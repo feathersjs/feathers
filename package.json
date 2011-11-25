@@ -1,0 +1,26 @@
+{
+  "name": "Feathry",
+  "description": "A resource oriented service dispatcher.",
+  "version": "0.0.1",
+  "homepage": "https://github.com/daffl/feathry",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/daffl/feathry.git"
+  },
+  "author": "David Luecke <daff@neyeon.de> (http://neyeon.com)",
+  "main": "lib/feathry",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "nodeunit test"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "dependencies" : {
+  	"connect" : ">= 1.7.0",
+  	"mime" : ">= 1.2.1",
+  	"uberclass" : "1.0.0"
+  }
+}
