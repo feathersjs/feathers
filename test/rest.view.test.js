@@ -24,6 +24,9 @@ exports.negotiate = function(test)
 	
 	header = 'application/json;q=1;level=2, text/html;q=1';
 	test.equal('application/json', view.negotiate(header, types).renders, 'Precedence');
+
+	header = 'bla/blu, x/*';
+	test.equal(null, view.negotiate(header, types));
 	
 	test.done();
-}
+};
