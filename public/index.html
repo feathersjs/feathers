@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Feathry SocketIO</title>
+</head>
+<body>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var socket = io.connect('http://localhost');
+		socket.emit('testing::index', {}, function(error, data) {
+			console.log(data);
+		});
+	</script>
+</body>
+</html>

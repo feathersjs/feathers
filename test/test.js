@@ -1,7 +1,9 @@
 var feathry = require('./../lib/feathry');
 
-feathry.createServer().service('testing', {
-	index : function (cb, params) {
+feathry.createServer({
+	port: 8000
+}).service('testing', {
+	index : function (params, cb) {
 		cb(null, [
 			{
 				test : 'hi',
@@ -12,11 +14,10 @@ feathry.createServer().service('testing', {
 			}
 		]);
 	},
-	get : function(cb, id, params) {
+	get : function(id, params, cb) {
 		cb(null, {
-			name : 'hi ' + id
+			id: id,
+			name : 'hi'
 		})
 	}
-}).use(feathry.rest({
-	port: 3000
-})).start();
+}).use(feathry.rest()).use(feathry.socketio()).start();
