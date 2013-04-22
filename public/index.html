@@ -10,6 +10,10 @@
 		socket.emit('testing::index', {}, function(error, data) {
 			console.log(data);
 		});
+
+		socket.on('testing created', function(data) {
+			console.log('Created:', data);
+		});
 	</script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 var assert = require('assert');
+var _ = require('underscore');
 var Proto = require('uberproto');
-var EventMixin = require('../../../lib/service/mixin/event');
+var EventMixin = require('../../lib/mixin/event');
 
 describe('Event mixin', function () {
 	it('initializes', function () {
@@ -40,9 +41,9 @@ describe('Event mixin', function () {
 	it('error', function (done) {
 		var FixtureService = Proto.extend({
 			create: function (data, params, cb) {
-				setTimeout(function() {
+				_.defer(function() {
 					cb(new Error('Something went wrong'));
-				}, 20);
+				});
 			}
 		});
 
@@ -57,18 +58,20 @@ describe('Event mixin', function () {
 			done();
 		});
 
-		instance.create({ name: 'Tester' }, {}, function() {});
+		instance.create({ name: 'Tester' }, {}, function(error) {
+			assert.ok(error instanceof Error);
+		});
 	});
 
 	it('created', function (done) {
 		var FixtureService = Proto.extend({
 			create: function (data, params, cb) {
-				setTimeout(function() {
+				_.defer(function() {
 					cb(null, {
 						id: 10,
 						name: data.name
 					});
-				}, 20);
+				});
 			}
 		});
 
@@ -83,13 +86,15 @@ describe('Event mixin', function () {
 			done();
 		});
 
-		instance.create({ name: 'Tester' }, {}, function() {});
+		instance.create({ name: 'Tester' }, {}, function(error, data) {
+			assert.equal(data.id, 10);
+		});
 	});
 
 	it('updated', function (done) {
 		var FixtureService = Proto.extend({
 			update: function (id, data, params, cb) {
-				setTimeout(function() {
+				_.defer(function() {
 					cb(null, {
 						id: id,
 						name: data.name
@@ -109,13 +114,15 @@ describe('Event mixin', function () {
 			done();
 		});
 
-		instance.update(12, { name: 'Updated tester' }, {}, function() {});
+		instance.update(12, { name: 'Updated tester' }, {}, function(error, data) {
+			assert.equal(data.id, 12);
+		});
 	});
 
 	it('destroyed', function (done) {
 		var FixtureService = Proto.extend({
 			destroy: function (id, params, cb) {
-				setTimeout(function() {
+				_.defer(function() {
 					cb(null, { id: id });
 				}, 20);
 			}
@@ -131,6 +138,8 @@ describe('Event mixin', function () {
 			done();
 		});
 
-		instance.destroy(27, {}, function() {});
+		instance.destroy(27, {}, function(error, data) {
+			assert.equal(data.id, 27);
+		});
 	});
 });

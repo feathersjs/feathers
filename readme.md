@@ -1,113 +1,92 @@
 # Feathry
 
-A resource oriented service dispatcher for NodeJS.
+A resource service framework for easily creating REST and SocketIO APIs with NodeJS.
 
-## What is a service?
+## Get started
 
-A service can be pretty much any JavaScript object offering service methods.
-To work with Nodes event mechanism a service method has to take a callback
-as the first parameter and should be called with the results.
+Services are just simple objects that provide certain methods. This makes it easy to initialize a
+service that provides a single todo:
 
-If you want to make your service accessible via REST you have to provide at
-least one of the methods following the resource-service patttern:
+```js
+var feathry = require('feathry');
 
-	{
-		index : function(cb, params) {
-		},
-		
-		get : function(cb, id, params) {
-		},
-		
-		create : function(cb, data, params)
-		{
-		},
-		
-		update : function(cb, id, data, params)
-		{
-		},
-		
-		destroy : function(cb, id, params)
-		{
-		}
-	}
+feathry.createServer({ port: 8000 })
+	.service('todo', {
+	  get: function(name, params, callback) {
+	    callback(null, {
+	      id: name,
+	      description: "You have to do " + name + "!"
+	    });
+	  }
+	})
+	.provide(feathry.rest())
+	.provide(feathry.socketio())
+	.start();
+```
 
+### REST
 
-## Creating resources
+You can access the REST service by going to `http://localhost:8000/todo/dishes` in your browser
+and will see:
 
-var app = require('cool-name');
+  {
+    "id": "dishes",
+    "description": "You have to do dishes!"
+  }
 
-app.register('users', {
-    index : function(cb, params) {
-    	cb(null, [{
-    		id: 0,
-    		name: 'Duck'
-    	}])
-    },
+### SocketIO
 
-    get : function(cb, id, params) {
-    },
+Since you added it as a provider, you can also connect to your service via SocketIO.
+Create an HTML page and insert the following code to see the response data logged on the console:
 
-    create : function(cb, data, params)
-    {
-    },
+```html
+<script src="http://localhost:8000/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost');
+  socket.emit('todo::get', 'laundry', {}, function(error, data) {
+    console.log(data); // -> { id: 'laundry', description: 'You have to do laundry!' }
+  });
+</script>
+```
 
-    update : function(cb, id, data, params)
-    {
-    },
+## Services
 
-    destroy : function(cb, id, params)
-    {
-    }
-});
+A service can be pretty much any JavaScript object that offers one or more of the `index`, `get`, `create`, `update`,
+`destroy` and `setup` service methods:
 
-### Handlers
-
-var rest = require('cool-name/handler/rest');
-var zeromq = require('cool-name/handler/zeromq');
-
-app.use(rest, {
-	port: 8080,
-	baseUrl: 'myname.com'
-}).use(zeromq, {
-	port: 7887
-});
-
-app.start();
-// REST http://myname.com:8080/users
-// ZEROMQ zmq://myname.com:7887/users
-
-## Finding resources
-
-// Mapping configuration file
-{
-	"users": "http://myname.com:8080/user",
-	"comments": {
-		"protocol": "zmq",
-		"host" : "myname.com",
-		"port": 7887,
-		"name": "comments"
-	}
+```js
+var myService = {
+  index: function(params, callback) {},
+  get: function(id, params, callback) {},
+  create: function(data, params) {},
+  update: function(id, data, params, callback) {},
+  destroy: function(id, params, callback) {},
+  setup: function(server) {}
 }
+```
 
-// post.js
-var Comment = Registry.lookup('comments');
+All callbacks follow the `function(error, data)` NodeJS convention.
 
-## Associations
+### index(params, callback)
 
-{
-	"username": "Eric",
-	"comments": [
-		"http://node-1.com/comments/10",
-		"http://node-1.com/comments/11"
-	]
-}
+### get(id, params, callback)
 
+### create(data, params)
 
-var User = Resource.define({
-	"username": String,
-	"comments": [Resource.lookup('http://localhost/users')]
-})
+### update(id, data, params, callback)
 
+### destroy(id, params, callback)
 
+### setup(server)
 
-Resource.lookup('http://localhost/users');
+## Built in services
+
+## Service mixins
+
+### Events
+
+### Association
+
+### Validation
+
+### Authentication

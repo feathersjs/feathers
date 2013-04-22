@@ -1,8 +1,6 @@
 var feathry = require('./../lib/feathry');
-
-feathry.createServer({
-	port: 8000
-}).service('testing', {
+var Proto = require('uberproto');
+var service = {
 	index : function (params, cb) {
 		cb(null, [
 			{
@@ -14,10 +12,23 @@ feathry.createServer({
 			}
 		]);
 	},
+
+	create: function(data, params, cb) {
+		cb(null, data);
+	},
+
 	get : function(id, params, cb) {
 		cb(null, {
 			id: id,
 			name : 'hi'
 		})
 	}
-}).use(feathry.rest()).use(feathry.socketio()).start();
+};
+
+Proto.mixin(require('../lib/mixin/event'), service);
+
+feathry.createServer({ port: 8000 })
+	.service('testing', service)
+	.provide(feathry.rest())
+	.provide(feathry.socketio())
+	.start();
