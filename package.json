@@ -8,15 +8,23 @@
     "url": "git://github.com/daffl/feathry.git"
   },
   "author": "David Luecke <daff@neyeon.de> (http://neyeon.com)",
+  "contributors": [
+    {
+      "name": "Eric Kryski",
+      "email": "e.kryski@gmail.com"
+    }
+  ],
   "main": "lib/feathry",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
+    "start": "node lib/feathry.js",
     "test": "nodeunit test"
   },
   "engines": {
-    "node": "*"
+    "node": "*",
+    "npm": "*"
   },
   "dependencies": {
     "uberproto": ">= 1.0.0",
