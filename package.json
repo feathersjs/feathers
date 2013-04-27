@@ -19,7 +19,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "start": "node lib/feathry.js",
+    "start": "node example/rest/app.js",
     "test": "nodeunit test"
   },
   "engines": {
