@@ -9,10 +9,7 @@
   },
   "author": "David Luecke <daff@neyeon.de> (http://neyeon.com)",
   "contributors": [
-    {
-      "name": "Eric Kryski",
-      "email": "e.kryski@gmail.com"
-    }
+    "Eric Kryski <e.kryski@gmail.com> (http://erickryski.com)"
   ],
   "main": "lib/feathry",
   "directories": {
