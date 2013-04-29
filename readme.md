@@ -10,7 +10,7 @@ We know... Oh God another bloody NodeJS framework! Yes we are also very tired of
 
 We also think that your data resources can and should be encapsulated in such a way that they can be ultra scalable and self contained. The MVC pattern works well but it is becoming antiquated in today's web. Frankly you don't need it and they tend to become bloated.
 
-With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathry is built on top of [Express](http://expressjs.com) and is inspired in part by [Flatiron](http://flatironjs.org) and [Derby](http://derbyjs.com).
+With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathry is built on top of [Express](http://expressjs.com) and is inspired in part by [Sails](http://sailsjs.org), [Flatiron](http://flatironjs.org) and [Derby](http://derbyjs.com).
 
 
 ## Key Concepts
@@ -19,11 +19,9 @@ At the core to Feathry are 3 simple but important concepts, **Providers**, **Ser
 
 A **Provider** is simply a module that *provides* your data to clients (ie. via REST or Web Sockets).
 
-A **Service** is a module that is used by the provider to actually manage the data (ie. a database adapter)
+A **Service** is a module that defines the API functionality for a given resource and is exposed to clients via a provider. (ie. A definition of create, update, etc.)
 
-A **Mixin** is like a utility that you can use to improve your service (ie. validation or authentication)
-
-*TODO: Maybe think of a different name for service*
+A **Mixin** is like a utility or middleware that you can use to improve your service (ie. validation or authentication)
 
 
 ## Getting Started is Easy
