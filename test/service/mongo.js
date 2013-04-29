@@ -1,50 +1,38 @@
 var assert = require('assert');
-var MongoService = require('../../lib/service/mongo');
+var MongoService = require('../../lib/services/mongo');
 var Proto = require('uberproto');
 
 describe('Mongo Service', function () {
-  it('create', function (done) {
-    var service = Proto.create.call(MongoService);
-    service.create({
-      name: 'Test 1'
-    }, {}, function(error, data) {
-      assert.equal(data.id, 0);
-      assert.equal(data.name, 'Test 1');
-      done();
-    });
+  describe('get', function () {
+    it('should return an instance that exists');
+    it('should return an error on db error');
   });
 
-  it('index', function(done) {
-    var service = Proto.create.call(MongoService);
-    for(var i = 0; i < 20; i++) {
-      service.create({
-        name: 'Test ' + i
-      }, {}, function(error, data) {
-
-      });
-    }
+  describe('create', function () {
+    it('should create a new instance');
+    it('should return an error on db error');
   });
 
-  it('creates indexes and gets items', function (done) {
-    var service = Proto.create.call(MongoService);
-    service.create({
-      name: 'Test 1'
-    }, {}, function() {
-      service.create({
-        name: 'Test 2'
-      }, {}, function(error, data) {
-        assert.equal(data.id, 1);
-        assert.equal(data.name, 'Test 2');
-        service.index({}, function(error, items) {
-          assert.ok(Array.isArray(items));
-          assert.equal(items.length, 2);
-          service.get(0, {}, function(error, data) {
-            assert.equal(data.id, 0);
-            assert.equal(data.name, 'Test 1');
-            done();
-          });
-        });
-      });
-    });
+  describe('update', function () {
+    it('should update an existing instance');
+    it('should return an error on db error');
+  });
+
+  describe('destroy', function () {
+    it('should delete an existing instance');
+    it('should return an error on db error');
+  });
+
+  describe('init', function () {
+    it('should setup a mongo connection based on config');
+    it('should setup a mongo connection based on ENV vars');
+  });
+
+  describe('index', function () {
+    it('should return all items');
+    it('should return all items sorted in ascending order');
+    it('should return all items sorted in descending order');
+    it('should return the number of items set by the limit');
+    it('should skip over the number of items set by skip');
   });
 });
