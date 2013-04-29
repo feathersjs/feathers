@@ -1,4 +1,5 @@
 Copyright (C) 2013 David Luecke daff@neyeon.com
+Copyright (C) 2013 Eric Kryski e.kryski@gmail.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

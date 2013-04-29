@@ -2,7 +2,7 @@ var assert = require('assert');
 var MemoryService = require('../../lib/service/memory');
 var Proto = require('uberproto');
 
-describe('Memory service', function () {
+describe('Memory Service', function () {
 	it('create', function (done) {
 		var service = Proto.create.call(MemoryService);
 		service.create({
