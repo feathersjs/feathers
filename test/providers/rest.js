@@ -1,28 +1,49 @@
-var should = require('should');
-var connect = require('connect');
+var assert = require('assert');
 var request = require('request');
-var injector = require('./../lib/connect-injector');
+var feathry = require('../../lib/feathry');
 
-describe('connect-injector', function () {
-	it('does not mess with normal requests', function (done) {
-		var rewriter = injector(function () {
-			return false;
-		}, function () {
-			done('Should never be called');
-		});
+describe('REST provider', function () {
+	it('GET', function (done) {
+		var todoService = {
+			findById: function(name, params, callback) {
+				callback(null, {
+					id: name,
+					description: "You have to do " + name + "!"
+				});
+			}
+		};
 
-		var app = connect().use(rewriter).use(function (req, res) {
-			res.writeHead(200, { 'Content-Type': 'text/plain' });
-			res.end('Hello World\n');
-		});
+		var server = feathry.createServer({ port: 8000 })
+			.service('todo', todoService)
+			.provide(feathry.rest())
+			.provide(feathry.socketio())
+			.start();
 
-		var server = app.listen(9999).on('listening', function () {
-			request('http://localhost:9999', function (error, response, body) {
-				should.not.exist(error);
-				response.headers['content-type'].should.equal('text/plain');
-				body.should.equal('Hello World\n');
-				server.close(done);
-			});
-		});
+		request('http://localhost:8000/todo/dishes', function (error, response, body) {
+			server.stop();
+			done();
+		})
+	});
+
+	it('PUT', function (done) {
+		var todoService = {
+			findById: function(name, params, callback) {
+				callback(null, {
+					id: name,
+					description: "You have to do " + name + "!"
+				});
+			}
+		};
+
+		var server = feathry.createServer({ port: 8000 })
+			.service('todo', todoService)
+			.provide(feathry.rest())
+			.start();
+
+		request('http://localhost:8000/todo/dishes', function (error, response, body) {
+			console.log(arguments);
+			server.stop();
+			done();
+		})
 	});
 });

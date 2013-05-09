@@ -30,5 +30,9 @@
     "underscore": "~1.4.4",
     "socket.io": "~0.9.14",
     "mongoskin": "~0.5.0"
+  },
+  "devDependencies": {
+    "request": "~2.21.0",
+    "socket.io-client": "~0.9.11"
   }
 }
