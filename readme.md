@@ -2,7 +2,7 @@
 
 #### An ultra scalable, data oriented framework built for tomorrow's web.
 
-The core focus of Feathry is your **data**. We believe that ultimately your app's purpose is to manage data in some fashion and so that's all you should really need to deal with. Managing your data. Feathry provides a deadly simple way of managing your data and allows you to provide this data via REST and SocketIO APIs with NodeJS.
+The core focus of Feathry is **your data**. We believe that ultimately your app's purpose is to manage data in some fashion and so that's all you should really need to deal with. Managing your data. Feathry provides a deadly simple way of managing your data and allows you to provide this data via REST and SocketIO APIs with NodeJS.
 
 ## Why Another NodeJS Framework?
 
@@ -79,12 +79,12 @@ Create an HTML page and insert the following code to see the response data logge
 
 ## Services
 
-A service can be any JavaScript object that offers one or more of the `index`, `get`, `create`, `update`,
+A service can be any JavaScript object that offers one or more of the `find`, `get`, `create`, `update`,
 `destroy` and `setup` service methods:
 
 ```js
 var myService = {
-  index: function(params, callback) {},
+  find: function(params, callback) {},
   get: function(id, params, callback) {},
   create: function(data, params, callback) {},
   update: function(id, data, params, callback) {},
@@ -97,18 +97,21 @@ All callbacks follow the `function(error, data)` NodeJS convention. `params` con
 parameters like the query parameters of a REST API call. For example `http://localhost:8000/todo/dishes?done=true`
 from the getting started example would result in `{ done: 'true' }` as the `params` object.
 
-### index(params, callback)
+### find(params, callback)
 
 Retrieves a list of all resources of the service. `params` contains additional parameters such
 as URL query parameters (like `http://localhost:8000/todo?sort=status`).
 
 ### get(id, params, callback)
 
+Retrieves a single resource of the service. `params` contains additional parameters such
+as URL query parameters (like `http://localhost:8000/todo?sort=status`).
+
 ### create(data, params, callback)
 
 ### update(id, data, params, callback)
 
-### destroy(id, params, callback)
+### remove(id, params, callback)
 
 ### setup(registry)
 

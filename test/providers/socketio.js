@@ -4,9 +4,9 @@ var feathry = require('../../lib/feathry');
 var io = require('socket.io-client');
 
 describe('SocketIO provider', function () {
-	it('findById', function (done) {
+	it('get', function (done) {
 		var todoService = {
-			findById: function(name, params, callback) {
+			get: function(name, params, callback) {
 				callback(null, {
 					id: name,
 					description: "You have to do " + name + "!"
@@ -20,5 +20,7 @@ describe('SocketIO provider', function () {
 			.start();
 
 		var socket = io.connect('http://localhost:8000');
+
+		done();
 	});
 });

@@ -20,9 +20,9 @@ describe('Memory Service', function () {
     });
   });
 
-  describe('findById', function () {
+  describe('get', function () {
     it('should return an instance that exists', function (done){
-      service.findById(1, function(error, data) {
+      service.get(1, function(error, data) {
         assert.equal(data.id, 1);
         assert.equal(data.name, 'Test 1');
         done();
@@ -30,7 +30,7 @@ describe('Memory Service', function () {
     });
 
     it('should return an error when requested doesn\'t exist', function (done){
-      service.findById(2, function(error, data) {
+      service.get(2, function(error, data) {
         // assert.exists(error,);
         assert.equal(data, null);
         done();
@@ -111,10 +111,10 @@ describe('Memory Service', function () {
       }, {}, function(error, data) {
         assert.equal(data.id, 1);
         assert.equal(data.name, 'Test 2');
-        service.index({}, function(error, items) {
+        service.find({}, function(error, items) {
           assert.ok(Array.isArray(items));
           assert.equal(items.length, 2);
-          service.findById(0, {}, function(error, data) {
+          service.get(0, {}, function(error, data) {
             assert.equal(data.id, 0);
             assert.equal(data.name, 'Test 1');
             done();

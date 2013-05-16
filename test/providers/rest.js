@@ -5,7 +5,7 @@ var feathry = require('../../lib/feathry');
 describe('REST provider', function () {
 	it('GET', function (done) {
 		var todoService = {
-			findById: function(name, params, callback) {
+			get: function(name, params, callback) {
 				callback(null, {
 					id: name,
 					description: "You have to do " + name + "!"
@@ -27,7 +27,7 @@ describe('REST provider', function () {
 
 	it('PUT', function (done) {
 		var todoService = {
-			findById: function(name, params, callback) {
+			get: function(name, params, callback) {
 				callback(null, {
 					id: name,
 					description: "You have to do " + name + "!"
