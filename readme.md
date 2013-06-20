@@ -1,8 +1,8 @@
-# Feathry
+# Feathers
 
-#### An ultra scalable, data oriented framework built for tomorrow's web.
+> An ultra scalable, feather weight, data oriented framework built for tomorrow's web.
 
-The core focus of Feathry is **your data**. We believe that ultimately your app's purpose is to manage data in some fashion and so that's all you should really need to deal with. Managing your data. Feathry provides a deadly simple way of managing your data and allows you to provide this data via REST and SocketIO APIs with NodeJS.
+The core focus of Feathers is **your data**. We believe that ultimately your app's purpose is to manage data in some fashion and so that's all you should really need to deal with. Managing your data. Feathers provides a deadly simple way of managing your data and allows you to provide this data via REST and SocketIO APIs with NodeJS.
 
 ## Why Another NodeJS Framework?
 
@@ -10,12 +10,12 @@ We know... Oh God another bloody NodeJS framework! Yes we are also very tired of
 
 We also think that your data resources can and should be encapsulated in such a way that they can be ultra scalable and self contained. The MVC pattern works well but it is becoming antiquated in today's web. Frankly you don't need it and they tend to become bloated.
 
-With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathry is built on top of [Express](http://expressjs.com) and is inspired in part by [Sails](http://sailsjs.org), [Flatiron](http://flatironjs.org) and [Derby](http://derbyjs.com).
+With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of [Express](http://expressjs.com) and is inspired in part by [Sails](http://sailsjs.org), [Flatiron](http://flatironjs.org) and [Derby](http://derbyjs.com).
 
 
 ## Key Concepts
 
-At the core to Feathry are 3 simple but important concepts, **Providers**, **Services** and **Mixins**.
+At the core to Feathers are 3 simple but important concepts, **Providers**, **Services** and **Mixins**.
 
 A **Provider** is simply a module that *provides* your data to clients (ie. via REST or Web Sockets).
 
@@ -29,7 +29,7 @@ A **Mixin** is like a utility or middleware that you can use to improve your ser
 Like we said, services are just simple modules that expose certain methods to the providers. This makes it easy to initialize a service that say... provides a single TODO:
 
 ```js
-var feathry = require('feathry');
+var feathers = require('feathers');
 
 var todoService = {
   get: function(name, params, callback) {
@@ -40,14 +40,14 @@ var todoService = {
   }
 };
 
-feathry.createServer({ port: 8000 })
+feathers.createServer({ port: 8000 })
 	.service('todo', todoService)
-	.provide(feathry.rest())
-	.provide(feathry.socketio())
+	.provide(feathers.rest())
+	.provide(feathers.socketio())
 	.start();
 ```
 
-That's all there really is to building an app with Feathry... Providers, Services, and Mixins!
+That's all there really is to building an app with Feathers... Providers, Services, and Mixins!
 
 
 ## Built In Providers
@@ -117,7 +117,7 @@ as URL query parameters (like `http://localhost:8000/todo?sort=status`).
 
 ## Built In Services
 
-To make it easier to get started, Feathry comes with several standard service implementations to extend
+To make it easier to get started, Feathers comes with several standard service implementations to extend
 from. All built in services follow the same parameter conventions for things like sorting and filtering.
 
 ### Memory

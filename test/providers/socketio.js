@@ -1,6 +1,6 @@
 var assert = require('assert');
 var request = require('request');
-var feathry = require('../../lib/feathry');
+var feathers = require('../../lib/feathers');
 var io = require('socket.io-client');
 
 describe('SocketIO provider', function () {
@@ -14,9 +14,9 @@ describe('SocketIO provider', function () {
 			}
 		};
 
-		var server = feathry.createServer({ port: 8000 })
+		var server = feathers.createServer({ port: 8000 })
 			.service('todo', todoService)
-			.provide(feathry.socketio())
+			.provide(feathers.socketio())
 			.start();
 
 		var socket = io.connect('http://localhost:8000');

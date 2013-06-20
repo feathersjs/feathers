@@ -1,17 +1,18 @@
 {
-  "name": "Feathry",
-  "description": "A resource oriented service dispatcher.",
+  "name": "Feathers",
+  "description": "An ultra scalable, feather weight, data oriented framework",
   "version": "0.0.1",
-  "homepage": "https://github.com/daffl/feathry",
+  "homepage": "https://github.com/yycjs/feathers",
   "repository": {
     "type": "git",
-    "url": "git://github.com/daffl/feathry.git"
+    "url": "git://github.com/yycjs/feathers.git"
   },
-  "author": "David Luecke <daff@neyeon.de> (http://neyeon.com)",
+  "author": "YYCjs <hello@yycjs.com> (http://yycjs.com)",
   "contributors": [
-    "Eric Kryski <e.kryski@gmail.com> (http://erickryski.com)"
+    "Eric Kryski <e.kryski@gmail.com> (http://erickryski.com)",
+    "David Luecke <daff@neyeon.de> (http://neyeon.com)"
   ],
-  "main": "lib/feathry",
+  "main": "lib/feathers",
   "directories": {
     "lib": "lib"
   },

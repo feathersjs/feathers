@@ -1,6 +1,6 @@
 var assert = require('assert');
 var request = require('request');
-var feathry = require('../../lib/feathry');
+var feathers = require('../../lib/feathers');
 
 describe('REST provider', function () {
 	it('GET', function (done) {
@@ -13,10 +13,10 @@ describe('REST provider', function () {
 			}
 		};
 
-		var server = feathry.createServer({ port: 8000 })
+		var server = feathers.createServer({ port: 8000 })
 			.service('todo', todoService)
-			.provide(feathry.rest())
-			.provide(feathry.socketio())
+			.provide(feathers.rest())
+			.provide(feathers.socketio())
 			.start();
 
 		request('http://localhost:8000/todo/dishes', function (error, response, body) {
@@ -35,9 +35,9 @@ describe('REST provider', function () {
 			}
 		};
 
-		var server = feathry.createServer({ port: 8000 })
+		var server = feathers.createServer({ port: 8000 })
 			.service('todo', todoService)
-			.provide(feathry.rest())
+			.provide(feathers.rest())
 			.start();
 
 		request('http://localhost:8000/todo/dishes', function (error, response, body) {

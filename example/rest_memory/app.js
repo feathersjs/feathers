@@ -1,12 +1,12 @@
-var feathry = require('../../lib/feathry');
+var feathers = require('../../lib/feathers');
 var Proto = require('uberproto');
-var memoryService = feathry.memory();
+var memoryService = feathers.memory();
 var express = require('express');
 
 Proto.mixin(require('../../lib/mixin/event'), memoryService);
 
-feathry.createServer()
+feathers.createServer()
   .use(express.static(__dirname))
   .service('users', memoryService)
-  .provide(feathry.rest())
+  .provide(feathers.rest())
   .start();

@@ -1,4 +1,4 @@
-var feathry = require('./../lib/feathry');
+var feathers = require('./../lib/feathers');
 var Proto = require('uberproto');
 var service = {
 	index : function (params, cb) {
@@ -27,8 +27,8 @@ var service = {
 
 Proto.mixin(require('../lib/mixin/event'), service);
 
-feathry.createServer({ port: 8000 })
+feathers.createServer({ port: 8000 })
 	.service('testing', service)
-	.provide(feathry.rest())
-	.provide(feathry.socketio())
+	.provide(feathers.rest())
+	.provide(feathers.socketio())
 	.start();
