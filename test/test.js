@@ -25,7 +25,7 @@ var service = {
 	}
 };
 
-Proto.mixin(require('../lib/mixin/event'), service);
+Proto.mixin(require('../lib/mixins/event'), service);
 
 feathers.createServer({ port: 8000 })
 	.service('testing', service)

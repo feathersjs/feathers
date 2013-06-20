@@ -3,7 +3,7 @@ var Proto = require('uberproto');
 var memoryService = feathers.memory();
 var express = require('express');
 
-Proto.mixin(require('../../lib/mixin/event'), memoryService);
+Proto.mixin(require('../../lib/mixins/event'), memoryService);
 
 feathers.createServer()
   .use(express.static(__dirname))

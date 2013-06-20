@@ -1,7 +1,7 @@
 var assert = require('assert');
 var _ = require('underscore');
 var Proto = require('uberproto');
-var EventMixin = require('../../lib/mixin/event');
+var EventMixin = require('../../lib/mixins/event');
 
 describe('Event mixin', function () {
 	it('initializes', function () {

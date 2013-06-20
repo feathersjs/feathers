@@ -2,7 +2,7 @@ var assert = require('assert');
 var _ = require('underscore');
 var Proto = require('uberproto');
 var errors = require('../../lib/errors');
-var ValidationMixin = require('../../lib/mixin/validation');
+var ValidationMixin = require('../../lib/mixins/validation');
 
 describe('Validation mixin', function () {
 	it('initializes', function () {

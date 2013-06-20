@@ -1,5 +1,5 @@
 {
-  "name": "Feathers",
+  "name": "feathers",
   "description": "An ultra scalable, feather weight, data oriented framework",
   "version": "0.0.1",
   "homepage": "https://github.com/yycjs/feathers",
@@ -34,6 +34,14 @@
   },
   "devDependencies": {
     "request": "~2.21.0",
-    "socket.io-client": "~0.9.11"
+    "socket.io-client": "~0.9.11",
+    "grunt-simple-mocha": "~0.4.0",
+    "grunt": "~0.4.1",
+    "grunt-release": "~0.3.5",
+    "grunt-dox": "~0.4.2",
+    "sinon-chai": "~2.4.0",
+    "chai": "~1.7.0",
+    "mocha": "~1.11.0",
+    "sinon": "~1.7.2"
   }
 }
