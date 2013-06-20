@@ -2,7 +2,7 @@
 
 > An ultra scalable, feather weight, data oriented framework built for tomorrow's web.
 
-[![Build Status](https://travis-ci.org/[yycjs]/[feathers].png)](https://travis-ci.org/[yycjs]/[feathers])
+[![Build Status](https://travis-ci.org/yycjs/feathers.png)](https://travis-ci.org/yycjs/feathers)
 
 The core focus of Feathers is **your data**. We believe that ultimately your app's purpose is to manage data in some fashion and so that's all you should really need to deal with. Managing your data. Feathers provides a deadly simple way of managing your data and allows you to provide this data via REST and SocketIO APIs with NodeJS.
 
