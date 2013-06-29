@@ -41,7 +41,7 @@ describe('REST provider', function () {
 			.start();
 
 		request('http://localhost:8000/todo/dishes', function (error, response, body) {
-			console.log(arguments);
+			// console.log(arguments);
 			server.stop();
 			done();
 		})

@@ -7,6 +7,7 @@ var service;
 describe('Memory Service', function () {
   beforeEach(function(done){
     service = Proto.create.call(MemoryService);
+    service.on('error', function(){});
     service.create({
       id: 1,
       name: 'Test 1'
@@ -22,6 +23,7 @@ describe('Memory Service', function () {
   });
 
   describe('get', function () {
+
     it('should return an instance that exists', function (done){
       service.get(1, function(error, data) {
         expect(data.id).to.equal(1);
@@ -37,9 +39,11 @@ describe('Memory Service', function () {
         done();
       });
     });
+
   });
 
   describe('create', function () {
+
     it('should create a new instance', function (done) {
       service.create({
         id: 2,
@@ -51,10 +55,20 @@ describe('Memory Service', function () {
       });
     });
 
-    it('should return an error when it can\'t create');
+    it('should return an error when it can\'t create', function (done) {
+      service.create({
+        id: 1,
+        name: 'Test 2'
+      }, function(error, data) {
+        expect(error).to.not.be.null;
+        expect(data).to.be.undefined;
+        done();
+      });
+    });
   });
 
   describe('update', function () {
+
     it('should update an existing instance', function (done) {
       service.update(1, {
         name: 'Test 1 Updated'
@@ -74,9 +88,11 @@ describe('Memory Service', function () {
         done();
       });
     });
+
   });
 
   describe('destroy', function () {
+
     it('should delete an existing instance', function (done) {
       service.destroy(1, function(error, data) {
         expect(data.id).to.equal(1);
@@ -92,40 +108,135 @@ describe('Memory Service', function () {
         done();
       });
     });
+
   });
 
   describe('find', function () {
-    it('should return all items');
-    it('should return all items sorted in ascending order');
-    it('should return all items sorted in descending order');
-    it('should return the number of items set by the limit');
-    it('should skip over the number of items set by skip');
-  });
 
-  it('creates indexes and gets items', function (done) {
-    var service = Proto.create.call(MemoryService);
-    service.create({
-      name: 'Test 1'
-    }, {}, function() {
+    beforeEach(function(done){
       service.create({
-        name: 'Test 2'
-      }, {}, function(error, data) {
-
-        expect(data.id).to.equal(1);
-        expect(data.name).to.equal('Test 2');
-
-        service.find({}, function(error, items) {
-
-          expect(items).to.be.an('array');
-          expect(items.length).to.equal(2);
-
-          service.get(0, {}, function(error, data) {
-            expect(data.id).to.equal(0);
-            expect(data.name).to.equal('Test 1');
-            done();
-          });
+        id: 2,
+        name: 'Bob'
+      }, function(){
+        service.create({
+          id: 3,
+          name: 'Alice'
+        }, function(){
+          done();
         });
       });
     });
+
+    afterEach(function(done){
+      service.destroy(2, function(){
+        service.destroy(3, function(){
+          done();
+        });
+      });
+    });
+
+    it('should return all items', function(done){
+      var expected = [
+        {
+          id: 1,
+          name: 'Test 1'
+        },
+        {
+          id: 2,
+          name: 'Bob'
+        },
+        {
+          id: 3,
+          name: 'Alice'
+        }
+      ];
+
+      service.find({}, function(err, items){
+        expect(err).to.be.null;
+        expect(items).to.deep.equal(expected);
+        done();
+      });
+    });
+
+    it('should return all items sorted in ascending order by sort value', function(done){
+      var expected = [
+        {
+          id: 3,
+          name: 'Alice'
+        },
+        {
+          id: 2,
+          name: 'Bob'
+        },
+        {
+          id: 1,
+          name: 'Test 1'
+        }
+      ];
+
+      service.find({ sort: 'name'}, function(err, items){
+        expect(err).to.be.null;
+        expect(items).to.deep.equal(expected);
+        done();
+      });
+    });
+
+    it('should return all items sorted in descending order by sort value', function(done){
+      var expected = [
+        {
+          id: 1,
+          name: 'Test 1'
+        },
+        {
+          id: 2,
+          name: 'Bob'
+        },
+        {
+          id: 3,
+          name: 'Alice'
+        }
+      ];
+
+      service.find({ sort: 'name', order: true }, function(err, items){
+        expect(err).to.be.null;
+        expect(items).to.deep.equal(expected);
+        done();
+      });
+    });
+
+    it('should return the number of items set by the limit', function(done){
+      var expected = [
+        {
+          id: 1,
+          name: 'Test 1'
+        },
+        {
+          id: 2,
+          name: 'Bob'
+        }
+      ];
+
+      service.find({ limit: 2 }, function(err, items){
+        expect(err).to.be.null;
+        expect(items).to.deep.equal(expected);
+        done();
+      });
+    });
+
+    it('should skip over the number of items set by skip', function(done){
+      var expected = [
+        {
+          id: 3,
+          name: 'Alice'
+        }
+      ];
+
+      service.find({ skip: 2 }, function(err, items){
+        expect(err).to.be.null;
+        expect(items).to.deep.equal(expected);
+        done();
+      });
+    });
+
   });
 });
