@@ -1,6 +1,16 @@
 var feathers = require('../../lib/feathers');
 var Proto = require('uberproto');
-var mongoService = feathers.mongo();
+
+var options = {
+  // username: 'hulk',
+  // password: 'greenman',
+  // host: 'localhost',
+  // port: '27017',
+  // reconnect: true,
+  db: 'feathers'
+};
+
+var mongoService = feathers.mongo(options);
 var express = require('express');
 
 Proto.mixin(require('../../lib/mixins/event'), mongoService);
