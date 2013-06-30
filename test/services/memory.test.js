@@ -7,7 +7,6 @@ var service;
 describe('Memory Service', function () {
   beforeEach(function(done){
     service = Proto.create.call(MemoryService);
-    service.on('error', function(){});
     service.create({
       id: 1,
       name: 'Test 1'
