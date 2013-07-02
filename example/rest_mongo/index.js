@@ -19,4 +19,5 @@ feathers.createServer()
   .use(express.static(__dirname))
   .service('users', mongoService)
   .provide(feathers.rest())
+  .provide(feathers.socketio())
   .start();

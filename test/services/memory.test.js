@@ -71,7 +71,7 @@ describe('Memory Service', function () {
     it('should update an existing instance', function (done) {
       service.update(1, {
         name: 'Test 1 Updated'
-      }, function(error, data) {
+      }, {}, function(error, data) {
         expect(data.id).to.equal(1);
         expect(data.name).to.equal('Test 1 Updated');
         done();
@@ -81,7 +81,7 @@ describe('Memory Service', function () {
     it('should return an error on db when instance to update doesn\'t exist', function (done) {
       service.update(3, {
         name: 'Test 2'
-      }, function(error, data) {
+      }, {}, function(error, data) {
         expect(error).to.not.be.null;
         expect(data).to.be.undefined;
         done();
