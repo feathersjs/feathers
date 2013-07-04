@@ -25,7 +25,6 @@ A **Service** is a module that defines the API functionality for a given resourc
 
 A **Mixin** is like a utility or middleware that you can use to improve your service (ie. validation or authentication)
 
-
 ## Getting Started is Easy
 
 Like we said, services are just simple modules that expose certain methods to the providers. This makes it easy to initialize a service that say... provides a single TODO:
@@ -49,7 +48,7 @@ feathers.createServer({ port: 8000 })
 	.start();
 ```
 
-That's all there really is to building an app with Feathers... Providers, Services, and Mixins!
+That's all there really is to building an app with Feathers.
 
 
 ## Built In Providers
@@ -59,10 +58,12 @@ That's all there really is to building an app with Feathers... Providers, Servic
 You can access the REST service by going to `http://localhost:8000/todo/dishes` in your browser
 and will see:
 
-  {
-    "id": "dishes",
-    "description": "You have to do dishes!"
-  }
+```js
+{
+  "id": "dishes",
+  "description": "You have to do dishes!"
+}
+```
 
 ### SocketIO
 

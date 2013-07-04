@@ -104,7 +104,7 @@ describe('Validation mixin', function () {
 			assert.equal(data.id, 14);
 		});
 
-		instance.update({ fullName: 'Tester' }, {}, function(error) {
+		instance.update('14', { fullName: 'Tester' }, {}, function(error) {
 			assert.ok(error);
 			assert.ok(error instanceof errors.ValidationError);
 			assert.equal(error.type, 'ValidationError');
