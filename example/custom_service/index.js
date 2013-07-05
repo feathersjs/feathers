@@ -35,8 +35,6 @@ var service = {
   }
 };
 
-Proto.mixin(require('../../lib/mixins/event'), service);
-
 feathers.createServer({ port: 8000 })
   .service('users', service)
   .provide(feathers.rest())

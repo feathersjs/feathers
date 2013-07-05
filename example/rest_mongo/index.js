@@ -13,8 +13,6 @@ var options = {
 var mongoService = feathers.mongo(options);
 var express = require('express');
 
-Proto.mixin(require('../../lib/mixins/event'), mongoService);
-
 feathers.createServer()
   .use(express.static(__dirname))
   .service('users', mongoService)
