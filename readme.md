@@ -133,7 +133,30 @@ from. All built in services follow the same parameter conventions for things lik
 
 ### Event
 
-### Association
+### Associations
+
+* register associated services via `has({ 'attr_name': ['service path']})`
+      -
+      ```js 
+      post.has({
+        'author': '/users',
+        'comments': ['/comments']
+      });
+
+      comment.has({
+        'author': '/users',
+        'post': '/posts'
+      });
+      ```
+
+      - This then gives *user* event listeners for 'post created', 'post updated', 'post removed'
+      - This then gives *user* event listeners for 'comment created', 'comment updated', 'comment removed'
+      - This then gives *post* event listeners for 'comment created', 'comment updated', 'comment removed'
+      - This then gives *post* event listeners for 'user created', 'user updated', 'user removed'
+
+* We could use /posts?expand=true to get the posts with all of its comment objects, otherwise we get the ids.
+
+
 
 ### Validation
 

@@ -119,7 +119,7 @@ describe('Event mixin', function () {
 		});
 	});
 
-	it('destroyed', function (done) {
+	it('removed', function (done) {
 		var FixtureService = Proto.extend({
 			destroy: function (id, params, cb) {
 				_.defer(function() {
@@ -133,7 +133,7 @@ describe('Event mixin', function () {
 		var instance = Proto.create.call(FixtureService);
 		instance.setup();
 
-		instance.on('destroyed', function(data) {
+		instance.on('removed', function(data) {
 			assert.equal(data.id, 27);
 			done();
 		});
