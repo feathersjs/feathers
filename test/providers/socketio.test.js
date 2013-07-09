@@ -21,6 +21,9 @@ describe('SocketIO provider', function () {
 
 		var socket = io.connect('http://localhost:8000');
 
-		done();
+		socket.emit('todo::get', 'dishes', {}, function(error, data) {
+			console.log(data);
+			done();
+		});
 	});
 });
