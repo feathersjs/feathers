@@ -1,5 +1,5 @@
 var assert = require('assert');
-var MongoService = require('../../lib/services/mongo');
+var MongoService = require('../../lib/services/mongodb');
 var Proto = require('uberproto');
 
 describe('Mongo Service', function () {

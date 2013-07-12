@@ -8,15 +8,6 @@ var users = feathers.service.mongodb({ collection: 'users' });
 var posts = feathers.service.mongodb({ collection: 'posts' });
 var comments = feathers.service.mongodb({ collection: 'comments' });
 
-// Mixins
-Proto.mixin(require('../../lib/mixins/event'), users);
-Proto.mixin(require('../../lib/mixins/event'), posts);
-Proto.mixin(require('../../lib/mixins/event'), comments);
-
-Proto.mixin(require('../../lib/mixins/association'), users);
-Proto.mixin(require('../../lib/mixins/association'), posts);
-Proto.mixin(require('../../lib/mixins/association'), comments);
-
 // Associations
 users.has({
   posts: ['posts'],
@@ -78,6 +69,7 @@ feathers.createServer()
   .use(express.static(__dirname))
   .service('users', users)
   .service('posts', posts)
+  .service('comments', comments)
   .provide(feathers.rest())
   .provide(feathers.socketio())
   .start();
