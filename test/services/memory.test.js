@@ -150,7 +150,7 @@ describe('Memory Service', function () {
         }
       ];
 
-      service.find({}, function(err, items){
+      service.find({ query: {} }, function(err, items){
         expect(err).to.be.null;
         expect(items).to.deep.equal(expected);
         done();
@@ -173,7 +173,11 @@ describe('Memory Service', function () {
         }
       ];
 
-      service.find({ sort: 'name'}, function(err, items){
+      var query = {
+        query: { sort: 'name' }
+      };
+
+      service.find(query, function(err, items){
         expect(err).to.be.null;
         expect(items).to.deep.equal(expected);
         done();
@@ -196,7 +200,11 @@ describe('Memory Service', function () {
         }
       ];
 
-      service.find({ sort: 'name', order: true }, function(err, items){
+      var query = {
+        query: { sort: 'name', order: true }
+      };
+
+      service.find(query, function(err, items){
         expect(err).to.be.null;
         expect(items).to.deep.equal(expected);
         done();
@@ -215,7 +223,11 @@ describe('Memory Service', function () {
         }
       ];
 
-      service.find({ limit: 2 }, function(err, items){
+      var query = {
+        query: { limit: 2 }
+      };
+
+      service.find(query, function(err, items){
         expect(err).to.be.null;
         expect(items).to.deep.equal(expected);
         done();
@@ -230,7 +242,11 @@ describe('Memory Service', function () {
         }
       ];
 
-      service.find({ skip: 2 }, function(err, items){
+      var query = {
+        query: { skip: 2 }
+      };
+
+      service.find(query, function(err, items){
         expect(err).to.be.null;
         expect(items).to.deep.equal(expected);
         done();
