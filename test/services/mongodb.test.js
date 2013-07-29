@@ -94,6 +94,7 @@ describe('Mongo Service', function () {
 
   describe('update', function () {
     it('should update an existing instance');
+    it('should update mulitple existing instances');
     it('should return an error on db error');
   });
 
