@@ -2,7 +2,7 @@ var assert = require('assert');
 var _ = require('underscore');
 var Proto = require('uberproto');
 var errors = require('../../lib/errors');
-var ValidationMixin = require('../../lib/mixins/validation');
+var mixinValidation = require('../../lib/mixins/validation');
 
 describe('Validation mixin', function () {
 	it('initializes', function () {
@@ -17,7 +17,7 @@ describe('Validation mixin', function () {
 			}
 		});
 
-		ValidationService.mixin(ValidationMixin);
+		mixinValidation(ValidationService);
 
 		assert.equal(typeof ValidationService.create, 'function');
 		assert.equal(typeof ValidationService.update, 'function');
@@ -58,7 +58,7 @@ describe('Validation mixin', function () {
 			}
 		});
 
-		ValidationService.mixin(ValidationMixin);
+		mixinValidation(ValidationService);
 
 		var instance = Proto.create.call(ValidationService);
 		instance.create({ name: 'Tester' }, {}, function(error, data) {
@@ -96,7 +96,7 @@ describe('Validation mixin', function () {
 			}
 		});
 
-		ValidationService.mixin(ValidationMixin);
+		mixinValidation(ValidationService);
 
 		var instance = Proto.create.call(ValidationService);
 		instance.update(14, { name: 'Tester' }, {}, function(error, data) {

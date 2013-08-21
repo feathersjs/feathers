@@ -1,7 +1,8 @@
 var assert = require('assert');
 var _ = require('underscore');
 var Proto = require('uberproto');
-var EventMixin = require('../../lib/mixins/event');
+var mixinEvent = require('../../lib/mixins/event');
+var EventMixin = mixinEvent.Mixin;
 
 describe('Event mixin', function () {
 	it('initializes', function () {
@@ -11,7 +12,7 @@ describe('Event mixin', function () {
 			}
 		});
 
-		FixtureService.mixin(EventMixin);
+		mixinEvent(FixtureService);
 
 		assert.equal(typeof FixtureService.setup, 'function');
 		assert.equal(typeof FixtureService.on, 'function');
@@ -27,7 +28,7 @@ describe('Event mixin', function () {
 			},
 
 			emit: function() {
-				return 'Original emit'
+				return 'Original emit';
 			}
 		}
 
@@ -47,7 +48,7 @@ describe('Event mixin', function () {
 			}
 		});
 
-		FixtureService.mixin(EventMixin);
+		mixinEvent(FixtureService);
 
 		var instance = Proto.create.call(FixtureService);
 		instance.setup();
@@ -75,7 +76,7 @@ describe('Event mixin', function () {
 			}
 		});
 
-		FixtureService.mixin(EventMixin);
+		mixinEvent(FixtureService);
 
 		var instance = Proto.create.call(FixtureService);
 		instance.setup();
@@ -103,7 +104,7 @@ describe('Event mixin', function () {
 			}
 		});
 
-		FixtureService.mixin(EventMixin);
+		mixinEvent(FixtureService);
 
 		var instance = Proto.create.call(FixtureService);
 		instance.setup();
@@ -128,7 +129,7 @@ describe('Event mixin', function () {
 			}
 		});
 
-		FixtureService.mixin(EventMixin);
+		mixinEvent(FixtureService);
 
 		var instance = Proto.create.call(FixtureService);
 		instance.setup();
