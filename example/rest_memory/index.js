@@ -1,6 +1,6 @@
 var feathers = require('../../lib/feathers');
 var Proto = require('uberproto');
-var memoryService = feathers.memory();
+var memoryService = feathers.service.memory();
 var express = require('express');
 
 feathers.createServer({ port: 3000 })

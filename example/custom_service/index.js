@@ -14,7 +14,7 @@ var users = [
 ];
 
 var service = {
-  index : function (params, cb) {
+  find: function (params, cb) {
     cb(null, users);
   },
 
