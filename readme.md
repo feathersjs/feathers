@@ -41,11 +41,10 @@ var todoService = {
   }
 };
 
-feathers.createServer({ port: 8000 })
-	.service('todo', todoService)
-	.provide(feathers.rest())
-	.provide(feathers.socketio())
-	.start();
+feathers()
+	.configure(feathers.socketio)
+	.use('todo', todoService)
+	.listen(300);
 ```
 
 That's all there really is to building an app with Feathers.

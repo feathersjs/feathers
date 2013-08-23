@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Feathers real-time Todos</title>
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container">
+		<h1>Feathers real-time Todos</h1>
+
+		<div class="alert alert-danger" style="display: none;">Bla</div>
+
+		<table class="table todos">
+			<thead>
+			<tr>
+				<th>Description</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+
+		<form role="form" class="create-todo">
+			<div class="form-group">
+				<label for="description">New Todo</label>
+				<input type="text" class="form-control" id="description" placeholder="New Todo description">
+			</div>
+			<button type="submit" class="btn btn-primary pull-right">Submit</button>
+		</form>
+	</div>
+
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var socket = io.connect();
+
+		function addTodo(todo) {
+			var html = '<tr data-id="' + todo.id + '">' +
+					'<td>' + todo.description + '</td>' +
+					'<td><a href="#" class="delete">remove</a></td>' +
+				'</tr>';
+
+			$('.todos tbody').append(html);
+		}
+
+		function removeTodo(id) {
+			$('[data-id="' + id + '"]').remove();
+		}
+
+		function errorHandler(error) {
+			if(error) {
+				$('.alert').show().html(error.message);
+			}
+		}
+
+		socket.on('todos removed', function(todo) {
+			removeTodo(todo.id);
+		});
+
+		socket.on('todos created', function(todo) {
+			addTodo(todo);
+		});
+
+		socket.emit('todos::find', {}, function(error, todos) {
+			todos.forEach(addTodo);
+		});
+
+		$('.create-todo').submit(function(ev) {
+			var field = $('#description');
+
+			socket.emit('todos::create', {
+				description: field.val()
+			}, errorHandler);
+
+			field.val('');
+			ev.preventDefault();
+		});
+
+		$('body').on('click', '.delete', function(ev) {
+			var id = $(this).parents('tr').data('id');
+			socket.emit('todos::destroy', id, errorHandler);
+			ev.preventDefault();
+		});
+	</script>
+</body>
+</html>
