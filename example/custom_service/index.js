@@ -13,28 +13,21 @@ var users = [
 	}
 ];
 
-feathers()
-	.service('users', {
+var app = feathers()
+	.configure(feathers.socketio)
+	.use(feathers.static(__dirname))
+	.use('users', {
 		find: function (params, cb) {
 			cb(null, users);
 		},
 
-		create: function (data, params, cb) {
-			console.log(data, params);
-			users.push(data);
-			cb(null, data);
-		},
-
 		get: function (id, params, cb) {
 			for (var user in users) {
-				if (users[user] && users[user].id === id) {
+				if (users[user] && users[user].id == id) {
 					return cb(null, users[user]);
 				}
 			}
 
 			cb(new Error('User With ID ' + id + ' Not Found'));
 		}
-	})
-	.provide(feathers.rest())
-	.provide(feathers.socketio())
-	.listen(3000);
+	}).listen(3000);
