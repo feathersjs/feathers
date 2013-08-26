@@ -1,64 +1,69 @@
-var expect = require('chai').expect;
-var request = require('request');
+var assert = require('assert');
 var feathers = require('../../lib/feathers');
 var io = require('socket.io-client');
-var _ = require('underscore');
+
+var fixture = require('./service-fixture');
+var todoService = fixture.Service;
+var verify = fixture.assert;
 
 describe('SocketIO provider', function () {
-//	it('get', function (done) {
-//		var todoService = {
-//			get: function(name, params, callback) {
-//				callback(null, {
-//					id: name,
-//					description: 'You have to do ' + name + '!'
-//				});
-//			}
-//		};
-//
-//		var server = feathers.createServer({ port: 8000 })
-//			.service('todo', todoService)
-//			.provide(feathers.socketio())
-//			.start();
-//
-//		var socket = io.connect('http://localhost:8000');
-//
-//		socket.emit('todo::get', 'dishes', {}, function(error, data) {
-//			expect(error).to.be.null;
-//			expect(data.id).to.equal('dishes');
-//			expect(data.description).to.equal('You have to do dishes!');
-//			server.stop();
-//			done();
-//		});
-//	});
+	var server, socket;
 
-	it('create and created event', function (done) {
-		var todoService = {
-			create: function(data, params, callback) {
-				_.defer(function() {
-					callback(null, data);
-				}, 200);
-			}
-		};
+	before(function(){
+		server = feathers()
+			.configure(feathers.socketio())
+			.use('todo', todoService)
+			.listen(3000);
 
-		var server = feathers.createServer({ port: 8000 })
-			.service('todo', todoService)
-			.provide(feathers.socketio())
-			.start();
+		socket = io.connect('http://localhost:3000');
+	});
 
-		var socket = io.connect('http://localhost:8000');
+	after(function(done) {
+		socket.disconnect();
+		server.close(done);
+	});
 
-		socket.on('todo created', function(data) {
-			expect(data.id).to.equal(1);
-			expect(data.name).to.equal('Create dishes');
-			server.stop();
-			done();
+	describe('CRUD', function() {
+		it('::find', function (done) {
+			socket.emit('todo::find', {}, function(error, data) {
+				verify.find(data);
+
+				done(error);
+			});
 		});
 
-		socket.emit('todo::create', {
-			id: 1,
-			name: 'Create dishes'
-		}, {}, function(error, data) {
-			expect(error).to.be.null;
+		it('::get', function (done) {
+			socket.emit('todo::get', 'laundry', {}, function(error, data) {
+				verify.get('laundry', data);
+
+				done(error);
+			});
+		});
+
+		it.skip('::create', function() {
+
+		});
+
+		it.skip('::update', function() {
+
+		});
+
+		it.skip('::remove', function() {
+
+		});
+	});
+
+	describe('Events', function() {
+		it.skip('created', function(done) {
+
+		});
+
+		it.skip('updated', function(done) {
+
+		});
+
+		it.skip('removed', function(done) {
+
 		});
 	});
 });

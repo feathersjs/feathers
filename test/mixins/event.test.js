@@ -25,17 +25,12 @@ describe('Event mixin', function () {
 		var existingMethodsService = {
 			setup: function(arg) {
 				return 'Original setup from object: ' + arg;
-			},
-
-			emit: function() {
-				return 'Original emit';
 			}
 		}
 
 		Proto.mixin(EventMixin, existingMethodsService);
 
 		assert.equal('Original setup from object: Test', existingMethodsService.setup('Test'));
-		assert.equal(existingMethodsService.emit(), 'Original emit');
 		assert.equal(typeof existingMethodsService.on, 'function');
 	});
 
@@ -122,7 +117,7 @@ describe('Event mixin', function () {
 
 	it('removed', function (done) {
 		var FixtureService = Proto.extend({
-			destroy: function (id, params, cb) {
+			remove: function (id, params, cb) {
 				_.defer(function() {
 					cb(null, { id: id });
 				}, 20);
@@ -139,7 +134,7 @@ describe('Event mixin', function () {
 			done();
 		});
 
-		instance.destroy(27, {}, function(error, data) {
+		instance.remove(27, {}, function(error, data) {
 			assert.equal(data.id, 27);
 		});
 	});

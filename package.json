@@ -18,7 +18,7 @@
   },
   "scripts": {
     "start": "node example/rest/app.js",
-    "test": "grunt test"
+    "test": "mocha test/ --recursive"
   },
   "engines": {
     "node": "*",
@@ -26,23 +26,17 @@
   },
   "dependencies": {
     "uberproto": ">= 1.0.0",
-    "express": "~3.1.1",
+    "express": "~ 3.1.1",
     "rubberduck": "~0.2.0",
     "underscore": "~1.4.4",
-    "socket.io": "~0.9.14",
-    "mongoskin": "~0.5.0"
+    "socket.io": "~0.9.14"
   },
   "devDependencies": {
     "request": "~2.21.0",
     "socket.io-client": "~0.9.11",
-    "grunt-simple-mocha": "~0.4.0",
     "grunt-cli": "~0.1.7",
     "grunt": "~0.4.1",
     "grunt-release": "~0.3.5",
-    "grunt-dox": "~0.4.2",
-    "sinon-chai": "~2.4.0",
-    "chai": "~1.7.0",
-    "mocha": "~1.11.0",
-    "sinon": "~1.7.2"
+    "mocha": "~1.11.0"
   }
 }
