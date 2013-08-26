@@ -43,6 +43,7 @@
     "sinon-chai": "~2.4.0",
     "chai": "~1.7.0",
     "mocha": "~1.11.0",
-    "sinon": "~1.7.2"
+    "sinon": "~1.7.2",
+    "database-cleaner": "~0.7.0"
   }
 }
