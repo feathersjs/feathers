@@ -34,7 +34,7 @@ describe('Event mixin', function () {
 		assert.equal(typeof existingMethodsService.on, 'function');
 	});
 
-	it('error', function (done) {
+	it('serviceError', function (done) {
 		var FixtureService = Proto.extend({
 			create: function (data, params, cb) {
 				_.defer(function() {
@@ -48,7 +48,7 @@ describe('Event mixin', function () {
 		var instance = Proto.create.call(FixtureService);
 		instance.setup();
 
-		instance.on('error', function(error) {
+		instance.on('serviceError', function(error) {
 			assert.ok(error instanceof Error);
 			assert.equal(error.message, 'Something went wrong');
 			done();

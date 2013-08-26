@@ -15,16 +15,6 @@ We also think that your data resources can and should be encapsulated in such a 
 With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of [Express](http://expressjs.com) and is inspired in part by [Sails](http://sailsjs.org), [Flatiron](http://flatironjs.org) and [Derby](http://derbyjs.com).
 
 
-## Key Concepts
-
-At the core to Feathers are 3 simple but important concepts, **Providers**, **Services** and **Mixins**.
-
-A **Provider** is simply a module that *provides* your data to clients (ie. via REST or Web Sockets).
-
-A **Service** is a module that defines the API functionality for a given resource and is exposed to clients via a provider. (ie. A definition of create, update, etc.)
-
-A **Mixin** is like a utility or middleware that you can use to improve your service (ie. validation or authentication)
-
 ## Getting Started is Easy
 
 Like we said, services are just simple modules that expose certain methods to the providers. This makes it easy to initialize a service that say... provides a single TODO:
@@ -42,9 +32,9 @@ var todoService = {
 };
 
 feathers()
-	.configure(feathers.socketio)
+	.configure(feathers.socketio())
 	.use('todo', todoService)
-	.listen(300);
+	.listen(8000);
 ```
 
 That's all there really is to building an app with Feathers.
@@ -116,47 +106,3 @@ as URL query parameters (like `http://localhost:8000/todo?sort=status`).
 ### remove(id, params, callback)
 
 ### setup(registry)
-
-## Built In Services
-
-To make it easier to get started, Feathers comes with several standard service implementations to extend
-from. All built in services follow the same parameter conventions for things like sorting and filtering.
-
-### Memory
-
-### MongoDB (TODO)
-
-### Redis (TODO)
-
-## Service mixins
-
-### Event
-
-### Associations
-
-* register associated services via `has({ 'attr_name': ['service path']})`
-      -
-      ```js 
-      post.has({
-        'author': '/users',
-        'comments': ['/comments']
-      });
-
-      comment.has({
-        'author': '/users',
-        'post': '/posts'
-      });
-      ```
-
-      - This then gives *user* event listeners for 'post created', 'post updated', 'post removed'
-      - This then gives *user* event listeners for 'comment created', 'comment updated', 'comment removed'
-      - This then gives *post* event listeners for 'comment created', 'comment updated', 'comment removed'
-      - This then gives *post* event listeners for 'user created', 'user updated', 'user removed'
-
-* We could use /posts?expand=true to get the posts with all of its comment objects, otherwise we get the ids.
-
-
-
-### Validation
-
-### Authentication

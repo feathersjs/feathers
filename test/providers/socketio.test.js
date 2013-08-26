@@ -4,16 +4,23 @@ var io = require('socket.io-client');
 
 var fixture = require('./service-fixture');
 var todoService = fixture.Service;
-var verify = fixture.assert;
+var verify = fixture.verify;
 
 describe('SocketIO provider', function () {
 	var server, socket;
 
-	before(function(){
+	before(function() {
+		// This seems to be the only way to not get the
+		// socket.io started log messing up the test output
+		var oldlog = console.log;
+		console.log = function() {}
+
 		server = feathers()
 			.configure(feathers.socketio())
 			.use('todo', todoService)
 			.listen(3000);
+
+		console.log = oldlog;
 
 		socket = io.connect('http://localhost:3000');
 	});
@@ -40,30 +47,65 @@ describe('SocketIO provider', function () {
 			});
 		});
 
-		it.skip('::create', function() {
+		it('::create', function(done) {
+			var original = { name: 'creating' };
 
+			socket.emit('todo::create', original, {}, function(error, data) {
+				verify.create(original, data);
+
+				done(error);
+			});
 		});
 
-		it.skip('::update', function() {
+		it('::update', function(done) {
+			var original = { name: 'updating' };
 
+			socket.emit('todo::update', 23, original, {}, function(error, data) {
+				verify.update(23, original, data);
+
+				done(error);
+			});
 		});
 
-		it.skip('::remove', function() {
+		it('::remove', function(done) {
+			socket.emit('todo::remove', 11, {}, function(error, data) {
+				verify.remove(11, data);
 
+				done(error);
+			});
 		});
 	});
 
 	describe('Events', function() {
-		it.skip('created', function(done) {
+		it('created', function(done) {
+			var original = { name: 'created event' };
 
+			socket.on('todo created', function(data) {
+				verify.create(original, data);
+				done();
+			});
+
+			socket.emit('todo::create', original, {}, function() {});
 		});
 
-		it.skip('updated', function(done) {
+		it('updated', function(done) {
+			var original = { name: 'updated event' };
 
+			socket.on('todo updated', function(data) {
+				verify.update(10, original, data);
+				done();
+			});
+
+			socket.emit('todo::update', 10, original, {}, function() {});
 		});
 
-		it.skip('removed', function(done) {
+		it('removed', function(done) {
+			socket.on('todo removed', function(data) {
+				verify.remove(333, data);
+				done();
+			});
 
+			socket.emit('todo::remove', 333, {}, function() {});
 		});
 	});
 });
