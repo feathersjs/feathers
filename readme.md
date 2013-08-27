@@ -15,6 +15,12 @@ We also think that your data resources can and should be encapsulated in such a 
 With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of [Express](http://expressjs.com) and is inspired in part by [Sails](http://sailsjs.org), [Flatiron](http://flatironjs.org) and [Derby](http://derbyjs.com).
 
 
+## Install
+
+As with any NodeJS module, just install it as a dependency in your application:
+
+> npm install feathers --save
+
 ## Getting Started Is Easy
 
 Like we said, services are just simple modules that expose certain methods to the providers. This makes it easy to initialize a service that say... provides a single TODO:
@@ -218,16 +224,15 @@ You can see the combination when going to `http://localhost:8000/my/test`.
 
 ## Getting Real, Time
 
+The secret ingredient to create real time applications using Feathers and SocketIO is the
+`created`, `updated` and `removed` events every Feathers service automatically emits.
+Here is another simple Todo service, that just passes the data through `create`:
+
 ```js
 var feathers = require('feathers');
 
 var todoService = {
-  todos: [],
-  find: function(params, callback) {
-    callback(null, this.todos);
-  },
   create: function(data, params, callback) {
-    this.todos.push(data);
     callback(null, data);
   }
 };
@@ -236,8 +241,9 @@ var app = feathers()
 	.configure(feathers.socketio())
 	.use('todo', todoService)
 	.listen(8000);
-
 ```
+
+Lets make an HTML file that creates a new Todo using SocketIO every two seconds:
 
 ```html
 <script src="http://localhost:8000/socket.io/socket.io.js"></script>
@@ -259,6 +265,8 @@ var app = feathers()
 </script>
 ```
 
+In another file we just listen to the `todo created` event and log it:
+
 ```html
 <script src="http://localhost:8000/socket.io/socket.io.js"></script>
 <script>
@@ -269,3 +277,6 @@ var app = feathers()
   });
 </script>
 ```
+
+When visiting both HTMl files in a browser at the same time you should see a new Todo being logged every
+two seconds on both pages.
