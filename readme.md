@@ -1,19 +1,12 @@
 # Feathers
 
-> A feather weight, data driven real-time framework built for tomorrow's web.
+> Let your web app fly.
 
 [![Build Status](https://travis-ci.org/feathersjs/feathers.png)](https://travis-ci.org/feathersjs/feathers)
 
-The core focus of Feathers is **your data**. We believe that ultimately your app's purpose is to manage data in some fashion and so that's all you should really need to deal with. Managing your data. Feathers provides a deadly simple way of managing your data and allows you to provide this data via REST and SocketIO APIs with NodeJS.
+Feathers is a light weight web application framework that rides on top of [Express](http://expressjs.com). It makes it easy to create RESTful web services and real-time applications using [socket.io](http://socket.io).
 
-## Why Another NodeJS Framework?
-
-We know... Oh God another bloody NodeJS framework! Yes we are also very tired of seeing all these NodeJS frameworks. All the rails clones are getting a bit boring and really aren't taking advantage of the real strengths of NodeJS. We wanted to take a different approach than every other framework we have seen, because we believe that data is core to the web and should be the core focus of web applications. 
-
-We also think that your data resources can and should be encapsulated in such a way that they can be ultra scalable and self contained. The MVC pattern works well but it is becoming antiquated in today's web. Frankly you don't need it and they tend to become bloated.
-
-With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of [Express](http://expressjs.com) and is inspired in part by [Sails](http://sailsjs.org), [Flatiron](http://flatironjs.org) and [Derby](http://derbyjs.com).
-
+The core focus of Feathers is **your data**. We believe that ultimately your app's purpose is to manage data in some fashion and so that's all you should really need to deal with. Managing your data.
 
 ## Getting Started Is Easy
 
@@ -269,3 +262,11 @@ var app = feathers()
   });
 </script>
 ```
+
+## Why Another NodeJS Framework?
+
+We know... Oh God another bloody NodeJS framework! Yes we are also very tired of seeing all these NodeJS frameworks. All the rails clones are getting a bit boring and really aren't taking advantage of the real strengths of NodeJS. We wanted to take a different approach than every other framework we have seen, because we believe that data is core to the web and should be the core focus of web applications. 
+
+We also think that your data resources can and should be encapsulated in such a way that they can be ultra scalable and self contained. The MVC pattern works well but it is becoming antiquated in today's web. Frankly you don't need it and they tend to become bloated.
+
+With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of [Express](http://expressjs.com) and is inspired in part by [Sails](http://sailsjs.org), [Flatiron](http://flatironjs.org) and [Derby](http://derbyjs.com).
