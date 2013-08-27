@@ -1,3 +1,5 @@
+'use strict';
+
 var assert = require('assert');
 var _ = require('underscore');
 var Proto = require('uberproto');
@@ -26,7 +28,7 @@ describe('Event mixin', function () {
 			setup: function(arg) {
 				return 'Original setup from object: ' + arg;
 			}
-		}
+		};
 
 		Proto.mixin(EventMixin, existingMethodsService);
 

@@ -1,3 +1,5 @@
+'use strict';
+
 var _ = require('underscore');
 var assert = require('assert');
 
@@ -40,7 +42,7 @@ exports.Service = {
 			id: id
 		});
 	}
-}
+};
 
 exports.verify = {
 	find: function(data) {
@@ -71,4 +73,4 @@ exports.verify = {
 	remove: function(id, data) {
 		assert.deepEqual({ id: id }, data, '.remove called');
 	}
-}
+};

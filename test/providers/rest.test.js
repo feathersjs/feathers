@@ -1,3 +1,5 @@
+'use strict';
+
 var request = require('request');
 var assert = require('assert');
 var feathers = require('../../lib/feathers');

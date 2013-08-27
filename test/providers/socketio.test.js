@@ -1,3 +1,5 @@
+'use strict';
+
 var assert = require('assert');
 var feathers = require('../../lib/feathers');
 var io = require('socket.io-client');
@@ -13,7 +15,7 @@ describe('SocketIO provider', function () {
 		// This seems to be the only way to not get the
 		// socket.io started log messing up the test output
 		var oldlog = console.log;
-		console.log = function() {}
+		console.log = function() {};
 
 		server = feathers()
 			.configure(feathers.socketio())

@@ -18,7 +18,7 @@
   },
   "scripts": {
     "start": "node example/rest/app.js",
-    "test": "mocha test/ --recursive"
+    "test": "grunt"
   },
   "engines": {
     "node": "*",
@@ -36,7 +36,9 @@
     "socket.io-client": "~0.9.11",
     "grunt-cli": "~0.1.7",
     "grunt": "~0.4.1",
-    "grunt-release": "~0.3.5",
-    "mocha": "~1.11.0"
+    "grunt-release": "~0.5.1",
+    "mocha": "~1.11.0",
+    "grunt-contrib-jshint": "~0.6.3",
+    "grunt-simple-mocha": "~0.4.0"
   }
 }
