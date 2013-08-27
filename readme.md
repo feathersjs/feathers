@@ -261,7 +261,6 @@ Lets make an HTML file that creates a new Todo using SocketIO every two seconds:
       console.log('Created: ', data);
     });
   }, 2000);
-  ```
 </script>
 ```
 
