@@ -82,7 +82,7 @@ var myService = {
   create: function(data, params, callback) {},
   update: function(id, data, params, callback) {},
   destroy: function(id, params, callback) {},
-  setup: function(server) {}
+  setup: function(app) {}
 }
 ```
 
@@ -106,4 +106,10 @@ as URL query parameters (like `http://localhost:8000/todo?sort=status`).
 
 ### remove(id, params, callback)
 
-### setup(registry)
+### setup(app)
+
+## How to
+
+### Disable a provider
+
+### Pass service parameters

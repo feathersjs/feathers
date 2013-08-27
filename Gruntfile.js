@@ -1,7 +1,5 @@
 'use strict';
 
-var exec = require('child_process').exec;
-
 module.exports = function (grunt) {
 
   // Project configuration.
@@ -27,9 +25,6 @@ module.exports = function (grunt) {
       files: ['lib/**/*.js', 'test/**/*.js', 'Gruntfile.js', 'package.json']
     },
     simplemocha: {
-      options: {
-        reporter: 'dot'
-      },
       mixins: {
         src: ['test/mixins/**/*.test.js']
       },
