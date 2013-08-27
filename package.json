@@ -1,8 +1,8 @@
 {
   "name": "feathers",
   "description": "An ultra scalable, feather weight, data oriented framework",
-  "version": "0.0.2",
-  "homepage": "https://github.com/feathersjs/feathers",
+  "version": "0.0.3",
+  "homepage": "https://feathersjs.com",
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git"
