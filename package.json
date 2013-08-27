@@ -7,17 +7,26 @@
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git"
   },
-  "author": "YYCjs <hello@yycjs.com> (http://yycjs.com)",
+  "keywords": [
+    "feathers",
+    "REST",
+    "socket.io",
+    "realtime"
+  ],
+  "author": "Feathers <hello@feathersjs.com> (http://feathersjs.com)",
   "contributors": [
     "Eric Kryski <e.kryski@gmail.com> (http://erickryski.com)",
     "David Luecke <daff@neyeon.de> (http://neyeon.com)"
   ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
   "main": "lib/feathers",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "start": "node example/rest/app.js",
     "test": "grunt"
   },
   "engines": {
