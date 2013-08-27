@@ -1,8 +1,8 @@
 # Feathers
 
-> An ultra scalable, feather weight, data oriented framework built for tomorrow's web.
+> A feather weight, data driven real-time framework built for tomorrow's web.
 
-[![Build Status](https://travis-ci.org/yycjs/feathers.png)](https://travis-ci.org/yycjs/feathers)
+[![Build Status](https://travis-ci.org/feathersjs/feathers.png)](https://travis-ci.org/feathersjs/feathers)
 
 The core focus of Feathers is **your data**. We believe that ultimately your app's purpose is to manage data in some fashion and so that's all you should really need to deal with. Managing your data. Feathers provides a deadly simple way of managing your data and allows you to provide this data via REST and SocketIO APIs with NodeJS.
 
@@ -15,17 +15,7 @@ We also think that your data resources can and should be encapsulated in such a 
 With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of [Express](http://expressjs.com) and is inspired in part by [Sails](http://sailsjs.org), [Flatiron](http://flatironjs.org) and [Derby](http://derbyjs.com).
 
 
-## Key Concepts
-
-At the core to Feathers are 3 simple but important concepts, **Providers**, **Services** and **Mixins**.
-
-A **Provider** is simply a module that *provides* your data to clients (ie. via REST or Web Sockets).
-
-A **Service** is a module that defines the API functionality for a given resource and is exposed to clients via a provider. (ie. A definition of create, update, etc.)
-
-A **Mixin** is like a utility or middleware that you can use to improve your service (ie. validation or authentication)
-
-## Getting Started is Easy
+## Getting Started Is Easy
 
 Like we said, services are just simple modules that expose certain methods to the providers. This makes it easy to initialize a service that say... provides a single TODO:
 
@@ -41,17 +31,13 @@ var todoService = {
   }
 };
 
-feathers.createServer({ port: 8000 })
-	.service('todo', todoService)
-	.provide(feathers.rest())
-	.provide(feathers.socketio())
-	.start();
+feathers()
+	.configure(feathers.socketio())
+	.use('todo', todoService)
+	.listen(8000);
 ```
 
 That's all there really is to building an app with Feathers.
-
-
-## Built In Providers
 
 ### REST
 
@@ -65,9 +51,11 @@ and will see:
 }
 ```
 
+> Note: Query parameters like `http://localhost:8000/todo/dishes?type=dirty` will be passed as `params.query`
+
 ### SocketIO
 
-Since, in the above example, you added it as a provider, you can also connect to your service via SocketIO.
+Since we configured our app with `feathers.socketio()`, you can also connect to your service via SocketIO.
 Create an HTML page and insert the following code to see the response data logged on the console:
 
 ```html
@@ -92,72 +80,192 @@ var myService = {
   create: function(data, params, callback) {},
   update: function(id, data, params, callback) {},
   destroy: function(id, params, callback) {},
-  setup: function(server) {}
+  setup: function(app) {}
 }
 ```
 
-All callbacks follow the `function(error, data)` NodeJS convention. `params` contains additional
-parameters like the query parameters of a REST API call. For example `http://localhost:8000/todo/dishes?done=true`
-from the getting started example would result in `{ done: 'true' }` as the `params` object.
+All callbacks follow the `function(error, data)` NodeJS convention. `params` can contain any additional parameters, for
+example the currently authenticated user. REST service calls set `params.query` with the query parameters (e.g. a query string
+like `?status=active&type=user` becomes `{ status: "active", type: "user" }`).
 
-### find(params, callback)
+### `find(params, callback)`
 
-Retrieves a list of all resources of the service. `params` contains additional parameters such
-as URL query parameters (like `http://localhost:8000/todo?sort=status`).
+Retrieves a list of all resources from the service. Ideally use `params.query` for things like filtering and paging so
+that REST calls like `todo?status=completed&user=10` work right out of the box.
 
-### get(id, params, callback)
+__REST__
 
-Retrieves a single resource of the service. `params` contains additional parameters such
-as URL query parameters (like `http://localhost:8000/todo?sort=status`).
+> GET todo?status=completed&user=10
+
+__SocketIO__
+
+```js
+socket.emit('todo::find', {
+  status: 'completed'
+  user: 10
+}, function(error, data) {
+});
+```
+
+### `get(id, params, callback)`
+
+Retrieves a single resource with the given `id` from the service.
+
+__REST__
+
+> GET todo/1
+
+__SocketIO__
+
+```js
+socket.emit('todo::get', 1, {}, function(error, data) {
+
+});
+```
 
 ### create(data, params, callback)
 
+Creates a new resource with `data`. The callback should be called with that resource (and the id initialized).
+
+__REST__
+
+> POST todo
+> { "description": "I really have to iron" }
+
+By default the body can be eihter JSON or form encoded as long as the content type is set accordingly.
+
+__SocketIO__
+
+```js
+socket.emit('todo::create', {
+  description: 'I really have to iron'
+}, function(error, data) {
+});
+```
+
 ### update(id, data, params, callback)
+
+Updates the resource identified by `id` using `data`.
+
+__REST__
+
+> PUT todo/2
+> { "description": "I really have to do laundry" }
+
+__SocketIO__
+
+```js
+socket.emit('todo::update', 2, {
+  description: 'I really have to do laundry'
+}, {}, function(error, data) {
+  // data -> { id: 2, description: "I really have to do laundry" }
+});
+```
 
 ### remove(id, params, callback)
 
-### setup(registry)
+Remove the resource with `id`.
 
-## Built In Services
+__REST__
 
-To make it easier to get started, Feathers comes with several standard service implementations to extend
-from. All built in services follow the same parameter conventions for things like sorting and filtering.
+> DELETE todo/2
 
-### Memory
+__SocketIO__
 
-### MongoDB (TODO)
+```js
+socket.emit('todo::delete', 2, {}, function(error, data) {
+});
+```
 
-### Redis (TODO)
+### setup(app)
 
-## Service mixins
+Initializes the service passing an instance of the Feathers application.
+`app` can do everything a normal Express application does and additionally provides `app.lookup(path)`
+to retrieve another service by its path. `setup` is a great way to connect services:
 
-### Event
+```js
+var todoService = {
+  get: function(name, params, callback) {
+    callback(null, {
+      id: name,
+      description: 'You have to ' + name + '!'
+    });
+  }
+};
 
-### Associations
+var myService = {
+  setup: function(app) {
+    this.todo = app.lookup('todo');
+  },
 
-* register associated services via `has({ 'attr_name': ['service path']})`
-      -
-      ```js 
-      post.has({
-        'author': '/users',
-        'comments': ['/comments']
+  get: function(name, params, callback) {
+    this.todo.get('take out trash', {}, function(error, todo) {
+      callback(null, {
+        name: name,
+        todo: todo
       });
+    });
+  }
+}
 
-      comment.has({
-        'author': '/users',
-        'post': '/posts'
-      });
-      ```
+feathers()
+	.use('todo', todoService)
+	.use('my', myService)
+	.listen(8000);
+```
 
-      - This then gives *user* event listeners for 'post created', 'post updated', 'post removed'
-      - This then gives *user* event listeners for 'comment created', 'comment updated', 'comment removed'
-      - This then gives *post* event listeners for 'comment created', 'comment updated', 'comment removed'
-      - This then gives *post* event listeners for 'user created', 'user updated', 'user removed'
+You can see the combination when going to `http://localhost:8000/my/test`.
 
-* We could use /posts?expand=true to get the posts with all of its comment objects, otherwise we get the ids.
+## Getting Real, Time
 
+```js
+var feathers = require('feathers');
 
+var todoService = {
+  todos: [],
+  find: function(params, callback) {
+    callback(null, this.todos);
+  },
+  create: function(data, params, callback) {
+    this.todos.push(data);
+    callback(null, data);
+  }
+};
 
-### Validation
+var app = feathers()
+	.configure(feathers.socketio())
+	.use('todo', todoService)
+	.listen(8000);
 
-### Authentication
+```
+
+```html
+<script src="http://localhost:8000/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:8000/');
+  var counter = 0;
+
+  // Create a new Todo every two seconds
+  setInterval(function() {
+    counter++;
+
+    socket.emit('todo::create', {
+      description: 'I have ' + counter + ' things to do!'
+    }, {}, function(error, data) {
+      console.log('Created: ', data);
+    });
+  }, 2000);
+  ```
+</script>
+```
+
+```html
+<script src="http://localhost:8000/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:8000/');
+
+  socket.on('todo created', function(todo) {
+    console.log(todo.description);
+  });
+</script>
+```

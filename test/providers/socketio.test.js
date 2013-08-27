@@ -1,64 +1,121 @@
-var expect = require('chai').expect;
-var request = require('request');
+'use strict';
+
+var assert = require('assert');
 var feathers = require('../../lib/feathers');
 var io = require('socket.io-client');
-var _ = require('underscore');
+
+var fixture = require('./service-fixture');
+var todoService = fixture.Service;
+var verify = fixture.verify;
 
 describe('SocketIO provider', function () {
-//	it('get', function (done) {
-//		var todoService = {
-//			get: function(name, params, callback) {
-//				callback(null, {
-//					id: name,
-//					description: 'You have to do ' + name + '!'
-//				});
-//			}
-//		};
-//
-//		var server = feathers.createServer({ port: 8000 })
-//			.service('todo', todoService)
-//			.provide(feathers.socketio())
-//			.start();
-//
-//		var socket = io.connect('http://localhost:8000');
-//
-//		socket.emit('todo::get', 'dishes', {}, function(error, data) {
-//			expect(error).to.be.null;
-//			expect(data.id).to.equal('dishes');
-//			expect(data.description).to.equal('You have to do dishes!');
-//			server.stop();
-//			done();
-//		});
-//	});
+  var server, socket;
 
-	it('create and created event', function (done) {
-		var todoService = {
-			create: function(data, params, callback) {
-				_.defer(function() {
-					callback(null, data);
-				}, 200);
-			}
-		};
+  before(function () {
+    // This seems to be the only way to not get the
+    // socket.io started log messing up the test output
+    var oldlog = console.log;
+    console.log = function () {};
 
-		var server = feathers.createServer({ port: 8000 })
-			.service('todo', todoService)
-			.provide(feathers.socketio())
-			.start();
+    server = feathers()
+      .configure(feathers.socketio())
+      .use('todo', todoService)
+      .listen(3000);
 
-		var socket = io.connect('http://localhost:8000');
+    console.log = oldlog;
 
-		socket.on('todo created', function(data) {
-			expect(data.id).to.equal(1);
-			expect(data.name).to.equal('Create dishes');
-			server.stop();
-			done();
-		});
+    socket = io.connect('http://localhost:3000');
+  });
 
-		socket.emit('todo::create', {
-			id: 1,
-			name: 'Create dishes'
-		}, {}, function(error, data) {
-			expect(error).to.be.null;
-		});
-	});
+  after(function (done) {
+    socket.disconnect();
+    server.close(done);
+  });
+
+  describe('CRUD', function () {
+    it('::find', function (done) {
+      socket.emit('todo::find', {}, function (error, data) {
+        verify.find(data);
+
+        done(error);
+      });
+    });
+
+    it('::get', function (done) {
+      socket.emit('todo::get', 'laundry', {}, function (error, data) {
+        verify.get('laundry', data);
+
+        done(error);
+      });
+    });
+
+    it('::create', function (done) {
+      var original = {
+        name: 'creating'
+      };
+
+      socket.emit('todo::create', original, {}, function (error, data) {
+        verify.create(original, data);
+
+        done(error);
+      });
+    });
+
+    it('::update', function (done) {
+      var original = {
+        name: 'updating'
+      };
+
+      socket.emit('todo::update', 23, original, {}, function (error, data) {
+        verify.update(23, original, data);
+
+        done(error);
+      });
+    });
+
+    it('::remove', function (done) {
+      socket.emit('todo::remove', 11, {}, function (error, data) {
+        verify.remove(11, data);
+
+        done(error);
+      });
+    });
+  });
+
+  describe('Events', function () {
+    it('created', function (done) {
+      var original = {
+        name: 'created event'
+      };
+
+      socket.on('todo created', function (data) {
+        verify.create(original, data);
+        done();
+      });
+
+      socket.emit('todo::create', original, {}, function () {});
+    });
+
+    it('updated', function (done) {
+      var original = {
+        name: 'updated event'
+      };
+
+      socket.on('todo updated', function (data) {
+        verify.update(10, original, data);
+        done();
+      });
+
+      socket.emit('todo::update', 10, original, {}, function () {});
+    });
+
+    it('removed', function (done) {
+      socket.on('todo removed', function (data) {
+        verify.remove(333, data);
+        done();
+      });
+
+      socket.emit('todo::remove', 333, {}, function () {});
+    });
+  });
 });

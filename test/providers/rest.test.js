@@ -1,49 +1,93 @@
-var assert = require('assert');
+'use strict';
+
 var request = require('request');
+var assert = require('assert');
 var feathers = require('../../lib/feathers');
 
+var fixture = require('./service-fixture');
+var todoService = fixture.Service;
+var verify = fixture.verify;
+
 describe('REST provider', function () {
-	it('GET', function (done) {
-		var todoService = {
-			get: function(name, params, callback) {
-				callback(null, {
-					id: name,
-					description: "You have to do " + name + "!"
-				});
-			}
-		};
+  describe('CRUD', function () {
+    var server;
 
-		var server = feathers.createServer({ port: 8000 })
-			.service('todo', todoService)
-			.provide(feathers.rest())
-			.provide(feathers.socketio())
-			.start();
+    before(function () {
+      server = feathers()
+        .use('todo', todoService)
+        .listen(3000);
+    });
 
-		request('http://localhost:8000/todo/dishes', function (error, response, body) {
-			server.stop();
-			done();
-		})
-	});
+    after(function (done) {
+      server.close(done);
+    });
 
-	it('PUT', function (done) {
-		var todoService = {
-			get: function(name, params, callback) {
-				callback(null, {
-					id: name,
-					description: "You have to do " + name + "!"
-				});
-			}
-		};
+    it('GET .find', function (done) {
+      request('http://localhost:3000/todo', function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        verify.find(JSON.parse(body));
+        done(error);
+      });
+    });
 
-		var server = feathers.createServer({ port: 8000 })
-			.service('todo', todoService)
-			.provide(feathers.rest())
-			.start();
+    it('GET .get', function (done) {
+      request('http://localhost:3000/todo/dishes', function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        verify.get('dishes', JSON.parse(body));
+        done(error);
+      });
+    });
 
-		request('http://localhost:8000/todo/dishes', function (error, response, body) {
-			// console.log(arguments);
-			server.stop();
-			done();
-		})
-	});
+    it('POST .create', function (done) {
+      var original = {
+        description: 'POST .create'
+      };
+
+      request({
+        url: 'http://localhost:3000/todo',
+        method: 'post',
+        body: JSON.stringify(original),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }, function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        verify.create(original, JSON.parse(body));
+
+        done(error);
+      });
+    });
+
+    it('PUT .update', function (done) {
+      var original = {
+        description: 'PUT .update'
+      };
+
+      request({
+        url: 'http://localhost:3000/todo/544',
+        method: 'put',
+        body: JSON.stringify(original),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }, function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        verify.update(544, original, JSON.parse(body));
+
+        done(error);
+      });
+    });
+
+    it('DELETE .remove', function (done) {
+      request({
+        url: 'http://localhost:3000/todo/233',
+        method: 'delete'
+      }, function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        verify.remove(233, JSON.parse(body));
+
+        done(error);
+      });
+    });
+  });
 });

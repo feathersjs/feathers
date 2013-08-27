@@ -1,67 +1,43 @@
-var exec = require('child_process').exec;
+'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    meta: {
-      banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
-        '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-        '<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
-        '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
+    release: {},
+    jshint: {
+      options: {
+        jshintrc: '.jshintrc'
+      },
+      lib: ['lib/**/*.js', 'Gruntfile.js'],
+      test: 'test/**/*.js'
     },
-
-    /* Testing
-    =======================================================*/
+    jsbeautifier: {
+      options: {
+        js: {
+          indent_size: 2,
+          jslintHappy: true,
+          keepArrayIndentation: true,
+          wrapLineLength: 0
+        }
+      },
+      files: ['lib/**/*.js', 'test/**/*.js', 'Gruntfile.js', 'package.json']
+    },
     simplemocha: {
-      options: {
-        globals: ['should', 'expect'],
-        timeout: 3000,
-        ignoreLeaks: false,
-        // grep: '*-test',
-        ui: 'bdd',
-        reporter: 'spec'
+      mixins: {
+        src: ['test/mixins/**/*.test.js']
       },
-
-      all: { src: 'test/**/*.js' },
-      mixins: { src: 'test/mixins/**/*.js' },
-      providers: { src: 'test/providers/**/*.js' },
-      services: { src: 'test/services/**/*.js' }
-    },
-
-    /* Documentation
-    =======================================================*/
-    dox: {
-      options: {
-        title: "<%= pkg.title || pkg.name %>"
-      },
-      files: {
-        src: ['lib/'],
-        dest: 'docs'
+      providers: {
+        src: ['test/providers/**/*.test.js']
       }
     }
   });
 
-  grunt.loadNpmTasks('grunt-simple-mocha');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-release');
-  grunt.loadNpmTasks('grunt-dox');
+  grunt.loadNpmTasks('grunt-jsbeautifier');
+  grunt.loadNpmTasks('grunt-simple-mocha');
 
-  // Alias'
-  // --------------------------------------------------
-  grunt.registerTask('test', ['simplemocha:all']);
-  grunt.registerTask('test:mixins', ['simplemocha:mixins']);
-  grunt.registerTask('test:providers', ['simplemocha:providers']);
-  grunt.registerTask('test:services', ['simplemocha:services']);
-
-  // Default Task.
-  grunt.registerTask("default", ['development']);
-
-  // Development Tasks
-  // --------------------------------------------------
-  grunt.registerTask('development', ['test']);
-
-  // Release Tasks
-  // --------------------------------------------------
+  grunt.registerTask('default', ['jsbeautifier', 'jshint', 'simplemocha']);
 };
