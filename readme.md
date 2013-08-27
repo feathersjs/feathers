@@ -8,6 +8,12 @@ Feathers is a light weight web application framework that rides on top of [Expre
 
 The core focus of Feathers is **your data**. We believe that ultimately your app's purpose is to manage data in some fashion and so that's all you should really need to deal with. Managing your data.
 
+## Install
+
+As with any NodeJS module, just install it as a dependency in your application:
+
+> npm install feathers --save
+
 ## Getting Started Is Easy
 
 Like we said, services are just simple modules that expose certain methods to the providers. This makes it easy to initialize a service that say... provides a single TODO:
@@ -211,16 +217,15 @@ You can see the combination when going to `http://localhost:8000/my/test`.
 
 ## Getting Real, Time
 
+The secret ingredient to create real time applications using Feathers and SocketIO is the
+`created`, `updated` and `removed` events every Feathers service automatically emits.
+Here is another simple Todo service, that just passes the data through `create`:
+
 ```js
 var feathers = require('feathers');
 
 var todoService = {
-  todos: [],
-  find: function(params, callback) {
-    callback(null, this.todos);
-  },
   create: function(data, params, callback) {
-    this.todos.push(data);
     callback(null, data);
   }
 };
@@ -229,8 +234,9 @@ var app = feathers()
 	.configure(feathers.socketio())
 	.use('todo', todoService)
 	.listen(8000);
-
 ```
+
+Lets make an HTML file that creates a new Todo using SocketIO every two seconds:
 
 ```html
 <script src="http://localhost:8000/socket.io/socket.io.js"></script>
@@ -248,9 +254,10 @@ var app = feathers()
       console.log('Created: ', data);
     });
   }, 2000);
-  ```
 </script>
 ```
+
+In another file we just listen to the `todo created` event and log it:
 
 ```html
 <script src="http://localhost:8000/socket.io/socket.io.js"></script>
@@ -262,6 +269,9 @@ var app = feathers()
   });
 </script>
 ```
+When visiting both HTMl files in a browser at the same time you should see a new Todo being logged every
+two seconds on both pages.
+
 
 ## Why Another NodeJS Framework?
 
