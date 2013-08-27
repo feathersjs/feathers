@@ -39,9 +39,6 @@ feathers()
 
 That's all there really is to building an app with Feathers.
 
-
-## Built In Providers
-
 ### REST
 
 You can access the REST service by going to `http://localhost:8000/todo/dishes` in your browser
@@ -68,6 +65,10 @@ Create an HTML page and insert the following code to see the response data logge
   });
 </script>
 ```
+
+## Getting real, time
+
+
 
 ## Services
 
