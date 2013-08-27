@@ -15,7 +15,7 @@ We also think that your data resources can and should be encapsulated in such a 
 With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of [Express](http://expressjs.com) and is inspired in part by [Sails](http://sailsjs.org), [Flatiron](http://flatironjs.org) and [Derby](http://derbyjs.com).
 
 
-## Getting Started is Easy
+## Getting Started Is Easy
 
 Like we said, services are just simple modules that expose certain methods to the providers. This makes it easy to initialize a service that say... provides a single TODO:
 
@@ -95,7 +95,7 @@ that REST calls like `todo?status=completed&user=10` work right out of the box.
 
 __REST__
 
-  GET todo?status=completed&user=10
+> GET todo?status=completed&user=10
 
 __SocketIO__
 
@@ -113,7 +113,7 @@ Retrieves a single resource with the given `id` from the service.
 
 __REST__
 
-  GET todo/1
+> GET todo/1
 
 __SocketIO__
 
@@ -129,8 +129,8 @@ Creates a new resource with `data`. The callback should be called with that reso
 
 __REST__
 
-  POST todo
-  { "description": "I really have to iron" }
+> POST todo
+> { "description": "I really have to iron" }
 
 By default the body can be eihter JSON or form encoded as long as the content type is set accordingly.
 
@@ -149,8 +149,8 @@ Updates the resource identified by `id` using `data`.
 
 __REST__
 
-  PUT todo/2
-  { "description": "I really have to do laundry" }
+> PUT todo/2
+> { "description": "I really have to do laundry" }
 
 __SocketIO__
 
@@ -168,7 +168,7 @@ Remove the resource with `id`.
 
 __REST__
 
-  DELETE todo/2
+> DELETE todo/2
 
 __SocketIO__
 
@@ -179,17 +179,16 @@ socket.emit('todo::delete', 2, {}, function(error, data) {
 
 ### setup(app)
 
-Initializes the service passing an instance of the feathers application it is running on.
-`app` can do everything a normal Express application does and additionally allows you to call
-`app.lookup(path)` to retrieve another service by its path. `.setup` is guaranteed to be called
-before any other service method so it is a great way to connect services:
+Initializes the service passing an instance of the Feathers application.
+`app` can do everything a normal Express application does and additionally provides `app.lookup(path)`
+to retrieve another service by its path. `setup` is a great way to connect services:
 
 ```js
 var todoService = {
   get: function(name, params, callback) {
     callback(null, {
       id: name,
-      description: "You have to do " + name + "!"
+      description: 'You have to ' + name + '!'
     });
   }
 };
@@ -210,15 +209,14 @@ var myService = {
 }
 
 feathers()
-	.configure(feathers.socketio())
 	.use('todo', todoService)
 	.use('my', myService)
 	.listen(8000);
 ```
 
-## Getting real, time
+You can see the combination when going to `http://localhost:8000/my/test`.
 
-
+## Getting Real, Time
 
 ```js
 var feathers = require('feathers');
@@ -239,15 +237,35 @@ var app = feathers()
 	.use('todo', todoService)
 	.listen(8000);
 
-setInterval(
 ```
 
 ```html
 <script src="http://localhost:8000/socket.io/socket.io.js"></script>
 <script>
   var socket = io.connect('http://localhost:8000/');
-  socket.emit('todo::create', , {}, function(error, data) {
-    console.log(data); // -> { id: 'laundry', description: 'You have to do laundry!' }
+  var counter = 0;
+
+  // Create a new Todo every two seconds
+  setInterval(function() {
+    counter++;
+
+    socket.emit('todo::create', {
+      description: 'I have ' + counter + ' things to do!'
+    }, {}, function(error, data) {
+      console.log('Created: ', data);
+    });
+  }, 2000);
+  ```
+</script>
+```
+
+```html
+<script src="http://localhost:8000/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:8000/');
+
+  socket.on('todo created', function(todo) {
+    console.log(todo.description);
   });
 </script>
 ```

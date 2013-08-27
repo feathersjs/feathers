@@ -2,10 +2,10 @@
   "name": "feathers",
   "description": "An ultra scalable, feather weight, data oriented framework",
   "version": "0.0.2",
-  "homepage": "https://github.com/yycjs/feathers",
+  "homepage": "https://github.com/feathersjs/feathers",
   "repository": {
     "type": "git",
-    "url": "git://github.com/yycjs/feathers.git"
+    "url": "git://github.com/feathersjs/feathers.git"
   },
   "author": "YYCjs <hello@yycjs.com> (http://yycjs.com)",
   "contributors": [
