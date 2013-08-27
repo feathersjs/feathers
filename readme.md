@@ -16,7 +16,7 @@ As with any NodeJS module, just install it as a dependency in your application:
 
 ## Getting Started Is Easy
 
-Like we said, services are just simple modules that expose certain methods to the providers. This makes it easy to initialize a service that say... provides a single TODO:
+Building an app with Feathers is easy. There are only 4 things to worry about. A wrapped express server, providers, services & middleware. Services are just simple modules that expose certain methods to the providers in order to CRUD your data. We can easily initialize a service that say... provides a single TODO:
 
 ```js
 var feathers = require('feathers');
