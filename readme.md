@@ -70,7 +70,7 @@ Create an HTML page and insert the following code to see the response data logge
 ## Services
 
 A service can be any JavaScript object that offers one or more of the `find`, `get`, `create`, `update`,
-`destroy` and `setup` service methods:
+`remove` and `setup` service methods:
 
 ```js
 var myService = {
@@ -78,7 +78,7 @@ var myService = {
   get: function(id, params, callback) {},
   create: function(data, params, callback) {},
   update: function(id, data, params, callback) {},
-  destroy: function(id, params, callback) {},
+  remove: function(id, params, callback) {},
   setup: function(app) {}
 }
 ```
