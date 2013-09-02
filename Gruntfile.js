@@ -25,9 +25,6 @@ module.exports = function (grunt) {
       files: ['lib/**/*.js', 'test/**/*.js', 'Gruntfile.js', 'package.json']
     },
     simplemocha: {
-      options: {
-        reporter: 'spec'
-      },
       mixins: {
         src: ['test/mixins/**/*.test.js']
       },
