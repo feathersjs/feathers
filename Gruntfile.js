@@ -25,6 +25,9 @@ module.exports = function (grunt) {
       files: ['lib/**/*.js', 'test/**/*.js', 'Gruntfile.js', 'package.json']
     },
     simplemocha: {
+      options: {
+        reporter: 'spec'
+      },
       mixins: {
         src: ['test/mixins/**/*.test.js']
       },
@@ -39,5 +42,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-jsbeautifier');
   grunt.loadNpmTasks('grunt-simple-mocha');
 
+  grunt.registerTask('test', 'simplemocha');
   grunt.registerTask('default', ['jsbeautifier', 'jshint', 'simplemocha']);
 };

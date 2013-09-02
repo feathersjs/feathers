@@ -10,12 +10,11 @@ var verify = fixture.verify;
 
 describe('REST provider', function () {
   describe('CRUD', function () {
-    var server;
+    var server, app;
 
     before(function () {
-      server = feathers()
-        .use('todo', todoService)
-        .listen(3000);
+      app = feathers().use('todo', todoService);
+      server = app.listen(4777);
     });
 
     after(function (done) {
@@ -23,7 +22,7 @@ describe('REST provider', function () {
     });
 
     it('GET .find', function (done) {
-      request('http://localhost:3000/todo', function (error, response, body) {
+      request('http://localhost:4777/todo', function (error, response, body) {
         assert.ok(response.statusCode === 200, 'Got OK status code');
         verify.find(JSON.parse(body));
         done(error);
@@ -31,7 +30,7 @@ describe('REST provider', function () {
     });
 
     it('GET .get', function (done) {
-      request('http://localhost:3000/todo/dishes', function (error, response, body) {
+      request('http://localhost:4777/todo/dishes', function (error, response, body) {
         assert.ok(response.statusCode === 200, 'Got OK status code');
         verify.get('dishes', JSON.parse(body));
         done(error);
@@ -44,7 +43,7 @@ describe('REST provider', function () {
       };
 
       request({
-        url: 'http://localhost:3000/todo',
+        url: 'http://localhost:4777/todo',
         method: 'post',
         body: JSON.stringify(original),
         headers: {
@@ -64,7 +63,7 @@ describe('REST provider', function () {
       };
 
       request({
-        url: 'http://localhost:3000/todo/544',
+        url: 'http://localhost:4777/todo/544',
         method: 'put',
         body: JSON.stringify(original),
         headers: {
@@ -80,7 +79,7 @@ describe('REST provider', function () {
 
     it('DELETE .remove', function (done) {
       request({
-        url: 'http://localhost:3000/todo/233',
+        url: 'http://localhost:4777/todo/233',
         method: 'delete'
       }, function (error, response, body) {
         assert.ok(response.statusCode === 200, 'Got OK status code');
@@ -88,6 +87,37 @@ describe('REST provider', function () {
 
         done(error);
       });
+    });
+  });
+
+  it('sets service parameters', function (done) {
+    var service = {
+      get: function (id, params, callback) {
+        callback(null, params);
+      }
+    };
+
+    var server = feathers()
+      .use(function (req, res, next) {
+        assert.ok(req.feathers, 'Feathers object initialized');
+        req.feathers.test = 'Happy';
+        next();
+      })
+      .use('service', service)
+      .listen(4778);
+
+    request('http://localhost:4778/service/bla?some=param&another=thing', function (error, response, body) {
+      var expected = {
+        test: 'Happy',
+        query: {
+          some: 'param',
+          another: 'thing'
+        }
+      };
+
+      assert.ok(response.statusCode === 200, 'Got OK status code');
+      assert.deepEqual(JSON.parse(body), expected, 'Got params object back');
+      server.close(done);
     });
   });
 });
