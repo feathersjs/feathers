@@ -39,5 +39,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-jsbeautifier');
   grunt.loadNpmTasks('grunt-simple-mocha');
 
+  grunt.registerTask('test', 'simplemocha');
   grunt.registerTask('default', ['jsbeautifier', 'jshint', 'simplemocha']);
 };
