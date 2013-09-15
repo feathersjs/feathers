@@ -5,40 +5,37 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    release: {},
-    jshint: {
-      options: {
-        jshintrc: '.jshintrc'
-      },
-      lib: ['lib/**/*.js', 'Gruntfile.js'],
-      test: 'test/**/*.js'
+    release: {
+
     },
-    jsbeautifier: {
-      options: {
-        js: {
-          indent_size: 2,
-          jslintHappy: true,
-          keepArrayIndentation: true,
-          wrapLineLength: 0
+
+    less: {
+      production: {
+        options: {
+          paths: ["less"],
+          yuicompress: true
+          // ieCompat: true
+        },
+        files: {
+          "css/feathers.min.css": "less/main.less"
         }
-      },
-      files: ['lib/**/*.js', 'test/**/*.js', 'Gruntfile.js', 'package.json']
-    },
-    simplemocha: {
-      mixins: {
-        src: ['test/mixins/**/*.test.js']
-      },
-      providers: {
-        src: ['test/providers/**/*.test.js']
       }
-    }
+    },
+
+    watch: {
+      all: {
+        files: ['**/*.js', '**/*.less', '**/*.html', 'img/**/*'],
+        tasks: ['default'],
+        options: {
+        },
+      },
+    },
   });
 
-  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-release');
-  grunt.loadNpmTasks('grunt-jsbeautifier');
-  grunt.loadNpmTasks('grunt-simple-mocha');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('test', 'simplemocha');
-  grunt.registerTask('default', ['jsbeautifier', 'jshint', 'simplemocha']);
+  grunt.registerTask('default', ['less']);
 };

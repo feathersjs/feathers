@@ -1,0 +1,42 @@
+{
+  "name": "feathers",
+  "description": "An ultra scalable, feather weight, data oriented framework",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://feathersjs.com",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git"
+  },
+  "keywords": [
+    "feathers",
+    "REST",
+    "socket.io",
+    "realtime"
+  ],
+  "author": "Feathers <hello@feathersjs.com> (http://feathersjs.com)",
+  "contributors": [
+    "Eric Kryski <e.kryski@gmail.com> (http://erickryski.com)",
+    "David Luecke <daff@neyeon.de> (http://neyeon.com)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "scripts": {
+    "test": "grunt"
+  },
+  "engines": {
+    "node": "*",
+    "npm": "*"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt-cli": "~0.1.7",
+    "grunt": "~0.4.1",
+    "grunt-release": "~0.5.1",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-less": "~0.7.0",
+    "grunt-contrib-watch": "~0.5.3"
+  }
+}
