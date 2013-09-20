@@ -64,11 +64,12 @@ a {
 }
 
 section {
-  padding: 80px 0;
+  padding: 120px 0;
 }
 
 section.hero {
   text-align: center;
+  margin-top: 80px;
 
   h1 {
     margin-top: -20px;
@@ -83,16 +84,25 @@ section.hero {
   .btn {
     margin-top: 20px;
   }
+
+  img {
+    margin: -20px 0 20px 0;
+  }
 }
 
 section.get-started {
   .drop-shadow(0, 1px, 8px, 0.3);
-  background: @super-dark-grey;
-  color: @super-light-grey;
+  background: @lighter-grey;
+/*  color: @super-light-grey;*/
+
+  h1 {
+    color: @red;
+  }
 
   p {
     font-weight: 200;
     letter-spacing: 1px;
+    color: @dark-grey;
   }
 }
 
