@@ -3,6 +3,7 @@
 var assert = require('assert');
 var feathers = require('../../lib/feathers');
 var io = require('socket.io-client');
+var request = require('request');
 
 var fixture = require('./service-fixture');
 var todoService = fixture.Service;
@@ -20,11 +21,11 @@ describe('SocketIO provider', function () {
     server = feathers()
       .configure(feathers.socketio())
       .use('todo', todoService)
-      .listen(3000);
+      .listen(7886);
 
     console.log = oldlog;
 
-    socket = io.connect('http://localhost:3000');
+    socket = io.connect('http://localhost:7886');
   });
 
   after(function (done) {
