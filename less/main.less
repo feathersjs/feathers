@@ -1,6 +1,7 @@
 @import "bootstrap/bootstrap";
 @import "font-awesome/font-awesome";
 @import "variables";
+@import "mixins";
 
 body, html {
   height: 100%;
@@ -10,16 +11,117 @@ body {
   min-height: 100%;
 }
 
-#content, #menu {
-  overflow: scroll;
-  height: 100%;
+a {
+  color: @red;
+
+  &:hover {
+    color: @dark-red;
+  }
 }
 
-#menu {
-  color: @gray-lighter;
-  background-color: @gray-dark;
+.navbar {
+  margin-bottom: 0;
 }
 
-#content {
-  box-shadow: -1px 1px 3px 1px @gray-light;
+.navbar-brand {
+  padding: 10px 0;
+}
+
+.navbar-inverse {
+  background: @super-dark-grey;
+}
+
+.navbar-nav > li > a {
+  margin: 35px 0;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary {
+  background-color: @medium-red;
+  border-color: @dark-red;
+}
+
+.btn-primary {
+  background-color: @red;
+  border-color: @dark-red;
+}
+
+.nav-stacked > li.active > a,
+.nav-stacked > li.active > a:hover,
+.nav-stacked > li.active > a:focus {
+  background-color: @red;
+  color: @white;
+}
+
+.nav-stacked > li > a:hover,
+.nav-stacked > li > a:focus {
+  /*color: @dark-grey;*/
+  background-color: @super-light-grey;
+}
+
+section {
+  padding: 80px 0;
+}
+
+section.hero {
+  text-align: center;
+
+  h1 {
+    margin-top: -20px;
+  }
+
+  .tagline {
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 48px;
+  }
+
+  .btn {
+    margin-top: 20px;
+  }
+}
+
+section.get-started {
+  .drop-shadow(0, 1px, 8px, 0.3);
+  background: @super-dark-grey;
+  color: @super-light-grey;
+
+  p {
+    font-weight: 200;
+    letter-spacing: 1px;
+  }
+}
+
+section.features {
+  text-align: center;
+  color: @dark-grey;
+
+  [class^="icon-"], [class*=" icon-"] {
+    font-size: 42px;
+  }
+
+  .description {
+    text-align: justify;
+    font-weight: 300;
+    font-size: 18px;
+    letter-spacing: 1px;
+  }
+}
+
+section.example {
+  background: @red;
+}
+
+footer {
+  color: @light-grey;
+  background: @very-dark-grey;
+  padding: 40px;
+
+  .icon-heart {
+    font-size: 24px;
+    color: @red;
+  }
 }
