@@ -26,7 +26,7 @@
 
   <!-- NAVBAR
   ================================================== -->
-  <body>
+  <body data-spy="scroll" data-target=".navbar-inverse" data-offset="100">
     <div class="navbar-wrapper">
       <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
@@ -43,7 +43,7 @@
           <div class="navbar-collapse collapse pull-right">
             <ul class="nav navbar-nav">
               <li class="active"><a href="#features">Features</a></li>
-              <li><a href="#getstarted">Get Started</a></li>
+              <li><a href="#rapid-start">Get Started</a></li>
               <li><a href="#example">Example</a></li>
               <li><a href="#documentation">Documentation</a></li>
               <li><a href="https://github.com/feathersjs/feathers">Github</a></li>
@@ -53,8 +53,8 @@
       </div>
     </div>
 
-    <div class="content" data-spy="scroll" data-target=".navbar-inverse" data-offset="-100">
-      <section class="hero">
+    <div class="content">
+      <section id="hero" class="hero">
         <div class="container">
           <div class="row">
             <div class="col-md-6">
@@ -98,7 +98,7 @@
               </p>
             </div>
             <div class="col-md-4">
-              <i class="icon-plane"></i>
+              <i class="icon-rocket"></i>
               <h2>Realtime</h2>
               <p class="feature description">No real-time abstraction magic. Plain SocketIO and events is all you need to make your web application come to live.</p>
             </div>
@@ -209,7 +209,7 @@
 
     <!-- FOOTER -->
     <footer>
-      <p class="pull-right"><a href="#">Back to top</a></p>
+      <p class="pull-right"><a href="#hero">Back to top</a></p>
       <p>© 2013 Feathers. Another project made with <i class="icon-heart"></i> by <a href="http://twitter/daffl" title="David Luecke" target="_blank">@daffl</a> and <a href="http://twitter/ekryski" title="Eric Kryski" target="_blank">@ekryski</a>.</p>
       <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=watch&count=true"
   allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
