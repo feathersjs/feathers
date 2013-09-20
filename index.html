@@ -6,21 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
     <link rel="shortcut icon" href="/ico/favicon.png">
 
     <title>Feathersjs - A micro, real-time framework that lets your web apps fly.</title>
 
     <!-- Feathers CSS -->
-    <link href="/css/feathers.min.css" rel="stylesheet">
+    <link href="css/feathers.min.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-      <script src="/js/html5shiv.js"></script>
-      <script src="/js/respond.min.js"></script>
+      <script src="js/html5shiv.js"></script>
+      <script src="js/respond.min.js"></script>
     <![endif]-->
   </head>
 
@@ -37,7 +37,7 @@
               <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="/">
-              <img class="navbar-logo" src="/img/feathers-logo-dark.png" alt="Feathers Logo">
+              <img class="navbar-logo" src="img/feathers-logo-dark.png" alt="Feathers Logo">
             </a>
           </div>
           <div class="navbar-collapse collapse pull-right">
@@ -64,14 +64,14 @@
                 <p class="inline-code">> npm install feathers</p>
               </div>
               <div class="col-md-6 col-md-offset-3">
-                <a href="#getstarted" class="btn btn-primary btn-lg btn-block">Take Flight</a>
+                <a href="#getstarted" class="btn btn-primary btn-lg btn-block">Take Off</a>
               </div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="row">
               <div class="col-md-8 col-md-offset-2">
-                <img src="/img/feathers-medium.png" alt="Feathers" class="img-responsive">
+                <img src="img/feathers-medium.png" alt="Feathers" class="img-responsive">
               </div>
             </div>
             <div class="row">
@@ -89,19 +89,45 @@
       <div class="container">
         <div class="row">
           <div class="col-md-4">
-            <i class="icon-magic"></i>
+            <i class="icon-cloud"></i>
             <h2>Lightweight</h2>
-            <p class="feature description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, quis, magnam, beatae debitis sit eaque corporis quisquam eveniet laboriosam sequi ipsa non blanditiis vitae soluta quia animi facilis et! Sunt.</p>
+            <p class="feature description">No "Framework X" but for Node.
+              Built right on top and with the spirit of Express. Literally replace
+              <code>express</code> with <code>feathers</code>.
+            </p>
           </div>
           <div class="col-md-4">
-            <i class="icon-magic"></i>
+            <i class="icon-plane"></i>
             <h2>Realtime</h2>
-            <p class="feature description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, quis, magnam, beatae debitis sit eaque corporis quisquam eveniet laboriosam sequi ipsa non blanditiis vitae soluta quia animi facilis et! Sunt.</p>
+            <p class="feature description">No real-time abstraction magic. Plain SocketIO and events is all you need to make your web application come to live.</p>
           </div>
           <div class="col-md-4">
-            <i class="icon-magic"></i>
+            <i class="icon-cogs"></i>
             <h2>Flexible</h2>
-            <p class="feature description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, quis, magnam, beatae debitis sit eaque corporis quisquam eveniet laboriosam sequi ipsa non blanditiis vitae soluta quia animi facilis et! Sunt.</p>
+            <p class="feature description">You can do everything that
+              Express and SocketIO can do. And services give you the
+              direction to easily structure your data and application logic.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rapid-start">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h1>Rapid start</h1>
+            <p>Feathers can get a REST and SocketIO service running in no time.
+              <strong>Services</strong> are objects that can be used just like
+              an Express middleware. The example on the right creates a simple
+              Todo service that is available as a RESTful service and via SocektIO:</p>
+            <ul class="nav nav-pills">
+              <li class="active"><a href="#">REST</a></li>
+              <li><a href="#">SocketIO</a></li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <script src="https://gist.github.com/daffl/6644432.js"></script>
           </div>
         </div>
       </div>
@@ -111,7 +137,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-6">
-            <img class="screencast" src="/img/video-placeholder.jpg" data-video="http://www.youtube.com/embed/zP_D_YKnwi0">
+            <img class="screencast" src="img/video-placeholder.jpg" data-video="http://www.youtube.com/embed/zP_D_YKnwi0">
           </div>
           <div class="col-md-6">
             <h1>Obligatory Screencast</h1>
@@ -182,7 +208,7 @@
     <!-- JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/js/jquery.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
   </body>
 </html>
