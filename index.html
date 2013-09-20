@@ -46,71 +46,72 @@
               <li><a href="#getstarted">Get Started</a></li>
               <li><a href="#example">Example</a></li>
               <li><a href="#documentation">Documentation</a></li>
-              <li><a href="#github">Github</a></li>
+              <li><a href="https://github.com/feathersjs/feathers">Github</a></li>
             </ul>
           </div>
         </div>
       </div>
     </div>
 
-    <section class="hero">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="row">
-              <h1 class="tagline">Let your applications fly</h1>
-              <h4>Build lightweight, real-time apps in seconds</h4>
-              <div class="col-md-6 col-md-offset-3">
-                <p class="inline-code">> npm install feathers</p>
-              </div>
-              <div class="col-md-6 col-md-offset-3">
-                <a href="#getstarted" class="btn btn-primary btn-lg btn-block">Take Off</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="row">
-              <div class="col-md-8 col-md-offset-2">
-                <img src="img/feathers-medium.png" alt="Feathers" class="img-responsive">
+    <div class="content" data-spy="scroll" data-target=".navbar-inverse" data-offset="-100">
+      <section class="hero">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="row">
+                <h1 class="tagline">Let your applications fly</h1>
+                <h4>Build lightweight, real-time apps in seconds</h4>
+                <div class="col-md-6 col-md-offset-3">
+                  <p class="inline-code">> npm install feathers</p>
+                </div>
+                <div class="col-md-6 col-md-offset-3">
+                  <a href="https://github.com/feathersjs/feathers" class="btn btn-primary btn-lg btn-block">Take Off</a>
+                </div>
               </div>
             </div>
-            <div class="row">
-                <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=watch&count=true"
-              allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
-                <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=fork&count=true"
-              allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+            <div class="col-md-6">
+              <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                  <img src="img/feathers-medium.png" alt="Feathers" class="img-responsive">
+                </div>
+              </div>
+              <div class="row">
+                  <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=watch&count=true"
+                allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+                  <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=fork&count=true"
+                allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="features">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-4">
-            <i class="icon-cloud"></i>
-            <h2>Lightweight</h2>
-            <p class="feature description">No "Framework X" but for Node.
-              Built right on top and with the spirit of Express. Literally replace
-              <code>express</code> with <code>feathers</code>.
-            </p>
-          </div>
-          <div class="col-md-4">
-            <i class="icon-plane"></i>
-            <h2>Realtime</h2>
-            <p class="feature description">No real-time abstraction magic. Plain SocketIO and events is all you need to make your web application come to live.</p>
-          </div>
-          <div class="col-md-4">
-            <i class="icon-cogs"></i>
-            <h2>Flexible</h2>
-            <p class="feature description">You can do everything that
-              Express and SocketIO can do. And services give you the
-              direction to easily structure your data and application logic.</p>
+      <section id="features" class="features">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <i class="icon-cloud"></i>
+              <h2>Lightweight</h2>
+              <p class="feature description">No "Framework X" but for Node.
+                Built right on top and with the spirit of Express. Literally replace
+                <code>express</code> with <code>feathers</code>.
+              </p>
+            </div>
+            <div class="col-md-4">
+              <i class="icon-plane"></i>
+              <h2>Realtime</h2>
+              <p class="feature description">No real-time abstraction magic. Plain SocketIO and events is all you need to make your web application come to live.</p>
+            </div>
+            <div class="col-md-4">
+              <i class="icon-cogs"></i>
+              <h2>Flexible</h2>
+              <p class="feature description">You can do everything that
+                Express and SocketIO can do. And services give you the
+                direction to easily structure your data and application logic.</p>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
     <section class="rapid-start">
       <div class="container">
@@ -122,7 +123,7 @@
               an Express middleware. The example on the right creates a simple
               Todo service that is available as a RESTful service and via SocektIO.</p>
 
-            <ul class="nav nav-pills options">
+            <ul class="nav nav-pills options" id="rapidstart">
               <li class="active"><a href="#">REST</a></li>
               <li><a href="#">SocketIO</a></li>
             </ul>
@@ -133,69 +134,78 @@
             <script src="https://gist.github.com/daffl/6644432.js"></script>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="get-started">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6">
-            <img class="screencast" src="img/video-placeholder.jpg" data-video="http://www.youtube.com/embed/zP_D_YKnwi0">
-          </div>
-          <div class="col-md-6">
-            <h1>Obligatory Screencast</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, at voluptatibus accusantium nemo autem rerum quo sequi praesentium dignissimos laudantium quisquam deleniti facilis blanditiis quaerat maiores? Ea, reiciendis eum tempore.</p>
+      <section id="get-started" class="get-started">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <img class="screencast" src="img/video-placeholder.jpg" data-video="http://www.youtube.com/embed/zP_D_YKnwi0">
+            </div>
+            <div class="col-md-6">
+              <h1>Obligatory Screencast</h1>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, at voluptatibus accusantium nemo autem rerum quo sequi praesentium dignissimos laudantium quisquam deleniti facilis blanditiis quaerat maiores? Ea, reiciendis eum tempore.</p>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="example">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6">
-            <h1>Real-time TODOS</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, at voluptatibus accusantium nemo autem rerum quo sequi praesentium dignissimos laudantium quisquam deleniti facilis blanditiis quaerat maiores? Ea, reiciendis eum tempore.</p>
+      <section id="example" class="example">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <h1>Real-time TODOS</h1>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, at voluptatibus accusantium nemo autem rerum quo sequi praesentium dignissimos laudantium quisquam deleniti facilis blanditiis quaerat maiores? Ea, reiciendis eum tempore.</p>
+            </div>
+            <div class="col-md-6">
+              <div class="row">
+                <ul class="nav nav-pills">
+                  <li class="active"><a href="#">Result</a></li>
+                  <li><a href="#">Client</a></li>
+                  <li><a href="#">Server</a></li>
+                </ul>
+              </div>
+              <div class="row">
+                <code></code>
+              </div>
+            </div>
           </div>
-          <div class="col-md-6">
-            <div class="row">
-              <ul class="nav nav-pills">
-                <li class="active"><a href="#">Result</a></li>
-                <li><a href="#">Client</a></li>
-                <li><a href="#">Server</a></li>
+        </div>
+      </section>
+
+      <section id="documentation" class="documentation">
+        <div class="container">
+          <div class="row">
+            <h1>Documentation</h1>
+            <hr>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <ul class="nav nav-stacked">
+                <li class="active"><a href="#services">Services</a></li>
+                <li><a href="#providers">Providers</a></li>
+                <li><a href="#mixins">Mixins</a></li>
               </ul>
             </div>
-            <div class="row">
+            <div class="col-md-9 services">
+              <h1>Services</h1>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis, deleniti, voluptate, nulla dolorum architecto magnam ipsum eaque eligendi molestiae adipisci corporis animi fugit mollitia ratione doloremque voluptatum sunt voluptates ad.</p>
+              <code></code>
+            </div>
+            <div class="col-md-9 providers hidden">
+              <h1>Providers</h1>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis, deleniti, voluptate, nulla dolorum architecto magnam ipsum eaque eligendi molestiae adipisci corporis animi fugit mollitia ratione doloremque voluptatum sunt voluptates ad.</p>
+              <code></code>
+            </div>
+            <div class="col-md-9 mixins hidden">
+              <h1>Mixins</h1>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis, deleniti, voluptate, nulla dolorum architecto magnam ipsum eaque eligendi molestiae adipisci corporis animi fugit mollitia ratione doloremque voluptatum sunt voluptates ad.</p>
               <code></code>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="documentation">
-      <div class="container">
-        <div class="row">
-          <h1>Documentation</h1>
-          <hr>
-        </div>
-        <div class="row">
-          <div class="col-md-3">
-            <ul class="nav nav-stacked">
-              <li class="active"><a href="#services">Services</a></li>
-              <li><a href="#providers">Providers</a></li>
-              <li><a href="#mixins">Mixins</a></li>
-            </ul>
-          </div>
-          <div class="col-md-9">
-            <h1>Services</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis, deleniti, voluptate, nulla dolorum architecto magnam ipsum eaque eligendi molestiae adipisci corporis animi fugit mollitia ratione doloremque voluptatum sunt voluptates ad.</p>
-            <code></code>
-          </div>
-        </div>
-      </div>
-    </section>
-
+      </section>
+    </div>
 
     <!-- FOOTER -->
     <footer>
@@ -213,5 +223,6 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/feathers.js"></script>
   </body>
 </html>
