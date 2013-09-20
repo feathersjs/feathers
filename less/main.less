@@ -25,15 +25,31 @@ a {
 }
 
 .navbar-brand {
-  padding: 10px 0;
+  padding: 5px 0;
+}
+
+.navbar-logo {
+  width: 260px;
 }
 
 .navbar-inverse {
-  background: @super-dark-grey;
+  background: @white;
+  border-color: @very-light-grey;
+}
+
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > .active > a:focus {
+  color: #FFF;
+  background-color: @red;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+  color: @dark-grey;
 }
 
 .navbar-nav > li > a {
-  margin: 35px 0;
+  margin: 15px 0;
 }
 
 .btn-primary:hover,
@@ -63,6 +79,25 @@ a {
   background-color: @super-light-grey;
 }
 
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  color: @red;
+  background-color: @white;
+}
+
+.nav-pills > li > a {
+  .border-radius(0);
+  color: @dark-grey;
+  background-color: @white;
+  margin: 0 10px;
+}
+
+.nav-pills > li > a:hover,
+.nav-pills > li > a:focus {
+  background-color: @very-light-grey;
+}
+
 section {
   padding: 120px 0;
 }
@@ -70,6 +105,7 @@ section {
 section.hero {
   text-align: center;
   margin-top: 80px;
+  padding: 80px 0;
 
   h1 {
     margin-top: -20px;
@@ -78,11 +114,20 @@ section.hero {
   .tagline {
     text-transform: uppercase;
     font-weight: 600;
-    font-size: 48px;
+    font-size: 48px;;
+  }
+
+  .inline-code {
+    border: 1px solid @very-light-grey;
+    background: @super-light-grey;
+    font-style: italic;
+    padding: 5px 0;
+    color: @red;
+    margin: 10px 0 20px 0;
   }
 
   .btn {
-    margin-top: 20px;
+    /*margin-top: 20px;*/
   }
 
   img {
@@ -91,9 +136,6 @@ section.hero {
 }
 
 section.get-started {
-  .drop-shadow(0, 1px, 8px, 0.3);
-  background: @lighter-grey;
-/*  color: @super-light-grey;*/
 
   h1 {
     color: @red;
@@ -107,11 +149,18 @@ section.get-started {
 }
 
 section.features {
+  .drop-shadow(0, 1px, 8px, 0.3);
+  background: @lighter-grey;
   text-align: center;
   color: @dark-grey;
 
+  h2 {
+    color: @red;
+  }
+
   [class^="icon-"], [class*=" icon-"] {
-    font-size: 42px;
+    font-size: 100px;
+    color: @super-light-grey;
   }
 
   .description {
