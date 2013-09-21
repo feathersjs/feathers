@@ -34,10 +34,10 @@
     "npm": "*"
   },
   "dependencies": {
-    "uberproto": "~ 1.`.0",
+    "uberproto": "~ 1.1.0",
     "express": "~ 3.4.0",
     "rubberduck": "~0.2.0",
-    "underscore": "~1.4.4",
+    "underscore": "~1.5.0",
     "socket.io": "~0.9.0"
   },
   "devDependencies": {
