@@ -1,8 +1,9 @@
 (function($, undefined){
-  $.fn.gistPills = function(gistId) {
+  $.fn.gistPills = function(gistId, index) {
   	var gistFiles = $('#gist' + gistId).find('.gist-file');
   	var lis = this.find('li');
   	var parent = this;
+
   	gistFiles.hide();
 
   	// this.find('li:first').click();
@@ -13,6 +14,8 @@
   		$(gistFiles.hide().get(el.index())).show();
   		ev.preventDefault();
   	});
+
+    $(lis.get(index || 0)).click();
   };
 
   $(document).ready(function(){
@@ -27,5 +30,6 @@
   	});
   	
     $('#rapidstart').gistPills(6644854);
+    $('#realtime-todos').gistPills(6651209, 1);
   });
 })(jQuery);
