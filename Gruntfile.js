@@ -1,7 +1,8 @@
 'use strict';
 
-module.exports = function (grunt) {
 
+
+module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -22,6 +23,14 @@ module.exports = function (grunt) {
       }
     },
 
+    render: {
+      index: {
+        markdown: 'https://raw.github.com/feathersjs/feathers/master/readme.md',
+        template: 'index.handlebars',
+        output: 'index.html'
+      }
+    },
+
     watch: {
       all: {
         files: ['js/**/*.js', 'less/**/*.less'],
@@ -32,6 +41,7 @@ module.exports = function (grunt) {
     },
   });
 
+  grunt.loadTasks('tasks');
   grunt.loadNpmTasks('grunt-release');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-less');

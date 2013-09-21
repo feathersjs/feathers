@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="/ico/favicon.png">
+
+    <title>Feathersjs - A micro, real-time framework that lets your web apps fly.</title>
+
+    <!-- Feathers CSS -->
+    <link href="css/feathers.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <!-- NAVBAR
+  ================================================== -->
+  <body data-spy="scroll" data-target=".navbar-inverse" data-offset="100">
+    <div class="navbar-wrapper">
+      <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+              <img class="navbar-logo" src="img/feathers-logo-dark.png" alt="Feathers Logo">
+            </a>
+          </div>
+          <div class="navbar-collapse collapse pull-right">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="#features">Features</a></li>
+              <li><a href="#get-started">Get Started</a></li>
+              <li><a href="#example">Example</a></li>
+              <li><a href="#documentation">Documentation</a></li>
+              <li><a href="https://github.com/feathersjs/feathers" target="_blank"><strong>Github</strong></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <section id="hero" class="hero">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="row">
+                <h1 class="tagline">Let your applications fly</h1>
+                <h4>Build lightweight, real-time apps in seconds</h4>
+                <div class="col-md-6 col-md-offset-3">
+                  <p class="inline-code">> npm install feathers</p>
+                </div>
+                <div class="col-md-6 col-md-offset-3">
+                  <a href="#get-started" class="btn btn-primary btn-lg btn-block">Take Off</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row badges">
+                <p>
+                  <a href="https://npmjs.org/package/feathers" title="Package status" target="_blank"><img src="https://badge.fury.io/js/feathers.png"/></a>
+                  <a href="https://david-dm.org/feathersjs/feathers" target="_blank" title="Dependency status"><img src="https://david-dm.org/feathersjs/feathers.png"/></a>
+                  <a href="https://travis-ci.org/feathersjs/feathers" target="_blank"><img src="https://travis-ci.org/feathersjs/feathers.png?branch=master" alt="Build status" /></a>
+                </p>
+                <p>
+                <img src="img/feathers-medium.png" alt="Feathers" class="img-responsive theme">
+                </p>
+                <p>
+                  <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=watch&count=true"
+                allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+                  <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=fork&count=true"
+                allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="features">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <i class="icon-cloud"></i>
+              <h2>Lightweight</h2>
+              <p class="feature description">No "Framework X" but for Node.
+                Built right on top and with the spirit of Express. Literally replace
+                <code>express</code> with <code>feathers</code>.
+              </p>
+            </div>
+            <div class="col-md-4">
+              <i class="icon-rocket"></i>
+              <h2>Realtime</h2>
+              <p class="feature description">No real-time abstraction magic. Plain SocketIO and events is all you need to make your web application come to live.</p>
+            </div>
+            <div class="col-md-4">
+              <i class="icon-cogs"></i>
+              <h2>Flexible</h2>
+              <p class="feature description">You can do everything that
+                Express and SocketIO can do. And services give you the
+                direction to easily structure your data and application logic.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    <section id="get-started" class="rapid-start">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h1>Rapid start</h1>
+            <p>Feathers can get a REST and SocketIO service running in no time.
+              <strong>Services</strong> are objects that can be used just like
+              an Express middleware. The example on the right creates a simple
+              Todo service that is available as a RESTful service and via SocektIO.</p>
+
+            <ul class="nav nav-pills options" id="rapidstart">
+              <li class="active"><a href="#">REST</a></li>
+              <li><a href="#">SocketIO</a></li>
+            </ul>
+            <script src="https://gist.github.com/daffl/6644854.js"></script>
+          </div>
+          <div class="col-md-6">
+            <script src="https://gist.github.com/daffl/6644432.js"></script>
+          </div>
+        </div>
+      </section>
+
+      <section id="get-started" class="get-started">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <img class="screencast" src="img/video-placeholder.jpg" data-video="http://www.youtube.com/embed/zP_D_YKnwi0">
+            </div>
+            <div class="col-md-6">
+              <h1>Obligatory Screencast</h1>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, at voluptatibus accusantium nemo autem rerum quo sequi praesentium dignissimos laudantium quisquam deleniti facilis blanditiis quaerat maiores? Ea, reiciendis eum tempore.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="example" class="example">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <h1>Real-time TODOS</h1>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, at voluptatibus accusantium nemo autem rerum quo sequi praesentium dignissimos laudantium quisquam deleniti facilis blanditiis quaerat maiores? Ea, reiciendis eum tempore.</p>
+              TODOs here
+            </div>
+            <div class="col-md-6">
+              <div class="row">
+                <ul class="nav nav-pills options" id="realtime-todos">
+                  <li><a href="#">Client</a></li>
+                  <li><a href="#">Server</a></li>
+                </ul>
+                <script src="https://gist.github.com/daffl/6651209.js"></script>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="documentation" class="documentation">
+        <div class="container">
+          <div class="row">
+            <h1>Documentation</h1>
+            <hr>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <ul class="nav nav-stacked">
+                <li class="active"><a href="#services">Services</a></li>
+                <li><a href="#providers">Providers</a></li>
+                <li><a href="#mixins">Mixins</a></li>
+              </ul>
+            </div>
+            <div class="col-md-9 services">
+              {{{readme}}}
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <p class="pull-right"><a href="#hero">Back to top</a></p>
+      <p>© 2013 Feathers. Another project made with <i class="icon-heart"></i> by <a href="http://twitter/daffl" title="David Luecke" target="_blank">@daffl</a> and <a href="http://twitter/ekryski" title="Eric Kryski" target="_blank">@ekryski</a>.</p>
+      <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=watch&count=true"
+  allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+            <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=fork&count=true"
+  allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+    </footer>
+
+
+    <!-- JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/feathers.js"></script>
+  </body>
+</html>

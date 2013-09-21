@@ -88,7 +88,7 @@ a {
 
 .nav-pills > li > a {
   .border-radius(0);
-  color: @red;
+  color: @grey;
   background-color: @lighter-grey;
   margin: 0 10px;
 }
@@ -125,6 +125,10 @@ section.hero {
 
   img.theme {
     margin: 10px auto;
+  }
+
+  .badges p {
+    margin-bottom: 20px;
   }
 
   .tagline {
@@ -183,6 +187,13 @@ section.example {
 
   .file-data {
     height: 400px;
+  }
+
+  .nav-pills.options {
+    li.active a {
+      color: @red;
+      background-color: @white;
+    }
   }
 }
 

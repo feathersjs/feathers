@@ -30,13 +30,15 @@
     "node": "*",
     "npm": "*"
   },
-  "dependencies": {},
   "devDependencies": {
+    "marked": "~0.2.9",
     "grunt-cli": "~0.1.7",
     "grunt": "~0.4.1",
     "grunt-release": "~0.5.1",
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-less": "~0.7.0",
-    "grunt-contrib-watch": "~0.5.3"
+    "grunt-contrib-watch": "~0.5.3",
+    "request": "~2.27.0",
+    "handlebars": "~1.0.12"
   }
 }
