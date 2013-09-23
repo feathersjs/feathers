@@ -70,15 +70,19 @@
               </div>
             </div>
             <div class="col-md-6">
+              <div class="row">
+                <p>
+                  <img src="img/feathers-medium.png" alt="Feathers" class="img-responsive theme">
+                </p>
+              </div>
               <div class="row badges">
                 <p>
                   <a href="https://npmjs.org/package/feathers" title="Package status" target="_blank"><img src="https://badge.fury.io/js/feathers.png"/></a>
                   <a href="https://david-dm.org/feathersjs/feathers" target="_blank" title="Dependency status"><img src="https://david-dm.org/feathersjs/feathers.png"/></a>
                   <a href="https://travis-ci.org/feathersjs/feathers" target="_blank"><img src="https://travis-ci.org/feathersjs/feathers.png?branch=master" alt="Build status" /></a>
                 </p>
-                <p>
-                <img src="img/feathers-medium.png" alt="Feathers" class="img-responsive theme">
-                </p>
+              </div>
+              <div class="row github-links">
                 <p>
                   <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=watch&count=true"
                 allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
@@ -98,35 +102,30 @@
               <i class="icon-cloud"></i>
               <h2>Lightweight</h2>
               <p class="feature description">No "Framework X" but for Node.
-                Built right on top and with the spirit of Express. Literally replace
-                <code>express</code> with <code>feathers</code>.
+                Feathers is built right on top of <a href="http://expressjs.com" title="Express" target="_blank">Express</a> and harnesses the small, modular spirit of the <a href="https://twitter.com/search?q=%23nodejs&src=hash" title="NodeJS Twitter" targe="_blank">#NodeJS</a> community. Literally replace
+                <strong>Express</strong> with <strong>Feathers</strong> and you are good to go. You can even use the same middleware!
               </p>
             </div>
             <div class="col-md-4">
               <i class="icon-rocket"></i>
               <h2>Realtime</h2>
-              <p class="feature description">No real-time abstraction magic. Plain SocketIO and events is all you need to make your web application come to live.</p>
+              <p class="feature description">No real-time abstraction magic. Vanilla SocketIO and name spaced events are all you need to make your web application come to life. To make things easier we even set up some default events for you!</p>
             </div>
             <div class="col-md-4">
               <i class="icon-cogs"></i>
               <h2>Flexible</h2>
-              <p class="feature description">You can do everything that
-                Express and SocketIO can do. And services give you the
-                direction to easily structure your data and application logic.</p>
+              <p class="feature description">You can do everything that Express and <a href="http://socket.io/" title="Socket.IO" targe="_blank">SocketIO</a> can do. With the ability to use the same middleware and write your own custom mixins or services, giving feathers a try is a snap!</p>
             </div>
           </div>
         </div>
       </section>
 
     <section id="get-started" class="rapid-start">
-      <div class="container">
+      <div class="container">        
         <div class="row">
           <div class="col-md-6">
             <h1>Rapid start</h1>
-            <p>Feathers can get a REST and SocketIO service running in no time.
-              <strong>Services</strong> are objects that can be used just like
-              an Express middleware. The example on the right creates a simple
-              Todo service that is available as a RESTful service and via SocektIO.</p>
+            <p>With Feathers you can get a flexible REST and SocketIO service running in no time. <strong>Services</strong> are objects that can be used just like an Express middleware. The example on the right creates a simple Todo service that is available as a RESTful endpoint and also a real-time endpoint via SocketIO.</p>
 
             <ul class="nav nav-pills options" id="rapidstart">
               <li class="active"><a href="#">REST</a></li>
@@ -138,42 +137,47 @@
             <script src="https://gist.github.com/daffl/6644432.js"></script>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section id="get-started" class="get-started">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-6">
-              <img class="screencast" src="img/video-placeholder.jpg" data-video="http://www.youtube.com/embed/zP_D_YKnwi0">
-            </div>
-            <div class="col-md-6">
-              <h1>Obligatory Screencast</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, at voluptatibus accusantium nemo autem rerum quo sequi praesentium dignissimos laudantium quisquam deleniti facilis blanditiis quaerat maiores? Ea, reiciendis eum tempore.</p>
+    <div class="container">
+      <hr>
+    </div>
+  
+    <section id="get-started" class="get-started">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <img class="screencast image-responsive" src="img/video-placeholder.jpg" data-video="http://www.youtube.com/embed/zP_D_YKnwi0">
+          </div>
+          <div class="col-md-6">
+            <h1>Obligatory Screencast</h1>
+            <p>Some of you may not want to dive into code right away, we know it can be somewhat overwhelming. That's why we've created a little screencast that walks you through creating the real-time Todo application found below. It only takes a couple minutes and we'll explain some of the finer points of feathers.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="example" class="example">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h1>Real-time TODOS</h1>
+            <p>You're all probably familiar with <a href="http://todomvc.com/" title="TODO MVC" target="_blank">TodoMVC</a>. Well, we are huge fans and so we've created a real-time TODO app that you can see right here. It's definitely fairly trivial, but it demonstrates most of the major parts of Feathers.</p>
+            TODOs here
+          </div>
+          <div class="col-md-6">
+            <div class="row">
+              <ul class="nav nav-pills options example" id="realtime-todos">
+                <li><a href="#" title="TODO Client">Client</a></li>
+                <li><a href="#" title="TODO Feathers Server">Server</a></li>
+              </ul>
+              <script src="https://gist.github.com/daffl/6651209.js"></script>
             </div>
           </div>
         </div>
-      </section>
-
-      <section id="example" class="example">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-6">
-              <h1>Real-time TODOS</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, at voluptatibus accusantium nemo autem rerum quo sequi praesentium dignissimos laudantium quisquam deleniti facilis blanditiis quaerat maiores? Ea, reiciendis eum tempore.</p>
-              TODOs here
-            </div>
-            <div class="col-md-6">
-              <div class="row">
-                <ul class="nav nav-pills options" id="realtime-todos">
-                  <li><a href="#">Client</a></li>
-                  <li><a href="#">Server</a></li>
-                </ul>
-                <script src="https://gist.github.com/daffl/6651209.js"></script>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      </div>
+    </section>
 
       <section id="documentation" class="documentation">
         <div class="container">
@@ -191,209 +195,206 @@
             </div>
             <div class="col-md-9 services">
               <h1>Feathers</h1>
-<blockquote>
-<p>Let your web app fly.</p>
-</blockquote>
-<p><a href="https://travis-ci.org/feathersjs/feathers"><img src="https://travis-ci.org/feathersjs/feathers.png" alt="Build Status"></a></p>
-<p>Feathers is a light weight web application framework that rides on top of <a href="http://expressjs.com">Express</a>. It makes it easy to create RESTful web services and real-time applications using <a href="http://socket.io">socket.io</a>.</p>
-<p>The core focus of Feathers is <strong>your data</strong>. We believe that ultimately your app&#39;s purpose is to manage data in some fashion and so that&#39;s all you should really need to deal with. Managing your data.</p>
-<h2>Install</h2>
-<p>As with any NodeJS module, just install it as a dependency in your application:</p>
-<blockquote>
-<p>npm install feathers --save</p>
-</blockquote>
-<h2>Getting Started Is Easy</h2>
-<p>Building an app with Feathers is easy. There are only 4 things to worry about. A wrapped express server, providers, services &amp; middleware. Services are just simple modules that expose certain methods to the providers in order to CRUD your data. We can easily initialize a service that say... provides a single TODO:</p>
-<pre><code class="lang-js">var feathers = require(&#39;feathers&#39;);
+              <blockquote>
+              <p>Let your web app fly.</p>
+              </blockquote>
+              <p><a href="https://travis-ci.org/feathersjs/feathers"><img src="https://travis-ci.org/feathersjs/feathers.png" alt="Build Status"></a></p>
+              <p>Feathers is a light weight web application framework that rides on top of <a href="http://expressjs.com">Express</a>. It makes it easy to create RESTful web services and real-time applications using <a href="http://socket.io">socket.io</a>.</p>
+              <p>The core focus of Feathers is <strong>your data</strong>. We believe that ultimately your app&#39;s purpose is to manage data in some fashion and so that&#39;s all you should really need to deal with. Managing your data.</p>
+              <h2>Install</h2>
+              <p>As with any NodeJS module, just install it as a dependency in your application:</p>
+              <blockquote>
+              <p>npm install feathers --save</p>
+              </blockquote>
+              <h2>Getting Started Is Easy</h2>
+              <p>Building an app with Feathers is easy. There are only 4 things to worry about. A wrapped express server, providers, services &amp; middleware. Services are just simple modules that expose certain methods to the providers in order to CRUD your data. We can easily initialize a service that say... provides a single TODO:</p>
+              <pre><code class="lang-js">var feathers = require(&#39;feathers&#39;);
 
-var todoService = {
-  get: function(name, params, callback) {
-    callback(null, {
-      id: name,
-      description: &quot;You have to do &quot; + name + &quot;!&quot;
-    });
-  }
-};
+              var todoService = {
+                get: function(name, params, callback) {
+                  callback(null, {
+                    id: name,
+                    description: &quot;You have to do &quot; + name + &quot;!&quot;
+                  });
+                }
+              };
 
-feathers()
-    .configure(feathers.socketio())
-    .use(&#39;todo&#39;, todoService)
-    .listen(8000);</code></pre>
-<p>That&#39;s all there really is to building an app with Feathers.</p>
-<h3>REST</h3>
-<p>You can access the REST service by going to <code>http://localhost:8000/todo/dishes</code> in your browser
-and will see:</p>
-<pre><code class="lang-js">{
-  &quot;id&quot;: &quot;dishes&quot;,
-  &quot;description&quot;: &quot;You have to do dishes!&quot;
-}</code></pre>
-<blockquote>
-<p>Note: Query parameters like <code>http://localhost:8000/todo/dishes?type=dirty</code> will be passed as <code>params.query</code></p>
-</blockquote>
-<h3>SocketIO</h3>
-<p>Since we configured our app with <code>feathers.socketio()</code>, you can also connect to your service via SocketIO.
-Create an HTML page and insert the following code to see the response data logged on the console:</p>
-<pre><code class="lang-html">&lt;script src=&quot;http://localhost:8000/socket.io/socket.io.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-  var socket = io.connect(&#39;http://localhost:8000/&#39;);
-  socket.emit(&#39;todo::get&#39;, &#39;laundry&#39;, {}, function(error, data) {
-    console.log(data); // -&gt; { id: &#39;laundry&#39;, description: &#39;You have to do laundry!&#39; }
-  });
-&lt;/script&gt;</code></pre>
-<h2>Services</h2>
-<p>A service can be any JavaScript object that offers one or more of the <code>find</code>, <code>get</code>, <code>create</code>, <code>update</code>,
-<code>remove</code> and <code>setup</code> service methods:</p>
-<pre><code class="lang-js">var myService = {
-  find: function(params, callback) {},
-  get: function(id, params, callback) {},
-  create: function(data, params, callback) {},
-  update: function(id, data, params, callback) {},
-  remove: function(id, params, callback) {},
-  setup: function(app) {}
-}</code></pre>
-<p>All callbacks follow the <code>function(error, data)</code> NodeJS convention. <code>params</code> can contain any additional parameters, for
-example the currently authenticated user. REST service calls set <code>params.query</code> with the query parameters (e.g. a query string
-like <code>?status=active&amp;type=user</code> becomes <code>{ status: &quot;active&quot;, type: &quot;user&quot; }</code>).</p>
-<h3><code>find(params, callback)</code></h3>
-<p>Retrieves a list of all resources from the service. Ideally use <code>params.query</code> for things like filtering and paging so
-that REST calls like <code>todo?status=completed&amp;user=10</code> work right out of the box.</p>
-<p><strong>REST</strong></p>
-<blockquote>
-<p>GET todo?status=completed&amp;user=10</p>
-</blockquote>
-<p><strong>SocketIO</strong></p>
-<pre><code class="lang-js">socket.emit(&#39;todo::find&#39;, {
-  status: &#39;completed&#39;
-  user: 10
-}, function(error, data) {
-});</code></pre>
-<h3><code>get(id, params, callback)</code></h3>
-<p>Retrieves a single resource with the given <code>id</code> from the service.</p>
-<p><strong>REST</strong></p>
-<blockquote>
-<p>GET todo/1</p>
-</blockquote>
-<p><strong>SocketIO</strong></p>
-<pre><code class="lang-js">socket.emit(&#39;todo::get&#39;, 1, {}, function(error, data) {
+              feathers()
+                  .configure(feathers.socketio())
+                  .use(&#39;todo&#39;, todoService)
+                  .listen(8000);</code></pre>
+              <p>That&#39;s all there really is to building an app with Feathers.</p>
+              <h3>REST</h3>
+              <p>You can access the REST service by going to <code>http://localhost:8000/todo/dishes</code> in your browser
+              and will see:</p>
+              <pre><code class="lang-js">{
+                &quot;id&quot;: &quot;dishes&quot;,
+                &quot;description&quot;: &quot;You have to do dishes!&quot;
+              }</code></pre>
+              <p><strong>Note:</strong> Query parameters like <code>http://localhost:8000/todo/dishes?type=dirty</code> will be passed as <code>params.query</code></p>
+              <h3>SocketIO</h3>
+              <p>Since we configured our app with <code>feathers.socketio()</code>, you can also connect to your service via SocketIO.
+              Create an HTML page and insert the following code to see the response data logged on the console:</p>
+              <pre><code class="lang-html">&lt;script src=&quot;http://localhost:8000/socket.io/socket.io.js&quot;&gt;&lt;/script&gt;
+              &lt;script&gt;
+                var socket = io.connect(&#39;http://localhost:8000/&#39;);
+                socket.emit(&#39;todo::get&#39;, &#39;laundry&#39;, {}, function(error, data) {
+                  console.log(data); // -&gt; { id: &#39;laundry&#39;, description: &#39;You have to do laundry!&#39; }
+                });
+              &lt;/script&gt;</code></pre>
+              <h2>Services</h2>
+              <p>A service can be any JavaScript object that offers one or more of the <code>find</code>, <code>get</code>, <code>create</code>, <code>update</code>,
+              <code>remove</code> and <code>setup</code> service methods:</p>
+              <pre><code class="lang-js">var myService = {
+                find: function(params, callback) {},
+                get: function(id, params, callback) {},
+                create: function(data, params, callback) {},
+                update: function(id, data, params, callback) {},
+                remove: function(id, params, callback) {},
+                setup: function(app) {}
+              }</code></pre>
+              <p>All callbacks follow the <code>function(error, data)</code> NodeJS convention. <code>params</code> can contain any additional parameters, for
+              example the currently authenticated user. REST service calls set <code>params.query</code> with the query parameters (e.g. a query string
+              like <code>?status=active&amp;type=user</code> becomes <code>{ status: &quot;active&quot;, type: &quot;user&quot; }</code>).</p>
+              <h3><code>find(params, callback)</code></h3>
+              <p>Retrieves a list of all resources from the service. Ideally use <code>params.query</code> for things like filtering and paging so
+              that REST calls like <code>todo?status=completed&amp;user=10</code> work right out of the box.</p>
+              <p><strong>REST</strong></p>
+              <blockquote>
+              <p>GET todo?status=completed&amp;user=10</p>
+              </blockquote>
+              <p><strong>SocketIO</strong></p>
+              <pre><code class="lang-js">socket.emit(&#39;todo::find&#39;, {
+                status: &#39;completed&#39;
+                user: 10
+              }, function(error, data) {
+              });</code></pre>
+              <h3><code>get(id, params, callback)</code></h3>
+              <p>Retrieves a single resource with the given <code>id</code> from the service.</p>
+              <p><strong>REST</strong></p>
+              <blockquote>
+              <p>GET todo/1</p>
+              </blockquote>
+              <p><strong>SocketIO</strong></p>
+              <pre><code class="lang-js">socket.emit(&#39;todo::get&#39;, 1, {}, function(error, data) {
 
-});</code></pre>
-<h3>create(data, params, callback)</h3>
-<p>Creates a new resource with <code>data</code>. The callback should be called with that resource (and the id initialized).</p>
-<p><strong>REST</strong></p>
-<blockquote>
-<p>POST todo
-{ &quot;description&quot;: &quot;I really have to iron&quot; }</p>
-</blockquote>
-<p>By default the body can be eihter JSON or form encoded as long as the content type is set accordingly.</p>
-<p><strong>SocketIO</strong></p>
-<pre><code class="lang-js">socket.emit(&#39;todo::create&#39;, {
-  description: &#39;I really have to iron&#39;
-}, function(error, data) {
-});</code></pre>
-<h3>update(id, data, params, callback)</h3>
-<p>Updates the resource identified by <code>id</code> using <code>data</code>.</p>
-<p><strong>REST</strong></p>
-<blockquote>
-<p>PUT todo/2
-{ &quot;description&quot;: &quot;I really have to do laundry&quot; }</p>
-</blockquote>
-<p><strong>SocketIO</strong></p>
-<pre><code class="lang-js">socket.emit(&#39;todo::update&#39;, 2, {
-  description: &#39;I really have to do laundry&#39;
-}, {}, function(error, data) {
-  // data -&gt; { id: 2, description: &quot;I really have to do laundry&quot; }
-});</code></pre>
-<h3>remove(id, params, callback)</h3>
-<p>Remove the resource with <code>id</code>.</p>
-<p><strong>REST</strong></p>
-<blockquote>
-<p>DELETE todo/2</p>
-</blockquote>
-<p><strong>SocketIO</strong></p>
-<pre><code class="lang-js">socket.emit(&#39;todo::delete&#39;, 2, {}, function(error, data) {
-});</code></pre>
-<h3>setup(app)</h3>
-<p>Initializes the service passing an instance of the Feathers application.
-<code>app</code> can do everything a normal Express application does and additionally provides <code>app.lookup(path)</code>
-to retrieve another service by its path. <code>setup</code> is a great way to connect services:</p>
-<pre><code class="lang-js">var todoService = {
-  get: function(name, params, callback) {
-    callback(null, {
-      id: name,
-      description: &#39;You have to &#39; + name + &#39;!&#39;
-    });
-  }
-};
+              });</code></pre>
+              <h3>create(data, params, callback)</h3>
+              <p>Creates a new resource with <code>data</code>. The callback should be called with that resource (and the id initialized).</p>
+              <p><strong>REST</strong></p>
+              <blockquote>
+              <p>POST todo
+              { &quot;description&quot;: &quot;I really have to iron&quot; }</p>
+              </blockquote>
+              <p>By default the body can be eihter JSON or form encoded as long as the content type is set accordingly.</p>
+              <p><strong>SocketIO</strong></p>
+              <pre><code class="lang-js">socket.emit(&#39;todo::create&#39;, {
+                description: &#39;I really have to iron&#39;
+              }, function(error, data) {
+              });</code></pre>
+              <h3>update(id, data, params, callback)</h3>
+              <p>Updates the resource identified by <code>id</code> using <code>data</code>.</p>
+              <p><strong>REST</strong></p>
+              <blockquote>
+              <p>PUT todo/2
+              { &quot;description&quot;: &quot;I really have to do laundry&quot; }</p>
+              </blockquote>
+              <p><strong>SocketIO</strong></p>
+              <pre><code class="lang-js">socket.emit(&#39;todo::update&#39;, 2, {
+                description: &#39;I really have to do laundry&#39;
+              }, {}, function(error, data) {
+                // data -&gt; { id: 2, description: &quot;I really have to do laundry&quot; }
+              });</code></pre>
+              <h3>remove(id, params, callback)</h3>
+              <p>Remove the resource with <code>id</code>.</p>
+              <p><strong>REST</strong></p>
+              <blockquote>
+              <p>DELETE todo/2</p>
+              </blockquote>
+              <p><strong>SocketIO</strong></p>
+              <pre><code class="lang-js">socket.emit(&#39;todo::delete&#39;, 2, {}, function(error, data) {
+              });</code></pre>
+              <h3>setup(app)</h3>
+              <p>Initializes the service passing an instance of the Feathers application.
+              <code>app</code> can do everything a normal Express application does and additionally provides <code>app.lookup(path)</code>
+              to retrieve another service by its path. <code>setup</code> is a great way to connect services:</p>
+              <pre><code class="lang-js">var todoService = {
+                get: function(name, params, callback) {
+                  callback(null, {
+                    id: name,
+                    description: &#39;You have to &#39; + name + &#39;!&#39;
+                  });
+                }
+              };
 
-var myService = {
-  setup: function(app) {
-    this.todo = app.lookup(&#39;todo&#39;);
-  },
+              var myService = {
+                setup: function(app) {
+                  this.todo = app.lookup(&#39;todo&#39;);
+                },
 
-  get: function(name, params, callback) {
-    this.todo.get(&#39;take out trash&#39;, {}, function(error, todo) {
-      callback(null, {
-        name: name,
-        todo: todo
-      });
-    });
-  }
-}
+                get: function(name, params, callback) {
+                  this.todo.get(&#39;take out trash&#39;, {}, function(error, todo) {
+                    callback(null, {
+                      name: name,
+                      todo: todo
+                    });
+                  });
+                }
+              }
 
-feathers()
-    .use(&#39;todo&#39;, todoService)
-    .use(&#39;my&#39;, myService)
-    .listen(8000);</code></pre>
-<p>You can see the combination when going to <code>http://localhost:8000/my/test</code>.</p>
-<h2>Getting Real, Time</h2>
-<p>The secret ingredient to create real time applications using Feathers and SocketIO is the
-<code>created</code>, <code>updated</code> and <code>removed</code> events every Feathers service automatically emits.
-Here is another simple Todo service, that just passes the data through <code>create</code>:</p>
-<pre><code class="lang-js">var feathers = require(&#39;feathers&#39;);
+              feathers()
+                  .use(&#39;todo&#39;, todoService)
+                  .use(&#39;my&#39;, myService)
+                  .listen(8000);</code></pre>
+              <p>You can see the combination when going to <code>http://localhost:8000/my/test</code>.</p>
+              <h2>Getting Real, Time</h2>
+              <p>The secret ingredient to create real time applications using Feathers and SocketIO is the
+              <code>created</code>, <code>updated</code> and <code>removed</code> events every Feathers service automatically emits.
+              Here is another simple Todo service, that just passes the data through <code>create</code>:</p>
+              <pre><code class="lang-js">var feathers = require(&#39;feathers&#39;);
 
-var todoService = {
-  create: function(data, params, callback) {
-    callback(null, data);
-  }
-};
+              var todoService = {
+                create: function(data, params, callback) {
+                  callback(null, data);
+                }
+              };
 
-var app = feathers()
-    .configure(feathers.socketio())
-    .use(&#39;todo&#39;, todoService)
-    .listen(8000);</code></pre>
-<p>Lets make an HTML file that creates a new Todo using SocketIO every two seconds:</p>
-<pre><code class="lang-html">&lt;script src=&quot;http://localhost:8000/socket.io/socket.io.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-  var socket = io.connect(&#39;http://localhost:8000/&#39;);
-  var counter = 0;
+              var app = feathers()
+                  .configure(feathers.socketio())
+                  .use(&#39;todo&#39;, todoService)
+                  .listen(8000);</code></pre>
+              <p>Lets make an HTML file that creates a new Todo using SocketIO every two seconds:</p>
+              <pre><code class="lang-html">&lt;script src=&quot;http://localhost:8000/socket.io/socket.io.js&quot;&gt;&lt;/script&gt;
+              &lt;script&gt;
+                var socket = io.connect(&#39;http://localhost:8000/&#39;);
+                var counter = 0;
 
-  // Create a new Todo every two seconds
-  setInterval(function() {
-    counter++;
+                // Create a new Todo every two seconds
+                setInterval(function() {
+                  counter++;
 
-    socket.emit(&#39;todo::create&#39;, {
-      description: &#39;I have &#39; + counter + &#39; things to do!&#39;
-    }, {}, function(error, data) {
-      console.log(&#39;Created: &#39;, data);
-    });
-  }, 2000);
-&lt;/script&gt;</code></pre>
-<p>In another file we just listen to the <code>todo created</code> event and log it:</p>
-<pre><code class="lang-html">&lt;script src=&quot;http://localhost:8000/socket.io/socket.io.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-  var socket = io.connect(&#39;http://localhost:8000/&#39;);
+                  socket.emit(&#39;todo::create&#39;, {
+                    description: &#39;I have &#39; + counter + &#39; things to do!&#39;
+                  }, {}, function(error, data) {
+                    console.log(&#39;Created: &#39;, data);
+                  });
+                }, 2000);
+              &lt;/script&gt;</code></pre>
+              <p>In another file we just listen to the <code>todo created</code> event and log it:</p>
+              <pre><code class="lang-html">&lt;script src=&quot;http://localhost:8000/socket.io/socket.io.js&quot;&gt;&lt;/script&gt;
+              &lt;script&gt;
+                var socket = io.connect(&#39;http://localhost:8000/&#39;);
 
-  socket.on(&#39;todo created&#39;, function(todo) {
-    console.log(todo.description);
-  });
-&lt;/script&gt;</code></pre>
-<p>When visiting both HTMl files in a browser at the same time you should see a new Todo being logged every
-two seconds on both pages.</p>
-<h2>Why Another NodeJS Framework?</h2>
-<p>We know... Oh God another bloody NodeJS framework! Yes we are also very tired of seeing all these NodeJS frameworks. All the rails clones are getting a bit boring and really aren&#39;t taking advantage of the real strengths of NodeJS. We wanted to take a different approach than every other framework we have seen, because we believe that data is core to the web and should be the core focus of web applications. </p>
-<p>We also think that your data resources can and should be encapsulated in such a way that they can be ultra scalable and self contained. The MVC pattern works well but it is becoming antiquated in today&#39;s web. Frankly you don&#39;t need it and they tend to become bloated.</p>
-<p>With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of <a href="http://expressjs.com">Express</a> and is inspired in part by <a href="http://sailsjs.org">Sails</a>, <a href="http://flatironjs.org">Flatiron</a> and <a href="http://derbyjs.com">Derby</a>.</p>
-
+                socket.on(&#39;todo created&#39;, function(todo) {
+                  console.log(todo.description);
+                });
+              &lt;/script&gt;</code></pre>
+              <p>When visiting both HTMl files in a browser at the same time you should see a new Todo being logged every
+              two seconds on both pages.</p>
+              <h2>Why Another NodeJS Framework?</h2>
+              <p>We know... Oh God another bloody NodeJS framework! Yes we are also very tired of seeing all these NodeJS frameworks. All the rails clones are getting a bit boring and really aren&#39;t taking advantage of the real strengths of NodeJS. We wanted to take a different approach than every other framework we have seen, because we believe that data is core to the web and should be the core focus of web applications. </p>
+              <p>We also think that your data resources can and should be encapsulated in such a way that they can be ultra scalable and self contained. The MVC pattern works well but it is becoming antiquated in today&#39;s web. Frankly you don&#39;t need it and they tend to become bloated.</p>
+              <p>With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of <a href="http://expressjs.com">Express</a> and is inspired in part by <a href="http://sailsjs.org">Sails</a>, <a href="http://flatironjs.org">Flatiron</a> and <a href="http://derbyjs.com">Derby</a>.</p>
             </div>
           </div>
         </div>
@@ -402,12 +403,19 @@ two seconds on both pages.</p>
 
     <!-- FOOTER -->
     <footer>
-      <p class="pull-right"><a href="#hero">Back to top</a></p>
-      <p>© 2013 Feathers. Another project made with <i class="icon-heart"></i> by <a href="http://twitter/daffl" title="David Luecke" target="_blank">@daffl</a> and <a href="http://twitter/ekryski" title="Eric Kryski" target="_blank">@ekryski</a>.</p>
-      <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=watch&count=true"
-  allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
-            <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=fork&count=true"
-  allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+      <div class="row">
+        <div class="col-md-4">
+          <p>© 2013 Feathers.</p>
+          <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+          <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+        </div>
+        <div class="col-md-4">
+          <p> Another project made with <i class="icon-heart"></i> by <a href="http://twitter/daffl" title="David Luecke" target="_blank">@daffl</a> and <a href="http://twitter/ekryski" title="Eric Kryski" target="_blank">@ekryski</a>.</p>
+        </div>
+        <div class="col-md-4">
+          <p class="back pull-right"><a href="#hero">Back to top</a></p>
+        </div>
+      </div>
     </footer>
 
 

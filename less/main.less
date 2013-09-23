@@ -34,8 +34,13 @@ a {
 
 .navbar-inverse {
   background: @white;
-  border-color: @very-light-grey;
+  border: none;
   .drop-shadow(0, 1px, 2px, 0.2);
+}
+
+.navbar-inverse .navbar-toggle {
+  background: #333;
+  margin-top: 20px;
 }
 
 .navbar-inverse .navbar-nav > .active > a,
@@ -79,11 +84,8 @@ a {
   background-color: @super-light-grey;
 }
 
-.nav-pills > li.active > a,
-.nav-pills > li.active > a:hover,
-.nav-pills > li.active > a:focus {
-  color: @white;
-  background-color: @red;
+.nav-pills > li {
+  margin: 0 10px;
 }
 
 .nav-pills > li > a {
@@ -98,8 +100,33 @@ a {
   background-color: @very-light-grey;
 }
 
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  color: @white;
+  background-color: @red;
+}
+
+.nav-pills.example > li > a {
+  .border-radius(0);
+  /*color: @grey;*/
+  background-color: @dark-grey;
+}
+
+.nav-pills.example > li > a:hover,
+.nav-pills.example > li > a:focus {
+  background-color: @light-grey;
+}
+
+.nav-pills.example > li.active > a,
+.nav-pills.example > li.active > a:hover,
+.nav-pills.example > li.active > a:focus {
+  color: @white;
+  background-color: @red;
+}
+
 .nav-pills.options {
-  margin-bottom: 10px;
+  margin: 20px;
 
   li a {
     margin: 0;
@@ -117,14 +144,10 @@ section {
 section.hero {
   text-align: center;
   margin-top: 80px;
-  padding: 80px 0;
-
-  h1 {
-    margin-top: -20px;
-  }
+  padding: 60px 0;
 
   img.theme {
-    margin: 10px auto;
+    margin: 0px auto 30px auto;
   }
 
   .badges p {
@@ -145,6 +168,12 @@ section.hero {
     color: @red;
     margin: 10px 0 20px 0;
   }
+
+  @media (max-width: 979px) {
+    img.theme {
+      margin: 20px auto 30px auto;
+    }
+  }
 }
 
 section.get-started {
@@ -157,6 +186,16 @@ section.get-started {
     font-weight: 200;
     letter-spacing: 1px;
     color: @dark-grey;
+  }
+
+  .screencast {
+    width: 100%;
+  }
+
+  @media (max-width: 979px) {
+    .screencast {
+      margin-bottom: 20px;
+    }
   }
 }
 
@@ -180,6 +219,12 @@ section.features {
     font-size: 18px;
     letter-spacing: 1px;
   }
+
+  @media (max-width: 979px) {
+    .description {
+      margin: 20px 0;
+    }
+  }
 }
 
 section.example {
@@ -195,6 +240,14 @@ section.example {
       background-color: @white;
     }
   }
+
+  a {
+    color: @super-light-grey;
+
+    &:hover {
+     color: @white;
+    }
+  }
 }
 
 footer {
@@ -206,8 +259,34 @@ footer {
     font-size: 24px;
     color: @red;
   }
+
+  @media (max-width: 979px) {
+    .back {
+      float: none!important;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+  }
 }
 
 #gist6644432 {
-  margin-top: 10px;
+  margin-top: 50px;
+}
+
+@media (max-width: 979px) {
+  .back {
+    float: none!important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .nav > li > a {
+    padding: 10px 10px;
+  }
+
+  .back {
+    float: none!important;
+  }
 }
