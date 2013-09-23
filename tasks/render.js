@@ -13,7 +13,7 @@ module.exports = function(grunt) {
 	      return done(new Error('Could not request readme.md from GitHub'));
 	    }
 
-	    marked(body, {}, function(error, content) {
+	    marked(body, options.marked || {}, function(error, content) {
 	      fs.readFile(options.template, function(err, tpl) {
 	        var renderer = Handlebars.compile(tpl.toString());
 	        var output = renderer(content);

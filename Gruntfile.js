@@ -1,6 +1,6 @@
 'use strict';
 
-
+var pygmentize = require('pygmentize-bundled');
 
 module.exports = function (grunt) {
   // Project configuration.
@@ -26,9 +26,17 @@ module.exports = function (grunt) {
     render: {
       index: {
         options: {
-          markdown: 'https://raw.github.com/feathersjs/feathers/master/readme.md',
+          markdown: 'https://raw.github.com/feathersjs/feathers/master/documentation.md',
           template: 'index.handlebars',
-          output: 'index.html'
+          output: 'index.html',
+          marked: {
+            highlight: function (code, lang, callback) {
+              pygmentize({ lang: lang, format: 'html' }, code, function (err, result) {
+                if (err) return callback(err);
+                callback(null, result.toString());
+              });
+            },
+          }
         }
       }
     },

@@ -39,6 +39,7 @@
     "grunt-contrib-less": "~0.7.0",
     "grunt-contrib-watch": "~0.5.3",
     "request": "~2.27.0",
-    "handlebars": "~1.0.12"
+    "handlebars": "~1.0.12",
+    "pygmentize-bundled": "~2.1.0"
   }
 }
