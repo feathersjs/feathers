@@ -50,7 +50,7 @@ and will see:
 }
 ```
 
-> Note: Query parameters like `http://localhost:8000/todo/dishes?type=dirty` will be passed as `params.query`
+**Note:** Query parameters like `http://localhost:8000/todo/dishes?type=dirty` will be passed as `params.query`
 
 ### SocketIO
 
