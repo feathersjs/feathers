@@ -31,7 +31,7 @@
         }
 
         return id;
-      }
+      };
 
       headings.each(function() {
         var id = getId($(this));
@@ -58,6 +58,12 @@
     $('#rapidstart').gistPills(6644854);
     $('#realtime-todos').gistPills(6665992, 0);
 
+    $(window).on('resize', function(){
+      $('[data-spy="scroll"]').each(function () {
+        var $spy = $(this).scrollspy('refresh');
+      });
+    });
+
     // This needs to be after #toc
     $('a[href^="#"').click(function(ev){
       ev.preventDefault();
@@ -65,7 +71,7 @@
       var position = $(ev.target.hash).offset();
       
       if (position){
-        $("html, body").animate({ scrollTop: position.top - 100 }, 600);
+        $("html, body").animate({ scrollTop: position.top - 80 }, 600);
       }
     });
   });
