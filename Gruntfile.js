@@ -25,15 +25,17 @@ module.exports = function (grunt) {
 
     render: {
       index: {
-        markdown: 'https://raw.github.com/feathersjs/feathers/master/readme.md',
-        template: 'index.handlebars',
-        output: 'index.html'
+        options: {
+          markdown: 'https://raw.github.com/feathersjs/feathers/master/readme.md',
+          template: 'index.handlebars',
+          output: 'index.html'
+        }
       }
     },
 
     watch: {
       all: {
-        files: ['js/**/*.js', 'less/**/*.less'],
+        files: ['js/**/*.js', 'less/**/*.less', 'index.handlebars'],
         tasks: ['default'],
         options: {
         },
@@ -47,5 +49,5 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['less']);
+  grunt.registerTask('default', ['less', 'render']);
 };
