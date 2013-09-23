@@ -18,18 +18,55 @@
     $(lis.get(index || 0)).click();
   };
 
-  $(document).ready(function(){
-  	$('a[href^="#"').click(function(ev){
-  	  ev.preventDefault();
+  $.fn.toc = function(target) {
+    var idCounter = 0;
+    var createMenu = function(headings, level) {
+      var root = $('<ul>');
+      var getId = function(el) {
+        var id = el.attr('id');
 
-  	  var position = $(ev.target.hash).offset();
-  	  
-  	  if (position){
-  	    $("html, body").animate({ scrollTop: position.top - 100 }, 600);
-  	  }
-  	});
-  	
+        if(!id) {
+          id = 'toc' + (++idCounter);
+          el.attr('id', id);
+        }
+
+        return id;
+      }
+
+      headings.each(function() {
+        var id = getId($(this));
+        var link = $('<a>').attr('href', '#' + id).html($(this).html());
+        var current = $('<li>').html(link);
+        var headings = $(this).nextUntil('h' + level).filter('h' + (level + 1));
+
+        if(headings.length) {
+          current.append(createMenu(headings, level + 1));
+        }
+
+        root.append(current);
+      });
+
+      return root;
+    }
+    
+
+    this.html(createMenu($(target).find('h2'), 2));
+  };
+
+  $(document).ready(function(){
+    $('#toc').toc('.documentation-content');
     $('#rapidstart').gistPills(6644854);
-    $('#realtime-todos').gistPills(6651209, 1);
+    $('#realtime-todos').gistPills(6665992, 0);
+
+    // This needs to be after #toc
+    $('a[href^="#"').click(function(ev){
+      ev.preventDefault();
+
+      var position = $(ev.target.hash).offset();
+      
+      if (position){
+        $("html, body").animate({ scrollTop: position.top - 100 }, 600);
+      }
+    });
   });
 })(jQuery);

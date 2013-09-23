@@ -2,6 +2,7 @@
 @import "font-awesome/font-awesome";
 @import "variables";
 @import "mixins";
+@import "pygments";
 
 body, html {
   height: 100%;
@@ -174,6 +175,12 @@ section.hero {
       margin: 20px auto 30px auto;
     }
   }
+
+  @media (max-width: 479px) {
+    .tagline {
+      font-size: 40px;
+    }
+  }
 }
 
 section.get-started {
@@ -253,7 +260,7 @@ section.example {
 footer {
   color: @light-grey;
   background: @very-dark-grey;
-  padding: 40px;
+  padding: 20px;
 
   .icon-heart {
     font-size: 24px;
