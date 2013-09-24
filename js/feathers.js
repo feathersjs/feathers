@@ -56,7 +56,7 @@
   $(document).ready(function(){
     $('#toc').toc('.documentation-content');
     $('#rapidstart').gistPills(6644854);
-    $('#realtime-todos').gistPills(6665992, 0);
+    $('#realtime-todos').gistPills(6665992, 1);
 
     $(window).on('resize', function(){
       $('[data-spy="scroll"]').each(function () {
