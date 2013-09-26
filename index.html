@@ -186,6 +186,84 @@
             <div class="col-md-3" id="toc"></div>
             <div class="col-md-9 documentation-content">
               <h2>Introduction</h2>
+<h2>Configuration</h2>
+<h3>REST</h3>
+<p>Exposing services through a RESTful JSON interface is enabled by default. If you only want to use SocketIO
+call <code>app.disabled(&#39;feathers rest&#39;)</code> <em>before</em> registering any services.</p>
+<h3>SocketIO</h3>
+<p>To expose services via <a href="http://socket.io/">SocketIO</a> call <code>app.configure(feathers.socketio())</code>. It is also possible pass a <code>function(io) {}</code> when initializing the provider where <code>io</code> is the main SocketIO object so you can listen to custom events, change the configuration or add <a href="https://github.com/LearnBoost/socket.io/wiki/Authorizing">authorization</a>:</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">socketio</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">io</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">io</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;connection&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">socket</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;news&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">hello</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span> <span class="p">});</span>
+    <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;my other event&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+
+  <span class="nx">io</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;authorization&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">handshakeData</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">app</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">({</span>
+      <span class="nx">username</span><span class="o">:</span> <span class="nx">handshakeData</span><span class="p">.</span><span class="nx">username</span><span class="p">,</span>
+      <span class="nx">password</span><span class="o">:</span> <span class="nx">handshakeData</span><span class="p">.</span><span class="nx">password</span>
+    <span class="p">},</span> <span class="nx">callback</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}));</span>
+</pre></div>
+</code></pre>
+<p>Once the server has been started with <code>app.listen()</code> the SocketIO object is available as <code>app.io</code>.</p>
+<h2>API</h2>
+<h3>listen</h3>
+<p><code>app.listen([port])</code> starts the application on the given port. Before calling the original <a href="http://expressjs.com/api.html#app.listen">Express app.listen([port])</a> Feathers will initialize the SocketIO server (if set up) and call all services <code>setup(app, path)</code> methods in the order they have been registered.</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">feathers</span><span class="p">();</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">setup</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">app</span><span class="p">,</span> <span class="nx">path</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// path -&gt; &#39;todos&#39;</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+</pre></div>
+</code></pre>
+<h3>lookup</h3>
+<p><code>app.lookup(path)</code> returns the wrapped service object for the given path. Note that the returned object will provide the same methods and functionality as the original service but actually is a new object with additional functionality added (most notably it is possible to listen to service events). <code>path</code> can be the service name with or without leading and trailing slashes.</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/my/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">create</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="kd">var</span> <span class="nx">todoService</span> <span class="o">=</span> <span class="nx">app</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="s1">&#39;my/todos&#39;</span><span class="p">);</span>
+<span class="c1">// todoService is an event emitter</span>
+<span class="nx">todoService</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;created&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Created todo&#39;</span><span class="p">,</span> <span class="nx">todo</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</code></pre>
+<h3>use</h3>
+<p><code>app.use([path], service)</code> works just like <a href="http://expressjs.com/api.html#app.use">Express app.use([path], middleware)</a> but additionally allows to register a service object (an object which at least provides one of the service methods as outlined in the Services section) instead of the middleware function. Note that REST services are registered in the same order as any other middleware so the below example will allow the <code>/todos</code> service only to <a href="http://passportjs.org/">Passport</a> authenticated users.</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="c1">// Serve public folder for everybody</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/public&#39;</span><span class="p">);</span>
+<span class="c1">// Make sure that everything else only works with authentication</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">,</span><span class="nx">next</span><span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">()){</span>
+    <span class="nx">next</span><span class="p">();</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// 401 Not Authorized</span>
+    <span class="nx">next</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="mi">401</span><span class="p">));</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+<span class="c1">// Add a service.</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">id</span><span class="o">:</span> <span class="nx">name</span><span class="p">,</span>
+      <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;You have to do &quot;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot;!&quot;</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</code></pre>
 <h2>Services</h2>
 <p>A service can be any JavaScript object that offers one or more of the <code>find</code>, <code>get</code>, <code>create</code>, <code>update</code>, <code>remove</code> and <code>setup</code> service methods:</p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">myService</span> <span class="o">=</span> <span class="p">{</span>
@@ -202,13 +280,15 @@
 <h3>find</h3>
 <p><code>find(params, callback)</code> retrieves a list of all resources from the service. Ideally use <code>params.query</code> for things like filtering and paging so that REST calls like <code>todo?status=completed&amp;user=10</code> work right out of the box.</p>
 <p><strong>REST</strong></p>
-<blockquote>
-<p>GET todo?status=completed&amp;user=10</p>
-</blockquote>
+<pre><code><div class="highlight"><pre><span class="nx">GET</span> <span class="nx">todo</span><span class="o">?</span><span class="nx">status</span><span class="o">=</span><span class="nx">completed</span><span class="o">&amp;</span><span class="nx">user</span><span class="o">=</span><span class="mi">10</span>
+</pre></div>
+</code></pre>
 <p><strong>SocketIO</strong></p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;todo::find&#39;</span><span class="p">,</span> <span class="p">{</span>
-  <span class="nx">status</span><span class="o">:</span> <span class="s1">&#39;completed&#39;</span>
-  <span class="nx">user</span><span class="o">:</span> <span class="mi">10</span>
+  <span class="nx">query</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">status</span><span class="o">:</span> <span class="s1">&#39;completed&#39;</span>
+    <span class="nx">user</span><span class="o">:</span> <span class="mi">10</span>
+  <span class="p">}</span>
 <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
 <span class="p">});</span>
 </pre></div>
@@ -216,9 +296,9 @@
 <h3>get</h3>
 <p><code>get(id, params, callback)</code> retrieves a single resource with the given <code>id</code> from the service.</p>
 <p><strong>REST</strong></p>
-<blockquote>
-<p>GET todo/1</p>
-</blockquote>
+<pre><code><div class="highlight"><pre><span class="nx">GET</span> <span class="nx">todo</span><span class="o">/</span><span class="mi">1</span>
+</pre></div>
+</code></pre>
 <p><strong>SocketIO</strong></p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;todo::get&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
 
@@ -226,12 +306,13 @@
 </pre></div>
 </code></pre>
 <h3>create</h3>
-<p><code>create(data, params, callback)</code> creates a new resource with <code>data</code>. The callback should be called with that resource (and the id initialized).</p>
+<p><code>create(data, params, callback)</code> creates a new resource with <code>data</code>. The callback should be called with the newly
+created resource data.</p>
 <p><strong>REST</strong></p>
-<blockquote>
-<p>POST todo
-{ &quot;description&quot;: &quot;I really have to iron&quot; }</p>
-</blockquote>
+<pre><code><div class="highlight"><pre><span class="nx">POST</span> <span class="nx">todo</span>
+<span class="p">{</span> <span class="s2">&quot;description&quot;</span><span class="o">:</span> <span class="s2">&quot;I really have to iron&quot;</span> <span class="p">}</span>
+</pre></div>
+</code></pre>
 <p>By default the body can be eihter JSON or form encoded as long as the content type is set accordingly.</p>
 <p><strong>SocketIO</strong></p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;todo::create&#39;</span><span class="p">,</span> <span class="p">{</span>
@@ -241,12 +322,13 @@
 </pre></div>
 </code></pre>
 <h3>update</h3>
-<p><code>update(id, data, params, callback)</code> updates the resource identified by <code>id</code> using <code>data</code>.</p>
+<p><code>update(id, data, params, callback)</code> updates the resource identified by <code>id</code> using <code>data</code>. The callback should
+be called with the updated resource data.</p>
 <p><strong>REST</strong></p>
-<blockquote>
-<p>PUT todo/2
-{ &quot;description&quot;: &quot;I really have to do laundry&quot; }</p>
-</blockquote>
+<pre><code><div class="highlight"><pre><span class="nx">PUT</span> <span class="nx">todo</span><span class="o">/</span><span class="mi">2</span>
+<span class="p">{</span> <span class="s2">&quot;description&quot;</span><span class="o">:</span> <span class="s2">&quot;I really have to do laundry&quot;</span> <span class="p">}</span>
+</pre></div>
+</code></pre>
 <p><strong>SocketIO</strong></p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;todo::update&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">{</span>
   <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;I really have to do laundry&#39;</span>
@@ -256,20 +338,18 @@
 </pre></div>
 </code></pre>
 <h3>remove</h3>
-<p><code>remove(id, params, callback)</code> removes the resource with <code>id</code>.</p>
+<p><code>remove(id, params, callback)</code> removes the resource with <code>id</code>. The callback should be called with the removed resource.</p>
 <p><strong>REST</strong></p>
-<blockquote>
-<p>DELETE todo/2</p>
-</blockquote>
+<pre><code><div class="highlight"><pre><span class="nx">DELETE</span> <span class="nx">todo</span><span class="o">/</span><span class="mi">2</span>
+</pre></div>
+</code></pre>
 <p><strong>SocketIO</strong></p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;todo::remove&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
 <span class="p">});</span>
 </pre></div>
 </code></pre>
 <h3>setup</h3>
-<p><code>setup(app)</code> initializes the service passing an instance of the Feathers application.
-<code>app</code> can do everything a normal Express application does and additionally provides <code>app.lookup(path)</code>
-to retrieve another service by its path. <code>setup</code> is a great way to connect services:</p>
+<p><code>setup(app, path)</code> initializes the service passing an instance of the Feathers application and the path it has been registered on. The SocketIO server is available via <code>app.io</code>. <code>setup</code> is a great way to connect services:</p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">todoService</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
@@ -301,56 +381,117 @@ to retrieve another service by its path. <code>setup</code> is a great way to co
 </pre></div>
 </code></pre>
 <p>You can see the combination when going to <code>http://localhost:8000/my/test</code>.</p>
-<h2>Events</h2>
-<p>The secret ingredient to create real time applications using Feathers and SocketIO is the
-<code>created</code>, <code>updated</code> and <code>removed</code> events every Feathers service automatically emits.
-Here is another simple Todo service, that just passes the data through <code>create</code>:</p>
-<pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">feathers</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;feathers&#39;</span><span class="p">);</span>
+<p><strong>Pro tip:</strong></p>
+<p>Bind the apps <code>lookup</code> method to your service to always look your services up dynamically:</p>
+<pre><code><div class="highlight"><pre><span class="kd">var</span> <span class="nx">myService</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">setup</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">lookup</span> <span class="o">=</span> <span class="nx">app</span><span class="p">.</span><span class="nx">lookup</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
+  <span class="p">},</span>
 
-<span class="kd">var</span> <span class="nx">todoService</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="s1">&#39;todos&#39;</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;take out trash&#39;</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">name</span><span class="o">:</span> <span class="nx">name</span><span class="p">,</span>
+        <span class="nx">todo</span><span class="o">:</span> <span class="nx">todo</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</code></pre>
+<h2>Events</h2>
+<p>Any registered service will be automatically turned into an event emitter that emits events when a resource has changed, that is a <code>create</code>, <code>update</code> or <code>remove</code> service call returned successfully. It is therefore possible to bind to the below events via <code>app.lookup(servicename).on()</code> and, if enabled, all events will also broadcast to all connected SocketIO clients in the form of <code>&lt;servicepath&gt; &lt;eventname&gt;</code>.</p>
+<h3>created</h3>
+<p>The <code>created</code> event will be published with the callback data when a service <code>create</code> calls back successfully.</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
   <span class="nx">create</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
   <span class="p">}</span>
-<span class="p">};</span>
+<span class="p">});</span>
 
-<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">feathers</span><span class="p">()</span>
-    <span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">socketio</span><span class="p">())</span>
-    <span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;todo&#39;</span><span class="p">,</span> <span class="nx">todoService</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8000</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;created&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Created todo&#39;</span><span class="p">,</span> <span class="nx">todo</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">).</span><span class="nx">create</span><span class="p">({</span>
+  <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;We have to do something!&#39;</span>
+<span class="p">},</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// ...</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8000</span><span class="p">);</span>
 </pre></div>
 </code></pre>
-<p>Lets make an HTML file that creates a new Todo using SocketIO every two seconds:</p>
-<pre><code class="lang-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://localhost:8000/socket.io/socket.io.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-<span class="nt">&lt;script&gt;</span>
-  <span class="kd">var</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nx">io</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s1">&#39;http://localhost:8000/&#39;</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-  <span class="c1">// Create a new Todo every two seconds</span>
-  <span class="nx">setInterval</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">counter</span><span class="o">++</span><span class="p">;</span>
-
-    <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;todo::create&#39;</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;I have &#39;</span> <span class="o">+</span> <span class="nx">counter</span> <span class="o">+</span> <span class="s1">&#39; things to do!&#39;</span>
-    <span class="p">},</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Created: &#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
-    <span class="p">});</span>
-  <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
-<span class="nt">&lt;/script&gt;</span>
-</pre></div>
-</code></pre>
-<p>In another file we just listen to the <code>todo created</code> event and log it:</p>
+<p><strong>SocketIO</strong></p>
 <pre><code class="lang-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://localhost:8000/socket.io/socket.io.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
 <span class="nt">&lt;script&gt;</span>
   <span class="kd">var</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nx">io</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s1">&#39;http://localhost:8000/&#39;</span><span class="p">);</span>
 
-  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;todo created&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">todo</span><span class="p">.</span><span class="nx">description</span><span class="p">);</span>
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;todos created&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Got a new Todo!&#39;</span><span class="p">,</span> <span class="nx">todo</span><span class="p">);</span>
   <span class="p">});</span>
 <span class="nt">&lt;/script&gt;</span>
 </pre></div>
 </code></pre>
-<p>When visiting both HTMl files in a browser at the same time you should see a new Todo being logged every
-two seconds on both pages.</p>
+<h3>updated</h3>
+<p>The <code>updated</code> event will be published with the callback data when a service <code>update</code> calls back successfully.</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">update</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;updated&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Updated todo&#39;</span><span class="p">,</span> <span class="nx">todo</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8000</span><span class="p">);</span>
+</pre></div>
+</code></pre>
+<p><strong>SocketIO</strong></p>
+<pre><code class="lang-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://localhost:8000/socket.io/socket.io.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+  <span class="kd">var</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nx">io</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s1">&#39;http://localhost:8000/&#39;</span><span class="p">);</span>
+
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;todos::update&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;Updated description&#39;</span>
+  <span class="p">},</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+   <span class="c1">// Do something here</span>
+  <span class="p">});</span>
+
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;todos updated&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Got an updated Todo!&#39;</span><span class="p">,</span> <span class="nx">todo</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+</code></pre>
+<h3>removed</h3>
+<p>The <code>removed</code> event will be published with the callback data when a service <code>remove</code> calls back successfully.</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">remove</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="nx">id</span> <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">).</span><span class="nx">remove</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// ...</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8000</span><span class="p">);</span>
+</pre></div>
+</code></pre>
+<p><strong>SocketIO</strong></p>
+<pre><code class="lang-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://localhost:8000/socket.io/socket.io.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+  <span class="kd">var</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nx">io</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s1">&#39;http://localhost:8000/&#39;</span><span class="p">);</span>
+
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;todos removed&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Remove element showing the Todo from the page</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#todo-&#39;</span> <span class="o">+</span> <span class="nx">todo</span><span class="p">.</span><span class="nx">id</span><span class="p">).</span><span class="nx">remove</span><span class="p">();</span>
+  <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+</code></pre>
 <h2>Another Framework?</h2>
 <p>We know... Oh God another bloody NodeJS framework! Yes we are also very tired of seeing all these NodeJS frameworks. All the rails clones are getting a bit boring and really aren&#39;t taking advantage of the real strengths of NodeJS. We wanted to take a different approach than every other framework we have seen, because we believe that data is core to the web and should be the core focus of web applications.</p>
 <p>We also think that your data resources can and should be encapsulated in such a way that they can be ultra scalable and self contained. The MVC pattern works well but it is becoming antiquated in today&#39;s web. Frankly you don&#39;t need it and they tend to become bloated.</p>
