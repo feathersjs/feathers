@@ -33,7 +33,7 @@ Once the server has been started with `app.listen()` the SocketIO object is avai
 
 ## API
 
-## listen
+### listen
 
 `app.listen([port])` starts the application on the given port. Before calling the original [Express app.listen([port])](http://expressjs.com/api.html#app.listen) Feathers will initialize the SocketIO server (if set up) and call all services `setup(app, path)` methods in the order they have been registered.
 
@@ -50,7 +50,7 @@ var server = app.listen(8080);
 server.close();
 ```
 
-## lookup
+### lookup
 
 `app.lookup(path)` returns the wrapped service object for the given path. Note that the returned object will provide the same methods and functionality as the original service but actually is a new object with additional functionality added (most notably it is possible to listen to service events). `path` can be the service name with or without leading and trailing slashes.
 
@@ -68,7 +68,7 @@ todoService.on('created', function(todo) {
 });
 ```
 
-## use
+### use
 
 `app.use([path], service)` works just like [Express app.use([path], middleware)](http://expressjs.com/api.html#app.use) but additionally allows to register a service object (an object which at least provides one of the service methods as outlined in the Services section) instead of the middleware function. Note that REST services are registered in the same order as any other middleware so the below example will allow the `/todos` service only to [Passport](http://passportjs.org/) authenticated users.
 
@@ -118,7 +118,7 @@ All callbacks follow the `function(error, data)` NodeJS convention. `params` can
 
 __REST__
 
-  GET todo?status=completed&user=10
+    GET todo?status=completed&user=10
 
 __SocketIO__
 
@@ -138,7 +138,7 @@ socket.emit('todo::find', {
 
 __REST__
 
-  GET todo/1
+    GET todo/1
 
 __SocketIO__
 
@@ -155,8 +155,8 @@ created resource data.
 
 __REST__
 
-  POST todo
-  { "description": "I really have to iron" }
+    POST todo
+    { "description": "I really have to iron" }
 
 By default the body can be eihter JSON or form encoded as long as the content type is set accordingly.
 
@@ -176,8 +176,8 @@ be called with the updated resource data.
 
 __REST__
 
-  PUT todo/2
-  { "description": "I really have to do laundry" }
+    PUT todo/2
+    { "description": "I really have to do laundry" }
 
 __SocketIO__
 
@@ -195,7 +195,7 @@ socket.emit('todo::update', 2, {
 
 __REST__
 
-  DELETE todo/2
+    DELETE todo/2
 
 __SocketIO__
 
@@ -266,7 +266,7 @@ var myService = {
 
 Any registered service will be automatically turned into an event emitter that emits events when a resource has changed, that is a `create`, `update` or `remove` service call returned successfully. It is therefore possible to bind to the below events via `app.lookup(servicename).on()` and, if enabled, all events will also broadcast to all connected SocketIO clients in the form of `<servicepath> <eventname>`.
 
-## created
+### created
 
 The `created` event will be published with the callback data when a service `create` calls back successfully.
 
@@ -303,7 +303,7 @@ __SocketIO__
 </script>
 ```
 
-## updated
+### updated
 
 The `updated` event will be published with the callback data when a service `update` calls back successfully.
 
@@ -328,7 +328,7 @@ __SocketIO__
 <script>
   var socket = io.connect('http://localhost:8000/');
 
-  socket.emit('todos::updated', 1, {
+  socket.emit('todos::update', 1, {
     description: 'Updated description'
   }, {}, function(error, callback) {
    // Do something here
@@ -340,7 +340,7 @@ __SocketIO__
 </script>
 ```
 
-## removed
+### removed
 
 The `removed` event will be published with the callback data when a service `remove` calls back successfully.
 
