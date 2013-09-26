@@ -5,12 +5,7 @@
 @import "pygments";
 
 body, html {
-  height: 100%;
   font-family: 'Helvetica', 'Arial', Sans-serif;
-}
-
-body {
-  min-height: 100%;
 }
 
 a {
@@ -191,6 +186,7 @@ section.rapid-start {
 
   h1 {
     color: @red;
+    margin-top: 0;
   }
 
   p {
@@ -286,10 +282,6 @@ footer {
   }
 }
 
-#gist6644432 {
-  margin-top: 50px;
-}
-
 @media (max-width: 979px) {
   .back {
     float: none!important;
@@ -307,14 +299,17 @@ footer {
 }
 
 pre {
-  padding-bottom: 0;
+  padding: 15px;
   font-family: Consolas, "Liberation Mono", Courier, monospace;
   font-size: 14px;
   background-color: #f8f8ff;
+  line-height: 0;
 
   pre {
+    line-height: 1.428571429;
     border: none;
     padding: 0;
+    margin: 0;
   }
 }
 
@@ -331,9 +326,44 @@ pre {
 }
 
 #toc {
+  padding-top: 20px;
+
   &.affix {
     position: fixed;
     top: 80px;
-    width: 273px;
-  } 
+    width: 263px;
+  }
+
+  li > ul {
+    display: none;
+  }
+
+  li.active {
+    > a {
+      font-weight: bold;
+    }
+
+    > ul {
+      display: block;
+    }
+  }
+
+  ul.nav > li.active > ul > li {
+    list-style: none;
+
+    a {
+      color: @dark-grey;
+    }
+  }
+}
+
+#todo-example {
+  ul.todos {
+    height: 285px;
+    color: #FFF;
+
+    li.done {
+      text-decoration: line-through;
+    }
+  }
 }

@@ -42,7 +42,7 @@
           </div>
           <div class="navbar-collapse collapse pull-right">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#features">Features</a></li>
+              <li><a href="#features">Features</a></li>
               <li><a href="#get-started">Get Started</a></li>
               <li><a href="#example">Example</a></li>
               <li><a href="#documentation">Documentation</a></li>
@@ -101,20 +101,19 @@
             <div class="col-md-4">
               <i class="icon-cloud"></i>
               <h2>Lightweight</h2>
-              <p class="feature description">No "Framework X" but for Node.
-                Feathers is built right on top of <a href="http://expressjs.com" title="Express" target="_blank">Express</a> and harnesses the small, modular spirit of the <a href="https://twitter.com/search?q=%23nodejs&src=hash" title="NodeJS Twitter" targe="_blank">#NodeJS</a> community. Literally replace
+              <p class="feature description">Feathers is built right on top of <a href="http://expressjs.com" title="Express" target="_blank">Express</a>. No "Framework X" but for Node. Literally replace
                 <strong>Express</strong> with <strong>Feathers</strong> and you are good to go. You can even use the same middleware!
               </p>
             </div>
             <div class="col-md-4">
               <i class="icon-rocket"></i>
               <h2>Realtime</h2>
-              <p class="feature description">No real-time abstraction magic. Vanilla SocketIO and name spaced events are all you need to make your web application come to life. To make things easier we even set up some default events for you!</p>
+              <p class="feature description">No real-time abstraction magic. Vanilla SocketIO and namespaced events are all you need to make your web application come to life. And Feathers already provides the ones you need!</p>
             </div>
             <div class="col-md-4">
               <i class="icon-cogs"></i>
               <h2>Flexible</h2>
-              <p class="feature description">You can do everything that Express and <a href="http://socket.io/" title="Socket.IO" targe="_blank">SocketIO</a> can do. With the ability to use the same middleware and write your own custom mixins or services, giving feathers a try is a snap!</p>
+              <p class="feature description">Feathers isn't in the way. You can do everything that Express and <a href="http://socket.io/" title="Socket.IO" targe="_blank">SocketIO</a> can do. Using your existing middleware and adding new services as you go makes trying out Feathers a snap!</p>
             </div>
           </div>
         </div>
@@ -123,9 +122,13 @@
       <section id="get-started" class="rapid-start">
         <div class="container">
           <div class="row">
+            <div class="col-md-12">
+              <h1 class="page-header">Rapid start</h1>
+            </div>
+          </div>
+          <div class="row">
             <div class="col-md-6">
-              <h1>Rapid start</h1>
-              <p>With Feathers you can get a flexible REST and SocketIO service running in no time. <strong>Services</strong> are objects that can be used just like an Express middleware. The example on the right creates a simple Todo service that is available as a RESTful endpoint and also a real-time endpoint via SocketIO.</p>
+              <p>With Feathers you can get a flexible REST and SocketIO service running in no time. <strong>Services</strong> are objects with a certain set of methods that can be used just like an Express middleware. The <code>feathers-rapidstart.js</code> example creates a simple Todo service that is available as a RESTful webservice and also a real-time endpoint via SocketIO.</p>
 
               <ul class="nav nav-pills options" id="rapidstart">
                 <li class="active"><a href="#">REST</a></li>
@@ -138,6 +141,7 @@
             </div>
           </div>
 
+          <!-- TODO
           <div class="row">
             <hr>
           </div>
@@ -152,6 +156,7 @@
             </div>
           </div>
         </div>
+        -->
       </section>
 
       <section id="example" class="example">
@@ -160,7 +165,16 @@
             <div class="col-md-6">
               <h1>Real-time TODOS</h1>
               <p>You're all probably familiar with <a href="http://todomvc.com/" title="TODO MVC" target="_blank">TodoMVC</a>. Well, we are huge fans and so we've created a real-time TODO app that you can see right here. It's definitely fairly trivial, but it demonstrates most of the major parts of Feathers.</p>
-              TODOs here
+              
+              <div id="todo-example">
+                <ul class="todos list-unstyled"></ul>
+                <form role="form" class="create-todo">
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="description" placeholder="Add a new Todo">
+                  </div>
+                  <button type="submit" class="btn btn-info col-md-12">Add Todo</button>
+                </form>
+              </div>
             </div>
             <div class="col-md-6">
               <div class="row">
@@ -557,12 +571,10 @@ THE SOFTWARE.</p>
       </div>
     </footer>
 
-
-    <!-- JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://localhost:8080/socket.io/socket.io.js"></script>
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/feathers.js"></script>
+    <script src="js/todos.js"></script>
   </body>
 </html>

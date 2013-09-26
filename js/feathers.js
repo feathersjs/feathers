@@ -6,7 +6,6 @@
 
   	gistFiles.hide();
 
-  	// this.find('li:first').click();
   	this.on('click', 'li', function(ev) {
   		var el = $(this);
   		lis.removeClass('active');
@@ -51,13 +50,18 @@
       });
 
       return root;
-    }
+    };
     
 
     this.html(createMenu($(target).find('h2'), 2));
   };
 
-  $(document).ready(function(){
+  $(document).ready(function() {
+    $('body').scrollspy({
+      target: '.navbar-inverse, #toc',
+      offset: $('.navbar-inverse').outerHeight()
+    });
+
     $('#toc').toc('.documentation-content');
     $('#rapidstart').gistPills(6644854);
     $('#realtime-todos').gistPills(6665992, 1);
@@ -67,27 +71,15 @@
         var $spy = $(this).scrollspy('refresh');
       });
     });
-
-    // This needs to be after #toc
-    $('a[href^="#"').click(function(ev){
-      ev.preventDefault();
-
-      var position = $(ev.target.hash).offset();
-      
-      if (position){
-        $("html, body").animate({ scrollTop: position.top - 80 }, 600);
-      }
-    });
-
-    // $('body').scrollspy({ target: '.navbar-inverse' });
-    $('body').scrollspy({ target: '#toc ul' });
+    
     $('#toc').affix({
       offset: {
-        top: $('#toc').offset().top - $('.navbar').outerHeight(),
-        bottom: function () {
-          return $('footer').outerHeight(true);
-        }
+        top: $('#toc').offset().top - $('.navbar').outerHeight()
       }
     });
+
+    $('body').scrollspy('refresh');
+
+    $('#todo-example').todos('http://tekhnotron.com');
   });
 })(jQuery);

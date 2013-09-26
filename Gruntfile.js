@@ -43,7 +43,7 @@ module.exports = function (grunt) {
 
     watch: {
       all: {
-        files: ['js/**/*.js', 'less/**/*.less', 'index.handlebars'],
+        files: ['less/**/*.less', 'index.handlebars'],
         tasks: ['default'],
         options: {
         },
