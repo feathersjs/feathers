@@ -1,5 +1,100 @@
 ## Introduction
 
+## Configuration
+
+### REST
+
+Exposing services through a RESTful JSON interface is enabled by default. If you only want to use SocketIO
+call `app.disabled('feathers rest')` _before_ registering any services.
+
+### SocketIO
+
+To expose services via [SocketIO](http://socket.io/) call `app.configure(feathers.socketio())`. It is also possible pass a `function(io) {}` when initializing the provider where `io` is the main SocketIO object so you can listen to custom events, change the configuration or add [authorization](https://github.com/LearnBoost/socket.io/wiki/Authorizing):
+
+```js
+app.configure(feathers.socketio(function(io) {
+  io.on('connection', function(socket) {
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data) {
+      console.log(data);
+    });
+  });
+
+  io.set('authorization', function (handshakeData, callback) {
+    app.lookup('users').find({
+      username: handshakeData.username,
+      password: handshakeData.password
+    }, callback);
+  });
+}));
+```
+
+Once the server has been started with `app.listen()` the SocketIO object is available as `app.io`.
+
+## API
+
+## listen
+
+`app.listen([port])` starts the application on the given port. Before calling the original [Express app.listen([port])](http://expressjs.com/api.html#app.listen) Feathers will initialize the SocketIO server (if set up) and call all services `setup(app, path)` methods in the order they have been registered.
+
+```js
+var app = feathers();
+app.use('/todos', {
+  setup: function(app, path) {
+    // path -> 'todos'
+  }
+});
+
+var server = app.listen(8080);
+
+server.close();
+```
+
+## lookup
+
+`app.lookup(path)` returns the wrapped service object for the given path. Note that the returned object will provide the same methods and functionality as the original service but actually is a new object with additional functionality added (most notably it is possible to listen to service events). `path` can be the service name with or without leading and trailing slashes.
+
+```js
+app.use('/my/todos', {
+  create: function(data, params, callback) {
+    callback(null, data);
+  }
+});
+
+var todoService = app.lookup('my/todos');
+// todoService is an event emitter
+todoService.on('created', function(todo) {
+  console.log('Created todo', todo);
+});
+```
+
+## use
+
+`app.use([path], service)` works just like [Express app.use([path], middleware)](http://expressjs.com/api.html#app.use) but additionally allows to register a service object (an object which at least provides one of the service methods as outlined in the Services section) instead of the middleware function. Note that REST services are registered in the same order as any other middleware so the below example will allow the `/todos` service only to [Passport](http://passportjs.org/) authenticated users.
+
+```js
+// Serve public folder for everybody
+app.use(feathers.static(__dirname + '/public');
+// Make sure that everything else only works with authentication
+app.use(function(req,res,next){
+  if(req.isAuthenticated()){
+    next();
+  } else {
+    // 401 Not Authorized
+    next(new Error(401));
+  }
+});
+// Add a service.
+app.use('/todos', {
+  get: function(name, params, callback) {
+    callback(null, {
+      id: name,
+      description: "You have to do " + name + "!"
+    });
+  }
+});
+```
+
 ## Services
 
 A service can be any JavaScript object that offers one or more of the `find`, `get`, `create`, `update`, `remove` and `setup` service methods:
@@ -23,14 +118,16 @@ All callbacks follow the `function(error, data)` NodeJS convention. `params` can
 
 __REST__
 
-> GET todo?status=completed&user=10
+  GET todo?status=completed&user=10
 
 __SocketIO__
 
 ```js
 socket.emit('todo::find', {
-  status: 'completed'
-  user: 10
+  query: {
+    status: 'completed'
+    user: 10
+  }
 }, function(error, data) {
 });
 ```
@@ -41,7 +138,7 @@ socket.emit('todo::find', {
 
 __REST__
 
-> GET todo/1
+  GET todo/1
 
 __SocketIO__
 
@@ -53,12 +150,13 @@ socket.emit('todo::get', 1, {}, function(error, data) {
 
 ### create
 
-`create(data, params, callback)` creates a new resource with `data`. The callback should be called with that resource (and the id initialized).
+`create(data, params, callback)` creates a new resource with `data`. The callback should be called with the newly
+created resource data.
 
 __REST__
 
-> POST todo
-> { "description": "I really have to iron" }
+  POST todo
+  { "description": "I really have to iron" }
 
 By default the body can be eihter JSON or form encoded as long as the content type is set accordingly.
 
@@ -73,12 +171,13 @@ socket.emit('todo::create', {
 
 ### update
 
-`update(id, data, params, callback)` updates the resource identified by `id` using `data`.
+`update(id, data, params, callback)` updates the resource identified by `id` using `data`. The callback should
+be called with the updated resource data.
 
 __REST__
 
-> PUT todo/2
-> { "description": "I really have to do laundry" }
+  PUT todo/2
+  { "description": "I really have to do laundry" }
 
 __SocketIO__
 
@@ -92,11 +191,11 @@ socket.emit('todo::update', 2, {
 
 ### remove
 
-`remove(id, params, callback)` removes the resource with `id`.
+`remove(id, params, callback)` removes the resource with `id`. The callback should be called with the removed resource.
 
 __REST__
 
-> DELETE todo/2
+  DELETE todo/2
 
 __SocketIO__
 
@@ -107,9 +206,7 @@ socket.emit('todo::remove', 2, {}, function(error, data) {
 
 ### setup
 
-`setup(app)` initializes the service passing an instance of the Feathers application.
-`app` can do everything a normal Express application does and additionally provides `app.lookup(path)`
-to retrieve another service by its path. `setup` is a great way to connect services:
+`setup(app, path)` initializes the service passing an instance of the Feathers application and the path it has been registered on. The SocketIO server is available via `app.io`. `setup` is a great way to connect services:
 
 ```js
 var todoService = {
@@ -144,62 +241,136 @@ feathers()
 
 You can see the combination when going to `http://localhost:8000/my/test`.
 
+__Pro tip:__
+
+Bind the apps `lookup` method to your service to always look your services up dynamically:
+
+```
+var myService = {
+  setup: function(app) {
+    this.lookup = app.lookup.bind(app);
+  },
+
+  get: function(name, params, callback) {
+    this.lookup('todos').get('take out trash', {}, function(error, todo) {
+      callback(null, {
+        name: name,
+        todo: todo
+      });
+    });
+  }
+}
+```
+
 ## Events
 
-The secret ingredient to create real time applications using Feathers and SocketIO is the
-`created`, `updated` and `removed` events every Feathers service automatically emits.
-Here is another simple Todo service, that just passes the data through `create`:
+Any registered service will be automatically turned into an event emitter that emits events when a resource has changed, that is a `create`, `update` or `remove` service call returned successfully. It is therefore possible to bind to the below events via `app.lookup(servicename).on()` and, if enabled, all events will also broadcast to all connected SocketIO clients in the form of `<servicepath> <eventname>`.
+
+## created
+
+The `created` event will be published with the callback data when a service `create` calls back successfully.
 
 ```js
-var feathers = require('feathers');
-
-var todoService = {
+app.use('/todos', {
   create: function(data, params, callback) {
     callback(null, data);
   }
-};
+});
 
-var app = feathers()
-	.configure(feathers.socketio())
-	.use('todo', todoService)
-	.listen(8000);
+app.lookup('/todos').on('created', function(todo) {
+  console.log('Created todo', todo);
+});
+
+app.lookup('/todos').create({
+  description: 'We have to do something!'
+}, {}, function(error, callback) {
+  // ...
+});
+
+app.listen(8000);
 ```
 
-Lets make an HTML file that creates a new Todo using SocketIO every two seconds:
-
-```html
-<script src="http://localhost:8000/socket.io/socket.io.js"></script>
-<script>
-  var socket = io.connect('http://localhost:8000/');
-  var counter = 0;
-
-  // Create a new Todo every two seconds
-  setInterval(function() {
-    counter++;
-
-    socket.emit('todo::create', {
-      description: 'I have ' + counter + ' things to do!'
-    }, {}, function(error, data) {
-      console.log('Created: ', data);
-    });
-  }, 2000);
-</script>
-```
-
-In another file we just listen to the `todo created` event and log it:
+__SocketIO__
 
 ```html
 <script src="http://localhost:8000/socket.io/socket.io.js"></script>
 <script>
   var socket = io.connect('http://localhost:8000/');
 
-  socket.on('todo created', function(todo) {
-    console.log(todo.description);
+  socket.on('todos created', function(todo) {
+    console.log('Got a new Todo!', todo);
   });
 </script>
 ```
-When visiting both HTMl files in a browser at the same time you should see a new Todo being logged every
-two seconds on both pages.
+
+## updated
+
+The `updated` event will be published with the callback data when a service `update` calls back successfully.
+
+```js
+app.use('/todos', {
+  update: function(id, data, params, callback) {
+    callback(null, data);
+  }
+});
+
+app.lookup('/todos').on('updated', function(todo) {
+  console.log('Updated todo', todo);
+});
+
+app.listen(8000);
+```
+
+__SocketIO__
+
+```html
+<script src="http://localhost:8000/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:8000/');
+
+  socket.emit('todos::updated', 1, {
+    description: 'Updated description'
+  }, {}, function(error, callback) {
+   // Do something here
+  });
+
+  socket.on('todos updated', function(todo) {
+    console.log('Got an updated Todo!', todo);
+  });
+</script>
+```
+
+## removed
+
+The `removed` event will be published with the callback data when a service `remove` calls back successfully.
+
+```js
+app.use('/todos', {
+  remove: function(id, params, callback) {
+    callback(null, { id: id });
+  }
+});
+
+app.lookup('/todos').remove(1, {}, function(error, callback) {
+  // ...
+});
+
+app.listen(8000);
+```
+
+__SocketIO__
+
+```html
+<script src="http://localhost:8000/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:8000/');
+
+  socket.on('todos removed', function(todo) {
+    // Remove element showing the Todo from the page
+    $('#todo-' + todo.id).remove();
+  });
+</script>
+```
 
 ## Another Framework?
 
