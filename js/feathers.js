@@ -33,6 +33,10 @@
         return id;
       };
 
+      if(level === 2) {
+        root.addClass('nav');
+      }
+
       headings.each(function() {
         var id = getId($(this));
         var link = $('<a>').attr('href', '#' + id).html($(this).html());
@@ -72,6 +76,17 @@
       
       if (position){
         $("html, body").animate({ scrollTop: position.top - 80 }, 600);
+      }
+    });
+
+    // $('body').scrollspy({ target: '.navbar-inverse' });
+    $('body').scrollspy({ target: '#toc ul' });
+    $('#toc').affix({
+      offset: {
+        top: $('#toc').offset().top - $('.navbar').outerHeight(),
+        bottom: function () {
+          return $('footer').outerHeight(true);
+        }
       }
     });
   });
