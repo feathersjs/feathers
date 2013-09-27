@@ -1,5 +1,7 @@
 ## Introduction
 
+Feathers sits right on top of Express, one of the most popular web frameworks for NodeJS. If you are not familiar with Express head over to the [Express Guides](http://expressjs.com/guide.html). Feathers works the exact same way except that `var app = require('express')();` is replaced with `var app = require('feathers')()`. The small differences and additional functionality available is outline in the following documentation.
+
 ## Configuration
 
 ### REST
@@ -372,9 +374,9 @@ __SocketIO__
 </script>
 ```
 
-## Another Framework?
+## Why?
 
-We know... Oh God another bloody NodeJS framework! Yes we are also very tired of seeing all these NodeJS frameworks. All the rails clones are getting a bit boring and really aren't taking advantage of the real strengths of NodeJS. We wanted to take a different approach than every other framework we have seen, because we believe that data is core to the web and should be the core focus of web applications.
+We know... Oh God another NodeJS framework! Yes we are also very tired of seeing all these NodeJS frameworks. All the rails clones are getting a bit boring and really aren't taking advantage of the real strengths of NodeJS. We wanted to take a different approach than every other framework we have seen, because we believe that data is core to the web and should be the core focus of web applications.
 
 We also think that your data resources can and should be encapsulated in such a way that they can be ultra scalable and self contained. The MVC pattern works well but it is becoming antiquated in today's web. Frankly you don't need it and they tend to become bloated.
 
