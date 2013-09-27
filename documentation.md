@@ -6,8 +6,26 @@ Feathers sits right on top of Express, one of the most popular web frameworks fo
 
 ### REST
 
-Exposing services through a RESTful JSON interface is enabled by default. If you only want to use SocketIO
-call `app.disabled('feathers rest')` _before_ registering any services.
+Exposing services through a RESTful JSON interface is enabled by default. If you only want to use SocketIO call `app.disabled('feathers rest')` _before_ registering any services.
+
+To set service parameters in a middleware, just attach it to the `req.feathers` object which will become the params for any resulting service call:
+
+```js
+app.use(function(req, res) {
+  req.feathers.data = 'Hello world';
+});
+
+app.use('/todos', {
+  get: function(name, params, callback) {
+    console.log(params.data); // -> 'Hello world'
+    callback(null, {
+      id: name,
+      params: params,
+      description: "You have to do " + name + "!"
+    });
+  }
+});
+```
 
 ### SocketIO
 
