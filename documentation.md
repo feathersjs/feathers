@@ -1,6 +1,6 @@
 ## Introduction
 
-Feathers sits right on top of Express, one of the most popular web frameworks for NodeJS. If you are not familiar with Express head over to the [Express Guides](http://expressjs.com/guide.html). Feathers works the exact same way except that `var app = require('express')();` is replaced with `var app = require('feathers')()`. The small differences and additional functionality available is outline in the following documentation.
+Feathers sits right on top of Express, one of the most popular web frameworks for [NodeJS](http://nodejs.org/). If you are not familiar with Express head over to the [Express Guides](http://expressjs.com/guide.html) to get an idea. Feathers works the exact same way except that `var app = require('express')();` is replaced with `var app = require('feathers')()`. The small differences and additional functionality available is outline in the following documentation.
 
 ## Configuration
 
@@ -41,9 +41,9 @@ Once the server has been started with `app.listen()` the SocketIO object is avai
 
 ```js
 var app = feathers();
-app.use('/todos', {
+app.use('/my/todos', {
   setup: function(app, path) {
-    // path -> 'todos'
+    // path -> 'my/todos'
   }
 });
 
@@ -54,7 +54,7 @@ server.close();
 
 ### lookup
 
-`app.lookup(path)` returns the wrapped service object for the given path. Note that the returned object will provide the same methods and functionality as the original service but actually is a new object with additional functionality added (most notably it is possible to listen to service events). `path` can be the service name with or without leading and trailing slashes.
+`app.lookup(path)` returns the wrapped service object for the given path. Note that Feathers internally creates a new object from each registered service. This means that the object returned by `lookup` will provide the same methods and functionality as the original service but also functionality added by Feathers (most notably it is possible to listen to service events). `path` can be the service name with or without leading and trailing slashes.
 
 ```js
 app.use('/my/todos', {
@@ -99,7 +99,7 @@ app.use('/todos', {
 
 ## Services
 
-A service can be any JavaScript object that offers one or more of the `find`, `get`, `create`, `update`, `remove` and `setup` service methods:
+A service can be any JavaScript object that offers one or more of the `find`, `get`, `create`, `update`, `remove` and `setup` service methods with the following signatures:
 
 ```js
 var myService = {
@@ -112,7 +112,7 @@ var myService = {
 }
 ```
 
-All callbacks follow the `function(error, data)` NodeJS convention. `params` can contain any additional parameters, for example the currently authenticated user. REST service calls set `params.query` with the query parameters (e.g. a query string like `?status=active&type=user` becomes `{ status: "active", type: "user" }`).
+All callbacks follow the `function(error, data)` NodeJS convention. `params` can contain any additional parameters, for example the currently authenticated user. REST service calls set `params.query` with the query parameters (e.g. a query string like `?status=active&type=user` becomes `{ query: { status: "active", type: "user" } }`).
 
 ### find
 
@@ -167,7 +167,7 @@ __SocketIO__
 ```js
 socket.emit('todo::create', {
   description: 'I really have to iron'
-}, function(error, data) {
+}, {}, function(error, data) {
 });
 ```
 
@@ -227,7 +227,7 @@ var myService = {
 
   get: function(name, params, callback) {
     this.todo.get('take out trash', {}, function(error, todo) {
-      callback(null, {
+      callback(error, {
         name: name,
         todo: todo
       });
@@ -266,7 +266,7 @@ var myService = {
 
 ## Events
 
-Any registered service will be automatically turned into an event emitter that emits events when a resource has changed, that is a `create`, `update` or `remove` service call returned successfully. It is therefore possible to bind to the below events via `app.lookup(servicename).on()` and, if enabled, all events will also broadcast to all connected SocketIO clients in the form of `<servicepath> <eventname>`.
+Any registered service will be automatically turned into an event emitter that emits events when a resource has changed, that is a `create`, `update` or `remove` service call returned successfully. It is therefore possible to bind to the below events via `app.lookup(servicename).on()` and, if enabled, all events will also broadcast to all connected SocketIO clients in the form of `<servicepath> <eventname>`. Note that the service path will always be stripped of leading and trailing slashes regardless of how it has been registered (e.g. `/my/service/` will become `my/service`).
 
 ### created
 
@@ -310,14 +310,10 @@ __SocketIO__
 The `updated` event will be published with the callback data when a service `update` calls back successfully.
 
 ```js
-app.use('/todos', {
+app.use('/my/todos/', {
   update: function(id, data, params, callback) {
     callback(null, data);
   }
-});
-
-app.lookup('/todos').on('updated', function(todo) {
-  console.log('Updated todo', todo);
 });
 
 app.listen(8000);
@@ -330,14 +326,14 @@ __SocketIO__
 <script>
   var socket = io.connect('http://localhost:8000/');
 
-  socket.emit('todos::update', 1, {
+  socket.on('my/todos updated', function(todo) {
+    console.log('Got an updated Todo!', todo);
+  });
+
+  socket.emit('my/todos::update', 1, {
     description: 'Updated description'
   }, {}, function(error, callback) {
    // Do something here
-  });
-
-  socket.on('todos updated', function(todo) {
-    console.log('Got an updated Todo!', todo);
   });
 </script>
 ```
@@ -376,9 +372,9 @@ __SocketIO__
 
 ## Why?
 
-We know... Oh God another NodeJS framework! Yes we are also very tired of seeing all these NodeJS frameworks. All the rails clones are getting a bit boring and really aren't taking advantage of the real strengths of NodeJS. We wanted to take a different approach than every other framework we have seen, because we believe that data is core to the web and should be the core focus of web applications.
+We know... Oh God another NodeJS framework! We really didn't want to add another name to the long list of NodeJS web frameworks but also wanted to explore a different approach than any other framework we have seen. We strongly believe that data is the core of the web and should be the focus of web applications.
 
-We also think that your data resources can and should be encapsulated in such a way that they can be ultra scalable and self contained. The MVC pattern works well but it is becoming antiquated in today's web. Frankly you don't need it and they tend to become bloated.
+We also think that your data resources can and should be encapsulated in such a way that they can be scalable, easily testable and self contained. The classic web MVC pattern used to work well but is becoming antiquated in today's web.
 
 With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of [Express](http://expressjs.com) and is inspired in part by [Sails](http://sailsjs.org), [Flatiron](http://flatironjs.org) and [Derby](http://derbyjs.com).
 
