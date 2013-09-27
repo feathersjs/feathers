@@ -16,7 +16,7 @@ As with any NodeJS module, just install it as a dependency in your application:
 
 ## Getting Started Is Easy
 
-Building an app with Feathers is easy. There are only 4 things to worry about. A wrapped express server, providers, services & middleware. Services are just simple modules that expose certain methods to the providers in order to CRUD your data. We can easily initialize a service that say... provides a single TODO:
+Building an app with Feathers is easy. There are only 4 things to worry about. A wrapped express server, providers, services & middleware. Services are just simple modules that expose certain methods to the providers in order to CRUD your data. We can easily initialize a service that say... provides a single Todo:
 
 ```js
 var feathers = require('feathers');
@@ -32,7 +32,7 @@ var todoService = {
 
 feathers()
 	.configure(feathers.socketio())
-	.use('todo', todoService)
+	.use('/todo', todoService)
 	.listen(8000);
 ```
 
@@ -66,3 +66,7 @@ Create an HTML page and insert the following code to see the response data logge
   });
 </script>
 ```
+
+## What's next?
+
+Head over to the Feathers website at [feathersjs.com](http://feathersjs.com/) for more examples and the detailed documenation.
