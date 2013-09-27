@@ -60,7 +60,7 @@
             <div class="col-md-6">
               <div class="row">
                 <h1 class="tagline">Let your applications fly</h1>
-                <h4>Build lightweight, real-time web services in seconds</h4>
+                <h4>Build lightweight, real-time web apps in seconds</h4>
                 <div class="col-md-6 col-md-offset-3">
                   <p class="inline-code">npm install feathers</p>
                 </div>
@@ -163,8 +163,8 @@
         <div class="container">
           <div class="row">
             <div class="col-md-6">
-              <h1>Real-time TODOS</h1>
-              <p>You're all probably familiar with <a href="http://todomvc.com/" title="TODO MVC" target="_blank">TodoMVC</a>. Well, we are huge fans and so we've created a real-time TODO app that you can see right here. It's definitely fairly trivial, but it demonstrates most of the major parts of Feathers.</p>
+              <h1>Real-time Todos</h1>
+              <p>We are huge fans of <a href="http://todomvc.com/" title="TODO MVC" target="_blank">TodoMVC</a>and so we've created a real-time todo app that you can see right here (and the REST endpoint <a href="http://todos.feathersjs.com/todos" title="Todo REST service" target="_blank">here</a>). It's definitely fairly trivial, but it demonstrates most of the major parts of Feathers.</p>
               
               <div id="todo-example">
                 <ul class="todos list-unstyled"></ul>
@@ -202,11 +202,27 @@
             </div>
             <div class="col-md-9 documentation-content">
               <h2>Introduction</h2>
-<p>Feathers sits right on top of Express, one of the most popular web frameworks for NodeJS. If you are not familiar with Express head over to the <a href="http://expressjs.com/guide.html">Express Guides</a>. Feathers works the exact same way except that <code>var app = require(&#39;express&#39;)();</code> is replaced with <code>var app = require(&#39;feathers&#39;)()</code>. The small differences and additional functionality available is outline in the following documentation.</p>
+<p>Feathers sits right on top of Express, one of the most popular web frameworks for <a href="http://nodejs.org/">NodeJS</a>. If you are not familiar with Express head over to the <a href="http://expressjs.com/guide.html">Express Guides</a> to get an idea. Feathers works the exact same way except that <code>var app = require(&#39;express&#39;)();</code> is replaced with <code>var app = require(&#39;feathers&#39;)()</code>. The small differences and additional functionality available is outline in the following documentation.</p>
 <h2>Configuration</h2>
 <h3>REST</h3>
-<p>Exposing services through a RESTful JSON interface is enabled by default. If you only want to use SocketIO
-call <code>app.disabled(&#39;feathers rest&#39;)</code> <em>before</em> registering any services.</p>
+<p>Exposing services through a RESTful JSON interface is enabled by default. If you only want to use SocketIO call <code>app.disabled(&#39;feathers rest&#39;)</code> <em>before</em> registering any services.</p>
+<p>To set service parameters in a middleware, just attach it to the <code>req.feathers</code> object which will become the params for any resulting service call:</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">req</span><span class="p">.</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="s1">&#39;Hello world&#39;</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span> <span class="c1">// -&gt; &#39;Hello world&#39;</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">id</span><span class="o">:</span> <span class="nx">name</span><span class="p">,</span>
+      <span class="nx">params</span><span class="o">:</span> <span class="nx">params</span><span class="p">,</span>
+      <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;You have to do &quot;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot;!&quot;</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</code></pre>
 <h3>SocketIO</h3>
 <p>To expose services via <a href="http://socket.io/">SocketIO</a> call <code>app.configure(feathers.socketio())</code>. It is also possible pass a <code>function(io) {}</code> when initializing the provider where <code>io</code> is the main SocketIO object so you can listen to custom events, change the configuration or add <a href="https://github.com/LearnBoost/socket.io/wiki/Authorizing">authorization</a>:</p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">socketio</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">io</span><span class="p">)</span> <span class="p">{</span>
@@ -231,9 +247,9 @@ call <code>app.disabled(&#39;feathers rest&#39;)</code> <em>before</em> register
 <h3>listen</h3>
 <p><code>app.listen([port])</code> starts the application on the given port. Before calling the original <a href="http://expressjs.com/api.html#app.listen">Express app.listen([port])</a> Feathers will initialize the SocketIO server (if set up) and call all services <code>setup(app, path)</code> methods in the order they have been registered.</p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">feathers</span><span class="p">();</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/my/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
   <span class="nx">setup</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">app</span><span class="p">,</span> <span class="nx">path</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// path -&gt; &#39;todos&#39;</span>
+    <span class="c1">// path -&gt; &#39;my/todos&#39;</span>
   <span class="p">}</span>
 <span class="p">});</span>
 
@@ -243,7 +259,7 @@ call <code>app.disabled(&#39;feathers rest&#39;)</code> <em>before</em> register
 </pre></div>
 </code></pre>
 <h3>lookup</h3>
-<p><code>app.lookup(path)</code> returns the wrapped service object for the given path. Note that the returned object will provide the same methods and functionality as the original service but actually is a new object with additional functionality added (most notably it is possible to listen to service events). <code>path</code> can be the service name with or without leading and trailing slashes.</p>
+<p><code>app.lookup(path)</code> returns the wrapped service object for the given path. Note that Feathers internally creates a new object from each registered service. This means that the object returned by <code>lookup</code> will provide the same methods and functionality as the original service but also functionality added by Feathers (most notably it is possible to listen to service events). <code>path</code> can be the service name with or without leading and trailing slashes.</p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/my/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
   <span class="nx">create</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
@@ -282,7 +298,7 @@ call <code>app.disabled(&#39;feathers rest&#39;)</code> <em>before</em> register
 </pre></div>
 </code></pre>
 <h2>Services</h2>
-<p>A service can be any JavaScript object that offers one or more of the <code>find</code>, <code>get</code>, <code>create</code>, <code>update</code>, <code>remove</code> and <code>setup</code> service methods:</p>
+<p>A service can be any JavaScript object that offers one or more of the <code>find</code>, <code>get</code>, <code>create</code>, <code>update</code>, <code>remove</code> and <code>setup</code> service methods with the following signatures:</p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">myService</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">find</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{},</span>
   <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{},</span>
@@ -293,7 +309,7 @@ call <code>app.disabled(&#39;feathers rest&#39;)</code> <em>before</em> register
 <span class="p">}</span>
 </pre></div>
 </code></pre>
-<p>All callbacks follow the <code>function(error, data)</code> NodeJS convention. <code>params</code> can contain any additional parameters, for example the currently authenticated user. REST service calls set <code>params.query</code> with the query parameters (e.g. a query string like <code>?status=active&amp;type=user</code> becomes <code>{ status: &quot;active&quot;, type: &quot;user&quot; }</code>).</p>
+<p>All callbacks follow the <code>function(error, data)</code> NodeJS convention. <code>params</code> can contain any additional parameters, for example the currently authenticated user. REST service calls set <code>params.query</code> with the query parameters (e.g. a query string like <code>?status=active&amp;type=user</code> becomes <code>{ query: { status: &quot;active&quot;, type: &quot;user&quot; } }</code>).</p>
 <h3>find</h3>
 <p><code>find(params, callback)</code> retrieves a list of all resources from the service. Ideally use <code>params.query</code> for things like filtering and paging so that REST calls like <code>todo?status=completed&amp;user=10</code> work right out of the box.</p>
 <p><strong>REST</strong></p>
@@ -334,7 +350,7 @@ created resource data.</p>
 <p><strong>SocketIO</strong></p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;todo::create&#39;</span><span class="p">,</span> <span class="p">{</span>
   <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;I really have to iron&#39;</span>
-<span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+<span class="p">},</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
 <span class="p">});</span>
 </pre></div>
 </code></pre>
@@ -383,7 +399,7 @@ be called with the updated resource data.</p>
 
   <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">todo</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;take out trash&#39;</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="p">{</span>
         <span class="nx">name</span><span class="o">:</span> <span class="nx">name</span><span class="p">,</span>
         <span class="nx">todo</span><span class="o">:</span> <span class="nx">todo</span>
       <span class="p">});</span>
@@ -417,7 +433,7 @@ be called with the updated resource data.</p>
 </pre></div>
 </code></pre>
 <h2>Events</h2>
-<p>Any registered service will be automatically turned into an event emitter that emits events when a resource has changed, that is a <code>create</code>, <code>update</code> or <code>remove</code> service call returned successfully. It is therefore possible to bind to the below events via <code>app.lookup(servicename).on()</code> and, if enabled, all events will also broadcast to all connected SocketIO clients in the form of <code>&lt;servicepath&gt; &lt;eventname&gt;</code>.</p>
+<p>Any registered service will be automatically turned into an event emitter that emits events when a resource has changed, that is a <code>create</code>, <code>update</code> or <code>remove</code> service call returned successfully. It is therefore possible to bind to the below events via <code>app.lookup(servicename).on()</code> and, if enabled, all events will also broadcast to all connected SocketIO clients in the form of <code>&lt;servicepath&gt; &lt;eventname&gt;</code>. Note that the service path will always be stripped of leading and trailing slashes regardless of how it has been registered (e.g. <code>/my/service/</code> will become <code>my/service</code>).</p>
 <h3>created</h3>
 <p>The <code>created</code> event will be published with the callback data when a service <code>create</code> calls back successfully.</p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
@@ -452,14 +468,10 @@ be called with the updated resource data.</p>
 </code></pre>
 <h3>updated</h3>
 <p>The <code>updated</code> event will be published with the callback data when a service <code>update</code> calls back successfully.</p>
-<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/my/todos/&#39;</span><span class="p">,</span> <span class="p">{</span>
   <span class="nx">update</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
   <span class="p">}</span>
-<span class="p">});</span>
-
-<span class="nx">app</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;updated&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Updated todo&#39;</span><span class="p">,</span> <span class="nx">todo</span><span class="p">);</span>
 <span class="p">});</span>
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8000</span><span class="p">);</span>
@@ -470,14 +482,14 @@ be called with the updated resource data.</p>
 <span class="nt">&lt;script&gt;</span>
   <span class="kd">var</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nx">io</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s1">&#39;http://localhost:8000/&#39;</span><span class="p">);</span>
 
-  <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;todos::update&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;my/todos updated&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Got an updated Todo!&#39;</span><span class="p">,</span> <span class="nx">todo</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;my/todos::update&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">{</span>
     <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;Updated description&#39;</span>
   <span class="p">},</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
    <span class="c1">// Do something here</span>
-  <span class="p">});</span>
-
-  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;todos updated&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Got an updated Todo!&#39;</span><span class="p">,</span> <span class="nx">todo</span><span class="p">);</span>
   <span class="p">});</span>
 <span class="nt">&lt;/script&gt;</span>
 </pre></div>
@@ -510,8 +522,8 @@ be called with the updated resource data.</p>
 </pre></div>
 </code></pre>
 <h2>Why?</h2>
-<p>We know... Oh God another NodeJS framework! Yes we are also very tired of seeing all these NodeJS frameworks. All the rails clones are getting a bit boring and really aren&#39;t taking advantage of the real strengths of NodeJS. We wanted to take a different approach than every other framework we have seen, because we believe that data is core to the web and should be the core focus of web applications.</p>
-<p>We also think that your data resources can and should be encapsulated in such a way that they can be ultra scalable and self contained. The MVC pattern works well but it is becoming antiquated in today&#39;s web. Frankly you don&#39;t need it and they tend to become bloated.</p>
+<p>We know... Oh God another NodeJS framework! We really didn&#39;t want to add another name to the long list of NodeJS web frameworks but also wanted to explore a different approach than any other framework we have seen. We strongly believe that data is the core of the web and should be the focus of web applications.</p>
+<p>We also think that your data resources can and should be encapsulated in such a way that they can be scalable, easily testable and self contained. The classic web MVC pattern used to work well but is becoming antiquated in today&#39;s web.</p>
 <p>With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of <a href="http://expressjs.com">Express</a> and is inspired in part by <a href="http://sailsjs.org">Sails</a>, <a href="http://flatironjs.org">Flatiron</a> and <a href="http://derbyjs.com">Derby</a>.</p>
 <h2>Changelog</h2>
 <p><strong>0.2.0</strong></p>
@@ -560,8 +572,6 @@ THE SOFTWARE.</p>
       <div class="row">
         <div class="col-md-4">
           <p>© 2013 Feathers.</p>
-          <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
-          <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
         </div>
         <div class="col-md-4">
           <p> Another project made with <i class="icon-heart"></i> by <a href="http://twitter/daffl" title="David Luecke" target="_blank">@daffl</a> and <a href="http://twitter/ekryski" title="Eric Kryski" target="_blank">@ekryski</a>.</p>
@@ -572,7 +582,7 @@ THE SOFTWARE.</p>
       </div>
     </footer>
 
-    <script src="http://tekhnotron.com/socket.io/socket.io.js"></script>
+    <script src="http://todos.feathersjs.com/socket.io/socket.io.js"></script>
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/feathers.js"></script>

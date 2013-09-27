@@ -40,11 +40,14 @@
     el.on('submit', 'form', function (ev) {
       var field = $(this).find('[name="description"]');
    
-      socket.emit('todos::create', {
-        description: field.val()
-      }, {}, app.errorHandler);
-   
-      field.val('');
+      if(field.val().replace(/^\s+|\s+$/g, '') !== '') {
+        socket.emit('todos::create', {
+          description: field.val()
+        }, {}, app.errorHandler);
+     
+        field.val('');
+      }
+      
       ev.preventDefault();
     }).on('click', '.delete', function (ev) {
       var id = $(this).parents('li').data('id');

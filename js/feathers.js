@@ -57,10 +57,7 @@
   };
 
   $(document).ready(function() {
-    $('body').scrollspy({
-      target: '.navbar-inverse, #toc',
-      offset: $('.navbar-inverse').outerHeight()
-    });
+    var offsetTop = $('.navbar-inverse').outerHeight();
 
     $('#toc').toc('.documentation-content');
     $('#rapidstart').gistPills(6644854);
@@ -78,8 +75,19 @@
       }
     });
 
-    $('body').scrollspy('refresh');
+    // This needs to be after #toc creation
+    $('a[href^="#"]').click(function(ev) {
+      var position = $(ev.target.hash).offset();
+      
+      if (position){
+        $("html, body").animate({ scrollTop: position.top - offsetTop }, 300);
+      }
+    });
 
-    $('#todo-example').todos('http://tekhnotron.com');
+    $('#todo-example').todos('http://todos.feathersjs.com');
+    $('body').scrollspy({
+      target: '#toc',
+      offset: offsetTop
+    });
   });
 })(jQuery);
