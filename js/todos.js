@@ -9,7 +9,7 @@
               '<label><input type="checkbox" name="done">' +
               '<span class="description">' + todo.description + '</span>' +
               '</label><a href="javascript://" class="pull-right delete">' +
-              '<span class="icon-remove"></span>' +
+              '<i class="icon-trash"></i>' +
               '</a></li>';
 
         el.find('.todos').append(html);

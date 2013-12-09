@@ -9,6 +9,7 @@
 .icon-flag:before { content: '\2691'; } /* '⚑' */
 .icon-plus:before { content: '\e805'; } /* '' */
 .icon-alert:before { content: '💥'; } /* '\1f4a5' */
+.icon-trash:before { content: '\e806'; } /* '' */
 .icon-feather-1:before { content: '\e801'; } /* '' */
 .icon-commerical-building:before { content: '\e811'; } /* '' */
 .icon-edit-alt:before { content: '\e0ed'; } /* '' */

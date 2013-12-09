@@ -18,6 +18,7 @@
 .icon-flag { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x2691;&nbsp;'); }
 .icon-plus { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe805;&nbsp;'); }
 .icon-alert { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x1f4a5;&nbsp;'); }
+.icon-trash { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe806;&nbsp;'); }
 .icon-feather-1 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe801;&nbsp;'); }
 .icon-commerical-building { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe811;&nbsp;'); }
 .icon-edit-alt { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe0ed;&nbsp;'); }

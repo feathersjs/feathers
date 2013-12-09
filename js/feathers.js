@@ -68,12 +68,15 @@
         var $spy = $(this).scrollspy('refresh');
       });
     });
-    
-    $('#toc').affix({
-      offset: {
-        top: $('#toc').offset().top - $('.navbar').outerHeight()
-      }
-    });
+
+    console.log($(window).width(), $(window).width() > 768)
+    if($(window).width() > 992) {
+      $('#toc').affix({
+        offset: {
+          top: $('#toc').offset().top - $('.navbar').outerHeight()
+        }
+      });
+    }
 
     // This needs to be after #toc creation
     $('a[href^="#"]').click(function(ev) {
