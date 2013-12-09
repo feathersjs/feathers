@@ -69,7 +69,6 @@
       });
     });
 
-    console.log($(window).width(), $(window).width() > 768)
     if($(window).width() > 992) {
       $('#toc').affix({
         offset: {
