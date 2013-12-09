@@ -1,5 +1,4 @@
 @import "bootstrap/bootstrap";
-@import "font-awesome/font-awesome";
 @import "variables";
 @import "mixins";
 @import "pygments";
@@ -24,8 +23,14 @@ code {
   margin-bottom: 0;
 }
 
-.navbar-brand {
-  padding: 5px 0;
+.navbar-inverse a.navbar-brand {
+  color: @medium-grey;
+  font-size: 35px;
+  padding-top: 20px;
+
+  &:hover {
+    color: @red;
+  }
 }
 
 .navbar-logo {
@@ -142,7 +147,7 @@ section {
 }
 
 section.hero {
-  text-align: center;
+  background: @lighter-grey;
   margin-top: 80px;
   padding: 60px 0;
 
@@ -178,6 +183,30 @@ section.hero {
   @media (max-width: 479px) {
     .tagline {
       font-size: 40px;
+    }
+  }
+
+  ul {
+    font-size: 24px;
+    margin-bottom: 20px;
+
+    li {
+      padding-left: 70px;
+
+      .icon-plus {
+        color: @red;
+      }
+
+      &.first {
+        .icon-feather {
+          font-size: 50px;
+        }
+
+        font-size: 30px;
+        font-weight: bold;
+        padding-left: 0;
+        margin-bottom: 10px;
+      }
     }
   }
 }

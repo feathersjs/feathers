@@ -12,10 +12,9 @@
     <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
     <link rel="shortcut icon" href="/ico/favicon.png">
 
-    <title>Feathers - Let your web apps fly!</title>
-
-    <!-- Feathers CSS -->
+    <title>Feathers - Let your applications fly!</title>
     <link href="css/feathers.min.css" rel="stylesheet">
+    <link href="css/fontello.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -24,25 +23,21 @@
     <![endif]-->
   </head>
 
-  <!-- NAVBAR
-  ================================================== -->
   <body data-spy="scroll" data-offset="100">
     <div class="navbar-wrapper">
       <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
+              <span class="icon-feather"></span>
             </button>
-            <a class="navbar-brand" href="/">
-              <img class="navbar-logo" src="img/feathers-logo-dark.png" alt="Feathers Logo">
+            <a class="navbar-brand" href="#">
+              <i class="icon-feather"></i> Feathers
             </a>
           </div>
           <div class="navbar-collapse collapse pull-right">
             <ul class="nav navbar-nav">
-              <li><a href="#features">Features</a></li>
+              {{! <li><a href="#features">Features</a></li> }}
               <li><a href="#get-started">Get Started</a></li>
               <li><a href="#example">Example</a></li>
               <li><a href="#documentation">Documentation</a></li>
@@ -58,31 +53,34 @@
         <div class="container">
           <div class="row">
             <div class="col-md-6">
-              <div class="row">
-                <h1 class="tagline">Let your applications fly</h1>
-                <h4>Build lightweight, real-time web apps in seconds</h4>
+              <div class="row text-center">
+                <h1 class="tagline">Let your applications fly!</h1>
+                <h4>Real-time without magic</h4>
                 <div class="col-md-6 col-md-offset-3">
                   <p class="inline-code">npm install feathers</p>
                 </div>
                 <div class="col-md-6 col-md-offset-3">
-                  <a href="#get-started" class="btn btn-primary btn-lg btn-block">Take Off</a>
+                  <a href="#example" class="btn btn-primary btn-lg btn-block">Take Off</a>
                 </div>
               </div>
             </div>
             <div class="col-md-6">
               <div class="row">
-                <p>
-                  <img src="img/feathers-medium.png" alt="Feathers" class="img-responsive theme">
-                </p>
+                <ul class="list-unstyled">
+                  <li class="first"><i class="icon-feather"></i> Use the power of Express and...</li>
+                  <li><i class="icon-plus"></i> Data driven <a href="">services</a></li>
+                  <li><i class="icon-plus"></i> RESTful <a href="">APIs</a> out of the box</li>
+                  <li><i class="icon-plus"></i> <a href="#example">Real-time</a> events via SocketIO</li>
+                </ul>
               </div>
-              <div class="row badges">
+              <div class="row badges text-center">
                 <p>
                   <a href="https://npmjs.org/package/feathers" title="Package status" target="_blank"><img src="https://badge.fury.io/js/feathers.png"/></a>
                   <a href="https://david-dm.org/feathersjs/feathers" target="_blank" title="Dependency status"><img src="https://david-dm.org/feathersjs/feathers.png"/></a>
                   <a href="https://travis-ci.org/feathersjs/feathers" target="_blank"><img src="https://travis-ci.org/feathersjs/feathers.png?branch=master" alt="Build status" /></a>
                 </p>
               </div>
-              <div class="row github-links">
+              <div class="row github-links text-center">
                 <p>
                   <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=watch&count=true"
                 allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
@@ -95,15 +93,14 @@
         </div>
       </section>
 
-      <section id="features" class="features">
+      {{! <section id="features" class="features">
         <div class="container">
           <div class="row">
             <div class="col-md-4">
               <i class="icon-cloud"></i>
               <h2>Lightweight</h2>
               <p class="feature description">Feathers is built right on top of <a href="http://expressjs.com" title="Express" target="_blank">Express</a>. No "Framework X" but for Node. Literally replace
-                <strong>Express</strong> with <strong>Feathers</strong> and you are good to go. You can even use the same middleware!
-              </p>
+              <strong>Express</strong> with <strong>Feathers</strong> and you are good to go. You can even use the same middleware!</p>
             </div>
             <div class="col-md-4">
               <i class="icon-rocket"></i>
@@ -113,11 +110,11 @@
             <div class="col-md-4">
               <i class="icon-cogs"></i>
               <h2>Flexible</h2>
-              <p class="feature description">Feathers isn't in the way. You can do everything that Express and <a href="http://socket.io/" title="Socket.IO" targe="_blank">SocketIO</a> can do. Using your existing middleware and adding new services as you go makes trying out Feathers a snap!</p>
+              <p class="feature description">Feathers isn't in the way. You can always directly fall back to Express and <a href="http://socket.io/" title="Socket.IO" targe="_blank">SocketIO</a>. Use your existing middleware, add new services as you go and migrating will be a snap.</p>
             </div>
           </div>
         </div>
-      </section>
+      </section> }}
 
       <section id="get-started" class="rapid-start">
         <div class="container">
@@ -128,7 +125,7 @@
           </div>
           <div class="row">
             <div class="col-md-6">
-              <p>With Feathers you can get a flexible REST and SocketIO service running in no time. <strong>Services</strong> are objects with a certain set of methods that can be used just like an Express middleware. The <code>feathers-rapidstart.js</code> example creates a simple Todo service that is available as a RESTful webservice and also a real-time endpoint via SocketIO.</p>
+              <p>Feathers makes it easy to get REST and real-time APIs running in no time by using <strong>Services</strong>. Services are objects with a certain set of methods that can be used just like an Express middleware. The <a href="https://gist.github.com/daffl/6644432" target="_blank">rapid start example</a> creates a simple Todo REST and SocketIO service that can get a list of todos and create new ones.</p>
 
               <ul class="nav nav-pills options" id="rapidstart">
                 <li class="active"><a href="#">REST</a></li>
@@ -140,23 +137,6 @@
               <script src="https://gist.github.com/daffl/6644432.js"></script>
             </div>
           </div>
-
-          <!-- TODO
-          <div class="row">
-            <hr>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6">
-              <img class="screencast" src="img/video-placeholder.jpg" data-video="http://www.youtube.com/embed/zP_D_YKnwi0">
-            </div>
-            <div class="col-md-6">
-              <h1>Obligatory Screencast</h1>
-              <p>Some of you may not want to dive into code right away, we know it can be somewhat overwhelming. That's why we've created a little screencast that walks you through creating the real-time Todo application found below. It only takes a couple minutes and we'll explain some of the finer points of feathers.</p>
-            </div>
-          </div>
-        </div>
-        -->
       </section>
 
       <section id="example" class="example">
@@ -208,7 +188,6 @@
       </section>
     </div>
 
-    <!-- FOOTER -->
     <footer>
       <div class="row">
         <div class="col-md-4">

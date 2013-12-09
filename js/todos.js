@@ -7,7 +7,7 @@
       addTodo: function(todo) {
         var html = '<li class="page-header checkbox" data-id="' + todo.id + '">' +
               '<label><input type="checkbox" name="done">' +
-              todo.description +
+              '<span class="description">' + todo.description + '</span>' +
               '</label><a href="javascript://" class="pull-right delete">' +
               '<span class="icon-remove"></span>' +
               '</a></li>';
@@ -22,13 +22,9 @@
         var element = el.find('[data-id="' + todo.id + '"]');
         var checkbox = element.find('[name="done"]').removeAttr('disabled');
 
-        if(todo.done) {
-          element.addClass('done');
-          checkbox.prop('checked', true);
-        } else {
-          element.removeClass('done');
-          checkbox.prop('checked', false);
-        }
+        element.toggleClass('done', todo.done);
+        checkbox.prop('checked', todo.done);
+        element.find('.description').html(todo.description);
       },
       errorHandler: function(error) {
         if(error) {
