@@ -19,7 +19,9 @@ describe('SocketIO provider', function () {
     console.log = function () {};
 
     server = feathers()
-      .configure(feathers.socketio())
+      .configure(feathers.socketio(function(io) {
+        io.set('log level', 0);
+      }))
       .use('todo', todoService)
       .listen(7886);
 

@@ -29,7 +29,29 @@ app.use('/todos', {
 
 ### SocketIO
 
-To expose services via [SocketIO](http://socket.io/) call `app.configure(feathers.socketio())`. It is also possible pass a `function(io) {}` when initializing the provider where `io` is the main SocketIO object so you can listen to custom events, change the configuration or add [authorization](https://github.com/LearnBoost/socket.io/wiki/Authorizing):
+To expose services via [SocketIO](http://socket.io/) call `app.configure(feathers.socketio())`. It is also possible pass a `function(io) {}` when initializing the provider where `io` is the main SocketIO object. Since Feathers is only using the SocketIO default configuration, this is a good spot to initialize the [recommended production settings](https://github.com/LearnBoost/Socket.IO/wiki/Configuring-Socket.IO#recommended-production-settings):
+
+```js
+app.configure(feathers.socketio(function(io) {
+  io.enable('browser client minification');  // send minified client
+  io.enable('browser client etag');          // apply etag caching logic based on version number
+  io.enable('browser client gzip');          // gzip the file
+  io.set('log level', 1);                    // reduce logging
+
+  // enable all transports (optional if you want flashsocket support, please note that some hosting
+  // providers do not allow you to create servers that listen on a port different than 80 or their
+  // default port)
+  io.set('transports', [
+      'websocket'
+    , 'flashsocket'
+    , 'htmlfile'
+    , 'xhr-polling'
+    , 'jsonp-polling'
+  ]);
+}));
+```
+
+This is also the place to listen to custom events or add [authorization](https://github.com/LearnBoost/socket.io/wiki/Authorizing):
 
 ```js
 app.configure(feathers.socketio(function(io) {
@@ -41,6 +63,7 @@ app.configure(feathers.socketio(function(io) {
   });
 
   io.set('authorization', function (handshakeData, callback) {
+    // Authorize using the /users service
     app.lookup('users').find({
       username: handshakeData.username,
       password: handshakeData.password

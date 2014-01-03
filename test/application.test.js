@@ -63,7 +63,9 @@ describe('Feathers application', function () {
     var oldlog = console.log;
     console.log = function () {};
 
-    var app = feathers().configure(feathers.socketio()).use('/todo', todoService);
+    var app = feathers().configure(feathers.socketio(function(io) {
+      io.set('log level', 0);
+    })).use('/todo', todoService);
     var server = app.listen(6999).on('listening', function () {
       console.log = oldlog;
 
