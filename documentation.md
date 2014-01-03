@@ -421,6 +421,12 @@ With that being said there are some amazing frameworks already out there and we 
 
 ## Changelog
 
+__0.3.0__
+
+- Removed bad SocketIO configuration ([#19](https://github.com/feathersjs/feathers/issues/19))
+- Add .npmignore to not publish .idea folder ([#30](https://github.com/feathersjs/feathers/issues/30))
+- Remove middleware: connect.bodyParser() ([#27](https://github.com/feathersjs/feathers/pull/27))
+
 __0.2.0__
 
 - Pre-initialize `req.feathers` in REST provider to set service parameters
