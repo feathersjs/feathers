@@ -78,19 +78,45 @@ Once the server has been started with `app.listen()` the SocketIO object is avai
 
 ### listen
 
-`app.listen([port])` starts the application on the given port. Before calling the original [Express app.listen([port])](http://expressjs.com/api.html#app.listen) Feathers will initialize the SocketIO server (if set up) and call all services `setup(app, path)` methods in the order they have been registered.
+`app.listen([port])` starts the application on the given port. It will first call the original [Express app.listen([port])](http://expressjs.com/api.html#app.listen), then run `app.setup(server)` (see below) with the server object and then return the server object.
+
+### setup
+
+`app.setup(server)` is used initialize all services by calling each services `.setup(app, path)` method (if available).
+It will also use the `server` instance passed (e.g. through `http.createServer`) to set up SocketIO (if enabled) and any other provider that might require the server instance.
+
+Normally `app.setup` will be called automatically when starting the application via `app.listen([port])` but there are cases when you need to initialize the server separately:
+
+__HTTPS__
+
+With your Feathers application initialized it is easy to set up an HTTPS REST and SocketIO server:
 
 ```js
-var app = feathers();
-app.use('/my/todos', {
-  setup: function(app, path) {
-    // path -> 'my/todos'
-  }
-});
+app.configure(feathers.socketio()).use('/todos', todoService);
 
-var server = app.listen(8080);
+var https = require('https');
+var server = https.createServer({
+  key: fs.readFileSync('privatekey.pem'),
+  cert: fs.readFileSync('certificate.pem')
+}, app).listen(443);
 
-server.close();
+// Call app.setup to initialize all services and SocketIO
+app.setup(server);
+```
+
+__Virtual Hosts__
+
+You can use `feathers.vhost` (which is the same as [Express and Connect .vhost](http://www.senchalabs.org/connect/vhost.html)) to run your Feathers app on a virtual host:
+
+```js
+app.use('/todos', todoService);
+
+var host = feathers().use(feathers.vhost('foo.com', app));
+var server = host.listen(8080);
+
+// Here we need to call app.setup because .listen on our virtal hosted
+// app is never called
+app.setup(server);
 ```
 
 ### lookup
@@ -140,7 +166,7 @@ app.use('/todos', {
 
 ### service
 
-`app.service([path], service)` is what is called internally by `app.use([path], service)` if a service object is being passed. Use it instead of `app.use([path], service)` if you want to be more explicit that you are registering a service.
+`app.service([path], service)` is what is called internally by `app.use([path], service)` if a service object is being passed. Use it instead of `app.use([path], service)` if you want to be more explicit that you are registering a service. `app.service` does __not__ provide the Express `app.use` functionality and doesn't check the service object for valid methods.
 
 ## Services
 
