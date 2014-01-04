@@ -1,9 +1,7 @@
 'use strict';
 
-var assert = require('assert');
 var feathers = require('../../lib/feathers');
 var io = require('socket.io-client');
-var request = require('request');
 
 var fixture = require('./service-fixture');
 var todoService = fixture.Service;

@@ -6,12 +6,11 @@ var io = require('socket.io-client');
 var request = require('request');
 
 var feathers = require('../lib/feathers');
-var express = require('express');
 
 describe('Feathers application', function () {
   it('registers service and looks it up with and without leading and trailing slashes', function () {
     var dummyService = {
-      find: function (params, callback) {
+      find: function () {
         // No need to implement this
       }
     };

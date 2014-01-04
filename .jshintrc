@@ -6,5 +6,7 @@
     "after": true,
     "exports": true
   },
+  "unused": true,
+  "undef": true,
   "node": true
 }
