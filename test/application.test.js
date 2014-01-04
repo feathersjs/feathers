@@ -87,7 +87,7 @@ describe('Feathers application', function () {
     });
   });
 
-  it.only('REST and SocketIO with SSL server (#25)', function(done) {
+  it('REST and SocketIO with SSL server (#25)', function(done) {
     // For more info on Reqest HTTPS settings see https://github.com/mikeal/request/issues/418
     // This needs to be set so that the SocektIO client can connect
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -101,6 +101,8 @@ describe('Feathers application', function () {
       }
     };
 
+    var oldlog = console.log;
+    console.log = function () {};
     var app = feathers().configure(feathers.socketio(function(io) {
       io.set('log level', 0);
     })).use('/secureTodos', todoService);
@@ -116,6 +118,8 @@ describe('Feathers application', function () {
 
     httpsServer.on('listening', function() {
       var socket = io.connect('https://localhost:7889', { secure: true, port: 7889 });
+
+      console.log = oldlog;
 
       request({
         url: 'https://localhost:7889/secureTodos/dishes',
