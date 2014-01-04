@@ -138,6 +138,10 @@ app.use('/todos', {
 });
 ```
 
+### service
+
+`app.service([path], service)` is what is called internally by `app.use([path], service)` if a service object is being passed. Use it instead of `app.use([path], service)` if you want to be more explicit that you are registering a service.
+
 ## Services
 
 A service can be any JavaScript object that offers one or more of the `find`, `get`, `create`, `update`, `remove` and `setup` service methods with the following signatures:
