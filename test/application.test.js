@@ -4,6 +4,8 @@ var assert = require('assert');
 var Proto = require('uberproto');
 var io = require('socket.io-client');
 var request = require('request');
+var https = require('https');
+var fs = require('fs');
 
 var feathers = require('../lib/feathers');
 
@@ -80,6 +82,59 @@ describe('Feathers application', function () {
 
           socket.disconnect();
           server.close(done);
+        });
+      });
+    });
+  });
+
+  it('REST and SocketIO with SSL server (#25)', function(done) {
+    // For more info on Reqest HTTPS settings see https://github.com/mikeal/request/issues/418
+    // This needs to be set so that the SocektIO client can connect
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+    var todoService = {
+      get: function (name, params, callback) {
+        callback(null, {
+          id: name,
+          description: "You have to do " + name + "!"
+        });
+      }
+    };
+
+    var oldlog = console.log;
+    console.log = function () {};
+    var app = feathers().configure(feathers.socketio(function(io) {
+      io.set('log level', 0);
+    })).use('/secureTodos', todoService);
+
+    var httpsServer = https.createServer({
+      key: fs.readFileSync(__dirname + '/resources/privatekey.pem'),
+      cert: fs.readFileSync(__dirname + '/resources/certificate.pem'),
+      rejectUnauthorized: false,
+      requestCert: false
+    }, app).listen(7889);
+
+    app.setup(httpsServer);
+
+    httpsServer.on('listening', function() {
+      var socket = io.connect('https://localhost:7889', { secure: true, port: 7889 });
+
+      console.log = oldlog;
+
+      request({
+        url: 'https://localhost:7889/secureTodos/dishes',
+        strictSSL: false,
+        rejectUnhauthorized : false
+      }, function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        var data = JSON.parse(body);
+        assert.equal(data.description, 'You have to do dishes!');
+
+        socket.emit('secureTodos::get', 'laundry', {}, function (error, data) {
+          assert.equal(data.description, 'You have to do laundry!');
+
+          socket.disconnect();
+          httpsServer.close(done);
         });
       });
     });
