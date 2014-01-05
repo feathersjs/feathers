@@ -494,6 +494,8 @@ With that being said there are some amazing frameworks already out there and we 
 
 __0.3.0__
 
+- Added [Primus](https://github.com/primus/primus) provider ([#34](https://github.com/feathersjs/feathers/pull/34))
+- `app.setup(server)` to support HTTPS (and other functionality that requires a custom server) ([#33](https://github.com/feathersjs/feathers/pull/33))
 - Removed bad SocketIO configuration ([#19](https://github.com/feathersjs/feathers/issues/19))
 - Add .npmignore to not publish .idea folder ([#30](https://github.com/feathersjs/feathers/issues/30))
 - Remove middleware: connect.bodyParser() ([#27](https://github.com/feathersjs/feathers/pull/27))
