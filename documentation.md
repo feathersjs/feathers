@@ -74,6 +74,47 @@ app.configure(feathers.socketio(function(io) {
 
 Once the server has been started with `app.listen()` the SocketIO object is available as `app.io`.
 
+### Primus
+
+[Primus](https://github.com/primus/primus) is a universal wrapper for real-time frameworks and allows you to transparently use Engine.IO, WebSockets, BrowserChannel, SockJS and Socket.IO. Set it up with `feathers.primus(configuration [, fn])` where `configuration` is the [Primus server configuration](https://github.com/primus/primus#getting-started) and `fn` an optional callback with the Primus server instance that can e.g. be used for setting up [authorization](https://github.com/primus/primus#authorization):
+
+```js
+// Set up Primus with SockJS
+app.configure(feathers.primus({
+  transformer: 'sockjs'
+}, function(primus) {
+  // Set up Primus authorization here
+  primus.authorize(function (req, done) {
+    var auth;
+
+    try { auth = authParser(req.headers['authorization']) }
+    catch (ex) { return done(ex) }
+
+    // Do some async auth check
+    authCheck(auth, done);
+  });
+}));
+```
+
+In the Browser you can connect like this:
+
+```html
+<script type="text/javascript" src="primus/primus.js"></script>
+<script type="text/javascript">
+  var primus = new Primus(url);
+
+  primus.on('todos created', function(todo) {
+    console.log('Someone created a Todo', todo);
+  });
+
+  primus.send('todos::create', { description: 'Do something', {}, function() {
+    primus.send('todos::find', {}, function(error, todos) {
+      console.log(todos);
+    });
+  });
+</script>
+```
+
 ## API
 
 ### listen
@@ -453,6 +494,8 @@ With that being said there are some amazing frameworks already out there and we 
 
 __0.3.0__
 
+- Added [Primus](https://github.com/primus/primus) provider ([#34](https://github.com/feathersjs/feathers/pull/34))
+- `app.setup(server)` to support HTTPS (and other functionality that requires a custom server) ([#33](https://github.com/feathersjs/feathers/pull/33))
 - Removed bad SocketIO configuration ([#19](https://github.com/feathersjs/feathers/issues/19))
 - Add .npmignore to not publish .idea folder ([#30](https://github.com/feathersjs/feathers/issues/30))
 - Remove middleware: connect.bodyParser() ([#27](https://github.com/feathersjs/feathers/pull/27))

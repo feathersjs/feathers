@@ -38,7 +38,9 @@
     "express": "~ 3.4.0",
     "rubberduck": "~1.x",
     "underscore": "~1.5.0",
-    "socket.io": "~0.9.0"
+    "socket.io": "~0.9.0",
+    "primus-emitter": "~2.0.5",
+    "primus": "~1.5.1"
   },
   "devDependencies": {
     "request": "~2.21.0",
