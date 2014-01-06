@@ -182,7 +182,27 @@
 </pre></div>
 </code></pre>
 <h3>SocketIO</h3>
-<p>To expose services via <a href="http://socket.io/">SocketIO</a> call <code>app.configure(feathers.socketio())</code>. It is also possible pass a <code>function(io) {}</code> when initializing the provider where <code>io</code> is the main SocketIO object so you can listen to custom events, change the configuration or add <a href="https://github.com/LearnBoost/socket.io/wiki/Authorizing">authorization</a>:</p>
+<p>To expose services via <a href="http://socket.io/">SocketIO</a> call <code>app.configure(feathers.socketio())</code>. It is also possible pass a <code>function(io) {}</code> when initializing the provider where <code>io</code> is the main SocketIO object. Since Feathers is only using the SocketIO default configuration, this is a good spot to initialize the <a href="https://github.com/LearnBoost/Socket.IO/wiki/Configuring-Socket.IO#recommended-production-settings">recommended production settings</a>:</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">socketio</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">io</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">io</span><span class="p">.</span><span class="nx">enable</span><span class="p">(</span><span class="s1">&#39;browser client minification&#39;</span><span class="p">);</span>  <span class="c1">// send minified client</span>
+  <span class="nx">io</span><span class="p">.</span><span class="nx">enable</span><span class="p">(</span><span class="s1">&#39;browser client etag&#39;</span><span class="p">);</span>          <span class="c1">// apply etag caching logic based on version number</span>
+  <span class="nx">io</span><span class="p">.</span><span class="nx">enable</span><span class="p">(</span><span class="s1">&#39;browser client gzip&#39;</span><span class="p">);</span>          <span class="c1">// gzip the file</span>
+  <span class="nx">io</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;log level&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>                    <span class="c1">// reduce logging</span>
+
+  <span class="c1">// enable all transports (optional if you want flashsocket support, please note that some hosting</span>
+  <span class="c1">// providers do not allow you to create servers that listen on a port different than 80 or their</span>
+  <span class="c1">// default port)</span>
+  <span class="nx">io</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;transports&#39;</span><span class="p">,</span> <span class="p">[</span>
+      <span class="s1">&#39;websocket&#39;</span>
+    <span class="p">,</span> <span class="s1">&#39;flashsocket&#39;</span>
+    <span class="p">,</span> <span class="s1">&#39;htmlfile&#39;</span>
+    <span class="p">,</span> <span class="s1">&#39;xhr-polling&#39;</span>
+    <span class="p">,</span> <span class="s1">&#39;jsonp-polling&#39;</span>
+  <span class="p">]);</span>
+<span class="p">}));</span>
+</pre></div>
+</code></pre>
+<p>This is also the place to listen to custom events or add <a href="https://github.com/LearnBoost/socket.io/wiki/Authorizing">authorization</a>:</p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">socketio</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">io</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">io</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;connection&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">socket</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;news&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">hello</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span> <span class="p">});</span>
@@ -192,6 +212,7 @@
   <span class="p">});</span>
 
   <span class="nx">io</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;authorization&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">handshakeData</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Authorize using the /users service</span>
     <span class="nx">app</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">({</span>
       <span class="nx">username</span><span class="o">:</span> <span class="nx">handshakeData</span><span class="p">.</span><span class="nx">username</span><span class="p">,</span>
       <span class="nx">password</span><span class="o">:</span> <span class="nx">handshakeData</span><span class="p">.</span><span class="nx">password</span>
@@ -201,19 +222,73 @@
 </pre></div>
 </code></pre>
 <p>Once the server has been started with <code>app.listen()</code> the SocketIO object is available as <code>app.io</code>.</p>
+<h3>Primus</h3>
+<p><a href="https://github.com/primus/primus">Primus</a> is a universal wrapper for real-time frameworks and allows you to transparently use Engine.IO, WebSockets, BrowserChannel, SockJS and Socket.IO. Set it up with <code>feathers.primus(configuration [, fn])</code> where <code>configuration</code> is the <a href="https://github.com/primus/primus#getting-started">Primus server configuration</a> and <code>fn</code> an optional callback with the Primus server instance that can e.g. be used for setting up <a href="https://github.com/primus/primus#authorization">authorization</a>:</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="c1">// Set up Primus with SockJS</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">primus</span><span class="p">({</span>
+  <span class="nx">transformer</span><span class="o">:</span> <span class="s1">&#39;sockjs&#39;</span>
+<span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">primus</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// Set up Primus authorization here</span>
+  <span class="nx">primus</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">auth</span><span class="p">;</span>
+
+    <span class="k">try</span> <span class="p">{</span> <span class="nx">auth</span> <span class="o">=</span> <span class="nx">authParser</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">headers</span><span class="p">[</span><span class="s1">&#39;authorization&#39;</span><span class="p">])</span> <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="nx">ex</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">done</span><span class="p">(</span><span class="nx">ex</span><span class="p">)</span> <span class="p">}</span>
+
+    <span class="c1">// Do some async auth check</span>
+    <span class="nx">authCheck</span><span class="p">(</span><span class="nx">auth</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}));</span>
+</pre></div>
+</code></pre>
+<p>In the Browser you can connect like this:</p>
+<pre><code class="lang-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;primus/primus.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+  <span class="kd">var</span> <span class="nx">primus</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Primus</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
+
+  <span class="nx">primus</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;todos created&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Someone created a Todo&#39;</span><span class="p">,</span> <span class="nx">todo</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">primus</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;todos::create&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;Do something&#39;</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">primus</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;todos::find&#39;</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">todos</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">todos</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+</code></pre>
 <h2>API</h2>
 <h3>listen</h3>
-<p><code>app.listen([port])</code> starts the application on the given port. Before calling the original <a href="http://expressjs.com/api.html#app.listen">Express app.listen([port])</a> Feathers will initialize the SocketIO server (if set up) and call all services <code>setup(app, path)</code> methods in the order they have been registered.</p>
-<pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">feathers</span><span class="p">();</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/my/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
-  <span class="nx">setup</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">app</span><span class="p">,</span> <span class="nx">path</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// path -&gt; &#39;my/todos&#39;</span>
-  <span class="p">}</span>
-<span class="p">});</span>
+<p><code>app.listen([port])</code> starts the application on the given port. It will first call the original <a href="http://expressjs.com/api.html#app.listen">Express app.listen([port])</a>, then run <code>app.setup(server)</code> (see below) with the server object and then return the server object.</p>
+<h3>setup</h3>
+<p><code>app.setup(server)</code> is used initialize all services by calling each services <code>.setup(app, path)</code> method (if available).
+It will also use the <code>server</code> instance passed (e.g. through <code>http.createServer</code>) to set up SocketIO (if enabled) and any other provider that might require the server instance.</p>
+<p>Normally <code>app.setup</code> will be called automatically when starting the application via <code>app.listen([port])</code> but there are cases when you need to initialize the server separately:</p>
+<p><strong>HTTPS</strong></p>
+<p>With your Feathers application initialized it is easy to set up an HTTPS REST and SocketIO server:</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">socketio</span><span class="p">()).</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="nx">todoService</span><span class="p">);</span>
 
-<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">https</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;https&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">https</span><span class="p">.</span><span class="nx">createServer</span><span class="p">({</span>
+  <span class="nx">key</span><span class="o">:</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;privatekey.pem&#39;</span><span class="p">),</span>
+  <span class="nx">cert</span><span class="o">:</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;certificate.pem&#39;</span><span class="p">)</span>
+<span class="p">},</span> <span class="nx">app</span><span class="p">).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">443</span><span class="p">);</span>
 
-<span class="nx">server</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+<span class="c1">// Call app.setup to initialize all services and SocketIO</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">setup</span><span class="p">(</span><span class="nx">server</span><span class="p">);</span>
+</pre></div>
+</code></pre>
+<p><strong>Virtual Hosts</strong></p>
+<p>You can use <code>feathers.vhost</code> (which is the same as <a href="http://www.senchalabs.org/connect/vhost.html">Express and Connect .vhost</a>) to run your Feathers app on a virtual host:</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="nx">todoService</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">host</span> <span class="o">=</span> <span class="nx">feathers</span><span class="p">().</span><span class="nx">use</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">vhost</span><span class="p">(</span><span class="s1">&#39;foo.com&#39;</span><span class="p">,</span> <span class="nx">app</span><span class="p">));</span>
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">host</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
+
+<span class="c1">// Here we need to call app.setup because .listen on our virtal hosted</span>
+<span class="c1">// app is never called</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">setup</span><span class="p">(</span><span class="nx">server</span><span class="p">);</span>
 </pre></div>
 </code></pre>
 <h3>lookup</h3>
@@ -255,6 +330,8 @@
 <span class="p">});</span>
 </pre></div>
 </code></pre>
+<h3>service</h3>
+<p><code>app.service([path], service)</code> is what is called internally by <code>app.use([path], service)</code> if a service object is being passed. Use it instead of <code>app.use([path], service)</code> if you want to be more explicit that you are registering a service. <code>app.service</code> does <strong>not</strong> provide the Express <code>app.use</code> functionality and doesn&#39;t check the service object for valid methods.</p>
 <h2>Services</h2>
 <p>A service can be any JavaScript object that offers one or more of the <code>find</code>, <code>get</code>, <code>create</code>, <code>update</code>, <code>remove</code> and <code>setup</code> service methods with the following signatures:</p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">myService</span> <span class="o">=</span> <span class="p">{</span>
@@ -484,6 +561,14 @@ be called with the updated resource data.</p>
 <p>We also think that your data resources can and should be encapsulated in such a way that they can be scalable, easily testable and self contained. The classic web MVC pattern used to work well but is becoming antiquated in today&#39;s web.</p>
 <p>With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of <a href="http://expressjs.com">Express</a> and is inspired in part by <a href="http://sailsjs.org">Sails</a>, <a href="http://flatironjs.org">Flatiron</a> and <a href="http://derbyjs.com">Derby</a>.</p>
 <h2>Changelog</h2>
+<p><strong>0.3.0</strong></p>
+<ul>
+<li>Added <a href="https://github.com/primus/primus">Primus</a> provider (<a href="https://github.com/feathersjs/feathers/pull/34">#34</a>)</li>
+<li><code>app.setup(server)</code> to support HTTPS (and other functionality that requires a custom server) (<a href="https://github.com/feathersjs/feathers/pull/33">#33</a>)</li>
+<li>Removed bad SocketIO configuration (<a href="https://github.com/feathersjs/feathers/issues/19">#19</a>)</li>
+<li>Add .npmignore to not publish .idea folder (<a href="https://github.com/feathersjs/feathers/issues/30">#30</a>)</li>
+<li>Remove middleware: connect.bodyParser() (<a href="https://github.com/feathersjs/feathers/pull/27">#27</a>)</li>
+</ul>
 <p><strong>0.2.0</strong></p>
 <ul>
 <li>Pre-initialize <code>req.feathers</code> in REST provider to set service parameters</li>
