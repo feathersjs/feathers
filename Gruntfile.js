@@ -26,7 +26,7 @@ module.exports = function (grunt) {
     render: {
       index: {
         options: {
-          markdown: 'https://raw.github.com/feathersjs/feathers/master/documentation.md',
+          markdown: 'https://raw.github.com/feathersjs/feathers/master/readme.md',
           template: 'index.handlebars',
           output: 'index.html',
           marked: {
