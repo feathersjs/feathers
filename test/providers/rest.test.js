@@ -120,4 +120,32 @@ describe('REST provider', function () {
       server.close(done);
     });
   });
+
+  it('throws a 405 for undefined service methods', function(done) {
+    var app = feathers().use('todo', {
+        get: function(id, params, callback) {
+          callback(null, { description: 'You have to do ' + id });
+        }
+      });
+
+    /* jshint ignore:start */
+    // Error handler
+    app.use(function(error, req, res, next) {
+      assert.equal(error.message, 'Can not call service method .find');
+      res.json({ message: error.message });
+    });
+    /* jshint ignore:end */
+
+    var server = app.listen(4777);
+
+    request('http://localhost:4777/todo/dishes', function (error, response, body) {
+      assert.ok(response.statusCode === 200, 'Got OK status code for .get');
+      assert.deepEqual(JSON.parse(body), { description: 'You have to do dishes' }, 'Got expected object');
+      request('http://localhost:4777/todo', function (error, response, body) {
+        assert.ok(response.statusCode === 405, 'Got 405 for .find');
+        assert.deepEqual(JSON.parse(body), { message: 'Can not call service method .find' }, 'Error serialized as expected');
+        server.close(done);
+      });
+    });
+  });
 });

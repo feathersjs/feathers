@@ -49,7 +49,7 @@
     "grunt": "~0.4.1",
     "grunt-release": "~0.5.1",
     "mocha": "~1.11.0",
-    "grunt-contrib-jshint": "~0.6.3",
+    "grunt-contrib-jshint": "~0.x",
     "grunt-simple-mocha": "~0.4.0",
     "grunt-jsbeautifier": "~0.2.2"
   }

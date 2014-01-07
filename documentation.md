@@ -107,7 +107,7 @@ In the Browser you can connect like this:
     console.log('Someone created a Todo', todo);
   });
 
-  primus.send('todos::create', { description: 'Do something', {}, function() {
+  primus.send('todos::create', { description: 'Do something' }, {}, function() {
     primus.send('todos::find', {}, function(error, todos) {
       console.log(todos);
     });
