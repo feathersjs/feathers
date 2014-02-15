@@ -1,6 +1,6 @@
 # <%= appname %> [![Build Status](https://travis-ci.org/<%= githubUser %>/<%= _.slugify(appname) %>.png?branch=master)](https://travis-ci.org/<%= githubUser %>/<%= _.slugify(appname) %>)
 
-> A [Feathersjs](https://github.com/feathersjs/feathers) plugin.
+> <%= pluginDescription %>
 
 ## Getting Started
 
