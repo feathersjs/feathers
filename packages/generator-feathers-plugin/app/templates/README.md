@@ -19,7 +19,7 @@ var plugin = require('<%= _.slugify(appname) %>');
 // Setup
 var app = feathers();
 // Use Plugin
-app.configure(plugin());
+app.configure(plugin({ /* configuration */ }));
 ```
 
 ## Documentation

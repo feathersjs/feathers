@@ -8,11 +8,22 @@
 'use strict';
 
 module.exports = function(config) {
-  return function() {
-    var app = this;
-    var services = {};
+    return function() {
+        var app = this;
+        var services = {};
 
-    app.enable('feathers <%= pluginName %>');
+        // Enable the <%= pluginName %> Plugin
+        app.enable('feathers <%= pluginName %>');
 
-  };
+        // Check for configuration
+        if (config) {
+            // Apply configuration
+        }
+
+        // Optional: Register this plugin as a Feathers provider
+        app.providers.push(function(path, service) {
+            services[path] = service;
+        });
+
+    };
 };
