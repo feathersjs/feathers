@@ -1,17 +1,21 @@
 {
   "name": "generator-feathers-plugin",
-  "version": "0.0.0",
-  "description": "A generator for Yeoman",
+  "version": "0.1.0",
+  "description": "A generator for Feathersjs Plugins.",
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator",
+    "feathers"
   ],
   "homepage": "https://github.com/Glavin001/generator-feathers-plugin",
   "bugs": "https://github.com/Glavin001/generator-feathers-plugin/issues",
   "author": {
     "name": "Glavin Wiechert",
-    "email": "",
+    "email": "glavin.wiechert@gmail.com",
     "url": "https://github.com/Glavin001"
   },
+  "contributors": [
+    "David Luecke <daff@neyeon.de> (http://neyeon.com)"
+  ],
   "main": "app/index.js",
   "repository": {
     "type": "git",
@@ -21,7 +25,9 @@
     "test": "mocha"
   },
   "dependencies": {
-    "yeoman-generator": "~0.14.0"
+    "yeoman-generator": "~0.16.0",
+    "github": "~0.1.8",
+    "chalk": "~0.4.0"
   },
   "devDependencies": {
     "mocha": "~1.14.0"
