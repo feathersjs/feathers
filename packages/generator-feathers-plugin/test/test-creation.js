@@ -36,7 +36,8 @@ describe('feathers-plugin generator', function () {
 
         helpers.mockPrompt(this.app, {
             'githubUser': 'Glavin001',
-            'pluginName': 'plugin'
+            'pluginName': 'plugin',
+            'pluginDescription': 'This is a plugin description'
         });
         this.app.options['skip-install'] = true;
         this.app.run({}, function () {

@@ -1,7 +1,7 @@
 {
   "name": "<%= _.slugify(appname) %>",
   "version": "0.1.0",
-  "description": "A Feathersjs plugin.",
+  "description": "<%= pluginDescription %>",
   "homepage": "<%= githubUrl %>/<%= _.slugify(appname) %>",
   "keywords": [
     "feathers-plugin",

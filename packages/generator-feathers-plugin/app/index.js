@@ -74,11 +74,17 @@ var FeathersPluginGenerator = yeoman.generators.Base.extend({
       name: 'pluginName',
       message: 'What\'s the base name of your plugin?',
       default: pluginName
+    },
+    {
+      name: 'pluginDescription',
+      message: 'What\'s plugin description?',
+      default: "A Feathersjs plugin."
     }];
 
     this.prompt(prompts, function (props) {
       this.githubUser = props.githubUser;
       this.pluginName = props.pluginName;
+      this.pluginDescription = props.pluginDescription;
       this.appname = 'feathers-' + this.pluginName;
       done();
     }.bind(this));
