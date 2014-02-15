@@ -1,0 +1,6 @@
+.git*
+docs/
+test/
+.DS_Store
+*.markdown
+*.md

@@ -23,11 +23,20 @@ describe('feathers-plugin generator', function () {
         var expected = [
             // add files you expect to exist here.
             '.jshintrc',
-            '.editorconfig'
+            '.editorconfig',
+            '.npmignore',
+            'package.json',
+            '.gitignore',
+            '.jshintrc',
+            'Gruntfile.js',
+            '.travis.yml',
+            'LICENSE',
+            'README.md'
         ];
 
         helpers.mockPrompt(this.app, {
-            'someOption': true
+            'githubUser': 'Glavin001',
+            'pluginName': 'plugin'
         });
         this.app.options['skip-install'] = true;
         this.app.run({}, function () {
