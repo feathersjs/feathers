@@ -33,4 +33,5 @@ See the [docs](docs/).
 ## License
 
 Copyright (c) <%= currentYear %> <%= realname %>
+
 Licensed under the [MIT license](LICENSE).

@@ -17,6 +17,14 @@ module.exports = function (grunt) {
             all: {
                 src: ['test/**/*.test.js']
             }
+        },
+        watch: {
+            scripts: {
+                files: '**/*.js',
+                tasks: ['jshint', 'simplemocha'],
+                options: {
+                }
+            }
         }
     });
 
@@ -25,5 +33,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-simple-mocha');
 
     grunt.registerTask('test', 'simplemocha');
-    grunt.registerTask('default', ['jshint', 'simplemocha']);
+    grunt.registerTask('default', ['jshint', 'simplemocha', 'watch']);
+
 };
