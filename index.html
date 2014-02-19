@@ -160,7 +160,8 @@
             </div>
             <div class="col-md-9 documentation-content">
               <h2>Introduction</h2>
-<p>Feathers sits right on top of Express, one of the most popular web frameworks for <a href="http://nodejs.org/">NodeJS</a>. If you are not familiar with Express head over to the <a href="http://expressjs.com/guide.html">Express Guides</a> to get an idea. Feathers works the exact same way except that <code>var app = require(&#39;express&#39;)();</code> is replaced with <code>var app = require(&#39;feathers&#39;)()</code>. The small differences and additional functionality available is outline in the following documentation.</p>
+<p>Feathers is a light weight web application framework that rides on top of <a href="http://expressjs.com">Express</a>, one of the most popular web frameworks for <a href="http://nodejs.org/">NodeJS</a>. It makes it easy to create RESTful web services and real-time applications using SocketIO and several other NodeJS real-time libraries.</p>
+<p>If you are not familiar with Express head over to the <a href="http://expressjs.com/guide.html">Express Guides</a> to get an idea. Feathers works the exact same way except that <code>var app = require(&#39;express&#39;)();</code> is replaced with <code>var app = require(&#39;feathers&#39;)()</code>. The most important concept that Feathers adds to Express middleware is data oriented <strong>Services</strong>. How services work and the API additional to the available <a href="http://expressjs.com/api.html">Express API</a> is outlined in the following documentation.</p>
 <h2>Configuration</h2>
 <h3>REST</h3>
 <p>Exposing services through a RESTful JSON interface is enabled by default. If you only want to use SocketIO call <code>app.disabled(&#39;feathers rest&#39;)</code> <em>before</em> registering any services.</p>
@@ -250,7 +251,7 @@
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Someone created a Todo&#39;</span><span class="p">,</span> <span class="nx">todo</span><span class="p">);</span>
   <span class="p">});</span>
 
-  <span class="nx">primus</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;todos::create&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;Do something&#39;</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">primus</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;todos::create&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;Do something&#39;</span> <span class="p">},</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">primus</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;todos::find&#39;</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">todos</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">todos</span><span class="p">);</span>
     <span class="p">});</span>
@@ -557,10 +558,15 @@ be called with the updated resource data.</p>
 </pre></div>
 </code></pre>
 <h2>Why?</h2>
-<p>We know... Oh God another NodeJS framework! We really didn&#39;t want to add another name to the long list of NodeJS web frameworks but also wanted to explore a different approach than any other framework we have seen. We strongly believe that data is the core of the web and should be the focus of web applications.</p>
+<p>We know! Oh God another NodeJS framework! We really didn&#39;t want to add another name to the long list of NodeJS web frameworks but also wanted to explore a different approach than any other framework we have seen. We strongly believe that data is the core of the web and should be the focus of web applications.</p>
 <p>We also think that your data resources can and should be encapsulated in such a way that they can be scalable, easily testable and self contained. The classic web MVC pattern used to work well but is becoming antiquated in today&#39;s web.</p>
 <p>With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of <a href="http://expressjs.com">Express</a> and is inspired in part by <a href="http://sailsjs.org">Sails</a>, <a href="http://flatironjs.org">Flatiron</a> and <a href="http://derbyjs.com">Derby</a>.</p>
 <h2>Changelog</h2>
+<p><strong>0.3.1</strong></p>
+<ul>
+<li>REST provider refactoring (<a href="https://github.com/feathersjs/feathers/pull/35">#35</a>) to make it easier to develop plugins</li>
+<li>HTTP requests now return 405 (Method not allowed) when trying to access unavailable service methods (<a href="https://github.com/feathersjs/feathers/pull/35">#35</a>)</li>
+</ul>
 <p><strong>0.3.0</strong></p>
 <ul>
 <li>Added <a href="https://github.com/primus/primus">Primus</a> provider (<a href="https://github.com/feathersjs/feathers/pull/34">#34</a>)</li>
