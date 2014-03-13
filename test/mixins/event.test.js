@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert');
-var _ = require('underscore');
+var _ = require('lodash');
 var Proto = require('uberproto');
 var mixinEvent = require('../../lib/mixins/event');
 var EventMixin = mixinEvent.Mixin;

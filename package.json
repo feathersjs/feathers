@@ -34,23 +34,23 @@
     "npm": "*"
   },
   "dependencies": {
-    "uberproto": "~ 1.1.0",
-    "express": "~ 3.4.0",
-    "rubberduck": "~1.x",
-    "underscore": "~1.5.0",
-    "socket.io": "~0.9.0",
-    "primus-emitter": "~2.0.5",
-    "primus": "~1.5.1"
+    "uberproto": "^1.x",
+    "express": "^3.4.0",
+    "rubberduck": "^1.x",
+    "socket.io": "^0.9.0",
+    "primus-emitter": "^3.x",
+    "primus": "^2.x",
+    "lodash": "^2.4.1"
   },
   "devDependencies": {
-    "request": "~2.21.0",
-    "socket.io-client": "~0.9.11",
-    "grunt-cli": "~0.1.7",
-    "grunt": "~0.4.1",
-    "grunt-release": "~0.5.1",
-    "mocha": "~1.11.0",
-    "grunt-contrib-jshint": "~0.x",
-    "grunt-simple-mocha": "~0.4.0",
-    "grunt-jsbeautifier": "~0.2.2"
+    "request": "^2.x",
+    "socket.io-client": "^0.9.0",
+    "grunt-cli": "^0.1.0",
+    "grunt": "^0.4.0",
+    "grunt-release": "^0.5.0",
+    "mocha": "^1.x",
+    "grunt-contrib-jshint": "^0.x",
+    "grunt-simple-mocha": "^0.4.0",
+    "grunt-jsbeautifier": "^0.2.0"
   }
 }
