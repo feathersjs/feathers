@@ -9,6 +9,19 @@ var fs = require('fs');
 
 var feathers = require('../lib/feathers');
 
+describe("Express application", function() {
+
+  it("should use express apps", function() {
+    var app = feathers();
+    var child = feathers();
+
+    app.use('/path', child);
+    assert.equal(child.route, '/path');
+  });
+  
+});
+
+
 describe('Feathers application', function () {
   it('registers service and looks it up with and without leading and trailing slashes', function () {
     var dummyService = {
