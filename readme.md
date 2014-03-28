@@ -494,6 +494,11 @@ With that being said there are some amazing frameworks already out there and we 
 
 ## Changelog
 
+__0.3.2__
+
+- Allows Feathers to use other Express apps ([#46](https://github.com/feathersjs/feathers/pull/46))
+- Updated dependencies and switched to Lodash ([#42](https://github.com/feathersjs/feathers/pull/42))
+
 __0.3.1__
 
 - REST provider refactoring ([#35](https://github.com/feathersjs/feathers/pull/35)) to make it easier to develop plugins
