@@ -77,6 +77,26 @@ describe('REST provider', function () {
       });
     });
 
+    it('PATCH .patch', function (done) {
+      var original = {
+        description: 'PATCH .patch'
+      };
+
+      request({
+        url: 'http://localhost:4777/todo/544',
+        method: 'patch',
+        body: JSON.stringify(original),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }, function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        verify.patch(544, original, JSON.parse(body));
+
+        done(error);
+      });
+    });
+
     it('DELETE .remove', function (done) {
       request({
         url: 'http://localhost:4777/todo/233',
