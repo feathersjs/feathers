@@ -37,6 +37,13 @@ exports.Service = {
     callback(null, result);
   },
 
+  patch: function (id, data, params, callback) {
+    var result = _.clone(data);
+    result.id = id;
+    result.status = 'patched';
+    callback(null, result);
+  },
+
   remove: function (id, params, callback) {
     callback(null, {
       id: id
@@ -68,6 +75,14 @@ exports.verify = {
       status: 'updated'
     });
     assert.deepEqual(expected, current, 'Data ran through .update as expected');
+  },
+
+  patch: function (id, original, current) {
+    var expected = _.extend({}, original, {
+      id: id,
+      status: 'patched'
+    });
+    assert.deepEqual(expected, current, 'Data ran through .patch as expected');
   },
 
   remove: function (id, data) {
