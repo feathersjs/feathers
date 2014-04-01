@@ -74,6 +74,18 @@ describe('SocketIO provider', function () {
       });
     });
 
+    it('::patch', function (done) {
+      var original = {
+        name: 'patching'
+      };
+
+      socket.emit('todo::patch', 25, original, {}, function (error, data) {
+        verify.patch(25, original, data);
+
+        done(error);
+      });
+    });
+
     it('::remove', function (done) {
       socket.emit('todo::remove', 11, {}, function (error, data) {
         verify.remove(11, data);
