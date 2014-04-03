@@ -1,14 +1,20 @@
 'use strict';
 
+var _ = require('lodash');
 var feathers = require('../../lib/feathers');
 var io = require('socket.io-client');
+var assert = require('assert');
 
 var fixture = require('./service-fixture');
 var todoService = fixture.Service;
 var verify = fixture.verify;
 
 describe('SocketIO provider', function () {
-  var server, socket;
+  var server, socket, app,
+    socketParams = {
+      user: { name: 'David' },
+      provider: 'socketio'
+    };
 
   before(function () {
     // This seems to be the only way to not get the
@@ -16,12 +22,17 @@ describe('SocketIO provider', function () {
     var oldlog = console.log;
     console.log = function () {};
 
-    server = feathers()
+    app = feathers()
       .configure(feathers.socketio(function(io) {
         io.set('log level', 0);
+        io.set('authorization', function (handshake, callback) {
+          handshake.feathers = socketParams;
+          callback(null, true);
+        });
       }))
-      .use('todo', todoService)
-      .listen(7886);
+      .use('todo', todoService);
+
+    server = app.listen(7886);
 
     console.log = oldlog;
 
@@ -31,6 +42,47 @@ describe('SocketIO provider', function () {
   after(function (done) {
     socket.disconnect();
     server.close(done);
+  });
+
+  it('passes handshake as service parameters', function(done) {
+    var service = app.lookup('todo');
+    var old = {
+      find: service.find,
+      create: service.create,
+      update: service.update,
+      remove: service.remove
+    };
+
+    service.find = function(params) {
+      assert.deepEqual(params, socketParams, 'Handshake parameters passed on proper position');
+      old.find.apply(this, arguments);
+    };
+
+    service.create = function(data, params) {
+      assert.deepEqual(params, socketParams, 'Passed handshake parameters');
+      old.create.apply(this, arguments);
+    };
+
+    service.update = function(id, data, params) {
+      assert.deepEqual(params, _.extend(socketParams, {
+        test: 'param'
+      }), 'Extended handshake paramters with original');
+      old.update.apply(this, arguments);
+    };
+
+    service.remove = function(id, params) {
+      assert.equal(params.provider, 'socketio', 'Handshake parameters have priority');
+      old.remove.apply(this, arguments);
+    };
+
+    socket.emit('todo::create', {}, {}, function () {
+      socket.emit('todo::update', 1, {}, { test: 'param' }, function() {
+        socket.emit('todo::remove', 1, { provider: 'something' }, function() {
+          _.extend(service, old);
+          done();
+        });
+      });
+    });
   });
 
   describe('CRUD', function () {
