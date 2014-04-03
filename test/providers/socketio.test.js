@@ -19,6 +19,10 @@ describe('SocketIO provider', function () {
     server = feathers()
       .configure(feathers.socketio(function(io) {
         io.set('log level', 0);
+        io.set('authorization', function (handshakeData, callback) {
+          handshakeData.user = { name: 'David' };
+          callback(null, true);
+        });
       }))
       .use('todo', todoService)
       .listen(7886);
@@ -101,7 +105,7 @@ describe('SocketIO provider', function () {
         name: 'created event'
       };
 
-      socket.on('todo created', function (data) {
+      socket.once('todo created', function (data) {
         verify.create(original, data);
         done();
       });
@@ -114,7 +118,7 @@ describe('SocketIO provider', function () {
         name: 'updated event'
       };
 
-      socket.on('todo updated', function (data) {
+      socket.once('todo updated', function (data) {
         verify.update(10, original, data);
         done();
       });
@@ -123,12 +127,35 @@ describe('SocketIO provider', function () {
     });
 
     it('removed', function (done) {
-      socket.on('todo removed', function (data) {
+      socket.once('todo removed', function (data) {
         verify.remove(333, data);
         done();
       });
 
       socket.emit('todo::remove', 333, {}, function () {});
+    });
+  });
+
+  describe('Event filtering', function() {
+    it.skip('.created', function (done) {
+      done();
+    });
+
+    it('.updated', function (done) {
+      var original = {
+        name: 'updated event'
+      };
+
+      socket.once('todo updated', function (data) {
+        verify.update(10, original, data);
+        done();
+      });
+
+      socket.emit('todo::update', 10, original, {}, function () {});
+    });
+
+    it.skip('.removed', function (done) {
+      done();
     });
   });
 });
