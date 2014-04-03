@@ -74,6 +74,24 @@ app.configure(feathers.socketio(function(io) {
 }));
 ```
 
+Similar than the REST middleware, the SocketIO handshakes `feathers` property will be extended
+for service parameters:
+
+```js
+app.configure(feathers.socketio(function(io) {
+  io.set('authorization', function (handshake, callback) {
+    handshake.feathers.user = { name: 'David' };
+  });
+}));
+
+app.use('todos', {
+  create: function(data, params, callback) {
+    // When called via SocketIO:
+    params.user // -> { name: 'David' }
+  }
+});
+```
+
 Once the server has been started with `app.listen()` the SocketIO object is available as `app.io`.
 
 ### Primus
