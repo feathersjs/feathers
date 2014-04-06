@@ -48,6 +48,22 @@ exports.Service = {
     callback(null, {
       id: id
     });
+  },
+
+  removed: function(data, params, callback) {
+    if(params.process) {
+      return callback(null, _.extend({}, data, params));
+    }
+
+    callback(null, data);
+  },
+
+  created: function(data, params, callback) {
+    if(params.process) {
+      return callback(null, _.extend({}, data, params));
+    }
+
+    callback(null, data);
   }
 };
 
