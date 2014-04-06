@@ -174,6 +174,19 @@ describe('SocketIO provider', function () {
       socket.emit('todo::update', 10, original, {}, function () {});
     });
 
+    it('patched', function(done) {
+      var original = {
+        name: 'patched event'
+      };
+
+      socket.once('todo patched', function (data) {
+        verify.patch(12, original, data);
+        done();
+      });
+
+      socket.emit('todo::patch', 12, original, {}, function () {});
+    });
+
     it('removed', function (done) {
       socket.once('todo removed', function (data) {
         verify.remove(333, data);
