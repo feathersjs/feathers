@@ -643,6 +643,13 @@ With that being said there are some amazing frameworks already out there and we 
 
 ## Changelog
 
+__0.4.0__
+
+- Allow socket provider event filtering and params passthrough ([#49](https://github.com/feathersjs/feathers/pull/49), [#50](https://github.com/feathersjs/feathers/pull/50), [#51](https://github.com/feathersjs/feathers/pull/51))
+- Added `patch` support ([#47](https://github.com/feathersjs/feathers/pull/47))
+- Allow to configure REST handler manually ([#40](https://github.com/feathersjs/feathers/issues/40), [#52](https://github.com/feathersjs/feathers/pull/52))
+
+
 __0.3.2__
 
 - Allows Feathers to use other Express apps ([#46](https://github.com/feathersjs/feathers/pull/46))
