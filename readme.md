@@ -29,6 +29,32 @@ app.use('/todos', {
 });
 ```
 
+The default REST handler is a middleware that formats the data retrieved by the service as JSON. REST handling will be set up automatically when calling `var app = feathers()`. If you would like to configure the REST provider yourself, call `var app = feathers({ rest: false });`.
+
+Then you can configure it manually and add your own `handler` middleware that, for example just renders plain text with the todo description (`res.data` contains the data returned by the service):
+
+```js
+var app = feathers({ rest: false });
+
+app.use(feathers.urlencoded()).use(feathers.json())
+  .configure(feathers.rest(function restFormatter(req, res) {
+    res.format({
+      'text/plain': function() {
+        res.end('The todo is: ' + res.data.description);
+      }
+    });
+  }))
+  .use('/todo', {
+    get: function (id, params, callback) {
+      callback(null, { description: 'You have to do ' + id });
+    }
+  });
+```
+
+__Note:__ When configuring REST this way, you *have* to add `app.use(feathers.urlencoded()).use(feathers.json())` to support request body parsing.
+
+If you want to add other middleware *before* the REST handler, simply call `app.use(middleware)` before configuring the handler.
+
 ### SocketIO
 
 To expose services via [SocketIO](http://socket.io/) call `app.configure(feathers.socketio())`. It is also possible pass a `function(io) {}` when initializing the provider where `io` is the main SocketIO object. Since Feathers is only using the SocketIO default configuration, this is a good spot to initialize the [recommended production settings](https://github.com/LearnBoost/Socket.IO/wiki/Configuring-Socket.IO#recommended-production-settings):
