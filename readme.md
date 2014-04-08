@@ -135,6 +135,23 @@ In the Browser you can connect like this:
 </script>
 ```
 
+Just like REST and SocketIO, the Primus request object can be extended with a `feathers` parameter during authorization which will extend the `params` for any service request:
+
+```js
+app.configure(feathers.primus({
+  transformer: 'sockjs'
+}, function(primus) {
+  // Set up Primus authorization here
+  primus.authorize(function (req, done) {
+    req.feathers = {
+      user: { name: 'David' }
+    }
+
+    done();
+  });
+}));
+```
+
 ## API
 
 ### listen
