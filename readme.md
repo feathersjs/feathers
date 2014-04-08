@@ -239,6 +239,7 @@ var myService = {
   get: function(id, params, callback) {},
   create: function(data, params, callback) {},
   update: function(id, data, params, callback) {},
+  patch: function(id, data, params, callback) {},
   remove: function(id, params, callback) {},
   setup: function(app) {}
 }
@@ -317,6 +318,25 @@ __SocketIO__
 
 ```js
 socket.emit('todo::update', 2, {
+  description: 'I really have to do laundry'
+}, {}, function(error, data) {
+  // data -> { id: 2, description: "I really have to do laundry" }
+});
+```
+
+### patch
+
+`patch(id, data, params, callback)` patches the resource identified by `id` using `data`. The callback should be called with the updated resource data. Implement `patch` additionally to `update` if you want to separate between partial and full updates and support the `PATCH` HTTP method.
+
+__REST__
+
+    PATCH todo/2
+    { "description": "I really have to do laundry" }
+
+__SocketIO__
+
+```js
+socket.emit('todo::patch', 2, {
   description: 'I really have to do laundry'
 }, {}, function(error, data) {
   // data -> { id: 2, description: "I really have to do laundry" }
@@ -437,9 +457,9 @@ __SocketIO__
 </script>
 ```
 
-### updated
+### updated, patched
 
-The `updated` event will be published with the callback data when a service `update` calls back successfully.
+The `updated` and `patched` events will be published with the callback data when a service `update` or `patch` method calls back successfully.
 
 ```js
 app.use('/my/todos/', {
@@ -500,6 +520,74 @@ __SocketIO__
     $('#todo-' + todo.id).remove();
   });
 </script>
+```
+
+### Event filtering
+
+By default all service events will be dispatched to all connected clients.
+In many cases you probably want to be able to only dispatch events for certain clients.
+This can be done by implementing the `created`, `updated`, `patched` and `removed` methods as `function(data, params, callback) {}` with `params` being the parameters set when the client connected, in SocketIO when authorizing and setting `handshake.feathers` and Primus with `req.feathers`.
+
+```js
+var myService = {
+  created: function(data, params, callback) {},
+  updated: function(data, params, callback) {},
+  patched: function(data, params, callback) {},
+  removed: function(data, params, callback) {}
+}
+```
+
+The event dispatching service methods will be run for every connected client. Calling the callback with data (that you also may modify) will dispatch the according event. Callling back with a falsy value will prevent the event being dispatched to this client.
+
+The following example only dispatches the Todo `updated` event if the authorized user belongs to the same company:
+
+```js
+app.configure(feathers.socketio(function(io) {
+  io.set('authorization', function (handshake, callback) {
+    // Authorize using the /users service
+    app.lookup('users').find({
+      username: handshake.username,
+      password: handshake.password
+    }, function(error, user) {
+      if(!error || !user) {
+        return callback(error, false);
+      }
+
+      handshake.feathers = {
+        user: user
+      };
+
+      callback(null, true);
+    });
+  });
+}));
+
+app.use('todos', {
+  update: function(id, data, params, callback) {
+    // Update
+    callback(null, data);
+  },
+
+  updated: function(todo, params, callback) {
+    // params === handshake.feathers
+    if(todo.companyId === params.user.companyId) {
+      // Dispatch the todo data to this client
+      return callback(null, todo);
+    }
+
+    // Call back with a falsy value to prevent dispatching
+    callback(null, false);
+  }
+});
+```
+
+On the client:
+
+```js
+socket.on('todo updated', function(data) {
+  // The client will only get this event
+  // if authorized and in the same company
+});
 ```
 
 ## Why?

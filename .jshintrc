@@ -3,7 +3,9 @@
     "it": true,
     "describe": true,
     "before": true,
+    "beforeEach": true,
     "after": true,
+    "afterEach": true,
     "exports": true
   },
   "unused": true,

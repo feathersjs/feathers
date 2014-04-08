@@ -153,7 +153,7 @@ describe('SocketIO provider', function () {
         name: 'created event'
       };
 
-      socket.on('todo created', function (data) {
+      socket.once('todo created', function (data) {
         verify.create(original, data);
         done();
       });
@@ -166,7 +166,7 @@ describe('SocketIO provider', function () {
         name: 'updated event'
       };
 
-      socket.on('todo updated', function (data) {
+      socket.once('todo updated', function (data) {
         verify.update(10, original, data);
         done();
       });
@@ -174,13 +174,88 @@ describe('SocketIO provider', function () {
       socket.emit('todo::update', 10, original, {}, function () {});
     });
 
+    it('patched', function(done) {
+      var original = {
+        name: 'patched event'
+      };
+
+      socket.once('todo patched', function (data) {
+        verify.patch(12, original, data);
+        done();
+      });
+
+      socket.emit('todo::patch', 12, original, {}, function () {});
+    });
+
     it('removed', function (done) {
-      socket.on('todo removed', function (data) {
+      socket.once('todo removed', function (data) {
         verify.remove(333, data);
         done();
       });
 
       socket.emit('todo::remove', 333, {}, function () {});
+    });
+  });
+
+  describe('Event filtering', function() {
+    it('.created', function (done) {
+      var service = app.lookup('todo');
+      var original = { description: 'created event test' };
+      var oldCreated = service.created;
+
+      service.created = function(data, params, callback) {
+        assert.deepEqual(params, socketParams);
+        verify.create(original, data);
+
+        callback(null, _.extend({ processed: true }, data));
+      };
+
+      socket.emit('todo::create', original, {}, function() {});
+
+      socket.once('todo created', function (data) {
+        service.created = oldCreated;
+        // Make sure Todo got processed
+        verify.create(_.extend({ processed: true }, original), data);
+        done();
+      });
+    });
+
+    it('.updated', function (done) {
+      var original = {
+        name: 'updated event'
+      };
+
+      socket.once('todo updated', function (data) {
+        verify.update(10, original, data);
+        done();
+      });
+
+      socket.emit('todo::update', 10, original, {}, function () {});
+    });
+
+    it('.removed', function (done) {
+      var service = app.lookup('todo');
+      var oldRemoved = service.removed;
+
+      service.removed = function(data, params, callback) {
+        assert.deepEqual(params, socketParams);
+
+        if(data.id === 23) {
+          // Only dispatch with given id
+          return callback(null, data);
+        }
+
+        callback();
+      };
+
+      socket.emit('todo::remove', 1, {}, function() {});
+      socket.emit('todo::remove', 23, {}, function() {});
+
+      socket.on('todo removed', function (data) {
+        service.removed = oldRemoved;
+        assert.equal(data.id, 23);
+        done();
+      });
     });
   });
 });
