@@ -141,16 +141,16 @@ describe('REST provider', function () {
     });
   });
 
-  it('throws a 405 for undefined service methods', function(done) {
+  it('throws a 405 for undefined service methods', function (done) {
     var app = feathers().use('todo', {
-        get: function(id, params, callback) {
-          callback(null, { description: 'You have to do ' + id });
-        }
-      });
+      get: function (id, params, callback) {
+        callback(null, { description: 'You have to do ' + id });
+      }
+    });
 
     /* jshint ignore:start */
     // Error handler
-    app.use(function(error, req, res, next) {
+    app.use(function (error, req, res, next) {
       assert.equal(error.message, 'Can not call service method .find');
       res.json({ message: error.message });
     });
@@ -166,6 +166,58 @@ describe('REST provider', function () {
         assert.deepEqual(JSON.parse(body), { message: 'Can not call service method .find' }, 'Error serialized as expected');
         server.close(done);
       });
+    });
+  });
+
+  it('disables REST and lets you set the handler manually', function(done) {
+    var app = feathers({ rest: false });
+
+    app.configure(feathers.rest(function restFormatter(req, res) {
+        res.format({
+          'text/plain': function() {
+            res.end('The todo is: ' + res.data.description);
+          }
+        });
+      }))
+      .use('/todo', {
+        get: function (id, params, callback) {
+          callback(null, { description: 'You have to do ' + id });
+        }
+      });
+
+    var server = app.listen(4776);
+    request('http://localhost:4776/todo/dishes', function (error, response, body) {
+      assert.equal(body, 'The todo is: You have to do dishes');
+      server.close(done);
+    });
+  });
+
+  it('Lets you configure your own middleware before the handler (#40)', function(done) {
+    var data = { description: 'Do dishes!', id: 'dishes' };
+    var app = feathers({ rest: false });
+
+    app.use(function defaultContentTypeMiddleware (req, res, next) {
+      req.headers['content-type'] = req.headers['content-type'] || 'application/json';
+      next();
+    })
+    .use(feathers.urlencoded())
+    .use(feathers.json())
+    .configure(feathers.rest())
+    .use('/todo', {
+      create: function (data, params, callback) {
+        callback(null, data);
+      }
+    });
+
+    var server = app.listen(4775);
+    request({
+      method: 'POST',
+      url: 'http://localhost:4775/todo',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }, function (error, response, body) {
+      assert.deepEqual(JSON.parse(body), data);
+      server.close(done);
     });
   });
 });
