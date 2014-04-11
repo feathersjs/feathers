@@ -22,8 +22,8 @@
         var element = el.find('[data-id="' + todo.id + '"]');
         var checkbox = element.find('[name="done"]').removeAttr('disabled');
 
-        element.toggleClass('done', todo.completed);
-        checkbox.prop('checked', todo.completed);
+        element.toggleClass('done', todo.complete);
+        checkbox.prop('checked', todo.complete);
         element.find('.description').html(todo.text);
       },
       errorHandler: function(error) {
@@ -55,7 +55,7 @@
       $(this).attr('disabled', 'disabled');
 
       socket.emit('todos::update', id, {
-        completed: $(this).is(':checked')
+        complete: $(this).is(':checked')
       }, {}, app.errorHandler);
     });
 
