@@ -7,7 +7,7 @@
       addTodo: function(todo) {
         var html = '<li class="page-header checkbox" data-id="' + todo.id + '">' +
               '<label><input type="checkbox" name="done">' +
-              '<span class="description">' + todo.description + '</span>' +
+              '<span class="description">' + todo.text + '</span>' +
               '</label><a href="javascript://" class="pull-right delete">' +
               '<i class="icon-trash"></i>' +
               '</a></li>';
@@ -22,9 +22,9 @@
         var element = el.find('[data-id="' + todo.id + '"]');
         var checkbox = element.find('[name="done"]').removeAttr('disabled');
 
-        element.toggleClass('done', todo.done);
-        checkbox.prop('checked', todo.done);
-        element.find('.description').html(todo.description);
+        element.toggleClass('done', todo.completed);
+        checkbox.prop('checked', todo.completed);
+        element.find('.description').html(todo.text);
       },
       errorHandler: function(error) {
         if(error) {
@@ -38,7 +38,7 @@
    
       if(field.val().replace(/^\s+|\s+$/g, '') !== '') {
         socket.emit('todos::create', {
-          description: field.val()
+          text: field.val()
         }, {}, app.errorHandler);
      
         field.val('');
@@ -55,7 +55,7 @@
       $(this).attr('disabled', 'disabled');
 
       socket.emit('todos::update', id, {
-        done: $(this).is(':checked')
+        completed: $(this).is(':checked')
       }, {}, app.errorHandler);
     });
 
