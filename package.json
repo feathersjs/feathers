@@ -35,12 +35,13 @@
   },
   "dependencies": {
     "uberproto": "~1.x",
-    "express": "~3.4.0",
+    "express": "~4.0.0",
     "rubberduck": "~1.x",
     "socket.io": "~0.9.0",
     "primus-emitter": "~3.x",
     "primus": "~2.x",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "body-parser": "~1.0.2"
   },
   "devDependencies": {
     "request": "~2.x",

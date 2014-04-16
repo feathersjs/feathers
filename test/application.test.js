@@ -9,20 +9,15 @@ var fs = require('fs');
 
 var feathers = require('../lib/feathers');
 
-describe("Express application", function() {
-
-  it("should use express apps", function() {
+describe('Feathers application', function () {
+  it("Express application should use express apps", function() {
     var app = feathers();
     var child = feathers();
 
     app.use('/path', child);
-    assert.equal(child.route, '/path');
+    assert.equal(child.parent, app);
   });
-  
-});
 
-
-describe('Feathers application', function () {
   it('registers service and looks it up with and without leading and trailing slashes', function () {
     var dummyService = {
       find: function () {
@@ -64,7 +59,7 @@ describe('Feathers application', function () {
     });
   });
 
-  it('adds REST by default and registers SocketIO provider', function (done) {
+  it('adds REST and SocketIO provider', function (done) {
     var todoService = {
       get: function (name, params, callback) {
         callback(null, {
@@ -77,9 +72,11 @@ describe('Feathers application', function () {
     var oldlog = console.log;
     console.log = function () {};
 
-    var app = feathers().configure(feathers.socketio(function(io) {
-      io.set('log level', 0);
-    })).use('/todo', todoService);
+    var app = feathers()
+      .configure(feathers.rest())
+      .configure(feathers.socketio(function(io) {
+        io.set('log level', 0);
+      })).use('/todo', todoService);
     var server = app.listen(6999).on('listening', function () {
       console.log = oldlog;
 
@@ -116,9 +113,11 @@ describe('Feathers application', function () {
 
     var oldlog = console.log;
     console.log = function () {};
-    var app = feathers().configure(feathers.socketio(function(io) {
-      io.set('log level', 0);
-    })).use('/secureTodos', todoService);
+    var app = feathers()
+      .configure(feathers.rest())
+      .configure(feathers.socketio(function(io) {
+        io.set('log level', 0);
+      })).use('/secureTodos', todoService);
 
     var httpsServer = https.createServer({
       key: fs.readFileSync(__dirname + '/resources/privatekey.pem'),
