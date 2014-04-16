@@ -151,7 +151,7 @@ describe('REST provider', function () {
     /* jshint ignore:start */
     // Error handler
     app.use(function (error, req, res, next) {
-      assert.equal(error.message, 'Can not call service method .find');
+      assert.equal(error.message, 'Method `find` is not supported by this endpoint.');
       res.json({ message: error.message });
     });
     /* jshint ignore:end */
@@ -163,7 +163,7 @@ describe('REST provider', function () {
       assert.deepEqual(JSON.parse(body), { description: 'You have to do dishes' }, 'Got expected object');
       request('http://localhost:4777/todo', function (error, response, body) {
         assert.ok(response.statusCode === 405, 'Got 405 for .find');
-        assert.deepEqual(JSON.parse(body), { message: 'Can not call service method .find' }, 'Error serialized as expected');
+        assert.deepEqual(JSON.parse(body), { message: 'Method `find` is not supported by this endpoint.' }, 'Error serialized as expected');
         server.close(done);
       });
     });
