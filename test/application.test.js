@@ -97,6 +97,41 @@ describe('Feathers application', function () {
     });
   });
 
+  it('uses custom middleware (#21)', function (done) {
+    var todoService = {
+      get: function (name, params, callback) {
+        callback(null, {
+          id: name,
+          description: "You have to do " + name + "!",
+          stuff: params.stuff
+        });
+      }
+    };
+
+    var app = feathers()
+      .configure(feathers.rest())
+      .use('/todo', function(req, res, next) {
+        req.feathers.stuff = 'custom middleware';
+        next();
+      }, todoService)
+      .use('/otherTodo', todoService);
+
+    var server = app.listen(6995).on('listening', function () {
+      request('http://localhost:6995/todo/dishes', function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        var data = JSON.parse(body);
+        assert.equal(data.stuff, 'custom middleware', 'Custom middleware updated params');
+
+        request('http://localhost:6995/otherTodo/dishes', function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          var data = JSON.parse(body);
+          assert.ok(!data.stuff, 'Custom middleware not run for different service.');
+          server.close(done);
+        });
+      });
+    });
+  });
+
   it('REST and SocketIO with SSL server (#25)', function(done) {
     // For more info on Reqest HTTPS settings see https://github.com/mikeal/request/issues/418
     // This needs to be set so that the SocektIO client can connect
