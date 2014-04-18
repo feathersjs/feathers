@@ -13,7 +13,7 @@ describe('REST provider', function () {
     var server, app;
 
     before(function () {
-      app = feathers().use('todo', todoService);
+      app = feathers().configure(feathers.rest()).use('todo', todoService);
       server = app.listen(4777);
     });
 
@@ -117,7 +117,7 @@ describe('REST provider', function () {
       }
     };
 
-    var server = feathers()
+    var server = feathers().configure(feathers.rest())
       .use(function (req, res, next) {
         assert.ok(req.feathers, 'Feathers object initialized');
         req.feathers.test = 'Happy';
@@ -142,7 +142,7 @@ describe('REST provider', function () {
   });
 
   it('throws a 405 for undefined service methods', function (done) {
-    var app = feathers().use('todo', {
+    var app = feathers().configure(feathers.rest()).use('todo', {
       get: function (id, params, callback) {
         callback(null, { description: 'You have to do ' + id });
       }
@@ -194,14 +194,12 @@ describe('REST provider', function () {
 
   it('Lets you configure your own middleware before the handler (#40)', function(done) {
     var data = { description: 'Do dishes!', id: 'dishes' };
-    var app = feathers({ rest: false });
+    var app = feathers();
 
     app.use(function defaultContentTypeMiddleware (req, res, next) {
       req.headers['content-type'] = req.headers['content-type'] || 'application/json';
       next();
     })
-    .use(feathers.urlencoded())
-    .use(feathers.json())
     .configure(feathers.rest())
     .use('/todo', {
       create: function (data, params, callback) {
@@ -213,7 +211,6 @@ describe('REST provider', function () {
     request({
       method: 'POST',
       url: 'http://localhost:4775/todo',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     }, function (error, response, body) {
       assert.deepEqual(JSON.parse(body), data);

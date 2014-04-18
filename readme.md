@@ -8,12 +8,12 @@ If you are not familiar with Express head over to the [Express Guides](http://ex
 
 ### REST
 
-Exposing services through a RESTful JSON interface is enabled by default. If you only want to use SocketIO call `app.disabled('feathers rest')` _before_ registering any services.
+In almost every case you want to exposes your services through a RESTful JSON interface. This can be achieved by calling `app.configure(feathers.rest())`.
 
 To set service parameters in a middleware, just attach it to the `req.feathers` object which will become the params for any resulting service call:
 
 ```js
-app.use(function(req, res) {
+app.configure(feathers.rest()).use(function(req, res) {
   req.feathers.data = 'Hello world';
 });
 
@@ -29,15 +29,10 @@ app.use('/todos', {
 });
 ```
 
-The default REST handler is a middleware that formats the data retrieved by the service as JSON. REST handling will be set up automatically when calling `var app = feathers()`. If you would like to configure the REST provider yourself, call `var app = feathers({ rest: false });`.
-
-Then you can configure it manually and add your own `handler` middleware that, for example just renders plain text with the todo description (`res.data` contains the data returned by the service):
+The default REST handler is a middleware that formats the data retrieved by the service as JSON. If you would like to configure your own `handler` middleware just pass it to `feathers.rest(handler)`. For example a middleware that just renders plain text with the todo description (`res.data` contains the data returned by the service):
 
 ```js
-var app = feathers({ rest: false });
-
-app.use(feathers.urlencoded()).use(feathers.json())
-  .configure(feathers.rest(function restFormatter(req, res) {
+app.configure(feathers.rest(function restFormatter(req, res) {
     res.format({
       'text/plain': function() {
         res.end('The todo is: ' + res.data.description);
@@ -50,8 +45,6 @@ app.use(feathers.urlencoded()).use(feathers.json())
     }
   });
 ```
-
-__Note:__ When configuring REST this way, you *have* to add `app.use(feathers.urlencoded()).use(feathers.json())` to support request body parsing.
 
 If you want to add other middleware *before* the REST handler, simply call `app.use(middleware)` before configuring the handler.
 
