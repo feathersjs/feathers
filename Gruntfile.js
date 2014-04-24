@@ -13,12 +13,11 @@ module.exports = function (grunt) {
     less: {
       production: {
         options: {
-          paths: ["less"],
+          paths: ["build/less"],
           yuicompress: true
-          // ieCompat: true
         },
         files: {
-          "css/feathers.min.css": "less/main.less"
+          "css/feathers.min.css": "build/less/main.less"
         }
       }
     },
@@ -27,7 +26,7 @@ module.exports = function (grunt) {
       index: {
         options: {
           markdown: 'https://raw.github.com/feathersjs/feathers/master/readme.md',
-          template: 'index.handlebars',
+          template: 'build/index.handlebars',
           output: 'index.html',
           marked: {
             highlight: function (code, lang, callback) {
@@ -35,7 +34,7 @@ module.exports = function (grunt) {
                 if (err) return callback(err);
                 callback(null, result.toString());
               });
-            },
+            }
           }
         }
       }
@@ -46,12 +45,12 @@ module.exports = function (grunt) {
         files: ['less/**/*.less', 'index.handlebars'],
         tasks: ['default'],
         options: {
-        },
-      },
-    },
+        }
+      }
+    }
   });
 
-  grunt.loadTasks('tasks');
+  grunt.loadTasks('build/tasks');
   grunt.loadNpmTasks('grunt-release');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-less');

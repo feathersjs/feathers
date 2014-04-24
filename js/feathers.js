@@ -2,7 +2,6 @@
   $.fn.gistPills = function(gistId, index) {
   	var gistFiles = $('#gist' + gistId).find('.gist-file');
   	var lis = this.find('li');
-  	var parent = this;
 
   	gistFiles.hide();
 
@@ -19,6 +18,7 @@
 
   $.fn.toc = function(target) {
     var idCounter = 0;
+    var existingIds = {};
     var createMenu = function(headings, level) {
       var root = $('<ul>');
       var getId = function(el) {
@@ -26,9 +26,15 @@
 
         if(!id) {
           id = 'toc' + (++idCounter);
-          el.attr('id', id);
         }
 
+        if(typeof existingIds[id] !== 'undefined') {
+          id = id + '-' + (++existingIds[id]);
+        } else {
+          existingIds[id] = 0;
+        }
+
+        el.attr('id', id);
         return id;
       };
 

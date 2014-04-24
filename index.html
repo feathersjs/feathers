@@ -6,21 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../ico/apple-touch-icon-57-precomposed.png">
     <link rel="shortcut icon" href="/ico/favicon.png">
 
     <title>Feathers - Let your applications fly!</title>
     <link href="css/feathers.min.css" rel="stylesheet">
     <link href="css/fontello.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="js/html5shiv.js"></script>
-      <script src="js/respond.min.js"></script>
-    <![endif]-->
   </head>
 
   <body data-spy="scroll" data-offset="100">
@@ -77,7 +71,6 @@
                   <a href="https://npmjs.org/package/feathers" title="Package status" target="_blank"><img src="https://badge.fury.io/js/feathers.png"/></a>
                   <a href="https://david-dm.org/feathersjs/feathers" target="_blank" title="Dependency status"><img src="https://david-dm.org/feathersjs/feathers.png"/></a>
                   <a href="https://travis-ci.org/feathersjs/feathers" target="_blank"><img src="https://travis-ci.org/feathersjs/feathers.png?branch=master" alt="Build status" /></a>
-                  <a href="https://codeclimate.com/github/feathersjs/feathers" target="_blank"><img src="https://codeclimate.com/github/feathersjs/feathers.png" /></a>
                 </p>
               </div>
               <div class="row github-links text-center">
@@ -165,9 +158,9 @@
 <p>If you are not familiar with Express head over to the <a href="http://expressjs.com/guide.html">Express Guides</a> to get an idea. Feathers works the exact same way except that <code>var app = require(&#39;express&#39;)();</code> is replaced with <code>var app = require(&#39;feathers&#39;)()</code>. The most important concept that Feathers adds to Express middleware is data oriented <strong>Services</strong>. How services work and the API additional to the available <a href="http://expressjs.com/api.html">Express API</a> is outlined in the following documentation.</p>
 <h2 id="configuration">Configuration</h2>
 <h3 id="rest">REST</h3>
-<p>Exposing services through a RESTful JSON interface is enabled by default. If you only want to use SocketIO call <code>app.disabled(&#39;feathers rest&#39;)</code> <em>before</em> registering any services.</p>
+<p>In almost every case you want to exposes your services through a RESTful JSON interface. This can be achieved by calling <code>app.configure(feathers.rest())</code>.</p>
 <p>To set service parameters in a middleware, just attach it to the <code>req.feathers</code> object which will become the params for any resulting service call:</p>
-<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">rest</span><span class="p">()).</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">req</span><span class="p">.</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="s1">&#39;Hello world&#39;</span><span class="p">;</span>
 <span class="p">});</span>
 
@@ -183,12 +176,8 @@
 <span class="p">});</span>
 </pre></div>
 </code></pre>
-<p>The default REST handler is a middleware that formats the data retrieved by the service as JSON. REST handling will be set up automatically when calling <code>var app = feathers()</code>. If you would like to configure the REST provider yourself, call <code>var app = feathers({ rest: false });</code>.</p>
-<p>Then you can configure it manually and add your own <code>handler</code> middleware that, for example just renders plain text with the todo description (<code>res.data</code> contains the data returned by the service):</p>
-<pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">feathers</span><span class="p">({</span> <span class="nx">rest</span><span class="o">:</span> <span class="kc">false</span> <span class="p">});</span>
-
-<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">urlencoded</span><span class="p">()).</span><span class="nx">use</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
-  <span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">rest</span><span class="p">(</span><span class="kd">function</span> <span class="nx">restFormatter</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+<p>The default REST handler is a middleware that formats the data retrieved by the service as JSON. If you would like to configure your own <code>handler</code> middleware just pass it to <code>feathers.rest(handler)</code>. For example a middleware that just renders plain text with the todo description (<code>res.data</code> contains the data returned by the service):</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">rest</span><span class="p">(</span><span class="kd">function</span> <span class="nx">restFormatter</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">res</span><span class="p">.</span><span class="nx">format</span><span class="p">({</span>
       <span class="s1">&#39;text/plain&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;The todo is: &#39;</span> <span class="o">+</span> <span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">description</span><span class="p">);</span>
@@ -202,7 +191,6 @@
   <span class="p">});</span>
 </pre></div>
 </code></pre>
-<p><strong>Note:</strong> When configuring REST this way, you <em>have</em> to add <code>app.use(feathers.urlencoded()).use(feathers.json())</code> to support request body parsing.</p>
 <p>If you want to add other middleware <em>before</em> the REST handler, simply call <code>app.use(middleware)</code> before configuring the handler.</p>
 <h3 id="socketio">SocketIO</h3>
 <p>To expose services via <a href="http://socket.io/">SocketIO</a> call <code>app.configure(feathers.socketio())</code>. It is also possible pass a <code>function(io) {}</code> when initializing the provider where <code>io</code> is the main SocketIO object. Since Feathers is only using the SocketIO default configuration, this is a good spot to initialize the <a href="https://github.com/LearnBoost/Socket.IO/wiki/Configuring-Socket.IO#recommended-production-settings">recommended production settings</a>:</p>
@@ -771,8 +759,8 @@ THE SOFTWARE.</p>
     </footer>
 
     <script src="http://todos.feathersjs.com/socket.io/socket.io.js"></script>
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="js/feathers.js"></script>
     <script src="js/todos.js"></script>
   </body>
