@@ -44,14 +44,15 @@
     "body-parser": "~1.0.2"
   },
   "devDependencies": {
-    "request": "~2.x",
-    "socket.io-client": "~0.9.0",
-    "grunt-cli": "~0.1.0",
     "grunt": "~0.4.0",
-    "grunt-release": "~0.5.0",
-    "mocha": "~1.x",
+    "grunt-cli": "~0.1.0",
     "grunt-contrib-jshint": "~0.x",
+    "grunt-jsbeautifier": "~0.2.0",
+    "grunt-release": "~0.5.0",
     "grunt-simple-mocha": "~0.4.0",
-    "grunt-jsbeautifier": "~0.2.0"
+    "mocha": "~1.x",
+    "q": "^1.0.1",
+    "request": "~2.x",
+    "socket.io-client": "~0.9.0"
   }
 }
