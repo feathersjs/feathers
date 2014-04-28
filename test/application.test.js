@@ -6,6 +6,7 @@ var io = require('socket.io-client');
 var request = require('request');
 var https = require('https');
 var fs = require('fs');
+var q = require('q');
 
 var feathers = require('../lib/feathers');
 
@@ -183,6 +184,32 @@ describe('Feathers application', function () {
           socket.disconnect();
           httpsServer.close(done);
         });
+      });
+    });
+  });
+
+  it('returns the value of a promise (#41)', function (done) {
+    var original = {};
+    var todoService = {
+      get: function (name) {
+        original = {
+          id: name,
+          q: true,
+          description: "You have to do " + name + "!"
+        };
+        return q(original);
+      }
+    };
+
+    var app = feathers()
+      .configure(feathers.rest())
+      .use('/todo', todoService);
+
+    var server = app.listen(6880).on('listening', function () {
+      request('http://localhost:6880/todo/dishes', function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        assert.deepEqual(original, JSON.parse(body));
+        server.close(done);
       });
     });
   });
