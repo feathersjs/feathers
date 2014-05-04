@@ -61,7 +61,7 @@
               <div class="row">
                 <ul class="list-unstyled">
                   <li class="first"><i class="icon-feather"></i> Use the power of <a href="http://expressjs.com">Express</a> plus...</li>
-                  <li><i class="icon-plus"></i> Data driven <a href="#toc9">services</a></li>
+                  <li><i class="icon-plus"></i> Data driven <a href="#services">services</a></li>
                   <li><i class="icon-plus"></i> Out of the box  <a href="http://todos.feathersjs.com/todos" target="_blank">RESTful APIs</a></li>
                   <li><i class="icon-plus"></i> <a href="#example">Real-time</a> events via SocketIO</li>
                 </ul>
@@ -97,7 +97,7 @@
           </div>
           <div class="row">
             <div class="col-md-6">
-              <p>Feathers makes it easy to get REST and real-time APIs running by using <a href="#toc9">Services</a>. A Service is a JavaScript object which provides a certain set of methods and can be used just like an Express middleware. The <a href="https://gist.github.com/daffl/6644432" target="_blank">rapid start example</a> creates a simple Todo REST and SocketIO service that maintains a list of todos and lets you creates new ones.</p>
+              <p>Feathers makes it easy to get REST and real-time APIs running by using <a href="#services">Services</a>. A Service is a JavaScript object which provides a certain set of methods and can be used just like an Express middleware. The <a href="https://gist.github.com/daffl/6644432" target="_blank">rapid start example</a> creates a simple Todo REST and SocketIO service that maintains a list of todos.</p>
 
               <ul class="nav nav-pills options" id="rapidstart">
                 <li class="active"><a href="#">REST</a></li>
@@ -300,82 +300,8 @@ for service parameters:</p>
 <span class="p">}));</span>
 </pre></div>
 </code></pre>
-<h2 id="api">API</h2>
-<h3 id="listen">listen</h3>
-<p><code>app.listen([port])</code> starts the application on the given port. It will first call the original <a href="http://expressjs.com/api.html#app.listen">Express app.listen([port])</a>, then run <code>app.setup(server)</code> (see below) with the server object and then return the server object.</p>
-<h3 id="setup">setup</h3>
-<p><code>app.setup(server)</code> is used initialize all services by calling each services <code>.setup(app, path)</code> method (if available).
-It will also use the <code>server</code> instance passed (e.g. through <code>http.createServer</code>) to set up SocketIO (if enabled) and any other provider that might require the server instance.</p>
-<p>Normally <code>app.setup</code> will be called automatically when starting the application via <code>app.listen([port])</code> but there are cases when you need to initialize the server separately:</p>
-<p><strong>HTTPS</strong></p>
-<p>With your Feathers application initialized it is easy to set up an HTTPS REST and SocketIO server:</p>
-<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">socketio</span><span class="p">()).</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="nx">todoService</span><span class="p">);</span>
-
-<span class="kd">var</span> <span class="nx">https</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;https&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">https</span><span class="p">.</span><span class="nx">createServer</span><span class="p">({</span>
-  <span class="nx">key</span><span class="o">:</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;privatekey.pem&#39;</span><span class="p">),</span>
-  <span class="nx">cert</span><span class="o">:</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;certificate.pem&#39;</span><span class="p">)</span>
-<span class="p">},</span> <span class="nx">app</span><span class="p">).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">443</span><span class="p">);</span>
-
-<span class="c1">// Call app.setup to initialize all services and SocketIO</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">setup</span><span class="p">(</span><span class="nx">server</span><span class="p">);</span>
-</pre></div>
-</code></pre>
-<p><strong>Virtual Hosts</strong></p>
-<p>You can use <code>feathers.vhost</code> (which is the same as <a href="http://www.senchalabs.org/connect/vhost.html">Express and Connect .vhost</a>) to run your Feathers app on a virtual host:</p>
-<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="nx">todoService</span><span class="p">);</span>
-
-<span class="kd">var</span> <span class="nx">host</span> <span class="o">=</span> <span class="nx">feathers</span><span class="p">().</span><span class="nx">use</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">vhost</span><span class="p">(</span><span class="s1">&#39;foo.com&#39;</span><span class="p">,</span> <span class="nx">app</span><span class="p">));</span>
-<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">host</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
-
-<span class="c1">// Here we need to call app.setup because .listen on our virtal hosted</span>
-<span class="c1">// app is never called</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">setup</span><span class="p">(</span><span class="nx">server</span><span class="p">);</span>
-</pre></div>
-</code></pre>
-<h3 id="lookup">lookup</h3>
-<p><code>app.lookup(path)</code> returns the wrapped service object for the given path. Note that Feathers internally creates a new object from each registered service. This means that the object returned by <code>lookup</code> will provide the same methods and functionality as the original service but also functionality added by Feathers (most notably it is possible to listen to service events). <code>path</code> can be the service name with or without leading and trailing slashes.</p>
-<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/my/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
-  <span class="nx">create</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">});</span>
-
-<span class="kd">var</span> <span class="nx">todoService</span> <span class="o">=</span> <span class="nx">app</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="s1">&#39;my/todos&#39;</span><span class="p">);</span>
-<span class="c1">// todoService is an event emitter</span>
-<span class="nx">todoService</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;created&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Created todo&#39;</span><span class="p">,</span> <span class="nx">todo</span><span class="p">);</span>
-<span class="p">});</span>
-</pre></div>
-</code></pre>
-<h3 id="use">use</h3>
-<p><code>app.use([path], service)</code> works just like <a href="http://expressjs.com/api.html#app.use">Express app.use([path], middleware)</a> but additionally allows to register a service object (an object which at least provides one of the service methods as outlined in the Services section) instead of the middleware function. Note that REST services are registered in the same order as any other middleware so the below example will allow the <code>/todos</code> service only to <a href="http://passportjs.org/">Passport</a> authenticated users.</p>
-<pre><code class="lang-js"><div class="highlight"><pre><span class="c1">// Serve public folder for everybody</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/public&#39;</span><span class="p">);</span>
-<span class="c1">// Make sure that everything else only works with authentication</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">,</span><span class="nx">next</span><span class="p">){</span>
-  <span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">()){</span>
-    <span class="nx">next</span><span class="p">();</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="c1">// 401 Not Authorized</span>
-    <span class="nx">next</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="mi">401</span><span class="p">));</span>
-  <span class="p">}</span>
-<span class="p">});</span>
-<span class="c1">// Add a service.</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
-  <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nx">id</span><span class="o">:</span> <span class="nx">name</span><span class="p">,</span>
-      <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;You have to do &quot;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot;!&quot;</span>
-    <span class="p">});</span>
-  <span class="p">}</span>
-<span class="p">});</span>
-</pre></div>
-</code></pre>
-<h3 id="service">service</h3>
-<p><code>app.service([path], service)</code> is what is called internally by <code>app.use([path], service)</code> if a service object is being passed. Use it instead of <code>app.use([path], service)</code> if you want to be more explicit that you are registering a service. <code>app.service</code> does <strong>not</strong> provide the Express <code>app.use</code> functionality and doesn&#39;t check the service object for valid methods.</p>
 <h2 id="services">Services</h2>
-<p>A service can be any JavaScript object that offers one or more of the <code>find</code>, <code>get</code>, <code>create</code>, <code>update</code>, <code>remove</code> and <code>setup</code> service methods with the following signatures:</p>
+<p>As mentioned, the basic Feathers functionality is fully compatible with Express. The key concept added to that of middleware is *service objects. A service can be any JavaScript object that offers one or more of the <code>find</code>, <code>get</code>, <code>create</code>, <code>update</code>, <code>remove</code> and <code>setup</code> service methods with the following signatures:</p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">myService</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">find</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{},</span>
   <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{},</span>
@@ -387,7 +313,27 @@ It will also use the <code>server</code> instance passed (e.g. through <code>htt
 <span class="p">}</span>
 </pre></div>
 </code></pre>
-<p>All callbacks follow the <code>function(error, data)</code> NodeJS convention. <code>params</code> can contain any additional parameters, for example the currently authenticated user. REST service calls set <code>params.query</code> with the query parameters (e.g. a query string like <code>?status=active&amp;type=user</code> becomes <code>{ query: { status: &quot;active&quot;, type: &quot;user&quot; } }</code>).</p>
+<p>And can be used like any other Express middleware <code>app.use(&#39;/my-service&#39;, myService)</code>.</p>
+<p>All service callbacks follow the <code>function(error, data)</code> NodeJS convention. <code>params</code> can contain any additional parameters, for example the currently authenticated user. REST service calls set <code>params.query</code> with the query parameters (e.g. a query string like <code>?status=active&amp;type=user</code> becomes <code>{ query: { status: &quot;active&quot;, type: &quot;user&quot; } }</code>).</p>
+<p>It is also possible to return a <a href="http://promises-aplus.github.io/promises-spec/">Promise</a> object from a service instead of using the callback, for example using <a href="https://github.com/kriskowal/q">Q</a>:</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">Q</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">todos</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">dfd</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">dfd</span><span class="p">.</span><span class="nx">resolve</span><span class="p">({</span>
+        <span class="nx">id</span><span class="o">:</span> <span class="nx">id</span><span class="p">,</span>
+        <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;You have to do &#39;</span> <span class="o">+</span> <span class="nx">id</span>
+      <span class="p">});</span>
+    <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nx">dfd</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</code></pre>
 <h3 id="find">find</h3>
 <p><code>find(params, callback)</code> retrieves a list of all resources from the service. Ideally use <code>params.query</code> for things like filtering and paging so that REST calls like <code>todo?status=completed&amp;user=10</code> work right out of the box.</p>
 <p><strong>REST</strong></p>
@@ -674,6 +620,80 @@ This can be done by implementing the <code>created</code>, <code>updated</code>,
 <span class="p">});</span>
 </pre></div>
 </code></pre>
+<h2 id="api">API</h2>
+<h3 id="listen">listen</h3>
+<p><code>app.listen([port])</code> starts the application on the given port. It will first call the original <a href="http://expressjs.com/api.html#app.listen">Express app.listen([port])</a>, then run <code>app.setup(server)</code> (see below) with the server object and then return the server object.</p>
+<h3 id="setup">setup</h3>
+<p><code>app.setup(server)</code> is used initialize all services by calling each services <code>.setup(app, path)</code> method (if available).
+It will also use the <code>server</code> instance passed (e.g. through <code>http.createServer</code>) to set up SocketIO (if enabled) and any other provider that might require the server instance.</p>
+<p>Normally <code>app.setup</code> will be called automatically when starting the application via <code>app.listen([port])</code> but there are cases when you need to initialize the server separately:</p>
+<p><strong>HTTPS</strong></p>
+<p>With your Feathers application initialized it is easy to set up an HTTPS REST and SocketIO server:</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">socketio</span><span class="p">()).</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="nx">todoService</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">https</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;https&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">https</span><span class="p">.</span><span class="nx">createServer</span><span class="p">({</span>
+  <span class="nx">key</span><span class="o">:</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;privatekey.pem&#39;</span><span class="p">),</span>
+  <span class="nx">cert</span><span class="o">:</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;certificate.pem&#39;</span><span class="p">)</span>
+<span class="p">},</span> <span class="nx">app</span><span class="p">).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">443</span><span class="p">);</span>
+
+<span class="c1">// Call app.setup to initialize all services and SocketIO</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">setup</span><span class="p">(</span><span class="nx">server</span><span class="p">);</span>
+</pre></div>
+</code></pre>
+<p><strong>Virtual Hosts</strong></p>
+<p>You can use <code>feathers.vhost</code> (which is the same as <a href="http://www.senchalabs.org/connect/vhost.html">Express and Connect .vhost</a>) to run your Feathers app on a virtual host:</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="nx">todoService</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">host</span> <span class="o">=</span> <span class="nx">feathers</span><span class="p">().</span><span class="nx">use</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">vhost</span><span class="p">(</span><span class="s1">&#39;foo.com&#39;</span><span class="p">,</span> <span class="nx">app</span><span class="p">));</span>
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">host</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
+
+<span class="c1">// Here we need to call app.setup because .listen on our virtal hosted</span>
+<span class="c1">// app is never called</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">setup</span><span class="p">(</span><span class="nx">server</span><span class="p">);</span>
+</pre></div>
+</code></pre>
+<h3 id="lookup">lookup</h3>
+<p><code>app.lookup(path)</code> returns the wrapped service object for the given path. Note that Feathers internally creates a new object from each registered service. This means that the object returned by <code>lookup</code> will provide the same methods and functionality as the original service but also functionality added by Feathers (most notably it is possible to listen to service events). <code>path</code> can be the service name with or without leading and trailing slashes.</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/my/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">create</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="kd">var</span> <span class="nx">todoService</span> <span class="o">=</span> <span class="nx">app</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="s1">&#39;my/todos&#39;</span><span class="p">);</span>
+<span class="c1">// todoService is an event emitter</span>
+<span class="nx">todoService</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;created&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Created todo&#39;</span><span class="p">,</span> <span class="nx">todo</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</code></pre>
+<h3 id="use">use</h3>
+<p><code>app.use([path], service)</code> works just like <a href="http://expressjs.com/api.html#app.use">Express app.use([path], middleware)</a> but additionally allows to register a service object (an object which at least provides one of the service methods as outlined in the Services section) instead of the middleware function. Note that REST services are registered in the same order as any other middleware so the below example will allow the <code>/todos</code> service only to <a href="http://passportjs.org/">Passport</a> authenticated users.</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="c1">// Serve public folder for everybody</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/public&#39;</span><span class="p">);</span>
+<span class="c1">// Make sure that everything else only works with authentication</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">,</span><span class="nx">next</span><span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">isAuthenticated</span><span class="p">()){</span>
+    <span class="nx">next</span><span class="p">();</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// 401 Not Authorized</span>
+    <span class="nx">next</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="mi">401</span><span class="p">));</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+<span class="c1">// Add a service.</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">id</span><span class="o">:</span> <span class="nx">name</span><span class="p">,</span>
+      <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;You have to do &quot;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot;!&quot;</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</code></pre>
+<h3 id="service">service</h3>
+<p><code>app.service([path], service)</code> is what is called internally by <code>app.use([path], service)</code> if a service object is being passed. Use it instead of <code>app.use([path], service)</code> if you want to be more explicit that you are registering a service. <code>app.service</code> does <strong>not</strong> provide the Express <code>app.use</code> functionality and doesn&#39;t check the service object for valid methods.</p>
 <h2 id="why-">Why?</h2>
 <p>We know! Oh God another NodeJS framework! We really didn&#39;t want to add another name to the long list of NodeJS web frameworks but also wanted to explore a different approach than any other framework we have seen. We strongly believe that data is the core of the web and should be the focus of web applications.</p>
 <p>We also think that your data resources can and should be encapsulated in such a way that they can be scalable, easily testable and self contained. The classic web MVC pattern used to work well but is becoming antiquated in today&#39;s web.</p>
