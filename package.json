@@ -30,29 +30,30 @@
     "test": "grunt"
   },
   "engines": {
-    "node": "*",
-    "npm": "*"
+    "node": ">= 0.10.0",
+    "npm": ">= 1.3.0"
   },
   "dependencies": {
-    "uberproto": "~1.x",
-    "express": "~4.0.0",
-    "rubberduck": "~1.x",
-    "socket.io": "~0.9.0",
-    "primus-emitter": "~3.x",
-    "primus": "~2.x",
-    "lodash": "~2.4.1",
-    "body-parser": "~1.0.2"
+    "body-parser": "^1.0.2",
+    "express": "^4.0.0",
+    "grunt-release": "^0.5.1",
+    "lodash": "^2.4.1",
+    "primus": "^2.2.1",
+    "primus-emitter": "^3.0.2",
+    "rubberduck": "^1.0.0",
+    "socket.io": "^0.9.0",
+    "uberproto": "^1.1.0"
   },
   "devDependencies": {
-    "grunt": "~0.4.0",
-    "grunt-cli": "~0.1.0",
-    "grunt-contrib-jshint": "~0.x",
-    "grunt-jsbeautifier": "~0.2.0",
-    "grunt-release": "~0.5.0",
-    "grunt-simple-mocha": "~0.4.0",
-    "mocha": "~1.x",
-    "q": "~1.0.1",
-    "request": "~2.x",
-    "socket.io-client": "~0.9.0"
+    "grunt": "^0.4.0",
+    "grunt-cli": "^0.1.0",
+    "grunt-contrib-jshint": "^0.x",
+    "grunt-jsbeautifier": "^0.2.0",
+    "grunt-release": "^0.5.0",
+    "grunt-simple-mocha": "^0.4.0",
+    "mocha": "^1.x",
+    "q": "^1.0.1",
+    "request": "^2.x",
+    "socket.io-client": "^0.9.0"
   }
 }
