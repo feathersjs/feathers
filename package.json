@@ -36,7 +36,6 @@
   "dependencies": {
     "body-parser": "^1.0.2",
     "express": "^4.0.0",
-    "grunt-release": "^0.5.1",
     "lodash": "^2.4.1",
     "primus": "^2.2.1",
     "primus-emitter": "^3.0.2",
@@ -49,7 +48,7 @@
     "grunt-cli": "^0.1.0",
     "grunt-contrib-jshint": "^0.x",
     "grunt-jsbeautifier": "^0.2.0",
-    "grunt-release": "^0.5.0",
+    "grunt-release": "^0.7.0",
     "grunt-simple-mocha": "^0.4.0",
     "mocha": "^1.x",
     "q": "^1.0.1",
