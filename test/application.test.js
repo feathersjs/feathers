@@ -75,9 +75,7 @@ describe('Feathers application', function () {
 
     var app = feathers()
       .configure(feathers.rest())
-      .configure(feathers.socketio(function(io) {
-        io.set('log level', 0);
-      })).use('/todo', todoService);
+      .configure(feathers.socketio()).use('/todo', todoService);
     var server = app.listen(6999).on('listening', function () {
       console.log = oldlog;
 
@@ -151,9 +149,7 @@ describe('Feathers application', function () {
     console.log = function () {};
     var app = feathers()
       .configure(feathers.rest())
-      .configure(feathers.socketio(function(io) {
-        io.set('log level', 0);
-      })).use('/secureTodos', todoService);
+      .configure(feathers.socketio()).use('/secureTodos', todoService);
 
     var httpsServer = https.createServer({
       key: fs.readFileSync(__dirname + '/resources/privatekey.pem'),
@@ -182,7 +178,8 @@ describe('Feathers application', function () {
           assert.equal(data.description, 'You have to do laundry!');
 
           socket.disconnect();
-          httpsServer.close(done);
+          httpsServer.close();
+          done();
         });
       });
     });

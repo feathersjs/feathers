@@ -24,10 +24,9 @@ describe('SocketIO provider', function () {
 
     app = feathers()
       .configure(feathers.socketio(function(io) {
-        io.set('log level', 0);
-        io.set('authorization', function (handshake, callback) {
-          handshake.feathers = socketParams;
-          callback(null, true);
+        io.use(function (socket, next) {
+          socket.feathers = socketParams;
+          next();
         });
       }))
       .use('todo', todoService);
