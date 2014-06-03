@@ -15,18 +15,18 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/feather-errors.git"
+    "url": "git://github.com/feathersjs/feathers-errors.git"
   },
   "bugs": {
-    "url": "https://github.com/feathersjs/feather-errors/issues"
+    "url": "https://github.com/feathersjs/feathers-errors/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/feathersjs/feather-errors/blob/master/LICENSE-MIT"
+      "url": "https://github.com/feathersjs/feathers-errors/blob/master/LICENSE-MIT"
     }
   ],
-  "main": "lib/associations",
+  "main": "lib/errors",
   "engines": {
     "node": ">= 0.10.0"
   },
@@ -46,7 +46,7 @@
     "socket.io-client": "^0.9.16"
   },
   "peerDependencies": {
-    "feathers": ">= 0.3.1"
+    "feathers": "~0.4.0"
   },
   "keywords": [
     "feathers-plugin",
@@ -55,7 +55,7 @@
     "error handling"
   ],
   "dependencies": {
-    "uberproto": "~1.1.1",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "uberproto": "~1.1.1"
   }
 }
