@@ -178,7 +178,8 @@ describe('Feathers application', function () {
           assert.equal(data.description, 'You have to do laundry!');
 
           socket.disconnect();
-          httpsServer.close(done);
+          httpsServer.close();
+          done();
         });
       });
     });
