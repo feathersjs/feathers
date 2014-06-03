@@ -12,13 +12,13 @@ describe('Primus provider', function () {
   var server, socket, app,
     socketParams = {
       user: { name: 'David' },
-      provider: 'socketio'
+      provider: 'sockjs'
     };
 
   before(function () {
     app = feathers()
       .configure(feathers.primus({
-        transformer: 'socket.io'
+        transformer: 'sockjs'
       }, function(primus) {
         socket = new primus.Socket('http://localhost:7888');
 
@@ -33,7 +33,7 @@ describe('Primus provider', function () {
   });
 
   after(function (done) {
-    socket.socket.disconnect();
+    socket.socket.close();
     server.close(done);
   });
 
@@ -64,7 +64,7 @@ describe('Primus provider', function () {
     };
 
     service.remove = function(id, params) {
-      assert.equal(params.provider, 'socketio', 'Handshake parameters have priority');
+      assert.equal(params.provider, 'sockjs', 'Handshake parameters have priority');
       old.remove.apply(this, arguments);
     };
 
