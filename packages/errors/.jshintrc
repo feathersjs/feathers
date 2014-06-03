@@ -1,0 +1,21 @@
+{
+  "globals": {
+    "it": true,
+    "describe": true,
+    "before": true,
+    "after": true,
+    "exports": true
+  },
+  "curly": true,
+  "eqeqeq": true,
+  "immed": true,
+  "latedef": "nofunc",
+  "newcap": true,
+  "noarg": true,
+  "sub": true,
+  "undef": true,
+  "unused": true,
+  "boss": true,
+  "eqnull": true,
+  "node": true
+}
