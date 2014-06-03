@@ -57,7 +57,6 @@ app.configure(feathers.socketio(function(io) {
   io.enable('browser client minification');  // send minified client
   io.enable('browser client etag');          // apply etag caching logic based on version number
   io.enable('browser client gzip');          // gzip the file
-  io.set('log level', 1);                    // reduce logging
 
   // enable all transports (optional if you want flashsocket support, please note that some hosting
   // providers do not allow you to create servers that listen on a port different than 80 or their
@@ -72,6 +71,8 @@ app.configure(feathers.socketio(function(io) {
 }));
 ```
 
+> Note: io.set is deprecated in Socket.IO 1.0. The above configuration will still work but will be replaced with the recommended production configuration for version 1.0 (which isn't available at the moment).
+
 This is also the place to listen to custom events or add [authorization](https://github.com/LearnBoost/socket.io/wiki/Authorizing):
 
 ```js
@@ -83,12 +84,12 @@ app.configure(feathers.socketio(function(io) {
     });
   });
 
-  io.set('authorization', function (handshakeData, callback) {
+  io.use(function (socket, next) {
     // Authorize using the /users service
     app.lookup('users').find({
-      username: handshakeData.username,
-      password: handshakeData.password
-    }, callback);
+      username: socket.request.username,
+      password: socket.request.password
+    }, next);
   });
 }));
 ```
@@ -98,8 +99,9 @@ for service parameters:
 
 ```js
 app.configure(feathers.socketio(function(io) {
-  io.set('authorization', function (handshake, callback) {
-    handshake.feathers.user = { name: 'David' };
+  io.use(function (socket, next) {
+    socket.feathers.user = { name: 'David' };
+    next();
   });
 }));
 
@@ -508,7 +510,7 @@ The following example only dispatches the Todo `updated` event if the authorized
 
 ```js
 app.configure(feathers.socketio(function(io) {
-  io.set('authorization', function (handshake, callback) {
+  io.use(function (socket, callback) {
     // Authorize using the /users service
     app.lookup('users').find({
       username: handshake.username,
@@ -518,7 +520,7 @@ app.configure(feathers.socketio(function(io) {
         return callback(error, false);
       }
 
-      handshake.feathers = {
+      socket.feathers = {
         user: user
       };
 
