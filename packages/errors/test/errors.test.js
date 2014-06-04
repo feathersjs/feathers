@@ -13,6 +13,12 @@ describe('Feathers errors', function () {
     app = feathers().configure(errors());
   });
 
+  it('exposes the api properly', function () {
+    assert.equal(typeof errors.types, 'object', 'exposes error types');
+    assert.equal(typeof errors.handler, 'function', 'exposes error handler');
+    assert.equal(typeof errors.missing, 'function', 'exposes 404 handler');
+  });
+
   it('initializes errors object', function () {
     assert.equal(typeof app.errors, 'object', 'errors got added to the app');
   });
@@ -24,7 +30,7 @@ describe('Feathers errors', function () {
     assert.equal(error.message, 'foo' ,'a general error was created with the correct message');
   });
 
-  it('has all the available errors', function () {
+  it('app has all the available errors', function () {
     assert.notEqual(typeof app.errors.GeneralError, 'undefined', 'has GeneralError');
     assert.notEqual(typeof app.errors.BadRequest, 'undefined', 'has BadRequest');
     assert.notEqual(typeof app.errors.NotAuthenticated, 'undefined', 'has NotAuthenticated');
