@@ -42,7 +42,10 @@ exports.missing = function(req, res, next) {
  * @param  {Object} req - the request object
  * @param  {Object} res - the response object
  * @param  {Function} next - callback to call for next step in middleware chain
+ *
  */
+
+/* jshint unused:false */
 exports.handler = function(err, req, res, next) {
   if (typeof err === 'string' || !(err instanceof errors.AbstractError)) {
     err = new errors.GeneralError(err);
