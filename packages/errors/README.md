@@ -9,39 +9,73 @@ Install the module with: `npm install feathers-errors --save`
 ```js
 var feathers = require('feathers');
 var errors = require('feathers-errors');
+var memory = require('feathers-memory');
 
 var app = feathers().configure(errors())
-  .use('/users', userService)
-  .use('/posts', postsService)
+  .use('/users', memory('users'))
   .use(errors.handler);
 ```
 
 ## Documentation
 
-__Definition and use with REST URIs:__
+__Current Error Types:__
+
+* `GeneralError` - `500`
+* `BadRequest` - `400`
+* `NotAuthenticated` - `401`
+* `Forbidden` - `403`
+* `NotFound` - `404`
+* `Timeout` - `409`
+* `Conflict` - `409`
+* `PaymentError` - `409`
+* `Unprocessable` - `422`
+
+*Pro Tip:* Feathers service adapters (ie. mongodb, memory, etc.) already emit the appropriate errors for you. :-)
+
+__Usage:__
 
 ```js
-// Both associations should only work if there is a /users service registered already
-app.use('/users', userService)
-  .use('/posts', postsService)
-  .use('/accounts', accountService);
+var feathers = require('feathers');
+var errors = require('feathers-errors');
+var app = feathers();
 
-// Pass service name in an array
-// Calls postsService.findAll({ userId: <userId> })
-app.associate('/users/:userId/posts', ['posts']);
+// If you were to create an error yourself.
 
-// Calls userService.get(<userId>) then calls
-// accountService.get(user.account)
-app.associate('/users/:userId/account', 'accounts');
+var userService = {
+  find: function(params, callback) {
+    callback(new this.app.errors.NotFound('User does not exist'));
+
+    // You can also simply do something like this if you
+    // just want to fire back a simple 500 error with your
+    // custom message.
+    // 
+    // callback('A generic server error');
+  },
+
+  setup: function(app){
+    this.app = app;
+  }
+};
+
+app.configure(errors())
+   .use('/users', userService)
+   .use(errors.handler);
 ```
 
-__For SocketIO:__
+__404 Handling__:
+
+We have conveniently created a basic 404 middleware as well. To use it:
 
 ```js
-socket.emit('/users/:userId/posts', { userId: 123 }, function(error, posts) {
-});
-```
+var feathers = require('feathers');
+var errors = require('feathers-errors');
+var app = feathers();
 
+app.configure(errors())
+   .use('/users', userService)
+   .use(errors.missing) // your 404 handler
+   .use(errors.handler);
+```
 
 ## Examples
 See [examples directory](https://github.com/feathersjs/feathers-errors/tree/master/examples).
