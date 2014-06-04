@@ -12,7 +12,7 @@ var errors = require('feathers-errors');
 var memory = require('feathers-memory');
 
 var app = feathers().configure(errors())
-  .use('/users', memory('users'))
+  .use('/users', memory)
   .use(errors.handler);
 ```
 
