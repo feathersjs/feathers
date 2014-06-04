@@ -13,7 +13,17 @@ describe('REST provider', function () {
     var server, app;
 
     before(function () {
-      app = feathers().configure(feathers.rest()).use('todo', todoService);
+      app = feathers().configure(feathers.rest())
+        .use('codes', {
+          get: function(id, params, callback) {
+            callback();
+          },
+
+          create: function(data, params, callback) {
+            callback(null, data);
+          }
+        })
+        .use('todo', todoService);
       server = app.listen(4777);
     });
 
@@ -50,7 +60,7 @@ describe('REST provider', function () {
           'Content-Type': 'application/json'
         }
       }, function (error, response, body) {
-        assert.ok(response.statusCode === 200, 'Got OK status code');
+        assert.ok(response.statusCode === 201, 'Got CREATED status code');
         verify.create(original, JSON.parse(body));
 
         done(error);
@@ -110,6 +120,60 @@ describe('REST provider', function () {
     });
   });
 
+  describe('HTTP status codes', function() {
+    var app;
+    var server;
+
+    before(function() {
+      app = feathers().configure(feathers.rest()).use('todo', {
+        get: function (id, params, callback) {
+          callback(null, { description: 'You have to do ' + id });
+        },
+
+        find: function(params, callback) {
+          callback();
+        }
+      });
+
+      /* jshint ignore:start */
+      // Error handler
+      app.use(function (error, req, res, next) {
+        assert.equal(error.message, 'Method `remove` is not supported by this endpoint.');
+        res.json({ message: error.message });
+      });
+      /* jshint ignore:end */
+
+      server = app.listen(4780);
+    });
+
+    after(function(done) {
+      server.close(done);
+    });
+
+    it('throws a 405 for undefined service methods', function (done) {
+      request('http://localhost:4780/todo/dishes', function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code for .get');
+        assert.deepEqual(JSON.parse(body), { description: 'You have to do dishes' }, 'Got expected object');
+        request({
+          method: 'delete',
+          url: 'http://localhost:4780/todo/2'
+        }, function (error, response, body) {
+          assert.ok(response.statusCode === 405, 'Got 405 for .remove');
+          assert.deepEqual(JSON.parse(body), { message: 'Method `remove` is not supported by this endpoint.' }, 'Error serialized as expected');
+          done();
+        });
+      });
+    });
+
+    it('empty response sets 204 status codes', function(done) {
+      request('http://localhost:4780/todo', function (error, response) {
+        assert.ok(response.statusCode === 204, 'Got empty status code');
+
+        done(error);
+      });
+    });
+  });
+
   it('sets service parameters', function (done) {
     var service = {
       get: function (id, params, callback) {
@@ -138,34 +202,6 @@ describe('REST provider', function () {
       assert.ok(response.statusCode === 200, 'Got OK status code');
       assert.deepEqual(JSON.parse(body), expected, 'Got params object back');
       server.close(done);
-    });
-  });
-
-  it('throws a 405 for undefined service methods', function (done) {
-    var app = feathers().configure(feathers.rest()).use('todo', {
-      get: function (id, params, callback) {
-        callback(null, { description: 'You have to do ' + id });
-      }
-    });
-
-    /* jshint ignore:start */
-    // Error handler
-    app.use(function (error, req, res, next) {
-      assert.equal(error.message, 'Method `find` is not supported by this endpoint.');
-      res.json({ message: error.message });
-    });
-    /* jshint ignore:end */
-
-    var server = app.listen(4777);
-
-    request('http://localhost:4777/todo/dishes', function (error, response, body) {
-      assert.ok(response.statusCode === 200, 'Got OK status code for .get');
-      assert.deepEqual(JSON.parse(body), { description: 'You have to do dishes' }, 'Got expected object');
-      request('http://localhost:4777/todo', function (error, response, body) {
-        assert.ok(response.statusCode === 405, 'Got 405 for .find');
-        assert.deepEqual(JSON.parse(body), { message: 'Method `find` is not supported by this endpoint.' }, 'Error serialized as expected');
-        server.close(done);
-      });
     });
   });
 
