@@ -1,4 +1,4 @@
-# feathers-errors [![Build Status](https://secure.travis-ci.org/feathersjs/feathers-errors.png?branch=master)](http://travis-ci.org/feathersjs/feathers-errors)
+# feathers-errors [![Build Status](https://travis-ci.org/feathersjs/feathers-errors.svg?branch=master)](https://travis-ci.org/feathersjs/feathers-errors)
 
 > Error handling mixin for Feathers apps.
 
