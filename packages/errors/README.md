@@ -20,15 +20,15 @@ var app = feathers().configure(errors())
 
 #### Current Error Types:
 
-* `GeneralError` -> `500`
-* `BadRequest` -> `400`
-* `NotAuthenticated` -> `401`
-* `Forbidden` -> `403`
-* `NotFound` -> `404`
-* `Timeout` -> `409`
-* `Conflict` -> `409`
-* `PaymentError` -> `409`
-* `Unprocessable` -> `422`
+* `GeneralError`: __500__
+* `BadRequest`: __400__
+* `NotAuthenticated`: __401__
+* `Forbidden`: __403__
+* `NotFound`: __404__
+* `Timeout`: __409__
+* `Conflict`: __409__
+* `PaymentError`: __409__
+* `Unprocessable`: __422__
 
 **Pro Tip:** Feathers service adapters (ie. mongodb, memory, etc.) already emit the appropriate errors for you. :-)
 
