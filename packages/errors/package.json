@@ -1,7 +1,7 @@
 {
   "name": "feathers-errors",
   "description": "Convenient error handling for Feathers services.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/feathersjs/feathers-errors",
   "author": {
     "name": "Eric Kryski",
