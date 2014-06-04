@@ -1,6 +1,6 @@
 # feathers-errors [![Build Status](https://secure.travis-ci.org/feathersjs/feathers-errors.png?branch=master)](http://travis-ci.org/feathersjs/feathers-errors)
 
-> Error handling mixin for Feathers services.
+> Error handling mixin for Feathers apps.
 
 ## Getting Started
 
@@ -10,7 +10,7 @@ Install the module with: `npm install feathers-errors --save`
 var feathers = require('feathers');
 var errors = require('feathers-errors');
 
-var app = feathers().configure(errors)
+var app = feathers().configure(errors())
   .use('/users', userService)
   .use('/posts', postsService)
   .use(errors.handler);
