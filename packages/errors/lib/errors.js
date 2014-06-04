@@ -23,6 +23,8 @@ exports = module.exports = function () {
   };
 };
 
+exports.types = errors;
+
 /**
  * Convenience method for a 404 middleware
  * See http://expressjs.com/guide.html#error-handling
