@@ -47,33 +47,28 @@ describe('Primus provider', function () {
     };
 
     service.find = function(params) {
-      assert.deepEqual(params, socketParams, 'Handshake parameters passed on proper position');
+      assert.deepEqual(_.omit(params, 'query'), socketParams, 'Handshake parameters passed on proper position');
       old.find.apply(this, arguments);
     };
 
     service.create = function(data, params) {
-      assert.deepEqual(params, socketParams, 'Passed handshake parameters');
+      assert.deepEqual(_.omit(params, 'query'), socketParams, 'Passed handshake parameters');
       old.create.apply(this, arguments);
     };
 
     service.update = function(id, data, params) {
-      assert.deepEqual(params, _.extend(socketParams, {
-        test: 'param'
-      }), 'Extended handshake paramters with original');
+      assert.deepEqual(params, _.extend({
+        query: {
+          test: 'param'
+        }
+      }, socketParams), 'Passed handshake parameters as query');
       old.update.apply(this, arguments);
-    };
-
-    service.remove = function(id, params) {
-      assert.equal(params.provider, 'sockjs', 'Handshake parameters have priority');
-      old.remove.apply(this, arguments);
     };
 
     socket.send('todo::create', {}, {}, function () {
       socket.send('todo::update', 1, {}, { test: 'param' }, function() {
-        socket.send('todo::remove', 1, { provider: 'something' }, function() {
-          _.extend(service, old);
-          done();
-        });
+        _.extend(service, old);
+        done();
       });
     });
   });
