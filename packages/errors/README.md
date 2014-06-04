@@ -18,7 +18,7 @@ var app = feathers().configure(errors())
 
 ## Documentation
 
-__Current Error Types:__
+#### Current Error Types:
 
 * `GeneralError` - `500`
 * `BadRequest` - `400`
@@ -30,9 +30,9 @@ __Current Error Types:__
 * `PaymentError` - `409`
 * `Unprocessable` - `422`
 
-*Pro Tip:* Feathers service adapters (ie. mongodb, memory, etc.) already emit the appropriate errors for you. :-)
+**Pro Tip:** Feathers service adapters (ie. mongodb, memory, etc.) already emit the appropriate errors for you. :-)
 
-__Usage:__
+#### Usage:
 
 ```js
 var feathers = require('feathers');
