@@ -20,15 +20,15 @@ var app = feathers().configure(errors())
 
 #### Current Error Types:
 
-* `GeneralError` - `500`
-* `BadRequest` - `400`
-* `NotAuthenticated` - `401`
-* `Forbidden` - `403`
-* `NotFound` - `404`
-* `Timeout` - `409`
-* `Conflict` - `409`
-* `PaymentError` - `409`
-* `Unprocessable` - `422`
+* `GeneralError` -> `500`
+* `BadRequest` -> `400`
+* `NotAuthenticated` -> `401`
+* `Forbidden` -> `403`
+* `NotFound` -> `404`
+* `Timeout` -> `409`
+* `Conflict` -> `409`
+* `PaymentError` -> `409`
+* `Unprocessable` -> `422`
 
 **Pro Tip:** Feathers service adapters (ie. mongodb, memory, etc.) already emit the appropriate errors for you. :-)
 
@@ -39,10 +39,10 @@ var feathers = require('feathers');
 var errors = require('feathers-errors');
 var app = feathers();
 
-// If you were to create an error yourself.
-
 var userService = {
   find: function(params, callback) {
+
+    // If you were to create an error yourself.
     callback(new this.app.errors.NotFound('User does not exist'));
 
     // You can also simply do something like this if you
@@ -62,7 +62,7 @@ app.configure(errors())
    .use(errors.handler);
 ```
 
-__404 Handling__:
+#### 404 Handling:
 
 We have conveniently created a basic 404 middleware as well. To use it:
 
@@ -84,7 +84,9 @@ See [examples directory](https://github.com/feathersjs/feathers-errors/tree/mast
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-_(Nothing yet)_
+__0.1.0__
+
+- Initial release
 
 ## License
 Copyright (c) 2014 [Eric Kryski](https://github.com/ekryski)
