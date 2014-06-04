@@ -86,7 +86,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 ## Release History
 __0.1.1__
 
-- Exposing error types directly via `var types = require('feathers-errors').types;
+- Exposing error types directly via `var types = require('feathers-errors').types;`
 
 __0.1.0__
 
