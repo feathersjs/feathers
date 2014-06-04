@@ -191,7 +191,7 @@ var myService = {
 
 And can be used like any other Express middleware `app.use('/my-service', myService)`.
 
-All service callbacks follow the `function(error, data)` NodeJS convention. `params` can contain any additional parameters, for example the currently authenticated user. REST service calls set `params.query` with the query parameters (e.g. a query string like `?status=active&type=user` becomes `{ query: { status: "active", type: "user" } }`).
+All service callbacks follow the `function(error, data)` NodeJS convention. `params` can contain any additional parameters, for example the currently authenticated user. REST service calls set `params.query` with the query parameters (e.g. a query string like `?status=active&type=user` becomes `{ query: { status: "active", type: "user" } }`), socket call parameters will also be passed as `params.query`.
 
 It is also possible to return a [Promise](http://promises-aplus.github.io/promises-spec/) object from a service instead of using the callback, for example using [Q](https://github.com/kriskowal/q):
 
@@ -216,7 +216,7 @@ var todos = {
 
 ### find
 
-`find(params, callback)` retrieves a list of all resources from the service. Ideally use `params.query` for things like filtering and paging so that REST calls like `todo?status=completed&user=10` work right out of the box.
+`find(params, callback)` retrieves a list of all resources from the service. SocketIO parameters will be passed as `params.query` to the service.
 
 __REST__
 
@@ -226,13 +226,13 @@ __SocketIO__
 
 ```js
 socket.emit('todo::find', {
-  query: {
-    status: 'completed'
-    user: 10
-  }
+  status: 'completed'
+  user: 10
 }, function(error, data) {
 });
 ```
+
+> Will call .create with `params` { query: { status: 'completed', user: 10 } }
 
 ### get
 
