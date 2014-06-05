@@ -67,8 +67,11 @@ exports.handler = function(err, req, res, next) {
         return res.send(err);
       }
 
-      var errorPath = req.app.get('redirect') + err.className;
-      res.redirect(errorPath);
+      if (err.code === 404) {
+        res.redirect('/404');
+      }
+
+      res.redirect('/500');
     },
 
     'application/json': function(){
