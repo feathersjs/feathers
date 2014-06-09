@@ -8,8 +8,25 @@
 
 'use strict';
 
-var _ = require('lodash');
+var fs = require('fs');
+var path = require('path');
 var errors = require('./error-types');
+var html = fs.readFileSync(path.resolve(__dirname, '..', 'public/error.html')).toString();
+
+/**
+* Escape the given string of `html`.
+*
+* @param {String} html
+* @return {String}
+* @api private
+*/
+var escapeHTML = function(html){
+  return String(html)
+    .replace(/&(?!\w+;)/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+};
 
 exports = module.exports = function () {
   return function () {
@@ -62,20 +79,39 @@ exports.handler = function(err, req, res, next) {
   }
 
   res.format({
-    'text/html': function(){
-      if(req.app.settings.env === 'development') {
-        return res.send(err);
+    'text/html': function(){        
+      // If we have a rendering engine don't show the
+      // default feathers error page.
+      if (req.app.get('view engine') !== undefined) {
+        if (err.code === 404) {
+          return res.redirect('/404');
+        }
+
+        return res.redirect('/500');
       }
 
-      if (err.code === 404) {
-        res.redirect('/404');
-      }
+      var stack = (err.stack || '')
+          .split('\n')
+          .slice(1)
+          .map(function(v) {
+             return '<li>' + v + '</li>';
+           })
+          .join('');
 
-      res.redirect('/500');
+      var errorPage = html
+          .replace('{stack}', stack)
+          .replace('{title}', err.message)
+          .replace('{statusCode}', err.code)
+          .replace(/\{error\}/g, escapeHTML(err.toString().replace(/\n/g, '<br/>')));
+      res.send(errorPage);
     },
 
     'application/json': function(){
-      res.json(_.pick(err, 'message', 'name', 'code', 'className'));
+      res.json({
+        'code': err.code,
+        'name': err.name,
+        'message': err.message
+      });
     },
 
     'text/plain': function(){
