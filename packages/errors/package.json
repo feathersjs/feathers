@@ -54,8 +54,5 @@
     "errors",
     "error handling"
   ],
-  "dependencies": {
-    "lodash": "~2.4.1",
-    "uberproto": "~1.1.1"
-  }
+  "dependencies": {}
 }
