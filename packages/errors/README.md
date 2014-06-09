@@ -84,6 +84,14 @@ See [examples directory](https://github.com/feathersjs/feathers-errors/tree/mast
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+__0.1.3__
+
+- Adding a default error page
+
+__0.1.2__
+
+- Minor bug fixes
+
 __0.1.1__
 
 - Exposing error types directly via `var types = require('feathers-errors').types;`
