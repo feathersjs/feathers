@@ -210,4 +210,34 @@ describe('Feathers application', function () {
       });
     });
   });
+
+  it('extend params with route params (#76)', function (done) {
+    var todoService = {
+      get: function (id, params, callback) {
+        var result = {
+          id: id,
+          appId: params.appId
+        };
+        callback(null, result);
+      }
+    };
+
+    var app = feathers()
+      .configure(feathers.rest())
+      .use('/:appId/todo', todoService);
+
+    var expected = {
+      id: "dishes",
+      appId: "theApp"
+    };
+
+    var server = app.listen(6880).on('listening', function () {
+      request('http://localhost:6880/theApp/todo/' + expected.id, function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        assert.deepEqual(expected, JSON.parse(body));
+        server.close(done);
+      });
+    });
+  });
+
 });

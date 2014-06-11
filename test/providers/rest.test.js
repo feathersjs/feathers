@@ -3,6 +3,7 @@
 var request = require('request');
 var assert = require('assert');
 var feathers = require('../../lib/feathers');
+var bodyParser = require('body-parser');
 
 var fixture = require('./service-fixture');
 var todoService = fixture.Service;
@@ -14,6 +15,7 @@ describe('REST provider', function () {
 
     before(function () {
       app = feathers().configure(feathers.rest())
+        .use(bodyParser())
         .use('codes', {
           get: function(id, params, callback) {
             callback();
@@ -237,6 +239,7 @@ describe('REST provider', function () {
       next();
     })
     .configure(feathers.rest())
+    .use(bodyParser())
     .use('/todo', {
       create: function (data, params, callback) {
         callback(null, data);
