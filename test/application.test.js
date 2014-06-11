@@ -260,7 +260,7 @@ describe('Feathers application', function () {
         app.use('/dummy', todoService);
         done(new Error('Should throw an error'));
       } catch(e) {
-        done();
+        server.close(done);
       }
     });
   });
