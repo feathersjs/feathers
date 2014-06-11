@@ -240,4 +240,28 @@ describe('Feathers application', function () {
     });
   });
 
+  it('throws a warning when trying to register a service after application setup (#67)', function(done) {
+    var todoService = {
+      get: function (name, params, callback) {
+        callback(null, {
+          id: name,
+          q: true,
+          description: "You have to do " + name + "!"
+        });
+      }
+    };
+    var app = feathers()
+      .configure(feathers.rest())
+      .use('/todo', todoService);
+
+    var server = app.listen();
+    server.on('listening', function() {
+      try {
+        app.use('/dummy', todoService);
+        done(new Error('Should throw an error'));
+      } catch(e) {
+        done();
+      }
+    });
+  });
 });
