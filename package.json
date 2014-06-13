@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "express": "^4.0.0",
-    "feathers-errors": ">=0.1.4",
+    "feathers-errors": ">=0.1.5",
     "lodash": "^2.4.1",
     "primus": "^2.2.1",
     "primus-emitter": "^3.0.2",
