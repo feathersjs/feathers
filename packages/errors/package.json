@@ -45,9 +45,6 @@
     "supertest": "~0.9.0",
     "socket.io-client": "^0.9.16"
   },
-  "peerDependencies": {
-    "feathers": "~0.4.0"
-  },
   "keywords": [
     "feathers-plugin",
     "feathers",
