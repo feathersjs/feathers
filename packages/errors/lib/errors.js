@@ -8,6 +8,7 @@
 
 'use strict';
 
+var _ = require('lodash');
 var fs = require('fs');
 var path = require('path');
 var errors = require('./error-types');
@@ -28,29 +29,15 @@ var escapeHTML = function(html){
     .replace(/"/g, '&quot;');
 };
 
-exports = module.exports = function () {
-  return function () {
-    var app = this;
-
-    // Enable the errors Plugin
-    app.enable('feathers errors');
-
-    // Set the available errors on the app for convenience
-    app.errors = errors;
-  };
-};
-
-exports.types = errors;
-
 /**
- * Convenience method for a 404 middleware
+ * Method for a 404 middleware
  * See http://expressjs.com/guide.html#error-handling
  * @param  {Error} err - An error
  * @param  {Object} req - the request object
  * @param  {Object} res - the response object
  * @param  {Function} next - callback to call for next step in middleware chain
  */
-exports.missing = function(req, res, next) {
+var fourOhFour = function(req, res, next) {
   next(new errors.NotFound('Page not found.'));
 };
 
@@ -65,7 +52,7 @@ exports.missing = function(req, res, next) {
  */
 
 /* jshint unused:false */
-exports.handler = function(err, req, res, next) {
+var handler = function(err, req, res, next) {
   if (typeof err === 'string' || !(err instanceof errors.AbstractError)) {
     err = new errors.GeneralError(err);
   }
@@ -82,6 +69,8 @@ exports.handler = function(err, req, res, next) {
     'text/html': function(){        
       // If we have a rendering engine don't show the
       // default feathers error page.
+      // TODO (EK): We should let people specify this instead
+      // of making a shitty assumption.
       if (req.app.get('view engine') !== undefined) {
         if (err.code === 404) {
           return res.redirect('/404');
@@ -119,3 +108,32 @@ exports.handler = function(err, req, res, next) {
     }
   });
 };
+
+exports = module.exports = function (config) {
+  if (typeof config === 'function') {
+    handler = config;
+    config = {};
+  }
+
+  config = _.defaults({}, config, {
+    handler: handler,
+    fourOhFour: fourOhFour
+  });
+
+  return function () {
+    var app = this;
+
+    // Enable the errors Plugin
+    app.enable('feathers errors');
+
+    // Set the error handlers
+    app.use(config.fourOhFour).use(config.handler);
+
+    // Set the available errors on the app for convenience
+    app.errors = errors;
+  };
+};
+
+exports.fourOhFour = fourOhFour;
+exports.handler = handler;
+exports.types = errors;

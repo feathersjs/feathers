@@ -1,5 +1,4 @@
 var feathers = require('feathers');
-var errors = require('../lib/errors');
 var app = feathers();
 
 var userService = {
@@ -17,10 +16,8 @@ var userService = {
   }
 };
 
-app.configure(errors())
-   .use('/users', userService)
-   .use(errors.missing)
-   .use(errors.handler);
+app.use('/users', userService)
+   .configure(feathers.errors());
 
 app.listen(8080);
 

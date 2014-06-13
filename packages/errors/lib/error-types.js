@@ -22,12 +22,16 @@ function createError(errorName, code, className) {
   errorFn.prototype.className = className;
 }
 
-createError('GeneralError', 500, 'error');
 createError('BadRequest', 400, 'bad-request');
 createError('NotAuthenticated', 401, 'not-authenticated');
+createError('PaymentError', 402, 'payment-error');
 createError('Forbidden', 403, 'forbidden');
 createError('NotFound', 404, 'not-found');
-createError('Timeout', 409, 'timeout');
+createError('MethodNotAllowed', 405, 'method-not-allowed');
+createError('NotAcceptable', 406, 'not-acceptable');
+createError('Timeout', 408, 'timeout');
 createError('Conflict', 409, 'conflict');
-createError('PaymentError', 409, 'payment-error');
 createError('Unprocessable', 422, 'unprocessable');
+createError('GeneralError', 500, 'error');
+createError('NotImplemented', 501, 'not-implemented');
+createError('Unavailable', 503, 'unavailable');
