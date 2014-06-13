@@ -4,7 +4,7 @@
 
 ## Getting Started
 
-Feathers erros comes with feathers by default. So typically you don't need to install it at all. However you can also use `feathers-errors` with express directly as well. In that case you install the module with: `npm install feathers-errors --save`
+Feathers errors come with feathers by default. So typically you don't need to install it at all. However you can also use `feathers-errors` with express directly as well. In that case you install the module with: `npm install feathers-errors --save`
 
 #### With Feathers
 
