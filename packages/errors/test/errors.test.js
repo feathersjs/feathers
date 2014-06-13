@@ -16,7 +16,7 @@ describe('Feathers errors', function () {
   it('exposes the api properly', function () {
     assert.equal(typeof errors.types, 'object', 'exposes error types');
     assert.equal(typeof errors.handler, 'function', 'exposes error handler');
-    assert.equal(typeof errors.missing, 'function', 'exposes 404 handler');
+    assert.equal(typeof errors.fourOhFour, 'function', 'exposes 404 handler');
   });
 
   it('initializes errors object', function () {
@@ -31,15 +31,19 @@ describe('Feathers errors', function () {
   });
 
   it('app has all the available errors', function () {
-    assert.notEqual(typeof app.errors.GeneralError, 'undefined', 'has GeneralError');
     assert.notEqual(typeof app.errors.BadRequest, 'undefined', 'has BadRequest');
     assert.notEqual(typeof app.errors.NotAuthenticated, 'undefined', 'has NotAuthenticated');
+    assert.notEqual(typeof app.errors.PaymentError, 'undefined', 'has PaymentError');
     assert.notEqual(typeof app.errors.Forbidden, 'undefined', 'has Forbidden');
     assert.notEqual(typeof app.errors.NotFound, 'undefined', 'has NotFound');
+    assert.notEqual(typeof app.errors.MethodNotAllowed, 'undefined', 'has MethodNotAllowed');
+    assert.notEqual(typeof app.errors.NotAcceptable, 'undefined', 'has NotAcceptable');
     assert.notEqual(typeof app.errors.Timeout, 'undefined', 'has Timeout');
     assert.notEqual(typeof app.errors.Conflict, 'undefined', 'has Conflict');
-    assert.notEqual(typeof app.errors.PaymentError, 'undefined', 'has PaymentError');
     assert.notEqual(typeof app.errors.Unprocessable, 'undefined', 'has Unprocessable');
+    assert.notEqual(typeof app.errors.GeneralError, 'undefined', 'has GeneralError');
+    assert.notEqual(typeof app.errors.NotImplemented, 'undefined', 'has NotImplemented');
+    assert.notEqual(typeof app.errors.Unavailable, 'undefined', 'has Unavailable');
   });
 
   it.skip('error handler catches errors', function () {
