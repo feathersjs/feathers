@@ -17,8 +17,9 @@ var bodyParser = require('body-parser');
 
 app.configure(feathers.rest())
   .use(bodyParser())
-  .use(function(req, res) {
+  .use(function(req, res, next) {
     req.feathers.data = 'Hello world';
+    next();
   });
 
 app.use('/:app/todos', {
