@@ -164,8 +164,9 @@
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">rest</span><span class="p">())</span>
   <span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">bodyParser</span><span class="p">())</span>
-  <span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">req</span><span class="p">.</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="s1">&#39;Hello world&#39;</span><span class="p">;</span>
+    <span class="nx">next</span><span class="p">();</span>
   <span class="p">});</span>
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/:app/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
