@@ -158,15 +158,20 @@
 <p>If you are not familiar with Express head over to the <a href="http://expressjs.com/guide.html">Express Guides</a> to get an idea. Feathers works the exact same way except that <code>var app = require(&#39;express&#39;)();</code> is replaced with <code>var app = require(&#39;feathers&#39;)()</code>. The most important concept that Feathers adds to Express middleware is data oriented <strong>Services</strong>. How services work and the API additional to the available <a href="http://expressjs.com/api.html">Express API</a> is outlined in the following documentation.</p>
 <h2 id="configuration">Configuration</h2>
 <h3 id="rest">REST</h3>
-<p>In almost every case you want to exposes your services through a RESTful JSON interface. This can be achieved by calling <code>app.configure(feathers.rest())</code>.</p>
-<p>To set service parameters in a middleware, just attach it to the <code>req.feathers</code> object which will become the params for any resulting service call:</p>
-<pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">rest</span><span class="p">()).</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">req</span><span class="p">.</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="s1">&#39;Hello world&#39;</span><span class="p">;</span>
-<span class="p">});</span>
+<p>In almost every case you want to exposes your services through a RESTful JSON interface. This can be achieved by calling <code>app.configure(feathers.rest())</code>. Note that you will have to provide your own body parser middleware like the standard <a href="https://github.com/expressjs/body-parser">Express 4 body-parser</a> to make REST <code>.create</code>, <code>.update</code> and <code>.patch</code> calls pass the parsed data.</p>
+<p>To set service parameters in a middleware, just attach it to the <code>req.feathers</code> object which will become the params for any resulting service call. It is also possible to use URL parameters for REST API calls which will also be added to the params object:</p>
+<pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">bodyParser</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;body-parser&#39;</span><span class="p">);</span>
 
-<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">rest</span><span class="p">())</span>
+  <span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">bodyParser</span><span class="p">())</span>
+  <span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">req</span><span class="p">.</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="s1">&#39;Hello world&#39;</span><span class="p">;</span>
+  <span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/:app/todos&#39;</span><span class="p">,</span> <span class="p">{</span>
   <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span> <span class="c1">// -&gt; &#39;Hello world&#39;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">app</span><span class="p">);</span> <span class="c1">// will be `my` for GET /my/todos/dishes</span>
     <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
       <span class="nx">id</span><span class="o">:</span> <span class="nx">name</span><span class="p">,</span>
       <span class="nx">params</span><span class="o">:</span> <span class="nx">params</span><span class="p">,</span>
@@ -198,7 +203,6 @@
   <span class="nx">io</span><span class="p">.</span><span class="nx">enable</span><span class="p">(</span><span class="s1">&#39;browser client minification&#39;</span><span class="p">);</span>  <span class="c1">// send minified client</span>
   <span class="nx">io</span><span class="p">.</span><span class="nx">enable</span><span class="p">(</span><span class="s1">&#39;browser client etag&#39;</span><span class="p">);</span>          <span class="c1">// apply etag caching logic based on version number</span>
   <span class="nx">io</span><span class="p">.</span><span class="nx">enable</span><span class="p">(</span><span class="s1">&#39;browser client gzip&#39;</span><span class="p">);</span>          <span class="c1">// gzip the file</span>
-  <span class="nx">io</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;log level&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>                    <span class="c1">// reduce logging</span>
 
   <span class="c1">// enable all transports (optional if you want flashsocket support, please note that some hosting</span>
   <span class="c1">// providers do not allow you to create servers that listen on a port different than 80 or their</span>
@@ -213,6 +217,9 @@
 <span class="p">}));</span>
 </pre></div>
 </code></pre>
+<blockquote>
+<p>Note: io.set is deprecated in Socket.IO 1.0. The above configuration will still work but will be replaced with the recommended production configuration for version 1.0 (which isn&#39;t available at the moment).</p>
+</blockquote>
 <p>This is also the place to listen to custom events or add <a href="https://github.com/LearnBoost/socket.io/wiki/Authorizing">authorization</a>:</p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">socketio</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">io</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">io</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;connection&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">socket</span><span class="p">)</span> <span class="p">{</span>
@@ -222,12 +229,12 @@
     <span class="p">});</span>
   <span class="p">});</span>
 
-  <span class="nx">io</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;authorization&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">handshakeData</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">io</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">socket</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Authorize using the /users service</span>
     <span class="nx">app</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">({</span>
-      <span class="nx">username</span><span class="o">:</span> <span class="nx">handshakeData</span><span class="p">.</span><span class="nx">username</span><span class="p">,</span>
-      <span class="nx">password</span><span class="o">:</span> <span class="nx">handshakeData</span><span class="p">.</span><span class="nx">password</span>
-    <span class="p">},</span> <span class="nx">callback</span><span class="p">);</span>
+      <span class="nx">username</span><span class="o">:</span> <span class="nx">socket</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">username</span><span class="p">,</span>
+      <span class="nx">password</span><span class="o">:</span> <span class="nx">socket</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">password</span>
+    <span class="p">},</span> <span class="nx">next</span><span class="p">);</span>
   <span class="p">});</span>
 <span class="p">}));</span>
 </pre></div>
@@ -235,8 +242,9 @@
 <p>Similar than the REST middleware, the SocketIO handshakes <code>feathers</code> property will be extended
 for service parameters:</p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">socketio</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">io</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">io</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;authorization&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">handshake</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">handshake</span><span class="p">.</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">user</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;David&#39;</span> <span class="p">};</span>
+  <span class="nx">io</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">socket</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">socket</span><span class="p">.</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">user</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;David&#39;</span> <span class="p">};</span>
+    <span class="nx">next</span><span class="p">();</span>
   <span class="p">});</span>
 <span class="p">}));</span>
 
@@ -314,7 +322,7 @@ for service parameters:</p>
 </pre></div>
 </code></pre>
 <p>And can be used like any other Express middleware <code>app.use(&#39;/my-service&#39;, myService)</code>.</p>
-<p>All service callbacks follow the <code>function(error, data)</code> NodeJS convention. <code>params</code> can contain any additional parameters, for example the currently authenticated user. REST service calls set <code>params.query</code> with the query parameters (e.g. a query string like <code>?status=active&amp;type=user</code> becomes <code>{ query: { status: &quot;active&quot;, type: &quot;user&quot; } }</code>).</p>
+<p>All service callbacks follow the <code>function(error, data)</code> NodeJS convention. <code>params</code> can contain any additional parameters, for example the currently authenticated user. REST service calls set <code>params.query</code> with the query parameters (e.g. a query string like <code>?status=active&amp;type=user</code> becomes <code>{ query: { status: &quot;active&quot;, type: &quot;user&quot; } }</code>), socket call parameters will also be passed as <code>params.query</code>.</p>
 <p>It is also possible to return a <a href="http://promises-aplus.github.io/promises-spec/">Promise</a> object from a service instead of using the callback, for example using <a href="https://github.com/kriskowal/q">Q</a>:</p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">Q</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">);</span>
 
@@ -335,21 +343,22 @@ for service parameters:</p>
 </pre></div>
 </code></pre>
 <h3 id="find">find</h3>
-<p><code>find(params, callback)</code> retrieves a list of all resources from the service. Ideally use <code>params.query</code> for things like filtering and paging so that REST calls like <code>todo?status=completed&amp;user=10</code> work right out of the box.</p>
+<p><code>find(params, callback)</code> retrieves a list of all resources from the service. SocketIO parameters will be passed as <code>params.query</code> to the service.</p>
 <p><strong>REST</strong></p>
 <pre><code><div class="highlight"><pre><span class="nx">GET</span> <span class="nx">todo</span><span class="o">?</span><span class="nx">status</span><span class="o">=</span><span class="nx">completed</span><span class="o">&amp;</span><span class="nx">user</span><span class="o">=</span><span class="mi">10</span>
 </pre></div>
 </code></pre>
 <p><strong>SocketIO</strong></p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;todo::find&#39;</span><span class="p">,</span> <span class="p">{</span>
-  <span class="nx">query</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">status</span><span class="o">:</span> <span class="s1">&#39;completed&#39;</span>
-    <span class="nx">user</span><span class="o">:</span> <span class="mi">10</span>
-  <span class="p">}</span>
+  <span class="nx">status</span><span class="o">:</span> <span class="s1">&#39;completed&#39;</span>
+  <span class="nx">user</span><span class="o">:</span> <span class="mi">10</span>
 <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
 <span class="p">});</span>
 </pre></div>
 </code></pre>
+<blockquote>
+<p>Will call .create with <code>params</code> { query: { status: &#39;completed&#39;, user: 10 } }</p>
+</blockquote>
 <h3 id="get">get</h3>
 <p><code>get(id, params, callback)</code> retrieves a single resource with the given <code>id</code> from the service.</p>
 <p><strong>REST</strong></p>
@@ -575,7 +584,7 @@ This can be done by implementing the <code>created</code>, <code>updated</code>,
 <p>The event dispatching service methods will be run for every connected client. Calling the callback with data (that you also may modify) will dispatch the according event. Callling back with a falsy value will prevent the event being dispatched to this client.</p>
 <p>The following example only dispatches the Todo <code>updated</code> event if the authorized user belongs to the same company:</p>
 <pre><code class="lang-js"><div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">socketio</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">io</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">io</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;authorization&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">handshake</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">io</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">socket</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Authorize using the /users service</span>
     <span class="nx">app</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">({</span>
       <span class="nx">username</span><span class="o">:</span> <span class="nx">handshake</span><span class="p">.</span><span class="nx">username</span><span class="p">,</span>
@@ -585,7 +594,7 @@ This can be done by implementing the <code>created</code>, <code>updated</code>,
         <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
       <span class="p">}</span>
 
-      <span class="nx">handshake</span><span class="p">.</span><span class="nx">feathers</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">socket</span><span class="p">.</span><span class="nx">feathers</span> <span class="o">=</span> <span class="p">{</span>
         <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span>
       <span class="p">};</span>
 
