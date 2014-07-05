@@ -53,7 +53,9 @@ var fourOhFour = function(req, res, next) {
 
 /* jshint unused:false */
 var handler = function(err, req, res, next) {
-  if (typeof err === 'string' || !(err instanceof errors.AbstractError)) {
+  console.log('ERR', typeof err);
+    
+  if (typeof err === 'string') {
     err = new errors.GeneralError(err);
   }
 
@@ -61,8 +63,8 @@ var handler = function(err, req, res, next) {
 
   res.status(statusCode);
 
-  if (req.app.log === 'function') {
-    req.app.log(req.url, err.stack || err);
+  if (typeof req.app.error === 'function') {
+    req.app.error(req.url, err.stack || err);
   }
 
   res.format({
