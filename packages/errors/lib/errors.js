@@ -53,10 +53,16 @@ var fourOhFour = function(req, res, next) {
 
 /* jshint unused:false */
 var handler = function(err, req, res, next) {
-  console.log('ERR', typeof err);
-    
   if (typeof err === 'string') {
     err = new errors.GeneralError(err);
+  }
+  else if (!(err instanceof errors.AbstractError)) {
+    var oldError = err;
+    err = new errors.GeneralError(oldError.message);
+
+    if (oldError.stack) {
+      err.stack = oldError.stack;
+    }
   }
 
   var statusCode = typeof err.code === 'number' ? err.code : 500;
