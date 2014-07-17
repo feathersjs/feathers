@@ -117,6 +117,10 @@ See [examples directory](https://github.com/feathersjs/feathers-errors/tree/mast
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+__0.2.0__
+
+- Adding support for mongoose errors [Issue #5](https://github.com/feathersjs/feathers-errors/issues/5).
+
 __0.1.4__
 
 - Adding more error types
