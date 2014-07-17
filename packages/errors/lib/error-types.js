@@ -3,7 +3,18 @@ var util = require('util');
 // Abstract Error
 var AbstractError = exports.AbstractError = function(msg, constr, data) {
   Error.captureStackTrace(this, constr || this);
-  this.message = msg instanceof Error ? msg.message : (msg || 'Error');
+
+  if (msg instanceof Error) {
+    this.message = msg.message;
+
+    if (msg.errors) {
+      this.errors = msg.errors;
+    }
+  }
+  else {
+    this.message = msg || 'Error';
+  }
+  
   this.data = data;
 };
 

@@ -107,7 +107,8 @@ var handler = function(err, req, res, next) {
       res.json({
         'code': err.code,
         'name': err.name,
-        'message': err.message
+        'message': err.message,
+        'errors': err.errors || {}
       });
     },
 
