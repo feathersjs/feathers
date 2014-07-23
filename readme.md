@@ -8,7 +8,7 @@ If you are not familiar with Express head over to the [Express Guides](http://ex
 
 ### REST
 
-In almost every case you want to exposes your services through a RESTful JSON interface. This can be achieved by calling `app.configure(feathers.rest())`. Note that you will have to provide your own body parser middleware like the standard [Express 4 body-parser](https://github.com/expressjs/body-parser) to make REST `.create`, `.update` and `.patch` calls pass the parsed data.
+In almost every case you want to expose your services through a RESTful JSON interface. This can be achieved by calling `app.configure(feathers.rest())`. Note that you will have to provide your own body parser middleware like the standard [Express 4 body-parser](https://github.com/expressjs/body-parser) to make REST `.create`, `.update` and `.patch` calls pass the parsed data.
 
 To set service parameters in a middleware, just attach it to the `req.feathers` object which will become the params for any resulting service call. It is also possible to use URL parameters for REST API calls which will also be added to the params object:
 
@@ -16,7 +16,8 @@ To set service parameters in a middleware, just attach it to the `req.feathers` 
 var bodyParser = require('body-parser');
 
 app.configure(feathers.rest())
-  .use(bodyParser())
+  .use(bodyParser.json())
+  .use(bodyParser.urlencoded({extended: true}))
   .use(function(req, res, next) {
     req.feathers.data = 'Hello world';
     next();
