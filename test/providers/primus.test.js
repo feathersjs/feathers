@@ -73,6 +73,23 @@ describe('Primus provider', function () {
     });
   });
 
+  it('missing parameters in socket call works (#88)', function(done) {
+    var service = app.lookup('todo');
+    var old = {
+      find: service.find
+    };
+
+    service.find = function(params) {
+      assert.deepEqual(_.omit(params, 'query'), socketParams, 'Handshake parameters passed on proper position');
+      old.find.apply(this, arguments);
+    };
+
+    socket.send('todo::find', function () {
+      _.extend(service, old);
+      done();
+    });
+  });
+
   describe('CRUD', function () {
     it('::find', function (done) {
       socket.send('todo::find', {}, function (error, data) {
