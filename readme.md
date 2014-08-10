@@ -368,6 +368,48 @@ feathers()
 
 You can see the combination when going to `http://localhost:8000/my/test`.
 
+`setup` will be called after all REST routes have been set up. This means that you
+can't register custom middleware with potentially conflicting paths.
+In this case, implement `_setup(app, path)` instead which will run before the REST
+middleware is registered. An example would be implementing a `todos/count` route
+which returns the number of todos (instead of the todo with the id count):
+
+```js
+var todoService = {
+  todos: [
+    {
+      id: 0,
+      description: 'Learn Feathers'
+    },
+    {
+      id: 1,
+      description: 'Do dishes'
+    }
+  ],
+
+  find: function (params, callback) {
+    callback(null, this.todos);
+  },
+
+  _setup: function (app, path) {
+    var self = this;
+
+    app.get('/' + path + '/count', function (req, res) {
+      self.find({}, function (error, todos) {
+        res.json({
+          count: todos.length
+        });
+      });
+    });
+  }
+};
+
+feathers()
+  .use('todos', todoService)
+  .listen(8000);
+```
+
+
 __Pro tip:__
 
 Bind the apps `lookup` method to your service to always look your services up dynamically:

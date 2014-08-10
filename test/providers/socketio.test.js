@@ -17,11 +17,6 @@ describe('SocketIO provider', function () {
     };
 
   before(function () {
-    // This seems to be the only way to not get the
-    // socket.io started log messing up the test output
-    var oldlog = console.log;
-    console.log = function () {};
-
     app = feathers()
       .configure(feathers.socketio(function(io) {
         io.use(function (socket, next) {
@@ -32,8 +27,6 @@ describe('SocketIO provider', function () {
       .use('todo', todoService);
 
     server = app.listen(7886);
-
-    console.log = oldlog;
 
     socket = io.connect('http://localhost:7886');
   });
