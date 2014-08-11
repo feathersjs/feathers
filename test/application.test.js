@@ -11,7 +11,7 @@ var q = require('q');
 var feathers = require('../lib/feathers');
 
 describe('Feathers application', function () {
-  it("Express application should use express apps", function() {
+  it("Express application should use express apps", function () {
     var app = feathers();
     var child = feathers();
 
@@ -70,15 +70,10 @@ describe('Feathers application', function () {
       }
     };
 
-    var oldlog = console.log;
-    console.log = function () {};
-
     var app = feathers()
       .configure(feathers.rest())
       .configure(feathers.socketio()).use('/todo', todoService);
     var server = app.listen(6999).on('listening', function () {
-      console.log = oldlog;
-
       var socket = io.connect('http://localhost:6999');
 
       request('http://localhost:6999/todo/dishes', function (error, response, body) {
@@ -109,7 +104,7 @@ describe('Feathers application', function () {
 
     var app = feathers()
       .configure(feathers.rest())
-      .use('/todo', function(req, res, next) {
+      .use('/todo', function (req, res, next) {
         req.feathers.stuff = 'custom middleware';
         next();
       }, todoService)
@@ -131,7 +126,7 @@ describe('Feathers application', function () {
     });
   });
 
-  it('REST and SocketIO with SSL server (#25)', function(done) {
+  it('REST and SocketIO with SSL server (#25)', function (done) {
     // For more info on Reqest HTTPS settings see https://github.com/mikeal/request/issues/418
     // This needs to be set so that the SocektIO client can connect
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -145,8 +140,6 @@ describe('Feathers application', function () {
       }
     };
 
-    var oldlog = console.log;
-    console.log = function () {};
     var app = feathers()
       .configure(feathers.rest())
       .configure(feathers.socketio()).use('/secureTodos', todoService);
@@ -160,15 +153,13 @@ describe('Feathers application', function () {
 
     app.setup(httpsServer);
 
-    httpsServer.on('listening', function() {
+    httpsServer.on('listening', function () {
       var socket = io.connect('https://localhost:7889', { secure: true, port: 7889 });
-
-      console.log = oldlog;
 
       request({
         url: 'https://localhost:7889/secureTodos/dishes',
         strictSSL: false,
-        rejectUnhauthorized : false
+        rejectUnhauthorized: false
       }, function (error, response, body) {
         assert.ok(response.statusCode === 200, 'Got OK status code');
         var data = JSON.parse(body);
@@ -240,7 +231,7 @@ describe('Feathers application', function () {
     });
   });
 
-  it('throws a warning when trying to register a service after application setup (#67)', function(done) {
+  it('throws a warning when trying to register a service after application setup (#67)', function (done) {
     var todoService = {
       get: function (name, params, callback) {
         callback(null, {
@@ -255,13 +246,51 @@ describe('Feathers application', function () {
       .use('/todo', todoService);
 
     var server = app.listen();
-    server.on('listening', function() {
+    server.on('listening', function () {
       try {
         app.use('/dummy', todoService);
         done(new Error('Should throw an error'));
-      } catch(e) {
+      } catch (e) {
         server.close(done);
       }
+    });
+  });
+
+  it('calls _setup in order to set up custom routes with higher priority (#86)', function (done) {
+    var todoService = {
+      get: function (name, params, callback) {
+        callback(null, {
+          id: name,
+          description: "You have to do " + name + "!"
+        });
+      },
+
+      _setup: function (app, path) {
+        app.get('/' + path + '/count', function(req, res) {
+          res.json({
+            counter: 10
+          });
+        });
+      }
+    };
+
+    var app = feathers()
+      .configure(feathers.rest())
+      .use('/todo', todoService);
+
+    var server = app.listen(8999).on('listening', function () {
+      request('http://localhost:8999/todo/dishes', function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        var data = JSON.parse(body);
+        assert.equal(data.description, 'You have to do dishes!');
+
+        request('http://localhost:8999/todo/count', function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          var data = JSON.parse(body);
+          assert.equal(data.counter, 10);
+          server.close(done);
+        });
+      });
     });
   });
 });
