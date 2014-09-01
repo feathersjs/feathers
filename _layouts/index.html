@@ -1,0 +1,113 @@
+---
+layout: default
+---
+
+<section id="hero" class="hero">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="row text-center">
+          <h1 class="tagline">Let your applications fly!</h1>
+          <h4>Real-time without magic</h4>
+          <div class="col-md-6 col-md-offset-3">
+            <p class="inline-code">npm install feathers</p>
+          </div>
+          <div class="col-md-6 col-md-offset-3">
+            <a href="#example" class="btn btn-primary btn-lg btn-block">Take Off</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="row">
+          <ul class="list-unstyled">
+            <li class="first"><i class="icon-feather"></i> Use the power of <a href="http://expressjs.com">Express</a> plus...</li>
+            <li><i class="icon-plus"></i> Data driven <a href="#services">services</a></li>
+            <li><i class="icon-plus"></i> Out of the box  <a href="http://todos.feathersjs.com/todos" target="_blank">RESTful APIs</a></li>
+            <li><i class="icon-plus"></i> <a href="#example">Real-time</a> events via SocketIO</li>
+          </ul>
+        </div>
+        <div class="row badges text-center">
+          <p>
+            <a href="https://npmjs.org/package/feathers" title="Package status" target="_blank"><img src="https://badge.fury.io/js/feathers.png"/></a>
+            <a href="https://david-dm.org/feathersjs/feathers" target="_blank" title="Dependency status"><img src="https://david-dm.org/feathersjs/feathers.png"/></a>
+            <a href="https://travis-ci.org/feathersjs/feathers" target="_blank"><img src="https://travis-ci.org/feathersjs/feathers.png?branch=master" alt="Build status" /></a>
+          </p>
+        </div>
+        <div class="row github-links text-center">
+          <p>
+            <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=watch&count=true"
+          allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+            <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=fork&count=true"
+          allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features" class="features">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <i class="icon-cloud"></i>
+        <h2>Lightweight</h2>
+        <p class="feature description">Feathers is built right on top of <a href="http://expressjs.com" title="Express" target="_blank">Express</a>. No "Framework X" but for Node. Literally replace
+        <strong>Express</strong> with <strong>Feathers</strong> and you are good to go. You can even use the same middleware!</p>
+      </div>
+      <div class="col-md-4">
+        <i class="icon-rocket"></i>
+        <h2>Realtime</h2>
+        <p class="feature description">No real-time abstraction magic. Vanilla SocketIO and namespaced events are all you need to make your web application come to life. And Feathers already provides the ones you need!</p>
+      </div>
+      <div class="col-md-4">
+        <i class="icon-cogs"></i>
+        <h2>Flexible</h2>
+        <p class="feature description">Feathers isn't in the way. You can always directly fall back to Express and <a href="http://socket.io/" title="Socket.IO" targe="_blank">SocketIO</a>. Use your existing middleware, add new services as you go and migrating will be a snap.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="example" class="example">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h1>Real-time Todos</h1>
+        <p>We are huge fans of <a href="http://todomvc.com/" title="TODO MVC" target="_blank">TodoMVC</a> so we've created a real-time todo app that you can see right here (and the REST endpoint <a href="http://todos.feathersjs.com/todos" title="Todo REST service" target="_blank">here</a>). It's definitely fairly trivial, but it demonstrates most of the major parts of Feathers.</p>
+
+        <div id="todo-example">
+          <ul class="todos list-unstyled"></ul>
+          <form role="form" class="create-todo">
+            <div class="form-group">
+              <input type="text" class="form-control" name="description" placeholder="Add a new Todo">
+            </div>
+            <button type="submit" class="btn btn-info col-md-12">Add Todo</button>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="row">
+          <ul class="nav nav-pills options example" id="realtime-todos">
+            <li><a href="#" title="TODO Client">Client</a></li>
+            <li><a href="#" title="TODO Feathers Server">Server</a></li>
+          </ul>
+          <script src="https://gist.github.com/daffl/6665992.js"></script>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <div id="toc"></div>
+      </div>
+      <div class="col-md-9 page-content">
+        {{ content }}
+      </div>
+    </div>
+  </div>
+</section>
