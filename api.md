@@ -5,12 +5,6 @@ permalink: /api/
 weight: 2
 ---
 
-## Introduction
-
-Feathers is a light weight web application framework that rides on top of [Express](http://expressjs.com), one of the most popular web frameworks for [NodeJS](http://nodejs.org/). It makes it easy to create RESTful web services and real-time applications using SocketIO and several other NodeJS real-time libraries.
-
-If you are not familiar with Express head over to the [Express Guides](http://expressjs.com/guide.html) to get an idea. Feathers works the exact same way except that `var app = require('express')();` is replaced with `var app = require('feathers')()`. The most important concept that Feathers adds to Express middleware is data oriented **Services**. How services work and the API additional to the available [Express API](http://expressjs.com/api.html) is outlined in the following documentation.
-
 ## Configuration
 
 ### REST
@@ -186,6 +180,100 @@ app.configure(feathers.primus({
   });
 }));
 ```
+
+## API
+
+### listen
+
+`app.listen([port])` starts the application on the given port. It will first call the original [Express app.listen([port])](http://expressjs.com/api.html#app.listen), then run `app.setup(server)` (see below) with the server object and then return the server object.
+
+### setup
+
+`app.setup(server)` is used initialize all services by calling each services `.setup(app, path)` method (if available).
+It will also use the `server` instance passed (e.g. through `http.createServer`) to set up SocketIO (if enabled) and any other provider that might require the server instance.
+
+Normally `app.setup` will be called automatically when starting the application via `app.listen([port])` but there are cases when you need to initialize the server separately:
+
+__HTTPS__
+
+With your Feathers application initialized it is easy to set up an HTTPS REST and SocketIO server:
+
+```js
+app.configure(feathers.socketio()).use('/todos', todoService);
+
+var https = require('https');
+var server = https.createServer({
+  key: fs.readFileSync('privatekey.pem'),
+  cert: fs.readFileSync('certificate.pem')
+}, app).listen(443);
+
+// Call app.setup to initialize all services and SocketIO
+app.setup(server);
+```
+
+__Virtual Hosts__
+
+You can use `feathers.vhost` (which is the same as [Express and Connect .vhost](http://www.senchalabs.org/connect/vhost.html)) to run your Feathers app on a virtual host:
+
+```js
+app.use('/todos', todoService);
+
+var host = feathers().use(feathers.vhost('foo.com', app));
+var server = host.listen(8080);
+
+// Here we need to call app.setup because .listen on our virtal hosted
+// app is never called
+app.setup(server);
+```
+
+### lookup
+
+`app.lookup(path)` returns the wrapped service object for the given path. Note that Feathers internally creates a new object from each registered service. This means that the object returned by `lookup` will provide the same methods and functionality as the original service but also functionality added by Feathers (most notably it is possible to listen to service events). `path` can be the service name with or without leading and trailing slashes.
+
+```js
+app.use('/my/todos', {
+  create: function(data, params, callback) {
+    callback(null, data);
+  }
+});
+
+var todoService = app.lookup('my/todos');
+// todoService is an event emitter
+todoService.on('created', function(todo) {
+  console.log('Created todo', todo);
+});
+```
+
+### use
+
+`app.use([path], service)` works just like [Express app.use([path], middleware)](http://expressjs.com/api.html#app.use) but additionally allows to register a service object (an object which at least provides one of the service methods as outlined in the Services section) instead of the middleware function. Note that REST services are registered in the same order as any other middleware so the below example will allow the `/todos` service only to [Passport](http://passportjs.org/) authenticated users.
+
+```js
+// Serve public folder for everybody
+app.use(feathers.static(__dirname + '/public');
+// Make sure that everything else only works with authentication
+app.use(function(req,res,next){
+  if(req.isAuthenticated()){
+    next();
+  } else {
+    // 401 Not Authorized
+    next(new Error(401));
+  }
+});
+// Add a service.
+app.use('/todos', {
+  get: function(name, params, callback) {
+    callback(null, {
+      id: name,
+      description: "You have to do " + name + "!"
+    });
+  }
+});
+```
+
+### service
+
+`app.service([path], service)` is what is called internally by `app.use([path], service)` if a service object is being passed. Use it instead of `app.use([path], service)` if you want to be more explicit that you are registering a service. `app.service` does __not__ provide the Express `app.use` functionality and doesn't check the service object for valid methods.
 
 ## Services
 
@@ -570,105 +658,3 @@ socket.on('todo updated', function(data) {
   // if authorized and in the same company
 });
 ```
-
-## API
-
-### listen
-
-`app.listen([port])` starts the application on the given port. It will first call the original [Express app.listen([port])](http://expressjs.com/api.html#app.listen), then run `app.setup(server)` (see below) with the server object and then return the server object.
-
-### setup
-
-`app.setup(server)` is used initialize all services by calling each services `.setup(app, path)` method (if available).
-It will also use the `server` instance passed (e.g. through `http.createServer`) to set up SocketIO (if enabled) and any other provider that might require the server instance.
-
-Normally `app.setup` will be called automatically when starting the application via `app.listen([port])` but there are cases when you need to initialize the server separately:
-
-__HTTPS__
-
-With your Feathers application initialized it is easy to set up an HTTPS REST and SocketIO server:
-
-```js
-app.configure(feathers.socketio()).use('/todos', todoService);
-
-var https = require('https');
-var server = https.createServer({
-  key: fs.readFileSync('privatekey.pem'),
-  cert: fs.readFileSync('certificate.pem')
-}, app).listen(443);
-
-// Call app.setup to initialize all services and SocketIO
-app.setup(server);
-```
-
-__Virtual Hosts__
-
-You can use `feathers.vhost` (which is the same as [Express and Connect .vhost](http://www.senchalabs.org/connect/vhost.html)) to run your Feathers app on a virtual host:
-
-```js
-app.use('/todos', todoService);
-
-var host = feathers().use(feathers.vhost('foo.com', app));
-var server = host.listen(8080);
-
-// Here we need to call app.setup because .listen on our virtal hosted
-// app is never called
-app.setup(server);
-```
-
-### lookup
-
-`app.lookup(path)` returns the wrapped service object for the given path. Note that Feathers internally creates a new object from each registered service. This means that the object returned by `lookup` will provide the same methods and functionality as the original service but also functionality added by Feathers (most notably it is possible to listen to service events). `path` can be the service name with or without leading and trailing slashes.
-
-```js
-app.use('/my/todos', {
-  create: function(data, params, callback) {
-    callback(null, data);
-  }
-});
-
-var todoService = app.lookup('my/todos');
-// todoService is an event emitter
-todoService.on('created', function(todo) {
-  console.log('Created todo', todo);
-});
-```
-
-### use
-
-`app.use([path], service)` works just like [Express app.use([path], middleware)](http://expressjs.com/api.html#app.use) but additionally allows to register a service object (an object which at least provides one of the service methods as outlined in the Services section) instead of the middleware function. Note that REST services are registered in the same order as any other middleware so the below example will allow the `/todos` service only to [Passport](http://passportjs.org/) authenticated users.
-
-```js
-// Serve public folder for everybody
-app.use(feathers.static(__dirname + '/public');
-// Make sure that everything else only works with authentication
-app.use(function(req,res,next){
-  if(req.isAuthenticated()){
-    next();
-  } else {
-    // 401 Not Authorized
-    next(new Error(401));
-  }
-});
-// Add a service.
-app.use('/todos', {
-  get: function(name, params, callback) {
-    callback(null, {
-      id: name,
-      description: "You have to do " + name + "!"
-    });
-  }
-});
-```
-
-### service
-
-`app.service([path], service)` is what is called internally by `app.use([path], service)` if a service object is being passed. Use it instead of `app.use([path], service)` if you want to be more explicit that you are registering a service. `app.service` does __not__ provide the Express `app.use` functionality and doesn't check the service object for valid methods.
-
-## Why?
-
-We know! Oh God another NodeJS framework! We really didn't want to add another name to the long list of NodeJS web frameworks but also wanted to explore a different approach than any other framework we have seen. We strongly believe that data is the core of the web and should be the focus of web applications.
-
-We also think that your data resources can and should be encapsulated in such a way that they can be scalable, easily testable and self contained. The classic web MVC pattern used to work well but is becoming antiquated in today's web.
-
-With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of [Express](http://expressjs.com) and is inspired in part by [Sails](http://sailsjs.org), [Flatiron](http://flatironjs.org) and [Derby](http://derbyjs.com).
