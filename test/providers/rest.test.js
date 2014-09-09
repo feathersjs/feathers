@@ -15,7 +15,7 @@ describe('REST provider', function () {
 
     before(function () {
       app = feathers().configure(feathers.rest())
-        .use(bodyParser())
+        .use(bodyParser.json())
         .use('codes', {
           get: function(id, params, callback) {
             callback();
@@ -239,7 +239,7 @@ describe('REST provider', function () {
       next();
     })
     .configure(feathers.rest())
-    .use(bodyParser())
+    .use(bodyParser.json())
     .use('/todo', {
       create: function (data, params, callback) {
         callback(null, data);

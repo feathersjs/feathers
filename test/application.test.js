@@ -28,9 +28,9 @@ describe('Feathers application', function () {
 
     var app = feathers().use('/dummy/service/', dummyService);
 
-    assert.ok(typeof app.lookup('dummy/service').find === 'function', 'Could look up without slashes');
-    assert.ok(typeof app.lookup('/dummy/service').find === 'function', 'Could look up with leading slash');
-    assert.ok(typeof app.lookup('dummy/service/').find === 'function', 'Could look up with trailing slash');
+    assert.ok(typeof app.service('dummy/service').find === 'function', 'Could look up without slashes');
+    assert.ok(typeof app.service('/dummy/service').find === 'function', 'Could look up with leading slash');
+    assert.ok(typeof app.service('dummy/service/').find === 'function', 'Could look up with trailing slash');
   });
 
   it('registers a service, wraps it and adds the event mixin', function (done) {
@@ -42,7 +42,7 @@ describe('Feathers application', function () {
 
     var app = feathers().use('/dummy', dummyService);
     var server = app.listen(7887);
-    var wrappedService = app.lookup('dummy');
+    var wrappedService = app.service('dummy');
 
     assert.ok(Proto.isPrototypeOf(wrappedService), 'Service got wrapped as Uberproto object');
     assert.ok(typeof wrappedService.on === 'function', 'Wrapped service is an event emitter');
