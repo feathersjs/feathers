@@ -38,10 +38,10 @@
     "body-parser": "^1.0.2",
     "feathers-errors": ">=0.2.0",
     "lodash": "^2.4.1",
-    "primus": "^2.2.1",
+    "primus": "^2.4.0",
     "primus-emitter": "^3.0.2",
     "rubberduck": "^1.0.0",
-    "socket.io": "^1.0.0",
+    "socket.io": "^1.1.0",
     "uberproto": "^1.1.0"
   },
   "devDependencies": {

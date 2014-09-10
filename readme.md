@@ -93,7 +93,7 @@ app.configure(feathers.socketio(function(io) {
 
   io.use(function (socket, next) {
     // Authorize using the /users service
-    app.lookup('users').find({
+    app.service('users').find({
       username: socket.request.username,
       password: socket.request.password
     }, next);
@@ -348,7 +348,7 @@ var todoService = {
 
 var myService = {
   setup: function(app) {
-    this.todo = app.lookup('todo');
+    this.todo = app.service('todo');
   },
 
   get: function(name, params, callback) {
@@ -413,16 +413,16 @@ feathers()
 
 __Pro tip:__
 
-Bind the apps `lookup` method to your service to always look your services up dynamically:
+Bind the apps `service` method to your service to always look your services up dynamically:
 
 ```
 var myService = {
   setup: function(app) {
-    this.lookup = app.lookup.bind(app);
+    this.service = app.service.bind(app);
   },
 
   get: function(name, params, callback) {
-    this.lookup('todos').get('take out trash', {}, function(error, todo) {
+    this.service('todos').get('take out trash', {}, function(error, todo) {
       callback(null, {
         name: name,
         todo: todo
@@ -434,7 +434,7 @@ var myService = {
 
 ## Events
 
-Any registered service will be automatically turned into an event emitter that emits events when a resource has changed, that is a `create`, `update` or `remove` service call returned successfully. It is therefore possible to bind to the below events via `app.lookup(servicename).on()` and, if enabled, all events will also broadcast to all connected SocketIO clients in the form of `<servicepath> <eventname>`. Note that the service path will always be stripped of leading and trailing slashes regardless of how it has been registered (e.g. `/my/service/` will become `my/service`).
+Any registered service will be automatically turned into an event emitter that emits events when a resource has changed, that is a `create`, `update` or `remove` service call returned successfully. It is therefore possible to bind to the below events via `app.service(servicepath).on()` and, if enabled, all events will also broadcast to all connected SocketIO clients in the form of `<servicepath> <eventname>`. Note that the service path will always be stripped of leading and trailing slashes regardless of how it has been registered (e.g. `/my/service/` will become `my/service`).
 
 ### created
 
@@ -447,11 +447,11 @@ app.use('/todos', {
   }
 });
 
-app.lookup('/todos').on('created', function(todo) {
+app.service('/todos').on('created', function(todo) {
   console.log('Created todo', todo);
 });
 
-app.lookup('/todos').create({
+app.service('/todos').create({
   description: 'We have to do something!'
 }, {}, function(error, callback) {
   // ...
@@ -517,7 +517,7 @@ app.use('/todos', {
   }
 });
 
-app.lookup('/todos').remove(1, {}, function(error, callback) {
+app.service('/todos').remove(1, {}, function(error, callback) {
   // ...
 });
 
@@ -561,7 +561,7 @@ The following example only dispatches the Todo `updated` event if the authorized
 app.configure(feathers.socketio(function(io) {
   io.use(function (socket, callback) {
     // Authorize using the /users service
-    app.lookup('users').find({
+    app.service('users').find({
       username: handshake.username,
       password: handshake.password
     }, function(error, user) {
@@ -651,24 +651,6 @@ var server = host.listen(8080);
 app.setup(server);
 ```
 
-### lookup
-
-`app.lookup(path)` returns the wrapped service object for the given path. Note that Feathers internally creates a new object from each registered service. This means that the object returned by `lookup` will provide the same methods and functionality as the original service but also functionality added by Feathers (most notably it is possible to listen to service events). `path` can be the service name with or without leading and trailing slashes.
-
-```js
-app.use('/my/todos', {
-  create: function(data, params, callback) {
-    callback(null, data);
-  }
-});
-
-var todoService = app.lookup('my/todos');
-// todoService is an event emitter
-todoService.on('created', function(todo) {
-  console.log('Created todo', todo);
-});
-```
-
 ### use
 
 `app.use([path], service)` works just like [Express app.use([path], middleware)](http://expressjs.com/api.html#app.use) but additionally allows to register a service object (an object which at least provides one of the service methods as outlined in the Services section) instead of the middleware function. Note that REST services are registered in the same order as any other middleware so the below example will allow the `/todos` service only to [Passport](http://passportjs.org/) authenticated users.
@@ -698,7 +680,25 @@ app.use('/todos', {
 
 ### service
 
-`app.service([path], service)` is what is called internally by `app.use([path], service)` if a service object is being passed. Use it instead of `app.use([path], service)` if you want to be more explicit that you are registering a service. `app.service` does __not__ provide the Express `app.use` functionality and doesn't check the service object for valid methods.
+`app.service(path [, service])` does two things. Either returns the Feathers wrapped service object for the given path or registers a new service for the path.
+
+`app.service(path)` returns the wrapped service object for the given path. Feathers internally creates a new object from each registered service. This means that the object returned by `service(path)` will provide the same methods and functionality as your original service object but also functionality added by Feathers (most notably it is possible to listen to service events). `path` can be the service name with or without leading and trailing slashes.
+
+```js
+app.use('/my/todos', {
+  create: function(data, params, callback) {
+    callback(null, data);
+  }
+});
+
+var todoService = app.service('my/todos');
+// todoService is an event emitter
+todoService.on('created', function(todo) {
+  console.log('Created todo', todo);
+});
+```
+
+You can use `app.service(path, service)` instead `app.use(path, service)` if you want to be more explicit that you are registering a service. It is what is called internally by `app.use([path], service)` if a service object is being passed. `app.service` does __not__ provide the Express `app.use` functionality and does not check the service object for valid methods.
 
 ## Why?
 
@@ -709,6 +709,20 @@ We also think that your data resources can and should be encapsulated in such a 
 With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of [Express](http://expressjs.com) and is inspired in part by [Sails](http://sailsjs.org), [Flatiron](http://flatironjs.org) and [Derby](http://derbyjs.com).
 
 ## Changelog
+
+__[1.0.0](https://github.com/feathersjs/feathers/issues?q=milestone%3A1.0.0)__
+
+- Remove app.lookup and make the functionality available as app.service ([#94](https://github.com/feathersjs/feathers/pull/94)
+- Allow not passing parameters in websocket calls ([#92](https://github.com/feathersjs/feathers/pull/91))
+- Add _setup method ([#91](https://github.com/feathersjs/feathers/pull/91))
+- Throw an error when registering a service after application start ([#78](https://github.com/feathersjs/feathers/pull/78))
+- Send socket parameters as params.query ([#72](https://github.com/feathersjs/feathers/pull/72))
+- Send HTTP 201 and 204 status codes ([#71](https://github.com/feathersjs/feathers/pull/71))
+- Upgrade to SocketIO 1.0 ([#70](https://github.com/feathersjs/feathers/pull/70))
+- Upgrade to Express 4.0 ([#55](https://github.com/feathersjs/feathers/pull/55), [#54](https://github.com/feathersjs/feathers/issues/54))
+- Allow service methods to return a promise ([#59](https://github.com/feathersjs/feathers/pull/59))
+- Allow to register services with custom middleware ([#56](https://github.com/feathersjs/feathers/pull/56))
+- REST provider should not be added by default ([#53](https://github.com/feathersjs/feathers/issues/53))
 
 __0.4.0__
 

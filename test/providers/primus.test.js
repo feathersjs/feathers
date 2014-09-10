@@ -38,7 +38,7 @@ describe('Primus provider', function () {
   });
 
   it('passes handshake as service parameters', function(done) {
-    var service = app.lookup('todo');
+    var service = app.service('todo');
     var old = {
       find: service.find,
       create: service.create,
@@ -74,7 +74,7 @@ describe('Primus provider', function () {
   });
 
   it('missing parameters in socket call works (#88)', function(done) {
-    var service = app.lookup('todo');
+    var service = app.service('todo');
     var old = {
       find: service.find
     };
@@ -204,7 +204,7 @@ describe('Primus provider', function () {
 
   describe('Event filtering', function() {
     it('.created', function (done) {
-      var service = app.lookup('todo');
+      var service = app.service('todo');
       var original = { description: 'created event test' };
       var oldCreated = service.created;
 
@@ -239,7 +239,7 @@ describe('Primus provider', function () {
     });
 
     it('.removed', function (done) {
-      var service = app.lookup('todo');
+      var service = app.service('todo');
       var oldRemoved = service.removed;
 
       service.removed = function(data, params, callback) {
