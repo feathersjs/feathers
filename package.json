@@ -31,8 +31,9 @@
     "npm": "*"
   },
   "devDependencies": {
-    "grunt-cli": "^0.1.7",
     "grunt": "^0.4.1",
-    "grunt-contrib-less": "^0.7.0"
+    "grunt-cli": "^0.1.7",
+    "grunt-contrib-less": "^0.7.0",
+    "grunt-contrib-watch": "^0.6.1"
   }
 }

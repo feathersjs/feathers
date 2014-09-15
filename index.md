@@ -7,7 +7,7 @@ permalink: /
 
 ## To get started
 
-Feathers is a light weight web application framework that rides on top of [Express](http://expressjs.com), one of the most popular web frameworks for [NodeJS](http://nodejs.org/). It makes it easy to create RESTful web services and real-time applications using SocketIO and several other NodeJS real-time libraries.
+Feathers is a lightweight web application framework that rides on top of [Express](http://expressjs.com), one of the most popular web frameworks for [NodeJS](http://nodejs.org/). It makes it easy to create RESTful web services and real-time applications using SocketIO and several other NodeJS real-time libraries.
 
 If you are not familiar with Express head over to the [Express Guides](http://expressjs.com/guide.html) to get an idea. Feathers works the exact same way except that `var app = require('express')();` is replaced with `var app = require('feathers')()`. This means that you can literally drop Feathers into your existing Express 4.0 application and start adding new services right away. The following guide will walk through creating a basic Todo REST and websocket API with Feathers and MongoDB. For additional information also make sure to read through the [API documentation](/api/).
 
@@ -192,7 +192,7 @@ Running `app.js` will now provide a fully functional REST API at `http://localho
 
 ## Getting real-time
 
-As previously mentioned, a Feathers service can also be exposed through websockets. You can either use [SocketIO](http://socket.io) or [Primus](https://github.com/primus/primus) - an abstraction layer for all kinds Node websocket libraries. In the following examples we will use SocketIO.
+As previously mentioned, a Feathers service can also be exposed through websockets. You can either use [SocketIO](http://socket.io) or [Primus](https://github.com/primus/primus) - an abstraction layer for differentNode websocket libraries. In the following examples we will use SocketIO.
 
 SocketIO can be enabled by calling `app.configure(feathers.socketio())`. Once set up, it is possible to call service methods by emitting events like `<servicepath>::<methodname>` on the socket and also receive events by listening to `<servicepath> <eventname>` (*eventname* can be `created`, `updated`, `patched` or `removed`). To make it easier to test in a web page, lets also statically host the files in the current folder. `app.js` then looks like this:
 
@@ -287,16 +287,223 @@ And just like this we have a full REST and real-time Todo API that stores its da
 
 ## Validation and processing
 
-With the persisten storage fully implemented already, there are several ways to process data
+With the storage already implemented there are several ways to pre- or postprocess incoming and outgoing data.
+
+### Service Extension
+
+The MongoDB service implementation uses the ES5 inheritance library [Uberproto](https://github.com/daffl/uberproto) so you can just `extend` the service object, process the Todo data and then pass it to the original method or add your own methods:
+
+```js
+var todoService = mongodb({
+  db: 'feathers-demo',
+  collection: 'todos'
+}).extend({
+  create: function(data, params, callback) {
+    // We want to convert possible string in `complete` to
+    // an actual boolean and also only use the `text` and
+    // `complete` properties
+    var newData = {
+      text: data.text,
+      complete: data.complete || data.complete === 'true'
+    };
+    // Call the original method with the new data
+    this._super(newData, params, callback);
+  },
+
+  // Or add other methods
+  addDefaultTodo: function(callback) {
+    this.create({
+      text: 'The default todo',
+      complete: false
+    }, {}, callback);
+  }
+});
+```
+
+### Hooks
+
+Another option is the [feathers-hooks](https://github.com/feathersjs/feathers-hooks) plugin which allows you to asynchronously hook in before or after a service method executes.
+
+> npm install feathers-hooks
+
+```js
+// app.js
+var feathers = require('feathers');
+var mongodb = require('feathers-mongodb');
+var hooks = require('feathers-hooks');
+var bodyParser = require('body-parser');
+
+var app = feathers();
+var todoService = mongodb({
+  db: 'feathers-demo',
+  collection: 'todos'
+});
+
+app.configure(feathers.rest())
+  .configure(feathers.socketio())
+  .configure(hooks())
+  .use(bodyParser.json())
+  .use('/todos', todoService)
+  .use('/', feathers.static(__dirname))
+  .listen(3000);
+
+// Get the wrapped todos service object and
+// add a `before` create hook modifying the data
+app.service('todos').before({
+  create: function(hook, next) {
+    var oldData = hook.data;
+    hook.data = {
+      text: oldData.text,
+      complete: oldData.complete || oldData.complete === 'true'
+    };
+    next();
+  }
+});
+```
+
+## Authentication
+
+Since Feathers directly extends Express you can use any of its authentication plugins, the one most commonly used being [Passport](http://passportjs.org/). The following examples first show how to implement a stateless HTTP basic authorization for only the REST API and then a session based authorization that can also be used for SocketIO.
+
+### Stateles basic HTTP
+
+A stateles [username and password](http://passportjs.org/guide/username-password/) HTTP authentication for the REST API using a Feathers user service (with the user information stored in a MongoDB collecion) can look like this:
+
+> npm install passport passport-http
+
+```js
+// app.js
+var feathers = require('feathers');
+var mongodb = require('feathers-mongodb');
+var bodyParser = require('body-parser');
+var passport = require('passport');
+var BasicStrategy = require('passport-http').Strategy;
+var crypto = require('crypto')
+// SHA1 hashes a string
+var sha1 = function(string) {
+  var shasum = crypto.createHash('sha1');
+  shasum.update(string);
+  return shasum.digest('hex');
+};
+
+var app = feathers();
+var todoService = mongodb({
+  db: 'feathers-demo',
+  collection: 'todos'
+});
+var userService = mongodb({
+  db: 'feathers-demo',
+  collection: 'users'
+}).extend({
+  // Add a method to this service that authenticates a user
+  authenticate: function(username, password, callback) {
+    this.find({ username: username }, {}, function(error, users) {
+      if(error) {
+        return callback(error);
+      }
+
+      var user = users[0];
+
+      // If we didn't find a user or the hashed password doesn't
+      // match we are not authenticated
+      if(!user || (user.password !== sha1(users[0].password))) {
+        return callback(null, false);
+      }
+
+      callback(null, user);
+    });
+  }
+});
+
+passport.use(new BasicStrategy(function(username, password, done) {
+  // Look up the user service. Technically the same as the
+  // `userService` object but with important Feathers functionality added
+  var users = app.service('users');
+  // Call the `authenticate` functionality implemented above
+  users.authenticate(username, password, done);
+});
+
+app.configure(feathers.rest())
+  .use(bodyParser.json())
+  // Register before the services so they are protected
+  .use(passport.authenticate('basic', { session: false }))
+  .use('/todos', todoService)
+  .use('/users', userService)
+  .listen(3000);
+
+// When the application starts, create a new user in the database
+app.service('users').create({
+  username: 'daffl',
+  password: sha1('password')
+}, {}, function(error, user) {
+  console.log('Created default user', user);
+});
+```
+
+This will provide a username and password protected, MongoDB persisted API for todos and users. Since it transmits the password in plain text, make sure to always secure the connection with HTTPS in production.
+
+In case you are wondering about authorization (for example we wouldn't want even an authenticated user to be able to see delete or modify other users), we will implement that after the next chapter in which we will set up session based authentication and third party logins (like Facebook, Google or GitHub) .
+
+### Third party logins
+
+Basic HTTP authentication is great for REST-only APIs where we have user information in the database already. In many web applications however, you are more likely to have users enter their username and password on a login page or use third party services like Facebook, Google or Twitter. Upon successful authentication the application sets up a session (so that you don't have to sign in again for every request). This also applies to websocket services since they also use HTTP (and its session) to establish the initial connection.
+
+The first step is - just like in Express - to set up proper session handling. Since we are already using MongoDB we will also use it as the session store.
+
+> npm install cookie-parser express-session connect-mongo
+
+```js
+// app.js
+var feathers = require('feathers');
+var mongodb = require('feathers-mongodb');
+var bodyParser = require('body-parser');
+var passport = require('passport');
+var session = require('connect-session');
+var cookieParser = require('cookie-parser');
+var MongoStore = require('connect-mongo')(session);
+
+var app = feathers();
+var todoService = mongodb({
+  db: 'feathers-demo',
+  collection: 'todos'
+});
+var userService = mongodb({
+  db: 'feathers-demo',
+  collection: 'users'
+});
+
+app.configure(feathers.rest())
+  .configure(feathers.socketio())
+  .use(bodyParser.json())
+  // Set up session and passport middleware
+  .use(cookieParser())
+  .use(session({
+    secret: 'feathers-supersecret',
+    store: new MongoStore({
+      db : 'feathers-demo'
+    })
+  }))
+  .use(passport.initialize())
+  .use(passport.session())
+  // Set up services
+  .use('/todos', todoService)
+  .use('/users', userService)
+  .listen(3000);
+```
 
 ## Authorization
 
+Authorization is the process of determining after successful authentication if the authenticated user is allowed to perform the requested action.
+
 ## Frontend integration
+
+## What's next?
 
 ## Changelog
 
 __[1.0.0](https://github.com/feathersjs/feathers/issues?q=milestone%3A1.0.0)__
 
+- Remove app.lookup and make the functionality available as app.service ([#94](https://github.com/feathersjs/feathers/pull/94))
 - Allow not passing parameters in websocket calls ([#92](https://github.com/feathersjs/feathers/pull/91))
 - Add _setup method ([#91](https://github.com/feathersjs/feathers/pull/91))
 - Throw an error when registering a service after application start ([#78](https://github.com/feathersjs/feathers/pull/78))
