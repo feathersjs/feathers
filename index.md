@@ -3,6 +3,7 @@ layout: index
 title: Guide
 weight: 1
 permalink: /
+anchor: guide
 ---
 
 ## To get started

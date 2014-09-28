@@ -21,17 +21,20 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
               <span class="icon-feather"></span>
             </button>
-            <a class="navbar-brand" href="#">
-              <img src="images/logo-small.png" alt="Feathers logo small" />
+            <a class="navbar-brand" href="/">
+              <img src="/images/logo-small.png" alt="Feathers logo small" />
             </a>
           </div>
           <div class="navbar-collapse collapse pull-right">
             <ul class="nav navbar-nav">
+              <li>
+                <a class="page-link" href="{{ '/' | prepend: site.baseurl }}">Home</a>
+              </li>
               {% for weight in (1..10) %}
                 {% for p in site.pages %}
                   {% if p.weight == weight %}
                     <li>
-                      <a class="page-link {% if p.url == page.url %}active{% endif %}" href="{{ p.url | prepend: site.baseurl }}">
+                      <a class="page-link {% if p.url == page.url %}active{% endif %}" href="{{ p.url | prepend: site.baseurl}}#{{p.anchor}}">
                         {{ p.title }}
                       </a>
                     </li>
@@ -39,7 +42,7 @@
                 {% endfor %}
               {% endfor %}
               <li>
-                <a class="page-link" href="https://github.com/feathersjs/feathers">
+                <a class="page-link" target="_blank" href="https://github.com/feathersjs/feathers">
                   <strong>Github</strong>
                 </a>
               </li>
@@ -53,15 +56,10 @@
 
     <footer>
       <div class="row">
-        <div class="col-md-4">
-          <p>© 2013 Feathers.</p>
-        </div>
-        <div class="col-md-4">
-          <p> Another project made with <i class="icon-heart"></i> by <a href="http://twitter.com/daffl" title="David Luecke" target="_blank">@daffl</a> and <a href="http://twitter.com/ekryski" title="Eric Kryski" target="_blank">@ekryski</a>.</p>
-        </div>
-        <div class="col-md-4">
-          <p class="back pull-right"><a href="#hero">Back to top</a></p>
-        </div>
+        <p>&copy; 2014 Feathers. Another project made with <i class="icon-heart"></i> by
+          <a href="http://twitter.com/daffl" title="David Luecke" target="_blank">@daffl</a> and
+          <a href="http://twitter.com/ekryski" title="Eric Kryski" target="_blank">@ekryski</a>.
+        </p>
       </div>
     </footer>
 
