@@ -13,7 +13,7 @@ On this page you can find a list of Feathers related questions that came up befo
 
 We know! Oh God another NodeJS framework! We really didn't want to add another name to the long list of NodeJS web frameworks but also wanted to explore a different approach than any other library we have seen. We strongly believe that data is the core of the web and should be the focus of web applications.
 
-Many web frameworks end up focussing so much on secondary concerns like how to render views or handle and process HTTP requests and responses that even when using the MVC pattern your actual application logic becomes a slave to those concerns. This paradigm shift is also part of the reason why Feathers extends and is fully compatible with Express but doesn't just ship as an Express plugin (very similar to how Express iteself extends [connect](https://github.com/senchalabs/connect#readme)).
+Many web frameworks end up focussing so much on secondary concerns like how to render views or handle and process HTTP requests and responses that even when using the MVC pattern your actual application logic becomes a slave to those concerns.
 
 Feathers services bring two important concepts together that help to separate those concerns from how your application works:
 

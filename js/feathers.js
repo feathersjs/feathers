@@ -66,7 +66,7 @@
     var offsetTop = $('.navbar-inverse').outerHeight();
 
     $('#toc').toc('.page-content');
-    $('#realtime-todos').gistPills(6665992, 1);
+    $('#realtime-todos').gistPills(6665992, 0);
 
     $(window).on('resize', function(){
       $('[data-spy="scroll"]').each(function () {

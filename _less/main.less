@@ -226,25 +226,28 @@ section.rapid-start {
 }
 
 section.example {
-  background: @red;
+  background: @lighter-grey;
+
+  h2 {
+    margin-top: 0;
+  }
 
   .file-data {
     height: 400px;
   }
 
   .nav-pills.options {
+    li a {
+      color: @white;
+    }
+
     li.active a {
-      color: @red;
-      background-color: @white;
+      color: @white;
     }
   }
 
-  a {
-    color: @super-light-grey;
-
-    &:hover {
-     color: @white;
-    }
+  blockquote {
+    padding: 0;
   }
 }
 
@@ -340,11 +343,22 @@ pre {
 
 #todo-example {
   ul.todos {
-    height: 285px;
+    height: 402px;
     color: #FFF;
 
     li.done {
       text-decoration: line-through;
     }
+  }
+}
+
+blockquote > pre {
+  border: none;
+  background: transparent;
+}
+
+.gist {
+  pre, .file-data {
+    font-size: 14px !important;
   }
 }

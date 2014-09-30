@@ -189,7 +189,8 @@ app.configure(feathers.rest())
 
 Running `app.js` will now provide a fully functional REST API at `http://localhost:3000/todos`. You can test it, for example, using the [Postman](https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?hl=en) REST client plugin for Google chrome or via CURL:
 
-    curl 'http://localhost:3000/todos/' -H 'Content-Type: application/json' --data-binary '{ "text": "You have to do dishes!" }'
+
+<blockquote><pre>curl 'http://localhost:3000/todos/' -H 'Content-Type: application/json' --data-binary '{ "text": "You have to do dishes!" }'</pre></blockquote>
 
 ## Getting real-time
 
@@ -252,11 +253,11 @@ To test the connection, we can create an `index.html` file in the same folder. T
 </html>
 ```
 
-After restarting, going directly to `http://localhost:3000` with the console open will show what is happening. You can also see the newly created Todo at `http://localhost:3000/todos`. Creating a new  Todo via the REST API, for example
+After restarting, going directly to `http://localhost:3000` with the console open will show what is happening. You can also see the newly created Todo at `http://localhost:3000/todos`. With the page open, reating a new  Todo via the REST API, for example
 
-> CURL
+<blockquote><pre>curl 'http://localhost:3000/todos/' -H 'Content-Type: application/json' --data-binary '{ "text": "Do something" }'</pre></blockquote>
 
-with the page open at `http://localhost:3000` will also log *Someone created a new Todo*.
+will also log `Someone created a new Todo`. This is how you can implement real-time functionality in you web page without any magic.
 
 ## Persisting to MongoDB
 
@@ -432,12 +433,12 @@ app.listen(4000);
 
 ## Authorization
 
-Authorization is the process of determining after successful authentication if the authenticated user is allowed to perform the requested action. This is again where hooks come in very handy. Since feathers-passport adds the authenticated user information to the service call parameters we can just check those in the hooks and return with an error if the user is not authorized:
+Authorization is the process of determining after successful authentication if the user is allowed to perform the requested action. This is again where hooks come in very handy. Since *feathers-passport* adds the authenticated user information to the service call parameters we can just check those in the hooks and return with an error if the user is not authorized:
 
 ```js
 app.service('todos').before({
   create: function(hook, next) {
-    // We only allowe creating hooks with an authenticated user
+    // We only allow creating hooks with an authenticated user
     if(!hook.params.user) {
       return next(new Error('User not authenticated'));
     }
@@ -456,7 +457,35 @@ app.service('todos').before({
 });
 ```
 
+This is also a good time to talk a little about [filtering events](/api/#event-filtering). It is very likely that you only want to send certain events to specific users instead of everybody. Following up on the group authorization example from above, we might only want to dispatch a `todos created` event to users that are in the admin group. This can be done by adding a `created(data, params, callback)` method to the Todo MongoDB service:
+
+```js
+var todoService = mongodb({
+  db: 'feathers-demo',
+  collection: 'todos'
+}).extend({
+  created: function(data, params, callback) {
+    if(params.user && params.user.groups.indexOf('admin') !== -1) {
+      // Call back with the data we want to dispatch
+      return callback(null, data);
+    }
+
+    // Call back with falsy value to not dispatch the event
+    callback(null, false);
+  }
+});
+```
+
+The `created` method is being run for every connected user with the `params` set in the `request.feathers` object and the data from the event.
+
 ## What's next?
+
+This guide hopefully gave you an overview of how Feathers works. We created a Todo service and made it available through a REST API and SocketIO. Then we moved to using MongoDB as the backend storage and learned how to process and validate our data. After that we added PassportJS authentication for both, the REST API and websockets and then briefly discussed how you might authorize that authenticated user and make sure that websocket events only get dispatched to where we want them to.
+
+The next step is definitely reading through the [API documentation](/api/) for a more detailed information on how to configure and use certain parts of Feathers. The [FAQ](/faq/) also has some answers to questions that come up regularly. For a growing list of official plugins, have a look at the [Feathersjs GitHub organization](https://github.com/feathersjs).
+
+If you have any other questions, feel free to submit them as a [GitHub issue](https://github.com/feathersjs/feathers/issues) or on [Stackoverflow](http://stackoverflow.com) using the `feathers` or `feathersjs` tag.
+
 
 ## Changelog
 
