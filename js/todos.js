@@ -1,7 +1,7 @@
 (function($) {
   $.fn.todos = function(host) {
     var el = this;
-    var socket = io.connect(host);
+    var socket = io(host);
 
     var app = {
       addTodo: function(todo) {
@@ -35,15 +35,15 @@
 
     el.on('submit', 'form', function (ev) {
       var field = $(this).find('[name="description"]');
-   
+
       if(field.val().replace(/^\s+|\s+$/g, '') !== '') {
         socket.emit('todos::create', {
           text: field.val()
         }, {}, app.errorHandler);
-     
+
         field.val('');
       }
-      
+
       ev.preventDefault();
     }).on('click', '.delete', function (ev) {
       var id = $(this).parents('li').data('id');

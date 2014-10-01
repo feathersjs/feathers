@@ -57,7 +57,7 @@
 
       return root;
     };
-    
+
 
     this.html(createMenu($(target).find('h2'), 2));
   };
@@ -65,9 +65,8 @@
   $(document).ready(function() {
     var offsetTop = $('.navbar-inverse').outerHeight();
 
-    $('#toc').toc('.documentation-content');
-    $('#rapidstart').gistPills(6644854);
-    $('#realtime-todos').gistPills(6665992, 1);
+    $('#toc').toc('.page-content');
+    $('#realtime-todos').gistPills(6665992, 0);
 
     $(window).on('resize', function(){
       $('[data-spy="scroll"]').each(function () {
@@ -86,13 +85,13 @@
     // This needs to be after #toc creation
     $('a[href^="#"]').click(function(ev) {
       var position = $(ev.target.hash).offset();
-      
+
       if (position){
         $("html, body").animate({ scrollTop: position.top - offsetTop }, 300);
       }
     });
 
-    $('#todo-example').todos('http://todos.feathersjs.com');
+    $('#todo-example').todos('http://todos.feathersjs.com:80');
     $('body').scrollspy({
       target: '#toc',
       offset: offsetTop

@@ -1,0 +1,85 @@
+---
+layout: default
+---
+
+<section id="hero">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 with-separator">
+        <div class="row text-center">
+          <img src="images/logo.png" alt="Feathers logo" />
+          <h1 class="tagline">Let your applications fly!</h1>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <p class="description">
+          Feathers is a small library that extends <a href="http://expressjs.com" target="_blank">Express</a>, one of the most popular web frameworks for <a href="http://nodejs.org" target="_blank">NodeJS</a>. It helps you to easily create shared RESTful web services and real-time APIs using <a href="http://socket.io" target="_blank">SocketIO</a> or other websocket libraries supported by <a href="http://primus.io" target="_blank">Primus</a>.
+        </p>
+        <div class="row badges text-center">
+          <p>
+            <a href="https://npmjs.org/package/feathers" title="Package status" target="_blank"><img src="https://badge.fury.io/js/feathers.png"/></a>
+            <a href="https://david-dm.org/feathersjs/feathers" target="_blank" title="Dependency status"><img src="https://david-dm.org/feathersjs/feathers.png"/></a>
+            <a href="https://travis-ci.org/feathersjs/feathers" target="_blank"><img src="https://travis-ci.org/feathersjs/feathers.png?branch=master" alt="Build status" /></a>
+          </p>
+        </div>
+        <div class="row github-links text-center">
+          <p>
+            <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=watch&count=true"
+          allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+            <iframe src="http://ghbtns.com/github-btn.html?user=feathersjs&repo=feathers&type=fork&count=true"
+          allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="example" class="example">
+  <div class="container">
+    <h2 class="page-header">Real-time Todos</h2>
+
+    <p>
+      In the tradition of <a href="http://todomvc.com/" title="TODO MVC" target="_blank">TodoMVC</a> the below example shows a real-time Todo application with Feathers and an in-memory Todo service on the server and a jQuery HTML page for the browser. To get up and running with this example <a href="https://gist.github.com/daffl/6665992/download">download the Gist</a>, unpack and in the new folder run
+      <blockquote><pre>npm install feathers feathers-memory body-parser<br>node app.js</pre></blockquote>
+      Then go to <a href="http://localhost:8080" target="_blank">http://localhost:8080</a>. The REST API will be available at <a href="localhost:8080/todos" target="_blank">localhost:8080/todos</a> (check out the example application endpoint <a href="http://todos.feathersjs.com/todos" target="_blank">here</a>). <br>Next, read up on the <a href="#guide">Feathers guide</a>.
+    </p>
+    <hr>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div id="todo-example">
+          <ul class="todos list-unstyled"></ul>
+          <form role="form" class="create-todo">
+            <div class="form-group">
+              <input type="text" class="form-control" name="description" placeholder="Add a new Todo">
+            </div>
+            <button type="submit" class="btn btn-primary col-md-12">Add Todo</button>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="row">
+          <ul class="nav nav-pills options example" id="realtime-todos">
+            <li><a href="#" title="Todo Feathers Server">Server</a></li>
+            <li><a href="#" title="Real-time Todo web page">Client</a></li>
+          </ul>
+          <script src="https://gist.github.com/daffl/6665992.js"></script>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="guide">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <div id="toc"></div>
+      </div>
+      <div class="col-md-9 page-content">
+        {{ content }}
+      </div>
+    </div>
+  </div>
+</section>

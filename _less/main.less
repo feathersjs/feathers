@@ -3,8 +3,11 @@
 @import "mixins";
 @import "pygments";
 
+@navbar-height: 60px;
+
 body, html {
   font-family: 'Helvetica', 'Arial', Sans-serif;
+  font-weight: 300;
 }
 
 a {
@@ -16,17 +19,30 @@ a {
 }
 
 code {
-  color: #000;
+  color: #6E6E6E;
+  font-size: 80%;
+  font-weight: bold;
+  background-color: transparent;
+}
+
+.content {
+  margin-top: @navbar-height;
 }
 
 .navbar {
   margin-bottom: 0;
 }
 
+.navbar-collapse {
+  &.collapsing, &.in {
+    width: 100%;
+  }
+}
+
 .navbar-inverse a.navbar-brand {
-  color: @medium-grey;
-  font-size: 35px;
-  padding-top: 20px;
+  padding: 0;
+  margin: 0 !important;
+  height: @navbar-height;
 
   &:hover {
     color: @red;
@@ -38,14 +54,18 @@ code {
 }
 
 .navbar-inverse {
-  background: @white;
-  border: none;
-  .drop-shadow(0, 1px, 2px, 0.2);
-}
-
-.navbar-inverse .navbar-toggle {
   background: #333;
-  margin-top: 20px;
+  border: none;
+  border-bottom: 10px solid @red;
+
+  .navbar-nav > li > a {
+    color: @white;
+  }
+
+  .navbar-toggle {
+    color: @white;
+    margin-top: 20px;
+  }
 }
 
 .navbar-inverse .navbar-nav > .active > a,
@@ -55,12 +75,14 @@ code {
   background-color: @red;
 }
 
-.navbar-inverse .navbar-nav > li > a:hover {
-  color: @dark-grey;
-}
+.navbar-inverse .navbar-nav > li > a {
+  &:hover {
+    color: @grey;
+  }
 
-.navbar-nav > li > a {
-  margin: 15px 0;
+  &.active {
+    color: @red;
+  }
 }
 
 .btn-primary:hover,
@@ -139,20 +161,20 @@ code {
 }
 
 section {
-  padding: 80px 0;
+  padding: 50px 0;
 
   h1 {
     margin-top: 0;
   }
 }
 
-section.hero {
-  background: @lighter-grey;
-  margin-top: 80px;
-  padding: 60px 0;
+section#hero {
+  padding: 100px 0;
 
-  img.theme {
-    margin: 0px auto 30px auto;
+  @media (min-width: 979px) {
+    .with-separator {
+      border-right: 1px solid #E5E5E5;
+    }
   }
 
   .badges p {
@@ -160,49 +182,17 @@ section.hero {
   }
 
   .tagline {
-    text-transform: uppercase;
-    font-weight: 600;
-    font-size: 48px;;
-  }
-
-  .inline-code {
-    border: 1px solid @very-light-grey;
-    background: @super-light-grey;
-    font-style: italic;
-    padding: 5px 0;
-    color: @red;
-    margin: 10px 0 20px 0;
-  }
-
-  @media (max-width: 979px) {
-    img.theme {
-      margin: 20px auto 30px auto;
-    }
-  }
-
-  @media (max-width: 479px) {
-    .tagline {
-      font-size: 40px;
-    }
-  }
-
-  ul {
     font-size: 24px;
-    margin-bottom: 20px;
+    color: #5f5f5f;
+  }
 
-    li {
-      padding-left: 70px;
+  .col-md-6 {
+    padding: 50px;
 
-      &.first {
-        .icon-feather {
-          font-size: 50px;
-        }
-
-        font-size: 30px;
-        font-weight: bold;
-        padding-left: 0;
-        margin-bottom: 10px;
-      }
+    .description {
+      padding-top: 50px;
+      padding-bottom: 20px;
+      text-align: justify;
     }
   }
 }
@@ -235,61 +225,40 @@ section.rapid-start {
   }
 }
 
-section.features {
+section.example {
   background: @lighter-grey;
-  text-align: center;
-  color: @dark-grey;
+
+  hr {
+    margin-bottom: 40px;
+  }
 
   h2 {
-    color: @red;
+    margin-top: 0;
   }
-
-  [class^="icon-"], [class*=" icon-"] {
-    font-size: 100px;
-    color: @super-light-grey;
-  }
-
-  .description {
-    text-align: justify;
-    font-weight: 300;
-    font-size: 18px;
-    letter-spacing: 1px;
-  }
-
-  @media (max-width: 979px) {
-    .description {
-      margin: 20px 0;
-    }
-  }
-}
-
-section.example {
-  background: @red;
 
   .file-data {
     height: 400px;
   }
 
   .nav-pills.options {
+    li a {
+      color: @white;
+    }
+
     li.active a {
-      color: @red;
-      background-color: @white;
+      color: @white;
     }
   }
 
-  a {
-    color: @super-light-grey;
-
-    &:hover {
-     color: @white;
-    }
+  blockquote {
+    padding: 0;
   }
 }
 
 footer {
-  color: @light-grey;
-  background: @very-dark-grey;
-  padding: 20px;
+  color: #5f5f5f;
+  text-align: center;
+  padding: 10px;
 
   .icon-heart {
     font-size: 24px;
@@ -326,19 +295,10 @@ footer {
 pre {
   padding: 15px;
   font-family: Consolas, "Liberation Mono", Courier, monospace;
-  font-size: 14px;
   background-color: #f8f8ff;
-  line-height: 0;
-
-  pre {
-    line-height: 1.428571429;
-    border: none;
-    padding: 0;
-    margin: 0;
-  }
 }
 
-.documentation-content {
+.page-content {
   h2 {
     color: @red;
   }
@@ -352,6 +312,9 @@ pre {
 
 #toc {
   padding-top: 20px;
+  height: 100%;
+  overflow: scroll;
+  padding-bottom: 100px;
 
   &.affix {
     position: fixed;
@@ -384,11 +347,26 @@ pre {
 
 #todo-example {
   ul.todos {
-    height: 285px;
-    color: #FFF;
+    padding-top: 10px;
+    height: 402px;
+
+    li:first-child {
+      margin-top: 0;
+    }
 
     li.done {
       text-decoration: line-through;
     }
+  }
+}
+
+blockquote > pre {
+  border: none;
+  background: transparent;
+}
+
+.gist {
+  pre, .file-data {
+    font-size: 14px !important;
   }
 }

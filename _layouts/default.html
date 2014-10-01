@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="/ico/favicon.png">
+
+    <title>{{ site.title }}{% if page.title %} - {{ page.title }}{% endif %}</title>
+    <link href="{{ '/css/feathers.min.css' | prepend: site.baseurl }}" rel="stylesheet">
+    <link href="{{ '/css/fontello.css' | prepend: site.baseurl }}" rel="stylesheet">
+    <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
+  </head>
+  <body data-spy="scroll" data-offset="100">
+    <div class="navbar-wrapper">
+      <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="icon-feather"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+              <img src="/images/logo-small.png" alt="Feathers logo small" />
+            </a>
+          </div>
+          <div class="navbar-collapse collapse pull-right">
+            <ul class="nav navbar-nav">
+              <li>
+                <a class="page-link" href="{{ '/' | prepend: site.baseurl }}">Home</a>
+              </li>
+              {% for weight in (1..10) %}
+                {% for p in site.pages %}
+                  {% if p.weight == weight %}
+                    <li>
+                      <a class="page-link {% if p.url == page.url %}active{% endif %}" href="{{ p.url | prepend: site.baseurl}}#{{p.anchor}}">
+                        {{ p.title }}
+                      </a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              {% endfor %}
+              <li>
+                <a class="page-link" target="_blank" href="https://github.com/feathersjs/feathers">
+                  <strong>Github</strong>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">{{content}}</div>
+
+    <footer>
+      <div class="row">
+        <p>&copy; 2014 Feathers. Another project made with <i class="icon-heart"></i> by
+          <a href="http://twitter.com/daffl" title="David Luecke" target="_blank">@daffl</a> and
+          <a href="http://twitter.com/ekryski" title="Eric Kryski" target="_blank">@ekryski</a>.
+        </p>
+      </div>
+    </footer>
+
+    <script src="http://todos.feathersjs.com/socket.io/socket.io.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="{{ '/js/todos.js' | prepend: site.baseurl }}"></script>
+    <script src="{{ '/js/feathers.js' | prepend: site.baseurl }}"></script>
+  </body>
+</html>

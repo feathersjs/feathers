@@ -1,7 +1,7 @@
 {
   "name": "feathers",
   "description": "An ultra scalable, feather weight, data oriented framework",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "homepage": "https://feathersjs.com",
   "repository": {
@@ -31,15 +31,9 @@
     "npm": "*"
   },
   "devDependencies": {
-    "marked": "~0.2.9",
-    "grunt-cli": "~0.1.7",
-    "grunt": "~0.4.1",
-    "grunt-release": "~0.5.1",
-    "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-less": "~0.7.0",
-    "grunt-contrib-watch": "~0.5.3",
-    "request": "~2.27.0",
-    "handlebars": "~1.0.12",
-    "pygmentize-bundled": "~2.1.0"
+    "grunt": "^0.4.1",
+    "grunt-cli": "^0.1.7",
+    "grunt-contrib-less": "^0.7.0",
+    "grunt-contrib-watch": "^0.6.1"
   }
 }
