@@ -6,13 +6,9 @@ baseurl: ""
 url: "http://yourdomain.com"
 
 # Build settings
-markdown: kramdown
-highlighter: pygments
-kramdown:
-  input: GFM
-  use_coderay: true
-  coderay:
-    coderay_line_numbers: ''
+markdown: redcarpet
+redcarpet:
+  extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "strikethrough", "superscript"]
 permalink: pretty
 exclude:
   - "node_modules"
