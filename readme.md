@@ -1,188 +1,20 @@
-## Introduction
+# Feathers - Let your applications fly!
 
-Feathers is a light weight web application framework that rides on top of [Express](http://expressjs.com), one of the most popular web frameworks for [NodeJS](http://nodejs.org/). It makes it easy to create RESTful web services and real-time applications using SocketIO and several other NodeJS real-time libraries.
+> Shared REST and real-time APIs with Express.
 
-If you are not familiar with Express head over to the [Express Guides](http://expressjs.com/guide.html) to get an idea. Feathers works the exact same way except that `var app = require('express')();` is replaced with `var app = require('feathers')()`. The most important concept that Feathers adds to Express middleware is data oriented **Services**. How services work and the API additional to the available [Express API](http://expressjs.com/api.html) is outlined in the following documentation.
+## To get started
 
-## Configuration
+Feathers extends [Express 4](http://expressjs.com), one of the most popular web frameworks for [NodeJS](http://nodejs.org/). It makes it easy to create shared RESTful web services and real-time applications using SocketIO and several other NodeJS websocket libraries.
 
-### REST
+If you are not familiar with Express head over to the [Express Guides](http://expressjs.com/guide.html) to get an idea. Feathers works the exact same way except that `var app = require('express')();` is replaced with `var app = require('feathers')()`. This means that you can literally drop Feathers into your existing Express 4 application and start adding new services right away. The following guide will walk through creating a basic Todo REST and websocket API with Feathers and MongoDB and also explain how to add authentication and authorization. For additional information also make sure to read through the [API documentation](/api/) later.
 
-In almost every case you want to expose your services through a RESTful JSON interface. This can be achieved by calling `app.configure(feathers.rest())`. Note that you will have to provide your own body parser middleware like the standard [Express 4 body-parser](https://github.com/expressjs/body-parser) to make REST `.create`, `.update` and `.patch` calls pass the parsed data.
+To get started with this guide, lets create a new folder and in it
 
-To set service parameters in a middleware, just attach it to the `req.feathers` object which will become the params for any resulting service call. It is also possible to use URL parameters for REST API calls which will also be added to the params object:
+> `npm install feathers`
 
-```js
-var bodyParser = require('body-parser');
+## Your first service
 
-app.configure(feathers.rest())
-  .use(bodyParser.json())
-  .use(bodyParser.urlencoded({extended: true}))
-  .use(function(req, res, next) {
-    req.feathers.data = 'Hello world';
-    next();
-  });
-
-app.use('/:app/todos', {
-  get: function(name, params, callback) {
-    console.log(params.data); // -> 'Hello world'
-    console.log(params.app); // will be `my` for GET /my/todos/dishes
-    callback(null, {
-      id: name,
-      params: params,
-      description: "You have to do " + name + "!"
-    });
-  }
-});
-```
-
-The default REST handler is a middleware that formats the data retrieved by the service as JSON. If you would like to configure your own `handler` middleware just pass it to `feathers.rest(handler)`. For example a middleware that just renders plain text with the todo description (`res.data` contains the data returned by the service):
-
-```js
-app.configure(feathers.rest(function restFormatter(req, res) {
-    res.format({
-      'text/plain': function() {
-        res.end('The todo is: ' + res.data.description);
-      }
-    });
-  }))
-  .use('/todo', {
-    get: function (id, params, callback) {
-      callback(null, { description: 'You have to do ' + id });
-    }
-  });
-```
-
-If you want to add other middleware *before* the REST handler, simply call `app.use(middleware)` before configuring the handler.
-
-### SocketIO
-
-To expose services via [SocketIO](http://socket.io/) call `app.configure(feathers.socketio())`. It is also possible pass a `function(io) {}` when initializing the provider where `io` is the main SocketIO object. Since Feathers is only using the SocketIO default configuration, this is a good spot to initialize the [recommended production settings](https://github.com/LearnBoost/Socket.IO/wiki/Configuring-Socket.IO#recommended-production-settings):
-
-```js
-app.configure(feathers.socketio(function(io) {
-  io.enable('browser client minification');  // send minified client
-  io.enable('browser client etag');          // apply etag caching logic based on version number
-  io.enable('browser client gzip');          // gzip the file
-
-  // enable all transports (optional if you want flashsocket support, please note that some hosting
-  // providers do not allow you to create servers that listen on a port different than 80 or their
-  // default port)
-  io.set('transports', [
-      'websocket'
-    , 'flashsocket'
-    , 'htmlfile'
-    , 'xhr-polling'
-    , 'jsonp-polling'
-  ]);
-}));
-```
-
-> Note: io.set is deprecated in Socket.IO 1.0. The above configuration will still work but will be replaced with the recommended production configuration for version 1.0 (which isn't available at the moment).
-
-This is also the place to listen to custom events or add [authorization](https://github.com/LearnBoost/socket.io/wiki/Authorizing):
-
-```js
-app.configure(feathers.socketio(function(io) {
-  io.on('connection', function(socket) {
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
-      console.log(data);
-    });
-  });
-
-  io.use(function (socket, next) {
-    // Authorize using the /users service
-    app.service('users').find({
-      username: socket.request.username,
-      password: socket.request.password
-    }, next);
-  });
-}));
-```
-
-Similar than the REST middleware, the SocketIO handshakes `feathers` property will be extended
-for service parameters:
-
-```js
-app.configure(feathers.socketio(function(io) {
-  io.use(function (socket, next) {
-    socket.feathers.user = { name: 'David' };
-    next();
-  });
-}));
-
-app.use('todos', {
-  create: function(data, params, callback) {
-    // When called via SocketIO:
-    params.user // -> { name: 'David' }
-  }
-});
-```
-
-Once the server has been started with `app.listen()` the SocketIO object is available as `app.io`.
-
-### Primus
-
-[Primus](https://github.com/primus/primus) is a universal wrapper for real-time frameworks and allows you to transparently use Engine.IO, WebSockets, BrowserChannel, SockJS and Socket.IO. Set it up with `feathers.primus(configuration [, fn])` where `configuration` is the [Primus server configuration](https://github.com/primus/primus#getting-started) and `fn` an optional callback with the Primus server instance that can e.g. be used for setting up [authorization](https://github.com/primus/primus#authorization):
-
-```js
-// Set up Primus with SockJS
-app.configure(feathers.primus({
-  transformer: 'sockjs'
-}, function(primus) {
-  // Set up Primus authorization here
-  primus.authorize(function (req, done) {
-    var auth;
-
-    try { auth = authParser(req.headers['authorization']) }
-    catch (ex) { return done(ex) }
-
-    // Do some async auth check
-    authCheck(auth, done);
-  });
-}));
-```
-
-In the Browser you can connect like this:
-
-```html
-<script type="text/javascript" src="primus/primus.js"></script>
-<script type="text/javascript">
-  var primus = new Primus(url);
-
-  primus.on('todos created', function(todo) {
-    console.log('Someone created a Todo', todo);
-  });
-
-  primus.send('todos::create', { description: 'Do something' }, {}, function() {
-    primus.send('todos::find', {}, function(error, todos) {
-      console.log(todos);
-    });
-  });
-</script>
-```
-
-Just like REST and SocketIO, the Primus request object can be extended with a `feathers` parameter during authorization which will extend the `params` for any service request:
-
-```js
-app.configure(feathers.primus({
-  transformer: 'sockjs'
-}, function(primus) {
-  // Set up Primus authorization here
-  primus.authorize(function (req, done) {
-    req.feathers = {
-      user: { name: 'David' }
-    }
-
-    done();
-  });
-}));
-```
-
-## Services
-
-As mentioned, the basic Feathers functionality is fully compatible with Express. The key concept added to that of middleware is *service objects. A service can be any JavaScript object that offers one or more of the `find`, `get`, `create`, `update`, `remove` and `setup` service methods with the following signatures:
+The most important concept Feathers adds to Express is that of __services__. Services can be used just like an Express middleware function but instead are JavaScript objects that provide at least one of the following methods:
 
 ```js
 var myService = {
@@ -192,598 +24,267 @@ var myService = {
   update: function(id, data, params, callback) {},
   patch: function(id, data, params, callback) {},
   remove: function(id, params, callback) {},
-  setup: function(app) {}
+  setup: function(app, path) {}
 }
 ```
 
-And can be used like any other Express middleware `app.use('/my-service', myService)`.
+This object can be registered like `app.use('/my-service', myService)` which - if configured - makes it available as a REST endpoint at `/my-service` and also through websockets. As usual in NodeJS, `callback` has to be called with the error (if any) first and the data as the second parameter.
 
-All service callbacks follow the `function(error, data)` NodeJS convention. `params` can contain any additional parameters, for example the currently authenticated user. REST service calls set `params.query` with the query parameters (e.g. a query string like `?status=active&type=user` becomes `{ query: { status: "active", type: "user" } }`), socket call parameters will also be passed as `params.query`.
+### Simple Todo
 
-It is also possible to return a [Promise](http://promises-aplus.github.io/promises-spec/) object from a service instead of using the callback, for example using [Q](https://github.com/kriskowal/q):
-
-```js
-var Q = require('q');
-
-var todos = {
-  get: function(id) {
-    var dfd = Q.defer();
-
-    setTimeout(function() {
-      dfd.resolve({
-        id: id,
-        description: 'You have to do ' + id
-      });
-    }, 500);
-
-    return dfd.promise;
-  }
-}
-```
-
-### find
-
-`find(params, callback)` retrieves a list of all resources from the service. SocketIO parameters will be passed as `params.query` to the service.
-
-__REST__
-
-    GET todo?status=completed&user=10
-
-__SocketIO__
+With those methods available we can implement a very basic Todo service that returns a single Todo using the id passed to the `get` method:
 
 ```js
-socket.emit('todo::find', {
-  status: 'completed'
-  user: 10
-}, function(error, data) {
-});
-```
-
-> Will call .create with `params` { query: { status: 'completed', user: 10 } }
-
-### get
-
-`get(id, params, callback)` retrieves a single resource with the given `id` from the service.
-
-__REST__
-
-    GET todo/1
-
-__SocketIO__
-
-```js
-socket.emit('todo::get', 1, {}, function(error, data) {
-
-});
-```
-
-### create
-
-`create(data, params, callback)` creates a new resource with `data`. The callback should be called with the newly
-created resource data.
-
-__REST__
-
-    POST todo
-    { "description": "I really have to iron" }
-
-By default the body can be eihter JSON or form encoded as long as the content type is set accordingly.
-
-__SocketIO__
-
-```js
-socket.emit('todo::create', {
-  description: 'I really have to iron'
-}, {}, function(error, data) {
-});
-```
-
-### update
-
-`update(id, data, params, callback)` updates the resource identified by `id` using `data`. The callback should
-be called with the updated resource data.
-
-__REST__
-
-    PUT todo/2
-    { "description": "I really have to do laundry" }
-
-__SocketIO__
-
-```js
-socket.emit('todo::update', 2, {
-  description: 'I really have to do laundry'
-}, {}, function(error, data) {
-  // data -> { id: 2, description: "I really have to do laundry" }
-});
-```
-
-### patch
-
-`patch(id, data, params, callback)` patches the resource identified by `id` using `data`. The callback should be called with the updated resource data. Implement `patch` additionally to `update` if you want to separate between partial and full updates and support the `PATCH` HTTP method.
-
-__REST__
-
-    PATCH todo/2
-    { "description": "I really have to do laundry" }
-
-__SocketIO__
-
-```js
-socket.emit('todo::patch', 2, {
-  description: 'I really have to do laundry'
-}, {}, function(error, data) {
-  // data -> { id: 2, description: "I really have to do laundry" }
-});
-```
-
-### remove
-
-`remove(id, params, callback)` removes the resource with `id`. The callback should be called with the removed resource.
-
-__REST__
-
-    DELETE todo/2
-
-__SocketIO__
-
-```js
-socket.emit('todo::remove', 2, {}, function(error, data) {
-});
-```
-
-### setup
-
-`setup(app, path)` initializes the service passing an instance of the Feathers application and the path it has been registered on. The SocketIO server is available via `app.io`. `setup` is a great way to connect services:
-
-```js
+// app.js
+var feathers = require('feathers');
+var app = feathers();
 var todoService = {
-  get: function(name, params, callback) {
+  get: function(id, params, callback) {
+    // Call back with no error and the Todo object
     callback(null, {
-      id: name,
-      description: 'You have to ' + name + '!'
+      id: id,
+      text: 'You have to do ' + id + '!'
     });
   }
 };
 
-var myService = {
-  setup: function(app) {
-    this.todo = app.service('todo');
-  },
-
-  get: function(name, params, callback) {
-    this.todo.get('take out trash', {}, function(error, todo) {
-      callback(error, {
-        name: name,
-        todo: todo
-      });
-    });
-  }
-}
-
-feathers()
-	.use('todo', todoService)
-	.use('my', myService)
-	.listen(8000);
+app.configure(feathers.rest())
+  .use('/todos', todoService)
+  .listen(3000);
 ```
 
-You can see the combination when going to `http://localhost:8000/my/test`.
+After running
 
-`setup` will be called after all REST routes have been set up. This means that you
-can't register custom middleware with potentially conflicting paths.
-In this case, implement `_setup(app, path)` instead which will run before the REST
-middleware is registered. An example would be implementing a `todos/count` route
-which returns the number of todos (instead of the todo with the id count):
+> `node app.js`
+
+You can go to [localhost:3000/todos/dishes](http://localhost:3000/todos/dishes) and should see the following JSON response:
 
 ```js
-var todoService = {
-  todos: [
-    {
-      id: 0,
-      description: 'Learn Feathers'
-    },
-    {
-      id: 1,
-      description: 'Do dishes'
-    }
-  ],
+{
+  "id": "dishes",
+  "text": "You have to do dishes!"
+}
+```
 
-  find: function (params, callback) {
+### CRUD Todos
+
+As you might have noticed, service methods mainly reflect basic [CRUD](http://en.wikipedia.org/wiki/Create,_read,_update_and_delete) functionality. Following up is a longer example with comments for implementing a complete Todo service that manages all Todos in memory:
+
+```js
+// todos.js
+module.exports = {
+  // The current id counter
+  id: 0,
+  // An array with all todos
+  todos: [],
+
+  // Tries to get a single Todo by its id.
+  // Throws an error if none can be found.
+  getTodo: function(id) {
+    var todos = this.todos;
+
+    for(var i = 0; i < todos.length; i++) {
+      if(todos[i].id === parseInt(id, 10)) {
+        return todos[i];
+      }
+    }
+
+    // If we didn't return yet we can throw an error
+    throw new Error('Could not find Todo');
+  },
+
+  // Return all Todos
+  find: function(params, callback) {
     callback(null, this.todos);
   },
 
-  _setup: function (app, path) {
-    var self = this;
-
-    app.get('/' + path + '/count', function (req, res) {
-      self.find({}, function (error, todos) {
-        res.json({
-          count: todos.length
-        });
-      });
-    });
-  }
-};
-
-feathers()
-  .use('todos', todoService)
-  .listen(8000);
-```
-
-
-__Pro tip:__
-
-Bind the apps `service` method to your service to always look your services up dynamically:
-
-```
-var myService = {
-  setup: function(app) {
-    this.service = app.service.bind(app);
-  },
-
-  get: function(name, params, callback) {
-    this.service('todos').get('take out trash', {}, function(error, todo) {
-      callback(null, {
-        name: name,
-        todo: todo
-      });
-    });
-  }
-}
-```
-
-## Events
-
-Any registered service will be automatically turned into an event emitter that emits events when a resource has changed, that is a `create`, `update` or `remove` service call returned successfully. It is therefore possible to bind to the below events via `app.service(servicepath).on()` and, if enabled, all events will also broadcast to all connected SocketIO clients in the form of `<servicepath> <eventname>`. Note that the service path will always be stripped of leading and trailing slashes regardless of how it has been registered (e.g. `/my/service/` will become `my/service`).
-
-### created
-
-The `created` event will be published with the callback data when a service `create` calls back successfully.
-
-```js
-app.use('/todos', {
-  create: function(data, params, callback) {
-    callback(null, data);
-  }
-});
-
-app.service('/todos').on('created', function(todo) {
-  console.log('Created todo', todo);
-});
-
-app.service('/todos').create({
-  description: 'We have to do something!'
-}, {}, function(error, callback) {
-  // ...
-});
-
-app.listen(8000);
-```
-
-__SocketIO__
-
-```html
-<script src="http://localhost:8000/socket.io/socket.io.js"></script>
-<script>
-  var socket = io.connect('http://localhost:8000/');
-
-  socket.on('todos created', function(todo) {
-    console.log('Got a new Todo!', todo);
-  });
-</script>
-```
-
-### updated, patched
-
-The `updated` and `patched` events will be published with the callback data when a service `update` or `patch` method calls back successfully.
-
-```js
-app.use('/my/todos/', {
-  update: function(id, data, params, callback) {
-    callback(null, data);
-  }
-});
-
-app.listen(8000);
-```
-
-__SocketIO__
-
-```html
-<script src="http://localhost:8000/socket.io/socket.io.js"></script>
-<script>
-  var socket = io.connect('http://localhost:8000/');
-
-  socket.on('my/todos updated', function(todo) {
-    console.log('Got an updated Todo!', todo);
-  });
-
-  socket.emit('my/todos::update', 1, {
-    description: 'Updated description'
-  }, {}, function(error, callback) {
-   // Do something here
-  });
-</script>
-```
-
-### removed
-
-The `removed` event will be published with the callback data when a service `remove` calls back successfully.
-
-```js
-app.use('/todos', {
-  remove: function(id, params, callback) {
-    callback(null, { id: id });
-  }
-});
-
-app.service('/todos').remove(1, {}, function(error, callback) {
-  // ...
-});
-
-app.listen(8000);
-```
-
-__SocketIO__
-
-```html
-<script src="http://localhost:8000/socket.io/socket.io.js"></script>
-<script>
-  var socket = io.connect('http://localhost:8000/');
-
-  socket.on('todos removed', function(todo) {
-    // Remove element showing the Todo from the page
-    $('#todo-' + todo.id).remove();
-  });
-</script>
-```
-
-### Event filtering
-
-By default all service events will be dispatched to all connected clients.
-In many cases you probably want to be able to only dispatch events for certain clients.
-This can be done by implementing the `created`, `updated`, `patched` and `removed` methods as `function(data, params, callback) {}` with `params` being the parameters set when the client connected, in SocketIO when authorizing and setting `handshake.feathers` and Primus with `req.feathers`.
-
-```js
-var myService = {
-  created: function(data, params, callback) {},
-  updated: function(data, params, callback) {},
-  patched: function(data, params, callback) {},
-  removed: function(data, params, callback) {}
-}
-```
-
-The event dispatching service methods will be run for every connected client. Calling the callback with data (that you also may modify) will dispatch the according event. Callling back with a falsy value will prevent the event being dispatched to this client.
-
-The following example only dispatches the Todo `updated` event if the authorized user belongs to the same company:
-
-```js
-app.configure(feathers.socketio(function(io) {
-  io.use(function (socket, callback) {
-    // Authorize using the /users service
-    app.service('users').find({
-      username: handshake.username,
-      password: handshake.password
-    }, function(error, user) {
-      if(!error || !user) {
-        return callback(error, false);
-      }
-
-      socket.feathers = {
-        user: user
-      };
-
-      callback(null, true);
-    });
-  });
-}));
-
-app.use('todos', {
-  update: function(id, data, params, callback) {
-    // Update
-    callback(null, data);
-  },
-
-  updated: function(todo, params, callback) {
-    // params === handshake.feathers
-    if(todo.companyId === params.user.companyId) {
-      // Dispatch the todo data to this client
-      return callback(null, todo);
+  // Returns a single Todo by id
+  get: function(id, params, callback) {
+    try {
+      callback(null, this.getTodo(id));
+    } catch(error) {
+      callback(error);
     }
+  },
 
-    // Call back with a falsy value to prevent dispatching
-    callback(null, false);
-  }
-});
-```
-
-On the client:
-
-```js
-socket.on('todo updated', function(data) {
-  // The client will only get this event
-  // if authorized and in the same company
-});
-```
-
-## API
-
-### listen
-
-`app.listen([port])` starts the application on the given port. It will first call the original [Express app.listen([port])](http://expressjs.com/api.html#app.listen), then run `app.setup(server)` (see below) with the server object and then return the server object.
-
-### setup
-
-`app.setup(server)` is used initialize all services by calling each services `.setup(app, path)` method (if available).
-It will also use the `server` instance passed (e.g. through `http.createServer`) to set up SocketIO (if enabled) and any other provider that might require the server instance.
-
-Normally `app.setup` will be called automatically when starting the application via `app.listen([port])` but there are cases when you need to initialize the server separately:
-
-__HTTPS__
-
-With your Feathers application initialized it is easy to set up an HTTPS REST and SocketIO server:
-
-```js
-app.configure(feathers.socketio()).use('/todos', todoService);
-
-var https = require('https');
-var server = https.createServer({
-  key: fs.readFileSync('privatekey.pem'),
-  cert: fs.readFileSync('certificate.pem')
-}, app).listen(443);
-
-// Call app.setup to initialize all services and SocketIO
-app.setup(server);
-```
-
-__Virtual Hosts__
-
-You can use `feathers.vhost` (which is the same as [Express and Connect .vhost](http://www.senchalabs.org/connect/vhost.html)) to run your Feathers app on a virtual host:
-
-```js
-app.use('/todos', todoService);
-
-var host = feathers().use(feathers.vhost('foo.com', app));
-var server = host.listen(8080);
-
-// Here we need to call app.setup because .listen on our virtal hosted
-// app is never called
-app.setup(server);
-```
-
-### use
-
-`app.use([path], service)` works just like [Express app.use([path], middleware)](http://expressjs.com/api.html#app.use) but additionally allows to register a service object (an object which at least provides one of the service methods as outlined in the Services section) instead of the middleware function. Note that REST services are registered in the same order as any other middleware so the below example will allow the `/todos` service only to [Passport](http://passportjs.org/) authenticated users.
-
-```js
-// Serve public folder for everybody
-app.use(feathers.static(__dirname + '/public');
-// Make sure that everything else only works with authentication
-app.use(function(req,res,next){
-  if(req.isAuthenticated()){
-    next();
-  } else {
-    // 401 Not Authorized
-    next(new Error(401));
-  }
-});
-// Add a service.
-app.use('/todos', {
-  get: function(name, params, callback) {
-    callback(null, {
-      id: name,
-      description: "You have to do " + name + "!"
-    });
-  }
-});
-```
-
-### service
-
-`app.service(path [, service])` does two things. Either returns the Feathers wrapped service object for the given path or registers a new service for the path.
-
-`app.service(path)` returns the wrapped service object for the given path. Feathers internally creates a new object from each registered service. This means that the object returned by `service(path)` will provide the same methods and functionality as your original service object but also functionality added by Feathers (most notably it is possible to listen to service events). `path` can be the service name with or without leading and trailing slashes.
-
-```js
-app.use('/my/todos', {
+  // Create a new Todo
   create: function(data, params, callback) {
+    // Increment the global ID counter and
+    // use it as the Todos id
+    data.id = this.id++;
+    this.todos.push(data);
     callback(null, data);
-  }
-});
+  },
 
-var todoService = app.service('my/todos');
-// todoService is an event emitter
-todoService.on('created', function(todo) {
-  console.log('Created todo', todo);
-});
+  // Update (replace) an existing Todo with new data
+  update: function(id, data, params, callback) {
+    try {
+      var todo = this.getTodo(id);
+      var index = this.todos.indexOf(todo);
+
+      data.id = todo.id;
+      // Replace all the data
+      this.todos[index] = data;
+      callback(null, data);
+    } catch(error) {
+      callback(error);
+    }
+  },
+
+  // Extend the data of an existing Todo
+  patch: function(id, data, params, callback) {
+    try {
+      var todo = this.getTodo(id);
+
+      // Extend the existing Todo with the new data
+      Object.keys(data).forEach(function(key) {
+        if(key !== 'id') {
+          todo[key] = data[key];
+        }
+      });
+
+      callback(null, todo);
+    } catch(error) {
+      callback(error);
+    }
+  },
+
+  // Remove an existing Todo by id
+  remove: function(id, params, callback) {
+    try {
+      var todo = this.getTodo(id);
+      var index = this.todos.indexOf(todo);
+
+      // Splice it out of our Todo list
+      this.todos.splice(index, 1);
+      callback(null, todo);
+    } catch(error) {
+      callback(error);
+    }
+  }
+}
 ```
 
-You can use `app.service(path, service)` instead `app.use(path, service)` if you want to be more explicit that you are registering a service. It is what is called internally by `app.use([path], service)` if a service object is being passed. `app.service` does __not__ provide the Express `app.use` functionality and does not check the service object for valid methods.
+The above example exports the service as a module from its own file, `todos.js`. This means that in  `app.js` we can replace the previous `todoService` with loading that module. In order to parse JSON encoded HTTP bodies we additionally need to install and load the Express [body-parser](https://github.com/expressjs/body-parser):
 
-## Why?
+> `npm install body-parser`
 
-We know! Oh God another NodeJS framework! We really didn't want to add another name to the long list of NodeJS web frameworks but also wanted to explore a different approach than any other framework we have seen. We strongly believe that data is the core of the web and should be the focus of web applications.
+```js
+// app.js
+var feathers = require('feathers');
+var bodyParser = require('body-parser');
 
-We also think that your data resources can and should be encapsulated in such a way that they can be scalable, easily testable and self contained. The classic web MVC pattern used to work well but is becoming antiquated in today's web.
+var app = feathers();
+var todoService = require('./todos');
 
-With that being said there are some amazing frameworks already out there and we wanted to leverage the ideas that have been put into them, which is why Feathers is built on top of [Express](http://expressjs.com) and is inspired in part by [Sails](http://sailsjs.org), [Flatiron](http://flatironjs.org) and [Derby](http://derbyjs.com).
+app.configure(feathers.rest())
+  .use(bodyParser.json())
+  .use('/todos', todoService)
+  .listen(3000);
+```
 
-## Changelog
-
-__[1.0.0](https://github.com/feathersjs/feathers/issues?q=milestone%3A1.0.0)__
-
-- Remove app.lookup and make the functionality available as app.service ([#94](https://github.com/feathersjs/feathers/pull/94)
-- Allow not passing parameters in websocket calls ([#92](https://github.com/feathersjs/feathers/pull/91))
-- Add _setup method ([#91](https://github.com/feathersjs/feathers/pull/91))
-- Throw an error when registering a service after application start ([#78](https://github.com/feathersjs/feathers/pull/78))
-- Send socket parameters as params.query ([#72](https://github.com/feathersjs/feathers/pull/72))
-- Send HTTP 201 and 204 status codes ([#71](https://github.com/feathersjs/feathers/pull/71))
-- Upgrade to SocketIO 1.0 ([#70](https://github.com/feathersjs/feathers/pull/70))
-- Upgrade to Express 4.0 ([#55](https://github.com/feathersjs/feathers/pull/55), [#54](https://github.com/feathersjs/feathers/issues/54))
-- Allow service methods to return a promise ([#59](https://github.com/feathersjs/feathers/pull/59))
-- Allow to register services with custom middleware ([#56](https://github.com/feathersjs/feathers/pull/56))
-- REST provider should not be added by default ([#53](https://github.com/feathersjs/feathers/issues/53))
-
-__0.4.0__
-
-- Allow socket provider event filtering and params passthrough ([#49](https://github.com/feathersjs/feathers/pull/49), [#50](https://github.com/feathersjs/feathers/pull/50), [#51](https://github.com/feathersjs/feathers/pull/51))
-- Added `patch` support ([#47](https://github.com/feathersjs/feathers/pull/47))
-- Allow to configure REST handler manually ([#40](https://github.com/feathersjs/feathers/issues/40), [#52](https://github.com/feathersjs/feathers/pull/52))
+Running `app.js` will now provide a fully functional REST API at `http://localhost:3000/todos`. You can test it, for example, using the [Postman](https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?hl=en) REST client plugin for Google chrome or via CURL:
 
 
-__0.3.2__
+<blockquote><pre>curl 'http://localhost:3000/todos/' -H 'Content-Type: application/json' --data-binary '{ "text": "You have to do dishes!" }'</pre></blockquote>
 
-- Allows Feathers to use other Express apps ([#46](https://github.com/feathersjs/feathers/pull/46))
-- Updated dependencies and switched to Lodash ([#42](https://github.com/feathersjs/feathers/pull/42))
+## Getting real-time
 
-__0.3.1__
+As previously mentioned, a Feathers service can also be exposed through websockets. You can either use [SocketIO](http://socket.io) or [Primus](https://github.com/primus/primus) - an abstraction layer for differentNode websocket libraries. In the following examples we will use SocketIO.
 
-- REST provider refactoring ([#35](https://github.com/feathersjs/feathers/pull/35)) to make it easier to develop plugins
-- HTTP requests now return 405 (Method not allowed) when trying to access unavailable service methods ([#35](https://github.com/feathersjs/feathers/pull/35))
+SocketIO can be enabled by calling `app.configure(feathers.socketio())`. Once set up, it is possible to call service methods by emitting events like `<servicepath>::<methodname>` on the socket and also receive events by listening to `<servicepath> <eventname>` (*eventname* can be `created`, `updated`, `patched` or `removed`). To make it easier to test in a web page, lets also statically host the files in the current folder. `app.js` then looks like this:
 
-__0.3.0__
+```js
+// app.js
+var feathers = require('feathers');
+var bodyParser = require('body-parser');
 
-- Added [Primus](https://github.com/primus/primus) provider ([#34](https://github.com/feathersjs/feathers/pull/34))
-- `app.setup(server)` to support HTTPS (and other functionality that requires a custom server) ([#33](https://github.com/feathersjs/feathers/pull/33))
-- Removed bad SocketIO configuration ([#19](https://github.com/feathersjs/feathers/issues/19))
-- Add .npmignore to not publish .idea folder ([#30](https://github.com/feathersjs/feathers/issues/30))
-- Remove middleware: connect.bodyParser() ([#27](https://github.com/feathersjs/feathers/pull/27))
+var app = feathers();
+var todoService = require('./todos');
 
-__0.2.0__
+app.configure(feathers.rest())
+  .configure(feathers.socketio())
+  .use(bodyParser.json())
+  .use('/todos', todoService)
+  .use('/', feathers.static(__dirname))
+  .listen(3000);
+```
 
-- Pre-initialize `req.feathers` in REST provider to set service parameters
-- Allowing to initialize services with or without slashes to be more express-compatible
+To test the connection, we can create an `index.html` file in the same folder. The example will connect to SocketIO, create a new Todo and also log when any Todo has been created, updated or patched:
 
-__0.1.0__
+```html
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Feathers SocketIO example</title>
+</head>
+<body>
+  <h1>A Feathers SocketIO example</h1>
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    // Connect to SocketIO on the same host
+    var socket = io.connect();
 
-- First beta release
-- Directly extends Express
-- Removed built in services and moved to [Legs](https://github.com/feathersjs/legs)
-- Created [example repository](https://github.com/feathersjs/examples)
+    socket.on('todos created', function(todo) {
+      console.log('Someone created a new Todo', todo);
+    });
 
-__0.0.x__
+    socket.on('todos updated', function(todo) {
+      console.log('Someone updated a Todo', todo);
+    });
 
-- Initial test alpha releases
+    socket.on('todos patched', function(todo) {
+      console.log('Someone patched', todo);
+    });
 
-## License
+    socket.emit('todos::create', {
+      description: 'You have to do something real-time!'
+    }, {}, function(error, todo) {
+      socket.emit('todos::find', {}, function(error, todos) {
+        console.log('Todos from server:', todos);
+      });
+    });
+  </script>
+</body>
+</html>
+```
 
-Copyright (C) 2013 David Luecke daff@neyeon.com
-Copyright (C) 2013 Eric Kryski e.kryski@gmail.com
+After restarting, going directly to [localhost:3000](http://localhost:3000) with the console open will show what is happening on the HTML page. You can also see the newly created Todo at the REST endpoint [localhost:3000/todos](http://localhost:3000/todos). With the page open, reating a new  Todo via the REST API, for example
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+<blockquote><pre>curl 'http://localhost:3000/todos/' -H 'Content-Type: application/json' --data-binary '{ "text": "Do something" }'</pre></blockquote>
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+will also log `Someone created a new Todo`. This is how you can implement real-time functionality in any web page without a lot of magic using standardized websocket messages instead of having to re-invent your own.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+## Persisting to MongoDB
+
+Our CRUD Todo functionality implemented in the service is very common and doesn't have to be implemented form scratch every time. In fact, this is almost exactly what is being provided already in the [feathers-memory](https://github.com/feathersjs/feathers-memory) module. Luckily we don't have to stop at storing everything in-memory. For the popular NoSQL database [MongoDB](http://mongodb.org) , for example, there already is the [feathers-mongodb](https://github.com/feathersjs/feathers-mongodb) module and if you need more ORM-like functionality through [Mongoose](http://mongoosejs.com/) you can also use [feathers-mongoose](https://github.com/feathersjs/feathers-mongoose).
+
+> `npm install feathers-mongodb`
+
+With a MongoDB instance running locally, we can replace our `todoService` in `app.js` with a MongoDB storage on the `feathers-demo` database and the `todos` collection like this:
+
+```js
+// app.js
+var feathers = require('feathers');
+var mongodb = require('feathers-mongodb');
+var bodyParser = require('body-parser');
+
+var app = feathers();
+var todoService = mongodb({
+  db: 'feathers-demo',
+  collection: 'todos'
+});
+
+app.configure(feathers.rest())
+  .configure(feathers.socketio())
+  .use(bodyParser.json())
+  .use('/todos', todoService)
+  .use('/', feathers.static(__dirname))
+  .listen(3000);
+```
+
+And just like this we have a full REST and real-time Todo API that stores its data into MongoDB in just 16 lines of code!
+
+## Next steps
+
+To learn more about Feathers go to the [feathersjs.com](http://feathersjs.com) homepage and continue reading this guide.
