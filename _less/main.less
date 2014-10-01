@@ -228,6 +228,10 @@ section.rapid-start {
 section.example {
   background: @lighter-grey;
 
+  hr {
+    margin-bottom: 40px;
+  }
+
   h2 {
     margin-top: 0;
   }
@@ -343,8 +347,12 @@ pre {
 
 #todo-example {
   ul.todos {
+    padding-top: 10px;
     height: 402px;
-    color: #FFF;
+
+    li:first-child {
+      margin-top: 0;
+    }
 
     li.done {
       text-decoration: line-through;

@@ -91,7 +91,7 @@
       }
     });
 
-    $('#todo-example').todos('http://todos.feathersjs.com');
+    $('#todo-example').todos('http://todos.feathersjs.com:80');
     $('body').scrollspy({
       target: '#toc',
       offset: offsetTop
