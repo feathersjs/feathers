@@ -228,16 +228,19 @@ To test the connection, we can create an `index.html` file in the same folder. T
   <h1>A Feathers SocketIO example</h1>
   <pre id="log"></pre>
 
-  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <script type="text/javascript">
     // Connect to SocketIO on the same host
     var socket = io.connect();
-    var logElement = document.getElementBydId('log');
+
+    // This lets us log messages and JSON on the page
+    var logElement = document.getElementById('log');
     var log = function(message, data) {
       logElement.innerHTML = logElement.innerHTML + '\n'
         + message + '\n' + JSON.stringify(data, null, '  ');
     }
 
+    // Listen to all the service events
     socket.on('todos created', function(todo) {
       log('Someone created a new Todo:', todo);
     });
@@ -254,8 +257,9 @@ To test the connection, we can create an `index.html` file in the same folder. T
       log('Someone deleted a Todo', todo);
     });
 
+    // Create a new Todo and then log all Todos from the server
     socket.emit('todos::create', {
-      description: 'You have to do something real-time!'
+      text: 'You have to do something real-time!'
     }, {}, function(error, todo) {
       log('Created Todo', todo);
       socket.emit('todos::find', {}, function(error, todos) {
@@ -271,11 +275,11 @@ After restarting, going directly to [localhost:3000](http://localhost:3000) with
 
 <blockquote><pre>curl 'http://localhost:3000/todos/' -H 'Content-Type: application/json' --data-binary '{ "text": "Do something" }'</pre></blockquote>
 
-will also log `Someone created a new Todo`. This is how you can implement real-time functionality in any web page without a lot of magic using standardized websocket messages instead of having to re-invent your own.
+will also log `Someone created a new Todo`. This is how you can implement real-time functionality in any web page by using standardized websocket messages instead of having to make up your own.
 
 ## Persisting to MongoDB
 
-Our CRUD Todo functionality implemented in the service is very common and doesn't have to be implemented from scratch every time. In fact, this is almost exactly what is being provided already in the [feathers-memory](https://github.com/feathersjs/feathers-memory) module. Luckily we don't have to stop at storing everything in-memory. For the popular NoSQL database [MongoDB](http://mongodb.org) , for example, there already is the [feathers-mongodb](https://github.com/feathersjs/feathers-mongodb) module and if you need more ORM-like functionality through [Mongoose](http://mongoosejs.com/) you can also use [feathers-mongoose](https://github.com/feathersjs/feathers-mongoose).
+Our CRUD Todo functionality implemented in the service is very common and doesn't have to be re-done from scratch every time. In fact, this is almost exactly what is being provided already in the [feathers-memory](https://github.com/feathersjs/feathers-memory) module. Luckily we don't have to stop at storing everything in-memory. For the popular NoSQL database [MongoDB](http://mongodb.org) , for example, there already is the [feathers-mongodb](https://github.com/feathersjs/feathers-mongodb) module and if you need more ORM-like functionality through [Mongoose](http://mongoosejs.com/) you can also use [feathers-mongoose](https://github.com/feathersjs/feathers-mongoose).
 
 > `npm install feathers-mongodb`
 
@@ -301,15 +305,15 @@ app.configure(feathers.rest())
   .listen(3000);
 ```
 
-And just like this we have a full REST and real-time Todo API that stores its data into MongoDB in just 16 lines of code!
+And just like this we have a full REST and real-time Todo API that stores its data into MongoDB in just 16 lines of code! We will continue using MongoDB so we don't need our example `todos.js` service anymore.
 
 ## Validation and processing
 
-The next important step in is validating and processing our data. With the MongoDB service functionality already implemented we have two options to extend the basic functionality.
+The next step is validating and processing our data. With the MongoDB service already implemented we have two options to extend its functionality.
 
 ### Service Extension
 
-*feathers-mongodb* uses the ES5 inheritance library [Uberproto](https://github.com/daffl/uberproto). This allows us to `extend` the original object returned by the call to `mongodb(options)` and overwrite the existing implementation of `create` to process the Todo data and then pass it to the original method. This way we can also easily add our own functionality to the service.
+*feathers-mongodb* uses the ES5 inheritance library [Uberproto](https://github.com/daffl/uberproto). This allows us to `extend` the original object returned by the call to `mongodb(options)` and overwrite the existing implementation of `create` to process the Todo data and then pass it to the original (`_super`) method. This way we can also easily add our own methods to the service.
 
 ```js
 var todoService = mongodb({
@@ -317,18 +321,17 @@ var todoService = mongodb({
   collection: 'todos'
 }).extend({
   create: function(data, params, callback) {
-    // We want to convert possible string in `complete` to
-    // an actual boolean and also only use the `text` and
-    // `complete` properties
+    // We want to make sure that `complete` is always set
+    // and also only use the `text` and `complete` properties
     var newData = {
       text: data.text,
-      complete: data.complete || data.complete === 'true'
+      complete: data.complete === 'true' || !!data.complete
     };
     // Call the original method with the new data
     this._super(newData, params, callback);
   },
 
-  // Or add other methods
+  // Add another method
   addDefaultTodo: function(callback) {
     this.create({
       text: 'The default todo',
@@ -340,7 +343,7 @@ var todoService = mongodb({
 
 ### Hooks
 
-Another option is the [feathers-hooks](https://github.com/feathersjs/feathers-hooks) plugin which allows you to add asynchronous hooks before or after a service method call. Hooks work similar to Express middleware. The following example adds a hook that converts our Todo data and makes sure that nobody submits anything that we don't want to put into MongoDB:
+Another option is the [feathers-hooks](https://github.com/feathersjs/feathers-hooks) plugin which allows us to add asynchronous hooks before or after a service method call. Hooks work similar to Express middleware. The following example adds a hook that converts our Todo data and makes sure that nobody submits anything that we don't want to put into MongoDB:
 
 > `npm install feathers-hooks`
 
@@ -374,20 +377,20 @@ app.service('todos').before({
     // Replace the old data by creating a new object
     hook.data = {
       text: oldData.text,
-      complete: oldData.complete || oldData.complete === 'true'
+      complete: oldData.complete === 'true' || !!oldData.complete
     };
     next();
   }
 });
 ```
 
-You might have noticed the call to [.service](/api/#service) in `app.service('todos')`. This will basically return the original service object (`todoService` in our case) *but* contain some functionality added by Feathers. Most notably, the returned service object will be an [EventEmitter](http://nodejs.org/api/events.html#events_class_events_eventemitter) that emits `created`, `updated` etc. events.
+You might have noticed the call to [.service](/api/#toc9) in `app.service('todos')`. This will basically return the original service object (`todoService` in our case) *but* contain some functionality added by Feathers. Most notably, the returned service object will be an [EventEmitter](http://nodejs.org/api/events.html#events_class_events_eventemitter) that emits `created`, `updated` etc. events.
 
-The *feathers-hooks* plugin also adds a `.before` and `.after` method that allows you to add hooks to that service. When you need to access services, *always* use `app.service(name)` and not the original service object otherwise things will not work as expected.
+The *feathers-hooks* plugin also adds a `.before` and `.after` method that allows to add hooks to that service. When you need to access services, *always* use `app.service(name)` and not the original service object otherwise things will not work as expected.
 
 ## Authentication
 
-Since Feathers directly extends Express you can use any of its authentication mechanism, the one  used quite often being [Passport](http://passportjs.org/). Manually setting up shared authentication between websockets and an HTTP REST API can be tricky. This is what the [feathers-passport](https://github.com/feathersjs/feathers-passport) module aims to make a lot easier. The following examples show how to add local authentication that uses a Feathers service for storing and retrieving user information.
+Since Feathers directly extends Express you can use any of its authentication mechanism. [Passport](http://passportjs.org/) is one that is used quite often and also really flexible. Manually setting up shared authentication between websockets and an HTTP REST API can be tricky. This is what the [feathers-passport](https://github.com/feathersjs/feathers-passport) module aims to make easier. The following examples show how to add local authentication that uses a Feathers service for storing and retrieving user information.
 
 ### Configuring Passport
 
@@ -400,6 +403,7 @@ The first step is to add the Passport, local strategy and feathers-passport modu
 var feathers = require('feathers');
 var mongodb = require('feathers-mongodb');
 var bodyParser = require('body-parser');
+var hooks = require('feathers-hooks');
 
 var passport = require('passport');
 var connectMongo = require('connect-mongo');
@@ -413,24 +417,28 @@ var todoService = mongodb({
 
 app.configure(feathers.rest())
   .configure(feathers.socketio())
-  .configure(feathersPassport(function(defaults) {
+  .configure(hooks())
+  .configure(feathersPassport(function(result) {
     // MongoStore needs the session function
-    var MongoStore = connectMongo(defaults.createSession);
-    return {
-      secret: 'feathers-rocks'
-      store: new MongoStore({
-        db: 'feathers-demo'
-      })
-    };
+    var MongoStore = connectMongo(result.createSession);
+
+    result.secret = 'feathers-rocks';
+    result.store = new MongoStore({
+      db: 'feathers-demo'
+    });
+
+    return result;
   }))
   .use(bodyParser.json())
+  // Now we also need to parse HTML form submissions
+  .use(bodyParser.urlencoded({ extended: true }))
   .use('/todos', todoService)
   .use('/', feathers.static(__dirname));
 ```
 
 ### User storage
 
-Next, we create a MongoDB service for storing user information. It is always a good idea to not store plain text passwords in the database so we add a `.before` hook that SHA1 hashes the password when creating a new user. This can be done in the service `.setup` which is called when the application is ready to start up. We will also add an `.authenticate` method that we can use to look up a user by username and compare the SHA1 hashed passwords.
+Next, we create a MongoDB service for storing user information. It is always a good idea to not store plain text passwords in the database so we add a `.before` hook that SHA1 hashes the password when creating a new user. This can be done in the service `.setup` which is called when the application is ready to start up. We also add an `.authenticate` method that we can use to look up a user by username and compare the SHA1 hashed passwords.
 
 ```js
 var crypto = require('crypto');
@@ -467,8 +475,7 @@ var userService = mongodb({
         return callback(new Error('User password does not match'));
       }
 
-      // If we got to here, we call the callback
-      // With the user information
+      // If we got to here, we call the callback with the user information
       return callback(null, user);
     });
   },
@@ -553,11 +560,11 @@ To test the login, we might want to add a new user as well:
 
 <blockquote><pre>curl 'http://localhost:3000/users/' -H 'Content-Type: application/json' --data-binary '{ "username": "feathers", "password": "supersecret" }'</pre></blockquote>
 
-Not it should be possible to log in with the `feathers` username and `supersecret` password.
+Now it should be possible to log in with the `feathers` username and `supersecret` password and you will get the logged in user information in every service call in `params.user`.
 
 ## Authorization
 
-Authorization is the process of determining after successful authentication if the user is allowed to perform the requested action. This is again where hooks come in very handy.
+Authorization is the process of determining after successful authentication if the user is allowed to perform the requested action. This is again where hooks come in handy.
 
 ### User authorization
 
@@ -566,9 +573,9 @@ Since *feathers-passport* adds the authenticated user information to the service
 ```js
 app.service('todos').before({
   create: function(hook, next) {
-    // We only allow creating hooks with an authenticated user
+    // We only allow creating todos with an authenticated user
     if(!hook.params.user) {
-      return next(new Error('User not authenticated'));
+      return next(new Error('You need to be authenticated'));
     }
 
     // Check if the user belongs the `admin` group
@@ -587,7 +594,7 @@ app.service('todos').before({
 
 ### Event filtering
 
-This is also a good time to talk a little about [filtering events](/api/#event-filtering). It is very likely that you only want to send certain events to specific users instead of everybody. Following up on the group authorization example from above, we might only want to dispatch a `todos created` event to users that are in the admin group. This can be done by adding a `created(data, params, callback)` method to the Todo MongoDB service:
+This is also a good time to talk a little about [filtering events](/api/#event-filtering). It is very likely that you eventually only want to send certain events to specific users instead of everybody. Following up on the group authorization example from above, we might only want to dispatch a `todos created` event to users that are in the admin group. This can be done by adding a `created(data, params, callback)` method to the Todo MongoDB service:
 
 ```js
 var todoService = mongodb({
@@ -595,6 +602,7 @@ var todoService = mongodb({
   collection: 'todos'
 }).extend({
   created: function(data, params, callback) {
+    // Only dispatch if we have a user and user belongs to the admin group
     if(params.user && params.user.groups.indexOf('admin') !== -1) {
       // Call back with the data we want to dispatch
       return callback(null, data);

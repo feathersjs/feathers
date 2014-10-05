@@ -9,6 +9,10 @@ weight: 4
 
 On this page you can find a list of Feathers related questions that came up before. Make sure to also head over to the [Express FAQ](http://expressjs.com/faq.html). As already mentioned, since Feathers directly extends Express, everything there applies to Feathers as well. You are more than welcome to submit any questions as a [GitHub issue](https://github.com/feathersjs/feathers/issues) or on [Stackoverflow](http://stackoverflow.com) using the `feathers` or `feathersjs` tag.
 
+## Where can I get help?
+
+If you have any questions, feel free to submit them as a [GitHub issue](https://github.com/feathersjs/feathers/issues) or on [Stackoverflow](http://stackoverflow.com) using the `feathers` or `feathersjs` tag. We are also on IRC in the [#feathersjs](http://webchat.freenode.net/?channels=feathersjs) channel on Freenode.
+
 ## Why another Node web framework?
 
 We know! Oh God another NodeJS framework! We really didn't want to add another name to the long list of NodeJS web frameworks but also wanted to explore a different approach than any other library we have seen. We strongly believe that data is the core of the web and should be the focus of web applications.
