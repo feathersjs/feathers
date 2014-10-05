@@ -21,8 +21,9 @@ a {
 code {
   color: #6E6E6E;
   font-size: 80%;
-  font-weight: bold;
+  font-weight: 100;
   background-color: transparent;
+  white-space: normal;
 }
 
 .content {
@@ -171,6 +172,10 @@ section {
 section#hero {
   padding: 100px 0;
 
+  img {
+    max-width: 100%;
+  }
+
   @media (min-width: 979px) {
     .with-separator {
       border-right: 1px solid #E5E5E5;
@@ -314,7 +319,7 @@ pre {
 #toc {
   padding-top: 20px;
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
   padding-bottom: 100px;
 
   &.affix {

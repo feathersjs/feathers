@@ -8,17 +8,19 @@ anchor: guide
 
 ## To get started
 
-Feathers extends [Express 4](http://expressjs.com), one of the most popular web frameworks for [NodeJS](http://nodejs.org/). It makes it easy to create shared RESTful web services and real-time applications using SocketIO and several other NodeJS websocket libraries.
+Feathers extends [Express 4](http://expressjs.com), one of the most popular web frameworks for [NodeJS](http://nodejs.org/). It makes it easy to create shared RESTful web services and real-time applications using SocketIO and several other NodeJS websocket libraries supported by [Primus](http://primus.io).
 
-If you are not familiar with Express head over to the [Express Guides](http://expressjs.com/guide.html) to get an idea. Feathers works the exact same way except that `var app = require('express')();` is replaced with `var app = require('feathers')()`. This means that you can literally drop Feathers into your existing Express 4 application and start adding new services right away. The following guide will walk through creating a basic Todo REST and websocket API with Feathers and MongoDB and also explain how to add authentication and authorization. For additional information also make sure to read through the [API documentation](/api/) later.
+If you are not familiar with Express head over to the [Express Guides](http://expressjs.com/guide.html) to get an idea. Feathers works the exact same way and supports the same functionality except that `var app = require('express')();` is replaced with `var app = require('feathers')()`. This means that you can literally drop Feathers into your existing Express 4 application and start adding new services right away.
 
-To get started with this guide, lets create a new folder and in it
+The following guide will walk through creating a basic Todo REST and websocket API with Feathers and MongoDB and also explain how to add authentication and authorization. For additional information also make sure to read through the [API documentation](/api/) and [FAQ](/faq/) later.
+
+To get started with this guide, lets create a new folder and in it run
 
 > `npm install feathers`
 
 ## Your first service
 
-The most important concept Feathers adds to Express is that of __services__. Services can be used just like an Express middleware function but instead are JavaScript objects that provide at least one of the following methods:
+The most important concept Feathers adds to Express is that of *services*. Services can be used just like an Express middleware function but instead are JavaScript objects that provide at least one of the following methods:
 
 ```js
 var myService = {
@@ -214,7 +216,7 @@ app.configure(feathers.rest())
   .listen(3000);
 ```
 
-To test the connection, we can create an `index.html` file in the same folder. The example will connect to SocketIO, create a new Todo and also log when any Todo has been created, updated or patched:
+To test the connection, we can create an `index.html` file in the same folder. The example page will connect to SocketIO, create a new Todo and also log when any Todo has been created, updated or patched:
 
 ```html
 <!DOCTYPE HTML>
@@ -224,28 +226,40 @@ To test the connection, we can create an `index.html` file in the same folder. T
 </head>
 <body>
   <h1>A Feathers SocketIO example</h1>
+  <pre id="log"></pre>
+
   <script src="http://localhost:3000/socket.io/socket.io.js"></script>
   <script type="text/javascript">
     // Connect to SocketIO on the same host
     var socket = io.connect();
+    var logElement = document.getElementBydId('log');
+    var log = function(message, data) {
+      logElement.innerHTML = logElement.innerHTML + '\n'
+        + message + '\n' + JSON.stringify(data, null, '  ');
+    }
 
     socket.on('todos created', function(todo) {
-      console.log('Someone created a new Todo', todo);
+      log('Someone created a new Todo:', todo);
     });
 
     socket.on('todos updated', function(todo) {
-      console.log('Someone updated a Todo', todo);
+      log('Someone updated a Todo', todo);
     });
 
     socket.on('todos patched', function(todo) {
-      console.log('Someone patched', todo);
+      log('Someone patched a Todo', todo);
+    });
+
+    socket.on('todos removed', function(todo) {
+      log('Someone deleted a Todo', todo);
     });
 
     socket.emit('todos::create', {
       description: 'You have to do something real-time!'
     }, {}, function(error, todo) {
+      log('Created Todo', todo);
       socket.emit('todos::find', {}, function(error, todos) {
-        console.log('Todos from server:', todos);
+        log('Todos from server:', todos);
       });
     });
   </script>
@@ -253,7 +267,7 @@ To test the connection, we can create an `index.html` file in the same folder. T
 </html>
 ```
 
-After restarting, going directly to [localhost:3000](http://localhost:3000) with the console open will show what is happening on the HTML page. You can also see the newly created Todo at the REST endpoint [localhost:3000/todos](http://localhost:3000/todos). With the page open, reating a new  Todo via the REST API, for example
+After restarting, going directly to [localhost:3000](http://localhost:3000) with the console open will show what is happening on the HTML page. You can also see the newly created Todo at the REST endpoint [localhost:3000/todos](http://localhost:3000/todos). With the page open, creating a new  Todo via the REST API, for example
 
 <blockquote><pre>curl 'http://localhost:3000/todos/' -H 'Content-Type: application/json' --data-binary '{ "text": "Do something" }'</pre></blockquote>
 
@@ -261,7 +275,7 @@ will also log `Someone created a new Todo`. This is how you can implement real-t
 
 ## Persisting to MongoDB
 
-Our CRUD Todo functionality implemented in the service is very common and doesn't have to be implemented form scratch every time. In fact, this is almost exactly what is being provided already in the [feathers-memory](https://github.com/feathersjs/feathers-memory) module. Luckily we don't have to stop at storing everything in-memory. For the popular NoSQL database [MongoDB](http://mongodb.org) , for example, there already is the [feathers-mongodb](https://github.com/feathersjs/feathers-mongodb) module and if you need more ORM-like functionality through [Mongoose](http://mongoosejs.com/) you can also use [feathers-mongoose](https://github.com/feathersjs/feathers-mongoose).
+Our CRUD Todo functionality implemented in the service is very common and doesn't have to be implemented from scratch every time. In fact, this is almost exactly what is being provided already in the [feathers-memory](https://github.com/feathersjs/feathers-memory) module. Luckily we don't have to stop at storing everything in-memory. For the popular NoSQL database [MongoDB](http://mongodb.org) , for example, there already is the [feathers-mongodb](https://github.com/feathersjs/feathers-mongodb) module and if you need more ORM-like functionality through [Mongoose](http://mongoosejs.com/) you can also use [feathers-mongoose](https://github.com/feathersjs/feathers-mongoose).
 
 > `npm install feathers-mongodb`
 
@@ -373,11 +387,11 @@ The *feathers-hooks* plugin also adds a `.before` and `.after` method that allow
 
 ## Authentication
 
-Since Feathers directly extends Express you can use any of its authentication mechanism, the one most commonly used being [Passport](http://passportjs.org/). Setting up shared authentication between websockets and an HTTP REST API can be tricky and this is what the [feathers-passport](https://github.com/feathersjs/feathers-passport) module helps with. The following examples show how to add local authentication that uses a Feathers user service for storing and retrieving user information.
+Since Feathers directly extends Express you can use any of its authentication mechanism, the one  used quite often being [Passport](http://passportjs.org/). Manually setting up shared authentication between websockets and an HTTP REST API can be tricky. This is what the [feathers-passport](https://github.com/feathersjs/feathers-passport) module aims to make a lot easier. The following examples show how to add local authentication that uses a Feathers service for storing and retrieving user information.
 
 ### Configuring Passport
 
-The first step is to add the Passport, Local strategy and feathers-passport modules to our application. Since we are using MongoDB already we will also use it as the session store through the [connect-mongo](https://github.com/kcbanner/connect-mongo) module:
+The first step is to add the Passport, local strategy and feathers-passport modules to our application. Since we are using MongoDB already we will also use it as the session store through the [connect-mongo](https://github.com/kcbanner/connect-mongo) module:
 
 > `npm install passport passport-local connect-mongo feathers-passport`
 
@@ -390,7 +404,6 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var connectMongo = require('connect-mongo');
 var feathersPassport = require('feathers-passport');
-var LocalStrategy = require('passport-local').Strategy;
 
 var app = feathers();
 var todoService = mongodb({
@@ -400,14 +413,15 @@ var todoService = mongodb({
 
 app.configure(feathers.rest())
   .configure(feathers.socketio())
-  .configure(feathersPassport({
-    secret: 'feathers-rocks'
-    store: function() {
-      var MongoStore = connectMongo(this.session);
-      return new MongoStore({
+  .configure(feathersPassport(function(defaults) {
+    // MongoStore needs the session function
+    var MongoStore = connectMongo(defaults.createSession);
+    return {
+      secret: 'feathers-rocks'
+      store: new MongoStore({
         db: 'feathers-demo'
-      });
-    }
+      })
+    };
   }))
   .use(bodyParser.json())
   .use('/todos', todoService)
@@ -415,6 +429,8 @@ app.configure(feathers.rest())
 ```
 
 ### User storage
+
+Next, we create a MongoDB service for storing user information. It is always a good idea to not store plain text passwords in the database so we add a `.before` hook that SHA1 hashes the password when creating a new user. This can be done in the service `.setup` which is called when the application is ready to start up. We will also add an `.authenticate` method that we can use to look up a user by username and compare the SHA1 hashed passwords.
 
 ```js
 var crypto = require('crypto');
@@ -430,6 +446,7 @@ var userService = mongodb({
   collection: 'users'
 }).extend({
   authenticate: function(username, password, callback) {
+    // This will be used as the MongoDB query
     var query = {
       username: username
     };
@@ -450,12 +467,14 @@ var userService = mongodb({
         return callback(new Error('User password does not match'));
       }
 
+      // If we got to here, we call the callback
+      // With the user information
       return callback(null, user);
     });
   },
 
   setup: function() {
-    // Add the hook during setup
+    // Adds the hook during service setup
     this.before({
       // SHA1 hash the password before sending it to MongoDB
       create: function(hook, next) {
@@ -469,9 +488,11 @@ var userService = mongodb({
 app.use('/users', userService);
 ```
 
-//
+Now we need to set up Passport to use that service and tell it how to deserialize and serialize our user information. For us, the serialized form is the `_id` generated by MongoDB. To deserialize by `_id` we can simply call the user services `.get` method. Then we add the local strategy which simply calls the `.authenticate` method that we implemented in the user service.
 
 ```js
+var LocalStrategy = require('passport-local').Strategy;
+
 passport.serializeUser(function(user, done) {
   // Use the `_id` property to serialize the user
   done(null, user._id);
@@ -501,7 +522,38 @@ app.post('/login', passport.authenticate('local', {
 app.listen(3000);
 ```
 
-HTML page
+And to add a `login.html` page:
+
+```html
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+  <form action="/login" method="post">
+    <div>
+      <label>Username:</label>
+      <input type="text" name="username"/>
+    </div>
+    <div>
+      <label>Password:</label>
+      <input type="password" name="password"/>
+    </div>
+    <div>
+      <input type="submit" value="Log In"/>
+    </div>
+  </form>
+</body>
+</html>
+```
+
+To test the login, we might want to add a new user as well:
+
+<blockquote><pre>curl 'http://localhost:3000/users/' -H 'Content-Type: application/json' --data-binary '{ "username": "feathers", "password": "supersecret" }'</pre></blockquote>
+
+Not it should be possible to log in with the `feathers` username and `supersecret` password.
 
 ## Authorization
 
@@ -562,7 +614,7 @@ This guide hopefully gave you an overview of how Feathers works. We created a To
 
 The next step is definitely reading through the [API documentation](/api/) for a more detailed information on how to configure and use certain parts of Feathers. The [FAQ](/faq/) also has some answers to questions that come up regularly. For a growing list of official plugins, have a look at the [Feathersjs GitHub organization](https://github.com/feathersjs).
 
-If you have any other questions, feel free to submit them as a [GitHub issue](https://github.com/feathersjs/feathers/issues) or on [Stackoverflow](http://stackoverflow.com) using the `feathers` or `feathersjs` tag.
+If you have any other questions, feel free to submit them as a [GitHub issue](https://github.com/feathersjs/feathers/issues) or on [Stackoverflow](http://stackoverflow.com) using the `feathers` or `feathersjs` tag or join [#feathersjs](http://webchat.freenode.net/?channels=feathersjs) on Freenode IRC.
 
 
 ## Changelog

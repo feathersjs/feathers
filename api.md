@@ -11,7 +11,7 @@ weight: 2
 
 In almost every case you want to expose your services through a RESTful JSON interface. This can be achieved by calling `app.configure(feathers.rest())`. Note that you will have to provide your own body parser middleware like the standard [Express 4 body-parser](https://github.com/expressjs/body-parser) to make REST `.create`, `.update` and `.patch` calls pass the parsed data.
 
-To set service parameters in a middleware, just attach it to the `req.feathers` object which will become the params for any resulting service call. It is also possible to use URL parameters for REST API calls which will also be added to the params object:
+To set service parameters in a middleware, just attach it to the `req.feathers` object which will become the params for any service call. It is also possible to use URL parameters for REST API calls which will also be added to the params object:
 
 ```js
 var bodyParser = require('body-parser');
@@ -37,7 +37,7 @@ app.use('/:app/todos', {
 });
 ```
 
-The default REST handler is a middleware that formats the data retrieved by the service as JSON. If you would like to configure your own `handler` middleware just pass it to `feathers.rest(handler)`. For example a middleware that just renders plain text with the todo description (`res.data` contains the data returned by the service):
+The default REST handler is a middleware that formats the data retrieved by the service as JSON. If you would like to configure your own `handler` middleware just pass it to `feathers.rest(handler)`. For example, a middleware that just renders plain text with the todo description (`res.data` contains the data returned by the service):
 
 ```js
 app.configure(feathers.rest(function restFormatter(req, res) {
@@ -94,7 +94,7 @@ app.configure(feathers.socketio(function(io) {
 
   io.use(function (socket, next) {
     // Authorize using the /users service
-    app.lookup('users').find({
+    app.service('users').find({
       username: socket.request.username,
       password: socket.request.password
     }, next);
@@ -102,7 +102,7 @@ app.configure(feathers.socketio(function(io) {
 }));
 ```
 
-Similar than the REST middleware, the SocketIO handshakes `feathers` property will be extended
+Similar than the REST middleware, the SocketIO socket `feathers` property will be extended
 for service parameters:
 
 ```js
@@ -189,7 +189,7 @@ app.configure(feathers.primus({
 
 ### setup
 
-`app.setup(server)` is used initialize all services by calling each services `.setup(app, path)` method (if available).
+`app.setup(server)` is used to initialize all services by calling each services `.setup(app, path)` method (if available).
 It will also use the `server` instance passed (e.g. through `http.createServer`) to set up SocketIO (if enabled) and any other provider that might require the server instance.
 
 Normally `app.setup` will be called automatically when starting the application via `app.listen([port])` but there are cases when you need to initialize the server separately:
@@ -213,12 +213,14 @@ app.setup(server);
 
 __Virtual Hosts__
 
-You can use `feathers.vhost` (which is the same as [Express and Connect .vhost](http://www.senchalabs.org/connect/vhost.html)) to run your Feathers app on a virtual host:
+You can use the [vhost](https://github.com/expressjs/vhost) middleware to run your Feathers app on a virtual host:
 
 ```js
+var vhost = require('vhost')
+
 app.use('/todos', todoService);
 
-var host = feathers().use(feathers.vhost('foo.com', app));
+var host = feathers().use(vhost('foo.com', app));
 var server = host.listen(8080);
 
 // Here we need to call app.setup because .listen on our virtal hosted
@@ -255,9 +257,9 @@ app.use('/todos', {
 
 ### service
 
-`app.service(path [, service])` does two things. Either returns the Feathers wrapped service object for the given path or registers a new service for the path.
+`app.service(path [, service])` does two things. It either returns the Feathers wrapped service object for the given path or registers a new service for that path.
 
-`app.service(path)` returns the wrapped service object for the given path. Feathers internally creates a new object from each registered service. This means that the object returned by `service(path)` will provide the same methods and functionality as your original service object but also functionality added by Feathers (most notably it is possible to listen to service events). `path` can be the service name with or without leading and trailing slashes.
+`app.service(path)` returns the wrapped service object for the given path. Feathers internally creates a new object from each registered service. This means that the object returned by `service(path)` will provide the same methods and functionality as your original service object but also functionality added by Feathers and its plugins (most notably it is possible to listen to service events). `path` can be the service name with or without leading and trailing slashes.
 
 ```js
 app.use('/my/todos', {
@@ -277,7 +279,7 @@ You can use `app.service(path, service)` instead `app.use(path, service)` if you
 
 ## Services
 
-As mentioned, the basic Feathers functionality is fully compatible with Express. The key concept added to that of middleware is *service objects. A service can be any JavaScript object that offers one or more of the `find`, `get`, `create`, `update`, `remove` and `setup` service methods with the following signatures:
+As mentioned, the basic Feathers functionality is fully compatible with Express. The key concept added to that of middleware is *service* objects. A service can be any JavaScript object that offers one or more of the `find`, `get`, `create`, `update`, `remove` and `setup` service methods with the following signatures:
 
 ```js
 var myService = {
@@ -443,7 +445,7 @@ var todoService = {
 
 var myService = {
   setup: function(app) {
-    this.todo = app.lookup('todo');
+    this.todo = app.service('todo');
   },
 
   get: function(name, params, callback) {
@@ -466,16 +468,16 @@ You can see the combination when going to `http://localhost:8000/my/test`.
 
 __Pro tip:__
 
-Bind the apps `lookup` method to your service to always look your services up dynamically:
+Bind the apps `service` method to your service to always look your services up dynamically:
 
-```
+```js
 var myService = {
   setup: function(app) {
-    this.lookup = app.lookup.bind(app);
+    this.service = app.service.bind(app);
   },
 
   get: function(name, params, callback) {
-    this.lookup('todos').get('take out trash', {}, function(error, todo) {
+    this.service('todos').get('take out trash', {}, function(error, todo) {
       callback(null, {
         name: name,
         todo: todo
@@ -487,11 +489,11 @@ var myService = {
 
 ## Events
 
-Any registered service will be automatically turned into an event emitter that emits events when a resource has changed, that is a `create`, `update` or `remove` service call returned successfully. It is therefore possible to bind to the below events via `app.lookup(servicename).on()` and, if enabled, all events will also broadcast to all connected SocketIO clients in the form of `<servicepath> <eventname>`. Note that the service path will always be stripped of leading and trailing slashes regardless of how it has been registered (e.g. `/my/service/` will become `my/service`).
+Any registered service will be automatically turned into an event emitter that emits events when a resource has changed, that is a `create`, `update` or `remove` service call returned successfully. It is therefore possible to bind to the below events via `app.service(servicename).on()` and, if enabled, all events will also broadcast to all connected SocketIO clients in the form of `<servicepath> <eventname>`. Note that the service path will always be stripped of leading and trailing slashes regardless of how it has been registered (e.g. `/my/service/` will become `my/service`).
 
 ### created
 
-The `created` event will be published with the callback data when a service `create` calls back successfully.
+The `created` event will be published with the callback data when a service `create` returns successfully.
 
 ```js
 app.use('/todos', {
@@ -500,11 +502,11 @@ app.use('/todos', {
   }
 });
 
-app.lookup('/todos').on('created', function(todo) {
+app.service('/todos').on('created', function(todo) {
   console.log('Created todo', todo);
 });
 
-app.lookup('/todos').create({
+app.service('/todos').create({
   description: 'We have to do something!'
 }, {}, function(error, callback) {
   // ...
@@ -570,7 +572,7 @@ app.use('/todos', {
   }
 });
 
-app.lookup('/todos').remove(1, {}, function(error, callback) {
+app.service('/todos').remove(1, {}, function(error, callback) {
   // ...
 });
 
@@ -595,7 +597,7 @@ __SocketIO__
 
 By default all service events will be dispatched to all connected clients.
 In many cases you probably want to be able to only dispatch events for certain clients.
-This can be done by implementing the `created`, `updated`, `patched` and `removed` methods as `function(data, params, callback) {}` with `params` being the parameters set when the client connected, in SocketIO when authorizing and setting `handshake.feathers` and Primus with `req.feathers`.
+This can be done by implementing the `created`, `updated`, `patched` and `removed` methods as `function(data, params, callback) {}` with `params` being the parameters set when the client connected, in SocketIO when authorizing and setting `socket.feathers` and Primus with `req.feathers`.
 
 ```js
 var myService = {
@@ -606,7 +608,7 @@ var myService = {
 }
 ```
 
-The event dispatching service methods will be run for every connected client. Calling the callback with data (that you also may modify) will dispatch the according event. Callling back with a falsy value will prevent the event being dispatched to this client.
+The event dispatching service methods will run for every connected client. Calling the callback with data (that you also may modify) will dispatch the according event. Callling back with a falsy value will prevent the event being dispatched to this client.
 
 The following example only dispatches the Todo `updated` event if the authorized user belongs to the same company:
 
@@ -614,19 +616,19 @@ The following example only dispatches the Todo `updated` event if the authorized
 app.configure(feathers.socketio(function(io) {
   io.use(function (socket, callback) {
     // Authorize using the /users service
-    app.lookup('users').find({
-      username: handshake.username,
-      password: handshake.password
+    app.service('users').find({
+      username: socket.request.username,
+      password: socket.request.password
     }, function(error, user) {
       if(!error || !user) {
-        return callback(error, false);
+        return callback(new Error('Not authenticated!'));
       }
 
       socket.feathers = {
         user: user
       };
 
-      callback(null, true);
+      callback();
     });
   });
 }));
@@ -638,7 +640,7 @@ app.use('todos', {
   },
 
   updated: function(todo, params, callback) {
-    // params === handshake.feathers
+    // params === socket.feathers
     if(todo.companyId === params.user.companyId) {
       // Dispatch the todo data to this client
       return callback(null, todo);
