@@ -438,14 +438,14 @@ app.configure(feathers.rest())
 
 ### User storage
 
-Next, we create a MongoDB service for storing user information. It is always a good idea to not store plain text passwords in the database so we add a `.before` hook that SHA1 hashes the password when creating a new user. This can be done in the service `.setup` which is called when the application is ready to start up. We also add an `.authenticate` method that we can use to look up a user by username and compare the SHA1 hashed passwords.
+Next, we create a MongoDB service for storing user information. It is always a good idea to not store plain text passwords in the database so we add a `.before` hook that salts and then hashes the password when creating a new user. This can be done in the service `.setup` which is called when the application is ready to start up. We also add an `.authenticate` method that we can use to look up a user by username and compare the hashed and salted passwords.
 
 ```js
 var crypto = require('crypto');
-// SHA1 hashes a string
-var sha1 = function(string) {
-  var shasum = crypto.createHash('sha1');
-  shasum.update(string);
+// One-way hashes a string
+var hash = function(string, salt) {
+  var shasum = crypto.createHash('sha256');
+  shasum.update(string + salt);
   return shasum.digest('hex');
 };
 
@@ -470,8 +470,8 @@ var userService = mongodb({
         return callback(new Error('No user found'));
       }
 
-      // Compare the hashed passwords
-      if(user.password !== sha1(password)) {
+      // Compare the hashed and salted passwords
+      if(user.password !== hash(password, user.salt)) {
         return callback(new Error('User password does not match'));
       }
 
@@ -483,9 +483,14 @@ var userService = mongodb({
   setup: function() {
     // Adds the hook during service setup
     this.before({
-      // SHA1 hash the password before sending it to MongoDB
+      // Hash the password before sending it to MongoDB
       create: function(hook, next) {
-        hook.data.password = sha1(hook.data.password);
+        // Create a random salt string
+        var salt = crypto.randomBytes(128).toString('base64');
+        // Change the password to a hashed and salted password
+        hook.data.password = hash(hook.data.password, salt);
+        // Add the salt to the user data
+        hook.data.salt = salt;
         next();
       }
     });
