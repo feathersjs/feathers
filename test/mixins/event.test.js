@@ -5,6 +5,7 @@ var _ = require('lodash');
 var Proto = require('uberproto');
 var mixinEvent = require('../../lib/mixins/event');
 var EventMixin = mixinEvent.Mixin;
+var create = Proto._create;
 
 describe('Event mixin', function () {
   it('initializes', function () {
@@ -20,7 +21,7 @@ describe('Event mixin', function () {
     assert.equal(typeof FixtureService.on, 'function');
     assert.equal(typeof FixtureService.emit, 'function');
 
-    var instance = FixtureService.create();
+    var instance = create.call(FixtureService);
     assert.equal('Original setup: Test', instance.setup('Test'));
     assert.ok(instance._rubberDuck instanceof require('events').EventEmitter);
 
@@ -47,7 +48,7 @@ describe('Event mixin', function () {
 
     mixinEvent(FixtureService);
 
-    var instance = Proto.create.call(FixtureService);
+    var instance = create.call(FixtureService);
     instance.setup();
 
     instance.on('serviceError', function (error) {
@@ -77,7 +78,7 @@ describe('Event mixin', function () {
 
     mixinEvent(FixtureService);
 
-    var instance = Proto.create.call(FixtureService);
+    var instance = create.call(FixtureService);
     instance.setup();
 
     instance.on('created', function (data) {
@@ -107,7 +108,7 @@ describe('Event mixin', function () {
 
     mixinEvent(FixtureService);
 
-    var instance = Proto.create.call(FixtureService);
+    var instance = create.call(FixtureService);
     instance.setup();
 
     instance.on('updated', function (data) {
@@ -136,7 +137,7 @@ describe('Event mixin', function () {
 
     mixinEvent(FixtureService);
 
-    var instance = Proto.create.call(FixtureService);
+    var instance = create.call(FixtureService);
     instance.setup();
 
     instance.on('removed', function (data) {

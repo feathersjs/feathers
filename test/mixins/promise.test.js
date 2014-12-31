@@ -2,6 +2,7 @@
 
 var assert = require('assert');
 var Proto = require('uberproto');
+var create = Proto._create;
 var q = require('q');
 var _ = require('lodash');
 
@@ -24,7 +25,7 @@ describe('Promises/A+ mixin', function () {
 
     mixin.call(context, FixtureService);
 
-    var instance = Proto.create.call(FixtureService);
+    var instance = create.call(FixtureService);
     instance.get('dishes', {}, function (error, data) {
       assert.deepEqual(data, {
         id: 'dishes',
@@ -53,7 +54,7 @@ describe('Promises/A+ mixin', function () {
 
     mixin.call(context, FixtureService);
 
-    var instance = Proto.create.call(FixtureService);
+    var instance = create.call(FixtureService);
     instance.get('dishes', {}, function (error) {
       assert.ok(error);
       assert.equal(error.message, 'Something went wrong');
@@ -84,7 +85,7 @@ describe('Promises/A+ mixin', function () {
 
     mixin.call(context, FixtureService);
 
-    var instance = Proto.create.call(FixtureService);
+    var instance = create.call(FixtureService);
     instance.create(original, {}).then(function(data) {
       assert.deepEqual(data, original);
       done();
