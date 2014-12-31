@@ -140,7 +140,7 @@ describe('REST provider', function () {
       /* jshint ignore:start */
       // Error handler
       app.use(function (error, req, res, next) {
-        assert.equal(error.message, 'Method `remove` is not supported by this endpoint.');
+        assert.equal(error.message, 'Method `create` is not supported by this endpoint.');
         res.json({ message: error.message });
       });
       /* jshint ignore:end */
@@ -152,16 +152,16 @@ describe('REST provider', function () {
       server.close(done);
     });
 
-    it('throws a 405 for undefined service methods', function (done) {
+    it('throws a 405 for undefined service methods (#99)', function (done) {
       request('http://localhost:4780/todo/dishes', function (error, response, body) {
         assert.ok(response.statusCode === 200, 'Got OK status code for .get');
         assert.deepEqual(JSON.parse(body), { description: 'You have to do dishes' }, 'Got expected object');
         request({
-          method: 'delete',
-          url: 'http://localhost:4780/todo/2'
+          method: 'post',
+          url: 'http://localhost:4780/todo'
         }, function (error, response, body) {
-          assert.ok(response.statusCode === 405, 'Got 405 for .remove');
-          assert.deepEqual(JSON.parse(body), { message: 'Method `remove` is not supported by this endpoint.' }, 'Error serialized as expected');
+          assert.ok(response.statusCode === 405, 'Got 405 for .create');
+          assert.deepEqual(JSON.parse(body), { message: 'Method `create` is not supported by this endpoint.' }, 'Error serialized as expected');
           done();
         });
       });
