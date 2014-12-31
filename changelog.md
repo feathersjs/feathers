@@ -1,5 +1,9 @@
 ## Changelog
 
+__1.0.1__
+
+- Rename Uberproto .create to avoid conflicts with service method ([#100](https://github.com/feathersjs/feathers/pull/100), [#99](https://github.com/feathersjs/feathers/issues/99))
+
 __[1.0.0](https://github.com/feathersjs/feathers/issues?q=milestone%3A1.0.0)__
 
 - Remove app.lookup and make the functionality available as app.service ([#94](https://github.com/feathersjs/feathers/pull/94))
