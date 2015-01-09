@@ -44,7 +44,7 @@ describe('Feathers application', function () {
     var server = app.listen(7887);
     var wrappedService = app.service('dummy');
 
-    // assert.ok(Proto.isPrototypeOf(wrappedService), 'Service got wrapped as Uberproto object');
+    assert.ok(Proto.isPrototypeOf(wrappedService), 'Service got wrapped as Uberproto object');
     assert.ok(typeof wrappedService.on === 'function', 'Wrapped service is an event emitter');
 
     wrappedService.on('created', function (data) {
