@@ -39,7 +39,7 @@ describe('Primus provider', function () {
     server.close(done);
   });
 
-  it('passes handshake as service parameters', function(done) {
+  it('Passes handshake as service parameters.', function(done) {
     var service = app.service('todo');
     var old = {
       find: service.find,
@@ -75,7 +75,7 @@ describe('Primus provider', function () {
     });
   });
 
-  it('missing parameters in socket call works (#88)', function(done) {
+  it('Missing parameters in socket call works. (#88)', function(done) {
     var service = app.service('todo');
     var old = {
       find: service.find
