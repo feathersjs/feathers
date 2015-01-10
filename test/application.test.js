@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert');
-var Proto = require('uberproto');
+var Proto = require('../lib/uberproto');
 var io = require('socket.io-client');
 var request = require('request');
 var https = require('https');
