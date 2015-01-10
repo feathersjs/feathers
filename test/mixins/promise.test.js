@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert');
-var Proto = require('uberproto');
+var Proto = require('../../lib/uberproto');
 var create = Proto._create;
 var q = require('q');
 var _ = require('lodash');

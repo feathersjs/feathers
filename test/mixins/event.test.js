@@ -2,7 +2,7 @@
 
 var assert = require('assert');
 var _ = require('lodash');
-var Proto = require('uberproto');
+var Proto = require('../../lib/uberproto');
 var mixinEvent = require('../../lib/mixins/event');
 var EventMixin = mixinEvent.Mixin;
 var create = Proto._create;
