@@ -29,7 +29,9 @@ describe('Primus provider', function () {
       }))
       .use('todo', todoService);
 
-    server = app.listen(7888);
+    server = app.listen(7888, function(){
+      app.use('tasks', todoService);
+    });
   });
 
   after(function (done) {
@@ -89,6 +91,9 @@ describe('Primus provider', function () {
       done();
     });
   });
+
+
+  /* * * * * * * * * Services * * * * * * * * */
 
   describe('CRUD', function () {
     it('::find', function (done) {
@@ -263,4 +268,183 @@ describe('Primus provider', function () {
       });
     });
   });
+
+
+  /* * * * * * * * * Dynamically-Added Services * * * * * * * * */
+
+  describe('Dynamic Service CRUD', function () {
+    it('::find', function (done) {
+      socket.send('tasks::find', {}, function (error, data) {
+        verify.find(data);
+
+        done(error);
+      });
+    });
+
+    it('::get', function (done) {
+      socket.send('tasks::get', 'laundry', {}, function (error, data) {
+        verify.get('laundry', data);
+
+        done(error);
+      });
+    });
+
+    it('::create', function (done) {
+      var original = {
+        name: 'creating'
+      };
+
+      socket.send('tasks::create', original, {}, function (error, data) {
+        verify.create(original, data);
+
+        done(error);
+      });
+    });
+
+    it('::update', function (done) {
+      var original = {
+        name: 'updating'
+      };
+
+      socket.send('tasks::update', 23, original, {}, function (error, data) {
+        verify.update(23, original, data);
+
+        done(error);
+      });
+    });
+
+    it('::patch', function (done) {
+      var original = {
+        name: 'patching'
+      };
+
+      socket.send('tasks::patch', 25, original, {}, function (error, data) {
+        verify.patch(25, original, data);
+
+        done(error);
+      });
+    });
+
+    it('::remove', function (done) {
+      socket.send('tasks::remove', 11, {}, function (error, data) {
+        verify.remove(11, data);
+
+        done(error);
+      });
+    });
+  });
+
+  describe('Dynamic Service Events', function () {
+    it('created', function (done) {
+      var original = {
+        name: 'created event'
+      };
+
+      socket.once('tasks created', function (data) {
+        verify.create(original, data);
+        done();
+      });
+
+      socket.send('tasks::create', original, {}, function () {});
+    });
+
+    it('updated', function (done) {
+      var original = {
+        name: 'updated event'
+      };
+
+      socket.once('tasks updated', function (data) {
+        verify.update(10, original, data);
+        done();
+      });
+
+      socket.send('tasks::update', 10, original, {}, function () {});
+    });
+
+    it('patched', function(done) {
+      var original = {
+        name: 'patched event'
+      };
+
+      socket.once('tasks patched', function (data) {
+        verify.patch(12, original, data);
+        done();
+      });
+
+      socket.send('tasks::patch', 12, original, {}, function () {});
+    });
+
+    it('removed', function (done) {
+      socket.once('tasks removed', function (data) {
+        verify.remove(333, data);
+        done();
+      });
+
+      socket.send('tasks::remove', 333, {}, function () {});
+    });
+  });
+
+  describe('Dynamic Service Event filtering', function() {
+    it('.created', function (done) {
+      var service = app.service('tasks');
+      var original = { description: 'created event test' };
+      var oldCreated = service.created;
+
+      service.created = function(data, params, callback) {
+        assert.deepEqual(params, socketParams);
+        verify.create(original, data);
+
+        callback(null, _.extend({ processed: true }, data));
+      };
+
+      socket.send('tasks::create', original, {}, function() {});
+
+      socket.once('tasks created', function (data) {
+        service.created = oldCreated;
+        // Make sure Todo got processed
+        verify.create(_.extend({ processed: true }, original), data);
+        done();
+      });
+    });
+
+    it('.updated', function (done) {
+      var original = {
+        name: 'updated event'
+      };
+
+      socket.once('tasks updated', function (data) {
+        verify.update(10, original, data);
+        done();
+      });
+
+      socket.send('tasks::update', 10, original, {}, function () {});
+    });
+
+    it('.removed', function (done) {
+      var service = app.service('tasks');
+      var oldRemoved = service.removed;
+
+      service.removed = function(data, params, callback) {
+        assert.deepEqual(params, socketParams);
+
+        if(data.id === 23) {
+          // Only dispatch with given id
+          return callback(null, data);
+        }
+
+        callback();
+      };
+
+      socket.send('tasks::remove', 1, {}, function() {});
+      socket.send('tasks::remove', 23, {}, function() {});
+
+      socket.on('tasks removed', function (data) {
+        service.removed = oldRemoved;
+        assert.equal(data.id, 23);
+        done();
+      });
+    });
+  });
+
+
 });

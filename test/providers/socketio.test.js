@@ -92,7 +92,7 @@ describe('SocketIO provider', function () {
   });
 
 
-
+/* * * * * * * * * Services * * * * * * * * */
 
   describe('CRUD', function () {
     it('::find', function (done) {
@@ -156,74 +156,6 @@ describe('SocketIO provider', function () {
     });
   });
 
-
-
-
-  describe('CRUD for Dynamic Service', function () {
-    it('::find', function (done) {
-      socket.emit('tasks::find', {}, function (error, data) {
-        verify.find(data);
-
-        done(error);
-      });
-    });
-
-    it('::get', function (done) {
-      socket.emit('tasks::get', 'laundry', {}, function (error, data) {
-        verify.get('laundry', data);
-
-        done(error);
-      });
-    });
-
-    it('::create', function (done) {
-      var original = {
-        name: 'creating'
-      };
-
-      socket.emit('tasks::create', original, {}, function (error, data) {
-        verify.create(original, data);
-
-        done(error);
-      });
-    });
-
-    it('::update', function (done) {
-      var original = {
-        name: 'updating'
-      };
-
-      socket.emit('tasks::update', 23, original, {}, function (error, data) {
-        verify.update(23, original, data);
-
-        done(error);
-      });
-    });
-
-    it('::patch', function (done) {
-      var original = {
-        name: 'patching'
-      };
-
-      socket.emit('tasks::patch', 25, original, {}, function (error, data) {
-        verify.patch(25, original, data);
-
-        done(error);
-      });
-    });
-
-    it('::remove', function (done) {
-      socket.emit('tasks::remove', 11, {}, function (error, data) {
-        verify.remove(11, data);
-
-        done(error);
-      });
-    });
-  });
-
-
-
-
   describe('Events', function () {
     it('created', function (done) {
       var original = {
@@ -273,62 +205,6 @@ describe('SocketIO provider', function () {
       socket.emit('todo::remove', 333, {}, function () {});
     });
   });
-
-
-
-
-  describe('Events for Dynamic Service', function () {
-    it('created', function (done) {
-      var original = {
-        name: 'created event'
-      };
-
-      socket.once('tasks created', function (data) {
-        verify.create(original, data);
-        done();
-      });
-
-      socket.emit('tasks::create', original, {}, function () {});
-    });
-
-    it('updated', function (done) {
-      var original = {
-        name: 'updated event'
-      };
-
-      socket.once('tasks updated', function (data) {
-        verify.update(10, original, data);
-        done();
-      });
-
-      socket.emit('tasks::update', 10, original, {}, function () {});
-    });
-
-    it('patched', function(done) {
-      var original = {
-        name: 'patched event'
-      };
-
-      socket.once('tasks patched', function (data) {
-        verify.patch(12, original, data);
-        done();
-      });
-
-      socket.emit('tasks::patch', 12, original, {}, function () {});
-    });
-
-    it('removed', function (done) {
-      socket.once('tasks removed', function (data) {
-        verify.remove(333, data);
-        done();
-      });
-
-      socket.emit('tasks::remove', 333, {}, function () {});
-    });
-  });
-
-
-
 
   describe('Event filtering', function() {
     it('.created', function (done) {
@@ -393,9 +269,121 @@ describe('SocketIO provider', function () {
   });
 
 
+/* * * * * * * * * Dynamically-Added Services * * * * * * * * */
 
+  describe('Dynamic Service CRUD', function () {
+    it('::find', function (done) {
+      socket.emit('tasks::find', {}, function (error, data) {
+        verify.find(data);
 
-  describe('Event filtering for Dynamic Service', function() {
+        done(error);
+      });
+    });
+
+    it('::get', function (done) {
+      socket.emit('tasks::get', 'laundry', {}, function (error, data) {
+        verify.get('laundry', data);
+
+        done(error);
+      });
+    });
+
+    it('::create', function (done) {
+      var original = {
+        name: 'creating'
+      };
+
+      socket.emit('tasks::create', original, {}, function (error, data) {
+        verify.create(original, data);
+
+        done(error);
+      });
+    });
+
+    it('::update', function (done) {
+      var original = {
+        name: 'updating'
+      };
+
+      socket.emit('tasks::update', 23, original, {}, function (error, data) {
+        verify.update(23, original, data);
+
+        done(error);
+      });
+    });
+
+    it('::patch', function (done) {
+      var original = {
+        name: 'patching'
+      };
+
+      socket.emit('tasks::patch', 25, original, {}, function (error, data) {
+        verify.patch(25, original, data);
+
+        done(error);
+      });
+    });
+
+    it('::remove', function (done) {
+      socket.emit('tasks::remove', 11, {}, function (error, data) {
+        verify.remove(11, data);
+
+        done(error);
+      });
+    });
+  });
+
+  describe('Dynamic Service Events', function () {
+    it('created', function (done) {
+      var original = {
+        name: 'created event'
+      };
+
+      socket.once('tasks created', function (data) {
+        verify.create(original, data);
+        done();
+      });
+
+      socket.emit('tasks::create', original, {}, function () {});
+    });
+
+    it('updated', function (done) {
+      var original = {
+        name: 'updated event'
+      };
+
+      socket.once('tasks updated', function (data) {
+        verify.update(10, original, data);
+        done();
+      });
+
+      socket.emit('tasks::update', 10, original, {}, function () {});
+    });
+
+    it('patched', function(done) {
+      var original = {
+        name: 'patched event'
+      };
+
+      socket.once('tasks patched', function (data) {
+        verify.patch(12, original, data);
+        done();
+      });
+
+      socket.emit('tasks::patch', 12, original, {}, function () {});
+    });
+
+    it('removed', function (done) {
+      socket.once('tasks removed', function (data) {
+        verify.remove(333, data);
+        done();
+      });
+
+      socket.emit('tasks::remove', 333, {}, function () {});
+    });
+  });
+
+  describe('Dynamic Service Event Filtering', function() {
     it('.created', function (done) {
       var service = app.service('tasks');
       var original = { description: 'created event test' };
