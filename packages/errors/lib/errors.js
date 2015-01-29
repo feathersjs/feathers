@@ -69,8 +69,6 @@ var handler = function(err, req, res, next) {
 
   res.status(statusCode);
 
-  console.log(req.app);
-
   if (req.app.logger && typeof req.app.logger.error === 'function') {
       req.app.logger.error(req.url, err.stack || err);
   }
