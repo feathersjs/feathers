@@ -5,7 +5,7 @@ var _ = require('lodash');
 var Proto = require('uberproto');
 var mixinEvent = require('../../lib/mixins/event');
 var EventMixin = mixinEvent.Mixin;
-var create = Proto._create;
+var create = Proto.create;
 
 describe('Event mixin', function () {
   it('initializes', function () {

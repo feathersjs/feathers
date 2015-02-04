@@ -12,13 +12,13 @@ describe('Primus provider', function () {
   var server, socket, app,
     socketParams = {
       user: { name: 'David' },
-      provider: 'sockjs'
+      provider: 'websockets'
     };
 
   before(function () {
     app = feathers()
       .configure(feathers.primus({
-        transformer: 'sockjs'
+        transformer: 'websockets'
       }, function(primus) {
         socket = new primus.Socket('http://localhost:7888');
 
