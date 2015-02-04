@@ -37,7 +37,7 @@
     "express": "^4.0.0",
     "body-parser": "^1.0.2",
     "feathers-errors": ">=0.2.0",
-    "lodash": "^2.4.1",
+    "lodash": "^3.1.0",
     "primus": "^2.4.0",
     "primus-emitter": "^3.0.2",
     "rubberduck": "^1.0.0",
@@ -55,7 +55,6 @@
     "q": "^1.0.1",
     "request": "^2.x",
     "socket.io-client": "^1.0.0",
-    "sockjs": "^0.3.9",
-    "sockjs-client-node": "^0.1.1"
+    "ws": "^0.7.1"
   }
 }
