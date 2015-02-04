@@ -2,7 +2,7 @@
 
 var assert = require('assert');
 var Proto = require('uberproto');
-var create = Proto._create;
+var create = Proto.create;
 var q = require('q');
 var _ = require('lodash');
 
