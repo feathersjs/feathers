@@ -1,5 +1,10 @@
 ## Changelog
 
+__1.0.2__
+
+- Use Uberproto extended instance when creating services ([#105](https://github.com/feathersjs/feathers/pull/105))
+- Make sure that mixins are specific to each new app ([#104](https://github.com/feathersjs/feathers/pull/104))
+
 __1.0.1__
 
 - Rename Uberproto .create to avoid conflicts with service method ([#100](https://github.com/feathersjs/feathers/pull/100), [#99](https://github.com/feathersjs/feathers/issues/99))
