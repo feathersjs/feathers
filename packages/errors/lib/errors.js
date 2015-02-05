@@ -65,15 +65,20 @@ var handler = function(err, req, res, next) {
     }
   }
 
+  // Don't show stack trace if it is a 404 error
+  if (err.code === 404) {
+    err.stack = null;
+  }
+
   var statusCode = typeof err.code === 'number' ? err.code : 500;
 
   res.status(statusCode);
 
   if (req.app.logger && typeof req.app.logger.error === 'function') {
-      req.app.logger.error(req.url, err.stack || err);
+    req.app.logger.error(err.code, req.url, err.stack || err);
   }
   else if (typeof req.app.error === 'function') {
-    req.app.error(req.url, err.stack || err);
+    req.app.error(err.code, req.url, err.stack || err);
   }
 
   res.format({
