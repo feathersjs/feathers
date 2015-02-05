@@ -75,10 +75,10 @@ var handler = function(err, req, res, next) {
   res.status(statusCode);
 
   if (req.app.logger && typeof req.app.logger.error === 'function') {
-    req.app.logger.error(err.code, req.url, err.stack || err);
+    req.app.logger.error(err.code + ' - ' + req.url, err.stack || err);
   }
   else if (typeof req.app.error === 'function') {
-    req.app.error(err.code, req.url, err.stack || err);
+    req.app.error(err.code + ' - ' + req.url, err.stack || err);
   }
 
   res.format({
