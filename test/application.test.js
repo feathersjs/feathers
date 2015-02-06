@@ -11,7 +11,7 @@ var q = require('q');
 var feathers = require('../lib/feathers');
 
 describe('Feathers application', function () {
-  it("Express application should use express apps", function () {
+  it("Express application should use express apps.", function () {
     var app = feathers();
     var child = feathers();
 
@@ -19,7 +19,7 @@ describe('Feathers application', function () {
     assert.equal(child.parent, app);
   });
 
-  it('registers service and looks it up with and without leading and trailing slashes', function () {
+  it('Register services and look them up with and without leading and trailing slashes.', function () {
     var dummyService = {
       find: function () {
         // No need to implement this
@@ -28,12 +28,22 @@ describe('Feathers application', function () {
 
     var app = feathers().use('/dummy/service/', dummyService);
 
+    app.listen(8012, function(){
+      app.use('/another/dummy/service/', dummyService);
+    });
+
     assert.ok(typeof app.service('dummy/service').find === 'function', 'Could look up without slashes');
     assert.ok(typeof app.service('/dummy/service').find === 'function', 'Could look up with leading slash');
     assert.ok(typeof app.service('dummy/service/').find === 'function', 'Could look up with trailing slash');
+
+    app.on('listening', function () {
+      assert.ok(typeof app.service('another/dummy/service').find === 'function', 'Could look up without slashes');
+      assert.ok(typeof app.service('/another/dummy/service').find === 'function', 'Could look up with leading slash');
+      assert.ok(typeof app.service('another/dummy/service/').find === 'function', 'Could look up with trailing slash');
+    });
   });
 
-  it('registers a service, wraps it and adds the event mixin', function (done) {
+  it('Registers a service, wraps it, and adds the event mixin.', function (done) {
     var dummyService = {
       create: function (data, params, callback) {
         callback(null, data);
@@ -60,7 +70,7 @@ describe('Feathers application', function () {
     });
   });
 
-  it('adds REST and SocketIO provider', function (done) {
+  it('Adds REST and SocketIO providers.', function (done) {
     var todoService = {
       get: function (name, params, callback) {
         callback(null, {
@@ -91,7 +101,7 @@ describe('Feathers application', function () {
     });
   });
 
-  it('uses custom middleware (#21)', function (done) {
+  it('Uses custom middleware. (#21)', function (done) {
     var todoService = {
       get: function (name, params, callback) {
         callback(null, {
@@ -176,7 +186,7 @@ describe('Feathers application', function () {
     });
   });
 
-  it('returns the value of a promise (#41)', function (done) {
+  it('Returns the value of a promise. (#41)', function (done) {
     var original = {};
     var todoService = {
       get: function (name) {
@@ -202,7 +212,7 @@ describe('Feathers application', function () {
     });
   });
 
-  it('extend params with route params (#76)', function (done) {
+  it('Extend params with route params. (#76)', function (done) {
     var todoService = {
       get: function (id, params, callback) {
         var result = {
@@ -231,36 +241,12 @@ describe('Feathers application', function () {
     });
   });
 
-  it('throws a warning when trying to register a service after application setup (#67)', function (done) {
+  it('Calls _setup in order to set up custom routes with higher priority. (#86)', function (done) {
     var todoService = {
       get: function (name, params, callback) {
         callback(null, {
           id: name,
           q: true,
-          description: "You have to do " + name + "!"
-        });
-      }
-    };
-    var app = feathers()
-      .configure(feathers.rest())
-      .use('/todo', todoService);
-
-    var server = app.listen();
-    server.on('listening', function () {
-      try {
-        app.use('/dummy', todoService);
-        done(new Error('Should throw an error'));
-      } catch (e) {
-        server.close(done);
-      }
-    });
-  });
-
-  it('calls _setup in order to set up custom routes with higher priority (#86)', function (done) {
-    var todoService = {
-      get: function (name, params, callback) {
-        callback(null, {
-          id: name,
           description: "You have to do " + name + "!"
         });
       },
