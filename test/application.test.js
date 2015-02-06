@@ -11,7 +11,7 @@ var q = require('q');
 var feathers = require('../lib/feathers');
 
 describe('Feathers application', function () {
-  it("Express application should use express apps.", function () {
+  it('Express application should use express apps.', function () {
     var app = feathers();
     var child = feathers();
 
@@ -75,14 +75,15 @@ describe('Feathers application', function () {
       get: function (name, params, callback) {
         callback(null, {
           id: name,
-          description: "You have to do " + name + "!"
+          description: 'You have to do ' + name + '!'
         });
       }
     };
 
     var app = feathers()
       .configure(feathers.rest())
-      .configure(feathers.socketio()).use('/todo', todoService);
+      .configure(feathers.socketio())
+      .use('/todo', todoService);
     var server = app.listen(6999).on('listening', function () {
       var socket = io.connect('http://localhost:6999');
 
@@ -106,7 +107,7 @@ describe('Feathers application', function () {
       get: function (name, params, callback) {
         callback(null, {
           id: name,
-          description: "You have to do " + name + "!",
+          description: 'You have to do ' + name + '!',
           stuff: params.stuff
         });
       }
@@ -139,13 +140,13 @@ describe('Feathers application', function () {
   it('REST and SocketIO with SSL server (#25)', function (done) {
     // For more info on Reqest HTTPS settings see https://github.com/mikeal/request/issues/418
     // This needs to be set so that the SocektIO client can connect
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
     var todoService = {
       get: function (name, params, callback) {
         callback(null, {
           id: name,
-          description: "You have to do " + name + "!"
+          description: 'You have to do ' + name + '!'
         });
       }
     };
@@ -193,7 +194,7 @@ describe('Feathers application', function () {
         original = {
           id: name,
           q: true,
-          description: "You have to do " + name + "!"
+          description: 'You have to do ' + name + '!'
         };
         return q(original);
       }
@@ -228,8 +229,8 @@ describe('Feathers application', function () {
       .use('/:appId/todo', todoService);
 
     var expected = {
-      id: "dishes",
-      appId: "theApp"
+      id: 'dishes',
+      appId: 'theApp'
     };
 
     var server = app.listen(6880).on('listening', function () {
@@ -247,7 +248,7 @@ describe('Feathers application', function () {
         callback(null, {
           id: name,
           q: true,
-          description: "You have to do " + name + "!"
+          description: 'You have to do ' + name + '!'
         });
       },
 
