@@ -26,12 +26,18 @@ describe('REST provider', function () {
           }
         })
         .use('todo', todoService);
-      server = app.listen(4777);
+
+      server = app.listen(4777, function(){
+        app.use('tasks', todoService);
+      });
     });
 
     after(function (done) {
       server.close(done);
     });
+
+
+    /* * * * * * * * * Services * * * * * * * * */
 
     it('GET .find', function (done) {
       request('http://localhost:4777/todo', function (error, response, body) {
@@ -109,6 +115,9 @@ describe('REST provider', function () {
       });
     });
 
+
+    /* * * * * * * * * Dynamically-Added Services * * * * * * * * */
+
     it('DELETE .remove', function (done) {
       request({
         url: 'http://localhost:4777/todo/233',
@@ -120,6 +129,95 @@ describe('REST provider', function () {
         done(error);
       });
     });
+
+    it('Dynamic GET .find', function (done) {
+      request('http://localhost:4777/tasks', function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        verify.find(JSON.parse(body));
+        done(error);
+      });
+    });
+
+    it('Dynamic GET .get', function (done) {
+      request('http://localhost:4777/tasks/dishes', function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        verify.get('dishes', JSON.parse(body));
+        done(error);
+      });
+    });
+
+    it('Dynamic POST .create', function (done) {
+      var original = {
+        description: 'Dynamic POST .create'
+      };
+
+      request({
+        url: 'http://localhost:4777/tasks',
+        method: 'post',
+        body: JSON.stringify(original),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }, function (error, response, body) {
+        assert.ok(response.statusCode === 201, 'Got CREATED status code');
+        verify.create(original, JSON.parse(body));
+
+        done(error);
+      });
+    });
+
+    it('Dynamic PUT .update', function (done) {
+      var original = {
+        description: 'Dynamic PUT .update'
+      };
+
+      request({
+        url: 'http://localhost:4777/tasks/544',
+        method: 'put',
+        body: JSON.stringify(original),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }, function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        verify.update(544, original, JSON.parse(body));
+
+        done(error);
+      });
+    });
+
+    it('Dynamic PATCH .patch', function (done) {
+      var original = {
+        description: 'Dynamic PATCH .patch'
+      };
+
+      request({
+        url: 'http://localhost:4777/tasks/544',
+        method: 'patch',
+        body: JSON.stringify(original),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }, function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        verify.patch(544, original, JSON.parse(body));
+
+        done(error);
+      });
+    });
+
+    it('Dynamic DELETE .remove', function (done) {
+      request({
+        url: 'http://localhost:4777/tasks/233',
+        method: 'delete'
+      }, function (error, response, body) {
+        assert.ok(response.statusCode === 200, 'Got OK status code');
+        verify.remove(233, JSON.parse(body));
+
+        done(error);
+      });
+    });
+    /* * * End of Dynamically-Added Tests * * */
   });
 
   describe('HTTP status codes', function() {
