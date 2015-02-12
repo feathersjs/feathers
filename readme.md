@@ -1,5 +1,7 @@
 # Feathers - Let your applications fly!
 
+[![Join the chat at https://gitter.im/feathersjs/feathers](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/feathersjs/feathers?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 > Shared REST and real-time APIs with Express.
 
 ## To get started
