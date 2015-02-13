@@ -437,10 +437,15 @@ describe('SocketIO provider', function () {
       socket.emit('tasks::remove', 1, {}, function() {});
       socket.emit('tasks::remove', 23, {}, function() {});
 
+      var ready = false;
+
       socket.on('tasks removed', function (data) {
         service.removed = oldRemoved;
         assert.equal(data.id, 23);
-        done();
+        if (ready) {
+          done();
+        }
+        ready = true;
       });
     });
   });

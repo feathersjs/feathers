@@ -43,15 +43,27 @@ describe('Feathers application', function () {
     });
   });
 
-  it('Registers a service, wraps it, and adds the event mixin.', function (done) {
+  it('Registers a service, wraps it, runs service.setup(), and adds the event mixin.', function (done) {
     var dummyService = {
+      setup: function(app, path){
+        this.path = path;
+      },
+
       create: function (data, params, callback) {
         callback(null, data);
       }
     };
 
+    var dynamicService;
+
     var app = feathers().use('/dummy', dummyService);
-    var server = app.listen(7887);
+    var server = app.listen(7887, function(){
+      app.use('/dumdum', dummyService);
+      dynamicService = app.service('dumdum');
+
+      assert.ok(wrappedService.path === 'dummy', 'Wrapped service setup method ran.');
+      assert.ok(dynamicService.path === 'dumdum', 'Dynamic service setup method ran.');
+    });
     var wrappedService = app.service('dummy');
 
     assert.ok(Proto.isPrototypeOf(wrappedService), 'Service got wrapped as Uberproto object');
