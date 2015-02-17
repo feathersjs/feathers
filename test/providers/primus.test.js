@@ -255,7 +255,7 @@ describe('Primus provider', function () {
           return callback(null, data);
         }
 
-        callback();
+        callback(null, false);
       };
 
       socket.send('todo::remove', 1, {}, function() {});
@@ -432,21 +432,16 @@ describe('Primus provider', function () {
           return callback(null, data);
         }
 
-        callback();
+        callback(null, false);
       };
 
       socket.send('tasks::remove', 1, {}, function() {});
       socket.send('tasks::remove', 23, {}, function() {});
 
-      var ready = false;
-
       socket.on('tasks removed', function (data) {
         service.removed = oldRemoved;
         assert.equal(data.id, 23);
-        if (ready) {
-          done();
-        }
-        ready = true;
+        done();
       });
     });
   });

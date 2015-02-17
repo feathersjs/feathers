@@ -254,7 +254,7 @@ describe('SocketIO provider', function () {
           return callback(null, data);
         }
 
-        callback();
+        callback(null, false);
       };
 
       socket.emit('todo::remove', 1, {}, function() {});
@@ -431,21 +431,16 @@ describe('SocketIO provider', function () {
           return callback(null, data);
         }
 
-        callback();
+        callback(null, false);
       };
 
       socket.emit('tasks::remove', 1, {}, function() {});
       socket.emit('tasks::remove', 23, {}, function() {});
 
-      var ready = false;
-
       socket.on('tasks removed', function (data) {
         service.removed = oldRemoved;
         assert.equal(data.id, 23);
-        if (ready) {
-          done();
-        }
-        ready = true;
+        done();
       });
     });
   });
