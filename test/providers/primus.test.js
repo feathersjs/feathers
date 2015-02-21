@@ -92,356 +92,355 @@ describe('Primus provider', function () {
     });
   });
 
+  describe('Services', function() {
 
-  /* * * * * * * * * Services * * * * * * * * */
+    describe('CRUD', function () {
+      it('::find', function (done) {
+        socket.send('todo::find', {}, function (error, data) {
+          verify.find(data);
 
-  describe('CRUD', function () {
-    it('::find', function (done) {
-      socket.send('todo::find', {}, function (error, data) {
-        verify.find(data);
+          done(error);
+        });
+      });
 
-        done(error);
+      it('::get', function (done) {
+        socket.send('todo::get', 'laundry', {}, function (error, data) {
+          verify.get('laundry', data);
+
+          done(error);
+        });
+      });
+
+      it('::create', function (done) {
+        var original = {
+          name: 'creating'
+        };
+
+        socket.send('todo::create', original, {}, function (error, data) {
+          verify.create(original, data);
+
+          done(error);
+        });
+      });
+
+      it('::update', function (done) {
+        var original = {
+          name: 'updating'
+        };
+
+        socket.send('todo::update', 23, original, {}, function (error, data) {
+          verify.update(23, original, data);
+
+          done(error);
+        });
+      });
+
+      it('::patch', function (done) {
+        var original = {
+          name: 'patching'
+        };
+
+        socket.send('todo::patch', 25, original, {}, function (error, data) {
+          verify.patch(25, original, data);
+
+          done(error);
+        });
+      });
+
+      it('::remove', function (done) {
+        socket.send('todo::remove', 11, {}, function (error, data) {
+          verify.remove(11, data);
+
+          done(error);
+        });
       });
     });
 
-    it('::get', function (done) {
-      socket.send('todo::get', 'laundry', {}, function (error, data) {
-        verify.get('laundry', data);
+    describe('Events', function () {
+      it('created', function (done) {
+        var original = {
+          name: 'created event'
+        };
 
-        done(error);
+        socket.once('todo created', function (data) {
+          verify.create(original, data);
+          done();
+        });
+
+        socket.send('todo::create', original, {}, function () {});
+      });
+
+      it('updated', function (done) {
+        var original = {
+          name: 'updated event'
+        };
+
+        socket.once('todo updated', function (data) {
+          verify.update(10, original, data);
+          done();
+        });
+
+        socket.send('todo::update', 10, original, {}, function () {});
+      });
+
+      it('patched', function(done) {
+        var original = {
+          name: 'patched event'
+        };
+
+        socket.once('todo patched', function (data) {
+          verify.patch(12, original, data);
+          done();
+        });
+
+        socket.send('todo::patch', 12, original, {}, function () {});
+      });
+
+      it('removed', function (done) {
+        socket.once('todo removed', function (data) {
+          verify.remove(333, data);
+          done();
+        });
+
+        socket.send('todo::remove', 333, {}, function () {});
       });
     });
 
-    it('::create', function (done) {
-      var original = {
-        name: 'creating'
-      };
+    describe('Event filtering', function() {
+      it('.created', function (done) {
+        var service = app.service('todo');
+        var original = { description: 'created event test' };
+        var oldCreated = service.created;
 
-      socket.send('todo::create', original, {}, function (error, data) {
-        verify.create(original, data);
+        service.created = function(data, params, callback) {
+          assert.deepEqual(params, socketParams);
+          verify.create(original, data);
 
-        done(error);
-      });
-    });
+          callback(null, _.extend({ processed: true }, data));
+        };
 
-    it('::update', function (done) {
-      var original = {
-        name: 'updating'
-      };
+        socket.send('todo::create', original, {}, function() {});
 
-      socket.send('todo::update', 23, original, {}, function (error, data) {
-        verify.update(23, original, data);
-
-        done(error);
-      });
-    });
-
-    it('::patch', function (done) {
-      var original = {
-        name: 'patching'
-      };
-
-      socket.send('todo::patch', 25, original, {}, function (error, data) {
-        verify.patch(25, original, data);
-
-        done(error);
-      });
-    });
-
-    it('::remove', function (done) {
-      socket.send('todo::remove', 11, {}, function (error, data) {
-        verify.remove(11, data);
-
-        done(error);
-      });
-    });
-  });
-
-  describe('Events', function () {
-    it('created', function (done) {
-      var original = {
-        name: 'created event'
-      };
-
-      socket.once('todo created', function (data) {
-        verify.create(original, data);
-        done();
+        socket.once('todo created', function (data) {
+          service.created = oldCreated;
+          // Make sure Todo got processed
+          verify.create(_.extend({ processed: true }, original), data);
+          done();
+        });
       });
 
-      socket.send('todo::create', original, {}, function () {});
-    });
+      it('.updated', function (done) {
+        var original = {
+          name: 'updated event'
+        };
 
-    it('updated', function (done) {
-      var original = {
-        name: 'updated event'
-      };
+        socket.once('todo updated', function (data) {
+          verify.update(10, original, data);
+          done();
+        });
 
-      socket.once('todo updated', function (data) {
-        verify.update(10, original, data);
-        done();
+        socket.send('todo::update', 10, original, {}, function () {});
       });
 
-      socket.send('todo::update', 10, original, {}, function () {});
-    });
+      it('.removed', function (done) {
+        var service = app.service('todo');
+        var oldRemoved = service.removed;
 
-    it('patched', function(done) {
-      var original = {
-        name: 'patched event'
-      };
+        service.removed = function(data, params, callback) {
+          assert.deepEqual(params, socketParams);
 
-      socket.once('todo patched', function (data) {
-        verify.patch(12, original, data);
-        done();
-      });
+          if(data.id === 23) {
+            // Only dispatch with given id
+            return callback(null, data);
+          }
 
-      socket.send('todo::patch', 12, original, {}, function () {});
-    });
+          callback(null, false);
+        };
 
-    it('removed', function (done) {
-      socket.once('todo removed', function (data) {
-        verify.remove(333, data);
-        done();
-      });
+        socket.send('todo::remove', 1, {}, function() {});
+        socket.send('todo::remove', 23, {}, function() {});
 
-      socket.send('todo::remove', 333, {}, function () {});
-    });
-  });
-
-  describe('Event filtering', function() {
-    it('.created', function (done) {
-      var service = app.service('todo');
-      var original = { description: 'created event test' };
-      var oldCreated = service.created;
-
-      service.created = function(data, params, callback) {
-        assert.deepEqual(params, socketParams);
-        verify.create(original, data);
-
-        callback(null, _.extend({ processed: true }, data));
-      };
-
-      socket.send('todo::create', original, {}, function() {});
-
-      socket.once('todo created', function (data) {
-        service.created = oldCreated;
-        // Make sure Todo got processed
-        verify.create(_.extend({ processed: true }, original), data);
-        done();
-      });
-    });
-
-    it('.updated', function (done) {
-      var original = {
-        name: 'updated event'
-      };
-
-      socket.once('todo updated', function (data) {
-        verify.update(10, original, data);
-        done();
-      });
-
-      socket.send('todo::update', 10, original, {}, function () {});
-    });
-
-    it('.removed', function (done) {
-      var service = app.service('todo');
-      var oldRemoved = service.removed;
-
-      service.removed = function(data, params, callback) {
-        assert.deepEqual(params, socketParams);
-
-        if(data.id === 23) {
-          // Only dispatch with given id
-          return callback(null, data);
-        }
-
-        callback(null, false);
-      };
-
-      socket.send('todo::remove', 1, {}, function() {});
-      socket.send('todo::remove', 23, {}, function() {});
-
-      socket.on('todo removed', function (data) {
-        service.removed = oldRemoved;
-        assert.equal(data.id, 23);
-        done();
-      });
-    });
-  });
-
-
-  /* * * * * * * * * Dynamically-Added Services * * * * * * * * */
-
-  describe('Dynamic Service CRUD', function () {
-    it('::find', function (done) {
-      socket.send('tasks::find', {}, function (error, data) {
-        verify.find(data);
-
-        done(error);
-      });
-    });
-
-    it('::get', function (done) {
-      socket.send('tasks::get', 'laundry', {}, function (error, data) {
-        verify.get('laundry', data);
-
-        done(error);
-      });
-    });
-
-    it('::create', function (done) {
-      var original = {
-        name: 'creating'
-      };
-
-      socket.send('tasks::create', original, {}, function (error, data) {
-        verify.create(original, data);
-
-        done(error);
-      });
-    });
-
-    it('::update', function (done) {
-      var original = {
-        name: 'updating'
-      };
-
-      socket.send('tasks::update', 23, original, {}, function (error, data) {
-        verify.update(23, original, data);
-
-        done(error);
-      });
-    });
-
-    it('::patch', function (done) {
-      var original = {
-        name: 'patching'
-      };
-
-      socket.send('tasks::patch', 25, original, {}, function (error, data) {
-        verify.patch(25, original, data);
-
-        done(error);
-      });
-    });
-
-    it('::remove', function (done) {
-      socket.send('tasks::remove', 11, {}, function (error, data) {
-        verify.remove(11, data);
-
-        done(error);
+        socket.on('todo removed', function (data) {
+          service.removed = oldRemoved;
+          assert.equal(data.id, 23);
+          done();
+        });
       });
     });
   });
 
-  describe('Dynamic Service Events', function () {
-    it('created', function (done) {
-      var original = {
-        name: 'created event'
-      };
+  describe('Dynamic services', function() {
+    describe('CRUD', function () {
+      it('::find', function (done) {
+        socket.send('tasks::find', {}, function (error, data) {
+          verify.find(data);
 
-      socket.once('tasks created', function (data) {
-        verify.create(original, data);
-        done();
+          done(error);
+        });
       });
 
-      socket.send('tasks::create', original, {}, function () {});
-    });
+      it('::get', function (done) {
+        socket.send('tasks::get', 'laundry', {}, function (error, data) {
+          verify.get('laundry', data);
 
-    it('updated', function (done) {
-      var original = {
-        name: 'updated event'
-      };
-
-      socket.once('tasks updated', function (data) {
-        verify.update(10, original, data);
-        done();
+          done(error);
+        });
       });
 
-      socket.send('tasks::update', 10, original, {}, function () {});
-    });
+      it('::create', function (done) {
+        var original = {
+          name: 'creating'
+        };
 
-    it('patched', function(done) {
-      var original = {
-        name: 'patched event'
-      };
+        socket.send('tasks::create', original, {}, function (error, data) {
+          verify.create(original, data);
 
-      socket.once('tasks patched', function (data) {
-        verify.patch(12, original, data);
-        done();
+          done(error);
+        });
       });
 
-      socket.send('tasks::patch', 12, original, {}, function () {});
-    });
+      it('::update', function (done) {
+        var original = {
+          name: 'updating'
+        };
 
-    it('removed', function (done) {
-      socket.once('tasks removed', function (data) {
-        verify.remove(333, data);
-        done();
+        socket.send('tasks::update', 23, original, {}, function (error, data) {
+          verify.update(23, original, data);
+
+          done(error);
+        });
       });
 
-      socket.send('tasks::remove', 333, {}, function () {});
-    });
-  });
+      it('::patch', function (done) {
+        var original = {
+          name: 'patching'
+        };
 
-  describe('Dynamic Service Event filtering', function() {
-    it('.created', function (done) {
-      var service = app.service('tasks');
-      var original = { description: 'created event test' };
-      var oldCreated = service.created;
+        socket.send('tasks::patch', 25, original, {}, function (error, data) {
+          verify.patch(25, original, data);
 
-      service.created = function(data, params, callback) {
-        assert.deepEqual(params, socketParams);
-        verify.create(original, data);
+          done(error);
+        });
+      });
 
-        callback(null, _.extend({ processed: true }, data));
-      };
+      it('::remove', function (done) {
+        socket.send('tasks::remove', 11, {}, function (error, data) {
+          verify.remove(11, data);
 
-      socket.send('tasks::create', original, {}, function() {});
-
-      socket.once('tasks created', function (data) {
-        service.created = oldCreated;
-        // Make sure Todo got processed
-        verify.create(_.extend({ processed: true }, original), data);
-        done();
+          done(error);
+        });
       });
     });
 
-    it('.updated', function (done) {
-      var original = {
-        name: 'updated event'
-      };
+    describe('Events', function () {
+      it('created', function (done) {
+        var original = {
+          name: 'created event'
+        };
 
-      socket.once('tasks updated', function (data) {
-        verify.update(10, original, data);
-        done();
+        socket.once('tasks created', function (data) {
+          verify.create(original, data);
+          done();
+        });
+
+        socket.send('tasks::create', original, {}, function () {});
       });
 
-      socket.send('tasks::update', 10, original, {}, function () {});
+      it('updated', function (done) {
+        var original = {
+          name: 'updated event'
+        };
+
+        socket.once('tasks updated', function (data) {
+          verify.update(10, original, data);
+          done();
+        });
+
+        socket.send('tasks::update', 10, original, {}, function () {});
+      });
+
+      it('patched', function(done) {
+        var original = {
+          name: 'patched event'
+        };
+
+        socket.once('tasks patched', function (data) {
+          verify.patch(12, original, data);
+          done();
+        });
+
+        socket.send('tasks::patch', 12, original, {}, function () {});
+      });
+
+      it('removed', function (done) {
+        socket.once('tasks removed', function (data) {
+          verify.remove(333, data);
+          done();
+        });
+
+        socket.send('tasks::remove', 333, {}, function () {});
+      });
     });
 
-    it('.removed', function (done) {
-      var service = app.service('tasks');
-      var oldRemoved = service.removed;
+    describe('Event filtering', function() {
+      it('.created', function (done) {
+        var service = app.service('tasks');
+        var original = { description: 'created event test' };
+        var oldCreated = service.created;
 
-      service.removed = function(data, params, callback) {
-        assert.deepEqual(params, socketParams);
+        service.created = function(data, params, callback) {
+          assert.deepEqual(params, socketParams);
+          verify.create(original, data);
 
-        if(data.id === 23) {
-          // Only dispatch with given id
-          return callback(null, data);
-        }
+          callback(null, _.extend({ processed: true }, data));
+        };
 
-        callback(null, false);
-      };
+        socket.send('tasks::create', original, {}, function() {});
 
-      socket.send('tasks::remove', 1, {}, function() {});
-      socket.send('tasks::remove', 23, {}, function() {});
+        socket.once('tasks created', function (data) {
+          service.created = oldCreated;
+          // Make sure Todo got processed
+          verify.create(_.extend({ processed: true }, original), data);
+          done();
+        });
+      });
 
-      socket.on('tasks removed', function (data) {
-        service.removed = oldRemoved;
-        assert.equal(data.id, 23);
-        done();
+      it('.updated', function (done) {
+        var original = {
+          name: 'updated event'
+        };
+
+        socket.once('tasks updated', function (data) {
+          verify.update(10, original, data);
+          done();
+        });
+
+        socket.send('tasks::update', 10, original, {}, function () {});
+      });
+
+      it('.removed', function (done) {
+        var service = app.service('tasks');
+        var oldRemoved = service.removed;
+
+        service.removed = function(data, params, callback) {
+          assert.deepEqual(params, socketParams);
+
+          if(data.id === 23) {
+            // Only dispatch with given id
+            return callback(null, data);
+          }
+
+          callback(null, false);
+        };
+
+        socket.send('tasks::remove', 1, {}, function() {});
+        socket.send('tasks::remove', 23, {}, function() {});
+
+        socket.on('tasks removed', function (data) {
+          service.removed = oldRemoved;
+          assert.equal(data.id, 23);
+          done();
+        });
       });
     });
   });

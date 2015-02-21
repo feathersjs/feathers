@@ -36,188 +36,186 @@ describe('REST provider', function () {
       server.close(done);
     });
 
+    describe('Services', function() {
 
-    /* * * * * * * * * Services * * * * * * * * */
+      it('GET .find', function (done) {
+        request('http://localhost:4777/todo', function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.find(JSON.parse(body));
+          done(error);
+        });
+      });
 
-    it('GET .find', function (done) {
-      request('http://localhost:4777/todo', function (error, response, body) {
-        assert.ok(response.statusCode === 200, 'Got OK status code');
-        verify.find(JSON.parse(body));
-        done(error);
+      it('GET .get', function (done) {
+        request('http://localhost:4777/todo/dishes', function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.get('dishes', JSON.parse(body));
+          done(error);
+        });
+      });
+
+      it('POST .create', function (done) {
+        var original = {
+          description: 'POST .create'
+        };
+
+        request({
+          url: 'http://localhost:4777/todo',
+          method: 'post',
+          body: JSON.stringify(original),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }, function (error, response, body) {
+          assert.ok(response.statusCode === 201, 'Got CREATED status code');
+          verify.create(original, JSON.parse(body));
+
+          done(error);
+        });
+      });
+
+      it('PUT .update', function (done) {
+        var original = {
+          description: 'PUT .update'
+        };
+
+        request({
+          url: 'http://localhost:4777/todo/544',
+          method: 'put',
+          body: JSON.stringify(original),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }, function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.update(544, original, JSON.parse(body));
+
+          done(error);
+        });
+      });
+
+      it('PATCH .patch', function (done) {
+        var original = {
+          description: 'PATCH .patch'
+        };
+
+        request({
+          url: 'http://localhost:4777/todo/544',
+          method: 'patch',
+          body: JSON.stringify(original),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }, function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.patch(544, original, JSON.parse(body));
+
+          done(error);
+        });
       });
     });
 
-    it('GET .get', function (done) {
-      request('http://localhost:4777/todo/dishes', function (error, response, body) {
-        assert.ok(response.statusCode === 200, 'Got OK status code');
-        verify.get('dishes', JSON.parse(body));
-        done(error);
+    describe('Dynamic Services', function() {
+      it('.remove', function (done) {
+        request({
+          url: 'http://localhost:4777/todo/233',
+          method: 'delete'
+        }, function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.remove(233, JSON.parse(body));
+
+          done(error);
+        });
+      });
+
+      it('GET .find', function (done) {
+        request('http://localhost:4777/tasks', function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.find(JSON.parse(body));
+          done(error);
+        });
+      });
+
+      it('GET .get', function (done) {
+        request('http://localhost:4777/tasks/dishes', function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.get('dishes', JSON.parse(body));
+          done(error);
+        });
+      });
+
+      it('POST .create', function (done) {
+        var original = {
+          description: 'Dynamic POST .create'
+        };
+
+        request({
+          url: 'http://localhost:4777/tasks',
+          method: 'post',
+          body: JSON.stringify(original),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }, function (error, response, body) {
+          assert.ok(response.statusCode === 201, 'Got CREATED status code');
+          verify.create(original, JSON.parse(body));
+
+          done(error);
+        });
+      });
+
+      it('PUT .update', function (done) {
+        var original = {
+          description: 'Dynamic PUT .update'
+        };
+
+        request({
+          url: 'http://localhost:4777/tasks/544',
+          method: 'put',
+          body: JSON.stringify(original),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }, function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.update(544, original, JSON.parse(body));
+
+          done(error);
+        });
+      });
+
+      it('PATCH .patch', function (done) {
+        var original = {
+          description: 'Dynamic PATCH .patch'
+        };
+
+        request({
+          url: 'http://localhost:4777/tasks/544',
+          method: 'patch',
+          body: JSON.stringify(original),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }, function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.patch(544, original, JSON.parse(body));
+
+          done(error);
+        });
+      });
+
+      it('DELETE .remove', function (done) {
+        request({
+          url: 'http://localhost:4777/tasks/233',
+          method: 'delete'
+        }, function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.remove(233, JSON.parse(body));
+
+          done(error);
+        });
       });
     });
-
-    it('POST .create', function (done) {
-      var original = {
-        description: 'POST .create'
-      };
-
-      request({
-        url: 'http://localhost:4777/todo',
-        method: 'post',
-        body: JSON.stringify(original),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }, function (error, response, body) {
-        assert.ok(response.statusCode === 201, 'Got CREATED status code');
-        verify.create(original, JSON.parse(body));
-
-        done(error);
-      });
-    });
-
-    it('PUT .update', function (done) {
-      var original = {
-        description: 'PUT .update'
-      };
-
-      request({
-        url: 'http://localhost:4777/todo/544',
-        method: 'put',
-        body: JSON.stringify(original),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }, function (error, response, body) {
-        assert.ok(response.statusCode === 200, 'Got OK status code');
-        verify.update(544, original, JSON.parse(body));
-
-        done(error);
-      });
-    });
-
-    it('PATCH .patch', function (done) {
-      var original = {
-        description: 'PATCH .patch'
-      };
-
-      request({
-        url: 'http://localhost:4777/todo/544',
-        method: 'patch',
-        body: JSON.stringify(original),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }, function (error, response, body) {
-        assert.ok(response.statusCode === 200, 'Got OK status code');
-        verify.patch(544, original, JSON.parse(body));
-
-        done(error);
-      });
-    });
-
-
-    /* * * * * * * * * Dynamically-Added Services * * * * * * * * */
-
-    it('DELETE .remove', function (done) {
-      request({
-        url: 'http://localhost:4777/todo/233',
-        method: 'delete'
-      }, function (error, response, body) {
-        assert.ok(response.statusCode === 200, 'Got OK status code');
-        verify.remove(233, JSON.parse(body));
-
-        done(error);
-      });
-    });
-
-    it('Dynamic GET .find', function (done) {
-      request('http://localhost:4777/tasks', function (error, response, body) {
-        assert.ok(response.statusCode === 200, 'Got OK status code');
-        verify.find(JSON.parse(body));
-        done(error);
-      });
-    });
-
-    it('Dynamic GET .get', function (done) {
-      request('http://localhost:4777/tasks/dishes', function (error, response, body) {
-        assert.ok(response.statusCode === 200, 'Got OK status code');
-        verify.get('dishes', JSON.parse(body));
-        done(error);
-      });
-    });
-
-    it('Dynamic POST .create', function (done) {
-      var original = {
-        description: 'Dynamic POST .create'
-      };
-
-      request({
-        url: 'http://localhost:4777/tasks',
-        method: 'post',
-        body: JSON.stringify(original),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }, function (error, response, body) {
-        assert.ok(response.statusCode === 201, 'Got CREATED status code');
-        verify.create(original, JSON.parse(body));
-
-        done(error);
-      });
-    });
-
-    it('Dynamic PUT .update', function (done) {
-      var original = {
-        description: 'Dynamic PUT .update'
-      };
-
-      request({
-        url: 'http://localhost:4777/tasks/544',
-        method: 'put',
-        body: JSON.stringify(original),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }, function (error, response, body) {
-        assert.ok(response.statusCode === 200, 'Got OK status code');
-        verify.update(544, original, JSON.parse(body));
-
-        done(error);
-      });
-    });
-
-    it('Dynamic PATCH .patch', function (done) {
-      var original = {
-        description: 'Dynamic PATCH .patch'
-      };
-
-      request({
-        url: 'http://localhost:4777/tasks/544',
-        method: 'patch',
-        body: JSON.stringify(original),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }, function (error, response, body) {
-        assert.ok(response.statusCode === 200, 'Got OK status code');
-        verify.patch(544, original, JSON.parse(body));
-
-        done(error);
-      });
-    });
-
-    it('Dynamic DELETE .remove', function (done) {
-      request({
-        url: 'http://localhost:4777/tasks/233',
-        method: 'delete'
-      }, function (error, response, body) {
-        assert.ok(response.statusCode === 200, 'Got OK status code');
-        verify.remove(233, JSON.parse(body));
-
-        done(error);
-      });
-    });
-    /* * * End of Dynamically-Added Tests * * */
   });
 
   describe('HTTP status codes', function() {
