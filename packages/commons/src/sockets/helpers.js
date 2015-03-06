@@ -3,9 +3,7 @@ import getArguments from '../arguments';
 
 function errorObject(e) {
   let result = {};
-  Object.getOwnPropertyNames(e).forEach(function (key) {
-    result[key] = e[key];
-  });
+  Object.getOwnPropertyNames(e).forEach(key => result[key] = e[key]);
   return result;
 }
 
@@ -25,26 +23,28 @@ export function defaultDispatcher(data, params, callback) {
 // Set up event handlers for a given service using the event dispatching mechanism
 export function setupEventHandlers(info, service, path) {
   // If the service emits events that we want to listen to (Event mixin)
-  if (typeof service.on === 'function' && service._serviceEvents) {
-    _.each(service._serviceEvents, ev => {
-      service.on(ev, function (data) {
-        // Check if there is a method on the service with the same name as the event
-        let dispatcher = typeof service[ev] === 'function' ?
-          service[ev] : defaultDispatcher;
-        let eventName = `${path} ${ev}`;
+  if (typeof service.on !== 'function' || !service._serviceEvents) {
+    return;
+  }
 
-        info.clients().forEach(function (socket) {
-          dispatcher(data, info.params(socket), function (error, dispatchData) {
-            if (error) {
-              socket[info.method]('error', error);
-            } else if (dispatchData) { // Only dispatch if we have data
-              socket[info.method](eventName, dispatchData);
-            }
-          });
+  _.each(service._serviceEvents, ev => {
+    service.on(ev, function (data) {
+      // Check if there is a method on the service with the same name as the event
+      let dispatcher = typeof service[ev] === 'function' ?
+        service[ev] : defaultDispatcher;
+      let eventName = `${path} ${ev}`;
+
+      info.clients().forEach(function (socket) {
+        dispatcher(data, info.params(socket), function (error, dispatchData) {
+          if (error) {
+            socket[info.method]('error', error);
+          } else if (dispatchData) { // Only dispatch if we have data
+            socket[info.method](eventName, dispatchData);
+          }
         });
       });
     });
-  }
+  });
 }
 
 // Set up all method handlers for a service and socket.
