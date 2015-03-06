@@ -37,6 +37,7 @@
     "body-parser": "^1.0.2",
     "debug": "^2.1.1",
     "express": "^4.0.0",
+    "feathers-commons": "^0.1.0",
     "feathers-errors": ">=0.2.0",
     "lodash": "^3.1.0",
     "primus": "^2.4.0",
