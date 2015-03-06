@@ -92,6 +92,13 @@ describe('SocketIO provider', function () {
   });
 
   describe('Services', function() {
+    it('invalid arguments cause an error', function (done) {
+      socket.emit('todo::find', 1, {}, function(error) {
+        assert.equal(error.message, 'Too many arguments for \'find\' service method');
+        done();
+      });
+    });
+
     describe('CRUD', function () {
       it('::find', function (done) {
         socket.emit('todo::find', {}, function (error, data) {
@@ -118,6 +125,20 @@ describe('SocketIO provider', function () {
           verify.create(original, data);
 
           done(error);
+        });
+      });
+
+      it('::create without parameters and callback', function (done) {
+        var original = {
+          name: 'creating'
+        };
+
+        socket.emit('todo::create', original);
+
+        socket.once('todo created', function(data) {
+          verify.create(original, data);
+
+          done();
         });
       });
 

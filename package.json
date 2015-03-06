@@ -27,7 +27,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "grunt"
+    "test": "grunt --stack"
   },
   "engines": {
     "node": ">= 0.10.0",
@@ -37,8 +37,8 @@
     "body-parser": "^1.0.2",
     "debug": "^2.1.1",
     "express": "^4.0.0",
-    "feathers-commons": "^0.1.0",
-    "feathers-errors": ">=0.2.0",
+    "feathers-commons": "^0.2.0",
+    "feathers-errors": "^0.2.5",
     "lodash": "^3.1.0",
     "primus": "^2.4.0",
     "primus-emitter": "^3.0.2",
