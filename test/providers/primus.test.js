@@ -93,8 +93,15 @@ describe('Primus provider', function () {
   });
 
   describe('Services', function() {
+    it('invalid arguments cause an error', function (done) {
+      socket.send('todo::find', 1, {}, function(error) {
+        assert.equal(error.message, 'Too many arguments for \'find\' service method');
+        done();
+      });
+    });
 
     describe('CRUD', function () {
+
       it('::find', function (done) {
         socket.send('todo::find', {}, function (error, data) {
           verify.find(data);
@@ -120,6 +127,20 @@ describe('Primus provider', function () {
           verify.create(original, data);
 
           done(error);
+        });
+      });
+
+      it('::create without parameters and callback', function (done) {
+        var original = {
+          name: 'creating'
+        };
+
+        socket.send('todo::create', original);
+
+        socket.once('todo created', function(data) {
+          verify.create(original, data);
+
+          done();
         });
       });
 
