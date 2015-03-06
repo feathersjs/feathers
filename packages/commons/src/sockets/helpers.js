@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import getArguments from '../arguments';
 
 // The position of the params parameters for a service method so that we can extend them
 // default is 1
@@ -51,13 +52,8 @@ export function setupMethodHandlers(info, socket, service, path) {
       paramsPositions[method] : 1;
 
     socket.on(name, function () {
-      var args = _.toArray(arguments);
-      // If the service is called with no parameter object
-      // insert an empty object
-      if (typeof args[position] === 'function') {
-        args.splice(position, 0, {});
-      }
-      args[position] = _.extend({query: args[position]}, params);
+      var args = getArguments(method, arguments);
+      args[position] = _.extend({ query: args[position] }, params);
       service[method].apply(service, args);
     });
   });
