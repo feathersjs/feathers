@@ -26,7 +26,8 @@ describe('Feathers application', function () {
       }
     };
 
-    var app = feathers().use('/dummy/service/', dummyService);
+    var app = feathers().configure(feathers.socketio())
+      .use('/dummy/service/', dummyService);
 
     app.listen(8012, function(){
       app.use('/another/dummy/service/', dummyService);
