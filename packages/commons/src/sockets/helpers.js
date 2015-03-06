@@ -29,9 +29,9 @@ export function setupEventHandlers(info, service, path) {
     _.each(service._serviceEvents, ev => {
       service.on(ev, function (data) {
         // Check if there is a method on the service with the same name as the event
-        var dispatcher = typeof service[ev] === 'function' ?
+        let dispatcher = typeof service[ev] === 'function' ?
           service[ev] : defaultDispatcher;
-        var eventName = `${path} ${ev}`;
+        let eventName = `${path} ${ev}`;
 
         info.clients().forEach(function (socket) {
           dispatcher(data, info.params(socket), function (error, dispatchData) {
@@ -54,18 +54,18 @@ export function setupMethodHandlers(info, socket, service, path) {
       return;
     }
 
-    var name = `${path}::${method}`;
-    var params = info.params(socket);
-    var position = typeof paramsPositions[method] !== 'undefined' ?
+    let name = `${path}::${method}`;
+    let params = info.params(socket);
+    let position = typeof paramsPositions[method] !== 'undefined' ?
       paramsPositions[method] : 1;
 
     socket.on(name, function () {
       try {
-        var args = getArguments(method, arguments);
+        let args = getArguments(method, arguments);
         args[position] = _.extend({ query: args[position] }, params);
         service[method].apply(service, args);
       } catch(e) {
-        var callback = arguments[arguments.length - 1];
+        let callback = arguments[arguments.length - 1];
         if(typeof callback === 'function') {
           callback(errorObject(e));
         }
