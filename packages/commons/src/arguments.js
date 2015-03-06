@@ -5,7 +5,8 @@ const getParams = (args, position) => typeof args[position] === 'object' ? args[
 
 const updateOrPatch = name => {
   return function(args) {
-    let [ id, data ] = args;
+    let id = args[0];
+    let data = args[1];
     let callback = getCallback(args);
     let params = getParams(args, 2);
 
