@@ -1,0 +1,50 @@
+{
+  "name": "feathers-commons",
+  "version": "0.1.0",
+  "description": "Shared Feathers utility functions",
+  "homepage": "https://github.com/feathersjs/feathers-commons",
+  "keywords": [
+    "feathers"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/feathersjs/feathers-commons/blob/master/LICENSE"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers-commons.git"
+  },
+  "author": {
+    "name": "David Luecke",
+    "email": "daff@neyeon.com",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers-commons/issues"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "main": "lib/commons.js",
+  "scripts": {
+    "prepublish": "npm run compile",
+    "compile": "rm -rf lib/ && node_modules/.bin/babel -d lib/ src/",
+    "jshint": "node_modules/.bin/jshint src/. test/. --config",
+    "mocha": "node_modules/.bin/mocha test/ --compilers js:babel/register",
+    "test": "npm run jshint && npm run mocha"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "lodash": "^2.4.1"
+  },
+  "devDependencies": {
+    "babel": "^4.6.6",
+    "jshint": "^2.6.3",
+    "mocha": "^2.1.0"
+  }
+}
