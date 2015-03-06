@@ -1,6 +1,14 @@
 import _ from 'lodash';
 import getArguments from '../arguments';
 
+function errorObject(e) {
+  let result = {};
+  Object.getOwnPropertyNames(e).forEach(function (key) {
+    result[key] = e[key];
+  });
+  return result;
+}
+
 // The position of the params parameters for a service method so that we can extend them
 // default is 1
 export const paramsPositions = {
@@ -52,9 +60,16 @@ export function setupMethodHandlers(info, socket, service, path) {
       paramsPositions[method] : 1;
 
     socket.on(name, function () {
-      var args = getArguments(method, arguments);
-      args[position] = _.extend({ query: args[position] }, params);
-      service[method].apply(service, args);
+      try {
+        var args = getArguments(method, arguments);
+        args[position] = _.extend({ query: args[position] }, params);
+        service[method].apply(service, args);
+      } catch(e) {
+        var callback = arguments[arguments.length - 1];
+        if(typeof callback === 'function') {
+          callback(errorObject(e));
+        }
+      }
     });
   });
 }
