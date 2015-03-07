@@ -1,4 +1,4 @@
-import { getArguments } from './arguments';
+import getArguments from './arguments';
 import socket from './sockets/index';
 import { stripSlashes } from './utils';
 
