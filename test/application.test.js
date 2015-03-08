@@ -296,10 +296,10 @@ describe('Feathers application', function () {
   it('mixins are unique to one application', function() {
     var app = feathers();
     app.mixins.push(function() {});
-    assert.equal(app.mixins.length, 3);
+    assert.equal(app.mixins.length, 4);
 
     var otherApp = feathers();
     otherApp.mixins.push(function() {});
-    assert.equal(otherApp.mixins.length, 3);
+    assert.equal(otherApp.mixins.length, 4);
   });
 });
