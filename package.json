@@ -27,7 +27,13 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "grunt --stack"
+    "publish": "git push origin --tags",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish",
+    "jshint": "jshint lib/. test/. --config",
+    "mocha": "mocha test/ --recursive",
+    "test": "npm run jshint && npm run mocha"
   },
   "engines": {
     "node": ">= 0.10.0",
@@ -47,13 +53,8 @@
     "uberproto": "^1.1.0"
   },
   "devDependencies": {
-    "grunt": "^0.4.0",
-    "grunt-cli": "^0.1.0",
-    "grunt-contrib-jshint": "^0.x",
-    "grunt-jsbeautifier": "^0.2.0",
-    "grunt-release": "^0.7.0",
-    "grunt-simple-mocha": "^0.4.0",
-    "mocha": "^1.x",
+    "jshint": "^2.6.3",
+    "mocha": "^2.2.0",
     "q": "^1.0.1",
     "request": "^2.x",
     "socket.io-client": "^1.0.0",
