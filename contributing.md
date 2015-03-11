@@ -18,7 +18,7 @@ Before running the tests from the `test/` folder `npm test` will run JSHint. You
 
 ## Documentation
 
-Feathers documentation is currently contained in Markdown files in the [gh-pages branch](https://github.com/feathersjs/feathers/tree/gh-pages). To change the documentation submit a pull request against that branch and the documentation will be automatically updated using Jekyll.
+Feathers documentation is contained Markdown files in the `/docs` folder. To change the documentation submit a pull request and it will be updated with the next release.
 
 # Contributor Code of Conduct
 
