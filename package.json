@@ -42,11 +42,11 @@
   "dependencies": {
     "body-parser": "^1.0.2",
     "debug": "^2.1.1",
-    "express": "^4.0.0",
+    "express": "^4.12.3",
     "feathers-commons": "^0.2.0",
     "feathers-errors": "^0.2.5",
     "lodash": "^3.1.0",
-    "primus": "^2.4.0",
+    "primus": "^3.0.2",
     "primus-emitter": "^3.0.2",
     "rubberduck": "^1.0.0",
     "socket.io": "^1.1.0",
