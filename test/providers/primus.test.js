@@ -39,6 +39,31 @@ describe('Primus provider', function () {
     server.close(done);
   });
 
+  it('runs primus before setup (#131)', function(done) {
+    var counter = 0;
+    var app = feathers()
+      .configure(feathers.primus({
+        transformer: 'websockets'
+      }, function() {
+        assert.equal(counter, 0);
+        counter++;
+      }))
+      .use('/todos', {
+        find: function(params, callback) {
+          callback(null, []);
+        },
+        setup: function(app) {
+          assert.ok(app.primus);
+          assert.equal(counter, 1, 'SocketIO configuration ran first');
+        }
+      });
+
+    var srv = app.listen(9119);
+    srv.on('listening', function() {
+      srv.close(done);
+    });
+  });
+
   it('Passes handshake as service parameters.', function(done) {
     var service = app.service('todo');
     var old = {
