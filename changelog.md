@@ -1,5 +1,13 @@
 ## Changelog
 
+__1.1.0__
+
+- Service `setup` called before `app.io` instantiated ([#131](https://github.com/feathersjs/feathers/issues/131))
+- Add debug module and messages ([#114](https://github.com/feathersjs/feathers/issues/114))
+- Server hardening with socket message validation and normalization ([#113](https://github.com/feathersjs/feathers/issues/113)) 
+- Custom service events ([#111](https://github.com/feathersjs/feathers/issues/111))
+- Support for registering services dynamically ([#67](https://github.com/feathersjs/feathers/issues/67), [#96](https://github.com/feathersjs/feathers/issues/96), [#107](https://github.com/feathersjs/feathers/issues/107))
+
 __1.0.2__
 
 - Use Uberproto extended instance when creating services ([#105](https://github.com/feathersjs/feathers/pull/105))
