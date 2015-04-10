@@ -38,6 +38,29 @@ describe('SocketIO provider', function () {
     server.close(done);
   });
 
+  it('runs io before setup (#131)', function(done) {
+    var counter = 0;
+    var app = feathers()
+      .configure(feathers.socketio(function() {
+        assert.equal(counter, 0);
+        counter++;
+      }))
+      .use('/todos', {
+        find: function(params, callback) {
+          callback(null, []);
+        },
+        setup: function(app) {
+          assert.ok(app.io);
+          assert.equal(counter, 1, 'SocketIO configuration ran first');
+        }
+      });
+
+    var srv = app.listen(8887);
+    srv.on('listening', function() {
+      srv.close(done);
+    });
+  });
+
   it('passes handshake as service parameters', function(done) {
     var service = app.service('todo');
     var old = {
