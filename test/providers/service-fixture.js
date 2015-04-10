@@ -12,6 +12,8 @@ var findAllData = [{
 }];
 
 exports.Service = {
+  events: [ 'log' ],
+
   find: function (params, callback) {
     callback(null, findAllData);
   },

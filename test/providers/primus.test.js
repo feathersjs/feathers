@@ -401,6 +401,27 @@ describe('Primus provider', function () {
 
         socket.send('tasks::remove', 333, {}, function () {});
       });
+
+      it('custom events', function(done) {
+        var service = app.service('todo');
+        var original = {
+          name: 'created event'
+        };
+        var old = service.create;
+
+        service.create = function(data) {
+          this.emit('log', { message: 'Custom log event', data: data });
+          service.create = old;
+          return old.apply(this, arguments);
+        };
+
+        socket.once('todo log', function(data) {
+          assert.deepEqual(data, { message: 'Custom log event', data: original });
+          done();
+        });
+
+        socket.send('todo::create', original, {}, function () {});
+      });
     });
 
     describe('Event filtering', function() {
