@@ -53,6 +53,7 @@
     "uberproto": "^1.1.0"
   },
   "devDependencies": {
+    "feathers-client": "^0.1.1",
     "jshint": "^2.6.3",
     "mocha": "^2.2.0",
     "q": "^1.0.1",

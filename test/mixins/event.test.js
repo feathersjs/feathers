@@ -3,6 +3,8 @@
 var assert = require('assert');
 var _ = require('lodash');
 var Proto = require('uberproto');
+var EventEmitter = require('events').EventEmitter;
+
 var mixinEvent = require('../../lib/mixins/event');
 var EventMixin = mixinEvent.Mixin;
 var create = Proto.create;
@@ -23,7 +25,7 @@ describe('Event mixin', function () {
 
     var instance = create.call(FixtureService);
     assert.equal('Original setup: Test', instance.setup('Test'));
-    assert.ok(instance._rubberDuck instanceof require('events').EventEmitter);
+    assert.ok(instance._rubberDuck instanceof EventEmitter);
 
     var existingMethodsService = {
       setup: function (arg) {
@@ -32,6 +34,7 @@ describe('Event mixin', function () {
     };
 
     Proto.mixin(EventMixin, existingMethodsService);
+    Proto.mixin(EventEmitter.prototype, existingMethodsService);
 
     assert.equal('Original setup from object: Test', existingMethodsService.setup('Test'));
     assert.equal(typeof existingMethodsService.on, 'function');
@@ -147,6 +150,38 @@ describe('Event mixin', function () {
 
     instance.remove(27, {}, function (error, data) {
       assert.equal(data.id, 27);
+    });
+  });
+
+  it('does not punch when service has an events list (#118)', function(done) {
+    var FixtureService = Proto.extend({
+      events: [ 'created' ],
+      create: function (data, params, cb) {
+        _.defer(function () {
+          cb(null, {
+            id: 10,
+            name: data.name
+          });
+        });
+      }
+    });
+
+    FixtureService.mixin(EventEmitter.prototype);
+    mixinEvent(FixtureService);
+
+    var instance = create.call(FixtureService);
+    instance.setup();
+
+    instance.on('created', function (data) {
+      assert.deepEqual(data, { custom: 'event' });
+      done();
+    });
+
+    instance.create({
+      name: 'Tester'
+    }, {}, function (error, data) {
+      assert.equal(data.id, 10);
+      instance.emit('created', { custom: 'event' });
     });
   });
 });
