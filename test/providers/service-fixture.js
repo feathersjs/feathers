@@ -5,10 +5,24 @@ var assert = require('assert');
 
 var findAllData = [{
   id: 0,
-  description: 'You have to do something'
+  description: 'You have to do something',
+  tasks: [{
+    id: 0,
+    description: 'play a video game'
+  }, {
+    id: 1,
+    description: 'watch a movie'
+  }]
 }, {
   id: 1,
-  description: 'You have to do laundry'
+  description: 'You have to do laundry',
+  tasks: [{
+    id: 0,
+    description: 'the blue jean'
+  }, {
+    id: 1,
+    description: 'the red shirt'
+  }]
 }];
 
 exports.Service = {
@@ -50,7 +64,33 @@ exports.Service = {
     callback(null, {
       id: id
     });
+  },
+
+  findInCollection: function(id, collection, params, callback) {
+    var collectionData = findAllData[id].tasks;
+    callback(null, collectionData);
+  },
+
+  // POST /resource/:id/:collection/:itemId
+  addToCollection: function(id, collection, params, callback) {
+
+
+    var result = _.clone(data);
+    result.id = 42;
+    result.status = 'created';
+    callback(null, result);
+
   }
+  //
+  //// GET /resource/:id/:collection/:itemId
+  //getInCollection: function(id, collection, itemId, params, callback) {
+  //
+  //},
+  //
+  //// DELETE /resource/:id/:collection/:itemId
+  //removeFromCollection: function(id, collection, itemId, params, callback) {
+  //
+  //}
 };
 
 exports.verify = {
@@ -91,5 +131,25 @@ exports.verify = {
     assert.deepEqual({
       id: id
     }, data, '.remove called');
-  }
+  },
+
+  findInCollection: function(id, currentData) {
+    var expectedData = findAllData[id].tasks;
+    assert.deepEqual(expectedData, currentData, 'Data as expected');
+  },
+
+  // POST /resource/:id/:collection/:itemId
+  addToCollection: function(id, collection, params, callback) {
+
+  },
+  //
+  //// GET /resource/:id/:collection/:itemId
+  //getInCollection: function(id, collection, itemId, params, callback) {
+  //
+  //},
+  //
+  //// DELETE /resource/:id/:collection/:itemId
+  //removeFromCollection: function(id, collection, itemId, params, callback) {
+  //
+  //}
 };
