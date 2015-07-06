@@ -1,0 +1,32 @@
+nav {
+  .font-size(18);
+  
+  .navbar {
+    margin: 0 auto;
+    display: table;
+    padding: 10px 0;
+  }
+
+  li {
+    margin: 0 10px;
+  }
+
+  a {
+    display: inline-block;
+    line-height: @logo-height;
+    vertical-align: middle;
+    
+    &.logo {
+      height: @logo-height;
+      width: @logo-height;
+    }
+  }
+}
+
+.menu-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 7px 14px;
+  z-index: 1000;
+}

@@ -1,0 +1,142 @@
+form {
+  .col,
+  .input-wrapper {
+    position: relative;
+  }
+
+  input,
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="date"],
+  textarea {
+    // display: block;
+    width: 100%;
+    // margin: 0.3em 0;
+    padding: 0.8em 0.6em 0.6em;
+    outline: none;
+    border: 1px solid @light-grey;  
+    font-size: 1.1em;
+    line-height: 1;
+    background: @white;
+    color: @medium-grey;
+    -webkit-appearance: none;
+    .transition;
+
+    // &:invalid + label {
+    //   transform: translateY(0);
+    // }
+
+    &:focus {
+      color: @dark-grey;
+      border: 1px solid @grey;
+      .box-shadow(0 0 2px, @grey);
+
+      & + label {
+        color: @medium-grey;
+        font-weight: 400;
+        // transform: translateY(-18px);
+      }
+    }
+
+    &.success {
+      border: 1px solid @green;
+      .box-shadow(0 0 2px, @green);
+
+      & + label {
+        color: @green;
+        font-weight: 400;
+      }
+    }
+
+    &.error {
+      border: 1px solid @red;
+      .box-shadow(0 0 2px, @red);
+
+      & + label {
+        color: @red;
+        font-weight: 400;
+      //   transform: translateY(-18px);
+      }
+    }
+
+    &::-webkit-input-placeholder {
+      color: @light-grey;
+      font-weight: 300;
+    }
+  }
+
+  [placeholder]:focus::-webkit-input-placeholder {
+    // transition: opacity 0.5s 0.5s ease; 
+    .transition;
+    opacity: 0;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button, 
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="date"]::-webkit-inner-spin-button, 
+  input[type="date"]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+  }
+
+  .select-style {
+    position: relative;
+    display: block;
+    width: 100%;
+    border: 1px solid @grey;
+    background: @white;
+
+    .fa-caret-down {
+      position: absolute;
+      right: 0.6em;
+      top: 0.8em;
+      color: @grey;
+      font-size: 1.4em;
+    }
+
+    select {
+      padding: 0.8em 0;
+      margin-left: 0.6em;
+      width: 100%;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+      background-image: none;
+      -webkit-appearance: none;
+      color: @grey;
+      font-size: 1.2em;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &:focus {
+        outline: none;  
+      }
+    }
+  }
+
+  fieldset.row {
+    padding: 0.5em 0;
+  }
+
+  label {
+    position: absolute;
+    left: 5px;
+    top: -5px;
+    padding: 0 5px;
+    background: white;
+    color: @grey;
+    font-size: 12px;
+    line-height: 12px;
+    text-transform: uppercase;
+    pointer-events: none;
+    z-index: 2;
+    // transition: transform 100ms ease;
+    // transform: translateY(-18px);
+  }
+}

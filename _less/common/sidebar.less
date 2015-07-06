@@ -1,0 +1,34 @@
+#toc {
+  padding-top: 20px;
+  height: 100%;
+  overflow: auto;
+  padding-bottom: 100px;
+
+  &.affix {
+    position: fixed;
+    top: 80px;
+    width: 263px;
+  }
+
+  li > ul {
+    display: none;
+  }
+
+  li.active {
+    > a {
+      font-weight: bold;
+    }
+
+    > ul {
+      display: block;
+    }
+  }
+
+  ul.nav > li.active > ul > li {
+    list-style: none;
+
+    a {
+      color: @dark-grey;
+    }
+  }
+}

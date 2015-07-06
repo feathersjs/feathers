@@ -2,7 +2,6 @@
 layout: page
 title: API
 permalink: /api/
-weight: 2
 ---
 
 ## Configuration

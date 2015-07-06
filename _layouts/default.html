@@ -4,62 +4,51 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="/ico/favicon.png">
+    <meta name="description" content="Feathers - Real-time microservice framework built on Express">
+    <meta name="author" content="David Luecke">
+    <meta name="author" content="Eric Kryski">
+    <link rel="shortcut icon" href="/images/favicon.png">
 
     <title>{{ site.title }}{% if page.title %} - {{ page.title }}{% endif %}</title>
+    <link href='//fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
     <link href="{{ '/css/feathers.min.css' | prepend: site.baseurl }}" rel="stylesheet">
-    <link href="{{ '/css/fontello.css' | prepend: site.baseurl }}" rel="stylesheet">
     <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
   </head>
   <body data-spy="scroll" data-offset="100">
-    <div class="navbar-wrapper">
-      <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="icon-feather"></span>
-            </button>
-            <a class="navbar-brand" href="/">
-              <img src="/images/logo-small.png" alt="Feathers logo small" />
-            </a>
-          </div>
-          <div class="navbar-collapse collapse pull-right">
-            <ul class="nav navbar-nav">
-              <li>
-                <a class="page-link" href="{{ '/' | prepend: site.baseurl }}">Home</a>
-              </li>
-              {% for weight in (1..10) %}
-                {% for p in site.pages %}
-                  {% if p.weight == weight %}
-                    <li>
-                      <a class="page-link {% if p.url == page.url %}active{% endif %}" href="{{ p.url | prepend: site.baseurl}}#{{p.anchor}}">
-                        {{ p.title }}
-                      </a>
-                    </li>
+    <nav>
+      <div class="navbar container">
+        <ul class="inline-list thin">
+          {% for weight in (1..5) %}
+            {% for p in site.pages %}
+              {% if p.weight == weight %}
+                <li>
+                  {% if p.title == 'Home' %}
+                    <a class="logo" href="{{ '/' | prepend: site.baseurl }}">
+                      <img src="/images/logo.png" alt="Feathers Logo">
+                    </a>       
+                  {% else %}
+                    <a class="{% if p.url == page.url %}normal{% endif %}" href="{{ p.url | prepend: site.baseurl}}#{{p.anchor}}">
+                      {{ p.title }}
+                    </a>
                   {% endif %}
-                {% endfor %}
-              {% endfor %}
-              <li>
-                <a class="page-link" target="_blank" href="https://github.com/feathersjs/feathers">
-                  <strong>Github</strong>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
+                </li>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        </ul>
       </div>
-    </div>
+    </nav>
 
     <div class="content">{{content}}</div>
 
     <footer>
-      <div class="row">
-        <p>&copy; 2014 Feathers. Another project made with <i class="icon-heart"></i> by
-          <a href="http://twitter.com/daffl" title="David Luecke" target="_blank">@daffl</a> and
-          <a href="http://twitter.com/ekryski" title="Eric Kryski" target="_blank">@ekryski</a>.
-        </p>
+      <div class="container">
+        <div class="row center-text">
+          <p>&copy; 2015 Feathers. Another project made with <i class="fa fa-heart"></i> + <i class="fa fa-beer"></i> by
+            <a class="primary normal" href="http://twitter.com/daffl" title="David Luecke" target="_blank">@daffl</a> and
+            <a class="primary normal" href="http://twitter.com/ekryski" title="Eric Kryski" target="_blank">@ekryski</a>.
+          </p>
+        </div>
       </div>
     </footer>
 

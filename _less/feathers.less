@@ -1,0 +1,102 @@
+@import "pygments";
+@import "font/font-awesome";
+
+@import "common/variables";
+@import "common/mixins";
+@import "common/base";
+
+@import "common/layout";
+@import "common/elements";
+@import "common/buttons";
+@import "common/forms";
+@import "common/modal";
+@import "common/notice";
+@import "common/nav";
+@import "common/sidebar";
+@import "common/footer";
+
+html, body {
+  background: @background-color;
+  color: @text-color;
+}
+
+h1.logo {
+  .font-size(64);
+}
+
+.gist {
+  pre, .file-data {
+    font-size: 14px !important;
+  }
+}
+
+section {
+  padding: 40px 0;
+}
+
+#hero {
+  .badges,
+  .github-links {
+    padding: 0.3em 0;
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+#ship {
+  h3 {
+    margin-bottom: 1em;
+  }
+
+  img.ship-it {
+    display: table;
+    height: 300px;
+    width: 300px;
+    margin: 0px auto;
+    border: 5px solid @soft-white;
+    background: @light-grey;
+    .rounded(100%);
+  }
+}
+
+#plugins {
+  color: @white;
+  background: @dark-grey;
+
+  p {
+    color: @light-grey;
+  }
+}
+
+#features {
+  color: @white;
+  background: @red;
+
+  h4 {
+    color: #982E3E;
+  }
+
+  a.primary {
+    color: @soft-white;
+    border-bottom: 1px dashed @soft-white;
+
+    &:hover {
+      color: darken(@soft-white, 10%);
+      border-bottom: 1px dashed darken(@soft-white, 10%);
+    }
+  }
+}
+
+#comparison {
+  img.ship-it {
+    display: table;
+    height: 300px;
+    width: 300px;
+    margin: 0px auto;
+    border: 5px solid @soft-white;
+    background: @light-grey;
+    .rounded(100%);
+  }
+}

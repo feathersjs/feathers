@@ -13,7 +13,7 @@ module.exports = function (grunt) {
           yuicompress: true
         },
         files: {
-          "css/feathers.min.css": "_less/main.less"
+          "css/feathers.min.css": "_less/feathers.less"
         }
       }
     },

@@ -20,7 +20,7 @@
     var idCounter = 0;
     var existingIds = {};
     var createMenu = function(headings, level) {
-      var root = $('<ul>');
+      var root = $('<ul class="unstyled-list">');
       var getId = function(el) {
         var id = el.attr('id');
 
