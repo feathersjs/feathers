@@ -63,7 +63,7 @@
   };
 
   $(document).ready(function() {
-    var offsetTop = $('.navbar-inverse').outerHeight();
+    var offsetTop = $('.navbar').outerHeight();
 
     $('#toc').toc('.page-content');
     $('#realtime-todos').gistPills(6665992, 0);
