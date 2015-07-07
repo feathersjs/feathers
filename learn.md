@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Examples
-permalink: /examples/
+title: Learn
+permalink: /learn/
 weight: 2
 ---
 

@@ -55,7 +55,6 @@ section {
     height: 300px;
     width: 300px;
     margin: 0px auto;
-    border: 5px solid @soft-white;
     background: @light-grey;
     .rounded(100%);
   }
@@ -67,6 +66,28 @@ section {
 
   p {
     color: @light-grey;
+  }
+
+  ul {
+    li {
+      padding: 10px 20px;
+
+      a {
+        display: inline-block;
+        
+        img {
+          height: 100px;
+          max-width: 160px;
+        }
+
+        @media (max-width: @mobile-breakpoint) {
+          img {
+            height: 60px;
+            max-width: 120px;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -90,13 +111,7 @@ section {
 }
 
 #comparison {
-  img.ship-it {
-    display: table;
-    height: 300px;
-    width: 300px;
+  img {
     margin: 0px auto;
-    border: 5px solid @soft-white;
-    background: @light-grey;
-    .rounded(100%);
   }
 }

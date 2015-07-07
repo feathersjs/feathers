@@ -21,12 +21,17 @@ nav {
       width: @logo-height;
     }
   }
-}
 
-.menu-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 7px 14px;
-  z-index: 1000;
+  @media (max-width: @mobile-breakpoint) {
+    .font-size(14);
+
+    a {
+      line-height: @mobile-logo-height;
+
+      &.logo {
+        height: @mobile-logo-height;
+        width: @mobile-logo-height;
+      }
+    }
+  }
 }

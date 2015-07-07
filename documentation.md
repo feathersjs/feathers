@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Documentation
+title: Docs
 permalink: /docs/
 weight: 4
 ---
