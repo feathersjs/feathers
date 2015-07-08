@@ -113,6 +113,17 @@ describe('REST provider', function () {
           done(error);
         });
       });
+
+      it('GET .findInCollection', function (done) {
+        request('http://localhost:4777/todo/1/tasks', function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.findInCollection(1, JSON.parse(body));
+          done(error);
+        });
+      });
+
+
+
     });
 
     describe('Dynamic Services', function() {
