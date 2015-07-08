@@ -1,6 +1,7 @@
 ---
 layout: quick-start
 title: Quick Start
+description: Build your first Feathers app in minutes using our quick start guide.
 weight: 1
 permalink: /quick-start/
 anchor: quick-start

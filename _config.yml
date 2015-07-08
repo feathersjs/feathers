@@ -1,9 +1,15 @@
 # Site settings
 title: Feathers
-email: your-email@domain.com
-description: "Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description."
-baseurl: ""
-url: "http://yourdomain.com"
+email: hello@feathersjs.com
+description: "Build better APIs, faster than ever."
+baseurl: "http://feathersjs.com"
+url: "http://feathersjs.com"
+twitter:
+  author: @ekryski
+analytics:
+  provider: google
+  google:
+    tracking_id: UA-64904930-1
 
 # Build settings
 markdown: redcarpet

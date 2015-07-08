@@ -1,0 +1,23 @@
+<nav>
+  <div class="navbar container">
+    <ul class="inline-list thin">
+      {% for weight in (1..5) %}
+        {% for p in site.pages %}
+          {% if p.weight == weight %}
+            <li>
+              {% if p.url == '/' %}
+                <a class="logo" href="{{ '/' | prepend: site.baseurl }}">
+                  <img src="/images/logo.png" alt="Feathers Logo">
+                </a>       
+              {% else %}
+                <a class="{% if p.url == page.url %}normal{% endif %}" href="{{ p.url | prepend: site.baseurl}}#{{p.anchor}}">
+                  {{ p.title }}
+                </a>
+              {% endif %}
+            </li>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    </ul>
+  </div>
+</nav>

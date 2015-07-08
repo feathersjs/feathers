@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Learn
+description: Learn how to get the most out of Feathers
 permalink: /learn/
 weight: 2
 ---

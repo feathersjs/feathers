@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Support
+description: Look through some of our most frequently asked questions.
 permalink: /support/
 weight: 5
 ---

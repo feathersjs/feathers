@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Docs
+description: View the beautiful API for docs Feathers all in one place.
 permalink: /docs/
 weight: 4
 ---
