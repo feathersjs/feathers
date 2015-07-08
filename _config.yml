@@ -2,10 +2,10 @@
 title: Feathers
 email: hello@feathersjs.com
 description: "Build better APIs, faster than ever."
-baseurl: "http://feathersjs.com"
+baseurl: ""
 url: "http://feathersjs.com"
 twitter:
-  author: @ekryski
+  author: "@ekryski"
 analytics:
   provider: google
   google:

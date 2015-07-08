@@ -12,7 +12,7 @@
     <!-- Schema.org markup for Google+ -->
     <meta itemprop="name" content="{{ site.title }}{% if page.title %} - {{ page.title }}{% endif %}">
     <meta itemprop="description" content="{{ page.description }}">
-    <meta itemprop="image" content="{{ '/images/google-plus.png' | prepend: site.baseurl }}">
+    <meta itemprop="image" content="{{ '/images/google-plus.png' | prepend: site.url }}">
 
     <!-- Twitter Card data -->
     <meta name="twitter:card" content="summary_large_image">
@@ -21,13 +21,13 @@
     <meta name="twitter:description" content="{{ page.description }}">
     <meta name="twitter:creator" content="{{ site.twitter.author }}">
     <!-- Twitter summary card with large image must be at least 280x150px -->
-    <meta name="twitter:image:src" content="{{ '/images/twitter-card.png' | prepend: site.baseurl }}">
+    <meta name="twitter:image:src" content="{{ '/images/twitter-card.png' | prepend: site.url }}">
 
     <!-- Open Graph data -->
     <meta property="og:title" content="{{ site.title }}{% if page.title %} - {{ page.title }}{% endif %}" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="{{ site.baseurl }}" />
-    <meta property="og:image" content="{{ '/images/google-plus.png' | prepend: site.baseurl }}" />
+    <meta property="og:url" content="{{ site.url }}" />
+    <meta property="og:image" content="{{ '/images/google-plus.png' | prepend: site.url }}" />
     <meta property="og:description" content="{{ page.description }}" />
     <meta property="og:site_name" content="Feathers" />
     <meta property="article:published_time" content="2015-07-08T11:08:00+01:00" />
