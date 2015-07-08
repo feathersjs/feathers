@@ -1,0 +1,53 @@
+.notice {
+  position: fixed;
+  bottom: 0;
+  right: 10px;
+  height: 100px;
+  width: 300px;
+  padding: 5px 10px 5px 10px;
+  display: none;
+  color: @white;
+  z-index: 1005;
+  .border-radius(5px, 0px, 0px, 5px);
+
+  &.success {
+    background-color: @green;
+  }
+
+  &.warning {
+    background-color: @yellow;
+  }
+
+  &.error {
+    background-color: @red;
+  }
+
+  header.notice-header {
+    position: relative;
+    margin-bottom: 0.2em;
+  }
+
+  section.notice-content {
+    height: 70px;
+    width: 100%;
+    overflow: auto;
+    font-size: 0.8em;
+  }
+
+  a.close {
+    position: absolute;
+    top: 3px;
+    right: 0;
+    padding: 0 4px 2px;
+    border: 1px solid;
+    border-radius: 100%;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 12px;
+    color: @white;
+
+    &:hover {
+      color: darken(@white, 20%);
+    }
+  }
+}

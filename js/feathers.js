@@ -1,11 +1,11 @@
 (function($, undefined){
   $.fn.gistPills = function(gistId, index) {
   	var gistFiles = $('#gist' + gistId).find('.gist-file');
-  	var lis = this.find('li');
+  	var lis = this.find('a');
 
   	gistFiles.hide();
 
-  	this.on('click', 'li', function(ev) {
+  	this.on('click', 'a', function(ev) {
   		var el = $(this);
   		lis.removeClass('active');
   		el.addClass('active');
@@ -20,7 +20,7 @@
     var idCounter = 0;
     var existingIds = {};
     var createMenu = function(headings, level) {
-      var root = $('<ul>');
+      var root = $('<ul class="unstyled-list">');
       var getId = function(el) {
         var id = el.attr('id');
 
@@ -63,7 +63,7 @@
   };
 
   $(document).ready(function() {
-    var offsetTop = $('.navbar-inverse').outerHeight();
+    var offsetTop = $('.navbar').outerHeight();
 
     $('#toc').toc('.page-content');
     $('#realtime-todos').gistPills(6665992, 0);
