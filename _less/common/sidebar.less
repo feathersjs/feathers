@@ -7,6 +7,14 @@
   overflow: auto;
   padding-bottom: 100px;
 
+  a {
+    color: @dark-grey;
+
+    &:hover {
+      color: darken(@dark-grey, 10%);
+    }
+  }
+
   li > ul {
     display: none;
 
@@ -27,9 +35,5 @@
 
   ul.nav > li.active > ul > li {
     list-style: none;
-
-    a {
-      color: @dark-grey;
-    }
   }
 }

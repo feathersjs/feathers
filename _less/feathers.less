@@ -123,3 +123,44 @@ section {
     margin: 0px auto;
   }
 }
+
+.page,
+.example {
+  a {
+    color: @red;
+
+    &:hover {
+      color: darken(@red, 10%);
+    }
+  }
+
+  .file-data {
+    .line-numbers {
+      width: 40px;
+    }
+  }
+}
+
+#todo-example {
+  input[type="text"] {
+    margin: 10px 0;
+  }
+
+  ul.todos {
+    li {
+      padding: 5px 0;
+
+      input[type="checkbox"] {
+        margin-top: 0.2em;
+      }
+
+      span {
+        margin-left: 5px;
+      }
+    }
+  }
+
+  .primary-button {
+    width: 100%;
+  }
+}

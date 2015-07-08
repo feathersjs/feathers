@@ -1,11 +1,11 @@
 (function($, undefined){
   $.fn.gistPills = function(gistId, index) {
   	var gistFiles = $('#gist' + gistId).find('.gist-file');
-  	var lis = this.find('li');
+  	var lis = this.find('a');
 
   	gistFiles.hide();
 
-  	this.on('click', 'li', function(ev) {
+  	this.on('click', 'a', function(ev) {
   		var el = $(this);
   		lis.removeClass('active');
   		el.addClass('active');
