@@ -71,7 +71,7 @@ exports.Service = {
     callback(null, collectionData);
   },
 
-  // POST /resource/:id/:collection/:itemId
+  // POST /resource/:id/:collection/:documentId
   addToCollection: function(id, collection, params, callback) {
 
 
@@ -82,13 +82,13 @@ exports.Service = {
 
   }
   //
-  //// GET /resource/:id/:collection/:itemId
-  //getInCollection: function(id, collection, itemId, params, callback) {
+  //// GET /resource/:id/:collection/:documentId
+  //getInCollection: function(id, collection, documentId, params, callback) {
   //
   //},
   //
-  //// DELETE /resource/:id/:collection/:itemId
-  //removeFromCollection: function(id, collection, itemId, params, callback) {
+  //// DELETE /resource/:id/:collection/:documentId
+  //removeFromCollection: function(id, collection, documentId, params, callback) {
   //
   //}
 };
@@ -138,18 +138,18 @@ exports.verify = {
     assert.deepEqual(expectedData, currentData, 'Data as expected');
   },
 
-  // POST /resource/:id/:collection/:itemId
+  // POST /resource/:id/:collection/:documentId
   addToCollection: function(id, collection, params, callback) {
 
   },
   //
-  //// GET /resource/:id/:collection/:itemId
-  //getInCollection: function(id, collection, itemId, params, callback) {
+  //// GET /resource/:id/:collection/:documentId
+  //getInCollection: function(id, collection, documentId, params, callback) {
   //
   //},
   //
-  //// DELETE /resource/:id/:collection/:itemId
-  //removeFromCollection: function(id, collection, itemId, params, callback) {
+  //// DELETE /resource/:id/:collection/:documentId
+  //removeFromCollection: function(id, collection, documentId, params, callback) {
   //
   //}
 };
