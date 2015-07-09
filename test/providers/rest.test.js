@@ -115,20 +115,23 @@ describe('REST provider', function () {
       });
 
       it('GET .findInCollection', function (done) {
-        request('http://localhost:4777/todo/1/subtasks', function (error, response, body) {
+        var collection = 'subtasks';
+
+        request('http://localhost:4777/todo/1/' + collection, function (error, response, body) {
           assert.ok(response.statusCode === 200, 'Got OK status code');
-          verify.findInCollection(1, JSON.parse(body));
+          verify.findInCollection(1, collection, JSON.parse(body));
           done(error);
         });
       });
 
       it('POST .addToCollection', function (done) {
+        var collection = 'subtasks';
         var documentToAdd = {
           id: 2
         };
 
         request({
-          url: 'http://localhost:4777/todo/1/subtasks',
+          url: 'http://localhost:4777/todo/1/' + collection,
           method: 'post',
           body: JSON.stringify(documentToAdd),
           headers: {
@@ -136,7 +139,34 @@ describe('REST provider', function () {
           }
         }, function (error, response, body) {
           assert.ok(response.statusCode === 200, 'Got OK status code');
-          verify.addToCollection(1, JSON.parse(body));
+          verify.addToCollection(1, collection, JSON.parse(body));
+          done(error);
+        });
+      });
+
+      it('GET .getInCollection', function (done) {
+        var collection = 'subtasks';
+        var documentId = 1;
+        var url = 'http://localhost:4777/todo/1/' + collection + '/' + documentId;
+
+        request(url, function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.getInCollection(1, collection, documentId, JSON.parse(body));
+          done(error);
+        });
+      });
+
+      it('DELETE .removeFromCollection', function (done) {
+        var collection = 'subtasks';
+        var documentId = 333;
+        var url = 'http://localhost:4777/todo/1/' + collection + '/' + documentId;
+
+        request({
+          url: url,
+          method: 'delete'
+        }, function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.removeFromCollection(documentId, JSON.parse(body));
           done(error);
         });
       });

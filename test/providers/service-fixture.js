@@ -73,20 +73,25 @@ exports.Service = {
 
   addToCollection: function(id, collection, data, params, callback) {
     var collectionData = findAllData[id][collection];
-    data.status = 'added';
-    collectionData.push(data);
-    callback(null, data);
+    var result = _.clone(data);
+    result.status = 'added';
+    collectionData.push(result);
+    callback(null, result);
+  },
+
+  getInCollection: function(id, collection, documentId, params, callback) {
+    var result = findAllData[id][collection][documentId];
+    callback(null, result);
+  },
+
+  removeFromCollection: function(id, collection, documentId, params, callback) {
+    var removedDocument = {
+      id: documentId,
+      status: 'removed'
+    };
+
+    callback(null, removedDocument);
   }
-  //
-  //// GET /resource/:id/:collection/:documentId
-  //getInCollection: function(id, collection, documentId, params, callback) {
-  //
-  //},
-  //
-  //// DELETE /resource/:id/:collection/:documentId
-  //removeFromCollection: function(id, collection, documentId, params, callback) {
-  //
-  //}
 };
 
 exports.verify = {
@@ -129,23 +134,27 @@ exports.verify = {
     }, data, '.remove called');
   },
 
-  findInCollection: function(id, currentData) {
-    var expectedData = findAllData[id].subtasks;
-    assert.deepEqual(expectedData, currentData, 'Data as expected');
+  findInCollection: function(id, collection, current) {
+    var expectedData = findAllData[id][collection];
+    assert.deepEqual(expectedData, current, 'Data as expected');
   },
 
-  addToCollection: function(id, current) {
-    var expected = findAllData[id].subtasks[2];
+  addToCollection: function(id, collection, current) {
+    var expected = findAllData[id][collection].pop();
     assert.deepEqual(expected, current, 'Data ran through .addToCollection as expected');
   },
-  //
-  //// GET /resource/:id/:collection/:documentId
-  //getInCollection: function(id, collection, documentId, params, callback) {
-  //
-  //},
-  //
-  //// DELETE /resource/:id/:collection/:documentId
-  //removeFromCollection: function(id, collection, documentId, params, callback) {
-  //
-  //}
+
+  getInCollection: function(id, collection, documentId, current) {
+    var expected = findAllData[id][collection][documentId];
+    assert.deepEqual(expected, current, 'Data ran through .getInCollection as expected');
+  },
+
+  removeFromCollection: function(id, current) {
+    var expected = {
+      id: id,
+      status: 'removed'
+    };
+
+    assert.deepEqual(expected, current, '.removeFromCollection called');
+  }
 };
