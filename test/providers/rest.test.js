@@ -115,15 +115,31 @@ describe('REST provider', function () {
       });
 
       it('GET .findInCollection', function (done) {
-        request('http://localhost:4777/todo/1/tasks', function (error, response, body) {
+        request('http://localhost:4777/todo/1/subtasks', function (error, response, body) {
           assert.ok(response.statusCode === 200, 'Got OK status code');
           verify.findInCollection(1, JSON.parse(body));
           done(error);
         });
       });
 
+      it('POST .addToCollection', function (done) {
+        var documentToAdd = {
+          id: 2
+        };
 
-
+        request({
+          url: 'http://localhost:4777/todo/1/subtasks',
+          method: 'post',
+          body: JSON.stringify(documentToAdd),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }, function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.addToCollection(1, JSON.parse(body));
+          done(error);
+        });
+      });
     });
 
     describe('Dynamic Services', function() {

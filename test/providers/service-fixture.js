@@ -6,7 +6,7 @@ var assert = require('assert');
 var findAllData = [{
   id: 0,
   description: 'You have to do something',
-  tasks: [{
+  subtasks: [{
     id: 0,
     description: 'play a video game'
   }, {
@@ -16,7 +16,7 @@ var findAllData = [{
 }, {
   id: 1,
   description: 'You have to do laundry',
-  tasks: [{
+  subtasks: [{
     id: 0,
     description: 'the blue jean'
   }, {
@@ -67,19 +67,15 @@ exports.Service = {
   },
 
   findInCollection: function(id, collection, params, callback) {
-    var collectionData = findAllData[id].tasks;
+    var collectionData = findAllData[id].subtasks;
     callback(null, collectionData);
   },
 
-  // POST /resource/:id/:collection/:documentId
-  addToCollection: function(id, collection, params, callback) {
-
-
-    var result = _.clone(data);
-    result.id = 42;
-    result.status = 'created';
-    callback(null, result);
-
+  addToCollection: function(id, collection, data, params, callback) {
+    var collectionData = findAllData[id][collection];
+    data.status = 'added';
+    collectionData.push(data);
+    callback(null, data);
   }
   //
   //// GET /resource/:id/:collection/:documentId
@@ -134,13 +130,13 @@ exports.verify = {
   },
 
   findInCollection: function(id, currentData) {
-    var expectedData = findAllData[id].tasks;
+    var expectedData = findAllData[id].subtasks;
     assert.deepEqual(expectedData, currentData, 'Data as expected');
   },
 
-  // POST /resource/:id/:collection/:documentId
-  addToCollection: function(id, collection, params, callback) {
-
+  addToCollection: function(id, current) {
+    var expected = findAllData[id].subtasks[2];
+    assert.deepEqual(expected, current, 'Data ran through .addToCollection as expected');
   },
   //
   //// GET /resource/:id/:collection/:documentId
