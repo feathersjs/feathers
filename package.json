@@ -42,7 +42,7 @@
   "dependencies": {
     "debug": "^2.1.1",
     "express": "^4.12.3",
-    "feathers-commons": "ebourmalo/feathers-commons",
+    "feathers-commons": "ebourmalo/feathers-commons#feat-advanced-routes",
     "feathers-errors": "^0.2.5",
     "lodash": "^3.1.0",
     "primus": "^3.0.2",
