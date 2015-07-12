@@ -47,7 +47,7 @@ layout: default
           With our light-weight code base and rich plug-in ecosystem you can <span class="normal">get prototypes out in a matter of minutes and production ready in days. Seriously.</span>
         </p>
         <p>
-          How is that even possible? We believe that less is more. So we built a razor thin wrapper (a few hundred lines of code) over top of <a class="primary normal" href="http://expressjs.com/" target="_blank" title="Express">Express</a> and <a class="primary normal" href="http://socket.io/" target="_blank" title="Socket.io">Socket.io</a>, the defacto technologies for building real-time web applications using NodeJS.
+          How is that even possible? We believe that less is more. So we created a razor thin wrapper (a few hundred lines of code) over top of <a class="primary normal" href="http://expressjs.com/" target="_blank" title="Express">Express</a> and <a class="primary normal" href="http://socket.io/" target="_blank" title="Socket.io">Socket.io</a>, the defacto technologies for building real-time web applications using NodeJS.
         </p>
         <p>
           At its core Feathers is a real-time, micro-service web framework that gives you control over your data via RESTful resources, sockets and flexible plug-ins.
@@ -109,47 +109,37 @@ layout: default
 <section id="features">
   <div class="container">
     <div class="row">
-      <h3 class="thin center-text">Here are just a few reasons why Feathers is quickly becoming the toolbox of choice for modern web applications.</h3>
+      <h3 class="thin center-text">
+        Feathers is a real-time framework where you don't have to
+        throw away the things you already learned or built...
+      </h3>
     </div>
     <div class="row clear">
-      <div class="col col-3 mobile-full">
-        <h4 class="normal">Battle Tested Core</h4>
-        <p>Feathers is a <a href="https://github.com/feathersjs/feathers" class="primary" target="_blank">very thin wrapper</a> over top of Express and Socket.io, both of which have been used in production by thousands of companies.</p>
-      </div>
-      <div class="col col-3 mobile-full">
-        <h4 class="normal">Uber Flexible</h4>
-        <p>Our <a href="https://www.npmjs.com/search?q=feathers-plugin" class="primary" target="_blank">plug-ins</a> are extremely flexible. Giving you only what you need and then getting out of your way.</p>
-      </div>
-      <div class="col col-3 mobile-full">
-        <h4 class="normal">Scaffold Real-time API's</h4>
-        <p>Instantly scaffold services from the command line, providing you with full CRUD via REST and websockets in just a few key strokes.</p>
-      </div>
-      <div class="col col-3 mobile-full">
-        <h4 class="normal">Zero Lock In</h4>
-        <p>Feathers is totally open source, works with any Express middleware and node module out of the box, and can be easily removed if it's not for you.</p>
-      </div>
-    </div>
-    <div class="row clear">
-      <div class="col col-3 mobile-full">
-        <h4 class="normal">Minimal Configuration</h4>
-        <p>Tired of massive JSON or YAML files? No need for that here! We value convention over configuration so you can spend more time writing code.</p>
-      </div>
-      <div class="col col-3 mobile-full">
-        <h4 class="normal">Multi-Database</h4>
-        <p>We support MongoDB, Postgres, and MySQL out of the box. If that's not for you, you can easily <a href="#" class="primary" target="_blank">write your own service adapters</a> and submit a PR.</p>
-      </div>
-      <div class="col col-3 mobile-full">
-        <h4 class="normal">Front End Agnostic</h4>
-        <p>Use whatever client you want; Angular, React, Swift/ObjC, Android, it doesn't matter. We only provide some <a href="#" class="primary" target="_blank">helpful guides</a> and <a href="https://www.npmjs.com/search?q=feathers-plugin" class="primary" target="_blank">plug-ins</a> to make things easier.</p>
-      </div>
-      <div class="col col-3 mobile-full">
+      <div class="col col-4 mobile-full">
         <h4 class="normal">Pure JavaScript</h4>
         <p>Because Feathers is 100% vanilla JavaScript on the backend, you get to use the same language all the way through your web stack. Less context switching.</p>
       </div>
+      <div class="col col-4 mobile-full">
+        <h4 class="normal">Express</h4>
+        <p>Feathers is a <a href="https://github.com/feathersjs/feathers" class="primary" target="_blank">very thin wrapper</a> over top of Express and Socket.io and works as a drop-in replacement for Express in any existing application.</p>
+      </div>
+      <div class="col col-4 mobile-full">
+        <h4 class="normal">Middleware</h4>
+        <p>Use any Express middleware and <a class="primary" href="">Hooks</a>, which follow the same pattern, for service data-processing and authorization that works via REST and websockets.</p>
+      </div>
     </div>
     <div class="row clear">
-      <div class="col col-4 push-4 mobile-full">
-        <a class="button transparent-button block normal" href="/learn" title="Features Explained">Tell Me More</a>
+      <div class="col col-4 mobile-full">
+        <h4 class="normal">Multi-Database</h4>
+        <p>We support MongoDB, Postgres, NeDB and MySQL out of the box. If that's not for you, you can easily <a href="#" class="primary" target="_blank">write your own service adapters</a>.</p>
+      </div>
+      <div class="col col-4 mobile-full">
+        <h4 class="normal">Front End Agnostic</h4>
+        <p>Use whatever client you want; Angular, React, Swift/ObjC, Android, it doesn't matter. A few lines of code can make your frontend real-time.</p>
+      </div>
+      <div class="col col-4 mobile-full">
+        <h4 class="normal">Existing APIs</h4>
+        <p>No need to re-write your existing API to go real-time. Feathers can act as a <a href="https://github.com/feathersjs/feathers" class="primary" target="_blank">real-time proxy</a> between other APIs and your frontend.</p>
       </div>
     </div>
   </div>
@@ -165,7 +155,7 @@ layout: default
         <h3>Feathers vs Meteor</h3>
         <h5 class="italic">"Once you go Meteor, you don't go back. And not in a good way."</h5>
         <p>
-          Meteor has amassed a large community and a lot of venture backed funding. Our biggest complaint is that because of this funding, there is some <span class="bold">serious lock in</span>. Meteor has it's own package system, how you use npm modules can be inconsistent, and there really is a lot of code for what it is doing. There is also the risk that when investors start pushing for a return on their investment, it could negatively impact the community.
+          Meteor has amassed a large community and a lot of venture backed funding. Our biggest complaint is that because of this funding, there is some <span class="bold">serious lock in</span>. Meteor has it's own package system, how you use npm modules can be inconsistent and it is a large codebase. There is also the risk that when investors start pushing for a return on their investment, it could negatively impact the community.
         </p>
         <p>
           From a feature standpoint Feathers is pretty similar to Meteor. You get real-time API's from both. However, we let you use the defacto npm for managing dependencies, we let you choose whether you want to use Webpack, Gulp, Grunt, or any other tool for managing assets, and Feathers is completely client agnostic without any additional overhead. Everything is open, flexible and pluggable. You use only what you need.
@@ -184,7 +174,7 @@ layout: default
           From a feature standpoint Feathers and Sails are probably the closest. Both provide real-time REST API's, multiple db support, and are client agnostic. Both frameworks also wrap Express, but Feathers supports Express 4, while Sails only supports Express 3.
         </p>
         <p>
-          Even though they have feature parity, Feathers achieves this with MUCH less code, which means less stuff to break and maintain. We also don't assume how you want to manage your assets by letting you use your build tool of choice. Feathers provides lightweight services and hooks instead of a bulky ORM, and we let you write code instead of long config files to define relationships and security policies.
+          Even though the features are very similar, Feathers achieves this with MUCH less code, which means less stuff to break and maintain. We also don't assume how you want to manage your assets by letting you use your build tool of choice. Feathers provides lightweight services and hooks instead of a full-blown ORM, and we let you write code instead of long config files to define relationships and security policies.
         </p>
         <!-- <a class="button primary-button normal" href="#" title="Feathers vs. Sails" target="_blank">Read More</a> -->
       </div>
@@ -197,10 +187,10 @@ layout: default
         <h3>Feathers vs Express</h3>
         <h5 class="italic">"I like Express because I love flexibility and boilerplate!"</h5>
         <p>
-          Express is awesome! It does much of the heavy lifting behind Feathers; routing, content-negotiation, middleware support, etc. However, you still need to implement a lot yourself.
+          Express is awesome! It does much of the heavy lifting behind Feathers; routing, content-negotiation, middleware support, etc. In fact, you can simply replace Express with Feathers in any existing application and start adding your own microservices.
         </p>
         <p>
-          Feathers eliminates a lot of the common boilerplate and gives you helpful plug-ins to make implementing common features easily, while also providing some convention. This includes stuff like managing permissions, CRUD for multiple databases, and real-time APIs using web sockets. We give you just enough to build your web app quickly but get out of your way when you need to customize something.
+          Feathers eliminates a lot of the common boilerplate and gives you helpful plug-ins to make implementing common features easier, while also providing some convention. This includes stuff like managing permissions, CRUD for multiple databases, and real-time APIs using web sockets. Just like Express, Feathers gives you just enough to build your web app quickly but gets out of your way when you need to customize something.
         </p>
         <!-- <a class="button primary-button normal" href="#" title="Feathers vs. Express" target="_blank">Read More</a> -->
       </div>
