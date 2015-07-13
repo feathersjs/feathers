@@ -146,11 +146,14 @@ section {
 }
 
 #todo-example {
+
   input[type="text"] {
     margin: 10px 0;
   }
 
   ul.todos {
+    height: 320px;
+
     li {
       padding: 5px 0;
 
@@ -161,7 +164,20 @@ section {
       span {
         margin-left: 5px;
       }
+
+      &.done label {
+        text-decoration: line-through;
+        color: #998;
+      }
+
+      .delete {
+        font-weight: bold;
+      }
     }
+  }
+
+  label {
+    float: left;
   }
 
   .primary-button {

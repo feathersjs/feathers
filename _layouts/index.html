@@ -125,7 +125,7 @@ layout: default
       </div>
       <div class="col col-4 mobile-full">
         <h4 class="normal">Middleware</h4>
-        <p>Use any Express middleware and <a class="primary" href="">Hooks</a>, which follow the same pattern, for service data-processing and authorization that works via REST and websockets.</p>
+        <p>Use any Express middleware and <a class="primary" href="">Hooks</a>, which follow the same pattern, for service data-processing and authorization that works both via REST and websockets.</p>
       </div>
     </div>
     <div class="row clear">
@@ -171,7 +171,7 @@ layout: default
         <h3>Feathers vs Sails</h3>
         <h5 class="italic">"If you love JSON config files, Sails is for you."</h5>
         <p>
-          From a feature standpoint Feathers and Sails are probably the closest. Both provide real-time REST API's, multiple db support, and are client agnostic. Both frameworks also wrap Express, but Feathers supports Express 4, while Sails only supports Express 3.
+          From a feature standpoint Feathers and Sails are probably the closest. Both provide real-time REST API's, multiple db support, and are client agnostic. Both frameworks also use Express, but Feathers supports Express 4 (and the latest version in a branch), while Sails only supports Express 3.
         </p>
         <p>
           Even though the features are very similar, Feathers achieves this with MUCH less code, which means less stuff to break and maintain. We also don't assume how you want to manage your assets by letting you use your build tool of choice. Feathers provides lightweight services and hooks instead of a full-blown ORM, and we let you write code instead of long config files to define relationships and security policies.
@@ -187,7 +187,7 @@ layout: default
         <h3>Feathers vs Express</h3>
         <h5 class="italic">"I like Express because I love flexibility and boilerplate!"</h5>
         <p>
-          Express is awesome! It does much of the heavy lifting behind Feathers; routing, content-negotiation, middleware support, etc. In fact, you can simply replace Express with Feathers in any existing application and start adding your own microservices.
+          Express is awesome! It does much of the heavy lifting behind Feathers; routing, content-negotiation, middleware support, etc. In fact, you can simply replace Express with Feathers in any existing application and start adding new microservices.
         </p>
         <p>
           Feathers eliminates a lot of the common boilerplate and gives you helpful plug-ins to make implementing common features easier, while also providing some convention. This includes stuff like managing permissions, CRUD for multiple databases, and real-time APIs using web sockets. Just like Express, Feathers gives you just enough to build your web app quickly but gets out of your way when you need to customize something.
