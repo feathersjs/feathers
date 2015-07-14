@@ -42,6 +42,10 @@ section {
   padding: 40px 0;
 }
 
+code {
+  padding: 0;
+}
+
 #hero {
   .badges,
   .github-links {
@@ -116,10 +120,6 @@ section {
       border-bottom: 1px dashed darken(@soft-white, 10%);
     }
   }
-
-  p {
-    text-align: justify;
-  }
 }
 
 #comparison {
@@ -128,8 +128,13 @@ section {
   }
 }
 
+.example, .example .row {
+  padding-bottom: 0;
+}
 .page,
 .example {
+  margin-bottom: 0;
+
   a {
     color: @red;
 
@@ -146,6 +151,7 @@ section {
 }
 
 #todo-example {
+  padding-bottom: 2em;
 
   input[type="text"] {
     margin: 10px 0;

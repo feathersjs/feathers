@@ -6,15 +6,27 @@ weight: 1
 permalink: /quick-start/
 ---
 
-## To get started
+## About Feathers
 
 Feathers extends [Express 4](http://expressjs.com), one of the most popular web frameworks for [NodeJS](http://nodejs.org/). It makes it easy to create shared RESTful web services and real-time applications using SocketIO and several other NodeJS websocket libraries supported by [Primus](http://primus.io).
 
-If you are not familiar with Express head over to the [Express Guides](http://expressjs.com/guide.html) to get an idea. Feathers works the exact same way and supports the same functionality except that `var app = require('express')();` is replaced with `var app = require('feathers')()`. This means that you can literally drop Feathers into your existing Express 4 application and start adding new services right away.
+If you are not familiar with Express head over to the [Express Guides](http://expressjs.com/guide.html) to get an idea. Feathers works the exact same way and supports the same functionality except that
 
-The following guide will walk through creating a basic Todo REST and websocket API with Feathers and MongoDB and also explain how to add authentication and authorization. For additional information also make sure to read through the [API documentation](/api/) and [FAQ](/faq/) later.
+```js
+var express = require('express');
+var app = express();
+```
 
-To get started with this guide, lets create a new folder and in it run
+is replaced with
+
+```js
+var feathers = require('feathers');
+var app = feathers();
+```
+
+This means that you can literally drop Feathers into your existing Express 4 application and start adding new services right away without having to change anything.
+
+The following guide will walk through creating a basic Todo REST and websocket API with Feathers. To get started, lets create a new folder and in it run
 
 > `npm install feathers`
 
@@ -74,7 +86,7 @@ You can go to [localhost:3000/todos/dishes](http://localhost:3000/todos/dishes) 
 
 ### CRUD Todos
 
-As you might have noticed, service methods mainly reflect basic [CRUD](http://en.wikipedia.org/wiki/Create,_read,_update_and_delete) functionality. Following up is a longer example with comments for implementing a complete Todo service that manages all Todos in memory:
+You might have noticed that service methods mainly reflect basic [CRUD](http://en.wikipedia.org/wiki/Create,_read,_update_and_delete) functionality. Following up is a longer example with comments for implementing a complete Todo service that manages all Todos in memory:
 
 ```js
 // todos.js
@@ -189,10 +201,12 @@ app.configure(feathers.rest())
   .listen(3000);
 ```
 
-Running `app.js` will now provide a fully functional REST API at `http://localhost:3000/todos`. You can test it, for example, using the [Postman](https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?hl=en) REST client plugin for Google chrome or via CURL:
+Running `app.js` will now provide a fully functional REST API at `http://localhost:3000/todos`. We can test it, for example, using the [Postman](https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?hl=en) REST client plugin for Google chrome or via CURL:
 
 
 <blockquote><pre>curl 'http://localhost:3000/todos/' -H 'Content-Type: application/json' --data-binary '{ "text": "You have to do dishes!" }'</pre></blockquote>
+
+The functionality provided by our service is quite common which is why we implemented the same thing and published it as the [feathers-memory](https://github.com/feathersjs/feathers-memory) module.
 
 ## Getting real-time
 
@@ -215,6 +229,14 @@ app.configure(feathers.rest())
   .use('/', feathers.static(__dirname))
   .listen(3000);
 ```
+
+That's it. Our application is now real-time, all we have to do is provide a nice frontend.
+
+## Building a frontend
+
+### Feathers client
+
+### Testing the connection
 
 To test the connection, we can create an `index.html` file in the same folder. The example page will connect to SocketIO, create a new Todo and also log when any Todo has been created, updated or patched:
 
@@ -271,7 +293,7 @@ To test the connection, we can create an `index.html` file in the same folder. T
 </html>
 ```
 
-After restarting, going directly to [localhost:3000](http://localhost:3000) with the console open will show what is happening on the HTML page. You can also see the newly created Todo at the REST endpoint [localhost:3000/todos](http://localhost:3000/todos). With the page open, creating a new  Todo via the REST API, for example
+After restarting, going directly to [localhost:3000](http://localhost:3000) with the console open will show what is happening on the HTML page. You can also see the newly created Todo at the REST endpoint [localhost:3000/todos](http://localhost:3000/todos). With the page open, creating a new Todo via the REST API, for example
 
 <blockquote><pre>curl 'http://localhost:3000/todos/' -H 'Content-Type: application/json' --data-binary '{ "text": "Do something" }'</pre></blockquote>
 
