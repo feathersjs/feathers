@@ -7,7 +7,7 @@ hide: true
 
 ## Authentication
 
-[Passport](http://passportjs.org/) is one that is used quite often and also really flexible. Manually setting up shared authentication between websockets and an HTTP REST API can be tricky. This is what the [feathers-passport](https://github.com/feathersjs/feathers-passport) module aims to make easier. The following examples show how to add local authentication that uses a Feathers service for storing and retrieving user information.
+[Passport](http://passportjs.org/) is the most popular authentication library for NodeJS is also really flexible. That's why we recommend with and without Feathers. Manually setting up shared authentication between websockets and an HTTP REST API can be tricky. Managing this shared session state is what the [feathers-passport](https://github.com/feathersjs/feathers-passport) module aims to make easier. The following example shows how you can use local authentication (email + password) and a simple Feathers service to authenticate users.
 
 ### Configuring Passport
 
@@ -55,7 +55,7 @@ app.configure(feathers.rest())
 
 ### User storage
 
-Next, we create a MongoDB service for storing user information. It is always a good idea to not store plain text passwords in the database so we add a `.before` hook that salts and then hashes the password when creating a new user. This can be done in the service `.setup` which is called when the application is ready to start up. We also add an `.authenticate` method that we can use to look up a user by username and compare the hashed and salted passwords.
+Next, we create a MongoDB service for storing user information. You should never store plain text passwords in the database so we add a `.before` hook that salts and then hashes the password when creating a new user. This can be done in the service `.setup` which is called when the application is ready to start up. We also add an `.authenticate` method that we can use to look up a user by username and compare the hashed and salted passwords.
 
 ```js
 var crypto = require('crypto');
