@@ -6,7 +6,7 @@ permalink: /learn/
 weight: 2
 ---
 
-So you're ready to learn more about Feathers, eh? If you haven't checked out the [Quick Start guide](/quick-start/) head over there first to get a brief intro to the basic concepts in a Feathers app. On this page you'll find additional resources and guides about Feathers.
+So you're ready to learn more about Feathers, eh? If you haven't checked out the [Quick Start guide](/quick-start/) head over there first to get a brief intro to the basic parts of a Feathers app. On this page you'll find additional resources and guides about to do more with Feathers.
 
 ## Front-end Frameworks
 
