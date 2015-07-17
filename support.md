@@ -18,7 +18,7 @@ If you have any questions, feel free to submit them as a [GitHub issue](https://
 
 We know! Oh God another NodeJS framework! We really didn't want to add another name to the long list of NodeJS web frameworks but also wanted to explore a different approach than any other library we have seen. We strongly believe that data is the core of the web and should be the focus of web applications.
 
-Many web frameworks end up focussing so much on secondary concerns like how to render views or handle and process HTTP requests and responses that even when using the MVC pattern your actual application logic becomes a slave to those concerns.
+Many web frameworks focus on things like rendering views, defining routes and handling HTTP requests and responses without providing a structure for implementing application logic separate from those secondary concerns. The result - even when using the MVC pattern - are big monolithic controllers where your actual application logic and how it is accessed - usually via HTTP - are all mixed up together.
 
 Feathers services bring two important concepts together that help to separate those concerns from how your application works:
 
@@ -43,7 +43,7 @@ var myService = {
 }
 ```
 
-This interface also made it easier to hook into the execution of those methods and emit events when  they return.
+This interface also makes it easier to hook into the execution of those methods and emit events when they return which can naturally be used to provide real-time functionality.
 
 ## Do I get websocket events from REST calls?
 
@@ -164,13 +164,13 @@ Custom Express middleware that only should be run before a specific service can 
 app.use('/todos', ensureAuthenticated, logRequest, todoService);
 ```
 
-Keep in mind that shared authentication (between REST and websockets) should use a service based approach as described in the [authentication section of the guide](/#authentication).
+Keep in mind that shared authentication (between REST and websockets) should use a service based approach as described in the [authentication section of the guide](/learn/authentication).
 
 ## What about Koa?
 
 Koa is a *"next generation web framework for Node.JS"* using ES6 generator functions instead of Express middleware. This approach does unfortunately not easily play well with Feathers services so there are no direct plans yet to use it as a future base for Feathers.
 
-There are however definitely plans of using ES6 features for Feathers once they make it into `node --harmony`, specifically:
+There are however definite plans of using ES6 features for Feathers once they make it into `node --harmony`, specifically:
 
 - [Promises](http://www.html5rocks.com/en/tutorials/es6/promises/) instead of callbacks for asynchronous processing
 - [ES6 classes](http://wiki.ecmascript.org/doku.php?id=strawman:maximally_minimal_classes) for defining services.

@@ -1,21 +1,4 @@
 (function($, undefined){
-  $.fn.gistPills = function(gistId, index) {
-  	var gistFiles = $('#gist' + gistId).find('.gist-file');
-  	var lis = this.find('a');
-
-  	gistFiles.hide();
-
-  	this.on('click', 'a', function(ev) {
-  		var el = $(this);
-  		lis.removeClass('active');
-  		el.addClass('active');
-  		$(gistFiles.hide().get(el.index())).show();
-  		ev.preventDefault();
-  	});
-
-    $(lis.get(index || 0)).click();
-  };
-
   $.fn.toc = function(target) {
     var idCounter = 0;
     var existingIds = {};
@@ -63,10 +46,7 @@
   };
 
   $(document).ready(function() {
-    var offsetTop = $('.navbar').outerHeight();
-
     $('#toc').toc('.page-content');
-    $('#realtime-todos').gistPills(6665992, 0);
 
     $(window).on('resize', function(){
       $('[data-spy="scroll"]').each(function () {
@@ -77,7 +57,7 @@
     if($(window).width() > 992) {
       $('#toc').affix({
         offset: {
-          top: $('#toc').offset().top - $('.navbar').outerHeight()
+          top: $('#toc').offset().top
         }
       });
     }
@@ -94,7 +74,7 @@
     $('#todo-example').todos('http://todos.feathersjs.com:80');
     $('body').scrollspy({
       target: '#toc',
-      offset: offsetTop
+      offset: 0
     });
   });
 })(jQuery);

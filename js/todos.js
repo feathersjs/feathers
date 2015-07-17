@@ -61,6 +61,7 @@
     socket.on('todos removed', app.removeTodo);
     socket.on('todos created', app.addTodo);
     socket.emit('todos::find', {}, function (error, todos) {
+      el.find('ul').empty();
       todos.forEach(app.addTodo);
     });
   };

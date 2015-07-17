@@ -236,6 +236,8 @@ That's it. Our application is now real-time, all we have to do is provide a nice
 
 ### Feathers client
 
+[feathers-client]() is a JavaScript client that can connect to Feathers services either via REST (using jQuery.ajax, node-request or Superagent) or websockets (Socket.io and Primus). That makes it possible to use
+
 ### Testing the connection
 
 To test the connection, we can create an `index.html` file in the same folder. The example page will connect to SocketIO, create a new Todo and also log when any Todo has been created, updated or patched:

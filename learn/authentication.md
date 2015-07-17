@@ -7,7 +7,7 @@ hide: true
 
 ## Authentication
 
-Since Feathers directly extends Express you can use any of its authentication mechanism. [Passport](http://passportjs.org/) is one that is used quite often and also really flexible. Manually setting up shared authentication between websockets and an HTTP REST API can be tricky. This is what the [feathers-passport](https://github.com/feathersjs/feathers-passport) module aims to make easier. The following examples show how to add local authentication that uses a Feathers service for storing and retrieving user information.
+[Passport](http://passportjs.org/) is one that is used quite often and also really flexible. Manually setting up shared authentication between websockets and an HTTP REST API can be tricky. This is what the [feathers-passport](https://github.com/feathersjs/feathers-passport) module aims to make easier. The following examples show how to add local authentication that uses a Feathers service for storing and retrieving user information.
 
 ### Configuring Passport
 

@@ -5,11 +5,9 @@ description: Learn how to authorize users
 hide: true
 ---
 
-## Authorization
+Authorization is the process of determining after [successful authentication](/learn/authentication) if the user is allowed to perform the requested action. This is again where [hooks](learn/validation#hooks) come in handy.
 
-Authorization is the process of determining after successful authentication if the user is allowed to perform the requested action. This is again where hooks come in handy.
-
-### User authorization
+## User authorization
 
 Since *feathers-passport* adds the authenticated user information to the service call parameters we can just check those in the hook and return with an error if the user is not authorized:
 
@@ -35,7 +33,7 @@ app.service('todos').before({
 });
 ```
 
-### Event filtering
+## Event filtering
 
 This is also a good time to talk a little about [filtering events](/api/#event-filtering). It is very likely that you eventually only want to send certain events to specific users instead of everybody. Following up on the group authorization example from above, we might only want to dispatch a `todos created` event to users that are in the admin group. This can be done by adding a `created(data, params, callback)` method to the Todo MongoDB service:
 
