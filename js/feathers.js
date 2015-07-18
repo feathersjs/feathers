@@ -57,7 +57,7 @@
     if($(window).width() > 992) {
       $('#toc').affix({
         offset: {
-          top: $('#toc').offset().top
+          top: $('#toc').offset().top + 5
         }
       });
     }
@@ -74,7 +74,7 @@
     $('#todo-example').todos('http://todos.feathersjs.com:80');
     $('body').scrollspy({
       target: '#toc',
-      offset: 0
+      offset: 5
     });
   });
 })(jQuery);

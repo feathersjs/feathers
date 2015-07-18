@@ -210,7 +210,7 @@ The functionality provided by our service is quite common which is why we implem
 
 ## Getting real-time
 
-As previously mentioned, a Feathers service can also be exposed through websockets. You can either use [SocketIO](http://socket.io) or [Primus](https://github.com/primus/primus) - an abstraction layer for differentNode websocket libraries. In the following examples we will use SocketIO.
+As previously mentioned, a Feathers service can also be exposed through websockets for both real-time updates and to call service methods. You can either use [SocketIO](http://socket.io) or [Primus](https://github.com/primus/primus) - an abstraction layer for different Node websocket libraries. In the following examples we will use SocketIO.
 
 SocketIO can be enabled by calling `app.configure(feathers.socketio())`. Once set up, it is possible to call service methods by emitting events like `<servicepath>::<methodname>` on the socket and also receive events by listening to `<servicepath> <eventname>` (*eventname* can be `created`, `updated`, `patched` or `removed`). To make it easier to test in a web page, lets also statically host the files in the current folder. `app.js` then looks like this:
 
@@ -234,13 +234,17 @@ That's it. Our application is now real-time, all we have to do is provide a nice
 
 ## Building a frontend
 
+Feathers works great with any frontend framework, Android or iOS clients or anything else that can connect to a REST API or websockets (to get real-time). We have real-time [TodoMVC](http://todomvc.com/) examples for [jQuery](), [Angular](), [React]() and [CanJS]() but for this guide, we will create a more simplified jQuery client.
+
 ### Feathers client
 
-[feathers-client]() is a JavaScript client that can connect to Feathers services either via REST (using jQuery.ajax, node-request or Superagent) or websockets (Socket.io and Primus). That makes it possible to use
+We could connect with any REST client or send our own websocket events but [feathers-client](https://github.com/feathersjs/feathers-client) makes it much easier. It is a JavaScript client that can connect to Feathers services either via REST (using jQuery.ajax, node-request or Superagent) or websockets (Socket.io and Primus) and lets you use services the same way you would on the server. You can install it via Bower, [download the release]() or install via NPM which is what we will use:
 
-### Testing the connection
+```
+npm install feathers-client
+```
 
-To test the connection, we can create an `index.html` file in the same folder. The example page will connect to SocketIO, create a new Todo and also log when any Todo has been created, updated or patched:
+Since we also set statically hosting the files in the current folder in the previous chapter, we can now create an `index.html` that loads the client, connects to our Todos service via Socket.io, creates a test todo and logs when a new todo has been created:
 
 ```html
 <!DOCTYPE HTML>
@@ -250,55 +254,153 @@ To test the connection, we can create an `index.html` file in the same folder. T
 </head>
 <body>
   <h1>A Feathers SocketIO example</h1>
-  <pre id="log"></pre>
 
   <script src="/socket.io/socket.io.js"></script>
-  <script type="text/javascript">
-    // Connect to SocketIO on the same host
-    var socket = io.connect();
+  <script src="/node_modules/feathers-client/dist/feathers.js"></script>
+  <script>
+    var socket = io();
+    var app = feathers().configure(feathers.socketio(socket));
+    var todos = app.service('todos');
 
-    // This lets us log messages and JSON on the page
-    var logElement = document.getElementById('log');
-    var log = function(message, data) {
-      logElement.innerHTML = logElement.innerHTML + '\n'
-        + message + '\n' + JSON.stringify(data, null, '  ');
-    }
-
-    // Listen to all the service events
-    socket.on('todos created', function(todo) {
-      log('Someone created a new Todo:', todo);
+    todos.on('created', function(todo) {
+      console.log('Todo created', todo.text);
     });
 
-    socket.on('todos updated', function(todo) {
-      log('Someone updated a Todo', todo);
-    });
-
-    socket.on('todos patched', function(todo) {
-      log('Someone patched a Todo', todo);
-    });
-
-    socket.on('todos removed', function(todo) {
-      log('Someone deleted a Todo', todo);
-    });
-
-    // Create a new Todo and then log all Todos from the server
-    socket.emit('todos::create', {
-      text: 'You have to do something real-time!'
-    }, {}, function(error, todo) {
-      log('Created Todo', todo);
-      socket.emit('todos::find', {}, function(error, todos) {
-        log('Todos from server:', todos);
-      });
+    todos.create({
+      text: 'Todo from client',.
+      complete: false
     });
   </script>
 </body>
-</html>
 ```
 
 After restarting, going directly to [localhost:3000](http://localhost:3000) with the console open will show what is happening on the HTML page. You can also see the newly created Todo at the REST endpoint [localhost:3000/todos](http://localhost:3000/todos). With the page open, creating a new Todo via the REST API, for example
 
 <blockquote><pre>curl 'http://localhost:3000/todos/' -H 'Content-Type: application/json' --data-binary '{ "text": "Do something" }'</pre></blockquote>
 
-will also log `Someone created a new Todo`. This is how you can implement real-time functionality in any web page by using standardized websocket messages instead of having to make up your own.
+will also log `Someone created a new Todo` with. This is how you can implement real-time functionality in any web page. All that's left now is using jQuery to listen to those events to update the list and the ability to remove and create todos.
 
-**[Learn more](/learn)**
+### jQuery frontend
+
+Let's update `index.html` to load [Bootstrap](http://getbootstrap.com/) and [jQuery](https://jquery.com) and also create an HTML form and placeholder where the Todos will go:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Feathers real-time Todos</title>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <style type="text/css">
+    .done {
+      text-decoration: line-through;
+    }
+  </style>
+
+  <div class="container" id="todos">
+    <h1>Feathers real-time Todos</h1>
+
+    <ul class="todos list-unstyled"></ul>
+    <form role="form" class="create-todo">
+      <div class="form-group">
+        <input type="text" class="form-control" name="description" placeholder="Add a new Todo">
+      </div>
+      <button type="submit" class="btn btn-info col-md-12">Add Todo</button>
+    </form>
+  </div>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="node_modules/feathers-client/release/dist/feathers.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="todos.js"></script>
+</body>
+```
+
+In `todos.js` we now have to connect to the service again and add jQuery code that adds, removes and updates todos. To identify a Todo we'll store the `data-id="<id>"` property on the todos `<li>` and retrieve it with `getElement(todo)`:
+
+```js
+var el = $('#todos');
+var socket = io();
+var app = feathers().configure(feathers.socketio(socket));
+var todos = app.service('todos');
+
+
+function getElement(todo) {
+  return el.find('[data-id="' + todo.id + '"]')
+}
+
+function addTodo(todo) {
+ var html = '<li class="page-header checkbox" data-id="' + todo.id + '">' +
+       '<label><input type="checkbox" name="done">' +
+       todo.text +
+       '</label><a href="javascript://" class="pull-right delete">' +
+       '<span class="glyphicon glyphicon-remove"></span>' +
+       '</a></li>';
+
+ el.find('.todos').append(html);
+ updateTodo(todo);
+}
+
+function removeTodo(todo) {
+ getElement(todo).remove();
+}
+
+function updateTodo(todo) {
+ var element = getElement(todo);
+ var checkbox = element.find('[name="done"]').removeAttr('disabled');
+
+ element.toggleClass('done', todo.complete);
+ checkbox.prop('checked', todo.complete);
+}
+```
+
+We can use the Todo service to listen to `created`, `updated` and `removed` events and call the appropriate functions that we just created. We will also initially load all existing Todos:
+
+```js
+todos.on('updated', updateTodo);
+todos.on('removed', removeTodo);
+todos.on('created', addTodo);
+
+todos.find(function(error, todos) {
+  todos.forEach(addTodo);
+});
+```
+
+Now we can add the jQuery event handlers when submitting the form, removing a Todo or completing it by clicking the checkbox. We only need to call the service method since the updates will happen automatically already through the service event handlers that we set up previously:
+
+```js
+el.on('submit', 'form', function (ev) {
+   var field = $(this).find('[name="description"]');
+
+   todos.create({
+     text: field.val(),
+     complete: false
+   });
+
+   field.val('');
+   ev.preventDefault();
+ });
+
+ el.on('click', '.delete', function (ev) {
+   var id = $(this).parents('li').data('id');
+   todos.remove(id);
+   ev.preventDefault();
+ });
+
+ el.on('click', '[name="done"]', function(ev) {
+   var id = $(this).parents('li').data('id');
+
+   $(this).attr('disabled', 'disabled');
+
+   todos.update(id, {
+     complete: $(this).is(':checked')
+   });
+ });
+ ```
+
+Now go to [http://localhost:3030](http://localhost:3030) and you will be able to create, complete and remove todos and it will update on all clients in real-time.
+
+## What's next?
+
+This are the basics of Feathers. We created a todos API that is accessible via REST and websockets and built a real-time jQuery frontend. Now, head over to the **[Learn section](/learn)** to learn more about things like Databases, how to integrate other frontend frameworks, Validation, Authentication or Authorization and get familiar with the **[API documentation](/api/)**.
