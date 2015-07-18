@@ -8,7 +8,7 @@ weight: 5
 
 ## The Feathers FAQ
 
-On this page you can find a list of Feathers related questions that came up before. Make sure to also head over to the [Express FAQ](http://expressjs.com/faq.html). As already mentioned, since Feathers directly extends Express, everything there applies to Feathers as well. You are more than welcome to submit any questions as a [GitHub issue](https://github.com/feathersjs/feathers/issues) or on [Stackoverflow](http://stackoverflow.com) using the `feathers` or `feathersjs` tag.
+On this page you can find a list of common questions that have come up before. Make sure to also check out to the [Express FAQ](http://expressjs.com/faq.html). Since Feathers directly extends Express, everything there applies to Feathers as well and your question may actually be about Express.
 
 ## Where can I get help?
 
@@ -16,9 +16,9 @@ If you have any questions, feel free to submit them as a [GitHub issue](https://
 
 ## Why another Node web framework?
 
-We know! Oh God another NodeJS framework! We really didn't want to add another name to the long list of NodeJS web frameworks but also wanted to explore a different approach than any other library we have seen. We strongly believe that data is the core of the web and should be the focus of web applications.
+We know! Oh God another NodeJS framework! We really didn't want to add another name to the long list of NodeJS web frameworks but also wanted to explore a different approach than any other library we have seen. We strongly believe that data is the core of the web and should be the focus of web applications, you shouldn't have to worry about the request or response objects.
 
-Many web frameworks focus on things like rendering views, defining routes and handling HTTP requests and responses without providing a structure for implementing application logic separate from those secondary concerns. The result - even when using the MVC pattern - are big monolithic controllers where your actual application logic and how it is accessed - usually via HTTP - are all mixed up together.
+Many web frameworks focus on things like rendering views, defining routes and handling HTTP requests and responses without providing a structure for implementing application logic separate from those secondary concerns. The result, even when using the MVC pattern, is usually big monolithic app with complex controllers and views or bloated models, where there isn't really a clean separation of concern between your application logic and how it is accessed (usually via HTTP).
 
 Feathers services bring two important concepts together that help to separate those concerns from how your application works:
 
