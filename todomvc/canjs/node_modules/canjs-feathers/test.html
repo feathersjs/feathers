@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CanJS Feathers tests</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="bower_components/mocha/mocha.css"/>
+  <style type="text/css">
+    iframe {
+      width: 70%;
+      height: 250px;
+      margin-top: 20px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+<div id="mocha"></div>
+<div id="testarea"></div>
+
+<script src="bower_components/mocha/mocha.js" type="text/javascript"></script>
+<script src="bower_components/assert/assert.js" type="text/javascript"></script>
+<script>
+  mocha.setup('bdd');
+</script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="bower_components/jquery/dist/jquery.js" type="text/javascript"></script>
+<script src="node_modules/feathers-client/dist/feathers.js" type="text/javascript"></script>
+<script src="bower_components/canjs/can.jquery.js" type="text/javascript"></script>
+<script src="dist/canjs-feathers.js" type="text/javascript"></script>
+<script src="test/test.js" type="text/javascript"></script>
+<script>
+  window.onload = function(){
+    mocha.run();
+  };
+</script>
+</body>
+</html>

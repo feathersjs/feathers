@@ -234,7 +234,7 @@ That's it. Our application is now real-time, all we have to do is provide a nice
 
 ## Building a frontend
 
-Feathers works great with any frontend framework, Android or iOS clients or anything else that can connect to a REST API or websockets (to get real-time). We have real-time [TodoMVC](http://todomvc.com/) examples for [jQuery](), [Angular](), [React]() and [CanJS]() but for this guide, we will create a more simplified jQuery client.
+Feathers works great with [any frontend framework](/learn/), Android or iOS clients or anything else that can connect to a REST API or websockets (to get real-time). We have real-time [TodoMVC](http://todomvc.com/) examples for [jQuery](/todomvc/feathers/jquery/guide.html), [Angular](/todomvc/feathers/angularjs/guide.html), [React](/todomvc/feathers/react/guide.html) and [CanJS](/todomvc/feathers/canjs/guide.html) but for this guide, we will create a more simplified jQuery client.
 
 ### Feathers client
 
@@ -267,7 +267,7 @@ Since we also set statically hosting the files in the current folder in the prev
     });
 
     todos.create({
-      text: 'Todo from client',.
+      text: 'Todo from client',
       complete: false
     });
   </script>
@@ -311,13 +311,13 @@ Let's update `index.html` to load [Bootstrap](http://getbootstrap.com/) and [jQu
   </div>
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <script src="node_modules/feathers-client/release/dist/feathers.js"></script>
+  <script src="node_modules/feathers-client/dist/feathers.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="todos.js"></script>
+  <script src="todo-client.js"></script>
 </body>
 ```
 
-In `todos.js` we now have to connect to the service again and add jQuery code that adds, removes and updates todos. To identify a Todo we'll store the `data-id="<id>"` property on the todos `<li>` and retrieve it with `getElement(todo)`:
+In `todo-client.js` we now have to connect to the service again and add jQuery code that adds, removes and updates todos. To identify a Todo we'll store the `data-id="<id>"` property on the todos `<li>` and retrieve it with `getElement(todo)`:
 
 ```js
 var el = $('#todos');
@@ -399,7 +399,7 @@ el.on('submit', 'form', function (ev) {
  });
  ```
 
-Now go to [http://localhost:3030](http://localhost:3030) and you will be able to create, complete and remove todos and it will update on all clients in real-time.
+Now go to [http://localhost:3000](http://localhost:3000) and you will be able to create, complete and remove todos and it will update on all clients in real-time.
 
 ## What's next?
 

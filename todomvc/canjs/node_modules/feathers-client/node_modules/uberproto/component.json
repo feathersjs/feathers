@@ -1,0 +1,21 @@
+{
+  "name": "uberproto",
+  "version": "1.1.0",
+  "repo": "daffl/uberproto",
+  "keywords": [
+    "inheritance",
+    "prototype"
+  ],
+  "main": "dist/proto.min.js",
+  "scripts": [
+    "dist/proto.es5.js",
+    "dist/proto.es5.min.js",
+    "dist/proto.js",
+    "dist/proto.min.js"
+  ],
+  "devDependencies": {
+    "mocha": "~ 1.8.0",
+    "assert": "0.0.1"
+  },
+  "license": "MIT"
+}

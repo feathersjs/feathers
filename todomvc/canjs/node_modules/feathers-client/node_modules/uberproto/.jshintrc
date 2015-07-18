@@ -1,0 +1,14 @@
+{
+	"globals": {
+		"it": true,
+		"describe": true,
+		"before": true,
+		"after": true,
+		"exports": true
+	},
+	"loopfunc": true,
+	"eqnull": true,
+	"node": true,
+	"unused": true,
+	"undef": true
+}

@@ -1,0 +1,6 @@
+.git*
+.DS_Store
+*.markdown
+*.md
+.idea
+!dist/

@@ -1,0 +1,16 @@
+{
+  "name": "feathers-client",
+  "version": "0.1.0",
+  "repo": "feathersjs/feathers-client",
+  "keywords": [
+    "feathers",
+    "jquery",
+    "websocket",
+    "socket.io",
+    "ajax",
+    "rest",
+    "rel-time"
+  ],
+  "main": "dist/feathers.js",
+  "license": "MIT"
+}
