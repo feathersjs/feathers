@@ -5,12 +5,10 @@
 
     var app = {
       addTodo: function(todo) {
-        var html = '<li class="page-header checkbox" data-id="' + todo.id + '">' +
+        var html = '<li class="page-header checkbox clear" data-id="' + todo.id + '">' +
               '<label><input type="checkbox" name="done">' +
               '<span class="description">' + todo.text + '</span>' +
-              '</label><a href="javascript://" class="pull-right delete">' +
-              '<i class="icon-trash"></i>' +
-              '</a></li>';
+              '</label><a href="javascript://" class="pull-right delete">X</a></li>';
 
         el.find('.todos').append(html);
         app.updateTodo(todo);
@@ -63,6 +61,7 @@
     socket.on('todos removed', app.removeTodo);
     socket.on('todos created', app.addTodo);
     socket.emit('todos::find', {}, function (error, todos) {
+      el.find('ul').empty();
       todos.forEach(app.addTodo);
     });
   };

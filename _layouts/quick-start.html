@@ -6,38 +6,30 @@ layout: default
   <div class="container">
     <div class="row clear">
       <div class="col col-9 push-3 page-content">
-        <h2 class="page-header">Example</h2>
+        <h1>{{page.title}}</h1>
 
-        <p>
-          In the tradition of <a href="http://todomvc.com/" title="TODO MVC" target="_blank">TodoMVC</a> the below example shows a real-time Todo application with Feathers and an in-memory Todo service on the server and a jQuery HTML page for the browser. To get up and running with this example <a href="https://gist.github.com/daffl/6665992/download">download the Gist</a>, unpack and in the new folder run
-          <blockquote><pre>npm install feathers feathers-memory body-parser<br>node app.js</pre></blockquote>
-          Then go to <a href="http://localhost:8080" target="_blank">http://localhost:8080</a>. The REST API will be available at <a href="localhost:8080/todos" target="_blank">localhost:8080/todos</a> (check out the example application endpoint <a href="http://todos.feathersjs.com/todos" target="_blank">here</a>). <br>Next, read up on the <a href="#guide">Feathers guide</a>.
-        </p>
+        <p>In this guide we will go over the basic concepts of Feathers by building the following real-time Todo application (inspired by the great <a href="http://todomvc.com" target="_blank">TodoMVC</a>) using jQuery as the frontend:</p>
 
         <hr>
 
-        <div class="row clear">
-          <div class="col col-4">
-            <div id="todo-example">
-              <ul class="todos unstyled-list"></ul>
-              <form role="form" class="create-todo">
-                <div class="form-group">
-                  <input type="text" class="form-control" name="description" placeholder="Add a new Todo">
-                </div>
-                <button type="submit" class="button primary-button block">Add Todo</button>
-              </form>
+        <div id="todo-example" class="row clear">
+          <ul class="todos unstyled-list">
+            <li>Loading...</li>
+          </ul>
+          <form role="form" class="create-todo">
+            <div class="form-group">
+              <input type="text" class="form-control" name="description" placeholder="Add a new Todo">
             </div>
-          </div>
-          <div class="col col-8">
-            <div class="row">
-              <div class="button-group" id="realtime-todos">
-                <a href="#" class="button" title="Todo Feathers Server">Server</a>
-                <a href="#" class="button" title="Real-time Todo web page">Client</a>
-              </div>
-              <script src="https://gist.github.com/daffl/6665992.js"></script>
-            </div>
-          </div>
+            <button type="submit" class="button primary-button block">Add Todo</button>
+          </form>
         </div>
+
+        <p>
+          Eager to try it out yourself? <a href="https://gist.github.com/daffl/6665992/download">Download this Gist</a> (view the code <a href="https://gist.github.com/daffl/6665992" target="_blank">here</a>), unpack and in the new folder run
+          <blockquote><pre>npm install feathers feathers-memory body-parser<br>node app.js</pre></blockquote>
+          Then go to <a href="http://localhost:8080" target="_blank">http://localhost:8080</a>. The REST API will be available at <a href="localhost:8080/todos" target="_blank">localhost:8080/todos</a>.
+          <br> In this guide we will learn how it all works...
+        </p>
       </div>
     </div>
   </div>
