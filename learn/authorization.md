@@ -5,7 +5,7 @@ description: Learn how to authorize users
 hide: true
 ---
 
-Authorization is the process of determining after [successful authentication](/learn/authentication) if the user is allowed to perform the requested action. This is again where [hooks](learn/validation#hooks) come in handy.
+Authorization is the process of determining, after [successful authentication](/learn/authentication), if the user is allowed to perform the requested action. This is where [hooks](learn/validation#hooks) come in handy.
 
 ## User authorization
 

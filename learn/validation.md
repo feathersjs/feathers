@@ -39,7 +39,7 @@ var todoService = mongodb({
 
 ## Hooks
 
-Another option is the [feathers-hooks](https://github.com/feathersjs/feathers-hooks) plugin which allows us to add asynchronous hooks before or after a service method call. Hooks work similar to Express middleware. The following example adds a hook that converts our Todo data and makes sure that nobody submits anything that we don't want to put into MongoDB:
+Another option is the [feathers-hooks](https://github.com/feathersjs/feathers-hooks) plug-in which allows us to add asynchronous hooks before or after a service method call. Hooks work similar to Express middleware. The following example adds a hook that converts our Todo data and makes sure that nobody submits anything that we don't want to put into MongoDB:
 
 > `npm install feathers-hooks`
 

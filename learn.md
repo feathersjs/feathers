@@ -6,7 +6,7 @@ permalink: /learn/
 weight: 2
 ---
 
-On this page you can find additional resources and guides about Feathers. Make sure to first get familiar with the basics in the [Quick Start guide](/quick-start/).
+So you're ready to learn more about Feathers, eh? If you haven't checked out the [Quick Start guide](/quick-start/) head over there first to get a brief intro to the basic parts of a Feathers app. On this page you'll find additional resources and guides how to do more with Feathers.
 
 ## API docs
 
@@ -14,7 +14,7 @@ For the API documentation with detailed information about the Feathers specific 
 
 ## Frontend Frameworks
 
-Feathers works great with any frontend that can connect through the REST API or websockets. Sometimes it is just a few lines of code to make a frontend turn real-time which is why implemented some TodoMVC examples and guides that all connect to the same Feathers real-time API:
+Feathers works great with any front-end that connects through HTTP/HTTPS or websockets to your Feathers REST API. Sometimes it is just a few lines of code to make a front-end turn real-time. To help you out we've provided some simple TodoMVC style examples and guides that all connect to the same Feathers real-time API ([todos.feathersjs.com](http://todos.feathersjs.com)):
 
 - [jQuery](http://feathersjs.github.io/todomvc/feathers/jquery/)
 - [React](http://feathersjs.github.io/todomvc/feathers/react/)
@@ -25,7 +25,7 @@ We don't know all the frameworks out there so if you don't see your favourite, s
 
 ## Databases
 
-Feathers already has plugins for CRUD operations on many different databases. All plugins provide a common way to filter, sort and limit records to make switching between databases easier. Our [MongoDB guide]() goes a little more into detail how to use Feathers with MongoDB (spoiler: it's only 16 lines of code to build a complete REST and real-time API with a MongoDB backend). For more information about other databases visit their plugin pages:
+Feathers already has plug-ins for *Create, Read, Update and Delete* operations on many different databases. All plug-ins provide a common way to filter, sort and limit records, which makes switching between databases super easy. Our [MongoDB guide](/learn/mongodb) goes into a bit more detail on how to use Feathers with MongoDB (**spoiler:** it's only 16 lines of code to build a complete REST and real-time API with a MongoDB backend). For more information about other databases visit their own plug-in page:
 
 - [In memory](https://github.com/feathersjs/feathers-memory) - A service that stores everything locally in memory. Probably not ideal in production environments but great for prototyping.
 - [MongoDB](https://github.com/feathersjs/feathers-mongodb) - A basic MongoDB implementation, easy to use.
