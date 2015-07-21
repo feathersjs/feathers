@@ -16,12 +16,10 @@ For the API documentation with detailed information about the Feathers specific 
 
 Feathers works great with any frontend that can connect through the REST API or websockets. Sometimes it is just a few lines of code to make a frontend turn real-time which is why implemented some TodoMVC examples and guides that all connect to the same Feathers real-time API:
 
-- [jQuery]()
-- [React]()
-- [Angular]()
-- [CanJS]()
-- [iOS]()
-- [Android]()
+- [jQuery](http://feathersjs.github.io/todomvc/feathers/jquery/)
+- [React](http://feathersjs.github.io/todomvc/feathers/react/)
+- [Angular](http://feathersjs.github.io/todomvc/feathers/angularjs/)
+- [CanJS](http://feathersjs.github.io/todomvc/feathers/canjs/)
 
 We don't know all the frameworks out there so if you don't see your favourite, submit an issue or - even better - a pull request and we'll try our best to make it happen.
 
@@ -29,18 +27,18 @@ We don't know all the frameworks out there so if you don't see your favourite, s
 
 Feathers already has plugins for CRUD operations on many different databases. All plugins provide a common way to filter, sort and limit records to make switching between databases easier. Our [MongoDB guide]() goes a little more into detail how to use Feathers with MongoDB (spoiler: it's only 16 lines of code to build a complete REST and real-time API with a MongoDB backend). For more information about other databases visit their plugin pages:
 
-- [In memory]() - A service that stores everything locally in memory. Probably not ideal in production environments but great for prototyping.
-- [MongoDB]() - A basic MongoDB implementation, easy to use.
-- [Mongoose]() - Support for the MongoDB ODM which gives you schemas and validation out of the box.
-- [NeDB]() - A file based database similar to MongoDB. Great if you want to ship your application and use it without having to set up a datbase server.
-- [MySQL]()
-- [PostgreSQL]()
+- [In memory](https://github.com/feathersjs/feathers-memory) - A service that stores everything locally in memory. Probably not ideal in production environments but great for prototyping.
+- [MongoDB](https://github.com/feathersjs/feathers-mongodb) - A basic MongoDB implementation, easy to use.
+- [Mongoose](https://github.com/feathersjs/feathers-mongoose) - Support for the MongoDB ODM which gives you schemas and validation out of the box.
+- [NeDB](https://github.com/feathersjs/feathers-nedb) - A file based database similar to MongoDB. Great if you want to ship your application and use it without having to set up a datbase server.
+- [MySQL](https://github.com/feathersjs/feathers-mysql)
+- [PostgreSQL](https://github.com/feathersjs/feathers-postgresql)
 
 If you are wondering how to customize those existing adapters and make it easier to switch between different databases, read more about hooks in the next paragraph.
 
 ## Hooks and validation
 
-While not part of the core, [feathers-hooks]() is a powerful plugin that allows to customize service method execution with small pluggable, reusable Lego-pieces very similar to Express middleware. We created a [guide how to use hooks for validation]() and you can read more about the theory and patterns behind it [in this blog post]().
+While not part of the core, [feathers-hooks](https://github.com/feathersjs/feathers-hooks) is a powerful plugin that allows to customize service method execution with small pluggable, reusable Lego-pieces very similar to Express middleware. We created a [guide how to use hooks for validation](/learn/validation/) and you can read more about the theory and patterns behind it [in this blog post](https://medium.com/all-about-feathersjs/api-service-composition-with-hooks-47af13aa6c01).
 
 ## Authentication
 

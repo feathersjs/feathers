@@ -1,15 +1,13 @@
 ---
 layout: page
-title: Validation
+title: Validation and processing
 description: Learn how to do Validation and data processing
 hide: true
 ---
 
-## Validation and processing
-
 The next step is validating and processing our data. With the MongoDB service already implemented we have two options to extend its functionality.
 
-### Service Extension
+## Service Extension
 
 *feathers-mongodb* uses the ES5 inheritance library [Uberproto](https://github.com/daffl/uberproto). This allows us to `extend` the original object returned by the call to `mongodb(options)` and overwrite the existing implementation of `create` to process the Todo data and then pass it to the original (`_super`) method. This way we can also easily add our own methods to the service.
 
@@ -39,7 +37,7 @@ var todoService = mongodb({
 });
 ```
 
-### Hooks
+## Hooks
 
 Another option is the [feathers-hooks](https://github.com/feathersjs/feathers-hooks) plugin which allows us to add asynchronous hooks before or after a service method call. Hooks work similar to Express middleware. The following example adds a hook that converts our Todo data and makes sure that nobody submits anything that we don't want to put into MongoDB:
 

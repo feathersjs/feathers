@@ -5,11 +5,9 @@ description: Learn how to do user authentication and authorization
 hide: true
 ---
 
-## Authentication
+[Passport](http://passportjs.org/) is the most commonly used authentication library for NodeJS and Express also really flexible. Manually setting up shared authentication between websockets and an HTTP REST API can be tricky. This is what the [feathers-passport](https://github.com/feathersjs/feathers-passport) module aims to make easier. The following examples show how to add local authentication that uses a Feathers service for storing and retrieving user information.
 
-[Passport](http://passportjs.org/) is one that is used quite often and also really flexible. Manually setting up shared authentication between websockets and an HTTP REST API can be tricky. This is what the [feathers-passport](https://github.com/feathersjs/feathers-passport) module aims to make easier. The following examples show how to add local authentication that uses a Feathers service for storing and retrieving user information.
-
-### Configuring Passport
+## Configuring Passport
 
 The first step is to add the Passport, local strategy and feathers-passport modules to our application. Since we are using MongoDB already we will also use it as the session store through the [connect-mongo](https://github.com/kcbanner/connect-mongo) module:
 
@@ -53,7 +51,7 @@ app.configure(feathers.rest())
   .use('/', feathers.static(__dirname));
 ```
 
-### User storage
+## User storage
 
 Next, we create a MongoDB service for storing user information. It is always a good idea to not store plain text passwords in the database so we add a `.before` hook that salts and then hashes the password when creating a new user. This can be done in the service `.setup` which is called when the application is ready to start up. We also add an `.authenticate` method that we can use to look up a user by username and compare the hashed and salted passwords.
 
@@ -137,7 +135,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
 }));
 ```
 
-### Login
+## Login
 
 The last step is to add the authentication route that we can POST the login to:
 
