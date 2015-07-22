@@ -10,7 +10,7 @@ On this page you can find ways to get help, a list of Feathers related questions
 
 ## Getting help
 
-If you have any questions, feel free to submit them as a [GitHub issue](https://github.com/feathersjs/feathers/issues) or on [Stackoverflow](http://stackoverflow.com) using the `feathers` or `feathersjs` tag. We are also on IRC in the [#feathersjs](http://webchat.freenode.net/?channels=feathersjs) channel on Freenode.
+If you have any questions, feel free to post them on our [Gitter channel](https://gitter.im/feathersjs/feathers), submit them as a [GitHub issue](https://github.com/feathersjs/feathers/issues) or on [Stackoverflow](http://stackoverflow.com) using the [feathersjs](http://stackoverflow.com/questions/tagged/feathersjs) tag. We are also on IRC in the [#feathersjs](http://webchat.freenode.net/?channels=feathersjs) channel on Freenode.
 
 ## FAQ
 
@@ -179,6 +179,27 @@ And a lot of the other syntactic sugar that comes with ES6 like arrow functions 
 
 ## Changelog
 
+## Changelog
+
+__1.1.0__
+
+- Service `setup` called before `app.io` instantiated ([#131](https://github.com/feathersjs/feathers/issues/131))
+- Allow to register services that already are event emitter ([#118](https://github.com/feathersjs/feathers/issues/118))
+- Clustering microservices ([#121](https://github.com/feathersjs/feathers/issues/121))
+- Add debug module and messages ([#114](https://github.com/feathersjs/feathers/issues/114))
+- Server hardening with socket message validation and normalization ([#113](https://github.com/feathersjs/feathers/issues/113))
+- Custom service events ([#111](https://github.com/feathersjs/feathers/issues/111))
+- Support for registering services dynamically ([#67](https://github.com/feathersjs/feathers/issues/67), [#96](https://github.com/feathersjs/feathers/issues/96), [#107](https://github.com/feathersjs/feathers/issues/107))
+
+__1.0.2__
+
+- Use Uberproto extended instance when creating services ([#105](https://github.com/feathersjs/feathers/pull/105))
+- Make sure that mixins are specific to each new app ([#104](https://github.com/feathersjs/feathers/pull/104))
+
+__1.0.1__
+
+- Rename Uberproto .create to avoid conflicts with service method ([#100](https://github.com/feathersjs/feathers/pull/100), [#99](https://github.com/feathersjs/feathers/issues/99))
+
 __[1.0.0](https://github.com/feathersjs/feathers/issues?q=milestone%3A1.0.0)__
 
 - Remove app.lookup and make the functionality available as app.service ([#94](https://github.com/feathersjs/feathers/pull/94))
@@ -232,12 +253,11 @@ __0.1.0__
 
 __0.0.x__
 
-- Initial test alpha releases
+- Initial alpha releases
 
 ## License
 
-Copyright (C) 2014 David Luecke daff@neyeon.com
-Copyright (C) 2014 Eric Kryski e.kryski@gmail.com
+Copyright (C) 2015 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
