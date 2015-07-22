@@ -179,8 +179,6 @@ And a lot of the other syntactic sugar that comes with ES6 like arrow functions 
 
 ## Changelog
 
-## Changelog
-
 __1.1.0__
 
 - Service `setup` called before `app.io` instantiated ([#131](https://github.com/feathersjs/feathers/issues/131))
