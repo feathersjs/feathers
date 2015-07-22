@@ -3,8 +3,10 @@
 __1.1.0__
 
 - Service `setup` called before `app.io` instantiated ([#131](https://github.com/feathersjs/feathers/issues/131))
+- Allow to register services that already are event emitter ([#118](https://github.com/feathersjs/feathers/issues/118))
+- Clustering microservices ([#121](https://github.com/feathersjs/feathers/issues/121))
 - Add debug module and messages ([#114](https://github.com/feathersjs/feathers/issues/114))
-- Server hardening with socket message validation and normalization ([#113](https://github.com/feathersjs/feathers/issues/113)) 
+- Server hardening with socket message validation and normalization ([#113](https://github.com/feathersjs/feathers/issues/113))
 - Custom service events ([#111](https://github.com/feathersjs/feathers/issues/111))
 - Support for registering services dynamically ([#67](https://github.com/feathersjs/feathers/issues/67), [#96](https://github.com/feathersjs/feathers/issues/96), [#107](https://github.com/feathersjs/feathers/issues/107))
 
