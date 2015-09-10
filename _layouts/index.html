@@ -74,6 +74,53 @@ layout: default
   </div>
 </section>
 
+<hr>
+
+<section id="demo">
+  <div class="container">
+    <div class="row clear">
+      <div class="col col-12 mobile-full">
+        <h2 style="margin-bottom: 30px;">How it works</h2>
+        <h5>Feathers uses small services that can be registered like an Express middleware. You can use services for <a href="/learn/#toc3" class="primary normal">different databases</a> or <a href="/quick-start" class="primary normal">write your own</a>. Here is a REST and websocket real-time todo API that uses <a href="https://github.com/louischatriot/nedb" target="_blank" class="primary normal">NEDB</a> for data storage:</h5>
+
+        <div class="highlight col-10 push-1"><pre><code class="language-js" data-lang="js">
+  <span class="c1">// app.js</span>
+  <span class="kd">var</span> <span class="nx">feathers</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'feathers'</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">nedb</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'feathers-nedb'</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">bodyParser</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'body-parser'</span><span class="p">);</span>
+
+  <span class="c1">// Initialize NEDB CRUD database service</span>
+  <span class="kd">var</span> <span class="nx">todos</span> <span class="o">=</span> <span class="nx">nedb</span><span class="p">(</span><span class="s1">'todos'</span><span class="p">);</span>
+  <span class="c1">// A Feathers app is the same as an Express app</span>
+  <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">feathers</span><span class="p">();</span>
+
+  <span class="c1">// Add REST API support</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">rest</span><span class="p">());</span>
+  <span class="c1">// Configure Socket.io real-time APIs</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="nx">feathers</span><span class="p">.</span><span class="nx">socketio</span><span class="p">());</span>
+  <span class="c1">// Parse HTTP JSON bodies</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">bodyParser</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+  <span class="c1">// Register the todo service</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">'/todos'</span><span class="p">,</span> <span class="nx">todos</span><span class="p">);</span>
+  <span class="c1">// Start the server</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span>
+  </code></pre>
+        </div>
+
+        <h5>Run the following commands</h5>
+        <pre class="col-10 push-1">npm install feathers body-parser feathers-nedb<br>node app<br>curl 'http://localhost:3000/todos/' -H 'Content-Type: application/json' --data-binary '{ "text": "Learn Feathers!" }'</pre>
+        <h5>Then go to <a class="primary normal" href="http://localhost:3000/todos" target="_blank">http://localhost:3000/todos</a></h5>
+
+        <div class="row clear">
+          <div class="col col-4 push-4 mobile-full">
+            <a class="button primary-button block normal" href="/quick-start" title="Get Started">See it in action</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="plugins">
   <div class="container">
     <div class="row center-text">

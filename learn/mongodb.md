@@ -37,4 +37,27 @@ app.configure(feathers.rest())
   .listen(3000);
 ```
 
+```js
+// app.js
+var feathers = require('feathers');
+var nedb = require('feathers-nedb');
+var bodyParser = require('body-parser');
+
+// Initialize NEDB CRUD database service
+var todos = nedb('todos');
+// A Feathers app is the exact same as an Express app
+var app = feathers();
+
+// Add REST API support
+app.configure(feathers.rest());
+// Configure Socket.io real-time APIs
+app.configure(feathers.socketio());
+// Parse HTTP JSON bodies
+app.use(bodyParser.json());
+// Register the todo service
+app.use('/todos', todos);
+// Start the server
+app.listen(3000);
+```
+
 And just like this we have a full REST and real-time Todo API that stores its data into MongoDB in just 16 lines of code! We will continue using MongoDB so we don't need our example `todos.js` service anymore.
