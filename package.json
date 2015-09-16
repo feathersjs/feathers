@@ -1,7 +1,7 @@
 {
   "name": "feathers",
   "description": "Build Better APIs, Faster than Ever.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",
@@ -42,7 +42,7 @@
   "dependencies": {
     "debug": "^2.1.1",
     "express": "^4.12.3",
-    "feathers-commons": "^0.2.0",
+    "feathers-commons": "ebourmalo/feathers-commons#feat-advanced-routes",
     "feathers-errors": "^0.2.5",
     "lodash": "^3.1.0",
     "primus": "^3.0.2",
