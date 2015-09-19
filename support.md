@@ -10,44 +10,35 @@ On this page you can find ways to get help, a list of Feathers related questions
 
 ## Getting help
 
-If you have any questions, feel free to post them on our [Gitter channel](https://gitter.im/feathersjs/feathers), submit them as a [GitHub issue](https://github.com/feathersjs/feathers/issues) or on [Stackoverflow](http://stackoverflow.com) using the [feathersjs](http://stackoverflow.com/questions/tagged/feathersjs) tag. We are also on IRC in the [#feathersjs](http://webchat.freenode.net/?channels=feathersjs) channel on Freenode.
+If you have any questions, feel free to post them on our [Gitter channel](https://gitter.im/feathersjs/feathers), submit them as a [GitHub issue](https://github.com/feathersjs/feathers/issues) or on [Stackoverflow](http://stackoverflow.com) using the [feathersjs](http://stackoverflow.com/questions/tagged/feathersjs) tag. We are also on [Slack](https://feathersjs.slack.com/) and on IRC in the [#feathersjs](http://webchat.freenode.net/?channels=feathersjs) channel on Freenode.
+
+We are also collecting tutorials and news on Medium in the ["All About FeathersJS"](https://medium.com/all-about-feathersjs) publication.
 
 ## FAQ
 
-### Another Node web framework?
+### Nested routes
 
-We know! Oh God another NodeJS framework! We really didn't want to add another name to the long list of NodeJS web frameworks but also wanted to explore a different approach than any other library we have seen. We strongly believe that data is the core of the web and should be the focus of web applications.
+Feathers does not provide an ORM so it does not know about associations between your services. Generally services are connected by their resource ids so any nested route can be expressed by query paramters. For example if you have a user service and would like to get all todos (assuming the associated user id is stored in each todo) for that user the url would be `/todos?userId=<userid>`.
 
-Many web frameworks focus on things like rendering views, defining routes and handling HTTP requests and responses without providing a structure for implementing application logic separate from those secondary concerns. The result - even when using the MVC pattern - are big monolithic controllers where your actual application logic and how it is accessed - usually via HTTP - are all mixed up together.
-
-Feathers services bring two important concepts together that help to separate those concerns from how your application works:
-
-1) A __[service layer](http://martinfowler.com/eaaCatalog/serviceLayer.html)__ which helps to decouple your application logic from how it is being accessed and represented. Besides also making things a lot easier to test - you just call your service methods instead of having to make fake HTTP requests - this is what allows Feathers to provide the same API through both HTTP REST and websockets. It can even be extended to use any other RPC protocol and you won't have to change any of your services.
-
-2) A __[uniform interface](http://en.wikipedia.org/wiki/Representational_state_transfer#Uniform_interface)__ which is one of the key constraints of [REST](http://en.wikipedia.org/wiki/Representational_state_transfer) in which context it is commonly referred to as the different HTTP verbs (GET, POST, PUT, PATCH and DELETE). This translates almost naturally into the Feathers service object interface:
+You can however add Express style parameters to your routes when you register a service which will then be set in the `params` object in each service call. For example a `/users/:userId/todos` route can be provided like this:
 
 ```js
-var myService = {
-  // GET /path
-  find: function(params, callback) {},
-  // GET /path/<id>
-  get: function(id, params, callback) {},
-  // POST /path
-  create: function(data, params, callback) {},
-  // POST /path/<id>
-  update: function(id, data, params, callback) {},
-  // PATCH /path/<id>
-  patch: function(id, data, params, callback) {},
-  // DELETE /patch/<id>
-  remove: function(id, params, callback) {}
-}
+app.use('/users/:userId/todos', {
+  find: function(params, calllback) {
+    // params.userId == current user id
+  },
+  create: function(data, params, callback) {
+    data.userId = params.userId;
+    // store the data
+  }
+})
 ```
 
-This interface also makes it easier to hook into the execution of those methods and emit events when they return which can naturally be used to provide real-time functionality.
+__Note:__ This route has to be registered _before_ the `/users` service otherwise the `get` route from the user service at `/users` will be matched first.
 
 ### Get websocket events from REST calls
 
-Every service emits all events no matter from where it has been called. So even creating a new  Todo internally on the server will send the event out on every socket that should receive it. This is very similar to what [Firebase](http://firebase.io/) does (but for free and open source).
+Every service emits all events no matter from where it has been called. So even creating a new  Todo internally on the server will send the event out on every socket that should receive it. This is very similar to what [Firebase](http://firebase.io/) does (but for free and open source). For a more detailed comparison and migration guide read [Feathers as an open source alternative to Firebase](https://medium.com/all-about-feathersjs/using-feathersjs-as-an-open-source-alternative-to-firebase-b5d93c200cee).
 
 You can also listen to events on the server by retrieving the wrapped service object which is an event emitter:
 
@@ -62,7 +53,7 @@ todoService.on('created', function(todo) {
 });
 ```
 
-### Find where a method call came from?
+### Find where a method call came from
 
 Sometimes you want to allow certain service calls internally (like creating a new user) but not through the REST or websocket API. This can be done by adding the information in a middleware to the `request.feathers` object which will be merged into service call parameters:
 
@@ -104,13 +95,13 @@ todoService.get('laundry', {}, function(error, todo) {
 });
 ```
 
-### Add authentication?
+### Add authentication
 
 Generally any authentication mechanism used for Express can also be implemented in Feathers.
 
-Please refer to the [authentication](/#authentication) and [authorization](/#authorization) section of the guide and, in more detail, the [feathers-hooks](https://github.com/feathersjs/feathers-hooks) and [feahters-passport](https://github.com/feathersjs/feathers-passport) modules for more information.
+Please refer to the [authentication](/learn/authentication/) and [authorization](/learn/authorization) section of the guide and, in more detail, the [feathers-hooks](https://github.com/feathersjs/feathers-hooks) and [feahters-passport](https://github.com/feathersjs/feathers-passport) modules for more information.
 
-### Only send certain events?
+### Only send certain events
 
 In almost any larger application not every user is supposed to receive every event through websockets. The [event filtering section](/api/#event-filtering) in the API documentation contains detailed documentation on how to only send events to authorized users.
 
@@ -165,6 +156,37 @@ app.use('/todos', ensureAuthenticated, logRequest, todoService);
 ```
 
 Keep in mind that shared authentication (between REST and websockets) should use a service based approach as described in the [authentication section of the guide](/learn/authentication).
+
+### Another Node web framework
+
+We know! Oh God another NodeJS framework! We really didn't want to add another name to the long list of NodeJS web frameworks but also wanted to explore a different approach than any other library we have seen. We strongly believe that data is the core of the web and should be the focus of web applications.
+
+Many web frameworks focus on things like rendering views, defining routes and handling HTTP requests and responses without providing a structure for implementing application logic separate from those secondary concerns. The result - even when using the MVC pattern - are big monolithic controllers where your actual application logic and how it is accessed - usually via HTTP - are all mixed up together.
+
+Feathers services bring two important concepts together that help to separate those concerns from how your application works:
+
+1) A __[service layer](http://martinfowler.com/eaaCatalog/serviceLayer.html)__ which helps to decouple your application logic from how it is being accessed and represented. Besides also making things a lot easier to test - you just call your service methods instead of having to make fake HTTP requests - this is what allows Feathers to provide the same API through both HTTP REST and websockets. It can even be extended to use any other RPC protocol and you won't have to change any of your services.
+
+2) A __[uniform interface](http://en.wikipedia.org/wiki/Representational_state_transfer#Uniform_interface)__ which is one of the key constraints of [REST](http://en.wikipedia.org/wiki/Representational_state_transfer) in which context it is commonly referred to as the different HTTP verbs (GET, POST, PUT, PATCH and DELETE). This translates almost naturally into the Feathers service object interface:
+
+```js
+var myService = {
+  // GET /path
+  find: function(params, callback) {},
+  // GET /path/<id>
+  get: function(id, params, callback) {},
+  // POST /path
+  create: function(data, params, callback) {},
+  // POST /path/<id>
+  update: function(id, data, params, callback) {},
+  // PATCH /path/<id>
+  patch: function(id, data, params, callback) {},
+  // DELETE /patch/<id>
+  remove: function(id, params, callback) {}
+}
+```
+
+This interface also makes it easier to hook into the execution of those methods and emit events when they return which can naturally be used to provide real-time functionality.
 
 ### What about Koa?
 
