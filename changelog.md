@@ -1,5 +1,9 @@
 ## Changelog
 
+__1.1.1__
+
+- Fix 404 not being properly thrown by REST provider ([#146](https://github.com/feathersjs/feathers/pull/146))
+
 __1.1.0__
 
 - Service `setup` called before `app.io` instantiated ([#131](https://github.com/feathersjs/feathers/issues/131))
