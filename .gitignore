@@ -28,4 +28,4 @@ build/Release
 node_modules
 
 tmp*
-idea/
+.idea/
