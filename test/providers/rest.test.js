@@ -263,6 +263,14 @@ describe('REST provider', function () {
       });
     });
 
+    it('throws a 404 for undefined route', function(done) {
+      request('http://localhost:4780/todo/foo/bar', function (error, response) {
+        assert.ok(response.statusCode === 404, 'Got Not Found code');
+
+        done(error);
+      });
+    });
+    
     it('empty response sets 204 status codes', function(done) {
       request('http://localhost:4780/todo', function (error, response) {
         assert.ok(response.statusCode === 204, 'Got empty status code');
