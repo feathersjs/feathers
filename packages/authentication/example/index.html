@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+  <h1>feathers-passport</h1>
+  <a href="/todos/dishes">REST endpoint /todos/rest</a>
+  <pre id="log"></pre>
+  <script src="socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    var socket = io();
+    var el = document.getElementById('log');
+
+    socket.on('error', function() {
+      console.error(arguments)
+    })
+    socket.emit('todos::get', 'SocketIO', {}, function(error, todo) {
+      el.innerHTML = el.innerHTML + '\n Got todo:\n' +
+          JSON.stringify(todo, null, '  ');
+    });
+  </script>
+</body>
+</html>
