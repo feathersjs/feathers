@@ -1,0 +1,66 @@
+{
+  "name": "feathers-passport-jwt",
+  "version": "1.0.0",
+  "description": "Feathers REST and websocket authentication using JSON Web Tokens (JWT) with PassportJS.",
+  "homepage": "https://github.com/feathersjs/feathers-passport-jwt",
+  "keywords": [
+    "feathers-plugin",
+    "feathers"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/feathersjs/feathers-passport-jwt/blob/master/LICENSE"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers-passport-jwt.git"
+  },
+  "author": {
+    "name": "Marshall Thompson",
+    "email": "marshall@creativeideal.net",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers-passport-jwt/issues"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "main": "lib/passport.js",
+  "scripts": {
+    "publish": "git push origin --tags",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish",
+    "jshint": "jshint lib/. test/. --config",
+    "mocha": "mocha test/ --recursive",
+    "test": "npm run jshint && npm run mocha"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "bcrypt": "^0.8.5",
+    "debug": "^2.0.0",
+    "jsonwebtoken": "^5.4.0",
+    "lodash": "^2.4.1",
+    "feathers-hooks": "^0.4.0",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "async": "^1.4.2",
+    "body-parser": "^1.9.0",
+    "feathers": "^1.0.0",
+    "feathers-memory": "^0.3.4",
+    "jshint": "^2.7.0",
+    "mocha": "^2.2.4",
+    "passport": "^0.3.0",
+    "q": "^1.4.1",
+    "request": "^2.44.0",
+    "socket.io-client": "^1.1.0",
+    "xmlhttprequest": "^1.6.0"
+  }
+}
