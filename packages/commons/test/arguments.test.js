@@ -1,6 +1,6 @@
 import assert from 'assert';
-import _ from 'lodash';
 import getArguments from '../src/arguments';
+import { noop } from '../src/arguments';
 
 describe('Argument normalization tests', () => {
   const params = { test: 'param' };
@@ -13,13 +13,13 @@ describe('Argument normalization tests', () => {
     assert.deepEqual(args, normal);
 
     args = getArguments('find', [ params ]);
-    assert.deepEqual(args, [ params, _.noop ]);
+    assert.deepEqual(args, [ params, noop ]);
 
     args = getArguments('find', [callback]);
     assert.deepEqual(args, [ {}, callback ]);
-    
+
     args = getArguments('find', []);
-    assert.deepEqual(args, [ {}, _.noop ]);
+    assert.deepEqual(args, [ {}, noop ]);
 
     try {
       getArguments('find', normal.concat(['too many']));
@@ -35,13 +35,13 @@ describe('Argument normalization tests', () => {
     assert.deepEqual(args, normal);
 
     args = getArguments('get', [2, params]);
-    assert.deepEqual(args, [2, params, _.noop]);
+    assert.deepEqual(args, [2, params, noop]);
 
     args = getArguments('get', [3, callback]);
     assert.deepEqual(args, [3, {}, callback]);
 
     args = getArguments('get', [4]);
-    assert.deepEqual(args, [4, {}, _.noop]);
+    assert.deepEqual(args, [4, {}, noop]);
 
     try {
       getArguments('get', [callback]);
@@ -63,13 +63,13 @@ describe('Argument normalization tests', () => {
     assert.deepEqual(args, normal);
 
     args = getArguments('remove', [2, params]);
-    assert.deepEqual(args, [2, params, _.noop]);
+    assert.deepEqual(args, [2, params, noop]);
 
     args = getArguments('remove', [3, callback]);
     assert.deepEqual(args, [3, {}, callback]);
 
     args = getArguments('remove', [4]);
-    assert.deepEqual(args, [4, {}, _.noop]);
+    assert.deepEqual(args, [4, {}, noop]);
 
     try {
       args = getArguments('remove', [callback]);
@@ -95,10 +95,10 @@ describe('Argument normalization tests', () => {
     assert.deepEqual(args, [data, {}, callback]);
 
     args = getArguments('create', [data, params]);
-    assert.deepEqual(args, [data, params, _.noop]);
+    assert.deepEqual(args, [data, params, noop]);
 
     args = getArguments('create', [data]);
-    assert.deepEqual(args, [data, {}, _.noop]);
+    assert.deepEqual(args, [data, {}, noop]);
 
     try {
       getArguments('create', [callback]);
@@ -124,10 +124,10 @@ describe('Argument normalization tests', () => {
     assert.deepEqual(args, [2, data, {}, callback]);
 
     args = getArguments('update', [3, data, params]);
-    assert.deepEqual(args, [3, data, params, _.noop]);
+    assert.deepEqual(args, [3, data, params, noop]);
 
     args = getArguments('update', [4, data]);
-    assert.deepEqual(args, [4, data, {}, _.noop]);
+    assert.deepEqual(args, [4, data, {}, noop]);
 
     try {
       getArguments('update', [callback]);
@@ -159,10 +159,10 @@ describe('Argument normalization tests', () => {
     assert.deepEqual(args, [2, data, {}, callback]);
 
     args = getArguments('patch', [3, data, params]);
-    assert.deepEqual(args, [3, data, params, _.noop]);
+    assert.deepEqual(args, [3, data, params, noop]);
 
     args = getArguments('patch', [4, data]);
-    assert.deepEqual(args, [4, data, {}, _.noop]);
+    assert.deepEqual(args, [4, data, {}, noop]);
 
     try {
       getArguments('patch', [callback]);
