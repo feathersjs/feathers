@@ -1,6 +1,8 @@
-import _ from 'lodash';
-
-const getCallback = args => typeof _.last(args) === 'function' ? _.last(args) : _.noop;
+export const noop = () => {};
+const getCallback = args => {
+  var last = args[args.length - 1];
+  return typeof last === 'function' ? last : noop;
+};
 const getParams = (args, position) => typeof args[position] === 'object' ? args[position] : {};
 
 const updateOrPatch = name => {
