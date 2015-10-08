@@ -3,7 +3,7 @@ var hooks = require('feathers-hooks');
 var memory = require('feathers-memory');
 var bodyParser = require('body-parser');
 var feathersPassportJwt = require('../lib/passport');
-var hashPassword = feathersPassportJwt.hashPassword;
+var hashPassword = feathersPassportJwt.hooks.hashPassword;
 
 // Initialize the application
 var app = feathers()
@@ -19,16 +19,13 @@ var app = feathers()
   // Initialize a user service
   .use('/api/users', memory())
   // A simple Todos service that we can used for testing
-  .use('/todos', {
-    get: function(id, params, callback) {
-      callback(null, {
-        id: id,
-        text: 'You have to do ' + id + '!',
-        user: params.user
-      });
-    }
-  })
-  .use('/', feathers.static(__dirname));
+  .use('/api/todos', memory())
+  .use('/', feathers.static(__dirname + '/public'));
+
+var todoService = app.service('/api/todos');
+todoService.create({name: 'Do the dishes'}, {}, function(){});
+todoService.create({name: 'Buy a guitar'}, {}, function(){});
+todoService.create({name: 'Exercise for 30 minutes.'}, {}, function(){});
 
 var userService = app.service('/api/users');
 
@@ -41,9 +38,10 @@ userService.before({
 // Create a user that we can use to log in
 userService.create({
   username: 'feathers',
-  password: 'secret'
+  password: 'test'
 }, {}, function(error, user) {
   console.log('Created default user', user);
+  console.log('Open http://localhost:4000');
 });
 
 app.listen(4000);
