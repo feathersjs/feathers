@@ -43,7 +43,7 @@ Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6
 ### Websocket Connections
 In order to authenticate a Websocket connection, you must first obtain a token using an Ajax request to your `loginEndpoint`.  You then include that token in the request.  The example below is for Socket.io, but the same `query` key can be passed to Primus.
 
-```json
+```js
 socket = io('', {
     // Assuming you've already saved a token to localStorage.
     query: 'token=' + localStorage.getItem('featherstoken'),
