@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+  <h1>feathers-passport</h1>
+  <a href="/todos/dishes">REST endpoint /todos/rest</a><br/><br/>
+  <a href="/sockets.html">Go Back</a>
+
+  <p>This page features hard-coded login.  View the source.</p>
+  
+  <pre id="log"></pre>
+  <script src="socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    // Normally, you would get this from /login or if you stored it in localStorage, from there.
+    var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZlYXRoZXJzIiwicGFzc3dvcmQiOiIkMmEkMTAkV2w2b3llTEs5V2NxVkR1RjgyNzNHTzVxLmhZVGFvcVR4Uy5odGUxR1hTclB6dTJVc01zWmEiLCJpZCI6MCwiaWF0IjoxNDQ0MzI1NjE3LCJleHAiOjE0NDQzNjE5Njh9.UXHMqci2_b2DlufYt2WXs9zH84JTfBnxTSXKl2tGgFI';
+    var socket = io('', {
+      query: 'token=' + token,
+      transport: ['websockets']
+    });
+    var el = document.getElementById('log');
+
+    socket.on('error', function() {
+      console.error(arguments);
+    });
+    socket.on('connect', function() {
+      socket.emit('api/todos::find', {}, function(error, todos) {
+        todos.forEach(function(todo){
+          el.innerHTML += todo.name + '<br/>';
+        });
+      });
+    });
+    
+  </script>
+
+  <a href="/logout.html">Logout</a>
+
+</body>
+</html>
