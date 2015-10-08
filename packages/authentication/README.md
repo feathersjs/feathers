@@ -155,7 +155,7 @@ Add a `login.html` with an HTML form that allows to log our user in:
 
 ## Changelog
 
-__0.1.0__
+__1.0.0__
 
 - Initial release
 
