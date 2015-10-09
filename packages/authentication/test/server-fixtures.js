@@ -57,14 +57,9 @@ module.exports = function(settings, username, password, next) {
       var obj = {
         app: app,
         server: server
-      }
+      };
       next(null, obj);
     });
     
   });
-  
 };
-
-exports.user = function(){
-
-}
