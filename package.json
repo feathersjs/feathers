@@ -33,7 +33,7 @@
     "release:major": "npm version major && npm publish",
     "jshint": "jshint lib/. test/. --config",
     "mocha": "mocha test/ --recursive",
-    "coverage": "istanbul cover _mocha -- -R Spec test/ --recursive",
+    "coverage": "istanbul cover _mocha -- test/ --recursive",
     "test": "npm run jshint && npm run coverage"
   },
   "engines": {
