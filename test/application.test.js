@@ -302,4 +302,24 @@ describe('Feathers application', function () {
     otherApp.mixins.push(function() {});
     assert.equal(otherApp.mixins.length, 4);
   });
+
+  it('Event punching happens after normalization (#150)', function (done) {
+    var todoService = {
+      create: function (data, params, callback) {
+        callback(null, data);
+      }
+    };
+
+    var app = feathers()
+      .configure(feathers.rest())
+      .use('/todo', todoService);
+
+    var server = app.listen(7001).on('listening', function () {
+      app.service('todo').create({
+        test: 'item'
+      });
+
+      server.close(done);
+    });
+  });
 });
