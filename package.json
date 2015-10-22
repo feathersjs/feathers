@@ -33,7 +33,8 @@
     "release:major": "npm version major && npm publish",
     "jshint": "jshint lib/. test/. --config",
     "mocha": "mocha test/ --recursive",
-    "test": "npm run jshint && npm run mocha"
+    "coverage": "istanbul cover _mocha -- -R Spec test/ --recursive",
+    "test": "npm run jshint && npm run coverage"
   },
   "engines": {
     "node": ">= 0.10.0",
@@ -54,6 +55,7 @@
   "devDependencies": {
     "body-parser": "^1.13.2",
     "feathers-client": "^0.1.1",
+    "istanbul": "^0.4.0",
     "jshint": "^2.6.3",
     "mocha": "^2.2.0",
     "q": "^1.0.1",
