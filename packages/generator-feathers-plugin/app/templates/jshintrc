@@ -6,9 +6,9 @@
     "curly": true,
     "eqeqeq": true,
     "immed": true,
-    "indent": 4,
+    "indent": 2,
     "latedef": "nofunc",
-    "newcap": true,
+    "newcap": false,
     "noarg": true,
     "quotmark": "single",
     "regexp": true,
@@ -18,11 +18,13 @@
     "trailing": true,
     "smarttabs": true,
     "white": false,
+    "node": true,
     "globals": {
         "it": true,
         "describe": true,
         "before": true,
+        "beforeEach": true,
         "after": true,
-        "exports": true
+        "afterEach": true
     }
 }

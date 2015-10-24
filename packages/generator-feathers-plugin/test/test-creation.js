@@ -1,48 +1,36 @@
 /*global describe, beforeEach, it*/
 'use strict';
 
-var path    = require('path');
+var path = require('path');
+var assert = require('assert');
+var exec = require('child_process').exec;
 var helpers = require('yeoman-generator').test;
 
-
 describe('feathers-plugin generator', function () {
-    beforeEach(function (done) {
-        helpers.testDirectory(path.join(__dirname, 'temp'), function (err) {
-            if (err) {
-                return done(err);
-            }
+    it('created a plugin with passing tests', function (done) {
+      var tmpDir;
 
-            this.app = helpers.createGenerator('feathers-plugin:app', [
-                '../../app'
-            ]);
-            done();
-        }.bind(this));
-    });
+      helpers.run(path.join(__dirname, '../app'))
+       .inTmpDir(function (dir) {
+         tmpDir = dir;
+       })
+       .withOptions({
+         skipInstall: false
+       })
+       .withPrompts({
+         name: 'feathers-tmp',
+         repository: 'feathersjs/feathers-tmp',
+         description: 'Plugin description here'
+       })
+       .on('end', function () {
+         var child = exec('npm test', {
+           cwd: tmpDir
+         });
 
-    it('creates expected files', function (done) {
-        var expected = [
-            // add files you expect to exist here.
-            '.jshintrc',
-            '.editorconfig',
-            '.npmignore',
-            'package.json',
-            '.gitignore',
-            '.jshintrc',
-            'Gruntfile.js',
-            '.travis.yml',
-            'LICENSE',
-            'README.md'
-        ];
-
-        helpers.mockPrompt(this.app, {
-            'githubUser': 'Glavin001',
-            'pluginName': 'plugin',
-            'pluginDescription': 'This is a plugin description'
-        });
-        this.app.options['skip-install'] = true;
-        this.app.run({}, function () {
-            helpers.assertFiles(expected);
-            done();
-        });
+         child.on('exit', function (status) {
+           assert.equal(status, 0, 'Got correct exist status');
+           done();
+         });
+       });
     });
 });
