@@ -22,7 +22,11 @@
     "url": "git://github.com/Glavin001/generator-feathers-plugin.git"
   },
   "scripts": {
-    "test": "mocha test/ --timeout 120000"
+    "test": "mocha test/ --timeout 120000",
+    "publish": "git push origin && git push origin --tags",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish",
   },
   "dependencies": {
     "lodash": "^3.10.1",
