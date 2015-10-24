@@ -1,7 +1,9 @@
-var assert = require('assert');
+import assert from 'assert';
+import plugin from '../src';
 
-describe('name_test.js test', function () {
-    it('does something', function () {
-        assert.ok(true, 'Done!');
-    });
+describe('<%= name %>', () => {
+  it('basic functionality', done => {
+    assert.equal(typeof plugin, 'function', 'It worked');
+    done();
+  });
 });

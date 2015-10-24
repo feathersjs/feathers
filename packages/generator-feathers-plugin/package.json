@@ -22,12 +22,11 @@
     "url": "git://github.com/Glavin001/generator-feathers-plugin.git"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha test/ --timeout 120000"
   },
   "dependencies": {
-    "yeoman-generator": "~0.16.0",
-    "github": "~0.1.8",
-    "chalk": "~0.4.0"
+    "lodash": "^3.10.1",
+    "yeoman-generator": "^0.21.1"
   },
   "devDependencies": {
     "mocha": "~1.14.0"

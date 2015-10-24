@@ -1,0 +1,4 @@
+.idea/
+src/
+test/
+!lib/

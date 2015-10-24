@@ -1,37 +1,20 @@
-# <%= appname %> [![Build Status](https://travis-ci.org/<%= githubUser %>/<%= _.slugify(appname) %>.png?branch=master)](https://travis-ci.org/<%= githubUser %>/<%= _.slugify(appname) %>)
+# <%= name %>
 
-> <%= pluginDescription %>
+[![Build Status](https://travis-ci.org/<%= repository %>.png?branch=master)](https://travis-ci.org/<%= repository %>)
 
-## Getting Started
+> <%= description %>
 
-To install <%= appname %> from [npm](https://www.npmjs.org/), run:
+## About
 
-```bash
-$ npm install <%= _.slugify(appname) %> --save
-```
 
-Finally, to use the plugin in your Feathers app:
+## Changelog
 
-```javascript
-// Require
-var feathers = require('feathers');
-var plugin = require('<%= _.slugify(appname) %>');
-// Setup
-var app = feathers();
-// Use Plugin
-app.configure(plugin({ /* configuration */ }));
-```
+__0.1.0__
 
-## Documentation
-
-See the [docs](docs/).
-
-## Author
-
-- [<%= realname %>](<%= githubUrl %>)
+- Initial release
 
 ## License
 
-Copyright (c) <%= currentYear %> <%= realname %>
+Copyright (c) 2015
 
 Licensed under the [MIT license](LICENSE).
