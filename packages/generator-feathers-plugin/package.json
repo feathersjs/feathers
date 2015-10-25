@@ -6,20 +6,19 @@
     "yeoman-generator",
     "feathers"
   ],
-  "homepage": "https://github.com/Glavin001/generator-feathers-plugin",
-  "bugs": "https://github.com/Glavin001/generator-feathers-plugin/issues",
+  "homepage": "https://github.com/feathersjs/generator-feathers-plugin",
+  "bugs": "https://github.com/feathersjs/generator-feathers-plugin/issues",
   "author": {
-    "name": "Glavin Wiechert",
-    "email": "glavin.wiechert@gmail.com",
-    "url": "https://github.com/Glavin001"
+    "name": "Feathers contributors",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
   },
   "contributors": [
-    "David Luecke <daff@neyeon.de> (http://neyeon.com)"
   ],
   "main": "app/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/Glavin001/generator-feathers-plugin.git"
+    "url": "git://github.com/feathersjs/generator-feathers-plugin.git"
   },
   "scripts": {
     "test": "mocha test/ --timeout 120000",

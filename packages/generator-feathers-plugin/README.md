@@ -1,8 +1,8 @@
-# generator-feathers-plugin [![Build Status](https://travis-ci.org/feathersjs/generator-feathers-plugin.png?branch=master)](https://travis-ci.org/Glavin001/generator-feathers-plugin)
+# generator-feathers-plugin [![Build Status](https://travis-ci.org/feathersjs/generator-feathers-plugin.png?branch=master)](https://travis-ci.org/feathersjs/generator-feathers-plugin)
 
 > A [Yeoman](http://yeoman.io) generator for initializing new [Feathersjs](https://github.com/feathersjs) plugins.
 
-To install [generator-feathers-plugin](https://github.com/Glavin001/generator-feathers-plugin) from [npm](https://www.npmjs.org/), run:
+To install [generator-feathers-plugin](https://github.com/feathersjs/generator-feathers-plugin) from [npm](https://www.npmjs.org/), run:
 
 ```
 $ npm install -g generator-feathers-plugin
