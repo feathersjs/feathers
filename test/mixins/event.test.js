@@ -84,15 +84,19 @@ describe('Event mixin', function () {
     var instance = create.call(FixtureService);
     instance.setup();
 
-    instance.on('created', function (data) {
+    instance.on('created', function (data, args) {
       assert.equal(data.id, 10);
       assert.equal(data.name, 'Tester');
+      assert.equal(args.data.name, 'Tester');
+      assert.equal(args.params.custom, 'value');
       done();
     });
 
     instance.create({
       name: 'Tester'
-    }, {}, function (error, data) {
+    }, {
+      custom: 'value'
+    }, function (error, data) {
       assert.equal(data.id, 10);
     });
   });
@@ -114,15 +118,20 @@ describe('Event mixin', function () {
     var instance = create.call(FixtureService);
     instance.setup();
 
-    instance.on('updated', function (data) {
+    instance.on('updated', function (data, args) {
       assert.equal(data.id, 12);
       assert.equal(data.name, 'Updated tester');
+      assert.equal(args.id, 12);
+      assert.equal(args.data.name, 'Updated tester');
+      assert.equal(args.params.custom, 'value');
       done();
     });
 
     instance.update(12, {
       name: 'Updated tester'
-    }, {}, function (error, data) {
+    }, {
+      custom: 'value'
+    }, function (error, data) {
       assert.equal(data.id, 12);
     });
   });
@@ -143,12 +152,16 @@ describe('Event mixin', function () {
     var instance = create.call(FixtureService);
     instance.setup();
 
-    instance.on('removed', function (data) {
+    instance.on('removed', function (data, args) {
       assert.equal(data.id, 27);
+      assert.equal(args.id, 27);
+      assert.equal(args.params.custom, 'value');
       done();
     });
 
-    instance.remove(27, {}, function (error, data) {
+    instance.remove(27, {
+      custom: 'value'
+    }, function (error, data) {
       assert.equal(data.id, 27);
     });
   });
