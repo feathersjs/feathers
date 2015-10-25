@@ -49,10 +49,9 @@ describe('Event mixin', function () {
       }
     });
 
-    mixinEvent(FixtureService);
-
     var instance = create.call(FixtureService);
-    instance.setup();
+
+    mixinEvent(instance);
 
     instance.on('serviceError', function (error) {
       assert.ok(error instanceof Error);
@@ -79,10 +78,9 @@ describe('Event mixin', function () {
       }
     });
 
-    mixinEvent(FixtureService);
-
     var instance = create.call(FixtureService);
-    instance.setup();
+
+    mixinEvent(instance);
 
     instance.on('created', function (data, args) {
       assert.equal(data.id, 10);
@@ -113,10 +111,9 @@ describe('Event mixin', function () {
       }
     });
 
-    mixinEvent(FixtureService);
-
     var instance = create.call(FixtureService);
-    instance.setup();
+
+    mixinEvent(instance);
 
     instance.on('updated', function (data, args) {
       assert.equal(data.id, 12);
@@ -147,10 +144,9 @@ describe('Event mixin', function () {
       }
     });
 
-    mixinEvent(FixtureService);
-
     var instance = create.call(FixtureService);
-    instance.setup();
+
+    mixinEvent(instance);
 
     instance.on('removed', function (data, args) {
       assert.equal(data.id, 27);
@@ -180,10 +176,10 @@ describe('Event mixin', function () {
     });
 
     FixtureService.mixin(EventEmitter.prototype);
-    mixinEvent(FixtureService);
 
     var instance = create.call(FixtureService);
-    instance.setup();
+
+    mixinEvent(instance);
 
     instance.on('created', function (data) {
       assert.deepEqual(data, { custom: 'event' });
