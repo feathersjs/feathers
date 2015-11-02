@@ -138,10 +138,12 @@ function getDefaultStrategy(app, settings){
     passwordField: settings.passwordField
   };
   return new LocalStrategy(strategySetup, function(username, password, done) {
-    var query = {}; 
-    query[settings.usernameField] = username;
-
-    app.service(settings.userEndpoint).find({ query: query }, function(error, users) {
+    var findParams = { 
+      internal: true,
+      query: {}
+    };
+    findParams.query[settings.usernameField] = username;
+    app.service(settings.userEndpoint).find(findParams, function(error, users) {
       if(error) {
         return done(error);
       }
