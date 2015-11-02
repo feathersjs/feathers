@@ -53,7 +53,7 @@ module.exports = function(config) {
 
       // Otherwise, authenticate the user and return a token
       } else {
-        passport.authenticate('local', function(err, user) {
+        passport.authenticate('local', { session: false }, function(err, user) {
           if (err) { return next(err); }
           // Login success. Generate token.
           delete user.password;
