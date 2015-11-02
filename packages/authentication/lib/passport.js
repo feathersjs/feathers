@@ -133,7 +133,11 @@ module.exports = function(config) {
 };
 
 function getDefaultStrategy(app, settings){
-  return new LocalStrategy(function(username, password, done) {
+  var strategySetup = {
+    usernameField: settings.usernameField, 
+    passwordField: settings.passwordField
+  };
+  return new LocalStrategy(strategySetup, function(username, password, done) {
     var query = {}; 
     query[settings.usernameField] = username;
 
