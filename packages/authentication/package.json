@@ -58,7 +58,6 @@
     "feathers-memory": "^0.3.4",
     "jshint": "^2.7.0",
     "mocha": "^2.2.4",
-    "passport": "^0.3.0",
     "q": "^1.4.1",
     "request": "^2.44.0",
     "socket.io-client": "^1.1.0",
