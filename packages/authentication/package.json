@@ -1,6 +1,6 @@
 {
   "name": "feathers-passport-jwt",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Feathers REST and websocket authentication using JSON Web Tokens (JWT) with PassportJS.",
   "homepage": "https://github.com/feathersjs/feathers-passport-jwt",
   "keywords": [
