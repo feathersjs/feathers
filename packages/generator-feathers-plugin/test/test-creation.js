@@ -27,6 +27,9 @@ describe('feathers-plugin generator', function () {
            cwd: tmpDir
          });
 
+         // child.stderr.pipe(process.stderr);
+         // child.stdout.pipe(process.stdout);
+
          child.on('exit', function (status) {
            assert.equal(status, 0, 'Got correct exist status');
            done();
