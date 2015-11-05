@@ -10,7 +10,7 @@ module.exports = generators.Base.extend({
     this.props = {
       name: process.cwd().split(path.sep).pop()
     };
-    this.dotfiles = ['editorconfig', 'gitignore', 'jshintrc', 'npmignore', 'travis.yml'];
+    this.dotfiles = ['babelrc', 'editorconfig', 'gitignore', 'jshintrc', 'npmignore', 'travis.yml'];
     this.files = ['package.json', 'src/index.js', 'test/index.test.js', 'LICENSE', 'README.md'];
   },
 
@@ -56,10 +56,12 @@ module.exports = generators.Base.extend({
     }.bind(this));
 
     this.npmInstall([
-      'babel',
-      'jshint',
-      'mocha',
-      'feathers'
+      'babel-core@^6.0.0',
+      'babel-cli@^6.0.0',
+      'babel-preset-es2015@^6.0.0',
+      'jshint@^2.0.0',
+      'mocha@^2.0.0',
+      'feathers@^1.0.0'
     ], { saveDev: true});
   }
 });

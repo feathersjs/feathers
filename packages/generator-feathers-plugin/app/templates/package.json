@@ -39,7 +39,7 @@
     "compile": "rm -rf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
-    "mocha": "mocha test/ --compilers js:babel/register",
+    "mocha": "mocha test/ --compilers js:babel-core/register",
     "test": "npm run jshint && npm run mocha"
   },
   "directories": {
