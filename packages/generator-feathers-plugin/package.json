@@ -1,6 +1,6 @@
 {
   "name": "generator-feathers-plugin",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A generator for Feathersjs Plugins.",
   "keywords": [
     "yeoman-generator",
@@ -13,8 +13,7 @@
     "email": "hello@feathersjs.com",
     "url": "https://feathersjs.com"
   },
-  "contributors": [
-  ],
+  "contributors": [],
   "main": "app/index.js",
   "repository": {
     "type": "git",
