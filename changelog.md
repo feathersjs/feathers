@@ -1,5 +1,10 @@
 ## Changelog
 
+__1.2.0__
+
+- Add hook object to service events parameters ([#148](https://github.com/feathersjs/feathers/pull/148))
+- Argument normalization runs before event mixin punched methods ([#150](https://github.com/feathersjs/feathers/issues/150))
+
 __1.1.1__
 
 - Fix 404 not being properly thrown by REST provider ([#146](https://github.com/feathersjs/feathers/pull/146))
