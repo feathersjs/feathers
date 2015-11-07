@@ -46,7 +46,7 @@
     "feathers-commons": "^0.2.0",
     "feathers-errors": "^0.2.5",
     "lodash": "^3.1.0",
-    "primus": "^3.0.2",
+    "primus": "^4.0.1",
     "primus-emitter": "^3.0.2",
     "rubberduck": "^1.0.0",
     "socket.io": "^1.1.0",
@@ -54,13 +54,13 @@
   },
   "devDependencies": {
     "body-parser": "^1.13.2",
-    "feathers-client": "^0.1.1",
+    "feathers-client": "^0.2.1",
     "istanbul": "^0.4.0",
     "jshint": "^2.6.3",
     "mocha": "^2.2.0",
     "q": "^1.0.1",
     "request": "^2.x",
     "socket.io-client": "^1.0.0",
-    "ws": "^0.7.1"
+    "ws": "^0.8.0"
   }
 }
