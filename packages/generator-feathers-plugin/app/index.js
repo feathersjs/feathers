@@ -56,6 +56,10 @@ module.exports = generators.Base.extend({
     }.bind(this));
 
     this.npmInstall([
+      'debug@^2.2.0'
+    ], { save: true });
+
+    this.npmInstall([
       'babel-core@^6.0.0',
       'babel-cli@^6.0.0',
       'babel-preset-es2015@^6.0.0',
