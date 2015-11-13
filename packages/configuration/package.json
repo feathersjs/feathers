@@ -1,0 +1,54 @@
+{
+  "name": "feathers-configuration",
+  "description": "A small configuration module for your Feathers application.",
+  "version": "0.0.0",
+  "homepage": "https://github.com/feathersjs/feathers-configuration",
+  "main": "lib/",
+  "keywords": [
+    "feathers",
+    "feathers-plugin"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers-configuration.git"
+  },
+  "author": {
+    "name": "Feathers contributors",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers-configuration/issues"
+  },
+  "engines": {
+    "node": ">= 0.12.0"
+  },
+  "scripts": {
+    "prepublish": "npm run compile",
+    "publish": "git push origin && git push origin --tags",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish",
+    "compile": "rm -rf lib/ && babel -d lib/ src/",
+    "watch": "babel --watch -d lib/ src/",
+    "jshint": "jshint src/. test/. --config",
+    "mocha": "NODE_ENV=testing mocha test/ --compilers js:babel-core/register",
+    "test": "npm run jshint && npm run mocha"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "debug": "^2.2.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.1.4",
+    "babel-core": "^6.1.4",
+    "babel-preset-es2015": "^6.1.4",
+    "feathers": "^1.2.0",
+    "jshint": "^2.8.0",
+    "mocha": "^2.3.3"
+  }
+}
