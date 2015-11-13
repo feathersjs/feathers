@@ -1,0 +1,6 @@
+{
+  "port": "3030",
+  "environment": "NODE_ENV",
+  "path": "../something",
+  "from": "default"
+}
