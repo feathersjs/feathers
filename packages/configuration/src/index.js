@@ -4,7 +4,7 @@ import makeDebug from 'debug';
 
 const debug = makeDebug('feathers:configuration');
 
-module.exports = function (root, configFolder = 'config') {
+export default module.exports = function (root, configFolder = 'config') {
   return function() {
     const app = this;
     const env = app.settings.env;

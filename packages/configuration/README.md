@@ -14,17 +14,29 @@
   - If the value is a valid environment variable (e.v. `NODE_ENV`), use its value instead
   - If the value start with `./` or `../` turn it it an absolute path relative to the configuration file path
 
+## Usage
+
+The `feathers-configuration` module is an app configuration function that takes a root directory (usually something like `__dirname` in your application) and the configuration folder (set to `config` by default):
+
+```js
+import feathers from 'feathers';
+import configuration from 'feathers-configuration';
+
+// Use the current folder as the root and look configuration up in `settings`
+let app = feathers().configure(configuration(__dirname, 'settings'))
+```
+
 ## Example
 
 In `config/default.json` we want to use the local development environment and default MongoDB connection string:
 
 ```js
 {
-  "frontend": "./public",
+  "frontend": "../public",
   "host": "localhost",
   "port": 3030,
   "mongodb": "mongodb://localhost:27017/myapp",
-  "templates": "./templates"
+  "templates": "../templates"
 }
 ```
 
@@ -52,6 +64,7 @@ console.log(app.get('frontend'));
 console.log(app.get('host'));
 console.log(app.get('port'));
 console.log(app.get('mongodb'));
+console.log(app.get('templates'));
 ```
 
 If you now run
@@ -62,6 +75,7 @@ node app
 // -> localhost
 // -> 3030
 // -> mongodb://localhost:27017/myapp
+// -> path/to/templates
 ```
 
 Or with a different environment and variables:
@@ -71,7 +85,8 @@ PORT=8080 MONGOHQ_URL=mongodb://localhost:27017/production NODE_ENV=production n
 // -> path/to/app/public/dist
 // -> myapp.com
 // -> 8080
-// -> MONGOHQ_URL=mongodb://localhost:27017/production
+// -> mongodb://localhost:27017/production
+// -> path/to/templates
 ```
 
 ## Changelog
