@@ -46,6 +46,7 @@
   "devDependencies": {
     "babel-cli": "^6.1.4",
     "babel-core": "^6.1.4",
+    "babel-plugin-transform-object-assign": "^6.1.18",
     "babel-preset-es2015": "^6.1.4",
     "feathers": "^1.2.0",
     "jshint": "^2.8.0",
