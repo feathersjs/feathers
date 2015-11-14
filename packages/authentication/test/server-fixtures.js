@@ -1,7 +1,7 @@
 var feathers = require('feathers');
 var feathersHooks = require('feathers-hooks');
-var feathersPassport = require('../lib/passport');
-var hooks = feathersPassport.hooks;
+var feathersAuth = require('../lib/feathers-authentication');
+var hooks = feathersAuth.hooks;
 var bodyParser = require('body-parser');
 var memory = require('feathers-memory');
 var async = require('async');
@@ -13,7 +13,7 @@ module.exports = function(settings, username, password, next) {
     .configure(feathers.socketio())
     .configure(feathersHooks())
     .use(bodyParser.urlencoded({ extended: true }))
-    .configure(feathersPassport(settings))
+    .configure(feathersAuth(settings))
     .use('/api/users', memory())
     .use('/api/todos', memory())
     .use('/api/tasks', memory())
