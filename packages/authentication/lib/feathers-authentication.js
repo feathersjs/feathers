@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var jwt = require('jsonwebtoken');
 var passport = require('passport');
-var debug = require('debug')('feathers-passport:main');
+var debug = require('debug')('feathers-authentication:main');
 var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt');
 
@@ -33,7 +33,7 @@ module.exports = function(config) {
     var strategy = settings.strategy || getDefaultStrategy(app, settings);
     passport.use(strategy);
 
-    debug('setting up feathers-passport-jwt');
+    debug('setting up feathers-authentication');
 
     // Add a route for passport login and token refresh.
     app.post(settings.loginEndpoint, function(req, res, next) {
@@ -53,15 +53,25 @@ module.exports = function(config) {
 
       // Otherwise, authenticate the user and return a token
       } else {
+        console.log(req.headers);
         passport.authenticate('local', { session: false }, function(err, user) {
+          console.log(arguments);
           if (err) { return next(err); }
-          // Login success. Generate token.
-          delete user.password;
-          var token = jwt.sign(user, settings.secret, settings.jwtOptions);
-          return res.json({ 
-            token: token,
-            data: user
-          });
+
+          // Login was successful. Generate and send token.
+          if (user) {
+            delete user.password;
+            var token = jwt.sign(user, settings.secret, settings.jwtOptions);
+            return res.json({ 
+              token: token,
+              data: user
+            });
+
+          // Login failed.
+          } else {
+            return next(new app.errors.NotAuthenticated(settings.loginError));
+          }
+          
         })(req, res, next);  
       }
     })
@@ -137,6 +147,7 @@ function getDefaultStrategy(app, settings){
     usernameField: settings.usernameField, 
     passwordField: settings.passwordField
   };
+  console.log(strategySetup);
   return new LocalStrategy(strategySetup, function(username, password, done) {
     var findParams = { 
       internal: true,
@@ -150,7 +161,8 @@ function getDefaultStrategy(app, settings){
       var user = users[0];
 
       if(!user) {
-        return done(new Error('User not found'));
+        console.log('no user');
+        return done(new app.errors.NotAuthenticated(settings.loginError));
       }
 
       bcrypt.compare(password, user[settings.passwordField], function(err, res) {
