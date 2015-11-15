@@ -1,25 +1,21 @@
 {
   "name": "feathers-authentication",
-  "version": "1.0.6",
-  "description": "Feathers REST and websocket authentication using JSON Web Tokens (JWT) with PassportJS.",
+  "description": "Add Authentication to your FeathersJS app.",
+  "version": "0.0.0",
   "homepage": "https://github.com/feathersjs/feathers-authentication",
+  "main": "lib/",
   "keywords": [
-    "feathers-plugin",
-    "feathers"
+    "feathers",
+    "feathers-plugin"
   ],
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/feathersjs/feathers-authentication/blob/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers-authentication.git"
   },
   "author": {
-    "name": "Marshall Thompson",
-    "email": "marshall@creativeideal.net",
+    "name": "Feathers contributors",
+    "email": "hello@feathersjs.com",
     "url": "https://feathersjs.com"
   },
   "contributors": [],
@@ -27,16 +23,18 @@
     "url": "https://github.com/feathersjs/feathers-authentication/issues"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">= 0.12.0"
   },
-  "main": "lib/feathers-authentication.js",
   "scripts": {
-    "publish": "git push origin --tags",
+    "prepublish": "npm run compile",
+    "publish": "git push origin && git push origin --tags",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
-    "jshint": "jshint lib/. test/. --config",
-    "mocha": "mocha test/ --recursive",
+    "compile": "rm -rf lib/ && babel -d lib/ src/",
+    "watch": "babel --watch -d lib/ src/",
+    "jshint": "jshint src/. test/. --config",
+    "mocha": "mocha test/ --compilers js:babel-core/register",
     "test": "npm run jshint && npm run mocha"
   },
   "directories": {
@@ -44,7 +42,7 @@
   },
   "dependencies": {
     "bcrypt": "^0.8.5",
-    "debug": "^2.0.0",
+    "debug": "^2.2.0",
     "feathers-hooks": "^0.4.0",
     "jsonwebtoken": "^5.4.0",
     "lodash": "^2.4.1",
@@ -53,12 +51,14 @@
   },
   "devDependencies": {
     "async": "^1.4.2",
+    "babel-cli": "^6.1.18",
+    "babel-core": "^6.1.21",
+    "babel-preset-es2015": "^6.1.18",
     "body-parser": "^1.9.0",
-    "feathers": "^1.0.0",
+    "feathers": "^1.2.0",
     "feathers-memory": "^0.3.4",
-    "jshint": "^2.7.0",
-    "mocha": "^2.2.4",
-    "q": "^1.4.1",
+    "jshint": "^2.8.0",
+    "mocha": "^2.3.3",
     "request": "^2.44.0",
     "socket.io-client": "^1.1.0",
     "xmlhttprequest": "^1.6.0"
