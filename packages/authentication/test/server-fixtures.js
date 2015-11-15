@@ -1,7 +1,7 @@
 var feathers = require('feathers');
 var feathersHooks = require('feathers-hooks');
-var feathersAuth = require('../lib/feathers-authentication');
-var hooks = feathersAuth.hooks;
+var feathersAuth = require('../src/').default;
+var hooks = require('../src/').hooks;
 var bodyParser = require('body-parser');
 var memory = require('feathers-memory');
 var async = require('async');
@@ -32,7 +32,7 @@ module.exports = function(settings, username, password, next) {
   // Tasks service won't require auth.
   var taskService = app.service('/api/tasks');
 
-  
+
   server.on('listening', function(){
     console.log('server listening');
 
@@ -60,6 +60,6 @@ module.exports = function(settings, username, password, next) {
       };
       next(null, obj);
     });
-    
+
   });
 };

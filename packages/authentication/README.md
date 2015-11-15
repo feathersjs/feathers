@@ -1,16 +1,19 @@
-# Feathers Passport-JWT
+# feathers-authentication
 
-[![Build Status](https://travis-ci.org/feathersjs/feathers-passport-jwt.png?branch=master)](https://travis-ci.org/feathersjs/feathers-passport-jwt)
+[![Build Status](https://travis-ci.org/feathersjs/feathers-authentication.png?branch=master)](https://travis-ci.org/feathersjs/feathers-authentication)
 
-feathers-passport-jwt adds shared [PassportJS](http://passportjs.org/) authentication for Feathers HTTP REST and websockets services using [JSON Web Tokens](http://jwt.io/).
+> Add Authentication to your FeathersJS app.
+
+`feathers-authentication` adds shared [PassportJS](http://passportjs.org/) authentication for Feathers HTTP REST and websockets services using [JSON Web Tokens](http://jwt.io/).
 
 ## Usage
-If you are using the default options, setting up JWT auth for your Feathers app is as simple as the below example.  Note: You must set up the `body-parser` module before setting up `feathers-passport-jwt`.
+If you are using the default options, setting up JWT auth for your Feathers app is as simple as the below example.  Note: You must set up the `body-parser` module before setting up `feathers-authentication`.
+
 ```js
 var feathers = require('feathers');
 var hooks = require('feathers-hooks');
 var bodyParser = require('body-parser');
-var feathersPassportJwt = require('feathers-passport-jwt');
+var feathersAuth = require('feathers-authentication');
 var mongooseService = require('feathers-mongoose');
 
 var app = feathers()
@@ -18,8 +21,8 @@ var app = feathers()
   .configure(feathers.socketio())
   .configure(hooks())
   .use(bodyParser.urlencoded({ extended: true }))
-  // Configure feathers-passport-jwt
-  .configure(feathersPassportJwt({
+  // Configure feathers-authentication
+  .configure(feathersAuth({
     secret: 'feathers-rocks'
   }))
   .use('/api/users', mongooseService({
@@ -29,7 +32,7 @@ var app = feathers()
       admin: {type: Boolean, default: false }
     },
     before:{
-      create: [feathersPassportJwt.hashPassword('password')]
+      create: [feathersAuth.hashPassword('password')]
     }
   }))
 ```
@@ -79,8 +82,8 @@ var passport = require('passport');
 var hooks = require('feathers-hooks');
 var memory = require('feathers-memory');
 var bodyParser = require('body-parser');
-var feathersPassportJwt = require('feathers-passport-jwt');
-var hashPassword = feathersPassportJwt.hashPassword;
+var feathersAuth = require('feathers-authentication');
+var hashPassword = feathersAuth.hashPassword;
 
 // Initialize the application
 var app = feathers()
@@ -89,8 +92,8 @@ var app = feathers()
   .configure(hooks())
   // Needed for parsing bodies (login)
   .use(bodyParser.urlencoded({ extended: true }))
-  // Configure feathers-passport-jwt
-  .configure(feathersPassportJwt({
+  // Configure feathers-authentication
+  .configure(feathersAuth({
     secret: 'feathers-rocks'
   }))
   // Initialize a user service
@@ -153,18 +156,17 @@ Add a `login.html` with an HTML form that allows to log our user in:
 </html>
 ```
 
+## About
+
+
 ## Changelog
 
 __1.0.0__
 
 - Initial release
 
-## Author
-
-- [Marshall Thompson](https://github.com/marshallswain)
-
 ## License
 
-Copyright (c) 2015 Marshall Thompson
+Copyright (c) 2015
 
 Licensed under the [MIT license](LICENSE).

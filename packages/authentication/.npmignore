@@ -1,7 +1,4 @@
-.git*
-docs/
+.idea/
+src/
 test/
-.DS_Store
-*.markdown
-*.md
-.idea
+!lib/

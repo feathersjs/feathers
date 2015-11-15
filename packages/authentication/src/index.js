@@ -1,9 +1,10 @@
-var _ = require('lodash');
-var jwt = require('jsonwebtoken');
-var passport = require('passport');
-var debug = require('debug')('feathers-authentication:main');
-var LocalStrategy = require('passport-local').Strategy;
-var bcrypt = require('bcrypt');
+import makeDebug from 'debug';
+import _ from 'lodash';
+import jwt from 'jsonwebtoken';
+import passport from 'passport';
+import passportLocal from 'passport-local';
+var LocalStrategy = passportLocal.Strategy;
+import bcrypt from 'bcrypt';
 
 var defaults = {
   userEndpoint: '/api/users',
@@ -17,8 +18,9 @@ var defaults = {
   },
   passport: passport,
 };
+const debug = makeDebug('feathers-authentication');
 
-module.exports = function(config) {
+export default function(config) {
   var settings = _.merge(defaults, config);
 
   if(!settings.secret) {
@@ -28,7 +30,7 @@ module.exports = function(config) {
   return function() {
     var app = this;
     var oldSetup = app.setup;
-    
+
     app.use(settings.passport.initialize());
     var strategy = settings.strategy || getDefaultStrategy(app, settings);
     passport.use(strategy);
@@ -53,16 +55,14 @@ module.exports = function(config) {
 
       // Otherwise, authenticate the user and return a token
       } else {
-        console.log(req.headers);
         passport.authenticate('local', { session: false }, function(err, user) {
-          console.log(arguments);
           if (err) { return next(err); }
 
           // Login was successful. Generate and send token.
           if (user) {
             delete user.password;
             var token = jwt.sign(user, settings.secret, settings.jwtOptions);
-            return res.json({ 
+            return res.json({
               token: token,
               data: user
             });
@@ -71,8 +71,8 @@ module.exports = function(config) {
           } else {
             return next(new app.errors.NotAuthenticated(settings.loginError));
           }
-          
-        })(req, res, next);  
+
+        })(req, res, next);
       }
     })
 
@@ -110,10 +110,10 @@ module.exports = function(config) {
             jwt.verify(socket.handshake.query.token, settings.secret, function(err, data) {
               if (err) {
                 return next(err);
-              } 
+              }
               socket.feathers = _.extend({ user: data }, socket.feathers);
             });
-          } 
+          }
           // If no token was passed, still allow the websocket. Service hooks can take care of Auth.
           return next(null, true);
         });
@@ -128,10 +128,10 @@ module.exports = function(config) {
             jwt.verify(req.handshake.query.token, settings.secret, function(err, data) {
               if (err) {
                 return done(err);
-              } 
+              }
               req.feathers = _.extend({ user: data }, req.feathers);
             });
-          } 
+          }
           // If no token was passed, still allow the websocket. Service hooks can take care of Auth.
           return done(null, true);
         });
@@ -140,16 +140,16 @@ module.exports = function(config) {
       return result;
     };
   };
-};
+}
+
 
 function getDefaultStrategy(app, settings){
   var strategySetup = {
-    usernameField: settings.usernameField, 
+    usernameField: settings.usernameField,
     passwordField: settings.passwordField
   };
-  console.log(strategySetup);
   return new LocalStrategy(strategySetup, function(username, password, done) {
-    var findParams = { 
+    var findParams = {
       internal: true,
       query: {}
     };
@@ -161,7 +161,6 @@ function getDefaultStrategy(app, settings){
       var user = users[0];
 
       if(!user) {
-        console.log('no user');
         return done(new app.errors.NotAuthenticated(settings.loginError));
       }
 
@@ -178,4 +177,4 @@ function getDefaultStrategy(app, settings){
 }
 
 // Make the password hashing hook available separately.
-module.exports.hooks = require('./hooks');
+export var hooks = require('./hooks');
