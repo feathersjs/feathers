@@ -161,7 +161,7 @@ Add a `login.html` with an HTML form that allows to log our user in:
 
 ## Changelog
 
-__1.0.0__
+__0.0.2__
 
 - Initial release
 
