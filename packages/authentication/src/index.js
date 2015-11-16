@@ -103,16 +103,20 @@ export default function(config) {
 
       function setUserData(socket, data) {
         socket.feathers = _.extend({ user: data }, socket.feathers);
-      };
+      }
 
       function checkToken(token, socket, callback) {
-        if (!token) return callback(null, true);
+        if (!token) {
+          return callback(null, true);
+        }
         jwt.verify(token, settings.secret, function(err, data) {
-          if (err) return callback(err);
+          if (err) {
+            return callback(err);
+          }
           setUserData(socket, data);
           callback(null, data);
         });
-      };
+      }
 
       // Socket.io middleware
       if(io) {
@@ -123,7 +127,9 @@ export default function(config) {
           socket.on('authenticate', (data) => {
             checkToken(data.token, socket, (err, data) => {
               delete data.password;
-              if (data) socket.emit('authenticated', data);
+              if (data) {
+                socket.emit('authenticated', data);
+              }
             });
           });
           // If no token was passed, still allow the websocket. Service hooks can take care of Auth.
@@ -135,7 +141,7 @@ export default function(config) {
       if(primus) {
         debug('intializing Primus middleware');
         primus.authorize(function(req, done) {
-          checkToken(req.handshake.query.token, socket, done);
+          checkToken(req.handshake.query.token, req, done);
         });
       }
 
