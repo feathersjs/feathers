@@ -101,19 +101,31 @@ export default function(config) {
 
       debug('running app.setup');
 
+      function setUserData(socket, data) {
+        socket.feathers = _.extend({ user: data }, socket.feathers);
+      };
+
+      function checkToken(token, socket, callback) {
+        if (!token) return callback(null, true);
+        jwt.verify(token, settings.secret, function(err, data) {
+          if (err) return callback(err);
+          setUserData(socket, data);
+          callback(null, data);
+        });
+      };
+
       // Socket.io middleware
       if(io) {
         debug('intializing SocketIO middleware');
         io.use(function(socket, next) {
           // If there's a token in place, decode it and set up the feathers.user
-          if (socket.handshake.query.token) {
-            jwt.verify(socket.handshake.query.token, settings.secret, function(err, data) {
-              if (err) {
-                return next(err);
-              }
-              socket.feathers = _.extend({ user: data }, socket.feathers);
+          checkToken(socket.handshake.query.token, socket, next);
+          socket.on('authenticate', (data) => {
+            checkToken(data.token, socket, (err, data) => {
+              delete data.password;
+              if (data) socket.emit('authenticated', data);
             });
-          }
+          });
           // If no token was passed, still allow the websocket. Service hooks can take care of Auth.
           return next(null, true);
         });
@@ -123,17 +135,7 @@ export default function(config) {
       if(primus) {
         debug('intializing Primus middleware');
         primus.authorize(function(req, done) {
-          // If there's a token in place, decode it and set up the feathers.user
-          if (req.handshake.query.token) {
-            jwt.verify(req.handshake.query.token, settings.secret, function(err, data) {
-              if (err) {
-                return done(err);
-              }
-              req.feathers = _.extend({ user: data }, req.feathers);
-            });
-          }
-          // If no token was passed, still allow the websocket. Service hooks can take care of Auth.
-          return done(null, true);
+          checkToken(req.handshake.query.token, socket, done);
         });
       }
 
