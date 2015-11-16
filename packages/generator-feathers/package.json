@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "homepage": "https://github.com/feathersjs/generator-feathers",
   "main": "lib/",
+  "license": "MIT",
   "keywords": [
     "feathers",
     "feathers-plugin"
