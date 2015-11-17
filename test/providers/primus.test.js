@@ -259,6 +259,7 @@ describe('Primus provider', function () {
         var oldCreated = service.created;
 
         service.created = function(data, params, callback) {
+          assert.ok(service === this);
           assert.deepEqual(params, socketParams);
           verify.create(original, data);
 
@@ -276,6 +277,8 @@ describe('Primus provider', function () {
       });
 
       it('.updated', function (done) {
+        // TODO this is not testing the right thing
+        // but we will get better event filtering in v2 anyway
         var original = {
           name: 'updated event'
         };
@@ -293,6 +296,7 @@ describe('Primus provider', function () {
         var oldRemoved = service.removed;
 
         service.removed = function(data, params, callback) {
+          assert.ok(service === this);
           assert.deepEqual(params, socketParams);
 
           if(data.id === 23) {
