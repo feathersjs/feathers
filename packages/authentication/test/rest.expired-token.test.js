@@ -2,7 +2,7 @@ var assert = require('assert');
 var request = require('request');
 var createApplication = require('./server-fixtures');
 
-describe('REST API authentication', function() {
+describe('Test using an expired token', function() {
   var server;
   var app;
   var username = 'feathers';
