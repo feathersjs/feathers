@@ -56,7 +56,9 @@ export default function(config) {
       // Otherwise, authenticate the user and return a token
       } else {
         passport.authenticate('local', { session: false }, function(err, user) {
-          if (err) { return next(err); }
+          if (err) {
+            return res.status(500).json(err);
+          }
 
           // Login was successful. Generate and send token.
           if (user) {
@@ -69,7 +71,11 @@ export default function(config) {
 
           // Login failed.
           } else {
-            return next(new app.errors.NotAuthenticated(settings.loginError));
+            return res.status(401).json({
+              code: 401,
+              name: 'NotAuthenticated',
+              message: settings.loginError
+            });
           }
 
         })(req, res, next);
@@ -169,7 +175,7 @@ function getDefaultStrategy(app, settings){
       var user = users[0];
 
       if(!user) {
-        return done(new app.errors.NotAuthenticated(settings.loginError));
+        return done(null, false);
       }
 
       bcrypt.compare(password, user[settings.passwordField], function(err, res) {
@@ -177,7 +183,7 @@ function getDefaultStrategy(app, settings){
         if (res) {
           return done(null, user);
         } else {
-          return done(new Error('Password not valid'));
+          return done(new Error(settings.loginError));
         }
       });
     });

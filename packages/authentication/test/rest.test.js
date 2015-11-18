@@ -24,6 +24,19 @@ describe('REST API authentication', function() {
     server.close(done);
   });
 
+  it('Posting no data to login returns a 401.', function(done) {
+    request({
+      url: 'http://localhost:8888/api/login',
+      method: 'POST',
+      form: {},
+      json: true
+    }, function(err, response, body) {
+      assert.equal(body.code, 401, 'POST to /api/login with no params returns an error.');
+      done();
+    });  
+
+  });
+
   it('Login works.', function(done) {
     request({
       url: 'http://localhost:8888/api/login',
