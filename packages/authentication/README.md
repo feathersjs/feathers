@@ -63,7 +63,7 @@ The following options are available:
 
 - __secret__ *required* - The secret used to create encrypted tokens.
 - __userEndpoint__ - The api endpoint used to look up the user service. The default is `'/api/users`.
-- __loginEndpoint__ - The url for posting the username and password during login. The default is `/api/login`.
+- __loginEndpoint__ - The url for posting the username and password during login. The default is `/api/login`.  You can also post a valid token here to receive a new one.  You might use this when the current auth token is about to expire to stay logged in on the client.
 - __usernameField__ The database field containing the username on the user service.  The default is `username`.
 - __passwordField__ The database field containing the password on the user service.  The default is `password`.
 - __loginError__ - The message to return for invalid login.  Default is 'Invalid login.'
@@ -71,6 +71,7 @@ The following options are available:
 - __jwtOptions.expiresIn__ - The number of **seconds** until the token expires.  Default is 36000 (10 hours).
 - __strategy__ - Allows you to pass a custom strategy to use for local auth.  The default strategy should fit most projects.
 - __passport__ (default: `require('passport')`) - The passport module
+ 
 
 ## Example
 
@@ -161,7 +162,7 @@ Add a `login.html` with an HTML form that allows to log our user in:
 
 ## Changelog
 
-__0.0.2__
+__0.0.5__
 
 - Initial release
 
