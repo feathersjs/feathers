@@ -12,6 +12,7 @@ module.exports = function(settings, username, password, next) {
     .configure(feathers.rest())
     .configure(feathers.socketio())
     .configure(feathersHooks())
+    .use(bodyParser.json())
     .use(bodyParser.urlencoded({ extended: true }))
     .configure(feathersAuth(settings))
     .use('/api/users', memory())

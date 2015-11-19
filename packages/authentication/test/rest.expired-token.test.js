@@ -49,11 +49,13 @@ describe('Test using an expired token', function() {
         url: 'http://localhost:8888/api/todos',
         method: 'GET',
         headers: {
-          'Authorization': 'Bearer ' + token
+          'Authorization': 'Bearer ' + token,
+          'Accept' : 'application/json',
+          'Content-Type': 'application/json'
         },
         json: true
       }, function(err, res, body) {
-        assert.notEqual(body.indexOf('TokenExpiredError'), -1, 'Got an error string back, not an object/array');
+        assert.equal(body.name, 'TokenExpiredError', 'Got an error string back, not an object/array');
         done();
       });
     }, 1900);
