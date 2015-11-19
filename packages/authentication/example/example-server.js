@@ -2,8 +2,8 @@ var feathers = require('feathers');
 var hooks = require('feathers-hooks');
 var memory = require('feathers-memory');
 var bodyParser = require('body-parser');
-var feathersPassportJwt = require('../lib/passport');
-var hashPassword = feathersPassportJwt.hooks.hashPassword;
+var feathersAuth = require('../lib/index');
+var hashPassword = feathersAuth.hooks.hashPassword;
 
 // Initialize the application
 var app = feathers()
@@ -12,8 +12,8 @@ var app = feathers()
   .configure(hooks())
   // Needed for parsing bodies (login)
   .use(bodyParser.urlencoded({ extended: true }))
-  // Configure feathers-passport-jwt
-  .configure(feathersPassportJwt({
+  // Configure feathers-authentication
+  .configure(feathersAuth({
     secret: 'feathers-rocks'
   }))
   // Initialize a user service
