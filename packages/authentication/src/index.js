@@ -82,7 +82,6 @@ export default function(config) {
               message: settings.loginError
             });
           }
-
         })(req, res, next);
       }
     })
@@ -179,21 +178,26 @@ function getDefaultStrategy(app, settings){
     };
     findParams.query[settings.usernameField] = username;
     app.service(settings.userEndpoint).find(findParams, function(error, users) {
+      // Handle any 500 server errors.
       if(error) {
         return done(error);
       }
-      var user = users[0];
-
-      if(!user) {
+      // Handle bad username.
+      if(!users[0]) {
         return done(null, false);
       }
-
-      bcrypt.compare(password, user[settings.passwordField], function(err, res) {
-        if (err) {return done(err);}
+      // Check password
+      bcrypt.compare(password, users[0][settings.passwordField], function(err, res) {
+        // Handle 500 server error.
+        if (err) {
+          return done(err);
+        }
+        // Successful login.
         if (res) {
-          return done(null, user);
+          return done(null, users[0]);
+        // Handle bad password.
         } else {
-          return done(new Error(settings.loginError));
+          return done(null, false);
         }
       });
     });
