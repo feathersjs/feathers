@@ -41,8 +41,13 @@ export default function(config) {
     app.post(settings.loginEndpoint, function(req, res, next) {
       // If a non-expired token is passed, refresh it.
       if (req.body.token) {
+        // TODO: Move token verification into its own middleware. See line ~96.
         jwt.verify(req.body.token, settings.secret, function(err, data) {
           if (err) {
+            // Return a 401 Unauthorized if the token has expired.
+            if (err.name === 'TokenExpiredError') {
+              return res.status(401).json(err);
+            }
             return next(err);
           }
           delete data.password;
@@ -87,8 +92,13 @@ export default function(config) {
       if (req.headers.authorization) {
         var token = req.headers.authorization.split(' ')[1];
         debug('Got an Authorization token', token);
+        // TODO: Move token verification into its own middleware. See line ~44.
         jwt.verify(token, settings.secret, function(err, data) {
           if (err) {
+            // Return a 401 Unauthorized if the token has expired.
+            if (err.name === 'TokenExpiredError') {
+              return res.status(401).json(err);
+            }
             return next(err);
           }
           // A valid token's data is set up on feathers.user.
