@@ -40,7 +40,7 @@ exports.hashPassword = function(passwordField){
  * find, get, create, update, remove
  */
 exports.requireAuth = function (hook, next) {
-  // Allow user to view records without a userID.
+  // Allow user to view records without a userId.
   if (!hook.params.user) {
     return next(new Errors.NotAuthenticated('Please include a valid auth token in the Authorization header.'));
   } else {
@@ -50,37 +50,52 @@ exports.requireAuth = function (hook, next) {
 
 
 /**
- * Set the userID as the owner.
+ * Set the userId as the owner.
  *
- * find, get, create, update, remove
+ * find, get, update, remove
  */
-exports.setOwner = function (hook, next) {
-  hook.params.query.userID = hook.params.user._id;
-  return next(null, hook);
+exports.setOwner = function (idInDB, userId) {
+  // If it's called directly as a hook, use defaults of query.userId and user._id.
+  if(typeof arguments[0] === 'object'){
+    console.log('Running setOwner hook with defaults of query.userId and user._id');
+    var hook = arguments[0];
+    var next = arguments[1];
+
+    hook.params.query.userId = hook.params.user._id;
+    return next(null, hook);
+
+  // otherwise it was run as a function at execution.
+  } else {
+    return function(hook, next) {
+      hook.params.query[idInDB] = hook.params.user[userId];
+      return next(null, hook);      
+    };  
+  }
 };
 
 
 /**
- * Checks that the action is performed by an admin or owner of the userID.
+ * Checks that the action is performed by an admin or owner of the userId.
+ * // TODO: Fix this.
  *
  * find, get, create, update, remove
  */
 exports.verifyOwnership = function (hook, next) {
   if (hook.params.user.admin) {
-    hook.params.query.userID = hook.params.user._id;
+    hook.params.query.userId = hook.params.user._id;
   }
   return next(null, hook);
 };
 
 
 /**
- * Set the userID as the owner.
+ * Set the userId as the owner.
  *
  * find, get, create, update, remove
  */
 exports.setOwnerIfNotAdmin = function (hook, next) {
   if (!hook.params.user.admin) {
-    hook.params.query.userID = hook.params.user._id;
+    hook.params.query.userId = hook.params.user._id;
   }
   return next(null, hook);
 };
@@ -117,7 +132,7 @@ exports.stop = function (hook, next) {
  */
 exports.lowercaseEmail = function (hook, next) {
 
-  // Allow user to view records without a userID.
+  // Allow user to view records without a userId.
   if (hook.data.email) {
     hook.data.email = hook.data.email.toLowerCase();
   }
@@ -126,16 +141,16 @@ exports.lowercaseEmail = function (hook, next) {
 
 
 /**
- * Authenticated users can have their own records (with userID),
- * and non-authenticated users can view records without a userID.
+ * Authenticated users can have their own records (with their userId),
+ * and non-authenticated users can view records that have no userId (public).
  *
  * find, get, create, update, remove
  */
 exports.requireAuthForPrivate = function(hook, next){
 
-  // If no user, limit to public records (no userID)
+  // If no user, limit to public records (no userId)
   if (!hook.params.user) {
-    hook.params.query.userID = null;
+    hook.params.query.userId = null;
     return next();
   }
 
@@ -144,15 +159,15 @@ exports.requireAuthForPrivate = function(hook, next){
 
 
 /**
- * Set up the userID on data.
+ * Set up the userId on data.
  *
  * create
  */
 exports.setUserID = function(hook, next){
 
-  // If a user is logged in, set up the userID on the data.
-  if (hook.params && hook.params.user && !hook.data.userID) {
-    hook.data.userID = hook.params.user._id;
+  // If a user is logged in, set up the userId on the data.
+  if (hook.params && hook.params.user && !hook.data.userId) {
+    hook.data.userId = hook.params.user._id;
   }
   return next(null, hook);
 };
