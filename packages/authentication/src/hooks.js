@@ -50,11 +50,11 @@ exports.requireAuth = function (hook, next) {
 
 
 /**
- * Set the userId as the owner.
+ * Add the current user's id to the query params.
  *
- * find, get, update, remove
+ * find, get
  */
-exports.setOwner = function (idInDB, userId) {
+exports.queryWithUserId = function (idInDB, userId) {
   // If it's called directly as a hook, use defaults of query.userId and user._id.
   if(typeof arguments[0] === 'object'){
     console.log('Running setOwner hook with defaults of query.userId and user._id');
