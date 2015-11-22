@@ -13,7 +13,8 @@ If you are using the default options, setting up JWT auth for your Feathers app 
 var feathers = require('feathers');
 var hooks = require('feathers-hooks');
 var bodyParser = require('body-parser');
-var feathersAuth = require('feathers-authentication');
+var feathersAuth = require('feathers-authentication').default;
+var authHooks = require('feathers-authentication').hooks;
 var mongooseService = require('feathers-mongoose');
 
 var app = feathers()
@@ -32,9 +33,10 @@ var app = feathers()
       admin: {type: Boolean, default: false }
     },
     before:{
-      create: [feathersAuth.hashPassword('password')]
+      create: [authHooks.hashPassword('password')]
     }
   }))
+  
 ```
 
 ### REST Requests
@@ -83,8 +85,8 @@ var passport = require('passport');
 var hooks = require('feathers-hooks');
 var memory = require('feathers-memory');
 var bodyParser = require('body-parser');
-var feathersAuth = require('feathers-authentication');
-var hashPassword = feathersAuth.hashPassword;
+var feathersAuth = require('feathers-authentication').default;
+var authHooks = require('feathers-authentication').hooks;
 
 // Initialize the application
 var app = feathers()
@@ -116,7 +118,7 @@ var userService = app.service('/api/users');
 // Add a hook to the user service that automatically replaces 
 // the password with a hash of the password before saving it.
 userService.before({
-  create: hashPassword()
+  create: authHooks.hashPassword('password')
 });
 
 // Create a user that we can use to log in
