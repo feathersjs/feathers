@@ -73,7 +73,15 @@ The following options are available:
 - __jwtOptions.expiresIn__ - The number of **seconds** until the token expires.  Default is 36000 (10 hours).
 - __strategy__ - Allows you to pass a custom strategy to use for local auth.  The default strategy should fit most projects.
 - __passport__ (default: `require('passport')`) - The passport module
- 
+
+
+## Bundled Hooks
+The `feathers-authentication` plugin automatically handles auth.  Keep in mind that access control is not automatic, but is easy to set up with the included hooks.   See the [feathers-hooks](https://github.com/feathersjs/feathers-hooks) plugin and the [FeathersJS website](http://feathersjs.com/learn) for more information about hooks.
+
+#### hashPassword('password')
+This is intended to be used on the user service on the `create` method.  It will automatically hash the data coming in on the `password` field.  You can specify another field by providing another string.
+
+#### requireAuth
 
 ## Example
 
