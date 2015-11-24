@@ -10,8 +10,12 @@ module.exports = generators.Base.extend({
     this.props = {
       name: process.cwd().split(path.sep).pop()
     };
-    this.dotfiles = ['babelrc', 'editorconfig', 'gitignore', 'jshintrc', 'npmignore', 'travis.yml'];
-    this.files = ['package.json', 'src/index.js', 'test/index.test.js', 'LICENSE', 'README.md'];
+    this.fileMap = {
+      'package.json': 'package.json',
+      'index.js': 'src/index.js',
+      'index.test.js': 'test/index.test.js',
+      'README.md': 'README.md'
+    };
   },
 
   prompting: function () {
@@ -39,18 +43,15 @@ module.exports = generators.Base.extend({
   },
 
   writing: function () {
-    this.dotfiles.forEach(function(file) {
-      this.fs.copyTpl(
-        this.templatePath(file),
-        this.destinationPath('.' + file),
-        this.props
-      );
-    }.bind(this));
+    this.fs.copy(this.templatePath('static/'), this.destinationPath());
+    this.fs.copy(this.templatePath('static/.*'), this.destinationPath());
 
-    this.files.forEach(function(file) {
+    Object.keys(this.fileMap).forEach(function(src) {
+      var target = this.fileMap[src];
+
       this.fs.copyTpl(
-        this.templatePath(file),
-        this.destinationPath(file),
+        this.templatePath(src),
+        this.destinationPath(target),
         this.props
       );
     }.bind(this));
@@ -63,6 +64,8 @@ module.exports = generators.Base.extend({
       'babel-core@^6.0.0',
       'babel-cli@^6.0.0',
       'babel-preset-es2015@^6.0.0',
+      'babel-plugin-add-module-exports',
+      'babel-plugin-transform-object-assign@^6.1.0',
       'jshint@^2.0.0',
       'mocha@^2.0.0',
       'feathers@^1.0.0'
