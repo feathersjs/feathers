@@ -36,18 +36,19 @@
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
     "compile": "rm -rf lib/ && node_modules/.bin/babel -d lib/ src/",
-    "jshint": "node_modules/.bin/jshint src/. test/. --config",
-    "mocha": "node_modules/.bin/mocha test/ --compilers js:babel/register",
-    "test": "npm run jshint && npm run mocha"
+    "jshint": "jshint src/. test/. --config",
+    "mocha": "mocha test/ --compilers js:babel-core/register",
+    "test": "npm run compile && npm run jshint && npm run mocha"
   },
   "directories": {
     "lib": "lib"
   },
-  "dependencies": {
-    "lodash": "^2.4.1"
-  },
   "devDependencies": {
-    "babel": "^4.6.6",
+    "babel-cli": "^6.2.0",
+    "babel-core": "^6.2.1",
+    "babel-plugin-add-module-exports": "^0.1.1",
+    "babel-plugin-transform-object-assign": "^6.1.18",
+    "babel-preset-es2015": "^6.1.18",
     "jshint": "^2.6.3",
     "mocha": "^2.1.0"
   }

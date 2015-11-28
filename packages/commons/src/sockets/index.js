@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import { stripSlashes } from '../utils';
+import { stripSlashes, each } from '../utils';
 import { setupEventHandlers, setupMethodHandlers } from './helpers';
 
 // Common setup functionality taking the info object which abstracts websocket access
@@ -12,11 +11,11 @@ export function setup(info) {
   info.connection().on('connection', socket => {
     let _setupMethodHandlers = setupMethodHandlers.bind(this, info, socket);
     // Process all registered services
-    _.each(this.services, _setupMethodHandlers);
+    each(this.services, _setupMethodHandlers);
   });
 
   // Set up events and event dispatching
-  _.each(this.services, _setupEventHandlers);
+  each(this.services, _setupEventHandlers);
 }
 
 // Socket mixin when a new service is registered
@@ -39,4 +38,4 @@ export function service(path, obj) {
   return protoService;
 }
 
-export default { service, setup };
+export default { setup, service };
