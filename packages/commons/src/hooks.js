@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { each } from './utils';
 
 function getOrRemove(args) {
   return {
@@ -65,13 +65,13 @@ exports.makeArguments = function(hookObject) {
 exports.convertHookData = function(obj) {
   var hookObject = {};
 
-  if(_.isArray(obj)) {
+  if(Array.isArray(obj)) {
     hookObject = { all: obj };
   } else if(typeof obj !== 'object') {
     hookObject = { all: [ obj ] };
   } else {
-    _.each(obj, function(value, key) {
-      hookObject[key] = !_.isArray(value) ? [ value ] : value;
+    each(obj, function(value, key) {
+      hookObject[key] = !Array.isArray(value) ? [ value ] : value;
     });
   }
 

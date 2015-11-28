@@ -1,5 +1,5 @@
-import _ from 'lodash';
 import getArguments from '../arguments';
+import { each } from '../utils';
 
 function errorObject(e) {
   let result = {};
@@ -27,7 +27,7 @@ export function setupEventHandlers(info, service, path) {
     return;
   }
 
-  _.each(service._serviceEvents, ev => {
+  each(service._serviceEvents, ev => {
     service.on(ev, function (data) {
       // Check if there is a method on the service with the same name as the event
       let dispatcher = typeof service[ev] === 'function' ?
@@ -62,7 +62,7 @@ export function setupMethodHandlers(info, socket, service, path) {
     socket.on(name, function () {
       try {
         let args = getArguments(method, arguments);
-        args[position] = _.extend({ query: args[position] }, params);
+        args[position] = Object.assign({ query: args[position] }, params);
         service[method].apply(service, args);
       } catch(e) {
         let callback = arguments[arguments.length - 1];
