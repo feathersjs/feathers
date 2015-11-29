@@ -6,7 +6,6 @@ var Proto = require('uberproto');
 var EventEmitter = require('events').EventEmitter;
 
 var mixinEvent = require('../../lib/mixins/event');
-var EventMixin = mixinEvent.Mixin;
 var create = Proto.create;
 
 describe('Event mixin', function () {
@@ -33,7 +32,6 @@ describe('Event mixin', function () {
       }
     };
 
-    Proto.mixin(EventMixin, existingMethodsService);
     Proto.mixin(EventEmitter.prototype, existingMethodsService);
 
     assert.equal('Original setup from object: Test', existingMethodsService.setup('Test'));
