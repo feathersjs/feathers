@@ -41,5 +41,9 @@
     "lib": "lib"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {},
+  "babel": {
+    "plugins": ["transform-object-assign", "add-module-exports"],
+    "presets": [ "es2015" ]
+  }
 }
