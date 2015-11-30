@@ -38,7 +38,7 @@ const getOrRemove = name => {
       throw new Error(`Too many arguments for '${name}' service method`);
     }
 
-    if(id === 'function') {
+    if(typeof id === 'function') {
       throw new Error(`First parameter for '${name}' can not be a function`);
     }
 
