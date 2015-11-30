@@ -1,6 +1,6 @@
 {
   "name": "feathers-commons",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "Shared Feathers utility functions",
   "homepage": "https://github.com/feathersjs/feathers-commons",
   "keywords": [
@@ -53,7 +53,12 @@
     "mocha": "^2.1.0"
   },
   "babel": {
-    "plugins": ["transform-object-assign", "add-module-exports"],
-    "presets": [ "es2015" ]
+    "plugins": [
+      "transform-object-assign",
+      "add-module-exports"
+    ],
+    "presets": [
+      "es2015"
+    ]
   }
 }
