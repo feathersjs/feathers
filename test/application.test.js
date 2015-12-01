@@ -120,7 +120,7 @@ describe('Feathers application', function () {
         callback(null, {
           id: name,
           description: 'You have to do ' + name + '!',
-          stuff: params.stuff
+          preService: params.preService
         });
       }
     };
@@ -128,21 +128,25 @@ describe('Feathers application', function () {
     var app = feathers()
       .configure(feathers.rest())
       .use('/todo', function (req, res, next) {
-        req.feathers.stuff = 'custom middleware';
+        req.feathers.preService = 'pre-service middleware';
         next();
-      }, todoService)
+      }, todoService, function (req, res, next) {
+        res.set('post-service', res.data.id);
+        next();
+      })
       .use('/otherTodo', todoService);
 
     var server = app.listen(6995).on('listening', function () {
       request('http://localhost:6995/todo/dishes', function (error, response, body) {
         assert.ok(response.statusCode === 200, 'Got OK status code');
         var data = JSON.parse(body);
-        assert.equal(data.stuff, 'custom middleware', 'Custom middleware updated params');
+        assert.equal(data.preService, 'pre-service middleware', 'Pre-service middleware updated response');
+        assert.equal(response.headers['post-service'], 'dishes', 'Post-service middleware updated response');
 
         request('http://localhost:6995/otherTodo/dishes', function (error, response, body) {
           assert.ok(response.statusCode === 200, 'Got OK status code');
           var data = JSON.parse(body);
-          assert.ok(!data.stuff, 'Custom middleware not run for different service.');
+          assert.ok(!data.preService && !response.headers['post-service'], 'Custom middleware not run for different service.');
           server.close(done);
         });
       });
