@@ -160,6 +160,36 @@ describe('Event mixin', function () {
     });
   });
 
+  it('array event data emits multiple event', function (done) {
+    var fixture = [
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+    ];
+    var FixtureService = Proto.extend({
+      create: function (data, params, cb) {
+        _.defer(function () {
+          cb(null, fixture);
+        });
+      }
+    });
+
+    var instance = create.call(FixtureService);
+    var counter = 0;
+
+    mixinEvent(instance);
+
+    instance.on('created', function (data) {
+      assert.equal(data.id, counter);
+      counter++;
+      if(counter === fixture.length) {
+        done();
+      }
+    });
+
+    instance.create({}, {}, function () {});
+  });
+
   it('does not punch when service has an events list (#118)', function(done) {
     var FixtureService = Proto.extend({
       events: [ 'created' ],
