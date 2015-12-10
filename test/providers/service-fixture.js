@@ -29,6 +29,11 @@ exports.Service = {
     var result = _.clone(data);
     result.id = 42;
     result.status = 'created';
+
+    if(Array.isArray(data)) {
+      result.many = true;
+    }
+
     callback(null, result);
   },
 
@@ -36,6 +41,11 @@ exports.Service = {
     var result = _.clone(data);
     result.id = id;
     result.status = 'updated';
+
+    if(id === null) {
+      result.many = true;
+    }
+
     callback(null, result);
   },
 
@@ -43,13 +53,20 @@ exports.Service = {
     var result = _.clone(data);
     result.id = id;
     result.status = 'patched';
+
+    if(id === null) {
+      result.many = true;
+    }
+
     callback(null, result);
   },
 
   remove: function (id, params, callback) {
-    callback(null, {
+    var result = {
       id: id
-    });
+    };
+
+    callback(null, result);
   }
 };
 

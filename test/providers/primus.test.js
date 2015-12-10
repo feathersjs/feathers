@@ -181,6 +181,19 @@ describe('Primus provider', function () {
         });
       });
 
+      it('::update many', function (done) {
+        var original = {
+          name: 'updating',
+          many: true
+        };
+
+        socket.send('todo::update', null, original, {}, function (error, data) {
+          verify.update(null, original, data);
+
+          done(error);
+        });
+      });
+
       it('::patch', function (done) {
         var original = {
           name: 'patching'
@@ -193,9 +206,30 @@ describe('Primus provider', function () {
         });
       });
 
+      it('::patch many', function (done) {
+        var original = {
+          name: 'patching',
+          many: true
+        };
+
+        socket.send('todo::patch', null, original, {}, function (error, data) {
+          verify.patch(null, original, data);
+
+          done(error);
+        });
+      });
+
       it('::remove', function (done) {
         socket.send('todo::remove', 11, {}, function (error, data) {
           verify.remove(11, data);
+
+          done(error);
+        });
+      });
+
+      it('::remove many', function (done) {
+        socket.send('todo::remove', null, {}, function (error, data) {
+          verify.remove(null, data);
 
           done(error);
         });

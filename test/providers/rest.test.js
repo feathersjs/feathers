@@ -94,6 +94,28 @@ describe('REST provider', function () {
         });
       });
 
+      it('PUT .update many', function (done) {
+        var original = {
+          description: 'PUT .update',
+          many: true
+        };
+
+        request({
+          url: 'http://localhost:4777/todo',
+          method: 'put',
+          body: JSON.stringify(original),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }, function (error, response, body) {
+          var data = JSON.parse(body);
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.update(null, original, data);
+
+          done(error);
+        });
+      });
+
       it('PATCH .patch', function (done) {
         var original = {
           description: 'PATCH .patch'
@@ -113,12 +135,31 @@ describe('REST provider', function () {
           done(error);
         });
       });
-    });
 
-    describe('Dynamic Services', function() {
-      it('.remove', function (done) {
+      it('PATCH .patch many', function (done) {
+        var original = {
+          description: 'PATCH .patch',
+          many: true
+        };
+
         request({
-          url: 'http://localhost:4777/todo/233',
+          url: 'http://localhost:4777/todo',
+          method: 'patch',
+          body: JSON.stringify(original),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }, function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.patch(null, original, JSON.parse(body));
+
+          done(error);
+        });
+      });
+
+      it('DELETE .remove', function (done) {
+        request({
+          url: 'http://localhost:4777/tasks/233',
           method: 'delete'
         }, function (error, response, body) {
           assert.ok(response.statusCode === 200, 'Got OK status code');
@@ -128,6 +169,20 @@ describe('REST provider', function () {
         });
       });
 
+      it('DELETE .remove many', function (done) {
+        request({
+          url: 'http://localhost:4777/tasks',
+          method: 'delete'
+        }, function (error, response, body) {
+          assert.ok(response.statusCode === 200, 'Got OK status code');
+          verify.remove(null, JSON.parse(body));
+
+          done(error);
+        });
+      });
+    });
+
+    describe('Dynamic Services', function() {
       it('GET .find', function (done) {
         request('http://localhost:4777/tasks', function (error, response, body) {
           assert.ok(response.statusCode === 200, 'Got OK status code');
@@ -270,7 +325,7 @@ describe('REST provider', function () {
         done(error);
       });
     });
-    
+
     it('empty response sets 204 status codes', function(done) {
       request('http://localhost:4780/todo', function (error, response) {
         assert.ok(response.statusCode === 204, 'Got empty status code');
