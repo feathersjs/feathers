@@ -1,3 +1,4 @@
+.babelrc
 .idea/
 test/
 !lib/
