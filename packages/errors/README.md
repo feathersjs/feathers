@@ -49,6 +49,11 @@ let userService = {
 ```
 
 ## Release History
+__1.0.0__
+ - converting to ES6
+ - making structure consistent with other plugins
+ - removing error handlers [#11](https://github.com/feathersjs/feathers-errors/issues/11)
+
 __0.2.0__
 
 - Adding support for mongoose errors [Issue #5](https://github.com/feathersjs/feathers-errors/issues/5).
