@@ -11,22 +11,23 @@ var _debug2 = _interopRequireDefault(_debug);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // import util from 'util';
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 var debug = (0, _debug2.default)('feathers-errors');
 
-var AbstractError = (function (_Error) {
-  _inherits(AbstractError, _Error);
-
-  function AbstractError(msg, name, code, className, data) {
-    _classCallCheck(this, AbstractError);
-
+// NOTE (EK): Babel doesn't properly support extending
+// some classes in ES6. The Error class being one of them.
+// Node v5.0+ does support this but until we want to drop support
+// for older versions we need this hack.
+// http://stackoverflow.com/questions/33870684/why-doesnt-instanceof-work-on-instances-of-error-subclasses-under-babel-node
+function AbstractError(klass) {
+  function Constructor(msg, name, code, className, data) {
     msg = msg || 'Error';
 
     var errors = undefined;
@@ -35,9 +36,7 @@ var AbstractError = (function (_Error) {
     if (msg instanceof Error) {
       message = msg.message || 'Error';
 
-      // NOTE (EK): This is typically to handle errors
-      // that are thrown from other modules. For example,
-      // Mongoose validations can return multiple errors.
+      // NOTE (EK): This is typically to handle validation errors
       if (msg.errors) {
         errors = msg.errors;
       }
@@ -46,33 +45,35 @@ var AbstractError = (function (_Error) {
     else if ((typeof msg === 'undefined' ? 'undefined' : _typeof(msg)) === 'object') {
         message = msg.message || 'Error';
         errors = msg.errors ? msg.errors : msg;
+        data = msg;
       }
       // message is just a string
       else {
           message = msg;
         }
 
+    klass.call(this, msg);
+
     // NOTE (EK): Babel doesn't support this so
     // we have to pass in the class name manually.
     // this.name = this.constructor.name;
+    this.name = name;
+    this.message = message;
+    this.code = code;
+    this.className = className;
+    this.data = data;
+    this.errors = errors;
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AbstractError).call(this, message));
+    Error.captureStackTrace(this, this.name);
 
-    _this.name = name;
-    _this.message = message;
-    _this.code = code;
-    _this.className = className;
-    _this.data = data;
-    _this.errors = errors;
-
-    Error.captureStackTrace(_this, _this.name);
-
-    debug(_this.name + '(' + _this.code + '): ' + _this.message);
-    return _this;
+    debug(this.name + '(' + this.code + '): ' + this.message);
   }
 
-  return AbstractError;
-})(Error);
+  AbstractError.prototype = Object.create(klass.prototype);
+  Object.setPrototypeOf(AbstractError, klass);
+
+  return Constructor;
+}
 
 var BadRequest = (function (_AbstractError) {
   _inherits(BadRequest, _AbstractError);
@@ -84,7 +85,7 @@ var BadRequest = (function (_AbstractError) {
   }
 
   return BadRequest;
-})(AbstractError);
+})(AbstractError(Error));
 
 var NotAuthenticated = (function (_AbstractError2) {
   _inherits(NotAuthenticated, _AbstractError2);
@@ -96,7 +97,7 @@ var NotAuthenticated = (function (_AbstractError2) {
   }
 
   return NotAuthenticated;
-})(AbstractError);
+})(AbstractError(Error));
 
 var PaymentError = (function (_AbstractError3) {
   _inherits(PaymentError, _AbstractError3);
@@ -108,7 +109,7 @@ var PaymentError = (function (_AbstractError3) {
   }
 
   return PaymentError;
-})(AbstractError);
+})(AbstractError(Error));
 
 var Forbidden = (function (_AbstractError4) {
   _inherits(Forbidden, _AbstractError4);
@@ -120,7 +121,7 @@ var Forbidden = (function (_AbstractError4) {
   }
 
   return Forbidden;
-})(AbstractError);
+})(AbstractError(Error));
 
 var NotFound = (function (_AbstractError5) {
   _inherits(NotFound, _AbstractError5);
@@ -132,7 +133,7 @@ var NotFound = (function (_AbstractError5) {
   }
 
   return NotFound;
-})(AbstractError);
+})(AbstractError(Error));
 
 var MethodNotAllowed = (function (_AbstractError6) {
   _inherits(MethodNotAllowed, _AbstractError6);
@@ -144,7 +145,7 @@ var MethodNotAllowed = (function (_AbstractError6) {
   }
 
   return MethodNotAllowed;
-})(AbstractError);
+})(AbstractError(Error));
 
 var NotAcceptable = (function (_AbstractError7) {
   _inherits(NotAcceptable, _AbstractError7);
@@ -156,7 +157,7 @@ var NotAcceptable = (function (_AbstractError7) {
   }
 
   return NotAcceptable;
-})(AbstractError);
+})(AbstractError(Error));
 
 var Timeout = (function (_AbstractError8) {
   _inherits(Timeout, _AbstractError8);
@@ -168,7 +169,7 @@ var Timeout = (function (_AbstractError8) {
   }
 
   return Timeout;
-})(AbstractError);
+})(AbstractError(Error));
 
 var Conflict = (function (_AbstractError9) {
   _inherits(Conflict, _AbstractError9);
@@ -180,7 +181,7 @@ var Conflict = (function (_AbstractError9) {
   }
 
   return Conflict;
-})(AbstractError);
+})(AbstractError(Error));
 
 var Unprocessable = (function (_AbstractError10) {
   _inherits(Unprocessable, _AbstractError10);
@@ -192,7 +193,7 @@ var Unprocessable = (function (_AbstractError10) {
   }
 
   return Unprocessable;
-})(AbstractError);
+})(AbstractError(Error));
 
 var GeneralError = (function (_AbstractError11) {
   _inherits(GeneralError, _AbstractError11);
@@ -204,7 +205,7 @@ var GeneralError = (function (_AbstractError11) {
   }
 
   return GeneralError;
-})(AbstractError);
+})(AbstractError(Error));
 
 var NotImplemented = (function (_AbstractError12) {
   _inherits(NotImplemented, _AbstractError12);
@@ -216,7 +217,7 @@ var NotImplemented = (function (_AbstractError12) {
   }
 
   return NotImplemented;
-})(AbstractError);
+})(AbstractError(Error));
 
 var Unavailable = (function (_AbstractError13) {
   _inherits(Unavailable, _AbstractError13);
@@ -228,7 +229,7 @@ var Unavailable = (function (_AbstractError13) {
   }
 
   return Unavailable;
-})(AbstractError);
+})(AbstractError(Error));
 
 var errors = {
   BadRequest: BadRequest,

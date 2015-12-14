@@ -65,35 +65,71 @@ describe('feathers-errors', () => {
   });
 
   describe('successful error creation', () => {
-    it('default error', () => {
-      var error = new errors.GeneralError();
-      assert.equal(error.code, 500);
-      assert.equal(error.message, 'Error');
-      assert.equal(error.className, 'general-error');
+    describe('without custom message', () => {
+      it('default error', () => {
+        var error = new errors.GeneralError();
+        assert.equal(error.code, 500);
+        assert.equal(error.message, 'Error');
+        assert.equal(error.className, 'general-error');
+        assert.notEqual(error.stack, undefined);
+        assert.equal(error instanceof errors.GeneralError, true);
+      });
+
+      it('can wrap an existing error', () => {
+        var error = new errors.BadRequest(new Error());
+        assert.equal(error.code, 400);
+        assert.equal(error.message, 'Error');
+      });
+
+      it('with multiple errors', () => {
+        var data = {
+          email: 'Email Taken',
+          password: 'Invalid Password'
+        };
+
+        var error = new errors.BadRequest(data);
+        assert.equal(error.code, 400);
+        assert.equal(error.message, 'Error');
+        assert.equal(error.errors, data);
+      });
+
+      it('with data', () => {
+        var data = {
+          email: 'Email Taken',
+          password: 'Invalid Password'
+        };
+
+        var error = new errors.GeneralError(data);
+        assert.equal(error.code, 500);
+        assert.equal(error.message, 'Error');
+        assert.equal(error.data, data);
+      });
     });
 
-    it('with custom message', () => {
-      var error = new errors.BadRequest('Invalid Password');
-      assert.equal(error.code, 400);
-      assert.equal(error.message, 'Invalid Password');
-    });
+    describe('with custom message', () => {
+      it('contains our message', () => {
+        var error = new errors.BadRequest('Invalid Password');
+        assert.equal(error.code, 400);
+        assert.equal(error.message, 'Invalid Password');
+      });
 
-    it('with error object', () => {
-      var error = new errors.BadRequest(new Error('Invalid Password'));
-      assert.equal(error.code, 400);
-      assert.equal(error.message, 'Invalid Password');
-    });
+      it('can wrap an existing error', () => {
+        var error = new errors.BadRequest(new Error('Invalid Password'));
+        assert.equal(error.code, 400);
+        assert.equal(error.message, 'Invalid Password');
+      });
 
-    it('with multiple errors', () => {
-      var data = {
-        email: 'Email Taken',
-        password: 'Invalid Password'
-      };
+      it('with data', () => {
+        var data = {
+          email: 'Email Taken',
+          password: 'Invalid Password'
+        };
 
-      var error = new errors.BadRequest(data);
-      assert.equal(error.code, 400);
-      assert.equal(error.message, 'Error');
-      assert.equal(error.errors, data);
+        var error = new errors.GeneralError('Custom Error', data);
+        assert.equal(error.code, 500);
+        assert.equal(error.message, 'Custom Error');
+        assert.equal(error.data, data);
+      });
     });
   });
 });

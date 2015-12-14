@@ -33,22 +33,20 @@ Feathers errors come with feathers by default. So typically you don't need to in
 ```js
 import errors from 'feathers-errors';
 
-let userService = {
-  find(params, callback) {
+// If you were to create an error yourself.
+var notFound = new errors.NotFound('User does not exist'));
 
-    // If you were to create an error yourself.
-    callback(new errors.NotFound('User does not exist'));
+// You can wrap existing errors
+var existing = new errors.GeneralError(new Error('I exist'));
 
-    // You can also simply do something like this if you
-    // just want to fire back a simple 500 error with your
-    // custom message.
-    // 
-    // callback('A generic server error');
-  }
-};
+// You can also pass additional data
+var data = new errors.BadRequest('Invalid email', {email: 'sergey@google.com'});
 ```
 
 ## Release History
+__1.0.1__
+- Fixing critical bug [#15](https://github.com/feathersjs/feathers-errors/issues/15)
+
 __1.0.0__
  - converting to ES6
  - making structure consistent with other plugins
