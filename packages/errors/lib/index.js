@@ -79,8 +79,10 @@ function AbstractError(klass) {
   return Constructor;
 }
 
-var BadRequest = (function (_AbstractError) {
-  _inherits(BadRequest, _AbstractError);
+var FeathersError = AbstractError(Error);
+
+var BadRequest = (function (_FeathersError) {
+  _inherits(BadRequest, _FeathersError);
 
   function BadRequest(message, data) {
     _classCallCheck(this, BadRequest);
@@ -89,10 +91,10 @@ var BadRequest = (function (_AbstractError) {
   }
 
   return BadRequest;
-})(AbstractError(Error));
+})(FeathersError);
 
-var NotAuthenticated = (function (_AbstractError2) {
-  _inherits(NotAuthenticated, _AbstractError2);
+var NotAuthenticated = (function (_FeathersError2) {
+  _inherits(NotAuthenticated, _FeathersError2);
 
   function NotAuthenticated(message, data) {
     _classCallCheck(this, NotAuthenticated);
@@ -101,10 +103,10 @@ var NotAuthenticated = (function (_AbstractError2) {
   }
 
   return NotAuthenticated;
-})(AbstractError(Error));
+})(FeathersError);
 
-var PaymentError = (function (_AbstractError3) {
-  _inherits(PaymentError, _AbstractError3);
+var PaymentError = (function (_FeathersError3) {
+  _inherits(PaymentError, _FeathersError3);
 
   function PaymentError(message, data) {
     _classCallCheck(this, PaymentError);
@@ -113,10 +115,10 @@ var PaymentError = (function (_AbstractError3) {
   }
 
   return PaymentError;
-})(AbstractError(Error));
+})(FeathersError);
 
-var Forbidden = (function (_AbstractError4) {
-  _inherits(Forbidden, _AbstractError4);
+var Forbidden = (function (_FeathersError4) {
+  _inherits(Forbidden, _FeathersError4);
 
   function Forbidden(message, data) {
     _classCallCheck(this, Forbidden);
@@ -125,10 +127,10 @@ var Forbidden = (function (_AbstractError4) {
   }
 
   return Forbidden;
-})(AbstractError(Error));
+})(FeathersError);
 
-var NotFound = (function (_AbstractError5) {
-  _inherits(NotFound, _AbstractError5);
+var NotFound = (function (_FeathersError5) {
+  _inherits(NotFound, _FeathersError5);
 
   function NotFound(message, data) {
     _classCallCheck(this, NotFound);
@@ -137,10 +139,10 @@ var NotFound = (function (_AbstractError5) {
   }
 
   return NotFound;
-})(AbstractError(Error));
+})(FeathersError);
 
-var MethodNotAllowed = (function (_AbstractError6) {
-  _inherits(MethodNotAllowed, _AbstractError6);
+var MethodNotAllowed = (function (_FeathersError6) {
+  _inherits(MethodNotAllowed, _FeathersError6);
 
   function MethodNotAllowed(message, data) {
     _classCallCheck(this, MethodNotAllowed);
@@ -149,10 +151,10 @@ var MethodNotAllowed = (function (_AbstractError6) {
   }
 
   return MethodNotAllowed;
-})(AbstractError(Error));
+})(FeathersError);
 
-var NotAcceptable = (function (_AbstractError7) {
-  _inherits(NotAcceptable, _AbstractError7);
+var NotAcceptable = (function (_FeathersError7) {
+  _inherits(NotAcceptable, _FeathersError7);
 
   function NotAcceptable(message, data) {
     _classCallCheck(this, NotAcceptable);
@@ -161,10 +163,10 @@ var NotAcceptable = (function (_AbstractError7) {
   }
 
   return NotAcceptable;
-})(AbstractError(Error));
+})(FeathersError);
 
-var Timeout = (function (_AbstractError8) {
-  _inherits(Timeout, _AbstractError8);
+var Timeout = (function (_FeathersError8) {
+  _inherits(Timeout, _FeathersError8);
 
   function Timeout(message, data) {
     _classCallCheck(this, Timeout);
@@ -173,10 +175,10 @@ var Timeout = (function (_AbstractError8) {
   }
 
   return Timeout;
-})(AbstractError(Error));
+})(FeathersError);
 
-var Conflict = (function (_AbstractError9) {
-  _inherits(Conflict, _AbstractError9);
+var Conflict = (function (_FeathersError9) {
+  _inherits(Conflict, _FeathersError9);
 
   function Conflict(message, data) {
     _classCallCheck(this, Conflict);
@@ -185,10 +187,10 @@ var Conflict = (function (_AbstractError9) {
   }
 
   return Conflict;
-})(AbstractError(Error));
+})(FeathersError);
 
-var Unprocessable = (function (_AbstractError10) {
-  _inherits(Unprocessable, _AbstractError10);
+var Unprocessable = (function (_FeathersError10) {
+  _inherits(Unprocessable, _FeathersError10);
 
   function Unprocessable(message, data) {
     _classCallCheck(this, Unprocessable);
@@ -197,10 +199,10 @@ var Unprocessable = (function (_AbstractError10) {
   }
 
   return Unprocessable;
-})(AbstractError(Error));
+})(FeathersError);
 
-var GeneralError = (function (_AbstractError11) {
-  _inherits(GeneralError, _AbstractError11);
+var GeneralError = (function (_FeathersError11) {
+  _inherits(GeneralError, _FeathersError11);
 
   function GeneralError(message, data) {
     _classCallCheck(this, GeneralError);
@@ -209,10 +211,10 @@ var GeneralError = (function (_AbstractError11) {
   }
 
   return GeneralError;
-})(AbstractError(Error));
+})(FeathersError);
 
-var NotImplemented = (function (_AbstractError12) {
-  _inherits(NotImplemented, _AbstractError12);
+var NotImplemented = (function (_FeathersError12) {
+  _inherits(NotImplemented, _FeathersError12);
 
   function NotImplemented(message, data) {
     _classCallCheck(this, NotImplemented);
@@ -221,10 +223,10 @@ var NotImplemented = (function (_AbstractError12) {
   }
 
   return NotImplemented;
-})(AbstractError(Error));
+})(FeathersError);
 
-var Unavailable = (function (_AbstractError13) {
-  _inherits(Unavailable, _AbstractError13);
+var Unavailable = (function (_FeathersError13) {
+  _inherits(Unavailable, _FeathersError13);
 
   function Unavailable(message, data) {
     _classCallCheck(this, Unavailable);
@@ -233,9 +235,10 @@ var Unavailable = (function (_AbstractError13) {
   }
 
   return Unavailable;
-})(AbstractError(Error));
+})(FeathersError);
 
 var errors = {
+  FeathersError: FeathersError,
   BadRequest: BadRequest,
   NotAuthenticated: NotAuthenticated,
   PaymentError: PaymentError,
