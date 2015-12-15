@@ -60,85 +60,88 @@ function AbstractError(klass) {
   return Constructor;
 }
 
-class BadRequest extends AbstractError(Error) {
+let FeathersError = AbstractError(Error);
+
+class BadRequest extends FeathersError {
   constructor(message, data) {
     super(message, 'BadRequest', 400, 'bad-request', data);
   }
 }
 
-class NotAuthenticated extends AbstractError(Error) {
+class NotAuthenticated extends FeathersError {
   constructor(message, data) {
     super(message, 'NotAuthenticated', 401, 'not-authenticated', data);
   }
 }
 
-class PaymentError extends AbstractError(Error) {
+class PaymentError extends FeathersError {
   constructor(message, data) {
     super(message, 'PaymentError', 402, 'payment-error', data);
   }
 }
 
-class Forbidden extends AbstractError(Error) {
+class Forbidden extends FeathersError {
   constructor(message, data) {
     super(message, 'Forbidden', 403, 'forbidden', data);
   }
 }
 
-class NotFound extends AbstractError(Error) {
+class NotFound extends FeathersError {
   constructor(message, data) {
     super(message, 'NotFound', 404, 'not-found', data);
   }
 }
 
-class MethodNotAllowed extends AbstractError(Error) {
+class MethodNotAllowed extends FeathersError {
   constructor(message, data) {
     super(message, 'MethodNotAllowed', 405, 'method-not-allowed', data);
   }
 }
 
-class NotAcceptable extends AbstractError(Error) {
+class NotAcceptable extends FeathersError {
   constructor(message, data) {
     super(message, 'NotAcceptable', 406, 'not-acceptable', data);
   }
 }
 
-class Timeout extends AbstractError(Error) {
+class Timeout extends FeathersError {
   constructor(message, data) {
     super(message, 'Timeout', 408, 'timeout', data);
   }
 }
 
-class Conflict extends AbstractError(Error) {
+class Conflict extends FeathersError {
   constructor(message, data) {
     super(message, 'Conflict', 409, 'conflict', data);
   }
 }
 
-class Unprocessable extends AbstractError(Error) {
+class Unprocessable extends FeathersError {
   constructor(message, data) {
     super(message, 'Unprocessable', 422, 'unprocessable', data);
   }
 }
 
-class GeneralError extends AbstractError(Error) {
+class GeneralError extends FeathersError {
   constructor(message, data) {
     super(message, 'GeneralError', 500, 'general-error', data);
   }
 }
 
-class NotImplemented extends AbstractError(Error) {
+class NotImplemented extends FeathersError {
   constructor(message, data) {
     super(message, 'NotImplemented', 501, 'not-implemented', data);
   }
 }
 
-class Unavailable extends AbstractError(Error) {
+class Unavailable extends FeathersError {
   constructor(message, data) {
     super(message, 'Unavailable', 503, 'unavailable', data);
   }
 }
 
 var errors = {
+  FeathersError,
   BadRequest,
   NotAuthenticated,
   PaymentError,

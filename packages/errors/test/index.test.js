@@ -73,6 +73,7 @@ describe('feathers-errors', () => {
         assert.equal(error.className, 'general-error');
         assert.notEqual(error.stack, undefined);
         assert.equal(error instanceof errors.GeneralError, true);
+        assert.equal(error instanceof errors.FeathersError, true);
       });
 
       it('can wrap an existing error', () => {
