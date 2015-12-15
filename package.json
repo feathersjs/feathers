@@ -44,7 +44,7 @@
     "debug": "^2.1.1",
     "express": "^4.12.3",
     "feathers-commons": "^0.2.0",
-    "feathers-errors": "^1.1.0",
+    "feathers-errors": "^1.1.4",
     "lodash": "^3.1.0",
     "primus": "^4.0.1",
     "primus-emitter": "^3.0.2",
