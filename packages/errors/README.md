@@ -42,8 +42,11 @@ var existing = new errors.GeneralError(new Error('I exist'));
 // You can also pass additional data
 var data = new errors.BadRequest('Invalid email', {email: 'sergey@google.com'});
 
+// You can also pass additional data
+var dataWithoutMessage = new errors.BadRequest({email: 'sergey@google.com'});
+
 // If you need to pass multiple errors
-var validationErrors = new errors.BadRequest('Invalid Parameters', {email: 'Email already taken'} });
+var validationErrors = new errors.BadRequest('Invalid Parameters', {errors: {email: 'Email already taken'} });
 
 // You can also omit the error message and we'll put in a default one for you
 var validationErrors = new errors.BadRequest({errors: {email: 'Invalid Email'} });
