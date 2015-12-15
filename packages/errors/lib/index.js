@@ -44,7 +44,6 @@ function AbstractError(klass) {
     // Support plain old objects
     else if ((typeof msg === 'undefined' ? 'undefined' : _typeof(msg)) === 'object') {
         message = msg.message || 'Error';
-        errors = msg.errors ? msg.errors : msg;
         data = msg;
       }
       // message is just a string
@@ -54,6 +53,11 @@ function AbstractError(klass) {
 
     klass.call(this, msg);
 
+    if (data && data.errors) {
+      errors = data.errors;
+      delete data.errors;
+    }
+
     // NOTE (EK): Babel doesn't support this so
     // we have to pass in the class name manually.
     // this.name = this.constructor.name;
@@ -62,7 +66,7 @@ function AbstractError(klass) {
     this.code = code;
     this.className = className;
     this.data = data;
-    this.errors = errors;
+    this.errors = errors || {};
 
     Error.captureStackTrace(this, this.name);
 

@@ -83,14 +83,18 @@ describe('feathers-errors', () => {
 
       it('with multiple errors', () => {
         var data = {
-          email: 'Email Taken',
-          password: 'Invalid Password'
+          errors: {
+            email: 'Email Taken',
+            password: 'Invalid Password'
+          },
+          foo: 'bar'
         };
 
         var error = new errors.BadRequest(data);
         assert.equal(error.code, 400);
         assert.equal(error.message, 'Error');
-        assert.equal(error.errors, data);
+        assert.deepEqual(error.errors, {email: 'Email Taken', password: 'Invalid Password'});
+        assert.deepEqual(error.data, {foo: 'bar'});
       });
 
       it('with data', () => {
@@ -130,6 +134,37 @@ describe('feathers-errors', () => {
         assert.equal(error.message, 'Custom Error');
         assert.equal(error.data, data);
       });
+
+      it('with multiple errors', () => {
+        var data = {
+          errors: {
+            email: 'Email Taken',
+            password: 'Invalid Password'
+          },
+          foo: 'bar'
+        };
+
+        var error = new errors.BadRequest(data);
+        assert.equal(error.code, 400);
+        assert.equal(error.message, 'Error');
+        assert.deepEqual(error.errors, {email: 'Email Taken', password: 'Invalid Password'});
+        assert.deepEqual(error.data, {foo: 'bar'});
+      });
+    });
+
+    it('can return JSON', () => {
+      var data = {
+        errors: {
+          email: 'Email Taken',
+          password: 'Invalid Password'  
+        },
+        foo: 'bar'
+      };
+
+      var expected = '{"name":"GeneralError","message":"Custom Error","code":500,"className":"general-error","data":{"foo":"bar"},"errors":{"email":"Email Taken","password":"Invalid Password"}}';
+      
+      var error = new errors.GeneralError('Custom Error', data);
+      assert.equal(JSON.stringify(error), expected);  
     });
   });
 });
