@@ -42,6 +42,7 @@
     "lib": "lib"
   },
   "dependencies": {
+    "babel-polyfill": "^6.3.14",
     "debug": "^2.2.0"
   },
   "devDependencies": {

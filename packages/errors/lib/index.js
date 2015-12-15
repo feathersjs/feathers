@@ -19,6 +19,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
+require('babel-polyfill');
+
 var debug = (0, _debug2.default)('feathers-errors');
 
 // NOTE (EK): Babel doesn't properly support extending
