@@ -1,3 +1,5 @@
+require('babel-polyfill');
+
 import makeDebug from 'debug';
 
 const debug = makeDebug('feathers-errors');
@@ -50,7 +52,7 @@ function AbstractError(klass) {
     this.errors = errors || {};
 
     Error.captureStackTrace(this, this.name);
-    
+
     debug(`${this.name}(${this.code}): ${this.message}`);
   }
 
