@@ -8,6 +8,12 @@
 
 Feathers errors come with feathers by default. So typically you don't need to install it at all.
 
+In the event that you do need to install it:
+
+```bash
+npm install --save feathers-errors
+```
+
 ## Documentation
 
 #### Current Error Types:
@@ -53,8 +59,15 @@ var validationErrors = new errors.BadRequest({errors: {email: 'Invalid Email'} }
 ```
 
 ## Release History
-__1.0.1__
+__1.1.2__
+- Adding more tests
+- Adding even more flexibility for handling multiple errors
+
+__1.1.1__
 - Fixing critical bug [#15](https://github.com/feathersjs/feathers-errors/issues/15)
+
+__1.1.0__
+- Adding better support for multiple errors
 
 __1.0.0__
  - converting to ES6
