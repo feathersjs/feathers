@@ -1,5 +1,10 @@
 ## Changelog
 
+__1.3.0__
+
+- Add ability to create, update, patch and remove many ([#144](https://github.com/feathersjs/feathers/issues/144), [#179](https://github.com/feathersjs/feathers/pull/179))
+- Handle middleware passed after the service to app.use ([#176](https://github.com/feathersjs/feathers/issues/176), [#178](https://github.com/feathersjs/feathers/pull/178))
+
 __1.2.0__
 
 - Add hook object to service events parameters ([#148](https://github.com/feathersjs/feathers/pull/148))
