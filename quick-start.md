@@ -10,7 +10,7 @@ permalink: /quick-start/
 
 Feathers extends [Express 4](http://expressjs.com), one of the most popular web frameworks for [NodeJS](http://nodejs.org/). It makes it easy to create shared RESTful web services and real-time applications using SocketIO and several other NodeJS websocket libraries supported by [Primus](http://primus.io).
 
-If you are not familiar with Express head over to the [Express Guides](http://expressjs.com/guide.html) to get an idea. Feathers works the exact same way and supports the same functionality except that
+If you are not familiar with Express head over to the [Express Guides](http://expressjs.com/en/guide/routing.html) to get an idea. Feathers works the exact same way and supports the same functionality except that
 
 ```js
 var express = require('express');
@@ -234,7 +234,7 @@ That's it. Our application is now real-time, all we have to do is provide a nice
 
 ## Building a frontend
 
-Feathers works great with [any frontend framework](/learn/), Android or iOS clients or anything else that can connect to a REST API or websockets (to get real-time). We have real-time [TodoMVC](http://todomvc.com/) examples for [jQuery](/todomvc/feathers/jquery/guide.html), [Angular](/todomvc/feathers/angularjs/guide.html), [React](/todomvc/feathers/react/guide.html) and [CanJS](/todomvc/feathers/canjs/guide.html) but for this guide, we will create a more simplified jQuery client.
+Feathers works great with [any frontend framework](/learn/), Android or iOS clients or anything else that can connect to a REST API or websockets (to get real-time). We have real-time [TodoMVC](http://todomvc.com/) examples for [jQuery](http://feathersjs.github.io/todomvc/feathers/jquery/), [Angular](http://feathersjs.github.io/todomvc/feathers/angularjs/), [React](http://feathersjs.github.io/todomvc/feathers/react/) and [CanJS](http://feathersjs.github.io/todomvc/feathers/canjs/) but for this guide, we will create a more simplified jQuery client.
 
 ### Feathers client
 
@@ -403,4 +403,4 @@ Now go to [http://localhost:3000](http://localhost:3000) and you will be able to
 
 ## What's next?
 
-This are the basics of Feathers. We created a todos API that is accessible via REST and websockets and built a real-time jQuery frontend. Now, head over to the **[Learn section](/learn)** to learn more about things like Databases, how to integrate other frontend frameworks, Validation, Authentication or Authorization and get familiar with the **[API documentation](/api/)**.
+This are the basics of Feathers. We created a todos API that is accessible via REST and websockets and built a real-time jQuery frontend. Now, head over to the **[Learn section](/learn)** to learn more about things like Databases, how to integrate other frontend frameworks, Validation, Authentication or Authorization and get familiar with the **[API documentation](/docs/)**.

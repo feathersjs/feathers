@@ -31,8 +31,11 @@ Feathers already has plug-ins for *Create, Read, Update and Delete* operations o
 - [MongoDB](https://github.com/feathersjs/feathers-mongodb) - A basic MongoDB implementation, easy to use.
 - [Mongoose](https://github.com/feathersjs/feathers-mongoose) - Support for the MongoDB ODM which gives you schemas and validation out of the box.
 - [NeDB](https://github.com/feathersjs/feathers-nedb) - A file based database similar to MongoDB. Great if you want to ship your application and use it without having to set up a datbase server.
-- [MySQL](https://github.com/feathersjs/feathers-mysql)
-- [PostgreSQL](https://github.com/feathersjs/feathers-postgresql)
+- [MySQL](https://github.com/feathersjs/feathers-sequelize)
+- [PostgreSQL](https://github.com/feathersjs/feathers-sequelize)
+- [SQLite](https://github.com/feathersjs/feathers-sequelize)
+- [MariaDB](https://github.com/feathersjs/feathers-sequelize)
+- [MSSQL](https://github.com/feathersjs/feathers-sequelize)
 
 If you are wondering how to customize those existing adapters and make it easier to switch between different databases, read more about hooks in the next paragraph.
 
