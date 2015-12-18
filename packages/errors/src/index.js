@@ -1,4 +1,4 @@
-require('babel-polyfill');
+if(!global._babelPolyfill) { require('babel-polyfill'); }
 
 import makeDebug from 'debug';
 
