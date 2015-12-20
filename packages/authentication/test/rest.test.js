@@ -3,6 +3,7 @@ var request = require('request');
 var createApplication = require('./server-fixtures');
 
 describe('REST API authentication', function() {
+  this.timeout(5000);
   var server;
   var app;
   var username = 'feathers';
@@ -33,7 +34,7 @@ describe('REST API authentication', function() {
     }, function(err, response, body) {
       assert.equal(body.code, 401, 'POST to /api/login with no params returns an error.');
       done();
-    });  
+    });
 
   });
 
@@ -107,35 +108,4 @@ describe('REST API authentication', function() {
       done();
     });
   });
-
-  it('Requests with valid auth to protected services will return data', function(done) {
-    request({
-      url: 'http://localhost:8888/api/todos',
-      method: 'GET',
-      json: true,
-      headers: {
-        'Authorization': 'Bearer ' + token
-      }
-    }, function(err, res, body) {
-      assert.equal(body.length, 3, 'Got data back');
-      assert.equal(body[0].name, 'Do the dishes', 'Got todos back');
-      done();
-    });
-  });
-
-  it('Requests with valid auth to unprotected services will return data', function(done) {
-    request({
-      url: 'http://localhost:8888/api/tasks',
-      method: 'GET',
-      json: true,
-      headers: {
-        'Authorization': 'Bearer ' + token
-      }
-    }, function(err, res, body) {
-      assert.equal(body.length, 3, 'Got data back');
-      assert.equal(body[0].name, 'Feed the pigs', 'Got tasks back');
-      done();
-    });
-  });
-
 });

@@ -3,7 +3,8 @@ var request = require('request');
 var io = require('socket.io-client');
 var createApplication = require('./server-fixtures');
 
-describe('REST API authentication', function() {
+describe('Socket.io authentication', function() {
+  this.timeout(5000);
   var server;
   var app;
   var username = 'feathers';
@@ -67,5 +68,16 @@ describe('REST API authentication', function() {
     });
   });
 
-
+  it('Can connect without an auth token and get data from an unprotected service.', function(done) {
+    var socket = io('http://localhost:8888', {
+      forceNew: true
+    });
+    socket.on('connect', function() {
+      socket.emit('api/tasks::find', {}, function(error, todos) {
+        assert.equal(todos[0].name, 'Feed the pigs');
+        socket.disconnect();
+        done();
+      });
+    });
+  });
 });

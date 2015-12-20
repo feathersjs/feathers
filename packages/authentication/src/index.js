@@ -134,21 +134,32 @@ export default function(config) {
       }
 
       // Socket.io middleware
-      if(io) {
+      if (io) {
         debug('intializing SocketIO middleware');
-        io.use(function(socket, next) {
+        io.use(function (socket, next) {
+
           // If there's a token in place, decode it and set up the feathers.user
-          checkToken(socket.handshake.query.token, socket, next);
-          socket.on('authenticate', (data) => {
-            checkToken(data.token, socket, (err, data) => {
-              delete data.password;
-              if (data) {
-                socket.emit('authenticated', data);
-              }
+          checkToken(socket.handshake.query.token, socket, function(err, data){
+            if(err) {
+              return next(err);
+            }
+
+            // If no token was passed, still allow the websocket. Service hooks can take care of Auth.
+            if(data === true) {
+              return next(null, true);
+            }
+
+            socket.on('authenticate', function (data) {
+              checkToken(data.token, socket, function (err, data) {
+                delete data.password;
+                if (data) {
+                  socket.emit('authenticated', data);
+                }
+              });
             });
+
+            return next(null, data);
           });
-          // If no token was passed, still allow the websocket. Service hooks can take care of Auth.
-          return next(null, true);
         });
       }
 
