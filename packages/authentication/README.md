@@ -26,7 +26,7 @@ var app = feathers()
   .configure(feathersAuth({
     secret: 'feathers-rocks'
   }))
-  .use('/api/users', mongooseService({
+  .use('/api/users', new mongooseService('user', {
     schema: {
       email: {type: String, required: true, unique: true },
       password: {type: String, required: true },
