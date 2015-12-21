@@ -67,6 +67,7 @@ export default function(config) {
 
           // Login was successful. Generate and send token.
           if (user) {
+            user = !user.toJSON ? user : user.toJSON();
             delete user.password;
             var token = jwt.sign(user, settings.secret, settings.jwtOptions);
             return res.json({
