@@ -3,7 +3,7 @@ var request = require('request');
 var createApplication = require('./server-fixtures');
 
 describe('REST API authentication with valid auth token', function () {
-  this.timeout(5000);
+  this.timeout(10000);
   var server;
   var app;
   var username = 'feathers';
@@ -68,4 +68,20 @@ describe('REST API authentication with valid auth token', function () {
       done();
     });
   });
+
+  it('Requests to refresh a valid token will return data', function (done) {
+    request({
+      url: 'http://localhost:8888/api/login/refresh',
+      method: 'POST',
+      form: {
+        token: token
+      },
+      json: true
+    }, function (err, res, body) {
+      assert.ok(body.token, 'POST to /api/login gave us back a token.');
+      assert.equal(body.token, token, 'Token is the same');
+      done();
+    });
+  });
+
 });

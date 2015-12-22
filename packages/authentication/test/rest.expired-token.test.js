@@ -3,6 +3,7 @@ var request = require('request');
 var createApplication = require('./server-fixtures');
 
 describe('Test using an expired token', function() {
+  this.timeout(10000);
   var server;
   var app;
   var username = 'feathers';
@@ -58,9 +59,36 @@ describe('Test using an expired token', function() {
         assert.equal(body.name, 'TokenExpiredError', 'Got an error string back, not an object/array');
         done();
       });
-    }, 1900);
+    }, 2500);
   });
 
+  it('Requests to refresh an expired token will fail', function (done) {
+    setTimeout(function() {
+      request({
+        url: 'http://localhost:8888/api/login/refresh',
+        method: 'POST',
+        form: {
+          token: token
+        },
+        json: true
+      }, function (err, res, body) {
+        assert.equal(body.name, 'TokenExpiredError', 'Got an error string back, not an object/array');
+        done();
+      });
+    }, 2500);
+  });
 
+  it('Requests to refresh with no token will throw an error', function (done) {
+    request({
+      url: 'http://localhost:8888/api/login/refresh',
+      method: 'POST',
+      form: {
 
+      },
+      json: true
+    }, function (err, res) {
+      assert.equal(res.statusCode, 500, 'Throws error');
+      done();
+    });
+  });
 });
