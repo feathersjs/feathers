@@ -4,7 +4,7 @@ var io = require('socket.io-client');
 var createApplication = require('./server-fixtures');
 
 describe('Socket.io authentication', function() {
-  this.timeout(5000);
+  this.timeout(10000);
   var server;
   var app;
   var username = 'feathers';

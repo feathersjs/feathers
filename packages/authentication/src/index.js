@@ -37,25 +37,27 @@ export default function(config) {
 
     debug('setting up feathers-authentication');
 
+    // Route for token refresh
+    app.post(settings.loginEndpoint + '/refresh', verifyToken, function(req, res) {
+      var data = req.authData;
+      delete data.password;
+      var token = jwt.sign(data, settings.secret, settings.jwtOptions);
+      return res.json({
+        token: token,
+        data: data
+      });
+    });
+
     // Add a route for passport login and token refresh.
-    app.post(settings.loginEndpoint, function(req, res, next) {
-      // If a non-expired token is passed, refresh it.
-      if (req.body.token) {
-        // TODO: Move token verification into its own middleware. See line ~96.
-        jwt.verify(req.body.token, settings.secret, function(err, data) {
-          if (err) {
-            // Return a 401 Unauthorized if the token has expired.
-            if (err.name === 'TokenExpiredError') {
-              return res.status(401).json(err);
-            }
-            return next(err);
-          }
-          delete data.password;
-          var token = jwt.sign(data, settings.secret, settings.jwtOptions);
-          return res.json({
-            token: token,
-            data: data
-          });
+    app.post(settings.loginEndpoint, verifyToken, function(req, res, next) {
+      // Non-expired token was passed in and refreshed
+      if (req.authData) {
+        var data = req.authData;
+        delete req.authData.password;
+        var token = jwt.sign(req.authData, settings.secret, settings.jwtOptions);
+        return res.json({
+          token: token,
+          data: data
         });
 
       // Otherwise, authenticate the user and return a token
@@ -175,8 +177,24 @@ export default function(config) {
       return result;
     };
   };
+  function verifyToken(req, res, next) {
+    if(req.body.token) {
+      jwt.verify(req.body.token, settings.secret, function (err, data) {
+        if (err) {
+          // Return a 401 Unauthorized if the token has expired.
+          if (err.name === 'TokenExpiredError') {
+            return res.status(401).json(err);
+          }
+          return next(err);
+        }
+        req.authData = data;
+        next();
+      });
+    } else {
+      next();
+    }
+  }
 }
-
 
 function getDefaultStrategy(app, settings){
   var strategySetup = {

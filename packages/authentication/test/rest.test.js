@@ -3,7 +3,7 @@ var request = require('request');
 var createApplication = require('./server-fixtures');
 
 describe('REST API authentication', function() {
-  this.timeout(5000);
+  this.timeout(10000);
   var server;
   var app;
   var username = 'feathers';
