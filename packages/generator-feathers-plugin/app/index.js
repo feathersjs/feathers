@@ -14,7 +14,9 @@ module.exports = generators.Base.extend({
       'package.json': 'package.json',
       'index.js': 'src/index.js',
       'index.test.js': 'test/index.test.js',
-      'README.md': 'README.md'
+      'README.md': 'README.md',
+      'static/LICENSE': 'LICENSE',
+      'static/__gitignore': '.gitignore'
     };
   },
 
@@ -43,7 +45,7 @@ module.exports = generators.Base.extend({
   },
 
   writing: function () {
-    this.fs.copy(this.templatePath('static/'), this.destinationPath());
+    // this.fs.copy(this.templatePath('static/'), this.destinationPath());
     this.fs.copy(this.templatePath('static/.*'), this.destinationPath());
 
     Object.keys(this.fileMap).forEach(function(src) {
