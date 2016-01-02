@@ -71,7 +71,7 @@
       }
     });
 
-    $('#todo-example').todos('http://todos.feathersjs.com:80');
+    $('#todo-example').todos('http://demo.feathersjs.com:80');
     $('body').scrollspy({
       target: '#toc',
       offset: 5
