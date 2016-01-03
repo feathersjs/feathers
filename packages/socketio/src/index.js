@@ -13,7 +13,12 @@ export default function (config) {
       service: commons.service,
       setup(server) {
         const io = this.io = socketio.listen(server);
-        
+
+        io.use(function (socket, next) {
+          socket.feathers = { provider: 'socketio' };
+          next();
+        });
+
         if (typeof config === 'function') {
           debug('Calling SocketIO configuration function');
           config.call(this, io);
