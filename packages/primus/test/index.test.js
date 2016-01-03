@@ -8,7 +8,7 @@ describe('feathers-primus', () => {
   var server, socket, app,
     socketParams = {
       user: { name: 'David' },
-      provider: 'websockets'
+      provider: 'primus'
     };
 
   before(done => {
@@ -19,7 +19,7 @@ describe('feathers-primus', () => {
         socket = new primus.Socket('http://localhost:7888');
 
         primus.authorize(function (req, done) {
-          req.feathers = socketParams;
+          req.feathers.user = { name: 'David' };
           done();
         });
       }))
