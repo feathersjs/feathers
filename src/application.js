@@ -1,18 +1,19 @@
-'use strict';
+import _ from 'lodash';
+import makeDebug from 'debug';
+import { stripSlashes } from 'feathers-commons';
+import Uberproto from 'uberproto';
+import mixins from './mixins';
 
-var _ = require('lodash');
-var debug = require('debug')('feathers:application');
-var stripSlashes = require('feathers-commons').stripSlashes;
-var Proto = require('uberproto').extend({
+const debug = makeDebug('feathers:application');
+const methods = ['find', 'get', 'create', 'update', 'patch', 'remove'];
+const Proto = Uberproto.extend({
   create: null
 });
-var mixins = require('./mixins');
 
-
-module.exports = {
-  init: function () {
+export default {
+  init() {
     _.extend(this, {
-      methods: ['find', 'get', 'create', 'update', 'patch', 'remove'],
+      methods,
       mixins: mixins(),
       services: {},
       providers: [],
@@ -20,35 +21,31 @@ module.exports = {
     });
   },
 
-  service: function(location, service, options) {
+  service(location, service, options) {
     location = stripSlashes(location);
 
     if(!service) {
       return this.services[location];
     }
 
-    var protoService = Proto.extend(service);
-    var self = this;
+    let protoService = Proto.extend(service);
 
-    debug('Registering new service at `' + location + '`');
+    debug(`Registering new service at \`${location}\``);
 
     // Add all the mixins
-    _.each(this.mixins, function (fn) {
-      fn.call(self, protoService);
-    });
+    this.mixins.forEach(fn => fn.call(this, protoService));
 
     if(typeof protoService._setup === 'function') {
       protoService._setup(this, location);
     }
 
     // Run the provider functions to register the service
-    _.each(this.providers, function (provider) {
-      provider(location, protoService, options || {});
-    });
+    this.providers.forEach(provider =>
+      provider.call(this, location, protoService, options || {}));
 
     // If we ran setup already, set this service up explicitly
     if (this._isSetup && typeof protoService.setup === 'function') {
-      debug('Setting up service for `' + location + '`');
+      debug(`Setting up service for \`${location}\``);
       protoService.setup(this, location);
     }
 
@@ -56,8 +53,8 @@ module.exports = {
     return protoService;
   },
 
-  use: function (location) {
-    var service, middleware = _(arguments)
+  use(location) {
+    let service, middleware = _(arguments)
       .slice(1)
       .reduce(function (middleware, arg) {
         if (typeof arg === 'function') {
@@ -72,33 +69,29 @@ module.exports = {
         before: [],
         after: []
       });
-    var hasMethod = function(methods) {
-      return _.some(methods, function(name) {
-        return (service && typeof service[name] === 'function');
-      });
-    };
+
+    const hasMethod = methods => _.some(methods, name =>
+      (service && typeof service[name] === 'function'));
 
     // Check for service (any object with at least one service method)
     if(hasMethod(['handle', 'set']) || !hasMethod(this.methods)) {
       return this._super.apply(this, arguments);
     }
 
-    this.service(location, service, {
-      // Any arguments left over are other middleware that we want to pass to the providers
-      middleware: middleware
-    });
+    // Any arguments left over are other middleware that we want to pass to the providers
+    this.service(location, service, { middleware });
 
     return this;
   },
 
-  setup: function() {
+  setup() {
     // Setup each service (pass the app so that they can look up other services etc.)
-    _.each(this.services, function (service, path) {
-      debug('Setting up service for `' + path + '`');
+    _.each(this.services, (service, path) => {
+      debug(`Setting up service for \`${path}\``);
       if (typeof service.setup === 'function') {
         service.setup(this, path);
       }
-    }.bind(this));
+    });
 
     this._isSetup = true;
 
@@ -109,16 +102,18 @@ module.exports = {
   // That just takes a function in order to keep Feathers plugin configuration easier.
   // Environment specific configurations should be done as suggested in the 4.x migration guide:
   // https://github.com/visionmedia/express/wiki/Migrating-from-3.x-to-4.x
-  configure: function(fn){
+  configure(fn){
     fn.call(this);
 
     return this;
   },
 
-  listen: function () {
-    var server = this._super.apply(this, arguments);
+  listen() {
+    const server = this._super.apply(this, arguments);
+
     this.setup(server);
     debug('Feathers application listening');
+    
     return server;
   }
 };

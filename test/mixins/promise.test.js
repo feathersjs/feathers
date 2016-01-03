@@ -1,31 +1,25 @@
-'use strict';
+import assert from 'assert';
+import Proto from 'uberproto';
+import mixin from '../../lib/mixins/promise';
 
-var assert = require('assert');
-var Proto = require('uberproto');
-var create = Proto.create;
-var q = require('q');
-var _ = require('lodash');
+const create = Proto.create;
 
-var mixin = require('../../lib/mixins/promise');
-
-describe('Promises/A+ mixin', function () {
-  it('Calls a callback when a promise is returned from the original service', function (done) {
+describe('Promises/A+ mixin', () => {
+  it('Calls a callback when a promise is returned from the original service', done => {
     // A dummy context (this will normally be the application)
-    var context = {
-      methods: ['get']
-    };
-    var FixtureService = Proto.extend({
+    const context = { methods: ['get'] };
+    const FixtureService = Proto.extend({
       get: function (id) {
-        return q({
+        return Promise.resolve({
           id: id,
-          description: 'You have to do ' + id
+          description: `You have to do ${id}`
         });
       }
     });
 
     mixin.call(context, FixtureService);
 
-    var instance = create.call(FixtureService);
+    const instance = create.call(FixtureService);
     instance.get('dishes', {}, function (error, data) {
       assert.deepEqual(data, {
         id: 'dishes',
@@ -35,20 +29,14 @@ describe('Promises/A+ mixin', function () {
     });
   });
 
-  it('calls back with an error for a failing deferred', function(done) {
+  it('calls back with an error for a failing deferred', done => {
     // A dummy context (this will normally be the application)
     var context = {
       methods: ['get']
     };
     var FixtureService = Proto.extend({
       get: function () {
-        var dfd = q.defer();
-
-        _.defer(function() {
-          dfd.reject(new Error('Something went wrong'));
-        });
-
-        return dfd.promise;
+        return Promise.reject(new Error('Something went wrong'));
       }
     });
 
@@ -64,29 +52,21 @@ describe('Promises/A+ mixin', function () {
 
   it('does not try to call the callback if it does not exist', function(done) {
     // A dummy context (this will normally be the application)
-    var context = {
-      methods: ['create']
-    };
-    var FixtureService = Proto.extend({
-      create: function (data) {
-        var dfd = q.defer();
-
-        _.defer(function() {
-          dfd.resolve(data);
-        });
-
-        return dfd.promise;
+    const context = { methods: ['create'] };
+    const FixtureService = Proto.extend({
+      create(data) {
+        return Promise.resolve(data);
       }
     });
-    var original = {
+    const original = {
       id: 'laundry',
       description: 'You have to do laundry'
     };
 
     mixin.call(context, FixtureService);
 
-    var instance = create.call(FixtureService);
-    instance.create(original, {}).then(function(data) {
+    const instance = create.call(FixtureService);
+    instance.create(original, {}).then(data => {
       assert.deepEqual(data, original);
       done();
     });

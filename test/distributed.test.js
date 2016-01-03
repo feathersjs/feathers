@@ -1,28 +1,30 @@
-var assert = require('assert');
-var client = require('feathers-client');
-var io = require('socket.io-client');
-var feathers = require('../lib/feathers');
+import assert from 'assert';
+import client from 'feathers-client';
+import io from 'socket.io-client';
+import socketio from 'feathers-socketio';
+import rest from 'feathers-rest';
+import feathers from '../src/feathers';
 
-describe('Distributed Feathers applications test', function () {
-  before(function(done) {
-    var app = feathers()
-      .configure(feathers.socketio())
+describe('Distributed Feathers applications test', () => {
+  before(done => {
+    const app = feathers()
+      .configure(socketio())
       .use('todos', {
-        create: function(data, params, callback) {
+        create(data) {
           data.id = 42;
-          callback(null, data);
+          return Promise.resolve(data);
         }
       });
 
     app.listen(8888, done);
   });
 
-  it('passes created event between servers', function (done) {
-    var socket = io('http://localhost:8888');
-    var remoteApp = client().configure(client.socketio(socket));
-    var todo = { text: 'Created on alpha server', complete: false };
-    var beta = feathers()
-      .configure(feathers.rest())
+  it('passes created event between servers', done => {
+    const socket = io('http://localhost:8888');
+    const remoteApp = client().configure(client.socketio(socket));
+    const todo = { text: 'Created on alpha server', complete: false };
+    const beta = feathers()
+      .configure(rest())
       .use('todos', remoteApp.service('todos'));
 
     beta.listen(9999, function() {
