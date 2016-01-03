@@ -7,7 +7,7 @@ import { Service as todoService, verify } from 'feathers-commons/lib/test-fixtur
 import socketio from '../src';
 
 describe('feathers-socketio', () => {
-  var server, socket, app,
+  let server, socket, app,
     socketParams = {
       user: { name: 'David' },
       provider: 'socketio'
@@ -17,7 +17,7 @@ describe('feathers-socketio', () => {
     app = feathers()
       .configure(socketio(function(io) {
         io.use(function (socket, next) {
-          socket.feathers = socketParams;
+          socket.feathers.user = { name: 'David' };
           next();
         });
       }))
@@ -25,10 +25,10 @@ describe('feathers-socketio', () => {
 
     server = app.listen(7886, function(){
       app.use('/tasks', todoService);
-      done();
     });
 
-    socket = io.connect('http://localhost:7886');
+    socket = io('http://localhost:7886');
+    socket.on('connect', () => done());
   });
 
   after(done => {
@@ -38,7 +38,7 @@ describe('feathers-socketio', () => {
 
   it('is CommonJS compatible', () => assert.equal(typeof require('../lib'), 'function'));
 
-  it('runs io before setup (#131)', function(done) {
+  it('runs io before setup (#131)', done => {
     let counter = 0;
     let app = feathers()
       .configure(socketio(function() {
@@ -58,9 +58,9 @@ describe('feathers-socketio', () => {
     let srv = app.listen(8887).on('listening', () => srv.close(done));
   });
 
-  it('passes handshake as service parameters', function(done) {
-    var service = app.service('todo');
-    var old = {
+  it('passes handshake as service parameters', done => {
+    let service = app.service('todo');
+    let old = {
       find: service.find,
       create: service.create,
       update: service.update,
@@ -94,9 +94,9 @@ describe('feathers-socketio', () => {
     });
   });
 
-  it('missing parameters in socket call works (#88)', function(done) {
-    var service = app.service('todo');
-    var old = {
+  it('missing parameters in socket call works (#88)', done => {
+    let service = app.service('todo');
+    let old = {
       find: service.find
     };
 
@@ -111,15 +111,15 @@ describe('feathers-socketio', () => {
     });
   });
 
-  describe('Services', function() {
-    it('invalid arguments cause an error', function (done) {
+  describe('Services', () => {
+    it('invalid arguments cause an error', done => {
       socket.emit('todo::find', 1, {}, function(error) {
         assert.equal(error.message, 'Too many arguments for \'find\' service method');
         done();
       });
     });
 
-    describe('CRUD', function () {
+    describe('CRUD', () => {
       it('::find', function (done) {
         socket.emit('todo::find', {}, function (error, data) {
           verify.find(data);
@@ -128,7 +128,7 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('::get', function (done) {
+      it('::get', done => {
         socket.emit('todo::get', 'laundry', {}, function (error, data) {
           verify.get('laundry', data);
 
@@ -136,8 +136,8 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('::create', function (done) {
-        var original = {
+      it('::create', done => {
+        let original = {
           name: 'creating'
         };
 
@@ -148,8 +148,8 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('::create without parameters and callback', function (done) {
-        var original = {
+      it('::create without parameters and callback', done => {
+        let original = {
           name: 'creating'
         };
 
@@ -162,8 +162,8 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('::update', function (done) {
-        var original = {
+      it('::update', done => {
+        let original = {
           name: 'updating'
         };
 
@@ -174,8 +174,8 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('::update many', function (done) {
-        var original = {
+      it('::update many', done => {
+        let original = {
           name: 'updating',
           many: true
         };
@@ -187,8 +187,8 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('::patch', function (done) {
-        var original = {
+      it('::patch', done => {
+        let original = {
           name: 'patching'
         };
 
@@ -199,8 +199,8 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('::patch many', function (done) {
-        var original = {
+      it('::patch many', done => {
+        let original = {
           name: 'patching',
           many: true
         };
@@ -212,7 +212,7 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('::remove', function (done) {
+      it('::remove', done => {
         socket.emit('todo::remove', 11, {}, function (error, data) {
           verify.remove(11, data);
 
@@ -220,7 +220,7 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('::remove many', function (done) {
+      it('::remove many', done => {
         socket.emit('todo::remove', null, {}, function (error, data) {
           verify.remove(null, data);
 
@@ -229,9 +229,9 @@ describe('feathers-socketio', () => {
       });
     });
 
-    describe('Events', function () {
-      it('created', function (done) {
-        var original = {
+    describe('Events', () => {
+      it('created', done => {
+        let original = {
           name: 'created event'
         };
 
@@ -243,8 +243,8 @@ describe('feathers-socketio', () => {
         socket.emit('todo::create', original, {}, function () {});
       });
 
-      it('updated', function (done) {
-        var original = {
+      it('updated', done => {
+        let original = {
           name: 'updated event'
         };
 
@@ -256,8 +256,8 @@ describe('feathers-socketio', () => {
         socket.emit('todo::update', 10, original, {}, function () {});
       });
 
-      it('patched', function(done) {
-        var original = {
+      it('patched', done => {
+        let original = {
           name: 'patched event'
         };
 
@@ -269,7 +269,7 @@ describe('feathers-socketio', () => {
         socket.emit('todo::patch', 12, original, {}, function () {});
       });
 
-      it('removed', function (done) {
+      it('removed', done => {
         socket.once('todo removed', function (data) {
           verify.remove(333, data);
           done();
@@ -278,12 +278,12 @@ describe('feathers-socketio', () => {
         socket.emit('todo::remove', 333, {}, function () {});
       });
 
-      it('custom events', function(done) {
-        var service = app.service('todo');
-        var original = {
+      it('custom events', done => {
+        let service = app.service('todo');
+        let original = {
           name: 'created event'
         };
-        var old = service.create;
+        let old = service.create;
 
         service.create = function(data) {
           this.emit('log', { message: 'Custom log event', data: data });
@@ -300,11 +300,13 @@ describe('feathers-socketio', () => {
       });
     });
 
-    describe('Event filtering', function() {
-      it('.created', function (done) {
-        var service = app.service('todo');
-        var original = { description: 'created event test' };
-        var oldCreated = service.created;
+    describe('Event filtering', () => {
+      before(done => setTimeout(done, 20));
+
+      it('.created', done => {
+        let service = app.service('todo');
+        let original = { description: 'created event test' };
+        let oldCreated = service.created;
 
         service.created = function(data, params, callback) {
           assert.deepEqual(params, socketParams);
@@ -323,8 +325,8 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('.updated', function (done) {
-        var original = {
+      it('.updated', done => {
+        let original = {
           name: 'updated event'
         };
 
@@ -336,9 +338,9 @@ describe('feathers-socketio', () => {
         socket.emit('todo::update', 10, original, {}, function () {});
       });
 
-      it('.removed', function (done) {
-        var service = app.service('todo');
-        var oldRemoved = service.removed;
+      it('.removed', done => {
+        let service = app.service('todo');
+        let oldRemoved = service.removed;
 
         service.removed = function(data, params, callback) {
           assert.deepEqual(params, socketParams);
@@ -363,9 +365,9 @@ describe('feathers-socketio', () => {
     });
   });
 
-  describe('Dynamic Services', function() {
+  describe('Dynamic Services', () =>{
     describe('CRUD', function () {
-      it('::find', function (done) {
+      it('::find', done => {
         socket.emit('tasks::find', {}, function (error, data) {
           verify.find(data);
 
@@ -373,7 +375,7 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('::get', function (done) {
+      it('::get', done => {
         socket.emit('tasks::get', 'laundry', {}, function (error, data) {
           verify.get('laundry', data);
 
@@ -381,8 +383,8 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('::create', function (done) {
-        var original = {
+      it('::create', done => {
+        let original = {
           name: 'creating'
         };
 
@@ -393,8 +395,8 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('::update', function (done) {
-        var original = {
+      it('::update', done => {
+        let original = {
           name: 'updating'
         };
 
@@ -405,8 +407,8 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('::patch', function (done) {
-        var original = {
+      it('::patch', done => {
+        let original = {
           name: 'patching'
         };
 
@@ -417,7 +419,7 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('::remove', function (done) {
+      it('::remove', done => {
         socket.emit('tasks::remove', 11, {}, function (error, data) {
           verify.remove(11, data);
 
@@ -427,8 +429,8 @@ describe('feathers-socketio', () => {
     });
 
     describe('Events', function () {
-      it('created', function (done) {
-        var original = {
+      it('created', done => {
+        let original = {
           name: 'created event'
         };
 
@@ -440,8 +442,8 @@ describe('feathers-socketio', () => {
         socket.emit('tasks::create', original, {}, function () {});
       });
 
-      it('updated', function (done) {
-        var original = {
+      it('updated', done => {
+        let original = {
           name: 'updated event'
         };
 
@@ -453,8 +455,8 @@ describe('feathers-socketio', () => {
         socket.emit('tasks::update', 10, original, {}, function () {});
       });
 
-      it('patched', function(done) {
-        var original = {
+      it('patched', done => {
+        let original = {
           name: 'patched event'
         };
 
@@ -466,7 +468,7 @@ describe('feathers-socketio', () => {
         socket.emit('tasks::patch', 12, original, {}, function () {});
       });
 
-      it('removed', function (done) {
+      it('removed', done => {
         socket.once('tasks removed', function (data) {
           verify.remove(333, data);
           done();
@@ -477,10 +479,10 @@ describe('feathers-socketio', () => {
     });
 
     describe('Event Filtering', function() {
-      it('.created', function (done) {
-        var service = app.service('tasks');
-        var original = { description: 'created event test' };
-        var oldCreated = service.created;
+      it('.created', done => {
+        let service = app.service('tasks');
+        let original = { description: 'created event test' };
+        let oldCreated = service.created;
 
         service.created = function(data, params, callback) {
           assert.ok(service === this);
@@ -500,10 +502,10 @@ describe('feathers-socketio', () => {
         });
       });
 
-      it('.updated', function (done) {
+      it('.updated', done => {
         // TODO this is not testing the right thing
         // but we will get better event filtering in v2 anyway
-        var original = {
+        let original = {
           name: 'updated event'
         };
 
@@ -515,9 +517,9 @@ describe('feathers-socketio', () => {
         socket.emit('tasks::update', 10, original, {}, function () {});
       });
 
-      it('.removed', function (done) {
-        var service = app.service('tasks');
-        var oldRemoved = service.removed;
+      it('.removed', done => {
+        let service = app.service('tasks');
+        let oldRemoved = service.removed;
 
         service.removed = function(data, params, callback) {
           assert.ok(service === this);
