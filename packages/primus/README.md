@@ -6,67 +6,47 @@
 
 ## About
 
-[Primus](https://github.com/primus/primus) is a universal wrapper for real-time frameworks and allows you to transparently use Engine.IO, WebSockets, BrowserChannel, SockJS and Socket.IO. Set it up with `feathers.primus(configuration [, fn])` where `configuration` is the [Primus server configuration](https://github.com/primus/primus#getting-started) and `fn` an optional callback with the Primus server instance that can e.g. be used for setting up [authorization](https://github.com/primus/primus#authorization):
+This provider exposes [Feathers](http://feathersjs.com) services through [Primus](https://github.com/primus/primus) real-time APIs. It is compatible with Feathers 1.x and 2.x.
+
+__Note:__ For the full API documentation go to [feathersjs.com/docs/providers.html](http://feathersjs.com/docs/providers.html).
+
+## Quick example
+
+> npm install ws
 
 ```js
-// Set up Primus with SockJS
-app.configure(feathers.primus({
-  transformer: 'sockjs'
-}, function(primus) {
-  // Set up Primus authorization here
-  primus.authorize(function (req, done) {
-    var auth;
+import feathers from 'feathers';
+import primus from 'feathers-primus';
 
-    try { auth = authParser(req.headers['authorization']) }
-    catch (ex) { return done(ex) }
+const app = feathers()
+  .configure(primus({
+    transformer: 'websockets'
+  }, function(primus) {
+    // Set up Primus authorization here
+    primus.authorize(function (req, done) {
+      req.feathers.data = 'Hello world';
 
-    // Do some async auth check
-    authCheck(auth, done);
-  });
-}));
-```
-
-In the Browser you can connect like this:
-
-```html
-<script type="text/javascript" src="primus/primus.js"></script>
-<script type="text/javascript">
-  var primus = new Primus(url);
-
-  primus.on('todos created', function(todo) {
-    console.log('Someone created a Todo', todo);
-  });
-
-  primus.send('todos::create', { description: 'Do something' }, {}, function() {
-    primus.send('todos::find', {}, function(error, todos) {
-      console.log(todos);
+      done();
     });
-  });
-</script>
-```
+  }));
 
-Just like REST and SocketIO, the Primus request object can be extended with a `feathers` parameter during authorization which will extend the `params` for any service request:
+app.use('/todos', {
+  get: function(id, params) {
+    console.log(params.data); // -> 'Hello world'
 
-```js
-app.configure(feathers.primus({
-  transformer: 'sockjs'
-}, function(primus) {
-  // Set up Primus authorization here
-  primus.authorize(function (req, done) {
-    req.feathers = {
-      user: { name: 'David' }
-    }
-
-    done();
-  });
-}));
+    return Promise.resolve({
+      id,
+      description: `You have to do ${name}!`
+    });
+  }
+});
 ```
 
 ## Changelog
 
-__0.1.0__
+__1.0.0__
 
-- Initial release
+- Initial release of extracted module from Feathers 1.3
 
 ## License
 
