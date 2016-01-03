@@ -17,7 +17,7 @@ import feathers from 'feathers';
 import socketio from 'feathers-socketio';
 
 const app = feathers()
-  .configure(feathers.socketio(function(io) {
+  .configure(socketio(function(io) {
     io.on('connection', function(socket) {
       socket.emit('news', { hello: 'world' });
       socket.on('my other event', function (data) {
