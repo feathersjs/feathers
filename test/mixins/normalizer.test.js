@@ -1,14 +1,12 @@
-'use strict';
+import assert from 'assert';
+import Proto from 'uberproto';
+import normalizer from '../../lib/mixins/normalizer';
+import mixins from '../../lib/mixins';
 
-var assert = require('assert');
-var Proto = require('uberproto');
-var normalizer = require('../../lib/mixins/normalizer');
-var mixins = require('../../lib/mixins');
-
-describe('Argument normalizer mixin', function () {
-  it('normalizer mixin is always the last to run', function() {
-    var arr = mixins();
-    var dummy = function() { };
+describe('Argument normalizer mixin', () => {
+  it('normalizer mixin is always the last to run', () => {
+    const arr = mixins();
+    const dummy = function() { };
 
     assert.equal(arr.length, 3);
 
@@ -21,12 +19,10 @@ describe('Argument normalizer mixin', function () {
   // The normalization is already tests in all variations in `getArguments`
   // so we just so we only test two random samples
 
-  it('normalizes .find without a callback', function (done) {
-    var context = {
-      methods: ['find']
-    };
-    var FixtureService = Proto.extend({
-      find: function(params, callback) {
+  it('normalizes .find without a callback', done => {
+    const context = { methods: ['find'] };
+    const FixtureService = Proto.extend({
+      find(params, callback) {
         assert.ok(typeof callback === 'function');
         assert.equal(params.test, 'Here');
         done();
@@ -35,17 +31,15 @@ describe('Argument normalizer mixin', function () {
 
     normalizer.call(context, FixtureService);
 
-    var instance = Proto.create.call(FixtureService);
+    const instance = Proto.create.call(FixtureService);
 
     instance.find({ test: 'Here' });
   });
 
-  it('normalizes .update without params and callback', function (done) {
-    var context = {
-      methods: ['update']
-    };
-    var FixtureService = Proto.extend({
-      update: function(id, data, params, callback) {
+  it('normalizes .update without params and callback', done => {
+    const context = { methods: ['update'] };
+    const FixtureService = Proto.extend({
+      update(id, data, params, callback) {
         assert.equal(id, 1);
         assert.ok(typeof callback === 'function');
         assert.deepEqual(data, { test: 'Here' });
@@ -56,7 +50,7 @@ describe('Argument normalizer mixin', function () {
 
     normalizer.call(context, FixtureService);
 
-    var instance = Proto.create.call(FixtureService);
+    const instance = Proto.create.call(FixtureService);
 
     instance.update(1, { test: 'Here' });
   });

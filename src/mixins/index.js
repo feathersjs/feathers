@@ -1,9 +1,5 @@
-'use strict';
-
-var _ = require('lodash');
-
-module.exports = function() {
-  var mixins = [
+export default function() {
+  const mixins = [
     require('./promise'),
     require('./event'),
     require('./normalizer')
@@ -11,10 +7,10 @@ module.exports = function() {
 
   // Override push to make sure that normalize is always the last
   mixins.push = function() {
-    var args = [ this.length - 1, 0].concat(_.toArray(arguments));
+    const args = [ this.length - 1, 0].concat(Array.from(arguments));
     this.splice.apply(this, args);
     return this.length;
   };
 
   return mixins;
-};
+}

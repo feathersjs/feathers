@@ -12,6 +12,14 @@ If you have any other questions, feel free to submit post them on [Stackoverflow
 
 Before running the tests from the `test/` folder `npm test` will run JSHint. You can check your code changes individually by running `npm run jshint`.
 
+## ES6 compilation
+
+Feathers uses [Babel](https://babeljs.io/) to leverage the latest developments of the JavaScript language. All code and samples are currently written in ES2015. To transpile the code in this repository run
+
+> npm run compile
+
+__Note:__ `npm test` will run the compilation automatically before the tests.
+
 ## Tests
 
 [Mocha](http://mochajs.org/) tests are located in the `test/` folder and can be run using the `npm run mocha` or `npm test` (with JSHint) command.

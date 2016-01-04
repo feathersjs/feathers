@@ -1,18 +1,16 @@
-'use strict';
+import assert from 'assert';
+import _ from 'lodash';
+import Proto from 'uberproto';
+import { EventEmitter } from 'events';
+import mixinEvent from '../../lib/mixins/event';
 
-var assert = require('assert');
-var _ = require('lodash');
-var Proto = require('uberproto');
-var EventEmitter = require('events').EventEmitter;
+const create = Proto.create;
 
-var mixinEvent = require('../../lib/mixins/event');
-var create = Proto.create;
-
-describe('Event mixin', function () {
-  it('initializes', function () {
-    var FixtureService = Proto.extend({
-      setup: function (arg) {
-        return 'Original setup: ' + arg;
+describe('Event mixin', () => {
+  it('initializes', () => {
+    const FixtureService = Proto.extend({
+      setup(arg) {
+        return `Original setup: ${arg}`;
       }
     });
 
@@ -22,13 +20,13 @@ describe('Event mixin', function () {
     assert.equal(typeof FixtureService.on, 'function');
     assert.equal(typeof FixtureService.emit, 'function');
 
-    var instance = create.call(FixtureService);
+    const instance = create.call(FixtureService);
     assert.equal('Original setup: Test', instance.setup('Test'));
     assert.ok(instance._rubberDuck instanceof EventEmitter);
 
-    var existingMethodsService = {
-      setup: function (arg) {
-        return 'Original setup from object: ' + arg;
+    const existingMethodsService = {
+      setup(arg) {
+        return `Original setup from object: ${arg}`;
       }
     };
 
@@ -40,14 +38,12 @@ describe('Event mixin', function () {
 
   it('serviceError', function (done) {
     var FixtureService = Proto.extend({
-      create: function (data, params, cb) {
-        _.defer(function () {
-          cb(new Error('Something went wrong'));
-        });
+      create(data, params, cb) {
+        cb(new Error('Something went wrong'));
       }
     });
 
-    var instance = create.call(FixtureService);
+    const instance = create.call(FixtureService);
 
     mixinEvent(instance);
 
@@ -57,26 +53,21 @@ describe('Event mixin', function () {
       done();
     });
 
-    instance.create({
-      name: 'Tester'
-    }, {}, function (error) {
-      assert.ok(error instanceof Error);
-    });
+    instance.create({ name: 'Tester' }, {},
+      error => assert.ok(error instanceof Error));
   });
 
-  it('created', function (done) {
-    var FixtureService = Proto.extend({
-      create: function (data, params, cb) {
-        _.defer(function () {
-          cb(null, {
-            id: 10,
-            name: data.name
-          });
+  it('created', done => {
+    const FixtureService = Proto.extend({
+      create: function (data, params, callback) {
+        callback(null, {
+          id: 10,
+          name: data.name
         });
       }
     });
 
-    var instance = create.call(FixtureService);
+    const instance = create.call(FixtureService);
 
     mixinEvent(instance);
 
@@ -92,14 +83,12 @@ describe('Event mixin', function () {
       name: 'Tester'
     }, {
       custom: 'value'
-    }, function (error, data) {
-      assert.equal(data.id, 10);
-    });
+    }, (error, data) => assert.equal(data.id, 10));
   });
 
-  it('updated', function (done) {
-    var FixtureService = Proto.extend({
-      update: function (id, data, params, cb) {
+  it('updated', done => {
+    const FixtureService = Proto.extend({
+      update(id, data, params, cb) {
         _.defer(function () {
           cb(null, {
             id: id,
@@ -109,7 +98,7 @@ describe('Event mixin', function () {
       }
     });
 
-    var instance = create.call(FixtureService);
+    const instance = create.call(FixtureService);
 
     mixinEvent(instance);
 
@@ -131,9 +120,9 @@ describe('Event mixin', function () {
     });
   });
 
-  it('removed', function (done) {
-    var FixtureService = Proto.extend({
-      remove: function (id, params, cb) {
+  it('removed', done => {
+    const FixtureService = Proto.extend({
+      remove(id, params, cb) {
         _.defer(function () {
           cb(null, {
             id: id
@@ -142,7 +131,7 @@ describe('Event mixin', function () {
       }
     });
 
-    var instance = create.call(FixtureService);
+    const instance = create.call(FixtureService);
 
     mixinEvent(instance);
 
@@ -160,22 +149,22 @@ describe('Event mixin', function () {
     });
   });
 
-  it('array event data emits multiple event', function (done) {
-    var fixture = [
+  it('array event data emits multiple event', done => {
+    const fixture = [
       { id: 0 },
       { id: 1 },
       { id: 2 },
     ];
-    var FixtureService = Proto.extend({
-      create: function (data, params, cb) {
+    const FixtureService = Proto.extend({
+      create(data, params, cb) {
         _.defer(function () {
           cb(null, fixture);
         });
       }
     });
 
-    var instance = create.call(FixtureService);
-    var counter = 0;
+    const instance = create.call(FixtureService);
+    let counter = 0;
 
     mixinEvent(instance);
 
@@ -190,10 +179,10 @@ describe('Event mixin', function () {
     instance.create({}, {}, function () {});
   });
 
-  it('does not punch when service has an events list (#118)', function(done) {
-    var FixtureService = Proto.extend({
+  it('does not punch when service has an events list (#118)', done => {
+    const FixtureService = Proto.extend({
       events: [ 'created' ],
-      create: function (data, params, cb) {
+      create(data, params, cb) {
         _.defer(function () {
           cb(null, {
             id: 10,
@@ -205,7 +194,7 @@ describe('Event mixin', function () {
 
     FixtureService.mixin(EventEmitter.prototype);
 
-    var instance = create.call(FixtureService);
+    const instance = create.call(FixtureService);
 
     mixinEvent(instance);
 

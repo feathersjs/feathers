@@ -21,18 +21,20 @@ Want to see it in action? Here is a full REST and real-time todo API that uses M
 
 ```js
 // app.js
-var feathers = require('feathers');
-var mongodb = require('feathers-mongodb');
-var bodyParser = require('body-parser');
+import feathers from 'feathers';
+import rest from 'feathers-rest';
+import socketio from 'feathers-socketio';
+import mongodb from 'feathers-mongodb';
+import bodyParser from 'body-parser';
 
-var app = feathers();
-var todoService = mongodb({
+const app = feathers();
+const todoService = mongodb({
   db: 'feathers-demo',
   collection: 'todos'
 });
 
-app.configure(feathers.rest())
-  .configure(feathers.socketio())
+app.configure(rest())
+  .configure(socketio())
   .use(bodyParser.json())
   .use('/todos', todoService)
   .use('/', feathers.static(__dirname))
@@ -42,7 +44,7 @@ app.configure(feathers.rest())
 Then run
 
 ```
-npm install feathers feathers-mongodb body-parser
+npm install feathers feathers-rest feathers-socketio feathers-mongodb body-parser
 node app
 ```
 
@@ -56,5 +58,4 @@ Don't want to use MongoDB? Feathers has plugins for [many other databases](http:
 
 ## Authors
 
-- [David Luecke](https://github.com/daffl)
-- [Eric Kryski](http://erickryski.com)
+[Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
