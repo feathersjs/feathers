@@ -1,7 +1,7 @@
 {
   "name": "feathers",
   "description": "Build Better APIs, Faster than Ever.",
-  "version": "2.0.0-0",
+  "version": "2.0.0-pre.0",
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
     "release:premajor": "npm version premajor && npm publish",
+    "release:prerelease": "npm version prerelease && npm publish",
     "compile": "rm -rf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
