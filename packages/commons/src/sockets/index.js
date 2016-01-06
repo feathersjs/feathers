@@ -32,7 +32,7 @@ export function service(path, obj) {
     // Set up event handlers for this new service
     _setupEventHandlers(protoService, location);
     // For any existing connection add method handlers
-    info.clients().forEach(socket => _setupMethodHandlers(socket, location, protoService));
+    Object.keys(info.clients()).forEach(socket => _setupMethodHandlers(socket, location, protoService));
   }
 
   return protoService;
