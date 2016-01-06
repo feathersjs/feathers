@@ -36,6 +36,7 @@
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
     "compile": "rm -rf lib/ && node_modules/.bin/babel -d lib/ src/",
+    "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
     "mocha": "mocha test/ --compilers js:babel-core/register",
     "test": "npm run compile && npm run jshint && npm run mocha"
