@@ -2,3 +2,4 @@
 .idea/
 test/
 !lib/
+src/
