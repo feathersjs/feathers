@@ -34,7 +34,7 @@ export function setupEventHandlers(info, service, path) {
         service[ev] : defaultDispatcher;
       let eventName = `${path} ${ev}`;
 
-      info.clients().forEach(function (socket) {
+      Object.keys(info.clients()).forEach(function (socket) {
         dispatcher.call(service, data, info.params(socket), function (error, dispatchData) {
           if (error) {
             socket[info.method]('error', error);
