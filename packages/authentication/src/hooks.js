@@ -1,5 +1,5 @@
-var bcrypt = require('bcrypt');
-var Errors = require('feathers').errors.types;
+import bcrypt from 'bcrypt';
+import errors from 'feathers-errors';
 
 /**
  * A function that generates a feathers hook that replaces a password located
@@ -42,7 +42,7 @@ exports.hashPassword = function(passwordField){
 exports.requireAuth = function (hook, next) {
   // Allow user to view records without a userId.
   if (!hook.params.user) {
-    return next(new Errors.NotAuthenticated('Please include a valid auth token in the Authorization header.'));
+    return next(new errors.NotAuthenticated('Please include a valid auth token in the Authorization header.'));
   } else {
     return next(null, hook);
   }
@@ -121,7 +121,7 @@ exports.restrictToSelf = function (hook, next) {
  * find, get, create, update, remove
  */
 exports.stop = function (hook, next) {
-  return next(new Errors.Forbidden('Safety check. We just stopped you from blowing things up.'));
+  return next(new errors.Forbidden('Safety check. We just stopped you from blowing things up.'));
 };
 
 /**

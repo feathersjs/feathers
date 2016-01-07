@@ -43,6 +43,7 @@
   "dependencies": {
     "bcrypt": "^0.8.5",
     "debug": "^2.2.0",
+    "feathers-errors": "^1.1.5",
     "feathers-hooks": "^0.4.0",
     "jsonwebtoken": "^5.4.0",
     "lodash": "^2.4.1",
