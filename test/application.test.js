@@ -44,6 +44,31 @@ describe('Feathers application', () => {
     });
   });
 
+  it('uses .defaultService if available', done => {
+    const app = feathers();
+
+    assert.ok(!app.service('/todos/'));
+    
+    app.defaultService = function(path) {
+      assert.equal(path, 'todos');
+      return {
+        get(id) {
+          return Promise.resolve({
+            id, description: `You have to do ${id}!`
+          });
+        }
+      };
+    };
+
+    app.service('/todos/').get('dishes').then(data => {
+      assert.deepEqual(data, {
+        id: 'dishes',
+        description: 'You have to do dishes!'
+      });
+      done();
+    });
+  });
+
   it('Registers a service, wraps it, runs service.setup(), and adds the event and Promise mixin', done => {
     const dummyService = {
       setup(app, path){

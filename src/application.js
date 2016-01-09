@@ -20,11 +20,17 @@ export default {
     });
   },
 
-  service(location, service, options) {
+  service(location, service, options = {}) {
     location = stripSlashes(location);
 
     if(!service) {
-      return this.services[location];
+      const current = this.services[location];
+
+      if(typeof current === 'undefined' && typeof this.defaultService === 'function') {
+        return this.service(location, this.defaultService(location), options);
+      }
+
+      return current;
     }
 
     let protoService = Proto.extend(service);
@@ -40,7 +46,7 @@ export default {
 
     // Run the provider functions to register the service
     this.providers.forEach(provider =>
-      provider.call(this, location, protoService, options || {}));
+      provider.call(this, location, protoService, options));
 
     // If we ran setup already, set this service up explicitly
     if (this._isSetup && typeof protoService.setup === 'function') {
@@ -48,8 +54,7 @@ export default {
       protoService.setup(this, location);
     }
 
-    this.services[location] = protoService;
-    return protoService;
+    return (this.services[location] = protoService);
   },
 
   use(location) {
