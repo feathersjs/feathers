@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import rubberduck from 'rubberduck';
 import { EventEmitter } from 'events';
 import { hooks } from 'feathers-commons';
@@ -24,7 +23,7 @@ export default function(service) {
     service.mixin(EventEmitter.prototype);
   }
 
-  service._serviceEvents = _.isArray(service.events) ? service.events.slice() : [];
+  service._serviceEvents = Array.isArray(service.events) ? service.events.slice() : [];
 
   // Pass the Rubberduck error event through
   // TODO deal with error events properly
@@ -32,7 +31,8 @@ export default function(service) {
     service.emit('serviceError', errors[0]);
   });
 
-  _.each(eventMappings, (event, method) => {
+  Object.keys(eventMappings).forEach(method => {
+    const event = eventMappings[method];
     const alreadyEmits = service._serviceEvents.indexOf(event) !== -1;
 
     if (typeof service[method] === 'function' && !alreadyEmits) {

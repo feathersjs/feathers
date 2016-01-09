@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import makeDebug from 'debug';
 import { stripSlashes } from 'feathers-commons';
 import Uberproto from 'uberproto';
@@ -12,7 +11,7 @@ const Proto = Uberproto.extend({
 
 export default {
   init() {
-    _.extend(this, {
+    Object.assign(this, {
       methods,
       mixins: mixins(),
       services: {},
@@ -54,7 +53,7 @@ export default {
   },
 
   use(location) {
-    let service, middleware = _(arguments)
+    let service, middleware = Array.from(arguments)
       .slice(1)
       .reduce(function (middleware, arg) {
         if (typeof arg === 'function') {
@@ -70,7 +69,7 @@ export default {
         after: []
       });
 
-    const hasMethod = methods => _.some(methods, name =>
+    const hasMethod = methods => methods.some(name =>
       (service && typeof service[name] === 'function'));
 
     // Check for service (any object with at least one service method)
@@ -86,7 +85,9 @@ export default {
 
   setup() {
     // Setup each service (pass the app so that they can look up other services etc.)
-    _.each(this.services, (service, path) => {
+    Object.keys(this.services).forEach(path => {
+      const service = this.services[path];
+
       debug(`Setting up service for \`${path}\``);
       if (typeof service.setup === 'function') {
         service.setup(this, path);
@@ -113,7 +114,7 @@ export default {
 
     this.setup(server);
     debug('Feathers application listening');
-    
+
     return server;
   }
 };

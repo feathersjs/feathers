@@ -1,6 +1,5 @@
 if(!global._babelPolyfill) { require('babel-polyfill'); }
 
-import _ from 'lodash';
 import express from 'express';
 import Proto from 'uberproto';
 import Application from './application';
@@ -22,4 +21,4 @@ export default function createApplication() {
 createApplication.version = require('../package.json').version;
 
 // Expose all express methods (like express.engine())
-_.defaults(createApplication, express);
+Object.assign(createApplication, express);
