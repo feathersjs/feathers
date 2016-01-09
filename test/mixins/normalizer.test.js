@@ -1,7 +1,7 @@
 import assert from 'assert';
 import Proto from 'uberproto';
-import normalizer from '../../lib/mixins/normalizer';
-import mixins from '../../lib/mixins';
+import normalizer from '../../src/mixins/normalizer';
+import mixins from '../../src/mixins';
 
 describe('Argument normalizer mixin', () => {
   it('normalizer mixin is always the last to run', () => {

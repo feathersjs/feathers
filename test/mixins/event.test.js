@@ -1,7 +1,7 @@
 import assert from 'assert';
 import Proto from 'uberproto';
 import { EventEmitter } from 'events';
-import mixinEvent from '../../lib/mixins/event';
+import mixinEvent from '../../src/mixins/event';
 
 const create = Proto.create;
 

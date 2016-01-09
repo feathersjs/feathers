@@ -44,7 +44,7 @@ describe('Feathers application', () => {
     });
   });
 
-  it('Registers a service, wraps it, runs service.setup(), and adds the event mixin', done => {
+  it('Registers a service, wraps it, runs service.setup(), and adds the event and Promise mixin', done => {
     const dummyService = {
       setup(app, path){
         this.path = path;
@@ -84,7 +84,7 @@ describe('Feathers application', () => {
       get(name, params, callback) {
         callback(null, {
           id: name,
-          description: 'You have to do ' + name + '!'
+          description: `You have to do ${name}!`
         });
       }
     };
@@ -151,7 +151,7 @@ describe('Feathers application', () => {
   });
 
   it('REST and SocketIO with SSL server (#25)', done => {
-    // For more info on Reqest HTTPS settings see https://github.com/mikeal/request/issues/418
+    // For more info on Request HTTPS settings see https://github.com/mikeal/request/issues/418
     // This needs to be set so that the SocektIO client can connect
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 

@@ -10,8 +10,7 @@ import Application from './application';
  * @return {Function}
  * @api public
  */
-export default function createApplication() {
-  const app = express();
+export default function createApplication(app = express()) {
   Proto.mixin(Application, app);
   app.init();
   return app;
