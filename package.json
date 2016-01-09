@@ -68,5 +68,10 @@
     "q": "^1.0.1",
     "request": "^2.x",
     "socket.io-client": "^1.0.0"
+  },
+  "browser": {
+    "express": "./lib/client/express",
+    "./lib/feathers": "./lib/client/index",
+    "babel-polyfill": false
   }
 }

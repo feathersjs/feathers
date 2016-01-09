@@ -1,6 +1,6 @@
 import assert from 'assert';
 import Proto from 'uberproto';
-import mixin from '../../lib/mixins/promise';
+import mixin from '../../src/mixins/promise';
 
 const create = Proto.create;
 
