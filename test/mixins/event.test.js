@@ -1,5 +1,4 @@
 import assert from 'assert';
-import _ from 'lodash';
 import Proto from 'uberproto';
 import { EventEmitter } from 'events';
 import mixinEvent from '../../lib/mixins/event';
@@ -89,7 +88,7 @@ describe('Event mixin', () => {
   it('updated', done => {
     const FixtureService = Proto.extend({
       update(id, data, params, cb) {
-        _.defer(function () {
+        setTimeout(function () {
           cb(null, {
             id: id,
             name: data.name
@@ -123,7 +122,7 @@ describe('Event mixin', () => {
   it('removed', done => {
     const FixtureService = Proto.extend({
       remove(id, params, cb) {
-        _.defer(function () {
+        setTimeout(function () {
           cb(null, {
             id: id
           });
@@ -157,9 +156,9 @@ describe('Event mixin', () => {
     ];
     const FixtureService = Proto.extend({
       create(data, params, cb) {
-        _.defer(function () {
+        setTimeout(function () {
           cb(null, fixture);
-        });
+        }, 20);
       }
     });
 
@@ -183,12 +182,12 @@ describe('Event mixin', () => {
     const FixtureService = Proto.extend({
       events: [ 'created' ],
       create(data, params, cb) {
-        _.defer(function () {
+        setTimeout(function () {
           cb(null, {
             id: 10,
             name: data.name
           });
-        });
+        }, 20);
       }
     });
 
