@@ -1,4 +1,4 @@
 {
-  "plugins": ["transform-object-assign", "add-module-exports"],
+  "plugins": [ "add-module-exports" ],
   "presets": [ "es2015" ]
 }
