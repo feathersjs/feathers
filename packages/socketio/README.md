@@ -51,6 +51,18 @@ app.use('/todos', {
 });
 ```
 
+## Client use
+
+```js
+import io from 'socket.io-client';
+import feathers from 'feathers/client';
+import socketio from 'feathers-socketio/client';
+
+const socket = io('http://path/to/api');
+const app = feathers()
+  .configure(socketio(socket));
+```
+
 ## Changelog
 
 __1.0.0__
