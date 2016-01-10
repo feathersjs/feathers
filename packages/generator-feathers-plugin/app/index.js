@@ -59,7 +59,8 @@ module.exports = generators.Base.extend({
     }.bind(this));
 
     this.npmInstall([
-      'debug@^2.2.0'
+      'debug@^2.2.0',
+      'babel-polyfill@^6.3.14'
     ], { save: true });
 
     this.npmInstall([
@@ -67,7 +68,6 @@ module.exports = generators.Base.extend({
       'babel-cli@^6.0.0',
       'babel-preset-es2015@^6.0.0',
       'babel-plugin-add-module-exports',
-      'babel-plugin-transform-object-assign@^6.1.0',
       'jshint@^2.0.0',
       'mocha@^2.0.0',
       'feathers@^1.0.0'
