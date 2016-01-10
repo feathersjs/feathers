@@ -8,16 +8,6 @@
 
 This is a repository for utility functionality that is shared between different Feathers plugin and used by the main repository.
 
-## Changelog
-
-__0.2.0__
-
-- Socket handlers use argument normalization
-
-__0.1.0__
-
-- Initial release
-
 ## Author
 
 - [David Luecke](https://github.com/daffl)
