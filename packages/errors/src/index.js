@@ -9,8 +9,10 @@ const debug = makeDebug('feathers-errors');
 // Node v5.0+ does support this but until we want to drop support
 // for older versions we need this hack.
 // http://stackoverflow.com/questions/33870684/why-doesnt-instanceof-work-on-instances-of-error-subclasses-under-babel-node
-function AbstractError(klass) {
-  function Constructor(msg, name, code, className, data) {
+// https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend
+
+class FeathersError extends Error {
+  constructor(msg, name, code, className, data) {
     msg = msg || 'Error';
 
     let errors;
@@ -34,12 +36,12 @@ function AbstractError(klass) {
       message = msg;
     }
 
-    klass.call(this, msg);
-
     if (data && data.errors) {
       errors = data.errors;
       delete data.errors;
     }
+
+    super(message);
 
     // NOTE (EK): Babel doesn't support this so
     // we have to pass in the class name manually.
@@ -51,18 +53,22 @@ function AbstractError(klass) {
     this.data = data;
     this.errors = errors || {};
 
-    Error.captureStackTrace(this, this.name);
-
     debug(`${this.name}(${this.code}): ${this.message}`);
   }
 
-  AbstractError.prototype = Object.create(klass.prototype);
-  Object.setPrototypeOf(AbstractError, klass);
-
-  return Constructor;
+  // NOTE (EK): A little hack to get around `message` not
+  // being included in the default toJSON call.
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      code: this.code,
+      className: this.className,
+      data: this.data,
+      errors: this.errors
+    };
+  }
 }
-
-let FeathersError = AbstractError(Error);
 
 class BadRequest extends FeathersError {
   constructor(message, data) {

@@ -1,5 +1,7 @@
 'use strict';
 
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -11,15 +13,42 @@ var _debug2 = _interopRequireDefault(_debug);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+function _extendableBuiltin(cls) {
+  function ExtendableBuiltin() {
+    var instance = Reflect.construct(cls, Array.from(arguments));
+    Object.setPrototypeOf(instance, Object.getPrototypeOf(this));
+    return instance;
+  }
 
-require('babel-polyfill');
+  ExtendableBuiltin.prototype = Object.create(cls.prototype, {
+    constructor: {
+      value: cls,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+
+  if (Object.setPrototypeOf) {
+    Object.setPrototypeOf(ExtendableBuiltin, cls);
+  } else {
+    ExtendableBuiltin.__proto__ = cls;
+  }
+
+  return ExtendableBuiltin;
+}
+
+if (!global._babelPolyfill) {
+  require('babel-polyfill');
+}
 
 var debug = (0, _debug2.default)('feathers-errors');
 
@@ -28,8 +57,14 @@ var debug = (0, _debug2.default)('feathers-errors');
 // Node v5.0+ does support this but until we want to drop support
 // for older versions we need this hack.
 // http://stackoverflow.com/questions/33870684/why-doesnt-instanceof-work-on-instances-of-error-subclasses-under-babel-node
-function AbstractError(klass) {
-  function Constructor(msg, name, code, className, data) {
+// https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend
+
+var FeathersError = (function (_extendableBuiltin2) {
+  _inherits(FeathersError, _extendableBuiltin2);
+
+  function FeathersError(msg, name, code, className, data) {
+    _classCallCheck(this, FeathersError);
+
     msg = msg || 'Error';
 
     var errors = undefined;
@@ -53,8 +88,6 @@ function AbstractError(klass) {
           message = msg;
         }
 
-    klass.call(this, msg);
-
     if (data && data.errors) {
       errors = data.errors;
       delete data.errors;
@@ -63,25 +96,41 @@ function AbstractError(klass) {
     // NOTE (EK): Babel doesn't support this so
     // we have to pass in the class name manually.
     // this.name = this.constructor.name;
-    this.name = name;
-    this.message = message;
-    this.code = code;
-    this.className = className;
-    this.data = data;
-    this.errors = errors || {};
 
-    Error.captureStackTrace(this, this.name);
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FeathersError).call(this, message));
 
-    debug(this.name + '(' + this.code + '): ' + this.message);
+    _this.name = name;
+    _this.message = message;
+    _this.code = code;
+    _this.className = className;
+    _this.data = data;
+    _this.errors = errors || {};
+
+    // Error.captureStackTrace(this, this.name);
+
+    debug(_this.name + '(' + _this.code + '): ' + _this.message);
+    return _this;
   }
 
-  AbstractError.prototype = Object.create(klass.prototype);
-  Object.setPrototypeOf(AbstractError, klass);
+  // NOTE (EK): A little hack to get around `message` not
+  // being included in the default toJSON call.
 
-  return Constructor;
-}
+  _createClass(FeathersError, [{
+    key: 'toJSON',
+    value: function toJSON() {
+      return {
+        name: this.name,
+        message: this.message,
+        code: this.code,
+        className: this.className,
+        data: this.data,
+        errors: this.errors
+      };
+    }
+  }]);
 
-var FeathersError = AbstractError(Error);
+  return FeathersError;
+})(_extendableBuiltin(Error));
 
 var BadRequest = (function (_FeathersError) {
   _inherits(BadRequest, _FeathersError);
