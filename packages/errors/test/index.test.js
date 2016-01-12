@@ -107,7 +107,7 @@ describe('feathers-errors', () => {
         var error = new errors.GeneralError(data);
         assert.equal(error.code, 500);
         assert.equal(error.message, 'Error');
-        assert.equal(error.data, data);
+        assert.deepEqual(error.data, data);
       });
     });
 
@@ -133,7 +133,7 @@ describe('feathers-errors', () => {
         var error = new errors.GeneralError('Custom Error', data);
         assert.equal(error.code, 500);
         assert.equal(error.message, 'Custom Error');
-        assert.equal(error.data, data);
+        assert.deepEqual(error.data, data);
       });
 
       it('with multiple errors', () => {
@@ -166,6 +166,20 @@ describe('feathers-errors', () => {
       
       var error = new errors.GeneralError('Custom Error', data);
       assert.equal(JSON.stringify(error), expected);  
+    });
+
+    it('can handle immutable data', () => {
+      var data = {
+        errors: {
+          email: 'Email Taken',
+          password: 'Invalid Password'  
+        },
+        foo: 'bar'
+      };
+      
+      var error = new errors.GeneralError('Custom Error', Object.freeze(data));
+      assert.equal(error.data.errors, undefined);
+      assert.deepEqual(error.data, {foo: 'bar'});
     });
   });
 });

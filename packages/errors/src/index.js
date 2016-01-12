@@ -17,6 +17,7 @@ class FeathersError extends Error {
 
     let errors;
     let message;
+    let newData;
 
     if (msg instanceof Error) {
       message = msg.message || 'Error';
@@ -36,9 +37,16 @@ class FeathersError extends Error {
       message = msg;
     }
 
-    if (data && data.errors) {
-      errors = data.errors;
-      delete data.errors;
+    if (data) {
+      // NOTE(EK): To make sure that we are not messing
+      // with immutable data, just make a copy.
+      // https://github.com/feathersjs/feathers-errors/issues/19
+      newData = Object.assign({}, data);
+
+      if (newData.errors) {
+        errors = newData.errors;
+        delete newData.errors;
+      }
     }
 
     super(message);
@@ -50,7 +58,7 @@ class FeathersError extends Error {
     this.message = message;
     this.code = code;
     this.className = className;
-    this.data = data;
+    this.data = newData;
     this.errors = errors || {};
 
     debug(`${this.name}(${this.code}): ${this.message}`);

@@ -1,5 +1,7 @@
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 Object.defineProperty(exports, "__esModule", {
@@ -69,6 +71,7 @@ var FeathersError = (function (_extendableBuiltin2) {
 
     var errors = undefined;
     var message = undefined;
+    var newData = undefined;
 
     if (msg instanceof Error) {
       message = msg.message || 'Error';
@@ -88,9 +91,16 @@ var FeathersError = (function (_extendableBuiltin2) {
           message = msg;
         }
 
-    if (data && data.errors) {
-      errors = data.errors;
-      delete data.errors;
+    if (data) {
+      // NOTE(EK): To make sure that we are not messing
+      // with immutable data, just make a copy.
+      // https://github.com/feathersjs/feathers-errors/issues/19
+      newData = _extends({}, data);
+
+      if (newData.errors) {
+        errors = newData.errors;
+        delete newData.errors;
+      }
     }
 
     // NOTE (EK): Babel doesn't support this so
@@ -103,10 +113,8 @@ var FeathersError = (function (_extendableBuiltin2) {
     _this.message = message;
     _this.code = code;
     _this.className = className;
-    _this.data = data;
+    _this.data = newData;
     _this.errors = errors || {};
-
-    // Error.captureStackTrace(this, this.name);
 
     debug(_this.name + '(' + _this.code + '): ' + _this.message);
     return _this;
