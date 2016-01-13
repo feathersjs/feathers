@@ -2,48 +2,23 @@
   "name": "<%= name %>",
   "description": "<%= description %>",
   "version": "0.0.0",
-  "homepage": "https://github.com/<%= repository %>",
+  "homepage": "",
   "main": "lib/",
   "keywords": [
-    "feathers",
-    "feathers-plugin"
+    "feathers"
   ],
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/<%= repository %>/blob/master/LICENSE"
-    }
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/<%= repository %>.git"
-  },
-  "author": {
-    "name": "Feathers contributors",
-    "email": "hello@feathersjs.com",
-    "url": "https://feathersjs.com"
-  },
+  "license": "MIT",
+  "repository": {},
+  "author": {},
   "contributors": [],
-  "bugs": {
-    "url": "https://github.com/<%= repository %>/issues"
-  },
+  "bugs": {},
   "engines": {
     "node": ">= 0.12.0"
   },
   "scripts": {
-    "prepublish": "npm run compile",
-    "publish": "git push origin && git push origin --tags",
-    "release:patch": "npm version patch && npm publish",
-    "release:minor": "npm version minor && npm publish",
-    "release:major": "npm version major && npm publish",
-    "compile": "rm -rf lib/ && babel -d lib/ src/",
+    "start": "node server/",
     "jshint": "jshint src/. test/. --config",
-    "mocha": "mocha test/ --compilers js:babel/register",
+    "mocha": "mocha test/ --compilers js:babel-core/register",
     "test": "npm run jshint && npm run mocha"
-  },
-  "directories": {
-    "lib": "lib"
-  },
-  "dependencies": {},
-  "devDependencies": {}
+  }
 }

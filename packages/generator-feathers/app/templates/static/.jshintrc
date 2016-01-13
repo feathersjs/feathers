@@ -18,7 +18,6 @@
     "trailing": true,
     "smarttabs": true,
     "white": false,
-    "node": true,
     "globals": {
         "it": true,
         "describe": true,
