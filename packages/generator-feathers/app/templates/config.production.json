@@ -1,0 +1,23 @@
+{
+  "host": "<%=name%>-app.feathersjs.com",
+  "port": 80,<% if(database === 'mongodb'){ %>
+  "mongodb": "DATABASE_URL",<% } else if(database === 'mariadb'){ %>
+  "mariadb": "DATABASE_URL",<% } else if(database === 'mssql'){ %>
+  "mssql": "DATABASE_URL",<% } else if(database === 'mysql'){ %>
+  "mysql": "DATABASE_URL",<% } else if(database === 'postgres'){ %>
+  "postgres": "DATABASE_URL",<% } else if(database === 'nedb'){ %>
+  "nedb": "NEDB_BASE_PATH",<% } else if(database === 'sqlite'){ %>
+  "sqlite": "SQLITE_DB",<% } %>
+  "public": "../public/"<% if(authentication.length){ %>,
+  "auth": {<% if(authentication.indexOf('local' > -1)){ %>
+    "local": {
+      "secret": "FEATHERS_AUTH_SECRET",
+      "loginEndpoint": "/login",
+      "userEndpoint": "/users",
+      "usernameField": "email"
+    }<% } %>
+  }<% } %><% if (cors === 'whitelisted') { %>,
+  "corsWhitelist": [<% corsWhitelist.forEach(function(domain, index, list){ %>
+    "<%= domain.trim() %>"<% if(index + 1 !== list.length){ %>,<% } %><% }); %>
+  ]<% } %>
+}

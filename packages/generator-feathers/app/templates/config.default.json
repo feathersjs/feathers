@@ -1,0 +1,23 @@
+{
+  "host": "localhost",
+  "port": 3030,<% if(database === 'mongodb'){ %>
+  "mongodb": "mongodb://localhost:27017/feathers",<% } else if(database === 'mariadb'){ %>
+  "mariadb": "mariadb://root:@localhost:3306/feathers",<% } else if(database === 'mssql'){ %>
+  "mssql": "mssql://root:@localhost:1433/feathers",<% } else if(database === 'mysql'){ %>
+  "mysql": "mysql://root:@localhost:3306/feathers",<% } else if(database === 'postgres'){ %>
+  "postgres": "postgres://postgres:@localhost:5432/feathers",<% } else if(database === 'nedb'){ %>
+  "nedb": "../data/",<% } else if(database === 'sqlite'){ %>
+  "sqlite": "../data/feathers.sqlite",<% } %>
+  "public": "../public/"<% if(authentication.length){ %>,
+  "auth": {<% if(authentication.indexOf('local' > -1)){ %>
+    "local": {
+      "secret": "<%= secret %>",
+      "loginEndpoint": "/login",
+      "userEndpoint": "/users",
+      "usernameField": "email"
+    }<% } %>
+  }<% } %><% if (cors === 'whitelisted') { %>,
+  "corsWhitelist": [<% corsWhitelist.forEach(function(domain, index, list){ %>
+    "<%= domain.trim() %>"<% if(index + 1 !== list.length){ %>,<% } %><% }); %>
+  ]<% } %>
+}
