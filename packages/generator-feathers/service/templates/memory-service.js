@@ -11,5 +11,5 @@ export default function(){
     }
   };
 
-  app.use('/v1/users', service(options));
+  app.use(<% if (version) { %>'/<%= version %>/<%= pluralizedName %>'<% } else { %>'/<%= pluralizedName %>'<% } %>, service(options));
 }
