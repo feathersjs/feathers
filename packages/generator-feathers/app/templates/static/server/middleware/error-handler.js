@@ -16,7 +16,7 @@ export default function(app) {
       }
     }
 
-    const code = parseInt(error.code, 10) !== NaN ? parseInt(error.code, 10) : 500;
+    const code = !isNaN( parseInt(error.code, 10) ) ? parseInt(error.code, 10) : 500;
 
     // Don't show stack trace if it is a 404 error
     if (code === 404) {

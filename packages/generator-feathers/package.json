@@ -32,27 +32,18 @@
     "node": ">= 0.12.0"
   },
   "scripts": {
-    "prepublish": "npm run compile",
     "publish": "git push origin && git push origin --tags",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
-    "release:major": "npm version major && npm publish",
-    "compile": "rm -rf lib/ && babel -d lib/ src/",
-    "jshint": "jshint src/. test/. --config",
-    "mocha": "mocha test/ --compilers js:babel/register",
-    "test": "npm run jshint && npm run mocha"
+    "release:major": "npm version major && npm publish"
   },
   "directories": {
     "lib": "lib"
   },
   "dependencies": {
-    "lodash": "^3.10.1",
+    "i": "^0.3.3",
     "yeoman-generator": "^0.21.1"
   },
   "devDependencies": {
-    "babel": "^5.8.29",
-    "feathers": "^1.1.1",
-    "jshint": "^2.8.0",
-    "mocha": "^2.3.3"
   }
 }

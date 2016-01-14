@@ -3,7 +3,6 @@
 var generators = require('yeoman-generator');
 var path = require('path');
 var crypto = require('crypto');
-var _ = require('lodash');
 
 module.exports = generators.Base.extend({
   initializing: function () {
@@ -11,6 +10,17 @@ module.exports = generators.Base.extend({
     this.props = {
       name: process.cwd().split(path.sep).pop()
     };
+    this.dependencies = [
+      'feathers@2.0.0-pre.2',
+      'feathers-hooks@1.0.0-pre.2',
+      'feathers-errors',
+      'feathers-configuration',
+      'serve-favicon',
+      'compression',
+      'winston',
+      'babel-core',
+      'babel-preset-es2015'
+    ];
   },
 
   prompting: function () {
@@ -144,184 +154,151 @@ module.exports = generators.Base.extend({
     ];
 
     this.prompt(prompts, function (props) {
-      this.props = _.extend(this.props, props);
+      this.props = Object.assign(this.props, props);
 
       done();
     }.bind(this));
   },
 
-  writing: function () {
-    this.props.secret = crypto.randomBytes(64).toString('base64');
-    this.props.corsWhitelist = this.props.corsWhitelist && this.props.corsWhitelist.split(',');
-    var dependencies = [
-      'feathers@2.0.0-pre.2',
-      'feathers-hooks@1.0.0-pre.1',
-      'feathers-configuration',
-      'serve-favicon',
-      'compression',
-      'winston',
-      'babel-core',
-      'babel-preset-es2015'
-    ];
+  writing: {
+    providers: function() {
+      if (this.props.providers.indexOf('rest') !== -1) {
+        this.dependencies.push('body-parser');
+        this.dependencies.push('feathers-rest');
+      }
 
-    if (this.props.providers.indexOf('rest') !== -1) {
-      dependencies.push('body-parser');
-      dependencies.push('feathers-rest');
+      if (this.props.providers.indexOf('socket.io') !== -1) {
+        this.dependencies.push('feathers-socketio');
+      }
+
+      if (this.props.providers.indexOf('primus') !== -1) {
+        this.dependencies.push('feathers-primus');
+        this.dependencies.push('sockjs');
+      }
+    },
+
+    cors: function() {
+      this.props.corsWhitelist = this.props.corsWhitelist && this.props.corsWhitelist.split(',');
+
+      if (this.props.cors) {
+        this.dependencies.push('cors');
+      }
+    },
+
+    authentication: function() {
+      this.props.secret = crypto.randomBytes(64).toString('base64');
+
+      if (this.props.authentication.length) {
+        this.dependencies.push('feathers-authentication');
+      }
+    },
+
+    databases: function() {
+      switch(this.props.database) {
+        case 'memory':
+          this.dependencies.push('feathers-memory');
+          break;
+        case 'mongodb':
+          this.dependencies.push('mongoose');
+          this.dependencies.push('feathers-mongoose');
+          break;
+        case 'mysql':
+        case 'mariadb':
+          this.dependencies.push('mysql');
+          this.dependencies.push('sequelize');
+          this.dependencies.push('feathers-sequelize');
+          break;
+        case 'nedb':
+          this.dependencies.push('nedb');
+          this.dependencies.push('feathers-nedb');
+          break;
+        case 'postgres':
+          this.dependencies.push('pg');
+          this.dependencies.push('pg-hstore');
+          this.dependencies.push('sequelize');
+          this.dependencies.push('feathers-sequelize');
+          break;
+        case 'sqlite':
+          this.dependencies.push('sqlite3');
+          this.dependencies.push('fs-extra');
+          this.dependencies.push('sequelize');
+          this.dependencies.push('feathers-sequelize');
+          break;
+        case 'mssql':
+          this.dependencies.push('tedious');
+          this.dependencies.push('sequelize');
+          this.dependencies.push('feathers-sequelize');
+          break;
+      }
+    },
+
+    services: function() {
+      if (this.props.database) {
+        this.composeWith('feathers:service', {
+          options: {
+            type: 'database',
+            database: this.props.database,
+            name: 'user',
+            hazVersions: true,
+            version: 'v1'
+          }
+        });
+
+        this.fs.copyTpl(
+          this.templatePath('service.js'),
+          this.destinationPath('server/services', 'index.js'),
+          this.props
+        );
+      }
+    },
+
+    application: function() {
+      this.fs.copy(this.templatePath('static'), this.destinationPath());
+      this.fs.copy(this.templatePath('static/.*'), this.destinationPath());
+
+      this.fs.copyTpl(
+        this.templatePath('app.js'),
+        this.destinationPath('server', 'app.js'),
+        this.props
+      );
+    },
+
+    middleware: function() {
+      this.fs.copyTpl(
+        this.templatePath('middleware.js'),
+        this.destinationPath('server/middleware', 'index.js'),
+        this.props
+      );
+    },
+
+    config: function() {      
+      this.fs.copyTpl(
+        this.templatePath('config.default.json'),
+        this.destinationPath('config', 'default.json'),
+        this.props
+      );
+      
+      this.fs.copyTpl(
+        this.templatePath('config.production.json'),
+        this.destinationPath('config', 'production.json'),
+        this.props
+      );
+      
+      this.fs.copyTpl(
+        this.templatePath('package.json'),
+        this.destinationPath('package.json'),
+        this.props
+      );
+    },
+
+    deps: function() {
+      this.npmInstall(this.dependencies, { save: true });
+
+      this.npmInstall([
+        'jshint',
+        'mocha',
+        'request'
+      ], { saveDev: true});
     }
-
-    if (this.props.providers.indexOf('socket.io') !== -1) {
-      dependencies.push('feathers-socketio');
-    }
-
-    if (this.props.providers.indexOf('primus') !== -1) {
-      dependencies.push('feathers-primus');
-    }
-
-    if (this.props.authentication.length) {
-      dependencies.push('feathers-authentication');
-    }
-    
-    if (this.props.cors) {
-      dependencies.push('cors');
-    }
-
-    switch(this.props.database) {
-      case 'memory':
-        dependencies.push('feathers-memory');
-        this.fs.copyTpl(
-          this.templatePath('services/memory-user.js'),
-          this.destinationPath('server/services', 'user.js'),
-          this.props
-        );
-        break;
-      case 'mongodb':
-        dependencies.push('mongoose');
-        dependencies.push('feathers-mongoose');
-        this.fs.copyTpl(
-          this.templatePath('models/mongoose-user.js'),
-          this.destinationPath('server/models', 'user.js'),
-          this.props
-        );
-        this.fs.copyTpl(
-          this.templatePath('services/mongoose-user.js'),
-          this.destinationPath('server/services', 'user.js'),
-          this.props
-        );
-        break;
-      case 'mysql':
-      case 'mariadb':
-        dependencies.push('mysql');
-        dependencies.push('sequelize');
-        dependencies.push('feathers-sequelize');
-        this.fs.copyTpl(
-          this.templatePath('models/sequelize-user.js'),
-          this.destinationPath('server/models', 'user.js'),
-          this.props
-        );
-        this.fs.copyTpl(
-          this.templatePath('services/sequelize-user.js'),
-          this.destinationPath('server/services', 'user.js'),
-          this.props
-        );
-        break;
-      case 'nedb':
-        dependencies.push('nedb');
-        dependencies.push('feathers-nedb');
-        this.fs.copyTpl(
-          this.templatePath('services/nedb-user.js'),
-          this.destinationPath('server/services', 'user.js'),
-          this.props
-        );
-        break;
-      case 'postgres':
-        dependencies.push('pg');
-        dependencies.push('pg-hstore');
-        dependencies.push('sequelize');
-        dependencies.push('feathers-sequelize');
-        this.fs.copyTpl(
-          this.templatePath('models/sequelize-user.js'),
-          this.destinationPath('server/models', 'user.js'),
-          this.props
-        );
-        this.fs.copyTpl(
-          this.templatePath('services/sequelize-user.js'),
-          this.destinationPath('server/services', 'user.js'),
-          this.props
-        );
-        break;
-      case 'sqlite':
-        dependencies.push('sqlite3');
-        dependencies.push('sequelize');
-        dependencies.push('feathers-sequelize');
-        this.fs.copyTpl(
-          this.templatePath('models/sequelize-user.js'),
-          this.destinationPath('server/models', 'user.js'),
-          this.props
-        );
-        this.fs.copyTpl(
-          this.templatePath('services/sequelize-user.js'),
-          this.destinationPath('server/services', 'user.js'),
-          this.props
-        );
-        break;
-      case 'mssql':
-        dependencies.push('tedious');
-        dependencies.push('sequelize');
-        dependencies.push('feathers-sequelize');
-        this.fs.copyTpl(
-          this.templatePath('models/sequelize-user.js'),
-          this.destinationPath('server/models', 'user.js'),
-          this.props
-        );
-        this.fs.copyTpl(
-          this.templatePath('services/sequelize-user.js'),
-          this.destinationPath('server/services', 'user.js'),
-          this.props
-        );
-        break;
-    }
-
-    this.fs.copy(this.templatePath('static'), this.destinationPath());
-    this.fs.copy(this.templatePath('static/.*'), this.destinationPath());
-
-    this.fs.copyTpl(
-      this.templatePath('app.js'),
-      this.destinationPath('server', 'app.js'),
-      this.props
-    );
-
-    this.fs.copyTpl(
-      this.templatePath('middleware.js'),
-      this.destinationPath('server/middleware', 'index.js'),
-      this.props
-    );
-    
-    this.fs.copyTpl(
-      this.templatePath('config.default.json'),
-      this.destinationPath('config', 'default.json'),
-      this.props
-    );
-    
-    this.fs.copyTpl(
-      this.templatePath('config.production.json'),
-      this.destinationPath('config', 'production.json'),
-      this.props
-    );
-    
-    this.fs.copyTpl(
-      this.templatePath('package.json'),
-      this.destinationPath('package.json'),
-      this.props
-    );
-    
-    this.log(this.props);
-
-    this.npmInstall(dependencies, { save: true });
-
-    this.npmInstall([
-      'jshint',
-      'mocha',
-      'request'
-    ], { saveDev: true});
   }
 });

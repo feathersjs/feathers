@@ -1,24 +1,19 @@
 import hooks from '../hooks';
-import mongoose from 'mongoose';
 import service from 'feathers-mongoose';
-import User from '../models/user';
-
-mongoose.Promise = global.Promise;
+import <%= name %> from '../models/<%= name %>';
 
 export default function(){
   const app = this;
-  
-  mongoose.connect(app.get('mongodb'));
 
   let options = {
-    Model: User,
+    Model: <%= name %>,
     paginate: {
       default: 5,
       max: 25
     }
   };
 
-  app.use('/v1/users', service(options));
+  app.use(<% if (version) { %>'/<%= version %>/<%= pluralizedName %>'<% } else { %>'/<%= pluralizedName %>'<% } %>, service(options));
 
   // const service = this.service('v1/users');
 
