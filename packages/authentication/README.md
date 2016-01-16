@@ -143,7 +143,7 @@ Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6
 Assuming you've set up a todos service, here is full request example you can try out. Be sure to replace `<token>` with a token you've retrieved from your `loginEndpoint`:
 
 ```js
-// List Accounts (GET http://localhost:3030/api/todos)
+// List Todos (GET http://localhost:3030/api/todos)
 jQuery.ajax({
   url: 'http://localhost:3030/api/todos',
   type: 'GET',
