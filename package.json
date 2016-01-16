@@ -59,7 +59,7 @@
     "babel-plugin-add-module-exports": "^0.1.2",
     "babel-preset-es2015": "^6.3.13",
     "body-parser": "^1.13.2",
-    "feathers-client": "^0.2.1",
+    "feathers-client": "^0.5.1",
     "feathers-rest": "^1.0.0",
     "feathers-socketio": "^1.0.0",
     "istanbul": "^0.4.0",
