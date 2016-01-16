@@ -24,15 +24,15 @@ module.exports = function(settings, username, password, next) {
 
   var userService = app.service('/api/users');
   userService.before({
-    create: [hooks.hashPassword]
+    create: [hooks.hashPassword('password')]
   });
+
 
   // Todos will require auth.
   var todoService = app.service('/api/todos');
 
   // Tasks service won't require auth.
   var taskService = app.service('/api/tasks');
-
 
   server.on('listening', function(){
     console.log('server listening');
