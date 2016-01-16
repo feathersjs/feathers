@@ -7,7 +7,7 @@ import request from 'request';
 import https from 'https';
 import rest from 'feathers-rest';
 import socketio from 'feathers-socketio';
-import feathers from '../src/feathers';
+import feathers from '../src/';
 
 describe('Feathers application', () => {
   it('is CommonJS compatible', () => {
@@ -48,7 +48,7 @@ describe('Feathers application', () => {
     const app = feathers();
 
     assert.ok(!app.service('/todos/'));
-    
+
     app.defaultService = function(path) {
       assert.equal(path, 'todos');
       return {

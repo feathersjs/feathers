@@ -3,7 +3,7 @@ import client from 'feathers-client';
 import io from 'socket.io-client';
 import socketio from 'feathers-socketio';
 import rest from 'feathers-rest';
-import feathers from '../src/feathers';
+import feathers from '../src/';
 
 describe('Distributed Feathers applications test', () => {
   before(done => {
