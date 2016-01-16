@@ -212,19 +212,23 @@ function getDefaultStrategy(app, settings){
       if(error) {
         return done(error);
       }
+
+      // Paginated services return the array of results in the data attribute.
+      var user = users[0] || users.data[0];
+
       // Handle bad username.
-      if(!users[0]) {
+      if(!user) {
         return done(null, false);
       }
       // Check password
-      bcrypt.compare(password, users[0][settings.passwordField], function(err, res) {
+      bcrypt.compare(password, user[settings.passwordField], function(err, res) {
         // Handle 500 server error.
         if (err) {
           return done(err);
         }
         // Successful login.
         if (res) {
-          return done(null, users[0]);
+          return done(null, user);
         // Handle bad password.
         } else {
           return done(null, false);
