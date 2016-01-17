@@ -1,11 +1,10 @@
 import getArguments from './arguments';
-import socket from './sockets/';
-import { stripSlashes } from './utils';
+import { stripSlashes, each } from './utils';
 import hooks from './hooks';
 
 export default {
-  socket,
   getArguments,
   stripSlashes,
+  each,
   hooks
 };
