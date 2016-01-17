@@ -1,4 +1,4 @@
-import Service from 'feathers-commons/lib/sockets/client';
+import Service from 'feathers-socket-commons/client';
 
 export default function(connection) {
   if(!connection) {
