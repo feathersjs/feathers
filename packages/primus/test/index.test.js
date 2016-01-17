@@ -2,21 +2,24 @@ import assert from 'assert';
 import feathers from 'feathers';
 import _ from 'lodash';
 import { Service as todoService, verify } from 'feathers-commons/lib/test-fixture';
+
+import services from './service.test.js';
 import primus from '../src';
 
 describe('feathers-primus', () => {
-  var server, socket, app,
-    socketParams = {
+  let options = {
+    socketParams: {
       user: { name: 'David' },
       provider: 'primus'
-    };
+    }
+  };
 
   before(done => {
-    app = feathers()
+    const app = options.app = feathers()
       .configure(primus({
         transformer: 'websockets'
       }, function(primus) {
-        socket = new primus.Socket('http://localhost:7888');
+        options.socket = new primus.Socket('http://localhost:7888');
 
         primus.authorize(function (req, done) {
           req.feathers.user = { name: 'David' };
@@ -25,15 +28,15 @@ describe('feathers-primus', () => {
       }))
       .use('todo', todoService);
 
-    server = app.listen(7888, function(){
+    options.server = app.listen(7888, function(){
       app.use('tasks', todoService);
       done();
     });
   });
 
   after(done => {
-    socket.socket.close();
-    server.close(done);
+    options.socket.socket.close();
+    options.server.close(done);
   });
 
   it('is CommonJS compatible', () => {
@@ -66,7 +69,7 @@ describe('feathers-primus', () => {
   });
 
   it('Passes handshake as service parameters.', function(done) {
-    var service = app.service('todo');
+    var service = options.app.service('todo');
     var old = {
       find: service.find,
       create: service.create,
@@ -75,12 +78,14 @@ describe('feathers-primus', () => {
     };
 
     service.find = function(params) {
-      assert.deepEqual(_.omit(params, 'query'), socketParams, 'Handshake parameters passed on proper position');
+      assert.deepEqual(_.omit(params, 'query'), options.socketParams,
+        'Handshake parameters passed on proper position');
       old.find.apply(this, arguments);
     };
 
     service.create = function(data, params) {
-      assert.deepEqual(_.omit(params, 'query'), socketParams, 'Passed handshake parameters');
+      assert.deepEqual(_.omit(params, 'query'), options.socketParams,
+        'Passed handshake parameters');
       old.create.apply(this, arguments);
     };
 
@@ -89,12 +94,12 @@ describe('feathers-primus', () => {
         query: {
           test: 'param'
         }
-      }, socketParams), 'Passed handshake parameters as query');
+      }, options.socketParams), 'Passed handshake parameters as query');
       old.update.apply(this, arguments);
     };
 
-    socket.send('todo::create', {}, {}, function () {
-      socket.send('todo::update', 1, {}, { test: 'param' }, function() {
+    options.socket.send('todo::create', {}, {}, function () {
+      options.socket.send('todo::update', 1, {}, { test: 'param' }, function() {
         _.extend(service, old);
         done();
       });
@@ -102,452 +107,56 @@ describe('feathers-primus', () => {
   });
 
   it('Missing parameters in socket call works. (#88)', function(done) {
-    var service = app.service('todo');
+    var service = options.app.service('todo');
     var old = {
       find: service.find
     };
 
     service.find = function(params) {
-      assert.deepEqual(_.omit(params, 'query'), socketParams, 'Handshake parameters passed on proper position');
+      assert.deepEqual(_.omit(params, 'query'), options.socketParams,
+        'Handshake parameters passed on proper position');
       old.find.apply(this, arguments);
     };
 
-    socket.send('todo::find', function () {
+    options.socket.send('todo::find', function () {
       _.extend(service, old);
       done();
     });
   });
 
+  it('uses mountpath for sub-apps and calls their setup', done => {
+    let server;
+    const sub = feathers()
+      .configure(primus({
+        transformer: 'websockets'
+      }, function(primus) {
+        const socket = new primus.Socket('http://localhost:9876');
+
+        const original = {
+          name: 'creating'
+        };
+
+        socket.once('v1/todo created', data => {
+          verify.create(original, data);
+          socket.socket.close();
+          server.close(done);
+        });
+
+        socket.send('v1/todo::create', original);
+      }))
+      .use('/todo', todoService);
+
+      const main = feathers()
+        .use('/v1', sub);
+
+      server = main.listen(9876);
+  });
+
   describe('Services', function() {
-    it('invalid arguments cause an error', function (done) {
-      socket.send('todo::find', 1, {}, function(error) {
-        assert.equal(error.message, 'Too many arguments for \'find\' service method');
-        done();
-      });
-    });
-
-    describe('CRUD', function () {
-
-      it('::find', function (done) {
-        socket.send('todo::find', {}, function (error, data) {
-          verify.find(data);
-
-          done(error);
-        });
-      });
-
-      it('::get', function (done) {
-        socket.send('todo::get', 'laundry', {}, function (error, data) {
-          verify.get('laundry', data);
-
-          done(error);
-        });
-      });
-
-      it('::create', function (done) {
-        var original = {
-          name: 'creating'
-        };
-
-        socket.send('todo::create', original, {}, function (error, data) {
-          verify.create(original, data);
-
-          done(error);
-        });
-      });
-
-      it('::create without parameters and callback', function (done) {
-        var original = {
-          name: 'creating'
-        };
-
-        socket.send('todo::create', original);
-
-        socket.once('todo created', function(data) {
-          verify.create(original, data);
-
-          done();
-        });
-      });
-
-      it('::update', function (done) {
-        var original = {
-          name: 'updating'
-        };
-
-        socket.send('todo::update', 23, original, {}, function (error, data) {
-          verify.update(23, original, data);
-
-          done(error);
-        });
-      });
-
-      it('::update many', function (done) {
-        var original = {
-          name: 'updating',
-          many: true
-        };
-
-        socket.send('todo::update', null, original, {}, function (error, data) {
-          verify.update(null, original, data);
-
-          done(error);
-        });
-      });
-
-      it('::patch', function (done) {
-        var original = {
-          name: 'patching'
-        };
-
-        socket.send('todo::patch', 25, original, {}, function (error, data) {
-          verify.patch(25, original, data);
-
-          done(error);
-        });
-      });
-
-      it('::patch many', function (done) {
-        var original = {
-          name: 'patching',
-          many: true
-        };
-
-        socket.send('todo::patch', null, original, {}, function (error, data) {
-          verify.patch(null, original, data);
-
-          done(error);
-        });
-      });
-
-      it('::remove', function (done) {
-        socket.send('todo::remove', 11, {}, function (error, data) {
-          verify.remove(11, data);
-
-          done(error);
-        });
-      });
-
-      it('::remove many', function (done) {
-        socket.send('todo::remove', null, {}, function (error, data) {
-          verify.remove(null, data);
-
-          done(error);
-        });
-      });
-    });
-
-    describe('Events', function () {
-      it('created', function (done) {
-        var original = {
-          name: 'created event'
-        };
-
-        socket.once('todo created', function (data) {
-          verify.create(original, data);
-          done();
-        });
-
-        socket.send('todo::create', original, {}, function () {});
-      });
-
-      it('updated', function (done) {
-        var original = {
-          name: 'updated event'
-        };
-
-        socket.once('todo updated', function (data) {
-          verify.update(10, original, data);
-          done();
-        });
-
-        socket.send('todo::update', 10, original, {}, function () {});
-      });
-
-      it('patched', function(done) {
-        var original = {
-          name: 'patched event'
-        };
-
-        socket.once('todo patched', function (data) {
-          verify.patch(12, original, data);
-          done();
-        });
-
-        socket.send('todo::patch', 12, original, {}, function () {});
-      });
-
-      it('removed', function (done) {
-        socket.once('todo removed', function (data) {
-          verify.remove(333, data);
-          done();
-        });
-
-        socket.send('todo::remove', 333, {}, function () {});
-      });
-    });
-
-    describe('Event filtering', function() {
-      it('.created', function (done) {
-        var service = app.service('todo');
-        var original = { description: 'created event test' };
-        var oldCreated = service.created;
-
-        service.created = function(data, params, callback) {
-          assert.ok(service === this);
-          assert.deepEqual(params, socketParams);
-          verify.create(original, data);
-
-          callback(null, _.extend({ processed: true }, data));
-        };
-
-        socket.send('todo::create', original, {}, function() {});
-
-        socket.once('todo created', function (data) {
-          service.created = oldCreated;
-          // Make sure Todo got processed
-          verify.create(_.extend({ processed: true }, original), data);
-          done();
-        });
-      });
-
-      it('.updated', function (done) {
-        // TODO this is not testing the right thing
-        // but we will get better event filtering in v2 anyway
-        var original = {
-          name: 'updated event'
-        };
-
-        socket.once('todo updated', function (data) {
-          verify.update(10, original, data);
-          done();
-        });
-
-        socket.send('todo::update', 10, original, {}, function () {});
-      });
-
-      it('.removed', function (done) {
-        var service = app.service('todo');
-        var oldRemoved = service.removed;
-
-        service.removed = function(data, params, callback) {
-          assert.ok(service === this);
-          assert.deepEqual(params, socketParams);
-
-          if(data.id === 23) {
-            // Only dispatch with given id
-            return callback(null, data);
-          }
-
-          callback(null, false);
-        };
-
-        socket.send('todo::remove', 1, {}, function() {});
-        socket.send('todo::remove', 23, {}, function() {});
-
-        socket.on('todo removed', function (data) {
-          service.removed = oldRemoved;
-          assert.equal(data.id, 23);
-          done();
-        });
-      });
-    });
+    services('todo', options);
   });
 
   describe('Dynamic services', function() {
-    describe('CRUD', function () {
-      it('::find', function (done) {
-        socket.send('tasks::find', {}, function (error, data) {
-          verify.find(data);
-
-          done(error);
-        });
-      });
-
-      it('::get', function (done) {
-        socket.send('tasks::get', 'laundry', {}, function (error, data) {
-          verify.get('laundry', data);
-
-          done(error);
-        });
-      });
-
-      it('::create', function (done) {
-        var original = {
-          name: 'creating'
-        };
-
-        socket.send('tasks::create', original, {}, function (error, data) {
-          verify.create(original, data);
-
-          done(error);
-        });
-      });
-
-      it('::update', function (done) {
-        var original = {
-          name: 'updating'
-        };
-
-        socket.send('tasks::update', 23, original, {}, function (error, data) {
-          verify.update(23, original, data);
-
-          done(error);
-        });
-      });
-
-      it('::patch', function (done) {
-        var original = {
-          name: 'patching'
-        };
-
-        socket.send('tasks::patch', 25, original, {}, function (error, data) {
-          verify.patch(25, original, data);
-
-          done(error);
-        });
-      });
-
-      it('::remove', function (done) {
-        socket.send('tasks::remove', 11, {}, function (error, data) {
-          verify.remove(11, data);
-
-          done(error);
-        });
-      });
-    });
-
-    describe('Events', function () {
-      it('created', function (done) {
-        var original = {
-          name: 'created event'
-        };
-
-        socket.once('tasks created', function (data) {
-          verify.create(original, data);
-          done();
-        });
-
-        socket.send('tasks::create', original, {}, function () {});
-      });
-
-      it('updated', function (done) {
-        var original = {
-          name: 'updated event'
-        };
-
-        socket.once('tasks updated', function (data) {
-          verify.update(10, original, data);
-          done();
-        });
-
-        socket.send('tasks::update', 10, original, {}, function () {});
-      });
-
-      it('patched', function(done) {
-        var original = {
-          name: 'patched event'
-        };
-
-        socket.once('tasks patched', function (data) {
-          verify.patch(12, original, data);
-          done();
-        });
-
-        socket.send('tasks::patch', 12, original, {}, function () {});
-      });
-
-      it('removed', function (done) {
-        socket.once('tasks removed', function (data) {
-          verify.remove(333, data);
-          done();
-        });
-
-        socket.send('tasks::remove', 333, {}, function () {});
-      });
-
-      it('custom events', function(done) {
-        var service = app.service('todo');
-        var original = {
-          name: 'created event'
-        };
-        var old = service.create;
-
-        service.create = function(data) {
-          this.emit('log', { message: 'Custom log event', data: data });
-          service.create = old;
-          return old.apply(this, arguments);
-        };
-
-        socket.once('todo log', function(data) {
-          assert.deepEqual(data, { message: 'Custom log event', data: original });
-          done();
-        });
-
-        socket.send('todo::create', original, {}, function () {});
-      });
-    });
-
-    describe('Event filtering', function() {
-      it('.created', function (done) {
-        var service = app.service('tasks');
-        var original = { description: 'created event test' };
-        var oldCreated = service.created;
-
-        service.created = function(data, params, callback) {
-          assert.deepEqual(params, socketParams);
-          verify.create(original, data);
-
-          callback(null, _.extend({ processed: true }, data));
-        };
-
-        socket.send('tasks::create', original, {}, function() {});
-
-        socket.once('tasks created', function (data) {
-          service.created = oldCreated;
-          // Make sure Todo got processed
-          verify.create(_.extend({ processed: true }, original), data);
-          done();
-        });
-      });
-
-      it('.updated', function (done) {
-        var original = {
-          name: 'updated event'
-        };
-
-        socket.once('tasks updated', function (data) {
-          verify.update(10, original, data);
-          done();
-        });
-
-        socket.send('tasks::update', 10, original, {}, function () {});
-      });
-
-      it('.removed', function (done) {
-        var service = app.service('tasks');
-        var oldRemoved = service.removed;
-
-        service.removed = function(data, params, callback) {
-          assert.deepEqual(params, socketParams);
-
-          if(data.id === 23) {
-            // Only dispatch with given id
-            return callback(null, data);
-          }
-
-          callback(null, false);
-        };
-
-        socket.send('tasks::remove', 1, {}, function() {});
-        socket.send('tasks::remove', 23, {}, function() {});
-
-        socket.on('tasks removed', function (data) {
-          service.removed = oldRemoved;
-          assert.equal(data.id, 23);
-          done();
-        });
-      });
-    });
+    services('tasks', options);
   });
 });

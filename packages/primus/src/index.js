@@ -1,6 +1,6 @@
 import makeDebug from 'debug';
 import Proto from 'uberproto';
-import { socket as commons } from 'feathers-commons';
+import socket from 'feathers-socket-commons';
 import Primus from 'primus';
 import Emitter from 'primus-emitter';
 
@@ -10,10 +10,10 @@ export default function(config, configurer) {
   return function() {
     const app = this;
 
+    app.configure(socket);
+
     // Monkey patch app.setup(server)
     Proto.mixin({
-      service: commons.service,
-
       setup(server) {
         debug('Setting up Primus');
 
@@ -31,9 +31,7 @@ export default function(config, configurer) {
           configurer.call(this, primus);
         }
 
-        const result = this._super.apply(this, arguments);
-
-        commons.setup.call(this, {
+        this._socketInfo = {
           method: 'send',
           connection() {
             return primus;
@@ -44,9 +42,9 @@ export default function(config, configurer) {
           params(spark) {
             return spark.request.feathers;
           }
-        });
+        };
 
-        return result;
+        return this._super.apply(this, arguments);
       }
     }, app);
   };
