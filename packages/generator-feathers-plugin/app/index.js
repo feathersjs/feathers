@@ -45,7 +45,7 @@ module.exports = generators.Base.extend({
   },
 
   writing: function () {
-    // this.fs.copy(this.templatePath('static/'), this.destinationPath());
+    this.fs.copy(this.templatePath('static/'), this.destinationPath());
     this.fs.copy(this.templatePath('static/.*'), this.destinationPath());
 
     Object.keys(this.fileMap).forEach(function(src) {
@@ -70,7 +70,7 @@ module.exports = generators.Base.extend({
       'babel-plugin-add-module-exports',
       'jshint@^2.0.0',
       'mocha@^2.0.0',
-      'feathers@^1.0.0'
+      'feathers@^2.0.0-pre.2'
     ], { saveDev: true});
   }
 });
