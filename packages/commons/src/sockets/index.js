@@ -1,13 +1,41 @@
-import { stripSlashes, each } from '../utils';
-import { setupEventHandlers, setupMethodHandlers } from './helpers';
+import { each, stripSlashes } from '../utils';
+import { setupMethodHandlers } from './methods';
+import { eventMixin, setupEventHandlers } from './events';
 
-export function getPath(app, path) {
-  const mountpath = app.mountpath !== '/' ? app.mountpath : '';
+export function socketMixin(service) {
+  if(typeof service.mixin !== 'function') {
+    return;
+  }
 
-  return stripSlashes(`${mountpath}/${path}`);
+  service.mixin({
+    setup(app, path) {
+      const info = app._socketInfo;
+      const mountpath = app.mountpath !== '/' ? app.mountpath : '';
+      const servicePath = stripSlashes(`${mountpath}/${path}`);
+      const setupSocket = socket => {
+        setupMethodHandlers.call(app, info, socket, servicePath, this);
+      };
+
+      // Set up event handlers for this service
+      setupEventHandlers.call(app, info, servicePath, this);
+      // For a new connection, set up the service method handlers
+      info.connection().on('connection', setupSocket);
+      // For any existing connection add method handlers
+      each(info.clients(), setupSocket);
+
+      if(typeof this._super === 'function') {
+        return this._super.apply(this, arguments);
+      }
+    }
+  });
 }
 
-export function handleMount(app) {
+export default function() {
+  const app = this;
+
+  app.mixins.push(socketMixin);
+  app.mixins.push(eventMixin);
+
   // When mounted as a sub-app, override the parent setup so you don't have to call it
   app.on('mount', parent => {
     const oldSetup = parent.setup;
@@ -18,45 +46,4 @@ export function handleMount(app) {
       return result;
     };
   });
-}
-
-// Common setup functionality taking the info object which abstracts websocket access
-export function setup(info) {
-  const app = this;
-
-  app._commons = info;
-
-  // For a new connection, set up the service method handlers
-  info.connection().on('connection', socket =>
-    // Process all registered services
-    each(app.services, (service, path) =>
-      setupMethodHandlers.call(app, info, socket, getPath(app, path), service)
-    )
-  );
-
-  // Set up events and event dispatching
-  each(app.services, (service, path) =>
-    setupEventHandlers.call(app, info, getPath(app, path), service)
-  );
-}
-
-// Socket mixin when a new service is registered
-export function service(path, obj) {
-  const app = this;
-  const protoService = this._super.apply(this, arguments);
-  const info = this._commons;
-
-  // app._socketInfo will only be available once we are set up
-  if (obj && info) {
-    const location = stripSlashes(path);
-
-    // Set up event handlers for this new service
-    setupEventHandlers.call(app, info, getPath(app, location), protoService);
-    // For any existing connection add method handlers
-    each(info.clients(), socket =>
-      setupMethodHandlers.call(app, socket, getPath(app, location), protoService)
-    );
-  }
-
-  return protoService;
 }

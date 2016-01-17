@@ -1,5 +1,5 @@
 import getArguments from './arguments';
-import * as socket from './sockets/index';
+import socket from './sockets/';
 import { stripSlashes } from './utils';
 import hooks from './hooks';
 
