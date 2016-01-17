@@ -21,7 +21,7 @@ export function defaultDispatcher(data, params, callback) {
 }
 
 // Set up event handlers for a given service using the event dispatching mechanism
-export function setupEventHandlers(info, service, path) {
+export function setupEventHandlers(info, path, service) {
   // If the service emits events that we want to listen to (Event mixin)
   if (typeof service.on !== 'function' || !service._serviceEvents) {
     return;
@@ -48,7 +48,7 @@ export function setupEventHandlers(info, service, path) {
 }
 
 // Set up all method handlers for a service and socket.
-export function setupMethodHandlers(info, socket, service, path) {
+export function setupMethodHandlers(info, socket, path, service) {
   this.methods.forEach(function (method) {
     if (typeof service[method] !== 'function') {
       return;
