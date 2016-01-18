@@ -1,7 +1,7 @@
 import makeDebug from 'debug';
 import { stripSlashes } from 'feathers-commons';
 import Uberproto from 'uberproto';
-import mixins from './mixins';
+import mixins from './mixins/index';
 
 const debug = makeDebug('feathers:application');
 const methods = ['find', 'get', 'create', 'update', 'patch', 'remove'];
