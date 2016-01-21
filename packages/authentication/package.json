@@ -35,7 +35,7 @@
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
     "mocha": "mocha test/ --compilers js:babel-core/register",
-    "test": "npm run jshint && npm run mocha"
+    "test": "npm run jshint && npm run mocha && nsp check"
   },
   "directories": {
     "lib": "lib"
@@ -60,6 +60,7 @@
     "feathers-memory": "^0.5.1",
     "jshint": "^2.8.0",
     "mocha": "^2.3.3",
+    "nsp": "^2.2.0",
     "request": "^2.44.0",
     "socket.io-client": "^1.1.0",
     "xmlhttprequest": "^1.6.0"
