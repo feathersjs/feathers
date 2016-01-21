@@ -35,7 +35,7 @@
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
     "mocha": "NODE_ENV=testing mocha test/ --compilers js:babel-core/register",
-    "test": "npm run jshint && npm run mocha"
+    "test": "npm run jshint && npm run mocha && nsp check"
   },
   "directories": {
     "lib": "lib"
@@ -50,6 +50,7 @@
     "babel-preset-es2015": "^6.1.4",
     "feathers": "^1.2.0",
     "jshint": "^2.8.0",
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "nsp": "^2.2.0"
   }
 }
