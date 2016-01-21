@@ -39,7 +39,7 @@
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
     "mocha": "mocha test/ --compilers js:babel-core/register",
-    "test": "npm run compile && npm run jshint && npm run mocha"
+    "test": "npm run compile && npm run jshint && npm run mocha && nsp check"
   },
   "directories": {
     "lib": "lib"
@@ -50,6 +50,7 @@
     "babel-plugin-add-module-exports": "^0.1.1",
     "babel-plugin-transform-object-assign": "^6.1.18",
     "babel-preset-es2015": "^6.1.18",
+    "nsp": "^2.2.0",
     "jshint": "^2.6.3",
     "mocha": "^2.1.0"
   }
