@@ -47,7 +47,7 @@ module.exports = generators.Base.extend({
 
   writing: function () {
     this.fs.copy(this.templatePath('static/.*'), this.destinationPath());
-    
+
     Object.keys(this.fileMap).forEach(function(src) {
       var target = this.fileMap[src];
 
@@ -59,8 +59,7 @@ module.exports = generators.Base.extend({
     }.bind(this));
 
     this.npmInstall([
-      'debug@^2.2.0',
-      'babel-polyfill@^6.3.14'
+      'debug@^2.2.0'
     ], { save: true });
 
     this.npmInstall([
