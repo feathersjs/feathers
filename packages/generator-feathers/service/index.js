@@ -1,15 +1,28 @@
 'use strict';
 
 var generators = require('yeoman-generator');
-var path = require('path');
+var fs = require('fs');
 var inflect = require('i')();
+
+function addServiceImport(filename, module, name) {
+  if(fs.existsSync(filename)) {
+    var content = fs.readFileSync(filename).toString();
+    var statement = '\nimport ' + name + ' from \'' + module + '\';';
+    var configure = 'app.configure(' + name + ')';
+
+    // Also add if it is not already there
+    if(content.indexOf(statement) === -1) {
+      content = statement + '\n' + content;
+      content = content.replace(/\}(?!.*?\})/, configure);
+    }
+    
+    fs.writeFileSync(filename, content);
+  }
+}
 
 module.exports = generators.Base.extend({
   initializing: function (name) {
-    this.props = {
-      name: name,
-      version: 'v1'
-    };
+    this.props = { name: name };
 
     this.props = Object.assign(this.props, this.options);
   },
@@ -90,27 +103,7 @@ module.exports = generators.Base.extend({
         when: function(){
           return options.name === undefined;
         },
-      },
-      {
-        type: 'confirm',
-        name: 'hazVersions',
-        message: 'Do you have API versions?',
-        store: true,
-        default: true,
-        when: function(){
-          return options.hazVersions === undefined;
-        },
-      },
-      {
-        name: 'version',
-        message: 'What API version do you want to use?',
-        default: this.props.version,
-        store: true,
-        when: function(answers){
-          return options.version === undefined && answers.hazVersions;
-        }
-      },
-
+      }
     ];
 
     this.prompt(prompts, function (props) {
@@ -161,19 +154,19 @@ module.exports = generators.Base.extend({
           break;
       }
     }
-    else {
-      this.npmInstall(['feathers-errors'], { save: true });
-    }
 
     // TODO (EK): Automatically import the new service
     // into services/index.js and initialize it.
     this.props.pluralizedName = inflect.pluralize(this.props.name);
 
+    var servicePath = this.destinationPath('server/services', this.props.name + '.js');
+
     this.fs.copyTpl(
       this.templatePath(this.props.type + '-service.js'),
-      this.destinationPath('server/services', this.props.name + '.js'),
+      servicePath,
       this.props
     );
+
+    addServiceImport(servicePath, this.props.name, './' + this.props.name + '.js');
   }
 });
-

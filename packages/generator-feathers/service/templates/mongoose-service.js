@@ -13,21 +13,5 @@ export default function(){
     }
   };
 
-  app.use(<% if (version) { %>'/<%= version %>/<%= pluralizedName %>'<% } else { %>'/<%= pluralizedName %>'<% } %>, service(options));
-
-  // const service = this.service('v1/users');
-
-  /* * * Before hooks * * */
-  // service.before({
-  //   all:   [hooks.requireAuthForPrivate()],
-  //   before: [hooks.setUserID()]
-  // });
-
-  // /* * * After hooks * * */
-  // service.after({
-  //   all: [hooks.removeSomeField()]
-  // });
-
-  // /* * * Set up event filters * * */
-  // service.created = service.updated = service.patched = service.removed = events.requireAuthForPrivate;
+  app.use('/<%= pluralizedName %>', service(options));
 }
