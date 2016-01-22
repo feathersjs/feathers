@@ -2,7 +2,7 @@
 <% if (database === 'sqlite') { %>
 import path from 'path';
 import fs from 'fs-extra';<% } %>
-import userService from './user';
+<% if (authentication.length) { %>import userService from './user';<% } %>
 <% if (database === 'mongodb') { %>import mongoose from 'mongoose';<% } %>
 <% if (database === 'sqlite' || database === 'mssql' || database === 'postgres' || database === 'mysql' || database === 'mariadb') { %>import Sequelize from 'sequelize';<% } %>
 
@@ -33,5 +33,5 @@ export default function() {
   mongoose.Promise = global.Promise;<% } %>
   <% if (database === 'sqlite' || database === 'mssql' || database === 'postgres' || database === 'mysql' || database === 'mariadb') { %>app.set('sequelize', sequelize);<% } %>
 
-  app.configure(userService);
+  <% if (authentication.length) { %>app.configure(userService);<% } %>
 }

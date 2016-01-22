@@ -105,7 +105,7 @@ module.exports = generators.Base.extend({
   writing: function () {
     // TODO (EK): Automatically import the new model
     // into models/index.js and initialize it.
-
+    
     // Generating the appropriate model
     // based on the orm type.
     this.fs.copyTpl(
@@ -115,4 +115,3 @@ module.exports = generators.Base.extend({
     );
   }
 });
-
