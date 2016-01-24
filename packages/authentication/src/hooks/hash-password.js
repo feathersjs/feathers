@@ -7,13 +7,16 @@ import bcrypt from 'bcrypt';
  */
 exports.hashPassword = function(passwordField = 'password'){
   return function(hook) {
-    bcrypt.genSalt(10, function(err, salt) {
-      bcrypt.hash(hook.data[passwordField], salt, function(err, hash) {
-        if (err) {
-          throw new Error(err);
-        } else {
-          hook.data[passwordField] = hash;
-        }
+    return new Promise(function(resolve, reject){
+      bcrypt.genSalt(10, function(err, salt) {
+        bcrypt.hash(hook.data[passwordField], salt, function(err, hash) {
+          if (err) {
+            reject(err);
+          } else {
+            hook.data[passwordField] = hash;
+            resolve(hook);
+          }
+        });
       });
     });
   };
