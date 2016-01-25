@@ -1,18 +1,18 @@
-var assert = require('assert');
-var request = require('request');
-var io = require('socket.io-client');
-var createApplication = require('./server-fixtures');
+import assert from 'assert';
+import request from 'request';
+import io from 'socket.io-client';
+import createApplication from './server-fixtures';
 
 describe('Socket.io authentication', function() {
   this.timeout(10000);
-  var server;
-  var app;
-  var username = 'feathers';
-  var password = 'test';
-  var settings = {
-    secret: 'sockets-rock'
-  };
-  var token;
+  let server,
+    app,
+    token,
+    username = 'feathers',
+    password = 'test',
+    settings = {
+      secret: 'sockets-rock'
+    };
 
   before(function(done) {
     createApplication(settings, username, password, function(err, obj){

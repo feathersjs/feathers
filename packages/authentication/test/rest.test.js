@@ -1,19 +1,18 @@
-var assert = require('assert');
-var request = require('request');
-var createApplication = require('./server-fixtures');
+import assert from 'assert';
+import request from 'request';
+import createApplication from './server-fixtures';
 
 describe('REST API authentication', function() {
   this.timeout(10000);
-  var server;
-  var app;
-  var username = 'feathers';
-  var password = 'test';
-  var settings = {
-    secret: 'feathers-rocks'
-  };
-  var token;
+  let server, app,
+    username = 'feathers',
+    token,
+    password = 'test',
+    settings = {
+      secret: 'feathers-rocks'
+    };
 
-  before(function(done) {
+  before((done) => {
     createApplication(settings, username, password, function(err, obj){
       app = obj.app;
       server = obj.server;
@@ -35,7 +34,6 @@ describe('REST API authentication', function() {
       assert.equal(body.code, 401, 'POST to /api/login with no params returns an error.');
       done();
     });
-
   });
 
   it('Login works.', function(done) {
