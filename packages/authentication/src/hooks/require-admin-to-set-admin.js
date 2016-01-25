@@ -3,12 +3,12 @@
  * unauthorized users from setting other users up as administrators.
  * This typically would be used on a user-type service.
  *
- * create, update
+ * create, update, patch
  */
-export default function requireAdminToSetAdmin(){
+export default function requireAdminToSetAdmin(adminField = 'admin'){
   return function(hook){
-    if (hook.params.user && !hook.params.user.admin) {
-      delete hook.data.admin;
+    if (hook.params.user && !hook.params.user[adminField]) {
+      delete hook.data[adminField];
     }
   };
 }

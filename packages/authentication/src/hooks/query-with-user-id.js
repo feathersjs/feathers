@@ -3,7 +3,7 @@
  *
  * find, get, update
  */
-export default function queryWithUserId(idOnResource = 'userId', id = '_id') {
+export default function queryWithUserId(id = '_id', idOnResource = 'userId') {
   return function(hook) {
     if (hook.params.user) {
       hook.params.query[idOnResource] = hook.params.user[id];
