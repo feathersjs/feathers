@@ -1,22 +1,22 @@
-var assert = require('assert');
-var request = require('request');
-var createApplication = require('./server-fixtures');
+import assert from 'assert';
+import request from 'request';
+import createApplication from './server-fixtures';
 
 describe('Test using an expired token', function() {
   this.timeout(10000);
-  var server;
-  var app;
-  var username = 'feathers';
-  var password = 'test';
-  var settings = {
-    secret: 'feathers-rocks',
-    jwtOptions: {
-      expiresIn: 1 // Testing token expiration after 1 second.
-    }
-  };
-  var token;
+  let server,
+    app,
+    username = 'feathers',
+    password = 'test',
+    token,
+    settings = {
+      secret: 'feathers-rocks',
+      jwtOptions: {
+        expiresIn: 1 // Testing token expiration after 1 second.
+      }
+    };
 
-  before(function(done) {
+  before((done) => {
     createApplication(settings, username, password, function(err, obj){
       app = obj.app;
       server = obj.server;

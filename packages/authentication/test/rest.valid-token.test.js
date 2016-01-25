@@ -1,17 +1,17 @@
-var assert = require('assert');
-var request = require('request');
-var createApplication = require('./server-fixtures');
+import assert from 'assert';
+import request from 'request';
+import createApplication from './server-fixtures';
 
 describe('REST API authentication with valid auth token', function () {
   this.timeout(10000);
-  var server;
-  var app;
-  var username = 'feathers';
-  var password = 'test';
-  var settings = {
-    secret: 'feathers-rocks'
-  };
-  var token;
+  let server,
+    app,
+    username = 'feathers',
+    token,
+    password = 'test',
+    settings = {
+      secret: 'feathers-rocks'
+    };
 
   before(function (done) {
 

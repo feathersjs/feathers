@@ -1,16 +1,19 @@
-var feathers = require('feathers');
-var feathersHooks = require('feathers-hooks');
-var feathersAuth = require('../src/').default;
-var hooks = require('../src/').hooks;
-var bodyParser = require('body-parser');
-var memory = require('feathers-memory');
-var async = require('async');
+import feathers from 'feathers';
+import socketio from 'feathers-socketio';
+import rest from 'feathers-rest';
+import feathersHooks from 'feathers-hooks';
+import feathersAuth from '../src/';
+import {hooks} from '../src/';
+import bodyParser from 'body-parser';
+import memory from 'feathers-memory';
+import async from 'async';
 
-module.exports = function(settings, username, password, next) {
+export default function(settings, username, password, next) {
 
-  var app = feathers()
-    .configure(feathers.rest())
-    .configure(feathers.socketio())
+  const app = feathers();
+
+  app.configure(rest())
+    .configure(socketio())
     .configure(feathersHooks())
     .use(bodyParser.json())
     .use(bodyParser.urlencoded({ extended: true }))
@@ -20,21 +23,21 @@ module.exports = function(settings, username, password, next) {
     .use('/api/tasks', memory())
     .use('/', feathers.static(__dirname));
 
-  var server = app.listen(8888);
+  let server = app.listen(8888);
 
-  var userService = app.service('/api/users');
+  let userService = app.service('/api/users');
   userService.before({
-    create: [hooks.hashPassword('password')]
+    create: [hooks.hashPassword()]
   });
 
 
   // Todos will require auth.
-  var todoService = app.service('/api/todos');
+  let todoService = app.service('/api/todos');
 
   // Tasks service won't require auth.
-  var taskService = app.service('/api/tasks');
+  let taskService = app.service('/api/tasks');
 
-  server.on('listening', function(){
+  server.on('listening', () => {
     console.log('server listening');
 
     async.series([
@@ -51,8 +54,8 @@ module.exports = function(settings, username, password, next) {
       }
     ], function(){
       todoService.before({
-        find: [hooks.requireAuth],
-        get: [hooks.requireAuth]
+        find: [hooks.requireAuth()],
+        get: [hooks.requireAuth()]
       });
 
       var obj = {
@@ -63,4 +66,4 @@ module.exports = function(settings, username, password, next) {
     });
 
   });
-};
+}
