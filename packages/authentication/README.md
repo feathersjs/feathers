@@ -7,6 +7,12 @@
 `feathers-authentication` adds shared [PassportJS](http://passportjs.org/) authentication for Feathers HTTP REST and WebSockets services using [JSON Web Tokens](http://jwt.io/).
 
 
+## Installation
+
+```
+npm install feathers-authentication --save
+```
+
 ## Documentation
 
 Please refer to the [Authentication documentation](http://docs.feathersjs.com/authentication/readme.html) for more details:
