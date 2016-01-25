@@ -238,5 +238,6 @@ function getDefaultStrategy(app, settings){
   });
 }
 
+import hooks from './hooks/index';
 // Make the password hashing hook available separately.
-export var hooks = require('./hooks');
+export {hooks};
