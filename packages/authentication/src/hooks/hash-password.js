@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
  * of the password.
  * @param  {String} passwordField  The field containing the password.
  */
-exports.hashPassword = function(passwordField = 'password'){
+export default function(passwordField = 'password'){
   return function(hook) {
     return new Promise(function(resolve, reject){
       bcrypt.genSalt(10, function(err, salt) {
@@ -20,4 +20,4 @@ exports.hashPassword = function(passwordField = 'password'){
       });
     });
   };
-};
+}
