@@ -153,6 +153,9 @@ module.exports = generators.Base.extend({
         case 'nedb':
           this.props.type = 'nedb';
           break;
+        default:
+          this.props.type = 'generic';
+          break;
       }
     }
 
