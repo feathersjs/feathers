@@ -89,7 +89,7 @@ module.exports = generators.Base.extend({
   },
 
   writing: function () {
-    this.props.hookPath = path.join('server/hooks', this.props.service, this.props.type, this.props.method ? this.props.method : '', this.props.name + '.js');
+    this.props.hookPath = path.join('src/hooks', this.props.service, this.props.type, this.props.method ? this.props.method : '', this.props.name + '.js');
     
     // TODO (EK): Automatically import the hook into hooks/index.js
     // so that services can grab it easier.

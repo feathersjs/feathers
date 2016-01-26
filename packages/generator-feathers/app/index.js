@@ -11,8 +11,8 @@ module.exports = generators.Base.extend({
       name: process.cwd().split(path.sep).pop()
     };
     this.dependencies = [
-      'feathers@2.0.0-pre.2',
-      'feathers-hooks@1.0.0-pre.2',
+      'feathers@2.0.0-pre.4',
+      'feathers-hooks@1.0.0-pre.4',
       'feathers-errors',
       'feathers-configuration',
       'serve-favicon',
@@ -233,8 +233,24 @@ module.exports = generators.Base.extend({
     },
 
     services: function() {
+      this.props.services = [];
+
       if (this.props.database) {
-        if(this.props.authentication.length) {
+        this.props.services.push('message');
+
+        // Create a dummy message service
+        this.composeWith('feathers:service', {
+          options: {
+            type: 'database',
+            database: this.props.database,
+            name: 'message'
+          }
+        });
+
+        // If auth is enabled also create a user service
+        if (this.props.authentication.length) {
+          this.props.services.push('user');
+
           this.composeWith('feathers:service', {
             options: {
               type: 'database',
@@ -246,7 +262,7 @@ module.exports = generators.Base.extend({
 
         this.fs.copyTpl(
           this.templatePath('service.js'),
-          this.destinationPath('server/services', 'index.js'),
+          this.destinationPath('src/services', 'index.js'),
           this.props
         );
       }
@@ -258,7 +274,7 @@ module.exports = generators.Base.extend({
 
       this.fs.copyTpl(
         this.templatePath('app.js'),
-        this.destinationPath('server', 'app.js'),
+        this.destinationPath('src', 'app.js'),
         this.props
       );
     },
@@ -266,7 +282,7 @@ module.exports = generators.Base.extend({
     middleware: function() {
       this.fs.copyTpl(
         this.templatePath('middleware.js'),
-        this.destinationPath('server/middleware', 'index.js'),
+        this.destinationPath('src/middleware', 'index.js'),
         this.props
       );
     },

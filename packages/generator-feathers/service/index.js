@@ -4,14 +4,15 @@ var generators = require('yeoman-generator');
 var fs = require('fs');
 var inflect = require('i')();
 
-function addServiceImport(filename, module, name) {
-  if(fs.existsSync(filename)) {
+function addServiceImport(filename, name, module) {
+  // Lookup existing service/index.js file
+  if (fs.existsSync(filename)) {
     var content = fs.readFileSync(filename).toString();
-    var statement = '\nimport ' + name + ' from \'' + module + '\';';
-    var configure = 'app.configure(' + name + ')';
+    var statement = 'import ' + name + ' from \'' + module + '\';';
+    var configure = '  app.configure(' + name + ');\n}';
 
     // Also add if it is not already there
-    if(content.indexOf(statement) === -1) {
+    if (content.indexOf(statement) === -1) {
       content = statement + '\n' + content;
       content = content.replace(/\}(?!.*?\})/, configure);
     }
@@ -159,14 +160,14 @@ module.exports = generators.Base.extend({
     // into services/index.js and initialize it.
     this.props.pluralizedName = inflect.pluralize(this.props.name);
 
-    var servicePath = this.destinationPath('server/services', this.props.name + '.js');
+    var serviceIndexPath = this.destinationPath('src/services/index.js');
 
     this.fs.copyTpl(
       this.templatePath(this.props.type + '-service.js'),
-      servicePath,
+      this.destinationPath('src/services', this.props.name + '.js'),
       this.props
     );
 
-    addServiceImport(servicePath, this.props.name, './' + this.props.name + '.js');
+    addServiceImport(serviceIndexPath, this.props.name, './' + this.props.name);
   }
 });
