@@ -93,6 +93,7 @@ module.exports = generators.Base.extend({
         choices: [
           {
             name: 'I will choose my own',
+            value: 'generic',
             checked: true
           },
           {
