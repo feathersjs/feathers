@@ -16,8 +16,8 @@
     "node": ">= 0.12.0"
   },
   "scripts": {
-    "start": "node server/",
-    "jshint": "jshint server/. test/. --config",
+    "start": "node src/",
+    "jshint": "jshint src/. test/. --config",
     "mocha": "mocha test/ --compilers js:babel-core/register",
     "test": "npm run jshint && npm run mocha"
   }
