@@ -2,6 +2,25 @@
 
 var generators = require('yeoman-generator');
 var path = require('path');
+var fs = require('fs');
+var inflect = require('i')();
+
+function importHook(filename, name, module, type, method) {
+  // Lookup existing services/<service-name>/hooks/index.js file
+  if (fs.existsSync(filename)) {
+    var content = fs.readFileSync(filename).toString();
+    var statement = 'import ' + name + ' from \'' + module + '\';';
+    var expression = new RegExp( '(' + type + '(.|\n)+?' + method + '.+?)(\]{1})' );
+
+    // Also add if it is not already there
+    if (content.indexOf(statement) === -1) {
+      content = statement + '\n' + content;
+      content = content.replace(expression, '$1' + name + '(), $3');
+    }
+    
+    fs.writeFileSync(filename, content);
+  }
+}
 
 module.exports = generators.Base.extend({
   initializing: function (name) {
@@ -17,6 +36,7 @@ module.exports = generators.Base.extend({
         type: 'list',
         name: 'type',
         message: 'What type of hook do you need?',
+        store: true,
         choices: [
           {
             name: 'before hook',
@@ -32,11 +52,13 @@ module.exports = generators.Base.extend({
       {
         type: 'input',
         name: 'service',
+        store: true,
         message: 'What service is this hook for?'
       },
       {
         type: 'list',
         name: 'method',
+        store: true,
         message: 'What method is this hook for?',
         choices: [
           {
@@ -89,18 +111,17 @@ module.exports = generators.Base.extend({
   },
 
   writing: function () {
-    this.props.hookPath = path.join('src', this.props.service, this.props.type, this.props.method ? this.props.method : '', this.props.name + '.js');
+    var hookIndexPath = path.join('src/services/', this.props.service, 'hooks/index.js');
+    this.props.hookPath = path.join('src/services/', this.props.service, 'hooks/', this.props.name + '.js');
     
-    // TODO (EK): Automatically import the hook into hooks/index.js
-    // so that services can grab it easier.
+    // Automatically import the hook into services/<service-name>/hooks/index.js and initialize it.
+    importHook(hookIndexPath, inflect.camelize(inflect.underscore(this.props.name), false), './' + this.props.name, this.props.type, this.props.method);
 
     this.fs.copyTpl(
       this.templatePath(this.props.type + '-hook.js'),
       this.destinationPath(this.props.hookPath),
       this.props
     );
-    
-    this.log(this.props);
   }
 });
 
