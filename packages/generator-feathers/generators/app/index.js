@@ -317,5 +317,21 @@ module.exports = generators.Base.extend({
         'request'
       ], { saveDev: true});
     }
+  },
+
+  end: function() {
+    this.log('\nWoot! We\'ve created your "' + this.props.name + '" app!');
+
+    switch(this.props.database) {
+      case 'mongodb':
+      case 'mssql':
+      case 'mysql':
+      case 'mariadb':
+      case 'postgres':
+        this.log('Make sure that your ' + this.props.database + ' database is running...');
+        break;
+    }
+
+    this.log('To start your feathers server run `npm start`.');
   }
 });

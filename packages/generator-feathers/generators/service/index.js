@@ -4,7 +4,7 @@ var generators = require('yeoman-generator');
 var fs = require('fs');
 var inflect = require('i')();
 
-function addServiceImport(filename, name, module) {
+function importService(filename, name, module) {
   // Lookup existing service/index.js file
   if (fs.existsSync(filename)) {
     var content = fs.readFileSync(filename).toString();
@@ -115,8 +115,7 @@ module.exports = generators.Base.extend({
   },
 
   writing: function () {
-    // Generating the appropriate service
-    // based on the database.
+    // Generate the appropriate service based on the database.
     if (this.props.type === 'database') {
       switch(this.props.database) {
         case 'sqlite':
@@ -125,27 +124,9 @@ module.exports = generators.Base.extend({
         case 'mariadb':
         case 'postgres':
           this.props.type = 'sequelize';
-
-          // Automatically generate a new model
-          // based on the database type.
-          this.composeWith('feathers:model', {
-            options: {
-              type: this.props.type,
-              name: this.props.name
-            }
-          });
           break;
         case 'mongodb':
           this.props.type = 'mongoose';
-
-          // Automatically generate a new model
-          // based on the database type.
-          this.composeWith('feathers:model', {
-            options: {
-              type: this.props.type,
-              name: this.props.name
-            }
-          });
           break;
         case 'memory':
           this.props.type = 'memory';
@@ -159,18 +140,31 @@ module.exports = generators.Base.extend({
       }
     }
 
-    // TODO (EK): Automatically import the new service
-    // into services/index.js and initialize it.
     this.props.pluralizedName = inflect.pluralize(this.props.name);
 
     var serviceIndexPath = this.destinationPath('src/services/index.js');
 
     this.fs.copyTpl(
       this.templatePath(this.props.type + '-service.js'),
-      this.destinationPath('src/services', this.props.name + '.js'),
+      this.destinationPath('src/services', this.props.name, 'index.js'),
       this.props
     );
 
-    addServiceImport(serviceIndexPath, this.props.name, './' + this.props.name);
+    // Automatically import the new service into services/index.js and initialize it.
+    importService(serviceIndexPath, this.props.name, './' + this.props.name);
+
+    // Add a hooks folder for the service
+    this.fs.copy(this.templatePath('static'), this.destinationPath('src/services', this.props.name));
+
+    // If we are generating a service that requires a model, let's generate that model.
+    if (this.props.type === 'mongoose' || this.props.type === 'sequelize') {
+      this.composeWith('feathers:model', {
+        options: {
+          type: this.props.type,
+          name: this.props.name,
+          service: this.props.name
+        }
+      });
+    }
   }
 });

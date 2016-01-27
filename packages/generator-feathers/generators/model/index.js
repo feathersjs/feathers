@@ -26,6 +26,14 @@ module.exports = generators.Base.extend({
         },
       },
       {
+        name: 'service',
+        message: 'What service does this model belong to?',
+        default: this.props.service,
+        when: function(){
+          return options.service === undefined;
+        },
+      },
+      {
         type: 'list',
         name: 'type',
         message: 'What type of model do you need?',
@@ -102,16 +110,18 @@ module.exports = generators.Base.extend({
     }.bind(this));
   },
 
-  writing: function () {
-    // TODO (EK): Automatically import the new model
-    // into models/index.js and initialize it.
-    
-    // Generating the appropriate model
-    // based on the orm type.
+  writing: function () {    
+    // Generating the appropriate model based on the orm type.
     this.fs.copyTpl(
       this.templatePath(this.props.type + '.js'),
-      this.destinationPath('src/models', this.props.name + '.js'),
+      this.destinationPath('src/services/', this.props.service, 'models/', this.props.name + '.js'),
       this.props
     );
+  },
+
+  end: function() {
+    // NOTE (EK): Added this as a hack to stop the CLI from
+    // hanging when generating a service with a model.
+    process.exit();
   }
 });
