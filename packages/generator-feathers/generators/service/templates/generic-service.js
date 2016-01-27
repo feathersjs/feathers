@@ -1,4 +1,4 @@
-import hooks from '../hooks';
+import hooks from './hooks';
 
 export class Service {
   constructor(options = {}) {
@@ -11,7 +11,7 @@ export class Service {
 
   get(id, params) {
     return Promise.resolve({
-      id, text: `You have to do ${id}!`
+      id, text: `A new message with ID: ${id}!`
     });
   }
 
@@ -39,5 +39,15 @@ export class Service {
 export default function(){
   const app = this;
 
-  app.use('/<%= pluralizedName %>', service());
+  // Initialize our service with any options it requires
+  app.use('/<%= pluralizedName %>', new Service());
+
+  // Get our initialize service to that we can bind hooks
+  const <%= name %>Service = app.service('/<%= pluralizedName %>');
+
+  // Set up our before hooks
+  <%= name %>Service.before(hooks.before);
+
+  // Set up our after hooks
+  <%= name %>Service.after(hooks.after);
 }

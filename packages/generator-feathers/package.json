@@ -3,11 +3,13 @@
   "description": "A Yeoman generator for a Feathers application",
   "version": "0.1.0",
   "homepage": "https://github.com/feathersjs/generator-feathers",
-  "main": "lib/",
+  "main": "generators/app/index.js",
   "license": "MIT",
   "keywords": [
     "feathers",
-    "feathers-plugin"
+    "feathers-plugin",
+    "yeoman-generator",
+    "yeoman"
   ],
   "licenses": [
     {
@@ -37,9 +39,13 @@
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish"
   },
-  "directories": {
-    "lib": "lib"
-  },
+  "files": [
+    "generators/app",
+    "generators/hook",
+    "generators/middleware",
+    "generators/model",
+    "generators/service"
+  ],
   "dependencies": {
     "i": "^0.3.3",
     "yeoman-generator": "^0.21.1"
