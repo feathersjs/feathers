@@ -2,8 +2,8 @@
 <% } %>
 <% if (database === 'sqlite') { %>
 import path from 'path';
-import fs from 'fs-extra';<% } %><% if (database === 'mongodb') { %>import mongoose from 'mongoose';<% } %>
-<% if (database === 'sqlite' || database === 'mssql' || database === 'postgres' || database === 'mysql' || database === 'mariadb') { %>import Sequelize from 'sequelize';<% } %>
+import fs from 'fs-extra';<% } %><% if (database === 'mongodb') { %>import mongoose from 'mongoose';<% } %><% if (database === 'sqlite' || database === 'mssql' || database === 'postgres' || database === 'mysql' || database === 'mariadb') { %>import Sequelize from 'sequelize';<% } %>
+
 export default function() {
   const app = this;
   <% if (database === 'sqlite') { %>
@@ -28,7 +28,8 @@ export default function() {
   });
   <% } else if (database === 'mongodb') { %>
   mongoose.connect(app.get('mongodb'));
-  mongoose.Promise = global.Promise;<% } %><% if (database === 'sqlite' || database === 'mssql' || database === 'postgres' || database === 'mysql' || database === 'mariadb') { %>app.set('sequelize', sequelize);<% } %>
+  mongoose.Promise = global.Promise;<% } %><% if (database === 'sqlite' || database === 'mssql' || database === 'postgres' || database === 'mysql' || database === 'mariadb') { %>
+  app.set('sequelize', sequelize);<% } %>
   <% for (var i = 0; i < services.length; i++) { %>
   app.configure(<%= services[i] %>);<% } %>
 }

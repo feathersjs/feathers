@@ -1,5 +1,5 @@
-import <%= name %> from './models/<%= name %>';
 import service from 'feathers-sequelize';
+import <%= name %> from './<%= name %>-model';
 import hooks from './hooks';
 
 export default function(){
