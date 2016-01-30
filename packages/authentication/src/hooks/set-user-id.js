@@ -10,8 +10,24 @@
  */
 export default function setUserId(sourceProp = '_id', destProp = 'userId'){
   return function(hook) {
+
+    function setId(obj){
+      obj[destProp] = hook.params.user[sourceProp];
+    }
+
     if (hook.params.user) {
-      hook.data[destProp] = hook.params.user[sourceProp];
+
+      // Handle arrays.
+      if (Array.isArray(hook.data)) {
+        hook.data.forEach(item => {
+          setId(item);
+        });
+
+      // Handle single objects.
+      } else {
+        setId(hook.data);
+      }
+
     } else {
       throw new Error('There is no user logged in.');
     }
