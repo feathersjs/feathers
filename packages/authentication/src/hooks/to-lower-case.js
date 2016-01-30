@@ -8,11 +8,25 @@ export default function toLowercase(fieldName) {
   if (!fieldName) {
     throw new Error('You must provide the name of the field to use in the toLowerCase hook.');
   }
+
+  function convert(obj){
+    if (obj[fieldName] && obj[fieldName].toLowercase) {
+      obj[fieldName] = obj[fieldName].toLowerCase();
+    }
+  }
+
   return function(hook){
-    let location = hook.type === 'before' ? 'data' : 'params';
-    // Allow user to view records without a userId.
-    if (hook[location][fieldName] && hook[location][fieldName].toLowercase) {
-      hook[location][fieldName] = hook[location][fieldName].toLowerCase();
+    let location = hook.type === 'before' ? 'data' : 'result';
+
+    // Handle arrays.
+    if (Array.isArray(hook[location])) {
+      hook[location].forEach(item => {
+        convert(item);
+      });
+
+    // Handle Single Objects.
+    } else {
+      convert(hook[location]);
     }
   };
 }
