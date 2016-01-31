@@ -214,7 +214,7 @@ function getDefaultStrategy(app, settings){
       }
 
       // Paginated services return the array of results in the data attribute.
-      var user = users[0] || users.data[0];
+      var user = users[0] || users.data && users.data[0];
 
       // Handle bad username.
       if(!user) {
