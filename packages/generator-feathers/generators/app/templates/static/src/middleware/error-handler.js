@@ -27,8 +27,11 @@ export default function(app) {
 
     res.format({
       'text/html': function() {
-        const file = code === 404 ? '404.html' : '500.html';
-        res.sendFile(path.join(app.get('public'), file));
+        if (code === 404) {
+          return res.redirect('/404');
+        }
+
+        res.redirect(`/error?code=${code}&message=${error.message}`);
       },
 
       'application/json': function () {
