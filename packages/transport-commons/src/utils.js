@@ -1,14 +1,5 @@
 import { hooks } from 'feathers-commons';
 
-export const methods = [
-  'find',
-  'get',
-  'create',
-  'update',
-  'patch',
-  'remove'
-];
-
 export const eventMappings = {
   create: 'created',
   update: 'updated',
