@@ -1,4 +1,4 @@
-import { methods, events } from './utils';
+import { events } from './utils';
 
 export default class Service {
   constructor(options) {
@@ -11,24 +11,14 @@ export default class Service {
   emit(... args) {
     this.connection[this.method](... args);
   }
-}
 
-const emitterMethods = ['on', 'once', 'off'];
-
-emitterMethods.forEach(method => {
-  Service.prototype[method] = function(name, callback) {
-    this.connection[method](`${this.path} ${name}`, callback);
-  };
-});
-
-methods.forEach(method => {
-  Service.prototype[method] = function(... args) {
+  send(method, ...args) {
     let callback = null;
-    if(typeof args[args.length - 1] === 'function') {
+    if (typeof args[args.length - 1] === 'function') {
       callback = args.pop();
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise(function(resolve, reject) => {
       args.unshift(`${this.path}::${method}`);
       args.push(function(error, data) {
         if(callback) {
@@ -40,5 +30,37 @@ methods.forEach(method => {
 
       this.connection[this.method](... args);
     });
+  }
+
+  find(params = {}) {
+    return this.send('find', params.query);
+  }
+
+  get(id, params = {}) {
+    return this.send('get', id, params.query);
+  }
+
+  create(data, params = {}) {
+    return this.send('create', data, params.query);
+  }
+
+  update(id, data, params = {}) {
+    return this.send('update', id, data, params.query);
+  }
+
+  patch(id, data, params = {}) {
+    return this.send('patch', id, data, params.query);
+  }
+
+  remove(id, params = {}) {
+    return this.send('remove', id, params.query);
+  }
+}
+
+const emitterMethods = ['on', 'once', 'off'];
+
+emitterMethods.forEach(method => {
+  Service.prototype[method] = function(name, callback) {
+    this.connection[method](`${this.path} ${name}`, callback);
   };
 });
