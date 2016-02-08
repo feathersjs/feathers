@@ -31,7 +31,7 @@ describe('client', () => {
   });
 
   it('sends methods with acknowledgement', done => {
-    connection.on('todos::create', (data, callback) => {
+    connection.on('todos::create', (data, params, callback) => {
         data.created = true;
         callback(null, data);
     });

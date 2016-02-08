@@ -18,10 +18,10 @@ export default class Service {
       callback = args.pop();
     }
 
-    return new Promise(function(resolve, reject) => {
+    return new Promise((resolve, reject) => {
       args.unshift(`${this.path}::${method}`);
       args.push(function(error, data) {
-        if(callback) {
+        if (callback) {
           callback(error, data);
         }
 
@@ -33,27 +33,27 @@ export default class Service {
   }
 
   find(params = {}) {
-    return this.send('find', params.query);
+    return this.send('find', params.query || {});
   }
 
   get(id, params = {}) {
-    return this.send('get', id, params.query);
+    return this.send('get', id, params.query || {});
   }
 
   create(data, params = {}) {
-    return this.send('create', data, params.query);
+    return this.send('create', data, params.query || {});
   }
 
   update(id, data, params = {}) {
-    return this.send('update', id, data, params.query);
+    return this.send('update', id, data, params.query || {});
   }
 
   patch(id, data, params = {}) {
-    return this.send('patch', id, data, params.query);
+    return this.send('patch', id, data, params.query || {});
   }
 
   remove(id, params = {}) {
-    return this.send('remove', id, params.query);
+    return this.send('remove', id, params.query || {});
   }
 }
 
