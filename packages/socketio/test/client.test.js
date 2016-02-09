@@ -29,5 +29,9 @@ describe('feathers-socketio/client', function() {
     }
   });
 
+  it('app has the io attribute', () => {
+    assert.ok(app.io);
+  });
+
   baseTests(service);
 });
