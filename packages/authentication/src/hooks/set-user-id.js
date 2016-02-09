@@ -28,8 +28,7 @@ export default function setUserId(sourceProp = '_id', destProp = 'userId'){
         setId(hook.data);
       }
 
-    } else {
-      throw new Error('There is no user logged in.');
     }
+
   };
 }
