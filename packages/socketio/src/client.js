@@ -6,6 +6,7 @@ export default function(connection) {
   }
 
   return function() {
+    this.io = connection;
     this.defaultService = function(name) {
       return new Service({ name, connection, method: 'emit' });
     };
