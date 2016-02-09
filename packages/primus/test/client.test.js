@@ -30,5 +30,9 @@ describe('feathers-primus/client', function() {
     }
   });
 
+  it('app has the primus attribute', () => {
+    assert.ok(app.primus);
+  });
+
   baseTests(service);
 });
