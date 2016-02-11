@@ -1,5 +1,7 @@
 import { events } from './utils';
 
+const debug = require('debug')('feathers-socket-commons:client');
+
 export default class Service {
   constructor(options) {
     this.events = events;
@@ -27,7 +29,9 @@ export default class Service {
 
         return error ? reject(error) : resolve(data);
       });
-
+      
+      debug(`Sending socket.${this.method}`, args);
+      
       this.connection[this.method](... args);
     });
   }
@@ -61,6 +65,7 @@ const emitterMethods = ['on', 'once', 'off'];
 
 emitterMethods.forEach(method => {
   Service.prototype[method] = function(name, callback) {
+    debug(`Calling emitter method ${method} with event '${this.path} ${name}'`);
     this.connection[method](`${this.path} ${name}`, callback);
   };
 });

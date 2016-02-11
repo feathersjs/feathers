@@ -1,6 +1,8 @@
 import { each } from 'feathers-commons';
 import { events, promisify, convertFilterData, errorObject } from './utils';
 
+const debug = require('debug')('feathers-socket-commons:events');
+
 export function filterMixin(service) {
   if(typeof service.filter === 'function' || typeof service.mixin !== 'function') {
     return;
@@ -9,9 +11,11 @@ export function filterMixin(service) {
   service.mixin({
     _eventFilters: { all: [] },
 
-    filter(event, callback) {
+    filter(event, callback) {      
       const obj = typeof event === 'string' ? { [event]: callback } : event;
       const filterData = convertFilterData(obj);
+      
+      debug(`Adding ${filterData.length} filters for event '${event}'`);
 
       each(filterData, (callbacks, event) => {
         let filters = this._eventFilters[event] || (this._eventFilters[event] = []);
@@ -38,6 +42,7 @@ export function getDispatcher(service, ev, data, hook) {
     let promise = promisify(originalDispatcher, service, data, connection);
 
     if(eventFilters.length) {
+      debug(`Dispatching ${eventFilters.length} event filters for '${ev}' event`);
       eventFilters.forEach(filterFn => {
         if(filterFn.length === 4) { // function(data, connection, hook, callback)
           promise = promise.then(data =>
@@ -52,6 +57,8 @@ export function getDispatcher(service, ev, data, hook) {
         promise = promise.then(data => data ? data : Promise.reject());
       });
     }
+    
+    promise.catch(e => debug(`Error in filter chain for '${ev}' event`, e));
 
     return promise;
   };
@@ -73,8 +80,17 @@ export function setupEventHandlers(info, path, service) {
         const send = socket[info.method].bind(socket);
 
         dispatcher(info.params(socket))
-          .then(data => data && send(eventName, data))
-          .catch(error => error && send(`${path} error`, errorObject(error)));
+          .then(data => {
+            if(data) {
+              send(eventName, data);
+            } else {
+              debug(`Not sending any data for ${eventName}`);
+            }
+          })
+          .catch(error => {
+            debug(`Got error on ${path}`, error);
+            send(`${path} error`, errorObject(error));
+          });
       });
     });
   });
