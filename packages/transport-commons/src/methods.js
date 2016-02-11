@@ -1,6 +1,8 @@
 import { getArguments } from 'feathers-commons';
 import { errorObject } from './utils';
 
+const debug = require('debug')('feathers-socket-commons:methods');
+
 // The position of the params parameters for a service method so that we can extend them
 // default is 1
 export const paramsPositions = {
@@ -22,12 +24,15 @@ export function setupMethodHandlers(info, socket, path, service) {
       paramsPositions[method] : 1;
 
     socket.on(name, function () {
+      debug(`Got '${name}' event with connection`, params);
+      
       try {
         let args = getArguments(method, arguments);
         args[position] = Object.assign({ query: args[position] }, params);
         service[method].apply(service, args);
       } catch(e) {
         let callback = arguments[arguments.length - 1];
+        debug(`Error on socket`, e);
         if(typeof callback === 'function') {
           callback(errorObject(e));
         }
