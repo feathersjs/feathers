@@ -33,6 +33,29 @@ describe('feathers-primus/client', function() {
   it('app has the primus attribute', () => {
     assert.ok(app.primus);
   });
+  
+  it('throws an error when configured twice', () => {
+    try {
+      app.configure(primus({}));
+      assert.ok(false, 'Should never get here');
+    } catch (e) {
+      assert.equal(e.message, 'Only one default client provider can be configured');
+    }
+  });
+  
+  it('can initialize a client instance', done => {
+    const init = primus(service.connection);
+    const todos = init.service('todos');
+    
+    assert.ok(todos instanceof init.Service, 'Returned service is a client');
+    todos.find({}).then(todos => assert.deepEqual(todos, [
+      {
+        text: 'some todo',
+        complete: false,
+        id: 0
+      }
+    ])).then(() => done()).catch(done);
+  });
 
   baseTests(service);
 });
