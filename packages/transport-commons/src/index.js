@@ -13,6 +13,7 @@ function socketMixin(service) {
     setup(app, path) {
       if(!this._socketSetup) {
         const info = app._socketInfo;
+        const serviceCount = Object.keys(app.services).length;
         const connection = info.connection();
         const mountpath = (app.mountpath !== '/' && typeof app.mountpath === 'string') ?
             app.mountpath : '';
@@ -25,6 +26,9 @@ function socketMixin(service) {
 
         // Set up event handlers for this service
         setupEventHandlers.call(app, info, fullPath, this);
+        // Update the number of max listener to the service count
+        // This will still catch memory leaks
+        connection.setMaxListeners(serviceCount + 1);
         // For a new connection, set up the service method handlers
         connection.on('connection', setupSocket);
         // For any existing connection add method handlers
