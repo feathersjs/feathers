@@ -95,7 +95,7 @@ export let successfulLogin = function(options = {}) {
 };
 
 export let setupSocketIOAuthentication = function(app, options = {}) {
-  options = Object.assign(options, defaults);
+  options = Object.assign({}, defaults, options);
   
   debug('Setting up Socket.io authentication middleware with options:', options);
 
@@ -151,7 +151,7 @@ export let setupSocketIOAuthentication = function(app, options = {}) {
 
 // TODO (EK): DRY this up along with the code in setupSocketIOAuthentication
 export let setupPrimusAuthentication = function(app, options = {}) {
-  options = Object.assign(options, defaults);
+  options = Object.assign({}, defaults, options);
 
   debug('Setting up Primus authentication middleware with options:', options);
 
