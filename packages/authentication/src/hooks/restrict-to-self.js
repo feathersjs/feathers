@@ -6,12 +6,15 @@
  *
  * find, get, create, update, remove
  */
-export default function restrictToSelf(idProp = '_id') {
+export default function restrictToSelf(options = {}) {
+  const defaults = {idField: '_id'};
+  options = Object.assign({}, defaults, options);
+
   return function(hook){
-
     if (hook.params.user) {
-      hook.params.query[idProp] = hook.params.user[idProp];
+      hook.params.query[options.idField] = hook.params.user[options.idField];
+    } else {
+      throw new Error(`Could not find the user\'s ${options.idField} for the restrictToSelf hook.`);
     }
-
   };
 }

@@ -8,27 +8,27 @@
  * before
  * all, find, get, create, update, patch, remove
  */
-export default function setUserId(sourceProp = '_id', destProp = 'userId'){
-  return function(hook) {
+export default function setUserId(options = {}){
+  const defaults = { sourceProp: '_id', destProp: 'userId' };
+  options = Object.assign({}, defaults, options);
 
+  return function(hook) {
     function setId(obj){
-      obj[destProp] = hook.params.user[sourceProp];
+      obj[options.destProp] = hook.params.user[options.sourceProp];
     }
 
     if (hook.params.user) {
-
       // Handle arrays.
       if (Array.isArray(hook.data)) {
         hook.data.forEach(item => {
           setId(item);
         });
-
+      
+      }
       // Handle single objects.
-      } else {
+      else {
         setId(hook.data);
       }
-
     }
-
   };
 }

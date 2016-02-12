@@ -1,7 +1,8 @@
 language: node_js
 node_js:
-  - '4.2.6'
+  - 'node'
   - 'iojs'
+  - '0.12'
 before_install:
   - sudo apt-get install python-software-properties
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
