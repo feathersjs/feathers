@@ -112,7 +112,26 @@ app.io.on('connect', function(){
 
 ## Changelog
 
-__0.0.5__
+### 0.2.0
+
+- Migrating existing code to use services
+- Standardizing on a hook spec
+- Adds support for authenticating with socketio and primus ([#32](https://github.com/feathersjs/feathers-authentication/issues/32))
+- Only signs the JWT with user id ([#38](https://github.com/feathersjs/feathers-authentication/issues/38))
+- Locks down socket authentication ([#33](https://github.com/feathersjs/feathers-authentication/issues/33))
+- Continues the work @marshallswain did on handling expired tokens ([#25](https://github.com/feathersjs/feathers-authentication/issues/25))
+- Adds a bunch more tests.
+- Adds support for OAuth2 ([#43](https://github.com/feathersjs/feathers-authentication/issues/43))
+- Adds a client side component for easy authentication with Feathers ([#44](https://github.com/feathersjs/feathers-authentication/issues/44))
+- Adds preliminary support for graceful fallback to cookies for JWT ([#45](https://github.com/feathersjs/feathers-authentication/issues/45))
+- Adds an example project showing all the different ways you can authenticate 
+
+### 0.1.0
+
+- Adding local authentication
+- Adding bundled hooks
+
+### 0.0.5
 
 - Initial release
 
