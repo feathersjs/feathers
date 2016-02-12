@@ -31,68 +31,6 @@ export default function(options = {}) {
         throw new Error(`Unsupported authentication 'type': ${options.type}`);
       }
 
-      // return new Promise(function(resolve, reject) {
-
-      //   // If we are using a REST client
-      //   if (app.rest) {
-      //     return app.service(endPoint).create(options).then(response => {
-      //       utils.setToken(response.token);
-      //       utils.setUser(response.data);
-
-      //       return resolve(response);
-      //     }).catch(reject);
-      //   }
-
-      //   // If we are using sockets
-      //   function connected(socket, event) {
-      //     if(socket.connected) {
-      //       return Promise.resolve(socket);
-      //     }
-          
-      //     return new Promise((resolve, reject) => {
-      //       socket.on(event, () => resolve(socket));
-      //     });
-      //   }
-
-      //   function handleAuth(method) {
-      //     return new Promise((resolve, reject) => {
-      //       return function(socket) {
-      //         socket.on('unauthorized', function(error) {
-      //           console.error('Unauthorized', error);
-      //           return reject(error);
-      //         });
-
-      //         socket.on('disconnect', function(error) {
-      //           console.error('Socket disconnected', error);
-      //           return reject(error);
-      //         });
-
-      //         socket.on('authenticated', function (response) {
-      //           console.log('authenticated', response);
-      //           utils.setToken(response.token);
-      //           utils.setUser(response.data);
-
-      //           return resolve(response);
-      //         });
-
-      //         socket[method]('authenticate', options);
-      //       };
-      //     });
-      //   }
-
-      //   if (app.io) {
-      //     connected(app.io, 'connected').then(handleAuth('emit')).then(function(response){
-
-      //     }).catch(function(error){
-      //       console.log('Errrr', error);
-      //     });
-      //   }
-
-      //   if (app.primus) {
-      //     connected(app.primus, 'open').then(handleAuth('send'));
-      //   }
-      // });
-
       return new Promise(function(resolve, reject){
         // TODO (EK): Handle OAuth logins
         
