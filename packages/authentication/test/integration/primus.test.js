@@ -3,7 +3,7 @@ import createApplication from '../test-server';
 import jwt from 'jsonwebtoken';
 
 describe('Primus authentication', function() {
-  this.timeout(10000);
+  this.timeout(15000);
   const host = 'http://localhost:8888';
 
   let server, app, primus, Socket;
@@ -34,7 +34,7 @@ describe('Primus authentication', function() {
       Socket = app.primus.Socket;
 
       // Add a quick timeout to make sure that our token is expired
-      setTimeout(done, 10);
+      setTimeout(done, 1000);
     });
   });
 
