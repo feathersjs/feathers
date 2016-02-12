@@ -5,8 +5,8 @@ var primus = require('feathers-primus');
 var hooks = require('feathers-hooks');
 var memory = require('feathers-memory');
 var bodyParser = require('body-parser');
-var authentication = require('../lib/index').default;
-var authHooks = require('../lib/index').hooks;
+var authentication = require('../../lib/index').default;
+var authHooks = require('../../lib/index').hooks;
 
 // Passport Auth Strategies
 var FacebookStrategy = require('passport-facebook').Strategy;
@@ -28,7 +28,9 @@ var app = feathers()
     token: {
       secret: 'feathers-rocks'
     },
-    local: {},
+    local: {
+      userEndpoint: '/api/users'
+    },
     facebook: {
       strategy: FacebookStrategy,
       "clientID": "your-facebook-client-id",
@@ -45,7 +47,7 @@ var app = feathers()
     }
   }))
   // Initialize a user service
-  .use('/users', memory())
+  .use('/api/users', memory())
   // A simple Message service that we can used for testing
   .use('/messages', memory())
   .use('/', feathers.static(__dirname + '/public'))
@@ -67,7 +69,7 @@ messageService.before({
   ]
 })
 
-var userService = app.service('/users');
+var userService = app.service('api/users');
 
 // Add a hook to the user service that automatically replaces 
 // the password with a hash of the password before saving it.
