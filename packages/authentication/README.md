@@ -112,9 +112,14 @@ app.io.on('connect', function(){
 
 ## Changelog
 
-### 0.2.1
+### 0.2.2
 
 - Fix customization of the `tokenEndpoint` ([#57](https://github.com/feathersjs/feathers-authentication/issues/57))
+
+### 0.2.1
+
+- fixing passing custom local options. ([#55](https://github.com/feathersjs/feathers-authentication/issues/55))
+
 
 ### 0.2.0
 
