@@ -112,6 +112,10 @@ app.io.on('connect', function(){
 
 ## Changelog
 
+### 0.2.1
+
+- Fix customization of the `tokenEndpoint` ([#57](https://github.com/feathersjs/feathers-authentication/issues/57))
+
 ### 0.2.0
 
 - Migrating existing code to use services
