@@ -116,7 +116,7 @@ export default function(options){
     app.use(options.tokenEndpoint, new Service(options));
 
     // Get our initialize service to that we can bind hooks
-    const tokenService = app.service('/auth/token');
+    const tokenService = app.service(options.tokenEndpoint);
 
     // Set up our before hooks
     tokenService.before({
