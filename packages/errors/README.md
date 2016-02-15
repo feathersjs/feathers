@@ -59,6 +59,9 @@ var validationErrors = new errors.BadRequest({errors: {email: 'Invalid Email'} }
 ```
 
 ## Release History
+__1.2.0__
+- Adding error handler and basic static error pages back in
+
 __1.1.2__
 - Adding more tests
 - Adding even more flexibility for handling multiple errors
