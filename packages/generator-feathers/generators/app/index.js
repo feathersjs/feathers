@@ -93,8 +93,7 @@ module.exports = generators.Base.extend({
         choices: [
           {
             name: 'I will choose my own',
-            value: 'generic',
-            checked: true
+            value: 'generic'
           },
           {
             name: 'Memory',
@@ -114,7 +113,8 @@ module.exports = generators.Base.extend({
           },
           {
             name: 'NeDB',
-            value: 'nedb'
+            value: 'nedb',
+            checked: true
           },
           {
             name: 'PostgreSQL',
