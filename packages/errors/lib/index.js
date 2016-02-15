@@ -7,11 +7,15 @@ var _createClass = (function () { function defineProperties(target, props) { for
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.types = exports.errors = undefined;
+exports.handler = exports.types = exports.errors = undefined;
 
 var _debug = require('debug');
 
 var _debug2 = _interopRequireDefault(_debug);
+
+var _errorHandler = require('./error-handler');
+
+var _errorHandler2 = _interopRequireDefault(_errorHandler);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -318,3 +322,4 @@ var types = errors;
 exports.default = errors;
 exports.errors = errors;
 exports.types = types;
+exports.handler = _errorHandler2.default;
