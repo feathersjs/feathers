@@ -11,14 +11,14 @@ export let populateHeader = function(options = {}) {
   const defaults = {
     header: 'Authorization'
   };
-  
+
   options = Object.assign({}, defaults, options);
 
   return function(hook) {
     if (hook.params.token) {
-      hook.params.headers = {
+      hook.params.headers = Object.assign({}, hook.params.headers, {
         [options.header]: hook.params.token
-      }; 
+      });
     }
   };
 };
@@ -26,9 +26,9 @@ export let populateHeader = function(options = {}) {
 export let populateSocketParams = function() {
   return function(hook) {
     if (hook.params.token) {
-      hook.params.query = {
+      hook.params.query = Object.assign({}, hook.params.query, {
         token: hook.params.token
-      };
+      });
     }
   };
 };
