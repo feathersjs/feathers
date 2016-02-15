@@ -10,6 +10,11 @@ import errors from 'feathers-errors';
 export default function(options = {}){
   const secret = options.secret;
 
+  if (!secret) {
+    console.log('no secret', options);
+    throw new Error('You need to pass `options.secret` to the verifyToken() hook.');
+  }
+
   return function(hook) {
     const token = hook.params.token;
 

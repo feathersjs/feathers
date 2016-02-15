@@ -203,4 +203,44 @@ describe('Socket.io authentication', function() {
     // TODO (EK): This isn't really possible with sockets unless
     // you are sending auth_tokens from your OAuth2 provider
   });
+
+  describe('Authorization', () => {
+    describe('when authenticated', () => {
+      it('returns data from protected route', (done) => {
+        const data = { token: validToken };
+
+        socket.on('authenticated', function() {
+          socket.emit('messages::get', 1, {}, (error, data) => {
+            assert.equal(data.id, 1);
+            done();
+          });
+        });
+
+        socket.emit('authenticate', data);
+      });
+    });
+
+    describe('when not authenticated', () => {
+      it('returns 401 from protected route', (done) => {
+        socket.emit('messages::get', 1, {}, (error) => {
+          assert.equal(error.code, 401);
+          done();
+        });
+      });
+
+      it('does not return data from protected route', (done) => {
+        socket.emit('messages::get', 1, {}, (error, data) => {
+          assert.equal(data, undefined);
+          done();
+        });
+      });
+
+      it('returns data from unprotected route', (done) => {
+        socket.emit('users::find', {}, (error, data) => {
+          assert.notEqual(data, undefined);
+          done();
+        });
+      });
+    });
+  });
 });

@@ -19,11 +19,6 @@ export default function(providers) {
     const app = this;
     let _super = app.setup;
 
-    // Add mixin to normalize the auth token on the params
-    app.mixins.push(function(service){
-      service.before(hooks.normalizeAuthToken());
-    });
-
     // REST middleware
     if (app.rest) {
       debug('registering REST authentication middleware');
@@ -96,7 +91,10 @@ export default function(providers) {
 
       app.configure( provider(options) );
     });
+    
+    // TODO (EK): We might want to also support a failRedirect for HTML
 
+    // TODO (EK): Don't register this route handler if a custom success redirect is passed in
     app.get(authOptions.successRedirect, function(req, res){
       res.sendFile(path.resolve(__dirname, 'public', 'auth-success.html'));
     });

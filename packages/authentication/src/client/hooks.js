@@ -16,25 +16,12 @@ export let populateHeader = function(options = {}) {
 
   return function(hook) {
     if (hook.params.token) {
-      hook.params.headers = Object.assign({}, hook.params.headers, {
-        [options.header]: hook.params.token
-      });
-    }
-  };
-};
-
-export let populateSocketParams = function() {
-  return function(hook) {
-    if (hook.params.token) {
-      hook.params.query = Object.assign({}, hook.params.query, {
-        token: hook.params.token
-      });
+      hook.params.headers = Object.assign({}, { [options.header]: hook.params.token }, hook.params.headers);
     }
   };
 };
 
 export default {
   populateParams,
-  populateHeader,
-  populateSocketParams
+  populateHeader
 };

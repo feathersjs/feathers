@@ -19,7 +19,8 @@ export let exposeConnectMiddleware = function(req, res, next) {
   next();
 };
 
-// Make the authenticated passport user also available for REST services
+// Make the authenticated passport user also available for REST services.
+// We might need this for when we have session supported auth.
 // export let exposeAuthenticatedUser = function(options = {}) {
 //   return function(req, res, next) {
 //     req.feathers.user = req.user;
@@ -27,7 +28,9 @@ export let exposeConnectMiddleware = function(req, res, next) {
 //   };
 // };
 
-// Make the authenticated passport user also available for REST services
+// Make sure than an auth token passed in is available for hooks
+// and services. This gracefully falls back from
+// header -> cookie -> body -> query string
 export let normalizeAuthToken = function(options = {}) {
   const defaults = {
     header: 'authorization',
@@ -125,6 +128,7 @@ export let setupSocketIOAuthentication = function(app, options = {}) {
         // The token gets normalized in hook.params for REST so we'll stay with
         // convention and pass it as params using sockets.
         app.service(options.tokenEndpoint).create({}, data).then(response => {
+          socket.feathers.token = response.token;
           socket.feathers.user = response.data;
           socket.emit('authenticated', response);
         }).catch(errorHandler);
@@ -141,6 +145,7 @@ export let setupSocketIOAuthentication = function(app, options = {}) {
         params.req.body = data;
 
         app.service(options.localEndpoint).create(data, params).then(response => {
+          socket.feathers.token = response.token;
           socket.feathers.user = response.data;
           socket.emit('authenticated', response);
         }).catch(errorHandler);
@@ -177,6 +182,7 @@ export let setupPrimusAuthentication = function(app, options = {}) {
         // The token gets normalized in hook.params for REST so we'll stay with
         // convention and pass it as params using sockets.
         app.service(options.tokenEndpoint).create({}, data).then(response => {
+          socket.request.feathers.token = response.token;
           socket.request.feathers.user = response.data;
           socket.send('authenticated', response);
         }).catch(errorHandler);
@@ -193,6 +199,7 @@ export let setupPrimusAuthentication = function(app, options = {}) {
         params.req.body = data;
 
         app.service(options.localEndpoint).create(data, params).then(response => {
+          socket.request.feathers.token = response.token;
           socket.request.feathers.user = response.data;
           socket.send('authenticated', response);
         }).catch(errorHandler);
