@@ -104,17 +104,17 @@ export default function(options = {}) {
       utils.clearUser();
     };
 
-    // Set up hook that adds adds token to data sent to server over sockets
+    // Set up hook that adds adds token and user to params so that
+    // it they can be accessed by client side hooks and services
     app.mixins.push(function(service) {
       service.before(hooks.populateParams());
     });
-
-    // Set up hook that adds authorization header
+    
+    // Set up hook that adds authorization header for REST provider
     if (app.rest) {
       app.mixins.push(function(service) {
         service.before(hooks.populateHeader());
       });
     }
-
   };
 }

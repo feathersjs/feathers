@@ -21,7 +21,6 @@ export default function(settings, username, password, useSocketio, next) {
     .configure(authentication(settings))
     .use('/users', memory())
     .use('/messages', memory())
-    .use('/tasks', memory())
     .use('/', feathers.static(__dirname))
     /*jshint unused: false*/
     .use(function(error, req, res, next){
@@ -40,9 +39,6 @@ export default function(settings, username, password, useSocketio, next) {
   // Messages will require auth.
   let messageService = app.service('/messages');
 
-  // Tasks service won't require auth.
-  let taskService = app.service('/tasks');
-
   server.on('listening', () => {
     async.series([
       function(cb){
@@ -51,15 +47,15 @@ export default function(settings, username, password, useSocketio, next) {
       function(cb){
         messageService.create({text: 'A million people walk into a Silicon Valley bar'}, {}, function(){});
         messageService.create({text: 'Nobody buys anything'}, {}, function(){});
-        messageService.create({text: 'Bar declared massive success'}, {}, function(){});
-        taskService.create({text: 'Feed the pigs'}, {}, function(){});
-        taskService.create({text: 'Make Pizza.'}, {}, function(){});
-        taskService.create({text: 'Write a book.'}, {}, cb);
+        messageService.create({text: 'Bar declared massive success'}, {}, cb);
       }
     ], function(){
       messageService.before({
-        find: [hooks.requireAuth()],
-        get: [hooks.requireAuth()]
+        all: [
+          hooks.verifyToken({ secret: settings.token.secret }),
+          hooks.populateUser(),
+          hooks.requireAuth()
+        ]
       });
 
       var obj = {

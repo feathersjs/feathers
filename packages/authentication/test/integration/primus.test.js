@@ -201,4 +201,44 @@ describe('Primus authentication', function() {
     // TODO (EK): This isn't really possible with primus unless
     // you are sending auth_tokens from your OAuth2 provider
   });
+
+  describe('Authorization', () => {
+    describe('when authenticated', () => {
+      it('returns data from protected route', (done) => {
+        const data = { token: validToken };
+
+        primus.on('authenticated', function() {
+          primus.send('messages::get', 1, {}, (error, data) => {
+            assert.equal(data.id, 1);
+            done();
+          });
+        });
+
+        primus.send('authenticate', data);
+      });
+    });
+
+    describe('when not authenticated', () => {
+      it('returns 401 from protected route', (done) => {
+        primus.send('messages::get', 1, {}, (error) => {
+          assert.equal(error.code, 401);
+          done();
+        });
+      });
+
+      it('does not return data from protected route', (done) => {
+        primus.send('messages::get', 1, {}, (error, data) => {
+          assert.equal(data, undefined);
+          done();
+        });
+      });
+
+      it('returns data from unprotected route', (done) => {
+        primus.send('users::find', {}, (error, data) => {
+          assert.notEqual(data, undefined);
+          done();
+        });
+      });
+    });
+  });
 });

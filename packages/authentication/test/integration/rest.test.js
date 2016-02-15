@@ -182,57 +182,126 @@ describe('REST authentication', function() {
     // TODO (EK): This is hard to test
   });
 
-  // it('Requests without auth to an unprotected service will return data.', function(done) {
-  //   request({
-  //     url: 'http://localhost:8888/api/tasks',
-  //     method: 'GET',
-  //     json: true
-  //   }, function(err, res, tasks) {
-  //     assert.equal(tasks.length, 3, 'Got tasks');
+  describe('Authorization', () => {
+    describe('when authenticated', () => {
+      describe('when token passed via header', () => {
+        let options;
 
-  //     request({
-  //       url: 'http://localhost:8888/api/tasks/1',
-  //       json: true
-  //     }, function(err, res, task) {
-  //       assert.deepEqual(task, {
-  //         id: '1',
-  //         name: 'Make Pizza.'
-  //       });
-  //       done();
-  //     });
-  //   });
-  // });
+        before(() => {
+          options = {
+            method: 'GET',
+            json: true,
+            headers: {
+              Authorization: validToken
+            }
+          };
+        });
 
-  // it('Requests without auth to a protected service will return an error.', function(done) {
-  //   request({
-  //     url: 'http://localhost:8888/api/todos',
-  //     method: 'GET',
-  //     json: true
-  //   }, function(err, res, body) {
-  //     assert.equal(typeof body, 'string', 'Got an error string back, not an object/array');
+        it('returns data from protected route', (done) => {
+          options.url = `${host}/messages/1`;
 
-  //     request({
-  //       url: 'http://localhost:8888/api/todos/1',
-  //       json: true
-  //     }, function(err, res, body) {
-  //       assert.equal(typeof body, 'string', 'Got an error string back, not an object/array');
-  //       done();
-  //     });
-  //   });
-  // });
+          request(options, function(err, response, body) {
+            assert.equal(body.id, 1);
+            done();
+          });
+        });
+      });
 
-  // it('Requests with a broken token will return a JWT error', function(done) {
-  //   request({
-  //     url: 'http://localhost:8888/api/todos',
-  //     method: 'GET',
-  //     json: true,
-  //     headers: {
-  //       'Authorization': 'Bearer abcd'
-  //     }
-  //   }, function(err, res, body) {
-  //     assert.equal(typeof body, 'string', 'Got an error string back, not an object/array');
-  //     assert.ok(body.indexOf('JsonWebTokenError' > -1), 'Got a JsonWebTokenError');
-  //     done();
-  //   });
-  // });
+      describe('when token passed via body', () => {
+        let options;
+
+        before(() => {
+          options = {
+            method: 'PATCH',
+            json: true,
+            body: {
+              token: validToken,
+              text: 'new text'
+            }
+          };
+        });
+
+        it('returns updates data behind protected route', (done) => {
+          options.url = `${host}/messages/2`;
+
+          request(options, function(err, response, body) {
+            assert.equal(body.id, 2);
+            assert.equal(body.text, 'new text');
+            done();
+          });
+        });
+      });
+
+      describe('when token passed via query string', () => {
+        let options;
+
+        before(() => {
+          options = {
+            method: 'GET',
+            json: true
+          };
+        });
+
+        it('returns data from protected route', (done) => {
+          options.url = `${host}/messages/1?token=${validToken}`;
+
+          request(options, function(err, response, body) {
+            assert.equal(body.id, 1);
+            done();
+          });
+        });
+      });
+    });
+
+    describe('when not authenticated', () => {
+      let options;
+
+      before(() => {
+        options = {
+          method: 'GET',
+          json: true
+        };
+      });
+
+      describe('when route is protected', () => {
+        before(() => {
+          options.url = `${host}/messages/1`;
+        });
+
+        it('returns 401', (done) => {
+          request(options, function(err, response) {
+            assert.equal(response.statusCode, 401);
+            done();
+          });
+        });
+
+        it('returns error instead of data', (done) => {
+          request(options, function(err, response, body) {
+            assert.equal(body.code, 401);
+            done();
+          });
+        });
+      });
+
+      describe('when route is not protected', () => {
+        before(() => {
+          options.url = `${host}/users`;
+        });
+
+        it('returns 200', (done) => {
+          request(options, function(err, response) {
+            assert.equal(response.statusCode, 200);
+            done();
+          });
+        });
+
+        it('returns data', (done) => {
+          request(options, function(err, response, body) {
+            assert.notEqual(body, undefined);
+            done();
+          });
+        });
+      });
+    });
+  });
 });
