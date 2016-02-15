@@ -1,6 +1,7 @@
 if(!global._babelPolyfill) { require('babel-polyfill'); }
 
 import makeDebug from 'debug';
+import handler from './error-handler';
 
 const debug = makeDebug('feathers-errors');
 
@@ -176,4 +177,4 @@ var errors = {
 var types = errors;
 
 export default errors;
-export { errors, types };
+export { errors, types, handler };
