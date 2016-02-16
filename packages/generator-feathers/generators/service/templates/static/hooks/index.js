@@ -1,4 +1,3 @@
-// jshint unused:false
 import globalHooks from '../../../hooks';
 import { hooks as auth } from 'feathers-authentication';
 

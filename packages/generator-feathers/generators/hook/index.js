@@ -113,15 +113,25 @@ module.exports = generators.Base.extend({
   writing: function () {
     var hookIndexPath = path.join('src/services/', this.props.service, 'hooks/index.js');
     this.props.hookPath = path.join('src/services/', this.props.service, 'hooks/', this.props.name + '.js');
+    // this.props.hookTestPath = path.join('test/services/', this.props.service, 'hooks/', this.props.name + '.test.js');
+    this.props.codeName = inflect.camelize(inflect.underscore(this.props.name), false);
     
     // Automatically import the hook into services/<service-name>/hooks/index.js and initialize it.
-    importHook(hookIndexPath, inflect.camelize(inflect.underscore(this.props.name), false), './' + this.props.name, this.props.type, this.props.method);
-
+    importHook(hookIndexPath, this.props.codeName, './' + this.props.name, this.props.type, this.props.method);
+    
+    // copy the hook
     this.fs.copyTpl(
       this.templatePath(this.props.type + '-hook.js'),
       this.destinationPath(this.props.hookPath),
       this.props
     );
+
+    // copy the hook test
+    // this.fs.copyTpl(
+    //   this.templatePath(this.props.type + '-hook.test.js'),
+    //   this.destinationPath(this.props.hookTestPath),
+    //   this.props
+    // );
   }
 });
 

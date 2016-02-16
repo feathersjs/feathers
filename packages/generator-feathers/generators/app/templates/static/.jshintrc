@@ -13,7 +13,7 @@
     "quotmark": "single",
     "regexp": true,
     "undef": true,
-    "unused": true,
+    "unused": false,
     "strict": false,
     "trailing": true,
     "smarttabs": true,
