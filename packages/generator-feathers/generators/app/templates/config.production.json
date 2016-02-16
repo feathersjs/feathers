@@ -10,11 +10,8 @@
   "sqlite": "SQLITE_DB",<% } %>
   "public": "../public/"<% if(authentication.length){ %>,
   "auth": {<% if(authentication.indexOf('local' > -1)){ %>
-    "local": {
-      "secret": "FEATHERS_AUTH_SECRET",
-      "loginEndpoint": "/login",
-      "userEndpoint": "/users",
-      "usernameField": "email"
+    "token": {
+      "secret": "FEATHERS_AUTH_SECRET"
     }<% } %>
   }<% } %><% if (cors === 'whitelisted') { %>,
   "corsWhitelist": [<% corsWhitelist.forEach(function(domain, index, list){ %>

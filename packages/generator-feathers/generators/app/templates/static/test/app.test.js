@@ -1,6 +1,6 @@
 import assert from 'assert';
 import request from 'request';
-import app from '../server/app';
+import app from '../src/app';
 
 describe('Feathers application tests', () => {
   before(function(done) {
@@ -14,7 +14,7 @@ describe('Feathers application tests', () => {
 
   it('starts and shows the index page', done => {
     request('http://localhost:3030', (err, res, body) => {
-      assert.ok(body.indexOf('<!html>') !== -1);
+      assert.ok(body.indexOf('<html>') !== -1);
       done(err);
     });
   });
@@ -23,7 +23,7 @@ describe('Feathers application tests', () => {
     it('shows a 404 HTML page', done => {
       request('http://localhost:3030/path/to/nowhere', (err, res, body) => {
         assert.equal(res.statusCode, 404);
-        assert.ok(body.indexOf('<!html>') !== -1);
+        assert.ok(body.indexOf('<html>') !== -1);
         done(err);
       });
     });
