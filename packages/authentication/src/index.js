@@ -14,7 +14,7 @@ const PROVIDERS = {
   local
 };
 
-export default function(providers) {
+export default function auth(providers) {
   return function() {
     const app = this;
     let _super = app.setup;
@@ -101,4 +101,4 @@ export default function(providers) {
   };
 }
 
-export { hooks };
+auth.hooks = hooks;
