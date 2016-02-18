@@ -5,7 +5,12 @@ import socket from 'feathers-socket-commons';
 
 const debug = makeDebug('feathers-socketio');
 
-export default function (config) {
+export default function (options, config) {
+  if(typeof options === 'function') {
+    config = options;
+    options = {};
+  }
+  
   return function () {
     const app = this;
 
@@ -13,7 +18,7 @@ export default function (config) {
 
     Proto.mixin({
       setup(server) {
-        const io = this.io = socketio.listen(server);
+        const io = this.io = socketio.listen(server, options);
 
         io.use(function (socket, next) {
           socket.feathers = { provider: 'socketio' };

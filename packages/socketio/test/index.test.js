@@ -2,6 +2,7 @@ import assert from 'assert';
 import _ from 'lodash';
 import feathers from 'feathers';
 import io from 'socket.io-client';
+import request from 'request';
 import { Service as todoService } from 'feathers-commons/lib/test-fixture';
 
 import testService from './service.test.js';
@@ -60,6 +61,21 @@ describe('feathers-socketio', () => {
     let srv = app.listen(8887).on('listening', () => srv.close(done));
   });
 
+  it('can set options (#12)', done => {
+    let app = feathers()
+      .configure(socketio({
+        path: '/test/'
+      }, io => assert.ok(io)));
+    
+    let srv = app.listen(8987).on('listening', () => {
+      request('http://localhost:8987/test/socket.io.js', (err, res, body) => {
+        assert.equal(res.statusCode, 200);
+        assert.equal(body.indexOf('(function(f)'), 0);
+        srv.close(done);
+      });
+    });
+  });
+  
   it('passes handshake as service parameters', done => {
     let service = options.app.service('todo');
     let old = {
