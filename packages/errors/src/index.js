@@ -1,9 +1,6 @@
-if(!global._babelPolyfill) { require('babel-polyfill'); }
-
-import makeDebug from 'debug';
 import handler from './error-handler';
 
-const debug = makeDebug('feathers-errors');
+const debug = require('debug')('feathers-errors');
 
 // NOTE (EK): Babel doesn't properly support extending
 // some classes in ES6. The Error class being one of them.
@@ -157,7 +154,7 @@ class Unavailable extends FeathersError {
   }
 }
 
-var errors = {
+const errors = {
   FeathersError,
   BadRequest,
   NotAuthenticated,
@@ -174,7 +171,4 @@ var errors = {
   Unavailable
 };
 
-var types = errors;
-
-export default errors;
-export { errors, types, handler };
+export default Object.assign({ handler, types: errors, errors }, errors);
