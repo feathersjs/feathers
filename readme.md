@@ -21,11 +21,11 @@ yo feathers
 npm start
 ```
 
-To learn more about Feathers visit website at [feathersjs.com](http://feathersjs.com) or jump right into [the Feathers docs](http://docs.feathersjs.com).
+To learn more about Feathers visit the website at [feathersjs.com](http://feathersjs.com) or jump right into [the Feathers docs](http://docs.feathersjs.com).
 
-## An In-Memory REST and real-time API
+## See it in action
 
-Want to see it in action? Here is all the code you need to create RESTful, real-time todo API that uses an in memory data store:
+Here is all the code you need to create a RESTful, real-time todo API that uses an in memory data store:
 
 ```js
 // app.js
