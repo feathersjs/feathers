@@ -3,16 +3,25 @@ import path from 'path';
 import errors from './index';
 
 const defaults = {
-  public: path.resolve(__dirname, './public')
+  public: path.resolve(__dirname, 'public')
 };
 
 export default function(options = {}) {
   options = Object.assign({}, defaults, options);
+  
+  if(!options.files) {
+    options.files = {
+      404: path.resolve(options.public, '404.html'),
+      500: path.resolve(options.public, '500.html')
+    };
+  }
 
   return function(error, req, res, next) {
     if ( !(error instanceof errors.FeathersError) ) {
       let oldError = error;
-      error = new errors.GeneralError(oldError.message, {errors: oldError.errors});
+      error = new errors.GeneralError(oldError.message, {
+        errors: oldError.errors
+      });
 
       if (oldError.stack) {
         error.stack = oldError.stack;
@@ -30,8 +39,13 @@ export default function(options = {}) {
 
     res.format({
       'text/html': function() {
-        const file = code === 404 ? '404.html' : '500.html';
-        res.sendFile(path.join(path.resolve(options.public, file)));
+        let file = options.files[code];
+        
+        if(!file) {
+          file = options.files[500];
+        }
+        
+        res.sendFile(file);
       },
 
       'application/json': function () {
