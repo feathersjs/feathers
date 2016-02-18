@@ -30,9 +30,9 @@ html, body {
   color: @green;
 }
 
-h1.logo {
-  .font-size(64);
-}
+// h1.logo {
+//   .font-size(64);
+// }
 
 .gist {
   pre, .file-data {
@@ -49,6 +49,16 @@ code {
 }
 
 #hero {
+  img.logo {
+    margin: 40px auto;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  h2.secondary-text {
+    margin-bottom: 40px;
+  }
+
   .badges,
   .github-links {
     padding: 0.3em 0;
@@ -90,6 +100,8 @@ code {
   code, pre {
     font-size: 18px;
     line-height: 22px;
+    overflow-y: auto;
+    word-wrap: normal;
   }
 }
 
