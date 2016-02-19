@@ -18,7 +18,7 @@
   "scripts": {
     "start": "node src/",
     "jshint": "jshint src/. test/. --config",
-    "mocha": "mocha test/ --compilers js:babel-core/register",
+    "mocha": "mocha test/",
     "test": "npm run jshint && npm run mocha"
   }
 }

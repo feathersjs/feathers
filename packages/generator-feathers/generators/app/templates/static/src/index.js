@@ -1,9 +1,9 @@
-require('babel-core/register');
+'use strict';
 
-var app = require('./app').default;
-var port = app.get('port');
-var server = app.listen(port);
+const app = require('./app');
+const port = app.get('port');
+const server = app.listen(port);
 
-server.on('listening', function() {
-  console.log(`Feathers application started on ${app.get('host')}:${port}`);
-});
+server.on('listening', () =>
+  console.log(`Feathers application started on ${app.get('host')}:${port}`)
+);

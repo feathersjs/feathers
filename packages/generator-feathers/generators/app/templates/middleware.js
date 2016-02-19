@@ -1,9 +1,10 @@
-import path from 'path';
-import notFound from './not-found-handler';
-import { handler as error } from 'feathers-errors';
-import logger from './logger';
+'use strict';
 
-export default function() {
+const errors = require('feathers-errors');
+const notFound = require('./not-found-handler');
+const logger = require('./logger');
+
+module.exports = function() {
   const app = this;
 
   // Add your custom middleware here. Remember, that
@@ -11,5 +12,5 @@ export default function() {
   // handling middleware should go last.
   app.use(notFound())
     .use(logger(app))
-    .use(error());
-}
+    .use(errors.handler());
+};

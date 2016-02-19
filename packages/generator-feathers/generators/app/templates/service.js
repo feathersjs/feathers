@@ -1,10 +1,12 @@
-<% for (var i = 0; i < services.length; i++) { %>import <%= services[i] %> from './<%= services[i] %>';
+'use strict';
+
+<% for (var i = 0; i < services.length; i++) { %>const <%= services[i] %> = require('./<%= services[i] %>');
 <% } %>
 <% if (database === 'sqlite') { %>
-import path from 'path';
-import fs from 'fs-extra';<% } %><% if (database === 'mongodb') { %>import mongoose from 'mongoose';<% } %><% if (database === 'sqlite' || database === 'mssql' || database === 'postgres' || database === 'mysql' || database === 'mariadb') { %>import Sequelize from 'sequelize';<% } %>
+const path = require('path');
+const fs = require('fs-extra');<% } %><% if (database === 'mongodb') { %>const mongoose = require('mongoose');<% } %><% if (database === 'sqlite' || database === 'mssql' || database === 'postgres' || database === 'mysql' || database === 'mariadb') { %>const Sequelize = require('sequelize');<% } %>
 
-export default function() {
+module.exports = function() {
   const app = this;
   <% if (database === 'sqlite') { %>
   fs.ensureDirSync( path.dirname(app.get('sqlite')) );
@@ -32,4 +34,4 @@ export default function() {
   app.set('sequelize', sequelize);<% } %>
   <% for (var i = 0; i < services.length; i++) { %>
   app.configure(<%= services[i] %>);<% } %>
-}
+};

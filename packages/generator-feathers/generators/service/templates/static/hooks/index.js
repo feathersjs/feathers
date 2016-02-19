@@ -1,7 +1,9 @@
-import globalHooks from '../../../hooks';
-import { hooks as auth } from 'feathers-authentication';
+'use strict';
 
-let before = {
+const globalHooks = require('../../../hooks');
+const auth = require('feathers-authentication').hooks;
+
+exports.before = {
   all: [],
   find: [],
   get: [],
@@ -11,7 +13,7 @@ let before = {
   remove: []
 };
 
-let after = {
+exports.after = {
   all: [],
   find: [],
   get: [],
@@ -20,5 +22,3 @@ let after = {
   patch: [],
   remove: []
 };
-
-export default { before, after };

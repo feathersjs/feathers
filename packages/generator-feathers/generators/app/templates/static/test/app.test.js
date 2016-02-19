@@ -1,6 +1,8 @@
-import assert from 'assert';
-import request from 'request';
-import app from '../src/app';
+'use strict';
+
+const assert = require('assert');
+const request = require('request');
+const app = require('../src/app');
 
 describe('Feathers application tests', () => {
   before(function(done) {

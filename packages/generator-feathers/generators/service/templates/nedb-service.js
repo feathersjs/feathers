@@ -1,13 +1,15 @@
-import { join } from 'path';
-import NeDB from 'nedb';
-import service from 'feathers-nedb';
-import hooks from './hooks';
+'use strict';
 
-export default function(){
+const path = require('path');
+const NeDB = require('nedb');
+const service = require('feathers-nedb');
+const hooks = require('./hooks');
+
+module.exports = function(){
   const app = this;
 
   const db = new NeDB({
-    filename: join(app.get('nedb'), '<%= pluralizedName %>.db'),
+    filename: path.join(app.get('nedb'), '<%= pluralizedName %>.db'),
     autoload: true
   });
 
@@ -30,4 +32,4 @@ export default function(){
 
   // Set up our after hooks
   <%= name %>Service.after(hooks.after);
-}
+};
