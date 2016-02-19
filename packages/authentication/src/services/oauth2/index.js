@@ -5,11 +5,9 @@ import { exposeConnectMiddleware } from '../../middleware';
 import { successfulLogin } from '../../middleware';
 
 const debug = Debug('feathers-authentication:oauth2');
+
+// Provider specific config
 const defaults = {
-  successRedirect: '/auth/success',
-  passwordField: 'password',
-  userEndpoint: '/users',
-  tokenEndpoint: '/auth/token',
   passReqToCallback: true,
   callbackSuffix: 'callback',
   permissions: {}

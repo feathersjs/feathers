@@ -4,10 +4,10 @@ import hooks from '../../hooks';
 import errors from 'feathers-errors';
 
 const debug = Debug('feathers-authentication:token');
+
+// Provider specific config
 const defaults = {
-  userEndpoint: '/users',
   passwordField: 'password',
-  tokenEndpoint: '/auth/token',
   issuer: 'feathers',
   algorithms: ['HS256'],
   expiresIn: '1d', // 1 day

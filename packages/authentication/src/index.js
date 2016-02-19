@@ -8,16 +8,54 @@ import local from './services/local';
 import oauth2 from './services/oauth2';
 import * as middleware from './middleware';
 
+function isObject (item) {
+  return (typeof item === 'object' && !Array.isArray(item) && item !== null);
+}
+
 const debug = Debug('feathers-authentication:main');
 const PROVIDERS = {
   token,
   local
 };
 
-export default function auth(providers) {
+// Options that apply to any provider
+const defaults = {
+  setUpSuccessRedirect: true,
+  setUpFailureRedirect: true,
+  successRedirect: '/auth/success',
+  failureRedirect: '/auth/failure',
+  tokenEndpoint: '/auth/token',
+  localEndpoint: '/auth/local',
+  userEndpoint: '/users',
+  header: 'authorization',
+  cookie: 'feathers-jwt'
+};
+
+export default function auth(config = {}) {
   return function() {
     const app = this;
     let _super = app.setup;
+
+    // NOTE (EK): Currently we require token based auth so
+    // if the developer didn't provide a config for our token
+    // provider then we'll set up a sane default for them.
+    if (!config.token) {
+      config.token = {
+        secret: crypto.randomBytes(64).toString('base64')
+      };
+    }
+
+    // If they didn't pass in a local provider let's set one up
+    // for them with the default options.
+    if (config.local === undefined) {
+      config.local = {};
+    }
+
+    // Merge and flatten options
+    const authOptions = Object.assign({}, app.get('auth'), defaults, config);
+
+    // Set the options on the app
+    app.set('auth', authOptions);
 
     // REST middleware
     if (app.rest) {
@@ -26,25 +64,8 @@ export default function auth(providers) {
       // app.use( middleware.exposeAuthenticatedUser() );
       // Get the token and expose it to REST services.
       // TODO (EK): Maybe make header key configurable
-      app.use( middleware.normalizeAuthToken() );
+      app.use( middleware.normalizeAuthToken(authOptions) );
     }
-
-    // NOTE (EK): Currently we require token based auth so
-    // if the developer didn't provide a config for our token
-    // provider then we'll set up a sane default for them.
-    if (providers.token === undefined) {
-      providers.token = {
-        secret: crypto.randomBytes(64).toString('base64')
-      };
-    }
-
-    // If they didn't pass in a local provider let's set one up
-    // for them with the default options.
-    if (providers.local === undefined) {
-      providers.local = {};
-    }
-
-    const authOptions = Object.assign({ successRedirect: '/auth/success' }, providers.local, providers.token);
     
     app.use(passport.initialize());
 
@@ -67,13 +88,34 @@ export default function auth(providers) {
     };
 
     // Merge all of our options and configure the appropriate service
-    Object.keys(providers).forEach(function (key) {
+    Object.keys(config).forEach(function (key) {
+      
+      // Because we are iterating through all the keys we might
+      // be dealing with a confir param and not a provider config
+      // If that's the case we don't need to merge params and we
+      // shouldn't try to set up a service for this key.
+      if (!isObject(config[key])) {
+        return;
+      }
+
       // Check to see if the key is a local or token provider
       let provider = PROVIDERS[key];
-      let providerOptions = providers[key];
+      let providerOptions = config[key];
+
+      // If they passed a custom success redirect then we'll
+      // leave it to the developer to set up their own route.
+      if (providerOptions.successRedirect) {
+        authOptions.setUpSuccessRedirect = false;
+      }
+
+      // If they passed a custom failure redirect then we'll
+      // leave it to the developer to set up their own route.
+      if (providerOptions.failureRedirect) {
+        authOptions.setUpFailureRedirect = false;
+      }
 
       // If it's not one of our own providers then determine whether it is oauth1 or oauth2
-      if (!provider) {
+      if (!provider && isObject(providerOptions)) {
         // Check to see if it is an oauth2 provider
         if (providerOptions.clientID && providerOptions.clientSecret) {
           provider = oauth2;
@@ -82,22 +124,29 @@ export default function auth(providers) {
         else if (providerOptions.consumerKey && providerOptions.consumerSecret){
           throw new Error(`Sorry we don't support OAuth1 providers right now. Try using a ${key} OAuth2 provider.`);
         }
-        else if (!provider) {
-          throw new Error(`Invalid '${key}' provider configuration.\nYou need to provide your 'clientID' and 'clientSecret' if using an OAuth2 provider or your 'consumerKey' and 'consumerSecret' if using an OAuth1 provider.`);
-        }
+
+        providerOptions = Object.assign({ provider: key, endPoint: `/auth/${key}` }, providerOptions);
       }
-
-      const options = Object.assign({ provider: key, endPoint: `/auth/${key}` }, providerOptions, authOptions);
-
+      
+      const options = Object.assign({}, authOptions, providerOptions);
+      
       app.configure( provider(options) );
     });
     
-    // TODO (EK): We might want to also support a failRedirect for HTML
 
-    // TODO (EK): Don't register this route handler if a custom success redirect is passed in
-    app.get(authOptions.successRedirect, function(req, res){
-      res.sendFile(path.resolve(__dirname, 'public', 'auth-success.html'));
-    });
+    // Don't register this route handler if a custom success redirect is passed in
+    if (authOptions.setUpSuccessRedirect) {
+      app.get(authOptions.successRedirect, function(req, res){
+        res.sendFile(path.resolve(__dirname, 'public', 'auth-success.html'));
+      });
+    }
+
+    // Don't register this route handler if a custom failure redirect is passed in
+    if (authOptions.setUpFailureRedirect) {
+      app.get(authOptions.failureRedirect, function(req, res){
+        res.sendFile(path.resolve(__dirname, 'public', 'auth-fail.html'));
+      });
+    }
   };
 }
 
