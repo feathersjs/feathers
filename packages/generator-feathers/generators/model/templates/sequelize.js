@@ -12,7 +12,7 @@ export default function(sequelize) {
       allowNull: false,
       unique: true,
       validate: {
-        isAlphaNumeric: { msg: '`text` must only contain alpha numeric characters' }
+        isAlphanumeric: { msg: '`text` must only contain alpha numeric characters' }
       }
     }
   }, {
