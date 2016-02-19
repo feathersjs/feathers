@@ -1,5 +1,7 @@
-import assert from 'assert';
-import <%= codeName %> from '<%= hookPath %>';
+'use strict';
+
+const assert = require('assert');
+const <%= codeName %> = require('<%= hookPath %>');
 
 const mockHook = {
   type: 'before',
@@ -11,7 +13,7 @@ const mockHook = {
 
 describe('<%= service %> <%= codeName %> hook', () => {
   it('can be used', () => {
-    let hook = <%= codeName %>()(mockHook);
+    const hook = <%= codeName %>()(mockHook);
     assert.equal(hook.type, 'before');
   });
 });

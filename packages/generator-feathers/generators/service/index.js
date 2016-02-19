@@ -1,5 +1,3 @@
-'use strict';
-
 var generators = require('yeoman-generator');
 var fs = require('fs');
 var inflect = require('i')();
@@ -8,7 +6,7 @@ function importService(filename, name, module) {
   // Lookup existing service/index.js file
   if (fs.existsSync(filename)) {
     var content = fs.readFileSync(filename).toString();
-    var statement = 'import ' + name + ' from \'' + module + '\';';
+    var statement = 'const ' + name + ' = require(\'' + module + '\');';
     var configure = '  app.configure(' + name + ');\n}';
 
     // Also add if it is not already there

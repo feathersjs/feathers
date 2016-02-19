@@ -9,7 +9,7 @@ function importHook(filename, name, module, type, method) {
   // Lookup existing services/<service-name>/hooks/index.js file
   if (fs.existsSync(filename)) {
     var content = fs.readFileSync(filename).toString();
-    var statement = 'import ' + name + ' from \'' + module + '\';';
+    var statement = 'const ' + name + ' = require(\'' + module + '\');';
     var expression = new RegExp( '(' + type + '(.|\n)+?' + method + '.+?)(\]{1})' );
 
     // Also add if it is not already there

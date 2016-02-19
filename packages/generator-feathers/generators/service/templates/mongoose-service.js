@@ -1,11 +1,13 @@
-import service from 'feathers-mongoose';
-import <%= name %> from './<%= name %>-model';
-import hooks from './hooks';
+'use strict';
 
-export default function(){
+const service = require('feathers-mongoose');
+const <%= name %> = require('./<%= name %>-model');
+const hooks = require('./hooks');
+
+module.exports = function() {
   const app = this;
 
-  let options = {
+  const options = {
     Model: <%= name %>,
     paginate: {
       default: 5,
@@ -24,4 +26,4 @@ export default function(){
 
   // Set up our after hooks
   <%= name %>Service.after(hooks.after);
-}
+};

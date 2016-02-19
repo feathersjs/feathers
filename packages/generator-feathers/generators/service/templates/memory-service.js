@@ -1,7 +1,9 @@
-import service from 'feathers-memory';
-import hooks from './hooks';
+'use strict';
 
-export default function(){
+const service = require('feathers-memory');
+const hooks = require('./hooks');
+
+module.exports = function(){
   const app = this;
 
   let options = {
@@ -22,4 +24,4 @@ export default function(){
 
   // Set up our after hooks
   <%= name %>Service.after(hooks.after);
-}
+};

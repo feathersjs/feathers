@@ -1,6 +1,8 @@
-import hooks from './hooks';
+'use strict';
 
-export class Service {
+const hooks = require('./hooks');
+
+class Service {
   constructor(options = {}) {
     this.options = options;
   }
@@ -36,7 +38,7 @@ export class Service {
   }
 }
 
-export default function(){
+module.exports = function(){
   const app = this;
 
   // Initialize our service with any options it requires
@@ -50,4 +52,6 @@ export default function(){
 
   // Set up our after hooks
   <%= name %>Service.after(hooks.after);
-}
+};
+
+module.exports.Service = Service;
