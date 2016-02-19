@@ -2,13 +2,7 @@ import Debug from 'debug';
 import errors from 'feathers-errors';
 
 const debug = Debug('feathers-authentication:middleware');
-const FIVE_SECONDS = 5000;
 const TEN_HOURS = 36000;
-const defaults = {
-  timeout: FIVE_SECONDS,
-  tokenEndpoint: '/auth/token',
-  localEndpoint: '/auth/local'
-};
 
 // Usually this is a big no no but passport requires the 
 // request object to inspect req.body and req.query so we
@@ -32,12 +26,15 @@ export let exposeConnectMiddleware = function(req, res, next) {
 // and services. This gracefully falls back from
 // header -> cookie -> body -> query string
 export let normalizeAuthToken = function(options = {}) {
-  const defaults = {
-    header: 'authorization',
-    cookie: 'feathers-jwt'
-  };
+  debug('Setting up normalizeAuthToken middleware with options:', options);
 
-  options = Object.assign({}, defaults, options);
+  if (!options.header) {
+    throw new Error(`'header' must be provided to normalizeAuthToken() middleware`);
+  }
+
+  if (!options.cookie) {
+    throw new Error(`'cookie' must be provided to normalizeAuthToken() middleware`);
+  }
 
   return function(req, res, next) {
     let token = req.headers[options.header];
@@ -73,6 +70,16 @@ export let normalizeAuthToken = function(options = {}) {
 };
 
 export let successfulLogin = function(options = {}) {
+  debug('Setting up successfulLogin middleware with options:', options);
+
+  if (!options.cookie) {
+    throw new Error(`'cookie' must be provided to successfulLogin() middleware`);
+  }
+
+  if (!options.successRedirect) {
+    throw new Error(`'successRedirect' must be provided to successfulLogin() middleware`);
+  }
+
   return function(req, res, next) {
     // NOTE (EK): If we are not dealing with a browser or it was an
     // XHR request then just skip this. This is primarily for
@@ -83,14 +90,14 @@ export let successfulLogin = function(options = {}) {
     }
 
     // clear any previous JWT cookie
-    res.clearCookie('feathers-jwt');
+    res.clearCookie(options.cookie);
 
     // Set a our JWT in a cookie.
     // TODO (EK): Look into hardening this cookie a bit.
     let expiration = new Date();
     expiration.setTime(expiration.getTime() + TEN_HOURS);
 
-    res.cookie('feathers-jwt', res.data.token, { expires: expiration});
+    res.cookie(options.cookie, res.data.token, { expires: expiration});
 
     // Redirect to our success route
     res.redirect(options.successRedirect);
@@ -98,7 +105,7 @@ export let successfulLogin = function(options = {}) {
 };
 
 export let setupSocketIOAuthentication = function(app, options = {}) {
-  options = Object.assign({}, defaults, options);
+  options = Object.assign({}, options);
   
   debug('Setting up Socket.io authentication middleware with options:', options);
 
@@ -156,7 +163,7 @@ export let setupSocketIOAuthentication = function(app, options = {}) {
 
 // TODO (EK): DRY this up along with the code in setupSocketIOAuthentication
 export let setupPrimusAuthentication = function(app, options = {}) {
-  options = Object.assign({}, defaults, options);
+  options = Object.assign({}, options);
 
   debug('Setting up Primus authentication middleware with options:', options);
 

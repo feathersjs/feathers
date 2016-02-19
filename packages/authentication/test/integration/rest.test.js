@@ -11,6 +11,7 @@ describe('REST authentication', function() {
   let email = 'test@feathersjs.com';
   let password = 'test';
   let settings = {
+    idField: 'id',
     token: {
       secret: 'feathers-rocks'
     }

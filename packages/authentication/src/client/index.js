@@ -2,9 +2,7 @@ import hooks from './hooks';
 import utils from './utils';
 
 const defaults = {
-  usernameField: 'email',
-  passwordField: 'password',
-  userEndpoint: '/users',
+  // userEndpoint: '/users',
   localEndpoint: '/auth/local',
   tokenEndpoint: '/auth/token'
 };

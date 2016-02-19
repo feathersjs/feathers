@@ -8,18 +8,25 @@ import errors from 'feathers-errors';
  * @param {String} options.secret - The JWT secret
  */
 export default function(options = {}){
-  const secret = options.secret;
-
-  if (!secret) {
-    console.log('no secret', options);
-    throw new Error('You need to pass `options.secret` to the verifyToken() hook.');
-  }
+  let secret = options.secret;
 
   return function(hook) {
     const token = hook.params.token;
 
     if (!token) {
       return Promise.resolve(hook);
+    }
+
+    if (!secret) {
+      // Try to get the secret from the app config
+      const authOptions = hook.app.get('auth');
+
+      if (authOptions && authOptions.token && authOptions.token.secret) {
+        secret = authOptions.token.secret;
+      }
+      else {
+        throw new Error('You need to pass `options.secret` to the verifyToken() hook or set `auth.token.secret` it in your config.');
+      }
     }
 
     return new Promise(function(resolve, reject){

@@ -4,7 +4,7 @@
 const defaults = {
   userEndpoint: '/users',
   passwordField: 'password',
-  idField: 'id'
+  idField: '_id'
 };
 
 export default function(options = {}){
@@ -19,7 +19,7 @@ export default function(options = {}){
     let id;
     
     // If it's an after hook grab the id from the result
-    if (hook.result) {
+    if (hook.type === 'after') {
       id = hook.result[options.idField];
     }
     // Check to see if we have an id from a decoded JWT

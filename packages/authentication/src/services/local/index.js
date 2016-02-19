@@ -8,12 +8,8 @@ import { successfulLogin } from '../../middleware';
 
 const debug = Debug('feathers-authentication:local');
 const defaults = {
-  userEndpoint: '/users',
   usernameField: 'email',
-  passwordField: 'password',
-  userProperty: passport._userProperty || 'user',
-  localEndpoint: '/auth/local',
-  tokenEndpoint: '/auth/token'
+  passwordField: 'password'
 };
 
 export class Service {
