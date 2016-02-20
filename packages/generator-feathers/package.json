@@ -48,7 +48,9 @@
     "generators/service"
   ],
   "dependencies": {
+    "ast-traverse": "^0.1.1",
     "i": "^0.3.3",
+    "recast": "^0.11.2",
     "yeoman-generator": "^0.21.1"
   },
   "devDependencies": {
