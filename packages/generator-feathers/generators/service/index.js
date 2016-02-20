@@ -21,7 +21,7 @@ function importService(filename, name, module) {
 
 module.exports = generators.Base.extend({
   initializing: function (name) {
-    this.props = { name: name };
+    this.props = { name: name, authentication: false };
 
     this.props = Object.assign(this.props, this.options);
   },
@@ -96,6 +96,15 @@ module.exports = generators.Base.extend({
         ]
       },
       {
+        type: 'confirm',
+        name: 'authentication',
+        default: this.props.authentication,
+        message: 'Does your service require users to be authenticated?',
+        when: function(){
+          return options.authentication === undefined;
+        }
+      },
+      {
         name: 'name',
         message: 'What do you want to call your service?',
         default: this.props.name,
@@ -152,7 +161,11 @@ module.exports = generators.Base.extend({
     importService(serviceIndexPath, this.props.name, './' + this.props.name);
 
     // Add a hooks folder for the service
-    this.fs.copy(this.templatePath('static'), this.destinationPath('src/services', this.props.name));
+    this.fs.copyTpl(
+      this.templatePath('hooks.js'),
+      this.destinationPath('src/services', this.props.name, 'hooks/index.js'),
+      this.props
+    );
 
     // If we are generating a service that requires a model, let's generate that model.
     if (this.props.type === 'mongoose' || this.props.type === 'sequelize') {
