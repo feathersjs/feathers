@@ -10,12 +10,12 @@ function importHook(filename, name, module, type, method) {
   if (fs.existsSync(filename)) {
     var content = fs.readFileSync(filename).toString();
     var statement = 'const ' + name + ' = require(\'' + module + '\');';
-    var expression = new RegExp( '(' + type + '(.|\n)+?' + method + '.+?)(\]{1})' );
+    var expression = new RegExp( '(' + type + '(.|\n)+?' + method + '(.|\n)+?)(\]{1})' );
 
     // Also add if it is not already there
     if (content.indexOf(statement) === -1) {
-      content = statement + '\n' + content;
-      content = content.replace(expression, '$1' + name + '(), $3');
+      content = content.replace(/'use strict';\n\n/, '\'use strict;\'\n\n' + statement + '\n');
+      content = content.replace(expression, '$1$2$3' + name + '(),\n  $4');
     }
     
     fs.writeFileSync(filename, content);
