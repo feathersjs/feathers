@@ -1,11 +1,9 @@
 'use strict';
 
 <% for (var i = 0; i < services.length; i++) { %>const <%= services[i] %> = require('./<%= services[i] %>');
-<% } %>
-<% if (database === 'sqlite') { %>
+<% } %><% if (database === 'sqlite') { %>
 const path = require('path');
 const fs = require('fs-extra');<% } %><% if (database === 'mongodb') { %>const mongoose = require('mongoose');<% } %><% if (database === 'sqlite' || database === 'mssql' || database === 'postgres' || database === 'mysql' || database === 'mariadb') { %>const Sequelize = require('sequelize');<% } %>
-
 module.exports = function() {
   const app = this;
   <% if (database === 'sqlite') { %>

@@ -9,14 +9,21 @@ const Sequelize = require('sequelize');
 
 module.exports = function(sequelize) {
   const <%= name %> = sequelize.define('<%= name %>', {
-    text: {
+    <% if(name === 'user') { %>email: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true
+    }, password: {
+      type: Sequelize.STRING,
+      allowNull: false
+    }<% } else { %>text: {
       type: Sequelize.STRING,
       allowNull: false,
       unique: true,
       validate: {
         isAlphanumeric: { msg: '`text` must only contain alpha numeric characters' }
       }
-    }
+    }<% } %>
   }, {
     freezeTableName: true
   });

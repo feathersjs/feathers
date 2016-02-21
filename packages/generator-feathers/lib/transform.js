@@ -69,8 +69,22 @@ exports.addToArrayInObject = function(ast, objectCode, key, code) {
   });
   
   if(!ran) {
-    throw new Error('Could not find an array for object key ' + key + ' to inser ' + code);
+    throw new Error('Could not find an array for object key ' + key + ' to insert ' + code);
   }
+  
+  return ast;
+};
+
+exports.addLastInFunction = function(ast, search, code) {
+  var node = findFirstNodeAfter(ast, search, 'FunctionExpression');
+  
+  if(node === null) {
+    throw new Error('No function expression found after ' + search);
+  }
+  
+  var nodes = node.body.body;
+  
+  insert(nodes, parse(code).program.body, nodes.length);
   
   return ast;
 };

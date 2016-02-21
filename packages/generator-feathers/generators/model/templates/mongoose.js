@@ -9,9 +9,18 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const <%= name %>Schema = new Schema({
-  text: {type: String, required: true, index: true},
-  createdAt: {type: Date, 'default': Date.now},
-  updatedAt: {type: Date, 'default': Date.now}
+  <% if(name === 'user') { %>email: {
+    type: String,
+    required: true,
+    unique: true
+  }, password: {
+    type: String,
+    required: true
+  }<% } else { %>text: {
+    type: String,
+    required: true,
+    index: true
+  }<% } %>
 });
 
 const <%= name %>Model = mongoose.model('<%= name %>', <%= name %>Schema);

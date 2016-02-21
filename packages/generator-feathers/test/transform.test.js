@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('assert');
-const transform = require('../lib/transforms');
+const transform = require('../lib/transform');
 
 describe('transforms', () => {
   it('simple addImport', () => {
@@ -71,11 +71,42 @@ describe('transforms', () => {
     assert.equal(output, '[\'after\', 2, 3]');
   });
   
+  it('addLastInFunction', () => {
+    const code = `
+      'use strict';
+      
+      const messages = require('./messages');
+
+      module.exports = function() {
+        const app = this;
+        
+        app.configure(messages);
+      };
+    `;
+    
+    const ast = transform.parse(code);
+    const result = transform.addLastInFunction(ast, 'module.exports', 'app.configure(something());');
+    
+    assert.equal(transform.print(result), `
+      'use strict';
+      
+      const messages = require('./messages');
+
+      module.exports = function() {
+        const app = this;
+
+        app.configure(messages);
+        app.configure(something());
+      };
+    `);
+  });
+  
   it('addToArrayInObject', () => {
     const ast = transform.addToArrayInObject(`
       const x = {
         test: [1],
-        other: [2, 3]
+        other: [2, 
+          3]
       }
       
       const y = {

@@ -4,21 +4,20 @@ var generators = require('yeoman-generator');
 var path = require('path');
 var fs = require('fs');
 var inflect = require('i')();
+var transform = require('../../lib/transform');
 
-function importHook(filename, name, module, type, method) {
+function importHook(filename, name, moduleName, type, methods) {
   // Lookup existing services/<service-name>/hooks/index.js file
   if (fs.existsSync(filename)) {
     var content = fs.readFileSync(filename).toString();
-    var statement = 'const ' + name + ' = require(\'' + module + '\');';
-    var expression = new RegExp( '(' + type + '(.|\n)+?' + method + '(.|\n)+?)(\]{1})' );
-
-    // Also add if it is not already there
-    if (content.indexOf(statement) === -1) {
-      content = content.replace(/'use strict';\n\n/, '\'use strict;\'\n\n' + statement + '\n');
-      content = content.replace(expression, '$1$2$3' + name + '(),\n  $4');
-    }
+    var ast = transform.parse(content);
     
-    fs.writeFileSync(filename, content);
+    transform.addImport(ast, name, moduleName);
+    methods.forEach(function(method) {
+      transform.addToArrayInObject(ast, 'exports.' + type, method, name + '()');
+    });
+    
+    fs.writeFileSync(filename, transform.print(ast));
   }
 }
 
@@ -32,6 +31,11 @@ module.exports = generators.Base.extend({
   prompting: function () {
     var done = this.async();
     var prompts = [
+      {
+        type: 'input',
+        name: 'name',
+        message: 'What do you want to call your hook?',
+      },
       {
         type: 'list',
         name: 'type',
@@ -56,7 +60,7 @@ module.exports = generators.Base.extend({
         message: 'What service is this hook for?'
       },
       {
-        type: 'list',
+        type: 'checkbox',
         name: 'method',
         store: true,
         message: 'What method is this hook for?',
@@ -94,13 +98,7 @@ module.exports = generators.Base.extend({
             value: 'remove'
           }
         ]
-      },
-      {
-        type: 'input',
-        name: 'name',
-        message: 'What do you want to call your hook?',
-      },
-      
+      }
     ];
 
     this.prompt(prompts, function (props) {
@@ -111,8 +109,10 @@ module.exports = generators.Base.extend({
   },
 
   writing: function () {
-    var hookIndexPath = path.join('src/services/', this.props.service, 'hooks/index.js');
-    this.props.hookPath = path.join('src/services/', this.props.service, 'hooks/', this.props.name + '.js');
+    var hookIndexPath = path.join('src', 'services', this.props.service, 'hooks', 'index.js');
+    this.props.hookPath = path.join('src', 'services', this.props.service, 'hooks', this.props.name + '.js');
+    this.props.hookTestPath = path.join('test', 'services', this.props.service, 'hooks', this.props.name + '.test.js');
+    
     // this.props.hookTestPath = path.join('test/services/', this.props.service, 'hooks/', this.props.name + '.test.js');
     this.props.codeName = inflect.camelize(inflect.underscore(this.props.name), false);
     
@@ -121,17 +121,17 @@ module.exports = generators.Base.extend({
     
     // copy the hook
     this.fs.copyTpl(
-      this.templatePath(this.props.type + '-hook.js'),
+      this.templatePath('hook.js'),
       this.destinationPath(this.props.hookPath),
       this.props
     );
 
     // copy the hook test
-    // this.fs.copyTpl(
-    //   this.templatePath(this.props.type + '-hook.test.js'),
-    //   this.destinationPath(this.props.hookTestPath),
-    //   this.props
-    // );
+    this.fs.copyTpl(
+      this.templatePath('hook.test.js'),
+      this.destinationPath(this.props.hookTestPath),
+      this.props
+    );
   }
 });
 

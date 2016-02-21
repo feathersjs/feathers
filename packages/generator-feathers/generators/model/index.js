@@ -1,7 +1,6 @@
 'use strict';
 
 var generators = require('yeoman-generator');
-var path = require('path');
 
 module.exports = generators.Base.extend({
   initializing: function (name) {
@@ -56,51 +55,7 @@ module.exports = generators.Base.extend({
             value: 'sequelize'
           }
         ]
-      },
-      // {
-      //   type: 'list',
-      //   name: 'database',
-      //   message: 'For which database?',
-      //   store: true,
-      //   default: this.props.database,
-      //   when: function(answers){
-      //     return options.database === undefined && answers.type === 'database';
-      //   },
-      //   choices: [
-      //     {
-      //       name: 'Memory',
-      //       value: 'memory'
-      //     },
-      //     {
-      //       name: 'MongoDB',
-      //       value: 'mongodb'
-      //     },
-      //     {
-      //       name: 'MySQL',
-      //       value: 'mysql'
-      //     },
-      //     {
-      //       name: 'MariaDB',
-      //       value: 'mariadb'
-      //     },
-      //     {
-      //       name: 'NeDB',
-      //       value: 'nedb'
-      //     },
-      //     {
-      //       name: 'PostgreSQL',
-      //       value: 'postgres'
-      //     },
-      //     {
-      //       name: 'SQLite',
-      //       value: 'sqlite'
-      //     },
-      //     {
-      //      name: 'SQL Server',
-      //      value: 'mssql'
-      //     }
-      //   ]
-      // },
+      }
     ];
 
     this.prompt(prompts, function (props) {
