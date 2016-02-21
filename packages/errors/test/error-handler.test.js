@@ -76,7 +76,7 @@ describe('feathers-errors', () => {
       });
 
       it('serves a 500.html', done => {
-        fs.readFile(join(__dirname, '..', 'src', 'public', '500.html'), function(err, html) {
+        fs.readFile(join(__dirname, '..', 'src', 'public', 'default.html'), function(err, html) {
           request('http://localhost:5050/error', (error, res, body) => {
             assert.equal(res.statusCode, 500);
             assert.equal(html.toString(), body);
