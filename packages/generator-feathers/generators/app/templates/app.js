@@ -11,7 +11,6 @@ const hooks = require('feathers-hooks');<% if (providers.indexOf('rest') !== -1)
 const rest = require('feathers-rest');
 const bodyParser = require('body-parser');
 <% } %><% if (providers.indexOf('socket.io') !== -1) { %>const socketio = require('feathers-socketio');<% } %><% if (providers.indexOf('primus') !== -1) { %>const primus = require('feathers-primus');<% } %>
-<% if (authentication.length) { %>const authentication = require('feathers-authentication');<% } %>
 const middleware = require('./middleware');
 const services = require('./services');
 
@@ -37,10 +36,7 @@ app.use(compress())<% if (cors) { %>
   .configure(hooks())<% if (providers.indexOf('rest') !== -1) { %>
   .configure(rest())<% } %><% if (providers.indexOf('socket.io') !== -1) { %>
   .configure(socketio())<% } %><% if(providers.indexOf('primus') !== -1) { %>
-  .configure(primus({
-    transformer: 'sockjs'
-  }))<% } %><% if (authentication.length) { %>
-  .configure(authentication( app.get('auth') ))<% } %>
+  .configure(primus({ transformer: 'sockjs' }))<% } %>
   .configure(services)
   .configure(middleware);
 

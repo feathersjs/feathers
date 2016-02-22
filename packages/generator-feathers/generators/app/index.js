@@ -3,12 +3,15 @@
 var generators = require('yeoman-generator');
 var path = require('path');
 var crypto = require('crypto');
+var S = require('string');
+var AUTH_PROVIDERS = require('./auth-mapping.json');
 
 module.exports = generators.Base.extend({
   initializing: function () {
     this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
     this.props = {
-      name: process.cwd().split(path.sep).pop()
+      name: process.cwd().split(path.sep).pop(),
+      S: S
     };
     this.dependencies = [
       'feathers@2.0.0-pre.4',
@@ -131,23 +134,49 @@ module.exports = generators.Base.extend({
       {
         type: 'checkbox',
         name: 'authentication',
-        message: 'What authentication methods would you like to support?',
+        message: 'What authentication providers would you like to support?',
         choices: [
           {
             name: 'local',
-            checked: true
+            checked: true,
+            value: AUTH_PROVIDERS['local'],
+          },
+          {
+            name: 'bitbucket',
+            value: AUTH_PROVIDERS['bitbucket'],
+          },
+          {
+            name: 'dropbox',
+            value: AUTH_PROVIDERS['dropbox'],
+          },
+          {
+            name: 'facebook',
+            value: AUTH_PROVIDERS['facebook'],
+          },
+          {
+            name: 'github',
+            value: AUTH_PROVIDERS['github'],
+          },
+          {
+            name: 'google',
+            value: AUTH_PROVIDERS['google'],
+          },
+          {
+            name: 'instagram',
+            value: AUTH_PROVIDERS['instagram'],
+          },
+          {
+            name: 'linkedin',
+            value: AUTH_PROVIDERS['linkedin'],
+          },
+          {
+            name: 'paypal',
+            value: AUTH_PROVIDERS['paypal'],
+          },
+          {
+            name: 'spotify',
+            value: AUTH_PROVIDERS['spotify']
           }
-        //   name: 'basic'
-        // }, {
-
-        // }, {
-        //   name: 'google'
-        // }, {
-        //   name: 'facebook'
-        // }, {
-        //   name: 'twitter'
-        // }, {
-        //   name: 'github'
         ]
       }
     ];
@@ -189,6 +218,30 @@ module.exports = generators.Base.extend({
 
       if (this.props.authentication.length) {
         this.dependencies.push('feathers-authentication');
+        this.dependencies.push('passport');
+
+        this.props.localAuth = false;
+
+        this.props.authentication = this.props.authentication.filter(provider => {
+          if (provider.name === 'local') {
+            this.props.localAuth = true;
+          }
+          else {
+            this.dependencies.push(provider.strategy);
+
+            if (provider.tokenStrategy) {
+              this.dependencies.push(provider.tokenStrategy);      
+            }
+
+            return provider;
+          }
+        });
+
+        this.fs.copyTpl(
+          this.templatePath('authentication.js'),
+          this.destinationPath('src/services/authentication', 'index.js'),
+          this.props
+        );
       }
     },
 

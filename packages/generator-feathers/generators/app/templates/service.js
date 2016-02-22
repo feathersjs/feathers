@@ -1,5 +1,5 @@
 'use strict';
-
+<% if (authentication.length) { %>const authentication = require('./authentication');<% } %>
 <% for (var i = 0; i < services.length; i++) { %>const <%= services[i] %> = require('./<%= services[i] %>');
 <% } %><% if (database === 'sqlite') { %>
 const path = require('path');
@@ -25,11 +25,11 @@ module.exports = function() {
   const sequelize = new Sequelize(app.get('<%= database %>'), {
     dialect: '<%= database %>',
     logging: false
-  });
-  <% } else if (database === 'mongodb') { %>
+  });<% } else if (database === 'mongodb') { %>
   mongoose.connect(app.get('mongodb'));
   mongoose.Promise = global.Promise;<% } %><% if (database === 'sqlite' || database === 'mssql' || database === 'postgres' || database === 'mysql' || database === 'mariadb') { %>
   app.set('sequelize', sequelize);<% } %>
-  <% for (var i = 0; i < services.length; i++) { %>
+  <% if (authentication.length) { %>
+  app.configure(authentication);<% } %><% for (var i = 0; i < services.length; i++) { %>
   app.configure(<%= services[i] %>);<% } %>
 };
