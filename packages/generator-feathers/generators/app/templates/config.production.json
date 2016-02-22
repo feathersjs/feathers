@@ -8,10 +8,19 @@
   "postgres": "DATABASE_URL",<% } else if(database === 'nedb'){ %>
   "nedb": "NEDB_BASE_PATH",<% } else if(database === 'sqlite'){ %>
   "sqlite": "SQLITE_DB",<% } %>
-  "public": "../public/"<% if(authentication.length){ %>,
-  "auth": {<% if(authentication.indexOf('local' > -1)){ %>
+  "public": "../public/"<% if (authentication.length) { %>,
+  "auth": {
     "token": {
       "secret": "FEATHERS_AUTH_SECRET"
+    }<% if (localAuth) { %>,
+    "local": {}<% } else { %>
+    "local": false<% } %><% for (var i = 0; i < authentication.length; i++) { %>,
+    "<%= authentication[i].name %>": {
+      "clientID": "your <%= authentication[i].name %> client id",
+      "clientSecret": "your <%= authentication[i].name %> client secret",
+      "permissions": {
+        "scope": [<% for (var j=0; j < authentication[i].permissions.scope.length; j++) { %>"<%= authentication[i].permissions.scope[j]%>"<% if (j !== authentication[i].permissions.scope.length - 1) { %>,<% }} %>]
+      }
     }<% } %>
   }<% } %><% if (cors === 'whitelisted') { %>,
   "corsWhitelist": [<% corsWhitelist.forEach(function(domain, index, list){ %>
