@@ -45,7 +45,8 @@
     "generators/hook",
     "generators/middleware",
     "generators/model",
-    "generators/service"
+    "generators/service",
+    "lib"
   ],
   "dependencies": {
     "ast-traverse": "^0.1.1",
