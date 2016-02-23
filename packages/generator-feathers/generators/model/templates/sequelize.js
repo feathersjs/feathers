@@ -18,11 +18,7 @@ module.exports = function(sequelize) {
       allowNull: false
     }<% } else { %>text: {
       type: Sequelize.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        isAlphanumeric: { msg: '`text` must only contain alpha numeric characters' }
-      }
+      allowNull: false
     }<% } %>
   }, {
     freezeTableName: true
