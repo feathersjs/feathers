@@ -18,8 +18,7 @@ const <%= name %>Schema = new Schema({
     required: true
   }<% } else { %>text: {
     type: String,
-    required: true,
-    index: true
+    required: true
   }<% } %>
 });
 

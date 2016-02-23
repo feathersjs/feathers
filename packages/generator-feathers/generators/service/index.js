@@ -39,7 +39,7 @@ module.exports = generators.Base.extend({
         type: 'list',
         name: 'type',
         message: 'What type of service do you need?',
-        default: this.props.type,
+        default: this.props.type || 'database',
         store: true,
         when: function(){
           return options.type === undefined;
@@ -47,12 +47,12 @@ module.exports = generators.Base.extend({
         choices: [
           {
             name: 'generic',
-            value: 'generic',
-            checked: true
+            value: 'generic'
           },
           {
             name: 'database',
-            value: 'database'
+            value: 'database',
+            checked: true
           }
         ]
       },
@@ -61,7 +61,7 @@ module.exports = generators.Base.extend({
         name: 'database',
         message: 'For which database?',
         store: true,
-        default: this.props.database,
+        default: this.props.database || 'nedb',
         when: function(answers){
           return options.database === undefined && answers.type === 'database';
         },
