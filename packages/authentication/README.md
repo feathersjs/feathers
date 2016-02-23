@@ -112,6 +112,10 @@ app.io.on('connect', function(){
 
 ## Changelog
 
+### 0.3.1
+
+- Fix `toLowerCase` hook ([#74](https://github.com/feathersjs/feathers-authentication/issues/74))
+
 ### 0.2.2
 
 - Fix customization of the `tokenEndpoint` ([#57](https://github.com/feathersjs/feathers-authentication/issues/57))
