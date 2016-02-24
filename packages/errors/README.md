@@ -59,6 +59,9 @@ var validationErrors = new errors.BadRequest({errors: {email: 'Invalid Email'} }
 ```
 
 ## Release History
+__2.0.0__
+- Moving error handler out of default bundle so that it doesn't break React Native and browser builds. Now needs to be required using `require('feathers-errors/handler')`.
+
 __1.2.0__
 - Adding error handler and basic static error pages back in
 
