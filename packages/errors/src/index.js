@@ -1,5 +1,3 @@
-import handler from './error-handler';
-
 const debug = require('debug')('feathers-errors');
 
 // NOTE (EK): Babel doesn't properly support extending
@@ -171,4 +169,4 @@ const errors = {
   Unavailable
 };
 
-export default Object.assign({ handler, types: errors, errors }, errors);
+export default Object.assign({ types: errors, errors }, errors);

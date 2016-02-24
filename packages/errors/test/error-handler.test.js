@@ -5,11 +5,16 @@ import assert from 'assert';
 import request from 'request';
 import fs from 'fs';
 import { join } from 'path';
-import { handler, errors } from '../src';
+import { errors } from '../src';
+import handler from '../src/error-handler';
 
 describe('feathers-errors', () => {
   it('is CommonJS compatible', () => {
-    assert.equal(typeof require('../lib').handler, 'function');
+    assert.equal(typeof require('../lib/error-handler'), 'function');
+  });
+
+  it('can be required at the root', () => {
+    assert.equal(typeof require('../handler'), 'function');
   });
 
   it('is import compatible', () => {
