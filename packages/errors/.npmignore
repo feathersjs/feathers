@@ -1,7 +1,7 @@
-./.editorconfig
-./.jshintrc
-./.travis.yml
-./.babelrc
+.editorconfig
+.jshintrc
+.travis.yml
+.babelrc
 .idea/
 src/
 test/
