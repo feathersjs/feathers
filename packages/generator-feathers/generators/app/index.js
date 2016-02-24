@@ -14,10 +14,10 @@ module.exports = generators.Base.extend({
       S: S
     };
     this.dependencies = [
-      'feathers',
-      'feathers-hooks',
-      'feathers-errors',
-      'feathers-configuration',
+      'feathers@2.0',
+      'feathers-hooks@1.0',
+      'feathers-errors@2.0',
+      'feathers-configuration@0.1.0',
       'serve-favicon',
       'compression',
       'winston'
@@ -183,7 +183,7 @@ module.exports = generators.Base.extend({
 
     this.prompt(prompts, function (props) {
       this.props = Object.assign(this.props, props);
-
+      this.props.databaseName = S(this.props.name).camelize().s;
       done();
     }.bind(this));
   },
@@ -192,16 +192,16 @@ module.exports = generators.Base.extend({
     providers: function() {
       if (this.props.providers.indexOf('rest') !== -1) {
         this.dependencies.push('body-parser');
-        this.dependencies.push('feathers-rest');
+        this.dependencies.push('feathers-rest@1.0');
       }
 
       if (this.props.providers.indexOf('socket.io') !== -1) {
-        this.dependencies.push('feathers-socketio');
+        this.dependencies.push('feathers-socketio@1.0');
       }
 
       if (this.props.providers.indexOf('primus') !== -1) {
-        this.dependencies.push('feathers-primus');
-        this.dependencies.push('sockjs');
+        this.dependencies.push('feathers-primus@1.0');
+        this.dependencies.push('ws');
       }
     },
 
@@ -217,7 +217,7 @@ module.exports = generators.Base.extend({
       this.props.secret = crypto.randomBytes(64).toString('base64');
 
       if (this.props.authentication.length) {
-        this.dependencies.push('feathers-authentication');
+        this.dependencies.push('feathers-authentication@0.3');
         this.dependencies.push('passport');
 
         this.props.localAuth = false;
@@ -248,38 +248,38 @@ module.exports = generators.Base.extend({
     databases: function() {
       switch(this.props.database) {
         case 'memory':
-          this.dependencies.push('feathers-memory');
+          this.dependencies.push('feathers-memory@0.6');
           break;
         case 'mongodb':
           this.dependencies.push('mongoose');
-          this.dependencies.push('feathers-mongoose');
+          this.dependencies.push('feathers-mongoose@3.0');
           break;
         case 'mysql':
         case 'mariadb':
           this.dependencies.push('mysql');
           this.dependencies.push('sequelize');
-          this.dependencies.push('feathers-sequelize');
+          this.dependencies.push('feathers-sequelize@1.0');
           break;
         case 'nedb':
           this.dependencies.push('nedb');
-          this.dependencies.push('feathers-nedb');
+          this.dependencies.push('feathers-nedb@2.0');
           break;
         case 'postgres':
           this.dependencies.push('pg');
           this.dependencies.push('pg-hstore');
           this.dependencies.push('sequelize');
-          this.dependencies.push('feathers-sequelize');
+          this.dependencies.push('feathers-sequelize@1.0');
           break;
         case 'sqlite':
           this.dependencies.push('sqlite3');
           this.dependencies.push('fs-extra');
           this.dependencies.push('sequelize');
-          this.dependencies.push('feathers-sequelize');
+          this.dependencies.push('feathers-sequelize@1.0');
           break;
         case 'mssql':
           this.dependencies.push('tedious');
           this.dependencies.push('sequelize');
-          this.dependencies.push('feathers-sequelize');
+          this.dependencies.push('feathers-sequelize@1.0');
           break;
       }
     },

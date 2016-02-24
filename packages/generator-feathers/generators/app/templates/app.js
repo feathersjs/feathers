@@ -36,7 +36,7 @@ app.use(compress())<% if (cors) { %>
   .configure(hooks())<% if (providers.indexOf('rest') !== -1) { %>
   .configure(rest())<% } %><% if (providers.indexOf('socket.io') !== -1) { %>
   .configure(socketio())<% } %><% if(providers.indexOf('primus') !== -1) { %>
-  .configure(primus({ transformer: 'sockjs' }))<% } %>
+  .configure(primus({ transformer: 'websockets' }))<% } %>
   .configure(services)
   .configure(middleware);
 

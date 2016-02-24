@@ -24,7 +24,7 @@ module.exports = function(sequelize) {
     freezeTableName: true
   });
 
-  <%= name %>.sync({ force: true });
+  <%= name %>.sync();
 
   return <%= name %>;
 };
