@@ -33,6 +33,16 @@ describe('feathers-errors', () => {
           
           next(e);
         })
+        .get('/bad-request', function(req, res, next) {
+          next(new errors.BadRequest({
+            message: 'Invalid Password',
+            errors: [{
+              path: 'password',
+              value: null,
+              message: `'password' cannot be 'null'`
+            }]
+          }));
+        })
         .use(function(req, res, next) {
           next(new errors.NotFound('File not found'));
         })
@@ -92,7 +102,7 @@ describe('feathers-errors', () => {
     });
 
     describe('application/json format', () => {
-      it('404', done => {
+      it('500', done => {
         request({
           url: 'http://localhost:5050/error',
           json: true
@@ -110,7 +120,7 @@ describe('feathers-errors', () => {
         });
       });
 
-      it('500', done => {
+      it('404', done => {
         request({
           url: 'http://localhost:5050/path/to/nowhere',
           json: true
@@ -121,6 +131,29 @@ describe('feathers-errors', () => {
             code: 404,
             className: 'not-found',
             errors: {}
+          });
+          done();
+        });
+      });
+
+      it('400', done => {
+        request({
+          url: 'http://localhost:5050/bad-request',
+          json: true
+        }, (error, res, body) => {
+          assert.equal(res.statusCode, 400);
+          assert.deepEqual(body, { name: 'BadRequest',
+            message: 'Invalid Password',
+            code: 400,
+            className: 'bad-request',
+            data: {
+              message: 'Invalid Password'
+            },
+            errors: [{
+              path: 'password',
+              value: null,
+              message: `'password' cannot be 'null'`
+            }]
           });
           done();
         });
