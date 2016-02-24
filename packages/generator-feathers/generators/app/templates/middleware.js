@@ -1,6 +1,6 @@
 'use strict';
 
-const errors = require('feathers-errors');
+const handler = require('feathers-errors/handler');
 const notFound = require('./not-found-handler');
 const logger = require('./logger');
 
@@ -12,5 +12,5 @@ module.exports = function() {
 
   app.use(notFound());
   app.use(logger(app));
-  app.use(errors.handler());
+  app.use(handler());
 };

@@ -1,13 +1,13 @@
 {
   "host": "localhost",
   "port": 3030,<% if(database === 'mongodb'){ %>
-  "mongodb": "mongodb://localhost:27017/feathers",<% } else if(database === 'mariadb'){ %>
-  "mariadb": "mariadb://root:@localhost:3306/feathers",<% } else if(database === 'mssql'){ %>
-  "mssql": "mssql://root:@localhost:1433/feathers",<% } else if(database === 'mysql'){ %>
-  "mysql": "mysql://root:@localhost:3306/feathers",<% } else if(database === 'postgres'){ %>
-  "postgres": "postgres://postgres:@localhost:5432/feathers",<% } else if(database === 'nedb'){ %>
+  "mongodb": "mongodb://localhost:27017/<%= databaseName %>",<% } else if(database === 'mariadb'){ %>
+  "mariadb": "mariadb://root:@localhost:3306/<%= databaseName %>",<% } else if(database === 'mssql'){ %>
+  "mssql": "mssql://root:@localhost:1433/<%= databaseName %>",<% } else if(database === 'mysql'){ %>
+  "mysql": "mysql://root:@localhost:3306/<%= databaseName %>",<% } else if(database === 'postgres'){ %>
+  "postgres": "postgres://postgres:@localhost:5432/<%= databaseName %>",<% } else if(database === 'nedb'){ %>
   "nedb": "../data/",<% } else if(database === 'sqlite'){ %>
-  "sqlite": "../data/feathers.sqlite",<% } %>
+  "sqlite": "../data/<%= databaseName %>.sqlite",<% } %>
   "public": "../public/"<% if (authentication.length) { %>,
   "auth": {
     "token": {

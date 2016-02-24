@@ -3,7 +3,7 @@
 const authentication = require('feathers-authentication');
 <% for (var i = 0; i < authentication.length; i++) { %>
 const <%= S(authentication[i].name).capitalize().s %>Strategy = require('<%= authentication[i].strategy %>').Strategy;<% if (authentication[i].tokenStrategy) { %>
-const <%= S(authentication[i].name).capitalize().s %>TokenStrategy = require('<%= authentication[i].tokenStrategy %>').Strategy;<% }} %>
+const <%= S(authentication[i].name).capitalize().s %>TokenStrategy = require('<%= authentication[i].tokenStrategy %>');<% }} %>
 
 module.exports = function() {
   const app = this;
