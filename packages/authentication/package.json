@@ -47,7 +47,7 @@
   "dependencies": {
     "bcrypt": "^0.8.5",
     "debug": "^2.2.0",
-    "feathers-errors": "^1.1.5",
+    "feathers-errors": "^2.0.1",
     "jsonwebtoken": "^5.4.0",
     "passport": "^0.3.0",
     "passport-local": "^1.0.0"
