@@ -50,6 +50,7 @@ class FeathersError extends Error {
     // NOTE (EK): Babel doesn't support this so
     // we have to pass in the class name manually.
     // this.name = this.constructor.name;
+    this.type = 'FeathersError';
     this.name = name;
     this.message = message;
     this.code = code;

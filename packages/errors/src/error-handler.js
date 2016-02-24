@@ -19,7 +19,7 @@ export default function(options = {}) {
   }
 
   return function(error, req, res, next) {
-    if ( !(error instanceof errors.FeathersError) ) {
+    if (error.type !== 'FeathersError') {
       let oldError = error;
       error = new errors.GeneralError(oldError.message, {
         errors: oldError.errors
