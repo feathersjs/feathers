@@ -3,7 +3,7 @@
   "description": "<%= description %>",
   "version": "0.0.0",
   "homepage": "",
-  "main": "lib/",
+  "main": "src/",
   "keywords": [
     "feathers"
   ],
