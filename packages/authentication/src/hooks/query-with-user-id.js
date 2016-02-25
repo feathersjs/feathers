@@ -3,11 +3,18 @@
  *
  * find, get, update
  */
-export default function queryWithUserId(id = '_id', idOnResource = 'userId') {
+const defaults = {
+  id: '_id',
+  idOnResource: 'userId'
+};
+
+export default function queryWithUserId(options = {}) {
+  options = Object.assign({}, defaults, options);
+
   return function(hook) {
 
     if (hook.params.user) {
-      hook.params.query[idOnResource] = hook.params.user[id];
+      hook.params.query[options.idOnResource] = hook.params.user[options.id];
     }
 
   };
