@@ -8,7 +8,7 @@
   "postgres": "postgres://postgres:@localhost:5432/<%= databaseName %>",<% } else if(database === 'nedb'){ %>
   "nedb": "../data/",<% } else if(database === 'sqlite'){ %>
   "sqlite": "../data/<%= databaseName %>.sqlite",<% } %>
-  "public": "../public/"<% if (authentication.length) { %>,
+  "public": "../public/"<% if (localAuth || authentication.length) { %>,
   "auth": {
     "token": {
       "secret": "<%= secret %>"
