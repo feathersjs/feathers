@@ -8,7 +8,7 @@
   "postgres": "DATABASE_URL",<% } else if(database === 'nedb'){ %>
   "nedb": "NEDB_BASE_PATH",<% } else if(database === 'sqlite'){ %>
   "sqlite": "SQLITE_DB",<% } %>
-  "public": "../public/"<% if (authentication.length) { %>,
+  "public": "../public/"<% if (localAuth || authentication.length) { %>,
   "auth": {
     "token": {
       "secret": "FEATHERS_AUTH_SECRET"

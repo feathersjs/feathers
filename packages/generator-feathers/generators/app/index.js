@@ -215,12 +215,11 @@ module.exports = generators.Base.extend({
 
     authentication: function() {
       this.props.secret = crypto.randomBytes(64).toString('base64');
+      this.props.localAuth = false;
 
       if (this.props.authentication.length) {
         this.dependencies.push('feathers-authentication@0.3');
         this.dependencies.push('passport');
-
-        this.props.localAuth = false;
 
         this.props.authentication = this.props.authentication.filter(provider => {
           if (provider.name === 'local') {
@@ -289,7 +288,7 @@ module.exports = generators.Base.extend({
 
       if (this.props.database) {
         // If auth is enabled also create a user service
-        if (this.props.authentication.length) {
+        if (this.props.localAuth || this.props.authentication.length) {
           this.props.services.push('user');
 
           this.composeWith('feathers:service', {
