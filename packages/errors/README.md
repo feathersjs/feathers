@@ -40,7 +40,7 @@ npm install --save feathers-errors
 import errors from 'feathers-errors';
 
 // If you were to create an error yourself.
-var notFound = new errors.NotFound('User does not exist'));
+var notFound = new errors.NotFound('User does not exist');
 
 // You can wrap existing errors
 var existing = new errors.GeneralError(new Error('I exist'));
