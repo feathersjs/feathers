@@ -7,14 +7,22 @@ describe('feathers-configuration', () => {
   const app = feathers().configure(plugin(__dirname));
 
   it('initialized app with default.json data', () =>
-    assert.equal(app.get('port'), 3030));
+    assert.equal(app.get('port'), 3030)
+  );
 
   it('initialized with <env>.json', () =>
-    assert.equal(app.get('from'), 'testing'));
+    assert.equal(app.get('from'), 'testing')
+  );
 
   it('initialized property with environment variable', () =>
-    assert.equal(app.get('environment'), 'testing'));
+    assert.equal(app.get('environment'), 'testing')
+  );
 
   it('normalizes relative path names', () =>
-    assert.equal(app.get('path'), join(__dirname, 'something')));
+    assert.equal(app.get('path'), join(__dirname, 'something'))
+  );
+  
+  it('converts environment variables recursively', () =>
+    assert.equal(app.get('deeply').nested.env, 'testing')
+  );
 });
