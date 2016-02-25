@@ -29,8 +29,6 @@ export class Service {
       }
     };
 
-    // console.log('Authenticating', accessToken, refreshToken, profile);
-
     // Find or create the user since they could have signed up via facebook.
     app.service(options.userEndpoint)
       .find(params)
@@ -64,14 +62,14 @@ export class Service {
   // GET /auth/facebook
   find(params) {    
     // Authenticate via your provider. This will redirect you to authorize the application.
-    const authOptions = Object.assign({session: false}, this.options.permissions);
+    const authOptions = Object.assign({session: false, state: true}, this.options.permissions);
     return passport.authenticate(this.options.provider, authOptions)(params.req, params.res);
   }
 
   // For GET /auth/facebook/callback
   get(id, params) {
     const options = this.options;
-    const authOptions = Object.assign({session: false}, options.permissions);
+    const authOptions = Object.assign({session: false, state: true}, options.permissions);
     let app = this.app;
     
     // TODO (EK): Make this configurable
@@ -108,39 +106,45 @@ export class Service {
     });
   }
 
-  // // POST /auth/facebook /auth/facebook::
-  // create(data, params) {
-  //   // TODO (EK): This should be for token based auth
-  //   const options = this.options;
+  // POST /auth/facebook /auth/facebook::create
+  // This is for mobile token based authentication
+  create(data, params) {
+    const options = this.options;
+    const authOptions = Object.assign({session: false, state: true}, options.permissions);
+    let app = this.app;
+
+    if (!options.tokenStrategy) {
+      return Promise.reject(new errors.MethodNotAllowed());
+    }
     
-  //   // Authenticate via facebook, then generate a JWT and return it
-  //   return new Promise(function(resolve, reject){
-  //     let middleware = passport.authenticate('facebook-token', { session: false }, function(error, user) {
-  //       if (error) {
-  //         return reject(error);
-  //       }
+    // Authenticate via facebook, then generate a JWT and return it
+    return new Promise(function(resolve, reject){
+      let middleware = passport.authenticate(`${options.provider}-token`, authOptions, function(error, user) {
+        if (error) {
+          return reject(error);
+        }
 
-  //       // Login failed.
-  //       if (!user) {
-  //         return reject(new errors.NotAuthenticated(options.loginError));
-  //       }
+        // Login failed.
+        if (!user) {
+          return reject(new errors.NotAuthenticated(`An error occurred logging in with ${options.provider}`));
+        }
 
-  //       // Login was successful. Generate and send token.
-  //       user = Object.assign({}, user = !user.toJSON ? user : user.toJSON());
-  //       delete user[options.passwordField];
+        // Login was successful. Clean up the user object for the response.
+        // TODO (EK): Maybe the id field should be configurable
+        const payload = {
+          id: user.id !== undefined ? user.id : user._id
+        };
 
-  //       // TODO (EK): call this.app.service('/auth/token').create() instead
-  //       const token = jwt.sign(user, options.secret, options);
+        // Get a new JWT and the associated user from the Auth token service and send it back to the client.
+        return app.service(options.tokenEndpoint)
+                  .create(payload, { internal: true })
+                  .then(resolve)
+                  .catch(reject);
+      });
 
-  //       return resolve({
-  //         token: token,
-  //         data: user
-  //       });
-  //     });
-
-  //     middleware(params.req);
-  //   });
-  // }
+      middleware(params.req, params.res);
+    });
+  }
 
   setup(app) {
     // attach the app object to the service context
@@ -171,6 +175,7 @@ export default function(options){
   return function() {
     const app = this;
     const Strategy = options.strategy;
+    const TokenStrategy = options.tokenStrategy;
 
     // Initialize our service with any options it requires
     app.use(options.endPoint, exposeConnectMiddleware, new Service(options), successfulLogin(options));
@@ -179,6 +184,12 @@ export default function(options){
     const service = app.service(options.endPoint);
     
     // Register our Passport auth strategy and get it to use our passport callback function
+    debug(`registering passport-${options.provider} OAuth2 strategy`, options);
     passport.use(new Strategy(options, service.oauthCallback.bind(service)));
+
+    if (TokenStrategy) {
+      debug(`registering passport-${options.provider}-token OAuth2 strategy`, options);
+      passport.use(new TokenStrategy(options, service.oauthCallback.bind(service)));
+    }
   };
 }
