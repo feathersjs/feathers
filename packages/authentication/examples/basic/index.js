@@ -5,7 +5,7 @@ var primus = require('feathers-primus');
 var hooks = require('feathers-hooks');
 var memory = require('feathers-memory');
 var bodyParser = require('body-parser');
-var authentication = require('../../lib/index').default;
+var authentication = require('../../lib/index');
 var authHooks = require('../../lib/index').hooks;
 
 // Passport Auth Strategies

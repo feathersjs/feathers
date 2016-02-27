@@ -48,6 +48,7 @@
     "bcrypt": "^0.8.5",
     "debug": "^2.2.0",
     "feathers-errors": "^2.0.1",
+    "feathers-hooks": "^1.3.0",
     "jsonwebtoken": "^5.4.0",
     "passport": "^0.3.0",
     "passport-local": "^1.0.0"
@@ -61,7 +62,8 @@
     "body-parser": "^1.9.0",
     "feathers": "2.0.0-pre.4",
     "feathers-hooks": "^1.0.0-pre.4",
-    "feathers-memory": "^0.6.0",
+    "feathers-localstorage": "^0.2.0",
+    "feathers-memory": "^0.6.1",
     "feathers-primus": "^1.3.2",
     "feathers-rest": "^1.2.2",
     "feathers-socketio": "^1.3.2",

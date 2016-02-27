@@ -57,12 +57,8 @@ export default function(settings, username, password, useSocketio, next) {
           hooks.requireAuth()
         ]
       });
-
-      var obj = {
-        app: app,
-        server: server
-      };
-      next(null, obj);
+      
+      next(null, { app, server });
     });
 
   });
