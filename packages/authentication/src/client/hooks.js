@@ -1,27 +1,26 @@
-import utils from './utils';
-
-export let populateParams = function() {
+export function populateParams(options) {
   return function(hook) {
-    hook.params.user = utils.getUser();
-    hook.params.token = utils.getToken();
-  };
-};
-
-export let populateHeader = function(options = {}) {
-  const defaults = {
-    header: 'Authorization'
-  };
-
-  options = Object.assign({}, defaults, options);
-
-  return function(hook) {
-    if (hook.params.token) {
-      hook.params.headers = Object.assign({}, { [options.header]: hook.params.token }, hook.params.headers);
+    const storage = hook.app.service(options.storage);
+    
+    // We can not run this hook on the storage service itself
+    if(this !== storage) {
+      return Promise.all([
+        storage.get('user'),
+        storage.get('token')
+      ]).then(([ user, token ]) => {
+        Object.assign(hook.params, { user, token });
+        return hook;
+      });
     }
   };
-};
+}
 
-export default {
-  populateParams,
-  populateHeader
-};
+export function populateHeader(options = {}) {
+  return function(hook) {
+    if (hook.params.token) {
+      hook.params.headers = Object.assign({}, { 
+        [options.header || 'Authorization']: hook.params.token
+      }, hook.params.headers);
+    }
+  };
+}
