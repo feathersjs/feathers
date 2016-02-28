@@ -1,7 +1,7 @@
 {
   "name": "generator-feathers",
   "description": "A Yeoman generator for a Feathers application",
-  "version": "0.6.6",
+  "version": "0.6.7",
   "homepage": "https://github.com/feathersjs/generator-feathers",
   "main": "generators/app/index.js",
   "license": "MIT",
