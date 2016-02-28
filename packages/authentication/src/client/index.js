@@ -113,7 +113,7 @@ export default function(opts = {}) {
     };
 
     app.logout = function() {
-      return storage.remove(null, { id: { $in: ['user', 'token' ] } });
+      return storage().remove(null, { id: { $in: ['user', 'token' ] } });
     };
 
     // Set up hook that adds adds token and user to params so that
