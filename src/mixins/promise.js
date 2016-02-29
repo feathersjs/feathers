@@ -13,7 +13,7 @@ function wrapper() {
   return result;
 }
 
-export default function (service) {
+export default function promiseMixin(service) {
   if (typeof service.mixin === 'function') {
     const mixin = {};
 

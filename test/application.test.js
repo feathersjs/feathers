@@ -101,7 +101,8 @@ describe('Feathers application', () => {
     wrappedService.create({
       message: 'Test message'
     }).then(data =>
-      assert.equal(data.message, 'Test message', 'Got created event with test message'));
+      assert.equal(data.message, 'Test message', 'Got created event with test message')
+    );
   });
 
   it('Initializes REST and SocketIO providers.', function (done) {
@@ -344,5 +345,103 @@ describe('Feathers application', () => {
 
       server.close(done);
     });
+  });
+  
+  it('runs mixins in the correct order', done => {
+    const app = feathers();
+    const stack = [];
+    
+    app.mixins.push(service => service.mixin({
+      get() {
+        stack.push('mixin 1');
+        return this._super.apply(this, arguments);
+      }
+    }));
+    
+    app.mixins.push(service => service.mixin({
+      get() {
+        stack.push('mixin 2');
+        return this._super.apply(this, arguments);
+      }
+    }));
+    
+    app.use('/todos', {
+      get() {
+        return Promise.resolve({});
+      }
+    });
+    
+    app.service('todos').get(1).then(() => {
+      assert.deepEqual(stack, ['mixin 1', 'mixin 2']);
+      done();
+    }).catch(done);
+  });
+  
+  it('event mixin runs with final result on callbacks (#248)', done => {
+    const app = feathers();
+    
+    app.mixins.push(function testMixin(service ) {
+      return service.mixin({
+        create(data, params, callback) {
+          return this._super(data, params, (error, data) => {
+            data.modified = true;
+            callback(null, data);
+          });
+        }
+      });
+    });
+    
+    app.use('/todos', {
+      create(data, params, callback) {
+        callback(null, data);
+      }
+    });
+    
+    const service = app.service('todos');
+    
+    service.on('created', data => {
+      try {
+        assert.deepEqual(data, { test: 'data', modified: true });
+        done();
+      } catch(e) {
+        done(e);
+      }
+    });
+    
+    service.create({ test: 'data' });
+  });
+  
+  it('event mixin runs with final result on Promise (#248)', done => {
+    const app = feathers();
+    
+    app.mixins.push(function testMixin(service) {
+      return service.mixin({
+        create(... args) {
+          return this._super(... args).then(data => {
+            data.modified = true;
+            return data;
+          });
+        }
+      });
+    });
+    
+    app.use('/todos', {
+      create(data) {
+        return Promise.resolve(data);
+      }
+    });
+    
+    const service = app.service('todos');
+    
+    service.on('created', data => {
+      try {
+        assert.deepEqual(data, { test: 'data', modified: true });
+        done();
+      } catch(e) {
+        done(e);
+      }
+    });
+    
+    service.create({ test: 'data' });
   });
 });

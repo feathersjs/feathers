@@ -14,7 +14,7 @@ function upperCase(name) {
   return name.charAt(0).toUpperCase() + name.substring(1);
 }
 
-export default function(service) {
+export default function eventMixin(service) {
   const isEmitter = typeof service.on === 'function' &&
     typeof service.emit === 'function';
   const emitter = service._rubberDuck = rubberduck.emitter(service);

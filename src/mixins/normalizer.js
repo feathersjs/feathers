@@ -1,6 +1,6 @@
 import { getArguments } from 'feathers-commons';
 
-export default function (service) {
+export default function normalizerMixin(service) {
   if (typeof service.mixin === 'function') {
     const mixin = {};
 
