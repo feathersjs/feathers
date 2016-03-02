@@ -1,4 +1,7 @@
-tmp*
+.DS_Store
 node_modules/
-npm-debug.log
-_site
+cache/
+build/
+.publish
+!.gitignore
+!.npmignore
