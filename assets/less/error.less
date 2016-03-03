@@ -1,0 +1,21 @@
+main.error {
+  background: @background-color;
+  color: @text-color;
+  padding-top: 0;
+  padding-bottom: 40px;
+
+  img.logo {
+    max-width: 200px;
+    display: table;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 8em;
+    text-shadow: 1px 3px 6px fade(@black, 60%);
+  }
+
+  @media only screen and (min-width: @desktop-breakpoint) {
+    padding-top: 20px;
+  }
+}

@@ -1,0 +1,46 @@
+// Plugins
+
+@import "pygments";
+
+@import "common/variables";
+@import "common/mixins";
+@import "common/animations";
+@import "common/base";
+@import "font/font-awesome";
+
+@import "common/layout";
+@import "common/elements";
+@import "common/buttons";
+@import "common/forms";
+@import "common/modal";
+@import "common/notice";
+@import "common/nav";
+@import "common/footer";
+
+@import "home";
+@import "legal";
+@import "error";
+
+html, body {
+  background: @background-color;
+  color: @text-color;
+}
+
+h3 {
+  color: @primary-text-color;
+}
+
+.text-overflow-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+main {
+  padding-top: 60px;
+}
+
+section {
+  padding: 100px 0;
+}

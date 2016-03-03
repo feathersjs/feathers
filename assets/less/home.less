@@ -1,0 +1,164 @@
+main.home {
+  padding-top: 0;
+  
+  section.hero {
+    background: @background-color;
+    color: @text-color;
+    padding: 100px 0 40px 0;
+
+    img.logo {
+      display: block;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .button.primary-button {
+      font-size: 1.4em;
+      padding: 0.8em 1.5em;
+    }
+
+    h2.tagline {
+      .opacity(0);
+      .transition(opacity, 1.5s, ease-out);
+
+      &.animate {
+        .opacity(1);
+      }
+    }
+  }
+
+  section.product {
+    background: @background-color;
+
+    p {
+      font-size: 1.4em;
+      line-height: 1.3em;
+    }
+  }
+
+  section.example {
+    background-image: linear-gradient(-135deg, #58CEA9 0%, #31D895 100%);
+
+    h3, h4 {
+      color: @white;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    h4 {
+      margin-top: -20px;
+      margin-bottom: 60px;
+      line-height: 1.4em;
+    }
+
+    code, pre {
+      background: @white;
+      padding: 20px;
+      display: block;
+      .rounded(5px);
+      .drop-shadow(0, 2px, 3px, 0.3);
+    }
+
+    ul.side-nav {
+      padding-right: 2em;
+
+      li {
+        padding: 0.8em 0.8em;
+        margin: 1em 0;
+        .rounded(5px);
+
+        a {
+          font-size: 1.2em;
+          font-weight: 400;
+          letter-spacing: 0.1em;
+          color: rgba(0, 0, 0, 0.2);
+          text-transform: uppercase;
+          .transition();
+          
+
+          &:hover {
+            color: @white;
+          }
+        }
+
+        &.active {
+          background: rgba(0, 0, 0, 0.2);
+
+          a {
+            color: @white;
+          }
+        }
+      }
+    }
+
+    @media only screen and (max-width: @tablet-breakpoint) {
+      ul.side-nav {
+        display: block;
+        margin: 0 auto;
+        text-align: center;
+        padding: 0;
+
+        li {
+          display: inline-block;
+          padding: 0.6em 1em;
+
+          a {
+            font-size: 1.2em;
+          }
+        }
+      }
+    }
+
+    @media only screen and (max-width: @mobile-breakpoint) {
+      ul.side-nav {
+        li {
+          padding: 0.6em 0.6em;
+
+          a {
+            font-size: 0.8em;
+          }
+        }
+      }
+    }
+  }
+
+  section.features {
+    p {
+      line-height: 1.5em;
+    }
+  }
+
+  section.quick-start {
+    background: @soft-white;
+
+    h2 {
+      color: @green;
+    }
+
+    h4 {
+      line-height: 1.5em;
+    }
+
+    .terminal-wrapper {
+      font-family: 'Courier', 'Monaco', 'Arial', sans-serif;
+      padding: 20px;
+      background: @medium-grey;
+      .rounded(5px);
+      .drop-shadow(0, 2px, 3px, 0.3);
+
+      .terminal {
+        overflow-y: scroll;
+        white-space: nowrap;
+      }
+      
+      p {
+        color: @white;
+        line-height: 1.2em;
+      }
+    }
+  }
+
+  // @media only screen and (min-width: @desktop-breakpoint) {
+  //   padding-top: 20px;
+  // }
+}

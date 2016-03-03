@@ -1,0 +1,75 @@
+html, body {
+  font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', 'Lucida Grande', sans-serif;
+  font-weight: 300;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 300;
+}
+
+p {
+  margin: 0 0 1em 0;
+}
+
+pre, code {
+  background: #eff1f6;
+}
+
+a {
+  color: @text-color;
+  text-decoration: none;
+  .transition;
+
+  &.icon-button {
+    color: @primary-action-color;
+    padding: 3px 6px;
+    border: 1px solid @primary-action-color;
+    border-radius: 100%;
+    display: inline-block;
+
+    &:hover {
+      color: @primary-action-color;
+      border: 1px solid @primary-action-color;
+    }
+  }
+
+  &.active {
+    color: darken(@text-color, 20%);
+  }
+
+  &:hover {
+    color: darken(@text-color, 20%);
+
+    .fa-trash-o {
+      color: @red;
+    }
+  }
+
+  &.primary {
+    color: @primary-action-color;
+
+    &:hover {
+      color: darken(@primary-action-color, 10%);
+    }
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+hr {
+  margin: 0.5em 0;
+  width: 100%;
+}
+
+i.right-padding {
+  padding-right: 10px;
+}
+
+i.left-padding {
+  padding-left: 10px;
+}
