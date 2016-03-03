@@ -3,7 +3,6 @@ main.home {
   
   section.hero {
     background: @background-color;
-    color: @text-color;
     padding: 100px 0 40px 0;
 
     img.logo {
@@ -13,18 +12,19 @@ main.home {
       max-width: 400px;
     }
 
-    .button.primary-button {
-      font-size: 1.4em;
-      padding: 0.8em 1.5em;
-    }
-
     h2.tagline {
+      color: @medium-grey;
       .opacity(0);
       .transition(opacity, 1.5s, ease-out);
 
       &.animate {
         .opacity(1);
       }
+    }
+
+    .button.button-primary {
+      font-size: 1.4em;
+      padding: 0.8em 1.5em;
     }
   }
 
@@ -76,7 +76,7 @@ main.home {
     }
 
     h4 {
-      margin-top: -20px;
+      margin-top: 0;
       margin-bottom: 60px;
       line-height: 1.4em;
     }
@@ -90,8 +90,6 @@ main.home {
     }
 
     ul.side-nav {
-      padding-right: 2em;
-
       li {
         padding: 0.8em 0.8em;
         margin: 1em 0;
@@ -120,36 +118,6 @@ main.home {
         }
       }
     }
-
-    @media only screen and (max-width: @tablet-breakpoint) {
-      ul.side-nav {
-        display: block;
-        margin: 0 auto;
-        text-align: center;
-        padding: 0;
-
-        li {
-          display: inline-block;
-          padding: 0.6em 1em;
-
-          a {
-            font-size: 1.2em;
-          }
-        }
-      }
-    }
-
-    @media only screen and (max-width: @mobile-breakpoint) {
-      ul.side-nav {
-        li {
-          padding: 0.6em 0.6em;
-
-          a {
-            font-size: 0.8em;
-          }
-        }
-      }
-    }
   }
 
   section.features {
@@ -160,10 +128,5 @@ main.home {
 
   section.callout {
     background: @soft-white;
-    
   }
-
-  // @media only screen and (min-width: @desktop-breakpoint) {
-  //   padding-top: 20px;
-  // }
 }

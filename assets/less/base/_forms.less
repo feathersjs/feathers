@@ -1,0 +1,121 @@
+// ==========================================================================
+// Base – Forms
+// ==========================================================================
+
+// Form, Fieldset and Legend
+fieldset,
+legend {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+legend {
+  .font-size(@base-font-size + 2);
+  .line-height(@base-line-height + 2);
+  font-weight: @font-700;
+}
+.form {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+// All Form Elements
+label,
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+// Inputs
+input { line-height: normal; }
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+input[type="date"] {
+  height: 36px;
+  padding: 0 .4em;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="date"]::-webkit-inner-spin-button {
+  display: none;
+  -webkit-appearance: none;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+input[type="search"] {
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+// Text Area
+textarea {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  overflow: auto;
+}
+
+// Select
+select {
+  text-transform: none;
+  height: 36px;
+  padding: 0 .4em;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+optgroup { font-weight: @font-700; }
+
+// Buttons
+button {
+  overflow: visible;
+  text-transform: none;
+}
+button, html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+button[disabled], html input[disabled] { cursor: default; }
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+// Placeholder Colour
+::-webkit-input-placeholder { color: @base-placeholder-color; }
+:-moz-placeholder { color: @base-placeholder-color; }
+::-moz-placeholder { color: @base-placeholder-color; }
+:-ms-input-placeholder { color: @base-placeholder-color; }

@@ -9,6 +9,8 @@
   color: @text-color;
   white-space: nowrap;
   background-clip: padding-box;
+  text-align: center;
+  font-weight: 400;
   .rounded(5px);
 
   &.disabled,
@@ -34,7 +36,7 @@
     padding: 0.4em 0.6em;
   }
 
-  &.primary-button {
+  &.button-primary {
     color: @white;
     background: @primary-action-color;
     // .transition(all, 0.2s);
@@ -51,7 +53,7 @@
     }
   }
 
-  &.secondary-button {
+  &.button-secondary {
     background: none;
     border: 1px solid @lighter-grey;
 
@@ -78,7 +80,7 @@
     }
   }
 
-  &.remove-button {
+  &.button-remove {
     background: @red;
     color: @white;
     padding: 0.9em 1.5em;
@@ -94,7 +96,7 @@
     }
   }
 
-  &.transparent-button {
+  &.button-transparent {
     background: none;
     color: @white;
     border: 1px solid darken(@white, 5%);

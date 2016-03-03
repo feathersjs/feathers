@@ -2,13 +2,29 @@
 
 @import "pygments";
 
+// Base
+@import "base/_variables";
+@import "base/_mixins";
+@import "base/_resets";
+@import "base/_global";
+@import "base/_lists";
+@import "base/_blockquotes";
+@import "base/_tables";
+@import "base/_code";
+@import "base/_forms";
+@import "base/_assets";
+@import "base/_grid";
+
+// Helpers
+@import "base/_helpers";
+
+// Common components
 @import "common/variables";
 @import "common/mixins";
 @import "common/animations";
-@import "common/base";
 @import "font/font-awesome";
 
-@import "common/layout";
+@import "common/helpers";
 @import "common/elements";
 @import "common/buttons";
 @import "common/forms";
@@ -21,48 +37,27 @@
 @import "legal";
 @import "error";
 
-html, body {
-  background: @background-color;
-  color: @text-color;
+@import "_mobile-styles";
+
+// Tablet Styles
+@media only screen and (min-width: @breakpoint-tablet) {
+  @import "_tablet-styles";
 }
 
-h3 {
-  color: @primary-text-color;
+// Desktop Styles
+@media only screen and (min-width: @breakpoint-desktop) {
+  @import "_desktop-styles";
 }
 
-.text-overflow-ellipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  display: inline-block;
+// HD Styles
+@media only screen and (min-width: @breakpoint-hd) {
+  @import "_hd-styles";
 }
 
-main {
-  padding-top: 60px;
-}
+// Animations
+@import "base/_animations";
 
-section {
-  padding: 100px 0;
-}
-
-.typed-cursor{
-    opacity: 1;
-    -webkit-animation: blink 0.7s infinite;
-    -moz-animation: blink 0.7s infinite;
-    animation: blink 0.7s infinite;
-}
-@keyframes blink{
-    0% { opacity:1; }
-    50% { opacity:0; }
-    100% { opacity:1; }
-}
-@-webkit-keyframes blink{
-    0% { opacity:1; }
-    50% { opacity:0; }
-    100% { opacity:1; }
-}
-@-moz-keyframes blink{
-    0% { opacity:1; }
-    50% { opacity:0; }
-    100% { opacity:1; }
+// Print Styles
+@media print {
+  @import "base/_print";
 }
