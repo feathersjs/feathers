@@ -26,7 +26,7 @@ To learn more about Feathers visit the website at [feathersjs.com](http://feathe
 
 ## See it in action
 
-Here is all the code you need to create a RESTful, real-time todo API that uses an in memory data store:
+Here is all the code you need to create a RESTful, real-time message API that uses an in memory data store:
 
 ```js
 // app.js
@@ -35,6 +35,7 @@ var rest = require('feathers-rest');
 var socketio = require('feathers-socketio');
 var memory = require('feathers-memory');
 var bodyParser = require('body-parser');
+var handler = require('feathers-errors/handler');
 
 // A Feathers app is the same as an Express app
 var app = feathers();
@@ -47,8 +48,10 @@ app.configure(socketio());
 app.use(bodyParser.json());
 // Parse URL-encoded params
 app.use(bodyParser.urlencoded({ extended: true }));
-// Register our memory "todos" service
-app.use('/todos', memory());
+// Register our memory "messages" service
+app.use('/messages', memory());
+// Register a nicer error handler than the default Express one
+app.use(handler());
 // Start the server
 app.listen(3000);
 ```
@@ -56,11 +59,19 @@ app.listen(3000);
 Then run
 
 ```
-npm install feathers feathers-rest feathers-socketio feathers-memory body-parser
+npm install feathers feathers-rest feathers-socketio feathers-errors feathers-memory body-parser
 node app
 ```
 
-and go to [http://localhost:3000/todos](http://localhost:3000/todos). That's it! There's a lot more you can do with Feathers including; using a real database, authentication, authorization, clustering and more! Head on over to [the Feathers docs](http://docs.feathersjs.com) to see just how easy it is to build scalable real-time apps.
+and go to [http://localhost:3000/messages](http://localhost:3000/messages). That's it! There's a lot more you can do with Feathers including; using a real database, authentication, authorization, clustering and more! Head on over to [the Feathers docs](http://docs.feathersjs.com) to see just how easy it is to build scalable real-time apps.
+
+## Documentation
+
+The [Feathers docs](http://docs.feathersjs.com) are loaded with awesome stuff and tell you every thing you need to know about using and configuring Feathers.
+
+## Examples
+
+Each plugin has it's own minimal example in the repo. To see some more complex examples go to [feathersjs/feathers-demos](https://github.com/feathersjs/feathers-demos).
 
 ## License
 
