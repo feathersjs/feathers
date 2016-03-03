@@ -1,0 +1,46 @@
+{
+  "site": {
+    "baseUrl": "http://feathersjs.com",
+    "title": "Feathers - A minimalist real-time framework for tomorrow's apps.",
+    "description": "Manage NoSQL and SQL databases like MySQL, Postgres, SQLite, MongoDB, Redis and more! All in one beautiful app. Available for Mac, Linux, and Windows. Download for free today!",
+    "keywords": "feathers, server, websocket, application, client, real-time, Stripe, socket.io, javascript, sql, nosql, sql server, mysql, postgres, postgresql, mongo, mongodb, sqlite, sqllite, redis, nedb, mongoose, sequelize",
+    "author": {
+      "name": "Eric Kryski",
+      "twitter": "ekryski"
+    },
+    "ga": {
+      "id": "UA-64904930-1"
+    },
+    "googleplus": {
+      "name": "Feathers",
+      "about": "A minimalist real-time framework for tomorrow's apps.",
+      "description": "Wow your users. Build incredible real-time applications in record time.",
+      "image": "/img/google-plus-share.png",
+      "applicationCategory": "Server",
+      "downloadUrl": "http://feathersjs.com",
+      "featureList": "real-time, stripe, websocket, mongodb, mysql, postgres, sqlite",
+      "operatingSystem": "Windows 7, Windows 8, OSX 10.6+, Linux",
+      "screenshot": "/img/screenshot.png",
+      "author": "Eric Kryski"
+    },
+    "twittercard": {
+      "card": "summary_card_large",
+      "site": "@feathersjs",
+      "title": "Feathers - A minimalist real-time framework for tomorrow's apps.",
+      "description": "Wow your users. Build incredible real-time applications in record time.",
+      "creator": "@ekryski",
+      "image": "/img/twitter-card.png"
+    },
+    "facebookgraph": {
+      "title": "Feathers - A minimalist real-time framework for tomorrow's apps.",
+      "type": "product",
+      "image": "/img/facebook-share.png",
+      "description": "Wow your users. Build incredible real-time applications in record time.",
+      "siteName": "Feathers",
+      "updatedTime": "2016-03-02T11:08:47+01:00",
+      "richAttachment": "true",
+      "brand": "Feathers",
+      "category": "Software",
+      "admins": "517607527"
+    }
+}
