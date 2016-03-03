@@ -37,6 +37,36 @@ main.home {
     }
   }
 
+  section.quick-start {
+    background: @soft-white;
+
+    h2 {
+      color: @green;
+    }
+
+    h4 {
+      line-height: 1.5em;
+    }
+
+    .terminal-wrapper {
+      font-family: 'Courier', 'Monaco', 'Arial', sans-serif;
+      padding: 20px;
+      background: @medium-grey;
+      .rounded(5px);
+      .drop-shadow(0, 2px, 3px, 0.3);
+
+      .terminal {
+        overflow-y: scroll;
+        white-space: nowrap;
+      }
+      
+      p {
+        color: @white;
+        line-height: 1.2em;
+      }
+    }
+  }
+
   section.example {
     background-image: linear-gradient(-135deg, #58CEA9 0%, #31D895 100%);
 
@@ -128,34 +158,9 @@ main.home {
     }
   }
 
-  section.quick-start {
+  section.callout {
     background: @soft-white;
-
-    h2 {
-      color: @green;
-    }
-
-    h4 {
-      line-height: 1.5em;
-    }
-
-    .terminal-wrapper {
-      font-family: 'Courier', 'Monaco', 'Arial', sans-serif;
-      padding: 20px;
-      background: @medium-grey;
-      .rounded(5px);
-      .drop-shadow(0, 2px, 3px, 0.3);
-
-      .terminal {
-        overflow-y: scroll;
-        white-space: nowrap;
-      }
-      
-      p {
-        color: @white;
-        line-height: 1.2em;
-      }
-    }
+    
   }
 
   // @media only screen and (min-width: @desktop-breakpoint) {
