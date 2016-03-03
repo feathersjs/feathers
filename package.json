@@ -1,39 +1,64 @@
 {
-  "name": "feathers",
-  "description": "An ultra scalable, feather weight, data oriented framework",
-  "version": "1.0.0",
+  "name": "Feathers-Site",
+  "version": "0.1.0",
+  "description": "The Feathers marketing website",
   "private": true,
-  "homepage": "https://feathersjs.com",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/feathersjs/feathers.git"
+  "license": "MIT",
+  "author": {
+    "name": "Feathers contributors",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
   },
-  "keywords": [
-    "feathers",
-    "REST",
-    "socket.io",
-    "realtime"
-  ],
-  "author": "Feathers <hello@feathersjs.com> (http://feathersjs.com)",
   "contributors": [
     "Eric Kryski <e.kryski@gmail.com> (http://erickryski.com)",
     "David Luecke <daff@neyeon.de> (http://neyeon.com)"
   ],
-  "license": "MIT",
+  "homepage": "http://feathersjs.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/feathersjs/feathers.git"
+  },
   "bugs": {
     "url": "https://github.com/feathersjs/feathers/issues"
   },
-  "scripts": {
-    "test": "grunt"
-  },
   "engines": {
-    "node": "*",
-    "npm": "*"
+    "node": ">= 0.12.x",
+    "npm": ">= 2.5.x"
+  },
+  "keywords": [
+    "feathers"
+  ],
+  "main": "",
+  "scripts": {
+    "clean": "rm -rf build/",
+    "deploy": "npm run clean; NODE_ENV=production gulp build; gulp sitemap; gulp deploy",
+    "test": "gulp"
+  },
+  "dependencies": {
+    "jquery": "^2.1.3",
+    "lodash": "^3.8.0",
+    "velocity-animate": "^1.2.2"
   },
   "devDependencies": {
-    "grunt": "^0.4.1",
-    "grunt-cli": "^0.1.7",
-    "grunt-contrib-less": "^0.7.0",
-    "grunt-contrib-watch": "^0.6.1"
+    "del": "^1.2.0",
+    "expose-loader": "^0.6.0",
+    "gulp": "^3.9.0",
+    "gulp-changed": "^1.3.0",
+    "gulp-data": "^1.2.0",
+    "gulp-front-matter": "^1.2.3",
+    "gulp-gh-pages": "^0.5.2",
+    "gulp-if": "^2.0.0",
+    "gulp-imagemin": "^2.3.0",
+    "gulp-less": "^3.0.3",
+    "gulp-markdown": "^1.0.0",
+    "gulp-minify-css": "^1.2.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-sitemap": "^2.2.0",
+    "highlight.js": "^8.8.0",
+    "require-dir": "^0.1.0",
+    "swig": "^1.4.2",
+    "through2": "^2.0.0",
+    "webpack": "^1.10.5",
+    "webpack-stream": "^2.1.0"
   }
 }
