@@ -15,12 +15,11 @@
       "name": "Feathers",
       "about": "A minimalist real-time framework for tomorrow's apps.",
       "description": "Wow your users. Build incredible real-time applications in record time.",
-      "image": "/img/google-plus-share.png",
+      "image": "/img/google-plus-share-image.png",
       "applicationCategory": "Server",
       "downloadUrl": "http://feathersjs.com",
       "featureList": "real-time, stripe, websocket, mongodb, mysql, postgres, sqlite",
       "operatingSystem": "Windows 7, Windows 8, OSX 10.6+, Linux",
-      "screenshot": "/img/screenshot.png",
       "author": "Eric Kryski"
     },
     "twittercard": {
@@ -29,12 +28,12 @@
       "title": "Feathers - A minimalist real-time framework for tomorrow's apps.",
       "description": "Wow your users. Build incredible real-time applications in record time.",
       "creator": "@ekryski",
-      "image": "/img/twitter-card.png"
+      "image": "/img/twitter-card-image.png"
     },
     "facebookgraph": {
       "title": "Feathers - A minimalist real-time framework for tomorrow's apps.",
       "type": "product",
-      "image": "/img/facebook-share.png",
+      "image": "/img/facebook-share-image.png",
       "description": "Wow your users. Build incredible real-time applications in record time.",
       "siteName": "Feathers",
       "updatedTime": "2016-03-02T11:08:47+01:00",
@@ -43,4 +42,5 @@
       "category": "Software",
       "admins": "517607527"
     }
+  }
 }
