@@ -5,13 +5,15 @@ Feathers
 ## Getting Started
 
 1. Install nodejs and npm
-2. Install Gulp CLI by running `npm install -g gulp-cli` 
-3. run `npm install`
-4. run `gulp watch` go to [localhost:8080/](http://localhost:8080/) and start editing content. Your content will automatically be rebuilt when things change.
+2. run `npm install`
+3. run `npm run watch` 
+4. open your `build/index.html` file in your browser
+
+Now you can start editing content. Your content will automatically be rebuilt when things change and you can just reload your browser at any time.
 
 ## Building
 
-Simply run `gulp` to build the site.
+Simply run `npm run build` to build the site.
 
 ## Deploying
 The site currently gets deployed to Github Pages. In order to do this simple run `npm run deploy`. This will clean out any old files, rebuild the site with the production config, and push it to the `gh-pages` branch.
