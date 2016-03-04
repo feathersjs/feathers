@@ -102,6 +102,11 @@ module.exports = {
         }
       ]
     },
+    resolve: {
+      alias: {
+        velocity: 'velocity-animate'
+      }
+    },
     plugins: [
       // new webpack.optimize.CommonsChunkPlugin(/* chunkName= */'vendor', /* filename= */'vendor.js'),
       // new webpack.optimize.UglifyJsPlugin()
