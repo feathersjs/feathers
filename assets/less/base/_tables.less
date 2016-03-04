@@ -1,0 +1,29 @@
+// ==========================================================================
+// Base – Tables
+// ==========================================================================
+caption {
+  .font-size(@base-font-size + 2);
+  line-height: normal;
+  font-weight: @font-700;
+  text-align: left;
+  padding: .5em 0;
+  border-bottom: 1px solid #d7d7d7;
+}
+table {
+  .font-size(@base-font-size - 2);
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  margin: 1em 0;
+  text-align: left;
+  thead,
+  tbody,
+  tfoot {
+    td,
+    th {
+      color: #585858;
+      padding: .8em .5em;
+      border-bottom: 1px solid #e9e9e9;
+    }
+  }
+}

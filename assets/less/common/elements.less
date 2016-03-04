@@ -1,0 +1,131 @@
+html, body {
+  height: 100%;
+  font-family: 'Helvetica Neue', 'Roboto', 'Helvetica', 'Arial', 'Lucida Grande', sans-serif;
+  font-weight: 300;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: @background-color;
+  color: @text-color;
+}
+
+main {
+  padding-top: 60px;
+}
+
+section {
+  padding: 100px 0;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 300;
+}
+
+h3 {
+  color: @primary-text-color;
+}
+
+p {
+  margin: 0 0 1em 0;
+}
+
+pre, code {
+  background: @code-background-color;
+}
+
+.row {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+a {
+  color: @text-color;
+  text-decoration: none;
+  // .transition(color);
+
+  &.icon-button {
+    color: @primary-action-color;
+    padding: 3px 6px;
+    border: 1px solid @primary-action-color;
+    border-radius: 100%;
+    display: inline-block;
+
+    &:hover {
+      color: @primary-action-color;
+      border: 1px solid @primary-action-color;
+    }
+  }
+
+  &.active {
+    color: darken(@text-color, 20%);
+  }
+
+  &:hover {
+    color: darken(@text-color, 20%);
+
+    .fa-trash-o {
+      color: @red;
+    }
+  }
+
+  &.primary {
+    color: @primary-action-color;
+    font-weight: 400;
+
+    &:hover {
+      color: darken(@primary-action-color, 10%);
+    }
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+hr {
+  margin: 0.5em 0;
+  width: 100%;
+}
+
+i.right-padding {
+  padding-right: 10px;
+}
+
+i.left-padding {
+  padding-left: 10px;
+}
+
+.text-overflow-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.typed-cursor{
+  opacity: 1;
+  -webkit-animation: blink 0.7s infinite;
+  -moz-animation: blink 0.7s infinite;
+  animation: blink 0.7s infinite;
+}
+
+.typewriter span {
+  opacity: 0;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+      filter: alpha(opacity=0);
+}
+
+.typewriter span.show {
+  opacity: 1;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+      filter: alpha(opacity=100);
+}
+
+/* IE issues */
+.lt-ie9 .typewriter span {
+  display: inline-block;
+}
+
+.lt-ie9 .typewriter span.whitespace {
+  min-width: 0.35em;
+}

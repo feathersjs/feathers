@@ -1,0 +1,63 @@
+// ==========================================================================
+// Base – Non-Responsive Grid
+// ==========================================================================
+
+// Micro Clearfix - http://nicolasgallagher.com/micro-clearfix-hack/
+.clear:before, .clear:after { content: " "; display: table; } .clear:after { clear: both; }
+.row:before, .row:after { content: ""; display: table; } .row:after { clear: both; }
+
+.row {
+  position: relative;
+  margin-left: -@grid-gutter;
+  margin-right: -@grid-gutter;
+}
+
+// Mobile Container
+.container {
+  padding-left: @grid-gutter;
+  padding-right: @grid-gutter;
+  margin-left: auto;
+  margin-right: auto;
+  width: @container-desktop;
+}
+.container-full {
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// Grid Columns - Global Rules
+.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
+  padding-left: @grid-gutter;
+  padding-right: @grid-gutter;
+  position: relative;
+  float: left;
+}
+
+// Grid
+.generate-grid (12);
+.generate-grid (@index) when (@index > 0) {
+  .generate-grid (@index - 1);
+  .col-@{index} {
+    width: @index / 12 * 100%;
+  }
+}
+
+// Push Offsets
+.generate-push-offsets (11);
+.generate-push-offsets (@index) when (@index > 0) {
+  .generate-push-offsets (@index - 1);
+  .push-@{index} {
+    left: @index / 12 * 100%;
+  }
+}
+
+// Pull Offsets
+.generate-pull-offsets (11);
+.generate-pull-offsets (@index) when (@index > 0) {
+  .generate-pull-offsets (@index - 1);
+  .pull-@{index} {
+    left: -@index / 12 * 100%;
+  }
+}

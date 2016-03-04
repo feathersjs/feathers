@@ -1,0 +1,61 @@
+// ==========================================================================
+// Base – Mixins
+// ==========================================================================
+// Font sizes (primary sizing in `rem` units with a fallback of `px`)
+// Example usage .font-size(18);
+.font-size (@size) {
+  @remValue: @size / 16;
+  @pxValue: (@size);
+  font-size: ~"@{pxValue}px"; 
+  font-size: ~"@{remValue}rem";
+}
+
+// Line height sizes (primary sizing in `rem` units with a fallback of `px`)
+// Example usage .line-height(22);
+.line-height (@size) {
+  @remValue: @size / 16;
+  @pxValue: (@size);
+  line-height: ~"@{pxValue}px"; 
+  line-height: ~"@{remValue}rem";
+}
+
+// SVG background with PNG fallback
+// Example Usage .svg-bg("img/banner.svg", "img/banner.png", 50%, 50%, no-repeat);
+.bg-svg(@svg, @png, @x: 0, @y: 0, @repeat: no-repeat) {
+  background: url(@svg) @x @y @repeat;
+  .no-svg & {
+    background: url(@png) @x @y @repeat;
+  }
+}
+
+// Background Color with Opacity
+// Example Usage: .bg-rgba(#111, 50%);
+.bg-rgba(@color,@alpha) {
+  @rgba: rgba(red(@color), green(@color), blue(@color), @alpha);
+  @argb: argb(@rgba);
+  background-color: @color;
+  background-color: @rgba;
+}
+
+// Animations
+// Example Usage .animation(1s);
+.animate(@duration: 1s) {
+  animation-duration: @duration;
+  animation-fill-mode: both;
+}
+
+// SVG Fill - http://zslabs.com/articles/svg-background-fill/#update-2
+// Example usage: .svg-fill("img/icon.svg", "#555");
+.svg-fill(@src, @fill: ~"") when not (@fill = '') {
+  @data-uri: data-uri('image/svg+xml;charset=UTF-8', "src/@{src}");
+  @replace-src: replace("@{data-uri}", "fill\%3D\%22\%23[\w]{3,6}\%22", escape('fill="@{fill}"'), "g");
+  background-image:e(@replace-src);
+}
+// SVG Fill - http://zslabs.com/articles/svg-background-fill/#update-2
+// Example usage: .svg-fill("img/icon.svg");
+.svg-fill(@src, @fill: ~"") when (@fill = ~'') {
+  @data-uri: data-uri('image/svg+xml;charset=UTF-8', "src/@{src}");
+  background-image:e("@{data-uri}");
+}
+
+// Not enough mixins? – Please make some suggestions or contribute more! :)

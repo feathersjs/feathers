@@ -1,0 +1,38 @@
+.legal {
+  color: @text-color;
+  background: @background-color;
+
+  section {
+    padding: 40px 0;
+  }
+
+  section.content {
+    h1 {
+      color: @primary-text-color;
+    }
+
+    h2 {
+      color: lighten(@secondary-text-color, 15%);
+      margin: 30px 0 10px;
+    }
+
+    h3 {
+      // text-transform: uppercase;
+      // margin: 30px 0 15px 0;
+    }
+
+    li {
+      margin: 10px 0;
+    }
+
+    a {
+      color: lighten(@red, 10%);
+      border-bottom: 1px dashed lighten(@red, 10%);
+
+      &:hover {
+        color: darken(@red, 10%);
+        border-bottom: 1px dashed darken(@red, 10%);
+      }
+    }
+  }
+}

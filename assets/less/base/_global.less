@@ -1,0 +1,140 @@
+// ==========================================================================
+// Base – Global
+// ==========================================================================
+
+// Body
+body {
+  font-family: @base-font-family;
+  .font-size(@base-font-size);
+  .line-height(@base-line-height);
+  color: @base-font-color;
+  font-weight: @base-font-weight;
+  background: @base-background-color;
+}
+
+// Paragraph
+p { margin: 0 0 1em 0; }
+
+// Links
+a {
+  color: @base-link-color;
+  background: transparent;
+  text-decoration: underline;
+  &:active,
+  &:hover {
+    outline: 0;
+    text-decoration: none;
+  }
+}
+
+// Headings
+h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+  font-family: @heading-font-family;
+  margin: 0;
+}
+h1, .h1 {
+  .font-size(@h1-font-size);
+  .line-height(@h1-line-height);
+  margin-top: .7em;
+  margin-bottom: .5em;
+  color: @h1-color;
+  font-weight: @h1-font-weight;
+}
+h2, .h2 {
+  .font-size(@h2-font-size);
+  .line-height(@h2-line-height);
+  margin-top: 1.4em;
+  margin-bottom: .2em;
+  color: @h2-color;
+  font-weight: @h2-font-weight;
+}
+h3, .h3 {
+  .font-size(@h3-font-size);
+  .line-height(@h3-line-height);
+  margin-top: 1em;
+  margin-bottom: .2em;
+  color: @h3-color;
+  font-weight: @h3-font-weight;
+}
+h4, .h4 {
+  .font-size(@h4-font-size);
+  .line-height(@h4-line-height);
+  margin-top: 1em;
+  margin-bottom: .2em;
+  color: @h4-color;
+  font-weight: @h4-font-weight;
+}
+h5, .h5 {
+  .font-size(@h5-font-size);
+  .line-height(@h5-line-height);
+  margin-top: 1em;
+  margin-bottom: .1em;
+  color: @h5-color;
+  font-weight: @h5-font-weight;
+}
+h6, .h6 {
+  .font-size(@h6-font-size);
+  .line-height(@h6-line-height);
+  margin-top: 1em;
+  margin-bottom: .1em;
+  color: @h6-color;
+  font-weight: @h6-font-weight;
+}
+
+// Bold and Italics
+b,
+strong,
+.strong {
+  font-weight: @font-700;
+}
+em,
+.em {
+  font-style: italic;
+}
+
+// Abbreviation
+abbr[title], .abbr[title] { border-bottom: 1px dotted; }
+
+// Definition
+dfn { font-style: italic; }
+
+// Small
+small, .small { font-size: 80%; }
+
+// Mark
+mark,
+.mark {
+  background: #ff0;
+  color: #000;
+}
+
+// Sub and Sup
+sub,
+.sub,
+sup,
+.sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup, .sup { top: -0.5em; }
+sub, .sub { bottom: -0.25em; }
+
+// Del
+del, .del { text-decoration: line-through; }
+
+// Images
+figure { margin: 1em 40px; }
+
+// Horizontal Rules
+hr,
+.hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 1px;
+  background: #eee;
+  border: 0;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}

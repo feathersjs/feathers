@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{page.title}}{% endblock %}
+
+{% block content %}
+  <main class="legal">
+    <section class="container content {{page.class}}">
+      <div class="row">
+        <h1 class="font-800">{{page.title}}</h1>
+        <h2>Effective Date: {{page.date}}</h2>
+      </div>
+
+      <hr>
+
+      <div class="row">
+        {% autoescape false %}{{content}}{% endautoescape %}
+      </div>
+    </section>
+  </main>
+{% endblock %}

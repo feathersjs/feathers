@@ -1,0 +1,175 @@
+//
+// Buttons
+// --------------------------------------------------
+
+.button {
+  outline: none;
+  padding: 1em 1.5em;
+  background: darken(@white, 2%);
+  color: @text-color;
+  white-space: nowrap;
+  background-clip: padding-box;
+  text-align: center;
+  font-weight: 500;
+  .rounded(5px);
+  .transition(background, 0.2s);
+
+  &.disabled,
+  &[disabled] {
+    .opacity(0.7);
+    cursor: default;
+  }
+
+  &:hover:not(.disabled),
+  &:hover:not([disabled]) {
+    background: darken(@background-color, 15%);
+  } 
+
+  &.large {
+    padding: 1em 4em;
+  }
+
+  &.small {
+    padding: 0.6em 0.8em;
+  }
+
+  &.x-small {
+    padding: 0.4em 0.6em;
+  }
+
+  &.button-primary {
+    color: @white;
+    background: @primary-action-color;
+    
+    &:hover,
+    &:focus {
+      color: darken(@white, 5%);
+      background: darken(@primary-action-color, 5%);
+
+      &.disabled,
+      &:disabled {
+        background: @primary-action-color;
+      }
+    }
+  }
+
+  &.button-secondary {
+    background: none;
+    border: 1px solid @lighter-grey;
+
+    &:hover:not(.active),
+    &:hover:not(.disabled),
+    &:hover:not(:disabled),
+    &:focus:not(.active),
+    &:focus:not(.disabled),
+    &:focus:not(:disabled)  {
+      color: @medium-grey;
+      background: @soft-white;
+    }
+
+    &.active {
+      color: darken(@medium-grey, 5%);
+      background: darken(@soft-white, 5%);
+      border: 1px solid @lighter-grey;
+
+      &:hover {
+        color: darken(@medium-grey, 5%);
+        background: darken(@soft-white, 5%);
+        border: 1px solid @lighter-grey;
+      }
+    }
+  }
+
+  &.button-remove {
+    background: @red;
+    color: @white;
+    padding: 0.9em 1.5em;
+
+    &:hover,
+    &:focus {
+      background: darken(@red, 5%);
+
+      &.disabled,
+      &:disabled {
+        background: @red;
+      }
+    }
+  }
+
+  &.button-transparent {
+    background: none;
+    color: @white;
+    border: 1px solid darken(@white, 5%);
+    
+    &:hover:not(.disabled),
+    &:hover:not(:disabled) {
+      background: fade(@white, 10%);
+      color: @white;
+    } 
+  }
+}
+
+//
+// Button groups
+// --------------------------------------------------
+
+// Make the div behave like a button
+.button-group {
+  // position: relative;
+  // display: inline-flex;
+  // flex-direction: row;
+
+  > .button {
+    padding: 0.8em 1em;
+    text-align: center;
+    background: @white;
+    // border-left: 1px solid @lighter-grey;
+    border-top: 1px solid @lighter-grey;
+    border-bottom: 1px solid @lighter-grey;
+    .rounded(0);
+
+    i.fa {
+      margin-right: 5px;
+    }
+
+    &:first-child {
+      border-left: 1px solid @lighter-grey;
+      .border-radius(0, 0, 5px, 5px);
+    }
+
+    &:last-child {
+      border-right: 1px solid @lighter-grey;
+      .border-radius(5px, 5px, 0, 0);
+    }
+
+    &:hover:not(.active),
+    &:focus:not(.active) {
+      color: @medium-grey;
+      background: @soft-white;
+    }
+
+    &.active {
+      color: darken(@medium-grey, 5%);
+      background: darken(@soft-white, 5%);
+      border: 1px solid @lighter-grey;
+
+      &:hover {
+        color: darken(@medium-grey, 5%);
+        background: darken(@soft-white, 5%);
+        border: 1px solid @lighter-grey;
+      }
+    }
+  }
+
+  &.small {
+    > .button {
+      padding: 0.6em 0.8em;
+    }
+  }
+
+  &.x-small {
+    > .button {
+      padding: 0.4em 0.6em;
+    }
+  }
+}
