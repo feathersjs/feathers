@@ -4612,8 +4612,6 @@ form label {
 nav {
   background: none;
   width: 100%;
-  font-size: 18px;
-  font-size: 1.125rem;
   z-index: 10;
 }
 nav.transparent {
@@ -4930,6 +4928,10 @@ footer .social li {
   }
 }
 @media only screen and (min-width: 980px) {
+  nav {
+    font-size: 20px;
+    font-size: 1.25rem;
+  }
   main.home section.callout .button.button-primary {
     margin-top: 0;
   }

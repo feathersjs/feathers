@@ -48,9 +48,7 @@
 	__webpack_require__(4);
 	__webpack_require__(5);
 	__webpack_require__(6);
-	// require('scrollmagic/scrollmagic/uncompressed/plugins/animation.velocity');
 
-	// var ScrollMagic = require('scrollmagic');
 	var typewriter = __webpack_require__(7);
 
 	jQuery.fn.reverse = [].reverse;
@@ -62,69 +60,17 @@
 	    var $navLinks = $('.navbar a');
 	    typewriter.prepare('.typewriter');
 
-	    // $user1.velocity('transition.fadeIn', {
-	    //   loop: true,
-	    //   duration: 250,
-	    //   complete: function() {
-	    //     $user2.velocity('transition.fadeIn', {
-	    //       duration: 250,
-	    //       complete: function() {
-	    //         $user3.velocity('transition.fadeIn', {
-	    //           duration: 250
-	    //         });
-	    //       }
-	    //     });
-	    //   }
-	    // });
-	    // $message1.velocity('transition.fadeIn', {
-	    //   loop: true,
-	    //   duration: 250,
-	    //   complete: function() {
-	    //     $message2.velocity('transition.fadeIn', {
-	    //       duration: 250,
-	    //       complete: function() {
-	    //         $message3.velocity('transition.fadeIn', {
-	    //           duration: 250,
-	    //           complete: function(){
-	    //             $message4.velocity('transition.fadeIn', {
-	    //               duration: 250
-	    //             });    
-	    //           }
-	    //         });
-	    //       }
-	    //     });
-	    //   }
-	    // });
-	    // $user1.velocity('transition.slideLeftBigIn');
-	    // $message1.velocity('transition.slideLeftBigIn');
-
-	    // $user2.velocity('transition.slideRightBigIn');
-	    // $message2.velocity('transition.slideRightBigIn');
-
-	    // $user3.velocity('transition.slideLeftBigIn');
-	    // $message3.velocity('transition.slideLeftBigIn');
-	    // $message4.velocity('transition.slideLeftBigIn');
-
-	    // var controller = new ScrollMagic.Controller();
-
-	    // // build scene
-	    // var scene = new ScrollMagic.Scene({triggerElement: ".features"})
-	    //   // trigger a velocity opaticy animation
-	    //   .setVelocity(".feature", {opacity: 0}, {duration: 400})
-	    //   .addIndicators() // add indicators (requires plugin)
-	    //   .addTo(controller);
-
 	    // Animate the hero items and nav bar
 	    $navLinks.velocity('transition.slideDownIn', {
-	      stagger: 100,
+	      stagger: 150,
 	      visibility: 'visible',
 	      complete: function(){
 	        $tagline.velocity('transition.fadeIn', {
 	          visibility: 'visible',
-	          duration: 1000,
+	          duration: 500,
 	          complete: function(){
 	            $mainCTA.velocity('transition.fadeIn', {
-	              duration: 1000,
+	              duration: 500,
 	              display: 'block',
 	              visibility: 'visible'
 	            });
@@ -135,7 +81,7 @@
 
 	    var productWaypoint = new Waypoint({
 	      element: $('section.product')[0],
-	      offset: 50,
+	      offset: 300,
 	      handler: function(direction) {
 	        if (direction === 'down') {
 	          var $user1 = $('svg .user-1');
@@ -147,46 +93,47 @@
 	          var $message3 = $('svg .message-3');
 	          var $message4 = $('svg .message-4');
 
-	          var TIME = 1000;
+	          var DURATION = 300;
+	          var DELAY = 500;
 
 	          $user1.velocity('transition.fadeIn', {
 	            loop: true,
-	            duration: TIME,
+	            duration: DURATION,
 	          });
 
 	          $user2.velocity('transition.fadeIn', {
 	            loop: true,
-	            delay: TIME,
-	            duration: TIME
+	            delay: DELAY,
+	            duration: DURATION
 	          });
 
 	          $user3.velocity('transition.fadeIn', {
 	            loop: true,
-	            delay: TIME * 2,
-	            duration: TIME,
+	            delay: DELAY * 2,
+	            duration: DURATION,
 	          });
 
-	          $message1.velocity('transition.fadeIn', {
+	          $message1.velocity('transition.slideLeftIn', {
 	            loop: true,
-	            duration: TIME
+	            duration: DURATION
 	          });
 
-	          $message2.velocity('transition.fadeIn', {
+	          $message2.velocity('transition.slideRightIn', {
 	            loop: true,
-	            delay: TIME,
-	            duration: TIME
+	            delay: DELAY,
+	            duration: DURATION
 	          });
 
-	          $message3.velocity('transition.fadeIn', {
+	          $message3.velocity('transition.slideLeftIn', {
 	            loop: true,
-	            delay: TIME * 2,
-	            duration: TIME
+	            delay: DELAY * 2,
+	            duration: DURATION
 	          });
 
-	          $message4.velocity('transition.fadeIn', {
+	          $message4.velocity('transition.slideLeftIn', {
 	            loop: true,
-	            delay: TIME * 3,
-	            duration: TIME
+	            delay: DELAY * 3,
+	            duration: DURATION
 	          });
 
 
@@ -199,10 +146,10 @@
 
 	    var quickStartWaypoint = new Waypoint({
 	      element: $('section.quick-start')[0],
-	      offset: 50,
+	      offset: 200,
 	      handler: function(direction) {
 	        if (direction === 'down') {
-	          typewriter.type('.typewriter', { delay: 40});
+	          typewriter.type('.typewriter', { delay: 25});
 
 	          if (quickStartWaypoint) {
 	            quickStartWaypoint.disable();
@@ -213,11 +160,11 @@
 
 	    var exampleWaypoint = new Waypoint({
 	      element: $('section.example')[0],
-	      offset: 50,
+	      offset: 150,
 	      handler: function(direction) {
 	        if (direction === 'down') {
 	          var gistId = $('.example .side-nav li.active button').data('target');
-	          $('#' + gistId).addClass('active').velocity('transition.expandIn');
+	          $('#' + gistId).addClass('active').velocity('transition.expandIn', { duration: 300 });
 
 	          if (exampleWaypoint) {
 	            exampleWaypoint.disable();
@@ -228,14 +175,15 @@
 
 	    var featuresWaypoint = new Waypoint({
 	      element: $('section.features')[0],
-	      offset: 100,
+	      offset: 150,
 	      handler: function(direction) {
 	        var $features = $('.feature');
 
 	        if (direction === 'down') {
 	          // Animate features
 	          $features.velocity('transition.swoopIn', {
-	            stagger: 500,
+	            duration: 300,
+	            stagger: 200,
 	            visibility: 'visible'
 	          });
 
@@ -273,9 +221,10 @@
 	      var id = $el.data('target');
 	      $gist = $('#' + id);
 
-	      $('.gist.active').removeClass('active').velocity('transition.expandOut', {
+	      $('.gist.active').removeClass('active').velocity('transition.fadeOut', {
+	        duration: 100,
 	        complete: function(){
-	          $gist.addClass('active').velocity('transition.expandIn');
+	          $gist.addClass('active').velocity('transition.expandIn', { duration: 400 });
 	        }
 	      });
 	    });
