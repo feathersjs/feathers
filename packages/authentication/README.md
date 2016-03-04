@@ -87,7 +87,7 @@ You can use the client in the Browser, in NodeJS and in React Native.
 ```js
 import io from 'socket.io-client';
 import feathers from 'feathers/client';
-import hooks from `feathers-hooks`;
+import hooks from 'feathers-hooks';
 import socketio from 'feathers-socketio/client';
 import localstorage from 'feathers-localstorage';
 import authentication from 'feathers-authentication/client';
@@ -116,6 +116,7 @@ app.io.on('connect', function(){
 
 ### 0.4.0
 
+- Customize the JWT payload ([#78](https://github.com/feathersjs/feathers-authentication/issues/78))
 - Using `feathers-localstorage` for storing user and token credentials.
 - Adds support for using auth in NodeJS and React Native
 - Fixes issue where user was not getting added to response on authentication for databases that use `_id` as their field name.
@@ -146,7 +147,7 @@ app.io.on('connect', function(){
 - Adds support for OAuth2 ([#43](https://github.com/feathersjs/feathers-authentication/issues/43))
 - Adds a client side component for easy authentication with Feathers ([#44](https://github.com/feathersjs/feathers-authentication/issues/44))
 - Adds preliminary support for graceful fallback to cookies for JWT ([#45](https://github.com/feathersjs/feathers-authentication/issues/45))
-- Adds an example project showing all the different ways you can authenticate 
+- Adds an example project showing all the different ways you can authenticate
 
 ### 0.1.0
 

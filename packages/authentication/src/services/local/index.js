@@ -63,7 +63,7 @@ export class Service {
     let app = this.app;
 
     // Validate username and password, then generate a JWT and return it
-    return new Promise(function(resolve, reject){    
+    return new Promise(function(resolve, reject){
       let middleware = passport.authenticate('local', { session: false }, function(error, user) {
         if (error) {
           return reject(error);
@@ -74,15 +74,9 @@ export class Service {
           return reject(new errors.NotAuthenticated('Invalid login.'));
         }
 
-        // Login was successful. Generate and send token.
-        // TODO (EK): Maybe the id field should be configurable
-        const payload = {
-          id: user.id !== undefined ? user.id : user._id
-        };
-
         // Get a new JWT and the associated user from the Auth token service and send it back to the client.
         return app.service(options.tokenEndpoint)
-                  .create(payload, { internal: true })
+                  .create(user, { internal: true })
                   .then(resolve)
                   .catch(reject);
       });
@@ -110,7 +104,7 @@ export default function(options){
 
     // Get our initialize service to that we can bind hooks
     const localService = app.service(options.localEndpoint);
-    
+
     // Register our local auth strategy and get it to use the passport callback function
     passport.use(new Strategy(options, localService.checkCredentials.bind(localService)));
   };

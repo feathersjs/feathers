@@ -42,7 +42,7 @@ export class Service {
         }
 
         // No user found so we need to create one.
-        // 
+        //
         // TODO (EK): This is where we should look at req.user and see if we
         // can consolidate profiles. We might want to give the developer a hook
         // so that they can control the consolidation strategy.
@@ -52,7 +52,7 @@ export class Service {
           [`${options.provider}Id`]: profile.id,
           [`${options.provider}`]: profile._json
         });
-        
+
         return app.service(options.userEndpoint).create(data, { internal: true }).then(user => {
           return done(null, user);
         }).catch(done);
@@ -60,7 +60,7 @@ export class Service {
   }
 
   // GET /auth/facebook
-  find(params) {    
+  find(params) {
     // Authenticate via your provider. This will redirect you to authorize the application.
     const authOptions = Object.assign({session: false, state: true}, this.options.permissions);
     return passport.authenticate(this.options.provider, authOptions)(params.req, params.res);
@@ -71,14 +71,14 @@ export class Service {
     const options = this.options;
     const authOptions = Object.assign({session: false, state: true}, options.permissions);
     let app = this.app;
-    
+
     // TODO (EK): Make this configurable
     if (id !== 'callback') {
       return Promise.reject(new errors.NotFound());
     }
 
     return new Promise(function(resolve, reject){
-    
+
       let middleware = passport.authenticate(options.provider, authOptions, function(error, user) {
         if (error) {
           return reject(error);
@@ -89,15 +89,9 @@ export class Service {
           return reject(new errors.NotAuthenticated(`An error occurred logging in with ${options.provider}`));
         }
 
-        // Login was successful. Clean up the user object for the response.
-        // TODO (EK): Maybe the id field should be configurable
-        const payload = {
-          id: user.id !== undefined ? user.id : user._id
-        };
-
         // Get a new JWT and the associated user from the Auth token service and send it back to the client.
         return app.service(options.tokenEndpoint)
-                  .create(payload, { internal: true })
+                  .create(user, { internal: true })
                   .then(resolve)
                   .catch(reject);
       });
@@ -116,7 +110,7 @@ export class Service {
     if (!options.tokenStrategy) {
       return Promise.reject(new errors.MethodNotAllowed());
     }
-    
+
     // Authenticate via facebook, then generate a JWT and return it
     return new Promise(function(resolve, reject){
       let middleware = passport.authenticate(`${options.provider}-token`, authOptions, function(error, user) {
@@ -182,7 +176,7 @@ export default function(options){
 
     // Get our initialized service
     const service = app.service(options.endPoint);
-    
+
     // Register our Passport auth strategy and get it to use our passport callback function
     debug(`registering passport-${options.provider} OAuth2 strategy`, options);
     passport.use(new Strategy(options, service.oauthCallback.bind(service)));
