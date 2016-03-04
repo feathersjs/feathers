@@ -120,7 +120,7 @@ export default function(opts = {}) {
     // it they can be accessed by client side hooks and services
     app.mixins.push(function(service) {
       if (!service.before || !service.after) {
-        throw new Error(`It looks like feathers-hooks isn't ccnfigured. It is required before you configure feathers-authentication.`);
+        throw new Error(`It looks like feathers-hooks isn't configured. It is required before you configure feathers-authentication.`);
       }
       service.before(hooks.populateParams(authOptions));
     });
@@ -129,7 +129,7 @@ export default function(opts = {}) {
     if (app.rest) {
       app.mixins.push(function(service) {
         if (!service.before || !service.after) {
-          throw new Error(`It looks like feathers-hooks isn't ccnfigured. It is required before you configure feathers-authentication.`);
+          throw new Error(`It looks like feathers-hooks isn't configured. It is required before you configure feathers-authentication.`);
         }
         service.before(hooks.populateHeader(authOptions));
       });
