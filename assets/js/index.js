@@ -16,58 +16,6 @@ var App = function() {
     var $navLinks = $('.navbar a');
     typewriter.prepare('.typewriter');
 
-    // var $user1 = $('#user');
-    var $user1 = $('svg .user-1');
-    var $user2 = $('svg .user-2');
-    var $user3 = $('svg .user-3');
-
-    var $message1 = $('svg .message-1');
-    var $message2 = $('svg .message-2');
-    var $message3 = $('svg .message-3');
-    var $message4 = $('svg .message-4');
-
-    var TIME = 1000;
-
-    $user1.velocity('transition.fadeIn', {
-      loop: true,
-      duration: TIME,
-    });
-
-    $user2.velocity('transition.fadeIn', {
-      loop: true,
-      delay: TIME,
-      duration: TIME
-    });
-
-    $user3.velocity('transition.fadeIn', {
-      loop: true,
-      delay: TIME * 2,
-      duration: TIME,
-    });
-
-    $message1.velocity('transition.fadeIn', {
-      loop: true,
-      duration: TIME
-    });
-
-    $message2.velocity('transition.fadeIn', {
-      loop: true,
-      delay: TIME,
-      duration: TIME
-    });
-
-    $message3.velocity('transition.fadeIn', {
-      loop: true,
-      delay: TIME * 2,
-      duration: TIME
-    });
-
-    $message4.velocity('transition.fadeIn', {
-      loop: true,
-      delay: TIME * 3,
-      duration: TIME
-    });
-
     // $user1.velocity('transition.fadeIn', {
     //   loop: true,
     //   duration: 250,
@@ -141,9 +89,61 @@ var App = function() {
 
     var productWaypoint = new Waypoint({
       element: $('section.product')[0],
+      offset: 50,
       handler: function(direction) {
         if (direction === 'down') {
-          // TODO (EK): Animate images
+          var $user1 = $('svg .user-1');
+          var $user2 = $('svg .user-2');
+          var $user3 = $('svg .user-3');
+
+          var $message1 = $('svg .message-1');
+          var $message2 = $('svg .message-2');
+          var $message3 = $('svg .message-3');
+          var $message4 = $('svg .message-4');
+
+          var TIME = 1500;
+
+          $user1.velocity('transition.fadeIn', {
+            loop: true,
+            duration: TIME,
+          });
+
+          $user2.velocity('transition.fadeIn', {
+            loop: true,
+            delay: TIME,
+            duration: TIME
+          });
+
+          $user3.velocity('transition.fadeIn', {
+            loop: true,
+            delay: TIME * 2,
+            duration: TIME,
+          });
+
+          $message1.velocity('transition.fadeIn', {
+            loop: true,
+            duration: TIME
+          });
+
+          $message2.velocity('transition.fadeIn', {
+            loop: true,
+            delay: TIME,
+            duration: TIME
+          });
+
+          $message3.velocity('transition.fadeIn', {
+            loop: true,
+            delay: TIME * 2,
+            duration: TIME
+          });
+
+          $message4.velocity('transition.fadeIn', {
+            loop: true,
+            delay: TIME * 3,
+            duration: TIME
+          });
+
+
           if (productWaypoint) {
             productWaypoint.disable();
           }
@@ -153,6 +153,7 @@ var App = function() {
 
     var quickStartWaypoint = new Waypoint({
       element: $('section.quick-start')[0],
+      offset: 50,
       handler: function(direction) {
         if (direction === 'down') {
           typewriter.type('.typewriter', { delay: 40});
@@ -166,6 +167,7 @@ var App = function() {
 
     var exampleWaypoint = new Waypoint({
       element: $('section.example')[0],
+      offset: 50,
       handler: function(direction) {
         if (direction === 'down') {
           var gistId = $('.example .side-nav li.active button').data('target');
@@ -178,25 +180,23 @@ var App = function() {
       }
     });
 
-    // var featuresWaypoint = new Waypoint({
-    //   element: $('section.features')[0],
-    //   handler: function(direction) {
-    //     var $features = $('.feature');
+    var featuresWaypoint = new Waypoint({
+      element: $('section.features')[0],
+      handler: function(direction) {
+        var $features = $('.feature');
 
-    //     if (direction === 'down') {
-    //       // Animate features
-    //       $features.velocity('transition.swoopIn', {
-    //         stagger: 300
-    //       });
-    //     }
-    //     else {
-    //       $features.stop();
-    //       $features.reverse().velocity('transition.swoopOut', {
-    //         stagger: 300
-    //       });
-    //     }
-    //   }
-    // });
+        if (direction === 'down') {
+          // Animate features
+          $features.velocity('transition.swoopIn', {
+            stagger: 300
+          });
+
+          if (featuresWaypoint) {
+            featuresWaypoint.disable();
+          }
+        }
+      }
+    });
     
     $mainCTA.on('touchstart mousedown', function(ev){
       ev.preventDefault();
