@@ -101,7 +101,7 @@ var App = function() {
           var $message3 = $('svg .message-3');
           var $message4 = $('svg .message-4');
 
-          var TIME = 1500;
+          var TIME = 1000;
 
           $user1.velocity('transition.fadeIn', {
             loop: true,
@@ -182,13 +182,15 @@ var App = function() {
 
     var featuresWaypoint = new Waypoint({
       element: $('section.features')[0],
+      offset: 100,
       handler: function(direction) {
         var $features = $('.feature');
 
         if (direction === 'down') {
           // Animate features
           $features.velocity('transition.swoopIn', {
-            stagger: 300
+            stagger: 500,
+            visibility: 'visible'
           });
 
           if (featuresWaypoint) {

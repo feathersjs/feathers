@@ -5,25 +5,12 @@ main.home {
     background: @background-color;
     padding-bottom: 40px;
 
-    svg {
-        display: block;
-        margin: 0 auto;
-        width: 100%;
-        max-width: 400px;
-
-      .user-1,
-      .user-2,
-      .user-3 {
-        visibility: hidden;
-      }
+    img.logo {
+      display: block;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 400px;
     }
-
-    // img.logo {
-    //   display: block;
-    //   margin: 0 auto;
-    //   width: 100%;
-    //   max-width: 400px;
-    // }
 
     h2.tagline {
       color: @grey;
@@ -41,6 +28,23 @@ main.home {
 
   section.product {
     background: @background-color;
+
+    svg {
+        display: block;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 400px;
+
+      .user-1,
+      .user-2,
+      .user-3,
+      .message-1,
+      .message-2,
+      .message-3,
+      .message-4 {
+        display: none;
+      }
+    }
 
     p {
       font-size: 1.4em;
@@ -159,6 +163,10 @@ main.home {
   }
 
   section.features {
+    .feature {
+      visibility: hidden;
+    }
+
     p {
       line-height: 1.5em;
     }
