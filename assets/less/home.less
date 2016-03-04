@@ -5,29 +5,32 @@ main.home {
     background: @background-color;
     padding-bottom: 40px;
 
-    img.logo {
-      display: block;
-      margin: 0 auto;
-      width: 100%;
-      max-width: 400px;
+    svg {
+      .user-1,
+      .user-2,
+      .user-3 {
+        display: none;
+      }
     }
+
+    // img.logo {
+    //   display: block;
+    //   margin: 0 auto;
+    //   width: 100%;
+    //   max-width: 400px;
+    // }
 
     h2.tagline {
       color: @grey;
       margin-top: 20px;
       margin-bottom: 60px;
-
-      .opacity(0);
-      .transition(opacity, 1.5s, ease-out);
-
-      &.animate {
-        .opacity(1);
-      }
+      visibility: hidden;
     }
 
     .button.button-primary {
       font-size: 1.4em;
       padding: 0.8em 1.5em;
+      visibility: hidden;
     }
   }
 
@@ -71,7 +74,8 @@ main.home {
   }
 
   section.example {
-    background-image: linear-gradient(-135deg, #58CEA9 0%, #31D895 100%);
+    background-image: linear-gradient(135deg, #7AD3B7 0%, #31D895 100%);
+    min-height: 1200px;
 
     h2, h3 {
       color: @white;
@@ -84,13 +88,36 @@ main.home {
       line-height: 1.4em;
     }
 
-    code, pre {
+    // code, pre {
+    //   background: @white;
+    //   padding: 20px;
+    //   display: block;
+    //   min-height: 300px;
+    //   .rounded(5px);
+    //   .drop-shadow(0, 2px, 3px, 0.3);
+    // }
+    .gist {
       background: @white;
-      padding: 20px;
-      display: block;
       min-height: 300px;
       .rounded(5px);
       .drop-shadow(0, 2px, 3px, 0.3);
+      display: none;
+
+      &.active {
+        display: block;
+      }
+
+      .gist-data {
+        padding: 10px;
+
+        .pl-k:first-child {
+          color: @dark-green;
+        }
+      }
+
+      .gist-meta {
+        display: none;
+      }
     }
 
     ul.side-nav {
@@ -99,24 +126,26 @@ main.home {
         margin: 1em 0;
         .rounded(5px);
 
-        a {
+        button {
           font-size: 1.2em;
           font-weight: 400;
+          padding: 0.8em 0.6em;
           letter-spacing: 0.1em;
           color: rgba(0, 0, 0, 0.2);
           text-transform: uppercase;
-          .transition();
-          
+          background: none;
+          border: none;
 
           &:hover {
             color: @white;
+            background: none;
           }
         }
 
         &.active {
           background: rgba(0, 0, 0, 0.2);
 
-          a {
+          button {
             color: @white;
           }
         }

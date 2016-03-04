@@ -12,6 +12,7 @@
   text-align: center;
   font-weight: 500;
   .rounded(5px);
+  .transition(background, 0.2s);
 
   &.disabled,
   &[disabled] {
@@ -39,7 +40,6 @@
   &.button-primary {
     color: @white;
     background: @primary-action-color;
-    // .transition(all, 0.2s);
     
     &:hover,
     &:focus {

@@ -41,7 +41,7 @@ pre, code {
 a {
   color: @text-color;
   text-decoration: none;
-  .transition;
+  // .transition(color);
 
   &.icon-button {
     color: @primary-action-color;
@@ -107,4 +107,25 @@ i.left-padding {
   -webkit-animation: blink 0.7s infinite;
   -moz-animation: blink 0.7s infinite;
   animation: blink 0.7s infinite;
+}
+
+.typewriter span {
+  opacity: 0;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+      filter: alpha(opacity=0);
+}
+
+.typewriter span.show {
+  opacity: 1;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+      filter: alpha(opacity=100);
+}
+
+/* IE issues */
+.lt-ie9 .typewriter span {
+  display: inline-block;
+}
+
+.lt-ie9 .typewriter span.whitespace {
+  min-width: 0.35em;
 }
