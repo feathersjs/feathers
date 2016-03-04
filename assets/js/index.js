@@ -178,25 +178,25 @@ var App = function() {
       }
     });
 
-    var featuresWaypoint = new Waypoint({
-      element: $('section.features')[0],
-      handler: function(direction) {
-        var $features = $('.feature');
+    // var featuresWaypoint = new Waypoint({
+    //   element: $('section.features')[0],
+    //   handler: function(direction) {
+    //     var $features = $('.feature');
 
-        if (direction === 'down') {
-          // Animate features
-          $features.velocity('transition.swoopIn', {
-            stagger: 300
-          });
-        }
-        else {
-          $features.stop();
-          $features.reverse().velocity('transition.swoopOut', {
-            stagger: 300
-          });
-        }
-      }
-    });
+    //     if (direction === 'down') {
+    //       // Animate features
+    //       $features.velocity('transition.swoopIn', {
+    //         stagger: 300
+    //       });
+    //     }
+    //     else {
+    //       $features.stop();
+    //       $features.reverse().velocity('transition.swoopOut', {
+    //         stagger: 300
+    //       });
+    //     }
+    //   }
+    // });
     
     $mainCTA.on('touchstart mousedown', function(ev){
       ev.preventDefault();
