@@ -15,7 +15,7 @@ const defaults = {
 
 /**
  * Verifies that a JWT token is valid. This is a private hook.
- * 
+ *
  * @param  {Object} options - An options object
  * @param {String} options.secret - The JWT secret
  */
@@ -36,9 +36,9 @@ let _verifyToken = function(options = {}){
           // Return a 401 if the token has expired.
           return reject(new errors.NotAuthenticated(error));
         }
-        
+
         // Normalize our params with the token in it.
-        hook.data = { id: payload.id };
+        hook.data = payload;
         hook.params.data = Object.assign({}, hook.data, payload, { token });
         hook.params.query = Object.assign({}, hook.params.query, { token });
         resolve(hook);
@@ -78,7 +78,7 @@ export class Service {
     }
 
     const options = this.options;
-    const data = params.data;
+    const data = params;
     // Our before hook determined that we had a valid token or that this
     // was internally called so let's generate a new token with the user
     // id and return both the ID and the token.
@@ -90,9 +90,17 @@ export class Service {
   }
 
   // POST /auth/token
-  create(data) {
+  create(user) {
     const options = this.options;
-    
+
+    const data = {
+      id: user[options.idField] || user.id
+    };
+
+    if (Array.isArray(options.extraFields)) {
+      options.extraFields.forEach(field => data[field] = user[field]);
+    }
+
     // Our before hook determined that we had a valid token or that this
     // was internally called so let's generate a new token with the user
     // id and return both the ID and the token.
@@ -106,7 +114,7 @@ export class Service {
 
 export default function(options){
   options = Object.assign({}, defaults, options);
-  
+
   debug('configuring token authentication service with options', options);
 
   return function() {
