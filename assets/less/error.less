@@ -1,17 +1,23 @@
 main.error {
   background: @background-color;
-  color: @text-color;
-  padding-top: 0;
-  padding-bottom: 40px;
+  padding: 0;
 
   img.logo {
-    max-width: 200px;
-    display: table;
+    display: block;
     margin: 0 auto;
+    width: 100%;
+    max-width: 400px;
   }
 
   h1 {
     font-size: 8em;
-    text-shadow: 1px 3px 6px fade(@black, 60%);
+    margin: 0;
+    line-height: 1em;
+    color: @medium-grey;
+  }
+
+  h2 {
+    color: @grey;
+    margin-bottom: 60px;
   }
 }
