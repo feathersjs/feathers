@@ -35,6 +35,7 @@
     "name": "google",
     "strategy": "passport-google-oauth20",
     "tokenStrategy": "passport-google-token",
+    "tokenStrategyExposedNormally": true,
     "permissions": {
       "scope": ["profile"]
     }
@@ -51,6 +52,7 @@
     "name": "linkedin",
     "strategy": "passport-linkedin-oauth2",
     "tokenStrategy": "passport-linkedin-token-oauth2",
+    "tokenStrategyExposedNormally": true,
     "permissions": {
       "scope": ["r_emailaddress", "r_basicprofile"]
     }
