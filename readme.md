@@ -1,4 +1,4 @@
-<img style="width: 100%; max-width: 400px;" src="http://feathersjs.com/images/feathers-logov2.png" alt="Feathers logo">
+<img style="width: 100%; max-width: 400px;" src="http://feathersjs.com/images/feathers-logov-wide.png" alt="Feathers logo">
 
 ## A minimalist real-time framework for tomorrow's apps.
 
