@@ -12,16 +12,7 @@ module.exports = function() {
     dialect: 'sqlite',
     storage: app.get('sqlite'),
     logging: false
-  });<% } else if (database === 'mssql') { %>
-  const sequelize = new Sequelize('feathers', {
-    dialect: '<%= database %>',
-    host: 'localhost',
-    port: 1433,
-    logging: false,
-    dialectOptions: {
-      instanceName: 'feathers'
-    }
-  });<% } else if (database === 'postgres' || database === 'mysql' || database === 'mariadb') { %>
+  });<% } else if (database === 'postgres' || database === 'mysql' || database === 'mariadb' || database === 'mssql') { %>
   const sequelize = new Sequelize(app.get('<%= database %>'), {
     dialect: '<%= database %>',
     logging: false
