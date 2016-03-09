@@ -13,7 +13,7 @@ var pkg = require('../package.json');
 var makeMessage = function(update) {
     var line1 = ' Update available: ' + chalk.green.bold(update.latest) +
         chalk.dim(' (current: ' + update.current + ')') + ' ';
-    var line2 = ' Run ' + chalk.blue('npm install -g ' + update.name) +
+    var line2 = ' Run ' + chalk.green('npm install -g ' + update.name) +
         ' to update. ';
     var contentWidth = Math.max(stringLength(line1), stringLength(line2));
     var line1rest = contentWidth - stringLength(line1);
