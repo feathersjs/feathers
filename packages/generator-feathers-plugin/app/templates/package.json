@@ -31,7 +31,7 @@
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
-    "compile": "rm -rf lib/ && babel -d lib/ src/",
+    "compile": "rimraf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
     "mocha": "mocha test/ --compilers js:babel-core/register",
@@ -41,5 +41,7 @@
     "lib": "lib"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "rimraf": "^2.5.2"
+  }
 }

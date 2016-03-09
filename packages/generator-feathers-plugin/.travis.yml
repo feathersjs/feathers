@@ -1,7 +1,6 @@
 sudo: false
 language: node_js
-node_js:
-  - '0.10'
+node_js: "node"
 before_install:
   - currentfolder=${PWD##*/}
   - if [ "$currentfolder" != 'generator-feathers-plugin' ]; then cd .. && eval "mv $currentfolder generator-feathers-plugin" && cd generator-feathers-plugin; fi
