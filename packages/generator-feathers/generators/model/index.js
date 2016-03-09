@@ -1,15 +1,23 @@
 'use strict';
 
 var generators = require('yeoman-generator');
+var updateMixin = require('../../lib/updateMixin');
 
 module.exports = generators.Base.extend({
+  constructor: function() {
+    generators.Base.apply(this, arguments);
+    updateMixin.extend(this);
+  },
+  
   initializing: function (name) {
+    var done = this.async();
     this.props = {
       name: name,
       type: 'generic'
     };
 
     this.props = Object.assign(this.props, this.options);
+    this.mixins.notifyUpdate(done);
   },
 
   prompting: function () {
