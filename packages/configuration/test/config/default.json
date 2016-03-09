@@ -2,6 +2,7 @@
   "port": "3030",
   "environment": "NODE_ENV",
   "path": "../something",
+  "unescaped": "\\NODE_ENV",
   "from": "default",
   "deeply": { "nested": { "env": "NODE_ENV" } }
 }
