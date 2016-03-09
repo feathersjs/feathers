@@ -37,7 +37,7 @@ import service from 'feathers-mongoose';
 const port = 3030;
 const Schema = mongoose.Schema;
 const UserSchema = new Schema({
-  username: {type: String, required: true, unique: true},
+  email: {type: String, required: true, unique: true},
   password: {type: String, required: true },
   createdAt: {type: Date, 'default': Date.now},
   updatedAt: {type: Date, 'default': Date.now}
@@ -54,18 +54,7 @@ let app = feathers()
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
   // Configure feathers-authentication
-  .configure(authentication({
-    token: {
-      secret: 'feathers-rocks'
-    },
-    local: {
-      usernameField: 'username'
-    },
-    facebook: {
-      clientID: '',
-      clientSecret: ''
-    }
-  }));
+  .configure(authentication());
 
 app.use('/users', new service('user', {Model: UserModel}))
 
@@ -92,7 +81,7 @@ import socketio from 'feathers-socketio/client';
 import localstorage from 'feathers-localstorage';
 import authentication from 'feathers-authentication/client';
 
-const socket = io('http://path/to/api');
+const socket = io('http://localhost:3030/');
 const app = feathers()
   .configure(socketio(socket)) // you could use Primus or REST instead
   .configure(hooks())
