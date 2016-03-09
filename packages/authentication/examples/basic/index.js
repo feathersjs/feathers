@@ -25,11 +25,9 @@ var app = feathers()
   .use(bodyParser.urlencoded({ extended: true }))
   // Configure feathers-authentication
   .configure(authentication({
+    userEndpoint: '/api/users',
     token: {
       secret: 'feathers-rocks'
-    },
-    local: {
-      userEndpoint: '/api/users'
     },
     facebook: {
       strategy: FacebookStrategy,
@@ -71,7 +69,7 @@ messageService.before({
 
 var userService = app.service('api/users');
 
-// Add a hook to the user service that automatically replaces 
+// Add a hook to the user service that automatically replaces
 // the password with a hash of the password before saving it.
 userService.before({
   create: authHooks.hashPassword()
