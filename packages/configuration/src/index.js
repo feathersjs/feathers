@@ -4,7 +4,7 @@ import makeDebug from 'debug';
 
 const debug = makeDebug('feathers:configuration');
 
-export default module.exports = function (root, configFolder = 'config') {
+export default module.exports = function (root, configFolder = 'config', separator = path.sep) {
   return function() {
     const app = this;
     const env = app.settings.env;
@@ -21,9 +21,12 @@ export default module.exports = function (root, configFolder = 'config') {
         }
 
         // Make relative paths absolute
-        if(typeof value === 'string' && (value.indexOf(`.${path.sep}`) === 0 ||
-            value.indexOf(`..${path.sep}`) === 0)) {
-          value = path.resolve(path.join(root, configFolder), value);
+        if(typeof value === 'string' && (value.indexOf('.') === 0 ||
+            value.indexOf('..') === 0)) {
+          value = path.resolve(
+            path.join(root, configFolder),
+            value.replace(/\//g, separator)
+          );
         }
         
         result[name] = value;
