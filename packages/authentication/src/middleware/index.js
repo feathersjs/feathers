@@ -2,7 +2,7 @@ import Debug from 'debug';
 import errors from 'feathers-errors';
 
 const debug = Debug('feathers-authentication:middleware');
-const TEN_HOURS = 36000;
+const TEN_HOURS = 36000000;
 
 // Usually this is a big no no but passport requires the 
 // request object to inspect req.body and req.query so we
