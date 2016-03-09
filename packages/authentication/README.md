@@ -96,7 +96,7 @@ const socket = io('http://path/to/api');
 const app = feathers()
   .configure(socketio(socket)) // you could use Primus or REST instead
   .configure(hooks())
-  .use('storage', localstorage())
+  .use('storage', localstorage({ storage: window.localStorage })) // choose the right storage engine for your platform
   .configure(authentication());
 
 app.io.on('connect', function(){
