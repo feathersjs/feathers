@@ -4,97 +4,96 @@
   <meta charset="UTF-8">
   <title>Feathers Authentication</title>
   <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sixing: border-box;
-      }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-      html, body {
-        font-family: 'Helvetica Neue', 'Helevetica', 'Arial', 'sans-serif';
-        font-weight: 400;
-        font-size: 16px;
-      }
+    html, body {
+      font-family: 'Helvetica Neue', 'Helevetica', 'Arial', 'sans-serif';
+      font-weight: 400;
+      font-size: 16px;
+    }
 
-      main {
-        padding: 20px;
-      }
+    main {
+      padding: 20px;
+    }
 
-      section {
-        padding: 20px;
-        border: 1px solid #EEE;
-        margin: 20px 0;
-      }
+    section {
+      padding: 20px;
+      border: 1px solid #EEE;
+      margin: 20px 0;
+    }
 
-      img.logo {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        display: block;
-        width: 180px;
-      }
+    img.logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: block;
+      width: 180px;
+    }
 
-      h1 {
-        font-weight: 100;
-        font-size: 3em;
-        text-align: center;
-        margin-bottom: 10px;
-      }
+    h1 {
+      font-weight: 100;
+      font-size: 3em;
+      text-align: center;
+      margin-bottom: 10px;
+    }
 
-      h3 {
-        font-size: 1.4em;
-        font-weight: 300;
-        margin-bottom: 10px;
-      }
+    h3 {
+      font-size: 1.4em;
+      font-weight: 300;
+      margin-bottom: 10px;
+    }
 
-      button,
-      .button {
-        color: #FFF;
-        border: #29C9A5;
-        background: #29C9A5;
-        font-size: 1.0em;
-        padding: 0.8em 1.2em;
-        text-decoration: none;
-      }
+    button,
+    .button {
+      color: #FFF;
+      border: #29C9A5;
+      background: #29C9A5;
+      font-size: 1.0em;
+      padding: 0.8em 1.2em;
+      text-decoration: none;
+    }
 
-      button:hover,
-      button:focus,
-      .button:hover,
-      .button:focus {
-        cursor: pointer;
-        background: #1DAE8E;
-        border: #1DAE8E;
-        text-decoration: none;
-      }
+    button:hover,
+    button:focus,
+    .button:hover,
+    .button:focus {
+      cursor: pointer;
+      background: #1DAE8E;
+      border: #1DAE8E;
+      text-decoration: none;
+    }
 
-      form > fieldset {
-        position: relative;
-        padding: 5px 0;
-        border: none;
-      }
+    form > fieldset {
+      position: relative;
+      padding: 5px 0;
+      border: none;
+    }
 
-      form > fieldset:first-child {
-        padding-top: 10px;
-      }
+    form > fieldset:first-child {
+      padding-top: 10px;
+    }
 
-      form > fieldset:last-child {
-        padding-bottom: 10px;
-      }
+    form > fieldset:last-child {
+      padding-bottom: 10px;
+    }
 
-      fieldset > label {
-        display: block;
-        margin-bottom: 2px;
-        text-transform: uppercase;
-        font-size: 0.6em;
-        font-weight: 300;
-        color: #AEAEAE;
-      }
+    fieldset > label {
+      display: block;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      font-size: 0.6em;
+      font-weight: 300;
+      color: #AEAEAE;
+    }
 
-      form > fieldset > input {
-        padding: 0.3em 0.4em;
-        font-size: 0.9em;
-      }
-    </style>
+    form > fieldset > input {
+      padding: 0.3em 0.4em;
+      font-size: 0.9em;
+    }
   </style>
 </head>
 <body>
@@ -128,7 +127,7 @@
           <label>Token</label>
           <input type="text" name="token" value=""/>
         </fieldset>
-        
+
         <button id="token-rest-button">Login</button>
       </form>
     </section>
@@ -196,7 +195,7 @@
       <h3>Authenticate via Facebook</h3>
       <a href="/auth/facebook" class="button">Login with Facebook</a>
     </section>
-    
+
     <pre id="messages"></pre>
   </main>
 
@@ -229,7 +228,7 @@
           'password': 'admin'
         }).then(function(result){
           console.log('Authenticated!', result);
-          
+
           app.service('messages').find({}).then(function(data){
             console.log('messages', data);
           }).catch(function(error){
