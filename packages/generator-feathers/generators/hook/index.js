@@ -5,6 +5,7 @@ var path = require('path');
 var fs = require('fs');
 var inflect = require('i')();
 var transform = require('../../lib/transform');
+var updateMixin = require('../../lib/updateMixin');
 
 function importHook(filename, name, moduleName, type, methods) {
   // Lookup existing services/<service-name>/hooks/index.js file
@@ -22,10 +23,17 @@ function importHook(filename, name, moduleName, type, methods) {
 }
 
 module.exports = generators.Base.extend({
+  constructor: function() {
+    generators.Base.apply(this, arguments);
+    updateMixin.extend(this);
+  },
+  
   initializing: function (name) {
+    var done = this.async();
     this.props = {
       name: name
     };
+    this.mixins.notifyUpdate(done);
   },
 
   prompting: function () {

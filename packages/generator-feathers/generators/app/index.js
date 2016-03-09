@@ -3,11 +3,18 @@
 var generators = require('yeoman-generator');
 var path = require('path');
 var crypto = require('crypto');
+var updateMixin = require('../../lib/updateMixin');
 var S = require('string');
 var AUTH_PROVIDERS = require('./auth-mapping.json');
 
 module.exports = generators.Base.extend({
+  constructor: function() {
+    generators.Base.apply(this, arguments);
+    updateMixin.extend(this);
+  },
+  
   initializing: function () {
+    var done = this.async();
     this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
     this.props = {
       name: process.cwd().split(path.sep).pop(),
@@ -22,6 +29,7 @@ module.exports = generators.Base.extend({
       'compression',
       'winston'
     ];
+    this.mixins.notifyUpdate(done);
   },
 
   prompting: function () {
