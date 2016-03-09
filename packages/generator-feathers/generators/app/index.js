@@ -17,7 +17,7 @@ module.exports = generators.Base.extend({
       'feathers@2.0',
       'feathers-hooks@1.0',
       'feathers-errors@2.0',
-      'feathers-configuration@0.1.0',
+      'feathers-configuration@0.2.0',
       'serve-favicon',
       'compression',
       'winston'
