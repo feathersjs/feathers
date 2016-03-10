@@ -229,7 +229,7 @@ module.exports = generators.Base.extend({
         this.dependencies.push('feathers-authentication@0.3');
         this.dependencies.push('passport');
 
-        this.props.authentication = this.props.authentication.filter(provider => {
+        this.props.authentication = this.props.authentication.filter(function(provider) {
           if (provider.name === 'local') {
             this.props.localAuth = true;
           }
