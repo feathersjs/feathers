@@ -242,7 +242,7 @@ module.exports = generators.Base.extend({
 
             return provider;
           }
-        });
+        }.bind(this));
 
         this.fs.copyTpl(
           this.templatePath('authentication.js'),
