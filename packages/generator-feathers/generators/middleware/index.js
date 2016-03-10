@@ -1,5 +1,6 @@
 var generators = require('yeoman-generator');
 var fs = require('fs');
+var assign = require('object.assign').getPolyfill();
 var inflect = require('i')();
 var updateMixin = require('../../lib/updateMixin');
 
@@ -15,7 +16,7 @@ function importMiddleware(filename, name, module) {
       content = content.replace(/'use strict';\n\n/, '\'use strict;\'\n\n' + statement + '\n');
       content = content.replace(/\)\)\;/, use);
     }
-    
+
     fs.writeFileSync(filename, content);
   }
 }
@@ -25,12 +26,12 @@ module.exports = generators.Base.extend({
     generators.Base.apply(this, arguments);
     updateMixin.extend(this);
   },
-  
+
   initializing: function (name) {
     var done = this.async();
     this.props = { name: name };
 
-    this.props = Object.assign(this.props, this.options);
+    this.props = assign(this.props, this.options);
     this.mixins.notifyUpdate(done);
   },
 

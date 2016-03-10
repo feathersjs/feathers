@@ -4,6 +4,7 @@ var generators = require('yeoman-generator');
 var path = require('path');
 var fs = require('fs');
 var inflect = require('i')();
+var assign = require('object.assign').getPolyfill();
 var transform = require('../../lib/transform');
 var updateMixin = require('../../lib/updateMixin');
 
@@ -12,12 +13,12 @@ function importHook(filename, name, moduleName, type, methods) {
   if (fs.existsSync(filename)) {
     var content = fs.readFileSync(filename).toString();
     var ast = transform.parse(content);
-    
+
     transform.addImport(ast, name, moduleName);
     methods.forEach(function(method) {
       transform.addToArrayInObject(ast, 'exports.' + type, method, name + '()');
     });
-    
+
     fs.writeFileSync(filename, transform.print(ast));
   }
 }
@@ -27,7 +28,7 @@ module.exports = generators.Base.extend({
     generators.Base.apply(this, arguments);
     updateMixin.extend(this);
   },
-  
+
   initializing: function (name) {
     var done = this.async();
     this.props = {
@@ -110,7 +111,7 @@ module.exports = generators.Base.extend({
     ];
 
     this.prompt(prompts, function (props) {
-      this.props = Object.assign(this.props, props);
+      this.props = assign(this.props, props);
 
       done();
     }.bind(this));
@@ -120,13 +121,13 @@ module.exports = generators.Base.extend({
     var hookIndexPath = path.join('src', 'services', this.props.service, 'hooks', 'index.js');
     this.props.hookPath = path.join('src', 'services', this.props.service, 'hooks', this.props.name + '.js');
     this.props.hookTestPath = path.join('test', 'services', this.props.service, 'hooks', this.props.name + '.test.js');
-    
+
     // this.props.hookTestPath = path.join('test/services/', this.props.service, 'hooks/', this.props.name + '.test.js');
     this.props.codeName = inflect.camelize(inflect.underscore(this.props.name), false);
-    
+
     // Automatically import the hook into services/<service-name>/hooks/index.js and initialize it.
     importHook(hookIndexPath, this.props.codeName, './' + this.props.name, this.props.type, this.props.method);
-    
+
     // copy the hook
     this.fs.copyTpl(
       this.templatePath('hook.js'),

@@ -16,9 +16,11 @@
     "node": ">= 0.12.0"
   },
   "scripts": {
-    "start": "node src/",
-    "jshint": "jshint src/. test/. --config",
-    "mocha": "mocha test/ --recursive",
-    "test": "npm run jshint && npm run mocha"
+    "test": "npm run jshint && npm run mocha",
+    "jshint": "jshint src/. test/. --config",<% if(babel) { %>
+    "start": "babel-node src/",
+    "mocha": "mocha test/ --compilers js:babel-core/register --recursive"
+    <% } else { %>"start": "node src/",
+    "mocha": "mocha test/ --recursive"<% } %>
   }
 }
