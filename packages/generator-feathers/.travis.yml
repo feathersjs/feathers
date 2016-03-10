@@ -1,2 +1,5 @@
 language: node_js
-node_js: 'node'
+node_js:
+  - '0.12'
+  - '4.4.0'
+  - 'node'

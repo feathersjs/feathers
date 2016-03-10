@@ -1,5 +1,6 @@
 var generators = require('yeoman-generator');
 var fs = require('fs');
+var assign = require('object.assign').getPolyfill();
 var inflect = require('i')();
 var transform = require('../../lib/transform');
 var updateMixin = require('../../lib/updateMixin');
@@ -9,10 +10,10 @@ function importService(filename, name, moduleName) {
   if (fs.existsSync(filename)) {
     var content = fs.readFileSync(filename).toString();
     var ast = transform.parse(content);
-    
+
     transform.addImport(ast, name, moduleName);
     transform.addLastInFunction(ast, 'module.exports', 'app.configure(' + name + ');');
-    
+
     fs.writeFileSync(filename, transform.print(ast));
   }
 }
@@ -22,12 +23,12 @@ module.exports = generators.Base.extend({
     generators.Base.apply(this, arguments);
     updateMixin.extend(this);
   },
-  
+
   initializing: function (name) {
     var done = this.async();
     this.props = { name: name, authentication: false };
 
-    this.props = Object.assign(this.props, this.options);
+    this.props = assign(this.props, this.options);
     this.mixins.notifyUpdate(done);
   },
 
@@ -120,7 +121,7 @@ module.exports = generators.Base.extend({
     ];
 
     this.prompt(prompts, function (props) {
-      this.props = Object.assign(this.props, props);
+      this.props = assign(this.props, props);
       done();
     }.bind(this));
   },
@@ -174,7 +175,7 @@ module.exports = generators.Base.extend({
       this.destinationPath('src', 'services', this.props.name, 'hooks', 'index.js'),
       this.props
     );
-    
+
     this.fs.copyTpl(
       this.templatePath('index.test.js'),
       this.destinationPath('test', 'services', this.props.name, 'index.test.js'),

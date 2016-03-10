@@ -6,13 +6,14 @@ var crypto = require('crypto');
 var updateMixin = require('../../lib/updateMixin');
 var S = require('string');
 var AUTH_PROVIDERS = require('./auth-mapping.json');
+var assign = require('object.assign').getPolyfill();
 
 module.exports = generators.Base.extend({
   constructor: function() {
     generators.Base.apply(this, arguments);
     updateMixin.extend(this);
   },
-  
+
   initializing: function () {
     var done = this.async();
     this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
@@ -147,51 +148,52 @@ module.exports = generators.Base.extend({
           {
             name: 'local',
             checked: true,
-            value: AUTH_PROVIDERS['local'],
+            value: AUTH_PROVIDERS.local,
           },
           {
             name: 'bitbucket',
-            value: AUTH_PROVIDERS['bitbucket'],
+            value: AUTH_PROVIDERS.bitbucket,
           },
           {
             name: 'dropbox',
-            value: AUTH_PROVIDERS['dropbox'],
+            value: AUTH_PROVIDERS.dropbox,
           },
           {
             name: 'facebook',
-            value: AUTH_PROVIDERS['facebook'],
+            value: AUTH_PROVIDERS.facebook,
           },
           {
             name: 'github',
-            value: AUTH_PROVIDERS['github'],
+            value: AUTH_PROVIDERS.github,
           },
           {
             name: 'google',
-            value: AUTH_PROVIDERS['google'],
+            value: AUTH_PROVIDERS.google,
           },
           {
             name: 'instagram',
-            value: AUTH_PROVIDERS['instagram'],
+            value: AUTH_PROVIDERS.instagram,
           },
           {
             name: 'linkedin',
-            value: AUTH_PROVIDERS['linkedin'],
+            value: AUTH_PROVIDERS.linkedin,
           },
           {
             name: 'paypal',
-            value: AUTH_PROVIDERS['paypal'],
+            value: AUTH_PROVIDERS.paypal,
           },
           {
             name: 'spotify',
-            value: AUTH_PROVIDERS['spotify']
+            value: AUTH_PROVIDERS.spotify
           }
         ]
       }
     ];
 
     this.prompt(prompts, function (props) {
-      this.props = Object.assign(this.props, props);
+      this.props = assign(this.props, props);
       this.props.databaseName = S(this.props.name).camelize().s;
+      this.props.babel = process.versions.node < '5.0.0';
       done();
     }.bind(this));
   },
@@ -237,7 +239,7 @@ module.exports = generators.Base.extend({
             this.dependencies.push(provider.strategy);
 
             if (provider.tokenStrategy) {
-              this.dependencies.push(provider.tokenStrategy);      
+              this.dependencies.push(provider.tokenStrategy);
             }
 
             return provider;
@@ -333,6 +335,14 @@ module.exports = generators.Base.extend({
         this.destinationPath('src', 'app.js'),
         this.props
       );
+
+      if(this.props.babel) {
+        this.fs.copyTpl(
+          this.templatePath('.babelrc'),
+          this.destinationPath('.babelrc'),
+          this.props
+        );
+      }
     },
 
     middleware: function() {
@@ -365,6 +375,10 @@ module.exports = generators.Base.extend({
 
     deps: function() {
       this.npmInstall(this.dependencies, { save: true });
+
+      if(this.props.babel) {
+        this.npmInstall(['babel-cli', 'babel-core', 'babel-preset-es2015'], { save: true });
+      }
 
       this.npmInstall([
         'jshint',

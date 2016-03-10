@@ -1,6 +1,7 @@
 'use strict';
 
 var generators = require('yeoman-generator');
+var assign = require('object.assign').getPolyfill();
 var updateMixin = require('../../lib/updateMixin');
 
 module.exports = generators.Base.extend({
@@ -8,7 +9,7 @@ module.exports = generators.Base.extend({
     generators.Base.apply(this, arguments);
     updateMixin.extend(this);
   },
-  
+
   initializing: function (name) {
     var done = this.async();
     this.props = {
@@ -16,7 +17,7 @@ module.exports = generators.Base.extend({
       type: 'generic'
     };
 
-    this.props = Object.assign(this.props, this.options);
+    this.props = assign(this.props, this.options);
     this.mixins.notifyUpdate(done);
   },
 
@@ -73,7 +74,7 @@ module.exports = generators.Base.extend({
     }.bind(this));
   },
 
-  writing: function () {    
+  writing: function () {
     // Generating the appropriate model based on the orm type.
     this.fs.copyTpl(
       this.templatePath(this.props.type + '.js'),

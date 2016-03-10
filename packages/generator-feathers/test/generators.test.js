@@ -8,11 +8,11 @@ const exec = require('child_process').exec;
 
 describe('generator-feathers', () => {
   let appDir;
-  
+
   function runTest(expectedText, done) {
     let child = exec('npm test', { cwd: appDir });
     let buffer = '';
-    
+
     child.stdout.on('data', function(data) {
       buffer += data;
     });
@@ -24,7 +24,7 @@ describe('generator-feathers', () => {
       done();
     });
   }
-  
+
   it('feathers:app', done => {
     helpers.run(path.join(__dirname, '../generators/app'))
       .inTmpDir(dir => appDir = dir)
@@ -38,11 +38,11 @@ describe('generator-feathers', () => {
       .withOptions({
         skipInstall: false
       })
-      .on('end', () => 
+      .on('end', () =>
         runTest('starts and shows the index page', done)
       );
   });
-  
+
   it('feathers:service', done => {
     helpers.run(path.join(__dirname, '../generators/service'))
       .inTmpDir(() => process.chdir(appDir))
@@ -51,11 +51,11 @@ describe('generator-feathers', () => {
         database: 'memory',
         name: 'messages'
       })
-      .on('end', () => 
+      .on('end', () =>
         runTest('registered the messages service', done)
       );
   });
-  
+
   it('feathers:hook', done => {
     helpers.run(path.join(__dirname, '../generators/hook'))
       .inTmpDir(() => process.chdir(appDir))
@@ -65,7 +65,7 @@ describe('generator-feathers', () => {
         method: ['create', 'update', 'patch'],
         name: 'removeId'
       })
-      .on('end', () => 
+      .on('end', () =>
         runTest('hook can be used', done)
       );
   });
