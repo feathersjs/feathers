@@ -67,7 +67,7 @@ var notifyUpdate = function(cb) {
                 }];
                 this.prompt(prompts, function (props) {
                   if(props.updateGenerator === 'yes') {
-                    spawn('npm', ['install', '-g', '--dry-run', 'generator-feathers'], {stdio: 'inherit'})
+                    spawn('npm', ['install', '-g', 'generator-feathers'], {stdio: 'inherit'})
                       .on('close', function(){
                         process.exit();
                       });
