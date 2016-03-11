@@ -13,7 +13,7 @@
     "token": {
       "secret": "<%= secret %>"
     }<% if (localAuth) { %>,
-    "local": {}<% } else { %>
+    "local": {}<% } else { %>,
     "local": false<% } %><% for (var i = 0; i < authentication.length; i++) { %>,
     "<%= authentication[i].name %>": {
       "clientID": "your <%= authentication[i].name %> client id",
