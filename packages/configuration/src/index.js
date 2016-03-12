@@ -9,15 +9,15 @@ export default module.exports = function (root, configFolder = 'config', separat
     const app = this;
     const env = app.settings.env;
     const convert = current => {
-      const result = {};
-      
+      const result = Array.isArray(current) ? [] : {};
+
       Object.keys(current).forEach(name => {
         let value = current[name];
-        
+
         if(typeof value === 'object') {
           value = convert(value);
         }
-        
+
         if(typeof value === 'string') {
           if(value.indexOf('\\') === 0) {
             value = value.replace('\\', '');
@@ -36,7 +36,7 @@ export default module.exports = function (root, configFolder = 'config', separat
 
         result[name] = value;
       });
-      
+
       return result;
     };
 

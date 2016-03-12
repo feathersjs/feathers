@@ -4,5 +4,6 @@
   "path": "../something",
   "unescaped": "\\NODE_ENV",
   "from": "default",
-  "deeply": { "nested": { "env": "NODE_ENV" } }
+  "deeply": { "nested": { "env": "NODE_ENV" } },
+  "array": ["one", "two", "three"]
 }
