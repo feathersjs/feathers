@@ -17,16 +17,20 @@ describe('feathers-configuration', () => {
   it('initialized property with environment variable', () =>
     assert.equal(app.get('environment'), 'testing')
   );
-  
+
   it('uses an escape character', () =>
     assert.equal(app.get('unescaped'), 'NODE_ENV')
   );
-  
+
   it('normalizes relative path names', () =>
     assert.equal(app.get('path'), join(__dirname, 'something'))
   );
-  
+
   it('converts environment variables recursively', () =>
     assert.equal(app.get('deeply').nested.env, 'testing')
+  );
+
+  it('converts arrays as actual arrays', () =>
+    assert.ok(Array.isArray(app.get('array')))
   );
 });
