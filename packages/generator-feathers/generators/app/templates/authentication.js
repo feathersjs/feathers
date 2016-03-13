@@ -13,6 +13,6 @@ module.exports = function() {
   config.<%= authentication[i].name %>.strategy = <%= S(authentication[i].name).capitalize().s %>Strategy;<% if (authentication[i].tokenStrategy) { %>
   config.<%= authentication[i].name %>.tokenStrategy = <%= S(authentication[i].name).capitalize().s %>TokenStrategy;<% }} %>
 
-  app.set('auth', config);
+  <% if(authentication.length) { %>app.set('auth', config);<% } %>
   app.configure(authentication(config));
 }
