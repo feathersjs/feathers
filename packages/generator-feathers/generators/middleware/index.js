@@ -3,21 +3,17 @@ var fs = require('fs');
 var assign = require('object.assign').getPolyfill();
 var inflect = require('i')();
 var updateMixin = require('../../lib/updateMixin');
+var transform = require('../../lib/transform');
 
-function importMiddleware(filename, name, module) {
+function importMiddleware(filename, name, moduleName) {
   // Lookup existing service/index.js file
   if (fs.existsSync(filename)) {
     var content = fs.readFileSync(filename).toString();
-    var statement = 'const ' + name + ' = require(\'' + module + '\');';
-    var use = '))\n    .use(' + name + '(app));';
+    var ast = transform.parse(content);
 
-    // add if it is not already there
-    if (content.indexOf(statement) === -1) {
-      content = content.replace(/'use strict';\n\n/, '\'use strict;\'\n\n' + statement + '\n');
-      content = content.replace(/\)\)\;/, use);
-    }
+    transform.addImport(ast, name, moduleName);
 
-    fs.writeFileSync(filename, content);
+    fs.writeFileSync(filename, transform.print(ast));
   }
 }
 
