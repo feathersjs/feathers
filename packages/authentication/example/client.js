@@ -1,4 +1,4 @@
-// This is what a NodeJS client would look like
+// This is what a NodeJS client looks like
 const io = require('socket.io-client');
 const feathers = require('feathers/client');
 const socketio = require('feathers-socketio/client');
@@ -24,7 +24,7 @@ app.authenticate({
   }).catch(function(error){
     console.error('Error finding data', error);
   });
-  
+
 }).catch(function(error){
   console.error('Error authenticating!', error);
 });
