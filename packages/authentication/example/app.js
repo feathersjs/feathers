@@ -16,7 +16,9 @@ var app = feathers()
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
   // Configure feathers-authentication
-  .configure(authentication())
+  .configure(authentication({
+    idField: 'id'
+  }))
   // Initialize a user service
   .use('/users', memory())
   // A simple Message service that we can used for testing
