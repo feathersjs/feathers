@@ -146,7 +146,7 @@
       window.app = feathers()
         .configure(feathers.socketio(socket))
         .configure(feathers.hooks())
-        .configure(feathers.authentication());
+        .configure(feathers.authentication({ storage: window.localStorage }));
 
       $('#submit').on('click', function(ev){
         ev.preventDefault();
