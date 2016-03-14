@@ -1,9 +1,10 @@
 import assert from 'assert';
-import client from 'feathers-client';
 import io from 'socket.io-client';
 import socketio from 'feathers-socketio';
+import socketioClient from 'feathers-socketio/client';
 import rest from 'feathers-rest';
 import feathers from '../src/';
+import client from '../src/client';
 
 describe('Distributed Feathers applications test', () => {
   before(done => {
@@ -21,7 +22,7 @@ describe('Distributed Feathers applications test', () => {
 
   it('passes created event between servers', done => {
     const socket = io('http://localhost:8888');
-    const remoteApp = client().configure(client.socketio(socket));
+    const remoteApp = client().configure(socketioClient(socket));
     const todo = { text: 'Created on alpha server', complete: false };
     const beta = feathers()
       .configure(rest())
