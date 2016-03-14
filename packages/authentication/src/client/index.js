@@ -24,7 +24,7 @@ export default function(opts = {}) {
       // If no type was given let's try to authenticate with a stored JWT
       if (!options.type) {
         getOptions = getJWT(config.tokenKey, this.get('storage')).then(token => {
-          if(!token) {
+          if (!token) {
             return Promise.reject(new Error(`Could not find stored JWT and no authentication type was given`));
           }
 
