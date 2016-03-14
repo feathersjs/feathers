@@ -85,23 +85,28 @@ const socket = io('http://localhost:3030/');
 const app = feathers()
   .configure(socketio(socket)) // you could use Primus or REST instead
   .configure(hooks())
-  .use('storage', localstorage({ storage: window.localStorage })) // choose the right storage engine for your platform
-  .configure(authentication());
+  .configure(authentication({ storage: window.localStorage }));
 
-app.io.on('connect', function(){
-  app.authenticate({
-    type: 'local',
-    'email': 'admin@feathersjs.com',
-    'password': 'admin'
-  }).then(function(result){
-    console.log('Authenticated!', result);
-  }).catch(function(error){
-    console.error('Error authenticating!', error);
-  });
+app.authenticate({
+  type: 'local',
+  'email': 'admin@feathersjs.com',
+  'password': 'admin'
+}).then(function(result){
+  console.log('Authenticated!', result);
+}).catch(function(error){
+  console.error('Error authenticating!', error);
 });
 ```
 
 ## Changelog
+
+### 0.5.0
+
+- Removing `app.user` and `app.token`
+- Removing dependency on `feathers-localstorage`
+- Abstracting socket connect and disconnect events so developers don't need to do it and the interface is the same between REST and sockets.
+- Adding more tests
+- Cleaning up the example
 
 ### 0.4.0
 
