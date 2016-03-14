@@ -1,58 +1,28 @@
 var feathers = require('feathers');
 var rest = require('feathers-rest');
 var socketio = require('feathers-socketio');
-var primus = require('feathers-primus');
 var hooks = require('feathers-hooks');
 var memory = require('feathers-memory');
 var bodyParser = require('body-parser');
-var authentication = require('../../lib/index');
-var authHooks = require('../../lib/index').hooks;
-
-// Passport Auth Strategies
-var FacebookStrategy = require('passport-facebook').Strategy;
-var GithubStrategy = require('passport-github').Strategy;
+var errorHandler = require('feathers-errors/handler');
+var authentication = require('../lib/index');
 
 // Initialize the application
 var app = feathers()
   .configure(rest())
-  // .configure(primus({
-  //   transformer: 'websockets'
-  // }))
   .configure(socketio())
   .configure(hooks())
   // Needed for parsing bodies (login)
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
   // Configure feathers-authentication
-  .configure(authentication({
-    userEndpoint: '/api/users',
-    token: {
-      secret: 'feathers-rocks'
-    },
-    facebook: {
-      strategy: FacebookStrategy,
-      "clientID": "your-facebook-client-id",
-      "clientSecret": "your-facebook-client-secret",
-      "permissions": {
-        authType: 'rerequest',
-        "scope": ["public_profile", "email"]
-      }
-    },
-    github: {
-      strategy: GithubStrategy,
-      "clientID": "your-github-client-id",
-      "clientSecret": "your-github-client-secret"
-    }
-  }))
+  .configure(authentication())
   // Initialize a user service
-  .use('/api/users', memory())
+  .use('/users', memory())
   // A simple Message service that we can used for testing
   .use('/messages', memory())
   .use('/', feathers.static(__dirname + '/public'))
-  .use(function(error, req, res, next){
-    res.status(error.code);
-    res.json(error);
-  });
+  .use(errorHandler());
 
 var messageService = app.service('/messages');
 messageService.create({text: 'A million people walk into a Silicon Valley bar'}, {}, function(){});
@@ -61,18 +31,18 @@ messageService.create({text: 'Bar declared massive success'}, {}, function(){});
 
 messageService.before({
   all: [
-    authHooks.verifyToken({secret: 'feathers-rocks'}),
-    authHooks.populateUser(),
-    authHooks.requireAuth()
+    authentication.hooks.verifyToken(),
+    authentication.hooks.populateUser(),
+    authentication.hooks.requireAuth()
   ]
 })
 
-var userService = app.service('api/users');
+var userService = app.service('users');
 
-// Add a hook to the user service that automatically replaces
+// Add a hook to the user service that automatically replaces 
 // the password with a hash of the password before saving it.
 userService.before({
-  create: authHooks.hashPassword()
+  create: authentication.hooks.hashPassword()
 });
 
 // Create a user that we can use to log in
