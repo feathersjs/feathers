@@ -20,13 +20,14 @@
     "white": false,
     "node": true,
     "globals": {
-        "it": true,
-        "describe": true,
-        "before": true,
-        "beforeEach": true,
-        "after": true,
-        "afterEach": true,
-        "document": true,
-        "localStorage": true
+      "window": true,
+      "it": true,
+      "describe": true,
+      "before": true,
+      "beforeEach": true,
+      "after": true,
+      "afterEach": true,
+      "document": true,
+      "localStorage": true
     }
 }
