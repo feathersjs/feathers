@@ -39,8 +39,8 @@ describe('Primus authentication', function() {
     });
   });
 
-  after(function(done) {
-    server.close(done);
+  after(function() {
+    server.close();
   });
 
   beforeEach(done => {
@@ -61,7 +61,7 @@ describe('Primus authentication', function() {
           email: 'not-found@feathersjs.com',
           password
         };
-        
+
         primus.on('unauthorized', function(error) {
           assert.equal(error.code, 401);
           done();
@@ -103,7 +103,7 @@ describe('Primus authentication', function() {
           email,
           password
         };
-        
+
         primus.on('authenticated', function(response) {
           assert.ok(response.token);
           done();
@@ -117,7 +117,7 @@ describe('Primus authentication', function() {
           email,
           password
         };
-        
+
         primus.on('authenticated', function(response) {
           assert.equal(response.data.email, 'test@feathersjs.com');
           done();
@@ -173,7 +173,7 @@ describe('Primus authentication', function() {
     describe('when login succeeds', () => {
       const data = { token: validToken };
 
-      it('returns a JWT', function(done) {        
+      it('returns a JWT', function(done) {
         primus.on('authenticated', function(response) {
           assert.ok(response.token);
           done();
