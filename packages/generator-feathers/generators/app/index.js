@@ -18,9 +18,11 @@ module.exports = generators.Base.extend({
     var done = this.async();
     this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
     this.props = {
-      name: process.cwd().split(path.sep).pop(),
+      name: this.pkg.name || process.cwd().split(path.sep).pop(),
+      description: this.pkg.description,
       S: S
     };
+
     this.dependencies = [
       'feathers@^2.0.0',
       'feathers-hooks@^1.0.0',
