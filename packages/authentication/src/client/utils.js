@@ -18,7 +18,8 @@ export function connected(app) {
 
     // If the socket is not connected yet we have to wait for the `connect` event
     if( (app.io && !socket.connected) || (app.primus && socket.readyState !== 3)) {
-      socket.once('connect', () => resolve(socket));
+      const connectEvent = app.primus ? 'open' : 'connect';
+      socket.once(connectEvent, () => resolve(socket));
     } else {
       resolve(socket);
     }
