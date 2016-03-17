@@ -13,6 +13,12 @@ describe('client', () => {
     events
   });
 
+  it('allows chaining event listeners', done => {
+    assert.equal(service, service.on('thing', () => {}));
+    assert.equal(service, service.once('other thing', () => {}));
+    done();
+  });
+
   it('initializes and emits events', done => {
     connection.once('test', data => {
       assert.deepEqual(data, testData);
