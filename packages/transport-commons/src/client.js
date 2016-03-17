@@ -67,5 +67,6 @@ emitterMethods.forEach(method => {
   Service.prototype[method] = function(name, callback) {
     debug(`Calling emitter method ${method} with event '${this.path} ${name}'`);
     this.connection[method](`${this.path} ${name}`, callback);
+    return this;
   };
 });
