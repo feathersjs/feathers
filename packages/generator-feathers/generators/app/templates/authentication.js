@@ -15,4 +15,4 @@ module.exports = function() {
 
   <% if(authentication.length) { %>app.set('auth', config);<% } %>
   app.configure(authentication(config));
-}
+};
