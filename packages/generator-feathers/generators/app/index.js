@@ -25,9 +25,9 @@ module.exports = generators.Base.extend({
 
     this.dependencies = [
       'feathers@^2.0.0',
-      'feathers-hooks@^1.0.0',
-      'feathers-errors@^2.0.0',
-      'feathers-configuration@^0.2.0',
+      'feathers-hooks@^1.5.0',
+      'feathers-errors@^2.0.1',
+      'feathers-configuration@^0.2.1',
       'serve-favicon',
       'compression',
       'winston'
