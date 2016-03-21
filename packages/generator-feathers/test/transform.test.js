@@ -59,6 +59,7 @@ describe('transforms', () => {
   
   it('findFirstNodeAfter', () => {
     const ast = transform.parse(`
+      // a comment
       exports.before = ['before', 1, 2];
       exports.after = ['after', 2, 3];
       exports.after = [4, 5];
@@ -105,6 +106,7 @@ describe('transforms', () => {
     const ast = transform.addToArrayInObject(`
       const x = {
         test: [1],
+        // another comment
         other: [2, 
           3]
       }
@@ -120,6 +122,7 @@ describe('transforms', () => {
     assert.equal(output, `
       const x = {
         test: [1],
+        // another comment
         other: [2, 3, body()]
       }
       
