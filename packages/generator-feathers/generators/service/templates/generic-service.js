@@ -3,8 +3,8 @@
 const hooks = require('./hooks');
 
 class Service {
-  constructor(options = {}) {
-    this.options = options;
+  constructor(options) {
+    this.options = options || {};
   }
 
   find(params) {

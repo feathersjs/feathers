@@ -25,7 +25,7 @@ describe('generator-feathers', () => {
     });
   }
 
-  it('feathers:app', done => {
+  before(done => {
     helpers.run(path.join(__dirname, '../generators/app'))
       .inTmpDir(dir => appDir = dir)
       .withPrompts({
@@ -37,13 +37,14 @@ describe('generator-feathers', () => {
       })
       .withOptions({
         skipInstall: false
-      })
-      .on('end', () =>
-        runTest('starts and shows the index page', done)
-      );
+      }).on('end', () => done());
   });
 
-  it('feathers:service', done => {
+  it('feathers:app', done => {
+    runTest('starts and shows the index page', done);
+  });
+
+  it('feathers:service(memory)', done => {
     helpers.run(path.join(__dirname, '../generators/service'))
       .inTmpDir(() => process.chdir(appDir))
       .withPrompts({
@@ -53,6 +54,18 @@ describe('generator-feathers', () => {
       })
       .on('end', () =>
         runTest('registered the messages service', done)
+      );
+  });
+
+  it('feathers:service(generic)', done => {
+    helpers.run(path.join(__dirname, '../generators/service'))
+      .inTmpDir(() => process.chdir(appDir))
+      .withPrompts({
+        type: 'generic',
+        name: 'tests'
+      })
+      .on('end', () =>
+        runTest('registered the tests service', done)
       );
   });
 
