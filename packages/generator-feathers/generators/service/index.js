@@ -188,7 +188,9 @@ module.exports = generators.Base.extend({
         options: {
           type: this.props.type,
           name: this.props.name,
-          service: this.props.name
+          service: this.props.name,
+          authentication: this.props.authentication, // this gets passed from the main generator
+          providers: this.props.providers // this gets passed from the main generator
         }
       });
     }

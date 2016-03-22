@@ -303,12 +303,19 @@ module.exports = generators.Base.extend({
         if (this.props.localAuth || this.props.authentication.length) {
           this.props.services.push('user');
 
+          var providers = this.props.authentication.slice();
+
+          if (this.props.localAuth) {
+            providers.push('local');
+          }
+
           this.composeWith('feathers:service', {
             options: {
               type: 'database',
               database: this.props.database,
               name: 'user',
-              authentication: true
+              authentication: true,
+              providers: providers
             }
           });
         }

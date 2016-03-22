@@ -2,6 +2,7 @@
 
 var generators = require('yeoman-generator');
 var assign = require('object.assign').getPolyfill();
+var inflect = require('i')();
 var updateMixin = require('../../lib/updateMixin');
 
 module.exports = generators.Base.extend({
@@ -69,6 +70,7 @@ module.exports = generators.Base.extend({
 
     this.prompt(prompts, function (props) {
       this.props = assign(this.props, props);
+      this.props.pluralizedName = inflect.pluralize(this.props.name);
 
       done();
     }.bind(this));
