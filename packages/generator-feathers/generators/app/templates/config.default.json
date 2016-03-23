@@ -23,7 +23,5 @@
       }
     }<% } %>
   }<% } %><% if (cors === 'whitelisted') { %>,
-  "corsWhitelist": [<% corsWhitelist.forEach(function(domain, index, list){ %>
-    "<%= domain.trim() %>"<% if(index + 1 !== list.length){ %>,<% } %><% }); %>
-  ]<% } %>
+  "corsWhitelist": [<% (corsWhitelist || []).map(function(current) { return current.trim(); }).join(', ') %>]<% } %>
 }

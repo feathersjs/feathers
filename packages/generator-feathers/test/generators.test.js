@@ -31,8 +31,9 @@ describe('generator-feathers', () => {
       .withPrompts({
         name: 'myapp',
         providers: ['rest', 'socketio'],
-        cors: 'enabled',
+        cors: 'whitelisted',
         database: 'memory',
+        corsWhitelist: '',
         authentication: []
       })
       .withOptions({

@@ -22,8 +22,5 @@
         "scope": [<% for (var j=0; j < authentication[i].permissions.scope.length; j++) { %>"<%= authentication[i].permissions.scope[j]%>"<% if (j !== authentication[i].permissions.scope.length - 1) { %>,<% }} %>]
       }
     }<% } %>
-  }<% } %><% if (cors === 'whitelisted') { %>,
-  "corsWhitelist": [<% corsWhitelist.forEach(function(domain, index, list){ %>
-    "<%= domain.trim() %>"<% if(index + 1 !== list.length){ %>,<% } %><% }); %>
-  ]<% } %>
+  }<% } %>
 }
