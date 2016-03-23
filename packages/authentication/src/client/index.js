@@ -1,5 +1,6 @@
 import * as hooks from './hooks';
 import { connected, authenticateSocket, getJWT, getStorage } from './utils';
+import errors from 'feathers-errors';
 
 const defaults = {
   tokenKey: 'feathers-jwt',
@@ -25,7 +26,7 @@ export default function(opts = {}) {
       if (!options.type) {
         getOptions = getJWT(config.tokenKey, this.get('storage')).then(token => {
           if (!token) {
-            return Promise.reject(new Error(`Could not find stored JWT and no authentication type was given`));
+            return Promise.reject(new errors.NotAuthenticated(`Could not find stored JWT and no authentication type was given`));
           }
 
           return { type: 'token', token };
