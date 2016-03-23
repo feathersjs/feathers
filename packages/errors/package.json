@@ -3,7 +3,7 @@
   "description": "Common error types for feathers apps",
   "version": "2.0.1",
   "homepage": "https://github.com/feathersjs/feathers-errors",
-  "main": "lib/",
+  "main": "lib/index",
   "keywords": [
     "feathers",
     "feathers-plugin",
