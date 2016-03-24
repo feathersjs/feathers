@@ -71,7 +71,7 @@ export default function(opts = {}) {
       app.set('token', null);
       
       // TODO (EK): invalidate token with server
-      return Promise.resolve(app.get('storage').setItem(config.tokenKey, null));
+      return Promise.resolve(app.get('storage').setItem(config.tokenKey, ''));
     };
 
     // Set up hook that adds adds token and user to params so that

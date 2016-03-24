@@ -35,7 +35,7 @@
     "compile": "rm -rf lib/ && babel -d lib/ src/ && mkdir lib/public/ && cp src/public/* lib/public/",
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
-    "mocha": "mocha test/* --compilers js:babel-core/register",
+    "mocha": "mocha --recursive test/ --compilers js:babel-core/register",
     "test": "npm run compile && npm run jshint && npm run mocha && nsp check"
   },
   "directories": {
@@ -48,7 +48,7 @@
     "bcrypt": "^0.8.5",
     "debug": "^2.2.0",
     "feathers-errors": "^2.0.1",
-    "feathers-hooks": "^1.3.0",
+    "feathers-hooks": "^1.5.0",
     "jsonwebtoken": "^5.4.0",
     "passport": "^0.3.0",
     "passport-local": "^1.0.0"
@@ -60,6 +60,7 @@
     "babel-plugin-add-module-exports": "^0.1.2",
     "babel-preset-es2015": "^6.1.18",
     "body-parser": "^1.9.0",
+    "chai": "^3.5.0",
     "feathers": "2.0.0",
     "feathers-hooks": "^1.4.0",
     "feathers-memory": "^0.6.1",
@@ -75,6 +76,8 @@
     "primus": "^5.0.1",
     "primus-emitter": "^3.1.1",
     "request": "^2.69.0",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0",
     "socket.io-client": "^1.1.0",
     "ws": "^1.0.1",
     "xmlhttprequest": "^1.6.0"

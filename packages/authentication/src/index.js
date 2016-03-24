@@ -20,8 +20,7 @@ const PROVIDERS = {
 
 // Options that apply to any provider
 const defaults = {
-  setUpSuccessRedirect: true,
-  setUpFailureRedirect: true,
+  idField: '_id',
   successRedirect: '/auth/success',
   failureRedirect: '/auth/failure',
   tokenEndpoint: '/auth/token',
@@ -52,7 +51,29 @@ export default function auth(config = {}) {
     }
 
     // Merge and flatten options
-    const authOptions = Object.assign({}, app.get('auth'), defaults, config);
+    const authOptions = Object.assign({}, defaults, app.get('auth'), config);
+
+    // If we should redirect on success and the redirect route is the same as the
+    // default then we'll set up a route handler. Otherwise we'll leave it to the developer
+    // to set up their own custom route handler.
+    if (authOptions.successRedirect === defaults.successRedirect) {
+      debug(`Setting up successRedirect route: ${authOptions.successRedirect}`);
+      
+      app.get(authOptions.successRedirect, function(req, res){
+        res.sendFile(path.resolve(__dirname, 'public', 'auth-success.html'));
+      });
+    }
+
+    // If we should redirect on failure and the redirect route is the same as the
+    // default then we'll set up a route handler. Otherwise we'll leave it to the developer
+    // to set up their own custom route handler.
+    if (authOptions.failureRedirect === defaults.failureRedirect) {
+      debug(`Setting up failureRedirect route: ${authOptions.failureRedirect}`);
+
+      app.get(authOptions.failureRedirect, function(req, res){
+        res.sendFile(path.resolve(__dirname, 'public', 'auth-fail.html'));
+      });
+    }
 
     // Set the options on the app
     app.set('auth', authOptions);
@@ -62,8 +83,8 @@ export default function auth(config = {}) {
       debug('registering REST authentication middleware');
       // Make the Passport user available for REST services.
       // app.use( middleware.exposeAuthenticatedUser() );
+
       // Get the token and expose it to REST services.
-      // TODO (EK): Maybe make header key configurable
       app.use( middleware.normalizeAuthToken(authOptions) );
     }
     
@@ -91,7 +112,7 @@ export default function auth(config = {}) {
     Object.keys(config).forEach(function (key) {
       
       // Because we are iterating through all the keys we might
-      // be dealing with a confir param and not a provider config
+      // be dealing with a config param and not a provider config
       // If that's the case we don't need to merge params and we
       // shouldn't try to set up a service for this key.
       if (!isObject(config[key])) {
@@ -101,18 +122,6 @@ export default function auth(config = {}) {
       // Check to see if the key is a local or token provider
       let provider = PROVIDERS[key];
       let providerOptions = config[key];
-
-      // If they passed a custom success redirect then we'll
-      // leave it to the developer to set up their own route.
-      if (providerOptions.successRedirect) {
-        authOptions.setUpSuccessRedirect = false;
-      }
-
-      // If they passed a custom failure redirect then we'll
-      // leave it to the developer to set up their own route.
-      if (providerOptions.failureRedirect) {
-        authOptions.setUpFailureRedirect = false;
-      }
 
       // If it's not one of our own providers then determine whether it is oauth1 or oauth2
       if (!provider && isObject(providerOptions)) {
@@ -132,21 +141,10 @@ export default function auth(config = {}) {
       
       app.configure( provider(options) );
     });
-    
 
-    // Don't register this route handler if a custom success redirect is passed in
-    if (authOptions.setUpSuccessRedirect) {
-      app.get(authOptions.successRedirect, function(req, res){
-        res.sendFile(path.resolve(__dirname, 'public', 'auth-success.html'));
-      });
-    }
-
-    // Don't register this route handler if a custom failure redirect is passed in
-    if (authOptions.setUpFailureRedirect) {
-      app.get(authOptions.failureRedirect, function(req, res){
-        res.sendFile(path.resolve(__dirname, 'public', 'auth-fail.html'));
-      });
-    }
+    // Register error handling middleware for redirecting to support
+    // redirecting on authentication failure.
+    app.use(middleware.failedLogin(authOptions));
   };
 }
 

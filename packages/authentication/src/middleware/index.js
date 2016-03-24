@@ -76,16 +76,12 @@ export let successfulLogin = function(options = {}) {
     throw new Error(`'cookie' must be provided to successfulLogin() middleware`);
   }
 
-  if (!options.successRedirect) {
-    throw new Error(`'successRedirect' must be provided to successfulLogin() middleware`);
-  }
-
   return function(req, res, next) {
     // NOTE (EK): If we are not dealing with a browser or it was an
     // XHR request then just skip this. This is primarily for
     // handling the oauth redirects and for us to securely send the
     // JWT to the client.
-    if (req.xhr || !req.accepts('html')) {
+    if (!options.successRedirect || req.xhr || req.is('json') || !req.accepts('html')) {
       return next();
     }
 
@@ -101,6 +97,32 @@ export let successfulLogin = function(options = {}) {
 
     // Redirect to our success route
     res.redirect(options.successRedirect);
+  };
+};
+
+export let failedLogin = function(options = {}) {
+  debug('Setting up failedLogin middleware with options:', options);
+
+  if (!options.cookie) {
+    throw new Error(`'cookie' must be provided to failedLogin() middleware`);
+  }
+
+  return function(error, req, res, next) {
+    // NOTE (EK): If we are not dealing with a browser or it was an
+    // XHR request then just skip this. This is primarily for
+    // handling redirecting on an oauth failure.
+    // console.log('Auth Error', error, options);
+    if (!options.failureRedirect || req.xhr || req.is('json') || !req.accepts('html')) {
+      return next(error);
+    }
+
+    // clear any previous JWT cookie
+    res.clearCookie(options.cookie);
+
+    debug('An authentication error occurred.', error);
+
+    // Redirect to our failure route
+    res.redirect(options.failureRedirect);
   };
 };
 
@@ -132,9 +154,11 @@ export let setupSocketIOAuthentication = function(app, options = {}) {
           return errorHandler(new errors.BadRequest('Invalid token data type.'));
         }
 
+        const params = Object.assign({ provider: 'socketio' }, data);
+
         // The token gets normalized in hook.params for REST so we'll stay with
         // convention and pass it as params using sockets.
-        app.service(options.tokenEndpoint).create({}, data).then(response => {
+        app.service(options.tokenEndpoint).create({}, params).then(response => {
           socket.feathers.token = response.token;
           socket.feathers.user = response.data;
           socket.emit('authenticated', response);
@@ -146,6 +170,7 @@ export let setupSocketIOAuthentication = function(app, options = {}) {
         // with Passport to work because it checks res.body for the 
         // username and password.
         let params = {
+          provider: 'socketio',
           req: socket.request
         };
 
@@ -186,9 +211,11 @@ export let setupPrimusAuthentication = function(app, options = {}) {
           return errorHandler(new errors.BadRequest('Invalid token data type.'));
         }
 
+        const params = Object.assign({ provider: 'primus' }, data);
+
         // The token gets normalized in hook.params for REST so we'll stay with
         // convention and pass it as params using sockets.
-        app.service(options.tokenEndpoint).create({}, data).then(response => {
+        app.service(options.tokenEndpoint).create({}, params).then(response => {
           socket.request.feathers.token = response.token;
           socket.request.feathers.user = response.data;
           socket.send('authenticated', response);
@@ -200,6 +227,7 @@ export let setupPrimusAuthentication = function(app, options = {}) {
         // with Passport to work because it checks res.body for the 
         // username and password.
         let params = {
+          provider: 'primus',
           req: socket.request
         };
 

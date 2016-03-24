@@ -1,4 +1,4 @@
-import assert from 'assert';
+import { expect } from 'chai';
 import createApplication from '../test-server';
 import jwt from 'jsonwebtoken';
 
@@ -63,7 +63,7 @@ describe('Primus authentication', function() {
         };
 
         primus.on('unauthorized', function(error) {
-          assert.equal(error.code, 401);
+          expect(error.code).to.equal(401);
           done();
         });
 
@@ -77,7 +77,7 @@ describe('Primus authentication', function() {
         };
 
         primus.on('unauthorized', function(error) {
-          assert.equal(error.code, 401);
+          expect(error.code).to.equal(401);
           done();
         });
 
@@ -105,7 +105,7 @@ describe('Primus authentication', function() {
         };
 
         primus.on('authenticated', function(response) {
-          assert.ok(response.token);
+          expect(response.token).to.not.equal(undefined);
           done();
         });
 
@@ -119,7 +119,7 @@ describe('Primus authentication', function() {
         };
 
         primus.on('authenticated', function(response) {
-          assert.equal(response.data.email, 'test@feathersjs.com');
+          expect(response.data.email).to.equal('test@feathersjs.com');
           done();
         });
 
@@ -137,7 +137,7 @@ describe('Primus authentication', function() {
         };
 
         primus.on('unauthorized', function(error) {
-          assert.equal(error.code, 401);
+          expect(error.code).to.equal(401);
           done();
         });
 
@@ -150,7 +150,7 @@ describe('Primus authentication', function() {
         };
 
         primus.on('unauthorized', function(error) {
-          assert.equal(error.code, 401);
+          expect(error.code).to.equal(401);
           done();
         });
 
@@ -175,7 +175,7 @@ describe('Primus authentication', function() {
 
       it('returns a JWT', function(done) {
         primus.on('authenticated', function(response) {
-          assert.ok(response.token);
+          expect(response.token).to.not.equal(undefined);
           done();
         });
 
@@ -184,7 +184,7 @@ describe('Primus authentication', function() {
 
       it('returns the logged in user', function(done) {
         primus.on('authenticated', function(response) {
-          assert.equal(response.data.email, 'test@feathersjs.com');
+          expect(response.data.email).to.equal('test@feathersjs.com');
           done();
         });
 
@@ -210,7 +210,7 @@ describe('Primus authentication', function() {
 
         primus.on('authenticated', function() {
           primus.send('messages::get', 1, {}, (error, data) => {
-            assert.equal(data.id, 1);
+            expect(data.id).to.equal(1);
             done();
           });
         });
@@ -222,21 +222,21 @@ describe('Primus authentication', function() {
     describe('when not authenticated', () => {
       it('returns 401 from protected route', (done) => {
         primus.send('messages::get', 1, {}, (error) => {
-          assert.equal(error.code, 401);
+          expect(error.code).to.equal(401);
           done();
         });
       });
 
       it('does not return data from protected route', (done) => {
         primus.send('messages::get', 1, {}, (error, data) => {
-          assert.equal(data, undefined);
+          expect(data).to.equal(undefined);
           done();
         });
       });
 
       it('returns data from unprotected route', (done) => {
         primus.send('users::find', {}, (error, data) => {
-          assert.notEqual(data, undefined);
+          expect(data).to.not.equal(undefined);
           done();
         });
       });

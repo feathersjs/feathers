@@ -3,23 +3,14 @@
  */
 const defaults = {
   userEndpoint: '/users',
-  passwordField: 'password',
   idField: '_id'
 };
 
 export default function(options = {}){
   return function(hook) {
-    // Try to get auth options from the app config
-    const authOptions = hook.app.get('auth');
-
-    options = Object.assign({}, defaults, authOptions, options);
-
-    // If we already have a current user just pass through
-    if (hook.params.user) {
-      return Promise.resolve(hook);
-    }
-
     let id;
+
+    options = Object.assign({}, defaults, hook.app.get('auth'), options);
 
     // If it's an after hook grab the id from the result
     if (hook.type === 'after') {
@@ -44,9 +35,8 @@ export default function(options = {}){
         if (hook.result) {
           hook.result.data = Object.assign({}, user = !user.toJSON ? user : user.toJSON());
 
-          // format response
+          // remove the id field from the root, it already exists inside the user object
           delete hook.result[options.idField];
-          delete hook.result.data[options.passwordField];
         }
 
         return resolve(hook);

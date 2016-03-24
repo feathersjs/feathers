@@ -10,7 +10,10 @@ const debug = Debug('feathers-authentication:oauth2');
 const defaults = {
   passReqToCallback: true,
   callbackSuffix: 'callback',
-  permissions: {}
+  permissions: {
+    state: true,
+    session: false
+  }
 };
 
 export class Service {
@@ -22,7 +25,6 @@ export class Service {
     let app = this.app;
     const options = this.options;
     const params = {
-      internal: true,
       query: {
         // facebookId: profile.id
         [`${options.provider}Id`]: profile.id
@@ -53,7 +55,7 @@ export class Service {
           [`${options.provider}`]: profile._json
         });
 
-        return app.service(options.userEndpoint).create(data, { internal: true }).then(user => {
+        return app.service(options.userEndpoint).create(data).then(user => {
           return done(null, user);
         }).catch(done);
       }).catch(done);
@@ -62,24 +64,22 @@ export class Service {
   // GET /auth/facebook
   find(params) {
     // Authenticate via your provider. This will redirect you to authorize the application.
-    const authOptions = Object.assign({session: false, state: true}, this.options.permissions);
-    return passport.authenticate(this.options.provider, authOptions)(params.req, params.res);
+    return passport.authenticate(this.options.provider, this.options.permissions)(params.req, params.res);
   }
 
   // For GET /auth/facebook/callback
   get(id, params) {
     const options = this.options;
-    const authOptions = Object.assign({session: false, state: true}, options.permissions);
     let app = this.app;
 
     // TODO (EK): Make this configurable
-    if (id !== 'callback') {
+    if (id !== options.callbackSuffix) {
       return Promise.reject(new errors.NotFound());
     }
 
     return new Promise(function(resolve, reject){
 
-      let middleware = passport.authenticate(options.provider, authOptions, function(error, user) {
+      let middleware = passport.authenticate(options.provider, options.permissions, function(error, user) {
         if (error) {
           return reject(error);
         }
@@ -91,7 +91,7 @@ export class Service {
 
         // Get a new JWT and the associated user from the Auth token service and send it back to the client.
         return app.service(options.tokenEndpoint)
-                  .create(user, { internal: true })
+                  .create(user)
                   .then(resolve)
                   .catch(reject);
       });
@@ -104,7 +104,6 @@ export class Service {
   // This is for mobile token based authentication
   create(data, params) {
     const options = this.options;
-    const authOptions = Object.assign({session: false, state: true}, options.permissions);
     let app = this.app;
 
     if (!options.tokenStrategy) {
@@ -113,7 +112,7 @@ export class Service {
 
     // Authenticate via facebook, then generate a JWT and return it
     return new Promise(function(resolve, reject){
-      let middleware = passport.authenticate(`${options.provider}-token`, authOptions, function(error, user) {
+      let middleware = passport.authenticate(`${options.provider}-token`, options.permissions, function(error, user) {
         if (error) {
           return reject(error);
         }
@@ -131,7 +130,7 @@ export class Service {
 
         // Get a new JWT and the associated user from the Auth token service and send it back to the client.
         return app.service(options.tokenEndpoint)
-                  .create(payload, { internal: true })
+                  .create(payload)
                   .then(resolve)
                   .catch(reject);
       });
@@ -149,6 +148,9 @@ export class Service {
 
 export default function(options){
   options = Object.assign({}, defaults, options);
+
+  options.permissions.state = options.permissions.state === undefined ? true : options.permissions.state;
+  options.permissions.session = options.permissions.session === undefined ? false : options.permissions.session;
 
   if (!options.provider) {
     throw new Error('You need to pass a `provider` for your authentication provider');
@@ -178,11 +180,11 @@ export default function(options){
     const service = app.service(options.endPoint);
 
     // Register our Passport auth strategy and get it to use our passport callback function
-    debug(`registering passport-${options.provider} OAuth2 strategy`, options);
+    debug(`registering passport-${options.provider} OAuth2 strategy`);
     passport.use(new Strategy(options, service.oauthCallback.bind(service)));
 
     if (TokenStrategy) {
-      debug(`registering passport-${options.provider}-token OAuth2 strategy`, options);
+      debug(`registering passport-${options.provider}-token OAuth2 strategy`);
       passport.use(new TokenStrategy(options, service.oauthCallback.bind(service)));
     }
   };

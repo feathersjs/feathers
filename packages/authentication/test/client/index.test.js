@@ -1,4 +1,4 @@
-import assert from 'assert';
+import { expect } from 'chai';
 import io from 'socket.io-client';
 import hooks from 'feathers-hooks';
 import feathers from 'feathers/client';
@@ -31,11 +31,11 @@ const setupTests = initApp => {
         type: 'local',
         email, password
       }).then(response => {
-        assert.ok(response.token);
-        assert.ok(response.data);
+        expect(response.token).to.not.equal(undefined);
+        expect(response.data).to.not.equal(undefined);
 
-        assert.deepEqual(app.get('token'), response.token);
-        assert.deepEqual(app.get('user'), response.data);
+        expect(app.get('token')).to.deep.equal(response.token);
+        expect(app.get('user')).to.deep.equal(response.data);
 
         done();
       }).catch(done);
@@ -46,12 +46,12 @@ const setupTests = initApp => {
         type: 'local',
         email, password
       }).then(response => {
-        assert.ok(response.token);
-        assert.ok(response.data);
+        expect(response.token).to.not.equal(undefined);
+        expect(response.data).to.not.equal(undefined);
 
         return app.service('messages').create({ text: 'auth test message' })
           .then(msg => {
-            assert.ok(typeof msg.id !== 'undefined');
+            expect(typeof msg.id).to.not.equal(undefined);
             done();
           });
       }).catch(done);
@@ -65,8 +65,8 @@ const setupTests = initApp => {
       })
       .then(() => done(new Error('Should never get here')))
       .catch(error => {
-        assert.equal(error.name, 'NotAuthenticated');
-        assert.equal(error.code, 401);
+        expect(error.name).to.equal('NotAuthenticated');
+        expect(error.code).to.equal(401);
         done();
       });
   });
@@ -75,8 +75,8 @@ const setupTests = initApp => {
     app.authenticate()
       .then(() => done(new Error('Should never get here')))
       .catch(error => {
-        assert.equal(error.message, 'Could not find stored JWT and no authentication type was given');
-        assert.equal(error.code, 401);
+        expect(error.message).to.equal('Could not find stored JWT and no authentication type was given');
+        expect(error.code).to.equal(401);
         done();
       });
   });
@@ -89,7 +89,7 @@ const setupTests = initApp => {
         type: 'local',
         email, password
       }).then(response => {
-        assert.equal(response.token, localstorage.getItem('feathers-jwt'));
+        expect(response.token).to.equal(localstorage.getItem('feathers-jwt'));
         app.set('storage', oldStorage);
         done();
       });
@@ -100,12 +100,12 @@ const setupTests = initApp => {
         type: 'local',
         email, password
       }).then(response => {
-        assert.ok(response.token);
-        assert.ok(response.data);
+        expect(response.token).to.not.equal(undefined);
+        expect(response.data).to.not.equal(undefined);
 
         return app.authenticate().then(response => {
-          assert.deepEqual(app.get('token'), response.token);
-          assert.deepEqual(app.get('user'), response.data);
+          expect(app.get('token')).to.deep.equal(response.token);
+          expect(app.get('user')).to.deep.equal(response.data);
         }).then(done);
       }).catch(done);
   });
@@ -115,8 +115,8 @@ const setupTests = initApp => {
         type: 'local',
         email, password
       }).then(response => {
-        assert.ok(response.token);
-        assert.ok(response.data);
+        expect(response.token).to.not.equal(undefined);
+        expect(response.data).to.not.equal(undefined);
 
         app.logout().then(() => {
           app.service('messages').create({ text: 'auth test message' })
@@ -131,8 +131,8 @@ describe('Client side authentication', () => {
   it('adds .authenticate, and .logout', () => {
     const app = feathers().configure(authentication());
 
-    assert.equal(typeof app.authenticate, 'function');
-    assert.equal(typeof app.logout, 'function');
+    expect(typeof app.authenticate).to.equal('function');
+    expect(typeof app.logout).to.equal('function');
   });
 
   describe('REST client authentication', () => {

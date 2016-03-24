@@ -9,7 +9,8 @@ import { successfulLogin } from '../../middleware';
 const debug = Debug('feathers-authentication:local');
 const defaults = {
   usernameField: 'email',
-  passwordField: 'password'
+  passwordField: 'password',
+  session: false
 };
 
 export class Service {
@@ -19,7 +20,6 @@ export class Service {
 
   checkCredentials(username, password, done) {
     const params = {
-      internal: true,
       query: {
         [this.options.usernameField]: username
       }
@@ -41,6 +41,12 @@ export class Service {
       })
       .then(user => {
         // Check password
+        const hash = user[this.options.passwordField];
+
+        if (!hash) {
+          return done(new Error(`User record in the database is missing a '${this.options.passwordField}'`));
+        }
+
         bcrypt.compare(password, user[this.options.passwordField], function(error, result) {
           // Handle 500 server error.
           if (error) {
@@ -64,7 +70,7 @@ export class Service {
 
     // Validate username and password, then generate a JWT and return it
     return new Promise(function(resolve, reject){
-      let middleware = passport.authenticate('local', { session: false }, function(error, user) {
+      let middleware = passport.authenticate('local', { session: options.session }, function(error, user) {
         if (error) {
           return reject(error);
         }
@@ -76,7 +82,7 @@ export class Service {
 
         // Get a new JWT and the associated user from the Auth token service and send it back to the client.
         return app.service(options.tokenEndpoint)
-                  .create(user, { internal: true })
+                  .create(user)
                   .then(resolve)
                   .catch(reject);
       });
@@ -106,6 +112,7 @@ export default function(options){
     const localService = app.service(options.localEndpoint);
 
     // Register our local auth strategy and get it to use the passport callback function
+    debug('registering passport-local strategy');
     passport.use(new Strategy(options, localService.checkCredentials.bind(localService)));
   };
 }
