@@ -100,6 +100,18 @@ app.authenticate({
 
 ## Changelog
 
+### 0.6.0
+- Fixes for [#107](https://github.com/feathersjs/feathers-authentication/issues/107), [#103](https://github.com/feathersjs/feathers-authentication/issues/103), [#102](https://github.com/feathersjs/feathers-authentication/issues/102), [#105](https://github.com/feathersjs/feathers-authentication/issues/105), [#119](https://github.com/feathersjs/feathers-authentication/issues/105) 
+- Adds a bunch of tests ([#9](https://github.com/feathersjs/feathers-authentication/issues/9), [#59](https://github.com/feathersjs/feathers-authentication/issues/59))
+- All hooks now pull from auth config ([#93](https://github.com/feathersjs/feathers-authentication/issues/93))
+- Added ability to disable local and OAuth2 redirects independently ([#89](https://github.com/feathersjs/feathers-authentication/issues/89))
+- Removed `toLowerCase` hook. It already lives in [feathers-hooks](https://github.com/feathersjs/feathers-hooks/blob/master/src/bundled.js#L3)
+- Renamed `requireAuth` hook to `restrictToAuth`
+- Renamed `queryWithUserId` hook to `queryWithCurrentUser`
+- Renamed `setUserId` hook to `associateCurrentUser`
+- Renamed `restrictToSelf` hook to `restrictToOwner` as it could be used on other resources other than users
+- Added a `restrictToRoles` hook
+
 ### 0.5.0
 
 - Removing `app.user` and `app.token`
