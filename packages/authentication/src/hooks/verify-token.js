@@ -1,32 +1,38 @@
 import jwt from 'jsonwebtoken';
 import errors from 'feathers-errors';
 
-/**
- * Verifies that a JWT token is valid
- * 
- * @param  {Object} options - An options object
- * @param {String} options.secret - The JWT secret
- */
 export default function(options = {}){
-  let secret = options.secret;
-
   return function(hook) {
+    if (hook.type !== 'before') {
+      throw new Error(`The 'verifyToken' hook should only be used as a 'before' hook.`);
+    }
+
+    // If it was an internal call then skip this hook
+    if (!hook.params.provider) {
+      return hook;
+    }
+
     const token = hook.params.token;
 
     if (!token) {
-      return Promise.resolve(hook);
+      throw new errors.NotAuthenticated('Authentication token missing.');
     }
 
-    if (!secret) {
-      // Try to get the secret from the app config
-      const authOptions = hook.app.get('auth');
+    const authOptions = hook.app.get('auth') || {};
+    
+    // Grab the token options here
+    options = Object.assign({}, authOptions.token, options);
 
-      if (authOptions && authOptions.token && authOptions.token.secret) {
-        secret = authOptions.token.secret;
-      }
-      else {
-        throw new Error('You need to pass `options.secret` to the verifyToken() hook or set `auth.token.secret` it in your config.');
-      }
+    const secret = options.secret;
+
+    if (!secret) {
+      throw new Error(`You need to pass 'options.secret' to the verifyToken() hook or set 'auth.token.secret' it in your config.`);
+    }
+
+    // convert the alorithm value to an array
+    if (options.algorithm) {
+      options.algorithms = [options.algorithm];
+      delete options.algorithm;
     }
 
     return new Promise(function(resolve, reject){

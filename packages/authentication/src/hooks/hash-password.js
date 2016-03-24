@@ -1,23 +1,29 @@
 import bcrypt from 'bcrypt';
+import errors from 'feathers-errors';
 
-/**
- * Replaces a password located at the provided `passwordField` with a hash
- * of the password.
- * @param  {String} passwordField  The field containing the password.
- */
 const defaults = { passwordField: 'password' };
 
 export default function(options = {}){
-  options = Object.assign({}, defaults, options);
-
   return function(hook) {
-    if (!hook.data || !hook.data[options.passwordField]) {
+    if (hook.type !== 'before') {
+      throw new Error(`The 'hashPassword' hook should only be used as a 'before' hook.`);
+    }
+
+    options = Object.assign({}, defaults, hook.app.get('auth'), options);
+
+    if (hook.data === undefined) {
       return hook;
+    }
+
+    const password = hook.data[options.passwordField];
+
+    if (password === undefined) {
+      throw new errors.BadRequest(`'${options.passwordField}' field is missing.`);
     }
 
     return new Promise(function(resolve, reject){
       bcrypt.genSalt(10, function(err, salt) {
-        bcrypt.hash(hook.data[options.passwordField], salt, function(err, hash) {
+        bcrypt.hash(password, salt, function(err, hash) {
           if (err) {
             return reject(err);
           }

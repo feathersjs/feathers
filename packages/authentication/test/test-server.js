@@ -4,7 +4,7 @@ import socketio from 'feathers-socketio';
 import rest from 'feathers-rest';
 import feathersHooks from 'feathers-hooks';
 import authentication from '../src/';
-import {hooks} from '../src/';
+import { hooks } from '../src/';
 import bodyParser from 'body-parser';
 import memory from 'feathers-memory';
 import async from 'async';
@@ -52,9 +52,9 @@ export default function(settings, username, password, useSocketio, next) {
     ], function(){
       messageService.before({
         all: [
-          hooks.verifyToken({ secret: settings.token.secret }),
+          hooks.verifyToken(),
           hooks.populateUser(),
-          hooks.requireAuth()
+          hooks.restrictToAuthenticated()
         ]
       });
       

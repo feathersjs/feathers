@@ -35,7 +35,7 @@ messageService.before({
   all: [
     authentication.hooks.verifyToken(),
     authentication.hooks.populateUser(),
-    authentication.hooks.requireAuth()
+    authentication.hooks.restrictToAuthenticated()
   ]
 })
 

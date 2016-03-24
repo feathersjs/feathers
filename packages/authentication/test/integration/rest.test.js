@@ -1,4 +1,4 @@
-import assert from 'assert';
+import { expect } from 'chai';
 import request from 'request';
 import createApplication from '../test-server';
 import jwt from 'jsonwebtoken';
@@ -43,68 +43,127 @@ describe('REST authentication', function() {
   });
 
   describe('Local authentication', () => {
-    describe('when login unsuccessful', () => {
-      const options = {
-        url: `${host}/auth/local`,
-        method: 'POST',
-        form: {},
-        json: true
-      };
-
-      it('returns a 401 when user not found', function(done) {
-        options.form = {
-          email: 'not-found@feathersjs.com',
-          password
+    describe('Using Form Data', () => {
+      describe('when login unsuccessful', () => {
+        const options = {
+          url: `${host}/auth/local`,
+          method: 'POST',
+          followAllRedirects: true,
+          form: {}
         };
 
-        request(options, function(err, response) {
-          assert.equal(response.statusCode, 401);
-          done();
+        it('redirects to failure page', function(done) {
+          options.form = {
+            email: 'not-found@feathersjs.com',
+            password
+          };
+
+          request(options, function(err, response) {
+            expect(response.statusCode).to.equal(200);
+            expect(response.request.uri.path).to.equal('/auth/failure');
+            done();
+          });
         });
       });
 
-      it('returns a 401 when password is invalid', function(done) {
-        options.form = {
-          email: 'testd@feathersjs.com',
-          password: 'invalid'
+      describe('when login succeeds', () => {
+        const options = {
+          url: `${host}/auth/local`,
+          method: 'POST',
+          followAllRedirects: true,
+          form: {
+            email,
+            password
+          }
         };
 
-        request(options, function(err, response) {
-          assert.equal(response.statusCode, 401);
-          done();
+        it('redirects to success page', function(done) {
+          request(options, function(err, response) {
+            expect(response.statusCode).to.equal(200);
+            expect(response.request.uri.path).to.equal('/auth/success');
+            done();
+          });
+        });
+
+        it('sets the JWT in a cookie', function(done) {
+          var jar = request.jar();
+          options.jar = jar;
+
+          request(options, function() {
+            var cookies = jar.getCookies(`${host}/auth/success`);
+
+            expect(cookies.length).to.equal(1);
+            expect(cookies[0].toString().indexOf('feathers-jwt')).to.not.equal(-1);
+            done();
+          });
         });
       });
     });
 
-    describe('when login succeeds', () => {
-      const options = {
-        url: `${host}/auth/local`,
-        method: 'POST',
-        form: {
-          email,
-          password
-        },
-        json: true
-      };
+    describe('Using Ajax', () => {
+      describe('when login unsuccessful', () => {
+        const options = {
+          url: `${host}/auth/local`,
+          method: 'POST',
+          form: {},
+          json: true
+        };
 
-      it('returns a 201', function(done) {
-        request(options, function(err, response) {
-          assert.equal(response.statusCode, 201);
-          done();
+        it('returns a 401 when user not found', function(done) {
+          options.form = {
+            email: 'not-found@feathersjs.com',
+            password
+          };
+
+          request(options, function(err, response) {
+            expect(response.statusCode).to.equal(401);
+            done();
+          });
+        });
+
+        it('returns a 401 when password is invalid', function(done) {
+          options.form = {
+            email: 'testd@feathersjs.com',
+            password: 'invalid'
+          };
+
+          request(options, function(err, response) {
+            expect(response.statusCode).to.equal(401);
+            done();
+          });
         });
       });
 
-      it('returns a JWT', function(done) {
-        request(options, function(err, response, body) {
-          assert.ok(body.token, 'POST to /auth/local gave us back a token.');
-          done();
-        });
-      });
+      describe('when login succeeds', () => {
+        const options = {
+          url: `${host}/auth/local`,
+          method: 'POST',
+          form: {
+            email,
+            password
+          },
+          json: true
+        };
 
-      it('returns the logged in user', function(done) {
-        request(options, function(err, response, body) {
-          assert.equal(body.data.email, 'test@feathersjs.com');
-          done();
+        it('returns a 201', function(done) {
+          request(options, function(err, response) {
+            expect(response.statusCode).to.equal(201);
+            done();
+          });
+        });
+
+        it('returns a JWT', function(done) {
+          request(options, function(err, response, body) {
+            expect(body.token).to.not.equal(undefined);
+            done();
+          });
+        });
+
+        it('returns the logged in user', function(done) {
+          request(options, function(err, response, body) {
+            expect(body.data.email).to.equal('test@feathersjs.com');
+            done();
+          });
         });
       });
     });
@@ -125,7 +184,7 @@ describe('REST authentication', function() {
         };
 
         request(options, function(err, response) {
-          assert.equal(response.statusCode, 401);
+          expect(response.statusCode).to.equal(401);
           done();
         });
       });
@@ -136,7 +195,7 @@ describe('REST authentication', function() {
         };
 
         request(options, function(err, response) {
-          assert.equal(response.statusCode, 401);
+          expect(response.statusCode).to.equal(401);
           done();
         });
       });
@@ -154,21 +213,21 @@ describe('REST authentication', function() {
 
       it('returns a 201', function(done) {
         request(options, function(err, response) {
-          assert.equal(response.statusCode, 201);
+          expect(response.statusCode).to.equal(201);
           done();
         });
       });
 
       it('returns a JWT', function(done) {
         request(options, function(err, response, body) {
-          assert.ok(body.token, 'POST to /auth/token gave us back a token.');
+          expect(body.token).to.not.equal(undefined);
           done();
         });
       });
 
       it('returns the logged in user', function(done) {
         request(options, function(err, response, body) {
-          assert.equal(body.data.email, 'test@feathersjs.com');
+          expect(body.data.email).to.equal('test@feathersjs.com');
           done();
         });
       });
@@ -202,7 +261,7 @@ describe('REST authentication', function() {
           options.url = `${host}/messages/1`;
 
           request(options, function(err, response, body) {
-            assert.equal(body.id, 1);
+            expect(body.id).to.equal(1);
             done();
           });
         });
@@ -226,8 +285,8 @@ describe('REST authentication', function() {
           options.url = `${host}/messages/2`;
 
           request(options, function(err, response, body) {
-            assert.equal(body.id, 2);
-            assert.equal(body.text, 'new text');
+            expect(body.id).to.equal(2);
+            expect(body.text).to.equal('new text');
             done();
           });
         });
@@ -247,7 +306,7 @@ describe('REST authentication', function() {
           options.url = `${host}/messages/1?token=${validToken}`;
 
           request(options, function(err, response, body) {
-            assert.equal(body.id, 1);
+            expect(body.id).to.equal(1);
             done();
           });
         });
@@ -271,14 +330,14 @@ describe('REST authentication', function() {
 
         it('returns 401', (done) => {
           request(options, function(err, response) {
-            assert.equal(response.statusCode, 401);
+            expect(response.statusCode).to.equal(401);
             done();
           });
         });
 
         it('returns error instead of data', (done) => {
           request(options, function(err, response, body) {
-            assert.equal(body.code, 401);
+            expect(body.code).to.equal(401);
             done();
           });
         });
@@ -291,14 +350,14 @@ describe('REST authentication', function() {
 
         it('returns 200', (done) => {
           request(options, function(err, response) {
-            assert.equal(response.statusCode, 200);
+            expect(response.statusCode).to.equal(200);
             done();
           });
         });
 
         it('returns data', (done) => {
           request(options, function(err, response, body) {
-            assert.notEqual(body, undefined);
+            expect(body).to.not.equal(undefined);
             done();
           });
         });

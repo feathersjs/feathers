@@ -1,4 +1,4 @@
-import assert from 'assert';
+import { expect } from 'chai';
 import io from 'socket.io-client';
 import createApplication from '../test-server';
 import jwt from 'jsonwebtoken';
@@ -62,7 +62,7 @@ describe('Socket.io authentication', function() {
         };
         
         socket.on('unauthorized', function(error) {
-          assert.equal(error.code, 401);
+          expect(error.code).to.equal(401);
           done();
         });
 
@@ -76,7 +76,7 @@ describe('Socket.io authentication', function() {
         };
 
         socket.on('unauthorized', function(error) {
-          assert.equal(error.code, 401);
+          expect(error.code).to.equal(401);
           done();
         });
 
@@ -90,7 +90,7 @@ describe('Socket.io authentication', function() {
         };
 
         socket.on('disconnect', function(error) {
-          assert.equal(error.code, 401);
+          expect(error.code).to.equal(401);
           done();
         });
 
@@ -106,7 +106,7 @@ describe('Socket.io authentication', function() {
         };
         
         socket.on('authenticated', function(response) {
-          assert.ok(response.token);
+          expect(response.token).to.not.equal(undefined);
           done();
         });
 
@@ -120,7 +120,7 @@ describe('Socket.io authentication', function() {
         };
         
         socket.on('authenticated', function(response) {
-          assert.equal(response.data.email, 'test@feathersjs.com');
+          expect(response.data.email).to.equal('test@feathersjs.com');
           done();
         });
 
@@ -138,7 +138,7 @@ describe('Socket.io authentication', function() {
         };
 
         socket.on('unauthorized', function(error) {
-          assert.equal(error.code, 401);
+          expect(error.code).to.equal(401);
           done();
         });
 
@@ -151,7 +151,7 @@ describe('Socket.io authentication', function() {
         };
 
         socket.on('unauthorized', function(error) {
-          assert.equal(error.code, 401);
+          expect(error.code).to.equal(401);
           done();
         });
 
@@ -164,7 +164,7 @@ describe('Socket.io authentication', function() {
         };
 
         socket.on('disconnect', function(error) {
-          assert.equal(error.code, 401);
+          expect(error.code).to.equal(401);
           done();
         });
 
@@ -177,7 +177,7 @@ describe('Socket.io authentication', function() {
 
       it('returns a JWT', function(done) {        
         socket.on('authenticated', function(response) {
-          assert.ok(response.token);
+          expect(response.token).to.not.equal(undefined);
           done();
         });
 
@@ -186,7 +186,7 @@ describe('Socket.io authentication', function() {
 
       it('returns the logged in user', function(done) {
         socket.on('authenticated', function(response) {
-          assert.equal(response.data.email, 'test@feathersjs.com');
+          expect(response.data.email).to.equal('test@feathersjs.com');
           done();
         });
 
@@ -212,7 +212,7 @@ describe('Socket.io authentication', function() {
 
         socket.on('authenticated', function() {
           socket.emit('messages::get', 1, {}, (error, data) => {
-            assert.equal(data.id, 1);
+            expect(data.id).to.equal(1);
             done();
           });
         });
@@ -224,21 +224,21 @@ describe('Socket.io authentication', function() {
     describe('when not authenticated', () => {
       it('returns 401 from protected route', (done) => {
         socket.emit('messages::get', 1, {}, (error) => {
-          assert.equal(error.code, 401);
+          expect(error.code).to.equal(401);
           done();
         });
       });
 
       it('does not return data from protected route', (done) => {
         socket.emit('messages::get', 1, {}, (error, data) => {
-          assert.equal(data, undefined);
+          expect(data).to.equal(undefined);
           done();
         });
       });
 
       it('returns data from unprotected route', (done) => {
         socket.emit('users::find', {}, (error, data) => {
-          assert.notEqual(data, undefined);
+          expect(data).to.not.equal(undefined);
           done();
         });
       });

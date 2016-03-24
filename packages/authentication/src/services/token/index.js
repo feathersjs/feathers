@@ -1,15 +1,17 @@
 import Debug from 'debug';
 import jwt from 'jsonwebtoken';
 import hooks from '../../hooks';
+import commonHooks from 'feathers-hooks';
 import errors from 'feathers-errors';
 
 const debug = Debug('feathers-authentication:token');
 
 // Provider specific config
 const defaults = {
+  payload: [],
   passwordField: 'password',
   issuer: 'feathers',
-  algorithms: ['HS256'],
+  algorithm: 'HS256',
   expiresIn: '1d', // 1 day
 };
 
@@ -24,7 +26,8 @@ let _verifyToken = function(options = {}){
 
   return function(hook) {
     return new Promise(function(resolve, reject){
-      if (hook.params.internal) {
+      // If it was an internal call just skip
+      if (!hook.params.provider) {
         hook.params.data = hook.data;
         return resolve(hook);
       }
@@ -94,12 +97,11 @@ export class Service {
     const options = this.options;
 
     const data = {
-      id: user.hasOwnProperty(options.idField) ? user[options.idField] : user.id
+      [options.idField]: user[options.idField]
     };
 
-    if (Array.isArray(options.extraFields)) {
-      options.extraFields.forEach(field => data[field] = user[field]);
-    }
+    // Add any additional payload fields
+    options.payload.forEach(field => data[field] = user[field]);
 
     // Our before hook determined that we had a valid token or that this
     // was internally called so let's generate a new token with the user
@@ -134,9 +136,18 @@ export default function(options){
     });
 
     tokenService.after({
-      create: [hooks.populateUser(options)],
-      find: [hooks.populateUser(options)],
-      get: [hooks.populateUser(options)]
+      create: [
+        hooks.populateUser(options),
+        commonHooks.remove(options.passwordField)
+      ],
+      find: [
+        hooks.populateUser(options),
+        commonHooks.remove(options.passwordField)
+      ],
+      get: [
+        hooks.populateUser(options),
+        commonHooks.remove(options.passwordField)
+      ]
     });
   };
 }
