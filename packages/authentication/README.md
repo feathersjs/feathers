@@ -106,7 +106,7 @@ app.authenticate({
 - All hooks now pull from auth config ([#93](https://github.com/feathersjs/feathers-authentication/issues/93))
 - Added ability to disable local and OAuth2 redirects independently ([#89](https://github.com/feathersjs/feathers-authentication/issues/89))
 - Removed `toLowerCase` hook. It already lives in [feathers-hooks](https://github.com/feathersjs/feathers-hooks/blob/master/src/bundled.js#L3)
-- Renamed `requireAuth` hook to `restrictToAuth`
+- Renamed `requireAuth` hook to `restrictToAuthenticated`
 - Renamed `queryWithUserId` hook to `queryWithCurrentUser`
 - Renamed `setUserId` hook to `associateCurrentUser`
 - Renamed `restrictToSelf` hook to `restrictToOwner` as it could be used on other resources other than users
