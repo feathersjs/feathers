@@ -31,6 +31,30 @@ feathers$ help
     generate service      generate new service
 ```
 
+## Create a new application
+
+Create a directory for your new app.
+
+```bash
+mkdir my-new-app
+cd my-new-app
+```
+
+Generate your app and follow the prompts
+
+```bash
+$ feathers
+
+feathers$ generate
+```
+
+Start your brand new app! 💥
+
+```bash
+npm start
+```
+
+
 ## About
 
 Feathers CLI's generators are provided by [generator-feathers](https://github.com/feathersjs/generator-feathers), and its interactive command line is built on [Vorpal](http://vorpal.js.org/).
