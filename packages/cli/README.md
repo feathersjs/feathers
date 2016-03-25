@@ -31,7 +31,7 @@ feathers$ help
     generate service      generate new service
 ```
 
-## Create a new application
+## Creating a new Feathers application
 
 Create a directory for your new app.
 
