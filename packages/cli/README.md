@@ -31,6 +31,11 @@ feathers$ help
     generate service      generate new service
 ```
 
+## About
+
+Feathers CLI's generators are provided by [generator-feathers](https://github.com/feathersjs/generator-feathers), and its interactive command line is built on [Vorpal](http://vorpal.js.org/).
+
+
 ## Changelog
 
 __1.0.0__
