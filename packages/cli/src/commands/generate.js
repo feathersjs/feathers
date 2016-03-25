@@ -9,6 +9,7 @@ export default function(vorpal) {
     .command('generate ', 'alias for generate app')
     .autocomplete(['app', 'hook', 'middleware', 'model', 'service'])
     .action(function (args, callback) {
+      this.log('');
       env.run('feathers:app', callback);
     });
 
@@ -16,6 +17,7 @@ export default function(vorpal) {
     .command('generate app')
     .description('generate new application')
     .action(function (args, callback) {
+      this.log('');
       env.run('feathers:app', callback);
     });
 
@@ -23,6 +25,7 @@ export default function(vorpal) {
     .command('generate hook')
     .description('generate new hook')
     .action(function (args, callback) {
+      this.log('');
       env.run('feathers:hook', callback);
     });
 
@@ -30,6 +33,7 @@ export default function(vorpal) {
     .command('generate middleware')
     .description('generate new middleware')
     .action(function (args, callback) {
+      this.log('');
       env.run('feathers:middleware', callback);
     });
 
@@ -37,6 +41,7 @@ export default function(vorpal) {
     .command('generate model')
     .description('generate new model')
     .action(function (args, callback) {
+      this.log('');
       env.run('feathers:model', callback);
     });
 
@@ -44,6 +49,7 @@ export default function(vorpal) {
     .command('generate service')
     .description('generate new service')
     .action(function (args, callback) {
+      this.log('');
       env.run('feathers:service', callback);
     });
 }
