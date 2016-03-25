@@ -1,13 +1,15 @@
 import vorpalBuilder from 'vorpal';
 
-const vorpal = vorpalBuilder();
-
 const moduleNames = ['generate'];
 
-moduleNames.forEach(moduleName => {
-  require('./commands/' + moduleName)(vorpal);
-});
+export default function() {
+  const vorpal = vorpalBuilder();
 
-vorpal
-    .delimiter('feathers$')
-    .show();
+  moduleNames.forEach(moduleName => {
+    require('./commands/' + moduleName)(vorpal);
+  });
+
+  vorpal
+      .delimiter('feathers$')
+      .show();
+}

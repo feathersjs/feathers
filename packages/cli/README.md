@@ -1,11 +1,35 @@
-# feathers-cli
+# Feathers CLI
 
 [![Build Status](https://travis-ci.org/feathersjs/feathers-cli.png?branch=master)](https://travis-ci.org/feathersjs/feathers-cli)
 
-> Command-line Feathers generator
+> The command line interface for Feathers applications
 
-## About
+## Installation
 
+```bash
+npm install -g feathers-cli
+```
+
+## Usage
+
+Enter the interactive prompt
+
+```bash
+feathers
+
+feathers$ help
+
+  Commands:
+
+    help [command...]     Provides help for a given command.
+    exit                  Exits application.
+    generate              alias for generate app
+    generate app          generate new application
+    generate hook         generate new hook
+    generate middleware   generate new middleware
+    generate model        generate new model
+    generate service      generate new service
+```
 
 ## Changelog
 
