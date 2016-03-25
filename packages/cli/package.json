@@ -5,7 +5,7 @@
   "homepage": "https://github.com/feathersjs/feathers-cli",
   "main": "lib/",
   "bin": {
-    "feathers": "./lib/index.js"
+    "feathers": "./bin/feathers.js"
   },
   "keywords": [
     "feathers",
