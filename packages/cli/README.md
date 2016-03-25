@@ -33,25 +33,13 @@ feathers$ help
 
 ## Creating a new Feathers application
 
-Create a directory for your new app.
-
 ```bash
-mkdir my-new-app
+mkdir my-new-app          # create a new directory for your app
 cd my-new-app
-```
 
-Generate your app and follow the prompts
+feathers generate         # follow the prompts and generate your app
 
-```bash
-$ feathers
-
-feathers$ generate
-```
-
-Start your brand new app! 💥
-
-```bash
-npm start
+npm start                 # start your app
 ```
 
 

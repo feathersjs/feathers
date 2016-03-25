@@ -10,6 +10,7 @@ export default function() {
   });
 
   vorpal
-      .delimiter('feathers$')
-      .show();
+    .delimiter('feathers$')
+    .show()
+    .parse(process.argv);
 }
