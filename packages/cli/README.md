@@ -15,7 +15,7 @@ npm install -g feathers-cli
 Enter the interactive prompt
 
 ```bash
-feathers
+$ feathers
 
 feathers$ help
 
