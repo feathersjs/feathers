@@ -16,6 +16,7 @@ npm install -g feathers-cli
 $ feathers generate
 
 ? What type of API are you making? (Press <space> to select)
+
 ❯◉ REST
  ◉ Realtime via Socket.io
  ◯ Realtime via Primus
