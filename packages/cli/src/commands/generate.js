@@ -2,7 +2,13 @@ import yeoman from 'yeoman-environment';
 
 const env = yeoman.createEnv();
 
-env.lookup();
+const generators = 'generator-feathers/generators';
+
+env.register(require.resolve(`${generators}/app`), 'feathers:app');
+env.register(require.resolve(`${generators}/hook`), 'feathers:hook');
+env.register(require.resolve(`${generators}/middleware`), 'feathers:middleware');
+env.register(require.resolve(`${generators}/model`), 'feathers:model');
+env.register(require.resolve(`${generators}/service`), 'feathers:service');
 
 export default function(vorpal) {
   vorpal
@@ -53,3 +59,5 @@ export default function(vorpal) {
       env.run('feathers:service', callback);
     });
 }
+
+export { env };
