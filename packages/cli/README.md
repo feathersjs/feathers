@@ -13,7 +13,7 @@ npm install -g feathers-cli
 ## Usage
 
 ```
-$ feathers generate
+feathers generate
 
   ? What type of API are you making? (Press <space> to select)
 
@@ -29,7 +29,7 @@ npm start
 ## Available Commands
 
 ```
-$ feathers help
+feathers help
 
   Commands:
 
