@@ -1,8 +1,10 @@
 # Feathers CLI
 
+> The command line interface for Feathers applications
+
 [![Build Status](https://travis-ci.org/feathersjs/feathers-cli.png?branch=master)](https://travis-ci.org/feathersjs/feathers-cli)
 
-> The command line interface for Feathers applications
+[![NPM](https://nodei.co/npm/feathers-cli.png?downloads=true&stars=true)](https://nodei.co/npm/feathers-cli/)
 
 ## Installation
 
