@@ -15,15 +15,13 @@ npm install -g feathers-cli
 ```
 $ feathers generate
 
-? What type of API are you making? (Press <space> to select)
+  ? What type of API are you making? (Press <space> to select)
 
-❯◉ REST
- ◉ Realtime via Socket.io
- ◯ Realtime via Primus
+  ❯◉ REST
+   ◉ Realtime via Socket.io
+   ◯ Realtime via Primus
 
-(answer all the prompts to generate your app)
-
-feathers$ exit
+  (answer all the prompts to generate your app)
 
 npm start
 ```
@@ -43,7 +41,6 @@ $ feathers help
     generate middleware   generate new middleware
     generate model        generate new model
     generate service      generate new service
-
 ```
 
 ## About
