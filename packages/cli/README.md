@@ -12,7 +12,22 @@ npm install -g feathers-cli
 
 ## Usage
 
-Enter the interactive prompt
+```
+$ feathers generate
+
+? What type of API are you making? (Press <space> to select)
+❯◉ REST
+ ◉ Realtime via Socket.io
+ ◯ Realtime via Primus
+
+(answer all the prompts to generate your app)
+
+feathers$ exit
+
+npm start
+```
+
+## Available Commands
 
 ```
 $ feathers help
@@ -28,18 +43,6 @@ $ feathers help
     generate model        generate new model
     generate service      generate new service
 
-feathers$ generate
-
-  ? What type of API are you making? (Press <space> to select)
-  ❯◉ REST
-   ◉ Realtime via Socket.io
-   ◯ Realtime via Primus
-
-  (answer all the prompts to generate your app)
-
-feathers$ exit
-
-npm start
 ```
 
 ## About
