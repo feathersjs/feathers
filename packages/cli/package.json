@@ -49,6 +49,7 @@
   "directories": {
     "lib": "lib"
   },
+  "preferGlobal": true,
   "dependencies": {
     "generator-feathers": "^0.6.20",
     "vorpal": "^1.10.9",
