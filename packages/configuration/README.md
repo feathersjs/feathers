@@ -91,6 +91,11 @@ PORT=8080 MONGOHQ_URL=mongodb://localhost:27017/production NODE_ENV=production n
 
 ## Changelog
 
+__0.2.2__
+
+- Fixed bug with interpolating environment variables in <NODE_ENV>.json
+
+
 __0.1.0__
 
 - Initial release
