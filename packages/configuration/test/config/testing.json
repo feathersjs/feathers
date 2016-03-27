@@ -1,3 +1,4 @@
 {
-  "from": "testing"
+  "from": "testing",
+  "test_environment": "NODE_ENV"
 }

@@ -49,7 +49,7 @@ export default module.exports = function (root, configFolder = 'config', separat
       const envConfig = path.join(root, configFolder, `${env}.json`);
       // We can use sync here since configuration only happens once at startup
       if(fs.existsSync(envConfig)) {
-        Object.assign(config, require(envConfig));
+        Object.assign(config, convert(require(envConfig)));
       } else {
         debug(`Configuration file for ${env} environment not found at ${envConfig}`);
       }
