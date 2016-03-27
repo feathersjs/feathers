@@ -43,16 +43,21 @@ feathers help
     generate middleware   generate new middleware
     generate model        generate new model
     generate service      generate new service
+    generate plugin       generate new plugin
 ```
 
 ## About
 
-Feathers CLI's generators are provided by [generator-feathers](https://github.com/feathersjs/generator-feathers), its interactive command line is built on [Vorpal](http://vorpal.js.org/).
+Feathers CLI's generators are provided by [generator-feathers](https://github.com/feathersjs/generator-feathers) and [generator-feathers-plugin](https://github.com/feathersjs/generator-feathers-plugin). Its interactive command line is built on [Vorpal](http://vorpal.js.org/).
 
 
 ## Changelog
 
-__1.0.0__
+__1.2.0__
+
+- Supporting "generate plugin" command via feathersjs/generator-feathers-plugin
+
+__1.1.1__
 
 - Initial release
 
