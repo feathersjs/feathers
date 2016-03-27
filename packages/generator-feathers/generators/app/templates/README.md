@@ -29,11 +29,16 @@ Simply run `npm test` and all your tests in the `test/` directory will be run.
 
 ## Scaffolding
 
-Feathers has a powerful generator. Here's just a few things that it can do:
+Feathers has a powerful command line interface. Here are a few things it can do:
 
-- **Generate a new Service:** `yo feathers:service`
-- **Generate a new Hook:** `yo feathers:hook`
-- **Generate a new Model:** `yo feathers:model`
+```
+$ npm install -g feathers-cli             # Install Feathers CLI
+
+$ feathers generate service               # Generate a new Service
+$ feathers generate hook                  # Generate a new Hook
+$ feathers generate model                 # Generate a new Model
+$ feathers help                           # Show all commands
+```
 
 ## Help
 
