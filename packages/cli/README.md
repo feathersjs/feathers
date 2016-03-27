@@ -14,8 +14,6 @@ npm install -g feathers-cli
 
 ## Usage
 
-## Usage
-
 ```
 $ feathers help
 
