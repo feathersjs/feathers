@@ -18,6 +18,10 @@ describe('feathers-configuration', () => {
     assert.equal(app.get('environment'), 'testing')
   );
 
+  it('initialized property with environment variable from <env>.json', () =>
+    assert.equal(app.get('test_environment'), 'testing')
+  );
+
   it('uses an escape character', () =>
     assert.equal(app.get('unescaped'), 'NODE_ENV')
   );
