@@ -2,18 +2,20 @@ import yeoman from 'yeoman-environment';
 
 const env = yeoman.createEnv();
 
-const generators = 'generator-feathers/generators';
+const feathersGenerators = 'generator-feathers/generators';
 
-env.register(require.resolve(`${generators}/app`), 'feathers:app');
-env.register(require.resolve(`${generators}/hook`), 'feathers:hook');
-env.register(require.resolve(`${generators}/middleware`), 'feathers:middleware');
-env.register(require.resolve(`${generators}/model`), 'feathers:model');
-env.register(require.resolve(`${generators}/service`), 'feathers:service');
+env.register(require.resolve(`${feathersGenerators}/app`), 'feathers:app');
+env.register(require.resolve(`${feathersGenerators}/hook`), 'feathers:hook');
+env.register(require.resolve(`${feathersGenerators}/middleware`), 'feathers:middleware');
+env.register(require.resolve(`${feathersGenerators}/model`), 'feathers:model');
+env.register(require.resolve(`${feathersGenerators}/service`), 'feathers:service');
+env.register(require.resolve(`${feathersGenerators}/service`), 'feathers:service');
+env.register(require.resolve('generator-feathers-plugin'), 'feathers-plugin');
 
 export default function(vorpal) {
   vorpal
     .command('generate ', 'alias for generate app')
-    .autocomplete(['app', 'hook', 'middleware', 'model', 'service'])
+    .autocomplete(['app', 'hook', 'middleware', 'model', 'service', 'plugin'])
     .action(function (args, callback) {
       this.log('');
       env.run('feathers:app', callback);
@@ -58,6 +60,15 @@ export default function(vorpal) {
       this.log('');
       env.run('feathers:service', callback);
     });
+
+  vorpal
+    .command('generate plugin')
+    .description('generate new plugin')
+    .action(function (args, callback) {
+      this.log('');
+      env.run('feathers-plugin', callback);
+    });
+
 }
 
 export { env };

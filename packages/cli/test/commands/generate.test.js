@@ -19,7 +19,8 @@ describe('feathers-cli', () => {
         'feathers:hook',
         'feathers:middleware',
         'feathers:model',
-        'feathers:service'
+        'feathers:service',
+        'feathers-plugin'
       ];
 
       assert.equal(_.difference(expected, env.namespaces()).length, 0, `namespaces() is incomplete: ${env.namespaces()}`);
