@@ -42,8 +42,6 @@ feathers$ generate
 $ npm start
 ```
 
-```
-
 ## About
 
 Feathers CLI's generators are provided by [generator-feathers](https://github.com/feathersjs/generator-feathers) and [generator-feathers-plugin](https://github.com/feathersjs/generator-feathers-plugin). Its interactive command line is built on [Vorpal](http://vorpal.js.org/).
