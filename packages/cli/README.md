@@ -29,7 +29,7 @@ $ feathers help
     generate service      generate new service
     generate plugin       generate new plugin
 
-feathers$ generate
+$ feathers generate
 
   ? What type of API are you making? (Press <space> to select)
 
@@ -48,6 +48,11 @@ Feathers CLI's generators are provided by [generator-feathers](https://github.co
 
 
 ## Changelog
+
+__1.2.1__
+
+- Properly exiting after executing a command passed in `process.argv`
+
 
 __1.2.0__
 
