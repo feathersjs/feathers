@@ -10,7 +10,7 @@ env.register(require.resolve(`${feathersGenerators}/middleware`), 'feathers:midd
 env.register(require.resolve(`${feathersGenerators}/model`), 'feathers:model');
 env.register(require.resolve(`${feathersGenerators}/service`), 'feathers:service');
 env.register(require.resolve(`${feathersGenerators}/service`), 'feathers:service');
-env.register(require.resolve('generator-feathers-plugin'), 'feathers-plugin');
+env.register(require.resolve('generator-feathers-plugin'), 'feathers:plugin');
 
 export default function(vorpal) {
   vorpal
@@ -66,9 +66,8 @@ export default function(vorpal) {
     .description('generate new plugin')
     .action(function (args, callback) {
       this.log('');
-      env.run('feathers-plugin', callback);
+      env.run('feathers:plugin', callback);
     });
-
 }
 
 export { env };
