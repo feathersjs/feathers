@@ -63,6 +63,40 @@ yo feathers:service
 
 ## Changelog
 
+__0.7.0__
+
+- updating to feathers-authentication@0.7.0
+- automatically setting `idField`
+- adding `restrictToOwner` hook to user service
+
+__0.6.0__
+
+- adding middleware generation
+- adding auth hooks
+- moving to AST instead of Regex
+- a bunch of bug fixes and improvements
+
+__0.5.0__
+
+- bug fixes and improvements
+- making nedb the default db
+- updating error handler
+
+__0.4.0__
+
+- removing a bunch of boilerplate
+
+__0.3.0__
+
+- sorting out hook path and inclusion
+- changing directory structure
+
+__0.2.0__
+
+- cors
+- basic local auth
+- ability to select dbs
+
 __0.1.0__
 
 - Initial release
