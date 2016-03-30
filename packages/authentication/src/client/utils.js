@@ -36,9 +36,22 @@ export function authenticateSocket(options, socket, method) {
   });
 }
 
+// Returns a promise that de-authenticates a socket
+export function logoutSocket(socket, method) {
+  return new Promise((resolve, reject) => {
+    socket[method]('logout', error => {
+      if (error) {
+        reject(error);
+      }
+
+      resolve();
+    });
+  });
+}
+
 // Returns the value for a cookie
 export function getCookie(name) {
-  if(typeof document !== 'undefined') {
+  if (typeof document !== 'undefined') {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
 
@@ -50,13 +63,22 @@ export function getCookie(name) {
   return null;
 }
 
-// Tries the JWT from the given key either from a storage or the cookie
-export function getJWT(key, storage) {
-  return Promise.resolve(storage.getItem(key)).then(jwt => {
-    const cookieKey = getCookie(key);
+// Returns the value for a cookie
+export function clearCookie(name) {
+  if (typeof document !== 'undefined') {
+    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:01 GMT;`; 
+  }
 
-    if(cookieKey) {
-      return cookieKey;
+  return null;
+}
+
+// Tries the JWT from the given key either from a storage or the cookie
+export function getJWT(tokenKey, cookieKey, storage) {
+  return Promise.resolve(storage.getItem(tokenKey)).then(jwt => {
+    const cookieToken = getCookie(cookieKey);
+
+    if (cookieToken) {
+      return cookieToken;
     }
 
     return jwt;

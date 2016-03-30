@@ -125,6 +125,50 @@ describe('Primus authentication', function() {
 
         primus.send('authenticate', data);
       });
+
+      it('does not send a create event from local service', function(done) {
+        const data = {
+          email,
+          password
+        };
+
+        let receivedLocalEvent = false;
+
+        primus.on('auth/local created', function() {
+          receivedLocalEvent = true;
+        });
+
+        primus.on('authenticated', function() {
+          setTimeout(function() {
+            expect(receivedLocalEvent).to.equal(false);
+            done();
+          }, 100);
+        });
+
+        primus.send('authenticate', data);
+      });
+
+      it('does not send a create event from token service', function(done) {
+        const data = {
+          email,
+          password
+        };
+
+        let receivedTokenEvent = false;
+
+        primus.on('auth/token created', function() {
+          receivedTokenEvent = true;
+        });
+
+        primus.on('authenticated', function() {
+          setTimeout(function() {
+            expect(receivedTokenEvent).to.equal(false);
+            done();
+          }, 100);
+        });
+
+        primus.send('authenticate', data);
+      });
     });
   });
 

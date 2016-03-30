@@ -1,23 +1,43 @@
-import { expect } from 'chai';
+/*jshint expr: true*/
+
+import chai, { expect } from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 import middleware from '../../src/middleware';
 
-const MockRequest = {
-  feathers: {},
-  params: {},
-  body: {},
-  query: {},
-  headers: {},
-  cookies: {}
-};
+chai.use(sinonChai);
 
-const MockResponse = {
-  json: function(){}
-};
-
-const MockNext = function(){};
+let MockRequest;
+let MockResponse;
+let MockNext;
+let MockError;
 
 describe('Middleware', () => {
-  describe('Expose connect middleware', () => {
+  beforeEach(() => {
+    MockRequest = {
+      feathers: {},
+      params: {},
+      body: {},
+      query: {},
+      headers: {},
+      cookies: {}
+    };
+    MockResponse = {
+      json: sinon.spy(),
+      redirect: sinon.spy(),
+      data: {}
+    };
+    MockNext = sinon.spy();
+    MockError = new Error('Mock Error');
+  });
+
+  afterEach(() => {
+    MockResponse.json.reset();
+    MockResponse.redirect.reset();
+    MockNext.reset();
+  });
+
+  describe('exposeConnectMiddleware()', () => {
     it('adds the request object to req.feathers', () => {
       middleware.exposeConnectMiddleware(MockRequest, MockResponse, MockNext);
       expect(MockRequest.feathers.req).to.deep.equal(MockRequest);
@@ -29,7 +49,7 @@ describe('Middleware', () => {
     });
   });
 
-  describe('Normalize Auth Token', () => {
+  describe('normalizeAuthToken()', () => {
     describe('with invalid options', () => {
       it('throws an error when header option is missing', () => {
         try {
@@ -37,15 +57,6 @@ describe('Middleware', () => {
         }
         catch (error) {
           expect(error.message).to.equal(`'header' must be provided to normalizeAuthToken() middleware`);
-        }
-      });
-
-      it('throws an error when cookie option is missing', () => {
-        try {
-          middleware.normalizeAuthToken({ header: 'foo' })();
-        }
-        catch (error) {
-          expect(error.message).to.equal(`'cookie' must be provided to normalizeAuthToken() middleware`);
         }
       });
     });
@@ -79,32 +90,6 @@ describe('Middleware', () => {
 
           middleware.normalizeAuthToken(newOptions)(req, MockResponse, MockNext);
           expect(req.feathers.token).to.equal('my-token');
-        });
-      });
-
-      describe('Auth token passed via cookie', () => {
-        it('grabs the token', () => {
-          const req = Object.assign({}, MockRequest, {
-            cookies: {
-              'feathers-jwt': 'my-token'
-            }
-          });
-
-          middleware.normalizeAuthToken(options)(req, MockResponse, MockNext);
-          expect(req.feathers.token).to.deep.equal('my-token');
-        });
-
-        it('supports a custom cookie', () => {
-          const req = Object.assign({}, MockRequest, {
-            cookies: {
-              'my-cookie': 'my-token'
-            }
-          });
-
-          const newOptions = Object.assign({}, options, {cookie: 'my-cookie'});
-
-          middleware.normalizeAuthToken(newOptions)(req, MockResponse, MockNext);
-          expect(req.feathers.token).to.deep.equal('my-token');
         });
       });
 
@@ -154,6 +139,232 @@ describe('Middleware', () => {
           middleware.normalizeAuthToken(options)(req, MockResponse, MockNext);
           expect(req.query.token).to.equal(undefined);
         });
+      });
+    });
+  });
+
+  describe('successfulLogin()', () => {
+    describe('with invalid options', () => {
+      it('throws an error when cookie option is missing', () => {
+        try {
+          middleware.successfulLogin()();
+        }
+        catch (error) {
+          expect(error).to.not.equal(undefined);
+        }
+      });
+    });
+
+    describe('with valid options and not redirecting', () => {
+      let options;
+
+      beforeEach(() => {
+        options = { cookie: {} };
+      });
+
+      it('calls next', () => {
+        middleware.successfulLogin(options)(MockRequest, MockResponse, MockNext);
+        expect(MockNext).to.have.been.calledOnce;
+      });
+
+      describe('when it came from an ajax request', () => {
+        it('calls next', () => {
+          MockRequest.xhr = true;
+          options.successRedirect = true;
+          
+          middleware.successfulLogin(options)(MockRequest, MockResponse, MockNext);
+          expect(MockNext).to.have.been.calledOnce;
+        });
+      });
+
+      describe('when content type is JSON', () => {
+        it('calls next', () => {
+          MockRequest.is = sinon.stub().returns(true);
+          options.successRedirect = true;
+          
+          middleware.successfulLogin(options)(MockRequest, MockResponse, MockNext);
+          expect(MockNext).to.have.been.calledOnce;
+        });
+      });
+
+      describe('when client does not accept HTML', () => {
+        it('calls next', () => {
+          MockRequest.is = sinon.stub().returns(false);
+          MockRequest.accepts = sinon.stub().returns(false);
+          options.successRedirect = true;
+          
+          middleware.successfulLogin(options)(MockRequest, MockResponse, MockNext);
+          expect(MockNext).to.have.been.calledOnce;
+        });
+      });
+    });
+
+    describe('with valid options and redirecting', () => {
+      let options;
+
+      beforeEach(() => {
+        options = {
+          cookie: false,
+          successRedirect: '/auth/success'
+        };
+        
+        MockRequest.xhr = false;
+        MockRequest.is = sinon.stub().returns(false);
+        MockRequest.accepts = sinon.stub().returns(true);
+        MockResponse.clearCookie = sinon.spy();
+      });
+
+      it('redirects', () => {
+        middleware.successfulLogin(options)(MockRequest, MockResponse, MockNext);
+        expect(MockResponse.redirect).to.have.been.calledWith('/auth/success');
+      });
+
+      describe('when cookie enabled', () => {
+        beforeEach(() => {
+          options.cookie = { name: 'feathers-jwt' };
+          MockResponse.cookie = sinon.spy();
+        });
+
+        it('clears cookies', () => {
+          options.cookie.expires = new Date();
+          middleware.successfulLogin(options)(MockRequest, MockResponse, MockNext);
+          expect(MockResponse.clearCookie).to.have.been.calledWith('feathers-jwt');
+        });
+
+        it('throws an error if not using HTTPS in production', () => {
+          MockRequest.secure = false;
+          process.env.NODE_ENV = 'production';
+
+          try {
+            middleware.successfulLogin(options)(MockRequest, MockResponse, MockNext);  
+          }
+          catch(error) {
+            expect(error).to.not.equal(undefined);
+          }
+
+          process.env.NODE_ENV = undefined;
+        });
+
+        it('throws an error if expires is not a date', () => {
+          options.cookie.expires = 'not a date';
+
+          try {
+            middleware.successfulLogin(options)(MockRequest, MockResponse, MockNext);  
+          }
+          catch(error) {
+            expect(error).to.not.equal(undefined);
+          }
+        });
+
+        it('sets the cookie', () => {
+          MockResponse.data.token = 'token';
+
+          middleware.successfulLogin(options)(MockRequest, MockResponse, MockNext);
+          expect(MockResponse.cookie).to.have.been.calledWith('feathers-jwt', 'token');
+        });
+
+        it('supports custom cookie expiration', () => {
+          const expiry = new Date('Jan 1, 2000');
+          options.cookie.expires = expiry;
+          MockResponse.data.token = 'token';
+
+          const expected = Object.assign({}, options.cookie, {
+            path: '/auth/success',
+            expires: expiry
+          });
+
+          middleware.successfulLogin(options)(MockRequest, MockResponse, MockNext);
+          expect(MockResponse.cookie).to.have.been.calledWith('feathers-jwt', 'token', expected);
+        });
+      });
+    });
+  });
+
+  describe('failedLogin()', () => {
+    describe('with invalid options', () => {
+      it('throws an error when cookie option is missing', () => {
+        try {
+          middleware.failedLogin()();
+        }
+        catch (error) {
+          expect(error).to.not.equal(undefined);
+        }
+      });
+    });
+
+    describe('with valid options and not redirecting', () => {
+      let options;
+
+      beforeEach(() => {
+        options = { cookie: {} };
+      });
+
+      it('calls next', () => {
+        middleware.failedLogin(options)(MockError, MockRequest, MockResponse, MockNext);
+        expect(MockNext).to.have.been.calledOnce;
+      });
+
+      describe('when it came from an ajax request', () => {
+        it('calls next', () => {
+          MockRequest.xhr = true;
+          options.successRedirect = true;
+          
+          middleware.failedLogin(options)(MockError, MockRequest, MockResponse, MockNext);
+          expect(MockNext).to.have.been.calledOnce;
+        });
+      });
+
+      describe('when content type is JSON', () => {
+        it('calls next', () => {
+          MockRequest.is = sinon.stub().returns(true);
+          options.successRedirect = true;
+          
+          middleware.failedLogin(options)(MockError, MockRequest, MockResponse, MockNext);
+          expect(MockNext).to.have.been.calledOnce;
+        });
+      });
+
+      describe('when client does not accept HTML', () => {
+        it('calls next', () => {
+          MockRequest.is = sinon.stub().returns(false);
+          MockRequest.accepts = sinon.stub().returns(false);
+          options.successRedirect = true;
+          
+          middleware.failedLogin(options)(MockError, MockRequest, MockResponse, MockNext);
+          expect(MockNext).to.have.been.calledOnce;
+        });
+      });
+    });
+
+    describe('with valid options and redirecting', () => {
+      let options;
+
+      beforeEach(() => {
+        options = {
+          cookie: false,
+          failureRedirect: '/auth/failure'
+        };
+        
+        MockRequest.xhr = false;
+        MockRequest.is = sinon.stub().returns(false);
+        MockRequest.accepts = sinon.stub().returns(true);
+        MockResponse.clearCookie = sinon.spy();
+      });
+
+      describe('when cookie is enabled', () => {
+        beforeEach(() => {
+          options.cookie = { name: 'feathers-jwt' };
+        });
+
+        it('clears cookies', () => {
+          middleware.failedLogin(options)(MockError, MockRequest, MockResponse, MockNext);
+          expect(MockResponse.clearCookie).to.have.been.calledWith('feathers-jwt');
+        });
+      });
+
+      it('redirects', () => {
+        middleware.failedLogin(options)(MockError, MockRequest, MockResponse, MockNext);
+        expect(MockResponse.redirect).to.have.been.calledWith('/auth/failure');
       });
     });
   });

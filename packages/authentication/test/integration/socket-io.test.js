@@ -126,6 +126,50 @@ describe('Socket.io authentication', function() {
 
         socket.emit('authenticate', data);
       });
+
+      it('does not emit a create event from local service', function(done) {
+        const data = {
+          email,
+          password
+        };
+
+        let receivedLocalEvent = false;
+
+        socket.on('auth/local created', function() {
+          receivedLocalEvent = true;
+        });
+
+        socket.on('authenticated', function() {
+          setTimeout(function() {
+            expect(receivedLocalEvent).to.equal(false);
+            done();
+          }, 100);
+        });
+
+        socket.emit('authenticate', data);
+      });
+
+      it('does not emit a create event from token service', function(done) {
+        const data = {
+          email,
+          password
+        };
+
+        let receivedTokenEvent = false;
+
+        socket.on('auth/token created', function() {
+          receivedTokenEvent = true;
+        });
+
+        socket.on('authenticated', function() {
+          setTimeout(function() {
+            expect(receivedTokenEvent).to.equal(false);
+            done();
+          }, 100);
+        });
+
+        socket.emit('authenticate', data);
+      });
     });
   });
 

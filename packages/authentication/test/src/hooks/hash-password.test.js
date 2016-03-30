@@ -17,23 +17,66 @@ describe('hashPassword', () => {
     });
   });
 
-  describe('when hook.data does not exist', () => {
+  describe('when data does not exist', () => {
     it('does not do anything', () => {
       let hook = {
         type: 'before',
-        foo: { password: 'password' },
         app: {
           get: function() { return {}; }
         }
       };
 
-      hook = hashPassword()(hook);
-      expect(hook.data).to.equal(undefined);
-      expect(hook.foo.password).to.equal('password');
+      try {
+        var returnedHook = hashPassword()(hook);
+        expect(returnedHook).to.deep.equal(hook);
+      }
+      catch(error) {
+        // It should never get here
+        expect(true).to.equal(false);
+      }
     });
   });
 
-  describe('when hook.data exists', () => {
+  describe('when password does not exist', () => {
+    let hook;
+
+    beforeEach(() => {
+      hook = {
+        type: 'before',
+        data: {},
+        params: {},
+        app: {
+          get: function() { return {}; }
+        }
+      };
+    });
+
+    describe('when provider does not exist', () => {
+      it('does not do anything', () => {
+        try {
+          var returnedHook = hashPassword()(hook);
+          expect(returnedHook).to.deep.equal(hook);
+        }
+        catch(error) {
+          // It should never get here
+          expect(true).to.equal(false);
+        }
+      });
+    });
+
+    it('throws an error', () => {
+      hook.params.provider = 'rest';
+
+      try {
+        hashPassword()(hook);
+      }
+      catch(error) {
+        expect(error).to.not.equal(undefined);
+      }
+    });
+  });
+
+  describe('when password exists', () => {
     let hook;
 
     beforeEach(() => {

@@ -18,11 +18,33 @@ describe('queryWithCurrentUser', () => {
   });
 
   describe('when user does not exist', () => {
-    it('throws an error', () => {
-      let hook = {
+    let hook;
+
+    beforeEach(() => {
+      hook = {
         type: 'before',
-        params: {}
+        params: {},
+        app: {
+          get: function() { return {}; }
+        }
       };
+    });
+
+    describe('when provider does not exist', () => {
+      it('does not do anything', () => {
+        try {
+          var returnedHook = queryWithCurrentUser()(hook);
+          expect(returnedHook).to.deep.equal(hook);
+        }
+        catch(error) {
+          // It should never get here
+          expect(true).to.equal(false);
+        }
+      });
+    });
+
+    it('throws an error', () => {
+      hook.params.provider = 'rest';
 
       try {
         queryWithCurrentUser()(hook);

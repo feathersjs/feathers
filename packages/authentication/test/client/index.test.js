@@ -104,13 +104,13 @@ const setupTests = initApp => {
         expect(response.data).to.not.equal(undefined);
 
         return app.authenticate().then(response => {
-          expect(app.get('token')).to.deep.equal(response.token);
+          expect(app.get('token')).to.equal(response.token);
           expect(app.get('user')).to.deep.equal(response.data);
         }).then(done);
       }).catch(done);
   });
 
-  it.skip('.logout works, does not grant access to protected service', done => {
+  it('.logout works, does not grant access to protected service', done => {
     app.authenticate({
         type: 'local',
         email, password
@@ -119,10 +119,16 @@ const setupTests = initApp => {
         expect(response.data).to.not.equal(undefined);
 
         app.logout().then(() => {
+          expect(app.get('token')).to.equal(null);
+          expect(app.get('user')).to.equal(null);
+
           app.service('messages').create({ text: 'auth test message' })
-            .then(msg => console.log('!!!', msg))
-            .catch(error => console.log(error));
-        });
+            .then(done)
+            .catch(error => {
+              expect(error.code).to.equal(401);
+              done();
+            });
+        }).catch(done);
       }).catch(done);
   });
 };

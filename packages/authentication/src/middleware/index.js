@@ -2,7 +2,7 @@ import Debug from 'debug';
 import errors from 'feathers-errors';
 
 const debug = Debug('feathers-authentication:middleware');
-const TEN_HOURS = 36000000;
+const THIRTY_SECONDS = 30000;
 
 // Usually this is a big no no but passport requires the 
 // request object to inspect req.body and req.query so we
@@ -32,10 +32,6 @@ export let normalizeAuthToken = function(options = {}) {
     throw new Error(`'header' must be provided to normalizeAuthToken() middleware`);
   }
 
-  if (!options.cookie) {
-    throw new Error(`'cookie' must be provided to normalizeAuthToken() middleware`);
-  }
-
   return function(req, res, next) {
     let token = req.headers[options.header];
     
@@ -47,16 +43,12 @@ export let normalizeAuthToken = function(options = {}) {
       }
     }
 
-    // If we don't already have token in the header check for a cookie
-    if (!token && req.cookies && req.cookies[options.cookie]) {
-      token = req.cookies[options.cookie];
-    }
     // Check the body next if we still don't have a token
-    else if (req.body.token) {
+    if (req.body.token) {
       token = req.body.token;
       delete req.body.token;
     }
-    // Finally, check the query string. (worst method)
+    // Finally, check the query string. (worst method but nice for quick local dev)
     else if (req.query.token) {
       token = req.query.token;
       delete req.query.token;
@@ -72,28 +64,45 @@ export let normalizeAuthToken = function(options = {}) {
 export let successfulLogin = function(options = {}) {
   debug('Setting up successfulLogin middleware with options:', options);
 
-  if (!options.cookie) {
-    throw new Error(`'cookie' must be provided to successfulLogin() middleware`);
+  if (options.cookie === undefined) {
+    throw new Error(`'cookie' must be provided to successfulLogin() middleware or set to 'false'`);
   }
 
   return function(req, res, next) {
     // NOTE (EK): If we are not dealing with a browser or it was an
     // XHR request then just skip this. This is primarily for
     // handling the oauth redirects and for us to securely send the
-    // JWT to the client.
+    // JWT to the client in a cookie.
     if (!options.successRedirect || req.xhr || req.is('json') || !req.accepts('html')) {
       return next();
     }
 
-    // clear any previous JWT cookie
-    res.clearCookie(options.cookie);
+    // If cookies are enabled set our JWT in a cookie.
+    if (options.cookie) {
+      // clear any previous JWT cookie
+      res.clearCookie(options.cookie.name);
 
-    // Set a our JWT in a cookie.
-    // TODO (EK): Look into hardening this cookie a bit.
-    let expiration = new Date();
-    expiration.setTime(expiration.getTime() + TEN_HOURS);
+      // Only send back cookies when not in production or when in production and using HTTPS
+      if (!req.secure && process.env.NODE_ENV === 'production') {
+        console.error(`You should be using HTTPS in production! Refusing to send JWT in a cookie`);
+      }
+      else {
+        const cookieOptions = Object.assign({}, options.cookie, { path: options.successRedirect });
 
-    res.cookie(options.cookie, res.data.token, { expires: expiration});
+        // If a custom expiry wasn't passed then set the expiration to be 30 seconds from now.
+        if (cookieOptions.expires === undefined) {
+          const expiry = new Date();
+          expiry.setTime(expiry.getTime() + THIRTY_SECONDS);
+          cookieOptions.expires = expiry;
+        }
+
+        if ( !(cookieOptions.expires instanceof Date) ) {
+          throw new Error('cookie.expires must be a valid Date object');
+        }
+
+        res.cookie(options.cookie.name, res.data.token, cookieOptions);
+      }
+    }
 
     // Redirect to our success route
     res.redirect(options.successRedirect);
@@ -103,8 +112,8 @@ export let successfulLogin = function(options = {}) {
 export let failedLogin = function(options = {}) {
   debug('Setting up failedLogin middleware with options:', options);
 
-  if (!options.cookie) {
-    throw new Error(`'cookie' must be provided to failedLogin() middleware`);
+  if (options.cookie === undefined) {
+    throw new Error(`'cookie' must be provided to failedLogin() middleware or set to 'false'`);
   }
 
   return function(error, req, res, next) {
@@ -117,7 +126,9 @@ export let failedLogin = function(options = {}) {
     }
 
     // clear any previous JWT cookie
-    res.clearCookie(options.cookie);
+    if (options.cookie) {
+      res.clearCookie(options.cookie.name);
+    }
 
     debug('An authentication error occurred.', error);
 
@@ -183,6 +194,21 @@ export let setupSocketIOAuthentication = function(app, options = {}) {
         }).catch(errorHandler);
       }
     });
+
+    socket.on('logout', function(callback) {
+
+      // TODO (EK): Blacklist token
+      try {
+        delete socket.feathers.token;
+        delete socket.feathers.user;
+      }
+      catch(error) {
+        debug('There was an error logging out', error);
+        return callback(new Error('There was an error logging out'));
+      }
+      
+      callback();
+    });
   };
 };
 
@@ -240,6 +266,21 @@ export let setupPrimusAuthentication = function(app, options = {}) {
         }).catch(errorHandler);
       }
     });
+
+    socket.on('logout', function(callback) {
+
+      // TODO (EK): Blacklist token
+      try {
+        delete socket.request.feathers.token;
+        delete socket.request.feathers.user;
+      }
+      catch(error) {
+        debug('There was an error logging out', error);
+        return callback(new Error('There was an error logging out'));
+      }
+      
+      callback();
+    });
   };
 };
 
@@ -247,6 +288,7 @@ export default {
   exposeConnectMiddleware,
   normalizeAuthToken,
   successfulLogin,
+  failedLogin,
   setupSocketIOAuthentication,
   setupPrimusAuthentication
 };

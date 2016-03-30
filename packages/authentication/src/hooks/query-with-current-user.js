@@ -10,6 +10,10 @@ export default function(options = {}) {
     }
 
     if (!hook.params.user) {
+      if (!hook.params.provider) {
+        return hook;
+      }
+
       throw new Error('There is no current user to associate.');
     }
 

@@ -11,6 +11,10 @@ export default function(options = {}){
       throw new Error(`The 'restrictToOwner' hook should only be used as a 'before' hook.`);
     }
 
+    if (!hook.id) {
+      throw new Error(`The 'restrictToOwner' hook should only be used on the 'get', 'update', 'patch' and 'remove' service methods.`);
+    }
+
     // If it was an internal call then skip this hook
     if (!hook.params.provider) {
       return hook;
@@ -30,13 +34,28 @@ export default function(options = {}){
       throw new Error(`'${options.idField} is missing from current user.'`);
     }
 
-    // NOTE (EK): This just scopes the query for the resource requested to the
-    // current user, which will result in a 404 if they are not the owner.
-    hook.params.query[options.ownerField] = id;
-    
-    // TODO (EK): Maybe look up the actual document in this hook and throw a Forbidden error
-    // if (field && id && field.toString() !== id.toString()) {
-    //   throw new errors.Forbidden('You do not have valid permissions to access this.');
-    // }
+    // look up the document and throw a Forbidden error if the user is not an owner
+    return new Promise((resolve, reject) => {
+      // Set provider as undefined so we avoid an infinite loop if this hook is
+      // set on the resource we are requesting.
+      const params = Object.assign({}, hook.params, { provider: undefined });
+
+      return this.get(hook.id, params).then(data => {
+        if (data.toJSON) {
+          data = data.toJSON();
+        }
+        else if (data.toObject) {
+          data = data.toObject();
+        }
+
+        const field = data[options.ownerField];
+
+        if ( field === undefined || field.toString() !== id.toString() ) {
+          reject(new errors.Forbidden('You do not have the permissions to access this.'));
+        }
+
+        resolve(hook);
+      }).catch(reject);
+    });
   };
 }

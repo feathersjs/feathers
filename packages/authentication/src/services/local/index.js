@@ -1,6 +1,6 @@
 import Debug from 'debug';
 import errors from 'feathers-errors';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import passport from 'passport';
 import { Strategy } from 'passport-local';
 import { exposeConnectMiddleware } from '../../middleware';
@@ -40,6 +40,7 @@ export class Service {
         return user;
       })
       .then(user => {
+        const crypto = this.options.bcrypt || bcrypt;
         // Check password
         const hash = user[this.options.passwordField];
 
@@ -47,7 +48,7 @@ export class Service {
           return done(new Error(`User record in the database is missing a '${this.options.passwordField}'`));
         }
 
-        bcrypt.compare(password, user[this.options.passwordField], function(error, result) {
+        crypto.compare(password, user[this.options.passwordField], function(error, result) {
           // Handle 500 server error.
           if (error) {
             return done(error);
@@ -95,6 +96,11 @@ export class Service {
     // attach the app object to the service context
     // so that we can call other services
     this.app = app;
+
+    // prevent regular service events from being dispatched
+    if (typeof this.filter === 'function') {
+      this.filter(() => false);
+    }
   }
 }
 

@@ -1,7 +1,21 @@
 import { expect } from 'chai';
+import sinon from 'sinon';
 import { restrictToOwner } from '../../../src/hooks';
 
+let MockData;
+let MockService;
+
 describe('restrictToOwner', () => {
+  beforeEach(() => {
+    MockData = {
+      userId: '1',
+      text: 'hey'
+    };
+    MockService = {
+      get: sinon.stub().returns(Promise.resolve(MockData))
+    };
+  });
+
   describe('when not called as a before hook', () => {
     it('throws an error', () => {
       let hook = {
@@ -17,9 +31,25 @@ describe('restrictToOwner', () => {
     });
   });
 
+  describe('when not called with an id', () => {
+    it('throws an error', () => {
+      let hook = {
+        type: 'before'
+      };
+
+      try {
+        restrictToOwner()(hook);
+      }
+      catch(error) {
+        expect(error).to.not.equal(undefined);
+      }
+    });
+  });
+
   describe('when provider does not exist', () => {
     it('does not do anything', () => {
       let hook = {
+        id: '1',
         type: 'before',
         params: {}
       };
@@ -38,6 +68,7 @@ describe('restrictToOwner', () => {
   describe('when user does not exist', () => {
     it('throws a not authenticated error', () => {
       let hook = {
+        id: '1',
         type: 'before',
         params: {
           provider: 'rest'
@@ -58,11 +89,11 @@ describe('restrictToOwner', () => {
 
     beforeEach(() => {
       hook = {
+        id: '1',
         type: 'before',
         params: {
           provider: 'rest',
-          user: { _id: '1' },
-          query: { text: 'Hi' }
+          user: { _id: '1' }
         },
         app: {
           get: function() { return {}; }
@@ -72,14 +103,7 @@ describe('restrictToOwner', () => {
 
     describe('when user is missing idField', () => {
       it('throws an error', () => {
-        let hook = {
-          type: 'before',
-          params: {
-            provider: 'rest',
-            user: {},
-            query: {}
-          }
-        };
+        hook.params.user = {};
 
         try {
           restrictToOwner()(hook);
@@ -90,29 +114,38 @@ describe('restrictToOwner', () => {
       });
     });
 
-    it('adds user id to query using default options', () => {
-      restrictToOwner()(hook);
+    describe('when resource is missing owner id', () => {
+      it('returns a Forbidden error', done => {
+        let fn = restrictToOwner({ ownerField: 'user' });
 
-      expect(hook.params.query.userId).to.equal('1');
+        fn.call(MockService, hook).then(done).catch(error => {
+          expect(error.code).to.equal(403);
+          done();
+        });
+      });
     });
 
-    it('adds user id to query using options from global auth config', () => {
-      hook.params.user.id = '2';
-      hook.app.get = function() {
-        return { idField: 'id', ownerField: 'ownerId' };
-      };
+    describe('when user is not an owner', () => {
+      it('returns a Forbidden error', done => {
+        hook.params.user._id = '2';
+        let fn = restrictToOwner();
 
-      restrictToOwner()(hook);
-
-      expect(hook.params.query.ownerId).to.equal('2');
+        fn.call(MockService, hook).then(done).catch(error => {
+          expect(error.code).to.equal(403);
+          done();
+        });
+      });
     });
 
-    it('adds user id to query using custom options', () => {
-      hook.params.user.id = '2';
+    describe('when user owns the resource', () => {
+      it('does nothing', done => {
+        let fn = restrictToOwner();
 
-      restrictToOwner({ idField: 'id', ownerField: 'ownerId' })(hook);
-
-      expect(hook.params.query.ownerId).to.equal('2');
+        fn.call(MockService, hook).then(returnedHook => {
+          expect(returnedHook).to.deep.equal(hook);
+          done();
+        }).catch(done);
+      });
     });
   });
 });

@@ -18,11 +18,30 @@ describe('associateCurrentUser', () => {
   });
 
   describe('when user is not logged in', () => {
-    it('throws an error', () => {
-      let hook = {
+    let hook;
+
+    beforeEach(() => {
+      hook = {
         type: 'before',
         params: {}
       };
+    });
+
+    describe('when provider does not exist', () => {
+      it('does not do anything', () => {
+        try {
+          var returnedHook = associateCurrentUser()(hook);
+          expect(returnedHook).to.deep.equal(hook);
+        }
+        catch(error) {
+          // It should never get here
+          expect(true).to.equal(false);
+        }
+      });
+    });
+
+    it('throws an error', () => {
+      hook.params.provider = 'rest';
 
       try {
         associateCurrentUser()(hook);
