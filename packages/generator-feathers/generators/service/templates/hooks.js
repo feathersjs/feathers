@@ -8,17 +8,18 @@ exports.before = {
   all: [<% if (authentication && name !== 'user') { %>
     auth.verifyToken(),
     auth.populateUser(),
-    auth.requireAuth()
+    auth.restrictToAuthenticated()
   <% } %>],
   find: [<% if (authentication && name === 'user') { %>
     auth.verifyToken(),
     auth.populateUser(),
-    auth.requireAuth()
+    auth.restrictToAuthenticated()
   <% } %>],
   get: [<% if (authentication && name === 'user') { %>
     auth.verifyToken(),
     auth.populateUser(),
-    auth.requireAuth()
+    auth.restrictToAuthenticated(),
+    auth.restrictToOwner({ ownerField: <% if (database === 'mongodb' || database === 'nedb') { %>'_id'<% } else { %>'id'<% } %> })
   <% } %>],
   create: [<% if (authentication && name === 'user') { %>
     auth.hashPassword()
@@ -26,17 +27,20 @@ exports.before = {
   update: [<% if (authentication && name === 'user') { %>
     auth.verifyToken(),
     auth.populateUser(),
-    auth.requireAuth()
+    auth.restrictToAuthenticated(),
+    auth.restrictToOwner({ ownerField: <% if (database === 'mongodb' || database === 'nedb') { %>'_id'<% } else { %>'id'<% } %> })
   <% } %>],
   patch: [<% if (authentication && name === 'user') { %>
     auth.verifyToken(),
     auth.populateUser(),
-    auth.requireAuth()
+    auth.restrictToAuthenticated(),
+    auth.restrictToOwner({ ownerField: <% if (database === 'mongodb' || database === 'nedb') { %>'_id'<% } else { %>'id'<% } %> })
   <% } %>],
   remove: [<% if (authentication && name === 'user') { %>
     auth.verifyToken(),
     auth.populateUser(),
-    auth.requireAuth()
+    auth.restrictToAuthenticated(),
+    auth.restrictToOwner({ ownerField: <% if (database === 'mongodb' || database === 'nedb') { %>'_id'<% } else { %>'id'<% } %> })
   <% } %>]
 };
 
