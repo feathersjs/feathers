@@ -230,7 +230,7 @@ module.exports = generators.Base.extend({
       this.props.localAuth = false;
 
       if (this.props.authentication.length) {
-        this.dependencies.push('feathers-authentication@^0.4.0');
+        this.dependencies.push('feathers-authentication@^0.7.0');
         this.dependencies.push('passport');
 
         this.props.authentication = this.props.authentication.filter(function(provider) {
