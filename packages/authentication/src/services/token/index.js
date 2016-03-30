@@ -112,6 +112,13 @@ export class Service {
       });
     });
   }
+
+  setup() {
+    // prevent regular service events from being dispatched
+    if (typeof this.filter === 'function') {
+      this.filter(() => false);
+    }
+  }
 }
 
 export default function(options){
@@ -138,15 +145,15 @@ export default function(options){
     tokenService.after({
       create: [
         hooks.populateUser(options),
-        commonHooks.remove(options.passwordField)
+        commonHooks.remove(options.passwordField, () => true)
       ],
       find: [
         hooks.populateUser(options),
-        commonHooks.remove(options.passwordField)
+        commonHooks.remove(options.passwordField, () => true)
       ],
       get: [
         hooks.populateUser(options),
-        commonHooks.remove(options.passwordField)
+        commonHooks.remove(options.passwordField, () => true)
       ]
     });
   };

@@ -1,9 +1,23 @@
 import { expect } from 'chai';
+import sinon from 'sinon';
 import { restrictToRoles } from '../../../src/hooks';
 
-const options = { roles: ['admin', 'super'] };
+let MockData;
+let MockService;
+let options;
 
 describe('restrictToRoles', () => {
+  beforeEach(() => {
+    MockData = {
+      userId: '1',
+      text: 'hey'
+    };
+    MockService = {
+      get: sinon.stub().returns(Promise.resolve(MockData))
+    };
+    options = { roles: ['admin', 'super'] };
+  });
+
   it('throws an error when roles are missing', () => {
     try {
       restrictToRoles();
@@ -37,9 +51,25 @@ describe('restrictToRoles', () => {
     });
   });
 
+  describe('when not called with an id', () => {
+    it('throws an error', () => {
+      let hook = {
+        type: 'before'
+      };
+
+      try {
+        restrictToRoles(options)(hook);
+      }
+      catch(error) {
+        expect(error).to.not.equal(undefined);
+      }
+    });
+  });
+
   describe('when provider does not exist', () => {
     it('does not do anything', () => {
       let hook = {
+        id: '1',
         type: 'before',
         params: {}
       };
@@ -58,6 +88,7 @@ describe('restrictToRoles', () => {
   describe('when user does not exist', () => {
     it('throws a not authenticated error', () => {
       let hook = {
+        id: '1',
         type: 'before',
         params: {
           provider: 'rest'
@@ -78,14 +109,14 @@ describe('restrictToRoles', () => {
 
     beforeEach(() => {
       hook = {
+        id: '1',
         type: 'before',
         params: {
           provider: 'rest',
           user: {
             _id: '1',
             roles: ['admin']
-          },
-          query: { text: 'Hi' }
+          }
         },
         app: {
           get: function() { return {}; }
@@ -95,14 +126,7 @@ describe('restrictToRoles', () => {
 
     describe('when user is missing idField', () => {
       it('throws an error', () => {
-        let hook = {
-          type: 'before',
-          params: {
-            provider: 'rest',
-            user: {},
-            query: {}
-          }
-        };
+        hook.params.user = {};
 
         try {
           restrictToRoles(options)(hook);
@@ -115,19 +139,7 @@ describe('restrictToRoles', () => {
 
     describe('when user is missing fieldName', () => {
       it('throws a Forbidden error', () => {
-        let hook = {
-          type: 'before',
-          params: {
-            provider: 'rest',
-            user: {
-              _id: '1'
-            },
-            query: {}
-          },
-          app: {
-            get: function() { return {}; }
-          }
-        };
+        hook.params.user = { _id: '1' };
 
         try {
           restrictToRoles(options)(hook);
@@ -139,22 +151,10 @@ describe('restrictToRoles', () => {
     });
 
     describe('when user is missing the role', () => {
-      let hook;
-
       beforeEach(() => {
-        hook = {
-          type: 'before',
-          params: {
-            provider: 'rest',
-            user: {
-              '_id': '1',
-              roles: ['user']
-            },
-            query: {}
-          },
-          app: {
-            get: function() { return {}; }
-          }
+        hook.params.user = {
+          '_id': '1',
+          roles: ['user']
         };
       });
 
@@ -167,9 +167,45 @@ describe('restrictToRoles', () => {
         }
       });
 
-      it('adds user id to query when owner option is present', () => {
-        restrictToRoles({ roles: ['admin'], owner: true })(hook);
-        expect(hook.params.query.userId).to.equal('1');
+      describe('when owner option enabled', () => {
+        beforeEach(() => {
+          options.owner = true;
+        });
+
+        describe('when resource is missing owner id', () => {
+          it('returns a Forbidden error', done => {
+            options.ownerField = 'user';
+            let fn = restrictToRoles(options);
+
+            fn.call(MockService, hook).then(done).catch(error => {
+              expect(error.code).to.equal(403);
+              done();
+            });
+          });
+        });
+
+        describe('when user is not an owner', () => {
+          it('returns a Forbidden error', done => {
+            hook.params.user._id = '2';
+            let fn = restrictToRoles(options);
+
+            fn.call(MockService, hook).then(done).catch(error => {
+              expect(error.code).to.equal(403);
+              done();
+            });
+          });
+        });
+
+        describe('when user owns the resource', () => {
+          it('does nothing', done => {
+            let fn = restrictToRoles(options);
+
+            fn.call(MockService, hook).then(returnedHook => {
+              expect(returnedHook).to.deep.equal(hook);
+              done();
+            }).catch(done);
+          });
+        });
       });
     });
 
@@ -178,6 +214,7 @@ describe('restrictToRoles', () => {
 
       beforeEach(() => {
         hook = {
+          id: '1',
           type: 'before',
           params: {
             provider: 'rest',

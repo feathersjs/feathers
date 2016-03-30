@@ -18,7 +18,7 @@ describe('REST authentication', function() {
   };
   let jwtOptions = {
     issuer: 'feathers',
-    algorithms: ['HS256'],
+    algorithms: ['HS512'],
     expiresIn: '1h' // 1 hour
   };
 
@@ -30,7 +30,7 @@ describe('REST authentication', function() {
   let expiredToken = jwt.sign({ id: 0 }, settings.token.secret, jwtOptions);
 
   before((done) => {
-    createApplication(settings, email, password, true, (err, obj) =>{
+    createApplication(settings, email, password, true, (error, obj) =>{
       app = obj.app;
       server = obj.server;
       
@@ -58,7 +58,7 @@ describe('REST authentication', function() {
             password
           };
 
-          request(options, function(err, response) {
+          request(options, function(error, response) {
             expect(response.statusCode).to.equal(200);
             expect(response.request.uri.path).to.equal('/auth/failure');
             done();
@@ -78,7 +78,7 @@ describe('REST authentication', function() {
         };
 
         it('redirects to success page', function(done) {
-          request(options, function(err, response) {
+          request(options, function(error, response) {
             expect(response.statusCode).to.equal(200);
             expect(response.request.uri.path).to.equal('/auth/success');
             done();
@@ -115,7 +115,7 @@ describe('REST authentication', function() {
             password
           };
 
-          request(options, function(err, response) {
+          request(options, function(error, response) {
             expect(response.statusCode).to.equal(401);
             done();
           });
@@ -127,7 +127,7 @@ describe('REST authentication', function() {
             password: 'invalid'
           };
 
-          request(options, function(err, response) {
+          request(options, function(error, response) {
             expect(response.statusCode).to.equal(401);
             done();
           });
@@ -146,22 +146,29 @@ describe('REST authentication', function() {
         };
 
         it('returns a 201', function(done) {
-          request(options, function(err, response) {
+          request(options, function(error, response) {
             expect(response.statusCode).to.equal(201);
             done();
           });
         });
 
         it('returns a JWT', function(done) {
-          request(options, function(err, response, body) {
+          request(options, function(error, response, body) {
             expect(body.token).to.not.equal(undefined);
             done();
           });
         });
 
         it('returns the logged in user', function(done) {
-          request(options, function(err, response, body) {
+          request(options, function(error, response, body) {
             expect(body.data.email).to.equal('test@feathersjs.com');
+            done();
+          });
+        });
+
+        it('user\'s password has been removed', function(done) {
+          request(options, function(error, response, body) {
+            expect(body.data.password).to.equal(undefined);
             done();
           });
         });
@@ -183,7 +190,7 @@ describe('REST authentication', function() {
           token: 'invalid'
         };
 
-        request(options, function(err, response) {
+        request(options, function(error, response) {
           expect(response.statusCode).to.equal(401);
           done();
         });
@@ -194,7 +201,7 @@ describe('REST authentication', function() {
           token: expiredToken
         };
 
-        request(options, function(err, response) {
+        request(options, function(error, response) {
           expect(response.statusCode).to.equal(401);
           done();
         });
@@ -212,21 +219,21 @@ describe('REST authentication', function() {
       };
 
       it('returns a 201', function(done) {
-        request(options, function(err, response) {
+        request(options, function(error, response) {
           expect(response.statusCode).to.equal(201);
           done();
         });
       });
 
       it('returns a JWT', function(done) {
-        request(options, function(err, response, body) {
+        request(options, function(error, response, body) {
           expect(body.token).to.not.equal(undefined);
           done();
         });
       });
 
       it('returns the logged in user', function(done) {
-        request(options, function(err, response, body) {
+        request(options, function(error, response, body) {
           expect(body.data.email).to.equal('test@feathersjs.com');
           done();
         });
@@ -260,7 +267,7 @@ describe('REST authentication', function() {
         it('returns data from protected route', (done) => {
           options.url = `${host}/messages/1`;
 
-          request(options, function(err, response, body) {
+          request(options, function(error, response, body) {
             expect(body.id).to.equal(1);
             done();
           });
@@ -284,7 +291,7 @@ describe('REST authentication', function() {
         it('returns updates data behind protected route', (done) => {
           options.url = `${host}/messages/2`;
 
-          request(options, function(err, response, body) {
+          request(options, function(error, response, body) {
             expect(body.id).to.equal(2);
             expect(body.text).to.equal('new text');
             done();
@@ -305,7 +312,7 @@ describe('REST authentication', function() {
         it('returns data from protected route', (done) => {
           options.url = `${host}/messages/1?token=${validToken}`;
 
-          request(options, function(err, response, body) {
+          request(options, function(error, response, body) {
             expect(body.id).to.equal(1);
             done();
           });
@@ -329,14 +336,14 @@ describe('REST authentication', function() {
         });
 
         it('returns 401', (done) => {
-          request(options, function(err, response) {
+          request(options, function(error, response) {
             expect(response.statusCode).to.equal(401);
             done();
           });
         });
 
         it('returns error instead of data', (done) => {
-          request(options, function(err, response, body) {
+          request(options, function(error, response, body) {
             expect(body.code).to.equal(401);
             done();
           });
@@ -349,14 +356,14 @@ describe('REST authentication', function() {
         });
 
         it('returns 200', (done) => {
-          request(options, function(err, response) {
+          request(options, function(error, response) {
             expect(response.statusCode).to.equal(200);
             done();
           });
         });
 
         it('returns data', (done) => {
-          request(options, function(err, response, body) {
+          request(options, function(error, response, body) {
             expect(body).to.not.equal(undefined);
             done();
           });

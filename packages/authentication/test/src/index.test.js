@@ -40,6 +40,14 @@ describe('Feathers Authentication', () => {
           expect(app.get('auth').idField).to.equal('_id');
         });
 
+        it('sets shouldSetupSuccessRoute', () => {
+          expect(app.get('auth').shouldSetupSuccessRoute).to.equal(true);
+        });
+
+        it('sets shouldSetupFailureRoute', () => {
+          expect(app.get('auth').shouldSetupFailureRoute).to.equal(true);
+        });
+
         it('sets successRedirect', () => {
           expect(app.get('auth').successRedirect).to.equal('/auth/success');
         });
@@ -65,7 +73,19 @@ describe('Feathers Authentication', () => {
         });
 
         it('sets cookie', () => {
-          expect(app.get('auth').cookie).to.equal('feathers-jwt');
+          expect(typeof app.get('auth').cookie).to.equal('object');
+        });
+
+        it('sets cookie name', () => {
+          expect(app.get('auth').cookie.name).to.equal('feathers-jwt');
+        });
+
+        it('sets whether cookies should be httpOnly', () => {
+          expect(app.get('auth').cookie.httpOnly).to.equal(false);
+        });
+
+        it('sets whether cookies should be secure', () => {
+          expect(app.get('auth').cookie.secure).to.equal(false);
         });
 
         it('sets token', () => {
@@ -210,11 +230,13 @@ describe('Feathers Authentication', () => {
         it('allows disabling successRedirect', () => {
           app.configure(authentication({ successRedirect: false }));
           expect(app.get('auth').successRedirect).to.equal(false);
+          expect(app.get('auth').shouldSetupSuccessRoute).to.equal(false);
         });
 
         it('allows disabling failureRedirect', () => {
           app.configure(authentication({ failureRedirect: false }));
           expect(app.get('auth').failureRedirect).to.equal(false);
+          expect(app.get('auth').shouldSetupFailureRoute).to.equal(false);
         });
 
         it('allows overriding tokenEndpoint', () => {
@@ -237,23 +259,37 @@ describe('Feathers Authentication', () => {
           expect(app.get('auth').header).to.equal('x-authorization');
         });
 
+        it('allows disabling cookie', () => {
+          app.configure(authentication({ cookie: false }));
+          expect(app.get('auth').cookie).to.equal(false);
+        });
+
         it('allows overriding cookie', () => {
-          app.configure(authentication({ cookie: 'my-cookie' }));
-          expect(app.get('auth').cookie).to.equal('my-cookie');
+          const expiration = new Date('Jan 1, 2000');
+          app.configure(authentication({
+            cookie: {
+              name: 'my-cookie',
+              secure: true,
+              httpOnly: true,
+              expires: expiration
+            }
+          }));
+          expect(typeof app.get('auth').cookie).to.equal('object');
+          expect(app.get('auth').cookie.name).to.equal('my-cookie');
+          expect(app.get('auth').cookie.secure).to.equal(true);
+          expect(app.get('auth').cookie.httpOnly).to.equal(true);
+          expect(app.get('auth').cookie.expires).to.equal(expiration);
         });
 
         it('allows overriding token', () => {
           app.configure(authentication({
-            token: { custom: true }
+            token: {
+              custom: true,
+              secret: 'secret'
+            }
           }));
           expect(typeof app.get('auth').token).to.equal('object');
           expect(app.get('auth').token.custom).to.equal(true);
-        });
-
-        it('setting custom token secret', () => {
-          app.configure(authentication({
-            token: { secret: 'secret' }
-          }));
           expect(app.get('auth').token.secret).to.equal('secret');
         });
 
