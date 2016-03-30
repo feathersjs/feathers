@@ -100,6 +100,24 @@ app.authenticate({
 
 ## Changelog
 
+### 0.7.0
+
+- Lock down cookie [#132](https://github.com/feathersjs/feathers-authentication/issues/132)
+- can now use default redirect routes with a custom handler [#121](https://github.com/feathersjs/feathers-authentication/issues/121)
+- Add middleware tests for successfulLogin
+- Add middleware tests for failedLogin
+- Prevent emitting auth service events [#126](https://github.com/feathersjs/feathers-authentication/issues/126)
+- Add tests to make sure auth service events are not fired
+- `restrictToOwner` now throws an error [#128](https://github.com/feathersjs/feathers-authentication/issues/128)
+- `restrictToRoles` now throws an error [#127](https://github.com/feathersjs/feathers-authentication/issues/127)
+- user profile should be updated when using OAuth2 [#124](https://github.com/feathersjs/feathers-authentication/issues/124)
+- All hooks should support internal usage passthrough [#138](https://github.com/feathersjs/feathers-authentication/issues/138)
+- Clear cookie on logout [#122](https://github.com/feathersjs/feathers-authentication/issues/122)
+- de-auth socket on logout [#136](https://github.com/feathersjs/feathers-authentication/issues/136)
+- Move to bcryptjs instead of native brcrypt
+- Removes ability to authenticate with the cookie that is used to transmit the JWT to the client
+- Adds a TON of test coverage
+
 ### 0.6.0
 - Fixes for [#107](https://github.com/feathersjs/feathers-authentication/issues/107), [#103](https://github.com/feathersjs/feathers-authentication/issues/103), [#102](https://github.com/feathersjs/feathers-authentication/issues/102), [#105](https://github.com/feathersjs/feathers-authentication/issues/105), [#119](https://github.com/feathersjs/feathers-authentication/issues/105) 
 - Adds a bunch of tests ([#9](https://github.com/feathersjs/feathers-authentication/issues/9), [#59](https://github.com/feathersjs/feathers-authentication/issues/59))
