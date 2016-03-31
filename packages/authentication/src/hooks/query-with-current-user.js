@@ -6,7 +6,7 @@ const defaults = {
 export default function(options = {}) {
   return function(hook) {
     if (hook.type !== 'before') {
-      throw new Error(`The 'associateCurrentUser' hook should only be used as a 'before' hook.`);
+      throw new Error(`The 'queryWithCurrentUser' hook should only be used as a 'before' hook.`);
     }
 
     if (!hook.params.user) {
