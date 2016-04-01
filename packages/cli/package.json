@@ -1,7 +1,7 @@
 {
   "name": "feathers-cli",
   "description": "Command-line Feathers generator",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "homepage": "https://github.com/feathersjs/feathers-cli",
   "main": "lib/",
   "bin": {
@@ -51,7 +51,7 @@
   },
   "preferGlobal": true,
   "dependencies": {
-    "generator-feathers": "^0.6.20",
+    "generator-feathers": "^0.7.0",
     "generator-feathers-plugin": "^0.6.9",
     "vorpal": "^1.10.9",
     "yeoman-environment": "^1.5.2",
