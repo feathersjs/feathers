@@ -27,11 +27,11 @@
     "release:major": "npm version major && npm publish"
   },
   "dependencies": {
-    "lodash": "^3.10.1",
-    "yeoman-generator": "^0.21.1"
+    "lodash": "^4.7.0",
+    "yeoman-generator": "^0.22.5"
   },
   "devDependencies": {
-    "mocha": "~1.14.0"
+    "mocha": "~2.4.5"
   },
   "peerDependencies": {
     "yo": ">=1.0.0"
