@@ -12,13 +12,17 @@ env.register(require.resolve(`${feathersGenerators}/service`), 'feathers:service
 env.register(require.resolve(`${feathersGenerators}/service`), 'feathers:service');
 env.register(require.resolve('generator-feathers-plugin'), 'feathers:plugin');
 
+const generatorOptions = {
+  disableNotifyUpdate: true
+};
+
 export default function(vorpal) {
   vorpal
     .command('generate ', 'alias for generate app')
     .autocomplete(['app', 'hook', 'middleware', 'model', 'service', 'plugin'])
     .action(function (args, callback) {
       this.log('');
-      env.run('feathers:app', callback);
+      env.run('feathers:app', generatorOptions, callback);
     });
 
   vorpal
@@ -26,7 +30,7 @@ export default function(vorpal) {
     .description('generate new application')
     .action(function (args, callback) {
       this.log('');
-      env.run('feathers:app', callback);
+      env.run('feathers:app', generatorOptions, callback);
     });
 
   vorpal
@@ -34,7 +38,7 @@ export default function(vorpal) {
     .description('generate new hook')
     .action(function (args, callback) {
       this.log('');
-      env.run('feathers:hook', callback);
+      env.run('feathers:hook', generatorOptions, callback);
     });
 
   vorpal
@@ -42,7 +46,7 @@ export default function(vorpal) {
     .description('generate new middleware')
     .action(function (args, callback) {
       this.log('');
-      env.run('feathers:middleware', callback);
+      env.run('feathers:middleware', generatorOptions, callback);
     });
 
   vorpal
@@ -50,7 +54,7 @@ export default function(vorpal) {
     .description('generate new model')
     .action(function (args, callback) {
       this.log('');
-      env.run('feathers:model', callback);
+      env.run('feathers:model', generatorOptions, callback);
     });
 
   vorpal
@@ -58,7 +62,7 @@ export default function(vorpal) {
     .description('generate new service')
     .action(function (args, callback) {
       this.log('');
-      env.run('feathers:service', callback);
+      env.run('feathers:service', generatorOptions, callback);
     });
 
   vorpal
@@ -66,7 +70,7 @@ export default function(vorpal) {
     .description('generate new plugin')
     .action(function (args, callback) {
       this.log('');
-      env.run('feathers:plugin', callback);
+      env.run('feathers:plugin', generatorOptions, callback);
     });
 }
 

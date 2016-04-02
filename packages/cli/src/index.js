@@ -1,5 +1,4 @@
 import vorpal from 'vorpal';
-import generateCmd from './commands/generate';
 
 const commands = [
   'generate'
