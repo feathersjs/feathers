@@ -1,25 +1,26 @@
-import vorpalBuilder from 'vorpal';
+import vorpal from 'vorpal';
 import generateCmd from './commands/generate';
 
+const commands = [
+  'generate'
+];
+
 export default function() {
-  const vorpal = vorpalBuilder();
+  const app = vorpal();
 
-  // decorate vorpal with commands
-  generateCmd(vorpal);
-
-  vorpal.log(`Feathers CLI\n`);
+  commands.map((cmd) => require(`./commands/${cmd}`).default(app));
 
   if (process.argv.length > 2) {
     // one and done
-    vorpal
-      .parse(process.argv);
+    app.parse(process.argv);
   }
   else {
     // interactive shell
-    vorpal.log('Type "exit" to quit, "help" for a list of commands.');
-    vorpal
+    app.log(`Welcome to the Feathers command line.`);
+    app.log('Type "exit" to quit, "help" for a list of commands.');
+
+    app
       .delimiter('feathers$')
       .show();
-
   }
 }
