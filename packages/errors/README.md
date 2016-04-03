@@ -59,6 +59,14 @@ var validationErrors = new errors.BadRequest({errors: {email: 'Invalid Email'} }
 ```
 
 ## Release History
+__2.1.0__
+
+- converts over to chai for tests
+- adds better support for detecting `content-type` and `accepts` headers
+- makes JSON the default response
+- adds support for passing a custom html handler
+- adds support for passing a custom json handler
+
 __2.0.0__
 - Moving error handler out of default bundle so that it doesn't break React Native and browser builds. Now needs to be required using `require('feathers-errors/handler')`.
 
