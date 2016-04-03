@@ -49,7 +49,7 @@ Feathers CLI's generators are provided by [generator-feathers](https://github.co
 
 ## Changelog
 
-__1.2.3__
+__1.2.4__
 
 - Bumping to generator-feathers@0.8.0
 - Fixed missing peer dependency yo@>=1.0.0
