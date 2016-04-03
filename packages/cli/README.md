@@ -49,10 +49,20 @@ Feathers CLI's generators are provided by [generator-feathers](https://github.co
 
 ## Changelog
 
+__1.2.3__
+
+- Bumping to generator-feathers@0.8.0
+- Fixed missing peer dependency yo@>=1.0.0
+- Disabling upgrade notifications
+
+__1.2.2__
+
+- Bumping to generator-feathers@0.7.0
+
+
 __1.2.1__
 
 - Properly exiting after executing a command passed in `process.argv`
-
 
 __1.2.0__
 
