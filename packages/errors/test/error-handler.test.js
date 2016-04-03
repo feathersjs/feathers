@@ -1,24 +1,115 @@
+/*jshint expr: true, unused: false*/
+
 if(!global._babelPolyfill) { require('babel-polyfill'); }
 
 import feathers from 'feathers';
-import assert from 'assert';
+import chai, { expect } from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 import request from 'request';
 import fs from 'fs';
 import { join } from 'path';
 import { errors } from '../src';
 import handler from '../src/error-handler';
 
+chai.use(sinonChai);
+
+const content = '<html><head></head><body>Error</body></html>';
+
+let htmlHandler = sinon.spy(function(error, req, res, next) {
+  res.send(content);
+});
+
+const jsonHandler = sinon.spy(function(error, req, res, next) {
+  res.json(error);
+});
+
 describe('feathers-errors', () => {
   it('is CommonJS compatible', () => {
-    assert.equal(typeof require('../lib/error-handler'), 'function');
+    expect(typeof require('../lib/error-handler')).to.equal('function');
   });
 
   it('can be required at the root', () => {
-    assert.equal(typeof require('../handler'), 'function');
+    expect(typeof require('../handler')).to.equal('function');
   });
 
   it('is import compatible', () => {
-    assert.equal(typeof handler, 'function');
+    expect(typeof handler).to.equal('function');
+  });
+
+  describe('supports custom handlers', function() {
+    before(function() {
+      this.app = feathers()
+        .get('/error', function(req, res, next) {
+          next(new Error('Something went wrong'));
+        })
+        .use(handler({
+          html: htmlHandler,
+          json: jsonHandler
+        }));
+      
+      this.server = this.app.listen(5050);
+    });
+    
+    after(function(done) {
+      this.server.close(done);
+    });
+
+    describe('HTML handler', () => {
+      const options = {
+        url: 'http://localhost:5050/error',
+        headers: {
+          'Content-Type': 'text/html',
+          'Accept': 'text/html'
+        }
+      };
+
+      it('is called', done => {
+        request(options, (error, res, body) => {
+          expect(htmlHandler).to.be.called;
+          done();
+        });
+      });
+
+      it('can send a custom response', done => {
+        request(options, (error, res, body) => {
+          expect(body).to.equal(content);
+          done();
+        });
+      });
+    });
+
+    describe('JSON handler', () => {
+      const options = {
+        url: 'http://localhost:5050/error',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      };
+
+      it('is called', done => {
+        request(options, (error, res, body) => {
+          expect(jsonHandler).to.be.called;
+          done();
+        });
+      });
+
+      it('can send a custom response', done => {
+        const expected = JSON.stringify({
+          name: 'GeneralError',
+          message: 'Something went wrong',
+          code: 500,
+          className: 'general-error',
+          data: {},
+          errors: {}
+        });
+        request(options, (error, res, body) => {
+          expect(body).to.deep.equal(expected);
+          done();
+        });
+      });
+    });
   });
   
   describe('use as app error handler', function() {
@@ -61,8 +152,8 @@ describe('feathers-errors', () => {
           url: 'http://localhost:5050/error',
           json: true
         }, (error, res, body) => {
-          assert.equal(res.statusCode, 500);
-          assert.deepEqual(body, {
+          expect(res.statusCode).to.equal(500);
+          expect(body).to.deep.equal({
             name: 'GeneralError',
             message: 'Something went wrong',
             code: 500,
@@ -75,16 +166,22 @@ describe('feathers-errors', () => {
       });
 
       it.skip('still has a stack trace', () => {
-        assert.equal(handler, 'function');  
+        expect(handler).to.equal('function');  
       });
     });
 
     describe('text/html format', () => {
       it('serves a 404.html', done => {
         fs.readFile(join(__dirname, '..', 'src', 'public', '404.html'), function(err, html) {
-          request('http://localhost:5050/path/to/nowhere', (error, res, body) => {
-            assert.equal(res.statusCode, 404);
-            assert.equal(html.toString(), body);
+          request({
+            url: 'http://localhost:5050/path/to/nowhere',
+            headers: {
+              'Content-Type': 'text/html',
+              'Accept': 'text/html'
+            }
+          }, (error, res, body) => {
+            expect(res.statusCode).to.equal(404);
+            expect(html.toString()).to.equal(body);
             done();
           });
         });
@@ -92,9 +189,45 @@ describe('feathers-errors', () => {
 
       it('serves a 500.html', done => {
         fs.readFile(join(__dirname, '..', 'src', 'public', 'default.html'), function(err, html) {
-          request('http://localhost:5050/error', (error, res, body) => {
-            assert.equal(res.statusCode, 500);
-            assert.equal(html.toString(), body);
+          request({
+            url: 'http://localhost:5050/error',
+            headers: {
+              'Content-Type': 'text/html',
+              'Accept': 'text/html'
+            }
+          }, (error, res, body) => {
+            expect(res.statusCode).to.equal(500);
+            expect(html.toString()).to.equal(body);
+            done();
+          });
+        });
+      });
+
+      it('returns html when Content-Type header is set', done => {
+        fs.readFile(join(__dirname, '..', 'src', 'public', '404.html'), function(err, html) {
+          request({
+            url: 'http://localhost:5050/path/to/nowhere',
+            headers: {
+              'Content-Type': 'text/html'
+            }
+          }, (error, res, body) => {
+            expect(res.statusCode).to.equal(404);
+            expect(html.toString()).to.equal(body);
+            done();
+          });
+        });
+      });
+
+      it('returns html when Accept header is set', done => {
+        fs.readFile(join(__dirname, '..', 'src', 'public', '404.html'), function(err, html) {
+          request({
+            url: 'http://localhost:5050/path/to/nowhere',
+            headers: {
+              'Accept': 'text/html'
+            }
+          }, (error, res, body) => {
+            expect(res.statusCode).to.equal(404);
+            expect(html.toString()).to.equal(body);
             done();
           });
         });
@@ -105,10 +238,14 @@ describe('feathers-errors', () => {
       it('500', done => {
         request({
           url: 'http://localhost:5050/error',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
           json: true
         }, (error, res, body) => {
-          assert.equal(res.statusCode, 500);
-          assert.deepEqual(body, {
+          expect(res.statusCode).to.equal(500);
+          expect(body).to.deep.equal({
             name: 'GeneralError',
             message: 'Something went wrong',
             code: 500,
@@ -123,10 +260,14 @@ describe('feathers-errors', () => {
       it('404', done => {
         request({
           url: 'http://localhost:5050/path/to/nowhere',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
           json: true
         }, (error, res, body) => {
-          assert.equal(res.statusCode, 404);
-          assert.deepEqual(body, { name: 'NotFound',
+          expect(res.statusCode).to.equal(404);
+          expect(body).to.deep.equal({ name: 'NotFound',
             message: 'File not found',
             code: 404,
             className: 'not-found',
@@ -139,10 +280,14 @@ describe('feathers-errors', () => {
       it('400', done => {
         request({
           url: 'http://localhost:5050/bad-request',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
           json: true
         }, (error, res, body) => {
-          assert.equal(res.statusCode, 400);
-          assert.deepEqual(body, { name: 'BadRequest',
+          expect(res.statusCode).to.equal(400);
+          expect(body).to.deep.equal({ name: 'BadRequest',
             message: 'Invalid Password',
             code: 400,
             className: 'bad-request',
@@ -157,6 +302,81 @@ describe('feathers-errors', () => {
           });
           done();
         });
+      });
+
+      it('returns JSON when only Content-Type header is set', done => {
+        request({
+          url: 'http://localhost:5050/bad-request',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          json: true
+        }, (error, res, body) => {
+          expect(res.statusCode).to.equal(400);
+          expect(body).to.deep.equal({ name: 'BadRequest',
+            message: 'Invalid Password',
+            code: 400,
+            className: 'bad-request',
+            data: {
+              message: 'Invalid Password'
+            },
+            errors: [{
+              path: 'password',
+              value: null,
+              message: `'password' cannot be 'null'`
+            }]
+          });
+          done();
+        });
+      });
+
+      it('returns JSON when only Accept header is set', done => {
+        request({
+          url: 'http://localhost:5050/bad-request',
+          headers: {
+            'Accept': 'application/json'
+          },
+          json: true
+        }, (error, res, body) => {
+          expect(res.statusCode).to.equal(400);
+          expect(body).to.deep.equal({ name: 'BadRequest',
+            message: 'Invalid Password',
+            code: 400,
+            className: 'bad-request',
+            data: {
+              message: 'Invalid Password'
+            },
+            errors: [{
+              path: 'password',
+              value: null,
+              message: `'password' cannot be 'null'`
+            }]
+          });
+          done();
+        });
+      });
+    });
+
+    it('returns JSON by default', done => {
+      request('http://localhost:5050/bad-request', (error, res, body) => {
+        const expected = JSON.stringify({
+          name: 'BadRequest',
+          message: 'Invalid Password',
+          code: 400,
+          className: 'bad-request',
+          data: {
+            message: 'Invalid Password'
+          },
+          errors: [{
+            path: 'password',
+            value: null,
+            message: `'password' cannot be 'null'`
+          }]
+        });
+
+        expect(res.statusCode).to.equal(400);
+        expect(body).to.deep.equal(expected);
+        done();
       });
     });
   });

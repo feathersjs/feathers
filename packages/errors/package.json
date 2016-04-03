@@ -52,9 +52,12 @@
     "babel-plugin-transform-object-assign": "^6.3.13",
     "babel-polyfill": "^6.5.0",
     "babel-preset-es2015": "^6.3.13",
+    "chai": "^3.5.0",
     "feathers": "^2.0.0",
     "jshint": "^2.8.0",
     "mocha": "^2.3.4",
-    "request": "^2.69.0"
+    "request": "^2.69.0",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0"
   }
 }
