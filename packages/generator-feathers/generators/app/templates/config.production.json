@@ -9,7 +9,7 @@
   "nedb": "NEDB_BASE_PATH",<% } else if(database === 'sqlite'){ %>
   "sqlite": "SQLITE_DB",<% } %>
   "public": "../public/"<% if (localAuth || authentication.length) { %>,
-  "auth": {<% if (database !== 'nedb' || database !== 'mongodb') { %>
+  "auth": {<% if (database !== 'nedb' && database !== 'mongodb') { %>
     "idField": "id",<% } %>
     "token": {
       "secret": "FEATHERS_AUTH_SECRET"
