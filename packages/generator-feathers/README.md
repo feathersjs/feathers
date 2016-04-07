@@ -63,6 +63,11 @@ yo feathers:service
 
 ## Changelog
 
+__0.8.1__
+
+- adding `disableNotifyUpdate` config option to generator
+
+
 __0.7.0__
 
 - updating to feathers-authentication@0.7.0
