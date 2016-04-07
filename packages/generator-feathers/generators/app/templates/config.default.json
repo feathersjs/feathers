@@ -9,7 +9,7 @@
   "nedb": "../data/",<% } else if(database === 'sqlite'){ %>
   "sqlite": "../data/<%= databaseName %>.sqlite",<% } %>
   "public": "../public/"<% if (localAuth || authentication.length) { %>,
-  "auth": {<% if (database !== 'nedb' || database !== 'mongodb') { %>
+  "auth": {<% if (database !== 'nedb' && database !== 'mongodb') { %>
     "idField": "id",<% } %>
     "token": {
       "secret": "<%= secret %>"
