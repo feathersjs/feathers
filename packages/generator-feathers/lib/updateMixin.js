@@ -36,6 +36,10 @@ var makeMessage = function(update) {
  * @param {Function} cb - The callback function
  */
 var notifyUpdate = function(cb) {
+    if ((this.options || {}).disableNotifyUpdate) {
+      return cb();
+    }
+
     updateNotifier({
         pkg: pkg,
         callback: function(error, update) {
