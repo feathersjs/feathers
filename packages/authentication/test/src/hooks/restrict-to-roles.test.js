@@ -51,21 +51,6 @@ describe('restrictToRoles', () => {
     });
   });
 
-  describe('when not called with an id', () => {
-    it('throws an error', () => {
-      let hook = {
-        type: 'before'
-      };
-
-      try {
-        restrictToRoles(options)(hook);
-      }
-      catch(error) {
-        expect(error).to.not.equal(undefined);
-      }
-    });
-  });
-
   describe('when provider does not exist', () => {
     it('does not do anything', () => {
       let hook = {
@@ -170,6 +155,19 @@ describe('restrictToRoles', () => {
       describe('when owner option enabled', () => {
         beforeEach(() => {
           options.owner = true;
+        });
+
+        describe('when not called with an id', () => {
+          it('throws an error', () => {
+            hook.id = undefined;
+
+            try {
+              restrictToRoles(options)(hook);
+            }
+            catch(error) {
+              expect(error).to.not.equal(undefined);
+            }
+          });
         });
 
         describe('when resource is missing owner id', () => {
