@@ -17,10 +17,6 @@ export default function(options = {}){
       throw new Error(`The 'restrictToRoles' hook should only be used as a 'before' hook.`);
     }
 
-    if (!hook.id) {
-      throw new Error(`The 'restrictToRoles' hook should only be used on the 'get', 'update', 'patch' and 'remove' service methods.`);
-    }
-
     // If it was an internal call then skip this hook
     if (!hook.params.provider) {
       return hook;
@@ -61,6 +57,10 @@ export default function(options = {}){
     // If we should allow users that own the resource and they don't already have
     // the permitted roles check to see if they are the owner of the requested resource
     if (options.owner && !authorized) {
+      if (!hook.id) {
+        throw new Error(`The 'restrictToRoles' hook should only be used on the 'get', 'update', 'patch' and 'remove' service methods if you are using the 'owner' field.`);
+      }
+
       // look up the document and throw a Forbidden error if the user is not an owner
       return new Promise((resolve, reject) => {
         // Set provider as undefined so we avoid an infinite loop if this hook is
