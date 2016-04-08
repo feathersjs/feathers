@@ -93,7 +93,7 @@ export default function(opts = {}) {
       });
     };
 
-    // Set up hook that adds adds token and user to params so that
+    // Set up hook that adds token and user to params so that
     // it they can be accessed by client side hooks and services
     app.mixins.push(function(service) {
       if (typeof service.before !== 'function' || typeof service.after !== 'function') {
