@@ -2,13 +2,14 @@
 
 var generators = require('yeoman-generator');
 var path = require('path');
-var _ = require('lodash');
+var assign = require('object.assign').getPolyfill();
 
 module.exports = generators.Base.extend({
   initializing: function () {
     this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
     this.props = {
-      name: process.cwd().split(path.sep).pop()
+      name: process.cwd().split(path.sep).pop(),
+      description: this.pkg.description
     };
     this.fileMap = {
       'package.json': 'package.json',
@@ -39,7 +40,7 @@ module.exports = generators.Base.extend({
     }];
 
     this.prompt(prompts, function (props) {
-      this.props = _.extend(this.props, props);
+      this.props = assign(this.props, props);
 
       done();
     }.bind(this));
@@ -47,6 +48,7 @@ module.exports = generators.Base.extend({
 
   writing: function () {
     this.fs.copy(this.templatePath('static/.*'), this.destinationPath());
+    this.fs.copy(this.templatePath('static/**/*'), this.destinationPath());
 
     Object.keys(this.fileMap).forEach(function(src) {
       var target = this.fileMap[src];
@@ -59,6 +61,7 @@ module.exports = generators.Base.extend({
     }.bind(this));
 
     this.npmInstall([
+      'feathers-errors@^2.0.0',
       'debug@^2.2.0'
     ], { save: true });
 
@@ -69,7 +72,13 @@ module.exports = generators.Base.extend({
       'babel-plugin-add-module-exports',
       'jshint@^2.0.0',
       'mocha@^2.0.0',
-      'feathers@^2.0.0-pre.2'
+      'chai@^3.5.0',
+      'feathers@^2.0.0',
+      'feathers-hooks@^1.5.0',
+      'feathers-rest@^1.2.2',
+      'body-parser@^1.9.0',
+      'nsp@^2.2.0',
+      'rimraf@^2.5.0'
     ], { saveDev: true});
   }
 });

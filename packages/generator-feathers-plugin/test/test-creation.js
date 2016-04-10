@@ -5,7 +5,7 @@ var path = require('path');
 var assert = require('assert');
 var fs = require('fs');
 var exec = require('child_process').exec;
-var helpers = require('yeoman-generator').test;
+var helpers = require('yeoman-test');
 
 describe('feathers-plugin generator', function () {
     it('created a plugin with passing tests', function (done) {

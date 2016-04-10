@@ -34,14 +34,13 @@
     "compile": "rimraf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
-    "mocha": "mocha test/ --compilers js:babel-core/register",
-    "test": "npm run compile && npm run jshint && npm run mocha"
+    "mocha": "mocha --recursive test/ --compilers js:babel-core/register",
+    "test": "npm run compile && npm run jshint && npm run mocha",
+    "start": "npm run compile && node example/app"
   },
   "directories": {
     "lib": "lib"
   },
   "dependencies": {},
-  "devDependencies": {
-    "rimraf": "^2.5.2"
-  }
+  "devDependencies": {}
 }
