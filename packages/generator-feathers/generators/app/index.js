@@ -383,17 +383,19 @@ module.exports = generators.Base.extend({
     },
 
     deps: function() {
-      this.npmInstall(this.dependencies, { save: true });
-
-      if(this.props.babel) {
-        this.npmInstall(['babel-cli', 'babel-core', 'babel-preset-es2015'], { save: true });
-      }
-
-      this.npmInstall([
+      const devDependencies = [
         'jshint',
         'mocha',
         'request'
-      ], { saveDev: true});
+      ];
+
+      this.npmInstall(this.dependencies, { save: true });
+
+      if(this.props.babel) {
+        devDependencies.push('babel-cli', 'babel-core', 'babel-preset-es2015');
+      }
+      
+      this.npmInstall(devDependencies, { saveDev: true});
     }
   },
 

@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const path = require('path');
-const helpers = require('yeoman-generator').test;
+const helpers = require('yeoman-test');
 const exec = require('child_process').exec;
 
 
@@ -13,9 +13,8 @@ describe('generator-feathers', () => {
     let child = exec('npm test', { cwd: appDir });
     let buffer = '';
 
-    child.stdout.on('data', function(data) {
-      buffer += data;
-    });
+    child.stdout.on('data', data => buffer += data);
+    child.stderr.on('data', data => buffer += data);
 
     child.on('exit', function (status) {
       assert.equal(status, 0, 'Got correct exit status');
