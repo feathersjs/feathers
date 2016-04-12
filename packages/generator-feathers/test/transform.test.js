@@ -142,7 +142,7 @@ describe('transforms', () => {
       
       exports.after = {
         all: [],
-        create: [addUser()]
+        create: [addUser({ some: 'test' })]
       }
     `);
     
@@ -160,7 +160,7 @@ describe('transforms', () => {
       
       exports.after = {
         all: [deletePassword()],
-        create: [addUser(), doSomething()]
+        create: [addUser({ some: 'test' }), doSomething()]
       }
     `);
   });

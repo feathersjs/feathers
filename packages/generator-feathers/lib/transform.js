@@ -32,9 +32,7 @@ var findFirstNodeAfter = exports.findFirstNodeAfter = function(ast, code, type) 
       if(node && node.type !== 'Line' && recast.print(node).code === code) {
         next = true;
       }
-    },
-    
-    post: function(node) {
+
       if(!result && next && (!type || node.type === type)) {
         next = false;
         result = node;
@@ -54,7 +52,7 @@ exports.addToArrayInObject = function(ast, objectCode, key, code) {
   
   var objectAst = findFirstNodeAfter(ast, objectCode, 'ObjectExpression');
   var ran = false;
-  
+
   if(objectAst === null) {
     throw new Error('Could not find any object ' + objectCode);
   }
