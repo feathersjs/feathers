@@ -51,7 +51,7 @@
   },
   "preferGlobal": true,
   "dependencies": {
-    "generator-feathers": "^0.8.2",
+    "generator-feathers": "^0.8.4",
     "generator-feathers-plugin": "^0.6.9",
     "vorpal": "^1.10.9",
     "yeoman-environment": "^1.5.2",
