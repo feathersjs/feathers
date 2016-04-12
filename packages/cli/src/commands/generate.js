@@ -9,7 +9,6 @@ env.register(require.resolve(`${feathersGenerators}/hook`), 'feathers:hook');
 env.register(require.resolve(`${feathersGenerators}/middleware`), 'feathers:middleware');
 env.register(require.resolve(`${feathersGenerators}/model`), 'feathers:model');
 env.register(require.resolve(`${feathersGenerators}/service`), 'feathers:service');
-env.register(require.resolve(`${feathersGenerators}/service`), 'feathers:service');
 env.register(require.resolve('generator-feathers-plugin'), 'feathers:plugin');
 
 const generatorOptions = {
