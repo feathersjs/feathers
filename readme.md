@@ -26,7 +26,7 @@ To learn more about Feathers visit the website at [feathersjs.com](http://feathe
 
 ## See it in action
 
-Here is all the code you need to create a RESTful, real-time message API that uses an in memory data store:
+Here is all the code you need to create a RESTful, real-time message API that uses an in-memory data store:
 
 ```js
 // app.js
