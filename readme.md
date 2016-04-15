@@ -15,10 +15,10 @@ Feathers is a real-time, micro-service web framework for NodeJS that gives you c
 You can build your first real-time API in just 4 commands:
 
 ```bash
-$ npm install -g yo generator-feathers
+$ npm install -g feathers-cli
 $ mkdir my-new-app
 $ cd my-new-app/
-$ yo feathers
+$ feathers generate
 $ npm start
 ```
 
