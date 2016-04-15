@@ -15,10 +15,10 @@ Feathers is a real-time, micro-service web framework for NodeJS that gives you c
 You can build your first real-time API in just 4 commands:
 
 ```bash
-$ npm install -g yo generator-feathers
+$ npm install -g feathers-cli
 $ mkdir my-new-app
 $ cd my-new-app/
-$ yo feathers
+$ feathers generate
 $ npm start
 ```
 
@@ -30,15 +30,15 @@ Here is all the code you need to create a RESTful, real-time message API that us
 
 ```js
 // app.js
-var feathers = require('feathers');
-var rest = require('feathers-rest');
-var socketio = require('feathers-socketio');
-var memory = require('feathers-memory');
-var bodyParser = require('body-parser');
-var handler = require('feathers-errors/handler');
+const feathers = require('feathers');
+const rest = require('feathers-rest');
+const socketio = require('feathers-socketio');
+const memory = require('feathers-memory');
+const bodyParser = require('body-parser');
+const handler = require('feathers-errors/handler');
 
 // A Feathers app is the same as an Express app
-var app = feathers();
+const app = feathers();
 
 // Add REST API support
 app.configure(rest());
