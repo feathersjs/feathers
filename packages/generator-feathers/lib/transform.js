@@ -1,5 +1,6 @@
 var recast = require('recast');
 var traverse = require('ast-traverse');
+var inflect = require('i')();
 
 var parse = exports.parse = function(code) {
   return recast.parse(code);
@@ -88,6 +89,9 @@ exports.addLastInFunction = function(ast, search, code) {
 };
 
 exports.addImport = function(ast, varname, modulename) {
+  
+  varname = inflect.camelize(inflect.underscore(varname), false)
+  
   ast = convert(ast);
   
   var index = 0;

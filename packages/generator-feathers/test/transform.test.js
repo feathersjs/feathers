@@ -24,6 +24,28 @@ describe('transforms', () => {
       };
     `);
   });
+
+  it('addImport with hyphenated-name', () => {
+    const ast = transform.addImport(`
+      const first = require('first');
+      
+      module.exports = function() {
+        // A comment
+      };
+    `, 'my-service', 'my-service');
+
+    const output = transform.print(ast);
+
+    assert.equal(output, `
+      const myService = require('my-service');
+      const first = require('first');
+
+      module.exports = function() {
+        // A comment
+      };
+    `);
+  });
+
   
   it('addImport with \'use strict\';', () => {
     const code = `

@@ -12,6 +12,7 @@ function importService(filename, name, moduleName) {
     var ast = transform.parse(content);
 
     transform.addImport(ast, name, moduleName);
+    name = inflect.camelize(inflect.underscore(name), false);
     transform.addLastInFunction(ast, 'module.exports', 'app.configure(' + name + ');');
 
     fs.writeFileSync(filename, transform.print(ast));
