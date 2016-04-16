@@ -17,7 +17,10 @@ describe('generator-feathers', () => {
     child.stderr.on('data', data => buffer += data);
 
     child.on('exit', function (status) {
-      assert.equal(status, 0, 'Got correct exit status');
+      if(status !== 0) {
+        return done(new Error(buffer));
+      }
+      
       assert.ok(buffer.indexOf(expectedText) !== -1,
         'Ran test with text: ' + expectedText);
       done();
