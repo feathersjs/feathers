@@ -44,6 +44,11 @@ export default function(config, configurer) {
           }
         };
 
+        // In Feathers it is easy to hit the standard Node warning limit
+        // of event listeners (e.g. by registering 10 services).
+        // So we set it to a higher number. 64 should be enough for everyone.
+        this._socketInfo.connection().setMaxListeners(64);
+
         return this._super.apply(this, arguments);
       }
     }, app);
