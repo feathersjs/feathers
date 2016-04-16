@@ -6,7 +6,7 @@ const helpers = require('yeoman-test');
 const exec = require('child_process').exec;
 
 
-describe('generator-feathers', () => {
+describe('generator-feathers', function() {
   let appDir;
 
   function runTest(expectedText, done) {
@@ -27,7 +27,7 @@ describe('generator-feathers', () => {
     });
   }
 
-  before(done => {
+  before(function(done) {
     helpers.run(path.join(__dirname, '../generators/app'))
       .inTmpDir(dir => appDir = dir)
       .withPrompts({
@@ -43,11 +43,11 @@ describe('generator-feathers', () => {
       }).on('end', () => done());
   });
 
-  it('feathers:app', done => {
+  it('feathers:app', function(done) {
     runTest('starts and shows the index page', done);
   });
 
-  it('feathers:service(memory)', done => {
+  it('feathers:service(memory)', function(done) {
     helpers.run(path.join(__dirname, '../generators/service'))
       .inTmpDir(() => process.chdir(appDir))
       .withPrompts({
@@ -60,7 +60,7 @@ describe('generator-feathers', () => {
       );
   });
 
-  it('feathers:service(generic)', done => {
+  it('feathers:service(generic)', function(done) {
     helpers.run(path.join(__dirname, '../generators/service'))
       .inTmpDir(() => process.chdir(appDir))
       .withPrompts({
@@ -72,7 +72,7 @@ describe('generator-feathers', () => {
       );
   });
 
-  it('feathers:hook', done => {
+  it('feathers:hook', function(done) {
     helpers.run(path.join(__dirname, '../generators/hook'))
       .inTmpDir(() => process.chdir(appDir))
       .withPrompts({

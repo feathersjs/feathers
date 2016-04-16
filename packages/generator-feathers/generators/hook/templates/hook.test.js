@@ -3,8 +3,8 @@
 const assert = require('assert');
 const <%= codeName %> = require('../../../../<%= hookPath %>');
 
-describe('<%= service %> <%= codeName %> hook', () => {
-  it('hook can be used', () => {
+describe('<%= service %> <%= codeName %> hook', function() {
+  it('hook can be used', function() {
     const mockHook = {
       type: '<%= type %>',
       app: {},
@@ -12,9 +12,9 @@ describe('<%= service %> <%= codeName %> hook', () => {
       result: {},
       data: {}
     };
-    
+
     <%= codeName %>()(mockHook);
-    
+
     assert.ok(mockHook.<%= codeName %>);
   });
 });
