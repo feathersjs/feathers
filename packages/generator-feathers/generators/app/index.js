@@ -389,12 +389,24 @@ module.exports = generators.Base.extend({
         'request'
       ];
 
-      this.npmInstall(this.dependencies, { save: true });
-
       if(this.props.babel) {
         devDependencies.push('babel-cli', 'babel-core', 'babel-preset-es2015');
       }
+
+      this.dependencies.concat(devDependencies).forEach(function(dependency) {
+        var separatorIndex = dependency.indexOf('@');
+        var end = separatorIndex !== -1 ? separatorIndex : dependency.length;
+        var dependencyName = dependency.substring(0, end);
+
+        // Throw an error if the project name is the same as one of the dependencies
+        if(dependencyName === this.props.name) {
+          this.log.error('Your project can not be named ' + this.props.name + ' because the ' +
+            dependency + ' package will be installed as dependency.');
+          process.exit(1);
+        }
+      }.bind(this));
       
+      this.npmInstall(this.dependencies, { save: true });
       this.npmInstall(devDependencies, { saveDev: true});
     }
   },
