@@ -60,6 +60,16 @@ yo feathers:model
 yo feathers:service
 ```
 
+## Contributing
+
+To contribute PRs for these generators, you will need to clone the repo
+then inside the repo's directory, run `npm link`. This sets up a global
+link to your local package for running tests (`npm test`) and generating
+new feathers apps/services/hooks/etc.
+
+When finished testing, optionally run `npm uninstall generator-feathers` to remove
+the link.
+
 
 ## Changelog
 
