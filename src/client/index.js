@@ -5,4 +5,4 @@ export default function createApplication(... args) {
   return feathers(express(... args));
 }
 
-createApplication.version = require('../../package.json').version;
+createApplication.version = '2.0.1';
