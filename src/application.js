@@ -46,7 +46,8 @@ export default {
 
     // Run the provider functions to register the service
     this.providers.forEach(provider =>
-      provider.call(this, location, protoService, options));
+      provider.call(this, location, protoService, options)
+    );
 
     // If we ran setup already, set this service up explicitly
     if (this._isSetup && typeof protoService.setup === 'function') {
@@ -75,10 +76,11 @@ export default {
       });
 
     const hasMethod = methods => methods.some(name =>
-      (service && typeof service[name] === 'function'));
+      (service && typeof service[name] === 'function')
+    );
 
     // Check for service (any object with at least one service method)
-    if(hasMethod(['handle', 'set']) || !hasMethod(this.methods)) {
+    if(hasMethod(['handle', 'set']) || !hasMethod(this.methods.concat('setup'))) {
       return this._super.apply(this, arguments);
     }
 

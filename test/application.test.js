@@ -326,6 +326,20 @@ describe('Feathers application', () => {
     assert.equal(otherApp.mixins.length, 4);
   });
 
+  it('initializes a service with only a setup method (#285)', done => {
+    const app = feathers();
+
+    app.use('/setup-only', {
+      setup(_app, path) {
+        assert.equal(_app, app);
+        assert.equal(path, 'setup-only');
+        done();
+      }
+    });
+
+    app.setup();
+  });
+
   it('Event punching happens after normalization (#150)', done => {
     const todoService = {
       create(data) {
