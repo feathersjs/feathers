@@ -1,4 +1,5 @@
 import errors from 'feathers-errors';
+import isPlainObject from 'lodash.isplainobject';
 
 const defaults = {
   fieldName: 'roles',
@@ -78,7 +79,7 @@ export default function(options = {}){
           let field = data[options.ownerField];
 
           // Handle nested Sequelize or Mongoose models 
-          if (typeof field === 'object') {
+          if (isPlainObject(field)) {
             field = field[options.idField];
           }
 
