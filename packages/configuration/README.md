@@ -13,6 +13,8 @@
 - Go through each configuration value and sets it on the application (via `app.set(name, value)`).
   - If the value is a valid environment variable (e.v. `NODE_ENV`), use its value instead
   - If the value start with `./` or `../` turn it it an absolute path relative to the configuration file path
+- Both `default` and `<env>` configurations can be modules which provide their computed settings with `module.exports = {...}` and a `.js` file suffix. See `test/config/testing.js` for an example.  
+All rules listed above apply for `.js` modules.
 
 ## Usage
 
