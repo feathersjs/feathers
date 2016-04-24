@@ -40,15 +40,15 @@ export default module.exports = function (root, configFolder = 'config', separat
       return result;
     };
 
-    const config = convert(require(path.join(root, configFolder, 'default.json')));
+    const config = convert(require(path.join(root, configFolder, 'default')));
 
     debug(`Initializing configuration for ${env} environment`);
 
     // Dev is our default development. For everything else extend the default
     if(env !== 'development') {
-      const envConfig = path.join(root, configFolder, `${env}.json`);
+      const envConfig = path.join(root, configFolder, env);
       // We can use sync here since configuration only happens once at startup
-      if(fs.existsSync(envConfig)) {
+      if(fs.existsSync(`${envConfig}.js`) || fs.existsSync(`${envConfig}.json`)) {
         Object.assign(config, convert(require(envConfig)));
       } else {
         debug(`Configuration file for ${env} environment not found at ${envConfig}`);
