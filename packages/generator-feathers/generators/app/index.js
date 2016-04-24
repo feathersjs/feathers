@@ -383,7 +383,7 @@ module.exports = generators.Base.extend({
     },
 
     deps: function() {
-      const devDependencies = [
+      var devDependencies = [
         'jshint',
         'mocha',
         'request'
