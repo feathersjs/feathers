@@ -89,8 +89,7 @@ exports.addLastInFunction = function(ast, search, code) {
 };
 
 exports.addImport = function(ast, varname, modulename) {
-  
-  varname = inflect.camelize(inflect.underscore(varname), false)
+  varname = inflect.camelize(inflect.underscore(varname), false);
   
   ast = convert(ast);
   
