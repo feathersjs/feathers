@@ -1,20 +1,23 @@
 'use strict';
 
-const assert = require('assert');
-const path = require('path');
-const helpers = require('yeoman-test');
-const exec = require('child_process').exec;
+var assert = require('assert');
+var path = require('path');
+var helpers = require('yeoman-test');
+var exec = require('child_process').exec;
 
 
 describe('generator-feathers', function() {
-  let appDir;
+  var appDir;
 
   function runTest(expectedText, done) {
-    let child = exec('npm test', { cwd: appDir });
-    let buffer = '';
+    var child = exec('npm test', { cwd: appDir });
+    var buffer = '';
+    var addToBuffer = function(data) {
+      buffer += data;
+    };
 
-    child.stdout.on('data', data => buffer += data);
-    child.stderr.on('data', data => buffer += data);
+    child.stdout.on('data', addToBuffer);
+    child.stderr.on('data', addToBuffer);
 
     child.on('exit', function (status) {
       if(status !== 0) {
@@ -29,7 +32,9 @@ describe('generator-feathers', function() {
 
   before(function(done) {
     helpers.run(path.join(__dirname, '../generators/app'))
-      .inTmpDir(dir => appDir = dir)
+      .inTmpDir(function(dir) {
+        appDir = dir;
+      })
       .withPrompts({
         name: 'myapp',
         providers: ['rest', 'socketio'],
@@ -40,7 +45,9 @@ describe('generator-feathers', function() {
       })
       .withOptions({
         skipInstall: false
-      }).on('end', () => done());
+      }).on('end', function() {
+        done();
+      });
   });
 
   it('feathers:app', function(done) {
@@ -49,40 +56,46 @@ describe('generator-feathers', function() {
 
   it('feathers:service(memory)', function(done) {
     helpers.run(path.join(__dirname, '../generators/service'))
-      .inTmpDir(() => process.chdir(appDir))
+      .inTmpDir(function() {
+        process.chdir(appDir);
+      })
       .withPrompts({
         type: 'database',
         database: 'memory',
         name: 'messages'
       })
-      .on('end', () =>
-        runTest('registered the messages service', done)
-      );
+      .on('end', function() {
+        runTest('registered the messages service', done);
+      });
   });
 
   it('feathers:service(generic)', function(done) {
     helpers.run(path.join(__dirname, '../generators/service'))
-      .inTmpDir(() => process.chdir(appDir))
+      .inTmpDir(function() {
+        process.chdir(appDir);
+      })
       .withPrompts({
         type: 'generic',
         name: 'tests'
       })
-      .on('end', () =>
-        runTest('registered the tests service', done)
-      );
+      .on('end', function() {
+        runTest('registered the tests service', done);
+      });
   });
 
   it('feathers:hook', function(done) {
     helpers.run(path.join(__dirname, '../generators/hook'))
-      .inTmpDir(() => process.chdir(appDir))
+      .inTmpDir(function() {
+        process.chdir(appDir);
+      })
       .withPrompts({
         type: 'before',
         service: 'messages',
         method: ['create', 'update', 'patch'],
         name: 'removeId'
       })
-      .on('end', () =>
-        runTest('hook can be used', done)
-      );
+      .on('end', function() {
+        runTest('hook can be used', done);
+      });
   });
 });

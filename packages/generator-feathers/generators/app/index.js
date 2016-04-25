@@ -421,8 +421,9 @@ module.exports = generators.Base.extend({
       case 'mariadb':
       case 'postgres':
         this.log('Make sure that your ' + this.props.database +
-          ' database is running. The username/role is correct and the database ' 
-          + this.props.databaseName + ' has been created. Default information can be found in the projects config folder.');
+          ' database is running. The username/role is correct and the database ' +
+          this.props.databaseName + ' has been created. ' +
+          'Default information can be found in the projects config folder.');
         break;
     }
 
