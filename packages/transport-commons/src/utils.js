@@ -28,6 +28,14 @@ export function promisify(method, context, ... args) {
 
 export function errorObject(e) {
   let result = {};
+
   Object.getOwnPropertyNames(e).forEach(key => result[key] = e[key]);
+
+  if(process.env.NODE_ENV === 'production') {
+    delete result.stack;
+  }
+
+  delete result.hook;
+
   return result;
 }

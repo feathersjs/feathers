@@ -44,13 +44,14 @@ describe('utils', () => {
 
   it('errorObject', () => {
     const e = new Error('Testing');
+    e.hook = 'test';
     e.expando = true;
 
     const obj = errorObject(e);
-    delete obj.stack;
 
     assert.ok(typeof obj === 'object');
     assert.ok(!(obj instanceof Error));
+    assert.ok(typeof obj.hook === 'undefined');
     assert.deepEqual(obj, {
       message: 'Testing',
       expando: true
