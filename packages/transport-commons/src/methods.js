@@ -19,16 +19,27 @@ export function setupMethodHandlers(info, socket, path, service) {
     }
 
     let name = `${path}::${method}`;
-    let params = info.params(socket);
+    let connection = info.params(socket);
     let position = typeof paramsPositions[method] !== 'undefined' ?
       paramsPositions[method] : 1;
 
     socket.on(name, function () {
-      debug(`Got '${name}' event with connection`, params);
-      
+      debug(`Got '${name}' event with connection`, connection);
+
       try {
         let args = getArguments(method, arguments);
-        args[position] = Object.assign({ query: args[position] }, params);
+        let callback = args[args.length - 1];
+
+        args[position] = Object.assign({ query: args[position] }, connection);
+        args[args.length - 1] = function(error, data) {
+          if(error) {
+            debug(`Error calling ${name}`, error);
+            return callback(errorObject(error));
+          }
+
+          callback(error, data);
+        };
+
         service[method].apply(service, args);
       } catch(e) {
         let callback = arguments[arguments.length - 1];
