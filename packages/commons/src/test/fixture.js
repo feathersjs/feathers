@@ -11,19 +11,27 @@ const findAllData = [{
 export const Service = {
   events: [ 'log' ],
 
-  find(params, callback) {
-    callback(null, findAllData);
+  find() {
+    return Promise.resolve(findAllData);
   },
 
-  get(name, params, callback) {
-    callback(null, {
+  get(name, params) {
+    if(params.query.error) {
+      return Promise.reject(new Error(`Something for ${name} went wrong`));
+    }
+
+    if(params.query.runtimeError) {
+      thingThatDoesNotExist(); // jshint ignore:line
+    }
+    
+    return Promise.resolve({
       id: name,
       description: `You have to do ${name}!`
     });
   },
 
-  create(data, params, callback) {
-    let result = Object.assign({}, data, {
+  create(data) {
+    const result = Object.assign({}, data, {
       id: 42,
       status: 'created'
     });
@@ -32,11 +40,11 @@ export const Service = {
       result.many = true;
     }
 
-    callback(null, result);
+    return Promise.resolve(result);
   },
 
-  update(id, data, params, callback) {
-    var result = Object.assign({}, data, {
+  update(id, data) {
+    const result = Object.assign({}, data, {
       id, status: 'updated'
     });
 
@@ -44,11 +52,11 @@ export const Service = {
       result.many = true;
     }
 
-    callback(null, result);
+    return Promise.resolve(result);
   },
 
-  patch(id, data, params, callback) {
-    var result = Object.assign({}, data, {
+  patch(id, data) {
+    const result = Object.assign({}, data, {
       id, status: 'patched'
     });
 
@@ -56,11 +64,11 @@ export const Service = {
       result.many = true;
     }
 
-    callback(null, result);
+    return Promise.resolve(result);
   },
 
-  remove(id, params, callback) {
-    callback(null, { id });
+  remove(id) {
+    return Promise.resolve({ id });
   }
 };
 
