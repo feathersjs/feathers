@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "debug": "^2.2.0",
-    "feathers-socket-commons": "^0.2.0",
+    "feathers-socket-commons": "^1.0.0",
     "primus": "^5.0.1",
     "primus-emitter": "^3.1.1",
     "uberproto": "^1.2.0"
