@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import baseTests from 'feathers-commons/lib/test/client';
 
 import server from './server';
-import socketio from '../client';
+import socketio from '../../client';
 
 describe('feathers-socketio/client', function() {
   const socket = io('http://localhost:9988');
@@ -32,7 +32,7 @@ describe('feathers-socketio/client', function() {
   it('app has the io attribute', () => {
     assert.ok(app.io);
   });
-  
+
   it('throws an error when configured twice', () => {
     try {
       app.configure(socketio(socket));
@@ -41,11 +41,11 @@ describe('feathers-socketio/client', function() {
       assert.equal(e.message, 'Only one default client provider can be configured');
     }
   });
-  
+
   it('can initialize a client instance', done => {
     const init = socketio(socket);
     const todos = init.service('todos');
-    
+
     assert.ok(todos instanceof init.Service, 'Returned service is a client');
     todos.find({}).then(todos => assert.deepEqual(todos, [
       {

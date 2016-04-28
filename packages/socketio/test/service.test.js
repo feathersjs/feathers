@@ -26,6 +26,27 @@ export default function(name, options) {
       });
     });
 
+    it(`::get with error`, done => {
+      options.socket.emit(`${name}::get`, `laundry`, { error: true }, function (error) {
+        assert.equal(error.message, 'Something for laundry went wrong');
+        done();
+      });
+    });
+
+    it(`::get with runtime error`, done => {
+      options.socket.emit(`${name}::get`, `laundry`, { runtimeError: true }, function (error) {
+        assert.equal(error.message, 'thingThatDoesNotExist is not defined');
+        done();
+      });
+    });
+
+    it(`::get with error in hook`, done => {
+      options.socket.emit(`${name}::get`, `laundry`, { hookError: true }, function (error) {
+        assert.equal(error.message, 'Error from get, before hook');
+        done();
+      });
+    });
+
     it(`::create`, done => {
       let original = {
         name: `creating`
