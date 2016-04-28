@@ -63,20 +63,6 @@ const app = feathers()
   .configure(socketio(socket));
 ```
 
-## Changelog
-
-__1.2.0__
-
-- Added event filtering support (see [feathers-socketio/2](https://github.com/feathersjs/feathers-socketio/issues/2))
-
-__1.1.0__
-
-- Added Socket.io client and browser mapping for universal module usage
-
-__1.0.0__
-
-- Initial release of extracted module from Feathers 1.3
-
 ## License
 
 Copyright (c) 2015
