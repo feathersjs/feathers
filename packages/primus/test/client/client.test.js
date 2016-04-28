@@ -3,7 +3,7 @@ import feathers from 'feathers/client';
 import baseTests from 'feathers-commons/lib/test/client';
 
 import server from './server';
-import primus from '../client';
+import primus from '../../client';
 
 describe('feathers-primus/client', function() {
   const app = feathers().configure(primus({}));
@@ -33,7 +33,7 @@ describe('feathers-primus/client', function() {
   it('app has the primus attribute', () => {
     assert.ok(app.primus);
   });
-  
+
   it('throws an error when configured twice', () => {
     try {
       app.configure(primus({}));
@@ -42,11 +42,11 @@ describe('feathers-primus/client', function() {
       assert.equal(e.message, 'Only one default client provider can be configured');
     }
   });
-  
+
   it('can initialize a client instance', done => {
     const init = primus(service.connection);
     const todos = init.service('todos');
-    
+
     assert.ok(todos instanceof init.Service, 'Returned service is a client');
     todos.find({}).then(todos => assert.deepEqual(todos, [
       {
