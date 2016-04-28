@@ -8,6 +8,7 @@ export default class Service {
     this.path = options.name;
     this.connection = options.connection;
     this.method = options.method;
+    this.timeout = options.timeout || 5000;
   }
 
   emit(... args) {
@@ -21,17 +22,24 @@ export default class Service {
     }
 
     return new Promise((resolve, reject) => {
-      args.unshift(`${this.path}::${method}`);
+      const event = `${this.path}::${method}`;
+      const timeoutId = setTimeout(() => reject(
+        new Error(`Timeout of ${this.timeout}ms exceeded calling ${event}`)
+      ), this.timeout);
+
+      args.unshift(event);
       args.push(function(error, data) {
+        clearTimeout(timeoutId);
+
         if (callback) {
           callback(error, data);
         }
 
         return error ? reject(error) : resolve(data);
       });
-      
+
       debug(`Sending socket.${this.method}`, args);
-      
+
       this.connection[this.method](... args);
     });
   }

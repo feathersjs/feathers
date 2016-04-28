@@ -9,6 +9,7 @@ describe('client', () => {
   const service = new Service({
     name: 'todos',
     method: 'emit',
+    timeout: 50,
     connection,
     events
   });
@@ -38,12 +39,19 @@ describe('client', () => {
 
   it('sends methods with acknowledgement', done => {
     connection.on('todos::create', (data, params, callback) => {
-        data.created = true;
-        callback(null, data);
+      data.created = true;
+      callback(null, data);
     });
 
     service.create(testData).then(result => {
       assert.ok(result.created);
+      done();
+    });
+  });
+
+  it('times out on undefined methods', done => {
+    service.remove(10).catch(error => {
+      assert.equal(error.message, 'Timeout of 50ms exceeded calling todos::remove');
       done();
     });
   });
