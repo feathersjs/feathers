@@ -1,5 +1,5 @@
 import { getArguments } from 'feathers-commons';
-import { errorObject } from './utils';
+import { normalizeError } from './utils';
 
 const debug = require('debug')('feathers-socket-commons:methods');
 
@@ -30,11 +30,15 @@ export function setupMethodHandlers(info, socket, path, service) {
         let args = getArguments(method, arguments);
         let callback = args[args.length - 1];
 
+        // NOTE (EK): socket.io just bombs silently if there is an error that
+        // isn’t up to it’s standards, so you we inject a new error handler
+        // to print a debug log and clean up the error object so it actually
+        // gets transmitted back to the client.
         args[position] = Object.assign({ query: args[position] }, connection);
         args[args.length - 1] = function(error, data) {
           if(error) {
             debug(`Error calling ${name}`, error);
-            return callback(errorObject(error));
+            return callback(normalizeError(error));
           }
 
           callback(error, data);
@@ -45,7 +49,7 @@ export function setupMethodHandlers(info, socket, path, service) {
         let callback = arguments[arguments.length - 1];
         debug(`Error on socket`, e);
         if(typeof callback === 'function') {
-          callback(errorObject(e));
+          callback(normalizeError(e));
         }
       }
     });

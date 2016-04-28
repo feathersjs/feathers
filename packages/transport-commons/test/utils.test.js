@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { convertFilterData, promisify, errorObject } from '../src/utils';
+import { convertFilterData, promisify, normalizeError } from '../src/utils';
 
 describe('utils', () => {
   it('convertFilterData', () => {
@@ -42,12 +42,12 @@ describe('utils', () => {
     });
   });
 
-  it('errorObject', () => {
+  it('normalizeError', () => {
     const e = new Error('Testing');
     e.hook = 'test';
     e.expando = true;
 
-    const obj = errorObject(e);
+    const obj = normalizeError(e);
 
     assert.ok(typeof obj === 'object');
     assert.ok(!(obj instanceof Error));
