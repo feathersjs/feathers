@@ -8,7 +8,7 @@ import socketio from '../../client';
 
 describe('feathers-socketio/client', function() {
   const socket = io('http://localhost:9988');
-  const app = feathers().configure(socketio(socket));
+  const app = feathers().configure(socketio(socket, { timeout: 500 }));
   const service = app.service('todos');
 
   before(function(done) {
@@ -54,6 +54,13 @@ describe('feathers-socketio/client', function() {
         id: 0
       }
     ])).then(() => done()).catch(done);
+  });
+
+  it('times out with error when using non-existent service', done => {
+    app.service('not-me').create({}).catch(e => {
+      assert.equal(e.message, 'Timeout of 500ms exceeded calling not-me::create');
+      done();
+    });
   });
 
   baseTests(service);
