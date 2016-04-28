@@ -34,7 +34,7 @@
     "compile": "rm -rf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
-    "mocha": "mocha test/ --compilers js:babel-core/register",
+    "mocha": "mocha test/ --recursive --compilers js:babel-core/register",
     "test": "npm run compile && npm run jshint && npm run mocha && nsp check"
   },
   "directories": {
@@ -56,7 +56,8 @@
     "babel-plugin-transform-object-assign": "^6.3.13",
     "babel-preset-es2015": "^6.3.13",
     "feathers": "^2.0.0-pre.1",
-    "feathers-commons": "^0.7.0",
+    "feathers-commons": "^0.7.2",
+    "feathers-hooks": "^1.5.2",
     "feathers-memory": "^0.7.0",
     "jshint": "^2.8.0",
     "lodash": "^4.0.1",

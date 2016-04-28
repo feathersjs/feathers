@@ -1,5 +1,5 @@
 import feathers from 'feathers';
-import socketio from '../src';
+import socketio from '../../src';
 import memory from 'feathers-memory';
 
 Object.defineProperty(Error.prototype, 'toJSON', {

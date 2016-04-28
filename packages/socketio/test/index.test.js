@@ -1,6 +1,7 @@
 import assert from 'assert';
 import _ from 'lodash';
 import feathers from 'feathers';
+import hooks from 'feathers-hooks';
 import io from 'socket.io-client';
 import request from 'request';
 import { Service as todoService } from 'feathers-commons/lib/test-fixture';
@@ -17,7 +18,14 @@ describe('feathers-socketio', () => {
   };
 
   before(done => {
+    const errorHook = function(hook) {
+      if(hook.params.query.hookError) {
+        throw new Error(`Error from ${hook.method}, ${hook.type} hook`);
+      }
+    };
+
     const app = options.app = feathers()
+      .configure(hooks())
       .configure(socketio(function(io) {
         io.use(function (socket, next) {
           socket.feathers.user = { name: 'David' };
@@ -26,8 +34,15 @@ describe('feathers-socketio', () => {
       }))
       .use('/todo', todoService);
 
+    app.service('todo').before({
+      get: errorHook
+    });
+
     options.server = app.listen(7886, function(){
       app.use('/tasks', todoService);
+      app.service('tasks').before({
+        get: errorHook
+      });
     });
 
     const socket = options.socket = io('http://localhost:7886');
@@ -66,7 +81,7 @@ describe('feathers-socketio', () => {
       .configure(socketio({
         path: '/test/'
       }, io => assert.ok(io)));
-    
+
     let srv = app.listen(8987).on('listening', () => {
       request('http://localhost:8987/test/socket.io.js', (err, res, body) => {
         assert.equal(res.statusCode, 200);
@@ -75,7 +90,7 @@ describe('feathers-socketio', () => {
       });
     });
   });
-  
+
   it('passes handshake as service parameters', done => {
     let service = options.app.service('todo');
     let old = {
