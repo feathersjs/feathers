@@ -1,5 +1,6 @@
 import assert from 'assert';
 import feathers from 'feathers';
+import hooks from 'feathers-hooks';
 import _ from 'lodash';
 import { Service as todoService, verify } from 'feathers-commons/lib/test-fixture';
 
@@ -15,7 +16,13 @@ describe('feathers-primus', () => {
   };
 
   before(done => {
+    const errorHook = function(hook) {
+      if(hook.params.query.hookError) {
+        throw new Error(`Error from ${hook.method}, ${hook.type} hook`);
+      }
+    };
     const app = options.app = feathers()
+      .configure(hooks())
       .configure(primus({
         transformer: 'websockets'
       }, function(primus) {
@@ -28,8 +35,15 @@ describe('feathers-primus', () => {
       }))
       .use('todo', todoService);
 
+    app.service('todo').before({
+      get: errorHook
+    });
+
     options.server = app.listen(7888, function(){
       app.use('tasks', todoService);
+      app.service('tasks').before({
+        get: errorHook
+      });
       done();
     });
   });

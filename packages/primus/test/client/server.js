@@ -1,5 +1,5 @@
 import feathers from 'feathers';
-import primus from '../src';
+import primus from '../../src';
 import memory from 'feathers-memory';
 
 Object.defineProperty(Error.prototype, 'toJSON', {
