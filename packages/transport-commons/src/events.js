@@ -1,5 +1,5 @@
 import { each } from 'feathers-commons';
-import { events, promisify, convertFilterData, errorObject } from './utils';
+import { events, promisify, convertFilterData, normalizeError } from './utils';
 
 const debug = require('debug')('feathers-socket-commons:events');
 
@@ -89,7 +89,7 @@ export function setupEventHandlers(info, path, service) {
           })
           .catch(error => {
             debug(`Got error on ${path}`, error);
-            send(`${path} error`, errorObject(error));
+            send(`${path} error`, normalizeError(error));
           });
       });
     });

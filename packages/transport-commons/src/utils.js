@@ -26,7 +26,7 @@ export function promisify(method, context, ... args) {
   });
 }
 
-export function errorObject(e) {
+export function normalizeError(e) {
   let result = {};
 
   Object.getOwnPropertyNames(e).forEach(key => result[key] = e[key]);
