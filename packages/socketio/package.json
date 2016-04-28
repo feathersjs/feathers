@@ -35,7 +35,7 @@
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
     "mocha": "mocha test/ --recursive --compilers js:babel-core/register",
-    "test": "npm run compile && npm run jshint && npm run mocha && nsp check"
+    "test": "npm run compile && npm run jshint && npm run mocha"
   },
   "directories": {
     "lib": "lib"
@@ -62,7 +62,6 @@
     "jshint": "^2.8.0",
     "lodash": "^4.0.1",
     "mocha": "^2.3.4",
-    "nsp": "^2.2.0",
     "request": "^2.69.0",
     "socket.io-client": "^1.3.7"
   }
