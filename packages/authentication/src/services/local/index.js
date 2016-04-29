@@ -10,6 +10,7 @@ const debug = Debug('feathers-authentication:local');
 const defaults = {
   usernameField: 'email',
   passwordField: 'password',
+  passReqToCallback: true,
   session: false
 };
 
@@ -18,16 +19,24 @@ export class Service {
     this.options = options;
   }
 
-  checkCredentials(username, password, done) {
-    const params = {
-      query: {
-        [this.options.usernameField]: username
-      }
-    };
+  buildCredentials(req, username) {
+    const usernameField = this.options.usernameField;
+    return new Promise(function(resolve) {
+      const params = {
+        query: {
+          [usernameField]: username
+        }
+      };
+      resolve(params);
+    });
+  }
 
-    // Look up the user
-    this.app.service(this.options.userEndpoint)
-      .find(params)
+  checkCredentials(req, username, password, done) {
+    this.app.service(this.options.localEndpoint).buildCredentials(req, username, password)
+      .then(params => {
+        // Look up the user
+        return this.app.service(this.options.userEndpoint).find(params);
+      })
       .then(users => {
         // Paginated services return the array of results in the data attribute.
         let user = users[0] || users.data && users.data[0];
