@@ -24,7 +24,7 @@ export let exposeConnectMiddleware = function(req, res, next) {
 
 // Make sure than an auth token passed in is available for hooks
 // and services. This gracefully falls back from
-// header -> cookie -> body -> query string
+// header -> body -> query string
 export let normalizeAuthToken = function(options = {}) {
   debug('Setting up normalizeAuthToken middleware with options:', options);
 
