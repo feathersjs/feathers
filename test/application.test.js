@@ -203,7 +203,11 @@ describe('Feathers application', () => {
     app.setup(httpsServer);
 
     httpsServer.on('listening', function () {
-      const socket = io('https://localhost:7889', { secure: true, port: 7889 });
+      const socket = io('https://localhost:7889', {
+        secure: true,
+        port: 7889,
+        rejectUnauthorized: false
+      });
 
       request({
         url: 'https://localhost:7889/secureTodos/dishes',
