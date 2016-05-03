@@ -41,7 +41,7 @@
     "lib": "lib"
   },
   "dependencies": {
-    "babel-polyfill": "^6.3.14",
+    "babel-polyfill": "^6.7.4",
     "debug": "^2.2.0",
     "feathers-commons": "^0.7.0"
   },
