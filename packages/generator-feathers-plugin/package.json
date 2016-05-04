@@ -28,10 +28,11 @@
   },
   "dependencies": {
     "object.assign": "^4.0.3",
-    "yeoman-generator": "^0.22.5"
+    "yeoman-generator": "^0.23.2"
   },
   "devDependencies": {
-    "mocha": "~2.4.5"
+    "mocha": "~2.4.5",
+    "yeoman-test": "^1.4.0"
   },
   "engines": {
     "node": ">=0.8.0",
