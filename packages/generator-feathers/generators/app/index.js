@@ -192,7 +192,7 @@ module.exports = generators.Base.extend({
       }
     ];
 
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
       this.props = assign(this.props, props);
       this.props.databaseName = S(this.props.name).camelize().s;
       this.props.babel = process.versions.node < '5.0.0';

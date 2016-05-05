@@ -121,7 +121,7 @@ module.exports = generators.Base.extend({
       }
     ];
 
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
       this.props = assign(this.props, props);
       done();
     }.bind(this));
