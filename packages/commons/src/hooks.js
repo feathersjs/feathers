@@ -37,7 +37,7 @@ exports.converters = {
   patch: updateOrPatch
 };
 
-exports.hookObject = function(method, type, args) {
+exports.hookObject = exports.hook = function(method, type, args) {
   var hook = exports.converters[method](args);
 
   hook.method = method;
@@ -46,34 +46,54 @@ exports.hookObject = function(method, type, args) {
   return hook;
 };
 
-exports.makeArguments = function(hookObject) {
+const defaultMakeArguments = exports.defaultMakeArguments = function (hook) {
   var result = [];
-  if(typeof hookObject.id !== 'undefined') {
-    result.push(hookObject.id);
+  if(typeof hook.id !== 'undefined') {
+    result.push(hook.id);
   }
 
-  if(hookObject.data) {
-    result.push(hookObject.data);
+  if(hook.data) {
+    result.push(hook.data);
   }
 
-  result.push(hookObject.params || {});
-  result.push(hookObject.callback);
+  result.push(hook.params || {});
+  result.push(hook.callback);
 
   return result;
 };
 
+exports.makeArguments = function(hook) {
+  if(hook.method === 'find') {
+    return [ hook.params, hook.callback ];
+  }
+
+  if(hook.method === 'get' || hook.method === 'remove') {
+    return [ hook.id, hook.params, hook.callback ];
+  }
+
+  if(hook.method === 'update' || hook.method === 'patch') {
+    return [ hook.id, hook.data, hook.params, hook.callback ];
+  }
+
+  if(hook.method === 'create') {
+    return [ hook.data, hook.params, hook.callback ];
+  }
+
+  return defaultMakeArguments(hook);
+};
+
 exports.convertHookData = function(obj) {
-  var hookObject = {};
+  var hook = {};
 
   if(Array.isArray(obj)) {
-    hookObject = { all: obj };
+    hook = { all: obj };
   } else if(typeof obj !== 'object') {
-    hookObject = { all: [ obj ] };
+    hook = { all: [ obj ] };
   } else {
     each(obj, function(value, key) {
-      hookObject[key] = !Array.isArray(value) ? [ value ] : value;
+      hook[key] = !Array.isArray(value) ? [ value ] : value;
     });
   }
 
-  return hookObject;
+  return hook;
 };

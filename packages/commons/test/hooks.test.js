@@ -70,7 +70,7 @@ describe('hook utilities', () => {
   });
 
   it('.makeArguments', () => {
-    var args = utils.makeArguments({
+    let args = utils.makeArguments({
       id: 2,
       data: { my: 'data' },
       params: { some: 'thing' },
@@ -100,6 +100,37 @@ describe('hook utilities', () => {
       { some: 'thing' },
       noop
     ]);
+  });
+
+  it('.makeArguments makes correct argument list for known methods', () => {
+    let args = utils.makeArguments({
+      data: { my: 'data' },
+      params: { some: 'thing' },
+      method: 'update',
+      callback: noop
+    });
+
+    assert.deepEqual(args, [undefined, { my: 'data' }, { some: 'thing' }, noop]);
+
+    args = utils.makeArguments({
+      id: 2,
+      data: { my: 'data' },
+      params: { some: 'thing' },
+      method: 'remove',
+      callback: noop
+    });
+
+    assert.deepEqual(args, [2, { some: 'thing' }, noop]);
+
+    args = utils.makeArguments({
+      id: 2,
+      data: { my: 'data' },
+      params: { some: 'thing' },
+      method: 'create',
+      callback: noop
+    });
+
+    assert.deepEqual(args, [{ my: 'data' }, { some: 'thing' }, noop]);
   });
 
   it('.convertHookData', () => {
