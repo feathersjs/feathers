@@ -69,7 +69,7 @@ var notifyUpdate = function(cb) {
                     }
                   ]
                 }];
-                this.prompt(prompts, function (props) {
+                this.prompt(prompts).then(function (props) {
                   if(props.updateGenerator === 'yes') {
                     spawn('npm', ['install', '-g', 'generator-feathers'], {stdio: 'inherit'})
                       .on('close', function(){
