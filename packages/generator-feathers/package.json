@@ -61,7 +61,7 @@
     "repeating": "^2.0.0",
     "string": "^3.3.1",
     "string-length": "^1.0.1",
-    "update-notifier": "^0.6.1",
+    "update-notifier": "^0.7.0",
     "yeoman-generator": "^0.23.3"
   },
   "devDependencies": {
