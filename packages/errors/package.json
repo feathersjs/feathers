@@ -47,7 +47,7 @@
   "devDependencies": {
     "babel-cli": "^6.3.17",
     "babel-core": "^6.3.17",
-    "babel-plugin-add-module-exports": "^0.1.1",
+    "babel-plugin-add-module-exports": "^0.2.0",
     "babel-plugin-transform-builtin-extend": "^1.1.0",
     "babel-plugin-transform-object-assign": "^6.3.13",
     "babel-polyfill": "^6.5.0",
