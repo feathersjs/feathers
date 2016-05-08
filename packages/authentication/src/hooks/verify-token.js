@@ -29,7 +29,7 @@ export default function(options = {}){
       throw new Error(`You need to pass 'options.secret' to the verifyToken() hook or set 'auth.token.secret' it in your config.`);
     }
 
-    // convert the alorithm value to an array
+    // Convert the algorithm value to an array
     if (options.algorithm) {
       options.algorithms = [options.algorithm];
       delete options.algorithm;
