@@ -55,7 +55,7 @@
     "generator-feathers-plugin": "^0.6.9",
     "vorpal": "^1.10.9",
     "yeoman-environment": "^1.5.2",
-    "yo": "^1.7.0"
+    "yo": "=1.7.1"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
