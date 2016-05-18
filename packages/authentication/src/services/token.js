@@ -1,6 +1,6 @@
 import Debug from 'debug';
 import jwt from 'jsonwebtoken';
-import hooks from '../../hooks';
+import hooks from '../hooks';
 import commonHooks from 'feathers-hooks';
 import errors from 'feathers-errors';
 
