@@ -1,8 +1,8 @@
 import Debug from 'debug';
 import errors from 'feathers-errors';
 import passport from 'passport';
-import { exposeConnectMiddleware } from '../../middleware';
-import { successfulLogin } from '../../middleware';
+import { exposeConnectMiddleware } from '../middleware';
+import { successfulLogin } from '../middleware';
 
 const debug = Debug('feathers-authentication:oauth2');
 

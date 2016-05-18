@@ -3,8 +3,8 @@ import errors from 'feathers-errors';
 import bcrypt from 'bcryptjs';
 import passport from 'passport';
 import { Strategy } from 'passport-local';
-import { exposeConnectMiddleware } from '../../middleware';
-import { successfulLogin } from '../../middleware';
+import { exposeConnectMiddleware } from '../middleware';
+import { successfulLogin } from '../middleware';
 
 const debug = Debug('feathers-authentication:local');
 const defaults = {
@@ -33,10 +33,8 @@ export class Service {
 
   checkCredentials(req, username, password, done) {
     this.app.service(this.options.localEndpoint).buildCredentials(req, username, password)
-      .then(params => {
-        // Look up the user
-        return this.app.service(this.options.userEndpoint).find(params);
-      })
+      // Look up the user
+      .then(params => this.app.service(this.options.userEndpoint).find(params))
       .then(users => {
         // Paginated services return the array of results in the data attribute.
         let user = users[0] || users.data && users.data[0];
@@ -57,17 +55,13 @@ export class Service {
           return done(new Error(`User record in the database is missing a '${this.options.passwordField}'`));
         }
 
-        crypto.compare(password, user[this.options.passwordField], function(error, result) {
+        crypto.compare(password, hash, function(error, result) {
           // Handle 500 server error.
           if (error) {
             return done(error);
           }
-          // Successful login.
-          if (result) {
-            return done(null, user);
-          }
-          // Handle bad password.
-          return done(null, false);
+
+          return done(null, result ? user : false);
         });
       })
       .catch(done);
