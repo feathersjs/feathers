@@ -158,12 +158,18 @@ describe('transforms', () => {
   it('addToArrayInObject for hook objects', () => {
     const ast = transform.parse(`
       exports.before = {
-        all: [],
+        all: [
+          // otherCommentedOut();
+          /* commentedOut() */
+        ],
         create: [addUser()]
       }
       
       exports.after = {
-        all: [],
+        all: [
+          // otherCommentedOut()
+          /* commentedOut() */
+        ],
         create: [addUser({ some: 'test' })]
       }
     `);
