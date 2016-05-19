@@ -30,7 +30,7 @@ var findFirstNodeAfter = exports.findFirstNodeAfter = function(ast, code, type) 
   
   traverse(ast, {
     pre: function(node) {
-      if(node && node.type !== 'Line' && recast.print(node).code === code) {
+      if(node && node.type !== 'Line' && node.type !== 'Block' && recast.print(node).code === code) {
         next = true;
       }
 
