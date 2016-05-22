@@ -1,10 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import makeDebug from 'debug';
+import deepAssign from 'deep-assign';
 
 const debug = makeDebug('feathers:configuration');
+const separator = path.sep;
 
-export default module.exports = function (root, configFolder = 'config', separator = path.sep) {
+export default module.exports = function (root, configFolder = 'config', deep = true) {
   return function() {
     const app = this;
     const env = app.settings.env;
@@ -40,7 +42,7 @@ export default module.exports = function (root, configFolder = 'config', separat
       return result;
     };
 
-    const config = convert(require(path.join(root, configFolder, 'default')));
+    let config = convert(require(path.join(root, configFolder, 'default')));
 
     debug(`Initializing configuration for ${env} environment`);
 
@@ -49,7 +51,8 @@ export default module.exports = function (root, configFolder = 'config', separat
       const envConfig = path.join(root, configFolder, env);
       // We can use sync here since configuration only happens once at startup
       if(fs.existsSync(`${envConfig}.js`) || fs.existsSync(`${envConfig}.json`)) {
-        Object.assign(config, convert(require(envConfig)));
+        config = deep ? deepAssign(config, convert(require(envConfig))) :
+          Object.assign(config, convert(require(envConfig)));
       } else {
         debug(`Configuration file for ${env} environment not found at ${envConfig}`);
       }

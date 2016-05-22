@@ -13,5 +13,6 @@ module.exports = {
   from: 'testing',
   testEnvironment: 'NODE_ENV',
   derived: derivedSetting,
-  derivedEnvironment: derivedEnvironment
+  derivedEnvironment: derivedEnvironment,
+  deep: { merge: true }
 };
