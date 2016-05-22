@@ -45,4 +45,11 @@ describe('feathers-configuration', () => {
   it('converts arrays as actual arrays', () =>
     assert.ok(Array.isArray(app.get('array')))
   );
+
+  it('deep merges properties', () =>
+    assert.deepEqual(app.get('deep'), {
+      base: false,
+      merge: true
+    })
+  );
 });
