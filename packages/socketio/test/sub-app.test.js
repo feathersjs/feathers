@@ -28,20 +28,4 @@ describe('Sub Apps', function() {
   describe('Second Sub App', () => {
     baseTests(v2Service);
   });
-
-  // it('can send messages to first sub-app', done => {
-  //   v1Service.find({}).then(result => {
-  //     assert.equal(result.length, 1);
-  //     assert.equal(result[0].text, 'v1 todo');
-  //     done();
-  //   });
-  // });
-
-  // it('can send messages to second sub-app', done => {
-  //   v2Service.find({}).then(result => {
-  //     assert.equal(result.length, 1);
-  //     assert.equal(result[0].text, 'v2 todo');
-  //     done();
-  //   });
-  // });
 });

@@ -14,16 +14,20 @@ export default function (options, config) {
   return function () {
     const app = this;
 
-    app.configure(socket);
+    app.configure(socket('io'));
 
     Proto.mixin({
       setup(server) {
-        const io = this.io = socketio.listen(server, options);
+        let io = this.io;
 
-        io.use(function (socket, next) {
-          socket.feathers = { provider: 'socketio' };
-          next();
-        });
+        if(!io) {
+          io = this.io = socketio.listen(server, options);
+
+          io.use(function (socket, next) {
+            socket.feathers = { provider: 'socketio' };
+            next();
+          });
+        }
 
         if (typeof config === 'function') {
           debug('Calling SocketIO configuration function');
