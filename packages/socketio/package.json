@@ -34,7 +34,7 @@
     "compile": "rm -rf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
-    "mocha": "mocha test/ --recursive --compilers js:babel-core/register",
+    "mocha": "mocha test/ --compilers js:babel-core/register --timeout 5000",
     "test": "npm run compile && npm run jshint && npm run mocha"
   },
   "directories": {
