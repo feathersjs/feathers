@@ -61,7 +61,7 @@
     "feathers-memory": "^0.7.0",
     "jshint": "^2.8.0",
     "lodash": "^4.0.1",
-    "mocha": "^2.3.4",
+    "mocha": "^2.5.0",
     "request": "^2.69.0",
     "socket.io-client": "^1.3.7"
   }
