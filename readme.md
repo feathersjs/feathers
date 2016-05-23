@@ -73,6 +73,10 @@ The [Feathers docs](http://docs.feathersjs.com) are loaded with awesome stuff an
 
 Each plugin has it's own minimal example in the repo. To see some more complex examples go to [feathersjs/feathers-demos](https://github.com/feathersjs/feathers-demos).
 
+## Security
+
+We :heart: the community and take security very seriously. No one wants their app hacked. If you have come across a security concern please [report it responsibly](http://docs.feathersjs.com/SECURITY.html#where-should-i-report-security-issues). Visit the [Security section](http://docs.feathersjs.com/SECURITY.html) of the docs to learn more about how you can make sure your app is secure.
+
 ## License
 
 [MIT](LICENSE)
