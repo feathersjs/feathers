@@ -23,6 +23,8 @@ export function setupMethodHandlers(info, socket, path, service) {
     let position = typeof paramsPositions[method] !== 'undefined' ?
       paramsPositions[method] : 1;
 
+    debug(`Setting up socket listener for event '${name}'`);
+
     socket.on(name, function () {
       debug(`Got '${name}' event with connection`, connection);
 

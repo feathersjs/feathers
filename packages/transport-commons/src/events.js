@@ -41,10 +41,10 @@ export function getDispatcher(service, ev, data, hook) {
   return function(connection) {
     let promise = promisify(originalDispatcher, service, data, connection);
 
-    if(eventFilters.length) {
+    if (eventFilters.length) {
       debug(`Dispatching ${eventFilters.length} event filters for '${ev}' event`);
       eventFilters.forEach(filterFn => {
-        if(filterFn.length === 4) { // function(data, connection, hook, callback)
+        if (filterFn.length === 4) { // function(data, connection, hook, callback)
           promise = promise.then(data =>
             promisify(filterFn, service, data, connection, hook)
           );
@@ -82,6 +82,7 @@ export function setupEventHandlers(info, path, service) {
         dispatcher(info.params(socket))
           .then(data => {
             if(data) {
+              debug(`Dispatching ${eventName} with data`, data);
               send(eventName, data);
             } else {
               debug(`Not sending any data for ${eventName}`);
