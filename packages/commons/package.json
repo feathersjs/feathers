@@ -47,6 +47,6 @@
     "babel-polyfill": "^6.7.4",
     "babel-preset-es2015": "^6.1.18",
     "jshint": "^2.6.3",
-    "mocha": "^2.1.0"
+    "mocha": "^2.5.0"
   }
 }
