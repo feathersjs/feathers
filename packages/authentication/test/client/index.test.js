@@ -110,26 +110,30 @@ const setupTests = initApp => {
       }).catch(done);
   });
 
-  it('.logout works, does not grant access to protected service', done => {
+  it('.logout works, does not grant access to protected service and token is removed from localstorage', done => {
     app.authenticate({
-        type: 'local',
-        email, password
-      }).then(response => {
-        expect(response.token).to.not.equal(undefined);
-        expect(response.data).to.not.equal(undefined);
+      type: 'local',
+      email, password
+    }).then(response => {
+      expect(response.token).to.not.equal(undefined);
+      expect(response.data).to.not.equal(undefined);
 
-        app.logout().then(() => {
-          expect(app.get('token')).to.equal(null);
-          expect(app.get('user')).to.equal(null);
+      return app.logout().then(() => {
+        expect(app.get('token')).to.equal(null);
+        expect(app.get('user')).to.equal(null);
 
+
+        return Promise.resolve(app.get('storage').getItem('feathers-jwt')).then(token => {
+          expect(token).to.equal(undefined);
           app.service('messages').create({ text: 'auth test message' })
             .then(done)
             .catch(error => {
               expect(error.code).to.equal(401);
               done();
             });
-        }).catch(done);
-      }).catch(done);
+        });
+      });
+    }).catch(done);
   });
 };
 
