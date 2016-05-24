@@ -66,7 +66,7 @@ export function getCookie(name) {
 // Returns the value for a cookie
 export function clearCookie(name) {
   if (typeof document !== 'undefined') {
-    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:01 GMT;`; 
+    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
   }
 
   return null;
@@ -99,6 +99,11 @@ export function getStorage(storage) {
 
     setItem(key, value) {
       return (this.store[key] = value);
+    },
+
+    removeItem(key) {
+      delete this.store[key];
+      return this;
     }
   };
 }
