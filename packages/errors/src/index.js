@@ -170,4 +170,24 @@ const errors = {
   Unavailable
 };
 
-export default Object.assign({ types: errors, errors }, errors);
+function convert(error) {
+  if(!error) {
+    return error;
+  }
+
+  const FeathersError = errors[error.name];
+  const result = FeathersError ? new FeathersError(error.message, error.data) :
+    new Error(error.message || error);
+
+  if(typeof error === 'object') {
+    Object.assign(result, error);
+  }
+
+  return result;
+}
+
+export default Object.assign({
+  convert,
+  types: errors,
+  errors
+}, errors);

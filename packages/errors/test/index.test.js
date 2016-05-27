@@ -1,12 +1,40 @@
 if(!global._babelPolyfill) { require('babel-polyfill'); }
 
 import assert from 'assert';
-import { types, errors } from '../src';
+import { types, errors, convert } from '../src';
 
 describe('feathers-errors', () => {
   it('is CommonJS compatible', () => {
     assert.equal(typeof require('../lib'), 'object');
     assert.equal(typeof require('../lib').FeathersError, 'function');
+  });
+
+  describe('errors.convert', () => {
+    it('converts objects to feathers errors', () => {
+      const error = convert({
+        name: 'BadRequest',
+        message: 'Hi',
+        expando: 'Me'
+      });
+
+      assert.ok(error instanceof errors.BadRequest);
+      assert.equal(error.message, 'Hi');
+      assert.equal(error.expando, 'Me');
+    });
+
+    it('converts other object to error', () => {
+      let error = convert({
+        message: 'Something went wrong'
+      });
+
+      assert.ok(error instanceof Error);
+      assert.equal(error.message, 'Something went wrong');
+
+      error = convert('Something went wrong');
+
+      assert.ok(error instanceof Error);
+      assert.equal(error.message, 'Something went wrong');
+    });
   });
 
   describe('error types', () => {
@@ -160,26 +188,26 @@ describe('feathers-errors', () => {
       var data = {
         errors: {
           email: 'Email Taken',
-          password: 'Invalid Password'  
+          password: 'Invalid Password'
         },
         foo: 'bar'
       };
 
       var expected = '{"name":"GeneralError","message":"Custom Error","code":500,"className":"general-error","data":{"foo":"bar"},"errors":{"email":"Email Taken","password":"Invalid Password"}}';
-      
+
       var error = new errors.GeneralError('Custom Error', data);
-      assert.equal(JSON.stringify(error), expected);  
+      assert.equal(JSON.stringify(error), expected);
     });
 
     it('can handle immutable data', () => {
       var data = {
         errors: {
           email: 'Email Taken',
-          password: 'Invalid Password'  
+          password: 'Invalid Password'
         },
         foo: 'bar'
       };
-      
+
       var error = new errors.GeneralError('Custom Error', Object.freeze(data));
       assert.equal(error.data.errors, undefined);
       assert.deepEqual(error.data, {foo: 'bar'});
