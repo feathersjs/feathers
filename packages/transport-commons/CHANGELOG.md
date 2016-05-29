@@ -1,5 +1,25 @@
 # Change Log
 
+## [v2.1.0](https://github.com/feathersjs/feathers-socket-commons/tree/v2.1.0) (2016-05-29)
+[Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v2.0.0...v2.1.0)
+
+**Closed issues:**
+
+- Client should convert error objects to feathers-errors [\#19](https://github.com/feathersjs/feathers-socket-commons/issues/19)
+
+**Merged pull requests:**
+
+- Make client convert to feathers-errors [\#20](https://github.com/feathersjs/feathers-socket-commons/pull/20) ([daffl](https://github.com/daffl))
+
+## [v2.0.0](https://github.com/feathersjs/feathers-socket-commons/tree/v2.0.0) (2016-05-23)
+[Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v1.0.0...v2.0.0)
+
+**Merged pull requests:**
+
+- Better handling of sub-apps and sockets [\#18](https://github.com/feathersjs/feathers-socket-commons/pull/18) ([daffl](https://github.com/daffl))
+- Update babel-plugin-add-module-exports to version 0.2.0 🚀 [\#17](https://github.com/feathersjs/feathers-socket-commons/pull/17) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- babel-polyfill@6.7.4 breaks build 🚨 [\#16](https://github.com/feathersjs/feathers-socket-commons/pull/16) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+
 ## [v1.0.0](https://github.com/feathersjs/feathers-socket-commons/tree/v1.0.0) (2016-04-28)
 [Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v0.2.3...v1.0.0)
 
