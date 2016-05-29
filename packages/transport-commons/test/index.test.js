@@ -1,3 +1,5 @@
+if(!global._babelPolyfill) { require('babel-polyfill'); }
+
 import assert from 'assert';
 import plugin from '../src';
 

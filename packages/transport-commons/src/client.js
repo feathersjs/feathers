@@ -1,4 +1,5 @@
 import { events } from './utils';
+import { convert } from 'feathers-errors';
 
 const debug = require('debug')('feathers-socket-commons:client');
 
@@ -29,6 +30,7 @@ export default class Service {
 
       args.unshift(event);
       args.push(function(error, data) {
+        error = convert(error);
         clearTimeout(timeoutId);
 
         if (callback) {

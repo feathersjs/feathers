@@ -1,5 +1,6 @@
 import assert from 'assert';
 import { EventEmitter } from 'events';
+import errors from 'feathers-errors';
 import Service from '../src/client';
 import { events } from '../src/utils';
 
@@ -38,7 +39,7 @@ describe('client', () => {
   });
 
   it('sends methods with acknowledgement', done => {
-    connection.on('todos::create', (data, params, callback) => {
+    connection.once('todos::create', (data, params, callback) => {
       data.created = true;
       callback(null, data);
     });
@@ -54,5 +55,32 @@ describe('client', () => {
       assert.equal(error.message, 'Timeout of 50ms exceeded calling todos::remove');
       done();
     });
+  });
+
+  it('converts to feathers-errors (#19)', done => {
+    connection.once('todos::create', (data, params, callback) =>
+      callback(new errors.NotAuthenticated('Test', { hi: 'me' }).toJSON())
+    );
+
+    service.create(testData).catch(error => {
+      assert.ok(error instanceof errors.NotAuthenticated);
+      assert.equal(error.name, 'NotAuthenticated');
+      assert.equal(error.message, 'Test');
+      assert.equal(error.code, 401);
+      assert.deepEqual(error.data, { hi: 'me' });
+      done();
+    }).catch(done);
+  });
+
+  it('converts other errors (#19)', done => {
+    connection.once('todos::create', (data, params, callback) =>
+      callback('Something went wrong')
+    );
+
+    service.create(testData).catch(error => {
+      assert.ok(error instanceof Error);
+      assert.equal(error.message, 'Something went wrong');
+      done();
+    }).catch(done);
   });
 });
