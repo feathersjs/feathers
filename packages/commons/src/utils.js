@@ -26,9 +26,7 @@ export const _ = {
   },
   omit(obj, ...keys) {
     const result = Object.assign({}, obj);
-    for(let key of keys) {
-      delete result[key];
-    }
+    keys.forEach(key => delete result[key]);
     return result;
   }
 };
@@ -65,7 +63,7 @@ export const specialFilters = {
 
 export function matcher(originalQuery) {
   const query = _.omit(originalQuery, '$limit', '$skip', '$sort');
-  
+
   return function(item) {
     if(query.$or && _.some(query.$or, or => _.isMatch(item, or))) {
       return true;
