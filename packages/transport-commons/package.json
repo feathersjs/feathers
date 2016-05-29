@@ -41,14 +41,15 @@
     "lib": "lib"
   },
   "dependencies": {
-    "babel-polyfill": "^6.7.4",
     "debug": "^2.2.0",
-    "feathers-commons": "^0.7.0"
+    "feathers-commons": "^0.7.0",
+    "feathers-errors": "^2.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.4.5",
     "babel-core": "^6.4.5",
     "babel-plugin-add-module-exports": "^0.2.0",
+    "babel-polyfill": "^6.9.0",
     "babel-preset-es2015": "^6.3.13",
     "feathers": "^2.0.0-pre.4",
     "jshint": "^2.9.1",
