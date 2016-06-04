@@ -1,5 +1,3 @@
-if (!global._babelPolyfill) { require('babel-polyfill'); }
-
 import errors from 'feathers-errors';
 import makeDebug from 'debug';
 
