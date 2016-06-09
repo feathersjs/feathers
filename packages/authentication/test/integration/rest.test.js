@@ -12,6 +12,7 @@ describe('REST authentication', function() {
   let password = 'test';
   let settings = {
     idField: 'id',
+    header: 'X-Auth',
     token: {
       secret: 'feathers-rocks'
     }
@@ -259,7 +260,7 @@ describe('REST authentication', function() {
             method: 'GET',
             json: true,
             headers: {
-              Authorization: validToken
+              'X-Auth': validToken
             }
           };
         });

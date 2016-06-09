@@ -32,7 +32,8 @@ export function normalizeAuthToken(options = {}) {
   }
 
   return function(req, res, next) {
-    let token = req.headers[options.header];
+    // Normalize header capitalization the same way Node.js does
+    let token = req.headers[options.header.toLowerCase()];
 
     // Check the header for the token (preferred method)
     if (token) {

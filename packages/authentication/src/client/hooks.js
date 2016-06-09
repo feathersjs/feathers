@@ -13,7 +13,7 @@ export function populateHeader(options = {}) {
   return function(hook) {
     if (hook.params.token) {
       hook.params.headers = Object.assign({}, {
-        [options.header || 'Authorization']: hook.params.token
+        [options.header || 'authorization']: hook.params.token
       }, hook.params.headers);
     }
   };
