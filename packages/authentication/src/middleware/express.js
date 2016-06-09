@@ -82,26 +82,28 @@ export function successfulLogin(options = {}) {
       // clear any previous JWT cookie
       res.clearCookie(options.cookie.name);
 
-      // Only send back cookies when not in production or when in production and using HTTPS
-      if (!req.secure && process.env.NODE_ENV === 'production') {
-        console.error(`You should be using HTTPS in production! Refusing to send JWT in a cookie`);
+      // Check HTTPS and cookie status in production 
+      if (!req.secure && process.env.NODE_ENV === 'production' && options.cookie.secure) {
+        console.warn('WARN: Request isn\'t served through HTTPS: JWT in the cookie is exposed.');
+        console.info('If you are behind a proxy (e.g. NGINX) you can:');
+        console.info('- trust it: http://expressjs.com/en/guide/behind-proxies.html');
+        console.info('- set cookie.secure false');
       }
-      else {
-        const cookieOptions = Object.assign({}, options.cookie, { path: options.successRedirect });
 
-        // If a custom expiry wasn't passed then set the expiration to be 30 seconds from now.
-        if (cookieOptions.expires === undefined) {
-          const expiry = new Date();
-          expiry.setTime(expiry.getTime() + THIRTY_SECONDS);
-          cookieOptions.expires = expiry;
-        }
+      const cookieOptions = Object.assign({}, options.cookie, { path: options.successRedirect });
 
-        if ( !(cookieOptions.expires instanceof Date) ) {
-          throw new Error('cookie.expires must be a valid Date object');
-        }
-
-        res.cookie(options.cookie.name, res.data.token, cookieOptions);
+      // If a custom expiry wasn't passed then set the expiration to be 30 seconds from now.
+      if (cookieOptions.expires === undefined) {
+        const expiry = new Date();
+        expiry.setTime(expiry.getTime() + THIRTY_SECONDS);
+        cookieOptions.expires = expiry;
       }
+
+      if ( !(cookieOptions.expires instanceof Date) ) {
+        throw new Error('cookie.expires must be a valid Date object');
+      }
+
+      res.cookie(options.cookie.name, res.data.token, cookieOptions);
     }
 
     // Redirect to our success route

@@ -32,7 +32,7 @@ const defaults = {
   cookie: {
     name: 'feathers-jwt',
     httpOnly: false,
-    secure: process.env.NODE_ENV === 'production' ? true : false
+    secure: process.env.NODE_ENV === 'production'
   }
 };
 
@@ -56,9 +56,13 @@ export default function auth(config = {}) {
       config.local = {};
     }
 
+    if (config.cookie ){
+      config.cookie = Object.assign({}, defaults.cookie, config.cookie);
+    }
+
     // Merge and flatten options
-    const authOptions = Object.assign({}, defaults, app.get('auth'), config);
-    
+    const authOptions = Object.assign({}, defaults, app.get('auth'),config);
+
     // If a custom success redirect is passed in or it is disabled then we
     // won't setup the default route handler.
     if (authOptions.successRedirect !== defaults.successRedirect) {
@@ -83,7 +87,7 @@ export default function auth(config = {}) {
       // Get the token and expose it to REST services.
       app.use( middleware.normalizeAuthToken(authOptions) );
     }
-    
+
     app.use(passport.initialize());
 
     app.setup = function() {
@@ -106,7 +110,7 @@ export default function auth(config = {}) {
 
     // Merge all of our options and configure the appropriate service
     Object.keys(config).forEach(function (key) {
-      
+
       // Because we are iterating through all the keys we might
       // be dealing with a config param and not a provider config
       // If that's the case we don't need to merge params and we
@@ -124,7 +128,7 @@ export default function auth(config = {}) {
         // Check to see if it is an oauth2 provider
         if (providerOptions.clientID && providerOptions.clientSecret) {
           provider = oauth2;
-        } 
+        }
         // Check to see if it is an oauth1 provider
         else if (providerOptions.consumerKey && providerOptions.consumerSecret){
           throw new Error(`Sorry we don't support OAuth1 providers right now. Try using a ${key} OAuth2 provider.`);
@@ -132,9 +136,9 @@ export default function auth(config = {}) {
 
         providerOptions = Object.assign({ provider: key, endPoint: `/auth/${key}` }, providerOptions);
       }
-      
+
       const options = Object.assign({}, authOptions, providerOptions);
-      
+
       app.configure( provider(options) );
     });
 
@@ -145,7 +149,7 @@ export default function auth(config = {}) {
     // Setup route handler for default success redirect
     if (authOptions.shouldSetupSuccessRoute) {
       debug(`Setting up successRedirect route: ${authOptions.successRedirect}`);
-      
+
       app.get(authOptions.successRedirect, function(req, res){
         res.sendFile(path.resolve(__dirname, 'public', 'auth-success.html'));
       });
