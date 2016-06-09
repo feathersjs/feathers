@@ -281,6 +281,18 @@ describe('Feathers Authentication', () => {
           expect(app.get('auth').cookie.expires).to.equal(expiration);
         });
 
+        it('allows overriding cookie partially', () => {
+          app.configure(authentication({
+            cookie: {
+              secure: false
+            }
+          }));
+          expect(typeof app.get('auth').cookie).to.equal('object');
+          expect(app.get('auth').cookie.name).to.equal('feathers-jwt');
+          expect(app.get('auth').cookie.secure).to.equal(false);
+          expect(app.get('auth').cookie.httpOnly).to.equal(false);
+        });
+
         it('allows overriding token', () => {
           app.configure(authentication({
             token: {

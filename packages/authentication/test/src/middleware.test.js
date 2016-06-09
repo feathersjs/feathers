@@ -231,18 +231,24 @@ describe('Middleware', () => {
           expect(MockResponse.clearCookie).to.have.been.calledWith('feathers-jwt');
         });
 
-        it('throws an error if not using HTTPS in production', () => {
-          MockRequest.secure = false;
+        it('throws a warning if not using HTTPS in production', () => {
+          let MockConsoleWarn = sinon.stub(console, 'warn');
           process.env.NODE_ENV = 'production';
+          MockRequest.secure = false;
+          options.cookie = { 
+            name: 'feathers-jwt',
+            secure:true
+          };
+          
+          MockResponse.data.token = 'token';
 
-          try {
-            middleware.successfulLogin(options)(MockRequest, MockResponse, MockNext);  
-          }
-          catch(error) {
-            expect(error).to.not.equal(undefined);
-          }
-
+          middleware.successfulLogin(options)(MockRequest, MockResponse, MockNext);
+          expect(MockResponse.cookie).to.have.been.calledWith('feathers-jwt', 'token');
+          expect(console.warn).to.have.been
+            .calledWith('WARN: Request isn\'t served through HTTPS: JWT in the cookie is exposed.');
+          
           process.env.NODE_ENV = undefined;
+          MockConsoleWarn.reset();
         });
 
         it('throws an error if expires is not a date', () => {
