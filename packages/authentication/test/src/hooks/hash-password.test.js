@@ -120,4 +120,55 @@ describe('hashPassword', () => {
       });
     });
   });
+
+  describe('when password exists in bulk', () => {
+    let hook;
+
+    beforeEach(() => {
+      hook = {
+        type: 'before',
+        data: [{password: 'secret'}, {password: 'secret'}],
+        app: {
+          get: function() { return {}; }
+        }
+      };
+    });
+
+    it('hashes with default options', (done) => {
+      hashPassword()(hook).then(hook => {
+        hook.data.map(item => {
+          expect(item.password).to.not.equal(undefined);
+          expect(item.password).to.not.equal('secret');
+        });
+        done();
+      });
+    });
+
+    it('hashes with options from global auth config', (done) => {
+      hook.data = [{pass: 'secret'}, {pass: 'secret'}];
+      hook.app.get = function() {
+        return { passwordField: 'pass' };
+      };
+
+      hashPassword()(hook).then(hook => {
+        hook.data.map(item => {
+          expect(item.pass).to.not.equal(undefined);
+          expect(item.pass).to.not.equal('secret');
+        });
+        done();
+      });
+    });
+
+    it('hashes with custom options', (done) => {
+      hook.data = [{pass: 'secret'}, {pass: 'secret'}];
+
+      hashPassword({ passwordField: 'pass'})(hook).then(hook => {
+        hook.data.map(item => {
+          expect(item.pass).to.not.equal(undefined);
+          expect(item.pass).to.not.equal('secret');
+        });
+        done();
+      });
+    });
+  });
 });
