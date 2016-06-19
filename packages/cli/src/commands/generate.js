@@ -17,6 +17,14 @@ const generatorOptions = {
 
 export default function(vorpal) {
   vorpal
+    .command('g', 'alias for generate')
+    .autocomplete(['app', 'hook', 'middleware', 'model', 'service', 'plugin'])
+    .action(function (args, callback) {
+      this.log('');
+      env.run('feathers:app', generatorOptions, callback);
+    });
+
+  vorpal
     .command('generate ', 'alias for generate app')
     .autocomplete(['app', 'hook', 'middleware', 'model', 'service', 'plugin'])
     .action(function (args, callback) {
