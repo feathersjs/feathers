@@ -7,7 +7,7 @@
 ## Installation
 
 ```
-npm install feathers-authentication --save
+npm install <%= name %> --save
 ```
 
 ## Documentation
@@ -42,15 +42,8 @@ app.listen(3030);
 console.log('Feathers app started on 127.0.0.1:3030');
 ```
 
-
-## Changelog
-
-__0.1.0__
-
-- Initial release
-
 ## License
 
-Copyright (c) 2015
+Copyright (c) 2016
 
 Licensed under the [MIT license](LICENSE).
