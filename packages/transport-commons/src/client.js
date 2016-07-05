@@ -2,6 +2,52 @@ import { events } from './utils';
 import { convert } from 'feathers-errors';
 
 const debug = require('debug')('feathers-socket-commons:client');
+const namespacedEmitterMethods = [
+  'addListener',
+  'emit',
+  'listenerCount',
+  'listeners',
+  'on',
+  'once',
+  'prependListener',
+  'prependOnceListener',
+  'removeAllListeners',
+  'removeListener'
+];
+const otherEmitterMethods = [
+  'eventNames',
+  'getMaxListeners',
+  'setMaxListeners'
+];
+
+const addEmitterMethods = service => {
+  otherEmitterMethods.forEach(method => {
+    if(typeof service.connection[method] !== 'function') {
+      return;
+    }
+
+    service[method] = function(...args) {
+      return this.connection[method](...args);
+    };
+  });
+
+  namespacedEmitterMethods.forEach(method => {
+    if(typeof service.connection[method] !== 'function') {
+      return;
+    }
+
+    service[method] = function(name, ...args) {
+      const eventName = `${this.path} ${name}`;
+
+      debug(`Calling emitter method ${method} with ` +
+        `namespaced event '${eventName}'`);
+
+      const result = this.connection[method](eventName, ...args);
+
+      return result === this.connection ? this : result;
+    };
+  });
+};
 
 export default class Service {
   constructor(options) {
@@ -10,10 +56,8 @@ export default class Service {
     this.connection = options.connection;
     this.method = options.method;
     this.timeout = options.timeout || 5000;
-  }
 
-  emit(... args) {
-    this.connection[this.method](... args);
+    addEmitterMethods(this);
   }
 
   send(method, ...args) {
@@ -69,14 +113,14 @@ export default class Service {
   remove(id, params = {}) {
     return this.send('remove', id, params.query || {});
   }
+
+  off(... args) {
+    if(typeof this.connection.off === 'function') {
+      return this.connection.off(... args);
+    } else if(args.length === 1) {
+      return this.removeAllListeners(... args);
+    }
+
+    return this.removeEventListener(... args);
+  }
 }
-
-const emitterMethods = ['on', 'once', 'off'];
-
-emitterMethods.forEach(method => {
-  Service.prototype[method] = function(name, callback) {
-    debug(`Calling emitter method ${method} with event '${this.path} ${name}'`);
-    this.connection[method](`${this.path} ${name}`, callback);
-    return this;
-  };
-});
