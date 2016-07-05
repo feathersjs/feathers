@@ -1,5 +1,25 @@
 # Change Log
 
+## [v2.2.0](https://github.com/feathersjs/feathers-socket-commons/tree/v2.2.0) (2016-07-05)
+[Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v2.1.0...v2.2.0)
+
+**Implemented enhancements:**
+
+- Support native websockets directly [\#8](https://github.com/feathersjs/feathers-socket-commons/issues/8)
+
+**Fixed bugs:**
+
+- Calling `off` on primus fails [\#7](https://github.com/feathersjs/feathers-socket-commons/issues/7)
+
+**Closed issues:**
+
+- Should add other eventEmitter methods [\#22](https://github.com/feathersjs/feathers-socket-commons/issues/22)
+- Patch event sends the whole data back [\#21](https://github.com/feathersjs/feathers-socket-commons/issues/21)
+
+**Merged pull requests:**
+
+- Pass all EventEmitter methods to the client connection [\#23](https://github.com/feathersjs/feathers-socket-commons/pull/23) ([daffl](https://github.com/daffl))
+
 ## [v2.1.0](https://github.com/feathersjs/feathers-socket-commons/tree/v2.1.0) (2016-05-29)
 [Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v2.0.0...v2.1.0)
 
