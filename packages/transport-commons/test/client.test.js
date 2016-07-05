@@ -21,8 +21,8 @@ describe('client', () => {
     done();
   });
 
-  it('initializes and emits events', done => {
-    connection.once('test', data => {
+  it('initializes and emits namespaced events', done => {
+    connection.once('todos test', data => {
       assert.deepEqual(data, testData);
       done();
     });
@@ -82,5 +82,20 @@ describe('client', () => {
       assert.equal(error.message, 'Something went wrong');
       done();
     }).catch(done);
+  });
+
+  it('has all EventEmitter methods', done => {
+    const testData = { hello: 'world' };
+    const callback = data => {
+      assert.deepEqual(data, testData);
+      assert.equal(service.listenerCount('test'), 1);
+      service.removeListener('test', callback);
+      assert.equal(service.listenerCount('test'), 0);
+      done();
+    };
+
+    service.addListener('test', callback);
+
+    connection.emit('todos test', testData);
   });
 });
