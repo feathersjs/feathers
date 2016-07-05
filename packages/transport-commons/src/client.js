@@ -22,21 +22,21 @@ const otherEmitterMethods = [
 
 const addEmitterMethods = service => {
   otherEmitterMethods.forEach(method => {
-    if(typeof service.connection[method] !== 'function') {
-      return;
-    }
-
     service[method] = function(...args) {
+      if(typeof this.connection[method] !== 'function') {
+        throw new Error(`Can not call '${method}' on the client service connection.`);
+      }
+
       return this.connection[method](...args);
     };
   });
 
   namespacedEmitterMethods.forEach(method => {
-    if(typeof service.connection[method] !== 'function') {
-      return;
-    }
-
     service[method] = function(name, ...args) {
+      if(typeof this.connection[method] !== 'function') {
+        throw new Error(`Can not call '${method}' on the client service connection.`);
+      }
+
       const eventName = `${this.path} ${name}`;
 
       debug(`Calling emitter method ${method} with ` +
