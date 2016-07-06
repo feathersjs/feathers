@@ -19,9 +19,15 @@ app.authenticate({
   'password': 'admin'
 }).then(function(result){
   console.log(`Successfully authenticated against ${host}!`, result);
-  
+
   app.service('messages').find({}).then(function(data){
     console.log('messages', data);
+  }).catch(function(error){
+    console.error('Error finding data', error);
+  });
+
+  app.service('approved-messages').find({}).then(function(data){
+    console.log('approvedMessages', data);
   }).catch(function(error){
     console.error('Error finding data', error);
   });

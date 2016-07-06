@@ -23,6 +23,7 @@ var app = feathers()
   .use('/users', memory())
   // A simple Message service that we can used for testing
   .use('/messages', memory())
+  .use('/approved-messages', memory())
   .use('/', feathers.static(__dirname + '/public'))
   .use(errorHandler());
 
@@ -39,9 +40,40 @@ messageService.before({
   ]
 })
 
+var approvedMessageService = app.service('/approved-messages');
+approvedMessageService.create({text: 'A million people walk into a Silicon Valley bar', approved: false}, {}, function(){});
+approvedMessageService.create({text: 'Nobody buys anything', approved: true}, {}, function(){});
+approvedMessageService.create({text: 'Bar declared massive success', approved: true}, {}, function(){});
+
+
+// Will merge this restriction with the query params
+var restriction = { restrict: {approved: true} };
+
+approvedMessageService.before({
+  all: [
+    // Necessary since restrict must always use find and hook id is a string when the memory service expects it as a number
+    function(hook) {
+      if(hook.id) {
+        hook.id = parseInt(hook.id, 10);
+      }
+    }
+  ],
+  find: [
+    authentication.hooks.verifyOrRestrict(restriction),
+    authentication.hooks.populateOrRestrict(restriction),
+    authentication.hooks.hasRoleOrRestrict(Object.assign({roles: ['admin']}, restriction))
+  ],
+  get: [
+    authentication.hooks.verifyOrRestrict(restriction),
+    authentication.hooks.populateOrRestrict(restriction),
+    authentication.hooks.hasRoleOrRestrict(Object.assign({roles: ['admin']}, restriction))
+  ]
+})
+
+
 var userService = app.service('users');
 
-// Add a hook to the user service that automatically replaces 
+// Add a hook to the user service that automatically replaces
 // the password with a hash of the password before saving it.
 userService.before({
   create: authentication.hooks.hashPassword()
@@ -50,7 +82,8 @@ userService.before({
 // Create a user that we can use to log in
 var User = {
   email: 'admin@feathersjs.com',
-  password: 'admin'
+  password: 'admin',
+  roles: ['admin']
 };
 
 userService.create(User, {}).then(function(user) {

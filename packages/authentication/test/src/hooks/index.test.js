@@ -41,4 +41,16 @@ describe('Auth hooks', () => {
   it('exposes verifyToken hook', () => {
     expect(typeof hooks.verifyToken).to.equal('function');
   });
+
+  it('exposes verifyOrRestrict hook', () => {
+    expect(typeof hooks.verifyOrRestrict).to.equal('function');
+  });
+
+  it('exposes populateOrRestrict hook', () => {
+    expect(typeof hooks.populateOrRestrict).to.equal('function');
+  });
+
+  it('exposes hasRoleOrRestrict hook', () => {
+    expect(typeof hooks.hasRoleOrRestrict).to.equal('function');
+  });
 });
