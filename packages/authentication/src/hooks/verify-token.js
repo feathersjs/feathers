@@ -19,7 +19,7 @@ export default function(options = {}){
     }
 
     const authOptions = hook.app.get('auth') || {};
-    
+
     // Grab the token options here
     options = Object.assign({}, authOptions.token, options);
 
@@ -41,7 +41,7 @@ export default function(options = {}){
           // Return a 401 if the token has expired or is invalid.
           return reject(new errors.NotAuthenticated(error));
         }
-        
+
         // Attach our decoded token payload to the params
         hook.params.payload = payload;
 

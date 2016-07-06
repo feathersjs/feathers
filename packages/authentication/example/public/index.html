@@ -161,9 +161,15 @@
           console.log('Authenticated!', result);
 
           alert('You successfully authenticated over sockets with email and password. Your new JWT is:\n\n' + app.get('token'));
-          
+
           app.service('messages').find({}).then(function(data){
             console.log('messages', data);
+          }).catch(function(error){
+            console.error('Error finding data', error);
+          });
+
+          app.service('approvedMessages').find({}).then(function(data){
+            console.log('approvedMessages', data);
           }).catch(function(error){
             console.error('Error finding data', error);
           });
