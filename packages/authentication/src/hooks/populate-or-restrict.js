@@ -19,11 +19,15 @@ export default function(options = {}){
       throw new Error(`The 'populateOrRestrict' hook should only be used as a 'before' hook.`);
     }
 
+    if (hook.method !== 'find' && hook.method !== 'get') {
+      throw new Error(`'populateOrRestrict' should only be used in a find or get hook.`);
+    }
+
     // If it was an internal call then skip this hook
     if (!hook.params.provider) {
       return hook;
     }
-
+    
     // If we don't have a payload we have to always use find instead of get because we must not return id queries that are unrestricted and we don't want the developer to have to add after hooks.
     let query = Object.assign({}, hook.params.query, options.restrict);
 

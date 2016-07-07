@@ -15,7 +15,8 @@ describe('verifyOrRestrict', () => {
   describe('when not called as a before hook', () => {
     it('throws an error', () => {
       let hook = {
-        type: 'after'
+        type: 'after',
+        method: 'find'
       };
 
       try {
@@ -31,6 +32,7 @@ describe('verifyOrRestrict', () => {
     it('does not do anything', () => {
       let hook = {
         type: 'before',
+        method: 'find',
         params: {}
       };
 
@@ -48,6 +50,7 @@ describe('verifyOrRestrict', () => {
   describe('when token does not exist', () => {
     it('should merge the restriction in to the query and call find', () => {
       let hook = {
+        method: 'find',
         app: {
           service: mockService,
           get: function() {}
@@ -66,6 +69,7 @@ describe('verifyOrRestrict', () => {
     it('if hook.id is set, merge the restriction and the id into the query and call find', () => {
       let hook = {
         id: '525235',
+        method: 'find',
         app: {
           service: mockService,
           get: function() {}
@@ -87,6 +91,7 @@ describe('verifyOrRestrict', () => {
     beforeEach(() => {
       hook = {
         type: 'before',
+        method: 'find',
         params: {
           provider: 'rest',
           token: 'valid_token'
