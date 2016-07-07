@@ -15,6 +15,7 @@ describe('populateOrRestrict', () => {
   describe('when payload is missing', () => {
     it('should merge the restriction in to the query and call find', () => {
       let hook = {
+        method: 'find',
         app: {
           service: mockService,
           get: function() {}
@@ -33,6 +34,7 @@ describe('populateOrRestrict', () => {
     it('if hook.id is set, merge the restriction and the id into the query and call find', () => {
       let hook = {
         id: '525235',
+        method: 'find',
         app: {
           service: mockService,
           get: function() {}
@@ -51,6 +53,7 @@ describe('populateOrRestrict', () => {
   describe('when no user is found', () => {
     it('should merge the restriction in to the query and call find', () => {
       let hook = {
+        method: 'find',
         app: {
           service: mockService,
           get: function() {}
@@ -68,6 +71,7 @@ describe('populateOrRestrict', () => {
 
     it('if hook.id is set, merge the restriction and the id into the query and call find', () => {
       let hook = {
+        method: 'find',
         id: '525235',
         app: {
           service: mockService,
@@ -87,6 +91,7 @@ describe('populateOrRestrict', () => {
   describe('when user id is missing', () => {
     it('does not do anything', done => {
       let hook = {
+        method: 'find',
         type: 'before',
         params: {
           provider: 'rest',
@@ -109,7 +114,8 @@ describe('populateOrRestrict', () => {
   describe('when not called as a before hook', () => {
     it('throws an error', () => {
       let hook = {
-        type: 'after'
+        type: 'after',
+        method: 'find'
       };
 
       try {

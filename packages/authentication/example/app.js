@@ -22,7 +22,12 @@ var app = feathers()
   // Initialize a user service
   .use('/users', memory())
   // A simple Message service that we can used for testing
-  .use('/messages', memory())
+  .use('/messages', memory({
+    paginate: {
+      default: 5,
+      max: 25
+    }
+  }))
   .use('/approved-messages', memory())
   .use('/', feathers.static(__dirname + '/public'))
   .use(errorHandler());
@@ -41,9 +46,9 @@ messageService.before({
 })
 
 var approvedMessageService = app.service('/approved-messages');
-approvedMessageService.create({text: 'A million people walk into a Silicon Valley bar', approved: false}, {}, function(){});
-approvedMessageService.create({text: 'Nobody buys anything', approved: true}, {}, function(){});
-approvedMessageService.create({text: 'Bar declared massive success', approved: true}, {}, function(){});
+approvedMessageService.create({text: 'A million people walk into a Silicon Valley bar', approved: false, author: 'James'}, {}, function(){});
+approvedMessageService.create({text: 'Nobody buys anything', approved: true, author: 'Todd'}, {}, function(){});
+approvedMessageService.create({text: 'Bar declared massive success', approved: true, author: 'James'}, {}, function(){});
 
 
 // Will merge this restriction with the query params

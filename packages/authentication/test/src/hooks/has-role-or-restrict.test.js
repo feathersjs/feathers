@@ -48,7 +48,8 @@ describe('hasRoleOrRestrict', () => {
   describe('when not called as a before hook', () => {
     it('throws an error', () => {
       let hook = {
-        type: 'after'
+        type: 'after',
+        method: 'find'
       };
 
       try {
@@ -65,6 +66,7 @@ describe('hasRoleOrRestrict', () => {
       let hook = {
         id: '1',
         type: 'before',
+        method: 'find',
         params: {}
       };
 
@@ -86,6 +88,7 @@ describe('hasRoleOrRestrict', () => {
           service: mockService,
           get: function() {}
         },
+        method: 'find',
         type: 'before',
         params: {
           provider: 'rest',
@@ -104,6 +107,7 @@ describe('hasRoleOrRestrict', () => {
           service: MockService,
           get: function() {}
         },
+        method: 'find',
         type: 'before',
         params: {
           provider: 'rest'
@@ -122,6 +126,7 @@ describe('hasRoleOrRestrict', () => {
       hook = {
         id: '1',
         type: 'before',
+        method: 'find',
         params: {
           provider: 'rest',
           user: {
@@ -175,6 +180,7 @@ describe('hasRoleOrRestrict', () => {
             service: mockService,
             get: function() {}
           },
+          method: 'find',
           type: 'before',
           params: {
             provider: 'rest',
@@ -189,6 +195,7 @@ describe('hasRoleOrRestrict', () => {
       it('if hook.id is set, merge the restriction and the id into the query and call find', () => {
         let hook = {
           id: '525235',
+          method: 'find',
           app: {
             service: MockService,
             get: function() {}
@@ -265,6 +272,7 @@ describe('hasRoleOrRestrict', () => {
         hook = {
           id: '1',
           type: 'before',
+          method: 'find',
           params: {
             provider: 'rest',
             user: {
