@@ -24,7 +24,7 @@ const jsonHandler = sinon.spy(function(error, req, res, next) {
   res.json(error);
 });
 
-describe('feathers-errors', () => {
+describe('error-handler', () => {
   it('is CommonJS compatible', () => {
     expect(typeof require('../lib/error-handler')).to.equal('function');
   });
