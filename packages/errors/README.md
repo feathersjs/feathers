@@ -61,6 +61,10 @@ var validationErrors = new errors.BadRequest({errors: {email: 'Invalid Email'} }
 ## Release History
 __2.1.0__
 
+- Add a not found error handler. Required using `require('feathers-errors/not-found')`.
+
+__2.1.0__
+
 - converts over to chai for tests
 - adds better support for detecting `content-type` and `accepts` headers
 - makes JSON the default response
