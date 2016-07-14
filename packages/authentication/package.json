@@ -55,7 +55,6 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
-    "async": "^1.4.2",
     "babel-cli": "^6.1.18",
     "babel-core": "^6.1.21",
     "babel-plugin-add-module-exports": "^0.2.0",

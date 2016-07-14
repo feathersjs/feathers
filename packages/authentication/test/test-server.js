@@ -7,7 +7,6 @@ import authentication from '../src/';
 import { hooks } from '../src/';
 import bodyParser from 'body-parser';
 import memory from 'feathers-memory';
-import async from 'async';
 
 export default function(settings, username, password, useSocketio, next) {
 
@@ -40,26 +39,28 @@ export default function(settings, username, password, useSocketio, next) {
   let messageService = app.service('/messages');
 
   server.on('listening', () => {
-    async.series([
-      function(cb){
-        userService.create({email: username, password: password}, {}, cb);
-      },
-      function(cb){
-        messageService.create({text: 'A million people walk into a Silicon Valley bar'}, {}, function(){});
-        messageService.create({text: 'Nobody buys anything'}, {}, function(){});
-        messageService.create({text: 'Bar declared massive success'}, {}, cb);
-      }
-    ], function(){
-      messageService.before({
-        all: [
-          hooks.verifyToken(),
-          hooks.populateUser(),
-          hooks.restrictToAuthenticated()
-        ]
-      });
-      
-      next(null, { app, server });
-    });
+    userService.create({email: username, password: password})
+      .then(() => Promise.all([
+        messageService.create({
+          text: 'A million people walk into a Silicon Valley bar'
+        }),
+        messageService.create({
+          text: 'Nobody buys anything'
+        }),
+        messageService.create({
+          text: 'Bar declared massive success'
+        })
+      ]))
+      .then(() => {
+        messageService.before({
+          all: [
+            hooks.verifyToken(),
+            hooks.populateUser(),
+            hooks.restrictToAuthenticated()
+          ]
+        });
 
+        next(null, { app, server });
+      });
   });
 }
