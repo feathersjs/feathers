@@ -11,6 +11,7 @@ export default function(options = {}){
     if (hook.method !== 'find' && hook.method !== 'get') {
       throw new Error(`'verifyOrRestrict' should only be used in a find or get hook.`);
     }
+    
     // If it was an internal call then skip this hook
     if (!hook.params.provider) {
       return hook;
@@ -39,16 +40,13 @@ export default function(options = {}){
       }
 
       return this.find({ query }, params).then(results => {
-        if(results.length >= 1) {
-          if(hook.id !== undefined && hook.id !== null) {
-            hook.result = results[0];
-          } else {
-            hook.result = results;
-          }
+        if(hook.method === 'get' && Array.isArray(results) && results.length === 1) {
+          hook.result = results[0];
+          return hook;
+        } else {
+          hook.result = results;
           return hook;
         }
-
-        throw new errors.NotFound(`No record found`);
       }).catch(() => {
         throw new errors.NotFound(`No record found`);
       });
