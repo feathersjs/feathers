@@ -50,15 +50,13 @@ export default function(options = {}){
       }
 
       return this.find({ query }, params).then(results => {
-        if(results.length >= 1) {
-          if(hook.id !== undefined && hook.id !== null) {
-            hook.result = results[0];
-          } else {
-            hook.result = results;
-          }
+        if(hook.method === 'get' && Array.isArray(results) && results.length === 1) {
+          hook.result = results[0];
+          return hook;
+        } else {
+          hook.result = results;
           return hook;
         }
-        throw new errors.NotFound(`No record found`);
       }).catch(() => {
         throw new errors.NotFound(`No record found`);
       });
@@ -90,16 +88,13 @@ export default function(options = {}){
         }
 
         return this.find({ query }, params).then(results => {
-          if(results.length >= 1) {
-            if(hook.id !== undefined && hook.id !== null) {
-              hook.result = results[0];
-            } else {
-              hook.result = results;
-            }
+          if(hook.method === 'get' && Array.isArray(results) && results.length === 1) {
+            hook.result = results[0];
+            return hook;
+          } else {
+            hook.result = results;
             return hook;
           }
-
-          throw new errors.NotFound(`No record found`);
         }).catch(() => {
           throw new errors.NotFound(`No record found`);
         });
