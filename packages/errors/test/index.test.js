@@ -89,6 +89,59 @@ describe('feathers-errors', () => {
     it('Unavailable', () => {
       assert.notEqual(typeof errors.Unavailable, 'undefined', 'has Unavailable');
     });
+
+    it('400', () => {
+      assert.notEqual(typeof errors[400], 'undefined', 'has BadRequest alias');
+    });
+
+    it('401', () => {
+      assert.notEqual(typeof errors[401], 'undefined', 'has NotAuthenticated alias');
+    });
+
+    it('402', () => {
+      assert.notEqual(typeof errors[402], 'undefined', 'has PaymentError alias');
+    });
+
+    it('403', () => {
+      assert.notEqual(typeof errors[403], 'undefined', 'has Forbidden alias');
+    });
+
+    it('404', () => {
+      assert.notEqual(typeof errors[404], 'undefined', 'has NotFound alias');
+    });
+
+    it('405', () => {
+      assert.notEqual(typeof errors[405], 'undefined', 'has MethodNotAllowed alias');
+    });
+
+    it('406', () => {
+      assert.notEqual(typeof errors[406], 'undefined', 'has NotAcceptable alias');
+    });
+
+    it('408', () => {
+      assert.notEqual(typeof errors[408], 'undefined', 'has Timeout alias');
+    });
+
+    it('409', () => {
+      assert.notEqual(typeof errors[409], 'undefined', 'has Conflict alias');
+    });
+
+    it('422', () => {
+      assert.notEqual(typeof errors[422], 'undefined', 'has Unprocessable alias');
+    });
+
+    it('500', () => {
+      assert.notEqual(typeof errors[500], 'undefined', 'has GeneralError alias');
+    });
+
+    it('501', () => {
+      assert.notEqual(typeof errors[501], 'undefined', 'has NotImplemented alias');
+    });
+
+    it('503', () => {
+      assert.notEqual(typeof errors[503], 'undefined', 'has Unavailable alias');
+    });
+
   });
 
   it('exposes errors via types for backwards compatibility', () => {
