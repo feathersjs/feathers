@@ -59,7 +59,11 @@ var validationErrors = new errors.BadRequest({errors: {email: 'Invalid Email'} }
 ```
 
 ## Release History
-__2.1.0__
+__2.4.0__
+
+- Adding ability to get a feathers errors instance by status code
+
+__2.3.0__
 
 - Add a not found error handler. Required using `require('feathers-errors/not-found')`.
 
