@@ -167,7 +167,20 @@ const errors = {
   Unprocessable,
   GeneralError,
   NotImplemented,
-  Unavailable
+  Unavailable,
+  400: BadRequest,
+  401: NotAuthenticated,
+  402: PaymentError,
+  403: Forbidden,
+  404: NotFound,
+  405: MethodNotAllowed,
+  406: NotAcceptable,
+  408: Timeout,
+  409: Conflict,
+  422: Unprocessable,
+  500: GeneralError,
+  501: NotImplemented,
+  503: Unavailable
 };
 
 function convert(error) {
