@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "object.assign": "^4.0.3",
-    "yeoman-generator": "^0.23.2"
+    "yeoman-generator": "^0.24.1"
   },
   "devDependencies": {
     "mocha": "~2.5.0",
