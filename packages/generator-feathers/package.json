@@ -62,7 +62,7 @@
     "string": "^3.3.1",
     "string-length": "^1.0.1",
     "update-notifier": "^1.0.1",
-    "yeoman-generator": "^0.23.3"
+    "yeoman-generator": "^0.24.1"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
