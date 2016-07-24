@@ -1,5 +1,19 @@
 # Change Log
 
+## [v2.3.0](https://github.com/feathersjs/feathers-socket-commons/tree/v2.3.0) (2016-07-24)
+[Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v2.2.1...v2.3.0)
+
+**Fixed bugs:**
+
+- Error in filter chain for 'created' event after app.authenticate\(\) [\#12](https://github.com/feathersjs/feathers-socket-commons/issues/12)
+
+**Merged pull requests:**
+
+- Skip subsequent filters instead of rejecting the promise [\#24](https://github.com/feathersjs/feathers-socket-commons/pull/24) ([daffl](https://github.com/daffl))
+
+## [v2.2.1](https://github.com/feathersjs/feathers-socket-commons/tree/v2.2.1) (2016-07-05)
+[Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v2.2.0...v2.2.1)
+
 ## [v2.2.0](https://github.com/feathersjs/feathers-socket-commons/tree/v2.2.0) (2016-07-05)
 [Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v2.1.0...v2.2.0)
 
