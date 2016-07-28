@@ -6,7 +6,7 @@ Thank you for contributing to Feathers!
 
 Issues can be reported in the [issue tracker](https://github.com/feathersjs/feathers/issues).
 
-If you have any other questions, feel free to submit post them on [Stackoverflow](http://stackoverflow.com) using the `feathers` or `feathersjs` tag or join our [slack channel](http://slack.feathersks.com).
+If you have any other questions, feel free to submit post them on [Stackoverflow](http://stackoverflow.com) using the `feathers` or `feathersjs` tag or join our [slack channel](http://slack.feathersjs.com).
 
 ## Code style
 
