@@ -63,7 +63,7 @@
     "feathers-socketio": "^1.1.0",
     "istanbul": "^0.4.0",
     "jshint": "^2.6.3",
-    "mocha": "^2.5.0",
+    "mocha": "^3.0.0",
     "nsp": "^2.2.0",
     "q": "^1.0.1",
     "request": "^2.x",
