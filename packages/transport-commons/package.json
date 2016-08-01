@@ -54,6 +54,6 @@
     "babel-preset-es2015": "^6.3.13",
     "feathers": "^2.0.0-pre.4",
     "jshint": "^2.9.1",
-    "mocha": "^2.3.4"
+    "mocha": "^3.0.0"
   }
 }
