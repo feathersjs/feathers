@@ -1,5 +1,13 @@
 # Change Log
 
+## [v0.3.1](https://github.com/feathersjs/feathers-configuration/tree/v0.3.1) (2016-08-15)
+[Full Changelog](https://github.com/feathersjs/feathers-configuration/compare/v0.3.0...v0.3.1)
+
+**Merged pull requests:**
+
+- Support `null` values [\#19](https://github.com/feathersjs/feathers-configuration/pull/19) ([KenanY](https://github.com/KenanY))
+- Update mocha to version 3.0.0 🚀 [\#18](https://github.com/feathersjs/feathers-configuration/pull/18) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+
 ## [v0.3.0](https://github.com/feathersjs/feathers-configuration/tree/v0.3.0) (2016-05-22)
 [Full Changelog](https://github.com/feathersjs/feathers-configuration/compare/v0.2.3...v0.3.0)
 
