@@ -52,4 +52,8 @@ describe('feathers-configuration', () => {
       merge: true
     })
   );
+
+  it('supports null value', () => {
+    assert.strictEqual(app.get('nullish'), null);
+  });
 });

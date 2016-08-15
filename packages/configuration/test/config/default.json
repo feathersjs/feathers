@@ -6,5 +6,6 @@
   "from": "default",
   "deeply": { "nested": { "env": "NODE_ENV" } },
   "array": ["one", "two", "three"],
-  "deep": { "base": false }
+  "deep": { "base": false },
+  "nullish": null
 }

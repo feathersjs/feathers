@@ -16,7 +16,7 @@ export default module.exports = function (root, configFolder = 'config', deep = 
       Object.keys(current).forEach(name => {
         let value = current[name];
 
-        if(typeof value === 'object') {
+        if(typeof value === 'object' && value !== null) {
           value = convert(value);
         }
 
