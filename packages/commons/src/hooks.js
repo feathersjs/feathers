@@ -17,7 +17,7 @@ function updateOrPatch(args) {
   };
 }
 
-exports.converters = {
+const converters = {
   find: function(args) {
     return {
       params: args[0],
@@ -37,16 +37,16 @@ exports.converters = {
   patch: updateOrPatch
 };
 
-exports.hookObject = exports.hook = function(method, type, args) {
-  var hook = exports.converters[method](args);
+function hookObject(method, type, args) {
+  var hook = converters[method](args);
 
   hook.method = method;
   hook.type = type;
 
   return hook;
-};
+}
 
-const defaultMakeArguments = exports.defaultMakeArguments = function (hook) {
+function defaultMakeArguments(hook) {
   var result = [];
   if(typeof hook.id !== 'undefined') {
     result.push(hook.id);
@@ -60,9 +60,9 @@ const defaultMakeArguments = exports.defaultMakeArguments = function (hook) {
   result.push(hook.callback);
 
   return result;
-};
+}
 
-exports.makeArguments = function(hook) {
+function makeArguments(hook) {
   if(hook.method === 'find') {
     return [ hook.params, hook.callback ];
   }
@@ -80,9 +80,9 @@ exports.makeArguments = function(hook) {
   }
 
   return defaultMakeArguments(hook);
-};
+}
 
-exports.convertHookData = function(obj) {
+function convertHookData(obj) {
   var hook = {};
 
   if(Array.isArray(obj)) {
@@ -96,4 +96,13 @@ exports.convertHookData = function(obj) {
   }
 
   return hook;
+}
+
+export default {
+  hookObject,
+  hook: hookObject,
+  converters,
+  defaultMakeArguments,
+  makeArguments,
+  convertHookData
 };
