@@ -1,5 +1,64 @@
 # Change Log
 
+## [v0.7.10](https://github.com/feathersjs/feathers-authentication/tree/v0.7.10) (2016-08-31)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v0.7.9...v0.7.10)
+
+**Fixed bugs:**
+
+- restrictToOwner should not throw an error on mass deletions [\#175](https://github.com/feathersjs/feathers-authentication/issues/175)
+
+**Closed issues:**
+
+- Duplicate Email should be rejected by Default [\#281](https://github.com/feathersjs/feathers-authentication/issues/281)
+- Auth0 & featherjs authorization only [\#277](https://github.com/feathersjs/feathers-authentication/issues/277)
+- Cannot read property 'scope' of undefined [\#273](https://github.com/feathersjs/feathers-authentication/issues/273)
+- Socker.js | Custom successHandler [\#271](https://github.com/feathersjs/feathers-authentication/issues/271)
+- Use feathers-socketio? and rest&socket share session maybe?  [\#269](https://github.com/feathersjs/feathers-authentication/issues/269)
+- Ability to invalidate old token/session when user login with another machine. [\#267](https://github.com/feathersjs/feathers-authentication/issues/267)
+- 0.8 authentication before hooks - only ever getting a 401 Unauthorised [\#263](https://github.com/feathersjs/feathers-authentication/issues/263)
+- REST Middleware breaks local auth [\#262](https://github.com/feathersjs/feathers-authentication/issues/262)
+- 0.8: Token Service errors on token auth using client [\#254](https://github.com/feathersjs/feathers-authentication/issues/254)
+- 0.8: Cookies, turning off feathers-session cookie also turns off feathers-jwt cookie. [\#253](https://github.com/feathersjs/feathers-authentication/issues/253)
+- Any example of how to do refresh token? [\#248](https://github.com/feathersjs/feathers-authentication/issues/248)
+- Custom Authentication Hooks [\#236](https://github.com/feathersjs/feathers-authentication/issues/236)
+- Is there an Authenticated Event [\#235](https://github.com/feathersjs/feathers-authentication/issues/235)
+- Error while using /auth/local [\#233](https://github.com/feathersjs/feathers-authentication/issues/233)
+- Providing token to feathers.authentication doesn't work [\#230](https://github.com/feathersjs/feathers-authentication/issues/230)
+- bundled hooks customize errors [\#215](https://github.com/feathersjs/feathers-authentication/issues/215)
+- Hooks should support a callback for conditionally running [\#210](https://github.com/feathersjs/feathers-authentication/issues/210)
+- restrictToRoles hook: More complex determination of "owner". [\#205](https://github.com/feathersjs/feathers-authentication/issues/205)
+- verifyToken hook option to error [\#200](https://github.com/feathersjs/feathers-authentication/issues/200)
+- Allow using restrictToOwner as an after hook [\#123](https://github.com/feathersjs/feathers-authentication/issues/123)
+
+**Merged pull requests:**
+
+- Manually supply an endpoint to the Client authenticate\(\) method [\#278](https://github.com/feathersjs/feathers-authentication/pull/278) ([mcnamee](https://github.com/mcnamee))
+- Update mocha to version 3.0.0 🚀 [\#257](https://github.com/feathersjs/feathers-authentication/pull/257) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- Don’t mix options when signing tokens [\#255](https://github.com/feathersjs/feathers-authentication/pull/255) ([marshallswain](https://github.com/marshallswain))
+- Attempt to get token right away. [\#252](https://github.com/feathersjs/feathers-authentication/pull/252) ([marshallswain](https://github.com/marshallswain))
+- Update async to version 2.0.0 🚀 [\#240](https://github.com/feathersjs/feathers-authentication/pull/240) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- Creates better way or returning data in a familiar format [\#234](https://github.com/feathersjs/feathers-authentication/pull/234) ([codingfriend1](https://github.com/codingfriend1))
+- Throws an error if restriction methods are used outside of a find or get hook [\#232](https://github.com/feathersjs/feathers-authentication/pull/232) ([codingfriend1](https://github.com/codingfriend1))
+- RestrictToOwner now takes an array [\#231](https://github.com/feathersjs/feathers-authentication/pull/231) ([sscaff1](https://github.com/sscaff1))
+- Adds ability to limit queries unless authenticated and authorized [\#229](https://github.com/feathersjs/feathers-authentication/pull/229) ([codingfriend1](https://github.com/codingfriend1))
+
+## [v0.7.9](https://github.com/feathersjs/feathers-authentication/tree/v0.7.9) (2016-06-20)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v0.7.8...v0.7.9)
+
+**Fixed bugs:**
+
+- Calling logout should revoke/blacklist a JWT [\#133](https://github.com/feathersjs/feathers-authentication/issues/133)
+
+**Closed issues:**
+
+- Query email rather than oauth provider id on /auth/\<provider\> [\#223](https://github.com/feathersjs/feathers-authentication/issues/223)
+- Cannot read property \'service\' of undefined [\#222](https://github.com/feathersjs/feathers-authentication/issues/222)
+
+**Merged pull requests:**
+
+- added support for hashing passwords when hook.data is an array [\#225](https://github.com/feathersjs/feathers-authentication/pull/225) ([eblin](https://github.com/eblin))
+- jwt ssl warning [\#214](https://github.com/feathersjs/feathers-authentication/pull/214) ([aboutlo](https://github.com/aboutlo))
+
 ## [v0.7.8](https://github.com/feathersjs/feathers-authentication/tree/v0.7.8) (2016-06-09)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v0.7.7...v0.7.8)
 
