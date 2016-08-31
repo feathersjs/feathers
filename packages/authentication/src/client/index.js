@@ -52,7 +52,9 @@ export default function(opts = {}) {
       return getOptions.then(options => {
         let endPoint;
 
-        if (options.type === 'local') {
+        if (options.endpoint) {
+          endPoint = options.endpoint;
+        } else if (options.type === 'local') {
           endPoint = config.localEndpoint;
         } else if (options.type === 'token') {
           endPoint = config.tokenEndpoint;
