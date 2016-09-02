@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.3.1](https://github.com/feathersjs/feathers-socket-commons/tree/v2.3.1) (2016-09-02)
+[Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v2.3.0...v2.3.1)
+
+**Merged pull requests:**
+
+- Make service off method be namespaced [\#26](https://github.com/feathersjs/feathers-socket-commons/pull/26) ([t2t2](https://github.com/t2t2))
+- Update mocha to version 3.0.0 🚀 [\#25](https://github.com/feathersjs/feathers-socket-commons/pull/25) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+
 ## [v2.3.0](https://github.com/feathersjs/feathers-socket-commons/tree/v2.3.0) (2016-07-24)
 [Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v2.2.1...v2.3.0)
 
