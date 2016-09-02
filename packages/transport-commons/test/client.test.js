@@ -98,4 +98,45 @@ describe('client', () => {
 
     connection.emit('todos test', testData);
   });
+
+  it('properly handles on/off methods', done => {
+    const testData = { hello: 'world' };
+
+    const callback1 = data => {
+      assert.deepEqual(data, testData);
+      assert.equal(service.listenerCount('test'), 3);
+      service.off('test', callback1);
+      assert.equal(service.listenerCount('test'), 2);
+      service.off('test');
+      assert.equal(service.listenerCount('test'), 0);
+      done();
+    };
+    const callback2 = () => {
+      // noop
+    };
+
+    service.on('test', callback1);
+    service.on('test', callback2);
+    service.on('test', callback2);
+
+    connection.emit('todos test', testData);
+  });
+
+  it('forwards namespaced call to .off', done => {
+    // Use it's own connection and service so off method gets detected
+    const connection = new EventEmitter();
+    connection.off = name => {
+      assert.equal(name, 'todos test');
+      done();
+    };
+
+    const service = new Service({
+      name: 'todos',
+      method: 'emit',
+      timeout: 50,
+      connection,
+      events
+    });
+    service.off('test');
+  });
 });

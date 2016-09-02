@@ -7,6 +7,7 @@ const namespacedEmitterMethods = [
   'emit',
   'listenerCount',
   'listeners',
+  'off',
   'on',
   'once',
   'prependListener',
@@ -32,6 +33,11 @@ const addEmitterMethods = service => {
   });
 
   namespacedEmitterMethods.forEach(method => {
+    // Only set off if it's a method on connection
+    if (method === 'off' && typeof service.connection[method] !== 'function') {
+      return;
+    }
+
     service[method] = function(name, ...args) {
       if(typeof this.connection[method] !== 'function') {
         throw new Error(`Can not call '${method}' on the client service connection.`);
@@ -115,12 +121,11 @@ export default class Service {
   }
 
   off(... args) {
-    if(typeof this.connection.off === 'function') {
-      return this.connection.off(... args);
-    } else if(args.length === 1) {
+    // Note: if .off() is defined on connection, this method is replaced with namespaced method
+    if(args.length === 1) {
       return this.removeAllListeners(... args);
     }
 
-    return this.removeEventListener(... args);
+    return this.removeListener(... args);
   }
 }
