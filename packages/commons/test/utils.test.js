@@ -134,6 +134,26 @@ describe('feathers-commons utils', () => {
       assert.ok(!matches({ name: 'David' }));
     });
 
+    it('$or nested match', () => {
+      const matches = utils.matcher({
+        $or: [
+          { name: 'Eric' },
+          { age: { $gt: 18, $lt: 32 } }
+        ]
+      });
+
+      assert.ok(matches({ name: 'Eric' }));
+      assert.ok(matches({ age: 20 }));
+      assert.ok(matches({
+        name: 'David',
+        age: 30
+      }));
+      assert.ok(!matches({
+        name: 'David',
+        age: 64
+      }));
+    });
+
     it('special filter matches', () => {
       const matches = utils.matcher({
         counter: { $gt: 10, $lte: 19 },
