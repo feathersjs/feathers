@@ -65,7 +65,7 @@ export function matcher(originalQuery) {
   const query = _.omit(originalQuery, '$limit', '$skip', '$sort');
 
   return function(item) {
-    if(query.$or && _.some(query.$or, or => _.isMatch(item, or))) {
+    if(query.$or && _.some(query.$or, or => matcher(or)(item))) {
       return true;
     }
 
