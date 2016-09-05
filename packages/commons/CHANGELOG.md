@@ -1,5 +1,28 @@
 # Change Log
 
+## [v0.7.5](https://github.com/feathersjs/feathers-commons/tree/v0.7.5) (2016-09-05)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.7.4...v0.7.5)
+
+**Closed issues:**
+
+- Feathers should accept other type of data beside only the object type. [\#26](https://github.com/feathersjs/feathers-commons/issues/26)
+- Send better error messages for method normalization [\#12](https://github.com/feathersjs/feathers-commons/issues/12)
+
+**Merged pull requests:**
+
+- Allow matching nested $or queries [\#29](https://github.com/feathersjs/feathers-commons/pull/29) ([daffl](https://github.com/daffl))
+- Add default export to `hooks.js` [\#28](https://github.com/feathersjs/feathers-commons/pull/28) ([KenanY](https://github.com/KenanY))
+- Update mocha to version 3.0.0 🚀 [\#27](https://github.com/feathersjs/feathers-commons/pull/27) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+
+## [v0.7.4](https://github.com/feathersjs/feathers-commons/tree/v0.7.4) (2016-05-29)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.7.3...v0.7.4)
+
+**Merged pull requests:**
+
+- Use forEach instead of ES6 'for of' loop [\#25](https://github.com/feathersjs/feathers-commons/pull/25) ([mrpatiwi](https://github.com/mrpatiwi))
+- mocha@2.5.0 breaks build 🚨 [\#24](https://github.com/feathersjs/feathers-commons/pull/24) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- Update babel-plugin-add-module-exports to version 0.2.0 🚀 [\#23](https://github.com/feathersjs/feathers-commons/pull/23) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+
 ## [v0.7.3](https://github.com/feathersjs/feathers-commons/tree/v0.7.3) (2016-05-05)
 [Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.7.2...v0.7.3)
 
