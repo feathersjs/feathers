@@ -58,7 +58,7 @@
     "feathers": "^2.0.0-pre.1",
     "feathers-commons": "^0.7.2",
     "feathers-hooks": "^1.5.2",
-    "feathers-memory": "^0.7.0",
+    "feathers-memory": "^0.8.0",
     "jshint": "^2.8.0",
     "lodash": "^4.0.1",
     "mocha": "^3.0.0",
