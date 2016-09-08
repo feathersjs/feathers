@@ -63,7 +63,7 @@
     "chai": "^3.5.0",
     "feathers": "2.0.1",
     "feathers-hooks": "^1.4.0",
-    "feathers-memory": "^0.7.0",
+    "feathers-memory": "^0.8.0",
     "feathers-primus": "^1.3.2",
     "feathers-rest": "^1.2.2",
     "feathers-socketio": "^1.3.2",
