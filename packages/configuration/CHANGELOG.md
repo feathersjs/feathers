@@ -1,5 +1,16 @@
 # Change Log
 
+## [v0.3.2](https://github.com/feathersjs/feathers-configuration/tree/v0.3.2) (2016-09-12)
+[Full Changelog](https://github.com/feathersjs/feathers-configuration/compare/v0.3.1...v0.3.2)
+
+**Closed issues:**
+
+- A way to have local override [\#20](https://github.com/feathersjs/feathers-configuration/issues/20)
+
+**Merged pull requests:**
+
+- Remove check for development mode [\#21](https://github.com/feathersjs/feathers-configuration/pull/21) ([daffl](https://github.com/daffl))
+
 ## [v0.3.1](https://github.com/feathersjs/feathers-configuration/tree/v0.3.1) (2016-08-15)
 [Full Changelog](https://github.com/feathersjs/feathers-configuration/compare/v0.3.0...v0.3.1)
 
