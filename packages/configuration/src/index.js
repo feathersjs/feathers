@@ -46,16 +46,13 @@ export default module.exports = function (root, configFolder = 'config', deep = 
 
     debug(`Initializing configuration for ${env} environment`);
 
-    // Dev is our default development. For everything else extend the default
-    if(env !== 'development') {
-      const envConfig = path.join(root, configFolder, env);
-      // We can use sync here since configuration only happens once at startup
-      if(fs.existsSync(`${envConfig}.js`) || fs.existsSync(`${envConfig}.json`)) {
-        config = deep ? deepAssign(config, convert(require(envConfig))) :
-          Object.assign(config, convert(require(envConfig)));
-      } else {
-        debug(`Configuration file for ${env} environment not found at ${envConfig}`);
-      }
+    const envConfig = path.join(root, configFolder, env);
+    // We can use sync here since configuration only happens once at startup
+    if(fs.existsSync(`${envConfig}.js`) || fs.existsSync(`${envConfig}.json`)) {
+      config = deep ? deepAssign(config, convert(require(envConfig))) :
+        Object.assign(config, convert(require(envConfig)));
+    } else {
+      debug(`Configuration file for ${env} environment not found at ${envConfig}`);
     }
 
     Object.keys(config).forEach(name => {
