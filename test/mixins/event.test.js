@@ -209,4 +209,29 @@ describe('Event mixin', () => {
       instance.emit('created', { custom: 'event' });
     });
   });
+
+  it('sets hook.app', done => {
+      const FixtureService = Proto.extend({
+          update(id, data, params, cb) {
+              setTimeout(function () {
+                  cb(null, {
+                      id: id,
+                      name: data.name
+                  });
+              }, 20);
+          }
+      });
+
+      const instance = create.call(FixtureService);
+      const dummyApp = { isApp: true };
+
+      mixinEvent.call(dummyApp, instance);
+
+      instance.on('updated', function (data, hook) {
+          assert.deepEqual(hook.app, dummyApp);
+          done();
+      });
+
+      instance.update(12, { name: 'Updated tester' }, {}, function () {});
+  });
 });
