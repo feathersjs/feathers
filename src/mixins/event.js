@@ -15,6 +15,7 @@ function upperCase(name) {
 }
 
 export default function(service) {
+  const app = this;
   const isEmitter = typeof service.on === 'function' &&
     typeof service.emit === 'function';
   const emitter = service._rubberDuck = rubberduck.emitter(service);
@@ -47,6 +48,7 @@ export default function(service) {
           const hook = hookObject(method, 'after', args);
           const data = Array.isArray(results[1]) ? results[1] : [ results[1] ];
 
+          hook.app = app;
           data.forEach(current => service.emit(event, current, hook));
         } else {
           service.emit('serviceError', results[0]);
