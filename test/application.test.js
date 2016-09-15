@@ -255,34 +255,6 @@ describe('Feathers application', () => {
     });
   });
 
-  it('Extend params with route params. (#76)', done => {
-    const todoService = {
-      get(id, params) {
-        return Promise.resolve({
-          id,
-          appId: params.appId
-        });
-      }
-    };
-
-    const app = feathers()
-      .configure(rest())
-      .use('/:appId/todo', todoService);
-
-    const expected = {
-      id: 'dishes',
-      appId: 'theApp'
-    };
-
-    const server = app.listen(6880).on('listening', function () {
-      request('http://localhost:6880/theApp/todo/' + expected.id, (error, response, body) => {
-        assert.ok(response.statusCode === 200, 'Got OK status code');
-        assert.deepEqual(expected, JSON.parse(body));
-        server.close(done);
-      });
-    });
-  });
-
   it('Calls _setup in order to set up custom routes with higher priority. (#86)', done => {
     const todoService = {
       get(name) {
