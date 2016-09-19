@@ -11,11 +11,17 @@ module.exports = function() {
   const sequelize = new Sequelize('feathers', null, null, {
     dialect: 'sqlite',
     storage: app.get('sqlite'),
-    logging: false
+    logging: false,
+    define: {
+      freezeTableName: true
+    }
   });<% } else if (database === 'postgres' || database === 'mysql' || database === 'mariadb' || database === 'mssql') { %>
   const sequelize = new Sequelize(app.get('<%= database %>'), {
     dialect: '<%= database %>',
-    logging: false
+    logging: false,
+    define: {
+      freezeTableName: true
+    }
   });<% } else if (database === 'mongodb') { %>
   mongoose.connect(app.get('mongodb'));
   mongoose.Promise = global.Promise;<% } %><% if (database === 'sqlite' || database === 'mssql' || database === 'postgres' || database === 'mysql' || database === 'mariadb') { %>
