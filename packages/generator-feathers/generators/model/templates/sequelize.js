@@ -25,8 +25,6 @@ module.exports = function(sequelize) {
       type: Sequelize.STRING,
       allowNull: false
     }<% } %>
-  }, {
-    freezeTableName: true
   });
 
   <%= name %>.sync();
