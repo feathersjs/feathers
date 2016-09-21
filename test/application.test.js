@@ -292,7 +292,7 @@ describe('Feathers application', () => {
     });
   });
 
-  it('mixins are unique to one application', function() {
+  it('mixins are unique to one application', () => {
     const app = feathers();
     app.mixins.push(function() {});
     assert.equal(app.mixins.length, 4);
@@ -309,6 +309,20 @@ describe('Feathers application', () => {
       setup(_app, path) {
         assert.equal(_app, app);
         assert.equal(path, 'setup-only');
+        done();
+      }
+    });
+
+    app.setup();
+  });
+
+  it('sets the registered path on the service', done => {
+    const app = feathers();
+
+    app.use('/todos', {
+      setup() {
+        const name = app.service('todos').name;
+        assert.equal(name, 'todos');
         done();
       }
     });
