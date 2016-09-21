@@ -94,6 +94,7 @@ export default {
     // Setup each service (pass the app so that they can look up other services etc.)
     Object.keys(this.services).forEach(path => {
       const service = this.services[path];
+      service.name = path;
 
       debug(`Setting up service for \`${path}\``);
       if (typeof service.setup === 'function') {
