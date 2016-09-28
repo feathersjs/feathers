@@ -19,14 +19,23 @@ export class Service {
     this.options = options;
   }
 
-  buildCredentials(req, username) {
-    const usernameField = this.options.usernameField;
-    return new Promise(function(resolve) {
+  buildCredentials(req) {
+    const { usernameField, usernameFields } = this.options;
+    return new Promise((resolve, reject) => {
+      let field = usernameField;
+      if (usernameFields) {
+        field = usernameFields.find((f) => !!req.body[f]);
+        if (!field) {
+          return reject(new Error('Missing identity field.'));
+        }
+      }
+
       const params = {
         query: {
-          [usernameField]: username
+          [field]: req.body[field],
         }
       };
+
       resolve(params);
     });
   }
@@ -37,7 +46,7 @@ export class Service {
       .then(params => this.app.service(this.options.userEndpoint).find(params))
       .then(users => {
         // Paginated services return the array of results in the data attribute.
-        let user = users[0] || users.data && users.data[0];
+        const user = users[0] || users.data && users.data[0];
 
         // Handle bad username.
         if (!user) {
