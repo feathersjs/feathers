@@ -85,7 +85,7 @@ describe('feathers-socketio', () => {
     let srv = app.listen(8987).on('listening', () => {
       request('http://localhost:8987/test/socket.io.js', (err, res, body) => {
         assert.equal(res.statusCode, 200);
-        assert.equal(body.indexOf('(function(f)'), 0);
+        assert.equal(body.indexOf('(function'), 0);
         srv.close(done);
       });
     });
