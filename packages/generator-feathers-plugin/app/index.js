@@ -70,14 +70,13 @@ module.exports = generators.Base.extend({
       'babel-cli@^6.0.0',
       'babel-preset-es2015@^6.0.0',
       'babel-plugin-add-module-exports',
-      'jshint@^2.0.0',
+      'eslint@^3.7.0',
       'mocha@^2.0.0',
       'chai@^3.5.0',
       'feathers@^2.0.0',
       'feathers-hooks@^1.5.0',
       'feathers-rest@^1.2.2',
       'body-parser@^1.9.0',
-      'nsp@^2.2.0',
       'rimraf@^2.5.0'
     ], { saveDev: true});
   }
