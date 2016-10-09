@@ -34,9 +34,9 @@
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "compile": "rimraf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
-    "jshint": "jshint src/. test/. --config",
+    "lint": "eslint src/. test/.",
     "mocha": "mocha --recursive test/ --compilers js:babel-core/register",
-    "test": "npm run compile && npm run jshint && npm run mocha",
+    "test": "npm run compile && npm run lint && npm run mocha",
     "start": "npm run compile && node example/app"
   },
   "directories": {
