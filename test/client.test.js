@@ -22,11 +22,11 @@ describe('Feathers universal client', () => {
 
   it('Registers a service, wraps it, runs service.setup(), and adds the event and Promise mixin', done => {
     const dummyService = {
-      setup(app, path){
+      setup (app, path) {
         this.path = path;
       },
 
-      create(data) {
+      create (data) {
         return Promise.resolve(data);
       }
     };

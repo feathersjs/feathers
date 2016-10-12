@@ -5,8 +5,8 @@ export default function (service) {
     const mixin = {};
 
     this.methods.forEach(method => {
-      if(typeof service[method] === 'function') {
-        mixin[method] = function() {
+      if (typeof service[method] === 'function') {
+        mixin[method] = function () {
           return this._super.apply(this, getArguments(method, arguments));
         };
       }

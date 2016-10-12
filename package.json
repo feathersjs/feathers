@@ -27,6 +27,9 @@
   "directories": {
     "lib": "lib"
   },
+  "semistandard": {
+    "env": [ "mocha" ]
+  },
   "scripts": {
     "prepublish": "npm run compile",
     "publish": "git push origin && git push origin --tags",
@@ -36,10 +39,10 @@
     "release:prerelease": "npm version prerelease && npm publish --tag pegasus",
     "compile": "rm -rf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
-    "jshint": "jshint src/. test/. --config",
+    "eslint": "semistandard --fix",
     "coverage": "istanbul cover _mocha -- test/ --recursive",
     "mocha": "mocha test/ --compilers js:babel-core/register --recursive",
-    "test": "npm run compile && npm run jshint && npm run mocha && nsp check"
+    "test": "npm run compile && npm run eslint && npm run mocha && nsp check"
   },
   "engines": {
     "node": ">= 0.10.0",
@@ -63,11 +66,11 @@
     "feathers-rest": "^1.1.0",
     "feathers-socketio": "^1.1.0",
     "istanbul": "^0.4.0",
-    "jshint": "^2.6.3",
     "mocha": "^3.0.0",
     "nsp": "^2.2.0",
     "q": "^1.0.1",
     "request": "^2.x",
+    "semistandard": "^9.0.0",
     "socket.io-client": "^1.4.6"
   },
   "browser": {
