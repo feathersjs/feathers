@@ -28,7 +28,9 @@
     "lib": "lib"
   },
   "semistandard": {
-    "env": [ "mocha" ]
+    "env": [
+      "mocha"
+    ]
   },
   "scripts": {
     "prepublish": "npm run compile",
@@ -39,7 +41,7 @@
     "release:prerelease": "npm version prerelease && npm publish --tag pegasus",
     "compile": "rm -rf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
-    "eslint": "node test.js",
+    "eslint": "eslint-if-supported semistandard --fix",
     "coverage": "istanbul cover _mocha -- test/ --recursive",
     "mocha": "mocha test/ --compilers js:babel-core/register --recursive",
     "test": "npm run compile && npm run eslint && npm run mocha && nsp check"
@@ -63,6 +65,7 @@
     "babel-plugin-add-module-exports": "^0.2.0",
     "babel-preset-es2015": "^6.3.13",
     "body-parser": "^1.13.2",
+    "eslint-if-supported": "^1.0.0",
     "feathers-rest": "^1.1.0",
     "feathers-socketio": "^1.1.0",
     "istanbul": "^0.4.0",
