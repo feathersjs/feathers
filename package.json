@@ -17,7 +17,8 @@
   "author": "Feathers <hello@feathersjs.com> (http://feathersjs.com)",
   "contributors": [
     "Eric Kryski <e.kryski@gmail.com> (http://erickryski.com)",
-    "David Luecke <daff@neyeon.de> (http://neyeon.com)"
+    "David Luecke <daff@neyeon.de> (http://neyeon.com)",
+    "Marshall Thompson <marshall@creativeideal.net> (http://marshallthompson.net)"
   ],
   "license": "MIT",
   "bugs": {
@@ -25,6 +26,11 @@
   },
   "directories": {
     "lib": "lib"
+  },
+  "semistandard": {
+    "env": [
+      "mocha"
+    ]
   },
   "scripts": {
     "prepublish": "npm run compile",
@@ -35,10 +41,10 @@
     "release:prerelease": "npm version prerelease && npm publish --tag pegasus",
     "compile": "rm -rf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
-    "jshint": "jshint src/. test/. --config",
+    "eslint": "eslint-if-supported semistandard --fix",
     "coverage": "istanbul cover _mocha -- test/ --recursive",
     "mocha": "mocha test/ --compilers js:babel-core/register --recursive",
-    "test": "npm run compile && npm run jshint && npm run mocha && nsp check"
+    "test": "npm run compile && npm run eslint && npm run mocha && nsp check"
   },
   "engines": {
     "node": ">= 0.10.0",
@@ -59,14 +65,15 @@
     "babel-plugin-add-module-exports": "^0.2.0",
     "babel-preset-es2015": "^6.3.13",
     "body-parser": "^1.13.2",
+    "eslint-if-supported": "^1.0.0",
     "feathers-rest": "^1.1.0",
     "feathers-socketio": "^1.1.0",
     "istanbul": "^0.4.0",
-    "jshint": "^2.6.3",
     "mocha": "^3.0.0",
     "nsp": "^2.2.0",
     "q": "^1.0.1",
     "request": "^2.x",
+    "semistandard": "^9.0.0",
     "socket.io-client": "^1.4.6"
   },
   "browser": {

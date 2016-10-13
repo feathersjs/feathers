@@ -10,17 +10,17 @@ const eventMappings = {
   patch: 'patched'
 };
 
-function upperCase(name) {
+function upperCase (name) {
   return name.charAt(0).toUpperCase() + name.substring(1);
 }
 
-export default function(service) {
+export default function (service) {
   const app = this;
   const isEmitter = typeof service.on === 'function' &&
     typeof service.emit === 'function';
   const emitter = service._rubberDuck = rubberduck.emitter(service);
 
-  if(typeof service.mixin === 'function' && !isEmitter) {
+  if (typeof service.mixin === 'function' && !isEmitter) {
     service.mixin(EventEmitter.prototype);
   }
 
