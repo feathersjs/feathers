@@ -39,7 +39,7 @@
     "release:prerelease": "npm version prerelease && npm publish --tag pegasus",
     "compile": "rm -rf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
-    "eslint": "semistandard --fix",
+    "eslint": "node test.js",
     "coverage": "istanbul cover _mocha -- test/ --recursive",
     "mocha": "mocha test/ --compilers js:babel-core/register --recursive",
     "test": "npm run compile && npm run eslint && npm run mocha && nsp check"
