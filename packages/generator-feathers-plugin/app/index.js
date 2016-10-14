@@ -70,7 +70,7 @@ module.exports = generators.Base.extend({
       'babel-cli@^6.0.0',
       'babel-preset-es2015@^6.0.0',
       'babel-plugin-add-module-exports',
-      'eslint@^3.7.0',
+      'semistandard@^9.1.0',
       'mocha@^2.0.0',
       'chai@^3.5.0',
       'feathers@^2.0.0',
