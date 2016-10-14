@@ -34,7 +34,7 @@
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "compile": "rimraf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
-    "lint": "semistandard src/. test/. --fix",
+    "lint": "semistandard src/**/*.js test/**/*.js --fix",
     "mocha": "mocha --recursive test/ --compilers js:babel-core/register",
     "test": "npm run compile && npm run lint && npm run mocha",
     "start": "npm run compile && node example/app"

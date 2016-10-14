@@ -7,8 +7,8 @@ var fs = require('fs');
 var exec = require('child_process').exec;
 var helpers = require('yeoman-test');
 
-describe('feathers-plugin generator', function() {
-  it('created a plugin with passing tests', function(done) {
+describe('feathers-plugin generator', function () {
+  it('created a plugin with passing tests', function (done) {
     var tmpDir;
 
     helpers.run(path.join(__dirname, '../app'))
@@ -23,7 +23,7 @@ describe('feathers-plugin generator', function() {
         repository: 'feathersjs/feathers-tmp',
         description: 'Plugin description here'
       })
-      .on('end', function() {
+      .on('end', function () {
         assert.ok(fs.existsSync(path.join(tmpDir, '.npmignore')));
         assert.ok(fs.existsSync(path.join(tmpDir, '.travis.yml')));
         assert.ok(fs.existsSync(path.join(tmpDir, '.editorconfig')));
@@ -33,7 +33,7 @@ describe('feathers-plugin generator', function() {
           cwd: tmpDir
         });
 
-        child.on('exit', function(status) {
+        child.on('exit', function (status) {
           assert.equal(status, 0, 'Got correct exist status');
           done();
         });
