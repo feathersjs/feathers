@@ -4,11 +4,11 @@ import makeDebug from 'debug';
 const debug = makeDebug('<%= name %>');
 
 class Service {
-  constructor(options = {}) {
+  constructor (options = {}) {
     this.options = options;
   }
 
-  find(params) {
+  find (params) {
     return new Promise((resolve, reject) => {
       // Put some async code here.
       if (!params.query) {
@@ -20,7 +20,7 @@ class Service {
   }
 }
 
-export default function init(options) {
+export default function init (options) {
   debug('Initializing <%= name %> plugin');
   return new Service(options);
 }
