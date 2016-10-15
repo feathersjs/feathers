@@ -60,10 +60,7 @@ module.exports = generators.Base.extend({
       );
     }.bind(this));
 
-    this.npmInstall([
-      'feathers-errors@^2.0.0',
-      'debug@^2.2.0'
-    ], { save: true });
+    this.npmInstall([ 'debug' ], { save: true });
 
     this.npmInstall([
       'babel-core@^6.0.0',
@@ -71,12 +68,9 @@ module.exports = generators.Base.extend({
       'babel-preset-es2015@^6.0.0',
       'babel-plugin-add-module-exports',
       'semistandard',
-      'mocha@^2.0.0',
+      'mocha',
+      'istanbul@1.1.0-alpha.1',
       'chai@^3.5.0',
-      'feathers@^2.0.0',
-      'feathers-hooks@^1.5.0',
-      'feathers-rest@^1.2.2',
-      'body-parser@^1.9.0',
       'rimraf@^2.5.0'
     ], { saveDev: true});
   }

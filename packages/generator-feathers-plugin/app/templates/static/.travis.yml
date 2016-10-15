@@ -1,4 +1,9 @@
 language: node_js
 node_js:
   - 'node'
-  - 'iojs'
+  - '6'
+  - '4'
+code_climate:
+  repo_token: 'your repo token'
+after_script:
+  - codeclimate-test-reporter < lcov.info
