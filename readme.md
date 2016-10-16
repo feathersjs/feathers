@@ -6,6 +6,9 @@
 
 [![Build Status](https://travis-ci.org/feathersjs/feathers.png?branch=master)](https://travis-ci.org/feathersjs/feathers)
 [![Code Climate](https://codeclimate.com/github/feathersjs/feathers.png)](https://codeclimate.com/github/feathersjs/feathers)
+[![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-permissions/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers/coverage)
+[![Issue Count](https://codeclimate.com/github/feathersjs/feathers/badges/issue_count.svg)](https://codeclimate.com/github/feathersjs/feathers)
+[![Dependency Status](https://img.shields.io/david/feathersjs/feathers.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers)
 [![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 
 Feathers is a real-time, micro-service web framework for NodeJS that gives you control over your data via RESTful resources, sockets and flexible plug-ins.
@@ -76,6 +79,13 @@ Each plugin has it's own minimal example in the repo. To see some more complex e
 ## Security
 
 We :heart: the community and take security very seriously. No one wants their app hacked. If you have come across a security concern please [report it responsibly](http://docs.feathersjs.com/SECURITY.html#where-should-i-report-security-issues). Visit the [Security section](http://docs.feathersjs.com/SECURITY.html) of the docs to learn more about how you can make sure your app is secure.
+
+## Long Term Support Schedule
+
+We are going to be following along with the Node.js long term support cycle. As a result we will be dropping official support for node v0.10, v0.12, and iojs versions January 1st, 2017.
+
+We will be supporting Node.js v4 until **2018-04-01**.
+We will be supporting Node.js v6 until **2019-04-18**.
 
 ## License
 
