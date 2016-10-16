@@ -4,6 +4,8 @@
 [![Code Climate](https://codeclimate.com/github/<%= repository %>/badges/gpa.svg)](https://codeclimate.com/github/<%= repository %>)
 [![Test Coverage](https://codeclimate.com/github/<%= repository %>/badges/coverage.svg)](https://codeclimate.com/github/<%= repository %>/coverage)
 [![Issue Count](https://codeclimate.com/github/<%= repository %>/badges/issue_count.svg)](https://codeclimate.com/github/<%= repository %>)
+[![Dependency Status](https://img.shields.io/david/<%= repository %>.svg?style=flat-square)](https://david-dm.org/<%= repository %>)
+[![Download Status](https://img.shields.io/npm/dm/<%= name %>.svg?style=flat-square)](https://www.npmjs.com/package/<%= name %>)
 
 > <%= description %>
 

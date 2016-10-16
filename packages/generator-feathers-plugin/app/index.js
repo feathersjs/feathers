@@ -60,11 +60,11 @@ module.exports = generators.Base.extend({
       );
     }.bind(this));
 
-    this.npmInstall([ 'debug' ], { save: true });
+    this.npmInstall([ 'debug', 'feathers-errors' ], { save: true });
 
     this.npmInstall([
-      'babel-core@^6.0.0',
-      'babel-cli@^6.0.0',
+      'babel-core@^6.17.0',
+      'babel-cli@^6.16.0',
       'babel-preset-es2015@^6.0.0',
       'babel-plugin-add-module-exports',
       'semistandard',

@@ -1,3 +1,4 @@
+import errors from 'feathers-errors';
 import makeDebug from 'debug';
 
 const debug = makeDebug('<%= name %>');
