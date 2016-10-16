@@ -2,11 +2,9 @@
 
 ## A minimalist real-time framework for tomorrow's apps.
 
-[![NPM](https://nodei.co/npm/feathers.png?stars&downloads&downloadRank)](https://nodei.co/npm/feathers/) [![NPM](https://nodei.co/npm-dl/feathers.png?months=6&height=3)](https://nodei.co/npm/feathers/)
-
 [![Build Status](https://travis-ci.org/feathersjs/feathers.png?branch=master)](https://travis-ci.org/feathersjs/feathers)
 [![Code Climate](https://codeclimate.com/github/feathersjs/feathers.png)](https://codeclimate.com/github/feathersjs/feathers)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-permissions/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers/coverage)
+[![Test Coverage](https://codeclimate.com/github/feathersjs/feathers/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers/coverage)
 [![Dependency Status](https://img.shields.io/david/feathersjs/feathers.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers)
 [![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 
