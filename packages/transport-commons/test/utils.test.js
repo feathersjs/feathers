@@ -52,9 +52,7 @@ describe('utils', () => {
     assert.ok(typeof obj === 'object');
     assert.ok(!(obj instanceof Error));
     assert.ok(typeof obj.hook === 'undefined');
-    assert.deepEqual(obj, {
-      message: 'Testing',
-      expando: true
-    });
+    assert.equal(obj.message, 'Testing');
+    assert.equal(obj.expando, true);
   });
 });
