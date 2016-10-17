@@ -9,6 +9,21 @@ describe('Feathers universal client', () => {
     assert.ok(typeof app.render !== 'function');
   });
 
+  it('calling .use with a function throws', () => {
+    const app = feathers();
+
+    try {
+      app.use(function() {});
+      assert.ok(false, 'Should never get here');
+    } catch(e) {
+      assert.equal(e.message, 'Middleware functions can not be used in the Feathers client');
+    }
+  });
+
+  it('.listen does nothing', () => {
+    assert.deepEqual(feathers().listen(), {});
+  });
+
   it('is an event emitter', done => {
     const app = feathers();
     const original = { hello: 'world' };
