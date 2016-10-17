@@ -1,4 +1,16 @@
+sudo: false
 language: node_js
 node_js:
   - 'node'
-  - 'iojs'
+  - '6'
+  - '4'
+  - 'iojs' #end of life Jan. 2017
+  - '0.12' #end of life Jan. 2017
+  - '0.10' #end of life Jan. 2017
+addons:
+  code_climate:
+    repo_token: 'e6b833ee868f17733abe9cc20c2e83a7bda1f4006d9fc4cb26a4ba1a0c05b088'
+before_script:
+  - npm install -g codeclimate-test-reporter
+after_script:
+  - codeclimate-test-reporter < coverage/lcov.info

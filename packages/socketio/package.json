@@ -34,8 +34,9 @@
     "compile": "rm -rf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
-    "mocha": "mocha test/ --compilers js:babel-core/register --timeout 5000",
-    "test": "npm run compile && npm run jshint && npm run mocha"
+    "mocha": "mocha --opts mocha.opts",
+    "coverage": "istanbul cover _mocha -- --opts mocha.opts",
+    "test": "npm run compile && npm run jshint && npm run coverage"
   },
   "directories": {
     "lib": "lib"
@@ -59,6 +60,7 @@
     "feathers-commons": "^0.7.2",
     "feathers-hooks": "^1.5.2",
     "feathers-memory": "^0.8.0",
+    "istanbul": "^1.1.0-alpha.1",
     "jshint": "^2.8.0",
     "lodash": "^4.0.1",
     "mocha": "^3.0.0",
