@@ -56,7 +56,7 @@
     "babel-plugin-add-module-exports": "^0.2.0",
     "babel-plugin-transform-object-assign": "^6.3.13",
     "babel-preset-es2015": "^6.3.13",
-    "feathers": "^2.0.0-pre.1",
+    "feathers": "^2.0.0",
     "feathers-commons": "^0.7.2",
     "feathers-hooks": "^1.5.2",
     "feathers-memory": "^0.8.0",
