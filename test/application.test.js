@@ -22,6 +22,17 @@ describe('Feathers application', () => {
     assert.equal(child.parent, app);
   });
 
+  it('.use with invalid parameters', () => {
+    const app = feathers();
+
+    try {
+      app.use('/dummy', {}, {});
+      assert.ok(false, 'Should never get here');
+    } catch(e) {
+      assert.equal(e.message, 'invalid arg passed to app.use');
+    }
+  });
+
   it('Register services and look them up with and without leading and trailing slashes.', () => {
     const dummyService = {
       find() {
