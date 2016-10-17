@@ -1,5 +1,6 @@
 .editorconfig
 .travis.yml
+.istanbul.yml
 .babelrc
 .idea/
 src/
