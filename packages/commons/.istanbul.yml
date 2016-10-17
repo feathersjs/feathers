@@ -1,0 +1,19 @@
+verbose: false
+instrumentation:
+  root: src/
+  excludes:
+    - lib/
+    - src/test-fixture.js
+    - src/test/
+  include-all-sources: false
+reporting:
+  print: summary
+  reports:
+    - html
+    - text
+    - lcov
+  watermarks:
+    statements: [50, 80]
+    lines: [50, 80]
+    functions: [50, 80]
+    branches: [50, 80]
