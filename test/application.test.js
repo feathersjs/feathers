@@ -28,14 +28,14 @@ describe('Feathers application', () => {
     try {
       app.use('/dummy', {}, {});
       assert.ok(false, 'Should never get here');
-    } catch(e) {
+    } catch (e) {
       assert.equal(e.message, 'invalid arg passed to app.use');
     }
   });
 
   it('Register services and look them up with and without leading and trailing slashes.', () => {
     const dummyService = {
-      find() {
+      find () {
         // No need to implement this
       }
     };
@@ -60,10 +60,10 @@ describe('Feathers application', () => {
 
     assert.ok(!app.service('/todos/'));
 
-    app.defaultService = function(path) {
+    app.defaultService = function (path) {
       assert.equal(path, 'todos');
       return {
-        get(id) {
+        get (id) {
           return Promise.resolve({
             id, description: `You have to do ${id}!`
           });
@@ -82,18 +82,18 @@ describe('Feathers application', () => {
 
   it('Registers a service, wraps it, runs service.setup(), and adds the event and Promise mixin', done => {
     const dummyService = {
-      setup(app, path){
+      setup (app, path) {
         this.path = path;
       },
 
-      create(data) {
+      create (data) {
         return Promise.resolve(data);
       }
     };
 
     const app = feathers().use('/dummy', dummyService);
     const wrappedService = app.service('dummy');
-    const server = app.listen(7887, function(){
+    const server = app.listen(7887, function () {
       app.use('/dumdum', dummyService);
       const dynamicService = app.service('dumdum');
 
@@ -117,7 +117,7 @@ describe('Feathers application', () => {
 
   it('Initializes REST and SocketIO providers.', function (done) {
     const todoService = {
-      get(name, params, callback) {
+      get (name, params, callback) {
         callback(null, {
           id: name,
           description: `You have to do ${name}!`
@@ -133,11 +133,17 @@ describe('Feathers application', () => {
       const socket = io.connect('http://localhost:6999');
 
       request('http://localhost:6999/todo/dishes', (error, response, body) => {
+        if (error) {
+          done(error);
+        }
         assert.ok(response.statusCode === 200, 'Got OK status code');
         const data = JSON.parse(body);
         assert.equal(data.description, 'You have to do dishes!');
 
         socket.emit('todo::get', 'laundry', {}, function (error, data) {
+          if (error) {
+            done(error);
+          }
           assert.equal(data.description, 'You have to do laundry!');
 
           socket.disconnect();
@@ -149,7 +155,7 @@ describe('Feathers application', () => {
 
   it('Uses custom middleware. (#21)', done => {
     const todoService = {
-      get(name, params) {
+      get (name, params) {
         return Promise.resolve({
           id: name,
           description: `You have to do ${name}!`,
@@ -171,12 +177,18 @@ describe('Feathers application', () => {
 
     const server = app.listen(6995).on('listening', () => {
       request('http://localhost:6995/todo/dishes', (error, response, body) => {
+        if (error) {
+          done(error);
+        }
         assert.ok(response.statusCode === 200, 'Got OK status code');
         const data = JSON.parse(body);
         assert.equal(data.preService, 'pre-service middleware', 'Pre-service middleware updated response');
         assert.equal(response.headers['post-service'], 'dishes', 'Post-service middleware updated response');
 
         request('http://localhost:6995/otherTodo/dishes', (error, response, body) => {
+          if (error) {
+            done(error);
+          }
           assert.ok(response.statusCode === 200, 'Got OK status code');
           const data = JSON.parse(body);
           assert.ok(!data.preService && !response.headers['post-service'], 'Custom middleware not run for different service.');
@@ -192,7 +204,7 @@ describe('Feathers application', () => {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
     const todoService = {
-      get(name, params, callback) {
+      get (name, params, callback) {
         callback(null, {
           id: name,
           description: `You have to do ${name}!`
@@ -225,11 +237,17 @@ describe('Feathers application', () => {
         strictSSL: false,
         rejectUnhauthorized: false
       }, function (error, response, body) {
+        if (error) {
+          done(error);
+        }
         assert.ok(response.statusCode === 200, 'Got OK status code');
         const data = JSON.parse(body);
         assert.equal(data.description, 'You have to do dishes!');
 
         socket.emit('secureTodos::get', 'laundry', {}, function (error, data) {
+          if (error) {
+            done(error);
+          }
           assert.equal(data.description, 'You have to do laundry!');
 
           socket.disconnect();
@@ -243,11 +261,11 @@ describe('Feathers application', () => {
   it('Returns the value of a promise. (#41)', function (done) {
     let original = {};
     const todoService = {
-      get(name) {
+      get (name) {
         original = {
           id: name,
           q: true,
-          description: `You have to do ${name }!`
+          description: `You have to do ${name}!`
         };
         return Promise.resolve(original);
       }
@@ -259,6 +277,9 @@ describe('Feathers application', () => {
 
     const server = app.listen(6880).on('listening', function () {
       request('http://localhost:6880/todo/dishes', (error, response, body) => {
+        if (error) {
+          done(error);
+        }
         assert.ok(response.statusCode === 200, 'Got OK status code');
         assert.deepEqual(original, JSON.parse(body));
         server.close(done);
@@ -268,7 +289,7 @@ describe('Feathers application', () => {
 
   it('Calls _setup in order to set up custom routes with higher priority. (#86)', done => {
     const todoService = {
-      get(name) {
+      get (name) {
         return Promise.resolve({
           id: name,
           q: true,
@@ -276,8 +297,8 @@ describe('Feathers application', () => {
         });
       },
 
-      _setup(app, path) {
-        app.get(`/${path}/count`, function(req, res) {
+      _setup (app, path) {
+        app.get(`/${path}/count`, function (req, res) {
           res.json({ counter: 10 });
         });
       }
@@ -289,11 +310,17 @@ describe('Feathers application', () => {
 
     const server = app.listen(8999).on('listening', function () {
       request('http://localhost:8999/todo/dishes', (error, response, body) => {
+        if (error) {
+          done(error);
+        }
         assert.ok(response.statusCode === 200, 'Got OK status code');
         const data = JSON.parse(body);
         assert.equal(data.description, 'You have to do dishes!');
 
         request('http://localhost:8999/todo/count', (error, response, body) => {
+          if (error) {
+            done(error);
+          }
           assert.ok(response.statusCode === 200, 'Got OK status code');
           const data = JSON.parse(body);
           assert.equal(data.counter, 10);
@@ -303,13 +330,13 @@ describe('Feathers application', () => {
     });
   });
 
-  it('mixins are unique to one application', function() {
+  it('mixins are unique to one application', function () {
     const app = feathers();
-    app.mixins.push(function() {});
+    app.mixins.push(function () {});
     assert.equal(app.mixins.length, 4);
 
     const otherApp = feathers();
-    otherApp.mixins.push(function() {});
+    otherApp.mixins.push(function () {});
     assert.equal(otherApp.mixins.length, 4);
   });
 
@@ -317,7 +344,7 @@ describe('Feathers application', () => {
     const app = feathers();
 
     app.use('/setup-only', {
-      setup(_app, path) {
+      setup (_app, path) {
         assert.equal(_app, app);
         assert.equal(path, 'setup-only');
         done();
@@ -329,7 +356,7 @@ describe('Feathers application', () => {
 
   it('Event punching happens after normalization (#150)', done => {
     const todoService = {
-      create(data) {
+      create (data) {
         return Promise.resolve(data);
       }
     };

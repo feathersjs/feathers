@@ -6,7 +6,7 @@ import mixins from '../../src/mixins';
 describe('Argument normalizer mixin', () => {
   it('normalizer mixin is always the last to run', () => {
     const arr = mixins();
-    const dummy = function() { };
+    const dummy = function () { };
 
     assert.equal(arr.length, 3);
 
@@ -22,7 +22,7 @@ describe('Argument normalizer mixin', () => {
   it('normalizes .find without a callback', done => {
     const context = { methods: ['find'] };
     const FixtureService = Proto.extend({
-      find(params, callback) {
+      find (params, callback) {
         assert.ok(typeof callback === 'function');
         assert.equal(params.test, 'Here');
         done();
@@ -39,7 +39,7 @@ describe('Argument normalizer mixin', () => {
   it('normalizes .update without params and callback', done => {
     const context = { methods: ['update'] };
     const FixtureService = Proto.extend({
-      update(id, data, params, callback) {
+      update (id, data, params, callback) {
         assert.equal(id, 1);
         assert.ok(typeof callback === 'function');
         assert.deepEqual(data, { test: 'Here' });

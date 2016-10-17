@@ -11,7 +11,7 @@ describe('Distributed Feathers applications test', () => {
     const app = feathers()
       .configure(socketio())
       .use('todos', {
-        create(data) {
+        create (data) {
           data.id = 42;
           return Promise.resolve(data);
         }
@@ -28,8 +28,8 @@ describe('Distributed Feathers applications test', () => {
       .configure(rest())
       .use('todos', remoteApp.service('todos'));
 
-    beta.listen(9999, function() {
-      beta.service('todos').on('created', function(newTodo) {
+    beta.listen(9999, function () {
+      beta.service('todos').on('created', function (newTodo) {
         assert.deepEqual(newTodo, {
           id: 42,
           text: 'Created on alpha server',
