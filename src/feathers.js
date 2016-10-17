@@ -7,7 +7,7 @@ import Application from './application';
  * @return {Function}
  * @api public
  */
-export default function createApplication(app) {
+export default function createApplication (app) {
   Proto.mixin(Application, app);
   app.init();
   return app;

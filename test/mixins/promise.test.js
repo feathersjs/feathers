@@ -21,6 +21,9 @@ describe('Promises/A+ mixin', () => {
 
     const instance = create.call(FixtureService);
     instance.get('dishes', {}, function (error, data) {
+      if (error) {
+        done(error);
+      }
       assert.deepEqual(data, {
         id: 'dishes',
         description: 'You have to do dishes'
@@ -50,11 +53,11 @@ describe('Promises/A+ mixin', () => {
     });
   });
 
-  it('does not try to call the callback if it does not exist', function(done) {
+  it('does not try to call the callback if it does not exist', function (done) {
     // A dummy context (this will normally be the application)
     const context = { methods: ['create'] };
     const FixtureService = Proto.extend({
-      create(data) {
+      create (data) {
         return Promise.resolve(data);
       }
     });

@@ -1,42 +1,42 @@
 import { EventEmitter } from 'events';
 import Proto from 'uberproto';
 
-export default function() {
+export default function () {
   const app = {
     settings: {},
 
-    get(name) {
+    get (name) {
       return this.settings[name];
     },
 
-    set(name, value) {
+    set (name, value) {
       this.settings[name] = value;
       return this;
     },
 
-    disable(name) {
+    disable (name) {
       this.settings[name] = false;
       return this;
     },
 
-    disabled(name) {
+    disabled (name) {
       return !this.settings[name];
     },
 
-    enable(name) {
+    enable (name) {
       this.settings[name] = true;
       return this;
     },
 
-    enabled(name) {
+    enabled (name) {
       return !!this.settings[name];
     },
 
-    use() {
+    use () {
       throw new Error('Middleware functions can not be used in the Feathers client');
     },
 
-    listen() {
+    listen () {
       return {};
     }
   };

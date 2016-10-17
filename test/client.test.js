@@ -13,9 +13,9 @@ describe('Feathers universal client', () => {
     const app = feathers();
 
     try {
-      app.use(function() {});
+      app.use(function () {});
       assert.ok(false, 'Should never get here');
-    } catch(e) {
+    } catch (e) {
       assert.equal(e.message, 'Middleware functions can not be used in the Feathers client');
     }
   });
@@ -37,11 +37,11 @@ describe('Feathers universal client', () => {
 
   it('Registers a service, wraps it, runs service.setup(), and adds the event and Promise mixin', done => {
     const dummyService = {
-      setup(app, path){
+      setup (app, path) {
         this.path = path;
       },
 
-      create(data) {
+      create (data) {
         return Promise.resolve(data);
       }
     };

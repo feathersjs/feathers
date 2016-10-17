@@ -8,7 +8,7 @@ const create = Proto.create;
 describe('Event mixin', () => {
   it('initializes', () => {
     const FixtureService = Proto.extend({
-      setup(arg) {
+      setup (arg) {
         return `Original setup: ${arg}`;
       }
     });
@@ -24,7 +24,7 @@ describe('Event mixin', () => {
     assert.ok(instance._rubberDuck instanceof EventEmitter);
 
     const existingMethodsService = {
-      setup(arg) {
+      setup (arg) {
         return `Original setup from object: ${arg}`;
       }
     };
@@ -37,7 +37,7 @@ describe('Event mixin', () => {
 
   it('serviceError', function (done) {
     var FixtureService = Proto.extend({
-      create(data, params, cb) {
+      create (data, params, cb) {
         cb(new Error('Something went wrong'));
       }
     });
@@ -82,12 +82,17 @@ describe('Event mixin', () => {
       name: 'Tester'
     }, {
       custom: 'value'
-    }, (error, data) => assert.equal(data.id, 10));
+    }, (error, data) => {
+      if (error) {
+        done(error);
+      }
+      assert.equal(data.id, 10);
+    });
   });
 
   it('updated', done => {
     const FixtureService = Proto.extend({
-      update(id, data, params, cb) {
+      update (id, data, params, cb) {
         setTimeout(function () {
           cb(null, {
             id: id,
@@ -115,13 +120,16 @@ describe('Event mixin', () => {
     }, {
       custom: 'value'
     }, function (error, data) {
+      if (error) {
+        done(error);
+      }
       assert.equal(data.id, 12);
     });
   });
 
   it('removed', done => {
     const FixtureService = Proto.extend({
-      remove(id, params, cb) {
+      remove (id, params, cb) {
         setTimeout(function () {
           cb(null, {
             id: id
@@ -144,6 +152,9 @@ describe('Event mixin', () => {
     instance.remove(27, {
       custom: 'value'
     }, function (error, data) {
+      if (error) {
+        done(error);
+      }
       assert.equal(data.id, 27);
     });
   });
@@ -152,10 +163,10 @@ describe('Event mixin', () => {
     const fixture = [
       { id: 0 },
       { id: 1 },
-      { id: 2 },
+      { id: 2 }
     ];
     const FixtureService = Proto.extend({
-      create(data, params, cb) {
+      create (data, params, cb) {
         setTimeout(function () {
           cb(null, fixture);
         }, 20);
@@ -170,7 +181,7 @@ describe('Event mixin', () => {
     instance.on('created', function (data) {
       assert.equal(data.id, counter);
       counter++;
-      if(counter === fixture.length) {
+      if (counter === fixture.length) {
         done();
       }
     });
@@ -181,7 +192,7 @@ describe('Event mixin', () => {
   it('does not punch when service has an events list (#118)', done => {
     const FixtureService = Proto.extend({
       events: [ 'created' ],
-      create(data, params, cb) {
+      create (data, params, cb) {
         setTimeout(function () {
           cb(null, {
             id: 10,
@@ -205,33 +216,36 @@ describe('Event mixin', () => {
     instance.create({
       name: 'Tester'
     }, {}, function (error, data) {
+      if (error) {
+        done(error);
+      }
       assert.equal(data.id, 10);
       instance.emit('created', { custom: 'event' });
     });
   });
 
   it('sets hook.app', done => {
-      const FixtureService = Proto.extend({
-          update(id, data, params, cb) {
-              setTimeout(function () {
-                  cb(null, {
-                      id: id,
-                      name: data.name
-                  });
-              }, 20);
-          }
-      });
+    const FixtureService = Proto.extend({
+      update (id, data, params, cb) {
+        setTimeout(function () {
+          cb(null, {
+            id: id,
+            name: data.name
+          });
+        }, 20);
+      }
+    });
 
-      const instance = create.call(FixtureService);
-      const dummyApp = { isApp: true };
+    const instance = create.call(FixtureService);
+    const dummyApp = { isApp: true };
 
-      mixinEvent.call(dummyApp, instance);
+    mixinEvent.call(dummyApp, instance);
 
-      instance.on('updated', function (data, hook) {
-          assert.deepEqual(hook.app, dummyApp);
-          done();
-      });
+    instance.on('updated', function (data, hook) {
+      assert.deepEqual(hook.app, dummyApp);
+      done();
+    });
 
-      instance.update(12, { name: 'Updated tester' }, {}, function () {});
+    instance.update(12, { name: 'Updated tester' }, {}, function () {});
   });
 });

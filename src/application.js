@@ -10,7 +10,7 @@ const Proto = Uberproto.extend({
 });
 
 export default {
-  init() {
+  init () {
     Object.assign(this, {
       methods,
       mixins: mixins(),
@@ -20,13 +20,13 @@ export default {
     });
   },
 
-  service(location, service, options = {}) {
+  service (location, service, options = {}) {
     location = stripSlashes(location);
 
-    if(!service) {
+    if (!service) {
       const current = this.services[location];
 
-      if(typeof current === 'undefined' && typeof this.defaultService === 'function') {
+      if (typeof current === 'undefined' && typeof this.defaultService === 'function') {
         return this.service(location, this.defaultService(location), options);
       }
 
@@ -40,7 +40,7 @@ export default {
     // Add all the mixins
     this.mixins.forEach(fn => fn.call(this, protoService));
 
-    if(typeof protoService._setup === 'function') {
+    if (typeof protoService._setup === 'function') {
       protoService._setup(this, location);
     }
 
@@ -58,8 +58,9 @@ export default {
     return (this.services[location] = protoService);
   },
 
-  use(location) {
-    let service, middleware = Array.from(arguments)
+  use (location) {
+    let service;
+    let middleware = Array.from(arguments)
       .slice(1)
       .reduce(function (middleware, arg) {
         if (typeof arg === 'function') {
@@ -80,7 +81,7 @@ export default {
     );
 
     // Check for service (any object with at least one service method)
-    if(hasMethod(['handle', 'set']) || !hasMethod(this.methods.concat('setup'))) {
+    if (hasMethod(['handle', 'set']) || !hasMethod(this.methods.concat('setup'))) {
       return this._super.apply(this, arguments);
     }
 
@@ -90,7 +91,7 @@ export default {
     return this;
   },
 
-  setup() {
+  setup () {
     // Setup each service (pass the app so that they can look up other services etc.)
     Object.keys(this.services).forEach(path => {
       const service = this.services[path];
@@ -110,13 +111,13 @@ export default {
   // That just takes a function in order to keep Feathers plugin configuration easier.
   // Environment specific configurations should be done as suggested in the 4.x migration guide:
   // https://github.com/visionmedia/express/wiki/Migrating-from-3.x-to-4.x
-  configure(fn){
+  configure (fn) {
     fn.call(this);
 
     return this;
   },
 
-  listen() {
+  listen () {
     const server = this._super.apply(this, arguments);
 
     this.setup(server);
