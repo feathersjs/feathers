@@ -3,7 +3,6 @@
 [![Build Status](https://travis-ci.org/feathersjs/feathers-authentication-local.png?branch=master)](https://travis-ci.org/feathersjs/feathers-authentication-local)
 [![Code Climate](https://codeclimate.com/github/feathersjs/feathers-authentication-local/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-local)
 [![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-authentication-local/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-local/coverage)
-[![Issue Count](https://codeclimate.com/github/feathersjs/feathers-authentication-local/badges/issue_count.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-local)
 [![Dependency Status](https://img.shields.io/david/feathersjs/feathers-authentication-local.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers-authentication-local)
 [![Download Status](https://img.shields.io/npm/dm/feathers-authentication-local.svg?style=flat-square)](https://www.npmjs.com/package/feathers-authentication-local)
 
