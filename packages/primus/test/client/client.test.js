@@ -3,7 +3,7 @@ import feathers from 'feathers/client';
 import baseTests from 'feathers-commons/lib/test/client';
 
 import server from './server';
-import primus from '../../client';
+import primus from '../../src/client';
 
 describe('feathers-primus/client', function() {
   const app = feathers().configure(primus({}, { timeout: 500 }));
