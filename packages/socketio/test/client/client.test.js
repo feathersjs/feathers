@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import baseTests from 'feathers-commons/lib/test/client';
 
 import server from './server';
-import socketio from '../../client';
+import socketio from '../../src/client';
 
 describe('feathers-socketio/client', function() {
   const socket = io('http://localhost:9988');
