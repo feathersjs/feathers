@@ -1,6 +1,9 @@
 sudo: false
 language: node_js
 node_js: node
+notifications:
+  slack: feathersjs:T4tvpJFt27wJZABjLSg5OqMv
+  email: false
 before_install:
   - currentfolder=${PWD##*/}
   - if [ "$currentfolder" != 'generator-feathers-plugin' ]; then cd .. && eval "mv $currentfolder generator-feathers-plugin" && cd generator-feathers-plugin; fi
