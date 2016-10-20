@@ -1,5 +1,14 @@
 # Change Log
 
+## [v0.7.6](https://github.com/feathersjs/feathers-commons/tree/v0.7.6) (2016-10-20)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.7.5...v0.7.6)
+
+**Merged pull requests:**
+
+- Add test for matching  and increase code coverage [\#34](https://github.com/feathersjs/feathers-commons/pull/34) ([daffl](https://github.com/daffl))
+- omit '$select' in matcher [\#33](https://github.com/feathersjs/feathers-commons/pull/33) ([beeplin](https://github.com/beeplin))
+- adding code coverage [\#32](https://github.com/feathersjs/feathers-commons/pull/32) ([ekryski](https://github.com/ekryski))
+
 ## [v0.7.5](https://github.com/feathersjs/feathers-commons/tree/v0.7.5) (2016-09-05)
 [Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.7.4...v0.7.5)
 
