@@ -13,6 +13,18 @@ describe('feathers-commons utils', () => {
     assert.equal(utils.stripSlashes('//some//thing////'), 'some//thing');
   });
 
+  it('each', () => {
+    utils.each({ hi: 'there' }, (value, key) => {
+      assert.equal(key, 'hi');
+      assert.equal(value, 'there');
+    });
+
+    utils.each([ 'hi' ], (value, key) => {
+      assert.equal(key, 0);
+      assert.equal(value, 'hi');
+    });
+  });
+
   describe('specialFilters', () => {
     const filters = utils.specialFilters;
 
@@ -124,6 +136,12 @@ describe('feathers-commons utils', () => {
 
       assert.ok(matches({ name: 'Eric' }));
       assert.ok(!matches({ name: 'David' }));
+    });
+
+    it('does not match $select', () => {
+      const matches = utils.matcher({ $select: [ 'name' ] });
+
+      assert.ok(matches({ name: 'Eric' }));
     });
 
     it('$or match', () => {

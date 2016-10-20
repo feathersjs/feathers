@@ -102,6 +102,31 @@ describe('hook utilities', () => {
     ]);
   });
 
+  it('.defaultMakeArguments', () => {
+    let args = utils.makeArguments({
+      params: { some: 'thing' },
+      method: 'something',
+      data: { test: 'me' },
+      callback: noop
+    });
+
+    assert.deepEqual(args, [
+      { test: 'me' },
+      { some: 'thing' },
+      noop
+    ]);
+
+    args = utils.makeArguments({
+      id: 'testing',
+      method: 'something',
+      callback: noop
+    });
+
+    assert.deepEqual(args, [
+      'testing', {}, noop
+    ]);
+  });
+
   it('.makeArguments makes correct argument list for known methods', () => {
     let args = utils.makeArguments({
       data: { my: 'data' },
