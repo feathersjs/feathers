@@ -1,4 +1,4 @@
-if(!global._babelPolyfill) { require('babel-polyfill'); }
+if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 import assert from 'assert';
 
@@ -25,12 +25,12 @@ describe('hook utilities', () => {
     ], dummyApp);
 
     assert.deepEqual(hookObject, {
-        params: { some: 'thing' },
-        method: 'find',
-        type: 'test',
-        callback: noop,
-        app: dummyApp
-      }
+      params: { some: 'thing' },
+      method: 'find',
+      type: 'test',
+      callback: noop,
+      app: dummyApp
+    }
     );
 
     // get
@@ -87,7 +87,7 @@ describe('hook utilities', () => {
     });
 
     // patch
-    hookObject = utils.hookObject('patch','test', [
+    hookObject = utils.hookObject('patch', 'test', [
       2, { my: 'data' }, { some: 'thing' }, noop
     ]);
 
