@@ -2,10 +2,10 @@ import feathers from 'feathers';
 import primus from '../src';
 import memory from 'feathers-memory';
 
-function todoService() {
+function todoService () {
   return memory().extend({
-    get: function(id, params, callback) {
-      if(params.query.error) {
+    get: function (id, params, callback) {
+      if (params.query.error) {
         return callback(new Error('Something went wrong'));
       }
 
@@ -16,7 +16,7 @@ function todoService() {
   });
 }
 
-export default function(callback) {
+export default function (callback) {
   const options = {
     transformer: 'websockets'
   };
@@ -27,8 +27,8 @@ export default function(callback) {
   app.use('/api/v1', v1);
   app.use('/api/v2', v2);
 
-  v1.service('todos').create({ text: 'some todo', complete: false }, {}, function() {});
-  v2.service('todos').create({ text: 'some todo', complete: false }, {}, function() {});
+  v1.service('todos').create({ text: 'some todo', complete: false }, {}, function () {});
+  v2.service('todos').create({ text: 'some todo', complete: false }, {}, function () {});
 
   return app;
 }

@@ -6,25 +6,25 @@ import Emitter from 'primus-emitter';
 
 const debug = makeDebug('feathers-primus');
 
-export default function(config, configurer) {
-  return function() {
+export default function (config, configurer) {
+  return function () {
     const app = this;
 
     app.configure(socket('primus'));
 
     // Monkey patch app.setup(server)
     Proto.mixin({
-      setup(server) {
+      setup (server) {
         debug('Setting up Primus');
 
         let primus = this.primus;
 
-        if(!primus) {
+        if (!primus) {
           primus = this.primus = new Primus(server, config);
 
           primus.use('emitter', Emitter);
 
-          primus.before('feathers', function(req, res, next) {
+          primus.before('feathers', function (req, res, next) {
             req.feathers = { provider: 'primus' };
             next();
           }, 0);
@@ -37,13 +37,13 @@ export default function(config, configurer) {
 
         this._socketInfo = {
           method: 'send',
-          connection() {
+          connection () {
             return primus;
           },
-          clients() {
+          clients () {
             return primus;
           },
-          params(spark) {
+          params (spark) {
             return spark.request.feathers;
           }
         };

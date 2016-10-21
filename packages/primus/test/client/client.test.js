@@ -5,36 +5,36 @@ import baseTests from 'feathers-commons/lib/test/client';
 import server from './server';
 import primus from '../../src/client';
 
-describe('feathers-primus/client', function() {
+describe('feathers-primus/client', function () {
   const app = feathers().configure(primus({}, { timeout: 500 }));
   const service = app.service('todos');
 
-  before(function(done) {
+  before(function (done) {
     this.server = server(primus => {
       service.connection = this.socket = new primus.Socket('http://localhost:12012');
     }).listen(12012);
     this.server.on('listening', () => done());
   });
 
-  after(function(done) {
+  after(function (done) {
     this.socket.socket.close();
     this.server.close(done);
   });
 
-  it('throws an error with no connection', function() {
+  it('throws an error with no connection', function () {
     try {
       feathers().configure(primus());
       assert.ok(false);
-    } catch(e) {
+    } catch (e) {
       assert.equal(e.message, 'Primus connection needs to be provided');
     }
   });
 
-  it('app has the primus attribute', function() {
+  it('app has the primus attribute', function () {
     assert.ok(app.primus);
   });
 
-  it('throws an error when configured twice', function() {
+  it('throws an error when configured twice', function () {
     try {
       app.configure(primus({}));
       assert.ok(false, 'Should never get here');
@@ -43,7 +43,7 @@ describe('feathers-primus/client', function() {
     }
   });
 
-  it('can initialize a client instance', function(done) {
+  it('can initialize a client instance', function (done) {
     const init = primus(service.connection);
     const todos = init.service('todos');
 
@@ -57,7 +57,7 @@ describe('feathers-primus/client', function() {
     ])).then(() => done()).catch(done);
   });
 
-  it('times out with error when using non-existent service', function(done) {
+  it('times out with error when using non-existent service', function (done) {
     const notMe = app.service('not-me');
     // Hack because we didn't set the connection at the beginning
     notMe.connection = this.socket;
