@@ -1,6 +1,9 @@
 import assert from 'assert';
 
-export default function(service) {
+export default function(app, name) {
+  let service = (name && typeof app.service === 'function') ?
+    app.service(name) : app;
+
   describe('Service base tests', function() {
     it('.find', function(done) {
       service.find().then(todos => assert.deepEqual(todos, [
