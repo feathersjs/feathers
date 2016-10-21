@@ -5,24 +5,40 @@ import assert from 'assert';
 import { noop } from '../src/arguments';
 import utils from '../src/hooks';
 
-function hookMaker(name) {
-  return function() {
-    return utils.hookObject(name, 'test', arguments);
-  };
-}
-
 describe('hook utilities', () => {
   it('.hookObject', () => {
+    let hookObject = utils.hookObject('find', 'test', [
+      { some: 'thing' }, noop
+    ]);
     // find
-    assert.deepEqual(hookMaker('find')({ some: 'thing' }, noop), {
+    assert.deepEqual(hookObject, {
       params: { some: 'thing' },
       method: 'find',
       type: 'test',
       callback: noop
     });
 
+    const dummyApp = { test: true };
+
+    hookObject = utils.hookObject('find', 'test', [
+        { some: 'thing' }, noop
+    ], dummyApp);
+
+    assert.deepEqual(hookObject, {
+        params: { some: 'thing' },
+        method: 'find',
+        type: 'test',
+        callback: noop,
+        app: dummyApp
+      }
+    );
+
     // get
-    assert.deepEqual(hookMaker('get')(1, { some: 'thing' }, noop), {
+    hookObject = utils.hookObject('get', 'test', [
+      1, { some: 'thing' }, noop
+    ]);
+
+    assert.deepEqual(hookObject, {
       id: 1,
       params: { some: 'thing' },
       method: 'get',
@@ -31,7 +47,11 @@ describe('hook utilities', () => {
     });
 
     // remove
-    assert.deepEqual(hookMaker('remove')(1, { some: 'thing' }, noop), {
+    hookObject = utils.hookObject('remove', 'test', [
+      1, { some: 'thing' }, noop
+    ]);
+
+    assert.deepEqual(hookObject, {
       id: 1,
       params: { some: 'thing' },
       method: 'remove',
@@ -40,7 +60,11 @@ describe('hook utilities', () => {
     });
 
     // create
-    assert.deepEqual(hookMaker('create')({ my: 'data' }, { some: 'thing' }, noop), {
+    hookObject = utils.hookObject('create', 'test', [
+      { my: 'data' }, { some: 'thing' }, noop
+    ]);
+
+    assert.deepEqual(hookObject, {
       data: { my: 'data' },
       params: { some: 'thing' },
       method: 'create',
@@ -49,7 +73,11 @@ describe('hook utilities', () => {
     });
 
     // update
-    assert.deepEqual(hookMaker('update')(2, { my: 'data' }, { some: 'thing' }, noop), {
+    hookObject = utils.hookObject('update', 'test', [
+      2, { my: 'data' }, { some: 'thing' }, noop
+    ]);
+
+    assert.deepEqual(hookObject, {
       id: 2,
       data: { my: 'data' },
       params: { some: 'thing' },
@@ -59,7 +87,11 @@ describe('hook utilities', () => {
     });
 
     // patch
-    assert.deepEqual(hookMaker('patch')(2, { my: 'data' }, { some: 'thing' }, noop), {
+    hookObject = utils.hookObject('patch','test', [
+      2, { my: 'data' }, { some: 'thing' }, noop
+    ]);
+
+    assert.deepEqual(hookObject, {
       id: 2,
       data: { my: 'data' },
       params: { some: 'thing' },
