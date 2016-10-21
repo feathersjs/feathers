@@ -6,7 +6,7 @@ import socket from 'feathers-socket-commons';
 const debug = makeDebug('feathers-socketio');
 
 export default function (options, config) {
-  if(typeof options === 'function') {
+  if (typeof options === 'function') {
     config = options;
     options = {};
   }
@@ -17,10 +17,10 @@ export default function (options, config) {
     app.configure(socket('io'));
 
     Proto.mixin({
-      setup(server) {
+      setup (server) {
         let io = this.io;
 
-        if(!io) {
+        if (!io) {
           io = this.io = socketio.listen(server, options);
 
           io.use(function (socket, next) {
@@ -36,13 +36,13 @@ export default function (options, config) {
 
         this._socketInfo = {
           method: 'emit',
-          connection() {
+          connection () {
             return io.sockets;
           },
-          clients() {
+          clients () {
             return io.sockets.sockets;
           },
-          params(socket) {
+          params (socket) {
             return socket.feathers;
           }
         };

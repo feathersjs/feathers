@@ -6,16 +6,16 @@ import baseTests from 'feathers-commons/lib/test/client';
 import server from './server';
 import socketio from '../../src/client';
 
-describe('feathers-socketio/client', function() {
+describe('feathers-socketio/client', function () {
   const socket = io('http://localhost:9988');
   const app = feathers().configure(socketio(socket, { timeout: 500 }));
   const service = app.service('todos');
 
-  before(function(done) {
+  before(function (done) {
     this.server = server().listen(9988, done);
   });
 
-  after(function(done) {
+  after(function (done) {
     socket.disconnect();
     this.server.close(done);
   });
@@ -24,7 +24,7 @@ describe('feathers-socketio/client', function() {
     try {
       feathers().configure(socketio());
       assert.ok(false);
-    } catch(e) {
+    } catch (e) {
       assert.equal(e.message, 'Socket.io connection needs to be provided');
     }
   });

@@ -18,15 +18,15 @@ describe('feathers-socketio', () => {
   };
 
   before(done => {
-    const errorHook = function(hook) {
-      if(hook.params.query.hookError) {
+    const errorHook = function (hook) {
+      if (hook.params.query.hookError) {
         throw new Error(`Error from ${hook.method}, ${hook.type} hook`);
       }
     };
 
     const app = options.app = feathers()
       .configure(hooks())
-      .configure(socketio(function(io) {
+      .configure(socketio(function (io) {
         io.use(function (socket, next) {
           socket.feathers.user = { name: 'David' };
           next();
@@ -38,7 +38,7 @@ describe('feathers-socketio', () => {
       get: errorHook
     });
 
-    options.server = app.listen(7886, function(){
+    options.server = app.listen(7886, function () {
       app.use('/tasks', todoService);
       app.service('tasks').before({
         get: errorHook
@@ -59,15 +59,15 @@ describe('feathers-socketio', () => {
   it('runs io before setup (#131)', done => {
     let counter = 0;
     let app = feathers()
-      .configure(socketio(function() {
+      .configure(socketio(function () {
         assert.equal(counter, 0);
         counter++;
       }))
       .use('/todos', {
-        find(params, callback) {
+        find (params, callback) {
           callback(null, []);
         },
-        setup(app) {
+        setup (app) {
           assert.ok(app.io);
           assert.equal(counter, 1, 'SocketIO configuration ran first');
         }
@@ -83,6 +83,7 @@ describe('feathers-socketio', () => {
       }, io => assert.ok(io)));
 
     let srv = app.listen(8987).on('listening', () => {
+      // eslint-disable-next-line handle-callback-err
       request('http://localhost:8987/test/socket.io.js', (err, res, body) => {
         assert.equal(res.statusCode, 200);
         assert.equal(body.indexOf('(function'), 0);
@@ -100,17 +101,17 @@ describe('feathers-socketio', () => {
       remove: service.remove
     };
 
-    service.find = function(params) {
+    service.find = function (params) {
       assert.deepEqual(_.omit(params, 'query'), options.socketParams, 'Handshake parameters passed on proper position');
       old.find.apply(this, arguments);
     };
 
-    service.create = function(data, params) {
+    service.create = function (data, params) {
       assert.deepEqual(_.omit(params, 'query'), options.socketParams, 'Passed handshake parameters');
       old.create.apply(this, arguments);
     };
 
-    service.update = function(id, data, params) {
+    service.update = function (id, data, params) {
       assert.deepEqual(params, _.extend({
         query: {
           test: 'param'
@@ -120,7 +121,7 @@ describe('feathers-socketio', () => {
     };
 
     options.socket.emit('todo::create', {}, {}, function () {
-      options.socket.emit('todo::update', 1, {}, { test: 'param' }, function() {
+      options.socket.emit('todo::update', 1, {}, { test: 'param' }, function () {
         _.extend(service, old);
         done();
       });
@@ -133,7 +134,7 @@ describe('feathers-socketio', () => {
       find: service.find
     };
 
-    service.find = function(params) {
+    service.find = function (params) {
       assert.deepEqual(_.omit(params, 'query'), options.socketParams, 'Handshake parameters passed on proper position');
       old.find.apply(this, arguments);
     };
