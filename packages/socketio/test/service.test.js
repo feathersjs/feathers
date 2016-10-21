@@ -1,9 +1,9 @@
 import assert from 'assert';
 import { verify } from 'feathers-commons/lib/test-fixture';
 
-export default function(name, options) {
+export default function (name, options) {
   it(`invalid arguments cause an error`, done => {
-    options.socket.emit(`${name}::find`, 1, {}, function(error) {
+    options.socket.emit(`${name}::find`, 1, {}, function (error) {
       assert.equal(error.message, `Too many arguments for 'find' service method`);
       done();
     });
@@ -66,7 +66,7 @@ export default function(name, options) {
 
       options.socket.emit(`${name}::create`, original);
 
-      options.socket.once(`${name} created`, function(data) {
+      options.socket.once(`${name} created`, function (data) {
         verify.create(original, data);
 
         done();
@@ -196,13 +196,13 @@ export default function(name, options) {
       };
       let old = service.create;
 
-      service.create = function(data) {
+      service.create = function (data) {
         this.emit(`log`, { message: `Custom log event`, data: data });
         service.create = old;
         return old.apply(this, arguments);
       };
 
-      options.socket.once(`${name} log`, function(data) {
+      options.socket.once(`${name} log`, function (data) {
         assert.deepEqual(data, { message: `Custom log event`, data: original });
         done();
       });
@@ -219,14 +219,14 @@ export default function(name, options) {
       let original = { description: `created event test` };
       let oldCreated = service.created;
 
-      service.created = function(data, params, callback) {
+      service.created = function (data, params, callback) {
         assert.deepEqual(params, options.socketParams);
         verify.create(original, data);
 
         callback(null, Object.assign({ processed: true }, data));
       };
 
-      options.socket.emit(`${name}::create`, original, {}, function() {});
+      options.socket.emit(`${name}::create`, original, {}, function () {});
 
       options.socket.once(`${name} created`, function (data) {
         service.created = oldCreated;
@@ -240,10 +240,10 @@ export default function(name, options) {
       let service = options.app.service(name);
       let oldRemoved = service.removed;
 
-      service.removed = function(data, params, callback) {
+      service.removed = function (data, params, callback) {
         assert.deepEqual(params, options.socketParams);
 
-        if(data.id === 23) {
+        if (data.id === 23) {
           // Only dispatch with given id
           return callback(null, data);
         }
@@ -251,8 +251,8 @@ export default function(name, options) {
         callback(null, false);
       };
 
-      options.socket.emit(`${name}::remove`, 1, {}, function() {});
-      options.socket.emit(`${name}::remove`, 23, {}, function() {});
+      options.socket.emit(`${name}::remove`, 1, {}, function () {});
+      options.socket.emit(`${name}::remove`, 23, {}, function () {});
 
       options.socket.once(`${name} removed`, function (data) {
         service.removed = oldRemoved;
@@ -267,7 +267,7 @@ export default function(name, options) {
       assert.equal(typeof service.filter, `function`);
       assert.equal(typeof service._eventFilters, `object`);
 
-      service.filter(`created`, function() {});
+      service.filter(`created`, function () {});
       assert.equal(service._eventFilters.created.length, 1);
 
       service._eventFilters = {};
@@ -277,7 +277,7 @@ export default function(name, options) {
       let service = options.app.service(name);
       let original = { description: `created event test` };
 
-      service.filter(`created`, function(data, connection, hook) {
+      service.filter(`created`, function (data, connection, hook) {
         assert.deepEqual(connection, options.socketParams);
         assert.deepEqual(hook.params, {
           query: { test: true },
@@ -305,11 +305,11 @@ export default function(name, options) {
       let original = { description: `created event test` };
 
       service.filter(`created`, [
-        function(data) {
+        function (data) {
           return Object.assign({ processed: true }, data);
         },
 
-        function(data, connection, hook, callback) {
+        function (data, connection, hook, callback) {
           data = Object.assign({ next: true }, data);
           callback(null, data);
         }
@@ -333,11 +333,11 @@ export default function(name, options) {
       let original = { description: `created event test` };
 
       service.filter(`created`, [
-        function() {
+        function () {
           throw new Error(`Nooo!`);
         },
 
-        function() {
+        function () {
           assert.ok(false, `Should never get here`);
         }
       ]);
@@ -355,10 +355,10 @@ export default function(name, options) {
       let service = options.app.service(name);
 
       service.filter(`removed`, [
-        function(data, connection) {
+        function (data, connection) {
           assert.deepEqual(connection, options.socketParams);
 
-          if(data.id === 23) {
+          if (data.id === 23) {
             // Only dispatch with given id
             return data;
           }
@@ -366,17 +366,16 @@ export default function(name, options) {
           return false;
         },
 
-        function(data) {
-          if(data.id !== 23) {
+        function (data) {
+          if (data.id !== 23) {
             assert.ok(false, `Should never get here`);
           }
           return data;
         }
       ]);
 
-
-      options.socket.emit(`${name}::remove`, 1, {}, function() {});
-      options.socket.emit(`${name}::remove`, 23, {}, function() {});
+      options.socket.emit(`${name}::remove`, 1, {}, function () {});
+      options.socket.emit(`${name}::remove`, 23, {}, function () {});
 
       options.socket.once(`${name} removed`, function (data) {
         assert.equal(data.id, 23);

@@ -2,6 +2,7 @@ import feathers from 'feathers';
 import socketio from '../../src';
 import memory from 'feathers-memory';
 
+// eslint-disable-next-line no-extend-native
 Object.defineProperty(Error.prototype, 'toJSON', {
   value: function () {
     var alt = {};
@@ -15,11 +16,11 @@ Object.defineProperty(Error.prototype, 'toJSON', {
   configurable: true
 });
 
-export default function() {
+export default function () {
   // Create an in-memory CRUD service for our Todos
   var todoService = memory().extend({
-    get: function(id, params, callback) {
-      if(params.query.error) {
+    get: function (id, params, callback) {
+      if (params.query.error) {
         return callback(new Error('Something went wrong'));
       }
 
@@ -31,7 +32,7 @@ export default function() {
     .configure(socketio())
     .use('/todos', todoService);
 
-  app.service('todos').create({ text: 'some todo', complete: false }, {}, function() {});
+  app.service('todos').create({ text: 'some todo', complete: false }, {}, function () {});
 
   return app;
 }
