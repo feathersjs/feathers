@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.7.7](https://github.com/feathersjs/feathers-commons/tree/v0.7.7) (2016-10-21)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.7.6...v0.7.7)
+
+**Merged pull requests:**
+
+- Allow app in hookObject [\#35](https://github.com/feathersjs/feathers-commons/pull/35) ([daffl](https://github.com/daffl))
+
 ## [v0.7.6](https://github.com/feathersjs/feathers-commons/tree/v0.7.6) (2016-10-20)
 [Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.7.5...v0.7.6)
 
