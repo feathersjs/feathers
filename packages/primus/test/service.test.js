@@ -1,16 +1,15 @@
 import assert from 'assert';
 import { verify } from 'feathers-commons/lib/test-fixture';
 
-export default function(name, options) {
+export default function (name, options) {
   it(`invalid arguments cause an error`, function (done) {
-    options.socket.send(`${name}::find`, 1, {}, function(error) {
+    options.socket.send(`${name}::find`, 1, {}, function (error) {
       assert.equal(error.message, `Too many arguments for 'find' service method`);
       done();
     });
   });
 
   describe(`CRUD`, function () {
-
     it(`::find`, function (done) {
       options.socket.send(`${name}::find`, {}, function (error, data) {
         verify.find(data);
@@ -67,7 +66,7 @@ export default function(name, options) {
 
       options.socket.send(`${name}::create`, original);
 
-      options.socket.once(`${name} created`, function(data) {
+      options.socket.once(`${name} created`, function (data) {
         verify.create(original, data);
 
         done();
@@ -168,7 +167,7 @@ export default function(name, options) {
       options.socket.send(`${name}::update`, 10, original, {}, function () {});
     });
 
-    it(`patched`, function(done) {
+    it(`patched`, function (done) {
       var original = {
         name: `patched event`
       };
@@ -191,13 +190,13 @@ export default function(name, options) {
     });
   });
 
-  describe(`Event filtering`, function() {
+  describe(`Event filtering`, function () {
     it(`.created`, function (done) {
       var service = options.app.service(name);
       var original = { description: `created event test` };
       var oldCreated = service.created;
 
-      service.created = function(data, params, callback) {
+      service.created = function (data, params, callback) {
         assert.ok(service === this);
         assert.deepEqual(params, options.socketParams);
         verify.create(original, data);
@@ -205,7 +204,7 @@ export default function(name, options) {
         callback(null, Object.assign({ processed: true }, data));
       };
 
-      options.socket.send(`${name}::create`, original, {}, function() {});
+      options.socket.send(`${name}::create`, original, {}, function () {});
 
       options.socket.once(`${name} created`, function (data) {
         service.created = oldCreated;
@@ -234,11 +233,11 @@ export default function(name, options) {
       var service = options.app.service(name);
       var oldRemoved = service.removed;
 
-      service.removed = function(data, params, callback) {
+      service.removed = function (data, params, callback) {
         assert.ok(service === this);
         assert.deepEqual(params, options.socketParams);
 
-        if(data.id === 23) {
+        if (data.id === 23) {
           // Only dispatch with given id
           return callback(null, data);
         }
@@ -246,8 +245,8 @@ export default function(name, options) {
         callback(null, false);
       };
 
-      options.socket.send(`${name}::remove`, 1, {}, function() {});
-      options.socket.send(`${name}::remove`, 23, {}, function() {});
+      options.socket.send(`${name}::remove`, 1, {}, function () {});
+      options.socket.send(`${name}::remove`, 23, {}, function () {});
 
       options.socket.once(`${name} removed`, function (data) {
         service.removed = oldRemoved;
@@ -262,7 +261,7 @@ export default function(name, options) {
       assert.equal(typeof service.filter, `function`);
       assert.equal(typeof service._eventFilters, `object`);
 
-      service.filter(`created`, function() {});
+      service.filter(`created`, function () {});
       assert.equal(service._eventFilters.created.length, 1);
 
       service._eventFilters = {};
@@ -272,7 +271,7 @@ export default function(name, options) {
       let service = options.app.service(name);
       let original = { description: `created event test` };
 
-      service.filter(`created`, function(data, connection, hook) {
+      service.filter(`created`, function (data, connection, hook) {
         assert.deepEqual(connection, options.socketParams);
         assert.deepEqual(hook.params, {
           query: { test: true },
@@ -300,11 +299,11 @@ export default function(name, options) {
       let original = { description: `created event test` };
 
       service.filter(`created`, [
-        function(data) {
+        function (data) {
           return Object.assign({ processed: true }, data);
         },
 
-        function(data, connection, hook, callback) {
+        function (data, connection, hook, callback) {
           data = Object.assign({ next: true }, data);
           callback(null, data);
         }
@@ -328,11 +327,11 @@ export default function(name, options) {
       let original = { description: `created event test` };
 
       service.filter(`created`, [
-        function() {
+        function () {
           throw new Error(`Nooo!`);
         },
 
-        function() {
+        function () {
           assert.ok(false, `Should never get here`);
         }
       ]);
@@ -350,10 +349,10 @@ export default function(name, options) {
       let service = options.app.service(name);
 
       service.filter(`removed`, [
-        function(data, connection) {
+        function (data, connection) {
           assert.deepEqual(connection, options.socketParams);
 
-          if(data.id === 23) {
+          if (data.id === 23) {
             // Only dispatch with given id
             return data;
           }
@@ -361,17 +360,16 @@ export default function(name, options) {
           return false;
         },
 
-        function(data) {
-          if(data.id !== 23) {
+        function (data) {
+          if (data.id !== 23) {
             assert.ok(false, `Should never get here`);
           }
           return data;
         }
       ]);
 
-
-      options.socket.send(`${name}::remove`, 1, {}, function() {});
-      options.socket.send(`${name}::remove`, 23, {}, function() {});
+      options.socket.send(`${name}::remove`, 1, {}, function () {});
+      options.socket.send(`${name}::remove`, 23, {}, function () {});
 
       options.socket.once(`${name} removed`, function (data) {
         assert.equal(data.id, 23);
