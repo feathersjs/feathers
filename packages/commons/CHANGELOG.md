@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.7.8](https://github.com/feathersjs/feathers-commons/tree/v0.7.8) (2016-10-21)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.7.7...v0.7.8)
+
+**Merged pull requests:**
+
+- Make getting the service in base test dynamic [\#36](https://github.com/feathersjs/feathers-commons/pull/36) ([daffl](https://github.com/daffl))
+
 ## [v0.7.7](https://github.com/feathersjs/feathers-commons/tree/v0.7.7) (2016-10-21)
 [Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.7.6...v0.7.7)
 
