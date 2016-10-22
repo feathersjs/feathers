@@ -1,5 +1,17 @@
 # Change Log
 
+## [v0.4.0](https://github.com/feathersjs/feathers-configuration/tree/v0.4.0) (2016-10-22)
+[Full Changelog](https://github.com/feathersjs/feathers-configuration/compare/v0.3.3...v0.4.0)
+
+**Implemented enhancements:**
+
+- implement node-config [\#27](https://github.com/feathersjs/feathers-configuration/pull/27) ([slajax](https://github.com/slajax))
+
+**Closed issues:**
+
+- Deprecate v1 in favour of node-config [\#25](https://github.com/feathersjs/feathers-configuration/issues/25)
+- Make this repo more about managing configuration [\#24](https://github.com/feathersjs/feathers-configuration/issues/24)
+
 ## [v0.3.3](https://github.com/feathersjs/feathers-configuration/tree/v0.3.3) (2016-09-12)
 [Full Changelog](https://github.com/feathersjs/feathers-configuration/compare/v0.3.2...v0.3.3)
 
