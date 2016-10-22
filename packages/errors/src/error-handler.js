@@ -1,4 +1,3 @@
-// jshint unused:false
 import path from 'path';
 import errors from './index';
 
@@ -7,9 +6,9 @@ const defaults = {
 };
 const defaultError = path.resolve(defaults.public, 'default.html');
 
-export default function(options = {}) {
+export default function (options = {}) {
   options = Object.assign({}, defaults, options);
-  
+
   if (typeof options.html === 'undefined') {
     options.html = {
       401: path.resolve(options.public, '401.html'),
@@ -18,7 +17,7 @@ export default function(options = {}) {
     };
   }
 
-  return function(error, req, res, next) {
+  return function (error, req, res, next) {
     if (error.type !== 'FeathersError') {
       let oldError = error;
       error = new errors.GeneralError(oldError.message, {
@@ -30,21 +29,20 @@ export default function(options = {}) {
       }
     }
 
-    error.code = !isNaN( parseInt(error.code, 10) ) ? parseInt(error.code, 10) : 500;
+    error.code = !isNaN(parseInt(error.code, 10)) ? parseInt(error.code, 10) : 500;
     const formatter = {};
 
     // If the developer passed a custom function
     if (typeof options.html === 'function') {
       formatter['text/html'] = options.html;
-    }
-    else {
-      formatter['text/html'] = function() {
+    } else {
+      formatter['text/html'] = function () {
         let file = options.html[error.code];
-        
+
         if (!file) {
           file = options.html.default || defaultError;
         }
-        
+
         res.set('Content-Type', 'text/html');
         res.sendFile(file);
       };
@@ -53,8 +51,7 @@ export default function(options = {}) {
     // If the developer passed a custom function
     if (typeof options.json === 'function') {
       formatter['application/json'] = options.json;
-    }
-    else {
+    } else {
       // Don't show stack trace if it is a 404 error
       if (error.code === 404) {
         error.stack = null;
@@ -80,11 +77,9 @@ export default function(options = {}) {
     // by default just send back json
     if (contentType.indexOf('json') !== -1 || accepts.indexOf('json') !== -1) {
       formatter['application/json'](error, req, res, next);
-    }
-    else if ( options.html && (contentType.indexOf('html') !== -1 || accepts.indexOf('html') !== -1) ) {
+    } else if (options.html && (contentType.indexOf('html') !== -1 || accepts.indexOf('html') !== -1)) {
       return formatter['text/html'](error, req, res, next);
-    }
-    else {
+    } else {
       // TODO (EK): Maybe just return plain text
       formatter['application/json'](error, req, res, next);
     }

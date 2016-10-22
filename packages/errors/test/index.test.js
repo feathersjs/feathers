@@ -1,4 +1,4 @@
-if(!global._babelPolyfill) { require('babel-polyfill'); }
+if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 import assert from 'assert';
 import { types, errors, convert } from '../src';
@@ -141,7 +141,6 @@ describe('feathers-errors', () => {
     it('503', () => {
       assert.notEqual(typeof errors[503], 'undefined', 'has Unavailable alias');
     });
-
   });
 
   it('exposes errors via types for backwards compatibility', () => {

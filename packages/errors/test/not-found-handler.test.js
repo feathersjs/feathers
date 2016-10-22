@@ -1,6 +1,4 @@
-/*jshint expr: true, unused: false*/
-
-if(!global._babelPolyfill) { require('babel-polyfill'); }
+if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
