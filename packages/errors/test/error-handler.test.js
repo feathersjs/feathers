@@ -1,6 +1,5 @@
-/*jshint expr: true, unused: false*/
-
-if(!global._babelPolyfill) { require('babel-polyfill'); }
+/* eslint-disable handle-callback-err  */
+if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 import feathers from 'feathers';
 import chai, { expect } from 'chai';
@@ -16,11 +15,11 @@ chai.use(sinonChai);
 
 const content = '<html><head></head><body>Error</body></html>';
 
-let htmlHandler = sinon.spy(function(error, req, res, next) {
+let htmlHandler = sinon.spy(function (error, req, res, next) {
   res.send(content);
 });
 
-const jsonHandler = sinon.spy(function(error, req, res, next) {
+const jsonHandler = sinon.spy(function (error, req, res, next) {
   res.json(error);
 });
 
@@ -37,21 +36,21 @@ describe('error-handler', () => {
     expect(typeof handler).to.equal('function');
   });
 
-  describe('supports custom handlers', function() {
-    before(function() {
+  describe('supports custom handlers', function () {
+    before(function () {
       this.app = feathers()
-        .get('/error', function(req, res, next) {
+        .get('/error', function (req, res, next) {
           next(new Error('Something went wrong'));
         })
         .use(handler({
           html: htmlHandler,
           json: jsonHandler
         }));
-      
+
       this.server = this.app.listen(5050);
     });
-    
-    after(function(done) {
+
+    after(function (done) {
       this.server.close(done);
     });
 
@@ -111,20 +110,20 @@ describe('error-handler', () => {
       });
     });
   });
-  
-  describe('use as app error handler', function() {
-    before(function() {
+
+  describe('use as app error handler', function () {
+    before(function () {
       this.app = feathers()
-        .get('/error', function(req, res, next) {
+        .get('/error', function (req, res, next) {
           next(new Error('Something went wrong'));
         })
-        .get('/string-error', function(req, res, next) {
+        .get('/string-error', function (req, res, next) {
           const e = new Error('Something was not found');
           e.code = '404';
-          
+
           next(e);
         })
-        .get('/bad-request', function(req, res, next) {
+        .get('/bad-request', function (req, res, next) {
           next(new errors.BadRequest({
             message: 'Invalid Password',
             errors: [{
@@ -134,18 +133,18 @@ describe('error-handler', () => {
             }]
           }));
         })
-        .use(function(req, res, next) {
+        .use(function (req, res, next) {
           next(new errors.NotFound('File not found'));
         })
         .use(handler());
-      
+
       this.server = this.app.listen(5050);
     });
-    
-    after(function(done) {
+
+    after(function (done) {
       this.server.close(done);
     });
-    
+
     describe('converts an non-feathers error', () => {
       it('is an instance of GeneralError', done => {
         request({
@@ -166,13 +165,13 @@ describe('error-handler', () => {
       });
 
       it.skip('still has a stack trace', () => {
-        expect(handler).to.equal('function');  
+        expect(handler).to.equal('function');
       });
     });
 
     describe('text/html format', () => {
       it('serves a 404.html', done => {
-        fs.readFile(join(__dirname, '..', 'src', 'public', '404.html'), function(err, html) {
+        fs.readFile(join(__dirname, '..', 'src', 'public', '404.html'), function (err, html) {
           request({
             url: 'http://localhost:5050/path/to/nowhere',
             headers: {
@@ -188,7 +187,7 @@ describe('error-handler', () => {
       });
 
       it('serves a 500.html', done => {
-        fs.readFile(join(__dirname, '..', 'src', 'public', 'default.html'), function(err, html) {
+        fs.readFile(join(__dirname, '..', 'src', 'public', 'default.html'), function (err, html) {
           request({
             url: 'http://localhost:5050/error',
             headers: {
@@ -204,7 +203,7 @@ describe('error-handler', () => {
       });
 
       it('returns html when Content-Type header is set', done => {
-        fs.readFile(join(__dirname, '..', 'src', 'public', '404.html'), function(err, html) {
+        fs.readFile(join(__dirname, '..', 'src', 'public', '404.html'), function (err, html) {
           request({
             url: 'http://localhost:5050/path/to/nowhere',
             headers: {
@@ -219,7 +218,7 @@ describe('error-handler', () => {
       });
 
       it('returns html when Accept header is set', done => {
-        fs.readFile(join(__dirname, '..', 'src', 'public', '404.html'), function(err, html) {
+        fs.readFile(join(__dirname, '..', 'src', 'public', '404.html'), function (err, html) {
           request({
             url: 'http://localhost:5050/path/to/nowhere',
             headers: {
