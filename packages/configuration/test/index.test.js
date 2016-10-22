@@ -4,7 +4,7 @@ import { join } from 'path';
 import plugin from '../src';
 
 describe('feathers-configuration', () => {
-  const app = feathers().configure(plugin(__dirname));
+  const app = feathers().configure(plugin());
 
   it('initialized app with default data', () =>
     assert.equal(app.get('port'), 3030)

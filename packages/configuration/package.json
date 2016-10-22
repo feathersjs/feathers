@@ -35,7 +35,7 @@
     "compile": "rm -rf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
-    "mocha": "NODE_ENV=testing mocha test/ --compilers js:babel-core/register",
+    "mocha": "NODE_CONFIG_DIR=./test/config/ NODE_ENV=testing mocha test/ --compilers js:babel-core/register",
     "test": "npm run jshint && npm run mocha && nsp check"
   },
   "directories": {
@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "debug": "^2.2.0",
-    "deep-assign": "^2.0.0"
+    "config": "^1.21.0"
   },
   "devDependencies": {
     "babel-cli": "^6.1.4",
