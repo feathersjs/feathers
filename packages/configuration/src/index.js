@@ -1,15 +1,15 @@
-import fs from 'fs';
-import path from 'path';
 import makeDebug from 'debug';
-import deepAssign from 'deep-assign';
+import path from 'path';
 
 const debug = makeDebug('feathers:configuration');
+const config = require('config');
 const separator = path.sep;
 
-export default module.exports = function (root, configFolder = 'config', deep = true) {
+export default module.exports = function () {
   return function() {
-    const app = this;
-    const env = app.settings.env;
+
+    let app = this;
+
     const convert = current => {
       const result = Array.isArray(current) ? [] : {};
 
@@ -29,7 +29,7 @@ export default module.exports = function (root, configFolder = 'config', deep = 
             } else if(value.indexOf('.') === 0 || value.indexOf('..') === 0) {
               // Make relative paths absolute
               value = path.resolve(
-                path.join(root, configFolder),
+                path.join(config.util.getEnv('NODE_CONFIG_DIR')),
                 value.replace(/\//g, separator)
               );
             }
@@ -42,24 +42,17 @@ export default module.exports = function (root, configFolder = 'config', deep = 
       return result;
     };
 
-    let config = convert(require(path.join(root, configFolder, 'default')));
-
+    const env = config.util.getEnv('NODE_ENV');
     debug(`Initializing configuration for ${env} environment`);
+    const conf = convert(config);
 
-    const envConfig = path.join(root, configFolder, env);
-    // We can use sync here since configuration only happens once at startup
-    if(fs.existsSync(`${envConfig}.js`) || fs.existsSync(`${envConfig}.json`)) {
-      config = deep ? deepAssign(config, convert(require(envConfig))) :
-        Object.assign(config, convert(require(envConfig)));
-    } else {
-      debug(`Configuration file for ${env} environment not found at ${envConfig}`);
+    if(!app) {
+      return conf;
     }
 
-    Object.keys(config).forEach(name => {
-      let value = config[name];
-
+    Object.keys(conf).forEach(name => {
+      let value = conf[name];
       debug(`Setting ${name} configuration value to`, value);
-
       app.set(name, value);
     });
   };

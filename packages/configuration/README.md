@@ -6,15 +6,13 @@
 
 ## About
 
-`feathers-configuration` allows you to load default and environment specific JSON configuration files and environment variables and set them on your application. Here is what it does:
+This release of `feathers-configuration` simply acts as a wrapped around [node-config](https://github.com/lorenwest/node-config).
 
-- Given a root and configuration path load a `default.json` in that path
-- When the `NODE_ENV` is not `development`, also try to load `<NODE_ENV>.json` in that path and merge both configurations
-- Go through each configuration value and sets it on the application (via `app.set(name, value)`).
-  - If the value is a valid environment variable (e.v. `NODE_ENV`), use its value instead
-  - If the value start with `./` or `../` turn it it an absolute path relative to the configuration file path
-- Both `default` and `<env>` configurations can be modules which provide their computed settings with `module.exports = {...}` and a `.js` file suffix. See `test/config/testing.js` for an example.  
-All rules listed above apply for `.js` modules.
+By default this implementation will look in `config/*` for `default.json`.
+
+As per the [config docs](https://github.com/lorenwest/node-config/wiki/Configuration-Files) this is highly configurable.
+
+Future releases will also include adapters for external configuration storage.
 
 ## Usage
 
@@ -25,7 +23,7 @@ import feathers from 'feathers';
 import configuration from 'feathers-configuration';
 
 // Use the current folder as the root and look configuration up in `settings`
-let app = feathers().configure(configuration(__dirname, 'settings'))
+let app = feathers().configure()
 ```
 
 ## Example
@@ -55,18 +53,22 @@ In `config/production.js` we are going to use environment variables (e.g. set by
 
 Now it can be used in our `app.js` like this:
 
-```
+```js
 import feathers from 'feathers';
 import configuration from 'feathers-configuration';
 
+let conf = configuration();
+
 let app = feathers()
-  .configure(configuration(__dirname));
+  .configure(conf);
 
 console.log(app.get('frontend'));
 console.log(app.get('host'));
 console.log(app.get('port'));
 console.log(app.get('mongodb'));
 console.log(app.get('templates'));
+console.log(conf());
+
 ```
 
 If you now run
@@ -80,7 +82,14 @@ node app
 // -> path/to/templates
 ```
 
-Or with a different environment and variables:
+Or via custom environment variables by setting them in `config/custom-environment-variables.json`:
+
+```js
+{
+  "port": "PORT",
+  "mongodb": "MONGOHQ_URL"
+}
+```
 
 ```
 PORT=8080 MONGOHQ_URL=mongodb://localhost:27017/production NODE_ENV=production node app
@@ -90,6 +99,8 @@ PORT=8080 MONGOHQ_URL=mongodb://localhost:27017/production NODE_ENV=production n
 // -> mongodb://localhost:27017/production
 // -> path/to/templates
 ```
+
+You can also override these variables with arguments. Read more about how with [node-config](https://github.com/lorenwest/node-config)
 
 ## License
 
