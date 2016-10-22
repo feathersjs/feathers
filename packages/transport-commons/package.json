@@ -34,10 +34,18 @@
     "release:major": "npm version major && npm publish",
     "compile": "rm -rf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
-    "jshint": "jshint src/. test/. --config",
+    "lint": "eslint-if-supported semistandard --fix",
     "mocha": "mocha --opts mocha.opts",
     "coverage": "istanbul cover _mocha -- --opts mocha.opts",
-    "test": "npm run compile && npm run jshint && npm run coverage"
+    "test": "npm run compile && npm run lint && npm run coverage"
+  },
+  "semistandard": {
+    "env": [
+      "mocha"
+    ],
+    "ignore": [
+      "/lib"
+    ]
   },
   "directories": {
     "lib": "lib"
@@ -53,9 +61,10 @@
     "babel-plugin-add-module-exports": "^0.2.0",
     "babel-polyfill": "^6.9.0",
     "babel-preset-es2015": "^6.3.13",
+    "eslint-if-supported": "^1.0.1",
     "feathers": "^2.0.0",
     "istanbul": "^1.1.0-alpha.1",
-    "jshint": "^2.9.1",
-    "mocha": "^3.0.0"
+    "mocha": "^3.0.0",
+    "semistandard": "^9.1.0"
   }
 }

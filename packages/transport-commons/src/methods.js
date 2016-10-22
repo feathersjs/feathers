@@ -1,5 +1,5 @@
-import { getArguments } from 'feathers-commons';
-import { normalizeError } from './utils';
+import {getArguments} from 'feathers-commons';
+import {normalizeError} from './utils';
 
 const debug = require('debug')('feathers-socket-commons:methods');
 
@@ -12,7 +12,7 @@ export const paramsPositions = {
 };
 
 // Set up all method handlers for a service and socket.
-export function setupMethodHandlers(info, socket, path, service) {
+export function setupMethodHandlers (info, socket, path, service) {
   this.methods.forEach(method => {
     if (typeof service[method] !== 'function') {
       return;
@@ -20,8 +20,8 @@ export function setupMethodHandlers(info, socket, path, service) {
 
     let name = `${path}::${method}`;
     let connection = info.params(socket);
-    let position = typeof paramsPositions[method] !== 'undefined' ?
-      paramsPositions[method] : 1;
+    let position = typeof paramsPositions[method] !== 'undefined'
+      ? paramsPositions[method] : 1;
 
     debug(`Setting up socket listener for event '${name}'`);
 
@@ -36,9 +36,9 @@ export function setupMethodHandlers(info, socket, path, service) {
         // isn’t up to it’s standards, so you we inject a new error handler
         // to print a debug log and clean up the error object so it actually
         // gets transmitted back to the client.
-        args[position] = Object.assign({ query: args[position] }, connection);
-        args[args.length - 1] = function(error, data) {
-          if(error) {
+        args[position] = Object.assign({query: args[position]}, connection);
+        args[args.length - 1] = function (error, data) {
+          if (error) {
             debug(`Error calling ${name}`, error);
             return callback(normalizeError(error));
           }
@@ -47,10 +47,10 @@ export function setupMethodHandlers(info, socket, path, service) {
         };
 
         service[method].apply(service, args);
-      } catch(e) {
+      } catch (e) {
         let callback = arguments[arguments.length - 1];
         debug(`Error on socket`, e);
-        if(typeof callback === 'function') {
+        if (typeof callback === 'function') {
           callback(normalizeError(e));
         }
       }

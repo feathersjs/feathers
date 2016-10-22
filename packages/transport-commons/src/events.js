@@ -3,15 +3,15 @@ import { events, promisify, convertFilterData, normalizeError } from './utils';
 
 const debug = require('debug')('feathers-socket-commons:events');
 
-export function filterMixin(service) {
-  if(typeof service.filter === 'function' || typeof service.mixin !== 'function') {
+export function filterMixin (service) {
+  if (typeof service.filter === 'function' || typeof service.mixin !== 'function') {
     return;
   }
 
   service.mixin({
     _eventFilters: { all: [] },
 
-    filter(event, callback) {
+    filter (event, callback) {
       const obj = typeof event === 'string' ? { [event]: callback } : event;
       const filterData = convertFilterData(obj);
 
@@ -28,17 +28,17 @@ export function filterMixin(service) {
 }
 
 // The default event dispatcher
-export function defaultDispatcher(data, params, callback) {
+export function defaultDispatcher (data, params, callback) {
   callback(null, data);
 }
 
-export function getDispatcher(service, ev, data, hook) {
+export function getDispatcher (service, ev, data, hook) {
   const hasLegacy = events.indexOf(ev) !== -1 && typeof service[ev] === 'function';
   const originalDispatcher = hasLegacy ? service[ev] : defaultDispatcher;
   const eventFilters = (service._eventFilters.all || (service._eventFilters.all = []))
     .concat(service._eventFilters[ev] || []);
 
-  return function(connection) {
+  return function (connection) {
     let promise = promisify(originalDispatcher, service, data, connection);
 
     if (eventFilters.length) {
@@ -46,7 +46,7 @@ export function getDispatcher(service, ev, data, hook) {
       eventFilters.forEach(filterFn => {
         if (filterFn.length === 4) { // function(data, connection, hook, callback)
           promise = promise.then(data => {
-            if(data) {
+            if (data) {
               return promisify(filterFn, service, data, connection, hook);
             }
 
@@ -54,7 +54,7 @@ export function getDispatcher(service, ev, data, hook) {
           });
         } else { // function(data, connection, hook)
           promise = promise.then(data => {
-            if(data) {
+            if (data) {
               return filterFn.call(service, data, connection, hook);
             }
 
@@ -71,7 +71,7 @@ export function getDispatcher(service, ev, data, hook) {
 }
 
 // Set up event handlers for a given service using the event dispatching mechanism
-export function setupEventHandlers(info, path, service) {
+export function setupEventHandlers (info, path, service) {
   // If the service emits events that we want to listen to (Event mixin)
   if (typeof service.on !== 'function' || !service._serviceEvents) {
     return;
@@ -87,7 +87,7 @@ export function setupEventHandlers(info, path, service) {
 
         dispatcher(info.params(socket))
           .then(data => {
-            if(data) {
+            if (data) {
               debug(`Dispatching ${eventName} with data`, data);
               send(eventName, data);
             } else {

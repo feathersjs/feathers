@@ -4,17 +4,17 @@ import { filterMixin, setupEventHandlers } from './events';
 
 const debug = require('debug')('feathers-socket-commons');
 
-function socketMixin(service) {
-  if(typeof service.mixin !== 'function') {
+function socketMixin (service) {
+  if (typeof service.mixin !== 'function') {
     return;
   }
 
   service.mixin({
-    setup(app, path) {
+    setup (app, path) {
       if (!this._socketSetup) {
         const info = app._socketInfo;
         const isSubApp = app.mountpath !== '/' && typeof app.mountpath === 'string';
-        const mountpath =  isSubApp ? app.mountpath : '';
+        const mountpath = isSubApp ? app.mountpath : '';
         const fullPath = stripSlashes(`${mountpath}/${path}`);
         const setupSocket = socket => {
           setupMethodHandlers.call(app, info, socket, fullPath, this);
@@ -34,15 +34,15 @@ function socketMixin(service) {
 
       this._socketSetup = true;
 
-      if(typeof this._super === 'function') {
+      if (typeof this._super === 'function') {
         return this._super.apply(this, arguments);
       }
     }
   });
 }
 
-export default function createMixin(property) {
-  return function mixin() {
+export default function createMixin (property) {
+  return function mixin () {
     const app = this;
 
     app.mixins.push(socketMixin);
@@ -53,10 +53,10 @@ export default function createMixin(property) {
     app.on('mount', parent => {
       const oldSetup = parent.setup;
 
-      parent.setup = function(... args) {
+      parent.setup = function (...args) {
         const result = oldSetup.apply(this, args);
         app[property] = parent[property];
-        app.setup(... args);
+        app.setup(...args);
         return result;
       };
     });
