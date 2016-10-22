@@ -6,7 +6,7 @@ import { events } from '../src/utils';
 
 describe('client', () => {
   const connection = new EventEmitter();
-  const testData = { data: 'testing '};
+  const testData = { data: 'testing ' };
   const service = new Service({
     name: 'todos',
     method: 'emit',

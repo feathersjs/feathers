@@ -3,7 +3,7 @@ import { convertFilterData, promisify, normalizeError } from '../src/utils';
 
 describe('utils', () => {
   it('convertFilterData', () => {
-    const fn = function() {};
+    const fn = function () {};
 
     assert.deepEqual(convertFilterData(fn), {
       all: [fn]
@@ -25,9 +25,9 @@ describe('utils', () => {
   it('promisify', done => {
     const context = {};
     const message = 'a can not be null';
-    const fn = function(a, b, callback) {
+    const fn = function (a, b, callback) {
       assert.equal(this, context);
-      if(a === null) {
+      if (a === null) {
         return callback(new Error(message));
       }
       callback(null, a + b);

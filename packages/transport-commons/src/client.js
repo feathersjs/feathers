@@ -22,8 +22,8 @@ const otherEmitterMethods = [
 
 const addEmitterMethods = service => {
   otherEmitterMethods.forEach(method => {
-    service[method] = function(...args) {
-      if(typeof this.connection[method] !== 'function') {
+    service[method] = function (...args) {
+      if (typeof this.connection[method] !== 'function') {
         throw new Error(`Can not call '${method}' on the client service connection.`);
       }
 
@@ -32,8 +32,8 @@ const addEmitterMethods = service => {
   });
 
   namespacedEmitterMethods.forEach(method => {
-    service[method] = function(name, ...args) {
-      if(typeof this.connection[method] !== 'function') {
+    service[method] = function (name, ...args) {
+      if (typeof this.connection[method] !== 'function') {
         throw new Error(`Can not call '${method}' on the client service connection.`);
       }
 
@@ -50,7 +50,7 @@ const addEmitterMethods = service => {
 };
 
 export default class Service {
-  constructor(options) {
+  constructor (options) {
     this.events = events;
     this.path = options.name;
     this.connection = options.connection;
@@ -60,7 +60,7 @@ export default class Service {
     addEmitterMethods(this);
   }
 
-  send(method, ...args) {
+  send (method, ...args) {
     let callback = null;
     if (typeof args[args.length - 1] === 'function') {
       callback = args.pop();
@@ -73,7 +73,7 @@ export default class Service {
       ), this.timeout);
 
       args.unshift(event);
-      args.push(function(error, data) {
+      args.push(function (error, data) {
         error = convert(error);
         clearTimeout(timeoutId);
 
@@ -86,41 +86,41 @@ export default class Service {
 
       debug(`Sending socket.${this.method}`, args);
 
-      this.connection[this.method](... args);
+      this.connection[this.method](...args);
     });
   }
 
-  find(params = {}) {
+  find (params = {}) {
     return this.send('find', params.query || {});
   }
 
-  get(id, params = {}) {
+  get (id, params = {}) {
     return this.send('get', id, params.query || {});
   }
 
-  create(data, params = {}) {
+  create (data, params = {}) {
     return this.send('create', data, params.query || {});
   }
 
-  update(id, data, params = {}) {
+  update (id, data, params = {}) {
     return this.send('update', id, data, params.query || {});
   }
 
-  patch(id, data, params = {}) {
+  patch (id, data, params = {}) {
     return this.send('patch', id, data, params.query || {});
   }
 
-  remove(id, params = {}) {
+  remove (id, params = {}) {
     return this.send('remove', id, params.query || {});
   }
 
-  off(name, ... args) {
-    if(typeof this.connection.off === 'function') {
-      return this.connection.off(`${this.path} ${name}`, ... args);
-    } else if(args.length === 0) {
+  off (name, ...args) {
+    if (typeof this.connection.off === 'function') {
+      return this.connection.off(`${this.path} ${name}`, ...args);
+    } else if (args.length === 0) {
       return this.removeAllListeners(name);
     }
 
-    return this.removeListener(name, ... args);
+    return this.removeListener(name, ...args);
   }
 }

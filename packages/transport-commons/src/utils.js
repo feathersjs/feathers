@@ -10,14 +10,14 @@ export const eventMappings = {
 export const events = Object.keys(eventMappings)
   .map(method => eventMappings[method]);
 
-export function convertFilterData(obj) {
+export function convertFilterData (obj) {
   return hooks.convertHookData(obj);
 }
 
-export function promisify(method, context, ... args) {
+export function promisify (method, context, ...args) {
   return new Promise((resolve, reject) => {
-    method.apply(context, args.concat(function(error, result) {
-      if(error) {
+    method.apply(context, args.concat(function (error, result) {
+      if (error) {
         return reject(error);
       }
 
@@ -26,12 +26,12 @@ export function promisify(method, context, ... args) {
   });
 }
 
-export function normalizeError(e) {
+export function normalizeError (e) {
   let result = {};
 
-  Object.getOwnPropertyNames(e).forEach(key => result[key] = e[key]);
+  Object.getOwnPropertyNames(e).forEach(key => (result[key] = e[key]));
 
-  if(process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production') {
     delete result.stack;
   }
 
