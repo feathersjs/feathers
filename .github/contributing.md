@@ -8,15 +8,15 @@ This repo is the main core and where most issues are reported. Feathers embraces
 
 Before creating an issue please make sure you have checked out the docs, specifically the [FAQ](https://docs.feathersjs.com/help/faq.html) section. You might want to also try searching Github. It's pretty likely someone has already asked a similar question.
 
-If you haven't found your answer then, feel free to join our [slack channel](http://slack.feathersjs.com), create an issue on Github, or post on [Stackoverflow](http://stackoverflow.com) using the `feathers` or `feathersjs` tag. We try our best to monitor Stackoverflow but you're likely to get more immediate responses in Slack and Github.
+If you haven't found your answer please feel free to join our [slack channel](http://slack.feathersjs.com), create an issue on Github, or post on [Stackoverflow](http://stackoverflow.com) using the `feathers` or `feathersjs` tag. We try our best to monitor Stackoverflow but you're likely to get more immediate responses in Slack and Github.
 
-Issues can be reported in the [issue tracker](https://github.com/feathersjs/feathers/issues).  Since feathers combines many modules it can be hard for us to assess the root cause without knowing which modules are being used and what your configuration looks like, so it helps us immensely if you can link to a simple example that reproduces your issue.
+Issues can be reported in the [issue tracker](https://github.com/feathersjs/feathers/issues).  Since feathers combines many modules it can be hard for us to assess the root cause without knowing which modules are being used and what your configuration looks like, so **it helps us immensely if you can link to a simple example that reproduces your issue**.
 
 ## Report a Security Concern
 
-We take security very seriously at Feathers. We welcome any peer review of our 100% open source code to ensure nobody's Feathers app is ever compromised or hacked. As a web application developer you are responsible for any security breaches. We do our very best to make sure Feathers is as secure as possible.
+We take security very seriously at Feathers. We welcome any peer review of our 100% open source code to ensure nobody's Feathers app is ever compromised or hacked. As a web application developer you are responsible for any security breaches. We do our very best to make sure Feathers is as secure as possible by default.
 
-In order to give the community time to respond and upgrade we strongly urge you report all security issues to us. Send one of the core team members a PM in Slack or email us at hello@feathersjs.com with details and we will respond ASAP.
+In order to give the community time to respond and upgrade we strongly urge you report all security issues to us. Send one of the core team members a PM in [Slack](http://slack.feathersjs.com) or email us at hello@feathersjs.com with details and we will respond ASAP.
 
 For full details refer to our [Security docs](https://docs.feathersjs.com/SECURITY.html).
 
@@ -24,7 +24,9 @@ For full details refer to our [Security docs](https://docs.feathersjs.com/SECURI
 
 We :heart: pull requests and we're continually working to make it as easy as possible for people to contribute, including a [Plugin Generator](https://github.com/feathersjs/generator-feathers-plugin) and a [common test suite](https://github.com/feathersjs/feathers-service-tests) for database adapters.
 
-We prefer small pull requests with minimal code changes. The smaller they are the easier they are to review and merge. A core team member will pick up your PR and review it as soon as they can. They may ask for changes or reject your Pull Request. This is not a reflection of you as an engineer or person. Please accept feedback graciously as we will also be sensitive when providing it.
+We prefer small pull requests with minimal code changes. The smaller they are the easier they are to review and merge. A core team member will pick up your PR and review it as soon as they can. They may ask for changes or reject your pull request. This is not a reflection of you as an engineer or a person. Please accept feedback graciously as we will also try to be sensitive when providing it.
+
+Although we generally accept many PRs they can be rejected for many reasons. We will be as transparent as possible but it may simply be that you do not have the same context or information regarding the roadmap that the core team members have. We value the time you take to put together any contributions so we pledge to always be respectful of that time and will try to be as open as possible so that you don't waste it. :smile:
 
 **All PRs (except documentation) should be accompanied with tests and pass the linting rules.**
 
@@ -46,7 +48,7 @@ __Note:__ `npm test` will run the compilation automatically before the tests.
 
 ### Documentation
 
-Feathers documentation is contained in Markdown files in the [feathers-docs](https://github.com/feathersjs/feathers-docs) folder. To change the documentation submit a pull request to that repo referencing your other PR and the docs will be updated with the next release.
+Feathers documentation is contained in Markdown files in the [feathers-docs](https://github.com/feathersjs/feathers-docs) repository. To change the documentation submit a pull request to that repo, referencing any other PR if applicable, and the docs will be updated with the next release.
 
 ## External Modules
 

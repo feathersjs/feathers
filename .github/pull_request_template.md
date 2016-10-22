@@ -3,7 +3,11 @@
 (If you have not already please refer to the contributing guideline as [described
 here](https://github.com/feathersjs/feathers/blob/master/.github/contributing.md#pull-requests))
 
-Tell us about the problem your Pull Request is solving... are there any open issues that are related to this? Is this PR dependent on PRs in other repos? If so, please mention them to keep the conversations linked together.
+- [ ] Tell us about the problem your pull request is solving.
+- [ ] Are there any open issues that are related to this?
+- [ ] Is this PR dependent on PRs in other repos?
+
+If so, please mention them to keep the conversations linked together.
 
 ### Other Information
 
