@@ -28,17 +28,13 @@ const rest = require('feathers-rest');
 const hooks = require('feathers-hooks');
 const bodyParser = require('body-parser');
 const errorHandler = require('feathers-errors/handler');
-const plugin = require('feathers-authentication-client');
+const auth = require('feathers-authentication-client');
 
 // Initialize the application
 const app = feathers()
   .configure(rest())
   .configure(hooks())
-  // Needed for parsing bodies (login)
-  .use(bodyParser.json())
-  .use(bodyParser.urlencoded({ extended: true }))
-  // Initialize your feathers plugin
-  .use('/plugin', plugin())
+  .configure(auth())
   .use(errorHandler());
 
 app.listen(3030);
