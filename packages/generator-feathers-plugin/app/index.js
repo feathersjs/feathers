@@ -49,8 +49,9 @@ module.exports = generators.Base.extend({
   writing: function () {
     this.fs.copy(this.templatePath('static/.*'), this.destinationPath());
     this.fs.copy(this.templatePath('static/**/*'), this.destinationPath());
+    this.fs.copy(this.templatePath('static/.github/**/*'), this.destinationPath('.github/'));
 
-    Object.keys(this.fileMap).forEach(function(src) {
+    Object.keys(this.fileMap).forEach(function (src) {
       var target = this.fileMap[src];
 
       this.fs.copyTpl(
@@ -72,6 +73,6 @@ module.exports = generators.Base.extend({
       'istanbul@1.1.0-alpha.1',
       'chai@^3.5.0',
       'rimraf@^2.5.0'
-    ], { saveDev: true});
+    ], {saveDev: true});
   }
 });
