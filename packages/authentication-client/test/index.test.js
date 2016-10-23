@@ -149,6 +149,9 @@ describe('Client side authentication', () => {
 
     before(done => {
       createApplication(settings, email, password, true, (err, obj) => {
+        if (err) {
+          done(err);
+        }
         server = obj.server;
 
         setTimeout(done, 10);
@@ -170,6 +173,9 @@ describe('Client side authentication', () => {
 
     before(done => {
       createApplication(settings, email, password, true, (err, obj) => {
+        if (err) {
+          done(err);
+        }
         server = obj.server;
         socket = io('http://localhost:8888');
 
@@ -195,6 +201,9 @@ describe('Client side authentication', () => {
 
     before(done => {
       createApplication(settings, email, password, false, (err, obj) => {
+        if (err) {
+          done(err);
+        }
         const Socket = Primus.createSocket({
           transformer: 'websockets',
           plugin: {

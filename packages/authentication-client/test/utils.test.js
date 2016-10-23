@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { retrieveJWT, verifyJWT } from '../../src/client/utils';
+import { retrieveJWT, verifyJWT } from '../src/utils';
 
 const validToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjozNDc2MzkyNDgwLCJpYXQiOjE0NzYzOTI0ODAsImlzcyI6ImZlYXRoZXJzIn0.0V6NKoNszBPeIA72xWs2FDW6aPxOnHzEmskulq20uyo';
 const expiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJleHAiOjE0NzYzOTI0ODAsImlhdCI6MTQ3NjM5MjQ4MCwiaXNzIjoiZmVhdGhlcnMifQ.6rzpXFqWSmNEotnWo8f-SQ2Ey4rbar3f0pQKNTHdq9A';
@@ -27,7 +27,6 @@ describe('retrieveJWT', () => {
     });
   });
 });
-
 
 describe('verifyJWT', () => {
   it('decodes a token string properly', () => {
