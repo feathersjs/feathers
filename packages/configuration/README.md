@@ -6,13 +6,29 @@
 
 ## About
 
-This release of `feathers-configuration` simply acts as a wrapped around [node-config](https://github.com/lorenwest/node-config).
+The v0.4.x release of `feathers-configuration` is a breaking version and implementations that were made with earlier versions of the module may be required to make some minor changes. Please see the [migrating](#migrating) section for specifics.
 
-By default this implementation will look in `config/*` for `default.json`.
+This module is a simple wrapped on [node-config](https://github.com/lorenwest/node-config) that adds a bit of convenience. By default this implementation will look in `config/*` for `default.json` which retains convention. As per the [config docs](https://github.com/lorenwest/node-config/wiki/Configuration-Files) you can organize *"hierarchical configurations for your app deployments"*. See the usage section below for better information how to implement this.
 
-As per the [config docs](https://github.com/lorenwest/node-config/wiki/Configuration-Files) this is highly configurable.
+Please note: future releases will also include the ability to define adapters which will allow you to use external configuration storage like [vault](https://www.vaultproject.io/) or [etcd](https://github.com/coreos/etcd).
 
-Future releases will also include adapters for external configuration storage.
+## Migrating
+
+Moving from 0.3.x to 0.4.x should be *mostly* backwards compatible. The main change is that instead of passing the location of your configuration into the module constructor like this: 
+
+```js
+let config = require('feathers-configuration')(root, env, deepAssign);
+```
+
+The module now simply inherits from `NODE_ENV` and `NODE_CONFIG_DIR` as per the [config docs](https://github.com/lorenwest/node-config/wiki/Configuration-Files):
+
+```js
+$ NODE_ENV=development NODE_CONFIG_DIR=./config/ node app.js 
+```
+
+If you are currently setting your configurations via construction arguments, you will need to move these values out of your app into these environment variables.
+
+With the implementation of node-config we also now have the ability to set a `custom-environment-variables.json` file which will allow you to define which variables to override from `process.env`. See below for examples.
 
 ## Usage
 
@@ -92,7 +108,7 @@ Or via custom environment variables by setting them in `config/custom-environmen
 ```
 
 ```
-PORT=8080 MONGOHQ_URL=mongodb://localhost:27017/production NODE_ENV=production node app
+$ PORT=8080 MONGOHQ_URL=mongodb://localhost:27017/production NODE_ENV=production node app
 // -> path/to/app/public/dist
 // -> myapp.com
 // -> 8080
