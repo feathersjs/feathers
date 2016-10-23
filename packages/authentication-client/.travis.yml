@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - 'node'
+  - '6'
+  - '4'
+addons:
+  code_climate:
+    repo_token: 'your repo token'
+notifications:
+  slack: feathersjs:T4tvpJFt27wJZABjLSg5OqMv
+  email: false
+before_script:
+  - npm install -g codeclimate-test-reporter
+after_script:
+  - codeclimate-test-reporter < coverage/lcov.info
