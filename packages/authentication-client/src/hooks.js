@@ -1,5 +1,5 @@
-export function populateParams() {
-  return function(hook) {
+export function populateParams () {
+  return function (hook) {
     const app = hook.app;
 
     Object.assign(hook.params, {
@@ -11,8 +11,8 @@ export function populateParams() {
   };
 }
 
-export function populateHeader(options = {}) {
-  return function(hook) {
+export function populateHeader (options = {}) {
+  return function (hook) {
     if (hook.params.token) {
       hook.params.headers = Object.assign({}, {
         [options.header || 'authorization']: hook.params.token

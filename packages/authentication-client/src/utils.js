@@ -1,9 +1,9 @@
 import decode from 'jwt-decode';
 
 // Returns a promise that resolves when the socket is connected
-export function connected(app) {
+export function connected (app) {
   return new Promise((resolve, reject) => {
-    if(app.rest) {
+    if (app.rest) {
       return resolve();
     }
 
@@ -19,7 +19,7 @@ export function connected(app) {
     socket.once('close', reject);
 
     // If the socket is not connected yet we have to wait for the `connect` event
-    if( (app.io && !socket.connected) || (app.primus && socket.readyState !== 3)) {
+    if ((app.io && !socket.connected) || (app.primus && socket.readyState !== 3)) {
       const connectEvent = app.primus ? 'open' : 'connect';
       socket.once(connectEvent, () => resolve(socket));
     } else {
@@ -29,7 +29,7 @@ export function connected(app) {
 }
 
 // Returns a promise that authenticates a socket
-export function authenticateSocket(options, socket, method) {
+export function authenticateSocket (options, socket, method) {
   return new Promise((resolve, reject) => {
     socket.once('unauthorized', reject);
     socket.once('authenticated', resolve);
@@ -39,7 +39,7 @@ export function authenticateSocket(options, socket, method) {
 }
 
 // Returns a promise that de-authenticates a socket
-export function logoutSocket(socket, method) {
+export function logoutSocket (socket, method) {
   return new Promise((resolve, reject) => {
     socket[method]('logout', error => {
       if (error) {
@@ -52,12 +52,12 @@ export function logoutSocket(socket, method) {
 }
 
 // Returns the value for a cookie
-export function getCookie(name) {
+export function getCookie (name) {
   if (typeof document !== 'undefined') {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
 
-    if(parts.length === 2) {
+    if (parts.length === 2) {
       return parts.pop().split(';').shift();
     }
   }
@@ -66,7 +66,7 @@ export function getCookie(name) {
 }
 
 // Returns the value for a cookie
-export function clearCookie(name) {
+export function clearCookie (name) {
   if (typeof document !== 'undefined') {
     document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
   }
@@ -119,15 +119,15 @@ export function getStorage (storage) {
 
   return {
     store: {},
-    getItem(key) {
+    getItem (key) {
       return this.store[key];
     },
 
-    setItem(key, value) {
+    setItem (key, value) {
       return (this.store[key] = value);
     },
 
-    removeItem(key) {
+    removeItem (key) {
       delete this.store[key];
       return this;
     }
