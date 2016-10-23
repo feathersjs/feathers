@@ -76,6 +76,7 @@
     "request": "^2.75.0",
     "rimraf": "^2.5.4",
     "semistandard": "^9.1.0",
-    "socket.io-client": "^1.5.0"
+    "socket.io-client": "^1.5.0",
+    "ws": "^1.1.1"
   }
 }
