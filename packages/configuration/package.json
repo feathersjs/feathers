@@ -34,9 +34,17 @@
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "compile": "rm -rf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
-    "jshint": "jshint src/. test/. --config",
+    "lint": "eslint-if-supported semistandard --fix",
     "mocha": "NODE_CONFIG_DIR=./test/config/ NODE_ENV=testing mocha test/ --compilers js:babel-core/register",
-    "test": "npm run jshint && npm run mocha && nsp check"
+    "test": "npm run lint && npm run mocha && nsp check"
+  },
+  "semistandard": {
+    "env": [
+      "mocha"
+    ],
+    "ignore": [
+      "/lib"
+    ]
   },
   "directories": {
     "lib": "lib"
@@ -50,9 +58,10 @@
     "babel-core": "^6.1.4",
     "babel-plugin-transform-object-assign": "^6.1.18",
     "babel-preset-es2015": "^6.1.4",
+    "eslint-if-supported": "^1.0.1",
     "feathers": "^2.0.0",
-    "jshint": "^2.8.0",
     "mocha": "^3.0.0",
-    "nsp": "^2.2.0"
+    "nsp": "^2.2.0",
+    "semistandard": "^9.1.0"
   }
 }

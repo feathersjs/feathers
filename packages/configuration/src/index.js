@@ -6,8 +6,7 @@ const config = require('config');
 const separator = path.sep;
 
 export default module.exports = function () {
-  return function() {
-
+  return function () {
     let app = this;
 
     const convert = current => {
@@ -16,17 +15,17 @@ export default module.exports = function () {
       Object.keys(current).forEach(name => {
         let value = current[name];
 
-        if(typeof value === 'object' && value !== null) {
+        if (typeof value === 'object' && value !== null) {
           value = convert(value);
         }
 
-        if(typeof value === 'string') {
-          if(value.indexOf('\\') === 0) {
+        if (typeof value === 'string') {
+          if (value.indexOf('\\') === 0) {
             value = value.replace('\\', '');
           } else {
-            if(process.env[value]) {
+            if (process.env[value]) {
               value = process.env[value];
-            } else if(value.indexOf('.') === 0 || value.indexOf('..') === 0) {
+            } else if (value.indexOf('.') === 0 || value.indexOf('..') === 0) {
               // Make relative paths absolute
               value = path.resolve(
                 path.join(config.util.getEnv('NODE_CONFIG_DIR')),
@@ -46,7 +45,7 @@ export default module.exports = function () {
     debug(`Initializing configuration for ${env} environment`);
     const conf = convert(config);
 
-    if(!app) {
+    if (!app) {
       return conf;
     }
 
