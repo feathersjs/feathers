@@ -1,4 +1,4 @@
-/* global describe, it*/
+/* global describe, it */
 'use strict';
 
 var path = require('path');
@@ -12,7 +12,7 @@ describe('feathers-plugin generator', function () {
     var tmpDir;
 
     helpers.run(path.join(__dirname, '../app'))
-      .inTmpDir(function(dir) {
+      .inTmpDir(function (dir) {
         tmpDir = dir;
       })
       .withOptions({
@@ -30,6 +30,9 @@ describe('feathers-plugin generator', function () {
         assert.ok(fs.existsSync(path.join(tmpDir, '.editorconfig')));
         assert.ok(fs.existsSync(path.join(tmpDir, '.babelrc')));
         assert.ok(fs.existsSync(path.join(tmpDir, '.istanbul.yml')));
+        assert.ok(fs.existsSync(path.join(tmpDir, '.github', 'contributing.md')));
+        assert.ok(fs.existsSync(path.join(tmpDir, '.github', 'issue_template.md')));
+        assert.ok(fs.existsSync(path.join(tmpDir, '.github', 'pull_request_template.md')));
         assert.ok(fs.existsSync(path.join(tmpDir, 'package.json')));
         assert.ok(fs.existsSync(path.join(tmpDir, 'mocha.opts')));
         assert.ok(fs.existsSync(path.join(tmpDir, 'src', 'index.js')));
@@ -40,16 +43,16 @@ describe('feathers-plugin generator', function () {
         });
         var buffer = '';
 
-        child.stdout.on('data', function(data) {
+        child.stdout.on('data', function (data) {
           buffer += data.toString();
         });
 
-        child.stderr.on('data', function(data) {
+        child.stderr.on('data', function (data) {
           buffer += data.toString();
         });
 
         child.on('exit', function (status) {
-          if(status !== 0) {
+          if (status !== 0) {
             return done(new Error(buffer));
           }
 

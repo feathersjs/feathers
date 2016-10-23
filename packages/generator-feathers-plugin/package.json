@@ -20,12 +20,21 @@
     "url": "git://github.com/feathersjs/generator-feathers-plugin.git"
   },
   "scripts": {
-    "test": "mocha test/ --timeout 180000",
+    "lint": "semistandard --fix",
+    "test": "npm run lint && mocha test/ --timeout 180000",
     "publish": "git push origin && git push origin --tags",
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish"
+  },
+  "semistandard": {
+    "env": [
+      "mocha"
+    ],
+    "ignore": [
+      "/lib"
+    ]
   },
   "dependencies": {
     "object.assign": "^4.0.3",
@@ -33,6 +42,7 @@
   },
   "devDependencies": {
     "mocha": "^3.1.0",
+    "semistandard": "^9.1.0",
     "yeoman-test": "^1.4.0"
   },
   "engines": {
