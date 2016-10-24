@@ -31,11 +31,11 @@
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
-    "compile": "rm -rf lib/ && node_modules/.bin/babel -d lib/ src/",
+    "compile": "rimraf lib/ && node_modules/.bin/babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "lint": "eslint-if-supported semistandard --fix",
     "mocha": "mocha --opts mocha.opts",
-    "coverage": "istanbul cover _mocha -- --opts mocha.opts",
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
     "test": "npm run compile && npm run lint && npm run coverage"
   },
   "semistandard": {
@@ -60,6 +60,7 @@
     "istanbul": "^1.1.0-alpha.1",
     "jshint": "^2.6.3",
     "mocha": "^3.0.0",
+    "rimraf": "^2.5.4",
     "semistandard": "^9.1.0"
   }
 }
