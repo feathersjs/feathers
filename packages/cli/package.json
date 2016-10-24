@@ -40,7 +40,7 @@
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
-    "compile": "rm -rf lib/ && babel -d lib/ src/",
+    "compile": "rimraf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
     "mocha": "mocha test/ --compilers js:babel-core/register",
@@ -65,6 +65,7 @@
     "feathers": "^2.0.0",
     "jshint": "^2.9.1",
     "lodash": "^4.6.1",
-    "mocha": "^2.4.5"
+    "mocha": "^2.4.5",
+    "rimraf": "^2.5.4"
   }
 }
