@@ -32,7 +32,7 @@
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
-    "compile": "rm -rf lib/ && babel -d lib/ src/ && mkdir lib/public/ && cp src/public/* lib/public/",
+    "compile": "rimraf lib/ && babel -d lib/ src/ && mkdir lib/public/ && cp src/public/* lib/public/",
     "watch": "babel --watch -d lib/ src/",
     "lint": "eslint-if-supported semistandard --fix",
     "mocha": "mocha test/ --compilers js:babel-core/register",
@@ -65,6 +65,7 @@
     "feathers": "^2.0.0",
     "mocha": "^3.0.0",
     "request": "^2.69.0",
+    "rimraf": "^2.5.4",
     "semistandard": "^9.1.0",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0"
