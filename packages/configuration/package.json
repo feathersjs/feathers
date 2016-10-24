@@ -32,7 +32,7 @@
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
-    "compile": "rm -rf lib/ && babel -d lib/ src/",
+    "compile": "rimraf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "lint": "eslint-if-supported semistandard --fix",
     "mocha": "NODE_CONFIG_DIR=./test/config/ NODE_ENV=testing mocha test/ --compilers js:babel-core/register",
@@ -62,6 +62,7 @@
     "feathers": "^2.0.0",
     "mocha": "^3.0.0",
     "nsp": "^2.2.0",
+    "rimraf": "^2.5.4",
     "semistandard": "^9.1.0"
   }
 }
