@@ -1,5 +1,17 @@
 # Change Log
 
+## [v0.4.1](https://github.com/feathersjs/feathers-configuration/tree/v0.4.1) (2016-10-24)
+[Full Changelog](https://github.com/feathersjs/feathers-configuration/compare/v0.4.0...v0.4.1)
+
+**Closed issues:**
+
+- Investigate node-config [\#8](https://github.com/feathersjs/feathers-configuration/issues/8)
+
+**Merged pull requests:**
+
+- update readme [\#29](https://github.com/feathersjs/feathers-configuration/pull/29) ([slajax](https://github.com/slajax))
+- jshint —\> semistandard [\#28](https://github.com/feathersjs/feathers-configuration/pull/28) ([corymsmith](https://github.com/corymsmith))
+
 ## [v0.4.0](https://github.com/feathersjs/feathers-configuration/tree/v0.4.0) (2016-10-22)
 [Full Changelog](https://github.com/feathersjs/feathers-configuration/compare/v0.3.3...v0.4.0)
 
