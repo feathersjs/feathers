@@ -32,11 +32,11 @@
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
-    "compile": "rm -rf lib/ && babel -d lib/ src/",
+    "compile": "rimraf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "lint": "eslint-if-supported semistandard --fix",
     "mocha": "mocha --opts mocha.opts",
-    "coverage": "istanbul cover _mocha -- --opts mocha.opts",
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
     "test": "npm run compile && npm run lint && npm run coverage"
   },
   "semistandard": {
@@ -65,6 +65,7 @@
     "feathers": "^2.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.0.0",
+    "rimraf": "^2.5.4",
     "semistandard": "^9.1.0"
   }
 }
