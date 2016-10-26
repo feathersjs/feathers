@@ -5,6 +5,7 @@
 [![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-primus/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-primus/coverage)
 [![Dependency Status](https://img.shields.io/david/feathersjs/feathers-primus.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers-primus)
 [![Download Status](https://img.shields.io/npm/dm/feathers-primus.svg?style=flat-square)](https://www.npmjs.com/package/feathers-primus)
+[![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 
 > The Feathers Primus real-time API provider
 
