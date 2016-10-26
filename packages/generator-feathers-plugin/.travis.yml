@@ -1,9 +1,17 @@
 sudo: false
 language: node_js
-node_js: node
+node_js:
+- node
+- '6'
+- '4'
+- iojs
+- '0.12'
+- '0.10'
 notifications:
-  slack: feathersjs:T4tvpJFt27wJZABjLSg5OqMv
   email: false
+  slack:
+    rooms:
+      secure: ii82kXxOxUh8IWOH170d8zj42Y/hdOrWt5qoA7jmqn7mNFERB4A1sEu+CMcHGLURT8ZqPZI6z5DNzMO7z/eu7FOzuS+OqGXRF5IsFVCWz+up4MCKauQ77xOFLaf8zRRU+ZDFxFLsb4RUcfLv5+naLPkYQp71/QP2I/oQ7w4Fvas=
 before_install:
   - currentfolder=${PWD##*/}
   - if [ "$currentfolder" != 'generator-feathers-plugin' ]; then cd .. && eval "mv $currentfolder generator-feathers-plugin" && cd generator-feathers-plugin; fi
