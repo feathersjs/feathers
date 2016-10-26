@@ -3,3 +3,8 @@ src/
 test/
 !lib/
 .github/
+coverage
+.editorconfig
+.travis.yml
+.istanbul.yml
+.babelrc
