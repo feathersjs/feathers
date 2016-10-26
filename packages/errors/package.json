@@ -35,8 +35,9 @@
     "compile": "rimraf lib/ && babel -d lib/ src/ && mkdir lib/public/ && cp src/public/* lib/public/",
     "watch": "babel --watch -d lib/ src/",
     "lint": "eslint-if-supported semistandard --fix",
-    "mocha": "mocha test/ --compilers js:babel-core/register",
-    "test": "npm run compile && npm run lint && npm run mocha"
+    "mocha": "mocha --opts mocha.opts",
+    "test": "npm run compile && npm run lint && npm run coverage",
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts"
   },
   "semistandard": {
     "env": [
@@ -63,6 +64,7 @@
     "chai": "^3.5.0",
     "eslint-if-supported": "^1.0.1",
     "feathers": "^2.0.0",
+    "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.0.0",
     "request": "^2.69.0",
     "rimraf": "^2.5.4",
