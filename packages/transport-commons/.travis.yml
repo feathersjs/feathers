@@ -12,3 +12,8 @@ before_script:
   - npm install -g codeclimate-test-reporter
 after_script:
   - codeclimate-test-reporter < coverage/lcov.info
+notifications:
+  email: false
+  slack:
+    rooms:
+      secure: kBShpkglnAJE51VwunU/Om/NSmDaHuUdTw7DL1O9I9K8QfJ30BdDylaMDBDPN65sCxz2xJbD5CFPgFKNcSzD0r1UTYABe7fIWcJR2qHQXgH9yCz2irq2Zdq+GgbDTR6n3rypnaSj0Z7Jk5xHK9pvsg2PSe/In7LdyTqZzymKfxpn5Ib50EOfUdYX+0/Q2bn9jYGH3HOA2468qMLYlhLIVMWxnv8DmIn4gKeKXisM5gI0NHRaNMVlz7uu6rhTRG5a8/I8Swn834JwZewPLd/JhBidQZOoPdb1/wJX+lwMdv5vwAHtyXUu9AWgp3w0OX6CJ7tXqZBBccZz6SCr0xXXPSj/4/XmUi4tUZuic8jwwfLRLQRt4kjI7LNWo/h43VnkPzBSWgTtAl0jIrDAZEZ4FwfJZWlvLKieo+x9hQpS7xF0kCE1cJTaB8yhcTZ74pI99MTQuL/aIHrZq4rUT21Udt8GdZ7Ctwevk/ezwFJzEQO0V7DdZaF5t7ZFLSzhpgRNd4Ir/FrYgLoeTeGGYOg9AP1mPd41k3ZvTeba1FY7oPeZHaPF3fGxkA4uTyPe4g94931tAKEHWeC9Skw1WhN4ZTrFdWteH1czKwc/12+PkyOhzAxqYb7I4IXAxJgj/WyKM7oqnKWOvq3fPbJ4IZ01vg9haf4G7szTGneqIZt0u7E=
