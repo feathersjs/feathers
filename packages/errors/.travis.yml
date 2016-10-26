@@ -1,7 +1,21 @@
 sudo: false
 language: node_js
 node_js:
-  - '0.10'
-  - '0.12'
-  - 'node'
-  - 'iojs'
+- node
+- '6'
+- '4'
+- iojs
+- '0.12'
+- '0.10'
+before_script:
+- npm install -g codeclimate-test-reporter
+after_script:
+- codeclimate-test-reporter < coverage/lcov.info
+addons:
+  code_climate:
+    repo_token: 79bf1da6311c0a60e481f617f3666ae4068535bca3f9e0cfaa5a1500758d986b
+notifications:
+  email: false
+  slack:
+    rooms:
+      secure: A45tmvXAxLq82nbr8vazo30OpiDo1UMKkmMzmCjUfGjJ7dcAspCmOZOg/qpj5Pe/gKI5uGNq7/cF+JWMXVxC+dirndl+eo1WQrDcR5IzAUe0Zku43SoK19hFYpZy4zSL6z4bAL03Id4Sst0wSH0tnAyvagPASlaUAH4EM//fZ1I=
