@@ -35,8 +35,9 @@
     "compile": "rimraf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "lint": "eslint-if-supported semistandard --fix",
-    "mocha": "NODE_CONFIG_DIR=./test/config/ NODE_ENV=testing mocha test/ --compilers js:babel-core/register",
-    "test": "npm run lint && npm run mocha && nsp check"
+    "mocha": "NODE_CONFIG_DIR=./test/config/ NODE_ENV=testing mocha --opts mocha.opts",
+    "test": "npm run lint && npm run coverage && nsp check",
+    "coverage": "NODE_CONFIG_DIR=./test/config/ NODE_ENV=testing istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts"
   },
   "semistandard": {
     "env": [
@@ -60,6 +61,7 @@
     "babel-preset-es2015": "^6.1.4",
     "eslint-if-supported": "^1.0.1",
     "feathers": "^2.0.0",
+    "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.0.0",
     "nsp": "^2.2.0",
     "rimraf": "^2.5.4",
