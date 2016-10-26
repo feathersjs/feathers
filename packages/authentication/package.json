@@ -35,8 +35,9 @@
     "compile": "rimraf lib/ && babel -d lib/ src/ && mkdir lib/public/ && cp src/public/* lib/public/",
     "watch": "babel --watch -d lib/ src/",
     "jshint": "jshint src/. test/. --config",
-    "mocha": "mocha --recursive test/ --compilers js:babel-core/register",
-    "test": "npm run compile && npm run jshint && npm run mocha && nsp check"
+    "mocha": "mocha --opts mocha.opts",
+    "test": "npm run compile && npm run jshint && npm run coverage && nsp check",
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts"
   },
   "directories": {
     "lib": "lib"
@@ -67,6 +68,7 @@
     "feathers-primus": "^1.3.2",
     "feathers-rest": "^1.2.2",
     "feathers-socketio": "^1.3.2",
+    "istanbul": "^1.1.0-alpha.1",
     "jshint": "^2.8.0",
     "localstorage-memory": "^1.0.2",
     "mocha": "^3.0.0",
