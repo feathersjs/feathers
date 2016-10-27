@@ -24,7 +24,9 @@ For full details refer to our [Security docs](https://docs.feathersjs.com/SECURI
 
 We :heart: pull requests and we're continually working to make it as easy as possible for people to contribute, including a [Plugin Generator](https://github.com/feathersjs/generator-feathers-plugin) and a [common test suite](https://github.com/feathersjs/feathers-service-tests) for database adapters.
 
-We prefer small pull requests with minimal code changes. The smaller they are the easier they are to review and merge. A core team member will pick up your PR and review it as soon as they can. They may ask for changes or reject your pull request. This is not a reflection of you as an engineer or a person. Please accept feedback graciously as we will also try to be sensitive when providing it.
+All repos follow proper semantic verisioning and if the `master` branch is not the current release it is considered unstable. We tag all releases so you can always see which version of the code and documentation you are using.
+
+Pull requests should be to the `master` branch unless another branch is specifically requested by a core team member. We prefer small pull requests with minimal code changes. The smaller they are the easier they are to review and merge. A core team member will pick up your PR and review it as soon as they can. They may ask for changes or reject your pull request. This is not a reflection of you as an engineer or a person. Please accept feedback graciously as we will also try to be sensitive when providing it.
 
 Although we generally accept many PRs they can be rejected for many reasons. We will be as transparent as possible but it may simply be that you do not have the same context or information regarding the roadmap that the core team members have. We value the time you take to put together any contributions so we pledge to always be respectful of that time and will try to be as open as possible so that you don't waste it. :smile:
 
@@ -52,7 +54,7 @@ Feathers documentation is contained in Markdown files in the [feathers-docs](htt
 
 ## External Modules
 
-If you're written something awesome for Feathers, the Feathers ecosystem, or using Feathers please add it to the [showcase](https://docs.feathersjs.com/why/showcase.html). You also might want to check out the [Plugin Generator](https://github.com/feathersjs/generator-feathers-plugin) that can be used to scaffold plugins to be Feathers compliant from the start.
+If you've written something awesome for Feathers, the Feathers ecosystem, or using Feathers please add it to the [showcase](https://docs.feathersjs.com/why/showcase.html). You also might want to check out the [Plugin Generator](https://github.com/feathersjs/generator-feathers-plugin) that can be used to scaffold plugins to be Feathers compliant from the start.
 
 If you think it would be a good core module then please contact one of the Feathers core team members in [Slack](http://slack.feathersjs.com) and we can discuss whether it belongs in core and how to get it there. :beers:
 
