@@ -7,7 +7,6 @@ addons:
   code_climate:
     repo_token: 'your repo token'
 notifications:
-  slack: feathersjs:T4tvpJFt27wJZABjLSg5OqMv
   email: false
 before_script:
   - npm install -g codeclimate-test-reporter
