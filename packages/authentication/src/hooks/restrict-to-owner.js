@@ -6,13 +6,14 @@ const defaults = {
   ownerField: 'userId'
 };
 
-export default function(options = {}){
+export default function(options = {}) {
   return function(hook) {
     if (hook.type !== 'before') {
       throw new Error(`The 'restrictToOwner' hook should only be used as a 'before' hook.`);
     }
 
-    if (!hook.id) {
+    // Check hook is being called on an allowable method
+    if (!(hook.method === 'get' || hook.method === 'update' || hook.method === 'patch' || hook.method === 'remove')) {
       throw new errors.MethodNotAllowed(`The 'restrictToOwner' hook should only be used on the 'get', 'update', 'patch' and 'remove' service methods.`);
     }
 

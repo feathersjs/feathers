@@ -28,7 +28,8 @@ describe('restrictToOwner', () => {
   describe('when not called as a before hook', () => {
     it('throws an error', () => {
       let hook = {
-        type: 'after'
+        type: 'after',
+        method: 'get',
       };
 
       try {
@@ -43,7 +44,8 @@ describe('restrictToOwner', () => {
   describe('when not called with an id', () => {
     it('throws an error', () => {
       let hook = {
-        type: 'before'
+        type: 'before',
+        method: 'get',
       };
 
       try {
@@ -60,6 +62,7 @@ describe('restrictToOwner', () => {
       let hook = {
         id: '1',
         type: 'before',
+        method: 'get',
         params: {}
       };
 
@@ -79,6 +82,7 @@ describe('restrictToOwner', () => {
       let hook = {
         id: '1',
         type: 'before',
+        method: 'get',
         params: {
           provider: 'rest'
         }
@@ -100,6 +104,7 @@ describe('restrictToOwner', () => {
       hook = {
         id: '1',
         type: 'before',
+        method: 'get',
         params: {
           provider: 'rest',
           user: { _id: '1' }
