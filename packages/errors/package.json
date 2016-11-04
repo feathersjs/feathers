@@ -1,7 +1,7 @@
 {
   "name": "feathers-errors",
   "description": "Common error types for feathers apps",
-  "version": "2.4.1",
+  "version": "2.4.0",
   "homepage": "https://github.com/feathersjs/feathers-errors",
   "main": "lib/index",
   "keywords": [
@@ -28,10 +28,11 @@
   },
   "scripts": {
     "prepublish": "npm run compile",
-    "publish": "git push origin && git push origin --tags",
+    "publish": "git push origin --tags && npm run changelog && git push origin",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
+    "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "compile": "rimraf lib/ && babel -d lib/ src/ && mkdir lib/public/ && cp src/public/* lib/public/",
     "watch": "babel --watch -d lib/ src/",
     "lint": "eslint-if-supported semistandard --fix",
