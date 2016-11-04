@@ -66,75 +66,8 @@ var validationErrors = new errors.BadRequest('Invalid Parameters', {errors: {ema
 var validationErrors = new errors.BadRequest({errors: {email: 'Invalid Email'} });
 ```
 
-## Release History
-__2.4.1__
-- Adding more error types
-
-__2.4.0__
-
-- Adding ability to get a feathers errors instance by status code
-
-__2.3.0__
-
-- Add a not found error handler. Required using `require('feathers-errors/not-found')`.
-
-__2.1.0__
-
-- converts over to chai for tests
-- adds better support for detecting `content-type` and `accepts` headers
-- makes JSON the default response
-- adds support for passing a custom html handler
-- adds support for passing a custom json handler
-
-__2.0.0__
-- Moving error handler out of default bundle so that it doesn't break React Native and browser builds. Now needs to be required using `require('feathers-errors/handler')`.
-
-__1.2.0__
-- Adding error handler and basic static error pages back in
-
-__1.1.2__
-- Adding more tests
-- Adding even more flexibility for handling multiple errors
-
-__1.1.1__
-- Fixing critical bug [#15](https://github.com/feathersjs/feathers-errors/issues/15)
-
-__1.1.0__
-- Adding better support for multiple errors
-
-__1.0.0__
- - converting to ES6
- - making structure consistent with other plugins
- - removing error handlers [#11](https://github.com/feathersjs/feathers-errors/issues/11)
-
-__0.2.0__
-
-- Adding support for mongoose errors [Issue #5](https://github.com/feathersjs/feathers-errors/issues/5).
-
-__0.1.4__
-
-- Adding more error types
-- Changing `missing` to `fourOhFour`
-- Making library feathers core compatible
-
-__0.1.3__
-
-- Adding a default error page
-
-__0.1.2__
-
-- Minor bug fixes
-
-__0.1.1__
-
-- Exposing error types directly via `var types = require('feathers-errors').types;`
-
-__0.1.0__
-
-- Initial release
-
 ## License
 
-Copyright (c) 2015 Feathers Contributors
+Copyright (c) 2016 Feathers Contributors
 
 Licensed under the [MIT license](LICENSE).
