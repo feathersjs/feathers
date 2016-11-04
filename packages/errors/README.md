@@ -32,9 +32,12 @@ npm install --save feathers-errors
 * `NotAcceptable`: 406
 * `Timeout`: 408
 * `Conflict`: 409
+* `LengthRequired`: 411
 * `Unprocessable`: 422
+* `TooManyRequests`: 429
 * `GeneralError`: 500
 * `NotImplemented`: 501
+* `BadGateway`: 502
 * `Unavailable`: 503
 
 **Pro Tip:** Feathers service adapters (ie. mongodb, memory, etc.) already emit the appropriate errors for you. :-)
@@ -64,6 +67,9 @@ var validationErrors = new errors.BadRequest({errors: {email: 'Invalid Email'} }
 ```
 
 ## Release History
+__2.4.1__
+- Adding more error types
+
 __2.4.0__
 
 - Adding ability to get a feathers errors instance by status code

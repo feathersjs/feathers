@@ -74,8 +74,16 @@ describe('feathers-errors', () => {
       assert.notEqual(typeof errors.Conflict, 'undefined', 'has Conflict');
     });
 
+    it('Length Required', () => {
+      assert.notEqual(typeof errors.LengthRequired, 'undefined', 'has LengthRequired');
+    });
+
     it('Unprocessable', () => {
       assert.notEqual(typeof errors.Unprocessable, 'undefined', 'has Unprocessable');
+    });
+
+    it('Too Many Requests', () => {
+      assert.notEqual(typeof errors.TooManyRequests, 'undefined', 'has TooManyRequests');
     });
 
     it('General Error', () => {
@@ -84,6 +92,10 @@ describe('feathers-errors', () => {
 
     it('Not Implemented', () => {
       assert.notEqual(typeof errors.NotImplemented, 'undefined', 'has NotImplemented');
+    });
+
+    it('Bad Gateway', () => {
+      assert.notEqual(typeof errors.BadGateway, 'undefined', 'has BadGateway');
     });
 
     it('Unavailable', () => {
@@ -126,8 +138,16 @@ describe('feathers-errors', () => {
       assert.notEqual(typeof errors[409], 'undefined', 'has Conflict alias');
     });
 
+    it('411', () => {
+      assert.notEqual(typeof errors[411], 'undefined', 'has LengthRequired alias');
+    });
+
     it('422', () => {
       assert.notEqual(typeof errors[422], 'undefined', 'has Unprocessable alias');
+    });
+
+    it('429', () => {
+      assert.notEqual(typeof errors[429], 'undefined', 'has TooManyRequests alias');
     });
 
     it('500', () => {
@@ -136,6 +156,10 @@ describe('feathers-errors', () => {
 
     it('501', () => {
       assert.notEqual(typeof errors[501], 'undefined', 'has NotImplemented alias');
+    });
+
+    it('502', () => {
+      assert.notEqual(typeof errors[502], 'undefined', 'has BadGateway alias');
     });
 
     it('503', () => {
