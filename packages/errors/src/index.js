@@ -125,9 +125,21 @@ class Conflict extends FeathersError {
   }
 }
 
+class LengthRequired extends FeathersError {
+  constructor (message, data) {
+    super(message, 'LengthRequired', 411, 'length-required', data);
+  }
+}
+
 class Unprocessable extends FeathersError {
   constructor (message, data) {
     super(message, 'Unprocessable', 422, 'unprocessable', data);
+  }
+}
+
+class TooManyRequests extends FeathersError {
+  constructor (message, data) {
+    super(message, 'TooManyRequests', 429, 'too-many-requests', data);
   }
 }
 
@@ -140,6 +152,12 @@ class GeneralError extends FeathersError {
 class NotImplemented extends FeathersError {
   constructor (message, data) {
     super(message, 'NotImplemented', 501, 'not-implemented', data);
+  }
+}
+
+class BadGateway extends FeathersError {
+  constructor (message, data) {
+    super(message, 'BadGateway', 502, 'bad-gateway', data);
   }
 }
 
@@ -160,9 +178,12 @@ const errors = {
   NotAcceptable,
   Timeout,
   Conflict,
+  LengthRequired,
   Unprocessable,
+  TooManyRequests,
   GeneralError,
   NotImplemented,
+  BadGateway,
   Unavailable,
   400: BadRequest,
   401: NotAuthenticated,
@@ -173,9 +194,12 @@ const errors = {
   406: NotAcceptable,
   408: Timeout,
   409: Conflict,
+  411: LengthRequired,
   422: Unprocessable,
+  429: TooManyRequests,
   500: GeneralError,
   501: NotImplemented,
+  502: BadGateway,
   503: Unavailable
 };
 
