@@ -13,8 +13,7 @@ const defaults = {
   usernameField: 'email',
   passwordField: 'password',
   passReqToCallback: true,
-  session: false,
-  Verifier: DefaultVerifier
+  session: false
 };
 
 export default function init(options = {}) {
@@ -29,7 +28,13 @@ export default function init(options = {}) {
     // auth for an easier transition.
     const authSettings = app.get('auth') || {};
     const localSettings = merge(defaults, authSettings.local, omit(options, ['Verifier']));
-    let verifier = new options.Verifier(app, localSettings);
+    let Verifier = DefaultVerifier;
+
+    if (options.Verifier) {
+      Verifier = options.Verifier;
+    }
+
+    let verifier = new Verifier(app, localSettings);
 
     if (!verifier.verify) {
       throw new Error(`Your verifier must implement a 'verify' function. It should have the same signature as a local passport verify callback.`)
