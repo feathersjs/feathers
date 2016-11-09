@@ -1,32 +1,157 @@
 if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 import assert from 'assert';
-import * as utils from '../src/utils';
+import {
+  _, specialFilters, sorter, matcher,
+  stripSlashes, select, selectMany
+} from '../src/utils';
 
 describe('feathers-commons utils', () => {
   it('stripSlashes', () => {
-    assert.equal(utils.stripSlashes('some/thing'), 'some/thing');
-    assert.equal(utils.stripSlashes('/some/thing'), 'some/thing');
-    assert.equal(utils.stripSlashes('some/thing/'), 'some/thing');
-    assert.equal(utils.stripSlashes('/some/thing/'), 'some/thing');
-    assert.equal(utils.stripSlashes('//some/thing/'), 'some/thing');
-    assert.equal(utils.stripSlashes('//some//thing////'), 'some//thing');
+    assert.equal(stripSlashes('some/thing'), 'some/thing');
+    assert.equal(stripSlashes('/some/thing'), 'some/thing');
+    assert.equal(stripSlashes('some/thing/'), 'some/thing');
+    assert.equal(stripSlashes('/some/thing/'), 'some/thing');
+    assert.equal(stripSlashes('//some/thing/'), 'some/thing');
+    assert.equal(stripSlashes('//some//thing////'), 'some//thing');
   });
 
-  it('each', () => {
-    utils.each({ hi: 'there' }, (value, key) => {
-      assert.equal(key, 'hi');
-      assert.equal(value, 'there');
+  describe('_', () => {
+    it('each', () => {
+      _.each({ hi: 'there' }, (value, key) => {
+        assert.equal(key, 'hi');
+        assert.equal(value, 'there');
+      });
+
+      _.each([ 'hi' ], (value, key) => {
+        assert.equal(key, 0);
+        assert.equal(value, 'hi');
+      });
     });
 
-    utils.each([ 'hi' ], (value, key) => {
-      assert.equal(key, 0);
-      assert.equal(value, 'hi');
+    it('some', () => {
+      assert.ok(_.some([ 'a', 'b' ], current => current === 'a'));
+      assert.ok(!_.some([ 'a', 'b' ], current => current === 'c'));
+    });
+
+    it('every', () => {
+      assert.ok(_.every([ 'a', 'a' ], current => current === 'a'));
+      assert.ok(!_.every([ 'a', 'b' ], current => current === 'a'));
+    });
+
+    it('keys', () => {
+      const data = { hi: 'there', name: 'David' };
+
+      assert.deepEqual(_.keys(data), [ 'hi', 'name' ]);
+    });
+
+    it('values', () => {
+      const data = { hi: 'there', name: 'David' };
+
+      assert.deepEqual(_.values(data), [ 'there', 'David' ]);
+    });
+
+    it('isMatch', () => {
+      assert.ok(_.isMatch({
+        test: 'me', hi: 'you', more: true
+      }, {
+        test: 'me', hi: 'you'
+      }));
+
+      assert.ok(!_.isMatch({
+        test: 'me', hi: 'you', more: true
+      }, {
+        test: 'me', hi: 'there'
+      }));
+    });
+
+    it('isEmpty', () => {
+      assert.ok(_.isEmpty({}));
+      assert.ok(!_.isEmpty({ name: 'David' }));
+    });
+
+    it('extend', () => {
+      assert.deepEqual(_.extend({ hi: 'there' }, { name: 'david' }), {
+        hi: 'there',
+        name: 'david'
+      });
+    });
+
+    it('omit', () => {
+      assert.deepEqual(_.omit({
+        name: 'David',
+        first: 1,
+        second: 2
+      }, 'first', 'second'), {
+        name: 'David'
+      });
+    });
+
+    it('pick', () => {
+      assert.deepEqual(_.pick({
+        name: 'David',
+        first: 1,
+        second: 2
+      }, 'first', 'second'), {
+        first: 1,
+        second: 2
+      });
+    });
+  });
+
+  describe('selecting', () => {
+    it('select', () => {
+      const selector = select('name', 'age');
+
+      return Promise.resolve({
+        name: 'David',
+        age: 3,
+        test: 'me'
+      })
+      .then(selector)
+      .then(result => assert.deepEqual(result, {
+        name: 'David',
+        age: 3
+      }));
+    });
+
+    it('selectMany', () => {
+      const selector = selectMany('name', 'age');
+
+      return Promise.resolve([{
+        name: 'David',
+        age: 3,
+        test: 'me'
+      }])
+      .then(selector)
+      .then(result => assert.deepEqual(result, [{
+        name: 'David',
+        age: 3
+      }]));
+    });
+
+    it('selectMany paginated', () => {
+      const selector = selectMany('name', 'age');
+
+      return Promise.resolve({
+        data: [{
+          name: 'David',
+          age: 3,
+          test: 'me'
+        }]
+      })
+      .then(selector)
+      .then(result => assert.deepEqual(result, {
+        data: [{
+          name: 'David',
+          age: 3
+        }]
+      }));
     });
   });
 
   describe('specialFilters', () => {
-    const filters = utils.specialFilters;
+    const filters = specialFilters;
 
     it('$in', () => {
       const fn = filters.$in('test', ['a', 'b']);
@@ -90,11 +215,11 @@ describe('feathers-commons utils', () => {
         name: 'Eric'
       }];
 
-      const sorter = utils.sorter({
+      const sort = sorter({
         name: -1
       });
 
-      assert.deepEqual(array.sort(sorter), [{
+      assert.deepEqual(array.sort(sort), [{
         name: 'Eric'
       }, {
         name: 'David'
@@ -116,12 +241,12 @@ describe('feathers-commons utils', () => {
         counter: 0
       }];
 
-      const sorter = utils.sorter({
+      const sort = sorter({
         name: -1,
         counter: 1
       });
 
-      assert.deepEqual(array.sort(sorter), [
+      assert.deepEqual(array.sort(sort), [
         { name: 'Eric', counter: 0 },
         { name: 'David', counter: 0 },
         { name: 'Eric', counter: 1 },
@@ -132,20 +257,20 @@ describe('feathers-commons utils', () => {
 
   describe('matcher', () => {
     it('simple match', () => {
-      const matches = utils.matcher({ name: 'Eric' });
+      const matches = matcher({ name: 'Eric' });
 
       assert.ok(matches({ name: 'Eric' }));
       assert.ok(!matches({ name: 'David' }));
     });
 
     it('does not match $select', () => {
-      const matches = utils.matcher({ $select: [ 'name' ] });
+      const matches = matcher({ $select: [ 'name' ] });
 
       assert.ok(matches({ name: 'Eric' }));
     });
 
     it('$or match', () => {
-      const matches = utils.matcher({ $or: [{ name: 'Eric' }, { name: 'Marshall' }] });
+      const matches = matcher({ $or: [{ name: 'Eric' }, { name: 'Marshall' }] });
 
       assert.ok(matches({ name: 'Eric' }));
       assert.ok(matches({ name: 'Marshall' }));
@@ -153,7 +278,7 @@ describe('feathers-commons utils', () => {
     });
 
     it('$or nested match', () => {
-      const matches = utils.matcher({
+      const matches = matcher({
         $or: [
           { name: 'Eric' },
           { age: { $gt: 18, $lt: 32 } }
@@ -173,7 +298,7 @@ describe('feathers-commons utils', () => {
     });
 
     it('special filter matches', () => {
-      const matches = utils.matcher({
+      const matches = matcher({
         counter: { $gt: 10, $lte: 19 },
         name: { $in: ['Eric', 'Marshall'] }
       });
@@ -184,7 +309,7 @@ describe('feathers-commons utils', () => {
     });
 
     it('special filter and simple matches', () => {
-      const matches = utils.matcher({
+      const matches = matcher({
         counter: 0,
         name: { $in: ['Eric', 'Marshall'] }
       });

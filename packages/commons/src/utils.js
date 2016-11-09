@@ -11,22 +11,51 @@ export function each (obj, callback) {
 }
 
 export const _ = {
+  each,
+
   some (value, callback) {
     return Object.keys(value)
       .map(key => [ value[key], key ])
       .some(current => callback(...current));
   },
+
   every (value, callback) {
     return Object.keys(value)
       .map(key => [ value[key], key ])
       .every(current => callback(...current));
   },
-  isMatch (obj, item) {
-    return Object.keys(item).every(key => obj[key] === item[key]);
+
+  keys (obj) {
+    return Object.keys(obj);
   },
+
+  values (obj) {
+    return _.keys(obj).map(key => obj[key]);
+  },
+
+  isMatch (obj, item) {
+    return _.keys(item).every(key => obj[key] === item[key]);
+  },
+
+  isEmpty (obj) {
+    return _.keys(obj).length === 0;
+  },
+
+  extend (...args) {
+    return Object.assign(...args);
+  },
+
   omit (obj, ...keys) {
-    const result = Object.assign({}, obj);
+    const result = _.extend({}, obj);
     keys.forEach(key => delete result[key]);
+    return result;
+  },
+
+  pick (source, ...keys) {
+    const result = {};
+    keys.forEach(key => {
+      result[key] = source[key];
+    });
     return result;
   }
 };
@@ -60,6 +89,26 @@ export const specialFilters = {
     return current => current[key] !== value;
   }
 };
+
+export function select (...fields) {
+  return result => _.pick(result, ...fields);
+}
+
+export function selectMany (...fields) {
+  const selector = select(...fields);
+
+  return function (result) {
+    if (Array.isArray(result)) {
+      return result.map(selector);
+    }
+
+    if (result.data) {
+      result.data = result.data.map(selector);
+    }
+
+    return result;
+  };
+}
 
 export function matcher (originalQuery) {
   const query = _.omit(originalQuery, '$limit', '$skip', '$sort', '$select');
