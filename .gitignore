@@ -33,3 +33,6 @@ tmp*
 
 # The compiled/babelified modules
 lib/
+
+# Typings dependencies
+typings/
