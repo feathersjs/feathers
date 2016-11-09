@@ -1,5 +1,13 @@
 # Change Log
 
+## [v0.8.0](https://github.com/feathersjs/feathers-commons/tree/v0.8.0) (2016-11-09)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.7.8...v0.8.0)
+
+**Merged pull requests:**
+
+- Implementing lodash utilities and helpers for selecting [\#38](https://github.com/feathersjs/feathers-commons/pull/38) ([daffl](https://github.com/daffl))
+- jshint —\> semistandard [\#37](https://github.com/feathersjs/feathers-commons/pull/37) ([corymsmith](https://github.com/corymsmith))
+
 ## [v0.7.8](https://github.com/feathersjs/feathers-commons/tree/v0.7.8) (2016-10-21)
 [Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.7.7...v0.7.8)
 
