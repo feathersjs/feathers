@@ -16,19 +16,102 @@ npm install feathers-authentication-local --save
 
 ## Documentation
 
-Please refer to the [feathers-authentication-local documentation](http://docs.feathersjs.com/) for more details.
+<!-- Please refer to the [feathers-authentication-local documentation](http://docs.feathersjs.com/) for more details. -->
+
+## API
+
+This module contains 3 core pieces:
+
+1. The main entry function
+2. The `hashPassword` hook 
+3. The `Verifier` class
+
+### Main Initialization
+
+In most initializing the `feathers-authentication-local` module is simply:
+
+```js
+app.configure(authentication(settings));
+app.configure(local());
+```
+
+This will pull from your global `auth` object in your config file. It will also mix in the following defaults, which can be customized.
+
+#### Default Options
+
+```js
+{
+    name: 'local', // the name to use when invoking the authentication Strategy
+    entity: 'user', // the entity that you comparing username/password against
+    service: 'users', // the service to look up the entity
+    usernameField: 'email', // key name of username field
+    passwordField: 'password', // key name of password field
+    passReqToCallback: true, // whether the request object should be passed to `verify`
+    session: false // whether to use sessions,
+    Verifier: Verifier // A Verifier class. Defaults to the built-in one but can be a custom one. See below for details.
+}
+```
+
+### hashPassword hook
+
+This hook is used to hash plain text passwords before they are saved to the database. It uses the bcrypt algorithm by default but can be customized by passing your own `optionk.hash` function.
+
+#### Default Options
+
+```js
+{
+    passwordField: 'password', // key name of password field to look on hook.data
+    hash: 'function' // default bcrypt hash function. Takes in a password and returns a hash.
+}
+```
+
+### Verifier
+
+This is the verification class that does the username and password verification by looking up the entity (normally a `user`) on a given service and compares the hashed password using bcrypt. It has the following methods that can be overridden. All methods return a promise.
+
+```js
+{
+    constructor(app, options) // the class constructor
+    comparePassword(entity, password) // compares password using bcrypt
+    normalizeResult(result) // normalizes result from service to account for pagination
+    verify(req, username, password, done) // queries the service and calls the other internal functions.
+}
+```
+
+
+## Customizing the Verifier
+
+The `Verifier` class can be extended so that you customize it's behavior without having to rewrite and test a totally custom local Passport implementation. Although that is always an option if you don't want use this plugin.
+
+An example of customizing the Verifier:
+
+```js
+import local, { Verifier } from 'feathers-authentication-local';
+
+class CustomVerifier extends Verifier {
+  verify(req, username, password, done) {
+    // do your custom stuff. You can call internal Verifier methods
+    // and reference this.app and this.options. This method must be implemented.
+    done(null, user);
+  }
+}
+
+app.configure(local({ Verifier: CustomVerifier }));
+```
 
 ## Complete Example
 
-Here's an example of a Feathers server that uses `feathers-authentication-local`. 
+Here's a basic example of a Feathers server that uses `feathers-authentication-local`. You can see a fully working example in the [example/](./example/) directory.
 
 ```js
 const feathers = require('feathers');
 const rest = require('feathers-rest');
 const hooks = require('feathers-hooks');
+const memory = require('feathers-memory');
 const bodyParser = require('body-parser');
 const errorHandler = require('feathers-errors/handler');
-const plugin = require('feathers-authentication-local');
+const auth = require('feathers-authentication');
+const local = require('feathers-authentication-local');
 
 // Initialize the application
 const app = feathers()
@@ -37,8 +120,11 @@ const app = feathers()
   // Needed for parsing bodies (login)
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
-  // Initialize your feathers plugin
-  .use('/plugin', plugin())
+  // Initialize a user service. This must come first
+  .use('/users', memory())
+  // Configure feathers-authentication
+  .configure(auth({ secret: 'super secret' }))
+  .configure(local())
   .use(errorHandler());
 
 app.listen(3030);
