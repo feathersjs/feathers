@@ -1,68 +1,53 @@
 import Debug from 'debug';
-import localAuthHook from './local-auth';
+import merge from 'lodash.merge';
+import omit from 'lodash.omit';
+import hooks from './hooks';
+import DefaultVerifier from './verifier';
+import { Strategy as LocalStrategy } from 'passport-local';
 
 const debug = Debug('feathers-authentication-local');
+const defaults = {
+  name: 'local',
+  entity: 'user',
+  service: 'users',
+  usernameField: 'email',
+  passwordField: 'password',
+  passReqToCallback: true,
+  session: false,
+  Verifier: DefaultVerifier
+};
 
 export default function init(options = {}) {
   return function localAuth() {
     const app = this;
 
-    if(!app.authentication) {
-      throw new Error(`Can not find app.authentication. Did you initialize feathers-authentication before feathers-authentication-local?`);
+    if (!app.passport) {
+      throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before feathers-authentication-local?`);
     }
 
-    const authSettings = app.authentication.options;
-    const defaults = {
-      comparePassword(user, password) {
-        const field = this.options.user.passwordField;
-        const hash = user[field];
+    // NOTE (EK): Pull from global auth config to support legacy
+    // auth for an easier transition.
+    const authSettings = app.get('auth') || {};
+    const localSettings = merge(defaults, authSettings.local, omit(options, ['Verifier']));
+    let verifier = new options.Verifier(app, localSettings);
 
-        if (!hash) {
-          return Promise.reject(new Error(`User record in the database is missing a '${field}'`));
-        }
+    if (!verifier.verify) {
+      throw new Error(`Your verifier must implement a 'verify' function. It should have the same signature as a local passport verify callback.`)
+    }
 
-        debug('Verifying password');
+    // Set local options back on global auth config
+    authSettings.local = localSettings;
+    app.set('auth', authSettings);
 
-        return new Promise((resolve, reject) => {
-          bcrypt.compare(password, hash, function(error, result) {
-            // Handle 500 server error.
-            if (error) {
-              return reject(error);
-            }
-
-            if (!result) {
-              return reject(false);
-            }
-
-            debug('Password correct');
-            return resolve(user);
-          });
-        });
-      },
-
-      getFirstUser(users) {
-        // Paginated services return the array of results in the data attribute.
-        let user = users[0] || users.data && users.data[0];
-
-        // Handle bad username.
-        if (!user) {
-          return Promise.reject(false);
-        }
-
-        debug('User found');
-        return Promise.resolve(user);
-      }
-    };
-
-    authSettings.local = options;
-
-    app.service(options.service).before({
-      create(hook) {
-        if(hook.username && hook.password) {
-          hook.params.authentication = 'local';
-          // auth here
-        }
-      }
-    });
+    // Register 'local' strategy with passport
+    debug('Registering local authentication strategy with options:', localSettings);
+    app.passport.use(localSettings.name, new LocalStrategy(localSettings, verifier.verify.bind(verifier)));
   };
 }
+
+// Exposed Modules
+Object.assign(init, {
+  defaults,
+  hooks,
+  Verifier: DefaultVerifier
+});

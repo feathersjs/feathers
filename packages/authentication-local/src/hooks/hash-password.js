@@ -3,37 +3,39 @@ import Debug from 'debug';
 
 const debug = Debug('feathers-authentication:hooks:hash-password');
 
-export default function hashPassword(options = {}) {
-  return function(hook) {
+const defaultHash = function (password) {
+  return new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, function (error, salt) {
+      if (error) {
+        return reject(error);
+      }
+
+      bcrypt.hash(password, salt, function (error, hashedPassword) {
+        if (error) {
+          return reject(error);
+        }
+
+        resolve(hashedPassword);
+      });
+    });
+  });
+};
+
+export default function hashPassword (options = {}) {
+  return function (hook) {
     if (hook.type !== 'before') {
       return Promise.reject(new Error(`The 'hashPassword' hook should only be used as a 'before' hook.`));
     }
 
     const app = hook.app;
-    const authOptions = app.get('auth');
+    const authOptions = app.get('auth') || {};
 
-    options = Object.assign({}, authOptions.user, options);
+    options = Object.assign({}, authOptions.local, options);
 
     debug('Running hashPassword hook with options:', options);
 
     const field = options.passwordField;
-    const hashPw = options.hash || function(password) {
-      return new Promise((resolve, reject) => {
-        bcrypt.genSalt(10, function(error, salt) {
-          if (error) {
-            return reject(error);
-          }
-
-          bcrypt.hash(password, salt, function(error, hashedPassword) {
-            if (error) {
-              return reject(error);
-            }
-
-            resolve(hashedPassword);
-          });
-        });
-      });
-    };
+    const hashPw = options.hash || defaultHash;
 
     if (typeof hashPw !== 'function') {
       return Promise.reject(new Error(`'hash' must be a function that takes a password and returns Promise that resolves with a hashed password.`));
@@ -51,8 +53,7 @@ export default function hashPassword(options = {}) {
       data = hook.data.filter(item => {
         return item.hasOwnProperty(field);
       });
-    }
-    else if (hook.data[field]){
+    } else if (hook.data[field]) {
       data = hook.data;
     }
 
@@ -66,7 +67,7 @@ export default function hashPassword(options = {}) {
     if (Array.isArray(data)) {
       debug(`Hashing passwords.`);
 
-      return Promise.all(data.map((item) => {
+      return Promise.all(data.map(item => {
         return hashPw(item[field]).then(hashedPassword => {
           item[field] = hashedPassword;
           return item;
