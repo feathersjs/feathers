@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "debug": "^2.2.0",
-    "feathers-commons": "^0.7.0",
+    "feathers-commons": "^0.8.0",
     "feathers-errors": "^2.2.0"
   },
   "devDependencies": {
