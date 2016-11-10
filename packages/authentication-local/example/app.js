@@ -17,10 +17,11 @@ app.configure(rest())
   // Needed for parsing bodies (login)
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
-  // Initialize a user service. This must come first
-  .use('/users', memory())
   // Configure feathers-authentication
   .configure(auth({ secret: 'super secret' }))
+  // Initialize a user service. This must come before
+  // the local plugin because it depends on that service.
+  .use('/users', memory())
   .configure(local())
   .use(errorHandler());
 
