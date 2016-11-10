@@ -20,7 +20,7 @@ npm install feathers-authentication-jwt --save
 
 ## API
 
-This module contains 2 core pieces:
+This module contains 3 core pieces:
 
 1. The main entry function
 2. The `Verifier` class
