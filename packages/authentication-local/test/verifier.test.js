@@ -1,5 +1,6 @@
 import feathers from 'feathers';
 import authentication from 'feathers-authentication';
+import hasher from '../src/utils/hash';
 import { Verifier, defaults } from '../src';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
@@ -11,12 +12,26 @@ describe('Verifier', () => {
   let service;
   let app;
   let options;
+  let verifier;
+  let user;
 
   beforeEach(() => {
-    options = Object.assign({}, defaults);
-    service = { find: sinon.spy() };
     app = feathers();
-    app.use('users', service);
+    options = Object.assign({}, defaults);
+
+    return hasher('admin').then(password => {
+      user = {
+        email: 'admin@feathersjs.com',
+        password 
+      };
+
+      service = {
+        find: sinon.stub().returns(Promise.resolve([user]))
+      };
+
+      app.use('users', service);
+      verifier = new Verifier(app, options);
+    });
   });
 
   it('is CommonJS compatible', () => {
@@ -29,24 +44,20 @@ describe('Verifier', () => {
 
   describe('constructor', () => {
     it('retains an app reference', () => {
-      const verifier = new Verifier(app, options);
       expect(verifier.app).to.deep.equal(app);
     });
 
     it('sets options', () => {
-      const verifier = new Verifier(app, options);
       expect(verifier.options).to.deep.equal(options);
     });
 
     it('sets service using service path', () => {
-      const verifier = new Verifier(app, options);
       expect(verifier.service).to.deep.equal(app.service('users'));
     });
 
     it('sets a passed in service instance', () => {
       options.service = service;
-      const verifier = new Verifier(app, options);
-      expect(verifier.service).to.deep.equal(service);
+      expect(new Verifier(app, options).service).to.deep.equal(service);
     });
 
     describe('when service is undefined', () => {
@@ -58,60 +69,115 @@ describe('Verifier', () => {
     });
   });
 
-  describe.skip('comparePassword', () => {
-    let verifier;
-
-    before(() => {
-      verifier = new Verifier(app, options);
-    });
-
+  describe('comparePassword', () => {
     describe('when entity is missing password field', () => {
       it('returns an error', () => {
+        return verifier.comparePassword({}).catch(error => {
+          expect(error).to.not.equal(undefined);
+        });
       });
     });
 
     describe('password comparison fails', () => {
-      it('returns an error', () => {
+      it('rejects with false', () => {
+        return verifier.comparePassword(user, 'invalid').catch(error => {
+          expect(error).to.equal(false);
+        });
       });
     });
 
     describe('password comparison succeeds', () => {
       it('returns the entity', () => {
+        return verifier.comparePassword(user, 'admin').then(result => {
+          expect(result).to.deep.equal(user);
+        });
       });
     });
   });
 
-  describe.skip('normalize', () => {
-    describe('when entity is missing password field', () => {
-      it('returns an error', () => {
+  describe('normalizeResult', () => {
+    describe('when has results', () => {
+      it('returns entity when paginated', () => {  
+        return verifier.normalizeResult({ data: [user] }).then(result => {
+          expect(result).to.deep.equal(user);
+        });
+      });
+
+      it('returns entity when not paginated', () => {  
+        return verifier.normalizeResult([user]).then(result => {
+          expect(result).to.deep.equal(user);
+        });
       });
     });
 
-    describe('password comparison fails', () => {
-      it('returns an error', () => {
+    describe('when no results', () => {
+      it('rejects with false when paginated', () => {  
+        return verifier.normalizeResult({ data: [] }).catch(error => {
+          expect(error).to.equal(false);
+        });
       });
-    });
 
-    describe('password comparison succeeds', () => {
-      it('returns the entity', () => {
+      it('rejects with false when not paginated', () => {  
+        return verifier.normalizeResult([]).catch(error => {
+          expect(error).to.equal(false);
+        });
       });
     });
   });
 
-  describe.skip('verify', () => {
-    it('calls find on the provided service', () => {
+  describe('verify', () => {
+    it('calls find on the provided service', done => {
+      verifier.verify({}, user.email, 'admin', () => {
+        const query = { email: user.email, $limit: 1 };
+        expect(service.find).to.have.been.calledOnce;
+        expect(service.find).to.have.been.calledWith({ query });
+        done();
+      });
     });
 
-    it('calls normalize', () => {
+    it('calls normalizeResult', done => {
+      sinon.spy(verifier, 'normalizeResult');
+      verifier.verify({}, user.email, 'admin', () => {
+        expect(verifier.normalizeResult).to.have.been.calledOnce;
+        verifier.normalizeResult.restore();
+        done();
+      });
     });
 
-    it('calls comparePassword', () => {
+    it('calls comparePassword', done => {
+      sinon.spy(verifier, 'comparePassword');
+      verifier.verify({}, user.email, 'admin', () => {
+        expect(verifier.comparePassword).to.have.been.calledOnce;
+        verifier.comparePassword.restore();
+        done();
+      });
     });
 
-    it('returns the entity', () => {
+    it('returns the entity', done => {
+      verifier.verify({}, user.email, 'admin', (error, entity) => {
+        expect(error).to.equal(null);
+        expect(entity).to.deep.equal(user);
+        done();
+      });
+    });
+
+    it('handles false rejections in promise chain', () => {
+      verifier.normalizeResult = () => Promise.reject(false);
+      verifier.verify({}, user.email, 'admin', (error, entity) => {
+        expect(error).to.equal(null);
+        expect(entity).to.equal(false);
+        done();
+      });
     });
 
     it('returns errors', () => {
+      const authError = new Error('An error');
+      verifier.normalizeResult = () => Promise.reject(authError);
+      verifier.verify({}, user.email, 'admin', (error, entity) => {
+        expect(error).to.equal(authError);
+        expect(entity).to.equal(undefined);
+        done();
+      });
     });
   });
 });
