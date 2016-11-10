@@ -6,7 +6,7 @@
 [![Dependency Status](https://img.shields.io/david/feathersjs/feathers-authentication-local.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers-authentication-local)
 [![Download Status](https://img.shields.io/npm/dm/feathers-authentication-local.svg?style=flat-square)](https://www.npmjs.com/package/feathers-authentication-local)
 
-> Local authentication strategy for feathers-authentication
+> Local authentication strategy for feathers-authentication using Passport without all the boilerplate.
 
 ## Installation
 
@@ -28,7 +28,7 @@ This module contains 3 core pieces:
 
 ### Main Initialization
 
-In most initializing the `feathers-authentication-local` module is simply:
+In most cases initializing the `feathers-authentication-local` module is as simple as doing this:
 
 ```js
 app.configure(authentication(settings));

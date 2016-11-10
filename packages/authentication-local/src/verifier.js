@@ -11,7 +11,7 @@ class LocalVerifier {
     this.service = typeof options.service === 'string' ? app.service(options.service) : options.service;
 
     if (!this.service) {
-      throw new Error(`options.service does not exist.\nMake sure you are passing a valid service path or service instance and it is initialized before feathers-authentication-local.`);
+      throw new Error(`options.service does not exist.\n\tMake sure you are passing a valid service path or service instance and it is initialized before feathers-authentication-local.`);
     }
 
     this.comparePassword = this.comparePassword.bind(this);
@@ -23,7 +23,7 @@ class LocalVerifier {
     const hash = entity[this.options.passwordField];
 
     if (!hash) {
-      return Promise.reject(new Error(`'${this.options.entity}' record in the database is missing a '${options.passwordField}'`));
+      return Promise.reject(new Error(`'${this.options.entity}' record in the database is missing a '${this.options.passwordField}'`));
     }
 
     debug('Verifying password');
