@@ -97,12 +97,20 @@ export function select (params, ...otherFields) {
     fields.push(...otherFields);
   }
 
-  return result => {
+  const convert = result => {
     if (!Array.isArray(fields)) {
       return result;
     }
 
     return _.pick(result, ...fields);
+  };
+
+  return result => {
+    if (Array.isArray(result)) {
+      return result.map(convert);
+    }
+
+    return convert(result);
   };
 }
 
