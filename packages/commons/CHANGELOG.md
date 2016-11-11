@@ -1,5 +1,18 @@
 # Change Log
 
+## [v0.8.4](https://github.com/feathersjs/feathers-commons/tree/v0.8.4) (2016-11-11)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.8.3...v0.8.4)
+
+## [v0.8.3](https://github.com/feathersjs/feathers-commons/tree/v0.8.3) (2016-11-11)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.8.2...v0.8.3)
+
+## [v0.8.2](https://github.com/feathersjs/feathers-commons/tree/v0.8.2) (2016-11-11)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.8.1...v0.8.2)
+
+**Merged pull requests:**
+
+- One more fix for select on arrays [\#40](https://github.com/feathersjs/feathers-commons/pull/40) ([daffl](https://github.com/daffl))
+
 ## [v0.8.1](https://github.com/feathersjs/feathers-commons/tree/v0.8.1) (2016-11-11)
 [Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.8.0...v0.8.1)
 
