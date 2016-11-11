@@ -2,8 +2,7 @@ if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 import assert from 'assert';
 import {
-  _, specialFilters, sorter, matcher,
-  stripSlashes, select, selectMany
+  _, specialFilters, sorter, matcher, stripSlashes, select
 } from '../src/utils';
 
 describe('feathers-commons utils', () => {
@@ -99,9 +98,11 @@ describe('feathers-commons utils', () => {
     });
   });
 
-  describe('selecting', () => {
+  describe('select', () => {
     it('select', () => {
-      const selector = select('name', 'age');
+      const selector = select({
+        query: { $select: ['name', 'age'] }
+      });
 
       return Promise.resolve({
         name: 'David',
@@ -115,37 +116,32 @@ describe('feathers-commons utils', () => {
       }));
     });
 
-    it('selectMany', () => {
-      const selector = selectMany('name', 'age');
+    it('select with no query', () => {
+      const selector = select({});
+      const data = {
+        name: 'David'
+      };
 
-      return Promise.resolve([{
-        name: 'David',
-        age: 3,
-        test: 'me'
-      }])
+      return Promise.resolve(data)
       .then(selector)
-      .then(result => assert.deepEqual(result, [{
-        name: 'David',
-        age: 3
-      }]));
+      .then(result => assert.deepEqual(result, data));
     });
 
-    it('selectMany paginated', () => {
-      const selector = selectMany('name', 'age');
+    it('select with other fields', () => {
+      const selector = select({
+        query: { $select: [ 'name' ] }
+      }, 'id');
+      const data = {
+        id: 'me',
+        name: 'David',
+        age: 10
+      };
 
-      return Promise.resolve({
-        data: [{
-          name: 'David',
-          age: 3,
-          test: 'me'
-        }]
-      })
+      return Promise.resolve(data)
       .then(selector)
       .then(result => assert.deepEqual(result, {
-        data: [{
-          name: 'David',
-          age: 3
-        }]
+        id: 'me',
+        name: 'David'
       }));
     });
   });
