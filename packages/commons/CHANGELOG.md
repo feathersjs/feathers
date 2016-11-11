@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.8.1](https://github.com/feathersjs/feathers-commons/tree/v0.8.1) (2016-11-11)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.8.0...v0.8.1)
+
+**Merged pull requests:**
+
+- Fixing select utility methods to work with query selector [\#39](https://github.com/feathersjs/feathers-commons/pull/39) ([daffl](https://github.com/daffl))
+
 ## [v0.8.0](https://github.com/feathersjs/feathers-commons/tree/v0.8.0) (2016-11-09)
 [Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.7.8...v0.8.0)
 
