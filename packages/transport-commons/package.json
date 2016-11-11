@@ -23,7 +23,7 @@
     "url": "https://github.com/feathersjs/feathers-socket-commons/issues"
   },
   "engines": {
-    "node": ">= 0.12.0"
+    "node": ">= 4"
   },
   "scripts": {
     "prepublish": "npm run compile",
