@@ -68,7 +68,7 @@
     "feathers": "^2.0.0",
     "feathers-commons": "^0.8.0",
     "feathers-hooks": "^1.5.2",
-    "feathers-memory": "^0.8.0",
+    "feathers-memory": "^1.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "lodash": "^4.0.1",
     "mocha": "^3.0.0",
