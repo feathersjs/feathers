@@ -90,23 +90,19 @@ export const specialFilters = {
   }
 };
 
-export function select (...fields) {
-  return result => _.pick(result, ...fields);
-}
+export function select (params, ...otherFields) {
+  const fields = params && params.query && params.query.$select;
 
-export function selectMany (...fields) {
-  const selector = select(...fields);
+  if (Array.isArray(fields) && otherFields.length) {
+    fields.push(...otherFields);
+  }
 
-  return function (result) {
-    if (Array.isArray(result)) {
-      return result.map(selector);
+  return result => {
+    if (!Array.isArray(fields)) {
+      return result;
     }
 
-    if (result.data) {
-      result.data = result.data.map(selector);
-    }
-
-    return result;
+    return _.pick(result, ...fields);
   };
 }
 
