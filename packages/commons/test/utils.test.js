@@ -116,6 +116,30 @@ describe('feathers-commons utils', () => {
       }));
     });
 
+    it('select with arrays', () => {
+      const selector = select({
+        query: { $select: ['name', 'age'] }
+      });
+
+      return Promise.resolve([{
+        name: 'David',
+        age: 3,
+        test: 'me'
+      }, {
+        name: 'D',
+        age: 4,
+        test: 'you'
+      }])
+      .then(selector)
+      .then(result => assert.deepEqual(result, [{
+        name: 'David',
+        age: 3
+      }, {
+        name: 'D',
+        age: 4
+      }]));
+    });
+
     it('select with no query', () => {
       const selector = select({});
       const data = {
