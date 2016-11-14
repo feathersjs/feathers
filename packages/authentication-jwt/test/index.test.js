@@ -191,40 +191,5 @@ describe('feathers-authentication-jwt', () => {
         });
       });
     });
-
-    // describe('default options', () => {
-    //   let options;
-    //   before(() => {
-    //     app.configure(jwt());
-    //     options = app.get('auth').jwt;
-    //   });
-
-    //   it('sets options back onto global auth config', () => {
-    //     expect(options).to.not.equal(undefined);
-    //   });
-
-    //   it('sets the name', () => {
-    //     expect(options.name).to.equal('jwt');
-    //   });
-
-    //   it('sets the entity', () => {
-    //     expect(options.entity).to.equal('user');
-    //   });
-
-    //   it('sets the service', () => {
-    //     expect(options.service).to.equal('users');
-    //   });
-
-    //   it('sets passReqToCallback', () => {
-    //     expect(options.passReqToCallback).to.equal(true);
-    //   });
-
-    //   it('disables sessions', () => {
-    //     expect(options.session).to.equal(false);
-    //   });
-
-    //   describe('when secret is in global auth config', () => {
-    //   });
-    // });
   });
 });
