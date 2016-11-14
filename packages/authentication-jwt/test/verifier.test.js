@@ -1,5 +1,6 @@
 import feathers from 'feathers';
-import { Verifier, defaults } from '../src';
+import authentication from 'feathers-authentication';
+import { Verifier } from '../src';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
@@ -15,14 +16,16 @@ describe('Verifier', () => {
 
   beforeEach(() => {
     app = feathers();
-    options = Object.assign({}, defaults);
     user = { email: 'admin@feathersjs.com' };
     service = {
       id: 'id',
       get: sinon.stub().returns(Promise.resolve(user))
     };
 
-    app.use('users', service);
+    app.use('users', service)
+      .configure(authentication({ secret: 'supersecret' }));
+
+    options = app.get('auth');
     verifier = new Verifier(app, options);
   });
 
@@ -55,7 +58,7 @@ describe('Verifier', () => {
     describe('when service is undefined', () => {
       it('throws an error', () => {
         expect(() => {
-          Verifier(app, {});
+          new Verifier(app, {}); // eslint-disable-line
         }).to.throw();
       });
     });
@@ -80,11 +83,29 @@ describe('Verifier', () => {
         });
       });
 
-      it('returns the user', done => {
+      it('returns the entity', done => {
         verifier.verify({}, { id: 1 }, (error, result) => {
           expect(error).to.equal(null);
           expect(result.email).to.deep.equal(user.email);
           done();
+        });
+      });
+
+      describe('when service call errors', () => {
+        it('returns the payload', done => {
+          const service = {
+            id: 'id',
+            get: () => Promise.reject(new Error('User missing'))
+          };
+
+          options.service = service;
+          const erroringVerifier = new Verifier(app, options);
+          const payload = { id: 1 };
+          erroringVerifier.verify({}, payload, (error, result) => {
+            expect(error).to.equal(null);
+            expect(result.payload).to.deep.equal(payload);
+            done();
+          });
         });
       });
     });
