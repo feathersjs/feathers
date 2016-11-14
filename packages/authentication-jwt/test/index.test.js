@@ -6,6 +6,7 @@ import jwt, { Verifier, ExtractJwt } from '../src';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
+import passportJWT from 'passport-jwt';
 
 chai.use(sinonChai);
 
@@ -63,17 +64,107 @@ describe('feathers-authentication-jwt', () => {
       }).to.throw();
     });
 
+    it('throws an error if secret is not a string', () => {
+      expect(() => {
+        app.configure(jwt({ secret: true }));
+      }).to.throw();
+    });
+
     it('registers the jwt passport strategy', () => {
       sinon.spy(app.passport, 'use');
+      sinon.spy(passportJWT, 'Strategy');
       app.configure(jwt());
+
+      expect(passportJWT.Strategy).to.have.been.calledOnce;
       expect(app.passport.use).to.have.been.calledWith('jwt');
+
       app.passport.use.restore();
+      passportJWT.Strategy.restore();
+    });
+
+    describe('passport strategy options', () => {
+      let authOptions;
+      let args;
+
+      beforeEach(() => {
+        sinon.spy(passportJWT, 'Strategy');
+        app.configure(jwt({ custom: true }));
+        authOptions = app.get('auth');
+        args = passportJWT.Strategy.getCall(0).args[0];
+      });
+
+      afterEach(() => {
+        passportJWT.Strategy.restore();
+      });
+
+      it('sets secretOrKey', () => {
+        expect(args.secretOrKey).to.equal('supersecret');
+      });
+
+      it('sets jwtFromRequest', () => {
+        expect(args.jwtFromRequest).to.be.a('function');
+      });
+
+      it('sets session', () => {
+        expect(args.session).to.equal(authOptions.session);
+      });
+
+      it('sets entity', () => {
+        expect(args.entity).to.equal(authOptions.entity);
+      });
+
+      it('sets service', () => {
+        expect(args.service).to.equal(authOptions.service);
+      });
+
+      it('sets passReqToCallback', () => {
+        expect(args.passReqToCallback).to.equal(authOptions.passReqToCallback);
+      });
+
+      it('sets algorithms', () => {
+        expect(args.algorithms).to.deep.equal([authOptions.jwt.algorithm]);
+      });
+
+      it('sets audience', () => {
+        expect(args.audience).to.equal(authOptions.jwt.audience);
+      });
+
+      it('sets expiresIn', () => {
+        expect(args.expiresIn).to.equal(authOptions.jwt.expiresIn);
+      });
+
+      it('sets issuer', () => {
+        expect(args.issuer).to.equal(authOptions.jwt.issuer);
+      });
+
+      it('sets subject', () => {
+        expect(args.subject).to.equal(authOptions.jwt.subject);
+      });
+
+      it('sets header', () => {
+        expect(args.header).to.deep.equal(authOptions.jwt.header);
+      });
+
+      it('supports setting custom options', () => {
+        expect(args.custom).to.equal(true);
+      });
+
+      it('supports overriding default options', () => {
+        app.configure(jwt({ subject: 'custom' }));
+        expect(passportJWT.Strategy.getCall(1).args[0].subject).to.equal('custom');
+      });
     });
 
     describe('custom Verifier', () => {
       it('throws an error if a verify function is missing', () => {
         expect(() => {
-          app.configure(jwt({ Verifier: {} }));
+          class CustomVerifier {
+            constructor (app) {
+              this.app = app;
+            }
+          }
+
+          app.configure(jwt({ Verifier: CustomVerifier }));
         }).to.throw();
       });
 
@@ -101,39 +192,39 @@ describe('feathers-authentication-jwt', () => {
       });
     });
 
-    describe('default options', () => {
-      let options;
-      before(() => {
-        app.configure(jwt());
-        options = app.get('auth').jwt;
-      });
+    // describe('default options', () => {
+    //   let options;
+    //   before(() => {
+    //     app.configure(jwt());
+    //     options = app.get('auth').jwt;
+    //   });
 
-      it('sets options back onto global auth config', () => {
-        expect(options).to.not.equal(undefined);
-      });
+    //   it('sets options back onto global auth config', () => {
+    //     expect(options).to.not.equal(undefined);
+    //   });
 
-      it('sets the name', () => {
-        expect(options.name).to.equal('jwt');
-      });
+    //   it('sets the name', () => {
+    //     expect(options.name).to.equal('jwt');
+    //   });
 
-      it('sets the entity', () => {
-        expect(options.entity).to.equal('user');
-      });
+    //   it('sets the entity', () => {
+    //     expect(options.entity).to.equal('user');
+    //   });
 
-      it('sets the service', () => {
-        expect(options.service).to.equal('users');
-      });
+    //   it('sets the service', () => {
+    //     expect(options.service).to.equal('users');
+    //   });
 
-      it('sets passReqToCallback', () => {
-        expect(options.passReqToCallback).to.equal(true);
-      });
+    //   it('sets passReqToCallback', () => {
+    //     expect(options.passReqToCallback).to.equal(true);
+    //   });
 
-      it('disables sessions', () => {
-        expect(options.session).to.equal(false);
-      });
+    //   it('disables sessions', () => {
+    //     expect(options.session).to.equal(false);
+    //   });
 
-      describe('when secret is in global auth config', () => {
-      });
-    });
+    //   describe('when secret is in global auth config', () => {
+    //   });
+    // });
   });
 });
