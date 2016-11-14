@@ -76,10 +76,10 @@ export default function init (options = {}) {
 
     // register OAuth middleware
     debug(`Registering '${name}' Express OAuth middleware`);
-    app.get(oauth2Settings.path, auth.express.authenticate(name));
+    app.get(oauth2Settings.path, auth.express.authenticate(name, oauth2Settings));
     app.get(
       parse(oauth2Settings.callbackURL).pathname,
-      auth.express.authenticate(name),
+      auth.express.authenticate(name, oauth2Settings),
       handler,
       auth.express.emitEvents(authSettings),
       auth.express.setCookie(authSettings),
