@@ -7,3 +7,5 @@
 src/
 test/
 !lib/
+.github/
+coverage
