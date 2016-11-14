@@ -34,7 +34,7 @@ function customizeJWTPayload() {
 
     return Promise.resolve(hook);
   };
-};
+}
 
 // Authenticate the user using the default
 // email/password strategy and if successful

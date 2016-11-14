@@ -5,6 +5,7 @@ import local, { Verifier } from '../src';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
+import passportLocal from 'passport-local';
 
 chai.use(sinonChai);
 
@@ -43,9 +44,63 @@ describe('feathers-authentication-local', () => {
 
     it('registers the local passport strategy', () => {
       sinon.spy(app.passport, 'use');
+      sinon.spy(passportLocal, 'Strategy');
       app.configure(local());
+
+      expect(passportLocal.Strategy).to.have.been.calledOnce;
       expect(app.passport.use).to.have.been.calledWith('local');
+      
       app.passport.use.restore();
+      passportLocal.Strategy.restore();
+    });
+
+    describe('passport strategy options', () => {
+      let authOptions;
+      let args;
+
+      beforeEach(() => {
+        sinon.spy(passportLocal, 'Strategy');
+        app.configure(local({ custom: true }));
+        authOptions = app.get('auth');
+        args = passportLocal.Strategy.getCall(0).args[0];
+      });
+
+      afterEach(() => {
+        passportLocal.Strategy.restore();
+      });
+
+      it('sets usernameField', () => {
+        expect(args.usernameField).to.equal('email');
+      });
+
+      it('sets passwordField', () => {
+        expect(args.passwordField).to.equal('password');
+      });
+
+      it('sets entity', () => {
+        expect(args.entity).to.equal(authOptions.entity);
+      });
+
+      it('sets service', () => {
+        expect(args.service).to.equal(authOptions.service);
+      });
+
+      it('sets session', () => {
+        expect(args.session).to.equal(authOptions.session);
+      });
+
+      it('sets passReqToCallback', () => {
+        expect(args.passReqToCallback).to.equal(authOptions.passReqToCallback);
+      });
+
+      it('supports setting custom options', () => {
+        expect(args.custom).to.equal(true);
+      });
+
+      it('supports overriding default options', () => {
+        app.configure(local({ usernameField: 'username' }));
+        expect(passportLocal.Strategy.getCall(1).args[0].usernameField).to.equal('username');
+      });
     });
 
     describe('custom Verifier', () => {
@@ -80,46 +135,6 @@ describe('feathers-authentication-local', () => {
         return app.authenticate('local')(req).then(result => {
           expect(result.data.user).to.deep.equal(User);
         });
-      });
-    });
-
-    describe('default options', () => {
-      let options;
-      before(() => {
-        app.configure(local());
-        options = app.get('auth').local;
-      });
-
-      it('sets options back onto global auth config', () => {
-        expect(options).to.not.equal(undefined);
-      });
-
-      it('sets the name', () => {
-        expect(options.name).to.equal('local');
-      });
-
-      it('sets the entity', () => {
-        expect(options.entity).to.equal('user');
-      });
-
-      it('sets the service', () => {
-        expect(options.service).to.equal('users');
-      });
-
-      it('sets the usernameField', () => {
-        expect(options.usernameField).to.equal('email');
-      });
-
-      it('sets the passwordField', () => {
-        expect(options.passwordField).to.equal('password');
-      });
-
-      it('sets passReqToCallback', () => {
-        expect(options.passReqToCallback).to.equal(true);
-      });
-
-      it('disables sessions', () => {
-        expect(options.session).to.equal(false);
       });
     });
   });

@@ -17,7 +17,6 @@ describe('Verifier', () => {
 
   beforeEach(() => {
     app = feathers();
-    options = Object.assign({}, defaults);
 
     return hasher('admin').then(password => {
       user = {
@@ -29,7 +28,11 @@ describe('Verifier', () => {
         find: sinon.stub().returns(Promise.resolve([user]))
       };
 
-      app.use('users', service);
+      app.use('users', service)
+        .configure(authentication({ secret: 'supersecret' }));
+
+      options = Object.assign({}, defaults, app.get('auth'));
+
       verifier = new Verifier(app, options);
     });
   });

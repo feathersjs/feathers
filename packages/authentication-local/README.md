@@ -42,7 +42,7 @@ This will pull from your global `auth` object in your config file. It will also 
 ```js
 {
     name: 'local', // the name to use when invoking the authentication Strategy
-    entity: 'user', // the entity that you comparing username/password against
+    entity: 'user', // the entity that you're comparing username/password against
     service: 'users', // the service to look up the entity
     usernameField: 'email', // key name of username field
     passwordField: 'password', // key name of password field
@@ -79,7 +79,7 @@ This is the verification class that does the username and password verification 
 ```
 
 
-## Customizing the Verifier
+#### Customizing the Verifier
 
 The `Verifier` class can be extended so that you customize it's behavior without having to rewrite and test a totally custom local Passport implementation. Although that is always an option if you don't want use this plugin.
 
