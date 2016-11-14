@@ -649,17 +649,9 @@ base64-arraybuffer@0.1.5:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/base64-arraybuffer/-/base64-arraybuffer-0.1.5.tgz#73926771923b5a19747ad666aa5cd4bf9c6e9ce8"
 
-base64-url@^1.2.1:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/base64-url/-/base64-url-1.3.3.tgz#f8b6c537f09a4fc58c99cb86e0b0e9c61461a20f"
-
 base64id@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/base64id/-/base64id-0.1.0.tgz#02ce0fdeee0cef4f40080e1e73e834f0b1bfce3f"
-
-base64url@^2.0.0, base64url@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/base64url/-/base64url-2.0.0.tgz#eac16e03ea1438eff9423d69baa36262ed1f70bb"
 
 bcrypt-pbkdf@^1.0.0:
   version "1.0.0"
@@ -667,7 +659,7 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bcryptjs, bcryptjs@^2.3.0:
+bcryptjs:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/bcryptjs/-/bcryptjs-2.3.0.tgz#5826900cfef7abaf3425c72e4d464de509b8c2ec"
 
@@ -759,10 +751,6 @@ braces@^1.8.2:
 browser-stdout@1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/browser-stdout/-/browser-stdout-1.3.0.tgz#f351d32969d32fa5d7a5567154263d928ae3bd1f"
-
-buffer-equal-constant-time@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/buffer-equal-constant-time/-/buffer-equal-constant-time-1.0.1.tgz#f8e71132f7ffe6e01a5c9697a4c6f3e48d5cc819"
 
 buffer-shims@^1.0.0:
   version "1.0.0"
@@ -1123,12 +1111,6 @@ ecc-jsbn@~0.1.1:
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.1.tgz#0fc73a9ed5f0d53c38193398523ef7e543777505"
   dependencies:
     jsbn "~0.1.0"
-
-ecdsa-sig-formatter@1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/ecdsa-sig-formatter/-/ecdsa-sig-formatter-1.0.7.tgz#3137e976a1d6232517e2513e04e32f79bcbdf126"
-  dependencies:
-    base64-url "^1.2.1"
 
 editorconfig@^0.13.2:
   version "0.13.2"
@@ -1582,19 +1564,6 @@ feathers:
     rubberduck "^1.0.0"
     uberproto "^1.2.0"
 
-feathers-authentication:
-  version "0.7.11"
-  resolved "https://registry.yarnpkg.com/feathers-authentication/-/feathers-authentication-0.7.11.tgz#8b1165090c0dcfe1e6fd1bb025f2cf57904d995a"
-  dependencies:
-    bcryptjs "^2.3.0"
-    debug "^2.2.0"
-    feathers-errors "^2.0.1"
-    feathers-hooks "^1.5.0"
-    jsonwebtoken "^5.4.0"
-    lodash.isplainobject "^4.0.4"
-    passport "^0.3.0"
-    passport-local "^1.0.0"
-
 feathers-commons@^0.7.0, feathers-commons@^0.7.1, feathers-commons@^0.7.8:
   version "0.7.8"
   resolved "https://registry.yarnpkg.com/feathers-commons/-/feathers-commons-0.7.8.tgz#11b119c30dd1ea9c505c2537b12504aedaa3fe7d"
@@ -1611,7 +1580,7 @@ feathers-errors@^2.4.0:
   dependencies:
     debug "^2.2.0"
 
-feathers-hooks, feathers-hooks@^1.5.0:
+feathers-hooks:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/feathers-hooks/-/feathers-hooks-1.6.1.tgz#1f76021ff7acdaafc88301c5cd7a44e120661f30"
   dependencies:
@@ -2413,14 +2382,6 @@ jsonpointer@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/jsonpointer/-/jsonpointer-4.0.0.tgz#6661e161d2fc445f19f98430231343722e1fcbd5"
 
-jsonwebtoken@^5.4.0:
-  version "5.7.0"
-  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-5.7.0.tgz#1c90f9a86ce5b748f5f979c12b70402b4afcddb4"
-  dependencies:
-    jws "^3.0.0"
-    ms "^0.7.1"
-    xtend "^4.0.1"
-
 jsprim@^1.2.2:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/jsprim/-/jsprim-1.3.1.tgz#2a7256f70412a29ee3670aaca625994c4dcff252"
@@ -2435,23 +2396,6 @@ jsx-ast-utils@^1.3.1:
   dependencies:
     acorn-jsx "^3.0.1"
     object-assign "^4.1.0"
-
-jwa@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/jwa/-/jwa-1.1.4.tgz#dbb01bd38cd409899fa715107e90d90f9bcb161e"
-  dependencies:
-    base64url "2.0.0"
-    buffer-equal-constant-time "1.0.1"
-    ecdsa-sig-formatter "1.0.7"
-    safe-buffer "^5.0.1"
-
-jws@^3.0.0:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/jws/-/jws-3.1.4.tgz#f9e8b9338e8a847277d6444b1464f61880e050a2"
-  dependencies:
-    base64url "^2.0.0"
-    jwa "^1.1.4"
-    safe-buffer "^5.0.1"
 
 kind-of@^3.0.2:
   version "3.0.4"
@@ -2526,10 +2470,6 @@ lodash.isarray@^3.0.0:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/lodash.isarray/-/lodash.isarray-3.0.4.tgz#79e4eb88c36a8122af86f844aa9bcd851b5fbb55"
 
-lodash.isplainobject@^4.0.4:
-  version "4.0.6"
-  resolved "https://registry.yarnpkg.com/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"
-
 lodash.keys@^3.0.0:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/lodash.keys/-/lodash.keys-3.1.2.tgz#4dbc0472b156be50a0b286855d1bd0b0c656098a"
@@ -2545,6 +2485,10 @@ lodash.merge:
 lodash.omit, lodash.omit@^4.3.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.omit/-/lodash.omit-4.5.0.tgz#6eb19ae5a1ee1dd9df0b969e66ce0b7fa30b5e60"
+
+lodash.pick:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/lodash.pick/-/lodash.pick-4.4.0.tgz#52f05610fff9ded422611441ed1fc123a03001b3"
 
 lodash@^3.3.1:
   version "3.10.1"
@@ -2703,10 +2647,6 @@ mout@^0.11.0:
 "mout@>=0.9 <2.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/mout/-/mout-1.0.0.tgz#9bdf1d4af57d66d47cb353a6335a3281098e1501"
-
-ms@^0.7.1:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.2.tgz#ae25cf2512b3885a1d95d7f037868d8431124765"
 
 ms@0.7.1:
   version "0.7.1"
@@ -2946,7 +2886,7 @@ parseurl@~1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/parseurl/-/parseurl-1.3.1.tgz#c8ab8c9223ba34888aa64a297b28853bec18da56"
 
-passport-local, passport-local@^1.0.0:
+passport-local:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/passport-local/-/passport-local-1.0.0.tgz#1fe63268c92e75606626437e3b906662c15ba6ee"
   dependencies:
@@ -2955,13 +2895,6 @@ passport-local, passport-local@^1.0.0:
 passport-strategy@1.x.x:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/passport-strategy/-/passport-strategy-1.0.0.tgz#b5539aa8fc225a3d1ad179476ddf236b440f52e4"
-
-passport@^0.3.0:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/passport/-/passport-0.3.2.tgz#9dd009f915e8fe095b0124a01b8f82da07510102"
-  dependencies:
-    passport-strategy "1.x.x"
-    pause "0.0.1"
 
 path-exists@^1.0.0:
   version "1.0.0"
@@ -2996,10 +2929,6 @@ path-type@^1.0.0:
     graceful-fs "^4.1.2"
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
-
-pause@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/pause/-/pause-0.0.1.tgz#1d408b3fdb76923b9543d96fb4c9dfd535d9cb5d"
 
 pify@^2.0.0:
   version "2.3.0"
@@ -3353,10 +3282,6 @@ rx-lite@^3.1.2:
 rx@^2.4.3:
   version "2.5.3"
   resolved "https://registry.yarnpkg.com/rx/-/rx-2.5.3.tgz#21adc7d80f02002af50dae97fd9dbf248755f566"
-
-safe-buffer@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.0.1.tgz#d263ca54696cd8a306b5ca6551e92de57918fbe7"
 
 samsam@~1.1:
   version "1.1.3"

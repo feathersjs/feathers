@@ -28,7 +28,7 @@ describe('integration', () => {
 
     app.service('users').hooks({
       before: {
-        create: local.hooks.hashPassword()
+        create: local.hooks.hashPassword({ passwordField: 'password' })
       }
     });
 

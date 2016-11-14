@@ -1,7 +1,8 @@
 import hasher from '../utils/hash';
+import merge from 'lodash.merge';
 import Debug from 'debug';
 
-const debug = Debug('feathers-authentication:hooks:hash-password');
+const debug = Debug('feathers-authentication-local:hooks:hash-password');
 
 export default function hashPassword (options = {}) {
   return function (hook) {
@@ -12,12 +13,16 @@ export default function hashPassword (options = {}) {
     const app = hook.app;
     const authOptions = app.get('auth') || {};
 
-    options = Object.assign({}, authOptions.local, options);
+    options = merge({ passwordField: 'password' }, authOptions.local, options);
 
     debug('Running hashPassword hook with options:', options);
 
     const field = options.passwordField;
     const hashPw = options.hash || hasher;
+
+    if (typeof field !== 'string') {
+      return Promise.reject(new Error(`You must provide a 'passwordField' in your authentication configuration or pass one explicitly`));
+    }
 
     if (typeof hashPw !== 'function') {
       return Promise.reject(new Error(`'hash' must be a function that takes a password and returns Promise that resolves with a hashed password.`));
