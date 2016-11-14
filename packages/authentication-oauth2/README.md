@@ -3,10 +3,8 @@
 [![Build Status](https://travis-ci.org/feathersjs/feathers-authentication-oauth2.png?branch=master)](https://travis-ci.org/feathersjs/feathers-authentication-oauth2)
 [![Code Climate](https://codeclimate.com/github/feathersjs/feathers-authentication-oauth2/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-oauth2)
 [![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-authentication-oauth2/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-oauth2/coverage)
-[![Issue Count](https://codeclimate.com/github/feathersjs/feathers-authentication-oauth2/badges/issue_count.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-oauth2)
 [![Dependency Status](https://img.shields.io/david/feathersjs/feathers-authentication-oauth2.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers-authentication-oauth2)
 [![Download Status](https://img.shields.io/npm/dm/feathers-authentication-oauth2.svg?style=flat-square)](https://www.npmjs.com/package/feathers-authentication-oauth2)
-[![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 
 > An OAuth2 authentication strategy for feathers-authentication using Passport
 
