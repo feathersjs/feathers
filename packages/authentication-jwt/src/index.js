@@ -29,7 +29,7 @@ export default function init (options = {}) {
     }
 
     // NOTE (EK): Pull from global auth config to support legacy auth for an easier transition.
-    let jwtSettings = merge(defaults, pick(app.get('auth') || {}, KEYS), omit(options, ['Verifier']));
+    let jwtSettings = merge({}, defaults, pick(app.get('auth') || {}, KEYS), omit(options, ['Verifier']));
 
     if (typeof jwtSettings.header !== 'string') {
       throw new Error(`You must provide a 'header' in your authentication configuration or pass one explicitly`);
