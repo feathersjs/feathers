@@ -61,12 +61,14 @@ describe('feathers-authentication-jwt', () => {
     it('throws an error if header is not a string', () => {
       expect(() => {
         app.configure(jwt({ header: true }));
+        app.setup();
       }).to.throw();
     });
 
     it('throws an error if secret is not a string', () => {
       expect(() => {
         app.configure(jwt({ secret: true }));
+        app.setup();
       }).to.throw();
     });
 
@@ -74,6 +76,7 @@ describe('feathers-authentication-jwt', () => {
       sinon.spy(app.passport, 'use');
       sinon.spy(passportJWT, 'Strategy');
       app.configure(jwt());
+      app.setup();
 
       expect(passportJWT.Strategy).to.have.been.calledOnce;
       expect(app.passport.use).to.have.been.calledWith('jwt');
@@ -89,6 +92,7 @@ describe('feathers-authentication-jwt', () => {
       beforeEach(() => {
         sinon.spy(passportJWT, 'Strategy');
         app.configure(jwt({ custom: true }));
+        app.setup();
         authOptions = app.get('auth');
         args = passportJWT.Strategy.getCall(0).args[0];
       });
@@ -148,11 +152,16 @@ describe('feathers-authentication-jwt', () => {
       it('supports setting custom options', () => {
         expect(args.custom).to.equal(true);
       });
+    });
 
-      it('supports overriding default options', () => {
-        app.configure(jwt({ subject: 'custom' }));
-        expect(passportJWT.Strategy.getCall(1).args[0].subject).to.equal('custom');
-      });
+    it('supports overriding default options', () => {
+      sinon.spy(passportJWT, 'Strategy');
+      app.configure(jwt({ subject: 'custom' }));
+      app.setup();
+
+      expect(passportJWT.Strategy.getCall(0).args[0].subject).to.equal('custom');
+
+      passportJWT.Strategy.restore();
     });
 
     describe('custom Verifier', () => {
@@ -165,6 +174,7 @@ describe('feathers-authentication-jwt', () => {
           }
 
           app.configure(jwt({ Verifier: CustomVerifier }));
+          app.setup();
         }).to.throw();
       });
 
@@ -185,6 +195,7 @@ describe('feathers-authentication-jwt', () => {
         }
 
         app.configure(jwt({ Verifier: CustomVerifier }));
+        app.setup();
 
         return app.authenticate('jwt', { assignProperty: 'payload' })(req).then(result => {
           expect(result.data.payload.id).to.deep.equal(Payload.id);

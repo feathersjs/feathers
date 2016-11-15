@@ -23,6 +23,7 @@ const KEYS = [
 export default function init (options = {}) {
   return function jwtAuth () {
     const app = this;
+    const _super = app.setup;
 
     if (!app.passport) {
       throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before feathers-authentication-jwt?`);
@@ -56,15 +57,20 @@ export default function init (options = {}) {
       Verifier = options.Verifier;
     }
 
-    let verifier = new Verifier(app, jwtSettings);
+    app.setup = function () {
+      let result = _super.apply(this, arguments);
+      let verifier = new Verifier(app, jwtSettings);
 
-    if (!verifier.verify) {
-      throw new Error(`Your verifier must implement a 'verify' function. It should have the same signature as a jwt passport verify callback.`);
-    }
+      if (!verifier.verify) {
+        throw new Error(`Your verifier must implement a 'verify' function. It should have the same signature as a jwt passport verify callback.`);
+      }
 
-    // Register 'jwt' strategy with passport
-    debug('Registering jwt authentication strategy with options:', strategyOptions);
-    app.passport.use(jwtSettings.name, new JWTStrategy(strategyOptions, verifier.verify.bind(verifier)));
+      // Register 'jwt' strategy with passport
+      debug('Registering jwt authentication strategy with options:', strategyOptions);
+      app.passport.use(jwtSettings.name, new JWTStrategy(strategyOptions, verifier.verify.bind(verifier)));
+
+      return result;
+    };
   };
 }
 
