@@ -70,21 +70,36 @@ export default function init (options = {}) {
       debug(`Calling create on '${authSettings.path}' service with`, entity);
       app.service(authSettings.path).create(req[oauth2Settings.entity], params).then(result => {
         res.data = result;
+        
+        if (oauth2Settings.successRedirect) {
+          req.hook = {
+            redirect: { url: oauth2Settings.successRedirect }
+          };
+        }
+
         next();
-      }).catch(next);
+      }).catch(error => {
+        if (oauth2Settings.failureRedirect) {
+          req.hook = {
+            redirect: { url: oauth2Settings.failureRedirect }
+          };
+        }
+
+        next(error);
+      });
     };
 
     // register OAuth middleware
     debug(`Registering '${name}' Express OAuth middleware`);
-    app.get(oauth2Settings.path, auth.express.authenticate(name, oauth2Settings));
+    app.get(oauth2Settings.path, auth.express.authenticate(name));
     app.get(
       parse(oauth2Settings.callbackURL).pathname,
-      auth.express.authenticate(name, oauth2Settings),
+      auth.express.authenticate(name, { failureRedirect: oauth2Settings.failureRedirect }),
       handler,
       auth.express.emitEvents(authSettings),
       auth.express.setCookie(authSettings),
       auth.express.successRedirect(),
-      auth.express.failureRedirect(),
+      auth.express.failureRedirect(authSettings),
       formatter
     );
 
