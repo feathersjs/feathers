@@ -19,10 +19,8 @@ app.configure(rest())
   .use(bodyParser.urlencoded({ extended: true }))
   // Configure feathers-authentication
   .configure(auth({ secret: 'super secret' }))
-  // Initialize a user service. This must come before
-  // the JWT plugin because it depends on that service.
-  .use('/users', memory())
   .configure(jwt())
+  .use('/users', memory())
   .use(errorHandler());
 
 const issueJWT = () => {

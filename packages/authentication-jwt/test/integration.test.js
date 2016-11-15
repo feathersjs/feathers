@@ -43,6 +43,8 @@ describe('integration', () => {
       }
     });
 
+    app.setup();
+
     return app.service('users').create(User).then(user => {
       req.headers = { 'authorization': user.accessToken };
 
