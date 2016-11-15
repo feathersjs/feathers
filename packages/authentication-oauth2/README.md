@@ -124,7 +124,6 @@ Whenever you authenticate with an OAuth2 provider such as Facebook, the provider
 By default the `Verifier` takes everything returned by the provider and attaches it to the `entity` (ie. the user object) under the provider name. You will likely want to customize the data that is returned. This can be done by adding a `before` hook to both the `update` and `create` service methods on your `entity`'s service.
 
 ```js
-
 app.configure(oauth2({
   name: 'github',
   entity: 'user',
