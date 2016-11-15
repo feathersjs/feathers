@@ -22,15 +22,17 @@ describe('integration', () => {
     const app = feathers();
 
     app.configure(hooks())
-      .use('/users', memory())
       .configure(authentication({ secret: 'secret' }))
-      .configure(local());
+      .configure(local())
+      .use('/users', memory());
 
     app.service('users').hooks({
       before: {
         create: local.hooks.hashPassword({ passwordField: 'password' })
       }
     });
+
+    app.setup();
 
     return app.service('users').create(User).then(() => {
       return app.authenticate('local')(req).then(result => {
