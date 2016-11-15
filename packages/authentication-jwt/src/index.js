@@ -7,7 +7,8 @@ import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 
 const debug = Debug('feathers-authentication-jwt');
 const defaults = {
-  name: 'jwt'
+  name: 'jwt',
+  bodyKey: 'accessToken'
 };
 
 const KEYS = [
@@ -43,7 +44,10 @@ export default function init (options = {}) {
     let Verifier = DefaultVerifier;
     let strategyOptions = merge({
       secretOrKey: jwtSettings.secret,
-      jwtFromRequest: ExtractJwt.fromHeader(jwtSettings.header.toLowerCase())
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        ExtractJwt.fromHeader(jwtSettings.header.toLowerCase()),
+        ExtractJwt.fromBodyField(jwtSettings.bodyKey)
+      ])
     }, jwtSettings.jwt, omit(jwtSettings, ['jwt', 'header', 'secret']));
 
     // Normalize algorithm key
