@@ -18,7 +18,7 @@ app.configure(rest())
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
   // Configure feathers-authentication
-  .configure(auth({ secret: 'super secret' }))  
+  .configure(auth({ secret: 'super secret' }))
   .configure(oauth2({
     name: 'github',
     Strategy: GithubStrategy,
@@ -59,7 +59,7 @@ function customizeGithubProfile() {
 app.service('authentication').hooks({
   before: {
     create: [
-      auth.hooks.authenticate('oauth2'),
+      auth.hooks.authenticate('jwt'),
       customizeJWTPayload()
     ]
   }
