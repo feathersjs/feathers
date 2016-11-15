@@ -55,8 +55,6 @@ This will pull from your global `auth` object in your config file. It will also 
 
 #### Default Options
 
-The following default options will be mixed in with each authentication strategy. They can all be overridden but are optional.
-
 ```js
 {
     idField: '<provider>Id', // The field to look up the entity by when logging in with the provider. Defaults to '<provider>Id' (ie. 'facebookId').
