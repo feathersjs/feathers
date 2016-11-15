@@ -190,12 +190,11 @@ const app = feathers()
   // Configure feathers-authentication
   .configure(auth({ secret: 'super secret' }))
   .configure(oauth2({
-    github: {
-      Strategy: GithubStrategy,
-      clientID: 'dc608a778075377552a3',
-      clientSecret: 'c337fce2f47c493daa4e6b67e9f22ea8704d37ab',
-      scope: ['public_profile', 'email']
-    }
+    name: 'github',
+    Strategy: GithubStrategy,
+    clientID: '<your client id>',
+    clientSecret: '<your client secret>',
+    scope: ['user']
   }))
   .use('/users', memory())
   .use(errorHandler());
