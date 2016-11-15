@@ -55,7 +55,7 @@ This will pull from your global `auth` object in your config file. It will also 
 
 #### Default Options
 
-The following default options will be mixed in with each authentication strategy.
+The following default options will be mixed in with each authentication strategy. They can all be overridden but are optional.
 
 ```js
 {
@@ -66,7 +66,7 @@ The following default options will be mixed in with each authentication strategy
     service: 'users', // the service to look up the entity
     passReqToCallback: true, // whether the request object should be passed to `verify`
     session: false // whether to use sessions,
-    handler: function, // Your own custom express middleware for handling the oauth callback.
+    handler: function, // Express middleware for handling the oauth callback. Defaults to the built in middleware.
     formatter: function, // The response formatter. Defaults the the built in feathers-rest formatter, which returns JSON.
     Verifier: Verifier // A Verifier class. Defaults to the built-in one but can be a custom one. See below for details.
 }
