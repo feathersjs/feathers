@@ -106,7 +106,12 @@ describe('feathers-authentication-local', () => {
     describe('custom Verifier', () => {
       it('throws an error if a verify function is missing', () => {
         expect(() => {
-          app.configure(local({ Verifier: {} }));
+          class CustomVerifier {
+            constructor (app) {
+              this.app = app;
+            }
+          }
+          app.configure(local({ Verifier: CustomVerifier }));
         }).to.throw();
       });
 
