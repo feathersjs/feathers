@@ -24,6 +24,7 @@ const KEYS = [
 export default function init(options = {}) {
   return function localAuth() {
     const app = this;
+    const _super = app.setup;
 
     if (!app.passport) {
       throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before feathers-authentication-local?`);
@@ -37,15 +38,20 @@ export default function init(options = {}) {
       Verifier = options.Verifier;
     }
 
-    let verifier = new Verifier(app, localSettings);
+    app.setup = function () {
+      let result = _super.apply(this, arguments);
+      let verifier = new Verifier(app, localSettings);
 
-    if (!verifier.verify) {
-      throw new Error(`Your verifier must implement a 'verify' function. It should have the same signature as a local passport verify callback.`)
+      if (!verifier.verify) {
+        throw new Error(`Your verifier must implement a 'verify' function. It should have the same signature as a local passport verify callback.`)
+      }
+
+      // Register 'local' strategy with passport
+      debug('Registering local authentication strategy with options:', localSettings);
+      app.passport.use(localSettings.name, new LocalStrategy(localSettings, verifier.verify.bind(verifier)));
+      
+      return result;
     }
-
-    // Register 'local' strategy with passport
-    debug('Registering local authentication strategy with options:', localSettings);
-    app.passport.use(localSettings.name, new LocalStrategy(localSettings, verifier.verify.bind(verifier)));
   };
 }
 
