@@ -3,9 +3,10 @@ import merge from 'lodash.merge';
 import omit from 'lodash.omit';
 import pick from 'lodash.pick';
 import auth from 'feathers-authentication';
-import { formatter as defaulFormatter } from 'feathers-rest';
+import { formatter as defaultFormatter } from 'feathers-rest';
 import url from './url';
 import { parse } from 'url';
+import defaultHandler from './express/handler';
 import DefaultVerifier from './verifier';
 
 const debug = Debug('feathers-authentication-oauth2');
@@ -55,45 +56,18 @@ export default function init (options = {}) {
       throw new Error(`You must provide a 'clientSecret' in your authentication configuration or pass one explicitly`);
     }
 
-    let Verifier = options.Verifier || DefaultVerifier;
-    let formatter = options.formatter || defaulFormatter;
-
-    const handler = oauth2Settings.handler || function (req, res, next) {
-      const app = req.app;
-      const entity = req[oauth2Settings.entity];
-      const params = {
-        authenticated: true,
-        [oauth2Settings.entity]: entity
-      };
-
-      debug(`Executing '${name}' OAuth Callback`);
-      debug(`Calling create on '${authSettings.path}' service with`, entity);
-      app.service(authSettings.path).create(req[oauth2Settings.entity], params).then(result => {
-        res.data = result;
-        
-        if (oauth2Settings.successRedirect) {
-          req.hook = {
-            redirect: { url: oauth2Settings.successRedirect }
-          };
-        }
-
-        next();
-      }).catch(error => {
-        if (oauth2Settings.failureRedirect) {
-          req.hook = {
-            redirect: { url: oauth2Settings.failureRedirect }
-          };
-        }
-
-        next(error);
-      });
-    };
+    const Verifier = options.Verifier || DefaultVerifier;
+    const formatter = options.formatter || defaultFormatter;
+    const handler = options.handler || defaultHandler(oauth2Settings);
 
     // register OAuth middleware
     debug(`Registering '${name}' Express OAuth middleware`);
     app.get(oauth2Settings.path, auth.express.authenticate(name));
     app.get(
       parse(oauth2Settings.callbackURL).pathname,
+      // NOTE (EK): We register failure redirect here so that we can
+      // retain the natural express middleware redirect ability like
+      // you would have with vanilla passport.
       auth.express.authenticate(name, { failureRedirect: oauth2Settings.failureRedirect }),
       handler,
       auth.express.emitEvents(authSettings),
