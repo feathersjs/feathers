@@ -119,7 +119,7 @@ app.configure(oauth2({
 
 ## Customizing The OAuth Response
 
-Whenever you authenticate with an OAuth2 provider such as Facebook you will get back an `accessToken`, `refreshToken`, and a `profile` that contains the authenticated entity's information based on the OAuth2 `scopes` you have requested and been granted.
+Whenever you authenticate with an OAuth2 provider such as Facebook, the provider sends back an `accessToken`, `refreshToken`, and a `profile` that contains the authenticated entity's information based on the OAuth2 `scopes` you have requested and been granted.
 
 By default the `Verifier` takes everything returned by the provider and attaches it to the `entity` (ie. the user object) under the provider name. You will likely want to customize the data that is returned. This can be done by adding a `before` hook to both the `update` and `create` service methods on your `entity`'s service.
 
