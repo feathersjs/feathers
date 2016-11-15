@@ -46,6 +46,7 @@ describe('feathers-authentication-local', () => {
       sinon.spy(app.passport, 'use');
       sinon.spy(passportLocal, 'Strategy');
       app.configure(local());
+      app.setup();
 
       expect(passportLocal.Strategy).to.have.been.calledOnce;
       expect(app.passport.use).to.have.been.calledWith('local');
@@ -61,6 +62,7 @@ describe('feathers-authentication-local', () => {
       beforeEach(() => {
         sinon.spy(passportLocal, 'Strategy');
         app.configure(local({ custom: true }));
+        app.setup();
         authOptions = app.get('auth');
         args = passportLocal.Strategy.getCall(0).args[0];
       });
@@ -96,11 +98,16 @@ describe('feathers-authentication-local', () => {
       it('supports setting custom options', () => {
         expect(args.custom).to.equal(true);
       });
+    });
 
-      it('supports overriding default options', () => {
-        app.configure(local({ usernameField: 'username' }));
-        expect(passportLocal.Strategy.getCall(1).args[0].usernameField).to.equal('username');
-      });
+    it('supports overriding default options', () => {
+      sinon.spy(passportLocal, 'Strategy');
+      app.configure(local({ usernameField: 'username' }));
+      app.setup();
+
+      expect(passportLocal.Strategy.getCall(0).args[0].usernameField).to.equal('username');
+      
+      passportLocal.Strategy.restore();
     });
 
     describe('custom Verifier', () => {
@@ -112,6 +119,7 @@ describe('feathers-authentication-local', () => {
             }
           }
           app.configure(local({ Verifier: CustomVerifier }));
+          app.setup();
         }).to.throw();
       });
 
@@ -136,6 +144,7 @@ describe('feathers-authentication-local', () => {
         }
 
         app.configure(local({ Verifier: CustomVerifier }));
+        app.setup();
 
         return app.authenticate('local')(req).then(result => {
           expect(result.data.user).to.deep.equal(User);

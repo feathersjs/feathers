@@ -54,7 +54,7 @@ This will pull from your global `auth` object in your config file. It will also 
 
 ### hashPassword hook
 
-This hook is used to hash plain text passwords before they are saved to the database. It uses the bcrypt algorithm by default but can be customized by passing your own `optionk.hash` function.
+This hook is used to hash plain text passwords before they are saved to the database. It uses the bcrypt algorithm by default but can be customized by passing your own `options.hash` function.
 
 #### Default Options
 
@@ -124,10 +124,8 @@ const app = feathers()
   .use(bodyParser.urlencoded({ extended: true }))
   // Configure feathers-authentication
   .configure(auth({ secret: 'super secret' }))
-  // Initialize a user service. This must come before
-  // the local plugin because it depends on that service.
-  .use('/users', memory())
   .configure(local())
+  .use('/users', memory())
   .use(errorHandler());
 
 app.listen(3030);

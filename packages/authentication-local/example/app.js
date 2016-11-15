@@ -19,10 +19,8 @@ app.configure(rest())
   .use(bodyParser.urlencoded({ extended: true }))
   // Configure feathers-authentication
   .configure(auth({ secret: 'super secret' }))
-  // Initialize a user service. This must come before
-  // the local plugin because it depends on that service.
-  .use('/users', memory())
   .configure(local())
+  .use('/users', memory())
   .use(errorHandler());
 
 function customizeJWTPayload() {
