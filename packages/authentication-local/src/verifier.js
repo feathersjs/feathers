@@ -46,10 +46,10 @@ class LocalVerifier {
     });
   }
 
-  normalizeResult(result) {
+  normalizeResult(results) {
     // Paginated services return the array of results in the data attribute.
-    let data = result.data ? result.data : result;
-    let entity = data[0];
+    let entities = results.data ? results.data : results;
+    let entity = entities[0];
 
     // Handle bad username.
     if (!entity) {
