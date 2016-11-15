@@ -47,7 +47,7 @@ app.configure(oauth2({
   Strategy: FacebookStrategy,
   clientID: '<your client id>',
   clientSecret: '<your client secret>',
-  scope: ['user']
+  scope: ['public_profile', 'email']
 }));
 ```
 
@@ -108,13 +108,12 @@ class CustomVerifier extends Verifier {
 }
 
 app.configure(oauth2({
-    facebook: {
-        Strategy: FacebookStrategy,
-        clientID: '<your client id>',
-        clientSecret: '<your client secret>',
-        scope: ['user'],
-        Verifier: CustomVerifier
-    }
+  name: 'facebook'
+  Strategy: FacebookStrategy,
+  clientID: '<your client id>',
+  clientSecret: '<your client secret>',
+  scope: ['public_profile', 'email'],
+  Verifier: CustomVerifier
 }));
 ```
 
@@ -191,17 +190,15 @@ const app = feathers()
   .use(bodyParser.urlencoded({ extended: true }))
   // Configure feathers-authentication
   .configure(auth({ secret: 'super secret' }))
-  // Initialize a user service. This must come before
-  // the oauth2 plugin because it depends on that service.
-  .use('/users', memory())
   .configure(oauth2({
     github: {
       Strategy: GithubStrategy,
       clientID: 'dc608a778075377552a3',
       clientSecret: 'c337fce2f47c493daa4e6b67e9f22ea8704d37ab',
-      scope: ['user']
+      scope: ['public_profile', 'email']
     }
   }))
+  .use('/users', memory())
   .use(errorHandler());
 
 app.listen(3030);
