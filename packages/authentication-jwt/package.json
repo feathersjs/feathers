@@ -65,6 +65,7 @@
     "body-parser": "^1.15.2",
     "chai": "^3.5.0",
     "feathers": "^2.0.2",
+    "feathers-authentication": "^1.0.0-alpha",
     "feathers-hooks": "^1.6.1",
     "feathers-memory": "^0.8.1",
     "feathers-rest": "^1.5.2",
