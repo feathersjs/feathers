@@ -135,9 +135,18 @@ TODO
 
 ## JWT Parsing
 
-The JWT is only parsed from the header by default now. It is no longer pulled from the body or query string.
+The JWT is only parsed from the header and body by default now. It is no longer pulled from the query string.
 
-You can customize the header by passing the `app.configure(authentication({header: 'custom'})`. If you want to customize things further you can refer to the [`feathers-authentication-jwt`](https://github.com/feathersjs/feathers-authentication-jwt) module or implement your own custom passport JWT strategy.
+You can customize the header and body keys like so:
+
+```js
+app.configure(authentication({
+  header: 'custom',
+  bodyKey: 'custom'
+}));
+```
+
+If you want to customize things further you can refer to the [`feathers-authentication-jwt`](https://github.com/feathersjs/feathers-authentication-jwt) module or implement your own custom passport JWT strategy.
 
 ## Hook Changes
 
