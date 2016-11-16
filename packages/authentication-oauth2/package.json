@@ -51,7 +51,6 @@
   },
   "dependencies": {
     "debug": "^2.2.0",
-    "feathers-authentication": "^0.7.12",
     "feathers-errors": "^2.4.0",
     "feathers-rest": "^1.5.2",
     "lodash.merge": "^4.6.0",
@@ -66,6 +65,8 @@
     "body-parser": "^1.15.2",
     "chai": "^3.5.0",
     "feathers": "^2.0.2",
+    "feathers-authentication": "^1.0.0-alpha",
+    "feathers-hooks": "^1.6.1",
     "feathers-memory": "^0.8.1",
     "feathers-rest": "^1.5.2",
     "istanbul": "^1.1.0-alpha.1",
