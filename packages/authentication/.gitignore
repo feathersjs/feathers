@@ -28,4 +28,7 @@ node_modules
 .lock-wscript
 
 lib/
+coverage/
 data.db
+_backup/
+yarn.lock

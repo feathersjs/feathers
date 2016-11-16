@@ -1,94 +1,57 @@
 import Debug from 'debug';
-import path from 'path';
-import crypto from 'crypto';
-import passport from 'passport';
 import hooks from './hooks';
-import token from './services/token';
-import local from './services/local';
-import oauth2 from './services/oauth2';
-import * as middleware from './middleware';
+import express from './express';
+import passport from 'passport';
+import adapter from './passport';
+import getOptions from './options';
+import service from './service';
+import socket from './socket';
 
-function isObject (item) {
-  return (typeof item === 'object' && !Array.isArray(item) && item !== null);
-}
+const debug = Debug('feathers-authentication:index');
 
-const debug = Debug('feathers-authentication:main');
-const PROVIDERS = {
-  token,
-  local
-};
-
-// Options that apply to any provider
-const defaults = {
-  idField: '_id',
-  shouldSetupSuccessRoute: true,
-  shouldSetupFailureRoute: true,
-  successRedirect: '/auth/success',
-  failureRedirect: '/auth/failure',
-  tokenEndpoint: '/auth/token',
-  localEndpoint: '/auth/local',
-  userEndpoint: '/users',
-  header: 'authorization',
-  cookie: {
-    name: 'feathers-jwt',
-    httpOnly: false,
-    secure: process.env.NODE_ENV === 'production'
-  }
-};
-
-export default function auth(config = {}) {
-  return function() {
+export default function init(config = {}) {
+  return function authentication() {
     const app = this;
-    let _super = app.setup;
-
-    // NOTE (EK): Currently we require token based auth so
-    // if the developer didn't provide a config for our token
-    // provider then we'll set up a sane default for them.
-    if (!config.token) {
-      config.token = {
-        secret: crypto.randomBytes(64).toString('base64')
-      };
-    }
-
-    // If they didn't pass in a local provider let's set one up
-    // for them with the default options.
-    if (config.local === undefined) {
-      config.local = {};
-    }
-
-    if (config.cookie ){
-      config.cookie = Object.assign({}, defaults.cookie, config.cookie);
-    }
-
+    const _super = app.setup;
     // Merge and flatten options
-    const authOptions = Object.assign({}, defaults, app.get('auth'),config);
+    const options = getOptions(config);
 
-    // If a custom success redirect is passed in or it is disabled then we
-    // won't setup the default route handler.
-    if (authOptions.successRedirect !== defaults.successRedirect) {
-      authOptions.shouldSetupSuccessRoute = false;
+    if (app.passport) {
+      throw new Error(`You have already registered authentication on this app. You only need to do it once.`);
     }
 
-    // If a custom failure redirect is passed in or it is disabled then we
-    // won't setup the default route handler.
-    if (authOptions.failureRedirect !== defaults.failureRedirect) {
-      authOptions.shouldSetupFailureRoute = false;
+    if (!options.secret) {
+      throw new Error (`You must provide a 'secret' in your authentication configuration`);
     }
 
-    // Set the options on the app
-    app.set('auth', authOptions);
-
-    // REST middleware
-    if (app.rest) {
-      debug('registering REST authentication middleware');
-      // Make the Passport user available for REST services.
-      // app.use( middleware.exposeAuthenticatedUser() );
-
-      // Get the token and expose it to REST services.
-      app.use( middleware.normalizeAuthToken(authOptions) );
+    // Make sure cookies don't have to be sent over HTTPS
+    // when in development or test mode.
+    if (app.get('env') === 'development' || app.get('env') === 'test') {
+      options.cookie.secure = false;
     }
 
-    app.use(passport.initialize());
+    app.set('auth', options);
+
+    debug('Setting up Passport');    
+    // Set up our framework adapter
+    passport.framework(adapter.call(app, options));
+    // Expose passport on the app object
+    app.passport = passport;
+    // Alias to passport for less keystrokes
+    app.authenticate = passport.authenticate.bind(passport);
+    // Expose express request headers to Feathers services and hooks.
+    app.use(express.exposeHeaders());
+
+    if (options.cookie.enabled) {
+      // Expose express cookies to Feathers services and hooks.
+      debug('Setting up Express exposeCookie middleware');
+      app.use(express.exposeCookies());
+    }
+
+    // TODO (EK): Support passing your own service or force
+    // developer to register it themselves.
+    app.configure(service(options));
+    app.passport.initialize();
 
     app.setup = function() {
       let result = _super.apply(this, arguments);
@@ -96,74 +59,23 @@ export default function auth(config = {}) {
       // Socket.io middleware
       if (app.io) {
         debug('registering Socket.io authentication middleware');
-        app.io.on('connection', middleware.setupSocketIOAuthentication(app, authOptions));
+        app.io.on('connection', socket.socketio(app, options));
       }
 
       // Primus middleware
       if (app.primus) {
         debug('registering Primus authentication middleware');
-        app.primus.on('connection', middleware.setupPrimusAuthentication(app, authOptions));
+        app.primus.on('connection', socket.primus(app, options));
       }
 
       return result;
     };
-
-    // Merge all of our options and configure the appropriate service
-    Object.keys(config).forEach(function (key) {
-
-      // Because we are iterating through all the keys we might
-      // be dealing with a config param and not a provider config
-      // If that's the case we don't need to merge params and we
-      // shouldn't try to set up a service for this key.
-      if (!isObject(config[key]) || key === 'cookie') {
-        return;
-      }
-
-      // Check to see if the key is a local or token provider
-      let provider = PROVIDERS[key];
-      let providerOptions = config[key];
-
-      // If it's not one of our own providers then determine whether it is oauth1 or oauth2
-      if (!provider && isObject(providerOptions)) {
-        // Check to see if it is an oauth2 provider
-        if (providerOptions.clientID && providerOptions.clientSecret) {
-          provider = oauth2;
-        }
-        // Check to see if it is an oauth1 provider
-        else if (providerOptions.consumerKey && providerOptions.consumerSecret){
-          throw new Error(`Sorry we don't support OAuth1 providers right now. Try using a ${key} OAuth2 provider.`);
-        }
-
-        providerOptions = Object.assign({ provider: key, endPoint: `/auth/${key}` }, providerOptions);
-      }
-
-      const options = Object.assign({}, authOptions, providerOptions);
-
-      app.configure( provider(options) );
-    });
-
-    // Register error handling middleware for redirecting to support
-    // redirecting on authentication failure.
-    app.use(middleware.failedLogin(authOptions));
-
-    // Setup route handler for default success redirect
-    if (authOptions.shouldSetupSuccessRoute) {
-      debug(`Setting up successRedirect route: ${authOptions.successRedirect}`);
-
-      app.get(authOptions.successRedirect, function(req, res){
-        res.sendFile(path.resolve(__dirname, 'public', 'auth-success.html'));
-      });
-    }
-
-    // Setup route handler for default failure redirect
-    if (authOptions.shouldSetupFailureRoute) {
-      debug(`Setting up failureRedirect route: ${authOptions.failureRedirect}`);
-
-      app.get(authOptions.failureRedirect, function(req, res){
-        res.sendFile(path.resolve(__dirname, 'public', 'auth-fail.html'));
-      });
-    }
   };
 }
 
-auth.hooks = hooks;
+// Exposed Modules
+Object.assign(init, {
+  hooks,
+  express,
+  service
+});
