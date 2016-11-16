@@ -72,8 +72,8 @@ This is the verification class that does the username and password verification 
 ```js
 {
     constructor(app, options) // the class constructor
-    comparePassword(entity, password) // compares password using bcrypt
-    normalizeResult(result) // normalizes result from service to account for pagination
+    _comparePassword(entity, password) // compares password using bcrypt
+    _normalizeResult(result) // normalizes result from service to account for pagination
     verify(req, username, password, done) // queries the service and calls the other internal functions.
 }
 ```
@@ -94,6 +94,8 @@ class CustomVerifier extends Verifier {
   verify(req, username, password, done) {
     // do your custom stuff. You can call internal Verifier methods
     // and reference this.app and this.options. This method must be implemented.
+
+    // the 'user' variable can be any truthy value
     done(null, user);
   }
 }

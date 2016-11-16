@@ -14,12 +14,12 @@ class LocalVerifier {
       throw new Error(`options.service does not exist.\n\tMake sure you are passing a valid service path or service instance and it is initialized before feathers-authentication-local.`);
     }
 
-    this.comparePassword = this.comparePassword.bind(this);
-    this.normalizeResult = this.normalizeResult.bind(this);
+    this._comparePassword = this._comparePassword.bind(this);
+    this._normalizeResult = this._normalizeResult.bind(this);
     this.verify = this.verify.bind(this);
   }
 
-  comparePassword(entity, password) {
+  _comparePassword(entity, password) {
     const hash = entity[this.options.passwordField];
 
     if (!hash) {
@@ -46,7 +46,7 @@ class LocalVerifier {
     });
   }
 
-  normalizeResult(results) {
+  _normalizeResult(results) {
     // Paginated services return the array of results in the data attribute.
     let entities = results.data ? results.data : results;
     let entity = entities[0];
@@ -69,8 +69,8 @@ class LocalVerifier {
 
     // Look up the entity
     this.service.find({ query })
-      .then(this.normalizeResult)
-      .then(entity => this.comparePassword(entity, password))
+      .then(this._normalizeResult)
+      .then(entity => this._comparePassword(entity, password))
       .then(entity => done(null, entity))
       .catch(error => error ? done(error) : done(null, error));
   }

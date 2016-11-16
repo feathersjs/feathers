@@ -72,10 +72,10 @@ describe('Verifier', () => {
     });
   });
 
-  describe('comparePassword', () => {
+  describe('_comparePassword', () => {
     describe('when entity is missing password field', () => {
       it('returns an error', () => {
-        return verifier.comparePassword({}).catch(error => {
+        return verifier._comparePassword({}).catch(error => {
           expect(error).to.not.equal(undefined);
         });
       });
@@ -83,7 +83,7 @@ describe('Verifier', () => {
 
     describe('password comparison fails', () => {
       it('rejects with false', () => {
-        return verifier.comparePassword(user, 'invalid').catch(error => {
+        return verifier._comparePassword(user, 'invalid').catch(error => {
           expect(error).to.equal(false);
         });
       });
@@ -91,23 +91,23 @@ describe('Verifier', () => {
 
     describe('password comparison succeeds', () => {
       it('returns the entity', () => {
-        return verifier.comparePassword(user, 'admin').then(result => {
+        return verifier._comparePassword(user, 'admin').then(result => {
           expect(result).to.deep.equal(user);
         });
       });
     });
   });
 
-  describe('normalizeResult', () => {
+  describe('_normalizeResult', () => {
     describe('when has results', () => {
       it('returns entity when paginated', () => {  
-        return verifier.normalizeResult({ data: [user] }).then(result => {
+        return verifier._normalizeResult({ data: [user] }).then(result => {
           expect(result).to.deep.equal(user);
         });
       });
 
       it('returns entity when not paginated', () => {  
-        return verifier.normalizeResult([user]).then(result => {
+        return verifier._normalizeResult([user]).then(result => {
           expect(result).to.deep.equal(user);
         });
       });
@@ -115,13 +115,13 @@ describe('Verifier', () => {
 
     describe('when no results', () => {
       it('rejects with false when paginated', () => {  
-        return verifier.normalizeResult({ data: [] }).catch(error => {
+        return verifier._normalizeResult({ data: [] }).catch(error => {
           expect(error).to.equal(false);
         });
       });
 
       it('rejects with false when not paginated', () => {  
-        return verifier.normalizeResult([]).catch(error => {
+        return verifier._normalizeResult([]).catch(error => {
           expect(error).to.equal(false);
         });
       });
@@ -138,20 +138,20 @@ describe('Verifier', () => {
       });
     });
 
-    it('calls normalizeResult', done => {
-      sinon.spy(verifier, 'normalizeResult');
+    it('calls _normalizeResult', done => {
+      sinon.spy(verifier, '_normalizeResult');
       verifier.verify({}, user.email, 'admin', () => {
-        expect(verifier.normalizeResult).to.have.been.calledOnce;
-        verifier.normalizeResult.restore();
+        expect(verifier._normalizeResult).to.have.been.calledOnce;
+        verifier._normalizeResult.restore();
         done();
       });
     });
 
-    it('calls comparePassword', done => {
-      sinon.spy(verifier, 'comparePassword');
+    it('calls _comparePassword', done => {
+      sinon.spy(verifier, '_comparePassword');
       verifier.verify({}, user.email, 'admin', () => {
-        expect(verifier.comparePassword).to.have.been.calledOnce;
-        verifier.comparePassword.restore();
+        expect(verifier._comparePassword).to.have.been.calledOnce;
+        verifier._comparePassword.restore();
         done();
       });
     });
@@ -165,7 +165,7 @@ describe('Verifier', () => {
     });
 
     it('handles false rejections in promise chain', () => {
-      verifier.normalizeResult = () => Promise.reject(false);
+      verifier._normalizeResult = () => Promise.reject(false);
       verifier.verify({}, user.email, 'admin', (error, entity) => {
         expect(error).to.equal(null);
         expect(entity).to.equal(false);
@@ -175,7 +175,7 @@ describe('Verifier', () => {
 
     it('returns errors', () => {
       const authError = new Error('An error');
-      verifier.normalizeResult = () => Promise.reject(authError);
+      verifier._normalizeResult = () => Promise.reject(authError);
       verifier.verify({}, user.email, 'admin', (error, entity) => {
         expect(error).to.equal(authError);
         expect(entity).to.equal(undefined);
