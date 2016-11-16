@@ -1,5 +1,6 @@
 .editorconfig
 .jshintrc
+.istanbul.yml
 .travis.yml
 .babelrc
 .idea/

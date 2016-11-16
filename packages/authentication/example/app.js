@@ -1,100 +1,95 @@
-var feathers = require('feathers');
-var rest = require('feathers-rest');
-var socketio = require('feathers-socketio');
-var hooks = require('feathers-hooks');
-var memory = require('feathers-memory');
-var bodyParser = require('body-parser');
-var errorHandler = require('feathers-errors/handler');
-var authentication = require('../lib/index');
+const feathers = require('feathers');
+const rest = require('feathers-rest');
+const socketio = require('feathers-socketio');
+const hooks = require('feathers-hooks');
+const memory = require('feathers-memory');
+const bodyParser = require('body-parser');
+const errors = require('feathers-errors');
+const errorHandler = require('feathers-errors/handler');
+const local = require('feathers-authentication-local');
+const jwt = require('feathers-authentication-jwt');
+const auth = require('../lib/index');
 
-// Initialize the application
-var app = feathers()
-  .configure(rest())
+function customizeJWTPayload() {
+  return function(hook) {
+    hook.data.payload = {
+      id: hook.params.user.id
+    };
+
+    return Promise.resolve(hook);
+  };
+}
+
+const app = feathers();
+app.configure(rest())
   .configure(socketio())
   .configure(hooks())
-  // Needed for parsing bodies (login)
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
-  // Configure feathers-authentication
-  .configure(authentication({
-    idField: 'id'
-  }))
-  // Initialize a user service
+  .configure(auth({ secret: 'supersecret' }))
+  .configure(local())
+  .configure(jwt())
   .use('/users', memory())
-  // A simple Message service that we can used for testing
-  .use('/messages', memory({
-    paginate: {
-      default: 5,
-      max: 25
-    }
-  }))
-  .use('/approved-messages', memory())
-  .use('/', feathers.static(__dirname + '/public'))
-  .use(errorHandler());
+  .use('/', feathers.static(__dirname + '/public'));
 
-var messageService = app.service('/messages');
-messageService.create({text: 'A million people walk into a Silicon Valley bar'}, {}, function(){});
-messageService.create({text: 'Nobody buys anything'}, {}, function(){});
-messageService.create({text: 'Bar declared massive success'}, {}, function(){});
-
-messageService.before({
-  all: [
-    authentication.hooks.verifyToken(),
-    authentication.hooks.populateUser(),
-    authentication.hooks.restrictToAuthenticated()
-  ]
-})
-
-var approvedMessageService = app.service('/approved-messages');
-approvedMessageService.create({text: 'A million people walk into a Silicon Valley bar', approved: false, author: 'James'}, {}, function(){});
-approvedMessageService.create({text: 'Nobody buys anything', approved: true, author: 'Todd'}, {}, function(){});
-approvedMessageService.create({text: 'Bar declared massive success', approved: true, author: 'James'}, {}, function(){});
-
-
-// Will merge this restriction with the query params
-var restriction = { restrict: {approved: true} };
-
-approvedMessageService.before({
-  all: [
-    // Necessary since restrict must always use find and hook id is a string when the memory service expects it as a number
-    function(hook) {
-      if(hook.id) {
-        hook.id = parseInt(hook.id, 10);
-      }
-    }
-  ],
-  find: [
-    authentication.hooks.verifyOrRestrict(restriction),
-    authentication.hooks.populateOrRestrict(restriction),
-    authentication.hooks.hasRoleOrRestrict(Object.assign({roles: ['admin']}, restriction))
-  ],
-  get: [
-    authentication.hooks.verifyOrRestrict(restriction),
-    authentication.hooks.populateOrRestrict(restriction),
-    authentication.hooks.hasRoleOrRestrict(Object.assign({roles: ['admin']}, restriction))
-  ]
-})
-
-
-var userService = app.service('users');
+app.service('authentication').hooks({
+  before: {
+    create: [
+      // You can chain multiple strategies
+      auth.hooks.authenticate(['jwt', 'local']),
+      customizeJWTPayload()
+    ],
+    remove: [
+      auth.hooks.authenticate('jwt')
+    ]
+  }
+});
 
 // Add a hook to the user service that automatically replaces
 // the password with a hash of the password before saving it.
-userService.before({
-  create: authentication.hooks.hashPassword()
+app.service('users').hooks({
+  before: {
+    find: [
+      auth.hooks.authenticate('jwt')
+    ],
+    create: [
+      local.hooks.hashPassword({ passwordField: 'password' })
+    ]
+  }
 });
 
-// Create a user that we can use to log in
+// Custom Express routes
+app.get('/protected', auth.express.authenticate('jwt'), (req, res, next) => {
+  res.json({ success: true });
+});
+
+app.get('/unprotected', (req, res, next) => {
+  res.json({ success: true });
+});
+
+// Custom route with custom redirects
+app.post('/login', auth.express.authenticate('local', { successRedirect: '/app', failureRedirect: '/login' }));
+
+app.get('/app', (req, res, next) => {
+  res.json({ success: true });
+});
+
+app.get('/login', (req, res, next) => {
+  res.json({ success: false });
+});
+
 var User = {
   email: 'admin@feathersjs.com',
   password: 'admin',
-  roles: ['admin']
+  permissions: ['*']
 };
 
-userService.create(User, {}).then(function(user) {
+app.service('users').create(User).then(user => {
   console.log('Created default user', user);
-});
+}).catch(console.error);
+
+app.use(errorHandler());
 
 app.listen(3030);
 
-console.log('Feathers authentication app started on 127.0.0.1:3030');
+console.log('Feathers authentication with local auth started on 127.0.0.1:3030');
