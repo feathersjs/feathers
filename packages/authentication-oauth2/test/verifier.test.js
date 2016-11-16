@@ -69,7 +69,7 @@ describe('Verifier', () => {
     });
   });
 
-  describe('updateEntity', () => {
+  describe('_updateEntity', () => {
     let entity;
     let data;
     let args;
@@ -84,7 +84,7 @@ describe('Verifier', () => {
           name: 'Admin'
         }
       };
-      return verifier.updateEntity(entity, data).then(() => {
+      return verifier._updateEntity(entity, data).then(() => {
         args = service.update.getCall(0).args;
       });
     });
@@ -109,7 +109,7 @@ describe('Verifier', () => {
     });
   });
 
-  describe('createEntity', () => {
+  describe('_createEntity', () => {
     let data;
     let args;
 
@@ -122,7 +122,7 @@ describe('Verifier', () => {
           name: 'Admin'
         }
       };
-      return verifier.createEntity(data).then(() => {
+      return verifier._createEntity(data).then(() => {
         args = service.create.getCall(0).args;
       });
     });
@@ -141,30 +141,30 @@ describe('Verifier', () => {
     });
   });
 
-  describe('normalizeResult', () => {
+  describe('_normalizeResult', () => {
     describe('when has results', () => {
       it('returns entity when paginated', () => {
-        return verifier.normalizeResult({ data: [user] }).then(result => {
+        return verifier._normalizeResult({ data: [user] }).then(result => {
           expect(result).to.deep.equal(user);
         });
       });
 
       it('returns entity when not paginated', () => {
-        return verifier.normalizeResult([user]).then(result => {
+        return verifier._normalizeResult([user]).then(result => {
           expect(result).to.deep.equal(user);
         });
       });
 
       it('calls toObject on entity when present', () => {
         user.toObject = sinon.spy();
-        return verifier.normalizeResult({ data: [user] }).then(() => {
+        return verifier._normalizeResult({ data: [user] }).then(() => {
           expect(user.toObject).to.have.been.calledOnce;
         });
       });
 
       it('calls toJSON on entity when present', () => {
         user.toJSON = sinon.spy();
-        return verifier.normalizeResult({ data: [user] }).then(() => {
+        return verifier._normalizeResult({ data: [user] }).then(() => {
           expect(user.toJSON).to.have.been.calledOnce;
         });
       });
@@ -172,13 +172,13 @@ describe('Verifier', () => {
 
     describe('when no results', () => {
       it('rejects with false when paginated', () => {
-        return verifier.normalizeResult({ data: [] }).catch(error => {
+        return verifier._normalizeResult({ data: [] }).catch(error => {
           expect(error).to.equal(false);
         });
       });
 
       it('rejects with false when not paginated', () => {
-        return verifier.normalizeResult([]).catch(error => {
+        return verifier._normalizeResult([]).catch(error => {
           expect(error).to.equal(false);
         });
       });
@@ -195,58 +195,58 @@ describe('Verifier', () => {
       });
     });
 
-    it('calls normalizeResult', done => {
-      sinon.spy(verifier, 'normalizeResult');
+    it('calls _normalizeResult', done => {
+      sinon.spy(verifier, '_normalizeResult');
       verifier.verify({}, 'access', 'refresh', { id: 1234 }, () => {
-        expect(verifier.normalizeResult).to.have.been.calledOnce;
-        verifier.normalizeResult.restore();
+        expect(verifier._normalizeResult).to.have.been.calledOnce;
+        verifier._normalizeResult.restore();
         done();
       });
     });
 
     describe('when entity exists on request object', () => {
-      it('calls updateEntity', done => {
-        sinon.spy(verifier, 'updateEntity');
+      it('calls _updateEntity', done => {
+        sinon.spy(verifier, '_updateEntity');
         const req = { 'user': { name: 'Admin' } };
         verifier.verify(req, 'access', 'refresh', { id: 1234 }, () => {
-          expect(verifier.updateEntity).to.have.been.calledOnce;
-          verifier.updateEntity.restore();
+          expect(verifier._updateEntity).to.have.been.calledOnce;
+          verifier._updateEntity.restore();
           done();
         });
       });
     });
 
     describe('when entity exists on request.params object', () => {
-      it('calls updateEntity', done => {
-        sinon.spy(verifier, 'updateEntity');
+      it('calls _updateEntity', done => {
+        sinon.spy(verifier, '_updateEntity');
         const req = {
           params: {
             'user': { name: 'Admin' }
           }
         };
         verifier.verify(req, 'access', 'refresh', { id: 1234 }, () => {
-          expect(verifier.updateEntity).to.have.been.calledOnce;
-          verifier.updateEntity.restore();
+          expect(verifier._updateEntity).to.have.been.calledOnce;
+          verifier._updateEntity.restore();
           done();
         });
       });
     });
 
-    it('calls createEntity when entity not found', done => {
-      sinon.spy(verifier, 'createEntity');
-      verifier.normalizeResult = () => Promise.resolve(null);
+    it('calls _createEntity when entity not found', done => {
+      sinon.spy(verifier, '_createEntity');
+      verifier._normalizeResult = () => Promise.resolve(null);
       verifier.verify({}, 'access', 'refresh', { id: 1234 }, () => {
-        expect(verifier.createEntity).to.have.been.calledOnce;
-        verifier.createEntity.restore();
+        expect(verifier._createEntity).to.have.been.calledOnce;
+        verifier._createEntity.restore();
         done();
       });
     });
 
-    it('calls updateEntity when entity is found', done => {
-      sinon.spy(verifier, 'updateEntity');
+    it('calls _updateEntity when entity is found', done => {
+      sinon.spy(verifier, '_updateEntity');
       verifier.verify({}, 'access', 'refresh', { id: 1234 }, () => {
-        expect(verifier.updateEntity).to.have.been.calledOnce;
-        verifier.updateEntity.restore();
+        expect(verifier._updateEntity).to.have.been.calledOnce;
+        verifier._updateEntity.restore();
         done();
       });
     });
@@ -260,7 +260,7 @@ describe('Verifier', () => {
     });
 
     it('handles false rejections in promise chain', done => {
-      verifier.updateEntity = () => Promise.reject(false);
+      verifier._updateEntity = () => Promise.reject(false);
       verifier.verify({}, 'access', 'refresh', { id: 1234 }, (error, entity) => {
         expect(error).to.equal(null);
         expect(entity).to.equal(false);
@@ -270,7 +270,7 @@ describe('Verifier', () => {
 
     it('returns errors', done => {
       const authError = new Error('An error');
-      verifier.normalizeResult = () => Promise.reject(authError);
+      verifier._normalizeResult = () => Promise.reject(authError);
       verifier.verify({}, 'access', 'refresh', { id: 1234 }, (error, entity) => {
         expect(error).to.equal(authError);
         expect(entity).to.equal(undefined);

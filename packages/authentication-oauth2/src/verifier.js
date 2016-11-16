@@ -14,13 +14,13 @@ class OAuth2Verifier {
       throw new Error(`options.service does not exist.\n\tMake sure you are passing a valid service path or service instance and it is initialized before feathers-authentication-oauth2.`);
     }
 
-    this.createEntity = this.createEntity.bind(this);
-    this.updateEntity = this.updateEntity.bind(this);
-    this.normalizeResult = this.normalizeResult.bind(this);
+    this._createEntity = this._createEntity.bind(this);
+    this._updateEntity = this._updateEntity.bind(this);
+    this._normalizeResult = this._normalizeResult.bind(this);
     this.verify = this.verify.bind(this);
   }
 
-  normalizeResult (results) {
+  _normalizeResult (results) {
     // Paginated services return the array of results in the data attribute.
     let entities = results.data ? results.data : results;
     let entity = entities[0];
@@ -42,7 +42,7 @@ class OAuth2Verifier {
     return Promise.resolve(entity);
   }
 
-  updateEntity (entity, data) {
+  _updateEntity (entity, data) {
     const options = this.options;
     const name = options.name;
     const id = entity[this.service.id];
@@ -58,7 +58,7 @@ class OAuth2Verifier {
     return this.service.update(id, updated, { oauth: { provider: name } });
   }
 
-  createEntity (data) {
+  _createEntity (data) {
     const options = this.options;
     const name = options.name;
     const entity = {
@@ -96,7 +96,7 @@ class OAuth2Verifier {
     // already authenticated) attach the profile to the existing entity
     // because they are likely "linking" social accounts/profiles.
     if (existing) {
-      return this.updateEntity(existing, data)
+      return this._updateEntity(existing, data)
         .then(entity => done(null, entity))
         .catch(error => error ? done(error) : done(null, error));
     }
@@ -104,8 +104,8 @@ class OAuth2Verifier {
     // Find or create the user since they could have signed up via facebook.
     this.service
       .find({ query })
-      .then(this.normalizeResult)
-      .then(entity => entity ? this.updateEntity(entity, data) : this.createEntity(data))
+      .then(this._normalizeResult)
+      .then(entity => entity ? this._updateEntity(entity, data) : this._createEntity(data))
       .then(entity => done(null, entity))
       .catch(error => error ? done(error) : done(null, error));
   }
