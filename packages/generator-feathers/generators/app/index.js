@@ -27,7 +27,7 @@ module.exports = generators.Base.extend({
       'feathers@^2.0.0',
       'feathers-hooks@^1.5.0',
       'feathers-errors@^2.0.1',
-      'feathers-configuration@^0.3.0',
+      'feathers-configuration@^0.4.0',
       'serve-favicon',
       'compression',
       'winston'
@@ -405,7 +405,7 @@ module.exports = generators.Base.extend({
           process.exit(1);
         }
       }.bind(this));
-      
+
       this.npmInstall(this.dependencies, { save: true });
       this.npmInstall(devDependencies, { saveDev: true});
     }
