@@ -79,9 +79,9 @@ This is the verification class that handles the OAuth2 verification by looking u
 ```js
 {
     constructor(app, options) // the class constructor
-    updateEntity(entity) // updates an existing entity
-    createEntity(entity) // creates an entity if they didn't exist already
-    normalizeResult(result) // normalizes result from service to account for pagination
+    _updateEntity(entity) // updates an existing entity
+    _createEntity(entity) // creates an entity if they didn't exist already
+    _normalizeResult(result) // normalizes result from service to account for pagination
     verify(req, accessToken, refreshToken, profile, done) // queries the service and calls the other internal functions.
 }
 ```
@@ -101,7 +101,9 @@ class CustomVerifier extends Verifier {
   verify(req, accessToken, refreshToken, profile, done) {
     // do your custom stuff. You can call internal Verifier methods
     // and reference this.app and this.options. This method must be implemented.
-    done(null, profile);
+      
+    // the 'user' variable can be any truthy value
+    done(null, user);
   }
 }
 
