@@ -62,8 +62,10 @@
     "body-parser": "^1.15.2",
     "chai": "^3.5.0",
     "feathers": "^2.0.2",
-    "feathers-authentication": "^0.8.0-beta-2",
-    "feathers-hooks": "^1.5.8",
+    "feathers-authentication": "^1.0.0-beta",
+    "feathers-authentication-jwt": "^0.1.0",
+    "feathers-authentication-local": "^0.2.0",
+    "feathers-hooks": "^1.6.0",
     "feathers-memory": "^0.8.0",
     "feathers-primus": "^1.4.1",
     "feathers-rest": "^1.5.1",
@@ -73,10 +75,10 @@
     "mocha": "^3.1.2",
     "primus": "^6.0.3",
     "primus-emitter": "^3.1.1",
-    "request": "^2.75.0",
     "rimraf": "^2.5.4",
     "semistandard": "^9.1.0",
     "socket.io-client": "^1.5.0",
+    "superagent": "^2.3.0",
     "ws": "^1.1.1"
   }
 }

@@ -1,31 +1,34 @@
-import * as hooks from './hooks';
-import Authentication from './authentication';
+import hooks from './hooks';
+import Passport from './passport';
 
 const defaults = {
+  header: 'authorization',
   cookie: 'feathers-jwt',
-  tokenKey: 'feathers-jwt',
-  localEndpoint: '/auth/local',
-  tokenEndpoint: '/auth/token'
+  storageKey: 'feathers-jwt',
+  path: '/authentication',
+  entity: 'user',
+  service: 'users'
 };
 
-export default function (opts = {}) {
-  const options = Object.assign({}, defaults, opts);
+export default function (config = {}) {
+  const options = Object.assign({}, defaults, config);
 
   return function () {
     const app = this;
 
-    app.authentication = new Authentication(app, options);
-    app.authenticate = app.authentication.authenticate.bind(app.authentication);
-    app.logout = app.authentication.logout.bind(app.authentication);
+    app.passport = new Passport(app, options);
+    app.authenticate = app.passport.authenticate.bind(app.passport);
+    app.logout = app.passport.logout.bind(app.passport);
 
     // Set up hook that adds token and user to params so that
     // it they can be accessed by client side hooks and services
     app.mixins.push(function (service) {
+      // if (typeof service.hooks !== 'function') {
       if (typeof service.before !== 'function' || typeof service.after !== 'function') {
         throw new Error(`It looks like feathers-hooks isn't configured. It is required before running feathers-authentication.`);
       }
 
-      service.before(hooks.populateParams());
+      service.before(hooks.populateAccessToken(options));
     });
 
     // Set up hook that adds authorization header for REST provider
