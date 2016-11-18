@@ -31,4 +31,6 @@ lib/
 coverage/
 data.db
 _backup/
+
+# Yarn lockfile
 yarn.lock
