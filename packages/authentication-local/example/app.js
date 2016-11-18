@@ -6,6 +6,7 @@ var memory = require('feathers-memory');
 var bodyParser = require('body-parser');
 var errorHandler = require('feathers-errors/handler');
 var auth = require('feathers-authentication');
+var jwt = require('feathers-authentication-jwt');
 var local = require('../lib/index');
 
 // Initialize the application
@@ -20,6 +21,7 @@ app.configure(rest())
   // Configure feathers-authentication
   .configure(auth({ secret: 'super secret' }))
   .configure(local())
+  .configure(jwt())
   .use('/users', memory())
   .use(errorHandler());
 
@@ -50,6 +52,7 @@ app.service('authentication').hooks({
 // the password with a hash of the password before saving it.
 app.service('users').hooks({
   before: {
+    get: auth.hooks.authenticate('jwt'),
     create: local.hooks.hashPassword()
   }
 });
