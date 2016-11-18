@@ -67,7 +67,7 @@ This hook is used to hash plain text passwords before they are saved to the data
 
 ### Verifier
 
-This is the verification class that does the username and password verification by looking up the entity (normally a `user`) on a given service and compares the hashed password using bcrypt. It has the following methods that can all be overridden. All methods return a promise except `verify`, which has the exact same signature as [passport-local](https://github.com/jaredhanson/passport-local).
+This is the verification class that does the username and password verification by looking up the entity (normally a `user`) on a given service by the `usernameField` and compares the hashed password using bcrypt. It has the following methods that can all be overridden. All methods return a promise except `verify`, which has the exact same signature as [passport-local](https://github.com/jaredhanson/passport-local).
 
 ```js
 {
