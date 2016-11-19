@@ -125,13 +125,33 @@ app.authenticate({
 
 We previously made the poor assumption that you are always authenticating a user. This is not always be the case, or your app may not care about the current user as you have their id or can encode some details in the JWT.  Therefore, if you need to get the current user you need to request it explicitly after authentication or populate it yourself in an after hook.
 
-### Fetching User Explicitly
+### Fetching and Storing User Explicitly
 
-TODO
+Here is an example of how you can populate the entity associated with your JWT `accessToken`.
 
-### Populating User Explicitly
-
-TODO
+```js
+client.authenticate({
+  strategy: 'local',
+  email: 'admin@feathersjs.com',
+  password: 'admin'
+})
+.then(response => {
+  console.log('Authenticated!', response);
+  return client.passport.verifyJWT(response.accessToken);
+})
+.then(payload => {
+  console.log('JWT Payload', payload);
+  return client.service('users').get(payload.id);
+})
+.then(user => {
+  client.set('user', user);
+  console.log('User', client.get('user'));
+  // Do whatever you want now
+})
+.catch(function(error){
+  console.error('Error authenticating!', error);
+});
+```
 
 ## JWT Parsing
 
