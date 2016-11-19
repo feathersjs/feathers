@@ -1,5 +1,11 @@
+// This is an example of using the client on the server with Node.js.
+// Most of the code is the same for the browser with the exception
+// of how modules are imported and configured. It depends on how you choose
+// to load them. Refer to the client section of docs.feathersjs.com for more detail.
+
 // NOTE (EK): You need to uncomment the primus setup
 // and comment out the socket.io setup inside app.js
+// in order for this to work with the example app.
 
 const feathers = require('feathers/client');
 const primus = require('feathers-primus/client');
