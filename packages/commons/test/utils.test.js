@@ -2,7 +2,13 @@ if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 import { expect } from 'chai';
 import {
-  _, specialFilters, sorter, matcher, stripSlashes, select
+  _,
+  specialFilters,
+  sorter,
+  matcher,
+  stripSlashes,
+  select,
+  makeUrl
 } from '../src/utils';
 
 describe('feathers-commons utils', () => {
@@ -327,6 +333,76 @@ describe('feathers-commons utils', () => {
 
       expect(!matches({ name: 'Eric', counter: 1 })).to.be.ok;
       expect(matches({ name: 'Marshall', counter: 0 })).to.be.ok;
+    });
+  });
+
+  describe('makeUrl', function () {
+    let mockApp;
+
+    beforeEach(() => {
+      mockApp = { env: 'development' };
+      mockApp.get = (value) => {
+        switch (value) {
+          case 'port':
+            return 3030;
+          case 'host':
+            return 'feathersjs.com';
+          case 'env':
+            return mockApp.env;
+        }
+      };
+    });
+
+    describe('when in development mode', () => {
+      it('returns the correct url', () => {
+        const uri = makeUrl('test', mockApp);
+        expect(uri).to.equal('http://feathersjs.com:3030/test');
+      });
+    });
+
+    describe('when in test mode', () => {
+      it('returns the correct url', () => {
+        mockApp.env = 'test';
+        const uri = makeUrl('test', mockApp);
+        expect(uri).to.equal('http://feathersjs.com:3030/test');
+      });
+    });
+
+    describe('when in production mode', () => {
+      it('returns the correct url', () => {
+        mockApp.env = 'production';
+        const uri = makeUrl('test', mockApp);
+        expect(uri).to.equal('https://feathersjs.com/test');
+      });
+    });
+
+    describe('when path is not provided', () => {
+      it('returns a default url', () => {
+        const uri = makeUrl(null, mockApp);
+        expect(uri).to.equal('http://feathersjs.com:3030/');
+      });
+    });
+
+    describe('when app is not defined', () => {
+      it('returns the correct url', () => {
+        const uri = makeUrl('test');
+        expect(uri).to.equal('http://localhost:3030/test');
+      });
+    });
+
+    it('strips leading slashes on path', () => {
+      const uri = makeUrl('/test');
+      expect(uri).to.equal('http://localhost:3030/test');
+    });
+
+    it('strips trailing slashes on path', () => {
+      const uri = makeUrl('test/');
+      expect(uri).to.equal('http://localhost:3030/test');
+    });
+
+    it('works with query strings', () => {
+      const uri = makeUrl('test?admin=true');
+      expect(uri).to.equal('http://localhost:3030/test?admin=true');
     });
   });
 });
