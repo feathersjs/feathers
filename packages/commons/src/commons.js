@@ -2,11 +2,19 @@ import getArguments from './arguments';
 import {
   stripSlashes,
   each,
+  some,
+  every,
+  keys,
+  values,
+  isMatch,
+  isEmpty,
+  extend,
+  omit,
+  pick,
   matcher,
   sorter,
   _,
   select,
-  selectMany,
   makeUrl
 } from './utils';
 import hooks from './hooks';
@@ -16,10 +24,18 @@ export default {
   getArguments,
   stripSlashes,
   each,
+  some,
+  every,
+  keys,
+  values,
+  isMatch,
+  isEmpty,
+  extend,
+  omit,
+  pick,
   hooks,
   matcher,
   sorter,
   select,
-  selectMany,
   makeUrl
 };

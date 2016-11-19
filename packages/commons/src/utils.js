@@ -10,54 +10,63 @@ export function each (obj, callback) {
   }
 }
 
+export function some (value, callback) {
+  return Object.keys(value)
+    .map(key => [ value[key], key ])
+    .some(current => callback(...current));
+}
+
+export function every (value, callback) {
+  return Object.keys(value)
+    .map(key => [ value[key], key ])
+    .every(current => callback(...current));
+}
+
+export function keys (obj) {
+  return Object.keys(obj);
+}
+
+export function values (obj) {
+  return _.keys(obj).map(key => obj[key]);
+}
+
+export function isMatch (obj, item) {
+  return _.keys(item).every(key => obj[key] === item[key]);
+}
+
+export function isEmpty (obj) {
+  return _.keys(obj).length === 0;
+}
+
+export function extend (...args) {
+  return Object.assign(...args);
+}
+
+export function omit (obj, ...keys) {
+  const result = _.extend({}, obj);
+  keys.forEach(key => delete result[key]);
+  return result;
+}
+
+export function pick (source, ...keys) {
+  const result = {};
+  keys.forEach(key => {
+    result[key] = source[key];
+  });
+  return result;
+}
+
 export const _ = {
   each,
-
-  some (value, callback) {
-    return Object.keys(value)
-      .map(key => [ value[key], key ])
-      .some(current => callback(...current));
-  },
-
-  every (value, callback) {
-    return Object.keys(value)
-      .map(key => [ value[key], key ])
-      .every(current => callback(...current));
-  },
-
-  keys (obj) {
-    return Object.keys(obj);
-  },
-
-  values (obj) {
-    return _.keys(obj).map(key => obj[key]);
-  },
-
-  isMatch (obj, item) {
-    return _.keys(item).every(key => obj[key] === item[key]);
-  },
-
-  isEmpty (obj) {
-    return _.keys(obj).length === 0;
-  },
-
-  extend (...args) {
-    return Object.assign(...args);
-  },
-
-  omit (obj, ...keys) {
-    const result = _.extend({}, obj);
-    keys.forEach(key => delete result[key]);
-    return result;
-  },
-
-  pick (source, ...keys) {
-    const result = {};
-    keys.forEach(key => {
-      result[key] = source[key];
-    });
-    return result;
-  }
+  some,
+  every,
+  keys,
+  values,
+  isMatch,
+  isEmpty,
+  extend,
+  omit,
+  pick
 };
 
 export const specialFilters = {
