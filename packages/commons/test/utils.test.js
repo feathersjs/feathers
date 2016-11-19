@@ -1,97 +1,95 @@
 if (!global._babelPolyfill) { require('babel-polyfill'); }
 
-import assert from 'assert';
+import { expect } from 'chai';
 import {
   _, specialFilters, sorter, matcher, stripSlashes, select
 } from '../src/utils';
 
 describe('feathers-commons utils', () => {
   it('stripSlashes', () => {
-    assert.equal(stripSlashes('some/thing'), 'some/thing');
-    assert.equal(stripSlashes('/some/thing'), 'some/thing');
-    assert.equal(stripSlashes('some/thing/'), 'some/thing');
-    assert.equal(stripSlashes('/some/thing/'), 'some/thing');
-    assert.equal(stripSlashes('//some/thing/'), 'some/thing');
-    assert.equal(stripSlashes('//some//thing////'), 'some//thing');
+    expect(stripSlashes('some/thing')).to.equal('some/thing');
+    expect(stripSlashes('/some/thing')).to.equal('some/thing');
+    expect(stripSlashes('some/thing/')).to.equal('some/thing');
+    expect(stripSlashes('/some/thing/')).to.equal('some/thing');
+    expect(stripSlashes('//some/thing/')).to.equal('some/thing');
+    expect(stripSlashes('//some//thing////')).to.equal('some//thing');
   });
 
   describe('_', () => {
     it('each', () => {
       _.each({ hi: 'there' }, (value, key) => {
-        assert.equal(key, 'hi');
-        assert.equal(value, 'there');
+        expect(key).to.equal('hi');
+        expect(value).to.equal('there');
       });
 
       _.each([ 'hi' ], (value, key) => {
-        assert.equal(key, 0);
-        assert.equal(value, 'hi');
+        expect(key).to.equal(0);
+        expect(value).to.equal('hi');
       });
     });
 
     it('some', () => {
-      assert.ok(_.some([ 'a', 'b' ], current => current === 'a'));
-      assert.ok(!_.some([ 'a', 'b' ], current => current === 'c'));
+      expect(_.some([ 'a', 'b' ], current => current === 'a')).to.be.ok;
+      expect(!_.some([ 'a', 'b' ], current => current === 'c')).to.be.ok;
     });
 
     it('every', () => {
-      assert.ok(_.every([ 'a', 'a' ], current => current === 'a'));
-      assert.ok(!_.every([ 'a', 'b' ], current => current === 'a'));
+      expect(_.every([ 'a', 'a' ], current => current === 'a')).to.be.ok;
+      expect(!_.every([ 'a', 'b' ], current => current === 'a')).to.be.ok;
     });
 
     it('keys', () => {
       const data = { hi: 'there', name: 'David' };
-
-      assert.deepEqual(_.keys(data), [ 'hi', 'name' ]);
+      expect(_.keys(data)).to.deep.equal([ 'hi', 'name' ]);
     });
 
     it('values', () => {
       const data = { hi: 'there', name: 'David' };
-
-      assert.deepEqual(_.values(data), [ 'there', 'David' ]);
+      expect(_.values(data)).to.deep.equal([ 'there', 'David' ]);
     });
 
     it('isMatch', () => {
-      assert.ok(_.isMatch({
+      expect(_.isMatch({
         test: 'me', hi: 'you', more: true
       }, {
         test: 'me', hi: 'you'
-      }));
+      })).to.be.ok;
 
-      assert.ok(!_.isMatch({
+      expect(!_.isMatch({
         test: 'me', hi: 'you', more: true
       }, {
         test: 'me', hi: 'there'
-      }));
+      })).to.be.ok;
     });
 
     it('isEmpty', () => {
-      assert.ok(_.isEmpty({}));
-      assert.ok(!_.isEmpty({ name: 'David' }));
+      expect(_.isEmpty({})).to.be.ok;
+      expect(!_.isEmpty({ name: 'David' })).to.be.ok;
     });
 
     it('extend', () => {
-      assert.deepEqual(_.extend({ hi: 'there' }, { name: 'david' }), {
+      expect(_.extend({ hi: 'there' }, { name: 'david' })).to.deep.equal({
         hi: 'there',
         name: 'david'
       });
     });
 
     it('omit', () => {
-      assert.deepEqual(_.omit({
+      expect(_.omit({
         name: 'David',
         first: 1,
         second: 2
-      }, 'first', 'second'), {
+      }, 'first', 'second')).to.deep.equal({
         name: 'David'
       });
     });
 
     it('pick', () => {
-      assert.deepEqual(_.pick({
+      expect(_.pick({
         name: 'David',
         first: 1,
         second: 2
-      }, 'first', 'second'), {
+      }, 'first', 'second')).to.deep.equal({
         first: 1,
         second: 2
       });
@@ -110,7 +108,7 @@ describe('feathers-commons utils', () => {
         test: 'me'
       })
       .then(selector)
-      .then(result => assert.deepEqual(result, {
+      .then(result => expect(result).to.deep.equal({
         name: 'David',
         age: 3
       }));
@@ -131,7 +129,7 @@ describe('feathers-commons utils', () => {
         test: 'you'
       }])
       .then(selector)
-      .then(result => assert.deepEqual(result, [{
+      .then(result => expect(result).to.deep.equal([{
         name: 'David',
         age: 3
       }, {
@@ -148,7 +146,7 @@ describe('feathers-commons utils', () => {
 
       return Promise.resolve(data)
       .then(selector)
-      .then(result => assert.deepEqual(result, data));
+      .then(result => expect(result).to.deep.equal(data));
     });
 
     it('select with other fields', () => {
@@ -163,7 +161,7 @@ describe('feathers-commons utils', () => {
 
       return Promise.resolve(data)
       .then(selector)
-      .then(result => assert.deepEqual(result, {
+      .then(result => expect(result).to.deep.equal({
         id: 'me',
         name: 'David'
       }));
@@ -176,54 +174,54 @@ describe('feathers-commons utils', () => {
     it('$in', () => {
       const fn = filters.$in('test', ['a', 'b']);
 
-      assert.ok(fn({ test: 'a' }));
-      assert.ok(!fn({ test: 'c' }));
+      expect(fn({ test: 'a' })).to.be.ok;
+      expect(!fn({ test: 'c' })).to.be.ok;
     });
 
     it('$nin', () => {
       const fn = filters.$nin('test', ['a', 'b']);
 
-      assert.ok(!fn({ test: 'a' }));
-      assert.ok(fn({ test: 'c' }));
+      expect(!fn({ test: 'a' })).to.be.ok;
+      expect(fn({ test: 'c' })).to.be.ok;
     });
 
     it('$lt', () => {
       const fn = filters.$lt('age', 25);
 
-      assert.ok(fn({ age: 24 }));
-      assert.ok(!fn({ age: 25 }));
-      assert.ok(!fn({ age: 26 }));
+      expect(fn({ age: 24 })).to.be.ok;
+      expect(!fn({ age: 25 })).to.be.ok;
+      expect(!fn({ age: 26 })).to.be.ok;
     });
 
     it('$lte', () => {
       const fn = filters.$lte('age', 25);
 
-      assert.ok(fn({ age: 24 }));
-      assert.ok(fn({ age: 25 }));
-      assert.ok(!fn({ age: 26 }));
+      expect(fn({ age: 24 })).to.be.ok;
+      expect(fn({ age: 25 })).to.be.ok;
+      expect(!fn({ age: 26 })).to.be.ok;
     });
 
     it('$gt', () => {
       const fn = filters.$gt('age', 25);
 
-      assert.ok(!fn({ age: 24 }));
-      assert.ok(!fn({ age: 25 }));
-      assert.ok(fn({ age: 26 }));
+      expect(!fn({ age: 24 })).to.be.ok;
+      expect(!fn({ age: 25 })).to.be.ok;
+      expect(fn({ age: 26 })).to.be.ok;
     });
 
     it('$gte', () => {
       const fn = filters.$gte('age', 25);
 
-      assert.ok(!fn({ age: 24 }));
-      assert.ok(fn({ age: 25 }));
-      assert.ok(fn({ age: 26 }));
+      expect(!fn({ age: 24 })).to.be.ok;
+      expect(fn({ age: 25 })).to.be.ok;
+      expect(fn({ age: 26 })).to.be.ok;
     });
 
     it('$ne', () => {
       const fn = filters.$ne('test', 'me');
 
-      assert.ok(fn({ test: 'you' }));
-      assert.ok(!fn({ test: 'me' }));
+      expect(fn({ test: 'you' })).to.be.ok;
+      expect(!fn({ test: 'me' })).to.be.ok;
     });
   });
 
@@ -239,7 +237,7 @@ describe('feathers-commons utils', () => {
         name: -1
       });
 
-      assert.deepEqual(array.sort(sort), [{
+      expect(array.sort(sort)).to.deep.equal([{
         name: 'Eric'
       }, {
         name: 'David'
@@ -266,7 +264,7 @@ describe('feathers-commons utils', () => {
         counter: 1
       });
 
-      assert.deepEqual(array.sort(sort), [
+      expect(array.sort(sort)).to.deep.equal([
         { name: 'Eric', counter: 0 },
         { name: 'David', counter: 0 },
         { name: 'Eric', counter: 1 },
@@ -279,22 +277,21 @@ describe('feathers-commons utils', () => {
     it('simple match', () => {
       const matches = matcher({ name: 'Eric' });
 
-      assert.ok(matches({ name: 'Eric' }));
-      assert.ok(!matches({ name: 'David' }));
+      expect(matches({ name: 'Eric' })).to.be.ok;
+      expect(!matches({ name: 'David' })).to.be.ok;
     });
 
     it('does not match $select', () => {
       const matches = matcher({ $select: [ 'name' ] });
-
-      assert.ok(matches({ name: 'Eric' }));
+      expect(matches({ name: 'Eric' })).to.be.ok;
     });
 
     it('$or match', () => {
       const matches = matcher({ $or: [{ name: 'Eric' }, { name: 'Marshall' }] });
 
-      assert.ok(matches({ name: 'Eric' }));
-      assert.ok(matches({ name: 'Marshall' }));
-      assert.ok(!matches({ name: 'David' }));
+      expect(matches({ name: 'Eric' })).to.be.ok;
+      expect(matches({ name: 'Marshall' })).to.be.ok;
+      expect(!matches({ name: 'David' })).to.be.ok;
     });
 
     it('$or nested match', () => {
@@ -305,16 +302,10 @@ describe('feathers-commons utils', () => {
         ]
       });
 
-      assert.ok(matches({ name: 'Eric' }));
-      assert.ok(matches({ age: 20 }));
-      assert.ok(matches({
-        name: 'David',
-        age: 30
-      }));
-      assert.ok(!matches({
-        name: 'David',
-        age: 64
-      }));
+      expect(matches({ name: 'Eric' })).to.be.ok;
+      expect(matches({ age: 20 })).to.be.ok;
+      expect(matches({ name: 'David', age: 30 })).to.be.ok;
+      expect(!matches({ name: 'David', age: 64 })).to.be.ok;
     });
 
     it('special filter matches', () => {
@@ -323,9 +314,9 @@ describe('feathers-commons utils', () => {
         name: { $in: ['Eric', 'Marshall'] }
       });
 
-      assert.ok(matches({ name: 'Eric', counter: 12 }));
-      assert.ok(!matches({ name: 'Eric', counter: 10 }));
-      assert.ok(matches({ name: 'Marshall', counter: 19 }));
+      expect(matches({ name: 'Eric', counter: 12 })).to.be.ok;
+      expect(!matches({ name: 'Eric', counter: 10 })).to.be.ok;
+      expect(matches({ name: 'Marshall', counter: 19 })).to.be.ok;
     });
 
     it('special filter and simple matches', () => {
@@ -334,8 +325,8 @@ describe('feathers-commons utils', () => {
         name: { $in: ['Eric', 'Marshall'] }
       });
 
-      assert.ok(!matches({ name: 'Eric', counter: 1 }));
-      assert.ok(matches({ name: 'Marshall', counter: 0 }));
+      expect(!matches({ name: 'Eric', counter: 1 })).to.be.ok;
+      expect(matches({ name: 'Marshall', counter: 0 })).to.be.ok;
     });
   });
 });
