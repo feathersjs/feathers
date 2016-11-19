@@ -1,6 +1,6 @@
 if (!global._babelPolyfill) { require('babel-polyfill'); }
 
-import assert from 'assert';
+import { expect } from 'chai';
 
 import { noop } from '../src/arguments';
 import utils from '../src/hooks';
@@ -11,7 +11,7 @@ describe('hook utilities', () => {
       { some: 'thing' }, noop
     ]);
     // find
-    assert.deepEqual(hookObject, {
+    expect(hookObject).to.deep.equal({
       params: { some: 'thing' },
       method: 'find',
       type: 'test',
@@ -24,7 +24,7 @@ describe('hook utilities', () => {
         { some: 'thing' }, noop
     ], dummyApp);
 
-    assert.deepEqual(hookObject, {
+    expect(hookObject).to.deep.equal({
       params: { some: 'thing' },
       method: 'find',
       type: 'test',
@@ -38,7 +38,7 @@ describe('hook utilities', () => {
       1, { some: 'thing' }, noop
     ]);
 
-    assert.deepEqual(hookObject, {
+    expect(hookObject).to.deep.equal({
       id: 1,
       params: { some: 'thing' },
       method: 'get',
@@ -51,7 +51,7 @@ describe('hook utilities', () => {
       1, { some: 'thing' }, noop
     ]);
 
-    assert.deepEqual(hookObject, {
+    expect(hookObject).to.deep.equal({
       id: 1,
       params: { some: 'thing' },
       method: 'remove',
@@ -64,7 +64,7 @@ describe('hook utilities', () => {
       { my: 'data' }, { some: 'thing' }, noop
     ]);
 
-    assert.deepEqual(hookObject, {
+    expect(hookObject).to.deep.equal({
       data: { my: 'data' },
       params: { some: 'thing' },
       method: 'create',
@@ -77,7 +77,7 @@ describe('hook utilities', () => {
       2, { my: 'data' }, { some: 'thing' }, noop
     ]);
 
-    assert.deepEqual(hookObject, {
+    expect(hookObject).to.deep.equal({
       id: 2,
       data: { my: 'data' },
       params: { some: 'thing' },
@@ -91,7 +91,7 @@ describe('hook utilities', () => {
       2, { my: 'data' }, { some: 'thing' }, noop
     ]);
 
-    assert.deepEqual(hookObject, {
+    expect(hookObject).to.deep.equal({
       id: 2,
       data: { my: 'data' },
       params: { some: 'thing' },
@@ -110,7 +110,7 @@ describe('hook utilities', () => {
       callback: noop
     });
 
-    assert.deepEqual(args, [2, { my: 'data' }, { some: 'thing' }, noop]);
+    expect(args).to.deep.equal([2, { my: 'data' }, { some: 'thing' }, noop]);
 
     args = utils.makeArguments({
       id: 0,
@@ -120,7 +120,7 @@ describe('hook utilities', () => {
       callback: noop
     });
 
-    assert.deepEqual(args, [0, { my: 'data' }, { some: 'thing' }, noop]);
+    expect(args).to.deep.equal([0, { my: 'data' }, { some: 'thing' }, noop]);
 
     args = utils.makeArguments({
       params: { some: 'thing' },
@@ -128,7 +128,7 @@ describe('hook utilities', () => {
       callback: noop
     });
 
-    assert.deepEqual(args, [
+    expect(args).to.deep.equal([
       { some: 'thing' },
       noop
     ]);
@@ -142,7 +142,7 @@ describe('hook utilities', () => {
       callback: noop
     });
 
-    assert.deepEqual(args, [
+    expect(args).to.deep.equal([
       { test: 'me' },
       { some: 'thing' },
       noop
@@ -154,7 +154,7 @@ describe('hook utilities', () => {
       callback: noop
     });
 
-    assert.deepEqual(args, [
+    expect(args).to.deep.equal([
       'testing', {}, noop
     ]);
   });
@@ -167,7 +167,7 @@ describe('hook utilities', () => {
       callback: noop
     });
 
-    assert.deepEqual(args, [undefined, { my: 'data' }, { some: 'thing' }, noop]);
+    expect(args).to.deep.equal([undefined, { my: 'data' }, { some: 'thing' }, noop]);
 
     args = utils.makeArguments({
       id: 2,
@@ -177,7 +177,7 @@ describe('hook utilities', () => {
       callback: noop
     });
 
-    assert.deepEqual(args, [2, { some: 'thing' }, noop]);
+    expect(args).to.deep.equal([2, { some: 'thing' }, noop]);
 
     args = utils.makeArguments({
       id: 2,
@@ -187,23 +187,24 @@ describe('hook utilities', () => {
       callback: noop
     });
 
-    assert.deepEqual(args, [{ my: 'data' }, { some: 'thing' }, noop]);
+    expect(args).to.deep.equal([{ my: 'data' }, { some: 'thing' }, noop]);
   });
 
   it('.convertHookData', () => {
-    assert.deepEqual(utils.convertHookData('test'), {
+    expect(utils.convertHookData('test')).to.deep.equal({
       all: [ 'test' ]
     });
 
-    assert.deepEqual(utils.convertHookData([ 'test', 'me' ]), {
+    expect(utils.convertHookData([ 'test', 'me' ])).to.deep.equal({
       all: [ 'test', 'me' ]
     });
 
-    assert.deepEqual(utils.convertHookData({
+    expect(utils.convertHookData({
       all: 'thing',
       other: 'value',
       hi: [ 'foo', 'bar' ]
-    }), {
+    }))
+    .to.deep.equal({
       all: [ 'thing' ],
       other: [ 'value' ],
       hi: [ 'foo', 'bar' ]
