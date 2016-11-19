@@ -17,9 +17,11 @@ import {
   values,
   isMatch,
   isEmpty,
+  isObject,
   extend,
   omit,
-  pick
+  pick,
+  merge
 } from '../src/commons';
 
 describe('build', () => {
@@ -53,9 +55,11 @@ describe('build', () => {
     expect(typeof values).to.equal('function');
     expect(typeof isMatch).to.equal('function');
     expect(typeof isEmpty).to.equal('function');
+    expect(typeof isObject).to.equal('function');
     expect(typeof extend).to.equal('function');
     expect(typeof omit).to.equal('function');
     expect(typeof pick).to.equal('function');
+    expect(typeof merge).to.equal('function');
   });
 
   it('exposes lodash methods under _', () => {
@@ -66,8 +70,10 @@ describe('build', () => {
     expect(typeof _.values).to.equal('function');
     expect(typeof _.isMatch).to.equal('function');
     expect(typeof _.isEmpty).to.equal('function');
+    expect(typeof _.isObject).to.equal('function');
     expect(typeof _.extend).to.equal('function');
     expect(typeof _.omit).to.equal('function');
     expect(typeof _.pick).to.equal('function');
+    expect(typeof _.merge).to.equal('function');
   });
 });

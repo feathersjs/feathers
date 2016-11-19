@@ -5,7 +5,7 @@ export function stripSlashes (name) {
 export function each (obj, callback) {
   if (obj && typeof obj.forEach === 'function') {
     obj.forEach(callback);
-  } else if (typeof obj === 'object') {
+  } else if (isObject(obj)) {
     Object.keys(obj).forEach(key => callback(obj[key], key));
   }
 }
@@ -38,6 +38,10 @@ export function isEmpty (obj) {
   return _.keys(obj).length === 0;
 }
 
+export function isObject (item) {
+  return (typeof item === 'object' && !Array.isArray(item) && item !== null);
+}
+
 export function extend (...args) {
   return Object.assign(...args);
 }
@@ -56,6 +60,20 @@ export function pick (source, ...keys) {
   return result;
 }
 
+export function merge (target, source) {
+  if (isObject(target) && isObject(source)) {
+    Object.keys(source).forEach(key => {
+      if (isObject(source[key])) {
+        if (!target[key]) Object.assign(target, { [key]: {} });
+        merge(target[key], source[key]);
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
+    });
+  }
+  return target;
+}
+
 export const _ = {
   each,
   some,
@@ -64,9 +82,11 @@ export const _ = {
   values,
   isMatch,
   isEmpty,
+  isObject,
   extend,
   omit,
-  pick
+  pick,
+  merge
 };
 
 export const specialFilters = {
