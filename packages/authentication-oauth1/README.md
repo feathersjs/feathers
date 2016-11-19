@@ -193,8 +193,7 @@ const app = feathers()
     name: 'twitter',
     Strategy: TwitterStrategy,
     consumerKey: '<your consumer key>',
-    consumerSecret: '<your consumer secret>',
-    scope: ['user']
+    consumerSecret: '<your consumer secret>'
   }))
   .use('/users', memory())
   .use(errorHandler());
