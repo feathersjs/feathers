@@ -31,6 +31,7 @@ describe('feathers-authentication-oauth2', () => {
   describe('initialization', () => {
     let app;
     let config;
+    let globalConfig;
 
     beforeEach(() => {
       config = {
@@ -40,11 +41,20 @@ describe('feathers-authentication-oauth2', () => {
         clientSecret: 'secret'
       };
 
+      globalConfig = {
+        secret: 'supersecret',
+        github: {
+          clientID: '1234',
+          clientSecret: 'secret',
+          scope: ['user']
+        }
+      };
+
       app = feathers();
       app.set('host', 'localhost');
       app.set('port', 3030);
       app.use('/users', memory());
-      app.configure(authentication({ secret: 'supersecret' }));
+      app.configure(authentication(globalConfig));
     });
 
     it('throws an error if passport has not been registered', () => {
@@ -70,14 +80,16 @@ describe('feathers-authentication-oauth2', () => {
     it('throws an error if clientID is missing', () => {
       expect(() => {
         delete config.clientID;
-        app.configure(oauth2(config));
+        delete globalConfig.github.clientID;
+        feathers().configure(authentication(globalConfig)).configure(oauth2(config));
       }).to.throw();
     });
 
     it('throws an error if clientSecret is missing', () => {
       expect(() => {
         delete config.clientSecret;
-        app.configure(oauth2(config));
+        delete globalConfig.github.clientSecret;
+        feathers().configure(authentication(globalConfig)).configure(oauth2(config));
       }).to.throw();
     });
 
@@ -142,6 +154,19 @@ describe('feathers-authentication-oauth2', () => {
       it('supports setting custom options', () => {
         expect(args.custom).to.equal(true);
       });
+    });
+
+    it('mixes in global config for strategy', () => {
+      delete config.clientID;
+      delete config.clientSecret;
+      sinon.spy(config, 'Strategy');
+
+      app.configure(oauth2(config));
+      app.setup();
+
+      expect(config.Strategy.getCall(0).args[0].scope).to.deep.equal(['user']);
+      
+      config.Strategy.restore();
     });
 
     it('supports overriding default options', () => {

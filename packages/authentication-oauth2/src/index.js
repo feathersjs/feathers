@@ -37,16 +37,16 @@ export default function init (options = {}) {
       throw new Error(`You must provide a passport 'Strategy' instance.`);
     }
 
-    // Push on the provider name so that it the developer can define
-    // some of their options in their global auth config.
-    KEYS.push(name);
-
     const authSettings = app.get('auth') || {};
+
+    // Attempt to pull options from the global auth config
+    // for this provider.
+    const providerSettings = authSettings[name] || {};
     const oauth2Settings = merge({
       idField: `${name}Id`,
       path: `/auth/${name}`,
       callbackURL: url(app, `/auth/${name}/callback`)
-    }, pick(authSettings, KEYS), omit(options, ['Verifier', 'Strategy', 'formatter']));
+    }, pick(authSettings, KEYS), providerSettings, omit(options, ['Verifier', 'Strategy', 'formatter']));
 
     if (!oauth2Settings.clientID) {
       throw new Error(`You must provide a 'clientID' in your authentication configuration or pass one explicitly`);
