@@ -1,5 +1,6 @@
 if (!global._babelPolyfill) { require('babel-polyfill'); }
 
+import feathers from 'feathers';
 import { expect } from 'chai';
 import {
   _,
@@ -386,6 +387,13 @@ describe('feathers-commons utils', () => {
     describe('when app is not defined', () => {
       it('returns the correct url', () => {
         const uri = makeUrl('test');
+        expect(uri).to.equal('http://localhost:3030/test');
+      });
+    });
+
+    describe('works with an app instance', () => {
+      it('returns the correct url', () => {
+        const uri = makeUrl('test', feathers());
         expect(uri).to.equal('http://localhost:3030/test');
       });
     });
