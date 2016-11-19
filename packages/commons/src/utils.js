@@ -160,7 +160,7 @@ export function sorter ($sort) {
 }
 
 export function makeUrl (path, app = {}) {
-  const get = typeof app.get === 'function' ? app.get : () => {};
+  const get = typeof app.get === 'function' ? app.get.bind(app) : () => {};
   const env = get('env') || process.env.NODE_ENV;
   const host = get('host') || process.env.HOST_NAME || 'localhost';
   const protocol = (env === 'development' || env === 'test' || (env === undefined)) ? 'http' : 'https';
