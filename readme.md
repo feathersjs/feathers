@@ -80,7 +80,7 @@ We :heart: the community and take security very seriously. No one wants their ap
 
 ## Long Term Support Schedule
 
-We are going to be following along with the Node.js long term support cycle. As a result **we have dropped official support for node v0.10, v0.12, and iojs versions**. Feathers still works on those versions we're not going to ensure it will going forward.
+We are going to be following along with the Node.js long term support cycle. As a result **we have dropped official support for node v0.10, v0.12, and iojs versions**. Feathers still works on those versions but we're not going to ensure it will going forward.
 
 We will be supporting Node.js v4 until **2018-04-01**.
 We will be supporting Node.js v6 until **2019-04-18**.
