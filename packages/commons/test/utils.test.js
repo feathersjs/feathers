@@ -23,6 +23,12 @@ describe('feathers-commons utils', () => {
   });
 
   describe('_', () => {
+    it('isObject', () => {
+      expect(_.isObject({})).to.equal(true);
+      expect(_.isObject([])).to.equal(false);
+      expect(_.isObject(null)).to.equal(false);
+    });
+
     it('each', () => {
       _.each({ hi: 'there' }, (value, key) => {
         expect(key).to.equal('hi');
@@ -99,6 +105,35 @@ describe('feathers-commons utils', () => {
       }, 'first', 'second')).to.deep.equal({
         first: 1,
         second: 2
+      });
+    });
+
+    it('merge', () => {
+      expect(_.merge({ hi: 'there' }, { name: 'david' })).to.deep.equal({
+        hi: 'there',
+        name: 'david'
+      });
+
+      expect(_.merge({}, { name: 'david' })).to.deep.equal({
+        name: 'david'
+      });
+
+      expect(_.merge({ name: 'david' }, {})).to.deep.equal({
+        name: 'david'
+      });
+
+      expect(_.merge({
+        hi: 'there',
+        my: {
+          name: { is: 'david' },
+          number: { is: 1 }
+        }
+      }, { my: { name: { is: 'eric' } } })).to.deep.equal({
+        hi: 'there',
+        my: {
+          number: { is: 1 },
+          name: { is: 'eric' }
+        }
       });
     });
   });

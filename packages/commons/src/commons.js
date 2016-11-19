@@ -1,6 +1,12 @@
 import getArguments from './arguments';
 import {
+  _,
   stripSlashes,
+  matcher,
+  sorter,
+  select,
+  makeUrl,
+  // lodash functions
   each,
   some,
   every,
@@ -8,14 +14,11 @@ import {
   values,
   isMatch,
   isEmpty,
+  isObject,
   extend,
   omit,
   pick,
-  matcher,
-  sorter,
-  _,
-  select,
-  makeUrl
+  merge
 } from './utils';
 import hooks from './hooks';
 
@@ -23,6 +26,12 @@ export default {
   _,
   getArguments,
   stripSlashes,
+  hooks,
+  matcher,
+  sorter,
+  select,
+  makeUrl,
+  // lodash functions
   each,
   some,
   every,
@@ -30,12 +39,9 @@ export default {
   values,
   isMatch,
   isEmpty,
+  isObject,
   extend,
   omit,
   pick,
-  hooks,
-  matcher,
-  sorter,
-  select,
-  makeUrl
+  merge
 };
