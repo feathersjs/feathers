@@ -21,9 +21,7 @@ Please refer to the [feathers-authentication-oauth1 documentation](http://docs.f
 
 ## Supported Strategies
 
-There aren't a ton of OAuth1 strategies anymore as most have moved to OAuth1, however this will work for any [Passport OAuth1 strategy](http://passportjs.org/). Most notably
-
-- [Twitter](https://github.com/jaredhanson/passport-twitter)
+There aren't a ton of OAuth1 strategies anymore as most have moved to OAuth2, however this will work for any [Passport OAuth1 strategy](http://passportjs.org/). Most notably [Twitter](https://github.com/jaredhanson/passport-twitter).
 
 ## API
 
