@@ -1,7 +1,7 @@
 import feathers from 'feathers';
 import memory from 'feathers-memory';
 import authentication from 'feathers-authentication';
-import oauth2, { url, Verifier } from '../src';
+import oauth2, { Verifier } from '../src';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
@@ -21,11 +21,6 @@ describe('feathers-authentication-oauth2', () => {
   it('exposes the Verifier class', () => {
     expect(typeof Verifier).to.equal('function');
     expect(typeof oauth2.Verifier).to.equal('function');
-  });
-
-  it('exposes url utility function', () => {
-    expect(typeof url).to.equal('function');
-    expect(typeof oauth2.url).to.equal('function');
   });
 
   describe('initialization', () => {
