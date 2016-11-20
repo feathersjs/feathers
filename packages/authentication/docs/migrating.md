@@ -115,7 +115,7 @@ app.authenticate({
   return app.service('users').get(payload.id);
 })
 .then(user => {
-  client.set('user', user);
+  app.set('user', user);
   console.log('User', client.get('user'));
   // Do whatever you want now
 })
