@@ -35,7 +35,9 @@ This module contains 2 core pieces:
 In most cases initializing the `feathers-authentication-oauth1` module is as simple as doing this:
 
 ```js
+const session = require('express-session');
 const TwitterStrategy = require('passport-twitter').Strategy;
+app.use(session({ secret: 'super secret', resave: true, saveUninitialized: true }));
 app.configure(authentication(settings));
 app.configure(oauth1({
   name: 'twitter',
@@ -45,7 +47,7 @@ app.configure(oauth1({
 }));
 ```
 
-This will pull from your global `auth` object in your config file. It will also mix in the following defaults, which can be customized.
+This will set up session middleware and authentication pulling from your global `auth` object in your config file. It will also mix in the following defaults, which can be customized.
 
 #### Default Options
 
