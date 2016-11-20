@@ -51,11 +51,10 @@
   },
   "dependencies": {
     "debug": "^2.2.0",
+    "feathers-commons": "^0.8.5",
     "feathers-errors": "^2.4.0",
     "feathers-rest": "^1.5.2",
-    "lodash.merge": "^4.6.0",
-    "lodash.omit": "^4.5.0",
-    "lodash.pick": "^4.4.0"
+    "lodash.merge": "^4.6.0"
   },
   "devDependencies": {
     "babel-cli": "^6.16.0",

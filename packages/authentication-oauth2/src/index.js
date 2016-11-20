@@ -1,22 +1,22 @@
 import Debug from 'debug';
-import merge from 'lodash.merge';
-import omit from 'lodash.omit';
-import pick from 'lodash.pick';
+import url from 'url';
 import auth from 'feathers-authentication';
 import { formatter as defaultFormatter } from 'feathers-rest';
-import url from './url';
-import { parse } from 'url';
+import { omit, pick, makeUrl } from 'feathers-commons';
+import merge from 'lodash.merge';
 import defaultHandler from './express/handler';
 import DefaultVerifier from './verifier';
 
 const debug = Debug('feathers-authentication-oauth2');
 
-const KEYS = [
+const INCLUDE_KEYS = [
   'entity',
   'service',
   'passReqToCallback',
   'session'
 ];
+
+const EXCLUDE_KEYS = ['Verifier', 'Strategy', 'formatter'];
 
 export default function init (options = {}) {
   return function oauth2Auth () {
@@ -45,8 +45,8 @@ export default function init (options = {}) {
     const oauth2Settings = merge({
       idField: `${name}Id`,
       path: `/auth/${name}`,
-      callbackURL: url(app, `/auth/${name}/callback`)
-    }, pick(authSettings, KEYS), providerSettings, omit(options, ['Verifier', 'Strategy', 'formatter']));
+      callbackURL: makeUrl(`/auth/${name}/callback`, app)
+    }, pick(authSettings, ...INCLUDE_KEYS), providerSettings, omit(options, ...EXCLUDE_KEYS));
 
     if (!oauth2Settings.clientID) {
       throw new Error(`You must provide a 'clientID' in your authentication configuration or pass one explicitly`);
@@ -64,7 +64,7 @@ export default function init (options = {}) {
     debug(`Registering '${name}' Express OAuth middleware`);
     app.get(oauth2Settings.path, auth.express.authenticate(name));
     app.get(
-      parse(oauth2Settings.callbackURL).pathname,
+      url.parse(oauth2Settings.callbackURL).pathname,
       // NOTE (EK): We register failure redirect here so that we can
       // retain the natural express middleware redirect ability like
       // you would have with vanilla passport.
@@ -96,6 +96,5 @@ export default function init (options = {}) {
 
 // Exposed Modules
 Object.assign(init, {
-  Verifier: DefaultVerifier,
-  url: url
+  Verifier: DefaultVerifier
 });
