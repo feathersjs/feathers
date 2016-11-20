@@ -83,7 +83,7 @@
     "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0",
     "socket.io-client": "^1.4.8",
-    "superagent": "^2.3.0",
+    "superagent": "^3.0.0",
     "ws": "^1.1.1"
   }
 }
