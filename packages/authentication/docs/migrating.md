@@ -133,7 +133,7 @@ app.authenticate({
 
 ## Response to `app.authenticate()` does not return `user`
 
-We previously made the poor assumption that you are always authenticating a user. This is not always be the case, or your app may not care about the current user as you have their id or can encode some details in the JWT.  Therefore, if you need to get the current user you need to request it explicitly after authentication or populate it yourself in an after hook. See above for how to fetch your user.
+We previously made the poor assumption that you are always authenticating a user. This is not always the case, or your app may not care about the current user as you already have their id in the accessToken payload or can encode some additional details in the JWT accessToken.  Therefore, if you need to get the current user you need to request it explicitly after authentication or populate it yourself in an after hook server side. See the new usage above for how to fetch your user.
 
 ## JWT Parsing
 
@@ -206,6 +206,14 @@ exports.before = {
 // feathers-authentication >= v1.0.0
 const authentication = require('feathers-authentication');
 const permissions = require('feathers-permissions');
+
+const myCustomQueryWithCurrentUser = function(options ={}) {
+  return function(hook) {
+    hook.params.query.userId = hook.params.user._id;
+    return Promise.resolve(hook);
+  };
+};
+
 exports.before = {
   all: [
     authentication.hooks.authenticate('jwt'),
