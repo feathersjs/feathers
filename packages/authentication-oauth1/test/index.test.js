@@ -139,7 +139,7 @@ describe('feathers-authentication-oauth1', () => {
       });
 
       it('sets session', () => {
-        expect(args.session).to.equal(authOptions.session);
+        expect(args.session).to.equal(true);
       });
 
       it('sets passReqToCallback', () => {
