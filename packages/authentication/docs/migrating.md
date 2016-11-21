@@ -268,7 +268,7 @@ The following hooks have been removed:
 - `populateOrRestrict` -> use new `feathers-permissions` plugin
 - `hasRoleOrRestrict` -> use new `feathers-permissions` plugin
 - `restrictToAuthenticated` -> use new `feathers-permissions` plugin
-- `hashPassword` -> has been moved to `feathers-authentication-local`
+- `hashPassword` -> has been moved to `feathers-authentication-local` **This is important.**
 - `populateUser` -> use new `populate` hook in `feathers-hooks-common`
 - `verifyToken` -> use new `feathers-authentication-jwt` plugin to easily validate a JWT access token. You can also now call `app.passport.verifyJWT` anywhere in your app to do it explicitly.
 
@@ -280,6 +280,7 @@ Typically you saw a lot of this in your hook definitions for a service:
 
 ```js
 // feathers-authentication < v0.8.0
+// Users service
 const auth = require('feathers-authentication').hooks;
 exports.before = {
   all: [],
@@ -294,7 +295,22 @@ exports.before = {
     auth.populateUser(),
     auth.restrictToAuthenticated(),
     auth.restrictToOwner({ ownerField: '_id' })
-  ]
+  ],
+  create: [
+    auth.hashPassword()
+  ],
+  update: [
+    auth.verifyToken(),
+    auth.populateUser(),
+    auth.restrictToAuthenticated(),
+    auth.hashPassword()
+  ],
+  patch: [
+    auth.verifyToken(),
+    auth.populateUser(),
+    auth.restrictToAuthenticated(),
+    auth.hashPassword()
+  ],
 }
 ```
 
@@ -303,6 +319,7 @@ exports.before = {
 ```js
 // feathers-authentication >= v1.0.0
 const authentication = require('feathers-authentication');
+const local = require('feathers-authentication-local');
 const permissions = require('feathers-permissions');
 
 const myCustomQueryWithCurrentUser = function(options ={}) {
@@ -313,13 +330,32 @@ const myCustomQueryWithCurrentUser = function(options ={}) {
 };
 
 exports.before = {
-  all: [
+  all: [],
+  find: [
+    authentication.hooks.authenticate('jwt'),
+    permissions.hooks.checkPermissions({ service: 'users' }),
+    permissions.hooks.isPermitted(),
+    myCustomQueryWithCurrentUser() // instead of auth.queryWithCurrentUser()
+  ],
+  get: [
     authentication.hooks.authenticate('jwt'),
     permissions.hooks.checkPermissions({ service: 'users' }),
     permissions.hooks.isPermitted()
   ],
-  find: [
-    myCustomQueryWithCurrentUser() // instead of auth.queryWithCurrentUser()
-  ]
+  create: [
+    local.hooks.hashPassword()
+  ],
+  update: [
+    authentication.hooks.authenticate('jwt'),
+    permissions.hooks.checkPermissions({ service: 'users' }),
+    permissions.hooks.isPermitted(),
+    local.hooks.hashPassword()
+  ],
+  patch: [
+    authentication.hooks.authenticate('jwt'),
+    permissions.hooks.checkPermissions({ service: 'users' }),
+    permissions.hooks.isPermitted(),
+    local.hooks.hashPassword()
+  ],
 }
 ```
