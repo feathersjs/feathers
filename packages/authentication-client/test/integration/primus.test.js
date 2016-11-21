@@ -21,7 +21,7 @@ const Socket = Primus.createSocket({
 const app = createApplication({ secret: 'supersecret' }, 'primus');
 let options;
 
-describe('Primus client authentication', () => {
+describe('Primus client authentication', function () {
   let socket;
   let server;
   let client;
@@ -50,7 +50,9 @@ describe('Primus client authentication', () => {
 
   after(done => {
     socket.socket.close();
-    server.close(done);
+    server.close(() => {
+      done();
+    });
   });
 
   it('can use client.passport.getJWT() to get the accessToken', () => {
@@ -61,7 +63,7 @@ describe('Primus client authentication', () => {
     });
   });
 
-  it('can decode a accessToken with client.passport.verifyToken()', () => {
+  it('can decode an accessToken with client.passport.verifyToken()', () => {
     return client.authenticate(options).then(response => {
       return client.passport.verifyJWT(response.accessToken).then(payload => {
         expect(payload.id).to.equal(0);
@@ -137,6 +139,49 @@ describe('Primus client authentication', () => {
       return client.service('users').get(0).catch(error => {
         expect(error.code).to.equal(401);
       });
+    });
+  });
+
+  it('authenticates automatically after reconnection', done => {
+    client.authenticate(options).then(response => {
+      setTimeout(() => {
+        app.primus.end({ reconnect: true });
+        server.close();
+
+        const newApp = createApplication({ secret: 'supersecret' }, 'primus');
+
+        const newServer = newApp.listen(port, () => {});
+        newServer.once('listening', () => {
+          newApp.primus.once('connection', serverSocket => {
+            serverSocket.once('authenticate', data => {
+              expect(data.accessToken).to.equal(response.accessToken);
+              newServer.close();
+              done();
+            });
+          });
+        });
+      }, 500);
+    });
+  });
+
+  it.skip('authenticates automatically after upgrade', done => {
+    // TODO (EK): This is working but I have no idea how to manually
+    // trigger socket upgrade events.
+    app.primus.on('connection', serverSocket => {
+      serverSocket.on('upgrade', () => {
+        console.log('upgraded');
+
+        serverSocket.on('authenticate', data => {
+          expect(data.accessToken).to.be.ok;
+          done();
+        });
+      });
+    });
+
+    client.authenticate(options).then(response => {
+      setTimeout(() => {
+        app.primus.send('upgrade');
+      }, 500);
     });
   });
 });

@@ -10,7 +10,7 @@ const defaults = {
   service: 'users'
 };
 
-export default function (config = {}) {
+export default function init(config = {}) {
   const options = Object.assign({}, defaults, config);
 
   return function () {
@@ -39,3 +39,5 @@ export default function (config = {}) {
     }
   };
 }
+
+init.defaults = defaults;

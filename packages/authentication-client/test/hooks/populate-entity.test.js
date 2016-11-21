@@ -16,7 +16,7 @@ describe('hooks:populateEntity', () => {
       },
       result: {},
       app: {
-        authentication: {
+        passport: {
           verifyJWT: () => Promise.resolve({ userId: '1' })
         },
         set: () => {},

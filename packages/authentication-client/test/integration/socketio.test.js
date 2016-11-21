@@ -14,19 +14,25 @@ const baseURL = `http://localhost:${port}`;
 const app = createApplication({ secret: 'supersecret' }, 'socketio');
 let options;
 
-describe('Socket.io client authentication', () => {
+describe('Socket.io client authentication', function () {
+  this.timeout(5000);
   let socket;
   let server;
   let client;
+  let serverSocket;
 
   before(done => {
     server = app.listen(port);
     server.once('listening', () => {
+      app.io.on('connect', s => {
+        serverSocket = s;
+      });
+
       socket = io(baseURL);
 
       client = feathers()
         .configure(hooks())
-        .configure(socketio(socket, { timeout: 1000 }))
+        .configure(socketio(socket))
         .configure(authentication());
 
       done();
@@ -54,7 +60,7 @@ describe('Socket.io client authentication', () => {
     });
   });
 
-  it('can decode a accessToken with client.passport.verifyToken()', () => {
+  it('can decode an accessToken with client.passport.verifyToken()', () => {
     return client.authenticate(options).then(response => {
       return client.passport.verifyJWT(response.accessToken).then(payload => {
         expect(payload.id).to.equal(0);
@@ -130,6 +136,40 @@ describe('Socket.io client authentication', () => {
       return client.service('users').get(0).catch(error => {
         expect(error.code).to.equal(401);
       });
+    });
+  });
+
+  it('authenticates automatically after reconnection', done => {
+    client.authenticate(options).then(response => {
+      serverSocket.once('authenticate', data => {
+        expect(data.accessToken).to.equal(response.accessToken);
+        done();
+      });
+
+      setTimeout(() => {
+        app.io.sockets.emit('reconnect');
+      }, 500);
+    });
+  });
+
+  it.skip('authenticates automatically after upgrade', done => {
+    // TODO (EK): This is working but I have no idea how to manually
+    // trigger socket upgrade events.
+    app.io.on('connect', serverSocket => {
+      serverSocket.on('upgrade', () => {
+        console.log('upgraded');
+
+        serverSocket.on('authenticate', data => {
+          expect(data.accessToken).to.be.ok;
+          done();
+        });
+      });
+    });
+
+    client.authenticate(options).then(response => {
+      setTimeout(() => {
+        app.io.engine.emit('upgrade');
+      }, 500);
     });
   });
 });

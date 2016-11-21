@@ -24,7 +24,7 @@ export default function populateEntity (options = {}) {
       return Promise.reject(new Error(`The 'populateEntity' hook should only be used as an 'after' hook.`));
     }
 
-    return app.authentication
+    return app.passport
       .verifyJWT(hook.result.accessToken)
       .then(payload => {
         const id = payload[options.field];
