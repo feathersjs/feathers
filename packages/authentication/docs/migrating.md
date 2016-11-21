@@ -71,8 +71,8 @@ There are a number of breaking changes since the services have been removed:
   {
     "auth": {
       "facebook": {
-        "clientID": "1267524916640409",
-        "clientSecret": "xxxxx",
+        "clientID": "<your client id>",
+        "clientSecret": "<your client secret>",
         "permissions": {
           "scope": ["public_profile","email"]
         }
@@ -87,8 +87,8 @@ There are a number of breaking changes since the services have been removed:
   {
     "auth": {
       "facebook": {
-        "clientID": "1267524916640409",
-        "clientSecret": "xxxxx",
+        "clientID": "<your client id>",
+        "clientSecret": "<your client secret>",
         "scope": ["public_profile","email"]
       }
     }
