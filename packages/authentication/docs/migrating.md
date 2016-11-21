@@ -65,6 +65,35 @@ There are a number of breaking changes since the services have been removed:
 - `auth.localEndpoint` has been removed. There isn't a local service anymore. It is a passport plugin and has turned into `feathers-authentication-local`.
 - `auth.userEndpoint` has been removed. It is now part of `feathers-authentication-local` and is `auth.local.service`.
 - Cookies are now disabled by default. If you need cookie support (ie. OAuth, Server Side Rendering, Redirection) then you need to explicitly enable it by setting `auth.cookie.enable = true`.
+- Any passport strategy options are flattened. So previously you would have had this in your config:
+
+  ```json
+  {
+    "auth": {
+      "facebook": {
+        "clientID": "1267524916640409",
+        "clientSecret": "xxxxx",
+        "permissions": {
+          "scope": ["public_profile","email"]
+        }
+      }
+    }
+  }
+  ```
+
+  and now you have:
+
+  ```json
+  {
+    "auth": {
+      "facebook": {
+        "clientID": "1267524916640409",
+        "clientSecret": "xxxxx",
+        "scope": ["public_profile","email"]
+      }
+    }
+  }
+  ```
 
 ## Setting up authentication on the client
 
