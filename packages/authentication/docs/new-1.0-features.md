@@ -6,19 +6,19 @@
 
 You can override this property for each passport authentication strategy like so:
 
-    ```js
-    // when calling from hooks
-    auth.hooks.authenticate('local', { assignProperty: 'custom' })
-    // when calling from middleware
-    auth.express.authenticate('local', { assignProperty: 'custom' })
-    // For sockets and all other methods you can have it in your main
-    // config or pass explicitly when initializing auth.
-    app.configure(authentication({
-        local: {
-            assignProperty: 'custom'
-        }
-    }))
-    ```
+```js
+// when calling from hooks
+auth.hooks.authenticate('local', { assignProperty: 'custom' })
+// when calling from middleware
+auth.express.authenticate('local', { assignProperty: 'custom' })
+// For sockets and all other methods you can have it in your main
+// config or pass explicitly when initializing auth.
+app.configure(authentication({
+    local: {
+        assignProperty: 'custom'
+    }
+}))
+```
 
 ## More warnings and debugging
 
