@@ -27,7 +27,30 @@ For most of you, migrating your app should be fairly straight forward as there a
 
 ```js
 // feathers-authentication < v0.8.0
+
+// In your config files
+{
+  "auth": {
+    "token": {
+      "secret": "xxxx"
+    },
+    "local": {},
+    "facebook": {
+      "clientID": "<your client id>",
+      "clientSecret": "<your client secret>",
+      "permissions": {
+        "scope": ["public_profile","email"]
+      }
+    }
+  }
+}
+
+// In your authentication service
 const authentication = require('feathers-authentication');
+const FacebookStrategy = require('passport-facebook').Strategy;
+
+let config = app.get('auth');
+config.facebook.strategy = FacebookStrategy;
 app.configure(authentication(config))
     .use('/users', memory()) // this use to be okay to be anywhere
 ```
@@ -36,19 +59,64 @@ app.configure(authentication(config))
 
 ```js
 // feathers-authentication >= v1.0.0
+
+// In your config files
+{
+  "auth": {
+    "secret": "xxxx"
+    "facebook": {
+      "clientID": "<your client id>",
+      "clientSecret": "<your client secret>",
+      "scope": ["public_profile","email"]
+    }
+  }
+}
+
+// In your app or authentication service, wherever you would like
 const authentication = require('feathers-authentication');
 const local = require('feathers-authentication-local');
 const jwt = require('feathers-authentication-jwt');
 const oauth1 = require('feathers-authentication-oauth1');
 const oauth2 = require('feathers-authentication-oauth2');
+const FacebookStrategy = require('passport-facebook').Strategy;
 
 // The services you are setting the `entity` param for need to be registered before authentication
 app.use('/users', memory())
-    .configure(authentication(config))
-    .configure(jwt(config))
-    .configure(local(config))
-    .configure(oauth1(config))
-    .configure(oauth2(config))
+    .configure(authentication(app.get('auth')))
+    .configure(jwt())
+    .configure(local())
+    .configure(oauth1())
+    .configure(oauth2({
+      name: 'facebook', // if the name differs from your config key you need to pass your config options explicitly
+      Strategy: FacebookStrategy
+    }));
+
+// This hook customizes your payload.
+function customizeJWTPayload() {
+  return function(hook) {
+    console.log('Customizing JWT Payload');
+    hook.data.payload = {
+      // You need to make sure you have the right id.
+      // You can put whatever you want to be encoded in
+      // the JWT access token.
+      id: hook.params.user.id
+    };
+
+    return Promise.resolve(hook);
+  };
+}
+
+// Authenticate the user using the a JWT or
+// email/password strategy and if successful
+// return a new JWT access token.
+app.service('authentication').hooks({
+  before: {
+    create: [
+      auth.hooks.authenticate(['jwt', 'local']),
+      customizeJWTPayload()
+    ]
+  }
+});
 ```
 
 ### Config Options
@@ -247,7 +315,7 @@ const myCustomQueryWithCurrentUser = function(options ={}) {
 exports.before = {
   all: [
     authentication.hooks.authenticate('jwt'),
-    permissions.hooks.checkPermissions({service: 'users', on: 'user', field: 'permissions'}),
+    permissions.hooks.checkPermissions({ service: 'users' }),
     permissions.hooks.isPermitted()
   ],
   find: [
