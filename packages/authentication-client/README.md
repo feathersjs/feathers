@@ -38,6 +38,26 @@ It also has a `app.passport` instance that, like on the server, exposes utils fu
 
 **Note:** All these methods return promises.
 
+### Handling the special re-authentication errors
+
+In the event that your server goes down or the client loses connectivity, it will automatically handle attempting to re-authenticate the socket when the client regains connectivity with the server. In order to handle an authentication failure during automatic re-authentication you need to implement the following event listener:
+
+```js
+const errorHandler = error => {
+  app.authenticate({
+    strategy: 'local',
+    email: 'admin@feathersjs.com',
+    password: 'admin'
+  }).then(response => {
+    // You are now authenticated again
+  });
+};
+
+// Handle when auth fails during a reconnect or a transport upgrade
+app.on('reauthentication-error', errorHandler)
+```
+
+
 ### Default Options
 
 The following default options will be mixed in with the settings you pass in when configuring authentication. It will set the mixed options back to to the app so that they are available at any time by `app.get('auth')`. They can all be overridden.
