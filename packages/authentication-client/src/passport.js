@@ -62,7 +62,7 @@ export default class Passport {
             // it with the server automatically.
             if (socket.authenticated) {
               const data = {
-                strategy: 'jwt',
+                strategy: this.options.jwtStrategy,
                 accessToken: app.get('accessToken'),
               };
               this.authenticateSocket(data, socket, emit)
@@ -83,7 +83,7 @@ export default class Passport {
               // it with the server automatically.
               if (socket.authenticated) {
                 const data = {
-                  strategy: 'jwt',
+                  strategy: this.options.jwtStrategy,
                   accessToken: app.get('accessToken'),
                 };
                 this.authenticateSocket(data, socket, emit)
@@ -113,13 +113,13 @@ export default class Passport {
     // If no strategy was given let's try to authenticate with a stored JWT
     if (!credentials.strategy) {
       if (credentials.accessToken) {
-        credentials.strategy = 'jwt';
+        credentials.strategy = this.options.jwtStrategy;
       } else {
         getCredentials = this.getJWT().then(accessToken => {
           if (!accessToken) {
             return Promise.reject(new errors.NotAuthenticated(`Could not find stored JWT and no authentication strategy was given`));
           }
-          return { strategy: 'jwt', accessToken };
+          return { strategy: this.options.jwtStrategy, accessToken };
         });
       }
     }
