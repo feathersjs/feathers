@@ -14,6 +14,8 @@
 npm install feathers-authentication-local --save
 ```
 
+**Note:** This is only compatibile with `feathers-authentication@1.x` and above.
+
 ## Documentation
 
 <!-- Please refer to the [feathers-authentication-local documentation](http://docs.feathersjs.com/) for more details. -->
