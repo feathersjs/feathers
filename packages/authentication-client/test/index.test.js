@@ -25,6 +25,10 @@ describe('Feathers Authentication Client', () => {
       expect(client.passport.options.storageKey).to.equal('feathers-jwt');
     });
 
+    it('sets the jwtStrategy', () => {
+      expect(client.passport.options.jwtStrategy).to.equal('jwt');
+    });
+
     it('sets the auth service path', () => {
       expect(client.passport.options.path).to.equal('/authentication');
     });

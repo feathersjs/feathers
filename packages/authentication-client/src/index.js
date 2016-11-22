@@ -5,6 +5,7 @@ const defaults = {
   header: 'authorization',
   cookie: 'feathers-jwt',
   storageKey: 'feathers-jwt',
+  jwtStrategy: 'jwt', 
   path: '/authentication',
   entity: 'user',
   service: 'users'
