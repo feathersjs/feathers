@@ -15,6 +15,8 @@
 npm install feathers-authentication-oauth1 --save
 ```
 
+**Note:** This is only compatibile with `feathers-authentication@1.x` and above.
+
 ## Documentation
 
 Please refer to the [feathers-authentication-oauth1 documentation](http://docs.feathersjs.com/) for more details.
