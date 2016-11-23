@@ -15,21 +15,15 @@ const app = createApplication({ secret: 'supersecret' }, 'socketio');
 let options;
 
 describe('Socket.io client authentication', function () {
-  this.timeout(5000);
+  this.timeout(20000);
   let socket;
   let server;
   let client;
-  let serverSocket;
 
   before(done => {
     server = app.listen(port);
     server.once('listening', () => {
-      app.io.on('connect', s => {
-        serverSocket = s;
-      });
-
       socket = io(baseURL);
-
       client = feathers()
         .configure(hooks())
         .configure(socketio(socket))
@@ -141,14 +135,22 @@ describe('Socket.io client authentication', function () {
 
   it('authenticates automatically after reconnection', done => {
     client.authenticate(options).then(response => {
-      serverSocket.once('authenticate', data => {
-        expect(data.accessToken).to.equal(response.accessToken);
-        done();
-      });
+      app.io.close();
+      server.close(() => {
+        setTimeout(() => {
+          const newApp = createApplication({ secret: 'supersecret' }, 'socketio');
+          server = newApp.listen(port);
 
-      setTimeout(() => {
-        app.io.sockets.emit('reconnect');
-      }, 500);
+          server.once('listening', () => {
+            newApp.io.on('connect', s => {
+              s.once('authenticate', data => {
+                expect(data.accessToken).to.equal(response.accessToken);
+                done();
+              });
+            });
+          });
+        }, 1000);
+      });
     });
   });
 

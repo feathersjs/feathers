@@ -22,6 +22,7 @@ const app = createApplication({ secret: 'supersecret' }, 'primus');
 let options;
 
 describe('Primus client authentication', function () {
+  this.timeout(20000);
   let socket;
   let server;
   let client;
@@ -30,7 +31,6 @@ describe('Primus client authentication', function () {
     server = app.listen(port);
     server.once('listening', () => {
       socket = new Socket(baseURL);
-
       client = feathers()
         .configure(hooks())
         .configure(primus(socket, { timeout: 1000 }))
@@ -50,9 +50,7 @@ describe('Primus client authentication', function () {
 
   after(done => {
     socket.socket.close();
-    server.close(() => {
-      done();
-    });
+    server.close(done);
   });
 
   it('can use client.passport.getJWT() to get the accessToken', () => {
@@ -144,23 +142,22 @@ describe('Primus client authentication', function () {
 
   it('authenticates automatically after reconnection', done => {
     client.authenticate(options).then(response => {
-      setTimeout(() => {
-        app.primus.end({ reconnect: true });
-        server.close();
+      app.primus.end({ reconnect: true });
+      server.close(() => {
+        setTimeout(() => {
+          const newApp = createApplication({ secret: 'supersecret' }, 'primus');
 
-        const newApp = createApplication({ secret: 'supersecret' }, 'primus');
-
-        const newServer = newApp.listen(port, () => {});
-        newServer.once('listening', () => {
-          newApp.primus.once('connection', serverSocket => {
-            serverSocket.once('authenticate', data => {
-              expect(data.accessToken).to.equal(response.accessToken);
-              newServer.close();
-              done();
+          server = newApp.listen(port);
+          server.once('listening', () => {
+            newApp.primus.on('connection', s => {
+              s.once('authenticate', data => {
+                expect(data.accessToken).to.equal(response.accessToken);
+                done();
+              });
             });
           });
-        });
-      }, 500);
+        }, 1000);
+      });
     });
   });
 

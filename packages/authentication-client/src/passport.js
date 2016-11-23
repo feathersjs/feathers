@@ -6,6 +6,10 @@ const debug = Debug('feathers-authentication-client');
 
 export default class Passport {
   constructor (app, options) {
+    if (app.passport) {
+      throw new Error('You have already registered authentication on this client app instance. You only need to do it once.');
+    }
+    
     this.options = options;
     this.app = app;
     this.storage = app.get('storage') || this.getStorage(options.storage);
@@ -14,95 +18,100 @@ export default class Passport {
 
     app.set('storage', this.storage);
     this.getJWT().then(this.setJWT);
+
+    this.setupSocketListeners();
+  }
+
+  setupSocketListeners() {
+    const app = this.app;
+    const socket = app.io || app.primus;
+    const emit = app.io ? 'emit' : 'send';
+    const reconnected = app.io ? 'reconnect' : 'reconnected';
+
+    if (!socket) {
+      return;
+    }
+
+    socket.on(reconnected, () => {
+      debug('Socket reconnected');
+
+      // If socket was already authenticated then re-authenticate
+      // it with the server automatically.
+      if (socket.authenticated) {
+        const data = {
+          strategy: this.options.jwtStrategy,
+          accessToken: app.get('accessToken'),
+        };
+        this.authenticateSocket(data, socket, emit)
+          .then(this.setJWT)
+          .catch(error => {
+            debug('Error re-authenticating after socket reconnect', error);
+            socket.authenticated = false;
+            app.emit('reauthentication-error', error);
+          });
+      }
+    });
+
+    if (socket.io) {
+      socket.io.engine.on('upgrade', () => {
+        debug('Socket upgrading');
+
+        // If socket was already authenticated then re-authenticate
+        // it with the server automatically.
+        if (socket.authenticated) {
+          const data = {
+            strategy: this.options.jwtStrategy,
+            accessToken: app.get('accessToken'),
+          };
+
+          this.authenticateSocket(data, socket, emit)
+            .then(this.setJWT)
+            .catch(error => {
+              debug('Error re-authenticating after socket upgrade', error);
+              socket.authenticated = false;
+              app.emit('reauthentication-error', error);
+            });
+        }
+      });
+    }
   }
 
   connected () {
     const app = this.app;
 
+    if (app.rest) {
+      return Promise.resolve();
+    }
+
+    const socket = app.io || app.primus;
+
+    if (!socket) {
+      return Promise.reject(new Error(`It looks like your client connection has not been configured.`));
+    }
+
+    if ((app.io && socket.connected) || (app.primus && socket.readyState === 3)) {
+      debug('Socket already connected');
+      return Promise.resolve(socket);
+    }
+    
     return new Promise((resolve, reject) => {
-      if (app.rest) {
-        return resolve();
-      }
+      const connected = app.primus ? 'open' : 'connect';
+      const disconnect = app.io ? 'disconnect' : 'end';
+      debug('Waiting for socket connection');
 
-      const socket = app.io || app.primus;
+      const handleDisconnect = () => {
+        debug('Socket disconnected before it could connect');
+        socket.authenticated = false;
+      };
 
-      if (!socket) {
-        return reject(new Error(`It looks like your client connection has not been configured.`));
-      }
-
-      // If the socket is not connected yet we have to wait for the `connect` event
-      if ((app.io && !socket.connected) || (app.primus && socket.readyState !== 3)) {
-        const connected = app.primus ? 'open' : 'connect';
-        debug('Waiting for socket connection'); 
-
-        socket.on(connected, () => {
-          debug('Socket connected');
-
-          const emit = app.io ? 'emit' : 'send';
-          const disconnect = app.io ? 'disconnect' : 'end';
-          const reconnecting = app.io ? 'reconnecting' : 'reconnect';
-          const reconnected = app.io ? 'reconnect' : 'reconnected';
-
-          // If one of those events happens before `connect` the promise will be rejected
-          // If it happens after, it will do nothing (since Promises can only resolve once)
-          socket.on(disconnect, () => {
-            debug('Socket disconnected');
-            socket.authenticated = false;
-            socket.removeAllListeners();
-          });
-
-          socket.on(reconnecting, () => {
-            debug('Socket reconnecting');
-          });
-
-          socket.on(reconnected, () => {
-            debug('Socket reconnected');
-
-            // If socket was already authenticated then re-authenticate
-            // it with the server automatically.
-            if (socket.authenticated) {
-              const data = {
-                strategy: this.options.jwtStrategy,
-                accessToken: app.get('accessToken'),
-              };
-              this.authenticateSocket(data, socket, emit)
-                .then(this.setJWT)
-                .catch(error => {
-                  debug('Error re-authenticating after socket upgrade', error);
-                  socket.authenticated = false;
-                  app.emit('reauthentication-error', error);
-                });
-            }
-          });
-
-          if (socket.io) {
-            socket.io.engine.on('upgrade', () => {
-              debug('Socket upgrading', arguments);
-
-              // If socket was already authenticated then re-authenticate
-              // it with the server automatically.
-              if (socket.authenticated) {
-                const data = {
-                  strategy: this.options.jwtStrategy,
-                  accessToken: app.get('accessToken'),
-                };
-                this.authenticateSocket(data, socket, emit)
-                  .then(this.setJWT)
-                  .catch(error => {
-                    debug('Error re-authenticating after socket upgrade', error);
-                    socket.authenticated = false;
-                    app.emit('reauthentication-error', error);
-                  });
-              }
-            });
-          }
-
-          resolve(socket);
-        });
-      } else {
-        debug('Socket already connected');
+      // If disconnect happens before `connect` the promise will be rejected.
+      socket.once(disconnect, handleDisconnect);
+      socket.once(connected, () => {
+        debug('Socket connected');
+        debug(`Removing ${disconnect} listener`);
+        socket.removeListener(disconnect, handleDisconnect);
         resolve(socket);
-      }
+      });
     });
   }
 
