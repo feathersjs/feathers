@@ -55,6 +55,16 @@ describe('feathers-authentication-local', () => {
       passportLocal.Strategy.restore();
     });
 
+    it('registers the strategy options', () => {
+      sinon.spy(app.passport, 'options');
+      app.configure(local());
+      app.setup();
+
+      expect(app.passport.options).to.have.been.calledOnce;
+      
+      app.passport.options.restore();
+    });
+
     describe('passport strategy options', () => {
       let authOptions;
       let args;
@@ -106,6 +116,36 @@ describe('feathers-authentication-local', () => {
       app.setup();
 
       expect(passportLocal.Strategy.getCall(0).args[0].usernameField).to.equal('username');
+      
+      passportLocal.Strategy.restore();
+    });
+
+    it('pulls options from global config', () => {
+      sinon.spy(passportLocal, 'Strategy');
+      let authOptions = app.get('auth');
+      authOptions.local = { usernameField: 'username' };
+      app.set('auth', authOptions);
+
+      app.configure(local());
+      app.setup();
+
+      expect(passportLocal.Strategy.getCall(0).args[0].usernameField).to.equal('username');
+      expect(passportLocal.Strategy.getCall(0).args[0].passwordField).to.equal('password');
+      
+      passportLocal.Strategy.restore();
+    });
+
+    it('pulls options from global config with custom name', () => {
+      sinon.spy(passportLocal, 'Strategy');
+      let authOptions = app.get('auth');
+      authOptions.custom = { usernameField: 'username' };
+      app.set('auth', authOptions);
+
+      app.configure(local({ name: 'custom' }));
+      app.setup();
+
+      expect(passportLocal.Strategy.getCall(0).args[0].usernameField).to.equal('username');
+      expect(passportLocal.Strategy.getCall(0).args[0].passwordField).to.equal('password');
       
       passportLocal.Strategy.restore();
     });
