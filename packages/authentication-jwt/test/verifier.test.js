@@ -65,9 +65,9 @@ describe('Verifier', () => {
   });
 
   describe('verify', () => {
-    describe('when id is present in payload', () => {
+    describe('when userId is present in payload', () => {
       it('calls get on the provided service', done => {
-        verifier.verify({}, { id: 1 }, () => {
+        verifier.verify({}, { userId: 1 }, () => {
           expect(service.get).to.have.been.calledOnce;
           expect(service.get).to.have.been.calledWith(1);
           done();
@@ -75,7 +75,7 @@ describe('Verifier', () => {
       });
 
       it('returns the payload', done => {
-        const payload = { id: 1 };
+        const payload = { userId: 1 };
         verifier.verify({}, payload, (error, result) => {
           expect(error).to.equal(null);
           expect(result.payload).to.deep.equal(payload);
@@ -84,7 +84,7 @@ describe('Verifier', () => {
       });
 
       it('returns the entity', done => {
-        verifier.verify({}, { id: 1 }, (error, result) => {
+        verifier.verify({}, { userId: 1 }, (error, result) => {
           expect(error).to.equal(null);
           expect(result.email).to.deep.equal(user.email);
           done();
@@ -100,7 +100,7 @@ describe('Verifier', () => {
 
           options.service = service;
           const erroringVerifier = new Verifier(app, options);
-          const payload = { id: 1 };
+          const payload = { userId: 1 };
           erroringVerifier.verify({}, payload, (error, result) => {
             expect(error).to.equal(null);
             expect(result.payload).to.deep.equal(payload);

@@ -18,16 +18,18 @@ class JWTVerifier {
   verify (req, payload, done) {
     debug('Received JWT payload', payload);
 
-    const id = payload[this.service.id];
+    const id = payload[`${this.options.entity}Id`];
 
     if (id === undefined) {
+      debug(`JWT payload does not contain ${this.options.entity}Id`);
       return done(null, { payload });
     }
 
     debug(`Looking up ${this.options.entity} by id`, id);
 
     this.service.get(id).then(entity => {
-      return done(null, Object.assign({ payload }, entity));
+      const newPayload = { [`${this.options.entity}Id`]: id };
+      return done(null, Object.assign({ payload }, entity), newPayload);
     })
     .catch(error => {
       debug(`Error populating ${this.options.entity} with id ${id}`, error);
