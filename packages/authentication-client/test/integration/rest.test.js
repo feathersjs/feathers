@@ -53,7 +53,7 @@ describe('REST client authentication', () => {
   it('can decode a accessToken with client.passport.verifyToken()', () => {
     return client.authenticate(options).then(response => {
       return client.passport.verifyJWT(response.accessToken).then(payload => {
-        expect(payload.id).to.equal(0);
+        expect(payload.userId).to.equal(0);
         expect(payload.iss).to.equal('feathers');
         expect(payload.sub).to.equal('anonymous');
       });

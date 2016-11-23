@@ -39,7 +39,7 @@ client.authenticate({
 })
 .then(payload => {
   console.log('JWT Payload', payload);
-  return client.service('users').get(payload.id);
+  return client.service('users').get(payload.userId);
 })
 .then(user => {
   client.set('user', user);
