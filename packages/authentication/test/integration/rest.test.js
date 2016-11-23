@@ -20,7 +20,7 @@ describe('REST authentication', function() {
     app.passport.createJWT({}, options)
       .then(token => {
         expiredToken = token;
-        return app.passport.createJWT({ id: 0 }, app.get('auth'));
+        return app.passport.createJWT({ userId: 0 }, app.get('auth'));
       })
       .then(token => {
         accessToken = token;
@@ -37,6 +37,7 @@ describe('REST authentication', function() {
 
       beforeEach(() => {
         data = {
+          strategy: 'local',
           email: 'admin@feathersjs.com',
           password: 'admin'
         };
@@ -53,7 +54,7 @@ describe('REST authentication', function() {
             }).then(payload => {
               expect(payload).to.exist;
               expect(payload.iss).to.equal('feathers');
-              expect(payload.id).to.equal(0);
+              expect(payload.userId).to.equal(0);
             });
         });
       });
@@ -108,7 +109,7 @@ describe('REST authentication', function() {
             }).then(payload => {
               expect(payload).to.exist;
               expect(payload.iss).to.equal('feathers');
-              expect(payload.id).to.equal(0);
+              expect(payload.userId).to.equal(0);
             });
         });
       });
@@ -124,7 +125,7 @@ describe('REST authentication', function() {
             }).then(payload => {
               expect(payload).to.exist;
               expect(payload.iss).to.equal('feathers');
-              expect(payload.id).to.equal(0);
+              expect(payload.userId).to.equal(0);
             });
         });
       });

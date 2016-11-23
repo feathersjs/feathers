@@ -10,15 +10,16 @@ class Service {
     this.passport = app.passport;
   }
 
-  create(data, params) {
+  create(data = {}, params = {}) {
     const defaults = this.app.get('auth');
+    const payload = merge(data.payload, params.payload);
 
     // create accessToken
     // TODO (EK): Support refresh tokens
     // TODO (EK): This should likely be a hook
     // TODO (EK): This service can be datastore backed to support blacklists :)
     return this.passport
-      .createJWT(data.payload, merge(defaults, params))
+      .createJWT(payload, merge(defaults, params))
       .then(accessToken => {
         return { accessToken };
       });

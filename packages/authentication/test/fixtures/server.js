@@ -17,15 +17,15 @@ const User = {
   permissions: ['*']
 };
 
-function customizeJWTPayload() {
-  return function(hook) {
-    hook.data.payload = {
-      id: hook.params.user.id
-    };
+// function customizeJWTPayload() {
+//   return function(hook) {
+//     hook.data.payload = {
+//       id: hook.params.user.id
+//     };
 
-    return Promise.resolve(hook);
-  };
-}
+//     return Promise.resolve(hook);
+//   };
+// }
 
 export default function(settings, socketProvider) {
   const app = feathers();
@@ -39,6 +39,10 @@ export default function(settings, socketProvider) {
     .use(bodyParser.urlencoded({ extended: true }))
     .configure(auth(settings))
     .configure(local())
+    .configure(local({
+      name: 'org-local',
+      entity: 'org'
+    }))
     .configure(jwt())
     .use('/users', memory())
     .use('/', feathers.static(__dirname + '/public'));
@@ -46,8 +50,8 @@ export default function(settings, socketProvider) {
   app.service('authentication').hooks({
     before: {
       create: [
-        auth.hooks.authenticate(['jwt', 'local']),
-        customizeJWTPayload()
+        auth.hooks.authenticate(['jwt', 'local', 'org-local']),
+        // customizeJWTPayload()
       ],
       remove: [
         auth.hooks.authenticate('jwt')

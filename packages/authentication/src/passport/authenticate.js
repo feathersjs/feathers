@@ -13,9 +13,7 @@ export default function authenticate (options = {}) {
   debug('Initializing custom passport authenticate', options);
 
   // This function is bound by passport and called by passport.authenticate()
-  return function (passport, name, strategyOptions = {}, callback = () => {}) {
-    debug('passport.authenticate called with the following options', passport, name, strategyOptions, callback);
-    
+  return function (passport, name, strategyOptions = {}, callback = () => {}) {    
     // This is called by the feathers middleware, hook or socket. The request object
     // is a mock request derived from an http request, socket object, or hook.
     return function (request = {}) {
@@ -26,7 +24,7 @@ export default function authenticate (options = {}) {
         // Default is hook.params.user, req.user and socket.user.
         const entity = strategyOptions.entity || strategyOptions.assignProperty || options.entity;
         let failures = [];
-        let strategies = [name];
+        let strategies;
 
         // Cast `name` to an array, allowing authentication to pass through a chain of
         // strategies.  The first name to succeed, redirect, or error will halt
@@ -38,8 +36,12 @@ export default function authenticate (options = {}) {
         // It is not feasible to construct a chain of multiple strategies that involve
         // redirection (for example both Facebook and Twitter), since the first one to
         // redirect will halt the chain.
-        if (Array.isArray(name)) {
+        if (request.strategy) {
+          strategies = [request.strategy];
+        } else if (Array.isArray(name)) {
           strategies = name;
+        } else {
+          strategies = [name];
         }
 
         function attempt(index) {
@@ -60,7 +62,6 @@ export default function authenticate (options = {}) {
           if (!prototype) {
             return reject(new Error(`Unknown authentication strategy '${layer}'`));
           }
-          
 
           // Implement required passport methods that
           // can be called by a passport strategy.
@@ -88,13 +89,13 @@ export default function authenticate (options = {}) {
             reject(error);
           };
 
-          strategy.success = (data, info) => {
-            debug(`'${layer}' authentication strategy succeeded`, data, info);
+          strategy.success = (data, payload) => {
+            debug(`'${layer}' authentication strategy succeeded`, data, payload);
             resolve({
               success: true,
               data: {
                 [entity]: data,
-                info
+                payload
               }
             });
           };

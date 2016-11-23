@@ -10,16 +10,6 @@ const local = require('feathers-authentication-local');
 const jwt = require('feathers-authentication-jwt');
 const auth = require('../lib/index');
 
-function customizeJWTPayload() {
-  return function(hook) {
-    hook.data.payload = {
-      id: hook.params.user.id
-    };
-
-    return Promise.resolve(hook);
-  };
-}
-
 const app = feathers();
 app.configure(rest())
   .configure(socketio())
@@ -36,8 +26,7 @@ app.service('authentication').hooks({
   before: {
     create: [
       // You can chain multiple strategies
-      auth.hooks.authenticate(['jwt', 'local']),
-      customizeJWTPayload()
+      auth.hooks.authenticate(['jwt', 'local'])
     ],
     remove: [
       auth.hooks.authenticate('jwt')

@@ -147,8 +147,7 @@ app.service('authentication').hooks({
   before: {
     create: [
       // You can chain multiple strategies
-      auth.hooks.authenticate(['jwt', 'local']),
-      customizeJWTPayload()
+      auth.hooks.authenticate(['jwt', 'local'])
     ],
     remove: [
       auth.hooks.authenticate('jwt')
