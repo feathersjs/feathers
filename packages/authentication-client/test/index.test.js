@@ -12,6 +12,12 @@ describe('Feathers Authentication Client', () => {
       .configure(auth());
   });
 
+  it('throws an error if registered twice', () => {
+    expect(() => {
+      client.configure(auth());
+    }).to.throw(Error);
+  });
+
   describe('default options', () => {
     it('sets the authorization header', () => {
       expect(client.passport.options.header).to.equal('authorization');
