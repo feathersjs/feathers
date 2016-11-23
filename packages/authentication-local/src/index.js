@@ -17,8 +17,7 @@ const KEYS = [
   'entity',
   'service',
   'passReqToCallback',
-  'session',
-  'local'
+  'session'
 ];
 
 export default function init(options = {}) {
@@ -30,8 +29,12 @@ export default function init(options = {}) {
       throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before feathers-authentication-local?`);
     }
 
+    let name = options.name || defaults.name;
+    let authOptions = app.get('auth') || {};
+    let localOptions = authOptions[name] || {};
+
     // NOTE (EK): Pull from global auth config to support legacy auth for an easier transition.
-    const localSettings = merge({}, defaults, pick(app.get('auth') || {}, KEYS), omit(options, ['Verifier']));
+    const localSettings = merge({}, defaults, pick(authOptions, KEYS), localOptions, omit(options, ['Verifier']));
     let Verifier = DefaultVerifier;
 
     if (options.Verifier) {
@@ -49,6 +52,7 @@ export default function init(options = {}) {
       // Register 'local' strategy with passport
       debug('Registering local authentication strategy with options:', localSettings);
       app.passport.use(localSettings.name, new LocalStrategy(localSettings, verifier.verify.bind(verifier)));
+      app.passport.options(localSettings.name, localSettings);
       
       return result;
     }
