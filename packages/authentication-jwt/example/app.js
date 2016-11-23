@@ -27,7 +27,7 @@ const issueJWT = () => {
   return hook => {
     const app = hook.app;
     const id = hook.result.id;
-    return app.passport.createJWT({ id }, app.get('auth')).then(accessToken => {
+    return app.passport.createJWT({ userId: id }, app.get('auth')).then(accessToken => {
       hook.result.accessToken = accessToken;
       return Promise.resolve(hook);
     });
