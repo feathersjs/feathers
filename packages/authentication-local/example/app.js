@@ -25,16 +25,6 @@ app.configure(rest())
   .use('/users', memory())
   .use(errorHandler());
 
-function customizeJWTPayload() {
-  return function(hook) {
-    console.log('Customizing JWT Payload');
-    hook.data.payload = {
-      id: hook.params.user.id
-    };
-
-    return Promise.resolve(hook);
-  };
-}
 
 // Authenticate the user using the default
 // email/password strategy and if successful
@@ -42,8 +32,7 @@ function customizeJWTPayload() {
 app.service('authentication').hooks({
   before: {
     create: [
-      auth.hooks.authenticate('local'),
-      customizeJWTPayload()
+      auth.hooks.authenticate('local')
     ]
   }
 });
