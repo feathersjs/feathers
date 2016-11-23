@@ -105,7 +105,11 @@ class OAuth2Verifier {
       .find({ query })
       .then(this._normalizeResult)
       .then(entity => entity ? this._updateEntity(entity, data) : this._createEntity(data))
-      .then(entity => done(null, entity))
+      .then(entity => {
+        const id = entity[this.service.id];
+        const payload = { [`${this.options.entity}Id`]: id };
+        done(null, entity, payload);
+      })
       .catch(error => error ? done(error) : done(null, error));
   }
 }

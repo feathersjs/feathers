@@ -29,17 +29,6 @@ app.configure(rest())
   .use('/users', memory())
   .use(errorHandler());
 
-function customizeJWTPayload() {
-  return function(hook) {
-    console.log('Customizing JWT Payload');
-    hook.data.payload = {
-      id: hook.params.user.id
-    };
-
-    return Promise.resolve(hook);
-  };
-}
-
 function customizeGithubProfile() {
   return function(hook) {
     console.log('Customizing Github Profile');
@@ -59,8 +48,7 @@ function customizeGithubProfile() {
 app.service('authentication').hooks({
   before: {
     create: [
-      auth.hooks.authenticate('jwt'),
-      customizeJWTPayload()
+      auth.hooks.authenticate('jwt')
     ]
   }
 });

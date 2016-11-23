@@ -88,6 +88,7 @@ export default function init (options = {}) {
       // Register 'oauth2' strategy with passport
       debug('Registering oauth2 authentication strategy with options:', oauth2Settings);
       app.passport.use(name, new Strategy(oauth2Settings, verifier.verify.bind(verifier)));
+      app.passport.options(name, oauth2Settings);
 
       return result;
     };
