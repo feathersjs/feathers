@@ -91,29 +91,13 @@ app.use('/users', memory())
       Strategy: FacebookStrategy
     }));
 
-// This hook customizes your payload.
-function customizeJWTPayload() {
-  return function(hook) {
-    console.log('Customizing JWT Payload');
-    hook.data.payload = {
-      // You need to make sure you have the right id.
-      // You can put whatever you want to be encoded in
-      // the JWT access token.
-      id: hook.params.user.id
-    };
-
-    return Promise.resolve(hook);
-  };
-}
-
 // Authenticate the user using the a JWT or
 // email/password strategy and if successful
 // return a new JWT access token.
 app.service('authentication').hooks({
   before: {
     create: [
-      auth.hooks.authenticate(['jwt', 'local']),
-      customizeJWTPayload()
+      auth.hooks.authenticate(['jwt', 'local'])
     ]
   }
 });
@@ -125,7 +109,7 @@ There are a number of breaking changes since the services have been removed:
 
 - Change `auth.token` -> `auth.jwt` in your config
 - Move `auth.token.secret` -> `auth.secret`
-- `auth.token.payload` option has been removed. See [customizing JWT payload]() for how to do this.
+- `auth.token.payload` option has been removed. See [customizing JWT payload](#customizing-jwt-payload) for how to do this.
 - `auth.idField` has been removed. It is now included in all services so we can pull it internally without you needing to specify it.
 - `auth.shouldSetupSuccessRoute` has been removed. Success redirect middleware is registered automatically but only triggers if you explicitly set a redirect. [See redirecting]() for more details.
 - `auth.shouldSetupFailureRoute` has been removed. Failure redirect middleware is registered automatically but only triggers if you explicitly set a redirect. [See redirecting]() for more details.
@@ -232,6 +216,39 @@ app.authenticate({
 ## Response to `app.authenticate()` does not return `user`
 
 We previously made the poor assumption that you are always authenticating a user. This is not always the case, or your app may not care about the current user as you already have their id in the accessToken payload or can encode some additional details in the JWT accessToken.  Therefore, if you need to get the current user you need to request it explicitly after authentication or populate it yourself in an after hook server side. See the new usage above for how to fetch your user.
+
+## Customizing JWT Payload
+
+By default the payload for your JWT is simply your entity id (ie. `{ userId }`). However, you can customize your JWT payloads however you wish by adding a `before` hook to the authentication service. For example:
+
+```js
+// This hook customizes your payload.
+function customizeJWTPayload() {
+  return function(hook) {
+    console.log('Customizing JWT Payload');
+    hook.data.payload = {
+      // You need to make sure you have the right id.
+      // You can put whatever you want to be encoded in
+      // the JWT access token.
+      customId: hook.params.user.id
+    };
+
+    return Promise.resolve(hook);
+  };
+}
+
+// Authenticate the user using the a JWT or
+// email/password strategy and if successful
+// return a new JWT access token.
+app.service('authentication').hooks({
+  before: {
+    create: [
+      auth.hooks.authenticate(['jwt', 'local']),
+      customizeJWTPayload()
+    ]
+  }
+});
+``` 
 
 ## JWT Parsing
 

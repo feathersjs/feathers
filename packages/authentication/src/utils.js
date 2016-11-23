@@ -1,5 +1,6 @@
 import Debug from 'debug';
 import pick from 'lodash.pick';
+import omit from 'lodash.omit';
 import jwt from 'jsonwebtoken';
 
 const debug = Debug('feathers-authentication:authentication:utils');
@@ -32,7 +33,7 @@ export function createJWT (payload = {}, options = {}) {
     }
 
     // TODO (EK): Support jwtids. Maybe auto-generate a uuid
-    jwt.sign(payload, secret, pick(settings, VALID_KEYS), function(error, token) {
+    jwt.sign(omit(payload, VALID_KEYS), secret, pick(settings, VALID_KEYS), function(error, token) {
       if (error) {
         debug('Error signing JWT', error);
         return reject(error);

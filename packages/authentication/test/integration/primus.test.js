@@ -19,6 +19,7 @@ describe('Primus authentication', function() {
   let server;
   let socket;
   let Socket;
+  let serverSocket;
   let ExpiringSocket;
   let expiringServer;
   let expiringSocket;
@@ -30,7 +31,7 @@ describe('Primus authentication', function() {
     app.passport.createJWT({}, options)
       .then(token => {
         expiredToken = token;
-        return app.passport.createJWT({ id: 0 }, app.get('auth'));
+        return app.passport.createJWT({ userId: 0 }, app.get('auth'));
       })
       .then(token => {
         accessToken = token;
@@ -40,6 +41,7 @@ describe('Primus authentication', function() {
           server = app.listen(port);
           server.once('listening', () => {
             Socket = app.primus.Socket;
+            app.primus.on('connection', s => serverSocket = s);
             done();
           });
         });
@@ -78,9 +80,26 @@ describe('Primus authentication', function() {
             app.passport.verifyJWT(response.accessToken, app.get('auth')).then(payload => {
               expect(payload).to.exist;
               expect(payload.iss).to.equal('feathers');
-              expect(payload.id).to.equal(0);
+              expect(payload.userId).to.equal(0);
               done();
             });
+          });
+        });
+
+        it('sets the user on the socket', done => {
+          socket.send('authenticate', data, (error, response) => {
+            expect(response.accessToken).to.exist;
+            expect(serverSocket.request.feathers.user).to.not.equal(undefined);
+            done();
+          });
+        });
+
+        it('sets entity specified in strategy', done => {
+          data.strategy = 'org-local';
+          socket.send('authenticate', data, (error, response) => {
+            expect(response.accessToken).to.exist;
+            expect(serverSocket.request.feathers.org).to.not.equal(undefined);
+            done();
           });
         });
       });
@@ -132,7 +151,7 @@ describe('Primus authentication', function() {
             app.passport.verifyJWT(response.accessToken, app.get('auth')).then(payload => {
               expect(payload).to.exist;
               expect(payload.iss).to.equal('feathers');
-              expect(payload.id).to.equal(0);
+              expect(payload.userId).to.equal(0);
               done();
             });
           });
@@ -148,7 +167,7 @@ describe('Primus authentication', function() {
             app.passport.verifyJWT(response.accessToken, app.get('auth')).then(payload => {
               expect(payload).to.exist;
               expect(payload.iss).to.equal('feathers');
-              expect(payload.id).to.equal(0);
+              expect(payload.userId).to.equal(0);
               done();
             });
           });

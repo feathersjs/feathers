@@ -15,7 +15,22 @@ export default function initialize (options = {}) {
     // app.configure(authentication()).
     
     // Expose our JWT util functions globally
+    passport._feathers = {};
     passport.createJWT = createJWT;
     passport.verifyJWT = verifyJWT;
+    passport.options = function(name, strategyOptions) {
+      if (!name) {
+        return passport._feathers;
+      }
+
+      if (typeof name === 'string' && !strategyOptions) {
+        return passport._feathers[name];
+      }
+
+      if (typeof name === 'string' && strategyOptions) {
+        debug(`Setting ${name} strategy options`, strategyOptions);
+        passport._feathers[name] = Object.assign({}, strategyOptions);
+      }
+    };
   };
 }

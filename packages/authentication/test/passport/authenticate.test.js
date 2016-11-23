@@ -141,15 +141,15 @@ describe('passport:authenticate', () => {
       });
 
       describe('success', () => {
-        let info;
+        let payload;
         let user;
         let organization;
 
         beforeEach(() => {
-          info = { platform: 'feathers' };
+          payload = { platform: 'feathers' };
           user = { name: 'Bob' };
           organization = { name: 'Apple' };
-          verifier = (cb) => cb(null, user, info);
+          verifier = (cb) => cb(null, user, payload);
           passport.use(new MockStrategy({}, verifier));
           authenticator = authenticate({ entity: 'user' })(passport, 'mock');
         });
@@ -166,9 +166,9 @@ describe('passport:authenticate', () => {
           });
         });
 
-        it('returns the passport info', () => {
+        it('returns the passport payload', () => {
           return authenticator(req).then(result => {
-            expect(result.data.info).to.deep.equal(info);
+            expect(result.data.payload).to.deep.equal(payload);
           });
         });
 

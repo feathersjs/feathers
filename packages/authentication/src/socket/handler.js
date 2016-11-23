@@ -76,17 +76,19 @@ export default function setupSocketHandler(app, options, { feathersParams, provi
         return callback(normalizeError(error));
       }
 
-      const promise = app.authenticate(strategy, options[strategy])(socket._feathers)
+      const stategyOptions = app.passport.options(strategy);
+
+      const promise = app.authenticate(strategy, stategyOptions)(socket._feathers)
         .then(result => {
           if (result.success) {
             // NOTE (EK): I don't think we need to support
             // custom redirects. We can emit this to the client
             // and let the client redirect.
-            // if (options.successRedirect) {
+            // if (stategyOptions.successRedirect) {
             //   return {
             //     redirect: true,
             //     status: 302,
-            //     url: options.successRedirect
+            //     url: stategyOptions.successRedirect
             //   };
             // }
             return Promise.resolve(result.data);
@@ -96,16 +98,16 @@ export default function setupSocketHandler(app, options, { feathersParams, provi
             // NOTE (EK): I don't think we need to support
             // custom redirects. We can emit this to the client
             // and let the client redirect.
-            // if (options.failureRedirect) {
+            // if (stategyOptions.failureRedirect) {
             //   return {
             //     redirect: true,
             //     status: 302,
-            //     url: options.failureRedirect
+            //     url: stategyOptions.failureRedirect
             //   };
             // }
 
             const { challenge } = result;
-            const message = options.failureMessage || (challenge && challenge.message);
+            const message = stategyOptions.failureMessage || (challenge && challenge.message);
             
             return Promise.reject(new errors[401](message, challenge));
           }

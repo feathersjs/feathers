@@ -18,6 +18,7 @@ describe('Socket.io authentication', function() {
 
   let server;
   let socket;
+  let serverSocket;
   let expiringServer;
   let expiringSocket;
   let expiredToken;
@@ -28,14 +29,17 @@ describe('Socket.io authentication', function() {
     app.passport.createJWT({}, options)
       .then(token => {
         expiredToken = token;
-        return app.passport.createJWT({ id: 0 }, app.get('auth'));
+        return app.passport.createJWT({ userId: 0 }, app.get('auth'));
       })
       .then(token => {
         accessToken = token;
         expiringServer = expiringApp.listen(1336);
         expiringServer.once('listening', () => {
           server = app.listen(port);
-          server.once('listening', () => done());
+          server.once('listening', () => {
+            app.io.on('connect', s => serverSocket = s);
+            done();
+          });
         });
       });
   });
@@ -69,9 +73,26 @@ describe('Socket.io authentication', function() {
             app.passport.verifyJWT(response.accessToken, app.get('auth')).then(payload => {
               expect(payload).to.exist;
               expect(payload.iss).to.equal('feathers');
-              expect(payload.id).to.equal(0);
+              expect(payload.userId).to.equal(0);
               done();
             });
+          });
+        });
+
+        it('sets the user on the socket', done => {
+          socket.emit('authenticate', data, (error, response) => {
+            expect(response.accessToken).to.exist;
+            expect(serverSocket.feathers.user).to.not.equal(undefined);
+            done();
+          });
+        });
+
+        it('sets entity specified in strategy', done => {
+          data.strategy = 'org-local';
+          socket.emit('authenticate', data, (error, response) => {
+            expect(response.accessToken).to.exist;
+            expect(serverSocket.feathers.org).to.not.equal(undefined);
+            done();
           });
         });
       });
@@ -123,7 +144,7 @@ describe('Socket.io authentication', function() {
             app.passport.verifyJWT(response.accessToken, app.get('auth')).then(payload => {
               expect(payload).to.exist;
               expect(payload.iss).to.equal('feathers');
-              expect(payload.id).to.equal(0);
+              expect(payload.userId).to.equal(0);
               done();
             });
           });
@@ -139,7 +160,7 @@ describe('Socket.io authentication', function() {
             app.passport.verifyJWT(response.accessToken, app.get('auth')).then(payload => {
               expect(payload).to.exist;
               expect(payload.iss).to.equal('feathers');
-              expect(payload.id).to.equal(0);
+              expect(payload.userId).to.equal(0);
               done();
             });
           });
