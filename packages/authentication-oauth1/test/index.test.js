@@ -101,6 +101,16 @@ describe('feathers-authentication-oauth1', () => {
       config.Strategy.restore();
     });
 
+    it('registers the strategy options', () => {
+      sinon.spy(app.passport, 'options');
+      app.configure(oauth1(config));
+      app.setup();
+
+      expect(app.passport.options).to.have.been.calledOnce;
+      
+      app.passport.options.restore();
+    });
+
     describe('passport strategy options', () => {
       let authOptions;
       let args;
