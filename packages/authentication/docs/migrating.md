@@ -194,7 +194,7 @@ app.authenticate({
 })
 .then(payload => {
   console.log('JWT Payload', payload);
-  return app.service('users').get(payload.id);
+  return app.service('users').get(payload.userId);
 })
 .then(user => {
   app.set('user', user);
