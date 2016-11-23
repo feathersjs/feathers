@@ -85,6 +85,16 @@ describe('feathers-authentication-jwt', () => {
       passportJWT.Strategy.restore();
     });
 
+    it('registers the strategy options', () => {
+      sinon.spy(app.passport, 'options');
+      app.configure(jwt());
+      app.setup();
+
+      expect(app.passport.options).to.have.been.calledOnce;
+
+      app.passport.options.restore();
+    });
+
     describe('passport strategy options', () => {
       let authOptions;
       let args;
@@ -164,6 +174,21 @@ describe('feathers-authentication-jwt', () => {
       passportJWT.Strategy.restore();
     });
 
+    it('pulls options from global config with custom name', () => {
+      sinon.spy(passportJWT, 'Strategy');
+      let authOptions = app.get('auth');
+      authOptions.custom = { entity: 'device' };
+      app.set('auth', authOptions);
+
+      app.configure(jwt({ name: 'custom' }));
+      app.setup();
+
+      expect(passportJWT.Strategy.getCall(0).args[0].entity).to.equal('device');
+      expect(passportJWT.Strategy.getCall(0).args[0].bodyKey).to.equal('accessToken');
+
+      passportJWT.Strategy.restore();
+    });
+
     describe('custom Verifier', () => {
       it('throws an error if a verify function is missing', () => {
         expect(() => {
@@ -190,7 +215,7 @@ describe('feathers-authentication-jwt', () => {
         class CustomVerifier extends Verifier {
           verify (req, payload, done) {
             expect(payload.id).to.equal(Payload.id);
-            done(null, Payload);
+            done(null, payload, Payload);
           }
         }
 

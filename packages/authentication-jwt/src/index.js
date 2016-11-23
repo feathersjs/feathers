@@ -30,8 +30,11 @@ export default function init (options = {}) {
       throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before feathers-authentication-jwt?`);
     }
 
+    let authOptions = app.get('auth') || {};
+    let jwtOptions = authOptions[options.name] || {};
+
     // NOTE (EK): Pull from global auth config to support legacy auth for an easier transition.
-    let jwtSettings = merge({}, defaults, pick(app.get('auth') || {}, KEYS), omit(options, ['Verifier']));
+    let jwtSettings = merge({}, defaults, pick(authOptions, KEYS), jwtOptions, omit(options, ['Verifier']));
 
     if (typeof jwtSettings.header !== 'string') {
       throw new Error(`You must provide a 'header' in your authentication configuration or pass one explicitly`);
@@ -72,6 +75,7 @@ export default function init (options = {}) {
       // Register 'jwt' strategy with passport
       debug('Registering jwt authentication strategy with options:', strategyOptions);
       app.passport.use(jwtSettings.name, new JWTStrategy(strategyOptions, verifier.verify.bind(verifier)));
+      app.passport.options(jwtSettings.name, jwtSettings);
 
       return result;
     };
