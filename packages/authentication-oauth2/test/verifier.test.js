@@ -15,7 +15,7 @@ describe('Verifier', () => {
   let user;
 
   beforeEach(() => {
-    user = { email: 'admin@feathersjs.com' };
+    user = { id: 1, email: 'admin@feathersjs.com' };
     service = {
       id: 'id',
       find: sinon.stub().returns(Promise.resolve([user])),
