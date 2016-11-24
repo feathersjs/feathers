@@ -194,8 +194,8 @@ const app = feathers()
 
 app.authenticate({
   strategy: 'local',
-  'email': 'admin@feathersjs.com',
-  'password': 'admin'
+  email: 'admin@feathersjs.com',
+  password: 'admin'
 }).then(function(result){
   console.log('Authenticated!', result);
 }).catch(function(error){
