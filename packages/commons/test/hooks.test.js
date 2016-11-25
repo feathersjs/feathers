@@ -18,7 +18,7 @@ describe('hook utilities', () => {
       callback: noop
     });
 
-    const dummyApp = { test: true };
+    const dummyApp = function () {};
 
     hookObject = utils.hookObject('find', 'test', [
         { some: 'thing' }, noop
@@ -30,8 +30,20 @@ describe('hook utilities', () => {
       type: 'test',
       callback: noop,
       app: dummyApp
-    }
-    );
+    });
+
+    hookObject = utils.hookObject('find', 'test', [
+        { some: 'thing' }, noop
+    ], { test: 'me', other: true });
+
+    expect(hookObject).to.deep.equal({
+      params: { some: 'thing' },
+      method: 'find',
+      type: 'test',
+      callback: noop,
+      test: 'me',
+      other: true
+    });
 
     // get
     hookObject = utils.hookObject('get', 'test', [
