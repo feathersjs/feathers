@@ -1,5 +1,22 @@
 # Change Log
 
+## [v0.8.6](https://github.com/feathersjs/feathers-commons/tree/v0.8.6) (2016-11-25)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.8.5...v0.8.6)
+
+**Merged pull requests:**
+
+- Allow to pass an object to hook object [\#45](https://github.com/feathersjs/feathers-commons/pull/45) ([daffl](https://github.com/daffl))
+
+## [v0.8.5](https://github.com/feathersjs/feathers-commons/tree/v0.8.5) (2016-11-19)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.8.4...v0.8.5)
+
+**Merged pull requests:**
+
+- Deep merge and toObject [\#44](https://github.com/feathersjs/feathers-commons/pull/44) ([ekryski](https://github.com/ekryski))
+- Expose lodash functions [\#43](https://github.com/feathersjs/feathers-commons/pull/43) ([ekryski](https://github.com/ekryski))
+- Make url [\#42](https://github.com/feathersjs/feathers-commons/pull/42) ([ekryski](https://github.com/ekryski))
+- Expect syntax [\#41](https://github.com/feathersjs/feathers-commons/pull/41) ([ekryski](https://github.com/ekryski))
+
 ## [v0.8.4](https://github.com/feathersjs/feathers-commons/tree/v0.8.4) (2016-11-11)
 [Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.8.3...v0.8.4)
 
