@@ -37,14 +37,16 @@ const converters = {
   patch: updateOrPatch
 };
 
-function hookObject (method, type, args, app) {
+function hookObject (method, type, args, app = {}) {
   var hook = converters[method](args);
 
   hook.method = method;
   hook.type = type;
 
-  if (app) {
+  if (typeof app === 'function') {
     hook.app = app;
+  } else {
+    Object.assign(hook, app);
   }
 
   return hook;
