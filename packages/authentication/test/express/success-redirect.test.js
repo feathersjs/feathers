@@ -10,14 +10,15 @@ describe('express:successRedirect', () => {
   let res;
 
   beforeEach(() => {
-    req = {
-      hook: {
-        redirect: {
-          url: '/app'
-        }
-      }
-    };
+    req = {};
     res = {
+      hook: {
+        data: {
+          __redirect: {
+            url: '/app'
+          }
+        }
+      },
       redirect: sinon.spy(),
       status: sinon.spy()
     };
@@ -38,7 +39,7 @@ describe('express:successRedirect', () => {
     });
 
     it('supports a custom status code', () => {
-      req.hook.redirect.status = 400;
+      res.hook.data.__redirect.status = 400;
       successRedirect()(req, res);
       expect(res.status).to.have.been.calledOnce;
       expect(res.status).to.have.been.calledWith(400);
@@ -47,16 +48,16 @@ describe('express:successRedirect', () => {
     });
   });
 
-  describe('when req.hook is not defined', () => {
+  describe('when res.hook is not defined', () => {
     it('calls next', next => {
-      delete req.hook;
+      delete res.hook;
       successRedirect()(req, res, next);
     });
   });
 
-  describe('when req.hook.redirect is not defined', () => {
+  describe('when res.hook.data.__redirect is not defined', () => {
     it('calls next', next => {
-      delete req.hook.redirect;
+      delete res.hook.data.__redirect;
       successRedirect()(req, res, next);
     });
   });

@@ -10,8 +10,8 @@ export default function failureRedirect(options = {}) {
       res.clearCookie(options.cookie.name);
     }
 
-    if (req.hook && req.hook.redirect) {
-      const { url, status } = req.hook.redirect;
+    if (res.hook && res.hook.data && res.hook.data.__redirect) {
+      const { url, status } = res.hook.data.__redirect;
       debug(`Redirecting to ${url} after failed authentication.`);
       
       res.status(status || 302);

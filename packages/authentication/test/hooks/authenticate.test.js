@@ -128,8 +128,8 @@ describe('hooks:authenticate', () => {
     it('supports redirecting', () => {
       const successRedirect = '/app';
       return authenticate('mock', { successRedirect })(hook).then(hook => {
-        expect(hook.redirect.status).to.equal(302);
-        expect(hook.redirect.url).to.equal(successRedirect);
+        expect(hook.data.__redirect.status).to.equal(302);
+        expect(hook.data.__redirect.url).to.equal(successRedirect);
       });
     });
   });
@@ -196,8 +196,8 @@ describe('hooks:authenticate', () => {
     it('supports redirecting', () => {
       const failureRedirect = '/login';
       return authenticate('mock', { failureRedirect })(hook).catch(() => {
-        expect(hook.redirect.status).to.equal(302);
-        expect(hook.redirect.url).to.equal(failureRedirect);
+        expect(hook.data.__redirect.status).to.equal(302);
+        expect(hook.data.__redirect.url).to.equal(failureRedirect);
       });
     });
   });
@@ -236,10 +236,10 @@ describe('hooks:authenticate', () => {
       };
     });
 
-    it('sets hook.redirect', () => {
+    it('sets hook.data.__redirect', () => {
       return authenticate('mock')(hook).then(hook => {
-        expect(hook.redirect.status).to.equal(response.status);
-        expect(hook.redirect.url).to.equal(response.url);
+        expect(hook.data.__redirect.status).to.equal(response.status);
+        expect(hook.data.__redirect.url).to.equal(response.url);
       });
     });
   });

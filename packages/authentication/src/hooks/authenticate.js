@@ -41,11 +41,9 @@ export default function authenticate (strategy, options = {}) {
         // TODO (EK): Reject with something...
         // You get back result.challenge and result.status
         if (options.failureRedirect) {
+          // TODO (EK): Bypass the service?
           // hook.result = true
-          hook.redirect = {
-            status: 302,
-            url: options.failureRedirect
-          };
+          Object.defineProperty(hook.data, '__redirect', { value: { status: 302, url: options.failureRedirect } });
         }
 
         const { challenge, status = 401 } = result;
@@ -60,22 +58,15 @@ export default function authenticate (strategy, options = {}) {
 
       if (result.success) {
         hook.params = Object.assign({ authenticated: true }, hook.params, result.data);
-
         if (options.successRedirect) {
           // TODO (EK): Bypass the service?
           // hook.result = true
-          hook.redirect = {
-            status: 302,
-            url: options.successRedirect
-          };
+          Object.defineProperty(hook.data, '__redirect', { value: { status: 302, url: options.successRedirect } });
         }
       } else if (result.redirect) {
         // TODO (EK): Bypass the service?
         // hook.result = true
-        hook.redirect = {
-          status: result.status,
-          url: result.url
-        };
+        Object.defineProperty(hook.data, '__redirect', { value: { status: result.status, url: result.url } });
       }
 
       return Promise.resolve(hook);
