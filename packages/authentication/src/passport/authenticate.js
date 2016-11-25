@@ -36,8 +36,8 @@ export default function authenticate (options = {}) {
         // It is not feasible to construct a chain of multiple strategies that involve
         // redirection (for example both Facebook and Twitter), since the first one to
         // redirect will halt the chain.
-        if (request.strategy) {
-          strategies = [request.strategy];
+        if (request.body && request.body.strategy) {
+          strategies = [request.body.strategy];
         } else if (Array.isArray(name)) {
           strategies = name;
         } else {

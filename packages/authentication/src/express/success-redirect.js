@@ -4,9 +4,9 @@ const debug = Debug('feathers-authentication:middleware:success-redirect');
 export default function successRedirect() {
   debug('Registering successRedirect middleware');
 
-  return function(req, res, next) {    
-    if (req.hook && req.hook.redirect) {
-      const { url, status } = req.hook.redirect;
+  return function(req, res, next) {
+    if (res.hook && res.hook.data && res.hook.data.__redirect) {
+      const { url, status } = res.hook.data.__redirect;
       debug(`Redirecting to ${url} after successful authentication.`);
 
       res.status(status || 302);

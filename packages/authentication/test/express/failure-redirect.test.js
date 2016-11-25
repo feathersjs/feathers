@@ -11,14 +11,15 @@ describe('express:failureRedirect', () => {
   let error;
 
   beforeEach(() => {
-    req = {
-      hook: {
-        redirect: {
-          url: '/app'
-        }
-      }
-    };
+    req = {};
     res = {
+      hook: {
+        data: {
+          __redirect: {
+            url: '/app'
+          }
+        }
+      },
       clearCookie: sinon.spy(),
       redirect: sinon.spy(),
       status: sinon.spy()
@@ -42,7 +43,7 @@ describe('express:failureRedirect', () => {
     });
 
     it('supports a custom status code', () => {
-      req.hook.redirect.status = 400;
+      res.hook.data.__redirect.status = 400;
       failureRedirect()(error, req, res);
       expect(res.status).to.have.been.calledOnce;
       expect(res.status).to.have.been.calledWith(400);
@@ -66,9 +67,9 @@ describe('express:failureRedirect', () => {
     });
   });
 
-  describe('when req.hook is not defined', done => {
+  describe('when res.hook is not defined', done => {
     it('calls next with error', done => {
-      delete req.hook;
+      delete res.hook;
       failureRedirect()(error, req, res, e => {
         expect(e).to.equal(error);
         done();
@@ -76,9 +77,9 @@ describe('express:failureRedirect', () => {
     });
   });
 
-  describe('when req.hook.redirect is not defined', done => {
+  describe('when res.hook.data.redirect is not defined', done => {
     it('calls next with error', done => {
-      delete req.hook.redirect;
+      delete res.hook.data.__redirect;
       failureRedirect()(error, req, res, e => {
         expect(e).to.equal(error);
         done();
