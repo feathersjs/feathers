@@ -55,7 +55,7 @@
   "dependencies": {
     "debug": "^2.2.0",
     "feathers-socket-commons": "^2.0.0",
-    "socket.io": "^1.5.1",
+    "socket.io": "^1.7.1",
     "uberproto": "^1.2.0"
   },
   "devDependencies": {
