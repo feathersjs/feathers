@@ -84,9 +84,8 @@ describe('feathers-socketio', () => {
 
     let srv = app.listen(8987).on('listening', () => {
       // eslint-disable-next-line handle-callback-err
-      request('http://localhost:8987/test/socket.io.js', (err, res, body) => {
+      request('http://localhost:8987/test/socket.io.js', (err, res) => {
         assert.equal(res.statusCode, 200);
-        assert.equal(body.indexOf('(function'), 0);
         srv.close(done);
       });
     });
