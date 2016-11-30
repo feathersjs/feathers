@@ -152,7 +152,7 @@ export function matcher (originalQuery) {
     }
 
     return _.every(query, (value, key) => {
-      if (typeof value === 'object') {
+      if (value !== null && typeof value === 'object') {
         return _.every(value, (target, filterType) => {
           if (specialFilters[filterType]) {
             const filter = specialFilters[filterType](key, target);
