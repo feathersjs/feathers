@@ -13,7 +13,7 @@
 
 The v0.4.x release of `feathers-configuration` is a breaking version and implementations that were made with earlier versions of the module may be required to make some minor changes. Please see the [migrating](#migrating) section for specifics.
 
-This module is a simple wrapped on [node-config](https://github.com/lorenwest/node-config) that adds a bit of convenience. By default this implementation will look in `config/*` for `default.json` which retains convention. As per the [config docs](https://github.com/lorenwest/node-config/wiki/Configuration-Files) you can organize *"hierarchical configurations for your app deployments"*. See the usage section below for better information how to implement this.
+This module is a simple wrapper on [node-config](https://github.com/lorenwest/node-config) that adds a bit of convenience. By default this implementation will look in `config/*` for `default.json` which retains convention. As per the [config docs](https://github.com/lorenwest/node-config/wiki/Configuration-Files) you can organize *"hierarchical configurations for your app deployments"*. See the usage section below for better information how to implement this.
 
 Please note: future releases will also include the ability to define adapters which will allow you to use external configuration storage like [vault](https://www.vaultproject.io/) or [etcd](https://github.com/coreos/etcd).
 
@@ -25,7 +25,7 @@ Moving from 0.3.x to 0.4.x should be *mostly* backwards compatible. The main cha
 let config = require('feathers-configuration')(root, env, deepAssign);
 ```
 
-The module now simply inherits from `NODE_ENV` and `NODE_CONFIG_DIR` as per the [config docs](https://github.com/lorenwest/node-config/wiki/Configuration-Files):
+The module now simply inherits from `NODE_ENV` and `NODE_CONFIG_DIR` as per the [node-config docs](https://github.com/lorenwest/node-config/wiki/Configuration-Files):
 
 ```js
 $ NODE_ENV=development NODE_CONFIG_DIR=./config/ node app.js 
