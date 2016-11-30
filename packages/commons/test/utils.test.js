@@ -370,6 +370,16 @@ describe('feathers-commons utils', () => {
       expect(!matches({ name: 'Eric', counter: 1 })).to.be.ok;
       expect(matches({ name: 'Marshall', counter: 0 })).to.be.ok;
     });
+
+    it('with null values', () => {
+      const matches = matcher({
+        counter: null,
+        name: { $in: ['Eric', 'Marshall'] }
+      });
+
+      expect(!matches({ name: 'Eric', counter: 0 })).to.be.ok;
+      expect(matches({ name: 'Marshall', counter: null })).to.be.ok;
+    });
   });
 
   describe('makeUrl', function () {
