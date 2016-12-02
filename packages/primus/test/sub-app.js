@@ -18,7 +18,7 @@ function todoService () {
 
 export default function (callback) {
   const options = {
-    transformer: 'websockets'
+    transformer: 'uws'
   };
   const app = feathers().configure(primus(options, primus => callback(primus)));
   const v1 = feathers().configure(primus(options)).use('/todos', todoService());

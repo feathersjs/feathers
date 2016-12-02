@@ -22,9 +22,9 @@ export default function (config, configurer) {
         if (!primus) {
           primus = this.primus = new Primus(server, config);
 
-          primus.use('emitter', Emitter);
+          primus.plugin('emitter', Emitter);
 
-          primus.before('feathers', function (req, res, next) {
+          primus.use('feathers', function (req, res, next) {
             req.feathers = { provider: 'primus' };
             next();
           }, 0);

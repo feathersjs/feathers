@@ -24,7 +24,7 @@ describe('feathers-primus', () => {
     const app = options.app = feathers()
       .configure(hooks())
       .configure(primus({
-        transformer: 'websockets'
+        transformer: 'uws'
       }, function (primus) {
         options.socket = new primus.Socket('http://localhost:7888');
 
@@ -61,7 +61,7 @@ describe('feathers-primus', () => {
     var counter = 0;
     var app = feathers()
       .configure(primus({
-        transformer: 'websockets'
+        transformer: 'uws'
       }, function () {
         assert.equal(counter, 0);
         counter++;
@@ -142,7 +142,7 @@ describe('feathers-primus', () => {
     let server;
     const sub = feathers()
       .configure(primus({
-        transformer: 'websockets'
+        transformer: 'uws'
       }, function (primus) {
         const socket = new primus.Socket('http://localhost:9876');
 
