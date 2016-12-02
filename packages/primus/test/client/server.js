@@ -30,7 +30,7 @@ export default function (cb) {
 
   var app = feathers()
     .configure(primus({
-      transformer: 'websockets'
+      transformer: 'uws'
     }, cb))
     .use('/todos', todoService);
 
