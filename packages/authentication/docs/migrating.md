@@ -2,7 +2,7 @@
 
 Feathers authentication has had a major overhaul in order to bring some much needed functionality, customization, and scalability going forward while also making it less complex. It is now simply an adapter over top of [Passport](http://passportjs.org/).
 
-After usage by ourselves and others we realized that there were some limitations in previous the architecture. These new changes allow for some pretty awesome functionality and flexibility that are outlined in [New 1.0 Features](./new-1.0-features.md).
+After usage by ourselves and others we realized that there were some limitations in the previous architecture. These new changes allow for some pretty awesome functionality and flexibility that are outlined in [New 1.0 Features](./new-1.0-features.md).
 
 We've also decoupled the authentication strategies and permissions from the core authentication. While many apps needs these, not **every** app does. This has also allowed us to better test each piece in isolation.
 
