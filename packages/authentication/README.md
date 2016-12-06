@@ -1,4 +1,4 @@
-# feathers-authentication [DEPRECATED]
+# feathers-authentication
 
 This module is deprecated.  Use [feathers-authentication](https://github.com/feathersjs/feathers-authentication).
 
