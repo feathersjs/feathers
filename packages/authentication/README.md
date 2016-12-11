@@ -168,7 +168,8 @@ app.service('users').hooks({
   }
 });
 
-let server = app.listen(3030);
+const port = 3030;
+let server = app.listen(port);
 server.on('listening', function() {
   console.log(`Feathers application started on localhost:${port}`);
 });
