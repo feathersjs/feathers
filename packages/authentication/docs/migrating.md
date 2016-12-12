@@ -4,7 +4,7 @@ Feathers authentication has had a major overhaul in order to bring some much nee
 
 After usage by ourselves and others we realized that there were some limitations in the previous architecture. These new changes allow for some pretty awesome functionality and flexibility that are outlined in [New 1.0 Features](./new-1.0-features.md).
 
-We've also decoupled the authentication strategies and permissions from the core authentication. While many apps needs these, not **every** app does. This has also allowed us to better test each piece in isolation.
+We've also decoupled the authentication strategies and permissions from the core authentication. While many apps need these, not **every** app does. This has also allowed us to better test each piece in isolation.
 
 They are now located here:
 
