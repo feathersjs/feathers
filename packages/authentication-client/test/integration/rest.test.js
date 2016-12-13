@@ -40,6 +40,7 @@ describe('REST client authentication', () => {
 
   after(done => {
     server.close(done);
+    done();
   });
 
   it('can use client.passport.getJWT() to get the accessToken', () => {
