@@ -189,6 +189,26 @@ describe('feathers-authentication-jwt', () => {
       passportJWT.Strategy.restore();
     });
 
+    describe('Bearer scheme', () => {
+      it('authenticates using the default verifier', () => {
+        const req = {
+          query: {},
+          body: {},
+          headers: {
+            authorization: `Bearer ${validToken}`
+          },
+          cookies: {}
+        };
+
+        app.configure(jwt());
+        app.setup();
+
+        return app.authenticate('jwt', { assignProperty: 'payload' })(req).then(result => {
+          expect(result.success).to.equal(true);
+        });
+      });
+    });
+
     describe('custom Verifier', () => {
       it('throws an error if a verify function is missing', () => {
         expect(() => {

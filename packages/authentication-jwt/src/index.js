@@ -48,6 +48,7 @@ export default function init (options = {}) {
     let strategyOptions = merge({
       secretOrKey: jwtSettings.secret,
       jwtFromRequest: ExtractJwt.fromExtractors([
+        ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
         ExtractJwt.fromHeader(jwtSettings.header.toLowerCase()),
         ExtractJwt.fromBodyField(jwtSettings.bodyKey)
       ])
