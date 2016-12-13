@@ -1,4 +1,4 @@
-import hooks from './hooks';
+import hooks from './hooks/index';
 import Passport from './passport';
 
 const defaults = {
