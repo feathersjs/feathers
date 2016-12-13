@@ -1,18 +1,17 @@
 const feathers = require('feathers');
 const rest = require('feathers-rest');
 const socketio = require('feathers-socketio');
-const primus = require('feathers-primus');
 const hooks = require('feathers-hooks');
 const memory = require('feathers-memory');
 const bodyParser = require('body-parser');
-const errors = require('feathers-errors');
 const errorHandler = require('feathers-errors/handler');
 const auth = require('feathers-authentication');
 const local = require('feathers-authentication-local');
 const jwt = require('feathers-authentication-jwt');
+const path = require('path');
 
-function customizeJWTPayload() {
-  return function(hook) {
+function customizeJWTPayload () {
+  return function (hook) {
     hook.data.payload = {
       id: hook.params.user.id
     };
@@ -32,7 +31,7 @@ app.configure(rest())
   .configure(local())
   .configure(jwt())
   .use('/users', memory())
-  .use('/', feathers.static(__dirname + '/public'))
+  .use('/', feathers.static(path.join(__dirname, '/public')))
   .use(errorHandler());
 
 app.service('authentication').hooks({

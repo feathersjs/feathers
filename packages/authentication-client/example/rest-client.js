@@ -2,7 +2,7 @@
 // Most of the code is the same for the browser with the exception
 // of how modules are imported and configured. It depends on how you choose
 // to load them. Refer to the client section of docs.feathersjs.com for more detail.
-// 
+//
 const feathers = require('feathers/client');
 const rest = require('feathers-rest/client');
 const superagent = require('superagent');
@@ -33,6 +33,6 @@ client.authenticate({
   client.set('user', user);
   console.log('User', client.get('user'));
 })
-.catch(function(error){
+.catch(function (error) {
   console.error('Error authenticating!', error);
 });

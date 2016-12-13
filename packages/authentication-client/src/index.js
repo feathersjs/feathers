@@ -5,13 +5,13 @@ const defaults = {
   header: 'authorization',
   cookie: 'feathers-jwt',
   storageKey: 'feathers-jwt',
-  jwtStrategy: 'jwt', 
+  jwtStrategy: 'jwt',
   path: '/authentication',
   entity: 'user',
   service: 'users'
 };
 
-export default function init(config = {}) {
+export default function init (config = {}) {
   const options = Object.assign({}, defaults, config);
 
   return function () {
