@@ -34,6 +34,6 @@ client.authenticate({
   client.set('user', user);
   console.log('User', client.get('user'));
 })
-.catch(function(error){
+.catch(function (error) {
   console.error('Error authenticating!', error);
 });

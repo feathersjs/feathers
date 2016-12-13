@@ -9,7 +9,7 @@ export default class Passport {
     if (app.passport) {
       throw new Error('You have already registered authentication on this client app instance. You only need to do it once.');
     }
-    
+
     this.options = options;
     this.app = app;
     this.storage = app.get('storage') || this.getStorage(options.storage);
@@ -22,7 +22,7 @@ export default class Passport {
     this.setupSocketListeners();
   }
 
-  setupSocketListeners() {
+  setupSocketListeners () {
     const app = this.app;
     const socket = app.io || app.primus;
     const emit = app.io ? 'emit' : 'send';
@@ -40,7 +40,7 @@ export default class Passport {
       if (socket.authenticated) {
         const data = {
           strategy: this.options.jwtStrategy,
-          accessToken: app.get('accessToken'),
+          accessToken: app.get('accessToken')
         };
         this.authenticateSocket(data, socket, emit)
           .then(this.setJWT)
@@ -61,7 +61,7 @@ export default class Passport {
         if (socket.authenticated) {
           const data = {
             strategy: this.options.jwtStrategy,
-            accessToken: app.get('accessToken'),
+            accessToken: app.get('accessToken')
           };
 
           this.authenticateSocket(data, socket, emit)
@@ -93,7 +93,7 @@ export default class Passport {
       debug('Socket already connected');
       return Promise.resolve(socket);
     }
-    
+
     return new Promise((resolve, reject) => {
       const connected = app.primus ? 'open' : 'connect';
       const disconnect = app.io ? 'disconnect' : 'end';
@@ -233,7 +233,7 @@ export default class Passport {
 
     try {
       let payload = decode(token);
-      
+
       if (this.payloadIsValid(payload)) {
         return Promise.resolve(payload);
       }
