@@ -105,6 +105,17 @@ class CustomVerifier extends Verifier {
 app.configure(local({ Verifier: CustomVerifier }));
 ```
 
+## Expected Request Data
+By default, this strategy expects a payload in this format:
+
+```js
+{
+  strategy: 'local',
+  email: '<email>',
+  password: '<password>'
+}
+```
+
 ## Complete Example
 
 Here's a basic example of a Feathers server that uses `feathers-authentication-local`. You can see a fully working example in the [example/](./example/) directory.
