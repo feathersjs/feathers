@@ -6,7 +6,7 @@ import { normalizeError } from 'feathers-socket-commons/lib/utils';
 
 const debug = Debug('feathers-authentication:sockets:handler');
 
-function handleSocketCallback(promise, callback) {
+function handleSocketCallback (promise, callback) {
   if (typeof callback === 'function') {
     promise.then(data => callback(null, data))
       .catch(error => {
@@ -18,11 +18,11 @@ function handleSocketCallback(promise, callback) {
   return promise;
 }
 
-export default function setupSocketHandler(app, options, { feathersParams, provider, emit, disconnect }) {
+export default function setupSocketHandler (app, options, { feathersParams, provider, emit, disconnect }) {
   const authSettings = app.get('auth');
   const service = app.service(authSettings.path);
 
-  return function(socket) {
+  return function (socket) {
     let logoutTimer;
 
     const logout = function (callback = () => {}) {
@@ -110,7 +110,7 @@ export default function setupSocketHandler(app, options, { feathersParams, provi
 
             const { challenge } = result;
             const message = stategyOptions.failureMessage || (challenge && challenge.message);
-            
+
             return Promise.reject(new errors[401](message, challenge));
           }
 
@@ -120,7 +120,7 @@ export default function setupSocketHandler(app, options, { feathersParams, provi
           // if (result.redirect) {
           //   return { result };
           // }
-          
+
           // NOTE (EK): This handles redirects and .pass()
           return Promise.reject(new errors.NotAuthenticated('Authentication could not complete. You might be using an unsupported socket authentication strategy. Refer to docs.feathersjs.com for more details.'));
         })
@@ -136,7 +136,7 @@ export default function setupSocketHandler(app, options, { feathersParams, provi
             };
 
             connection = Object.assign(connection, result, tokens, { headers, authenticated: true });
-            
+
             // Clear any previous timeout if we have logged in again.
             if (logoutTimer) {
               debug(`Clearing old timeout.`);

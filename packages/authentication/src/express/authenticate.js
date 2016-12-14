@@ -37,7 +37,7 @@ export default function authenticate (strategy, options = {}) {
         return next();
       }
 
-      if (result.fail) {        
+      if (result.fail) {
         if (options.failureRedirect) {
           debug(`Redirecting to ${options.failureRedirect}`);
           res.status(302);

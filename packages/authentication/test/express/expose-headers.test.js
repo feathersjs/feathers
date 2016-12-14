@@ -1,9 +1,5 @@
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
+import { expect } from 'chai';
 import { exposeHeaders } from '../../src/express';
-
-chai.use(sinonChai);
 
 const headers = {
   'authorization': 'JWT:my token'

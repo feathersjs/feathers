@@ -23,6 +23,6 @@ const defaults = {
   }
 };
 
-export default function(... otherOptions) {
-  return merge({}, defaults, ... otherOptions);
+export default function (...otherOptions) {
+  return merge({}, defaults, ...otherOptions);
 }

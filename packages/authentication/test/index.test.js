@@ -54,7 +54,7 @@ describe('Feathers Authentication', () => {
         app.configure(authentication(config));
       }).to.throw;
     });
-  });  
+  });
 
   describe('when in development mode', () => {
     it('sets cookie to be insecure', () => {

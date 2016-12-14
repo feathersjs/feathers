@@ -1,4 +1,3 @@
-import feathers from 'feathers';
 import socket from '../../src/socket';
 import { expect } from 'chai';
 

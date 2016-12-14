@@ -1,5 +1,4 @@
 import merge from 'lodash.merge';
-import io from 'socket.io-client';
 import createApplication from '../fixtures/server';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
@@ -7,7 +6,7 @@ import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
 
-describe('Primus authentication', function() {
+describe('Primus authentication', function () {
   const port = 8998;
   const baseURL = `http://localhost:${port}`;
   const app = createApplication({ secret: 'supersecret' }, 'primus');
@@ -25,7 +24,7 @@ describe('Primus authentication', function() {
   let expiringSocket;
   let expiredToken;
   let accessToken;
-  
+
   before(done => {
     const options = merge({}, app.get('auth'), { jwt: { expiresIn: '1ms' } });
     app.passport.createJWT({}, options)
@@ -41,7 +40,7 @@ describe('Primus authentication', function() {
           server = app.listen(port);
           server.once('listening', () => {
             Socket = app.primus.Socket;
-            app.primus.on('connection', s => serverSocket = s);
+            app.primus.on('connection', s => { serverSocket = s; });
             done();
           });
         });
@@ -76,6 +75,7 @@ describe('Primus authentication', function() {
       describe('when using valid credentials', () => {
         it('returns a valid access token', done => {
           socket.send('authenticate', data, (error, response) => {
+            expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
             app.passport.verifyJWT(response.accessToken, app.get('auth')).then(payload => {
               expect(payload).to.exist;
@@ -88,6 +88,7 @@ describe('Primus authentication', function() {
 
         it('sets the user on the socket', done => {
           socket.send('authenticate', data, (error, response) => {
+            expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
             expect(serverSocket.request.feathers.user).to.not.equal(undefined);
             done();
@@ -97,6 +98,7 @@ describe('Primus authentication', function() {
         it('sets entity specified in strategy', done => {
           data.strategy = 'org-local';
           socket.send('authenticate', data, (error, response) => {
+            expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
             expect(serverSocket.request.feathers.org).to.not.equal(undefined);
             done();
@@ -147,6 +149,7 @@ describe('Primus authentication', function() {
       describe('when using a valid access token', () => {
         it('returns a valid access token', done => {
           socket.send('authenticate', data, (error, response) => {
+            expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
             app.passport.verifyJWT(response.accessToken, app.get('auth')).then(payload => {
               expect(payload).to.exist;
@@ -163,6 +166,7 @@ describe('Primus authentication', function() {
           delete data.accessToken;
           data.refreshToken = 'refresh';
           socket.send('authenticate', data, (error, response) => {
+            expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
             app.passport.verifyJWT(response.accessToken, app.get('auth')).then(payload => {
               expect(payload).to.exist;
@@ -235,9 +239,10 @@ describe('Primus authentication', function() {
         };
 
         expiringSocket.send('authenticate', data, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response).to.be.ok;
           // Wait for the accessToken to expire
-          setTimeout(function() {
+          setTimeout(function () {
             expiringSocket.send('users::find', {}, (error, response) => {
               expect(error.code).to.equal(401);
               done();
@@ -255,8 +260,10 @@ describe('Primus authentication', function() {
         };
 
         socket.send('authenticate', data, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response).to.be.ok;
           socket.send('users::find', {}, (error, response) => {
+            expect(error).to.not.be.ok;
             expect(response.length).to.equal(1);
             expect(response[0].id).to.equal(0);
             done();
@@ -270,6 +277,7 @@ describe('Primus authentication', function() {
     describe('when not authenticated', () => {
       it('returns data', done => {
         socket.send('users::get', 0, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response.id).to.equal(0);
           done();
         });
@@ -285,10 +293,12 @@ describe('Primus authentication', function() {
         };
 
         expiringSocket.send('authenticate', data, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response).to.be.ok;
           // Wait for the accessToken to expire
-          setTimeout(function() {
+          setTimeout(function () {
             socket.send('users::get', 0, (error, response) => {
+              expect(error).to.not.be.ok;
               expect(response.id).to.equal(0);
               done();
             });
@@ -305,8 +315,10 @@ describe('Primus authentication', function() {
         };
 
         socket.send('authenticate', data, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response).to.be.ok;
           socket.send('users::get', 0, (error, response) => {
+            expect(error).to.not.be.ok;
             expect(response.id).to.equal(0);
             done();
           });
@@ -329,6 +341,7 @@ describe('Primus authentication', function() {
     describe('authentication succeeds', () => {
       it('redirects', done => {
         socket.send('authenticate', data, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response.redirect).to.equal(true);
           expect(response.url).to.be.ok;
           done();
@@ -340,6 +353,7 @@ describe('Primus authentication', function() {
       it('redirects', done => {
         delete data.password;
         socket.send('authenticate', data, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response.redirect).to.equal(true);
           expect(response.url).to.be.ok;
           done();
@@ -361,7 +375,7 @@ describe('Primus authentication', function() {
 
     describe('when authentication succeeds', () => {
       it('emits login event', done => {
-        app.once('login', function(auth, info) {
+        app.once('login', function (auth, info) {
           expect(info.provider).to.equal('primus');
           expect(info.socket).to.exist;
           expect(info.connection).to.exist;
@@ -381,7 +395,7 @@ describe('Primus authentication', function() {
         socket.send('authenticate', data, error => {
           expect(error.code).to.equal(401);
 
-          setTimeout(function() {
+          setTimeout(function () {
             expect(handler).to.not.have.been.called;
             done();
           }, 100);
@@ -391,14 +405,15 @@ describe('Primus authentication', function() {
 
     describe('when logout succeeds', () => {
       it('emits logout event', done => {
-        app.once('logout', function(auth, info) {
+        app.once('logout', function (auth, info) {
           expect(info.provider).to.equal('primus');
           expect(info.socket).to.exist;
           expect(info.connection).to.exist;
           done();
         });
-        
+
         socket.send('authenticate', data, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response).to.be.ok;
           socket.send('logout', data);
         });

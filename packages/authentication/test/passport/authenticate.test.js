@@ -38,9 +38,9 @@ describe('passport:authenticate', () => {
       verifier = (cb) => cb(null, {});
       const strategyOptions = { assignProperty: 'organization' };
       const strategy = new MockStrategy({}, verifier);
-      
+
       sinon.spy(strategy, 'authenticate');
-      
+
       passport.use(strategy);
       authenticator = authenticate()(passport, 'mock', strategyOptions);
 

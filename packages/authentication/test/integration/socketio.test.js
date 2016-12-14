@@ -7,7 +7,7 @@ import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
 
-describe('Socket.io authentication', function() {
+describe('Socket.io authentication', function () {
   const port = 8997;
   const baseURL = `http://localhost:${port}`;
   const app = createApplication({ secret: 'supersecret' }, 'socketio');
@@ -23,7 +23,7 @@ describe('Socket.io authentication', function() {
   let expiringSocket;
   let expiredToken;
   let accessToken;
-  
+
   before(done => {
     const options = merge({}, app.get('auth'), { jwt: { expiresIn: '1ms' } });
     app.passport.createJWT({}, options)
@@ -37,7 +37,7 @@ describe('Socket.io authentication', function() {
         expiringServer.once('listening', () => {
           server = app.listen(port);
           server.once('listening', () => {
-            app.io.on('connect', s => serverSocket = s);
+            app.io.on('connect', s => { serverSocket = s; });
             done();
           });
         });
@@ -69,6 +69,7 @@ describe('Socket.io authentication', function() {
       describe('when using valid credentials', () => {
         it('returns a valid access token', done => {
           socket.emit('authenticate', data, (error, response) => {
+            expect(error).to.not.equal(undefined);
             expect(response.accessToken).to.exist;
             app.passport.verifyJWT(response.accessToken, app.get('auth')).then(payload => {
               expect(payload).to.exist;
@@ -81,6 +82,7 @@ describe('Socket.io authentication', function() {
 
         it('sets the user on the socket', done => {
           socket.emit('authenticate', data, (error, response) => {
+            expect(error).to.not.equal(undefined);
             expect(response.accessToken).to.exist;
             expect(serverSocket.feathers.user).to.not.equal(undefined);
             done();
@@ -90,6 +92,7 @@ describe('Socket.io authentication', function() {
         it('sets entity specified in strategy', done => {
           data.strategy = 'org-local';
           socket.emit('authenticate', data, (error, response) => {
+            expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
             expect(serverSocket.feathers.org).to.not.equal(undefined);
             done();
@@ -140,6 +143,7 @@ describe('Socket.io authentication', function() {
       describe('when using a valid access token', () => {
         it('returns a valid access token', done => {
           socket.emit('authenticate', data, (error, response) => {
+            expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
             app.passport.verifyJWT(response.accessToken, app.get('auth')).then(payload => {
               expect(payload).to.exist;
@@ -156,6 +160,7 @@ describe('Socket.io authentication', function() {
           delete data.accessToken;
           data.refreshToken = 'refresh';
           socket.emit('authenticate', data, (error, response) => {
+            expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
             app.passport.verifyJWT(response.accessToken, app.get('auth')).then(payload => {
               expect(payload).to.exist;
@@ -228,9 +233,10 @@ describe('Socket.io authentication', function() {
         };
 
         expiringSocket.emit('authenticate', data, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response).to.be.ok;
           // Wait for the accessToken to expire
-          setTimeout(function() {
+          setTimeout(function () {
             expiringSocket.emit('users::find', {}, (error, response) => {
               expect(error.code).to.equal(401);
               done();
@@ -248,8 +254,10 @@ describe('Socket.io authentication', function() {
         };
 
         socket.emit('authenticate', data, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response).to.be.ok;
           socket.emit('users::find', {}, (error, response) => {
+            expect(error).to.not.be.ok;
             expect(response.length).to.equal(1);
             expect(response[0].id).to.equal(0);
             done();
@@ -263,6 +271,7 @@ describe('Socket.io authentication', function() {
     describe('when not authenticated', () => {
       it('returns data', done => {
         socket.emit('users::get', 0, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response.id).to.equal(0);
           done();
         });
@@ -278,10 +287,12 @@ describe('Socket.io authentication', function() {
         };
 
         expiringSocket.emit('authenticate', data, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response).to.be.ok;
           // Wait for the accessToken to expire
-          setTimeout(function() {
+          setTimeout(function () {
             socket.emit('users::get', 0, (error, response) => {
+              expect(error).to.not.be.ok;
               expect(response.id).to.equal(0);
               done();
             });
@@ -298,8 +309,10 @@ describe('Socket.io authentication', function() {
         };
 
         socket.emit('authenticate', data, (error, response) => {
+          expect(error).to.not.equal(undefined);
           expect(response).to.be.ok;
           socket.emit('users::get', 0, (error, response) => {
+            expect(error).to.not.equal(undefined);
             expect(response.id).to.equal(0);
             done();
           });
@@ -322,6 +335,7 @@ describe('Socket.io authentication', function() {
     describe('authentication succeeds', () => {
       it('redirects', done => {
         socket.emit('authenticate', data, (error, response) => {
+          expect(error).to.not.equal(undefined);
           expect(response.redirect).to.equal(true);
           expect(response.url).to.be.ok;
           done();
@@ -333,6 +347,7 @@ describe('Socket.io authentication', function() {
       it('redirects', done => {
         delete data.password;
         socket.emit('authenticate', data, (error, response) => {
+          expect(error).to.not.equal(undefined);
           expect(response.redirect).to.equal(true);
           expect(response.url).to.be.ok;
           done();
@@ -354,7 +369,7 @@ describe('Socket.io authentication', function() {
 
     describe('when authentication succeeds', () => {
       it('emits login event', done => {
-        app.once('login', function(auth, info) {
+        app.once('login', function (auth, info) {
           expect(info.provider).to.equal('socketio');
           expect(info.socket).to.exist;
           expect(info.connection).to.exist;
@@ -374,7 +389,7 @@ describe('Socket.io authentication', function() {
         socket.emit('authenticate', data, error => {
           expect(error.code).to.equal(401);
 
-          setTimeout(function() {
+          setTimeout(function () {
             expect(handler).to.not.have.been.called;
             done();
           }, 100);
@@ -384,14 +399,15 @@ describe('Socket.io authentication', function() {
 
     describe('when logout succeeds', () => {
       it('emits logout event', done => {
-        app.once('logout', function(auth, info) {
+        app.once('logout', function (auth, info) {
           expect(info.provider).to.equal('socketio');
           expect(info.socket).to.exist;
           expect(info.connection).to.exist;
           done();
         });
-        
+
         socket.emit('authenticate', data, (error, response) => {
+          expect(error).to.not.equal(undefined);
           expect(response).to.be.ok;
           socket.emit('logout', data);
         });

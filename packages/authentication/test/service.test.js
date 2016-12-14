@@ -95,8 +95,8 @@ describe('/authentication service', () => {
 
     beforeEach(() => {
       return app.passport
-        .createJWT({ id: 1}, app.get('auth'))
-        .then(token => accessToken = token);
+        .createJWT({ id: 1 }, app.get('auth'))
+        .then(token => { accessToken = token; });
     });
 
     it('verifies an accessToken and returns it', () => {

@@ -4,14 +4,14 @@ import ms from 'ms';
 
 const debug = Debug('feathers-authentication:middleware:set-cookie');
 
-export default function setCookie(authOptions = {}) {
+export default function setCookie (authOptions = {}) {
   debug('Registering setCookie middleware');
 
-  function makeExpiry(timeframe){
+  function makeExpiry (timeframe) {
     return new Date(Date.now() + ms(timeframe));
   }
 
-  return function(req, res, next) {
+  return function (req, res, next) {
     const app = req.app;
     const options = authOptions.cookie || {};
 
@@ -31,7 +31,7 @@ export default function setCookie(authOptions = {}) {
 
       debug(`Clearing old '${cookie}' cookie`);
       res.clearCookie(cookie);
-      
+
       // Only set the cookie if we weren't removing the token and we
       // have a JWT access token.
       if (!res.hook || (res.hook && res.hook.method !== 'remove') && res.data && res.data.accessToken) {

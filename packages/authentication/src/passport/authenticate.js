@@ -8,18 +8,16 @@ import makeDebug from 'debug';
 const debug = makeDebug('feathers-authentication:passport:authenticate');
 
 export default function authenticate (options = {}) {
-  const app = this;
-
   debug('Initializing custom passport authenticate', options);
 
   // This function is bound by passport and called by passport.authenticate()
-  return function (passport, name, strategyOptions = {}, callback = () => {}) {    
+  return function (passport, name, strategyOptions = {}, callback = () => {}) {
     // This is called by the feathers middleware, hook or socket. The request object
     // is a mock request derived from an http request, socket object, or hook.
     return function (request = {}) {
       return new Promise((resolve, reject) => {
         // TODO (EK): Support transformAuthInfo
-        
+
         // Allow you to set a location for the success payload.
         // Default is hook.params.user, req.user and socket.user.
         const entity = strategyOptions.entity || strategyOptions.assignProperty || options.entity;
@@ -44,9 +42,9 @@ export default function authenticate (options = {}) {
           strategies = [name];
         }
 
-        function attempt(index) {
+        function attempt (index) {
           const layer = strategies[index];
-          
+
           if (!layer) {
             // If there isn't another strategy then they
             // all failed and we'll return the first failure.
@@ -83,7 +81,7 @@ export default function authenticate (options = {}) {
             // We failed so attempt with next strategy
             attempt(index + 1);
           };
-          
+
           strategy.error = error => {
             debug(`Error in '${layer}' authentication strategy`, error);
             reject(error);

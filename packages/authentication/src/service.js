@@ -5,12 +5,12 @@ import { successRedirect, failureRedirect, setCookie, emitEvents } from './expre
 const debug = Debug('feathers-authentication:authentication:service');
 
 class Service {
-  constructor(app) {
+  constructor (app) {
     this.app = app;
     this.passport = app.passport;
   }
 
-  create(data = {}, params = {}) {
+  create (data = {}, params = {}) {
     const defaults = this.app.get('auth');
     const payload = merge(data.payload, params.payload);
 
@@ -25,7 +25,7 @@ class Service {
       });
   }
 
-  remove(id, params) {
+  remove (id, params) {
     const defaults = this.app.get('auth');
     const accessToken = id !== null ? id : params.headers[defaults.header.toLowerCase()];
     // TODO (EK): return error if token is missing?
@@ -37,8 +37,8 @@ class Service {
   }
 }
 
-export default function init(options){
-  return function() {
+export default function init (options) {
+  return function () {
     const app = this;
     const path = options.path;
 

@@ -12,7 +12,7 @@ export default function Strategy (options, verify) {
 
 util.inherits(Strategy, passport.Strategy);
 
-Strategy.prototype.authenticate = function(req, options) {
+Strategy.prototype.authenticate = function (req, options) {
   const callback = function (error, user, info) {
     if (error) {
       return this.error(error);
@@ -25,7 +25,7 @@ Strategy.prototype.authenticate = function(req, options) {
     if (info && info.url) {
       return this.redirect(info.url, info.status);
     }
-    
+
     if (!user) {
       return this.fail(info.challenge, info.status);
     }

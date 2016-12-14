@@ -51,7 +51,7 @@ describe('hooks:authenticate', () => {
     it('does nothing', () => {
       delete hook.params.provider;
       return authenticate('mock')(hook).then(returnedHook => {
-        expect(returnedHook).to.deep.equal(hook);  
+        expect(returnedHook).to.deep.equal(hook);
       });
     });
   });
@@ -60,7 +60,7 @@ describe('hooks:authenticate', () => {
     it('does nothing', () => {
       hook.params.authenticated = true;
       return authenticate('mock')(hook).then(returnedHook => {
-        expect(returnedHook).to.deep.equal(hook);  
+        expect(returnedHook).to.deep.equal(hook);
       });
     });
   });
@@ -69,7 +69,7 @@ describe('hooks:authenticate', () => {
     it('returns an error', () => {
       hook.type = 'after';
       return authenticate('mock')(hook).catch(error => {
-        expect(error).to.not.equal(undefined);  
+        expect(error).to.not.equal(undefined);
       });
     });
   });
@@ -77,7 +77,7 @@ describe('hooks:authenticate', () => {
   describe('when strategy has not been registered with passport', () => {
     it('returns an error', () => {
       return authenticate('missing')(hook).catch(error => {
-        expect(error).to.not.equal(undefined);  
+        expect(error).to.not.equal(undefined);
       });
     });
   });
