@@ -65,10 +65,7 @@ export default function init (options = {}) {
     app.get(oauth2Settings.path, auth.express.authenticate(name));
     app.get(
       url.parse(oauth2Settings.callbackURL).pathname,
-      // NOTE (EK): We register failure redirect here so that we can
-      // retain the natural express middleware redirect ability like
-      // you would have with vanilla passport.
-      auth.express.authenticate(name, { failureRedirect: oauth2Settings.failureRedirect }),
+      auth.express.authenticate(name, oauth2Settings),
       handler,
       auth.express.emitEvents(authSettings),
       auth.express.setCookie(authSettings),
