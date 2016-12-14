@@ -115,7 +115,7 @@ The following plugins are complementary but entirely optional:
 Refer to [the migration guide](./docs/migrating.md).
 
 ## Complete Example
-Here's an example of a Feathers server that uses `feathers-authentication` for local auth.
+Here's an example of a Feathers server that uses `feathers-authentication` for local auth. You can try it out on your own machine by running the [example](./example/).
 
 **Note:** This does NOT implement any authorization. Use [feathers-permissions](https://github.com/feathersjs/feathers-permissions) for that.
 
