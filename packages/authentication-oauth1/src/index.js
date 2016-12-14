@@ -68,7 +68,7 @@ export default function init (options = {}) {
       // NOTE (EK): We register failure redirect here so that we can
       // retain the natural express middleware redirect ability like
       // you would have with vanilla passport.
-      auth.express.authenticate(name, { failureRedirect: oauth1Settings.failureRedirect }),
+      auth.express.authenticate(name, oauth1Settings),
       handler,
       auth.express.emitEvents(authSettings),
       auth.express.setCookie(authSettings),
