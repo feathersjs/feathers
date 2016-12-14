@@ -33,9 +33,9 @@ This module contains:
 5. Express middleware
 6. A [Passport](http://passportjs.org/) adapter 
 
-### Hooks
+### Required Hooks
 
-There is just 1 hook now called `authenticate`. This can be used to authenticate a service method with a given strategy.
+`feathers-authentication` only includes a single hook, now. Using the bundled `authenticate` hook is required to register an array of one or more strategies on a service method.
 
 ```js
 app.service('authentication').hooks({
@@ -50,6 +50,8 @@ app.service('authentication').hooks({
   }
 });
 ```
+
+The hooks that were once bundled with this module are now located at [feathers-legacy-authentication-hooks](https://github.com/feathersjs/feathers-legacy-authentication-hooks)
 
 
 ### Express Middleware
