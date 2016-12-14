@@ -38,7 +38,7 @@ describe('feathers-authentication-jwt', () => {
   describe('initialization', () => {
     let app;
     let validToken;
-    let Payload = { id: 1 };
+    let Payload = { userId: 1 };
 
     beforeEach(done => {
       app = feathers();
@@ -203,7 +203,7 @@ describe('feathers-authentication-jwt', () => {
         app.configure(jwt());
         app.setup();
 
-        return app.authenticate('jwt', { assignProperty: 'payload' })(req).then(result => {
+        return app.authenticate('jwt')(req).then(result => {
           expect(result.success).to.equal(true);
         });
       });
@@ -234,7 +234,7 @@ describe('feathers-authentication-jwt', () => {
         };
         class CustomVerifier extends Verifier {
           verify (req, payload, done) {
-            expect(payload.id).to.equal(Payload.id);
+            expect(payload.userId).to.equal(Payload.userId);
             done(null, payload, Payload);
           }
         }
@@ -242,8 +242,8 @@ describe('feathers-authentication-jwt', () => {
         app.configure(jwt({ Verifier: CustomVerifier }));
         app.setup();
 
-        return app.authenticate('jwt', { assignProperty: 'payload' })(req).then(result => {
-          expect(result.data.payload.id).to.deep.equal(Payload.id);
+        return app.authenticate('jwt')(req).then(result => {
+          expect(result.data.payload.userId).to.deep.equal(Payload.userId);
         });
       });
     });

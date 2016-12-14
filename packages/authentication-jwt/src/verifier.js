@@ -22,18 +22,18 @@ class JWTVerifier {
 
     if (id === undefined) {
       debug(`JWT payload does not contain ${this.options.entity}Id`);
-      return done(null, { payload });
+      return done(null, {}, payload);
     }
 
     debug(`Looking up ${this.options.entity} by id`, id);
 
     this.service.get(id).then(entity => {
       const newPayload = { [`${this.options.entity}Id`]: id };
-      return done(null, Object.assign({ payload }, entity), newPayload);
+      return done(null, entity, newPayload);
     })
     .catch(error => {
       debug(`Error populating ${this.options.entity} with id ${id}`, error);
-      return done(null, { payload });
+      return done(null, {}, payload);
     });
   }
 }
