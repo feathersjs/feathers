@@ -76,17 +76,18 @@ describe('Verifier', () => {
 
       it('returns the payload', done => {
         const payload = { userId: 1 };
-        verifier.verify({}, payload, (error, result) => {
+        verifier.verify({}, payload, (error, entity, p) => {
           expect(error).to.equal(null);
-          expect(result.payload).to.deep.equal(payload);
+          expect(entity).to.deep.equal({});
+          expect(p).to.deep.equal(payload);
           done();
         });
       });
 
       it('returns the entity', done => {
-        verifier.verify({}, { userId: 1 }, (error, result) => {
+        verifier.verify({}, { userId: 1 }, (error, entity) => {
           expect(error).to.equal(null);
-          expect(result.email).to.deep.equal(user.email);
+          expect(entity).to.deep.equal(user);
           done();
         });
       });
@@ -101,16 +102,17 @@ describe('Verifier', () => {
           options.service = service;
           const erroringVerifier = new Verifier(app, options);
           const payload = { userId: 1 };
-          erroringVerifier.verify({}, payload, (error, result) => {
+          erroringVerifier.verify({}, payload, (error, entity, p) => {
             expect(error).to.equal(null);
-            expect(result.payload).to.deep.equal(payload);
+            expect(entity).to.deep.equal({});
+            expect(p).to.deep.equal(payload);
             done();
           });
         });
       });
     });
 
-    describe('when id is not present in payload', () => {
+    describe('when userId is not present in payload', () => {
       it('does not call get on the provided service', done => {
         verifier.verify({}, {}, () => {
           expect(service.get).to.not.have.been.called;
@@ -120,9 +122,10 @@ describe('Verifier', () => {
 
       it('returns the payload', done => {
         const payload = { name: 'Eric' };
-        verifier.verify({}, payload, (error, response) => {
+        verifier.verify({}, payload, (error, entity, p) => {
           expect(error).to.equal(null);
-          expect(response.payload).to.deep.equal(payload);
+          expect(entity).to.deep.equal({});
+          expect(p).to.deep.equal(payload);
           done();
         });
       });
