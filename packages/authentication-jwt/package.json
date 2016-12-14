@@ -1,7 +1,7 @@
 {
   "name": "feathers-authentication-jwt",
   "description": "JWT authentication strategy for feathers-authentication using Passport",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/feathersjs/feathers-authentication-jwt",
   "main": "lib/",
   "keywords": [
