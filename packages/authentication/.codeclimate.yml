@@ -1,11 +1,11 @@
 engines:
  duplication:
-   enabled: true
+   enabled: false
    config:
      languages:
      - javascript
  eslint:
-   enabled: true
+   enabled: false
 ratings:
  paths:
  - "**.js"
