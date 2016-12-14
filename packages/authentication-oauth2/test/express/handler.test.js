@@ -66,9 +66,7 @@ describe('express:handler', () => {
       it('sets the redirect object on the request', done => {
         options.successRedirect = '/app';
         handler(options)(req, res, () => {
-          expect(req.hook).to.deep.equal({
-            redirect: { url: options.successRedirect }
-          });
+          expect(res.hook.data.__redirect).to.deep.equal({ status: 302, url: options.successRedirect });
           done();
         });
       });
@@ -92,9 +90,7 @@ describe('express:handler', () => {
       it('sets the redirect object on the request', done => {
         options.failureRedirect = '/login';
         handler(options)(req, res, () => {
-          expect(req.hook).to.deep.equal({
-            redirect: { url: options.failureRedirect }
-          });
+          expect(res.hook.data.__redirect).to.deep.equal({ status: 302, url: options.failureRedirect });
           done();
         });
       });
