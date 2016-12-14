@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.3.14",
-    "debug": "^2.1.1",
+    "debug": "^2.4.0",
     "events": "^1.1.0",
     "express": "^4.12.3",
     "feathers-commons": "^0.8.7",
