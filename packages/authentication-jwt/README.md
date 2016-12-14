@@ -98,6 +98,16 @@ import jwt, { ExtractJwt } from 'feathers-authentication-jwt';
 app.configure(jwt({ jwtFromRequest: ExtractJwt.fromBodyField('accessToken') }));
 ```
 
+## Expected Request Data
+By default, this strategy expects a payload in this format:
+
+```js
+{
+  strategy: 'jwt',
+  accessToken: '<token>'
+}
+```
+
 ## Complete Example
 
 Here's a basic example of a Feathers server that uses `feathers-authentication-jwt`. You can see a fully working example in the [example/](./example/) directory.
