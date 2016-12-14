@@ -28,7 +28,7 @@ export default function authenticate (strategy, options = {}) {
         Object.assign(req, { authenticated: true }, result.data);
         Object.assign(req.feathers, { authenticated: true }, result.data);
 
-        if (options.successRedirect) {
+        if (options.successRedirect && !options.__oauth) {
           debug(`Redirecting to ${options.successRedirect}`);
           res.status(302);
           return res.redirect(options.successRedirect);
@@ -38,7 +38,7 @@ export default function authenticate (strategy, options = {}) {
       }
 
       if (result.fail) {
-        if (options.failureRedirect) {
+        if (options.failureRedirect && !options.__oauth) {
           debug(`Redirecting to ${options.failureRedirect}`);
           res.status(302);
           return res.redirect(options.failureRedirect);
