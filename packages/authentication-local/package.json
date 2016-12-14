@@ -67,7 +67,7 @@
     "chai": "^3.5.0",
     "feathers": "^2.0.2",
     "feathers-authentication": "^1.0.0",
-    "feathers-authentication-jwt": "^0.1.0",
+    "feathers-authentication-jwt": "^0.3.0",
     "feathers-hooks": "^1.6.1",
     "feathers-memory": "^0.8.1",
     "feathers-rest": "^1.5.2",
