@@ -8,14 +8,20 @@ export default function OAuthHandler (options = {}) {
     const app = req.app;
     const authSettings = app.get('auth') || {};
     const entity = req[options.entity];
+    const payload = req.payload;
     const params = {
       authenticated: true,
-      [options.entity]: entity
+      [options.entity]: entity,
+      payload
+    };
+    const data = {
+      [options.entity]: entity,
+      payload
     };
 
     debug(`Executing '${options.name}' OAuth Callback`);
     debug(`Calling create on '${authSettings.path}' service with`, entity);
-    app.service(authSettings.path).create(req[options.entity], params).then(result => {
+    app.service(authSettings.path).create(data, params).then(result => {
       res.data = result;
 
       if (options.successRedirect) {

@@ -11,9 +11,11 @@ describe('express:handler', () => {
   let service;
   let options;
   let user;
+  let payload;
   let accessToken = 'access';
 
   beforeEach(() => {
+    payload = { userId: 1 };
     user = { name: 'Bob' };
     options = { entity: 'user', name: 'github' };
     service = {
@@ -22,6 +24,7 @@ describe('express:handler', () => {
 
     req = {
       user,
+      payload,
       app: {
         get: sinon.stub().returns({ path: '/authentication' }),
         service: sinon.stub().returns(service)
@@ -38,6 +41,7 @@ describe('express:handler', () => {
   it('calls create on the authentication service', done => {
     const params = {
       authenticated: true,
+      payload,
       user
     };
 
@@ -45,7 +49,7 @@ describe('express:handler', () => {
       expect(req.app.service).to.have.been.calledOnce;
       expect(req.app.service).to.have.been.calledWith('/authentication');
       expect(service.create).to.have.been.calledOnce;
-      expect(service.create).to.have.been.calledWith(user, params);
+      expect(service.create).to.have.been.calledWith({ user, payload }, params);
       done();
     });
   });
