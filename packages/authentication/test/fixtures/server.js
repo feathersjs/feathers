@@ -17,16 +17,6 @@ const User = {
   permissions: ['*']
 };
 
-// function customizeJWTPayload() {
-//   return function(hook) {
-//     hook.data.payload = {
-//       id: hook.params.user.id
-//     };
-
-//     return Promise.resolve(hook);
-//   };
-// }
-
 export default function (settings, socketProvider) {
   const app = feathers();
 
@@ -51,7 +41,6 @@ export default function (settings, socketProvider) {
     before: {
       create: [
         auth.hooks.authenticate(['jwt', 'local', 'org-local'])
-        // customizeJWTPayload()
       ],
       remove: [
         auth.hooks.authenticate('jwt')
