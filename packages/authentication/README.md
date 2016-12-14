@@ -9,7 +9,7 @@
 
 > Add Authentication to your FeathersJS app.
 
-`feathers-authentication` adds shared [PassportJS](http://passportjs.org/) authentication for Feathers HTTP REST and WebSockets transports using [JSON Web Tokens](http://jwt.io/).
+`feathers-authentication` adds shared [PassportJS](http://passportjs.org/) authentication for Feathers HTTP REST and WebSocket transports using [JSON Web Tokens](http://jwt.io/).
 
 
 ## Installation
@@ -27,15 +27,17 @@ npm install feathers-authentication --save
 This module contains:
 
 1. The main entry function
-2. An `authenticate` hook
+2. A single `authenticate` hook
 3. The authentication `service`
 4. Socket listeners
 5. Express middleware
-6. A [Passport](http://passportjs.org/) adapter 
+6. A [Passport](http://passportjs.org/) adapter for Feathers
 
-### Required Hooks
+### Hooks
 
-`feathers-authentication` only includes a single hook, now. Using the bundled `authenticate` hook is required to register an array of one or more strategies on a service method.
+`feathers-authentication` only includes a single hook. This bundled `authenticate` hook is used to register an array of one or more authentication strategies on a service method.
+
+> **Note:** Most of the time you should be registering this on your `/authentication` service. Without it you can hit the `authentication` service and generate a JWT `accessToken` without authentication (ie. anonymous authentication).
 
 ```js
 app.service('authentication').hooks({
@@ -51,18 +53,18 @@ app.service('authentication').hooks({
 });
 ```
 
-The hooks that were once bundled with this module are now located at [feathers-legacy-authentication-hooks](https://github.com/feathersjs/feathers-legacy-authentication-hooks)
+The hooks that were once bundled with this module are now located at [feathers-legacy-authentication-hooks](https://github.com/feathersjs/feathers-legacy-authentication-hooks). They are completely compatible but are deprecated and will not be supported by the core team going forward.
 
 
 ### Express Middleware
 
-Just like hooks there is an `authenticate` middleware. It is used the exact same way you would the regular passport express middleware.
+Just like hooks there is an `authenticate` middleware. It is used the exact same way you would the regular Passport express middleware.
 
 ```js
 app.post('/login', auth.express.authenticate('local', { successRedirect: '/app', failureRedirect: '/login' }));
 ```
 
-The other middleware are included but typically you don't need to worry about them.
+These other middleware are included and exposed but typically you don't need to worry about them:
 
 - `emitEvents` - emit `login` and `logout` events
 - `exposeCookies` - expose cookies to Feathers so they are available to hooks and services
@@ -73,7 +75,7 @@ The other middleware are included but typically you don't need to worry about th
 
 ### Default Options
 
-The following default options will be mixed in with your global `auth` object from your config file. It will set the mixed options back to to the app so that they are available at any time by `app.get('auth')`. They can all be overridden and are depended upon by some of the authentication plugins.
+The following default options will be mixed in with your global `auth` object from your config file. It will set the mixed options back on to the app so that they are available at any time by calling `app.get('auth')`. They can all be overridden and are depended upon by some of the authentication plugins.
 
 ```js
 {
@@ -111,7 +113,7 @@ The following plugins are complementary but entirely optional:
 - [feathers-authentication-oauth2](https://github.com/feathersjs/feathers-authentication-oauth2)
 - [feathers-permissions](https://github.com/feathersjs/feathers-permissions)
 
-## Migrating to 1.0
+## Migrating to 1.x
 Refer to [the migration guide](./docs/migrating.md).
 
 ## Complete Example
