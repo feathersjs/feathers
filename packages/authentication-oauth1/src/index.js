@@ -45,6 +45,7 @@ export default function init (options = {}) {
       idField: `${name}Id`,
       path: `/auth/${name}`,
       session: true,
+      __oauth: true,
       callbackURL: makeUrl(`/auth/${name}/callback`, app)
     }, pick(authSettings, ...INCLUDE_KEYS), providerSettings, omit(options, ...EXCLUDE_KEYS));
 
