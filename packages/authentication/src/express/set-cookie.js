@@ -17,24 +17,17 @@ export default function setCookie (authOptions = {}) {
 
     debug('Running setCookie middleware with options:', options);
 
-    // NOTE (EK): If we are not dealing with a browser or it was an
-    // XHR request then just skip this. This is primarily for
-    // handling the oauth redirects and for us to securely send the
-    // JWT to the client in a cookie.
-    // if (req.xhr || req.is('json') || !req.accepts('html')) {
-    //   return next();
-    // }
-
     // If cookies are enabled then set it with its options.
     if (options.enabled && options.name) {
       const cookie = options.name;
 
-      debug(`Clearing old '${cookie}' cookie`);
-      res.clearCookie(cookie);
+      // Only set the cookie if this was called after a service method and
+      // we weren't removing the token and we have a JWT access token.
+      if (res.hook && res.hook.method !== 'remove' && res.data && res.data.accessToken) {
+        // Clear out any old cookie since we are creating a new one
+        debug(`Clearing old '${cookie}' cookie`);
+        res.clearCookie(cookie);
 
-      // Only set the cookie if we weren't removing the token and we
-      // have a JWT access token.
-      if (!res.hook || (res.hook && res.hook.method !== 'remove') && res.data && res.data.accessToken) {
         // Check HTTPS and cookie status in production.
         if (!req.secure && app.get('env') === 'production' && options.secure) {
           console.warn('WARN: Request isn\'t served through HTTPS: JWT in the cookie is exposed.');
