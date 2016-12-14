@@ -39,7 +39,7 @@ describe('REST client authentication', () => {
   });
 
   after(done => {
-    server.close(done);
+    server.close();
     done();
   });
 
