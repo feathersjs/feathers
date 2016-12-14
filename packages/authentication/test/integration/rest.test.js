@@ -7,7 +7,7 @@ import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
 
-describe('REST authentication', function() {
+describe('REST authentication', function () {
   const port = 8996;
   const baseURL = `http://localhost:${port}`;
   const app = createApplication({ secret: 'supersecret' });
@@ -187,8 +187,8 @@ describe('REST authentication', function() {
           .get(`${baseURL}/users`)
           .set('X-Authorization', accessToken)
           .then(response => {
-              expect(response).to.not.be.ok; // should not get here
-            })
+            expect(response).to.not.be.ok; // should not get here
+          })
           .catch(error => {
             expect(error.status).to.equal(401);
             expect(error.response.body.name).to.equal('NotAuthenticated');
@@ -202,8 +202,8 @@ describe('REST authentication', function() {
           .get(`${baseURL}/users`)
           .set('Authorization', 'invalid')
           .then(response => {
-              expect(response).to.not.be.ok; // should not get here
-            })
+            expect(response).to.not.be.ok; // should not get here
+          })
           .catch(error => {
             expect(error.status).to.equal(401);
             expect(error.response.body.name).to.equal('NotAuthenticated');
@@ -217,8 +217,8 @@ describe('REST authentication', function() {
           .get(`${baseURL}/users`)
           .set('Authorization', expiredToken)
           .then(response => {
-              expect(response).to.not.be.ok; // should not get here
-            })
+            expect(response).to.not.be.ok; // should not get here
+          })
           .catch(error => {
             expect(error.status).to.equal(401);
             expect(error.response.body.name).to.equal('NotAuthenticated');
@@ -292,8 +292,8 @@ describe('REST authentication', function() {
           .set('Content-Type', 'application/json')
           .set('X-Authorization', accessToken)
           .then(response => {
-              expect(response).to.not.be.ok; // should not get here
-            })
+            expect(response).to.not.be.ok; // should not get here
+          })
           .catch(error => {
             expect(error.status).to.equal(401);
             expect(error.response.body.name).to.equal('NotAuthenticated');
@@ -308,8 +308,8 @@ describe('REST authentication', function() {
           .set('Content-Type', 'application/json')
           .set('Authorization', 'invalid')
           .then(response => {
-              expect(response).to.not.be.ok; // should not get here
-            })
+            expect(response).to.not.be.ok; // should not get here
+          })
           .catch(error => {
             expect(error.status).to.equal(401);
             expect(error.response.body.name).to.equal('NotAuthenticated');
@@ -324,8 +324,8 @@ describe('REST authentication', function() {
           .set('Content-Type', 'application/json')
           .set('Authorization', expiredToken)
           .then(response => {
-              expect(response).to.not.be.ok; // should not get here
-            })
+            expect(response).to.not.be.ok; // should not get here
+          })
           .catch(error => {
             expect(error.status).to.equal(401);
             expect(error.response.body.name).to.equal('NotAuthenticated');
@@ -442,7 +442,7 @@ describe('REST authentication', function() {
 
     describe('when authentication succeeds', () => {
       it('emits login event', done => {
-        app.once('login', function(auth, info) {
+        app.once('login', function (auth, info) {
           expect(info.provider).to.equal('rest');
           expect(info.req).to.exist;
           expect(info.res).to.exist;
@@ -462,12 +462,12 @@ describe('REST authentication', function() {
         request.post(`${baseURL}/authentication`)
           .send(data)
           .then(response => {
-              expect(response).to.not.be.ok; // should not get here
-            })
+            expect(response).to.not.be.ok; // should not get here
+          })
           .catch(error => {
             expect(error.status).to.equal(401);
 
-            setTimeout(function() {
+            setTimeout(function () {
               expect(handler).to.not.have.been.called;
               done();
             }, 100);
@@ -477,7 +477,7 @@ describe('REST authentication', function() {
 
     describe('when logout succeeds', () => {
       it('emits logout event', done => {
-        app.once('logout', function(auth, info) {
+        app.once('logout', function (auth, info) {
           expect(info.provider).to.equal('rest');
           expect(info.req).to.exist;
           expect(info.res).to.exist;

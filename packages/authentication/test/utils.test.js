@@ -65,7 +65,7 @@ describe('utils', () => {
         options.jwt.issuer = 'custom';
         options.jwt.audience = 'org';
         options.jwt.expiresIn = '1y'; // expires in 1 year
-        options.jwt.notBefore = '1h'; //token is valid 1 hour from now
+        options.jwt.notBefore = '1h'; // token is valid 1 hour from now
 
         return createJWT(payload, options).then(t => {
           token = t;

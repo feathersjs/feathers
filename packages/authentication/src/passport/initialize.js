@@ -13,12 +13,12 @@ export default function initialize (options = {}) {
   return function (passport) {
     // NOTE (EK): This is called by passport.initialize() when calling
     // app.configure(authentication()).
-    
+
     // Expose our JWT util functions globally
     passport._feathers = {};
     passport.createJWT = createJWT;
     passport.verifyJWT = verifyJWT;
-    passport.options = function(name, strategyOptions) {
+    passport.options = function (name, strategyOptions) {
       if (!name) {
         return passport._feathers;
       }

@@ -2,8 +2,8 @@ import Debug from 'debug';
 
 const debug = Debug('feathers-authentication:express:emit-events');
 
-export default function emitEvents() {
-  return function(req, res, next) {
+export default function emitEvents () {
+  return function (req, res, next) {
     const method = res.hook && res.hook.method;
 
     let event = null;
@@ -25,7 +25,7 @@ export default function emitEvents() {
         res
       });
     }
-    
+
     next();
   };
 }

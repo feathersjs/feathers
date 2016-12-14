@@ -1,3 +1,4 @@
+import path from 'path';
 import feathers from 'feathers';
 import rest from 'feathers-rest';
 import socketio from 'feathers-socketio';
@@ -5,7 +6,6 @@ import primus from 'feathers-primus';
 import hooks from 'feathers-hooks';
 import memory from 'feathers-memory';
 import bodyParser from 'body-parser';
-import errors from 'feathers-errors';
 import errorHandler from 'feathers-errors/handler';
 import local from 'feathers-authentication-local';
 import jwt from 'feathers-authentication-jwt';
@@ -27,7 +27,7 @@ const User = {
 //   };
 // }
 
-export default function(settings, socketProvider) {
+export default function (settings, socketProvider) {
   const app = feathers();
 
   app.configure(rest())
@@ -45,12 +45,12 @@ export default function(settings, socketProvider) {
     }))
     .configure(jwt())
     .use('/users', memory())
-    .use('/', feathers.static(__dirname + '/public'));
+    .use('/', feathers.static(path.resolve(__dirname, '/public')));
 
   app.service('authentication').hooks({
     before: {
       create: [
-        auth.hooks.authenticate(['jwt', 'local', 'org-local']),
+        auth.hooks.authenticate(['jwt', 'local', 'org-local'])
         // customizeJWTPayload()
       ],
       remove: [

@@ -3,8 +3,6 @@ import Debug from 'debug';
 const debug = Debug('feathers-authentication:hooks:authenticate');
 
 export default function authenticate (strategy, options = {}) {
-  // TODO (EK): Handle chaining multiple strategies
-
   if (!strategy) {
     throw new Error(`The 'authenticate' hook requires one of your registered passport strategies.`);
   }
@@ -21,10 +19,11 @@ export default function authenticate (strategy, options = {}) {
       return Promise.reject(new Error(`The 'authenticate' hook should only be used as a 'before' hook.`));
     }
 
+    // NOTE (EK): Bring this in when we decide to make the strategy required by the client
     // if (!hook.app.passport._strategy(strategy)) {
     //   return Promise.reject(new Error(`Your '${strategy}' authentication strategy is not registered with passport.`));
     // }
-    
+
     // NOTE (EK): Passport expects an express/connect
     // like request object. So we need to create on.
     let request = {
@@ -35,6 +34,8 @@ export default function authenticate (strategy, options = {}) {
       cookies: hook.params.cookies || {},
       session: {}
     };
+
+    debug(`Attempting to authenticate using ${strategy} strategy with options`, options);
 
     return app.authenticate(strategy, options)(request).then((result = {}) => {
       if (result.fail) {
@@ -52,7 +53,7 @@ export default function authenticate (strategy, options = {}) {
         if (options.failureMessage) {
           message = options.failureMessage;
         }
-        
+
         return Promise.reject(new errors[status](message, challenge));
       }
 

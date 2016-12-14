@@ -33,7 +33,7 @@ export function createJWT (payload = {}, options = {}) {
     }
 
     // TODO (EK): Support jwtids. Maybe auto-generate a uuid
-    jwt.sign(omit(payload, VALID_KEYS), secret, pick(settings, VALID_KEYS), function(error, token) {
+    jwt.sign(omit(payload, VALID_KEYS), secret, pick(settings, VALID_KEYS), function (error, token) {
       if (error) {
         debug('Error signing JWT', error);
         return reject(error);
@@ -53,7 +53,7 @@ export function verifyJWT (token, options = {}) {
     'ignoreExpiration',
     'ignoreNotBefore',
     'subject',
-    'clockTolerance',
+    'clockTolerance'
   ];
   const settings = Object.assign({}, options.jwt);
   const { secret } = options;

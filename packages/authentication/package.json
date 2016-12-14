@@ -35,10 +35,16 @@
     "release:pre": "npm publish --tag next",
     "compile": "rimraf -rf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
-    "jshint": "jshint src/. test/. --config",
+    "lint": "semistandard --fix",
     "mocha": "mocha --opts mocha.opts",
-    "test": "npm run compile && npm run jshint && npm run coverage && nsp check",
+    "test": "npm run compile && npm run lint && npm run coverage && nsp check",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts"
+  },
+  "semistandard": {
+    "sourceType": "module",
+    "env": [
+      "mocha"
+    ]
   },
   "directories": {
     "lib": "lib"
@@ -81,6 +87,7 @@
     "rimraf": "^2.5.4",
     "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0",
+    "semistandard": "^9.1.0",
     "socket.io-client": "^1.4.8",
     "superagent": "^3.0.0",
     "ws": "^1.1.1"

@@ -9,8 +9,8 @@ import socket from './socket';
 
 const debug = Debug('feathers-authentication:index');
 
-export default function init(config = {}) {
-  return function authentication() {
+export default function init (config = {}) {
+  return function authentication () {
     const app = this;
     const _super = app.setup;
     // Merge and flatten options
@@ -21,7 +21,7 @@ export default function init(config = {}) {
     }
 
     if (!options.secret) {
-      throw new Error (`You must provide a 'secret' in your authentication configuration`);
+      throw new Error(`You must provide a 'secret' in your authentication configuration`);
     }
 
     // Make sure cookies don't have to be sent over HTTPS
@@ -32,7 +32,7 @@ export default function init(config = {}) {
 
     app.set('auth', options);
 
-    debug('Setting up Passport');    
+    debug('Setting up Passport');
     // Set up our framework adapter
     passport.framework(adapter.call(app, options));
     // Expose passport on the app object
@@ -53,7 +53,7 @@ export default function init(config = {}) {
     app.configure(service(options));
     app.passport.initialize();
 
-    app.setup = function() {
+    app.setup = function () {
       let result = _super.apply(this, arguments);
 
       // Socket.io middleware
