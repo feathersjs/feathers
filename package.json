@@ -27,6 +27,7 @@
     "lib": "lib"
   },
   "scripts": {
+    "postinstall": "typings install",
     "prepublish": "npm run compile",
     "publish": "git push origin && git push origin --tags",
     "release:patch": "npm version patch && npm publish",
@@ -55,6 +56,7 @@
     "express": "^4.12.3",
     "feathers-commons": "^0.8.7",
     "rubberduck": "^1.0.0",
+    "typings": "^2.0.0",
     "uberproto": "^1.2.0"
   },
   "devDependencies": {
