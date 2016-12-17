@@ -1,5 +1,39 @@
 # Change Log
 
+## [Unreleased](https://github.com/feathersjs/feathers-primus/tree/HEAD)
+
+[Full Changelog](https://github.com/feathersjs/feathers-primus/compare/v2.0.0...HEAD)
+
+**Merged pull requests:**
+
+- Update uws to version 0.12.0 🚀 [\#37](https://github.com/feathersjs/feathers-primus/pull/37) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+
+## [v2.0.0](https://github.com/feathersjs/feathers-primus/tree/v2.0.0) (2016-12-02)
+[Full Changelog](https://github.com/feathersjs/feathers-primus/compare/v1.4.1...v2.0.0)
+
+**Closed issues:**
+
+- uws [\#36](https://github.com/feathersjs/feathers-primus/issues/36)
+
+**Merged pull requests:**
+
+- Update feathers-memory to version 1.0.0 🚀 [\#35](https://github.com/feathersjs/feathers-primus/pull/35) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- Update feathers-commons to version 0.8.0 🚀 [\#34](https://github.com/feathersjs/feathers-primus/pull/34) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- Swapping rm to rifraf and using relative path to \_mocha for windows support [\#33](https://github.com/feathersjs/feathers-primus/pull/33) ([corymsmith](https://github.com/corymsmith))
+- Update primus to version 6.0.5 🚀 [\#32](https://github.com/feathersjs/feathers-primus/pull/32) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- jshint —\> semistandard [\#30](https://github.com/feathersjs/feathers-primus/pull/30) ([corymsmith](https://github.com/corymsmith))
+- adding code coverage [\#29](https://github.com/feathersjs/feathers-primus/pull/29) ([ekryski](https://github.com/ekryski))
+- Update feathers-memory to version 0.8.0 🚀 [\#24](https://github.com/feathersjs/feathers-primus/pull/24) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- Update mocha to version 3.0.0 🚀 [\#22](https://github.com/feathersjs/feathers-primus/pull/22) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+
+## [v1.4.1](https://github.com/feathersjs/feathers-primus/tree/v1.4.1) (2016-05-23)
+[Full Changelog](https://github.com/feathersjs/feathers-primus/compare/v1.4.0...v1.4.1)
+
+**Merged pull requests:**
+
+- Update feathers-socket-commons to version 2.0.0 🚀 [\#18](https://github.com/feathersjs/feathers-primus/pull/18) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- Update babel-plugin-add-module-exports to version 0.2.0 🚀 [\#17](https://github.com/feathersjs/feathers-primus/pull/17) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+
 ## [v1.4.0](https://github.com/feathersjs/feathers-primus/tree/v1.4.0) (2016-04-28)
 [Full Changelog](https://github.com/feathersjs/feathers-primus/compare/v1.3.3...v1.4.0)
 
