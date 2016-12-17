@@ -73,7 +73,7 @@ app.configure(authentication(config))
 }
 
 // In your app or authentication service, wherever you would like
-const authentication = require('feathers-authentication');
+const auth = require('feathers-authentication');
 const local = require('feathers-authentication-local');
 const jwt = require('feathers-authentication-jwt');
 const oauth1 = require('feathers-authentication-oauth1');
@@ -82,7 +82,7 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 
 // The services you are setting the `entity` param for need to be registered before authentication
 app.use('/users', memory())
-    .configure(authentication(app.get('auth')))
+    .configure(auth(app.get('auth')))
     .configure(jwt())
     .configure(local())
     .configure(oauth1())
@@ -160,8 +160,8 @@ Authenticating through the Feathers client is almost exactly the same with just 
 
 ```js
 // feathers-authentication < v0.8.0
-const authentication = require('feathers-authentication/client');
-app.configure(authentication());
+const auth = require('feathers-authentication/client');
+app.configure(auth());
 
 app.authenticate({
   type: 'local',
@@ -178,8 +178,8 @@ app.authenticate({
 
 ```js
 // feathers-authentication-client >= v1.0.0
-const authentication = require('feathers-authentication-client');
-app.configure(authentication(config));
+const auth = require('feathers-authentication-client');
+app.configure(auth(config));
 
 app.authenticate({
   strategy: 'local',
@@ -335,7 +335,7 @@ exports.before = {
 
 ```js
 // feathers-authentication >= v1.0.0
-const authentication = require('feathers-authentication');
+const auth = require('feathers-authentication');
 const local = require('feathers-authentication-local');
 const permissions = require('feathers-permissions');
 
@@ -349,13 +349,13 @@ const myCustomQueryWithCurrentUser = function(options ={}) {
 exports.before = {
   all: [],
   find: [
-    authentication.hooks.authenticate('jwt'),
+    auth.hooks.authenticate('jwt'),
     permissions.hooks.checkPermissions({ service: 'users' }),
     permissions.hooks.isPermitted(),
     myCustomQueryWithCurrentUser() // instead of auth.queryWithCurrentUser()
   ],
   get: [
-    authentication.hooks.authenticate('jwt'),
+    auth.hooks.authenticate('jwt'),
     permissions.hooks.checkPermissions({ service: 'users' }),
     permissions.hooks.isPermitted()
   ],
@@ -363,13 +363,13 @@ exports.before = {
     local.hooks.hashPassword()
   ],
   update: [
-    authentication.hooks.authenticate('jwt'),
+    auth.hooks.authenticate('jwt'),
     permissions.hooks.checkPermissions({ service: 'users' }),
     permissions.hooks.isPermitted(),
     local.hooks.hashPassword()
   ],
   patch: [
-    authentication.hooks.authenticate('jwt'),
+    auth.hooks.authenticate('jwt'),
     permissions.hooks.checkPermissions({ service: 'users' }),
     permissions.hooks.isPermitted(),
     local.hooks.hashPassword()
