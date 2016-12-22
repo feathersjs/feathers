@@ -44,7 +44,7 @@ import feathers from 'feathers';
 import configuration from 'feathers-configuration';
 
 // Use the current folder as the root and look configuration up in `settings`
-let app = feathers().configure()
+let app = feathers().configure(configuration())
 ```
 
 ## Example
