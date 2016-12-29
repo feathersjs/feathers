@@ -65,9 +65,10 @@ describe('feathers-authentication-jwt', () => {
       }).to.throw();
     });
 
-    it('throws an error if secret is not a string', () => {
+    it('throws an error if secret is not provided', () => {
       expect(() => {
-        app.configure(jwt({ secret: true }));
+        app = feathers();
+        app.configure(authentication({}));
         app.setup();
       }).to.throw();
     });

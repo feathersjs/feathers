@@ -40,7 +40,7 @@ export default function init (options = {}) {
       throw new Error(`You must provide a 'header' in your authentication configuration or pass one explicitly`);
     }
 
-    if (typeof jwtSettings.secret !== 'string') {
+    if (typeof jwtSettings.secret === 'undefined') {
       throw new Error(`You must provide a 'secret' in your authentication configuration or pass one explicitly`);
     }
 
