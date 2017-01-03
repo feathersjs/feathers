@@ -32,7 +32,7 @@
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
-    "compile": "rimraf lib/ && babel -d lib/ src/",
+    "compile": "shx rm -rf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "lint": "semistandard src/**/*.js test/**/*.js --fix",
     "mocha": "mocha --opts mocha.opts",
