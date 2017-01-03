@@ -67,9 +67,9 @@
     "feathers": "^2.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.0.0",
-    "shx": "~0.2.1",
     "request": "^2.69.0",
     "semistandard": "^9.1.0",
+    "shx": "^0.2.1",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0"
   }
