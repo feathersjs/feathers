@@ -1,15 +1,15 @@
 /* global describe, it */
 'use strict';
 
-var path = require('path');
-var assert = require('assert');
-var fs = require('fs');
-var exec = require('child_process').exec;
-var helpers = require('yeoman-test');
+const path = require('path');
+const assert = require('assert');
+const fs = require('fs');
+const exec = require('child_process').exec;
+const helpers = require('yeoman-test');
 
 describe('feathers-plugin generator', function () {
   it('created a plugin with passing tests', function (done) {
-    var tmpDir;
+    let tmpDir;
 
     helpers.run(path.join(__dirname, '../app'))
       .inTmpDir(function (dir) {
@@ -38,20 +38,20 @@ describe('feathers-plugin generator', function () {
         assert.ok(fs.existsSync(path.join(tmpDir, 'src', 'index.js')));
         assert.ok(fs.existsSync(path.join(tmpDir, 'test', 'index.test.js')));
 
-        var child = exec('npm run compile && npm run mocha', {
+        const child = exec('npm run compile && npm run mocha', {
           cwd: tmpDir
         });
-        var buffer = '';
 
-        child.stdout.on('data', function (data) {
+        let buffer = '';
+
+        child.stdout.on('data', data => {
+          buffer += data.toString();
+        });
+        child.stderr.on('data', data => {
           buffer += data.toString();
         });
 
-        child.stderr.on('data', function (data) {
-          buffer += data.toString();
-        });
-
-        child.on('exit', function (status) {
+        child.on('exit', status => {
           if (status !== 0) {
             return done(new Error(buffer));
           }

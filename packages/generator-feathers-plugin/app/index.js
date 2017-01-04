@@ -1,11 +1,11 @@
 'use strict';
 
-var generators = require('yeoman-generator');
-var path = require('path');
-var assign = require('object.assign').getPolyfill();
+const Generator = require('yeoman-generator');
+const path = require('path');
 
-module.exports = generators.Base.extend({
-  initializing: function () {
+module.exports = class FeathersPluginGenerator extends Generator {
+  constructor (args, opts) {
+    super(args, opts);
     this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
     this.props = {
       name: process.cwd().split(path.sep).pop(),
@@ -20,9 +20,9 @@ module.exports = generators.Base.extend({
       '__gitignore': '.gitignore',
       '__npmignore': '.npmignore'
     };
-  },
+  }
 
-  prompting: function () {
+  prompting () {
     var done = this.async();
     var prompts = [{
       name: 'name',
@@ -40,13 +40,13 @@ module.exports = generators.Base.extend({
     }];
 
     this.prompt(prompts).then(function (props) {
-      this.props = assign(this.props, props);
+      this.props = Object.assign(this.props, props);
 
       done();
     }.bind(this));
-  },
+  }
 
-  writing: function () {
+  writing () {
     this.fs.copy(this.templatePath('static/.*'), this.destinationPath());
     this.fs.copy(this.templatePath('static/**/*'), this.destinationPath());
     this.fs.copy(this.templatePath('static/.github/**/*'), this.destinationPath('.github/'));
@@ -79,4 +79,4 @@ module.exports = generators.Base.extend({
       saveDev: true
     });
   }
-});
+};
