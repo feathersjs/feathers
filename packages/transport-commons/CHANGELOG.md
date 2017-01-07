@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/feathersjs/feathers-socket-commons/tree/HEAD)
-
-[Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v2.3.1...HEAD)
+## [v2.4.0](https://github.com/feathersjs/feathers-socket-commons/tree/v2.4.0) (2017-01-07)
+[Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v2.3.1...v2.4.0)
 
 **Implemented enhancements:**
 
