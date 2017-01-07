@@ -25,6 +25,10 @@ export function filterMixin (service) {
       return this;
     }
   });
+
+  if (service.filters) {
+    each(service.filters, service.filter.bind(service));
+  }
 }
 
 // The default event dispatcher
