@@ -39,3 +39,13 @@ export function normalizeError (e) {
 
   return result;
 }
+
+export function normalizeArgs (args) {
+  let ret = [];
+  if (args.length === 2 && Array.isArray(args['0'])) {
+    ret = args[0];
+    ret.push(args[1]);
+    return ret;
+  }
+  return args;
+}

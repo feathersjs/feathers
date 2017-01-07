@@ -1,5 +1,5 @@
 import {getArguments} from 'feathers-commons';
-import {normalizeError} from './utils';
+import {normalizeError, normalizeArgs} from './utils';
 
 const debug = require('debug')('feathers-socket-commons:methods');
 
@@ -29,7 +29,7 @@ export function setupMethodHandlers (info, socket, path, service) {
       debug(`Got '${name}' event with connection`, connection);
 
       try {
-        let args = getArguments(method, arguments);
+        let args = getArguments(method, normalizeArgs(arguments));
         let callback = args[args.length - 1];
 
         // NOTE (EK): socket.io just bombs silently if there is an error that

@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { convertFilterData, promisify, normalizeError } from '../src/utils';
+import { convertFilterData, promisify, normalizeError, normalizeArgs } from '../src/utils';
 
 describe('utils', () => {
   it('convertFilterData', () => {
@@ -54,5 +54,25 @@ describe('utils', () => {
     assert.ok(typeof obj.hook === 'undefined');
     assert.equal(obj.message, 'Testing');
     assert.equal(obj.expando, true);
+  });
+
+  it('normalizeArgs', () => {
+    const usualArgs = [ undefined, { test: true }, function () { } ];
+    const packedArgs = [ [ undefined, { test: true } ], function () { } ];
+    const usualArgsWithArray = [ [ undefined, { test: true } ], {}, function () { } ];
+
+    const normalizedUsualArgs = normalizeArgs(usualArgs);
+    const normalizedPackedArgs = normalizeArgs(packedArgs);
+    const normalizedUsualArgsWithArray = normalizeArgs(usualArgsWithArray);
+
+    assert.equal(usualArgs[0], normalizedUsualArgs[0]);
+    assert.deepEqual(usualArgs[1], normalizedUsualArgs[1]);
+    assert.equal(normalizedUsualArgs.length, 3);
+
+    assert.equal(usualArgs[0], normalizedPackedArgs[0]);
+    assert.deepEqual(usualArgs[1], normalizedPackedArgs[1]);
+    assert.equal(normalizedPackedArgs.length, 3);
+
+    assert.equal(normalizedUsualArgsWithArray.length, 3);
   });
 });
