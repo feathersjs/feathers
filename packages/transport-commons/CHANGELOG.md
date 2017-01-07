@@ -1,5 +1,27 @@
 # Change Log
 
+## [Unreleased](https://github.com/feathersjs/feathers-socket-commons/tree/HEAD)
+
+[Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v2.3.1...HEAD)
+
+**Implemented enhancements:**
+
+- support service.json [\#34](https://github.com/feathersjs/feathers-socket-commons/issues/34)
+- Socket event filters should not force returning data [\#4](https://github.com/feathersjs/feathers-socket-commons/issues/4)
+- bootstrap service.filters [\#37](https://github.com/feathersjs/feathers-socket-commons/pull/37) ([slajax](https://github.com/slajax))
+
+**Closed issues:**
+
+- Sockets timed out request - retry on reconnection \[feat?\] [\#32](https://github.com/feathersjs/feathers-socket-commons/issues/32)
+
+**Merged pull requests:**
+
+- Normalize arguments when client sends packed data. [\#39](https://github.com/feathersjs/feathers-socket-commons/pull/39) ([devel-pa](https://github.com/devel-pa))
+- Create .codeclimate.yml [\#33](https://github.com/feathersjs/feathers-socket-commons/pull/33) ([larkinscott](https://github.com/larkinscott))
+- Update feathers-commons to version 0.8.0 🚀 [\#31](https://github.com/feathersjs/feathers-socket-commons/pull/31) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- jshint —\> semistandard [\#30](https://github.com/feathersjs/feathers-socket-commons/pull/30) ([corymsmith](https://github.com/corymsmith))
+- Code coverage [\#29](https://github.com/feathersjs/feathers-socket-commons/pull/29) ([ekryski](https://github.com/ekryski))
+
 ## [v2.3.1](https://github.com/feathersjs/feathers-socket-commons/tree/v2.3.1) (2016-09-02)
 [Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v2.3.0...v2.3.1)
 
