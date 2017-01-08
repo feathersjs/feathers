@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "lib": ["es2016"],
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true,
+
+    "baseUrl": "..",
+    "typeRoots": [
+      ".."
+    ], 
+    "types": [],
+    "forceConsistentCasingInFileNames": true
+  },
+  "files": [
+    "index.d.ts",
+    "test-types.ts"
+  ]
+}
