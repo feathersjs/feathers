@@ -48,7 +48,7 @@
   "engines": {
     "node": ">= 4"
   },
-  "types":"./types/index.d.ts",
+  "types":"./index.d.ts",
   "dependencies": {
     "@types/express":"~4.0.35",
     "babel-polyfill": "^6.20.0",
