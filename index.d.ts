@@ -1,5 +1,3 @@
-import { Application } from './index.d';
-
 import * as express from 'express';
 import * as events from 'events';
 
