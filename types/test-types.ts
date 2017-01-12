@@ -1,4 +1,4 @@
-import feathers from '../';
+import * as feathers from '../';
 
 const app = feathers();
 
