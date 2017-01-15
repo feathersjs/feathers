@@ -1,11 +1,11 @@
 import * as express from 'express';
 import * as events from 'events';
 
-declare function e(): e.Application;
+declare function feathers(): feathers.Application;
 
-declare namespace e {
-  var static: typeof express.static;
-  
+declare namespace feathers {
+  export var static: typeof express.static;
+ 
   type NullableId = number | string | null;
 
   interface Params {
@@ -82,6 +82,4 @@ declare namespace e {
   }
 }
 
-export = e;
-
-
+export = feathers;
