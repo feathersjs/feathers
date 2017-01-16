@@ -1,2 +1,2 @@
-import feathers from './';
+import * as feathers from './';
 export = feathers;
