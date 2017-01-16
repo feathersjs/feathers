@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as expressCore from "express-serve-static-core";
 import * as events from 'events';
 
 declare function feathers(): feathers.Application;
@@ -55,7 +56,7 @@ declare namespace feathers {
     setup(app?: Application, path?: string): void;
   }
 
-  interface FeathersUseHandler<T> extends express.IRouterHandler<T>, express.IRouterMatcher<T> {
+  interface FeathersUseHandler<T> extends expressCore.IRouterHandler<T>, express.IRouterMatcher<T> {
     (location: string, service: Service<any>): T
   }
 
