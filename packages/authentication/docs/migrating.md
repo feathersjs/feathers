@@ -271,6 +271,12 @@ If you want to customize things further you can refer to the [`feathers-authenti
 
 This shouldn't really affect you unless you are testing, modifying or wrapping existing hooks but they **always** return promises now. This makes the interface more consistent, making it easier to test and reason as to what a hook does.
 
+### Added Hooks
+
+`auth.hooks.authenticate([...strategies])`: This hook takes the place of the `verifyToken` and `populateUser` hooks.
+
+For the JWT strategy, this hook has different behavior from the old hooks: it will return a `401 Unauthorized` error if no JWT is present in the request. Include an anonymous JWT (a JWT with no associated user) to prevent a `401` response. Anonymous JWT's can created through by externally calling the `create` endpoint of the authentication service. Internally, they can be created through `app.service('authentication').create({})`.
+
 ### Removed Hooks
 
 We have removed all of the old authentication hooks. If you still need these they have been moved to the [feathers-legacy-authentication-hooks](https://github.com/feathersjs/feathers-legacy-authentication-hooks) repo and are deprecated.
