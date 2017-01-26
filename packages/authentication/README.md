@@ -15,7 +15,7 @@
 ## Installation
 
 ```
-npm install feathers-authentication --save
+npm install feathers-authentication@pre --save
 ```
 
 ## Documentation
