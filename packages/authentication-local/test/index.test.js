@@ -36,7 +36,7 @@ describe('feathers-authentication-local', () => {
       app.configure(authentication({ secret: 'supersecret' }));
     });
 
-    it('throws an error if passport has not been registered', () => {      
+    it('throws an error if passport has not been registered', () => {
       expect(() => {
         feathers().configure(local());
       }).to.throw();
@@ -50,7 +50,7 @@ describe('feathers-authentication-local', () => {
 
       expect(passportLocal.Strategy).to.have.been.calledOnce;
       expect(app.passport.use).to.have.been.calledWith('local');
-      
+
       app.passport.use.restore();
       passportLocal.Strategy.restore();
     });
@@ -61,7 +61,7 @@ describe('feathers-authentication-local', () => {
       app.setup();
 
       expect(app.passport.options).to.have.been.calledOnce;
-      
+
       app.passport.options.restore();
     });
 
@@ -116,7 +116,7 @@ describe('feathers-authentication-local', () => {
       app.setup();
 
       expect(passportLocal.Strategy.getCall(0).args[0].usernameField).to.equal('username');
-      
+
       passportLocal.Strategy.restore();
     });
 
@@ -131,7 +131,7 @@ describe('feathers-authentication-local', () => {
 
       expect(passportLocal.Strategy.getCall(0).args[0].usernameField).to.equal('username');
       expect(passportLocal.Strategy.getCall(0).args[0].passwordField).to.equal('password');
-      
+
       passportLocal.Strategy.restore();
     });
 
@@ -146,7 +146,7 @@ describe('feathers-authentication-local', () => {
 
       expect(passportLocal.Strategy.getCall(0).args[0].usernameField).to.equal('username');
       expect(passportLocal.Strategy.getCall(0).args[0].passwordField).to.equal('password');
-      
+
       passportLocal.Strategy.restore();
     });
 
