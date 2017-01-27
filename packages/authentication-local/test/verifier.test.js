@@ -21,7 +21,7 @@ describe('Verifier', () => {
     return hasher('admin').then(password => {
       user = {
         email: 'admin@feathersjs.com',
-        password 
+        password
       };
 
       service = {
@@ -44,6 +44,8 @@ describe('Verifier', () => {
   it('exposes the Verifier class', () => {
     expect(typeof Verifier).to.equal('function');
   });
+
+
 
   describe('constructor', () => {
     it('retains an app reference', () => {
@@ -95,18 +97,30 @@ describe('Verifier', () => {
           expect(result).to.deep.equal(user);
         });
       });
+
+      it('allows dot notation for password field', () => {
+        user.password = {
+          value: user.password
+        };
+
+        verifier.options.passwordField = 'password.value';
+
+        return verifier._comparePassword(user, 'admin').then(result => {
+          expect(result).to.deep.equal(user);
+        });
+      });
     });
   });
 
   describe('_normalizeResult', () => {
     describe('when has results', () => {
-      it('returns entity when paginated', () => {  
+      it('returns entity when paginated', () => {
         return verifier._normalizeResult({ data: [user] }).then(result => {
           expect(result).to.deep.equal(user);
         });
       });
 
-      it('returns entity when not paginated', () => {  
+      it('returns entity when not paginated', () => {
         return verifier._normalizeResult([user]).then(result => {
           expect(result).to.deep.equal(user);
         });
@@ -114,13 +128,13 @@ describe('Verifier', () => {
     });
 
     describe('when no results', () => {
-      it('rejects with false when paginated', () => {  
+      it('rejects with false when paginated', () => {
         return verifier._normalizeResult({ data: [] }).catch(error => {
           expect(error).to.equal(false);
         });
       });
 
-      it('rejects with false when not paginated', () => {  
+      it('rejects with false when not paginated', () => {
         return verifier._normalizeResult([]).catch(error => {
           expect(error).to.equal(false);
         });

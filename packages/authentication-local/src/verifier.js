@@ -1,6 +1,7 @@
 import Debug from 'debug';
 import errors from 'feathers-errors';
 import bcrypt from 'bcryptjs';
+import get from 'lodash.get';
 
 const debug = Debug('feathers-authentication-local:verify');
 
@@ -20,14 +21,15 @@ class LocalVerifier {
   }
 
   _comparePassword(entity, password) {
-    const hash = entity[this.options.passwordField];
+    // find password in entity, this allows for dot notation
+    const hash = get(entity, this.options.passwordField);
 
     if (!hash) {
       return Promise.reject(new Error(`'${this.options.entity}' record in the database is missing a '${this.options.passwordField}'`));
     }
 
     debug('Verifying password');
-    
+
     return new Promise((resolve, reject) => {
       bcrypt.compare(password, hash, function(error, result) {
         // Handle 500 server error.
