@@ -1,5 +1,30 @@
 # Change Log
 
+## [v0.1.7](https://github.com/feathersjs/feathers-authentication-client/tree/v0.1.7) (2017-01-29)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.1.6...v0.1.7)
+
+**Closed issues:**
+
+- \[Webpack\] TypeError: \_this4.storage.getItem is not a function [\#18](https://github.com/feathersjs/feathers-authentication-client/issues/18)
+- \[Feature request\] Signup via socket [\#17](https://github.com/feathersjs/feathers-authentication-client/issues/17)
+- Missing auth token when used with feathers-rest in comparison to feathers-socketio [\#16](https://github.com/feathersjs/feathers-authentication-client/issues/16)
+- Cannot read property 'on' of undefined - feathers-authentication-client [\#12](https://github.com/feathersjs/feathers-authentication-client/issues/12)
+
+**Merged pull requests:**
+
+- Update passport.js [\#20](https://github.com/feathersjs/feathers-authentication-client/pull/20) ([bertho-zero](https://github.com/bertho-zero))
+
+## [v0.1.6](https://github.com/feathersjs/feathers-authentication-client/tree/v0.1.6) (2016-12-14)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.1.5...v0.1.6)
+
+**Closed issues:**
+
+- `logout\(\)` doesn't resolve [\#10](https://github.com/feathersjs/feathers-authentication-client/issues/10)
+
+**Merged pull requests:**
+
+- Fix linting [\#13](https://github.com/feathersjs/feathers-authentication-client/pull/13) ([marshallswain](https://github.com/marshallswain))
+
 ## [v0.1.5](https://github.com/feathersjs/feathers-authentication-client/tree/v0.1.5) (2016-12-13)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.1.4...v0.1.5)
 
