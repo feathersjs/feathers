@@ -14,6 +14,7 @@
     "realtime"
   ],
   "main": "lib/index",
+  "module": "src/index.js",
   "author": "Feathers <hello@feathersjs.com> (http://feathersjs.com)",
   "contributors": [
     "Eric Kryski <e.kryski@gmail.com> (http://erickryski.com)",
