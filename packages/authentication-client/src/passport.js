@@ -52,7 +52,7 @@ export default class Passport {
       }
     });
 
-    function socketUpgradeHandler () {
+    const socketUpgradeHandler = () => {
       socket.io.engine.on('upgrade', () => {
         debug('Socket upgrading');
 
@@ -73,7 +73,7 @@ export default class Passport {
             });
         }
       });
-    }
+    };
 
     if (socket.io && socket.io.engine) {
       socketUpgradeHandler();
