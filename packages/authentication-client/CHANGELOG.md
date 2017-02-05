@@ -1,5 +1,17 @@
 # Change Log
 
+## [v0.1.8](https://github.com/feathersjs/feathers-authentication-client/tree/v0.1.8) (2017-02-05)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.1.7...v0.1.8)
+
+**Closed issues:**
+
+- Uncaught TypeError: Cannot read property 'options' of undefined [\#26](https://github.com/feathersjs/feathers-authentication-client/issues/26)
+- Browser Version [\#24](https://github.com/feathersjs/feathers-authentication-client/issues/24)
+
+**Merged pull requests:**
+
+- Hoist upgrade handler into current scope by using an arrow function [\#27](https://github.com/feathersjs/feathers-authentication-client/pull/27) ([daffl](https://github.com/daffl))
+
 ## [v0.1.7](https://github.com/feathersjs/feathers-authentication-client/tree/v0.1.7) (2017-01-29)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.1.6...v0.1.7)
 
