@@ -13,7 +13,8 @@ export default function setCookie (authOptions = {}) {
 
   return function (req, res, next) {
     const app = req.app;
-    const options = authOptions.cookie || {};
+    // Prevent mutating authOptions object
+    const options = Object.assign({}, authOptions.cookie);
 
     debug('Running setCookie middleware with options:', options);
 
