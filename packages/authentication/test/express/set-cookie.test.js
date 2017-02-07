@@ -137,6 +137,14 @@ describe('express:setCookie', () => {
       });
     });
 
+    it('does not mutate given option object', done => {
+      setCookie(options)(req, res, () => {
+        expect(res.cookie.getCall(0).args[2].expires).to.be.defined;
+        expect(options.expires).to.be.undefined;
+        done();
+      });
+    });
+
     it('calls next', next => {
       setCookie(options)(req, res, next);
     });
