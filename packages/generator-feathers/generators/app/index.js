@@ -23,6 +23,8 @@ module.exports = class AppGenerator extends Generator {
       'serve-favicon',
       'compression',
       'body-parser',
+      'helmet',
+      'winston',
       'cors'
     ];
 
