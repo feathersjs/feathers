@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.0.0-pre.1](https://github.com/feathersjs/feathers-cli/tree/v2.0.0-pre.1) (2017-02-08)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v1.3.0-pre.1...v2.0.0-pre.1)
+
+**Closed issues:**
+
+- Support Heroku deployments [\#1](https://github.com/feathersjs/feathers-cli/issues/1)
+
+**Merged pull requests:**
+
+- Updating to major pre version [\#63](https://github.com/feathersjs/feathers-cli/pull/63) ([daffl](https://github.com/daffl))
+
 ## [v1.3.0-pre.1](https://github.com/feathersjs/feathers-cli/tree/v1.3.0-pre.1) (2017-02-08)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v1.2.7...v1.3.0-pre.1)
 
