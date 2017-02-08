@@ -4,6 +4,7 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const compress = require('compression');
 const cors = require('cors');
+const helmet = require('helmet');
 const bodyParser = require('body-parser');
 
 const feathers = require('feathers');
@@ -14,13 +15,15 @@ const hooks = require('feathers-hooks');
 <% if (hasProvider('primus')) { %>const primus = require('feathers-primus');<% } %>
 const middleware = require('./middleware');
 const services = require('./services');
+const appHooks = require('./hooks');
 
 const app = feathers();
 
 // Load app configuration
 app.configure(configuration(path.join(__dirname, '..')));
-// Enable CORS, compression, favicon and body parsing
+// Enable CORS, security, compression, favicon and body parsing
 app.use(cors());
+app.use(helmet());
 app.use(compress());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -37,5 +40,6 @@ app.configure(hooks());
 app.configure(services);
 // Configure middleware (see `middleware/index.js`) - always has to be last
 app.configure(middleware);
+app.hooks(appHooks);
 
 module.exports = app;
