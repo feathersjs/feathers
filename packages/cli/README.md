@@ -20,65 +20,44 @@ npm install -g feathers-cli
 ## Usage
 
 ```
+$ mkdir myproject
+
+$ cd myproject
+
 $ feathers help
+
+  Usage: feathers generate [type]
+
 
   Commands:
 
-    help [command...]     Provides help for a given command.
-    exit                  Exits application.
-    generate              alias for generate app
-    generate app          generate new application
-    generate hook         generate new hook
-    generate middleware   generate new middleware
-    generate model        generate new model
-    generate service      generate new service
-    generate plugin       generate new plugin
+    generate [type]  Run a generator. Type can be
+      • app - Create a new Feathers application in the current folder
+      • authentication - Set up authentication for the current application
+      • connection - Initialize a new database connection
+      • hook - Create a new hook
+      • middleware - Create an Express middleware
+      • service - Generate a new service
+      • plugin - Create a new Feathers plugin
 
-$ feathers generate
+    *
 
-  ? What type of API are you making? (Press <space> to select)
+  Options:
 
-  ❯◉ REST
-   ◉ Realtime via Socket.io
-   ◯ Realtime via Primus
+    -h, --help     output usage information
+    -V, --version  output the version number
 
-  (answer all the prompts to generate your app)
+$ feathers generate app
 
 $ npm start
 ```
 
 ## About
 
-Feathers CLI's generators are provided by [generator-feathers](https://github.com/feathersjs/generator-feathers) and [generator-feathers-plugin](https://github.com/feathersjs/generator-feathers-plugin). Its interactive command line is built on [Vorpal](http://vorpal.js.org/).
-
-
-## Changelog
-
-__1.2.4__
-
-- Bumping to generator-feathers@0.8.0
-- Fixed missing peer dependency yo@>=1.0.0
-- Disabling upgrade notifications
-
-__1.2.2__
-
-- Bumping to generator-feathers@0.7.0
-
-
-__1.2.1__
-
-- Properly exiting after executing a command passed in `process.argv`
-
-__1.2.0__
-
-- Supporting "generate plugin" command via feathersjs/generator-feathers-plugin
-
-__1.1.1__
-
-- Initial release
+Feathers CLI's generators are provided by [generator-feathers](https://github.com/feathersjs/generator-feathers) and [generator-feathers-plugin](https://github.com/feathersjs/generator-feathers-plugin).
 
 ## License
 
-Copyright (c) 2016
+Copyright (c) 2017
 
 Licensed under the [MIT license](LICENSE).
