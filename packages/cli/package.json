@@ -1,7 +1,7 @@
 {
   "name": "feathers-cli",
   "description": "Command-line Feathers generator",
-  "version": "1.2.7",
+  "version": "1.3.0-pre.0",
   "homepage": "https://github.com/feathersjs/feathers-cli",
   "main": "lib/",
   "bin": {
@@ -37,6 +37,7 @@
   "scripts": {
     "prepublish": "npm run compile",
     "publish": "git push origin && git push origin --tags",
+    "release:prerelease": "npm version prerelease && npm publish --tag pre",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
@@ -52,11 +53,10 @@
   },
   "preferGlobal": true,
   "dependencies": {
-    "generator-feathers": "^0.8.4",
+    "commander": "^2.9.0",
+    "generator-feathers": "^1.0.0-pre.3",
     "generator-feathers-plugin": "^0.6.9",
-    "vorpal": "^1.10.9",
-    "yeoman-environment": "^1.5.2",
-    "yo": "=1.7.1"
+    "yeoman-environment": "^1.6.6"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
@@ -67,7 +67,7 @@
     "istanbul": "^1.1.0-alpha.1",
     "jshint": "^2.9.1",
     "lodash": "^4.6.1",
-    "mocha": "^2.4.5",
+    "mocha": "^3.2.0",
     "rimraf": "^2.5.4"
   }
 }

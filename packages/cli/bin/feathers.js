@@ -2,4 +2,4 @@
 
 'use strict';
 
-require('../lib')();
+require('../lib')(process.argv);
