@@ -14,7 +14,7 @@ export function createJWT (payload = {}, options = {}) {
     'issuer',
     'jwtid',
     'subject',
-    'noTimetamp',
+    'noTimestamp',
     'header',
     'exp',
     'nbf',
