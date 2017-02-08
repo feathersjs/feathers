@@ -24,6 +24,7 @@ module.exports = function(argv, generatorOptions = {
     .usage('generate [type]');
 
   program.command('generate [type]')
+    .alias('g')
     .description(description)
     .action(type => {
       if (!type) {
