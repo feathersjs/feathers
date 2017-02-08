@@ -1,69 +1,73 @@
-var generators = require('yeoman-generator');
-var fs = require('fs');
-var assign = require('object.assign').getPolyfill();
-var inflect = require('i')();
-var updateMixin = require('../../lib/updateMixin');
-var transform = require('../../lib/transform');
+'use strict';
 
-function importMiddleware(filename, name, moduleName) {
-  // Lookup existing service/index.js file
-  if (fs.existsSync(filename)) {
-    var content = fs.readFileSync(filename).toString();
-    var ast = transform.parse(content);
+const Generator = require('../../lib/generator');
+const { kebabCase, camelCase } = require('lodash');
+const j = require('../../lib/transform');
 
-    transform.addImport(ast, name, moduleName);
-
-    fs.writeFileSync(filename, transform.print(ast));
-  }
-}
-
-module.exports = generators.Base.extend({
-  constructor: function() {
-    generators.Base.apply(this, arguments);
-    updateMixin.extend(this);
-  },
-
-  initializing: function (name) {
-    var done = this.async();
-    this.props = { name: name };
-
-    this.props = assign(this.props, this.options);
-    this.mixins.notifyUpdate(done);
-  },
-
-  prompting: function () {
-    var done = this.async();
-    var options = this.options;
-    var prompts = [
+module.exports = class MiddlewareGenerator extends Generator {
+  prompting() {
+    const prompts = [
       {
         name: 'name',
-        message: 'What do you want to call your middleware?',
-        default: this.props.name,
-        when: function(){
-          return options.name === undefined;
-        },
+        message: 'What is the name of the Express middleware?'
+      },
+      {
+        name: 'path',
+        message: 'What is the mount path?',
+        default: '*'
       }
     ];
 
-    this.prompt(prompts).then(function (props) {
-      this.props = assign(this.props, props);
+    return this.prompt(prompts).then(props => {
+      this.props = Object.assign(this.props, props, {
+        kebabName: kebabCase(props.name),
+        camelName: camelCase(props.name)
+      });
+    });
+  }
 
-      done();
-    }.bind(this));
-  },
+  _transformCode(code) {
+    const { props } = this;
+    const ast = j(code);
+    const useNotFound = ast.findExpressionStatement('use', 'notFound');
+    const mainExpression = ast.find(j.FunctionExpression)
+      .closest(j.ExpressionStatement);
+    const requireCall = `const ${props.camelName} = require('./${props.kebabName}');`;
 
-  writing: function () {
-    this.props.codeName = inflect.camelize(inflect.underscore(this.props.name), false);
+    if(useNotFound.length === 0) {
+      throw new Error(`Could not find 'app.use(notFound())' before which to insert the new middleware. Did you modify ${this.libDirectory}/middleware/index.js?`);
+    }
 
-    var middlewareIndexPath = this.destinationPath('src/middleware/index.js');
+    if(mainExpression.length !== 1) {
+      throw new Error(`${this.libDirectory}/middleware/index.js seems to have more than one function declaration and we can not register the new middleware. Did you modify it?`);
+    }
+
+    const middlewareCode = props.path === '*' ? `app.use(${props.camelName}());` : `app.use('${props.path}', ${props.camelName}());`;
+
+    mainExpression.insertBefore(requireCall);
+    useNotFound.insertBefore(middlewareCode);
+
+    return ast.toSource();
+  }
+
+  writing() {
+    const context = this.props;
+    const mainFile = this.destinationPath(this.libDirectory, 'middleware', `${context.kebabName}.js`);
+
+    // Do not run code transformations if the middleware file already exists
+    if(!this.fs.exists(mainFile)) {
+      const middlewarejs = this.destinationPath(this.libDirectory, 'middleware', 'index.js');
+      const transformed = this._transformCode(
+        this.fs.read(middlewarejs).toString()
+      );
+
+      this.conflicter.force = true;
+      this.fs.write(middlewarejs, transformed);
+    }
 
     this.fs.copyTpl(
       this.templatePath('middleware.js'),
-      this.destinationPath('src/middleware', this.props.name + '.js'),
-      this.props
+      mainFile, context
     );
-
-    // Automatically import the new service into services/index.js and initialize it.
-    importMiddleware(middlewareIndexPath, this.props.codeName, './' + this.props.name);
   }
-});
+};

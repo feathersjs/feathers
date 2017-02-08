@@ -1,43 +1,41 @@
 'use strict';
 
 const path = require('path');
-const serveStatic = require('feathers').static;
 const favicon = require('serve-favicon');
-const compress = require('compression');<% if (cors) { %>
-const cors = require('cors');<% } %>
+const compress = require('compression');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
 const feathers = require('feathers');
 const configuration = require('feathers-configuration');
-const hooks = require('feathers-hooks');<% if (providers.indexOf('rest') !== -1) { %>
-const rest = require('feathers-rest');
-const bodyParser = require('body-parser');
-<% } %><% if (providers.indexOf('socket.io') !== -1) { %>const socketio = require('feathers-socketio');<% } %><% if (providers.indexOf('primus') !== -1) { %>const primus = require('feathers-primus');<% } %>
+const hooks = require('feathers-hooks');
+<% if (hasProvider('rest')) { %>const rest = require('feathers-rest');<% } %>
+<% if (hasProvider('socketio')) { %>const socketio = require('feathers-socketio');<% } %>
+<% if (hasProvider('primus')) { %>const primus = require('feathers-primus');<% } %>
 const middleware = require('./middleware');
 const services = require('./services');
 
 const app = feathers();
 
-app.configure(configuration(path.join(__dirname, '..')));<% if (cors === 'whitelisted') { %>
+// Load app configuration
+app.configure(configuration(path.join(__dirname, '..')));
+// Enable CORS, compression, favicon and body parsing
+app.use(cors());
+app.use(compress());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(favicon( path.join(app.get('public'), 'favicon.ico') ));
+// Host the public folder
+app.use('/', feathers.static(app.get('public')));
 
-const whitelist = app.get('corsWhitelist');
-const corsOptions = {
-  origin(origin, callback){
-    const originIsWhitelisted = whitelist.indexOf(origin) !== -1;
-    callback(null, originIsWhitelisted);
-  }
-};<% } %>
-
-app.use(compress())<% if (cors) { %>
-  .options('*', cors(<% if (cors === 'whitelisted') { %>corsOptions<% } %>))
-  .use(cors(<% if (cors === 'whitelisted') { %>corsOptions<% } %>))<% } %>
-  .use(favicon( path.join(app.get('public'), 'favicon.ico') ))
-  .use('/', serveStatic( app.get('public') ))<% if(providers.indexOf('rest') !== -1) { %>
-  .use(bodyParser.json())
-  .use(bodyParser.urlencoded({ extended: true }))<% } %>
-  .configure(hooks())<% if (providers.indexOf('rest') !== -1) { %>
-  .configure(rest())<% } %><% if (providers.indexOf('socket.io') !== -1) { %>
-  .configure(socketio())<% } %><% if(providers.indexOf('primus') !== -1) { %>
-  .configure(primus({ transformer: 'websockets' }))<% } %>
-  .configure(services)
-  .configure(middleware);
+// Set up Plugins and providers
+app.configure(hooks());
+<% if (hasProvider('rest')) { %>app.configure(rest());<% } %>
+<% if (hasProvider('socketio')) { %>app.configure(socketio());<% } %>
+<% if(hasProvider('primus')) { %>app.configure(primus({ transformer: 'websockets' }));<% } %>
+// Set up our services (see `services/index.js`)
+app.configure(services);
+// Configure middleware (see `middleware/index.js`) - always has to be last
+app.configure(middleware);
 
 module.exports = app;

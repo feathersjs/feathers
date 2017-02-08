@@ -1,199 +1,212 @@
-var generators = require('yeoman-generator');
-var fs = require('fs');
-var assign = require('object.assign').getPolyfill();
-var inflect = require('i')();
-var transform = require('../../lib/transform');
-var updateMixin = require('../../lib/updateMixin');
+'use strict';
 
-function importService(filename, name, moduleName) {
-  // Lookup existing service/index.js file
-  if (fs.existsSync(filename)) {
-    var content = fs.readFileSync(filename).toString();
-    var ast = transform.parse(content);
+const _ = require('lodash');
+const fs = require('fs');
+const path = require('path');
+const Generator = require('../../lib/generator');
+const j = require('../../lib/transform');
 
-    transform.addImport(ast, name, moduleName);
-    name = inflect.camelize(inflect.underscore(name), false);
-    transform.addLastInFunction(ast, 'module.exports', 'app.configure(' + name + ');');
+const templatePath = path.join(__dirname, 'templates');
+const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
+const createExpression = (object, property, args = []) =>
+      j.expressionStatement(j.callExpression(j.memberExpression(j.identifier(object), j.identifier(property)), args));
 
-    fs.writeFileSync(filename, transform.print(ast));
-  }
-}
-
-module.exports = generators.Base.extend({
-  constructor: function() {
-    generators.Base.apply(this, arguments);
-    updateMixin.extend(this);
-  },
-
-  initializing: function (name) {
-    var done = this.async();
-    this.props = { name: name, authentication: false };
-
-    this.props = assign(this.props, this.options);
-    this.mixins.notifyUpdate(done);
-  },
-
-  prompting: function () {
-    var done = this.async();
-    var options = this.options;
-    var prompts = [
-      {
-        name: 'name',
-        message: 'What do you want to call your service?',
-        default: this.props.name,
-        when: function(){
-          return options.name === undefined;
-        }
-      },
+module.exports = class ServiceGenerator extends Generator {
+  prompting() {
+    const { props } = this;
+    const prompts = [
       {
         type: 'list',
-        name: 'type',
-        message: 'What type of service do you need?',
-        default: this.props.type || 'database',
-        store: true,
-        when: function(){
-          return options.type === undefined;
-        },
+        name: 'adapter',
+        message: 'What kind of service is it?',
+        default: 'nedb',
         choices: [
           {
-            name: 'generic',
+            name: 'A custom service',
             value: 'generic'
-          },
-          {
-            name: 'database',
-            value: 'database',
-            checked: true
-          }
-        ]
-      },
-      {
-        type: 'list',
-        name: 'database',
-        message: 'For which database?',
-        store: true,
-        default: this.props.database || 'nedb',
-        when: function(answers){
-          return options.database === undefined && answers.type === 'database';
-        },
-        choices: [
-          {
-            name: 'Memory',
+          }, {
+            name: 'In Memory',
             value: 'memory'
-          },
-          {
-            name: 'MongoDB',
-            value: 'mongodb'
-          },
-          {
-            name: 'MySQL',
-            value: 'mysql'
-          },
-          {
-            name: 'MariaDB',
-            value: 'mariadb'
-          },
-          {
+          }, {
             name: 'NeDB',
             value: 'nedb'
-          },
-          {
-            name: 'PostgreSQL',
-            value: 'postgres'
-          },
-          {
-            name: 'SQLite',
-            value: 'sqlite'
-          },
-          {
-           name: 'SQL Server',
-           value: 'mssql'
+          }, {
+            name: 'MongoDB',
+            value: 'mongodb'
+          }, {
+            name: 'Mongoose',
+            value: 'mongoose'
+          }, {
+            name: 'Sequelize',
+            value: 'sequelize'
+          }, {
+            name: 'KnexJS',
+            value: 'knex'
+          }, {
+            name: 'RethinkDB',
+            value: 'rethinkdb'
           }
         ]
-      },
-      {
-        type: 'confirm',
-        name: 'authentication',
-        default: this.props.authentication,
-        message: 'Does your service require users to be authenticated?',
-        when: function(){
-          return options.authentication === undefined;
+      }, {
+        name: 'name',
+        message: 'What is the name of the service?',
+        validate(input) {
+          if(input.trim() === '') {
+            return 'Service name can not be empty';
+          }
+
+          if(input.trim() === 'authentication') {
+            return '`authentication` is a reserved service name.';
+          }
+
+          return true;
+        },
+        when: !props.name
+      }, {
+        name: 'path',
+        message: 'Which path should the service be registered on?',
+        when: !props.path,
+        default(answers) {
+          return `/${_.kebabCase(answers.name || props.name)}`;
+        },
+        validate(input) {
+          if(input.trim() === '') {
+            return 'Service path can not be empty';
+          }
+
+          return true;
         }
+      }, {
+        name: 'requiresAuth',
+        message: 'Does the service require authentication?',
+        type: 'confirm',
+        default: false,
+        when: !!(this.defaultConfig.authentication && !props.authentication)
       }
     ];
 
-    this.prompt(prompts).then(function (props) {
-      this.props = assign(this.props, props);
-      done();
-    }.bind(this));
-  },
+    return this.prompt(prompts).then(answers => {
+      const name = answers.name || props.name;
 
-  writing: function () {
-    // Generate the appropriate service based on the database.
-    if (this.props.type === 'database') {
-      switch(this.props.database) {
-        case 'sqlite':
-        case 'mssql':
-        case 'mysql':
-        case 'mariadb':
-        case 'postgres':
-          this.npmInstall(['feathers-sequelize'], { save: true });
-          this.props.type = 'sequelize';
-          break;
-        case 'mongodb':
-          this.npmInstall(['feathers-mongoose'], { save: true });
-          this.props.type = 'mongoose';
-          break;
-        case 'memory':
-          this.npmInstall(['feathers-memory'], { save: true });
-          this.props.type = 'memory';
-          break;
-        case 'nedb':
-          this.npmInstall(['feathers-nedb'], { save: true });
-          this.props.type = 'nedb';
-          break;
-        default:
-          this.props.type = 'generic';
-          break;
-      }
+      this.props = Object.assign({
+        requiresAuth: false
+      }, props, answers, {
+        kebabName: _.kebabCase(name),
+        camelName: _.camelCase(name)
+      });
+    });
+  }
+
+  _transformCode(code) {
+    const { camelName, kebabName } = this.props;
+    const ast = j(code);
+
+    const serviceRequire = `const ${camelName} = require('./${kebabName}/${kebabName}.service.js');`;
+    const mainExpression = ast.find(j.FunctionExpression)
+      .closest(j.ExpressionStatement);
+
+    if(mainExpression.length !== 1) {
+      throw new Error(`${this.libDirectory}/services/index.js seems to have more than one function declaration and we can not register the new service. Did you modify it?`);
     }
 
-    this.props.pluralizedName = inflect.pluralize(this.props.name);
-
-    var serviceIndexPath = this.destinationPath('src/services/index.js');
-
-    this.fs.copyTpl(
-      this.templatePath(this.props.type + '-service.js'),
-      this.destinationPath('src/services', this.props.name, 'index.js'),
-      this.props
-    );
-
-    // Automatically import the new service into services/index.js and initialize it.
-    importService(serviceIndexPath, this.props.name, './' + this.props.name);
-
-    // Add a hooks folder for the service
-    this.fs.copyTpl(
-      this.templatePath('hooks.js'),
-      this.destinationPath('src', 'services', this.props.name, 'hooks', 'index.js'),
-      this.props
-    );
-
-    this.fs.copyTpl(
-      this.templatePath('index.test.js'),
-      this.destinationPath('test', 'services', this.props.name, 'index.test.js'),
-      this.props
-    );
-
-    // If we are generating a service that requires a model, let's generate that model.
-    if (this.props.type === 'mongoose' || this.props.type === 'sequelize') {
-      this.composeWith('feathers:model', {
-        options: {
-          type: this.props.type,
-          name: this.props.name,
-          service: this.props.name,
-          authentication: this.props.authentication, // this gets passed from the main generator
-          providers: this.props.providers // this gets passed from the main generator
-        }
+    // Add require('./service')
+    mainExpression.insertBefore(serviceRequire);
+    // Add app.configure(service) to service/index.js
+    mainExpression.find(j.BlockStatement)
+      .forEach((node) => {
+        const stmts = node.value.body;
+        const newStmt = createExpression('app', 'configure', [j.identifier(camelName)]);
+        stmts.push(newStmt);
       });
+
+    return ast.toSource();
+  }
+
+  writing() {
+    const { adapter, kebabName } = this.props;
+    const moduleMappings = {
+      generic: `./${kebabName}.class.js`,
+      memory: 'feathers-memory',
+      nedb: 'feathers-nedb',
+      mongodb: 'feathers-mongodb',
+      mongoose: 'feathers-mongoose',
+      sequelize: 'feathers-sequelize',
+      knex: 'feathers-knex',
+      rethinkdb: 'feathers-rethinkdb'
+    };
+    const serviceModule = moduleMappings[adapter];
+    const mainFile = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`);
+    const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.js`;
+    const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
+    const context = Object.assign({}, this.props, {
+      modelName: hasModel ? `${kebabName}.model` : null,
+      path: stripSlashes(this.props.path),
+      serviceModule
+    });
+
+    // Do not run code transformations if the service file already exists
+    if (!this.fs.exists(mainFile)) {
+      const servicejs = this.destinationPath(this.libDirectory, 'services', 'index.js');
+      const transformed = this._transformCode(
+        this.fs.read(servicejs).toString()
+      );
+
+      this.conflicter.force = true;
+      this.fs.write(servicejs, transformed);
+    }
+
+    // Run the `connection` generator for the selected database
+    // It will not do anything if the db has been set up already
+    if (adapter !== 'generic' && adapter !== 'memory') {
+      this.composeWith(require.resolve('../connection'), {
+        props: { adapter }
+      });
+    } else if(adapter === 'generic') {
+      // Copy the generic service class
+      this.fs.copyTpl(
+        this.templatePath('class.js'),
+        this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.class.js`),
+        context
+      );
+    }
+
+    if (context.modelName) {
+      // Copy the model
+      this.fs.copyTpl(
+        this.templatePath('model', modelTpl),
+        this.destinationPath(this.libDirectory, 'models', `${context.modelName}.js`),
+        context
+      );
+    }
+
+    this.fs.copyTpl(
+      this.templatePath(`hooks${this.props.authentication ? '-user' : ''}.js`),
+      this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`),
+      context
+    );
+
+    this.fs.copyTpl(
+      this.templatePath('filters.js'),
+      this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.filters.js`),
+      context
+    );
+
+    if (fs.existsSync(path.join(templatePath, 'types', `${adapter}.js`))) {
+      this.fs.copyTpl(
+        this.templatePath('types', `${adapter}.js`),
+        mainFile,
+        context
+      );
+    } else {
+      this.fs.copyTpl(
+        this.templatePath('service.js'),
+        mainFile,
+        context
+      );
+    }
+
+    if (serviceModule.charAt(0) !== '.') {
+      this._packagerInstall([ serviceModule ], { save: true });
     }
   }
-});
+};
