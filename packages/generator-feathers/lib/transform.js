@@ -1,106 +1,82 @@
-var recast = require('recast');
-var traverse = require('ast-traverse');
-var inflect = require('i')();
+const j = require('jscodeshift');
 
-var parse = exports.parse = function(code) {
-  return recast.parse(code);
-};
+j.registerMethods({
+  insertInArray(ast) {
+    this.forEach(node => {
+      const elements = node.value.elements;
+      elements.push(ast);
+      j(node).replaceWith(j.arrayExpression(elements));
+    });
 
-var convert = exports.convert = function(ast) {
-  if(typeof ast === 'string') {
-    return recast.parse(ast);
+    return this;
   }
+}, j.ArrayExpression);
+
+j.registerMethods({
+  findDeclaration(name) {
+    return this.findVariableDeclarators(name)
+      .closest(j.VariableDeclaration);
+  },
   
-  return ast;
-};
+  findIdentifier(name) {
+    const result = this.find(j.Identifier);
 
-var insert = exports.insert = function(target, nodes, index) {
-  target.splice.apply(target, [index || 0, 0].concat(nodes));
-  
-  return target;
-};
-
-var createImport = exports.createImport = function(varname, modulename) {
-  return parse('const ' + varname + ' = require(\'' + modulename + '\');\n').program.body;
-};
-
-var findFirstNodeAfter = exports.findFirstNodeAfter = function(ast, code, type) {
-  var next = false;
-  var result = null;
-  
-  traverse(ast, {
-    pre: function(node) {
-      if(node && node.type !== 'Line' && node.type !== 'Block' && recast.print(node).code === code) {
-        next = true;
-      }
-
-      if(!result && next && (!type || node.type === type)) {
-        next = false;
-        result = node;
-      }
+    if(name) {
+      return result.filter(i => i.value.name === name);
     }
-  });
-  
-  return result;
-};
 
-exports.print = function(ast) {
-  return recast.print(ast).code;
-};
+    return result;
+  },
 
-exports.addToArrayInObject = function(ast, objectCode, key, code) {
-  ast = convert(ast);
-  
-  var objectAst = findFirstNodeAfter(ast, objectCode, 'ObjectExpression');
-  var ran = false;
+  insertHook(type, method, name) {
+    let current = this.findIdentifier(type).closest(j.Property);
 
-  if(objectAst === null) {
-    throw new Error('Could not find any object ' + objectCode);
-  }
-  
-  traverse(objectAst, {
-    pre: function(node, parent) {
-      if(node.type === 'ArrayExpression' && parent.key.name === key) {
-        insert(node.elements, parse(code).program.body, node.elements.length);
-        ran = true;
-      }
+    if(!current.length) {
+      throw new Error(`No hook declaration object for '${type}' hooks found.`);
     }
-  });
-  
-  if(!ran) {
-    throw new Error('Could not find an array for object key ' + key + ' to insert ' + code);
-  }
-  
-  return ast;
-};
+    
+    current = current.findIdentifier(method).closest(j.Property);
 
-exports.addLastInFunction = function(ast, search, code) {
-  var node = findFirstNodeAfter(ast, search, 'FunctionExpression');
-  
-  if(node === null) {
-    throw new Error('No function expression found after ' + search);
-  }
-  
-  var nodes = node.body.body;
-  
-  insert(nodes, parse(code).program.body, nodes.length);
-  
-  return ast;
-};
+    if(!current.length) {
+      throw new Error(`No method declaration object for hook type '${type}' and method '${method}' found.`);
+    } 
 
-exports.addImport = function(ast, varname, modulename) {
-  varname = inflect.camelize(inflect.underscore(varname), false);
-  
-  ast = convert(ast);
-  
-  var index = 0;
-  var nodes = ast.program.body;
-  
-  if(nodes[0].expression && nodes[0].expression.raw.indexOf('use strict') !== -1) {
-    index = 1;
+    current.find(j.ArrayExpression)
+      .forEach(prop =>
+        prop.value.elements.push(j.callExpression(j.identifier(name), []))
+      );
+    
+    return this;
+  },
+
+  findExpressionStatement(identifier, name = '') {
+    let result = this.findIdentifier(identifier)
+      .closest(j.ExpressionStatement);
+
+    if (name) {
+      result = result.findIdentifier(name)
+        .closest(j.ExpressionStatement);
+    }
+
+    return result;
+  },
+
+  findConfigure(name = '') {
+    return this.findExpressionStatement('configure', name);
+  },
+
+  last() {
+    if (this.length === 0) {
+      return this;
+    }
+
+    return this.at(this.length - 1);
+  },
+
+  findModuleExports() {
+    return this.filter(node => node.value.name === 'exports')
+      .closest(j.ExpressionStatement);
   }
-  
-  insert(nodes, createImport(varname, modulename), index);
-  
-  return ast;
-};
+});
+
+module.exports = j;

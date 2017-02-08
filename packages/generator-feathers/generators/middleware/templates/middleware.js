@@ -1,9 +1,8 @@
 'use strict';
 
-module.exports = function(app) {
-  return function(req, res, next) {
-    // Perform actions
-
+module.exports = function(options = {}) {
+  return function <%= camelName %>(req, res, next) {
+    console.log('<%= name %> middleware is running');
     next();
   };
 };

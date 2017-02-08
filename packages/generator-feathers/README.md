@@ -44,17 +44,17 @@ npm start
 # short alias for generate new application
 yo feathers
 
-# generate new application
-yo feathers:app
+# set up authentication
+yo feathers:authentication
+
+# set up a database connection
+yo feathers:connection
 
 # generate new hook
 yo feathers:hook
 
 # generate new middleware
 yo feathers:middleware
-
-# generate new model
-yo feathers:model
 
 # generate new service
 yo feathers:service
