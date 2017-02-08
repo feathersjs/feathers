@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0-pre.4](https://github.com/feathersjs/generator-feathers/tree/v1.0.0-pre.4) (2017-02-08)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.0-pre.3...v1.0.0-pre.4)
+
+**Merged pull requests:**
+
+- Minor improvements [\#166](https://github.com/feathersjs/generator-feathers/pull/166) ([ekryski](https://github.com/ekryski))
+
 ## [v1.0.0-pre.3](https://github.com/feathersjs/generator-feathers/tree/v1.0.0-pre.3) (2017-02-08)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.0-pre.2...v1.0.0-pre.3)
 
