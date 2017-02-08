@@ -35,11 +35,12 @@
     "node": ">= 6.0.0"
   },
   "scripts": {
-    "publish": "git push origin && git push origin --tags",
+    "publish": "git push origin --tags && npm run changelog && git push origin",
     "release:prerelease": "npm version prerelease && npm publish --tag pre",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
+    "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "eslint": "eslint lib/. generators/**/index.js test/. --config .eslintrc.json",
     "test:transform": "mocha test/transform.test.js",
     "test:generators": "mocha test/generators.test.js --timeout 300000",
