@@ -45,14 +45,6 @@
     "test:generators": "mocha test/generators.test.js --timeout 300000",
     "test": "npm run eslint && npm run test:transform && npm run test:generators"
   },
-  "files": [
-    "generators/app",
-    "generators/hook",
-    "generators/middleware",
-    "generators/model",
-    "generators/service",
-    "lib"
-  ],
   "dependencies": {
     "jscodeshift": "^0.3.30",
     "lodash": "^4.17.4",
