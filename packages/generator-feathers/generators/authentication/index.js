@@ -64,7 +64,7 @@ module.exports = class AuthGenerator extends Generator {
 
   _writeConfiguration(context) {
     const config = Object.assign({}, this.defaultConfig);
-    
+
     config.authentication = {
       secret: randomstring.generate(64),
       strategies: [ 'jwt' ],
@@ -85,6 +85,7 @@ module.exports = class AuthGenerator extends Generator {
 
         if (strategy === 'facebook') {
           strategyConfig.scope = ['public_profile', 'email'];
+          strategyConfig.profileFields = ['id', 'displayName', 'first_name', 'last_name', 'email', 'gender', 'profileUrl', 'birthday', 'picture', 'permissions'];
         }
 
         config.authentication[strategy] = strategyConfig;
