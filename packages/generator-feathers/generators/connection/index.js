@@ -113,6 +113,8 @@ module.exports = class ConnectionGenerator extends Generator {
   }
 
   prompting() {
+    this.checkPackage();
+    
     const databaseName = kebabCase(this.pkg.name);
     const { defaultConfig } = this;
 
