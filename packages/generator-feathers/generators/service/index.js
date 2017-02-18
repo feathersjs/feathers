@@ -13,6 +13,8 @@ const createExpression = (object, property, args = []) =>
 
 module.exports = class ServiceGenerator extends Generator {
   prompting() {
+    this.checkPackage();
+    
     const { props } = this;
     const prompts = [
       {

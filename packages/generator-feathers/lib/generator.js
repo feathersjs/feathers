@@ -1,6 +1,7 @@
 'use strict';
 
 const Generator = require('yeoman-generator');
+const _ = require('lodash');
 
 module.exports = class BaseGenerator extends Generator {
   constructor(args, opts) {
@@ -11,6 +12,22 @@ module.exports = class BaseGenerator extends Generator {
     this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
     this.defaultConfig = this.fs.readJSON(defaultConfig, {});
     this.props = opts.props || {};
+
+    if(process.version < 'v6.0.0') {
+      this.log.error('The generator is only tested to work with Node v6.0.0 and up!');
+    }
+  }
+
+  checkPackage() {
+    if(_.isEmpty(this.pkg)) {
+      this.log.error('Could not find a valid package.json. Did you generate a new application and are running the generator in the project directory?');
+      return process.exit(1);
+    }
+
+    if(!(this.pkg.directories && this.pkg.directories.lib)) {
+      this.log.error('It does not look like this application has been generated with this version of the generator or the required `directories.lib` has been removed from package.json.');
+      return process.exit(1);
+    }
   }
 
   get libDirectory() {
