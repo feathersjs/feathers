@@ -208,7 +208,7 @@ describe('generator-feathers', function() {
         assert.jsonFileContent(
           path.join(appDir, 'config', 'default.json'), {
             rethinkdb: {
-              database: 'testing',
+              db: 'testing',
               servers: [
                 {
                   host: 'localhost',
@@ -269,8 +269,7 @@ describe('generator-feathers', function() {
     it('mongoose', () => testServiceGenerator('mongoose', 'mongodb', '_id'));
     it('knex', () => testServiceGenerator('knex', 'sqlite', 'id'));
     it('sequelize', () => testServiceGenerator('sequelize', 'sqlite', 'id'));
-    
-    it.skip('rethinkdb', () => testServiceGenerator('rethinkdb', 'id'));
+    it('rethinkdb', () => testServiceGenerator('rethinkdb', 'id'));
   });
 
   describe('feathers:authentication', () => {
