@@ -93,6 +93,7 @@ module.exports = class ServiceGenerator extends Generator {
       this.props = Object.assign({
         requiresAuth: false
       }, props, answers, {
+        snakeName: _.snakeCase(name),
         kebabName: _.kebabCase(name),
         camelName: _.camelCase(name)
       });
