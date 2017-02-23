@@ -1,6 +1,6 @@
 'use strict';
 
-const { kebabCase, snakeCase } = require('lodash');
+const { snakeCase } = require('lodash');
 const url = require('url');
 const Generator = require('../../lib/generator');
 const j = require('../../lib/transform');
@@ -103,20 +103,21 @@ module.exports = class ConnectionGenerator extends Generator {
     const { database } = this.props;
     const config = Object.assign({}, this.defaultConfig);
 
-    config[database] = this._getConfiguration();
+    if(!config[database]) {
+      config[database] = this._getConfiguration();
 
-    this.conflicter.force = true;
-    this.fs.writeJSON(
-      this.destinationPath('config', 'default.json'),
-      config
-    );
+      this.conflicter.force = true;
+      this.fs.writeJSON(
+        this.destinationPath('config', 'default.json'),
+        config
+      );
+    }
   }
 
   prompting() {
     this.checkPackage();
     
-    const databaseName = kebabCase(this.pkg.name);
-    const snakeDatabaseName = snakeCase(this.pkg.name);
+    const databaseName = snakeCase(this.pkg.name);
     const { defaultConfig } = this;
 
     const getProps = answers => Object.assign({}, this.props, answers);
@@ -227,7 +228,7 @@ module.exports = class ConnectionGenerator extends Generator {
             nedb: 'nedb://../data',
             // oracle: `oracle://root:password@localhost:1521/${databaseName}`,
             postgres: `postgres://postgres:@localhost:5432/${databaseName}`,
-            rethinkdb: `rethinkdb://localhost:28015/${snakeDatabaseName}`,
+            rethinkdb: `rethinkdb://localhost:28015/${databaseName}`,
             sqlite: `sqlite://${databaseName}.sqlite`,
             mssql: `mssql://root:password@localhost:1433/${databaseName}`
           };
@@ -239,22 +240,8 @@ module.exports = class ConnectionGenerator extends Generator {
           const { database } = answers;
           const connectionString = defaultConfig[database];
           
-          if (typeof connectionString === 'string') {
+          if (connectionString) {
             setProps({ connectionString });
-            return false;
-          }
-
-          if(typeof connectionString === 'object' && database === 'rethinkdb') {
-            // Assign the database connection variables by destructuring the current connection object
-            const {
-              db: databaseName = snakeDatabaseName, 
-              servers: [{
-                host: databaseHost = 'localhost', 
-                port: databasePort = '28015'
-              }]
-            } = connectionString;
-
-            setProps({ connectionString: `rethinkdb://${databaseHost}:${databasePort}/${databaseName}` });
             return false;
           }
 
@@ -312,8 +299,8 @@ module.exports = class ConnectionGenerator extends Generator {
 
     // NOTE (EK): If this is the first time we set this up
     // show this nice message.
-    if (connectionString) {
-      const databaseName = database === 'rethinkdb' ? snakeCase(this.pkg.name) : kebabCase(this.pkg.name);
+    if (connectionString && !this.defaultConfig[database]) {
+      const databaseName = snakeCase(this.pkg.name);
       this.log();
       this.log(`Woot! We've set up your ${database} database connection!`);
 

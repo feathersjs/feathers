@@ -11,7 +11,7 @@ module.exports = function() {
   const paginate = app.get('paginate');
 
   const options = {
-    name: '<%= kebabName %>',
+    name: '<%= snakeName %>',
     Model,
     paginate
   };
