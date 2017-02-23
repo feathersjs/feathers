@@ -1,6 +1,6 @@
 'use strict';
 
-const { kebabCase } = require('lodash');
+const { kebabCase, snakeCase } = require('lodash');
 const url = require('url');
 const Generator = require('../../lib/generator');
 const j = require('../../lib/transform');
@@ -116,6 +116,7 @@ module.exports = class ConnectionGenerator extends Generator {
     this.checkPackage();
     
     const databaseName = kebabCase(this.pkg.name);
+    const snakeDatabaseName = snakeCase(this.pkg.name);
     const { defaultConfig } = this;
 
     const getProps = answers => Object.assign({}, this.props, answers);
@@ -226,7 +227,7 @@ module.exports = class ConnectionGenerator extends Generator {
             nedb: 'nedb://../data',
             // oracle: `oracle://root:password@localhost:1521/${databaseName}`,
             postgres: `postgres://postgres:@localhost:5432/${databaseName}`,
-            rethinkdb: `rethinkdb://localhost:28015/${databaseName}`,
+            rethinkdb: `rethinkdb://localhost:28015/${snakeDatabaseName}`,
             sqlite: `sqlite://${databaseName}.sqlite`,
             mssql: `mssql://root:password@localhost:1433/${databaseName}`
           };
@@ -240,6 +241,20 @@ module.exports = class ConnectionGenerator extends Generator {
           
           if (typeof connectionString === 'string') {
             setProps({ connectionString });
+            return false;
+          }
+
+          if(typeof connectionString === 'object' && database === 'rethinkdb') {
+            // Assign the database connection variables by destructuring the current connection object
+            const {
+              db: databaseName = snakeDatabaseName, 
+              servers: [{
+                host: databaseHost = 'localhost', 
+                port: databasePort = '28015'
+              }]
+            } = connectionString;
+
+            setProps({ connectionString: `rethinkdb://${databaseHost}:${databasePort}/${databaseName}` });
             return false;
           }
 
@@ -298,7 +313,7 @@ module.exports = class ConnectionGenerator extends Generator {
     // NOTE (EK): If this is the first time we set this up
     // show this nice message.
     if (connectionString) {
-      const databaseName = kebabCase(this.pkg.name);
+      const databaseName = database === 'rethinkdb' ? snakeCase(this.pkg.name) : kebabCase(this.pkg.name);
       this.log();
       this.log(`Woot! We've set up your ${database} database connection!`);
 
