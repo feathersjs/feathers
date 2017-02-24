@@ -29,11 +29,6 @@ export default function (options, config) {
           });
         }
 
-        if (typeof config === 'function') {
-          debug('Calling SocketIO configuration function');
-          config.call(this, io);
-        }
-
         this._socketInfo = {
           method: 'emit',
           connection () {
@@ -51,6 +46,11 @@ export default function (options, config) {
         // of event listeners (e.g. by registering 10 services).
         // So we set it to a higher number. 64 should be enough for everyone.
         this._socketInfo.connection().setMaxListeners(64);
+
+        if (typeof config === 'function') {
+          debug('Calling SocketIO configuration function');
+          config.call(this, io);
+        }
 
         return this._super.apply(this, arguments);
       }
