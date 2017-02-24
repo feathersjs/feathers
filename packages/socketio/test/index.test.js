@@ -76,6 +76,18 @@ describe('feathers-socketio', () => {
     let srv = app.listen(8887).on('listening', () => srv.close(done));
   });
 
+  it('can set MaxListeners', done => {
+    let app = feathers()
+      .configure(socketio(function (io) {
+        io.sockets.setMaxListeners(100);
+      }));
+
+    let srv = app.listen(8987).on('listening', () => {
+      assert.equal(app.io.sockets.getMaxListeners(), 100);
+      srv.close(done);
+    });
+  });
+
   it('can set options (#12)', done => {
     let app = feathers()
       .configure(socketio({
