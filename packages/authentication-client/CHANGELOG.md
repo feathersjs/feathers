@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.1.9](https://github.com/feathersjs/feathers-authentication-client/tree/v0.1.9) (2017-03-01)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.1.8...v0.1.9)
+
+**Merged pull requests:**
+
+- Typescript Definitions [\#25](https://github.com/feathersjs/feathers-authentication-client/pull/25) ([AbraaoAlves](https://github.com/AbraaoAlves))
+
 ## [v0.1.8](https://github.com/feathersjs/feathers-authentication-client/tree/v0.1.8) (2017-02-05)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.1.7...v0.1.8)
 
