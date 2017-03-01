@@ -4,6 +4,7 @@
   "version": "1.0.2",
   "homepage": "https://github.com/feathersjs/feathers-authentication",
   "main": "lib/",
+  "types":["./index.d.ts", "./client.d.ts"],
   "keywords": [
     "feathers",
     "feathers-plugin"
