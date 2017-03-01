@@ -4,6 +4,7 @@
   "version": "0.1.8",
   "homepage": "https://github.com/feathersjs/feathers-authentication-client",
   "main": "lib/index",
+  "types": "./index.d.ts",
   "keywords": [
     "feathers",
     "feathers-plugin"
