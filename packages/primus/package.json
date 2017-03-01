@@ -4,6 +4,7 @@
   "version": "2.0.0",
   "homepage": "https://github.com/feathersjs/feathers-primus",
   "main": "lib/",
+  "types":["./index.d.ts", "./client.d.ts"],
   "keywords": [
     "feathers",
     "feathers-plugin"
