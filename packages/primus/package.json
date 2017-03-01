@@ -1,10 +1,13 @@
 {
   "name": "feathers-primus",
   "description": "The Feathers Primus real-time API provider",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "homepage": "https://github.com/feathersjs/feathers-primus",
   "main": "lib/",
-  "types":["./index.d.ts", "./client.d.ts"],
+  "types": [
+    "./index.d.ts",
+    "./client.d.ts"
+  ],
   "keywords": [
     "feathers",
     "feathers-plugin"
