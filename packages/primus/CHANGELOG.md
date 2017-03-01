@@ -1,11 +1,18 @@
 # Change Log
 
-## [Unreleased](https://github.com/feathersjs/feathers-primus/tree/HEAD)
+## [v2.1.0](https://github.com/feathersjs/feathers-primus/tree/v2.1.0) (2017-03-01)
+[Full Changelog](https://github.com/feathersjs/feathers-primus/compare/v2.0.0...v2.1.0)
 
-[Full Changelog](https://github.com/feathersjs/feathers-primus/compare/v2.0.0...HEAD)
+**Closed issues:**
+
+- Issues with using feathers-primus/client and feathers-client [\#41](https://github.com/feathersjs/feathers-primus/issues/41)
+- Any breaking change in 2.0.0? [\#39](https://github.com/feathersjs/feathers-primus/issues/39)
 
 **Merged pull requests:**
 
+- Update uws to version 0.13.0 🚀 [\#44](https://github.com/feathersjs/feathers-primus/pull/44) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- Typescript Definitions [\#43](https://github.com/feathersjs/feathers-primus/pull/43) ([AbraaoAlves](https://github.com/AbraaoAlves))
+- Update ws to version 2.0.0 🚀 [\#42](https://github.com/feathersjs/feathers-primus/pull/42) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 - Update uws to version 0.12.0 🚀 [\#37](https://github.com/feathersjs/feathers-primus/pull/37) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v2.0.0](https://github.com/feathersjs/feathers-primus/tree/v2.0.0) (2016-12-02)
