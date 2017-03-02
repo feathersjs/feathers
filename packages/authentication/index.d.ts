@@ -1,3 +1,5 @@
+// TODO:  don't have the defs from the hooks PR yet, fix later
+type Hook = (hookProps: any) => (Promise<any> | void);
 
 declare function auth (config?: auth.Options): () => void;
 
@@ -5,40 +7,40 @@ declare namespace auth{
   export const hooks: DefaultHooks;
 
   interface Options {
-      path: '/authentication';
-      header: 'Authorization';
-      entity: 'user';
-      service: 'users';
-      passReqToCallback: true;
-      session: false;
+      path: string;
+      header: string;
+      entity: string;
+      service: string;
+      passReqToCallback: boolean;
+      session: boolean;
       cookie: {
-        enabled: false;
-        name: 'feathers-jwt';
-        httpOnly: false;
-        secure: true;
+        enabled: boolean;
+        name: string;
+        httpOnly: boolean;
+        secure: boolean;
       };
       jwt: {
         /**
          * By default is an access token but can be any type
          */
-        header: { typ: 'access' };
+        header: Object;
 
         /**
          * The resource server where the token is processed
          */
-        audience: 'https://yourdomain.com';
+        audience: string;
 
         /**
          * Typically the entity id associated with the JWT
          */
-        subject: 'anonymous';
+        subject: string;
 
         /**
          * The issuing server, application or resource
          */
-        issuer: 'feathers';
-        algorithm: 'HS256';
-        expiresIn: '1d'
+        issuer: string;
+        algorithm: string;
+        expiresIn: string;
       }
   }
   interface HashPassOptions{
@@ -47,6 +49,7 @@ declare namespace auth{
 
   //TODO: move this for hook project
   interface DefaultHooks {
+    authenticate(strategies: string[]): Hook;
     /**
      * The `verifyToken` hook will attempt to verify a token.
      * If the token is missing or is invalid it returns an error.
@@ -55,7 +58,7 @@ declare namespace auth{
      *
      * @returns {Function}
      */
-    verifyToken(options?): Function;
+    verifyToken(options?): Hook;
     /**
      * The populateUser hook is for populating a user based on an id.
      * It can be used on any service method as either a before or after hook.
@@ -63,7 +66,7 @@ declare namespace auth{
      *
      * @returns {Function}
      */
-    populateUser(options?): Function;
+    populateUser(options?): Hook;
 
     /**
      * The `restrictToAuthenticated` hook throws an error if there isn't a logged-in user by checking for the `hook.params.user` object.
@@ -72,7 +75,7 @@ declare namespace auth{
      *
      * @returns {Function}
      */
-    restrictToAuthenticated(): Function;
+    restrictToAuthenticated(): Hook;
     /**
      * `restrictToOwner` is meant to be used as a before hook.
      * It only allows the user to retrieve resources that are owned by them.
@@ -82,7 +85,7 @@ declare namespace auth{
      * @param {RestrictOptions} [options]
      * @returns {Function}
      */
-    restrictToOwner(options?: RestrictOptions): Function;
+    restrictToOwner(options?: RestrictOptions): Hook;
 
     /**
      * The `hashPassword` hook will automatically hash the data coming in on the provided passwordField.
@@ -91,7 +94,7 @@ declare namespace auth{
      * @param {HashPassOptions} [options] - The field you use to denote the password on your user object.
      * @returns {Function}
      */
-    hashPassword(options?: HashPassOptions): Function;
+    hashPassword(options?: HashPassOptions): Hook;
   }
 
   interface RestrictOptions{
