@@ -1,30 +1,27 @@
 
-declare function e(config?: e.Config) : () => void;
+declare function feathersAuthClient(config?: feathersAuthClient.Config) : () => void;
 
-declare namespace e {
+declare namespace feathersAuthClient {
   export const defaults: Config;
 
   interface Config {
-    storage?:any;
-    header?: 'authorization';
-    cookie?: 'feathers-jwt';
-    storageKey?: 'feathers-jwt';
-    jwtStrategy?: 'jwt';
-    path?: '/authentication';
-    entity?: 'user';
-    service?: 'users';
+    storage?: Storage;
+    header?: string;
+    cookie?: string;
+    storageKey?: string;
+    jwtStrategy?: string;
+    path?: string;
+    entity?: string;
+    service?: string;
   }
 
-  interface DataCredential{
-    [index: string]: string;
-  }
-
-  interface Credentials extends DataCredential{
-    strategy?:any;
+  interface Credentials {
+    strategy?: string;
     accessToken?: string;
-    type: 'local' | 'token' | string;
+    type: string;
+    [index: string]: any;
   }
-
+  
   class Passport {
     constructor(app: any, options: Config);
     setupSocketListeners(): void;
@@ -43,4 +40,4 @@ declare namespace e {
   }
 }
 
-export = e;
+export = feathersAuthClient;
