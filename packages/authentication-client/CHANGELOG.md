@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.1.10](https://github.com/feathersjs/feathers-authentication-client/tree/v0.1.10) (2017-03-03)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.1.9...v0.1.10)
+
+**Merged pull requests:**
+
+- Remove hardcoded values for Config and Credentials typings [\#28](https://github.com/feathersjs/feathers-authentication-client/pull/28) ([myknbani](https://github.com/myknbani))
+
 ## [v0.1.9](https://github.com/feathersjs/feathers-authentication-client/tree/v0.1.9) (2017-03-01)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.1.8...v0.1.9)
 
