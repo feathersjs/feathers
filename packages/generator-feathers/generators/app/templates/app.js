@@ -15,7 +15,7 @@ const hooks = require('feathers-hooks');
 <% if (hasProvider('primus')) { %>const primus = require('feathers-primus');<% } %>
 const middleware = require('./middleware');
 const services = require('./services');
-const appHooks = require('./hooks');
+const appHooks = require('./app.hooks');
 
 const app = feathers();
 
