@@ -12,6 +12,13 @@ declare namespace feathers {
   interface Params {
     query?: any;
   }
+  
+  interface Pagination <T> {
+    total: Number,
+    limit: Number,
+    skip: Number,
+    data: T
+  }
 
   interface Service<T> extends events.EventEmitter {
 
@@ -19,7 +26,7 @@ declare namespace feathers {
      * Retrieves a list of all resources from the service.
      * Provider parameters will be passed as params.query
      */
-    find(params?: Params, callback?: any): Promise<T[]>;
+    find(params?: Params, callback?: any): Promise<T[] | Pagination<T>>;
 
     /**
      * Retrieves a single resource with the given id from the service.
