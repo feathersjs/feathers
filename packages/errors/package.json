@@ -1,10 +1,14 @@
 {
   "name": "feathers-errors",
   "description": "Common error types for feathers apps",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "homepage": "https://github.com/feathersjs/feathers-errors",
   "main": "lib/index",
-  "types":["./index.d.ts", "./handler.d.ts", "./not-found.d.ts"],
+  "types": [
+    "./index.d.ts",
+    "./handler.d.ts",
+    "./not-found.d.ts"
+  ],
   "keywords": [
     "feathers",
     "feathers-plugin",
