@@ -1,5 +1,18 @@
 # Change Log
 
+## [v2.6.0](https://github.com/feathersjs/feathers-errors/tree/v2.6.0) (2017-03-04)
+[Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.5.0...v2.6.0)
+
+**Closed issues:**
+
+- Full Validation Error Object not passed to client promise [\#61](https://github.com/feathersjs/feathers-errors/issues/61)
+- More HTTP Statuses [\#48](https://github.com/feathersjs/feathers-errors/issues/48)
+
+**Merged pull requests:**
+
+- add typescript definitions [\#62](https://github.com/feathersjs/feathers-errors/pull/62) ([superbarne](https://github.com/superbarne))
+- Fix compile npm task on Windows [\#60](https://github.com/feathersjs/feathers-errors/pull/60) ([AbraaoAlves](https://github.com/AbraaoAlves))
+
 ## [v2.5.0](https://github.com/feathersjs/feathers-errors/tree/v2.5.0) (2016-11-04)
 [Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.4.0...v2.5.0)
 
