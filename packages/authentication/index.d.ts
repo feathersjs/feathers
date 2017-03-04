@@ -49,7 +49,7 @@ declare namespace auth{
 
   //TODO: move this for hook project
   interface DefaultHooks {
-    authenticate(strategies: string[]): Hook;
+    authenticate(strategies: string[] | string): Hook;
     /**
      * The `verifyToken` hook will attempt to verify a token.
      * If the token is missing or is invalid it returns an error.
