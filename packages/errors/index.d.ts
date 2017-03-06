@@ -65,8 +65,8 @@ declare namespace FeathersErrors {
 }
 
 declare namespace FeathersErrors  {
-  types: FeathersErrors;
-  function convert(error: any):FeathersError;
+  types: FeathersErrors
+  function convert(error: any):FeathersError
   errors: FeathersErrors
 }
 
