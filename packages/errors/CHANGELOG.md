@@ -1,5 +1,12 @@
 # Change Log
 
+## [v2.6.1](https://github.com/feathersjs/feathers-errors/tree/v2.6.1) (2017-03-06)
+[Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.6.0...v2.6.1)
+
+**Merged pull requests:**
+
+- fix pull request \#62 [\#63](https://github.com/feathersjs/feathers-errors/pull/63) ([superbarne](https://github.com/superbarne))
+
 ## [v2.6.0](https://github.com/feathersjs/feathers-errors/tree/v2.6.0) (2017-03-04)
 [Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.5.0...v2.6.0)
 
