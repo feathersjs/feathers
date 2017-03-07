@@ -68,6 +68,20 @@ describe('REST client authentication', () => {
     });
   });
 
+  it('`authenticated` event', done => {
+    client.once('authenticated', response => {
+      try {
+        expect(response.accessToken).to.not.equal(undefined);
+        expect(client.get('accessToken')).to.deep.equal(response.accessToken);
+        done();
+      } catch (e) {
+        done(e);
+      }
+    });
+
+    client.authenticate(options);
+  });
+
   it('local username password authentication and access to protected service', () => {
     return client.authenticate(options).then(response => {
       expect(response.accessToken).to.not.equal(undefined);
@@ -127,6 +141,15 @@ describe('REST client authentication', () => {
       return client.service('users').get(0).catch(error => {
         expect(error.code).to.equal(401);
       });
+    });
+  });
+
+  it('`logout` event', done => {
+    client.once('logout', () => done());
+
+    client.authenticate(options).then(response => {
+      expect(response.accessToken).to.not.equal(undefined);
+      return client.logout();
     });
   });
 });

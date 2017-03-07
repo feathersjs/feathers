@@ -160,6 +160,9 @@ export default class Passport {
         const emit = app.io ? 'emit' : 'send';
         return this.authenticateSocket(credentials, socket, emit).then(this.setJWT);
       });
+    }).then(payload => {
+      app.emit('authenticated', payload);
+      return payload;
     });
   }
 
@@ -213,16 +216,19 @@ export default class Passport {
     this.clearCookie(this.options.cookie);
 
     // remove the accessToken from localStorage
-    return Promise.resolve(app.get('storage')
-      .removeItem(this.options.storageKey)).then(() => {
-        // If using sockets de-authenticate the socket
-        if (app.io || app.primus) {
-          const method = app.io ? 'emit' : 'send';
-          const socket = app.io ? app.io : app.primus;
+    return Promise.resolve(app.get('storage').removeItem(this.options.storageKey)).then(() => {
+      // If using sockets de-authenticate the socket
+      if (app.io || app.primus) {
+        const method = app.io ? 'emit' : 'send';
+        const socket = app.io ? app.io : app.primus;
 
-          return this.logoutSocket(socket, method);
-        }
-      });
+        return this.logoutSocket(socket, method);
+      }
+    }).then(result => {
+      app.emit('logout', result);
+
+      return result;
+    });
   }
 
   setJWT (data) {
