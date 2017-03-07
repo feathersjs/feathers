@@ -2,7 +2,7 @@ import hooks from './hooks/index';
 import Passport from './passport';
 
 const defaults = {
-  header: 'authorization',
+  header: 'Authorization',
   cookie: 'feathers-jwt',
   storageKey: 'feathers-jwt',
   jwtStrategy: 'jwt',

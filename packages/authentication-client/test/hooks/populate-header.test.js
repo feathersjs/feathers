@@ -6,7 +6,7 @@ describe('hooks:populateHeader', () => {
   let options;
 
   beforeEach(() => {
-    options = { header: 'authorization' };
+    options = { header: 'Authorization' };
     hook = {
       type: 'before',
       params: {
@@ -48,7 +48,7 @@ describe('hooks:populateHeader', () => {
   describe('when accessToken is present', () => {
     it('adds the accessToken to authorization header', () => {
       return populateHeader(options)(hook).then(hook => {
-        expect(hook.params.headers.authorization).to.equal('my token');
+        expect(hook.params.headers.Authorization).to.equal('my token');
       });
     });
 

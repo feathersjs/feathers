@@ -66,7 +66,7 @@ The following default options will be mixed in with the settings you pass in whe
 
 ```js
 {
-  header: 'authorization', // the default authorization header
+  header: 'Authorization', // the default authorization header
   path: '/authentication', // the server side authentication service path
   jwtStrategy: 'jwt', // the name of the JWT authentication strategy 
   entity: 'user', // the entity you are authenticating (ie. a users)

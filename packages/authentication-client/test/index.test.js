@@ -20,7 +20,7 @@ describe('Feathers Authentication Client', () => {
 
   describe('default options', () => {
     it('sets the authorization header', () => {
-      expect(client.passport.options.header).to.equal('authorization');
+      expect(client.passport.options.header).to.equal('Authorization');
     });
 
     it('sets the cookie name', () => {
