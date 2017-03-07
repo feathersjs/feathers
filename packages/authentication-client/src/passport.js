@@ -1,6 +1,7 @@
 import errors from 'feathers-errors';
 import decode from 'jwt-decode';
 import Debug from 'debug';
+import { Storage, payloadIsValid, getCookie, clearCookie } from './utils';
 
 const debug = Debug('feathers-authentication-client');
 
@@ -10,9 +11,14 @@ export default class Passport {
       throw new Error('You have already registered authentication on this client app instance. You only need to do it once.');
     }
 
-    this.options = options;
-    this.app = app;
-    this.storage = app.get('storage') || this.getStorage(options.storage);
+    Object.assign(this, {
+      options,
+      app,
+      payloadIsValid,
+      getCookie,
+      clearCookie,
+      storage: app.get('storage') || this.getStorage(options.storage)
+    });
 
     this.setJWT = this.setJWT.bind(this);
 
@@ -103,6 +109,11 @@ export default class Passport {
     return new Promise((resolve, reject) => {
       const connected = app.primus ? 'open' : 'connect';
       const disconnect = app.io ? 'disconnect' : 'end';
+      const timeout = setTimeout(() => {
+        debug('Socket connection timed out');
+        reject(new Error('Socket connection timed out'));
+      }, this.options.timeout);
+
       debug('Waiting for socket connection');
 
       const handleDisconnect = () => {
@@ -116,6 +127,7 @@ export default class Passport {
         debug('Socket connected');
         debug(`Removing ${disconnect} listener`);
         socket.removeListener(disconnect, handleDisconnect);
+        clearTimeout(timeout);
         resolve(socket);
       });
     });
@@ -154,12 +166,18 @@ export default class Passport {
   // Returns a promise that authenticates a socket
   authenticateSocket (credentials, socket, emit) {
     return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        debug('authenticateSocket timed out');
+        reject(new Error('Authentication timed out'));
+      }, this.options.timeout);
+
       debug('Attempting to authenticate socket');
       socket[emit]('authenticate', credentials, (error, data) => {
         if (error) {
           return reject(error);
         }
 
+        clearTimeout(timeout);
         socket.authenticated = true;
         debug('Socket authenticated!');
 
@@ -170,12 +188,19 @@ export default class Passport {
 
   logoutSocket (socket, emit) {
     return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        debug('logoutSocket timed out');
+        reject(new Error('Logout timed out'));
+      }, this.options.timeout);
+
       socket[emit]('logout', error => {
+        clearTimeout(timeout);
+        socket.authenticated = false;
+
         if (error) {
-          reject(error);
+          return reject(error);
         }
 
-        socket.authenticated = false;
         resolve();
       });
     });
@@ -188,15 +213,16 @@ export default class Passport {
     this.clearCookie(this.options.cookie);
 
     // remove the accessToken from localStorage
-    return Promise.resolve(app.get('storage').removeItem(this.options.storageKey)).then(() => {
-      // If using sockets de-authenticate the socket
-      if (app.io || app.primus) {
-        const method = app.io ? 'emit' : 'send';
-        const socket = app.io ? app.io : app.primus;
+    return Promise.resolve(app.get('storage')
+      .removeItem(this.options.storageKey)).then(() => {
+        // If using sockets de-authenticate the socket
+        if (app.io || app.primus) {
+          const method = app.io ? 'emit' : 'send';
+          const socket = app.io ? app.io : app.primus;
 
-        return this.logoutSocket(socket, method);
-      }
-    });
+          return this.logoutSocket(socket, method);
+        }
+      });
   }
 
   setJWT (data) {
@@ -219,15 +245,16 @@ export default class Passport {
         return resolve(accessToken);
       }
 
-      return Promise.resolve(this.storage.getItem(this.options.storageKey)).then(jwt => {
-        let token = jwt || this.getCookie(this.options.cookie);
+      return Promise.resolve(this.storage.getItem(this.options.storageKey))
+        .then(jwt => {
+          let token = jwt || this.getCookie(this.options.cookie);
 
-        if (token && token !== 'null' && !this.payloadIsValid(decode(token))) {
-          token = undefined;
-        }
+          if (token && token !== 'null' && !this.payloadIsValid(decode(token))) {
+            token = undefined;
+          }
 
-        return resolve(token);
-      });
+          return resolve(token);
+        });
     });
   }
 
@@ -250,52 +277,12 @@ export default class Passport {
     }
   }
 
-  // Pass a decoded payload and it will return a boolean based on if it hasn't expired.
-  payloadIsValid (payload) {
-    return payload && payload.exp * 1000 > new Date().getTime();
-  }
-
-  getCookie (name) {
-    if (typeof document !== 'undefined') {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-
-      if (parts.length === 2) {
-        return parts.pop().split(';').shift();
-      }
-    }
-
-    return null;
-  }
-
-  clearCookie (name) {
-    if (typeof document !== 'undefined') {
-      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
-    }
-
-    return null;
-  }
-
   // Returns a storage implementation
   getStorage (storage) {
     if (storage) {
       return storage;
     }
 
-    return {
-      store: {},
-      getItem (key) {
-        return this.store[key];
-      },
-
-      setItem (key, value) {
-        return (this.store[key] = value);
-      },
-
-      removeItem (key) {
-        delete this.store[key];
-        return this;
-      }
-    };
+    return new Storage();
   }
 }
