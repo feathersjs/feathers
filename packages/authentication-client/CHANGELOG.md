@@ -1,5 +1,21 @@
 # Change Log
 
+## [v0.2.0](https://github.com/feathersjs/feathers-authentication-client/tree/v0.2.0) (2017-03-07)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.1.10...v0.2.0)
+
+**Closed issues:**
+
+- Support `authenticated` and `logout` client side events [\#29](https://github.com/feathersjs/feathers-authentication-client/issues/29)
+- The default header mismatches the default feathers-authentication header [\#23](https://github.com/feathersjs/feathers-authentication-client/issues/23)
+- Re-authenticating fails when passing options [\#22](https://github.com/feathersjs/feathers-authentication-client/issues/22)
+- Socket.io timeout does nothing when there is JWT token available [\#19](https://github.com/feathersjs/feathers-authentication-client/issues/19)
+
+**Merged pull requests:**
+
+- Fix header casing [\#32](https://github.com/feathersjs/feathers-authentication-client/pull/32) ([daffl](https://github.com/daffl))
+- Add client side `authenticated` and `logout` events [\#31](https://github.com/feathersjs/feathers-authentication-client/pull/31) ([daffl](https://github.com/daffl))
+- Add support for socket timeouts and some refactoring [\#30](https://github.com/feathersjs/feathers-authentication-client/pull/30) ([daffl](https://github.com/daffl))
+
 ## [v0.1.10](https://github.com/feathersjs/feathers-authentication-client/tree/v0.1.10) (2017-03-03)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.1.9...v0.1.10)
 
