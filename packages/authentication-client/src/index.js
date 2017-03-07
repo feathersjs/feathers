@@ -8,7 +8,8 @@ const defaults = {
   jwtStrategy: 'jwt',
   path: '/authentication',
   entity: 'user',
-  service: 'users'
+  service: 'users',
+  timeout: 5000
 };
 
 export default function init (config = {}) {

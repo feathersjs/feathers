@@ -78,6 +78,17 @@ describe('Primus client authentication', function () {
     });
   });
 
+  it('supports socket timeouts', () => {
+    return client.passport.connected().then(() => {
+      client.passport.options.timeout = 0;
+
+      return client.authenticate(options).catch(error => {
+        client.passport.options.timeout = 5000;
+        expect(error.message).to.equal('Authentication timed out');
+      });
+    });
+  });
+
   it('local username password authentication and access to protected service', () => {
     return client.authenticate(options).then(response => {
       expect(response.accessToken).to.not.equal(undefined);
