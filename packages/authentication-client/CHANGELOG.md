@@ -1,5 +1,16 @@
 # Change Log
 
+## [Unreleased](https://github.com/feathersjs/feathers-authentication-client/tree/HEAD)
+
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.3.0...HEAD)
+
+**Closed issues:**
+
+- The latest tag on NPM is wrong [\#35](https://github.com/feathersjs/feathers-authentication-client/issues/35)
+
+## [v0.3.0](https://github.com/feathersjs/feathers-authentication-client/tree/v0.3.0) (2017-03-08)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.2.0...v0.3.0)
+
 ## [v0.2.0](https://github.com/feathersjs/feathers-authentication-client/tree/v0.2.0) (2017-03-07)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.1.10...v0.2.0)
 
