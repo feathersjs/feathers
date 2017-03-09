@@ -63,14 +63,14 @@ module.exports = class ConnectionGenerator extends Generator {
           }
         ]
       };
-    
+
     case 'memory':
       return null;
 
     case 'mongodb':
       this.dependencies.push(adapter);
       return connectionString;
-    
+
     case 'mariadb':
     case 'mysql':
     case 'mssql':
@@ -78,11 +78,11 @@ module.exports = class ConnectionGenerator extends Generator {
     case 'postgres': // eslint-disable-line no-fallthrough
     case 'sqlite':
       this.dependencies.push(adapter);
-      
+
       if (sqlPackages[database]) {
         this.dependencies.push(sqlPackages[database]);
       }
-      
+
       if (adapter === 'sequelize') {
         return connectionString;
       }
@@ -98,7 +98,7 @@ module.exports = class ConnectionGenerator extends Generator {
       throw new Error(`Invalid database '${database}'. Cannot assemble configuration.`);
     }
   }
-  
+
   _writeConfiguration() {
     const { database } = this.props;
     const config = Object.assign({}, this.defaultConfig);
@@ -116,13 +116,13 @@ module.exports = class ConnectionGenerator extends Generator {
 
   prompting() {
     this.checkPackage();
-    
+
     const databaseName = snakeCase(this.pkg.name);
     const { defaultConfig } = this;
 
     const getProps = answers => Object.assign({}, this.props, answers);
     const setProps = props => Object.assign(this.props, props);
-    
+
     const prompts = [
       {
         type: 'list',
@@ -144,7 +144,7 @@ module.exports = class ConnectionGenerator extends Generator {
         when(current) {
           const answers = getProps(current);
           const { database, adapter } = answers;
-          
+
           if (database) {
             return false;
           }
@@ -232,14 +232,14 @@ module.exports = class ConnectionGenerator extends Generator {
             sqlite: `sqlite://${databaseName}.sqlite`,
             mssql: `mssql://root:password@localhost:1433/${databaseName}`
           };
-          
+
           return defaultConnectionStrings[database];
         },
         when(current) {
           const answers = getProps(current);
           const { database } = answers;
           const connectionString = defaultConfig[database];
-          
+
           if (connectionString) {
             setProps({ connectionString });
             return false;

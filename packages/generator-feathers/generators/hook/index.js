@@ -58,7 +58,7 @@ module.exports = class HookGenerator extends Generator {
 
   prompting() {
     this.checkPackage();
-    
+
     const services = this._listDirectories(this.libDirectory, 'services');
     const prompts = [
       {

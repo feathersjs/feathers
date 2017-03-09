@@ -7,7 +7,7 @@ const j = require('../../lib/transform');
 module.exports = class MiddlewareGenerator extends Generator {
   prompting() {
     this.checkPackage();
-    
+
     const prompts = [
       {
         name: 'name',
