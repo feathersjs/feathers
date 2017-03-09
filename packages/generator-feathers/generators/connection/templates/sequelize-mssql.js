@@ -8,7 +8,7 @@ module.exports = function() {
   const connectionString = app.get('mssql');
   const connection = url.parse(connectionString);
   const database = connection.path.substring(1, connection.path.length);
-  const { port, hostname, username, password } = connection; 
+  const { port, hostname, username, password } = connection;
   const sequelize = new Sequelize(database, username, password, {
     dialect: 'mssql',
     host: hostname,
@@ -28,7 +28,7 @@ module.exports = function() {
 
   app.setup = function(...args) {
     const result = oldSetup.apply(this, args);
-    
+
     // Set up data relationships
     const models = sequelize.models;
     Object.keys(models).forEach(name => {

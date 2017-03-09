@@ -7,7 +7,7 @@ const makeConfig = require('./configs');
 module.exports = class AppGenerator extends Generator {
   constructor(args, opts) {
     super(args, opts);
-    
+
     this.props = {
       name: this.pkg.name || process.cwd().split(path.sep).pop(),
       description: this.pkg.description,
@@ -102,7 +102,7 @@ module.exports = class AppGenerator extends Generator {
         if(input.indexOf('primus') !== -1 && input.indexOf('socketio') !== -1) {
           return 'You can only pick SocketIO or Primus, not both.';
         }
-        
+
         return true;
       }
     }];
@@ -161,11 +161,11 @@ module.exports = class AppGenerator extends Generator {
     this.props.providers.forEach(
       provider => this.dependencies.push(`feathers-${provider}`)
     );
-    
+
     this._packagerInstall(this.dependencies, {
       save: true
     });
-    
+
     this._packagerInstall(this.devDependencies, {
       saveDev: true
     });

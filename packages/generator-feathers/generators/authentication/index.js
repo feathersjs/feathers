@@ -14,7 +14,7 @@ const OAUTH2_STRATEGY_MAPPINGS = {
 module.exports = class AuthGenerator extends Generator {
   prompting() {
     this.checkPackage();
-    
+
     const prompts = [{
       type: 'checkbox',
       name: 'strategies',
