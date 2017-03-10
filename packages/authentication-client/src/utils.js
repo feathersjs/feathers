@@ -19,7 +19,7 @@ export class Storage {
 
 // Pass a decoded payload and it will return a boolean based on if it hasn't expired.
 export function payloadIsValid (payload) {
-  return payload && payload.exp * 1000 > new Date().getTime();
+  return payload && (!payload.exp || payload.exp * 1000 > new Date().getTime());
 }
 
 export function getCookie (name) {
