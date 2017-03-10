@@ -1,12 +1,16 @@
 # Change Log
 
-## [Unreleased](https://github.com/feathersjs/feathers-authentication-client/tree/HEAD)
-
-[Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.3.0...HEAD)
+## [v0.3.1](https://github.com/feathersjs/feathers-authentication-client/tree/v0.3.1) (2017-03-10)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.3.0...v0.3.1)
 
 **Closed issues:**
 
 - The latest tag on NPM is wrong [\#35](https://github.com/feathersjs/feathers-authentication-client/issues/35)
+- exp claim should be optional [\#33](https://github.com/feathersjs/feathers-authentication-client/issues/33)
+
+**Merged pull requests:**
+
+- Fix \#33 exp claim should be optional [\#34](https://github.com/feathersjs/feathers-authentication-client/pull/34) ([whollacsek](https://github.com/whollacsek))
 
 ## [v0.3.0](https://github.com/feathersjs/feathers-authentication-client/tree/v0.3.0) (2017-03-08)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.2.0...v0.3.0)
