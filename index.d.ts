@@ -17,7 +17,7 @@ declare namespace feathers {
     total: Number,
     limit: Number,
     skip: Number,
-    data: T
+    data: T[]
   }
 
   interface Service<T> extends events.EventEmitter {
