@@ -13,9 +13,10 @@ module.exports = function(generator) {
     keywords: [
       'feathers'
     ],
-    license: 'MIT',
-    repository: {},
-    author: {},
+    author: {
+      name: generator.user.git.name(),
+      email: generator.user.git.email()
+    },
     contributors: [],
     bugs: {},
     directories: {
