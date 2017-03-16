@@ -1,5 +1,25 @@
 # Change Log
 
+## [v1.0.0-pre.6](https://github.com/feathersjs/generator-feathers/tree/v1.0.0-pre.6) (2017-03-16)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.0-pre.5...v1.0.0-pre.6)
+
+**Closed issues:**
+
+- Integration with GraphQL [\#188](https://github.com/feathersjs/generator-feathers/issues/188)
+- Trailing whitespace in some generators [\#186](https://github.com/feathersjs/generator-feathers/issues/186)
+- Add more junk management to gitignore [\#184](https://github.com/feathersjs/generator-feathers/issues/184)
+- Set package.json author and license according to npm/git  [\#183](https://github.com/feathersjs/generator-feathers/issues/183)
+- Rethink db option is 'database' instead of 'db' and db config gets overwritten [\#181](https://github.com/feathersjs/generator-feathers/issues/181)
+
+**Merged pull requests:**
+
+- Generate tests for hooks and services [\#191](https://github.com/feathersjs/generator-feathers/pull/191) ([daffl](https://github.com/daffl))
+- Add email unique index to NeDB user model [\#190](https://github.com/feathersjs/generator-feathers/pull/190) ([daffl](https://github.com/daffl))
+- Set name based on npm [\#189](https://github.com/feathersjs/generator-feathers/pull/189) ([daffl](https://github.com/daffl))
+- Trailing whitespace cleanup \(\#186\) [\#187](https://github.com/feathersjs/generator-feathers/pull/187) ([bitsoflogic](https://github.com/bitsoflogic))
+- ignore junk files [\#185](https://github.com/feathersjs/generator-feathers/pull/185) ([OmgImAlexis](https://github.com/OmgImAlexis))
+- Add support for selecting application hooks and old event filter [\#182](https://github.com/feathersjs/generator-feathers/pull/182) ([daffl](https://github.com/daffl))
+
 ## [v1.0.0-pre.5](https://github.com/feathersjs/generator-feathers/tree/v1.0.0-pre.5) (2017-02-23)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.0-pre.4...v1.0.0-pre.5)
 
