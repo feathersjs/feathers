@@ -1,5 +1,22 @@
 # Change Log
 
+## [v2.0.0-pre.2](https://github.com/feathersjs/feathers-cli/tree/v2.0.0-pre.2) (2017-03-16)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.0-pre.1...v2.0.0-pre.2)
+
+**Closed issues:**
+
+- Single line commands \(skipping the feathers terminal\) [\#70](https://github.com/feathersjs/feathers-cli/issues/70)
+- Trailing whitespace in a few files [\#69](https://github.com/feathersjs/feathers-cli/issues/69)
+- Add support for version argument [\#66](https://github.com/feathersjs/feathers-cli/issues/66)
+- Add support for rethinkdb [\#65](https://github.com/feathersjs/feathers-cli/issues/65)
+- Feathers generate fails on node 7.5.0 [\#64](https://github.com/feathersjs/feathers-cli/issues/64)
+- \[2.0\] Ability to generate/rotate secrets [\#46](https://github.com/feathersjs/feathers-cli/issues/46)
+
+**Merged pull requests:**
+
+- Use generator-feathers 1.0.0-pre.6 [\#71](https://github.com/feathersjs/feathers-cli/pull/71) ([daffl](https://github.com/daffl))
+- update all badges [\#67](https://github.com/feathersjs/feathers-cli/pull/67) ([OmgImAlexis](https://github.com/OmgImAlexis))
+
 ## [v2.0.0-pre.1](https://github.com/feathersjs/feathers-cli/tree/v2.0.0-pre.1) (2017-02-08)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v1.3.0-pre.1...v2.0.0-pre.1)
 
