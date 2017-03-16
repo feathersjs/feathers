@@ -1,7 +1,7 @@
 {
   "name": "feathers-errors",
   "description": "Common error types for feathers apps",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "homepage": "https://github.com/feathersjs/feathers-errors",
   "main": "lib/index",
   "types": [
