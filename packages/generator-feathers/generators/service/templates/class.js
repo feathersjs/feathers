@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 class Service {
   constructor(options) {
     this.options = options || {};
