@@ -142,6 +142,7 @@ module.exports = class ServiceGenerator extends Generator {
     const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.js`;
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
     const context = Object.assign({}, this.props, {
+      libDirectory: this.libDirectory,
       modelName: hasModel ? `${kebabName}.model` : null,
       path: stripSlashes(this.props.path),
       serviceModule
@@ -207,6 +208,12 @@ module.exports = class ServiceGenerator extends Generator {
         context
       );
     }
+
+    this.fs.copyTpl(
+      this.templatePath('test.js'),
+      this.destinationPath('test', 'services', `${kebabName}.test.js`),
+      context
+    );
 
     if (serviceModule.charAt(0) !== '.') {
       this._packagerInstall([ serviceModule ], { save: true });

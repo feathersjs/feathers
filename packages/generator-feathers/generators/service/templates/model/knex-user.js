@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use strict';
 
 // <%= name %>-model.js - A KnexJS

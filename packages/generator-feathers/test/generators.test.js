@@ -66,21 +66,19 @@ describe('generator-feathers', function() {
 
   it('feathers:app', () => runTest('starts and shows the index page'));
 
-  // it('feathers:hook', function(done) {
-  //   helpers.run(path.join(__dirname, '../generators/hook'))
-  //     .inTmpDir(function() {
-  //       process.chdir(appDir);
-  //     })
-  //     .withPrompts({
-  //       type: 'before',
-  //       service: 'messages',
-  //       method: ['create', 'update', 'patch'],
-  //       name: 'removeId'
-  //     })
-  //     .on('end', function() {
-  //       runTest('hook can be used', done);
-  //     });
-  // });
+  it('feathers:hook', function(done) {
+    helpers.run(path.join(__dirname, '../generators/hook'))
+      .inTmpDir(function() {
+        process.chdir(appDir);
+      })
+      .withPrompts({
+        name: 'removeId',
+        services: []
+      })
+      .on('end', () =>
+        runTest('\'removeId\' hook').then(() => done()).catch(done)
+      );
+  });
 
   describe('feathers:connection', () => {
     function runConnectionGenerator(prompts) {
@@ -234,6 +232,7 @@ describe('generator-feathers', function() {
           path: adapter
         })
         .withOptions({ skipInstall: false })
+        .then(() => runTest(`'${adapter}' service`))
         .then(() => startAndWait('node', ['src/'], { cwd: appDir }, 'Feathers application started'))
         .then(delay(1000))
         .then(({ child }) => {

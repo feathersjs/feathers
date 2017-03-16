@@ -136,7 +136,9 @@ module.exports = class HookGenerator extends Generator {
   }
 
   writing() {
-    const context = this.props;
+    const context = Object.assign({
+      libDirectory: this.libDirectory
+    }, this.props);
     const mainFile = this.destinationPath(this.libDirectory, 'hooks', `${context.kebabName}.js`);
 
     if(!this.fs.exists(mainFile) && context.type) {
@@ -148,6 +150,12 @@ module.exports = class HookGenerator extends Generator {
     this.fs.copyTpl(
       this.templatePath('hook.js'),
       mainFile, context
+    );
+
+    this.fs.copyTpl(
+      this.templatePath('test.js'),
+      this.destinationPath('test', 'hooks', `${context.kebabName}.test.js`),
+      context
     );
   }
 };
