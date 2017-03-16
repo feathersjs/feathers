@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.6.2](https://github.com/feathersjs/feathers-errors/tree/v2.6.2) (2017-03-16)
+[Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.6.1...v2.6.2)
+
+**Closed issues:**
+
+- Create a TokenExpired error type [\#53](https://github.com/feathersjs/feathers-errors/issues/53)
+
+**Merged pull requests:**
+
+- Fix declarations for index.d.ts [\#66](https://github.com/feathersjs/feathers-errors/pull/66) ([ghost](https://github.com/ghost))
+
 ## [v2.6.1](https://github.com/feathersjs/feathers-errors/tree/v2.6.1) (2017-03-06)
 [Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.6.0...v2.6.1)
 
