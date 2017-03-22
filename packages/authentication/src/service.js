@@ -19,7 +19,7 @@ class Service {
     // TODO (EK): This should likely be a hook
     // TODO (EK): This service can be datastore backed to support blacklists :)
     return this.passport
-      .createJWT(payload, merge(defaults, params))
+      .createJWT(payload, merge({}, defaults, params))
       .then(accessToken => {
         return { accessToken };
       });

@@ -88,6 +88,26 @@ describe('/authentication service', () => {
         expect(result.accessToken).to.not.equal.undefined;
       });
     });
+
+    it('creates multiple custom tokens without side effect on expiration', () => {
+      const params = {
+        jwt: {
+          header: { typ: 'refresh' },
+          expiresIn: '1y'
+        }
+      };
+
+      return app.service('authentication').create(data, params).then(result => {
+        return app.service('authentication').create(data).then(result => {
+          return app.passport
+            .verifyJWT(result.accessToken, app.get('auth'))
+            .then(payload => {
+              const delta = (payload.exp - payload.iat);
+              expect(delta).to.equal(24 * 60 * 60);
+            });
+        });
+      });
+    });
   });
 
   describe('remove', () => {
