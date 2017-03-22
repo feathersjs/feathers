@@ -27,7 +27,10 @@ class Service {
 
   remove (id, params) {
     const defaults = this.app.get('auth');
-    const accessToken = id !== null ? id : params.headers[defaults.header.toLowerCase()];
+    const authHeader = params.headers && params.headers[defaults.header.toLowerCase()];
+    const authParams = authHeader && authHeader.match(/(\S+)\s+(\S+)/);
+    const accessToken = id !== null ? id : authParams && authParams[2] || authHeader;
+
     // TODO (EK): return error if token is missing?
     return this.passport
       .verifyJWT(accessToken, merge(defaults, params))
