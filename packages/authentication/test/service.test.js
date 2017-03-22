@@ -124,5 +124,19 @@ describe('/authentication service', () => {
         expect(response).to.deep.equal({ accessToken });
       });
     });
+
+    it('verifies an accessToken in the header', () => {
+      const params = { headers: { authorization: accessToken } };
+      return app.service('authentication').remove(null, params).then(response => {
+        expect(response).to.deep.equal({ accessToken });
+      });
+    });
+
+    it('verifies an accessToken in the header with Bearer scheme', () => {
+      const params = { headers: { authorization: `Bearer ${accessToken}` } };
+      return app.service('authentication').remove(null, params).then(response => {
+        expect(response).to.deep.equal({ accessToken });
+      });
+    });
   });
 });
