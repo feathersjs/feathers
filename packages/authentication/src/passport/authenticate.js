@@ -11,7 +11,7 @@ export default function authenticate (options = {}) {
   debug('Initializing custom passport authenticate', options);
 
   // This function is bound by passport and called by passport.authenticate()
-  return function (passport, name, strategyOptions = {}, callback = () => {}) {
+  return function (passport, strategies, strategyOptions = {}, callback = () => {}) {
     // This is called by the feathers middleware, hook or socket. The request object
     // is a mock request derived from an http request, socket object, or hook.
     return function (request = {}) {
@@ -21,10 +21,22 @@ export default function authenticate (options = {}) {
         // Allow you to set a location for the success payload.
         // Default is hook.params.user, req.user and socket.user.
         const entity = strategyOptions.entity || strategyOptions.assignProperty || options.entity;
-        let failures = [];
-        let strategies;
+        request.body = request.body || {};
+        let strategyName = request.body.strategy;
 
-        // Cast `name` to an array, allowing authentication to pass through a chain of
+        if (!strategyName) {
+          if (Array.isArray(strategies)) {
+            strategyName = strategies[0];
+          } else {
+            strategyName = strategies;
+          }
+        }
+
+        if (!strategyName) {
+          return reject(new Error(`You must provide an authentication 'strategy'`));
+        }
+
+        // Make sure `strategies` is an array, allowing authentication to pass through a chain of
         // strategies.  The first name to succeed, redirect, or error will halt
         // the chain.  Authentication failures will proceed through each strategy in
         // series, ultimately failing if all strategies fail.
@@ -34,81 +46,68 @@ export default function authenticate (options = {}) {
         // It is not feasible to construct a chain of multiple strategies that involve
         // redirection (for example both Facebook and Twitter), since the first one to
         // redirect will halt the chain.
-        if (request.body && request.body.strategy) {
-          strategies = [request.body.strategy];
-        } else if (Array.isArray(name)) {
-          strategies = name;
-        } else {
-          strategies = [name];
+        if (!Array.isArray(strategies)) {
+          strategies = [strategies];
         }
 
-        function attempt (index) {
-          const layer = strategies[index];
-
-          if (!layer) {
-            // If there isn't another strategy then they
-            // all failed and we'll return the first failure.
-            // TODO (EK): Support passing multiple failures
-            return resolve(failures[0]);
-          }
-
-          // Get the strategy, which will be used as prototype from which to create
-          // a new instance.  Action functions will then be bound to the strategy
-          // within the context of the HTTP request/response pair.
-          let prototype = passport._strategy(layer);
-
-          if (!prototype) {
-            return reject(new Error(`Unknown authentication strategy '${layer}'`));
-          }
-
-          // Implement required passport methods that
-          // can be called by a passport strategy.
-          let strategy = Object.create(prototype);
-
-          strategy.redirect = (url, status = 302) => {
-            debug(`'${layer}' authentication redirecting to`, url, status);
-            resolve({ redirect: true, url, status });
-          };
-
-          strategy.fail = (challenge, status) => {
-            debug(`Authentication strategy '${layer}' failed`, challenge, status);
-            failures.push({
-              fail: true,
-              challenge,
-              status
-            });
-
-            // We failed so attempt with next strategy
-            attempt(index + 1);
-          };
-
-          strategy.error = error => {
-            debug(`Error in '${layer}' authentication strategy`, error);
-            reject(error);
-          };
-
-          strategy.success = (data, payload) => {
-            debug(`'${layer}' authentication strategy succeeded`, data, payload);
-            resolve({
-              success: true,
-              data: {
-                [entity]: data,
-                payload
-              }
-            });
-          };
-
-          strategy.pass = () => {
-            debug(`Passing on '${layer}' authentication strategy`);
-            resolve();
-          };
-
-          debug('Passport request object', request);
-          strategy.authenticate(request, strategyOptions);
+        // Return an error if the client is trying to authenticate with a strategy
+        // that the server hasn't allowed for this authenticate call. This is important
+        // because it prevents the user from authenticating with a registered strategy
+        // that is not being allowed for this authenticate call.
+        if (!strategies.includes(strategyName)) {
+          return reject(new Error(`Invalid authentication strategy '${strategyName}'`));
         }
 
-        // Attempt to authenticate with first strategy
-        attempt(0);
+        // Get the strategy, which will be used as prototype from which to create
+        // a new instance.  Action functions will then be bound to the strategy
+        // within the context of the HTTP request/response pair.
+        let prototype = passport._strategy(strategyName);
+
+        if (!prototype) {
+          return reject(new Error(`Unknown authentication strategy '${strategyName}'`));
+        }
+
+        // Implement required passport methods that
+        // can be called by a passport strategy.
+        let strategy = Object.create(prototype);
+
+        strategy.redirect = (url, status = 302) => {
+          debug(`'${strategyName}' authentication redirecting to`, url, status);
+          resolve({ redirect: true, url, status });
+        };
+
+        strategy.fail = (challenge, status) => {
+          debug(`Authentication strategy '${strategyName}' failed`, challenge, status);
+          resolve({
+            fail: true,
+            challenge,
+            status
+          });
+        };
+
+        strategy.error = error => {
+          debug(`Error in '${strategyName}' authentication strategy`, error);
+          reject(error);
+        };
+
+        strategy.success = (data, payload) => {
+          debug(`'${strategyName}' authentication strategy succeeded`, data, payload);
+          resolve({
+            success: true,
+            data: {
+              [entity]: data,
+              payload
+            }
+          });
+        };
+
+        strategy.pass = () => {
+          debug(`Passing on '${strategyName}' authentication strategy`);
+          resolve();
+        };
+
+        debug('Passport request object', request);
+        strategy.authenticate(request, strategyOptions);
       });
     };
   };

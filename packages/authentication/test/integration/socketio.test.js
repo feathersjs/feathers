@@ -111,19 +111,19 @@ describe('Socket.io authentication', function () {
       });
 
       describe('when missing credentials', () => {
-        it('returns NotAuthenticated error', done => {
+        it('returns BadRequest error', done => {
           socket.emit('authenticate', { strategy: 'local' }, error => {
-            expect(error.code).to.equal(401);
+            expect(error.code).to.equal(400);
             done();
           });
         });
       });
 
-      describe('when missing strategy', () => {
-        it('returns BadRequest error', done => {
+      describe('when missing strategy and server strategy does not match', () => {
+        it('returns NotAuthenticated error', done => {
           delete data.strategy;
           socket.emit('authenticate', data, error => {
-            expect(error.code).to.equal(400);
+            expect(error.code).to.equal(401);
             done();
           });
         });
@@ -202,11 +202,12 @@ describe('Socket.io authentication', function () {
         });
       });
 
-      describe('when missing strategy', () => {
-        it('returns BadRequest error', done => {
+      describe('when missing strategy it uses the auth strategy specified on the server', () => {
+        it('returns an accessToken', done => {
           delete data.strategy;
-          socket.emit('authenticate', data, error => {
-            expect(error.code).to.equal(400);
+          socket.emit('authenticate', data, (error, response) => {
+            expect(error).to.equal(null);
+            expect(response.accessToken).to.not.equal(undefined);
             done();
           });
         });
