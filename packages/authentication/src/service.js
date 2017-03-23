@@ -59,6 +59,12 @@ export default function init (options) {
       successRedirect(),
       failureRedirect(options)
     );
+
+    const service = app.service(path);
+
+    if (typeof service.filter === 'function') {
+      service.filter(() => false);
+    }
   };
 }
 
