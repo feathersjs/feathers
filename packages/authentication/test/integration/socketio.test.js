@@ -67,7 +67,11 @@ describe('Socket.io authentication', function () {
       });
 
       describe('when using valid credentials', () => {
-        it('returns a valid access token', done => {
+        it('returns a valid access token, does not send real-time event', done => {
+          socket.once('authentication created', () =>
+            done(new Error('real-time events for authentication should not be emitted'))
+          );
+
           socket.emit('authenticate', data, (error, response) => {
             expect(error).to.not.equal(undefined);
             expect(response.accessToken).to.exist;
