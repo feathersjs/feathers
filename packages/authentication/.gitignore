@@ -38,3 +38,4 @@ yarn.lock
 # local options/storage for JetBrains WebStorm and Visual Studio 2017 IDE folder
 .idea/
 .vs/
+/.vscode

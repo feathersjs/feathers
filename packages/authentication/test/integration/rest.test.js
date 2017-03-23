@@ -435,6 +435,7 @@ describe('REST authentication', function () {
 
     beforeEach(() => {
       data = {
+        strategy: 'local',
         email: 'admin@feathersjs.com',
         password: 'admin'
       };
