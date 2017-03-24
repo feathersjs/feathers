@@ -89,15 +89,5 @@ describe('express:handler', () => {
         done();
       });
     });
-
-    describe('when failureRedirect is set', () => {
-      it('sets the redirect object on the request', done => {
-        options.failureRedirect = '/login';
-        handler(options)(req, res, () => {
-          expect(res.hook.data.__redirect).to.deep.equal({ status: 302, url: options.failureRedirect });
-          done();
-        });
-      });
-    });
   });
 });

@@ -30,13 +30,6 @@ export default function OAuthHandler (options = {}) {
       }
 
       next();
-    }).catch(error => {
-      if (options.failureRedirect) {
-        res.hook = { data: {} };
-        Object.defineProperty(res.hook.data, '__redirect', { value: { status: 302, url: options.failureRedirect } });
-      }
-
-      next(error);
-    });
+    }).catch(next);
   };
 }

@@ -5,6 +5,7 @@ import { formatter as defaultFormatter } from 'feathers-rest';
 import { omit, pick, makeUrl } from 'feathers-commons';
 import merge from 'lodash.merge';
 import defaultHandler from './express/handler';
+import defaultErrorHandler from './express/error-handler';
 import DefaultVerifier from './verifier';
 
 const debug = Debug('feathers-authentication-oauth2');
@@ -60,6 +61,7 @@ export default function init (options = {}) {
     const Verifier = options.Verifier || DefaultVerifier;
     const formatter = options.formatter || defaultFormatter;
     const handler = options.handler || defaultHandler(oauth2Settings);
+    const errorHandler = defaultErrorHandler(oauth2Settings);
 
     // register OAuth middleware
     debug(`Registering '${name}' Express OAuth middleware`);
@@ -68,6 +70,7 @@ export default function init (options = {}) {
       url.parse(oauth2Settings.callbackURL).pathname,
       auth.express.authenticate(name, oauth2Settings),
       handler,
+      errorHandler,
       auth.express.emitEvents(authSettings),
       auth.express.setCookie(authSettings),
       auth.express.successRedirect(),
