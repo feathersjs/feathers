@@ -46,9 +46,12 @@ export default function init (options = {}) {
     const oauth2Settings = merge({
       idField: `${name}Id`,
       path: `/auth/${name}`,
-      __oauth: true,
-      callbackURL: makeUrl(`/auth/${name}/callback`, app)
+      __oauth: true
     }, pick(authSettings, ...INCLUDE_KEYS), providerSettings, omit(options, ...EXCLUDE_KEYS));
+
+    // Set callback defaults based on provided path
+    oauth2Settings.callbackPath = oauth2Settings.callbackPath || `${oauth2Settings.path}/callback`;
+    oauth2Settings.callbackURL = oauth2Settings.callbackURL || makeUrl(oauth2Settings.callbackPath, app);
 
     if (!oauth2Settings.clientID) {
       throw new Error(`You must provide a 'clientID' in your authentication configuration or pass one explicitly`);
@@ -67,7 +70,7 @@ export default function init (options = {}) {
     debug(`Registering '${name}' Express OAuth middleware`);
     app.get(oauth2Settings.path, auth.express.authenticate(name));
     app.get(
-      url.parse(oauth2Settings.callbackURL).pathname,
+      oauth2Settings.callbackPath,
       auth.express.authenticate(name, oauth2Settings),
       handler,
       errorHandler,
