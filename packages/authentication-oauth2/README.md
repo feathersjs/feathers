@@ -61,6 +61,7 @@ This will pull from your global `auth` object in your config file. It will also 
 {
     idField: '<provider>Id', // The field to look up the entity by when logging in with the provider. Defaults to '<provider>Id' (ie. 'facebookId').
     path: '/auth/<provider>', // The route to register the middleware
+    callbackPath: '/auth/<provider>/callback', // The route to register the callback handler
     callbackURL: 'http(s)://hostame[:port]/auth/<provider>/callback', // The callback url. Will automatically take into account your host and port and whether you are in production based on your app environment to construct the url. (ie. in development http://localhost:3030/auth/facebook/callback)
     entity: 'user', // the entity that you are looking up
     service: 'users', // the service to look up the entity
@@ -98,7 +99,7 @@ An example of customizing the Verifier:
 import oauth2, { Verifier } from 'feathers-authentication-oauth2';
 
 class CustomVerifier extends Verifier {
-  // The verify function has the exact same inputs and 
+  // The verify function has the exact same inputs and
   // return values as a vanilla passport strategy
   verify(req, accessToken, refreshToken, profile, done) {
     // do your custom stuff. You can call internal Verifier methods
@@ -141,7 +142,7 @@ function customizeGithubProfile() {
     // If there is a github field they signed up or
     // signed in with github so let's pull the email. If
     if (hook.data.github) {
-      hook.data.email = hook.data.github.email; 
+      hook.data.email = hook.data.github.email;
     }
 
     // If you want to do something whenever any OAuth
