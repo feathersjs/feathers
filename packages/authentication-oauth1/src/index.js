@@ -45,9 +45,12 @@ export default function init (options = {}) {
       idField: `${name}Id`,
       path: `/auth/${name}`,
       session: true,
-      __oauth: true,
-      callbackURL: makeUrl(`/auth/${name}/callback`, app)
+      __oauth: true
     }, pick(authSettings, ...INCLUDE_KEYS), providerSettings, omit(options, ...EXCLUDE_KEYS));
+
+    // Set callback defaults based on provided path
+    oauth1Settings.callbackPath = oauth1Settings.callbackPath || `${oauth1Settings.path}/callback`;
+    oauth1Settings.callbackURL = oauth1Settings.callbackURL || makeUrl(oauth1Settings.callbackPath, app);
 
     if (!oauth1Settings.consumerKey) {
       throw new Error(`You must provide a 'consumerKey' in your authentication configuration or pass one explicitly`);
@@ -65,7 +68,7 @@ export default function init (options = {}) {
     debug(`Registering '${name}' Express OAuth middleware`);
     app.get(oauth1Settings.path, auth.express.authenticate(name));
     app.get(
-      url.parse(oauth1Settings.callbackURL).pathname,
+      oauth1Settings.callbackPath,
       // NOTE (EK): We register failure redirect here so that we can
       // retain the natural express middleware redirect ability like
       // you would have with vanilla passport.

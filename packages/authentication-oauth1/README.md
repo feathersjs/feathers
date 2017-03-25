@@ -57,6 +57,7 @@ This will set up session middleware and authentication pulling from your global 
 {
     idField: '<provider>Id', // The field to look up the entity by when logging in with the provider. Defaults to '<provider>Id' (ie. 'twitterId').
     path: '/auth/<provider>', // The route to register the middleware
+    callbackPath: '/auth/<provider>/callback', // The route to register the callback handler
     callbackURL: 'http(s)://hostame[:port]/auth/<provider>/callback', // The callback url. Will automatically take into account your host and port and whether you are in production based on your app environment to construct the url. (ie. in development http://localhost:3030/auth/twitter/callback)
     entity: 'user', // the entity that you are looking up
     service: 'users', // the service to look up the entity

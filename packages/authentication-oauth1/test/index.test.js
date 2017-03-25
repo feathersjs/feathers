@@ -132,6 +132,10 @@ describe('feathers-authentication-oauth1', () => {
         expect(args.path).to.equal(`/auth/${config.name}`);
       });
 
+      it('sets callbackPath', () => {
+        expect(args.callbackPath).to.equal(`/auth/${config.name}/callback`);
+      });
+
       it('sets callbackURL', () => {
         expect(args.callbackURL).to.equal(`http://localhost:3030/auth/${config.name}/callback`);
       });
@@ -201,6 +205,17 @@ describe('feathers-authentication-oauth1', () => {
       app.setup();
 
       expect(app.get).to.have.been.calledWith(`/auth/${config.name}/callback`);
+
+      app.get.restore();
+    });
+
+    it('registers custom express callback route', () => {
+      sinon.spy(app, 'get');
+      config.callbackPath = `/v1/api/auth/${config.name}/callback`
+      app.configure(oauth1(config));
+      app.setup();
+
+      expect(app.get).to.have.been.calledWith(config.callbackPath);
 
       app.get.restore();
     });
