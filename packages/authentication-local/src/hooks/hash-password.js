@@ -11,7 +11,7 @@ export default function hashPassword (options = {}) {
     }
 
     const app = hook.app;
-    const authOptions = app.get('auth') || {};
+    const authOptions = app.get('authentication') || {};
 
     options = merge({ passwordField: 'password' }, authOptions.local, options);
 
