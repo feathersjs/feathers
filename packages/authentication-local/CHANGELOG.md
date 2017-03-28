@@ -1,5 +1,16 @@
 # Change Log
 
+## [v0.3.4](https://github.com/feathersjs/feathers-authentication-local/tree/v0.3.4) (2017-03-28)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-local/compare/v0.3.3...v0.3.4)
+
+**Closed issues:**
+
+- Shouldn't it be `authentication` instead of the old `auth` there? [\#11](https://github.com/feathersjs/feathers-authentication-local/issues/11)
+
+**Merged pull requests:**
+
+- Fix default authentication config name [\#12](https://github.com/feathersjs/feathers-authentication-local/pull/12) ([marshallswain](https://github.com/marshallswain))
+
 ## [v0.3.3](https://github.com/feathersjs/feathers-authentication-local/tree/v0.3.3) (2017-01-27)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-local/compare/v0.3.2...v0.3.3)
 
@@ -10,7 +21,7 @@
 
 **Merged pull requests:**
 
-- Add support for dot notation, fix some whitespace [\#8](https://github.com/feathersjs/feathers-authentication-local/pull/8) ([theonlyelf](https://github.com/theonlyelf))
+- Add support for dot notation, fix some whitespace [\#8](https://github.com/feathersjs/feathers-authentication-local/pull/8) ([elfey](https://github.com/elfey))
 
 ## [v0.3.2](https://github.com/feathersjs/feathers-authentication-local/tree/v0.3.2) (2016-12-14)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-local/compare/v0.3.1...v0.3.2)
