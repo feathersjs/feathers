@@ -1,6 +1,8 @@
 'use strict';
 
 const { authenticate } = require('feathers-authentication').hooks;
+const commonHooks = require('feathers-hooks-common');
+
 <% if (authentication.strategies.indexOf('local') !== -1) { %>const { hashPassword } = require('feathers-authentication-local').hooks;<% } %>
 
 module.exports = {
@@ -15,7 +17,7 @@ module.exports = {
   },
 
   after: {
-    all: [],
+    all: [commonHooks.when(hook => hook.params.provider, commonHooks.discard('password'))],
     find: [],
     get: [],
     create: [],
