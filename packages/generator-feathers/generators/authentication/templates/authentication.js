@@ -21,7 +21,8 @@ module.exports = function() {
   <% oauthProviders.forEach(provider => { %>
   app.configure(oauth2(Object.assign({
     name: '<%= provider.name %>',
-    Strategy: <%= provider.strategyName %>
+    Strategy: <%= provider.strategyName %>,
+    successRedirect: '/'
   }, config.<%= provider.name %>)));
   <% }); %>
 
