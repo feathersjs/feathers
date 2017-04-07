@@ -22,9 +22,12 @@ export default function setCookie (authOptions = {}) {
     if (options.enabled && options.name) {
       const cookie = options.name;
 
-      // Only set the cookie if this was called after a service method and
-      // we weren't removing the token and we have a JWT access token.
-      if (res.hook && res.hook.method !== 'remove' && res.data && res.data.accessToken) {
+      // Don't set the cookie if this was called after removing the token.
+      if (res.hook && res.hook.method === 'remove') {
+        return next();
+      }
+      // Only set the cookie if we have a JWT access token.
+      if (res.data && res.data.accessToken) {
         // Clear out any old cookie since we are creating a new one
         debug(`Clearing old '${cookie}' cookie`);
         res.clearCookie(cookie);
