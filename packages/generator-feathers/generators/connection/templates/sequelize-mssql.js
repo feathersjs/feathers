@@ -3,7 +3,7 @@
 const url = require('url');
 const Sequelize = require('sequelize');
 
-module.exports = function() {
+module.exports = function () {
   const app = this;
   const connectionString = app.get('mssql');
   const connection = url.parse(connectionString);
@@ -26,7 +26,7 @@ module.exports = function() {
 
   app.set('mssqlClient', sequelize);
 
-  app.setup = function(...args) {
+  app.setup = function (...args) {
     const result = oldSetup.apply(this, args);
 
     // Set up data relationships

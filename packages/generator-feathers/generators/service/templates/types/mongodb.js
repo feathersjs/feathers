@@ -5,7 +5,7 @@ const createService = require('feathers-mongodb');
 const hooks = require('./<%= kebabName %>.hooks');
 const filters = require('./<%= kebabName %>.filters');
 
-module.exports = function() {
+module.exports = function () {
   const app = this;
   const paginate = app.get('paginate');
   const mongoClient = app.get('mongoClient');
@@ -20,10 +20,10 @@ module.exports = function() {
   mongoClient.then(db => {
     service.Model = db.collection('<%= kebabName %>');
   });
-  
+
   service.hooks(hooks);
 
-  if(service.filter) {
+  if (service.filter) {
     service.filter(filters);
   }
 };

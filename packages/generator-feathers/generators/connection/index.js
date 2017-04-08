@@ -6,13 +6,13 @@ const Generator = require('../../lib/generator');
 const j = require('../../lib/transform');
 
 module.exports = class ConnectionGenerator extends Generator {
-  constructor(args, opts) {
+  constructor (args, opts) {
     super(args, opts);
 
     this.dependencies = [];
   }
 
-  _transformCode(code) {
+  _transformCode (code) {
     const { database } = this.props;
 
     const ast = j(code);
@@ -34,7 +34,7 @@ module.exports = class ConnectionGenerator extends Generator {
     return ast.toSource();
   }
 
-  _getConfiguration() {
+  _getConfiguration () {
     const sqlPackages = {
       mariadb: 'mysql',
       mysql: 'mysql',
@@ -47,7 +47,7 @@ module.exports = class ConnectionGenerator extends Generator {
     const { connectionString, database, adapter } = this.props;
     const parsed = url.parse(connectionString);
 
-    switch(database) {
+    switch (database) {
     case 'nedb':
       this.dependencies.push('nedb');
       return connectionString.substring(7, connectionString.length);
@@ -99,11 +99,11 @@ module.exports = class ConnectionGenerator extends Generator {
     }
   }
 
-  _writeConfiguration() {
+  _writeConfiguration () {
     const { database } = this.props;
     const config = Object.assign({}, this.defaultConfig);
 
-    if(!config[database]) {
+    if (!config[database]) {
       config[database] = this._getConfiguration();
 
       this.conflicter.force = true;
@@ -114,7 +114,7 @@ module.exports = class ConnectionGenerator extends Generator {
     }
   }
 
-  prompting() {
+  prompting () {
     this.checkPackage();
 
     const databaseName = snakeCase(this.pkg.name);
@@ -141,7 +141,7 @@ module.exports = class ConnectionGenerator extends Generator {
           { name: 'SQLite', value: 'sqlite' },
           { name: 'SQL Server', value: 'mssql' }
         ],
-        when(current) {
+        when (current) {
           const answers = getProps(current);
           const { database, adapter } = answers;
 
@@ -149,7 +149,7 @@ module.exports = class ConnectionGenerator extends Generator {
             return false;
           }
 
-          switch(adapter) {
+          switch (adapter) {
           case 'nedb':
           case 'rethinkdb':
           case 'memory':
@@ -168,7 +168,7 @@ module.exports = class ConnectionGenerator extends Generator {
         type: 'list',
         name: 'adapter',
         message: 'Which database adapter would you like to use?',
-        default(current) {
+        default (current) {
           const answers = getProps(current);
           const { database } = answers;
 
@@ -178,7 +178,7 @@ module.exports = class ConnectionGenerator extends Generator {
 
           return 'sequelize';
         },
-        choices(current) {
+        choices (current) {
           const answers = getProps(current);
           const { database } = answers;
           const mongoOptions = [
@@ -197,7 +197,7 @@ module.exports = class ConnectionGenerator extends Generator {
           // It's an SQL DB
           return sqlOptions;
         },
-        when(current) {
+        when (current) {
           const answers = getProps(current);
           const { database, adapter } = answers;
 
@@ -205,7 +205,7 @@ module.exports = class ConnectionGenerator extends Generator {
             return false;
           }
 
-          switch(database) {
+          switch (database) {
           case 'nedb':
           case 'rethinkdb':
           case 'memory':
@@ -218,7 +218,7 @@ module.exports = class ConnectionGenerator extends Generator {
       {
         name: 'connectionString',
         message: 'What is the database connection string?',
-        default(current) {
+        default (current) {
           const answers = getProps(current);
           const { database } = answers;
           const defaultConnectionStrings = {
@@ -235,7 +235,7 @@ module.exports = class ConnectionGenerator extends Generator {
 
           return defaultConnectionStrings[database];
         },
-        when(current) {
+        when (current) {
           const answers = getProps(current);
           const { database } = answers;
           const connectionString = defaultConfig[database];
@@ -255,15 +255,14 @@ module.exports = class ConnectionGenerator extends Generator {
     });
   }
 
-  writing() {
+  writing () {
     let template;
     const { database, adapter } = this.props;
     const context = Object.assign({}, this.props);
 
     if (database === 'rethinkdb') {
       template = 'rethinkdb.js';
-    }
-    else if (adapter && adapter !== 'nedb') {
+    } else if (adapter && adapter !== 'nedb') {
       template = database === 'mssql' ? `${adapter}-mssql.js` : `${adapter}.js`;
     }
 
@@ -294,7 +293,7 @@ module.exports = class ConnectionGenerator extends Generator {
     });
   }
 
-  end() {
+  end () {
     const { database, connectionString } = this.props;
 
     // NOTE (EK): If this is the first time we set this up
@@ -304,7 +303,7 @@ module.exports = class ConnectionGenerator extends Generator {
       this.log();
       this.log(`Woot! We've set up your ${database} database connection!`);
 
-      switch(database) {
+      switch (database) {
       case 'mariadb':
       case 'mongodb':
       case 'mssql':

@@ -2,7 +2,7 @@
 
 const Sequelize = require('sequelize');
 
-module.exports = function() {
+module.exports = function () {
   const app = this;
   const connectionString = app.get('<%= database %>');
   const sequelize = new Sequelize(connectionString, {
@@ -16,7 +16,7 @@ module.exports = function() {
 
   app.set('sequelizeClient', sequelize);
 
-  app.setup = function(...args) {
+  app.setup = function (...args) {
     const result = oldSetup.apply(this, args);
 
     // Set up data relationships
