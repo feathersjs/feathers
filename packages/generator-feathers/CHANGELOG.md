@@ -1,5 +1,15 @@
 # Change Log
 
+## [v1.0.0-pre.7](https://github.com/feathersjs/generator-feathers/tree/v1.0.0-pre.7) (2017-04-08)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.0-pre.6...v1.0.0-pre.7)
+
+**Merged pull requests:**
+
+- Add restrictToOwner hook to generated users service [\#196](https://github.com/feathersjs/generator-feathers/pull/196) ([daffl](https://github.com/daffl))
+- Friendly updates to the generator [\#195](https://github.com/feathersjs/generator-feathers/pull/195) ([marshallswain](https://github.com/marshallswain))
+- Add a successRedirect by default [\#194](https://github.com/feathersjs/generator-feathers/pull/194) ([marshallswain](https://github.com/marshallswain))
+- Adding hook to discard password to the users service [\#192](https://github.com/feathersjs/generator-feathers/pull/192) ([daffl](https://github.com/daffl))
+
 ## [v1.0.0-pre.6](https://github.com/feathersjs/generator-feathers/tree/v1.0.0-pre.6) (2017-03-16)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.0-pre.5...v1.0.0-pre.6)
 
