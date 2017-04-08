@@ -129,7 +129,11 @@ module.exports = class AuthGenerator extends Generator {
   }
 
   writing() {
-    const dependencies = [ 'feathers-authentication@pre', 'feathers-authentication-jwt' ];
+    const dependencies = [
+      'feathers-authentication',
+      'feathers-authentication-hooks',
+      'feathers-authentication-jwt'
+    ];
     const context = Object.assign({
       kebabEntity: _.kebabCase(this.props.entity),
       camelEntity: _.camelCase(this.props.entity),
