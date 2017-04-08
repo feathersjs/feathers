@@ -5,7 +5,7 @@ const { kebabCase, camelCase } = require('lodash');
 const j = require('../../lib/transform');
 
 module.exports = class MiddlewareGenerator extends Generator {
-  prompting() {
+  prompting () {
     this.checkPackage();
 
     const prompts = [
@@ -28,7 +28,7 @@ module.exports = class MiddlewareGenerator extends Generator {
     });
   }
 
-  _transformCode(code) {
+  _transformCode (code) {
     const { props } = this;
     const ast = j(code);
     const useNotFound = ast.findExpressionStatement('use', 'notFound');
@@ -36,11 +36,11 @@ module.exports = class MiddlewareGenerator extends Generator {
       .closest(j.ExpressionStatement);
     const requireCall = `const ${props.camelName} = require('./${props.kebabName}');`;
 
-    if(useNotFound.length === 0) {
+    if (useNotFound.length === 0) {
       throw new Error(`Could not find 'app.use(notFound())' before which to insert the new middleware. Did you modify ${this.libDirectory}/middleware/index.js?`);
     }
 
-    if(mainExpression.length !== 1) {
+    if (mainExpression.length !== 1) {
       throw new Error(`${this.libDirectory}/middleware/index.js seems to have more than one function declaration and we can not register the new middleware. Did you modify it?`);
     }
 
@@ -52,12 +52,12 @@ module.exports = class MiddlewareGenerator extends Generator {
     return ast.toSource();
   }
 
-  writing() {
+  writing () {
     const context = this.props;
     const mainFile = this.destinationPath(this.libDirectory, 'middleware', `${context.kebabName}.js`);
 
     // Do not run code transformations if the middleware file already exists
-    if(!this.fs.exists(mainFile)) {
+    if (!this.fs.exists(mainFile)) {
       const middlewarejs = this.destinationPath(this.libDirectory, 'middleware', 'index.js');
       const transformed = this._transformCode(
         this.fs.read(middlewarejs).toString()

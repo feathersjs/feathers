@@ -1,22 +1,22 @@
 'use strict';
 
-const randomstring = require('randomstring');
+const crypto = require('crypto');
 const Generator = require('../../lib/generator');
 
 module.exports = class SecretGenerator extends Generator {
-  constructor(args, opts) {
+  constructor (args, opts) {
     super(args, opts);
   }
 
-  prompting() {}
+  prompting () {}
 
-  writing() {
+  writing () {
     this.props = {
-      secret: randomstring.generate(64)
+      secret: crypto.randomBytes(256).toString('hex')
     };
   }
 
-  end() {
+  end () {
     const { secret } = this.props;
 
     this.log();

@@ -7,8 +7,8 @@ const { kebabCase, camelCase } = require('lodash');
 const j = require('../../lib/transform');
 
 module.exports = class HookGenerator extends Generator {
-  _listDirectories(... args) {
-    const serviceDir = this.destinationPath(... args);
+  _listDirectories (...args) {
+    const serviceDir = this.destinationPath(...args);
     const files = fs.readdirSync(serviceDir);
 
     return files.filter(current =>
@@ -16,7 +16,7 @@ module.exports = class HookGenerator extends Generator {
     );
   }
 
-  _transformHookFile(code, moduleName) {
+  _transformHookFile (code, moduleName) {
     const { type, methods, camelName } = this.props;
     const hookRequire = `const ${camelName} = require('${moduleName}');`;
 
@@ -24,7 +24,7 @@ module.exports = class HookGenerator extends Generator {
     const hookDefinitions = ast.find(j.ObjectExpression)
       .closest(j.ExpressionStatement);
 
-    if(hookDefinitions.length !== 1) {
+    if (hookDefinitions.length !== 1) {
       throw new Error(`Could not find the hooks definition object while adding ${moduleName}`);
     }
 
@@ -37,16 +37,16 @@ module.exports = class HookGenerator extends Generator {
     return ast.toSource();
   }
 
-  _addToService(serviceName, hookName) {
+  _addToService (serviceName, hookName) {
     let hooksFile = this.destinationPath(this.libDirectory, 'services', serviceName, `${serviceName}.hooks.js`);
     let moduleName = `../../${hookName}`;
 
-    if(serviceName === '__app') {
+    if (serviceName === '__app') {
       hooksFile = this.destinationPath(this.libDirectory, 'app.hooks.js');
       moduleName = `./${hookName}`;
     }
 
-    if(!this.fs.exists(hooksFile)) {
+    if (!this.fs.exists(hooksFile)) {
       throw new Error(`Can not add hook to the ${serviceName} hooks file ${hooksFile}. It does not exist.`);
     }
 
@@ -56,7 +56,7 @@ module.exports = class HookGenerator extends Generator {
     this.fs.write(hooksFile, transformed);
   }
 
-  prompting() {
+  prompting () {
     this.checkPackage();
 
     const services = this._listDirectories(this.libDirectory, 'services');
@@ -84,13 +84,13 @@ module.exports = class HookGenerator extends Generator {
         type: 'checkbox',
         name: 'services',
         message: 'What service(s) should this hook be for (select none to add it yourself)?\n',
-        choices() {
+        choices () {
           return [{
             name: 'Application wide (all services)',
             value: '__app'
           }].concat(services.map(value => ({ value })));
         },
-        when(answers) {
+        when (answers) {
           return answers.type !== null;
         }
       }, {
@@ -114,11 +114,11 @@ module.exports = class HookGenerator extends Generator {
             value: 'remove'
           }
         ],
-        when(answers) {
+        when (answers) {
           return answers.type !== null && answers.services.length;
         },
-        validate(methods) {
-          if(methods.indexOf('all') !== -1 && methods.length !== 1) {
+        validate (methods) {
+          if (methods.indexOf('all') !== -1 && methods.length !== 1) {
             return 'Select applicable methods or \'all\', not both.';
           }
 
@@ -135,13 +135,13 @@ module.exports = class HookGenerator extends Generator {
     });
   }
 
-  writing() {
+  writing () {
     const context = Object.assign({
       libDirectory: this.libDirectory
     }, this.props);
     const mainFile = this.destinationPath(this.libDirectory, 'hooks', `${context.kebabName}.js`);
 
-    if(!this.fs.exists(mainFile) && context.type) {
+    if (!this.fs.exists(mainFile) && context.type) {
       this.props.services.forEach(serviceName =>
         this._addToService(serviceName, `hooks/${context.kebabName}`)
       );

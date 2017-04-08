@@ -6,7 +6,7 @@ const createModel = require('../../models/<%= modelName %>');<% } %>
 const hooks = require('./<%= kebabName %>.hooks');
 const filters = require('./<%= kebabName %>.filters');
 
-module.exports = function() {
+module.exports = function () {
   const app = this;<% if (modelName) { %>
   const Model = createModel(app);<% } %>
   const paginate = app.get('paginate');

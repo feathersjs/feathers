@@ -3,9 +3,18 @@
 const Generator = require('../../lib/generator');
 const path = require('path');
 const makeConfig = require('./configs');
+const cmd = require('child_process').execSync;
+
+var yarnInstalled;
+try {
+  cmd('yarn bin').toString();
+  yarnInstalled = true;
+} catch (err) {
+  yarnInstalled = false;
+}
 
 module.exports = class AppGenerator extends Generator {
-  constructor(args, opts) {
+  constructor (args, opts) {
     super(args, opts);
 
     this.props = {
@@ -17,7 +26,7 @@ module.exports = class AppGenerator extends Generator {
     this.dependencies = [
       'feathers',
       'feathers-hooks',
-      'feathers-hooks-common',
+      'feathers-hooks-common@pre',
       'feathers-errors',
       'feathers-configuration',
       'serve-favicon',
@@ -36,7 +45,7 @@ module.exports = class AppGenerator extends Generator {
     ];
   }
 
-  prompting() {
+  prompting () {
     const dependencies = this.dependencies.concat(this.devDependencies)
       .concat(['feathers-rest', 'feathers-socketio', 'feathers-primus']);
     const prompts = [{
@@ -44,7 +53,7 @@ module.exports = class AppGenerator extends Generator {
       message: 'Project name',
       when: !this.pkg.name,
       default: this.props.name,
-      validate(input) {
+      validate (input) {
         // The project name can not be the same as any of the dependencies
         // we are going to install
         const isSelfReferential = dependencies.some(dependency => {
@@ -55,7 +64,7 @@ module.exports = class AppGenerator extends Generator {
           return dependencyName === input;
         });
 
-        if(isSelfReferential) {
+        if (isSelfReferential) {
           return `Your project can not be named '${input}' because the '${input}' package will be installed as a project dependency.`;
         }
 
@@ -74,7 +83,7 @@ module.exports = class AppGenerator extends Generator {
       name: 'packager',
       type: 'list',
       message: 'Which package manager are you using (has to be installed globally)?',
-      default: 'npm@>= 3.0.0',
+      default: yarnInstalled ? 'yarn@>= 0.18.0' : 'npm@>= 3.0.0',
       choices: [{
         name: 'npm',
         value: 'npm@>= 3.0.0'
@@ -98,8 +107,8 @@ module.exports = class AppGenerator extends Generator {
         name: 'Realtime via Primus',
         value: 'primus',
       }],
-      validate(input) {
-        if(input.indexOf('primus') !== -1 && input.indexOf('socketio') !== -1) {
+      validate (input) {
+        if (input.indexOf('primus') !== -1 && input.indexOf('socketio') !== -1) {
           return 'You can only pick SocketIO or Primus, not both.';
         }
 
@@ -112,11 +121,11 @@ module.exports = class AppGenerator extends Generator {
     });
   }
 
-  writing() {
+  writing () {
     const props = this.props;
     const pkg = this.pkg = makeConfig.package(this);
     const context = Object.assign({}, props, {
-      hasProvider(name) {
+      hasProvider (name) {
         return props.providers.indexOf(name) !== -1;
       }
     });
@@ -157,7 +166,7 @@ module.exports = class AppGenerator extends Generator {
     );
   }
 
-  install() {
+  install () {
     this.props.providers.forEach(
       provider => this.dependencies.push(`feathers-${provider}`)
     );

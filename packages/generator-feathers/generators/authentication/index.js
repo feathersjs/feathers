@@ -2,7 +2,7 @@
 
 const _ = require('lodash');
 const j = require('../../lib/transform');
-const randomstring = require('randomstring');
+const crypto = require('crypto');
 
 const Generator = require('../../lib/generator');
 const OAUTH2_STRATEGY_MAPPINGS = {
@@ -68,22 +68,40 @@ module.exports = class AuthGenerator extends Generator {
     const config = Object.assign({}, this.defaultConfig);
 
     config.authentication = {
-      secret: randomstring.generate(64),
+      secret: crypto.randomBytes(256).toString('hex'),
       strategies: [ 'jwt' ],
       path: '/authentication',
-      service: context.kebabEntity
+      service: context.kebabEntity,
+      jwt: {
+        header: { type: 'access' },
+        audience: 'https://yourdomain.com',
+        subject: 'anonymous',
+        issuer: 'feathers',
+        algorithm: 'HS256',
+        expiresIn: '1d'
+      }
     };
 
     if (context.strategies.indexOf('local') !== -1) {
       config.authentication.strategies.push('local');
+      config.authentication.local = {
+        entity: 'user',
+        service: 'users',
+        usernameField: 'email',
+        passwordField: 'password'
+      };
     }
+
+    let includesOAuth = false;
 
     context.strategies.forEach(strategy => {
       if (OAUTH2_STRATEGY_MAPPINGS[strategy]) {
         const strategyConfig = {
           clientID: `your ${strategy} client id`,
-          clientSecret: `your ${strategy} client secret`
+          clientSecret: `your ${strategy} client secret`,
+          successRedirect: '/'
         };
+        includesOAuth = true;
 
         if (strategy === 'facebook') {
           strategyConfig.scope = ['public_profile', 'email'];
@@ -93,6 +111,15 @@ module.exports = class AuthGenerator extends Generator {
         config.authentication[strategy] = strategyConfig;
       }
     });
+
+    if (includesOAuth) {
+      config.authentication.cookie = {
+        enabled: true,
+        name: 'feathers-jwt',
+        httpOnly: false,
+        secure: false
+      };
+    }
 
     this.conflicter.force = true;
     this.fs.writeJSON(

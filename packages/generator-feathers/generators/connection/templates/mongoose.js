@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 
-module.exports = function() {
+module.exports = function () {
   const app = this;
 
   mongoose.connect(app.get('mongodb'));
