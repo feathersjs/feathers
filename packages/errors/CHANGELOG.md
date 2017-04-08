@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.6.3](https://github.com/feathersjs/feathers-errors/tree/v2.6.3) (2017-04-08)
+[Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.6.2...v2.6.3)
+
+**Closed issues:**
+
+- Make options the same as res.format [\#37](https://github.com/feathersjs/feathers-errors/issues/37)
+
+**Merged pull requests:**
+
+- fix typescript definitions with noImplicitAny [\#69](https://github.com/feathersjs/feathers-errors/pull/69) ([JVirant](https://github.com/JVirant))
+
 ## [v2.6.2](https://github.com/feathersjs/feathers-errors/tree/v2.6.2) (2017-03-16)
 [Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.6.1...v2.6.2)
 
