@@ -70,23 +70,23 @@ declare namespace FeathersErrors {
 
 declare namespace FeathersErrors {
   interface ErrorContainer {
-    FeathersError
-    BadRequest
-    NotAuthenticated
-    PaymentError
-    Forbidden
-    NotFound
-    MethodNotAllowed
-    NotAcceptable
-    Timeout
-    Conflict
-    LengthRequired
-    Unprocessable
-    TooManyRequests
-    GeneralError
-    NotImplemented
-    BadGateway
-    Unavailable
+    FeathersError: FeathersErrors.FeathersError;
+    BadRequest: FeathersErrors.BadRequest;
+    NotAuthenticated: FeathersErrors.NotAuthenticated;
+    PaymentError: FeathersErrors.PaymentError;
+    Forbidden: FeathersErrors.Forbidden;
+    NotFound: FeathersErrors.NotFound;
+    MethodNotAllowed: FeathersErrors.MethodNotAllowed;
+    NotAcceptable: FeathersErrors.NotAcceptable;
+    Timeout: FeathersErrors.Timeout;
+    Conflict: FeathersErrors.Conflict;
+    LengthRequired: FeathersErrors.LengthRequired;
+    Unprocessable: FeathersErrors.Unprocessable;
+    TooManyRequests: FeathersErrors.TooManyRequests;
+    GeneralError: FeathersErrors.GeneralError;
+    NotImplemented: FeathersErrors.NotImplemented;
+    BadGateway: FeathersErrors.BadGateway;
+    Unavailable: FeathersErrors.Unavailable;
   }
 
   function convert(error: any): FeathersError
