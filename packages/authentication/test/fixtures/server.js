@@ -20,10 +20,29 @@ const User = {
 export default function (settings, socketProvider) {
   const app = feathers();
 
-  app.configure(rest())
-    .configure(socketProvider === 'socketio' ? socketio() : primus({
+  let _provider;
+  if (socketProvider === 'socketio') {
+    _provider = socketio((io) => {
+      io.use((socket, next) => {
+        socket.feathers.data = 'Hello world';
+        next();
+      });
+    });
+  } else {
+    _provider = primus({
       transformer: 'websockets'
-    }))
+    }, function (primus) {
+      // Set up Primus authorization here
+      primus.authorize(function (req, done) {
+        req.feathers.data = 'Hello world';
+
+        done();
+      });
+    });
+  }
+
+  app.configure(rest())
+    .configure(_provider)
     .configure(hooks())
     .use(bodyParser.json())
     .use(bodyParser.urlencoded({ extended: true }))
