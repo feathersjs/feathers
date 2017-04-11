@@ -1,5 +1,14 @@
 # Change Log
 
+## [v2.0.0](https://github.com/feathersjs/feathers-cli/tree/v2.0.0) (2017-04-11)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.0-pre.3...v2.0.0)
+
+**Closed issues:**
+
+- One-file-per-service [\#76](https://github.com/feathersjs/feathers-cli/issues/76)
+- feathers not recognized as an internal or external command [\#74](https://github.com/feathersjs/feathers-cli/issues/74)
+- The CLI is using a feathers-authentication version \< v0.8.0,  which is causing issues with mongodb + oatuh0 [\#72](https://github.com/feathersjs/feathers-cli/issues/72)
+
 ## [v2.0.0-pre.3](https://github.com/feathersjs/feathers-cli/tree/v2.0.0-pre.3) (2017-03-16)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.0-pre.2...v2.0.0-pre.3)
 
