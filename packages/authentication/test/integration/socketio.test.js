@@ -15,6 +15,12 @@ describe('Socket.io authentication', function () {
     secret: 'supersecret',
     jwt: { expiresIn: '500ms' }
   }, 'socketio');
+  const hook = sinon.spy(function (hook) {});
+  app.service('authentication').hooks({
+    before: {
+      create: [ hook ]
+    }
+  });
 
   let server;
   let socket;
@@ -49,6 +55,10 @@ describe('Socket.io authentication', function () {
     socket = io(baseURL);
   });
 
+  afterEach(() => {
+    hook.reset();
+  });
+
   after(() => {
     expiringServer.close();
     server.close();
@@ -79,6 +89,7 @@ describe('Socket.io authentication', function () {
               expect(payload).to.exist;
               expect(payload.iss).to.equal('feathers');
               expect(payload.userId).to.equal(0);
+              expect(hook).to.be.calledWith(sinon.match({ params: { data: 'Hello world' } }));
               done();
             });
           });

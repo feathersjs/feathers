@@ -55,13 +55,13 @@ export default function setupSocketHandler (app, options, { feathersParams, prov
 
     const authenticate = function (data, callback = () => {}) {
       const { strategy } = data;
-      socket._feathers = {
+      socket._feathers = Object.assign({
         query: {},
         provider: 'socketio',
         headers: {},
         session: {},
         cookies: {}
-      };
+      }, feathersParams(socket));
 
       const strategyOptions = app.passport.options(strategy);
 
