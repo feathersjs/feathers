@@ -279,23 +279,16 @@ For the JWT strategy, this hook has different behavior from the old hooks: it wi
 
 ### Removed Hooks
 
-We have removed all of the old authentication hooks. If you still need these they have been moved to the [feathers-legacy-authentication-hooks](https://github.com/feathersjs/feathers-legacy-authentication-hooks) repo and are deprecated.
+We have removed all of the old authentication hooks. If you still need these they have been moved to the [feathers-authentication-hooks](https://github.com/feathersjs/feathers-authentication-hooks) repo and some of them have been deprecated.
 
 The following hooks have been removed:
 
-- `associateCurrentUser` -> left to developer
-- `queryWithCurrentUser` -> left to developer
-- `restrictToOwner` -> use new `feathers-permissions` plugin
-- `restrictToRoles` -> use new `feathers-permissions` plugin
 - `verifyOrRestrict` -> use new `feathers-permissions` plugin
 - `populateOrRestrict` -> use new `feathers-permissions` plugin
-- `hasRoleOrRestrict` -> use new `feathers-permissions` plugin
-- `restrictToAuthenticated` -> use new `feathers-permissions` plugin
 - `hashPassword` -> has been moved to `feathers-authentication-local` **This is important.**
 - `populateUser` -> use new `populate` hook in `feathers-hooks-common`
 - `verifyToken` -> use new `feathers-authentication-jwt` plugin to easily validate a JWT access token. You can also now call `app.passport.verifyJWT` anywhere in your app to do it explicitly.
 
-**We will no longer be supporting these** but have published them as `feathers-legacy-authentication-hooks` to ease migration. You are highly encouraged to migrate to the much more powerful and flexible [feathers-permissions](https://github.com/feathersjs/feathers-permissions) plugin.
 
 **The Old Way (< v0.8.0)**
 
