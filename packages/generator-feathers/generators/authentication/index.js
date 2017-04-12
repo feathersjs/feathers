@@ -108,6 +108,10 @@ module.exports = class AuthGenerator extends Generator {
           strategyConfig.profileFields = ['id', 'displayName', 'first_name', 'last_name', 'email', 'gender', 'profileUrl', 'birthday', 'picture', 'permissions'];
         }
 
+        if (strategy === 'google') {
+          strategyConfig.scope = ['profile openid email'];
+        }
+
         config.authentication[strategy] = strategyConfig;
       }
     });
