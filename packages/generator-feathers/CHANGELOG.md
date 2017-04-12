@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.0.2](https://github.com/feathersjs/generator-feathers/tree/v1.0.2) (2017-04-12)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.1...v1.0.2)
+
+## [v1.0.1](https://github.com/feathersjs/generator-feathers/tree/v1.0.1) (2017-04-12)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.0...v1.0.1)
+
+**Closed issues:**
+
+- Unexpected token on app generate [\#199](https://github.com/feathersjs/generator-feathers/issues/199)
+
+**Merged pull requests:**
+
+- add default scope for google. fix \#14 [\#197](https://github.com/feathersjs/generator-feathers/pull/197) ([iamso](https://github.com/iamso))
+
 ## [v1.0.0](https://github.com/feathersjs/generator-feathers/tree/v1.0.0) (2017-04-11)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.0-pre.7...v1.0.0)
 
