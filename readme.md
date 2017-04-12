@@ -2,6 +2,8 @@
 
 ## An open source REST and realtime API layer for modern applications.
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/feathersjs/feathers.png?branch=master)](https://travis-ci.org/feathersjs/feathers)
 [![Code Climate](https://codeclimate.com/github/feathersjs/feathers.png)](https://codeclimate.com/github/feathersjs/feathers)
 [![Test Coverage](https://codeclimate.com/github/feathersjs/feathers/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers/coverage)
