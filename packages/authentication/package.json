@@ -64,7 +64,7 @@
     "lodash.merge": "^4.6.0",
     "lodash.omit": "^4.5.0",
     "lodash.pick": "^4.4.0",
-    "ms": "^0.7.1",
+    "ms": "^1.0.0",
     "passport": "^0.3.2"
   },
   "devDependencies": {
@@ -89,13 +89,13 @@
     "mocha": "^3.0.2",
     "nsp": "^2.6.1",
     "passport-strategy": "^1.0.0",
-    "primus": "^6.0.5",
+    "primus": "^7.0.0",
     "rimraf": "^2.5.4",
-    "sinon": "^1.17.6",
+    "sinon": "^2.1.0",
     "sinon-chai": "^2.8.0",
-    "semistandard": "^9.1.0",
+    "semistandard": "^9.0.0",
     "socket.io-client": "^1.4.8",
     "superagent": "^3.0.0",
-    "ws": "^1.1.1"
+    "ws": "^2.2.3"
   }
 }
