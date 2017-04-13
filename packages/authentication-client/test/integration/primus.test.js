@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 import hooks from 'feathers-hooks';
 import feathers from 'feathers/client';
 import primus from 'feathers-primus/client';
