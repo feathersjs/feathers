@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 import feathers from 'feathers';
