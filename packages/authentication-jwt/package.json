@@ -67,15 +67,15 @@
     "feathers": "^2.0.2",
     "feathers-authentication": "^1.0.0",
     "feathers-hooks": "^1.6.1",
-    "feathers-memory": "^0.8.1",
+    "feathers-memory": "^1.1.0",
     "feathers-rest": "^1.5.2",
     "feathers-socketio": "^1.4.2",
     "istanbul": "^1.1.0-alpha.1",
     "jsonwebtoken": "^7.1.9",
     "mocha": "^3.1.2",
     "rimraf": "^2.5.4",
-    "semistandard": "^9.1.0",
-    "sinon": "^1.17.6",
+    "semistandard": "^10.0.0",
+    "sinon": "^2.1.0",
     "sinon-chai": "^2.8.0"
   }
 }

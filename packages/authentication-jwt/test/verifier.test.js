@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 import feathers from 'feathers';
 import authentication from 'feathers-authentication';
 import { Verifier } from '../src';
