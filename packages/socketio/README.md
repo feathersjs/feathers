@@ -1,5 +1,7 @@
 # feathers-socketio
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-socketio.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/feathersjs/feathers-socketio.png?branch=master)](https://travis-ci.org/feathersjs/feathers-socketio)
 [![Code Climate](https://codeclimate.com/github/feathersjs/feathers-socketio/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/feathers-socketio)
 [![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-socketio/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-socketio/coverage)
