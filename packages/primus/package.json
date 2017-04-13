@@ -60,7 +60,7 @@
   "dependencies": {
     "debug": "^2.2.0",
     "feathers-socket-commons": "^2.0.0",
-    "primus": "^6.0.5",
+    "primus": "^7.0.0",
     "primus-emitter": "^3.1.1",
     "uberproto": "^1.2.0"
   },
@@ -79,7 +79,7 @@
     "lodash": "^4.0.1",
     "mocha": "^3.0.0",
     "rimraf": "^2.5.4",
-    "semistandard": "^9.1.0",
+    "semistandard": "^10.0.0",
     "uws": "^0.14.0",
     "ws": "^2.0.0"
   }
