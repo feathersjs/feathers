@@ -65,6 +65,6 @@
     "mocha": "^3.0.0",
     "nsp": "^2.2.0",
     "rimraf": "^2.5.4",
-    "semistandard": "^9.1.0"
+    "semistandard": "^10.0.0"
   }
 }
