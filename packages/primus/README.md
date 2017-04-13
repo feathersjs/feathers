@@ -1,5 +1,7 @@
 # feathers-primus
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-primus.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/feathersjs/feathers-primus.png?branch=master)](https://travis-ci.org/feathersjs/feathers-primus)
 [![Code Climate](https://codeclimate.com/github/feathersjs/feathers-primus/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/feathers-primus)
 [![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-primus/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-primus/coverage)
