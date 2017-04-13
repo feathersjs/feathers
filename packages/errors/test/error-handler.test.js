@@ -1,4 +1,5 @@
-/* eslint-disable handle-callback-err  */
+/* eslint-disable handle-callback-err, no-unused-expressions */
+
 if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 import feathers from 'feathers';

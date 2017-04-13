@@ -1,5 +1,7 @@
 # feathers-errors
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-errors.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/feathersjs/feathers-errors.png?branch=master)](https://travis-ci.org/feathersjs/feathers-errors)
 [![Code Climate](https://codeclimate.com/github/feathersjs/feathers-errors.png)](https://codeclimate.com/github/feathersjs/feathers-errors)
 [![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-errors/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-errors/coverage)
