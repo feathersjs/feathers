@@ -1,5 +1,7 @@
 # Feathers CLI
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-cli.svg)](https://greenkeeper.io/)
+
 > The command line interface for Feathers applications
 
 [![Build Status](https://img.shields.io/travis/feathersjs/feathers-cli/master.svg)](https://travis-ci.org/feathersjs/feathers-cli)
