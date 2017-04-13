@@ -1,5 +1,7 @@
 # feathers-authentication-client
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-authentication-client.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/feathersjs/feathers-authentication-client.png?branch=master)](https://travis-ci.org/feathersjs/feathers-authentication-client)
 [![Code Climate](https://codeclimate.com/github/feathersjs/feathers-authentication-client/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-client)
 [![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-authentication-client/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-client/coverage)
