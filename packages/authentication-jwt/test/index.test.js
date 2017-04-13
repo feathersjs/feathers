@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 import JWT from 'jsonwebtoken';
 import feathers from 'feathers';
 import memory from 'feathers-memory';
