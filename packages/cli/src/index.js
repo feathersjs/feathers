@@ -1,6 +1,7 @@
 import yeoman from 'yeoman-environment';
 import program from 'commander';
 import meta from 'generator-feathers/meta';
+import semver from 'semver';
 
 const env = yeoman.createEnv();
 
@@ -22,6 +23,11 @@ module.exports = function(argv, generatorOptions = {
 
   program.version(require('../package.json').version)
     .usage('generate [type]');
+
+  if(!semver.satisfies(process.version, '>= 6.0.0')) {
+    console.error('The Feathers CLI and generated application requires Node v6.0.0 or later.');
+    return process.exit(1);
+  }
 
   program.command('generate [type]')
     .alias('g')
