@@ -72,7 +72,7 @@
     "eslint-if-supported": "^1.0.1",
     "feathers": "^2.0.0",
     "feathers-commons": "^0.8.0",
-    "feathers-hooks": "^1.8.0",
+    "feathers-hooks": "^2.0.0",
     "feathers-memory": "^1.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "lodash": "^4.0.1",
