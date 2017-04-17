@@ -1,5 +1,17 @@
 # Change Log
 
+## [v1.0.3](https://github.com/feathersjs/generator-feathers/tree/v1.0.3) (2017-04-17)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.2...v1.0.3)
+
+**Closed issues:**
+
+- Use JSCodeshift without error message [\#198](https://github.com/feathersjs/generator-feathers/issues/198)
+
+**Merged pull requests:**
+
+- Use our fork of JSCodeshift for now to avoid installation error messages [\#201](https://github.com/feathersjs/generator-feathers/pull/201) ([daffl](https://github.com/daffl))
+- Add Greenkeeper badge 🌴 [\#200](https://github.com/feathersjs/generator-feathers/pull/200) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+
 ## [v1.0.2](https://github.com/feathersjs/generator-feathers/tree/v1.0.2) (2017-04-12)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.1...v1.0.2)
 
