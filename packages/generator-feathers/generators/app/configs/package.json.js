@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = function(generator) {
   const { props } = generator;
   const lib = props.src;

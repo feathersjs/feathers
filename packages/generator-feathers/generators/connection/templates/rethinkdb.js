@@ -1,5 +1,3 @@
-'use strict';
-
 const rethinkdbdash = require('rethinkdbdash');
 
 module.exports = function () {

@@ -1,5 +1,3 @@
-'use strict';
-
 // A hook that logs service method before, after and error
 const logger = require('winston');
 
