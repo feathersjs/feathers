@@ -1,5 +1,3 @@
-'use strict';
-
 const authentication = require('feathers-authentication');
 const jwt = require('feathers-authentication-jwt');
 <% if(strategies.indexOf('local') !== -1) { %>const local = require('feathers-authentication-local');<% } %>

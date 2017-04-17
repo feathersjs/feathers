@@ -1,4 +1,4 @@
-const j = require('jscodeshift');
+const j = require('@feathersjs/jscodeshift');
 
 j.registerMethods({
   insertInArray(ast) {

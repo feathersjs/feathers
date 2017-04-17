@@ -1,5 +1,3 @@
-'use strict';
-
 const { snakeCase } = require('lodash');
 const url = require('url');
 const Generator = require('../../lib/generator');

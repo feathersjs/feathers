@@ -1,5 +1,3 @@
-'use strict';
-
 const url = require('url');
 const Sequelize = require('sequelize');
 

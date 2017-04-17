@@ -1,5 +1,3 @@
-'use strict';
-
 const assert = require('assert');
 const j = require('../lib/transform');
 
@@ -15,15 +13,13 @@ describe('transforms', () => {
     `;
 
     const result = j(code).findConfigure('authentication').insertBefore('app.configure(muhkuh);').toSource();
+    
+    assert.equal(result, `const feathers = require('feathers');
 
-    assert.equal(result, `
-      const feathers = require('feathers');
+const app = feathers();
 
-      const app = feathers();
-
-      app.configure(thing);
-      app.configure(muhkuh);
-      app.configure(authentication);
-    `);
+app.configure(thing);
+app.configure(muhkuh);
+app.configure(authentication);`);
   });
 });

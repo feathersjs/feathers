@@ -1,5 +1,3 @@
-'use strict';
-
 <% if (requiresAuth) { %>const { authenticate } = require('feathers-authentication').hooks;<% } %>
 
 module.exports = {

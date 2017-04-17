@@ -1,5 +1,3 @@
-'use strict';
-
 const handler = require('feathers-errors/handler');
 const notFound = require('feathers-errors/not-found');
 

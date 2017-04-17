@@ -1,5 +1,3 @@
-'use strict';
-
 const Generator = require('../../lib/generator');
 const path = require('path');
 const makeConfig = require('./configs');

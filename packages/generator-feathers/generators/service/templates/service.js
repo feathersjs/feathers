@@ -1,5 +1,3 @@
-'use strict';
-
 // Initializes the `<%= name %>` service on path `/<%= path %>`
 const createService = require('<%= serviceModule %>');<% if(modelName) { %>
 const createModel = require('../../models/<%= modelName %>');<% } %>

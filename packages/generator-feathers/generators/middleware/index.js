@@ -1,5 +1,3 @@
-'use strict';
-
 const Generator = require('../../lib/generator');
 const { kebabCase, camelCase } = require('lodash');
 const j = require('../../lib/transform');
