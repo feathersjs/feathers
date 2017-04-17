@@ -1,5 +1,22 @@
 # Change Log
 
+## [v2.0.2](https://github.com/feathersjs/feathers-cli/tree/v2.0.2) (2017-04-17)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.1...v2.0.2)
+
+**Closed issues:**
+
+- Check for Node 6+ [\#79](https://github.com/feathersjs/feathers-cli/issues/79)
+- Generate stand alone micro-services not hard-linked to app/route [\#68](https://github.com/feathersjs/feathers-cli/issues/68)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#81](https://github.com/feathersjs/feathers-cli/pull/81) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Check for Node v6 or later [\#80](https://github.com/feathersjs/feathers-cli/pull/80) ([daffl](https://github.com/daffl))
+- Add Greenkeeper badge 🌴 [\#78](https://github.com/feathersjs/feathers-cli/pull/78) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+
+## [v2.0.1](https://github.com/feathersjs/feathers-cli/tree/v2.0.1) (2017-04-12)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.0...v2.0.1)
+
 ## [v2.0.0](https://github.com/feathersjs/feathers-cli/tree/v2.0.0) (2017-04-11)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.0-pre.3...v2.0.0)
 
