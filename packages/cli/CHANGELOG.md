@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.0.3](https://github.com/feathersjs/feathers-cli/tree/v2.0.3) (2017-04-18)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.2...v2.0.3)
+
+**Closed issues:**
+
+- Rename 2.0 branch to 3.0 [\#73](https://github.com/feathersjs/feathers-cli/issues/73)
+
+**Merged pull requests:**
+
+- Basic tests [\#82](https://github.com/feathersjs/feathers-cli/pull/82) ([ekryski](https://github.com/ekryski))
+
 ## [v2.0.2](https://github.com/feathersjs/feathers-cli/tree/v2.0.2) (2017-04-17)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.1...v2.0.2)
 
