@@ -1,7 +1,7 @@
 {
   "name": "feathers-socketio",
   "description": "The Feathers Socket.io real-time API provider",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "homepage": "https://github.com/feathersjs/feathers-socketio",
   "main": "lib/",
   "types": [
