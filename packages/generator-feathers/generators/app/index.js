@@ -148,6 +148,12 @@ module.exports = class AppGenerator extends Generator {
       context
     );
 
+    this.fs.copyTpl(
+      this.templatePath('app.test.js'),
+      this.destinationPath('test', 'app.test.js'),
+      context
+    );
+
     this.fs.writeJSON(
       this.destinationPath('package.json'),
       pkg
