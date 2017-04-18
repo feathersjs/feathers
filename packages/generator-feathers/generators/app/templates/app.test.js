@@ -1,6 +1,6 @@
 const assert = require('assert');
 const rp = require('request-promise');
-const app = require('../src/app');
+const app = require('../<%= src %>/app');
 
 describe('Feathers application tests', () => {
   before(function(done) {
