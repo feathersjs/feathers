@@ -1,5 +1,17 @@
 # Change Log
 
+## [Unreleased](https://github.com/feathersjs/generator-feathers/tree/HEAD)
+
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.3...HEAD)
+
+**Closed issues:**
+
+- Tests fail if a custom folder is chosen using the generator [\#202](https://github.com/feathersjs/generator-feathers/issues/202)
+
+**Merged pull requests:**
+
+- 	Fix folder for app test when a different directory is chosen [\#203](https://github.com/feathersjs/generator-feathers/pull/203) ([daffl](https://github.com/daffl))
+
 ## [v1.0.3](https://github.com/feathersjs/generator-feathers/tree/v1.0.3) (2017-04-17)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.2...v1.0.3)
 
