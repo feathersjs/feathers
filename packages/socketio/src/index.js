@@ -5,8 +5,14 @@ import socket from 'feathers-socket-commons';
 
 const debug = makeDebug('feathers-socketio');
 
-export default function (options, config) {
-  if (typeof options === 'function') {
+export default function (port, options, config) {
+  if (typeof port !== 'number') {
+    config = options;
+    options = port;
+    port = null;
+  }
+
+  if (typeof options !== 'object') {
     config = options;
     options = {};
   }
@@ -21,7 +27,7 @@ export default function (options, config) {
         let io = this.io;
 
         if (!io) {
-          io = this.io = socketio.listen(server, options);
+          io = this.io = socketio.listen(port || server, options);
 
           io.use(function (socket, next) {
             socket.feathers = { provider: 'socketio' };
