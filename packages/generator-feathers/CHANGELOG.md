@@ -1,8 +1,20 @@
 # Change Log
 
-## [Unreleased](https://github.com/feathersjs/generator-feathers/tree/HEAD)
+## [v1.0.5](https://github.com/feathersjs/generator-feathers/tree/v1.0.5) (2017-04-19)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.4...v1.0.5)
 
-[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.3...HEAD)
+**Closed issues:**
+
+- Hook generator fails if generating for a specific service [\#205](https://github.com/feathersjs/generator-feathers/issues/205)
+- Wrong client setup for Sequelize with MSSQL [\#204](https://github.com/feathersjs/generator-feathers/issues/204)
+
+**Merged pull requests:**
+
+- Fix Sequelize MSSQL client reference [\#208](https://github.com/feathersjs/generator-feathers/pull/208) ([daffl](https://github.com/daffl))
+- Update to latest jscodeshift which uses flow parser, add tests for ho… [\#207](https://github.com/feathersjs/generator-feathers/pull/207) ([daffl](https://github.com/daffl))
+
+## [v1.0.4](https://github.com/feathersjs/generator-feathers/tree/v1.0.4) (2017-04-18)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.3...v1.0.4)
 
 **Closed issues:**
 
