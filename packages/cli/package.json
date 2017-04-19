@@ -55,7 +55,7 @@
   "preferGlobal": true,
   "dependencies": {
     "commander": "^2.9.0",
-    "generator-feathers": "1.0.4",
+    "generator-feathers": "1.0.5",
     "generator-feathers-plugin": "0.10.0",
     "semver": "^5.3.0",
     "yeoman-environment": "^1.6.6"
