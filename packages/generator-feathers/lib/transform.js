@@ -1,18 +1,6 @@
 const j = require('@feathersjs/jscodeshift');
 
 j.registerMethods({
-  insertInArray(ast) {
-    this.forEach(node => {
-      const elements = node.value.elements;
-      elements.push(ast);
-      j(node).replaceWith(j.arrayExpression(elements));
-    });
-
-    return this;
-  }
-}, j.ArrayExpression);
-
-j.registerMethods({
   findDeclaration(name) {
     return this.findVariableDeclarators(name)
       .closest(j.VariableDeclaration);
