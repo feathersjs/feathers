@@ -22,7 +22,7 @@ module.exports = function () {
 
   const oldSetup = app.setup;
 
-  app.set('mssqlClient', sequelize);
+  app.set('sequelizeClient', sequelize);
 
   app.setup = function (...args) {
     const result = oldSetup.apply(this, args);
