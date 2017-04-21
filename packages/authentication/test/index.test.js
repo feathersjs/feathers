@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 import feathers from 'feathers';
 import passport from 'passport';
 import socketio from 'feathers-socketio';

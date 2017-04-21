@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 import feathers from 'feathers';
 import hooks from 'feathers-hooks';
 import authentication, { express } from '../src';
