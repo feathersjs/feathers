@@ -1,10 +1,10 @@
-if (!global._babelPolyfill) { require('babel-polyfill'); }
-
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import { errors } from '../src';
 import handler from '../src/not-found-handler';
+
+if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 chai.use(sinonChai);
 
