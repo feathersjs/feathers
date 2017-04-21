@@ -1,7 +1,7 @@
-if (!global._babelPolyfill) { require('babel-polyfill'); }
-
 import assert from 'assert';
 import plugin from '../src';
+
+if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 describe('feathers-socket-commons', () => {
   it('is CommonJS compatible', () => {
