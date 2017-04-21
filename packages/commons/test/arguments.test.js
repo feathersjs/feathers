@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-expressions */
-
-if (!global._babelPolyfill) { require('babel-polyfill'); }
-
 import { expect } from 'chai';
 import getArguments, { noop } from '../src/arguments';
+
+if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 describe('Argument normalization tests', () => {
   const params = { test: 'param' };

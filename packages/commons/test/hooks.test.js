@@ -1,9 +1,9 @@
-if (!global._babelPolyfill) { require('babel-polyfill'); }
-
 import { expect } from 'chai';
 
 import { noop } from '../src/arguments';
 import utils from '../src/hooks';
+
+if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 describe('hook utilities', () => {
   it('.hookObject', () => {

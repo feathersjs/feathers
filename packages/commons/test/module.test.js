@@ -1,5 +1,3 @@
-if (!global._babelPolyfill) { require('babel-polyfill'); }
-
 import { expect } from 'chai';
 import {
   getArguments,
@@ -23,6 +21,8 @@ import {
   pick,
   merge
 } from '../src/commons';
+
+if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 describe('build', () => {
   it('is commonjs compatible', () => {
