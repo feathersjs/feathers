@@ -77,7 +77,7 @@
     "primus": "^7.0.0",
     "primus-emitter": "^3.1.1",
     "rimraf": "^2.5.4",
-    "semistandard": "^10.0.0",
+    "semistandard": "^11.0.0",
     "socket.io-client": "^1.5.0",
     "superagent": "^3.5.2",
     "ws": "^2.2.3"
