@@ -74,7 +74,7 @@
     "passport-strategy": "^1.0.0",
     "passport-twitter": "^1.0.4",
     "rimraf": "^2.5.4",
-    "semistandard": "^10.0.0",
+    "semistandard": "^11.0.0",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.8.0"
   }
