@@ -74,7 +74,7 @@ describe('client', () => {
 
   it('converts other errors (#19)', done => {
     connection.once('todos::create', (data, params, callback) =>
-      callback('Something went wrong')
+      callback(new Error('Something went wrong'))
     );
 
     service.create(testData).catch(error => {
