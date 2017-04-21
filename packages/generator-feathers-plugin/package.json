@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "mocha": "^3.1.0",
-    "semistandard": "^10.0.0",
+    "semistandard": "^11.0.0",
     "yeoman-test": "^1.4.0"
   },
   "engines": {
