@@ -1,7 +1,4 @@
 /* eslint-disable no-unused-expressions */
-
-if (!global._babelPolyfill) { require('babel-polyfill'); }
-
 import feathers from 'feathers';
 import { expect } from 'chai';
 import {
@@ -13,6 +10,8 @@ import {
   select,
   makeUrl
 } from '../src/utils';
+
+if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 describe('feathers-commons utils', () => {
   it('stripSlashes', () => {

@@ -13,13 +13,13 @@ export function each (obj, callback) {
 export function some (value, callback) {
   return Object.keys(value)
     .map(key => [ value[key], key ])
-    .some(current => callback(...current));
+    .some(([val, key]) => callback(val, key));
 }
 
 export function every (value, callback) {
   return Object.keys(value)
     .map(key => [ value[key], key ])
-    .every(current => callback(...current));
+    .every(([val, key]) => callback(val, key));
 }
 
 export function keys (obj) {
