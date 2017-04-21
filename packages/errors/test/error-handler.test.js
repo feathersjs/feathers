@@ -1,7 +1,5 @@
 /* eslint-disable handle-callback-err, no-unused-expressions */
 
-if (!global._babelPolyfill) { require('babel-polyfill'); }
-
 import feathers from 'feathers';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
@@ -11,6 +9,8 @@ import fs from 'fs';
 import { join } from 'path';
 import { errors } from '../src';
 import handler from '../src/error-handler';
+
+if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 chai.use(sinonChai);
 
