@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 import merge from 'lodash.merge';
 import io from 'socket.io-client';
 import createApplication from '../fixtures/server';

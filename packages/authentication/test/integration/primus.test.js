@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 import merge from 'lodash.merge';
 import createApplication from '../fixtures/server';
 import chai, { expect } from 'chai';

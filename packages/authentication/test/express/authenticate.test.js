@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 import passport from 'passport';
 import MockStrategy from '../fixtures/strategy';
 import chai, { expect } from 'chai';
