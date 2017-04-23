@@ -6,7 +6,8 @@ module.exports = function () {
   const connectionString = app.get('mssql');
   const connection = url.parse(connectionString);
   const database = connection.path.substring(1, connection.path.length);
-  const { port, hostname, username, password } = connection;
+  const { port, hostname } = connection;
+  const [ username, password ] = (connection.auth || ':').split(':');
   const sequelize = new Sequelize(database, username, password, {
     dialect: 'mssql',
     host: hostname,
