@@ -1,5 +1,17 @@
 # Change Log
 
+## [v2.0.5](https://github.com/feathersjs/feathers-cli/tree/v2.0.5) (2017-04-23)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.4...v2.0.5)
+
+**Closed issues:**
+
+- Generated tests don't use the path passed to the generator [\#85](https://github.com/feathersjs/feathers-cli/issues/85)
+- Generated sequelize service does not use the username and password correctly [\#84](https://github.com/feathersjs/feathers-cli/issues/84)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#86](https://github.com/feathersjs/feathers-cli/pull/86) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+
 ## [v2.0.4](https://github.com/feathersjs/feathers-cli/tree/v2.0.4) (2017-04-19)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.3...v2.0.4)
 
