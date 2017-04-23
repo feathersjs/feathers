@@ -1,5 +1,14 @@
 # Change Log
 
+## [v1.0.6](https://github.com/feathersjs/generator-feathers/tree/v1.0.6) (2017-04-23)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.5...v1.0.6)
+
+**Merged pull requests:**
+
+- Split username and password from URL parsed auth [\#212](https://github.com/feathersjs/generator-feathers/pull/212) ([daffl](https://github.com/daffl))
+- Do not overwrite connection files when generating a service [\#211](https://github.com/feathersjs/generator-feathers/pull/211) ([daffl](https://github.com/daffl))
+- Use proper path to get service in test [\#210](https://github.com/feathersjs/generator-feathers/pull/210) ([daffl](https://github.com/daffl))
+
 ## [v1.0.5](https://github.com/feathersjs/generator-feathers/tree/v1.0.5) (2017-04-19)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.4...v1.0.5)
 
