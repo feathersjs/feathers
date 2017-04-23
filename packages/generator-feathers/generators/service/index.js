@@ -161,7 +161,10 @@ module.exports = class ServiceGenerator extends Generator {
     // It will not do anything if the db has been set up already
     if (adapter !== 'generic' && adapter !== 'memory') {
       this.composeWith(require.resolve('../connection'), {
-        props: { adapter }
+        props: {
+          adapter,
+          service: this.props.name
+        }
       });
     } else if(adapter === 'generic') {
       // Copy the generic service class
