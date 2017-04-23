@@ -266,9 +266,10 @@ module.exports = class ConnectionGenerator extends Generator {
 
     if (template) {
       const dbFile = `${database}.js`;
+      const templateExists = this.fs.exists(this.destinationPath(this.libDirectory, dbFile));
 
       // If the file doesn't exist yet, add it to the app.js
-      if (!this.fs.exists(this.destinationPath(this.libDirectory, dbFile))) {
+      if (!templateExists) {
         const appjs = this.destinationPath(this.libDirectory, 'app.js');
 
         this.conflicter.force = true;
@@ -277,11 +278,15 @@ module.exports = class ConnectionGenerator extends Generator {
         ));
       }
 
-      this.fs.copyTpl(
-        this.templatePath(template),
-        this.destinationPath(this.libDirectory, dbFile),
-        context
-      );
+      // Copy template only if connection generate is not composed
+      // from the service generator
+      if(!templateExists || (templateExists && !this.props.service)) {
+        this.fs.copyTpl(
+          this.templatePath(template),
+          this.destinationPath(this.libDirectory, dbFile),
+          context
+        );
+      }
     }
 
     this._writeConfiguration();
