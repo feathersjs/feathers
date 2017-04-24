@@ -156,6 +156,8 @@ Authenticating through the Feathers client is almost exactly the same with just 
 - You must fetch your user explicitly (typically after authentication succeeds)
 - You require `feathers-authentication-client` instead of `feathers-authentication/client`
 
+You can use `feathers-authentication-compatibility` on the server to keep the old client functional, this helps to migrate large scale deployments where you can not update all clients/api consumers before migrating to `>=1.0.0` Check https://www.npmjs.com/package/feathers-authentication-compatibility for more information.
+
 **The Old Way (< v0.8.0)**
 
 ```js
