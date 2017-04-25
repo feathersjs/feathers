@@ -1,8 +1,4 @@
 {
-  "plugins": [
-    "transform-object-assign",
-    "add-module-exports",
-    ["babel-plugin-transform-builtin-extend", { globals: ["Error", "Array"] }]
-  ],
+  "plugins": [ "transform-object-assign", "add-module-exports" ],
   "presets": [ "es2015" ]
 }

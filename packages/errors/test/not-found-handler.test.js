@@ -1,5 +1,4 @@
 import chai, { expect } from 'chai';
-import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import { errors } from '../src';
 import handler from '../src/not-found-handler';
@@ -7,10 +6,6 @@ import handler from '../src/not-found-handler';
 if (!global._babelPolyfill) { require('babel-polyfill'); }
 
 chai.use(sinonChai);
-
-const mockRequest = {};
-const mockResponse = {};
-const mockNext = sinon.spy(() => {});
 
 describe('not-found-handler', () => {
   it('is CommonJS compatible', () => {
@@ -25,8 +20,10 @@ describe('not-found-handler', () => {
     expect(typeof handler).to.equal('function');
   });
 
-  it.skip('returns NotFound error', () => {
-    handler()(mockRequest, mockResponse, mockNext);
-    expect(mockNext).to.have.been.calledWith(new errors.NotFound());
+  it('returns NotFound error', done => {
+    handler()({}, {}, function (error) {
+      expect(error instanceof errors.NotFound).to.equal(true);
+      done();
+    });
   });
 });
