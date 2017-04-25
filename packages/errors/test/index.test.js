@@ -1,8 +1,6 @@
 import assert from 'assert';
 import { types, errors, convert } from '../src';
 
-if (!global._babelPolyfill) { require('babel-polyfill'); }
-
 describe('feathers-errors', () => {
   it('is CommonJS compatible', () => {
     assert.equal(typeof require('../lib'), 'object');
