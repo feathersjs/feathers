@@ -1,5 +1,14 @@
 # Change Log
 
+## [v2.7.0](https://github.com/feathersjs/feathers-errors/tree/v2.7.0) (2017-04-25)
+[Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.6.3...v2.7.0)
+
+**Merged pull requests:**
+
+- Change back to old Error inheritance [\#73](https://github.com/feathersjs/feathers-errors/pull/73) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#72](https://github.com/feathersjs/feathers-errors/pull/72) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#71](https://github.com/feathersjs/feathers-errors/pull/71) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+
 ## [v2.6.3](https://github.com/feathersjs/feathers-errors/tree/v2.6.3) (2017-04-08)
 [Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.6.2...v2.6.3)
 
