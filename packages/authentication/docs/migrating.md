@@ -200,7 +200,7 @@ app.authenticate({
 })
 .then(user => {
   app.set('user', user);
-  console.log('User', client.get('user'));
+  console.log('User', app.get('user'));
   // Do whatever you want now
 })
 .catch(function(error){
