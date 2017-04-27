@@ -13,7 +13,8 @@ They are now located here:
 - [feathers-authentication-jwt](https://github.com/feathersjs/feathers-authentication-jwt)
 - [feathers-authentication-oauth1](https://github.com/feathersjs/feathers-authentication-oauth1)
 - [feathers-authentication-oauth2](https://github.com/feathersjs/feathers-authentication-oauth2)
-- [feathers-permissions](https://github.com/feathersjs/feathers-permissions)
+- [feathers-authentication-hooks](https://github.com/feathersjs/feathers-authentication-hooks)
+- [feathers-permissions](https://github.com/feathersjs/feathers-permissions) **(experimental)**
 
 For most of you, migrating your app should be fairly straight forward as there are only a couple breaking changes to the public interface.
 
@@ -338,41 +339,32 @@ exports.before = {
 // feathers-authentication >= v1.0.0
 const auth = require('feathers-authentication');
 const local = require('feathers-authentication-local');
-const permissions = require('feathers-permissions');
-
-const myCustomQueryWithCurrentUser = function(options ={}) {
-  return function(hook) {
-    hook.params.query.userId = hook.params.user._id;
-    return Promise.resolve(hook);
-  };
-};
+const {
+  queryWithCurrentUser,
+  restrictToOwner
+} = require('feathers-authentication-hooks');
 
 exports.before = {
   all: [],
   find: [
     auth.hooks.authenticate('jwt'),
-    permissions.hooks.checkPermissions({ service: 'users' }),
-    permissions.hooks.isPermitted(),
-    myCustomQueryWithCurrentUser() // instead of auth.queryWithCurrentUser()
+    queryWithCurrentUser()
   ],
   get: [
     auth.hooks.authenticate('jwt'),
-    permissions.hooks.checkPermissions({ service: 'users' }),
-    permissions.hooks.isPermitted()
+    restrictToOwner({ ownerField: '_id' })
   ],
   create: [
     local.hooks.hashPassword()
   ],
   update: [
     auth.hooks.authenticate('jwt'),
-    permissions.hooks.checkPermissions({ service: 'users' }),
-    permissions.hooks.isPermitted(),
+    restrictToOwner({ ownerField: '_id' }),
     local.hooks.hashPassword()
   ],
   patch: [
     auth.hooks.authenticate('jwt'),
-    permissions.hooks.checkPermissions({ service: 'users' }),
-    permissions.hooks.isPermitted(),
+    restrictToOwner({ ownerField: '_id' }),
     local.hooks.hashPassword()
   ],
 }
