@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.7.1](https://github.com/feathersjs/feathers-errors/tree/v2.7.1) (2017-04-28)
+[Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.7.0...v2.7.1)
+
+**Closed issues:**
+
+- Object.setPrototypeOf in IE 10 [\#70](https://github.com/feathersjs/feathers-errors/issues/70)
+
+**Merged pull requests:**
+
+- Define property toJSON because just assigning it throws an error in N… [\#74](https://github.com/feathersjs/feathers-errors/pull/74) ([daffl](https://github.com/daffl))
+
 ## [v2.7.0](https://github.com/feathersjs/feathers-errors/tree/v2.7.0) (2017-04-25)
 [Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.6.3...v2.7.0)
 
