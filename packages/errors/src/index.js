@@ -53,16 +53,18 @@ FeathersError.prototype = new Error();
 
 // NOTE (EK): A little hack to get around `message` not
 // being included in the default toJSON call.
-FeathersError.prototype.toJSON = function () {
-  return {
-    name: this.name,
-    message: this.message,
-    code: this.code,
-    className: this.className,
-    data: this.data,
-    errors: this.errors
-  };
-};
+Object.defineProperty(FeathersError.prototype, 'toJSON', {
+  value: function () {
+    return {
+      name: this.name,
+      message: this.message,
+      code: this.code,
+      className: this.className,
+      data: this.data,
+      errors: this.errors
+    };
+  }
+});
 
 // 400 - Bad Request
 function BadRequest (message, data) {
