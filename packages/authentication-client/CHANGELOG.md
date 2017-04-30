@@ -1,5 +1,23 @@
 # Change Log
 
+## [v0.3.2](https://github.com/feathersjs/feathers-authentication-client/tree/v0.3.2) (2017-04-30)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.3.1...v0.3.2)
+
+**Closed issues:**
+
+- An in-range update of feathers-errors is breaking the build 🚨 [\#45](https://github.com/feathersjs/feathers-authentication-client/issues/45)
+- Proper way to save jwt in cookies [\#41](https://github.com/feathersjs/feathers-authentication-client/issues/41)
+- Allow customizing the `tokenField` [\#38](https://github.com/feathersjs/feathers-authentication-client/issues/38)
+- Show blank page in safari@iOS 8.3 [\#37](https://github.com/feathersjs/feathers-authentication-client/issues/37)
+
+**Merged pull requests:**
+
+- Catch getJWT promise errors [\#46](https://github.com/feathersjs/feathers-authentication-client/pull/46) ([NikitaVlaznev](https://github.com/NikitaVlaznev))
+- Update semistandard to the latest version 🚀 [\#43](https://github.com/feathersjs/feathers-authentication-client/pull/43) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Update feathers-hooks to the latest version 🚀 [\#42](https://github.com/feathersjs/feathers-authentication-client/pull/42) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#40](https://github.com/feathersjs/feathers-authentication-client/pull/40) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Note that auth must be configured after rest/socket clients [\#36](https://github.com/feathersjs/feathers-authentication-client/pull/36) ([hubgit](https://github.com/hubgit))
+
 ## [v0.3.1](https://github.com/feathersjs/feathers-authentication-client/tree/v0.3.1) (2017-03-10)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.3.0...v0.3.1)
 
