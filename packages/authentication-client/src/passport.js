@@ -244,7 +244,7 @@ export default class Passport {
 
   getJWT () {
     const app = this.app;
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const accessToken = app.get('accessToken');
 
       if (accessToken) {
@@ -260,7 +260,8 @@ export default class Passport {
           }
 
           return resolve(token);
-        });
+        })
+        .catch(reject);
     });
   }
 
