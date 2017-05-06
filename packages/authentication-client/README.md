@@ -88,7 +88,7 @@ There are 3 hooks. They are really meant for internal use and you shouldn't need
 
 ## Complete Example
 
-Here's an example of a Feathers server that uses `feathers-authentication-client`. 
+Here's an example of a Feathers client that uses `feathers-authentication-client`. 
 
 ```js
 const feathers = require('feathers/client');
