@@ -27,7 +27,7 @@ function FeathersError (msg, name, code, className, data) {
     // NOTE(EK): To make sure that we are not messing
     // with immutable data, just make a copy.
     // https://github.com/feathersjs/feathers-errors/issues/19
-    newData = Object.assign({}, data);
+    newData = JSON.parse(JSON.stringify(data));
 
     if (newData.errors) {
       errors = newData.errors;
