@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.8.0](https://github.com/feathersjs/feathers-errors/tree/v2.8.0) (2017-05-08)
+[Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.7.1...v2.8.0)
+
+**Closed issues:**
+
+- Support array objects as data [\#64](https://github.com/feathersjs/feathers-errors/issues/64)
+
+**Merged pull requests:**
+
+- Allow data to be an array [\#75](https://github.com/feathersjs/feathers-errors/pull/75) ([daniel-constantin](https://github.com/daniel-constantin))
+
 ## [v2.7.1](https://github.com/feathersjs/feathers-errors/tree/v2.7.1) (2017-04-28)
 [Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.7.0...v2.7.1)
 
