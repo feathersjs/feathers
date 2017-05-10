@@ -82,7 +82,7 @@
     "feathers-memory": "^1.0.0",
     "feathers-primus": "^2.0.0",
     "feathers-rest": "^1.5.0",
-    "feathers-socketio": "^1.3.2",
+    "feathers-socketio": "^2.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "jshint": "^2.9.3",
     "localstorage-memory": "^1.0.2",
