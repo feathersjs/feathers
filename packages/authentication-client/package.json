@@ -70,7 +70,7 @@
     "feathers-memory": "^1.1.0",
     "feathers-primus": "^2.1.0",
     "feathers-rest": "^1.5.1",
-    "feathers-socketio": "^1.4.1",
+    "feathers-socketio": "^2.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "localstorage-memory": "^1.0.2",
     "mocha": "^3.1.2",
