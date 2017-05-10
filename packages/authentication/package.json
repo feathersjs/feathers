@@ -64,6 +64,7 @@
     "lodash.merge": "^4.6.0",
     "lodash.omit": "^4.5.0",
     "lodash.pick": "^4.4.0",
+    "long-timeout": "^0.1.1",
     "ms": "^1.0.0",
     "passport": "^0.3.2"
   },

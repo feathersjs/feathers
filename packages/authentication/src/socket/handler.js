@@ -1,6 +1,7 @@
 import Debug from 'debug';
 import ms from 'ms';
 import { normalizeError } from 'feathers-socket-commons/lib/utils';
+import lt from 'long-timeout';
 
 const debug = Debug('feathers-authentication:sockets:handler');
 
@@ -94,7 +95,7 @@ export default function setupSocketHandler (app, options, { feathersParams, prov
             clearTimeout(logoutTimer);
           }
 
-          logoutTimer = setTimeout(() => {
+          logoutTimer = lt.setTimeout(() => {
             debug(`Token expired. Logging out.`);
             logout();
           }, ms(authSettings.jwt.expiresIn));

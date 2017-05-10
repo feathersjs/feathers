@@ -232,6 +232,49 @@ describe('Socket.io authentication', function () {
     });
   });
 
+  describe('when expiry time is very long', () => {
+    const longExpiringApp = createApplication({
+      secret: 'supersecret',
+      jwt: { expiresIn: '1y' }
+    }, 'socketio');
+
+    let longExpiringServer;
+    let longExpiringSocket;
+
+    before(done => {
+      longExpiringServer = longExpiringApp.listen(1338);
+      longExpiringServer.once('listening', () => {
+        longExpiringSocket = io('http://localhost:1338');
+        done();
+      });
+    });
+
+    after(() => {
+      longExpiringServer.close();
+    });
+
+    it('should not immediately logout', done => {
+      const data = {
+        strategy: 'local',
+        email: 'admin@feathersjs.com',
+        password: 'admin'
+      };
+
+      longExpiringSocket.emit('authenticate', data, (error, response) => {
+        expect(error).to.not.be.ok;
+        expect(response).to.be.ok;
+        // Wait for a little bit
+        setTimeout(function () {
+          longExpiringSocket.emit('users::find', {}, (error, response) => {
+            expect(error).to.not.be.ok;
+            expect(response).to.be.ok;
+            done();
+          });
+        }, 100);
+      });
+    });
+  });
+
   describe('when calling a protected service method', () => {
     describe('when not authenticated', () => {
       it('returns NotAuthenticated error', done => {
