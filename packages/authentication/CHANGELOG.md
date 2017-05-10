@@ -1,5 +1,110 @@
 # Change Log
 
+## [Unreleased](https://github.com/feathersjs/feathers-authentication/tree/HEAD)
+
+[Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.2.2...HEAD)
+
+**Closed issues:**
+
+- Validating custom express routes [\#498](https://github.com/feathersjs/feathers-authentication/issues/498)
+- Payload won't include userId when logging in with stored localStorage token [\#496](https://github.com/feathersjs/feathers-authentication/issues/496)
+- How to send oauth token authentication to another client server [\#493](https://github.com/feathersjs/feathers-authentication/issues/493)
+- Unhandled Promise Rejection error. [\#489](https://github.com/feathersjs/feathers-authentication/issues/489)
+- No Auth token on authentication resource [\#488](https://github.com/feathersjs/feathers-authentication/issues/488)
+- How to verify JWT in feathers issued by another feathers instance ? [\#484](https://github.com/feathersjs/feathers-authentication/issues/484)
+- hook.params.user [\#483](https://github.com/feathersjs/feathers-authentication/issues/483)
+- Overriding JWT's expiresIn with a value more than 20d prevents users from signing in [\#458](https://github.com/feathersjs/feathers-authentication/issues/458)
+
+**Merged pull requests:**
+
+- Update feathers-socketio to the latest version 🚀 [\#503](https://github.com/feathersjs/feathers-authentication/pull/503) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Update socket.io-client to the latest version 🚀 [\#501](https://github.com/feathersjs/feathers-authentication/pull/501) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Fix issue with very large token timeout. [\#499](https://github.com/feathersjs/feathers-authentication/pull/499) ([asdacap](https://github.com/asdacap))
+- Typo [\#492](https://github.com/feathersjs/feathers-authentication/pull/492) ([wdmtech](https://github.com/wdmtech))
+- Update migrating.md [\#490](https://github.com/feathersjs/feathers-authentication/pull/490) ([MichaelErmer](https://github.com/MichaelErmer))
+- Update semistandard to the latest version 🚀 [\#487](https://github.com/feathersjs/feathers-authentication/pull/487) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Update feathers-hooks to the latest version 🚀 [\#485](https://github.com/feathersjs/feathers-authentication/pull/485) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#482](https://github.com/feathersjs/feathers-authentication/pull/482) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+
+## [v1.2.2](https://github.com/feathersjs/feathers-authentication/tree/v1.2.2) (2017-04-12)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.2.1...v1.2.2)
+
+**Fixed bugs:**
+
+- accessToken not being used when provided by client over socketio [\#400](https://github.com/feathersjs/feathers-authentication/issues/400)
+
+**Closed issues:**
+
+- Incompatible old client dependency [\#479](https://github.com/feathersjs/feathers-authentication/issues/479)
+- Using feathers-authentication-client for an existing API? [\#478](https://github.com/feathersjs/feathers-authentication/issues/478)
+- app.authenticate error : UnhandledPromiseRejectionWarning: Unhandled promise rejection \(rejection id: 2\): \* Error \* [\#476](https://github.com/feathersjs/feathers-authentication/issues/476)
+- Make `socket.feathers` data available in authentication hooks [\#475](https://github.com/feathersjs/feathers-authentication/issues/475)
+- Allow the authenticate hook to be called with no parameters [\#473](https://github.com/feathersjs/feathers-authentication/issues/473)
+- Authenticate : How to return more infos ? [\#471](https://github.com/feathersjs/feathers-authentication/issues/471)
+
+**Merged pull requests:**
+
+- Use latest version of feathers-authentication-client [\#480](https://github.com/feathersjs/feathers-authentication/pull/480) ([daffl](https://github.com/daffl))
+- Resolves \#475 - Socket params are made available to authentication hooks [\#477](https://github.com/feathersjs/feathers-authentication/pull/477) ([thomas-p-wilson](https://github.com/thomas-p-wilson))
+
+## [v1.2.1](https://github.com/feathersjs/feathers-authentication/tree/v1.2.1) (2017-04-07)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.2.0...v1.2.1)
+
+**Fixed bugs:**
+
+- failureRedirect is never used when using with oauth2 [\#387](https://github.com/feathersjs/feathers-authentication/issues/387)
+
+**Closed issues:**
+
+- OAuth guides [\#470](https://github.com/feathersjs/feathers-authentication/issues/470)
+- app.authenticate not working [\#466](https://github.com/feathersjs/feathers-authentication/issues/466)
+- how can I logout using local authentication? [\#465](https://github.com/feathersjs/feathers-authentication/issues/465)
+- How to do Socket.io Authentication [\#462](https://github.com/feathersjs/feathers-authentication/issues/462)
+- Add event filtering by default \(socket.io\) [\#460](https://github.com/feathersjs/feathers-authentication/issues/460)
+- Add ability to control if socket is marked as authenticated. [\#448](https://github.com/feathersjs/feathers-authentication/issues/448)
+- Auth redirect issue [\#425](https://github.com/feathersjs/feathers-authentication/issues/425)
+- E-mail verification step can be bypassed using Postman or Curl [\#391](https://github.com/feathersjs/feathers-authentication/issues/391)
+- Example app [\#386](https://github.com/feathersjs/feathers-authentication/issues/386)
+
+**Merged pull requests:**
+
+- Allow the cookie to be set if action is not `remove` [\#474](https://github.com/feathersjs/feathers-authentication/pull/474) ([marshallswain](https://github.com/marshallswain))
+
+## [v1.2.0](https://github.com/feathersjs/feathers-authentication/tree/v1.2.0) (2017-03-23)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.1.1...v1.2.0)
+
+**Fixed bugs:**
+
+- 1.0 authentication service hooks don't run when client uses feathers-socketio [\#455](https://github.com/feathersjs/feathers-authentication/issues/455)
+- `hook.params.provider` is not set when calling `client.authenticate\(\)` [\#432](https://github.com/feathersjs/feathers-authentication/issues/432)
+- remove method failed with JsonWebTokenError: invalid token [\#388](https://github.com/feathersjs/feathers-authentication/issues/388)
+
+**Closed issues:**
+
+- Token creation has side effect [\#454](https://github.com/feathersjs/feathers-authentication/issues/454)
+- Question: When is userId set? [\#453](https://github.com/feathersjs/feathers-authentication/issues/453)
+- How to authenticate SPA? More precisely how does the redirect works?  [\#451](https://github.com/feathersjs/feathers-authentication/issues/451)
+- POST to auth/facebook for FacebookTokenStrategy 404? [\#447](https://github.com/feathersjs/feathers-authentication/issues/447)
+- feathers-authentication 1.1.1 `No auth token` [\#445](https://github.com/feathersjs/feathers-authentication/issues/445)
+- Another readme incorrect and maybe docs to [\#441](https://github.com/feathersjs/feathers-authentication/issues/441)
+- Readme incorrect and maybe docs to [\#440](https://github.com/feathersjs/feathers-authentication/issues/440)
+- npm version issue? [\#439](https://github.com/feathersjs/feathers-authentication/issues/439)
+- setCookie express middleware only works inside hooks [\#438](https://github.com/feathersjs/feathers-authentication/issues/438)
+- createJWT throws 'secret must provided' [\#437](https://github.com/feathersjs/feathers-authentication/issues/437)
+- Not useful error message on NotAuthenticated error [\#436](https://github.com/feathersjs/feathers-authentication/issues/436)
+- Passwordfeld in auth.local does not work as expected [\#435](https://github.com/feathersjs/feathers-authentication/issues/435)
+- Authentication via REST returns token without finding user on db [\#430](https://github.com/feathersjs/feathers-authentication/issues/430)
+
+**Merged pull requests:**
+
+- Filter out all events [\#461](https://github.com/feathersjs/feathers-authentication/pull/461) ([daffl](https://github.com/daffl))
+- Fix socket auth [\#459](https://github.com/feathersjs/feathers-authentication/pull/459) ([marshallswain](https://github.com/marshallswain))
+- Fix \#454 Token create has side effect [\#456](https://github.com/feathersjs/feathers-authentication/pull/456) ([whollacsek](https://github.com/whollacsek))
+- Windows compatible version of the original compile comand with public folder support. [\#442](https://github.com/feathersjs/feathers-authentication/pull/442) ([appurist](https://github.com/appurist))
+- Add client.js back for consistency [\#433](https://github.com/feathersjs/feathers-authentication/pull/433) ([daffl](https://github.com/daffl))
+- add string to authenticate \(typescript\) [\#431](https://github.com/feathersjs/feathers-authentication/pull/431) ([superbarne](https://github.com/superbarne))
+- Add support for Bearer scheme in remove method [\#403](https://github.com/feathersjs/feathers-authentication/pull/403) ([boybundit](https://github.com/boybundit))
+
 ## [v1.1.1](https://github.com/feathersjs/feathers-authentication/tree/v1.1.1) (2017-03-02)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.1.0...v1.1.1)
 
