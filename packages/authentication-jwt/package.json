@@ -69,7 +69,7 @@
     "feathers-hooks": "^2.0.0",
     "feathers-memory": "^1.1.0",
     "feathers-rest": "^1.5.2",
-    "feathers-socketio": "^1.4.2",
+    "feathers-socketio": "^2.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "jsonwebtoken": "^7.1.9",
     "mocha": "^3.1.2",
