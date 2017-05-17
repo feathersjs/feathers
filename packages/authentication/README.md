@@ -113,6 +113,7 @@ The following plugins are complementary but entirely optional:
 - [feathers-authentication-jwt](https://github.com/feathersjs/feathers-authentication-jwt)
 - [feathers-authentication-oauth1](https://github.com/feathersjs/feathers-authentication-oauth1)
 - [feathers-authentication-oauth2](https://github.com/feathersjs/feathers-authentication-oauth2)
+- [feathers-authentication-hooks](https://github.com/feathersjs/feathers-authentication-hooks)
 - [feathers-permissions](https://github.com/feathersjs/feathers-permissions)
 
 ## Migrating to 1.x
