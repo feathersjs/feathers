@@ -6,13 +6,13 @@ declare function feathers(): feathers.Application;
 
 declare namespace feathers {
   export var static: typeof express.static;
- 
+
   type NullableId = number | string | null;
 
   interface Params {
     query?: any;
   }
-  
+
   interface Pagination <T> {
     total: Number,
     limit: Number,
@@ -34,13 +34,13 @@ declare namespace feathers {
     get?(id: number | string, params?: Params, callback?: any): Promise<T>;
 
     /**
-     * Creates a new resource with data. 
+     * Creates a new resource with data.
      */
     create?(data: T | T[], params?: Params, callback?: any): Promise<T | T[]>;
 
     /**
      * Replaces the resource identified by id with data.
-     * Update multiples resources with id equal `null` 
+     * Update multiples resources with id equal `null`
      */
     update?(id: NullableId, data: T, params?: Params, callback?: any): Promise<T>;
 
@@ -58,9 +58,12 @@ declare namespace feathers {
     remove?(id: NullableId, params?: Params, callback?: any): Promise<T>;
 
     /**
-     * Initialize your service with any special configuration or if connecting services that are very tightly coupled 
+     * Initialize your service with any special configuration or if connecting services that are very tightly coupled
      */
     setup?(app?: Application, path?: string): void;
+
+    before(any?): this;
+    after(any?): this;
   }
 
   interface FeathersUseHandler<T> extends expressCore.IRouterHandler<T>, express.IRouterMatcher<T> {
@@ -74,7 +77,7 @@ declare namespace feathers {
     service<T>(location: string): Service<T>;
 
     /**
-     * Registers a new service for that path and returns the wrapped service object 
+     * Registers a new service for that path and returns the wrapped service object
      */
     service<T>(location: string, service: Service<T>, options?: any): Service<T>;
 
@@ -84,7 +87,7 @@ declare namespace feathers {
     setup(): this;
 
     /**
-     * Register a service object 
+     * Register a service object
      */
     use: FeathersUseHandler<this>;
   }
