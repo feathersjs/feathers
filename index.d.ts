@@ -64,6 +64,8 @@ declare namespace feathers {
 
     before(any?): this;
     after(any?): this;
+    filter(any?): this;
+    
   }
 
   interface FeathersUseHandler<T> extends expressCore.IRouterHandler<T>, express.IRouterMatcher<T> {
