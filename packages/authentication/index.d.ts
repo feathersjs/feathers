@@ -7,40 +7,40 @@ declare namespace auth{
   export const hooks: DefaultHooks;
 
   interface Options {
-      path: string;
-      header: string;
-      entity: string;
-      service: string;
-      passReqToCallback: boolean;
-      session: boolean;
-      cookie: {
-        enabled: boolean;
-        name: string;
-        httpOnly: boolean;
-        secure: boolean;
+      path?: string;
+      header?: string;
+      entity?: string;
+      service?: string;
+      passReqToCallback?: boolean;
+      session?: boolean;
+      cookie?: {
+        enabled?: boolean;
+        name?: string;
+        httpOnly?: boolean;
+        secure?: boolean;
       };
-      jwt: {
+      jwt?: {
         /**
          * By default is an access token but can be any type
          */
-        header: Object;
+        header?: Object;
 
         /**
          * The resource server where the token is processed
          */
-        audience: string;
+        audience?: string;
 
         /**
          * Typically the entity id associated with the JWT
          */
-        subject: string;
+        subject?: string;
 
         /**
          * The issuing server, application or resource
          */
-        issuer: string;
-        algorithm: string;
-        expiresIn: string;
+        issuer?: string;
+        algorithm?: string;
+        expiresIn?: string;
       }
   }
   interface HashPassOptions{
