@@ -1,5 +1,25 @@
 # Change Log
 
+## [v2.2.0](https://github.com/feathersjs/feathers-primus/tree/v2.2.0) (2017-05-29)
+[Full Changelog](https://github.com/feathersjs/feathers-primus/compare/v2.1.0...v2.2.0)
+
+**Closed issues:**
+
+- An in-range update of feathers-hooks is breaking the build 🚨 [\#53](https://github.com/feathersjs/feathers-primus/issues/53)
+- An in-range update of debug is breaking the build 🚨 [\#52](https://github.com/feathersjs/feathers-primus/issues/52)
+- An in-range update of primus is breaking the build 🚨 [\#51](https://github.com/feathersjs/feathers-primus/issues/51)
+- An in-range update of uws is breaking the build 🚨 [\#50](https://github.com/feathersjs/feathers-primus/issues/50)
+- Expose headers and remote ip on feathers object [\#46](https://github.com/feathersjs/feathers-primus/issues/46)
+- docs are out of date [\#28](https://github.com/feathersjs/feathers-primus/issues/28)
+
+**Merged pull requests:**
+
+- Update ws to the latest version 🚀 [\#54](https://github.com/feathersjs/feathers-primus/pull/54) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update semistandard to the latest version 🚀 [\#49](https://github.com/feathersjs/feathers-primus/pull/49) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-hooks to the latest version 🚀 [\#48](https://github.com/feathersjs/feathers-primus/pull/48) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#47](https://github.com/feathersjs/feathers-primus/pull/47) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update uws to version 0.14.0 🚀 [\#45](https://github.com/feathersjs/feathers-primus/pull/45) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+
 ## [v2.1.0](https://github.com/feathersjs/feathers-primus/tree/v2.1.0) (2017-03-01)
 [Full Changelog](https://github.com/feathersjs/feathers-primus/compare/v2.0.0...v2.1.0)
 
