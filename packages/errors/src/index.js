@@ -32,6 +32,11 @@ function FeathersError (msg, name, code, className, data) {
     if (newData.errors) {
       errors = newData.errors;
       delete newData.errors;
+    } else if (data.errors) {
+      // The errors property from data could be
+      // stripped away while cloning resulting newData not to have it
+      // For example: when cloning arrays this property
+      errors = JSON.parse(JSON.stringify(data.errors));
     }
   }
 
