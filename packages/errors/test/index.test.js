@@ -299,6 +299,7 @@ describe('feathers-errors', () => {
       assert.equal(error.data.errors, undefined);
       assert.ok(Array.isArray(error.data));
       assert.deepEqual(error.data, [{hello: 'world'}]);
+      assert.equal(error.errors, 'Invalid input');
     });
   });
 });
