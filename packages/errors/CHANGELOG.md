@@ -1,5 +1,12 @@
 # Change Log
 
+## [v2.8.1](https://github.com/feathersjs/feathers-errors/tree/v2.8.1) (2017-05-30)
+[Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.8.0...v2.8.1)
+
+**Merged pull requests:**
+
+- Fix errors property being lost when cloning [\#76](https://github.com/feathersjs/feathers-errors/pull/76) ([daniel-constantin](https://github.com/daniel-constantin))
+
 ## [v2.8.0](https://github.com/feathersjs/feathers-errors/tree/v2.8.0) (2017-05-08)
 [Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.7.1...v2.8.0)
 
@@ -28,8 +35,8 @@
 **Merged pull requests:**
 
 - Change back to old Error inheritance [\#73](https://github.com/feathersjs/feathers-errors/pull/73) ([daffl](https://github.com/daffl))
-- Update semistandard to the latest version 🚀 [\#72](https://github.com/feathersjs/feathers-errors/pull/72) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
-- Update dependencies to enable Greenkeeper 🌴 [\#71](https://github.com/feathersjs/feathers-errors/pull/71) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Update semistandard to the latest version 🚀 [\#72](https://github.com/feathersjs/feathers-errors/pull/72) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#71](https://github.com/feathersjs/feathers-errors/pull/71) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
 ## [v2.6.3](https://github.com/feathersjs/feathers-errors/tree/v2.6.3) (2017-04-08)
 [Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.6.2...v2.6.3)
