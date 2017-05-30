@@ -15,7 +15,7 @@
 
 This provider exposes [Feathers](http://feathersjs.com) services through a [Socket.io](http://socket.io/) real-time API. It is compatible with Feathers 1.x and 2.x.
 
-__Note:__ For the full API documentation go to [http://docs.feathersjs.com/real-time/socket-io.html](http://docs.feathersjs.com/real-time/socket-io.html).
+__Note:__ For the full API documentation go to [https://docs.feathersjs.com/api/socketio.html](https://docs.feathersjs.com/api/socketio.html).
 
 ## Quick example
 
