@@ -78,7 +78,7 @@ Each plugin has it's own minimal example in the repo. To see some more complex e
 
 ## Security
 
-We :heart: the community and take security very seriously. No one wants their app hacked. If you have come across a security concern please [report it responsibly](https://legacy.docs.feathersjs.com/SECURITY.html). Visit the [Security section](https://legacy.docs.feathersjs.com/SECURITY.html) of the docs to learn more about how you can make sure your app is secure.
+We :heart: the community and take security very seriously. No one wants their app hacked. If you have come across a security concern please [report it responsibly](https://docs.feathersjs.com/security#where-should-i-report-security-issues). Visit the [Security section](https://docs.feathersjs.com/SECURITY.html) of the docs to learn more about how you can make sure your app is secure.
 
 ## Long Term Support Schedule
 
