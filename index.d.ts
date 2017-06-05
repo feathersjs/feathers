@@ -61,11 +61,6 @@ declare namespace feathers {
      * Initialize your service with any special configuration or if connecting services that are very tightly coupled
      */
     setup?(app?: Application, path?: string): void;
-
-    before(any?): this;
-    after(any?): this;
-    filter(any?): this;
-    
   }
 
   interface FeathersUseHandler<T> extends expressCore.IRouterHandler<T>, express.IRouterMatcher<T> {
