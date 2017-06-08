@@ -50,7 +50,7 @@ For most of you, migrating your app should be fairly straight forward as there a
 const authentication = require('feathers-authentication');
 const FacebookStrategy = require('passport-facebook').Strategy;
 
-let config = app.get('auth');
+let config = app.get('authentication');
 config.facebook.strategy = FacebookStrategy;
 app.configure(authentication(config))
     .use('/users', memory()) // this use to be okay to be anywhere
@@ -83,7 +83,7 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 
 // The services you are setting the `entity` param for need to be registered before authentication
 app.use('/users', memory())
-    .configure(auth(app.get('auth')))
+    .configure(auth(app.get('authentication')))
     .configure(jwt())
     .configure(local())
     .configure(oauth1())

@@ -77,7 +77,7 @@ These other middleware are included and exposed but typically you don't need to 
 
 ### Default Options
 
-The following default options will be mixed in with your global `auth` object from your config file. It will set the mixed options back on to the app so that they are available at any time by calling `app.get('auth')`. They can all be overridden and are depended upon by some of the authentication plugins.
+The following default options will be mixed in with your global `auth` object from your config file. It will set the mixed options back on to the app so that they are available at any time by calling `app.get('authentication')`. They can all be overridden and are depended upon by some of the authentication plugins.
 
 ```js
 {

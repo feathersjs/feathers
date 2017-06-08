@@ -102,7 +102,7 @@ describe('/authentication service', () => {
       return app.service('authentication').create(data, params).then(result => {
         return app.service('authentication').create(data).then(result => {
           return app.passport
-            .verifyJWT(result.accessToken, app.get('auth'))
+            .verifyJWT(result.accessToken, app.get('authentication'))
             .then(payload => {
               const delta = (payload.exp - payload.iat);
               expect(delta).to.equal(24 * 60 * 60);
@@ -117,7 +117,7 @@ describe('/authentication service', () => {
 
     beforeEach(() => {
       return app.passport
-        .createJWT({ id: 1 }, app.get('auth'))
+        .createJWT({ id: 1 }, app.get('authentication'))
         .then(token => { accessToken = token; });
     });
 

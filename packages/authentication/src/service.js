@@ -11,7 +11,7 @@ class Service {
   }
 
   create (data = {}, params = {}) {
-    const defaults = this.app.get('auth');
+    const defaults = this.app.get('authentication') || this.app.get('auth');
     const payload = params.payload;
 
     // create accessToken
@@ -26,7 +26,7 @@ class Service {
   }
 
   remove (id, params) {
-    const defaults = this.app.get('auth');
+    const defaults = this.app.get('authentication') || this.app.get('auth');
     const authHeader = params.headers && params.headers[defaults.header.toLowerCase()];
     const authParams = authHeader && authHeader.match(/(\S+)\s+(\S+)/);
     const accessToken = id !== null ? id : (authParams && authParams[2]) || authHeader;

@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/feathersjs/feathers-authentication/tree/HEAD)
-
-[Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.2.2...HEAD)
+## [v1.2.3](https://github.com/feathersjs/feathers-authentication/tree/v1.2.3) (2017-05-10)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.2.2...v1.2.3)
 
 **Closed issues:**
 

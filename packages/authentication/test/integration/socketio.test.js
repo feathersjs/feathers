@@ -34,11 +34,11 @@ describe('Socket.io authentication', function () {
   let accessToken;
 
   before(done => {
-    const options = merge({}, app.get('auth'), { jwt: { expiresIn: '1ms' } });
+    const options = merge({}, app.get('authentication'), { jwt: { expiresIn: '1ms' } });
     app.passport.createJWT({}, options)
       .then(token => {
         expiredToken = token;
-        return app.passport.createJWT({ userId: 0 }, app.get('auth'));
+        return app.passport.createJWT({ userId: 0 }, app.get('authentication'));
       })
       .then(token => {
         accessToken = token;
@@ -88,7 +88,7 @@ describe('Socket.io authentication', function () {
           socket.emit('authenticate', data, (error, response) => {
             expect(error).to.not.equal(undefined);
             expect(response.accessToken).to.exist;
-            app.passport.verifyJWT(response.accessToken, app.get('auth')).then(payload => {
+            app.passport.verifyJWT(response.accessToken, app.get('authentication')).then(payload => {
               expect(payload).to.exist;
               expect(payload.iss).to.equal('feathers');
               expect(payload.userId).to.equal(0);
@@ -186,7 +186,7 @@ describe('Socket.io authentication', function () {
           socket.emit('authenticate', data, (error, response) => {
             expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
-            app.passport.verifyJWT(response.accessToken, app.get('auth')).then(payload => {
+            app.passport.verifyJWT(response.accessToken, app.get('authentication')).then(payload => {
               expect(payload).to.exist;
               expect(payload.iss).to.equal('feathers');
               expect(payload.userId).to.equal(0);
@@ -203,7 +203,7 @@ describe('Socket.io authentication', function () {
           socket.emit('authenticate', data, (error, response) => {
             expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
-            app.passport.verifyJWT(response.accessToken, app.get('auth')).then(payload => {
+            app.passport.verifyJWT(response.accessToken, app.get('authentication')).then(payload => {
               expect(payload).to.exist;
               expect(payload.iss).to.equal('feathers');
               expect(payload.userId).to.equal(0);
