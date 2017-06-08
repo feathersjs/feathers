@@ -6,6 +6,7 @@ import createApplication from '../fixtures/server';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
+import clone from 'lodash.clone';
 
 chai.use(sinonChai);
 
@@ -103,6 +104,29 @@ describe('Socket.io authentication', function () {
             expect(response.accessToken).to.exist;
             expect(serverSocket.feathers.user).to.not.equal(undefined);
             done();
+          });
+        });
+
+        it('updates the user on the socket', done => {
+          socket.emit('authenticate', data, (error, response) => {
+            expect(error).to.not.equal(undefined);
+            // Clone the socket user and replace it with the clone so that feathers-memory
+            // doesn't have a reference to the same object.
+            const socketUser = clone(serverSocket.feathers.user);
+            serverSocket.feathers.user = socketUser;
+
+            const email = 'test@feathersjs.com';
+            const oldEmail = socketUser.email;
+
+            app.service('users').patch(socketUser.id, { email })
+              .then(user => {
+                expect(socketUser.email).to.equal(email);
+                return app.service('users').patch(socketUser.id, { email: oldEmail });
+              })
+              .then(user => {
+                expect(socketUser.email).to.equal(oldEmail);
+                done();
+              });
           });
         });
 
