@@ -229,7 +229,7 @@ By default the payload for your JWT is simply your entity id (ie. `{ userId }`).
 function customizeJWTPayload() {
   return function(hook) {
     console.log('Customizing JWT Payload');
-    hook.data.payload = {
+    hook.params.payload = {
       // You need to make sure you have the right id.
       // You can put whatever you want to be encoded in
       // the JWT access token.
@@ -251,7 +251,7 @@ app.service('authentication').hooks({
     ]
   }
 });
-``` 
+```
 
 ## JWT Parsing
 

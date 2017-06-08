@@ -12,7 +12,7 @@ class Service {
 
   create (data = {}, params = {}) {
     const defaults = this.app.get('auth');
-    const payload = merge(data.payload, params.payload);
+    const payload = params.payload;
 
     // create accessToken
     // TODO (EK): Support refresh tokens
