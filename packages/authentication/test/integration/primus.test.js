@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 
 import merge from 'lodash.merge';
+import clone from 'lodash.clone';
 import createApplication from '../fixtures/server';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
@@ -109,6 +110,29 @@ describe('Primus authentication', function () {
             expect(response.accessToken).to.exist;
             expect(serverSocket.request.feathers.user).to.not.equal(undefined);
             done();
+          });
+        });
+
+        it('updates the user on the socket', done => {
+          socket.send('authenticate', data, (error, response) => {
+            expect(error).to.not.be.ok;
+            // Clone the socket user and replace it with the clone so that feathers-memory
+            // doesn't have a reference to the same object.
+            const socketUser = clone(serverSocket.request.feathers.user);
+            serverSocket.request.feathers.user = socketUser;
+
+            const email = 'test@feathersjs.com';
+            const oldEmail = socketUser.email;
+
+            app.service('users').patch(socketUser.id, { email })
+              .then(user => {
+                expect(socketUser.email).to.equal(email);
+                return app.service('users').patch(socketUser.id, { email: oldEmail });
+              })
+              .then(user => {
+                expect(socketUser.email).to.equal(oldEmail);
+                done();
+              });
           });
         });
 
