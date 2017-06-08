@@ -57,7 +57,15 @@ export default function setupSocketHandler (app, options, { feathersParams, prov
       }
     };
 
-    const authenticate = function (data, callback = () => {}) {
+    const authenticate = function (data = {}, callback = () => {}) {
+      if (typeof data === 'function') {
+        callback = data;
+      }
+
+      if (typeof data === 'function' || typeof data !== 'object' || data === null) {
+        data = {};
+      }
+
       const { strategy } = data;
       socket._feathers = Object.assign({
         query: {},
