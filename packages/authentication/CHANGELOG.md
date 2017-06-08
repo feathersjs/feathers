@@ -1,5 +1,32 @@
 # Change Log
 
+## [v1.2.4](https://github.com/feathersjs/feathers-authentication/tree/v1.2.4) (2017-06-08)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.2.3...v1.2.4)
+
+**Fixed bugs:**
+
+- User \(Entity\) needs to be updated on the socket after authentication [\#293](https://github.com/feathersjs/feathers-authentication/issues/293)
+
+**Closed issues:**
+
+- Express Middleware local -\> jwt does not authorize on redirect [\#518](https://github.com/feathersjs/feathers-authentication/issues/518)
+- Issue with feathers-authentication [\#512](https://github.com/feathersjs/feathers-authentication/issues/512)
+- User Authentication Missing Credentials error \(and subsequent nav authorization\) [\#508](https://github.com/feathersjs/feathers-authentication/issues/508)
+- passport log failure [\#505](https://github.com/feathersjs/feathers-authentication/issues/505)
+- authenticate with a custom username field \(rather than email\) [\#502](https://github.com/feathersjs/feathers-authentication/issues/502)
+- app.get\('auth'\) vs app.get\('authentication'\) [\#497](https://github.com/feathersjs/feathers-authentication/issues/497)
+- Can't get success authorization with pure feathers server [\#491](https://github.com/feathersjs/feathers-authentication/issues/491)
+
+**Merged pull requests:**
+
+- Test and fix for authenticate event with invalid data [\#524](https://github.com/feathersjs/feathers-authentication/pull/524) ([daffl](https://github.com/daffl))
+- Remove hook.data.payload [\#522](https://github.com/feathersjs/feathers-authentication/pull/522) ([marshallswain](https://github.com/marshallswain))
+- Update socket entity [\#521](https://github.com/feathersjs/feathers-authentication/pull/521) ([marshallswain](https://github.com/marshallswain))
+- Made each option, optional [\#515](https://github.com/feathersjs/feathers-authentication/pull/515) ([cranesandcaff](https://github.com/cranesandcaff))
+- Add feathers-authentication-hooks in readme [\#510](https://github.com/feathersjs/feathers-authentication/pull/510) ([bertho-zero](https://github.com/bertho-zero))
+- Update ms to the latest version 🚀 [\#509](https://github.com/feathersjs/feathers-authentication/pull/509) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Fix default authentication config keys [\#506](https://github.com/feathersjs/feathers-authentication/pull/506) ([ekryski](https://github.com/ekryski))
+
 ## [v1.2.3](https://github.com/feathersjs/feathers-authentication/tree/v1.2.3) (2017-05-10)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.2.2...v1.2.3)
 
@@ -16,14 +43,14 @@
 
 **Merged pull requests:**
 
-- Update feathers-socketio to the latest version 🚀 [\#503](https://github.com/feathersjs/feathers-authentication/pull/503) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
-- Update socket.io-client to the latest version 🚀 [\#501](https://github.com/feathersjs/feathers-authentication/pull/501) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Update feathers-socketio to the latest version 🚀 [\#503](https://github.com/feathersjs/feathers-authentication/pull/503) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update socket.io-client to the latest version 🚀 [\#501](https://github.com/feathersjs/feathers-authentication/pull/501) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 - Fix issue with very large token timeout. [\#499](https://github.com/feathersjs/feathers-authentication/pull/499) ([asdacap](https://github.com/asdacap))
 - Typo [\#492](https://github.com/feathersjs/feathers-authentication/pull/492) ([wdmtech](https://github.com/wdmtech))
 - Update migrating.md [\#490](https://github.com/feathersjs/feathers-authentication/pull/490) ([MichaelErmer](https://github.com/MichaelErmer))
-- Update semistandard to the latest version 🚀 [\#487](https://github.com/feathersjs/feathers-authentication/pull/487) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
-- Update feathers-hooks to the latest version 🚀 [\#485](https://github.com/feathersjs/feathers-authentication/pull/485) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
-- Update dependencies to enable Greenkeeper 🌴 [\#482](https://github.com/feathersjs/feathers-authentication/pull/482) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Update semistandard to the latest version 🚀 [\#487](https://github.com/feathersjs/feathers-authentication/pull/487) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-hooks to the latest version 🚀 [\#485](https://github.com/feathersjs/feathers-authentication/pull/485) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#482](https://github.com/feathersjs/feathers-authentication/pull/482) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
 ## [v1.2.2](https://github.com/feathersjs/feathers-authentication/tree/v1.2.2) (2017-04-12)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.2.1...v1.2.2)
@@ -127,7 +154,6 @@
 - Feature Request: Anonymous Authentication Strategy Support [\#423](https://github.com/feathersjs/feathers-authentication/issues/423)
 - Error is not thrown if token that is provided is invalid [\#421](https://github.com/feathersjs/feathers-authentication/issues/421)
 - Request body 'token' parameter disappears [\#420](https://github.com/feathersjs/feathers-authentication/issues/420)
-- Prefixing socket events [\#418](https://github.com/feathersjs/feathers-authentication/issues/418)
 - Auth2 issue getting JWT token from server when different ports [\#416](https://github.com/feathersjs/feathers-authentication/issues/416)
 - Cookie-based authentication with XHR is not possible [\#413](https://github.com/feathersjs/feathers-authentication/issues/413)
 - JWT Authentication setup failing [\#411](https://github.com/feathersjs/feathers-authentication/issues/411)
