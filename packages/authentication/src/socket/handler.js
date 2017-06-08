@@ -19,7 +19,7 @@ function handleSocketCallback (promise, callback) {
 }
 
 export default function setupSocketHandler (app, options, { feathersParams, provider, emit, disconnect }) {
-  const authSettings = app.get('auth');
+  const authSettings = app.get('authentication') || app.get('auth');
   const service = app.service(authSettings.path);
   const entityService = app.service(authSettings.service);
   let isUpdateEntitySetup = false;

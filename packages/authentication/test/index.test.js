@@ -62,7 +62,7 @@ describe('Feathers Authentication', () => {
     it('sets cookie to be insecure', () => {
       app.set('env', 'development');
       app.configure(authentication(config));
-      expect(app.get('auth').cookie.secure).to.equal(false);
+      expect(app.get('authentication').cookie.secure).to.equal(false);
     });
   });
 
@@ -70,7 +70,7 @@ describe('Feathers Authentication', () => {
     it('sets cookie to be insecure', () => {
       app.set('env', 'test');
       app.configure(authentication(config));
-      expect(app.get('auth').cookie.secure).to.equal(false);
+      expect(app.get('authentication').cookie.secure).to.equal(false);
     });
   });
 
@@ -78,14 +78,14 @@ describe('Feathers Authentication', () => {
     it('sets cookie to be secure', () => {
       app.set('env', 'production');
       app.configure(authentication(config));
-      expect(app.get('auth').cookie.secure).to.equal(true);
+      expect(app.get('authentication').cookie.secure).to.equal(true);
     });
   });
 
   it('sets custom config options', () => {
     config.custom = 'custom';
     app.configure(authentication(config));
-    expect(app.get('auth').custom).to.equal('custom');
+    expect(app.get('authentication').custom).to.equal('custom');
   });
 
   it('sets up feathers passport adapter', () => {
