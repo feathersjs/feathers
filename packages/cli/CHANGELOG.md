@@ -1,5 +1,18 @@
 # Change Log
 
+## [v2.1.0](https://github.com/feathersjs/feathers-cli/tree/v2.1.0) (2017-06-10)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.5...v2.1.0)
+
+**Closed issues:**
+
+- Does not add all needed Feathers dependencies [\#90](https://github.com/feathersjs/feathers-cli/issues/90)
+- File postgres.js is overwritten when generating new service [\#87](https://github.com/feathersjs/feathers-cli/issues/87)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#93](https://github.com/feathersjs/feathers-cli/pull/93) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update yeoman-environment to the latest version 🚀 [\#89](https://github.com/feathersjs/feathers-cli/pull/89) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.0.5](https://github.com/feathersjs/feathers-cli/tree/v2.0.5) (2017-04-23)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.4...v2.0.5)
 
@@ -10,14 +23,14 @@
 
 **Merged pull requests:**
 
-- Update generator-feathers to the latest version 🚀 [\#86](https://github.com/feathersjs/feathers-cli/pull/86) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Update generator-feathers to the latest version 🚀 [\#86](https://github.com/feathersjs/feathers-cli/pull/86) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
 ## [v2.0.4](https://github.com/feathersjs/feathers-cli/tree/v2.0.4) (2017-04-19)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.3...v2.0.4)
 
 **Merged pull requests:**
 
-- Update generator-feathers to the latest version 🚀 [\#83](https://github.com/feathersjs/feathers-cli/pull/83) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Update generator-feathers to the latest version 🚀 [\#83](https://github.com/feathersjs/feathers-cli/pull/83) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
 ## [v2.0.3](https://github.com/feathersjs/feathers-cli/tree/v2.0.3) (2017-04-18)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.2...v2.0.3)
@@ -40,9 +53,9 @@
 
 **Merged pull requests:**
 
-- Update generator-feathers to the latest version 🚀 [\#81](https://github.com/feathersjs/feathers-cli/pull/81) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Update generator-feathers to the latest version 🚀 [\#81](https://github.com/feathersjs/feathers-cli/pull/81) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 - Check for Node v6 or later [\#80](https://github.com/feathersjs/feathers-cli/pull/80) ([daffl](https://github.com/daffl))
-- Add Greenkeeper badge 🌴 [\#78](https://github.com/feathersjs/feathers-cli/pull/78) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Add Greenkeeper badge 🌴 [\#78](https://github.com/feathersjs/feathers-cli/pull/78) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
 ## [v2.0.1](https://github.com/feathersjs/feathers-cli/tree/v2.0.1) (2017-04-12)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.0...v2.0.1)
