@@ -32,11 +32,16 @@ module.exports = class BaseGenerator extends Generator {
     return this.pkg.directories && this.pkg.directories.lib;
   }
 
-  _packagerInstall(... args) {
+  _packagerInstall(deps, options) {
     const packager = this.pkg.engines && this.pkg.engines.yarn ? 
       'yarn' : 'npm';
     const method = `${packager}Install`;
 
-    return this[method](... args);
+    if(packager === 'yarn' && options.saveDev) {
+      options.dev = true;
+      delete options.saveDev;
+    }
+    
+    return this[method](deps, options);
   }
 };
