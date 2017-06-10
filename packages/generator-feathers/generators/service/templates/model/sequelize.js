@@ -9,14 +9,12 @@ module.exports = function (app) {
       type: Sequelize.STRING,
       allowNull: false
     }
-  }, {
-    classMethods: {
-      associate (models) { // eslint-disable-line no-unused-vars
-        // Define associations here
-        // See http://docs.sequelizejs.com/en/latest/docs/associations/
-      }
-    }
   });
+
+  <%= camelName %>.associate = function (models) { // eslint-disable-line no-unused-vars
+    // Define associations here
+    // See http://docs.sequelizejs.com/en/latest/docs/associations/
+  };
 
   return <%= camelName %>;
 };
