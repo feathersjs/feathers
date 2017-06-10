@@ -1,5 +1,18 @@
 # Change Log
 
+## [v1.1.0](https://github.com/feathersjs/generator-feathers/tree/v1.1.0) (2017-06-10)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.6...v1.1.0)
+
+**Closed issues:**
+
+- An in-range update of mocha is breaking the build 🚨 [\#215](https://github.com/feathersjs/generator-feathers/issues/215)
+
+**Merged pull requests:**
+
+- Allow to customize the test directory [\#218](https://github.com/feathersjs/generator-feathers/pull/218) ([daffl](https://github.com/daffl))
+- Test and fix for Yarn saveDev [\#217](https://github.com/feathersjs/generator-feathers/pull/217) ([daffl](https://github.com/daffl))
+- Generate sequelize model according to sequelize 4.0 [\#216](https://github.com/feathersjs/generator-feathers/pull/216) ([jsphpl](https://github.com/jsphpl))
+
 ## [v1.0.6](https://github.com/feathersjs/generator-feathers/tree/v1.0.6) (2017-04-23)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.5...v1.0.6)
 
@@ -43,7 +56,7 @@
 **Merged pull requests:**
 
 - Use our fork of JSCodeshift for now to avoid installation error messages [\#201](https://github.com/feathersjs/generator-feathers/pull/201) ([daffl](https://github.com/daffl))
-- Add Greenkeeper badge 🌴 [\#200](https://github.com/feathersjs/generator-feathers/pull/200) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Add Greenkeeper badge 🌴 [\#200](https://github.com/feathersjs/generator-feathers/pull/200) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
 ## [v1.0.2](https://github.com/feathersjs/generator-feathers/tree/v1.0.2) (2017-04-12)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.1...v1.0.2)
