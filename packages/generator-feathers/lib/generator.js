@@ -32,6 +32,10 @@ module.exports = class BaseGenerator extends Generator {
     return this.pkg.directories && this.pkg.directories.lib;
   }
 
+  get testDirectory() {
+    return (this.pkg.directories && this.pkg.directories.test) || 'test';
+  }
+
   _packagerInstall(deps, options) {
     const packager = this.pkg.engines && this.pkg.engines.yarn ? 
       'yarn' : 'npm';
