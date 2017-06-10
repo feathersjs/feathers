@@ -152,7 +152,7 @@ module.exports = class HookGenerator extends Generator {
 
     this.fs.copyTpl(
       this.templatePath('test.js'),
-      this.destinationPath('test', 'hooks', `${context.kebabName}.test.js`),
+      this.destinationPath(this.testDirectory, 'hooks', `${context.kebabName}.test.js`),
       context
     );
   }

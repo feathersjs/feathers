@@ -212,7 +212,7 @@ module.exports = class ServiceGenerator extends Generator {
 
     this.fs.copyTpl(
       this.templatePath('test.js'),
-      this.destinationPath('test', 'services', `${kebabName}.test.js`),
+      this.destinationPath(this.testDirectory, 'services', `${kebabName}.test.js`),
       context
     );
 
