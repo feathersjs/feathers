@@ -54,7 +54,6 @@
     "node": ">= 4"
   },
   "dependencies": {
-    "babel-runtime": "^6.26.0",
     "debug": "^3.1.0",
     "events": "^1.1.1",
     "express": "^4.16.1",
