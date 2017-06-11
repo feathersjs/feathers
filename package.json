@@ -14,10 +14,6 @@
     "realtime"
   ],
   "main": "lib/index",
-  "types": [
-    "./index.d.ts",
-    "./client.d.ts"
-  ],
   "author": "Feathers <hello@feathersjs.com> (http://feathersjs.com)",
   "contributors": [
     "Eric Kryski <e.kryski@gmail.com> (http://erickryski.com)",
