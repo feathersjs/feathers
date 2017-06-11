@@ -53,8 +53,6 @@
     "node": ">= 4"
   },
   "dependencies": {
-    "@types/express": "~4.0.35",
-    "babel-runtime": "^6.26.0",
     "debug": "^3.1.0",
     "events": "^1.1.1",
     "express": "^4.16.1",
