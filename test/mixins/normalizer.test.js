@@ -8,7 +8,7 @@ describe('Argument normalizer mixin', () => {
     const arr = mixins();
     const dummy = function () { };
 
-    assert.equal(arr.length, 3);
+    assert.equal(arr.length, 4);
 
     arr.push(dummy);
 
