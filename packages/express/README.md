@@ -1,5 +1,7 @@
 # feathers-express
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-express.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/feathersjs/feathers-express.png?branch=master)](https://travis-ci.org/feathersjs/feathers-express)
 [![Code Climate](https://codeclimate.com/github/feathersjs/feathers-express/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/feathers-express)
 [![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-express/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-express/coverage)
