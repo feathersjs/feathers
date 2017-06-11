@@ -2,6 +2,7 @@ export default function () {
   const mixins = [
     require('./promise'),
     require('./event'),
+    require('../hooks'),
     require('./normalizer')
   ];
 
