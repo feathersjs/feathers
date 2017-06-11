@@ -333,11 +333,11 @@ describe('Feathers application', () => {
   it('mixins are unique to one application', function () {
     const app = feathers();
     app.mixins.push(function () {});
-    assert.equal(app.mixins.length, 4);
+    assert.equal(app.mixins.length, 5);
 
     const otherApp = feathers();
     otherApp.mixins.push(function () {});
-    assert.equal(otherApp.mixins.length, 4);
+    assert.equal(otherApp.mixins.length, 5);
   });
 
   it('initializes a service with only a setup method (#285)', done => {
