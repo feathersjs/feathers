@@ -1,4 +1,10 @@
-import { hooks as commons, validateArguments } from 'feathers-commons';
+import {
+  hooks as commons, validateArguments, isPromise
+} from 'feathers-commons';
+
+const {
+  createHookObject, getHooks, processHooks, enableHooks, makeArguments
+} = commons;
 
 export function hookMixin (service) {
   if (typeof service.hooks === 'function') {
@@ -9,8 +15,10 @@ export function hookMixin (service) {
   const methods = app.methods;
   const mixin = {};
 
-  commons.enableHooks(service, methods, app.hookTypes);
+  // Add .hooks method and properties to the service
+  enableHooks(service, methods, app.hookTypes);
 
+  // Assemble the mixin object that contains all "hooked" service methods
   methods.forEach(method => {
     if (typeof service[method] !== 'function') {
       return;
@@ -28,21 +36,16 @@ export function hookMixin (service) {
 
       // A reference to the original method
       const _super = this._super.bind(this);
-      // Additional data to add to the hook object
-      const hookData = {
-        app,
-        service,
-        get path () {
-          return Object.keys(app.services)
-            .find(path => app.services[path] === service);
-        }
-      };
       // Create the hook object that gets passed through
-      const hookObject = commons.hookObject(method, 'before', args, hookData);
-      const beforeHooks = commons.getHooks(app, this, 'before', method);
+      const hookObject = createHookObject(method, args, {
+        type: 'before', // initial hook object type
+        service,
+        app
+      });
+      const beforeHooks = getHooks(app, this, 'before', method);
 
       // Process all before hooks
-      return commons.processHooks.call(this, beforeHooks, hookObject)
+      return processHooks.call(this, beforeHooks, hookObject)
         // Use the hook object to call the original method
         .then(hookObject => {
           // If `hookObject.result` is set, skip the original method
@@ -51,7 +54,13 @@ export function hookMixin (service) {
           }
 
           // Otherwise, call it with arguments created from the hook object
-          return _super(...commons.makeArguments(hookObject)).then(result => {
+          const promise = _super(...makeArguments(hookObject));
+
+          if (!isPromise(promise)) {
+            throw new Error(`Service method '${hookObject.method}' for '${hookObject.path}' service must return a promise`);
+          }
+
+          return promise.then(result => {
             hookObject.result = result;
 
             return hookObject;
@@ -61,22 +70,22 @@ export function hookMixin (service) {
         .then(hookObject => Object.assign({}, hookObject, { type: 'after' }))
         // Run through all `after` hooks
         .then(hookObject => {
-          const afterHooks = commons.getHooks(app, this, 'after', method, true);
+          const afterHooks = getHooks(app, this, 'after', method, true);
 
-          return commons.processHooks.call(this, afterHooks, hookObject);
+          return processHooks.call(this, afterHooks, hookObject);
         })
         // Finally, return the result
         .then(hookObject => hookObject.result)
         // Handle errors
         .catch(error => {
-          const errorHooks = commons.getHooks(app, this, 'error', method, true);
+          const errorHooks = getHooks(app, this, 'error', method, true);
           const errorHookObject = Object.assign({}, error.hook || hookObject, {
             type: 'error',
             original: error.hook,
             error
           });
 
-          return commons.processHooks
+          return processHooks
             .call(this, errorHooks, errorHookObject)
             .then(hook => Promise.reject(hook.error));
         });
@@ -90,11 +99,14 @@ export default function () {
   return function () {
     const app = this;
 
+    // We store a reference of all supported hook types on the app
+    // in case someone needs it
     Object.assign(app, {
-      hookTypes: [ 'before', 'after', 'error' ]
+      hookTypes: [ 'before', 'after', 'error', 'finally' ]
     });
 
-    commons.enableHooks(app, app.methods, app.hookTypes);
+    // Add functionality for hooks to be registered as app.hooks
+    enableHooks(app, app.methods, app.hookTypes);
 
     app.mixins.push(hookMixin);
   };

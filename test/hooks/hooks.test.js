@@ -134,11 +134,23 @@ describe('hooks basics', () => {
 
   it('registering an already hooked service works (#154)', () => {
     const app = feathers().use('/dummy', {
-      get (id, params, callback) {
-        callback(null, { id, params });
+      get (id, params) {
+        return Promise.resolve({ id, params });
       }
     });
 
     app.use('/dummy2', app.service('dummy'));
+  });
+
+  it('not returning a promise errors', () => {
+    const app = feathers().use('/dummy', {
+      get () {
+        return {};
+      }
+    });
+
+    return app.service('dummy').get(1).catch(e => {
+      assert.equal(e.message, `Service method 'get' for 'dummy' service must return a promise`);
+    });
   });
 });

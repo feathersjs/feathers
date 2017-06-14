@@ -2,8 +2,8 @@ import makeDebug from 'debug';
 import { stripSlashes } from 'feathers-commons';
 import Uberproto from 'uberproto';
 
-import events from './events';
-import hooks from './hooks';
+import events from './plugins/events';
+import hooks from './plugins/hooks';
 
 const debug = makeDebug('feathers:application');
 const Proto = Uberproto.extend({
@@ -19,11 +19,10 @@ const application = {
       providers: [],
       _setup: false,
       settings: {}
-
     });
 
-    this.configure(events());
     this.configure(hooks());
+    this.configure(events());
   },
 
   get (name) {

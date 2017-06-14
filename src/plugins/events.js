@@ -1,6 +1,19 @@
 import { EventEmitter } from 'events';
 import Proto from 'uberproto';
 
+export function eventHook () {
+  return function (hook) {
+    const { app, service } = hook;
+    const eventName = app.eventMappings[hook.method];
+    const isHookEvent = service._hookEvents && service._hookEvents.indexOf(eventName) !== -1;
+
+    // If this event is not being sent yet and we are not in an error hook
+    if (eventName && isHookEvent && hook.type !== 'error') {
+      service.emit(eventName, hook.result, hook);
+    }
+  };
+}
+
 export function eventMixin (service) {
   if (service._serviceEvents) {
     return;
@@ -29,10 +42,13 @@ export function eventMixin (service) {
     }
   });
 
+  // `app.eventMappings` has the mapping from method name to event name
   Object.keys(app.eventMappings).forEach(method => {
     const event = app.eventMappings[method];
     const alreadyEmits = service._serviceEvents.indexOf(event) !== -1;
 
+    // Add events for known methods to _serviceEvents and _hookEvents
+    // if the service indicated it does not send it itself yet
     if (typeof service[method] === 'function' && !alreadyEmits) {
       service._serviceEvents.push(event);
       service._hookEvents.push(event);
@@ -44,6 +60,7 @@ export default function () {
   return function () {
     const app = this;
 
+    // Mappings from service method to event name
     Object.assign(app, {
       eventMappings: {
         create: 'created',
@@ -53,6 +70,9 @@ export default function () {
       }
     });
 
+    app.hooks({ after: eventHook() });
+
+    // Make the app an event emitter
     Proto.mixin(EventEmitter.prototype, app);
 
     app.mixins.push(eventMixin);
