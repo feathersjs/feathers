@@ -19,14 +19,12 @@ module.exports = function (app) {
   <% authentication.oauthProviders.forEach(provider => { %>
     <%= provider.name %>Id: { type: Sequelize.STRING },
   <% }); %>
-  }, {
-    classMethods: {
-      associate (models) { // eslint-disable-line no-unused-vars
-        // Define associations here
-        // See http://docs.sequelizejs.com/en/latest/docs/associations/
-      }
-    }
   });
+
+  <%= camelName %>.associate = function (models) { // eslint-disable-line no-unused-vars
+    // Define associations here
+    // See http://docs.sequelizejs.com/en/latest/docs/associations/
+  };
 
   return <%= camelName %>;
 };
