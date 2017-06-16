@@ -6,8 +6,9 @@ const j = require('../../lib/transform');
 
 const templatePath = path.join(__dirname, 'templates');
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
-const createExpression = (object, property, args = []) =>
-      j.expressionStatement(j.callExpression(j.memberExpression(j.identifier(object), j.identifier(property)), args));
+const createExpression = (object, property, args = []) => {
+  return j.expressionStatement(j.callExpression(j.memberExpression(j.identifier(object), j.identifier(property)), args));
+};
 
 module.exports = class ServiceGenerator extends Generator {
   prompting() {
