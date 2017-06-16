@@ -1,5 +1,21 @@
 # Change Log
 
+## [v1.1.1](https://github.com/feathersjs/generator-feathers/tree/v1.1.1) (2017-06-16)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.1.0...v1.1.1)
+
+**Closed issues:**
+
+- Sequelize 4.x Breaking Changes [\#224](https://github.com/feathersjs/generator-feathers/issues/224)
+- Header or request information in hooks [\#221](https://github.com/feathersjs/generator-feathers/issues/221)
+- Add "use strict" in src/hooks/logger.js. [\#220](https://github.com/feathersjs/generator-feathers/issues/220)
+
+**Merged pull requests:**
+
+- Update user model to Sequelize 4 [\#227](https://github.com/feathersjs/generator-feathers/pull/227) ([daffl](https://github.com/daffl))
+- Improve order of generated middleware [\#223](https://github.com/feathersjs/generator-feathers/pull/223) ([daffl](https://github.com/daffl))
+- Update eslint to the latest version 🚀 [\#222](https://github.com/feathersjs/generator-feathers/pull/222) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Add all generated app dependencies as devDependencies [\#219](https://github.com/feathersjs/generator-feathers/pull/219) ([daffl](https://github.com/daffl))
+
 ## [v1.1.0](https://github.com/feathersjs/generator-feathers/tree/v1.1.0) (2017-06-10)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.6...v1.1.0)
 
