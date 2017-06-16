@@ -11,6 +11,9 @@ const hooks = require('feathers-hooks');
 <% if (hasProvider('rest')) { %>const rest = require('feathers-rest');<% } %>
 <% if (hasProvider('socketio')) { %>const socketio = require('feathers-socketio');<% } %>
 <% if (hasProvider('primus')) { %>const primus = require('feathers-primus');<% } %>
+const handler = require('feathers-errors/handler');
+const notFound = require('feathers-errors/not-found');
+
 const middleware = require('./middleware');
 const services = require('./services');
 const appHooks = require('./app.hooks');
@@ -28,6 +31,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 // Host the public folder
 app.use('/', feathers.static(app.get('public')));
+// Configure other middleware (see `middleware/index.js`)
+app.configure(middleware);
 
 // Set up Plugins and providers
 app.configure(hooks());
@@ -36,8 +41,10 @@ app.configure(hooks());
 <% if(hasProvider('primus')) { %>app.configure(primus({ transformer: 'websockets' }));<% } %>
 // Set up our services (see `services/index.js`)
 app.configure(services);
-// Configure middleware (see `middleware/index.js`) - always has to be last
-app.configure(middleware);
+// Configure a middleware for 404s and the error handler
+app.use(notFound());
+app.use(handler());
+
 app.hooks(appHooks);
 
 module.exports = app;
