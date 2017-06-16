@@ -96,14 +96,12 @@ describe('generator-feathers', function() {
       return runConnectionGenerator({
         database: 'nedb',
         connectionString: 'nedb://../mytest'
-      })
-      .then(() => 
+      }).then(() => 
         assert.jsonFileContent(
           path.join(appDir, 'config', 'default.json'),
           { nedb: '../mytest' }
         )
-      )
-      .then(() => runTest('starts and shows the index page'));
+      ).then(() => runTest('starts and shows the index page'));
     });
 
     describe('mongodb', () => {
@@ -114,14 +112,12 @@ describe('generator-feathers', function() {
           database: 'mongodb',
           adapter: 'mongodb',
           connectionString
-        })
-        .then(() => 
+        }).then(() => 
           assert.jsonFileContent(
             path.join(appDir, 'config', 'default.json'),
             { mongodb: connectionString }
           )
-        )
-        .then(() => runTest('starts and shows the index page'));
+        ).then(() => runTest('starts and shows the index page'));
       });
 
       it('mongoose', () => {
@@ -131,14 +127,12 @@ describe('generator-feathers', function() {
           database: 'mongodb',
           adapter: 'mongoose',
           connectionString
-        })
-        .then(() => 
+        }).then(() => 
           assert.jsonFileContent(
             path.join(appDir, 'config', 'default.json'),
             { mongodb: connectionString }
           )
-        )
-        .then(() => runTest('starts and shows the index page'));
+        ).then(() => runTest('starts and shows the index page'));
       });
     });
 
@@ -166,8 +160,7 @@ describe('generator-feathers', function() {
           database: 'sqlite',
           adapter: 'knex',
           connectionString
-        })
-        .then(() => 
+        }).then(() => 
           assert.jsonFileContent(
             path.join(appDir, 'config', 'default.json'), {
               sqlite: {
@@ -178,8 +171,7 @@ describe('generator-feathers', function() {
               }
             }
           )
-        )
-        .then(() => runTest('starts and shows the index page'));
+        ).then(() => runTest('starts and shows the index page'));
       });
 
       it('sequelize', () => {
@@ -189,15 +181,13 @@ describe('generator-feathers', function() {
           database: 'sqlite',
           adapter: 'sequelize',
           connectionString
-        })
-        .then(() => 
+        }).then(() => 
           assert.jsonFileContent(
             path.join(appDir, 'config', 'default.json'), {
               sqlite: connectionString
             }
           )
-        )
-        .then(() => runTest('starts and shows the index page'));
+        ).then(() => runTest('starts and shows the index page'));
       });
     });
 
@@ -205,8 +195,7 @@ describe('generator-feathers', function() {
       return runConnectionGenerator({
         database: 'rethinkdb',
         connectionString: 'rethinkdb://localhost:11078/testing'
-      })
-      .then(() => 
+      }).then(() => 
         assert.jsonFileContent(
           path.join(appDir, 'config', 'default.json'), {
             rethinkdb: {
@@ -220,8 +209,7 @@ describe('generator-feathers', function() {
             }
           }
         )
-      )
-      .then(() => runTest('starts and shows the index page'));
+      ).then(() => runTest('starts and shows the index page'));
     });
   });
 
@@ -247,21 +235,19 @@ describe('generator-feathers', function() {
             method: 'post',
             json: true,
             body: { text }
-          })
-          .then(response => {
+          }).then(response => {
             if(id) {
               assert.ok(typeof response[id] !== 'undefined');
             }
             
             assert.equal(response.text, text);
-          })
-          .then(() => child.kill())
-          .catch(e =>
-            new Promise((resolve, reject) => {
-              child.once('exit', () => reject(e));
-              child.kill('SIGKILL');
-            })
-          );
+          }).then(() => child.kill())
+            .catch(e =>
+              new Promise((resolve, reject) => {
+                child.once('exit', () => reject(e));
+                child.kill('SIGKILL');
+              })
+            );
         });
     }
 
@@ -277,17 +263,16 @@ describe('generator-feathers', function() {
 
   describe('feathers:authentication', () => {
     it.skip('runs and initializes working local strategy', () => {
-      return helpers.run(path.join(__dirname, '../generators/authentication'))
-      .withPrompts({
-        strategies: ['local'],
-        entity: 'users',
-        database: 'memory'
-      })
-      .withOptions({ skipInstall: false })
-      .then(() => startAndWait('node', ['src/'], { cwd: appDir }, 'Feathers application started'))
-      .then(delay(1000));
-      // .then(({ child }) => {
-      // });
+      return helpers
+        .run(path.join(__dirname, '../generators/authentication'))
+        .withPrompts({
+          strategies: ['local'],
+          entity: 'users',
+          database: 'memory'
+        })
+        .withOptions({ skipInstall: false })
+        .then(() => startAndWait('node', ['src/'], { cwd: appDir }, 'Feathers application started'))
+        .then(delay(1000));
     });
   });
 });
