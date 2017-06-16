@@ -1,5 +1,17 @@
 # Change Log
 
+## [v2.1.1](https://github.com/feathersjs/feathers-cli/tree/v2.1.1) (2017-06-16)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.1.0...v2.1.1)
+
+**Closed issues:**
+
+- Can not generate services with Node 8.1.0 [\#94](https://github.com/feathersjs/feathers-cli/issues/94)
+- Whitespace handling [\#92](https://github.com/feathersjs/feathers-cli/issues/92)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#95](https://github.com/feathersjs/feathers-cli/pull/95) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.1.0](https://github.com/feathersjs/feathers-cli/tree/v2.1.0) (2017-06-10)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.0.5...v2.1.0)
 
