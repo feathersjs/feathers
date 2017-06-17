@@ -24,6 +24,59 @@ describe('Feathers application', () => {
     app.emit('test', original);
   });
 
+  it('throws an error for old app.service(path, service)', () => {
+    const app = feathers();
+
+    try {
+      app.service('/test', {});
+    } catch (e) {
+      assert.equal(e.message, 'Registering a new service with `app.service(path, service)` is no longer supported. Use `app.use(path, service)` instead.');
+    }
+  });
+
+  it('uses .defaultService if available', () => {
+    const app = feathers();
+
+    assert.ok(!app.service('/todos/'));
+
+    app.defaultService = function (path) {
+      assert.equal(path, 'todos');
+      return {
+        get (id) {
+          return Promise.resolve({
+            id, description: `You have to do ${id}!`
+          });
+        }
+      };
+    };
+
+    return app.service('/todos/').get('dishes').then(data => {
+      assert.deepEqual(data, {
+        id: 'dishes',
+        description: 'You have to do dishes!'
+      });
+    });
+  });
+
+  it('providers are getting called with a service', () => {
+    const app = feathers();
+    let providerRan = false;
+
+    app.providers.push(function (service, location, options) {
+      assert.ok(service.dummy);
+      assert.equal(location, 'dummy');
+      assert.deepEqual(options, {});
+      providerRan = true;
+    });
+
+    app.use('/dummy', {
+      dummy: true,
+      get () {}
+    });
+
+    assert.ok(providerRan);
+  });
+
   describe('Services', () => {
     it('calling .use with a non service object throws', () => {
       const app = feathers();
@@ -131,6 +184,64 @@ describe('Feathers application', () => {
         app.set('foo', 'bar');
         assert.strictEqual(app.disabled('foo'), false);
       });
+    });
+  });
+
+  describe('.setup', () => {
+    it('app.setup calls .setup on all services', () => {
+      const app = feathers();
+      let setupCount = 0;
+
+      app.use('/dummy', {
+        setup (appRef, path) {
+          setupCount++;
+          assert.equal(appRef, app);
+          assert.equal(path, 'dummy');
+        }
+      });
+
+      app.use('/dummy2', {
+        setup (appRef, path) {
+          setupCount++;
+          assert.equal(appRef, app);
+          assert.equal(path, 'dummy2');
+        }
+      });
+
+      app.setup();
+
+      assert.ok(app._isSetup);
+      assert.equal(setupCount, 2);
+    });
+
+    it('registering a service after app.setup will be set up', () => {
+      const app = feathers();
+
+      app.setup();
+
+      app.use('/dummy', {
+        setup (appRef, path) {
+          assert.ok(app._isSetup);
+          assert.equal(appRef, app);
+          assert.equal(path, 'dummy');
+        }
+      });
+    });
+
+    it('calls _setup on a service right away', () => {
+      const app = feathers();
+      let _setup = false;
+
+      app.use('/dummy', {
+        get () {},
+        _setup (appRef, path) {
+          _setup = true;
+          assert.equal(appRef, app);
+          assert.equal(path, 'dummy');
+        }
+      });
+
+      assert.ok(_setup);
     });
   });
 });

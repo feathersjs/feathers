@@ -70,7 +70,9 @@ export default function () {
       }
     });
 
-    app.hooks({ after: eventHook() });
+    // Register the event hook
+    // `finally` hooks always run last after `error` and `after` hooks
+    app.hooks({ finally: eventHook() });
 
     // Make the app an event emitter
     Proto.mixin(EventEmitter.prototype, app);

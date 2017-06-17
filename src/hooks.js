@@ -35,17 +35,17 @@ export function hookMixin (service) {
       }
 
       // A reference to the original method
-      const _super = this._super.bind(this);
+      const _super = service._super.bind(service);
       // Create the hook object that gets passed through
       const hookObject = createHookObject(method, args, {
         type: 'before', // initial hook object type
         service,
         app
       });
-      const beforeHooks = getHooks(app, this, 'before', method);
+      const beforeHooks = getHooks(app, service, 'before', method);
 
       // Process all before hooks
-      return processHooks.call(this, beforeHooks, hookObject)
+      return processHooks.call(service, beforeHooks, hookObject)
         // Use the hook object to call the original method
         .then(hookObject => {
           // If `hookObject.result` is set, skip the original method
@@ -70,15 +70,20 @@ export function hookMixin (service) {
         .then(hookObject => Object.assign({}, hookObject, { type: 'after' }))
         // Run through all `after` hooks
         .then(hookObject => {
-          const afterHooks = getHooks(app, this, 'after', method, true);
+          const afterHooks = getHooks(app, service, 'after', method, true);
+          const finallyHooks = getHooks(app, service, 'finally', method, true);
+          const hookChain = afterHooks.concat(finallyHooks);
 
-          return processHooks.call(this, afterHooks, hookObject);
+          return processHooks.call(service, hookChain, hookObject);
         })
         // Finally, return the result
         .then(hookObject => hookObject.result)
         // Handle errors
         .catch(error => {
-          const errorHooks = getHooks(app, this, 'error', method, true);
+          const errorHooks = getHooks(app, service, 'error', method, true);
+          const finallyHooks = getHooks(app, service, 'finally', method, true);
+          const hookChain = errorHooks.concat(finallyHooks);
+
           const errorHookObject = Object.assign({}, error.hook || hookObject, {
             type: 'error',
             original: error.hook,
@@ -86,7 +91,7 @@ export function hookMixin (service) {
           });
 
           return processHooks
-            .call(this, errorHooks, errorHookObject)
+            .call(service, hookChain, errorHookObject)
             .then(hook => Promise.reject(hook.error));
         });
     };

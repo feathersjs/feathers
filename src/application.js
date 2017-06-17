@@ -2,8 +2,8 @@ import makeDebug from 'debug';
 import { stripSlashes } from 'feathers-commons';
 import Uberproto from 'uberproto';
 
-import events from './plugins/events';
-import hooks from './plugins/hooks';
+import events from './events';
+import hooks from './hooks';
 
 const debug = makeDebug('feathers:application');
 const Proto = Uberproto.extend({
@@ -67,7 +67,8 @@ const application = {
     const current = this.services[location];
 
     if (typeof current === 'undefined' && typeof this.defaultService === 'function') {
-      return this.use(location, this.defaultService(location));
+      return this.use(`/${location}`, this.defaultService(location))
+        .service(location);
     }
 
     return current;
