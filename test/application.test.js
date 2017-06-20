@@ -75,6 +75,8 @@ describe('Feathers application', () => {
     });
 
     assert.ok(providerRan);
+
+    app.setup();
   });
 
   describe('Services', () => {
@@ -108,6 +110,39 @@ describe('Feathers application', () => {
       return wrappedService.create({
         message: 'Test message'
       }).then(data => assert.equal(data.message, 'Test message'));
+    });
+
+    it('services can be re-used (#566)', done => {
+      const app1 = feathers();
+      const app2 = feathers();
+
+      app2.use('/dummy', {
+        create (data) {
+          return Promise.resolve(data);
+        }
+      });
+
+      const dummy = app2.service('dummy');
+
+      dummy.hooks({
+        before: {
+          create (hook) {
+            hook.data.fromHook = true;
+          }
+        }
+      });
+
+      dummy.on('created', data => {
+        assert.deepEqual(data, {
+          message: 'Hi',
+          fromHook: true
+        });
+        done();
+      });
+
+      app1.use('/testing', app2.service('dummy'));
+
+      app1.service('testing').create({ message: 'Hi' });
     });
   });
 
@@ -197,6 +232,12 @@ describe('Feathers application', () => {
           setupCount++;
           assert.equal(appRef, app);
           assert.equal(path, 'dummy');
+        }
+      });
+
+      app.use('/simple', {
+        get (id) {
+          return Promise.resolve({ id });
         }
       });
 

@@ -1,4 +1,5 @@
 import assert from 'assert';
+import { EventEmitter } from 'events';
 
 import feathers from '../src';
 
@@ -13,6 +14,28 @@ describe('Service events', () => {
       done();
     });
     app.emit('test', { message: 'app' });
+  });
+
+  it('works with service that is already an EventEmitter', done => {
+    const app = feathers();
+    const service = new EventEmitter();
+
+    service.create = function (data) {
+      return Promise.resolve(data);
+    };
+
+    service.on('created', data => {
+      assert.deepEqual(data, {
+        message: 'testing'
+      });
+      done();
+    });
+
+    app.use('/emitter', service);
+
+    app.service('emitter').create({
+      message: 'testing'
+    });
   });
 
   describe('emits event data on a service', () => {

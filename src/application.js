@@ -117,6 +117,7 @@ const application = {
       const service = this.services[path];
 
       debug(`Setting up service for \`${path}\``);
+
       if (typeof service.setup === 'function') {
         service.setup(this, path);
       }
