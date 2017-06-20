@@ -11,12 +11,12 @@ module.exports = class ConnectionGenerator extends Generator {
   }
 
   _transformCode (code) {
-    const { database } = this.props;
+    const { adapter } = this.props;
 
     const ast = j(code);
     const appDeclaration = ast.findDeclaration('app');
     const configureHooks = ast.findConfigure('hooks');
-    const requireCall = `const ${database} = require('./${database}');`;
+    const requireCall = `const ${adapter} = require('./${adapter}');`;
 
     if (appDeclaration.length === 0) {
       throw new Error('Could not find \'app\' variable declaration in app.js to insert database configuration. Did you modify app.js?');
@@ -27,7 +27,7 @@ module.exports = class ConnectionGenerator extends Generator {
     }
 
     appDeclaration.insertBefore(requireCall);
-    configureHooks.insertAfter(`app.configure(${database});`);
+    configureHooks.insertAfter(`app.configure(${adapter});`);
 
     return ast.toSource();
   }
@@ -100,9 +100,10 @@ module.exports = class ConnectionGenerator extends Generator {
   _writeConfiguration () {
     const { database } = this.props;
     const config = Object.assign({}, this.defaultConfig);
+    const configuration = this._getConfiguration();
 
     if (!config[database]) {
-      config[database] = this._getConfiguration();
+      config[database] = configuration;
 
       this.conflicter.force = true;
       this.fs.writeJSON(
@@ -265,7 +266,7 @@ module.exports = class ConnectionGenerator extends Generator {
     }
 
     if (template) {
-      const dbFile = `${database}.js`;
+      const dbFile = `${adapter}.js`;
       const templateExists = this.fs.exists(this.destinationPath(this.libDirectory, dbFile));
 
       // If the file doesn't exist yet, add it to the app.js
