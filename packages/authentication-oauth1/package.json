@@ -1,7 +1,7 @@
 {
   "name": "feathers-authentication-oauth1",
   "description": "A Feathers OAuth1 authentication strategy",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "homepage": "https://github.com/feathersjs/feathers-authentication-oauth1",
   "main": "lib/",
   "keywords": [
