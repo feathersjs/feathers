@@ -1,19 +1,21 @@
 # Change Log
 
-## [Unreleased](https://github.com/feathersjs/feathers-authentication-oauth2/tree/HEAD)
-
-[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth2/compare/v0.2.4...HEAD)
+## [v0.2.5](https://github.com/feathersjs/feathers-authentication-oauth2/tree/v0.2.5) (2017-06-21)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth2/compare/v0.2.4...v0.2.5)
 
 **Closed issues:**
 
+- Module is using the wrong default config key [\#23](https://github.com/feathersjs/feathers-authentication-oauth2/issues/23)
 - Generated default.json is missing scope for Google OAuth [\#14](https://github.com/feathersjs/feathers-authentication-oauth2/issues/14)
 - Cookie not getting set [\#12](https://github.com/feathersjs/feathers-authentication-oauth2/issues/12)
 
 **Merged pull requests:**
 
-- Update semistandard to the latest version 🚀 [\#17](https://github.com/feathersjs/feathers-authentication-oauth2/pull/17) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
-- Update feathers-hooks to the latest version 🚀 [\#16](https://github.com/feathersjs/feathers-authentication-oauth2/pull/16) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
-- Update dependencies to enable Greenkeeper 🌴 [\#15](https://github.com/feathersjs/feathers-authentication-oauth2/pull/15) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Greenkeeper/chai 4.0.2 [\#28](https://github.com/feathersjs/feathers-authentication-oauth2/pull/28) ([daffl](https://github.com/daffl))
+- using correct auth key. Closes 23. [\#24](https://github.com/feathersjs/feathers-authentication-oauth2/pull/24) ([ekryski](https://github.com/ekryski))
+- Update semistandard to the latest version 🚀 [\#17](https://github.com/feathersjs/feathers-authentication-oauth2/pull/17) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-hooks to the latest version 🚀 [\#16](https://github.com/feathersjs/feathers-authentication-oauth2/pull/16) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#15](https://github.com/feathersjs/feathers-authentication-oauth2/pull/15) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
 ## [v0.2.4](https://github.com/feathersjs/feathers-authentication-oauth2/tree/v0.2.4) (2017-03-24)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth2/compare/v0.2.3...v0.2.4)
