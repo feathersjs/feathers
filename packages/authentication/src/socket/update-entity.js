@@ -22,13 +22,21 @@ module.exports = function updateEntity (entity, meta) {
 
   Object.keys(socketMap).forEach(socketId => {
     const socket = socketMap[socketId];
-    const socketEntity = (socket.feathers && socket.feathers[authConfig.entity]) || socket.request.feathers[authConfig.entity];
+    const feathers = socket.feathers || socket.request.feathers;
+    const socketEntity = feathers && feathers[authConfig.entity];
 
     if (socketEntity) {
       const socketEntityId = socketEntity[idField];
 
-      if (entityId === socketEntityId) {
+      if (`${entityId}` === `${socketEntityId}`) {
+        // Need to assign because of external references
         Object.assign(socketEntity, entity);
+
+        // Delete any removed entity properties
+        const entityProps = new Set(Object.keys(entity));
+        Object.keys(socketEntity)
+          .filter(prop => !entityProps.has(prop))
+          .forEach(prop => delete socketEntity[prop]);
       }
     }
   });
