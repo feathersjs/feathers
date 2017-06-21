@@ -1,5 +1,18 @@
 # Change Log
 
+## [v1.2.5](https://github.com/feathersjs/feathers-authentication/tree/v1.2.5) (2017-06-21)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.2.4...v1.2.5)
+
+**Closed issues:**
+
+- Cannot read property 'user' of undefined - lib\socket\update-entity.js:26:104 [\#529](https://github.com/feathersjs/feathers-authentication/issues/529)
+- Provider is undefined when using restrictToRoles [\#525](https://github.com/feathersjs/feathers-authentication/issues/525)
+- How to make a request to an Endpoint that requires authentication from nodejs? [\#523](https://github.com/feathersjs/feathers-authentication/issues/523)
+
+**Merged pull requests:**
+
+- fixes several issues with update-entity w/ test cases [\#531](https://github.com/feathersjs/feathers-authentication/pull/531) ([jerfowler](https://github.com/jerfowler))
+
 ## [v1.2.4](https://github.com/feathersjs/feathers-authentication/tree/v1.2.4) (2017-06-08)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.2.3...v1.2.4)
 
