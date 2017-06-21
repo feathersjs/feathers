@@ -1,5 +1,17 @@
 # Change Log
 
+## [v2.2.0](https://github.com/feathersjs/feathers-cli/tree/v2.2.0) (2017-06-21)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.1.1...v2.2.0)
+
+**Closed issues:**
+
+- Support ES-Next [\#91](https://github.com/feathersjs/feathers-cli/issues/91)
+- automatically migrate from prev versions to 2.0 [\#75](https://github.com/feathersjs/feathers-cli/issues/75)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#96](https://github.com/feathersjs/feathers-cli/pull/96) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.1.1](https://github.com/feathersjs/feathers-cli/tree/v2.1.1) (2017-06-16)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.1.0...v2.1.1)
 
