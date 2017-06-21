@@ -48,8 +48,10 @@ This will pull from your global `auth` object in your config file. It will also 
     name: 'local', // the name to use when invoking the authentication Strategy
     entity: 'user', // the entity that you're comparing username/password against
     service: 'users', // the service to look up the entity
-    usernameField: 'email', // key name of username field
-    passwordField: 'password', // key name of password field
+    usernameField: 'email', // key name of username field on the request
+    passwordField: 'password', // key name of password field on the request
+    entityUsernameField: 'email', // key name of the username field on the entity (defaults to `usernameField`)
+    entityPasswordField: 'password', // key name of the password on the entity (defaults to `passwordField`)
     passReqToCallback: true, // whether the request object should be passed to `verify`
     session: false // whether to use sessions,
     Verifier: Verifier // A Verifier class. Defaults to the built-in one but can be a custom one. See below for details.

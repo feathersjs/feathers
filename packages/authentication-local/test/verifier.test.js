@@ -109,6 +109,19 @@ describe('Verifier', () => {
           expect(result).to.deep.equal(user);
         });
       });
+
+      it('prefers entityPasswordField over passwordField', () => {
+        user.password = {
+          value: user.password
+        };
+
+        verifier.options.passwordField = 'password';
+        verifier.options.entityPasswordField = 'password.value';
+
+        return verifier._comparePassword(user, 'admin').then(result => {
+          expect(result).to.deep.equal(user);
+        });
+      })
     });
   });
 
@@ -150,6 +163,36 @@ describe('Verifier', () => {
         expect(service.find).to.have.been.calledWith({ query });
         done();
       });
+    });
+
+    it('allows overriding of usernameField', done => {
+      verifier.options.usernameField = 'username';
+
+      user.username = 'username';
+
+      verifier.verify({}, 'username', 'admin', (error, entity) => {
+        expect(error).to.equal(null);
+        expect(entity).to.deep.equal(user);
+        done();
+      })
+    });
+
+    it('prefers entityUsernameField over usernameField', done => {
+      verifier.options.usernameField = 'username';
+      verifier.options.entityUsernameField = 'users.username';
+
+      user.username = 'invalid';
+
+      user.users = {
+        username: 'valid'
+      };
+
+      verifier.verify({}, 'valid', 'admin', (error, entity) => {
+        expect(error).to.equal(null);
+        expect(entity).to.deep.equal(user);
+        done();
+      })
+
     });
 
     it('calls _normalizeResult', done => {
