@@ -120,7 +120,7 @@ describe('feathers-authentication-oauth2', () => {
         sinon.spy(config, 'Strategy');
         app.configure(oauth2(config));
         app.setup();
-        authOptions = app.get('auth');
+        authOptions = app.get('authentication');
         args = config.Strategy.getCall(0).args[0];
       });
 
