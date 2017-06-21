@@ -62,7 +62,7 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-es2015": "^6.16.0",
     "body-parser": "^1.15.2",
-    "chai": "^3.5.0",
+    "chai": "^4.0.2",
     "feathers": "^2.0.2",
     "feathers-authentication": "^1.0.0",
     "feathers-hooks": "^2.0.0",
@@ -75,6 +75,6 @@
     "rimraf": "^2.5.4",
     "semistandard": "^11.0.0",
     "sinon": "^2.1.0",
-    "sinon-chai": "^2.8.0"
+    "sinon-chai": "^2.11.0"
   }
 }
