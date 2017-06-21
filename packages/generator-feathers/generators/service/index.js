@@ -6,9 +6,6 @@ const j = require('../../lib/transform');
 
 const templatePath = path.join(__dirname, 'templates');
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
-const createExpression = (object, property, args = []) => {
-  return j.expressionStatement(j.callExpression(j.memberExpression(j.identifier(object), j.identifier(property)), args));
-};
 
 module.exports = class ServiceGenerator extends Generator {
   prompting() {
@@ -102,8 +99,6 @@ module.exports = class ServiceGenerator extends Generator {
   _transformCode(code) {
     const { camelName, kebabName } = this.props;
     const ast = j(code);
-
-    const serviceRequire = `const ${camelName} = require('./${kebabName}/${kebabName}.service.js');`;
     const mainExpression = ast.find(j.FunctionExpression)
       .closest(j.ExpressionStatement);
 
@@ -111,15 +106,13 @@ module.exports = class ServiceGenerator extends Generator {
       throw new Error(`${this.libDirectory}/services/index.js seems to have more than one function declaration and we can not register the new service. Did you modify it?`);
     }
 
+    const serviceRequire = `const ${camelName} = require('./${kebabName}/${kebabName}.service.js');`;
+    const serviceCode = `app.configure(${camelName});`;
+
     // Add require('./service')
     mainExpression.insertBefore(serviceRequire);
     // Add app.configure(service) to service/index.js
-    mainExpression.find(j.BlockStatement)
-      .forEach((node) => {
-        const stmts = node.value.body;
-        const newStmt = createExpression('app', 'configure', [j.identifier(camelName)]);
-        stmts.push(newStmt);
-      });
+    mainExpression.insertLastInFunction(serviceCode);
 
     return ast.toSource();
   }

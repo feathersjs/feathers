@@ -4,7 +4,8 @@
 // for more of what you can do here.
 module.exports = function (app) {
   const mongooseClient = app.get('mongooseClient');
-  const <%= camelName %> = new mongooseClient.Schema({
+  const { Schema } = mongooseClient;
+  const <%= camelName %> = new Schema({
     text: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }

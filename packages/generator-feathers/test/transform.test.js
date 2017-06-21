@@ -59,4 +59,21 @@ describe('transforms', () => {
       }
     `);
   });
+
+  it('insertLastInFunction', () => {
+    const code = `
+      module.exports = function () {
+        const app = this;
+      };
+    `;
+
+    const result = j(code).insertLastInFunction('app.use(\'/test\', middleware);').toSource();
+
+    assert.equal(result, `
+      module.exports = function () {
+        const app = this;
+        app.use('/test', middleware);
+      };
+    `);
+  });
 });
