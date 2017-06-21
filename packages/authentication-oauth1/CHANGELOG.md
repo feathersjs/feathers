@@ -1,19 +1,22 @@
 # Change Log
 
-## [Unreleased](https://github.com/feathersjs/feathers-authentication-oauth1/tree/HEAD)
-
-[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth1/compare/v0.2.4...HEAD)
+## [v0.2.5](https://github.com/feathersjs/feathers-authentication-oauth1/tree/v0.2.5) (2017-06-21)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth1/compare/v0.2.4...v0.2.5)
 
 **Closed issues:**
 
+- Module is using the wrong default config key [\#17](https://github.com/feathersjs/feathers-authentication-oauth1/issues/17)
+- When authenticating with stored localStorage jwt, payload doesn't have userId.  [\#15](https://github.com/feathersjs/feathers-authentication-oauth1/issues/15)
 - Support oauth1 endpoint within sub-app or reverse proxy [\#9](https://github.com/feathersjs/feathers-authentication-oauth1/issues/9)
 - failureRedirect is not followed if it fails during OAuth dance [\#8](https://github.com/feathersjs/feathers-authentication-oauth1/issues/8)
 
 **Merged pull requests:**
 
-- Update semistandard to the latest version 🚀 [\#14](https://github.com/feathersjs/feathers-authentication-oauth1/pull/14) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
-- Update feathers-hooks to the latest version 🚀 [\#13](https://github.com/feathersjs/feathers-authentication-oauth1/pull/13) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
-- Update dependencies to enable Greenkeeper 🌴 [\#12](https://github.com/feathersjs/feathers-authentication-oauth1/pull/12) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- chore\(package\): update chai to version 4.0.2 [\#20](https://github.com/feathersjs/feathers-authentication-oauth1/pull/20) ([daffl](https://github.com/daffl))
+- using correct auth key. Closes 17 [\#18](https://github.com/feathersjs/feathers-authentication-oauth1/pull/18) ([ekryski](https://github.com/ekryski))
+- Update semistandard to the latest version 🚀 [\#14](https://github.com/feathersjs/feathers-authentication-oauth1/pull/14) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-hooks to the latest version 🚀 [\#13](https://github.com/feathersjs/feathers-authentication-oauth1/pull/13) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#12](https://github.com/feathersjs/feathers-authentication-oauth1/pull/12) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
 ## [v0.2.4](https://github.com/feathersjs/feathers-authentication-oauth1/tree/v0.2.4) (2017-03-31)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth1/compare/v0.2.3...v0.2.4)
