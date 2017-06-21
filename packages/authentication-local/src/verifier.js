@@ -21,11 +21,14 @@ class LocalVerifier {
   }
 
   _comparePassword(entity, password) {
+    // select entity password field - take entityPasswordField over passwordField
+    const passwordField = this.options.entityPasswordField || this.options.passwordField;
+
     // find password in entity, this allows for dot notation
-    const hash = get(entity, this.options.passwordField);
+    const hash = get(entity, passwordField);
 
     if (!hash) {
-      return Promise.reject(new Error(`'${this.options.entity}' record in the database is missing a '${this.options.passwordField}'`));
+      return Promise.reject(new Error(`'${this.options.entity}' record in the database is missing a '${passwordField}'`));
     }
 
     debug('Verifying password');
@@ -64,8 +67,12 @@ class LocalVerifier {
 
   verify(req, username, password, done) {
     debug('Checking credentials', username, password);
+
+    // Choose username field
+    const usernameField = this.options.entityUsernameField || this.options.usernameField;
+
     const query = {
-      [this.options.usernameField]: username,
+      [usernameField]: username,
       $limit: 1
     };
 
