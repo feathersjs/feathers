@@ -30,7 +30,7 @@ export default function init(options = {}) {
     }
 
     let name = options.name || defaults.name;
-    let authOptions = app.get('auth') || {};
+    let authOptions = app.get('authentication') || {};
     let localOptions = authOptions[name] || {};
 
     // NOTE (EK): Pull from global auth config to support legacy auth for an easier transition.

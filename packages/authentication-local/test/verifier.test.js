@@ -31,7 +31,7 @@ describe('Verifier', () => {
       app.use('users', service)
         .configure(authentication({ secret: 'supersecret' }));
 
-      options = Object.assign({}, defaults, app.get('auth'));
+      options = Object.assign({}, defaults, app.get('authentication'));
 
       verifier = new Verifier(app, options);
     });

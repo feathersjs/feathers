@@ -73,7 +73,7 @@ describe('feathers-authentication-local', () => {
         sinon.spy(passportLocal, 'Strategy');
         app.configure(local({ custom: true }));
         app.setup();
-        authOptions = app.get('auth');
+        authOptions = app.get('authentication');
         args = passportLocal.Strategy.getCall(0).args[0];
       });
 
@@ -122,9 +122,9 @@ describe('feathers-authentication-local', () => {
 
     it('pulls options from global config', () => {
       sinon.spy(passportLocal, 'Strategy');
-      let authOptions = app.get('auth');
+      let authOptions = app.get('authentication');
       authOptions.local = { usernameField: 'username' };
-      app.set('auth', authOptions);
+      app.set('authentication', authOptions);
 
       app.configure(local());
       app.setup();
@@ -137,9 +137,9 @@ describe('feathers-authentication-local', () => {
 
     it('pulls options from global config with custom name', () => {
       sinon.spy(passportLocal, 'Strategy');
-      let authOptions = app.get('auth');
+      let authOptions = app.get('authentication');
       authOptions.custom = { usernameField: 'username' };
-      app.set('auth', authOptions);
+      app.set('authentication', authOptions);
 
       app.configure(local({ name: 'custom' }));
       app.setup();
