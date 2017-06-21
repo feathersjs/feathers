@@ -36,7 +36,7 @@ export default function init (options = {}) {
       throw new Error(`You must provide a passport 'Strategy' instance.`);
     }
 
-    const authSettings = app.get('auth') || {};
+    const authSettings = app.get('authentication') || {};
 
     // Attempt to pull options from the global auth config
     // for this provider.
