@@ -1,5 +1,20 @@
 # Change Log
 
+## [v1.2.0](https://github.com/feathersjs/generator-feathers/tree/v1.2.0) (2017-06-21)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.1.1...v1.2.0)
+
+**Closed issues:**
+
+- Generating a middleware throws error [\#228](https://github.com/feathersjs/generator-feathers/issues/228)
+- App generator: Ask for public folder and possibly colocated tests [\#226](https://github.com/feathersjs/generator-feathers/issues/226)
+- Facebook/Google/Github Profile [\#225](https://github.com/feathersjs/generator-feathers/issues/225)
+
+**Merged pull requests:**
+
+- Use Knex createTable workaround [\#231](https://github.com/feathersjs/generator-feathers/pull/231) ([daffl](https://github.com/daffl))
+- Fix and simplify generating a middleware [\#230](https://github.com/feathersjs/generator-feathers/pull/230) ([daffl](https://github.com/daffl))
+- Fix use of both MongoDB and Mongoose in the same app [\#229](https://github.com/feathersjs/generator-feathers/pull/229) ([daffl](https://github.com/daffl))
+
 ## [v1.1.1](https://github.com/feathersjs/generator-feathers/tree/v1.1.1) (2017-06-16)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.1.0...v1.1.1)
 
