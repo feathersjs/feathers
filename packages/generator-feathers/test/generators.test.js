@@ -70,8 +70,8 @@ describe('generator-feathers', function() {
     })
   );
 
-  it('feathers:hook', function(done) {
-    helpers.run(path.join(__dirname, '../generators/hook'))
+  it('feathers:hook', () => {
+    return helpers.run(path.join(__dirname, '../generators/hook'))
       .inTmpDir(function() {
         process.chdir(appDir);
       })
@@ -79,9 +79,18 @@ describe('generator-feathers', function() {
         name: 'removeId',
         services: []
       })
-      .on('end', () =>
-        runTest('\'removeId\' hook').then(() => done()).catch(done)
-      );
+      .then(() => runTest('\'removeId\' hook'));
+  });
+
+  it('feathers:middleware', () => {
+    return helpers.run(path.join(__dirname, '../generators/middleware'))
+      .inTmpDir(function() {
+        process.chdir(appDir);
+      })
+      .withPrompts({
+        name: 'testmiddleware',
+        path: '*'
+      });
   });
 
   describe('feathers:connection', () => {

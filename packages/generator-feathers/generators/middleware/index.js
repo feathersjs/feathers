@@ -29,23 +29,18 @@ module.exports = class MiddlewareGenerator extends Generator {
   _transformCode (code) {
     const { props } = this;
     const ast = j(code);
-    const useNotFound = ast.findExpressionStatement('use', 'notFound');
     const mainExpression = ast.find(j.FunctionExpression)
       .closest(j.ExpressionStatement);
-    const requireCall = `const ${props.camelName} = require('./${props.kebabName}');`;
-
-    if (useNotFound.length === 0) {
-      throw new Error(`Could not find 'app.use(notFound())' before which to insert the new middleware. Did you modify ${this.libDirectory}/middleware/index.js?`);
-    }
 
     if (mainExpression.length !== 1) {
       throw new Error(`${this.libDirectory}/middleware/index.js seems to have more than one function declaration and we can not register the new middleware. Did you modify it?`);
     }
 
+    const middlewareRequire = `const ${props.camelName} = require('./${props.kebabName}');`;
     const middlewareCode = props.path === '*' ? `app.use(${props.camelName}());` : `app.use('${props.path}', ${props.camelName}());`;
 
-    mainExpression.insertBefore(requireCall);
-    useNotFound.insertBefore(middlewareCode);
+    mainExpression.insertBefore(middlewareRequire);
+    mainExpression.insertLastInFunction(middlewareCode);
 
     return ast.toSource();
   }

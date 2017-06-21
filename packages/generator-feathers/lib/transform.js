@@ -64,6 +64,19 @@ j.registerMethods({
   findModuleExports() {
     return this.filter(node => node.value.name === 'exports')
       .closest(j.ExpressionStatement);
+  },
+
+  insertLastInFunction(code) {
+    const fn = this.find(j.FunctionExpression);
+
+    fn.find(j.BlockStatement).forEach(node => {
+      const { body } = node.value;
+      const es = j(code).find(j.ExpressionStatement).get().value;
+      
+      body.push(es);
+    });
+
+    return this;
   }
 });
 
