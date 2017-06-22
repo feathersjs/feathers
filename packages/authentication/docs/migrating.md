@@ -82,15 +82,15 @@ const oauth2 = require('feathers-authentication-oauth2');
 const FacebookStrategy = require('passport-facebook').Strategy;
 
 // The services you are setting the `entity` param for need to be registered before authentication
-app.use('/users', memory())
-    .configure(auth(app.get('authentication')))
+app.configure(auth(app.get('authentication')))
     .configure(jwt())
     .configure(local())
     .configure(oauth1())
     .configure(oauth2({
       name: 'facebook', // if the name differs from your config key you need to pass your config options explicitly
       Strategy: FacebookStrategy
-    }));
+    }))
+    .use('/users', memory());
 
 // Authenticate the user using the a JWT or
 // email/password strategy and if successful
