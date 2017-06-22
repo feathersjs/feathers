@@ -65,7 +65,7 @@
     "feathers": "^2.0.2",
     "feathers-authentication": "^1.0.0",
     "feathers-authentication-jwt": "^0.3.0",
-    "feathers-authentication-local": "^0.3.0",
+    "feathers-authentication-local": "^0.4.0",
     "feathers-hooks": "^2.0.0",
     "feathers-memory": "^1.1.0",
     "feathers-primus": "^2.1.0",
