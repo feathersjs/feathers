@@ -1,5 +1,17 @@
 # Change Log
 
+## [v1.2.6](https://github.com/feathersjs/feathers-authentication/tree/v1.2.6) (2017-06-22)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.2.5...v1.2.6)
+
+**Closed issues:**
+
+- OAuth 2 login for cordova [\#530](https://github.com/feathersjs/feathers-authentication/issues/530)
+
+**Merged pull requests:**
+
+- Change cleartimeout\(\) to lt.clearTimeout\(\) [\#534](https://github.com/feathersjs/feathers-authentication/pull/534) ([wnxhaja](https://github.com/wnxhaja))
+- Update feathers-authentication-local to the latest version 🚀 [\#533](https://github.com/feathersjs/feathers-authentication/pull/533) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.2.5](https://github.com/feathersjs/feathers-authentication/tree/v1.2.5) (2017-06-21)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.2.4...v1.2.5)
 
