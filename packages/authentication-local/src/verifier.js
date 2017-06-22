@@ -2,6 +2,7 @@ import Debug from 'debug';
 import errors from 'feathers-errors';
 import bcrypt from 'bcryptjs';
 import get from 'lodash.get';
+import omit from 'lodash.omit';
 
 const debug = Debug('feathers-authentication-local:verify');
 
@@ -71,17 +72,19 @@ class LocalVerifier {
     // Choose username field
     const usernameField = this.options.entityUsernameField || this.options.usernameField;
 
-    const query = {
-      [usernameField]: username,
-      $limit: 1
-    };
+    const params = Object.assign({
+        'query': {
+            [usernameField]: username,
+            '$limit': 1
+        }
+    }, omit(req.params, 'query', 'provider', 'headers', 'session', 'cookies'));
 
     // Look up the entity
-    this.service.find({ query })
+    this.service.find(params)
       .then(response => {
         const results = response.data || response
         if (!results.length) {
-          debug(`a record with ${this.options.usernameField} of '${username}' did not exist`);
+          debug(`a record with ${usernameField} of '${username}' did not exist`);
         }
         return this._normalizeResult(response)
       })
