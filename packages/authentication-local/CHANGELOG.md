@@ -1,11 +1,22 @@
 # Change Log
 
+## [v0.4.2](https://github.com/feathersjs/feathers-authentication-local/tree/v0.4.2) (2017-06-22)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-local/compare/v0.4.1...v0.4.2)
+
+## [v0.4.1](https://github.com/feathersjs/feathers-authentication-local/tree/v0.4.1) (2017-06-22)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-local/compare/v0.4.0...v0.4.1)
+
+**Merged pull requests:**
+
+- Resolves \#14 - Passes Feathers params to service hooks [\#15](https://github.com/feathersjs/feathers-authentication-local/pull/15) ([thomas-p-wilson](https://github.com/thomas-p-wilson))
+
 ## [v0.4.0](https://github.com/feathersjs/feathers-authentication-local/tree/v0.4.0) (2017-06-22)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-local/compare/v0.3.4...v0.4.0)
 
 **Closed issues:**
 
 - Module is using the wrong default config key [\#21](https://github.com/feathersjs/feathers-authentication-local/issues/21)
+- Feathers params not available to user service hooks [\#14](https://github.com/feathersjs/feathers-authentication-local/issues/14)
 - Bad error message is returned for invalid credentials [\#10](https://github.com/feathersjs/feathers-authentication-local/issues/10)
 
 **Merged pull requests:**
