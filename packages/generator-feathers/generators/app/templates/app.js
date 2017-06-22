@@ -31,14 +31,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 // Host the public folder
 app.use('/', feathers.static(app.get('public')));
-// Configure other middleware (see `middleware/index.js`)
-app.configure(middleware);
 
 // Set up Plugins and providers
 app.configure(hooks());
 <% if (hasProvider('rest')) { %>app.configure(rest());<% } %>
 <% if (hasProvider('socketio')) { %>app.configure(socketio());<% } %>
 <% if(hasProvider('primus')) { %>app.configure(primus({ transformer: 'websockets' }));<% } %>
+// Configure other middleware (see `middleware/index.js`)
+app.configure(middleware);
 // Set up our services (see `services/index.js`)
 app.configure(services);
 // Configure a middleware for 404s and the error handler
