@@ -1,5 +1,12 @@
 # Change Log
 
+## [v2.2.1](https://github.com/feathersjs/feathers-cli/tree/v2.2.1) (2017-06-22)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.2.0...v2.2.1)
+
+**Merged pull requests:**
+
+- fix\(package\): update generator-feathers to version 1.2.2 [\#98](https://github.com/feathersjs/feathers-cli/pull/98) ([daffl](https://github.com/daffl))
+
 ## [v2.2.0](https://github.com/feathersjs/feathers-cli/tree/v2.2.0) (2017-06-21)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.1.1...v2.2.0)
 
