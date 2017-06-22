@@ -34,3 +34,4 @@ lib/
 
 # Yarn lockfile
 yarn.lock
+/.vscode
