@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.2.2](https://github.com/feathersjs/generator-feathers/tree/v1.2.2) (2017-06-22)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.1...v1.2.2)
+
+**Closed issues:**
+
+- Escape config vars on windows [\#214](https://github.com/feathersjs/generator-feathers/issues/214)
+
+**Merged pull requests:**
+
+- Update Knex user model to create table properly [\#233](https://github.com/feathersjs/generator-feathers/pull/233) ([daffl](https://github.com/daffl))
+
 ## [v1.2.1](https://github.com/feathersjs/generator-feathers/tree/v1.2.1) (2017-06-22)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.0...v1.2.1)
 
