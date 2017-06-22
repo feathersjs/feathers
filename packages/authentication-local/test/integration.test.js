@@ -16,10 +16,20 @@ describe('integration', () => {
       query: {},
       body: Object.assign({}, User),
       headers: {},
-      cookies: {}
+      cookies: {},
+      params: {
+        query: {},
+        provider: 'socketio',
+        headers: {},
+        session: {},
+        cookies: {},
+        data: 'Hello, world'
+      }
     };
 
     const app = feathers();
+    let paramsReceived = false;
+    let dataReceived;
 
     app.configure(hooks())
       .configure(authentication({ secret: 'secret' }))
@@ -28,6 +38,10 @@ describe('integration', () => {
 
     app.service('users').hooks({
       before: {
+        find: (hook) => {
+          paramsReceived = Object.keys(hook.params);
+          dataReceived = hook.params.data;
+        },
         create: local.hooks.hashPassword({ passwordField: 'password' })
       }
     });
@@ -39,6 +53,8 @@ describe('integration', () => {
         expect(result.success).to.equal(true);
         expect(result.data.user.email).to.equal(User.email);
         expect(result.data.user.password).to.not.equal(undefined);
+        expect(paramsReceived).to.have.members(['data', 'query']);
+        expect(dataReceived).to.equal('Hello, world');
       });
     });
   });
