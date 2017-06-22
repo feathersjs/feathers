@@ -25,10 +25,11 @@ describe('Verifier', () => {
       };
 
       service = {
+        id: 'id',
         find () {}
       };
 
-      sinon.stub(service, "find", function (params) {
+      sinon.stub(service, 'find', function (params) {
         return new Promise((resolve, reject) => {
           const { email } = params && params.query
           if (email === 'nonexistinguser@gmail.com') {
@@ -255,6 +256,47 @@ describe('Verifier', () => {
         expect(entity).to.equal(undefined);
         done();
       });
+    });
+  });
+});
+
+describe('Verifier without service.id', function () {
+  let service;
+  let app;
+  let options;
+  let verifier;
+  let user;
+
+  beforeEach(() => {
+    app = feathers();
+
+    return hasher('admin').then(password => {
+      user = {
+        email: 'admin@feathersjs.com',
+        password
+      };
+
+      // testing a missing service.id
+      service = {
+        find () {
+          return Promise.resolve([])
+        }
+      };
+
+      app.use('users', service)
+        .configure(authentication({ secret: 'supersecret' }));
+
+      options = Object.assign({}, defaults, app.get('authentication'));
+
+      verifier = new Verifier(app, options);
+    });
+  });
+
+  it('throws an error when service.id is not set', done => {
+    verifier.verify({}, user.email, 'admin', (error, entity) => {
+      expect(error.message.includes('the `id` property must be set')).to.equal(true);
+      expect(entity).to.equal(undefined);
+      done();
     });
   });
 });
