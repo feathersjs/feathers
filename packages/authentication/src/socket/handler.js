@@ -103,7 +103,7 @@ export default function setupSocketHandler (app, options, { feathersParams, prov
           // Clear any previous timeout if we have logged in again.
           if (logoutTimer) {
             debug(`Clearing old timeout.`);
-            clearTimeout(logoutTimer);
+            lt.clearTimeout(logoutTimer);
           }
 
           logoutTimer = lt.setTimeout(() => {
