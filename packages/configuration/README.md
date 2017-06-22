@@ -48,6 +48,18 @@ import configuration from 'feathers-configuration';
 // Use the current folder as the root and look configuration up in `settings`
 let app = feathers().configure(configuration())
 ```
+## Variable types
+
+`feathers-configuration` uses the following variable mechanisms:
+
+- Given a root and configuration path load a `default.json` in that path
+- When the `NODE_ENV` is not `development`, also try to load `<NODE_ENV>.json` in that path and merge both configurations
+- Go through each configuration value and sets it on the application (via `app.set(name, value)`).
+  - If the value is a valid environment variable (e.v. `NODE_ENV`), use its value instead
+  - If the value start with `./` or `../` turn it it an absolute path relative to the configuration file path
+  - If the value is escaped (starting with a `\`) always use that value (e.g. `\\NODE_ENV` will become `NODE_ENV`)
+- Both `default` and `<env>` configurations can be modules which provide their computed settings with `module.exports = {...}` and a `.js` file suffix. See `test/config/testing.js` for an example.  
+All rules listed above apply for `.js` modules.
 
 ## Example
 
