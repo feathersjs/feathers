@@ -1,5 +1,16 @@
 # Change Log
 
+## [v0.4.3](https://github.com/feathersjs/feathers-authentication-local/tree/v0.4.3) (2017-06-22)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-local/compare/v0.4.2...v0.4.3)
+
+**Closed issues:**
+
+- Log a warning if service.id is undefined or null [\#19](https://github.com/feathersjs/feathers-authentication-local/issues/19)
+
+**Merged pull requests:**
+
+- throw error if service.id is missing [\#27](https://github.com/feathersjs/feathers-authentication-local/pull/27) ([marshallswain](https://github.com/marshallswain))
+
 ## [v0.4.2](https://github.com/feathersjs/feathers-authentication-local/tree/v0.4.2) (2017-06-22)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-local/compare/v0.4.1...v0.4.2)
 
