@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.2.1](https://github.com/feathersjs/generator-feathers/tree/v1.2.1) (2017-06-22)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.0...v1.2.1)
+
+**Merged pull requests:**
+
+- Move middleware configuration in the right spot finally [\#232](https://github.com/feathersjs/generator-feathers/pull/232) ([daffl](https://github.com/daffl))
+
 ## [v1.2.0](https://github.com/feathersjs/generator-feathers/tree/v1.2.0) (2017-06-21)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.1.1...v1.2.0)
 
