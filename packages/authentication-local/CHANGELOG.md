@@ -1,5 +1,24 @@
 # Change Log
 
+## [v0.4.0](https://github.com/feathersjs/feathers-authentication-local/tree/v0.4.0) (2017-06-22)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-local/compare/v0.3.4...v0.4.0)
+
+**Closed issues:**
+
+- Module is using the wrong default config key [\#21](https://github.com/feathersjs/feathers-authentication-local/issues/21)
+- Bad error message is returned for invalid credentials [\#10](https://github.com/feathersjs/feathers-authentication-local/issues/10)
+
+**Merged pull requests:**
+
+- Greenkeeper/chai 4.0.2 [\#26](https://github.com/feathersjs/feathers-authentication-local/pull/26) ([daffl](https://github.com/daffl))
+- Return Invalid login message when user doesn’t exist [\#25](https://github.com/feathersjs/feathers-authentication-local/pull/25) ([marshallswain](https://github.com/marshallswain))
+- Adding separate entity username and password fields [\#23](https://github.com/feathersjs/feathers-authentication-local/pull/23) ([adamvr](https://github.com/adamvr))
+- use the correct default config key. Closes \#21 [\#22](https://github.com/feathersjs/feathers-authentication-local/pull/22) ([ekryski](https://github.com/ekryski))
+- Update feathers-socketio to the latest version 🚀 [\#20](https://github.com/feathersjs/feathers-authentication-local/pull/20) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update semistandard to the latest version 🚀 [\#18](https://github.com/feathersjs/feathers-authentication-local/pull/18) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-hooks to the latest version 🚀 [\#16](https://github.com/feathersjs/feathers-authentication-local/pull/16) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#13](https://github.com/feathersjs/feathers-authentication-local/pull/13) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v0.3.4](https://github.com/feathersjs/feathers-authentication-local/tree/v0.3.4) (2017-03-28)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-local/compare/v0.3.3...v0.3.4)
 
