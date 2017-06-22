@@ -322,6 +322,59 @@ describe('Socket.io authentication', function () {
     });
   });
 
+  describe('reauthenticating will extends jwt expiry', () => {
+    const longExpiringApp = createApplication({
+      secret: 'supersecret',
+      jwt: { expiresIn: '10s' }
+    }, 'socketio');
+
+    let longExpiringServer;
+    let longExpiringSocket;
+
+    before(done => {
+      longExpiringServer = longExpiringApp.listen(1338);
+      longExpiringServer.once('listening', () => {
+        longExpiringSocket = io('http://localhost:1338');
+        done();
+      });
+    });
+
+    after(() => {
+      longExpiringServer.close();
+    });
+
+    it('should not be logout after reauthenticate', done => {
+      const data = {
+        strategy: 'local',
+        email: 'admin@feathersjs.com',
+        password: 'admin'
+      };
+
+      // token expires in 10 secs
+      longExpiringSocket.emit('authenticate', data, (error, response) => {
+        expect(error).to.not.be.ok;
+        expect(response).to.be.ok;
+
+        // reauth at 5 secs
+        setTimeout(function () {
+          longExpiringSocket.emit('authenticate', response, (error, response) => {
+            expect(error).to.not.be.ok;
+            expect(response).to.be.ok;
+          });
+        }, 5 * 1000);
+
+        // check if token expiry exceeds 10 secs
+        setTimeout(function () {
+          longExpiringSocket.emit('users::find', {}, (error, response) => {
+            expect(error).to.not.be.ok;
+            expect(response).to.be.ok;
+            done();
+          });
+        }, 14 * 1000);
+      });
+    });
+  });
+
   describe('when calling a protected service method', () => {
     describe('when not authenticated', () => {
       it('returns NotAuthenticated error', done => {
