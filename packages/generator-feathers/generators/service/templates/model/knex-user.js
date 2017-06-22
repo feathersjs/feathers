@@ -7,18 +7,24 @@
 module.exports = function (app) {
   const db = app.get('knexClient');
 
-  db.schema.createTableIfNotExists('<%= kebabName %>', table => {
-    table.increments('id');
-  <% if(authentication.strategies.indexOf('local') !== -1) { %>
-    table.string('email').unique();
-    table.string('password');
-  <% } %>
-  <% authentication.oauthProviders.forEach(provider => { %>
-    table.string('<%= provider.name %>Id');
-  <% }); %>
-  })
-  .then(() => console.log('Updated <%= kebabName %> table'))
-  .catch(e => console.error('Error updating <%= kebabName %> table', e));
+    db.schema.hasTable('<%= kebabName %>').then(exists => {
+      if(!exists) {
+        db.schema.createTable('<%= kebabName %>', table => {
+          table.increments('id');
+        <% if(authentication.strategies.indexOf('local') !== -1) { %>
+          table.string('email').unique();
+          table.string('password');
+        <% } %>
+        <% authentication.oauthProviders.forEach(provider => { %>
+          table.string('<%= provider.name %>Id');
+        <% }); %>
+        })
+        .then(
+          () => console.log('Updated <%= kebabName %> table'),
+          e => console.error('Error updating <%= kebabName %> table', e)
+        );
+      }
+    });
 
   return db;
 };
