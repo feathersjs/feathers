@@ -21,7 +21,7 @@ const appHooks = require('./app.hooks');
 const app = feathers();
 
 // Load app configuration
-app.configure(configuration(path.join(__dirname, '..')));
+app.configure(configuration());
 // Enable CORS, security, compression, favicon and body parsing
 app.use(cors());
 app.use(helmet());
