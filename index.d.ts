@@ -62,9 +62,9 @@ declare namespace feathers {
      */
     setup?(app?: Application, path?: string): void;
 
-    before(any?): this;
-    after(any?): this;
-    filter(any?): this;
+    before(any?: any): this;
+    after(any?: any): this;
+    filter(any?: any): this;
     
   }
 
