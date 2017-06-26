@@ -84,7 +84,6 @@ module.exports = class AuthGenerator extends Generator {
       config.authentication.strategies.push('local');
       config.authentication.local = {
         entity: 'user',
-        service: 'users',
         usernameField: 'email',
         passwordField: 'password'
       };
