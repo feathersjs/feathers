@@ -9,6 +9,12 @@ module.exports = function (app) {
       type: Sequelize.STRING,
       allowNull: false
     }
+  }, {
+    hooks: {
+      beforeCount(options) {
+        options.raw = true;
+      }
+    }
   });
 
   <%= camelName %>.associate = function (models) { // eslint-disable-line no-unused-vars
