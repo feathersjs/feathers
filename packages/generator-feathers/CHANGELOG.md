@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.2.3](https://github.com/feathersjs/generator-feathers/tree/v1.2.3) (2017-06-26)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.2...v1.2.3)
+
+**Closed issues:**
+
+- Error options.service does not exist after initial auth setup [\#236](https://github.com/feathersjs/generator-feathers/issues/236)
+- configuration\(path\) correct use of feathers-configuration? [\#234](https://github.com/feathersjs/generator-feathers/issues/234)
+
+**Merged pull requests:**
+
+- Also set raw to true in beforeCount hook [\#238](https://github.com/feathersjs/generator-feathers/pull/238) ([daffl](https://github.com/daffl))
+- Remove wrong entity name from local authentication configuration [\#237](https://github.com/feathersjs/generator-feathers/pull/237) ([daffl](https://github.com/daffl))
+- Remove path argument from configuration [\#235](https://github.com/feathersjs/generator-feathers/pull/235) ([arve0](https://github.com/arve0))
+
 ## [v1.2.2](https://github.com/feathersjs/generator-feathers/tree/v1.2.2) (2017-06-22)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.1...v1.2.2)
 
