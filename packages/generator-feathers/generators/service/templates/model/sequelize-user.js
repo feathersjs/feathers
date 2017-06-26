@@ -19,6 +19,12 @@ module.exports = function (app) {
   <% authentication.oauthProviders.forEach(provider => { %>
     <%= provider.name %>Id: { type: Sequelize.STRING },
   <% }); %>
+  }, {
+    hooks: {
+      beforeCount(options) {
+        options.raw = true;
+      }
+    }
   });
 
   <%= camelName %>.associate = function (models) { // eslint-disable-line no-unused-vars
