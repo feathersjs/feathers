@@ -1,7 +1,7 @@
 {
   "name": "feathers-cli",
   "description": "Command-line Feathers generator",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "homepage": "https://github.com/feathersjs/feathers-cli",
   "main": "lib/",
   "bin": {
