@@ -11,7 +11,7 @@ declare namespace feathers {
 
   interface Params {
     query?: any;
-    paginate?: false;
+    paginate?: false | object;
   }
 
   interface Pagination <T> {
