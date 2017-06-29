@@ -1,12 +1,11 @@
 import assert from 'assert';
 
 import feathers from '../../src';
-import hooks from '../../src/hooks';
 
-describe('error hooks', () => {
+describe('`error` hooks', () => {
   describe('on direct service method errors', () => {
     const errorMessage = 'Something else went wrong';
-    const app = feathers().configure(hooks()).use('/dummy', {
+    const app = feathers().use('/dummy', {
       get () {
         return Promise.reject(new Error('Something went wrong'));
       }
@@ -128,7 +127,7 @@ describe('error hooks', () => {
     let app, service;
 
     beforeEach(() => {
-      app = feathers().configure(hooks()).use('/dummy', {
+      app = feathers().use('/dummy', {
         get (id) {
           return Promise.resolve({
             id, text: `You have to do ${id}`
@@ -140,8 +139,10 @@ describe('error hooks', () => {
     });
 
     it('error in before hook', done => {
-      service.before(function () {
-        throw new Error(errorMessage);
+      service.hooks({
+        before () {
+          throw new Error(errorMessage);
+        }
       }).hooks({
         error (hook) {
           assert.equal(hook.error.hook.type, 'before',

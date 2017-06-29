@@ -1,44 +1,95 @@
 import makeDebug from 'debug';
 import { stripSlashes } from 'feathers-commons';
 import Uberproto from 'uberproto';
-import mixins from './mixins/index';
+
+import events from './events';
+import hooks from './hooks';
 
 const debug = makeDebug('feathers:application');
-const methods = ['find', 'get', 'create', 'update', 'patch', 'remove'];
 const Proto = Uberproto.extend({
   create: null
 });
 
-export default {
+const application = {
   init () {
     Object.assign(this, {
-      methods,
-      mixins: mixins(),
+      methods: [ 'find', 'get', 'create', 'update', 'patch', 'remove' ],
+      mixins: [],
       services: {},
       providers: [],
-      _setup: false
+      _setup: false,
+      settings: {}
     });
+
+    this.configure(hooks());
+    this.configure(events());
   },
 
-  service (location, service, options = {}) {
-    location = stripSlashes(location);
+  get (name) {
+    return this.settings[name];
+  },
 
-    if (!service) {
-      const current = this.services[location];
+  set (name, value) {
+    this.settings[name] = value;
+    return this;
+  },
 
-      if (typeof current === 'undefined' && typeof this.defaultService === 'function') {
-        return this.service(location, this.defaultService(location), options);
-      }
+  disable (name) {
+    this.settings[name] = false;
+    return this;
+  },
 
-      return current;
+  disabled (name) {
+    return !this.settings[name];
+  },
+
+  enable (name) {
+    this.settings[name] = true;
+    return this;
+  },
+
+  enabled (name) {
+    return !!this.settings[name];
+  },
+
+  configure (fn) {
+    fn.call(this);
+
+    return this;
+  },
+
+  service (path, service) {
+    if (typeof service !== 'undefined') {
+      throw new Error('Registering a new service with `app.service(path, service)` is no longer supported. Use `app.use(path, service)` instead.');
     }
 
-    let protoService = Proto.extend(service);
+    const location = stripSlashes(path);
+    const current = this.services[location];
+
+    if (typeof current === 'undefined' && typeof this.defaultService === 'function') {
+      return this.use(`/${location}`, this.defaultService(location))
+        .service(location);
+    }
+
+    return current;
+  },
+
+  use (path, service, options = {}) {
+    const location = stripSlashes(path);
+    const hasMethod = methods => methods.some(name =>
+      (service && typeof service[name] === 'function')
+    );
+
+    if (!hasMethod(this.methods.concat('setup'))) {
+      throw new Error(`Invalid service object passed for path \`${location}\``);
+    }
+
+    const protoService = Proto.extend(service);
 
     debug(`Registering new service at \`${location}\``);
 
     // Add all the mixins
-    this.mixins.forEach(fn => fn.call(this, protoService));
+    this.mixins.forEach(fn => fn.call(this, protoService, location, options));
 
     if (typeof protoService._setup === 'function') {
       protoService._setup(this, location);
@@ -46,7 +97,7 @@ export default {
 
     // Run the provider functions to register the service
     this.providers.forEach(provider =>
-      provider.call(this, location, protoService, options)
+      provider.call(this, protoService, location, options)
     );
 
     // If we ran setup already, set this service up explicitly
@@ -55,38 +106,7 @@ export default {
       protoService.setup(this, location);
     }
 
-    return (this.services[location] = protoService);
-  },
-
-  use (location) {
-    let service;
-    let middleware = Array.from(arguments)
-      .slice(1)
-      .reduce(function (middleware, arg) {
-        if (typeof arg === 'function') {
-          middleware[service ? 'after' : 'before'].push(arg);
-        } else if (!service) {
-          service = arg;
-        } else {
-          throw new Error('invalid arg passed to app.use');
-        }
-        return middleware;
-      }, {
-        before: [],
-        after: []
-      });
-
-    const hasMethod = methods => methods.some(name =>
-      (service && typeof service[name] === 'function')
-    );
-
-    // Check for service (any object with at least one service method)
-    if (hasMethod(['handle', 'set']) || !hasMethod(this.methods.concat('setup'))) {
-      return this._super.apply(this, arguments);
-    }
-
-    // Any arguments left over are other middleware that we want to pass to the providers
-    this.service(location, service, { middleware });
+    this.services[location] = protoService;
 
     return this;
   },
@@ -97,6 +117,7 @@ export default {
       const service = this.services[path];
 
       debug(`Setting up service for \`${path}\``);
+
       if (typeof service.setup === 'function') {
         service.setup(this, path);
       }
@@ -105,24 +126,7 @@ export default {
     this._isSetup = true;
 
     return this;
-  },
-
-  // Express 3.x configure is gone in 4.x but we'll keep a more basic version
-  // That just takes a function in order to keep Feathers plugin configuration easier.
-  // Environment specific configurations should be done as suggested in the 4.x migration guide:
-  // https://github.com/visionmedia/express/wiki/Migrating-from-3.x-to-4.x
-  configure (fn) {
-    fn.call(this);
-
-    return this;
-  },
-
-  listen () {
-    const server = this._super.apply(this, arguments);
-
-    this.setup(server);
-    debug('Feathers application listening');
-
-    return server;
   }
 };
+
+export default application;
