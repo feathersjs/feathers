@@ -1,3 +1,4 @@
+/* global __VERSION__ */
 import Proto from 'uberproto';
 
 import Application from './application';
@@ -13,5 +14,4 @@ export default function createApplication () {
   return app;
 }
 
-// TODO use https://github.com/gnandretta/babel-plugin-version-inline
-createApplication.version = '__VERSION__';
+createApplication.version = __VERSION__;
