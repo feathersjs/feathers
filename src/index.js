@@ -1,11 +1,17 @@
-import express from 'express';
-import feathers from './feathers';
+import Proto from 'uberproto';
 
-export default function createApplication (...args) {
-  return feathers(express(...args));
+import Application from './application';
+
+export default function createApplication () {
+  const app = {};
+
+  // Mix in the base application
+  Proto.mixin(Application, app);
+
+  app.init();
+
+  return app;
 }
 
-// Expose all express methods (like express.engine())
-Object.assign(createApplication, express, {
-  version: require('../package.json').version
-});
+// TODO use https://github.com/gnandretta/babel-plugin-version-inline
+createApplication.version = '__VERSION__';

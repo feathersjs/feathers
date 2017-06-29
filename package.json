@@ -1,7 +1,11 @@
 {
   "name": "feathers",
   "description": "Build Better APIs, Faster than Ever.",
+<<<<<<< HEAD
   "version": "2.2.2",
+=======
+  "version": "3.0.0-pre.0",
+>>>>>>> Initial changes for Feathers v3 (#605)
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",
@@ -32,11 +36,12 @@
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
-    "release:prerelease": "npm version prerelease && npm publish --tag pegasus",
+    "release:pre": "npm version prerelease && npm publish --tag pegasus",
     "compile": "rimraf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
     "lint": "eslint-if-supported semistandard --fix",
     "mocha": "mocha --opts mocha.opts",
+    "mocha:watch": "mocha --opts mocha.opts --watch",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
     "test": "npm run compile && npm run lint && npm run coverage && nsp check"
   },
@@ -51,9 +56,7 @@
   "dependencies": {
     "debug": "^3.1.0",
     "events": "^1.1.1",
-    "express": "^4.16.1",
-    "feathers-commons": "^0.8.7",
-    "rubberduck": "^1.1.1",
+    "feathers-commons": "^1.0.0-pre.1",
     "uberproto": "^1.2.0"
   },
   "devDependencies": {
@@ -62,21 +65,12 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.18.0",
-    "body-parser": "^1.15.2",
     "eslint-if-supported": "^1.0.1",
-    "feathers-rest": "^1.5.3",
-    "feathers-socketio": "^2.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "jshint": "^2.9.4",
     "mocha": "^4.0.0",
     "nsp": "^2.6.2",
-    "q": "^1.4.1",
-    "request": "^2.x",
     "rimraf": "^2.5.4",
-    "semistandard": "^10.0.0",
-    "socket.io-client": "^2.0.0"
-  },
-  "browser": {
-    "./lib/index": "./lib/client/index"
+    "semistandard": "^10.0.0"
   }
 }
