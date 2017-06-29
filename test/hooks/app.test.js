@@ -1,14 +1,12 @@
 import assert from 'assert';
 
 import feathers from '../../src';
-import hooks from '../../src/hooks';
 
 describe('app.hooks', () => {
   let app;
 
   beforeEach(() => {
     app = feathers()
-      .configure(hooks())
       .use('/todos', {
         get (id, params) {
           if (id === 'error') {

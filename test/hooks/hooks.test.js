@@ -1,25 +1,26 @@
 import assert from 'assert';
 
 import feathers from '../../src';
-import hooks from '../../src/hooks';
 
-describe('feathers-hooks', () => {
-  it('always turns service call into a promise (#28)', () => {
-    const app = feathers().configure(hooks()).use('/dummy', {
-      get (id, params, callback) {
-        callback(null, { id });
+describe('hooks basics', () => {
+  it('validates arguments', () => {
+    const app = feathers().use('/dummy', {
+      get (id, params) {
+        return Promise.resolve({ id, user: params.user });
       }
     });
 
-    const service = app.service('dummy');
+    return app.service('dummy').get(1, {}, function () {}).catch(e => {
+      assert.equal(e.message, 'Callbacks are no longer supported. Use Promises or async/await instead.');
 
-    return service.get(10).then(data => {
-      assert.deepEqual(data, { id: 10 });
+      return app.service('dummy').get();
+    }).catch(e => {
+      assert.equal(e.message, `An id must be provided to the 'get' method`);
     });
   });
 
-  it('works with services that return a promise (#28)', () => {
-    const app = feathers().configure(hooks()).use('/dummy', {
+  it('works with services that return a promise (feathers-hooks#28)', () => {
+    const app = feathers().use('/dummy', {
       get (id, params) {
         return Promise.resolve({ id, user: params.user });
       }
@@ -27,13 +28,16 @@ describe('feathers-hooks', () => {
 
     const service = app.service('dummy');
 
-    service.before({
-      get (hook) {
-        hook.params.user = 'David';
-      }
-    }).after({
-      get (hook) {
-        hook.result.after = true;
+    service.hooks({
+      before: {
+        get (hook) {
+          hook.params.user = 'David';
+        }
+      },
+      after: {
+        get (hook) {
+          hook.result.after = true;
+        }
       }
     });
 
@@ -42,43 +46,8 @@ describe('feathers-hooks', () => {
     });
   });
 
-  it('dispatches events with data modified by hook', done => {
-    const app = feathers().configure(hooks()).use('/dummy', {
-      create (data) {
-        return Promise.resolve(data);
-      }
-    });
-
-    const service = app.service('dummy');
-
-    service.before({
-      create (hook) {
-        hook.data.user = 'David';
-      }
-    }).after({
-      create (hook) {
-        hook.result.after = true;
-      }
-    });
-
-    service.once('created', function (data) {
-      try {
-        assert.deepEqual(data, {
-          test: true,
-          user: 'David',
-          after: true
-        });
-        done();
-      } catch (e) {
-        done(e);
-      }
-    });
-
-    service.create({ test: true });
-  });
-
   it('has hook.app, hook.service and hook.path', done => {
-    const app = feathers().configure(hooks()).use('/dummy', {
+    const app = feathers().use('/dummy', {
       get (id) {
         return Promise.resolve({ id });
       }
@@ -104,21 +73,23 @@ describe('feathers-hooks', () => {
   });
 
   it('does not error when result is null', () => {
-    const app = feathers().configure(hooks()).use('/dummy', {
-      get (id, params, callback) {
-        callback(null, { id });
+    const app = feathers().use('/dummy', {
+      get (id) {
+        return Promise.resolve({ id });
       }
     });
 
     const service = app.service('dummy');
 
-    service.after({
-      get: [
-        function (hook) {
-          hook.result = null;
-          return hook;
-        }
-      ]
+    service.hooks({
+      after: {
+        get: [
+          function (hook) {
+            hook.result = null;
+            return hook;
+          }
+        ]
+      }
     });
 
     return service.get(1)
@@ -126,7 +97,7 @@ describe('feathers-hooks', () => {
   });
 
   it('invalid type in .hooks throws error', () => {
-    const app = feathers().configure(hooks()).use('/dummy', {
+    const app = feathers().use('/dummy', {
       get (id, params, callback) {
         callback(null, { id, params });
       }
@@ -143,7 +114,7 @@ describe('feathers-hooks', () => {
   });
 
   it('invalid hook method throws error', () => {
-    const app = feathers().configure(hooks()).use('/dummy', {
+    const app = feathers().use('/dummy', {
       get (id, params, callback) {
         callback(null, { id, params });
       }
@@ -161,51 +132,25 @@ describe('feathers-hooks', () => {
     }
   });
 
-  it('.hooks and backwards compatibility methods chain their hooks', () => {
-    const app = feathers().configure(hooks()).use('/dummy', {
-      get (id, params, callback) {
-        callback(null, { id, params });
-      }
-    });
-    const makeHooks = name => {
-      return {
-        all (hook) {
-          hook.params.items.push(`${name}_all`);
-        },
-
-        get (hook) {
-          hook.params.items.push(`${name}_get`);
-        }
-      };
-    };
-
-    const service = app.service('dummy');
-
-    service.hooks({ before: makeHooks('hooks_before') });
-    service.hooks({ before: makeHooks('hooks_before_1') });
-    service.before(makeHooks('before'));
-    service.before(makeHooks('before_1'));
-
-    return service.get('testing', { items: [] })
-      .then(data => assert.deepEqual(data.params.items, [
-        'hooks_before_all',
-        'hooks_before_get',
-        'hooks_before_1_all',
-        'hooks_before_1_get',
-        'before_all',
-        'before_get',
-        'before_1_all',
-        'before_1_get'
-      ]));
-  });
-
   it('registering an already hooked service works (#154)', () => {
-    const app = feathers().configure(hooks()).use('/dummy', {
-      get (id, params, callback) {
-        callback(null, { id, params });
+    const app = feathers().use('/dummy', {
+      get (id, params) {
+        return Promise.resolve({ id, params });
       }
     });
 
     app.use('/dummy2', app.service('dummy'));
+  });
+
+  it('not returning a promise errors', () => {
+    const app = feathers().use('/dummy', {
+      get () {
+        return {};
+      }
+    });
+
+    return app.service('dummy').get(1).catch(e => {
+      assert.equal(e.message, `Service method 'get' for 'dummy' service must return a promise`);
+    });
   });
 });
