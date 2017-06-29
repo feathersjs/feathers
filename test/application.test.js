@@ -12,6 +12,12 @@ describe('Feathers application', () => {
     assert.equal(typeof app.services, 'object');
   });
 
+  it('sets the version', () => {
+    const pkg = require('../package.json');
+
+    assert.equal(feathers.version, pkg.version);
+  });
+
   it('is an event emitter', done => {
     const app = feathers();
     const original = { hello: 'world' };

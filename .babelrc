@@ -1,4 +1,4 @@
 {
-  "plugins": [ "add-module-exports" ],
+  "plugins": [ "add-module-exports", "version-inline" ],
   "presets": [ "es2015" ]
 }
