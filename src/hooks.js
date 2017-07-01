@@ -67,7 +67,9 @@ export function hookMixin (service) {
           });
         })
         // Make a copy of hookObject from `before` hooks and update type
-        .then(hookObject => Object.assign({}, hookObject, { type: 'after' }))
+        .then(hookObject =>
+          Object.assign({}, hookObject, { type: 'after' })
+        )
         // Run through all `after` hooks
         .then(hookObject => {
           const afterHooks = getHooks(app, service, 'after', method, true);
@@ -76,8 +78,10 @@ export function hookMixin (service) {
 
           return processHooks.call(service, hookChain, hookObject);
         })
-        // Finally, return the result
-        .then(hookObject => hookObject.result)
+        // Finally, return the result (or the hook object if a hidden flag is set)
+        .then(hookObject =>
+          hookObject.params.__returnHook ? hookObject : hookObject.result
+        )
         // Handle errors
         .catch(error => {
           const errorHooks = getHooks(app, service, 'error', method, true);
