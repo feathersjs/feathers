@@ -153,4 +153,25 @@ describe('hooks basics', () => {
       assert.equal(e.message, `Service method 'get' for 'dummy' service must return a promise`);
     });
   });
+
+  it('allows to return the hook object', () => {
+    const app = feathers().use('/dummy', {
+      get (id, params) {
+        return Promise.resolve({ id, params });
+      }
+    });
+    const params = {
+      __returnHook: true
+    };
+
+    return app.service('dummy').get(10, params).then(context => {
+      assert.equal(context.service, app.service('dummy'));
+      assert.equal(context.type, 'after');
+      assert.equal(context.path, 'dummy');
+      assert.deepEqual(context.result, {
+        id: 10,
+        params
+      });
+    });
+  });
 });
