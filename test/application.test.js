@@ -64,27 +64,6 @@ describe('Feathers application', () => {
     });
   });
 
-  it('providers are getting called with a service', () => {
-    const app = feathers();
-    let providerRan = false;
-
-    app.providers.push(function (service, location, options) {
-      assert.ok(service.dummy);
-      assert.equal(location, 'dummy');
-      assert.deepEqual(options, {});
-      providerRan = true;
-    });
-
-    app.use('/dummy', {
-      dummy: true,
-      get () {}
-    });
-
-    assert.ok(providerRan);
-
-    app.setup();
-  });
-
   describe('Services', () => {
     it('calling .use with a non service object throws', () => {
       const app = feathers();
@@ -289,6 +268,52 @@ describe('Feathers application', () => {
       });
 
       assert.ok(_setup);
+    });
+  });
+
+  describe('providers', () => {
+    it('are getting called with a service', () => {
+      const app = feathers();
+      let providerRan = false;
+
+      app.providers.push(function (service, location, options) {
+        assert.ok(service.dummy);
+        assert.equal(location, 'dummy');
+        assert.deepEqual(options, {});
+        providerRan = true;
+      });
+
+      app.use('/dummy', {
+        dummy: true,
+        get () {}
+      });
+
+      assert.ok(providerRan);
+
+      app.setup();
+    });
+
+    it('are getting called with a service and options', () => {
+      const app = feathers();
+      const opts = { test: true };
+
+      let providerRan = false;
+
+      app.providers.push(function (service, location, options) {
+        assert.ok(service.dummy);
+        assert.equal(location, 'dummy');
+        assert.deepEqual(options, opts);
+        providerRan = true;
+      });
+
+      app.use('/dummy', {
+        dummy: true,
+        get () {}
+      }, opts);
+
+      assert.ok(providerRan);
+
+      app.setup();
     });
   });
 });
