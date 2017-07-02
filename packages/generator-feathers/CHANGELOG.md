@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.2.4](https://github.com/feathersjs/generator-feathers/tree/v1.2.4) (2017-07-02)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.3...v1.2.4)
+
+**Merged pull requests:**
+
+- Postgres connection fix [\#240](https://github.com/feathersjs/generator-feathers/pull/240) ([jdziat](https://github.com/jdziat))
+
 ## [v1.2.3](https://github.com/feathersjs/generator-feathers/tree/v1.2.3) (2017-06-26)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.2...v1.2.3)
 
