@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.2.3](https://github.com/feathersjs/feathers-cli/tree/v2.2.3) (2017-07-02)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.2.2...v2.2.3)
+
+**Closed issues:**
+
+- Can not create service on postgres if default.json already has the connection string [\#100](https://github.com/feathersjs/feathers-cli/issues/100)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#101](https://github.com/feathersjs/feathers-cli/pull/101) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.2.2](https://github.com/feathersjs/feathers-cli/tree/v2.2.2) (2017-06-26)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.2.1...v2.2.2)
 
