@@ -237,10 +237,14 @@ module.exports = class ConnectionGenerator extends Generator {
         when (current) {
           const answers = getProps(current);
           const { database } = answers;
-          const connectionString = defaultConfig[database];
+          const connection = defaultConfig[database];
 
-          if (connectionString) {
-            setProps({ connectionString });
+          if (connection) {
+            if(connection.connection){
+              setProps({ connectionString:connection.connection });
+            }else{
+              setProps({ connectionString:connection });
+            }
             return false;
           }
 
