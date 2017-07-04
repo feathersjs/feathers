@@ -47,7 +47,7 @@ describe('feathers-authentication-jwt', () => {
       app.use('/users', memory());
       app.configure(authentication({ secret: 'supersecret' }));
 
-      JWT.sign(Payload, 'supersecret', app.get('auth').jwt, (error, token) => {
+      JWT.sign(Payload, 'supersecret', app.get('authentication').jwt, (error, token) => {
         if (error) { return done(error); }
         validToken = token;
         done();
@@ -106,7 +106,7 @@ describe('feathers-authentication-jwt', () => {
         sinon.spy(passportJWT, 'Strategy');
         app.configure(jwt({ custom: true }));
         app.setup();
-        authOptions = app.get('auth');
+        authOptions = app.get('authentication');
         args = passportJWT.Strategy.getCall(0).args[0];
       });
 
@@ -179,9 +179,9 @@ describe('feathers-authentication-jwt', () => {
 
     it('pulls options from global config with custom name', () => {
       sinon.spy(passportJWT, 'Strategy');
-      let authOptions = app.get('auth');
+      let authOptions = app.get('authentication');
       authOptions.custom = { entity: 'device' };
-      app.set('auth', authOptions);
+      app.set('authentication', authOptions);
 
       app.configure(jwt({ name: 'custom' }));
       app.setup();

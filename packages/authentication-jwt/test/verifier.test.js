@@ -27,7 +27,7 @@ describe('Verifier', () => {
     app.use('users', service)
       .configure(authentication({ secret: 'supersecret' }));
 
-    options = app.get('auth');
+    options = app.get('authentication');
     verifier = new Verifier(app, options);
   });
 
