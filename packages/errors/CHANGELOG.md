@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.8.2](https://github.com/feathersjs/feathers-errors/tree/v2.8.2) (2017-07-05)
+[Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.8.1...v2.8.2)
+
+**Merged pull requests:**
+
+- Fix wildcard import on ES2015+ [\#80](https://github.com/feathersjs/feathers-errors/pull/80) ([coreh](https://github.com/coreh))
+- Add more information to error debug [\#79](https://github.com/feathersjs/feathers-errors/pull/79) ([kamzil](https://github.com/kamzil))
+
 ## [v2.8.1](https://github.com/feathersjs/feathers-errors/tree/v2.8.1) (2017-05-30)
 [Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.8.0...v2.8.1)
 
