@@ -52,6 +52,7 @@ function FeathersError (msg, name, code, className, data) {
   this.errors = errors || {};
 
   debug(`${this.name}(${this.code}): ${this.message}`);
+  debug(this.errors);
 }
 
 FeathersError.prototype = new Error();
