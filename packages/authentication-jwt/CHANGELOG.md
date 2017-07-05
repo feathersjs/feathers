@@ -1,5 +1,24 @@
 # Change Log
 
+## [v0.3.2](https://github.com/feathersjs/feathers-authentication-jwt/tree/v0.3.2) (2017-07-05)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-jwt/compare/v0.3.1...v0.3.2)
+
+**Closed issues:**
+
+- Verifier is not called in a custom service route [\#24](https://github.com/feathersjs/feathers-authentication-jwt/issues/24)
+- Module is using the wrong default config key [\#20](https://github.com/feathersjs/feathers-authentication-jwt/issues/20)
+- Using feathers-authentication-jwt for api key authentication [\#18](https://github.com/feathersjs/feathers-authentication-jwt/issues/18)
+- Possible to return user id in the payload when authenticate? [\#13](https://github.com/feathersjs/feathers-authentication-jwt/issues/13)
+
+**Merged pull requests:**
+
+- Add backwards compatible fallback for \#21 [\#25](https://github.com/feathersjs/feathers-authentication-jwt/pull/25) ([daffl](https://github.com/daffl))
+- use the correct config key name. Closes \#20 [\#21](https://github.com/feathersjs/feathers-authentication-jwt/pull/21) ([ekryski](https://github.com/ekryski))
+- Update feathers-socketio to the latest version 🚀 [\#19](https://github.com/feathersjs/feathers-authentication-jwt/pull/19) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update semistandard to the latest version 🚀 [\#17](https://github.com/feathersjs/feathers-authentication-jwt/pull/17) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-hooks to the latest version 🚀 [\#16](https://github.com/feathersjs/feathers-authentication-jwt/pull/16) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#15](https://github.com/feathersjs/feathers-authentication-jwt/pull/15) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v0.3.1](https://github.com/feathersjs/feathers-authentication-jwt/tree/v0.3.1) (2016-12-29)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-jwt/compare/v0.3.0...v0.3.1)
 
