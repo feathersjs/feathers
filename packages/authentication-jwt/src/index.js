@@ -30,7 +30,7 @@ export default function init (options = {}) {
       throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before feathers-authentication-jwt?`);
     }
 
-    let authOptions = app.get('authentication') || {};
+    let authOptions = app.get('auth') || app.get('authentication') || {};
     let jwtOptions = authOptions[options.name] || {};
 
     // NOTE (EK): Pull from global auth config to support legacy auth for an easier transition.
