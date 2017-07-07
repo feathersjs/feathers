@@ -1,9 +1,7 @@
 // import errors from 'feathers-errors';
-import makeDebug from 'debug';
+const debug = require('debug')('<%= name %>');
 
-const debug = makeDebug('<%= name %>');
-
-export default function init () {
+module.exports = function init () {
   debug('Initializing <%= name %> plugin');
   return '<%= name %>';
-}
+};
