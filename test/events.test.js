@@ -1,8 +1,5 @@
 const assert = require('assert');
-
-const {
-  EventEmitter
-} = require('events');
+const { EventEmitter } = require('events');
 
 const feathers = require('../lib');
 
