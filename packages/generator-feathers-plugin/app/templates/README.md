@@ -48,6 +48,6 @@ console.log('Feathers app started on 127.0.0.1:3030');
 
 ## License
 
-Copyright (c) 2016
+Copyright (c) 2017
 
 Licensed under the [MIT license](LICENSE).

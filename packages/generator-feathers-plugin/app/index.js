@@ -13,7 +13,7 @@ module.exports = class FeathersPluginGenerator extends Generator {
     };
     this.fileMap = {
       'package.json': 'package.json',
-      'index.js': 'src/index.js',
+      'index.js': 'lib/index.js',
       'index.test.js': 'test/index.test.js',
       'README.md': 'README.md',
       'LICENSE': 'LICENSE',
@@ -61,20 +61,15 @@ module.exports = class FeathersPluginGenerator extends Generator {
       );
     }.bind(this));
 
-    this.npmInstall(['debug', 'feathers-errors'], {
+    this.npmInstall(['debug'], {
       save: true
     });
 
     this.npmInstall([
-      'babel-core@^6.17.0',
-      'babel-cli@^6.16.0',
-      'babel-preset-es2015@^6.0.0',
-      'babel-plugin-add-module-exports',
       'semistandard',
       'mocha',
       'istanbul@1.1.0-alpha.1',
-      'chai@^3.5.0',
-      'shx@^0.2.1'
+      'chai@^3.5.0'
     ], {
       saveDev: true
     });

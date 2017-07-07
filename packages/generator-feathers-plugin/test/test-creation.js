@@ -4,11 +4,11 @@
 const path = require('path');
 const assert = require('assert');
 const fs = require('fs');
-const exec = require('child_process').exec;
+const { exec } = require('child_process');
 const helpers = require('yeoman-test');
 
-describe('feathers-plugin generator', function () {
-  it('created a plugin with passing tests', function (done) {
+describe('feathers-plugin generator', () => {
+  it('created a plugin with passing tests', done => {
     let tmpDir;
 
     helpers.run(path.join(__dirname, '../app'))
@@ -28,17 +28,16 @@ describe('feathers-plugin generator', function () {
         assert.ok(fs.existsSync(path.join(tmpDir, '.gitignore')));
         assert.ok(fs.existsSync(path.join(tmpDir, '.travis.yml')));
         assert.ok(fs.existsSync(path.join(tmpDir, '.editorconfig')));
-        assert.ok(fs.existsSync(path.join(tmpDir, '.babelrc')));
         assert.ok(fs.existsSync(path.join(tmpDir, '.istanbul.yml')));
         assert.ok(fs.existsSync(path.join(tmpDir, '.github', 'contributing.md')));
         assert.ok(fs.existsSync(path.join(tmpDir, '.github', 'issue_template.md')));
         assert.ok(fs.existsSync(path.join(tmpDir, '.github', 'pull_request_template.md')));
         assert.ok(fs.existsSync(path.join(tmpDir, 'package.json')));
         assert.ok(fs.existsSync(path.join(tmpDir, 'mocha.opts')));
-        assert.ok(fs.existsSync(path.join(tmpDir, 'src', 'index.js')));
+        assert.ok(fs.existsSync(path.join(tmpDir, 'lib', 'index.js')));
         assert.ok(fs.existsSync(path.join(tmpDir, 'test', 'index.test.js')));
 
-        const child = exec('npm run compile && npm run mocha', {
+        const child = exec('npm test', {
           cwd: tmpDir
         });
 
