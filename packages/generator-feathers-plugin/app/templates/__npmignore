@@ -6,3 +6,5 @@
 .idea/
 .vscode/
 test/
+coverage/
+.github/
