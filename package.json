@@ -51,7 +51,7 @@
   "dependencies": {
     "debug": "^2.6.0",
     "events": "^1.1.1",
-    "feathers-commons": "^1.0.0-pre.1",
+    "feathers-commons": "^1.0.0-pre.2",
     "uberproto": "^1.2.0"
   },
   "devDependencies": {
