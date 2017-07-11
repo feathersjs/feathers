@@ -1,7 +1,6 @@
-import assert from 'assert';
-import Proto from 'uberproto';
-
-import feathers from '../src';
+const assert = require('assert');
+const Proto = require('uberproto');
+const feathers = require('../lib');
 
 describe('Feathers application', () => {
   it('initializes', () => {
