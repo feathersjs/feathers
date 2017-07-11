@@ -1,7 +1,5 @@
-/* eslint-disable handle-callback-err */
-import assert from 'assert';
-
-import feathers from '../../src';
+const assert = require('assert');
+const feathers = require('../../lib');
 
 describe('`after` hooks', () => {
   describe('function(hook)', () => {
