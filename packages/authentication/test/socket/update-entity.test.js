@@ -35,7 +35,7 @@ describe('Socket "Update Entity" Handler', function () {
     };
     const user = { _id: 5, email: 'test@feathersjs.com' };
 
-    updateEntity(user, { app });
+    updateEntity(app)(user);
 
     expect(app.io.sockets.sockets['my-socket'].feathers.user.email).to.equal('test@feathersjs.com');
   });
@@ -70,7 +70,7 @@ describe('Socket "Update Entity" Handler', function () {
     };
     const user = { _id: 5, email: 'test@feathersjs.com' };
 
-    updateEntity(user, { app });
+    updateEntity(app)(user);
 
     expect(app.primus.connections['my-socket'].request.feathers.user.email).to.equal('test@feathersjs.com');
   });
@@ -103,7 +103,7 @@ describe('Socket "Update Entity" Handler', function () {
     };
     const user = { id: 5, email: 'test@feathersjs.com' };
 
-    updateEntity(user, { app });
+    updateEntity(app)(user);
 
     expect(app.primus.connections['my-socket'].request.feathers.user.email).to.equal('test@feathersjs.com');
   });
@@ -142,7 +142,7 @@ describe('Socket "Update Entity" Handler', function () {
     };
     const user = { _id: 5, email: 'test@feathersjs.com' };
 
-    updateEntity(user, { app });
+    updateEntity(app)(user);
 
     expect(app.io.sockets.sockets['my-socket'].feathers.user.email).to.equal('test@feathersjs.com');
   });
@@ -177,7 +177,7 @@ describe('Socket "Update Entity" Handler', function () {
     };
     const user = { _id: new ObjectID(TEST_OBJECT_ID), email: 'test@feathersjs.com' };
 
-    updateEntity(user, { app });
+    updateEntity(app)(user);
 
     expect(app.io.sockets.sockets['my-socket'].feathers.user.email).to.equal('test@feathersjs.com');
   });
@@ -217,7 +217,7 @@ describe('Socket "Update Entity" Handler', function () {
     };
     const user = { _id: 5, email: 'test@feathersjs.com', nested: { value: 3 } };
 
-    updateEntity(user, { app });
+    updateEntity(app)(user);
 
     expect(app.io.sockets.sockets['my-socket'].feathers.user).to.deep.equal(user);
   });
