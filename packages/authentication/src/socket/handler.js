@@ -154,8 +154,8 @@ export default function setupSocketHandler (app, options, { feathersParams, prov
     // Only bind the handlers on receiving the first socket connection.
     if (!isUpdateEntitySetup) {
       isUpdateEntitySetup = true;
-      entityService.on('updated', updateEntity);
-      entityService.on('patched', updateEntity);
+      entityService.on('updated', updateEntity(app));
+      entityService.on('patched', updateEntity(app));
     }
   };
 }

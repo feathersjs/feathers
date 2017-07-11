@@ -1,7 +1,6 @@
 'use strict';
 
-module.exports = function updateEntity (entity, meta) {
-  const { app } = meta;
+module.exports = (app) => (entity) => {
   const authConfig = app.get('auth');
   let idField = app.service(authConfig.service).id;
 
