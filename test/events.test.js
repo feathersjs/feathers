@@ -1,7 +1,7 @@
-import assert from 'assert';
-import { EventEmitter } from 'events';
+const assert = require('assert');
+const { EventEmitter } = require('events');
 
-import feathers from '../src';
+const feathers = require('../lib');
 
 describe('Service events', () => {
   it('app is an event emitter', done => {

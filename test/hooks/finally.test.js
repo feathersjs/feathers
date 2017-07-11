@@ -1,6 +1,5 @@
-import assert from 'assert';
-
-import feathers from '../../src';
+const assert = require('assert');
+const feathers = require('../../lib');
 
 describe('`finally` hooks', () => {
   it('runs after `after` hooks, app level last', () => {
