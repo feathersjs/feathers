@@ -1,11 +1,10 @@
-.github
 .editorconfig
+.jshintrc
 .travis.yml
 .istanbul.yml
 .babelrc
 .idea/
-src/
+.vscode/
 test/
-!lib/
-coverage
+coverage/
 .github/

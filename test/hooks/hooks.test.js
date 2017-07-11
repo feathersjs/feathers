@@ -1,6 +1,5 @@
-import assert from 'assert';
-
-import feathers from '../../src';
+const assert = require('assert');
+const feathers = require('../../lib');
 
 describe('hooks basics', () => {
   it('validates arguments', () => {
