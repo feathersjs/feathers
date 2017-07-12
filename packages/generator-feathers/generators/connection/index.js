@@ -240,9 +240,11 @@ module.exports = class ConnectionGenerator extends Generator {
           const connection = defaultConfig[database];
 
           if (connection) {
-            if(connection.connection){
+            if (connection.connection){
               setProps({ connectionString:connection.connection });
-            }else{
+            } else if (database === 'rethinkdb' && connection.db) {
+              setProps({ connectionString:`rethinkdb://${connection.servers[0].host}:${connection.servers[0].port}/${connection.db}` });
+            } else {
               setProps({ connectionString:connection });
             }
             return false;
