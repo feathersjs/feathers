@@ -1,5 +1,17 @@
 # Change Log
 
+## [v2.2.4](https://github.com/feathersjs/feathers-cli/tree/v2.2.4) (2017-07-12)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.2.3...v2.2.4)
+
+**Closed issues:**
+
+- No model file when creating service \(bug or feature?\) [\#103](https://github.com/feathersjs/feathers-cli/issues/103)
+-  Could not find a valid package.json - feathers generate service [\#102](https://github.com/feathersjs/feathers-cli/issues/102)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#104](https://github.com/feathersjs/feathers-cli/pull/104) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.2.3](https://github.com/feathersjs/feathers-cli/tree/v2.2.3) (2017-07-02)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.2.2...v2.2.3)
 
