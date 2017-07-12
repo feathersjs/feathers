@@ -1,5 +1,18 @@
 # Change Log
 
+## [v1.2.5](https://github.com/feathersjs/generator-feathers/tree/v1.2.5) (2017-07-12)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.4...v1.2.5)
+
+**Closed issues:**
+
+- Authentication generator incorrectly modifying project  [\#243](https://github.com/feathersjs/generator-feathers/issues/243)
+
+**Merged pull requests:**
+
+- Fix problem with rethinkdb [\#244](https://github.com/feathersjs/generator-feathers/pull/244) ([ForsakenHarmony](https://github.com/ForsakenHarmony))
+- Minor changes to the generated index.html [\#241](https://github.com/feathersjs/generator-feathers/pull/241) ([chasenlehara](https://github.com/chasenlehara))
+- Set a name for generated hooks [\#239](https://github.com/feathersjs/generator-feathers/pull/239) ([1beb](https://github.com/1beb))
+
 ## [v1.2.4](https://github.com/feathersjs/generator-feathers/tree/v1.2.4) (2017-07-02)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.3...v1.2.4)
 
