@@ -37,8 +37,8 @@ declare namespace feathers {
     /**
      * Creates a new resource with data.
      */
-    create(data: T[], params?: Params, callback?: any): Promise<T[]>;
-    create(data: T , params?: Params, callback?: any): Promise<T>;
+    create?(data: T[], params?: Params, callback?: any): Promise<T[]>;
+    create?(data: T , params?: Params, callback?: any): Promise<T>;
     
     /**
      * Replaces the resource identified by id with data.
