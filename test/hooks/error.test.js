@@ -13,7 +13,7 @@ describe('`error` hooks', () => {
 
     afterEach(() => service.__hooks.error.get.pop());
 
-    it('basic error hook', done => {
+    it('basic error hook', () => {
       service.hooks({
         error: {
           get (hook) {
@@ -26,9 +26,9 @@ describe('`error` hooks', () => {
         }
       });
 
-      service.get('test').then(() => {
-        done(new Error('Should never get here'));
-      }).catch(() => done());
+      return service.get('test').then(() => {
+        throw new Error('Should never get here');
+      }).catch(() => true);
     });
 
     it('can change the error', () => {
@@ -118,6 +118,23 @@ describe('`error` hooks', () => {
         assert.ok(error.third);
       });
     });
+
+    it('setting `hook.result` will return result', () => {
+      const data = {
+        message: 'It worked'
+      };
+
+      service.hooks({
+        error: {
+          get (hook) {
+            hook.result = data;
+          }
+        }
+      });
+
+      return service.get(10)
+        .then(result => assert.deepEqual(result, data));
+    });
   });
 
   describe('error in hooks', () => {
@@ -137,7 +154,7 @@ describe('`error` hooks', () => {
       service = app.service('dummy');
     });
 
-    it('error in before hook', done => {
+    it('in before hook', () => {
       service.hooks({
         before () {
           throw new Error(errorMessage);
@@ -149,14 +166,17 @@ describe('`error` hooks', () => {
           );
           assert.equal(hook.id, 'dishes');
           assert.equal(hook.error.message, errorMessage);
-          done();
         }
       });
 
-      service.get('dishes').then(done);
+      return service.get('dishes')
+        .then(() => {
+          throw new Error('Should never get here');
+        })
+        .catch(error => assert.equal(error.message, errorMessage));
     });
 
-    it('error in after hook', done => {
+    it('in after hook', () => {
       service.hooks({
         after () {
           throw new Error(errorMessage);
@@ -167,19 +187,22 @@ describe('`error` hooks', () => {
             'Original hook still set'
           );
           assert.equal(hook.id, 'dishes');
-          assert.deepEqual(hook.result, {
+          assert.deepEqual(hook.original.result, {
             id: 'dishes',
             text: 'You have to do dishes'
           });
           assert.equal(hook.error.message, errorMessage);
-          done();
         }
       });
 
-      service.get('dishes').then(done);
+      return service.get('dishes')
+        .then(() => {
+          throw new Error('Should never get here');
+        })
+        .catch(error => assert.equal(error.message, errorMessage));
     });
 
-    it('uses the current hook object if thrown in a hook and sets hook.original', done => {
+    it('uses the current hook object if thrown in a hook and sets hook.original', () => {
       service.hooks({
         after (hook) {
           hook.modified = true;
@@ -190,12 +213,14 @@ describe('`error` hooks', () => {
         error (hook) {
           assert.ok(hook.modified);
           assert.equal(hook.original.type, 'after');
-
-          done();
         }
       });
 
-      service.get('laundry').then(done);
+      return service.get('laundry')
+        .then(() => {
+          throw new Error('Should never get here');
+        })
+        .catch(error => assert.equal(error.message, errorMessage));
     });
   });
 });
