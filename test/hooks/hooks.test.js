@@ -45,7 +45,7 @@ describe('hooks basics', () => {
     });
   });
 
-  it('has hook.app, hook.service and hook.path', done => {
+  it('has hook.app, hook.service and hook.path', () => {
     const app = feathers().use('/dummy', {
       get (id) {
         return Promise.resolve({ id });
@@ -56,19 +56,14 @@ describe('hooks basics', () => {
 
     service.hooks({
       before (hook) {
-        try {
-          assert.equal(this, service);
-          assert.equal(hook.service, service);
-          assert.equal(hook.app, app);
-          assert.equal(hook.path, 'dummy');
-          done();
-        } catch (e) {
-          done(e);
-        }
+        assert.equal(this, service);
+        assert.equal(hook.service, service);
+        assert.equal(hook.app, app);
+        assert.equal(hook.path, 'dummy');
       }
     });
 
-    service.get('test');
+    return service.get('test');
   });
 
   it('does not error when result is null', () => {
@@ -153,23 +148,43 @@ describe('hooks basics', () => {
     });
   });
 
-  it('allows to return the hook object', () => {
-    const app = feathers().use('/dummy', {
-      get (id, params) {
-        return Promise.resolve({ id, params });
-      }
-    });
-    const params = {
-      __returnHook: true
-    };
+  describe('returns the hook object with __returnHook', () => {
+    it('on normal method call', () => {
+      const app = feathers().use('/dummy', {
+        get (id, params) {
+          return Promise.resolve({ id, params });
+        }
+      });
+      const params = {
+        __returnHook: true
+      };
 
-    return app.service('dummy').get(10, params).then(context => {
-      assert.equal(context.service, app.service('dummy'));
-      assert.equal(context.type, 'after');
-      assert.equal(context.path, 'dummy');
-      assert.deepEqual(context.result, {
-        id: 10,
-        params
+      return app.service('dummy').get(10, params).then(context => {
+        assert.equal(context.service, app.service('dummy'));
+        assert.equal(context.type, 'after');
+        assert.equal(context.path, 'dummy');
+        assert.deepEqual(context.result, {
+          id: 10,
+          params
+        });
+      });
+    });
+
+    it('on error', () => {
+      const app = feathers().use('/dummy', {
+        get () {
+          return Promise.reject(new Error('Something went wrong'));
+        }
+      });
+      const params = {
+        __returnHook: true
+      };
+
+      return app.service('dummy').get(10, params).catch(context => {
+        assert.equal(context.service, app.service('dummy'));
+        assert.equal(context.type, 'error');
+        assert.equal(context.path, 'dummy');
+        assert.equal(context.error.message, 'Something went wrong');
       });
     });
   });
