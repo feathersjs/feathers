@@ -185,7 +185,7 @@ describe('`after` hooks', () => {
       });
     });
 
-    it('does not run after hook when there is an error', done => {
+    it('does not run after hook when there is an error', () => {
       const dummyService = {
         remove () {
           return Promise.reject(new Error('Error removing item'));
@@ -203,10 +203,9 @@ describe('`after` hooks', () => {
         }
       });
 
-      service.remove(1, {}).catch(error => {
+      return service.remove(1, {}).catch(error => {
         assert.ok(error, 'Got error');
         assert.equal(error.message, 'Error removing item', 'Got error message from service');
-        done();
       });
     });
 
