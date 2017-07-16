@@ -1,6 +1,6 @@
 {
   "name": "generator-feathers-plugin",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "A generator for Feathersjs Plugins.",
   "keywords": [
     "yeoman-generator",
