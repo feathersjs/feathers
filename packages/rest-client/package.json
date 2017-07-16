@@ -68,7 +68,10 @@
     "babelify": "^7.3.0",
     "body-parser": "^1.17.2",
     "browserify": "^14.4.0",
+<<<<<<< Updated upstream
     "chai": "^4.1.0",
+=======
+>>>>>>> Stashed changes
     "feathers": "^2.1.4",
     "feathers-memory": "^1.1.0",
     "feathers-rest": "^1.8.0",
