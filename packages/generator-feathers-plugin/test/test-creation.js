@@ -21,7 +21,8 @@ describe('feathers-plugin generator', () => {
       .withPrompts({
         name: 'feathers-tmp',
         repository: 'feathersjs/feathers-tmp',
-        description: 'Plugin description here'
+        description: 'Plugin description here',
+        client: true
       })
       .on('end', function () {
         assert.ok(fs.existsSync(path.join(tmpDir, '.npmignore')));
