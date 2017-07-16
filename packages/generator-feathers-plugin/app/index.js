@@ -2,6 +2,7 @@
 
 const Generator = require('yeoman-generator');
 const path = require('path');
+const pkgForClient = require('./templates/client/package.json.js');
 
 module.exports = class FeathersPluginGenerator extends Generator {
   constructor (args, opts) {
@@ -23,8 +24,7 @@ module.exports = class FeathersPluginGenerator extends Generator {
   }
 
   prompting () {
-    var done = this.async();
-    var prompts = [{
+    const prompts = [{
       name: 'name',
       message: 'Project name',
       when: !this.pkg.name,
@@ -37,22 +37,42 @@ module.exports = class FeathersPluginGenerator extends Generator {
       name: 'description',
       message: 'Description',
       when: !this.pkg.description
+    }, {
+      type: 'confirm',
+      name: 'client',
+      default: false,
+      message: 'Does this plugin require a client side build?'
     }];
 
-    this.prompt(prompts).then(function (props) {
+    return this.prompt(prompts).then(props => {
       this.props = Object.assign(this.props, props);
-
-      done();
-    }.bind(this));
+    });
   }
 
   writing () {
+    const devDependencies = [
+      'semistandard',
+      'mocha',
+      'istanbul@1.1.0-alpha.1',
+      'chai@^3.5.0'
+    ];
+
+    if (this.props.client) {
+      devDependencies.push('babel-core',
+        'babel-preset-es2015',
+        'babelify',
+        'browserify',
+        'shx',
+        'uglify-js'
+      );
+    }
+
     this.fs.copy(this.templatePath('static/.*'), this.destinationPath());
     this.fs.copy(this.templatePath('static/**/*'), this.destinationPath());
     this.fs.copy(this.templatePath('static/.github/**/*'), this.destinationPath('.github/'));
 
     Object.keys(this.fileMap).forEach(function (src) {
-      var target = this.fileMap[src];
+      const target = this.fileMap[src];
 
       this.fs.copyTpl(
         this.templatePath(src),
@@ -61,16 +81,15 @@ module.exports = class FeathersPluginGenerator extends Generator {
       );
     }.bind(this));
 
-    this.npmInstall(['debug'], {
-      save: true
-    });
+    if (this.props.client) {
+      const pkgFile = this.destinationPath('package.json');
+      const pkg = this.fs.readJSON(pkgFile);
 
-    this.npmInstall([
-      'semistandard',
-      'mocha',
-      'istanbul@1.1.0-alpha.1',
-      'chai@^3.5.0'
-    ], {
+      this.fs.writeJSON(pkgFile, pkgForClient(pkg));
+      this.fs.copy(this.templatePath('client/_babelrc'), this.destinationPath('.babelrc'));
+    }
+
+    this.npmInstall(devDependencies, {
       saveDev: true
     });
   }

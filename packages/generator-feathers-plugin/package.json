@@ -13,6 +13,9 @@
     "email": "hello@feathersjs.com",
     "url": "https://feathersjs.com"
   },
+  "engines": {
+    "node": ">= 6.0.0"
+  },
   "contributors": [],
   "main": "app/index.js",
   "repository": {
@@ -20,7 +23,7 @@
     "url": "git://github.com/feathersjs/generator-feathers-plugin.git"
   },
   "scripts": {
-    "lint": "semistandard --fix",
+    "lint": "semistandard --fix app/index.js test/**/*.js",
     "test": "npm run lint && mocha test/ --timeout 180000",
     "publish": "git push origin && git push origin --tags",
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
@@ -43,9 +46,6 @@
     "mocha": "^3.1.0",
     "semistandard": "^11.0.0",
     "yeoman-test": "^1.4.0"
-  },
-  "engines": {
-    "node": ">= 6.0.0"
   },
   "license": "MIT"
 }
