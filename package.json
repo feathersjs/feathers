@@ -1,7 +1,7 @@
 {
   "name": "feathers",
   "description": "Build Better APIs, Faster than Ever.",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",
