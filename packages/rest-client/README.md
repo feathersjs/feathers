@@ -10,6 +10,8 @@
 
 > REST client services for different Ajax libraries
 
+`feathers-rest-client` supports [REST server](https://docs.feathersjs.com/api/rest.html#server) connectivity using [jQuery](https://jquery.com/), [request](https://github.com/request/request), [Superagent](http://visionmedia.github.io/superagent/), [Axios](https://github.com/mzabriskie/axios), [Fetch](https://facebook.github.io/react-native/docs/network.html) or [Angular HTTP](https://angularjs.org/) as the AJAX library.
+
 ## Installation
 
 ```
@@ -18,35 +20,7 @@ npm install feathers-rest-client --save
 
 ## Documentation
 
-Please refer to the [feathers-rest-client documentation](http://docs.feathersjs.com/) for more details.
-
-## Complete Example
-
-Here's an example of a Feathers server that uses `feathers-rest-client`. 
-
-```js
-const feathers = require('feathers');
-const rest = require('feathers-rest');
-const hooks = require('feathers-hooks');
-const bodyParser = require('body-parser');
-const errorHandler = require('feathers-errors/handler');
-const plugin = require('feathers-rest-client');
-
-// Initialize the application
-const app = feathers()
-  .configure(rest())
-  .configure(hooks())
-  // Needed for parsing bodies (login)
-  .use(bodyParser.json())
-  .use(bodyParser.urlencoded({ extended: true }))
-  // Initialize your feathers plugin
-  .use('/plugin', plugin())
-  .use(errorHandler());
-
-app.listen(3030);
-
-console.log('Feathers app started on 127.0.0.1:3030');
-```
+Please refer to the [feathers-rest-client documentation](https://docs.feathersjs.com/api/rest.html#client) for more details.
 
 ## License
 
