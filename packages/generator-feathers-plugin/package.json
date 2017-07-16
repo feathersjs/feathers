@@ -25,7 +25,7 @@
   "scripts": {
     "lint": "semistandard --fix app/index.js test/**/*.js",
     "test": "npm run lint && mocha test/ --timeout 180000",
-    "publish": "git push origin && git push origin --tags",
+    "publish": "git push origin --tags && npm run changelog && git push origin",
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
