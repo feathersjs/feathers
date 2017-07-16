@@ -1,5 +1,7 @@
 # feathers-rest-client
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-rest-client.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/feathersjs/feathers-rest-client.png?branch=master)](https://travis-ci.org/feathersjs/feathers-rest-client)
 [![Code Climate](https://codeclimate.com/github/feathersjs/feathers-rest-client/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/feathers-rest-client)
 [![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-rest-client/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-rest-client/coverage)
