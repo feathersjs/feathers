@@ -1,5 +1,22 @@
 # Change Log
 
+## [v0.3.3](https://github.com/feathersjs/feathers-authentication-client/tree/v0.3.3) (2017-07-18)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.3.2...v0.3.3)
+
+**Closed issues:**
+
+- An in-range update of feathers is breaking the build 🚨 [\#59](https://github.com/feathersjs/feathers-authentication-client/issues/59)
+- An in-range update of feathers is breaking the build 🚨 [\#58](https://github.com/feathersjs/feathers-authentication-client/issues/58)
+
+**Merged pull requests:**
+
+- typings: add auth methods to feathers.Application interface [\#57](https://github.com/feathersjs/feathers-authentication-client/pull/57) ([j2L4e](https://github.com/j2L4e))
+- Update feathers-authentication-local to the latest version 🚀 [\#55](https://github.com/feathersjs/feathers-authentication-client/pull/55) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update chai to the latest version 🚀 [\#54](https://github.com/feathersjs/feathers-authentication-client/pull/54) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-socketio to the latest version 🚀 [\#50](https://github.com/feathersjs/feathers-authentication-client/pull/50) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update socket.io-client to the latest version 🚀 [\#49](https://github.com/feathersjs/feathers-authentication-client/pull/49) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update README.md [\#47](https://github.com/feathersjs/feathers-authentication-client/pull/47) ([bertho-zero](https://github.com/bertho-zero))
+
 ## [v0.3.2](https://github.com/feathersjs/feathers-authentication-client/tree/v0.3.2) (2017-04-30)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-client/compare/v0.3.1...v0.3.2)
 
@@ -13,9 +30,9 @@
 **Merged pull requests:**
 
 - Catch getJWT promise errors [\#46](https://github.com/feathersjs/feathers-authentication-client/pull/46) ([NikitaVlaznev](https://github.com/NikitaVlaznev))
-- Update semistandard to the latest version 🚀 [\#43](https://github.com/feathersjs/feathers-authentication-client/pull/43) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
-- Update feathers-hooks to the latest version 🚀 [\#42](https://github.com/feathersjs/feathers-authentication-client/pull/42) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
-- Update dependencies to enable Greenkeeper 🌴 [\#40](https://github.com/feathersjs/feathers-authentication-client/pull/40) ([greenkeeper[bot]](https://github.com/integration/greenkeeper))
+- Update semistandard to the latest version 🚀 [\#43](https://github.com/feathersjs/feathers-authentication-client/pull/43) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-hooks to the latest version 🚀 [\#42](https://github.com/feathersjs/feathers-authentication-client/pull/42) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#40](https://github.com/feathersjs/feathers-authentication-client/pull/40) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 - Note that auth must be configured after rest/socket clients [\#36](https://github.com/feathersjs/feathers-authentication-client/pull/36) ([hubgit](https://github.com/hubgit))
 
 ## [v0.3.1](https://github.com/feathersjs/feathers-authentication-client/tree/v0.3.1) (2017-03-10)
