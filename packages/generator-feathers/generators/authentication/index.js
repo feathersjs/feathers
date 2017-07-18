@@ -20,7 +20,8 @@ module.exports = class AuthGenerator extends Generator {
       default: 'providers',
       choices: [{
         name: 'Username + Password (Local)',
-        value: 'local'
+        value: 'local',
+        checked: true
       }, {
         name: 'Google',
         value: 'google'
