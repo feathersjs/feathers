@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.2.6](https://github.com/feathersjs/generator-feathers/tree/v1.2.6) (2017-07-18)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.5...v1.2.6)
+
+**Merged pull requests:**
+
+- Enable local authentication by default for auth generator [\#245](https://github.com/feathersjs/generator-feathers/pull/245) ([daffl](https://github.com/daffl))
+
 ## [v1.2.5](https://github.com/feathersjs/generator-feathers/tree/v1.2.5) (2017-07-12)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.4...v1.2.5)
 
