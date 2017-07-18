@@ -1,4 +1,3 @@
-
 declare function feathersAuthClient(config?: feathersAuthClient.Config) : () => void;
 
 declare namespace feathersAuthClient {
@@ -21,14 +20,14 @@ declare namespace feathersAuthClient {
     type: string;
     [index: string]: any;
   }
-  
+
   class Passport {
     constructor(app: any, options: Config);
     setupSocketListeners(): void;
     connected(): Promise<any>;
     authenticate(credentials?: Credentials): any;
     authenticateSocket(credentials: Credentials, socket: any, emit: any): any;
-    logoutSocket(socket: any, emit: any): any;
+    logoutSocket(socket: any, emit: any): Promise<any>;
     logout(): Promise<any>;
     setJWT(data: any): Promise<any>;
     getJWT(): Promise<any>;
@@ -37,6 +36,14 @@ declare namespace feathersAuthClient {
     getCookie(name: string): string;
     clearCookie(name: string): null;
     getStorage(storage: any): any;
+  }
+}
+
+declare module 'feathers' {
+  interface Application {
+    authenticate(options: feathersAuthClient.Credentials): Promise<any>;
+    logout(): Promise<any>;
+    passport: feathersAuthClient.Passport;
   }
 }
 
