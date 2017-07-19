@@ -10,15 +10,19 @@
 
 > Feathers Express framework bindings and REST provider
 
+This plugin turns a Feathers v3+ application into a drop-in replacement for any Express application.
+
 ## Installation
 
 ```
 npm install feathers-express --save
 ```
 
+> _Important:_ This plugin only works with `feathers` 3.0 and later
+
 ## Documentation
 
-Please refer to the [feathers-express documentation](http://docs.feathersjs.com/) for more details.
+Please refer to the [feathers-express API documentation](https://docs.feathersjs.com/api/express.html) for more details.
 
 ## Complete Example
 
@@ -26,22 +30,17 @@ Here's an example of a Feathers server that uses `feathers-express`.
 
 ```js
 const feathers = require('feathers');
-const rest = require('feathers-rest');
-const hooks = require('feathers-hooks');
-const bodyParser = require('body-parser');
-const errorHandler = require('feathers-errors/handler');
-const plugin = require('feathers-express');
+const expressify = require('feathers-express');
 
-// Initialize the application
-const app = feathers()
-  .configure(rest())
-  .configure(hooks())
-  // Needed for parsing bodies (login)
-  .use(bodyParser.json())
-  .use(bodyParser.urlencoded({ extended: true }))
-  // Initialize your feathers plugin
-  .use('/plugin', plugin())
-  .use(errorHandler());
+const app = expressify(feathers());
+
+app.use('/myservice', {
+  get(id) {
+    return Promise.resolve({ id });
+  }
+});
+
+app.use((req, res) => res.json({ message: 'Hello world' }));
 
 app.listen(3030);
 
@@ -50,6 +49,6 @@ console.log('Feathers app started on 127.0.0.1:3030');
 
 ## License
 
-Copyright (c) 2016
+Copyright (c) 2017
 
 Licensed under the [MIT license](LICENSE).
