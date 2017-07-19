@@ -1,11 +1,7 @@
 {
   "name": "feathers",
   "description": "Build Better APIs, Faster than Ever.",
-<<<<<<< HEAD
-  "version": "2.2.2",
-=======
-  "version": "3.0.0-pre.0",
->>>>>>> Initial changes for Feathers v3 (#605)
+  "version": "3.0.0-pre.1",
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",
