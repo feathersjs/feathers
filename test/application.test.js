@@ -11,10 +11,12 @@ describe('Feathers application', () => {
     assert.equal(typeof app.services, 'object');
   });
 
-  it('sets the version', () => {
+  it('sets the version on main and app instance', () => {
     const pkg = require('../package.json');
+    const app = feathers();
 
     assert.equal(feathers.version, pkg.version);
+    assert.equal(app.version, pkg.version);
   });
 
   it('is an event emitter', done => {
