@@ -19,6 +19,23 @@ describe('feathers-express', () => {
     assert.equal(typeof app, 'function');
   });
 
+  it('errors when not app is provided', () => {
+    try {
+      expressify();
+    } catch (e) {
+      assert.equal(e.message, 'feathers-express requires a valid Feathers application instance');
+    }
+
+    try {
+      const app = feathers();
+      app.version = '2.9.9';
+
+      expressify(app);
+    } catch (e) {
+      assert.equal(e.message, 'feathers-express requires an instance of a Feathers application version 3.x or later (got 2.9.9)');
+    }
+  });
+
   it('Can use Express sub-apps', () => {
     const app = expressify(feathers());
     const child = express();
