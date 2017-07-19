@@ -94,6 +94,11 @@ declare namespace feathers {
      * Register a service object
      */
     use: FeathersUseHandler<this>;
+
+    /**
+     * Runs a callback function with the application as the context (this). It can be used to initialize plugins or services.
+     */
+    configure(callback: any): this;
   }
 }
 
