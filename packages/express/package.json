@@ -1,7 +1,7 @@
 {
   "name": "feathers-express",
   "description": "Feathers Express framework bindings and REST provider",
-  "version": "0.0.0",
+  "version": "1.0.0-pre.0",
   "homepage": "https://github.com/feathersjs/feathers-express",
   "main": "lib/",
   "keywords": [

@@ -4,6 +4,7 @@ const Proto = require('uberproto');
 
 module.exports = function feathersExpress (feathersApp) {
   const expressApp = express();
+  // An Uberproto mixin that provides the extended functionality
   const mixin = {
     use (location) {
       let service;
@@ -50,11 +51,14 @@ module.exports = function feathersExpress (feathersApp) {
     }
   };
 
+  // Copy all non-existing properties (including non-enumerables)
+  // that don't already exist on the Express app
   Object.getOwnPropertyNames(feathersApp).forEach(prop => {
-    if (typeof mixin[prop] === 'undefined' && typeof expressApp[prop] === 'undefined') {
-      Object.defineProperty(mixin, prop,
-        Object.getOwnPropertyDescriptor(feathersApp, prop)
-      );
+    const feathersProp = Object.getOwnPropertyDescriptor(feathersApp, prop);
+    const expressProp = Object.getOwnPropertyDescriptor(expressApp, prop);
+
+    if (expressProp === undefined && feathersProp !== undefined) {
+      Object.defineProperty(expressApp, prop, feathersProp);
     }
   });
 

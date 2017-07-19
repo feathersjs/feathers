@@ -7,6 +7,12 @@ const axios = require('axios');
 const expressify = require('../lib');
 
 describe('feathers-express', () => {
+  const service = {
+    get (id) {
+      return Promise.resolve({ id });
+    }
+  };
+
   it('returns an Express application', () => {
     const app = expressify(feathers());
 
@@ -21,18 +27,42 @@ describe('feathers-express', () => {
     assert.equal(child.parent, app);
   });
 
+  it('has Feathers functionality', () => {
+    const app = expressify(feathers());
+
+    app.use('/myservice', service);
+
+    app.hooks({
+      after: {
+        get (hook) {
+          hook.result.fromAppHook = true;
+        }
+      }
+    });
+
+    app.service('myservice').hooks({
+      after: {
+        get (hook) {
+          hook.result.fromHook = true;
+        }
+      }
+    });
+
+    return app.service('myservice').get(10)
+      .then(data => assert.deepEqual(data, {
+        id: 10,
+        fromHook: true,
+        fromAppHook: true
+      }));
+  });
+
   it('can register a service and start an Express server', done => {
     const app = expressify(feathers());
     const response = {
       message: 'Hello world'
     };
 
-    app.use('/myservice', {
-      get (id) {
-        return Promise.resolve({ id });
-      }
-    });
-
+    app.use('/myservice', service);
     app.use((req, res) => res.json(response));
 
     const server = app.listen(8787).on('listening', () => {
