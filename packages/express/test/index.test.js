@@ -34,6 +34,15 @@ describe('feathers-express', () => {
     } catch (e) {
       assert.equal(e.message, 'feathers-express requires an instance of a Feathers application version 3.x or later (got 2.9.9)');
     }
+
+    try {
+      const app = feathers();
+      delete app.version;
+
+      expressify(app);
+    } catch (e) {
+      assert.equal(e.message, 'feathers-express requires an instance of a Feathers application version 3.x or later (got unknown)');
+    }
   });
 
   it('Can use Express sub-apps', () => {
