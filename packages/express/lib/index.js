@@ -8,7 +8,7 @@ module.exports = function feathersExpress (feathersApp) {
   }
 
   if (!feathersApp.version || feathersApp.version < '3.0.0') {
-    throw new Error(`feathers-express requires an instance of a Feathers application version 3.x or later (got ${feathersApp.version || unknown})`);
+    throw new Error(`feathers-express requires an instance of a Feathers application version 3.x or later (got ${feathersApp.version || 'unknown'})`);
   }
 
   const expressApp = express();
