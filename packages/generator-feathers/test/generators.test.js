@@ -190,7 +190,7 @@ describe('generator-feathers', function() {
           database: 'sqlite',
           adapter: 'sequelize',
           connectionString
-        }).then(() => 
+        }).then(() =>
           assert.jsonFileContent(
             path.join(appDir, 'config', 'default.json'), {
               sqlite: connectionString
@@ -200,11 +200,11 @@ describe('generator-feathers', function() {
       });
     });
 
-    it('rethinkdb', () => {
+    it.skip('rethinkdb', () => {
       return runConnectionGenerator({
         database: 'rethinkdb',
         connectionString: 'rethinkdb://localhost:11078/testing'
-      }).then(() => 
+      }).then(() =>
         assert.jsonFileContent(
           path.join(appDir, 'config', 'default.json'), {
             rethinkdb: {
@@ -267,7 +267,7 @@ describe('generator-feathers', function() {
     it('mongoose', () => testServiceGenerator('mongoose', 'mongodb', '_id'));
     it('knex', () => testServiceGenerator('knex', 'sqlite', 'id'));
     it('sequelize', () => testServiceGenerator('sequelize', 'sqlite', 'id'));
-    it('rethinkdb', () => testServiceGenerator('rethinkdb', 'id'));
+    it.skip('rethinkdb', () => testServiceGenerator('rethinkdb', 'id'));
   });
 
   describe('feathers:authentication', () => {
