@@ -4,6 +4,7 @@ const Request = require('./request');
 const Fetch = require('./fetch');
 const Axios = require('./axios');
 const Angular = require('./angular');
+const AngularHttpClient = require('./angular-http-client');
 
 const transports = {
   jquery: jQuery,
@@ -11,7 +12,8 @@ const transports = {
   request: Request,
   fetch: Fetch,
   axios: Axios,
-  angular: Angular
+  angular: Angular,
+  angularHttpClient: AngularHttpClient
 };
 
 module.exports = function (base = '') {

@@ -30,3 +30,4 @@ node_modules
 .lock-wscript
 
 dist/
+.idea/
