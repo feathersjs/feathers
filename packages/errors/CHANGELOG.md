@@ -1,5 +1,17 @@
 # Change Log
 
+## [v2.9.0](https://github.com/feathersjs/feathers-errors/tree/v2.9.0) (2017-07-20)
+[Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.8.2...v2.9.0)
+
+**Closed issues:**
+
+- Wrong stack for errors [\#78](https://github.com/feathersjs/feathers-errors/issues/78)
+
+**Merged pull requests:**
+
+- Capture proper stack trace and error messages [\#82](https://github.com/feathersjs/feathers-errors/pull/82) ([daffl](https://github.com/daffl))
+- Update chai to the latest version 🚀 [\#81](https://github.com/feathersjs/feathers-errors/pull/81) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.8.2](https://github.com/feathersjs/feathers-errors/tree/v2.8.2) (2017-07-05)
 [Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.8.1...v2.8.2)
 
