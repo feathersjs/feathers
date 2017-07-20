@@ -1,7 +1,7 @@
 {
   "name": "feathers-rest-client",
   "description": "REST client services for different Ajax libraries",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "homepage": "https://github.com/feathersjs/feathers-rest-client",
   "main": "lib/",
   "keywords": [
