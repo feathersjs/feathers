@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.2.7](https://github.com/feathersjs/generator-feathers/tree/v1.2.7) (2017-07-20)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.6...v1.2.7)
+
+**Merged pull requests:**
+
+- Use pg@6 [\#247](https://github.com/feathersjs/generator-feathers/pull/247) ([marshallswain](https://github.com/marshallswain))
+
 ## [v1.2.6](https://github.com/feathersjs/generator-feathers/tree/v1.2.6) (2017-07-18)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.5...v1.2.6)
 
