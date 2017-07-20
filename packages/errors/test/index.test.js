@@ -163,6 +163,15 @@ describe('feathers-errors', () => {
     it('503', () => {
       assert.notEqual(typeof errors[503], 'undefined', 'has Unavailable alias');
     });
+
+    it('instantiates every error', () => {
+      Object.keys(types).forEach(name => {
+        const E = types[name];
+        if (E) {
+          new E('Something went wrong'); // eslint-disable-line no-new
+        }
+      });
+    });
   });
 
   it('exposes errors via types for backwards compatibility', () => {
@@ -174,7 +183,6 @@ describe('feathers-errors', () => {
       it('default error', () => {
         var error = new errors.GeneralError();
         assert.equal(error.code, 500);
-        assert.equal(error.message, 'Error');
         assert.equal(error.className, 'general-error');
         assert.notEqual(error.stack, undefined);
         assert.equal(error instanceof errors.GeneralError, true);
@@ -300,6 +308,17 @@ describe('feathers-errors', () => {
       assert.ok(Array.isArray(error.data));
       assert.deepEqual(error.data, [{hello: 'world'}]);
       assert.equal(error.errors, 'Invalid input');
+    });
+
+    it('has proper stack trace (#78)', () => {
+      try {
+        throw new errors.NotFound('Not the error you are looking for');
+      } catch (e) {
+        const text = 'NotFound: Not the error you are looking for';
+
+        assert.equal(e.stack.indexOf(text), 0);
+        assert.ok(e.stack.indexOf('index.test.js') !== -1);
+      }
     });
   });
 });
