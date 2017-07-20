@@ -1,8 +1,6 @@
 const debug = require('debug')('feathers-errors');
 
 function FeathersError (msg, name, code, className, data) {
-  msg = msg || 'Error';
-
   let errors;
   let message;
   let newData;
@@ -20,8 +18,6 @@ function FeathersError (msg, name, code, className, data) {
   } else { // message is just a string
     message = msg;
   }
-
-  Error.call(this, message);
 
   if (data) {
     // NOTE(EK): To make sure that we are not messing
@@ -53,9 +49,15 @@ function FeathersError (msg, name, code, className, data) {
 
   debug(`${this.name}(${this.code}): ${this.message}`);
   debug(this.errors);
+
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(this, FeathersError);
+  } else {
+    this.stack = (new Error()).stack;
+  }
 }
 
-FeathersError.prototype = new Error();
+FeathersError.prototype = Object.create(Error.prototype);
 
 // NOTE (EK): A little hack to get around `message` not
 // being included in the default toJSON call.
@@ -77,112 +79,112 @@ function BadRequest (message, data) {
   FeathersError.call(this, message, 'BadRequest', 400, 'bad-request', data);
 }
 
-BadRequest.prototype = new FeathersError();
+BadRequest.prototype = FeathersError.prototype;
 
 // 401 - Not Authenticated
 function NotAuthenticated (message, data) {
   FeathersError.call(this, message, 'NotAuthenticated', 401, 'not-authenticated', data);
 }
 
-NotAuthenticated.prototype = new FeathersError();
+NotAuthenticated.prototype = FeathersError.prototype;
 
 // 402 - Payment Error
 function PaymentError (message, data) {
   FeathersError.call(this, message, 'PaymentError', 402, 'payment-error', data);
 }
 
-PaymentError.prototype = new FeathersError();
+PaymentError.prototype = FeathersError.prototype;
 
 // 403 - Forbidden
 function Forbidden (message, data) {
   FeathersError.call(this, message, 'Forbidden', 403, 'forbidden', data);
 }
 
-Forbidden.prototype = new FeathersError();
+Forbidden.prototype = FeathersError.prototype;
 
 // 404 - Not Found
 function NotFound (message, data) {
   FeathersError.call(this, message, 'NotFound', 404, 'not-found', data);
 }
 
-NotFound.prototype = new FeathersError();
+NotFound.prototype = FeathersError.prototype;
 
 // 405 - Method Not Allowed
 function MethodNotAllowed (message, data) {
   FeathersError.call(this, message, 'MethodNotAllowed', 405, 'method-not-allowed', data);
 }
 
-MethodNotAllowed.prototype = new FeathersError();
+MethodNotAllowed.prototype = FeathersError.prototype;
 
 // 406 - Not Acceptable
 function NotAcceptable (message, data) {
   FeathersError.call(this, message, 'NotAcceptable', 406, 'not-acceptable', data);
 }
 
-NotAcceptable.prototype = new FeathersError();
+NotAcceptable.prototype = FeathersError.prototype;
 
 // 408 - Timeout
 function Timeout (message, data) {
   FeathersError.call(this, message, 'Timeout', 408, 'timeout', data);
 }
 
-Timeout.prototype = new FeathersError();
+Timeout.prototype = FeathersError.prototype;
 
 // 409 - Conflict
 function Conflict (message, data) {
   FeathersError.call(this, message, 'Conflict', 409, 'conflict', data);
 }
 
-Conflict.prototype = new FeathersError();
+Conflict.prototype = FeathersError.prototype;
 
 // 411 - Length Required
 function LengthRequired (message, data) {
   FeathersError.call(this, message, 'LengthRequired', 411, 'length-required', data);
 }
 
-LengthRequired.prototype = new FeathersError();
+LengthRequired.prototype = FeathersError.prototype;
 
 // 422 Unprocessable
 function Unprocessable (message, data) {
   FeathersError.call(this, message, 'Unprocessable', 422, 'unprocessable', data);
 }
 
-Unprocessable.prototype = new FeathersError();
+Unprocessable.prototype = FeathersError.prototype;
 
 // 429 Too Many Requests
 function TooManyRequests (message, data) {
   FeathersError.call(this, message, 'TooManyRequests', 429, 'too-many-requests', data);
 }
 
-TooManyRequests.prototype = new FeathersError();
+TooManyRequests.prototype = FeathersError.prototype;
 
 // 500 - General Error
 function GeneralError (message, data) {
   FeathersError.call(this, message, 'GeneralError', 500, 'general-error', data);
 }
 
-GeneralError.prototype = new FeathersError();
+GeneralError.prototype = FeathersError.prototype;
 
 // 501 - Not Implemented
 function NotImplemented (message, data) {
   FeathersError.call(this, message, 'NotImplemented', 501, 'not-implemented', data);
 }
 
-NotImplemented.prototype = new FeathersError();
+NotImplemented.prototype = FeathersError.prototype;
 
 // 502 - Bad Gateway
 function BadGateway (message, data) {
   FeathersError.call(this, message, 'BadGateway', 502, 'bad-gateway', data);
 }
 
-BadGateway.prototype = new FeathersError();
+BadGateway.prototype = FeathersError.prototype;
 
 // 503 - Unavailable
 function Unavailable (message, data) {
   FeathersError.call(this, message, 'Unavailable', 503, 'unavailable', data);
 }
 
-Unavailable.prototype = new FeathersError();
+Unavailable.prototype = FeathersError.prototype;
 
 const errors = {
   FeathersError,
