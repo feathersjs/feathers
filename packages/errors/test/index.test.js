@@ -184,6 +184,7 @@ describe('feathers-errors', () => {
         var error = new errors.GeneralError();
         assert.equal(error.code, 500);
         assert.equal(error.className, 'general-error');
+        assert.equal(error.message, 'Error');
         assert.notEqual(error.stack, undefined);
         assert.equal(error instanceof errors.GeneralError, true);
         assert.equal(error instanceof errors.FeathersError, true);

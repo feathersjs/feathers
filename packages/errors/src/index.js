@@ -1,6 +1,8 @@
 const debug = require('debug')('feathers-errors');
 
 function FeathersError (msg, name, code, className, data) {
+  msg = msg || 'Error';
+
   let errors;
   let message;
   let newData;
