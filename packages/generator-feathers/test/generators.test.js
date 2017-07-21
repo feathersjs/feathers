@@ -200,7 +200,7 @@ describe('generator-feathers', function() {
       });
     });
 
-    it.skip('rethinkdb', () => {
+    it('rethinkdb', () => {
       return runConnectionGenerator({
         database: 'rethinkdb',
         connectionString: 'rethinkdb://localhost:11078/testing'
