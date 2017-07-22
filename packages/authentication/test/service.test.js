@@ -74,7 +74,7 @@ describe('/authentication service', () => {
 
     it('creates an accessToken', () => {
       return app.service('authentication').create(data).then(result => {
-        expect(result.accessToken).to.not.equal.undefined;
+        expect(result.accessToken).to.not.equal(undefined);
       });
     });
 
@@ -87,7 +87,7 @@ describe('/authentication service', () => {
       };
 
       return app.service('authentication').create(data, params).then(result => {
-        expect(result.accessToken).to.not.equal.undefined;
+        expect(result.accessToken).to.not.equal(undefined);
       });
     });
 
