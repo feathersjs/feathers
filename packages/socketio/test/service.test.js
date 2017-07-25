@@ -1,7 +1,10 @@
-import assert from 'assert';
-import { verify } from 'feathers-commons/lib/test-fixture';
+const assert = require('assert');
 
-export default function (name, options) {
+const {
+  verify
+} = require('feathers-commons/lib/test-fixture');
+
+module.exports = function (name, options) {
   it(`invalid arguments cause an error`, done => {
     options.socket.emit(`${name}::find`, 1, {}, function (error) {
       assert.equal(error.message, `Too many arguments for 'find' service method`);
@@ -384,4 +387,4 @@ export default function (name, options) {
       });
     });
   });
-}
+};

@@ -1,10 +1,8 @@
-// import assert from 'assert';
-import feathers from 'feathers/client';
-import io from 'socket.io-client';
-import baseTests from 'feathers-commons/lib/test/client';
-
-import server from './sub-app';
-import socketio from '../client';
+const feathers = require('feathers/client');
+const io = require('socket.io-client');
+const baseTests = require('feathers-commons/lib/test/client');
+const server = require('./sub-app');
+const socketio = require('../client');
 
 describe('Sub Apps', function () {
   const socket = io('http://localhost:6060');

@@ -1,6 +1,6 @@
-import feathers from 'feathers';
-import socketio from '../../src';
-import memory from 'feathers-memory';
+const feathers = require('feathers');
+const socketio = require('../../lib');
+const memory = require('feathers-memory');
 
 // eslint-disable-next-line no-extend-native
 Object.defineProperty(Error.prototype, 'toJSON', {
@@ -16,7 +16,7 @@ Object.defineProperty(Error.prototype, 'toJSON', {
   configurable: true
 });
 
-export default function () {
+module.exports = function () {
   // Create an in-memory CRUD service for our Todos
   var todoService = memory().extend({
     get: function (id, params, callback) {
@@ -35,4 +35,4 @@ export default function () {
   app.service('todos').create({ text: 'some todo', complete: false }, {}, function () {});
 
   return app;
-}
+};

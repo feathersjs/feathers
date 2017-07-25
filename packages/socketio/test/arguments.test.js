@@ -1,6 +1,6 @@
-import feathers from 'feathers';
-import io from 'socket.io-client';
-import socketio from '../src';
+const feathers = require('feathers');
+const io = require('socket.io-client');
+const socketio = require('../lib');
 
 const createUniquePort = UniquePortCreator(3000);
 

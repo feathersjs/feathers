@@ -1,13 +1,14 @@
-import assert from 'assert';
-import _ from 'lodash';
-import feathers from 'feathers';
-import hooks from 'feathers-hooks';
-import io from 'socket.io-client';
-import request from 'request';
-import { Service as todoService } from 'feathers-commons/lib/test-fixture';
+const assert = require('assert');
+const _ = require('lodash');
+const feathers = require('feathers');
+const hooks = require('feathers-hooks');
+const io = require('socket.io-client');
+const request = require('request');
 
-import testService from './service.test.js';
-import socketio from '../src';
+const { Service } = require('feathers-commons/lib/test-fixture');
+
+const testService = require('./service.test.js');
+const socketio = require('../lib');
 
 describe('feathers-socketio', () => {
   let options = {
@@ -32,14 +33,14 @@ describe('feathers-socketio', () => {
           next();
         });
       }))
-      .use('/todo', todoService);
+      .use('/todo', Service);
 
     app.service('todo').before({
       get: errorHook
     });
 
     options.server = app.listen(7886, function () {
-      app.use('/tasks', todoService);
+      app.use('/tasks', Service);
       app.service('tasks').before({
         get: errorHook
       });
