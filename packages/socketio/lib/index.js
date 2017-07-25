@@ -1,11 +1,11 @@
-import makeDebug from 'debug';
-import socketio from 'socket.io';
-import Proto from 'uberproto';
-import socket from 'feathers-socket-commons';
+const makeDebug = require('debug');
+const socketio = require('socket.io');
+const Proto = require('uberproto');
+const socket = require('feathers-socket-commons');
 
 const debug = makeDebug('feathers-socketio');
 
-export default function (port, options, config) {
+module.exports = function (port, options, config) {
   if (typeof port !== 'number') {
     config = options;
     options = port;
@@ -62,4 +62,4 @@ export default function (port, options, config) {
       }
     }, app);
   };
-}
+};

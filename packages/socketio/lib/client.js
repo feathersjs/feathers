@@ -1,6 +1,6 @@
-import Service from 'feathers-socket-commons/client';
+const Service = require('feathers-socket-commons/client');
 
-export default function (connection, options) {
+module.exports = function (connection, options) {
   if (!connection) {
     throw new Error('Socket.io connection needs to be provided');
   }
@@ -28,4 +28,4 @@ export default function (connection, options) {
   initialize.service = defaultService;
 
   return initialize;
-}
+};

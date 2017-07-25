@@ -1,6 +1,6 @@
-import feathers from 'feathers';
-import socketio from '../src';
-import memory from 'feathers-memory';
+const feathers = require('feathers');
+const socketio = require('../lib');
+const memory = require('feathers-memory');
 
 function todoService () {
   return memory().extend({
@@ -15,7 +15,8 @@ function todoService () {
     }
   });
 }
-export default function () {
+
+module.exports = function () {
   const app = feathers().configure(socketio());
   const v1 = feathers().configure(socketio()).use('/todos', todoService());
   const v2 = feathers().configure(socketio()).use('/todos', todoService());
@@ -27,4 +28,4 @@ export default function () {
   v2.service('todos').create({ text: 'some todo', complete: false }, {}, function () {});
 
   return app;
-}
+};
