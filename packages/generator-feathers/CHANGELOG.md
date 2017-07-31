@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.2.8](https://github.com/feathersjs/generator-feathers/tree/v1.2.8) (2017-07-31)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.7...v1.2.8)
+
+**Closed issues:**
+
+- mongodb service does not wait for connection to resolve [\#252](https://github.com/feathersjs/generator-feathers/issues/252)
+- Travis CI RethinkDB installation failing [\#248](https://github.com/feathersjs/generator-feathers/issues/248)
+- Generator should not add existing dependencies [\#242](https://github.com/feathersjs/generator-feathers/issues/242)
+
+**Merged pull requests:**
+
+- Add Auth0 to OAuth providers [\#254](https://github.com/feathersjs/generator-feathers/pull/254) ([marshallswain](https://github.com/marshallswain))
+- Re-enable RethinkDB test [\#250](https://github.com/feathersjs/generator-feathers/pull/250) ([daffl](https://github.com/daffl))
+
 ## [v1.2.7](https://github.com/feathersjs/generator-feathers/tree/v1.2.7) (2017-07-20)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.6...v1.2.7)
 
