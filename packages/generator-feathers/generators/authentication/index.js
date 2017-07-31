@@ -4,6 +4,7 @@ const crypto = require('crypto');
 
 const Generator = require('../../lib/generator');
 const OAUTH2_STRATEGY_MAPPINGS = {
+  auth0: 'passport-auth0',
   google: 'passport-google-oauth20',
   facebook: 'passport-facebook',
   github: 'passport-github'
@@ -22,6 +23,9 @@ module.exports = class AuthGenerator extends Generator {
         name: 'Username + Password (Local)',
         value: 'local',
         checked: true
+      }, {
+        name: 'Auth0',
+        value: 'auth0'
       }, {
         name: 'Google',
         value: 'google'
@@ -100,6 +104,10 @@ module.exports = class AuthGenerator extends Generator {
           successRedirect: '/'
         };
         includesOAuth = true;
+
+        if(strategy === 'auth0') {
+          strategyConfig.domain = 'mydomain.auth0.com';
+        }
 
         if (strategy === 'facebook') {
           strategyConfig.scope = ['public_profile', 'email'];
