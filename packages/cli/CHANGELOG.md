@@ -1,5 +1,12 @@
 # Change Log
 
+## [v2.3.3](https://github.com/feathersjs/feathers-cli/tree/v2.3.3) (2017-07-31)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.3.2...v2.3.3)
+
+**Merged pull requests:**
+
+- update generator versions [\#108](https://github.com/feathersjs/feathers-cli/pull/108) ([marshallswain](https://github.com/marshallswain))
+
 ## [v2.3.2](https://github.com/feathersjs/feathers-cli/tree/v2.3.2) (2017-07-20)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.3.1...v2.3.2)
 
