@@ -74,7 +74,7 @@ The [Feathers docs](http://docs.feathersjs.com) are loaded with awesome stuff an
 
 ## Examples
 
-Each plugin has it's own minimal example in the repo. To see some more complex examples go to [feathersjs/feathers-demos](https://github.com/feathersjs/feathers-demos).
+Each plugin has it's own minimal example in the repo. To see a more complex example go to [feathersjs/feathers-chat](https://github.com/feathersjs/feathers-chat).
 
 ## Security
 
