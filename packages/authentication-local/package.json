@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.3.0",
-    "debug": "^2.2.0",
+    "debug": "^3.0.0",
     "feathers-errors": "^2.4.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.0",
