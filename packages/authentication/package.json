@@ -55,7 +55,7 @@
     "lib": "lib"
   },
   "dependencies": {
-    "debug": "^2.2.0",
+    "debug": "^3.0.0",
     "feathers-authentication-client": "^0.3.1",
     "feathers-commons": "^0.8.4",
     "feathers-errors": "^2.4.0",
