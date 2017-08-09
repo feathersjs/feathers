@@ -48,7 +48,7 @@
     "lib": "lib"
   },
   "dependencies": {
-    "debug": "^2.6.8",
+    "debug": "^3.0.0",
     "express": "^4.15.3",
     "uberproto": "^1.2.0"
   },
