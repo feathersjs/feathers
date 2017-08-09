@@ -51,7 +51,7 @@
     "lib": "lib"
   },
   "dependencies": {
-    "debug": "^2.2.0",
+    "debug": "^3.0.0",
     "feathers-commons": "^0.8.0",
     "feathers-errors": "^2.2.0"
   },
