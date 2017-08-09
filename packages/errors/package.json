@@ -57,7 +57,7 @@
     "lib": "lib"
   },
   "dependencies": {
-    "debug": "^2.2.0"
+    "debug": "^3.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.3.17",
