@@ -1,5 +1,46 @@
 # Change Log
 
+## [Unreleased](https://github.com/feathersjs/feathers-authentication/tree/HEAD)
+
+[Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.2.7...HEAD)
+
+**Closed issues:**
+
+- Checking hook.params.headers.authorization [\#552](https://github.com/feathersjs/feathers-authentication/issues/552)
+- Ability to send token as part of URL [\#546](https://github.com/feathersjs/feathers-authentication/issues/546)
+- Anonymous Authentication [\#544](https://github.com/feathersjs/feathers-authentication/issues/544)
+- Quote Error [\#519](https://github.com/feathersjs/feathers-authentication/issues/519)
+- \[example\] CustomStrategy using passport-custom [\#516](https://github.com/feathersjs/feathers-authentication/issues/516)
+- \[Epic\] Auth 2.0.0 [\#513](https://github.com/feathersjs/feathers-authentication/issues/513)
+- ID set to null - Unable to delete with customer ID field. [\#422](https://github.com/feathersjs/feathers-authentication/issues/422)
+- Prefixing socket events [\#418](https://github.com/feathersjs/feathers-authentication/issues/418)
+- Passwordless auth [\#409](https://github.com/feathersjs/feathers-authentication/issues/409)
+- How to authenticate the application client? not only the users [\#405](https://github.com/feathersjs/feathers-authentication/issues/405)
+- Multi-factor Local Auth [\#5](https://github.com/feathersjs/feathers-authentication/issues/5)
+
+**Merged pull requests:**
+
+- Update debug to the latest version 🚀 [\#555](https://github.com/feathersjs/feathers-authentication/pull/555) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update ws to the latest version 🚀 [\#549](https://github.com/feathersjs/feathers-authentication/pull/549) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update chai to the latest version 🚀 [\#543](https://github.com/feathersjs/feathers-authentication/pull/543) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
+## [v1.2.7](https://github.com/feathersjs/feathers-authentication/tree/v1.2.7) (2017-07-11)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.2.6...v1.2.7)
+
+**Closed issues:**
+
+- Connection without password [\#541](https://github.com/feathersjs/feathers-authentication/issues/541)
+- email in lower case ? [\#538](https://github.com/feathersjs/feathers-authentication/issues/538)
+- Im unable to ping feathers server from react native.  [\#537](https://github.com/feathersjs/feathers-authentication/issues/537)
+- whats the official way to open cors in feather ? [\#536](https://github.com/feathersjs/feathers-authentication/issues/536)
+- Error options.service does not exist after initial auth setup [\#535](https://github.com/feathersjs/feathers-authentication/issues/535)
+- LogoutTimer not being cleared correctly [\#532](https://github.com/feathersjs/feathers-authentication/issues/532)
+- logoutTimer causing early logouts [\#404](https://github.com/feathersjs/feathers-authentication/issues/404)
+
+**Merged pull requests:**
+
+- fixed meta undefined error [\#542](https://github.com/feathersjs/feathers-authentication/pull/542) ([markacola](https://github.com/markacola))
+
 ## [v1.2.6](https://github.com/feathersjs/feathers-authentication/tree/v1.2.6) (2017-06-22)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication/compare/v1.2.5...v1.2.6)
 
