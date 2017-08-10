@@ -81,7 +81,7 @@ describe('options', () => {
       });
 
       it('sets the algorithm', () => {
-        expect(options.jwt.algorithm).to.equal('HS512');
+        expect(options.jwt.algorithm).to.equal('HS256');
       });
 
       it('sets the expiresIn', () => {
