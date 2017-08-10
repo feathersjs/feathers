@@ -18,7 +18,7 @@ const defaults = {
     audience: 'https://yourdomain.com', // The resource server where the token is processed
     subject: 'anonymous', // Typically the entity id associated with the JWT
     issuer: 'feathers', // The issuing server, application or resource
-    algorithm: 'HS256',
+    algorithm: 'HS512',
     expiresIn: '1d'
   }
 };
