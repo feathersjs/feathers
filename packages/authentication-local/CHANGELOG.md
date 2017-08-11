@@ -1,5 +1,19 @@
 # Change Log
 
+## [v0.4.4](https://github.com/feathersjs/feathers-authentication-local/tree/v0.4.4) (2017-08-11)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-local/compare/v0.4.3...v0.4.4)
+
+**Closed issues:**
+
+- i18n support [\#28](https://github.com/feathersjs/feathers-authentication-local/issues/28)
+- Couldn't store jwt token in cookies [\#17](https://github.com/feathersjs/feathers-authentication-local/issues/17)
+- Strategy for subapp [\#9](https://github.com/feathersjs/feathers-authentication-local/issues/9)
+
+**Merged pull requests:**
+
+- Update debug to the latest version 🚀 [\#31](https://github.com/feathersjs/feathers-authentication-local/pull/31) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Increase bcrypt cost factor, add future cost factor auto-optimization [\#30](https://github.com/feathersjs/feathers-authentication-local/pull/30) ([micaksica2](https://github.com/micaksica2))
+
 ## [v0.4.3](https://github.com/feathersjs/feathers-authentication-local/tree/v0.4.3) (2017-06-22)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-local/compare/v0.4.2...v0.4.3)
 
