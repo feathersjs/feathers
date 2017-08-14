@@ -95,7 +95,7 @@
     "primus": "^7.0.0",
     "rimraf": "^2.5.4",
     "semistandard": "^11.0.0",
-    "sinon": "^2.1.0",
+    "sinon": "^3.0.0",
     "sinon-chai": "^2.8.0",
     "socket.io-client": "^2.0.0",
     "superagent": "^3.0.0",
