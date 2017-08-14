@@ -1,5 +1,21 @@
 # Change Log
 
+## [v1.2.9](https://github.com/feathersjs/generator-feathers/tree/v1.2.9) (2017-08-14)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.8...v1.2.9)
+
+**Closed issues:**
+
+- Incorrect Knex client used when choosing Postgres [\#259](https://github.com/feathersjs/generator-feathers/issues/259)
+- Authentication: knex + sql server [\#256](https://github.com/feathersjs/generator-feathers/issues/256)
+- Can you use mongoose and mongodb services together? [\#251](https://github.com/feathersjs/generator-feathers/issues/251)
+- Upgrade to pg@7.x when Sequelize incompatibility is fixed [\#246](https://github.com/feathersjs/generator-feathers/issues/246)
+
+**Merged pull requests:**
+
+- Use latest pg driver again [\#261](https://github.com/feathersjs/generator-feathers/pull/261) ([daffl](https://github.com/daffl))
+- fix\(knex\): Fix knex + sql server issues [\#257](https://github.com/feathersjs/generator-feathers/pull/257) ([dschnare](https://github.com/dschnare))
+- Update connection code for latest MongoDB [\#255](https://github.com/feathersjs/generator-feathers/pull/255) ([daffl](https://github.com/daffl))
+
 ## [v1.2.8](https://github.com/feathersjs/generator-feathers/tree/v1.2.8) (2017-07-31)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.7...v1.2.8)
 
