@@ -29,7 +29,7 @@ describe('Verifier', () => {
         find () {}
       };
 
-      sinon.stub(service, 'find', function (params) {
+      sinon.stub(service, 'find').callsFake(function (params) {
         return new Promise((resolve, reject) => {
           const { email } = params && params.query
           if (email === 'nonexistinguser@gmail.com') {
