@@ -267,8 +267,10 @@ module.exports = class ConnectionGenerator extends Generator {
 
     if (database === 'rethinkdb') {
       template = 'rethinkdb.js';
+    } else if (database === 'mssql' && adapter === 'sequelize') {
+      template = `${adapter}-mssql.js`;
     } else if (adapter && adapter !== 'nedb') {
-      template = database === 'mssql' ? `${adapter}-mssql.js` : `${adapter}.js`;
+      template = `${adapter}.js`;
     }
 
     if (template) {
