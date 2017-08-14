@@ -37,7 +37,7 @@ module.exports = class ConnectionGenerator extends Generator {
       mariadb: 'mysql',
       mysql: 'mysql2',
       mssql: 'tedious',
-      postgres: 'pg@6',
+      postgres: 'pg',
       sqlite: 'sqlite3'
       // oracle: 'oracle'
     };
