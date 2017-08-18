@@ -67,7 +67,7 @@
     "lodash.pick": "^4.4.0",
     "long-timeout": "^0.1.1",
     "ms": "^2.0.0",
-    "passport": "^0.3.2"
+    "passport": "^0.4.0"
   },
   "devDependencies": {
     "babel-cli": "^6.14.0",
