@@ -1,5 +1,8 @@
 # Change Log
 
+## [v0.12.1](https://github.com/feathersjs/generator-feathers-plugin/tree/v0.12.1) (2017-08-21)
+[Full Changelog](https://github.com/feathersjs/generator-feathers-plugin/compare/v0.12.0...v0.12.1)
+
 ## [v0.12.0](https://github.com/feathersjs/generator-feathers-plugin/tree/v0.12.0) (2017-07-16)
 [Full Changelog](https://github.com/feathersjs/generator-feathers-plugin/compare/v0.11.0...v0.12.0)
 
