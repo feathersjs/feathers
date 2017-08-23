@@ -1,5 +1,12 @@
 # Change Log
 
+## [v2.3.5](https://github.com/feathersjs/feathers-cli/tree/v2.3.5) (2017-08-23)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.3.4...v2.3.5)
+
+**Merged pull requests:**
+
+- Update generator-feathers-plugin to the latest version 🚀 [\#112](https://github.com/feathersjs/feathers-cli/pull/112) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.3.4](https://github.com/feathersjs/feathers-cli/tree/v2.3.4) (2017-08-14)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.3.3...v2.3.4)
 
@@ -23,6 +30,10 @@
 
 ## [v2.3.1](https://github.com/feathersjs/feathers-cli/tree/v2.3.1) (2017-07-18)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.3.0...v2.3.1)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#106](https://github.com/feathersjs/feathers-cli/pull/106) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
 ## [v2.3.0](https://github.com/feathersjs/feathers-cli/tree/v2.3.0) (2017-07-16)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.2.4...v2.3.0)
