@@ -1,7 +1,6 @@
-import { events } from './utils';
-import { convert } from 'feathers-errors';
-
+const { convert } = require('feathers-errors');
 const debug = require('debug')('feathers-socket-commons:client');
+
 const namespacedEmitterMethods = [
   'addListener',
   'emit',
@@ -24,17 +23,18 @@ const addEmitterMethods = service => {
   otherEmitterMethods.forEach(method => {
     service[method] = function (...args) {
       if (typeof this.connection[method] !== 'function') {
-        throw new Error(`Can not call '${method}' on the client service connection.`);
+        throw new Error(`Can not call '${method}' on the client service connection`);
       }
 
       return this.connection[method](...args);
     };
   });
 
+  // Methods that should add the namespace (service path)
   namespacedEmitterMethods.forEach(method => {
     service[method] = function (name, ...args) {
       if (typeof this.connection[method] !== 'function') {
-        throw new Error(`Can not call '${method}' on the client service connection.`);
+        throw new Error(`Can not call '${method}' on the client service connection`);
       }
 
       const eventName = `${this.path} ${name}`;
@@ -49,9 +49,8 @@ const addEmitterMethods = service => {
   });
 };
 
-export default class Service {
+module.exports = class Service {
   constructor (options) {
-    this.events = events;
     this.path = options.name;
     this.connection = options.connection;
     this.method = options.method;
@@ -61,25 +60,15 @@ export default class Service {
   }
 
   send (method, ...args) {
-    let callback = null;
-    if (typeof args[args.length - 1] === 'function') {
-      callback = args.pop();
-    }
-
     return new Promise((resolve, reject) => {
-      const event = `${this.path}::${method}`;
       const timeoutId = setTimeout(() => reject(
-        new Error(`Timeout of ${this.timeout}ms exceeded calling ${event}`)
+        new Error(`Timeout of ${this.timeout}ms exceeded calling ${method} on ${this.path}`)
       ), this.timeout);
 
-      args.unshift(event);
+      args.unshift(method, this.path);
       args.push(function (error, data) {
         error = convert(error);
         clearTimeout(timeoutId);
-
-        if (callback) {
-          callback(error, data);
-        }
 
         return error ? reject(error) : resolve(data);
       });
@@ -114,6 +103,9 @@ export default class Service {
     return this.send('remove', id, params.query || {});
   }
 
+  // `off` is actually not part of the Node event emitter spec
+  // but we are adding it since everybody is expecting it because
+  // of the emitter-component Socket.io is using
   off (name, ...args) {
     if (typeof this.connection.off === 'function') {
       return this.connection.off(`${this.path} ${name}`, ...args);
@@ -123,4 +115,4 @@ export default class Service {
 
     return this.removeListener(name, ...args);
   }
-}
+};
