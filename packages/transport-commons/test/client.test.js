@@ -1,24 +1,52 @@
-import assert from 'assert';
-import { EventEmitter } from 'events';
-import errors from 'feathers-errors';
-import Service from '../src/client';
-import { events } from '../src/utils';
+const assert = require('assert');
+
+const {
+  EventEmitter
+} = require('events');
+
+const errors = require('feathers-errors');
+const Service = require('../lib/client');
 
 describe('client', () => {
-  const connection = new EventEmitter();
-  const testData = { data: 'testing ' };
-  const service = new Service({
-    name: 'todos',
-    method: 'emit',
-    timeout: 50,
-    connection,
-    events
+  let connection, testData, service;
+
+  beforeEach(() => {
+    connection = new EventEmitter();
+    testData = { data: 'testing ' };
+    service = new Service({
+      name: 'todos',
+      method: 'emit',
+      timeout: 50,
+      connection
+    });
   });
 
-  it('allows chaining event listeners', done => {
+  it('throws an error when the emitter does not have the method', () => {
+    const service = new Service({
+      name: 'todos',
+      method: 'emit',
+      timeout: 50,
+      connection: {}
+    });
+
+    try {
+      service.eventNames();
+      assert.ok(false, 'Should never get here');
+    } catch (e) {
+      assert.equal(e.message, 'Can not call \'eventNames\' on the client service connection');
+    }
+
+    try {
+      service.on();
+      assert.ok(false, 'Should never get here');
+    } catch (e) {
+      assert.equal(e.message, 'Can not call \'on\' on the client service connection');
+    }
+  });
+
+  it('allows chaining event listeners', () => {
     assert.equal(service, service.on('thing', () => {}));
     assert.equal(service, service.once('other thing', () => {}));
-    done();
   });
 
   it('initializes and emits namespaced events', done => {
@@ -27,6 +55,10 @@ describe('client', () => {
       done();
     });
     service.emit('test', testData);
+  });
+
+  it('has other emitter methods', () => {
+    assert.ok(service.eventNames());
   });
 
   it('can receive pathed events', done => {
@@ -38,50 +70,87 @@ describe('client', () => {
     connection.emit('todos thing', testData);
   });
 
-  it('sends methods with acknowledgement', done => {
-    connection.once('todos::create', (data, params, callback) => {
+  it('sends all service methods with acknowledgement', () => {
+    const idCb = (path, id, params, callback) =>
+      callback(null, { id });
+    const idDataCb = (path, id, data, params, callback) =>
+      callback(null, data);
+
+    connection.once('create', (path, data, params, callback) => {
       data.created = true;
       callback(null, data);
     });
 
-    service.create(testData).then(result => {
-      assert.ok(result.created);
-      done();
-    });
+    return service.create(testData)
+      .then(result => assert.ok(result.created))
+      .then(() => {
+        connection.once('get', idCb);
+
+        return service.get(1)
+          .then(res => assert.deepEqual(res, { id: 1 }));
+      })
+      .then(() => {
+        connection.once('remove', idCb);
+
+        return service.remove(12)
+          .then(res => assert.deepEqual(res, { id: 12 }));
+      })
+      .then(() => {
+        connection.once('update', idDataCb);
+
+        return service.update(12, testData)
+          .then(res => assert.deepEqual(res, testData));
+      })
+      .then(() => {
+        connection.once('patch', idDataCb);
+
+        return service.patch(12, testData)
+          .then(res => assert.deepEqual(res, testData));
+      })
+      .then(() => {
+        connection.once('find', (path, params, callback) =>
+          callback(null, { params })
+        );
+
+        return service.find({ query: { test: true } }).then(res =>
+          assert.deepEqual(res, {
+            params: { test: true }
+          })
+        );
+      });
   });
 
-  it('times out on undefined methods', done => {
-    service.remove(10).catch(error => {
-      assert.equal(error.message, 'Timeout of 50ms exceeded calling todos::remove');
-      done();
-    });
+  it('times out on undefined methods', () => {
+    return service.remove(10).then(() => {
+      throw new Error('Should never get here');
+    }).catch(error =>
+      assert.equal(error.message, 'Timeout of 50ms exceeded calling remove on todos')
+    );
   });
 
-  it('converts to feathers-errors (#19)', done => {
-    connection.once('todos::create', (data, params, callback) =>
+  it('converts to feathers-errors (#19)', () => {
+    connection.once('create', (path, data, params, callback) =>
       callback(new errors.NotAuthenticated('Test', { hi: 'me' }).toJSON())
     );
 
-    service.create(testData).catch(error => {
+    return service.create(testData).catch(error => {
       assert.ok(error instanceof errors.NotAuthenticated);
       assert.equal(error.name, 'NotAuthenticated');
       assert.equal(error.message, 'Test');
       assert.equal(error.code, 401);
       assert.deepEqual(error.data, { hi: 'me' });
-      done();
-    }).catch(done);
+    });
   });
 
-  it('converts other errors (#19)', done => {
-    connection.once('todos::create', (data, params, callback) =>
-      callback(new Error('Something went wrong'))
+  it('converts other errors (#19)', () => {
+    connection.once('create', (path, data, params, callback) =>
+      callback('Something went wrong')
     );
 
-    service.create(testData).catch(error => {
+    return service.create(testData).catch(error => {
       assert.ok(error instanceof Error);
       assert.equal(error.message, 'Something went wrong');
-      done();
-    }).catch(done);
+    });
   });
 
   it('has all EventEmitter methods', done => {
@@ -125,6 +194,7 @@ describe('client', () => {
   it('forwards namespaced call to .off', done => {
     // Use it's own connection and service so off method gets detected
     const connection = new EventEmitter();
+
     connection.off = name => {
       assert.equal(name, 'todos test');
       done();
@@ -134,9 +204,9 @@ describe('client', () => {
       name: 'todos',
       method: 'emit',
       timeout: 50,
-      connection,
-      events
+      connection
     });
+
     service.off('test');
   });
 });
