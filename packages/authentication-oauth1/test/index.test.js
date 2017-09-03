@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import feathers from 'feathers';
 import memory from 'feathers-memory';
 import authentication from 'feathers-authentication';
@@ -107,7 +108,7 @@ describe('feathers-authentication-oauth1', () => {
       app.setup();
 
       expect(app.passport.options).to.have.been.calledOnce;
-      
+
       app.passport.options.restore();
     });
 
@@ -174,7 +175,7 @@ describe('feathers-authentication-oauth1', () => {
       app.setup();
 
       expect(config.Strategy.getCall(0).args[0].scope).to.deep.equal(['user']);
-      
+
       config.Strategy.restore();
     });
 
@@ -185,7 +186,7 @@ describe('feathers-authentication-oauth1', () => {
       app.setup();
 
       expect(config.Strategy.getCall(0).args[0].entity).to.equal('organization');
-      
+
       config.Strategy.restore();
     });
 
