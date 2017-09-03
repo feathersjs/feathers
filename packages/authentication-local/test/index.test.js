@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import feathers from 'feathers';
 import memory from 'feathers-memory';
 import authentication from 'feathers-authentication';
