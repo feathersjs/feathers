@@ -1,5 +1,6 @@
-declare function handler(options?:any):Function;
+import { ErrorRequestHandler } from 'express';
 
-declare module handler {}
+declare function handler(options?:any):ErrorRequestHandler;
+declare namespace handler {}
 
 export = handler;

@@ -1,3 +1,6 @@
-declare function handler():Function;
+import { RequestHandler } from 'express';
 
-export = handler;
+declare function notFound():RequestHandler;
+declare namespace notFound {}
+
+export = notFound;
