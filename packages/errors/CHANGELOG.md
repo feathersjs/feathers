@@ -1,5 +1,18 @@
 # Change Log
 
+## [v2.9.2](https://github.com/feathersjs/feathers-errors/tree/v2.9.2) (2017-09-05)
+[Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.9.1...v2.9.2)
+
+**Closed issues:**
+
+- Getting 500 status code when attempting to throw non 500 style errors \(401\) [\#85](https://github.com/feathersjs/feathers-errors/issues/85)
+
+**Merged pull requests:**
+
+- fix typings [\#87](https://github.com/feathersjs/feathers-errors/pull/87) ([j2L4e](https://github.com/j2L4e))
+- Update debug to the latest version 🚀 [\#86](https://github.com/feathersjs/feathers-errors/pull/86) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update sinon to the latest version 🚀 [\#84](https://github.com/feathersjs/feathers-errors/pull/84) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.9.1](https://github.com/feathersjs/feathers-errors/tree/v2.9.1) (2017-07-21)
 [Full Changelog](https://github.com/feathersjs/feathers-errors/compare/v2.9.0...v2.9.1)
 
