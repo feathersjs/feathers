@@ -62,6 +62,13 @@ yo feathers:middleware
 yo feathers:service
 ```
 
+## Production
+[feathers/feathers-configuration](https://github.com/feathersjs/feathers-configuration) uses `NODE_ENV` to find a configuration file under `config/`. After updating `config/production.js` you can run 
+
+```bash
+NODE_ENV=production npm start
+```
+
 ## Contributing
 
 To contribute PRs for these generators, you will need to clone the repo
