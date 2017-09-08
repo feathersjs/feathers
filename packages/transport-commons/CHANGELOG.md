@@ -1,5 +1,24 @@
 # Change Log
 
+## [v3.0.0-pre.1](https://github.com/feathersjs/feathers-socket-commons/tree/v3.0.0-pre.1) (2017-09-08)
+[Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v2.4.0...v3.0.0-pre.1)
+
+**Fixed bugs:**
+
+- Socket events don't fire for sub-apps nested more than 2 deep [\#5](https://github.com/feathersjs/feathers-socket-commons/issues/5)
+
+**Closed issues:**
+
+- more tests [\#38](https://github.com/feathersjs/feathers-socket-commons/issues/38)
+
+**Merged pull requests:**
+
+- Prepare v3.0-pre [\#46](https://github.com/feathersjs/feathers-socket-commons/pull/46) ([daffl](https://github.com/daffl))
+- Update debug to the latest version 🚀 [\#45](https://github.com/feathersjs/feathers-socket-commons/pull/45) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-socketio to the latest version 🚀 [\#43](https://github.com/feathersjs/feathers-socket-commons/pull/43) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update semistandard to the latest version 🚀 [\#42](https://github.com/feathersjs/feathers-socket-commons/pull/42) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#41](https://github.com/feathersjs/feathers-socket-commons/pull/41) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.4.0](https://github.com/feathersjs/feathers-socket-commons/tree/v2.4.0) (2017-01-07)
 [Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v2.3.1...v2.4.0)
 
