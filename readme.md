@@ -21,7 +21,7 @@ You can build your first real-time and REST API in just 4 commands:
 $ npm install -g feathers-cli
 $ mkdir my-new-app
 $ cd my-new-app/
-$ feathers generate
+$ feathers generate app
 $ npm start
 ```
 
