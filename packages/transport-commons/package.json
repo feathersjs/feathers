@@ -31,6 +31,7 @@
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
+    "release:prerelease": "npm version prerelease && npm publish --tag pre",
     "lint": "semistandard --fix",
     "mocha": "mocha --opts mocha.opts",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
