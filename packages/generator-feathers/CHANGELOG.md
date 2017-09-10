@@ -1,5 +1,25 @@
 # Change Log
 
+## [v1.2.10](https://github.com/feathersjs/generator-feathers/tree/v1.2.10) (2017-09-10)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.9...v1.2.10)
+
+**Closed issues:**
+
+- Recent generator causes grief when paired with module-resolver \(TypeError: Sequelize is not a constructor\) [\#265](https://github.com/feathersjs/generator-feathers/issues/265)
+- The automatic generator-feathers update does not work. [\#264](https://github.com/feathersjs/generator-feathers/issues/264)
+- Error when server first run \( npm start \) [\#262](https://github.com/feathersjs/generator-feathers/issues/262)
+- Parameter "url" must be a string, not object \[KnexJS & SQLite\] [\#260](https://github.com/feathersjs/generator-feathers/issues/260)
+
+**Merged pull requests:**
+
+- Filter into valid project name [\#277](https://github.com/feathersjs/generator-feathers/pull/277) ([daffl](https://github.com/daffl))
+- Strategy configuration consistency [\#276](https://github.com/feathersjs/generator-feathers/pull/276) ([sylvainlap](https://github.com/sylvainlap))
+- Properly handle connection string for Knex SQLite [\#273](https://github.com/feathersjs/generator-feathers/pull/273) ([daffl](https://github.com/daffl))
+- make default message clickable on iTerm [\#272](https://github.com/feathersjs/generator-feathers/pull/272) ([rayfoss](https://github.com/rayfoss))
+- Make production deployment info easier to find [\#268](https://github.com/feathersjs/generator-feathers/pull/268) ([rayfoss](https://github.com/rayfoss))
+- change template of default models for sequelize [\#267](https://github.com/feathersjs/generator-feathers/pull/267) ([maximelkin](https://github.com/maximelkin))
+- Remove template strings in index.js [\#266](https://github.com/feathersjs/generator-feathers/pull/266) ([HelloEdit](https://github.com/HelloEdit))
+
 ## [v1.2.9](https://github.com/feathersjs/generator-feathers/tree/v1.2.9) (2017-08-14)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.8...v1.2.9)
 
