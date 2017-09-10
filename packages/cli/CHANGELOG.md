@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.3.6](https://github.com/feathersjs/feathers-cli/tree/v2.3.6) (2017-09-10)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.3.5...v2.3.6)
+
+**Closed issues:**
+
+- use semistandard instead of eslint:recommended with tweaks? [\#113](https://github.com/feathersjs/feathers-cli/issues/113)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#115](https://github.com/feathersjs/feathers-cli/pull/115) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.3.5](https://github.com/feathersjs/feathers-cli/tree/v2.3.5) (2017-08-23)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.3.4...v2.3.5)
 
