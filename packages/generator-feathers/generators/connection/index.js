@@ -43,7 +43,7 @@ module.exports = class ConnectionGenerator extends Generator {
     };
 
     const { connectionString, database, adapter } = this.props;
-    const parsed = url.parse(connectionString);
+    let parsed = {};
 
     switch (database) {
     case 'nedb':
@@ -51,7 +51,9 @@ module.exports = class ConnectionGenerator extends Generator {
       return connectionString.substring(7, connectionString.length);
 
     case 'rethinkdb':
+      parsed = url.parse(connectionString);
       this.dependencies.push('rethinkdbdash');
+      
       return {
         db: parsed.path.substring(1, parsed.path.length),
         servers: [
@@ -87,7 +89,7 @@ module.exports = class ConnectionGenerator extends Generator {
 
       return {
         client: sqlPackages[database],
-        connection: database === 'sqlite' ? {
+        connection: (database === 'sqlite' && typeof connectionString === 'string') ? {
           filename: connectionString.substring(9, connectionString.length)
         } : connectionString
       };
