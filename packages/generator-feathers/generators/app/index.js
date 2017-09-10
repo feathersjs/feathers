@@ -2,6 +2,7 @@ const Generator = require('../../lib/generator');
 const path = require('path');
 const makeConfig = require('./configs');
 const cmd = require('child_process').execSync;
+const { kebabCase } = require('lodash');
 
 var yarnInstalled;
 try {
@@ -51,6 +52,7 @@ module.exports = class AppGenerator extends Generator {
       message: 'Project name',
       when: !this.pkg.name,
       default: this.props.name,
+      filter: kebabCase,
       validate (input) {
         // The project name can not be the same as any of the dependencies
         // we are going to install
