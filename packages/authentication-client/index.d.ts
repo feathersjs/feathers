@@ -31,7 +31,7 @@ declare namespace feathersAuthClient {
     logout(): Promise<any>;
     setJWT(data: any): Promise<any>;
     getJWT(): Promise<any>;
-    verifyJWT(token: string): Promise<string>;
+    verifyJWT(token: string): Promise<any>;
     payloadIsValid(payload: string): boolean;
     getCookie(name: string): string;
     clearCookie(name: string): null;
