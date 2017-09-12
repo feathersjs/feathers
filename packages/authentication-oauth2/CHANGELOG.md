@@ -1,5 +1,20 @@
 # Change Log
 
+## [v0.2.6](https://github.com/feathersjs/feathers-authentication-oauth2/tree/v0.2.6) (2017-09-12)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth2/compare/v0.2.5...v0.2.6)
+
+**Closed issues:**
+
+- 0.2.5 introduced breaking changes [\#36](https://github.com/feathersjs/feathers-authentication-oauth2/issues/36)
+- An in-range update of feathers is breaking the build 🚨 [\#34](https://github.com/feathersjs/feathers-authentication-oauth2/issues/34)
+
+**Merged pull requests:**
+
+- Fix old property name fallback for backwards compatibility [\#37](https://github.com/feathersjs/feathers-authentication-oauth2/pull/37) ([daffl](https://github.com/daffl))
+- Include babel-polyfill and package-lock.json [\#35](https://github.com/feathersjs/feathers-authentication-oauth2/pull/35) ([daffl](https://github.com/daffl))
+- Update debug to the latest version 🚀 [\#30](https://github.com/feathersjs/feathers-authentication-oauth2/pull/30) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update sinon to the latest version 🚀 [\#29](https://github.com/feathersjs/feathers-authentication-oauth2/pull/29) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v0.2.5](https://github.com/feathersjs/feathers-authentication-oauth2/tree/v0.2.5) (2017-06-21)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth2/compare/v0.2.4...v0.2.5)
 
