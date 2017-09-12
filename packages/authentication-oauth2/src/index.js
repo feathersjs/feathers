@@ -1,5 +1,4 @@
 import Debug from 'debug';
-import url from 'url';
 import auth from 'feathers-authentication';
 import { formatter as defaultFormatter } from 'feathers-rest';
 import { omit, pick, makeUrl } from 'feathers-commons';
@@ -38,7 +37,7 @@ export default function init (options = {}) {
       throw new Error(`You must provide a passport 'Strategy' instance.`);
     }
 
-    const authSettings = app.get('authentication') || {};
+    const authSettings = app.get('auth') || app.get('authentication') || {};
 
     // Attempt to pull options from the global auth config
     // for this provider.
