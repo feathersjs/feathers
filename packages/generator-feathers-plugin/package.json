@@ -40,7 +40,7 @@
     ]
   },
   "dependencies": {
-    "yeoman-generator": "^1.0.1"
+    "yeoman-generator": "^2.0.0"
   },
   "devDependencies": {
     "mocha": "^3.1.0",
