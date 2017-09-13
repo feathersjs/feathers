@@ -32,7 +32,6 @@ describe('feathers-authentication-jwt', () => {
     expect(typeof ExtractJwt.fromHeader).to.equal('function');
     expect(typeof ExtractJwt.fromBodyField).to.equal('function');
     expect(typeof ExtractJwt.fromUrlQueryParameter).to.equal('function');
-    expect(typeof ExtractJwt.fromAuthHeader).to.equal('function');
     expect(typeof ExtractJwt.fromAuthHeaderWithScheme).to.equal('function');
     expect(typeof ExtractJwt.fromExtractors).to.equal('function');
   });

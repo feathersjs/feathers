@@ -55,7 +55,7 @@
     "lodash.merge": "^4.6.0",
     "lodash.omit": "^4.5.0",
     "lodash.pick": "^4.4.0",
-    "passport-jwt": "^2.2.1"
+    "passport-jwt": "^3.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
