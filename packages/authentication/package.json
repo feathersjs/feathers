@@ -60,7 +60,7 @@
     "feathers-commons": "^0.8.4",
     "feathers-errors": "^2.4.0",
     "feathers-socket-commons": "^2.3.1",
-    "jsonwebtoken": "^7.1.9",
+    "jsonwebtoken": "^8.0.0",
     "lodash.clone": "^4.5.0",
     "lodash.merge": "^4.6.0",
     "lodash.omit": "^4.5.0",
