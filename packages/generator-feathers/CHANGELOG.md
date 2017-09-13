@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.2.11](https://github.com/feathersjs/generator-feathers/tree/v1.2.11) (2017-09-13)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.10...v1.2.11)
+
+**Closed issues:**
+
+- Issue with header config for JWT authentication [\#278](https://github.com/feathersjs/generator-feathers/issues/278)
+- Service generation results in "Parameter "url" must be a string, not object" when using custom 'connection' parameter [\#274](https://github.com/feathersjs/generator-feathers/issues/274)
+- Basic guide on how to fork and customize the generator [\#270](https://github.com/feathersjs/generator-feathers/issues/270)
+
+**Merged pull requests:**
+
+- Fix authentication configuration [\#280](https://github.com/feathersjs/generator-feathers/pull/280) ([daffl](https://github.com/daffl))
+- Update yeoman-generator to the latest version 🚀 [\#279](https://github.com/feathersjs/generator-feathers/pull/279) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.2.10](https://github.com/feathersjs/generator-feathers/tree/v1.2.10) (2017-09-10)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.9...v1.2.10)
 
