@@ -76,7 +76,7 @@ module.exports = class AuthGenerator extends Generator {
       path: '/authentication',
       service: context.kebabEntity,
       jwt: {
-        header: { type: 'access' },
+        header: { typ: 'access' },
         audience: 'https://yourdomain.com',
         subject: 'anonymous',
         issuer: 'feathers',
