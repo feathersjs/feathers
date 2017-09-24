@@ -21,7 +21,7 @@ declare namespace feathers {
     data: T[]
   }
 
-  interface Service<T> extends events.EventEmitter {
+  interface Service<T extends any> extends events.EventEmitter {
 
     /**
      * Retrieves a list of all resources from the service.
