@@ -34,3 +34,6 @@ lib/
 
 # Yarn lockfile
 yarn.lock
+
+# Exclude local vscode settings
+.vscode
