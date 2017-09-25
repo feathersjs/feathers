@@ -52,9 +52,7 @@ class OAuth2Verifier {
       [name]: data
     };
 
-    // Merge existing user data with new profile data
-    const updated = merge({}, entity, newData);
-    return this.service.update(id, updated, { oauth: { provider: name } });
+    return this.service.patch(id, newData, { oauth: { provider: name } });
   }
 
   _createEntity (data) {
