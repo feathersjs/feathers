@@ -20,7 +20,7 @@ describe('Verifier', () => {
       id: 'id',
       find: sinon.stub().returns(Promise.resolve([user])),
       create: sinon.stub().returns(Promise.resolve(user)),
-      update: sinon.stub().returns(Promise.resolve(user))
+      patch: sinon.stub().returns(Promise.resolve(user))
     };
 
     app = feathers();
@@ -85,21 +85,19 @@ describe('Verifier', () => {
         }
       };
       return verifier._updateEntity(entity, data).then(() => {
-        args = service.update.getCall(0).args;
+        args = service.patch.getCall(0).args;
       });
     });
 
-    it('calls update on passed in service', () => {
-      expect(service.update).to.have.been.calledOnce;
+    it('calls patch on passed in service', () => {
+      expect(service.patch).to.have.been.calledOnce;
     });
 
     it('passes id', () => {
       expect(args[0]).to.equal(entity.id);
     });
 
-    it('passes merged entity', () => {
-      expect(args[1].id).to.equal(entity.id);
-      expect(args[1].name).to.equal(entity.name);
+    it('passes patch data', () => {
       expect(args[1].githubId).to.equal(data.profile.id);
       expect(args[1].github).to.deep.equal(data);
     });
