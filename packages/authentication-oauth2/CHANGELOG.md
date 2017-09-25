@@ -1,5 +1,21 @@
 # Change Log
 
+## [v0.3.0](https://github.com/feathersjs/feathers-authentication-oauth2/tree/v0.3.0) (2017-09-25)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth2/compare/v0.2.6...v0.3.0)
+
+**Closed issues:**
+
+- Missing params on OAuth redirect creation [\#41](https://github.com/feathersjs/feathers-authentication-oauth2/issues/41)
+- how to custom callback page after authetication [\#39](https://github.com/feathersjs/feathers-authentication-oauth2/issues/39)
+- profileUrl is undefined [\#38](https://github.com/feathersjs/feathers-authentication-oauth2/issues/38)
+- Use patch to update the entity instead of update [\#31](https://github.com/feathersjs/feathers-authentication-oauth2/issues/31)
+- Update existing user in verifier will change the user password hash from an already hashed password. [\#19](https://github.com/feathersjs/feathers-authentication-oauth2/issues/19)
+
+**Merged pull requests:**
+
+- Added support for redirect options on strategy options \(\#41\) [\#42](https://github.com/feathersjs/feathers-authentication-oauth2/pull/42) ([nsainaney](https://github.com/nsainaney))
+- \#19 Fix: using patch to update entity in verifier [\#20](https://github.com/feathersjs/feathers-authentication-oauth2/pull/20) ([skinnyworm](https://github.com/skinnyworm))
+
 ## [v0.2.6](https://github.com/feathersjs/feathers-authentication-oauth2/tree/v0.2.6) (2017-09-12)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth2/compare/v0.2.5...v0.2.6)
 
