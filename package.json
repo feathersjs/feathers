@@ -57,7 +57,7 @@
     "babel-runtime": "^6.26.0",
     "debug": "^3.0.0",
     "events": "^1.1.1",
-    "express": "^4.14.0",
+    "express": "^4.15.5",
     "feathers-commons": "^0.8.7",
     "rubberduck": "^1.1.1",
     "uberproto": "^1.2.0"

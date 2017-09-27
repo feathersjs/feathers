@@ -112,7 +112,7 @@ export default {
   // Environment specific configurations should be done as suggested in the 4.x migration guide:
   // https://github.com/visionmedia/express/wiki/Migrating-from-3.x-to-4.x
   configure (fn) {
-    fn.call(this);
+    fn.call(this, this);
 
     return this;
   },
