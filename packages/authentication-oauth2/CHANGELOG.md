@@ -1,12 +1,23 @@
 # Change Log
 
+## [v0.3.1](https://github.com/feathersjs/feathers-authentication-oauth2/tree/v0.3.1) (2017-09-27)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth2/compare/v0.3.0...v0.3.1)
+
+**Closed issues:**
+
+- Google "hostedDomain" not working [\#13](https://github.com/feathersjs/feathers-authentication-oauth2/issues/13)
+
+**Merged pull requests:**
+
+- Simplified redirectOptions \(\#42\) [\#44](https://github.com/feathersjs/feathers-authentication-oauth2/pull/44) ([nsainaney](https://github.com/nsainaney))
+
 ## [v0.3.0](https://github.com/feathersjs/feathers-authentication-oauth2/tree/v0.3.0) (2017-09-25)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth2/compare/v0.2.6...v0.3.0)
 
 **Closed issues:**
 
 - Missing params on OAuth redirect creation [\#41](https://github.com/feathersjs/feathers-authentication-oauth2/issues/41)
-- how to custom callback page after authentication [\#39](https://github.com/feathersjs/feathers-authentication-oauth2/issues/39)
+- how to custom callback page after authetication [\#39](https://github.com/feathersjs/feathers-authentication-oauth2/issues/39)
 - profileUrl is undefined [\#38](https://github.com/feathersjs/feathers-authentication-oauth2/issues/38)
 - Use patch to update the entity instead of update [\#31](https://github.com/feathersjs/feathers-authentication-oauth2/issues/31)
 - Update existing user in verifier will change the user password hash from an already hashed password. [\#19](https://github.com/feathersjs/feathers-authentication-oauth2/issues/19)
