@@ -40,6 +40,21 @@ describe('socket commons utils', () => {
       assert.deepEqual(normalizeError(e), {});
       assert.ok(e.hook, 'Does not mutate the original object');
     });
+
+    it('hides stack in production', () => {
+      const oldEnv = process.env.NODE_ENV;
+
+      process.env.NODE_ENV = 'production';
+
+      const message = 'Something went wrong';
+      const e = new Error(message);
+      const normalized = normalizeError(e);
+
+      assert.equal(normalized.message, message);
+      assert.ok(!normalized.stack);
+
+      process.env.NODE_ENV = oldEnv;
+    });
   });
 
   describe('.getDispatcher', () => {

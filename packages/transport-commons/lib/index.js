@@ -1,5 +1,5 @@
 const debug = require('debug')('feathers-socket-commons');
-const channels = require('feathers-channels');
+const channels = require('./channels');
 const { getDispatcher, runMethod } = require('./utils');
 
 module.exports = function ({ done, emit, socketKey, getParams }) {

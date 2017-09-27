@@ -47,8 +47,8 @@
   },
   "dependencies": {
     "debug": "^3.0.1",
-    "feathers-channels": "^0.2.0",
     "feathers-errors": "^2.9.1",
+    "lodash": "^4.17.4",
     "url-pattern": "^1.0.3"
   },
   "devDependencies": {
