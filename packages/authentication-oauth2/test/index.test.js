@@ -114,13 +114,13 @@ describe('feathers-authentication-oauth2', () => {
 
     it('registers the redirect options on strategy options', () => {
       sinon.spy(authentication.express, 'authenticate');
-
-      const mergedOptions = Object.assign({}, config, globalConfig)
+      
+      const mergedOptions = Object.assign({}, config, globalConfig);
       app.configure(oauth2(mergedOptions));
       app.setup();
-      
-      const strategyOptions = mergedOptions[config.name]
-      expect(authentication.express.authenticate).to.have.been.calledWith(config.name, strategyOptions);
+
+      delete mergedOptions.Strategy;
+      expect(authentication.express.authenticate).to.have.been.calledWith(config.name, sinon.match(mergedOptions));
 
       authentication.express.authenticate.restore();
     });
