@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.0.0-pre.2](https://github.com/feathersjs/feathers-socket-commons/tree/v3.0.0-pre.2) (2017-09-28)
+[Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v3.0.0-pre.1...v3.0.0-pre.2)
+
+**Merged pull requests:**
+
+- Add feathers-channels [\#47](https://github.com/feathersjs/feathers-socket-commons/pull/47) ([daffl](https://github.com/daffl))
+
 ## [v3.0.0-pre.1](https://github.com/feathersjs/feathers-socket-commons/tree/v3.0.0-pre.1) (2017-09-08)
 [Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v2.4.0...v3.0.0-pre.1)
 
