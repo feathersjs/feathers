@@ -115,7 +115,7 @@ class CustomVerifier extends Verifier {
 }
 
 app.configure(oauth2({
-  name: 'facebook'
+  name: 'facebook',
   Strategy: FacebookStrategy,
   clientID: '<your client id>',
   clientSecret: '<your client secret>',
@@ -144,9 +144,9 @@ function customizeGithubProfile() {
   return function(hook) {
     console.log('Customizing Github Profile');
     // If there is a github field they signed up or
-    // signed in with github so let's pull the email. If
+    // signed in with github so let's pull the primary account email.
     if (hook.data.github) {
-      hook.data.email = hook.data.github.email;
+      hook.data.email = hook.data.github.profile.emails.find(email => email.primary).value;
     }
 
     // If you want to do something whenever any OAuth
