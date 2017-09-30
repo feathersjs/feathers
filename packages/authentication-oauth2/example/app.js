@@ -1,15 +1,15 @@
-var feathers = require('feathers');
-var rest = require('feathers-rest');
-var hooks = require('feathers-hooks');
-var memory = require('feathers-memory');
-var bodyParser = require('body-parser');
-var GithubStrategy = require('passport-github').Strategy;
-var errorHandler = require('feathers-errors/handler');
-var auth = require('feathers-authentication');
-var oauth2 = require('../lib/index');
+const feathers = require('feathers');
+const rest = require('feathers-rest');
+const hooks = require('feathers-hooks');
+const memory = require('feathers-memory');
+const bodyParser = require('body-parser');
+const GithubStrategy = require('passport-github').Strategy;
+const errorHandler = require('feathers-errors/handler');
+const auth = require('feathers-authentication');
+const oauth2 = require('../lib/index');
 
 // Initialize the application
-var app = feathers();
+const app = feathers();
 app.set('port', 3030);
 
 app.configure(rest())
@@ -24,7 +24,7 @@ app.configure(rest())
     Strategy: GithubStrategy,
     clientID: 'your client id',
     clientSecret: 'your client secret',
-    scope: ['user']
+    scope: ['user:email']
   }))
   .use('/users', memory())
   .use(errorHandler());
@@ -35,7 +35,7 @@ function customizeGithubProfile() {
     // If there is a github field they signed up or
     // signed in with github so let's pull the email
     if (hook.data.github) {
-      hook.data.email = hook.data.github.email; 
+      hook.data.email = hook.data.github.profile.emails.find(email => email.primary).value;
     }
 
     return Promise.resolve(hook);
