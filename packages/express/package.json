@@ -56,7 +56,7 @@
     "axios": "^0.16.2",
     "feathers": "^3.0.0-pre.1",
     "istanbul": "^1.1.0-alpha.1",
-    "mocha": "^3.4.2",
+    "mocha": "^4.0.0",
     "semistandard": "^11.0.0",
     "shx": "^0.2.2"
   }
