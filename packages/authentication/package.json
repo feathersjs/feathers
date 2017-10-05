@@ -89,7 +89,7 @@
     "istanbul": "^1.1.0-alpha.1",
     "jshint": "^2.9.3",
     "localstorage-memory": "^1.0.2",
-    "mocha": "^3.0.2",
+    "mocha": "^4.0.0",
     "mongodb": "^2.2.29",
     "nsp": "^2.6.1",
     "passport-strategy": "^1.0.0",
