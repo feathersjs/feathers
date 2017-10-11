@@ -6,9 +6,9 @@ module.exports = function (app) {
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
   const <%= camelName %> = new Schema({
-    text: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now }
+    text: { type: String, required: true }
+  }, {
+    timestamps: true
   });
 
   return mongooseClient.model('<%= camelName %>', <%= camelName %>);
