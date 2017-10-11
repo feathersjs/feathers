@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.3.8](https://github.com/feathersjs/feathers-cli/tree/v2.3.8) (2017-10-11)
+[Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.3.7...v2.3.8)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#119](https://github.com/feathersjs/feathers-cli/pull/119) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update mocha to the latest version 🚀 [\#117](https://github.com/feathersjs/feathers-cli/pull/117) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.3.7](https://github.com/feathersjs/feathers-cli/tree/v2.3.7) (2017-09-13)
 [Full Changelog](https://github.com/feathersjs/feathers-cli/compare/v2.3.6...v2.3.7)
 
