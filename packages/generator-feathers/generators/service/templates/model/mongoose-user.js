@@ -12,8 +12,8 @@ module.exports = function (app) {
   <% authentication.oauthProviders.forEach(provider => { %>
     <%= provider.name %>Id: { type: String },
   <% }); %>
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now }
+  }, {
+    timestamps: true
   });
 
   return mongooseClient.model('<%= camelName %>', <%= camelName %>);
