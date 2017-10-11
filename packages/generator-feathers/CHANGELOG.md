@@ -1,5 +1,14 @@
 # Change Log
 
+## [v1.2.12](https://github.com/feathersjs/generator-feathers/tree/v1.2.12) (2017-10-11)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.11...v1.2.12)
+
+**Merged pull requests:**
+
+- Tweak the `timestamp` in mongoose model template [\#284](https://github.com/feathersjs/generator-feathers/pull/284) ([Mr-Binary](https://github.com/Mr-Binary))
+- Update mocha to the latest version 🚀 [\#283](https://github.com/feathersjs/generator-feathers/pull/283) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- fix jwt configuration typo \(type -\> typ\) [\#281](https://github.com/feathersjs/generator-feathers/pull/281) ([j2L4e](https://github.com/j2L4e))
+
 ## [v1.2.11](https://github.com/feathersjs/generator-feathers/tree/v1.2.11) (2017-09-13)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.10...v1.2.11)
 
