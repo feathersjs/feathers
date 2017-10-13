@@ -21,7 +21,7 @@ declare namespace feathers {
     data: T[]
   }
 
-  interface Service<T extends any> extends events.EventEmitter {
+  interface Service<T> extends Partial<events.EventEmitter> {
 
     /**
      * Retrieves a list of all resources from the service.
@@ -39,7 +39,7 @@ declare namespace feathers {
      */
     create?(data: T[], params?: Params, callback?: any): Promise<T[]>;
     create?(data: T , params?: Params, callback?: any): Promise<T>;
-    
+
     /**
      * Replaces the resource identified by id with data.
      * Update multiples resources with id equal `null`
@@ -63,15 +63,54 @@ declare namespace feathers {
      * Initialize your service with any special configuration or if connecting services that are very tightly coupled
      */
     setup?(app?: Application, path?: string): void;
+  }
 
-    before(any?: any): this;
-    after(any?: any): this;
-    filter(any?: any): this;
-    
+  interface ServiceHandler<T> {
+
+    /**
+     * Retrieves a list of all resources from the service.
+     * Provider parameters will be passed as params.query
+     */
+    find?(params?: Params, callback?: any): Promise<T[] | Pagination<T>>;
+
+    /**
+     * Retrieves a single resource with the given id from the service.
+     */
+    get?(id: number | string, params?: Params, callback?: any): Promise<T>;
+
+    /**
+     * Creates a new resource with data.
+     */
+    create?(data: T[], params?: Params, callback?: any): Promise<T[]>;
+    create?(data: T , params?: Params, callback?: any): Promise<T>;
+
+    /**
+     * Replaces the resource identified by id with data.
+     * Update multiples resources with id equal `null`
+     */
+    update?(id: NullableId, data: T, params?: Params, callback?: any): Promise<T>;
+
+    /**
+     * Merges the existing data of the resource identified by id with the new data.
+     * Implement patch additionally to update if you want to separate between partial and full updates and support the PATCH HTTP method.
+     * Patch multiples resources with id equal `null`
+     */
+    patch?(id: NullableId, data: any, params?: Params, callback?: any): Promise<T>;
+
+    /**
+     * Removes the resource with id.
+     * Delete multiple resources with id equal `null`
+     */
+    remove?(id: NullableId, params?: Params, callback?: any): Promise<T>;
+
+    /**
+     * Initialize your service with any special configuration or if connecting services that are very tightly coupled
+     */
+    setup?(app?: Application, path?: string): void;
   }
 
   interface FeathersUseHandler<T> extends expressCore.IRouterHandler<T>, express.IRouterMatcher<T> {
-    (location: string, service: Service<any>): T
+    (location: string, service: ServiceHandler<any>): T
   }
 
   interface Application extends express.Application {
