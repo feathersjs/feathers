@@ -6,7 +6,7 @@ const debug = Debug('feathers-authentication-oauth1:handler');
 export default function OAuthHandler (options = {}) {
   return function (req, res, next) {
     const app = req.app;
-    const authSettings = app.get('authentication') || {};
+    const authSettings = app.get('auth') || app.get('authentication') || {};
     const entity = req[options.entity];
     const payload = req.payload;
     const params = {
