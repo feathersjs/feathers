@@ -79,6 +79,11 @@ class OAuth2Verifier {
     const data = { profile, accessToken, refreshToken };
     let existing;
 
+    if (this.service.id === null || this.service.id === undefined) {
+      debug('failed: the service.id was not set');
+      return done(new Error('the `id` property must be set on the entity service for authentication'));
+    }
+
     // Check request object for an existing entity
     if (req && req[options.entity]) {
       existing = req[options.entity];
