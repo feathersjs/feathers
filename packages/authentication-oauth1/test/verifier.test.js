@@ -279,3 +279,38 @@ describe('Verifier', () => {
     });
   });
 });
+
+describe('Verifier without service.id', function () {
+  let service;
+  let app;
+  let options;
+  let verifier;
+  let user;
+
+  beforeEach(() => {
+    user = { id: 1, email: 'admin@feathersjs.com' };
+    service = {
+      find: sinon.stub().returns(Promise.resolve([user])),
+      create: sinon.stub().returns(Promise.resolve(user)),
+      patch: sinon.stub().returns(Promise.resolve(user))
+    };
+
+    app = feathers();
+    app.use('users', service)
+      .configure(authentication({ secret: 'supersecret' }));
+
+    options = app.get('authentication');
+    options.name = 'twitter';
+    options.idField = 'twitterId';
+
+    verifier = new Verifier(app, options);
+  });
+
+  it('throws an error when service.id is not set', done => {
+    verifier.verify({}, 'access', 'refresh', { id: 1234 }, (error, entity) => {
+      expect(error.message.includes('the `id` property must be set')).to.equal(true);
+      expect(entity).to.equal(undefined);
+      done();
+    });
+  });
+});
