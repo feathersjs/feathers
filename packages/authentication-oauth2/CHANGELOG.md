@@ -1,5 +1,20 @@
 # Change Log
 
+## [v0.3.2](https://github.com/feathersjs/feathers-authentication-oauth2/tree/v0.3.2) (2017-10-15)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth2/compare/v0.3.1...v0.3.2)
+
+**Closed issues:**
+
+- Examples are no longer working due to missing email property [\#40](https://github.com/feathersjs/feathers-authentication-oauth2/issues/40)
+- Log a warning if this.service.id is undefined or null [\#21](https://github.com/feathersjs/feathers-authentication-oauth2/issues/21)
+
+**Merged pull requests:**
+
+- Erroring if service.id is undefined. Closes \#21. [\#47](https://github.com/feathersjs/feathers-authentication-oauth2/pull/47) ([ekryski](https://github.com/ekryski))
+- Update mocha to the latest version 🚀 [\#46](https://github.com/feathersjs/feathers-authentication-oauth2/pull/46) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update examples to work with latest OAuth payload [\#45](https://github.com/feathersjs/feathers-authentication-oauth2/pull/45) ([teddy-error](https://github.com/teddy-error))
+- Update sinon to the latest version 🚀 [\#43](https://github.com/feathersjs/feathers-authentication-oauth2/pull/43) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v0.3.1](https://github.com/feathersjs/feathers-authentication-oauth2/tree/v0.3.1) (2017-09-27)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth2/compare/v0.3.0...v0.3.1)
 
