@@ -1,5 +1,24 @@
 # Change Log
 
+## [v0.2.6](https://github.com/feathersjs/feathers-authentication-oauth1/tree/v0.2.6) (2017-10-15)
+[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth1/compare/v0.2.5...v0.2.6)
+
+**Closed issues:**
+
+- An in-range update of feathers is breaking the build 🚨 [\#23](https://github.com/feathersjs/feathers-authentication-oauth1/issues/23)
+- Log a warning if this.service.id is undefined or null [\#16](https://github.com/feathersjs/feathers-authentication-oauth1/issues/16)
+
+**Merged pull requests:**
+
+- Erroring if service.id is undefined. Closes \#16 [\#29](https://github.com/feathersjs/feathers-authentication-oauth1/pull/29) ([ekryski](https://github.com/ekryski))
+- Fix old property name fallback for backwards compatibility [\#28](https://github.com/feathersjs/feathers-authentication-oauth1/pull/28) ([ekryski](https://github.com/ekryski))
+- changing to patch instead of update when updating an existing user [\#27](https://github.com/feathersjs/feathers-authentication-oauth1/pull/27) ([ekryski](https://github.com/ekryski))
+- Update mocha to the latest version 🚀 [\#26](https://github.com/feathersjs/feathers-authentication-oauth1/pull/26) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update sinon to the latest version 🚀 [\#25](https://github.com/feathersjs/feathers-authentication-oauth1/pull/25) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Add babel-polyfill and package-lock.json [\#24](https://github.com/feathersjs/feathers-authentication-oauth1/pull/24) ([daffl](https://github.com/daffl))
+- Update debug to the latest version 🚀 [\#22](https://github.com/feathersjs/feathers-authentication-oauth1/pull/22) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update sinon to the latest version 🚀 [\#21](https://github.com/feathersjs/feathers-authentication-oauth1/pull/21) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v0.2.5](https://github.com/feathersjs/feathers-authentication-oauth1/tree/v0.2.5) (2017-06-21)
 [Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth1/compare/v0.2.4...v0.2.5)
 
