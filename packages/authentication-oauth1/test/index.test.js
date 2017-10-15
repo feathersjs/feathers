@@ -112,6 +112,18 @@ describe('feathers-authentication-oauth1', () => {
       app.passport.options.restore();
     });
 
+    it('registers the redirect options on strategy options', () => {
+      sinon.spy(authentication.express, 'authenticate');
+      const mergedOptions = Object.assign({}, config, globalConfig);
+      app.configure(oauth1(mergedOptions));
+      app.setup();
+
+      delete mergedOptions.Strategy;
+      expect(authentication.express.authenticate).to.have.been.calledWith(config.name, sinon.match(mergedOptions));
+
+      authentication.express.authenticate.restore();
+    });
+
     describe('passport strategy options', () => {
       let authOptions;
       let args;
