@@ -1,9 +1,10 @@
-const makeDebug = require('debug');
 const socketio = require('socket.io');
 const Proto = require('uberproto');
-const socket = require('feathers-socket-commons');
+const http = require('http');
+const commons = require('feathers-socket-commons');
+const debug = require('debug')('feathers-socketio');
 
-const debug = makeDebug('feathers-socketio');
+const socketKey = Symbol('feathers-socketio/socket');
 
 module.exports = function (port, options, config) {
   if (typeof port !== 'number') {
@@ -19,47 +20,75 @@ module.exports = function (port, options, config) {
 
   return function () {
     const app = this;
-
-    app.configure(socket('io'));
-
-    Proto.mixin({
-      setup (server) {
-        let io = this.io;
-
-        if (!io) {
-          io = this.io = socketio.listen(port || server, options);
-
-          io.use(function (socket, next) {
-            socket.feathers = { provider: 'socketio' };
-            next();
-          });
-        }
-
-        this._socketInfo = {
-          method: 'emit',
-          connection () {
-            return io.sockets;
-          },
-          clients () {
-            return io.sockets.sockets;
-          },
-          params (socket) {
-            return socket.feathers;
+    // Promise that resolves with the Socket.io `io` instance
+    // when `setup` has been called (with a server)
+    const done = new Promise(resolve => {
+      Proto.mixin({
+        listen (...args) {
+          if (typeof this._super === 'function') {
+            // If `listen` already exists
+            // usually the case when the app has been expressified
+            return this._super(...args);
           }
-        };
 
-        // In Feathers it is easy to hit the standard Node warning limit
-        // of event listeners (e.g. by registering 10 services).
-        // So we set it to a higher number. 64 should be enough for everyone.
-        this._socketInfo.connection().setMaxListeners(64);
+          const server = http.createServer();
 
-        if (typeof config === 'function') {
-          debug('Calling SocketIO configuration function');
-          config.call(this, io);
+          this.setup(server);
+
+          return server.listen(...args);
+        },
+
+        setup (server) {
+          if (!this.io) {
+            const io = this.io = socketio
+              .listen(port || server, options);
+
+            io.use((socket, next) => {
+              socket.feathers = {
+                provider: 'socketio'
+              };
+
+              Object.defineProperty(socket.feathers, socketKey, {
+                value: socket
+              });
+
+              next();
+            });
+
+            io.use((socket, next) => {
+              socket.once('disconnect', () =>
+                app.channel(app.channels).leave(socket.feathers)
+              );
+              next();
+            });
+
+            // In Feathers it is easy to hit the standard Node warning limit
+            // of event listeners (e.g. by registering 10 services).
+            // So we set it to a higher number. 64 should be enough for everyone.
+            io.sockets.setMaxListeners(64);
+          }
+
+          if (typeof config === 'function') {
+            debug('Calling SocketIO configuration function');
+            config.call(this, this.io);
+          }
+
+          resolve(this.io);
+
+          return this._super.apply(this, arguments);
         }
+      }, app);
+    });
 
-        return this._super.apply(this, arguments);
+    app.configure(commons({
+      done,
+      socketKey,
+      emit: 'emit',
+      getParams (socket) {
+        return socket.feathers;
       }
-    }, app);
+    }));
   };
 };
+
+module.exports.SOCKET_KEY = socketKey;
