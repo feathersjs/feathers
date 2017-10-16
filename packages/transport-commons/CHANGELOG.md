@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.0.0-pre.3](https://github.com/feathersjs/feathers-socket-commons/tree/v3.0.0-pre.3) (2017-10-16)
+[Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v3.0.0-pre.2...v3.0.0-pre.3)
+
+**Merged pull requests:**
+
+- Update mocha to the latest version 🚀 [\#48](https://github.com/feathersjs/feathers-socket-commons/pull/48) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.0.0-pre.2](https://github.com/feathersjs/feathers-socket-commons/tree/v3.0.0-pre.2) (2017-09-28)
 [Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v3.0.0-pre.1...v3.0.0-pre.2)
 
