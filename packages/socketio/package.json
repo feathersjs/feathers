@@ -44,20 +44,15 @@
   "directories": {
     "lib": "lib"
   },
-  "browser": {
-    "./lib/index": "./lib/client"
-  },
   "dependencies": {
-    "@types/socket.io": "~1.4.27",
-    "debug": "^3.0.0",
-    "feathers-socket-commons": "^2.0.0",
-    "socket.io": "^2.0.1",
-    "uberproto": "^1.2.0"
+    "debug": "^3.1.0",
+    "feathers-commons": "^1.0.0-pre.2",
+    "feathers-express": "^1.0.0-pre.1",
+    "feathers-socket-commons": "^3.0.0-pre.3",
+    "socket.io": "^2.0.3"
   },
   "devDependencies": {
-    "feathers": "^2.0.0",
-    "feathers-commons": "^0.8.0",
-    "feathers-hooks": "^2.0.0",
+    "feathers": "^3.0.0-pre.1",
     "feathers-memory": "^1.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "lodash": "^4.0.1",
