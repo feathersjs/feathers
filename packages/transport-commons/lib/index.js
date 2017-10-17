@@ -8,7 +8,7 @@ module.exports = function ({ done, emit, socketKey, getParams }) {
 
     // Event dispatching (through `feathers-channels`)
     app.configure(channels());
-    app.on('publish', getDispatcher('emit', socketKey));
+    app.on('publish', getDispatcher(emit, socketKey));
 
     // `connection` event
     done.then(provider => provider.on('connection', socket =>
