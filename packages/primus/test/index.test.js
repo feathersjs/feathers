@@ -1,11 +1,15 @@
-import assert from 'assert';
-import feathers from 'feathers';
-import hooks from 'feathers-hooks';
-import _ from 'lodash';
-import { Service as todoService, verify } from 'feathers-commons/lib/test-fixture';
+const assert = require('assert');
+const feathers = require('feathers');
+const hooks = require('feathers-hooks');
+const _ = require('lodash');
 
-import services from './service.test.js';
-import primus from '../src';
+const {
+  Service,
+  verify
+} = require('feathers-commons/lib/test-fixture');
+
+const services = require('./service.test.js');
+const primus = require('../lib');
 
 describe('feathers-primus', () => {
   let options = {
@@ -33,14 +37,14 @@ describe('feathers-primus', () => {
           done();
         });
       }))
-      .use('todo', todoService);
+      .use('todo', Service);
 
     app.service('todo').before({
       get: errorHook
     });
 
     options.server = app.listen(7888, function () {
-      app.use('tasks', todoService);
+      app.use('tasks', Service);
       app.service('tasks').before({
         get: errorHook
       });
@@ -158,7 +162,7 @@ describe('feathers-primus', () => {
 
         socket.send('v1/todo::create', original);
       }))
-      .use('/todo', todoService);
+      .use('/todo', Service);
 
     const main = feathers()
         .use('/v1', sub);
