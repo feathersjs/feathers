@@ -48,7 +48,7 @@
     "debug": "^3.1.0",
     "feathers-commons": "^1.0.0-pre.2",
     "feathers-express": "^1.0.0-pre.1",
-    "feathers-socket-commons": "^3.0.0-pre.3",
+    "feathers-socket-commons": "^3.0.0-pre.4",
     "socket.io": "^2.0.3"
   },
   "devDependencies": {
@@ -59,6 +59,7 @@
     "mocha": "^4.0.0",
     "request": "^2.69.0",
     "semistandard": "^11.0.0",
-    "socket.io-client": "^2.0.0"
+    "socket.io-client": "^2.0.0",
+    "uberproto": "^1.2.0"
   }
 }
