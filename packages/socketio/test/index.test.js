@@ -4,7 +4,6 @@ const feathers = require('feathers');
 const expressify = require('feathers-express');
 const io = require('socket.io-client');
 const request = require('request');
-
 const { Service } = require('feathers-commons/lib/test/fixture');
 
 const methodTests = require('./methods.js');

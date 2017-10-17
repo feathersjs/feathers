@@ -20,6 +20,8 @@ module.exports = function (port, options, config) {
 
   return function () {
     const app = this;
+    const getParams = socket => socket.feathers;
+
     // Promise that resolves with the Socket.io `io` instance
     // when `setup` has been called (with a server)
     const done = new Promise(resolve => {
@@ -44,21 +46,27 @@ module.exports = function (port, options, config) {
               .listen(port || server, options);
 
             io.use((socket, next) => {
-              socket.feathers = {
+              const connection = {
                 provider: 'socketio'
               };
 
-              Object.defineProperty(socket.feathers, socketKey, {
+              Object.defineProperty(connection, socketKey, {
                 value: socket
               });
+
+              socket.feathers = connection;
 
               next();
             });
 
             io.use((socket, next) => {
-              socket.once('disconnect', () =>
-                app.channel(app.channels).leave(socket.feathers)
-              );
+              socket.once('disconnect', () => {
+                const { channels } = app;
+
+                if (channels.length) {
+                  app.channel(app.channels).leave(getParams(socket));
+                }
+              });
               next();
             });
 
@@ -83,10 +91,8 @@ module.exports = function (port, options, config) {
     app.configure(commons({
       done,
       socketKey,
-      emit: 'emit',
-      getParams (socket) {
-        return socket.feathers;
-      }
+      getParams,
+      emit: 'emit'
     }));
   };
 };
