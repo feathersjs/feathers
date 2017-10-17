@@ -1,12 +1,12 @@
-import makeDebug from 'debug';
-import Proto from 'uberproto';
-import socket from 'feathers-socket-commons';
-import Primus from 'primus';
-import Emitter from 'primus-emitter';
+const makeDebug = require('debug');
+const Proto = require('uberproto');
+const socket = require('feathers-socket-commons');
+const Primus = require('primus');
+const Emitter = require('primus-emitter');
 
 const debug = makeDebug('feathers-primus');
 
-export default function (config, configurer) {
+module.exports = function (config, configurer) {
   return function () {
     const app = this;
 
@@ -57,4 +57,4 @@ export default function (config, configurer) {
       }
     }, app);
   };
-}
+};
