@@ -1,7 +1,7 @@
 {
   "name": "feathers-socketio",
   "description": "The Feathers Socket.io real-time API provider",
-  "version": "2.0.0",
+  "version": "3.0.0-pre.0",
   "homepage": "https://github.com/feathersjs/feathers-socketio",
   "main": "lib/",
   "keywords": [
@@ -27,7 +27,7 @@
   },
   "scripts": {
     "publish": "git push origin && git push origin --tags",
-    "release:pre": "npm version prerelease && npm publish --tag pre",
+    "release:prerelease": "npm version prerelease && npm publish --tag pre",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
