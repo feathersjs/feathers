@@ -1,3 +1,4 @@
+const debug = require('debug')('feathers-socket-commons:channels');
 const { get, compact, flattenDeep } = require('lodash');
 const CombinedChannel = require('./channel/combined');
 const { channelMixin, publishMixin, keys } = require('./mixins');
@@ -35,6 +36,8 @@ function channels () {
             hook = { path, service, app, result: data };
           }
 
+          debug('Publishing event', event, hook.path);
+
           const servicePublishers = service[PUBLISHERS];
           const appPublishers = app[PUBLISHERS];
           const publishers = compact([
@@ -51,6 +54,8 @@ function channels () {
 
             if (channel.length > 0) {
               app.emit('publish', event, channel, hook);
+            } else {
+              debug('No connections to publish to');
             }
           });
         });

@@ -1,3 +1,4 @@
+const debug = require('debug')('feathers-socket-commons:channels/mixins');
 const Channel = require('./channel/base');
 const CombinedChannel = require('./channel/combined');
 
@@ -16,6 +17,8 @@ exports.channelMixin = function channelMixin () {
     [CHANNELS]: {},
 
     channel (...names) {
+      debug('Returning channels', names);
+
       if (names.length === 0) {
         throw new Error('app.channel needs at least one channel name');
       }
@@ -43,6 +46,8 @@ exports.publishMixin = function publishMixin () {
     [PUBLISHERS]: {},
 
     publish (event, callback) {
+      debug('Registering publisher', event);
+
       if (!callback && typeof event === 'function') {
         callback = event;
         event = ALL_EVENTS;
