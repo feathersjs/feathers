@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.0.0-pre.4](https://github.com/feathersjs/feathers-socket-commons/tree/v3.0.0-pre.4) (2017-10-17)
+[Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v3.0.0-pre.3...v3.0.0-pre.4)
+
+**Merged pull requests:**
+
+- Fix the event name and add some channel debug statements [\#49](https://github.com/feathersjs/feathers-socket-commons/pull/49) ([daffl](https://github.com/daffl))
+
 ## [v3.0.0-pre.3](https://github.com/feathersjs/feathers-socket-commons/tree/v3.0.0-pre.3) (2017-10-16)
 [Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v3.0.0-pre.2...v3.0.0-pre.3)
 
