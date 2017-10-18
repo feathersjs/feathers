@@ -49,21 +49,22 @@
     "./lib/index": "./lib/client"
   },
   "dependencies": {
-    "debug": "^3.0.0",
-    "feathers-socket-commons": "^2.0.0",
+    "debug": "^3.1.0",
+    "feathers-socket-commons": "^3.0.0-pre.4",
     "primus": "^7.0.0",
-    "primus-emitter": "^3.1.1",
-    "uberproto": "^1.2.0"
+    "primus-emitter": "^3.1.1"
   },
   "devDependencies": {
-    "feathers": "^2.0.0",
-    "feathers-commons": "^0.8.0",
-    "feathers-hooks": "^2.0.0",
+    "feathers": "^3.0.0-pre.1",
+    "feathers-commons": "^0.8.7",
+    "feathers-express": "^1.0.0-pre.1",
     "feathers-memory": "^1.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "lodash": "^4.0.1",
     "mocha": "^4.0.0",
+    "request": "^2.83.0",
     "semistandard": "^11.0.0",
+    "uberproto": "^1.2.0",
     "uws": "^8.14.0",
     "ws": "^3.0.0"
   }
