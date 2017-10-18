@@ -1,5 +1,22 @@
 # Change Log
 
+## [v3.0.0-pre.1](https://github.com/feathersjs/feathers-primus/tree/v3.0.0-pre.1) (2017-10-18)
+[Full Changelog](https://github.com/feathersjs/feathers-primus/compare/v2.2.0...v3.0.0-pre.1)
+
+**Closed issues:**
+
+- An in-range update of babel-core is breaking the build 🚨 [\#56](https://github.com/feathersjs/feathers-primus/issues/56)
+- Update  npm version  [\#55](https://github.com/feathersjs/feathers-primus/issues/55)
+
+**Merged pull requests:**
+
+- Compatibility and updates for Feathers v3 [\#62](https://github.com/feathersjs/feathers-primus/pull/62) ([daffl](https://github.com/daffl))
+- Update to new plugin infrastructure [\#61](https://github.com/feathersjs/feathers-primus/pull/61) ([daffl](https://github.com/daffl))
+- Update mocha to the latest version 🚀 [\#60](https://github.com/feathersjs/feathers-primus/pull/60) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update debug to the latest version 🚀 [\#59](https://github.com/feathersjs/feathers-primus/pull/59) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update primus type definition [\#58](https://github.com/feathersjs/feathers-primus/pull/58) ([Sieabah](https://github.com/Sieabah))
+- Update uws to the latest version 🚀 [\#57](https://github.com/feathersjs/feathers-primus/pull/57) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.2.0](https://github.com/feathersjs/feathers-primus/tree/v2.2.0) (2017-05-29)
 [Full Changelog](https://github.com/feathersjs/feathers-primus/compare/v2.1.0...v2.2.0)
 
