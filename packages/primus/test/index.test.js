@@ -1,15 +1,13 @@
 const assert = require('assert');
 const feathers = require('feathers');
-const hooks = require('feathers-hooks');
+const expressify = require('feathers-express');
+const request = require('request');
 const _ = require('lodash');
+const { Service } = require('feathers-commons/lib/test-fixture');
 
-const {
-  Service,
-  verify
-} = require('feathers-commons/lib/test-fixture');
-
-const services = require('./service.test.js');
 const primus = require('../lib');
+const methodTests = require('./methods.js');
+const eventTests = require('./events');
 
 describe('feathers-primus', () => {
   let options = {
@@ -26,27 +24,34 @@ describe('feathers-primus', () => {
       }
     };
     const app = options.app = feathers()
-      .configure(hooks())
       .configure(primus({
         transformer: 'uws'
       }, function (primus) {
-        options.socket = new primus.Socket('http://localhost:7888');
-
         primus.authorize(function (req, done) {
           req.feathers.user = { name: 'David' };
+
+          const { channel } = req.query;
+
+          if (channel) {
+            req.feathers.channel = channel;
+          }
+
           done();
         });
+
+        options.primus = primus;
+        options.socket = new primus.Socket('http://localhost:7888');
       }))
       .use('todo', Service);
 
-    app.service('todo').before({
-      get: errorHook
+    app.service('todo').hooks({
+      before: { get: errorHook }
     });
 
     options.server = app.listen(7888, function () {
       app.use('tasks', Service);
-      app.service('tasks').before({
-        get: errorHook
+      app.service('tasks').hooks({
+        before: { get: errorHook }
       });
       done();
     });
@@ -61,9 +66,9 @@ describe('feathers-primus', () => {
     assert.equal(typeof require('../lib'), 'function');
   });
 
-  it('runs primus before setup (#131)', function (done) {
-    var counter = 0;
-    var app = feathers()
+  it('runs primus before setup (#131)', done => {
+    let counter = 0;
+    const app = feathers()
       .configure(primus({
         transformer: 'uws'
       }, function () {
@@ -71,24 +76,41 @@ describe('feathers-primus', () => {
         counter++;
       }))
       .use('/todos', {
-        find: function (params, callback) {
-          callback(null, []);
+        find () {
+          return Promise.resolve([]);
         },
-        setup: function (app) {
+        setup (app) {
           assert.ok(app.primus);
-          assert.equal(counter, 1, 'SocketIO configuration ran first');
+          assert.equal(counter, 1, 'Primus configuration ran first');
         }
       });
 
-    var srv = app.listen(9119);
-    srv.on('listening', function () {
-      srv.close(done);
+    const srv = app.listen(9119);
+    srv.on('listening', () => srv.close(done));
+  });
+
+  it('expressified app works', done => {
+    const data = { message: 'Hello world' };
+    const app = expressify(feathers())
+      .configure(primus({
+        transformer: 'uws'
+      }))
+      .use('/test', (req, res) => res.json(data));
+
+    const srv = app.listen(8992).on('listening', () => {
+      const url = 'http://localhost:8992/test';
+
+      request({ url, json: true }, (err, res) => {
+        assert.ok(!err);
+        assert.deepEqual(res.body, data);
+        srv.close(done);
+      });
     });
   });
 
   it('Passes handshake as service parameters.', function (done) {
-    var service = options.app.service('todo');
-    var old = {
+    const service = options.app.service('todo');
+    const old = {
       find: service.find,
       create: service.create,
       update: service.update,
@@ -96,28 +118,35 @@ describe('feathers-primus', () => {
     };
 
     service.find = function (params) {
-      assert.deepEqual(_.omit(params, 'query'), options.socketParams,
+      assert.deepEqual(_.omit(params, 'query', 'route'), options.socketParams,
         'Handshake parameters passed on proper position');
-      old.find.apply(this, arguments);
+
+      return old.find.apply(this, arguments);
     };
 
     service.create = function (data, params) {
-      assert.deepEqual(_.omit(params, 'query'), options.socketParams,
+      assert.deepEqual(_.omit(params, 'query', 'route'), options.socketParams,
         'Passed handshake parameters');
-      old.create.apply(this, arguments);
+
+      return old.create.apply(this, arguments);
     };
 
     service.update = function (id, data, params) {
       assert.deepEqual(params, _.extend({
+        route: {},
         query: {
           test: 'param'
         }
       }, options.socketParams), 'Passed handshake parameters as query');
-      old.update.apply(this, arguments);
+
+      return old.update.apply(this, arguments);
     };
 
-    options.socket.send('todo::create', {}, {}, function () {
-      options.socket.send('todo::update', 1, {}, { test: 'param' }, function () {
+    options.socket.send('create', 'todo', {}, {}, error => {
+      assert.ok(!error);
+
+      options.socket.send('update', 'todo', 1, {}, { test: 'param' }, () => {
+        assert.ok(!error);
         _.extend(service, old);
         done();
       });
@@ -125,56 +154,38 @@ describe('feathers-primus', () => {
   });
 
   it('Missing parameters in socket call works. (#88)', function (done) {
-    var service = options.app.service('todo');
-    var old = {
+    const service = options.app.service('todo');
+    const old = {
       find: service.find
     };
 
     service.find = function (params) {
-      assert.deepEqual(_.omit(params, 'query'), options.socketParams,
+      assert.deepEqual(_.omit(params, 'query', 'route'), options.socketParams,
         'Handshake parameters passed on proper position');
-      old.find.apply(this, arguments);
+
+      return old.find.apply(this, arguments);
     };
 
-    options.socket.send('todo::find', function () {
+    options.socket.send('find', 'todo', function () {
       _.extend(service, old);
       done();
     });
   });
 
-  it('uses mountpath for sub-apps and calls their setup', done => {
-    let server;
-    const sub = feathers()
-      .configure(primus({
-        transformer: 'uws'
-      }, function (primus) {
-        const socket = new primus.Socket('http://localhost:9876');
+  describe('Service method calls', () => {
+    describe('(\'method\', \'service\')  event format', () => {
+      describe('Service', () => methodTests('todo', options));
+      describe('Dynamic Service', () => methodTests('todo', options));
+    });
 
-        const original = {
-          name: 'creating'
-        };
-
-        socket.once('v1/todo created', data => {
-          verify.create(original, data);
-          socket.socket.close();
-          server.close(done);
-        });
-
-        socket.send('v1/todo::create', original);
-      }))
-      .use('/todo', Service);
-
-    const main = feathers()
-        .use('/v1', sub);
-
-    server = main.listen(9876);
+    describe('(\'service::method\') legacy event format', () => {
+      describe('Service', () => methodTests('tasks', options, true));
+      describe('Dynamic Service', () => methodTests('tasks', options, true));
+    });
   });
 
-  describe('Services', function () {
-    services('todo', options);
-  });
-
-  describe('Dynamic services', function () {
-    services('tasks', options);
+  describe('Service events', () => {
+    describe('Service', () => eventTests('todo', options));
+    describe('Dynamic Service', () => eventTests('tasks', options));
   });
 });
