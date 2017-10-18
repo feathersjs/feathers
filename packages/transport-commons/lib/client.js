@@ -51,6 +51,7 @@ const addEmitterMethods = service => {
 
 module.exports = class Service {
   constructor (options) {
+    this.events = options.events;
     this.path = options.name;
     this.connection = options.connection;
     this.method = options.method;

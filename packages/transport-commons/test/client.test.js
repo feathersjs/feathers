@@ -14,11 +14,16 @@ describe('client', () => {
     connection = new EventEmitter();
     testData = { data: 'testing ' };
     service = new Service({
+      events: [ 'created' ],
       name: 'todos',
       method: 'emit',
       timeout: 50,
       connection
     });
+  });
+
+  it('sets `events` property on service', () => {
+    assert.ok(service.events);
   });
 
   it('throws an error when the emitter does not have the method', () => {
@@ -144,7 +149,7 @@ describe('client', () => {
 
   it('converts other errors (#19)', () => {
     connection.once('create', (path, data, params, callback) =>
-      callback('Something went wrong')
+      callback('Something went wrong') // eslint-disable-line
     );
 
     return service.create(testData).catch(error => {
