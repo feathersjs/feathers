@@ -72,3 +72,5 @@ module.exports = function feathersExpress (feathersApp) {
 
   return Proto.mixin(mixin, expressApp);
 };
+
+Object.assign(module.exports, express);

@@ -53,6 +53,12 @@ describe('feathers-express', () => {
     assert.equal(child.parent, app);
   });
 
+  it('Can use express.static', () => {
+    const app = expressify(feathers());
+
+    app.use('/path', expressify.static(__dirname));
+  });
+
   it('has Feathers functionality', () => {
     const app = expressify(feathers());
 
