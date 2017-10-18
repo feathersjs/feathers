@@ -1,7 +1,7 @@
 {
   "name": "feathers-socketio-client",
   "description": "The client for Socket.io through feathers-socketio",
-  "version": "0.0.0",
+  "version": "1.0.0-pre.0",
   "homepage": "https://github.com/feathersjs/feathers-socketio-client",
   "main": "lib/",
   "keywords": [
