@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.0.0-pre.5](https://github.com/feathersjs/feathers-socket-commons/tree/v3.0.0-pre.5) (2017-10-18)
+[Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v3.0.0-pre.4...v3.0.0-pre.5)
+
+**Merged pull requests:**
+
+- Pass events property to the client [\#50](https://github.com/feathersjs/feathers-socket-commons/pull/50) ([daffl](https://github.com/daffl))
+
 ## [v3.0.0-pre.4](https://github.com/feathersjs/feathers-socket-commons/tree/v3.0.0-pre.4) (2017-10-17)
 [Full Changelog](https://github.com/feathersjs/feathers-socket-commons/compare/v3.0.0-pre.3...v3.0.0-pre.4)
 
