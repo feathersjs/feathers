@@ -4,6 +4,7 @@ const Request = require('./request');
 const Fetch = require('./fetch');
 const Axios = require('./axios');
 const Angular = require('./angular');
+const Base = require('./base');
 const AngularHttpClient = require('./angular-http-client');
 
 const transports = {
@@ -17,7 +18,7 @@ const transports = {
 };
 
 module.exports = function (base = '') {
-  const result = {};
+  const result = { Base };
 
   Object.keys(transports).forEach(key => {
     const Service = transports[key];

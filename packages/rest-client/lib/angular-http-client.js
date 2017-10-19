@@ -26,9 +26,15 @@ class AngularHttpService extends Base {
       httpClient.request(options.method, url, requestOptions)
         .subscribe(resolve, reject);
     })
-      .catch(error => {
-        throw error.error || error;
-      });
+    .catch(error => {
+      const e = error.error;
+
+      if (e) {
+        throw (typeof e === 'string' ? JSON.parse(e) : e);
+      }
+
+      throw error;
+    });
   }
 }
 

@@ -1,6 +1,7 @@
 const feathers = require('feathers');
+const expressify = require('feathers-express');
 const bodyParser = require('body-parser');
-const memory = require('feathers-memory');
+const { Service } = require('feathers-memory');
 const errors = require('feathers-errors');
 const rest = require('feathers-rest');
 
@@ -31,38 +32,38 @@ let errorHandler = function (error, req, res, next) {
   });
 };
 
-module.exports = function (configurer) {
-  // Create an in-memory CRUD service for our Todos
-  var todoService = memory().extend({
-    get (id, params) {
-      if (params.query.error) {
-        throw new Error('Something went wrong');
-      }
-
-      if (params.query.feathersError) {
-        throw new errors.NotAcceptable('This is a Feathers error', { data: true });
-      }
-
-      return this._super(id, params)
-        .then(data => Object.assign({ query: params.query }, data));
-    },
-
-    remove (id, params) {
-      if (id === null) {
-        return Promise.resolve({
-          id, text: 'deleted many'
-        });
-      }
-
-      if (params.query.noContent) {
-        return Promise.resolve();
-      }
-
-      return this._super.apply(this, arguments);
+// Create an in-memory CRUD service for our Todos
+class TodoService extends Service {
+  get (id, params) {
+    if (params.query.error) {
+      throw new Error('Something went wrong');
     }
-  });
 
-  var app = feathers()
+    if (params.query.feathersError) {
+      throw new errors.NotAcceptable('This is a Feathers error', { data: true });
+    }
+
+    return super.get(id, params)
+      .then(data => Object.assign({ query: params.query }, data));
+  }
+
+  remove (id, params) {
+    if (id === null) {
+      return Promise.resolve({
+        id, text: 'deleted many'
+      });
+    }
+
+    if (params.query.noContent) {
+      return Promise.resolve();
+    }
+
+    return super.remove(id, params);
+  }
+}
+
+module.exports = function (configurer) {
+  const app = expressify(feathers())
     .use(function (req, res, next) {
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Headers', 'Authorization');
@@ -87,14 +88,17 @@ module.exports = function (configurer) {
     .use(bodyParser.json())
     .use(bodyParser.urlencoded({ extended: true }))
     // Host our Todos service on the /todos path
-    .use('/todos', todoService)
+    .use('/todos', new TodoService())
     .use(errorHandler);
 
   if (typeof configurer === 'function') {
     configurer.call(app);
   }
 
-  app.service('todos').create({ text: 'some todo', complete: false }, {}, function () {});
+  app.service('todos').create({
+    text: 'some todo',
+    complete: false
+  });
 
   return app;
 };

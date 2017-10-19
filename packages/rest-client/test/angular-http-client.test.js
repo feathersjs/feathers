@@ -1,5 +1,5 @@
 const assert = require('assert');
-const feathers = require('feathers/client');
+const feathers = require('feathers');
 const baseTests = require('feathers-commons/lib/test/client');
 const errors = require('feathers-errors');
 
@@ -52,6 +52,15 @@ describe('@angular/common/http REST connector', function () {
         complete: false,
         query: {}
       })
+    );
+  });
+
+  it('throws an error without Headers set', () => {
+    const app = feathers().configure(rest(url)
+      .angularHttpClient(angularHttpClient));
+
+    return app.service('dummy').find().catch(e =>
+      assert.equal(e.message, `Please pass angular's 'httpClient' (instance) and and object with 'HttpHeaders' (class) to feathers-rest`)
     );
   });
 

@@ -27,21 +27,15 @@
   },
   "scripts": {
     "publish": "git push origin --tags && npm run changelog && git push origin",
-    "release:pre": "npm run add-dist && npm version prerelease && npm publish --tag pre",
-    "release:patch": "npm run add-dist && npm version patch && npm publish",
-    "release:minor": "npm run add-dist && npm version minor && npm publish",
-    "release:major": "npm run add-dist && npm version major && npm publish",
+    "release:pre": "npm version prerelease && npm publish --tag pre --access public",
+    "release:patch": "npm version patch && npm publish --access public",
+    "release:minor": "npm version minor && npm publish --access public",
+    "release:major": "npm version major && npm publish --access public",
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "lint": "semistandard lib/**/*.js test/**/*.js --fix",
     "mocha": "mocha --opts mocha.opts",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
-    "test": "npm run browserify && npm run lint && npm run coverage",
-    "clean": "shx rm -rf dist/ && shx mkdir -p dist",
-    "prepublish": "npm run browserify",
-    "browserify:dist": "browserify lib/index.js -t babelify --standalone feathers.rest --outfile dist/feathers-rest-client.js",
-    "browserify:min": "browserify lib/index.js -t babelify --standalone feathers.rest | uglifyjs > dist/feathers-rest-client.min.js",
-    "browserify": "npm run clean && npm run browserify:dist && npm run browserify:min",
-    "add-dist": "npm run browserify && git add dist/ --force && git commit -am \"Updating dist\""
+    "test": "npm run lint && npm run coverage"
   },
   "semistandard": {
     "sourceType": "module",
@@ -53,7 +47,7 @@
     "lib": "lib"
   },
   "dependencies": {
-    "feathers-commons": "^0.8.7",
+    "feathers-commons": "^1.0.0-pre.3",
     "feathers-errors": "^2.8.2",
     "qs": "^6.5.0"
   },
@@ -68,9 +62,10 @@
     "babelify": "^7.3.0",
     "body-parser": "^1.17.2",
     "browserify": "^14.4.0",
-    "feathers": "^2.1.4",
+    "feathers": "^3.0.0-pre.1",
+    "feathers-express": "^1.0.0-pre.1",
     "feathers-memory": "^1.1.0",
-    "feathers-rest": "^1.8.0",
+    "feathers-rest": "^2.0.0-pre.1",
     "istanbul": "^1.1.0-alpha.1",
     "jquery": "^3.2.1",
     "jsdom": "^11.1.0",
