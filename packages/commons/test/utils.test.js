@@ -1,10 +1,6 @@
 /* eslint-disable no-unused-expressions */
 
-const feathers = require('feathers');
-
-const {
-  expect
-} = require('chai');
+const { expect } = require('chai');
 
 const {
   _,
@@ -17,7 +13,7 @@ const {
   isPromise
 } = require('../lib/utils');
 
-describe('feathers-commons utils', () => {
+describe('@featherjs/commons utils', () => {
   it('stripSlashes', () => {
     expect(stripSlashes('some/thing')).to.equal('some/thing');
     expect(stripSlashes('/some/thing')).to.equal('some/thing');
@@ -445,13 +441,6 @@ describe('feathers-commons utils', () => {
     describe('when app is not defined', () => {
       it('returns the correct url', () => {
         const uri = makeUrl('test');
-        expect(uri).to.equal('http://localhost:3030/test');
-      });
-    });
-
-    describe('works with an app instance', () => {
-      it('returns the correct url', () => {
-        const uri = makeUrl('test', feathers());
         expect(uri).to.equal('http://localhost:3030/test');
       });
     });

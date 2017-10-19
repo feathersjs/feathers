@@ -1,15 +1,15 @@
 {
-  "name": "feathers-commons",
+  "name": "@featherjs/commons",
   "version": "1.0.0-pre.3",
   "description": "Shared Feathers utility functions",
-  "homepage": "https://github.com/feathersjs/feathers-commons",
+  "homepage": "https://github.com/feathersjs/commons",
   "keywords": [
     "feathers"
   ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/feathers-commons.git"
+    "url": "git://github.com/feathersjs/commons.git"
   },
   "author": {
     "name": "David Luecke",
@@ -18,7 +18,7 @@
   },
   "contributors": [],
   "bugs": {
-    "url": "https://github.com/feathersjs/feathers-commons/issues"
+    "url": "https://github.com/feathersjs/commons/issues"
   },
   "engines": {
     "node": ">= 6"
@@ -26,10 +26,10 @@
   "main": "lib/commons.js",
   "scripts": {
     "publish": "git push origin --tags && npm run changelog && git push origin",
-    "release:patch": "npm version patch && npm publish",
-    "release:minor": "npm version minor && npm publish",
-    "release:major": "npm version major && npm publish",
-    "release:prerelease": "npm version prerelease && npm publish --tag pre",
+    "release:patch": "npm version patch && npm publish --access public",
+    "release:minor": "npm version minor && npm publish --access public",
+    "release:major": "npm version major && npm publish --access public",
+    "release:prerelease": "npm version prerelease && npm publish --tag pre --access public",
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "lint": "semistandard --fix",
     "mocha": "mocha --opts mocha.opts",
@@ -47,7 +47,6 @@
   },
   "devDependencies": {
     "chai": "^4.0.0",
-    "feathers": "^2.0.2",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^4.0.0",
     "semistandard": "^11.0.0"
