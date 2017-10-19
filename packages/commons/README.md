@@ -13,12 +13,13 @@
 
 This is a repository for utility functionality that is shared between different Feathers plugin and used by the main repository.
 
-## Author
 
-- [David Luecke](https://github.com/daffl)
+## Authors
+
+[Feathers contributors](https://github.com/feathersjs/commons/graphs/contributors)
 
 ## License
 
-Copyright (c) 2015 David Luecke
+Copyright (c) 2017 Feathers contributors
 
 Licensed under the [MIT license](LICENSE).
