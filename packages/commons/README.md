@@ -6,7 +6,6 @@
 [![Test Coverage](https://codeclimate.com/github/feathersjs/commons/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/commons/coverage)
 [![Dependency Status](https://img.shields.io/david/feathersjs/commons.svg?style=flat-square)](https://david-dm.org/feathersjs/commons)
 [![Download Status](https://img.shields.io/npm/dm/@featherjs/commons.svg?style=flat-square)](https://www.npmjs.com/package/@featherjs/commons)
-[![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 
 > Shared Feathers utility functions
 
