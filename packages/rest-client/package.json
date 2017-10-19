@@ -1,8 +1,8 @@
 {
-  "name": "feathers-rest-client",
+  "name": "@feathersjs/rest-client",
   "description": "REST client services for different Ajax libraries",
   "version": "1.1.0",
-  "homepage": "https://github.com/feathersjs/feathers-rest-client",
+  "homepage": "https://github.com/feathersjs/rest-client",
   "main": "lib/",
   "keywords": [
     "feathers",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/feathers-rest-client.git"
+    "url": "git://github.com/feathersjs/rest-client.git"
   },
   "author": {
     "name": "Feathers contributors",
@@ -20,7 +20,7 @@
   },
   "contributors": [],
   "bugs": {
-    "url": "https://github.com/feathersjs/feathers-rest-client/issues"
+    "url": "https://github.com/feathersjs/rest-client/issues"
   },
   "engines": {
     "node": ">= 6.0.0"
