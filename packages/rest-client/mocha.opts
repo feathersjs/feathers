@@ -1,1 +1,2 @@
 --recursive test/
+--exit
