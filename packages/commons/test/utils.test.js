@@ -1,17 +1,21 @@
 /* eslint-disable no-unused-expressions */
-import feathers from 'feathers';
-import { expect } from 'chai';
-import {
+
+const feathers = require('feathers');
+
+const {
+  expect
+} = require('chai');
+
+const {
   _,
   specialFilters,
   sorter,
   matcher,
   stripSlashes,
   select,
-  makeUrl
-} from '../src/utils';
-
-if (!global._babelPolyfill) { require('babel-polyfill'); }
+  makeUrl,
+  isPromise
+} = require('../lib/utils');
 
 describe('feathers-commons utils', () => {
   it('stripSlashes', () => {
@@ -21,6 +25,14 @@ describe('feathers-commons utils', () => {
     expect(stripSlashes('/some/thing/')).to.equal('some/thing');
     expect(stripSlashes('//some/thing/')).to.equal('some/thing');
     expect(stripSlashes('//some//thing////')).to.equal('some//thing');
+  });
+
+  it('isPromise', () => {
+    expect(isPromise(Promise.resolve())).to.equal(true);
+    expect(isPromise({
+      then () {}
+    })).to.equal(true);
+    expect(isPromise(null)).to.equal(false);
   });
 
   describe('_', () => {

@@ -1,95 +1,82 @@
-export function stripSlashes (name) {
+exports.stripSlashes = function stripSlashes (name) {
   return name.replace(/^(\/*)|(\/*)$/g, '');
-}
-
-export function each (obj, callback) {
-  if (obj && typeof obj.forEach === 'function') {
-    obj.forEach(callback);
-  } else if (isObject(obj)) {
-    Object.keys(obj).forEach(key => callback(obj[key], key));
-  }
-}
-
-export function some (value, callback) {
-  return Object.keys(value)
-    .map(key => [ value[key], key ])
-    .some(([val, key]) => callback(val, key));
-}
-
-export function every (value, callback) {
-  return Object.keys(value)
-    .map(key => [ value[key], key ])
-    .every(([val, key]) => callback(val, key));
-}
-
-export function keys (obj) {
-  return Object.keys(obj);
-}
-
-export function values (obj) {
-  return _.keys(obj).map(key => obj[key]);
-}
-
-export function isMatch (obj, item) {
-  return _.keys(item).every(key => obj[key] === item[key]);
-}
-
-export function isEmpty (obj) {
-  return _.keys(obj).length === 0;
-}
-
-export function isObject (item) {
-  return (typeof item === 'object' && !Array.isArray(item) && item !== null);
-}
-
-export function extend (...args) {
-  return Object.assign(...args);
-}
-
-export function omit (obj, ...keys) {
-  const result = _.extend({}, obj);
-  keys.forEach(key => delete result[key]);
-  return result;
-}
-
-export function pick (source, ...keys) {
-  const result = {};
-  keys.forEach(key => {
-    result[key] = source[key];
-  });
-  return result;
-}
-
-export function merge (target, source) {
-  if (isObject(target) && isObject(source)) {
-    Object.keys(source).forEach(key => {
-      if (isObject(source[key])) {
-        if (!target[key]) Object.assign(target, { [key]: {} });
-        merge(target[key], source[key]);
-      } else {
-        Object.assign(target, { [key]: source[key] });
-      }
-    });
-  }
-  return target;
-}
-
-export const _ = {
-  each,
-  some,
-  every,
-  keys,
-  values,
-  isMatch,
-  isEmpty,
-  isObject,
-  extend,
-  omit,
-  pick,
-  merge
 };
 
-export const specialFilters = {
+const _ = exports._ = {
+  each (obj, callback) {
+    if (obj && typeof obj.forEach === 'function') {
+      obj.forEach(callback);
+    } else if (_.isObject(obj)) {
+      Object.keys(obj).forEach(key => callback(obj[key], key));
+    }
+  },
+
+  some (value, callback) {
+    return Object.keys(value)
+      .map(key => [ value[key], key ])
+      .some(([val, key]) => callback(val, key));
+  },
+
+  every (value, callback) {
+    return Object.keys(value)
+      .map(key => [ value[key], key ])
+      .every(([val, key]) => callback(val, key));
+  },
+
+  keys (obj) {
+    return Object.keys(obj);
+  },
+
+  values (obj) {
+    return _.keys(obj).map(key => obj[key]);
+  },
+
+  isMatch (obj, item) {
+    return _.keys(item).every(key => obj[key] === item[key]);
+  },
+
+  isEmpty (obj) {
+    return _.keys(obj).length === 0;
+  },
+
+  isObject (item) {
+    return (typeof item === 'object' && !Array.isArray(item) && item !== null);
+  },
+
+  extend (...args) {
+    return Object.assign(...args);
+  },
+
+  omit (obj, ...keys) {
+    const result = _.extend({}, obj);
+    keys.forEach(key => delete result[key]);
+    return result;
+  },
+
+  pick (source, ...keys) {
+    const result = {};
+    keys.forEach(key => {
+      result[key] = source[key];
+    });
+    return result;
+  },
+
+  merge (target, source) {
+    if (_.isObject(target) && _.isObject(source)) {
+      Object.keys(source).forEach(key => {
+        if (_.isObject(source[key])) {
+          if (!target[key]) Object.assign(target, { [key]: {} });
+          _.merge(target[key], source[key]);
+        } else {
+          Object.assign(target, { [key]: source[key] });
+        }
+      });
+    }
+    return target;
+  }
+};
+
+exports.specialFilters = {
   $in (key, ins) {
     return current => ins.indexOf(current[key]) !== -1;
   },
@@ -119,7 +106,7 @@ export const specialFilters = {
   }
 };
 
-export function select (params, ...otherFields) {
+exports.select = function select (params, ...otherFields) {
   const fields = params && params.query && params.query.$select;
 
   if (Array.isArray(fields) && otherFields.length) {
@@ -141,9 +128,9 @@ export function select (params, ...otherFields) {
 
     return convert(result);
   };
-}
+};
 
-export function matcher (originalQuery) {
+exports.matcher = function matcher (originalQuery) {
   const query = _.omit(originalQuery, '$limit', '$skip', '$sort', '$select');
 
   return function (item) {
@@ -154,8 +141,8 @@ export function matcher (originalQuery) {
     return _.every(query, (value, key) => {
       if (value !== null && typeof value === 'object') {
         return _.every(value, (target, filterType) => {
-          if (specialFilters[filterType]) {
-            const filter = specialFilters[filterType](key, target);
+          if (exports.specialFilters[filterType]) {
+            const filter = exports.specialFilters[filterType](key, target);
             return filter(item);
           }
 
@@ -168,12 +155,12 @@ export function matcher (originalQuery) {
       return false;
     });
   };
-}
+};
 
-export function sorter ($sort) {
+exports.sorter = function sorter ($sort) {
   return function (first, second) {
     let comparator = 0;
-    each($sort, (modifier, key) => {
+    _.each($sort, (modifier, key) => {
       modifier = parseInt(modifier, 10);
 
       if (first[key] < second[key]) {
@@ -186,9 +173,9 @@ export function sorter ($sort) {
     });
     return comparator;
   };
-}
+};
 
-export function makeUrl (path, app = {}) {
+exports.makeUrl = function makeUrl (path, app = {}) {
   const get = typeof app.get === 'function' ? app.get.bind(app) : () => {};
   const env = get('env') || process.env.NODE_ENV;
   const host = get('host') || process.env.HOST_NAME || 'localhost';
@@ -198,5 +185,10 @@ export function makeUrl (path, app = {}) {
 
   path = path || '';
 
-  return `${protocol}://${host}${port}/${stripSlashes(path)}`;
-}
+  return `${protocol}://${host}${port}/${exports.stripSlashes(path)}`;
+};
+
+exports.isPromise = function isPromise (result) {
+  return _.isObject(result) &&
+    typeof result.then === 'function';
+};

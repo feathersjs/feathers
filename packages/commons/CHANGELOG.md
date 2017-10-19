@@ -1,5 +1,41 @@
 # Change Log
 
+## [v1.0.0-pre.3](https://github.com/feathersjs/feathers-commons/tree/v1.0.0-pre.3) (2017-10-18)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v1.0.0-pre.2...v1.0.0-pre.3)
+
+**Merged pull requests:**
+
+- Update the client test suite [\#55](https://github.com/feathersjs/feathers-commons/pull/55) ([daffl](https://github.com/daffl))
+- Update mocha to the latest version 🚀 [\#54](https://github.com/feathersjs/feathers-commons/pull/54) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
+## [v1.0.0-pre.2](https://github.com/feathersjs/feathers-commons/tree/v1.0.0-pre.2) (2017-07-11)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v1.0.0-pre.1...v1.0.0-pre.2)
+
+**Merged pull requests:**
+
+- Update to new plugin infrastructure [\#53](https://github.com/feathersjs/feathers-commons/pull/53) ([daffl](https://github.com/daffl))
+
+## [v1.0.0-pre.1](https://github.com/feathersjs/feathers-commons/tree/v1.0.0-pre.1) (2017-06-28)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.8.7...v1.0.0-pre.1)
+
+**Merged pull requests:**
+
+- Commons for Feathers v3 [\#52](https://github.com/feathersjs/feathers-commons/pull/52) ([daffl](https://github.com/daffl))
+- Update chai to the latest version 🚀 [\#51](https://github.com/feathersjs/feathers-commons/pull/51) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update semistandard to the latest version 🚀 [\#50](https://github.com/feathersjs/feathers-commons/pull/50) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#49](https://github.com/feathersjs/feathers-commons/pull/49) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
+## [v0.8.7](https://github.com/feathersjs/feathers-commons/tree/v0.8.7) (2016-11-30)
+[Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.8.6...v0.8.7)
+
+**Closed issues:**
+
+- Matcher function blows up with null values [\#46](https://github.com/feathersjs/feathers-commons/issues/46)
+
+**Merged pull requests:**
+
+- matcher now doesn't blow up with null values. Closes \#46 [\#47](https://github.com/feathersjs/feathers-commons/pull/47) ([ekryski](https://github.com/ekryski))
+
 ## [v0.8.6](https://github.com/feathersjs/feathers-commons/tree/v0.8.6) (2016-11-25)
 [Full Changelog](https://github.com/feathersjs/feathers-commons/compare/v0.8.5...v0.8.6)
 

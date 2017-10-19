@@ -1,225 +1,423 @@
-import { expect } from 'chai';
-
-import { noop } from '../src/arguments';
-import utils from '../src/hooks';
-
-if (!global._babelPolyfill) { require('babel-polyfill'); }
+const { expect } = require('chai');
+const utils = require('../lib/hooks');
 
 describe('hook utilities', () => {
-  it('.hookObject', () => {
-    let hookObject = utils.hookObject('find', 'test', [
-      { some: 'thing' }, noop
-    ]);
-    // find
-    expect(hookObject).to.deep.equal({
-      params: { some: 'thing' },
-      method: 'find',
-      type: 'test',
-      callback: noop
+  describe('.makeArguments', () => {
+    it('basic functionality', () => {
+      let args = utils.makeArguments({
+        id: 2,
+        data: { my: 'data' },
+        params: { some: 'thing' },
+        method: 'update'
+      });
+
+      expect(args).to.deep.equal([2, { my: 'data' }, { some: 'thing' }]);
+
+      args = utils.makeArguments({
+        id: 0,
+        data: { my: 'data' },
+        params: { some: 'thing' },
+        method: 'update'
+      });
+
+      expect(args).to.deep.equal([0, { my: 'data' }, { some: 'thing' }]);
+
+      args = utils.makeArguments({
+        params: { some: 'thing' },
+        method: 'find'
+      });
+
+      expect(args).to.deep.equal([
+        { some: 'thing' }
+      ]);
     });
 
-    const dummyApp = function () {};
+    it('uses .defaultMakeArguments', () => {
+      let args = utils.makeArguments({
+        params: { some: 'thing' },
+        method: 'something',
+        data: { test: 'me' }
+      });
 
-    hookObject = utils.hookObject('find', 'test', [
-        { some: 'thing' }, noop
-    ], dummyApp);
+      expect(args).to.deep.equal([
+        { test: 'me' },
+        { some: 'thing' }
+      ]);
 
-    expect(hookObject).to.deep.equal({
-      params: { some: 'thing' },
-      method: 'find',
-      type: 'test',
-      callback: noop,
-      app: dummyApp
+      args = utils.makeArguments({
+        id: 'testing',
+        method: 'something'
+      });
+
+      expect(args).to.deep.equal([
+        'testing', {}
+      ]);
     });
 
-    hookObject = utils.hookObject('find', 'test', [
-        { some: 'thing' }, noop
-    ], { test: 'me', other: true });
+    it('.makeArguments makes correct argument list for known methods', () => {
+      let args = utils.makeArguments({
+        data: { my: 'data' },
+        params: { some: 'thing' },
+        method: 'update'
+      });
 
-    expect(hookObject).to.deep.equal({
-      params: { some: 'thing' },
-      method: 'find',
-      type: 'test',
-      callback: noop,
-      test: 'me',
-      other: true
-    });
+      expect(args).to.deep.equal([undefined, { my: 'data' }, { some: 'thing' }]);
 
-    // get
-    hookObject = utils.hookObject('get', 'test', [
-      1, { some: 'thing' }, noop
-    ]);
+      args = utils.makeArguments({
+        id: 2,
+        data: { my: 'data' },
+        params: { some: 'thing' },
+        method: 'remove'
+      });
 
-    expect(hookObject).to.deep.equal({
-      id: 1,
-      params: { some: 'thing' },
-      method: 'get',
-      type: 'test',
-      callback: noop
-    });
+      expect(args).to.deep.equal([2, { some: 'thing' }]);
 
-    // remove
-    hookObject = utils.hookObject('remove', 'test', [
-      1, { some: 'thing' }, noop
-    ]);
+      args = utils.makeArguments({
+        id: 2,
+        data: { my: 'data' },
+        params: { some: 'thing' },
+        method: 'create'
+      });
 
-    expect(hookObject).to.deep.equal({
-      id: 1,
-      params: { some: 'thing' },
-      method: 'remove',
-      type: 'test',
-      callback: noop
-    });
-
-    // create
-    hookObject = utils.hookObject('create', 'test', [
-      { my: 'data' }, { some: 'thing' }, noop
-    ]);
-
-    expect(hookObject).to.deep.equal({
-      data: { my: 'data' },
-      params: { some: 'thing' },
-      method: 'create',
-      type: 'test',
-      callback: noop
-    });
-
-    // update
-    hookObject = utils.hookObject('update', 'test', [
-      2, { my: 'data' }, { some: 'thing' }, noop
-    ]);
-
-    expect(hookObject).to.deep.equal({
-      id: 2,
-      data: { my: 'data' },
-      params: { some: 'thing' },
-      method: 'update',
-      type: 'test',
-      callback: noop
-    });
-
-    // patch
-    hookObject = utils.hookObject('patch', 'test', [
-      2, { my: 'data' }, { some: 'thing' }, noop
-    ]);
-
-    expect(hookObject).to.deep.equal({
-      id: 2,
-      data: { my: 'data' },
-      params: { some: 'thing' },
-      method: 'patch',
-      type: 'test',
-      callback: noop
+      expect(args).to.deep.equal([{ my: 'data' }, { some: 'thing' }]);
     });
   });
 
-  it('.makeArguments', () => {
-    let args = utils.makeArguments({
-      id: 2,
-      data: { my: 'data' },
-      params: { some: 'thing' },
-      method: 'update',
-      callback: noop
+  describe('.convertHookData', () => {
+    it('converts existing', () => {
+      expect(utils.convertHookData('test')).to.deep.equal({
+        all: [ 'test' ]
+      });
     });
 
-    expect(args).to.deep.equal([2, { my: 'data' }, { some: 'thing' }, noop]);
-
-    args = utils.makeArguments({
-      id: 0,
-      data: { my: 'data' },
-      params: { some: 'thing' },
-      method: 'update',
-      callback: noop
+    it('converts to `all`', () => {
+      expect(utils.convertHookData([ 'test', 'me' ])).to.deep.equal({
+        all: [ 'test', 'me' ]
+      });
     });
 
-    expect(args).to.deep.equal([0, { my: 'data' }, { some: 'thing' }, noop]);
-
-    args = utils.makeArguments({
-      params: { some: 'thing' },
-      method: 'find',
-      callback: noop
+    it('converts all properties into arrays', () => {
+      expect(utils.convertHookData({
+        all: 'thing',
+        other: 'value',
+        hi: [ 'foo', 'bar' ]
+      }))
+      .to.deep.equal({
+        all: [ 'thing' ],
+        other: [ 'value' ],
+        hi: [ 'foo', 'bar' ]
+      });
     });
-
-    expect(args).to.deep.equal([
-      { some: 'thing' },
-      noop
-    ]);
   });
 
-  it('.defaultMakeArguments', () => {
-    let args = utils.makeArguments({
-      params: { some: 'thing' },
-      method: 'something',
-      data: { test: 'me' },
-      callback: noop
+  describe('.isHookObject', () => {
+    it('with a valid hook object', () => {
+      expect(utils.isHookObject({
+        type: 'before',
+        method: 'here'
+      })).to.equal(true);
     });
 
-    expect(args).to.deep.equal([
-      { test: 'me' },
-      { some: 'thing' },
-      noop
-    ]);
-
-    args = utils.makeArguments({
-      id: 'testing',
-      method: 'something',
-      callback: noop
+    it('with an invalid hook object', () => {
+      expect(utils.isHookObject({
+        type: 'before'
+      })).to.equal(false);
     });
-
-    expect(args).to.deep.equal([
-      'testing', {}, noop
-    ]);
   });
 
-  it('.makeArguments makes correct argument list for known methods', () => {
-    let args = utils.makeArguments({
-      data: { my: 'data' },
-      params: { some: 'thing' },
-      method: 'update',
-      callback: noop
+  describe('.createHookObject', () => {
+    const service = {};
+    const app = {
+      services: {
+        testing: service
+      }
+    };
+    const hookData = { app, service };
+
+    it('for find', () => {
+      let hookObject = utils.createHookObject('find', [
+        { some: 'thing' }
+      ], hookData);
+
+      expect(hookObject).to.deep.equal({
+        params: { some: 'thing' },
+        method: 'find',
+        app,
+        service,
+        path: 'testing'
+      });
+
+      hookObject = utils.createHookObject('find', [
+        { some: 'thing' }
+      ]);
+
+      expect(hookObject).to.deep.equal({
+        params: { some: 'thing' },
+        method: 'find',
+        path: null
+      });
+
+      hookObject = utils.createHookObject('find', [], hookData);
+
+      expect(hookObject).to.deep.equal({
+        params: {},
+        method: 'find',
+        app,
+        service,
+        path: 'testing'
+      });
     });
 
-    expect(args).to.deep.equal([undefined, { my: 'data' }, { some: 'thing' }, noop]);
+    it('for get', () => {
+      let hookObject = utils.createHookObject('get', [
+        1, { some: 'thing' }
+      ], hookData);
 
-    args = utils.makeArguments({
-      id: 2,
-      data: { my: 'data' },
-      params: { some: 'thing' },
-      method: 'remove',
-      callback: noop
+      expect(hookObject).to.deep.equal({
+        id: 1,
+        params: { some: 'thing' },
+        method: 'get',
+        app,
+        service,
+        path: 'testing'
+      });
+
+      hookObject = utils.createHookObject('get', [ 1 ], hookData);
+
+      expect(hookObject).to.deep.equal({
+        id: 1,
+        params: {},
+        method: 'get',
+        app,
+        service,
+        path: 'testing'
+      });
     });
 
-    expect(args).to.deep.equal([2, { some: 'thing' }, noop]);
+    it('for remove', () => {
+      let hookObject = utils.createHookObject('remove', [
+        1, { some: 'thing' }
+      ], hookData);
 
-    args = utils.makeArguments({
-      id: 2,
-      data: { my: 'data' },
-      params: { some: 'thing' },
-      method: 'create',
-      callback: noop
+      expect(hookObject).to.deep.equal({
+        id: 1,
+        params: { some: 'thing' },
+        method: 'remove',
+        app,
+        service,
+        path: 'testing'
+      });
+
+      hookObject = utils.createHookObject('remove', [ 1 ], hookData);
+
+      expect(hookObject).to.deep.equal({
+        id: 1,
+        params: {},
+        method: 'remove',
+        app,
+        service,
+        path: 'testing'
+      });
     });
 
-    expect(args).to.deep.equal([{ my: 'data' }, { some: 'thing' }, noop]);
+    it('for create', () => {
+      const hookObject = utils.createHookObject('create', [
+        { my: 'data' }, { some: 'thing' }
+      ], hookData);
+
+      expect(hookObject).to.deep.equal({
+        data: { my: 'data' },
+        params: { some: 'thing' },
+        method: 'create',
+        app,
+        service,
+        path: 'testing'
+      });
+    });
+
+    it('for update', () => {
+      const hookObject = utils.createHookObject('update', [
+        2, { my: 'data' }, { some: 'thing' }
+      ], hookData);
+
+      expect(hookObject).to.deep.equal({
+        id: 2,
+        data: { my: 'data' },
+        params: { some: 'thing' },
+        method: 'update',
+        app,
+        service,
+        path: 'testing'
+      });
+    });
+
+    it('for patch', () => {
+      const hookObject = utils.createHookObject('patch', [
+        2, { my: 'data' }, { some: 'thing' }
+      ], hookData);
+
+      expect(hookObject).to.deep.equal({
+        id: 2,
+        data: { my: 'data' },
+        params: { some: 'thing' },
+        method: 'patch',
+        app,
+        service,
+        path: 'testing'
+      });
+    });
   });
 
-  it('.convertHookData', () => {
-    expect(utils.convertHookData('test')).to.deep.equal({
-      all: [ 'test' ]
+  describe('.processHooks', () => {
+    it('runs through a hook chain with various formats', () => {
+      const dummyHook = {
+        type: 'dummy',
+        method: 'something'
+      };
+
+      const promise = utils.processHooks([
+        function (hook) {
+          hook.chain = [ 'first' ];
+
+          return Promise.resolve(hook);
+        },
+
+        function (hook, next) {
+          hook.chain.push('second');
+
+          next();
+        },
+
+        hook => {
+          hook.chain.push('third');
+        },
+
+        function (hook) {
+          hook.chain.push('fourth');
+
+          return hook;
+        }
+      ], dummyHook);
+
+      return promise.then(result => {
+        expect(result).to.deep.equal({
+          type: 'dummy',
+          method: 'something',
+          chain: [ 'first', 'second', 'third', 'fourth' ]
+        });
+      });
     });
 
-    expect(utils.convertHookData([ 'test', 'me' ])).to.deep.equal({
-      all: [ 'test', 'me' ]
+    it('errors when invalid hook object is returned', () => {
+      const dummyHook = {
+        type: 'dummy',
+        method: 'something'
+      };
+
+      const promise = utils.processHooks([
+        function () {
+          return {};
+        }
+      ], dummyHook);
+
+      return promise.catch(e => {
+        expect(e.message).to.equal(`dummy hook for 'something' method returned invalid hook object`);
+        expect(typeof e.hook).to.equal('object');
+      });
+    });
+  });
+
+  describe('.enableHooks', () => {
+    it('with custom types', () => {
+      const base = {};
+
+      utils.enableHooks(base, [], ['test']);
+
+      expect(typeof base.__hooks).to.equal('object');
+      expect(typeof base.__hooks.test).to.equal('object');
+      expect(typeof base.__hooks.before).to.equal('undefined');
     });
 
-    expect(utils.convertHookData({
-      all: 'thing',
-      other: 'value',
-      hi: [ 'foo', 'bar' ]
-    }))
-    .to.deep.equal({
-      all: [ 'thing' ],
-      other: [ 'value' ],
-      hi: [ 'foo', 'bar' ]
+    it('does nothing when .hooks method exists', () => {
+      const base = {
+        hooks () {}
+      };
+
+      utils.enableHooks(base, [], ['test']);
+      expect(typeof base.__hooks).to.equal('undefined');
+    });
+
+    describe('.hooks method', () => {
+      let base = {};
+
+      beforeEach(() => {
+        base = utils.enableHooks({}, [ 'testMethod' ], [ 'dummy' ]);
+      });
+
+      it('registers hook with custom type and `all` method', () => {
+        expect(typeof base.hooks).to.equal('function');
+
+        const fn = function () {};
+
+        base.hooks({ dummy: fn });
+
+        expect(base.__hooks.dummy.testMethod).to.deep.equal([ fn ]);
+      });
+
+      it('registers hook with custom type and specific method', () => {
+        base.hooks({
+          dummy: {
+            testMethod () {}
+          }
+        });
+
+        expect(base.__hooks.dummy.testMethod.length).to.equal(1);
+      });
+
+      it('throws an error when registering invalid hook type', () => {
+        try {
+          base.hooks({ wrong: function () {} });
+          throw new Error('Should never get here');
+        } catch (e) {
+          expect(e.message).to.equal(`'wrong' is not a valid hook type`);
+        }
+      });
+
+      it('throws an error when registering invalid method', () => {
+        try {
+          base.hooks({ dummy: {
+            wrongMethod: function () {}
+          } });
+          throw new Error('Should never get here');
+        } catch (e) {
+          expect(e.message).to.equal(`'wrongMethod' is not a valid hook method`);
+        }
+      });
+    });
+  });
+
+  describe('.getHooks', () => {
+    const app = utils.enableHooks({}, [ 'testMethod' ], [ 'dummy' ]);
+    const service = utils.enableHooks({}, [ 'testMethod' ], [ 'dummy' ]);
+    const appHook = function () {};
+    const serviceHook = function () {};
+
+    app.hooks({
+      dummy: appHook
+    });
+
+    service.hooks({
+      dummy: serviceHook
+    });
+
+    it('combines app and service hooks', () => {
+      expect(utils.getHooks(app, service, 'dummy', 'testMethod'))
+        .to.deep.equal([ appHook, serviceHook ]);
+    });
+
+    it('combines app and service hooks with appLast', () => {
+      expect(utils.getHooks(app, service, 'dummy', 'testMethod', true))
+        .to.deep.equal([ serviceHook, appHook ]);
     });
   });
 });
