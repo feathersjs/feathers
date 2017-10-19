@@ -1,4 +1,4 @@
-import assert from 'assert';
+const assert = require('assert');
 
 const findAllData = [{
   id: 0,
@@ -8,7 +8,7 @@ const findAllData = [{
   description: 'You have to do laundry'
 }];
 
-export const Service = {
+exports.Service = {
   events: [ 'log' ],
 
   find () {
@@ -72,7 +72,7 @@ export const Service = {
   }
 };
 
-export const verify = {
+exports.verify = {
   find (data) {
     assert.deepEqual(findAllData, data, 'Data as expected');
   },

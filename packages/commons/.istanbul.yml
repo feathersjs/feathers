@@ -1,10 +1,9 @@
 verbose: false
 instrumentation:
-  root: src/
+  root: lib/
   excludes:
-    - lib/
-    - src/test-fixture.js
-    - src/test/
+    - lib/test-fixture.js
+    - lib/test/
   include-all-sources: false
 reporting:
   print: summary
