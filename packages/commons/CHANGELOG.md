@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.0.0](https://github.com/feathersjs/commons/tree/v1.0.0) (2017-10-19)
+[Full Changelog](https://github.com/feathersjs/commons/compare/v1.0.0-pre.3...v1.0.0)
+
+**Merged pull requests:**
+
+- Rename repository and add to npm scope [\#57](https://github.com/feathersjs/commons/pull/57) ([daffl](https://github.com/daffl))
+- Updates for Feathers v3 \(Buzzard\) [\#56](https://github.com/feathersjs/commons/pull/56) ([daffl](https://github.com/daffl))
+
 ## [v1.0.0-pre.3](https://github.com/feathersjs/commons/tree/v1.0.0-pre.3) (2017-10-18)
 [Full Changelog](https://github.com/feathersjs/commons/compare/v1.0.0-pre.2...v1.0.0-pre.3)
 
