@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/feathersjs/commons.png?branch=master)](https://travis-ci.org/feathersjs/commons)
 [![Test Coverage](https://codeclimate.com/github/feathersjs/commons/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/commons/coverage)
 [![Dependency Status](https://img.shields.io/david/feathersjs/commons.svg?style=flat-square)](https://david-dm.org/feathersjs/commons)
-[![Download Status](https://img.shields.io/npm/dm/@featherjs/commons.svg?style=flat-square)](https://www.npmjs.com/package/@featherjs/commons)
+[![Download Status](https://img.shields.io/npm/dm/@feathersjs/commons.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/commons)
 
 > Shared Feathers utility functions
 
