@@ -1,5 +1,17 @@
 # Change Log
 
+## [v1.2.0](https://github.com/feathersjs/rest-client/tree/v1.2.0) (2017-10-19)
+[Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.1.1-0...v1.2.0)
+
+## [v1.1.1-0](https://github.com/feathersjs/rest-client/tree/v1.1.1-0) (2017-10-19)
+[Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.1.0...v1.1.1-0)
+
+**Merged pull requests:**
+
+- Rename repository to publish in npm namespace [\#5](https://github.com/feathersjs/rest-client/pull/5) ([daffl](https://github.com/daffl))
+- Upgrade to use Feathers v3 [\#4](https://github.com/feathersjs/rest-client/pull/4) ([daffl](https://github.com/daffl))
+- Update mocha to the latest version 🚀 [\#3](https://github.com/feathersjs/rest-client/pull/3) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.1.0](https://github.com/feathersjs/rest-client/tree/v1.1.0) (2017-07-20)
 [Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.0.0...v1.1.0)
 
