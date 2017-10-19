@@ -1,12 +1,12 @@
 # Feathers Commons
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-commons.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/commons.svg)](https://greenkeeper.io/)
 
-[![Build Status](https://travis-ci.org/feathersjs/feathers-commons.png?branch=master)](https://travis-ci.org/feathersjs/feathers-commons)
-[![Code Climate](https://codeclimate.com/github/feathersjs/feathers-commons/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/feathers-commons)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-commons/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-commons/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/feathers-commons.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers-commons)
-[![Download Status](https://img.shields.io/npm/dm/feathers-commons.svg?style=flat-square)](https://www.npmjs.com/package/feathers-commons)
+[![Build Status](https://travis-ci.org/feathersjs/commons.png?branch=master)](https://travis-ci.org/feathersjs/commons)
+[![Code Climate](https://codeclimate.com/github/feathersjs/commons/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/commons)
+[![Test Coverage](https://codeclimate.com/github/feathersjs/commons/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/commons/coverage)
+[![Dependency Status](https://img.shields.io/david/feathersjs/commons.svg?style=flat-square)](https://david-dm.org/feathersjs/commons)
+[![Download Status](https://img.shields.io/npm/dm/@featherjs/commons.svg?style=flat-square)](https://www.npmjs.com/package/@featherjs/commons)
 [![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 
 > Shared Feathers utility functions
