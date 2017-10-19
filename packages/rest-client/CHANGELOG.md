@@ -1,16 +1,16 @@
 # Change Log
 
-## [v1.1.0](https://github.com/feathersjs/feathers-rest-client/tree/v1.1.0) (2017-07-20)
-[Full Changelog](https://github.com/feathersjs/feathers-rest-client/compare/v1.0.0...v1.1.0)
+## [v1.1.0](https://github.com/feathersjs/rest-client/tree/v1.1.0) (2017-07-20)
+[Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.0.0...v1.1.0)
 
 **Merged pull requests:**
 
-- add support for @angular/common/http \(HttpClient\) [\#2](https://github.com/feathersjs/feathers-rest-client/pull/2) ([j2L4e](https://github.com/j2L4e))
+- add support for @angular/common/http \(HttpClient\) [\#2](https://github.com/feathersjs/rest-client/pull/2) ([j2L4e](https://github.com/j2L4e))
 
-## [v1.0.0](https://github.com/feathersjs/feathers-rest-client/tree/v1.0.0) (2017-07-16)
+## [v1.0.0](https://github.com/feathersjs/rest-client/tree/v1.0.0) (2017-07-16)
 **Merged pull requests:**
 
-- Update dependencies to enable Greenkeeper 🌴 [\#1](https://github.com/feathersjs/feathers-rest-client/pull/1) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#1](https://github.com/feathersjs/rest-client/pull/1) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
 
 
