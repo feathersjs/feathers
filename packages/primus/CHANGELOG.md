@@ -1,5 +1,8 @@
 # Change Log
 
+## [v3.0.0-pre.2](https://github.com/feathersjs/feathers-primus/tree/v3.0.0-pre.2) (2017-10-19)
+[Full Changelog](https://github.com/feathersjs/feathers-primus/compare/v3.0.0-pre.1...v3.0.0-pre.2)
+
 ## [v3.0.0-pre.1](https://github.com/feathersjs/feathers-primus/tree/v3.0.0-pre.1) (2017-10-18)
 [Full Changelog](https://github.com/feathersjs/feathers-primus/compare/v2.2.0...v3.0.0-pre.1)
 
