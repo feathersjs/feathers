@@ -1,5 +1,5 @@
 {
-  "name": "@featherjs/commons",
+  "name": "@feathersjs/commons",
   "version": "1.0.0-pre.3",
   "description": "Shared Feathers utility functions",
   "homepage": "https://github.com/feathersjs/commons",
