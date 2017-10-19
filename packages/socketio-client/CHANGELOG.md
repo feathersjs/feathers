@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0-pre.2](https://github.com/feathersjs/socketio-client/tree/v1.0.0-pre.2) (2017-10-19)
+[Full Changelog](https://github.com/feathersjs/socketio-client/compare/v1.0.0-pre.1...v1.0.0-pre.2)
+
+**Merged pull requests:**
+
+- Update dependencies to enable Greenkeeper 🌴 [\#1](https://github.com/feathersjs/socketio-client/pull/1) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.0-pre.1](https://github.com/feathersjs/socketio-client/tree/v1.0.0-pre.1) (2017-10-18)
 
 
