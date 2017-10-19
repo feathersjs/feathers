@@ -1,6 +1,6 @@
 const assert = require('assert');
 const superagent = require('superagent');
-const feathers = require('feathers/client');
+const feathers = require('feathers');
 const baseTests = require('feathers-commons/lib/test/client');
 const errors = require('feathers-errors');
 const server = require('./server');

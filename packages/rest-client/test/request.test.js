@@ -1,6 +1,6 @@
 const assert = require('assert');
 const request = require('request');
-const feathers = require('feathers/client');
+const feathers = require('feathers');
 const baseTests = require('feathers-commons/lib/test/client');
 const errors = require('feathers-errors');
 const server = require('./server');
@@ -51,6 +51,15 @@ describe('node-request REST connector', function () {
           id: 0
         }
       ])
+    );
+  });
+
+  it('catches connection errors', () => {
+    const init = rest('nowhere').request(request);
+    const todos = init.service('todos');
+
+    return todos.find().catch(error =>
+      assert.equal(error.message, 'Invalid URI "nowhere/todos"')
     );
   });
 
