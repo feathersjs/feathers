@@ -65,6 +65,13 @@ describe('Feathers application', () => {
     });
   });
 
+  it('additionally passes `app` as .configure parameter (#558)', done => {
+    feathers().configure(function (app) {
+      assert.equal(this, app);
+      done();
+    });
+  });
+
   describe('Services', () => {
     it('calling .use with a non service object throws', () => {
       const app = feathers();
