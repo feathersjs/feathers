@@ -317,4 +317,61 @@ describe('Feathers application', () => {
       app.setup();
     });
   });
+
+  describe('sub apps', () => {
+    it('re-registers sub-app services with prefix', done => {
+      const app = feathers();
+      const subApp = feathers();
+
+      subApp.use('/service1', {
+        get (id) {
+          return Promise.resolve({
+            id, name: 'service1'
+          });
+        }
+      }).use('/service2', {
+        get (id) {
+          return Promise.resolve({
+            id, name: 'service2'
+          });
+        },
+
+        create (data) {
+          return Promise.resolve(data);
+        }
+      });
+
+      app.use('/api/', subApp);
+
+      app.service('/api/service2').once('created', data => {
+        assert.deepEqual(data, {
+          message: 'This is a test'
+        });
+
+        subApp.service('service2').once('created', data => {
+          assert.deepEqual(data, {
+            message: 'This is another test'
+          });
+
+          done();
+        });
+
+        app.service('api/service2').create({
+          message: 'This is another test'
+        });
+      });
+
+      app.service('/api/service1').get(10).then(data => {
+        assert.equal(data.name, 'service1');
+
+        return app.service('/api/service2').get(1);
+      }).then(data => {
+        assert.equal(data.name, 'service2');
+
+        return subApp.service('service2').create({
+          message: 'This is a test'
+        });
+      });
+    });
+  });
 });
