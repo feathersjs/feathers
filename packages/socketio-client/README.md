@@ -1,6 +1,6 @@
 # @feathersjs/socketio-client
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-socketio-client.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/socketio-client.svg)](https://greenkeeper.io/)
 
 [![Build Status](https://travis-ci.org/feathersjs/socketio-client.png?branch=master)](https://travis-ci.org/feathersjs/socketio-client)
 [![Test Coverage](https://codeclimate.com/github/feathersjs/socketio-client/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/socketio-client/coverage)
