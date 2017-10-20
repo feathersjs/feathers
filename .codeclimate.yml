@@ -1,12 +1,14 @@
 engines:
- duplication:
-   enabled: true
-   config:
-     languages:
-     - javascript
- eslint:
-   enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+  eslint:
+    enabled: true
+    config:
+      config: .eslintrc.js
 ratings:
- paths:
- - "**.js"
+  paths:
+    - "**.js"
 #exclude_paths:
