@@ -1,6 +1,6 @@
 {
-  "name": "feathers",
-  "description": "Build Better APIs, Faster than Ever.",
+  "name": "@feathersjs/feathers",
+  "description": "A REST and realtime API layer for modern applications.",
   "version": "3.0.0-pre.1",
   "homepage": "http://feathersjs.com",
   "repository": {
@@ -14,11 +14,11 @@
     "realtime"
   ],
   "main": "lib/index",
-  "author": "Feathers <hello@feathersjs.com> (http://feathersjs.com)",
-  "contributors": [
-    "Eric Kryski <e.kryski@gmail.com> (http://erickryski.com)",
-    "David Luecke <daff@neyeon.de> (http://neyeon.com)"
-  ],
+  "author": {
+    "name": "Feathers contributor",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/feathersjs/feathers/issues"
