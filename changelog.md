@@ -1,11 +1,13 @@
 # Change Log
 
-## [Unreleased](https://github.com/feathersjs/feathers/tree/HEAD)
-
-[Full Changelog](https://github.com/feathersjs/feathers/compare/v2.2.2...HEAD)
+## [v2.2.3](https://github.com/feathersjs/feathers/tree/v2.2.3) (2017-10-20)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v2.2.2...v2.2.3)
 
 **Merged pull requests:**
 
+- Move Typescript declaration dependency into devDependencies [\#696](https://github.com/feathersjs/feathers/pull/696) ([daffl](https://github.com/daffl))
+- Add changelog back [\#695](https://github.com/feathersjs/feathers/pull/695) ([daffl](https://github.com/daffl))
+- Add support for Feathers v3 sub-apps [\#694](https://github.com/feathersjs/feathers/pull/694) ([daffl](https://github.com/daffl))
 - Feature/typescript fix [\#692](https://github.com/feathersjs/feathers/pull/692) ([TimMensch](https://github.com/TimMensch))
 - Update mocha to the latest version 🚀 [\#685](https://github.com/feathersjs/feathers/pull/685) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
