@@ -1,5 +1,13 @@
 # Change Log
 
+## [v3.0.0-pre.2](https://github.com/feathersjs/feathers/tree/v3.0.0-pre.2) (2017-10-20)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v2.2.3...v3.0.0-pre.2)
+
+**Merged pull requests:**
+
+- Move to @feathersjs npm scope [\#699](https://github.com/feathersjs/feathers/pull/699) ([daffl](https://github.com/daffl))
+- Also pass app object as parameter to configure callbacks [\#698](https://github.com/feathersjs/feathers/pull/698) ([daffl](https://github.com/daffl))
+
 ## [v2.2.3](https://github.com/feathersjs/feathers/tree/v2.2.3) (2017-10-20)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v2.2.2...v2.2.3)
 
