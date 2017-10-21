@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "@feathersjs/errors": "^3.0.0-pre.1",
-    "debug": "^3.0.1",
+    "debug": "^3.1.0",
     "lodash": "^4.17.4",
     "url-pattern": "^1.0.3"
   },
