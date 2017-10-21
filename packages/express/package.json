@@ -48,8 +48,8 @@
     "lib": "lib"
   },
   "dependencies": {
-    "debug": "^3.0.0",
-    "express": "^4.15.3",
+    "debug": "^3.1.0",
+    "express": "^4.16.2",
     "uberproto": "^1.2.0"
   },
   "devDependencies": {
@@ -57,7 +57,6 @@
     "axios": "^0.17.0",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^4.0.0",
-    "semistandard": "^11.0.0",
-    "shx": "^0.2.2"
+    "semistandard": "^11.0.0"
   }
 }
