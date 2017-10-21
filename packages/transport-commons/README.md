@@ -3,13 +3,11 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/socket-commons.svg)](https://greenkeeper.io/)
 
 [![Build Status](https://travis-ci.org/feathersjs/socket-commons.png?branch=master)](https://travis-ci.org/feathersjs/socket-commons)
-[![Code Climate](https://codeclimate.com/github/feathersjs/socket-commons/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/socket-commons)
 [![Test Coverage](https://codeclimate.com/github/feathersjs/socket-commons/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/socket-commons/coverage)
 [![Dependency Status](https://img.shields.io/david/feathersjs/socket-commons.svg?style=flat-square)](https://david-dm.org/feathersjs/socket-commons)
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/socket-commons.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/socket-commons)
-[![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 
-> Shared functionality for websocket providers like [feathers-socketio](https://github.com/feathersjs/feathers-socketio) and [feathers-primus](https://github.com/feathersjs/feathers-primus). Only intended to be used internally by other Feathers real-time providers.
+> Shared functionality for websocket providers like [@feathers/socketio](https://github.com/feathersjs/socketio) and [@feathersjs/primus](https://github.com/feathersjs/primus). Only intended to be used internally by other Feathers real-time providers.
 
 ## About
 
