@@ -1,10 +1,7 @@
 const assert = require('assert');
 
-const {
-  EventEmitter
-} = require('events');
-
-const errors = require('feathers-errors');
+const { EventEmitter } = require('events');
+const errors = require('@feathersjs/errors');
 const Service = require('../lib/client');
 
 describe('client', () => {

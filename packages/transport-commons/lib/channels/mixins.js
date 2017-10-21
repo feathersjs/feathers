@@ -1,4 +1,4 @@
-const debug = require('debug')('feathers-socket-commons:channels/mixins');
+const debug = require('debug')('@feathersjs/socket-commons:channels/mixins');
 const Channel = require('./channel/base');
 const CombinedChannel = require('./channel/combined');
 
