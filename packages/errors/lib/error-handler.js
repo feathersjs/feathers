@@ -1,12 +1,12 @@
-import path from 'path';
-import errors from './index';
+const path = require('path');
+const errors = require('./index');
 
 const defaults = {
   public: path.resolve(__dirname, 'public')
 };
 const defaultError = path.resolve(defaults.public, 'default.html');
 
-export default function (options = {}) {
+module.exports = function (options = {}) {
   options = Object.assign({}, defaults, options);
 
   if (typeof options.html === 'undefined') {
@@ -84,4 +84,4 @@ export default function (options = {}) {
       formatter['application/json'](error, req, res, next);
     }
   };
-}
+};

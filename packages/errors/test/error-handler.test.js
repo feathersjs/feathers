@@ -1,19 +1,20 @@
-/* eslint-disable handle-callback-err, no-unused-expressions */
+/* eslint-disable handle-callback-err */
+/* eslint-disable no-unused-expressions */
+const feathers = require('feathers');
 
-import feathers from 'feathers';
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import request from 'request';
-import fs from 'fs';
-import { join } from 'path';
-import { errors } from '../src';
-import handler from '../src/error-handler';
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+const request = require('request');
+const fs = require('fs');
+const { join } = require('path');
 
-if (!global._babelPolyfill) { require('babel-polyfill'); }
+const errors = require('../lib');
+const handler = require('../lib/error-handler');
 
 chai.use(sinonChai);
 
+const { expect } = chai;
 const content = '<html><head></head><body>Error</body></html>';
 
 let htmlHandler = sinon.spy(function (error, req, res, next) {
@@ -66,7 +67,7 @@ describe('error-handler', () => {
 
       it('is called', done => {
         request(options, (error, res, body) => {
-          expect(htmlHandler).to.be.called;
+          expect(htmlHandler).to.be.called; // eslint-disable-line
           done();
         });
       });
@@ -172,7 +173,7 @@ describe('error-handler', () => {
 
     describe('text/html format', () => {
       it('serves a 404.html', done => {
-        fs.readFile(join(__dirname, '..', 'src', 'public', '404.html'), function (err, html) {
+        fs.readFile(join(__dirname, '..', 'lib', 'public', '404.html'), function (err, html) {
           request({
             url: 'http://localhost:5050/path/to/nowhere',
             headers: {
@@ -188,7 +189,7 @@ describe('error-handler', () => {
       });
 
       it('serves a 500.html', done => {
-        fs.readFile(join(__dirname, '..', 'src', 'public', 'default.html'), function (err, html) {
+        fs.readFile(join(__dirname, '..', 'lib', 'public', 'default.html'), function (err, html) {
           request({
             url: 'http://localhost:5050/error',
             headers: {
@@ -204,7 +205,7 @@ describe('error-handler', () => {
       });
 
       it('returns html when Content-Type header is set', done => {
-        fs.readFile(join(__dirname, '..', 'src', 'public', '404.html'), function (err, html) {
+        fs.readFile(join(__dirname, '..', 'lib', 'public', '404.html'), function (err, html) {
           request({
             url: 'http://localhost:5050/path/to/nowhere',
             headers: {
@@ -219,7 +220,7 @@ describe('error-handler', () => {
       });
 
       it('returns html when Accept header is set', done => {
-        fs.readFile(join(__dirname, '..', 'src', 'public', '404.html'), function (err, html) {
+        fs.readFile(join(__dirname, '..', 'lib', 'public', '404.html'), function (err, html) {
           request({
             url: 'http://localhost:5050/path/to/nowhere',
             headers: {

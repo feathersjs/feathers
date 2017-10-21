@@ -1,9 +1,11 @@
-import chai, { expect } from 'chai';
-import sinonChai from 'sinon-chai';
-import { errors } from '../src';
-import handler from '../src/not-found-handler';
+const chai = require('chai');
+const sinonChai = require('sinon-chai');
 
-if (!global._babelPolyfill) { require('babel-polyfill'); }
+const errors = require('../lib');
+
+const handler = require('../lib/not-found-handler');
+
+const { expect } = chai;
 
 chai.use(sinonChai);
 
