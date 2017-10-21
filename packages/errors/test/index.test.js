@@ -1,7 +1,9 @@
-import assert from 'assert';
-import { types, errors, convert } from '../src';
+const assert = require('assert');
 
-describe('feathers-errors', () => {
+const errors = require('../lib');
+const { convert } = errors;
+
+describe('@feathersjs/errors', () => {
   it('is CommonJS compatible', () => {
     assert.equal(typeof require('../lib'), 'object');
     assert.equal(typeof require('../lib').FeathersError, 'function');
@@ -33,6 +35,10 @@ describe('feathers-errors', () => {
       assert.ok(error instanceof Error);
       assert.equal(error.message, 'Something went wrong');
     });
+
+    it('converts nothing', () =>
+      assert.equal(convert(null), null)
+    );
   });
 
   describe('error types', () => {
@@ -165,17 +171,18 @@ describe('feathers-errors', () => {
     });
 
     it('instantiates every error', () => {
-      Object.keys(types).forEach(name => {
-        const E = types[name];
+      Object.keys(errors).forEach(name => {
+        if (name === 'convert') {
+          return;
+        }
+
+        const E = errors[name];
+
         if (E) {
           new E('Something went wrong'); // eslint-disable-line no-new
         }
       });
     });
-  });
-
-  it('exposes errors via types for backwards compatibility', () => {
-    assert.notEqual(typeof types.BadRequest, 'undefined', 'has BadRequest');
   });
 
   describe('successful error creation', () => {
@@ -318,7 +325,19 @@ describe('feathers-errors', () => {
         const text = 'NotFound: Not the error you are looking for';
 
         assert.equal(e.stack.indexOf(text), 0);
+
         assert.ok(e.stack.indexOf('index.test.js') !== -1);
+
+        const oldCST = Error.captureStackTrace;
+
+        delete Error.captureStackTrace;
+
+        try {
+          throw new errors.NotFound('Not the error you are looking for');
+        } catch (e) {
+          assert.ok(e);
+          Error.captureStackTrace = oldCST;
+        }
       }
     });
   });

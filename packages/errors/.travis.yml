@@ -3,14 +3,13 @@ language: node_js
 node_js:
   - node
   - '6'
-  - '4'
 before_script:
 - npm install -g codeclimate-test-reporter
 after_script:
 - codeclimate-test-reporter < coverage/lcov.info
 addons:
   code_climate:
-    repo_token: 79bf1da6311c0a60e481f617f3666ae4068535bca3f9e0cfaa5a1500758d986b
+    repo_token: 39c710513d49b85f9cd9360fae42a7019691b96d639a5e95caf3116a09f455f6
 notifications:
   email: false
   slack:

@@ -1,7 +1,7 @@
-import errors from './index';
+const errors = require('./index');
 
-export default function () {
+module.exports = function () {
   return function (req, res, next) {
     next(new errors.NotFound('Page not found'));
   };
-}
+};
