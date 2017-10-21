@@ -29,10 +29,11 @@ Here's an example of a Feathers server that uses `@feathersjs/express`.
 
 ```js
 const feathers = require('feathers');
-const expressify = require('@feathersjs/express');
+const express = require('@feathersjs/express');
 
-const app = expressify(feathers());
+const app = express(feathers());
 
+app.configure(express.rest());
 app.use('/myservice', {
   get(id) {
     return Promise.resolve({ id });

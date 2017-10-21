@@ -1,8 +1,7 @@
 const assert = require('assert');
-
 const express = require('express');
-const feathers = require('@feathersjs/feathers');
 const axios = require('axios');
+const feathers = require('@feathersjs/feathers');
 
 const expressify = require('../lib');
 
@@ -17,6 +16,10 @@ describe('@feathersjs/express', () => {
     const app = expressify(feathers());
 
     assert.equal(typeof app, 'function');
+  });
+
+  it('exports `express.rest`', () => {
+    assert.ok(typeof expressify.rest === 'function');
   });
 
   it('errors when not app is provided', () => {
