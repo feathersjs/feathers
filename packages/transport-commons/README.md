@@ -1,19 +1,19 @@
-# feathers-socket-commons
+# @feathersjs/socket-commons
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-socket-commons.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/socket-commons.svg)](https://greenkeeper.io/)
 
-[![Build Status](https://travis-ci.org/feathersjs/feathers-socket-commons.png?branch=master)](https://travis-ci.org/feathersjs/feathers-socket-commons)
-[![Code Climate](https://codeclimate.com/github/feathersjs/feathers-socket-commons/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/feathers-socket-commons)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-socket-commons/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-socket-commons/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/feathers-socket-commons.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers-socket-commons)
-[![Download Status](https://img.shields.io/npm/dm/feathers-socket-commons.svg?style=flat-square)](https://www.npmjs.com/package/feathers-socket-commons)
+[![Build Status](https://travis-ci.org/feathersjs/socket-commons.png?branch=master)](https://travis-ci.org/feathersjs/socket-commons)
+[![Code Climate](https://codeclimate.com/github/feathersjs/socket-commons/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/socket-commons)
+[![Test Coverage](https://codeclimate.com/github/feathersjs/socket-commons/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/socket-commons/coverage)
+[![Dependency Status](https://img.shields.io/david/feathersjs/socket-commons.svg?style=flat-square)](https://david-dm.org/feathersjs/socket-commons)
+[![Download Status](https://img.shields.io/npm/dm/@feathersjs/socket-commons.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/socket-commons)
 [![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 
 > Shared functionality for websocket providers like [feathers-socketio](https://github.com/feathersjs/feathers-socketio) and [feathers-primus](https://github.com/feathersjs/feathers-primus). Only intended to be used internally by other Feathers real-time providers.
 
 ## About
 
-`feathers-socket-commons` contains internal shared functionality for Feathers real-time providers (currently Socket.io and Primus).
+`@feathersjs/socket-commons` contains internal shared functionality for Feathers real-time providers (currently Socket.io and Primus).
 
 `lib/client.js` is a base socket service client
 `lib/index.js` returns a configurable function and requires the following options:
@@ -28,7 +28,7 @@
 Channels provide channel functionality for bi-directional Feathers service providers. It is e.g. used by the Socket.io and Primus provider to quickly determine what messages to send to connected clients.
 
 ```
-const channels = require('feathers-socket-commons/lib/channels');
+const channels = require('@feathersjs/socket-commons/lib/channels');
 ```
 
 ## Documentation

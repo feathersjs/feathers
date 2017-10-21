@@ -1,10 +1,10 @@
 const assert = require('assert');
 const { EventEmitter } = require('events');
-const feathers = require('feathers');
+const feathers = require('@feathersjs/feathers');
 
 const commons = require('../lib');
 
-describe('feathers-socket-commons', () => {
+describe('@feathersjs/socket-commons', () => {
   let provider, options, app, connection;
 
   beforeEach(() => {

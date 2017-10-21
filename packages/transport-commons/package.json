@@ -1,8 +1,8 @@
 {
-  "name": "feathers-socket-commons",
+  "name": "@feathersjs/socket-commons",
   "description": "Shared functionality for websocket providers",
   "version": "3.0.0-pre.5",
-  "homepage": "https://github.com/feathersjs/feathers-socket-commons",
+  "homepage": "https://github.com/feathersjs/socket-commons",
   "main": "lib/",
   "keywords": [
     "feathers",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/feathers-socket-commons.git"
+    "url": "git://github.com/feathersjs/socket-commons.git"
   },
   "author": {
     "name": "Feathers contributors",
@@ -20,7 +20,7 @@
   },
   "contributors": [],
   "bugs": {
-    "url": "https://github.com/feathersjs/feathers-socket-commons/issues"
+    "url": "https://github.com/feathersjs/socket-commons/issues"
   },
   "engines": {
     "node": ">= 6"
@@ -46,13 +46,13 @@
     "lib": "lib"
   },
   "dependencies": {
+    "@feathersjs/errors": "^3.0.0-pre.1",
     "debug": "^3.0.1",
-    "feathers-errors": "^2.9.1",
     "lodash": "^4.17.4",
     "url-pattern": "^1.0.3"
   },
   "devDependencies": {
-    "feathers": "^3.0.0-pre.1",
+    "@feathersjs/feathers": "^3.0.0-pre.2",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^4.0.0",
     "semistandard": "^11.0.0"

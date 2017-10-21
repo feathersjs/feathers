@@ -1,7 +1,7 @@
 const assert = require('assert');
 const { EventEmitter } = require('events');
-const feathers = require('feathers');
-const errors = require('feathers-errors');
+const feathers = require('@feathersjs/feathers');
+const errors = require('@feathersjs/errors');
 
 const {
   normalizeError,

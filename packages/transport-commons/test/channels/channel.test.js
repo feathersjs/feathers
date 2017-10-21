@@ -1,5 +1,5 @@
 const assert = require('assert');
-const feathers = require('feathers');
+const feathers = require('@feathersjs/feathers');
 const channels = require('../../lib/channels');
 const Channel = require('../../lib/channels/channel/base');
 const CombinedChannel = require('../../lib/channels/channel/combined');
