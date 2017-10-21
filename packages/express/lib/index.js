@@ -1,14 +1,14 @@
-const debug = require('debug')('feathers-express');
+const debug = require('debug')('@feathersjs/express');
 const express = require('express');
 const Proto = require('uberproto');
 
 module.exports = function feathersExpress (feathersApp) {
   if (!feathersApp || typeof feathersApp.setup !== 'function') {
-    throw new Error('feathers-express requires a valid Feathers application instance');
+    throw new Error('@feathersjs/express requires a valid Feathers application instance');
   }
 
   if (!feathersApp.version || feathersApp.version < '3.0.0') {
-    throw new Error(`feathers-express requires an instance of a Feathers application version 3.x or later (got ${feathersApp.version || 'unknown'})`);
+    throw new Error(`@feathersjs/express requires an instance of a Feathers application version 3.x or later (got ${feathersApp.version || 'unknown'})`);
   }
 
   const expressApp = express();

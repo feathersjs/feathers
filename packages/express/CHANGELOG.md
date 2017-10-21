@@ -1,18 +1,18 @@
 # Change Log
 
-## [v1.0.0-pre.2](https://github.com/feathersjs/feathers-express/tree/v1.0.0-pre.2) (2017-10-18)
-[Full Changelog](https://github.com/feathersjs/feathers-express/compare/v1.0.0-pre.1...v1.0.0-pre.2)
+## [v1.0.0-pre.2](https://github.com/feathersjs/express/tree/v1.0.0-pre.2) (2017-10-18)
+[Full Changelog](https://github.com/feathersjs/express/compare/v1.0.0-pre.1...v1.0.0-pre.2)
 
 **Merged pull requests:**
 
-- Also export Express top level functionality [\#5](https://github.com/feathersjs/feathers-express/pull/5) ([daffl](https://github.com/daffl))
-- Update mocha to the latest version 🚀 [\#4](https://github.com/feathersjs/feathers-express/pull/4) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
-- Update debug to the latest version 🚀 [\#2](https://github.com/feathersjs/feathers-express/pull/2) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Also export Express top level functionality [\#5](https://github.com/feathersjs/express/pull/5) ([daffl](https://github.com/daffl))
+- Update mocha to the latest version 🚀 [\#4](https://github.com/feathersjs/express/pull/4) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update debug to the latest version 🚀 [\#2](https://github.com/feathersjs/express/pull/2) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
-## [v1.0.0-pre.1](https://github.com/feathersjs/feathers-express/tree/v1.0.0-pre.1) (2017-07-19)
+## [v1.0.0-pre.1](https://github.com/feathersjs/express/tree/v1.0.0-pre.1) (2017-07-19)
 **Merged pull requests:**
 
-- Update dependencies to enable Greenkeeper 🌴 [\#1](https://github.com/feathersjs/feathers-express/pull/1) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#1](https://github.com/feathersjs/express/pull/1) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
 
 
