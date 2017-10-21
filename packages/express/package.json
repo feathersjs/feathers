@@ -48,6 +48,8 @@
     "lib": "lib"
   },
   "dependencies": {
+    "@feathersjs/commons": "^1.0.0",
+    "@feathersjs/errors": "^3.0.0-pre.1",
     "debug": "^3.1.0",
     "express": "^4.16.2",
     "uberproto": "^1.2.0"

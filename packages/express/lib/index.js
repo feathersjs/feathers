@@ -1,6 +1,8 @@
-const debug = require('debug')('@feathersjs/express');
 const express = require('express');
 const Proto = require('uberproto');
+const debug = require('debug')('feathersjs/express');
+
+const rest = require('./rest');
 
 module.exports = function feathersExpress (feathersApp) {
   if (!feathersApp || typeof feathersApp.setup !== 'function') {
@@ -73,4 +75,4 @@ module.exports = function feathersExpress (feathersApp) {
   return Proto.mixin(mixin, expressApp);
 };
 
-Object.assign(module.exports, express);
+Object.assign(module.exports, express, { rest });
