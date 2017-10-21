@@ -1,5 +1,18 @@
 # Change Log
 
+## [v3.0.0-pre.6](https://github.com/feathersjs/socket-commons/tree/v3.0.0-pre.6) (2017-10-21)
+[Full Changelog](https://github.com/feathersjs/socket-commons/compare/v3.0.0-pre.5...v3.0.0-pre.6)
+
+**Closed issues:**
+
+- feathers-socket-commons produces error when it get bundled and steal-socket.io gets used as connection [\#44](https://github.com/feathersjs/socket-commons/issues/44)
+- Surface src/events.js lines 44-69 for feathers-hooks-common/src/filters/combine.js [\#40](https://github.com/feathersjs/socket-commons/issues/40)
+
+**Merged pull requests:**
+
+- Updates for Feathers v3 \(Buzzard\) [\#52](https://github.com/feathersjs/socket-commons/pull/52) ([daffl](https://github.com/daffl))
+- Rename repository and use npm scope [\#51](https://github.com/feathersjs/socket-commons/pull/51) ([daffl](https://github.com/daffl))
+
 ## [v3.0.0-pre.5](https://github.com/feathersjs/socket-commons/tree/v3.0.0-pre.5) (2017-10-18)
 [Full Changelog](https://github.com/feathersjs/socket-commons/compare/v3.0.0-pre.4...v3.0.0-pre.5)
 
