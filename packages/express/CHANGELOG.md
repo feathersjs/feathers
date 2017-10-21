@@ -1,5 +1,14 @@
 # Change Log
 
+## [v1.0.0-pre.3](https://github.com/feathersjs/express/tree/v1.0.0-pre.3) (2017-10-21)
+[Full Changelog](https://github.com/feathersjs/express/compare/v1.0.0-pre.2...v1.0.0-pre.3)
+
+**Merged pull requests:**
+
+- Add REST provider to Express framework bindings [\#8](https://github.com/feathersjs/express/pull/8) ([daffl](https://github.com/daffl))
+- Update repository name and move to npm scope [\#7](https://github.com/feathersjs/express/pull/7) ([daffl](https://github.com/daffl))
+- Update axios to the latest version 🚀 [\#6](https://github.com/feathersjs/express/pull/6) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.0-pre.2](https://github.com/feathersjs/express/tree/v1.0.0-pre.2) (2017-10-18)
 [Full Changelog](https://github.com/feathersjs/express/compare/v1.0.0-pre.1...v1.0.0-pre.2)
 
