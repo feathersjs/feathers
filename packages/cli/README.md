@@ -5,13 +5,9 @@
 > The command line interface for Feathers applications
 
 [![Build Status](https://img.shields.io/travis/feathersjs/feathers-cli/master.svg)](https://travis-ci.org/feathersjs/feathers-cli)
-[![Code Climate](https://img.shields.io/codeclimate/github/feathersjs/feathers-cli.svg)](https://codeclimate.com/github/feathersjs/feathers-cli)
 [![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-cli/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-cli/coverage)
 [![Dependency Status](https://img.shields.io/david/feathersjs/feathers-cli.svg)](https://david-dm.org/feathersjs/feathers-cli)
 [![Download Status](https://img.shields.io/npm/dm/feathers-cli.svg)](https://www.npmjs.com/package/feathers-cli)
-[![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
-
-[![NPM](https://nodei.co/npm/feathers-cli.png?downloads=true&stars=true)](https://nodei.co/npm/feathers-cli/)
 
 ## Installation
 

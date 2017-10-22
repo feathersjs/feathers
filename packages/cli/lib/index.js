@@ -1,7 +1,7 @@
-import yeoman from 'yeoman-environment';
-import program from 'commander';
-import meta from 'generator-feathers/meta';
-import semver from 'semver';
+const yeoman = require('yeoman-environment');
+const program = require('commander');
+const meta = require('generator-feathers/meta');
+const semver = require('semver');
 
 const env = yeoman.createEnv();
 
@@ -12,9 +12,7 @@ Object.keys(meta).forEach(name => {
   env.register(require.resolve(moduleName), `feathers:${name}`);
 });
 
-module.exports = function(argv, generatorOptions = {
-  disableNotifyUpdate: true
-}) {
+module.exports = function (argv, generatorOptions = {}) {
   let description = 'Run a generator. Type can be\n';
 
   Object.keys(meta).forEach(name => {
@@ -24,7 +22,7 @@ module.exports = function(argv, generatorOptions = {
   program.version(require('../package.json').version)
     .usage('generate [type]');
 
-  if(!semver.satisfies(process.version, '>= 6.0.0')) {
+  if (!semver.satisfies(process.version, '>= 6.0.0')) {
     console.error('The Feathers CLI and generated application requires Node v6.0.0 or later.');
     return process.exit(1);
   }
