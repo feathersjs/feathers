@@ -1,7 +1,7 @@
+const feathers = require('@feathersjs/feathers');
+const express = require('@feathersjs/express');
 const assert = require('assert');
 const _ = require('lodash');
-const feathers = require('feathers');
-const expressify = require('feathers-express');
 const io = require('socket.io-client');
 const request = require('request');
 const { Service } = require('feathers-commons/lib/test/fixture');
@@ -10,7 +10,7 @@ const methodTests = require('./methods.js');
 const eventTests = require('./events');
 const socketio = require('../lib');
 
-describe('feathers-socketio', () => {
+describe('@feathersjs/socketio', () => {
   let app, server, socket;
 
   const socketParams = {
@@ -97,7 +97,7 @@ describe('feathers-socketio', () => {
 
   it('expressified app works', done => {
     const data = { message: 'Hello world' };
-    const app = expressify(feathers())
+    const app = express(feathers())
       .configure(socketio())
       .use('/test', (req, res) => res.json(data));
     const srv = app.listen(8992).on('listening', () => {
