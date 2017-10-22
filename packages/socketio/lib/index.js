@@ -1,10 +1,10 @@
 const socketio = require('socket.io');
 const Proto = require('uberproto');
 const http = require('http');
-const commons = require('feathers-socket-commons');
-const debug = require('debug')('feathers-socketio');
+const commons = require('@feathersjs/socket-commons');
+const debug = require('debug')('@feathersjs/socketio');
 
-const socketKey = Symbol('feathers-socketio/socket');
+const socketKey = Symbol('@feathersjs/socketio/socket');
 
 module.exports = function (port, options, config) {
   if (typeof port !== 'number') {

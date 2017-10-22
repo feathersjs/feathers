@@ -1,13 +1,11 @@
-# feathers-socketio
+# @feathersjs/socketio
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-socketio.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/socketio.svg)](https://greenkeeper.io/)
 
-[![Build Status](https://travis-ci.org/feathersjs/feathers-socketio.png?branch=master)](https://travis-ci.org/feathersjs/feathers-socketio)
-[![Code Climate](https://codeclimate.com/github/feathersjs/feathers-socketio/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/feathers-socketio)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-socketio/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-socketio/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/feathers-socketio.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers-socketio)
-[![Download Status](https://img.shields.io/npm/dm/feathers-socketio.svg?style=flat-square)](https://www.npmjs.com/package/feathers-socketio)
-[![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
+[![Build Status](https://travis-ci.org/feathersjs/socketio.png?branch=master)](https://travis-ci.org/feathersjs/socketio)
+[![Test Coverage](https://codeclimate.com/github/feathersjs/socketio/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/socketio/coverage)
+[![Dependency Status](https://img.shields.io/david/feathersjs/socketio.svg?style=flat-square)](https://david-dm.org/feathersjs/socketio)
+[![Download Status](https://img.shields.io/npm/dm/@feathersjs/socketio.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/socketio)
 
 > The Feathers Socket.io real-time API provider
 
@@ -20,8 +18,8 @@ __Note:__ For the full API documentation go to [https://docs.feathersjs.com/api/
 ## Quick example
 
 ```js
-import feathers from 'feathers';
-import socketio from 'feathers-socketio';
+import feathers from '@feathersjs/feathers';
+import socketio from '@feathersjs/socketio';
 
 const app = feathers()
   .configure(socketio(function(io) {
@@ -63,7 +61,7 @@ app.use('/todos', {
 ```js
 import io from 'socket.io-client';
 import feathers from 'feathers/client';
-import socketio from 'feathers-socketio/client';
+import socketio from '@feathersjs/socketio/client';
 
 const socket = io('http://path/to/api');
 const app = feathers()
