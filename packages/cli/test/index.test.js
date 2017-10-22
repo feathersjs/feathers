@@ -1,5 +1,5 @@
-import assert from 'assert';
-import plugin from '../src';
+const assert = require('assert');
+const cli = require('../lib');
 
 describe('feathers-cli', () => {
   it('is CommonJS compatible', () => {
@@ -7,7 +7,11 @@ describe('feathers-cli', () => {
   });
 
   it('basic functionality', done => {
-    assert.equal(typeof plugin, 'function', 'It worked');
+    assert.equal(typeof cli, 'function', 'It worked');
     done();
+  });
+
+  it('runs the program with `generate` argument', () => {
+    cli([ null, __filename, 'generate' ]);
   });
 });
