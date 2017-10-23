@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0-pre.2](https://github.com/feathersjs/primus-client/tree/v1.0.0-pre.2) (2017-10-23)
+[Full Changelog](https://github.com/feathersjs/primus-client/compare/v1.0.0-pre.1...v1.0.0-pre.2)
+
+**Merged pull requests:**
+
+- Use scoped npm packages [\#2](https://github.com/feathersjs/primus-client/pull/2) ([daffl](https://github.com/daffl))
+
 ## [v1.0.0-pre.1](https://github.com/feathersjs/primus-client/tree/v1.0.0-pre.1) (2017-10-19)
 **Merged pull requests:**
 
