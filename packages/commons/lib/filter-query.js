@@ -1,5 +1,6 @@
 const { _ } = require('./utils');
 
+// Officially supported query parameters ($populate is kind of special)
 const PROPERTIES = ['$sort', '$limit', '$skip', '$select', '$populate'];
 
 function parse (number) {
@@ -8,6 +9,8 @@ function parse (number) {
   }
 }
 
+// Returns the pagination limit and will take into account the
+// default and max pagination settings
 function getLimit (limit, paginate) {
   if (paginate && paginate.default) {
     const lower = typeof limit === 'number' ? limit : paginate.default;
@@ -19,6 +22,7 @@ function getLimit (limit, paginate) {
   return limit;
 }
 
+// Makes sure that $sort order is always converted to an actual number
 function convertSort (sort) {
   if (typeof sort !== 'object') {
     return sort;
@@ -26,11 +30,17 @@ function convertSort (sort) {
 
   const result = {};
 
-  Object.keys(sort).forEach(key => (result[key] = typeof sort[key] === 'object' ? sort[key] : parseInt(sort[key], 10)));
+  Object.keys(sort).forEach(key => {
+    result[key] = typeof sort[key] === 'object'
+      ? sort[key] : parseInt(sort[key], 10);
+  });
 
   return result;
 }
 
+// Converts Feathers special query parameters and pagination settings
+// and returns them separately a `filters` and the rest of the query
+// as `query`
 module.exports = function (query, paginate) {
   let filters = {
     $sort: convertSort(query.$sort),

@@ -308,6 +308,30 @@ describe('hook utilities', () => {
       });
     });
 
+    it('next and next with error', () => {
+      const dummyHook = {
+        type: 'dummy',
+        method: 'something'
+      };
+
+      const promise = utils.processHooks([
+        function (hook, next) {
+          hook.test = 'first ran';
+
+          next();
+        },
+
+        function (hook, next) {
+          next(new Error('This did not work'));
+        }
+      ], dummyHook);
+
+      return promise.catch(error => {
+        expect(error.message).to.equal('This did not work');
+        expect(error.hook.test).to.equal('first ran');
+      });
+    });
+
     it('errors when invalid hook object is returned', () => {
       const dummyHook = {
         type: 'dummy',

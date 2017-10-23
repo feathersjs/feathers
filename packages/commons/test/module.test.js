@@ -7,7 +7,6 @@ describe('module', () => {
     console.log(commons);
     expect(typeof commons).to.equal('object');
     expect(typeof commons.stripSlashes).to.equal('function');
-    expect(typeof commons.matcher).to.equal('function');
     expect(typeof commons.sorter).to.equal('function');
     expect(typeof commons.select).to.equal('function');
     expect(typeof commons.validateArguments).to.equal('function');
