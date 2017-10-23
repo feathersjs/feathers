@@ -11,7 +11,7 @@ reporting:
     - text
     - lcov
   watermarks:
-    statements: [50, 80]
-    lines: [50, 80]
-    functions: [50, 80]
-    branches: [50, 80]
+    statements: [70, 90]
+    lines: [70, 90]
+    functions: [70, 90]
+    branches: [70, 90]

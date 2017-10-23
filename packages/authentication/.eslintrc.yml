@@ -1,0 +1,2 @@
+---
+extends: eslint-config-semistandard
