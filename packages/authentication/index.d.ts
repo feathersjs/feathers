@@ -58,7 +58,7 @@ declare namespace auth{
      *
      * @returns {Function}
      */
-    verifyToken(options?): Hook;
+    verifyToken(options?:any): Hook;
     /**
      * The populateUser hook is for populating a user based on an id.
      * It can be used on any service method as either a before or after hook.
@@ -66,7 +66,7 @@ declare namespace auth{
      *
      * @returns {Function}
      */
-    populateUser(options?): Hook;
+    populateUser(options?:any): Hook;
 
     /**
      * The `restrictToAuthenticated` hook throws an error if there isn't a logged-in user by checking for the `hook.params.user` object.
