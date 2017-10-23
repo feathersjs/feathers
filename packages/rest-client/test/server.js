@@ -1,9 +1,9 @@
-const feathers = require('feathers');
-const expressify = require('feathers-express');
+const feathers = require('@feathersjs/feathers');
+const expressify = require('@feathersjs/express');
 const bodyParser = require('body-parser');
 const { Service } = require('feathers-memory');
-const errors = require('feathers-errors');
-const rest = require('feathers-rest');
+const errors = require('@feathersjs/errors');
+const rest = require('@feathersjs/express/rest');
 
 // eslint-disable-next-line no-extend-native
 Object.defineProperty(Error.prototype, 'toJSON', {
