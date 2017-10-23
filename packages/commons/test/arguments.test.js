@@ -1,10 +1,5 @@
-const {
-  expect
-} = require('chai');
-
-const {
-  validateArguments
-} = require('../lib/arguments');
+const { expect } = require('chai');
+const { validateArguments } = require('../lib/arguments');
 
 describe('.validateArguments', () => {
   it('throws an error for callbacks', () => {
