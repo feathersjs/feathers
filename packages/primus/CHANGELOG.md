@@ -1,5 +1,13 @@
 # Change Log
 
+## [v3.0.0-pre.3](https://github.com/feathersjs/primus/tree/v3.0.0-pre.3) (2017-10-23)
+[Full Changelog](https://github.com/feathersjs/primus/compare/v3.0.0-pre.2...v3.0.0-pre.3)
+
+**Merged pull requests:**
+
+- Updates for Feathers v3 \(Buzzard\) [\#64](https://github.com/feathersjs/primus/pull/64) ([daffl](https://github.com/daffl))
+- Update to use npm scopes [\#63](https://github.com/feathersjs/primus/pull/63) ([daffl](https://github.com/daffl))
+
 ## [v3.0.0-pre.2](https://github.com/feathersjs/primus/tree/v3.0.0-pre.2) (2017-10-19)
 [Full Changelog](https://github.com/feathersjs/primus/compare/v3.0.0-pre.1...v3.0.0-pre.2)
 
@@ -45,7 +53,7 @@
 
 **Closed issues:**
 
-- Issues with using @feathersjs/primus/client and feathers-client [\#41](https://github.com/feathersjs/primus/issues/41)
+- Issues with using feathers-primus/client and feathers-client [\#41](https://github.com/feathersjs/primus/issues/41)
 - Any breaking change in 2.0.0? [\#39](https://github.com/feathersjs/primus/issues/39)
 
 **Merged pull requests:**
@@ -138,7 +146,7 @@
 
 **Merged pull requests:**
 
-- @feathersjs/primus/client service and tests [\#1](https://github.com/feathersjs/primus/pull/1) ([daffl](https://github.com/daffl))
+- feathers-primus/client service and tests [\#1](https://github.com/feathersjs/primus/pull/1) ([daffl](https://github.com/daffl))
 
 ## [v1.0.0](https://github.com/feathersjs/primus/tree/v1.0.0) (2016-01-03)
 
