@@ -47,8 +47,8 @@
     "lib": "lib"
   },
   "dependencies": {
-    "feathers-commons": "^1.0.0-pre.3",
-    "feathers-errors": "^2.8.2",
+    "@feathersjs/commons": "^1.0.0",
+    "@feathersjs/errors": "^3.0.0-pre.1",
     "qs": "^6.5.0"
   },
   "devDependencies": {
@@ -56,16 +56,15 @@
     "@angular/core": "^4.3.0",
     "@angular/http": "^4.3.0",
     "@angular/platform-browser": "^4.3.0",
+    "@feathersjs/express": "^1.0.0-pre.3",
+    "@feathersjs/feathers": "^3.0.0-pre.2",
     "axios": "^0.17.0",
     "babel-core": "^6.25.0",
     "babel-preset-es2015": "^6.24.1",
     "babelify": "^7.3.0",
     "body-parser": "^1.17.2",
     "browserify": "^14.4.0",
-    "feathers": "^3.0.0-pre.1",
-    "feathers-express": "^1.0.0-pre.1",
     "feathers-memory": "^1.1.0",
-    "feathers-rest": "^2.0.0-pre.1",
     "istanbul": "^1.1.0-alpha.1",
     "jquery": "^3.2.1",
     "jsdom": "^11.1.0",

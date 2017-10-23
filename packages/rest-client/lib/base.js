@@ -1,6 +1,6 @@
 const query = require('qs');
-const { stripSlashes } = require('feathers-commons');
-const { convert } = require('feathers-errors');
+const { stripSlashes } = require('@feathersjs/commons');
+const { convert } = require('@feathersjs/errors');
 
 function toError (error) {
   throw convert(error);
