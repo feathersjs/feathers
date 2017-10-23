@@ -1,7 +1,7 @@
 {
-  "name": "feathers",
-  "description": "Build Better APIs, Faster than Ever.",
-  "version": "3.0.0-pre.1",
+  "name": "@feathersjs/feathers",
+  "description": "A REST and realtime API layer for modern applications.",
+  "version": "3.0.0-pre.2",
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",
@@ -14,11 +14,11 @@
     "realtime"
   ],
   "main": "lib/index",
-  "author": "Feathers <hello@feathersjs.com> (http://feathersjs.com)",
-  "contributors": [
-    "Eric Kryski <e.kryski@gmail.com> (http://erickryski.com)",
-    "David Luecke <daff@neyeon.de> (http://neyeon.com)"
-  ],
+  "author": {
+    "name": "Feathers contributor",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/feathersjs/feathers/issues"
@@ -31,10 +31,10 @@
     "version": "npm run update-version && git add lib/version.js && git commit -am \"Updating version\"",
     "publish": "git push origin --tags && npm run changelog && git push origin",
     "changelog": "github_changelog_generator --no-issues && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
-    "release:patch": "npm version patch && npm publish",
-    "release:minor": "npm version minor && npm publish",
-    "release:major": "npm version major && npm publish",
-    "release:pre": "npm version prerelease && npm publish --tag pre",
+    "release:pre": "npm version prerelease && npm publish --tag pre  --access public",
+    "release:patch": "npm version patch && npm publish --access public",
+    "release:minor": "npm version minor && npm publish --access public",
+    "release:major": "npm version major && npm publish --access public",
     "lint": "semistandard --fix",
     "mocha": "mocha --opts mocha.opts",
     "mocha:watch": "mocha --opts mocha.opts --watch",
@@ -50,9 +50,9 @@
     "node": ">= 6"
   },
   "dependencies": {
+    "@feathersjs/commons": "^1.0.0",
     "debug": "^3.1.0",
     "events": "^1.1.1",
-    "feathers-commons": "^1.0.0-pre.2",
     "uberproto": "^1.2.0"
   },
   "devDependencies": {
