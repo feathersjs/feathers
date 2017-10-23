@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.3.0](https://github.com/feathersjs/rest-client/tree/v1.3.0) (2017-10-23)
+[Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.2.0...v1.3.0)
+
+**Merged pull requests:**
+
+- Update all dependencies to use npm scope [\#7](https://github.com/feathersjs/rest-client/pull/7) ([daffl](https://github.com/daffl))
+- Update axios to the latest version 🚀 [\#6](https://github.com/feathersjs/rest-client/pull/6) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.2.0](https://github.com/feathersjs/rest-client/tree/v1.2.0) (2017-10-19)
 [Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.1.1-0...v1.2.0)
 
