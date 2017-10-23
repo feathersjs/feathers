@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.1.0](https://github.com/feathersjs/commons/tree/v1.1.0) (2017-10-23)
+[Full Changelog](https://github.com/feathersjs/commons/compare/v1.0.0...v1.1.0)
+
+**Merged pull requests:**
+
+- Remove unused utilities and add some inline documentation [\#59](https://github.com/feathersjs/commons/pull/59) ([daffl](https://github.com/daffl))
+- Add feathers-query-filters [\#58](https://github.com/feathersjs/commons/pull/58) ([daffl](https://github.com/daffl))
+
 ## [v1.0.0](https://github.com/feathersjs/commons/tree/v1.0.0) (2017-10-19)
 [Full Changelog](https://github.com/feathersjs/commons/compare/v1.0.0-pre.3...v1.0.0)
 
