@@ -1,5 +1,5 @@
 const assert = require('assert');
-const feathers = require('feathers');
+const feathers = require('@feathersjs/feathers');
 const io = require('socket.io-client');
 const baseTests = require('feathers-commons/lib/test/client');
 
