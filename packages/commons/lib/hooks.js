@@ -1,35 +1,28 @@
 const { each } = require('./utils')._;
 
-function getParams (value) {
-  return value || {};
-}
-
 function convertGetOrRemove (args) {
-  return {
-    id: args[0],
-    params: getParams(args[1])
-  };
+  const [ id, params = {} ] = args;
+
+  return { id, params };
 }
 
 function convertUpdateOrPatch (args) {
-  return {
-    id: args[0],
-    data: args[1],
-    params: getParams(args[2])
-  };
+  const [ id, data, params = {} ] = args;
+
+  return { id, data, params };
 }
 
+// Converters from service method arguments to hook object properties
 exports.converters = {
   find (args) {
-    return {
-      params: getParams(args[0])
-    };
+    const [ params = {} ] = args;
+
+    return { params };
   },
   create (args) {
-    return {
-      data: args[0],
-      params: getParams(args[1])
-    };
+    const [ data, params = {} ] = args;
+
+    return { data, params };
   },
   get: convertGetOrRemove,
   remove: convertGetOrRemove,
@@ -37,11 +30,14 @@ exports.converters = {
   patch: convertUpdateOrPatch
 };
 
+// Create a hook object for a method with arguments `args`
+// `data` is additional data that will be added
 exports.createHookObject = function createHookObject (method, args, data = {}) {
   const hook = exports.converters[method](args);
 
   return Object.assign(hook, data, {
     method,
+    // A dynamic getter that returns the path of the service
     get path () {
       const { app, service } = data;
 
@@ -55,6 +51,7 @@ exports.createHookObject = function createHookObject (method, args, data = {}) {
   });
 };
 
+// Fallback used by `makeArguments` which usually won't be used
 exports.defaultMakeArguments = function defaultMakeArguments (hook) {
   const result = [];
 
@@ -71,26 +68,27 @@ exports.defaultMakeArguments = function defaultMakeArguments (hook) {
   return result;
 };
 
+// Turns a hook object back into a list of arguments
+// to call a service method with
 exports.makeArguments = function makeArguments (hook) {
-  if (hook.method === 'find') {
-    return [ hook.params ];
-  }
-
-  if (hook.method === 'get' || hook.method === 'remove') {
-    return [ hook.id, hook.params ];
-  }
-
-  if (hook.method === 'update' || hook.method === 'patch') {
-    return [ hook.id, hook.data, hook.params ];
-  }
-
-  if (hook.method === 'create') {
-    return [ hook.data, hook.params ];
+  switch (hook.method) {
+    case 'find':
+      return [ hook.params ];
+    case 'get':
+    case 'remove':
+      return [ hook.id, hook.params ];
+    case 'update':
+    case 'patch':
+      return [ hook.id, hook.data, hook.params ];
+    case 'create':
+      return [ hook.data, hook.params ];
   }
 
   return exports.defaultMakeArguments(hook);
 };
 
+// Converts different hook registration formats into the
+// same internal format
 exports.convertHookData = function convertHookData (obj) {
   var hook = {};
 
@@ -107,12 +105,17 @@ exports.convertHookData = function convertHookData (obj) {
   return hook;
 };
 
+// Duck-checks a given object to be a hook object
+// A valid hook object has `type` and `method`
 exports.isHookObject = function isHookObject (hookObject) {
   return typeof hookObject === 'object' &&
     typeof hookObject.method === 'string' &&
     typeof hookObject.type === 'string';
 };
 
+// Returns all service and application hooks combined
+// for a given method and type `appLast` sets if the hooks
+// from `app` should be added last (or first by default)
 exports.getHooks = function getHooks (app, service, type, method, appLast = false) {
   const appHooks = app.__hooks[type][method] || [];
   const serviceHooks = service.__hooks[type][method] || [];
@@ -128,6 +131,8 @@ exports.getHooks = function getHooks (app, service, type, method, appLast = fals
 exports.processHooks = function processHooks (hooks, initialHookObject) {
   let hookObject = initialHookObject;
   let updateCurrentHook = current => {
+    // Either use the returned hook object or the current
+    // hook object from the chain if the hook returned undefined
     if (current) {
       if (!exports.isHookObject(current)) {
         throw new Error(`${hookObject.type} hook for '${hookObject.method}' method returned invalid hook object`);
@@ -138,6 +143,7 @@ exports.processHooks = function processHooks (hooks, initialHookObject) {
 
     return hookObject;
   };
+  // First step of the hook chain with the initial hook object
   let promise = Promise.resolve(hookObject);
 
   // Go through all hooks and chain them into our promise
@@ -148,7 +154,8 @@ exports.processHooks = function processHooks (hooks, initialHookObject) {
       promise = promise.then(hookObject => {
         return new Promise((resolve, reject) => {
           hook(hookObject, (error, result) =>
-            error ? reject(error) : resolve(result));
+            error ? reject(error) : resolve(result)
+          );
         });
       });
     } else { // function(hook)
@@ -166,6 +173,7 @@ exports.processHooks = function processHooks (hooks, initialHookObject) {
   });
 };
 
+// Add `.hooks` functionality to an object
 exports.enableHooks = function enableHooks (obj, methods, types) {
   if (typeof obj.hooks === 'function') {
     return obj;

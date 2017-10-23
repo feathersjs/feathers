@@ -4,12 +4,9 @@ const { expect } = require('chai');
 
 const {
   _,
-  specialFilters,
   sorter,
-  matcher,
   stripSlashes,
   select,
-  makeUrl,
   isPromise
 } = require('../lib/utils');
 
@@ -123,8 +120,12 @@ describe('@feathersjs/commons utils', () => {
         name: 'david'
       });
 
-      expect(_.merge({}, { name: 'david' })).to.deep.equal({
-        name: 'david'
+      expect(_.merge({}, {
+        name: 'david',
+        nested: { obj: true }
+      })).to.deep.equal({
+        name: 'david',
+        nested: { obj: true }
       });
 
       expect(_.merge({ name: 'david' }, {})).to.deep.equal({
@@ -144,6 +145,8 @@ describe('@feathersjs/commons utils', () => {
           name: { is: 'eric' }
         }
       });
+
+      expect(_.merge('hello', {})).to.equal('hello');
     });
   });
 
@@ -219,63 +222,6 @@ describe('@feathersjs/commons utils', () => {
     });
   });
 
-  describe('specialFilters', () => {
-    const filters = specialFilters;
-
-    it('$in', () => {
-      const fn = filters.$in('test', ['a', 'b']);
-
-      expect(fn({ test: 'a' })).to.be.ok;
-      expect(!fn({ test: 'c' })).to.be.ok;
-    });
-
-    it('$nin', () => {
-      const fn = filters.$nin('test', ['a', 'b']);
-
-      expect(!fn({ test: 'a' })).to.be.ok;
-      expect(fn({ test: 'c' })).to.be.ok;
-    });
-
-    it('$lt', () => {
-      const fn = filters.$lt('age', 25);
-
-      expect(fn({ age: 24 })).to.be.ok;
-      expect(!fn({ age: 25 })).to.be.ok;
-      expect(!fn({ age: 26 })).to.be.ok;
-    });
-
-    it('$lte', () => {
-      const fn = filters.$lte('age', 25);
-
-      expect(fn({ age: 24 })).to.be.ok;
-      expect(fn({ age: 25 })).to.be.ok;
-      expect(!fn({ age: 26 })).to.be.ok;
-    });
-
-    it('$gt', () => {
-      const fn = filters.$gt('age', 25);
-
-      expect(!fn({ age: 24 })).to.be.ok;
-      expect(!fn({ age: 25 })).to.be.ok;
-      expect(fn({ age: 26 })).to.be.ok;
-    });
-
-    it('$gte', () => {
-      const fn = filters.$gte('age', 25);
-
-      expect(!fn({ age: 24 })).to.be.ok;
-      expect(fn({ age: 25 })).to.be.ok;
-      expect(fn({ age: 26 })).to.be.ok;
-    });
-
-    it('$ne', () => {
-      const fn = filters.$ne('test', 'me');
-
-      expect(fn({ test: 'you' })).to.be.ok;
-      expect(!fn({ test: 'me' })).to.be.ok;
-    });
-  });
-
   describe('sorter', () => {
     it('simple sorter', () => {
       const array = [{
@@ -321,143 +267,6 @@ describe('@feathersjs/commons utils', () => {
         { name: 'Eric', counter: 1 },
         { name: 'David', counter: 1 }
       ]);
-    });
-  });
-
-  describe('matcher', () => {
-    it('simple match', () => {
-      const matches = matcher({ name: 'Eric' });
-
-      expect(matches({ name: 'Eric' })).to.be.ok;
-      expect(!matches({ name: 'David' })).to.be.ok;
-    });
-
-    it('does not match $select', () => {
-      const matches = matcher({ $select: [ 'name' ] });
-      expect(matches({ name: 'Eric' })).to.be.ok;
-    });
-
-    it('$or match', () => {
-      const matches = matcher({ $or: [{ name: 'Eric' }, { name: 'Marshall' }] });
-
-      expect(matches({ name: 'Eric' })).to.be.ok;
-      expect(matches({ name: 'Marshall' })).to.be.ok;
-      expect(!matches({ name: 'David' })).to.be.ok;
-    });
-
-    it('$or nested match', () => {
-      const matches = matcher({
-        $or: [
-          { name: 'Eric' },
-          { age: { $gt: 18, $lt: 32 } }
-        ]
-      });
-
-      expect(matches({ name: 'Eric' })).to.be.ok;
-      expect(matches({ age: 20 })).to.be.ok;
-      expect(matches({ name: 'David', age: 30 })).to.be.ok;
-      expect(!matches({ name: 'David', age: 64 })).to.be.ok;
-    });
-
-    it('special filter matches', () => {
-      const matches = matcher({
-        counter: { $gt: 10, $lte: 19 },
-        name: { $in: ['Eric', 'Marshall'] }
-      });
-
-      expect(matches({ name: 'Eric', counter: 12 })).to.be.ok;
-      expect(!matches({ name: 'Eric', counter: 10 })).to.be.ok;
-      expect(matches({ name: 'Marshall', counter: 19 })).to.be.ok;
-    });
-
-    it('special filter and simple matches', () => {
-      const matches = matcher({
-        counter: 0,
-        name: { $in: ['Eric', 'Marshall'] }
-      });
-
-      expect(!matches({ name: 'Eric', counter: 1 })).to.be.ok;
-      expect(matches({ name: 'Marshall', counter: 0 })).to.be.ok;
-    });
-
-    it('with null values', () => {
-      const matches = matcher({
-        counter: null,
-        name: { $in: ['Eric', 'Marshall'] }
-      });
-
-      expect(!matches({ name: 'Eric', counter: 0 })).to.be.ok;
-      expect(matches({ name: 'Marshall', counter: null })).to.be.ok;
-    });
-  });
-
-  describe('makeUrl', function () {
-    let mockApp;
-
-    beforeEach(() => {
-      mockApp = { env: 'development' };
-      mockApp.get = (value) => {
-        switch (value) {
-          case 'port':
-            return 3030;
-          case 'host':
-            return 'feathersjs.com';
-          case 'env':
-            return mockApp.env;
-        }
-      };
-    });
-
-    describe('when in development mode', () => {
-      it('returns the correct url', () => {
-        const uri = makeUrl('test', mockApp);
-        expect(uri).to.equal('http://feathersjs.com:3030/test');
-      });
-    });
-
-    describe('when in test mode', () => {
-      it('returns the correct url', () => {
-        mockApp.env = 'test';
-        const uri = makeUrl('test', mockApp);
-        expect(uri).to.equal('http://feathersjs.com:3030/test');
-      });
-    });
-
-    describe('when in production mode', () => {
-      it('returns the correct url', () => {
-        mockApp.env = 'production';
-        const uri = makeUrl('test', mockApp);
-        expect(uri).to.equal('https://feathersjs.com/test');
-      });
-    });
-
-    describe('when path is not provided', () => {
-      it('returns a default url', () => {
-        const uri = makeUrl(null, mockApp);
-        expect(uri).to.equal('http://feathersjs.com:3030/');
-      });
-    });
-
-    describe('when app is not defined', () => {
-      it('returns the correct url', () => {
-        const uri = makeUrl('test');
-        expect(uri).to.equal('http://localhost:3030/test');
-      });
-    });
-
-    it('strips leading slashes on path', () => {
-      const uri = makeUrl('/test');
-      expect(uri).to.equal('http://localhost:3030/test');
-    });
-
-    it('strips trailing slashes on path', () => {
-      const uri = makeUrl('test/');
-      expect(uri).to.equal('http://localhost:3030/test');
-    });
-
-    it('works with query strings', () => {
-      const uri = makeUrl('test?admin=true');
-      expect(uri).to.equal('http://localhost:3030/test?admin=true');
     });
   });
 });
