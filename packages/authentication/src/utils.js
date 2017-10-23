@@ -1,4 +1,6 @@
 import Debug from 'debug';
+import uuidv4 from 'uuid/v4';
+import merge from 'lodash.merge';
 import pick from 'lodash.pick';
 import omit from 'lodash.omit';
 import jwt from 'jsonwebtoken';
@@ -22,7 +24,7 @@ export function createJWT (payload = {}, options = {}) {
     'sub',
     'iss'
   ];
-  const settings = Object.assign({}, options.jwt);
+  const settings = merge({ jwtid: uuidv4() }, options.jwt);
   const { secret } = options;
 
   return new Promise((resolve, reject) => {
@@ -55,7 +57,7 @@ export function verifyJWT (token, options = {}) {
     'subject',
     'clockTolerance'
   ];
-  const settings = Object.assign({}, options.jwt);
+  const settings = merge({}, options.jwt);
   const { secret } = options;
 
   // normalize algorithm to array
