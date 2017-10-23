@@ -1,4 +1,4 @@
-const Service = require('feathers-socket-commons/client');
+const Service = require('@feathersjs/socket-commons/client');
 
 module.exports = function (connection, options) {
   if (!connection) {
