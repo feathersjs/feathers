@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.0.0-pre.1](https://github.com/feathersjs/configuration/tree/v1.0.0-pre.1) (2017-10-23)
+[Full Changelog](https://github.com/feathersjs/configuration/compare/v0.4.2...v1.0.0-pre.1)
+
+**Closed issues:**
+
+- Move config options to app.config instead of the Express app object. [\#31](https://github.com/feathersjs/configuration/issues/31)
+
+**Merged pull requests:**
+
+- Update to new plugin infrastructure and npm scopes [\#51](https://github.com/feathersjs/configuration/pull/51) ([daffl](https://github.com/daffl))
+
 ## [v0.4.2](https://github.com/feathersjs/configuration/tree/v0.4.2) (2017-10-15)
 [Full Changelog](https://github.com/feathersjs/configuration/compare/v0.4.1...v0.4.2)
 
