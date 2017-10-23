@@ -1,9 +1,10 @@
-import assert from 'assert';
-import feathers from 'feathers';
-import { join } from 'path';
-import plugin from '../src';
+const assert = require('assert');
+const feathers = require('@feathersjs/feathers');
+const { join } = require('path');
 
-describe('feathers-configuration', () => {
+const plugin = require('../lib');
+
+describe('@feathersjs/configuration', () => {
   const app = feathers().configure(plugin());
 
   it('initialized app with default data', () =>
@@ -45,6 +46,12 @@ describe('feathers-configuration', () => {
   it('converts arrays as actual arrays', () =>
     assert.ok(Array.isArray(app.get('array')))
   );
+
+  it('works when called directly', () => {
+    const fn = plugin();
+
+    assert.equal(fn().port, '3030');
+  });
 
   it('deep merges properties', () =>
     assert.deepEqual(app.get('deep'), {

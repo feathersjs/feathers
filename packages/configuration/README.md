@@ -1,19 +1,19 @@
-# feathers-configuration
+# @feathersjs/configuration
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-configuration.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/configuration.svg)](https://greenkeeper.io/)
 
-[![Build Status](https://travis-ci.org/feathersjs/feathers-configuration.png?branch=master)](https://travis-ci.org/feathersjs/feathers-configuration)
-[![Code Climate](https://codeclimate.com/github/feathersjs/feathers-configuration.png)](https://codeclimate.com/github/feathersjs/feathers-configuration)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-configuration/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-configuration/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/feathers-configuration.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers-configuration)
-[![Download Status](https://img.shields.io/npm/dm/feathers-configuration.svg?style=flat-square)](https://www.npmjs.com/package/feathers-configuration)
+[![Build Status](https://travis-ci.org/feathersjs/configuration.png?branch=master)](https://travis-ci.org/feathersjs/configuration)
+[![Code Climate](https://codeclimate.com/github/feathersjs/configuration.png)](https://codeclimate.com/github/feathersjs/configuration)
+[![Test Coverage](https://codeclimate.com/github/feathersjs/configuration/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/configuration/coverage)
+[![Dependency Status](https://img.shields.io/david/feathersjs/configuration.svg?style=flat-square)](https://david-dm.org/feathersjs/configuration)
+[![Download Status](https://img.shields.io/npm/dm/@feathersjs/configuration.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/configuration)
 [![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 
 > A small configuration module for your Feathers application.
 
 ## About
 
-The v0.4.x release of `feathers-configuration` is a breaking version and implementations that were made with earlier versions of the module may be required to make some minor changes. Please see the [migrating](#migrating) section for specifics.
+The v0.4.x release of `@feathersjs/configuration` is a breaking version and implementations that were made with earlier versions of the module may be required to make some minor changes. Please see the [migrating](#migrating) section for specifics.
 
 This module is a simple wrapper on [node-config](https://github.com/lorenwest/node-config) that adds a bit of convenience. By default this implementation will look in `config/*` for `default.json` which retains convention. As per the [config docs](https://github.com/lorenwest/node-config/wiki/Configuration-Files) you can organize *"hierarchical configurations for your app deployments"*. See the usage section below for better information how to implement this.
 
@@ -24,7 +24,7 @@ Please note: future releases will also include the ability to define adapters wh
 Moving from 0.3.x to 0.4.x should be *mostly* backwards compatible. The main change is that instead of passing the location of your configuration into the module constructor like this: 
 
 ```js
-let config = require('feathers-configuration')(root, env, deepAssign);
+let config = require('@feathersjs/configuration')(root, env, deepAssign);
 ```
 
 The module now simply inherits from `NODE_ENV` and `NODE_CONFIG_DIR` as per the [node-config docs](https://github.com/lorenwest/node-config/wiki/Configuration-Files):
@@ -39,18 +39,18 @@ With the implementation of node-config we also now have the ability to set a `cu
 
 ## Usage
 
-The `feathers-configuration` module is an app configuration function that takes a root directory (usually something like `__dirname` in your application) and the configuration folder (set to `config` by default):
+The `@feathersjs/configuration` module is an app configuration function that takes a root directory (usually something like `__dirname` in your application) and the configuration folder (set to `config` by default):
 
 ```js
 import feathers from 'feathers';
-import configuration from 'feathers-configuration';
+import configuration from '@feathersjs/configuration';
 
 // Use the current folder as the root and look configuration up in `settings`
 let app = feathers().configure(configuration())
 ```
 ## Variable types
 
-`feathers-configuration` uses the following variable mechanisms:
+`@feathersjs/configuration` uses the following variable mechanisms:
 
 - Given a root and configuration path load a `default.json` in that path
 - When the `NODE_ENV` is not `development`, also try to load `<NODE_ENV>.json` in that path and merge both configurations
@@ -90,7 +90,7 @@ Now it can be used in our `app.js` like this:
 
 ```js
 import feathers from 'feathers';
-import configuration from 'feathers-configuration';
+import configuration from '@feathersjs/configuration';
 
 let conf = configuration();
 

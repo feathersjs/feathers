@@ -1,4 +1,4 @@
-// feathers-configuration pulls in default and <env> settings files using
+// @feathersjs/configuration pulls in default and <env> settings files using
 // Node's `require()`.
 // Node require() looks first for <filename>.js,
 // and if not found, it will check for <filename>.json

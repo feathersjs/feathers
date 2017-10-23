@@ -1,4 +1,0 @@
-{
-  "plugins": ["babel-plugin-transform-object-assign"],
-  "presets": [ "es2015" ]
-}
