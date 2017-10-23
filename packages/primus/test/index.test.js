@@ -1,6 +1,6 @@
+const feathers = require('@feathersjs/feathers');
+const express = require('@feathersjs/express');
 const assert = require('assert');
-const feathers = require('feathers');
-const expressify = require('feathers-express');
 const request = require('request');
 const _ = require('lodash');
 const { Service } = require('feathers-commons/lib/test-fixture');
@@ -9,7 +9,7 @@ const primus = require('../lib');
 const methodTests = require('./methods.js');
 const eventTests = require('./events');
 
-describe('feathers-primus', () => {
+describe('@feathersjs/primus', () => {
   let options = {
     socketParams: {
       user: { name: 'David' },
@@ -91,7 +91,7 @@ describe('feathers-primus', () => {
 
   it('expressified app works', done => {
     const data = { message: 'Hello world' };
-    const app = expressify(feathers())
+    const app = express(feathers())
       .configure(primus({
         transformer: 'uws'
       }))

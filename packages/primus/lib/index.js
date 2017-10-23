@@ -1,12 +1,12 @@
+const commons = require('@feathersjs/socket-commons');
 const makeDebug = require('debug');
 const Proto = require('uberproto');
-const commons = require('feathers-socket-commons');
 const Primus = require('primus');
 const http = require('http');
 const Emitter = require('primus-emitter');
 
-const debug = makeDebug('feathers-primus');
-const socketKey = Symbol('feathers-primus/socket');
+const debug = makeDebug('@feathersjs/primus');
+const socketKey = Symbol('@feathersjs/primus/socket');
 
 module.exports = function (config, configurer) {
   return function () {
