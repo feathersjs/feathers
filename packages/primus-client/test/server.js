@@ -1,5 +1,5 @@
-const feathers = require('feathers');
-const primus = require('feathers-primus');
+const feathers = require('@feathersjs/feathers');
+const primus = require('@feathersjs/primus');
 const { Service } = require('feathers-memory');
 
 // eslint-disable-next-line no-extend-native
