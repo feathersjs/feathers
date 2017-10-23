@@ -1,11 +1,11 @@
-import makeDebug from 'debug';
-import path from 'path';
+const makeDebug = require('debug');
+const path = require('path');
 
-const debug = makeDebug('feathers:configuration');
+const debug = makeDebug('@feathersjs/configuration');
 const config = require('config');
 const separator = path.sep;
 
-export default module.exports = function () {
+module.exports = module.exports = function () {
   return function () {
     let app = this;
 
@@ -42,10 +42,11 @@ export default module.exports = function () {
     };
 
     const env = config.util.getEnv('NODE_ENV');
-    debug(`Initializing configuration for ${env} environment`);
     const conf = convert(config);
 
-    if (!app) {
+    debug(`Initializing configuration for ${env} environment`);
+
+    if (!app || app === global) {
       return conf;
     }
 
