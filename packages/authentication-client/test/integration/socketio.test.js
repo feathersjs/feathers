@@ -1,14 +1,13 @@
 /* eslint-disable no-unused-expressions */
+const hooks = require('feathers-hooks');
+const feathers = require('feathers/client');
+const socketio = require('feathers-socketio/client');
+const localstorage = require('localstorage-memory');
+const io = require('socket.io-client');
+const { expect } = require('chai');
 
-import hooks from 'feathers-hooks';
-import feathers from 'feathers/client';
-import socketio from 'feathers-socketio/client';
-import localstorage from 'localstorage-memory';
-import io from 'socket.io-client';
-import { expect } from 'chai';
-
-import authentication from '../../src/index';
-import createApplication from '../fixtures/server';
+const authentication = require('../../lib/index');
+const createApplication = require('../fixtures/server');
 
 const port = 8998;
 const baseURL = `http://localhost:${port}`;

@@ -1,4 +1,4 @@
-export class Storage {
+exports.Storage = class Storage {
   constructor () {
     this.store = {};
   }
@@ -15,14 +15,13 @@ export class Storage {
     delete this.store[key];
     return this;
   }
-}
+};
 
-// Pass a decoded payload and it will return a boolean based on if it hasn't expired.
-export function payloadIsValid (payload) {
+exports.payloadIsValid = function payloadIsValid (payload) {
   return payload && (!payload.exp || payload.exp * 1000 > new Date().getTime());
-}
+};
 
-export function getCookie (name) {
+exports.getCookie = function getCookie (name) {
   if (typeof document !== 'undefined') {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -33,12 +32,12 @@ export function getCookie (name) {
   }
 
   return null;
-}
+};
 
-export function clearCookie (name) {
+exports.clearCookie = function clearCookie (name) {
   if (typeof document !== 'undefined') {
     document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
   }
 
   return null;
-}
+};

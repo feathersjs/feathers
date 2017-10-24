@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
-
-import { expect } from 'chai';
-import { populateHeader } from '../../src/hooks';
+const { expect } = require('chai');
+const { populateHeader } = require('../../lib/hooks');
 
 describe('hooks:populateHeader', () => {
   let hook;

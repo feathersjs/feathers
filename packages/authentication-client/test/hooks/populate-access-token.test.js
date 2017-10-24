@@ -1,5 +1,6 @@
-import { expect } from 'chai';
-import { populateAccessToken } from '../../src/hooks';
+/* eslint-disable no-unused-expressions */
+const { expect } = require('chai');
+const { populateAccessToken } = require('../../lib/hooks');
 
 describe('hooks:populateAccessToken', () => {
   let hook;

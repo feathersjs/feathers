@@ -1,7 +1,9 @@
-import { expect } from 'chai';
-import feathers from 'feathers/client';
-import hooks from 'feathers-hooks';
-import auth from '../src/index';
+/* eslint-disable no-unused-expressions */
+const { expect } = require('chai');
+
+const feathers = require('feathers/client');
+const hooks = require('feathers-hooks');
+const auth = require('../lib/index');
 
 describe('Feathers Authentication Client', () => {
   let client;
