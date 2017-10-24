@@ -1,13 +1,8 @@
-/*
- * An authentication function that is called by
- * app.authenticate. Inspired by
- * https://github.com/jaredhanson/passport/blob/master/lib/middleware/authenticate.js
- */
-import makeDebug from 'debug';
+const makeDebug = require('debug');
 
 const debug = makeDebug('feathers-authentication:passport:authenticate');
 
-export default function authenticate (options = {}) {
+module.exports = function authenticate (options = {}) {
   debug('Initializing custom passport authenticate', options);
 
   // This function is bound by passport and called by passport.authenticate()
@@ -111,4 +106,4 @@ export default function authenticate (options = {}) {
       });
     };
   };
-}
+};

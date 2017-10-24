@@ -1,8 +1,12 @@
-import Debug from 'debug';
-import ms from 'ms';
-import { normalizeError } from 'feathers-socket-commons/lib/utils';
-import lt from 'long-timeout';
-import updateEntity from './update-entity';
+const Debug = require('debug');
+const ms = require('ms');
+
+const {
+  normalizeError
+} = require('feathers-socket-commons/lib/utils');
+
+const lt = require('long-timeout');
+const updateEntity = require('./update-entity');
 
 const debug = Debug('feathers-authentication:sockets:handler');
 
@@ -18,7 +22,7 @@ function handleSocketCallback (promise, callback) {
   return promise;
 }
 
-export default function setupSocketHandler (app, options, { feathersParams, provider, emit, disconnect }) {
+module.exports = function setupSocketHandler (app, options, { feathersParams, provider, emit, disconnect }) {
   const authSettings = app.get('authentication') || app.get('auth');
   const service = app.service(authSettings.path);
   const entityService = app.service(authSettings.service);
@@ -158,4 +162,4 @@ export default function setupSocketHandler (app, options, { feathersParams, prov
       entityService.on('patched', updateEntity(app));
     }
   };
-}
+};

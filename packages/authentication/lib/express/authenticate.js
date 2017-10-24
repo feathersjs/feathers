@@ -1,8 +1,8 @@
-import errors from 'feathers-errors';
-import Debug from 'debug';
+const errors = require('feathers-errors');
+const Debug = require('debug');
 const debug = Debug('feathers-authentication:express:authenticate');
 
-export default function authenticate (strategy, options = {}) {
+module.exports = function authenticate (strategy, options = {}) {
   // TODO (EK): Support arrays of strategies
 
   if (!strategy) {
@@ -65,4 +65,4 @@ export default function authenticate (strategy, options = {}) {
       next();
     }).catch(next);
   };
-}
+};

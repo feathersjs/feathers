@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-expressions */
-import 'babel-polyfill';
-
-import feathers from 'feathers';
-import passport from 'passport';
-import socketio from 'feathers-socketio';
-import primus from 'feathers-primus';
-import authentication, { express } from '../src';
-import socket from '../src/socket';
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
+const feathers = require('feathers');
+const passport = require('passport');
+const socketio = require('feathers-socketio');
+const primus = require('feathers-primus');
+const authentication = require('../lib');
+const socket = require('../lib/socket');
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+const { expect } = chai;
+const { express } = authentication;
 
 chai.use(sinonChai);
 

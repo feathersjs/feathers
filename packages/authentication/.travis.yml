@@ -3,8 +3,6 @@ language: node_js
 node_js:
   - node
   - '6'
-  - '4'
-sudo: false
 before_script:
 - npm install -g codeclimate-test-reporter
 after_script:

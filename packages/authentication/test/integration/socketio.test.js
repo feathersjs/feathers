@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-expressions */
-
-import merge from 'lodash.merge';
-import io from 'socket.io-client';
-import createApplication from '../fixtures/server';
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import clone from 'lodash.clone';
+const merge = require('lodash.merge');
+const io = require('socket.io-client');
+const createApplication = require('../fixtures/server');
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+const clone = require('lodash.clone');
+const { expect } = chai;
 
 chai.use(sinonChai);
 

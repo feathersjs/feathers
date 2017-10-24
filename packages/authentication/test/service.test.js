@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-expressions */
+const feathers = require('feathers');
+const hooks = require('feathers-hooks');
+const authentication = require('../lib');
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
 
-import feathers from 'feathers';
-import hooks from 'feathers-hooks';
-import authentication, { express } from '../src';
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
+const { expect } = chai;
+const { express } = authentication;
 
 chai.use(sinonChai);
 

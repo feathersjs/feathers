@@ -1,8 +1,9 @@
-import jwt from 'jsonwebtoken';
-import chai, { expect } from 'chai';
-import chaiUuid from 'chai-uuid';
-import { createJWT, verifyJWT } from '../src/utils';
-import getOptions from '../src/options';
+const jwt = require('jsonwebtoken');
+const chai = require('chai');
+const chaiUuid = require('chai-uuid');
+const { createJWT, verifyJWT } = require('../lib/utils');
+const getOptions = require('../lib/options');
+const { expect } = require('chai');
 
 chai.use(chaiUuid);
 

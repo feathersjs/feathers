@@ -1,8 +1,8 @@
-import Debug from 'debug';
+const Debug = require('debug');
 
 const debug = Debug('feathers-authentication:express:emit-events');
 
-export default function emitEvents () {
+module.exports = function emitEvents () {
   return function (req, res, next) {
     const method = res.hook && res.hook.method;
 
@@ -28,4 +28,4 @@ export default function emitEvents () {
 
     next();
   };
-}
+};

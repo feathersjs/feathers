@@ -1,7 +1,7 @@
-import Debug from 'debug';
+const Debug = require('debug');
 const debug = Debug('feathers-authentication:middleware:failure-redirect');
 
-export default function failureRedirect (options = {}) {
+module.exports = function failureRedirect (options = {}) {
   debug('Registering failureRedirect middleware');
 
   return function (error, req, res, next) {
@@ -20,4 +20,4 @@ export default function failureRedirect (options = {}) {
 
     next(error);
   };
-}
+};

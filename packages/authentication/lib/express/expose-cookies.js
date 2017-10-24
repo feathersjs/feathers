@@ -1,7 +1,7 @@
-import Debug from 'debug';
+const Debug = require('debug');
 const debug = Debug('feathers-authentication:express:expose-cookies');
 
-export default function () {
+module.exports = function () {
   debug('Registering exposeCookies middleware');
 
   return function exposeCookies (req, res, next) {
@@ -9,4 +9,4 @@ export default function () {
     req.feathers.cookies = req.cookies;
     next();
   };
-}
+};

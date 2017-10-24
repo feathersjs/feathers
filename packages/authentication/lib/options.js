@@ -1,4 +1,4 @@
-import merge from 'lodash.merge';
+const merge = require('lodash.merge');
 
 const defaults = {
   path: '/authentication',
@@ -23,6 +23,6 @@ const defaults = {
   }
 };
 
-export default function (...otherOptions) {
+module.exports = function (...otherOptions) {
   return merge({}, defaults, ...otherOptions);
-}
+};

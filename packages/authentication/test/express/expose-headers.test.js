@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-expressions */
-
-import { expect } from 'chai';
-import { exposeHeaders } from '../../src/express';
+const { expect } = require('chai');
+const { exposeHeaders } = require('../../lib/express');
 
 const headers = {
   'authorization': 'JWT:my token'
