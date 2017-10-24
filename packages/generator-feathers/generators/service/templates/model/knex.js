@@ -6,16 +6,15 @@
 // for more of what you can do here.
 module.exports = function (app) {
   const db = app.get('knexClient');
-
-  db.schema.hasTable('<%= kebabName %>').then(exists => {
+  const tableName = '<%= kebabName %>';
+  db.schema.hasTable(tableName).then(exists => {
     if(!exists) {
-      db.schema.createTable('<%= kebabName %>', table => {
+      db.schema.createTable(tableName, table => {
         table.increments('id');
         table.string('text');
-      }).then(
-        () => console.log('Updated <%= kebabName %> table'),
-        e => console.error('Error updating <%= kebabName %> table', e)
-      );
+      })
+        .then(() => console.log(`Created ${tableName} table`))
+        .catch(e => console.error(`Error creating ${tableName} table`, e));
     }
   });
   
