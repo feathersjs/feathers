@@ -1,18 +1,18 @@
 # Feathers CLI
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-cli.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/cli.svg)](https://greenkeeper.io/)
 
 > The command line interface for Feathers applications
 
-[![Build Status](https://img.shields.io/travis/feathersjs/feathers-cli/master.svg)](https://travis-ci.org/feathersjs/feathers-cli)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-cli/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-cli/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/feathers-cli.svg)](https://david-dm.org/feathersjs/feathers-cli)
-[![Download Status](https://img.shields.io/npm/dm/feathers-cli.svg)](https://www.npmjs.com/package/feathers-cli)
+[![Build Status](https://img.shields.io/travis/feathersjs/cli/master.svg)](https://travis-ci.org/feathersjs/cli)
+[![Test Coverage](https://codeclimate.com/github/feathersjs/cli/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/cli/coverage)
+[![Dependency Status](https://img.shields.io/david/feathersjs/cli.svg)](https://david-dm.org/feathersjs/cli)
+[![Download Status](https://img.shields.io/npm/dm/@feathersjs/cli.svg)](https://www.npmjs.com/package/@feathersjs/cli)
 
 ## Installation
 
 ```bash
-npm install -g feathers-cli
+npm install -g @feathersjs/cli
 ```
 
 ## Usage

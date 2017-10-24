@@ -1,8 +1,8 @@
 {
-  "name": "feathers-cli",
+  "name": "@feathersjs/cli",
   "description": "Command-line Feathers generator",
-  "version": "2.3.8",
-  "homepage": "https://github.com/feathersjs/feathers-cli",
+  "version": "3.0.0-pre.0",
+  "homepage": "https://github.com/feathersjs/cli",
   "main": "lib/",
   "bin": {
     "feathers": "./bin/feathers.js"
@@ -14,7 +14,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/feathers-cli.git"
+    "url": "git://github.com/feathersjs/cli.git"
   },
   "author": {
     "name": "Feathers contributors",
@@ -22,7 +22,7 @@
     "url": "https://feathersjs.com"
   },
   "bugs": {
-    "url": "https://github.com/feathersjs/feathers-cli/issues"
+    "url": "https://github.com/feathersjs/cli/issues"
   },
   "engines": {
     "node": ">= 6"
