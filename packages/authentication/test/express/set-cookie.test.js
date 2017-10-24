@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-expressions */
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+const ms = require('ms');
+const getOptions = require('../../lib/options');
+const { setCookie } = require('../../lib/express');
 
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import ms from 'ms';
-import getOptions from '../../src/options';
-import { setCookie } from '../../src/express';
+const { expect } = chai;
 
 chai.use(sinonChai);
 

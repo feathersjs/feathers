@@ -1,10 +1,10 @@
-import Debug from 'debug';
-import omit from 'lodash.omit';
-import ms from 'ms';
+const Debug = require('debug');
+const omit = require('lodash.omit');
+const ms = require('ms');
 
 const debug = Debug('feathers-authentication:middleware:set-cookie');
 
-export default function setCookie (authOptions = {}) {
+module.exports = function setCookie (authOptions = {}) {
   debug('Registering setCookie middleware');
 
   function makeExpiry (timeframe) {
@@ -66,4 +66,4 @@ export default function setCookie (authOptions = {}) {
 
     next();
   };
-}
+};

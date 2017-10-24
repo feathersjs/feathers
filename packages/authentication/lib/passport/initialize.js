@@ -1,9 +1,13 @@
-import makeDebug from 'debug';
-import { createJWT, verifyJWT } from '../utils';
+const makeDebug = require('debug');
+
+const {
+  createJWT,
+  verifyJWT
+} = require('../utils');
 
 const debug = makeDebug('feathers-authentication:passport:initialize');
 
-export default function initialize (options = {}) {
+module.exports = function initialize (options = {}) {
   // const app = this;
 
   debug('Initializing custom passport initialize', options);
@@ -33,4 +37,4 @@ export default function initialize (options = {}) {
       }
     };
   };
-}
+};

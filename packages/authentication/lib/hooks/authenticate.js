@@ -1,9 +1,9 @@
-import errors from 'feathers-errors';
-import Debug from 'debug';
-import merge from 'lodash.merge';
+const errors = require('feathers-errors');
+const Debug = require('debug');
+const merge = require('lodash.merge');
 const debug = Debug('feathers-authentication:hooks:authenticate');
 
-export default function authenticate (strategies, options = {}) {
+module.exports = function authenticate (strategies, options = {}) {
   if (!strategies) {
     throw new Error(`The 'authenticate' hook requires one of your registered passport strategies.`);
   }
@@ -96,4 +96,4 @@ export default function authenticate (strategies, options = {}) {
       return Promise.resolve(hook);
     });
   };
-}
+};

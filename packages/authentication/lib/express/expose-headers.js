@@ -1,7 +1,7 @@
-import Debug from 'debug';
+const Debug = require('debug');
 const debug = Debug('feathers-authentication:express:expose-headers');
 
-export default function () {
+module.exports = function () {
   debug('Registering exposeHeaders middleware');
 
   return function exposeHeaders (req, res, next) {
@@ -9,4 +9,4 @@ export default function () {
     req.feathers.headers = req.headers;
     next();
   };
-}
+};

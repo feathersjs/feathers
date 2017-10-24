@@ -1,13 +1,13 @@
-import Debug from 'debug';
-import uuidv4 from 'uuid/v4';
-import merge from 'lodash.merge';
-import pick from 'lodash.pick';
-import omit from 'lodash.omit';
-import jwt from 'jsonwebtoken';
+const Debug = require('debug');
+const uuidv4 = require('uuid/v4');
+const merge = require('lodash.merge');
+const pick = require('lodash.pick');
+const omit = require('lodash.omit');
+const jwt = require('jsonwebtoken');
 
 const debug = Debug('feathers-authentication:authentication:utils');
 
-export function createJWT (payload = {}, options = {}) {
+exports.createJWT = function createJWT (payload = {}, options = {}) {
   const VALID_KEYS = [
     'algorithm',
     'expiresIn',
@@ -45,9 +45,9 @@ export function createJWT (payload = {}, options = {}) {
       return resolve(token);
     });
   });
-}
+};
 
-export function verifyJWT (token, options = {}) {
+exports.verifyJWT = function verifyJWT (token, options = {}) {
   const VALID_KEYS = [
     'algorithms',
     'audience',
@@ -86,4 +86,4 @@ export function verifyJWT (token, options = {}) {
       resolve(payload);
     });
   });
-}
+};

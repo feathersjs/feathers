@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-expressions */
-
-import passport from 'passport';
-import MockStrategy from '../fixtures/strategy';
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import { authenticate } from '../../src/express';
+const passport = require('passport');
+const MockStrategy = require('../fixtures/strategy');
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+const { expect } = chai;
+const { authenticate } = require('../../lib/express');
 
 chai.use(sinonChai);
 

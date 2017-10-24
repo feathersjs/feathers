@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-expressions */
-
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import { failureRedirect } from '../../src/express';
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+const { failureRedirect } = require('../../lib/express');
+const { expect } = chai;
 
 chai.use(sinonChai);
 

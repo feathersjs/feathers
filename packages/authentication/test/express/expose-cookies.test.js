@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-expressions */
-
-import { expect } from 'chai';
-import { exposeCookies } from '../../src/express';
+const { expect } = require('chai');
+const { exposeCookies } = require('../../lib/express');
 
 const cookies = {
   'feathers-jwt': 'cookie cookie cookie'

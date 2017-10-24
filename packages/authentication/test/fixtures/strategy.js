@@ -1,14 +1,12 @@
-// A Mock Passport Strategy for testing.
+const passport = require('passport-strategy');
+const util = require('util');
 
-import passport from 'passport-strategy';
-import util from 'util';
-
-export default function Strategy (options, verify) {
+const Strategy = function (options, verify) {
   passport.Strategy.call(this);
   this.name = 'mock';
   this._options = options;
   this._verify = verify;
-}
+};
 
 util.inherits(Strategy, passport.Strategy);
 
@@ -35,3 +33,5 @@ Strategy.prototype.authenticate = function (req, options) {
 
   this._verify(callback);
 };
+
+module.exports = Strategy;

@@ -1,6 +1,6 @@
-import feathers from 'feathers';
-import adapter from '../../src/passport';
-import { expect } from 'chai';
+const feathers = require('feathers');
+const { expect } = require('chai');
+const adapter = require('../../lib/passport');
 
 describe('Feathers Passport Adapter', () => {
   let app;

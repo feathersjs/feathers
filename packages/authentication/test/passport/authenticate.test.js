@@ -1,9 +1,10 @@
-import passport from 'passport';
-import authenticate from '../../src/passport/authenticate';
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import MockStrategy from '../fixtures/strategy';
+const passport = require('passport');
+const authenticate = require('../../lib/passport/authenticate');
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+const MockStrategy = require('../fixtures/strategy');
+const { expect } = chai;
 
 chai.use(sinonChai);
 

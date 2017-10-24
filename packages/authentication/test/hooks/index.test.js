@@ -1,5 +1,6 @@
-import { expect } from 'chai';
-import hooks from '../../src/hooks';
+const { expect } = require('chai');
+
+const hooks = require('../../lib/hooks');
 
 describe('hooks', () => {
   it('is CommonJS compatible', () => {

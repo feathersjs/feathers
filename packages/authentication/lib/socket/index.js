@@ -1,9 +1,9 @@
-import Debug from 'debug';
-import setupSocketHandler from './handler';
+const Debug = require('debug');
+const setupSocketHandler = require('./handler');
 
 const debug = Debug('feathers-authentication:sockets');
 
-export function socketio (app, options = {}) {
+const socketio = function socketio (app, options = {}) {
   debug('Setting up Socket.io authentication middleware with options:', options);
 
   const providerSettings = {
@@ -16,9 +16,9 @@ export function socketio (app, options = {}) {
   };
 
   return setupSocketHandler(app, options, providerSettings);
-}
+};
 
-export function primus (app, options = {}) {
+const primus = function primus (app, options = {}) {
   debug('Setting up Primus authentication middleware with options:', options);
 
   const providerSettings = {
@@ -31,9 +31,9 @@ export function primus (app, options = {}) {
   };
 
   return setupSocketHandler(app, options, providerSettings);
-}
+};
 
-export default {
+module.exports = {
   socketio,
   primus
 };

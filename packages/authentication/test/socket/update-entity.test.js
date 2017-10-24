@@ -1,6 +1,6 @@
-import { expect } from 'chai';
-import { ObjectID } from 'mongodb';
-import updateEntity from '../../src/socket/update-entity';
+const { expect } = require('chai');
+const { ObjectID } = require('mongodb');
+const updateEntity = require('../../lib/socket/update-entity');
 
 const TEST_OBJECT_ID = '59499c9a901604391cab65f5';
 

@@ -1,15 +1,15 @@
-import Debug from 'debug';
-import hooks from './hooks';
-import express from './express';
-import passport from 'passport';
-import adapter from './passport';
-import getOptions from './options';
-import service from './service';
-import socket from './socket';
+const Debug = require('debug');
+const hooks = require('./hooks');
+const express = require('./express');
+const passport = require('passport');
+const adapter = require('./passport');
+const getOptions = require('./options');
+const service = require('./service');
+const socket = require('./socket');
 
 const debug = Debug('feathers-authentication:index');
 
-export default function init (config = {}) {
+module.exports = function init (config = {}) {
   return function authentication () {
     const app = this;
     const _super = app.setup;
@@ -72,10 +72,10 @@ export default function init (config = {}) {
       return result;
     };
   };
-}
+};
 
 // Exposed Modules
-Object.assign(init, {
+Object.assign(module.exports, {
   hooks,
   express,
   service

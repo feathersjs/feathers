@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-expressions */
-
-import merge from 'lodash.merge';
-import clone from 'lodash.clone';
-import createApplication from '../fixtures/server';
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
+const merge = require('lodash.merge');
+const clone = require('lodash.clone');
+const createApplication = require('../fixtures/server');
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+const { expect } = chai;
 
 chai.use(sinonChai);
 

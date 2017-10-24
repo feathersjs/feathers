@@ -1,5 +1,5 @@
-import getOptions from '../src/options';
-import { expect } from 'chai';
+const getOptions = require('../lib/options');
+const { expect } = require('chai');
 
 describe('options', () => {
   it('is CommonJS compatible', () => {

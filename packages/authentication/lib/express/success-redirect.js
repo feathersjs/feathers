@@ -1,7 +1,7 @@
-import Debug from 'debug';
+const Debug = require('debug');
 const debug = Debug('feathers-authentication:middleware:success-redirect');
 
-export default function successRedirect () {
+module.exports = function successRedirect () {
   debug('Registering successRedirect middleware');
 
   return function (req, res, next) {
@@ -15,4 +15,4 @@ export default function successRedirect () {
 
     next();
   };
-}
+};
