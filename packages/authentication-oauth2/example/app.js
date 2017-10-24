@@ -29,8 +29,8 @@ app.configure(rest())
   .use('/users', memory())
   .use(errorHandler());
 
-function customizeGithubProfile() {
-  return function(hook) {
+function customizeGithubProfile () {
+  return function (hook) {
     console.log('Customizing Github Profile');
     // If there is a github field they signed up or
     // signed in with github so let's pull the email

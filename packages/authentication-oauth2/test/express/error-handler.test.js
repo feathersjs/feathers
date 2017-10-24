@@ -1,5 +1,7 @@
-import { expect } from 'chai';
-import errorHandler from '../../src/express/error-handler';
+/* eslint-disable no-unused-expressions */
+const { expect } = require('chai');
+
+const errorHandler = require('../../lib/express/error-handler');
 
 describe('express:error-handler', () => {
   let req;

@@ -1,12 +1,16 @@
-import 'babel-polyfill';
-import feathers from 'feathers';
-import memory from 'feathers-memory';
-import authentication from 'feathers-authentication';
-import oauth2, { Verifier } from '../src';
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import Strategy from './fixtures/strategy';
+/* eslint-disable no-unused-expressions */
+const feathers = require('feathers');
+const memory = require('feathers-memory');
+const authentication = require('feathers-authentication');
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+
+const oauth2 = require('../lib');
+const Strategy = require('./fixtures/strategy');
+
+const { Verifier } = oauth2;
+const { expect } = chai;
 
 chai.use(sinonChai);
 
@@ -42,7 +46,7 @@ describe('feathers-authentication-oauth2', () => {
         github: {
           clientID: '1234',
           clientSecret: 'secret',
-          scope: ['user']       
+          scope: ['user']
         }
       };
 
@@ -114,7 +118,7 @@ describe('feathers-authentication-oauth2', () => {
 
     it('registers the redirect options on strategy options', () => {
       sinon.spy(authentication.express, 'authenticate');
-      
+
       const mergedOptions = Object.assign({}, config, globalConfig);
       app.configure(oauth2(mergedOptions));
       app.setup();
@@ -225,7 +229,7 @@ describe('feathers-authentication-oauth2', () => {
 
     it('registers custom express callback route', () => {
       sinon.spy(app, 'get');
-      config.callbackPath = `/v1/api/auth/${config.name}/callback`
+      config.callbackPath = `/v1/api/auth/${config.name}/callback`;
       app.configure(oauth2(config));
       app.setup();
 
