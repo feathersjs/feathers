@@ -1,11 +1,17 @@
-import errors from 'feathers-errors';
-import decode from 'jwt-decode';
-import Debug from 'debug';
-import { Storage, payloadIsValid, getCookie, clearCookie } from './utils';
+const errors = require('feathers-errors');
+const decode = require('jwt-decode');
+const Debug = require('debug');
+
+const {
+  Storage,
+  payloadIsValid,
+  getCookie,
+  clearCookie
+} = require('./utils');
 
 const debug = Debug('feathers-authentication-client');
 
-export default class Passport {
+module.exports = class Passport {
   constructor (app, options) {
     if (app.passport) {
       throw new Error('You have already registered authentication on this client app instance. You only need to do it once.');
@@ -292,4 +298,4 @@ export default class Passport {
 
     return new Storage();
   }
-}
+};

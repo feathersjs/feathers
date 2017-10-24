@@ -1,5 +1,7 @@
-import { expect } from 'chai';
-import hooks from '../../src/hooks';
+/* eslint-disable no-unused-expressions */
+const { expect } = require('chai');
+
+const hooks = require('../../lib/hooks');
 
 describe('hooks', () => {
   it('is CommonJS compatible', () => {

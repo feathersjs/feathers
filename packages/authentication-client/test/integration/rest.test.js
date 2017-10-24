@@ -1,12 +1,13 @@
-import hooks from 'feathers-hooks';
-import feathers from 'feathers/client';
-import rest from 'feathers-rest/client';
-import localstorage from 'localstorage-memory';
-import superagent from 'superagent';
-import { expect } from 'chai';
+/* eslint-disable no-unused-expressions */
+const hooks = require('feathers-hooks');
+const feathers = require('feathers/client');
+const rest = require('feathers-rest/client');
+const localstorage = require('localstorage-memory');
+const superagent = require('superagent');
+const { expect } = require('chai');
 
-import authentication from '../../src/index';
-import createApplication from '../fixtures/server';
+const authentication = require('../../lib/index');
+const createApplication = require('../fixtures/server');
 
 const port = 8998;
 const baseURL = `http://localhost:${port}`;

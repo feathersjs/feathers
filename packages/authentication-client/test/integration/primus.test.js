@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-expressions */
+const hooks = require('feathers-hooks');
+const feathers = require('feathers/client');
+const primus = require('feathers-primus/client');
+const localstorage = require('localstorage-memory');
+const Primus = require('primus');
+const Emitter = require('primus-emitter');
+const { expect } = require('chai');
 
-import hooks from 'feathers-hooks';
-import feathers from 'feathers/client';
-import primus from 'feathers-primus/client';
-import localstorage from 'localstorage-memory';
-import Primus from 'primus';
-import Emitter from 'primus-emitter';
-import { expect } from 'chai';
-
-import authentication from '../../src/index';
-import createApplication from '../fixtures/server';
+const authentication = require('../../lib/index');
+const createApplication = require('../fixtures/server');
 
 const port = 8998;
 const baseURL = `http://localhost:${port}`;

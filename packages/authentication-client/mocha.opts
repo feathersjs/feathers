@@ -1,4 +1,2 @@
 --recursive test/
---compilers js:babel-core/register
---require babel-polyfill
 --exit

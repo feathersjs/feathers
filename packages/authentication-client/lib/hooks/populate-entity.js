@@ -1,10 +1,4 @@
-/*
- * Fetch and populate an entity by id encoded in the
- * access token payload. Useful for easily getting the
- * current user after authentication, or any other entity.
- */
-
-export default function populateEntity (options = {}) {
+module.exports = function populateEntity (options = {}) {
   if (!options.service) {
     throw new Error(`You need to pass 'options.service' to the populateEntity() hook.`);
   }
@@ -42,4 +36,4 @@ export default function populateEntity (options = {}) {
         return Promise.resolve(hook);
       });
   };
-}
+};

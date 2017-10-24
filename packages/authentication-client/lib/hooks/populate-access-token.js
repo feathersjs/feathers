@@ -1,9 +1,4 @@
-/*
- * Exposes the access token to the client side hooks
- * under hook.params.accessToken.
- */
-
-export default function populateAccessToken () {
+module.exports = function populateAccessToken () {
   return function (hook) {
     const app = hook.app;
 
@@ -15,4 +10,4 @@ export default function populateAccessToken () {
 
     return Promise.resolve(hook);
   };
-}
+};

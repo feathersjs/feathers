@@ -1,10 +1,4 @@
-/*
- * Sets the access token in the authorization header
- * under hook.params.header so that it can be picked
- * up by the client side REST libraries.
- */
-
-export default function populateHeader (options = {}) {
+module.exports = function populateHeader (options = {}) {
   if (!options.header) {
     throw new Error(`You need to pass 'options.header' to the populateHeader() hook.`);
   }
@@ -22,4 +16,4 @@ export default function populateHeader (options = {}) {
 
     return Promise.resolve(hook);
   };
-}
+};

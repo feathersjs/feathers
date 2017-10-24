@@ -1,15 +1,15 @@
-import path from 'path';
-import feathers from 'feathers';
-import rest from 'feathers-rest';
-import socketio from 'feathers-socketio';
-import primus from 'feathers-primus';
-import hooks from 'feathers-hooks';
-import memory from 'feathers-memory';
-import bodyParser from 'body-parser';
-import errorHandler from 'feathers-errors/handler';
-import local from 'feathers-authentication-local';
-import jwt from 'feathers-authentication-jwt';
-import auth from 'feathers-authentication';
+const path = require('path');
+const feathers = require('feathers');
+const rest = require('feathers-rest');
+const socketio = require('feathers-socketio');
+const primus = require('feathers-primus');
+const hooks = require('feathers-hooks');
+const memory = require('feathers-memory');
+const bodyParser = require('body-parser');
+const errorHandler = require('feathers-errors/handler');
+const local = require('feathers-authentication-local');
+const jwt = require('feathers-authentication-jwt');
+const auth = require('feathers-authentication');
 
 const User = {
   email: 'admin@feathersjs.com',
@@ -17,7 +17,7 @@ const User = {
   permissions: ['*']
 };
 
-export default function (settings, socketProvider) {
+module.exports = function (settings, socketProvider) {
   const app = feathers();
 
   app.configure(rest())
@@ -62,4 +62,4 @@ export default function (settings, socketProvider) {
   app.service('users').create(User).catch(console.error);
 
   return app;
-}
+};

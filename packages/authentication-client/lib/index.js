@@ -1,5 +1,5 @@
-import hooks from './hooks/index';
-import Passport from './passport';
+const hooks = require('./hooks/index');
+const Passport = require('./passport');
 
 const defaults = {
   header: 'Authorization',
@@ -12,7 +12,7 @@ const defaults = {
   timeout: 5000
 };
 
-export default function init (config = {}) {
+module.exports = function init (config = {}) {
   const options = Object.assign({}, defaults, config);
 
   return function () {
@@ -40,6 +40,6 @@ export default function init (config = {}) {
       });
     }
   };
-}
+};
 
-init.defaults = defaults;
+module.exports.defaults = defaults;

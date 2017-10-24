@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
-
-import { expect } from 'chai';
-import { populateEntity } from '../../src/hooks';
+const { expect } = require('chai');
+const { populateEntity } = require('../../lib/hooks');
 
 const user = { id: '1', name: 'Bob' };
 
