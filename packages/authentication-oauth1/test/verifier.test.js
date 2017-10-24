@@ -1,9 +1,14 @@
-import feathers from 'feathers';
-import authentication from 'feathers-authentication';
-import { Verifier } from '../src';
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
+/* eslint-disable no-unused-expressions */
+const feathers = require('feathers');
+const authentication = require('feathers-authentication');
+
+const { Verifier } = require('../lib');
+
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+
+const { expect } = chai;
 
 chai.use(sinonChai);
 
@@ -258,7 +263,7 @@ describe('Verifier', () => {
     });
 
     it('handles false rejections in promise chain', done => {
-      verifier._updateEntity = () => Promise.reject(false);
+      verifier._updateEntity = () => Promise.reject(false); // eslint-disable-line
       verifier.verify({}, 'access', 'refresh', { id: 1234 }, (error, entity) => {
         expect(error).to.equal(null);
         expect(entity).to.equal(false);

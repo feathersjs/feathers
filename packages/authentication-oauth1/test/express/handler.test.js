@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-expressions */
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+const handler = require('../../lib/express/handler');
 
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import handler from '../../src/express/handler';
+const { expect } = chai;
 
 chai.use(sinonChai);
 

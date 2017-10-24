@@ -1,5 +1,4 @@
-import Debug from 'debug';
-import merge from 'lodash.merge';
+const Debug = require('debug');
 
 const debug = Debug('feathers-authentication-oauth1:verify');
 
@@ -117,4 +116,4 @@ class OAuth1Vierifier {
   }
 }
 
-export default OAuth1Vierifier;
+module.exports = OAuth1Vierifier;

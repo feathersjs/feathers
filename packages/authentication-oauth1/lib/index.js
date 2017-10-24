@@ -1,10 +1,16 @@
-import Debug from 'debug';
-import auth from 'feathers-authentication';
-import { formatter as defaultFormatter } from 'feathers-rest';
-import { omit, pick, makeUrl } from 'feathers-commons';
-import merge from 'lodash.merge';
-import defaultHandler from './express/handler';
-import DefaultVerifier from './verifier';
+const Debug = require('debug');
+const auth = require('feathers-authentication');
+const rest = require('feathers-rest');
+
+const {
+  omit,
+  pick,
+  makeUrl
+} = require('feathers-commons');
+
+const merge = require('lodash.merge');
+const defaultHandler = require('./express/handler');
+const DefaultVerifier = require('./verifier');
 
 const debug = Debug('feathers-authentication-oauth1');
 
@@ -16,7 +22,7 @@ const INCLUDE_KEYS = [
 
 const EXCLUDE_KEYS = ['Verifier', 'Strategy', 'formatter'];
 
-export default function init (options = {}) {
+module.exports = function init (options = {}) {
   return function oauth1Auth () {
     const app = this;
     const _super = app.setup;
@@ -60,7 +66,7 @@ export default function init (options = {}) {
     }
 
     const Verifier = options.Verifier || DefaultVerifier;
-    const formatter = options.formatter || defaultFormatter;
+    const formatter = options.formatter || rest.formatter;
     const handler = options.handler || defaultHandler(oauth1Settings);
 
     // register OAuth middleware
@@ -96,9 +102,9 @@ export default function init (options = {}) {
       return result;
     };
   };
-}
+};
 
 // Exposed Modules
-Object.assign(init, {
+Object.assign(module.exports, {
   Verifier: DefaultVerifier
 });

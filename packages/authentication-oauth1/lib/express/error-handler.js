@@ -1,6 +1,4 @@
-// The default Express error middleware that gets called by the OAuth callback route.
-
-export default function OAuthErrorHandler (options = {}) {
+module.exports = function OAuthErrorHandler (options = {}) {
   return function (err, req, res, next) {
     // Set __redirect so that later middleware (e.g., auth.express.failureRedirect) can redirect accordingly
     if (options.failureRedirect) {
@@ -10,4 +8,4 @@ export default function OAuthErrorHandler (options = {}) {
 
     next(err);
   };
-}
+};

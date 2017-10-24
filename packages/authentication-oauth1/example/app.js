@@ -31,8 +31,8 @@ app.configure(rest())
   .use('/users', memory())
   .use(errorHandler());
 
-function customizeTwitterProfile() {
-  return function(hook) {
+function customizeTwitterProfile () {
+  return function (hook) {
     console.log('Customizing Twitter Profile');
     // If there is a twitter field they signed up or
     // signed in with twitter so let's pull the email

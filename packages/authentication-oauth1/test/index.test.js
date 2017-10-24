@@ -1,12 +1,15 @@
-import 'babel-polyfill';
-import feathers from 'feathers';
-import memory from 'feathers-memory';
-import authentication from 'feathers-authentication';
-import oauth1, { Verifier } from '../src';
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import Strategy from './fixtures/strategy';
+/* eslint-disable no-unused-expressions */
+const feathers = require('feathers');
+const memory = require('feathers-memory');
+const authentication = require('feathers-authentication');
+const oauth1 = require('../lib');
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+const Strategy = require('./fixtures/strategy');
+
+const { Verifier } = oauth1;
+const { expect } = chai;
 
 chai.use(sinonChai);
 
@@ -224,7 +227,7 @@ describe('feathers-authentication-oauth1', () => {
 
     it('registers custom express callback route', () => {
       sinon.spy(app, 'get');
-      config.callbackPath = `/v1/api/auth/${config.name}/callback`
+      config.callbackPath = `/v1/api/auth/${config.name}/callback`;
       app.configure(oauth1(config));
       app.setup();
 
