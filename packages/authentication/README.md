@@ -1,11 +1,11 @@
 # feathers-authentication
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-authentication.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/authentication.svg)](https://greenkeeper.io/)
 
-[![Build Status](https://travis-ci.org/feathersjs/feathers-authentication.png?branch=master)](https://travis-ci.org/feathersjs/feathers-authentication)
-[![Code Climate](https://codeclimate.com/github/feathersjs/feathers-authentication.png)](https://codeclimate.com/github/feathersjs/feathers-authentication)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-authentication/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/feathers-authentication.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers-authentication)
+[![Build Status](https://travis-ci.org/feathersjs/authentication.png?branch=master)](https://travis-ci.org/feathersjs/authentication)
+[![Maintainability](https://api.codeclimate.com/v1/badges/65abe50ec85244072ee9/maintainability)](https://codeclimate.com/github/feathersjs/authentication/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/65abe50ec85244072ee9/test_coverage)](https://codeclimate.com/github/feathersjs/authentication/test_coverage)
+[![Dependency Status](https://img.shields.io/david/feathersjs/authentication.svg?style=flat-square)](https://david-dm.org/feathersjs/authentication)
 [![Download Status](https://img.shields.io/npm/dm/feathers-authentication.svg?style=flat-square)](https://www.npmjs.com/package/feathers-authentication)
 [![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 
