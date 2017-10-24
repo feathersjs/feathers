@@ -4,7 +4,7 @@
 .istanbul.yml
 .babelrc
 .idea/
-src/
+.vscode/
 test/
-!lib/
+coverage/
 .github/

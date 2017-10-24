@@ -1,10 +1,11 @@
-import Debug from 'debug';
-import merge from 'lodash.merge';
-import omit from 'lodash.omit';
-import pick from 'lodash.pick';
-import hooks from './hooks';
-import DefaultVerifier from './verifier';
-import { Strategy as LocalStrategy } from 'passport-local';
+const Debug = require('debug');
+const merge = require('lodash.merge');
+const omit = require('lodash.omit');
+const pick = require('lodash.pick');
+const hooks = require('./hooks');
+const DefaultVerifier = require('./verifier');
+
+const passportLocal = require('passport-local');
 
 const debug = Debug('feathers-authentication-local');
 const defaults = {
@@ -20,8 +21,8 @@ const KEYS = [
   'session'
 ];
 
-export default function init(options = {}) {
-  return function localAuth() {
+module.exports = function init (options = {}) {
+  return function localAuth () {
     const app = this;
     const _super = app.setup;
 
@@ -46,21 +47,21 @@ export default function init(options = {}) {
       let verifier = new Verifier(app, localSettings);
 
       if (!verifier.verify) {
-        throw new Error(`Your verifier must implement a 'verify' function. It should have the same signature as a local passport verify callback.`)
+        throw new Error(`Your verifier must implement a 'verify' function. It should have the same signature as a local passport verify callback.`);
       }
 
       // Register 'local' strategy with passport
       debug('Registering local authentication strategy with options:', localSettings);
-      app.passport.use(localSettings.name, new LocalStrategy(localSettings, verifier.verify.bind(verifier)));
+      app.passport.use(localSettings.name, new passportLocal.Strategy(localSettings, verifier.verify.bind(verifier)));
       app.passport.options(localSettings.name, localSettings);
-      
+
       return result;
-    }
+    };
   };
-}
+};
 
 // Exposed Modules
-Object.assign(init, {
+Object.assign(module.exports, {
   defaults,
   hooks,
   Verifier: DefaultVerifier

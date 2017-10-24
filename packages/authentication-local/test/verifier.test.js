@@ -1,10 +1,14 @@
-import feathers from 'feathers';
-import authentication from 'feathers-authentication';
-import hasher from '../src/utils/hash';
-import { Verifier, defaults } from '../src';
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
+/* eslint-disable no-unused-expressions */
+const feathers = require('feathers');
+const authentication = require('feathers-authentication');
+const hasher = require('../lib/utils/hash');
+const { Verifier, defaults } = require('../lib');
+
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+
+const { expect } = require('chai');
 
 chai.use(sinonChai);
 
@@ -31,12 +35,12 @@ describe('Verifier', () => {
 
       sinon.stub(service, 'find').callsFake(function (params) {
         return new Promise((resolve, reject) => {
-          const { email } = params && params.query
+          const { email } = params && params.query;
           if (email === 'nonexistinguser@gmail.com') {
-            return resolve([])
+            return resolve([]);
           }
-          return resolve([user])
-        })
+          return resolve([user]);
+        });
       });
 
       app.use('users', service)
@@ -55,8 +59,6 @@ describe('Verifier', () => {
   it('exposes the Verifier class', () => {
     expect(typeof Verifier).to.equal('function');
   });
-
-
 
   describe('constructor', () => {
     it('retains an app reference', () => {
@@ -79,7 +81,7 @@ describe('Verifier', () => {
     describe('when service is undefined', () => {
       it('throws an error', () => {
         expect(() => {
-          new Verifier(app, {});
+          new Verifier(app, {}); // eslint-disable-line
         }).to.throw();
       });
     });
@@ -132,7 +134,7 @@ describe('Verifier', () => {
         return verifier._comparePassword(user, 'admin').then(result => {
           expect(result).to.deep.equal(user);
         });
-      })
+      });
     });
   });
 
@@ -185,7 +187,7 @@ describe('Verifier', () => {
         expect(error).to.equal(null);
         expect(entity).to.deep.equal(user);
         done();
-      })
+      });
     });
 
     it('prefers entityUsernameField over usernameField', done => {
@@ -202,8 +204,7 @@ describe('Verifier', () => {
         expect(error).to.equal(null);
         expect(entity).to.deep.equal(user);
         done();
-      })
-
+      });
     });
 
     it('calls _normalizeResult', done => {
@@ -217,6 +218,7 @@ describe('Verifier', () => {
 
     it('produces an error message when the user did not exist', done => {
       verifier.verify({}, 'nonexistinguser@gmail.com', 'admin', (err, user, info) => {
+        expect(err).to.not.be.undefined;
         expect(info.message).to.equal('Invalid login');
         done();
       });
@@ -240,7 +242,7 @@ describe('Verifier', () => {
     });
 
     it('handles false rejections in promise chain', (done) => {
-      verifier._normalizeResult = () => Promise.reject(false);
+      verifier._normalizeResult = () => Promise.reject(false); // eslint-disable-line
       verifier.verify({}, user.email, 'admin', (error, entity) => {
         expect(error).to.equal(null);
         expect(entity).to.equal(false);
@@ -279,7 +281,7 @@ describe('Verifier without service.id', function () {
       // testing a missing service.id
       service = {
         find () {
-          return Promise.resolve([])
+          return Promise.resolve([]);
         }
       };
 

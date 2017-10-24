@@ -1,12 +1,15 @@
-import 'babel-polyfill';
-import feathers from 'feathers';
-import memory from 'feathers-memory';
-import authentication from 'feathers-authentication';
-import local, { Verifier } from '../src';
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import passportLocal from 'passport-local';
+/* eslint-disable no-unused-expressions */
+const feathers = require('feathers');
+const memory = require('feathers-memory');
+const authentication = require('feathers-authentication');
+const local = require('../lib');
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+const passportLocal = require('passport-local');
+
+const { Verifier } = local;
+const { expect } = chai;
 
 chai.use(sinonChai);
 
@@ -177,7 +180,7 @@ describe('feathers-authentication-local', () => {
           cookies: {}
         };
         class CustomVerifier extends Verifier {
-          verify(req, username, password, done) {
+          verify (req, username, password, done) {
             expect(username).to.equal(User.email);
             expect(password).to.equal(User.password);
             done(null, User);

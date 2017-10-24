@@ -1,10 +1,10 @@
-import hasher from '../utils/hash';
-import merge from 'lodash.merge';
-import Debug from 'debug';
+const hasher = require('../utils/hash');
+const merge = require('lodash.merge');
+const Debug = require('debug');
 
 const debug = Debug('feathers-authentication-local:hooks:hash-password');
 
-export default function hashPassword (options = {}) {
+module.exports = function hashPassword (options = {}) {
   return function (hook) {
     if (hook.type !== 'before') {
       return Promise.reject(new Error(`The 'hashPassword' hook should only be used as a 'before' hook.`));
@@ -72,4 +72,4 @@ export default function hashPassword (options = {}) {
       return Promise.resolve(hook);
     });
   };
-}
+};
