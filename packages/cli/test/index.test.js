@@ -1,7 +1,7 @@
 const assert = require('assert');
 const cli = require('../lib');
 
-describe('feathers-cli', () => {
+describe('@feathersjs/cli', () => {
   it('is CommonJS compatible', () => {
     assert.equal(typeof require('../lib'), 'function');
   });
