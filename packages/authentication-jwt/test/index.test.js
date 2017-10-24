@@ -1,14 +1,16 @@
 /* eslint-disable no-unused-expressions */
+const JWT = require('jsonwebtoken');
+const feathers = require('feathers');
+const memory = require('feathers-memory');
+const authentication = require('feathers-authentication');
+const jwt = require('../lib');
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+const passportJWT = require('passport-jwt');
 
-import JWT from 'jsonwebtoken';
-import feathers from 'feathers';
-import memory from 'feathers-memory';
-import authentication from 'feathers-authentication';
-import jwt, { Verifier, ExtractJwt } from '../src';
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import passportJWT from 'passport-jwt';
+const { Verifier, ExtractJwt } = jwt;
+const { expect } = chai;
 
 chai.use(sinonChai);
 

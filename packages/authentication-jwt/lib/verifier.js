@@ -1,5 +1,4 @@
-import Debug from 'debug';
-
+const Debug = require('debug');
 const debug = Debug('feathers-authentication-jwt:verify');
 
 class JWTVerifier {
@@ -38,4 +37,4 @@ class JWTVerifier {
   }
 }
 
-export default JWTVerifier;
+module.exports = JWTVerifier;

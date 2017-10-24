@@ -1,9 +1,10 @@
-import feathers from 'feathers';
-import authentication from 'feathers-authentication';
-import memory from 'feathers-memory';
-import hooks from 'feathers-hooks';
-import jwt from '../src';
-import { expect } from 'chai';
+/* eslint-disable no-unused-expressions */
+const feathers = require('feathers');
+const authentication = require('feathers-authentication');
+const memory = require('feathers-memory');
+const hooks = require('feathers-hooks');
+const { expect } = require('chai');
+const jwt = require('../lib');
 
 describe('integration', () => {
   it('verifies', () => {
