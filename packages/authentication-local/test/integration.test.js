@@ -1,9 +1,11 @@
-import feathers from 'feathers';
-import authentication from 'feathers-authentication';
-import memory from 'feathers-memory';
-import hooks from 'feathers-hooks';
-import local from '../src';
-import { expect } from 'chai';
+/* eslint-disable no-unused-expressions */
+const feathers = require('feathers');
+const authentication = require('feathers-authentication');
+const memory = require('feathers-memory');
+const hooks = require('feathers-hooks');
+const local = require('../lib');
+
+const { expect } = require('chai');
 
 describe('integration', () => {
   it('verifies', () => {

@@ -25,7 +25,6 @@ app.configure(rest())
   .use('/users', memory())
   .use(errorHandler());
 
-
 // Authenticate the user using the default
 // email/password strategy and if successful
 // return a JWT.

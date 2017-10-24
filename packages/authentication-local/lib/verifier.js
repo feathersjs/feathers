@@ -1,8 +1,7 @@
-import Debug from 'debug';
-import errors from 'feathers-errors';
-import bcrypt from 'bcryptjs';
-import get from 'lodash.get';
-import omit from 'lodash.omit';
+const Debug = require('debug');
+const bcrypt = require('bcryptjs');
+const get = require('lodash.get');
+const omit = require('lodash.omit');
 
 const debug = Debug('feathers-authentication-local:verify');
 
@@ -43,7 +42,7 @@ class LocalVerifier {
 
         if (!result) {
           debug('Password incorrect');
-          return reject(false);
+          return reject(false); // eslint-disable-line
         }
 
         debug('Password correct');
@@ -59,7 +58,7 @@ class LocalVerifier {
 
     // Handle bad username.
     if (!entity) {
-      return Promise.reject(false);
+      return Promise.reject(false); // eslint-disable-line
     }
 
     debug(`${this.options.entity} found`);
@@ -80,7 +79,7 @@ class LocalVerifier {
 
     if (id === null || id === undefined) {
       debug('failed: the service.id was not set');
-      return done(new Error('the `id` property must be set on the entity service for authentication'))
+      return done(new Error('the `id` property must be set on the entity service for authentication'));
     }
 
     // Look up the entity
@@ -102,4 +101,4 @@ class LocalVerifier {
   }
 }
 
-export default LocalVerifier;
+module.exports = LocalVerifier;

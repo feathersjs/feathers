@@ -1,8 +1,6 @@
 verbose: false
 instrumentation:
-  root: ./src/
-  excludes:
-    - lib/
+  root: ./lib/
   include-all-sources: true
 reporting:
   print: summary
