@@ -1,9 +1,9 @@
-import Debug from 'debug';
-import merge from 'lodash.merge';
-import omit from 'lodash.omit';
-import pick from 'lodash.pick';
-import DefaultVerifier from './verifier';
-import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
+const Debug = require('debug');
+const merge = require('lodash.merge');
+const omit = require('lodash.omit');
+const pick = require('lodash.pick');
+const DefaultVerifier = require('./verifier');
+const passportJwt = require('passport-jwt');
 
 const debug = Debug('feathers-authentication-jwt');
 const defaults = {
@@ -21,10 +21,11 @@ const KEYS = [
   'jwt'
 ];
 
-export default function init (options = {}) {
+module.exports = function init (options = {}) {
   return function jwtAuth () {
     const app = this;
     const _super = app.setup;
+    const { ExtractJwt, Strategy } = passportJwt;
 
     if (!app.passport) {
       throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before feathers-authentication-jwt?`);
@@ -76,17 +77,17 @@ export default function init (options = {}) {
 
       // Register 'jwt' strategy with passport
       debug('Registering jwt authentication strategy with options:', strategyOptions);
-      app.passport.use(jwtSettings.name, new JWTStrategy(strategyOptions, verifier.verify.bind(verifier)));
+      app.passport.use(jwtSettings.name, new Strategy(strategyOptions, verifier.verify.bind(verifier)));
       app.passport.options(jwtSettings.name, jwtSettings);
 
       return result;
     };
   };
-}
+};
 
 // Exposed Modules
-Object.assign(init, {
+Object.assign(module.exports, {
   defaults,
-  ExtractJwt,
+  ExtractJwt: passportJwt.ExtractJwt,
   Verifier: DefaultVerifier
 });
