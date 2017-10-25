@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.0.0-pre.7](https://github.com/feathersjs/socket-commons/tree/v3.0.0-pre.7) (2017-10-25)
+[Full Changelog](https://github.com/feathersjs/socket-commons/compare/v3.0.0-pre.6...v3.0.0-pre.7)
+
+**Merged pull requests:**
+
+- Update to better returnHook handling [\#53](https://github.com/feathersjs/socket-commons/pull/53) ([daffl](https://github.com/daffl))
+
 ## [v3.0.0-pre.6](https://github.com/feathersjs/socket-commons/tree/v3.0.0-pre.6) (2017-10-21)
 [Full Changelog](https://github.com/feathersjs/socket-commons/compare/v3.0.0-pre.5...v3.0.0-pre.6)
 
