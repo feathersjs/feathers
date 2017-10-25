@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0-pre.4](https://github.com/feathersjs/express/tree/v1.0.0-pre.4) (2017-10-25)
+[Full Changelog](https://github.com/feathersjs/express/compare/v1.0.0-pre.3...v1.0.0-pre.4)
+
+**Merged pull requests:**
+
+- Update to better returnHook handling [\#9](https://github.com/feathersjs/express/pull/9) ([daffl](https://github.com/daffl))
+
 ## [v1.0.0-pre.3](https://github.com/feathersjs/express/tree/v1.0.0-pre.3) (2017-10-21)
 [Full Changelog](https://github.com/feathersjs/express/compare/v1.0.0-pre.2...v1.0.0-pre.3)
 
