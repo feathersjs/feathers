@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
-const hooks = require('feathers-hooks');
-const feathers = require('feathers/client');
-const socketio = require('feathers-socketio/client');
+const feathers = require('@feathersjs/feathers');
+const socketio = require('@feathersjs/socketio-client');
 const localstorage = require('localstorage-memory');
 const io = require('socket.io-client');
 const { expect } = require('chai');
@@ -26,7 +25,6 @@ describe('Socket.io client authentication', function () {
     server.once('listening', () => {
       socket = io(baseURL);
       client = feathers()
-        .configure(hooks())
         .configure(socketio(socket))
         .configure(authentication());
 

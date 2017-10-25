@@ -1,15 +1,15 @@
 const path = require('path');
-const feathers = require('feathers');
-const rest = require('feathers-rest');
-const socketio = require('feathers-socketio');
-const primus = require('feathers-primus');
-const hooks = require('feathers-hooks');
+const feathers = require('@feathersjs/feathers');
+const express = require('@feathersjs/express');
+const rest = require('@feathersjs/express/rest');
+const socketio = require('@feathersjs/socketio');
+const primus = require('@feathersjs/primus');
 const memory = require('feathers-memory');
 const bodyParser = require('body-parser');
-const errorHandler = require('feathers-errors/handler');
-const local = require('feathers-authentication-local');
-const jwt = require('feathers-authentication-jwt');
-const auth = require('feathers-authentication');
+const errorHandler = require('@feathersjs/errors/handler');
+const local = require('@feathersjs/authentication-local');
+const jwt = require('@feathersjs/authentication-jwt');
+const auth = require('@feathersjs/authentication');
 
 const User = {
   email: 'admin@feathersjs.com',
@@ -18,20 +18,19 @@ const User = {
 };
 
 module.exports = function (settings, socketProvider) {
-  const app = feathers();
+  const app = express(feathers());
 
   app.configure(rest())
     .configure(socketProvider === 'socketio' ? socketio() : primus({
       transformer: 'websockets'
     }))
-    .configure(hooks())
     .use(bodyParser.json())
     .use(bodyParser.urlencoded({ extended: true }))
     .configure(auth(settings))
     .configure(local())
     .configure(jwt())
     .use('/users', memory())
-    .use('/', feathers.static(path.resolve(__dirname, '/public')))
+    .use('/', express.static(path.resolve(__dirname, '/public')))
     .use(errorHandler());
 
   app.service('authentication').hooks({

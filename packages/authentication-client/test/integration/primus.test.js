@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
-const hooks = require('feathers-hooks');
-const feathers = require('feathers/client');
-const primus = require('feathers-primus/client');
+const feathers = require('@feathersjs/feathers');
+const primus = require('@feathersjs/primus-client');
 const localstorage = require('localstorage-memory');
 const Primus = require('primus');
 const Emitter = require('primus-emitter');
@@ -33,7 +32,6 @@ describe('Primus client authentication', function () {
     server.once('listening', () => {
       socket = new Socket(baseURL);
       client = feathers()
-        .configure(hooks())
         .configure(primus(socket, { timeout: 1000 }))
         .configure(authentication());
 

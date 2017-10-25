@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-expressions */
-const hooks = require('feathers-hooks');
-const feathers = require('feathers/client');
-const rest = require('feathers-rest/client');
+const feathers = require('@feathersjs/feathers');
+const rest = require('@feathersjs/rest-client');
 const localstorage = require('localstorage-memory');
 const superagent = require('superagent');
 const { expect } = require('chai');
@@ -23,7 +21,6 @@ describe('REST client authentication', () => {
     server = app.listen(port);
     server.once('listening', () => {
       client = feathers()
-        .configure(hooks())
         .configure(rest(baseURL).superagent(superagent))
         .configure(authentication());
 
