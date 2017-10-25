@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-expressions */
 const JWT = require('jsonwebtoken');
-const feathers = require('feathers');
+const feathers = require('@feathersjs/feathers');
+const expressify = require('@feathersjs/express');
+const authentication = require('@feathersjs/authentication');
 const memory = require('feathers-memory');
-const authentication = require('feathers-authentication');
-const jwt = require('../lib');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const passportJWT = require('passport-jwt');
+const jwt = require('../lib');
 
 const { Verifier, ExtractJwt } = jwt;
 const { expect } = chai;
@@ -44,7 +45,7 @@ describe('@feathersjs/authentication-jwt', () => {
     let Payload = { userId: 1 };
 
     beforeEach(done => {
-      app = feathers();
+      app = expressify(feathers());
       app.use('/users', memory());
       app.configure(authentication({ secret: 'supersecret' }));
 
@@ -57,7 +58,7 @@ describe('@feathersjs/authentication-jwt', () => {
 
     it('throws an error if passport has not been registered', () => {
       expect(() => {
-        feathers().configure(jwt());
+        expressify(feathers()).configure(jwt());
       }).to.throw();
     });
 
@@ -70,7 +71,7 @@ describe('@feathersjs/authentication-jwt', () => {
 
     it('throws an error if secret is not provided', () => {
       expect(() => {
-        app = feathers();
+        app = expressify(feathers());
         app.configure(authentication({}));
         app.setup();
       }).to.throw();
