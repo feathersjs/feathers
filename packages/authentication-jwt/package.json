@@ -30,7 +30,7 @@
     "release:patch": "npm version patch && npm publish --access public",
     "release:minor": "npm version minor && npm publish --access public",
     "release:major": "npm version major && npm publish --access public",
-    "release:prerelease": "npm version prerelease && npm publish --tag pre --access public",
+    "release:pre": "npm version prerelease && npm publish --tag pre --access public",
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "lint": "semistandard --fix",
     "mocha": "mocha --opts mocha.opts",
