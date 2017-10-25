@@ -5,7 +5,7 @@ const {
   verifyJWT
 } = require('../utils');
 
-const debug = makeDebug('feathers-authentication:passport:initialize');
+const debug = makeDebug('@feathersjs/authentication:passport:initialize');
 
 module.exports = function initialize (options = {}) {
   // const app = this;

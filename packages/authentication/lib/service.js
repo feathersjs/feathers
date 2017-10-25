@@ -2,7 +2,7 @@ const Debug = require('debug');
 const merge = require('lodash.merge');
 const express = require('./express');
 
-const debug = Debug('feathers-authentication:authentication:service');
+const debug = Debug('@feathersjs/authentication:authentication:service');
 
 class Service {
   constructor (app) {

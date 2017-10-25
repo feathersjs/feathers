@@ -2,7 +2,7 @@ const initialize = require('./initialize');
 const authenticate = require('./authenticate');
 const makeDebug = require('debug');
 
-const debug = makeDebug('feathers-authentication:passport');
+const debug = makeDebug('@feathersjs/authentication:passport');
 
 module.exports = function feathersPassport (options) {
   const app = this;

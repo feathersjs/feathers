@@ -1,8 +1,8 @@
 {
-  "name": "feathers-authentication",
+  "name": "@feathersjs/authentication",
   "description": "Add Authentication to your FeathersJS app.",
   "version": "1.3.0",
-  "homepage": "https://github.com/feathersjs/feathers-authentication",
+  "homepage": "https://github.com/feathersjs/authentication",
   "main": "lib/",
   "keywords": [
     "feathers",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/feathers-authentication.git"
+    "url": "git://github.com/feathersjs/authentication.git"
   },
   "author": {
     "name": "Feathers contributors",
@@ -20,7 +20,7 @@
   },
   "contributors": [],
   "bugs": {
-    "url": "https://github.com/feathersjs/feathers-authentication/issues"
+    "url": "https://github.com/feathersjs/authentication/issues"
   },
   "engines": {
     "node": ">= 6"

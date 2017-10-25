@@ -1,7 +1,7 @@
 const errors = require('@feathersjs/errors');
 const Debug = require('debug');
 const merge = require('lodash.merge');
-const debug = Debug('feathers-authentication:hooks:authenticate');
+const debug = Debug('@feathersjs/authentication:hooks:authenticate');
 
 module.exports = function authenticate (strategies, options = {}) {
   if (!strategies) {

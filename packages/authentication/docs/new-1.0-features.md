@@ -25,20 +25,20 @@ app.configure(authentication({
 We've added more helpful warning messages and added debug logs for every hook, service, and middleware. We use the [debug]() module so usage is the same.
 
 #### Turning on all auth logs
-You can turn on all auth debug logs by running your app with `DEBUG=feathers-authentication* npm start`.
+You can turn on all auth debug logs by running your app with `DEBUG=@feathersjs/authentication* npm start`.
 
 #### Turning on logs for a specific type
-If you want to only turn on logs for a `hooks`, `express`, `passport` or `service` you can do `DEBUG=feathers-authentication:<type>* npm start`. For example,
+If you want to only turn on logs for a `hooks`, `express`, `passport` or `service` you can do `DEBUG=@feathersjs/authentication:<type>* npm start`. For example,
 
 ```
-`DEBUG=feathers-authentication:hooks* npm start`
+`DEBUG=@feathersjs/authentication:hooks* npm start`
 ```
 
 #### Turning on logs for a specific entity
-If you want to only turn on logs for a specific hook, middleware or service you can do `DEBUG=feathers-authentication:<type>:<entity> npm start`. For example,
+If you want to only turn on logs for a specific hook, middleware or service you can do `DEBUG=@feathersjs/authentication:<type>:<entity> npm start`. For example,
 
 ```
-`DEBUG=feathers-authentication:hooks:authenticate npm start`
+`DEBUG=@feathersjs/authentication:hooks:authenticate npm start`
 ```
 
 ## More Flexible Tokens
