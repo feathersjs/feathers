@@ -1,5 +1,5 @@
 const Debug = require('debug');
-const debug = Debug('feathers-authentication-jwt:verify');
+const debug = Debug('@feathersjs/authentication-jwt:verify');
 
 class JWTVerifier {
   constructor (app, options = {}) {
@@ -8,7 +8,7 @@ class JWTVerifier {
     this.service = typeof options.service === 'string' ? app.service(options.service) : options.service;
 
     if (!this.service) {
-      throw new Error(`options.service does not exist.\n\tMake sure you are passing a valid service path or service instance and it is initialized before feathers-authentication-jwt.`);
+      throw new Error(`options.service does not exist.\n\tMake sure you are passing a valid service path or service instance and it is initialized before @feathersjs/authentication-jwt.`);
     }
 
     this.verify = this.verify.bind(this);

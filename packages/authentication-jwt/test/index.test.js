@@ -14,7 +14,7 @@ const { expect } = chai;
 
 chai.use(sinonChai);
 
-describe('feathers-authentication-jwt', () => {
+describe('@feathersjs/authentication-jwt', () => {
   it('is CommonJS compatible', () => {
     expect(typeof require('../lib')).to.equal('function');
   });

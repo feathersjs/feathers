@@ -1,24 +1,23 @@
-# feathers-authentication-jwt
+# @feathersjs/authentication-jwt
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-authentication-jwt.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/authentication-jwt.svg)](https://greenkeeper.io/)
 
-[![Build Status](https://travis-ci.org/feathersjs/feathers-authentication-jwt.png?branch=master)](https://travis-ci.org/feathersjs/feathers-authentication-jwt)
-[![Code Climate](https://codeclimate.com/github/feathersjs/feathers-authentication-jwt/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-jwt)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-authentication-jwt/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-jwt/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/feathers-authentication-jwt.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers-authentication-jwt)
-[![Download Status](https://img.shields.io/npm/dm/feathers-authentication-jwt.svg?style=flat-square)](https://www.npmjs.com/package/feathers-authentication-jwt)
+[![Build Status](https://travis-ci.org/feathersjs/authentication-jwt.png?branch=master)](https://travis-ci.org/feathersjs/authentication-jwt)
+[![Test Coverage](https://codeclimate.com/github/feathersjs/authentication-jwt/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/authentication-jwt/coverage)
+[![Dependency Status](https://img.shields.io/david/feathersjs/authentication-jwt.svg?style=flat-square)](https://david-dm.org/feathersjs/authentication-jwt)
+[![Download Status](https://img.shields.io/npm/dm/@feathersjs/authentication-jwt.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/authentication-jwt)
 
 > JWT authentication strategy for feathers-authentication using Passport
 
 ## Installation
 
 ```
-npm install feathers-authentication-jwt --save
+npm install @feathersjs/authentication-jwt --save
 ```
 
 ## Documentation
 
-<!-- Please refer to the [feathers-authentication-jwt documentation](http://docs.feathersjs.com/) for more details. -->
+<!-- Please refer to the [@feathersjs/authentication-jwt documentation](http://docs.feathersjs.com/) for more details. -->
 
 ## API
 
@@ -30,7 +29,7 @@ This module contains 3 core pieces:
 
 ### Main Initialization
 
-In most cases initializing the `feathers-authentication-jwt` module is as simple as doing this:
+In most cases initializing the `@feathersjs/authentication-jwt` module is as simple as doing this:
 
 ```js
 app.configure(authentication(settings));
@@ -74,7 +73,7 @@ The `Verifier` class can be extended so that you customize it's behavior without
 An example of customizing the Verifier:
 
 ```js
-import jwt, { Verifier } from 'feathers-authentication-jwt';
+import jwt, { Verifier } from '@feathersjs/authentication-jwt';
 
 class CustomVerifier extends Verifier {
   // The verify function has the exact same inputs and 
@@ -95,7 +94,7 @@ This is a collection of functions provided by [passport-jwt](https://github.com/
 
 ```js
 // Example of pulling from the body instead
-import jwt, { ExtractJwt } from 'feathers-authentication-jwt';
+import jwt, { ExtractJwt } from '@feathersjs/authentication-jwt';
 
 app.configure(jwt({ jwtFromRequest: ExtractJwt.fromBodyField('accessToken') }));
 ```
@@ -112,7 +111,7 @@ By default, this strategy expects a payload in this format:
 
 ## Complete Example
 
-Here's a basic example of a Feathers server that uses `feathers-authentication-jwt`. You can see a fully working example in the [example/](./example/) directory.
+Here's a basic example of a Feathers server that uses `@feathersjs/authentication-jwt`. You can see a fully working example in the [example/](./example/) directory.
 
 ```js
 const feathers = require('feathers');
@@ -122,7 +121,7 @@ const memory = require('feathers-memory');
 const bodyParser = require('body-parser');
 const errorHandler = require('feathers-errors/handler');
 const auth = require('feathers-authentication');
-const jwt = require('feathers-authentication-jwt');
+const jwt = require('@feathersjs/authentication-jwt');
 
 // Initialize the application
 const app = feathers()

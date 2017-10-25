@@ -1,8 +1,8 @@
 {
-  "name": "feathers-authentication-jwt",
+  "name": "@feathersjs/authentication-jwt",
   "description": "JWT authentication strategy for feathers-authentication using Passport",
   "version": "0.3.2",
-  "homepage": "https://github.com/feathersjs/feathers-authentication-jwt",
+  "homepage": "https://github.com/feathersjs/authentication-jwt",
   "main": "lib/",
   "keywords": [
     "feathers",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/feathers-authentication-jwt.git"
+    "url": "git://github.com/feathersjs/authentication-jwt.git"
   },
   "author": {
     "name": "Feathers contributors",
@@ -20,7 +20,7 @@
   },
   "contributors": [],
   "bugs": {
-    "url": "https://github.com/feathersjs/feathers-authentication-jwt/issues"
+    "url": "https://github.com/feathersjs/authentication-jwt/issues"
   },
   "engines": {
     "node": ">= 6"
