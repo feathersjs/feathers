@@ -33,7 +33,7 @@ describe('/authentication service', () => {
 
   it('throws an error when path option is missing', () => {
     expect(() => {
-      feathers().configure(authentication({
+      express(feathers()).configure(authentication({
         secret: 'dummy',
         path: null
       }));

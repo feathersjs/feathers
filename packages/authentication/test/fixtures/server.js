@@ -7,8 +7,8 @@ const primus = require('@feathersjs/primus');
 const memory = require('feathers-memory');
 const bodyParser = require('body-parser');
 const errorHandler = require('@feathersjs/errors/handler');
-const local = require('feathers-authentication-local');
-const jwt = require('feathers-authentication-jwt');
+const local = require('@feathersjs/authentication-local');
+const jwt = require('@feathersjs/authentication-jwt');
 const auth = require('../../lib/index');
 
 const User = {
