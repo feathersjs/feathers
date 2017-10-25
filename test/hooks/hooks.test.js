@@ -148,24 +148,21 @@ describe('hooks basics', () => {
     });
   });
 
-  describe('returns the hook object with __returnHook', () => {
+  describe('returns the hook object when passing true as last parameter', () => {
     it('on normal method call', () => {
       const app = feathers().use('/dummy', {
         get (id, params) {
           return Promise.resolve({ id, params });
         }
       });
-      const params = {
-        __returnHook: true
-      };
 
-      return app.service('dummy').get(10, params).then(context => {
+      return app.service('dummy').get(10, {}, true).then(context => {
         assert.equal(context.service, app.service('dummy'));
         assert.equal(context.type, 'after');
         assert.equal(context.path, 'dummy');
         assert.deepEqual(context.result, {
           id: 10,
-          params
+          params: {}
         });
       });
     });
@@ -176,11 +173,8 @@ describe('hooks basics', () => {
           return Promise.reject(new Error('Something went wrong'));
         }
       });
-      const params = {
-        __returnHook: true
-      };
 
-      return app.service('dummy').get(10, params).catch(context => {
+      return app.service('dummy').get(10, {}, true).catch(context => {
         assert.equal(context.service, app.service('dummy'));
         assert.equal(context.type, 'error');
         assert.equal(context.path, 'dummy');
