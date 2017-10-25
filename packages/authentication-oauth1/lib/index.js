@@ -1,12 +1,9 @@
 const Debug = require('debug');
-const auth = require('feathers-authentication');
-const rest = require('feathers-rest');
+const auth = require('@feathersjs/authentication');
+const rest = require('@feathersjs/express/rest');
 
-const {
-  omit,
-  pick,
-  makeUrl
-} = require('feathers-commons');
+const { makeUrl, _ } = require('@feathersjs/commons');
+const { omit, pick } = _;
 
 const merge = require('lodash.merge');
 const defaultHandler = require('./express/handler');

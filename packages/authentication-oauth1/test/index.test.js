@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-expressions */
-const feathers = require('feathers');
+const feathers = require('@feathersjs/feathers');
+const authentication = require('@feathersjs/authentication');
+const expressify = require('@feathersjs/express');
 const memory = require('feathers-memory');
-const authentication = require('feathers-authentication');
-const oauth1 = require('../lib');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
+
+const oauth1 = require('../lib');
 const Strategy = require('./fixtures/strategy');
 
 const { Verifier } = oauth1;
@@ -49,7 +51,7 @@ describe('@feathersjs/authentication-oauth1', () => {
         }
       };
 
-      app = feathers();
+      app = expressify(feathers());
       app.set('host', 'localhost');
       app.set('port', 3030);
       app.use('/users', memory());
@@ -58,7 +60,7 @@ describe('@feathersjs/authentication-oauth1', () => {
 
     it('throws an error if passport has not been registered', () => {
       expect(() => {
-        feathers().configure(oauth1());
+        expressify(feathers()).configure(oauth1());
       }).to.throw();
     });
 
@@ -80,7 +82,7 @@ describe('@feathersjs/authentication-oauth1', () => {
       expect(() => {
         delete config.consumerKey;
         delete globalConfig.twitter.consumerKey;
-        feathers().configure(authentication(globalConfig)).configure(oauth1(config));
+        expressify(feathers()).configure(authentication(globalConfig)).configure(oauth1(config));
       }).to.throw();
     });
 
@@ -88,7 +90,7 @@ describe('@feathersjs/authentication-oauth1', () => {
       expect(() => {
         delete config.consumerSecret;
         delete globalConfig.twitter.consumerSecret;
-        feathers().configure(authentication(globalConfig)).configure(oauth1(config));
+        expressify(feathers()).configure(authentication(globalConfig)).configure(oauth1(config));
       }).to.throw();
     });
 

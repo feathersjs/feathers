@@ -1,6 +1,5 @@
 var feathers = require('feathers');
 var rest = require('feathers-rest');
-var hooks = require('feathers-hooks');
 var memory = require('feathers-memory');
 var bodyParser = require('body-parser');
 var session = require('express-session');
@@ -14,7 +13,6 @@ var app = feathers();
 app.set('port', 3030);
 
 app.configure(rest())
-  .configure(hooks())
   // Needed for parsing bodies (login)
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
