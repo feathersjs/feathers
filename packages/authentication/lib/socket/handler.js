@@ -3,7 +3,7 @@ const ms = require('ms');
 
 const {
   normalizeError
-} = require('feathers-socket-commons/lib/utils');
+} = require('@feathersjs/socket-commons/lib/utils');
 
 const lt = require('long-timeout');
 const updateEntity = require('./update-entity');

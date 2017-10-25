@@ -1,4 +1,4 @@
-const errors = require('feathers-errors');
+const errors = require('@feathersjs/errors');
 const Debug = require('debug');
 const debug = Debug('feathers-authentication:express:authenticate');
 

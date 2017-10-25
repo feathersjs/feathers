@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-expressions */
-const feathers = require('feathers');
+const feathers = require('@feathersjs/feathers');
+const expressify = require('@feathersjs/express');
 const passport = require('passport');
-const socketio = require('feathers-socketio');
-const primus = require('feathers-primus');
+const socketio = require('@feathersjs/socketio');
+const primus = require('@feathersjs/primus');
 const authentication = require('../lib');
 const socket = require('../lib/socket');
 const chai = require('chai');
@@ -18,7 +19,7 @@ describe('Feathers Authentication', () => {
   let config;
 
   beforeEach(() => {
-    app = feathers();
+    app = expressify(feathers());
     config = { secret: 'supersecret' };
   });
 
