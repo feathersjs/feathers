@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-local",
   "description": "Local authentication strategy for @feathers/authentication",
-  "version": "1.0.0-pre.0",
+  "version": "1.0.0-pre.1",
   "homepage": "https://github.com/feathersjs/authentication-local",
   "main": "lib/",
   "keywords": [
