@@ -7,7 +7,8 @@ const {
   sorter,
   stripSlashes,
   select,
-  isPromise
+  isPromise,
+  makeUrl
 } = require('../lib/utils');
 
 describe('@feathersjs/commons utils', () => {
@@ -267,6 +268,66 @@ describe('@feathersjs/commons utils', () => {
         { name: 'Eric', counter: 1 },
         { name: 'David', counter: 1 }
       ]);
+    });
+  });
+
+  describe('makeUrl', function () {
+    let mockApp;
+
+    beforeEach(() => {
+      mockApp = { env: 'development' };
+      mockApp.get = (value) => {
+        switch (value) {
+          case 'port':
+            return 3030;
+          case 'host':
+            return 'feathersjs.com';
+          case 'env':
+            return mockApp.env;
+        }
+      };
+    });
+
+    it('when in development mode returns the correct url', () => {
+      const uri = makeUrl('test', mockApp);
+      expect(uri).to.equal('http://feathersjs.com:3030/test');
+    });
+
+    it('when in test mode returns the correct url', () => {
+      mockApp.env = 'test';
+      const uri = makeUrl('test', mockApp);
+      expect(uri).to.equal('http://feathersjs.com:3030/test');
+    });
+
+    it('when in production mode returns the correct url', () => {
+      mockApp.env = 'production';
+      const uri = makeUrl('test', mockApp);
+      expect(uri).to.equal('https://feathersjs.com/test');
+    });
+
+    it('when path is not provided returns a default url', () => {
+      const uri = makeUrl(null, mockApp);
+      expect(uri).to.equal('http://feathersjs.com:3030/');
+    });
+
+    it('when app is not defined returns the correct url', () => {
+      const uri = makeUrl('test');
+      expect(uri).to.equal('http://localhost:3030/test');
+    });
+
+    it('strips leading slashes on path', () => {
+      const uri = makeUrl('/test');
+      expect(uri).to.equal('http://localhost:3030/test');
+    });
+
+    it('strips trailing slashes on path', () => {
+      const uri = makeUrl('test/');
+      expect(uri).to.equal('http://localhost:3030/test');
+    });
+
+    it('works with query strings', () => {
+      const uri = makeUrl('test?admin=true');
+      expect(uri).to.equal('http://localhost:3030/test?admin=true');
     });
   });
 });
