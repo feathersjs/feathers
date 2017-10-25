@@ -5,7 +5,7 @@ const pick = require('lodash.pick');
 const DefaultVerifier = require('./verifier');
 const passportJwt = require('passport-jwt');
 
-const debug = Debug('feathers-authentication-jwt');
+const debug = Debug('@feathersjs/authentication-jwt');
 const defaults = {
   name: 'jwt',
   bodyKey: 'accessToken'
@@ -28,7 +28,7 @@ module.exports = function init (options = {}) {
     const { ExtractJwt, Strategy } = passportJwt;
 
     if (!app.passport) {
-      throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before feathers-authentication-jwt?`);
+      throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before @feathersjs/authentication-jwt?`);
     }
 
     let authOptions = app.get('auth') || app.get('authentication') || {};

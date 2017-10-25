@@ -1,6 +1,6 @@
-# feathers-authentication-jwt Example
+# @feathersjs/authentication-jwt Example
 
-This provides a complete working example on how to use `feathers-authentication-jwt` to provide JWT authentication and get a JWT access token upon successful authentication or to enforce authentication of a service or endpoint.
+This provides a complete working example on how to use `@feathersjs/authentication-jwt` to provide JWT authentication and get a JWT access token upon successful authentication or to enforce authentication of a service or endpoint.
 
 1. Start the app by running `npm start`
 2. Make a request using the JWT access token outputted in the console.
