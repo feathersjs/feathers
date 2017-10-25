@@ -134,3 +134,16 @@ exports.isPromise = function isPromise (result) {
   return _.isObject(result) &&
     typeof result.then === 'function';
 };
+
+exports.makeUrl = function makeUrl (path, app = {}) {
+  const get = typeof app.get === 'function' ? app.get.bind(app) : () => {};
+  const env = get('env') || process.env.NODE_ENV;
+  const host = get('host') || process.env.HOST_NAME || 'localhost';
+  const protocol = (env === 'development' || env === 'test' || (env === undefined)) ? 'http' : 'https';
+  const PORT = get('port') || process.env.PORT || 3030;
+  const port = (env === 'development' || env === 'test' || (env === undefined)) ? `:${PORT}` : '';
+
+  path = path || '';
+
+  return `${protocol}://${host}${port}/${exports.stripSlashes(path)}`;
+};
