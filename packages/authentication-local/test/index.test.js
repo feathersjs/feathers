@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-expressions */
-const feathers = require('feathers');
+const feathers = require('@feathersjs/feathers');
+const expressify = require('@feathersjs/express');
+const authentication = require('@feathersjs/authentication');
 const memory = require('feathers-memory');
-const authentication = require('feathers-authentication');
-const local = require('../lib');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const passportLocal = require('passport-local');
+const local = require('../lib');
 
 const { Verifier } = local;
 const { expect } = chai;
@@ -35,14 +36,14 @@ describe('@feathersjs/authentication-local', () => {
     let app;
 
     beforeEach(() => {
-      app = feathers();
+      app = expressify(feathers());
       app.use('/users', memory());
       app.configure(authentication({ secret: 'supersecret' }));
     });
 
     it('throws an error if passport has not been registered', () => {
       expect(() => {
-        feathers().configure(local());
+        expressify(feathers()).configure(local());
       }).to.throw();
     });
 

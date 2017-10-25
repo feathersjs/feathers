@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
-const feathers = require('feathers');
-const authentication = require('feathers-authentication');
+const feathers = require('@feathersjs/feathers');
+const authentication = require('@feathersjs/authentication');
+const expressify = require('@feathersjs/express');
 const hasher = require('../lib/utils/hash');
 const { Verifier, defaults } = require('../lib');
 
@@ -20,7 +21,7 @@ describe('Verifier', () => {
   let user;
 
   beforeEach(() => {
-    app = feathers();
+    app = expressify(feathers());
 
     return hasher('admin').then(password => {
       user = {
@@ -270,7 +271,7 @@ describe('Verifier without service.id', function () {
   let user;
 
   beforeEach(() => {
-    app = feathers();
+    app = expressify(feathers());
 
     return hasher('admin').then(password => {
       user = {
