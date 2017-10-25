@@ -1,6 +1,6 @@
 const Debug = require('debug');
 
-const debug = Debug('feathers-authentication-oauth1:handler');
+const debug = Debug('@feathersjs/authentication-oauth1:handler');
 
 module.exports = function OAuthHandler (options = {}) {
   return function (req, res, next) {

@@ -13,7 +13,7 @@ const { expect } = chai;
 
 chai.use(sinonChai);
 
-describe('feathers-authentication-oauth1', () => {
+describe('@feathersjs/authentication-oauth1', () => {
   it('is CommonJS compatible', () => {
     expect(typeof require('../lib')).to.equal('function');
   });

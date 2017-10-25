@@ -1,8 +1,8 @@
 {
-  "name": "feathers-authentication-oauth1",
+  "name": "@feathersjs/authentication-oauth1",
   "description": "A Feathers OAuth1 authentication strategy",
   "version": "0.2.6",
-  "homepage": "https://github.com/feathersjs/feathers-authentication-oauth1",
+  "homepage": "https://github.com/feathersjs/authentication-oauth1",
   "main": "lib/",
   "keywords": [
     "feathers",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/feathers-authentication-oauth1.git"
+    "url": "git://github.com/feathersjs/authentication-oauth1.git"
   },
   "author": {
     "name": "Feathers contributors",
@@ -20,7 +20,7 @@
   },
   "contributors": [],
   "bugs": {
-    "url": "https://github.com/feathersjs/feathers-authentication-oauth1/issues"
+    "url": "https://github.com/feathersjs/authentication-oauth1/issues"
   },
   "engines": {
     "node": ">= 6"
