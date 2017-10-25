@@ -4,7 +4,7 @@ node_js:
 - '6'
 addons:
   code_climate:
-    repo_token: cf706c068b154cd14858801171af2544c905d85c8da7377e001b99c97c61f12a
+    repo_token: 38c1ee5a9e13bd08d65df63e33e107a9ec8ca58c51702681c1cc3f87d5b44cb9
 notifications:
   email: false
   slack:

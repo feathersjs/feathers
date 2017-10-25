@@ -1,6 +1,6 @@
-# feathers-authentication-oauth2 Example
+# @feathersjs/authentication-oauth2 Example
 
-This provides a complete working example on how to use `feathers-authentication-oauth2` to provide Github authentication and get a JWT access token in return.
+This provides a complete working example on how to use `@feathersjs/authentication-oauth2` to provide Github authentication and get a JWT access token in return.
 
 1. Create an application on Github
     
