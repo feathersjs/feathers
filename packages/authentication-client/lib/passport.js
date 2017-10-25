@@ -9,7 +9,7 @@ const {
   clearCookie
 } = require('./utils');
 
-const debug = Debug('feathers-authentication-client');
+const debug = Debug('@feathersjs/authentication-client');
 
 module.exports = class Passport {
   constructor (app, options) {

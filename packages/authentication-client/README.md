@@ -1,12 +1,12 @@
-# feathers-authentication-client
+# @feathersjs/authentication-client
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-authentication-client.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/authentication-client.svg)](https://greenkeeper.io/)
 
-[![Build Status](https://travis-ci.org/feathersjs/feathers-authentication-client.png?branch=master)](https://travis-ci.org/feathersjs/feathers-authentication-client)
-[![Code Climate](https://codeclimate.com/github/feathersjs/feathers-authentication-client/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-client)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-authentication-client/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-client/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/feathers-authentication-client.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers-authentication-client)
-[![Download Status](https://img.shields.io/npm/dm/feathers-authentication-client.svg?style=flat-square)](https://www.npmjs.com/package/feathers-authentication-client)
+[![Build Status](https://travis-ci.org/feathersjs/authentication-client.png?branch=master)](https://travis-ci.org/feathersjs/authentication-client)
+[![Code Climate](https://codeclimate.com/github/feathersjs/authentication-client/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/authentication-client)
+[![Test Coverage](https://codeclimate.com/github/feathersjs/authentication-client/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/authentication-client/coverage)
+[![Dependency Status](https://img.shields.io/david/feathersjs/authentication-client.svg?style=flat-square)](https://david-dm.org/feathersjs/authentication-client)
+[![Download Status](https://img.shields.io/npm/dm/@feathersjs/authentication-client.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/authentication-client)
 [![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 
 > The authentication plugin for feathers-client
@@ -14,14 +14,14 @@
 ## Installation
 
 ```
-npm install feathers-authentication-client --save
+npm install @feathersjs/authentication-client --save
 ```
 
 **Note:** This is only compatibile with `feathers-authentication@1.x` and above.
 
 ## Documentation
 
-<!-- Please refer to the [feathers-authentication-client documentation](http://docs.feathersjs.com/) for more details. -->
+<!-- Please refer to the [@feathersjs/authentication-client documentation](http://docs.feathersjs.com/) for more details. -->
 
 ## API
 
@@ -88,7 +88,7 @@ There are 3 hooks. They are really meant for internal use and you shouldn't need
 
 ## Complete Example
 
-Here's an example of a Feathers client that uses `feathers-authentication-client`. 
+Here's an example of a Feathers client that uses `@feathersjs/authentication-client`. 
 
 ```js
 const feathers = require('feathers/client');
@@ -96,7 +96,7 @@ const rest = require('feathers-rest/client');
 const superagent = require('superagent');
 const hooks = require('feathers-hooks');
 const localStorage = require('localstorage-memory');
-const auth = require('feathers-authentication-client');
+const auth = require('@feathersjs/authentication-client');
 
 const client = feathers();
 
