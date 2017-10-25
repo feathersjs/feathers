@@ -1,79 +1,88 @@
 # Change Log
 
-## [v0.2.6](https://github.com/feathersjs/feathers-authentication-oauth1/tree/v0.2.6) (2017-10-15)
-[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth1/compare/v0.2.5...v0.2.6)
+## [v1.0.0-pre.1](https://github.com/feathersjs/authentication-oauth1/tree/v1.0.0-pre.1) (2017-10-25)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v0.2.6...v1.0.0-pre.1)
+
+**Merged pull requests:**
+
+- Update to Feathers v3 [\#32](https://github.com/feathersjs/authentication-oauth1/pull/32) ([daffl](https://github.com/daffl))
+- Rename repository and use npm scope [\#31](https://github.com/feathersjs/authentication-oauth1/pull/31) ([daffl](https://github.com/daffl))
+- Update to new plugin infrastructure [\#30](https://github.com/feathersjs/authentication-oauth1/pull/30) ([daffl](https://github.com/daffl))
+
+## [v0.2.6](https://github.com/feathersjs/authentication-oauth1/tree/v0.2.6) (2017-10-15)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v0.2.5...v0.2.6)
 
 **Closed issues:**
 
-- An in-range update of feathers is breaking the build 🚨 [\#23](https://github.com/feathersjs/feathers-authentication-oauth1/issues/23)
-- Log a warning if this.service.id is undefined or null [\#16](https://github.com/feathersjs/feathers-authentication-oauth1/issues/16)
+- An in-range update of feathers is breaking the build 🚨 [\#23](https://github.com/feathersjs/authentication-oauth1/issues/23)
+- Log a warning if this.service.id is undefined or null [\#16](https://github.com/feathersjs/authentication-oauth1/issues/16)
 
 **Merged pull requests:**
 
-- Erroring if service.id is undefined. Closes \#16 [\#29](https://github.com/feathersjs/feathers-authentication-oauth1/pull/29) ([ekryski](https://github.com/ekryski))
-- Fix old property name fallback for backwards compatibility [\#28](https://github.com/feathersjs/feathers-authentication-oauth1/pull/28) ([ekryski](https://github.com/ekryski))
-- changing to patch instead of update when updating an existing user [\#27](https://github.com/feathersjs/feathers-authentication-oauth1/pull/27) ([ekryski](https://github.com/ekryski))
-- Update mocha to the latest version 🚀 [\#26](https://github.com/feathersjs/feathers-authentication-oauth1/pull/26) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
-- Update sinon to the latest version 🚀 [\#25](https://github.com/feathersjs/feathers-authentication-oauth1/pull/25) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
-- Add babel-polyfill and package-lock.json [\#24](https://github.com/feathersjs/feathers-authentication-oauth1/pull/24) ([daffl](https://github.com/daffl))
-- Update debug to the latest version 🚀 [\#22](https://github.com/feathersjs/feathers-authentication-oauth1/pull/22) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
-- Update sinon to the latest version 🚀 [\#21](https://github.com/feathersjs/feathers-authentication-oauth1/pull/21) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Erroring if service.id is undefined. Closes \#16 [\#29](https://github.com/feathersjs/authentication-oauth1/pull/29) ([ekryski](https://github.com/ekryski))
+- Fix old property name fallback for backwards compatibility [\#28](https://github.com/feathersjs/authentication-oauth1/pull/28) ([ekryski](https://github.com/ekryski))
+- changing to patch instead of update when updating an existing user [\#27](https://github.com/feathersjs/authentication-oauth1/pull/27) ([ekryski](https://github.com/ekryski))
+- Update mocha to the latest version 🚀 [\#26](https://github.com/feathersjs/authentication-oauth1/pull/26) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update sinon to the latest version 🚀 [\#25](https://github.com/feathersjs/authentication-oauth1/pull/25) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Add babel-polyfill and package-lock.json [\#24](https://github.com/feathersjs/authentication-oauth1/pull/24) ([daffl](https://github.com/daffl))
+- Update debug to the latest version 🚀 [\#22](https://github.com/feathersjs/authentication-oauth1/pull/22) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update sinon to the latest version 🚀 [\#21](https://github.com/feathersjs/authentication-oauth1/pull/21) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
-## [v0.2.5](https://github.com/feathersjs/feathers-authentication-oauth1/tree/v0.2.5) (2017-06-21)
-[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth1/compare/v0.2.4...v0.2.5)
+## [v0.2.5](https://github.com/feathersjs/authentication-oauth1/tree/v0.2.5) (2017-06-21)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v0.2.4...v0.2.5)
 
 **Closed issues:**
 
-- Module is using the wrong default config key [\#17](https://github.com/feathersjs/feathers-authentication-oauth1/issues/17)
-- When authenticating with stored localStorage jwt, payload doesn't have userId.  [\#15](https://github.com/feathersjs/feathers-authentication-oauth1/issues/15)
-- Support oauth1 endpoint within sub-app or reverse proxy [\#9](https://github.com/feathersjs/feathers-authentication-oauth1/issues/9)
-- failureRedirect is not followed if it fails during OAuth dance [\#8](https://github.com/feathersjs/feathers-authentication-oauth1/issues/8)
+- Module is using the wrong default config key [\#17](https://github.com/feathersjs/authentication-oauth1/issues/17)
+- When authenticating with stored localStorage jwt, payload doesn't have userId.  [\#15](https://github.com/feathersjs/authentication-oauth1/issues/15)
+- Support oauth1 endpoint within sub-app or reverse proxy [\#9](https://github.com/feathersjs/authentication-oauth1/issues/9)
+- failureRedirect is not followed if it fails during OAuth dance [\#8](https://github.com/feathersjs/authentication-oauth1/issues/8)
 
 **Merged pull requests:**
 
-- chore\(package\): update chai to version 4.0.2 [\#20](https://github.com/feathersjs/feathers-authentication-oauth1/pull/20) ([daffl](https://github.com/daffl))
-- using correct auth key. Closes 17 [\#18](https://github.com/feathersjs/feathers-authentication-oauth1/pull/18) ([ekryski](https://github.com/ekryski))
-- Update semistandard to the latest version 🚀 [\#14](https://github.com/feathersjs/feathers-authentication-oauth1/pull/14) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
-- Update feathers-hooks to the latest version 🚀 [\#13](https://github.com/feathersjs/feathers-authentication-oauth1/pull/13) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
-- Update dependencies to enable Greenkeeper 🌴 [\#12](https://github.com/feathersjs/feathers-authentication-oauth1/pull/12) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- chore\(package\): update chai to version 4.0.2 [\#20](https://github.com/feathersjs/authentication-oauth1/pull/20) ([daffl](https://github.com/daffl))
+- using correct auth key. Closes 17 [\#18](https://github.com/feathersjs/authentication-oauth1/pull/18) ([ekryski](https://github.com/ekryski))
+- Update semistandard to the latest version 🚀 [\#14](https://github.com/feathersjs/authentication-oauth1/pull/14) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-hooks to the latest version 🚀 [\#13](https://github.com/feathersjs/authentication-oauth1/pull/13) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update dependencies to enable Greenkeeper 🌴 [\#12](https://github.com/feathersjs/authentication-oauth1/pull/12) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
-## [v0.2.4](https://github.com/feathersjs/feathers-authentication-oauth1/tree/v0.2.4) (2017-03-31)
-[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth1/compare/v0.2.3...v0.2.4)
+## [v0.2.4](https://github.com/feathersjs/authentication-oauth1/tree/v0.2.4) (2017-03-31)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v0.2.3...v0.2.4)
 
 **Closed issues:**
 
-- userId is missing in jwt payload [\#5](https://github.com/feathersjs/feathers-authentication-oauth1/issues/5)
-- accessToken is not returned when successRedirect is set [\#4](https://github.com/feathersjs/feathers-authentication-oauth1/issues/4)
+- userId is missing in jwt payload [\#5](https://github.com/feathersjs/authentication-oauth1/issues/5)
+- accessToken is not returned when successRedirect is set [\#4](https://github.com/feathersjs/authentication-oauth1/issues/4)
 
 **Merged pull requests:**
 
-- Issue \#9: Support oauth1 endpoint within sub-app or reverse proxy [\#11](https://github.com/feathersjs/feathers-authentication-oauth1/pull/11) ([buske](https://github.com/buske))
-- Issue \#8: Follow failureRedirect on oauth1 authentication failure [\#10](https://github.com/feathersjs/feathers-authentication-oauth1/pull/10) ([buske](https://github.com/buske))
+- Issue \#9: Support oauth1 endpoint within sub-app or reverse proxy [\#11](https://github.com/feathersjs/authentication-oauth1/pull/11) ([buske](https://github.com/buske))
+- Issue \#8: Follow failureRedirect on oauth1 authentication failure [\#10](https://github.com/feathersjs/authentication-oauth1/pull/10) ([buske](https://github.com/buske))
 
-## [v0.2.3](https://github.com/feathersjs/feathers-authentication-oauth1/tree/v0.2.3) (2016-12-14)
-[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth1/compare/v0.2.2...v0.2.3)
+## [v0.2.3](https://github.com/feathersjs/authentication-oauth1/tree/v0.2.3) (2016-12-14)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v0.2.2...v0.2.3)
 
-## [v0.2.2](https://github.com/feathersjs/feathers-authentication-oauth1/tree/v0.2.2) (2016-12-14)
-[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth1/compare/v0.2.1...v0.2.2)
-
-**Merged pull requests:**
-
-- setting \_\_oauth value and fixing redirects [\#3](https://github.com/feathersjs/feathers-authentication-oauth1/pull/3) ([ekryski](https://github.com/ekryski))
-
-## [v0.2.1](https://github.com/feathersjs/feathers-authentication-oauth1/tree/v0.2.1) (2016-12-14)
-[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth1/compare/v0.2.0...v0.2.1)
-
-## [v0.2.0](https://github.com/feathersjs/feathers-authentication-oauth1/tree/v0.2.0) (2016-11-23)
-[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth1/compare/v0.1.1...v0.2.0)
+## [v0.2.2](https://github.com/feathersjs/authentication-oauth1/tree/v0.2.2) (2016-12-14)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v0.2.1...v0.2.2)
 
 **Merged pull requests:**
 
-- adding compatibility with payload generation [\#2](https://github.com/feathersjs/feathers-authentication-oauth1/pull/2) ([ekryski](https://github.com/ekryski))
+- setting \_\_oauth value and fixing redirects [\#3](https://github.com/feathersjs/authentication-oauth1/pull/3) ([ekryski](https://github.com/ekryski))
 
-## [v0.1.1](https://github.com/feathersjs/feathers-authentication-oauth1/tree/v0.1.1) (2016-11-20)
-[Full Changelog](https://github.com/feathersjs/feathers-authentication-oauth1/compare/v0.1.0...v0.1.1)
+## [v0.2.1](https://github.com/feathersjs/authentication-oauth1/tree/v0.2.1) (2016-12-14)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v0.2.0...v0.2.1)
 
-## [v0.1.0](https://github.com/feathersjs/feathers-authentication-oauth1/tree/v0.1.0) (2016-11-19)
+## [v0.2.0](https://github.com/feathersjs/authentication-oauth1/tree/v0.2.0) (2016-11-23)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v0.1.1...v0.2.0)
+
+**Merged pull requests:**
+
+- adding compatibility with payload generation [\#2](https://github.com/feathersjs/authentication-oauth1/pull/2) ([ekryski](https://github.com/ekryski))
+
+## [v0.1.1](https://github.com/feathersjs/authentication-oauth1/tree/v0.1.1) (2016-11-20)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v0.1.0...v0.1.1)
+
+## [v0.1.0](https://github.com/feathersjs/authentication-oauth1/tree/v0.1.0) (2016-11-19)
 
 
 \* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
