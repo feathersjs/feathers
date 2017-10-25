@@ -1,5 +1,14 @@
 # Change Log
 
+## [v3.0.0-pre.3](https://github.com/feathersjs/feathers/tree/v3.0.0-pre.3) (2017-10-25)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.0-pre.2...v3.0.0-pre.3)
+
+**Merged pull requests:**
+
+- Better logic for returning the hook object from method call [\#706](https://github.com/feathersjs/feathers/pull/706) ([daffl](https://github.com/daffl))
+- Codeclimate Updates [\#704](https://github.com/feathersjs/feathers/pull/704) ([ekryski](https://github.com/ekryski))
+- Add more inline documentation [\#703](https://github.com/feathersjs/feathers/pull/703) ([daffl](https://github.com/daffl))
+
 ## [v3.0.0-pre.2](https://github.com/feathersjs/feathers/tree/v3.0.0-pre.2) (2017-10-20)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v2.2.3...v3.0.0-pre.2)
 
