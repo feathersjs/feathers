@@ -12,7 +12,7 @@ const merge = require('lodash.merge');
 const defaultHandler = require('./express/handler');
 const DefaultVerifier = require('./verifier');
 
-const debug = Debug('feathers-authentication-oauth1');
+const debug = Debug('@feathersjs/authentication-oauth1');
 
 const INCLUDE_KEYS = [
   'entity',
@@ -28,7 +28,7 @@ module.exports = function init (options = {}) {
     const _super = app.setup;
 
     if (!app.passport) {
-      throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before feathers-authentication-oauth1?`);
+      throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before @feathersjs/authentication-oauth1?`);
     }
 
     let { name, Strategy } = options;

@@ -1,6 +1,6 @@
-# feathers-authentication-oauth1 Example
+# @feathersjs/authentication-oauth1 Example
 
-This provides a complete working example on how to use `feathers-authentication-oauth1` to provide Twitter authentication and get a JWT access token in return.
+This provides a complete working example on how to use `@feathersjs/authentication-oauth1` to provide Twitter authentication and get a JWT access token in return.
 
 1. Create an application on Twitter
     
