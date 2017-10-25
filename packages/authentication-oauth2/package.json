@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-oauth2",
   "description": "An OAuth2 authentication strategy for feathers-authentication using Passport",
-  "version": "0.3.2",
+  "version": "1.0.0-pre.0",
   "homepage": "https://github.com/feathersjs/authentication-oauth2",
   "main": "lib/",
   "keywords": [
@@ -27,9 +27,10 @@
   },
   "scripts": {
     "publish": "git push origin --tags && npm run changelog && git push origin",
-    "release:patch": "npm version patch && npm publish",
-    "release:minor": "npm version minor && npm publish",
-    "release:major": "npm version major && npm publish",
+    "release:pre": "npm version prerelease && npm publish --tag pre --access public",
+    "release:patch": "npm version patch && npm publish --access public",
+    "release:minor": "npm version minor && npm publish --access public",
+    "release:major": "npm version major && npm publish --access public",
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "lint": "semistandard --fix",
     "mocha": "mocha --opts mocha.opts",
