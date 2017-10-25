@@ -13,7 +13,7 @@ const { expect } = chai;
 
 chai.use(sinonChai);
 
-describe('feathers-authentication-local', () => {
+describe('@feathersjs/authentication-local', () => {
   it('is CommonJS compatible', () => {
     expect(typeof require('../lib')).to.equal('function');
   });

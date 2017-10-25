@@ -2,7 +2,7 @@ const hasher = require('../utils/hash');
 const merge = require('lodash.merge');
 const Debug = require('debug');
 
-const debug = Debug('feathers-authentication-local:hooks:hash-password');
+const debug = Debug('@feathersjs/authentication-local:hooks:hash-password');
 
 module.exports = function hashPassword (options = {}) {
   return function (hook) {
