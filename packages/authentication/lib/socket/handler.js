@@ -8,7 +8,7 @@ const {
 const lt = require('long-timeout');
 const updateEntity = require('./update-entity');
 
-const debug = Debug('feathers-authentication:sockets:handler');
+const debug = Debug('@feathersjs/authentication:sockets:handler');
 
 function handleSocketCallback (promise, callback) {
   if (typeof callback === 'function') {

@@ -5,7 +5,7 @@ const pick = require('lodash.pick');
 const omit = require('lodash.omit');
 const jwt = require('jsonwebtoken');
 
-const debug = Debug('feathers-authentication:authentication:utils');
+const debug = Debug('@feathersjs/authentication:authentication:utils');
 
 exports.createJWT = function createJWT (payload = {}, options = {}) {
   const VALID_KEYS = [

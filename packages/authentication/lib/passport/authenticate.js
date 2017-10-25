@@ -1,6 +1,6 @@
 const makeDebug = require('debug');
 
-const debug = makeDebug('feathers-authentication:passport:authenticate');
+const debug = makeDebug('@feathersjs/authentication:passport:authenticate');
 
 module.exports = function authenticate (options = {}) {
   debug('Initializing custom passport authenticate', options);

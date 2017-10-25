@@ -1,7 +1,7 @@
 const Debug = require('debug');
 const setupSocketHandler = require('./handler');
 
-const debug = Debug('feathers-authentication:sockets');
+const debug = Debug('@feathersjs/authentication:sockets');
 
 const socketio = function socketio (app, options = {}) {
   debug('Setting up Socket.io authentication middleware with options:', options);

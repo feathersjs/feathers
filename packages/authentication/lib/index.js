@@ -7,7 +7,7 @@ const getOptions = require('./options');
 const service = require('./service');
 const socket = require('./socket');
 
-const debug = Debug('feathers-authentication:index');
+const debug = Debug('@feathersjs/authentication:index');
 
 module.exports = function init (config = {}) {
   return function authentication () {

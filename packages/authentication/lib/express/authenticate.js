@@ -1,6 +1,6 @@
 const errors = require('@feathersjs/errors');
 const Debug = require('debug');
-const debug = Debug('feathers-authentication:express:authenticate');
+const debug = Debug('@feathersjs/authentication:express:authenticate');
 
 module.exports = function authenticate (strategy, options = {}) {
   // TODO (EK): Support arrays of strategies
