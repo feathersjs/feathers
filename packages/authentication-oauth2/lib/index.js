@@ -1,13 +1,8 @@
 const Debug = require('debug');
-const auth = require('feathers-authentication');
+const auth = require('@feathersjs/authentication');
 
-const rest = require('feathers-rest');
-
-const {
-  omit,
-  pick,
-  makeUrl
-} = require('feathers-commons');
+const rest = require('@feathersjs/express/rest');
+const { _, makeUrl } = require('@feathersjs/commons');
 
 const merge = require('lodash.merge');
 const defaultHandler = require('./express/handler');
@@ -16,6 +11,7 @@ const DefaultVerifier = require('./verifier');
 
 const debug = Debug('@feathersjs/authentication-oauth2');
 
+const { omit, pick } = _;
 const INCLUDE_KEYS = [
   'entity',
   'service',

@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
-const feathers = require('feathers');
-const authentication = require('feathers-authentication');
+const feathers = require('@feathersjs/feathers');
+const expressify = require('@feathersjs/express');
+const authentication = require('@feathersjs/authentication');
 
 const { Verifier } = require('../lib');
 
@@ -28,7 +29,7 @@ describe('Verifier', () => {
       patch: sinon.stub().returns(Promise.resolve(user))
     };
 
-    app = feathers();
+    app = expressify(feathers());
     app.use('users', service)
       .configure(authentication({ secret: 'supersecret' }));
 
@@ -298,7 +299,7 @@ describe('Verifier without service.id', function () {
       patch: sinon.stub().returns(Promise.resolve(user))
     };
 
-    app = feathers();
+    app = expressify(feathers());
     app.use('users', service)
       .configure(authentication({ secret: 'supersecret' }));
 
