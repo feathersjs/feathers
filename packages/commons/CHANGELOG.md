@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.2.0](https://github.com/feathersjs/commons/tree/v1.2.0) (2017-10-25)
+[Full Changelog](https://github.com/feathersjs/commons/compare/v1.1.0...v1.2.0)
+
+**Merged pull requests:**
+
+- Bring back makeUrl [\#62](https://github.com/feathersjs/commons/pull/62) ([daffl](https://github.com/daffl))
+- adding codeclimate config [\#60](https://github.com/feathersjs/commons/pull/60) ([ekryski](https://github.com/ekryski))
+
 ## [v1.1.0](https://github.com/feathersjs/commons/tree/v1.1.0) (2017-10-23)
 [Full Changelog](https://github.com/feathersjs/commons/compare/v1.0.0...v1.1.0)
 
