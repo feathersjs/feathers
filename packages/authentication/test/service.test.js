@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
-const feathers = require('feathers');
-const hooks = require('feathers-hooks');
+const feathers = require('@feathersjs/feathers');
+const expressify = require('@feathersjs/express');
 const authentication = require('../lib');
 const chai = require('chai');
 const sinon = require('sinon');
@@ -20,8 +20,7 @@ describe('/authentication service', () => {
     sinon.spy(express, 'successRedirect');
     sinon.spy(express, 'failureRedirect');
 
-    app = feathers()
-      .configure(hooks())
+    app = expressify(feathers())
       .configure(authentication({ secret: 'supersecret' }));
   });
 
