@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-expressions */
-const feathers = require('feathers');
-const authentication = require('feathers-authentication');
+const feathers = require('@feathersjs/feathers');
+const expressify = require('@feathersjs/express');
+const authentication = require('@feathersjs/authentication');
 const memory = require('feathers-memory');
-const hooks = require('feathers-hooks');
 const { expect } = require('chai');
 const jwt = require('../lib');
 
@@ -31,10 +31,9 @@ describe('integration', () => {
       };
     };
 
-    const app = feathers();
+    const app = expressify(feathers());
 
-    app.configure(hooks())
-      .use('/users', memory())
+    app.use('/users', memory())
       .configure(authentication({ secret: 'secret' }))
       .configure(jwt());
 

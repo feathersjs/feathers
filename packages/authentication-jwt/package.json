@@ -47,22 +47,21 @@
     "lib": "lib"
   },
   "dependencies": {
-    "debug": "^3.0.0",
-    "feathers-errors": "^2.5.0",
+    "@feathersjs/errors": "^3.0.0-pre.1",
+    "debug": "^3.1.0",
     "lodash.merge": "^4.6.0",
     "lodash.omit": "^4.5.0",
     "lodash.pick": "^4.4.0",
     "passport-jwt": "^3.0.0"
   },
   "devDependencies": {
+    "@feathersjs/authentication": "^1.4.0",
+    "@feathersjs/express": "^1.0.0-pre.4",
+    "@feathersjs/feathers": "^3.0.0-pre.3",
+    "@feathersjs/socketio": "^3.0.0-pre.4",
     "body-parser": "^1.15.2",
     "chai": "^4.1.0",
-    "feathers": "^2.0.2",
-    "feathers-authentication": "^1.0.0",
-    "feathers-hooks": "^2.0.0",
     "feathers-memory": "^1.1.0",
-    "feathers-rest": "^1.5.2",
-    "feathers-socketio": "^2.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "jsonwebtoken": "^8.0.0",
     "mocha": "^4.0.0",
