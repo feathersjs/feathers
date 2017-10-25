@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-expressions */
 const { expect } = require('chai');
 
-const feathers = require('feathers/client');
-const hooks = require('feathers-hooks');
+const feathers = require('@feathersjs/feathers');
 const auth = require('../lib/index');
 
 describe('Feathers Authentication Client', () => {
@@ -10,7 +9,6 @@ describe('Feathers Authentication Client', () => {
 
   beforeEach(() => {
     client = feathers()
-      .configure(hooks())
       .configure(auth());
   });
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 const { expect } = require('chai');
 
-const feathers = require('feathers/client');
+const feathers = require('@feathersjs/feathers');
 const Passport = require('../lib/passport');
 const auth = require('../lib');
 
