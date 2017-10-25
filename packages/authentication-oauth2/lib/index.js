@@ -14,7 +14,7 @@ const defaultHandler = require('./express/handler');
 const defaultErrorHandler = require('./express/error-handler');
 const DefaultVerifier = require('./verifier');
 
-const debug = Debug('feathers-authentication-oauth2');
+const debug = Debug('@feathersjs/authentication-oauth2');
 
 const INCLUDE_KEYS = [
   'entity',
@@ -31,7 +31,7 @@ module.exports = function init (options = {}) {
     const _super = app.setup;
 
     if (!app.passport) {
-      throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before feathers-authentication-oauth2?`);
+      throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before @feathersjs/authentication-oauth2?`);
     }
 
     let { name, Strategy } = options;

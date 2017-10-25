@@ -1,26 +1,25 @@
-# feathers-authentication-oauth2
+# @feathersjs/authentication-oauth2
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-authentication-oauth2.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/authentication-oauth2.svg)](https://greenkeeper.io/)
 
-[![Build Status](https://travis-ci.org/feathersjs/feathers-authentication-oauth2.png?branch=master)](https://travis-ci.org/feathersjs/feathers-authentication-oauth2)
-[![Code Climate](https://codeclimate.com/github/feathersjs/feathers-authentication-oauth2/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-oauth2)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-authentication-oauth2/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-oauth2/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/feathers-authentication-oauth2.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers-authentication-oauth2)
-[![Download Status](https://img.shields.io/npm/dm/feathers-authentication-oauth2.svg?style=flat-square)](https://www.npmjs.com/package/feathers-authentication-oauth2)
+[![Build Status](https://travis-ci.org/feathersjs/authentication-oauth2.png?branch=master)](https://travis-ci.org/feathersjs/authentication-oauth2)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/ba4d86601a687bb6e960/test_coverage)](https://codeclimate.com/github/feathersjs/authentication-oauth2/test_coverage)
+[![Dependency Status](https://img.shields.io/david/feathersjs/authentication-oauth2.svg?style=flat-square)](https://david-dm.org/feathersjs/authentication-oauth2)
+[![Download Status](https://img.shields.io/npm/dm/@feathersjs/authentication-oauth2.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/authentication-oauth2)
 
 > An OAuth2 authentication strategy for feathers-authentication using Passport
 
 ## Installation
 
 ```
-npm install feathers-authentication-oauth2 --save
+npm install @feathersjs/authentication-oauth2 --save
 ```
 
 **Note:** This is only compatibile with `feathers-authentication@1.x` and above.
 
 ## Documentation
 
-<!-- Please refer to the [feathers-authentication-oauth2 documentation](http://docs.feathersjs.com/) for more details. -->
+<!-- Please refer to the [@feathersjs/authentication-oauth2 documentation](http://docs.feathersjs.com/) for more details. -->
 
 ## Supported Strategies
 
@@ -41,7 +40,7 @@ This module contains 2 core pieces:
 
 ### Main Initialization
 
-In most cases initializing the `feathers-authentication-oauth2` module is as simple as doing this:
+In most cases initializing the `@feathersjs/authentication-oauth2` module is as simple as doing this:
 
 ```js
 const FacebookStrategy = require('passport-facebook').Strategy;
@@ -100,7 +99,7 @@ The `Verifier` class can be extended so that you customize it's behavior without
 An example of customizing the Verifier:
 
 ```js
-import oauth2, { Verifier } from 'feathers-authentication-oauth2';
+import oauth2, { Verifier } from '@feathersjs/authentication-oauth2';
 
 class CustomVerifier extends Verifier {
   // The verify function has the exact same inputs and
@@ -174,7 +173,7 @@ app.service('users').hooks({
 
 ## Complete Example
 
-Here's a basic example of a Feathers server that uses `feathers-authentication-oauth2`. You can see a fully working example in the [example/](./example/) directory.
+Here's a basic example of a Feathers server that uses `@feathersjs/authentication-oauth2`. You can see a fully working example in the [example/](./example/) directory.
 
 ```js
 const feathers = require('feathers');
@@ -185,7 +184,7 @@ const bodyParser = require('body-parser');
 const GithubStrategy = require('passport-github').Strategy;
 const errorHandler = require('feathers-errors/handler');
 const auth = require('feathers-authentication');
-const oauth2 = require('feathers-authentication-oauth2');
+const oauth2 = require('@feathersjs/authentication-oauth2');
 
 // Initialize the application
 const app = feathers()

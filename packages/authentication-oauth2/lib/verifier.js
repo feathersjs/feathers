@@ -1,6 +1,6 @@
 const Debug = require('debug');
 
-const debug = Debug('feathers-authentication-oauth2:verify');
+const debug = Debug('@feathersjs/authentication-oauth2:verify');
 
 class OAuth2Verifier {
   constructor (app, options = {}) {
@@ -9,7 +9,7 @@ class OAuth2Verifier {
     this.service = typeof options.service === 'string' ? app.service(options.service) : options.service;
 
     if (!this.service) {
-      throw new Error(`options.service does not exist.\n\tMake sure you are passing a valid service path or service instance and it is initialized before feathers-authentication-oauth2.`);
+      throw new Error(`options.service does not exist.\n\tMake sure you are passing a valid service path or service instance and it is initialized before @feathersjs/authentication-oauth2.`);
     }
 
     this._createEntity = this._createEntity.bind(this);
