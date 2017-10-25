@@ -184,7 +184,6 @@ const oauth1 = require('@feathersjs/authentication-oauth1');
 // Initialize the application
 const app = feathers()
   .configure(rest())
-  .configure(hooks())
   // Needed for parsing bodies (login)
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
