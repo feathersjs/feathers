@@ -106,15 +106,9 @@ exports.runMethod = function (app, connection, path, method, args) {
     // and added with the route
     const params = Object.assign({ query, route }, connection);
 
-    // This is an internal (hidden) property that tells Feathers
-    // to return the hook instead of the result
-    Object.defineProperty(params, '__returnHook', {
-      value: true
-    });
-
     methodArgs[position] = params;
 
-    return service[method](...methodArgs);
+    return service[method](...methodArgs, true);
   };
 
   // Run and map to the callback that is being called for Socket calls
