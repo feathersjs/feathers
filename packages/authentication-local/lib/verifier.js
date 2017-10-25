@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const get = require('lodash.get');
 const omit = require('lodash.omit');
 
-const debug = Debug('feathers-authentication-local:verify');
+const debug = Debug('@feathersjs/authentication-local:verify');
 
 class LocalVerifier {
   constructor (app, options = {}) {
@@ -12,7 +12,7 @@ class LocalVerifier {
     this.service = typeof options.service === 'string' ? app.service(options.service) : options.service;
 
     if (!this.service) {
-      throw new Error(`options.service does not exist.\n\tMake sure you are passing a valid service path or service instance and it is initialized before feathers-authentication-local.`);
+      throw new Error(`options.service does not exist.\n\tMake sure you are passing a valid service path or service instance and it is initialized before @feathersjs/authentication-local.`);
     }
 
     this._comparePassword = this._comparePassword.bind(this);

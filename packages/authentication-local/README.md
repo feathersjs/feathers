@@ -1,26 +1,25 @@
-# feathers-authentication-local
+# @feathersjs/authentication-local
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-authentication-local.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/authentication-local.svg)](https://greenkeeper.io/)
 
-[![Build Status](https://travis-ci.org/feathersjs/feathers-authentication-local.png?branch=master)](https://travis-ci.org/feathersjs/feathers-authentication-local)
-[![Code Climate](https://codeclimate.com/github/feathersjs/feathers-authentication-local/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-local)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-authentication-local/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-authentication-local/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/feathers-authentication-local.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers-authentication-local)
-[![Download Status](https://img.shields.io/npm/dm/feathers-authentication-local.svg?style=flat-square)](https://www.npmjs.com/package/feathers-authentication-local)
+[![Build Status](https://travis-ci.org/feathersjs/authentication-local.png?branch=master)](https://travis-ci.org/feathersjs/authentication-local)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/d948ae0f5b7572578d5a/test_coverage)](https://codeclimate.com/github/feathersjs/authentication-local/test_coverage)
+[![Dependency Status](https://img.shields.io/david/feathersjs/authentication-local.svg?style=flat-square)](https://david-dm.org/feathersjs/authentication-local)
+[![Download Status](https://img.shields.io/npm/dm/@feathersjs/authentication-local.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/authentication-local)
 
 > Local authentication strategy for feathers-authentication using Passport without all the boilerplate.
 
 ## Installation
 
 ```
-npm install feathers-authentication-local --save
+npm install @feathersjs/authentication-local --save
 ```
 
-**Note:** This is only compatibile with `feathers-authentication@1.x` and above.
+**Note:** This is only compatibile with `@feathers/authentication@1.x` and above.
 
 ## Documentation
 
-<!-- Please refer to the [feathers-authentication-local documentation](http://docs.feathersjs.com/) for more details. -->
+<!-- Please refer to the [@feathersjs/authentication-local documentation](http://docs.feathersjs.com/) for more details. -->
 
 ## API
 
@@ -32,7 +31,7 @@ This module contains 3 core pieces:
 
 ### Main Initialization
 
-In most cases initializing the `feathers-authentication-local` module is as simple as doing this:
+In most cases initializing the `@feathersjs/authentication-local` module is as simple as doing this:
 
 ```js
 app.configure(authentication(settings));
@@ -92,7 +91,7 @@ The `Verifier` class can be extended so that you customize it's behavior without
 An example of customizing the Verifier:
 
 ```js
-import local, { Verifier } from 'feathers-authentication-local';
+import local, { Verifier } from '@feathersjs/authentication-local';
 
 class CustomVerifier extends Verifier {
   // The verify function has the exact same inputs and 
@@ -122,7 +121,7 @@ By default, this strategy expects a payload in this format:
 
 ## Complete Example
 
-Here's a basic example of a Feathers server that uses `feathers-authentication-local`. You can see a fully working example in the [example/](./example/) directory.
+Here's a basic example of a Feathers server that uses `@feathersjs/authentication-local`. You can see a fully working example in the [example/](./example/) directory.
 
 ```js
 const feathers = require('feathers');
@@ -132,7 +131,7 @@ const memory = require('feathers-memory');
 const bodyParser = require('body-parser');
 const errorHandler = require('feathers-errors/handler');
 const auth = require('feathers-authentication');
-const local = require('feathers-authentication-local');
+const local = require('@feathersjs/authentication-local');
 
 // Initialize the application
 const app = feathers()

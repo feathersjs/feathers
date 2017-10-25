@@ -7,7 +7,7 @@ const DefaultVerifier = require('./verifier');
 
 const passportLocal = require('passport-local');
 
-const debug = Debug('feathers-authentication-local');
+const debug = Debug('@feathersjs/authentication-local');
 const defaults = {
   name: 'local',
   usernameField: 'email',
@@ -27,7 +27,7 @@ module.exports = function init (options = {}) {
     const _super = app.setup;
 
     if (!app.passport) {
-      throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before feathers-authentication-local?`);
+      throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before @feathersjs/authentication-local?`);
     }
 
     let name = options.name || defaults.name;
