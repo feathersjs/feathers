@@ -152,6 +152,7 @@ describe('@feathersjs/express/rest provider', () => {
               type: 'after',
               method: 'get',
               path: 'hook',
+              returnHook: true,
               result: { description: 'You have to do dishes' },
               addedProperty: true
             });
@@ -208,6 +209,7 @@ describe('@feathersjs/express/rest provider', () => {
                   query: {},
                   provider: 'rest'
                 },
+                returnHook: true,
                 type: 'error',
                 method: 'get',
                 path: 'hook-error',
