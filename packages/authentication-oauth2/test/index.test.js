@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-expressions */
-const feathers = require('feathers');
+const feathers = require('@feathersjs/feathers');
+const expressify = require('@feathersjs/express');
+const authentication = require('@feathersjs/authentication');
 const memory = require('feathers-memory');
-const authentication = require('feathers-authentication');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
@@ -50,7 +51,7 @@ describe('@feathersjs/authentication-oauth2', () => {
         }
       };
 
-      app = feathers();
+      app = expressify(feathers());
       app.set('host', 'localhost');
       app.set('port', 3030);
       app.use('/users', memory());
@@ -59,7 +60,7 @@ describe('@feathersjs/authentication-oauth2', () => {
 
     it('throws an error if passport has not been registered', () => {
       expect(() => {
-        feathers().configure(oauth2());
+        expressify(feathers()).configure(oauth2());
       }).to.throw();
     });
 
@@ -81,7 +82,7 @@ describe('@feathersjs/authentication-oauth2', () => {
       expect(() => {
         delete config.clientID;
         delete globalConfig.github.clientID;
-        feathers().configure(authentication(globalConfig)).configure(oauth2(config));
+        expressify(feathers()).configure(authentication(globalConfig)).configure(oauth2(config));
       }).to.throw();
     });
 
@@ -89,7 +90,7 @@ describe('@feathersjs/authentication-oauth2', () => {
       expect(() => {
         delete config.clientSecret;
         delete globalConfig.github.clientSecret;
-        feathers().configure(authentication(globalConfig)).configure(oauth2(config));
+        expressify(feathers()).configure(authentication(globalConfig)).configure(oauth2(config));
       }).to.throw();
     });
 
