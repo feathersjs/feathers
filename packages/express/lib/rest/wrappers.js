@@ -57,7 +57,7 @@ function getHandler (method, getArgs) {
 
       debug(`REST handler calling \`${method}\` from \`${req.url}\``);
 
-      service[method](...args)
+      service[method](...args, true)
         .then(hook => {
           const data = hook.dispatch !== undefined ? hook.dispatch : hook.result;
 
