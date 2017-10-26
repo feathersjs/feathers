@@ -6,25 +6,23 @@
 // for more of what you can do here.
 module.exports = function (app) {
   const db = app.get('knexClient');
-
-    db.schema.hasTable('<%= kebabName %>').then(exists => {
-      if(!exists) {
-        db.schema.createTable('<%= kebabName %>', table => {
-          table.increments('id');
-        <% if(authentication.strategies.indexOf('local') !== -1) { %>
-          table.string('email').unique();
-          table.string('password');
-        <% } %>
-        <% authentication.oauthProviders.forEach(provider => { %>
-          table.string('<%= provider.name %>Id');
-        <% }); %>
-        })
-        .then(
-          () => console.log('Updated <%= kebabName %> table'),
-          e => console.error('Error updating <%= kebabName %> table', e)
-        );
-      }
-    });
+  const tableName = '<%= snakeName %>'
+  db.schema.hasTable(tableName).then(exists => {
+    if(!exists) {
+      db.schema.createTable(tableName, table => {
+        table.increments('id');
+      <% if(authentication.strategies.indexOf('local') !== -1) { %>
+        table.string('email').unique();
+        table.string('password');
+      <% } %>
+      <% authentication.oauthProviders.forEach(provider => { %>
+        table.string('<%= provider.name %>Id');
+      <% }); %>
+      })
+        .then(() => console.log(`Created ${tableName} table`))
+        .catch(e => console.error(`Error creating ${tableName} table`, e));
+    }
+  });
 
   return db;
 };
