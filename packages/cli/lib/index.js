@@ -2,6 +2,7 @@ const yeoman = require('yeoman-environment');
 const program = require('commander');
 const meta = require('generator-feathers/meta');
 const semver = require('semver');
+const { upgrade } = require('@feathersjs/tools');
 
 const env = yeoman.createEnv();
 
@@ -20,6 +21,7 @@ module.exports = function (argv, generatorOptions = {}) {
   });
 
   program.version(require('../package.json').version)
+    .usage('upgrade <version>')
     .usage('generate [type]');
 
   if (!semver.satisfies(process.version, '>= 6.0.0')) {
@@ -37,6 +39,11 @@ module.exports = function (argv, generatorOptions = {}) {
         env.run(`feathers:${type}`, generatorOptions);
       }
     });
+
+  program.command('upgrade')
+    .alias('u')
+    .description('Try to automatically upgrade to the latest Feathers version')
+    .action(version => upgrade(process.cwd()));
 
   program.command('*').action(() => program.help());
   program.parse(argv);
