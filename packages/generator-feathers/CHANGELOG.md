@@ -1,11 +1,25 @@
 # Change Log
 
+## [v1.2.13](https://github.com/feathersjs/generator-feathers/tree/v1.2.13) (2017-10-26)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.12...v1.2.13)
+
+**Closed issues:**
+
+- Generator ignores service name \(or incorrect expectations\) [\#291](https://github.com/feathersjs/generator-feathers/issues/291)
+- knex table name should snake\_case [\#288](https://github.com/feathersjs/generator-feathers/issues/288)
+
+**Merged pull requests:**
+
+- Use snake\_name for Sequelize table name as well [\#293](https://github.com/feathersjs/generator-feathers/pull/293) ([daffl](https://github.com/daffl))
+- update knex model to use snakeName [\#289](https://github.com/feathersjs/generator-feathers/pull/289) ([nueko](https://github.com/nueko))
+- update knex model to use tableName const [\#287](https://github.com/feathersjs/generator-feathers/pull/287) ([nueko](https://github.com/nueko))
+
 ## [v1.2.12](https://github.com/feathersjs/generator-feathers/tree/v1.2.12) (2017-10-11)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.11...v1.2.12)
 
 **Merged pull requests:**
 
-- Tweak the `timestamp` in mongoose model template [\#284](https://github.com/feathersjs/generator-feathers/pull/284) ([Mr-Binary](https://github.com/Mr-Binary))
+- Tweak the `timestamp` in mongoose model template [\#284](https://github.com/feathersjs/generator-feathers/pull/284) ([Albert-Gao](https://github.com/Albert-Gao))
 - Update mocha to the latest version 🚀 [\#283](https://github.com/feathersjs/generator-feathers/pull/283) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 - fix jwt configuration typo \(type -\> typ\) [\#281](https://github.com/feathersjs/generator-feathers/pull/281) ([j2L4e](https://github.com/j2L4e))
 
