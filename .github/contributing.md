@@ -44,7 +44,7 @@ Feathers documentation is contained in Markdown files in the [docs](https://gith
 
 ## Community Contributions
 
-If you're written something awesome about Feathers, for the Feathers ecosystem, or created an app using Feathers please add it to the [awesome-feathersjs](https://github.com/feathersjs-ecosystem/awesome-feathersjs).
+If you've written something awesome about Feathers, for the Feathers ecosystem, or created an app using Feathers please add it to the [awesome-feathersjs](https://github.com/feathersjs-ecosystem/awesome-feathersjs).
 
 If you are looking to create a new plugin you also might want to check out the [Plugin Generator](https://github.com/feathersjs/generator-feathers-plugin) that can be used to scaffold plugins to be Feathers compliant from the start.
 
