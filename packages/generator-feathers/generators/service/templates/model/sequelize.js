@@ -5,7 +5,7 @@ const DataTypes = Sequelize.DataTypes;
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const <%= camelName %> = sequelizeClient.define('<%= kebabName %>', {
+  const <%= camelName %> = sequelizeClient.define('<%= snakeName %>', {
     text: {
       type: DataTypes.STRING,
       allowNull: false
