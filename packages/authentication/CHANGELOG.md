@@ -26,13 +26,6 @@
 ## [v1.3.0](https://github.com/feathersjs/authentication/tree/v1.3.0) (2017-10-24)
 [Full Changelog](https://github.com/feathersjs/authentication/compare/v0.7.13...v1.3.0)
 
-**Merged pull requests:**
-
-- updating the codeclimate setup [\#589](https://github.com/feathersjs/authentication/pull/589) ([ekryski](https://github.com/ekryski))
-
-## [v0.7.13](https://github.com/feathersjs/authentication/tree/v0.7.13) (2017-10-23)
-[Full Changelog](https://github.com/feathersjs/authentication/compare/v1.2.7...v0.7.13)
-
 **Closed issues:**
 
 - Error authenticating! Error: Token provided to verifyJWT is missing or not a string ? [\#584](https://github.com/feathersjs/authentication/issues/584)
@@ -61,6 +54,7 @@
 
 **Merged pull requests:**
 
+- updating the codeclimate setup [\#589](https://github.com/feathersjs/authentication/pull/589) ([ekryski](https://github.com/ekryski))
 - Features/typescript fix [\#585](https://github.com/feathersjs/authentication/pull/585) ([TimMensch](https://github.com/TimMensch))
 - Update mocha to the latest version 🚀 [\#582](https://github.com/feathersjs/authentication/pull/582) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 - Update sinon to the latest version 🚀 [\#580](https://github.com/feathersjs/authentication/pull/580) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
