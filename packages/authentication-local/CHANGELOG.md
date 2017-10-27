@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0-pre.2](https://github.com/feathersjs/authentication-local/tree/v1.0.0-pre.2) (2017-10-27)
+[Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.0.0-pre.1...v1.0.0-pre.2)
+
+**Merged pull requests:**
+
+- Safely dispatch without password [\#40](https://github.com/feathersjs/authentication-local/pull/40) ([daffl](https://github.com/daffl))
+
 ## [v1.0.0-pre.1](https://github.com/feathersjs/authentication-local/tree/v1.0.0-pre.1) (2017-10-25)
 [Full Changelog](https://github.com/feathersjs/authentication-local/compare/v0.4.4...v1.0.0-pre.1)
 
