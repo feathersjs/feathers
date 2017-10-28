@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 
-module.exports = function () {
-  const app = this;
-
+module.exports = function (app) {
   mongoose.connect(app.get('mongodb'), {
     useMongoClient: true
   });

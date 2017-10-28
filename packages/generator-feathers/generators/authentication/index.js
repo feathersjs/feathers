@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const j = require('../../lib/transform');
+const j = require('@feathersjs/tools').transform;
 const crypto = require('crypto');
 
 const Generator = require('../../lib/generator');
@@ -140,9 +140,8 @@ module.exports = class AuthGenerator extends Generator {
 
   writing() {
     const dependencies = [
-      'feathers-authentication',
-      'feathers-authentication-hooks',
-      'feathers-authentication-jwt'
+      '@feathersjs/authentication',
+      '@feathersjs/authentication-jwt'
     ];
     const context = Object.assign({
       kebabEntity: _.kebabCase(this.props.entity),
@@ -155,7 +154,7 @@ module.exports = class AuthGenerator extends Generator {
       const oauthProvider = OAUTH2_STRATEGY_MAPPINGS[strategy];
 
       if (oauthProvider) {
-        dependencies.push('feathers-authentication-oauth2');
+        dependencies.push('@feathersjs/authentication-oauth2');
         dependencies.push(oauthProvider);
         context.oauthProviders.push({
           name: strategy,
@@ -163,7 +162,7 @@ module.exports = class AuthGenerator extends Generator {
           module: oauthProvider
         });
       } else {
-        dependencies.push(`feathers-authentication-${strategy}`);
+        dependencies.push(`@feathersjs/authentication-${strategy}`);
       }
     });
 

@@ -1,7 +1,7 @@
 {
   "name": "generator-feathers",
   "description": "A Yeoman generator for a Feathers application",
-  "version": "1.2.13",
+  "version": "2.0.0-pre.0",
   "homepage": "https://github.com/feathersjs/generator-feathers",
   "main": "generators/app/index.js",
   "license": "MIT",
@@ -36,18 +36,17 @@
   },
   "scripts": {
     "publish": "git push origin --tags && npm run changelog && git push origin",
-    "release:prerelease": "npm version prerelease && npm publish --tag pre",
+    "release:pre": "npm version prerelease && npm publish --tag pre",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "eslint": "eslint lib/. generators/**/index.js test/. --config .eslintrc.json",
-    "test:transform": "mocha test/transform.test.js --exit",
-    "test:generators": "mocha test/generators.test.js --timeout 300000 --exit",
-    "test": "npm run eslint && npm run test:transform && npm run test:generators"
+    "test": "npm run eslint && mocha test/generators.test.js --timeout 300000 --exit"
   },
   "dependencies": {
     "@feathersjs/jscodeshift": "^0.5.0",
+    "@feathersjs/tools": "^0.1.0",
     "lodash": "^4.17.4",
     "randomstring": "^1.1.5",
     "yeoman-generator": "^2.0.0"

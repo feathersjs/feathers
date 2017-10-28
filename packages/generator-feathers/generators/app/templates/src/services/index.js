@@ -1,3 +1,2 @@
-module.exports = function () {
-  const app = this; // eslint-disable-line no-unused-vars
+module.exports = function (app) { // eslint-disable-line no-unused-vars
 };

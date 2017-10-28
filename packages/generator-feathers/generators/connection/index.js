@@ -1,7 +1,7 @@
 const { snakeCase } = require('lodash');
 const url = require('url');
+const j = require('@feathersjs/tools').transform;
 const Generator = require('../../lib/generator');
-const j = require('../../lib/transform');
 
 module.exports = class ConnectionGenerator extends Generator {
   constructor (args, opts) {
@@ -15,19 +15,19 @@ module.exports = class ConnectionGenerator extends Generator {
 
     const ast = j(code);
     const appDeclaration = ast.findDeclaration('app');
-    const configureHooks = ast.findConfigure('hooks');
+    const configureMiddleware = ast.findConfigure('middleware');
     const requireCall = `const ${adapter} = require('./${adapter}');`;
 
     if (appDeclaration.length === 0) {
       throw new Error('Could not find \'app\' variable declaration in app.js to insert database configuration. Did you modify app.js?');
     }
 
-    if (configureHooks.length === 0) {
-      throw new Error('Could not find .configure(hooks()) call in app.js after which to insert database configuration. Did you modify app.js?');
+    if (configureMiddleware.length === 0) {
+      throw new Error('Could not find .configure(middleware) call in app.js after which to insert database configuration. Did you modify app.js?');
     }
 
     appDeclaration.insertBefore(requireCall);
-    configureHooks.insertAfter(`app.configure(${adapter});`);
+    configureMiddleware.insertBefore(`app.configure(${adapter});`);
 
     return ast.toSource();
   }

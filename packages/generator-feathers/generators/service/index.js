@@ -1,8 +1,8 @@
 const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
+const j = require('@feathersjs/tools').transform;
 const Generator = require('../../lib/generator');
-const j = require('../../lib/transform');
 
 const templatePath = path.join(__dirname, 'templates');
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
@@ -181,12 +181,6 @@ module.exports = class ServiceGenerator extends Generator {
     this.fs.copyTpl(
       this.templatePath(`hooks${this.props.authentication ? '-user' : ''}.js`),
       this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`),
-      context
-    );
-
-    this.fs.copyTpl(
-      this.templatePath('filters.js'),
-      this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.filters.js`),
       context
     );
 

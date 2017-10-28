@@ -1,6 +1,6 @@
-const Generator = require('../../lib/generator');
 const { kebabCase, camelCase } = require('lodash');
-const j = require('../../lib/transform');
+const j = require('@feathersjs/tools').transform;
+const Generator = require('../../lib/generator');
 
 module.exports = class MiddlewareGenerator extends Generator {
   prompting () {

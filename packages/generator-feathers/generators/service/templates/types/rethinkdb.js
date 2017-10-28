@@ -1,10 +1,8 @@
 // Initializes the `<%= name %>` service on path `/<%= path %>`
 const createService = require('feathers-rethinkdb');
 const hooks = require('./<%= kebabName %>.hooks');
-const filters = require('./<%= kebabName %>.filters');
 
-module.exports = function () {
-  const app = this;
+module.exports = function (app) {
   const Model = app.get('rethinkdbClient');
   const paginate = app.get('paginate');
 
@@ -22,7 +20,11 @@ module.exports = function () {
 
   service.hooks(hooks);
 
-  if (service.filter) {
-    service.filter(filters);
-  }
+  app.publish(() => {
+    // Here you can add event publishers to channels set up in `channels.js`
+    // To publish only for a specific event use `app.publish(eventname, () => {})`
+
+    // e.g. to publish all service events to all authenticated users use
+    // return app.channel('authenticated');
+  });
 };

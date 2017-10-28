@@ -1,4 +1,4 @@
-<% if (requiresAuth) { %>const { authenticate } = require('feathers-authentication').hooks;<% } %>
+<% if (requiresAuth) { %>const { authenticate } = require('@feathersjs/authentication').hooks;<% } %>
 
 module.exports = {
   before: {

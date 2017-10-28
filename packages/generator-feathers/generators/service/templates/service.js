@@ -2,11 +2,9 @@
 const createService = require('<%= serviceModule %>');<% if(modelName) { %>
 const createModel = require('../../models/<%= modelName %>');<% } %>
 const hooks = require('./<%= kebabName %>.hooks');
-const filters = require('./<%= kebabName %>.filters');
 
-module.exports = function () {
-  const app = this;<% if (modelName) { %>
-  const Model = createModel(app);<% } %>
+module.exports = function (app) {
+  <% if (modelName) { %>const Model = createModel(app);<% } %>
   const paginate = app.get('paginate');
 
   const options = {
@@ -23,7 +21,11 @@ module.exports = function () {
 
   service.hooks(hooks);
 
-  if (service.filter) {
-    service.filter(filters);
-  }
+  app.publish(() => {
+    // Here you can add event publishers to channels set up in `channels.js`
+    // To publish only for a specific event use `app.publish(eventname, () => {})`
+
+    // e.g. to publish all service events to all authenticated users use
+    // return app.channel('authenticated');
+  });
 };

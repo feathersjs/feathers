@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize');
 
-module.exports = function () {
-  const app = this;
+module.exports = function (app) {
   const connectionString = app.get('<%= database %>');
   const sequelize = new Sequelize(connectionString, {
     dialect: '<%= database %>',

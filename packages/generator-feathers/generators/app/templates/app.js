@@ -3,22 +3,22 @@ const favicon = require('serve-favicon');
 const compress = require('compression');
 const cors = require('cors');
 const helmet = require('helmet');
-const bodyParser = require('body-parser');
 
-const feathers = require('feathers');
-const configuration = require('feathers-configuration');
-const hooks = require('feathers-hooks');
-<% if (hasProvider('rest')) { %>const rest = require('feathers-rest');<% } %>
-<% if (hasProvider('socketio')) { %>const socketio = require('feathers-socketio');<% } %>
-<% if (hasProvider('primus')) { %>const primus = require('feathers-primus');<% } %>
-const handler = require('feathers-errors/handler');
-const notFound = require('feathers-errors/not-found');
+const feathers = require('@feathersjs/feathers');
+const configuration = require('@feathersjs/configuration');
+const express = require('@feathersjs/express');
+<% if (hasProvider('rest')) { %>const rest = require('@feathersjs/express/rest');<% } %>
+<% if (hasProvider('socketio')) { %>const socketio = require('@feathersjs/socketio');<% } %>
+<% if (hasProvider('primus')) { %>const primus = require('@feathersjs/primus');<% } %>
+const handler = require('@feathersjs/errors/handler');
+const notFound = require('@feathersjs/errors/not-found');
 
 const middleware = require('./middleware');
 const services = require('./services');
 const appHooks = require('./app.hooks');
+const channels = require('./channels');
 
-const app = feathers();
+const app = express(feathers());
 
 // Load app configuration
 app.configure(configuration());
@@ -26,19 +26,20 @@ app.configure(configuration());
 app.use(cors());
 app.use(helmet());
 app.use(compress());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 // Host the public folder
-app.use('/', feathers.static(app.get('public')));
+app.use('/', express.static(app.get('public')));
 
 // Set up Plugins and providers
-app.configure(hooks());
 <% if (hasProvider('rest')) { %>app.configure(rest());<% } %>
 <% if (hasProvider('socketio')) { %>app.configure(socketio());<% } %>
 <% if(hasProvider('primus')) { %>app.configure(primus({ transformer: 'websockets' }));<% } %>
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);
+// Set up event channels (see channels.js)
+app.configure(channels);
 // Set up our services (see `services/index.js`)
 app.configure(services);
 // Configure a middleware for 404s and the error handler

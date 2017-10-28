@@ -1,7 +1,6 @@
 const rethinkdbdash = require('rethinkdbdash');
 
-module.exports = function () {
-  const app = this;
+module.exports = function (app) {
   const config = app.get('rethinkdb');
   const r = rethinkdbdash(config);
   const oldSetup = app.setup;
