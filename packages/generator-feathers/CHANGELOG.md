@@ -1,5 +1,12 @@
 # Change Log
 
+## [v2.0.0-pre.1](https://github.com/feathersjs/generator-feathers/tree/v2.0.0-pre.1) (2017-10-28)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.13...v2.0.0-pre.1)
+
+**Merged pull requests:**
+
+- Update generator to v3 \(Buzzard\) [\#295](https://github.com/feathersjs/generator-feathers/pull/295) ([daffl](https://github.com/daffl))
+
 ## [v1.2.13](https://github.com/feathersjs/generator-feathers/tree/v1.2.13) (2017-10-26)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.12...v1.2.13)
 
