@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const Generator = require('../../lib/generator');
+const j = require('@feathersjs/tools').transform;
 const { kebabCase, camelCase } = require('lodash');
-const j = require('../../lib/transform');
+const Generator = require('../../lib/generator');
 
 module.exports = class HookGenerator extends Generator {
   _listDirectories (...args) {

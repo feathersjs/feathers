@@ -1,11 +1,10 @@
-const authentication = require('feathers-authentication');
-const jwt = require('feathers-authentication-jwt');
-<% if(strategies.indexOf('local') !== -1) { %>const local = require('feathers-authentication-local');<% } %>
-<% if(oauthProviders.length){ %>const oauth2 = require('feathers-authentication-oauth2');<% } %>
+const authentication = require('@feathersjs/authentication');
+const jwt = require('@feathersjs/authentication-jwt');
+<% if(strategies.indexOf('local') !== -1) { %>const local = require('@feathersjs/authentication-local');<% } %>
+<% if(oauthProviders.length){ %>const oauth2 = require('@feathersjs/authentication-oauth2');<% } %>
 <% oauthProviders.forEach(provider => { %>const <%= provider.strategyName %> = require('<%= provider.module %>');
 <% }); %>
-module.exports = function () {
-  const app = this;
+module.exports = function (app) {
   const config = app.get('authentication');
 
   // Set up authentication with the secret

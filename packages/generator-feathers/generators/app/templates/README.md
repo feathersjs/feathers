@@ -32,7 +32,7 @@ Simply run `npm test` and all your tests in the `test/` directory will be run.
 Feathers has a powerful command line interface. Here are a few things it can do:
 
 ```
-$ npm install -g feathers-cli             # Install Feathers CLI
+$ npm install -g @feathersjs/cli          # Install Feathers CLI
 
 $ feathers generate service               # Generate a new Service
 $ feathers generate hook                  # Generate a new Hook

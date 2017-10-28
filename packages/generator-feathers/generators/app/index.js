@@ -1,16 +1,7 @@
 const Generator = require('../../lib/generator');
 const path = require('path');
 const makeConfig = require('./configs');
-const cmd = require('child_process').execSync;
 const { kebabCase } = require('lodash');
-
-var yarnInstalled;
-try {
-  cmd('yarn bin').toString();
-  yarnInstalled = true;
-} catch (err) {
-  yarnInstalled = false;
-}
 
 module.exports = class AppGenerator extends Generator {
   constructor (args, opts) {
@@ -23,14 +14,12 @@ module.exports = class AppGenerator extends Generator {
     };
 
     this.dependencies = [
-      'feathers',
-      'feathers-hooks',
-      'feathers-hooks-common',
-      'feathers-errors',
-      'feathers-configuration',
+      '@feathersjs/feathers',
+      '@feathersjs/errors',
+      '@feathersjs/configuration',
+      '@feathersjs/express',
       'serve-favicon',
       'compression',
-      'body-parser',
       'helmet',
       'winston',
       'cors'
@@ -46,7 +35,11 @@ module.exports = class AppGenerator extends Generator {
 
   prompting () {
     const dependencies = this.dependencies.concat(this.devDependencies)
-      .concat(['feathers-rest', 'feathers-socketio', 'feathers-primus']);
+      .concat([
+        '@feathersjs/express',
+        '@feathersjs/socketio',
+        '@feathersjs/primus'
+      ]);
     const prompts = [{
       name: 'name',
       message: 'Project name',
@@ -83,7 +76,7 @@ module.exports = class AppGenerator extends Generator {
       name: 'packager',
       type: 'list',
       message: 'Which package manager are you using (has to be installed globally)?',
-      default: yarnInstalled ? 'yarn@>= 0.18.0' : 'npm@>= 3.0.0',
+      default: 'npm@>= 3.0.0',
       choices: [{
         name: 'npm',
         value: 'npm@>= 3.0.0'
@@ -173,9 +166,11 @@ module.exports = class AppGenerator extends Generator {
   }
 
   install () {
-    this.props.providers.forEach(
-      provider => this.dependencies.push(`feathers-${provider}`)
-    );
+    this.props.providers.forEach(provider => {
+      const type = provider === 'rest' ? 'express' : provider;
+
+      this.dependencies.push(`@feathersjs/${type}`);
+    });
 
     this._packagerInstall(this.dependencies, {
       save: true

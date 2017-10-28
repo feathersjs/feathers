@@ -1,33 +1,25 @@
-const { authenticate } = require('feathers-authentication').hooks;
-const commonHooks = require('feathers-hooks-common');
-const { restrictToOwner } = require('feathers-authentication-hooks');
+const { authenticate } = require('@feathersjs/authentication').hooks;
 
-<% if (authentication.strategies.indexOf('local') !== -1) { %>const { hashPassword } = require('feathers-authentication-local').hooks;<% } %>
-const restrict = [
-  authenticate('jwt'),
-  restrictToOwner({
-    idField: '<%= (adapter === 'mongodb' || adapter === 'mongoose' || adapter === 'nedb') ? '_id' : 'id' %>',
-    ownerField: '<%= (adapter === 'mongodb' || adapter === 'mongoose' || adapter === 'nedb') ? '_id' : 'id' %>'
-  })
-];
+<% if (authentication.strategies.indexOf('local') !== -1) { %>const {
+ hashPassword, protect
+} = require('@feathersjs/authentication-local').hooks;<% } %>
 
 module.exports = {
   before: {
     all: [],
     find: [ authenticate('jwt') ],
-    get: [ ...restrict ],
+    get: [],
     create: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword()<% } %> ],
-    update: [ ...restrict<% if (authentication.strategies.indexOf('local') !== -1) { %>, hashPassword()<% } %> ],
-    patch: [ ...restrict<% if (authentication.strategies.indexOf('local') !== -1) { %>, hashPassword()<% } %> ],
-    remove: [ ...restrict ]
+    update: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword()<% } %> ],
+    patch: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword()<% } %> ],
+    remove: []
   },
 
   after: {
-    all: [
-      commonHooks.when(
-        hook => hook.params.provider,
-        commonHooks.discard('password')
-      )
+    all: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>
+      // Make sure the password field is never sent to the client
+      // Always must be the last hook
+      protect('password')<% } %>
     ],
     find: [],
     get: [],
