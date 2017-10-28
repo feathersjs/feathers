@@ -1,5 +1,26 @@
 # Change Log
 
+## [v3.0.0-pre.1](https://github.com/feathersjs/cli/tree/v3.0.0-pre.1) (2017-10-28)
+[Full Changelog](https://github.com/feathersjs/cli/compare/v2.3.9...v3.0.0-pre.1)
+
+**Merged pull requests:**
+
+- Prepare prerelease [\#125](https://github.com/feathersjs/cli/pull/125) ([daffl](https://github.com/daffl))
+- Add upgrade functionality [\#124](https://github.com/feathersjs/cli/pull/124) ([daffl](https://github.com/daffl))
+
+## [v2.3.9](https://github.com/feathersjs/cli/tree/v2.3.9) (2017-10-26)
+[Full Changelog](https://github.com/feathersjs/cli/compare/v2.3.8...v2.3.9)
+
+**Closed issues:**
+
+- A mongoose way to handle the createAt and updateAt [\#118](https://github.com/feathersjs/cli/issues/118)
+
+**Merged pull requests:**
+
+- Use latest generator-feathers [\#122](https://github.com/feathersjs/cli/pull/122) ([daffl](https://github.com/daffl))
+- Rename repository to use npm scope [\#121](https://github.com/feathersjs/cli/pull/121) ([daffl](https://github.com/daffl))
+- Update to new plugin infrastructure [\#120](https://github.com/feathersjs/cli/pull/120) ([daffl](https://github.com/daffl))
+
 ## [v2.3.8](https://github.com/feathersjs/cli/tree/v2.3.8) (2017-10-11)
 [Full Changelog](https://github.com/feathersjs/cli/compare/v2.3.7...v2.3.8)
 
