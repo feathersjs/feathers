@@ -1,5 +1,8 @@
 # Change Log
 
+## [v3.0.0-pre.2](https://github.com/feathersjs/cli/tree/v3.0.0-pre.2) (2017-10-30)
+[Full Changelog](https://github.com/feathersjs/cli/compare/v3.0.0-pre.1...v3.0.0-pre.2)
+
 ## [v3.0.0-pre.1](https://github.com/feathersjs/cli/tree/v3.0.0-pre.1) (2017-10-28)
 [Full Changelog](https://github.com/feathersjs/cli/compare/v2.3.9...v3.0.0-pre.1)
 
