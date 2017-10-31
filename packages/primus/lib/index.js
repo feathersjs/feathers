@@ -13,6 +13,10 @@ module.exports = function (config, configurer) {
     const app = this;
     const getParams = spark => spark.request.feathers;
 
+    if (!app.version || app.version < '3.0.0') {
+      throw new Error('@feathersjs/primus is not compatible with this version of Feathers. Use the latest at @feathersjs/feathers.');
+    }
+
     const done = new Promise(resolve => {
       Proto.mixin({
         listen (...args) {
