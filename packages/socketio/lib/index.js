@@ -22,6 +22,10 @@ module.exports = function (port, options, config) {
     const app = this;
     const getParams = socket => socket.feathers;
 
+    if (!app.version || app.version < '3.0.0') {
+      throw new Error('@feathersjs/socketio is not compatible with this version of Feathers. Use the latest at @feathersjs/feathers.');
+    }
+
     // Promise that resolves with the Socket.io `io` instance
     // when `setup` has been called (with a server)
     const done = new Promise(resolve => {
