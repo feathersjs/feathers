@@ -74,6 +74,17 @@ describe('@feathersjs/socketio', () => {
     server.close(done);
   });
 
+  it('throws an error when using an incompatible version of Feathers', () => {
+    const oldFeathers = require('feathers');
+
+    try {
+      oldFeathers().configure(socketio());
+      assert.ok(false, 'Should never get here');
+    } catch (e) {
+      assert.equal(e.message, '@feathersjs/socketio is not compatible with this version of Feathers. Use the latest at @feathersjs/feathers.');
+    }
+  });
+
   it('runs io before setup (#131)', done => {
     let counter = 0;
     let app = feathers().configure(socketio(() => {
