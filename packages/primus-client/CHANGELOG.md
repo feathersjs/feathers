@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0](https://github.com/feathersjs/primus-client/tree/v1.0.0) (2017-11-01)
+[Full Changelog](https://github.com/feathersjs/primus-client/compare/v1.0.0-pre.2...v1.0.0)
+
+**Merged pull requests:**
+
+- Update dependencies for release [\#3](https://github.com/feathersjs/primus-client/pull/3) ([daffl](https://github.com/daffl))
+
 ## [v1.0.0-pre.2](https://github.com/feathersjs/primus-client/tree/v1.0.0-pre.2) (2017-10-23)
 [Full Changelog](https://github.com/feathersjs/primus-client/compare/v1.0.0-pre.1...v1.0.0-pre.2)
 
