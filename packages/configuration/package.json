@@ -50,7 +50,7 @@
     "debug": "^3.1.0"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "^3.0.0-pre.2",
+    "@feathersjs/feathers": "^3.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^4.0.0",
     "nsp": "^2.2.0",
