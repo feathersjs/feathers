@@ -1,5 +1,20 @@
 # Change Log
 
+## [v3.0.0](https://github.com/feathersjs/socketio/tree/v3.0.0) (2017-11-01)
+[Full Changelog](https://github.com/feathersjs/socketio/compare/v2.0.1...v3.0.0)
+
+**Merged pull requests:**
+
+- Update dependencies for release [\#95](https://github.com/feathersjs/socketio/pull/95) ([daffl](https://github.com/daffl))
+- Throw an error when using an incompatible version of Feathers [\#94](https://github.com/feathersjs/socketio/pull/94) ([daffl](https://github.com/daffl))
+
+## [v2.0.1](https://github.com/feathersjs/socketio/tree/v2.0.1) (2017-10-31)
+[Full Changelog](https://github.com/feathersjs/socketio/compare/v3.0.0-pre.4...v2.0.1)
+
+**Merged pull requests:**
+
+- Add an error when trying to use earlier versions with Feathers v3 [\#93](https://github.com/feathersjs/socketio/pull/93) ([daffl](https://github.com/daffl))
+
 ## [v3.0.0-pre.4](https://github.com/feathersjs/socketio/tree/v3.0.0-pre.4) (2017-10-25)
 [Full Changelog](https://github.com/feathersjs/socketio/compare/v3.0.0-pre.3...v3.0.0-pre.4)
 
