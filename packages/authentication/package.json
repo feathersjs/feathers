@@ -47,9 +47,9 @@
     "lib": "lib"
   },
   "dependencies": {
-    "@feathersjs/commons": "^1.1.0",
-    "@feathersjs/errors": "^3.0.0-pre.1",
-    "@feathersjs/socket-commons": "^3.0.0-pre.7",
+    "@feathersjs/commons": "^1.2.0",
+    "@feathersjs/errors": "^3.0.0",
+    "@feathersjs/socket-commons": "^3.0.0",
     "debug": "^3.1.0",
     "jsonwebtoken": "^8.0.0",
     "lodash.clone": "^4.5.0",
@@ -62,13 +62,13 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "@feathersjs/authentication-jwt": "^1.0.0-pre.1",
-    "@feathersjs/authentication-local": "^1.0.0-pre.1",
-    "@feathersjs/configuration": "^1.0.0-pre.1",
-    "@feathersjs/express": "^1.0.0-pre.4",
-    "@feathersjs/feathers": "^3.0.0-pre.3",
-    "@feathersjs/primus": "^3.0.0-pre.4",
-    "@feathersjs/socketio": "^3.0.0-pre.4",
+    "@feathersjs/authentication-jwt": "^1.0.0",
+    "@feathersjs/authentication-local": "^1.0.0",
+    "@feathersjs/configuration": "^1.0.0",
+    "@feathersjs/express": "^1.0.0",
+    "@feathersjs/feathers": "^3.0.0",
+    "@feathersjs/primus": "^3.0.0",
+    "@feathersjs/socketio": "^3.0.0",
     "body-parser": "^1.15.2",
     "chai": "^4.1.0",
     "chai-uuid": "^1.0.6",
