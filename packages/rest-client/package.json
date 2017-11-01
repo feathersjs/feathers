@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@angular/common": "^5.0.0",
-    "@angular/core": "^4.3.0",
+    "@angular/core": "^5.0.0",
     "@angular/http": "^4.3.0",
     "@angular/platform-browser": "^4.3.0",
     "@feathersjs/express": "^1.0.0",
