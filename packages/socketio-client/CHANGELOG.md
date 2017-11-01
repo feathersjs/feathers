@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0](https://github.com/feathersjs/socketio-client/tree/v1.0.0) (2017-11-01)
+[Full Changelog](https://github.com/feathersjs/socketio-client/compare/v1.0.0-pre.3...v1.0.0)
+
+**Merged pull requests:**
+
+- Update dependencies for release [\#3](https://github.com/feathersjs/socketio-client/pull/3) ([daffl](https://github.com/daffl))
+
 ## [v1.0.0-pre.3](https://github.com/feathersjs/socketio-client/tree/v1.0.0-pre.3) (2017-10-23)
 [Full Changelog](https://github.com/feathersjs/socketio-client/compare/v1.0.0-pre.2...v1.0.0-pre.3)
 
