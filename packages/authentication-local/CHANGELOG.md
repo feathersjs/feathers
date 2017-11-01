@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0](https://github.com/feathersjs/authentication-local/tree/v1.0.0) (2017-11-01)
+[Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.0.0-pre.2...v1.0.0)
+
+**Merged pull requests:**
+
+- Update dependencies for release [\#41](https://github.com/feathersjs/authentication-local/pull/41) ([daffl](https://github.com/daffl))
+
 ## [v1.0.0-pre.2](https://github.com/feathersjs/authentication-local/tree/v1.0.0-pre.2) (2017-10-27)
 [Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.0.0-pre.1...v1.0.0-pre.2)
 
