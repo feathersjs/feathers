@@ -55,7 +55,7 @@
     "@angular/common": "^5.0.0",
     "@angular/core": "^5.0.0",
     "@angular/http": "^5.0.0",
-    "@angular/platform-browser": "^4.3.0",
+    "@angular/platform-browser": "^5.0.0",
     "@feathersjs/express": "^1.0.0",
     "@feathersjs/feathers": "^3.0.0",
     "axios": "^0.17.0",
