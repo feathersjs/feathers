@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0](https://github.com/feathersjs/authentication-jwt/tree/v1.0.0) (2017-11-01)
+[Full Changelog](https://github.com/feathersjs/authentication-jwt/compare/v1.0.0-pre.1...v1.0.0)
+
+**Merged pull requests:**
+
+- Update dependencies for release [\#44](https://github.com/feathersjs/authentication-jwt/pull/44) ([daffl](https://github.com/daffl))
+
 ## [v1.0.0-pre.1](https://github.com/feathersjs/authentication-jwt/tree/v1.0.0-pre.1) (2017-10-25)
 [Full Changelog](https://github.com/feathersjs/authentication-jwt/compare/v0.3.2...v1.0.0-pre.1)
 
