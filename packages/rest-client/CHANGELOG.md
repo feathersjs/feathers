@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.3.1](https://github.com/feathersjs/rest-client/tree/v1.3.1) (2017-11-01)
+[Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.3.0...v1.3.1)
+
+**Merged pull requests:**
+
+- Update dependencies [\#9](https://github.com/feathersjs/rest-client/pull/9) ([daffl](https://github.com/daffl))
+- Update babelify to the latest version 🚀 [\#8](https://github.com/feathersjs/rest-client/pull/8) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.3.0](https://github.com/feathersjs/rest-client/tree/v1.3.0) (2017-10-23)
 [Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.2.0...v1.3.0)
 
