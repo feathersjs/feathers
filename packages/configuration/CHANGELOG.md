@@ -1,5 +1,8 @@
 # Change Log
 
+## [v1.0.0](https://github.com/feathersjs/configuration/tree/v1.0.0) (2017-11-01)
+[Full Changelog](https://github.com/feathersjs/configuration/compare/v1.0.0-pre.1...v1.0.0)
+
 ## [v1.0.0-pre.1](https://github.com/feathersjs/configuration/tree/v1.0.0-pre.1) (2017-10-23)
 [Full Changelog](https://github.com/feathersjs/configuration/compare/v0.4.2...v1.0.0-pre.1)
 
