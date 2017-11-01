@@ -46,13 +46,13 @@
     "lib": "lib"
   },
   "dependencies": {
-    "@feathersjs/errors": "^3.0.0-pre.1",
+    "@feathersjs/errors": "^3.0.0",
     "debug": "^3.1.0",
     "lodash": "^4.17.4",
     "url-pattern": "^1.0.3"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "^3.0.0-pre.3",
+    "@feathersjs/feathers": "^3.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^4.0.0",
     "semistandard": "^11.0.0"
