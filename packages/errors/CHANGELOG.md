@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.0.0](https://github.com/feathersjs/errors/tree/v3.0.0) (2017-11-01)
+[Full Changelog](https://github.com/feathersjs/errors/compare/v3.0.0-pre.1...v3.0.0)
+
+**Merged pull requests:**
+
+- Update to Buzzard infrastructure [\#93](https://github.com/feathersjs/errors/pull/93) ([daffl](https://github.com/daffl))
+
 ## [v3.0.0-pre.1](https://github.com/feathersjs/errors/tree/v3.0.0-pre.1) (2017-10-21)
 [Full Changelog](https://github.com/feathersjs/errors/compare/v2.9.2...v3.0.0-pre.1)
 
