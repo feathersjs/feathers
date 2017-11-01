@@ -1,5 +1,13 @@
 # Change Log
 
+## [v3.0.0](https://github.com/feathersjs/feathers/tree/v3.0.0) (2017-11-01)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.0-pre.3...v3.0.0)
+
+**Merged pull requests:**
+
+- Update dependencies to enable Greenkeeper 🌴 [\#708](https://github.com/feathersjs/feathers/pull/708) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Feathers v3 core \(Buzzard\) [\#697](https://github.com/feathersjs/feathers/pull/697) ([daffl](https://github.com/daffl))
+
 ## [v3.0.0-pre.3](https://github.com/feathersjs/feathers/tree/v3.0.0-pre.3) (2017-10-25)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.0-pre.2...v3.0.0-pre.3)
 
