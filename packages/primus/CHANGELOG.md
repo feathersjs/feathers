@@ -1,5 +1,20 @@
 # Change Log
 
+## [v3.0.0](https://github.com/feathersjs/primus/tree/v3.0.0) (2017-11-01)
+[Full Changelog](https://github.com/feathersjs/primus/compare/v2.2.1...v3.0.0)
+
+**Merged pull requests:**
+
+- Update dependencies for release [\#67](https://github.com/feathersjs/primus/pull/67) ([daffl](https://github.com/daffl))
+- Throw an error when using an incompatible version of Feathers [\#66](https://github.com/feathersjs/primus/pull/66) ([daffl](https://github.com/daffl))
+
+## [v2.2.1](https://github.com/feathersjs/primus/tree/v2.2.1) (2017-10-31)
+[Full Changelog](https://github.com/feathersjs/primus/compare/v3.0.0-pre.4...v2.2.1)
+
+**Merged pull requests:**
+
+- Add an error when trying to use earlier versions with Feathers v3 [\#65](https://github.com/feathersjs/primus/pull/65) ([daffl](https://github.com/daffl))
+
 ## [v3.0.0-pre.4](https://github.com/feathersjs/primus/tree/v3.0.0-pre.4) (2017-10-25)
 [Full Changelog](https://github.com/feathersjs/primus/compare/v3.0.0-pre.3...v3.0.0-pre.4)
 
