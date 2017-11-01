@@ -49,15 +49,15 @@
     "./lib/index": "./lib/client"
   },
   "dependencies": {
-    "@feathersjs/socket-commons": "^3.0.0-pre.7",
+    "@feathersjs/socket-commons": "^3.0.0",
     "debug": "^3.1.0",
     "primus": "^7.0.0",
     "primus-emitter": "^3.1.1"
   },
   "devDependencies": {
-    "@feathersjs/commons": "^1.0.0",
-    "@feathersjs/express": "^1.0.0-pre.3",
-    "@feathersjs/feathers": "^3.0.0-pre.3",
+    "@feathersjs/commons": "^1.2.0",
+    "@feathersjs/express": "^1.0.0",
+    "@feathersjs/feathers": "^3.0.0",
     "feathers": "^2.2.3",
     "feathers-memory": "^1.0.0",
     "istanbul": "^1.1.0-alpha.1",
