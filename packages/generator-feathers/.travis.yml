@@ -2,6 +2,6 @@ language: node_js
 services: mongodb
 node_js:
   - 6
-  - node
+  - 8
 addons:
   rethinkdb: 2.3
