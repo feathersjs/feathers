@@ -34,7 +34,7 @@ Here is all the code you need to create a RESTful, real-time message API that us
 ```js
 // app.js
 const feathers = require('@feathersjs/feathers');
-const expressify = require('@feathersjs/express')
+const express = require('@feathersjs/express')
 const socketio = require('@feathersjs/socketio');
 const handler = require('@feathersjs/errors/handler');
 
@@ -42,14 +42,14 @@ const memory = require('feathers-memory');
 
 // Create a Feathers application that is also fully compatible
 // with an Express app
-const app = expressify(feathers());
+const app = express(feathers());
 
 // Parse HTTP JSON bodies
-app.use(expressify.json());
+app.use(express.json());
 // Parse URL-encoded params
-app.use(expressify.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 // Add REST API support
-app.configure(expressify.rest());
+app.configure(express.rest());
 // Configure Socket.io real-time APIs
 app.configure(socketio());
 // Register our memory "messages" service
