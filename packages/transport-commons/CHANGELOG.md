@@ -1,5 +1,16 @@
 # Change Log
 
+## [v3.0.1](https://github.com/feathersjs/socket-commons/tree/v3.0.1) (2017-11-03)
+[Full Changelog](https://github.com/feathersjs/socket-commons/compare/v3.0.0...v3.0.1)
+
+**Closed issues:**
+
+- Allow socket calls without params and callback [\#54](https://github.com/feathersjs/socket-commons/issues/54)
+
+**Merged pull requests:**
+
+- Allow socket calls without query and callback [\#55](https://github.com/feathersjs/socket-commons/pull/55) ([daffl](https://github.com/daffl))
+
 ## [v3.0.0](https://github.com/feathersjs/socket-commons/tree/v3.0.0) (2017-11-01)
 [Full Changelog](https://github.com/feathersjs/socket-commons/compare/v3.0.0-pre.7...v3.0.0)
 
