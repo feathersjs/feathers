@@ -180,17 +180,62 @@ describe('socket commons utils', () => {
       });
     });
 
-    it('simple method running', done => {
-      const callback = (error, result) => {
-        if (error) {
-          return done(error);
-        }
+    describe('running methods', () => {
+      it('basic', done => {
+        const callback = (error, result) => {
+          if (error) {
+            return done(error);
+          }
 
-        assert.deepEqual(result, { id: 10 });
-        done();
-      };
+          assert.deepEqual(result, { id: 10 });
+          done();
+        };
 
-      runMethod(app, {}, 'myservice', 'get', [ 10, callback ]);
+        runMethod(app, {}, 'myservice', 'get', [ 10, {}, callback ]);
+      });
+
+      it('with params missing', done => {
+        const callback = (error, result) => {
+          if (error) {
+            return done(error);
+          }
+
+          assert.deepEqual(result, { id: 10 });
+          done();
+        };
+
+        runMethod(app, {}, 'myservice', 'get', [ 10, callback ]);
+      });
+
+      it('with params but missing callback', done => {
+        app.use('/otherservice', {
+          get (id) {
+            assert.equal(id, 'dishes');
+
+            return Promise.resolve({ id }).then(res => {
+              done();
+              return res;
+            });
+          }
+        });
+
+        runMethod(app, {}, 'otherservice', 'get', [ 'dishes', {} ]);
+      });
+
+      it('with params and callback missing', done => {
+        app.use('/otherservice', {
+          get (id) {
+            assert.equal(id, 'laundry');
+
+            return Promise.resolve({ id }).then(res => {
+              done();
+              return res;
+            });
+          }
+        });
+
+        runMethod(app, {}, 'otherservice', 'get', [ 'laundry' ]);
+      });
     });
 
     it('throws NotFound for invalid service', done => {
