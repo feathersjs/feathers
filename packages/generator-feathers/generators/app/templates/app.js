@@ -38,10 +38,10 @@ app.use('/', express.static(app.get('public')));
 <% if(hasProvider('primus')) { %>app.configure(primus({ transformer: 'websockets' }));<% } %>
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);
-// Set up event channels (see channels.js)
-app.configure(channels);
 // Set up our services (see `services/index.js`)
 app.configure(services);
+// Set up event channels (see channels.js)
+app.configure(channels);
 // Configure a middleware for 404s and the error handler
 app.use(notFound());
 app.use(handler());

@@ -1,5 +1,5 @@
 module.exports = function(app) {
-  if(!app.channel) {
+  if(typeof app.channel !== 'function') {
     // If no real-time functionality has been configured just return
     return;
   }
@@ -30,4 +30,16 @@ module.exports = function(app) {
       // user.rooms.forEach(room => app.channel(`rooms/${room.id}`).join(channel))
     }
   });
+
+  app.publish((data, hook) => { // eslint-disable-line no-unused-vars
+    // Here you can add event publishers to channels set up in `channels.js`
+    // To publish only for a specific event use `app.publish(eventname, () => {})`
+
+    // e.g. to publish all service events to all authenticated users use
+    // return app.channel('authenticated');
+  });
+
+  // Here you can also add service specific event publishers
+  // e..g the publish the `users` service `created` event to the `admins` channel
+  // app.service('users').publish('created', () => app.channel('admins'));
 };
