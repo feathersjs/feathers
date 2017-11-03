@@ -64,6 +64,17 @@ describe('utils', () => {
       });
     });
 
+    it('does not error if payload has jti property', () => {
+      return createJWT({
+        id: 1,
+        jti: 'test'
+      }, options).then(t => {
+        const decoded = jwt.decode(t);
+
+        expect(decoded.jti).to.equal('test');
+      });
+    });
+
     describe('when passing custom options', () => {
       let token;
       let decoded;
