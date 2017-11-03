@@ -24,8 +24,12 @@ exports.createJWT = function createJWT (payload = {}, options = {}) {
     'sub',
     'iss'
   ];
-  const settings = merge({ jwtid: uuidv4() }, options.jwt);
+  const settings = merge({}, options.jwt);
   const { secret } = options;
+
+  if (!(payload.jti || settings.jwtid)) {
+    settings.jwtid = uuidv4();
+  }
 
   return new Promise((resolve, reject) => {
     debug('Creating JWT using options', settings);
