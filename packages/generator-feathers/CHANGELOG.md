@@ -1,5 +1,22 @@
 # Change Log
 
+## [v2.0.0](https://github.com/feathersjs/generator-feathers/tree/v2.0.0) (2017-11-04)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.0.0-pre.1...v2.0.0)
+
+**Closed issues:**
+
+- remove facebook ads from generator [\#294](https://github.com/feathersjs/generator-feathers/issues/294)
+- Generator auto updates packages [\#292](https://github.com/feathersjs/generator-feathers/issues/292)
+- Remove separate bodyParser middleware [\#290](https://github.com/feathersjs/generator-feathers/issues/290)
+- Incorrect Knex client used when SQL Server chosen [\#258](https://github.com/feathersjs/generator-feathers/issues/258)
+
+**Merged pull requests:**
+
+- Install mssql instead of tedious [\#300](https://github.com/feathersjs/generator-feathers/pull/300) ([daffl](https://github.com/daffl))
+- Do not reinstall existing dependencies [\#299](https://github.com/feathersjs/generator-feathers/pull/299) ([daffl](https://github.com/daffl))
+- Move all channel handling into channels.js [\#298](https://github.com/feathersjs/generator-feathers/pull/298) ([daffl](https://github.com/daffl))
+- Use the selected packager to run commands [\#297](https://github.com/feathersjs/generator-feathers/pull/297) ([louim](https://github.com/louim))
+
 ## [v2.0.0-pre.1](https://github.com/feathersjs/generator-feathers/tree/v2.0.0-pre.1) (2017-10-28)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.13...v2.0.0-pre.1)
 
