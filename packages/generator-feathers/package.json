@@ -42,7 +42,8 @@
     "release:major": "npm version major && npm publish",
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "eslint": "eslint lib/. generators/**/index.js test/. --config .eslintrc.json",
-    "test": "npm run eslint && mocha test/generators.test.js --timeout 300000 --exit"
+    "test": "npm run eslint && npm run mocha",
+    "mocha": "mocha test/generators.test.js --timeout 300000 --exit"
   },
   "dependencies": {
     "@feathersjs/jscodeshift": "^0.5.0",

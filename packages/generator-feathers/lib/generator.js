@@ -40,12 +40,15 @@ module.exports = class BaseGenerator extends Generator {
     const packager = this.pkg.engines && this.pkg.engines.yarn ? 
       'yarn' : 'npm';
     const method = `${packager}Install`;
+    const isDev = options.saveDev;
+    const existingDependencies = this.pkg[isDev ? 'devDependencies' : 'dependencies'] || {};
+    const dependencies = deps.filter(current => !existingDependencies[current]);
 
-    if(packager === 'yarn' && options.saveDev) {
+    if(packager === 'yarn' && isDev) {
       options.dev = true;
       delete options.saveDev;
     }
-    
-    return this[method](deps, options);
+
+    return this[method](dependencies, options);
   }
 };
