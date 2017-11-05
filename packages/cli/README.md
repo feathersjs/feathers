@@ -27,23 +27,26 @@ $ feathers help
   Usage: feathers generate [type]
 
 
-  Commands:
-
-    generate [type]  Run a generator. Type can be
-      • app - Create a new Feathers application in the current folder
-      • authentication - Set up authentication for the current application
-      • connection - Initialize a new database connection
-      • hook - Create a new hook
-      • middleware - Create an Express middleware
-      • service - Generate a new service
-      • plugin - Create a new Feathers plugin
-
-    *
-
   Options:
 
-    -h, --help     output usage information
     -V, --version  output the version number
+    -h, --help     output usage information
+
+
+  Commands:
+
+    generate|g [type]  Run a generator. Type can be
+    	• app - Create a new Feathers application in the current folder
+    	• authentication - Set up authentication for the current application
+    	• connection - Initialize a new database connection
+    	• hook - Create a new hook
+    	• middleware - Create an Express middleware
+    	• secret - Generate a new authentication secret
+    	• service - Generate a new service
+    	• plugin - Create a new Feathers plugin
+
+    upgrade|u          Try to automatically upgrade to the latest Feathers version
+    *
 
 $ feathers generate app
 
