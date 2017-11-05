@@ -1,7 +1,7 @@
 const errors = require('@feathersjs/errors');
 const { omit } = require('@feathersjs/commons')._;
 
-const debug = require('debug')('feathersjs/express/rest');
+const debug = require('debug')('@feathersjs/express/rest');
 
 const statusCodes = {
   created: 201,
