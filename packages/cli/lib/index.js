@@ -2,6 +2,7 @@ const yeoman = require('yeoman-environment');
 const program = require('commander');
 const meta = require('generator-feathers/meta');
 const semver = require('semver');
+const updateNotifier = require('update-notifier');
 const { upgrade } = require('@feathersjs/tools');
 
 const env = yeoman.createEnv();
@@ -14,13 +15,16 @@ Object.keys(meta).forEach(name => {
 });
 
 module.exports = function (argv, generatorOptions = {}) {
+  const pkg = require('../package.json');
   let description = 'Run a generator. Type can be\n';
 
   Object.keys(meta).forEach(name => {
     description += `\t• ${name} - ${meta[name]}\n`;
   });
 
-  program.version(require('../package.json').version)
+  updateNotifier({ pkg }).notify();
+
+  program.version(pkg.version)
     .usage('upgrade <version>')
     .usage('generate [type]');
 
