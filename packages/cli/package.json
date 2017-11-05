@@ -58,7 +58,6 @@
     "yeoman-environment": "^2.0.0"
   },
   "devDependencies": {
-    "feathers": "^2.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "lodash": "^4.6.1",
     "mocha": "^4.0.0",
