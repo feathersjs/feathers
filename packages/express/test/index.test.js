@@ -12,6 +12,11 @@ describe('@feathersjs/express', () => {
     }
   };
 
+  it('exports .rest and .errorHandler', () => {
+    assert.equal(typeof expressify.rest, 'function');
+    assert.equal(expressify.errorHandler, require('@feathersjs/errors/handler'));
+  });
+
   it('returns an Express application', () => {
     const app = expressify(feathers());
 

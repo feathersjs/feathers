@@ -1,7 +1,7 @@
 const makeDebug = require('debug');
 const wrappers = require('./wrappers');
 
-const debug = makeDebug('feathersjs/express/rest');
+const debug = makeDebug('@feathersjs/express/rest');
 
 function formatter (req, res, next) {
   if (res.data === undefined) {
