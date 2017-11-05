@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.1.0](https://github.com/feathersjs/express/tree/v1.1.0) (2017-11-05)
+[Full Changelog](https://github.com/feathersjs/express/compare/v1.0.0...v1.1.0)
+
+**Merged pull requests:**
+
+- Re-export Express error handler [\#10](https://github.com/feathersjs/express/pull/10) ([daffl](https://github.com/daffl))
+
 ## [v1.0.0](https://github.com/feathersjs/express/tree/v1.0.0) (2017-11-01)
 [Full Changelog](https://github.com/feathersjs/express/compare/v1.0.0-pre.4...v1.0.0)
 
