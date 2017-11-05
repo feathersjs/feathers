@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.1.0](https://github.com/feathersjs/cli/tree/v3.1.0) (2017-11-05)
+[Full Changelog](https://github.com/feathersjs/cli/compare/v3.0.0...v3.1.0)
+
+**Merged pull requests:**
+
+- Add update notifier [\#127](https://github.com/feathersjs/cli/pull/127) ([daffl](https://github.com/daffl))
+
 ## [v3.0.0](https://github.com/feathersjs/cli/tree/v3.0.0) (2017-11-05)
 [Full Changelog](https://github.com/feathersjs/cli/compare/v3.0.0-pre.2...v3.0.0)
 
