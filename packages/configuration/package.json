@@ -53,7 +53,6 @@
     "@feathersjs/feathers": "^3.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^4.0.0",
-    "nsp": "^2.2.0",
     "semistandard": "^11.0.0"
   }
 }
