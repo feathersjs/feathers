@@ -59,7 +59,7 @@
     "istanbul": "^1.1.0-alpha.1",
     "jshint": "^2.9.4",
     "mocha": "^4.0.0",
-    "nsp": "^2.6.2",
+    "nsp": "^3.0.0",
     "semistandard": "^11.0.0"
   }
 }
