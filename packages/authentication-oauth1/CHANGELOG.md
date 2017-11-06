@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.1](https://github.com/feathersjs/authentication-oauth1/tree/v1.0.1) (2017-11-06)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v1.0.0...v1.0.1)
+
+**Merged pull requests:**
+
+- Add a missing errorr handler [\#35](https://github.com/feathersjs/authentication-oauth1/pull/35) ([Avnerus](https://github.com/Avnerus))
+
 ## [v1.0.0](https://github.com/feathersjs/authentication-oauth1/tree/v1.0.0) (2017-11-01)
 [Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v1.0.0-pre.1...v1.0.0)
 
