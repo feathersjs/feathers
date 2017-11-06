@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.1.1](https://github.com/feathersjs/express/tree/v1.1.1) (2017-11-06)
+[Full Changelog](https://github.com/feathersjs/express/compare/v1.1.0...v1.1.1)
+
+**Merged pull requests:**
+
+- Also add notFound to export [\#11](https://github.com/feathersjs/express/pull/11) ([daffl](https://github.com/daffl))
+
 ## [v1.1.0](https://github.com/feathersjs/express/tree/v1.1.0) (2017-11-05)
 [Full Changelog](https://github.com/feathersjs/express/compare/v1.0.0...v1.1.0)
 
