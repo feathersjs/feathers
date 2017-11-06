@@ -1,6 +1,7 @@
 const express = require('express');
 const Proto = require('uberproto');
 const errorHandler = require('@feathersjs/errors/handler');
+const notFound = require('@feathersjs/errors/not-found');
 const debug = require('debug')('@feathersjs/express');
 
 const rest = require('./rest');
@@ -76,4 +77,4 @@ module.exports = function feathersExpress (feathersApp) {
   return Proto.mixin(mixin, expressApp);
 };
 
-Object.assign(module.exports, express, { rest, errorHandler });
+Object.assign(module.exports, express, { rest, notFound, errorHandler });

@@ -12,9 +12,10 @@ describe('@feathersjs/express', () => {
     }
   };
 
-  it('exports .rest and .errorHandler', () => {
+  it('exports .rest, .notFound and .errorHandler', () => {
     assert.equal(typeof expressify.rest, 'function');
     assert.equal(expressify.errorHandler, require('@feathersjs/errors/handler'));
+    assert.equal(expressify.notFound, require('@feathersjs/errors/not-found'));
   });
 
   it('returns an Express application', () => {
