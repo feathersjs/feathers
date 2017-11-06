@@ -7,11 +7,8 @@ const helmet = require('helmet');
 const feathers = require('@feathersjs/feathers');
 const configuration = require('@feathersjs/configuration');
 const express = require('@feathersjs/express');
-<% if (hasProvider('rest')) { %>const rest = require('@feathersjs/express/rest');<% } %>
 <% if (hasProvider('socketio')) { %>const socketio = require('@feathersjs/socketio');<% } %>
 <% if (hasProvider('primus')) { %>const primus = require('@feathersjs/primus');<% } %>
-const handler = require('@feathersjs/errors/handler');
-const notFound = require('@feathersjs/errors/not-found');
 
 const middleware = require('./middleware');
 const services = require('./services');
@@ -33,7 +30,7 @@ app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 app.use('/', express.static(app.get('public')));
 
 // Set up Plugins and providers
-<% if (hasProvider('rest')) { %>app.configure(rest());<% } %>
+<% if (hasProvider('rest')) { %>app.configure(express.rest());<% } %>
 <% if (hasProvider('socketio')) { %>app.configure(socketio());<% } %>
 <% if(hasProvider('primus')) { %>app.configure(primus({ transformer: 'websockets' }));<% } %>
 // Configure other middleware (see `middleware/index.js`)
@@ -42,9 +39,10 @@ app.configure(middleware);
 app.configure(services);
 // Set up event channels (see channels.js)
 app.configure(channels);
+
 // Configure a middleware for 404s and the error handler
-app.use(notFound());
-app.use(handler());
+app.use(express.notFound());
+app.use(express.errorHandler());
 
 app.hooks(appHooks);
 
