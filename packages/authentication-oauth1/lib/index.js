@@ -7,6 +7,7 @@ const { omit, pick } = _;
 
 const merge = require('lodash.merge');
 const defaultHandler = require('./express/handler');
+const defaultErrorHandler = require('./express/error-handler');
 const DefaultVerifier = require('./verifier');
 
 const debug = Debug('@feathersjs/authentication-oauth1');
@@ -65,6 +66,7 @@ module.exports = function init (options = {}) {
     const Verifier = options.Verifier || DefaultVerifier;
     const formatter = options.formatter || rest.formatter;
     const handler = options.handler || defaultHandler(oauth1Settings);
+    const errorHandler = defaultErrorHandler(oauth1Settings);
 
     // register OAuth middleware
     debug(`Registering '${name}' Express OAuth middleware`);
@@ -76,6 +78,7 @@ module.exports = function init (options = {}) {
       // you would have with vanilla passport.
       auth.express.authenticate(name, oauth1Settings),
       handler,
+      errorHandler,
       auth.express.emitEvents(authSettings),
       auth.express.setCookie(authSettings),
       auth.express.successRedirect(),
