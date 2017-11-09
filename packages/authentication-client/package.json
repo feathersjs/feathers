@@ -53,7 +53,7 @@
     "jwt-decode": "^2.1.0"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^1.4.0",
+    "@feathersjs/authentication": "^2.0.0",
     "@feathersjs/authentication-jwt": "^1.0.0",
     "@feathersjs/authentication-local": "^1.0.0",
     "@feathersjs/express": "^1.0.0",
