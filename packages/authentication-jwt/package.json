@@ -56,7 +56,7 @@
     "passport-jwt": "^3.0.0"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^1.4.0",
+    "@feathersjs/authentication": "^2.0.0",
     "@feathersjs/express": "^1.0.0",
     "@feathersjs/feathers": "^3.0.0",
     "@feathersjs/socketio": "^3.0.0",
