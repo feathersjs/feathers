@@ -1,5 +1,17 @@
 # Change Log
 
+## [v2.0.0](https://github.com/feathersjs/authentication/tree/v2.0.0) (2017-11-09)
+[Full Changelog](https://github.com/feathersjs/authentication/compare/v1.3.1...v2.0.0)
+
+**Closed issues:**
+
+- is there a way to detect if the token used is correct or not ? [\#601](https://github.com/feathersjs/authentication/issues/601)
+- option for non-JWT based session [\#597](https://github.com/feathersjs/authentication/issues/597)
+
+**Merged pull requests:**
+
+- Update nsp to the latest version 🚀 [\#603](https://github.com/feathersjs/authentication/pull/603) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.3.1](https://github.com/feathersjs/authentication/tree/v1.3.1) (2017-11-03)
 [Full Changelog](https://github.com/feathersjs/authentication/compare/v1.4.1...v1.3.1)
 
