@@ -73,6 +73,28 @@ describe('Feathers application', () => {
   });
 
   describe('Services', () => {
+    it('calling .use with invalid path throws', () => {
+      const app = feathers();
+
+      try {
+        app.use('/', {});
+      } catch (e) {
+        assert.equal(e.message, `'/' is not a valid service path.`);
+      }
+
+      try {
+        app.use('', {});
+      } catch (e) {
+        assert.equal(e.message, `'' is not a valid service path.`);
+      }
+
+      try {
+        app.use({}, {});
+      } catch (e) {
+        assert.equal(e.message, `'[object Object]' is not a valid service path.`);
+      }
+    });
+
     it('calling .use with a non service object throws', () => {
       const app = feathers();
 
