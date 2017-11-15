@@ -3,6 +3,10 @@ const Proto = require('uberproto');
 const feathers = require('../lib');
 
 describe('Feathers application', () => {
+  it('adds an ES module `default` export', () => {
+    assert.equal(feathers, feathers.default);
+  });
+
   it('initializes', () => {
     const app = feathers();
 
