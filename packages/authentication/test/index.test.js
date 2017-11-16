@@ -31,6 +31,10 @@ describe('Feathers Authentication', () => {
     expect(typeof authentication).to.equal('function');
   });
 
+  it('exposes default', () => {
+    expect(typeof authentication.default).to.equal('function');
+  });
+
   it('exposes hooks', () => {
     expect(typeof authentication.hooks).to.equal('object');
   });
