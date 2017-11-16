@@ -16,6 +16,10 @@ describe('REST client tests', function () {
     assert.equal(typeof transports.fetch, 'function');
   });
 
+  it('exports default', () => {
+    assert.equal(init.default, init);
+  });
+
   it('base errors (backwards compatibility)', () => {
     const { Base } = init();
     const service = new Base({ name: 'test' });

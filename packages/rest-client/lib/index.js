@@ -17,7 +17,7 @@ const transports = {
   angularHttpClient: AngularHttpClient
 };
 
-module.exports = function (base = '') {
+function restClient (base = '') {
   const result = { Base };
 
   Object.keys(transports).forEach(key => {
@@ -49,4 +49,7 @@ module.exports = function (base = '') {
   });
 
   return result;
-};
+}
+
+module.exports = restClient;
+module.exports.default = restClient;
