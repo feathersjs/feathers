@@ -1,5 +1,12 @@
 # Change Log
 
+## [v2.0.1](https://github.com/feathersjs/authentication/tree/v2.0.1) (2017-11-16)
+[Full Changelog](https://github.com/feathersjs/authentication/compare/v2.0.0...v2.0.1)
+
+**Merged pull requests:**
+
+- Add default export for better ES module \(TypeScript\) compatibility [\#605](https://github.com/feathersjs/authentication/pull/605) ([daffl](https://github.com/daffl))
+
 ## [v2.0.0](https://github.com/feathersjs/authentication/tree/v2.0.0) (2017-11-09)
 [Full Changelog](https://github.com/feathersjs/authentication/compare/v1.3.1...v2.0.0)
 
@@ -728,7 +735,6 @@
 
 - Finalizing client side authentication module [\#101](https://github.com/feathersjs/authentication/pull/101) ([daffl](https://github.com/daffl))
 - Ten hours is only 36 seconds [\#99](https://github.com/feathersjs/authentication/pull/99) ([mileswilson](https://github.com/mileswilson))
-- Fix examples [\#98](https://github.com/feathersjs/authentication/pull/98) ([mastertinner](https://github.com/mastertinner))
 - fix html in templates [\#97](https://github.com/feathersjs/authentication/pull/97) ([mastertinner](https://github.com/mastertinner))
 - update populateUser\(\) hook [\#87](https://github.com/feathersjs/authentication/pull/87) ([kulakowka](https://github.com/kulakowka))
 - Customize the JWT payload [\#80](https://github.com/feathersjs/authentication/pull/80) ([enten](https://github.com/enten))
