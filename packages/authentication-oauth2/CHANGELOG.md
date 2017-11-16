@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.0.1](https://github.com/feathersjs/authentication-oauth2/tree/v1.0.1) (2017-11-16)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth2/compare/v1.0.0...v1.0.1)
+
+**Closed issues:**
+
+- `facebook.profileFields` not works properly [\#57](https://github.com/feathersjs/authentication-oauth2/issues/57)
+- I get Internal server error after I auth with Google authentication [\#55](https://github.com/feathersjs/authentication-oauth2/issues/55)
+- Cannot connect with OAuth2, always getting 404 Not Found Page. [\#54](https://github.com/feathersjs/authentication-oauth2/issues/54)
+
+**Merged pull requests:**
+
+- Add default export for better ES module \(TypeScript\) compatibility [\#58](https://github.com/feathersjs/authentication-oauth2/pull/58) ([daffl](https://github.com/daffl))
+- Update @feathersjs/authentication to the latest version 🚀 [\#56](https://github.com/feathersjs/authentication-oauth2/pull/56) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.0](https://github.com/feathersjs/authentication-oauth2/tree/v1.0.0) (2017-11-01)
 [Full Changelog](https://github.com/feathersjs/authentication-oauth2/compare/v1.0.0-pre.1...v1.0.0)
 
