@@ -24,6 +24,10 @@ describe('@feathersjs/authentication-oauth1', () => {
     expect(typeof oauth1).to.equal('function');
   });
 
+  it('exports default', () => {
+    expect(oauth1.default).to.equal(oauth1);
+  });
+
   it('exposes the Verifier class', () => {
     expect(typeof Verifier).to.equal('function');
     expect(typeof oauth1.Verifier).to.equal('function');
