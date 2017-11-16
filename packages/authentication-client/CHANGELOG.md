@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.0.1](https://github.com/feathersjs/authentication-client/tree/v1.0.1) (2017-11-16)
+[Full Changelog](https://github.com/feathersjs/authentication-client/compare/v1.0.0...v1.0.1)
+
+**Merged pull requests:**
+
+- Add default export for better ES module \(TypeScript\) compatibility [\#81](https://github.com/feathersjs/authentication-client/pull/81) ([daffl](https://github.com/daffl))
+- Update @feathersjs/authentication to the latest version 🚀 [\#79](https://github.com/feathersjs/authentication-client/pull/79) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.0](https://github.com/feathersjs/authentication-client/tree/v1.0.0) (2017-11-01)
 [Full Changelog](https://github.com/feathersjs/authentication-client/compare/v1.0.0-pre.1...v1.0.0)
 
