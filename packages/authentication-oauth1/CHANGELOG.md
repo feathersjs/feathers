@@ -1,5 +1,17 @@
 # Change Log
 
+## [v1.0.2](https://github.com/feathersjs/authentication-oauth1/tree/v1.0.2) (2017-11-16)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v1.0.1...v1.0.2)
+
+**Closed issues:**
+
+- No error handler? [\#34](https://github.com/feathersjs/authentication-oauth1/issues/34)
+
+**Merged pull requests:**
+
+- Add default ES module default exports to make TypeScript integration … [\#37](https://github.com/feathersjs/authentication-oauth1/pull/37) ([daffl](https://github.com/daffl))
+- Update @feathersjs/authentication to the latest version 🚀 [\#36](https://github.com/feathersjs/authentication-oauth1/pull/36) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.1](https://github.com/feathersjs/authentication-oauth1/tree/v1.0.1) (2017-11-06)
 [Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v1.0.0...v1.0.1)
 
