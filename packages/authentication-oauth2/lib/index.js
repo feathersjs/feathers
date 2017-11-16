@@ -21,7 +21,7 @@ const INCLUDE_KEYS = [
 
 const EXCLUDE_KEYS = ['Verifier', 'Strategy', 'formatter'];
 
-module.exports = function init (options = {}) {
+function init (options = {}) {
   return function oauth2Auth () {
     const app = this;
     const _super = app.setup;
@@ -99,9 +99,12 @@ module.exports = function init (options = {}) {
       return result;
     };
   };
-};
+}
+
+module.exports = init;
 
 // Exposed Modules
 Object.assign(module.exports, {
+  default: init,
   Verifier: DefaultVerifier
 });
