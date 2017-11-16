@@ -3,7 +3,7 @@
   "description": "Client services for Primus and feathers-primus",
   "version": "1.0.0",
   "homepage": "https://github.com/feathersjs/primus-client",
-  "main": "lib/",
+  "main": "lib/index.js",
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -47,8 +47,7 @@
     "lib": "lib"
   },
   "dependencies": {
-    "@feathersjs/socket-commons": "^3.0.0",
-    "ws": "^3.2.0"
+    "@feathersjs/socket-commons": "^3.0.0"
   },
   "devDependencies": {
     "@feathersjs/commons": "^1.2.0",
@@ -59,6 +58,7 @@
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^4.0.1",
     "semistandard": "^11.0.0",
-    "uws": "^8.14.1"
+    "uws": "^8.14.1",
+    "ws": "^3.3.1"
   }
 }

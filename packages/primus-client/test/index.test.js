@@ -24,7 +24,11 @@ describe('feathers-primus/client', () => {
     srv.close(done);
   });
 
-  it('throws an error with no connection', function () {
+  it('exports default', () => {
+    assert.equal(primus.default, primus);
+  });
+
+  it('throws an error with no connection', () => {
     try {
       feathers().configure(primus());
       assert.ok(false);
@@ -33,11 +37,11 @@ describe('feathers-primus/client', () => {
     }
   });
 
-  it('app has the primus attribute', function () {
+  it('app has the primus attribute', () => {
     assert.ok(app.primus);
   });
 
-  it('throws an error when configured twice', function () {
+  it('throws an error when configured twice', () => {
     try {
       app.configure(primus({}));
       assert.ok(false, 'Should never get here');
