@@ -6,7 +6,7 @@ const debug = require('debug')('@feathersjs/express');
 
 const rest = require('./rest');
 
-module.exports = function feathersExpress (feathersApp) {
+function feathersExpress (feathersApp) {
   if (!feathersApp || typeof feathersApp.setup !== 'function') {
     throw new Error('@feathersjs/express requires a valid Feathers application instance');
   }
@@ -75,6 +75,14 @@ module.exports = function feathersExpress (feathersApp) {
   });
 
   return Proto.mixin(mixin, expressApp);
-};
+}
 
-Object.assign(module.exports, express, { rest, notFound, errorHandler });
+module.exports = feathersExpress;
+
+Object.assign(module.exports, express, {
+  default: feathersExpress,
+  original: express,
+  rest,
+  notFound,
+  errorHandler
+});
