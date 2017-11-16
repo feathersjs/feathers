@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.0.1](https://github.com/feathersjs/primus/tree/v3.0.1) (2017-11-16)
+[Full Changelog](https://github.com/feathersjs/primus/compare/v3.0.0...v3.0.1)
+
+**Merged pull requests:**
+
+- Add default ES module default exports to make TypeScript integration … [\#68](https://github.com/feathersjs/primus/pull/68) ([daffl](https://github.com/daffl))
+
 ## [v3.0.0](https://github.com/feathersjs/primus/tree/v3.0.0) (2017-11-01)
 [Full Changelog](https://github.com/feathersjs/primus/compare/v2.2.1...v3.0.0)
 
