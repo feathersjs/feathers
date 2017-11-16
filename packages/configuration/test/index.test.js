@@ -7,6 +7,10 @@ const plugin = require('../lib');
 describe('@feathersjs/configuration', () => {
   const app = feathers().configure(plugin());
 
+  it('exports default', () =>
+    assert.equal(plugin, plugin.default)
+  );
+
   it('initialized app with default data', () =>
     assert.equal(app.get('port'), 3030)
   );

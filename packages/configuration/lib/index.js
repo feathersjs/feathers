@@ -5,7 +5,7 @@ const debug = makeDebug('@feathersjs/configuration');
 const config = require('config');
 const separator = path.sep;
 
-module.exports = module.exports = function () {
+function init () {
   return function () {
     let app = this;
 
@@ -56,4 +56,7 @@ module.exports = module.exports = function () {
       app.set(name, value);
     });
   };
-};
+}
+
+module.exports = init;
+module.exports.default = init;
