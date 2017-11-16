@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/primus",
   "description": "The Feathers Primus real-time API provider",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "homepage": "https://github.com/feathersjs/primus",
   "main": "lib/",
   "keywords": [
