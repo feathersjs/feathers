@@ -6,7 +6,7 @@ const debug = require('debug')('@feathersjs/socketio');
 
 const socketKey = Symbol('@feathersjs/socketio/socket');
 
-module.exports = function (port, options, config) {
+function configureSocketio (port, options, config) {
   if (typeof port !== 'number') {
     config = options;
     options = port;
@@ -99,6 +99,8 @@ module.exports = function (port, options, config) {
       emit: 'emit'
     }));
   };
-};
+}
 
+module.exports = configureSocketio;
+module.exports.default = configureSocketio;
 module.exports.SOCKET_KEY = socketKey;
