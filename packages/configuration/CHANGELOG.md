@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.0.1](https://github.com/feathersjs/configuration/tree/v1.0.1) (2017-11-16)
+[Full Changelog](https://github.com/feathersjs/configuration/compare/v1.0.0...v1.0.1)
+
+**Merged pull requests:**
+
+- Add default export for better ES module \(TypeScript\) compatibility [\#53](https://github.com/feathersjs/configuration/pull/53) ([daffl](https://github.com/daffl))
+- Update nsp to the latest version 🚀 [\#52](https://github.com/feathersjs/configuration/pull/52) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.0](https://github.com/feathersjs/configuration/tree/v1.0.0) (2017-11-01)
 [Full Changelog](https://github.com/feathersjs/configuration/compare/v1.0.0-pre.1...v1.0.0)
 
