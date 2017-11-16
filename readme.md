@@ -72,7 +72,7 @@ npm install @feathersjs/feathers @feathersjs/express @feathersjs/socketio @feath
 node app
 ```
 
-and go to [http://localhost:3000/messages](http://localhost:3000/messages). That's it! There's a lot more you can do with Feathers including; using a real database, authentication, authorization, clustering and more! Head on over to [the Feathers docs](http://docs.feathersjs.com) to see just how easy it is to build scalable real-time apps.
+and go to [http://localhost:3030/messages](http://localhost:3030/messages). That's it! There's a lot more you can do with Feathers including; using a real database, authentication, authorization, clustering and more! Head on over to [the Feathers docs](http://docs.feathersjs.com) to see just how easy it is to build scalable real-time apps.
 
 ## Documentation
 
