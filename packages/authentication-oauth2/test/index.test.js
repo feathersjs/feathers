@@ -20,6 +20,10 @@ describe('@feathersjs/authentication-oauth2', () => {
     expect(typeof require('../lib')).to.equal('function');
   });
 
+  it('exports default', () => {
+    expect(oauth2.default).to.equal(oauth2);
+  });
+
   it('basic functionality', () => {
     expect(typeof oauth2).to.equal('function');
   });
