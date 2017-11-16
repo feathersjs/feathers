@@ -13,7 +13,7 @@
     "socket.io",
     "realtime"
   ],
-  "main": "lib/index",
+  "main": "lib/index.js",
   "author": {
     "name": "Feathers contributor",
     "email": "hello@feathersjs.com",
