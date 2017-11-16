@@ -12,7 +12,7 @@ const defaults = {
   timeout: 5000
 };
 
-module.exports = function init (config = {}) {
+function init (config = {}) {
   const options = Object.assign({}, defaults, config);
 
   return function () {
@@ -44,6 +44,9 @@ module.exports = function init (config = {}) {
       });
     }
   };
-};
+}
 
+module.exports = init;
+
+module.exports.default = init;
 module.exports.defaults = defaults;

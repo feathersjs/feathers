@@ -18,6 +18,10 @@ describe('Feathers Authentication Client', () => {
     }).to.throw(Error);
   });
 
+  it('exports default', () => {
+    expect(auth.default).to.equal(auth);
+  });
+
   describe('default options', () => {
     it('sets the authorization header', () => {
       expect(client.passport.options.header).to.equal('Authorization');

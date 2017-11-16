@@ -3,7 +3,7 @@
   "description": "The authentication plugin for feathers-client",
   "version": "1.0.0",
   "homepage": "https://github.com/feathersjs/authentication-client",
-  "main": "lib/index",
+  "main": "lib/index.js",
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -74,6 +74,6 @@
     "semistandard": "^11.0.0",
     "socket.io-client": "^2.0.0",
     "superagent": "^3.5.2",
-    "ws": "^3.1.0"
+    "ws": "^3.3.1"
   }
 }
