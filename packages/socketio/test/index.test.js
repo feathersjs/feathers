@@ -74,6 +74,11 @@ describe('@feathersjs/socketio', () => {
     server.close(done);
   });
 
+  it('exports default and SOCKET_KEY', () => {
+    assert.ok(socketio.SOCKET_KEY);
+    assert.equal(socketio, socketio.default);
+  });
+
   it('throws an error when using an incompatible version of Feathers', () => {
     const oldFeathers = require('feathers');
 
