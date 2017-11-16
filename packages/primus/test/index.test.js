@@ -62,6 +62,11 @@ describe('@feathersjs/primus', () => {
     options.server.close(done);
   });
 
+  it('exports default and SOCKET_KEY', () => {
+    assert.ok(primus.SOCKET_KEY);
+    assert.equal(primus, primus.default);
+  });
+
   it('is CommonJS compatible', () => {
     assert.equal(typeof require('../lib'), 'function');
   });
