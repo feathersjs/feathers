@@ -21,7 +21,7 @@ const KEYS = [
   'jwt'
 ];
 
-module.exports = function init (options = {}) {
+function init (options = {}) {
   return function jwtAuth () {
     const app = this;
     const _super = app.setup;
@@ -83,11 +83,14 @@ module.exports = function init (options = {}) {
       return result;
     };
   };
-};
+}
+
+module.exports = init;
 
 // Exposed Modules
 Object.assign(module.exports, {
   defaults,
+  default: init,
   ExtractJwt: passportJwt.ExtractJwt,
   Verifier: DefaultVerifier
 });

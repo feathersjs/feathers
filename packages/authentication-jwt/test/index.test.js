@@ -22,6 +22,7 @@ describe('@feathersjs/authentication-jwt', () => {
 
   it('basic functionality', () => {
     expect(typeof jwt).to.equal('function');
+    expect(jwt.default).to.equal(jwt);
   });
 
   it('exposes the Verifier class', () => {
