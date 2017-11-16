@@ -56,18 +56,6 @@ app.use('/todos', {
 });
 ```
 
-## Client use
-
-```js
-import io from 'socket.io-client';
-import feathers from 'feathers/client';
-import socketio from '@feathersjs/socketio/client';
-
-const socket = io('http://path/to/api');
-const app = feathers()
-  .configure(socketio(socket));
-```
-
 ## License
 
 Copyright (c) 2015
