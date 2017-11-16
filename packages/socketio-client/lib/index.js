@@ -1,6 +1,6 @@
 const Service = require('@feathersjs/socket-commons/client');
 
-module.exports = function (connection, options) {
+function socketioClient (connection, options) {
   if (!connection) {
     throw new Error('Socket.io connection needs to be provided');
   }
@@ -32,4 +32,7 @@ module.exports = function (connection, options) {
   initialize.service = defaultService;
 
   return initialize;
-};
+}
+
+module.exports = socketioClient;
+module.exports.default = socketioClient;

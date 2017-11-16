@@ -3,7 +3,7 @@
   "description": "The client for Socket.io through feathers-socketio",
   "version": "1.0.0",
   "homepage": "https://github.com/feathersjs/socketio-client",
-  "main": "lib/",
+  "main": "lib/index.js",
   "keywords": [
     "feathers",
     "feathers-plugin"

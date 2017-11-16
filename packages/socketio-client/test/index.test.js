@@ -19,6 +19,10 @@ describe('@feathersjs/socketio-client', () => {
     this.server.close(done);
   });
 
+  it('exports default', () =>
+    assert.equal(socketio.default, socketio)
+  );
+
   it('throws an error with no connection', () => {
     try {
       feathers().configure(socketio());
