@@ -1,5 +1,17 @@
 # Change Log
 
+## [v1.3.2](https://github.com/feathersjs/rest-client/tree/v1.3.2) (2017-11-16)
+[Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.3.1...v1.3.2)
+
+**Merged pull requests:**
+
+- Add default export for better ES module \(TypeScript\) compatibility [\#16](https://github.com/feathersjs/rest-client/pull/16) ([daffl](https://github.com/daffl))
+- Update package.json [\#15](https://github.com/feathersjs/rest-client/pull/15) ([frank-dspeed](https://github.com/frank-dspeed))
+- Update @angular/platform-browser to the latest version 🚀 [\#13](https://github.com/feathersjs/rest-client/pull/13) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update @angular/http to the latest version 🚀 [\#12](https://github.com/feathersjs/rest-client/pull/12) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update @angular/core to the latest version 🚀 [\#11](https://github.com/feathersjs/rest-client/pull/11) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update @angular/common to the latest version 🚀 [\#10](https://github.com/feathersjs/rest-client/pull/10) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.3.1](https://github.com/feathersjs/rest-client/tree/v1.3.1) (2017-11-01)
 [Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.3.0...v1.3.1)
 
