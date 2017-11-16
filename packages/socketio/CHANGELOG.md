@@ -1,5 +1,17 @@
 # Change Log
 
+## [v3.0.1](https://github.com/feathersjs/socketio/tree/v3.0.1) (2017-11-16)
+[Full Changelog](https://github.com/feathersjs/socketio/compare/v3.0.0...v3.0.1)
+
+**Closed issues:**
+
+- Remote address IP is always undefined [\#96](https://github.com/feathersjs/socketio/issues/96)
+
+**Merged pull requests:**
+
+- Add default export for better ES module \(TypeScript\) compatibility [\#100](https://github.com/feathersjs/socketio/pull/100) ([daffl](https://github.com/daffl))
+- Updating client use example to fix imports [\#99](https://github.com/feathersjs/socketio/pull/99) ([corymsmith](https://github.com/corymsmith))
+
 ## [v3.0.0](https://github.com/feathersjs/socketio/tree/v3.0.0) (2017-11-01)
 [Full Changelog](https://github.com/feathersjs/socketio/compare/v2.0.1...v3.0.0)
 
