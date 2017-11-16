@@ -1,5 +1,16 @@
 # Change Log
 
+## [v3.0.1](https://github.com/feathersjs/feathers/tree/v3.0.1) (2017-11-16)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.0...v3.0.1)
+
+**Merged pull requests:**
+
+- Updated readme.md [\#732](https://github.com/feathersjs/feathers/pull/732) ([andlewis](https://github.com/andlewis))
+- Add default export for better ES module \(TypeScript\) compatibility [\#731](https://github.com/feathersjs/feathers/pull/731) ([daffl](https://github.com/daffl))
+- Throw an error for invalid service paths [\#729](https://github.com/feathersjs/feathers/pull/729) ([daffl](https://github.com/daffl))
+- Update nsp to the latest version 🚀 [\#723](https://github.com/feathersjs/feathers/pull/723) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Rename expressify to express [\#719](https://github.com/feathersjs/feathers/pull/719) ([bertho-zero](https://github.com/bertho-zero))
+
 ## [v3.0.0](https://github.com/feathersjs/feathers/tree/v3.0.0) (2017-11-01)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.0-pre.3...v3.0.0)
 
