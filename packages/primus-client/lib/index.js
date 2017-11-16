@@ -1,6 +1,6 @@
 const Service = require('@feathersjs/socket-commons/client');
 
-module.exports = function (connection, options) {
+function primusClient (connection, options) {
   if (!connection) {
     throw new Error('Primus connection needs to be provided');
   }
@@ -26,4 +26,7 @@ module.exports = function (connection, options) {
   initialize.service = defaultService;
 
   return initialize;
-};
+}
+
+module.exports = primusClient;
+module.exports.default = primusClient;
