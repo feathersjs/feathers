@@ -8,7 +8,7 @@ const Emitter = require('primus-emitter');
 const debug = makeDebug('@feathersjs/primus');
 const socketKey = Symbol('@feathersjs/primus/socket');
 
-module.exports = function (config, configurer) {
+function configurePrimus (config, configurer) {
   return function () {
     const app = this;
     const getParams = spark => spark.request.feathers;
@@ -86,6 +86,8 @@ module.exports = function (config, configurer) {
       emit: 'send'
     }));
   };
-};
+}
 
+module.exports = configurePrimus;
 module.exports.SOCKET_KEY = socketKey;
+module.exports.default = configurePrimus;
