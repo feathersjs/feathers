@@ -9,7 +9,7 @@ const socket = require('./socket');
 
 const debug = Debug('@feathersjs/authentication:index');
 
-module.exports = function init (config = {}) {
+function init (config = {}) {
   return function authentication () {
     const app = this;
     const _super = app.setup;
@@ -72,10 +72,13 @@ module.exports = function init (config = {}) {
       return result;
     };
   };
-};
+}
+
+module.exports = init;
 
 // Exposed Modules
 Object.assign(module.exports, {
+  default: init,
   hooks,
   express,
   service

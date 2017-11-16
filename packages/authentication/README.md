@@ -6,7 +6,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/65abe50ec85244072ee9/test_coverage)](https://codeclimate.com/github/feathersjs/authentication/test_coverage)
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/authentication.svg)](https://greenkeeper.io/)
-[![Download Status](https://img.shields.io/npm/dm/feathersjs/authentication.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/authentication)
+[![Download Status](https://img.shields.io/npm/dm/@feathersjs/authentication.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/authentication)
 [![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 
 > Add Authentication to your FeathersJS app.
