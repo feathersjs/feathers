@@ -23,6 +23,10 @@ describe('@feathersjs/authentication-local', () => {
     expect(typeof local).to.equal('function');
   });
 
+  it('exposes default', () => {
+    expect(local.default).to.equal(local);
+  });
+
   it('exposes hooks', () => {
     expect(typeof local.hooks).to.equal('object');
   });

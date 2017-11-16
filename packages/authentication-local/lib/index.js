@@ -21,7 +21,7 @@ const KEYS = [
   'session'
 ];
 
-module.exports = function init (options = {}) {
+function init (options = {}) {
   return function localAuth () {
     const app = this;
     const _super = app.setup;
@@ -58,10 +58,13 @@ module.exports = function init (options = {}) {
       return result;
     };
   };
-};
+}
+
+module.exports = init;
 
 // Exposed Modules
 Object.assign(module.exports, {
+  default: init,
   defaults,
   hooks,
   Verifier: DefaultVerifier
