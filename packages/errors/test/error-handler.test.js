@@ -38,7 +38,7 @@ describe('error-handler', () => {
     expect(typeof handler).to.equal('function');
   });
 
-  describe('supports custom handlers', function () {
+  describe('supports catch-all custom handlers', function () {
     before(function () {
       this.app = feathers()
         .get('/error', function (req, res, next) {
@@ -109,6 +109,120 @@ describe('error-handler', () => {
           expect(body).to.deep.equal(expected);
           done();
         });
+      });
+    });
+  });
+
+  describe('supports error-code specific custom handlers', () => {
+    describe('HTML handler', () => {
+      const req = {
+        headers: { 'content-type': 'text/html' }
+      };
+      const makeRes = (errCode, props) => {
+        return Object.assign({
+          set () {},
+          status (code) {
+            expect(code).to.equal(errCode);
+          }
+        }, props);
+      };
+
+      it('if the value is a string, calls res.sendFile', done => {
+        const err = new errors.NotAuthenticated();
+        const middleware = handler({
+          html: { 401: 'path/to/401.html' }
+        });
+        const res = makeRes(401, {
+          sendFile (f) {
+            expect(f).to.equal('path/to/401.html');
+            done();
+          }
+        });
+        middleware(err, req, res);
+      });
+
+      it('if the value is a function, calls as middleware ', done => {
+        const err = new errors.PaymentError();
+        const res = makeRes(402);
+        const middleware = handler({
+          html: { 402: (_err, _req, _res) => {
+            expect(_err).to.equal(err);
+            expect(_req).to.equal(req);
+            expect(_res).to.equal(res);
+            done();
+          }}
+        });
+        middleware(err, req, res);
+      });
+
+      it('falls back to default if error code config is available', done => {
+        const err = new errors.NotAcceptable();
+        const res = makeRes(406);
+        const middleware = handler({
+          html: { default: (_err, _req, _res) => {
+            expect(_err).to.equal(err);
+            expect(_req).to.equal(req);
+            expect(_res).to.equal(res);
+            done();
+          }}
+        });
+        middleware(err, req, res);
+      });
+    });
+
+    describe('JSON handler', () => {
+      const req = {
+        headers: { 'content-type': 'application/json' }
+      };
+      const makeRes = (errCode, props) => {
+        return Object.assign({
+          set () {},
+          status (code) {
+            expect(code).to.equal(errCode);
+          }
+        }, props);
+      };
+
+      it('calls res.json by default', done => {
+        const err = new errors.NotAuthenticated();
+        const middleware = handler({
+          json: {}
+        });
+        const res = makeRes(401, {
+          json (obj) {
+            expect(obj).to.deep.equal(err.toJSON());
+            done();
+          }
+        });
+        middleware(err, req, res);
+      });
+
+      it('if the value is a function, calls as middleware ', done => {
+        const err = new errors.PaymentError();
+        const res = makeRes(402);
+        const middleware = handler({
+          json: { 402: (_err, _req, _res) => {
+            expect(_err).to.equal(err);
+            expect(_req).to.equal(req);
+            expect(_res).to.equal(res);
+            done();
+          }}
+        });
+        middleware(err, req, res);
+      });
+
+      it('falls back to default if error code config is available', done => {
+        const err = new errors.NotAcceptable();
+        const res = makeRes(406);
+        const middleware = handler({
+          json: { default: (_err, _req, _res) => {
+            expect(_err).to.equal(err);
+            expect(_req).to.equal(req);
+            expect(_res).to.equal(res);
+            done();
+          }}
+        });
+        middleware(err, req, res);
       });
     });
   });
