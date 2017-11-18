@@ -1,5 +1,16 @@
 # Change Log
 
+## [v3.1.0](https://github.com/feathersjs/errors/tree/v3.1.0) (2017-11-18)
+[Full Changelog](https://github.com/feathersjs/errors/compare/v3.0.0...v3.1.0)
+
+**Closed issues:**
+
+- feature: allow for mixed files/functions for error-handler options [\#91](https://github.com/feathersjs/errors/issues/91)
+
+**Merged pull requests:**
+
+- 91 allow mixed config [\#94](https://github.com/feathersjs/errors/pull/94) ([DesignByOnyx](https://github.com/DesignByOnyx))
+
 ## [v3.0.0](https://github.com/feathersjs/errors/tree/v3.0.0) (2017-11-01)
 [Full Changelog](https://github.com/feathersjs/errors/compare/v3.0.0-pre.1...v3.0.0)
 
