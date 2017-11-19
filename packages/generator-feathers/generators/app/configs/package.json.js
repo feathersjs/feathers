@@ -1,4 +1,7 @@
+const semver = require('semver');
+
 module.exports = function(generator) {
+  const major = semver.major(process.version);
   const { props } = generator;
   const lib = props.src;
   const [ packager, version ] = props.packager.split('@');
@@ -22,7 +25,7 @@ module.exports = function(generator) {
       test: 'test/'
     },
     engines: {
-      node: '>= 6.0.0',
+      node: `^${major}.0.0`,
       [packager]: version
     },
     'scripts': {

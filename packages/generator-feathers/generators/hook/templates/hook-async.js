@@ -2,7 +2,7 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 
 module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
-  return context => {
-    return Promise.resolve(context);
+  return async context => {
+    return context;
   };
 };
