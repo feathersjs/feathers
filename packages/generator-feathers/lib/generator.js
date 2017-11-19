@@ -1,4 +1,5 @@
 const Generator = require('yeoman-generator');
+const semver = require('semver');
 const _ = require('lodash');
 
 module.exports = class BaseGenerator extends Generator {
@@ -26,6 +27,14 @@ module.exports = class BaseGenerator extends Generator {
       this.log.error('It does not look like this application has been generated with this version of the generator or the required `directories.lib` has been removed from package.json.');
       return process.exit(1);
     }
+  }
+
+  get hasAsync() {
+    const asyncNode = '>= 8.0.0';
+    const pkgEngineAsync = !(this.pkg.engines && this.pkg.engines.node) ||
+      semver.intersects(this.pkg.engines.node, asyncNode);
+
+    return semver.satisfies(process.version, asyncNode) && pkgEngineAsync;
   }
 
   get libDirectory() {

@@ -50,6 +50,7 @@
     "@feathersjs/tools": "^0.1.0",
     "lodash": "^4.17.4",
     "randomstring": "^1.1.5",
+    "semver": "^5.4.1",
     "yeoman-generator": "^2.0.0"
   },
   "devDependencies": {

@@ -42,7 +42,7 @@ describe('generator-feathers', function() {
   let appDir;
 
   function runTest(expectedText) {
-    return startAndWait('yarn', ['test'], { cwd: appDir })
+    return startAndWait('npm', ['test'], { cwd: appDir })
       .then(({ buffer }) => {
         assert.ok(buffer.indexOf(expectedText) !== -1,
           'Ran test with text: ' + expectedText);
@@ -55,7 +55,7 @@ describe('generator-feathers', function() {
       name: 'myapp',
       providers: ['rest', 'socketio'],
       src: 'src',
-      packager: 'yarn@>= 0.18.0'
+      packager: 'npm@>= 3.0.0'
     })
     .withOptions({
       skipInstall: false

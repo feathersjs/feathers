@@ -146,7 +146,7 @@ module.exports = class HookGenerator extends Generator {
     }
 
     this.fs.copyTpl(
-      this.templatePath('hook.js'),
+      this.templatePath(this.hasAsync ? 'hook-async.js' : 'hook.js'),
       mainFile, context
     );
 
