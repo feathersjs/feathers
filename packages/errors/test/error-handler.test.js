@@ -39,6 +39,8 @@ describe('error-handler', () => {
   });
 
   describe('supports catch-all custom handlers', function () {
+    let currentError;
+
     before(function () {
       this.app = feathers()
         .get('/error', function (req, res, next) {
@@ -46,7 +48,12 @@ describe('error-handler', () => {
         })
         .use(handler({
           html: htmlHandler,
-          json: jsonHandler
+          json: jsonHandler,
+          logger: {
+            error (e) {
+              currentError = e;
+            }
+          }
         }));
 
       this.server = this.app.listen(5050);
@@ -68,6 +75,13 @@ describe('error-handler', () => {
       it('is called', done => {
         request(options, (error, res, body) => {
           expect(htmlHandler).to.be.called; // eslint-disable-line
+          done();
+        });
+      });
+
+      it('logs the error', done => {
+        request(options, (error, res, body) => {
+          expect(currentError.message).to.equal('Something went wrong');
           done();
         });
       });

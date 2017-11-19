@@ -2,7 +2,8 @@ const path = require('path');
 const errors = require('./index');
 
 const defaults = {
-  public: path.resolve(__dirname, 'public')
+  public: path.resolve(__dirname, 'public'),
+  logger: console
 };
 const defaultHtmlError = path.resolve(defaults.public, 'default.html');
 
@@ -22,6 +23,11 @@ module.exports = function (options = {}) {
   }
 
   return function (error, req, res, next) {
+    // Log the error if it didn't come from a service method call
+    if (options.logger && typeof options.logger.error === 'function' && !res.hook) {
+      options.logger.error(error);
+    }
+
     if (error.type !== 'FeathersError') {
       let oldError = error;
       error = new errors.GeneralError(oldError.message, {
@@ -91,7 +97,7 @@ module.exports = function (options = {}) {
     if (contentType.indexOf('json') !== -1 || accepts.indexOf('json') !== -1) {
       formatter['application/json'](error, req, res, next);
     } else if (options.html && (contentType.indexOf('html') !== -1 || accepts.indexOf('html') !== -1)) {
-      return formatter['text/html'](error, req, res, next);
+      formatter['text/html'](error, req, res, next);
     } else {
       // TODO (EK): Maybe just return plain text
       formatter['application/json'](error, req, res, next);
