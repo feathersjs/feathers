@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.2.0](https://github.com/feathersjs/errors/tree/v3.2.0) (2017-11-19)
+[Full Changelog](https://github.com/feathersjs/errors/compare/v3.1.0...v3.2.0)
+
+**Merged pull requests:**
+
+- Allow ability to log middleware errors [\#95](https://github.com/feathersjs/errors/pull/95) ([daffl](https://github.com/daffl))
+
 ## [v3.1.0](https://github.com/feathersjs/errors/tree/v3.1.0) (2017-11-18)
 [Full Changelog](https://github.com/feathersjs/errors/compare/v3.0.0...v3.1.0)
 
