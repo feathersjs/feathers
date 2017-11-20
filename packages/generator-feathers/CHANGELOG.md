@@ -1,5 +1,20 @@
 # Change Log
 
+## [v2.1.0](https://github.com/feathersjs/generator-feathers/tree/v2.1.0) (2017-11-20)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.0.0...v2.1.0)
+
+**Closed issues:**
+
+- Generate custom service [\#304](https://github.com/feathersjs/generator-feathers/issues/304)
+- For first time users... [\#296](https://github.com/feathersjs/generator-feathers/issues/296)
+
+**Merged pull requests:**
+
+- Improve logging hook and add Express error logging [\#306](https://github.com/feathersjs/generator-feathers/pull/306) ([daffl](https://github.com/daffl))
+- Use async/await for generated hooks and custom services if available [\#305](https://github.com/feathersjs/generator-feathers/pull/305) ([daffl](https://github.com/daffl))
+- Update for finalized Express bindings [\#302](https://github.com/feathersjs/generator-feathers/pull/302) ([daffl](https://github.com/daffl))
+- Make URL in tests configurable [\#301](https://github.com/feathersjs/generator-feathers/pull/301) ([nueko](https://github.com/nueko))
+
 ## [v2.0.0](https://github.com/feathersjs/generator-feathers/tree/v2.0.0) (2017-11-04)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.0.0-pre.1...v2.0.0)
 
