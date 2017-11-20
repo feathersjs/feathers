@@ -58,7 +58,9 @@ const _ = exports._ = {
   pick (source, ...keys) {
     const result = {};
     keys.forEach(key => {
-      result[key] = source[key];
+      if (source[key] !== undefined) {
+        result[key] = source[key];
+      }
     });
     return result;
   },

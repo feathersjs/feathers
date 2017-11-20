@@ -46,6 +46,10 @@ describe('@feathersjs/commons utils', () => {
         expect(key).to.equal(0);
         expect(value).to.equal('hi');
       });
+
+      _.each('moo', value => expect(false)
+        .to.equal(true, 'Should never get here')
+      );
     });
 
     it('some', () => {
@@ -112,6 +116,13 @@ describe('@feathersjs/commons utils', () => {
       }, 'first', 'second')).to.deep.equal({
         first: 1,
         second: 2
+      });
+
+      expect(_.pick({
+        name: 'David',
+        first: 1
+      }, 'first', 'second')).to.deep.equal({
+        first: 1
       });
     });
 

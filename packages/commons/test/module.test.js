@@ -4,7 +4,7 @@ const { _ } = require('../lib/commons');
 describe('module', () => {
   it('is commonjs compatible', () => {
     let commons = require('../lib/commons');
-    console.log(commons);
+
     expect(typeof commons).to.equal('object');
     expect(typeof commons.stripSlashes).to.equal('function');
     expect(typeof commons.sorter).to.equal('function');
