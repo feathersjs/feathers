@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.3.0](https://github.com/feathersjs/commons/tree/v1.3.0) (2017-11-20)
+[Full Changelog](https://github.com/feathersjs/commons/compare/v1.2.0...v1.3.0)
+
+**Merged pull requests:**
+
+- Add a toJSON method to the hook context [\#63](https://github.com/feathersjs/commons/pull/63) ([daffl](https://github.com/daffl))
+- updating contributing guide and issue template [\#61](https://github.com/feathersjs/commons/pull/61) ([ekryski](https://github.com/ekryski))
+
 ## [v1.2.0](https://github.com/feathersjs/commons/tree/v1.2.0) (2017-10-25)
 [Full Changelog](https://github.com/feathersjs/commons/compare/v1.1.0...v1.2.0)
 
