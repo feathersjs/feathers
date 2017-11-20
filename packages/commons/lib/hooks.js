@@ -1,4 +1,4 @@
-const { each } = require('./utils')._;
+const { each, pick } = require('./utils')._;
 
 function convertGetOrRemove (args) {
   const [ id, params = {} ] = args;
@@ -34,6 +34,13 @@ exports.converters = {
 // `data` is additional data that will be added
 exports.createHookObject = function createHookObject (method, args, data = {}) {
   const hook = exports.converters[method](args);
+
+  Object.defineProperty(hook, 'toJSON', {
+    value () {
+      return pick(this, 'type', 'method', 'path',
+        'params', 'id', 'data', 'result', 'error');
+    }
+  });
 
   return Object.assign(hook, data, {
     method,

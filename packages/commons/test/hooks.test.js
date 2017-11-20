@@ -134,6 +134,24 @@ describe('hook utilities', () => {
     };
     const hookData = { app, service };
 
+    it('.toJSON', () => {
+      let hookObject = utils.createHookObject('find', [
+        { some: 'thing' }
+      ], hookData);
+
+      expect(hookObject.toJSON()).to.deep.equal({
+        params: { some: 'thing' },
+        method: 'find',
+        path: 'testing'
+      });
+
+      expect(JSON.stringify(hookObject)).to.equal(JSON.stringify({
+        method: 'find',
+        path: 'testing',
+        params: { some: 'thing' }
+      }));
+    });
+
     it('for find', () => {
       let hookObject = utils.createHookObject('find', [
         { some: 'thing' }
