@@ -1,7 +1,7 @@
 const Debug = require('debug');
 const auth = require('@feathersjs/authentication');
 
-const rest = require('@feathersjs/express/rest');
+const { rest } = require('@feathersjs/express');
 const { _, makeUrl } = require('@feathersjs/commons');
 
 const merge = require('lodash.merge');
