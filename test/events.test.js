@@ -56,6 +56,40 @@ describe('Service events', () => {
       service.create({ message: 'Hello' });
     });
 
+    it('.create and created with array', done => {
+      const app = feathers().use('/creator', {
+        async create (data) {
+          if (Array.isArray(data)) {
+            return Promise.all(data.map(current => this.create(current)));
+          }
+
+          return data;
+        }
+      });
+
+      const service = app.service('creator');
+
+      var createItems = [
+        { message: 'Hello 0' },
+        { message: 'Hello 1' }
+      ];
+
+      Promise.all(createItems.map((element, index) => {
+        return new Promise((resolve, reject) => {
+          service.on('created', data => {
+            if (data.message === element.message) {
+              assert.deepEqual(data, { message: `Hello ${index}` });
+              resolve();
+            }
+          });
+        });
+      })).then(resolved => {
+        done();
+      });
+
+      service.create(createItems);
+    });
+
     it('.update and updated', done => {
       const app = feathers().use('/creator', {
         update (id, data) {
@@ -71,6 +105,38 @@ describe('Service events', () => {
       });
 
       service.update(10, { message: 'Hello' });
+    });
+
+    it('.update and updated with array', done => {
+      const app = feathers().use('/creator', {
+        async update (id, data) {
+          return data.map((element, index) => {
+            return Object.assign({ id: index }, element);
+          });
+        }
+      });
+
+      const service = app.service('creator');
+
+      var updateItems = [
+        { message: 'Hello 0' },
+        { message: 'Hello 1' }
+      ];
+
+      Promise.all(updateItems.map((element, index) => {
+        return new Promise((resolve, reject) => {
+          service.on('updated', data => {
+            if (data.message === element.message) {
+              assert.deepEqual(data, { id: index, message: `Hello ${index}` });
+              resolve();
+            }
+          });
+        });
+      })).then(resolved => {
+        done();
+      });
+
+      service.update(null, updateItems);
     });
 
     it('.patch and patched', done => {
@@ -90,6 +156,38 @@ describe('Service events', () => {
       service.patch(12, { message: 'Hello' });
     });
 
+    it('.patch and patched with array', done => {
+      const app = feathers().use('/creator', {
+        async patch (id, data) {
+          return data.map((element, index) => {
+            return Object.assign({ id: index }, element);
+          });
+        }
+      });
+
+      const service = app.service('creator');
+
+      var patchItems = [
+        { message: 'Hello 0' },
+        { message: 'Hello 1' }
+      ];
+
+      Promise.all(patchItems.map((element, index) => {
+        return new Promise((resolve, reject) => {
+          service.on('patched', data => {
+            if (data.message === element.message) {
+              assert.deepEqual(data, { id: index, message: `Hello ${index}` });
+              resolve();
+            }
+          });
+        });
+      })).then(resolved => {
+        done();
+      });
+
+      service.patch(null, patchItems);
+    });
+
     it('.remove and removed', done => {
       const app = feathers().use('/creator', {
         remove (id) {
@@ -105,6 +203,38 @@ describe('Service events', () => {
       });
 
       service.remove(22);
+    });
+
+    it('.remove and removed with array', done => {
+      const app = feathers().use('/creator', {
+        async remove (id, data) {
+          return data.map((element, index) => {
+            return Object.assign({ id: index }, element);
+          });
+        }
+      });
+
+      const service = app.service('creator');
+
+      var removeItems = [
+        { message: 'Hello 0' },
+        { message: 'Hello 1' }
+      ];
+
+      Promise.all(removeItems.map((element, index) => {
+        return new Promise((resolve, reject) => {
+          service.on('removed', data => {
+            if (data.message === element.message) {
+              assert.deepEqual(data, { id: index, message: `Hello ${index}` });
+              resolve();
+            }
+          });
+        });
+      })).then(resolved => {
+        done();
+      });
+
+      service.remove(null, removeItems);
     });
   });
 
@@ -138,7 +268,7 @@ describe('Service events', () => {
 
     it('events indicated by the service are not sent automatically', done => {
       const app = feathers().use('/creator', {
-        events: [ 'created' ],
+        events: ['created'],
         create (data) {
           return Promise.resolve(data);
         }
