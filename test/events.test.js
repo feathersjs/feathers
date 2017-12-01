@@ -56,6 +56,61 @@ describe('Service events', () => {
       service.create({ message: 'Hello' });
     });
 
+    it('.update and updated', done => {
+      const app = feathers().use('/creator', {
+        update (id, data) {
+          return Promise.resolve(Object.assign({ id }, data));
+        }
+      });
+
+      const service = app.service('creator');
+
+      service.on('updated', data => {
+        assert.deepEqual(data, { id: 10, message: 'Hello' });
+        done();
+      });
+
+      service.update(10, { message: 'Hello' });
+    });
+
+    it('.patch and patched', done => {
+      const app = feathers().use('/creator', {
+        patch (id, data) {
+          return Promise.resolve(Object.assign({ id }, data));
+        }
+      });
+
+      const service = app.service('creator');
+
+      service.on('patched', data => {
+        assert.deepEqual(data, { id: 12, message: 'Hello' });
+        done();
+      });
+
+      service.patch(12, { message: 'Hello' });
+    });
+
+    it('.remove and removed', done => {
+      const app = feathers().use('/creator', {
+        remove (id) {
+          return Promise.resolve({ id });
+        }
+      });
+
+      const service = app.service('creator');
+
+      service.on('removed', data => {
+        assert.deepEqual(data, { id: 22 });
+        done();
+      });
+
+      service.remove(22);
+    });
+
+  });
+
+  describe('emits event data arrays on a service', () => {
+
     it('.create and created with array', done => {
       const app = feathers().use('/creator', {
         async create (data) {
@@ -90,23 +145,6 @@ describe('Service events', () => {
       service.create(createItems);
     });
 
-    it('.update and updated', done => {
-      const app = feathers().use('/creator', {
-        update (id, data) {
-          return Promise.resolve(Object.assign({ id }, data));
-        }
-      });
-
-      const service = app.service('creator');
-
-      service.on('updated', data => {
-        assert.deepEqual(data, { id: 10, message: 'Hello' });
-        done();
-      });
-
-      service.update(10, { message: 'Hello' });
-    });
-
     it('.update and updated with array', done => {
       const app = feathers().use('/creator', {
         async update (id, data) {
@@ -139,23 +177,6 @@ describe('Service events', () => {
       service.update(null, updateItems);
     });
 
-    it('.patch and patched', done => {
-      const app = feathers().use('/creator', {
-        patch (id, data) {
-          return Promise.resolve(Object.assign({ id }, data));
-        }
-      });
-
-      const service = app.service('creator');
-
-      service.on('patched', data => {
-        assert.deepEqual(data, { id: 12, message: 'Hello' });
-        done();
-      });
-
-      service.patch(12, { message: 'Hello' });
-    });
-
     it('.patch and patched with array', done => {
       const app = feathers().use('/creator', {
         async patch (id, data) {
@@ -186,23 +207,6 @@ describe('Service events', () => {
       });
 
       service.patch(null, patchItems);
-    });
-
-    it('.remove and removed', done => {
-      const app = feathers().use('/creator', {
-        remove (id) {
-          return Promise.resolve({ id });
-        }
-      });
-
-      const service = app.service('creator');
-
-      service.on('removed', data => {
-        assert.deepEqual(data, { id: 22 });
-        done();
-      });
-
-      service.remove(22);
     });
 
     it('.remove and removed with array', done => {
