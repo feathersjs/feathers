@@ -68,7 +68,7 @@
     "feathers-mongodb": "^2.9.0",
     "feathers-mongoose": "^5.1.0",
     "feathers-nedb": "^2.6.2",
-    "feathers-rethinkdb": "^0.4.3",
+    "feathers-rethinkdb": "^0.5.0",
     "feathers-sequelize": "^2.0.1",
     "helmet": "^3.6.1",
     "jshint": "^2.9.2",
