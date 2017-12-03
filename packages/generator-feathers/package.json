@@ -63,7 +63,7 @@
     "feathers-errors": "^2.8.1",
     "feathers-hooks": "^2.0.1",
     "feathers-hooks-common": "^3.5.1",
-    "feathers-knex": "^2.6.3",
+    "feathers-knex": "^3.0.0",
     "feathers-memory": "^2.0.0",
     "feathers-mongodb": "^2.9.0",
     "feathers-mongoose": "^5.1.0",
