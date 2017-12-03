@@ -66,6 +66,7 @@
     "feathers-knex": "^3.0.0",
     "feathers-memory": "^2.0.0",
     "feathers-mongodb": "^2.9.0",
+    "feathers-mongodb": "^3.0.0",
     "feathers-mongoose": "^5.1.0",
     "feathers-nedb": "^3.0.0",
     "feathers-rethinkdb": "^0.5.0",
