@@ -55,7 +55,7 @@
     "@feathersjs/express": "^1.0.0",
     "@feathersjs/feathers": "^3.0.0",
     "feathers": "^2.2.3",
-    "feathers-memory": "^1.0.0",
+    "feathers-memory": "^2.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "lodash": "^4.0.1",
     "mocha": "^4.0.0",
