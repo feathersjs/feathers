@@ -59,7 +59,7 @@
     "@feathersjs/feathers": "^3.0.0",
     "body-parser": "^1.15.2",
     "chai": "^4.0.2",
-    "feathers-memory": "^1.1.0",
+    "feathers-memory": "^2.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^4.0.0",
     "passport-github": "^1.1.0",
