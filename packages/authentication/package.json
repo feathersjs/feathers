@@ -72,7 +72,7 @@
     "body-parser": "^1.15.2",
     "chai": "^4.1.0",
     "chai-uuid": "^1.0.6",
-    "feathers-memory": "^1.0.0",
+    "feathers-memory": "^2.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "jshint": "^2.9.3",
     "localstorage-memory": "^1.0.2",
