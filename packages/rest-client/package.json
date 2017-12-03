@@ -60,7 +60,7 @@
     "@feathersjs/feathers": "^3.0.0",
     "axios": "^0.17.0",
     "body-parser": "^1.17.2",
-    "feathers-memory": "^1.1.0",
+    "feathers-memory": "^2.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "jquery": "^3.2.1",
     "jsdom": "^11.1.0",
