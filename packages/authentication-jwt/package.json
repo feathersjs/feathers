@@ -62,7 +62,7 @@
     "@feathersjs/socketio": "^3.0.0",
     "body-parser": "^1.15.2",
     "chai": "^4.1.0",
-    "feathers-memory": "^1.1.0",
+    "feathers-memory": "^2.0.0",
     "istanbul": "^1.1.0-alpha.1",
     "jsonwebtoken": "^8.0.0",
     "mocha": "^4.0.0",
