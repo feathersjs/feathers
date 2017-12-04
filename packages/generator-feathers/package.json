@@ -70,7 +70,7 @@
     "feathers-mongoose": "^6.0.0",
     "feathers-nedb": "^3.0.0",
     "feathers-rethinkdb": "^0.5.0",
-    "feathers-sequelize": "^2.0.1",
+    "feathers-sequelize": "^3.0.0",
     "helmet": "^3.6.1",
     "jshint": "^2.9.2",
     "mocha": "^4.0.0",
