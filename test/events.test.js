@@ -121,8 +121,7 @@ describe('Service events', () => {
       });
 
       const service = app.service('creator');
-
-      var createItems = [
+      const createItems = [
         { message: 'Hello 0' },
         { message: 'Hello 1' }
       ];
@@ -136,9 +135,7 @@ describe('Service events', () => {
             }
           });
         });
-      })).then(resolved => {
-        done();
-      });
+      })).then(() => done()).catch(done);
 
       service.create(createItems);
     });
@@ -154,8 +151,7 @@ describe('Service events', () => {
       });
 
       const service = app.service('creator');
-
-      var updateItems = [
+      const updateItems = [
         { message: 'Hello 0' },
         { message: 'Hello 1' }
       ];
@@ -169,9 +165,7 @@ describe('Service events', () => {
             }
           });
         });
-      })).then(resolved => {
-        done();
-      });
+      })).then(() => done()).catch(done);
 
       service.update(null, updateItems);
     });
@@ -187,8 +181,7 @@ describe('Service events', () => {
       });
 
       const service = app.service('creator');
-
-      var patchItems = [
+      const patchItems = [
         { message: 'Hello 0' },
         { message: 'Hello 1' }
       ];
@@ -202,9 +195,7 @@ describe('Service events', () => {
             }
           });
         });
-      })).then(resolved => {
-        done();
-      });
+      })).then(() => done()).catch(done);
 
       service.patch(null, patchItems);
     });
@@ -220,8 +211,7 @@ describe('Service events', () => {
       });
 
       const service = app.service('creator');
-
-      var removeItems = [
+      const removeItems = [
         { message: 'Hello 0' },
         { message: 'Hello 1' }
       ];
@@ -235,9 +225,7 @@ describe('Service events', () => {
             }
           });
         });
-      })).then(resolved => {
-        done();
-      });
+      })).then(() => done()).catch(done);
 
       service.remove(null, removeItems);
     });
