@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.0.2](https://github.com/feathersjs/feathers/tree/v3.0.2) (2017-12-05)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.1...v3.0.2)
+
+**Merged pull requests:**
+
+- Updated to handle array emit for service results. [\#743](https://github.com/feathersjs/feathers/pull/743) ([superlazycoder](https://github.com/superlazycoder))
+
 ## [v3.0.1](https://github.com/feathersjs/feathers/tree/v3.0.1) (2017-11-16)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.0...v3.0.1)
 
