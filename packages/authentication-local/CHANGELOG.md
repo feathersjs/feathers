@@ -1,5 +1,17 @@
 # Change Log
 
+## [v1.0.2](https://github.com/feathersjs/authentication-local/tree/v1.0.2) (2017-12-06)
+[Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.0.1...v1.0.2)
+
+**Closed issues:**
+
+- why is the password send as plain text instead of encrypting it on client side? [\#44](https://github.com/feathersjs/authentication-local/issues/44)
+
+**Merged pull requests:**
+
+- Update hook.result if an external provider is set [\#46](https://github.com/feathersjs/authentication-local/pull/46) ([daffl](https://github.com/daffl))
+- Update feathers-memory to the latest version 🚀 [\#45](https://github.com/feathersjs/authentication-local/pull/45) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.1](https://github.com/feathersjs/authentication-local/tree/v1.0.1) (2017-11-16)
 [Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.0.0...v1.0.1)
 
