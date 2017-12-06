@@ -5,12 +5,12 @@ const Debug = require('debug');
 const debug = Debug('@feathersjs/authentication-local:hooks:hash-password');
 
 module.exports = function hashPassword (options = {}) {
-  return function (hook) {
-    if (hook.type !== 'before') {
+  return function (context) {
+    if (context.type !== 'before') {
       return Promise.reject(new Error(`The 'hashPassword' hook should only be used as a 'before' hook.`));
     }
 
-    const app = hook.app;
+    const app = context.app;
     const authOptions = app.get('authentication') || {};
 
     options = merge({ passwordField: 'password' }, authOptions.local, options);
@@ -28,27 +28,27 @@ module.exports = function hashPassword (options = {}) {
       return Promise.reject(new Error(`'hash' must be a function that takes a password and returns Promise that resolves with a hashed password.`));
     }
 
-    if (hook.data === undefined) {
+    if (context.data === undefined) {
       debug(`hook.data is undefined. Skipping hashPassword hook.`);
-      return Promise.resolve(hook);
+      return Promise.resolve(context);
     }
 
     let data;
 
     // make sure we actually have password fields
-    if (Array.isArray(hook.data)) {
-      data = hook.data.filter(item => {
+    if (Array.isArray(context.data)) {
+      data = context.data.filter(item => {
         return item.hasOwnProperty(field);
       });
-    } else if (hook.data[field]) {
-      data = hook.data;
+    } else if (context.data[field]) {
+      data = context.data;
     }
 
     // If the data doesn't have a password field
     // then don't attempt to hash it.
     if (data === undefined || (Array.isArray(data) && !data.length)) {
       debug(`'${field}' field is missing. Skipping hashPassword hook.`);
-      return Promise.resolve(hook);
+      return Promise.resolve(context);
     }
 
     if (Array.isArray(data)) {
@@ -61,15 +61,15 @@ module.exports = function hashPassword (options = {}) {
         });
       }))
       .then(results => {
-        hook.data = results;
-        return Promise.resolve(hook);
+        context.data = results;
+        return Promise.resolve(context);
       });
     }
 
     debug(`Hashing password.`);
     return hashPw(data[field]).then(hashedPassword => {
-      hook.data[field] = hashedPassword;
-      return Promise.resolve(hook);
+      context.data[field] = hashedPassword;
+      return Promise.resolve(context);
     });
   };
 };
