@@ -1,24 +1,28 @@
 const omit = require('lodash.omit');
 
 module.exports = function (...fields) {
-  return function protect (hook) {
-    const result = hook.dispatch || hook.result;
+  return function protect (context) {
+    const result = context.dispatch || context.result;
     const o = current => omit(current, fields);
 
     if (!result) {
-      return hook;
+      return context;
     }
 
     if (Array.isArray(result)) {
-      hook.dispatch = result.map(o);
+      context.dispatch = result.map(o);
     } else if (result.data) {
-      hook.dispatch = Object.assign({}, result, {
+      context.dispatch = Object.assign({}, result, {
         data: result.data.map(o)
       });
     } else {
-      hook.dispatch = o(result);
+      context.dispatch = o(result);
     }
 
-    return hook;
+    if (context.params && context.params.provider) {
+      context.result = context.dispatch;
+    }
+
+    return context;
   };
 };

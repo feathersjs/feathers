@@ -73,6 +73,35 @@ function testOmit (title, property) {
         }
       });
     });
+
+    it('updates result if params.provider is set', () => {
+      const data = [{
+        email: 'test1@user.com',
+        password: 'supersecret'
+      }, {
+        email: 'test2@user.com',
+        password: 'othersecret'
+      }];
+      const params = { provider: 'test' };
+      const context = {
+        [property]: data,
+        params
+      };
+      const result = fn(context);
+
+      expect(result).to.deep.equal({
+        [property]: data,
+        params,
+        result: [
+          { email: 'test1@user.com' },
+          { email: 'test2@user.com' }
+        ],
+        dispatch: [
+          { email: 'test1@user.com' },
+          { email: 'test2@user.com' }
+        ]
+      });
+    });
   });
 }
 
