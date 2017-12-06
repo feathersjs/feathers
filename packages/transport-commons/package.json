@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/socket-commons",
   "description": "Shared functionality for websocket providers",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "homepage": "https://github.com/feathersjs/socket-commons",
   "main": "lib/",
   "keywords": [
