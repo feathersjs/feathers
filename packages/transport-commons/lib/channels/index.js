@@ -54,9 +54,8 @@ function channels () {
           ].find(current => typeof current === 'function') || noop;
 
           Promise.resolve(callback(data, hook)).then(result => {
-            const channel = Array.isArray(result)
-              ? new CombinedChannel(compact(flattenDeep(result)))
-              : result;
+            const results = Array.isArray(result) ? compact(flattenDeep(result)) : [ result ];
+            const channel = new CombinedChannel(results);
 
             if (channel && channel.length > 0) {
               app.emit('publish', event, channel, hook);
