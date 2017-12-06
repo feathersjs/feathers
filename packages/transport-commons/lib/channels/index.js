@@ -54,6 +54,10 @@ function channels () {
           ].find(current => typeof current === 'function') || noop;
 
           Promise.resolve(callback(data, hook)).then(result => {
+            if (!result) {
+              return;
+            }
+
             const results = Array.isArray(result) ? compact(flattenDeep(result)) : [ result ];
             const channel = new CombinedChannel(results);
 
