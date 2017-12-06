@@ -130,13 +130,15 @@ describe('app.publish', () => {
         done(new Error('Should never get here'))
       );
 
+      process.once('unhandledRejection', error => done(error));
+
       app.service('test')
         .create(data)
         .then(() => done())
         .catch(done);
     });
 
-    it('does not sent `dispatch` event if there are no connections', done => {
+    it('does not send `dispatch` event if there are no connections', done => {
       app.service('test').publish('created', () =>
         app.channel('dummy')
       );
