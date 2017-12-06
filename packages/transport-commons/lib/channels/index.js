@@ -1,5 +1,5 @@
 const debug = require('debug')('@feathersjs/socket-commons/channels');
-const { get, compact, flattenDeep } = require('lodash');
+const { get, compact, flattenDeep, noop } = require('lodash');
 const CombinedChannel = require('./channel/combined');
 const { channelMixin, publishMixin, keys } = require('./mixins');
 
@@ -40,19 +40,25 @@ function channels () {
 
           const servicePublishers = service[PUBLISHERS];
           const appPublishers = app[PUBLISHERS];
-          const publishers = compact([
-            get(servicePublishers, ALL_EVENTS),
+          // This will return the first publisher list that is not empty
+          // In the following precedence
+          const callback = [
+            // 1. Service publisher for a specific event
             get(servicePublishers, event),
-            get(appPublishers, ALL_EVENTS),
-            get(appPublishers, event)
-          ]);
+            // 2. Service publisher for all events
+            get(servicePublishers, ALL_EVENTS),
+            // 3. App publishers for a specific event
+            get(appPublishers, event),
+            // 4. App publishers for all events
+            get(appPublishers, ALL_EVENTS)
+          ].find(current => typeof current === 'function') || noop;
 
-          Promise.all(publishers.map(callback =>
-            Promise.resolve(callback(data, hook))
-          )).then(results => {
-            const channel = new CombinedChannel(compact(flattenDeep(results)));
+          Promise.resolve(callback(data, hook)).then(result => {
+            const channel = Array.isArray(result)
+              ? new CombinedChannel(compact(flattenDeep(result)))
+              : result;
 
-            if (channel.length > 0) {
+            if (channel && channel.length > 0) {
               app.emit('publish', event, channel, hook);
             } else {
               debug('No connections to publish to');
