@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.1.0](https://github.com/feathersjs/socket-commons/tree/v3.1.0) (2017-12-06)
+[Full Changelog](https://github.com/feathersjs/socket-commons/compare/v3.0.1...v3.1.0)
+
+**Merged pull requests:**
+
+- Give channel dispatchers a precedence [\#58](https://github.com/feathersjs/socket-commons/pull/58) ([daffl](https://github.com/daffl))
+
 ## [v3.0.1](https://github.com/feathersjs/socket-commons/tree/v3.0.1) (2017-11-03)
 [Full Changelog](https://github.com/feathersjs/socket-commons/compare/v3.0.0...v3.0.1)
 
