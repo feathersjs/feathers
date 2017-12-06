@@ -17,6 +17,10 @@ const User = {
   permissions: ['*']
 };
 
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at: Promise ', p, ' reason: ', reason);
+});
+
 module.exports = function (settings, socketProvider) {
   const app = express(feathers());
 
@@ -103,6 +107,9 @@ module.exports = function (settings, socketProvider) {
   });
 
   app.use(errorHandler());
+
+  app.on('connection', connection => app.channel('everybody').join(connection));
+  app.publish(() => app.channel('everybody'));
 
   return app;
 };

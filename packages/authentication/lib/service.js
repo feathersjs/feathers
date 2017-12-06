@@ -68,8 +68,8 @@ module.exports = function init (options) {
 
     const service = app.service(path);
 
-    if (typeof service.filter === 'function') {
-      service.filter(() => false);
+    if (typeof service.publish === 'function') {
+      service.publish(() => false);
     }
   };
 };
