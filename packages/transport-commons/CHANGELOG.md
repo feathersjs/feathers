@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.1.2](https://github.com/feathersjs/socket-commons/tree/v3.1.2) (2017-12-06)
+[Full Changelog](https://github.com/feathersjs/socket-commons/compare/v3.1.1...v3.1.2)
+
+**Merged pull requests:**
+
+- Fix another error when there are no results [\#60](https://github.com/feathersjs/socket-commons/pull/60) ([daffl](https://github.com/daffl))
+
 ## [v3.1.1](https://github.com/feathersjs/socket-commons/tree/v3.1.1) (2017-12-06)
 [Full Changelog](https://github.com/feathersjs/socket-commons/compare/v3.1.0...v3.1.1)
 
