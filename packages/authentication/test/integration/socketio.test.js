@@ -107,6 +107,17 @@ describe('Socket.io authentication', function () {
           });
         });
 
+        it('does never publish events from the authentication service', done => {
+          socket.once('authentication created', () => done(new Error('Should not get here')));
+
+          socket.emit('authenticate', data, (error, response) => {
+            expect(error).to.not.equal(undefined);
+            expect(response.accessToken).to.exist;
+            expect(serverSocket.feathers.user).to.not.equal(undefined);
+            done();
+          });
+        });
+
         it('updates the user on the socket', done => {
           socket.emit('authenticate', data, (error, response) => {
             expect(error).to.not.equal(undefined);
