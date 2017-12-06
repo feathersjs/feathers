@@ -59,7 +59,7 @@ describe('app.publish', () => {
         .catch(done);
     });
 
-    it('app and global level dispatching', done => {
+    it('app and global level dispatching and precedence', done => {
       app.channel('testing').join(c1);
       app.channel('other').join(c2);
 
@@ -68,7 +68,6 @@ describe('app.publish', () => {
 
       app.once('publish', function (event, channel, hook) {
         assert.ok(channel.connections.indexOf(c1) !== -1);
-        assert.ok(channel.connections.indexOf(c2) !== -1);
         done();
       });
 
@@ -155,12 +154,10 @@ describe('app.publish', () => {
       app.channel('testing').join(c1);
       app.channel('othertest').join(c2);
 
-      app.service('test').publish('created', () => {
-        return [
-          app.channel('testing'),
-          app.channel('othertest')
-        ];
-      });
+      app.service('test').publish('created', () => [
+        app.channel('testing'),
+        app.channel('othertest')
+      ]);
 
       app.once('publish', (event, channel, hook) => {
         assert.deepEqual(hook.result, data);
@@ -179,12 +176,10 @@ describe('app.publish', () => {
       app.channel('testing').join(c1);
       app.channel('othertest').join(c2);
 
-      app.service('test').publish('created', () => {
-        return [
-          app.channel('testing').send(c1data),
-          app.channel('othertest')
-        ];
-      });
+      app.service('test').publish('created', () => [
+        app.channel('testing').send(c1data),
+        app.channel('othertest')
+      ]);
 
       app.once('publish', (event, channel, hook) => {
         assert.deepEqual(hook.result, data);
@@ -194,9 +189,18 @@ describe('app.publish', () => {
         done();
       });
 
-      app.service('test')
-        .create(data)
-        .catch(done);
+      app.service('test').create(data).catch(done);
+    });
+
+    it('publisher precedence and preventing publishing', done => {
+      app.channel('test').join(c1);
+
+      app.publish(() => app.channel('test'));
+      app.service('test').publish('created', () => null);
+
+      app.once('publish', (event, channel, hook) => done(new Error('Should never get here')));
+
+      app.service('test').create(data).then(() => done()).catch(done);
     });
 
     it('data of first channel has precedence', done => {
