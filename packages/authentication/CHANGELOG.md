@@ -1,5 +1,18 @@
 # Change Log
 
+## [v2.1.0](https://github.com/feathersjs/authentication/tree/v2.1.0) (2017-12-06)
+[Full Changelog](https://github.com/feathersjs/authentication/compare/v2.0.1...v2.1.0)
+
+**Closed issues:**
+
+- Method "Remove" from Authentication Service gives Internal Server Error when using JWT Authentication with Cookies. [\#606](https://github.com/feathersjs/authentication/issues/606)
+- Anonymous Authentication fails over Socket.io [\#457](https://github.com/feathersjs/authentication/issues/457)
+
+**Merged pull requests:**
+
+- Always prevent publishing of authentication events [\#614](https://github.com/feathersjs/authentication/pull/614) ([daffl](https://github.com/daffl))
+- Update feathers-memory to the latest version 🚀 [\#613](https://github.com/feathersjs/authentication/pull/613) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.0.1](https://github.com/feathersjs/authentication/tree/v2.0.1) (2017-11-16)
 [Full Changelog](https://github.com/feathersjs/authentication/compare/v2.0.0...v2.0.1)
 
@@ -735,6 +748,7 @@
 
 - Finalizing client side authentication module [\#101](https://github.com/feathersjs/authentication/pull/101) ([daffl](https://github.com/daffl))
 - Ten hours is only 36 seconds [\#99](https://github.com/feathersjs/authentication/pull/99) ([mileswilson](https://github.com/mileswilson))
+- Fix examples [\#98](https://github.com/feathersjs/authentication/pull/98) ([mastertinner](https://github.com/mastertinner))
 - fix html in templates [\#97](https://github.com/feathersjs/authentication/pull/97) ([mastertinner](https://github.com/mastertinner))
 - update populateUser\(\) hook [\#87](https://github.com/feathersjs/authentication/pull/87) ([kulakowka](https://github.com/kulakowka))
 - Customize the JWT payload [\#80](https://github.com/feathersjs/authentication/pull/80) ([enten](https://github.com/enten))
