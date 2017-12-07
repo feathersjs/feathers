@@ -1,5 +1,26 @@
 # Change Log
 
+## [v2.1.1](https://github.com/feathersjs/generator-feathers/tree/v2.1.1) (2017-12-07)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.1.0...v2.1.1)
+
+**Closed issues:**
+
+- Error: Cannot find module '@feathersjs/authentication' after using a new generator with old project [\#308](https://github.com/feathersjs/generator-feathers/issues/308)
+- feathers generate service vs sequelize model:create [\#286](https://github.com/feathersjs/generator-feathers/issues/286)
+
+**Merged pull requests:**
+
+- Log error if trying to use the generator with incompatible versions [\#319](https://github.com/feathersjs/generator-feathers/pull/319) ([daffl](https://github.com/daffl))
+- mongodb 3.0.0-rc0 support [\#318](https://github.com/feathersjs/generator-feathers/pull/318) ([rayfoss](https://github.com/rayfoss))
+- Update feathers-sequelize to the latest version 🚀 [\#317](https://github.com/feathersjs/generator-feathers/pull/317) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-mongoose to the latest version 🚀 [\#316](https://github.com/feathersjs/generator-feathers/pull/316) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-memory to the latest version 🚀 [\#314](https://github.com/feathersjs/generator-feathers/pull/314) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-mongodb to the latest version 🚀 [\#313](https://github.com/feathersjs/generator-feathers/pull/313) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-knex to the latest version 🚀 [\#312](https://github.com/feathersjs/generator-feathers/pull/312) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-nedb to the latest version 🚀 [\#311](https://github.com/feathersjs/generator-feathers/pull/311) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-rethinkdb to the latest version 🚀 [\#310](https://github.com/feathersjs/generator-feathers/pull/310) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- add features and fix typos [\#309](https://github.com/feathersjs/generator-feathers/pull/309) ([superlazycoder](https://github.com/superlazycoder))
+
 ## [v2.1.0](https://github.com/feathersjs/generator-feathers/tree/v2.1.0) (2017-11-20)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.0.0...v2.1.0)
 
