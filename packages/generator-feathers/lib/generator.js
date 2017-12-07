@@ -13,7 +13,13 @@ module.exports = class BaseGenerator extends Generator {
     this.props = opts.props || {};
 
     if(process.version < 'v6.0.0') {
-      this.log.error('The generator is only tested to work with Node v6.0.0 and up!');
+      this.log.error('The generator will only work with Node v6.0.0 and up!');
+      process.exit();
+    }
+
+    if(this.pkg.dependencies && this.pkg.dependencies.feathers) {
+      this.log.error('This version of the generator will only work with Feathers Buzzard (v3) and up. Please run `feathers upgrade` first.');
+      process.exit();
     }
   }
 
