@@ -42,10 +42,13 @@ exports.getDispatcher = function (emit, socketKey) {
       if (socket) {
         const data = channel.dataFor(connection) || hook.dispatch || hook.result;
         const eventName = `${hook.path || ''} ${event}`.trim();
+        const dataList = Array.isArray(data) ? data : [ data ];
 
-        debug(`Dispatching '${eventName}' to Socket ${socket.id} with`, data);
+        dataList.forEach(current => {
+          debug(`Dispatching '${eventName}' to Socket ${socket.id} with`, current);
 
-        socket[emit](eventName, data);
+          socket[emit](eventName, current);
+        });
       }
     });
   };
