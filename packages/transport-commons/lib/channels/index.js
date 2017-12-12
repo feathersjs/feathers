@@ -62,7 +62,7 @@ function channels () {
             const channel = new CombinedChannel(results);
 
             if (channel && channel.length > 0) {
-              app.emit('publish', event, channel, hook);
+              app.emit('publish', event, channel, hook, data);
             } else {
               debug('No connections to publish to');
             }
