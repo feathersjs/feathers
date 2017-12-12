@@ -1,5 +1,8 @@
 # Change Log
 
+## [v3.1.5](https://github.com/feathersjs/socket-commons/tree/v3.1.5) (2017-12-12)
+[Full Changelog](https://github.com/feathersjs/socket-commons/compare/v3.1.4...v3.1.5)
+
 ## [v3.1.4](https://github.com/feathersjs/socket-commons/tree/v3.1.4) (2017-12-12)
 [Full Changelog](https://github.com/feathersjs/socket-commons/compare/v3.1.3...v3.1.4)
 
