@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.1.3](https://github.com/feathersjs/socket-commons/tree/v3.1.3) (2017-12-12)
+[Full Changelog](https://github.com/feathersjs/socket-commons/compare/v3.1.2...v3.1.3)
+
+**Merged pull requests:**
+
+- Make sure that each entry in an array is dispatched as its own even [\#61](https://github.com/feathersjs/socket-commons/pull/61) ([daffl](https://github.com/daffl))
+
 ## [v3.1.2](https://github.com/feathersjs/socket-commons/tree/v3.1.2) (2017-12-06)
 [Full Changelog](https://github.com/feathersjs/socket-commons/compare/v3.1.1...v3.1.2)
 
