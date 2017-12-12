@@ -132,7 +132,8 @@ describe('socket commons utils', () => {
           });
         });
 
-        dispatcher('testing', dummyChannel, dummyHook);
+        dispatcher('testing', dummyChannel, dummyHook, data1);
+        dispatcher('testing', dummyChannel, dummyHook, data2);
       });
     });
   });
