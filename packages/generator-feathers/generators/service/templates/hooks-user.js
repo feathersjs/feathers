@@ -1,7 +1,7 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 
 <% if (authentication.strategies.indexOf('local') !== -1) { %>const {
- hashPassword, protect
+  hashPassword, protect
 } = require('@feathersjs/authentication-local').hooks;<% } %>
 
 module.exports = {

@@ -77,6 +77,7 @@ describe('generator-feathers', function() {
       })
       .withPrompts({
         name: 'removeId',
+        type: 'before',
         services: []
       })
       .then(() => runTest('\'removeId\' hook'));
