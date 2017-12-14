@@ -1,5 +1,17 @@
 # Change Log
 
+## [v2.2.0](https://github.com/feathersjs/generator-feathers/tree/v2.2.0) (2017-12-14)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.1.1...v2.2.0)
+
+**Closed issues:**
+
+- Change generated hook test to use a full app [\#320](https://github.com/feathersjs/generator-feathers/issues/320)
+- Sub generators break when using michael jackson script [\#303](https://github.com/feathersjs/generator-feathers/issues/303)
+
+**Merged pull requests:**
+
+- Change hook tests to use an actual Feathers app [\#321](https://github.com/feathersjs/generator-feathers/pull/321) ([daffl](https://github.com/daffl))
+
 ## [v2.1.1](https://github.com/feathersjs/generator-feathers/tree/v2.1.1) (2017-12-07)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.1.0...v2.1.1)
 
