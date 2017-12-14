@@ -50,7 +50,7 @@
   },
   "preferGlobal": true,
   "dependencies": {
-    "@feathersjs/tools": "^0.1.3",
+    "@feathersjs/tools": "^0.1.6",
     "commander": "^2.9.0",
     "generator-feathers": "2.2.0",
     "generator-feathers-plugin": "0.12.1",
