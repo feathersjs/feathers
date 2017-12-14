@@ -1,5 +1,23 @@
 # Change Log
 
+## [v3.3.0](https://github.com/feathersjs/cli/tree/v3.3.0) (2017-12-14)
+[Full Changelog](https://github.com/feathersjs/cli/compare/v3.2.1...v3.3.0)
+
+**Fixed bugs:**
+
+- \[3.0\] CLI is not respecting directory [\#39](https://github.com/feathersjs/cli/issues/39)
+
+**Closed issues:**
+
+- \[3.0\] Allow plugins [\#62](https://github.com/feathersjs/cli/issues/62)
+- \[3.0\] Support file conflicts [\#40](https://github.com/feathersjs/cli/issues/40)
+- \[3.0\] Be able to install templates from Github repos [\#38](https://github.com/feathersjs/cli/issues/38)
+- \[3.0\] Have a basic "doctor" command [\#24](https://github.com/feathersjs/cli/issues/24)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#130](https://github.com/feathersjs/cli/pull/130) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.2.1](https://github.com/feathersjs/cli/tree/v3.2.1) (2017-12-07)
 [Full Changelog](https://github.com/feathersjs/cli/compare/v3.2.0...v3.2.1)
 
