@@ -34,7 +34,6 @@ module.exports = class ConnectionGenerator extends Generator {
 
   _getConfiguration () {
     const sqlPackages = {
-      mariadb: 'mysql',
       mysql: 'mysql2',
       mssql: 'mssql',
       postgres: 'pg',
@@ -71,7 +70,6 @@ module.exports = class ConnectionGenerator extends Generator {
       this.dependencies.push(adapter);
       return connectionString;
 
-    case 'mariadb':
     case 'mysql':
     case 'mssql':
     // case oracle:
@@ -131,10 +129,9 @@ module.exports = class ConnectionGenerator extends Generator {
         message: 'Which database are you connecting to?',
         default: 'nedb',
         choices: [
-          { name: 'MariaDB', value: 'mariadb' },
           { name: 'Memory', value: 'memory' },
           { name: 'MongoDB', value: 'mongodb' },
-          { name: 'MySQL', value: 'mysql' },
+          { name: 'MySQL (MariaDB)', value: 'mysql' },
           { name: 'NeDB', value: 'nedb' },
           // { name: 'Oracle', value: 'oracle' },
           { name: 'PostgreSQL', value: 'postgres' },
@@ -223,7 +220,6 @@ module.exports = class ConnectionGenerator extends Generator {
           const answers = getProps(current);
           const { database } = answers;
           const defaultConnectionStrings = {
-            mariadb: `mariadb://root:@localhost:3306/${databaseName}`,
             mongodb: `mongodb://localhost:27017/${databaseName}`,
             mysql: `mysql://root:@localhost:3306/${databaseName}`,
             nedb: 'nedb://../data',
@@ -318,7 +314,6 @@ module.exports = class ConnectionGenerator extends Generator {
       this.log(`Woot! We've set up your ${database} database connection!`);
 
       switch (database) {
-      case 'mariadb':
       case 'mongodb':
       case 'mssql':
       case 'mysql':
