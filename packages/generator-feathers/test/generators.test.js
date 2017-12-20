@@ -154,10 +154,6 @@ describe('generator-feathers', function() {
 
     });
 
-    describe.skip('mariadb', () => {
-
-    });
-
     describe.skip('mssql', () => {
 
     });
