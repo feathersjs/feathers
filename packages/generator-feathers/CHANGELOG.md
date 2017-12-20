@@ -1,5 +1,17 @@
 # Change Log
 
+## [v2.3.0](https://github.com/feathersjs/generator-feathers/tree/v2.3.0) (2017-12-20)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.2.0...v2.3.0)
+
+**Closed issues:**
+
+- Typo: "typ" should be "type" [\#322](https://github.com/feathersjs/generator-feathers/issues/322)
+
+**Merged pull requests:**
+
+- Publish to authenticated users by default [\#324](https://github.com/feathersjs/generator-feathers/pull/324) ([daffl](https://github.com/daffl))
+- Remove MariaDB since it will just use MySQL [\#323](https://github.com/feathersjs/generator-feathers/pull/323) ([daffl](https://github.com/daffl))
+
 ## [v2.2.0](https://github.com/feathersjs/generator-feathers/tree/v2.2.0) (2017-12-14)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.1.1...v2.2.0)
 
