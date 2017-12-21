@@ -1,5 +1,12 @@
 # Change Log
 
+## [v2.3.1](https://github.com/feathersjs/generator-feathers/tree/v2.3.1) (2017-12-21)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.3.0...v2.3.1)
+
+**Merged pull requests:**
+
+- Add authentication hook to all methods \(except create\) [\#325](https://github.com/feathersjs/generator-feathers/pull/325) ([daffl](https://github.com/daffl))
+
 ## [v2.3.0](https://github.com/feathersjs/generator-feathers/tree/v2.3.0) (2017-12-20)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.2.0...v2.3.0)
 
