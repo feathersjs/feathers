@@ -8,11 +8,11 @@ module.exports = {
   before: {
     all: [],
     find: [ authenticate('jwt') ],
-    get: [],
+    get: [ authenticate('jwt') ],
     create: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword()<% } %> ],
-    update: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword()<% } %> ],
-    patch: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword()<% } %> ],
-    remove: []
+    update: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword(), <% } %> authenticate('jwt') ],
+    patch: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword(), <% } %> authenticate('jwt') ],
+    remove: [ authenticate('jwt') ]
   },
 
   after: {
