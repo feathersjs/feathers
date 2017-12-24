@@ -73,7 +73,7 @@
     "helmet": "^3.6.1",
     "jshint": "^2.9.2",
     "mocha": "^4.0.0",
-    "mongodb": "^2.2.28",
+    "mongodb": "^3.0.0",
     "mongoose": "^4.10.5",
     "nedb": "^1.8.0",
     "request": "^2.79.0",
