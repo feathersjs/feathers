@@ -1,7 +1,0 @@
-{
-  "frontend": "../public",
-  "host": "localhost",
-  "port": 3030,
-  "mongodb": "mongodb://localhost:27017/myapp",
-  "templates": "../templates"
-}
