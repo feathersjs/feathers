@@ -1,6 +1,0 @@
-{
-  "frontend": "../public/dist",
-  "host": "myapp.com",
-  "port": "PORT",
-  "mongodb": "MONGOHQ_URL"
-}

@@ -1,4 +1,0 @@
-{
-  "port": "PORT",
-  "mongodb": "MONGOHQ_URL"
-}
