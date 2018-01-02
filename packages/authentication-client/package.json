@@ -71,7 +71,7 @@
     "mocha": "^4.0.0",
     "primus": "^7.0.0",
     "primus-emitter": "^3.1.1",
-    "semistandard": "^11.0.0",
+    "semistandard": "^12.0.0",
     "socket.io-client": "^2.0.0",
     "superagent": "^3.5.2",
     "ws": "^3.3.1"
