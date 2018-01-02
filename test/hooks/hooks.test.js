@@ -181,5 +181,27 @@ describe('hooks basics', () => {
         assert.equal(context.error.message, 'Something went wrong');
       });
     });
+
+    it('still swallows error if context.result is set', () => {
+      const result = { message: 'this is a test' };
+      const app = feathers().use('/dummy', {
+        get () {
+          return Promise.reject(new Error('Something went wrong'));
+        }
+      });
+
+      app.service('dummy').hooks({
+        error (context) {
+          context.result = result;
+        }
+      });
+
+      return app.service('dummy').get(10, {}, true).then(hook => {
+        assert.ok(hook.error);
+        assert.deepEqual(hook.result, result);
+      }).catch(() => {
+        throw new Error('Should never get here');
+      });
+    });
   });
 });
