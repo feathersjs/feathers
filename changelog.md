@@ -1,5 +1,13 @@
 # Change Log
 
+## [v3.0.3](https://github.com/feathersjs/feathers/tree/v3.0.3) (2018-01-02)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.2...v3.0.3)
+
+**Merged pull requests:**
+
+- Properly resolve the promise in error hooks if returnHook is set. [\#769](https://github.com/feathersjs/feathers/pull/769) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#768](https://github.com/feathersjs/feathers/pull/768) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.0.2](https://github.com/feathersjs/feathers/tree/v3.0.2) (2017-12-05)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.1...v3.0.2)
 
