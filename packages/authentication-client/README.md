@@ -15,118 +15,26 @@
 npm install @feathersjs/authentication-client --save
 ```
 
-**Note:** This is only compatibile with `feathers-authentication@1.x` and above.
+## Quick example
+
+```js
+const feathers = require('@feathersjs/feathers');
+const auth = require('@feathersjs/authentication-client');
+
+const app = feathers();
+
+// Available options are listed in the "Options" section
+app.configure(auth({
+  storage: window.localStorage
+}))
+```
 
 ## Documentation
 
-<!-- Please refer to the [@feathersjs/authentication-client documentation](http://docs.feathersjs.com/) for more details. -->
-
-## API
-
-This module contains:
-
-1. The main entry function
-2. Some helpful hooks
-
-The main feathers client instance has a few public methods:
-
-- `app.authenticate(options)` - Authenticate by passing credentials.
-- `app.logout()`
-
-It also has a `app.passport` instance that, like on the server, exposes utils functions for dealing with JWTs:
-
-- `app.passport.getJWT()` - pull it from localstorage or the cookie
-- `app.passport.verifyJWT(token)` - verify that a JWT is not expired and decode it to get the payload.
-
-**Note:** All these methods return promises.
-
-### Handling the special re-authentication errors
-
-In the event that your server goes down or the client loses connectivity, it will automatically handle attempting to re-authenticate the socket when the client regains connectivity with the server. In order to handle an authentication failure during automatic re-authentication you need to implement the following event listener:
-
-```js
-const errorHandler = error => {
-  app.authenticate({
-    strategy: 'local',
-    email: 'admin@feathersjs.com',
-    password: 'admin'
-  }).then(response => {
-    // You are now authenticated again
-  });
-};
-
-// Handle when auth fails during a reconnect or a transport upgrade
-app.on('reauthentication-error', errorHandler)
-```
-
-
-### Default Options
-
-The following default options will be mixed in with the settings you pass in when configuring authentication. It will set the mixed options back to to the app so that they are available at any time by `app.get('auth')`. They can all be overridden.
-
-```js
-{
-  header: 'Authorization', // the default authorization header
-  path: '/authentication', // the server side authentication service path
-  jwtStrategy: 'jwt', // the name of the JWT authentication strategy 
-  entity: 'user', // the entity you are authenticating (ie. a users)
-  service: 'users', // the service to look up the entity
-  cookie: 'feathers-jwt', // the name of the cookie to parse the JWT from when cookies are enabled server side
-  storageKey: 'feathers-jwt', // the key to store the accessToken in localstorage or AsyncStorage on React Native
-}
-```
-
-### Hooks
-
-There are 3 hooks. They are really meant for internal use and you shouldn't need to worry about them very often.
-
-1. `populateAccessToken` - Takes the token and puts in on `hooks.params.accessToken` in case you need it in one of your client side services or hooks
-2. `populateHeader` - Add the accessToken to the authorization header
-3. `populateEntity` - Experimental. Populate an entity based on the JWT payload.
-
-## Complete Example
-
-Here's an example of a Feathers client that uses `@feathersjs/authentication-client`. 
-
-```js
-const feathers = require('feathers/client');
-const rest = require('feathers-rest/client');
-const superagent = require('superagent');
-const hooks = require('feathers-hooks');
-const localStorage = require('localstorage-memory');
-const auth = require('@feathersjs/authentication-client');
-
-const client = feathers();
-
-// NOTE: the order is important: auth must be configured _after_ rest/socket
-client.configure(hooks())
-  .configure(rest('http://localhost:3030').superagent(superagent))
-  .configure(auth({ storage: localStorage }));
-
-client.authenticate({
-  strategy: 'local',
-  email: 'admin@feathersjs.com',
-  password: 'admin'
-})
-.then(response => {
-  console.log('Authenticated!', response);
-  return client.passport.verifyJWT(response.accessToken);
-})
-.then(payload => {
-  console.log('JWT Payload', payload);
-  return client.service('users').get(payload.userId);
-})
-.then(user => {
-  client.set('user', user);
-  console.log('User', client.get('user'));
-})
-.catch(function(error){
-  console.error('Error authenticating!', error);
-});
-```
+Please refer to the [@feathersjs/authentication-client documentation](https://docs.feathersjs.com/api/authentication/client.html) for more details.
 
 ## License
 
-Copyright (c) 2016
+Copyright (c) 2018
 
 Licensed under the [MIT license](LICENSE).
