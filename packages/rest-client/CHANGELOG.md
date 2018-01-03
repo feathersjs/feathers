@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.3.3](https://github.com/feathersjs/rest-client/tree/v1.3.3) (2018-01-03)
+[Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.3.2...v1.3.3)
+
+**Closed issues:**
+
+- Conditions, like { name: null } , to query resources can't be used. [\#18](https://github.com/feathersjs/rest-client/issues/18)
+- Failed to minify the code from /lib/base.js [\#14](https://github.com/feathersjs/rest-client/issues/14)
+
+**Merged pull requests:**
+
+- Update documentation to correspond with latest release [\#20](https://github.com/feathersjs/rest-client/pull/20) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#19](https://github.com/feathersjs/rest-client/pull/19) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-memory to the latest version 🚀 [\#17](https://github.com/feathersjs/rest-client/pull/17) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.3.2](https://github.com/feathersjs/rest-client/tree/v1.3.2) (2017-11-16)
 [Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.3.1...v1.3.2)
 
