@@ -1,2 +1,3 @@
 --recursive test/
 --exit
+--timeout 10000

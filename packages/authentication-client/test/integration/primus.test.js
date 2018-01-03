@@ -151,17 +151,17 @@ describe('Primus client authentication', function () {
       expect(response.accessToken).to.not.equal(undefined);
       return client.logout();
     })
-    .then(() => {
-      expect(client.get('accessToken')).to.equal(null);
-      return Promise.resolve(client.get('storage').getItem('feathers-jwt'));
-    })
-    .then(accessToken => {
-      expect(accessToken).to.equal(undefined);
+      .then(() => {
+        expect(client.get('accessToken')).to.equal(null);
+        return Promise.resolve(client.get('storage').getItem('feathers-jwt'));
+      })
+      .then(accessToken => {
+        expect(accessToken).to.equal(undefined);
 
-      return client.service('users').get(0).catch(error => {
-        expect(error.code).to.equal(401);
+        return client.service('users').get(0).catch(error => {
+          expect(error.code).to.equal(401);
+        });
       });
-    });
   });
 
   it('`logout` event', done => {
