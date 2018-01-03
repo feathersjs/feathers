@@ -19,7 +19,7 @@
 npm install @feathersjs/authentication --save
 ```
 
-Quick usage:
+## Quick example
 
 ```js
 const feathers = require('@feathersjs/feathers');
