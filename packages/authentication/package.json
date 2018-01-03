@@ -26,7 +26,6 @@
     "node": ">= 6"
   },
   "scripts": {
-    "start": "node example/app",
     "publish": "git push origin --tags && npm run changelog && git push origin",
     "release:patch": "npm version patch && npm publish --access public",
     "release:minor": "npm version minor && npm publish --access public",
