@@ -1,5 +1,17 @@
 # Change Log
 
+## [v1.0.3](https://github.com/feathersjs/authentication-local/tree/v1.0.3) (2018-01-03)
+[Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.0.2...v1.0.3)
+
+**Closed issues:**
+
+- local authentication bug with users as sequelize service [\#47](https://github.com/feathersjs/authentication-local/issues/47)
+
+**Merged pull requests:**
+
+- Update documentation to correspond with latest release [\#50](https://github.com/feathersjs/authentication-local/pull/50) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#49](https://github.com/feathersjs/authentication-local/pull/49) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.2](https://github.com/feathersjs/authentication-local/tree/v1.0.2) (2017-12-06)
 [Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.0.1...v1.0.2)
 
