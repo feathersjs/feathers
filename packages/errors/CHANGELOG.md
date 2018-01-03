@@ -1,5 +1,17 @@
 # Change Log
 
+## [v3.2.1](https://github.com/feathersjs/errors/tree/v3.2.1) (2018-01-03)
+[Full Changelog](https://github.com/feathersjs/errors/compare/v3.2.0...v3.2.1)
+
+**Closed issues:**
+
+- Error handler usage/setup is mis-documented [\#96](https://github.com/feathersjs/errors/issues/96)
+
+**Merged pull requests:**
+
+- Update readme to correspond with latest release  [\#98](https://github.com/feathersjs/errors/pull/98) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#97](https://github.com/feathersjs/errors/pull/97) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.2.0](https://github.com/feathersjs/errors/tree/v3.2.0) (2017-11-19)
 [Full Changelog](https://github.com/feathersjs/errors/compare/v3.1.0...v3.2.0)
 
