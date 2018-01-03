@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-oauth2",
   "description": "An OAuth2 authentication strategy for feathers-authentication using Passport",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "homepage": "https://github.com/feathersjs/authentication-oauth2",
   "main": "lib/",
   "keywords": [
