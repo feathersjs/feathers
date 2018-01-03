@@ -1,5 +1,18 @@
 # Change Log
 
+## [v1.0.2](https://github.com/feathersjs/authentication-client/tree/v1.0.2) (2018-01-03)
+[Full Changelog](https://github.com/feathersjs/authentication-client/compare/v1.0.1...v1.0.2)
+
+**Closed issues:**
+
+- No Auth header added when sending 1st request [\#80](https://github.com/feathersjs/authentication-client/issues/80)
+
+**Merged pull requests:**
+
+- Update to correspond with latest release [\#84](https://github.com/feathersjs/authentication-client/pull/84) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#83](https://github.com/feathersjs/authentication-client/pull/83) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-memory to the latest version 🚀 [\#82](https://github.com/feathersjs/authentication-client/pull/82) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.1](https://github.com/feathersjs/authentication-client/tree/v1.0.1) (2017-11-16)
 [Full Changelog](https://github.com/feathersjs/authentication-client/compare/v1.0.0...v1.0.1)
 
