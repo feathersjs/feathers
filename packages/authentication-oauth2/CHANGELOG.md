@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.0.3](https://github.com/feathersjs/authentication-oauth2/tree/v1.0.3) (2018-01-03)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth2/compare/v1.0.2...v1.0.3)
+
+**Closed issues:**
+
+- I got Internal error when I log in with google  [\#63](https://github.com/feathersjs/authentication-oauth2/issues/63)
+- how to use proxy when call authnetication provider [\#62](https://github.com/feathersjs/authentication-oauth2/issues/62)
+
+**Merged pull requests:**
+
+- Update documentation to correspond with latest release [\#65](https://github.com/feathersjs/authentication-oauth2/pull/65) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#64](https://github.com/feathersjs/authentication-oauth2/pull/64) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-memory to the latest version 🚀 [\#61](https://github.com/feathersjs/authentication-oauth2/pull/61) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.2](https://github.com/feathersjs/authentication-oauth2/tree/v1.0.2) (2017-11-28)
 [Full Changelog](https://github.com/feathersjs/authentication-oauth2/compare/v1.0.1...v1.0.2)
 
