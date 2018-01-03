@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.0.4](https://github.com/feathersjs/feathers/tree/v3.0.4) (2018-01-03)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.3...v3.0.4)
+
+**Merged pull requests:**
+
+- Update Readme to correspond with latest release [\#772](https://github.com/feathersjs/feathers/pull/772) ([daffl](https://github.com/daffl))
+
 ## [v3.0.3](https://github.com/feathersjs/feathers/tree/v3.0.3) (2018-01-02)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.2...v3.0.3)
 
