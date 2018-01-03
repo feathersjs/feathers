@@ -9,46 +9,32 @@
 
 > The Feathers Primus real-time API provider
 
-## About
+## Installation
 
-This provider exposes [Feathers](http://feathersjs.com) services through [Primus](https://github.com/primus/primus) real-time APIs. It is compatible with Feathers 1.x and 2.x.
-
-__Note:__ For the full API documentation go to [feathersjs.com/docs/providers.html](http://feathersjs.com/docs/providers.html).
+```
+npm install @feathersjs/primus --save
+```
 
 ## Quick example
 
-> npm install ws
-
 ```js
-import feathers from 'feathers';
-import primus from '@feathersjs/primus';
+const feathers = require('@feathersjs/feathers');
+const primus = require('@feathersjs/primus');
 
-const app = feathers()
-  .configure(primus({
-    transformer: 'websockets'
-  }, function(primus) {
-    // Set up Primus authorization here
-    primus.authorize(function (req, done) {
-      req.feathers.data = 'Hello world';
+const app = feathers();
 
-      done();
-    });
-  }));
+// Set up Primus with SockJS
+app.configure(primus({ transformer: 'ws' }));
 
-app.use('/todos', {
-  get: function(id, params) {
-    console.log(params.data); // -> 'Hello world'
-
-    return Promise.resolve({
-      id,
-      description: `You have to do ${name}!`
-    });
-  }
-});
+app.listen(3030);
 ```
+
+## Documentation
+
+Please refer to the [@feathersjs/primus documentation](https://docs.feathersjs.com/api/primus.html) for more details.
 
 ## License
 
-Copyright (c) 2015
+Copyright (c) 2018
 
 Licensed under the [MIT license](LICENSE).
