@@ -1,5 +1,21 @@
 # Change Log
 
+## [v3.0.2](https://github.com/feathersjs/socketio/tree/v3.0.2) (2018-01-03)
+[Full Changelog](https://github.com/feathersjs/socketio/compare/v3.0.1...v3.0.2)
+
+**Closed issues:**
+
+- Updated from feathers-socketio to @feathersjs/socketio; error message [\#104](https://github.com/feathersjs/socketio/issues/104)
+- How to stop listening to socket server from client service  [\#103](https://github.com/feathersjs/socketio/issues/103)
+- Options are not passed to socket-io [\#101](https://github.com/feathersjs/socketio/issues/101)
+- feathers / graphql using REST / Sockets [\#97](https://github.com/feathersjs/socketio/issues/97)
+
+**Merged pull requests:**
+
+- Update Readme to correspond with latest release [\#106](https://github.com/feathersjs/socketio/pull/106) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#105](https://github.com/feathersjs/socketio/pull/105) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-memory to the latest version 🚀 [\#102](https://github.com/feathersjs/socketio/pull/102) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.0.1](https://github.com/feathersjs/socketio/tree/v3.0.1) (2017-11-16)
 [Full Changelog](https://github.com/feathersjs/socketio/compare/v3.0.0...v3.0.1)
 
