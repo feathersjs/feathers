@@ -9,55 +9,31 @@
 
 > The Feathers Socket.io real-time API provider
 
-## About
+## Installation
 
-This provider exposes [Feathers](http://feathersjs.com) services through a [Socket.io](http://socket.io/) real-time API. It is compatible with Feathers 1.x and 2.x.
-
-__Note:__ For the full API documentation go to [https://docs.feathersjs.com/api/socketio.html](https://docs.feathersjs.com/api/socketio.html).
+```
+npm install @feathersjs/socketio --save
+```
 
 ## Quick example
 
 ```js
-import feathers from '@feathersjs/feathers';
-import socketio from '@feathersjs/socketio';
+const feathers = require('@feathersjs/feathers');
+const socketio = require('@feathersjs/socketio');
 
-const app = feathers()
-  .configure(socketio(function(io) {
-    io.on('connection', function(socket) {
-      socket.emit('news', { hello: 'world' });
-      socket.on('my other event', function (data) {
-        console.log(data);
-      });
-    });
+const app = feathers();
 
-    io.use(function(socket, next) {
-      socket.feathers.data = 'Hello world';
-      next();
-    });
+app.configure(socketio());
 
-    io.use(function (socket, next) {
-      // Authorize using the /users service
-      app.service('users').find({
-        username: socket.request.username,
-        password: socket.request.password
-      }, next);
-    });
-  }));
-
-app.use('/todos', {
-  get: function(id, params) {
-    console.log(params.data); // -> 'Hello world'
-
-    return Promise.resolve({
-      id,
-      description: `You have to do ${name}!`
-    });
-  }
-});
+app.listen(3030);
 ```
+
+## Documentation
+
+Please refer to the [@feathersjs/socketio documentation](https://docs.feathersjs.com/api/socketio.html) for more details.
 
 ## License
 
-Copyright (c) 2015
+Copyright (c) 2018
 
 Licensed under the [MIT license](LICENSE).
