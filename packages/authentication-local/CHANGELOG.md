@@ -1,5 +1,8 @@
 # Change Log
 
+## [v1.0.4](https://github.com/feathersjs/authentication-local/tree/v1.0.4) (2018-01-03)
+[Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.0.3...v1.0.4)
+
 ## [v1.0.3](https://github.com/feathersjs/authentication-local/tree/v1.0.3) (2018-01-03)
 [Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.0.2...v1.0.3)
 
