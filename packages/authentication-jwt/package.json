@@ -35,8 +35,7 @@
     "lint": "semistandard --fix",
     "mocha": "mocha --opts mocha.opts",
     "coverage": "istanbul cover _mocha -- --opts mocha.opts",
-    "test": "npm run lint && npm run coverage",
-    "start": "npm run compile && node example/app"
+    "test": "npm run lint && npm run coverage"
   },
   "semistandard": {
     "sourceType": "module",
