@@ -1,5 +1,14 @@
 # Change Log
 
+## [v1.0.2](https://github.com/feathersjs/socketio-client/tree/v1.0.2) (2018-01-03)
+[Full Changelog](https://github.com/feathersjs/socketio-client/compare/v1.0.1...v1.0.2)
+
+**Merged pull requests:**
+
+- Update documentation to correspond with latest release [\#7](https://github.com/feathersjs/socketio-client/pull/7) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#6](https://github.com/feathersjs/socketio-client/pull/6) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-memory to the latest version 🚀 [\#5](https://github.com/feathersjs/socketio-client/pull/5) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.1](https://github.com/feathersjs/socketio-client/tree/v1.0.1) (2017-11-16)
 [Full Changelog](https://github.com/feathersjs/socketio-client/compare/v1.0.0...v1.0.1)
 
