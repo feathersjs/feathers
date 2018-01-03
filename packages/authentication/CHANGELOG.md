@@ -1,5 +1,20 @@
 # Change Log
 
+## [v2.1.1](https://github.com/feathersjs/authentication/tree/v2.1.1) (2018-01-03)
+[Full Changelog](https://github.com/feathersjs/authentication/compare/v2.1.0...v2.1.1)
+
+**Closed issues:**
+
+- Deleted user successfully signs in using JWT [\#615](https://github.com/feathersjs/authentication/issues/615)
+- Feathers.authenticate gives window undefined \(server-rendered\) [\#573](https://github.com/feathersjs/authentication/issues/573)
+- Be careful with discard\('password'\) in user [\#434](https://github.com/feathersjs/authentication/issues/434)
+
+**Merged pull requests:**
+
+- Update readme to correspond with latest release [\#621](https://github.com/feathersjs/authentication/pull/621) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#620](https://github.com/feathersjs/authentication/pull/620) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update mongodb to the latest version 🚀 [\#618](https://github.com/feathersjs/authentication/pull/618) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.1.0](https://github.com/feathersjs/authentication/tree/v2.1.0) (2017-12-06)
 [Full Changelog](https://github.com/feathersjs/authentication/compare/v2.0.1...v2.1.0)
 
