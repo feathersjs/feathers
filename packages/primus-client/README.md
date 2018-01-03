@@ -15,12 +15,33 @@
 npm install @feathersjs/primus-client --save
 ```
 
+Quick usage:
+
+```js
+const feathers = require('@feathersjs/feathers');
+const primus = require('@feathersjs/primus-client');
+const socket = new Primus('http://api.my-feathers-server.com');
+
+const app = feathers();
+
+app.configure(primus(socket));
+
+// Receive real-time events through Primus
+app.service('messages')
+  .on('created', message => console.log('New message created', message));
+
+// Call the `messages` service
+app.service('messages').create({
+  text: 'A message from a REST client'
+});
+```
+
 ## Documentation
 
-Please refer to the [@feathersjs/primus-client documentation](https://docs.feathersjs.com/api/primus.html#client) for more details.
+Please refer to the [@feathersjs/primus-client documentation](https://docs.feathersjs.com/api/client/primus.html) for more details.
 
 ## License
 
-Copyright (c) 2017
+Copyright (c) 2018
 
 Licensed under the [MIT license](LICENSE).
