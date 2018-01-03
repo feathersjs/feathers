@@ -1,5 +1,15 @@
 # Change Log
 
+## [v3.0.2](https://github.com/feathersjs/primus/tree/v3.0.2) (2018-01-03)
+[Full Changelog](https://github.com/feathersjs/primus/compare/v3.0.1...v3.0.2)
+
+**Merged pull requests:**
+
+- Update documentation to correspond with latest release [\#72](https://github.com/feathersjs/primus/pull/72) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#71](https://github.com/feathersjs/primus/pull/71) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-memory to the latest version 🚀 [\#70](https://github.com/feathersjs/primus/pull/70) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update uws to the latest version 🚀 [\#69](https://github.com/feathersjs/primus/pull/69) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.0.1](https://github.com/feathersjs/primus/tree/v3.0.1) (2017-11-16)
 [Full Changelog](https://github.com/feathersjs/primus/compare/v3.0.0...v3.0.1)
 
