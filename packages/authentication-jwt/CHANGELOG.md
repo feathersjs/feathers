@@ -1,5 +1,18 @@
 # Change Log
 
+## [v1.0.2](https://github.com/feathersjs/authentication-jwt/tree/v1.0.2) (2018-01-03)
+[Full Changelog](https://github.com/feathersjs/authentication-jwt/compare/v1.0.1...v1.0.2)
+
+**Closed issues:**
+
+- Include data into JWT response [\#47](https://github.com/feathersjs/authentication-jwt/issues/47)
+
+**Merged pull requests:**
+
+- Update documentation to correspond with latest release [\#51](https://github.com/feathersjs/authentication-jwt/pull/51) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#50](https://github.com/feathersjs/authentication-jwt/pull/50) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-memory to the latest version 🚀 [\#49](https://github.com/feathersjs/authentication-jwt/pull/49) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.1](https://github.com/feathersjs/authentication-jwt/tree/v1.0.1) (2017-11-16)
 [Full Changelog](https://github.com/feathersjs/authentication-jwt/compare/v1.0.0...v1.0.1)
 
