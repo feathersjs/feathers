@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-client",
   "description": "The authentication plugin for feathers-client",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "homepage": "https://github.com/feathersjs/authentication-client",
   "main": "lib/index.js",
   "keywords": [
