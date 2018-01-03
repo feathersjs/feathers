@@ -1,5 +1,14 @@
 # Change Log
 
+## [v1.0.3](https://github.com/feathersjs/authentication-oauth1/tree/v1.0.3) (2018-01-03)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v1.0.2...v1.0.3)
+
+**Merged pull requests:**
+
+- Update documentation to correspond with latest release [\#40](https://github.com/feathersjs/authentication-oauth1/pull/40) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#39](https://github.com/feathersjs/authentication-oauth1/pull/39) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-memory to the latest version 🚀 [\#38](https://github.com/feathersjs/authentication-oauth1/pull/38) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.2](https://github.com/feathersjs/authentication-oauth1/tree/v1.0.2) (2017-11-16)
 [Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v1.0.1...v1.0.2)
 
