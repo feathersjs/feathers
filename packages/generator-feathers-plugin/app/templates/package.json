@@ -38,10 +38,7 @@
     "test": "npm run lint && npm run coverage"
   },
   "semistandard": {
-    "sourceType": "module",
-    "env": [
-      "mocha"
-    ]
+    "env": [ "mocha" ]
   },
   "directories": {
     "lib": "lib"

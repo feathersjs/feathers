@@ -2,7 +2,7 @@
 
 Thank you for contributing to Feathers! :heart: :tada:
 
-This repo is the main core and where most issues are reported. Feathers embraces modularity and is broken up across many repos. To make this easier to manage we currently use [Zenhub](https://www.zenhub.com/) for issue triage and visibility. They have a free browser plugin you can install so that you can see what is in flight at any time, but of course you also always see current issues in Github.
+This repo is the main core and where most issues are reported. Feathers embraces modularity and is broken up across many repos.
 
 ## Report a bug
 
@@ -34,25 +34,13 @@ Although we generally accept many PRs they can be rejected for many reasons. We 
 
 Before running the tests from the `test/` folder `npm test` will run ESlint. You can check your code changes individually by running `npm run lint`.
 
-### ES6 compilation
-
-Feathers uses [Babel](https://babeljs.io/) to leverage the latest developments of the JavaScript language. All code and samples are currently written in ES2015. To transpile the code in this repository run
-
-> npm run compile
-
-__Note:__ `npm test` will run the compilation automatically before the tests.
-
 ### Tests
 
 [Mocha](http://mochajs.org/) tests are located in the `test/` folder and can be run using the `npm run mocha` or `npm test` (with ESLint and code coverage) command.
 
-### Documentation
-
-Feathers documentation is contained in Markdown files in the [feathers-docs](https://github.com/feathersjs/feathers-docs) repository. To change the documentation submit a pull request to that repo, referencing any other PR if applicable, and the docs will be updated with the next release.
-
 ## External Modules
 
-If you're written something awesome for Feathers, the Feathers ecosystem, or using Feathers please add it to the [showcase](https://docs.feathersjs.com/why/showcase.html). You also might want to check out the [Plugin Generator](https://github.com/feathersjs/generator-feathers-plugin) that can be used to scaffold plugins to be Feathers compliant from the start.
+If you're written something awesome for Feathers, the Feathers ecosystem, or using Feathers please add it to the [awesome-feathersjs](https://github.com/feathersjs/awesome-feathersjs) repository.
 
 If you think it would be a good core module then please contact one of the Feathers core team members in [Slack](http://slack.feathersjs.com) and we can discuss whether it belongs in core and how to get it there. :beers:
 
