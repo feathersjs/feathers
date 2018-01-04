@@ -16,6 +16,78 @@
 
 Feathers is a real-time, micro-service web framework for NodeJS that gives you control over your data via RESTful resources, sockets and flexible plug-ins.
 
+## Support
+
+### Sponsors
+
+Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/feathers#sponsor)]
+
+<a href="https://opencollective.com/feathers/sponsor/0/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/1/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/2/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/3/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/4/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/5/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/6/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/7/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/8/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/9/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/9/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/10/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/10/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/11/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/11/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/12/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/12/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/13/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/13/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/14/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/14/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/15/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/15/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/16/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/16/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/17/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/17/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/18/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/18/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/19/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/19/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/20/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/20/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/21/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/21/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/22/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/22/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/23/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/23/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/24/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/24/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/25/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/25/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/26/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/26/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/27/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/27/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/28/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/28/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/sponsor/29/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/29/avatar.svg"></a>
+
+### Backers
+
+Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/feathers#backer)]
+
+<a href="https://opencollective.com/feathers/backer/0/website" target="_blank"><img src="https://opencollective.com/feathers/backer/0/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/1/website" target="_blank"><img src="https://opencollective.com/feathers/backer/1/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/2/website" target="_blank"><img src="https://opencollective.com/feathers/backer/2/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/3/website" target="_blank"><img src="https://opencollective.com/feathers/backer/3/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/4/website" target="_blank"><img src="https://opencollective.com/feathers/backer/4/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/5/website" target="_blank"><img src="https://opencollective.com/feathers/backer/5/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/6/website" target="_blank"><img src="https://opencollective.com/feathers/backer/6/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/7/website" target="_blank"><img src="https://opencollective.com/feathers/backer/7/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/8/website" target="_blank"><img src="https://opencollective.com/feathers/backer/8/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/9/website" target="_blank"><img src="https://opencollective.com/feathers/backer/9/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/10/website" target="_blank"><img src="https://opencollective.com/feathers/backer/10/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/11/website" target="_blank"><img src="https://opencollective.com/feathers/backer/11/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/12/website" target="_blank"><img src="https://opencollective.com/feathers/backer/12/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/13/website" target="_blank"><img src="https://opencollective.com/feathers/backer/13/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/14/website" target="_blank"><img src="https://opencollective.com/feathers/backer/14/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/15/website" target="_blank"><img src="https://opencollective.com/feathers/backer/15/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/16/website" target="_blank"><img src="https://opencollective.com/feathers/backer/16/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/17/website" target="_blank"><img src="https://opencollective.com/feathers/backer/17/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/18/website" target="_blank"><img src="https://opencollective.com/feathers/backer/18/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/19/website" target="_blank"><img src="https://opencollective.com/feathers/backer/19/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/20/website" target="_blank"><img src="https://opencollective.com/feathers/backer/20/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/21/website" target="_blank"><img src="https://opencollective.com/feathers/backer/21/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/22/website" target="_blank"><img src="https://opencollective.com/feathers/backer/22/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/23/website" target="_blank"><img src="https://opencollective.com/feathers/backer/23/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/24/website" target="_blank"><img src="https://opencollective.com/feathers/backer/24/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/25/website" target="_blank"><img src="https://opencollective.com/feathers/backer/25/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/26/website" target="_blank"><img src="https://opencollective.com/feathers/backer/26/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/27/website" target="_blank"><img src="https://opencollective.com/feathers/backer/27/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/28/website" target="_blank"><img src="https://opencollective.com/feathers/backer/28/avatar.svg"></a>
+<a href="https://opencollective.com/feathers/backer/29/website" target="_blank"><img src="https://opencollective.com/feathers/backer/29/avatar.svg"></a>
+
 ## Getting started
 
 You can build your first real-time and REST API in just 4 commands:
@@ -89,78 +161,6 @@ The [Feathers docs](http://docs.feathersjs.com) are loaded with awesome stuff an
 ## Security
 
 We :heart: the community and take security very seriously. No one wants their app hacked. If you have come across a security concern please [report it responsibly](https://docs.feathersjs.com/security#where-should-i-report-security-issues). Visit the [Security section](https://docs.feathersjs.com/SECURITY.html) of the docs to learn more about how you can make sure your app is secure.
-
-## Support
-
-### Sponsors
-
-Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/feathers#sponsor)]
-
-<a href="https://opencollective.com/feathers/sponsor/0/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/1/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/2/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/3/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/4/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/5/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/6/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/7/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/8/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/9/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/9/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/10/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/10/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/11/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/11/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/12/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/12/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/13/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/13/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/14/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/14/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/15/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/15/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/16/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/16/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/17/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/17/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/18/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/18/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/19/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/19/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/20/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/20/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/21/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/21/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/22/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/22/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/23/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/23/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/24/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/24/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/25/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/25/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/26/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/26/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/27/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/27/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/28/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/28/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/sponsor/29/website" target="_blank"><img src="https://opencollective.com/feathers/sponsor/29/avatar.svg"></a>
-
-### Backers
-
-Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/feathers#backer)]
-
-<a href="https://opencollective.com/feathers/backer/0/website" target="_blank"><img src="https://opencollective.com/feathers/backer/0/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/1/website" target="_blank"><img src="https://opencollective.com/feathers/backer/1/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/2/website" target="_blank"><img src="https://opencollective.com/feathers/backer/2/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/3/website" target="_blank"><img src="https://opencollective.com/feathers/backer/3/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/4/website" target="_blank"><img src="https://opencollective.com/feathers/backer/4/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/5/website" target="_blank"><img src="https://opencollective.com/feathers/backer/5/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/6/website" target="_blank"><img src="https://opencollective.com/feathers/backer/6/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/7/website" target="_blank"><img src="https://opencollective.com/feathers/backer/7/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/8/website" target="_blank"><img src="https://opencollective.com/feathers/backer/8/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/9/website" target="_blank"><img src="https://opencollective.com/feathers/backer/9/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/10/website" target="_blank"><img src="https://opencollective.com/feathers/backer/10/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/11/website" target="_blank"><img src="https://opencollective.com/feathers/backer/11/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/12/website" target="_blank"><img src="https://opencollective.com/feathers/backer/12/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/13/website" target="_blank"><img src="https://opencollective.com/feathers/backer/13/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/14/website" target="_blank"><img src="https://opencollective.com/feathers/backer/14/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/15/website" target="_blank"><img src="https://opencollective.com/feathers/backer/15/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/16/website" target="_blank"><img src="https://opencollective.com/feathers/backer/16/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/17/website" target="_blank"><img src="https://opencollective.com/feathers/backer/17/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/18/website" target="_blank"><img src="https://opencollective.com/feathers/backer/18/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/19/website" target="_blank"><img src="https://opencollective.com/feathers/backer/19/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/20/website" target="_blank"><img src="https://opencollective.com/feathers/backer/20/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/21/website" target="_blank"><img src="https://opencollective.com/feathers/backer/21/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/22/website" target="_blank"><img src="https://opencollective.com/feathers/backer/22/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/23/website" target="_blank"><img src="https://opencollective.com/feathers/backer/23/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/24/website" target="_blank"><img src="https://opencollective.com/feathers/backer/24/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/25/website" target="_blank"><img src="https://opencollective.com/feathers/backer/25/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/26/website" target="_blank"><img src="https://opencollective.com/feathers/backer/26/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/27/website" target="_blank"><img src="https://opencollective.com/feathers/backer/27/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/28/website" target="_blank"><img src="https://opencollective.com/feathers/backer/28/avatar.svg"></a>
-<a href="https://opencollective.com/feathers/backer/29/website" target="_blank"><img src="https://opencollective.com/feathers/backer/29/avatar.svg"></a>
 
 ## License
 
