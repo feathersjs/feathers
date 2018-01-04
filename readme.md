@@ -1,5 +1,7 @@
 <img style="width: 100%; max-width: 400px;" src="http://feathersjs.com/img/feathers-logo-wide.png" alt="Feathers logo">
 
+> __Very Important:__ THIS IS A PREVIOUS VERSION OF FEATHERS. The `feathers` package and latest version has been moved to [@feathersjs/feathers](https://www.npmjs.com/package/@feathersjs/feathers). See [docs.feathersjs.com/migrating.html](https://docs.feathersjs.com/migrating.html) for more information.
+
 ## An open source REST and realtime API layer for modern applications.
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers.svg)](https://greenkeeper.io/)
