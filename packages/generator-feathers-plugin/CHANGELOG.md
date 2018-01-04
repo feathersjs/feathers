@@ -1,5 +1,15 @@
 # Change Log
 
+## [v1.0.0](https://github.com/feathersjs/generator-feathers-plugin/tree/v1.0.0) (2018-01-04)
+[Full Changelog](https://github.com/feathersjs/generator-feathers-plugin/compare/v0.12.1...v1.0.0)
+
+**Merged pull requests:**
+
+- Update plugin generator to correspond with latest release [\#49](https://github.com/feathersjs/generator-feathers-plugin/pull/49) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#48](https://github.com/feathersjs/generator-feathers-plugin/pull/48) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update mocha to the latest version 🚀 [\#47](https://github.com/feathersjs/generator-feathers-plugin/pull/47) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update yeoman-generator to the latest version 🚀 [\#46](https://github.com/feathersjs/generator-feathers-plugin/pull/46) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v0.12.1](https://github.com/feathersjs/generator-feathers-plugin/tree/v0.12.1) (2017-08-21)
 [Full Changelog](https://github.com/feathersjs/generator-feathers-plugin/compare/v0.12.0...v0.12.1)
 
