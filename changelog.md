@@ -1,5 +1,66 @@
 # Change Log
 
+## [v2.2.4](https://github.com/feathersjs/feathers/tree/v2.2.4) (2018-01-04)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.4...v2.2.4)
+
+## [v3.0.4](https://github.com/feathersjs/feathers/tree/v3.0.4) (2018-01-03)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.3...v3.0.4)
+
+**Merged pull requests:**
+
+- Update Readme to correspond with latest release [\#772](https://github.com/feathersjs/feathers/pull/772) ([daffl](https://github.com/daffl))
+
+## [v3.0.3](https://github.com/feathersjs/feathers/tree/v3.0.3) (2018-01-02)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.2...v3.0.3)
+
+**Merged pull requests:**
+
+- Properly resolve the promise in error hooks if returnHook is set. [\#769](https://github.com/feathersjs/feathers/pull/769) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#768](https://github.com/feathersjs/feathers/pull/768) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
+## [v3.0.2](https://github.com/feathersjs/feathers/tree/v3.0.2) (2017-12-05)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.1...v3.0.2)
+
+**Merged pull requests:**
+
+- Updated to handle array emit for service results. [\#743](https://github.com/feathersjs/feathers/pull/743) ([superlazycoder](https://github.com/superlazycoder))
+
+## [v3.0.1](https://github.com/feathersjs/feathers/tree/v3.0.1) (2017-11-16)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.0...v3.0.1)
+
+**Merged pull requests:**
+
+- Updated readme.md [\#732](https://github.com/feathersjs/feathers/pull/732) ([andlewis](https://github.com/andlewis))
+- Add default export for better ES module \(TypeScript\) compatibility [\#731](https://github.com/feathersjs/feathers/pull/731) ([daffl](https://github.com/daffl))
+- Throw an error for invalid service paths [\#729](https://github.com/feathersjs/feathers/pull/729) ([daffl](https://github.com/daffl))
+- Update nsp to the latest version 🚀 [\#723](https://github.com/feathersjs/feathers/pull/723) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Rename expressify to express [\#719](https://github.com/feathersjs/feathers/pull/719) ([bertho-zero](https://github.com/bertho-zero))
+
+## [v3.0.0](https://github.com/feathersjs/feathers/tree/v3.0.0) (2017-11-01)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.0-pre.3...v3.0.0)
+
+**Merged pull requests:**
+
+- Update dependencies to enable Greenkeeper 🌴 [\#708](https://github.com/feathersjs/feathers/pull/708) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Feathers v3 core \(Buzzard\) [\#697](https://github.com/feathersjs/feathers/pull/697) ([daffl](https://github.com/daffl))
+
+## [v3.0.0-pre.3](https://github.com/feathersjs/feathers/tree/v3.0.0-pre.3) (2017-10-25)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.0-pre.2...v3.0.0-pre.3)
+
+**Merged pull requests:**
+
+- Better logic for returning the hook object from method call [\#706](https://github.com/feathersjs/feathers/pull/706) ([daffl](https://github.com/daffl))
+- Codeclimate Updates [\#704](https://github.com/feathersjs/feathers/pull/704) ([ekryski](https://github.com/ekryski))
+- Add more inline documentation [\#703](https://github.com/feathersjs/feathers/pull/703) ([daffl](https://github.com/daffl))
+
+## [v3.0.0-pre.2](https://github.com/feathersjs/feathers/tree/v3.0.0-pre.2) (2017-10-20)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v2.2.3...v3.0.0-pre.2)
+
+**Merged pull requests:**
+
+- Move to @feathersjs npm scope [\#699](https://github.com/feathersjs/feathers/pull/699) ([daffl](https://github.com/daffl))
+- Also pass app object as parameter to configure callbacks [\#698](https://github.com/feathersjs/feathers/pull/698) ([daffl](https://github.com/daffl))
+
 ## [v2.2.3](https://github.com/feathersjs/feathers/tree/v2.2.3) (2017-10-20)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v2.2.2...v2.2.3)
 
