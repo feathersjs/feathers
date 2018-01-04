@@ -1,5 +1,15 @@
 # Change Log
 
+## [v3.0.5](https://github.com/feathersjs/feathers/tree/v3.0.5) (2018-01-04)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v2.2.4...v3.0.5)
+
+**Merged pull requests:**
+
+- Add backers & sponsors from Open Collective [\#504](https://github.com/feathersjs/feathers/pull/504) ([piamancini](https://github.com/piamancini))
+
+## [v2.2.4](https://github.com/feathersjs/feathers/tree/v2.2.4) (2018-01-04)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.4...v2.2.4)
+
 ## [v3.0.4](https://github.com/feathersjs/feathers/tree/v3.0.4) (2018-01-03)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.3...v3.0.4)
 
