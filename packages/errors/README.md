@@ -12,7 +12,7 @@
 ## Installation
 
 ```
-npm install @feathersjs/primus-client --save
+npm install @feathersjs/errors --save
 ```
 
 Quick usage:
