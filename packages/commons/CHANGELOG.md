@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.3.1](https://github.com/feathersjs/commons/tree/v1.3.1) (2018-01-12)
+[Full Changelog](https://github.com/feathersjs/commons/compare/v1.3.0...v1.3.1)
+
+**Merged pull requests:**
+
+- Allow array for sorting [\#66](https://github.com/feathersjs/commons/pull/66) ([daffl](https://github.com/daffl))
+- Update semistandard to the latest version 🚀 [\#64](https://github.com/feathersjs/commons/pull/64) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.3.0](https://github.com/feathersjs/commons/tree/v1.3.0) (2017-11-20)
 [Full Changelog](https://github.com/feathersjs/commons/compare/v1.2.0...v1.3.0)
 
@@ -155,7 +163,7 @@
 
 **Merged pull requests:**
 
-- Use forEach instead of ES6 'for of' loop [\#25](https://github.com/feathersjs/commons/pull/25) ([mrpatiwi](https://github.com/mrpatiwi))
+- Use forEach instead of ES6 'for of' loop [\#25](https://github.com/feathersjs/commons/pull/25) ([lopezjurip](https://github.com/lopezjurip))
 - mocha@2.5.0 breaks build 🚨 [\#24](https://github.com/feathersjs/commons/pull/24) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 - Update babel-plugin-add-module-exports to version 0.2.0 🚀 [\#23](https://github.com/feathersjs/commons/pull/23) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
