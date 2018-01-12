@@ -23,6 +23,14 @@ describe('.filterQuery', function () {
       expect(query).to.deep.equal({});
     });
 
+    it('does not convert $sort arrays', function () {
+      const $sort = [ [ 'test', '-1' ], [ 'a', '1' ] ];
+      const { filters, query } = filter({ $sort });
+
+      expect(filters.$sort).to.deep.equal($sort);
+      expect(query).to.deep.equal({});
+    });
+
     it('returns undefined when not present in query', function () {
       const query = { $foo: 1 };
       const { filters } = filter(query);
