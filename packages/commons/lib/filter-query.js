@@ -24,7 +24,7 @@ function getLimit (limit, paginate) {
 
 // Makes sure that $sort order is always converted to an actual number
 function convertSort (sort) {
-  if (typeof sort !== 'object') {
+  if (typeof sort !== 'object' || Array.isArray(sort)) {
     return sort;
   }
 
