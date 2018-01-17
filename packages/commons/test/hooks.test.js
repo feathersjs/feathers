@@ -355,6 +355,12 @@ describe('hook utilities', () => {
           hook.chain.push('fourth');
 
           return hook;
+        },
+
+        function (hook, next) {
+          hook.chain.push('fourth');
+
+          next();
         }
       ], dummyHook);
 
