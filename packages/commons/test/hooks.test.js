@@ -102,11 +102,11 @@ describe('hook utilities', () => {
         other: 'value',
         hi: [ 'foo', 'bar' ]
       }))
-      .to.deep.equal({
-        all: [ 'thing' ],
-        other: [ 'value' ],
-        hi: [ 'foo', 'bar' ]
-      });
+        .to.deep.equal({
+          all: [ 'thing' ],
+          other: [ 'value' ],
+          hi: [ 'foo', 'bar' ]
+        });
     });
   });
 
@@ -322,6 +322,47 @@ describe('hook utilities', () => {
           type: 'dummy',
           method: 'something',
           chain: [ 'first', 'second', 'third', 'fourth' ]
+        });
+      });
+    });
+
+    it('skip further hooks', () => {
+      const dummyHook = {
+        type: 'dummy',
+        method: 'something'
+      };
+
+      const promise = utils.processHooks([
+        function (hook) {
+          hook.chain = [ 'first' ];
+
+          return Promise.resolve(hook);
+        },
+
+        function (hook, next) {
+          hook.chain.push('second');
+
+          next();
+        },
+
+        hook => {
+          hook.chain.push('third');
+
+          return utils.SKIP;
+        },
+
+        function (hook) {
+          hook.chain.push('fourth');
+
+          return hook;
+        }
+      ], dummyHook);
+
+      return promise.then(result => {
+        expect(result).to.deep.equal({
+          type: 'dummy',
+          method: 'something',
+          chain: [ 'first', 'second', 'third' ]
         });
       });
     });

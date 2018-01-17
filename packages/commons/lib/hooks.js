@@ -12,6 +12,9 @@ function convertUpdateOrPatch (args) {
   return { id, data, params };
 }
 
+// To skip further hooks
+const SKIP = exports.SKIP = typeof Symbol !== 'undefined' ? Symbol('skip') : '__feathersSkipHooks';
+
 // Converters from service method arguments to hook object properties
 exports.converters = {
   find (args) {
@@ -141,6 +144,10 @@ exports.processHooks = function processHooks (hooks, initialHookObject) {
     // Either use the returned hook object or the current
     // hook object from the chain if the hook returned undefined
     if (current) {
+      if (current === SKIP) {
+        return SKIP;
+      }
+
       if (!exports.isHookObject(current)) {
         throw new Error(`${hookObject.type} hook for '${hookObject.method}' method returned invalid hook object`);
       }
@@ -158,26 +165,26 @@ exports.processHooks = function processHooks (hooks, initialHookObject) {
     const hook = fn.bind(this);
 
     if (hook.length === 2) { // function(hook, next)
-      promise = promise.then(hookObject => {
-        return new Promise((resolve, reject) => {
-          hook(hookObject, (error, result) =>
-            error ? reject(error) : resolve(result)
-          );
-        });
-      });
+      promise = promise.then(hookObject => hookObject === SKIP ? SKIP : new Promise((resolve, reject) => {
+        hook(hookObject, (error, result) =>
+          error ? reject(error) : resolve(result)
+        );
+      }));
     } else { // function(hook)
-      promise = promise.then(hook);
+      promise = promise.then(hookObject => hookObject === SKIP ? SKIP : hook(hookObject));
     }
 
     // Use the returned hook object or the old one
     promise = promise.then(updateCurrentHook);
   });
 
-  return promise.catch(error => {
-    // Add the hook information to any errors
-    error.hook = hookObject;
-    throw error;
-  });
+  return promise
+    .then(() => hookObject)
+    .catch(error => {
+      // Add the hook information to any errors
+      error.hook = hookObject;
+      throw error;
+    });
 };
 
 // Add `.hooks` functionality to an object
