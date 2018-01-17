@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.4.0](https://github.com/feathersjs/commons/tree/v1.4.0) (2018-01-17)
+[Full Changelog](https://github.com/feathersjs/commons/compare/v1.3.1...v1.4.0)
+
+**Merged pull requests:**
+
+- Add ability to skip all following hooks [\#65](https://github.com/feathersjs/commons/pull/65) ([sylvainlap](https://github.com/sylvainlap))
+
 ## [v1.3.1](https://github.com/feathersjs/commons/tree/v1.3.1) (2018-01-12)
 [Full Changelog](https://github.com/feathersjs/commons/compare/v1.3.0...v1.3.1)
 
