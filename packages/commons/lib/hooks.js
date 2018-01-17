@@ -13,7 +13,7 @@ function convertUpdateOrPatch (args) {
 }
 
 // To skip further hooks
-const SKIP = exports.SKIP = typeof Symbol !== 'undefined' ? Symbol('skip') : '__feathersSkipHooks';
+const SKIP = exports.SKIP = typeof Symbol !== 'undefined' ? Symbol('__feathersSkipHooks') : '__feathersSkipHooks';
 
 // Converters from service method arguments to hook object properties
 exports.converters = {
