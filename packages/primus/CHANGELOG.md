@@ -1,5 +1,14 @@
 # Change Log
 
+## [v3.0.3](https://github.com/feathersjs/primus/tree/v3.0.3) (2018-01-18)
+[Full Changelog](https://github.com/feathersjs/primus/compare/v3.0.2...v3.0.3)
+
+**Merged pull requests:**
+
+- Remove setMaxListeners [\#75](https://github.com/feathersjs/primus/pull/75) ([daffl](https://github.com/daffl))
+- Update mocha to the latest version 🚀 [\#74](https://github.com/feathersjs/primus/pull/74) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update ws to the latest version 🚀 [\#73](https://github.com/feathersjs/primus/pull/73) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.0.2](https://github.com/feathersjs/primus/tree/v3.0.2) (2018-01-03)
 [Full Changelog](https://github.com/feathersjs/primus/compare/v3.0.1...v3.0.2)
 
