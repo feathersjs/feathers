@@ -24,7 +24,9 @@ describe('integration', () => {
       return hook => {
         const app = hook.app;
         const id = hook.result.id;
-        return app.passport.createJWT({ userId: id }, app.get('authentication')).then(accessToken => {
+        return app.passport.createJWT({
+          userId: id
+        }, app.get('authentication')).then(accessToken => {
           hook.result.accessToken = accessToken;
           return Promise.resolve(hook);
         });
@@ -52,6 +54,34 @@ describe('integration', () => {
         expect(result.success).to.equal(true);
         expect(result.data.user.email).to.equal(User.email);
         expect(result.data.user.password).to.not.equal(undefined);
+      });
+    });
+  });
+
+  it('errors when user is not found', () => {
+    const app = expressify(feathers());
+    const req = {
+      query: {},
+      body: {},
+      headers: {},
+      cookies: {}
+    };
+
+    app.use('/users', memory())
+      .configure(authentication({ secret: 'secret' }))
+      .configure(jwt());
+
+    app.setup();
+
+    return app.passport.createJWT({
+      userId: 'wrong'
+    }, app.get('authentication')).then(accessToken => {
+      req.headers = { 'authorization': accessToken };
+
+      return app.authenticate('jwt')(req).then(() => {
+        throw new Error('Should never get here');
+      }).catch(error => {
+        expect(error.name).to.equal('NotFound');
       });
     });
   });

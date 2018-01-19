@@ -32,7 +32,7 @@ class JWTVerifier {
     })
     .catch(error => {
       debug(`Error populating ${this.options.entity} with id ${id}`, error);
-      return done(null, {}, payload);
+      return done(error);
     });
   }
 }

@@ -43,12 +43,16 @@ describe('@feathersjs/authentication-jwt', () => {
   describe('initialization', () => {
     let app;
     let validToken;
-    let Payload = { userId: 1 };
+    let Payload = { userId: 0 };
 
     beforeEach(done => {
       app = expressify(feathers());
       app.use('/users', memory());
       app.configure(authentication({ secret: 'supersecret' }));
+
+      app.service('users').create({
+        name: 'test user'
+      });
 
       JWT.sign(Payload, 'supersecret', app.get('authentication').jwt, (error, token) => {
         if (error) { return done(error); }
