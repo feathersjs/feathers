@@ -1,6 +1,8 @@
 const Debug = require('debug');
 const ms = require('ms');
 
+const merge = require('lodash.merge');
+
 const {
   normalizeError
 } = require('@feathersjs/socket-commons/lib/utils');
@@ -79,7 +81,7 @@ module.exports = function setupSocketHandler (app, options, { feathersParams, pr
         cookies: {}
       }, feathersParams(socket));
 
-      const strategyOptions = app.passport.options(strategy);
+      const strategyOptions = merge({}, options, app.passport.options(strategy));
 
       const promise = service.create(data, socket._feathers)
         .then(tokens => {
