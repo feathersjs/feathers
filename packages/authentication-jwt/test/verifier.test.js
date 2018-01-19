@@ -82,9 +82,12 @@ describe('Verifier', () => {
 
       it('returns the payload', done => {
         const payload = { userId: 1 };
+
         verifier.verify({}, payload, (error, entity, p) => {
-          expect(error).to.equal(null);
-          expect(entity).to.deep.equal({});
+          if (error) {
+            return done(error);
+          }
+
           expect(p).to.deep.equal(payload);
           done();
         });
@@ -109,9 +112,8 @@ describe('Verifier', () => {
           const erroringVerifier = new Verifier(app, options);
           const payload = { userId: 1 };
           erroringVerifier.verify({}, payload, (error, entity, p) => {
-            expect(error).to.equal(null);
-            expect(entity).to.deep.equal({});
-            expect(p).to.deep.equal(payload);
+            expect(error).to.exist;
+            expect(error.message).to.equal('User missing');
             done();
           });
         });
