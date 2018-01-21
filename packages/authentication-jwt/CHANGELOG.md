@@ -1,5 +1,22 @@
 # Change Log
 
+## [v2.0.0](https://github.com/feathersjs/authentication-jwt/tree/v2.0.0) (2018-01-21)
+[Full Changelog](https://github.com/feathersjs/authentication-jwt/compare/v1.0.2...v2.0.0)
+
+**Closed issues:**
+
+- Purpuse of lower casing header option [\#52](https://github.com/feathersjs/authentication-jwt/issues/52)
+- Get error in custom verify [\#48](https://github.com/feathersjs/authentication-jwt/issues/48)
+- Strategy loses the params on its way [\#36](https://github.com/feathersjs/authentication-jwt/issues/36)
+- Strategy succeeds even if user is not found [\#27](https://github.com/feathersjs/authentication-jwt/issues/27)
+- Swallowing errors when getting user from service? [\#14](https://github.com/feathersjs/authentication-jwt/issues/14)
+
+**Merged pull requests:**
+
+- Bring back Cookie token extractor [\#55](https://github.com/feathersjs/authentication-jwt/pull/55) ([daffl](https://github.com/daffl))
+- Properly pass through errors in the verifier [\#54](https://github.com/feathersjs/authentication-jwt/pull/54) ([daffl](https://github.com/daffl))
+- Update mocha to the latest version 🚀 [\#53](https://github.com/feathersjs/authentication-jwt/pull/53) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.2](https://github.com/feathersjs/authentication-jwt/tree/v1.0.2) (2018-01-03)
 [Full Changelog](https://github.com/feathersjs/authentication-jwt/compare/v1.0.1...v1.0.2)
 
