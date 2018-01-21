@@ -31,29 +31,36 @@ function init (options = {}) {
       throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before @feathersjs/authentication-jwt?`);
     }
 
-    let authOptions = app.get('auth') || app.get('authentication') || {};
-    let jwtOptions = authOptions[options.name] || {};
-
+    const authOptions = app.get('auth') || app.get('authentication') || {};
+    const jwtOptions = authOptions[options.name] || {};
     // NOTE (EK): Pull from global auth config to support legacy auth for an easier transition.
-    let jwtSettings = merge({}, defaults, pick(authOptions, KEYS), jwtOptions, omit(options, ['Verifier']));
+    const jwtSettings = merge({}, defaults, pick(authOptions, KEYS), jwtOptions, omit(options, ['Verifier']));
 
     if (typeof jwtSettings.header !== 'string') {
       throw new Error(`You must provide a 'header' in your authentication configuration or pass one explicitly`);
     }
 
-    if (typeof jwtSettings.secret === 'undefined') {
-      throw new Error(`You must provide a 'secret' in your authentication configuration or pass one explicitly`);
+    const extractors = [
+      ExtractJwt.fromAuthHeaderWithScheme('jwt'),
+      ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ExtractJwt.fromHeader(jwtSettings.header.toLowerCase()),
+      ExtractJwt.fromBodyField(jwtSettings.bodyKey)
+    ];
+
+    if (authOptions.cookie && authOptions.cookie.name) {
+      extractors.push(function (req) {
+        if (req && req.cookies) {
+          return req.cookies[authOptions.cookie.name];
+        }
+
+        return null;
+      });
     }
 
     let Verifier = DefaultVerifier;
     let strategyOptions = merge({
       secretOrKey: jwtSettings.secret,
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        ExtractJwt.fromAuthHeaderWithScheme('jwt'),
-        ExtractJwt.fromAuthHeaderAsBearerToken(),
-        ExtractJwt.fromHeader(jwtSettings.header.toLowerCase()),
-        ExtractJwt.fromBodyField(jwtSettings.bodyKey)
-      ])
+      jwtFromRequest: ExtractJwt.fromExtractors(extractors)
     }, jwtSettings.jwt, omit(jwtSettings, ['jwt', 'header', 'secret']));
 
     // Normalize algorithm key
