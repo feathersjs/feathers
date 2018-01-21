@@ -61,7 +61,7 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "@feathersjs/authentication-jwt": "^1.0.0",
+    "@feathersjs/authentication-jwt": "^2.0.0",
     "@feathersjs/authentication-local": "^1.0.0",
     "@feathersjs/configuration": "^1.0.0",
     "@feathersjs/express": "^1.0.0",
