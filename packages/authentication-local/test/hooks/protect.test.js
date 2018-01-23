@@ -24,6 +24,23 @@ function testOmit (title, property) {
       });
     });
 
+    it('handles `data` property only for find', () => {
+      const data = {
+        email: 'test@user.com',
+        password: 'supersecret',
+        data: 'yes'
+      };
+      const context = {
+        [property]: data
+      };
+      const result = fn(context);
+
+      expect(result).to.deep.equal({
+        [property]: data,
+        dispatch: { email: 'test@user.com', data: 'yes' }
+      });
+    });
+
     it('omits from array', () => {
       const data = [{
         email: 'test1@user.com',
@@ -58,11 +75,13 @@ function testOmit (title, property) {
         }]
       };
       const context = {
+        method: 'find',
         [property]: data
       };
       const result = fn(context);
 
       expect(result).to.deep.equal({
+        method: 'find',
         [property]: data,
         dispatch: {
           total: 2,
