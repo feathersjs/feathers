@@ -185,6 +185,25 @@ describe('@feathersjs/errors', () => {
     });
   });
 
+  describe('inheritance', () => {
+    it('instanceof differentiates between error types', () => {
+      const error = new errors.MethodNotAllowed();
+      assert.ok(!(error instanceof errors.BadRequest));
+    });
+
+    it('follows the prototypical inheritance chain', () => {
+      const error = new errors.MethodNotAllowed();
+      assert.ok(error instanceof Error);
+      assert.ok(error instanceof errors.FeathersError);
+    });
+
+    it('has the correct constructors', () => {
+      const error = new errors.NotFound();
+      assert.ok(error.constructor === errors.NotFound);
+      assert.ok(error.constructor.name === 'NotFound');
+    });
+  });
+
   describe('successful error creation', () => {
     describe('without custom message', () => {
       it('default error', () => {

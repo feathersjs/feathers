@@ -59,7 +59,12 @@ function FeathersError (msg, name, code, className, data) {
   }
 }
 
-FeathersError.prototype = Object.create(Error.prototype);
+function inheritsFrom (Child, Parent) {
+  Child.prototype = Object.create(Parent.prototype);
+  Child.prototype.constructor = Child;
+}
+
+inheritsFrom(FeathersError, Error);
 
 // NOTE (EK): A little hack to get around `message` not
 // being included in the default toJSON call.
@@ -81,112 +86,112 @@ function BadRequest (message, data) {
   FeathersError.call(this, message, 'BadRequest', 400, 'bad-request', data);
 }
 
-BadRequest.prototype = FeathersError.prototype;
+inheritsFrom(BadRequest, FeathersError);
 
 // 401 - Not Authenticated
 function NotAuthenticated (message, data) {
   FeathersError.call(this, message, 'NotAuthenticated', 401, 'not-authenticated', data);
 }
 
-NotAuthenticated.prototype = FeathersError.prototype;
+inheritsFrom(NotAuthenticated, FeathersError);
 
 // 402 - Payment Error
 function PaymentError (message, data) {
   FeathersError.call(this, message, 'PaymentError', 402, 'payment-error', data);
 }
 
-PaymentError.prototype = FeathersError.prototype;
+inheritsFrom(PaymentError, FeathersError);
 
 // 403 - Forbidden
 function Forbidden (message, data) {
   FeathersError.call(this, message, 'Forbidden', 403, 'forbidden', data);
 }
 
-Forbidden.prototype = FeathersError.prototype;
+inheritsFrom(Forbidden, FeathersError);
 
 // 404 - Not Found
 function NotFound (message, data) {
   FeathersError.call(this, message, 'NotFound', 404, 'not-found', data);
 }
 
-NotFound.prototype = FeathersError.prototype;
+inheritsFrom(NotFound, FeathersError);
 
 // 405 - Method Not Allowed
 function MethodNotAllowed (message, data) {
   FeathersError.call(this, message, 'MethodNotAllowed', 405, 'method-not-allowed', data);
 }
 
-MethodNotAllowed.prototype = FeathersError.prototype;
+inheritsFrom(MethodNotAllowed, FeathersError);
 
 // 406 - Not Acceptable
 function NotAcceptable (message, data) {
   FeathersError.call(this, message, 'NotAcceptable', 406, 'not-acceptable', data);
 }
 
-NotAcceptable.prototype = FeathersError.prototype;
+inheritsFrom(NotAcceptable, FeathersError);
 
 // 408 - Timeout
 function Timeout (message, data) {
   FeathersError.call(this, message, 'Timeout', 408, 'timeout', data);
 }
 
-Timeout.prototype = FeathersError.prototype;
+inheritsFrom(Timeout, FeathersError);
 
 // 409 - Conflict
 function Conflict (message, data) {
   FeathersError.call(this, message, 'Conflict', 409, 'conflict', data);
 }
 
-Conflict.prototype = FeathersError.prototype;
+inheritsFrom(Conflict, FeathersError);
 
 // 411 - Length Required
 function LengthRequired (message, data) {
   FeathersError.call(this, message, 'LengthRequired', 411, 'length-required', data);
 }
 
-LengthRequired.prototype = FeathersError.prototype;
+inheritsFrom(LengthRequired, FeathersError);
 
 // 422 Unprocessable
 function Unprocessable (message, data) {
   FeathersError.call(this, message, 'Unprocessable', 422, 'unprocessable', data);
 }
 
-Unprocessable.prototype = FeathersError.prototype;
+inheritsFrom(Unprocessable, FeathersError);
 
 // 429 Too Many Requests
 function TooManyRequests (message, data) {
   FeathersError.call(this, message, 'TooManyRequests', 429, 'too-many-requests', data);
 }
 
-TooManyRequests.prototype = FeathersError.prototype;
+inheritsFrom(TooManyRequests, FeathersError);
 
 // 500 - General Error
 function GeneralError (message, data) {
   FeathersError.call(this, message, 'GeneralError', 500, 'general-error', data);
 }
 
-GeneralError.prototype = FeathersError.prototype;
+inheritsFrom(GeneralError, FeathersError);
 
 // 501 - Not Implemented
 function NotImplemented (message, data) {
   FeathersError.call(this, message, 'NotImplemented', 501, 'not-implemented', data);
 }
 
-NotImplemented.prototype = FeathersError.prototype;
+inheritsFrom(NotImplemented, FeathersError);
 
 // 502 - Bad Gateway
 function BadGateway (message, data) {
   FeathersError.call(this, message, 'BadGateway', 502, 'bad-gateway', data);
 }
 
-BadGateway.prototype = FeathersError.prototype;
+inheritsFrom(BadGateway, FeathersError);
 
 // 503 - Unavailable
 function Unavailable (message, data) {
   FeathersError.call(this, message, 'Unavailable', 503, 'unavailable', data);
 }
 
-Unavailable.prototype = FeathersError.prototype;
+inheritsFrom(Unavailable, FeathersError);
 
 const errors = {
   FeathersError,
