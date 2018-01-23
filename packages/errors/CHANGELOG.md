@@ -1,5 +1,20 @@
 # Change Log
 
+## [v3.2.2](https://github.com/feathersjs/errors/tree/v3.2.2) (2018-01-23)
+[Full Changelog](https://github.com/feathersjs/errors/compare/v3.2.1...v3.2.2)
+
+**Closed issues:**
+
+- Handling Status Codes [\#103](https://github.com/feathersjs/errors/issues/103)
+- Override default error page [\#102](https://github.com/feathersjs/errors/issues/102)
+- wrong npm package in Installation instructions [\#100](https://github.com/feathersjs/errors/issues/100)
+
+**Merged pull requests:**
+
+- Fix instanceof and prototypical inheritance [\#104](https://github.com/feathersjs/errors/pull/104) ([nikaspran](https://github.com/nikaspran))
+- Update mocha to the latest version 🚀 [\#101](https://github.com/feathersjs/errors/pull/101) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- fix installation declaration [\#99](https://github.com/feathersjs/errors/pull/99) ([jasonmacgowan](https://github.com/jasonmacgowan))
+
 ## [v3.2.1](https://github.com/feathersjs/errors/tree/v3.2.1) (2018-01-03)
 [Full Changelog](https://github.com/feathersjs/errors/compare/v3.2.0...v3.2.1)
 
