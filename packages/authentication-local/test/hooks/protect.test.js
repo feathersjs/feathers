@@ -41,6 +41,28 @@ function testOmit (title, property) {
       });
     });
 
+    it('uses .toJSON (#48)', () => {
+      class MyUser {
+        toJSON () {
+          return {
+            email: 'test@user.com',
+            password: 'supersecret'
+          };
+        }
+      }
+
+      const data = new MyUser();
+      const context = {
+        [property]: data
+      };
+      const result = fn(context);
+
+      expect(result).to.deep.equal({
+        [property]: data,
+        dispatch: { email: 'test@user.com' }
+      });
+    });
+
     it('omits from array', () => {
       const data = [{
         email: 'test1@user.com',

@@ -3,7 +3,11 @@ const omit = require('lodash.omit');
 module.exports = function (...fields) {
   return function protect (context) {
     const result = context.dispatch || context.result;
-    const o = current => omit(current, fields);
+    const o = current => {
+      const data = typeof current.toJSON === 'function'
+        ? current.toJSON() : current;
+      return omit(data, fields);
+    };
 
     if (!result) {
       return context;
