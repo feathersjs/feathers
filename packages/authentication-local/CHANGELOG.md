@@ -1,5 +1,20 @@
 # Change Log
 
+## [v1.1.0](https://github.com/feathersjs/authentication-local/tree/v1.1.0) (2018-01-23)
+[Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.0.4...v1.1.0)
+
+**Closed issues:**
+
+- protect hook attempts to map through 'result.data' on all service methods. [\#53](https://github.com/feathersjs/authentication-local/issues/53)
+- Protect hook should check for toJSON [\#48](https://github.com/feathersjs/authentication-local/issues/48)
+
+**Merged pull requests:**
+
+- Use .toJSON if available [\#55](https://github.com/feathersjs/authentication-local/pull/55) ([daffl](https://github.com/daffl))
+- Only map data for find method [\#54](https://github.com/feathersjs/authentication-local/pull/54) ([daffl](https://github.com/daffl))
+- Update @feathersjs/authentication-jwt to the latest version 🚀 [\#52](https://github.com/feathersjs/authentication-local/pull/52) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update mocha to the latest version 🚀 [\#51](https://github.com/feathersjs/authentication-local/pull/51) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.4](https://github.com/feathersjs/authentication-local/tree/v1.0.4) (2018-01-03)
 [Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.0.3...v1.0.4)
 
