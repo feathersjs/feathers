@@ -11,7 +11,7 @@ module.exports = function (...fields) {
 
     if (Array.isArray(result)) {
       context.dispatch = result.map(o);
-    } else if (result.data) {
+    } else if (result.data && context.method === 'find') {
       context.dispatch = Object.assign({}, result, {
         data: result.data.map(o)
       });
