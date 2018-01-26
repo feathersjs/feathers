@@ -101,18 +101,23 @@ module.exports = class ServiceGenerator extends Generator {
     const ast = j(code);
     const mainExpression = ast.find(j.FunctionExpression)
       .closest(j.ExpressionStatement);
-
-    if(mainExpression.length !== 1) {
-      throw new Error(`${this.libDirectory}/services/index.js seems to have more than one function declaration and we can not register the new service. Did you modify it?`);
-    }
-
     const serviceRequire = `const ${camelName} = require('./${kebabName}/${kebabName}.service.js');`;
     const serviceCode = `app.configure(${camelName});`;
-
-    // Add require('./service')
-    mainExpression.insertBefore(serviceRequire);
-    // Add app.configure(service) to service/index.js
-    mainExpression.insertLastInFunction(serviceCode);
+    
+    if(mainExpression.length !== 1) {
+      this.log
+        .writeln()
+        .conflict(`${this.libDirectory}/services/index.js seems to have more than one function declaration and we can not register the new service. Did you modify it?`)
+        .info('You will need to add the next lines manually to the file')
+        .info(serviceRequire)
+        .info(serviceCode)
+        .writeln();
+    } else {
+      // Add require('./service')
+      mainExpression.insertBefore(serviceRequire);
+      // Add app.configure(service) to service/index.js
+      mainExpression.insertLastInFunction(serviceCode);
+    }
 
     return ast.toSource();
   }
