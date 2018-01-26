@@ -1,5 +1,6 @@
 const assert = require('assert');
 const Proto = require('uberproto');
+const { hooks } = require('@feathersjs/commons');
 const feathers = require('../lib');
 
 describe('Feathers application', () => {
@@ -21,6 +22,10 @@ describe('Feathers application', () => {
 
     assert.equal(feathers.version, pkg.version);
     assert.equal(app.version, pkg.version);
+  });
+
+  it('sets SKIP on main', () => {
+    assert.equal(feathers.SKIP, hooks.SKIP);
   });
 
   it('is an event emitter', done => {
