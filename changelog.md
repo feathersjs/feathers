@@ -1,5 +1,13 @@
 # Change Log
 
+## [v3.1.0](https://github.com/feathersjs/feathers/tree/v3.1.0) (2018-01-26)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.5...v3.1.0)
+
+**Merged pull requests:**
+
+- Update mocha to the latest version 🚀 [\#793](https://github.com/feathersjs/feathers/pull/793) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Add ability to skip all following hooks [\#792](https://github.com/feathersjs/feathers/pull/792) ([sylvainlap](https://github.com/sylvainlap))
+
 ## [v3.0.5](https://github.com/feathersjs/feathers/tree/v3.0.5) (2018-01-04)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v2.2.4...v3.0.5)
 
