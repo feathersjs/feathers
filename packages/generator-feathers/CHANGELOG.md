@@ -1,5 +1,25 @@
 # Change Log
 
+## [v2.4.0](https://github.com/feathersjs/generator-feathers/tree/v2.4.0) (2018-01-27)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.3.1...v2.4.0)
+
+**Closed issues:**
+
+- eslint-disable-line + prettier/linters [\#329](https://github.com/feathersjs/generator-feathers/issues/329)
+- Include operatorsAliases in sequelize connection. [\#307](https://github.com/feathersjs/generator-feathers/issues/307)
+- Don't overwrite customized Mongoose schemas [\#249](https://github.com/feathersjs/generator-feathers/issues/249)
+
+**Merged pull requests:**
+
+- Do not generate the users service if it already exists [\#334](https://github.com/feathersjs/generator-feathers/pull/334) ([daffl](https://github.com/daffl))
+- Change ESLint flag to make formatting easier [\#333](https://github.com/feathersjs/generator-feathers/pull/333) ([daffl](https://github.com/daffl))
+- Add Sequelize operator aliases [\#332](https://github.com/feathersjs/generator-feathers/pull/332) ([daffl](https://github.com/daffl))
+- Do not fail when the services index has been modified [\#331](https://github.com/feathersjs/generator-feathers/pull/331) ([louim](https://github.com/louim))
+- Update mongoose.js [\#330](https://github.com/feathersjs/generator-feathers/pull/330) ([dobeerman](https://github.com/dobeerman))
+- Update mocha to the latest version 🚀 [\#328](https://github.com/feathersjs/generator-feathers/pull/328) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update mongoose to the latest version 🚀 [\#327](https://github.com/feathersjs/generator-feathers/pull/327) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update mongodb to the latest version 🚀 [\#326](https://github.com/feathersjs/generator-feathers/pull/326) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.3.1](https://github.com/feathersjs/generator-feathers/tree/v2.3.1) (2017-12-21)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.3.0...v2.3.1)
 
