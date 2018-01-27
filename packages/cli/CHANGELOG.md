@@ -1,5 +1,22 @@
 # Change Log
 
+## [v3.6.0](https://github.com/feathersjs/cli/tree/v3.6.0) (2018-01-27)
+[Full Changelog](https://github.com/feathersjs/cli/compare/v2.4.0...v3.6.0)
+
+**Closed issues:**
+
+- The `useMongoClient` option is no longer necessary in mongoose 5.x [\#136](https://github.com/feathersjs/cli/issues/136)
+- Add .env for SECRET in authentication [\#111](https://github.com/feathersjs/cli/issues/111)
+- Automated testing environment [\#27](https://github.com/feathersjs/cli/issues/27)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#137](https://github.com/feathersjs/cli/pull/137) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update mocha to the latest version 🚀 [\#135](https://github.com/feathersjs/cli/pull/135) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
+## [v2.4.0](https://github.com/feathersjs/cli/tree/v2.4.0) (2018-01-11)
+[Full Changelog](https://github.com/feathersjs/cli/compare/v3.5.0...v2.4.0)
+
 ## [v3.5.0](https://github.com/feathersjs/cli/tree/v3.5.0) (2018-01-04)
 [Full Changelog](https://github.com/feathersjs/cli/compare/v3.4.1...v3.5.0)
 
