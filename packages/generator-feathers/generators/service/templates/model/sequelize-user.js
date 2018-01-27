@@ -28,7 +28,8 @@ module.exports = function (app) {
     }
   });
 
-  <%= camelName %>.associate = function (models) { // eslint-disable-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
+  <%= camelName %>.associate = function (models) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   };
