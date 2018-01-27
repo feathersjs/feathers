@@ -165,15 +165,17 @@ module.exports = class AuthGenerator extends Generator {
         dependencies.push(`@feathersjs/authentication-${strategy}`);
       }
     });
-
-    // Create the users service
-    this.composeWith(require.resolve('../service'), {
-      props: {
-        name: context.entity,
-        path: `/${context.kebabEntity}`,
-        authentication: context
-      }
-    });
+    
+    if(!this.fs.exists(this.destinationPath(this.libDirectory, 'services', context.kebabEntity, `${context.kebabEntity}.service.js`))) {
+      // Create the users service
+      this.composeWith(require.resolve('../service'), {
+        props: {
+          name: context.entity,
+          path: `/${context.kebabEntity}`,
+          authentication: context
+        }
+      });
+    }
 
     // If the file doesn't exist yet, add it to the app.js
     if (!this.fs.exists(this.destinationPath(this.libDirectory, 'authentication.js'))) {
