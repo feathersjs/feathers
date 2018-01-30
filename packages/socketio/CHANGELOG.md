@@ -1,5 +1,17 @@
 # Change Log
 
+## [v3.1.0](https://github.com/feathersjs/socketio/tree/v3.1.0) (2018-01-30)
+[Full Changelog](https://github.com/feathersjs/socketio/compare/v3.0.2...v3.1.0)
+
+**Closed issues:**
+
+- How to change 5000ms timeout?  [\#107](https://github.com/feathersjs/socketio/issues/107)
+
+**Merged pull requests:**
+
+- Change dependency to @feathersjs/transport-commons [\#110](https://github.com/feathersjs/socketio/pull/110) ([daffl](https://github.com/daffl))
+- Update mocha to the latest version 🚀 [\#108](https://github.com/feathersjs/socketio/pull/108) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.0.2](https://github.com/feathersjs/socketio/tree/v3.0.2) (2018-01-03)
 [Full Changelog](https://github.com/feathersjs/socketio/compare/v3.0.1...v3.0.2)
 
