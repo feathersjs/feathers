@@ -1,5 +1,20 @@
 # Change Log
 
+## [v3.2.0](https://github.com/feathersjs/transport-commons/tree/v3.2.0) (2018-01-30)
+[Full Changelog](https://github.com/feathersjs/transport-commons/compare/v3.1.5...v3.2.0)
+
+**Closed issues:**
+
+- Publishing to a channel fails after passing safety check [\#66](https://github.com/feathersjs/transport-commons/issues/66)
+- Feathers Server Ends unexpected if some arg to socket.io is a ipv6 local subnet [\#65](https://github.com/feathersjs/transport-commons/issues/65)
+
+**Merged pull requests:**
+
+- Rename to @feathersjs/transport-commons [\#69](https://github.com/feathersjs/transport-commons/pull/69) ([daffl](https://github.com/daffl))
+- Switch to Radix tree based routing [\#68](https://github.com/feathersjs/transport-commons/pull/68) ([daffl](https://github.com/daffl))
+- Update mocha to the latest version 🚀 [\#64](https://github.com/feathersjs/transport-commons/pull/64) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update semistandard to the latest version 🚀 [\#63](https://github.com/feathersjs/transport-commons/pull/63) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.1.5](https://github.com/feathersjs/transport-commons/tree/v3.1.5) (2017-12-12)
 [Full Changelog](https://github.com/feathersjs/transport-commons/compare/v3.1.4...v3.1.5)
 
@@ -64,7 +79,7 @@
 
 **Closed issues:**
 
-- feathers-transport-commons produces error when it get bundled and steal-socket.io gets used as connection [\#44](https://github.com/feathersjs/transport-commons/issues/44)
+- feathers-socket-commons produces error when it get bundled and steal-socket.io gets used as connection [\#44](https://github.com/feathersjs/transport-commons/issues/44)
 - Surface src/events.js lines 44-69 for feathers-hooks-common/src/filters/combine.js [\#40](https://github.com/feathersjs/transport-commons/issues/40)
 
 **Merged pull requests:**
