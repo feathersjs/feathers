@@ -1,5 +1,5 @@
 const { convert } = require('@feathersjs/errors');
-const debug = require('debug')('@feathersjs/socket-commons/client');
+const debug = require('debug')('@feathersjs/transport-commons/client');
 
 const namespacedEmitterMethods = [
   'addListener',

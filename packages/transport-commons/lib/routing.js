@@ -1,6 +1,6 @@
 const Router = require('radix-router');
 const { stripSlashes } = require('@feathersjs/commons');
-const ROUTER = Symbol('@feathersjs/socket-commons/router');
+const ROUTER = Symbol('@feathersjs/transport-commons/router');
 
 module.exports = function () {
   return app => {

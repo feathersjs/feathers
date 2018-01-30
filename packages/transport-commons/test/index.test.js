@@ -4,7 +4,7 @@ const feathers = require('@feathersjs/feathers');
 
 const commons = require('../lib');
 
-describe('@feathersjs/socket-commons', () => {
+describe('@feathersjs/transport-commons', () => {
   let provider, options, app, connection;
 
   beforeEach(() => {
