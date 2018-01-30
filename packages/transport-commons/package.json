@@ -1,8 +1,8 @@
 {
-  "name": "@feathersjs/socket-commons",
+  "name": "@feathersjs/transport-commons",
   "description": "Shared functionality for websocket providers",
   "version": "3.1.5",
-  "homepage": "https://github.com/feathersjs/socket-commons",
+  "homepage": "https://github.com/feathersjs/transport-commons",
   "main": "lib/",
   "keywords": [
     "feathers",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/socket-commons.git"
+    "url": "git://github.com/feathersjs/transport-commons.git"
   },
   "author": {
     "name": "Feathers contributors",
@@ -20,7 +20,7 @@
   },
   "contributors": [],
   "bugs": {
-    "url": "https://github.com/feathersjs/socket-commons/issues"
+    "url": "https://github.com/feathersjs/transport-commons/issues"
   },
   "engines": {
     "node": ">= 6"

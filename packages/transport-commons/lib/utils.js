@@ -1,5 +1,5 @@
 const errors = require('@feathersjs/errors');
-const debug = require('debug')('@feathersjs/socket-commons');
+const debug = require('debug')('@feathersjs/transport-commons');
 
 const paramsPositions = exports.paramsPositions = {
   find: 0,

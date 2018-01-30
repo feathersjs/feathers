@@ -1,4 +1,4 @@
-const debug = require('debug')('@feathersjs/socket-commons');
+const debug = require('debug')('@feathersjs/transport-commons');
 const channels = require('./channels');
 const routing = require('./routing');
 const { getDispatcher, runMethod } = require('./utils');

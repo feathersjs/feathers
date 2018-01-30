@@ -1,4 +1,4 @@
-const debug = require('debug')('@feathersjs/socket-commons/channels');
+const debug = require('debug')('@feathersjs/transport-commons/channels');
 const { get, compact, flattenDeep, noop } = require('lodash');
 const CombinedChannel = require('./channel/combined');
 const { channelMixin, publishMixin, keys } = require('./mixins');
