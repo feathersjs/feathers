@@ -13,7 +13,7 @@ module.exports = function (name, options, legacy = false) {
         error ? reject(error) : resolve(result)
       );
     }
-  );
+    );
 
   it(`invalid arguments cause an error`, () =>
     call('find', 1, {}).catch(e =>
