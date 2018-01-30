@@ -1,13 +1,13 @@
 const debug = require('debug')('@feathersjs/socket-commons');
 const channels = require('./channels');
+const routing = require('./routing');
 const { getDispatcher, runMethod } = require('./utils');
 
 module.exports = function ({ done, emit, socketKey, getParams }) {
-  return function () {
-    const app = this;
-
-    // Event dispatching (through `feathers-channels`)
+  return app => {
     app.configure(channels());
+    app.configure(routing());
+
     app.on('publish', getDispatcher(emit, socketKey));
 
     // `connection` event

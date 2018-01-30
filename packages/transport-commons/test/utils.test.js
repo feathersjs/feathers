@@ -3,11 +3,11 @@ const { EventEmitter } = require('events');
 const feathers = require('@feathersjs/feathers');
 const errors = require('@feathersjs/errors');
 
+const routing = require('../lib/routing');
 const {
   normalizeError,
   getDispatcher,
-  runMethod,
-  getService
+  runMethod
 } = require('../lib/utils');
 
 describe('socket commons utils', () => {
@@ -138,57 +138,12 @@ describe('socket commons utils', () => {
     });
   });
 
-  describe('.getService', () => {
-    it('simple service', () => {
-      const app = feathers().use('/myservice', {
-        get (id) {
-          return Promise.resolve({ id });
-        }
-      });
-      const { service, route } = getService(app, 'myservice/');
-
-      assert.deepEqual(route, {}, 'There is always a route');
-
-      return service.get(10).then(data =>
-        assert.deepEqual(data, { id: 10 }, 'Got data from service')
-      );
-    });
-
-    it('route with parameter', () => {
-      const app = feathers().use('/users/:userId/comments', {
-        get (id) {
-          return Promise.resolve({ id });
-        }
-      });
-      const { service, route } = getService(app, 'users/10/comments');
-
-      assert.deepEqual(route, {
-        userId: 10
-      }, 'got expected route parameters');
-
-      return service.get(1).then(data =>
-        assert.deepEqual(data, { id: 1 }, 'Got data from service')
-      );
-    });
-
-    it('no service found', () => {
-      const app = feathers().use('/users/:userId/comment', {
-        get (id) {
-          return Promise.resolve({ id });
-        }
-      });
-      const { service, route } = getService(app, 'users/10/comments');
-
-      assert.deepEqual(route, {}, 'route is empty');
-      assert.ok(!service);
-    });
-  });
-
   describe('.runMethod', () => {
     let app;
 
     beforeEach(() => {
-      app = feathers().use('/myservice', {
+      app = feathers().configure(routing());
+      app.use('/myservice', {
         get (id, params) {
           if (params.query.error) {
             return Promise.reject(new errors.NotAuthenticated('None shall pass'));

@@ -1,5 +1,4 @@
 const errors = require('@feathersjs/errors');
-const UrlPattern = require('url-pattern');
 const debug = require('debug')('@feathersjs/socket-commons');
 
 const paramsPositions = exports.paramsPositions = {
@@ -58,33 +57,6 @@ exports.getDispatcher = function (emit, socketKey) {
   };
 };
 
-const getService = exports.getService = function (app, path) {
-  let service = app.service(path);
-  let route = {};
-
-  if (!service) {
-    // If the service was not found, find all registered service
-    const paths = Object.keys(app.services);
-
-    for (let current of paths) {
-      // For each path, create a URL pattern to see if it matches
-      // e.g. `/users/:userId/comments` for /users/10/comments
-      // would return path `users/:userId/comments`
-      // and a `{ userId: 10 }` route
-      const match = new UrlPattern(current).match(path);
-
-      if (match !== null) {
-        return {
-          service: app.service(current),
-          route: match
-        };
-      }
-    }
-  }
-
-  return { service, route };
-};
-
 exports.runMethod = function (app, connection, path, method, args) {
   const trace = `method '${method}' on service '${path}'`;
   const methodArgs = args.slice(0);
@@ -95,13 +67,15 @@ exports.runMethod = function (app, connection, path, method, args) {
 
   // A wrapper function that runs the method and returns a promise
   const _run = () => {
-    const { service, route } = getService(app, path);
+    const lookup = app.lookup(path);
 
     // No valid service was found, return a 404
     // just like a REST route would
-    if (!service) {
+    if (lookup === null) {
       return Promise.reject(new errors.NotFound(`Service '${path}' not found`));
     }
+
+    const { service, params: route = {} } = lookup;
 
     // Only service methods are allowed
     if (paramsPositions[method] === undefined || typeof service[method] !== 'function') {

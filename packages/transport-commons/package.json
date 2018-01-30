@@ -46,10 +46,11 @@
     "lib": "lib"
   },
   "dependencies": {
+    "@feathersjs/commons": "^1.4.0",
     "@feathersjs/errors": "^3.0.0",
     "debug": "^3.1.0",
     "lodash": "^4.17.4",
-    "url-pattern": "^1.0.3"
+    "radix-router": "^3.0.1"
   },
   "devDependencies": {
     "@feathersjs/feathers": "^3.0.0",

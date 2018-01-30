@@ -2,9 +2,9 @@ const debug = require('debug')('@feathersjs/socket-commons:channels/mixins');
 const Channel = require('./channel/base');
 const CombinedChannel = require('./channel/combined');
 
-const PUBLISHERS = Symbol('feathers-channels/publishers');
-const CHANNELS = Symbol('feathers-channels/channels');
-const ALL_EVENTS = Symbol('feathers-channels/all-events');
+const PUBLISHERS = Symbol('@feathersjs/socket-commons/publishers');
+const CHANNELS = Symbol('@feathersjs/socket-commons/channels');
+const ALL_EVENTS = Symbol('@feathersjs/socket-commons/all-events');
 
 exports.keys = {
   PUBLISHERS,

@@ -6,9 +6,7 @@ const { channelMixin, publishMixin, keys } = require('./mixins');
 const { CHANNELS, PUBLISHERS, ALL_EVENTS } = keys;
 
 function channels () {
-  return function () {
-    const app = this;
-
+  return app => {
     if (typeof app.channel === 'function' && typeof app.publish === 'function') {
       return;
     }
@@ -21,8 +19,6 @@ function channels () {
     });
 
     app.mixins.push(function (service, path) {
-      const app = this;
-
       if (typeof service.publish === 'function' || !service._serviceEvents) {
         return;
       }
