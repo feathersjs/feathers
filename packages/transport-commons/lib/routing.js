@@ -4,6 +4,10 @@ const ROUTER = Symbol('@feathersjs/transport-commons/router');
 
 module.exports = function () {
   return app => {
+    if (typeof app.lookup === 'function') {
+      return;
+    }
+
     const router = new Router();
 
     Object.assign(app, {

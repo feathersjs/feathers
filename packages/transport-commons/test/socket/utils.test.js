@@ -3,12 +3,12 @@ const { EventEmitter } = require('events');
 const feathers = require('@feathersjs/feathers');
 const errors = require('@feathersjs/errors');
 
-const routing = require('../lib/routing');
+const routing = require('../../lib/routing');
 const {
   normalizeError,
   getDispatcher,
   runMethod
-} = require('../lib/utils');
+} = require('../../lib/socket/utils');
 
 describe('socket commons utils', () => {
   describe('.normalizeError', () => {
