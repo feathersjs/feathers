@@ -15,6 +15,10 @@ describe('app.router', () => {
     });
   });
 
+  it('does nothing when configured twice', () => {
+    feathers().configure(routing()).configure(routing());
+  });
+
   it('has app.lookup and ROUTER symbol', () => {
     assert.equal(typeof app.lookup, 'function');
     assert.ok(app[routing.ROUTER]);
