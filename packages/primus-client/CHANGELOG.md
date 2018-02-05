@@ -1,5 +1,14 @@
 # Change Log
 
+## [v1.0.3](https://github.com/feathersjs/primus-client/tree/v1.0.3) (2018-02-05)
+[Full Changelog](https://github.com/feathersjs/primus-client/compare/v1.0.2...v1.0.3)
+
+**Merged pull requests:**
+
+- Move to use transport-commons [\#11](https://github.com/feathersjs/primus-client/pull/11) ([daffl](https://github.com/daffl))
+- Update mocha to the latest version 🚀 [\#10](https://github.com/feathersjs/primus-client/pull/10) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update ws to the latest version 🚀 [\#9](https://github.com/feathersjs/primus-client/pull/9) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.2](https://github.com/feathersjs/primus-client/tree/v1.0.2) (2018-01-03)
 [Full Changelog](https://github.com/feathersjs/primus-client/compare/v1.0.1...v1.0.2)
 
