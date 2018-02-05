@@ -28,7 +28,7 @@ Please refer to the [@feathersjs/express API documentation](https://docs.feather
 Here's an example of a Feathers server that uses `@feathersjs/express`. 
 
 ```js
-const feathers = require('feathers');
+const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 
 const app = express(feathers());
