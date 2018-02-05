@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.0.3](https://github.com/feathersjs/socketio-client/tree/v1.0.3) (2018-02-05)
+[Full Changelog](https://github.com/feathersjs/socketio-client/compare/v1.0.2...v1.0.3)
+
+**Merged pull requests:**
+
+- Move to use transport-commons [\#10](https://github.com/feathersjs/socketio-client/pull/10) ([daffl](https://github.com/daffl))
+- Update mocha to the latest version 🚀 [\#8](https://github.com/feathersjs/socketio-client/pull/8) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.2](https://github.com/feathersjs/socketio-client/tree/v1.0.2) (2018-01-03)
 [Full Changelog](https://github.com/feathersjs/socketio-client/compare/v1.0.1...v1.0.2)
 
