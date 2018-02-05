@@ -1,4 +1,4 @@
-const Service = require('@feathersjs/socket-commons/client');
+const Service = require('@feathersjs/transport-commons/client');
 
 function primusClient (connection, options) {
   if (!connection) {
