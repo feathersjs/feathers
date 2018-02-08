@@ -1,5 +1,13 @@
 # Change Log
 
+## [v3.1.1](https://github.com/feathersjs/feathers/tree/v3.1.1) (2018-02-08)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.1.0...v3.1.1)
+
+**Merged pull requests:**
+
+- Turn argument validation into the first hook [\#818](https://github.com/feathersjs/feathers/pull/818) ([daffl](https://github.com/daffl))
+- Add Russian Telegram community [\#814](https://github.com/feathersjs/feathers/pull/814) ([vodniciarv](https://github.com/vodniciarv))
+
 ## [v3.1.0](https://github.com/feathersjs/feathers/tree/v3.1.0) (2018-01-26)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v3.0.5...v3.1.0)
 
