@@ -182,6 +182,21 @@ describe('hooks basics', () => {
       });
     });
 
+    it('on argument validation error', () => {
+      const app = feathers().use('/dummy', {
+        get (id) {
+          return Promise.resolve({ id });
+        }
+      });
+
+      return app.service('dummy').get(undefined, {}, true).catch(context => {
+        assert.equal(context.service, app.service('dummy'));
+        assert.equal(context.type, 'error');
+        assert.equal(context.path, 'dummy');
+        assert.equal(context.error.message, 'An id must be provided to the \'get\' method');
+      });
+    });
+
     it('still swallows error if context.result is set', () => {
       const result = { message: 'this is a test' };
       const app = feathers().use('/dummy', {
