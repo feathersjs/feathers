@@ -5,7 +5,6 @@
 [![Build Status](https://travis-ci.org/feathersjs/generator-feathers-plugin.png?branch=master)](https://travis-ci.org/feathersjs/generator-feathers-plugin)
 [![Dependency Status](https://img.shields.io/david/feathersjs/generator-feathers-plugin.svg?style=flat-square)](https://david-dm.org/feathersjs/generator-feathers-plugin)
 [![Download Status](https://img.shields.io/npm/dm/generator-feathers-plugin.svg?style=flat-square)](https://www.npmjs.com/package/generator-feathers-plugin)
-[![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 
 > A [Yeoman](http://yeoman.io) generator for initializing new [Feathersjs](https://github.com/feathersjs) plug-ins.
 
