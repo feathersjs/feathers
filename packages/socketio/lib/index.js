@@ -1,7 +1,7 @@
 const socketio = require('socket.io');
 const Proto = require('uberproto');
 const http = require('http');
-const commons = require('@feathersjs/transport-commons');
+const { socket: commons } = require('@feathersjs/transport-commons');
 const debug = require('debug')('@feathersjs/socketio');
 
 const socketKey = Symbol('@feathersjs/socketio/socket');

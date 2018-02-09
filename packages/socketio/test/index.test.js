@@ -158,13 +158,14 @@ describe('@feathersjs/socketio', () => {
     };
 
     service.create = function (data, params) {
-      assert.deepEqual(_.omit(params, 'query', 'route'), socketParams, 'Passed handshake parameters');
+      assert.deepEqual(_.omit(params, 'query', 'route', 'connection'), socketParams, 'Passed handshake parameters');
       return old.create.apply(this, arguments);
     };
 
     service.update = function (id, data, params) {
       assert.deepEqual(params, _.extend({
         route: {},
+        connection: socketParams,
         query: {
           test: 'param'
         }
@@ -190,7 +191,7 @@ describe('@feathersjs/socketio', () => {
     let old = { find: service.find };
 
     service.find = function (params) {
-      assert.deepEqual(_.omit(params, 'query', 'route'), socketParams, 'Handshake parameters passed on proper position');
+      assert.deepEqual(_.omit(params, 'query', 'route', 'connection'), socketParams, 'Handshake parameters passed on proper position');
       return old.find.apply(this, arguments);
     };
 
