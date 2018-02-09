@@ -1,4 +1,4 @@
-const commons = require('@feathersjs/transport-commons');
+const { socket: commons } = require('@feathersjs/transport-commons');
 const makeDebug = require('debug');
 const Proto = require('uberproto');
 const Primus = require('primus');

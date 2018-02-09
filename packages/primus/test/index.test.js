@@ -134,14 +134,14 @@ describe('@feathersjs/primus', () => {
     };
 
     service.find = function (params) {
-      assert.deepEqual(_.omit(params, 'query', 'route'), options.socketParams,
+      assert.deepEqual(_.omit(params, 'query', 'route', 'connection'), options.socketParams,
         'Handshake parameters passed on proper position');
 
       return old.find.apply(this, arguments);
     };
 
     service.create = function (data, params) {
-      assert.deepEqual(_.omit(params, 'query', 'route'), options.socketParams,
+      assert.deepEqual(_.omit(params, 'query', 'route', 'connection'), options.socketParams,
         'Passed handshake parameters');
 
       return old.create.apply(this, arguments);
@@ -149,6 +149,7 @@ describe('@feathersjs/primus', () => {
 
     service.update = function (id, data, params) {
       assert.deepEqual(params, _.extend({
+        connection: options.socketParams,
         route: {},
         query: {
           test: 'param'
@@ -176,7 +177,7 @@ describe('@feathersjs/primus', () => {
     };
 
     service.find = function (params) {
-      assert.deepEqual(_.omit(params, 'query', 'route'), options.socketParams,
+      assert.deepEqual(_.omit(params, 'query', 'route', 'connection'), options.socketParams,
         'Handshake parameters passed on proper position');
 
       return old.find.apply(this, arguments);
