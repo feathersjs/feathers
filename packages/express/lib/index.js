@@ -7,7 +7,11 @@ const debug = require('debug')('@feathersjs/express');
 const rest = require('./rest');
 
 function feathersExpress (feathersApp) {
-  if (!feathersApp || typeof feathersApp.setup !== 'function') {
+  if (!feathersApp) {
+    return express();
+  }
+
+  if (typeof feathersApp.setup !== 'function') {
     throw new Error('@feathersjs/express requires a valid Feathers application instance');
   }
 
