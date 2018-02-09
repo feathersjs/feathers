@@ -47,12 +47,12 @@
     "lib": "lib"
   },
   "dependencies": {
-    "@feathersjs/transport-commons": "^3.2.0"
+    "@feathersjs/transport-commons": "^4.0.0"
   },
   "devDependencies": {
     "@feathersjs/commons": "^1.2.0",
     "@feathersjs/feathers": "^3.0.0",
-    "@feathersjs/socketio": "^3.0.0",
+    "@feathersjs/socketio": "^3.2.0",
     "chai": "^4.1.2",
     "feathers-memory": "^2.0.0",
     "istanbul": "^1.1.0-alpha.1",
