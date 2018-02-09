@@ -1,5 +1,18 @@
 # Change Log
 
+## [v4.0.0](https://github.com/feathersjs/transport-commons/tree/v4.0.0) (2018-02-09)
+[Full Changelog](https://github.com/feathersjs/transport-commons/compare/v3.2.0...v4.0.0)
+
+**Closed issues:**
+
+- Additional data for client errors [\#72](https://github.com/feathersjs/transport-commons/issues/72)
+
+**Merged pull requests:**
+
+- Throw a Timeout error on send timeout instead of Error [\#73](https://github.com/feathersjs/transport-commons/pull/73) ([TimNZ](https://github.com/TimNZ))
+- Pass connection in params [\#71](https://github.com/feathersjs/transport-commons/pull/71) ([daffl](https://github.com/daffl))
+- Move socket handling into its own file [\#70](https://github.com/feathersjs/transport-commons/pull/70) ([daffl](https://github.com/daffl))
+
 ## [v3.2.0](https://github.com/feathersjs/transport-commons/tree/v3.2.0) (2018-01-30)
 [Full Changelog](https://github.com/feathersjs/transport-commons/compare/v3.1.5...v3.2.0)
 
