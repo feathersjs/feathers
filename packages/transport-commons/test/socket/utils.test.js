@@ -167,6 +167,36 @@ describe('socket commons utils', () => {
         runMethod(app, {}, 'myservice', 'get', [ 10, {}, callback ]);
       });
 
+      it('merges params with connection and passes connection', done => {
+        const connection = {
+          testing: true
+        };
+        const callback = (error, result) => {
+          if (error) {
+            return done(error);
+          }
+
+          assert.deepEqual(result, {
+            id: 10,
+            params: {
+              connection,
+              query: {},
+              route: {},
+              testing: true
+            }
+          });
+          done();
+        };
+
+        app.use('/otherservice', {
+          get (id, params) {
+            return Promise.resolve({ id, params });
+          }
+        });
+
+        runMethod(app, connection, 'otherservice', 'get', [ 10, {}, callback ]);
+      });
+
       it('with params missing', done => {
         const callback = (error, result) => {
           if (error) {

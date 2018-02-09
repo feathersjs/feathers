@@ -86,7 +86,7 @@ exports.runMethod = function (app, connection, path, method, args) {
     const query = methodArgs[position] || {};
     // `params` have to be re-mapped to the query
     // and added with the route
-    const params = Object.assign({ query, route }, connection);
+    const params = Object.assign({ query, route, connection }, connection);
 
     methodArgs[position] = params;
 
