@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.1.0](https://github.com/feathersjs/primus-client/tree/v1.1.0) (2018-02-09)
+[Full Changelog](https://github.com/feathersjs/primus-client/compare/v1.0.3...v1.1.0)
+
+**Merged pull requests:**
+
+- Update @feathersjs/transport-commons to the latest version 🚀 [\#12](https://github.com/feathersjs/primus-client/pull/12) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.3](https://github.com/feathersjs/primus-client/tree/v1.0.3) (2018-02-05)
 [Full Changelog](https://github.com/feathersjs/primus-client/compare/v1.0.2...v1.0.3)
 
