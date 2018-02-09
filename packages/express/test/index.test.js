@@ -33,9 +33,17 @@ describe('@feathersjs/express', () => {
     assert.ok(typeof expressify.rest === 'function');
   });
 
-  it('errors when not app is provided', () => {
+  it('returns a plain express app when no app is provided', () => {
+    const app = expressify();
+
+    assert.equal(typeof app.use, 'function');
+    assert.equal(typeof app.service, 'undefined');
+    assert.equal(typeof app.services, 'undefined');
+  });
+
+  it('errors when app with wrong version is provided', () => {
     try {
-      expressify();
+      expressify({});
     } catch (e) {
       assert.equal(e.message, '@feathersjs/express requires a valid Feathers application instance');
     }
