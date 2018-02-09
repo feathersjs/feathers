@@ -58,7 +58,8 @@ describe('@feathersjs/transport-commons', () => {
             id: 10,
             params: Object.assign({
               query: {},
-              route: {}
+              route: {},
+              connection
             }, connection)
           });
           done();
@@ -82,7 +83,8 @@ describe('@feathersjs/transport-commons', () => {
         try {
           const params = Object.assign({
             query: { fromQuery: true },
-            route: {}
+            route: {},
+            connection
           }, connection);
 
           assert.ok(!error);
@@ -107,6 +109,7 @@ describe('@feathersjs/transport-commons', () => {
           assert.deepEqual(result, {
             id: 10,
             params: Object.assign({
+              connection,
               query: {},
               route: {}
             }, connection)
@@ -131,7 +134,8 @@ describe('@feathersjs/transport-commons', () => {
       }, (error, result) => {
         const params = Object.assign({
           query: { fromQuery: true },
-          route: {}
+          route: {},
+          connection
         }, connection);
 
         try {
