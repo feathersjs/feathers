@@ -1,4 +1,4 @@
-const { convert } = require('@feathersjs/errors');
+const { convert, Timeout } = require('@feathersjs/errors');
 const debug = require('debug')('@feathersjs/transport-commons/client');
 
 const namespacedEmitterMethods = [
@@ -63,7 +63,11 @@ module.exports = class Service {
   send (method, ...args) {
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => reject(
-        new Error(`Timeout of ${this.timeout}ms exceeded calling ${method} on ${this.path}`)
+        new Timeout(`Timeout of ${this.timeout}ms exceeded calling ${method} on ${this.path}`, {
+          timeout: this.timeout,
+          method,
+          path: this.path
+        })
       ), this.timeout);
 
       args.unshift(method, this.path);

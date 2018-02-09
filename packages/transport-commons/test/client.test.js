@@ -130,6 +130,14 @@ describe('client', () => {
     );
   });
 
+  it('throws a Timeout error when send times out waiting for a response', () => {
+    return service.remove(10).then(() => {
+      throw new Error('Should never get here');
+    }).catch(error =>
+      assert.equal(error.name, 'Timeout')
+    );
+  });
+
   it('converts to feathers-errors (#19)', () => {
     connection.once('create', (path, data, params, callback) =>
       callback(new errors.NotAuthenticated('Test', { hi: 'me' }).toJSON())
