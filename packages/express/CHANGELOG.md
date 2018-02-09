@@ -1,5 +1,22 @@
 # Change Log
 
+## [v1.2.0](https://github.com/feathersjs/express/tree/v1.2.0) (2018-02-09)
+[Full Changelog](https://github.com/feathersjs/express/compare/v1.1.2...v1.2.0)
+
+**Closed issues:**
+
+- Error in `create` method results in unhandled rejection  [\#19](https://github.com/feathersjs/express/issues/19)
+- @feathersjs/express call without paramaters could returns an instance of express [\#18](https://github.com/feathersjs/express/issues/18)
+- Feathers-express blows up the feathers application version property and the example doesn't work [\#16](https://github.com/feathersjs/express/issues/16)
+- Error handler in wrapper hides breaks and hides real error [\#13](https://github.com/feathersjs/express/issues/13)
+
+**Merged pull requests:**
+
+- Return an instance of the original Express application when nothing i… [\#20](https://github.com/feathersjs/express/pull/20) ([daffl](https://github.com/daffl))
+- Fix README example [\#17](https://github.com/feathersjs/express/pull/17) ([bertho-zero](https://github.com/bertho-zero))
+- Update mocha to the latest version 🚀 [\#15](https://github.com/feathersjs/express/pull/15) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update semistandard to the latest version 🚀 [\#14](https://github.com/feathersjs/express/pull/14) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.1.2](https://github.com/feathersjs/express/tree/v1.1.2) (2017-11-16)
 [Full Changelog](https://github.com/feathersjs/express/compare/v1.1.1...v1.1.2)
 
