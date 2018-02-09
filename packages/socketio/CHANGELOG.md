@@ -1,5 +1,16 @@
 # Change Log
 
+## [v3.2.0](https://github.com/feathersjs/socketio/tree/v3.2.0) (2018-02-09)
+[Full Changelog](https://github.com/feathersjs/socketio/compare/v3.1.0...v3.2.0)
+
+**Closed issues:**
+
+- My chat room sometimes the user's text has become????? [\#109](https://github.com/feathersjs/socketio/issues/109)
+
+**Merged pull requests:**
+
+- Update @feathersjs/transport-commons to the latest version 🚀 [\#111](https://github.com/feathersjs/socketio/pull/111) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.1.0](https://github.com/feathersjs/socketio/tree/v3.1.0) (2018-01-30)
 [Full Changelog](https://github.com/feathersjs/socketio/compare/v3.0.2...v3.1.0)
 
