@@ -24,8 +24,6 @@ module.exports = function (app) {
     // right away that depend on the database and tables being created
     this.set('rethinkInit', promise);
 
-    promise.then(() => oldSetup.apply(this, args));
-
-    return this;
+    return oldSetup.apply(this, args);
   };
 };
