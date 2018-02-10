@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.4.1](https://github.com/feathersjs/generator-feathers/tree/v2.4.1) (2018-02-10)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.4.0...v2.4.1)
+
+**Merged pull requests:**
+
+- Fix RethinkDB setup [\#337](https://github.com/feathersjs/generator-feathers/pull/337) ([daffl](https://github.com/daffl))
+- Update feathers-hooks-common to the latest version 🚀 [\#335](https://github.com/feathersjs/generator-feathers/pull/335) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.4.0](https://github.com/feathersjs/generator-feathers/tree/v2.4.0) (2018-01-27)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.3.1...v2.4.0)
 
