@@ -40,7 +40,7 @@ app.service('authentication').hooks({
 
 ## Documentation
 
-Please refer to the [@feathersjs/authentication-oauth1 documentation](https://docs.feathersjs.com/api/authentication/jwt.html) for more details.
+Please refer to the [@feathersjs/authentication-jwt documentation](https://docs.feathersjs.com/api/authentication/jwt.html) for more details.
 
 
 ## License
