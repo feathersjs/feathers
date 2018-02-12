@@ -1,7 +1,9 @@
 const errors = require('./index');
 
-module.exports = function () {
+module.exports = function ({ verbose = false } = {}) {
   return function (req, res, next) {
-    next(new errors.NotFound('Page not found | Requested page/route: ' + req.url));
+    const { url } = req;
+    const message = `Page not found${verbose ? ': ' + url : ''}`;
+    next(new errors.NotFound(message, { url }));
   };
 };
