@@ -1,5 +1,17 @@
 # Change Log
 
+## [v3.3.0](https://github.com/feathersjs/errors/tree/v3.3.0) (2018-02-12)
+[Full Changelog](https://github.com/feathersjs/errors/compare/v3.2.2...v3.3.0)
+
+**Closed issues:**
+
+- How to handling error from Hook function when I use Aync/Await in Hook function [\#106](https://github.com/feathersjs/errors/issues/106)
+
+**Merged pull requests:**
+
+- Add a verbose flag to notFound handler [\#107](https://github.com/feathersjs/errors/pull/107) ([daffl](https://github.com/daffl))
+- Add req.url to notFound handler message [\#105](https://github.com/feathersjs/errors/pull/105) ([FreeLineTM](https://github.com/FreeLineTM))
+
 ## [v3.2.2](https://github.com/feathersjs/errors/tree/v3.2.2) (2018-01-23)
 [Full Changelog](https://github.com/feathersjs/errors/compare/v3.2.1...v3.2.2)
 
@@ -110,7 +122,7 @@
 
 **Merged pull requests:**
 
-- Fix errors property being lost when cloning [\#76](https://github.com/feathersjs/errors/pull/76) ([daniel-constantin](https://github.com/daniel-constantin))
+- Fix errors property being lost when cloning [\#76](https://github.com/feathersjs/errors/pull/76) ([0x6431346e](https://github.com/0x6431346e))
 
 ## [v2.8.0](https://github.com/feathersjs/errors/tree/v2.8.0) (2017-05-08)
 [Full Changelog](https://github.com/feathersjs/errors/compare/v2.7.1...v2.8.0)
@@ -121,7 +133,7 @@
 
 **Merged pull requests:**
 
-- Allow data to be an array [\#75](https://github.com/feathersjs/errors/pull/75) ([daniel-constantin](https://github.com/daniel-constantin))
+- Allow data to be an array [\#75](https://github.com/feathersjs/errors/pull/75) ([0x6431346e](https://github.com/0x6431346e))
 
 ## [v2.7.1](https://github.com/feathersjs/errors/tree/v2.7.1) (2017-04-28)
 [Full Changelog](https://github.com/feathersjs/errors/compare/v2.7.0...v2.7.1)
