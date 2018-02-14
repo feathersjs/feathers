@@ -1,5 +1,38 @@
 # Change Log
 
+## [v2.1.2](https://github.com/feathersjs/authentication/tree/v2.1.2) (2018-02-14)
+[Full Changelog](https://github.com/feathersjs/authentication/compare/v2.1.1...v2.1.2)
+
+**Fixed bugs:**
+
+- hook failed with auth & sync [\#540](https://github.com/feathersjs/authentication/issues/540)
+- JWT Cookie [\#389](https://github.com/feathersjs/authentication/issues/389)
+
+**Closed issues:**
+
+- forgot password [\#638](https://github.com/feathersjs/authentication/issues/638)
+- registered many authentication services [\#634](https://github.com/feathersjs/authentication/issues/634)
+- TypeError: Cannot read property '\_strategy' of undefined [\#632](https://github.com/feathersjs/authentication/issues/632)
+- How to change 5000ms timeout? [\#628](https://github.com/feathersjs/authentication/issues/628)
+- cookie reused from server in SSR app [\#619](https://github.com/feathersjs/authentication/issues/619)
+- Express middleware not setCookie [\#617](https://github.com/feathersjs/authentication/issues/617)
+- Server to Server Authentication Question [\#612](https://github.com/feathersjs/authentication/issues/612)
+- No way to share token between socket-rest-express  [\#607](https://github.com/feathersjs/authentication/issues/607)
+- 404 when accessing route using customer authentication [\#579](https://github.com/feathersjs/authentication/issues/579)
+- \[question\] is it possible to protect by role a create method? [\#564](https://github.com/feathersjs/authentication/issues/564)
+- Authentication with server-side rendering [\#560](https://github.com/feathersjs/authentication/issues/560)
+- Problem authenticating using REST middleware [\#495](https://github.com/feathersjs/authentication/issues/495)
+- A supposed way to auth requests from SSR to Feathers API [\#469](https://github.com/feathersjs/authentication/issues/469)
+- rename `app.authenticate\(\)` to `app.\_authenticate\(\)` [\#468](https://github.com/feathersjs/authentication/issues/468)
+
+**Merged pull requests:**
+
+- Delete slack link [\#637](https://github.com/feathersjs/authentication/pull/637) ([vodniciarv](https://github.com/vodniciarv))
+- Update @feathersjs/authentication-jwt to the latest version 🚀 [\#631](https://github.com/feathersjs/authentication/pull/631) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update mocha to the latest version 🚀 [\#629](https://github.com/feathersjs/authentication/pull/629) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update ws to the latest version 🚀 [\#625](https://github.com/feathersjs/authentication/pull/625) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Options merged [\#611](https://github.com/feathersjs/authentication/pull/611) ([Makingweb](https://github.com/Makingweb))
+
 ## [v2.1.1](https://github.com/feathersjs/authentication/tree/v2.1.1) (2018-01-03)
 [Full Changelog](https://github.com/feathersjs/authentication/compare/v2.1.0...v2.1.1)
 
