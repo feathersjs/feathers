@@ -182,6 +182,44 @@ describe('hooks basics', () => {
       });
     });
 
+    it('on argument validation error (https://github.com/feathersjs/express/issues/19)', () => {
+      const app = feathers().use('/dummy', {
+        get (id) {
+          return Promise.resolve({ id });
+        }
+      });
+
+      return app.service('dummy').get(undefined, {}, true).catch(context => {
+        assert.equal(context.service, app.service('dummy'));
+        assert.equal(context.type, 'error');
+        assert.equal(context.path, 'dummy');
+        assert.equal(context.error.message, 'An id must be provided to the \'get\' method');
+      });
+    });
+
+    it('on error in error hook (https://github.com/feathersjs/express/issues/21)', () => {
+      const app = feathers().use('/dummy', {
+        get (id) {
+          return Promise.reject(new Error('Nope'));
+        }
+      });
+
+      app.service('dummy').hooks({
+        error: {
+          get (context) {
+            throw new Error('Error in error hook');
+          }
+        }
+      });
+
+      return app.service('dummy').get(10, {}, true).catch(context => {
+        assert.equal(context.service, app.service('dummy'));
+        assert.equal(context.type, 'error');
+        assert.equal(context.path, 'dummy');
+        assert.equal(context.error.message, 'Error in error hook');
+      });
+    });
+
     it('still swallows error if context.result is set', () => {
       const result = { message: 'this is a test' };
       const app = feathers().use('/dummy', {
