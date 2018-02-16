@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.1.3](https://github.com/feathersjs/feathers/tree/v3.1.3) (2018-02-16)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.1.2...v3.1.3)
+
+**Merged pull requests:**
+
+- Update events to the latest version 🚀 [\#810](https://github.com/feathersjs/feathers/pull/810) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.1.2](https://github.com/feathersjs/feathers/tree/v3.1.2) (2018-02-10)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v3.1.1...v3.1.2)
 
