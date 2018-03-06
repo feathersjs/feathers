@@ -82,7 +82,7 @@
     "primus": "^7.0.0",
     "semistandard": "^12.0.0",
     "sinon": "^4.0.0",
-    "sinon-chai": "^2.8.0",
+    "sinon-chai": "^3.0.0",
     "socket.io-client": "^2.0.0",
     "superagent": "^3.0.0",
     "ws": "^4.0.0"
