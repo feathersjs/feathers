@@ -52,7 +52,7 @@
     "lodash.merge": "^4.6.0",
     "lodash.omit": "^4.5.0",
     "lodash.pick": "^4.4.0",
-    "passport-jwt": "^3.0.0"
+    "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
     "@feathersjs/authentication": "^2.0.0",
