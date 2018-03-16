@@ -1,5 +1,24 @@
 # Change Log
 
+## [v2.1.3](https://github.com/feathersjs/authentication/tree/v2.1.3) (2018-03-16)
+[Full Changelog](https://github.com/feathersjs/authentication/compare/v2.1.2...v2.1.3)
+
+**Closed issues:**
+
+- ts [\#647](https://github.com/feathersjs/authentication/issues/647)
+- Using /auth/facebook gives a 404 from vue-router [\#643](https://github.com/feathersjs/authentication/issues/643)
+- Crash after upgrade to feathersjs v3 [\#642](https://github.com/feathersjs/authentication/issues/642)
+- SameSite cookie option [\#640](https://github.com/feathersjs/authentication/issues/640)
+- context.params.user is empty object [\#635](https://github.com/feathersjs/authentication/issues/635)
+- Token is undefined for authenticated user [\#500](https://github.com/feathersjs/authentication/issues/500)
+- 1.x: logout timers need to be moved [\#467](https://github.com/feathersjs/authentication/issues/467)
+
+**Merged pull requests:**
+
+- Merge auk to master [\#653](https://github.com/feathersjs/authentication/pull/653) ([wnxhaja](https://github.com/wnxhaja))
+- Update ws to the latest version 🚀 [\#645](https://github.com/feathersjs/authentication/pull/645) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update sinon-chai to the latest version 🚀 [\#644](https://github.com/feathersjs/authentication/pull/644) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.1.2](https://github.com/feathersjs/authentication/tree/v2.1.2) (2018-02-14)
 [Full Changelog](https://github.com/feathersjs/authentication/compare/v2.1.1...v2.1.2)
 
