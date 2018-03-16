@@ -57,6 +57,9 @@ module.exports = function setupSocketHandler (app, options, { feathersParams, pr
           return tokens;
         });
 
+        // Clear logoutTimer.
+        lt.clearTimeout(logoutTimer);
+
         handleSocketCallback(promise, callback);
       } else if (typeof callback === 'function') {
         return callback(null, {});
