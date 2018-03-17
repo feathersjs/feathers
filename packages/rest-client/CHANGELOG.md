@@ -1,5 +1,20 @@
 # Change Log
 
+## [v1.3.4](https://github.com/feathersjs/rest-client/tree/v1.3.4) (2018-03-17)
+[Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.3.3...v1.3.4)
+
+**Closed issues:**
+
+- Window.fetch on macOS [\#24](https://github.com/feathersjs/rest-client/issues/24)
+- Error on server side rendering [\#23](https://github.com/feathersjs/rest-client/issues/23)
+
+**Merged pull requests:**
+
+- Properly serialize ECONNREFUSED errors [\#27](https://github.com/feathersjs/rest-client/pull/27) ([daffl](https://github.com/daffl))
+- Update axios to the latest version 🚀 [\#25](https://github.com/feathersjs/rest-client/pull/25) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update node-fetch to the latest version 🚀 [\#22](https://github.com/feathersjs/rest-client/pull/22) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update mocha to the latest version 🚀 [\#21](https://github.com/feathersjs/rest-client/pull/21) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.3.3](https://github.com/feathersjs/rest-client/tree/v1.3.3) (2018-01-03)
 [Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.3.2...v1.3.3)
 
