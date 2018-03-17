@@ -1,8 +1,14 @@
 const query = require('qs');
+const { Unavailable } = require('@feathersjs/errors');
+const { _ } = require('@feathersjs/commons');
 const { stripSlashes } = require('@feathersjs/commons');
 const { convert } = require('@feathersjs/errors');
 
 function toError (error) {
+  if (error.code === 'ECONNREFUSED') {
+    throw new Unavailable(error.message, _.pick(error, 'address', 'port', 'config'));
+  }
+
   throw convert(error);
 }
 

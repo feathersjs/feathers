@@ -77,4 +77,18 @@ describe('Axios REST connector', function () {
         assert.equal(error.code, 406);
       });
   });
+
+  it('ECONNREFUSED errors are serializable', () => {
+    const url = 'http://localhost:60000';
+    const setup = rest(url).axios(axios);
+    const app = feathers().configure(setup);
+
+    return app.service('something').find().catch(e => {
+      const err = JSON.parse(JSON.stringify(e));
+
+      assert.equal(err.name, 'Unavailable');
+      assert.equal(err.message, 'connect ECONNREFUSED 127.0.0.1:60000');
+      assert.ok(e.data.config);
+    });
+  });
 });
