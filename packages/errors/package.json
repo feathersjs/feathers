@@ -56,7 +56,7 @@
     "request": "^2.69.0",
     "semistandard": "^12.0.0",
     "shx": "^0.2.1",
-    "sinon": "^4.0.0",
+    "sinon": "^5.0.0",
     "sinon-chai": "^3.0.0"
   }
 }
