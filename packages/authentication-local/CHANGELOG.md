@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.1.1](https://github.com/feathersjs/authentication-local/tree/v1.1.1) (2018-03-25)
+[Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.1.0...v1.1.1)
+
+**Closed issues:**
+
+- hash-password hook will skip users if they are missing password [\#58](https://github.com/feathersjs/authentication-local/issues/58)
+- User service create method gets called upon each validation [\#56](https://github.com/feathersjs/authentication-local/issues/56)
+
+**Merged pull requests:**
+
+- Do not skip users that have no password [\#60](https://github.com/feathersjs/authentication-local/pull/60) ([daffl](https://github.com/daffl))
+- Update sinon to the latest version 🚀 [\#59](https://github.com/feathersjs/authentication-local/pull/59) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update sinon-chai to the latest version 🚀 [\#57](https://github.com/feathersjs/authentication-local/pull/57) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.1.0](https://github.com/feathersjs/authentication-local/tree/v1.1.0) (2018-01-23)
 [Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.0.4...v1.1.0)
 
