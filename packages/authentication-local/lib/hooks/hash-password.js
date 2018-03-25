@@ -33,43 +33,23 @@ module.exports = function hashPassword (options = {}) {
       return Promise.resolve(context);
     }
 
-    let data;
+    const dataIsArray = Array.isArray(context.data);
+    const data = dataIsArray ? context.data : [ context.data ];
 
-    // make sure we actually have password fields
-    if (Array.isArray(context.data)) {
-      data = context.data.filter(item => {
-        return item.hasOwnProperty(field);
-      });
-    } else if (context.data[field]) {
-      data = context.data;
-    }
-
-    // If the data doesn't have a password field
-    // then don't attempt to hash it.
-    if (data === undefined || (Array.isArray(data) && !data.length)) {
-      debug(`'${field}' field is missing. Skipping hashPassword hook.`);
-      return Promise.resolve(context);
-    }
-
-    if (Array.isArray(data)) {
-      debug(`Hashing passwords.`);
-
-      return Promise.all(data.map(item => {
+    return Promise.all(data.map(item => {
+      if (item.hasOwnProperty(field)) {
         return hashPw(item[field]).then(hashedPassword => {
-          item[field] = hashedPassword;
-          return item;
+          return Object.assign(item, {
+            [field]: hashedPassword
+          });
         });
-      }))
-      .then(results => {
-        context.data = results;
-        return Promise.resolve(context);
-      });
-    }
+      }
 
-    debug(`Hashing password.`);
-    return hashPw(data[field]).then(hashedPassword => {
-      context.data[field] = hashedPassword;
-      return Promise.resolve(context);
+      return item;
+    })).then(results => {
+      context.data = dataIsArray ? results : results[0];
+
+      return context;
     });
   };
 };

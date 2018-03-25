@@ -104,6 +104,21 @@ describe('hooks:hashPassword', () => {
       });
     });
 
+    it('does not remove things if there is no password', () => {
+      hook.data = [
+        { id: 0, password: 'secret' },
+        { id: 1 }
+      ];
+
+      return hashPassword()(hook).then(hook => {
+        const { data } = hook;
+
+        expect(data.length).to.equal(2);
+        expect(data[0].password).to.not.equal('secret');
+        expect(data[1]).to.exist;
+      });
+    });
+
     it('hashes with custom options', () => {
       hook.data = [
         {pass: 'secret'},
