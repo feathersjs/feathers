@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.1.4](https://github.com/feathersjs/feathers/tree/v3.1.4) (2018-03-26)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.1.3...v3.1.4)
+
+**Merged pull requests:**
+
+- Make sure error hooks always have the original context information [\#842](https://github.com/feathersjs/feathers/pull/842) ([daffl](https://github.com/daffl))
+
 ## [v3.1.3](https://github.com/feathersjs/feathers/tree/v3.1.3) (2018-02-16)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v3.1.2...v3.1.3)
 
