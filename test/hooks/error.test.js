@@ -223,4 +223,48 @@ describe('`error` hooks', () => {
         .catch(error => assert.equal(error.message, errorMessage));
     });
   });
+
+  it('Error in before hook causes inter-service calls to have wrong hook context (https://github.com/feathersjs/feathers/issues/841)', () => {
+    const app = feathers();
+
+    let service1Params, service2Params;
+
+    app.use('/service1', {
+      find () {
+        return Promise.resolve({ message: 'service1 success' });
+      }
+    });
+
+    app.service('service1').hooks({
+      before (context) {
+        service1Params = context.params;
+        return Promise.reject(new Error('Error in service1 before hook'));
+      }
+    });
+
+    app.use('/service2', {
+      find (params) {
+        return app.service('/service1').find({}).then(() => {
+          return { message: 'service2 success' };
+        });
+      }
+    });
+
+    app.service('service2').hooks({
+      before (context) {
+        service2Params = context.params;
+        context.params.foo = 'bar';
+      },
+      error (context) {
+        assert.ok(service1Params !== context.params);
+        assert.ok(service2Params === context.params);
+        assert.equal(context.path, 'service2');
+        assert.equal(context.params.foo, 'bar');
+      }
+    });
+
+    return app.service('/service2').find().catch(error => {
+      assert.equal(error.message, 'Error in service1 before hook');
+    });
+  });
 });
