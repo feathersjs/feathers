@@ -20,11 +20,11 @@ function rest (handler = formatter) {
     const app = this;
 
     if (typeof app.route !== 'function') {
-      throw new Error('feathers-rest needs an Express compatible app. Feathers apps have to wrapped with feathers-express first.');
+      throw new Error('@feathersjs/express/rest needs an Express compatible app. Feathers apps have to wrapped with feathers-express first.');
     }
 
     if (!app.version || app.version < '3.0.0') {
-      throw new Error(`feathers-rest requires an instance of a Feathers application version 3.x or later (got ${app.version})`);
+      throw new Error(`@feathersjs/express/rest requires an instance of a Feathers application version 3.x or later (got ${app.version})`);
     }
 
     app.rest = wrappers;
