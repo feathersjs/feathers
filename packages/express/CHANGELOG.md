@@ -1,5 +1,18 @@
 # Change Log
 
+## [v1.2.1](https://github.com/feathersjs/express/tree/v1.2.1) (2018-03-29)
+[Full Changelog](https://github.com/feathersjs/express/compare/v1.2.0...v1.2.1)
+
+**Closed issues:**
+
+- Error in error hook results in unhandled rejection [\#21](https://github.com/feathersjs/express/issues/21)
+- Error handler in wrapper hides breaks and hides real error [\#13](https://github.com/feathersjs/express/issues/13)
+
+**Merged pull requests:**
+
+- Allow to set HTTP status code in a hook [\#23](https://github.com/feathersjs/express/pull/23) ([daffl](https://github.com/daffl))
+- Update axios to the latest version 🚀 [\#22](https://github.com/feathersjs/express/pull/22) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.2.0](https://github.com/feathersjs/express/tree/v1.2.0) (2018-02-09)
 [Full Changelog](https://github.com/feathersjs/express/compare/v1.1.2...v1.2.0)
 
@@ -8,7 +21,6 @@
 - Error in `create` method results in unhandled rejection  [\#19](https://github.com/feathersjs/express/issues/19)
 - @feathersjs/express call without paramaters could returns an instance of express [\#18](https://github.com/feathersjs/express/issues/18)
 - Feathers-express blows up the feathers application version property and the example doesn't work [\#16](https://github.com/feathersjs/express/issues/16)
-- Error handler in wrapper hides breaks and hides real error [\#13](https://github.com/feathersjs/express/issues/13)
 
 **Merged pull requests:**
 
