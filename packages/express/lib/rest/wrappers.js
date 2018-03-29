@@ -64,7 +64,9 @@ function getHandler (method, getArgs) {
           res.data = data;
           res.hook = hook;
 
-          if (!data) {
+          if (hook.statusCode) {
+            res.status(hook.statusCode);
+          } else if (!data) {
             debug(`No content returned for '${req.url}'`);
             res.status(statusCodes.noContent);
           } else if (method === 'create') {

@@ -18,7 +18,7 @@ describe('@feathersjs/express/rest provider', () => {
         app.configure(rest());
         assert.ok(false, 'Should never get here');
       } catch (e) {
-        assert.equal(e.message, 'feathers-rest needs an Express compatible app. Feathers apps have to wrapped with feathers-express first.');
+        assert.equal(e.message, '@feathersjs/express/rest needs an Express compatible app. Feathers apps have to wrapped with feathers-express first.');
       }
     });
 
@@ -31,7 +31,7 @@ describe('@feathersjs/express/rest provider', () => {
 
         assert.ok(false, 'Should never get here');
       } catch (e) {
-        assert.equal(e.message, 'feathers-rest requires an instance of a Feathers application version 3.x or later (got 2.9.9)');
+        assert.equal(e.message, '@feathersjs/express/rest requires an instance of a Feathers application version 3.x or later (got 2.9.9)');
       }
     });
 
@@ -181,6 +181,23 @@ describe('@feathersjs/express/rest provider', () => {
               fromDispatch: true
             });
           });
+      });
+
+      it('allows to set statusCode in a hook', () => {
+        app.use('/hook-status', {
+          get (id) {
+            return Promise.resolve({});
+          }
+        });
+
+        app.service('hook-status').hooks({
+          after (hook) {
+            hook.statusCode = 206;
+          }
+        });
+
+        return axios.get('http://localhost:4777/hook-status/dishes')
+          .then(res => assert.equal(res.status, 206));
       });
 
       it('sets the hook object in res.hook on error', () => {
