@@ -1,5 +1,17 @@
 # Change Log
 
+## [v3.2.1](https://github.com/feathersjs/socketio/tree/v3.2.1) (2018-04-04)
+[Full Changelog](https://github.com/feathersjs/socketio/compare/v3.2.0...v3.2.1)
+
+**Closed issues:**
+
+- Connection closed before receiving a handshake response [\#113](https://github.com/feathersjs/socketio/issues/113)
+- `yarn add @feathersjs/socketio` gets stuck [\#112](https://github.com/feathersjs/socketio/issues/112)
+
+**Merged pull requests:**
+
+- Use latest version of Socket.io \(2.1.0\) [\#115](https://github.com/feathersjs/socketio/pull/115) ([daffl](https://github.com/daffl))
+
 ## [v3.2.0](https://github.com/feathersjs/socketio/tree/v3.2.0) (2018-02-09)
 [Full Changelog](https://github.com/feathersjs/socketio/compare/v3.1.0...v3.2.0)
 
