@@ -1,19 +1,12 @@
 const { each, pick } = require('./utils')._;
 
-function convertGetOrRemove (args) {
-  const [ id, params = {} ] = args;
-
-  return { id, params };
-}
-
-function convertUpdateOrPatch (args) {
-  const [ id, data, params = {} ] = args;
-
-  return { id, data, params };
-}
-
 // To skip further hooks
-const SKIP = exports.SKIP = typeof Symbol !== 'undefined' ? Symbol('__feathersSkipHooks') : '__feathersSkipHooks';
+const SKIP = exports.SKIP = typeof Symbol !== 'undefined'
+  ? Symbol('__feathersSkipHooks')
+  : '__feathersSkipHooks';
+
+const convertGetOrRemove = ([ id, params = {} ]) => ({ id, params });
+const convertUpdateOrPatch = ([ id, data, params = {} ]) => ({ id, data, params });
 
 // Converters from service method arguments to hook object properties
 exports.converters = {
