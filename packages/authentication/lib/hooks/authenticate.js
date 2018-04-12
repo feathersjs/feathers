@@ -1,12 +1,15 @@
 const errors = require('@feathersjs/errors');
 const Debug = require('debug');
 const merge = require('lodash.merge');
+const { NotAuthenticated } = require('@feathersjs/errors');
 const debug = Debug('@feathersjs/authentication:hooks:authenticate');
 
-module.exports = function authenticate (strategies, options = {}) {
-  if (!strategies) {
+module.exports = function authenticate (_strategies, options = {}) {
+  if (!_strategies) {
     throw new Error(`The 'authenticate' hook requires one of your registered passport strategies.`);
   }
+
+  const strategies = Array.isArray(_strategies) ? _strategies : [ _strategies ];
 
   return function (hook) {
     const app = hook.app;
@@ -22,13 +25,10 @@ module.exports = function authenticate (strategies, options = {}) {
 
     hook.data = hook.data || {};
 
-    let { strategy } = hook.data;
-    if (!strategy) {
-      if (Array.isArray(strategies)) {
-        strategy = strategies[0];
-      } else {
-        strategy = strategies;
-      }
+    const strategy = hook.data.strategy || strategies[0];
+
+    if (strategies.indexOf(strategy) === -1) {
+      return Promise.reject(new NotAuthenticated(`Strategy ${strategy} is not permitted`));
     }
 
     // Handle the case where authenticate hook was registered without a passport strategy specified

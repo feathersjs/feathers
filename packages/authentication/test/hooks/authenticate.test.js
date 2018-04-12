@@ -98,6 +98,16 @@ describe('hooks:authenticate', () => {
     });
   });
 
+  it('throws error when strategy is not allowed', () => {
+    hook.data.strategy = 'something';
+
+    return authenticate('mock')(hook).then(() => {
+      throw new Error('Should never get here');
+    }).catch(error => {
+      expect(error.message).to.equal('Strategy something is not permitted');
+    });
+  });
+
   describe('when authentication succeeds', () => {
     let response;
 
