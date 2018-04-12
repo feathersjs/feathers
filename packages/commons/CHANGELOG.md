@@ -1,5 +1,18 @@
 # Change Log
 
+## [v1.4.1](https://github.com/feathersjs/commons/tree/v1.4.1) (2018-04-12)
+[Full Changelog](https://github.com/feathersjs/commons/compare/v1.4.0...v1.4.1)
+
+**Closed issues:**
+
+- Uncaught ReferenceError: convertGetOrRemove is not defined [\#69](https://github.com/feathersjs/commons/issues/69)
+- Cannot build with create-react-app [\#68](https://github.com/feathersjs/commons/issues/68)
+
+**Merged pull requests:**
+
+- Make conversion functions more concise [\#70](https://github.com/feathersjs/commons/pull/70) ([daffl](https://github.com/daffl))
+- Update mocha to the latest version 🚀 [\#67](https://github.com/feathersjs/commons/pull/67) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.4.0](https://github.com/feathersjs/commons/tree/v1.4.0) (2018-01-17)
 [Full Changelog](https://github.com/feathersjs/commons/compare/v1.3.1...v1.4.0)
 
