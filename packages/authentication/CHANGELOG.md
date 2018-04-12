@@ -1,5 +1,21 @@
 # Change Log
 
+## [v2.1.4](https://github.com/feathersjs/authentication/tree/v2.1.4) (2018-04-12)
+[Full Changelog](https://github.com/feathersjs/authentication/compare/v2.1.3...v2.1.4)
+
+**Closed issues:**
+
+- Column "createdAt" does not exist" in Autentication [\#660](https://github.com/feathersjs/authentication/issues/660)
+- How to make a user automatically logined on server side? [\#659](https://github.com/feathersjs/authentication/issues/659)
+- authentication-jwt functional example [\#657](https://github.com/feathersjs/authentication/issues/657)
+- "No auth token" with auth0 when following the guide [\#655](https://github.com/feathersjs/authentication/issues/655)
+- Service returns \[No Auth Token\] same by passing Authorization Token on HEADER [\#641](https://github.com/feathersjs/authentication/issues/641)
+
+**Merged pull requests:**
+
+- Throw an error for unavailable strategy [\#663](https://github.com/feathersjs/authentication/pull/663) ([daffl](https://github.com/daffl))
+- Update sinon to the latest version 🚀 [\#656](https://github.com/feathersjs/authentication/pull/656) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.1.3](https://github.com/feathersjs/authentication/tree/v2.1.3) (2018-03-16)
 [Full Changelog](https://github.com/feathersjs/authentication/compare/v2.1.2...v2.1.3)
 
