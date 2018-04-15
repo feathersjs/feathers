@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.1.2](https://github.com/feathersjs/authentication-local/tree/v1.1.2) (2018-04-15)
+[Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.1.1...v1.1.2)
+
+**Closed issues:**
+
+- Protect hooks does not support dot notation [\#61](https://github.com/feathersjs/authentication-local/issues/61)
+
+**Merged pull requests:**
+
+- Use latest version of Lodash [\#62](https://github.com/feathersjs/authentication-local/pull/62) ([daffl](https://github.com/daffl))
+
 ## [v1.1.1](https://github.com/feathersjs/authentication-local/tree/v1.1.1) (2018-03-25)
 [Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.1.0...v1.1.1)
 
