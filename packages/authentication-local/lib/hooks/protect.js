@@ -1,4 +1,4 @@
-const omit = require('lodash.omit');
+const { omit } = require('lodash');
 
 module.exports = function (...fields) {
   return function protect (context) {

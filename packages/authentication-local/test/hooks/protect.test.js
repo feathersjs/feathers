@@ -24,6 +24,25 @@ function testOmit (title, property) {
       });
     });
 
+    it('omits from nested object', () => {
+      const hook = protect('user.password');
+      const data = {
+        user: {
+          email: 'test@user.com',
+          password: 'supersecret'
+        }
+      };
+      const context = {
+        [property]: data
+      };
+      const result = hook(context);
+
+      expect(result).to.deep.equal({
+        [property]: data,
+        dispatch: { user: { email: 'test@user.com' } }
+      });
+    });
+
     it('handles `data` property only for find', () => {
       const data = {
         email: 'test@user.com',

@@ -1,7 +1,6 @@
 const Debug = require('debug');
 const bcrypt = require('bcryptjs');
-const get = require('lodash.get');
-const omit = require('lodash.omit');
+const { get, omit } = require('lodash');
 
 const debug = Debug('@feathersjs/authentication-local:verify');
 

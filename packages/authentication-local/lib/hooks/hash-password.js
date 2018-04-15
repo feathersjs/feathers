@@ -1,5 +1,5 @@
 const hasher = require('../utils/hash');
-const merge = require('lodash.merge');
+const { merge } = require('lodash');
 const Debug = require('debug');
 
 const debug = Debug('@feathersjs/authentication-local:hooks:hash-password');
