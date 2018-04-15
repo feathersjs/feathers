@@ -1,7 +1,5 @@
 const Debug = require('debug');
-const merge = require('lodash.merge');
-const omit = require('lodash.omit');
-const pick = require('lodash.pick');
+const { merge, omit, pick } = require('lodash');
 const hooks = require('./hooks');
 const DefaultVerifier = require('./verifier');
 

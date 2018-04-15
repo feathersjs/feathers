@@ -50,10 +50,7 @@
     "@feathersjs/errors": "^3.0.0",
     "bcryptjs": "^2.3.0",
     "debug": "^3.1.0",
-    "lodash.get": "^4.4.2",
-    "lodash.merge": "^4.6.0",
-    "lodash.omit": "^4.5.0",
-    "lodash.pick": "^4.4.0",
+    "lodash": "^4.17.5",
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
