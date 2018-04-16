@@ -1,5 +1,17 @@
 # Change Log
 
+## [v2.1.5](https://github.com/feathersjs/authentication/tree/v2.1.5) (2018-04-16)
+[Full Changelog](https://github.com/feathersjs/authentication/compare/v2.1.4...v2.1.5)
+
+**Closed issues:**
+
+- feathersjs Invalid token: expired [\#661](https://github.com/feathersjs/authentication/issues/661)
+- Safari and iOS facebook login can't redirect back, but others can. [\#651](https://github.com/feathersjs/authentication/issues/651)
+
+**Merged pull requests:**
+
+- Remove payload and user entity on logout. [\#665](https://github.com/feathersjs/authentication/pull/665) ([bertho-zero](https://github.com/bertho-zero))
+
 ## [v2.1.4](https://github.com/feathersjs/authentication/tree/v2.1.4) (2018-04-12)
 [Full Changelog](https://github.com/feathersjs/authentication/compare/v2.1.3...v2.1.4)
 
