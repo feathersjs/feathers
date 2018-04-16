@@ -346,6 +346,32 @@ describe('@feathersjs/express/rest provider', () => {
         .then(() => server.close());
     });
 
+    it('allows an array of middleware without a service', () => {
+      const app = expressify(feathers());
+      const middlewareArray = [
+        function (req, res, next) {
+          res.data = ['first'];
+          next();
+        }, function (req, res, next) {
+          res.data.push('second');
+          next();
+        }, function (req, res, next) {
+          res.data.push(req.body.text);
+          res.status(200).json(res.data);
+        }];
+      app.configure(rest())
+        .use(bodyParser.json())
+        .use('/array-middleware', middlewareArray);
+
+      const server = app.listen(4776);
+
+      return axios.post('http://localhost:4776/array-middleware', {text: 'Do dishes'})
+        .then(res => {
+          assert.deepEqual(res.data, ['first', 'second', 'Do dishes']);
+        })
+        .then(() => server.close());
+    });
+
     it('formatter does nothing when there is no res.data', () => {
       const data = { message: 'It worked' };
       const app = expressify(feathers()).use('/test',

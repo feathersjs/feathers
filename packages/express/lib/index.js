@@ -41,7 +41,7 @@ function feathersExpress (feathersApp) {
         });
 
       const hasMethod = methods => methods.some(name =>
-        (service && typeof service[name] === 'function')
+        (service && !Array.isArray(service) && typeof service[name] === 'function')
       );
 
       // Check for service (any object with at least one service method)
