@@ -44,6 +44,10 @@ module.exports = function setupSocketHandler (app, options, { feathersParams, pr
         delete connection.authenticated;
         connection.headers = {};
         socket._feathers.body = {};
+        if (socket.feathers) {
+          socket.feathers.payload = null;
+          socket.feathers[authSettings.entity] = null;
+        }
 
         const promise = service.remove(accessToken, { authenticated: true }).then(tokens => {
           debug(`Successfully logged out socket with accessToken`, accessToken);
