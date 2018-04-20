@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.1.3](https://github.com/feathersjs/authentication-local/tree/v1.1.3) (2018-04-20)
+[Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.1.2...v1.1.3)
+
+**Merged pull requests:**
+
+- Adding tests and calling to hasOwnProperty on Object.prototype instead of assuming valid prototype [\#63](https://github.com/feathersjs/authentication-local/pull/63) ([pmabres](https://github.com/pmabres))
+
 ## [v1.1.2](https://github.com/feathersjs/authentication-local/tree/v1.1.2) (2018-04-15)
 [Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.1.1...v1.1.2)
 
