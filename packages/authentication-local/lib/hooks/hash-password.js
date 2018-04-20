@@ -37,7 +37,7 @@ module.exports = function hashPassword (options = {}) {
     const data = dataIsArray ? context.data : [ context.data ];
 
     return Promise.all(data.map(item => {
-      if (item.hasOwnProperty(field)) {
+      if (Object.prototype.hasOwnProperty.call(item, field)) {
         return hashPw(item[field]).then(hashedPassword => {
           return Object.assign(item, {
             [field]: hashedPassword

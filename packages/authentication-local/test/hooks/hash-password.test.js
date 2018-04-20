@@ -46,6 +46,15 @@ describe('hooks:hashPassword', () => {
     });
   });
 
+  describe('when data does not have a prototype', () => {
+    it('does not do anything', () => {
+      hook.data = Object.create(null);
+      return hashPassword()(hook).then(returnedHook => {
+        expect(returnedHook).to.deep.equal(hook);
+      });
+    });
+  });
+
   describe('when password does not exist', () => {
     it('does not do anything', () => {
       delete hook.data.password;
