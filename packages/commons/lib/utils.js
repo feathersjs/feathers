@@ -56,13 +56,13 @@ const _ = exports._ = {
   },
 
   pick (source, ...keys) {
-    const result = {};
-    keys.forEach(key => {
+    return keys.reduce((result, key) => {
       if (source[key] !== undefined) {
         result[key] = source[key];
       }
-    });
-    return result;
+
+      return result;
+    }, {});
   },
 
   // Recursively merge the source object into the target object

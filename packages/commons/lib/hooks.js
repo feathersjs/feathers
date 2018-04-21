@@ -93,7 +93,7 @@ exports.makeArguments = function makeArguments (hook) {
 // Converts different hook registration formats into the
 // same internal format
 exports.convertHookData = function convertHookData (obj) {
-  var hook = {};
+  let hook = {};
 
   if (Array.isArray(obj)) {
     hook = { all: obj };
@@ -150,11 +150,8 @@ exports.processHooks = function processHooks (hooks, initialHookObject) {
 
     return hookObject;
   };
-  // First step of the hook chain with the initial hook object
-  let promise = Promise.resolve(hookObject);
-
   // Go through all hooks and chain them into our promise
-  hooks.forEach(fn => {
+  const promise = hooks.reduce((promise, fn) => {
     const hook = fn.bind(this);
 
     if (hook.length === 2) { // function(hook, next)
@@ -168,16 +165,14 @@ exports.processHooks = function processHooks (hooks, initialHookObject) {
     }
 
     // Use the returned hook object or the old one
-    promise = promise.then(updateCurrentHook);
-  });
+    return promise.then(updateCurrentHook);
+  }, Promise.resolve(hookObject));
 
-  return promise
-    .then(() => hookObject)
-    .catch(error => {
-      // Add the hook information to any errors
-      error.hook = hookObject;
-      throw error;
-    });
+  return promise.then(() => hookObject).catch(error => {
+    // Add the hook information to any errors
+    error.hook = hookObject;
+    throw error;
+  });
 };
 
 // Add `.hooks` functionality to an object
@@ -186,7 +181,7 @@ exports.enableHooks = function enableHooks (obj, methods, types) {
     return obj;
   }
 
-  let __hooks = {};
+  const __hooks = {};
 
   types.forEach(type => {
     // Initialize properties where hook functions are stored
