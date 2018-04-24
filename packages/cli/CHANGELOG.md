@@ -1,5 +1,21 @@
 # Change Log
 
+## [v3.6.2](https://github.com/feathersjs/cli/tree/v3.6.2) (2018-04-24)
+[Full Changelog](https://github.com/feathersjs/cli/compare/v3.6.1...v3.6.2)
+
+**Closed issues:**
+
+- Unhandled 'error' event [\#145](https://github.com/feathersjs/cli/issues/145)
+- Generate Service stops responding at "What is the database connection string" [\#144](https://github.com/feathersjs/cli/issues/144)
+- Feature: List updated/new files [\#143](https://github.com/feathersjs/cli/issues/143)
+- Duplicate passport users in users table [\#141](https://github.com/feathersjs/cli/issues/141)
+- Add elasticsearch  support when generating a database service [\#77](https://github.com/feathersjs/cli/issues/77)
+
+**Merged pull requests:**
+
+- Update generator-feathers to latest version [\#147](https://github.com/feathersjs/cli/pull/147) ([daffl](https://github.com/daffl))
+- Add basic shell command [\#138](https://github.com/feathersjs/cli/pull/138) ([zaro](https://github.com/zaro))
+
 ## [v3.6.1](https://github.com/feathersjs/cli/tree/v3.6.1) (2018-02-10)
 [Full Changelog](https://github.com/feathersjs/cli/compare/v3.6.0...v3.6.1)
 
