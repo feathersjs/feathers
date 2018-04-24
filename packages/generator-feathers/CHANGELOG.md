@@ -1,5 +1,15 @@
 # Change Log
 
+## [v2.4.2](https://github.com/feathersjs/generator-feathers/tree/v2.4.2) (2018-04-24)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.4.1...v2.4.2)
+
+**Merged pull requests:**
+
+- Fix Node version check which did not work with v10.0.0 [\#344](https://github.com/feathersjs/generator-feathers/pull/344) ([daffl](https://github.com/daffl))
+- Update sqlite3 to the latest version 🚀 [\#340](https://github.com/feathersjs/generator-feathers/pull/340) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Improve comments' readability [\#339](https://github.com/feathersjs/generator-feathers/pull/339) ([claforte](https://github.com/claforte))
+- fix typo [\#338](https://github.com/feathersjs/generator-feathers/pull/338) ([claforte](https://github.com/claforte))
+
 ## [v2.4.1](https://github.com/feathersjs/generator-feathers/tree/v2.4.1) (2018-02-10)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.4.0...v2.4.1)
 
