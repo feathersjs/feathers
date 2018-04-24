@@ -4,7 +4,6 @@ const meta = require('generator-feathers/meta');
 const semver = require('semver');
 const updateNotifier = require('update-notifier');
 const { upgrade } = require('@feathersjs/tools');
-const shell = require('./shell');
 
 const env = yeoman.createEnv();
 
@@ -49,11 +48,6 @@ module.exports = function (argv, generatorOptions = {}) {
     .alias('u')
     .description('Try to automatically upgrade to the latest Feathers version')
     .action(version => upgrade(process.cwd()));
-
-  program.command('shell')
-    .alias('s')
-    .description('Start interactive shell')
-    .action(_ => shell());
 
   program.command('*').action(() => program.help());
   program.parse(argv);
