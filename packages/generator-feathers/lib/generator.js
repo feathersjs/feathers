@@ -12,7 +12,7 @@ module.exports = class BaseGenerator extends Generator {
     this.defaultConfig = this.fs.readJSON(defaultConfig, {});
     this.props = opts.props || {};
 
-    if(process.version < 'v6.0.0') {
+    if (!semver.satisfies(process.version, '>= 6.0.0')) {
       this.log.error('The generator will only work with Node v6.0.0 and up!');
       process.exit();
     }
