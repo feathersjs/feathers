@@ -3,5 +3,6 @@ services: mongodb
 node_js:
   - 6
   - 8
+  - 10
 addons:
   rethinkdb: 2.3
