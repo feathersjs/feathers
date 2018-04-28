@@ -278,4 +278,31 @@ describe('Service events', () => {
         .then(() => service.emit('created', { message: 'custom event' }));
     });
   });
+
+  describe('event skipping', () => {
+    it('skips emitting events if hook.skipEvent is set', done => {
+      const app = feathers().use('/creator', {
+        create (data) {
+          return Promise.resolve(data);
+        }
+      });
+
+      const service = app.service('creator');
+
+      service.hooks({
+        after (hook) {
+          hook.skipEvent = true;
+        }
+      });
+
+      service.on('created', (data, hook) => {
+        done(new Error('created should not be called'));
+      });
+
+      service.create({ message: 'Hi' });
+      setTimeout(() => {
+        done();
+      }, 1000);
+    });
+  });
 });
