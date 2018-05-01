@@ -242,4 +242,46 @@ describe('hooks basics', () => {
       });
     });
   });
+
+  it('can register hooks on a custom method', () => {
+    const app = feathers().use('/dummy', {
+      methods: ['custom'],
+      converters: {
+        custom: ([ id, data, params = {} ]) => ({ id, data, params })
+      },
+      get () {
+        return Promise.reject(new Error('Something went wrong'));
+      },
+      custom (id, data, params) {
+        console.log([id, data, params]);
+        return Promise.resolve([id, data, params]);
+      }
+    });
+
+    app.service('dummy').hooks({
+      before: {
+        all (context) {
+          context.test = ['all::before'];
+        },
+        custom (context) {
+          context.test.push('custom::before');
+        }
+      },
+      after: {
+        all (context) {
+          context.test.push('all::after');
+        },
+        custom (context) {
+          context.test.push('custom::after');
+        }
+      }
+    });
+
+    const args = [1, { test: 'ok' }, { provider: 'rest' }];
+
+    return app.service('dummy').custom(...args, true).then(hook => {
+      assert.deepEqual(hook.result, args);
+      assert.deepEqual(hook.test, ['all::before', 'custom::before', 'all::after', 'custom::after']);
+    });
+  });
 });
