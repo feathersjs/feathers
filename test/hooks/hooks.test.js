@@ -253,7 +253,6 @@ describe('hooks basics', () => {
         return Promise.reject(new Error('Something went wrong'));
       },
       custom (id, data, params) {
-        console.log([id, data, params]);
         return Promise.resolve([id, data, params]);
       }
     });
