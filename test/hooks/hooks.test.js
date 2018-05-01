@@ -249,9 +249,7 @@ describe('hooks basics', () => {
       converters: {
         custom: ([ id, data, params = {} ]) => ({ id, data, params })
       },
-      get () {
-        return Promise.reject(new Error('Something went wrong'));
-      },
+      get () {},
       custom (id, data, params) {
         return Promise.resolve([id, data, params]);
       }
