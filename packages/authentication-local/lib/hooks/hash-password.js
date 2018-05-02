@@ -1,5 +1,5 @@
 const hasher = require('../utils/hash');
-const { merge } = require('lodash');
+const { merge, get, set } = require('lodash');
 const Debug = require('debug');
 
 const debug = Debug('@feathersjs/authentication-local:hooks:hash-password');
@@ -37,12 +37,9 @@ module.exports = function hashPassword (options = {}) {
     const data = dataIsArray ? context.data : [ context.data ];
 
     return Promise.all(data.map(item => {
-      if (Object.prototype.hasOwnProperty.call(item, field)) {
-        return hashPw(item[field]).then(hashedPassword => {
-          return Object.assign(item, {
-            [field]: hashedPassword
-          });
-        });
+      const password = get(item, field);
+      if (password) {
+        return hashPw(password).then(hashedPassword => set(item, field, hashedPassword));
       }
 
       return item;
