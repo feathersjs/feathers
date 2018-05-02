@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.2.0](https://github.com/feathersjs/authentication-local/tree/v1.2.0) (2018-05-02)
+[Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.1.3...v1.2.0)
+
+**Merged pull requests:**
+
+- added support for nested password fields option in hash password hook [\#64](https://github.com/feathersjs/authentication-local/pull/64) ([ThePesta](https://github.com/ThePesta))
+
 ## [v1.1.3](https://github.com/feathersjs/authentication-local/tree/v1.1.3) (2018-04-20)
 [Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.1.2...v1.1.3)
 
