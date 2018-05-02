@@ -81,6 +81,19 @@ describe('hooks:hashPassword', () => {
       });
     });
 
+    it('hashes with nested password field custom option', () => {
+      hook.data = {
+        nested: {
+          pass: 'secret'
+        }
+      };
+
+      return hashPassword({ passwordField: 'nested.pass' })(hook).then(hook => {
+        expect(hook.data.nested.pass).to.not.equal(undefined);
+        expect(hook.data.nested.pass).to.not.equal('secret');
+      });
+    });
+
     it('calls custom hash function', () => {
       const fn = sinon.stub().returns(Promise.resolve());
       return hashPassword({ hash: fn })(hook).then(() => {
