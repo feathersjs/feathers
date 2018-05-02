@@ -1,5 +1,5 @@
 const hasher = require('../utils/hash');
-const { merge, get, set } = require('lodash');
+const { merge, get, set, cloneDeep } = require('lodash');
 const Debug = require('debug');
 
 const debug = Debug('@feathersjs/authentication-local:hooks:hash-password');
@@ -39,7 +39,9 @@ module.exports = function hashPassword (options = {}) {
     return Promise.all(data.map(item => {
       const password = get(item, field);
       if (password) {
-        return hashPw(password).then(hashedPassword => set(item, field, hashedPassword));
+        return hashPw(password).then(hashedPassword =>
+          set(cloneDeep(item), field, hashedPassword)
+        );
       }
 
       return item;
