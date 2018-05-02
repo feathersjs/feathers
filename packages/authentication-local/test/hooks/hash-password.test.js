@@ -72,6 +72,18 @@ describe('hooks:hashPassword', () => {
       });
     });
 
+    it('does not modify the original object', () => {
+      const data = { password: 'secret' };
+
+      hook.data = data;
+
+      return hashPassword()(hook).then(hook => {
+        expect(hook.data.password).to.not.equal(undefined);
+        expect(hook.data.password).to.not.equal('secret');
+        expect(data.password).to.equal('secret');
+      });
+    });
+
     it('hashes with custom options', () => {
       hook.data.pass = 'secret';
 
