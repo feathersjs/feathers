@@ -1,5 +1,19 @@
 # Change Log
 
+## [v2.0.1](https://github.com/feathersjs/authentication-jwt/tree/v2.0.1) (2018-05-04)
+[Full Changelog](https://github.com/feathersjs/authentication-jwt/compare/v2.0.0...v2.0.1)
+
+**Closed issues:**
+
+- "No auth token" with socketio [\#60](https://github.com/feathersjs/authentication-jwt/issues/60)
+
+**Merged pull requests:**
+
+- Update sinon to the latest version 🚀 [\#59](https://github.com/feathersjs/authentication-jwt/pull/59) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update passport-jwt to the latest version 🚀 [\#58](https://github.com/feathersjs/authentication-jwt/pull/58) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update sinon-chai to the latest version 🚀 [\#57](https://github.com/feathersjs/authentication-jwt/pull/57) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Fix typo on documentation link [\#56](https://github.com/feathersjs/authentication-jwt/pull/56) ([bernardobelchior](https://github.com/bernardobelchior))
+
 ## [v2.0.0](https://github.com/feathersjs/authentication-jwt/tree/v2.0.0) (2018-01-21)
 [Full Changelog](https://github.com/feathersjs/authentication-jwt/compare/v1.0.2...v2.0.0)
 
