@@ -135,6 +135,25 @@ describe('`error` hooks', () => {
       return service.get(10)
         .then(result => assert.deepEqual(result, data));
     });
+
+    it('allows to set `context.result = null` in error hooks (#865)', () => {
+      const app = feathers().use('/dummy', {
+        get () {
+          return Promise.reject(new Error('Damnit'));
+        }
+      });
+
+      app.service('dummy').hooks({
+        error: {
+          get (context) {
+            context.result = null;
+          }
+        }
+      });
+
+      return app.service('dummy').get(1)
+        .then(result => assert.equal(result, null));
+    });
   });
 
   describe('error in hooks', () => {
