@@ -245,9 +245,8 @@ describe('hooks basics', () => {
 
   it('can register hooks on a custom method', () => {
     const app = feathers().use('/dummy', {
-      methods: ['custom'],
-      converters: {
-        custom: ([ id, data, params = {} ]) => ({ id, data, params })
+      methods: {
+        custom: ['id', 'data', 'params']
       },
       get () {},
       custom (id, data, params) {
