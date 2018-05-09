@@ -16,7 +16,7 @@ class Service {
 
   create (data, params) {
     if (Array.isArray(data)) {
-      return Promise.all(data.map(current => this.create(current)));
+      return Promise.all(data.map(current => this.create(current, params)));
     }
 
     return Promise.resolve(data);

@@ -16,7 +16,7 @@ class Service {
 
   async create (data, params) {
     if (Array.isArray(data)) {
-      return await Promise.all(data.map(current => this.create(current)));
+      return Promise.all(data.map(current => this.create(current, params)));
     }
 
     return data;
