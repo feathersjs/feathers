@@ -1,5 +1,19 @@
 # Change Log
 
+## [v2.4.3](https://github.com/feathersjs/generator-feathers/tree/v2.4.3) (2018-05-09)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.4.2...v2.4.3)
+
+**Closed issues:**
+
+- Version 10 of node.js has been released [\#345](https://github.com/feathersjs/generator-feathers/issues/345)
+- Created database summary is wrong [\#343](https://github.com/feathersjs/generator-feathers/issues/343)
+
+**Merged pull requests:**
+
+- Fix summary for generated connection [\#348](https://github.com/feathersjs/generator-feathers/pull/348) ([daffl](https://github.com/daffl))
+- Remove confusing and unnecessary name parameter [\#347](https://github.com/feathersjs/generator-feathers/pull/347) ([daffl](https://github.com/daffl))
+- Update to node 10 in .travis.yml [\#346](https://github.com/feathersjs/generator-feathers/pull/346) ([daffl](https://github.com/daffl))
+
 ## [v2.4.2](https://github.com/feathersjs/generator-feathers/tree/v2.4.2) (2018-04-24)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.4.1...v2.4.2)
 
