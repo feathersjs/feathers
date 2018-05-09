@@ -1,14 +1,15 @@
 // Initializes the `<%= name %>` service on path `/<%= path %>`
-const createService = require('<%= serviceModule %>');<% if(modelName) { %>
-const createModel = require('../../models/<%= modelName %>');<% } %>
+const createService = require('<%= serviceModule %>');
+const createModel = require('../../models/<%= modelName %>');
 const hooks = require('./<%= kebabName %>.hooks');
 
 module.exports = function (app) {
-  <% if (modelName) { %>const Model = createModel(app);<% } %>
+  const Model = createModel(app);
   const paginate = app.get('paginate');
 
-  const options = {<% if (modelName) { %>
-    Model,<% } %>
+  const options = {
+    name: '<%= snakeName %>',
+    Model,
     paginate
   };
 
@@ -20,3 +21,4 @@ module.exports = function (app) {
 
   service.hooks(hooks);
 };
+  
