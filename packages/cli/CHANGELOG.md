@@ -1,5 +1,16 @@
 # Change Log
 
+## [v3.6.3](https://github.com/feathersjs/cli/tree/v3.6.3) (2018-05-09)
+[Full Changelog](https://github.com/feathersjs/cli/compare/v3.6.2...v3.6.3)
+
+**Closed issues:**
+
+- CLI lists suggested database name when instead a custom name is specified [\#142](https://github.com/feathersjs/cli/issues/142)
+
+**Merged pull requests:**
+
+- Update and lock generator-feathers to 2.4.3 [\#149](https://github.com/feathersjs/cli/pull/149) ([daffl](https://github.com/daffl))
+
 ## [v3.6.2](https://github.com/feathersjs/cli/tree/v3.6.2) (2018-04-24)
 [Full Changelog](https://github.com/feathersjs/cli/compare/v3.6.1...v3.6.2)
 
