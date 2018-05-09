@@ -309,7 +309,6 @@ module.exports = class ConnectionGenerator extends Generator {
     // NOTE (EK): If this is the first time we set this up
     // show this nice message.
     if (connectionString && !this.defaultConfig[database]) {
-      const databaseName = snakeCase(this.pkg.name);
       this.log();
       this.log(`Woot! We've set up your ${database} database connection!`);
 
@@ -320,7 +319,7 @@ module.exports = class ConnectionGenerator extends Generator {
       // case 'oracle':
       case 'postgres': // eslint-disable-line no-fallthrough
       case 'rethinkdb':
-        this.log(`Make sure that your ${database} database is running, the username/role is correct, and the database "${databaseName}" has been created.`);
+        this.log(`Make sure that your ${database} database is running, the username/role is correct, and "${connectionString}" is reachable and the database has been created.`);
         this.log('Your configuration can be found in the projects config/ folder.');
         break;
       }
