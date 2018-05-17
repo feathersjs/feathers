@@ -42,7 +42,7 @@ class Base {
       url: this.makeUrl(params.query),
       method: 'GET',
       headers: Object.assign({}, params.headers)
-    }).catch(toError);
+    }, params).catch(toError);
   }
 
   get (id, params = {}) {
@@ -54,7 +54,7 @@ class Base {
       url: this.makeUrl(params.query, id),
       method: 'GET',
       headers: Object.assign({}, params.headers)
-    }).catch(toError);
+    }, params).catch(toError);
   }
 
   create (body, params = {}) {
@@ -63,7 +63,7 @@ class Base {
       body,
       method: 'POST',
       headers: Object.assign({ 'Content-Type': 'application/json' }, params.headers)
-    }).catch(toError);
+    }, params).catch(toError);
   }
 
   update (id, body, params = {}) {
@@ -76,7 +76,7 @@ class Base {
       body,
       method: 'PUT',
       headers: Object.assign({ 'Content-Type': 'application/json' }, params.headers)
-    }).catch(toError);
+    }, params).catch(toError);
   }
 
   patch (id, body, params = {}) {
@@ -89,7 +89,7 @@ class Base {
       body,
       method: 'PATCH',
       headers: Object.assign({ 'Content-Type': 'application/json' }, params.headers)
-    }).catch(toError);
+    }, params).catch(toError);
   }
 
   remove (id, params = {}) {
@@ -101,7 +101,7 @@ class Base {
       url: this.makeUrl(params.query, id),
       method: 'DELETE',
       headers: Object.assign({}, params.headers)
-    }).catch(toError);
+    }, params).catch(toError);
   }
 }
 

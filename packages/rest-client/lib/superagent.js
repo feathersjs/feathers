@@ -1,10 +1,11 @@
 const Base = require('./base');
 
 class SuperagentService extends Base {
-  request (options) {
+  request (options, params) {
     const superagent = this.connection(options.method, options.url)
       .set(this.options.headers || {})
       .set('Accept', 'application/json')
+      .set(params.connection || {})
       .set(options.headers || {})
       .type(options.type || 'json');
 

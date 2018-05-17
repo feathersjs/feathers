@@ -1,8 +1,8 @@
 const Base = require('./base');
 
 class FetchService extends Base {
-  request (options) {
-    let fetchOptions = Object.assign({}, options);
+  request (options, params) {
+    let fetchOptions = Object.assign({}, options, params.connection);
 
     fetchOptions.headers = Object.assign({
       Accept: 'application/json'
@@ -15,14 +15,14 @@ class FetchService extends Base {
     const fetch = this.connection;
 
     return fetch(options.url, fetchOptions)
-        .then(this.checkStatus)
-        .then(response => {
-          if (response.status === 204) {
-            return null;
-          }
+      .then(this.checkStatus)
+      .then(response => {
+        if (response.status === 204) {
+          return null;
+        }
 
-          return response.json();
-        });
+        return response.json();
+      });
   }
 
   checkStatus (response) {

@@ -23,13 +23,32 @@ describe('node-request REST connector', function () {
   baseTests(service);
 
   it('supports custom headers', () => {
-    let headers = {
+    const headers = {
       'Authorization': 'let-me-in'
     };
 
     return service.get(0, { headers }).then(todo =>
       assert.deepEqual(todo, {
         id: 0,
+        authorization: 'let-me-in',
+        text: 'some todo',
+        complete: false,
+        query: {}
+      })
+    );
+  });
+
+  it('supports params.connection', () => {
+    const connection = {
+      headers: {
+        'Authorization': 'let-me-in'
+      }
+    };
+
+    return service.get(0, { connection }).then(todo =>
+      assert.deepEqual(todo, {
+        id: 0,
+        authorization: 'let-me-in',
         text: 'some todo',
         complete: false,
         query: {}

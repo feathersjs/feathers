@@ -31,6 +31,25 @@ describe('fetch REST connector', function () {
       assert.deepEqual(todo, {
         id: 0,
         text: 'some todo',
+        authorization: 'let-me-in',
+        complete: false,
+        query: {}
+      })
+    );
+  });
+
+  it('supports params.connection', () => {
+    const connection = {
+      headers: {
+        'Authorization': 'let-me-in'
+      }
+    };
+
+    return service.get(0, { connection }).then(todo =>
+      assert.deepEqual(todo, {
+        id: 0,
+        text: 'some todo',
+        authorization: 'let-me-in',
         complete: false,
         query: {}
       })

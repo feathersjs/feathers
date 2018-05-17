@@ -30,6 +30,25 @@ describe('Axios REST connector', function () {
     return service.get(0, { headers }).then(todo =>
       assert.deepEqual(todo, {
         id: 0,
+        authorization: 'let-me-in',
+        text: 'some todo',
+        complete: false,
+        query: {}
+      })
+    );
+  });
+
+  it('uses params.connection for additional options', () => {
+    const connection = {
+      headers: {
+        'Authorization': 'let-me-in'
+      }
+    };
+
+    return service.get(0, { connection }).then(todo =>
+      assert.deepEqual(todo, {
+        id: 0,
+        authorization: 'let-me-in',
         text: 'some todo',
         complete: false,
         query: {}
