@@ -44,7 +44,15 @@ class TodoService extends Service {
     }
 
     return super.get(id, params)
-      .then(data => Object.assign({ query: params.query }, data));
+      .then(data => {
+        const result = Object.assign({ query: params.query }, data);
+
+        if (params.authorization) {
+          result.authorization = params.authorization;
+        }
+
+        return result;
+      });
   }
 
   remove (id, params) {
@@ -64,11 +72,6 @@ class TodoService extends Service {
 
 module.exports = function (configurer) {
   const app = expressify(feathers())
-    .use(function (req, res, next) {
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header('Access-Control-Allow-Headers', 'Authorization');
-      next();
-    })
     .configure(rest(function formatter (req, res, next) {
       if (!res.data) {
         next();
@@ -84,6 +87,12 @@ module.exports = function (configurer) {
         }
       });
     }))
+    .use(function (req, res, next) {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Headers', 'Authorization');
+      req.feathers.authorization = req.headers.authorization;
+      next();
+    })
     // Parse HTTP bodies
     .use(bodyParser.json())
     .use(bodyParser.urlencoded({ extended: true }))

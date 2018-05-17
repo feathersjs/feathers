@@ -1,12 +1,12 @@
 const Base = require('./base');
 
 class jQueryService extends Base {
-  request (options) {
-    let opts = Object.assign({
+  request (options, params) {
+    const { connection = {} } = params;
+    const headers = Object.assign({}, options.headers, this.options.headers, connection.headers);
+    const opts = Object.assign({
       dataType: options.type || 'json'
-    }, {
-      headers: this.options.headers || {}
-    }, options);
+    }, connection, options, { headers });
 
     if (options.body) {
       opts.data = JSON.stringify(options.body);

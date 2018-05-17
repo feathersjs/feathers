@@ -1,7 +1,7 @@
 const Base = require('./base');
 
 class AngularService extends Base {
-  request (options) {
+  request (options, params) {
     const http = this.connection;
     const Headers = this.options.Headers;
 
@@ -10,17 +10,19 @@ class AngularService extends Base {
     }
 
     const url = options.url;
-    const requestOptions = {
-      method: options.method,
-      body: options.body,
-      headers: new Headers(
-        Object.assign(
-          { Accept: 'application/json' },
-          this.options.headers,
-          options.headers
-        )
+    const { connection = {} } = params;
+    const headers = new Headers(
+      Object.assign(
+        { Accept: 'application/json' },
+        this.options.headers,
+        options.headers,
+        connection.headers
       )
-    };
+    );
+    const requestOptions = Object.assign({
+      method: options.method,
+      body: options.body
+    }, connection, { headers });
 
     return new Promise((resolve, reject) => {
       http.request(url, requestOptions)

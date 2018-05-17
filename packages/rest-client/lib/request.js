@@ -1,11 +1,14 @@
 const Base = require('./base');
 
 class RequestService extends Base {
-  request (options) {
+  request (options, params) {
     return new Promise((resolve, reject) => {
+      const { connection = {} } = params;
+      const headers = Object.assign({}, options.headers, connection.headers);
+
       this.connection(Object.assign({
         json: true
-      }, options), function (error, res, data) {
+      }, options, params.connection, { headers }), function (error, res, data) {
         if (error) {
           return reject(error);
         }
