@@ -1,5 +1,18 @@
 # Change Log
 
+## [v1.4.0](https://github.com/feathersjs/rest-client/tree/v1.4.0) (2018-05-17)
+[Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.3.4...v1.4.0)
+
+**Closed issues:**
+
+- Need a way to abort requests [\#29](https://github.com/feathersjs/rest-client/issues/29)
+- Pass request options to transport \(request\) [\#26](https://github.com/feathersjs/rest-client/issues/26)
+
+**Merged pull requests:**
+
+- Add support for passing library options in params.connection [\#30](https://github.com/feathersjs/rest-client/pull/30) ([daffl](https://github.com/daffl))
+- Update dependencies to enable Greenkeeper 🌴 [\#28](https://github.com/feathersjs/rest-client/pull/28) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.3.4](https://github.com/feathersjs/rest-client/tree/v1.3.4) (2018-03-17)
 [Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.3.3...v1.3.4)
 
