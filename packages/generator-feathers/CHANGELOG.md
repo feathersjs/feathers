@@ -1,5 +1,21 @@
 # Change Log
 
+## [v2.4.4](https://github.com/feathersjs/generator-feathers/tree/v2.4.4) (2018-05-21)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.4.3...v2.4.4)
+
+**Closed issues:**
+
+- Show confirmation when generating a hook without service information [\#355](https://github.com/feathersjs/generator-feathers/issues/355)
+- Typo in channels.js [\#352](https://github.com/feathersjs/generator-feathers/issues/352)
+
+**Merged pull requests:**
+
+- Make service selection when generating a hook mandatory [\#356](https://github.com/feathersjs/generator-feathers/pull/356) ([daffl](https://github.com/daffl))
+- Remove "and filters" from a comment in the service.js template [\#354](https://github.com/feathersjs/generator-feathers/pull/354) ([jsphpl](https://github.com/jsphpl))
+- Fixed comment typo on line 51 [\#353](https://github.com/feathersjs/generator-feathers/pull/353) ([temowemo](https://github.com/temowemo))
+- Use cors after helmet [\#351](https://github.com/feathersjs/generator-feathers/pull/351) ([AidanGG](https://github.com/AidanGG))
+- Update copyright year in README template [\#350](https://github.com/feathersjs/generator-feathers/pull/350) ([mischah](https://github.com/mischah))
+
 ## [v2.4.3](https://github.com/feathersjs/generator-feathers/tree/v2.4.3) (2018-05-09)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.4.2...v2.4.3)
 
