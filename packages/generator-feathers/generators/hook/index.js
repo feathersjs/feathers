@@ -90,6 +90,12 @@ module.exports = class HookGenerator extends Generator {
         },
         when (answers) {
           return answers.type !== null;
+        },
+        validate(answers) {
+          if (answers.length < 1) {
+            return 'You must choose at least one service (use Space key to select).';
+          }
+          return true;
         }
       }, {
         type: 'checkbox',
