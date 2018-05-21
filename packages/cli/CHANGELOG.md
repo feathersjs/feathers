@@ -1,5 +1,16 @@
 # Change Log
 
+## [v3.6.4](https://github.com/feathersjs/cli/tree/v3.6.4) (2018-05-21)
+[Full Changelog](https://github.com/feathersjs/cli/compare/v3.6.3...v3.6.4)
+
+**Closed issues:**
+
+- CLI switch for version number does not work. Possible bug [\#150](https://github.com/feathersjs/cli/issues/150)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#151](https://github.com/feathersjs/cli/pull/151) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.6.3](https://github.com/feathersjs/cli/tree/v3.6.3) (2018-05-09)
 [Full Changelog](https://github.com/feathersjs/cli/compare/v3.6.2...v3.6.3)
 
