@@ -93,8 +93,9 @@ module.exports = class HookGenerator extends Generator {
         },
         validate(answers) {
           if (answers.length < 1) {
-            return 'You must choose at least one service (use Space key to select).';
+            return 'You have to select at least one service (use Space key to select).';
           }
+
           return true;
         }
       }, {
@@ -122,6 +123,10 @@ module.exports = class HookGenerator extends Generator {
           return answers.type !== null && answers.services.length;
         },
         validate (methods) {
+          if (methods.length < 1) {
+            return 'You have to select at least one method (use Space key to select).';
+          }
+
           if (methods.indexOf('all') !== -1 && methods.length !== 1) {
             return 'Select applicable methods or \'all\', not both.';
           }
