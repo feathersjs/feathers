@@ -52,7 +52,7 @@
   "dependencies": {
     "@feathersjs/commons": "^1.4.0",
     "debug": "^3.1.0",
-    "events": "^2.0.0",
+    "events": "^3.0.0",
     "uberproto": "^1.2.0"
   },
   "devDependencies": {
