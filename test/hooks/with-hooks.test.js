@@ -44,7 +44,6 @@ describe('services withHooks', () => {
           method: 'create',
           path: 'svc',
           data,
-          arguments: [data, params],
           _called: 'called',
           result: data,
           type: 'after'
