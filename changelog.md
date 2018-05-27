@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.1.5](https://github.com/feathersjs/feathers/tree/v3.1.5) (2018-05-04)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.1.4...v3.1.5)
+
+**Merged pull requests:**
+
+- Allow methods to return a null result [\#865](https://github.com/feathersjs/feathers/pull/865) ([bertho-zero](https://github.com/bertho-zero))
+
 ## [v3.1.4](https://github.com/feathersjs/feathers/tree/v3.1.4) (2018-03-26)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v3.1.3...v3.1.4)
 
