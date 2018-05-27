@@ -1,7 +1,7 @@
 {
-  "name": "feathers",
-  "description": "Build Better APIs, Faster than Ever.",
-  "version": "2.1.7",
+  "name": "@feathersjs/feathers",
+  "description": "A REST and realtime API layer for modern applications.",
+  "version": "3.1.5",
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",
@@ -13,16 +13,12 @@
     "socket.io",
     "realtime"
   ],
-  "main": "lib/index",
-  "types": [
-    "./index.d.ts",
-    "./client.d.ts"
-  ],
-  "author": "Feathers <hello@feathersjs.com> (http://feathersjs.com)",
-  "contributors": [
-    "Eric Kryski <e.kryski@gmail.com> (http://erickryski.com)",
-    "David Luecke <daff@neyeon.de> (http://neyeon.com)"
-  ],
+  "main": "lib/index.js",
+  "author": {
+    "name": "Feathers contributor",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/feathersjs/feathers/issues"
@@ -31,18 +27,19 @@
     "lib": "lib"
   },
   "scripts": {
-    "prepublish": "npm run compile",
-    "publish": "git push origin && git push origin --tags",
-    "release:patch": "npm version patch && npm publish",
-    "release:minor": "npm version minor && npm publish",
-    "release:major": "npm version major && npm publish",
-    "release:prerelease": "npm version prerelease && npm publish --tag pegasus",
-    "compile": "rimraf lib/ && babel -d lib/ src/",
-    "watch": "babel --watch -d lib/ src/",
-    "lint": "eslint-if-supported semistandard --fix",
+    "update-version": "node -e \"console.log('module.exports = \\'' + require('./package.json').version + '\\';')\" > lib/version.js",
+    "version": "npm run update-version && git add lib/version.js && git commit -am \"Updating version\"",
+    "publish": "git push origin --tags && npm run changelog && git push origin",
+    "changelog": "github_changelog_generator --no-issues && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
+    "release:pre": "npm version prerelease && npm publish --tag pre  --access public",
+    "release:patch": "npm version patch && npm publish --access public",
+    "release:minor": "npm version minor && npm publish --access public",
+    "release:major": "npm version major && npm publish --access public",
+    "lint": "semistandard --fix",
     "mocha": "mocha --opts mocha.opts",
+    "mocha:watch": "mocha --opts mocha.opts --watch",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
-    "test": "npm run compile && npm run lint && npm run coverage && nsp check"
+    "test": "npm run lint && npm run coverage"
   },
   "semistandard": {
     "env": [
@@ -50,7 +47,7 @@
     ]
   },
   "engines": {
-    "node": ">= 4"
+    "node": ">= 6"
   },
   "dependencies": {
     "@types/express": "~4.0.35",
@@ -71,17 +68,14 @@
     "eslint-if-supported": "^1.0.1",
     "feathers-rest": "^1.5.3",
     "feathers-socketio": "^2.0.0",
+    "@feathersjs/commons": "^1.4.0",
+    "debug": "^3.1.0",
+    "events": "^3.0.0",
+    "uberproto": "^1.2.0",
     "istanbul": "^1.1.0-alpha.1",
     "jshint": "^2.9.4",
-    "mocha": "^3.2.0",
-    "nsp": "^2.6.2",
-    "q": "^1.4.1",
-    "request": "^2.x",
-    "rimraf": "^2.5.4",
-    "semistandard": "^10.0.0",
-    "socket.io-client": "^2.0.0"
-  },
-  "browser": {
-    "./lib/index": "./lib/client/index"
+    "mocha": "^5.0.0",
+    "nsp": "^3.2.1",
+    "semistandard": "^12.0.0"
   }
 }
