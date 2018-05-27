@@ -2,7 +2,7 @@
 
 Thank you for contributing to Feathers! :heart: :tada:
 
-This repo is the main core and where most issues are reported. Feathers embraces modularity and is broken up across many repos. To make this easier to manage we currently use [Zenhub](https://www.zenhub.com/) for issue triage and visibility. They have a free browser plugin you can install so that you can see what is in flight at any time, but of course you also always see current issues in Github.
+Feathers embraces modularity and is broken up across many repos. To make this easier to manage we currently use Github projects for issue triage and visibility. To get a high level view of the core releases you can go to https://github.com/feathersjs/feathers/projects.
 
 ## Report a bug
 
@@ -16,7 +16,7 @@ Issues can be reported in the [issue tracker](https://github.com/feathersjs/feat
 
 We take security very seriously at Feathers. We welcome any peer review of our 100% open source code to ensure nobody's Feathers app is ever compromised or hacked. As a web application developer you are responsible for any security breaches. We do our very best to make sure Feathers is as secure as possible by default.
 
-In order to give the community time to respond and upgrade we strongly urge you report all security issues to us. Send one of the core team members a PM in [Slack](http://slack.feathersjs.com) or email us at hello@feathersjs.com with details and we will respond ASAP.
+In order to give the community time to respond and upgrade we strongly urge you report all security issues to us. Send one of the core team members a PM in [Slack](http://slack.feathersjs.com) or email us at <a href="mailto:">hello@feathersjs.com</a> with details and we will respond ASAP.
 
 For full details refer to our [Security docs](https://docs.feathersjs.com/SECURITY.html).
 
@@ -24,11 +24,9 @@ For full details refer to our [Security docs](https://docs.feathersjs.com/SECURI
 
 We :heart: pull requests and we're continually working to make it as easy as possible for people to contribute, including a [Plugin Generator](https://github.com/feathersjs/generator-feathers-plugin) and a [common test suite](https://github.com/feathersjs/feathers-service-tests) for database adapters.
 
-All repos follow proper semantic verisioning and if the `master` branch is not the current release it is considered unstable. We tag all releases so you can always see which version of the code and documentation you are using.
+We prefer small pull requests with minimal code changes. The smaller they are the easier they are to review and merge. A FeathersJS maintainer will pick up your PR and review it as soon as they can. They may ask for changes or reject your pull request. This is not a reflection of you as an engineer or a person. Please accept feedback graciously as we will also try to be sensitive when providing it.
 
-Pull requests should be to the `master` branch unless another branch is specifically requested by a core team member. We prefer small pull requests with minimal code changes. The smaller they are the easier they are to review and merge. A core team member will pick up your PR and review it as soon as they can. They may ask for changes or reject your pull request. This is not a reflection of you as an engineer or a person. Please accept feedback graciously as we will also try to be sensitive when providing it.
-
-Although we generally accept many PRs they can be rejected for many reasons. We will be as transparent as possible but it may simply be that you do not have the same context or information regarding the roadmap that the core team members have. We value the time you take to put together any contributions so we pledge to always be respectful of that time and will try to be as open as possible so that you don't waste it. :smile:
+Although we generally accept many PRs they can be rejected for many reasons. We will be as transparent as possible but it may simply be that you do not have the same context, historical knowledge or information regarding the roadmap that the maintainers have. We value the time you take to put together any contributions so we pledge to always be respectful of that time and will try to be as open as possible so that you don't waste it. :smile:
 
 **All PRs (except documentation) should be accompanied with tests and pass the linting rules.**
 
@@ -36,27 +34,21 @@ Although we generally accept many PRs they can be rejected for many reasons. We 
 
 Before running the tests from the `test/` folder `npm test` will run ESlint. You can check your code changes individually by running `npm run lint`.
 
-### ES6 compilation
-
-Feathers uses [Babel](https://babeljs.io/) to leverage the latest developments of the JavaScript language. All code and samples are currently written in ES2015. To transpile the code in this repository run
-
-> npm run compile
-
-__Note:__ `npm test` will run the compilation automatically before the tests.
-
 ### Tests
 
 [Mocha](http://mochajs.org/) tests are located in the `test/` folder and can be run using the `npm run mocha` or `npm test` (with ESLint and code coverage) command.
 
 ### Documentation
 
-Feathers documentation is contained in Markdown files in the [feathers-docs](https://github.com/feathersjs/feathers-docs) repository. To change the documentation submit a pull request to that repo, referencing any other PR if applicable, and the docs will be updated with the next release.
+Feathers documentation is contained in Markdown files in the [docs](https://github.com/feathersjs/docs) repository. To change the documentation submit a pull request to that repo, referencing any other PR if applicable, and the docs will be updated with the next release.
 
-## External Modules
+## Community Contributions
 
-If you've written something awesome for Feathers, the Feathers ecosystem, or using Feathers please add it to the [showcase](https://docs.feathersjs.com/why/showcase.html). You also might want to check out the [Plugin Generator](https://github.com/feathersjs/generator-feathers-plugin) that can be used to scaffold plugins to be Feathers compliant from the start.
+If you've written something awesome about Feathers, for the Feathers ecosystem, or created an app using Feathers please add it to the [awesome-feathersjs](https://github.com/feathersjs-ecosystem/awesome-feathersjs).
 
-If you think it would be a good core module then please contact one of the Feathers core team members in [Slack](http://slack.feathersjs.com) and we can discuss whether it belongs in core and how to get it there. :beers:
+If you are looking to create a new plugin you also might want to check out the [Plugin Generator](https://github.com/feathersjs/generator-feathers-plugin) that can be used to scaffold plugins to be Feathers compliant from the start.
+
+If you think your module would be a good core `feathersjs` module or `featherjs-ecosystem` module then please contact one of the Feathers maintainers in [Slack](http://slack.feathersjs.com) and we can discuss whether it belongs and how to get it there. :beers:
 
 ## Contributor Code of Conduct
 
