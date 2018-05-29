@@ -173,11 +173,11 @@ describe('@feathersjs/commons utils', () => {
         age: 3,
         test: 'me'
       })
-      .then(selector)
-      .then(result => expect(result).to.deep.equal({
-        name: 'David',
-        age: 3
-      }));
+        .then(selector)
+        .then(result => expect(result).to.deep.equal({
+          name: 'David',
+          age: 3
+        }));
     });
 
     it('select with arrays', () => {
@@ -194,14 +194,14 @@ describe('@feathersjs/commons utils', () => {
         age: 4,
         test: 'you'
       }])
-      .then(selector)
-      .then(result => expect(result).to.deep.equal([{
-        name: 'David',
-        age: 3
-      }, {
-        name: 'D',
-        age: 4
-      }]));
+        .then(selector)
+        .then(result => expect(result).to.deep.equal([{
+          name: 'David',
+          age: 3
+        }, {
+          name: 'D',
+          age: 4
+        }]));
     });
 
     it('select with no query', () => {
@@ -211,8 +211,8 @@ describe('@feathersjs/commons utils', () => {
       };
 
       return Promise.resolve(data)
-      .then(selector)
-      .then(result => expect(result).to.deep.equal(data));
+        .then(selector)
+        .then(result => expect(result).to.deep.equal(data));
     });
 
     it('select with other fields', () => {
@@ -226,11 +226,11 @@ describe('@feathersjs/commons utils', () => {
       };
 
       return Promise.resolve(data)
-      .then(selector)
-      .then(result => expect(result).to.deep.equal({
-        id: 'me',
-        name: 'David'
-      }));
+        .then(selector)
+        .then(result => expect(result).to.deep.equal({
+          id: 'me',
+          name: 'David'
+        }));
     });
   });
 

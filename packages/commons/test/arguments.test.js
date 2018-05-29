@@ -1,10 +1,19 @@
 const { expect } = require('chai');
 const { validateArguments } = require('../lib/arguments');
 
+const argumentsOrders = {
+  find: [ 'params' ],
+  get: [ 'id', 'params' ],
+  create: [ 'data', 'params' ],
+  update: [ 'id', 'data', 'params' ],
+  patch: [ 'id', 'data', 'params' ],
+  remove: [ 'id', 'params' ]
+};
+
 describe('.validateArguments', () => {
   it('throws an error for callbacks', () => {
     try {
-      validateArguments('find', [{}, function () {}]);
+      validateArguments(argumentsOrders, 'find', [{}, function () {}]);
       throw new Error('Should never get here');
     } catch (e) {
       expect(e.message).to.equal('Callbacks are no longer supported. Use Promises or async/await instead.');
@@ -14,7 +23,7 @@ describe('.validateArguments', () => {
   it('errors with invalid parameter count', () => {
     const check = (method, args) => {
       try {
-        validateArguments(method, args);
+        validateArguments(argumentsOrders, method, args);
         throw new Error('Should never get here');
       } catch (e) {
         expect(e.message).to.equal(`Too many arguments for '${method}' method`);
@@ -32,7 +41,7 @@ describe('.validateArguments', () => {
   it('errors if params is not an object', () => {
     const check = (method, args) => {
       try {
-        validateArguments(method, args);
+        validateArguments(argumentsOrders, method, args);
         throw new Error('Should never get here');
       } catch (e) {
         expect(e.message).to.equal(`Params for '${method}' method must be an object`);
@@ -50,7 +59,7 @@ describe('.validateArguments', () => {
   it('throws method specific errors', () => {
     const checkId = (method, args) => {
       try {
-        validateArguments(method, args);
+        validateArguments(argumentsOrders, method, args);
         throw new Error('Should never get here');
       } catch (e) {
         expect(e.message).to.equal(`An id must be provided to the '${method}' method`);
@@ -58,7 +67,7 @@ describe('.validateArguments', () => {
     };
     const checkData = (method, args) => {
       try {
-        validateArguments(method, args);
+        validateArguments(argumentsOrders, method, args);
         throw new Error('Should never get here');
       } catch (e) {
         expect(e.message).to.equal(`A data object must be provided to the '${method}' method`);
@@ -76,34 +85,34 @@ describe('.validateArguments', () => {
   });
 
   it('passes for valid arguments', () => {
-    let result = validateArguments('find', [ {} ]);
+    let result = validateArguments(argumentsOrders, 'find', [ {} ]);
     expect(result).to.equal(true);
-    result = validateArguments('find', []);
-    expect(result).to.equal(true);
-
-    result = validateArguments('get', [ 1, {} ]);
-    expect(result).to.equal(true);
-    result = validateArguments('get', [ 1 ]);
+    result = validateArguments(argumentsOrders, 'find', []);
     expect(result).to.equal(true);
 
-    result = validateArguments('create', [ {}, {} ]);
+    result = validateArguments(argumentsOrders, 'get', [ 1, {} ]);
     expect(result).to.equal(true);
-    result = validateArguments('create', [ {} ]);
-    expect(result).to.equal(true);
-
-    result = validateArguments('update', [ 1, {}, {} ]);
-    expect(result).to.equal(true);
-    result = validateArguments('update', [ 1, {} ]);
+    result = validateArguments(argumentsOrders, 'get', [ 1 ]);
     expect(result).to.equal(true);
 
-    result = validateArguments('patch', [ 1, {}, {} ]);
+    result = validateArguments(argumentsOrders, 'create', [ {}, {} ]);
     expect(result).to.equal(true);
-    result = validateArguments('patch', [ 1, {} ]);
+    result = validateArguments(argumentsOrders, 'create', [ {} ]);
     expect(result).to.equal(true);
 
-    result = validateArguments('remove', [ 1, {} ]);
+    result = validateArguments(argumentsOrders, 'update', [ 1, {}, {} ]);
     expect(result).to.equal(true);
-    result = validateArguments('remove', [ 1 ]);
+    result = validateArguments(argumentsOrders, 'update', [ 1, {} ]);
+    expect(result).to.equal(true);
+
+    result = validateArguments(argumentsOrders, 'patch', [ 1, {}, {} ]);
+    expect(result).to.equal(true);
+    result = validateArguments(argumentsOrders, 'patch', [ 1, {} ]);
+    expect(result).to.equal(true);
+
+    result = validateArguments(argumentsOrders, 'remove', [ 1, {} ]);
+    expect(result).to.equal(true);
+    result = validateArguments(argumentsOrders, 'remove', [ 1 ]);
     expect(result).to.equal(true);
   });
 });
