@@ -49,7 +49,7 @@
     "@feathersjs/commons": "^1.4.0",
     "@feathersjs/errors": "^3.0.0",
     "debug": "^3.1.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.10",
     "radix-router": "^3.0.1"
   },
   "devDependencies": {
