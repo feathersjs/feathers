@@ -1,5 +1,18 @@
 # Change Log
 
+## [v2.5.0](https://github.com/feathersjs/generator-feathers/tree/v2.5.0) (2018-05-30)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.4.4...v2.5.0)
+
+**Closed issues:**
+
+- Cannot use sequelize transaction with the default logger hook [\#357](https://github.com/feathersjs/generator-feathers/issues/357)
+- Enhancement Request: Allow for the name spacing of services using dot notation [\#341](https://github.com/feathersjs/generator-feathers/issues/341)
+
+**Merged pull requests:**
+
+- Allow generating services in nested folders [\#360](https://github.com/feathersjs/generator-feathers/pull/360) ([daffl](https://github.com/daffl))
+- Don't use JSON.stringify in the default logger.js hook [\#358](https://github.com/feathersjs/generator-feathers/pull/358) ([zaro](https://github.com/zaro))
+
 ## [v2.4.4](https://github.com/feathersjs/generator-feathers/tree/v2.4.4) (2018-05-21)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.4.3...v2.4.4)
 
