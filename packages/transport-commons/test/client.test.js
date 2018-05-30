@@ -186,7 +186,7 @@ describe('client', () => {
       assert.equal(service.listenerCount('test'), 3);
       service.off('test', callback1);
       assert.equal(service.listenerCount('test'), 2);
-      service.off('test');
+      service.removeAllListeners('test');
       assert.equal(service.listenerCount('test'), 0);
       done();
     };
