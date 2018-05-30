@@ -65,7 +65,10 @@ module.exports = class ServiceGenerator extends Generator {
         message: 'Which path should the service be registered on?',
         when: !props.path,
         default(answers) {
-          return `/${_.kebabCase(answers.name || props.name)}`;
+          const parts = (answers.name || props.name).split('/');
+          const name = _.kebabCase(parts.pop());
+
+          return `/${parts.concat(name).join('/')}`;
         },
         validate(input) {
           if(input.trim() === '') {
@@ -84,11 +87,13 @@ module.exports = class ServiceGenerator extends Generator {
     ];
 
     return this.prompt(prompts).then(answers => {
-      const name = answers.name || props.name;
+      const parts = (answers.name || props.name).split('/');
+      const name = parts.pop();
 
       this.props = Object.assign({
         requiresAuth: false
       }, props, answers, {
+        subfolder: parts,
         snakeName: _.snakeCase(name),
         kebabName: _.kebabCase(name),
         camelName: _.camelCase(name)
@@ -97,11 +102,12 @@ module.exports = class ServiceGenerator extends Generator {
   }
 
   _transformCode(code) {
-    const { camelName, kebabName } = this.props;
+    const { kebabName, subfolder } = this.props;
     const ast = j(code);
-    const mainExpression = ast.find(j.FunctionExpression)
-      .closest(j.ExpressionStatement);
-    const serviceRequire = `const ${camelName} = require('./${kebabName}/${kebabName}.service.js');`;
+    const mainExpression = ast.find(j.FunctionExpression).closest(j.ExpressionStatement);
+    const folder = subfolder.concat(kebabName).join('/');
+    const camelName = _.camelCase(folder);
+    const serviceRequire = `const ${camelName} = require('./${folder}/${kebabName}.service.js');`;
     const serviceCode = `app.configure(${camelName});`;
     
     if(mainExpression.length !== 1) {
@@ -123,7 +129,7 @@ module.exports = class ServiceGenerator extends Generator {
   }
 
   writing() {
-    const { adapter, kebabName } = this.props;
+    const { adapter, kebabName, subfolder } = this.props;
     const moduleMappings = {
       generic: `./${kebabName}.class.js`,
       memory: 'feathers-memory',
@@ -135,13 +141,15 @@ module.exports = class ServiceGenerator extends Generator {
       rethinkdb: 'feathers-rethinkdb'
     };
     const serviceModule = moduleMappings[adapter];
-    const mainFile = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`);
+    const serviceFolder = [ this.libDirectory, 'services', ...subfolder, kebabName ];
+    const mainFile = this.destinationPath(... serviceFolder, `${kebabName}.service.js`);
     const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.js`;
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
     const context = Object.assign({}, this.props, {
       libDirectory: this.libDirectory,
       modelName: hasModel ? `${kebabName}.model` : null,
       path: stripSlashes(this.props.path),
+      relativeRoot: '../'.repeat(subfolder.length + 2),
       serviceModule
     });
 
@@ -169,7 +177,7 @@ module.exports = class ServiceGenerator extends Generator {
       // Copy the generic service class
       this.fs.copyTpl(
         this.templatePath(this.hasAsync ? 'class-async.js' : 'class.js'),
-        this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.class.js`),
+        this.destinationPath(... serviceFolder, `${kebabName}.class.js`),
         context
       );
     }
@@ -185,7 +193,7 @@ module.exports = class ServiceGenerator extends Generator {
 
     this.fs.copyTpl(
       this.templatePath(`hooks${this.props.authentication ? '-user' : ''}.js`),
-      this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`),
+      this.destinationPath(... serviceFolder, `${kebabName}.hooks.js`),
       context
     );
 
@@ -205,7 +213,7 @@ module.exports = class ServiceGenerator extends Generator {
 
     this.fs.copyTpl(
       this.templatePath('test.js'),
-      this.destinationPath(this.testDirectory, 'services', `${kebabName}.test.js`),
+      this.destinationPath(this.testDirectory, 'services', ...subfolder, `${kebabName}.test.js`),
       context
     );
 
