@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.7.0](https://github.com/feathersjs/cli/tree/v3.7.0) (2018-05-30)
+[Full Changelog](https://github.com/feathersjs/cli/compare/v3.6.4...v3.7.0)
+
+**Merged pull requests:**
+
+- Update generator-feathers [\#152](https://github.com/feathersjs/cli/pull/152) ([daffl](https://github.com/daffl))
+
 ## [v3.6.4](https://github.com/feathersjs/cli/tree/v3.6.4) (2018-05-21)
 [Full Changelog](https://github.com/feathersjs/cli/compare/v3.6.3...v3.6.4)
 
