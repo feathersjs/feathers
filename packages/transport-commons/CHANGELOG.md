@@ -1,5 +1,12 @@
 # Change Log
 
+## [v4.0.1](https://github.com/feathersjs/transport-commons/tree/v4.0.1) (2018-05-30)
+[Full Changelog](https://github.com/feathersjs/transport-commons/compare/v4.0.0...v4.0.1)
+
+**Merged pull requests:**
+
+- Update Codeclimate settings [\#74](https://github.com/feathersjs/transport-commons/pull/74) ([daffl](https://github.com/daffl))
+
 ## [v4.0.0](https://github.com/feathersjs/transport-commons/tree/v4.0.0) (2018-02-09)
 [Full Changelog](https://github.com/feathersjs/transport-commons/compare/v3.2.0...v4.0.0)
 
