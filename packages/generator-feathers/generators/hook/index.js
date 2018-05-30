@@ -1,17 +1,17 @@
-const fs = require('fs');
 const path = require('path');
 const j = require('@feathersjs/tools').transform;
-const { kebabCase, camelCase } = require('lodash');
+const { kebabCase, camelCase, last } = require('lodash');
+const dir = require('node-dir');
 const Generator = require('../../lib/generator');
 
 module.exports = class HookGenerator extends Generator {
-  _listDirectories (...args) {
+  _listServices (...args) {
     const serviceDir = this.destinationPath(...args);
-    const files = fs.readdirSync(serviceDir);
-
-    return files.filter(current =>
-      fs.lstatSync(path.join(serviceDir, current)).isDirectory()
-    );
+    const files = dir.files(serviceDir, { sync: true });
+    const services = files.filter(file => file.endsWith('.service.js'))
+      .map(file => path.dirname(path.relative(serviceDir, file)));
+    
+    return services;
   }
 
   _transformHookFile (code, moduleName) {
@@ -36,8 +36,11 @@ module.exports = class HookGenerator extends Generator {
   }
 
   _addToService (serviceName, hookName) {
-    let hooksFile = this.destinationPath(this.libDirectory, 'services', serviceName, `${serviceName}.hooks.js`);
-    let moduleName = `../../${hookName}`;
+    const nameParts = serviceName.split('/');
+    const relativeRoot = '../'.repeat(nameParts.length + 1);
+
+    let hooksFile = this.destinationPath(this.libDirectory, 'services', ...nameParts, `${last(nameParts)}.hooks.js`);
+    let moduleName = relativeRoot + hookName;
 
     if (serviceName === '__app') {
       hooksFile = this.destinationPath(this.libDirectory, 'app.hooks.js');
@@ -57,7 +60,7 @@ module.exports = class HookGenerator extends Generator {
   prompting () {
     this.checkPackage();
 
-    const services = this._listDirectories(this.libDirectory, 'services');
+    const services = this._listServices(this.libDirectory, 'services');
     const prompts = [
       {
         name: 'name',
