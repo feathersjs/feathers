@@ -3,7 +3,8 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/transport-commons.svg)](https://greenkeeper.io/)
 
 [![Build Status](https://travis-ci.org/feathersjs/transport-commons.png?branch=master)](https://travis-ci.org/feathersjs/transport-commons)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/transport-commons/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/transport-commons/coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/87c506753cb9fc6a8b87/maintainability)](https://codeclimate.com/github/feathersjs/transport-commons/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/87c506753cb9fc6a8b87/test_coverage)](https://codeclimate.com/github/feathersjs/transport-commons/test_coverage)
 [![Dependency Status](https://img.shields.io/david/feathersjs/transport-commons.svg?style=flat-square)](https://david-dm.org/feathersjs/transport-commons)
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/transport-commons.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/transport-commons)
 
