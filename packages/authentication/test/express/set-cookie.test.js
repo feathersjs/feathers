@@ -34,8 +34,8 @@ describe('express:setCookie', () => {
   });
 
   afterEach(() => {
-    res.cookie.reset();
-    res.clearCookie.reset();
+    res.cookie.resetHistory();
+    res.clearCookie.resetHistory();
   });
 
   describe('when cookies are not enabled', () => {

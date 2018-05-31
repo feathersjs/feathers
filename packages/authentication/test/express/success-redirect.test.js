@@ -27,8 +27,8 @@ describe('express:successRedirect', () => {
   });
 
   afterEach(() => {
-    res.redirect.reset();
-    res.status.reset();
+    res.redirect.resetHistory();
+    res.status.resetHistory();
   });
 
   describe('when redirect is set on the hook', () => {

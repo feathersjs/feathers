@@ -28,7 +28,7 @@ describe('express:emitEvents', () => {
   });
 
   afterEach(() => {
-    req.app.emit.reset();
+    req.app.emit.resetHistory();
   });
 
   it('calls next', next => {

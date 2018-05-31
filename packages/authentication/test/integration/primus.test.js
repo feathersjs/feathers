@@ -65,7 +65,7 @@ describe('Primus authentication', function () {
   });
 
   afterEach(() => {
-    hook.reset();
+    hook.resetHistory();
   });
 
   after(() => {
