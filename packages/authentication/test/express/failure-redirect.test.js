@@ -30,9 +30,9 @@ describe('express:failureRedirect', () => {
   });
 
   afterEach(() => {
-    res.clearCookie.reset();
-    res.redirect.reset();
-    res.status.reset();
+    res.clearCookie.resetHistory();
+    res.redirect.resetHistory();
+    res.status.resetHistory();
   });
 
   describe('when redirect is set on the hook', () => {

@@ -32,8 +32,8 @@ describe('express:authenticate', () => {
   });
 
   afterEach(() => {
-    next.reset();
-    res.status.reset();
+    next.resetHistory();
+    res.status.resetHistory();
   });
 
   describe('when strategy name is missing', () => {

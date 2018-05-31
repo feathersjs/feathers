@@ -38,7 +38,7 @@ describe('hooks:authenticate', () => {
   });
 
   afterEach(() => {
-    authenticator.reset();
+    authenticator.resetHistory();
   });
 
   describe('when strategy name is missing', () => {
