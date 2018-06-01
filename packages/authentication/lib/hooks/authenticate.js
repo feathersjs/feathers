@@ -57,7 +57,7 @@ module.exports = function authenticate (_strategies, options = {}) {
     debug(`Attempting to authenticate using ${strategy} strategy with options`, strategyOptions);
 
     return app.authenticate(strategy, strategyOptions)(request).then((result = {}) => {
-      if (result.fail) {
+      if (result.fail && options.allowUnauthenticated !== true) {
         // TODO (EK): Reject with something...
         // You get back result.challenge and result.status
         if (strategyOptions.failureRedirect) {
@@ -76,8 +76,8 @@ module.exports = function authenticate (_strategies, options = {}) {
         return Promise.reject(new errors[status](message, challenge));
       }
 
-      if (result.success) {
-        hook.params = Object.assign({ authenticated: true }, hook.params, result.data);
+      if (result.success || options.allowUnauthenticated === true) {
+        hook.params = Object.assign({ authenticated: result.success }, hook.params, result.data);
 
         // Add the user to the original request object so it's available in the socket handler
         Object.assign(request.params, hook.params);
