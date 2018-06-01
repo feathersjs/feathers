@@ -1,5 +1,26 @@
 # Change Log
 
+## [v2.1.6](https://github.com/feathersjs/authentication/tree/v2.1.6) (2018-06-01)
+[Full Changelog](https://github.com/feathersjs/authentication/compare/v2.1.5...v2.1.6)
+
+**Closed issues:**
+
+- Authentication local strategy not working with a Custom User service [\#672](https://github.com/feathersjs/authentication/issues/672)
+- CLI command bug: 'Feathers generate authentication' produces bad working 'users' service [\#670](https://github.com/feathersjs/authentication/issues/670)
+- config\default.json generated without callbackURL config needed to set redirect URL for Google Outh2 [\#669](https://github.com/feathersjs/authentication/issues/669)
+- HELP WANTED: Authentication strategy 'jwt' is not registered. [\#668](https://github.com/feathersjs/authentication/issues/668)
+- Authenticate shows error: No auth token [\#667](https://github.com/feathersjs/authentication/issues/667)
+- authentication - Method: remove [\#662](https://github.com/feathersjs/authentication/issues/662)
+- NotAuthenticated: jwt expired [\#633](https://github.com/feathersjs/authentication/issues/633)
+- Authentication via phone number [\#616](https://github.com/feathersjs/authentication/issues/616)
+- Persist auth tokens on db [\#569](https://github.com/feathersjs/authentication/issues/569)
+- Tighter integration with feathers-authentication-management [\#393](https://github.com/feathersjs/authentication/issues/393)
+
+**Merged pull requests:**
+
+- Fix tests to work with latest Sinon [\#674](https://github.com/feathersjs/authentication/pull/674) ([daffl](https://github.com/daffl))
+- add option to allowUnauthenticated [\#599](https://github.com/feathersjs/authentication/pull/599) ([MichaelErmer](https://github.com/MichaelErmer))
+
 ## [v2.1.5](https://github.com/feathersjs/authentication/tree/v2.1.5) (2018-04-16)
 [Full Changelog](https://github.com/feathersjs/authentication/compare/v2.1.4...v2.1.5)
 
