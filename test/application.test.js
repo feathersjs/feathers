@@ -188,6 +188,26 @@ describe('Feathers application', () => {
 
       assert.ok(wrappedService[TEST]);
     });
+
+    it('methods conserve Symbols', () => {
+      const TEST = Symbol('test');
+      const dummyService = {
+        setup (app, path) {
+          this.path = path;
+        },
+
+        create (data) {
+          return Promise.resolve(data);
+        }
+      };
+
+      dummyService.create[TEST] = true;
+
+      const app = feathers().use('/dummy', dummyService);
+      const wrappedService = app.service('dummy');
+
+      assert.ok(wrappedService.create[TEST]);
+    });
   });
 
   // Copied from the Express tests (without special cases)
