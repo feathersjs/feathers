@@ -1,5 +1,14 @@
 # Change Log
 
+## [v3.2.1](https://github.com/feathersjs/primus/tree/v3.2.1) (2018-06-03)
+[Full Changelog](https://github.com/feathersjs/primus/compare/v3.2.0...v3.2.1)
+
+**Merged pull requests:**
+
+- Update uberproto to the latest version 🚀 [\#80](https://github.com/feathersjs/primus/pull/80) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update uws to the latest version 🚀 [\#79](https://github.com/feathersjs/primus/pull/79) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update ws to the latest version 🚀 [\#78](https://github.com/feathersjs/primus/pull/78) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.2.0](https://github.com/feathersjs/primus/tree/v3.2.0) (2018-02-09)
 [Full Changelog](https://github.com/feathersjs/primus/compare/v3.1.0...v3.2.0)
 
