@@ -52,7 +52,7 @@
     "@feathersjs/errors": "^3.0.0",
     "debug": "^3.1.0",
     "express": "^4.16.2",
-    "uberproto": "^1.2.0"
+    "uberproto": "^2.0.0"
   },
   "devDependencies": {
     "@feathersjs/feathers": "^3.0.5",

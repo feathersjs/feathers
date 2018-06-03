@@ -228,7 +228,6 @@ describe('@feathersjs/express/rest provider', () => {
                 type: 'error',
                 method: 'get',
                 path: 'hook-error',
-                result: null,
                 error: {}
               },
               error: { message: 'I blew up' }
