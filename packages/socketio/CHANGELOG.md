@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.2.2](https://github.com/feathersjs/socketio/tree/v3.2.2) (2018-06-03)
+[Full Changelog](https://github.com/feathersjs/socketio/compare/v3.2.1...v3.2.2)
+
+**Merged pull requests:**
+
+- Update uberproto to the latest version 🚀 [\#117](https://github.com/feathersjs/socketio/pull/117) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.2.1](https://github.com/feathersjs/socketio/tree/v3.2.1) (2018-04-04)
 [Full Changelog](https://github.com/feathersjs/socketio/compare/v3.2.0...v3.2.1)
 
