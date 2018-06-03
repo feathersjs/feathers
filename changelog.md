@@ -1,5 +1,15 @@
 # Change Log
 
+## [v3.1.6](https://github.com/feathersjs/feathers/tree/v3.1.6) (2018-06-03)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.1.5...v3.1.6)
+
+**Merged pull requests:**
+
+- Update uberproto to the latest version 🚀 [\#881](https://github.com/feathersjs/feathers/pull/881) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Add 'services conserve Symbols' test [\#880](https://github.com/feathersjs/feathers/pull/880) ([bertho-zero](https://github.com/bertho-zero))
+- Update events to the latest version 🚀 [\#872](https://github.com/feathersjs/feathers/pull/872) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Add Greenkeeper badge 🌴 [\#867](https://github.com/feathersjs/feathers/pull/867) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.1.5](https://github.com/feathersjs/feathers/tree/v3.1.5) (2018-05-04)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v3.1.4...v3.1.5)
 
