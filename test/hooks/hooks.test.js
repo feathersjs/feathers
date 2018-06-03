@@ -282,6 +282,12 @@ describe('hooks basics', () => {
     const args = [1, { test: 'ok' }, { provider: 'rest' }];
 
     assert.deepEqual(app.service('dummy').methods, {
+      find: ['params'],
+      get: ['id', 'params'],
+      create: ['data', 'params'],
+      update: ['id', 'data', 'params'],
+      patch: ['id', 'data', 'params'],
+      remove: ['id', 'params'],
       custom: ['id', 'data', 'params'],
       other: ['id', 'data', 'params']
     });
