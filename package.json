@@ -53,7 +53,7 @@
     "@feathersjs/commons": "^1.4.0",
     "debug": "^3.1.0",
     "events": "^3.0.0",
-    "uberproto": "^1.2.0"
+    "uberproto": "^2.0.1"
   },
   "devDependencies": {
     "istanbul": "^1.1.0-alpha.1",
