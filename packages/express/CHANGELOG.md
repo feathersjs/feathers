@@ -1,5 +1,24 @@
 # Change Log
 
+## [v1.2.3](https://github.com/feathersjs/express/tree/v1.2.3) (2018-06-03)
+[Full Changelog](https://github.com/feathersjs/express/compare/v1.2.2...v1.2.3)
+
+**Closed issues:**
+
+- Question: How to handle JSON:API [\#26](https://github.com/feathersjs/express/issues/26)
+- \[Proposal\] Allow multiple express middleware functions to be passed into `app.use` [\#24](https://github.com/feathersjs/express/issues/24)
+
+**Merged pull requests:**
+
+- Update uberproto to the latest version [\#28](https://github.com/feathersjs/express/pull/28) ([bertho-zero](https://github.com/bertho-zero))
+
+## [v1.2.2](https://github.com/feathersjs/express/tree/v1.2.2) (2018-04-16)
+[Full Changelog](https://github.com/feathersjs/express/compare/v1.2.1...v1.2.2)
+
+**Merged pull requests:**
+
+- Allow multiple express middleware functions to be passed into `app.use` [\#25](https://github.com/feathersjs/express/pull/25) ([eXigentCoder](https://github.com/eXigentCoder))
+
 ## [v1.2.1](https://github.com/feathersjs/express/tree/v1.2.1) (2018-03-29)
 [Full Changelog](https://github.com/feathersjs/express/compare/v1.2.0...v1.2.1)
 
