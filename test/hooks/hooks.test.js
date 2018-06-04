@@ -252,8 +252,8 @@ describe('hooks basics', () => {
       custom (id, data, params) {
         return Promise.resolve([id, data, params]);
       },
-      // activeHooks is usable as a decorator: @activeHooks(['id', 'data', 'params'])
-      other: feathers.activeHooks(['id', 'data', 'params'])(
+      // activateHooks is usable as a decorator: @activateHooks(['id', 'data', 'params'])
+      other: feathers.activateHooks(['id', 'data', 'params'])(
         (id, data, params) => {
           return Promise.resolve([id, data, params]);
         }
