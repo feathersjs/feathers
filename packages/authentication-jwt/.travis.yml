@@ -1,7 +1,8 @@
 language: node_js
 node_js:
-- node
-- '6'
+  - node
+  - '6'
+install: npm install
 addons:
   code_climate:
     repo_token: dbbeb7f2781d54d104578ff891500c1ec7a13a3d394af8650bf340e606e9ec29
