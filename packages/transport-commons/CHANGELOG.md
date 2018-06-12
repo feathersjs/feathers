@@ -1,5 +1,12 @@
 # Change Log
 
+## [v4.0.2](https://github.com/feathersjs/transport-commons/tree/v4.0.2) (2018-06-12)
+[Full Changelog](https://github.com/feathersjs/transport-commons/compare/v4.0.1...v4.0.2)
+
+**Merged pull requests:**
+
+- Fix looking up invalid path names through sockets [\#76](https://github.com/feathersjs/transport-commons/pull/76) ([daffl](https://github.com/daffl))
+
 ## [v4.0.1](https://github.com/feathersjs/transport-commons/tree/v4.0.1) (2018-05-30)
 [Full Changelog](https://github.com/feathersjs/transport-commons/compare/v4.0.0...v4.0.1)
 
