@@ -13,7 +13,11 @@ module.exports = function () {
     Object.assign(app, {
       [ROUTER]: router,
       lookup (path) {
-        return this[ROUTER].lookup(stripSlashes(path));
+        if (!path) {
+          return null;
+        }
+
+        return this[ROUTER].lookup(stripSlashes('' + path));
       }
     });
 

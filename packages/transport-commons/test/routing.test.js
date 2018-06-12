@@ -30,6 +30,11 @@ describe('app.router', () => {
     assert.equal(result, null);
   });
 
+  it('returns null for invalid service path', () => {
+    assert.equal(app.lookup(null), null);
+    assert.equal(app.lookup({}), null);
+  });
+
   it('can look up and strips slashes', () => {
     const result = app.lookup('my/service');
 
