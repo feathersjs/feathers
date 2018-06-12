@@ -69,6 +69,18 @@ describe('@feathersjs/transport-commons', () => {
       });
     });
 
+    it('.get with invalid service name and arguments', done => {
+      const socket = new EventEmitter();
+
+      provider.emit('connection', socket);
+
+      socket.emit('get', null, (error, result) => {
+        assert.equal(error.name, 'NotFound');
+        assert.equal(error.message, `Service 'null' not found`);
+        done();
+      });
+    });
+
     it('.create with params', done => {
       const socket = new EventEmitter();
       const data = {

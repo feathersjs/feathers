@@ -65,6 +65,10 @@ exports.runMethod = function (app, connection, path, method, args) {
 
   debug(`Running ${trace}`, connection, args);
 
+  const handleError = error => {
+    debug(`Error in ${trace}`, error);
+    callback(normalizeError(error));
+  };
   // A wrapper function that runs the method and returns a promise
   const _run = () => {
     const lookup = app.lookup(path);
@@ -93,16 +97,15 @@ exports.runMethod = function (app, connection, path, method, args) {
     return service[method](...methodArgs, true);
   };
 
-  // Run and map to the callback that is being called for Socket calls
-  _run().then(hook => {
-    const result = hook.dispatch || hook.result;
+  try {
+    // Run and map to the callback that is being called for Socket calls
+    _run().then(hook => {
+      const result = hook.dispatch || hook.result;
 
-    debug(`Returned successfully ${trace}`, result);
-    callback(null, result);
-  }).catch(hook => {
-    const error = hook.type === 'error' ? hook.error : hook;
-
-    debug(`Error in ${trace}`, error);
-    callback(normalizeError(error));
-  });
+      debug(`Returned successfully ${trace}`, result);
+      callback(null, result);
+    }).catch(hook => handleError(hook.type === 'error' ? hook.error : hook));
+  } catch (error) {
+    handleError(error);
+  }
 };
