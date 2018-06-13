@@ -82,7 +82,7 @@
     "sequelize": "^4.1.0",
     "serve-favicon": "^2.4.3",
     "sqlite3": "^4.0.0",
-    "winston": "^2.3.1",
+    "winston": "^3.0.0",
     "yeoman-assert": "^3.0.0",
     "yeoman-test": "^1.4.0"
   }
