@@ -18,7 +18,7 @@ module.exports = function () {
     }
     
     if (context.error) {
-      logger.error(context.error);
+      logger.error(context.error.stack);
     }
   };
 };
