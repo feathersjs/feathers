@@ -1,5 +1,19 @@
 # Change Log
 
+## [v2.5.1](https://github.com/feathersjs/generator-feathers/tree/v2.5.1) (2018-06-16)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.0...v2.5.1)
+
+**Closed issues:**
+
+- Scope not generated for Auth0 strategy [\#364](https://github.com/feathersjs/generator-feathers/issues/364)
+- Typo in authentication config [\#361](https://github.com/feathersjs/generator-feathers/issues/361)
+
+**Merged pull requests:**
+
+- Only log error stacks and add Auth0 scope [\#367](https://github.com/feathersjs/generator-feathers/pull/367) ([daffl](https://github.com/daffl))
+- Fixed Winston Transport error [\#366](https://github.com/feathersjs/generator-feathers/pull/366) ([plunkettscott](https://github.com/plunkettscott))
+- Update winston to the latest version 🚀 [\#363](https://github.com/feathersjs/generator-feathers/pull/363) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.5.0](https://github.com/feathersjs/generator-feathers/tree/v2.5.0) (2018-05-30)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.4.4...v2.5.0)
 
