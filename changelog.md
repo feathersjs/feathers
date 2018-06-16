@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.1.7](https://github.com/feathersjs/feathers/tree/v3.1.7) (2018-06-16)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.1.6...v3.1.7)
+
+**Merged pull requests:**
+
+- Update to latest Uberproto and other dependencies [\#889](https://github.com/feathersjs/feathers/pull/889) ([daffl](https://github.com/daffl))
+
 ## [v3.1.6](https://github.com/feathersjs/feathers/tree/v3.1.6) (2018-06-03)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v3.1.5...v3.1.6)
 
