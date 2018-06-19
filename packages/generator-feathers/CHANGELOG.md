@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.5.2](https://github.com/feathersjs/generator-feathers/tree/v2.5.2) (2018-06-19)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.1...v2.5.2)
+
+**Closed issues:**
+
+- TypeError: Cannot read property 'combine' of undefined [\#369](https://github.com/feathersjs/generator-feathers/issues/369)
+
+**Merged pull requests:**
+
+- Force installation of Winston 3 [\#370](https://github.com/feathersjs/generator-feathers/pull/370) ([daffl](https://github.com/daffl))
+
 ## [v2.5.1](https://github.com/feathersjs/generator-feathers/tree/v2.5.1) (2018-06-16)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.0...v2.5.1)
 
@@ -635,7 +646,6 @@
 **Implemented enhancements:**
 
 - Support bypassing update notification [\#102](https://github.com/feathersjs/generator-feathers/issues/102)
-- Added an option to bypass the update notification [\#101](https://github.com/feathersjs/generator-feathers/pull/101) ([derek-watson](https://github.com/derek-watson))
 
 **Merged pull requests:**
 
