@@ -107,7 +107,7 @@ module.exports = class AuthGenerator extends Generator {
 
         if(strategy === 'auth0') {
           strategyConfig.domain = 'mydomain.auth0.com';
-          strategyConfig.sopes = [ 'profile' ];
+          strategyConfig.scopes = [ 'profile' ];
         }
 
         if (strategy === 'facebook') {
