@@ -21,7 +21,7 @@ module.exports = class AppGenerator extends Generator {
       'serve-favicon',
       'compression',
       'helmet',
-      'winston',
+      'winston@^3.0.0',
       'cors'
     ];
 
