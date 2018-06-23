@@ -1,5 +1,27 @@
 # Change Log
 
+## [v1.1.0](https://github.com/feathersjs/authentication-oauth2/tree/v1.1.0) (2018-06-23)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth2/compare/v1.0.3...v1.1.0)
+
+**Closed issues:**
+
+- Authentication always logging as first user [\#77](https://github.com/feathersjs/authentication-oauth2/issues/77)
+- Restricting certain email domains [\#75](https://github.com/feathersjs/authentication-oauth2/issues/75)
+- Error when save callback payload google login into users service [\#74](https://github.com/feathersjs/authentication-oauth2/issues/74)
+- Confusing in doc of 'OAuth2 Authentication' [\#73](https://github.com/feathersjs/authentication-oauth2/issues/73)
+- Deleted [\#71](https://github.com/feathersjs/authentication-oauth2/issues/71)
+- Callback URL problem in production when using oauth [\#53](https://github.com/feathersjs/authentication-oauth2/issues/53)
+- Unable to override Facebook display options [\#32](https://github.com/feathersjs/authentication-oauth2/issues/32)
+- Implement oauth2 with graphql [\#25](https://github.com/feathersjs/authentication-oauth2/issues/25)
+
+**Merged pull requests:**
+
+- Allow a custom error Handler [\#79](https://github.com/feathersjs/authentication-oauth2/pull/79) ([mrdj07](https://github.com/mrdj07))
+- Update sinon to the latest version 🚀 [\#76](https://github.com/feathersjs/authentication-oauth2/pull/76) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update sinon to the latest version 🚀 [\#72](https://github.com/feathersjs/authentication-oauth2/pull/72) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update sinon-chai to the latest version 🚀 [\#69](https://github.com/feathersjs/authentication-oauth2/pull/69) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update mocha to the latest version 🚀 [\#66](https://github.com/feathersjs/authentication-oauth2/pull/66) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.3](https://github.com/feathersjs/authentication-oauth2/tree/v1.0.3) (2018-01-03)
 [Full Changelog](https://github.com/feathersjs/authentication-oauth2/compare/v1.0.2...v1.0.3)
 
