@@ -66,7 +66,7 @@ function init (options = {}) {
     const Verifier = options.Verifier || DefaultVerifier;
     const formatter = options.formatter || rest.formatter;
     const handler = options.handler || defaultHandler(oauth2Settings);
-    const errorHandler = defaultErrorHandler(oauth2Settings);
+    const errorHandler = typeof options.errorHandler === 'function' ? options.errorHandler(oauth2Settings) : defaultErrorHandler(oauth2Settings);
 
     // register OAuth middleware
     debug(`Registering '${name}' Express OAuth middleware`);
