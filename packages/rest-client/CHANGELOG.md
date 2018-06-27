@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.4.1](https://github.com/feathersjs/rest-client/tree/v1.4.1) (2018-06-27)
+[Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.4.0...v1.4.1)
+
+**Merged pull requests:**
+
+- URL encode ID. [\#33](https://github.com/feathersjs/rest-client/pull/33) ([SteffenLanger](https://github.com/SteffenLanger))
+- Update shx to the latest version 🚀 [\#31](https://github.com/feathersjs/rest-client/pull/31) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.4.0](https://github.com/feathersjs/rest-client/tree/v1.4.0) (2018-05-17)
 [Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.3.4...v1.4.0)
 
