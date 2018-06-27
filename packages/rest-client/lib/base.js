@@ -25,7 +25,7 @@ class Base {
     let url = this.base;
 
     if (typeof id !== 'undefined' && id !== null) {
-      url += `/${id}`;
+      url += `/${encodeURIComponent(id)}`;
     }
 
     if (Object.keys(params).length !== 0) {
