@@ -38,7 +38,7 @@ app.configure(express.rest())
  .configure(local())
  .configure(jwt())
  .use('/users', memory())
- .use('/', feathers.static(__dirname + '/public'))
+ .use('/', express.static(__dirname + '/public'))
  .use(express.errorHandler());
 
 app.service('users').hooks({
