@@ -1,5 +1,9 @@
-class Channel {
+const { EventEmitter } = require('events');
+
+class Channel extends EventEmitter {
   constructor (connections = [], data = null) {
+    super();
+
     this.connections = connections;
     this.data = data;
   }
@@ -20,6 +24,10 @@ class Channel {
         this.connections.splice(index, 1);
       }
     });
+
+    if (this.length === 0) {
+      this.emit('empty');
+    }
 
     return this;
   }
