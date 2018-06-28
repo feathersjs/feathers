@@ -1,5 +1,12 @@
 # Change Log
 
+## [v4.1.0](https://github.com/feathersjs/transport-commons/tree/v4.1.0) (2018-06-28)
+[Full Changelog](https://github.com/feathersjs/transport-commons/compare/v4.0.2...v4.1.0)
+
+**Merged pull requests:**
+
+- Remove empty channels [\#75](https://github.com/feathersjs/transport-commons/pull/75) ([daffl](https://github.com/daffl))
+
 ## [v4.0.2](https://github.com/feathersjs/transport-commons/tree/v4.0.2) (2018-06-12)
 [Full Changelog](https://github.com/feathersjs/transport-commons/compare/v4.0.1...v4.0.2)
 
