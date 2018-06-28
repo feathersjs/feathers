@@ -4,6 +4,8 @@ const channels = require('../../lib/channels');
 const Channel = require('../../lib/channels/channel/base');
 const CombinedChannel = require('../../lib/channels/channel/combined');
 
+const { CHANNELS } = channels.keys;
+
 describe('app.channel', () => {
   let app;
 
@@ -11,7 +13,7 @@ describe('app.channel', () => {
     app = feathers().configure(channels());
   });
 
-  describe('leaf channels', () => {
+  describe('base channels', () => {
     it('creates a new channel, app.channels has names', () => {
       assert.ok(app.channel('test') instanceof Channel);
       assert.deepEqual(app.channels, ['test']);
@@ -96,6 +98,64 @@ describe('app.channel', () => {
 
       assert.ok(test !== withData);
       assert.deepEqual(withData.data, data);
+    });
+
+    describe('empty channels', () => {
+      it('is an EventEmitter', () => {
+        const channel = app.channel('emitchannel');
+
+        return new Promise((resolve) => {
+          channel.once('message', data => {
+            assert.equal(data, 'hello');
+            resolve();
+          });
+
+          channel.emit('message', 'hello');
+        });
+      });
+
+      it('empty', done => {
+        const channel = app.channel('test');
+        const c1 = { id: 1 };
+        const c2 = { id: 2 };
+
+        channel.once('empty', done);
+
+        channel.join(c1, c2);
+        channel.leave(c1);
+        channel.leave(c2);
+      });
+
+      it('removes an empty channel', () => {
+        const channel = app.channel('test');
+        const appChannels = app[CHANNELS];
+        const c1 = { id: 1 };
+
+        channel.join(c1);
+
+        assert.ok(appChannels.test);
+        assert.equal(Object.keys(appChannels).length, 1);
+        channel.leave(c1);
+
+        assert.ok(app[CHANNELS].test === undefined);
+        assert.equal(Object.keys(appChannels).length, 0);
+      });
+
+      it('removes all event listeners from an empty channel', () => {
+        const channel = app.channel('testing');
+        const connection = { id: 1 };
+
+        channel.on('something', () => {});
+        assert.equal(channel.listenerCount('something'), 1);
+        assert.equal(channel.listenerCount('empty'), 1);
+
+        channel.join(connection).leave(connection);
+
+        assert.ok(app[CHANNELS].testing === undefined);
+
+        assert.equal(channel.listenerCount('something'), 0);
+        assert.equal(channel.listenerCount('empty'), 0);
+      });
     });
   });
 

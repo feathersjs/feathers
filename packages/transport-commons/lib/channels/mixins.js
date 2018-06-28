@@ -24,14 +24,24 @@ exports.channelMixin = function channelMixin () {
       }
 
       if (names.length === 1) {
-        const name = names[0];
+        const [ name ] = names;
 
         if (Array.isArray(name)) {
           return this.channel(...name);
         }
 
-        return this[CHANNELS][name] ||
-          (this[CHANNELS][name] = new Channel());
+        if (!this[CHANNELS][name]) {
+          const channel = new Channel();
+
+          channel.once('empty', () => {
+            channel.removeAllListeners();
+            delete this[CHANNELS][name];
+          });
+
+          this[CHANNELS][name] = channel;
+        }
+
+        return this[CHANNELS][name];
       }
 
       const channels = names.map(name => this.channel(name));
