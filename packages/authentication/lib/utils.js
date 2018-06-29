@@ -58,7 +58,6 @@ exports.verifyJWT = function verifyJWT (token, options = {}) {
     'issuer',
     'ignoreExpiration',
     'ignoreNotBefore',
-    'subject',
     'clockTolerance'
   ];
   const settings = merge({}, options.jwt);
