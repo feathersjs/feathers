@@ -1,5 +1,26 @@
 # Change Log
 
+## [v2.1.7](https://github.com/feathersjs/authentication/tree/v2.1.7) (2018-06-29)
+[Full Changelog](https://github.com/feathersjs/authentication/compare/v2.1.6...v2.1.7)
+
+**Fixed bugs:**
+
+- XXXOrRestrict undermines provider \(security\) logic [\#395](https://github.com/feathersjs/authentication/issues/395)
+
+**Closed issues:**
+
+- Customize response of authentication service [\#679](https://github.com/feathersjs/authentication/issues/679)
+- hook.params.user is null using REST [\#678](https://github.com/feathersjs/authentication/issues/678)
+- Can't store JWT token to cookie on REST client [\#676](https://github.com/feathersjs/authentication/issues/676)
+- Is there a way to get req.user without using the authentication middleware? [\#675](https://github.com/feathersjs/authentication/issues/675)
+
+**Merged pull requests:**
+
+- Remove subject from the JWT verification options [\#686](https://github.com/feathersjs/authentication/pull/686) ([rasendubi](https://github.com/rasendubi))
+- Replaced feathers.static with express.static [\#685](https://github.com/feathersjs/authentication/pull/685) ([georgehorrell](https://github.com/georgehorrell))
+- Remove dependency on Express and Express middleware [\#683](https://github.com/feathersjs/authentication/pull/683) ([daffl](https://github.com/daffl))
+- Update sinon to the latest version 🚀 [\#681](https://github.com/feathersjs/authentication/pull/681) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.1.6](https://github.com/feathersjs/authentication/tree/v2.1.6) (2018-06-01)
 [Full Changelog](https://github.com/feathersjs/authentication/compare/v2.1.5...v2.1.6)
 
@@ -480,10 +501,6 @@
 **Closed issues:**
 
 - successRedirect not redirecting [\#364](https://github.com/feathersjs/authentication/issues/364)
-
-**Merged pull requests:**
-
-- adding a value for checking against oauth [\#374](https://github.com/feathersjs/authentication/pull/374) ([ekryski](https://github.com/ekryski))
 
 ## [v1.0.1](https://github.com/feathersjs/authentication/tree/v1.0.1) (2016-12-14)
 [Full Changelog](https://github.com/feathersjs/authentication/compare/v1.0.0...v1.0.1)
