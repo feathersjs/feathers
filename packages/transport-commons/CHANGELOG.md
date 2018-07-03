@@ -1,5 +1,12 @@
 # Change Log
 
+## [v4.1.1](https://github.com/feathersjs/transport-commons/tree/v4.1.1) (2018-07-03)
+[Full Changelog](https://github.com/feathersjs/transport-commons/compare/v4.1.0...v4.1.1)
+
+**Merged pull requests:**
+
+- Properly dispatch arrays that do not come from Feathers hook events [\#77](https://github.com/feathersjs/transport-commons/pull/77) ([daffl](https://github.com/daffl))
+
 ## [v4.1.0](https://github.com/feathersjs/transport-commons/tree/v4.1.0) (2018-06-28)
 [Full Changelog](https://github.com/feathersjs/transport-commons/compare/v4.0.2...v4.1.0)
 
