@@ -118,7 +118,7 @@ describe('socket commons utils', () => {
         dispatcher('testing', dummyChannel, dummyHook);
       });
 
-      it('dispatches arrays properly', done => {
+      it('dispatches arrays properly hook events', done => {
         const data1 = { message: 'First message' };
         const data2 = { message: 'Second message' };
 
@@ -134,6 +134,22 @@ describe('socket commons utils', () => {
 
         dispatcher('testing', dummyChannel, dummyHook, data1);
         dispatcher('testing', dummyChannel, dummyHook, data2);
+      });
+
+      it('dispatches arrays properly for custom events', done => {
+        const result = [
+          { message: 'First' },
+          { message: 'Second' }
+        ];
+
+        dummyHook.result = result;
+
+        dummySocket.once('otherEvent', data => {
+          assert.deepEqual(data, result);
+          done();
+        });
+
+        dispatcher('otherEvent', dummyChannel, dummyHook, result);
       });
     });
   });
