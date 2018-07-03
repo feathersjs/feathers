@@ -30,7 +30,7 @@ const normalizeError = exports.normalizeError = function (e) {
 };
 
 exports.getDispatcher = function (emit, socketKey) {
-  return function (event, channel, hook, data) {
+  return function (event, channel, context, data) {
     debug(`Dispatching '${event}' to ${channel.length} connections`);
 
     channel.connections.forEach(connection => {
@@ -39,14 +39,14 @@ exports.getDispatcher = function (emit, socketKey) {
       const socket = connection[socketKey];
 
       if (socket) {
-        const eventName = `${hook.path || ''} ${event}`.trim();
+        const eventName = `${context.path || ''} ${event}`.trim();
 
-        let result = channel.dataFor(connection) || hook.dispatch || hook.result;
+        let result = channel.dataFor(connection) || context.dispatch || context.result;
 
-        // If we are getting events from an array, try to get the individual
-        // item to dispatch from the correct index.
-        if (Array.isArray(hook.result) && Array.isArray(result)) {
-          result = result[hook.result.indexOf(data)];
+        // If we are getting events from an array but try to dispatch individual data
+        // try to get the individual item to dispatch from the correct index.
+        if (!Array.isArray(data) && Array.isArray(context.result) && Array.isArray(result)) {
+          result = result[context.result.indexOf(data)];
         }
 
         debug(`Dispatching '${eventName}' to Socket ${socket.id} with`, result);
