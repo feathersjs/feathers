@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.7.3](https://github.com/feathersjs/cli/tree/v3.7.3) (2018-07-04)
+[Full Changelog](https://github.com/feathersjs/cli/compare/v3.7.2...v3.7.3)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#156](https://github.com/feathersjs/cli/pull/156) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.7.2](https://github.com/feathersjs/cli/tree/v3.7.2) (2018-06-19)
 [Full Changelog](https://github.com/feathersjs/cli/compare/v3.7.1...v3.7.2)
 
