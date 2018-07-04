@@ -1,5 +1,19 @@
 # Change Log
 
+## [v2.5.3](https://github.com/feathersjs/generator-feathers/tree/v2.5.3) (2018-07-04)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.2...v2.5.3)
+
+**Closed issues:**
+
+- tengo este error pueden ayudarme [\#373](https://github.com/feathersjs/generator-feathers/issues/373)
+
+**Merged pull requests:**
+
+- Update all dependencies to latest [\#375](https://github.com/feathersjs/generator-feathers/pull/375) ([daffl](https://github.com/daffl))
+- Update yeoman-generator to the latest version 🚀 [\#374](https://github.com/feathersjs/generator-feathers/pull/374) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Move to async/await, remove Node 6 compatibility [\#372](https://github.com/feathersjs/generator-feathers/pull/372) ([daffl](https://github.com/daffl))
+- Update eslint to the latest version 🚀 [\#371](https://github.com/feathersjs/generator-feathers/pull/371) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.5.2](https://github.com/feathersjs/generator-feathers/tree/v2.5.2) (2018-06-19)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.1...v2.5.2)
 
@@ -646,6 +660,7 @@
 **Implemented enhancements:**
 
 - Support bypassing update notification [\#102](https://github.com/feathersjs/generator-feathers/issues/102)
+- Added an option to bypass the update notification [\#101](https://github.com/feathersjs/generator-feathers/pull/101) ([derek-watson](https://github.com/derek-watson))
 
 **Merged pull requests:**
 
