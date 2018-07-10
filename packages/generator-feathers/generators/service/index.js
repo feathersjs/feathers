@@ -87,7 +87,10 @@ module.exports = class ServiceGenerator extends Generator {
     ];
 
     return this.prompt(prompts).then(answers => {
-      const parts = (answers.name || props.name).split('/');
+      const parts = (answers.name || props.name)
+        .split('/')
+        // exclude route parameters from folder hierarchy i.e. /users/:id/roles 
+        .filter(part => !part.startsWith(':'));
       const name = parts.pop();
 
       this.props = Object.assign({
