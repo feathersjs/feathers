@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.5.5](https://github.com/feathersjs/generator-feathers/tree/v2.5.5) (2018-07-10)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.4...v2.5.5)
+
+**Closed issues:**
+
+- PrimusError: Missing dependencies for transformer: "websockets" [\#377](https://github.com/feathersjs/generator-feathers/issues/377)
+
+**Merged pull requests:**
+
+- Adds 'ws' package if 'primus' is selected [\#378](https://github.com/feathersjs/generator-feathers/pull/378) ([rvanzon](https://github.com/rvanzon))
+
 ## [v2.5.4](https://github.com/feathersjs/generator-feathers/tree/v2.5.4) (2018-07-10)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.3...v2.5.4)
 
