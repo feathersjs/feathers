@@ -1,5 +1,16 @@
 # Change Log
 
+## [v3.7.5](https://github.com/feathersjs/cli/tree/v3.7.5) (2018-07-10)
+[Full Changelog](https://github.com/feathersjs/cli/compare/v3.7.4...v3.7.5)
+
+**Closed issues:**
+
+- Error when using NodeJS 10.6.0 [\#157](https://github.com/feathersjs/cli/issues/157)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#159](https://github.com/feathersjs/cli/pull/159) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.7.4](https://github.com/feathersjs/cli/tree/v3.7.4) (2018-07-10)
 [Full Changelog](https://github.com/feathersjs/cli/compare/v3.7.3...v3.7.4)
 
