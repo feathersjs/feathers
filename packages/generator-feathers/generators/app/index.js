@@ -170,6 +170,10 @@ module.exports = class AppGenerator extends Generator {
       const type = provider === 'rest' ? 'express' : provider;
 
       this.dependencies.push(`@feathersjs/${type}`);
+
+      if (provider === 'primus') {
+        this.dependencies.push('ws');
+      }
     });
 
     this._packagerInstall(this.dependencies, {
