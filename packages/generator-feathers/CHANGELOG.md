@@ -1,5 +1,12 @@
 # Change Log
 
+## [v2.5.4](https://github.com/feathersjs/generator-feathers/tree/v2.5.4) (2018-07-10)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.3...v2.5.4)
+
+**Merged pull requests:**
+
+- Exclude route parameters when generating services in nested folders [\#376](https://github.com/feathersjs/generator-feathers/pull/376) ([robbiedhickey](https://github.com/robbiedhickey))
+
 ## [v2.5.3](https://github.com/feathersjs/generator-feathers/tree/v2.5.3) (2018-07-04)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.2...v2.5.3)
 
