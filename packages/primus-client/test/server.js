@@ -30,7 +30,7 @@ class TodoService extends Service {
 module.exports = function (cb) {
   const app = feathers()
     .configure(primus({
-      transformer: 'uws'
+      transformer: 'websockets'
     }, cb))
     .use('/todos', new TodoService());
 
