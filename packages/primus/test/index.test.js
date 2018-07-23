@@ -25,7 +25,7 @@ describe('@feathersjs/primus', () => {
     };
     const app = options.app = feathers()
       .configure(primus({
-        transformer: 'uws'
+        transformer: 'websockets'
       }, function (primus) {
         primus.authorize(function (req, done) {
           req.feathers.user = { name: 'David' };
@@ -86,7 +86,7 @@ describe('@feathersjs/primus', () => {
     let counter = 0;
     const app = feathers()
       .configure(primus({
-        transformer: 'uws'
+        transformer: 'websockets'
       }, function () {
         assert.equal(counter, 0);
         counter++;
@@ -109,7 +109,7 @@ describe('@feathersjs/primus', () => {
     const data = { message: 'Hello world' };
     const app = express(feathers())
       .configure(primus({
-        transformer: 'uws'
+        transformer: 'websockets'
       }))
       .use('/test', (req, res) => res.json(data));
 
