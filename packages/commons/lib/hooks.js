@@ -5,8 +5,31 @@ const SKIP = exports.SKIP = typeof Symbol !== 'undefined'
   ? Symbol('__feathersSkipHooks')
   : '__feathersSkipHooks';
 
-exports.createHookObject = function createHookObject (method, data = {}) {
-  const hook = {};
+const convertGetOrRemove = ([ id, params = {} ]) => ({ id, params });
+const convertUpdateOrPatch = ([ id, data, params = {} ]) => ({ id, data, params });
+
+// Converters from service method arguments to hook object properties
+exports.converters = {
+  find (args) {
+    const [ params = {} ] = args;
+
+    return { params };
+  },
+  create (args) {
+    const [ data, params = {} ] = args;
+
+    return { data, params };
+  },
+  get: convertGetOrRemove,
+  remove: convertGetOrRemove,
+  update: convertUpdateOrPatch,
+  patch: convertUpdateOrPatch
+};
+
+// Create a hook object for a method with arguments `args`
+// `data` is additional data that will be added
+exports.createHookObject = function createHookObject (method, args, data = {}) {
+  const hook = exports.converters[method](args);
 
   Object.defineProperty(hook, 'toJSON', {
     value () {

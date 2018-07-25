@@ -135,39 +135,50 @@ describe('hook utilities', () => {
     const hookData = { app, service };
 
     it('.toJSON', () => {
-      let hookObject = utils.createHookObject('find', hookData);
+      let hookObject = utils.createHookObject('find', [
+        { some: 'thing' }
+      ], hookData);
 
       expect(hookObject.toJSON()).to.deep.equal({
+        params: { some: 'thing' },
         method: 'find',
         path: 'testing'
       });
 
       expect(JSON.stringify(hookObject)).to.equal(JSON.stringify({
         method: 'find',
-        path: 'testing'
+        path: 'testing',
+        params: { some: 'thing' }
       }));
     });
 
     it('for find', () => {
-      let hookObject = utils.createHookObject('find', hookData);
+      let hookObject = utils.createHookObject('find', [
+        { some: 'thing' }
+      ], hookData);
 
       expect(hookObject).to.deep.equal({
+        params: { some: 'thing' },
         method: 'find',
         app,
         service,
         path: 'testing'
       });
 
-      hookObject = utils.createHookObject('find');
+      hookObject = utils.createHookObject('find', [
+        { some: 'thing' }
+      ]);
 
       expect(hookObject).to.deep.equal({
+        params: { some: 'thing' },
         method: 'find',
         path: null
       });
 
-      hookObject = utils.createHookObject('find', hookData);
+      hookObject = utils.createHookObject('find', [], hookData);
 
       expect(hookObject).to.deep.equal({
+        params: {},
         method: 'find',
         app,
         service,
@@ -176,18 +187,24 @@ describe('hook utilities', () => {
     });
 
     it('for get', () => {
-      let hookObject = utils.createHookObject('get', hookData);
+      let hookObject = utils.createHookObject('get', [
+        1, { some: 'thing' }
+      ], hookData);
 
       expect(hookObject).to.deep.equal({
+        id: 1,
+        params: { some: 'thing' },
         method: 'get',
         app,
         service,
         path: 'testing'
       });
 
-      hookObject = utils.createHookObject('get', hookData);
+      hookObject = utils.createHookObject('get', [ 1 ], hookData);
 
       expect(hookObject).to.deep.equal({
+        id: 1,
+        params: {},
         method: 'get',
         app,
         service,
@@ -196,18 +213,24 @@ describe('hook utilities', () => {
     });
 
     it('for remove', () => {
-      let hookObject = utils.createHookObject('remove', hookData);
+      let hookObject = utils.createHookObject('remove', [
+        1, { some: 'thing' }
+      ], hookData);
 
       expect(hookObject).to.deep.equal({
+        id: 1,
+        params: { some: 'thing' },
         method: 'remove',
         app,
         service,
         path: 'testing'
       });
 
-      hookObject = utils.createHookObject('remove', hookData);
+      hookObject = utils.createHookObject('remove', [ 1 ], hookData);
 
       expect(hookObject).to.deep.equal({
+        id: 1,
+        params: {},
         method: 'remove',
         app,
         service,
@@ -216,9 +239,13 @@ describe('hook utilities', () => {
     });
 
     it('for create', () => {
-      const hookObject = utils.createHookObject('create', hookData);
+      const hookObject = utils.createHookObject('create', [
+        { my: 'data' }, { some: 'thing' }
+      ], hookData);
 
       expect(hookObject).to.deep.equal({
+        data: { my: 'data' },
+        params: { some: 'thing' },
         method: 'create',
         app,
         service,
@@ -227,9 +254,14 @@ describe('hook utilities', () => {
     });
 
     it('for update', () => {
-      const hookObject = utils.createHookObject('update', hookData);
+      const hookObject = utils.createHookObject('update', [
+        2, { my: 'data' }, { some: 'thing' }
+      ], hookData);
 
       expect(hookObject).to.deep.equal({
+        id: 2,
+        data: { my: 'data' },
+        params: { some: 'thing' },
         method: 'update',
         app,
         service,
@@ -238,21 +270,15 @@ describe('hook utilities', () => {
     });
 
     it('for patch', () => {
-      const hookObject = utils.createHookObject('patch', hookData);
+      const hookObject = utils.createHookObject('patch', [
+        2, { my: 'data' }, { some: 'thing' }
+      ], hookData);
 
       expect(hookObject).to.deep.equal({
+        id: 2,
+        data: { my: 'data' },
+        params: { some: 'thing' },
         method: 'patch',
-        app,
-        service,
-        path: 'testing'
-      });
-    });
-
-    it('for custom method', () => {
-      const hookObject = utils.createHookObject('custom', hookData);
-
-      expect(hookObject).to.deep.equal({
-        method: 'custom',
         app,
         service,
         path: 'testing'
