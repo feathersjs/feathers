@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.4.3](https://github.com/feathersjs/commons/tree/v1.4.3) (2018-07-25)
+[Full Changelog](https://github.com/feathersjs/commons/compare/v1.4.2...v1.4.3)
+
+**Merged pull requests:**
+
+- Revert breaking change from 78d780de91ae8333f3843be153beb5deea55c792 [\#78](https://github.com/feathersjs/commons/pull/78) ([daffl](https://github.com/daffl))
+
 ## [v1.4.2](https://github.com/feathersjs/commons/tree/v1.4.2) (2018-07-25)
 [Full Changelog](https://github.com/feathersjs/commons/compare/v1.4.1...v1.4.2)
 
