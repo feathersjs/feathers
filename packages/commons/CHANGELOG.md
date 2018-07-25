@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.4.2](https://github.com/feathersjs/commons/tree/v1.4.2) (2018-07-25)
+[Full Changelog](https://github.com/feathersjs/commons/compare/v1.4.1...v1.4.2)
+
+**Closed issues:**
+
+- Sort error on multiple fields [\#74](https://github.com/feathersjs/commons/issues/74)
+- Cannot build with create-react-app \(again\) [\#71](https://github.com/feathersjs/commons/issues/71)
+
+**Merged pull requests:**
+
+- Update all dependencies [\#77](https://github.com/feathersjs/commons/pull/77) ([daffl](https://github.com/daffl))
+- Use sorting algorithm from NeDB [\#76](https://github.com/feathersjs/commons/pull/76) ([daffl](https://github.com/daffl))
+- Open hook workflow to custom methods [\#72](https://github.com/feathersjs/commons/pull/72) ([bertho-zero](https://github.com/bertho-zero))
+
 ## [v1.4.1](https://github.com/feathersjs/commons/tree/v1.4.1) (2018-04-12)
 [Full Changelog](https://github.com/feathersjs/commons/compare/v1.4.0...v1.4.1)
 
