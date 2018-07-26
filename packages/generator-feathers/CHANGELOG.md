@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.5.6](https://github.com/feathersjs/generator-feathers/tree/v2.5.6) (2018-07-26)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.5...v2.5.6)
+
+**Merged pull requests:**
+
+- Remove space for consistent formatting [\#380](https://github.com/feathersjs/generator-feathers/pull/380) ([Strongbyte-ES](https://github.com/Strongbyte-ES))
+- Fix renaming to preserve dot notation [\#379](https://github.com/feathersjs/generator-feathers/pull/379) ([SassNinja](https://github.com/SassNinja))
+
 ## [v2.5.5](https://github.com/feathersjs/generator-feathers/tree/v2.5.5) (2018-07-10)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.4...v2.5.5)
 
