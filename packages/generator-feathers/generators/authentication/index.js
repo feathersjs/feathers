@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const j = require('@feathersjs/tools').transform;
 const crypto = require('crypto');
+const validate = require('validate-npm-package-name');
 
 const Generator = require('../../lib/generator');
 const OAUTH2_STRATEGY_MAPPINGS = {
@@ -145,7 +146,7 @@ module.exports = class AuthGenerator extends Generator {
       '@feathersjs/authentication-jwt'
     ];
     const context = Object.assign({
-      kebabEntity: _.kebabCase(this.props.entity),
+      kebabEntity: validate(this.props.entity).validForNewPackages ? this.props.entity : _.kebabCase(this.props.entity),
       camelEntity: _.camelCase(this.props.entity),
       oauthProviders: []
     }, this.props);
