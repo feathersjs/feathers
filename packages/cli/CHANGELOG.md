@@ -1,5 +1,16 @@
 # Change Log
 
+## [v3.7.6](https://github.com/feathersjs/cli/tree/v3.7.6) (2018-07-26)
+[Full Changelog](https://github.com/feathersjs/cli/compare/v3.7.5...v3.7.6)
+
+**Closed issues:**
+
+- undesired hook renaming [\#160](https://github.com/feathersjs/cli/issues/160)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#161](https://github.com/feathersjs/cli/pull/161) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.7.5](https://github.com/feathersjs/cli/tree/v3.7.5) (2018-07-10)
 [Full Changelog](https://github.com/feathersjs/cli/compare/v3.7.4...v3.7.5)
 
