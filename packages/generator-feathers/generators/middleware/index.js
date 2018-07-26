@@ -1,5 +1,6 @@
 const { kebabCase, camelCase } = require('lodash');
 const j = require('@feathersjs/tools').transform;
+const validate = require('validate-npm-package-name');
 const Generator = require('../../lib/generator');
 
 module.exports = class MiddlewareGenerator extends Generator {
@@ -20,7 +21,7 @@ module.exports = class MiddlewareGenerator extends Generator {
 
     return this.prompt(prompts).then(props => {
       this.props = Object.assign(this.props, props, {
-        kebabName: kebabCase(props.name),
+        kebabName: validate(props.name).validForNewPackages ? props.name : kebabCase(props.name),
         camelName: camelCase(props.name)
       });
     });

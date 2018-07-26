@@ -52,6 +52,7 @@
     "node-dir": "^0.1.17",
     "randomstring": "^1.1.5",
     "semver": "^5.5.0",
+    "validate-npm-package-name": "^3.0.0",
     "yeoman-generator": "^3.0.0"
   },
   "devDependencies": {
