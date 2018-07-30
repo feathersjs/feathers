@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/configuration",
   "description": "A small configuration module for your Feathers application.",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "homepage": "https://github.com/feathersjs/configuration",
   "main": "lib/",
   "keywords": [
