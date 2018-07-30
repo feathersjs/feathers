@@ -1,5 +1,19 @@
 # Change Log
 
+## [v2.0.0](https://github.com/feathersjs/configuration/tree/v2.0.0) (2018-07-30)
+[Full Changelog](https://github.com/feathersjs/configuration/compare/v1.0.2...v2.0.0)
+
+**Closed issues:**
+
+- Config adding a value of userName in runtime its overwritten to the OS name [\#58](https://github.com/feathersjs/configuration/issues/58)
+- Configuration Management [\#26](https://github.com/feathersjs/configuration/issues/26)
+
+**Merged pull requests:**
+
+- Update config to the latest version 🚀 [\#59](https://github.com/feathersjs/configuration/pull/59) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- misspelling [\#57](https://github.com/feathersjs/configuration/pull/57) ([chaintng](https://github.com/chaintng))
+- Update mocha to the latest version 🚀 [\#56](https://github.com/feathersjs/configuration/pull/56) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.0.2](https://github.com/feathersjs/configuration/tree/v1.0.2) (2018-01-02)
 [Full Changelog](https://github.com/feathersjs/configuration/compare/v1.0.1...v1.0.2)
 
