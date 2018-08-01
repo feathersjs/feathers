@@ -85,6 +85,6 @@
     "sqlite3": "^4.0.1",
     "winston": "^3.0.0",
     "yeoman-assert": "^3.1.1",
-    "yeoman-test": "^1.8.0"
+    "yeoman-test": "^2.0.0"
   }
 }
