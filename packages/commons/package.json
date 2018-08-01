@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/commons",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "Shared Feathers utility functions",
   "homepage": "https://github.com/feathersjs/commons",
   "keywords": [
