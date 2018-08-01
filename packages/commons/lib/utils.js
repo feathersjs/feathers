@@ -139,7 +139,7 @@ exports.compareNSB = function (a, b) {
   return 0;
 };
 
-exports.compareArrays = function compareArrays (a, b) {
+exports.compareArrays = function (a, b) {
   var i, comp;
 
   for (i = 0; i < Math.min(a.length, b.length); i += 1) {
@@ -152,7 +152,7 @@ exports.compareArrays = function compareArrays (a, b) {
   return exports.compareNSB(a.length, b.length);
 };
 
-exports.compare = function compare (a, b, compareStrings = exports.compareNSB) {
+exports.compare = function (a, b, compareStrings = exports.compareNSB) {
   const { compareNSB, compare, compareArrays } = exports;
 
   // undefined
@@ -199,7 +199,7 @@ exports.compare = function compare (a, b, compareStrings = exports.compareNSB) {
 
 // An in-memory sorting function according to the
 // $sort special query parameter
-exports.sorter = function sorter ($sort) {
+exports.sorter = function ($sort) {
   const criteria = Object.keys($sort).map(key => {
     const direction = $sort[key];
 
