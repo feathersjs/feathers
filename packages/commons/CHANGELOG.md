@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.4.4](https://github.com/feathersjs/commons/tree/v1.4.4) (2018-08-01)
+[Full Changelog](https://github.com/feathersjs/commons/compare/v1.4.3...v1.4.4)
+
+**Merged pull requests:**
+
+- Update utils.js [\#79](https://github.com/feathersjs/commons/pull/79) ([bertho-zero](https://github.com/bertho-zero))
+
 ## [v1.4.3](https://github.com/feathersjs/commons/tree/v1.4.3) (2018-07-25)
 [Full Changelog](https://github.com/feathersjs/commons/compare/v1.4.2...v1.4.3)
 
