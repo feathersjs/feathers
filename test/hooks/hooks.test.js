@@ -243,7 +243,7 @@ describe('hooks basics', () => {
     });
   });
 
-  it('can register hooks on a custom method', async () => {
+  it('can register hooks on a custom method', () => {
     const app = feathers().use('/dummy', {
       methods: {
         custom: ['id', 'data', 'params']
@@ -292,14 +292,16 @@ describe('hooks basics', () => {
       other: ['id', 'data', 'params']
     });
 
-    await app.service('dummy').custom(...args, true).then(hook => {
-      assert.deepEqual(hook.result, args);
-      assert.deepEqual(hook.test, ['all::before', 'custom::before', 'all::after', 'custom::after']);
-    });
+    return app.service('dummy').custom(...args, true)
+      .then(hook => {
+        assert.deepEqual(hook.result, args);
+        assert.deepEqual(hook.test, ['all::before', 'custom::before', 'all::after', 'custom::after']);
 
-    return app.service('dummy').other(...args, true).then(hook => {
-      assert.deepEqual(hook.result, args);
-      assert.deepEqual(hook.test, ['all::before', 'all::after']);
-    });
+        app.service('dummy').other(...args, true)
+          .then(hook => {
+            assert.deepEqual(hook.result, args);
+            assert.deepEqual(hook.test, ['all::before', 'all::after']);
+          });
+      });
   });
 });
