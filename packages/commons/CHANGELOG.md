@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.0.0](https://github.com/feathersjs/commons/tree/v2.0.0) (2018-08-03)
+[Full Changelog](https://github.com/feathersjs/commons/compare/v1.4.4...v2.0.0)
+
+**Merged pull requests:**
+
+- Merge major with latest changes [\#80](https://github.com/feathersjs/commons/pull/80) ([daffl](https://github.com/daffl))
+- Ability to specify custom filters in filterQuery [\#73](https://github.com/feathersjs/commons/pull/73) ([vonagam](https://github.com/vonagam))
+
 ## [v1.4.4](https://github.com/feathersjs/commons/tree/v1.4.4) (2018-08-01)
 [Full Changelog](https://github.com/feathersjs/commons/compare/v1.4.3...v1.4.4)
 
