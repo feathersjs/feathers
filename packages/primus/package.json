@@ -56,7 +56,7 @@
     "primus-emitter": "^3.1.1"
   },
   "devDependencies": {
-    "@feathersjs/commons": "^1.2.0",
+    "@feathersjs/commons": "^2.0.0",
     "@feathersjs/express": "^1.0.0",
     "@feathersjs/feathers": "^3.0.0",
     "feathers": "^2.2.3",
