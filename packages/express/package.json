@@ -48,7 +48,7 @@
     "lib": "lib"
   },
   "dependencies": {
-    "@feathersjs/commons": "^1.4.0",
+    "@feathersjs/commons": "^2.0.0",
     "@feathersjs/errors": "^3.0.0",
     "debug": "^3.1.0",
     "express": "^4.16.2",
