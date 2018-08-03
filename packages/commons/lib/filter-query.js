@@ -1,8 +1,5 @@
 const { _ } = require('./utils');
 
-// Officially supported query parameters ($populate is kind of special)
-const PROPERTIES = ['$sort', '$limit', '$skip', '$select', '$populate'];
-
 function parse (number) {
   if (typeof number !== 'undefined') {
     return Math.abs(parseInt(number, 10));
@@ -38,17 +35,57 @@ function convertSort (sort) {
   return result;
 }
 
+function cleanQuery (query, operators) {
+  if (Array.isArray(query)) {
+    return query.map((query) => cleanQuery(query, operators));
+  }
+
+  if (query && query.constructor === Object) {
+    const result = {};
+    _.each(query, (query, key) => {
+      if (key[0] === '$' && operators.indexOf(key) === -1) return;
+      result[key] = cleanQuery(query, operators);
+    });
+    return result;
+  }
+
+  return query;
+}
+
+function assignFilters (object, query, filters, options) {
+  if (Array.isArray(filters)) {
+    _.each(filters, (key) => {
+      object[key] = query[key];
+    });
+  } else {
+    _.each(filters, (converter, key) => {
+      object[key] = converter(query[key], options);
+    });
+  }
+}
+
+const FILTERS = {
+  $sort: (value) => convertSort(value),
+  $limit: (value, options) => getLimit(parse(value), options.paginate),
+  $skip: (value) => parse(value),
+  $select: (value) => value
+};
+
+const OPERATORS = ['$in', '$nin', '$lt', '$lte', '$gt', '$gte', '$ne', '$or'];
+
 // Converts Feathers special query parameters and pagination settings
 // and returns them separately a `filters` and the rest of the query
 // as `query`
-module.exports = function (query, paginate) {
-  let filters = {
-    $sort: convertSort(query.$sort),
-    $limit: getLimit(parse(query.$limit), paginate),
-    $skip: parse(query.$skip),
-    $select: query.$select,
-    $populate: query.$populate
-  };
+module.exports = function filterQuery (query, options = {}) {
+  let { filters: additionalFilters = {}, operators: additionalOperators = [] } = options;
+  let result = {};
 
-  return { filters, query: _.omit(query, ...PROPERTIES) };
+  result.filters = {};
+  assignFilters(result.filters, query, FILTERS, options);
+  assignFilters(result.filters, query, additionalFilters, options);
+
+  let operators = OPERATORS.concat(additionalOperators);
+  result.query = cleanQuery(query, operators);
+
+  return result;
 };

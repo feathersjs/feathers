@@ -71,13 +71,13 @@ describe('.filterQuery', function () {
 
     describe('pagination', function () {
       it('limits with default pagination', function () {
-        const { filters } = filter({}, { default: 10 });
+        const { filters } = filter({}, { paginate: { default: 10 } });
         expect(filters.$limit).to.equal(10);
       });
 
       it('limits with max pagination', function () {
-        const { filters } = filter({ $limit: 20 }, { default: 5, max: 10 });
-        const { filters: filtersNeg } = filter({ $limit: -20 }, { default: 5, max: 10 });
+        const { filters } = filter({ $limit: 20 }, { paginate: { default: 5, max: 10 } });
+        const { filters: filtersNeg } = filter({ $limit: -20 }, { paginate: { default: 5, max: 10 } });
         expect(filters.$limit).to.equal(10);
         expect(filtersNeg.$limit).to.equal(10);
       });
@@ -131,24 +131,45 @@ describe('.filterQuery', function () {
     });
   });
 
-  describe('$populate', function () {
+  describe('additional filters', () => {
     beforeEach(function () {
-      this.query = { $populate: 1 };
+      this.query = { $select: 1, $known: 1, $unknown: 1 };
     });
 
-    it('returns $populate when present in query', function () {
+    it('returns only default filters when no additionals', function () {
       const { filters } = filter(this.query);
-      expect(filters.$populate).to.equal(1);
+      expect(filters).to.include({ $select: 1 }).and.to.not.have.any.keys('$known', '$unknown');
     });
 
-    it('removes $populate from query when present', function () {
-      expect(filter(this.query).query).to.deep.equal({});
+    it('returns default and known additional filters (array)', function () {
+      const { filters } = filter(this.query, { filters: [ '$known' ] });
+      expect(filters).to.include({ $select: 1, $known: 1 }).and.to.not.have.key('$unknown');
     });
 
-    it('returns undefined when not present in query', function () {
-      const query = { $foo: 1 };
-      const { filters } = filter(query);
-      expect(filters.$populate).to.equal(undefined);
+    it('returns default and known additional filters (object)', function () {
+      const { filters } = filter(this.query, { filters: { $known: (value) => value.toString() } });
+      expect(filters).to.include({ $select: 1, $known: '1' }).and.to.not.have.key('$unknown');
+    });
+  });
+
+  describe('additional operators', () => {
+    beforeEach(function () {
+      this.query = { $ne: 1, $known: 1, $unknown: 1 };
+    });
+
+    it('returns query with only default operators when no additionals', function () {
+      const { query } = filter(this.query);
+      expect(query).to.include({ $ne: 1 }).and.to.not.have.any.keys('$known', '$unknown');
+    });
+
+    it('returns query with default and known additional operators', function () {
+      const { query } = filter(this.query, { operators: [ '$known' ] });
+      expect(query).to.eql({ $ne: 1, $known: 1 }).and.to.not.have.key('$unknown');
+    });
+
+    it('returns query with default and known additional operators (nested)', function () {
+      const { query } = filter({ field: this.query }, { operators: [ '$known' ] });
+      expect(query).to.deep.include({ field: { $ne: 1, $known: 1 } }).and.to.not.have.nested.property('field.$unknown');
     });
   });
 });
