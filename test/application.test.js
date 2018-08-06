@@ -168,6 +168,46 @@ describe('Feathers application', () => {
 
       app1.service('testing').create({ message: 'Hi' });
     });
+
+    it('services conserve Symbols', () => {
+      const TEST = Symbol('test');
+      const dummyService = {
+        [TEST]: true,
+
+        setup (app, path) {
+          this.path = path;
+        },
+
+        create (data) {
+          return Promise.resolve(data);
+        }
+      };
+
+      const app = feathers().use('/dummy', dummyService);
+      const wrappedService = app.service('dummy');
+
+      assert.ok(wrappedService[TEST]);
+    });
+
+    it('methods conserve Symbols', () => {
+      const TEST = Symbol('test');
+      const dummyService = {
+        setup (app, path) {
+          this.path = path;
+        },
+
+        create (data) {
+          return Promise.resolve(data);
+        }
+      };
+
+      dummyService.create[TEST] = true;
+
+      const app = feathers().use('/dummy', dummyService);
+      const wrappedService = app.service('dummy');
+
+      assert.ok(wrappedService.create[TEST]);
+    });
   });
 
   // Copied from the Express tests (without special cases)

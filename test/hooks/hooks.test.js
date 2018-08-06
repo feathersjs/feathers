@@ -251,7 +251,13 @@ describe('hooks basics', () => {
       get () {},
       custom (id, data, params) {
         return Promise.resolve([id, data, params]);
-      }
+      },
+      // activateHooks is usable as a decorator: @activateHooks(['id', 'data', 'params'])
+      other: feathers.activateHooks(['id', 'data', 'params'])(
+        (id, data, params) => {
+          return Promise.resolve([id, data, params]);
+        }
+      )
     });
 
     app.service('dummy').hooks({
@@ -275,9 +281,27 @@ describe('hooks basics', () => {
 
     const args = [1, { test: 'ok' }, { provider: 'rest' }];
 
-    return app.service('dummy').custom(...args, true).then(hook => {
-      assert.deepEqual(hook.result, args);
-      assert.deepEqual(hook.test, ['all::before', 'custom::before', 'all::after', 'custom::after']);
+    assert.deepEqual(app.service('dummy').methods, {
+      find: ['params'],
+      get: ['id', 'params'],
+      create: ['data', 'params'],
+      update: ['id', 'data', 'params'],
+      patch: ['id', 'data', 'params'],
+      remove: ['id', 'params'],
+      custom: ['id', 'data', 'params'],
+      other: ['id', 'data', 'params']
     });
+
+    return app.service('dummy').custom(...args, true)
+      .then(hook => {
+        assert.deepEqual(hook.result, args);
+        assert.deepEqual(hook.test, ['all::before', 'custom::before', 'all::after', 'custom::after']);
+
+        app.service('dummy').other(...args, true)
+          .then(hook => {
+            assert.deepEqual(hook.result, args);
+            assert.deepEqual(hook.test, ['all::before', 'all::after']);
+          });
+      });
   });
 });
