@@ -242,4 +242,66 @@ describe('hooks basics', () => {
       });
     });
   });
+
+  it('can register hooks on a custom method', () => {
+    const app = feathers().use('/dummy', {
+      methods: {
+        custom: ['id', 'data', 'params']
+      },
+      get () {},
+      custom (id, data, params) {
+        return Promise.resolve([id, data, params]);
+      },
+      // activateHooks is usable as a decorator: @activateHooks(['id', 'data', 'params'])
+      other: feathers.activateHooks(['id', 'data', 'params'])(
+        (id, data, params) => {
+          return Promise.resolve([id, data, params]);
+        }
+      )
+    });
+
+    app.service('dummy').hooks({
+      before: {
+        all (context) {
+          context.test = ['all::before'];
+        },
+        custom (context) {
+          context.test.push('custom::before');
+        }
+      },
+      after: {
+        all (context) {
+          context.test.push('all::after');
+        },
+        custom (context) {
+          context.test.push('custom::after');
+        }
+      }
+    });
+
+    const args = [1, { test: 'ok' }, { provider: 'rest' }];
+
+    assert.deepEqual(app.service('dummy').methods, {
+      find: ['params'],
+      get: ['id', 'params'],
+      create: ['data', 'params'],
+      update: ['id', 'data', 'params'],
+      patch: ['id', 'data', 'params'],
+      remove: ['id', 'params'],
+      custom: ['id', 'data', 'params'],
+      other: ['id', 'data', 'params']
+    });
+
+    return app.service('dummy').custom(...args, true)
+      .then(hook => {
+        assert.deepEqual(hook.result, args);
+        assert.deepEqual(hook.test, ['all::before', 'custom::before', 'all::after', 'custom::after']);
+
+        app.service('dummy').other(...args, true)
+          .then(hook => {
+            assert.deepEqual(hook.result, args);
+            assert.deepEqual(hook.test, ['all::before', 'all::after']);
+          });
+      });
+  });
 });
