@@ -9,7 +9,6 @@ describe('module', () => {
     expect(typeof commons.stripSlashes).to.equal('function');
     expect(typeof commons.sorter).to.equal('function');
     expect(typeof commons.select).to.equal('function');
-    expect(typeof commons.validateArguments).to.equal('function');
     expect(typeof commons.hooks).to.equal('object');
     expect(typeof commons._).to.equal('object');
   });

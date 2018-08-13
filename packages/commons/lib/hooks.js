@@ -1,9 +1,10 @@
-const { each, pick } = require('./utils')._;
+const { _: { each, pick }, createSymbol } = require('./utils');
 
 // To skip further hooks
-const SKIP = exports.SKIP = typeof Symbol !== 'undefined'
-  ? Symbol('__feathersSkipHooks')
-  : '__feathersSkipHooks';
+const SKIP = createSymbol('__feathersSkipHooks');
+
+exports.SKIP = SKIP;
+exports.ACTIVATE_HOOKS = createSymbol('__feathersActivateHooks');
 
 exports.createHookObject = function createHookObject (method, data = {}) {
   const hook = {};

@@ -45,6 +45,10 @@ const _ = exports._ = {
     return (typeof item === 'object' && !Array.isArray(item) && item !== null);
   },
 
+  isObjectOrArray (value) {
+    return typeof value === 'object' && value !== null;
+  },
+
   extend (...args) {
     return Object.assign(...args);
   },
@@ -128,6 +132,10 @@ exports.makeUrl = function makeUrl (path, app = {}) {
   path = path || '';
 
   return `${protocol}://${host}${port}/${exports.stripSlashes(path)}`;
+};
+
+exports.createSymbol = name => {
+  return typeof Symbol !== 'undefined' ? Symbol(name) : name;
 };
 
 // Sorting algorithm taken from NeDB (https://github.com/louischatriot/nedb)
