@@ -31,6 +31,7 @@ module.exports = function(generator) {
     'scripts': {
       test: `${packager} run eslint && ${packager} run mocha`,
       eslint: `eslint ${lib}/. test/. --config .eslintrc.json`,
+      dev: `nodemon ${lib}/`,
       start: `node ${lib}/`,
       mocha: 'mocha test/ --recursive --exit'
     }
