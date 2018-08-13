@@ -1,5 +1,17 @@
 # Change Log
 
+## [v3.8.0](https://github.com/feathersjs/cli/tree/v3.8.0) (2018-08-13)
+[Full Changelog](https://github.com/feathersjs/cli/compare/v3.7.6...v3.8.0)
+
+**Closed issues:**
+
+- dev mode with watcher [\#163](https://github.com/feathersjs/cli/issues/163)
+- couchDB not visible in feathersJs when creating service [\#162](https://github.com/feathersjs/cli/issues/162)
+
+**Merged pull requests:**
+
+- Update generator-feathers to the latest version 🚀 [\#164](https://github.com/feathersjs/cli/pull/164) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v3.7.6](https://github.com/feathersjs/cli/tree/v3.7.6) (2018-07-26)
 [Full Changelog](https://github.com/feathersjs/cli/compare/v3.7.5...v3.7.6)
 
