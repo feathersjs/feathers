@@ -1,5 +1,12 @@
 # Change Log
 
+## [v3.0.0-pre.1](https://github.com/feathersjs/commons/tree/v3.0.0-pre.1) (2018-08-13)
+[Full Changelog](https://github.com/feathersjs/commons/compare/v2.0.0...v3.0.0-pre.1)
+
+**Merged pull requests:**
+
+- Remove argument verification and add further utilities [\#81](https://github.com/feathersjs/commons/pull/81) ([daffl](https://github.com/daffl))
+
 ## [v2.0.0](https://github.com/feathersjs/commons/tree/v2.0.0) (2018-08-03)
 [Full Changelog](https://github.com/feathersjs/commons/compare/v1.4.4...v2.0.0)
 
@@ -10,10 +17,6 @@
 
 ## [v1.4.4](https://github.com/feathersjs/commons/tree/v1.4.4) (2018-08-01)
 [Full Changelog](https://github.com/feathersjs/commons/compare/v1.4.3...v1.4.4)
-
-**Merged pull requests:**
-
-- Update utils.js [\#79](https://github.com/feathersjs/commons/pull/79) ([bertho-zero](https://github.com/bertho-zero))
 
 ## [v1.4.3](https://github.com/feathersjs/commons/tree/v1.4.3) (2018-07-25)
 [Full Changelog](https://github.com/feathersjs/commons/compare/v1.4.2...v1.4.3)
