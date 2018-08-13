@@ -26,6 +26,7 @@ module.exports = class AppGenerator extends Generator {
     ];
 
     this.devDependencies = [
+      'nodemon',
       'eslint',
       'mocha',
       'request',
