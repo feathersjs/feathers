@@ -8,7 +8,8 @@ const {
   stripSlashes,
   select,
   isPromise,
-  makeUrl
+  makeUrl,
+  createSymbol
 } = require('../lib/utils');
 
 describe('@feathersjs/commons utils', () => {
@@ -29,11 +30,21 @@ describe('@feathersjs/commons utils', () => {
     expect(isPromise(null)).to.equal(false);
   });
 
+  it('createSymbol', () => {
+    expect(typeof createSymbol('a test')).to.equal('symbol');
+  });
+
   describe('_', () => {
     it('isObject', () => {
       expect(_.isObject({})).to.equal(true);
       expect(_.isObject([])).to.equal(false);
       expect(_.isObject(null)).to.equal(false);
+    });
+
+    it('isObjectOrArray', () => {
+      expect(_.isObjectOrArray({})).to.equal(true);
+      expect(_.isObjectOrArray([])).to.equal(true);
+      expect(_.isObjectOrArray(null)).to.equal(false);
     });
 
     it('each', () => {

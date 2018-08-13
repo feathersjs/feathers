@@ -25,22 +25,16 @@ function convertSort (sort) {
     return sort;
   }
 
-  const result = {};
-
-  Object.keys(sort).forEach(key => {
+  return Object.keys(sort).reduce((result, key) => {
     result[key] = typeof sort[key] === 'object'
       ? sort[key] : parseInt(sort[key], 10);
-  });
 
-  return result;
+    return result;
+  }, {});
 }
 
 function cleanQuery (query, operators) {
-  if (Array.isArray(query)) {
-    return query.map((query) => cleanQuery(query, operators));
-  }
-
-  if (query && query.constructor === Object) {
+  if (_.isObject(query)) {
     const result = {};
     _.each(query, (query, key) => {
       if (key[0] === '$' && operators.indexOf(key) === -1) return;
@@ -62,6 +56,8 @@ function assignFilters (object, query, filters, options) {
       object[key] = converter(query[key], options);
     });
   }
+
+  return object;
 }
 
 const FILTERS = {
@@ -77,15 +73,18 @@ const OPERATORS = ['$in', '$nin', '$lt', '$lte', '$gt', '$gte', '$ne', '$or'];
 // and returns them separately a `filters` and the rest of the query
 // as `query`
 module.exports = function filterQuery (query, options = {}) {
-  let { filters: additionalFilters = {}, operators: additionalOperators = [] } = options;
-  let result = {};
+  const {
+    filters: additionalFilters = {},
+    operators: additionalOperators = []
+  } = options;
+  const result = {};
 
-  result.filters = {};
-  assignFilters(result.filters, query, FILTERS, options);
-  assignFilters(result.filters, query, additionalFilters, options);
+  result.filters = assignFilters({}, query, FILTERS, options);
+  result.filters = assignFilters(result.filters, query, additionalFilters, options);
 
-  let operators = OPERATORS.concat(additionalOperators);
-  result.query = cleanQuery(query, operators);
+  result.query = cleanQuery(query, OPERATORS.concat(additionalOperators));
 
   return result;
 };
+
+Object.assign(module.exports, { OPERATORS, FILTERS });
