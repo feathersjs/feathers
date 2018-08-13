@@ -1,5 +1,21 @@
 # Change Log
 
+## [v2.6.0](https://github.com/feathersjs/generator-feathers/tree/v2.6.0) (2018-08-13)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.6...v2.6.0)
+
+**Closed issues:**
+
+- dev mode with watcher [\#385](https://github.com/feathersjs/generator-feathers/issues/385)
+- Windows - Trying to copy from a source that does not exist [\#384](https://github.com/feathersjs/generator-feathers/issues/384)
+
+**Merged pull requests:**
+
+- Lock versions of installed packages to non-breaking range [\#390](https://github.com/feathersjs/generator-feathers/pull/390) ([daffl](https://github.com/daffl))
+- Add a dev script with nodemon as a watcher \(\#385\) [\#386](https://github.com/feathersjs/generator-feathers/pull/386) ([Alfredo-Delgado](https://github.com/Alfredo-Delgado))
+- Update dependencies [\#383](https://github.com/feathersjs/generator-feathers/pull/383) ([daffl](https://github.com/daffl))
+- Use new url parser [\#382](https://github.com/feathersjs/generator-feathers/pull/382) ([cashlionjp](https://github.com/cashlionjp))
+- Update yeoman-test to the latest version 🚀 [\#381](https://github.com/feathersjs/generator-feathers/pull/381) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.5.6](https://github.com/feathersjs/generator-feathers/tree/v2.5.6) (2018-07-26)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.5...v2.5.6)
 
