@@ -6,6 +6,10 @@ describe('hooks basics', () => {
     const app = feathers().use('/dummy', {
       get (id, params) {
         return Promise.resolve({ id, user: params.user });
+      },
+
+      create (data) {
+        return Promise.resolve(data);
       }
     });
 
@@ -15,6 +19,10 @@ describe('hooks basics', () => {
       return app.service('dummy').get();
     }).catch(e => {
       assert.equal(e.message, `An id must be provided to the 'get' method`);
+    }).then(() =>
+      app.service('dummy').create()
+    ).catch(e => {
+      assert.equal(e.message, `A data object must be provided to the 'create' method`);
     });
   });
 

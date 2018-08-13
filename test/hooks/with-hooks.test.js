@@ -46,7 +46,8 @@ describe('services withHooks', () => {
           data,
           _called: 'called',
           result: data,
-          type: 'after'
+          type: 'after',
+          arguments: [ data, params ]
         }, 'test hook');
       });
   });
@@ -85,6 +86,21 @@ describe('services withHooks', () => {
       .then(result => {
         assert.deepEqual(result, data, 'test result');
       });
+  });
+
+  it('get expected find result with no hooks at all', () => {
+    const data = { total: 1, data: [{ name: 'john' }] };
+
+    const app = createApp(data);
+    const svc = app.service('svc');
+
+    return withHooks({
+      app,
+      service: svc,
+      method: 'find'
+    })()().then(result => {
+      assert.deepEqual(result, data, 'test result');
+    });
   });
 
   it('test using keep hook', () => {
