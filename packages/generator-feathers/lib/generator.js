@@ -1,3 +1,4 @@
+const path = require('path');
 const Generator = require('yeoman-generator');
 const semver = require('semver');
 const _ = require('lodash');
@@ -8,6 +9,7 @@ module.exports = class BaseGenerator extends Generator {
 
     const defaultConfig = this.destinationPath('config', 'default.json');
 
+    this.generatorPkg = this.fs.readJSON(path.join(__dirname, '..', 'package.json'));
     this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
     this.defaultConfig = this.fs.readJSON(defaultConfig, {});
     this.props = opts.props || {};
@@ -57,7 +59,18 @@ module.exports = class BaseGenerator extends Generator {
     const method = `${packager}Install`;
     const isDev = options.saveDev;
     const existingDependencies = this.pkg[isDev ? 'devDependencies' : 'dependencies'] || {};
-    const dependencies = deps.filter(current => !existingDependencies[current]);
+    const dependencies = deps.filter(current => !existingDependencies[current])
+      .map(dependency => {
+        const version = this.generatorPkg.devDependencies[dependency];
+
+        if(!version) {
+          this.log(`No locked version found for ${dependency}, installing latest.`);
+
+          return dependency;
+        }
+
+        return `${dependency}@${version}`;
+      });
 
     if(packager === 'yarn' && isDev) {
       options.dev = true;
