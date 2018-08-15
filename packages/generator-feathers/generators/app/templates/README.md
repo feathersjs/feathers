@@ -36,7 +36,6 @@ $ npm install -g @feathersjs/cli          # Install Feathers CLI
 
 $ feathers generate service               # Generate a new Service
 $ feathers generate hook                  # Generate a new Hook
-$ feathers generate model                 # Generate a new Model
 $ feathers help                           # Show all commands
 ```
 
