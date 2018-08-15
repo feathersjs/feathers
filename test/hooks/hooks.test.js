@@ -312,4 +312,34 @@ describe('hooks basics', () => {
           });
       });
   });
+
+  it('context.data should not change arguments', () => {
+    const app = feathers().use('/dummy', {
+      methods: {
+        custom: ['id', 'params']
+      },
+      get () {},
+      custom (id, params) {
+        return Promise.resolve([id, params]);
+      }
+    });
+
+    app.service('dummy').hooks({
+      before: {
+        all (context) {
+          context.test = ['all::before'];
+        },
+        custom (context) {
+          context.data = { post: 'title' };
+        }
+      }
+    });
+
+    const args = [1, { provider: 'rest' }];
+
+    return app.service('dummy').custom(...args)
+      .then(result => {
+        assert.deepEqual(result, args);
+      });
+  });
 });
