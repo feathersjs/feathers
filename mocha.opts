@@ -1,2 +1,2 @@
---recursive test/
+--recursive packages/**/test/**/*.test.js
 --exit
