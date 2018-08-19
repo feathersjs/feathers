@@ -1,0 +1,55 @@
+{
+  "name": "@feathersjs/feathers",
+  "description": "A REST and realtime API layer for modern applications.",
+  "version": "3.2.0-pre.1",
+  "homepage": "http://feathersjs.com",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git"
+  },
+  "keywords": [
+    "feathers",
+    "REST",
+    "socket.io",
+    "realtime"
+  ],
+  "main": "lib/index.js",
+  "author": {
+    "name": "Feathers contributor",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "update-version": "node -e \"console.log('module.exports = \\'' + require('./package.json').version + '\\';')\" > lib/version.js",
+    "version": "npm run update-version && git add lib/version.js && git commit -am \"Updating version\"",
+    "publish": "git push origin --tags && npm run changelog && git push origin",
+    "changelog": "github_changelog_generator --no-issues && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
+    "release:pre": "npm version prerelease && npm publish --tag pre  --access public",
+    "release:patch": "npm version patch && npm publish --access public",
+    "release:minor": "npm version minor && npm publish --access public",
+    "release:major": "npm version major && npm publish --access public"
+  },
+  "engines": {
+    "node": ">= 6"
+  },
+  "dependencies": {
+    "@feathersjs/commons": "^3.0.0-pre.1",
+    "debug": "^3.1.0",
+    "events": "^3.0.0",
+    "uberproto": "^2.0.2"
+  },
+  "devDependencies": {
+    "istanbul": "^1.1.0-alpha.1",
+    "jshint": "^2.9.5",
+    "mocha": "^5.2.0",
+    "nsp": "^3.2.1",
+    "semistandard": "^12.0.1"
+  }
+}
