@@ -28,13 +28,7 @@
   },
   "scripts": {
     "update-version": "node -e \"console.log('module.exports = \\'' + require('./package.json').version + '\\';')\" > lib/version.js",
-    "version": "npm run update-version && git add lib/version.js && git commit -am \"Updating version\"",
-    "publish": "git push origin --tags && npm run changelog && git push origin",
-    "changelog": "github_changelog_generator --no-issues && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
-    "release:pre": "npm version prerelease && npm publish --tag pre  --access public",
-    "release:patch": "npm version patch && npm publish --access public",
-    "release:minor": "npm version minor && npm publish --access public",
-    "release:major": "npm version major && npm publish --access public"
+    "version": "npm run update-version && git add lib/version.js && git commit -am \"Updating version\""
   },
   "engines": {
     "node": ">= 6"
