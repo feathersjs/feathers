@@ -1,5 +1,14 @@
 # Change Log
 
+## [v3.2.0-pre.1](https://github.com/feathersjs/feathers/tree/v3.2.0-pre.1) (2018-08-19)
+[Full Changelog](https://github.com/feathersjs/feathers/compare/v3.1.7...v3.2.0-pre.1)
+
+**Merged pull requests:**
+
+- Add breaking test [\#931](https://github.com/feathersjs/feathers/pull/931) ([bertho-zero](https://github.com/bertho-zero))
+- Some refactoring for custom method hooks [\#930](https://github.com/feathersjs/feathers/pull/930) ([daffl](https://github.com/daffl))
+- Allow adding hooks to other service methods [\#924](https://github.com/feathersjs/feathers/pull/924) ([bertho-zero](https://github.com/bertho-zero))
+
 ## [v3.1.7](https://github.com/feathersjs/feathers/tree/v3.1.7) (2018-06-16)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v3.1.6...v3.1.7)
 
