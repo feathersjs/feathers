@@ -2,23 +2,23 @@
   "name": "@feathersjs/commons",
   "version": "3.0.0-pre.1",
   "description": "Shared Feathers utility functions",
-  "homepage": "https://github.com/feathersjs/commons",
+  "homepage": "https://feathersjs.com",
   "keywords": [
     "feathers"
   ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/commons.git"
+    "url": "git://github.com/feathersjs/feathers.git"
   },
   "author": {
-    "name": "David Luecke",
-    "email": "daff@neyeon.com",
+    "name": "Feathers contributor",
+    "email": "hello@feathersjs.com",
     "url": "https://feathersjs.com"
   },
   "contributors": [],
   "bugs": {
-    "url": "https://github.com/feathersjs/commons/issues"
+    "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
     "node": ">= 6"
