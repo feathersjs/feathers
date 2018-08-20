@@ -24,19 +24,7 @@
     "node": ">= 6"
   },
   "main": "lib/commons.js",
-  "scripts": {
-    "publish": "git push origin --tags && npm run changelog && git push origin",
-    "release:patch": "npm version patch && npm publish --access public",
-    "release:minor": "npm version minor && npm publish --access public",
-    "release:major": "npm version major && npm publish --access public",
-    "release:pre": "npm version prerelease && npm publish --tag pre --access public",
-    "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
-    "lint": "semistandard --fix",
-    "mocha": "mocha --opts mocha.opts",
-    "mocha:watch": "mocha --opts mocha.opts --watch",
-    "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
-    "test": "npm run lint && npm run coverage"
-  },
+  "scripts": {},
   "directories": {
     "lib": "lib"
   },
