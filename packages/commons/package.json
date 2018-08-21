@@ -24,7 +24,9 @@
     "node": ">= 6"
   },
   "main": "lib/commons.js",
-  "scripts": {},
+  "scripts": {
+    "test": "../../node_modules/.bin/mocha"
+  },
   "directories": {
     "lib": "lib"
   },

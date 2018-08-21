@@ -28,6 +28,9 @@
 	"directories": {
 		"lib": "lib"
 	},
+	"scripts": {
+		"test": "../../node_modules/.bin/mocha"
+	},
 	"dependencies": {
 		"debug": "^3.1.0"
 	},
