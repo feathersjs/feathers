@@ -32,6 +32,7 @@
     ]
   },
   "devDependencies": {
+    "axios": "^0.18.0",
     "chai": "^4.1.2",
     "lerna": "^3.1.1",
     "mocha": "^5.2.0",
