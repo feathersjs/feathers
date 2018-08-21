@@ -1,6 +1,7 @@
 /* eslint-disable handle-callback-err */
 /* eslint-disable no-unused-expressions */
-const feathers = require('feathers');
+const feathers = require('@feathersjs/feathers');
+const expressify = require('@feathersjs/express');
 
 const chai = require('chai');
 const sinon = require('sinon');
@@ -42,7 +43,7 @@ describe('error-handler', () => {
     let currentError;
 
     before(function () {
-      this.app = feathers()
+      this.app = expressify(feathers())
         .get('/error', function (req, res, next) {
           next(new Error('Something went wrong'));
         })
@@ -144,6 +145,7 @@ describe('error-handler', () => {
       it('if the value is a string, calls res.sendFile', done => {
         const err = new errors.NotAuthenticated();
         const middleware = handler({
+          logger: null,
           html: { 401: 'path/to/401.html' }
         });
         const res = makeRes(401, {
@@ -159,6 +161,7 @@ describe('error-handler', () => {
         const err = new errors.PaymentError();
         const res = makeRes(402);
         const middleware = handler({
+          logger: null,
           html: { 402: (_err, _req, _res) => {
             expect(_err).to.equal(err);
             expect(_req).to.equal(req);
@@ -173,6 +176,7 @@ describe('error-handler', () => {
         const err = new errors.NotAcceptable();
         const res = makeRes(406);
         const middleware = handler({
+          logger: null,
           html: { default: (_err, _req, _res) => {
             expect(_err).to.equal(err);
             expect(_req).to.equal(req);
@@ -200,6 +204,7 @@ describe('error-handler', () => {
       it('calls res.json by default', done => {
         const err = new errors.NotAuthenticated();
         const middleware = handler({
+          logger: null,
           json: {}
         });
         const res = makeRes(401, {
@@ -215,6 +220,7 @@ describe('error-handler', () => {
         const err = new errors.PaymentError();
         const res = makeRes(402);
         const middleware = handler({
+          logger: null,
           json: { 402: (_err, _req, _res) => {
             expect(_err).to.equal(err);
             expect(_req).to.equal(req);
@@ -229,6 +235,7 @@ describe('error-handler', () => {
         const err = new errors.NotAcceptable();
         const res = makeRes(406);
         const middleware = handler({
+          logger: null,
           json: { default: (_err, _req, _res) => {
             expect(_err).to.equal(err);
             expect(_req).to.equal(req);
@@ -243,7 +250,7 @@ describe('error-handler', () => {
 
   describe('use as app error handler', function () {
     before(function () {
-      this.app = feathers()
+      this.app = expressify(feathers())
         .get('/error', function (req, res, next) {
           next(new Error('Something went wrong'));
         })
@@ -266,7 +273,9 @@ describe('error-handler', () => {
         .use(function (req, res, next) {
           next(new errors.NotFound('File not found'));
         })
-        .use(handler());
+        .use(handler({
+          logger: null
+        }));
 
       this.server = this.app.listen(5050);
     });
