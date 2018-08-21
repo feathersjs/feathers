@@ -1,2 +1,3 @@
---recursive packages/*/test/**/*.test.js
+--recursive packages/**/test/**/*.test.js
+--exclude **/node_modules/**
 --exit
