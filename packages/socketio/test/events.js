@@ -118,11 +118,7 @@ module.exports = function (name, options) {
 
     before(done => {
       let counter = 0;
-
-      connections = [];
-      sockets = [];
-
-      options.app.on('connection', connection => {
+      const handler = connection => {
         counter++;
 
         options.app.channel(connection.channel).join(connection);
@@ -131,8 +127,14 @@ module.exports = function (name, options) {
 
         if (counter === 3) {
           done();
+          options.app.off('connection', handler);
         }
-      });
+      };
+
+      connections = [];
+      sockets = [];
+
+      options.app.on('connection', handler);
 
       sockets.push(
         io('http://localhost:7886', {
@@ -149,17 +151,8 @@ module.exports = function (name, options) {
       );
     });
 
-    after(done => {
-      let counter = 0;
-
-      sockets.forEach(socket => {
-        socket.once('disconnect', () => {
-          if (++counter === sockets.length) {
-            done();
-          }
-        });
-        socket.close();
-      });
+    after(() => {
+      sockets.forEach(socket => socket.disconnect());
     });
 
     it(`filters '${eventName}' event for a single channel`, done => {
