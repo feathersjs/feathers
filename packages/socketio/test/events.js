@@ -127,7 +127,7 @@ module.exports = function (name, options) {
 
         if (counter === 3) {
           done();
-          options.app.off('connection', handler);
+          options.app.removeListener('connection', handler);
         }
       };
 
