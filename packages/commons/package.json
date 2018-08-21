@@ -28,5 +28,7 @@
   "directories": {
     "lib": "lib"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "chai": "^4.1.2"
+  }
 }

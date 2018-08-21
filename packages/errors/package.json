@@ -33,6 +33,9 @@
 	},
 	"devDependencies": {
 		"@feathersjs/express": "^1.2.3",
-		"@feathersjs/feathers": "^3.2.0-pre.1"
+		"@feathersjs/feathers": "^3.1.7",
+		"chai": "^4.1.2",
+		"sinon": "^6.1.5",
+		"sinon-chai": "^3.2.0"
 	}
 }
