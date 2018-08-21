@@ -1,62 +1,38 @@
 {
-  "name": "@feathersjs/errors",
-  "description": "Common error types for feathers apps",
-  "version": "3.3.0",
-  "homepage": "https://github.com/feathersjs/errors",
-  "main": "lib/index",
-  "keywords": [
-    "feathers",
-    "feathers-plugin"
-  ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/feathersjs/errors.git"
-  },
-  "author": {
-    "name": "Feathers contributors",
-    "email": "hello@feathersjs.com",
-    "url": "https://feathersjs.com"
-  },
-  "contributors": [],
-  "bugs": {
-    "url": "https://github.com/feathersjs/errors/issues"
-  },
-  "engines": {
-    "node": ">= 6"
-  },
-  "scripts": {
-    "publish": "git push origin --tags && npm run changelog && git push origin",
-    "release:pre": "npm version prerelease && npm publish --access public --tag pre",
-    "release:patch": "npm version patch && npm publish --access public",
-    "release:minor": "npm version minor && npm publish --access public",
-    "release:major": "npm version major && npm publish --access public",
-    "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
-    "lint": "semistandard --fix",
-    "mocha": "mocha --opts mocha.opts",
-    "test": "npm run lint && npm run coverage",
-    "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts"
-  },
-  "semistandard": {
-    "env": [
-      "mocha"
-    ]
-  },
-  "directories": {
-    "lib": "lib"
-  },
-  "dependencies": {
-    "debug": "^3.1.0"
-  },
-  "devDependencies": {
-    "chai": "^4.1.0",
-    "feathers": "^2.0.0",
-    "istanbul": "^1.1.0-alpha.1",
-    "mocha": "^5.0.0",
-    "request": "^2.69.0",
-    "semistandard": "^12.0.0",
-    "shx": "^0.2.1",
-    "sinon": "^5.0.0",
-    "sinon-chai": "^3.0.0"
-  }
+	"name": "@feathersjs/errors",
+	"description": "Common error types for Feathers apps",
+	"version": "3.3.0",
+	"homepage": "https://feathersjs.com",
+	"main": "lib/index",
+	"keywords": [
+		"feathers",
+		"feathers-plugin"
+	],
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/feathersjs/feathers.git"
+	},
+	"author": {
+		"name": "Feathers contributors",
+		"email": "hello@feathersjs.com",
+		"url": "https://feathersjs.com"
+	},
+	"contributors": [],
+	"bugs": {
+		"url": "https://github.com/feathersjs/feathers/issues"
+	},
+	"engines": {
+		"node": ">= 6"
+	},
+	"directories": {
+		"lib": "lib"
+	},
+	"dependencies": {
+		"debug": "^3.1.0"
+	},
+	"devDependencies": {
+		"@feathersjs/express": "^1.2.3",
+		"@feathersjs/feathers": "^3.2.0-pre.1"
+	}
 }

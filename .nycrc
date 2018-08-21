@@ -6,9 +6,11 @@
       "mocha"
     ]
   },
+  "print": "detail",
   "reporter": [
     "html",
     "text",
+    "text-summary",
     "lcov"
   ],
   "watermarks": {
