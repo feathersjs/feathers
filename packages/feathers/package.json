@@ -27,6 +27,7 @@
     "lib": "lib"
   },
   "scripts": {
+    "test": "../../node_modules/.bin/mocha",
     "update-version": "node -e \"console.log('module.exports = \\'' + require('./package.json').version + '\\';')\" > lib/version.js",
     "version": "npm run update-version && git add lib/version.js && git commit -am \"Updating version\""
   },
