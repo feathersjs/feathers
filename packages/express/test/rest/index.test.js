@@ -117,6 +117,7 @@ describe('@feathersjs/express/rest provider', () => {
 
         delete result.service;
         delete result.app;
+        delete result.error;
 
         return result;
       };
@@ -227,8 +228,7 @@ describe('@feathersjs/express/rest provider', () => {
                 },
                 type: 'error',
                 method: 'get',
-                path: 'hook-error',
-                error: {}
+                path: 'hook-error'
               },
               error: { message: 'I blew up' }
             });
