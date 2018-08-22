@@ -7,11 +7,16 @@ const server = require('./server');
 const socketio = require('../lib');
 
 describe('@feathersjs/socketio-client', () => {
-  const socket = io('http://localhost:9988');
-  const app = feathers().configure(socketio(socket));
+  const app = feathers();
+
+  let socket;
 
   before(function (done) {
-    this.server = server().listen(9988, done);
+    this.server = server().listen(9988, () => {
+      socket = io('http://localhost:9988');
+      app.configure(socketio(socket));
+      done();
+    });
   });
 
   after(function (done) {
