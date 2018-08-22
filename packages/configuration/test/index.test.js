@@ -2,10 +2,26 @@ const assert = require('assert');
 const feathers = require('@feathersjs/feathers');
 const { join } = require('path');
 
-const plugin = require('../lib');
-
 describe('@feathersjs/configuration', () => {
-  const app = feathers().configure(plugin());
+  const originalEnv = {};
+  let app;
+  let plugin;
+
+  before(() => {
+    originalEnv.NODE_ENV = process.env.NODE_ENV;
+    originalEnv.NODE_CONFIG_DIR = process.env.NODE_CONFIG_DIR;
+
+    process.env.NODE_ENV = 'testing';
+    process.env.NODE_CONFIG_DIR = join(__dirname, 'config');
+
+    plugin = require('../lib');
+    app = feathers().configure(plugin());
+  });
+
+  after(() => {
+    process.env.NODE_ENV = originalEnv.NODE_ENV;
+    process.env.NODE_CONFIG_DIR = originalEnv.NODE_CONFIG_DIR;
+  });
 
   it('exports default', () =>
     assert.equal(plugin, plugin.default)
