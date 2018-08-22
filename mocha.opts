@@ -1,3 +1,4 @@
 --recursive packages/**/test/**/*.test.js
 --exclude **/node_modules/**
+--reporter Dot
 --exit
