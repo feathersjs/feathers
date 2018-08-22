@@ -1,5 +1,5 @@
 const makeDebug = require('debug');
-const wrappers = require('./wrappers');
+const getHandler = require('./getHandler');
 
 const debug = makeDebug('@feathersjs/express/rest');
 
@@ -27,7 +27,14 @@ function rest (handler = formatter) {
       throw new Error(`@feathersjs/express/rest requires an instance of a Feathers application version 3.x or later (got ${app.version})`);
     }
 
-    app.rest = wrappers;
+    app.rest = {
+      find: getHandler('find'),
+      get: getHandler('get'),
+      create: getHandler('create'),
+      update: getHandler('update'),
+      patch: getHandler('patch'),
+      remove: getHandler('remove')
+    };
 
     app.use(function (req, res, next) {
       req.feathers = { provider: 'rest' };

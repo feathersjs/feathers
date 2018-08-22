@@ -153,7 +153,15 @@ describe('@feathersjs/express/rest provider', () => {
               method: 'get',
               path: 'hook',
               result: { description: 'You have to do dishes' },
-              addedProperty: true
+              addedProperty: true,
+              arguments: [
+                'dishes',
+                {
+                  route: {},
+                  query: { test: 'param' },
+                  provider: 'rest'
+                }
+              ]
             });
           });
       });
@@ -228,7 +236,15 @@ describe('@feathersjs/express/rest provider', () => {
                 type: 'error',
                 method: 'get',
                 path: 'hook-error',
-                error: {}
+                error: {},
+                arguments: [
+                  'dishes',
+                  {
+                    route: {},
+                    query: {},
+                    provider: 'rest'
+                  }
+                ]
               },
               error: { message: 'I blew up' }
             });
