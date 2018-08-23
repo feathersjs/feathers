@@ -12,7 +12,9 @@ describe('@feathersjs/cli', () => {
     assert.equal(typeof cli, 'function', 'It worked');
   });
 
-  it('runs the program with `generate` argument', done => {
+  it('runs the program with `generate` argument', function (done) {
+    this.timeout(5000);
+
     exec(`node ${path.join(__dirname, '../bin/feathers.js')} generate`, (err, stdout, stderr) => {
       assert.equal(err, null);
       assert.equal(stderr, '');
