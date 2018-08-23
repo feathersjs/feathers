@@ -13,8 +13,9 @@ describe('@feathersjs/cli', () => {
   });
 
   it('runs the program with `generate` argument', done => {
-    exec(`node ${path.join(__dirname, '../bin/feathers.js')} generate`, (err, stdout) => {
+    exec(`node ${path.join(__dirname, '../bin/feathers.js')} generate`, (err, stdout, stderr) => {
       assert.equal(err, null);
+      assert.equal(stderr, '');
       assert.equal(stdout, '\n  Usage: feathers generate [type]\n\n\n' +
         '  Options:\n\n' +
         '    -V, --version  output the version number\n' +
