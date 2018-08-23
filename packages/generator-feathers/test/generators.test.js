@@ -9,7 +9,7 @@ const rp = require('request-promise');
 function startAndWait(cmd, args, options, text) {
   return new Promise((resolve, reject) => {
     let buffer = '';
-  
+
     const child = cp.spawn(cmd, args, options);
     const addToBuffer = data => {
       buffer += data;
@@ -39,6 +39,8 @@ function delay(ms) {
 }
 
 describe('generator-feathers', function() {
+  this.timeout(300000);
+
   let appDir;
 
   function runTest(expectedText) {
@@ -62,7 +64,7 @@ describe('generator-feathers', function() {
     })
   );
 
-  it('feathers:app', () => 
+  it('feathers:app', () =>
     runTest('starts and shows the index page').then(() => {
       const pkg = require(path.join(appDir, 'package.json'));
 
@@ -106,7 +108,7 @@ describe('generator-feathers', function() {
       return runConnectionGenerator({
         database: 'nedb',
         connectionString: 'nedb://../mytest'
-      }).then(() => 
+      }).then(() =>
         assert.jsonFileContent(
           path.join(appDir, 'config', 'default.json'),
           { nedb: '../mytest' }
@@ -122,7 +124,7 @@ describe('generator-feathers', function() {
           database: 'mongodb',
           adapter: 'mongodb',
           connectionString
-        }).then(() => 
+        }).then(() =>
           assert.jsonFileContent(
             path.join(appDir, 'config', 'default.json'),
             { mongodb: connectionString }
@@ -137,7 +139,7 @@ describe('generator-feathers', function() {
           database: 'mongodb',
           adapter: 'mongoose',
           connectionString
-        }).then(() => 
+        }).then(() =>
           assert.jsonFileContent(
             path.join(appDir, 'config', 'default.json'),
             { mongodb: connectionString }
@@ -166,7 +168,7 @@ describe('generator-feathers', function() {
           database: 'sqlite',
           adapter: 'knex',
           connectionString
-        }).then(() => 
+        }).then(() =>
           assert.jsonFileContent(
             path.join(appDir, 'config', 'default.json'), {
               sqlite: {
@@ -245,7 +247,7 @@ describe('generator-feathers', function() {
             if(id) {
               assert.ok(typeof response[id] !== 'undefined');
             }
-            
+
             assert.equal(response.text, text);
           }).then(() => child.kill())
             .catch(e =>
