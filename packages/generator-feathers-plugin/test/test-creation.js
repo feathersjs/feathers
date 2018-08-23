@@ -7,7 +7,9 @@ const fs = require('fs');
 const { exec } = require('child_process');
 const helpers = require('yeoman-test');
 
-describe('feathers-plugin generator', () => {
+describe('feathers-plugin generator', function () {
+  this.timeout(180000);
+
   it('created a plugin with passing tests', done => {
     let tmpDir;
 
