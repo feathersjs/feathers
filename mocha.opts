@@ -1,4 +1,5 @@
 --recursive packages/**/test/**/*.test.js
+--exclude packages/generator-feathers*/**
 --exclude **/node_modules/**
 --reporter Dot
 --exit
