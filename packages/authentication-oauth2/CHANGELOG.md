@@ -1,5 +1,26 @@
 # Change Log
 
+## [v1.2.0](https://github.com/feathersjs/authentication-oauth2/tree/v1.2.0) (2018-08-28)
+[Full Changelog](https://github.com/feathersjs/authentication-oauth2/compare/v1.1.0...v1.2.0)
+
+**Closed issues:**
+
+- Entity could be an array? [\#87](https://github.com/feathersjs/authentication-oauth2/issues/87)
+- Cannot use Passport-Google-Token through POST request on /authentication [\#83](https://github.com/feathersjs/authentication-oauth2/issues/83)
+- JWT sub is always 'anonymous' after using verifier [\#82](https://github.com/feathersjs/authentication-oauth2/issues/82)
+- How to authenticate token from Facebook on Feathers server [\#80](https://github.com/feathersjs/authentication-oauth2/issues/80)
+- How to use FBSDK Login with React Native and FeathersJS? [\#22](https://github.com/feathersjs/authentication-oauth2/issues/22)
+- Create custom formatter to support calling back a mobile deep link [\#8](https://github.com/feathersjs/authentication-oauth2/issues/8)
+- Create custom formatter for returning an html page that calls back to parent window [\#7](https://github.com/feathersjs/authentication-oauth2/issues/7)
+
+**Merged pull requests:**
+
+- Update all dependencies [\#89](https://github.com/feathersjs/authentication-oauth2/pull/89) ([daffl](https://github.com/daffl))
+- Allowing return type of \_createEntity to be an Array [\#88](https://github.com/feathersjs/authentication-oauth2/pull/88) ([testless](https://github.com/testless))
+- Fix for Update an existing entity in verifier \#18 [\#86](https://github.com/feathersjs/authentication-oauth2/pull/86) ([nsainaney](https://github.com/nsainaney))
+- Update @feathersjs/commons to the latest version 🚀 [\#84](https://github.com/feathersjs/authentication-oauth2/pull/84) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Fix state=true in authorizationURL integrating passport-oauth2 [\#81](https://github.com/feathersjs/authentication-oauth2/pull/81) ([happydenn](https://github.com/happydenn))
+
 ## [v1.1.0](https://github.com/feathersjs/authentication-oauth2/tree/v1.1.0) (2018-06-23)
 [Full Changelog](https://github.com/feathersjs/authentication-oauth2/compare/v1.0.3...v1.1.0)
 
