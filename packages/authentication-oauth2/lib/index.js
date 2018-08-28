@@ -21,6 +21,20 @@ const INCLUDE_KEYS = [
 
 const EXCLUDE_KEYS = ['Verifier', 'Strategy', 'formatter'];
 
+// When the OAuth callback is called, req.user will always be null
+// The following extracts the user from the jwt cookie if present
+// This ensures that the social link happens on an existing user
+function _callbackAuthenticator (config) {
+  return function (req, res, next) {
+    auth.express.authenticate('jwt', config)(req, res, () => {
+      // We have to mark this as unauthenticated even though req.user may be set
+      // because we still need the OAuth strategy to run in next()
+      req.authenticated = false;
+      next();
+    });
+  };
+}
+
 function init (options = {}) {
   return function oauth2Auth () {
     const app = this;
@@ -73,6 +87,7 @@ function init (options = {}) {
     app.get(oauth2Settings.path, auth.express.authenticate(name, omit(oauth2Settings, 'state')));
     app.get(
       oauth2Settings.callbackPath,
+      _callbackAuthenticator(authSettings),
       auth.express.authenticate(name, omit(oauth2Settings, 'state')),
       handler,
       errorHandler,

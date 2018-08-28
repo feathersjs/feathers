@@ -68,6 +68,12 @@ class OAuth2Verifier {
     return this.service.create(entity, { oauth: { provider: name } });
   }
 
+  _setPayloadAndDone (entity, done) {
+    const id = entity[this.service.id];
+    const payload = { [`${this.options.entity}Id`]: id };
+    done(null, entity, payload);
+  }
+
   verify (req, accessToken, refreshToken, profile, done) {
     debug('Checking credentials');
     const options = this.options;
@@ -98,7 +104,7 @@ class OAuth2Verifier {
     // because they are likely "linking" social accounts/profiles.
     if (existing) {
       return this._updateEntity(existing, data)
-        .then(entity => done(null, entity))
+        .then(entity => this._setPayloadAndDone(entity, done))
         .catch(error => error ? done(error) : done(null, error));
     }
 
@@ -107,11 +113,7 @@ class OAuth2Verifier {
       .find({ query })
       .then(this._normalizeResult)
       .then(entity => entity ? this._updateEntity(entity, data) : this._createEntity(data))
-      .then(entity => {
-        const id = Array.isArray(entity) ? entity[0][this.service.id] : entity[this.service.id];
-        const payload = { [`${this.options.entity}Id`]: id };
-        done(null, entity, payload);
-      })
+      .then(entity => this._setPayloadAndDone(entity, done))
       .catch(error => error ? done(error) : done(null, error));
   }
 }
