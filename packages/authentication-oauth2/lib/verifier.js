@@ -108,7 +108,7 @@ class OAuth2Verifier {
       .then(this._normalizeResult)
       .then(entity => entity ? this._updateEntity(entity, data) : this._createEntity(data))
       .then(entity => {
-        const id = entity[this.service.id];
+        const id = Array.isArray(entity) ? entity[0][this.service.id] : entity[this.service.id];
         const payload = { [`${this.options.entity}Id`]: id };
         done(null, entity, payload);
       })
