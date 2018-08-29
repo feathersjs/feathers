@@ -2,7 +2,7 @@
   "name": "@feathersjs/authentication-client",
   "description": "The authentication plugin for feathers-client",
   "version": "1.0.2",
-  "homepage": "https://github.com/feathersjs/authentication-client",
+  "homepage": "https://feathersjs.com",
   "main": "lib/index.js",
   "keywords": [
     "feathers",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/authentication-client.git"
+    "url": "git://github.com/feathersjs/feathers.git"
   },
   "author": {
     "name": "Feathers contributors",
@@ -20,29 +20,12 @@
   },
   "contributors": [],
   "bugs": {
-    "url": "https://github.com/feathersjs/authentication-client/issues"
+    "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
     "node": ">= 6"
   },
-  "scripts": {
-    "publish": "git push origin --tags && npm run changelog && git push origin",
-    "release:pre": "npm version prerelease && npm publish --tag pre --access public",
-    "release:patch": "npm version patch && npm publish --access public",
-    "release:minor": "npm version minor && npm publish --access public",
-    "release:major": "npm version major && npm publish --access public",
-    "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
-    "lint": "semistandard --fix",
-    "mocha": "mocha --opts mocha.opts",
-    "coverage": "istanbul cover _mocha -- --opts mocha.opts",
-    "test": "npm run lint && npm run coverage"
-  },
-  "semistandard": {
-    "sourceType": "module",
-    "env": [
-      "mocha"
-    ]
-  },
+  "scripts": {},
   "directories": {
     "lib": "lib"
   },
@@ -65,12 +48,9 @@
     "body-parser": "^1.15.2",
     "chai": "^4.0.0",
     "feathers-memory": "^2.0.0",
-    "istanbul": "^1.1.0-alpha.1",
     "localstorage-memory": "^1.0.2",
-    "mocha": "^5.0.0",
     "primus": "^7.0.0",
     "primus-emitter": "^3.1.1",
-    "semistandard": "^12.0.0",
     "socket.io-client": "^2.0.0",
     "superagent": "^3.5.2",
     "ws": "^6.0.0"
