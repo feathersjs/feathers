@@ -21,7 +21,7 @@ const Socket = Primus.createSocket({
 const app = createApplication({ secret: 'supersecret' }, 'primus');
 let options;
 
-describe.skip('Primus client authentication', function () {
+describe('Primus client authentication', function () {
   this.timeout(20000);
   let socket;
   let server;
