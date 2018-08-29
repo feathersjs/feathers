@@ -1,10 +1,7 @@
 # @feathersjs/socketio-client
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/socketio-client.svg)](https://greenkeeper.io/)
-
-[![Build Status](https://travis-ci.org/feathersjs/socketio-client.png?branch=master)](https://travis-ci.org/feathersjs/socketio-client)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/socketio-client/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/socketio-client/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/socketio-client.svg?style=flat-square)](https://david-dm.org/feathersjs/socketio-client)
+[![Build Status](https://travis-ci.org/feathersjs/feathers.png?branch=master)](https://travis-ci.org/feathersjs/feathers)
+[![Dependency Status](https://img.shields.io/david/feathersjs/feathers.svg?style=flat-square&path=packages/socketio-client)](https://david-dm.org/feathersjs/feathers?path=packages/socketio-client)
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/socketio-client.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/socketio-client)
 
 > The client for Socket.io Feathers connections

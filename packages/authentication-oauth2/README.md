@@ -1,10 +1,7 @@
 # @feathersjs/authentication-oauth2
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/authentication-oauth2.svg)](https://greenkeeper.io/)
-
-[![Build Status](https://travis-ci.org/feathersjs/authentication-oauth2.png?branch=master)](https://travis-ci.org/feathersjs/authentication-oauth2)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/ba4d86601a687bb6e960/test_coverage)](https://codeclimate.com/github/feathersjs/authentication-oauth2/test_coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/authentication-oauth2.svg?style=flat-square)](https://david-dm.org/feathersjs/authentication-oauth2)
+[![Build Status](https://travis-ci.org/feathersjs/feathers.png?branch=master)](https://travis-ci.org/feathersjs/feathers)
+[![Dependency Status](https://img.shields.io/david/feathersjs/feathers.svg?style=flat-square&path=packages/authentication-oauth2)](https://david-dm.org/feathersjs/feathers?path=packages/authentication-oauth2)
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/authentication-oauth2.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/authentication-oauth2)
 
 > An OAuth2 authentication strategy for feathers-authentication using Passport

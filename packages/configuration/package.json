@@ -26,7 +26,7 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha"
+    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
   },
   "semistandard": {
     "env": [
@@ -35,6 +35,9 @@
   },
   "directories": {
     "lib": "lib"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "config": "^2.0.0",
