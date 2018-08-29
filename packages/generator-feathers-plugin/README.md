@@ -1,9 +1,7 @@
-# generator-feathers-plugin [![Build Status](https://travis-ci.org/feathersjs/generator-feathers-plugin.png?branch=master)](https://travis-ci.org/feathersjs/generator-feathers-plugin)
+# generator-feathers-plugin
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/generator-feathers-plugin.svg)](https://greenkeeper.io/)
-
-[![Build Status](https://travis-ci.org/feathersjs/generator-feathers-plugin.png?branch=master)](https://travis-ci.org/feathersjs/generator-feathers-plugin)
-[![Dependency Status](https://img.shields.io/david/feathersjs/generator-feathers-plugin.svg?style=flat-square)](https://david-dm.org/feathersjs/generator-feathers-plugin)
+[![Build Status](https://travis-ci.org/feathersjs/feathers.png?branch=master)](https://travis-ci.org/feathersjs/feathers)
+[![Dependency Status](https://img.shields.io/david/feathersjs/feathers.svg?style=flat-square&path=packages/generator-feathers-plugin)](https://david-dm.org/feathersjs/feathers?path=packages/generator-feathers-plugin)
 [![Download Status](https://img.shields.io/npm/dm/generator-feathers-plugin.svg?style=flat-square)](https://www.npmjs.com/package/generator-feathers-plugin)
 
 > A [Yeoman](http://yeoman.io) generator for initializing new [Feathersjs](https://github.com/feathersjs) plug-ins.

@@ -1,10 +1,7 @@
 # @feathersjs/authentication-jwt
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/authentication-jwt.svg)](https://greenkeeper.io/)
-
-[![Build Status](https://travis-ci.org/feathersjs/authentication-jwt.png?branch=master)](https://travis-ci.org/feathersjs/authentication-jwt)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/authentication-jwt/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/authentication-jwt/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/authentication-jwt.svg?style=flat-square)](https://david-dm.org/feathersjs/authentication-jwt)
+[![Build Status](https://travis-ci.org/feathersjs/feathers.png?branch=master)](https://travis-ci.org/feathersjs/feathers)
+[![Dependency Status](https://img.shields.io/david/feathersjs/feathers.svg?style=flat-square&path=packages/authentication-jwt)](https://david-dm.org/feathersjs/feathers?path=packages/authentication-jwt)
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/authentication-jwt.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/authentication-jwt)
 
 > JWT authentication strategy for feathers-authentication using Passport

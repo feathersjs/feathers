@@ -10,7 +10,7 @@ const { expect } = chai;
 chai.use(sinonChai);
 
 describe('Primus authentication', function () {
-  const port = 8998;
+  const port = 9889;
   const baseURL = `http://localhost:${port}`;
   const app = createApplication({ secret: 'supersecret' }, 'primus');
   const expiringApp = createApplication({

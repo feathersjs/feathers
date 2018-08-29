@@ -25,10 +25,13 @@
   },
   "main": "lib/commons.js",
   "scripts": {
-    "test": "../../node_modules/.bin/mocha"
+    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
   },
   "directories": {
     "lib": "lib"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "devDependencies": {
     "chai": "^4.1.2"

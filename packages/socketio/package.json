@@ -26,10 +26,13 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha"
+    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
   },
   "directories": {
     "lib": "lib"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@feathersjs/transport-commons": "^4.0.0",

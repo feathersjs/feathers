@@ -29,8 +29,11 @@
 		"lib": "lib"
 	},
 	"scripts": {
-		"test": "../../node_modules/.bin/mocha"
+		"test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
 	},
+	"publishConfig": {
+    "access": "public"
+  },
 	"dependencies": {
 		"debug": "^3.1.0"
 	},
