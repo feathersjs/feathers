@@ -31,6 +31,9 @@
   "directories": {
     "lib": "lib"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@feathersjs/commons": "^2.0.0",
     "@feathersjs/errors": "^3.3.0",

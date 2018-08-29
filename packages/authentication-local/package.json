@@ -29,6 +29,9 @@
   "directories": {
     "lib": "lib"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@feathersjs/errors": "^3.0.0",
     "bcryptjs": "^2.3.0",

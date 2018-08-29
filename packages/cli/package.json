@@ -34,6 +34,9 @@
     "lib": "lib"
   },
   "preferGlobal": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@feathersjs/tools": "^0.1.6",
     "commander": "^2.9.0",

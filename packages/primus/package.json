@@ -31,6 +31,9 @@
   "directories": {
     "lib": "lib"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@feathersjs/transport-commons": "^4.0.0",
     "uberproto": "^2.0.1",
