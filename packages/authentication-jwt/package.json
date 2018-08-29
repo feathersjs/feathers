@@ -25,7 +25,9 @@
   "engines": {
     "node": ">= 6"
   },
-  "scripts": {},
+  "scripts": {
+    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+  },
   "directories": {
     "lib": "lib"
   },

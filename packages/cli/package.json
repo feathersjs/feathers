@@ -28,7 +28,7 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha"
+    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
   },
   "directories": {
     "lib": "lib"

@@ -1,6 +1,4 @@
---recursive packages/**/test/**/*.test.js
---exclude packages/generator-feathers*/**
---exclude **/node_modules/**
+--recursive test/
 --timeout 20000
 --reporter Dot
 --exit
