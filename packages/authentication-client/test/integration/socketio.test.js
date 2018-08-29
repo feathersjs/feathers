@@ -14,7 +14,7 @@ const baseURL = `http://localhost:${port}`;
 const app = createApplication({ secret: 'supersecret' }, 'socketio');
 let options;
 
-describe.skip('Socket.io client authentication', function () {
+describe('Socket.io client authentication', function () {
   this.timeout(20000);
   let socket;
   let server;
