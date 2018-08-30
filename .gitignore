@@ -31,3 +31,6 @@ node_modules
 
 # IDEs
 .idea
+
+# Sub-package package-lock.json
+packages/**/package-lock.json
