@@ -17,11 +17,10 @@ describe('Feathers application', () => {
   });
 
   it('sets the version on main and app instance', () => {
-    const pkg = require('../package.json');
     const app = feathers();
 
-    assert.equal(feathers.version, pkg.version);
-    assert.equal(app.version, pkg.version);
+    assert.equal(feathers.version, '3.0.0-development');
+    assert.equal(app.version, '3.0.0-development');
   });
 
   it('sets SKIP on main', () => {
