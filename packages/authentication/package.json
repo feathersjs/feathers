@@ -1,0 +1,76 @@
+{
+  "name": "@feathersjs/authentication",
+  "description": "Add Authentication to your FeathersJS app.",
+  "version": "2.1.7",
+  "homepage": "https://feathersjs.com",
+  "main": "lib/",
+  "keywords": [
+    "feathers",
+    "feathers-plugin"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git"
+  },
+  "author": {
+    "name": "Feathers contributors",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "engines": {
+    "node": ">= 6"
+  },
+  "scripts": {
+    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@feathersjs/commons": "^2.0.0",
+    "@feathersjs/errors": "^3.0.0",
+    "@feathersjs/socket-commons": "^3.1.2",
+    "debug": "^3.1.0",
+    "jsonwebtoken": "^8.0.0",
+    "lodash.clone": "^4.5.0",
+    "lodash.merge": "^4.6.0",
+    "lodash.omit": "^4.5.0",
+    "lodash.pick": "^4.4.0",
+    "long-timeout": "^0.1.1",
+    "ms": "^2.0.0",
+    "passport": "^0.4.0",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "@feathersjs/authentication-jwt": "^2.0.0",
+    "@feathersjs/authentication-local": "^1.0.0",
+    "@feathersjs/configuration": "^2.0.0",
+    "@feathersjs/express": "^1.0.0",
+    "@feathersjs/feathers": "^3.0.5",
+    "@feathersjs/primus": "^3.0.3",
+    "@feathersjs/socketio": "^3.0.0",
+    "body-parser": "^1.15.2",
+    "chai": "^4.1.0",
+    "chai-uuid": "^1.0.6",
+    "feathers-memory": "^2.0.0",
+    "jshint": "^2.9.3",
+    "localstorage-memory": "^1.0.2",
+    "mongodb": "^3.0.0",
+    "nsp": "^3.0.0",
+    "passport-strategy": "^1.0.0",
+    "primus": "^7.0.0",
+    "sinon": "^6.0.0",
+    "sinon-chai": "^3.0.0",
+    "socket.io-client": "^2.0.0",
+    "superagent": "^3.0.0",
+    "ws": "^6.0.0"
+  }
+}

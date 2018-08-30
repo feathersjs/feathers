@@ -1,10 +1,7 @@
 # @feathersjs/primus
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/primus.svg)](https://greenkeeper.io/)
-
-[![Build Status](https://travis-ci.org/feathersjs/primus.png?branch=master)](https://travis-ci.org/feathersjs/primus)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/primus/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/primus/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/primus.svg?style=flat-square)](https://david-dm.org/feathersjs/primus)
+[![Build Status](https://travis-ci.org/feathersjs/feathers.png?branch=master)](https://travis-ci.org/feathersjs/feathers)
+[![Dependency Status](https://img.shields.io/david/feathersjs/feathers.svg?style=flat-square&path=packages/primus)](https://david-dm.org/feathersjs/feathers?path=packages/primus)
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/primus.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/primus)
 
 > The Feathers Primus real-time API provider

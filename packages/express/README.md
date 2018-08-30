@@ -1,10 +1,7 @@
 # @feathersjs/express
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/express.svg)](https://greenkeeper.io/)
-
-[![Build Status](https://travis-ci.org/feathersjs/express.png?branch=master)](https://travis-ci.org/feathersjs/express)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/express/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/express/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/express.svg?style=flat-square)](https://david-dm.org/feathersjs/express)
+[![Build Status](https://travis-ci.org/feathersjs/feathers.png?branch=master)](https://travis-ci.org/feathersjs/feathers)
+[![Dependency Status](https://img.shields.io/david/feathersjs/feathers.svg?style=flat-square&path=packages/express)](https://david-dm.org/feathersjs/feathers?path=packages/express)
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/express.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/express)
 
 > Feathers Express framework bindings and REST provider

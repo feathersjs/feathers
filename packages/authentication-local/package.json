@@ -1,0 +1,56 @@
+{
+  "name": "@feathersjs/authentication-local",
+  "description": "Local authentication strategy for @feathers/authentication",
+  "version": "1.2.1",
+  "homepage": "https://feathersjs.com",
+  "main": "lib/",
+  "keywords": [
+    "feathers",
+    "feathers-plugin"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git"
+  },
+  "author": {
+    "name": "Feathers contributors",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "engines": {
+    "node": ">= 6"
+  },
+  "scripts": {
+    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@feathersjs/errors": "^3.0.0",
+    "bcryptjs": "^2.3.0",
+    "debug": "^3.1.0",
+    "lodash": "^4.17.5",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "@feathersjs/authentication": "^2.0.0",
+    "@feathersjs/authentication-jwt": "^2.0.0",
+    "@feathersjs/express": "^1.0.0",
+    "@feathersjs/feathers": "^3.0.0",
+    "@feathersjs/socketio": "^3.0.0",
+    "body-parser": "^1.15.2",
+    "chai": "^4.0.2",
+    "feathers-memory": "^2.0.0",
+    "sinon": "^6.0.0",
+    "sinon-chai": "^3.0.0"
+  }
+}

@@ -113,8 +113,8 @@ describe('@feathersjs/primus', () => {
       }))
       .use('/test', (req, res) => res.json(data));
 
-    const srv = app.listen(8992).on('listening', () => {
-      const url = 'http://localhost:8992/test';
+    const srv = app.listen(8993).on('listening', () => {
+      const url = 'http://localhost:8993/test';
 
       request({ url, json: true }, (err, res) => {
         assert.ok(!err);

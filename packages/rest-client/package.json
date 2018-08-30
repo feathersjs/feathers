@@ -25,9 +25,14 @@
   "engines": {
     "node": ">= 6.0.0"
   },
-  "scripts": {},
+  "scripts": {
+    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+  },
   "directories": {
     "lib": "lib"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@feathersjs/commons": "^2.0.0",

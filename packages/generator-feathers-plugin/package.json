@@ -1,0 +1,35 @@
+{
+  "name": "generator-feathers-plugin",
+  "version": "1.0.0",
+  "description": "A generator for Feathersjs Plugins.",
+  "keywords": [
+    "yeoman-generator",
+    "feathers"
+  ],
+  "homepage": "http://feathersjs.com",
+  "bugs": "https://github.com/feathersjs/feathers/issues",
+  "author": {
+    "name": "Feathers contributors",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "engines": {
+    "node": ">= 6.0.0"
+  },
+  "contributors": [],
+  "main": "app/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git"
+  },
+  "scripts": {
+    "test": "../../node_modules/.bin/mocha"
+  },
+  "dependencies": {
+    "yeoman-generator": "^3.0.0"
+  },
+  "devDependencies": {
+    "yeoman-test": "^2.0.0"
+  },
+  "license": "MIT"
+}

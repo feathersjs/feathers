@@ -1,10 +1,7 @@
 # @feathersjs/errors
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/errors.svg)](https://greenkeeper.io/)
-
-[![Build Status](https://travis-ci.org/feathersjs/errors.png?branch=master)](https://travis-ci.org/feathersjs/errors)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/errors/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/errors/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/errors.svg?style=flat-square)](https://david-dm.org/feathersjs/errors)
+[![Build Status](https://travis-ci.org/feathersjs/feathers.png?branch=master)](https://travis-ci.org/feathersjs/feathers)
+[![Dependency Status](https://img.shields.io/david/feathersjs/feathers.svg?style=flat-square&path=packages/errors)](https://david-dm.org/feathersjs/feathers?path=packages/errors)
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/errors.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/errors)
 
 > Common error types for feathers apps

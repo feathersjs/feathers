@@ -1,0 +1,10 @@
+.editorconfig
+.jshintrc
+.travis.yml
+.istanbul.yml
+.babelrc
+.idea/
+.vscode/
+test/
+coverage/
+.github/
