@@ -1,12 +1,12 @@
 {
+  "ci": false,
   "packages": [
     "packages/*"
   ],
   "version": "independent",
   "commands": {
     "bootstrap": {
-      "hoist": true,
-      "ci": false
+      "hoist": true
     }
   }
 }

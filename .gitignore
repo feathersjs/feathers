@@ -33,4 +33,4 @@ node_modules
 .idea
 
 # Sub-package package-lock.json
-# packages/**/package-lock.json
+packages/**/package-lock.json
