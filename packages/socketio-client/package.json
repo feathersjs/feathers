@@ -38,7 +38,7 @@
     "@feathersjs/transport-commons": "^4.1.2"
   },
   "devDependencies": {
-    "@feathersjs/commons": "^2.0.0",
+    "@feathersjs/commons": "^3.0.0",
     "@feathersjs/feathers": "^3.0.0",
     "@feathersjs/socketio": "^3.2.3",
     "chai": "^4.1.2",
