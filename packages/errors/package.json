@@ -38,9 +38,9 @@
 		"debug": "^3.1.0"
 	},
 	"devDependencies": {
-		"@feathersjs/express": "^1.2.4",
 		"@feathersjs/feathers": "^3.1.7",
 		"chai": "^4.1.2",
+		"express": "^4.16.3",
 		"sinon": "^6.1.5",
 		"sinon-chai": "^3.2.0"
 	}

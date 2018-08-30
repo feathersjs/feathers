@@ -42,7 +42,7 @@
     "uberproto": "^2.0.1"
   },
   "devDependencies": {
-    "@feathersjs/commons": "^2.0.0",
+    "@feathersjs/commons": "^3.0.0",
     "@feathersjs/express": "^1.2.4",
     "@feathersjs/feathers": "^3.0.0",
     "feathers": "^2.2.3",
