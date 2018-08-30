@@ -29,7 +29,7 @@
   "scripts": {
     "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts",
     "update-version": "node -e \"console.log('module.exports = \\'' + require('./package.json').version + '\\';')\" > lib/version.js",
-    "version": "npm run update-version && git add lib/version.js && git commit -am \"Updating version\""
+    "version": "npm run update-version"
   },
   "engines": {
     "node": ">= 6"
