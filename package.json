@@ -19,7 +19,7 @@
     "node": ">= 6"
   },
   "scripts": {
-    "install": "lerna bootstrap --hoist --no-ci",
+    "install": "lerna bootstrap",
     "lint": "semistandard packages/**/*.js --fix",
     "test": "npm run lint && nyc lerna run test --ignore generator-**"
   },
