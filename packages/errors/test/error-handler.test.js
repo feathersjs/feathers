@@ -1,7 +1,6 @@
 /* eslint-disable handle-callback-err */
 /* eslint-disable no-unused-expressions */
-const feathers = require('@feathersjs/feathers');
-const expressify = require('@feathersjs/express');
+const express = require('express');
 
 const chai = require('chai');
 const sinon = require('sinon');
@@ -43,19 +42,17 @@ describe('error-handler', () => {
     let currentError;
 
     before(function () {
-      this.app = expressify(feathers())
-        .get('/error', function (req, res, next) {
-          next(new Error('Something went wrong'));
-        })
-        .use(handler({
-          html: htmlHandler,
-          json: jsonHandler,
-          logger: {
-            error (e) {
-              currentError = e;
-            }
+      this.app = express().get('/error', function (req, res, next) {
+        next(new Error('Something went wrong'));
+      }).use(handler({
+        html: htmlHandler,
+        json: jsonHandler,
+        logger: {
+          error (e) {
+            currentError = e;
           }
-        }));
+        }
+      }));
 
       this.server = this.app.listen(5050);
     });
@@ -250,7 +247,7 @@ describe('error-handler', () => {
 
   describe('use as app error handler', function () {
     before(function () {
-      this.app = expressify(feathers())
+      this.app = express()
         .get('/error', function (req, res, next) {
           next(new Error('Something went wrong'));
         })

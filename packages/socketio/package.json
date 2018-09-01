@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/socketio",
   "description": "The Feathers Socket.io real-time API provider",
-  "version": "3.2.2",
+  "version": "3.2.3",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -35,14 +35,14 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/transport-commons": "^4.0.0",
+    "@feathersjs/transport-commons": "^4.1.2",
     "debug": "^3.1.0",
     "socket.io": "^2.1.0",
     "uberproto": "^2.0.1"
   },
   "devDependencies": {
-    "@feathersjs/commons": "^2.0.0",
-    "@feathersjs/express": "^1.0.0",
+    "@feathersjs/commons": "^3.0.0",
+    "@feathersjs/express": "^1.2.4",
     "@feathersjs/feathers": "^3.0.0",
     "feathers": "^2.2.3",
     "feathers-memory": "^2.0.0",

@@ -123,6 +123,12 @@ describe('@feathersjs/express/rest provider', () => {
       };
 
       it('sets the actual hook object in res.hook', () => {
+        const params = {
+          route: {},
+          query: { test: 'param' },
+          provider: 'rest'
+        };
+
         app.use('/hook', {
           get (id) {
             return Promise.resolve({
@@ -145,11 +151,11 @@ describe('@feathersjs/express/rest provider', () => {
           .then(res => {
             assert.deepEqual(res.data, {
               id: 'dishes',
-              params: {
-                route: {},
-                query: { test: 'param' },
-                provider: 'rest'
-              },
+              params,
+              arguments: [
+                'dishes',
+                params
+              ],
               type: 'after',
               method: 'get',
               path: 'hook',
@@ -210,6 +216,12 @@ describe('@feathersjs/express/rest provider', () => {
       });
 
       it('sets the hook object in res.hook on error', () => {
+        const params = {
+          route: {},
+          query: {},
+          provider: 'rest'
+        };
+        
         app.use('/hook-error', {
           get () {
             return Promise.reject(new Error('I blew up'));
@@ -229,11 +241,8 @@ describe('@feathersjs/express/rest provider', () => {
             assert.deepEqual(error.response.data, {
               hook: {
                 id: 'dishes',
-                params: {
-                  route: {},
-                  query: {},
-                  provider: 'rest'
-                },
+                params,
+                arguments: [ 'dishes', params ],
                 type: 'error',
                 method: 'get',
                 path: 'hook-error',

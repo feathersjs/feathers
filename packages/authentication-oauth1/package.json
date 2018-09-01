@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-oauth1",
   "description": "A Feathers OAuth1 authentication strategy",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -35,14 +35,14 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^2.0.0",
-    "@feathersjs/errors": "^3.0.0",
+    "@feathersjs/commons": "^3.0.0",
+    "@feathersjs/errors": "^3.3.1",
     "debug": "^3.1.0",
     "lodash.merge": "^4.6.0"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^2.0.0",
-    "@feathersjs/express": "^1.0.0",
+    "@feathersjs/authentication": "^2.1.8",
+    "@feathersjs/express": "^1.2.4",
     "@feathersjs/feathers": "^3.0.0",
     "body-parser": "^1.15.2",
     "chai": "^4.0.2",
