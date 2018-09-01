@@ -246,7 +246,6 @@ describe('@feathersjs/express/rest provider', () => {
                 type: 'error',
                 method: 'get',
                 path: 'hook-error',
-                error: {},
                 arguments: [
                   'dishes',
                   {
