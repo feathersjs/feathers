@@ -8,11 +8,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @feathersjs/transport-commons
 
+<a name="4.1.2"></a>
+## 4.1.2
 
-
-
-
-# Change Log
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
 
 ## [v4.1.1](https://github.com/feathersjs/transport-commons/tree/v4.1.1) (2018-07-03)
 [Full Changelog](https://github.com/feathersjs/transport-commons/compare/v4.1.0...v4.1.1)

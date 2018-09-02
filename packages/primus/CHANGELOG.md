@@ -8,11 +8,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @feathersjs/primus
 
+<a name="3.2.2"></a>
+## 3.2.2
 
-
-
-
-# Change Log
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
 
 ## [v3.2.1](https://github.com/feathersjs/primus/tree/v3.2.1) (2018-06-03)
 [Full Changelog](https://github.com/feathersjs/primus/compare/v3.2.0...v3.2.1)

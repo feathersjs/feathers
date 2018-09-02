@@ -8,11 +8,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @feathersjs/configuration
 
+<a name="2.0.1"></a>
+## 2.0.1
 
-
-
-
-# Change Log
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
 
 ## [v2.0.0](https://github.com/feathersjs/configuration/tree/v2.0.0) (2018-07-30)
 [Full Changelog](https://github.com/feathersjs/configuration/compare/v1.0.2...v2.0.0)

@@ -8,11 +8,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @feathersjs/authentication-local
 
+<a name="1.2.2"></a>
+## 1.2.2
 
-
-
-
-# Change Log
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
 
 ## [v1.2.1](https://github.com/feathersjs/authentication-local/tree/v1.2.1) (2018-05-02)
 [Full Changelog](https://github.com/feathersjs/authentication-local/compare/v1.2.0...v1.2.1)

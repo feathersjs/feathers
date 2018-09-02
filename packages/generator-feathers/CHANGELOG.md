@@ -8,11 +8,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package generator-feathers
 
+<a name="2.6.1"></a>
+## 2.6.1
 
-
-
-
-# Change Log
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
 
 ## [v2.6.0](https://github.com/feathersjs/generator-feathers/tree/v2.6.0) (2018-08-13)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.6...v2.6.0)

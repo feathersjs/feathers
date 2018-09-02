@@ -8,11 +8,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @feathersjs/errors
 
+<a name="3.3.1"></a>
+## 3.3.1
 
-
-
-
-# Change Log
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
 
 ## [v3.3.0](https://github.com/feathersjs/errors/tree/v3.3.0) (2018-02-12)
 [Full Changelog](https://github.com/feathersjs/errors/compare/v3.2.2...v3.3.0)
