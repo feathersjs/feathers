@@ -8,11 +8,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @feathersjs/express
 
+<a name="1.2.4"></a>
+## 1.2.4
 
-
-
-
-# Change Log
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
 
 ## [v1.2.3](https://github.com/feathersjs/express/tree/v1.2.3) (2018-06-03)
 [Full Changelog](https://github.com/feathersjs/express/compare/v1.2.2...v1.2.3)

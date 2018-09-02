@@ -8,11 +8,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @feathersjs/authentication-client
 
+<a name="1.0.3"></a>
+## 1.0.3
 
-
-
-
-# Change Log
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
 
 ## [v1.0.2](https://github.com/feathersjs/authentication-client/tree/v1.0.2) (2018-01-03)
 [Full Changelog](https://github.com/feathersjs/authentication-client/compare/v1.0.1...v1.0.2)

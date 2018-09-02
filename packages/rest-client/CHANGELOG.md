@@ -8,11 +8,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @feathersjs/rest-client
 
+<a name="1.4.2"></a>
+## 1.4.2
 
-
-
-
-# Change Log
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
 
 ## [v1.4.1](https://github.com/feathersjs/rest-client/tree/v1.4.1) (2018-06-27)
 [Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.4.0...v1.4.1)

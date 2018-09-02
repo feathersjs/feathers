@@ -8,11 +8,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @feathersjs/primus-client
 
+<a name="1.1.1"></a>
+## 1.1.1
 
-
-
-
-# Change Log
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
 
 ## [v1.1.0](https://github.com/feathersjs/primus-client/tree/v1.1.0) (2018-02-09)
 [Full Changelog](https://github.com/feathersjs/primus-client/compare/v1.0.3...v1.1.0)

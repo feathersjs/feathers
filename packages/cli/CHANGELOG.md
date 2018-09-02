@@ -8,11 +8,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @feathersjs/cli
 
+<a name="3.8.1"></a>
+## 3.8.1
 
-
-
-
-# Change Log
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
 
 ## [v3.8.0](https://github.com/feathersjs/cli/tree/v3.8.0) (2018-08-13)
 [Full Changelog](https://github.com/feathersjs/cli/compare/v3.7.6...v3.8.0)

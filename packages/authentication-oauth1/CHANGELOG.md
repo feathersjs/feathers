@@ -8,11 +8,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @feathersjs/authentication-oauth1
 
+<a name="1.0.4"></a>
+## 1.0.4
 
-
-
-
-# Change Log
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
 
 ## [v1.0.3](https://github.com/feathersjs/authentication-oauth1/tree/v1.0.3) (2018-01-03)
 [Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v1.0.2...v1.0.3)

@@ -9,7 +9,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 **Note:** Version bump only for package @feathersjs/authentication
 
 <a name="2.1.8"></a>
-## [2.1.8](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication@2.1.8...@feathersjs/authentication@2.1.8)
+## 2.1.8
 
 - Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
 
