@@ -1,5 +1,19 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+<a name="1.2.2"></a>
+## [1.2.2](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-oauth2@1.2.1...@feathersjs/authentication-oauth2@1.2.2) (2018-09-02)
+
+**Note:** Version bump only for package @feathersjs/authentication-oauth2
+
+
+
+
+
+# Change Log
+
 ## [v1.2.0](https://github.com/feathersjs/authentication-oauth2/tree/v1.2.0) (2018-08-28)
 [Full Changelog](https://github.com/feathersjs/authentication-oauth2/compare/v1.1.0...v1.2.0)
 

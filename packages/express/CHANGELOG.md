@@ -1,5 +1,19 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+<a name="1.2.5"></a>
+## [1.2.5](https://github.com/feathersjs/feathers/compare/@feathersjs/express@1.2.4...@feathersjs/express@1.2.5) (2018-09-02)
+
+**Note:** Version bump only for package @feathersjs/express
+
+
+
+
+
+# Change Log
+
 ## [v1.2.3](https://github.com/feathersjs/express/tree/v1.2.3) (2018-06-03)
 [Full Changelog](https://github.com/feathersjs/express/compare/v1.2.2...v1.2.3)
 

@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-jwt",
   "description": "JWT authentication strategy for feathers-authentication using Passport",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -35,7 +35,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/errors": "^3.3.1",
+    "@feathersjs/errors": "^3.3.2",
     "debug": "^3.1.0",
     "lodash.merge": "^4.6.0",
     "lodash.omit": "^4.5.0",
@@ -43,10 +43,10 @@
     "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^2.1.8",
-    "@feathersjs/express": "^1.2.4",
-    "@feathersjs/feathers": "^3.0.0",
-    "@feathersjs/socketio": "^3.2.3",
+    "@feathersjs/authentication": "^2.1.9",
+    "@feathersjs/express": "^1.2.5",
+    "@feathersjs/feathers": "^3.2.1",
+    "@feathersjs/socketio": "^3.2.4",
     "body-parser": "^1.15.2",
     "chai": "^4.1.0",
     "feathers-memory": "^2.0.0",

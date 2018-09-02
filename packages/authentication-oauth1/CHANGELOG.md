@@ -1,5 +1,19 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+<a name="1.0.5"></a>
+## [1.0.5](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-oauth1@1.0.4...@feathersjs/authentication-oauth1@1.0.5) (2018-09-02)
+
+**Note:** Version bump only for package @feathersjs/authentication-oauth1
+
+
+
+
+
+# Change Log
+
 ## [v1.0.3](https://github.com/feathersjs/authentication-oauth1/tree/v1.0.3) (2018-01-03)
 [Full Changelog](https://github.com/feathersjs/authentication-oauth1/compare/v1.0.2...v1.0.3)
 

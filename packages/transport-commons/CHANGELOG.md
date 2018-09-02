@@ -1,5 +1,19 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+<a name="4.1.3"></a>
+## [4.1.3](https://github.com/feathersjs/feathers/compare/@feathersjs/transport-commons@4.1.2...@feathersjs/transport-commons@4.1.3) (2018-09-02)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# Change Log
+
 ## [v4.1.1](https://github.com/feathersjs/transport-commons/tree/v4.1.1) (2018-07-03)
 [Full Changelog](https://github.com/feathersjs/transport-commons/compare/v4.1.0...v4.1.1)
 

@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-local",
   "description": "Local authentication strategy for @feathers/authentication",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -35,18 +35,18 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/errors": "^3.3.1",
+    "@feathersjs/errors": "^3.3.2",
     "bcryptjs": "^2.3.0",
     "debug": "^3.1.0",
     "lodash": "^4.17.5",
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^2.1.8",
-    "@feathersjs/authentication-jwt": "^2.0.2",
-    "@feathersjs/express": "^1.2.4",
-    "@feathersjs/feathers": "^3.0.0",
-    "@feathersjs/socketio": "^3.2.3",
+    "@feathersjs/authentication": "^2.1.9",
+    "@feathersjs/authentication-jwt": "^2.0.3",
+    "@feathersjs/express": "^1.2.5",
+    "@feathersjs/feathers": "^3.2.1",
+    "@feathersjs/socketio": "^3.2.4",
     "body-parser": "^1.15.2",
     "chai": "^4.0.2",
     "feathers-memory": "^2.0.0",

@@ -1,5 +1,19 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+<a name="1.4.3"></a>
+## [1.4.3](https://github.com/feathersjs/feathers/compare/@feathersjs/rest-client@1.4.2...@feathersjs/rest-client@1.4.3) (2018-09-02)
+
+**Note:** Version bump only for package @feathersjs/rest-client
+
+
+
+
+
+# Change Log
+
 ## [v1.4.1](https://github.com/feathersjs/rest-client/tree/v1.4.1) (2018-06-27)
 [Full Changelog](https://github.com/feathersjs/rest-client/compare/v1.4.0...v1.4.1)
 

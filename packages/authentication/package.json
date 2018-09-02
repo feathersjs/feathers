@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication",
   "description": "Add Authentication to your FeathersJS app.",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@feathersjs/commons": "^3.0.0",
-    "@feathersjs/errors": "^3.3.1",
+    "@feathersjs/errors": "^3.3.2",
     "@feathersjs/socket-commons": "^3.1.2",
     "debug": "^3.1.0",
     "jsonwebtoken": "^8.0.0",
@@ -50,13 +50,13 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "@feathersjs/authentication-jwt": "^2.0.2",
-    "@feathersjs/authentication-local": "^1.2.2",
-    "@feathersjs/configuration": "^2.0.1",
-    "@feathersjs/express": "^1.2.4",
-    "@feathersjs/feathers": "^3.0.5",
-    "@feathersjs/primus": "^3.2.2",
-    "@feathersjs/socketio": "^3.2.3",
+    "@feathersjs/authentication-jwt": "^2.0.3",
+    "@feathersjs/authentication-local": "^1.2.3",
+    "@feathersjs/configuration": "^2.0.2",
+    "@feathersjs/express": "^1.2.5",
+    "@feathersjs/feathers": "^3.2.1",
+    "@feathersjs/primus": "^3.2.3",
+    "@feathersjs/socketio": "^3.2.4",
     "body-parser": "^1.15.2",
     "chai": "^4.1.0",
     "chai-uuid": "^1.0.6",

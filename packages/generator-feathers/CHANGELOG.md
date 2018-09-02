@@ -1,5 +1,19 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+<a name="2.6.2"></a>
+## [2.6.2](https://github.com/feathersjs/feathers/compare/generator-feathers@2.6.1...generator-feathers@2.6.2) (2018-09-02)
+
+**Note:** Version bump only for package generator-feathers
+
+
+
+
+
+# Change Log
+
 ## [v2.6.0](https://github.com/feathersjs/generator-feathers/tree/v2.6.0) (2018-08-13)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.6...v2.6.0)
 
