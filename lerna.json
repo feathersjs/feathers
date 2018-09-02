@@ -4,7 +4,7 @@
     "packages/*"
   ],
   "version": "independent",
-  "commands": {
+  "command": {
     "bootstrap": {
       "hoist": true
     },
@@ -14,6 +14,7 @@
   },
   "ignoreChanges": [
     "**/package-lock.json",
+    "**/yarn.lock",
     "**/test/**"
   ]
 }
