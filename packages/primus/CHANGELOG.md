@@ -1,5 +1,18 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+<a name="3.2.3"></a>
+## [3.2.3](https://github.com/feathersjs/feathers/compare/@feathersjs/primus@3.2.2...@feathersjs/primus@3.2.3) (2018-09-02)
+
+**Note:** Version bump only for package @feathersjs/primus
+
+<a name="3.2.2"></a>
+## 3.2.2
+
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
+
 ## [v3.2.1](https://github.com/feathersjs/primus/tree/v3.2.1) (2018-06-03)
 [Full Changelog](https://github.com/feathersjs/primus/compare/v3.2.0...v3.2.1)
 

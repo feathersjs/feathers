@@ -1,5 +1,18 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+<a name="3.3.2"></a>
+## [3.3.2](https://github.com/feathersjs/feathers/compare/@feathersjs/errors@3.3.1...@feathersjs/errors@3.3.2) (2018-09-02)
+
+**Note:** Version bump only for package @feathersjs/errors
+
+<a name="3.3.1"></a>
+## 3.3.1
+
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
+
 ## [v3.3.0](https://github.com/feathersjs/errors/tree/v3.3.0) (2018-02-12)
 [Full Changelog](https://github.com/feathersjs/errors/compare/v3.2.2...v3.3.0)
 

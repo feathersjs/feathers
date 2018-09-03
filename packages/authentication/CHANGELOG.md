@@ -1,5 +1,18 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+<a name="2.1.9"></a>
+## [2.1.9](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication@2.1.8...@feathersjs/authentication@2.1.9) (2018-09-02)
+
+**Note:** Version bump only for package @feathersjs/authentication
+
+<a name="2.1.8"></a>
+## 2.1.8
+
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
+
 ## [v2.1.7](https://github.com/feathersjs/authentication/tree/v2.1.7) (2018-06-29)
 [Full Changelog](https://github.com/feathersjs/authentication/compare/v2.1.6...v2.1.7)
 

@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-oauth2",
   "description": "An OAuth2 authentication strategy for feathers-authentication using Passport",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -36,14 +36,14 @@
   },
   "dependencies": {
     "@feathersjs/commons": "^3.0.0",
-    "@feathersjs/errors": "^3.3.1",
-    "@feathersjs/express": "^1.2.4",
+    "@feathersjs/errors": "^3.3.2",
+    "@feathersjs/express": "^1.2.5",
     "debug": "^3.1.0",
     "lodash.merge": "^4.6.1"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^2.1.8",
-    "@feathersjs/feathers": "^3.1.7",
+    "@feathersjs/authentication": "^2.1.9",
+    "@feathersjs/feathers": "^3.2.1",
     "body-parser": "^1.18.3",
     "chai": "^4.1.2",
     "feathers-memory": "^2.2.0",

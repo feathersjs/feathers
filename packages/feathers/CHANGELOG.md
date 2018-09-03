@@ -1,6 +1,16 @@
 # Change Log
 
-## [v3.2.0-pre.1](https://github.com/feathersjs/feathers/tree/v3.2.0-pre.1) (2018-08-19)
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+<a name="3.2.1"></a>
+## [3.2.1](https://github.com/feathersjs/feathers/compare/@feathersjs/express@1.2.4...@feathersjs/feather@3.2.1) (2018-09-02)
+
+**Note:** Version bump only for package @feathersjs/express
+
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
+
+## [v3.2.0](https://github.com/feathersjs/feathers/tree/v3.2.0-pre.1) (2018-08-19)
 [Full Changelog](https://github.com/feathersjs/feathers/compare/v3.1.7...v3.2.0-pre.1)
 
 **Merged pull requests:**

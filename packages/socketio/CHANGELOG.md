@@ -1,5 +1,18 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+<a name="3.2.4"></a>
+## [3.2.4](https://github.com/feathersjs/feathers/compare/@feathersjs/socketio@3.2.3...@feathersjs/socketio@3.2.4) (2018-09-02)
+
+**Note:** Version bump only for package @feathersjs/socketio
+
+<a name="3.2.3"></a>
+## 3.2.3
+
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
+
 ## [v3.2.2](https://github.com/feathersjs/socketio/tree/v3.2.2) (2018-06-03)
 [Full Changelog](https://github.com/feathersjs/socketio/compare/v3.2.1...v3.2.2)
 

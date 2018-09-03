@@ -1,5 +1,18 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+<a name="1.1.2"></a>
+## [1.1.2](https://github.com/feathersjs/feathers/compare/@feathersjs/socketio-client@1.1.1...@feathersjs/socketio-client@1.1.2) (2018-09-02)
+
+**Note:** Version bump only for package @feathersjs/socketio-client
+
+<a name="1.1.1"></a>
+## 1.1.1
+
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
+
 ## [v1.1.0](https://github.com/feathersjs/socketio-client/tree/v1.1.0) (2018-02-09)
 [Full Changelog](https://github.com/feathersjs/socketio-client/compare/v1.0.3...v1.1.0)
 

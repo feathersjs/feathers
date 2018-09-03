@@ -1,5 +1,18 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+<a name="3.8.2"></a>
+## [3.8.2](https://github.com/feathersjs/feathers/compare/@feathersjs/cli@3.8.1...@feathersjs/cli@3.8.2) (2018-09-02)
+
+**Note:** Version bump only for package @feathersjs/cli
+
+<a name="3.8.1"></a>
+## 3.8.1
+
+- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
+
 ## [v3.8.0](https://github.com/feathersjs/cli/tree/v3.8.0) (2018-08-13)
 [Full Changelog](https://github.com/feathersjs/cli/compare/v3.7.6...v3.8.0)
 

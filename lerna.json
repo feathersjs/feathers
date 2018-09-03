@@ -4,9 +4,18 @@
     "packages/*"
   ],
   "version": "independent",
-  "commands": {
+  "command": {
     "bootstrap": {
       "hoist": true
+    },
+    "version": {
+      "conventionalCommits": true
     }
-  }
+  },
+  "ignoreChanges": [
+    "**/CHANGELOG.md",
+    "**/package-lock.json",
+    "**/yarn.lock",
+    "**/test/**"
+  ]
 }
