@@ -13,6 +13,7 @@
     }
   },
   "ignoreChanges": [
+    "**/changelog.md",
     "**/CHANGELOG.md",
     "**/package-lock.json",
     "**/yarn.lock",
