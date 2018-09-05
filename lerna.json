@@ -8,8 +8,10 @@
     "bootstrap": {
       "hoist": true
     },
-    "version": {
-      "conventionalCommits": true
+    "publish": {
+      "allowBranch": "master",
+      "conventionalCommits": true,
+      "message": "chore(release): publish %s"
     }
   },
   "ignoreChanges": [
