@@ -64,42 +64,42 @@ module.exports = function authenticate (options = {}) {
 
         // Implement required passport methods that
         // can be called by a passport strategy.
-        let strategy = Object.create(prototype);
+        const strategy = Object.assign(Object.create(prototype), {
+          redirect (url, status = 302) {
+            debug(`'${strategyName}' authentication redirecting to`, url, status);
+            resolve({ redirect: true, url, status });
+          },
 
-        strategy.redirect = (url, status = 302) => {
-          debug(`'${strategyName}' authentication redirecting to`, url, status);
-          resolve({ redirect: true, url, status });
-        };
+          fail (challenge, status) {
+            debug(`Authentication strategy '${strategyName}' failed`, challenge, status);
+            resolve({
+              fail: true,
+              challenge,
+              status
+            });
+          },
 
-        strategy.fail = (challenge, status) => {
-          debug(`Authentication strategy '${strategyName}' failed`, challenge, status);
-          resolve({
-            fail: true,
-            challenge,
-            status
-          });
-        };
+          error (error) {
+            debug(`Error in '${strategyName}' authentication strategy`, error);
+            reject(error);
+          },
 
-        strategy.error = error => {
-          debug(`Error in '${strategyName}' authentication strategy`, error);
-          reject(error);
-        };
+          success (data, payload) {
+            debug(`'${strategyName}' authentication strategy succeeded`, data, payload);
+            resolve({
+              success: true,
+              data: {
+                [entity]: data,
+                payload
+              }
+            });
+          },
 
-        strategy.success = (data, payload) => {
-          debug(`'${strategyName}' authentication strategy succeeded`, data, payload);
-          resolve({
-            success: true,
-            data: {
-              [entity]: data,
-              payload
-            }
-          });
-        };
-
-        strategy.pass = () => {
-          debug(`Passing on '${strategyName}' authentication strategy`);
-          resolve();
-        };
+          pass () {
+            debug(`Passing on '${strategyName}' authentication strategy`);
+            resolve();
+          }
+        });
 
         debug('Passport request object', request);
         strategy.authenticate(request, strategyOptions);

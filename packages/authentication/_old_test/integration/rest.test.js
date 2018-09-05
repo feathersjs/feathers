@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-const merge = require('lodash.merge');
+const { merge } = require('lodash');
 const request = require('superagent');
 const createApplication = require('../fixtures/server');
 const chai = require('chai');
@@ -9,7 +9,7 @@ const { expect } = chai;
 
 chai.use(sinonChai);
 
-describe('REST authentication', function () {
+describe.skip('REST authentication', function () {
   const port = 8996;
   const baseURL = `http://localhost:${port}`;
   const app = createApplication({ secret: 'supersecret' });

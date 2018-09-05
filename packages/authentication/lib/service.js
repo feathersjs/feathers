@@ -1,6 +1,5 @@
 const Debug = require('debug');
-const merge = require('lodash.merge');
-const express = require('./express');
+const { merge } = require('lodash');
 
 const debug = Debug('@feathersjs/authentication:authentication:service');
 
@@ -44,12 +43,6 @@ module.exports = function init (options) {
   return function () {
     const app = this;
     const path = options.path;
-    const {
-      successRedirect,
-      failureRedirect,
-      setCookie,
-      emitEvents
-    } = express;
 
     if (typeof path !== 'string') {
       throw new Error(`You must provide a 'path' in your authentication configuration or pass one explicitly.`);
@@ -57,14 +50,7 @@ module.exports = function init (options) {
 
     debug('Configuring authentication service at path', path);
 
-    app.use(
-      path,
-      new Service(app, options),
-      emitEvents(options),
-      setCookie(options),
-      successRedirect(),
-      failureRedirect(options)
-    );
+    app.use(path, new Service(app, options));
 
     const service = app.service(path);
 

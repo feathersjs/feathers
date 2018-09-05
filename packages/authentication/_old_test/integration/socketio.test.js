@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
-const merge = require('lodash.merge');
-const clone = require('lodash.clone');
+const { merge, clone } = require('lodash');
+const io = require('socket.io-client');
 const createApplication = require('../fixtures/server');
 const chai = require('chai');
 const sinon = require('sinon');
@@ -9,14 +9,14 @@ const { expect } = chai;
 
 chai.use(sinonChai);
 
-describe('Primus authentication', function () {
-  const port = 9889;
+describe.skip('Socket.io authentication', function () {
+  const port = 8997;
   const baseURL = `http://localhost:${port}`;
-  const app = createApplication({ secret: 'supersecret' }, 'primus');
+  const app = createApplication({ secret: 'supersecret' }, 'socketio');
   const expiringApp = createApplication({
     secret: 'supersecret',
     jwt: { expiresIn: '500ms' }
-  }, 'primus');
+  }, 'socketio');
   const hook = sinon.spy(function (hook) {});
   app.service('authentication').hooks({
     before: {
@@ -26,9 +26,7 @@ describe('Primus authentication', function () {
 
   let server;
   let socket;
-  let Socket;
   let serverSocket;
-  let ExpiringSocket;
   let expiringServer;
   let expiringSocket;
   let expiredToken;
@@ -43,25 +41,20 @@ describe('Primus authentication', function () {
       })
       .then(token => {
         accessToken = token;
-        expiringServer = expiringApp.listen(1337);
+        expiringServer = expiringApp.listen(1336);
         expiringServer.once('listening', () => {
-          ExpiringSocket = expiringApp.primus.Socket;
           server = app.listen(port);
           server.once('listening', () => {
-            Socket = app.primus.Socket;
-            app.primus.on('connection', s => { serverSocket = s; });
+            app.io.on('connect', s => { serverSocket = s; });
             done();
           });
         });
       });
   });
 
-  beforeEach(done => {
-    expiringSocket = new ExpiringSocket('http://localhost:1337');
-    expiringSocket.on('open', () => {
-      socket = new Socket(baseURL);
-      socket.on('open', () => done());
-    });
+  beforeEach(() => {
+    expiringSocket = io('http://localhost:1336');
+    socket = io(baseURL);
   });
 
   afterEach(() => {
@@ -91,8 +84,8 @@ describe('Primus authentication', function () {
             done(new Error('real-time events for authentication should not be emitted'))
           );
 
-          socket.send('authenticate', data, (error, response) => {
-            expect(error).to.not.be.ok;
+          socket.emit('authenticate', data, (error, response) => {
+            expect(error).to.not.equal(undefined);
             expect(response.accessToken).to.exist;
             app.passport.verifyJWT(response.accessToken, app.get('authentication')).then(payload => {
               expect(payload).to.exist;
@@ -105,21 +98,32 @@ describe('Primus authentication', function () {
         });
 
         it('sets the user on the socket', done => {
-          socket.send('authenticate', data, (error, response) => {
-            expect(error).to.not.be.ok;
+          socket.emit('authenticate', data, (error, response) => {
+            expect(error).to.not.equal(undefined);
             expect(response.accessToken).to.exist;
-            expect(serverSocket.request.feathers.user).to.not.equal(undefined);
+            expect(serverSocket.feathers.user).to.not.equal(undefined);
+            done();
+          });
+        });
+
+        it('does never publish events from the authentication service', done => {
+          socket.once('authentication created', () => done(new Error('Should not get here')));
+
+          socket.emit('authenticate', data, (error, response) => {
+            expect(error).to.not.equal(undefined);
+            expect(response.accessToken).to.exist;
+            expect(serverSocket.feathers.user).to.not.equal(undefined);
             done();
           });
         });
 
         it('updates the user on the socket', done => {
-          socket.send('authenticate', data, (error, response) => {
-            expect(error).to.not.be.ok;
+          socket.emit('authenticate', data, (error, response) => {
+            expect(error).to.not.equal(undefined);
             // Clone the socket user and replace it with the clone so that feathers-memory
             // doesn't have a reference to the same object.
-            const socketUser = clone(serverSocket.request.feathers.user);
-            serverSocket.request.feathers.user = socketUser;
+            const socketUser = clone(serverSocket.feathers.user);
+            serverSocket.feathers.user = socketUser;
 
             const email = 'test@feathersjs.com';
             const oldEmail = socketUser.email;
@@ -138,10 +142,10 @@ describe('Primus authentication', function () {
 
         it('sets entity specified in strategy', done => {
           data.strategy = 'org-local';
-          socket.send('authenticate', data, (error, response) => {
+          socket.emit('authenticate', data, (error, response) => {
             expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
-            expect(serverSocket.request.feathers.org).to.not.equal(undefined);
+            expect(serverSocket.feathers.org).to.not.equal(undefined);
             done();
           });
         });
@@ -150,7 +154,30 @@ describe('Primus authentication', function () {
       describe('when using invalid credentials', () => {
         it('returns NotAuthenticated error', done => {
           data.password = 'invalid';
-          socket.send('authenticate', data, error => {
+          socket.emit('authenticate', data, error => {
+            expect(error.code).to.equal(401);
+            done();
+          });
+        });
+
+        it('returns NotAuthenticated error when strategy is invalid', done => {
+          delete data.strategy;
+
+          socket.emit('authenticate', data, error => {
+            expect(error.code).to.equal(401);
+            done();
+          });
+        });
+
+        it('returns NotAuthenticated error when data is not an object', done => {
+          socket.emit('authenticate', undefined, error => {
+            expect(error.code).to.equal(401);
+            done();
+          });
+        });
+
+        it('returns NotAuthenticated error when data is not passed', done => {
+          socket.emit('authenticate', error => {
             expect(error.code).to.equal(401);
             done();
           });
@@ -159,7 +186,7 @@ describe('Primus authentication', function () {
 
       describe('when missing credentials', () => {
         it('returns BadRequest error', done => {
-          socket.send('authenticate', { strategy: 'local' }, error => {
+          socket.emit('authenticate', { strategy: 'local' }, error => {
             expect(error.code).to.equal(400);
             done();
           });
@@ -169,7 +196,7 @@ describe('Primus authentication', function () {
       describe('when missing strategy and server strategy does not match', () => {
         it('returns NotAuthenticated error', done => {
           delete data.strategy;
-          socket.send('authenticate', data, error => {
+          socket.emit('authenticate', data, error => {
             expect(error.code).to.equal(401);
             done();
           });
@@ -189,7 +216,7 @@ describe('Primus authentication', function () {
 
       describe('when using a valid access token', () => {
         it('returns a valid access token', done => {
-          socket.send('authenticate', data, (error, response) => {
+          socket.emit('authenticate', data, (error, response) => {
             expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
             app.passport.verifyJWT(response.accessToken, app.get('authentication')).then(payload => {
@@ -206,7 +233,7 @@ describe('Primus authentication', function () {
         it('returns a valid access token', done => {
           delete data.accessToken;
           data.refreshToken = 'refresh';
-          socket.send('authenticate', data, (error, response) => {
+          socket.emit('authenticate', data, (error, response) => {
             expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
             app.passport.verifyJWT(response.accessToken, app.get('authentication')).then(payload => {
@@ -222,7 +249,7 @@ describe('Primus authentication', function () {
       describe('when access token is invalid', () => {
         it('returns NotAuthenticated error', done => {
           data.accessToken = 'invalid';
-          socket.send('authenticate', data, error => {
+          socket.emit('authenticate', data, error => {
             expect(error.code).to.equal(401);
             done();
           });
@@ -232,7 +259,7 @@ describe('Primus authentication', function () {
       describe('when access token is missing', () => {
         it('returns NotAuthenticated error', done => {
           delete data.accessToken;
-          socket.send('authenticate', data, error => {
+          socket.emit('authenticate', data, error => {
             expect(error.code).to.equal(401);
             done();
           });
@@ -242,7 +269,7 @@ describe('Primus authentication', function () {
       describe('when access token is expired', () => {
         it('returns NotAuthenticated error', done => {
           data.accessToken = expiredToken;
-          socket.send('authenticate', data, error => {
+          socket.emit('authenticate', data, error => {
             expect(error.code).to.equal(401);
             done();
           });
@@ -252,7 +279,7 @@ describe('Primus authentication', function () {
       describe('when missing strategy it uses the auth strategy specified on the server', () => {
         it('returns an accessToken', done => {
           delete data.strategy;
-          socket.send('authenticate', data, (error, response) => {
+          socket.emit('authenticate', data, (error, response) => {
             expect(error).to.equal(null);
             expect(response.accessToken).to.not.equal(undefined);
             done();
@@ -262,10 +289,106 @@ describe('Primus authentication', function () {
     });
   });
 
+  describe('when expiry time is very long', () => {
+    const longExpiringApp = createApplication({
+      secret: 'supersecret',
+      jwt: { expiresIn: '1y' }
+    }, 'socketio');
+
+    let longExpiringServer;
+    let longExpiringSocket;
+
+    before(done => {
+      longExpiringServer = longExpiringApp.listen(1338);
+      longExpiringServer.once('listening', () => {
+        longExpiringSocket = io('http://localhost:1338');
+        done();
+      });
+    });
+
+    after(() => {
+      longExpiringServer.close();
+    });
+
+    it('should not immediately logout', done => {
+      const data = {
+        strategy: 'local',
+        email: 'admin@feathersjs.com',
+        password: 'admin'
+      };
+
+      longExpiringSocket.emit('authenticate', data, (error, response) => {
+        expect(error).to.not.be.ok;
+        expect(response).to.be.ok;
+        // Wait for a little bit
+        setTimeout(function () {
+          longExpiringSocket.emit('users::find', {}, (error, response) => {
+            expect(error).to.not.be.ok;
+            expect(response).to.be.ok;
+            done();
+          });
+        }, 100);
+      });
+    });
+  });
+
+  describe('reauthenticating extends jwt expiry', () => {
+    const longExpiringApp = createApplication({
+      secret: 'supersecret',
+      jwt: { expiresIn: '10s' }
+    }, 'socketio');
+
+    let longExpiringServer;
+    let longExpiringSocket;
+
+    before(done => {
+      longExpiringServer = longExpiringApp.listen(1338);
+      longExpiringServer.once('listening', () => {
+        longExpiringSocket = io('http://localhost:1338');
+        done();
+      });
+    });
+
+    after(() => {
+      longExpiringServer.close();
+    });
+
+    it('should not be logout after reauthenticate', done => {
+      const data = {
+        strategy: 'local',
+        email: 'admin@feathersjs.com',
+        password: 'admin'
+      };
+
+      // token expires in 10 secs
+      longExpiringSocket.emit('authenticate', data, (error, response) => {
+        expect(error).to.not.be.ok;
+        expect(response).to.be.ok;
+
+        // reauth at 5 secs
+        setTimeout(function () {
+          longExpiringSocket.emit('authenticate', response, (error, response) => {
+            expect(error).to.not.be.ok;
+            expect(response).to.be.ok;
+          });
+        }, 5 * 1000);
+
+        // check if token expiry exceeds 10 secs
+        setTimeout(function () {
+          longExpiringSocket.emit('users::find', {}, (error, response) => {
+            expect(error).to.not.be.ok;
+            expect(response).to.be.ok;
+            done();
+          });
+        }, 14 * 1000);
+      });
+    });
+  });
+
   describe('when calling a protected service method', () => {
     describe('when not authenticated', () => {
       it('returns NotAuthenticated error', done => {
-        socket.send('users::find', {}, error => {
+        socket.emit('users::find', {}, error => {
           expect(error.code).to.equal(401);
           done();
         });
@@ -280,12 +403,12 @@ describe('Primus authentication', function () {
           password: 'admin'
         };
 
-        expiringSocket.send('authenticate', data, (error, response) => {
+        expiringSocket.emit('authenticate', data, (error, response) => {
           expect(error).to.not.be.ok;
           expect(response).to.be.ok;
           // Wait for the accessToken to expire
           setTimeout(function () {
-            expiringSocket.send('users::find', {}, (error, response) => {
+            expiringSocket.emit('users::find', {}, (error, response) => {
               expect(error.code).to.equal(401);
               done();
             });
@@ -301,10 +424,10 @@ describe('Primus authentication', function () {
           accessToken
         };
 
-        socket.send('authenticate', data, (error, response) => {
+        socket.emit('authenticate', data, (error, response) => {
           expect(error).to.not.be.ok;
           expect(response).to.be.ok;
-          socket.send('users::find', {}, (error, response) => {
+          socket.emit('users::find', {}, (error, response) => {
             expect(error).to.not.be.ok;
             expect(response.length).to.equal(1);
             expect(response[0].id).to.equal(0);
@@ -318,7 +441,7 @@ describe('Primus authentication', function () {
   describe('when calling an un-protected service method', () => {
     describe('when not authenticated', () => {
       it('returns data', done => {
-        socket.send('users::get', 0, (error, response) => {
+        socket.emit('users::get', 0, (error, response) => {
           expect(error).to.not.be.ok;
           expect(response.id).to.equal(0);
           done();
@@ -334,12 +457,12 @@ describe('Primus authentication', function () {
           password: 'admin'
         };
 
-        expiringSocket.send('authenticate', data, (error, response) => {
+        expiringSocket.emit('authenticate', data, (error, response) => {
           expect(error).to.not.be.ok;
           expect(response).to.be.ok;
           // Wait for the accessToken to expire
           setTimeout(function () {
-            socket.send('users::get', 0, (error, response) => {
+            socket.emit('users::get', 0, (error, response) => {
               expect(error).to.not.be.ok;
               expect(response.id).to.equal(0);
               done();
@@ -356,11 +479,11 @@ describe('Primus authentication', function () {
           accessToken
         };
 
-        socket.send('authenticate', data, (error, response) => {
-          expect(error).to.not.be.ok;
+        socket.emit('authenticate', data, (error, response) => {
+          expect(error).to.not.equal(undefined);
           expect(response).to.be.ok;
-          socket.send('users::get', 0, (error, response) => {
-            expect(error).to.not.be.ok;
+          socket.emit('users::get', 0, (error, response) => {
+            expect(error).to.not.equal(undefined);
             expect(response.id).to.equal(0);
             done();
           });
@@ -382,8 +505,8 @@ describe('Primus authentication', function () {
 
     describe('authentication succeeds', () => {
       it('redirects', done => {
-        socket.send('authenticate', data, (error, response) => {
-          expect(error).to.not.be.ok;
+        socket.emit('authenticate', data, (error, response) => {
+          expect(error).to.not.equal(undefined);
           expect(response.redirect).to.equal(true);
           expect(response.url).to.be.ok;
           done();
@@ -394,8 +517,8 @@ describe('Primus authentication', function () {
     describe('authentication fails', () => {
       it('redirects', done => {
         delete data.password;
-        socket.send('authenticate', data, (error, response) => {
-          expect(error).to.not.be.ok;
+        socket.emit('authenticate', data, (error, response) => {
+          expect(error).to.not.equal(undefined);
           expect(response.redirect).to.equal(true);
           expect(response.url).to.be.ok;
           done();
@@ -418,13 +541,13 @@ describe('Primus authentication', function () {
     describe('when authentication succeeds', () => {
       it('emits login event', done => {
         app.once('login', function (auth, info) {
-          expect(info.provider).to.equal('primus');
+          expect(info.provider).to.equal('socketio');
           expect(info.socket).to.exist;
           expect(info.connection).to.exist;
           done();
         });
 
-        socket.send('authenticate', data);
+        socket.emit('authenticate', data);
       });
     });
 
@@ -434,7 +557,7 @@ describe('Primus authentication', function () {
         const handler = sinon.spy();
         app.once('login', handler);
 
-        socket.send('authenticate', data, error => {
+        socket.emit('authenticate', data, error => {
           expect(error.code).to.equal(401);
 
           setTimeout(function () {
@@ -448,16 +571,16 @@ describe('Primus authentication', function () {
     describe('when logout succeeds', () => {
       it('emits logout event', done => {
         app.once('logout', function (auth, info) {
-          expect(info.provider).to.equal('primus');
+          expect(info.provider).to.equal('socketio');
           expect(info.socket).to.exist;
           expect(info.connection).to.exist;
           done();
         });
 
-        socket.send('authenticate', data, (error, response) => {
-          expect(error).to.not.be.ok;
+        socket.emit('authenticate', data, (error, response) => {
+          expect(error).to.not.equal(undefined);
           expect(response).to.be.ok;
-          socket.send('logout', data);
+          socket.emit('logout', data);
         });
       });
     });

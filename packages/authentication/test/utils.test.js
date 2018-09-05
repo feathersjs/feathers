@@ -1,11 +1,10 @@
+const assert = require('assert');
 const jwt = require('jsonwebtoken');
-const chai = require('chai');
-const chaiUuid = require('chai-uuid');
+const { omit } = require('lodash');
+
 const { createJWT, verifyJWT } = require('../lib/utils');
 const getOptions = require('../lib/options');
-const { expect } = require('chai');
-
-chai.use(chaiUuid);
+const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/;
 
 describe('utils', () => {
   let options;
@@ -20,50 +19,6 @@ describe('utils', () => {
   });
 
   describe('createJWT', () => {
-    describe('when secret is undefined', () => {
-      it('returns an error', () => {
-        return createJWT().catch(error => {
-          expect(error).to.not.equal(undefined);
-        });
-      });
-    });
-
-    describe('when using default options', () => {
-      let token;
-      let decoded;
-
-      beforeEach(() => {
-        return createJWT(payload, options).then(t => {
-          token = t;
-          decoded = jwt.decode(token);
-        });
-      });
-
-      it('returns a JWT', () => {
-        expect(token).not.equal(undefined);
-      });
-
-      it('encodes the payload', () => {
-        expect(decoded.id).to.deep.equal(payload.id);
-      });
-
-      it('has the correct audience', () => {
-        expect(decoded.aud).to.equal(options.jwt.audience);
-      });
-
-      it('has the correct subject', () => {
-        expect(decoded.sub).to.equal(options.jwt.subject);
-      });
-
-      it('has the correct issuer', () => {
-        expect(decoded.iss).to.equal(options.jwt.issuer);
-      });
-
-      it('has a uuidv4 jwtid', () => {
-        expect(decoded.jti).to.be.a.uuid('v4');
-      });
-    });
-
     it('does not error if payload has jti property', () => {
       return createJWT({
         id: 1,
@@ -71,21 +26,48 @@ describe('utils', () => {
       }, options).then(t => {
         const decoded = jwt.decode(t);
 
-        expect(decoded.jti).to.equal('test');
+        assert.equal(decoded.jti, 'test');
       });
     });
 
-    describe('when passing custom options', () => {
+    describe('using default options', () => {
       let token;
       let decoded;
 
       beforeEach(() => {
-        options.jwt.subject = 'refresh';
-        options.jwt.issuer = 'custom';
-        options.jwt.audience = 'org';
-        options.jwt.expiresIn = '1y'; // expires in 1 year
-        options.jwt.notBefore = '1h'; // token is valid 1 hour from now
-        options.jwt.jwtid = '1234';
+        return createJWT(payload, options).then(t => {
+          token = t;
+          decoded = jwt.decode(token);
+        });
+      });
+
+      it('returns a JWT', () => {
+        assert.ok(token);
+      });
+
+      it('decodes the token', () => {
+        assert.equal(decoded.id, payload.id);
+        assert.equal(decoded.aud, options.jwt.audience);
+        assert.equal(decoded.sub, options.jwt.subject);
+        assert.equal(decoded.iss, options.jwt.issuer);
+        assert.ok(decoded.jti);
+        assert.ok(UUID.test(decoded.jti));
+      });
+    });
+
+    describe('passing custom options', () => {
+      let token;
+      let decoded;
+
+      beforeEach(() => {
+        Object.assign(options.jwt, {
+          subject: 'refresh',
+          issuer: 'custom',
+          audience: 'org',
+          expiresIn: '1y', // expires in 1 year
+          notBefore: '1h', // token is valid 1 hour from now
+          jwtid: '1234'
+        });
 
         return createJWT(payload, options).then(t => {
           token = t;
@@ -94,27 +76,31 @@ describe('utils', () => {
       });
 
       it('returns a JWT', () => {
-        expect(token).not.equal(undefined);
+        assert.ok(token);
       });
 
-      it('encodes the payload', () => {
-        expect(decoded.id).to.deep.equal(payload.id);
+      it('decoded the token', () => {
+        assert.equal(decoded.id, payload.id);
+        assert.equal(decoded.aud, 'org');
+        assert.equal(decoded.sub, 'refresh');
+        assert.equal(decoded.iss, 'custom');
+        assert.equal(decoded.jti, '1234');
+      });
+    });
+
+    describe('errors', () => {
+      it('returns an error when secret is undefined', () => {
+        return createJWT().catch(error => assert.ok(error));
       });
 
-      it('has the correct audience', () => {
-        expect(decoded.aud).to.equal('org');
-      });
+      it('errors with invalid settings', () => {
+        options.jwt.algorithm = 'jkflsd';
 
-      it('has the correct subject', () => {
-        expect(decoded.sub).to.equal('refresh');
-      });
-
-      it('has the correct issuer', () => {
-        expect(decoded.iss).to.equal('custom');
-      });
-
-      it('has the correct jwtid', () => {
-        expect(decoded.jti).to.equal('1234');
+        return createJWT(payload, options)
+          .then(() => assert.fail('Should never get here'))
+          .catch(error => {
+            assert.equal(error.message, '"algorithm" must be a valid string enum value');
+          });
       });
     });
   });
@@ -134,84 +120,79 @@ describe('utils', () => {
       });
     });
 
-    describe('when secret is undefined', () => {
-      it('returns an error', () => {
-        return verifyJWT().catch(error => {
-          expect(error).to.not.equal(undefined);
-        });
-      });
+    it('returns an error when secret is undefined', () => {
+      return verifyJWT().then(() => assert.fail('Should never get here'))
+        .catch(error => assert.equal(error.message, 'Token must be provided'));
     });
 
     describe('when using default options', () => {
-      describe('when token is valid', () => {
-        it('returns payload', () => {
-          return verifyJWT(validToken, options).then(payload => {
-            expect(payload.id).to.equal(1);
-          });
+      it('returns payload when token is valid', () => {
+        return verifyJWT(validToken, options).then(payload => {
+          assert.equal(payload.id, 1);
         });
       });
 
-      describe('when token is expired', () => {
-        it('returns an error', () => {
-          return verifyJWT(expiredToken, options).catch(error => {
-            expect(error).to.not.equal(undefined);
+      it('errors when no secret is provided', () => {
+        return verifyJWT(expiredToken, omit(options, 'secret'))
+          .then(() => assert.fail('Should never get here'))
+          .catch(error => {
+            assert.equal(error.message, 'Secret must be provided');
           });
-        });
       });
 
-      describe('when token is invalid', () => {
-        it('returns payload', () => {
-          return verifyJWT('invalid', options).catch(error => {
-            expect(error).to.not.equal(undefined);
+      it('errors when token is expired', () => {
+        return verifyJWT(expiredToken, options)
+          .then(() => assert.fail('Should never get here'))
+          .catch(error => {
+            assert.equal(error.message, 'jwt expired');
           });
-        });
+      });
+
+      it('errors when token is invalid', () => {
+        return verifyJWT('invalid', options)
+          .then(() => assert.fail('Should never get here'))
+          .catch(error => {
+            assert.equal(error.message, 'jwt malformed');
+          });
       });
     });
 
     describe('when using custom options', () => {
-      describe('when secret does not match', () => {
-        it('returns an error', () => {
-          options.secret = 'invalid';
-          return verifyJWT(validToken, options).catch(error => {
-            expect(error).to.not.equal(undefined);
+      it('returns an error when secret does not match', () => {
+        options.secret = 'invalid';
+        return verifyJWT(validToken, options)
+          .then(() => assert.fail('Should never get here'))
+          .catch(error => {
+            assert.equal(error.message, 'invalid signature');
           });
-        });
       });
 
-      describe('when audience does not match', () => {
-        it('returns an error', () => {
-          options.jwt.audience = 'invalid';
-          return verifyJWT(validToken, options).catch(error => {
-            expect(error).to.not.equal(undefined);
+      it('returns an error', () => {
+        options.jwt.audience = 'invalid';
+        return verifyJWT(validToken, options)
+          .then(() => assert.fail('Should never get here'))
+          .catch(error => {
+            assert.equal(error.message, 'jwt audience invalid. expected: invalid');
           });
-        });
       });
 
-      describe('when subject does not match', () => {
-        it('returns an error', () => {
-          options.jwt.subject = 'invalid';
-          return verifyJWT(validToken, options).catch(error => {
-            expect(error).to.not.equal(undefined);
+      it('returns an error when issuer does not match', () => {
+        options.jwt.issuer = 'invalid';
+        return verifyJWT(validToken, options)
+          .then(() => assert.fail('Should never get here'))
+          .catch(error => {
+            assert.equal(error.message, 'jwt issuer invalid. expected: invalid');
           });
-        });
       });
 
-      describe('when issuer does not match', () => {
-        it('returns an error', () => {
-          options.jwt.issuer = 'invalid';
-          return verifyJWT(validToken, options).catch(error => {
-            expect(error).to.not.equal(undefined);
+      it('returns an error when algorithm does not match', () => {
+        delete options.jwt.algorithm;
+        options.jwt.algorithms = [ 'HS512' ];
+        return verifyJWT(validToken, options)
+          .then(() => assert.fail('Should never get here'))
+          .catch(error => {
+            assert.equal(error.message, 'invalid algorithm');
           });
-        });
-      });
-
-      describe('when algorithm does not match', () => {
-        it('returns an error', () => {
-          options.jwt.algorithm = 'HS512';
-          return verifyJWT(validToken, options).catch(error => {
-            expect(error).to.not.equal(undefined);
-          });
-        });
       });
     });
   });

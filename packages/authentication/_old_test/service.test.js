@@ -3,11 +3,9 @@ const feathers = require('@feathersjs/feathers');
 const expressify = require('@feathersjs/express');
 const authentication = require('../lib');
 const chai = require('chai');
-const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 
 const { expect } = chai;
-const { express } = authentication;
 
 chai.use(sinonChai);
 
@@ -15,25 +13,13 @@ describe('/authentication service', () => {
   let app;
 
   beforeEach(() => {
-    sinon.spy(express, 'emitEvents');
-    sinon.spy(express, 'setCookie');
-    sinon.spy(express, 'successRedirect');
-    sinon.spy(express, 'failureRedirect');
-
     app = expressify(feathers())
       .configure(authentication({ secret: 'supersecret' }));
   });
 
-  afterEach(() => {
-    express.emitEvents.restore();
-    express.setCookie.restore();
-    express.successRedirect.restore();
-    express.failureRedirect.restore();
-  });
-
   it('throws an error when path option is missing', () => {
     expect(() => {
-      express(feathers()).configure(authentication({
+      expressify(feathers()).configure(authentication({
         secret: 'dummy',
         path: null
       }));
@@ -50,22 +36,6 @@ describe('/authentication service', () => {
 
   it('keeps a reference to passport', () => {
     expect(app.service('authentication').passport).to.not.equal(undefined);
-  });
-
-  it('registers the emitEvents express middleware', () => {
-    expect(express.emitEvents).to.have.been.calledOnce;
-  });
-
-  it('registers the setCookie express middleware', () => {
-    expect(express.setCookie).to.have.been.calledOnce;
-  });
-
-  it('registers the successRedirect express middleware', () => {
-    expect(express.successRedirect).to.have.been.calledOnce;
-  });
-
-  it('registers the failureRedirect express middleware', () => {
-    expect(express.failureRedirect).to.have.been.calledOnce;
   });
 
   describe('create', () => {

@@ -1,23 +1,21 @@
 /* eslint-disable no-unused-expressions */
-const merge = require('lodash.merge');
-const io = require('socket.io-client');
+const { merge, clone } = require('lodash');
 const createApplication = require('../fixtures/server');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const clone = require('lodash.clone');
 const { expect } = chai;
 
 chai.use(sinonChai);
 
-describe('Socket.io authentication', function () {
-  const port = 8997;
+describe.skip('Primus authentication', function () {
+  const port = 8998;
   const baseURL = `http://localhost:${port}`;
-  const app = createApplication({ secret: 'supersecret' }, 'socketio');
+  const app = createApplication({ secret: 'supersecret' }, 'primus');
   const expiringApp = createApplication({
     secret: 'supersecret',
     jwt: { expiresIn: '500ms' }
-  }, 'socketio');
+  }, 'primus');
   const hook = sinon.spy(function (hook) {});
   app.service('authentication').hooks({
     before: {
@@ -27,7 +25,9 @@ describe('Socket.io authentication', function () {
 
   let server;
   let socket;
+  let Socket;
   let serverSocket;
+  let ExpiringSocket;
   let expiringServer;
   let expiringSocket;
   let expiredToken;
@@ -42,20 +42,25 @@ describe('Socket.io authentication', function () {
       })
       .then(token => {
         accessToken = token;
-        expiringServer = expiringApp.listen(1336);
+        expiringServer = expiringApp.listen(1337);
         expiringServer.once('listening', () => {
+          ExpiringSocket = expiringApp.primus.Socket;
           server = app.listen(port);
           server.once('listening', () => {
-            app.io.on('connect', s => { serverSocket = s; });
+            Socket = app.primus.Socket;
+            app.primus.on('connection', s => { serverSocket = s; });
             done();
           });
         });
       });
   });
 
-  beforeEach(() => {
-    expiringSocket = io('http://localhost:1336');
-    socket = io(baseURL);
+  beforeEach(done => {
+    expiringSocket = new ExpiringSocket('http://localhost:1337');
+    expiringSocket.on('open', () => {
+      socket = new Socket(baseURL);
+      socket.on('open', () => done());
+    });
   });
 
   afterEach(() => {
@@ -85,8 +90,8 @@ describe('Socket.io authentication', function () {
             done(new Error('real-time events for authentication should not be emitted'))
           );
 
-          socket.emit('authenticate', data, (error, response) => {
-            expect(error).to.not.equal(undefined);
+          socket.send('authenticate', data, (error, response) => {
+            expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
             app.passport.verifyJWT(response.accessToken, app.get('authentication')).then(payload => {
               expect(payload).to.exist;
@@ -99,32 +104,21 @@ describe('Socket.io authentication', function () {
         });
 
         it('sets the user on the socket', done => {
-          socket.emit('authenticate', data, (error, response) => {
-            expect(error).to.not.equal(undefined);
+          socket.send('authenticate', data, (error, response) => {
+            expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
-            expect(serverSocket.feathers.user).to.not.equal(undefined);
-            done();
-          });
-        });
-
-        it('does never publish events from the authentication service', done => {
-          socket.once('authentication created', () => done(new Error('Should not get here')));
-
-          socket.emit('authenticate', data, (error, response) => {
-            expect(error).to.not.equal(undefined);
-            expect(response.accessToken).to.exist;
-            expect(serverSocket.feathers.user).to.not.equal(undefined);
+            expect(serverSocket.request.feathers.user).to.not.equal(undefined);
             done();
           });
         });
 
         it('updates the user on the socket', done => {
-          socket.emit('authenticate', data, (error, response) => {
-            expect(error).to.not.equal(undefined);
+          socket.send('authenticate', data, (error, response) => {
+            expect(error).to.not.be.ok;
             // Clone the socket user and replace it with the clone so that feathers-memory
             // doesn't have a reference to the same object.
-            const socketUser = clone(serverSocket.feathers.user);
-            serverSocket.feathers.user = socketUser;
+            const socketUser = clone(serverSocket.request.feathers.user);
+            serverSocket.request.feathers.user = socketUser;
 
             const email = 'test@feathersjs.com';
             const oldEmail = socketUser.email;
@@ -143,10 +137,10 @@ describe('Socket.io authentication', function () {
 
         it('sets entity specified in strategy', done => {
           data.strategy = 'org-local';
-          socket.emit('authenticate', data, (error, response) => {
+          socket.send('authenticate', data, (error, response) => {
             expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
-            expect(serverSocket.feathers.org).to.not.equal(undefined);
+            expect(serverSocket.request.feathers.org).to.not.equal(undefined);
             done();
           });
         });
@@ -155,30 +149,7 @@ describe('Socket.io authentication', function () {
       describe('when using invalid credentials', () => {
         it('returns NotAuthenticated error', done => {
           data.password = 'invalid';
-          socket.emit('authenticate', data, error => {
-            expect(error.code).to.equal(401);
-            done();
-          });
-        });
-
-        it('returns NotAuthenticated error when strategy is invalid', done => {
-          delete data.strategy;
-
-          socket.emit('authenticate', data, error => {
-            expect(error.code).to.equal(401);
-            done();
-          });
-        });
-
-        it('returns NotAuthenticated error when data is not an object', done => {
-          socket.emit('authenticate', undefined, error => {
-            expect(error.code).to.equal(401);
-            done();
-          });
-        });
-
-        it('returns NotAuthenticated error when data is not passed', done => {
-          socket.emit('authenticate', error => {
+          socket.send('authenticate', data, error => {
             expect(error.code).to.equal(401);
             done();
           });
@@ -187,7 +158,7 @@ describe('Socket.io authentication', function () {
 
       describe('when missing credentials', () => {
         it('returns BadRequest error', done => {
-          socket.emit('authenticate', { strategy: 'local' }, error => {
+          socket.send('authenticate', { strategy: 'local' }, error => {
             expect(error.code).to.equal(400);
             done();
           });
@@ -197,7 +168,7 @@ describe('Socket.io authentication', function () {
       describe('when missing strategy and server strategy does not match', () => {
         it('returns NotAuthenticated error', done => {
           delete data.strategy;
-          socket.emit('authenticate', data, error => {
+          socket.send('authenticate', data, error => {
             expect(error.code).to.equal(401);
             done();
           });
@@ -217,7 +188,7 @@ describe('Socket.io authentication', function () {
 
       describe('when using a valid access token', () => {
         it('returns a valid access token', done => {
-          socket.emit('authenticate', data, (error, response) => {
+          socket.send('authenticate', data, (error, response) => {
             expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
             app.passport.verifyJWT(response.accessToken, app.get('authentication')).then(payload => {
@@ -234,7 +205,7 @@ describe('Socket.io authentication', function () {
         it('returns a valid access token', done => {
           delete data.accessToken;
           data.refreshToken = 'refresh';
-          socket.emit('authenticate', data, (error, response) => {
+          socket.send('authenticate', data, (error, response) => {
             expect(error).to.not.be.ok;
             expect(response.accessToken).to.exist;
             app.passport.verifyJWT(response.accessToken, app.get('authentication')).then(payload => {
@@ -250,7 +221,7 @@ describe('Socket.io authentication', function () {
       describe('when access token is invalid', () => {
         it('returns NotAuthenticated error', done => {
           data.accessToken = 'invalid';
-          socket.emit('authenticate', data, error => {
+          socket.send('authenticate', data, error => {
             expect(error.code).to.equal(401);
             done();
           });
@@ -260,7 +231,7 @@ describe('Socket.io authentication', function () {
       describe('when access token is missing', () => {
         it('returns NotAuthenticated error', done => {
           delete data.accessToken;
-          socket.emit('authenticate', data, error => {
+          socket.send('authenticate', data, error => {
             expect(error.code).to.equal(401);
             done();
           });
@@ -270,7 +241,7 @@ describe('Socket.io authentication', function () {
       describe('when access token is expired', () => {
         it('returns NotAuthenticated error', done => {
           data.accessToken = expiredToken;
-          socket.emit('authenticate', data, error => {
+          socket.send('authenticate', data, error => {
             expect(error.code).to.equal(401);
             done();
           });
@@ -280,7 +251,7 @@ describe('Socket.io authentication', function () {
       describe('when missing strategy it uses the auth strategy specified on the server', () => {
         it('returns an accessToken', done => {
           delete data.strategy;
-          socket.emit('authenticate', data, (error, response) => {
+          socket.send('authenticate', data, (error, response) => {
             expect(error).to.equal(null);
             expect(response.accessToken).to.not.equal(undefined);
             done();
@@ -290,106 +261,10 @@ describe('Socket.io authentication', function () {
     });
   });
 
-  describe('when expiry time is very long', () => {
-    const longExpiringApp = createApplication({
-      secret: 'supersecret',
-      jwt: { expiresIn: '1y' }
-    }, 'socketio');
-
-    let longExpiringServer;
-    let longExpiringSocket;
-
-    before(done => {
-      longExpiringServer = longExpiringApp.listen(1338);
-      longExpiringServer.once('listening', () => {
-        longExpiringSocket = io('http://localhost:1338');
-        done();
-      });
-    });
-
-    after(() => {
-      longExpiringServer.close();
-    });
-
-    it('should not immediately logout', done => {
-      const data = {
-        strategy: 'local',
-        email: 'admin@feathersjs.com',
-        password: 'admin'
-      };
-
-      longExpiringSocket.emit('authenticate', data, (error, response) => {
-        expect(error).to.not.be.ok;
-        expect(response).to.be.ok;
-        // Wait for a little bit
-        setTimeout(function () {
-          longExpiringSocket.emit('users::find', {}, (error, response) => {
-            expect(error).to.not.be.ok;
-            expect(response).to.be.ok;
-            done();
-          });
-        }, 100);
-      });
-    });
-  });
-
-  describe('reauthenticating extends jwt expiry', () => {
-    const longExpiringApp = createApplication({
-      secret: 'supersecret',
-      jwt: { expiresIn: '10s' }
-    }, 'socketio');
-
-    let longExpiringServer;
-    let longExpiringSocket;
-
-    before(done => {
-      longExpiringServer = longExpiringApp.listen(1338);
-      longExpiringServer.once('listening', () => {
-        longExpiringSocket = io('http://localhost:1338');
-        done();
-      });
-    });
-
-    after(() => {
-      longExpiringServer.close();
-    });
-
-    it('should not be logout after reauthenticate', done => {
-      const data = {
-        strategy: 'local',
-        email: 'admin@feathersjs.com',
-        password: 'admin'
-      };
-
-      // token expires in 10 secs
-      longExpiringSocket.emit('authenticate', data, (error, response) => {
-        expect(error).to.not.be.ok;
-        expect(response).to.be.ok;
-
-        // reauth at 5 secs
-        setTimeout(function () {
-          longExpiringSocket.emit('authenticate', response, (error, response) => {
-            expect(error).to.not.be.ok;
-            expect(response).to.be.ok;
-          });
-        }, 5 * 1000);
-
-        // check if token expiry exceeds 10 secs
-        setTimeout(function () {
-          longExpiringSocket.emit('users::find', {}, (error, response) => {
-            expect(error).to.not.be.ok;
-            expect(response).to.be.ok;
-            done();
-          });
-        }, 14 * 1000);
-      });
-    });
-  });
-
   describe('when calling a protected service method', () => {
     describe('when not authenticated', () => {
       it('returns NotAuthenticated error', done => {
-        socket.emit('users::find', {}, error => {
+        socket.send('users::find', {}, error => {
           expect(error.code).to.equal(401);
           done();
         });
@@ -404,12 +279,12 @@ describe('Socket.io authentication', function () {
           password: 'admin'
         };
 
-        expiringSocket.emit('authenticate', data, (error, response) => {
+        expiringSocket.send('authenticate', data, (error, response) => {
           expect(error).to.not.be.ok;
           expect(response).to.be.ok;
           // Wait for the accessToken to expire
           setTimeout(function () {
-            expiringSocket.emit('users::find', {}, (error, response) => {
+            expiringSocket.send('users::find', {}, (error, response) => {
               expect(error.code).to.equal(401);
               done();
             });
@@ -425,10 +300,10 @@ describe('Socket.io authentication', function () {
           accessToken
         };
 
-        socket.emit('authenticate', data, (error, response) => {
+        socket.send('authenticate', data, (error, response) => {
           expect(error).to.not.be.ok;
           expect(response).to.be.ok;
-          socket.emit('users::find', {}, (error, response) => {
+          socket.send('users::find', {}, (error, response) => {
             expect(error).to.not.be.ok;
             expect(response.length).to.equal(1);
             expect(response[0].id).to.equal(0);
@@ -442,7 +317,7 @@ describe('Socket.io authentication', function () {
   describe('when calling an un-protected service method', () => {
     describe('when not authenticated', () => {
       it('returns data', done => {
-        socket.emit('users::get', 0, (error, response) => {
+        socket.send('users::get', 0, (error, response) => {
           expect(error).to.not.be.ok;
           expect(response.id).to.equal(0);
           done();
@@ -458,12 +333,12 @@ describe('Socket.io authentication', function () {
           password: 'admin'
         };
 
-        expiringSocket.emit('authenticate', data, (error, response) => {
+        expiringSocket.send('authenticate', data, (error, response) => {
           expect(error).to.not.be.ok;
           expect(response).to.be.ok;
           // Wait for the accessToken to expire
           setTimeout(function () {
-            socket.emit('users::get', 0, (error, response) => {
+            socket.send('users::get', 0, (error, response) => {
               expect(error).to.not.be.ok;
               expect(response.id).to.equal(0);
               done();
@@ -480,11 +355,11 @@ describe('Socket.io authentication', function () {
           accessToken
         };
 
-        socket.emit('authenticate', data, (error, response) => {
-          expect(error).to.not.equal(undefined);
+        socket.send('authenticate', data, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response).to.be.ok;
-          socket.emit('users::get', 0, (error, response) => {
-            expect(error).to.not.equal(undefined);
+          socket.send('users::get', 0, (error, response) => {
+            expect(error).to.not.be.ok;
             expect(response.id).to.equal(0);
             done();
           });
@@ -506,8 +381,8 @@ describe('Socket.io authentication', function () {
 
     describe('authentication succeeds', () => {
       it('redirects', done => {
-        socket.emit('authenticate', data, (error, response) => {
-          expect(error).to.not.equal(undefined);
+        socket.send('authenticate', data, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response.redirect).to.equal(true);
           expect(response.url).to.be.ok;
           done();
@@ -518,8 +393,8 @@ describe('Socket.io authentication', function () {
     describe('authentication fails', () => {
       it('redirects', done => {
         delete data.password;
-        socket.emit('authenticate', data, (error, response) => {
-          expect(error).to.not.equal(undefined);
+        socket.send('authenticate', data, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response.redirect).to.equal(true);
           expect(response.url).to.be.ok;
           done();
@@ -542,13 +417,13 @@ describe('Socket.io authentication', function () {
     describe('when authentication succeeds', () => {
       it('emits login event', done => {
         app.once('login', function (auth, info) {
-          expect(info.provider).to.equal('socketio');
+          expect(info.provider).to.equal('primus');
           expect(info.socket).to.exist;
           expect(info.connection).to.exist;
           done();
         });
 
-        socket.emit('authenticate', data);
+        socket.send('authenticate', data);
       });
     });
 
@@ -558,7 +433,7 @@ describe('Socket.io authentication', function () {
         const handler = sinon.spy();
         app.once('login', handler);
 
-        socket.emit('authenticate', data, error => {
+        socket.send('authenticate', data, error => {
           expect(error.code).to.equal(401);
 
           setTimeout(function () {
@@ -572,16 +447,16 @@ describe('Socket.io authentication', function () {
     describe('when logout succeeds', () => {
       it('emits logout event', done => {
         app.once('logout', function (auth, info) {
-          expect(info.provider).to.equal('socketio');
+          expect(info.provider).to.equal('primus');
           expect(info.socket).to.exist;
           expect(info.connection).to.exist;
           done();
         });
 
-        socket.emit('authenticate', data, (error, response) => {
-          expect(error).to.not.equal(undefined);
+        socket.send('authenticate', data, (error, response) => {
+          expect(error).to.not.be.ok;
           expect(response).to.be.ok;
-          socket.emit('logout', data);
+          socket.send('logout', data);
         });
       });
     });

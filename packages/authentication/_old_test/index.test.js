@@ -10,7 +10,6 @@ const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const { expect } = chai;
-const { express } = authentication;
 
 chai.use(sinonChai);
 
@@ -37,10 +36,6 @@ describe('Feathers Authentication', () => {
 
   it('exposes hooks', () => {
     expect(typeof authentication.hooks).to.equal('object');
-  });
-
-  it('exposes express middleware', () => {
-    expect(typeof authentication.express).to.equal('object');
   });
 
   it('exposes the auth service', () => {
@@ -111,13 +106,6 @@ describe('Feathers Authentication', () => {
     expect(typeof app.authenticate).to.equal('function');
   });
 
-  it('registers the exposeHeaders express middleware', () => {
-    sinon.spy(express, 'exposeHeaders');
-    app.configure(authentication(config));
-    expect(express.exposeHeaders).to.have.been.calledOnce;
-    express.exposeHeaders.restore();
-  });
-
   it('initializes passport', () => {
     sinon.spy(passport, 'initialize');
     app.configure(authentication(config));
@@ -128,16 +116,6 @@ describe('Feathers Authentication', () => {
   it('registers the authentication service', () => {
     app.configure(authentication(config));
     expect(app.service('authentication')).to.not.equal(undefined);
-  });
-
-  describe('when cookies are enabled', () => {
-    it('registers the express exposeCookies middleware', () => {
-      config = Object.assign(config, { cookie: { enabled: true } });
-      sinon.spy(express, 'exposeCookies');
-      app.configure(authentication(config));
-      expect(express.exposeCookies).to.have.been.calledOnce;
-      express.exposeCookies.restore();
-    });
   });
 
   describe('when socketio is configured', () => {

@@ -86,17 +86,9 @@ module.exports = function (settings, socketProvider) {
   // Create a user that we can use to log in
   app.service('users').create(User).catch(console.error);
 
-  // Custom Express routes
-  app.get('/protected', auth.express.authenticate('jwt'), (req, res, next) => {
-    res.json({ success: true });
-  });
-
   app.get('/unprotected', (req, res, next) => {
     res.json({ success: true });
   });
-
-  // Custom route with custom redirects
-  app.post('/login', auth.express.authenticate('local', { successRedirect: '/app', failureRedirect: '/login' }));
 
   app.get('/app', (req, res, next) => {
     res.json({ success: true });

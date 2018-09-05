@@ -1,6 +1,6 @@
 const errors = require('@feathersjs/errors');
 const Debug = require('debug');
-const merge = require('lodash.merge');
+const { merge } = require('lodash');
 const { NotAuthenticated } = require('@feathersjs/errors');
 const debug = Debug('@feathersjs/authentication:hooks:authenticate');
 
@@ -11,21 +11,21 @@ module.exports = function authenticate (_strategies, options = {}) {
 
   const strategies = Array.isArray(_strategies) ? _strategies : [ _strategies ];
 
-  return function (hook) {
-    const app = hook.app;
+  return function (context) {
+    const app = context.app;
 
     // If called internally or we are already authenticated skip
-    if (!hook.params.provider || hook.params.authenticated) {
-      return Promise.resolve(hook);
+    if (!context.params.provider || context.params.authenticated) {
+      return Promise.resolve(context);
     }
 
-    if (hook.type !== 'before') {
+    if (context.type !== 'before') {
       return Promise.reject(new Error(`The 'authenticate' hook should only be used as a 'before' hook.`));
     }
 
-    hook.data = hook.data || {};
+    context.data = context.data || {};
 
-    const strategy = hook.data.strategy || strategies[0];
+    const strategy = context.data.strategy || strategies[0];
 
     if (strategies.indexOf(strategy) === -1) {
       return Promise.reject(new NotAuthenticated(`Strategy ${strategy} is not permitted`));
@@ -44,11 +44,11 @@ module.exports = function authenticate (_strategies, options = {}) {
     // NOTE (EK): Passport expects an express/connect
     // like request object. So we need to create one.
     let request = {
-      query: hook.data,
-      body: hook.data,
-      params: hook.params,
-      headers: hook.params.headers || {},
-      cookies: hook.params.cookies || {},
+      query: context.data,
+      body: context.data,
+      params: context.params,
+      headers: context.params.headers || {},
+      cookies: context.params.cookies || {},
       session: {}
     };
 
@@ -63,7 +63,7 @@ module.exports = function authenticate (_strategies, options = {}) {
         if (strategyOptions.failureRedirect) {
           // TODO (EK): Bypass the service?
           // hook.result = true
-          Object.defineProperty(hook.data, '__redirect', { value: { status: 302, url: strategyOptions.failureRedirect } });
+          Object.defineProperty(context.data, '__redirect', { value: { status: 302, url: strategyOptions.failureRedirect } });
         }
 
         const { challenge, status = 401 } = result;
@@ -77,23 +77,23 @@ module.exports = function authenticate (_strategies, options = {}) {
       }
 
       if (result.success || options.allowUnauthenticated === true) {
-        hook.params = Object.assign({ authenticated: result.success }, hook.params, result.data);
+        context.params = Object.assign({ authenticated: result.success }, context.params, result.data);
 
         // Add the user to the original request object so it's available in the socket handler
-        Object.assign(request.params, hook.params);
+        Object.assign(request.params, context.params);
 
         if (strategyOptions.successRedirect) {
           // TODO (EK): Bypass the service?
           // hook.result = true
-          Object.defineProperty(hook.data, '__redirect', { value: { status: 302, url: strategyOptions.successRedirect } });
+          Object.defineProperty(context.data, '__redirect', { value: { status: 302, url: strategyOptions.successRedirect } });
         }
       } else if (result.redirect) {
         // TODO (EK): Bypass the service?
         // hook.result = true
-        Object.defineProperty(hook.data, '__redirect', { value: { status: result.status, url: result.url } });
+        Object.defineProperty(context.data, '__redirect', { value: { status: result.status, url: result.url } });
       }
 
-      return Promise.resolve(hook);
+      return Promise.resolve(context);
     });
   };
 };
