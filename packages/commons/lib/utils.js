@@ -1,6 +1,6 @@
 // Removes all leading and trailing slashes from a path
 exports.stripSlashes = function stripSlashes (name) {
-  return name.replace(/^(\/*)|(\/*)$/g, '');
+  return name.replace(/^(\/+)|(\/+)$/g, '');
 };
 
 // A set of lodash-y utility functions that use ES6
