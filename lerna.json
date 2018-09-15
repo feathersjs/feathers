@@ -19,6 +19,9 @@
     "**/CHANGELOG.md",
     "**/package-lock.json",
     "**/yarn.lock",
-    "**/test/**"
+    "**/test/**",
+    "lerna.json",
+    "readme.md",
+    "package.json"
   ]
 }
