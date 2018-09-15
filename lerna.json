@@ -1,4 +1,5 @@
 {
+  "ci": false,
   "packages": [
     "packages/*"
   ],
