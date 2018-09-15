@@ -6,7 +6,7 @@ module.exports = function populateAccessToken () {
       return Promise.reject(new Error(`The 'populateAccessToken' hook should only be used as a 'before' hook.`));
     }
 
-    Object.assign(hook.params, { accessToken: app.get('accessToken') });
+    Object.assign(hook.params || {}, { accessToken: app.get('accessToken') });
 
     return Promise.resolve(hook);
   };
