@@ -8,9 +8,8 @@ const legacySockets = require('./socket');
 
 const debug = Debug('@feathersjs/authentication:index');
 
-function init (config = {}) {
-  return function authentication () {
-    const app = this;
+const init = (config = {}) => {
+  return app => {
     const _super = app.setup;
     // Merge and flatten options
     const options = getOptions(config);
@@ -32,10 +31,13 @@ function init (config = {}) {
     app.passport = passport;
     // Alias to passport for less keystrokes
     app.authenticate = passport.authenticate.bind(passport);
+    app.use(options.path, service(app, options));
 
-    // TODO (EK): Support passing your own service or force
-    // developer to register it themselves.
-    app.configure(service(options));
+    const authService = app.service(options.path);
+
+    authService.publish(() => false);
+    // TODO add service hooks
+
     app.passport.initialize();
 
     app.setup = function () {
@@ -56,7 +58,7 @@ function init (config = {}) {
       return result;
     };
   };
-}
+};
 
 module.exports = init;
 

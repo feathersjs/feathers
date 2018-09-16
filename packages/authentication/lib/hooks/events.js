@@ -8,7 +8,7 @@ module.exports = () => {
     const { method, app, result, params } = context;
     const event = EVENTS[method];
 
-    if (event) {
+    if (event && params.provider) {
       app.emit(event, result, params, context);
     }
 

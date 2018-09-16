@@ -1,10 +1,5 @@
 const makeDebug = require('debug');
 
-const {
-  createJWT,
-  verifyJWT
-} = require('../utils');
-
 const debug = makeDebug('@feathersjs/authentication:passport:initialize');
 
 module.exports = function initialize (options = {}) {
@@ -20,8 +15,6 @@ module.exports = function initialize (options = {}) {
 
     // Expose our JWT util functions globally
     passport._feathers = {};
-    passport.createJWT = createJWT;
-    passport.verifyJWT = verifyJWT;
     passport.options = function (name, strategyOptions) {
       if (!name) {
         return passport._feathers;
