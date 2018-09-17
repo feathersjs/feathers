@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@feathersjs/errors": "^3.3.2",
-    "debug": "^3.1.0",
+    "debug": "^4.0.0",
     "jwt-decode": "^2.1.0"
   },
   "devDependencies": {
