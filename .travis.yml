@@ -1,7 +1,7 @@
 sudo: false
 language: node_js
 install: npm install
-test: npm test && npm run test:generators
+script: npm run ci
 services: mongodb
 node_js:
   - node
