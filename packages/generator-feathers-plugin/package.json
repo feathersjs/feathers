@@ -23,7 +23,7 @@
     "url": "git://github.com/feathersjs/feathers.git"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha"
+    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
   },
   "dependencies": {
     "yeoman-generator": "^3.0.0"
