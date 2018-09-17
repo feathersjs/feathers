@@ -22,7 +22,7 @@
     "install": "lerna bootstrap",
     "lint": "semistandard packages/**/*.js --fix",
     "test": "npm run lint && nyc lerna run test --ignore generator-**",
-    "test:generators": "lerna run test --scope generator-**"
+    "test:generators": "lerna run test --scope generator-** --stream --concurrency 1"
   },
   "semistandard": {
     "env": [
