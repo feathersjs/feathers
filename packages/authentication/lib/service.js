@@ -4,7 +4,7 @@ const jsonwebtoken = require('jsonwebtoken');
 const { merge, get } = require('lodash');
 const { BadRequest } = require('@feathersjs/errors');
 
-const debug = require('debug')('@feathersjs/authentication:service');
+const debug = require('debug')('@feathersjs/authentication/service');
 
 const createJWT = promisify(jsonwebtoken.sign);
 const verifyJWT = promisify(jsonwebtoken.verify);
@@ -32,7 +32,7 @@ module.exports = class Service {
     const jwtOptions = merge({}, jwt, options);
     const { algorithm } = jwtOptions;
 
-    if (algorithm) {
+    if (algorithm && !jwtOptions.algorithms) {
       jwtOptions.algorithms = Array.isArray(algorithm) ? algorithm : [ algorithm ];
       delete jwtOptions.algorithm;
     }
@@ -44,7 +44,7 @@ module.exports = class Service {
     return merge({}, this.app.get('authentication'));
   }
 
-  getEntity (accessToken) {
+  getEntity (accessToken, params) {
     const { entity, service } = this.settings;
     
     if (!entity || !service) {
@@ -60,7 +60,7 @@ module.exports = class Service {
         return null;
       }
       
-      return entityService.get(payload.sub);
+      return entityService.get(payload.sub, params);
     });
   }
 

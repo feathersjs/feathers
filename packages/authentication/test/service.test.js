@@ -106,7 +106,15 @@ describe('Authentication service tests', () => {
 
     it('errors when custom algorithm property does not match', () => {
       return service.verifyJWT(validToken, {
-        algorithm: 'HS512'
+        algorithm: [ 'HS512' ]
+      }).then(() => assert.fail('Should never get here')).catch(error => {
+        assert.equal(error.message, 'invalid algorithm');
+      });
+    });
+
+    it('errors when algorithms property does not match', () => {
+      return service.verifyJWT(validToken, {
+        algorithms: [ 'HS512' ]
       }).then(() => assert.fail('Should never get here')).catch(error => {
         assert.equal(error.message, 'invalid algorithm');
       });

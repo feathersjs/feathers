@@ -13,7 +13,7 @@ module.exports = () => {
     if (connection) {
       if (method === 'remove') {
         delete connection.authentication;
-      } else {
+      } else if (!connection.authentication) {
         connection.authentication = {
           strategy: 'jwt',
           accessToken
