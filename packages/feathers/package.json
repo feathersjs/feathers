@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/feathers",
   "description": "A REST and realtime API layer for modern applications.",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",
@@ -38,7 +38,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^3.0.0",
+    "@feathersjs/commons": "^3.0.1",
     "debug": "^4.0.0",
     "events": "^3.0.0",
     "uberproto": "^2.0.2"

@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.1.10"></a>
+## [2.1.10](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication@2.1.9...@feathersjs/authentication@2.1.10) (2018-09-17)
+
+**Note:** Version bump only for package @feathersjs/authentication
+
+
+
+
+
 <a name="2.1.9"></a>
 ## [2.1.9](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication@2.1.8...@feathersjs/authentication@2.1.9) (2018-09-02)
 

@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.0.4"></a>
+## [2.0.4](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-jwt@2.0.3...@feathersjs/authentication-jwt@2.0.4) (2018-09-17)
+
+**Note:** Version bump only for package @feathersjs/authentication-jwt
+
+
+
+
+
 <a name="2.0.3"></a>
 ## [2.0.3](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-jwt@2.0.2...@feathersjs/authentication-jwt@2.0.3) (2018-09-02)
 

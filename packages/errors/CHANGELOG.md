@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="3.3.3"></a>
+## [3.3.3](https://github.com/feathersjs/feathers/compare/@feathersjs/errors@3.3.2...@feathersjs/errors@3.3.3) (2018-09-17)
+
+
+### Bug Fixes
+
+* Update 401.html ([#983](https://github.com/feathersjs/feathers/issues/983)) ([cec6bae](https://github.com/feathersjs/feathers/commit/cec6bae))
+* Update 404.html ([#984](https://github.com/feathersjs/feathers/issues/984)) ([72132d1](https://github.com/feathersjs/feathers/commit/72132d1))
+
+
+
+
+
 <a name="3.3.2"></a>
 ## [3.3.2](https://github.com/feathersjs/feathers/compare/@feathersjs/errors@3.3.1...@feathersjs/errors@3.3.2) (2018-09-02)
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.6.3"></a>
+## [2.6.3](https://github.com/feathersjs/feathers/compare/generator-feathers@2.6.2...generator-feathers@2.6.3) (2018-09-17)
+
+
+### Bug Fixes
+
+* Support Logger swallowing ([#995](https://github.com/feathersjs/feathers/issues/995)) ([5b3b37e](https://github.com/feathersjs/feathers/commit/5b3b37e)), closes [/github.com/feathersjs/generator-feathers/pull/392#issuecomment-420408312](https://github.com//github.com/feathersjs/generator-feathers/pull/392/issues/issuecomment-420408312)
+
+
+
+
+
 <a name="2.6.2"></a>
 ## [2.6.2](https://github.com/feathersjs/feathers/compare/generator-feathers@2.6.1...generator-feathers@2.6.2) (2018-09-02)
 

@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/cli",
   "description": "Command-line Feathers generator",
-  "version": "3.8.2",
+  "version": "3.8.3",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "bin": {
@@ -40,7 +40,7 @@
   "dependencies": {
     "@feathersjs/tools": "^0.1.6",
     "commander": "^2.9.0",
-    "generator-feathers": "^2.6.2",
+    "generator-feathers": "^2.6.3",
     "generator-feathers-plugin": "^1.0.1",
     "semver": "^5.3.0",
     "update-notifier": "^2.3.0",

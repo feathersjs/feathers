@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.0.3"></a>
+## [2.0.3](https://github.com/feathersjs/feathers/compare/@feathersjs/configuration@2.0.2...@feathersjs/configuration@2.0.3) (2018-09-17)
+
+**Note:** Version bump only for package @feathersjs/configuration
+
+
+
+
+
 <a name="2.0.2"></a>
 ## [2.0.2](https://github.com/feathersjs/feathers/compare/@feathersjs/configuration@2.0.1...@feathersjs/configuration@2.0.2) (2018-09-02)
 
