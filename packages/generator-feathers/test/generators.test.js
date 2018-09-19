@@ -243,13 +243,13 @@ describe('generator-feathers', function() {
       return runConnectionGenerator({
         database: 'cassandra',
         adapter: 'cassandra',
-        connectionString: 'cassandra://localhost:9042/test'
+        connectionString: 'cassandra://127.0.0.1:9042/test'
       }).then(() =>
         assert.jsonFileContent(
           path.join(appDir, 'config', 'default.json'), {
             cassandra: {
               clientOptions: {
-                contactPoints: ['localhost'],
+                contactPoints: ['127.0.0.1'],
                 protocolOptions: { port: 9042 },
                 keyspace: 'test',
                 queryOptions: { consistency: 1 }

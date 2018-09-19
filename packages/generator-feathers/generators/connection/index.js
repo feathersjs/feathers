@@ -270,7 +270,7 @@ module.exports = class ConnectionGenerator extends Generator {
             rethinkdb: `rethinkdb://localhost:28015/${databaseName}`,
             sqlite: `sqlite://${databaseName}.sqlite`,
             mssql: `mssql://root:password@localhost:1433/${databaseName}`,
-            cassandra: `cassandra://localhost:9042/${databaseName}`
+            cassandra: `cassandra://127.0.0.1:9042/${databaseName}`
           };
 
           return defaultConnectionStrings[database];
