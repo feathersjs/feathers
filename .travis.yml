@@ -4,7 +4,9 @@ install: npm install
 script:
   - npm test
   - npm run test:generators
-services: mongodb
+services:
+  - mongodb
+  - cassandra
 node_js:
   - node
   - '6'

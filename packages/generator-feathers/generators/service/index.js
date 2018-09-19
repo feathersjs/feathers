@@ -44,6 +44,12 @@ module.exports = class ServiceGenerator extends Generator {
           }, {
             name: 'RethinkDB',
             value: 'rethinkdb'
+          }, {
+            name: 'Objection',
+            value: 'objection'
+          }, {
+            name: 'Cassandra',
+            value: 'cassandra'
           }
         ]
       }, {
@@ -90,7 +96,7 @@ module.exports = class ServiceGenerator extends Generator {
     return this.prompt(prompts).then(answers => {
       const parts = (answers.name || props.name)
         .split('/')
-        // exclude route parameters from folder hierarchy i.e. /users/:id/roles 
+        // exclude route parameters from folder hierarchy i.e. /users/:id/roles
         .filter(part => !part.startsWith(':'));
       const name = parts.pop();
 
@@ -113,7 +119,7 @@ module.exports = class ServiceGenerator extends Generator {
     const camelName = _.camelCase(folder);
     const serviceRequire = `const ${camelName} = require('./${folder}/${kebabName}.service.js');`;
     const serviceCode = `app.configure(${camelName});`;
-    
+
     if(mainExpression.length !== 1) {
       this.log
         .writeln()
@@ -142,7 +148,9 @@ module.exports = class ServiceGenerator extends Generator {
       mongoose: 'feathers-mongoose',
       sequelize: 'feathers-sequelize',
       knex: 'feathers-knex',
-      rethinkdb: 'feathers-rethinkdb'
+      rethinkdb: 'feathers-rethinkdb',
+      objection: 'feathers-objection',
+      cassandra: 'feathers-cassandra'
     };
     const serviceModule = moduleMappings[adapter];
     const serviceFolder = [ this.libDirectory, 'services', ...subfolder, kebabName ];
