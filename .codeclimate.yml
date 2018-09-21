@@ -1,0 +1,5 @@
+exclude_patterns:
+  - "lib/foundation.js"
+  - "**/test/*"
+  - "**/dist/*"
+  - "**/*.dist.js"
