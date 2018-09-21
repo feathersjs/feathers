@@ -21,7 +21,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "clean": "shx rm -rf dist/ && shx mkdir -p dist",
+    "clean": "../../node_modules/.bin/shx rm -rf dist/ && ../../node_modules/.bin/shx mkdir -p dist",
     "version": "npm run build",
     "mocha": "../../node_modules/.bin/mocha --opts ../../mocha.opts",
     "test": "npm run build && npm run mocha",
