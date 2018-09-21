@@ -26,10 +26,10 @@ checks:
       threshold: 6
   similar-code:
     config:
-      threshold: 3
+      threshold: 50
   identical-code:
     config:
-      threshold: 3
+      threshold: 25
 exclude_patterns:
   - "lib/foundation.js"
   - "**/test/*"
