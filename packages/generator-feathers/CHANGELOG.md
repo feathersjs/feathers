@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.6.4"></a>
+## [2.6.4](https://github.com/feathersjs/feathers/compare/generator-feathers@2.6.3...generator-feathers@2.6.4) (2018-09-21)
+
+**Note:** Version bump only for package generator-feathers
+
+
+
+
+
 <a name="2.6.3"></a>
 ## [2.6.3](https://github.com/feathersjs/feathers/compare/generator-feathers@2.6.2...generator-feathers@2.6.3) (2018-09-17)
 

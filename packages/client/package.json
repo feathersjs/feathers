@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/client",
   "description": "A module that consolidates Feathers client modules for REST (jQuery, Request, Superagent) and Websocket (Socket.io, Primus) connections",
-  "version": "3.7.1",
+  "version": "3.7.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/feathersjs/feathers.git"
@@ -37,18 +37,18 @@
     "ignore": "jsdom"
   },
   "devDependencies": {
-    "@feathersjs/authentication-client": "^1.0.5",
-    "@feathersjs/errors": "^3.3.3",
-    "@feathersjs/feathers": "^3.2.2",
-    "@feathersjs/primus-client": "^1.1.3",
-    "@feathersjs/rest-client": "^1.4.4",
-    "@feathersjs/socketio-client": "^1.1.3",
     "@babel/core": "^7.0.0",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
-    "@feathersjs/express": "^1.2.6",
-    "@feathersjs/primus": "^3.2.4",
-    "@feathersjs/socketio": "^3.2.5",
+    "@feathersjs/authentication-client": "^1.0.6",
+    "@feathersjs/errors": "^3.3.4",
+    "@feathersjs/express": "^1.2.7",
+    "@feathersjs/feathers": "^3.2.3",
+    "@feathersjs/primus": "^3.2.5",
+    "@feathersjs/primus-client": "^1.1.4",
+    "@feathersjs/rest-client": "^1.4.5",
+    "@feathersjs/socketio": "^3.2.6",
+    "@feathersjs/socketio-client": "^1.1.4",
     "babel-loader": "^8.0.0",
     "body-parser": "^1.18.3",
     "feathers-memory": "^2.2.0",
