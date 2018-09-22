@@ -1,0 +1,66 @@
+{
+  "name": "@feathersjs/client",
+  "description": "A module that consolidates Feathers client modules for REST (jQuery, Request, Superagent) and Websocket (Socket.io, Primus) connections",
+  "version": "3.7.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/feathersjs/feathers.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "homepage": "https://github.com/feathersjs/client",
+  "keywords": [
+    "feathers",
+    "feathers-plugin"
+  ],
+  "author": "Feathers contributors",
+  "engines": {
+    "node": ">= 6"
+  },
+  "main": "index.js",
+  "scripts": {
+    "clean": "../../node_modules/.bin/shx rm -rf dist/ && ../../node_modules/.bin/shx mkdir -p dist",
+    "version": "npm run build",
+    "mocha": "../../node_modules/.bin/mocha --opts ../../mocha.opts",
+    "test": "npm run build && npm run mocha",
+    "build": "npm run clean && npm run webpack",
+    "build:test": "cd browser && webpack",
+    "webpack": "parallel-webpack"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "IE 10"
+  ],
+  "greenkeeper": {
+    "ignore": "jsdom"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@feathersjs/authentication-client": "^1.0.6",
+    "@feathersjs/errors": "^3.3.4",
+    "@feathersjs/express": "^1.2.7",
+    "@feathersjs/feathers": "^3.2.3",
+    "@feathersjs/primus": "^3.2.5",
+    "@feathersjs/primus-client": "^1.1.4",
+    "@feathersjs/rest-client": "^1.4.5",
+    "@feathersjs/socketio": "^3.2.6",
+    "@feathersjs/socketio-client": "^1.1.4",
+    "babel-loader": "^8.0.0",
+    "body-parser": "^1.18.3",
+    "feathers-memory": "^2.2.0",
+    "jsdom": "8.1.0",
+    "node-fetch": "^2.2.0",
+    "parallel-webpack": "^2.3.0",
+    "request": "^2.88.0",
+    "socket.io-client": "^2.1.1",
+    "superagent": "^4.0.0-beta.5",
+    "uglifyjs-webpack-plugin": "^2.0.0",
+    "webpack": "^4.19.0",
+    "webpack-merge": "^4.1.4",
+    "ws": "^6.0.0"
+  }
+}

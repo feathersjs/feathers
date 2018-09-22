@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/express",
   "description": "Feathers Express framework bindings and REST provider",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -36,13 +36,13 @@
   },
   "dependencies": {
     "@feathersjs/commons": "^3.0.1",
-    "@feathersjs/errors": "^3.3.3",
+    "@feathersjs/errors": "^3.3.4",
     "debug": "^4.0.0",
     "express": "^4.16.2",
     "uberproto": "^2.0.0"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "^3.2.2",
+    "@feathersjs/feathers": "^3.2.3",
     "axios": "^0.18.0",
     "chai": "^4.1.2"
   }

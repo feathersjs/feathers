@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.4.5"></a>
+## [1.4.5](https://github.com/feathersjs/feathers/compare/@feathersjs/rest-client@1.4.4...@feathersjs/rest-client@1.4.5) (2018-09-21)
+
+**Note:** Version bump only for package @feathersjs/rest-client
+
+
+
+
+
 <a name="1.4.4"></a>
 ## [1.4.4](https://github.com/feathersjs/feathers/compare/@feathersjs/rest-client@1.4.3...@feathersjs/rest-client@1.4.4) (2018-09-17)
 

@@ -3,11 +3,14 @@ const { _ } = require('@feathersjs/commons');
 const assignArguments = context => {
   const { service, method } = context;
   const parameters = service.methods[method];
-
   const argsObject = context.arguments.reduce((result, value, index) => {
     result[parameters[index]] = value;
     return result;
-  }, { params: {} });
+  }, {});
+
+  if (!argsObject.params) {
+    argsObject.params = {};
+  }
 
   Object.assign(context, argsObject);
 
