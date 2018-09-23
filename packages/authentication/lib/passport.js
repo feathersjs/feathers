@@ -1,6 +1,6 @@
 const debug = require('debug')('@feathersjs/authentication/passport');
 
-module.exports = options => {
+module.exports = (options = {}) => {
   debug('Initializing Feathers passport adapter', options);
 
   return {
@@ -20,23 +20,16 @@ module.exports = options => {
       };
     },
 
-    authenticate (passport, strategies, strategyOptions = {}) {
+    authenticate (passport, _strategies, strategyOptions = {}) {
       return function (request = {}) {
         return new Promise((resolve, reject) => {
           const entity = strategyOptions.entity || strategyOptions.assignProperty || options.entity;
           request.body = request.body || {};
-          let strategyName = request.body.strategy;
-
-          if (!strategyName) {
-            strategyName = Array.isArray(strategies) ? strategies[0] : strategies;
-          }
+          const strategies = Array.isArray(_strategies) ? _strategies : [ _strategies ];
+          const strategyName = request.body.strategy || strategies[0];
 
           if (!strategyName) {
             return reject(new Error(`You must provide an authentication 'strategy'`));
-          }
-
-          if (!Array.isArray(strategies)) {
-            strategies = [ strategies ];
           }
 
           if (!strategies.includes(strategyName)) {

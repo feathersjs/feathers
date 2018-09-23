@@ -11,9 +11,13 @@ module.exports = () => {
     }
 
     if (connection) {
+      const { authentication: { accessToken: currentToken } = {} } = connection;
+
       if (method === 'remove') {
-        delete connection.authentication;
-      } else if (!connection.authentication) {
+        if (accessToken === currentToken) {
+          delete connection.authentication;
+        }
+      } else if (method === 'create' && accessToken) {
         connection.authentication = {
           strategy: 'jwt',
           accessToken
