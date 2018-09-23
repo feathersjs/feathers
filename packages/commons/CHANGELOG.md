@@ -1,5 +1,22 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+<a name="3.0.1"></a>
+## [3.0.1](https://github.com/feathersjs/feathers/compare/@feathersjs/commons@3.0.0...@feathersjs/commons@3.0.1) (2018-09-17)
+
+
+### Bug Fixes
+
+* use minimal RegExp matching for better performance ([#977](https://github.com/feathersjs/feathers/issues/977)) ([3ca7e97](https://github.com/feathersjs/feathers/commit/3ca7e97))
+
+
+
+
+
+# Change Log
+
 ## [v3.0.0-pre.1](https://github.com/feathersjs/commons/tree/v3.0.0-pre.1) (2018-08-13)
 [Full Changelog](https://github.com/feathersjs/commons/compare/v2.0.0...v3.0.0-pre.1)
 

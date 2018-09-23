@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="4.1.5"></a>
+## [4.1.5](https://github.com/feathersjs/feathers/compare/@feathersjs/transport-commons@4.1.4...@feathersjs/transport-commons@4.1.5) (2018-09-21)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+<a name="4.1.4"></a>
+## [4.1.4](https://github.com/feathersjs/feathers/compare/@feathersjs/transport-commons@4.1.3...@feathersjs/transport-commons@4.1.4) (2018-09-17)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
 <a name="4.1.3"></a>
 ## [4.1.3](https://github.com/feathersjs/feathers/compare/@feathersjs/transport-commons@4.1.2...@feathersjs/transport-commons@4.1.3) (2018-09-02)
 
