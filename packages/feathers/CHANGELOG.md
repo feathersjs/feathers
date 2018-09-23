@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="3.2.3"></a>
+## [3.2.3](https://github.com/feathersjs/feathers/compare/@feathersjs/feathers@3.2.2...@feathersjs/feathers@3.2.3) (2018-09-21)
+
+
+### Bug Fixes
+
+* Normalize params to object even when it is falsy ([#1012](https://github.com/feathersjs/feathers/issues/1012)) ([af97818](https://github.com/feathersjs/feathers/commit/af97818))
+
+
+
+
+
 <a name="3.2.2"></a>
 ## [3.2.2](https://github.com/feathersjs/feathers/compare/@feathersjs/feathers@3.2.1...@feathersjs/feathers@3.2.2) (2018-09-17)
 

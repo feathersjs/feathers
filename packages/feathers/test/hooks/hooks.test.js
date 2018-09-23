@@ -100,8 +100,8 @@ describe('hooks basics', () => {
 
   it('invalid type in .hooks throws error', () => {
     const app = feathers().use('/dummy', {
-      get (id, params, callback) {
-        callback(null, { id, params });
+      get (id, params) {
+        return Promise.resolve({ id, params });
       }
     });
 
@@ -117,8 +117,8 @@ describe('hooks basics', () => {
 
   it('invalid hook method throws error', () => {
     const app = feathers().use('/dummy', {
-      get (id, params, callback) {
-        callback(null, { id, params });
+      get (id, params) {
+        return Promise.resolve({ id, params });
       }
     });
 
@@ -341,5 +341,20 @@ describe('hooks basics', () => {
       .then(result => {
         assert.deepEqual(result, args);
       });
+  });
+
+  it('normalizes params to object even when it is falsy (#1001)', () => {
+    const app = feathers().use('/dummy', {
+      get (id, params) {
+        return Promise.resolve({ id, params });
+      }
+    });
+
+    return app.service('dummy').get('test', null).then(result => {
+      assert.deepEqual(result, {
+        id: 'test',
+        params: {}
+      });
+    });
   });
 });
