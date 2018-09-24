@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="3.7.3"></a>
+## [3.7.3](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.2...@feathersjs/client@3.7.3) (2018-09-24)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
 <a name="3.7.2"></a>
 ## 3.7.2 (2018-09-21)
 
