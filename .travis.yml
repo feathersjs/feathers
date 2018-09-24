@@ -4,7 +4,7 @@ install: npm install
 script:
   - npm test
   - npm run test:generators
-  - npm run test:client
+  - if [ ! -z "$SAUCE_ACCESS_KEY" ]; then npm run test:client; fi
 services: mongodb
 node_js:
   - node
