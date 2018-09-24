@@ -1,11 +1,13 @@
-sudo: false
+sudo: required
 language: node_js
 install: npm install
 script:
   - npm test
   - npm run test:generators
   - if [ ! -z "$SAUCE_ACCESS_KEY" ]; then npm run test:client; fi
-services: mongodb
+services:
+  - mongodb
+  - cassandra
 node_js:
   - node
   - '6'

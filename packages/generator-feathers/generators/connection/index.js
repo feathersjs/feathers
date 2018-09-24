@@ -44,6 +44,13 @@ module.exports = class ConnectionGenerator extends Generator {
     const { connectionString, database, adapter } = this.props;
     let parsed = {};
 
+    if (adapter === 'objection') {
+      this.dependencies.push('knex');
+    } else if (adapter === 'cassandra') {
+      this.dependencies.push('express-cassandra');
+      this.dependencies.push('cassanknex');
+    }
+
     switch (database) {
     case 'nedb':
       this.dependencies.push('nedb');
@@ -52,7 +59,7 @@ module.exports = class ConnectionGenerator extends Generator {
     case 'rethinkdb':
       parsed = url.parse(connectionString);
       this.dependencies.push('rethinkdbdash');
-      
+
       return {
         db: parsed.path.substring(1, parsed.path.length),
         servers: [
@@ -91,6 +98,30 @@ module.exports = class ConnectionGenerator extends Generator {
         connection: (database === 'sqlite' && typeof connectionString === 'string') ? {
           filename: connectionString.substring(9, connectionString.length)
         } : connectionString
+      };
+
+    case 'cassandra':
+      if (typeof connectionString !== 'string') {
+        return connectionString;
+      }
+
+      parsed = url.parse(connectionString);
+
+      return {
+        clientOptions: {
+          contactPoints: [parsed.hostname],
+          protocolOptions: { port: Number(parsed.port) || 9042 },
+          keyspace: parsed.path.substring(1, parsed.path.length),
+          queryOptions: { consistency: 1 }
+        },
+        ormOptions: {
+          defaultReplicationStrategy: {
+            class: 'SimpleStrategy',
+            replication_factor: 1
+          },
+          migration: 'alter',
+          createKeyspace: true
+        }
       };
 
     default:
@@ -138,7 +169,8 @@ module.exports = class ConnectionGenerator extends Generator {
           { name: 'PostgreSQL', value: 'postgres' },
           { name: 'RethinkDB', value: 'rethinkdb' },
           { name: 'SQLite', value: 'sqlite' },
-          { name: 'SQL Server', value: 'mssql' }
+          { name: 'SQL Server', value: 'mssql' },
+          { name: 'Cassandra', value: 'cassandra' }
         ],
         when (current) {
           const answers = getProps(current);
@@ -153,6 +185,7 @@ module.exports = class ConnectionGenerator extends Generator {
           case 'rethinkdb':
           case 'memory':
           case 'mongodb':
+          case 'cassandra':
             setProps({ database: adapter });
             return false;
           case 'mongoose':
@@ -186,11 +219,19 @@ module.exports = class ConnectionGenerator extends Generator {
           ];
           const sqlOptions = [
             { name: 'Sequelize', value: 'sequelize' },
-            { name: 'KnexJS', value: 'knex' }
+            { name: 'KnexJS', value: 'knex' },
+            { name: 'Objection', value: 'objection' }
+          ];
+          const cassandraOptions = [
+            { name: 'Cassandra', value: 'cassandra' }
           ];
 
           if (database === 'mongodb') {
             return mongoOptions;
+          }
+
+          if (database === 'cassandra') {
+            return cassandraOptions;
           }
 
           // It's an SQL DB
@@ -208,6 +249,7 @@ module.exports = class ConnectionGenerator extends Generator {
           case 'nedb':
           case 'rethinkdb':
           case 'memory':
+          case 'cassandra':
             return false;
           }
 
@@ -228,7 +270,8 @@ module.exports = class ConnectionGenerator extends Generator {
             postgres: `postgres://postgres:@localhost:5432/${databaseName}`,
             rethinkdb: `rethinkdb://localhost:28015/${databaseName}`,
             sqlite: `sqlite://${databaseName}.sqlite`,
-            mssql: `mssql://root:password@localhost:1433/${databaseName}`
+            mssql: `mssql://root:password@localhost:1433/${databaseName}`,
+            cassandra: `cassandra://localhost:9042/${databaseName}`
           };
 
           return defaultConnectionStrings[database];
@@ -320,6 +363,7 @@ module.exports = class ConnectionGenerator extends Generator {
       // case 'oracle':
       case 'postgres': // eslint-disable-line no-fallthrough
       case 'rethinkdb':
+      case 'cassandra':
         this.log(`Make sure that your ${database} database is running, the username/role is correct, and "${connectionString}" is reachable and the database has been created.`);
         this.log('Your configuration can be found in the projects config/ folder.');
         break;
