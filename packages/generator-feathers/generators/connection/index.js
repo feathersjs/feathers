@@ -75,6 +75,7 @@ module.exports = class ConnectionGenerator extends Generator {
 
     case 'mongodb':
       this.dependencies.push(adapter);
+      this.dependencies.push('mongodb-core');
       return connectionString;
 
     case 'mysql':

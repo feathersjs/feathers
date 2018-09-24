@@ -1,15 +1,15 @@
-const url = require('url');
+const parse = require('mongodb-core').parseConnectionString;
 const MongoClient = require('mongodb').MongoClient;
 
 module.exports = function (app) {
   const config = app.get('mongodb');
-  const dbName = url.parse(config).path.substring(1);
-  const promise = MongoClient.connect(config).then(client => {
+  const promise = MongoClient.connect(config, { useNewUrlParser: true }).then(client => {
     // For mongodb <= 2.2
     if(client.collection) {
       return client;
     }
-    
+
+    const dbName = parse(config, () => {});
     return client.db(dbName);
   });
 
