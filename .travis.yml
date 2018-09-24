@@ -4,7 +4,7 @@ install: npm install
 script:
   - npm test
   - npm run test:generators
-  - npm run test:client
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then npm run test:client fi'
 services: mongodb
 node_js:
   - node
