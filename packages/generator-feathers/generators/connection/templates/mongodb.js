@@ -11,7 +11,8 @@ module.exports = function (app) {
 
     const dbName = parse(config, () => {});
     return client.db(dbName);
-  });
-
+  })
+  .catch(error => console.error(error));
+  
   app.set('mongoClient', promise);
 };

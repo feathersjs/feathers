@@ -16,7 +16,7 @@ module.exports = function (app) {
       const service = app.service(path);
 
       if (typeof service.init === 'function') {
-        promise = promise.then(() => service.init());
+        promise = promise.then(() => service.init()).catch(error => console.error(error));
       }
     });
 
