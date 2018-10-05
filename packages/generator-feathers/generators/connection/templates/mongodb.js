@@ -13,5 +13,8 @@ module.exports = function (app) {
     return client.db(dbName);
   });
 
+  // catch the connection error
+  promise.catch(error => console.error(error));
+
   app.set('mongoClient', promise);
 };

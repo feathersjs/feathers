@@ -24,6 +24,9 @@ module.exports = function (app) {
     // right away that depend on the database and tables being created
     this.set('rethinkInit', promise);
 
+    // catch the connection error
+    promise.catch(error => console.error(error));
+
     return oldSetup.apply(this, args);
   };
 };
