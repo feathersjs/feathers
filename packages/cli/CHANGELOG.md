@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="3.8.6"></a>
+## [3.8.6](https://github.com/feathersjs/feathers/compare/@feathersjs/cli@3.8.5...@feathersjs/cli@3.8.6) (2018-10-06)
+
+**Note:** Version bump only for package @feathersjs/cli
+
+
+
+
+
 <a name="3.8.5"></a>
 ## [3.8.5](https://github.com/feathersjs/feathers/compare/@feathersjs/cli@3.8.4...@feathersjs/cli@3.8.5) (2018-09-24)
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.7.1"></a>
+## [2.7.1](https://github.com/feathersjs/feathers/compare/generator-feathers@2.7.0...generator-feathers@2.7.1) (2018-10-06)
+
+
+### Bug Fixes
+
+* Catch connection initialization errors ([#1043](https://github.com/feathersjs/feathers/issues/1043)) ([4f9acd6](https://github.com/feathersjs/feathers/commit/4f9acd6))
+
+
+
+
+
 <a name="2.7.0"></a>
 # [2.7.0](https://github.com/feathersjs/feathers/compare/generator-feathers@2.6.4...generator-feathers@2.7.0) (2018-09-24)
 
