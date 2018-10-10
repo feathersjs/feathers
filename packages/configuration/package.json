@@ -26,7 +26,7 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+    "test": "mocha --opts ../../mocha.opts"
   },
   "semistandard": {
     "env": [
@@ -41,7 +41,8 @@
   },
   "dependencies": {
     "config": "^2.0.0",
-    "debug": "^4.0.0"
+    "debug": "^4.0.0",
+    "mocha": "^5.2.0"
   },
   "devDependencies": {
     "@feathersjs/feathers": "^3.2.3"

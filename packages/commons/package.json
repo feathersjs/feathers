@@ -25,7 +25,7 @@
   },
   "main": "lib/commons.js",
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+    "test": "mocha --opts ../../mocha.opts"
   },
   "directories": {
     "lib": "lib"
@@ -35,5 +35,8 @@
   },
   "devDependencies": {
     "chai": "^4.1.2"
+  },
+  "dependencies": {
+    "mocha": "^5.2.0"
   }
 }

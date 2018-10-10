@@ -30,12 +30,13 @@
     "node": ">= 6.0.0"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts --timeout 30000"
+    "test": "mocha --opts ../../mocha.opts --timeout 30000"
   },
   "dependencies": {
     "@feathersjs/jscodeshift": "^0.5.0",
     "@feathersjs/tools": "^0.1.7",
     "lodash": "^4.17.10",
+    "mocha": "^5.2.0",
     "node-dir": "^0.1.17",
     "randomstring": "^1.1.5",
     "semver": "^5.5.0",
