@@ -23,7 +23,7 @@
   "scripts": {
     "clean": "../../node_modules/.bin/shx rm -rf dist/ && ../../node_modules/.bin/shx mkdir -p dist",
     "version": "npm run build",
-    "mocha": "../../node_modules/.bin/mocha --opts ../../mocha.opts",
+    "mocha": "mocha --opts ../../mocha.opts",
     "test": "npm run build && npm run mocha",
     "build": "npm run clean && npm run webpack",
     "build:test": "cd browser && webpack",
@@ -62,5 +62,8 @@
     "webpack": "^4.19.0",
     "webpack-merge": "^4.1.4",
     "ws": "^6.0.0"
+  },
+  "dependencies": {
+    "mocha": "^5.2.0"
   }
 }

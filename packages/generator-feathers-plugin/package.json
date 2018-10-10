@@ -23,9 +23,10 @@
     "url": "git://github.com/feathersjs/feathers.git"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+    "test": "mocha --opts ../../mocha.opts"
   },
   "dependencies": {
+    "mocha": "^5.2.0",
     "yeoman-generator": "^3.0.0"
   },
   "devDependencies": {

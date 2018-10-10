@@ -29,13 +29,14 @@
 		"lib": "lib"
 	},
 	"scripts": {
-		"test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+		"test": "mocha --opts ../../mocha.opts"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"dependencies": {
-		"debug": "^4.0.0"
+		"debug": "^4.0.0",
+		"mocha": "^5.2.0"
 	},
 	"devDependencies": {
 		"@feathersjs/feathers": "^3.2.3",

@@ -26,7 +26,7 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+    "test": "mocha --opts ../../mocha.opts"
   },
   "directories": {
     "lib": "lib"
@@ -37,7 +37,8 @@
   "dependencies": {
     "@feathersjs/errors": "^3.3.4",
     "debug": "^4.0.0",
-    "jwt-decode": "^2.1.0"
+    "jwt-decode": "^2.1.0",
+    "mocha": "^5.2.0"
   },
   "devDependencies": {
     "@feathersjs/authentication": "^2.1.11",

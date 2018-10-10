@@ -26,7 +26,7 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+    "test": "mocha --opts ../../mocha.opts"
   },
   "directories": {
     "lib": "lib"
@@ -45,6 +45,7 @@
     "lodash.omit": "^4.5.0",
     "lodash.pick": "^4.4.0",
     "long-timeout": "^0.1.1",
+    "mocha": "^5.2.0",
     "ms": "^2.0.0",
     "passport": "^0.4.0",
     "uuid": "^3.1.0"
