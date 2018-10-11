@@ -61,9 +61,7 @@
     "uglifyjs-webpack-plugin": "^2.0.0",
     "webpack": "^4.19.0",
     "webpack-merge": "^4.1.4",
-    "ws": "^6.0.0"
-  },
-  "dependencies": {
+    "ws": "^6.0.0",
     "mocha": "^5.2.0"
   }
 }

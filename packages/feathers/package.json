@@ -41,7 +41,9 @@
     "@feathersjs/commons": "^3.0.1",
     "debug": "^4.0.0",
     "events": "^3.0.0",
-    "mocha": "^5.2.0",
     "uberproto": "^2.0.2"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
   }
 }

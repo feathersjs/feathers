@@ -37,10 +37,10 @@
   "dependencies": {
     "@feathersjs/commons": "^3.0.1",
     "@feathersjs/errors": "^3.3.4",
-    "mocha": "^5.2.0",
     "qs": "^6.5.0"
   },
   "devDependencies": {
+    "mocha": "^5.2.0",
     "@angular/common": "^6.0.0",
     "@angular/core": "^6.0.0",
     "@angular/http": "^6.0.0",
