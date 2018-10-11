@@ -39,10 +39,10 @@
     "@feathersjs/errors": "^3.3.4",
     "debug": "^4.0.0",
     "express": "^4.16.2",
-    "mocha": "^5.2.0",
     "uberproto": "^2.0.0"
   },
   "devDependencies": {
+    "mocha": "^5.2.0",
     "@feathersjs/feathers": "^3.2.3",
     "axios": "^0.18.0",
     "chai": "^4.1.2"

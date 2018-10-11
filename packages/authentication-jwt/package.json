@@ -40,10 +40,10 @@
     "lodash.merge": "^4.6.0",
     "lodash.omit": "^4.5.0",
     "lodash.pick": "^4.4.0",
-    "mocha": "^5.2.0",
     "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
+    "mocha": "^5.2.0",
     "@feathersjs/authentication": "^2.1.11",
     "@feathersjs/express": "^1.2.7",
     "@feathersjs/feathers": "^3.2.3",
