@@ -26,7 +26,7 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+    "test": "mocha --opts ../../mocha.opts"
   },
   "directories": {
     "lib": "lib"
@@ -42,6 +42,7 @@
     "lodash.merge": "^4.6.1"
   },
   "devDependencies": {
+    "mocha": "^5.2.0",
     "@feathersjs/authentication": "^2.1.11",
     "@feathersjs/feathers": "^3.2.3",
     "body-parser": "^1.18.3",

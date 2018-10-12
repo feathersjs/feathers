@@ -26,7 +26,7 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+    "test": "mocha --opts ../../mocha.opts"
   },
   "directories": {
     "lib": "lib"
@@ -41,6 +41,7 @@
     "uberproto": "^2.0.1"
   },
   "devDependencies": {
+    "mocha": "^5.2.0",
     "@feathersjs/commons": "^3.0.1",
     "@feathersjs/express": "^1.2.7",
     "@feathersjs/feathers": "^3.2.3",

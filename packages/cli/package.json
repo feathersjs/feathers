@@ -28,7 +28,7 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+    "test": "mocha --opts ../../mocha.opts"
   },
   "directories": {
     "lib": "lib"
@@ -45,5 +45,8 @@
     "semver": "^5.3.0",
     "update-notifier": "^2.3.0",
     "yeoman-environment": "^2.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
   }
 }

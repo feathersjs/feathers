@@ -26,7 +26,7 @@
     "node": ">= 6.0.0"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+    "test": "mocha --opts ../../mocha.opts"
   },
   "directories": {
     "lib": "lib"
@@ -38,6 +38,7 @@
     "@feathersjs/transport-commons": "^4.1.5"
   },
   "devDependencies": {
+    "mocha": "^5.2.0",
     "@feathersjs/commons": "^3.0.1",
     "@feathersjs/feathers": "^3.2.3",
     "@feathersjs/primus": "^3.2.5",

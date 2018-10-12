@@ -30,7 +30,7 @@
     "node": ">= 6.0.0"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts --timeout 30000"
+    "test": "mocha --opts ../../mocha.opts --timeout 30000"
   },
   "dependencies": {
     "@feathersjs/jscodeshift": "^0.5.0",
@@ -43,6 +43,7 @@
     "yeoman-generator": "^3.1.1"
   },
   "devDependencies": {
+    "mocha": "^5.2.0",
     "@feathersjs/authentication": "^2.1.11",
     "@feathersjs/authentication-jwt": "^2.0.5",
     "@feathersjs/authentication-local": "^1.2.5",
