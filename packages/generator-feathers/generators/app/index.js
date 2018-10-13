@@ -28,7 +28,6 @@ module.exports = class AppGenerator extends Generator {
     this.devDependencies = [
       'nodemon',
       'eslint',
-      'mocha',
       'request',
       'request-promise'
     ];
@@ -108,6 +107,18 @@ module.exports = class AppGenerator extends Generator {
 
         return true;
       }
+    }, {
+      name: 'tester',
+      type: 'list',
+      message: 'Which testing framework do you prefer?',
+      default: 'mocha',
+      choices: [{
+        name: 'Mocha + assert',
+        value: 'mocha'
+      }, {
+        name: 'Jest',
+        value: 'jest'
+      }]
     }];
 
     return this.prompt(prompts).then(props => {
@@ -145,7 +156,7 @@ module.exports = class AppGenerator extends Generator {
     );
 
     this.fs.copyTpl(
-      this.templatePath('app.test.js'),
+      this.templatePath(`app.test.${props.tester}.js`),
       this.destinationPath(this.testDirectory, 'app.test.js'),
       context
     );
@@ -180,6 +191,8 @@ module.exports = class AppGenerator extends Generator {
     this._packagerInstall(this.dependencies, {
       save: true
     });
+
+    this.devDependencies.push(this.props.tester);
 
     this._packagerInstall(this.devDependencies, {
       saveDev: true
