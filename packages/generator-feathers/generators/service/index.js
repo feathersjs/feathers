@@ -164,6 +164,7 @@ module.exports = class ServiceGenerator extends Generator {
       relativeRoot: '../'.repeat(subfolder.length + 2),
       serviceModule
     });
+    const tester = this.pkg.config.tester || 'mocha';
 
     // Do not run code transformations if the service file already exists
     if (!this.fs.exists(mainFile)) {
@@ -224,7 +225,7 @@ module.exports = class ServiceGenerator extends Generator {
     }
 
     this.fs.copyTpl(
-      this.templatePath('test.js'),
+      this.templatePath(`test.${tester}.js`),
       this.destinationPath(this.testDirectory, 'services', ...subfolder, `${kebabName}.test.js`),
       context
     );
