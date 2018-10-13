@@ -67,8 +67,11 @@ describe('generator-feathers', function() {
   it('feathers:app', () =>
     runTest('starts and shows the index page').then(() => {
       const pkg = require(path.join(appDir, 'package.json'));
-
-      assert.ok(pkg.devDependencies.mocha, 'Added mocha as a devDependency');
+      switch(pkg.config.tester) {
+        case 'jest': assert.ok(pkg.devDependencies.jest, 'Added jest as a devDependency'); break;
+        case 'mocha':
+        default: assert.ok(pkg.devDependencies.mocha, 'Added mocha as a devDependency');
+      }
     })
   );
 
