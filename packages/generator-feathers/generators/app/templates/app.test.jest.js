@@ -10,7 +10,7 @@ const getUrl = pathname => url.format({
   pathname
 });
 
-describe('Feathers application tests', () => {
+describe('Feathers application tests (with jest)', () => {
   beforeAll(done => {
     this.server = app.listen(port);
     this.server.once('listening', () => done());

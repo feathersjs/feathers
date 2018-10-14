@@ -167,6 +167,11 @@ module.exports = class AppGenerator extends Generator {
     );
 
     this.fs.writeJSON(
+      this.destinationPath('.eslintrc.json'),
+      makeConfig.eslintrc(this)
+    )
+
+    this.fs.writeJSON(
       this.destinationPath('config', 'default.json'),
       makeConfig.configDefault(this)
     );
