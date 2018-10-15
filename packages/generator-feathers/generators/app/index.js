@@ -98,8 +98,8 @@ module.exports = class AppGenerator extends Generator {
         return true;
       }
     }, {
-      name: 'tester',
       type: 'list',
+      name: 'tester',
       message: 'Which testing framework do you prefer?',
       default: 'mocha',
       choices: [
