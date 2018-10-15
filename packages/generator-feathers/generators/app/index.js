@@ -101,7 +101,7 @@ module.exports = class AppGenerator extends Generator {
       type: 'list',
       name: 'tester',
       message: 'Which testing framework do you prefer?',
-      default: 'mocha',
+      default: 0,
       choices: [
         { name: 'Mocha + assert', value: 'mocha' },
         { name: 'Jest',           value: 'jest'  }
