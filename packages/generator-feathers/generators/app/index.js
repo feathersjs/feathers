@@ -77,29 +77,19 @@ module.exports = class AppGenerator extends Generator {
       type: 'list',
       message: 'Which package manager are you using (has to be installed globally)?',
       default: 'npm@>= 3.0.0',
-      choices: [{
-        name: 'npm',
-        value: 'npm@>= 3.0.0'
-      }, {
-        name: 'Yarn',
-        value: 'yarn@>= 0.18.0'
-      }]
+      choices: [
+        { name: 'npm',  value: 'npm@>= 3.0.0'   },
+        { name: 'Yarn', value: 'yarn@>= 0.18.0' }
+      ]
     }, {
       type: 'checkbox',
       name: 'providers',
       message: 'What type of API are you making?',
-      choices: [{
-        name: 'REST',
-        value: 'rest',
-        checked: true
-      }, {
-        name: 'Realtime via Socket.io',
-        value: 'socketio',
-        checked: true
-      }, {
-        name: 'Realtime via Primus',
-        value: 'primus',
-      }],
+      choices: [
+        { name: 'REST',                   value: 'rest',     checked: true },
+        { name: 'Realtime via Socket.io', value: 'socketio', checked: true },
+        { name: 'Realtime via Primus',    value: 'primus',                 }
+      ],
       validate (input) {
         if (input.indexOf('primus') !== -1 && input.indexOf('socketio') !== -1) {
           return 'You can only pick SocketIO or Primus, not both.';
@@ -112,13 +102,10 @@ module.exports = class AppGenerator extends Generator {
       type: 'list',
       message: 'Which testing framework do you prefer?',
       default: 'mocha',
-      choices: [{
-        name: 'Mocha + assert',
-        value: 'mocha'
-      }, {
-        name: 'Jest',
-        value: 'jest'
-      }]
+      choices: [
+        { name: 'Mocha + assert', value: 'mocha' },
+        { name: 'Jest',           value: 'jest'  }
+      ]
     }];
 
     return this.prompt(prompts).then(props => {
