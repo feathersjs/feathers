@@ -139,7 +139,7 @@ module.exports = class ServiceGenerator extends Generator {
       relativeRoot: '../'.repeat(subfolder.length + 2),
       serviceModule
     });
-    const tester = this.pkg.config.tester || 'mocha';
+    const tester = this.pkg.devDependencies.jest ? 'jest' : 'mocha';
 
     // Do not run code transformations if the service file already exists
     if (!this.fs.exists(mainFile)) {

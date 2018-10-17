@@ -28,9 +28,6 @@ module.exports = function(generator) {
       node: `^${major}.0.0`,
       [packager]: version
     },
-    config: {
-      tester: props.tester
-    },
     'scripts': {
       test: `${packager} run eslint && NODE_ENV= ${packager} run ${props.tester}`,
       eslint: `eslint ${lib}/. test/. --config .eslintrc.json`,

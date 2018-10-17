@@ -153,7 +153,7 @@ module.exports = class HookGenerator extends Generator {
       libDirectory: this.libDirectory
     }, this.props);
     const mainFile = this.destinationPath(this.libDirectory, 'hooks', `${context.kebabName}.js`);
-    const tester = this.pkg.config.tester || 'mocha';
+    const tester = this.pkg.devDependencies.jest ? 'jest' : 'mocha';
 
     if (!this.fs.exists(mainFile) && context.type) {
       this.props.services.forEach(serviceName =>
