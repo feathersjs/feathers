@@ -61,7 +61,7 @@
     "cors": "^2.8.4",
     "express-cassandra": "^2.2.3",
     "feathers-cassandra": "^1.0.10",
-    "feathers-knex": "^3.3.0",
+    "feathers-knex": "^4.0.0",
     "feathers-memory": "^2.1.3",
     "feathers-mongodb": "^3.3.0",
     "feathers-mongoose": "^6.1.4",
