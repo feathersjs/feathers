@@ -67,7 +67,8 @@ describe('generator-feathers', function() {
   it('feathers:app', () =>
     runTest('starts and shows the index page').then(() => {
       const pkg = require(path.join(appDir, 'package.json'));
-      switch(pkg.config.tester) {
+      const tester = pkg.scripts.jest ? 'jest' : 'mocha';
+      switch(tester) {
         case 'jest': assert.ok(pkg.devDependencies.jest, 'Added jest as a devDependency'); break;
         case 'mocha':
         default: assert.ok(pkg.devDependencies.mocha, 'Added mocha as a devDependency');
@@ -323,7 +324,7 @@ describe('generator-feathers', function() {
     it('knex', () => testServiceGenerator('knex', 'sqlite', 'id'));
     it('sequelize', () => testServiceGenerator('sequelize', 'sqlite', 'id'));
     it('objection', () => testServiceGenerator('objection', 'sqlite', 'id'));
-    it('cassandra', () => testServiceGenerator('cassandra', 'cassandra', 'id'));
+    it.skip('cassandra', () => testServiceGenerator('cassandra', 'cassandra', 'id'));
     it.skip('rethinkdb', () => testServiceGenerator('rethinkdb', 'id'));
   });
 
