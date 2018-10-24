@@ -28,7 +28,6 @@ module.exports = class AppGenerator extends Generator {
     this.devDependencies = [
       'nodemon',
       'eslint',
-      'mocha',
       'request',
       'request-promise'
     ];
@@ -78,29 +77,19 @@ module.exports = class AppGenerator extends Generator {
       type: 'list',
       message: 'Which package manager are you using (has to be installed globally)?',
       default: 'npm@>= 3.0.0',
-      choices: [{
-        name: 'npm',
-        value: 'npm@>= 3.0.0'
-      }, {
-        name: 'Yarn',
-        value: 'yarn@>= 0.18.0'
-      }]
+      choices: [
+        { name: 'npm',  value: 'npm@>= 3.0.0'   },
+        { name: 'Yarn', value: 'yarn@>= 0.18.0' }
+      ]
     }, {
       type: 'checkbox',
       name: 'providers',
       message: 'What type of API are you making?',
-      choices: [{
-        name: 'REST',
-        value: 'rest',
-        checked: true
-      }, {
-        name: 'Realtime via Socket.io',
-        value: 'socketio',
-        checked: true
-      }, {
-        name: 'Realtime via Primus',
-        value: 'primus',
-      }],
+      choices: [
+        { name: 'REST',                   value: 'rest',     checked: true },
+        { name: 'Realtime via Socket.io', value: 'socketio', checked: true },
+        { name: 'Realtime via Primus',    value: 'primus',                 }
+      ],
       validate (input) {
         if (input.indexOf('primus') !== -1 && input.indexOf('socketio') !== -1) {
           return 'You can only pick SocketIO or Primus, not both.';
@@ -108,6 +97,16 @@ module.exports = class AppGenerator extends Generator {
 
         return true;
       }
+    }, {
+      type: 'list',
+      name: 'tester',
+      message: 'Which testing framework do you prefer?',
+      default: 'mocha',
+      choices: [
+        { name: 'Mocha + assert', value: 'mocha' },
+        { name: 'Jest',           value: 'jest'  }
+      ],
+      pageSize: 7 // unnecessary; trying to get codeclimate to leave me alone :(
     }];
 
     return this.prompt(prompts).then(props => {
@@ -145,7 +144,7 @@ module.exports = class AppGenerator extends Generator {
     );
 
     this.fs.copyTpl(
-      this.templatePath('app.test.js'),
+      this.templatePath(`app.test.${props.tester}.js`),
       this.destinationPath(this.testDirectory, 'app.test.js'),
       context
     );
@@ -154,6 +153,11 @@ module.exports = class AppGenerator extends Generator {
       this.destinationPath('package.json'),
       pkg
     );
+
+    this.fs.writeJSON(
+      this.destinationPath('.eslintrc.json'),
+      makeConfig.eslintrc(this)
+    )
 
     this.fs.writeJSON(
       this.destinationPath('config', 'default.json'),
@@ -180,6 +184,8 @@ module.exports = class AppGenerator extends Generator {
     this._packagerInstall(this.dependencies, {
       save: true
     });
+
+    this.devDependencies.push(this.props.tester);
 
     this._packagerInstall(this.devDependencies, {
       saveDev: true
