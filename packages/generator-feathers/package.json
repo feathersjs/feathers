@@ -30,7 +30,7 @@
     "node": ">= 6.0.0"
   },
   "scripts": {
-    "test": "mocha --opts ../../mocha.opts --timeout 30000"
+    "test": "mocha --opts ../../mocha.opts --no-timeouts"
   },
   "dependencies": {
     "@feathersjs/jscodeshift": "^0.5.0",
