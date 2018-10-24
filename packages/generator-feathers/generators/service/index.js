@@ -20,51 +20,26 @@ module.exports = class ServiceGenerator extends Generator {
         message: 'What kind of service is it?',
         default: 'nedb',
         choices: [
-          {
-            name: 'A custom service',
-            value: 'generic'
-          }, {
-            name: 'In Memory',
-            value: 'memory'
-          }, {
-            name: 'NeDB',
-            value: 'nedb'
-          }, {
-            name: 'MongoDB',
-            value: 'mongodb'
-          }, {
-            name: 'Mongoose',
-            value: 'mongoose'
-          }, {
-            name: 'Sequelize',
-            value: 'sequelize'
-          }, {
-            name: 'KnexJS',
-            value: 'knex'
-          }, {
-            name: 'RethinkDB',
-            value: 'rethinkdb'
-          }, {
-            name: 'Objection',
-            value: 'objection'
-          }, {
-            name: 'Cassandra',
-            value: 'cassandra'
-          }
+          { name: 'A custom service', value: 'generic'   },
+          { name: 'In Memory',        value: 'memory'    },
+          { name: 'NeDB',             value: 'nedb'      },
+          { name: 'MongoDB',          value: 'mongodb'   },
+          { name: 'Mongoose',         value: 'mongoose'  },
+          { name: 'Sequelize',        value: 'sequelize' },
+          { name: 'KnexJS',           value: 'knex'      },
+          { name: 'RethinkDB',        value: 'rethinkdb' },
+          { name: 'Objection',        value: 'objection' },
+          { name: 'Cassandra',        value: 'cassandra' }
         ]
       }, {
         name: 'name',
         message: 'What is the name of the service?',
         validate(input) {
-          if(input.trim() === '') {
-            return 'Service name can not be empty';
+          switch(input.trim()) {
+            case '': return 'Service name can not be empty';
+            case 'authentication': return '`authentication` is a reserved service name';
+            default: return true;
           }
-
-          if(input.trim() === 'authentication') {
-            return '`authentication` is a reserved service name.';
-          }
-
-          return true;
         },
         when: !props.name
       }, {
@@ -164,6 +139,7 @@ module.exports = class ServiceGenerator extends Generator {
       relativeRoot: '../'.repeat(subfolder.length + 2),
       serviceModule
     });
+    const tester = this.pkg.devDependencies.jest ? 'jest' : 'mocha';
 
     // Do not run code transformations if the service file already exists
     if (!this.fs.exists(mainFile)) {
@@ -180,10 +156,7 @@ module.exports = class ServiceGenerator extends Generator {
     // It will not do anything if the db has been set up already
     if (adapter !== 'generic' && adapter !== 'memory') {
       this.composeWith(require.resolve('../connection'), {
-        props: {
-          adapter,
-          service: this.props.name
-        }
+        props: { adapter, service: this.props.name }
       });
     } else if(adapter === 'generic') {
       // Copy the generic service class
@@ -224,7 +197,7 @@ module.exports = class ServiceGenerator extends Generator {
     }
 
     this.fs.copyTpl(
-      this.templatePath('test.js'),
+      this.templatePath(`test.${tester}.js`),
       this.destinationPath(this.testDirectory, 'services', ...subfolder, `${kebabName}.test.js`),
       context
     );
