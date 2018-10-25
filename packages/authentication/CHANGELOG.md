@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.1.12"></a>
+## [2.1.12](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication@2.1.11...@feathersjs/authentication@2.1.12) (2018-10-25)
+
+
+### Bug Fixes
+
+* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+* Only merge authenticated property on update ([8a564f7](https://github.com/feathersjs/feathers/commit/8a564f7))
+
+
+
+
+
 <a name="2.1.11"></a>
 ## [2.1.11](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication@2.1.10...@feathersjs/authentication@2.1.11) (2018-09-21)
 

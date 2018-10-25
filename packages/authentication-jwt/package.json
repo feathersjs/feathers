@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-jwt",
   "description": "JWT authentication strategy for feathers-authentication using Passport",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -43,15 +43,15 @@
     "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
-    "mocha": "^5.2.0",
-    "@feathersjs/authentication": "^2.1.11",
+    "@feathersjs/authentication": "^2.1.12",
     "@feathersjs/express": "^1.2.7",
     "@feathersjs/feathers": "^3.2.3",
-    "@feathersjs/socketio": "^3.2.6",
+    "@feathersjs/socketio": "^3.2.7",
     "body-parser": "^1.15.2",
     "chai": "^4.1.0",
     "feathers-memory": "^2.0.0",
     "jsonwebtoken": "^8.0.0",
+    "mocha": "^5.2.0",
     "sinon": "^6.0.0",
     "sinon-chai": "^3.0.0"
   }

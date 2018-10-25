@@ -221,4 +221,43 @@ describe('Socket "Update Entity" Handler', function () {
 
     expect(app.io.sockets.sockets['my-socket'].feathers.user).to.deep.equal(user);
   });
+
+  it('socket entity should be correctly updated on entity patch', function () {
+    const app = {
+      get () {
+        return {
+          entity: 'user',
+          service: 'users'
+        };
+      },
+      io: {
+        sockets: {
+          sockets: {
+            'my-socket': {
+              feathers: {
+                user: {
+                  _id: 5,
+                  email: 'admin@feathersjs.com',
+                  nested: { value: 1 }
+                }
+              }
+            }
+          }
+        }
+      },
+      services: {
+        users: {
+          id: '_id'
+        }
+      },
+      service (location) {
+        return this.services[location];
+      }
+    };
+    const patchedUser = { _id: 5, email: 'test@feathersjs.com' };
+
+    updateEntity(app, 'patch')(patchedUser);
+
+    expect(app.io.sockets.sockets['my-socket'].feathers.user).to.deep.equal({ _id: 5, email: 'test@feathersjs.com', nested: { value: 1 } });
+  });
 });

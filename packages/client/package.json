@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/client",
   "description": "A module that consolidates Feathers client modules for REST (jQuery, Request, Superagent) and Websocket (Socket.io, Primus) connections",
-  "version": "3.7.3",
+  "version": "3.7.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/feathersjs/feathers.git"
@@ -40,19 +40,20 @@
     "@babel/core": "^7.0.0",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
-    "@feathersjs/authentication-client": "^1.0.6",
+    "@feathersjs/authentication-client": "^1.0.7",
     "@feathersjs/errors": "^3.3.4",
     "@feathersjs/express": "^1.2.7",
     "@feathersjs/feathers": "^3.2.3",
-    "@feathersjs/primus": "^3.2.5",
-    "@feathersjs/primus-client": "^1.1.4",
+    "@feathersjs/primus": "^3.2.6",
+    "@feathersjs/primus-client": "^1.1.5",
     "@feathersjs/rest-client": "^1.4.5",
-    "@feathersjs/socketio": "^3.2.6",
-    "@feathersjs/socketio-client": "^1.1.4",
+    "@feathersjs/socketio": "^3.2.7",
+    "@feathersjs/socketio-client": "^1.1.5",
     "babel-loader": "^8.0.0",
     "body-parser": "^1.18.3",
     "feathers-memory": "^2.2.0",
     "jsdom": "8.1.0",
+    "mocha": "^5.2.0",
     "node-fetch": "^2.2.0",
     "parallel-webpack": "^2.3.0",
     "request": "^2.88.0",
@@ -61,7 +62,6 @@
     "uglifyjs-webpack-plugin": "^2.0.0",
     "webpack": "^4.19.0",
     "webpack-merge": "^4.1.4",
-    "ws": "^6.0.0",
-    "mocha": "^5.2.0"
+    "ws": "^6.0.0"
   }
 }

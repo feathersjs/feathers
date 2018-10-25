@@ -167,8 +167,8 @@ module.exports = function setupSocketHandler (app, options, { feathersParams, pr
     // Only bind the handlers on receiving the first socket connection.
     if (!isUpdateEntitySetup) {
       isUpdateEntitySetup = true;
-      entityService.on('updated', updateEntity(app));
-      entityService.on('patched', updateEntity(app));
+      entityService.on('updated', updateEntity(app, 'update'));
+      entityService.on('patched', updateEntity(app, 'patch'));
     }
   };
 };

@@ -1,5 +1,6 @@
 const errors = require('@feathersjs/errors');
 const debug = require('debug')('@feathersjs/transport-commons');
+const { isEqual } = require('lodash');
 
 const paramsPositions = exports.paramsPositions = {
   find: 0,
@@ -46,7 +47,7 @@ exports.getDispatcher = function (emit, socketKey) {
         // If we are getting events from an array but try to dispatch individual data
         // try to get the individual item to dispatch from the correct index.
         if (!Array.isArray(data) && Array.isArray(context.result) && Array.isArray(result)) {
-          result = result[context.result.indexOf(data)];
+          result = context.result.find(resultData => isEqual(resultData, data));
         }
 
         debug(`Dispatching '${eventName}' to Socket ${socket.id} with`, result);

@@ -153,6 +153,7 @@ module.exports = class HookGenerator extends Generator {
       libDirectory: this.libDirectory
     }, this.props);
     const mainFile = this.destinationPath(this.libDirectory, 'hooks', `${context.kebabName}.js`);
+    const tester = this.pkg.devDependencies.jest ? 'jest' : 'mocha';
 
     if (!this.fs.exists(mainFile) && context.type) {
       this.props.services.forEach(serviceName =>
@@ -166,7 +167,7 @@ module.exports = class HookGenerator extends Generator {
     );
 
     this.fs.copyTpl(
-      this.templatePath(this.hasAsync ? 'test-async.js' : 'test.js'),
+      this.templatePath(this.hasAsync ? `test-async.${tester}.js` : `test.${tester}.js`),
       this.destinationPath(this.testDirectory, 'hooks', `${context.kebabName}.test.js`),
       context
     );

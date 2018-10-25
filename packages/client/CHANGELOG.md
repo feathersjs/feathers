@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="3.7.4"></a>
+## [3.7.4](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.3...@feathersjs/client@3.7.4) (2018-10-25)
+
+
+### Bug Fixes
+
+* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+
+
+
+
+
 <a name="3.7.3"></a>
 ## [3.7.3](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.2...@feathersjs/client@3.7.3) (2018-09-24)
 
