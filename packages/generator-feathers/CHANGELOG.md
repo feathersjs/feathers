@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.8.0"></a>
+# [2.8.0](https://github.com/feathersjs/feathers/compare/generator-feathers@2.7.1...generator-feathers@2.8.0) (2018-10-25)
+
+
+### Bug Fixes
+
+* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+
+
+### Features
+
+* [@feathers](https://github.com/feathers)/cli: introduce option to choose jest for tests instead of mocha ([#1057](https://github.com/feathersjs/feathers/issues/1057)) ([1356a1c](https://github.com/feathersjs/feathers/commit/1356a1c))
+
+
+
+
+
 <a name="2.7.1"></a>
 ## [2.7.1](https://github.com/feathersjs/feathers/compare/generator-feathers@2.7.0...generator-feathers@2.7.1) (2018-10-06)
 

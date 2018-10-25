@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.8"></a>
+## [1.0.8](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-oauth1@1.0.7...@feathersjs/authentication-oauth1@1.0.8) (2018-10-25)
+
+
+### Bug Fixes
+
+* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+
+
+
+
+
 <a name="1.0.7"></a>
 ## [1.0.7](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-oauth1@1.0.6...@feathersjs/authentication-oauth1@1.0.7) (2018-09-21)
 
