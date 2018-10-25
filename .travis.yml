@@ -9,8 +9,8 @@ services:
   - mongodb
   - cassandra
 node_js:
-  - node
-  - '6'
+  - 10
+  - 6
 addons:
   rethinkdb: 2.3
   code_climate:
