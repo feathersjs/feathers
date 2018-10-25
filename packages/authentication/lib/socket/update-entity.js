@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = (app) => (entity) => {
+module.exports = (app, operation = 'update') => (entity) => {
   const authConfig = app.get('auth');
   let idField = app.service(authConfig.service).id;
 
@@ -31,11 +31,14 @@ module.exports = (app) => (entity) => {
         // Need to assign because of external references
         Object.assign(socketEntity, entity);
 
-        // Delete any removed entity properties
-        const entityProps = new Set(Object.keys(entity));
-        Object.keys(socketEntity)
-          .filter(prop => !entityProps.has(prop))
-          .forEach(prop => delete socketEntity[prop]);
+        // Delete any removed entity properties on update
+        // On patch we can only update existing properties so this is not required
+        if (operation === 'update') {
+          const entityProps = new Set(Object.keys(entity));
+          Object.keys(socketEntity)
+            .filter(prop => !entityProps.has(prop))
+            .forEach(prop => delete socketEntity[prop]);
+        }
       }
     }
   });
