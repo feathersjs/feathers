@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.0.7"></a>
+## [2.0.7](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-jwt@2.0.6...@feathersjs/authentication-jwt@2.0.7) (2018-10-26)
+
+
+### Bug Fixes
+
+* support a secretProvider ([#1063](https://github.com/feathersjs/feathers/issues/1063)) ([9da26ad](https://github.com/feathersjs/feathers/commit/9da26ad))
+
+
+
+
+
 <a name="2.0.6"></a>
 ## [2.0.6](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-jwt@2.0.5...@feathersjs/authentication-jwt@2.0.6) (2018-10-25)
 

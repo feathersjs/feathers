@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.8"></a>
+## [1.0.8](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-client@1.0.7...@feathersjs/authentication-client@1.0.8) (2018-10-26)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
 <a name="1.0.7"></a>
 ## [1.0.7](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-client@1.0.6...@feathersjs/authentication-client@1.0.7) (2018-10-25)
 

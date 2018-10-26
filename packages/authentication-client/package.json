@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-client",
   "description": "The authentication plugin for feathers-client",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "homepage": "https://feathersjs.com",
   "main": "lib/index.js",
   "keywords": [
@@ -40,9 +40,9 @@
     "jwt-decode": "^2.1.0"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^2.1.12",
-    "@feathersjs/authentication-jwt": "^2.0.6",
-    "@feathersjs/authentication-local": "^1.2.6",
+    "@feathersjs/authentication": "^2.1.13",
+    "@feathersjs/authentication-jwt": "^2.0.7",
+    "@feathersjs/authentication-local": "^1.2.7",
     "@feathersjs/express": "^1.2.7",
     "@feathersjs/feathers": "^3.2.3",
     "@feathersjs/primus": "^3.2.6",
