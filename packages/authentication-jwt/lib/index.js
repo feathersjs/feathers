@@ -59,7 +59,8 @@ function init (options = {}) {
 
     let Verifier = DefaultVerifier;
     let strategyOptions = merge({
-      secretOrKey: jwtSettings.secret,
+      secretOrKey: typeof jwtSettings.secret !== 'function' ? jwtSettings.secret : null,
+      secretOrKeyProvider: typeof jwtSettings.secret === 'function' ? jwtSettings.secret : null,
       jwtFromRequest: ExtractJwt.fromExtractors(extractors)
     }, jwtSettings.jwt, omit(jwtSettings, ['jwt', 'header', 'secret']));
 
