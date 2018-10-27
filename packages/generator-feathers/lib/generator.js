@@ -7,7 +7,7 @@ module.exports = class BaseGenerator extends Generator {
   constructor(args, opts) {
     super(args, opts);
 
-    const defaultConfig = this.destinationPath('config', 'default.json');
+    const defaultConfig = this.destinationPath(this.configDirectory, 'default.json');
 
     this.generatorPkg = this.fs.readJSON(path.join(__dirname, '..', 'package.json'));
     this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
@@ -53,8 +53,11 @@ module.exports = class BaseGenerator extends Generator {
     return (this.pkg.directories && this.pkg.directories.test) || 'test';
   }
 
+  get configDirectory() {
+    return (this.pkg && this.pkg.directories && this.pkg.directories.config) || 'config';
+  }
   _packagerInstall(deps, options) {
-    const packager = this.pkg.engines && this.pkg.engines.yarn ? 
+    const packager = this.pkg.engines && this.pkg.engines.yarn ?
       'yarn' : 'npm';
     const method = `${packager}Install`;
     const isDev = options.saveDev;

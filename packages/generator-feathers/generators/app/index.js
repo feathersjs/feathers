@@ -160,12 +160,12 @@ module.exports = class AppGenerator extends Generator {
     )
 
     this.fs.writeJSON(
-      this.destinationPath('config', 'default.json'),
+      this.destinationPath(this.configDirectory, 'default.json'),
       makeConfig.configDefault(this)
     );
 
     this.fs.writeJSON(
-      this.destinationPath('config', 'production.json'),
+      this.destinationPath(this.configDirectory, 'production.json'),
       makeConfig.configProduction(this)
     );
   }

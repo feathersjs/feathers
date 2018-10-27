@@ -135,7 +135,7 @@ module.exports = class AuthGenerator extends Generator {
 
     this.conflicter.force = true;
     this.fs.writeJSON(
-      this.destinationPath('config', 'default.json'),
+      this.destinationPath(this.configDirectory, 'default.json'),
       config
     );
   }
@@ -167,7 +167,7 @@ module.exports = class AuthGenerator extends Generator {
         dependencies.push(`@feathersjs/authentication-${strategy}`);
       }
     });
-    
+
     if(!this.fs.exists(this.destinationPath(this.libDirectory, 'services', context.kebabEntity, `${context.kebabEntity}.service.js`))) {
       // Create the users service
       this.composeWith(require.resolve('../service'), {
