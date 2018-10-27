@@ -2,6 +2,8 @@ const semver = require('semver');
 
 module.exports = function(generator) {
   const major = semver.major(process.version);
+  const envConfigDir = process.env['NODE_CONFIG_DIR'];
+  const configDirectory = envConfigDir ? p.join(envConfigDir) : 'config/';
   const { props } = generator;
   const lib = props.src;
   const [ packager, version ] = props.packager.split('@');
@@ -22,7 +24,8 @@ module.exports = function(generator) {
     bugs: {},
     directories: {
       lib,
-      test: 'test/'
+      test: 'test/',
+      config: configDirectory
     },
     engines: {
       node: `^${major}.0.0`,
