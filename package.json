@@ -20,8 +20,11 @@
   },
   "scripts": {
     "install": "lerna bootstrap",
+    "publish": "lerna publish",
     "lint": "semistandard packages/**/*.js --fix",
-    "test": "npm run lint && nyc lerna run test --ignore generator-**"
+    "test": "npm run lint && nyc lerna run test --ignore generator-**",
+    "test:client": "grunt",
+    "test:generators": "lerna run test --scope generator-** --stream --concurrency 1"
   },
   "semistandard": {
     "env": [
@@ -29,9 +32,11 @@
     ]
   },
   "devDependencies": {
-    "lerna": "^3.1.1",
-    "mocha": "^5.2.0",
+    "lerna": "^3.4.0",
     "nyc": "^13.0.1",
-    "semistandard": "^12.0.1"
+    "semistandard": "^12.0.1",
+    "grunt": "^1.0.3",
+    "grunt-cli": "^1.3.1",
+    "grunt-saucelabs": "^9.0.0"
   }
 }

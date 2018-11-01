@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="3.2.6"></a>
+## [3.2.6](https://github.com/feathersjs/feathers/compare/@feathersjs/primus@3.2.5...@feathersjs/primus@3.2.6) (2018-10-25)
+
+
+### Bug Fixes
+
+* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+
+
+
+
+
+<a name="3.2.5"></a>
+## [3.2.5](https://github.com/feathersjs/feathers/compare/@feathersjs/primus@3.2.4...@feathersjs/primus@3.2.5) (2018-09-21)
+
+**Note:** Version bump only for package @feathersjs/primus
+
+
+
+
+
+<a name="3.2.4"></a>
+## [3.2.4](https://github.com/feathersjs/feathers/compare/@feathersjs/primus@3.2.3...@feathersjs/primus@3.2.4) (2018-09-17)
+
+**Note:** Version bump only for package @feathersjs/primus
+
+
+
+
+
 <a name="3.2.3"></a>
 ## [3.2.3](https://github.com/feathersjs/feathers/compare/@feathersjs/primus@3.2.2...@feathersjs/primus@3.2.3) (2018-09-02)
 

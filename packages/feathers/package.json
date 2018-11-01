@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/feathers",
   "description": "A REST and realtime API layer for modern applications.",
-  "version": "3.2.1",
+  "version": "3.2.3",
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts",
+    "test": "mocha --opts ../../mocha.opts",
     "update-version": "node -e \"console.log('module.exports = \\'' + require('./package.json').version + '\\';')\" > lib/version.js",
     "version": "npm run update-version"
   },
@@ -38,9 +38,12 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^3.0.0",
-    "debug": "^3.1.0",
+    "@feathersjs/commons": "^3.0.1",
+    "debug": "^4.0.0",
     "events": "^3.0.0",
     "uberproto": "^2.0.2"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
   }
 }

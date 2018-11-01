@@ -6,7 +6,7 @@ module.exports = function (app) {
   const mongooseClient = app.get('mongooseClient');
   const <%= camelName %> = new mongooseClient.Schema({
   <% if(authentication.strategies.indexOf('local') !== -1) { %>
-    email: {type: String, unique: true},
+    email: {type: String, unique: true, lowercase: true},
     password: { type: String },
   <% } %>
   <% authentication.oauthProviders.forEach(provider => { %>

@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/configuration",
   "description": "A small configuration module for your Feathers application.",
-  "version": "2.0.2",
+  "version": "2.0.4",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -26,7 +26,7 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+    "test": "mocha --opts ../../mocha.opts"
   },
   "semistandard": {
     "env": [
@@ -41,9 +41,10 @@
   },
   "dependencies": {
     "config": "^2.0.0",
-    "debug": "^3.1.0"
+    "debug": "^4.0.0"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "^3.2.1"
+    "mocha": "^5.2.0",
+    "@feathersjs/feathers": "^3.2.3"
   }
 }

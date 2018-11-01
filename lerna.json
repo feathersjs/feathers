@@ -10,8 +10,7 @@
     },
     "publish": {
       "allowBranch": "master",
-      "conventionalCommits": true,
-      "message": "chore(release): publish %s"
+      "conventionalCommits": true
     }
   },
   "ignoreChanges": [
@@ -19,6 +18,9 @@
     "**/CHANGELOG.md",
     "**/package-lock.json",
     "**/yarn.lock",
-    "**/test/**"
+    "**/test/**",
+    "lerna.json",
+    "readme.md",
+    "package.json"
   ]
 }

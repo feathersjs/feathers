@@ -1,0 +1,42 @@
+version: "2"         # required to adjust maintainability checks
+checks:
+  argument-count:
+    config:
+      threshold: 6
+  complex-logic:
+    config:
+      threshold: 50
+  file-lines:
+    config:
+      threshold: 300
+  method-complexity:
+    config:
+      threshold: 6
+  method-count:
+    config:
+      threshold: 20
+  method-lines:
+    config:
+      threshold: 80
+  nested-control-flow:
+    config:
+      threshold: 6
+  return-statements:
+    config:
+      threshold: 6
+  similar-code:
+    config:
+      threshold: 50
+  identical-code:
+    config:
+      threshold: 25
+plugins:
+  duplication:
+    enabled: true
+    config:
+      count_threshold: 3
+exclude_patterns:
+  - "**/test/*"
+  - "**/dist/*"
+  - "**/*.dist.js"
+  - "**/templates/*"
