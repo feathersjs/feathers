@@ -1,6 +1,5 @@
 const errors = require('@feathersjs/errors');
 const { omit } = require('@feathersjs/commons')._;
-
 const debug = require('debug')('@feathersjs/express/rest');
 
 const statusCodes = {
@@ -16,7 +15,15 @@ const methodMap = {
   patch: 'PATCH',
   remove: 'DELETE'
 };
-const allowedMethods = function (service) {
+
+function getAllowedMethods(service, routes) {
+  if (routes) {
+    return routes
+      .filter(({ method }) => typeof service[method] === 'function')
+      .map(methodRoute => methodRoute.verb.toUpperCase())
+      .filter((value, index, list) => list.indexOf(value) === index);
+  }
+
   return Object.keys(methodMap)
     .filter(method => typeof service[method] === 'function')
     .map(method => methodMap[method])
@@ -40,14 +47,15 @@ function makeArgsGetter (argsOrder) {
 // A function that returns the middleware for a given method and service
 // `getArgs` is a function that should return additional leading service arguments
 module.exports = function getHandler (method) {
-  return service => {
+  return (service, routes) => {
     const getArgs = makeArgsGetter(service.methods[method]);
+    const allowedMethods = getAllowedMethods(service, routes);
 
     return function (req, res, next) {
       const { query } = req;
       const route = omit(req.params, '__feathersId');
 
-      res.setHeader('Allow', allowedMethods(service).join(','));
+      res.setHeader('Allow', allowedMethods.join(','));
 
       // Check if the method exists on the service at all. Send 405 (Method not allowed) if not
       if (typeof service[method] !== 'function') {

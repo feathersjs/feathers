@@ -1,7 +1,65 @@
-const makeDebug = require('debug');
+const { stripSlashes } = require('@feathersjs/commons');
+const debug = require('debug')('@feathersjs/express/rest');
 const getHandler = require('./getHandler');
 
-const debug = makeDebug('@feathersjs/express/rest');
+const HTTP_METHOD = Symbol('@feathersjs/express/rest/HTTP_METHOD');
+
+const httpMethod = (verb, uris) => method => {
+  Object.defineProperty(method, HTTP_METHOD, {
+    enumerable: false,
+    configurable: true,
+    writable: false,
+    value: (Array.isArray(uris) ? uris : [uris])
+      .reduce(
+        (result, uri) => ([...result, { verb, uri }]),
+        method[HTTP_METHOD] || []
+      )
+  });
+
+  return method;
+};
+
+function getServiceRoutes (service, path, defaultRoutes) {
+  const { methods } = service;
+
+  const getDefaultUri = methodName => methods[methodName].indexOf('id') === -1
+    ? `/${path}/${methodName}`
+    : `/${path}/:__feathersId/${methodName}`;
+
+  return Object.keys(methods)
+    .filter(methodName => (service[methodName] && service[methodName][HTTP_METHOD]))
+    .reduce((result, methodName) => {
+      const methodRoutes = (Array.isArray(service[methodName][HTTP_METHOD])
+        ? service[methodName][HTTP_METHOD]
+        : [service[methodName][HTTP_METHOD]])
+        .map(methodRoute => ({
+          method: methodName,
+          verb: methodRoute.verb,
+          uri: methodRoute.uri ? `/${path}/${stripSlashes(methodRoute.uri)}` : getDefaultUri(methodName)
+        }));
+
+      return [
+        ...result,
+        ...methodRoutes
+      ];
+    }, defaultRoutes);
+};
+
+const getDefaultRoutes = uri => {
+  const idUri = `${uri}/:__feathersId`;
+
+  return [
+    { method: 'find', verb: 'GET', uri }, // find(params)
+    { method: 'get', verb: 'GET', uri: idUri }, // get(id, params)
+    { method: 'create', verb: 'POST', uri }, // create(data, params)
+    { method: 'patch', verb: 'PATCH', uri: idUri }, // patch(id, data, params)
+    { method: 'patch', verb: 'PATCH', uri }, // patch(null, data, params)
+    { method: 'update', verb: 'PUT', uri: idUri }, // update(id, data, params)
+    { method: 'update', verb: 'PUT', uri }, // update(null, data, params)
+    { method: 'remove', verb: 'DELETE', uri: idUri }, // remove(id, data, params)
+    { method: 'remove', verb: 'DELETE', uri } // remove(null, data, params)
+  ];
+};
 
 function formatter (req, res, next) {
   if (res.data === undefined) {
@@ -44,8 +102,6 @@ function rest (handler = formatter) {
     // Register the REST provider
     app.providers.push(function (service, path, options) {
       const uri = `/${path}`;
-      const baseRoute = app.route(uri);
-      const idRoute = app.route(`${uri}/:__feathersId`);
 
       let { middleware } = options;
       let { before, after } = middleware;
@@ -56,29 +112,24 @@ function rest (handler = formatter) {
 
       debug(`Adding REST provider for service \`${path}\` at base route \`${uri}\``);
 
-      // GET / -> service.find(params)
-      baseRoute.get(...before, app.rest.find(service), ...after);
-      // POST / -> service.create(data, params)
-      baseRoute.post(...before, app.rest.create(service), ...after);
-      // PATCH / -> service.patch(null, data, params)
-      baseRoute.patch(...before, app.rest.patch(service), ...after);
-      // PUT / -> service.update(null, data, params)
-      baseRoute.put(...before, app.rest.update(service), ...after);
-      // DELETE / -> service.remove(null, params)
-      baseRoute.delete(...before, app.rest.remove(service), ...after);
+      const routes = getServiceRoutes(service, path, getDefaultRoutes(uri));
+      const routesStore = {};
 
-      // GET /:id -> service.get(id, params)
-      idRoute.get(...before, app.rest.get(service), ...after);
-      // PUT /:id -> service.update(id, data, params)
-      idRoute.put(...before, app.rest.update(service), ...after);
-      // PATCH /:id -> service.patch(id, data, params)
-      idRoute.patch(...before, app.rest.patch(service), ...after);
-      // DELETE /:id -> service.remove(id, params)
-      idRoute.delete(...before, app.rest.remove(service), ...after);
+      for (const { method, verb, uri: routeUri } of routes) {
+        routesStore[routeUri] = routesStore[routeUri] || app.route(routeUri);
+
+        routesStore[routeUri][verb.toLowerCase()](
+          ...before,
+          getHandler(method)(service, routes),
+          ...after
+        );
+      }
     });
   };
 }
 
 rest.formatter = formatter;
+rest.httpMethod = httpMethod;
+rest.HTTP_METHOD = HTTP_METHOD;
 
 module.exports = rest;

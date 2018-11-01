@@ -221,7 +221,7 @@ describe('@feathersjs/express/rest provider', () => {
           query: {},
           provider: 'rest'
         };
-        
+
         app.use('/hook-error', {
           get () {
             return Promise.reject(new Error('I blew up'));
@@ -522,6 +522,68 @@ describe('@feathersjs/express/rest provider', () => {
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code');
           assert.deepEqual(expected, res.data);
+        });
+    });
+  });
+
+  describe('Custom methods', () => {
+    let server, app;
+
+    before(() => {
+      app = expressify(feathers())
+        .configure(rest())
+        .use(bodyParser.json())
+        .use('/todo', {
+          get(id) {
+            return id;
+          },
+          // httpMethod is usable as a decorator: @httpMethod('POST', '/:__feathersId/custom-path')
+          custom: rest.httpMethod('POST')(feathers.activateHooks(['id', 'data', 'params'])(
+            (id, data, params = {}) => {
+              return Promise.resolve({
+                id,
+                data
+              });
+            }
+          )),
+          other: rest.httpMethod('PATCH', [':__feathersId/second-method', ])(
+            feathers.activateHooks(['id', 'data', 'params'])(
+              (id, data, params = {}) => {
+                return Promise.resolve({
+                  id,
+                  data
+                });
+              }
+            )
+          )
+        });
+
+      server = app.listen(4781);
+    });
+
+    after(done => server.close(done));
+
+    it.only('works with custom methods', () => {
+      return axios.post('http://localhost:4781/todo/42/custom', { text: 'Do dishes' })
+        .then(res => {
+          assert.equal(res.headers.allow, 'GET,POST,PATCH');
+          assert.deepEqual(res.data, {
+            id: '42',
+            data: { text: 'Do dishes' }
+          });
+
+          return axios.patch('http://localhost:4781/todo/12/second-method', { text: 'Hmm' })
+            .then(res => {
+              assert.equal(res.headers.allow, 'GET,POST,PATCH');
+              assert.deepEqual(res.data, {
+                id: '12',
+                data: { text: 'Hmm' }
+              });
+            });
+        })
+        .catch(err => {
+          console.log(err);
+          return Promise.reject(err);
         });
     });
   });
