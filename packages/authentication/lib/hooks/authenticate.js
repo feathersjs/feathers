@@ -28,7 +28,7 @@ module.exports = function authenticate (_strategies, options = {}) {
     const strategy = context.data.strategy || strategies[0];
 
     if (strategies.indexOf(strategy) === -1) {
-      return Promise.reject(new NotAuthenticated(`Strategy ${strategy} is not permitted`));
+      return Promise.reject(new NotAuthenticated(`Strategy '${strategy}' is not permitted`));
     }
 
     // Handle the case where authenticate hook was registered without a passport strategy specified
