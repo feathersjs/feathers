@@ -563,7 +563,7 @@ describe('@feathersjs/express/rest provider', () => {
 
     after(done => server.close(done));
 
-    it.only('works with custom methods', () => {
+    it('works with custom methods', () => {
       return axios.post('http://localhost:4781/todo/42/custom', { text: 'Do dishes' })
         .then(res => {
           assert.equal(res.headers.allow, 'GET,POST,PATCH');
