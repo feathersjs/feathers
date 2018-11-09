@@ -546,7 +546,7 @@ describe('@feathersjs/express/rest provider', () => {
               });
             }
           )),
-          other: rest.httpMethod('PATCH', [':__feathersId/second-method', ])(
+          other: rest.httpMethod('PATCH', ':__feathersId/second-method')(
             feathers.activateHooks(['id', 'data', 'params'])(
               (id, data, params = {}) => {
                 return Promise.resolve({
@@ -571,15 +571,21 @@ describe('@feathersjs/express/rest provider', () => {
             id: '42',
             data: { text: 'Do dishes' }
           });
+        })
+        .catch(err => {
+          console.log(err);
+          return Promise.reject(err);
+        });
+    });
 
-          return axios.patch('http://localhost:4781/todo/12/second-method', { text: 'Hmm' })
-            .then(res => {
-              assert.equal(res.headers.allow, 'GET,POST,PATCH');
-              assert.deepEqual(res.data, {
-                id: '12',
-                data: { text: 'Hmm' }
-              });
-            });
+    it('works with custom methods - with route', () => {
+      return axios.patch('http://localhost:4781/todo/12/second-method', { text: 'Hmm' })
+        .then(res => {
+          assert.equal(res.headers.allow, 'GET,POST,PATCH');
+          assert.deepEqual(res.data, {
+            id: '12',
+            data: { text: 'Hmm' }
+          });
         })
         .catch(err => {
           console.log(err);
