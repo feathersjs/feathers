@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="4.1.6"></a>
+## [4.1.6](https://github.com/feathersjs/feathers/compare/@feathersjs/transport-commons@4.1.5...@feathersjs/transport-commons@4.1.6) (2018-10-25)
+
+
+### Bug Fixes
+
+* Compare socket event data using lodash's isEqual instead of indexOf ([#1061](https://github.com/feathersjs/feathers/issues/1061)) ([f706db3](https://github.com/feathersjs/feathers/commit/f706db3))
+* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+
+
+
+
+
 <a name="4.1.5"></a>
 ## [4.1.5](https://github.com/feathersjs/feathers/compare/@feathersjs/transport-commons@4.1.4...@feathersjs/transport-commons@4.1.5) (2018-09-21)
 

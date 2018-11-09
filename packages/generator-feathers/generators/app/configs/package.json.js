@@ -29,13 +29,17 @@ module.exports = function(generator) {
       [packager]: version
     },
     'scripts': {
-      test: `${packager} run eslint && ${packager} run mocha`,
+      test: `${packager} run eslint && NODE_ENV= ${packager} run ${props.tester}`,
       eslint: `eslint ${lib}/. test/. --config .eslintrc.json`,
       dev: `nodemon ${lib}/`,
-      start: `node ${lib}/`,
-      mocha: 'mocha test/ --recursive --exit'
+      start: `node ${lib}/`
     }
   };
+  if ('mocha' === props.tester) {
+    pkg.scripts['mocha'] = 'mocha test/ --recursive --exit';
+  } else {
+    pkg.scripts['jest'] = 'jest';
+  }
 
   return pkg;
 };

@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.8.0"></a>
+# [2.8.0](https://github.com/feathersjs/feathers/compare/generator-feathers@2.7.1...generator-feathers@2.8.0) (2018-10-25)
+
+
+### Bug Fixes
+
+* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+
+
+### Features
+
+* [@feathers](https://github.com/feathers)/cli: introduce option to choose jest for tests instead of mocha ([#1057](https://github.com/feathersjs/feathers/issues/1057)) ([1356a1c](https://github.com/feathersjs/feathers/commit/1356a1c))
+
+
+
+
+
+<a name="2.7.1"></a>
+## [2.7.1](https://github.com/feathersjs/feathers/compare/generator-feathers@2.7.0...generator-feathers@2.7.1) (2018-10-06)
+
+
+### Bug Fixes
+
+* Catch connection initialization errors ([#1043](https://github.com/feathersjs/feathers/issues/1043)) ([4f9acd6](https://github.com/feathersjs/feathers/commit/4f9acd6))
+
+
+
+
+
+<a name="2.7.0"></a>
+# [2.7.0](https://github.com/feathersjs/feathers/compare/generator-feathers@2.6.4...generator-feathers@2.7.0) (2018-09-24)
+
+
+### Bug Fixes
+
+* More robust parsing of mongodb connection string. Use new url parser. ([#1002](https://github.com/feathersjs/feathers/issues/1002)) ([74b31df](https://github.com/feathersjs/feathers/commit/74b31df))
+
+
+### Features
+
+* Added generators for feathers-objection & feathers-cassandra ([#1010](https://github.com/feathersjs/feathers/issues/1010)) ([c8b27d0](https://github.com/feathersjs/feathers/commit/c8b27d0))
+
+
+
+
+
 <a name="2.6.4"></a>
 ## [2.6.4](https://github.com/feathersjs/feathers/compare/generator-feathers@2.6.3...generator-feathers@2.6.4) (2018-09-21)
 

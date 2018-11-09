@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-client",
   "description": "The authentication plugin for feathers-client",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "homepage": "https://feathersjs.com",
   "main": "lib/index.js",
   "keywords": [
@@ -26,7 +26,7 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+    "test": "mocha --opts ../../mocha.opts"
   },
   "directories": {
     "lib": "lib"
@@ -40,20 +40,21 @@
     "jwt-decode": "^2.1.0"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^2.1.11",
-    "@feathersjs/authentication-jwt": "^2.0.5",
-    "@feathersjs/authentication-local": "^1.2.5",
+    "@feathersjs/authentication": "^2.1.13",
+    "@feathersjs/authentication-jwt": "^2.0.7",
+    "@feathersjs/authentication-local": "^1.2.7",
     "@feathersjs/express": "^1.2.7",
     "@feathersjs/feathers": "^3.2.3",
-    "@feathersjs/primus": "^3.2.5",
-    "@feathersjs/primus-client": "^1.1.4",
+    "@feathersjs/primus": "^3.2.6",
+    "@feathersjs/primus-client": "^1.1.5",
     "@feathersjs/rest-client": "^1.4.5",
-    "@feathersjs/socketio": "^3.2.6",
-    "@feathersjs/socketio-client": "^1.1.4",
+    "@feathersjs/socketio": "^3.2.7",
+    "@feathersjs/socketio-client": "^1.1.5",
     "body-parser": "^1.15.2",
     "chai": "^4.0.0",
     "feathers-memory": "^2.0.0",
     "localstorage-memory": "^1.0.2",
+    "mocha": "^5.2.0",
     "primus": "^7.0.0",
     "primus-emitter": "^3.1.1",
     "socket.io-client": "^2.0.0",

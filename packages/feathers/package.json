@@ -27,7 +27,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts",
+    "test": "mocha --opts ../../mocha.opts",
     "update-version": "node -e \"console.log('module.exports = \\'' + require('./package.json').version + '\\';')\" > lib/version.js",
     "version": "npm run update-version"
   },
@@ -42,5 +42,8 @@
     "debug": "^4.0.0",
     "events": "^3.0.0",
     "uberproto": "^2.0.2"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
   }
 }

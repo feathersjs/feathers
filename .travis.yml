@@ -1,14 +1,16 @@
-sudo: false
+sudo: required
 language: node_js
 install: npm install
 script:
   - npm test
   - npm run test:generators
-  - npm run test:client
-services: mongodb
+  - if [ ! -z "$SAUCE_ACCESS_KEY" ]; then npm run test:client; fi
+services:
+  - mongodb
+  - cassandra
 node_js:
-  - node
-  - '6'
+  - 10
+  - 6
 addons:
   rethinkdb: 2.3
   code_climate:

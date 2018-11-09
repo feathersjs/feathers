@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-local",
   "description": "Local authentication strategy for @feathers/authentication",
-  "version": "1.2.5",
+  "version": "1.2.7",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -26,7 +26,7 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+    "test": "mocha --opts ../../mocha.opts"
   },
   "directories": {
     "lib": "lib"
@@ -42,14 +42,15 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^2.1.11",
-    "@feathersjs/authentication-jwt": "^2.0.5",
+    "@feathersjs/authentication": "^2.1.13",
+    "@feathersjs/authentication-jwt": "^2.0.7",
     "@feathersjs/express": "^1.2.7",
     "@feathersjs/feathers": "^3.2.3",
-    "@feathersjs/socketio": "^3.2.6",
+    "@feathersjs/socketio": "^3.2.7",
     "body-parser": "^1.15.2",
     "chai": "^4.0.2",
     "feathers-memory": "^2.0.0",
+    "mocha": "^5.2.0",
     "sinon": "^6.0.0",
     "sinon-chai": "^3.0.0"
   }

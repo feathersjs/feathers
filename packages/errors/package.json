@@ -29,7 +29,7 @@
 		"lib": "lib"
 	},
 	"scripts": {
-		"test": "../../node_modules/.bin/mocha --opts ../../mocha.opts"
+		"test": "mocha --opts ../../mocha.opts"
 	},
 	"publishConfig": {
 		"access": "public"
@@ -38,6 +38,7 @@
 		"debug": "^4.0.0"
 	},
 	"devDependencies": {
+		"mocha": "^5.2.0",
 		"@feathersjs/feathers": "^3.2.3",
 		"chai": "^4.1.2",
 		"express": "^4.16.3",
