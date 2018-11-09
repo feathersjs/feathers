@@ -125,12 +125,9 @@ function rest (handler = formatter) {
       debug(`Adding REST provider for service \`${path}\` at base route \`${uri}\``);
 
       const routes = getServiceRoutes(service, path, getDefaultRoutes(uri));
-      const routesStore = {};
 
       for (const { method, verb, uri: routeUri } of routes) {
-        routesStore[routeUri] = routesStore[routeUri] || app.route(routeUri);
-
-        routesStore[routeUri][verb.toLowerCase()](
+        app.route(routeUri)[verb.toLowerCase()](
           ...before,
           getHandler(method)(service, routes),
           ...after
