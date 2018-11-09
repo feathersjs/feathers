@@ -113,21 +113,19 @@ function rest (handler = formatter) {
 
     // Register the REST provider
     app.providers.push(function (service, path, options) {
-      const uri = `/${path}`;
-
-      let { middleware } = options;
-      let { before, after } = middleware;
+      const baseUri = `/${path}`;
+      let { middleware: { before, after } } = options;
 
       if (typeof handler === 'function') {
         after = after.concat(handler);
       }
 
-      debug(`Adding REST provider for service \`${path}\` at base route \`${uri}\``);
+      debug(`Adding REST provider for service \`${path}\` at base route \`${baseUri}\``);
 
-      const routes = getServiceRoutes(service, path, getDefaultRoutes(uri));
+      const routes = getServiceRoutes(service, path, getDefaultRoutes(baseUri));
 
-      for (const { method, verb, uri: routeUri } of routes) {
-        app.route(routeUri)[verb.toLowerCase()](
+      for (const { method, verb, uri } of routes) {
+        app.route(uri)[verb.toLowerCase()](
           ...before,
           getHandler(method)(service, routes),
           ...after
