@@ -4,48 +4,60 @@ const getHandler = require('./getHandler');
 
 const HTTP_METHOD = Symbol('@feathersjs/express/rest/HTTP_METHOD');
 
-const httpMethod = (verb, uris) => method => {
-  Object.defineProperty(method, HTTP_METHOD, {
-    enumerable: false,
-    configurable: true,
-    writable: false,
-    value: (Array.isArray(uris) ? uris : [uris])
-      .reduce(
-        (result, uri) => ([...result, { verb, uri }]),
-        method[HTTP_METHOD] || []
-      )
-  });
+function httpMethod (verb, uris) {
+  return method => {
+    Object.defineProperty(method, HTTP_METHOD, {
+      enumerable: false,
+      configurable: true,
+      writable: false,
+      value: (Array.isArray(uris) ? uris : [uris])
+        .reduce(
+          (result, uri) => ([...result, { verb, uri }]),
+          method[HTTP_METHOD] || []
+        )
+    });
 
-  return method;
-};
+    return method;
+  };
+}
+
+function getDefaultUri (path, methods, method) {
+  return methods[method].indexOf('id') === -1
+    ? `/${path}/${method}`
+    : `/${path}/:__feathersId/${method}`;
+}
+
+function parseRoute(path, methods, method, route) {
+  return {
+    method,
+    verb: route.verb,
+    uri: route.uri ? `/${path}/${stripSlashes(route.uri)}` : getDefaultUri(path, methods, method)
+  };
+}
 
 function getServiceRoutes (service, path, defaultRoutes) {
   const { methods } = service;
 
-  const getDefaultUri = methodName => methods[methodName].indexOf('id') === -1
-    ? `/${path}/${methodName}`
-    : `/${path}/:__feathersId/${methodName}`;
-
   return Object.keys(methods)
-    .filter(methodName => (service[methodName] && service[methodName][HTTP_METHOD]))
-    .reduce((result, methodName) => {
-      const methodRoutes = (Array.isArray(service[methodName][HTTP_METHOD])
-        ? service[methodName][HTTP_METHOD]
-        : [service[methodName][HTTP_METHOD]])
-        .map(methodRoute => ({
-          method: methodName,
-          verb: methodRoute.verb,
-          uri: methodRoute.uri ? `/${path}/${stripSlashes(methodRoute.uri)}` : getDefaultUri(methodName)
-        }));
+    .filter(method => (service[method] && service[method][HTTP_METHOD]))
+    .reduce((result, method) => {
+      const routes = service[method][HTTP_METHOD];
+
+      if (Array.isArray(routes)) {
+        return [
+          ...result,
+          ...routes.map(route => parseRoute(path, methods, method, route))
+        ];
+      }
 
       return [
         ...result,
-        ...methodRoutes
+        parseRoute(path, methods, method, routes)
       ];
     }, defaultRoutes);
 };
 
-const getDefaultRoutes = uri => {
+function getDefaultRoutes (uri) {
   const idUri = `${uri}/:__feathersId`;
 
   return [
