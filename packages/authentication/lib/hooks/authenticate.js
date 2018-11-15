@@ -12,18 +12,16 @@ module.exports = function authenticate (_strategies, options = {}) {
   const strategies = Array.isArray(_strategies) ? _strategies : [ _strategies ];
 
   return function (context) {
-    const app = context.app;
+    const { app, params, type, data = {} } = context;
 
     // If called internally or we are already authenticated skip
-    if (!context.params.provider || context.params.authenticated) {
+    if (!params.provider || params.authenticated) {
       return Promise.resolve(context);
     }
 
-    if (context.type !== 'before') {
+    if (type !== 'before') {
       return Promise.reject(new Error(`The 'authenticate' hook should only be used as a 'before' hook.`));
     }
-
-    context.data = context.data || {};
 
     const strategy = context.data.strategy || strategies[0];
 

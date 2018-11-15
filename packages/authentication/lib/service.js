@@ -9,7 +9,7 @@ const debug = require('debug')('@feathersjs/authentication/service');
 const createJWT = promisify(jsonwebtoken.sign);
 const verifyJWT = promisify(jsonwebtoken.verify);
 
-module.exports = class Service {
+class Service {
   constructor (app) {
     this.app = app;
   }
@@ -117,4 +117,8 @@ module.exports = class Service {
       }
     }
   }
-};
+}
+
+module.exports = app => new Service(app);
+
+Object.assign(module.exports, { Service });

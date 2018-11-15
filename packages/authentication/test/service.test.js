@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const feathers = require('@feathersjs/feathers');
 
 const getOptions = require('../lib/options');
-const AuthService = require('../lib/service');
+const { Service: AuthService } = require('../lib/service');
 
 const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/;
 

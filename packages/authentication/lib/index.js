@@ -3,7 +3,7 @@ const hooks = require('./hooks');
 const passport = require('passport');
 const adapter = require('./passport');
 const getOptions = require('./options');
-const service = require('./service');
+const createService = require('./service');
 const legacySockets = require('./socket');
 
 const debug = Debug('@feathersjs/authentication:index');
@@ -11,31 +11,29 @@ const debug = Debug('@feathersjs/authentication:index');
 const init = (config = {}) => {
   return app => {
     const _super = app.setup;
-    // Merge and flatten options
-    const options = getOptions(config);
+    // Merge all options
+    const options = getOptions(config, app.get('authentication'));
 
     if (app.passport) {
       throw new Error(`You have already registered authentication on this app. You only need to do it once.`);
-    }
-
-    if (!options.secret) {
-      throw new Error(`You must provide a 'secret' in your authentication configuration`);
     }
 
     app.set('authentication', options);
 
     debug('Setting up Passport');
     // Set up our framework adapter
-    passport.framework(adapter.call(app, options));
+    passport.framework(adapter(options));
     // Expose passport on the app object
     app.passport = passport;
     // Alias to passport for less keystrokes
     app.authenticate = passport.authenticate.bind(passport);
-    app.use(options.path, service(app, options));
+    app.use(options.path, createService(app));
 
     const authService = app.service(options.path);
 
-    authService.publish(() => false);
+    if (typeof authService.publish === 'function') {
+      authService.publish(() => false);
+    }
     // TODO add service hooks
 
     app.passport.initialize();
@@ -66,5 +64,5 @@ module.exports = init;
 Object.assign(module.exports, {
   default: init,
   hooks,
-  service
+  createService
 });
