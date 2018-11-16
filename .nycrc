@@ -6,6 +6,9 @@
       "mocha"
     ]
   },
+  "exclude": [
+    "*/dist/**"
+  ],
   "print": "detail",
   "reporter": [
     "html",

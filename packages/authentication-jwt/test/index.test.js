@@ -289,8 +289,8 @@ describe('@feathersjs/authentication-jwt', () => {
         app = expressify(feathers());
         app.use('/users', memory());
         app.configure(authentication({
-          secret: sinon.spy(function(request, token, done) {
-              done(null, 'supersecret');
+          secret: sinon.spy(function (request, token, done) {
+            done(null, 'supersecret');
           }),
           cookie: {
             enabled: true,
@@ -346,14 +346,12 @@ describe('@feathersjs/authentication-jwt', () => {
       });
 
       describe('passport strategy options', () => {
-        let authOptions;
         let args;
 
         beforeEach(() => {
           sinon.spy(passportJWT, 'Strategy');
           app.configure(jwt({ custom: true }));
           app.setup();
-          authOptions = app.get('authentication');
           args = passportJWT.Strategy.getCall(0).args[0];
         });
 
