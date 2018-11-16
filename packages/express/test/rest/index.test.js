@@ -213,7 +213,7 @@ describe('@feathersjs/express/rest provider', () => {
           query: {},
           provider: 'rest'
         };
-        
+
         app.use('/hook-error', {
           get () {
             return Promise.reject(new Error('I blew up'));

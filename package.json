@@ -21,7 +21,7 @@
   "scripts": {
     "install": "lerna bootstrap",
     "publish": "lerna publish",
-    "lint": "semistandard packages/**/*.js --fix",
+    "lint": "semistandard \"packages/**/lib/**/*.js\" \"packages/**/test/**/*.js\" --fix",
     "test": "npm run lint && nyc lerna run test",
     "test:client": "grunt"
   },
