@@ -7,7 +7,10 @@
     ]
   },
   "exclude": [
-    "*/dist/**"
+    "**/test/*",
+    "**/dist/*",
+    "**/*.dist.js",
+    "**/templates/*"
   ],
   "print": "detail",
   "reporter": [
