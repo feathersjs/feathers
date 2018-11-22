@@ -21,7 +21,7 @@ describe('app.publish', () => {
       app.service('test').publish('bla', function () {});
       assert.ok(false, 'Should never get here');
     } catch (e) {
-      assert.equal(e.message, `'bla' is not a valid service event`);
+      assert.strictEqual(e.message, `'bla' is not a valid service event`);
     }
   });
 
@@ -46,11 +46,11 @@ describe('app.publish', () => {
       app.service('test').publish('created', () => app.channel('testing'));
 
       app.once('publish', function (event, channel, hook) {
-        assert.equal(event, 'created');
-        assert.equal(hook.path, 'test');
-        assert.equal(hook.type, 'after');
-        assert.deepEqual(hook.result, data);
-        assert.deepEqual(channel.connections, [ c1 ]);
+        assert.strictEqual(event, 'created');
+        assert.strictEqual(hook.path, 'test');
+        assert.strictEqual(hook.type, 'after');
+        assert.deepStrictEqual(hook.result, data);
+        assert.deepStrictEqual(channel.connections, [ c1 ]);
         done();
       });
 
@@ -92,8 +92,8 @@ describe('app.publish', () => {
       );
 
       app.once('publish', (event, channel, hook) => {
-        assert.deepEqual(hook.result, data);
-        assert.deepEqual(channel.connections, [ c1, c2 ]);
+        assert.deepStrictEqual(hook.result, data);
+        assert.deepStrictEqual(channel.connections, [ c1, c2 ]);
         done();
       });
 
@@ -111,14 +111,14 @@ describe('app.publish', () => {
       app.service('test').publish('foo', () => app.channel('testing'));
 
       app.once('publish', (event, channel, hook) => {
-        assert.equal(event, 'foo');
-        assert.deepEqual(hook, {
+        assert.strictEqual(event, 'foo');
+        assert.deepStrictEqual(hook, {
           app,
           path: 'test',
           service: app.service('test'),
           result: eventData
         });
-        assert.deepEqual(channel.connections, [ c1 ]);
+        assert.deepStrictEqual(channel.connections, [ c1 ]);
         done();
       });
 
@@ -162,8 +162,8 @@ describe('app.publish', () => {
       ]);
 
       app.once('publish', (event, channel, hook) => {
-        assert.deepEqual(hook.result, data);
-        assert.deepEqual(channel.connections, [ c1, c2 ]);
+        assert.deepStrictEqual(hook.result, data);
+        assert.deepStrictEqual(channel.connections, [ c1, c2 ]);
         done();
       });
 
@@ -184,10 +184,10 @@ describe('app.publish', () => {
       ]);
 
       app.once('publish', (event, channel, hook) => {
-        assert.deepEqual(hook.result, data);
-        assert.deepEqual(channel.dataFor(c1), c1data);
+        assert.deepStrictEqual(hook.result, data);
+        assert.deepStrictEqual(channel.dataFor(c1), c1data);
         assert.ok(channel.dataFor(c2) === null);
-        assert.deepEqual(channel.connections, [ c1, c2 ]);
+        assert.deepStrictEqual(channel.connections, [ c1, c2 ]);
         done();
       });
 
@@ -219,8 +219,8 @@ describe('app.publish', () => {
       });
 
       app.once('publish', (event, channel, hook) => {
-        assert.equal(channel.dataFor(c1), null);
-        assert.deepEqual(channel.connections, [ c1 ]);
+        assert.strictEqual(channel.dataFor(c1), null);
+        assert.deepStrictEqual(channel.connections, [ c1 ]);
         done();
       });
 

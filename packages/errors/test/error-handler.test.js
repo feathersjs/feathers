@@ -164,7 +164,7 @@ describe('error-handler', () => {
             expect(_req).to.equal(req);
             expect(_res).to.equal(res);
             done();
-          }}
+          } }
         });
         middleware(err, req, res);
       });
@@ -179,7 +179,7 @@ describe('error-handler', () => {
             expect(_req).to.equal(req);
             expect(_res).to.equal(res);
             done();
-          }}
+          } }
         });
         middleware(err, req, res);
       });
@@ -223,7 +223,7 @@ describe('error-handler', () => {
             expect(_req).to.equal(req);
             expect(_res).to.equal(res);
             done();
-          }}
+          } }
         });
         middleware(err, req, res);
       });
@@ -238,7 +238,7 @@ describe('error-handler', () => {
             expect(_req).to.equal(req);
             expect(_res).to.equal(res);
             done();
-          }}
+          } }
         });
         middleware(err, req, res);
       });

@@ -22,7 +22,7 @@
     "install": "lerna bootstrap",
     "publish": "lerna publish",
     "lint": "semistandard \"packages/**/lib/**/*.js\" \"packages/**/test/**/*.js\" --fix",
-    "test": "npm run lint && nyc lerna run test",
+    "test": "npm run lint && nyc lerna run test --ignore @feathersjs/authentication-client",
     "test:client": "grunt"
   },
   "semistandard": {

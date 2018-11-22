@@ -6,9 +6,9 @@ describe('feathers-channels', () => {
   it('has app.channel', () => {
     const app = feathers().configure(channels());
 
-    assert.equal(typeof app.channel, 'function');
-    assert.equal(typeof app[channels.keys.CHANNELS], 'object');
-    assert.equal(app.channels.length, 0);
+    assert.strictEqual(typeof app.channel, 'function');
+    assert.strictEqual(typeof app[channels.keys.CHANNELS], 'object');
+    assert.strictEqual(app.channels.length, 0);
   });
 
   it('throws an error when called with nothing', () => {
@@ -18,7 +18,7 @@ describe('feathers-channels', () => {
       app.channel();
       assert.ok(false, 'Should never get here');
     } catch (e) {
-      assert.equal(e.message, 'app.channel needs at least one channel name');
+      assert.strictEqual(e.message, 'app.channel needs at least one channel name');
     }
   });
 

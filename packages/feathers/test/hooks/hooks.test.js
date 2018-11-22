@@ -14,15 +14,15 @@ describe('hooks basics', () => {
     });
 
     return app.service('dummy').get(1, {}, function () {}).catch(e => {
-      assert.equal(e.message, 'Callbacks are no longer supported. Use Promises or async/await instead.');
+      assert.strictEqual(e.message, 'Callbacks are no longer supported. Use Promises or async/await instead.');
 
       return app.service('dummy').get();
     }).catch(e => {
-      assert.equal(e.message, `An id must be provided to the 'get' method`);
+      assert.strictEqual(e.message, `An id must be provided to the 'get' method`);
     }).then(() =>
       app.service('dummy').create()
     ).catch(e => {
-      assert.equal(e.message, `A data object must be provided to the 'create' method`);
+      assert.strictEqual(e.message, `A data object must be provided to the 'create' method`);
     });
   });
 
@@ -49,7 +49,7 @@ describe('hooks basics', () => {
     });
 
     return service.get(10).then(data => {
-      assert.deepEqual(data, { id: 10, user: 'David', after: true });
+      assert.deepStrictEqual(data, { id: 10, user: 'David', after: true });
     });
   });
 
@@ -64,10 +64,10 @@ describe('hooks basics', () => {
 
     service.hooks({
       before (hook) {
-        assert.equal(this, service);
-        assert.equal(hook.service, service);
-        assert.equal(hook.app, app);
-        assert.equal(hook.path, 'dummy');
+        assert.strictEqual(this, service);
+        assert.strictEqual(hook.service, service);
+        assert.strictEqual(hook.app, app);
+        assert.strictEqual(hook.path, 'dummy');
       }
     });
 
@@ -95,7 +95,7 @@ describe('hooks basics', () => {
     });
 
     return service.get(1)
-      .then(result => assert.equal(result, null));
+      .then(result => assert.strictEqual(result, null));
   });
 
   it('invalid type in .hooks throws error', () => {
@@ -111,7 +111,7 @@ describe('hooks basics', () => {
       });
       assert.ok(false);
     } catch (e) {
-      assert.equal(e.message, `'invalid' is not a valid hook type`);
+      assert.strictEqual(e.message, `'invalid' is not a valid hook type`);
     }
   });
 
@@ -130,7 +130,7 @@ describe('hooks basics', () => {
       });
       assert.ok(false);
     } catch (e) {
-      assert.equal(e.message, `'invalid' is not a valid hook method`);
+      assert.strictEqual(e.message, `'invalid' is not a valid hook method`);
     }
   });
 
@@ -152,7 +152,7 @@ describe('hooks basics', () => {
     });
 
     return app.service('dummy').get(1).catch(e => {
-      assert.equal(e.message, `Service method 'get' for 'dummy' service must return a promise`);
+      assert.strictEqual(e.message, `Service method 'get' for 'dummy' service must return a promise`);
     });
   });
 
@@ -165,10 +165,10 @@ describe('hooks basics', () => {
       });
 
       return app.service('dummy').get(10, {}, true).then(context => {
-        assert.equal(context.service, app.service('dummy'));
-        assert.equal(context.type, 'after');
-        assert.equal(context.path, 'dummy');
-        assert.deepEqual(context.result, {
+        assert.strictEqual(context.service, app.service('dummy'));
+        assert.strictEqual(context.type, 'after');
+        assert.strictEqual(context.path, 'dummy');
+        assert.deepStrictEqual(context.result, {
           id: 10,
           params: {}
         });
@@ -183,10 +183,10 @@ describe('hooks basics', () => {
       });
 
       return app.service('dummy').get(10, {}, true).catch(context => {
-        assert.equal(context.service, app.service('dummy'));
-        assert.equal(context.type, 'error');
-        assert.equal(context.path, 'dummy');
-        assert.equal(context.error.message, 'Something went wrong');
+        assert.strictEqual(context.service, app.service('dummy'));
+        assert.strictEqual(context.type, 'error');
+        assert.strictEqual(context.path, 'dummy');
+        assert.strictEqual(context.error.message, 'Something went wrong');
       });
     });
 
@@ -198,10 +198,10 @@ describe('hooks basics', () => {
       });
 
       return app.service('dummy').get(undefined, {}, true).catch(context => {
-        assert.equal(context.service, app.service('dummy'));
-        assert.equal(context.type, 'error');
-        assert.equal(context.path, 'dummy');
-        assert.equal(context.error.message, 'An id must be provided to the \'get\' method');
+        assert.strictEqual(context.service, app.service('dummy'));
+        assert.strictEqual(context.type, 'error');
+        assert.strictEqual(context.path, 'dummy');
+        assert.strictEqual(context.error.message, 'An id must be provided to the \'get\' method');
       });
     });
 
@@ -221,10 +221,10 @@ describe('hooks basics', () => {
       });
 
       return app.service('dummy').get(10, {}, true).catch(context => {
-        assert.equal(context.service, app.service('dummy'));
-        assert.equal(context.type, 'error');
-        assert.equal(context.path, 'dummy');
-        assert.equal(context.error.message, 'Error in error hook');
+        assert.strictEqual(context.service, app.service('dummy'));
+        assert.strictEqual(context.type, 'error');
+        assert.strictEqual(context.path, 'dummy');
+        assert.strictEqual(context.error.message, 'Error in error hook');
       });
     });
 
@@ -244,7 +244,7 @@ describe('hooks basics', () => {
 
       return app.service('dummy').get(10, {}, true).then(hook => {
         assert.ok(hook.error);
-        assert.deepEqual(hook.result, result);
+        assert.deepStrictEqual(hook.result, result);
       }).catch(() => {
         throw new Error('Should never get here');
       });
@@ -289,7 +289,7 @@ describe('hooks basics', () => {
 
     const args = [1, { test: 'ok' }, { provider: 'rest' }];
 
-    assert.deepEqual(app.service('dummy').methods, {
+    assert.deepStrictEqual(app.service('dummy').methods, {
       find: ['params'],
       get: ['id', 'params'],
       create: ['data', 'params'],
@@ -302,13 +302,13 @@ describe('hooks basics', () => {
 
     return app.service('dummy').custom(...args, true)
       .then(hook => {
-        assert.deepEqual(hook.result, args);
-        assert.deepEqual(hook.test, ['all::before', 'custom::before', 'all::after', 'custom::after']);
+        assert.deepStrictEqual(hook.result, args);
+        assert.deepStrictEqual(hook.test, ['all::before', 'custom::before', 'all::after', 'custom::after']);
 
         app.service('dummy').other(...args, true)
           .then(hook => {
-            assert.deepEqual(hook.result, args);
-            assert.deepEqual(hook.test, ['all::before', 'all::after']);
+            assert.deepStrictEqual(hook.result, args);
+            assert.deepStrictEqual(hook.test, ['all::before', 'all::after']);
           });
       });
   });
@@ -339,7 +339,7 @@ describe('hooks basics', () => {
 
     return app.service('dummy').custom(...args)
       .then(result => {
-        assert.deepEqual(result, args);
+        assert.deepStrictEqual(result, args);
       });
   });
 
@@ -351,7 +351,7 @@ describe('hooks basics', () => {
     });
 
     return app.service('dummy').get('test', null).then(result => {
-      assert.deepEqual(result, {
+      assert.deepStrictEqual(result, {
         id: 'test',
         params: {}
       });

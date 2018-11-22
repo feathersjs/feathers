@@ -18,7 +18,7 @@ describe('@feathersjs/express/rest provider', () => {
         app.configure(rest());
         assert.ok(false, 'Should never get here');
       } catch (e) {
-        assert.equal(e.message, '@feathersjs/express/rest needs an Express compatible app. Feathers apps have to wrapped with feathers-express first.');
+        assert.strictEqual(e.message, '@feathersjs/express/rest needs an Express compatible app. Feathers apps have to wrapped with feathers-express first.');
       }
     });
 
@@ -31,7 +31,7 @@ describe('@feathersjs/express/rest provider', () => {
 
         assert.ok(false, 'Should never get here');
       } catch (e) {
-        assert.equal(e.message, '@feathersjs/express/rest requires an instance of a Feathers application version 3.x or later (got 2.9.9)');
+        assert.strictEqual(e.message, '@feathersjs/express/rest requires an instance of a Feathers application version 3.x or later (got 2.9.9)');
       }
     });
 
@@ -58,7 +58,7 @@ describe('@feathersjs/express/rest provider', () => {
 
       return axios.get('http://localhost:4776/todo/dishes')
         .then(res => {
-          assert.equal(res.data, 'The todo is: You have to do dishes');
+          assert.strictEqual(res.data, 'The todo is: You have to do dishes');
         })
         .then(() => server.close());
     });
@@ -80,7 +80,7 @@ describe('@feathersjs/express/rest provider', () => {
       let server = app.listen(5775);
 
       return axios.get('http://localhost:5775/todo-handler/dishes')
-        .then(res => assert.deepEqual(res.data, data))
+        .then(res => assert.deepStrictEqual(res.data, data))
         .then(() => server.close());
     });
   });
@@ -149,7 +149,7 @@ describe('@feathersjs/express/rest provider', () => {
 
         return axios.get('http://localhost:4777/hook/dishes?test=param')
           .then(res => {
-            assert.deepEqual(res.data, {
+            assert.deepStrictEqual(res.data, {
               id: 'dishes',
               params,
               arguments: [
@@ -183,7 +183,7 @@ describe('@feathersjs/express/rest provider', () => {
 
         return axios.get('http://localhost:4777/hook-dispatch/dishes')
           .then(res => {
-            assert.deepEqual(res.data, {
+            assert.deepStrictEqual(res.data, {
               id: 'dishes',
               fromDispatch: true
             });
@@ -204,7 +204,7 @@ describe('@feathersjs/express/rest provider', () => {
         });
 
         return axios.get('http://localhost:4777/hook-status/dishes')
-          .then(res => assert.equal(res.status, 206));
+          .then(res => assert.strictEqual(res.status, 206));
       });
 
       it('sets the hook object in res.hook on error', () => {
@@ -230,7 +230,7 @@ describe('@feathersjs/express/rest provider', () => {
 
         return axios('http://localhost:4777/hook-error/dishes')
           .catch(error => {
-            assert.deepEqual(error.response.data, {
+            assert.deepStrictEqual(error.response.data, {
               hook: {
                 id: 'dishes',
                 params,
@@ -277,7 +277,7 @@ describe('@feathersjs/express/rest provider', () => {
           };
 
           assert.ok(res.status === 200, 'Got OK status code');
-          assert.deepEqual(res.data, expected, 'Got params object back');
+          assert.deepStrictEqual(res.data, expected, 'Got params object back');
         })
         .then(() => server.close());
     });
@@ -313,7 +313,7 @@ describe('@feathersjs/express/rest provider', () => {
 
       return axios(options)
         .then(res => {
-          assert.deepEqual(res.data, data);
+          assert.deepStrictEqual(res.data, data);
           server.close();
         });
     });
@@ -345,7 +345,7 @@ describe('@feathersjs/express/rest provider', () => {
 
       return axios.post('http://localhost:4776/todo', { text: 'Do dishes' })
         .then(res => {
-          assert.deepEqual(res.data, {
+          assert.deepStrictEqual(res.data, {
             text: 'Do dishes',
             before: [ 'before first', 'before second' ],
             after: [ 'after first', 'after second' ]
@@ -373,9 +373,9 @@ describe('@feathersjs/express/rest provider', () => {
 
       const server = app.listen(4776);
 
-      return axios.post('http://localhost:4776/array-middleware', {text: 'Do dishes'})
+      return axios.post('http://localhost:4776/array-middleware', { text: 'Do dishes' })
         .then(res => {
-          assert.deepEqual(res.data, ['first', 'second', 'Do dishes']);
+          assert.deepStrictEqual(res.data, ['first', 'second', 'Do dishes']);
         })
         .then(() => server.close());
     });
@@ -390,7 +390,7 @@ describe('@feathersjs/express/rest provider', () => {
       const server = app.listen(7988);
 
       return axios.get('http://localhost:7988/test')
-        .then(res => assert.deepEqual(res.data, data))
+        .then(res => assert.deepStrictEqual(res.data, data))
         .then(() => server.close());
     });
   });
@@ -443,16 +443,16 @@ describe('@feathersjs/express/rest provider', () => {
       return axios.get('http://localhost:4780/todo/dishes')
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code for .get');
-          assert.deepEqual(res.data, {
+          assert.deepStrictEqual(res.data, {
             description: 'You have to do dishes'
           }, 'Got expected object');
 
           return axios.post('http://localhost:4780/todo');
         })
         .catch(error => {
-          assert.equal(error.response.headers.allow, 'GET,PATCH');
+          assert.strictEqual(error.response.headers.allow, 'GET,PATCH');
           assert.ok(error.response.status === 405, 'Got 405 for .create');
-          assert.deepEqual(error.response.data, {
+          assert.deepStrictEqual(error.response.data, {
             message: 'Method `create` is not supported by this endpoint.'
           }, 'Error serialized as expected');
         });
@@ -505,7 +505,7 @@ describe('@feathersjs/express/rest provider', () => {
       return axios.get(`http://localhost:6880/theApp/myId/todo/${expected.id}`)
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code');
-          assert.deepEqual(expected, res.data);
+          assert.deepStrictEqual(expected, res.data);
         });
     });
   });

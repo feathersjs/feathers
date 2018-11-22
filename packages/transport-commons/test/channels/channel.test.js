@@ -16,7 +16,7 @@ describe('app.channel', () => {
   describe('base channels', () => {
     it('creates a new channel, app.channels has names', () => {
       assert.ok(app.channel('test') instanceof Channel);
-      assert.deepEqual(app.channels, ['test']);
+      assert.deepStrictEqual(app.channels, ['test']);
     });
 
     it('.join', () => {
@@ -25,20 +25,20 @@ describe('app.channel', () => {
       const c2 = { id: 2 };
       const c3 = { id: 3 };
 
-      assert.equal(test.length, 0, 'Initial channel is empty');
+      assert.strictEqual(test.length, 0, 'Initial channel is empty');
 
       test.join(c1);
       test.join(c1);
 
-      assert.equal(test.length, 1, 'Joining twice only runs once');
+      assert.strictEqual(test.length, 1, 'Joining twice only runs once');
 
       test.join(c2, c3);
 
-      assert.equal(test.length, 3, 'New connections joined');
+      assert.strictEqual(test.length, 3, 'New connections joined');
 
       test.join(c1, c2, c3);
 
-      assert.equal(test.length, 3, 'Joining multiple times does nothing');
+      assert.strictEqual(test.length, 3, 'Joining multiple times does nothing');
     });
 
     it('.leave', () => {
@@ -46,17 +46,17 @@ describe('app.channel', () => {
       const c1 = { id: 1 };
       const c2 = { id: 2 };
 
-      assert.equal(test.length, 0);
+      assert.strictEqual(test.length, 0);
 
       test.join(c1, c2);
 
-      assert.equal(test.length, 2);
+      assert.strictEqual(test.length, 2);
 
       test.leave(c2);
       test.leave(c2);
 
-      assert.equal(test.length, 1);
-      assert.equal(test.connections.indexOf(c2), -1);
+      assert.strictEqual(test.length, 1);
+      assert.strictEqual(test.connections.indexOf(c2), -1);
     });
 
     it('.leave conditional', () => {
@@ -67,12 +67,12 @@ describe('app.channel', () => {
 
       test.join(c1, c2, c3);
 
-      assert.equal(test.length, 3);
+      assert.strictEqual(test.length, 3);
 
       test.leave(connection => connection.leave);
 
-      assert.equal(test.length, 2);
-      assert.equal(test.connections.indexOf(c1), -1);
+      assert.strictEqual(test.length, 2);
+      assert.strictEqual(test.connections.indexOf(c1), -1);
     });
 
     it('.filter', () => {
@@ -87,7 +87,7 @@ describe('app.channel', () => {
 
       assert.ok(filtered !== test, 'Returns a new channel instance');
       assert.ok(filtered instanceof Channel);
-      assert.equal(filtered.length, 1);
+      assert.strictEqual(filtered.length, 1);
     });
 
     it('.send', () => {
@@ -97,7 +97,7 @@ describe('app.channel', () => {
       const withData = test.send(data);
 
       assert.ok(test !== withData);
-      assert.deepEqual(withData.data, data);
+      assert.deepStrictEqual(withData.data, data);
     });
 
     describe('empty channels', () => {
@@ -106,7 +106,7 @@ describe('app.channel', () => {
 
         return new Promise((resolve) => {
           channel.once('message', data => {
-            assert.equal(data, 'hello');
+            assert.strictEqual(data, 'hello');
             resolve();
           });
 
@@ -134,11 +134,11 @@ describe('app.channel', () => {
         channel.join(c1);
 
         assert.ok(appChannels.test);
-        assert.equal(Object.keys(appChannels).length, 1);
+        assert.strictEqual(Object.keys(appChannels).length, 1);
         channel.leave(c1);
 
         assert.ok(app[CHANNELS].test === undefined);
-        assert.equal(Object.keys(appChannels).length, 0);
+        assert.strictEqual(Object.keys(appChannels).length, 0);
       });
 
       it('removes all event listeners from an empty channel', () => {
@@ -146,15 +146,15 @@ describe('app.channel', () => {
         const connection = { id: 1 };
 
         channel.on('something', () => {});
-        assert.equal(channel.listenerCount('something'), 1);
-        assert.equal(channel.listenerCount('empty'), 1);
+        assert.strictEqual(channel.listenerCount('something'), 1);
+        assert.strictEqual(channel.listenerCount('empty'), 1);
 
         channel.join(connection).leave(connection);
 
         assert.ok(app[CHANNELS].testing === undefined);
 
-        assert.equal(channel.listenerCount('something'), 0);
-        assert.equal(channel.listenerCount('empty'), 0);
+        assert.strictEqual(channel.listenerCount('something'), 0);
+        assert.strictEqual(channel.listenerCount('empty'), 0);
       });
     });
   });
@@ -163,9 +163,9 @@ describe('app.channel', () => {
     it('combines multiple channels', () => {
       const combined = app.channel('test', 'again');
 
-      assert.deepEqual(app.channels, ['test', 'again']);
+      assert.deepStrictEqual(app.channels, ['test', 'again']);
       assert.ok(combined instanceof CombinedChannel);
-      assert.equal(combined.length, 0);
+      assert.strictEqual(combined.length, 0);
     });
 
     it('de-dupes connections', () => {
@@ -178,7 +178,7 @@ describe('app.channel', () => {
       const combined = app.channel('test', 'again');
 
       assert.ok(combined instanceof CombinedChannel);
-      assert.equal(combined.length, 2);
+      assert.strictEqual(combined.length, 2);
     });
 
     it('.join all child channels', () => {
@@ -189,9 +189,9 @@ describe('app.channel', () => {
 
       combined.join(c1, c2);
 
-      assert.equal(combined.length, 2);
-      assert.equal(app.channel('test').length, 2);
-      assert.equal(app.channel('again').length, 2);
+      assert.strictEqual(combined.length, 2);
+      assert.strictEqual(app.channel('test').length, 2);
+      assert.strictEqual(app.channel('again').length, 2);
     });
 
     it('.leave all child channels', () => {
@@ -205,8 +205,8 @@ describe('app.channel', () => {
 
       combined.leave(c1);
 
-      assert.equal(app.channel('test').length, 1);
-      assert.equal(app.channel('again').length, 0);
+      assert.strictEqual(app.channel('test').length, 1);
+      assert.strictEqual(app.channel('again').length, 0);
     });
 
     it('.leave all child channels conditionally', () => {
@@ -216,8 +216,8 @@ describe('app.channel', () => {
 
       combined.leave(connection => connection.leave);
 
-      assert.equal(app.channel('test').length, 1);
-      assert.equal(app.channel('again').length, 1);
+      assert.strictEqual(app.channel('test').length, 1);
+      assert.strictEqual(app.channel('again').length, 1);
     });
 
     it('app.channel(app.channels)', () => {
@@ -229,7 +229,7 @@ describe('app.channel', () => {
 
       const combined = app.channel(app.channels);
 
-      assert.deepEqual(combined.connections, [ c1, c2 ]);
+      assert.deepStrictEqual(combined.connections, [ c1, c2 ]);
     });
   });
 });
