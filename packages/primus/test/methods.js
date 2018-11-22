@@ -17,7 +17,7 @@ module.exports = function (name, options, legacy = false) {
 
   it(`invalid arguments cause an error`, () =>
     call('find', 1, {}).catch(e =>
-      assert.equal(e.message, 'Too many arguments for \'find\' method')
+      assert.strictEqual(e.message, 'Too many arguments for \'find\' method')
     )
   );
 
@@ -32,19 +32,19 @@ module.exports = function (name, options, legacy = false) {
   it('.get with error', () =>
     call('get', 'laundry', { error: true })
       .then(() => assert.ok(false, 'Should never get here'))
-      .catch(error => assert.equal(error.message, 'Something for laundry went wrong'))
+      .catch(error => assert.strictEqual(error.message, 'Something for laundry went wrong'))
   );
 
   it('.get with runtime error', () =>
     call('get', 'laundry', { runtimeError: true })
       .then(() => assert.ok(false, 'Should never get here'))
-      .catch(error => assert.equal(error.message, 'thingThatDoesNotExist is not defined'))
+      .catch(error => assert.strictEqual(error.message, 'thingThatDoesNotExist is not defined'))
   );
 
   it('.get with error in hook', () =>
     call('get', 'laundry', { hookError: true })
       .then(() => assert.ok(false, 'Should never get here'))
-      .catch(error => assert.equal(error.message, 'Error from get, before hook'))
+      .catch(error => assert.strictEqual(error.message, 'Error from get, before hook'))
   );
 
   it(`.create`, () => {

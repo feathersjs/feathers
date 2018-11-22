@@ -40,7 +40,7 @@ module.exports = function crud (description, name) {
       return axios.put('http://localhost:4777/todo/544', original)
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code');
-          verify.update(544, original, res.data);
+          verify.update('544', original, res.data);
         });
     });
 
@@ -66,7 +66,7 @@ module.exports = function crud (description, name) {
       return axios.patch('http://localhost:4777/todo/544', original)
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code');
-          verify.patch(544, original, res.data);
+          verify.patch('544', original, res.data);
         });
     });
 
@@ -87,7 +87,7 @@ module.exports = function crud (description, name) {
       return axios.delete('http://localhost:4777/tasks/233')
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code');
-          verify.remove(233, res.data);
+          verify.remove('233', res.data);
         });
     });
 

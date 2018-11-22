@@ -28,7 +28,7 @@ describe('node-request REST connector', function () {
     };
 
     return service.get(0, { headers }).then(todo =>
-      assert.deepEqual(todo, {
+      assert.deepStrictEqual(todo, {
         id: 0,
         authorization: 'let-me-in',
         text: 'some todo',
@@ -46,7 +46,7 @@ describe('node-request REST connector', function () {
     };
 
     return service.get(0, { connection }).then(todo =>
-      assert.deepEqual(todo, {
+      assert.deepStrictEqual(todo, {
         id: 0,
         authorization: 'let-me-in',
         text: 'some todo',
@@ -63,7 +63,7 @@ describe('node-request REST connector', function () {
     assert.ok(todos instanceof init.Service, 'Returned service is a client');
 
     return todos.find({}).then(todos =>
-      assert.deepEqual(todos, [
+      assert.deepStrictEqual(todos, [
         {
           text: 'some todo',
           complete: false,
@@ -78,37 +78,37 @@ describe('node-request REST connector', function () {
     const todos = init.service('todos');
 
     return todos.find().catch(error =>
-      assert.equal(error.message, 'Invalid URI "nowhere/todos"')
+      assert.strictEqual(error.message, 'Invalid URI "nowhere/todos"')
     );
   });
 
   it('supports nested arrays in queries', () => {
-    const query = { test: { $in: [ 0, 1, 2 ] } };
+    const query = { test: { $in: [ '0', '1', '2' ] } };
 
     return service.get(0, { query }).then(data =>
-      assert.deepEqual(data.query, query)
+      assert.deepStrictEqual(data.query, query)
     );
   });
 
   it('converts errors properly', () => {
     return service.get(1, { query: { error: true } }).catch(e =>
-      assert.equal(e.message, 'Something went wrong')
+      assert.strictEqual(e.message, 'Something went wrong')
     );
   });
 
   it('remove many', () => {
     return service.remove(null).then(todo => {
-      assert.equal(todo.id, null);
-      assert.equal(todo.text, 'deleted many');
+      assert.strictEqual(todo.id, null);
+      assert.strictEqual(todo.text, 'deleted many');
     });
   });
 
   it('converts feathers errors (#50)', () => {
     return service.get(0, { query: { feathersError: true } }).catch(error => {
       assert.ok(error instanceof errors.NotAcceptable);
-      assert.equal(error.message, 'This is a Feathers error');
-      assert.equal(error.code, 406);
-      assert.deepEqual(error.data, { data: true });
+      assert.strictEqual(error.message, 'This is a Feathers error');
+      assert.strictEqual(error.code, 406);
+      assert.deepStrictEqual(error.data, { data: true });
       assert.ok(error.response);
     });
   });

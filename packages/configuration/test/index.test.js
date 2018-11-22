@@ -24,43 +24,43 @@ describe('@feathersjs/configuration', () => {
   });
 
   it('exports default', () =>
-    assert.equal(plugin, plugin.default)
+    assert.strictEqual(plugin, plugin.default)
   );
 
   it('initialized app with default data', () =>
-    assert.equal(app.get('port'), 3030)
+    assert.strictEqual(app.get('port'), 3030)
   );
 
   it('initialized with <env>', () =>
-    assert.equal(app.get('from'), 'testing')
+    assert.strictEqual(app.get('from'), 'testing')
   );
 
   it('initialized with <env> derived data module', () =>
-    assert.equal(app.get('derived'), 'Hello World')
+    assert.strictEqual(app.get('derived'), 'Hello World')
   );
 
   it('initialized property with environment variable', () =>
-    assert.equal(app.get('environment'), 'testing')
+    assert.strictEqual(app.get('environment'), 'testing')
   );
 
   it('initialized property with environment variable from <env>', () =>
-    assert.equal(app.get('testEnvironment'), 'testing')
+    assert.strictEqual(app.get('testEnvironment'), 'testing')
   );
 
   it('initialized property with derived environment variable from <env> module', () =>
-    assert.equal(app.get('derivedEnvironment'), 'testing')
+    assert.strictEqual(app.get('derivedEnvironment'), 'testing')
   );
 
   it('uses an escape character', () =>
-    assert.equal(app.get('unescaped'), 'NODE_ENV')
+    assert.strictEqual(app.get('unescaped'), 'NODE_ENV')
   );
 
   it('normalizes relative path names', () =>
-    assert.equal(app.get('path'), join(__dirname, 'something'))
+    assert.strictEqual(app.get('path'), join(__dirname, 'something'))
   );
 
   it('converts environment variables recursively', () =>
-    assert.equal(app.get('deeply').nested.env, 'testing')
+    assert.strictEqual(app.get('deeply').nested.env, 'testing')
   );
 
   it('converts arrays as actual arrays', () =>
@@ -70,11 +70,11 @@ describe('@feathersjs/configuration', () => {
   it('works when called directly', () => {
     const fn = plugin();
 
-    assert.equal(fn().port, '3030');
+    assert.strictEqual(fn().port, 3030);
   });
 
   it('deep merges properties', () =>
-    assert.deepEqual(app.get('deep'), {
+    assert.deepStrictEqual(app.get('deep'), {
       base: false,
       merge: true
     })

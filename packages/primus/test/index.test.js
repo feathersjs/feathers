@@ -64,11 +64,11 @@ describe('@feathersjs/primus', () => {
 
   it('exports default and SOCKET_KEY', () => {
     assert.ok(primus.SOCKET_KEY);
-    assert.equal(primus, primus.default);
+    assert.strictEqual(primus, primus.default);
   });
 
   it('is CommonJS compatible', () => {
-    assert.equal(typeof require('../lib'), 'function');
+    assert.strictEqual(typeof require('../lib'), 'function');
   });
 
   it('throws an error when using an incompatible version of Feathers', () => {
@@ -78,7 +78,7 @@ describe('@feathersjs/primus', () => {
       oldFeathers().configure(primus());
       assert.ok(false, 'Should never get here');
     } catch (e) {
-      assert.equal(e.message, '@feathersjs/primus is not compatible with this version of Feathers. Use the latest at @feathersjs/feathers.');
+      assert.strictEqual(e.message, '@feathersjs/primus is not compatible with this version of Feathers. Use the latest at @feathersjs/feathers.');
     }
   });
 
@@ -88,7 +88,7 @@ describe('@feathersjs/primus', () => {
       .configure(primus({
         transformer: 'websockets'
       }, function () {
-        assert.equal(counter, 0);
+        assert.strictEqual(counter, 0);
         counter++;
       }))
       .use('/todos', {
@@ -97,7 +97,7 @@ describe('@feathersjs/primus', () => {
         },
         setup (app) {
           assert.ok(app.primus);
-          assert.equal(counter, 1, 'Primus configuration ran first');
+          assert.strictEqual(counter, 1, 'Primus configuration ran first');
         }
       });
 
@@ -118,7 +118,7 @@ describe('@feathersjs/primus', () => {
 
       request({ url, json: true }, (err, res) => {
         assert.ok(!err);
-        assert.deepEqual(res.body, data);
+        assert.deepStrictEqual(res.body, data);
         srv.close(done);
       });
     });
@@ -134,21 +134,21 @@ describe('@feathersjs/primus', () => {
     };
 
     service.find = function (params) {
-      assert.deepEqual(_.omit(params, 'query', 'route', 'connection'), options.socketParams,
+      assert.deepStrictEqual(_.omit(params, 'query', 'route', 'connection'), options.socketParams,
         'Handshake parameters passed on proper position');
 
       return old.find.apply(this, arguments);
     };
 
     service.create = function (data, params) {
-      assert.deepEqual(_.omit(params, 'query', 'route', 'connection'), options.socketParams,
+      assert.deepStrictEqual(_.omit(params, 'query', 'route', 'connection'), options.socketParams,
         'Passed handshake parameters');
 
       return old.create.apply(this, arguments);
     };
 
     service.update = function (id, data, params) {
-      assert.deepEqual(params, _.extend({
+      assert.deepStrictEqual(params, _.extend({
         connection: options.socketParams,
         route: {},
         query: {
@@ -177,7 +177,7 @@ describe('@feathersjs/primus', () => {
     };
 
     service.find = function (params) {
-      assert.deepEqual(_.omit(params, 'query', 'route', 'connection'), options.socketParams,
+      assert.deepStrictEqual(_.omit(params, 'query', 'route', 'connection'), options.socketParams,
         'Handshake parameters passed on proper position');
 
       return old.find.apply(this, arguments);
