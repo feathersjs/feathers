@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 
 const feathers = require('@feathersjs/feathers');
 const { Service } = require('@feathersjs/commons/lib/test/fixture');
+const { BadRequest } = require('@feathersjs/errors');
 
 const expressify = require('../../lib');
 const testCrud = require('./crud');
@@ -481,12 +482,17 @@ describe('@feathersjs/express/rest provider', () => {
         .configure(rest())
         .use('/:appId/:id/todo', {
           get (id, params) {
+            if (params.query.error) {
+              return Promise.reject(new BadRequest('Not good'));
+            }
+
             return Promise.resolve({
               id,
               route: params.route
             });
           }
-        });
+        })
+        .use(expressify.errorHandler());
 
       server = app.listen(6880);
     });
@@ -506,6 +512,22 @@ describe('@feathersjs/express/rest provider', () => {
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code');
           assert.deepStrictEqual(expected, res.data);
+        });
+    });
+
+    it('properly serializes error for nested routes (#1096)', () => {
+      return axios.get(`http://localhost:6880/theApp/myId/todo/test?error=true`)
+        .catch(error => {
+          const { response } = error;
+
+          assert.strictEqual(response.status, 400);
+          assert.deepStrictEqual(response.data, {
+            name: 'BadRequest',
+            message: 'Not good',
+            code: 400,
+            className: 'bad-request',
+            errors: {}
+          });
         });
     });
   });
