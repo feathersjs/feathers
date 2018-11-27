@@ -3,7 +3,7 @@ language: node_js
 install: npm install
 script:
   - npm test
-  - if [ ! -z "$SAUCE_ACCESS_KEY" ]; then npm run test:client; fi
+  - if [[ "$TRAVIS_NODE_VERSION" > 11 ]]; then if [ -n "$SAUCE_ACCESS_KEY" ]; then npm run test:client; fi; fi;
 node_js:
   - node
   - 10
