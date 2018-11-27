@@ -5,8 +5,8 @@ const { convert } = errors;
 
 describe('@feathersjs/errors', () => {
   it('is CommonJS compatible', () => {
-    assert.equal(typeof require('../lib'), 'object');
-    assert.equal(typeof require('../lib').FeathersError, 'function');
+    assert.strictEqual(typeof require('../lib'), 'object');
+    assert.strictEqual(typeof require('../lib').FeathersError, 'function');
   });
 
   describe('errors.convert', () => {
@@ -18,8 +18,8 @@ describe('@feathersjs/errors', () => {
       });
 
       assert.ok(error instanceof errors.BadRequest);
-      assert.equal(error.message, 'Hi');
-      assert.equal(error.expando, 'Me');
+      assert.strictEqual(error.message, 'Hi');
+      assert.strictEqual(error.expando, 'Me');
     });
 
     it('converts other object to error', () => {
@@ -28,146 +28,146 @@ describe('@feathersjs/errors', () => {
       });
 
       assert.ok(error instanceof Error);
-      assert.equal(error.message, 'Something went wrong');
+      assert.strictEqual(error.message, 'Something went wrong');
 
       error = convert('Something went wrong');
 
       assert.ok(error instanceof Error);
-      assert.equal(error.message, 'Something went wrong');
+      assert.strictEqual(error.message, 'Something went wrong');
     });
 
     it('converts nothing', () =>
-      assert.equal(convert(null), null)
+      assert.strictEqual(convert(null), null)
     );
   });
 
   describe('error types', () => {
     it('Bad Request', () => {
-      assert.notEqual(typeof errors.BadRequest, 'undefined', 'has BadRequest');
+      assert.notStrictEqual(typeof errors.BadRequest, 'undefined', 'has BadRequest');
     });
 
     it('Not Authenticated', () => {
-      assert.notEqual(typeof errors.NotAuthenticated, 'undefined', 'has NotAuthenticated');
+      assert.notStrictEqual(typeof errors.NotAuthenticated, 'undefined', 'has NotAuthenticated');
     });
 
     it('Payment Error', () => {
-      assert.notEqual(typeof errors.PaymentError, 'undefined', 'has PaymentError');
+      assert.notStrictEqual(typeof errors.PaymentError, 'undefined', 'has PaymentError');
     });
 
     it('Forbidden', () => {
-      assert.notEqual(typeof errors.Forbidden, 'undefined', 'has Forbidden');
+      assert.notStrictEqual(typeof errors.Forbidden, 'undefined', 'has Forbidden');
     });
 
     it('Not Found', () => {
-      assert.notEqual(typeof errors.NotFound, 'undefined', 'has NotFound');
+      assert.notStrictEqual(typeof errors.NotFound, 'undefined', 'has NotFound');
     });
 
     it('Method Not Allowed', () => {
-      assert.notEqual(typeof errors.MethodNotAllowed, 'undefined', 'has MethodNotAllowed');
+      assert.notStrictEqual(typeof errors.MethodNotAllowed, 'undefined', 'has MethodNotAllowed');
     });
 
     it('Not Acceptable', () => {
-      assert.notEqual(typeof errors.NotAcceptable, 'undefined', 'has NotAcceptable');
+      assert.notStrictEqual(typeof errors.NotAcceptable, 'undefined', 'has NotAcceptable');
     });
 
     it('Timeout', () => {
-      assert.notEqual(typeof errors.Timeout, 'undefined', 'has Timeout');
+      assert.notStrictEqual(typeof errors.Timeout, 'undefined', 'has Timeout');
     });
 
     it('Conflict', () => {
-      assert.notEqual(typeof errors.Conflict, 'undefined', 'has Conflict');
+      assert.notStrictEqual(typeof errors.Conflict, 'undefined', 'has Conflict');
     });
 
     it('Length Required', () => {
-      assert.notEqual(typeof errors.LengthRequired, 'undefined', 'has LengthRequired');
+      assert.notStrictEqual(typeof errors.LengthRequired, 'undefined', 'has LengthRequired');
     });
 
     it('Unprocessable', () => {
-      assert.notEqual(typeof errors.Unprocessable, 'undefined', 'has Unprocessable');
+      assert.notStrictEqual(typeof errors.Unprocessable, 'undefined', 'has Unprocessable');
     });
 
     it('Too Many Requests', () => {
-      assert.notEqual(typeof errors.TooManyRequests, 'undefined', 'has TooManyRequests');
+      assert.notStrictEqual(typeof errors.TooManyRequests, 'undefined', 'has TooManyRequests');
     });
 
     it('General Error', () => {
-      assert.notEqual(typeof errors.GeneralError, 'undefined', 'has GeneralError');
+      assert.notStrictEqual(typeof errors.GeneralError, 'undefined', 'has GeneralError');
     });
 
     it('Not Implemented', () => {
-      assert.notEqual(typeof errors.NotImplemented, 'undefined', 'has NotImplemented');
+      assert.notStrictEqual(typeof errors.NotImplemented, 'undefined', 'has NotImplemented');
     });
 
     it('Bad Gateway', () => {
-      assert.notEqual(typeof errors.BadGateway, 'undefined', 'has BadGateway');
+      assert.notStrictEqual(typeof errors.BadGateway, 'undefined', 'has BadGateway');
     });
 
     it('Unavailable', () => {
-      assert.notEqual(typeof errors.Unavailable, 'undefined', 'has Unavailable');
+      assert.notStrictEqual(typeof errors.Unavailable, 'undefined', 'has Unavailable');
     });
 
     it('400', () => {
-      assert.notEqual(typeof errors[400], 'undefined', 'has BadRequest alias');
+      assert.notStrictEqual(typeof errors[400], 'undefined', 'has BadRequest alias');
     });
 
     it('401', () => {
-      assert.notEqual(typeof errors[401], 'undefined', 'has NotAuthenticated alias');
+      assert.notStrictEqual(typeof errors[401], 'undefined', 'has NotAuthenticated alias');
     });
 
     it('402', () => {
-      assert.notEqual(typeof errors[402], 'undefined', 'has PaymentError alias');
+      assert.notStrictEqual(typeof errors[402], 'undefined', 'has PaymentError alias');
     });
 
     it('403', () => {
-      assert.notEqual(typeof errors[403], 'undefined', 'has Forbidden alias');
+      assert.notStrictEqual(typeof errors[403], 'undefined', 'has Forbidden alias');
     });
 
     it('404', () => {
-      assert.notEqual(typeof errors[404], 'undefined', 'has NotFound alias');
+      assert.notStrictEqual(typeof errors[404], 'undefined', 'has NotFound alias');
     });
 
     it('405', () => {
-      assert.notEqual(typeof errors[405], 'undefined', 'has MethodNotAllowed alias');
+      assert.notStrictEqual(typeof errors[405], 'undefined', 'has MethodNotAllowed alias');
     });
 
     it('406', () => {
-      assert.notEqual(typeof errors[406], 'undefined', 'has NotAcceptable alias');
+      assert.notStrictEqual(typeof errors[406], 'undefined', 'has NotAcceptable alias');
     });
 
     it('408', () => {
-      assert.notEqual(typeof errors[408], 'undefined', 'has Timeout alias');
+      assert.notStrictEqual(typeof errors[408], 'undefined', 'has Timeout alias');
     });
 
     it('409', () => {
-      assert.notEqual(typeof errors[409], 'undefined', 'has Conflict alias');
+      assert.notStrictEqual(typeof errors[409], 'undefined', 'has Conflict alias');
     });
 
     it('411', () => {
-      assert.notEqual(typeof errors[411], 'undefined', 'has LengthRequired alias');
+      assert.notStrictEqual(typeof errors[411], 'undefined', 'has LengthRequired alias');
     });
 
     it('422', () => {
-      assert.notEqual(typeof errors[422], 'undefined', 'has Unprocessable alias');
+      assert.notStrictEqual(typeof errors[422], 'undefined', 'has Unprocessable alias');
     });
 
     it('429', () => {
-      assert.notEqual(typeof errors[429], 'undefined', 'has TooManyRequests alias');
+      assert.notStrictEqual(typeof errors[429], 'undefined', 'has TooManyRequests alias');
     });
 
     it('500', () => {
-      assert.notEqual(typeof errors[500], 'undefined', 'has GeneralError alias');
+      assert.notStrictEqual(typeof errors[500], 'undefined', 'has GeneralError alias');
     });
 
     it('501', () => {
-      assert.notEqual(typeof errors[501], 'undefined', 'has NotImplemented alias');
+      assert.notStrictEqual(typeof errors[501], 'undefined', 'has NotImplemented alias');
     });
 
     it('502', () => {
-      assert.notEqual(typeof errors[502], 'undefined', 'has BadGateway alias');
+      assert.notStrictEqual(typeof errors[502], 'undefined', 'has BadGateway alias');
     });
 
     it('503', () => {
-      assert.notEqual(typeof errors[503], 'undefined', 'has Unavailable alias');
+      assert.notStrictEqual(typeof errors[503], 'undefined', 'has Unavailable alias');
     });
 
     it('instantiates every error', () => {
@@ -208,18 +208,18 @@ describe('@feathersjs/errors', () => {
     describe('without custom message', () => {
       it('default error', () => {
         var error = new errors.GeneralError();
-        assert.equal(error.code, 500);
-        assert.equal(error.className, 'general-error');
-        assert.equal(error.message, 'Error');
-        assert.notEqual(error.stack, undefined);
-        assert.equal(error instanceof errors.GeneralError, true);
-        assert.equal(error instanceof errors.FeathersError, true);
+        assert.strictEqual(error.code, 500);
+        assert.strictEqual(error.className, 'general-error');
+        assert.strictEqual(error.message, 'Error');
+        assert.notStrictEqual(error.stack, undefined);
+        assert.strictEqual(error instanceof errors.GeneralError, true);
+        assert.strictEqual(error instanceof errors.FeathersError, true);
       });
 
       it('can wrap an existing error', () => {
         var error = new errors.BadRequest(new Error());
-        assert.equal(error.code, 400);
-        assert.equal(error.message, 'Error');
+        assert.strictEqual(error.code, 400);
+        assert.strictEqual(error.message, 'Error');
       });
 
       it('with multiple errors', () => {
@@ -232,10 +232,10 @@ describe('@feathersjs/errors', () => {
         };
 
         var error = new errors.BadRequest(data);
-        assert.equal(error.code, 400);
-        assert.equal(error.message, 'Error');
-        assert.deepEqual(error.errors, {email: 'Email Taken', password: 'Invalid Password'});
-        assert.deepEqual(error.data, {foo: 'bar'});
+        assert.strictEqual(error.code, 400);
+        assert.strictEqual(error.message, 'Error');
+        assert.deepStrictEqual(error.errors, { email: 'Email Taken', password: 'Invalid Password' });
+        assert.deepStrictEqual(error.data, { foo: 'bar' });
       });
 
       it('with data', () => {
@@ -245,23 +245,23 @@ describe('@feathersjs/errors', () => {
         };
 
         var error = new errors.GeneralError(data);
-        assert.equal(error.code, 500);
-        assert.equal(error.message, 'Error');
-        assert.deepEqual(error.data, data);
+        assert.strictEqual(error.code, 500);
+        assert.strictEqual(error.message, 'Error');
+        assert.deepStrictEqual(error.data, data);
       });
     });
 
     describe('with custom message', () => {
       it('contains our message', () => {
         var error = new errors.BadRequest('Invalid Password');
-        assert.equal(error.code, 400);
-        assert.equal(error.message, 'Invalid Password');
+        assert.strictEqual(error.code, 400);
+        assert.strictEqual(error.message, 'Invalid Password');
       });
 
       it('can wrap an existing error', () => {
         var error = new errors.BadRequest(new Error('Invalid Password'));
-        assert.equal(error.code, 400);
-        assert.equal(error.message, 'Invalid Password');
+        assert.strictEqual(error.code, 400);
+        assert.strictEqual(error.message, 'Invalid Password');
       });
 
       it('with data', () => {
@@ -271,9 +271,9 @@ describe('@feathersjs/errors', () => {
         };
 
         var error = new errors.GeneralError('Custom Error', data);
-        assert.equal(error.code, 500);
-        assert.equal(error.message, 'Custom Error');
-        assert.deepEqual(error.data, data);
+        assert.strictEqual(error.code, 500);
+        assert.strictEqual(error.message, 'Custom Error');
+        assert.deepStrictEqual(error.data, data);
       });
 
       it('with multiple errors', () => {
@@ -286,10 +286,10 @@ describe('@feathersjs/errors', () => {
         };
 
         var error = new errors.BadRequest(data);
-        assert.equal(error.code, 400);
-        assert.equal(error.message, 'Error');
-        assert.deepEqual(error.errors, {email: 'Email Taken', password: 'Invalid Password'});
-        assert.deepEqual(error.data, {foo: 'bar'});
+        assert.strictEqual(error.code, 400);
+        assert.strictEqual(error.message, 'Error');
+        assert.deepStrictEqual(error.errors, { email: 'Email Taken', password: 'Invalid Password' });
+        assert.deepStrictEqual(error.data, { foo: 'bar' });
       });
     });
 
@@ -305,7 +305,7 @@ describe('@feathersjs/errors', () => {
       var expected = '{"name":"GeneralError","message":"Custom Error","code":500,"className":"general-error","data":{"foo":"bar"},"errors":{"email":"Email Taken","password":"Invalid Password"}}';
 
       var error = new errors.GeneralError('Custom Error', data);
-      assert.equal(JSON.stringify(error), expected);
+      assert.strictEqual(JSON.stringify(error), expected);
     });
 
     it('can handle immutable data', () => {
@@ -318,8 +318,8 @@ describe('@feathersjs/errors', () => {
       };
 
       var error = new errors.GeneralError('Custom Error', Object.freeze(data));
-      assert.equal(error.data.errors, undefined);
-      assert.deepEqual(error.data, {foo: 'bar'});
+      assert.strictEqual(error.data.errors, undefined);
+      assert.deepStrictEqual(error.data, { foo: 'bar' });
     });
 
     it('allows arrays as data', () => {
@@ -331,10 +331,10 @@ describe('@feathersjs/errors', () => {
       data.errors = 'Invalid input';
 
       var error = new errors.GeneralError('Custom Error', data);
-      assert.equal(error.data.errors, undefined);
+      assert.strictEqual(error.data.errors, undefined);
       assert.ok(Array.isArray(error.data));
-      assert.deepEqual(error.data, [{hello: 'world'}]);
-      assert.equal(error.errors, 'Invalid input');
+      assert.deepStrictEqual(error.data, [{ hello: 'world' }]);
+      assert.strictEqual(error.errors, 'Invalid input');
     });
 
     it('has proper stack trace (#78)', () => {
@@ -343,7 +343,7 @@ describe('@feathersjs/errors', () => {
       } catch (e) {
         const text = 'NotFound: Not the error you are looking for';
 
-        assert.equal(e.stack.indexOf(text), 0);
+        assert.strictEqual(e.stack.indexOf(text), 0);
 
         assert.ok(e.stack.indexOf('index.test.js') !== -1);
 

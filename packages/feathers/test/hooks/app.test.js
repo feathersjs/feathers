@@ -22,7 +22,7 @@ describe('app.hooks', () => {
   });
 
   it('app has the .hooks method', () => {
-    assert.equal(typeof app.hooks, 'function');
+    assert.strictEqual(typeof app.hooks, 'function');
   });
 
   describe('app.hooks({ before })', () => {
@@ -31,13 +31,13 @@ describe('app.hooks', () => {
 
       app.hooks({
         before (hook) {
-          assert.equal(hook.app, app);
+          assert.strictEqual(hook.app, app);
           hook.params.ran = true;
         }
       });
 
       return service.get('test').then(result => {
-        assert.deepEqual(result, {
+        assert.deepStrictEqual(result, {
           id: 'test',
           params: { ran: true }
         });
@@ -45,7 +45,7 @@ describe('app.hooks', () => {
         const data = { test: 'hi' };
 
         return service.create(data).then(result => {
-          assert.deepEqual(result, {
+          assert.deepStrictEqual(result, {
             data, params: { ran: true }
           });
         });
@@ -55,28 +55,28 @@ describe('app.hooks', () => {
     it('app before hooks always run first', () => {
       app.service('todos').hooks({
         before (hook) {
-          assert.equal(hook.app, app);
+          assert.strictEqual(hook.app, app);
           hook.params.order.push('service.before');
         }
       });
 
       app.service('todos').hooks({
         before (hook) {
-          assert.equal(hook.app, app);
+          assert.strictEqual(hook.app, app);
           hook.params.order.push('service.before 1');
         }
       });
 
       app.hooks({
         before (hook) {
-          assert.equal(hook.app, app);
+          assert.strictEqual(hook.app, app);
           hook.params.order = [];
           hook.params.order.push('app.before');
         }
       });
 
       return app.service('todos').get('test').then(result => {
-        assert.deepEqual(result, {
+        assert.deepStrictEqual(result, {
           id: 'test',
           params: {
             order: [ 'app.before', 'service.before', 'service.before 1' ]
@@ -90,13 +90,13 @@ describe('app.hooks', () => {
     it('basic app after hook', () => {
       app.hooks({
         after (hook) {
-          assert.equal(hook.app, app);
+          assert.strictEqual(hook.app, app);
           hook.result.ran = true;
         }
       });
 
       return app.service('todos').get('test').then(result => {
-        assert.deepEqual(result, {
+        assert.deepStrictEqual(result, {
           id: 'test',
           params: {},
           ran: true
@@ -107,14 +107,14 @@ describe('app.hooks', () => {
     it('app after hooks always run last', () => {
       app.hooks({
         after (hook) {
-          assert.equal(hook.app, app);
+          assert.strictEqual(hook.app, app);
           hook.result.order.push('app.after');
         }
       });
 
       app.service('todos').hooks({
         after (hook) {
-          assert.equal(hook.app, app);
+          assert.strictEqual(hook.app, app);
           hook.result.order = [];
           hook.result.order.push('service.after');
         }
@@ -122,13 +122,13 @@ describe('app.hooks', () => {
 
       app.service('todos').hooks({
         after (hook) {
-          assert.equal(hook.app, app);
+          assert.strictEqual(hook.app, app);
           hook.result.order.push('service.after 1');
         }
       });
 
       return app.service('todos').get('test').then(result => {
-        assert.deepEqual(result, {
+        assert.deepStrictEqual(result, {
           id: 'test',
           params: {},
           order: [ 'service.after', 'service.after 1', 'app.after' ]
@@ -141,40 +141,40 @@ describe('app.hooks', () => {
     it('basic app error hook', () => {
       app.hooks({
         error (hook) {
-          assert.equal(hook.app, app);
+          assert.strictEqual(hook.app, app);
           hook.error = new Error('App hook ran');
         }
       });
 
       return app.service('todos').get('error').catch(error => {
-        assert.equal(error.message, 'App hook ran');
+        assert.strictEqual(error.message, 'App hook ran');
       });
     });
 
     it('app error hooks always run last', () => {
       app.hooks({
         error (hook) {
-          assert.equal(hook.app, app);
+          assert.strictEqual(hook.app, app);
           hook.error = new Error(`${hook.error.message} app.after`);
         }
       });
 
       app.service('todos').hooks({
         error (hook) {
-          assert.equal(hook.app, app);
+          assert.strictEqual(hook.app, app);
           hook.error = new Error(`${hook.error.message} service.after`);
         }
       });
 
       app.service('todos').hooks({
         error (hook) {
-          assert.equal(hook.app, app);
+          assert.strictEqual(hook.app, app);
           hook.error = new Error(`${hook.error.message} service.after 1`);
         }
       });
 
       return app.service('todos').get('error').catch(error => {
-        assert.equal(error.message, 'Something went wrong service.after service.after 1 app.after');
+        assert.strictEqual(error.message, 'Something went wrong service.after service.after 1 app.after');
       });
     });
   });

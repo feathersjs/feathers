@@ -20,7 +20,7 @@ describe('`after` hooks', () => {
       });
 
       return service.get(10).catch(e => {
-        assert.equal(e.message, 'after hook for \'get\' method returned invalid hook object');
+        assert.strictEqual(e.message, 'after hook for \'get\' method returned invalid hook object');
       });
     });
 
@@ -53,7 +53,7 @@ describe('`after` hooks', () => {
       });
 
       return service.get('laundry', {}).then(data => {
-        assert.deepEqual(data, {
+        assert.deepStrictEqual(data, {
           id: 'laundry',
           description: 'You have to do laundry',
           ran: true
@@ -62,7 +62,7 @@ describe('`after` hooks', () => {
         return service.find({}).then(() => {
           throw new Error('Should never get here');
         }).catch(error => {
-          assert.equal(error.message, 'You can not see this');
+          assert.strictEqual(error.message, 'You can not see this');
         });
       });
     });
@@ -94,14 +94,14 @@ describe('`after` hooks', () => {
       });
 
       return service.get('laundry').then(data => {
-        assert.deepEqual(data, {
+        assert.deepStrictEqual(data, {
           id: 'laundry',
           description: 'You have to do laundry',
           ran: true
         });
 
         return service.find().catch(error => {
-          assert.equal(error.message, 'You can not see this');
+          assert.strictEqual(error.message, 'You can not see this');
         });
       });
     });
@@ -121,7 +121,7 @@ describe('`after` hooks', () => {
       service.hooks({
         after: {
           create (hook, next) {
-            assert.equal(hook.type, 'after');
+            assert.strictEqual(hook.type, 'after');
 
             hook.result.some = 'thing';
 
@@ -131,7 +131,7 @@ describe('`after` hooks', () => {
       });
 
       return service.create({ my: 'data' }).then(data => {
-        assert.deepEqual({ my: 'data', some: 'thing' }, data, 'Got modified data');
+        assert.deepStrictEqual({ my: 'data', some: 'thing' }, data, 'Got modified data');
       });
     });
 
@@ -149,7 +149,7 @@ describe('`after` hooks', () => {
         after: {
           create (hook, next) {
             hook.result.appPresent = typeof hook.app !== 'undefined';
-            assert.equal(hook.result.appPresent, true);
+            assert.strictEqual(hook.result.appPresent, true);
 
             next(null, hook);
           }
@@ -157,7 +157,7 @@ describe('`after` hooks', () => {
       });
 
       return service.create({ my: 'data' }).then(data => {
-        assert.deepEqual({ my: 'data', appPresent: true }, data, 'The app was present in the hook.');
+        assert.deepStrictEqual({ my: 'data', appPresent: true }, data, 'The app was present in the hook.');
       });
     });
 
@@ -181,7 +181,7 @@ describe('`after` hooks', () => {
 
       return service.update(1, { my: 'data' }).catch(error => {
         assert.ok(error, 'Got an error');
-        assert.equal(error.message, 'This did not work', 'Got expected error message from hook');
+        assert.strictEqual(error.message, 'This did not work', 'Got expected error message from hook');
       });
     });
 
@@ -205,7 +205,7 @@ describe('`after` hooks', () => {
 
       return service.remove(1, {}).catch(error => {
         assert.ok(error, 'Got error');
-        assert.equal(error.message, 'Error removing item', 'Got error message from service');
+        assert.strictEqual(error.message, 'Error removing item', 'Got error message from service');
       });
     });
 
@@ -239,7 +239,7 @@ describe('`after` hooks', () => {
       });
 
       service.create({ my: 'data' }).then(data => {
-        assert.deepEqual({
+        assert.deepStrictEqual({
           my: 'data',
           some: 'thing',
           other: 'stuff'
@@ -274,7 +274,7 @@ describe('`after` hooks', () => {
       });
 
       return service.create({ my: 'data' }).then(data => {
-        assert.deepEqual({
+        assert.deepStrictEqual({
           my: 'data',
           some: 'thing',
           other: 'stuff'
@@ -316,7 +316,7 @@ describe('`after` hooks', () => {
       });
 
       service.get(10).then(data => {
-        assert.deepEqual(data.items, ['first', 'second', 'third']);
+        assert.deepStrictEqual(data.items, ['first', 'second', 'third']);
       });
     });
 
@@ -388,7 +388,7 @@ describe('`after` hooks', () => {
       });
 
       service.get(10).then(data => {
-        assert.deepEqual(data, {
+        assert.deepStrictEqual(data, {
           id: 10,
           number: 42,
           test: 43

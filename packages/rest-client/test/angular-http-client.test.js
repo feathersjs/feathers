@@ -26,7 +26,7 @@ describe('@angular/common/http REST connector', function () {
   const angularHttpClient = createAngularHTTPClient();
 
   const url = 'http://localhost:8889';
-  const setup = rest(url).angularHttpClient(angularHttpClient, {HttpHeaders});
+  const setup = rest(url).angularHttpClient(angularHttpClient, { HttpHeaders });
   const app = feathers().configure(setup);
   const service = app.service('todos');
 
@@ -45,8 +45,8 @@ describe('@angular/common/http REST connector', function () {
       'Authorization': 'let-me-in'
     };
 
-    return service.get(0, {headers}).then(todo =>
-      assert.deepEqual(todo, {
+    return service.get(0, { headers }).then(todo =>
+      assert.deepStrictEqual(todo, {
         id: 0,
         authorization: 'let-me-in',
         text: 'some todo',
@@ -64,7 +64,7 @@ describe('@angular/common/http REST connector', function () {
     };
 
     return service.get(0, { connection }).then(todo =>
-      assert.deepEqual(todo, {
+      assert.deepStrictEqual(todo, {
         id: 0,
         authorization: 'let-me-in',
         text: 'some todo',
@@ -79,18 +79,18 @@ describe('@angular/common/http REST connector', function () {
       .angularHttpClient(angularHttpClient));
 
     return app.service('dummy').find().catch(e =>
-      assert.equal(e.message, `Please pass angular's 'httpClient' (instance) and and object with 'HttpHeaders' (class) to feathers-rest`)
+      assert.strictEqual(e.message, `Please pass angular's 'httpClient' (instance) and and object with 'HttpHeaders' (class) to feathers-rest`)
     );
   });
 
   it('can initialize a client instance', () => {
-    const init = rest(url).angularHttpClient(angularHttpClient, {HttpHeaders});
+    const init = rest(url).angularHttpClient(angularHttpClient, { HttpHeaders });
     const todos = init.service('todos');
 
     assert.ok(todos instanceof init.Service, 'Returned service is a client');
 
     return todos.find({}).then(todos =>
-      assert.deepEqual(todos, [
+      assert.deepStrictEqual(todos, [
         {
           text: 'some todo',
           complete: false,
@@ -101,26 +101,26 @@ describe('@angular/common/http REST connector', function () {
   });
 
   it('supports nested arrays in queries', () => {
-    const query = {test: {$in: [0, 1, 2]}};
+    const query = { test: { $in: [ '0', '1', '2' ] } };
 
-    return service.get(0, {query}).then(data =>
-      assert.deepEqual(data.query, query)
+    return service.get(0, { query }).then(data =>
+      assert.deepStrictEqual(data.query, query)
     );
   });
 
   it('remove many', () => {
     return service.remove(null).then(todo => {
-      assert.equal(todo.id, null);
-      assert.equal(todo.text, 'deleted many');
+      assert.strictEqual(todo.id, null);
+      assert.strictEqual(todo.text, 'deleted many');
     });
   });
 
   it('converts feathers errors (#50)', () => {
-    return service.get(0, {query: {feathersError: true}})
+    return service.get(0, { query: { feathersError: true } })
       .catch(error => {
         assert.ok(error instanceof errors.NotAcceptable);
-        assert.equal(error.message, 'This is a Feathers error');
-        assert.equal(error.code, 406);
+        assert.strictEqual(error.message, 'This is a Feathers error');
+        assert.strictEqual(error.code, 406);
       });
   });
 });

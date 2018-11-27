@@ -76,7 +76,7 @@ describe('@feathersjs/socketio', () => {
 
   it('exports default and SOCKET_KEY', () => {
     assert.ok(socketio.SOCKET_KEY);
-    assert.equal(socketio, socketio.default);
+    assert.strictEqual(socketio, socketio.default);
   });
 
   it('throws an error when using an incompatible version of Feathers', () => {
@@ -86,14 +86,14 @@ describe('@feathersjs/socketio', () => {
       oldFeathers().configure(socketio());
       assert.ok(false, 'Should never get here');
     } catch (e) {
-      assert.equal(e.message, '@feathersjs/socketio is not compatible with this version of Feathers. Use the latest at @feathersjs/feathers.');
+      assert.strictEqual(e.message, '@feathersjs/socketio is not compatible with this version of Feathers. Use the latest at @feathersjs/feathers.');
     }
   });
 
   it('runs io before setup (#131)', done => {
     let counter = 0;
     let app = feathers().configure(socketio(() => {
-      assert.equal(counter, 0);
+      assert.strictEqual(counter, 0);
       counter++;
     }));
 
@@ -106,7 +106,7 @@ describe('@feathersjs/socketio', () => {
     ));
 
     let srv = app.listen(8987).on('listening', () => {
-      assert.equal(app.io.sockets.getMaxListeners(), 100);
+      assert.strictEqual(app.io.sockets.getMaxListeners(), 100);
       srv.close(done);
     });
   });
@@ -121,13 +121,13 @@ describe('@feathersjs/socketio', () => {
 
       request(url, (err, res) => {
         assert.ok(!err);
-        assert.equal(res.statusCode, 200);
+        assert.strictEqual(res.statusCode, 200);
 
         const url = 'http://localhost:8992/test';
 
         request({ url, json: true }, (err, res) => {
           assert.ok(!err);
-          assert.deepEqual(res.body, data);
+          assert.deepStrictEqual(res.body, data);
           srv.close(done);
         });
       });
@@ -144,7 +144,7 @@ describe('@feathersjs/socketio', () => {
 
       // eslint-disable-next-line handle-callback-err
       request(url, (err, res) => {
-        assert.equal(res.statusCode, 200);
+        assert.strictEqual(res.statusCode, 200);
         srv.close(done);
       });
     });
@@ -158,12 +158,12 @@ describe('@feathersjs/socketio', () => {
     };
 
     service.create = function (data, params) {
-      assert.deepEqual(_.omit(params, 'query', 'route', 'connection'), socketParams, 'Passed handshake parameters');
+      assert.deepStrictEqual(_.omit(params, 'query', 'route', 'connection'), socketParams, 'Passed handshake parameters');
       return old.create.apply(this, arguments);
     };
 
     service.update = function (id, data, params) {
-      assert.deepEqual(params, _.extend({
+      assert.deepStrictEqual(params, _.extend({
         route: {},
         connection: socketParams,
         query: {
@@ -191,7 +191,7 @@ describe('@feathersjs/socketio', () => {
     let old = { find: service.find };
 
     service.find = function (params) {
-      assert.deepEqual(_.omit(params, 'query', 'route', 'connection'), socketParams, 'Handshake parameters passed on proper position');
+      assert.deepStrictEqual(_.omit(params, 'query', 'route', 'connection'), socketParams, 'Handshake parameters passed on proper position');
       return old.find.apply(this, arguments);
     };
 

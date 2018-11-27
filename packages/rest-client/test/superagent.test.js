@@ -28,7 +28,7 @@ describe('Superagent REST connector', function () {
     };
 
     return service.get(0, { headers }).then(todo =>
-      assert.deepEqual(todo, {
+      assert.deepStrictEqual(todo, {
         id: 0,
         authorization: 'let-me-in',
         text: 'some todo',
@@ -44,7 +44,7 @@ describe('Superagent REST connector', function () {
     };
 
     return service.get(0, { connection }).then(todo =>
-      assert.deepEqual(todo, {
+      assert.deepStrictEqual(todo, {
         id: 0,
         authorization: 'let-me-in',
         text: 'some todo',
@@ -61,7 +61,7 @@ describe('Superagent REST connector', function () {
     assert.ok(todos instanceof init.Service, 'Returned service is a client');
 
     return todos.find({}).then(todos =>
-      assert.deepEqual(todos, [
+      assert.deepStrictEqual(todos, [
         {
           text: 'some todo',
           complete: false,
@@ -72,17 +72,17 @@ describe('Superagent REST connector', function () {
   });
 
   it('supports nested arrays in queries', () => {
-    const query = { test: { $in: [ 0, 1, 2 ] } };
+    const query = { test: { $in: [ '0', '1', '2' ] } };
 
     return service.get(0, { query }).then(data =>
-      assert.deepEqual(data.query, query)
+      assert.deepStrictEqual(data.query, query)
     );
   });
 
   it('remove many', () => {
     return service.remove(null).then(todo => {
-      assert.equal(todo.id, null);
-      assert.equal(todo.text, 'deleted many');
+      assert.strictEqual(todo.id, null);
+      assert.strictEqual(todo.text, 'deleted many');
     });
   });
 
@@ -90,8 +90,8 @@ describe('Superagent REST connector', function () {
     return service.get(0, { query: { feathersError: true } })
       .catch(error => {
         assert.ok(error instanceof errors.NotAcceptable);
-        assert.equal(error.message, 'This is a Feathers error');
-        assert.equal(error.code, 406);
+        assert.strictEqual(error.message, 'This is a Feathers error');
+        assert.strictEqual(error.code, 406);
         assert.ok(error.response);
       });
   });

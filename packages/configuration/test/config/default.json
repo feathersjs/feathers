@@ -1,5 +1,5 @@
 {
-  "port": "3030",
+  "port": 3030,
   "environment": "NODE_ENV",
   "path": "../something",
   "unescaped": "\\NODE_ENV",

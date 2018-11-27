@@ -17,7 +17,7 @@ describe('.filterQuery', function () {
     });
 
     it('returns $sort when present in query as an object', function () {
-      const { filters, query } = filter({ $sort: { name: {something: 10} } });
+      const { filters, query } = filter({ $sort: { name: { something: 10 } } });
       expect(filters.$sort.name.something).to.equal(10);
       expect(query).to.deep.equal({});
     });

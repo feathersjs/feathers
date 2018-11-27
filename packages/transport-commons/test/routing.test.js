@@ -20,32 +20,32 @@ describe('app.router', () => {
   });
 
   it('has app.lookup and ROUTER symbol', () => {
-    assert.equal(typeof app.lookup, 'function');
+    assert.strictEqual(typeof app.lookup, 'function');
     assert.ok(app[routing.ROUTER]);
   });
 
   it('returns null when nothing is found', () => {
     const result = app.lookup('me/service');
 
-    assert.equal(result, null);
+    assert.strictEqual(result, null);
   });
 
   it('returns null for invalid service path', () => {
-    assert.equal(app.lookup(null), null);
-    assert.equal(app.lookup({}), null);
+    assert.strictEqual(app.lookup(null), null);
+    assert.strictEqual(app.lookup({}), null);
   });
 
   it('can look up and strips slashes', () => {
     const result = app.lookup('my/service');
 
-    assert.equal(result.service, app.service('/my/service'));
+    assert.strictEqual(result.service, app.service('/my/service'));
   });
 
   it('can look up with id', () => {
     const result = app.lookup('/my/service/1234');
 
-    assert.equal(result.service, app.service('/my/service'));
-    assert.deepEqual(result.params, {
+    assert.strictEqual(result.service, app.service('/my/service'));
+    assert.deepStrictEqual(result.params, {
       __id: '1234'
     });
   });
@@ -61,8 +61,8 @@ describe('app.router', () => {
 
     const result = app.lookup('/test/me/my/::special/testing');
 
-    assert.equal(result.service, app.service(path));
-    assert.deepEqual(result.params, {
+    assert.strictEqual(result.service, app.service(path));
+    assert.deepStrictEqual(result.params, {
       __id: 'testing',
       first: 'me',
       second: '::special'

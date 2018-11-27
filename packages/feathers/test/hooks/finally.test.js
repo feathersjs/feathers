@@ -27,7 +27,7 @@ describe('`finally` hooks', () => {
     });
 
     return service.get(42).then(data => {
-      assert.deepEqual(data, {
+      assert.deepStrictEqual(data, {
         id: 42,
         chain: [ 'service after', 'service finally', 'app finally' ]
       });
@@ -64,12 +64,12 @@ describe('`finally` hooks', () => {
     return service.get(42).then(
       () => assert(false, 'Should never get here'),
       error => {
-        assert.deepEqual(error.chain, [
+        assert.deepStrictEqual(error.chain, [
           'service error',
           'service finally',
           'app finally'
         ]);
-        assert.deepEqual(error.message, '42 is not the answer');
+        assert.deepStrictEqual(error.message, '42 is not the answer');
       }
     );
   });
