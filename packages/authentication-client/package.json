@@ -58,7 +58,7 @@
     "primus": "^7.0.0",
     "primus-emitter": "^3.1.1",
     "socket.io-client": "^2.0.0",
-    "superagent": "^3.5.2",
+    "superagent": "^4.0.0",
     "ws": "^6.0.0"
   }
 }
