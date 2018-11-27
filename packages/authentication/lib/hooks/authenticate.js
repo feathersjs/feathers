@@ -47,6 +47,8 @@ module.exports = function authenticate (_strategies, options = {}) {
       query: hook.data,
       body: hook.data,
       params: hook.params,
+      path: hook.path,
+      method: hook.method,
       headers: hook.params.headers || {},
       cookies: hook.params.cookies || {},
       session: {}
