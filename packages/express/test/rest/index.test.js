@@ -102,6 +102,7 @@ describe('@feathersjs/express/rest provider', () => {
             return Promise.resolve(data);
           }
         })
+        .use('/', Service)
         .use('todo', Service);
 
       server = app.listen(4777, () => app.use('tasks', Service));
@@ -110,6 +111,7 @@ describe('@feathersjs/express/rest provider', () => {
     after(done => server.close(done));
 
     testCrud('Services', 'todo');
+    testCrud('Root Service', '/');
     testCrud('Dynamic Services', 'tasks');
 
     describe('res.hook', () => {
