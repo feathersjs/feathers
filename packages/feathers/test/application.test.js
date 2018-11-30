@@ -5,26 +5,26 @@ const feathers = require('../lib');
 
 describe('Feathers application', () => {
   it('adds an ES module `default` export', () => {
-    assert.equal(feathers, feathers.default);
+    assert.strictEqual(feathers, feathers.default);
   });
 
   it('initializes', () => {
     const app = feathers();
 
-    assert.equal(typeof app.use, 'function');
-    assert.equal(typeof app.service, 'function');
-    assert.equal(typeof app.services, 'object');
+    assert.strictEqual(typeof app.use, 'function');
+    assert.strictEqual(typeof app.service, 'function');
+    assert.strictEqual(typeof app.services, 'object');
   });
 
   it('sets the version on main and app instance', () => {
     const app = feathers();
 
-    assert.equal(feathers.version, '3.0.0-development');
-    assert.equal(app.version, '3.0.0-development');
+    assert.strictEqual(feathers.version, '3.0.0-development');
+    assert.strictEqual(app.version, '3.0.0-development');
   });
 
   it('sets SKIP on main', () => {
-    assert.equal(feathers.SKIP, hooks.SKIP);
+    assert.strictEqual(feathers.SKIP, hooks.SKIP);
   });
 
   it('is an event emitter', done => {
@@ -32,7 +32,7 @@ describe('Feathers application', () => {
     const original = { hello: 'world' };
 
     app.on('test', data => {
-      assert.deepEqual(original, data);
+      assert.deepStrictEqual(original, data);
       done();
     });
 
@@ -45,7 +45,7 @@ describe('Feathers application', () => {
     try {
       app.service('/test', {});
     } catch (e) {
-      assert.equal(e.message, 'Registering a new service with `app.service(path, service)` is no longer supported. Use `app.use(path, service)` instead.');
+      assert.strictEqual(e.message, 'Registering a new service with `app.service(path, service)` is no longer supported. Use `app.use(path, service)` instead.');
     }
   });
 
@@ -55,7 +55,7 @@ describe('Feathers application', () => {
     assert.ok(!app.service('/todos/'));
 
     app.defaultService = function (path) {
-      assert.equal(path, 'todos');
+      assert.strictEqual(path, 'todos');
       return {
         get (id) {
           return Promise.resolve({
@@ -66,7 +66,7 @@ describe('Feathers application', () => {
     };
 
     return app.service('/todos/').get('dishes').then(data => {
-      assert.deepEqual(data, {
+      assert.deepStrictEqual(data, {
         id: 'dishes',
         description: 'You have to do dishes!'
       });
@@ -75,7 +75,7 @@ describe('Feathers application', () => {
 
   it('additionally passes `app` as .configure parameter (#558)', done => {
     feathers().configure(function (app) {
-      assert.equal(this, app);
+      assert.strictEqual(this, app);
       done();
     });
   });
@@ -87,19 +87,19 @@ describe('Feathers application', () => {
       try {
         app.use('/', {});
       } catch (e) {
-        assert.equal(e.message, `'/' is not a valid service path.`);
+        assert.strictEqual(e.message, `'/' is not a valid service path.`);
       }
 
       try {
         app.use('', {});
       } catch (e) {
-        assert.equal(e.message, `'' is not a valid service path.`);
+        assert.strictEqual(e.message, `'' is not a valid service path.`);
       }
 
       try {
         app.use({}, {});
       } catch (e) {
-        assert.equal(e.message, `'[object Object]' is not a valid service path.`);
+        assert.strictEqual(e.message, `'[object Object]' is not a valid service path.`);
       }
     });
 
@@ -110,7 +110,7 @@ describe('Feathers application', () => {
         app.use('/bla', function () {});
         assert.ok(false, 'Should never get here');
       } catch (e) {
-        assert.equal(e.message, 'Invalid service object passed for path `bla`');
+        assert.strictEqual(e.message, 'Invalid service object passed for path `bla`');
       }
     });
 
@@ -132,7 +132,7 @@ describe('Feathers application', () => {
 
       return wrappedService.create({
         message: 'Test message'
-      }).then(data => assert.equal(data.message, 'Test message'));
+      }).then(data => assert.strictEqual(data.message, 'Test message'));
     });
 
     it('services can be re-used (#566)', done => {
@@ -156,7 +156,7 @@ describe('Feathers application', () => {
       });
 
       dummy.on('created', data => {
-        assert.deepEqual(data, {
+        assert.deepStrictEqual(data, {
           message: 'Hi',
           fromHook: true
         });
@@ -215,17 +215,17 @@ describe('Feathers application', () => {
       it('should set a value', () => {
         var app = feathers();
         app.set('foo', 'bar');
-        assert.equal(app.get('foo'), 'bar');
+        assert.strictEqual(app.get('foo'), 'bar');
       });
 
       it('should return the app', () => {
         var app = feathers();
-        assert.equal(app.set('foo', 'bar'), app);
+        assert.strictEqual(app.set('foo', 'bar'), app);
       });
 
       it('should return the app when undefined', () => {
         var app = feathers();
-        assert.equal(app.set('foo', undefined), app);
+        assert.strictEqual(app.set('foo', undefined), app);
       });
     });
 
@@ -238,14 +238,14 @@ describe('Feathers application', () => {
       it('should otherwise return the value', () => {
         var app = feathers();
         app.set('foo', 'bar');
-        assert.equal(app.get('foo'), 'bar');
+        assert.strictEqual(app.get('foo'), 'bar');
       });
     });
 
     describe('.enable()', () => {
       it('should set the value to true', () => {
         var app = feathers();
-        assert.equal(app.enable('tobi'), app);
+        assert.strictEqual(app.enable('tobi'), app);
         assert.strictEqual(app.get('tobi'), true);
       });
     });
@@ -253,7 +253,7 @@ describe('Feathers application', () => {
     describe('.disable()', () => {
       it('should set the value to false', () => {
         var app = feathers();
-        assert.equal(app.disable('tobi'), app);
+        assert.strictEqual(app.disable('tobi'), app);
         assert.strictEqual(app.get('tobi'), false);
       });
     });
@@ -293,8 +293,8 @@ describe('Feathers application', () => {
       app.use('/dummy', {
         setup (appRef, path) {
           setupCount++;
-          assert.equal(appRef, app);
-          assert.equal(path, 'dummy');
+          assert.strictEqual(appRef, app);
+          assert.strictEqual(path, 'dummy');
         }
       });
 
@@ -307,15 +307,15 @@ describe('Feathers application', () => {
       app.use('/dummy2', {
         setup (appRef, path) {
           setupCount++;
-          assert.equal(appRef, app);
-          assert.equal(path, 'dummy2');
+          assert.strictEqual(appRef, app);
+          assert.strictEqual(path, 'dummy2');
         }
       });
 
       app.setup();
 
       assert.ok(app._isSetup);
-      assert.equal(setupCount, 2);
+      assert.strictEqual(setupCount, 2);
     });
 
     it('registering a service after app.setup will be set up', () => {
@@ -326,8 +326,8 @@ describe('Feathers application', () => {
       app.use('/dummy', {
         setup (appRef, path) {
           assert.ok(app._isSetup);
-          assert.equal(appRef, app);
-          assert.equal(path, 'dummy');
+          assert.strictEqual(appRef, app);
+          assert.strictEqual(path, 'dummy');
         }
       });
     });
@@ -340,8 +340,8 @@ describe('Feathers application', () => {
         get () {},
         _setup (appRef, path) {
           _setup = true;
-          assert.equal(appRef, app);
-          assert.equal(path, 'dummy');
+          assert.strictEqual(appRef, app);
+          assert.strictEqual(path, 'dummy');
         }
       });
 
@@ -356,8 +356,8 @@ describe('Feathers application', () => {
 
       app.providers.push(function (service, location, options) {
         assert.ok(service.dummy);
-        assert.equal(location, 'dummy');
-        assert.deepEqual(options, {});
+        assert.strictEqual(location, 'dummy');
+        assert.deepStrictEqual(options, {});
         providerRan = true;
       });
 
@@ -379,8 +379,8 @@ describe('Feathers application', () => {
 
       app.providers.push(function (service, location, options) {
         assert.ok(service.dummy);
-        assert.equal(location, 'dummy');
-        assert.deepEqual(options, opts);
+        assert.strictEqual(location, 'dummy');
+        assert.deepStrictEqual(options, opts);
         providerRan = true;
       });
 
@@ -421,12 +421,12 @@ describe('Feathers application', () => {
       app.use('/api/', subApp);
 
       app.service('/api/service2').once('created', data => {
-        assert.deepEqual(data, {
+        assert.deepStrictEqual(data, {
           message: 'This is a test'
         });
 
         subApp.service('service2').once('created', data => {
-          assert.deepEqual(data, {
+          assert.deepStrictEqual(data, {
             message: 'This is another test'
           });
 
@@ -439,11 +439,11 @@ describe('Feathers application', () => {
       });
 
       app.service('/api/service1').get(10).then(data => {
-        assert.equal(data.name, 'service1');
+        assert.strictEqual(data.name, 'service1');
 
         return app.service('/api/service2').get(1);
       }).then(data => {
-        assert.equal(data.name, 'service2');
+        assert.strictEqual(data.name, 'service2');
 
         return subApp.service('service2').create({
           message: 'This is a test'

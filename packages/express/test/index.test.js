@@ -16,17 +16,17 @@ describe('@feathersjs/express', () => {
   };
 
   it('exports .default, .original .rest, .notFound and .errorHandler', () => {
-    assert.equal(expressify.default, expressify);
-    assert.equal(expressify.original, express);
-    assert.equal(typeof expressify.rest, 'function');
-    assert.equal(expressify.errorHandler, require('@feathersjs/errors/handler'));
-    assert.equal(expressify.notFound, require('@feathersjs/errors/not-found'));
+    assert.strictEqual(expressify.default, expressify);
+    assert.strictEqual(expressify.original, express);
+    assert.strictEqual(typeof expressify.rest, 'function');
+    assert.strictEqual(expressify.errorHandler, require('@feathersjs/errors/handler'));
+    assert.strictEqual(expressify.notFound, require('@feathersjs/errors/not-found'));
   });
 
   it('returns an Express application', () => {
     const app = expressify(feathers());
 
-    assert.equal(typeof app, 'function');
+    assert.strictEqual(typeof app, 'function');
   });
 
   it('exports `express.rest`', () => {
@@ -36,16 +36,16 @@ describe('@feathersjs/express', () => {
   it('returns a plain express app when no app is provided', () => {
     const app = expressify();
 
-    assert.equal(typeof app.use, 'function');
-    assert.equal(typeof app.service, 'undefined');
-    assert.equal(typeof app.services, 'undefined');
+    assert.strictEqual(typeof app.use, 'function');
+    assert.strictEqual(typeof app.service, 'undefined');
+    assert.strictEqual(typeof app.services, 'undefined');
   });
 
   it('errors when app with wrong version is provided', () => {
     try {
       expressify({});
     } catch (e) {
-      assert.equal(e.message, '@feathersjs/express requires a valid Feathers application instance');
+      assert.strictEqual(e.message, '@feathersjs/express requires a valid Feathers application instance');
     }
 
     try {
@@ -54,7 +54,7 @@ describe('@feathersjs/express', () => {
 
       expressify(app);
     } catch (e) {
-      assert.equal(e.message, '@feathersjs/express requires an instance of a Feathers application version 3.x or later (got 2.9.9)');
+      assert.strictEqual(e.message, '@feathersjs/express requires an instance of a Feathers application version 3.x or later (got 2.9.9)');
     }
 
     try {
@@ -63,7 +63,7 @@ describe('@feathersjs/express', () => {
 
       expressify(app);
     } catch (e) {
-      assert.equal(e.message, '@feathersjs/express requires an instance of a Feathers application version 3.x or later (got unknown)');
+      assert.strictEqual(e.message, '@feathersjs/express requires an instance of a Feathers application version 3.x or later (got unknown)');
     }
   });
 
@@ -72,7 +72,7 @@ describe('@feathersjs/express', () => {
     const child = express();
 
     app.use('/path', child);
-    assert.equal(child.parent, app);
+    assert.strictEqual(child.parent, app);
   });
 
   it('Can use express.static', () => {
@@ -103,7 +103,7 @@ describe('@feathersjs/express', () => {
     });
 
     return app.service('myservice').get(10)
-      .then(data => assert.deepEqual(data, {
+      .then(data => assert.deepStrictEqual(data, {
         id: 10,
         fromHook: true,
         fromAppHook: true
@@ -121,9 +121,9 @@ describe('@feathersjs/express', () => {
 
     const server = app.listen(8787).on('listening', () => {
       app.service('myservice').get(10)
-        .then(data => assert.deepEqual(data, { id: 10 }))
+        .then(data => assert.deepStrictEqual(data, { id: 10 }))
         .then(() => axios.get('http://localhost:8787'))
-        .then(res => assert.deepEqual(res.data, response))
+        .then(res => assert.deepStrictEqual(res.data, response))
         .then(() => server.close(() => done()))
         .catch(done);
     });
@@ -140,8 +140,8 @@ describe('@feathersjs/express', () => {
 
       setup (appParam, path) {
         try {
-          assert.equal(appParam, app);
-          assert.equal(path, 'myservice');
+          assert.strictEqual(appParam, app);
+          assert.strictEqual(path, 'myservice');
           called = true;
         } catch (e) {
           done(e);
@@ -173,9 +173,9 @@ describe('@feathersjs/express', () => {
     };
 
     feathersApp.use = function (path, serviceArg, options) {
-      assert.equal(path, '/myservice');
-      assert.equal(serviceArg, service);
-      assert.deepEqual(options.middleware, {
+      assert.strictEqual(path, '/myservice');
+      assert.strictEqual(serviceArg, service);
+      assert.deepStrictEqual(options.middleware, {
         before: [a, b],
         after: [c]
       });
@@ -197,7 +197,7 @@ describe('@feathersjs/express', () => {
     try {
       app.use('/myservice', service, 'hi');
     } catch (e) {
-      assert.equal(e.message, 'Invalid options passed to app.use');
+      assert.strictEqual(e.message, 'Invalid options passed to app.use');
     }
   });
 
@@ -233,7 +233,7 @@ describe('@feathersjs/express', () => {
 
       instance.get('https://localhost:7889/secureTodos/dishes').then(response => {
         assert.ok(response.status === 200, 'Got OK status code');
-        assert.equal(response.data.description, 'You have to do dishes!');
+        assert.strictEqual(response.data.description, 'You have to do dishes!');
         httpsServer.close(() => done());
       }).catch(done);
     });

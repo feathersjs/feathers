@@ -124,8 +124,8 @@ describe('hooks:hashPassword', () => {
   describe('when password exists in bulk', () => {
     beforeEach(() => {
       hook.data = [
-        {password: 'secret'},
-        {password: 'secret'}
+        { password: 'secret' },
+        { password: 'secret' }
       ];
     });
 
@@ -155,8 +155,8 @@ describe('hooks:hashPassword', () => {
 
     it('hashes with custom options', () => {
       hook.data = [
-        {pass: 'secret'},
-        {pass: 'secret'}
+        { pass: 'secret' },
+        { pass: 'secret' }
       ];
 
       return hashPassword({ passwordField: 'pass' })(hook).then(hook => {
