@@ -3,7 +3,7 @@ language: node_js
 install: npm install
 script:
   - npm test
-  - if [[ scripts/test-client ]]; npm run test:client; fi;
+  - scripts/test-client && npm run test:client
 node_js:
   - node
   - 10
