@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+const semver = require('semver');
+
+const { SAUCE_ACCESS_KEY, TRAVIS_NODE_VERSION } = process.env;
+const isLatestNode = semver.satisfies(TRAVIS_NODE_VERSION, '>= 11.0.0');
+const runSaucelabs = SAUCE_ACCESS_KEY && isLatestNode;
+
+process.exit(runSaucelabs ? 0 : 1);
