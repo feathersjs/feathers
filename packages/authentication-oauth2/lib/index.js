@@ -68,6 +68,9 @@ function init (options = {}) {
     // Set callback defaults based on provided path
     oauth2Settings.callbackPath = oauth2Settings.callbackPath || `${oauth2Settings.path}/callback`;
     oauth2Settings.callbackURL = oauth2Settings.callbackURL || makeUrl(oauth2Settings.callbackPath, app);
+    oauth2Settings.makeQuery = oauth2Settings.makeQuery || function(profile, options) {
+      return { [options.idField]: profile.id }; // facebookId: profile.id
+    };
 
     if (!oauth2Settings.clientID) {
       throw new Error(`You must provide a 'clientID' in your authentication configuration or pass one explicitly`);
