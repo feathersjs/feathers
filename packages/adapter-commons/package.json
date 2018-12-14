@@ -1,7 +1,7 @@
 {
-  "name": "@feathersjs/commons",
-  "version": "3.0.1",
-  "description": "Shared Feathers utility functions",
+  "name": "@feathersjs/adapter-commons",
+  "version": "0.1.0",
+  "description": "Shared database adapter utility functions",
   "homepage": "https://feathersjs.com",
   "keywords": [
     "feathers"
@@ -34,7 +34,9 @@
     "access": "public"
   },
   "devDependencies": {
-    "mocha": "^5.2.0",
-    "chai": "^4.1.2"
+    "mocha": "^5.2.0"
+  },
+  "dependencies": {
+    "@feathersjs/commons": "^3.0.1"
   }
 }

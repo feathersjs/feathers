@@ -1,4 +1,4 @@
-const { _ } = require('./utils');
+const { _ } = require('@feathersjs/commons');
 
 function parse (number) {
   if (typeof number !== 'undefined') {
