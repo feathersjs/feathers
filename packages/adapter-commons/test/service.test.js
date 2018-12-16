@@ -24,7 +24,7 @@ describe('@feathersjs/adapter-commons/service', () => {
 
   describe('works when methods exist', () => {
     class MethodService extends AdapterService {
-      _find() {
+      _find () {
         return Promise.resolve([]);
       }
 
@@ -32,7 +32,7 @@ describe('@feathersjs/adapter-commons/service', () => {
         return Promise.resolve({ id });
       }
 
-      _create(data) {
+      _create (data) {
         return Promise.resolve(data);
       }
 
@@ -54,7 +54,7 @@ describe('@feathersjs/adapter-commons/service', () => {
         const service = new MethodService();
         const args = [];
 
-        if(method !== 'find') {
+        if (method !== 'find') {
           args.push('test');
         }
 
@@ -64,6 +64,39 @@ describe('@feathersjs/adapter-commons/service', () => {
 
         return service[method](...args);
       });
+    });
+
+    it('does not allow multi patch', () => {
+      const service = new MethodService();
+
+      return service.patch(null, {})
+        .then(() => assert.ok(false))
+        .catch(error => {
+          assert.strictEqual(error.name, 'MethodNotAllowed');
+          assert.strictEqual(error.message, 'Can not patch multiple entries');
+        });
+    });
+
+    it('does not allow multi remove', () => {
+      const service = new MethodService();
+
+      return service.remove(null, {})
+        .then(() => assert.ok(false))
+        .catch(error => {
+          assert.strictEqual(error.name, 'MethodNotAllowed');
+          assert.strictEqual(error.message, 'Can not remove multiple entries');
+        });
+    });
+
+    it('does not allow multi create', () => {
+      const service = new MethodService();
+
+      return service.create([])
+        .then(() => assert.ok(false))
+        .catch(error => {
+          assert.strictEqual(error.name, 'MethodNotAllowed');
+          assert.strictEqual(error.message, 'Can not create multiple entries');
+        });
     });
   });
 

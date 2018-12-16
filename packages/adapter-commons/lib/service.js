@@ -53,7 +53,7 @@ module.exports = class AdapterService {
 
   create (data, params) {
     if (Array.isArray(data) && !checkMulti('create', this.options.multi)) {
-      throw new MethodNotAllowed(`Can not create multiple entries`);
+      return Promise.reject(new MethodNotAllowed(`Can not create multiple entries`));
     }
 
     return callMethod(this, '_create', data, params);
@@ -61,9 +61,9 @@ module.exports = class AdapterService {
 
   update (id, data, params) {
     if (id === null || Array.isArray(data)) {
-      throw new BadRequest(
+      return Promise.reject(new BadRequest(
         `You can not replace multiple instances. Did you mean 'patch'?`
-      );
+      ));
     }
 
     return callMethod(this, '_update', id, data, params);
@@ -71,7 +71,7 @@ module.exports = class AdapterService {
 
   patch (id, data, params) {
     if (id === null && !checkMulti('patch', this.options.multi)) {
-      throw new MethodNotAllowed(`Can not patch multiple entries`);
+      return Promise.reject(new MethodNotAllowed(`Can not patch multiple entries`));
     }
 
     return callMethod(this, '_patch', id, data, params);
@@ -79,7 +79,7 @@ module.exports = class AdapterService {
 
   remove (id, data, params) {
     if (id === null && !checkMulti('remove', this.options.multi)) {
-      throw new MethodNotAllowed(`Can not remove multiple entries`);
+      return Promise.reject(new MethodNotAllowed(`Can not remove multiple entries`));
     }
 
     return callMethod(this, '_remove', id, data, params);
