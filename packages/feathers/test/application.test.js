@@ -85,15 +85,9 @@ describe('Feathers application', () => {
       const app = feathers();
 
       try {
-        app.use('/', {});
+        app.use(null, {});
       } catch (e) {
-        assert.strictEqual(e.message, `'/' is not a valid service path.`);
-      }
-
-      try {
-        app.use('', {});
-      } catch (e) {
-        assert.strictEqual(e.message, `'' is not a valid service path.`);
+        assert.strictEqual(e.message, `'null' is not a valid service path.`);
       }
 
       try {
@@ -133,6 +127,17 @@ describe('Feathers application', () => {
       return wrappedService.create({
         message: 'Test message'
       }).then(data => assert.strictEqual(data.message, 'Test message'));
+    });
+
+    it('can use a root level service', () => {
+      const app = feathers().use('/', {
+        get (id) {
+          return Promise.resolve({ id });
+        }
+      });
+
+      return app.service('/').get('test')
+        .then(result => assert.deepStrictEqual(result, { id: 'test' }));
     });
 
     it('services can be re-used (#566)', done => {

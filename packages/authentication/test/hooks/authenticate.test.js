@@ -33,7 +33,9 @@ describe('hooks:authenticate', () => {
         cookies: {
           'feathers-jwt': 'token'
         }
-      }
+      },
+      path: 'test',
+      method: 'POST'
     };
   });
 
@@ -91,6 +93,8 @@ describe('hooks:authenticate', () => {
         query: hook.data,
         body: hook.data,
         params: hook.params,
+        path: hook.path,
+        method: hook.method,
         headers: hook.params.headers,
         cookies: hook.params.cookies,
         session: {}

@@ -32,19 +32,25 @@ class TodoService extends Service {
 module.exports = function () {
   const app = feathers()
     .configure(socketio())
+    .use('/', new TodoService())
     .use('/todos', new TodoService());
   const service = app.service('todos');
+  const rootService = app.service('/');
+  const publisher = () => app.channel('general');
+  const data = {
+    text: 'some todo',
+    complete: false
+  };
 
   app.on('connection', connection =>
     app.channel('general').join(connection)
   );
 
-  service.create({
-    text: 'some todo',
-    complete: false
-  });
+  rootService.create(data);
+  rootService.publish(publisher);
 
-  service.publish(() => app.channel('general'));
+  service.create(data);
+  service.publish(publisher);
 
   return app;
 };
