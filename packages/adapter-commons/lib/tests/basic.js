@@ -8,17 +8,17 @@ module.exports = (test, app, errors, serviceName, idProp) => {
       service = app.service(serviceName);
     });
 
-    it('service.id', () => {
+    it('.id', () => {
       assert.strictEqual(service.id, idProp,
         'id property is set to expected name'
       );
     });
 
-    test('service.options', () => {
+    test('.options', () => {
       assert.ok(service.options, 'Options are available in service.options');
     });
 
-    test('service.events', () => {
+    test('.events', () => {
       assert.ok(service.events.includes('testing'),
         'service.events is set and includes "testing"'
       );

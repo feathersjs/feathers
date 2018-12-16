@@ -275,14 +275,14 @@ module.exports = (test, app, errors, serviceName, idProp) => {
 
     describe('paginate', function () {
       beforeEach(() => {
-        service.paginate = {
+        service.options.paginate = {
           default: 1,
           max: 2
         };
       });
 
       afterEach(() => {
-        service.paginate = {};
+        service.options.paginate = {};
       });
 
       test('.find + paginate', async () => {

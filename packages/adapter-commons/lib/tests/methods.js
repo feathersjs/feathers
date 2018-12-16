@@ -19,7 +19,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
     });
 
     describe('get', () => {
-      it('.get', async () => {
+      test('.get', async () => {
         const data = await service.get(doug[idProp]);
 
         assert.strictEqual(data[idProp].toString(), doug[idProp].toString(),
@@ -41,7 +41,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
         assert.strictEqual(data.age, undefined, 'data.age is undefined');
       });
 
-      test('.get + query', async () => {
+      test('.get + id + query', async () => {
         try {
           await service.get(doug[idProp], {
             query: { name: 'Tester' }
@@ -91,7 +91,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
         assert.strictEqual(data.age, undefined, 'data.age is undefined');
       });
 
-      test('.remove + query', async () => {
+      test('.remove + id + query', async () => {
         try {
           await service.remove(doug[idProp], {
             query: { name: 'Tester' }
@@ -104,7 +104,18 @@ module.exports = (test, app, errors, serviceName, idProp) => {
         }
       });
 
-      it('.remove multiple', async () => {
+      test('.remove + multi', async () => {
+        try {
+          await service.remove(null);
+          throw new Error('Should never get here');
+        } catch (error) {
+          assert.strictEqual(error.name, 'MethodNotAllowed',
+            'Removing multiple without option set throws MethodNotAllowed'
+          );
+        }
+
+        service.options.multi = [ 'remove' ];
+
         await service.create({ name: 'Dave', age: 29, created: true });
         await service.create({
           name: 'David',
@@ -157,6 +168,19 @@ module.exports = (test, app, errors, serviceName, idProp) => {
         assert.strictEqual(data.age, undefined, 'data.age is undefined');
       });
 
+      test('.update + id + query', async () => {
+        try {
+          await service.update(doug[idProp], {}, {
+            query: { name: 'Tester' }
+          });
+          throw new Error('Should never get here');
+        } catch (error) {
+          assert.ok(error instanceof errors.NotFound,
+            'Got a NotFound Feathers error'
+          );
+        }
+      });
+
       test('.update + NotFound', async () => {
         try {
           await service.update('568225fbfe21222432e836ff', { name: 'NotFound' });
@@ -195,23 +219,44 @@ module.exports = (test, app, errors, serviceName, idProp) => {
         assert.strictEqual(data.age, undefined, 'data.age is undefined');
       });
 
+      test('.patch + id + query', async () => {
+        try {
+          await service.patch(doug[idProp], {}, {
+            query: { name: 'Tester' }
+          });
+          throw new Error('Should never get here');
+        } catch (error) {
+          assert.ok(error instanceof errors.NotFound,
+            'Got a NotFound Feathers error'
+          );
+        }
+      });
+
       test('.patch multiple', async () => {
-        const service = app.service(serviceName);
+        try {
+          await service.patch(null, {});
+          throw new Error('Should never get here');
+        } catch (error) {
+          assert.strictEqual(error.name, 'MethodNotAllowed',
+            'Removing multiple without option set throws MethodNotAllowed'
+          );
+        }
+
         const params = {
           query: { created: true }
         };
-
-        await service.create({
+        const dave = await service.create({
           name: 'Dave',
           age: 29,
           created: true
         });
-
-        await service.create({
+        const david = await service.create({
           name: 'David',
           age: 3,
           created: true
         });
+
+        service.options.multi = [ 'patch' ];
 
         const data = await service.patch(null, {
           age: 2
@@ -221,7 +266,8 @@ module.exports = (test, app, errors, serviceName, idProp) => {
         assert.strictEqual(data[0].age, 2, 'First entry age was updated');
         assert.strictEqual(data[1].age, 2, 'Sceond entry age was updated');
 
-        await service.remove(null, params);
+        await service.remove(dave[idProp], params);
+        await service.remove(david[idProp], params);
       });
 
       test('.patch multi query', async () => {
@@ -229,14 +275,12 @@ module.exports = (test, app, errors, serviceName, idProp) => {
         const params = {
           query: { age: { $lt: 10 } }
         };
-
-        await service.create({
+        const dave = await service.create({
           name: 'Dave',
           age: 8,
           created: true
         });
-
-        await service.create({
+        const david = await service.create({
           name: 'David',
           age: 4,
           created: true
@@ -250,7 +294,8 @@ module.exports = (test, app, errors, serviceName, idProp) => {
         assert.strictEqual(data[0].age, 2, 'First entry age was updated');
         assert.strictEqual(data[1].age, 2, 'Sceond entry age was updated');
 
-        await service.remove(null, params);
+        await service.remove(dave[idProp], params);
+        await service.remove(david[idProp], params);
       });
 
       test('.patch + NotFound', async () => {
@@ -301,6 +346,15 @@ module.exports = (test, app, errors, serviceName, idProp) => {
       });
 
       test('.create multi', async () => {
+        try {
+          await service.create([], {});
+          throw new Error('Should never get here');
+        } catch (error) {
+          assert.strictEqual(error.name, 'MethodNotAllowed',
+            'Removing multiple without option set throws MethodNotAllowed'
+          );
+        }
+
         const items = [
           {
             name: 'Gerald',
@@ -311,6 +365,8 @@ module.exports = (test, app, errors, serviceName, idProp) => {
             age: 18
           }
         ];
+
+        service.options.multi = [ 'create', 'patch' ];
 
         const data = await service.create(items);
 
@@ -355,33 +411,35 @@ module.exports = (test, app, errors, serviceName, idProp) => {
         });
       });
 
-      test('internal service.find', () => app.service(serviceName).find.call(throwing));
+      test('internal .find', () => app.service(serviceName).find.call(throwing));
 
-      test('internal service.get', () =>
-        app.service(serviceName).get.call(throwing, doug[idProp])
+      test('internal .get', () =>
+        service.get.call(throwing, doug[idProp])
       );
 
-      test('internal service.create', () => app.service(serviceName)
-        .create.call(throwing, {
+      test('internal .create', async () => {
+        const bob = await service.create.call(throwing, {
           name: 'Bob',
           age: 25
-        })
-      );
+        });
 
-      test('internal service.update', () =>
-        app.service(serviceName).update.call(throwing, doug[idProp], {
+        await service.remove(bob[idProp]);
+      });
+
+      test('internal .update', () =>
+        service.update.call(throwing, doug[idProp], {
           name: 'Dougler'
         })
       );
 
-      test('internal service.patch', () =>
-        app.service(serviceName).patch.call(throwing, doug[idProp], {
+      test('internal .patch', () =>
+        service.patch.call(throwing, doug[idProp], {
           name: 'PatchDoug'
         })
       );
 
-      test('internal remove', () =>
-        app.service(serviceName).remove.call(throwing, doug[idProp])
+      test('internal .remove', () =>
+        service.remove.call(throwing, doug[idProp])
       );
     });
   });

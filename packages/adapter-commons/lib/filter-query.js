@@ -34,10 +34,13 @@ function convertSort (sort) {
 }
 
 function cleanQuery (query, operators) {
-  if (_.isObject(query)) {
+  if (_.isObject(query) && query.constructor === {}.constructor) {
     const result = {};
     _.each(query, (query, key) => {
-      if (key[0] === '$' && operators.indexOf(key) === -1) return;
+      if (key[0] === '$' && operators.indexOf(key) === -1) {
+        return;
+      }
+
       result[key] = cleanQuery(query, operators);
     });
     return result;
@@ -49,11 +52,17 @@ function cleanQuery (query, operators) {
 function assignFilters (object, query, filters, options) {
   if (Array.isArray(filters)) {
     _.each(filters, (key) => {
-      object[key] = query[key];
+      if (query[key] !== undefined) {
+        object[key] = query[key];
+      }
     });
   } else {
     _.each(filters, (converter, key) => {
-      object[key] = converter(query[key], options);
+      const converted = converter(query[key], options);
+
+      if (converted !== undefined) {
+        object[key] = converted;
+      }
     });
   }
 

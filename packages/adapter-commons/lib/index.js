@@ -1,5 +1,6 @@
 const { _ } = require('@feathersjs/commons');
 
+const AdapterService = require('./service');
 const filterQuery = require('./filter-query');
 const sort = require('./sort');
 
@@ -30,4 +31,8 @@ const select = function select (params, ...otherFields) {
   };
 };
 
-module.exports = Object.assign({ select, filterQuery }, sort);
+module.exports = Object.assign({
+  select,
+  filterQuery,
+  AdapterService
+}, sort);
