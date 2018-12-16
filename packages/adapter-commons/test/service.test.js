@@ -1,30 +1,69 @@
 const assert = require('assert');
 const { NotImplemented } = require('@feathersjs/errors');
 const { AdapterService } = require('../lib');
-
-class CustomService extends AdapterService {
-  _find () {
-    return Promise.resolve([]);
-  }
-}
+const METHODS = [ 'find', 'get', 'create', 'update', 'patch', 'remove' ];
 
 describe('@feathersjs/adapter-commons/service', () => {
-  it('calls methods', () => {
-    const service = new CustomService();
+  class CustomService extends AdapterService {
+  }
 
-    return service.find().then(result => {
-      assert.deepStrictEqual(result, []);
+  describe('errors when method does not exit', () => {
+    METHODS.forEach(method => {
+      it(`${method}`, () => {
+        const service = new CustomService();
+
+        return service[method]().then(() => {
+          throw new Error('Should never get here');
+        }).catch(error => {
+          assert.ok(error instanceof NotImplemented);
+          assert.strictEqual(error.message, `Method _${method} not available`);
+        });
+      });
     });
   });
 
-  it('throw an error if method does not exist', () => {
-    const service = new CustomService();
+  describe('works when methods exist', () => {
+    class MethodService extends AdapterService {
+      _find() {
+        return Promise.resolve([]);
+      }
 
-    return service.create().then(() => {
-      throw new Error('Should never get here');
-    }).catch(error => {
-      assert.ok(error instanceof NotImplemented);
-      assert.strictEqual(error.message, 'Method _create not available');
+      _get (id) {
+        return Promise.resolve({ id });
+      }
+
+      _create(data) {
+        return Promise.resolve(data);
+      }
+
+      _update (id) {
+        return Promise.resolve({ id });
+      }
+
+      _patch (id) {
+        return Promise.resolve({ id });
+      }
+
+      _remove (id) {
+        return Promise.resolve({ id });
+      }
+    }
+
+    METHODS.forEach(method => {
+      it(`${method}`, () => {
+        const service = new MethodService();
+        const args = [];
+
+        if(method !== 'find') {
+          args.push('test');
+        }
+
+        if (method === 'update' || method === 'patch') {
+          args.push({});
+        }
+
+        return service[method](...args);
+      });
     });
   });
 
@@ -35,6 +74,7 @@ describe('@feathersjs/adapter-commons/service', () => {
     });
 
     assert.deepStrictEqual(filtered, {
+      paginate: {},
       filters: { $limit: 10 },
       query: { test: 'me' }
     });
