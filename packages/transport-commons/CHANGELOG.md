@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="4.2.0"></a>
+# [4.2.0](https://github.com/feathersjs/feathers/compare/@feathersjs/transport-commons@4.1.6...@feathersjs/transport-commons@4.2.0) (2018-12-16)
+
+
+### Features
+
+* Allow registering a service at the root level ([#1115](https://github.com/feathersjs/feathers/issues/1115)) ([c73d322](https://github.com/feathersjs/feathers/commit/c73d322))
+
+
+
+
+
 <a name="4.1.6"></a>
 ## [4.1.6](https://github.com/feathersjs/feathers/compare/@feathersjs/transport-commons@4.1.5...@feathersjs/transport-commons@4.1.6) (2018-10-25)
 

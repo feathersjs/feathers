@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.2.6"></a>
+## [1.2.6](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-oauth2@1.2.5...@feathersjs/authentication-oauth2@1.2.6) (2018-12-16)
+
+**Note:** Version bump only for package @feathersjs/authentication-oauth2
+
+
+
+
+
 <a name="1.2.5"></a>
 ## [1.2.5](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-oauth2@1.2.4...@feathersjs/authentication-oauth2@1.2.5) (2018-10-25)
 

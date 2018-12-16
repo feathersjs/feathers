@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="3.7.6"></a>
+## [3.7.6](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.5...@feathersjs/client@3.7.6) (2018-12-16)
+
+
+### Bug Fixes
+
+* **chore:** Properly configure and run code linter ([#1092](https://github.com/feathersjs/feathers/issues/1092)) ([fd3fc34](https://github.com/feathersjs/feathers/commit/fd3fc34))
+
+
+
+
+
 <a name="3.7.5"></a>
 ## [3.7.5](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.4...@feathersjs/client@3.7.5) (2018-10-26)
 
