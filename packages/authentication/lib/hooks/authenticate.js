@@ -43,10 +43,21 @@ module.exports = function authenticate (_strategies, options = {}) {
 
     // NOTE (EK): Passport expects an express/connect
     // like request object. So we need to create one.
+    const methodMap = {
+      find: 'GET',
+      get: 'GET',
+      create: 'POST',
+      update: 'PUT',
+      patch: 'PATCH',
+      remove: 'DELETE'
+    };
+
     let request = {
       query: hook.data,
       body: hook.data,
       params: hook.params,
+      path: hook.path,
+      method: methodMap[hook.method] || hook.method,
       headers: hook.params.headers || {},
       cookies: hook.params.cookies || {},
       session: {}
