@@ -17,7 +17,7 @@ module.exports = function () {
           return null;
         }
 
-        return this[ROUTER].lookup(stripSlashes('' + path));
+        return this[ROUTER].lookup(stripSlashes('' + path) || '/');
       }
     });
 
