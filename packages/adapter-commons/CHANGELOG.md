@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.3"></a>
+## [1.0.3](https://github.com/feathersjs/feathers/compare/@feathersjs/adapter-commons@1.0.2...@feathersjs/adapter-commons@1.0.3) (2018-12-17)
+
+
+### Bug Fixes
+
+* Fix AdapterService multi option when set to true ([#1134](https://github.com/feathersjs/feathers/issues/1134)) ([40402fc](https://github.com/feathersjs/feathers/commit/40402fc))
+
+
+
+
+
 <a name="1.0.2"></a>
 ## [1.0.2](https://github.com/feathersjs/feathers/compare/@feathersjs/adapter-commons@1.0.1...@feathersjs/adapter-commons@1.0.2) (2018-12-17)
 
