@@ -34,11 +34,16 @@ module.exports = class AdapterService {
     return this.options.events;
   }
 
-  filterQuery (params = {}, options = {}) {
+  filterQuery (params = {}, opts = {}) {
     const paginate = typeof params.paginate !== 'undefined'
       ? params.paginate : this.options.paginate;
     const { query = {} } = params;
-    const result = filterQuery(query, Object.assign({ paginate }, options));
+    const options = Object.assign({
+      operators: this.options.whitelist || [],
+      filters: this.options.filters,
+      paginate
+    }, opts);
+    const result = filterQuery(query, options);
 
     return Object.assign(result, { paginate });
   }
