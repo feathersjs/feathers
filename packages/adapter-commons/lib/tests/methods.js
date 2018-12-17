@@ -170,7 +170,9 @@ module.exports = (test, app, errors, serviceName, idProp) => {
 
       test('.update + id + query', async () => {
         try {
-          await service.update(doug[idProp], {}, {
+          await service.update(doug[idProp], {
+            name: 'Dougler'
+          }, {
             query: { name: 'Tester' }
           });
           throw new Error('Should never get here');
@@ -221,7 +223,9 @@ module.exports = (test, app, errors, serviceName, idProp) => {
 
       test('.patch + id + query', async () => {
         try {
-          await service.patch(doug[idProp], {}, {
+          await service.patch(doug[idProp], {
+            name: 'id patched doug'
+          }, {
             query: { name: 'Tester' }
           });
           throw new Error('Should never get here');
