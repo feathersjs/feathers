@@ -11,7 +11,7 @@ const callMethod = (self, name, ...args) => {
 
 const checkMulti = (method, option) => {
   if (option === true) {
-    return;
+    return true;
   }
 
   return Array.isArray(option) ? option.includes(method) : false;

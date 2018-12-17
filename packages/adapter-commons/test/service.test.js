@@ -98,6 +98,15 @@ describe('@feathersjs/adapter-commons/service', () => {
           assert.strictEqual(error.message, 'Can not create multiple entries');
         });
     });
+
+    it('multi can be set to true', () => {
+      const service = new MethodService();
+
+      service.options.multi = true;
+
+      return service.create([])
+        .then(() => assert.ok(true));
+    });
   });
 
   it('filterQuery', () => {
