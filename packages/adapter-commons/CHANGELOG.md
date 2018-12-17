@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.2"></a>
+## [1.0.2](https://github.com/feathersjs/feathers/compare/@feathersjs/adapter-commons@1.0.1...@feathersjs/adapter-commons@1.0.2) (2018-12-17)
+
+
+### Bug Fixes
+
+* Add whitelist and filter support to common adapter service ([#1132](https://github.com/feathersjs/feathers/issues/1132)) ([df1daaa](https://github.com/feathersjs/feathers/commit/df1daaa))
+
+
+
+
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://github.com/feathersjs/feathers/compare/@feathersjs/adapter-commons@1.0.0...@feathersjs/adapter-commons@1.0.1) (2018-12-17)
 
