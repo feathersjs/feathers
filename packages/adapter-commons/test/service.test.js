@@ -100,8 +100,10 @@ describe('@feathersjs/adapter-commons/service', () => {
     });
   });
 
-  it('getFilters', () => {
-    const service = new CustomService();
+  it('filterQuery', () => {
+    const service = new CustomService({
+      whitelist: [ '$something' ]
+    });
     const filtered = service.filterQuery({
       query: { $limit: 10, test: 'me' }
     });
@@ -110,6 +112,16 @@ describe('@feathersjs/adapter-commons/service', () => {
       paginate: {},
       filters: { $limit: 10 },
       query: { test: 'me' }
+    });
+
+    const withWhitelisted = service.filterQuery({
+      query: { $limit: 10, $something: 'else' }
+    });
+    
+    assert.deepStrictEqual(withWhitelisted, {
+      paginate: {},
+      filters: { $limit: 10 },
+      query: { $something: 'else' }
     });
   });
 });
