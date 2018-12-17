@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/adapter-commons",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Shared database adapter utility functions",
   "homepage": "https://feathersjs.com",
   "keywords": [

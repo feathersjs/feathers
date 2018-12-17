@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/feathersjs/feathers/compare/@feathersjs/adapter-commons@1.0.0...@feathersjs/adapter-commons@1.0.1) (2018-12-17)
+
+
+### Bug Fixes
+
+* Throw error in `filterQuery` when query parameter is unknown ([#1131](https://github.com/feathersjs/feathers/issues/1131)) ([cd1a183](https://github.com/feathersjs/feathers/commit/cd1a183))
+
+
+
+
+
 <a name="1.0.0"></a>
 # 1.0.0 (2018-12-16)
 
