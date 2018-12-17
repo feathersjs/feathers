@@ -23,7 +23,7 @@ class TodoService extends Service {
       return Promise.reject(new Error('Something went wrong'));
     }
 
-    return super.get(id, params).then(data =>
+    return super.get(id).then(data =>
       Object.assign({ query: params.query }, data)
     );
   }

@@ -43,7 +43,7 @@ class TodoService extends Service {
       throw new errors.NotAcceptable('This is a Feathers error', { data: true });
     }
 
-    return super.get(id, params)
+    return super.get(id)
       .then(data => {
         const result = Object.assign({ query: params.query }, data);
 
