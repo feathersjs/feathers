@@ -1,4 +1,5 @@
 const { _ } = require('@feathersjs/commons');
+const { BadRequest } = require('@feathersjs/errors');
 
 function parse (number) {
   if (typeof number !== 'undefined') {
@@ -33,15 +34,21 @@ function convertSort (sort) {
   }, {});
 }
 
-function cleanQuery (query, operators) {
+function cleanQuery (query, operators, filters) {
   if (_.isObject(query) && query.constructor === {}.constructor) {
     const result = {};
-    _.each(query, (query, key) => {
-      if (key[0] === '$' && operators.indexOf(key) === -1) {
-        return;
+    _.each(query, (value, key) => {
+      if (key[0] === '$') {
+        if(filters[key] !== undefined) {
+          return;
+        }
+
+        if(!operators.includes(key)) {
+          throw new BadRequest(`Invalid query parameter ${key}`, query);
+        }
       }
 
-      result[key] = cleanQuery(query, operators);
+      result[key] = cleanQuery(value, operators, filters);
     });
     return result;
   }
@@ -91,7 +98,7 @@ module.exports = function filterQuery (query, options = {}) {
   result.filters = assignFilters({}, query, FILTERS, options);
   result.filters = assignFilters(result.filters, query, additionalFilters, options);
 
-  result.query = cleanQuery(query, OPERATORS.concat(additionalOperators));
+  result.query = cleanQuery(query, OPERATORS.concat(additionalOperators), result.filters);
 
   return result;
 };

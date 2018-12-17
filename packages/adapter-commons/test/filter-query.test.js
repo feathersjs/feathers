@@ -37,8 +37,19 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
       assert.deepStrictEqual(query, {});
     });
 
+    it('throws an error when special parameter is not known', () => {
+      try {
+        const query = { $foo: 1 };
+        filterQuery(query);
+        assert.ok(false, 'Should never get here');
+      } catch (error) {
+        assert.strictEqual(error.name, 'BadRequest');
+        assert.strictEqual(error.message, 'Invalid query parameter $foo');
+      }
+    });
+
     it('returns undefined when not present in query', () => {
-      const query = { $foo: 1 };
+      const query = { foo: 1 };
       const { filters } = filterQuery(query);
 
       assert.strictEqual(filters.$sort, undefined);
@@ -58,7 +69,7 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
     });
 
     it('returns undefined when not present in query', () => {
-      const query = { $foo: 1 };
+      const query = { foo: 1 };
       const { filters } = filterQuery(query);
 
       assert.strictEqual(filters.$limit, undefined);
@@ -113,7 +124,7 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
     });
 
     it('returns undefined when not present in query', () => {
-      const query = { $foo: 1 };
+      const query = { foo: 1 };
       const { filters } = filterQuery(query);
 
       assert.strictEqual(filters.$skip, undefined);
@@ -142,7 +153,7 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
     });
 
     it('returns undefined when not present in query', () => {
-      const query = { $foo: 1 };
+      const query = { foo: 1 };
       const { filters } = filterQuery(query);
 
       assert.strictEqual(filters.$select, undefined);
@@ -161,28 +172,29 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
   });
 
   describe('additional filters', () => {
-    beforeEach(() => {
-      this.query = { $select: 1, $known: 1, $unknown: 1 };
-    });
-
-    it('returns only default filters when no additionals', () => {
-      const { filters } = filterQuery(this.query);
-
-      assert.strictEqual(filters.$unknown, undefined);
-      assert.strictEqual(filters.$known, undefined);
-      assert.strictEqual(filters.$select, 1);
+    it('throw error when not set as additionals', () => {
+      try {
+        filterQuery({ $select: 1, $known: 1 });
+        assert.ok(false, 'Should never get here');
+      } catch(error) {
+        assert.strictEqual(error.message, 'Invalid query parameter $known');
+      }
     });
 
     it('returns default and known additional filters (array)', () => {
-      const { filters } = filterQuery(this.query, { filters: [ '$known' ] });
+      const query = { $select: ['a', 'b'], $known: 1, $unknown: 1 };
+      const { filters } = filterQuery(query, { filters: [ '$known', '$unknown' ] });
 
-      assert.strictEqual(filters.$unknown, undefined);
+      assert.strictEqual(filters.$unknown, 1);
       assert.strictEqual(filters.$known, 1);
-      assert.strictEqual(filters.$select, 1);
+      assert.deepStrictEqual(filters.$select, [ 'a', 'b' ]);
     });
 
     it('returns default and known additional filters (object)', () => {
-      const { filters } = filterQuery(this.query, { filters: { $known: (value) => value.toString() } });
+      const { filters } = filterQuery({
+        $known: 1,
+        $select: 1
+      }, { filters: { $known: (value) => value.toString() } });
 
       assert.strictEqual(filters.$unknown, undefined);
       assert.strictEqual(filters.$known, '1');
@@ -191,32 +203,14 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
   });
 
   describe('additional operators', () => {
-    beforeEach(() => {
-      this.query = { $ne: 1, $known: 1, $unknown: 1 };
-    });
-
-    it('returns query with only default operators when no additionals', () => {
-      const { query } = filterQuery(this.query);
-
-      assert.strictEqual(query.$ne, 1);
-      assert.strictEqual(query.$known, undefined);
-      assert.strictEqual(query.$unknown, undefined);
-    });
-
     it('returns query with default and known additional operators', () => {
-      const { query } = filterQuery(this.query, { operators: [ '$known' ] });
+      const { query } = filterQuery({
+        $ne: 1, $known: 1
+      }, { operators: [ '$known' ] });
 
       assert.strictEqual(query.$ne, 1);
       assert.strictEqual(query.$known, 1);
       assert.strictEqual(query.$unknown, undefined);
-    });
-
-    it('returns query with default and known additional operators (nested)', () => {
-      const { query } = filterQuery({ field: this.query }, { operators: [ '$known' ] });
-
-      assert.strictEqual(query.field.$ne, 1);
-      assert.strictEqual(query.field.$known, 1);
-      assert.strictEqual(query.field.$unknown, undefined);
     });
   });
 });
