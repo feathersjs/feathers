@@ -77,7 +77,10 @@ class OAuth2Verifier {
   verify (req, accessToken, refreshToken, profile, done) {
     debug('Checking credentials');
     const options = this.options;
-    const query = Object.assign({}, options.makeQuery(profile, options), { $limit: 1 });
+    const makeQuery = options.makeQuery || function (profile, options) {
+      return { [options.idField]: profile.id }; // facebookId: profile.id
+    };
+    const query = Object.assign({}, makeQuery(profile, options), { $limit: 1 });
     const data = { profile, accessToken, refreshToken };
     let existing;
 

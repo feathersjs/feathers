@@ -54,9 +54,6 @@ function init (options = {}) {
     // Set callback defaults based on provided path
     oauth1Settings.callbackPath = oauth1Settings.callbackPath || `${oauth1Settings.path}/callback`;
     oauth1Settings.callbackURL = oauth1Settings.callbackURL || makeUrl(oauth1Settings.callbackPath, app);
-    oauth1Settings.makeQuery = oauth1Settings.makeQuery || function(profile, options) {
-      return { [options.idField]: profile.id }; // facebookId: profile.id
-    };
 
     if (!oauth1Settings.consumerKey) {
       throw new Error(`You must provide a 'consumerKey' in your authentication configuration or pass one explicitly`);
