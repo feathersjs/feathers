@@ -1,4 +1,5 @@
-const { _ } = require('./utils');
+const { _ } = require('@feathersjs/commons');
+const { BadRequest } = require('@feathersjs/errors');
 
 function parse (number) {
   if (typeof number !== 'undefined') {
@@ -33,12 +34,21 @@ function convertSort (sort) {
   }, {});
 }
 
-function cleanQuery (query, operators) {
-  if (_.isObject(query)) {
+function cleanQuery (query, operators, filters) {
+  if (_.isObject(query) && query.constructor === {}.constructor) {
     const result = {};
-    _.each(query, (query, key) => {
-      if (key[0] === '$' && operators.indexOf(key) === -1) return;
-      result[key] = cleanQuery(query, operators);
+    _.each(query, (value, key) => {
+      if (key[0] === '$') {
+        if(filters[key] !== undefined) {
+          return;
+        }
+
+        if(!operators.includes(key)) {
+          throw new BadRequest(`Invalid query parameter ${key}`, query);
+        }
+      }
+
+      result[key] = cleanQuery(value, operators, filters);
     });
     return result;
   }
@@ -49,11 +59,17 @@ function cleanQuery (query, operators) {
 function assignFilters (object, query, filters, options) {
   if (Array.isArray(filters)) {
     _.each(filters, (key) => {
-      object[key] = query[key];
+      if (query[key] !== undefined) {
+        object[key] = query[key];
+      }
     });
   } else {
     _.each(filters, (converter, key) => {
-      object[key] = converter(query[key], options);
+      const converted = converter(query[key], options);
+
+      if (converted !== undefined) {
+        object[key] = converted;
+      }
     });
   }
 
@@ -82,7 +98,7 @@ module.exports = function filterQuery (query, options = {}) {
   result.filters = assignFilters({}, query, FILTERS, options);
   result.filters = assignFilters(result.filters, query, additionalFilters, options);
 
-  result.query = cleanQuery(query, OPERATORS.concat(additionalOperators));
+  result.query = cleanQuery(query, OPERATORS.concat(additionalOperators), result.filters);
 
   return result;
 };

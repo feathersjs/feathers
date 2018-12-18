@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="3.3.0"></a>
+# [3.3.0](https://github.com/feathersjs/feathers/compare/@feathersjs/feathers@3.2.3...@feathersjs/feathers@3.3.0) (2018-12-16)
+
+
+### Bug Fixes
+
+* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+
+
+### Features
+
+* Allow registering a service at the root level ([#1115](https://github.com/feathersjs/feathers/issues/1115)) ([c73d322](https://github.com/feathersjs/feathers/commit/c73d322))
+
+
+
+
+
 <a name="3.2.3"></a>
 ## [3.2.3](https://github.com/feathersjs/feathers/compare/@feathersjs/feathers@3.2.2...@feathersjs/feathers@3.2.3) (2018-09-21)
 

@@ -1,0 +1,64 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [1.0.4](https://github.com/feathersjs/feathers/compare/@feathersjs/adapter-commons@1.0.3...@feathersjs/adapter-commons@1.0.4) (2018-12-17)
+
+
+### Bug Fixes
+
+* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
+
+
+
+
+
+<a name="1.0.3"></a>
+## [1.0.3](https://github.com/feathersjs/feathers/compare/@feathersjs/adapter-commons@1.0.2...@feathersjs/adapter-commons@1.0.3) (2018-12-17)
+
+
+### Bug Fixes
+
+* Fix AdapterService multi option when set to true ([#1134](https://github.com/feathersjs/feathers/issues/1134)) ([40402fc](https://github.com/feathersjs/feathers/commit/40402fc))
+
+
+
+
+
+<a name="1.0.2"></a>
+## [1.0.2](https://github.com/feathersjs/feathers/compare/@feathersjs/adapter-commons@1.0.1...@feathersjs/adapter-commons@1.0.2) (2018-12-17)
+
+
+### Bug Fixes
+
+* Add whitelist and filter support to common adapter service ([#1132](https://github.com/feathersjs/feathers/issues/1132)) ([df1daaa](https://github.com/feathersjs/feathers/commit/df1daaa))
+
+
+
+
+
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/feathersjs/feathers/compare/@feathersjs/adapter-commons@1.0.0...@feathersjs/adapter-commons@1.0.1) (2018-12-17)
+
+
+### Bug Fixes
+
+* Throw error in `filterQuery` when query parameter is unknown ([#1131](https://github.com/feathersjs/feathers/issues/1131)) ([cd1a183](https://github.com/feathersjs/feathers/commit/cd1a183))
+
+
+
+
+
+<a name="1.0.0"></a>
+# 1.0.0 (2018-12-16)
+
+
+### Features
+
+* Common database adapter utilities and test suite ([#1130](https://github.com/feathersjs/feathers/issues/1130)) ([17b3dc8](https://github.com/feathersjs/feathers/commit/17b3dc8))
+
+
+### BREAKING CHANGES
+
+* Move database adapter utilities from @feathersjs/commons into its own module

@@ -1,14 +1,12 @@
 const { expect } = require('chai');
-const { _ } = require('../lib/commons');
+const { _ } = require('../lib');
 
 describe('module', () => {
   it('is commonjs compatible', () => {
-    let commons = require('../lib/commons');
+    let commons = require('../lib');
 
     expect(typeof commons).to.equal('object');
     expect(typeof commons.stripSlashes).to.equal('function');
-    expect(typeof commons.sorter).to.equal('function');
-    expect(typeof commons.select).to.equal('function');
     expect(typeof commons.hooks).to.equal('object');
     expect(typeof commons._).to.equal('object');
   });

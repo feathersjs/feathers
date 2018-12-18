@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="3.2.8"></a>
+## [3.2.8](https://github.com/feathersjs/feathers/compare/@feathersjs/socketio@3.2.7...@feathersjs/socketio@3.2.8) (2018-12-16)
+
+**Note:** Version bump only for package @feathersjs/socketio
+
+
+
+
+
 <a name="3.2.7"></a>
 ## [3.2.7](https://github.com/feathersjs/feathers/compare/@feathersjs/socketio@3.2.6...@feathersjs/socketio@3.2.7) (2018-10-25)
 

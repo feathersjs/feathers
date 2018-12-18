@@ -72,4 +72,5 @@ describe('@feathersjs/socketio-client', () => {
   });
 
   baseTests(app, 'todos');
+  baseTests(app, '/');
 });

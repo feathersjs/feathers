@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="2.1.14"></a>
+## [2.1.14](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication@2.1.13...@feathersjs/authentication@2.1.14) (2018-12-16)
+
+
+### Bug Fixes
+
+* Added path and method in to express request for passport ([#1112](https://github.com/feathersjs/feathers/issues/1112)) ([afa1cb4](https://github.com/feathersjs/feathers/commit/afa1cb4))
+
+
+
+
+
 <a name="2.1.13"></a>
 ## [2.1.13](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication@2.1.12...@feathersjs/authentication@2.1.13) (2018-10-26)
 
