@@ -38,7 +38,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
           `${idProp} id property matches`
         );
         assert.strictEqual(data.name, 'Doug', 'data.name matches');
-        assert.strictEqual(data.age, undefined, 'data.age is undefined');
+        assert.ok(!data.age, 'data.age is falsy');
       });
 
       test('.get + id + query', async () => {
@@ -88,7 +88,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
         });
 
         assert.strictEqual(data.name, 'Doug', 'data.name matches');
-        assert.strictEqual(data.age, undefined, 'data.age is undefined');
+        assert.ok(!data.age, 'data.age is falsy');
       });
 
       test('.remove + id + query', async () => {
@@ -150,7 +150,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
           `${idProp} id matches`
         );
         assert.strictEqual(data.name, 'Dougler', 'data.name matches');
-        assert.strictEqual(data.age, undefined, 'data.age is undefined');
+        assert.ok(!data.age, 'data.age is falsy');
       });
 
       test('.update + $select', async () => {
@@ -165,7 +165,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
         });
 
         assert.strictEqual(data.name, 'Dougler', 'data.name matches');
-        assert.strictEqual(data.age, undefined, 'data.age is undefined');
+        assert.ok(!data.age, 'data.age is falsy');
       });
 
       test('.update + id + query', async () => {
@@ -218,7 +218,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
         });
 
         assert.strictEqual(data.name, 'PatchDoug', 'data.name matches');
-        assert.strictEqual(data.age, undefined, 'data.age is undefined');
+        assert.ok(!data.age, 'data.age is falsy');
       });
 
       test('.patch + id + query', async () => {
@@ -344,7 +344,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
         });
 
         assert.strictEqual(data.name, 'William', 'data.name matches');
-        assert.strictEqual(data.age, undefined, 'data.age is undefined');
+        assert.ok(!data.age, 'data.age is falsy');
 
         await service.remove(data[idProp]);
       });
