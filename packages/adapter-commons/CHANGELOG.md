@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.5](https://github.com/feathersjs/feathers/compare/@feathersjs/adapter-commons@1.0.4...@feathersjs/adapter-commons@1.0.5) (2018-12-20)
+
+
+### Bug Fixes
+
+* Update adapter common tests to check for falsy ([#1140](https://github.com/feathersjs/feathers/issues/1140)) ([2856722](https://github.com/feathersjs/feathers/commit/2856722))
+
+
+
+
+
 ## [1.0.4](https://github.com/feathersjs/feathers/compare/@feathersjs/adapter-commons@1.0.3...@feathersjs/adapter-commons@1.0.4) (2018-12-17)
 
 
