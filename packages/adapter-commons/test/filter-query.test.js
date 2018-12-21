@@ -159,6 +159,23 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
       assert.strictEqual(filters.$select, undefined);
     });
 
+    it('includes Symbols', () => {
+      const TEST = Symbol('testing');
+      const original = {
+        [TEST]: 'message',
+        other: true,
+        sub: { [TEST]: 'othermessage' }
+      };
+
+      const { query } = filterQuery(original);
+
+      assert.deepStrictEqual(query, {
+        [TEST]: 'message',
+        other: true,
+        sub: { [TEST]: 'othermessage' }
+      });
+    });
+
     it('only converts plain objects', () => {
       const userId = ObjectId();
       const original = {
@@ -176,7 +193,7 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
       try {
         filterQuery({ $select: 1, $known: 1 });
         assert.ok(false, 'Should never get here');
-      } catch(error) {
+      } catch (error) {
         assert.strictEqual(error.message, 'Invalid query parameter $known');
       }
     });

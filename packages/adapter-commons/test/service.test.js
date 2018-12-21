@@ -126,7 +126,7 @@ describe('@feathersjs/adapter-commons/service', () => {
     const withWhitelisted = service.filterQuery({
       query: { $limit: 10, $something: 'else' }
     });
-    
+
     assert.deepStrictEqual(withWhitelisted, {
       paginate: {},
       filters: { $limit: 10 },
