@@ -5,7 +5,7 @@ const version = require('./version');
 const { ACTIVATE_HOOKS, activateHooks } = require('./hooks');
 
 function createApplication () {
-  const app = {};
+  const app = Object.create(null);
 
   // Mix in the base application
   Proto.mixin(Application, app);
