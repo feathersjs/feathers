@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.15](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication@2.1.14...@feathersjs/authentication@2.1.15) (2019-01-02)
+
+
+### Bug Fixes
+
+* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
+
+
+
+
+
 <a name="2.1.14"></a>
 ## [2.1.14](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication@2.1.13...@feathersjs/authentication@2.1.14) (2018-12-16)
 

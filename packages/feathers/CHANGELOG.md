@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.1](https://github.com/feathersjs/feathers/compare/@feathersjs/feathers@3.3.0...@feathersjs/feathers@3.3.1) (2019-01-02)
+
+
+### Bug Fixes
+
+* Do not inherit app object from Object prototype ([#1153](https://github.com/feathersjs/feathers/issues/1153)) ([ed8c2e4](https://github.com/feathersjs/feathers/commit/ed8c2e4))
+* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
+
+
+
+
+
 <a name="3.3.0"></a>
 # [3.3.0](https://github.com/feathersjs/feathers/compare/@feathersjs/feathers@3.2.3...@feathersjs/feathers@3.3.0) (2018-12-16)
 

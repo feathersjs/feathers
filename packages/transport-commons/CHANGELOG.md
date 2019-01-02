@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.1](https://github.com/feathersjs/feathers/compare/@feathersjs/transport-commons@4.2.0...@feathersjs/transport-commons@4.2.1) (2019-01-02)
+
+
+### Bug Fixes
+
+* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
+
+
+
+
+
 <a name="4.2.0"></a>
 # [4.2.0](https://github.com/feathersjs/feathers/compare/@feathersjs/transport-commons@4.1.6...@feathersjs/transport-commons@4.2.0) (2018-12-16)
 
