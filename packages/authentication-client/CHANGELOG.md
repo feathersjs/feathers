@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.10](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-client@1.0.9...@feathersjs/authentication-client@1.0.10) (2019-01-02)
+
+
+### Bug Fixes
+
+* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
+
+
+
+
+
 <a name="1.0.9"></a>
 ## [1.0.9](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-client@1.0.8...@feathersjs/authentication-client@1.0.9) (2018-12-16)
 

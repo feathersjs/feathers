@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/feathersjs/feathers/compare/@feathersjs/socketio-client@1.2.0...@feathersjs/socketio-client@1.2.1) (2019-01-02)
+
+
+### Bug Fixes
+
+* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
+
+
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/feathersjs/feathers/compare/@feathersjs/socketio-client@1.1.5...@feathersjs/socketio-client@1.2.0) (2018-12-16)
 

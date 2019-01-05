@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.7](https://github.com/feathersjs/feathers/compare/@feathersjs/adapter-commons@1.0.6...@feathersjs/adapter-commons@1.0.7) (2019-01-02)
+
+
+### Bug Fixes
+
+* **chore:** Add .npmignore to adapter-commons ([8e129d8](https://github.com/feathersjs/feathers/commit/8e129d8))
+
+
+
+
+
 ## [1.0.6](https://github.com/feathersjs/feathers/compare/@feathersjs/adapter-commons@1.0.5...@feathersjs/adapter-commons@1.0.6) (2018-12-21)
 
 
