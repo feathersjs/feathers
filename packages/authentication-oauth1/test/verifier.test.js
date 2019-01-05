@@ -199,6 +199,17 @@ describe('Verifier', () => {
       });
     });
 
+    it('calls with query from makeQuery', done => {
+      options = { ...options, makeQuery: sinon.stub().returns({ key: 'value' }) };
+      verifier = new Verifier(app, options);
+      verifier.verify({}, 'access', 'refresh', { id: 1234 }, () => {
+        const query = { key: 'value', $limit: 1 };
+        expect(options.makeQuery).to.have.been.calledOnce;
+        expect(service.find).to.have.been.calledWith({ query });
+        done();
+      });
+    });
+
     it('calls _normalizeResult', done => {
       sinon.spy(verifier, '_normalizeResult');
       verifier.verify({}, 'access', 'refresh', { id: 1234 }, () => {
