@@ -49,7 +49,7 @@
     "@feathersjs/socketio": "^3.2.9",
     "body-parser": "^1.15.2",
     "chai": "^4.0.2",
-    "feathers-memory": "^2.0.0",
+    "feathers-memory": "^3.0.0",
     "mocha": "^5.2.0",
     "sinon": "^6.0.0",
     "sinon-chai": "^3.0.0"

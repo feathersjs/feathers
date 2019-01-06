@@ -52,7 +52,7 @@
     "@feathersjs/socketio-client": "^1.2.1",
     "body-parser": "^1.15.2",
     "chai": "^4.0.0",
-    "feathers-memory": "^2.0.0",
+    "feathers-memory": "^3.0.0",
     "localstorage-memory": "^1.0.2",
     "mocha": "^5.2.0",
     "primus": "^7.0.0",

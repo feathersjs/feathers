@@ -60,7 +60,7 @@
     "body-parser": "^1.15.2",
     "chai": "^4.1.0",
     "chai-uuid": "^1.0.6",
-    "feathers-memory": "^2.0.0",
+    "feathers-memory": "^3.0.0",
     "jshint": "^2.9.3",
     "localstorage-memory": "^1.0.2",
     "mocha": "^5.2.0",
