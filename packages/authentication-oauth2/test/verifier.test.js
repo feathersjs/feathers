@@ -200,7 +200,7 @@ describe('Verifier', () => {
     });
 
     it('calls with query from makeQuery', done => {
-      options = { ...options, makeQuery: sinon.stub().returns({ key: 'value' }) };
+      options = Object.assign({}, options, { makeQuery: sinon.stub().returns({ key: 'value' }) });
       verifier = new Verifier(app, options);
       verifier.verify({}, 'access', 'refresh', { id: 1234 }, () => {
         const query = { key: 'value', $limit: 1 };
