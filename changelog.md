@@ -1,9 +1,8 @@
 # Change Log
 
-Changelog for each Feathers module can be found in `changelog.md` in their respective `packages/` directory:
+Changelogs for each Feathers module can be found in `changelog.md` in their respective `packages/` directory:
 
 - [@feathersjs/feathers](packages/feathers/changelog.md)
-- [@feathersjs/adapter-commons](packages/adapter-commons/changelog.md)
 - [@feathersjs/authentication](packages/authentication/changelog.md)
 - [@feathersjs/authentication-client](packages/authentication-client/changelog.md)
 - [@feathersjs/authentication-jwt](packages/authentication-jwt/changelog.md)
@@ -19,4 +18,5 @@ Changelog for each Feathers module can be found in `changelog.md` in their respe
 - [@feathersjs/primus-client](packages/primus-client/changelog.md)
 - [@feathersjs/socketio](packages/socketio/changelog.md)
 - [@feathersjs/socketio-client](packages/socketio-client/changelog.md)
+- [@feathersjs/adapter-commons](packages/adapter-commons/changelog.md)
 - [@feathersjs/transport-commons](packages/transport-commons/changelog.md)
