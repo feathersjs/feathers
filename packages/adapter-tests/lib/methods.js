@@ -52,6 +52,17 @@ module.exports = (test, app, errors, serviceName, idProp) => {
             'Got a NotFound Feathers error'
           );
         }
+
+        try {
+          await service.get(doug[idProp], {
+            query: { [idProp]: '568225fbfe21222432e836ff' }
+          });
+          throw new Error('Should never get here');
+        } catch (error) {
+          assert.ok(error instanceof errors.NotFound,
+            'Got a NotFound Feathers error'
+          );
+        }
       });
 
       test('.get + NotFound', async () => {
@@ -95,6 +106,17 @@ module.exports = (test, app, errors, serviceName, idProp) => {
         try {
           await service.remove(doug[idProp], {
             query: { name: 'Tester' }
+          });
+          throw new Error('Should never get here');
+        } catch (error) {
+          assert.ok(error instanceof errors.NotFound,
+            'Got a NotFound Feathers error'
+          );
+        }
+
+        try {
+          await service.remove(doug[idProp], {
+            query: { [idProp]: '568225fbfe21222432e836ff' }
           });
           throw new Error('Should never get here');
         } catch (error) {
@@ -181,6 +203,19 @@ module.exports = (test, app, errors, serviceName, idProp) => {
             'Got a NotFound Feathers error'
           );
         }
+
+        try {
+          await service.update(doug[idProp], {
+            name: 'Dougler'
+          }, {
+            query: { [idProp]: '568225fbfe21222432e836ff' }
+          });
+          throw new Error('Should never get here');
+        } catch (error) {
+          assert.ok(error instanceof errors.NotFound,
+            'Got a NotFound Feathers error'
+          );
+        }
       });
 
       test('.update + NotFound', async () => {
@@ -227,6 +262,19 @@ module.exports = (test, app, errors, serviceName, idProp) => {
             name: 'id patched doug'
           }, {
             query: { name: 'Tester' }
+          });
+          throw new Error('Should never get here');
+        } catch (error) {
+          assert.ok(error instanceof errors.NotFound,
+            'Got a NotFound Feathers error'
+          );
+        }
+
+        try {
+          await service.patch(doug[idProp], {
+            name: 'id patched doug'
+          }, {
+            query: { [idProp]: '568225fbfe21222432e836ff' }
           });
           throw new Error('Should never get here');
         } catch (error) {
