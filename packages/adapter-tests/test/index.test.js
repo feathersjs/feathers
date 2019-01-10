@@ -60,7 +60,11 @@ const testSuite = adapterTests([
   '.find + paginate',
   '.find + paginate + $limit + $skip',
   '.find + paginate + $limit 0',
-  '.find + paginate + params'
+  '.find + paginate + params',
+  '.get + id + query id',
+  '.remove + id + query id',
+  '.update + id + query id',
+  '.patch + id + query id'
 ]);
 
 describe('Feathers Memory Service', () => {
