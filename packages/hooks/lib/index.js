@@ -1,24 +1,36 @@
 const compose = require('koa-compose');
 
+const HOOKS = Symbol('@feathersjs/hooks');
+const ORIGINAL = Symbol('@feathersjs/hooks/original');
+const RETURN = Symbol('@feathersjs/hooks/return');
+
 const defaultGetContext = data => args => Object.assign({ arguments: args }, data);
 
-const hookFunction = (method, hooks, getContext = defaultGetContext({})) => {
-  return function (...args) {
+const hookFunction = (method, _hooks, getContext = defaultGetContext({})) => {
+  if (typeof method !== 'function') {
+    throw new Error('Can not apply hooks to non-function');
+  }
+
+  const hooks = (method[HOOKS] || []).concat(_hooks);
+  const original = method[ORIGINAL] || method;
+  const fn = function (...args) {
+    const returnHook = args[args.length - 1] === RETURN ? !!args.pop() : false;
     const context = getContext.call(this, args);
     const hookChain = [
-      async (ctx, next) => {
-        await next();
-
-        return ctx.result;
+      // Return `ctx.result` or the context
+      (ctx, next) => {
+        return next().then(() => returnHook ? ctx : ctx.result);
       },
-      ...hooks,
-      async (ctx, next) => {
+      // The hook chain attached to this function
+      ...fn[HOOKS],
+      // Runs the actual original method if `ctx.result` is not set
+      (ctx, next) => {
         if (ctx.result === undefined) {
-          const result = await Promise.resolve(method.apply(this, ctx.arguments));
+          return Promise.resolve(original.apply(this, ctx.arguments)).then(result => {
+            ctx.result = result;
 
-          ctx.result = result;
-
-          return next();
+            return next();
+          });
         }
 
         return next();
@@ -28,6 +40,11 @@ const hookFunction = (method, hooks, getContext = defaultGetContext({})) => {
 
     return composed(context);
   };
+
+  return Object.assign(fn, {
+    [HOOKS]: hooks,
+    [ORIGINAL]: original
+  });
 };
 
 const hookObject = (object, hookMap, getContext = defaultGetContext) => {
@@ -69,14 +86,23 @@ const hookDecorator = (hooks, getContext = defaultGetContext) => {
   };
 };
 
-module.exports = (...args) => {
+const main = (...args) => {
   const [ target ] = args;
 
   if (Array.isArray(target)) {
     return hookDecorator(...args);
-  } else if (typeof target === 'function') {
-    return hookFunction(...args);
+  } else if (typeof target === 'object') {
+    return hookObject(...args);
   }
-
-  return hookObject(...args);
+  
+  return hookFunction(...args);
 };
+
+Object.assign(main, {
+  HOOKS,
+  ORIGINAL,
+  RETURN,
+  default: main
+});
+
+module.exports = main;

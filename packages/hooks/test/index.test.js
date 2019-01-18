@@ -1,11 +1,40 @@
 const assert = require('assert');
+
 const hooks = require('../lib');
+const { ORIGINAL, HOOKS, RETURN } = hooks;
 
 describe('async-hooks', () => {
   describe('hookFunction', () => {
     const hello = async name => {
       return `Hello ${name}`;
     };
+
+    it('throws an error when not using with a function', () => {
+      try {
+        hooks('jfkdls', []);
+        assert.fail('Should never get here');
+      } catch (error) {
+        assert.strictEqual(error.message, 'Can not apply hooks to non-function');
+      }
+    });
+
+    it('returns a new function, sets ORIGINAL and HOOKS', () => {
+      const fn = hooks(hello, []);
+
+      assert.ok(fn !== hello);
+      assert.deepStrictEqual(fn[HOOKS], []);
+      assert.ok(fn[ORIGINAL], hello);
+    });
+
+    it('returns context with RETURN as last parameter', async () => {
+      const fn = hooks(hello, []);
+      const context = await fn('Dave', RETURN);
+
+      assert.deepStrictEqual(context, {
+        arguments: [ 'Dave' ],
+        result: 'Hello Dave'
+      });
+    });
 
     it('can override arguments, has context', async () => {
       const addYou = async (ctx, next) => {
@@ -86,6 +115,31 @@ describe('async-hooks', () => {
 
       assert.strictEqual(res, 'Hi Dave');
     });
+
+    it('adds additional hooks to an existing function, uses original', async () => {
+      const first = hooks(hello, [
+        async (ctx, next) => {
+          await next();
+
+          ctx.result += ' First';
+        }
+      ]);
+      const second = hooks(first, [
+        async (ctx, next) => {
+          await next();
+
+          ctx.result += ' Second';
+        }
+      ]);
+
+      assert.ok(first[ORIGINAL], hello);
+      assert.ok(second[ORIGINAL], hello);
+      assert.strictEqual(second[HOOKS].length, 2);
+
+      const result = await second('Dave');
+
+      assert.strictEqual(result, 'Hello Dave Second First');
+    });
   });
 
   describe('hookObject', () => {
@@ -127,6 +181,25 @@ describe('async-hooks', () => {
       assert.notStrictEqual(obj, hookedObj);
       assert.strictEqual(await hookedObj.sayHi('David'), 'Hi David?');
       assert.strictEqual(await hookedObj.addOne(1), 3);
+    });
+
+    it('hooking multiple times combines hooks for methods', async () => {
+      const first = hooks(obj, {
+        sayHi: [async (ctx, next) => {
+          await next();
+
+          ctx.result += '?';
+        }]
+      });
+      const hookedObj = hooks(first, {
+        sayHi: [async (ctx, next) => {
+          await next();
+
+          ctx.result += '!';
+        }]
+      });
+
+      assert.strictEqual(await hookedObj.sayHi('David'), 'Hi David!?');
     });
 
     it('throws an error when hooking invalid method', async () => {
@@ -186,7 +259,7 @@ describe('async-hooks', () => {
         decorator(obj, 'test', descriptor);
         assert.fail('Should never get here');
       } catch (error) {
-        assert.equal(error.message, `Can not apply hooks. 'test' is not a function`);
+        assert.strictEqual(error.message, `Can not apply hooks. 'test' is not a function`);
       }
     });
   });

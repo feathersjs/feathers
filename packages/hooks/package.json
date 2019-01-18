@@ -25,6 +25,7 @@
     "node": ">= 6"
   },
   "main": "lib/index.js",
+  "types": "./index.d.ts",
   "scripts": {
     "test": "mocha --opts ../../mocha.opts"
   },
