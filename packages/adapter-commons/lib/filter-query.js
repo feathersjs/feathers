@@ -89,7 +89,7 @@ const FILTERS = {
   $select: (value) => value
 };
 
-const OPERATORS = ['$in', '$nin', '$lt', '$lte', '$gt', '$gte', '$ne', '$or'];
+const OPERATORS = ['$in', '$nin', '$lt', '$lte', '$gt', '$gte', '$ne', '$or', '$and'];
 
 // Converts Feathers special query parameters and pagination settings
 // and returns them separately a `filters` and the rest of the query
