@@ -51,7 +51,7 @@
     "chai": "^4.0.2",
     "feathers-memory": "^3.0.0",
     "mocha": "^5.2.0",
-    "sinon": "^6.0.0",
+    "sinon": "^7.2.3",
     "sinon-chai": "^3.0.0"
   }
 }

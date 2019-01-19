@@ -51,7 +51,7 @@
     "mocha": "^5.2.0",
     "passport-strategy": "^1.0.0",
     "passport-twitter": "^1.0.4",
-    "sinon": "^6.0.0",
+    "sinon": "^7.2.3",
     "sinon-chai": "^3.0.0"
   }
 }

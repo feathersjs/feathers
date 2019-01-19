@@ -68,7 +68,7 @@
     "nsp": "^3.0.0",
     "passport-strategy": "^1.0.0",
     "primus": "^7.0.0",
-    "sinon": "^6.0.0",
+    "sinon": "^7.2.3",
     "sinon-chai": "^3.0.0",
     "socket.io-client": "^2.0.0",
     "superagent": "^4.0.0",
