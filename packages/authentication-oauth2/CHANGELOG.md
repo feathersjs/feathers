@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-oauth2@1.3.0...@feathersjs/authentication-oauth2@1.3.1) (2019-01-26)
+
+
+### Bug Fixes
+
+* **authentication:** Fall back when req.app is not the application when emitting events ([#1185](https://github.com/feathersjs/feathers/issues/1185)) ([6a534f0](https://github.com/feathersjs/feathers/commit/6a534f0))
+
+
+
+
+
 # [1.3.0](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-oauth2@1.2.7...@feathersjs/authentication-oauth2@1.3.0) (2019-01-06)
 
 
