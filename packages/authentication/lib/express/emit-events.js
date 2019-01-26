@@ -2,7 +2,7 @@ const Debug = require('debug');
 
 const debug = Debug('feathers-authentication:express:emit-events');
 
-module.exports = function emitEvents () {
+module.exports = function emitEvents (settings, _app) {
   return function (req, res, next) {
     const method = res.hook && res.hook.method;
 
@@ -15,7 +15,7 @@ module.exports = function emitEvents () {
     }
 
     if (res.data && res.data.accessToken && event) {
-      const { app } = req;
+      const app = req.app && typeof req.app.emit === 'function' ? req.app : _app;
 
       debug(`Sending '${event}' event for REST provider. Token is`, res.data.accessToken);
 

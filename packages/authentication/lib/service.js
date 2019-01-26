@@ -60,7 +60,7 @@ module.exports = function init (options) {
     app.use(
       path,
       new Service(app, options),
-      emitEvents(options),
+      emitEvents(options, app),
       setCookie(options),
       successRedirect(),
       failureRedirect(options)
