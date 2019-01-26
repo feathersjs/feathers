@@ -63,6 +63,19 @@ describe('express:emitEvents', () => {
         done();
       });
     });
+
+    it('works with app fallback', done => {
+      const fallback = {
+        emit: sinon.spy()
+      };
+      delete req.app.emit;
+      emitEvents({}, fallback)(req, res, () => {
+        expect(fallback.emit).to.have.been.calledOnce;
+        expect(fallback.emit).to.have.been.calledWith('login', res.data, { provider: 'rest', req, res });
+        req.app.emit = sinon.spy();
+        done();
+      });
+    });
   });
 
   describe('when remove method was called', () => {

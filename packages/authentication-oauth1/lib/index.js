@@ -79,7 +79,7 @@ function init (options = {}) {
       auth.express.authenticate(name, oauth1Settings),
       handler,
       errorHandler,
-      auth.express.emitEvents(authSettings),
+      auth.express.emitEvents(authSettings, app),
       auth.express.setCookie(authSettings),
       auth.express.successRedirect(),
       auth.express.failureRedirect(authSettings),
