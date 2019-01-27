@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.7](https://github.com/feathersjs/feathers/compare/@feathersjs/primus-client@1.1.6...@feathersjs/primus-client@1.1.7) (2019-01-02)
+
+**Note:** Version bump only for package @feathersjs/primus-client
+
+
+
+
+
+<a name="1.1.6"></a>
+## [1.1.6](https://github.com/feathersjs/feathers/compare/@feathersjs/primus-client@1.1.5...@feathersjs/primus-client@1.1.6) (2018-12-16)
+
+**Note:** Version bump only for package @feathersjs/primus-client
+
+
+
+
+
 <a name="1.1.5"></a>
 ## [1.1.5](https://github.com/feathersjs/feathers/compare/@feathersjs/primus-client@1.1.4...@feathersjs/primus-client@1.1.5) (2018-10-25)
 

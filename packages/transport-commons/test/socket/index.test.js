@@ -38,7 +38,7 @@ describe('@feathersjs/transport-commons', () => {
     const socket = new EventEmitter();
 
     app.once('connection', data => {
-      assert.equal(connection, data);
+      assert.strictEqual(connection, data);
       done();
     });
 
@@ -54,7 +54,7 @@ describe('@feathersjs/transport-commons', () => {
       socket.emit('get', 'myservice', 10, (error, result) => {
         try {
           assert.ok(!error);
-          assert.deepEqual(result, {
+          assert.deepStrictEqual(result, {
             id: 10,
             params: Object.assign({
               query: {},
@@ -75,8 +75,8 @@ describe('@feathersjs/transport-commons', () => {
       provider.emit('connection', socket);
 
       socket.emit('get', null, (error, result) => {
-        assert.equal(error.name, 'NotFound');
-        assert.equal(error.message, `Service 'null' not found`);
+        assert.strictEqual(error.name, 'NotFound');
+        assert.strictEqual(error.message, `Service 'null' not found`);
         done();
       });
     });
@@ -100,7 +100,7 @@ describe('@feathersjs/transport-commons', () => {
           }, connection);
 
           assert.ok(!error);
-          assert.deepEqual(result, Object.assign({ params }, data));
+          assert.deepStrictEqual(result, Object.assign({ params }, data));
           done();
         } catch (e) {
           done(e);
@@ -118,7 +118,7 @@ describe('@feathersjs/transport-commons', () => {
       socket.emit('myservice::get', 10, (error, result) => {
         try {
           assert.ok(!error);
-          assert.deepEqual(result, {
+          assert.deepStrictEqual(result, {
             id: 10,
             params: Object.assign({
               connection,
@@ -152,7 +152,7 @@ describe('@feathersjs/transport-commons', () => {
 
         try {
           assert.ok(!error);
-          assert.deepEqual(result, Object.assign({ params }, data));
+          assert.deepStrictEqual(result, Object.assign({ params }, data));
           done();
         } catch (e) {
           done(e);

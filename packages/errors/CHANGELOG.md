@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.6](https://github.com/feathersjs/feathers/compare/@feathersjs/errors@3.3.5...@feathersjs/errors@3.3.6) (2019-01-02)
+
+
+### Bug Fixes
+
+* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
+
+
+
+
+
+<a name="3.3.5"></a>
+## [3.3.5](https://github.com/feathersjs/feathers/compare/@feathersjs/errors@3.3.4...@feathersjs/errors@3.3.5) (2018-12-16)
+
+
+### Bug Fixes
+
+* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+
+
+
+
+
 <a name="3.3.4"></a>
 ## [3.3.4](https://github.com/feathersjs/feathers/compare/@feathersjs/errors@3.3.3...@feathersjs/errors@3.3.4) (2018-09-21)
 

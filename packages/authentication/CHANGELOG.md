@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.16](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication@2.1.15...@feathersjs/authentication@2.1.16) (2019-01-26)
+
+
+### Bug Fixes
+
+* **authentication:** Fall back when req.app is not the application when emitting events ([#1185](https://github.com/feathersjs/feathers/issues/1185)) ([6a534f0](https://github.com/feathersjs/feathers/commit/6a534f0))
+
+
+
+
+
+## [2.1.15](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication@2.1.14...@feathersjs/authentication@2.1.15) (2019-01-02)
+
+
+### Bug Fixes
+
+* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
+
+
+
+
+
+<a name="2.1.14"></a>
+## [2.1.14](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication@2.1.13...@feathersjs/authentication@2.1.14) (2018-12-16)
+
+
+### Bug Fixes
+
+* Added path and method in to express request for passport ([#1112](https://github.com/feathersjs/feathers/issues/1112)) ([afa1cb4](https://github.com/feathersjs/feathers/commit/afa1cb4))
+
+
+
+
+
 <a name="2.1.13"></a>
 ## [2.1.13](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication@2.1.12...@feathersjs/authentication@2.1.13) (2018-10-26)
 

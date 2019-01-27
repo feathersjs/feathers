@@ -3,16 +3,12 @@ language: node_js
 install: npm install
 script:
   - npm test
-  - npm run test:generators
-  - if [ ! -z "$SAUCE_ACCESS_KEY" ]; then npm run test:client; fi
-services:
-  - mongodb
-  - cassandra
+  - if [[ "$TRAVIS_NODE_VERSION" = "node" ]]; then if [ -n "$SAUCE_ACCESS_KEY" ]; then npm run test:client; fi; fi;
 node_js:
+  - node
   - 10
-  - 6
+  - 8
 addons:
-  rethinkdb: 2.3
   code_climate:
     repo_token: 9840b8b56f6d10209b3478d41f7ba5102d02981435df129bb18554a529359c62
 before_script:

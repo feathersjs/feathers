@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.6](https://github.com/feathersjs/feathers/compare/@feathersjs/configuration@2.0.5...@feathersjs/configuration@2.0.6) (2019-01-02)
+
+**Note:** Version bump only for package @feathersjs/configuration
+
+
+
+
+
+<a name="2.0.5"></a>
+## [2.0.5](https://github.com/feathersjs/feathers/compare/@feathersjs/configuration@2.0.4...@feathersjs/configuration@2.0.5) (2018-12-16)
+
+
+### Bug Fixes
+
+* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+* **package:** update config to version 3.0.0 ([#1100](https://github.com/feathersjs/feathers/issues/1100)) ([c9f4b42](https://github.com/feathersjs/feathers/commit/c9f4b42))
+
+
+
+
+
 <a name="2.0.4"></a>
 ## [2.0.4](https://github.com/feathersjs/feathers/compare/@feathersjs/configuration@2.0.3...@feathersjs/configuration@2.0.4) (2018-09-21)
 

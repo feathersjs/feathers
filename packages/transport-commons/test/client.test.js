@@ -35,25 +35,25 @@ describe('client', () => {
       service.eventNames();
       assert.ok(false, 'Should never get here');
     } catch (e) {
-      assert.equal(e.message, 'Can not call \'eventNames\' on the client service connection');
+      assert.strictEqual(e.message, 'Can not call \'eventNames\' on the client service connection');
     }
 
     try {
       service.on();
       assert.ok(false, 'Should never get here');
     } catch (e) {
-      assert.equal(e.message, 'Can not call \'on\' on the client service connection');
+      assert.strictEqual(e.message, 'Can not call \'on\' on the client service connection');
     }
   });
 
   it('allows chaining event listeners', () => {
-    assert.equal(service, service.on('thing', () => {}));
-    assert.equal(service, service.once('other thing', () => {}));
+    assert.strictEqual(service, service.on('thing', () => {}));
+    assert.strictEqual(service, service.once('other thing', () => {}));
   });
 
   it('initializes and emits namespaced events', done => {
     connection.once('todos test', data => {
-      assert.deepEqual(data, testData);
+      assert.deepStrictEqual(data, testData);
       done();
     });
     service.emit('test', testData);
@@ -65,7 +65,7 @@ describe('client', () => {
 
   it('can receive pathed events', done => {
     service.once('thing', data => {
-      assert.deepEqual(data, testData);
+      assert.deepStrictEqual(data, testData);
       done();
     });
 
@@ -89,25 +89,25 @@ describe('client', () => {
         connection.once('get', idCb);
 
         return service.get(1)
-          .then(res => assert.deepEqual(res, { id: 1 }));
+          .then(res => assert.deepStrictEqual(res, { id: 1 }));
       })
       .then(() => {
         connection.once('remove', idCb);
 
         return service.remove(12)
-          .then(res => assert.deepEqual(res, { id: 12 }));
+          .then(res => assert.deepStrictEqual(res, { id: 12 }));
       })
       .then(() => {
         connection.once('update', idDataCb);
 
         return service.update(12, testData)
-          .then(res => assert.deepEqual(res, testData));
+          .then(res => assert.deepStrictEqual(res, testData));
       })
       .then(() => {
         connection.once('patch', idDataCb);
 
         return service.patch(12, testData)
-          .then(res => assert.deepEqual(res, testData));
+          .then(res => assert.deepStrictEqual(res, testData));
       })
       .then(() => {
         connection.once('find', (path, params, callback) =>
@@ -115,7 +115,7 @@ describe('client', () => {
         );
 
         return service.find({ query: { test: true } }).then(res =>
-          assert.deepEqual(res, {
+          assert.deepStrictEqual(res, {
             params: { test: true }
           })
         );
@@ -126,7 +126,7 @@ describe('client', () => {
     return service.remove(10).then(() => {
       throw new Error('Should never get here');
     }).catch(error =>
-      assert.equal(error.message, 'Timeout of 50ms exceeded calling remove on todos')
+      assert.strictEqual(error.message, 'Timeout of 50ms exceeded calling remove on todos')
     );
   });
 
@@ -134,7 +134,7 @@ describe('client', () => {
     return service.remove(10).then(() => {
       throw new Error('Should never get here');
     }).catch(error =>
-      assert.equal(error.name, 'Timeout')
+      assert.strictEqual(error.name, 'Timeout')
     );
   });
 
@@ -145,10 +145,10 @@ describe('client', () => {
 
     return service.create(testData).catch(error => {
       assert.ok(error instanceof errors.NotAuthenticated);
-      assert.equal(error.name, 'NotAuthenticated');
-      assert.equal(error.message, 'Test');
-      assert.equal(error.code, 401);
-      assert.deepEqual(error.data, { hi: 'me' });
+      assert.strictEqual(error.name, 'NotAuthenticated');
+      assert.strictEqual(error.message, 'Test');
+      assert.strictEqual(error.code, 401);
+      assert.deepStrictEqual(error.data, { hi: 'me' });
     });
   });
 
@@ -159,17 +159,17 @@ describe('client', () => {
 
     return service.create(testData).catch(error => {
       assert.ok(error instanceof Error);
-      assert.equal(error.message, 'Something went wrong');
+      assert.strictEqual(error.message, 'Something went wrong');
     });
   });
 
   it('has all EventEmitter methods', done => {
     const testData = { hello: 'world' };
     const callback = data => {
-      assert.deepEqual(data, testData);
-      assert.equal(service.listenerCount('test'), 1);
+      assert.deepStrictEqual(data, testData);
+      assert.strictEqual(service.listenerCount('test'), 1);
       service.removeListener('test', callback);
-      assert.equal(service.listenerCount('test'), 0);
+      assert.strictEqual(service.listenerCount('test'), 0);
       done();
     };
 
@@ -182,12 +182,12 @@ describe('client', () => {
     const testData = { hello: 'world' };
 
     const callback1 = data => {
-      assert.deepEqual(data, testData);
-      assert.equal(service.listenerCount('test'), 3);
+      assert.deepStrictEqual(data, testData);
+      assert.strictEqual(service.listenerCount('test'), 3);
       service.off('test', callback1);
-      assert.equal(service.listenerCount('test'), 2);
+      assert.strictEqual(service.listenerCount('test'), 2);
       service.removeAllListeners('test');
-      assert.equal(service.listenerCount('test'), 0);
+      assert.strictEqual(service.listenerCount('test'), 0);
       done();
     };
     const callback2 = () => {
@@ -206,7 +206,7 @@ describe('client', () => {
     const connection = new EventEmitter();
 
     connection.off = name => {
-      assert.equal(name, 'todos test');
+      assert.strictEqual(name, 'todos test');
       done();
     };
 

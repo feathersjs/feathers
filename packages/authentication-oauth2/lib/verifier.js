@@ -8,6 +8,10 @@ class OAuth2Verifier {
     this.options = options;
     this.service = typeof options.service === 'string' ? app.service(options.service) : options.service;
 
+    options.makeQuery = options.makeQuery || function (profile, options) {
+      return { [options.idField]: profile.id }; // facebookId: profile.id
+    };
+
     if (!this.service) {
       throw new Error(`options.service does not exist.\n\tMake sure you are passing a valid service path or service instance and it is initialized before @feathersjs/authentication-oauth2.`);
     }
@@ -77,10 +81,7 @@ class OAuth2Verifier {
   verify (req, accessToken, refreshToken, profile, done) {
     debug('Checking credentials');
     const options = this.options;
-    const query = {
-      [options.idField]: profile.id, // facebookId: profile.id
-      $limit: 1
-    };
+    const query = Object.assign({}, options.makeQuery(profile, options), { $limit: 1 });
     const data = { profile, accessToken, refreshToken };
     let existing;
 

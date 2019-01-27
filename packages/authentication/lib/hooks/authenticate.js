@@ -39,8 +39,6 @@ module.exports = function authenticate (_strategies, options = {}) {
       return Promise.reject(new errors.BadRequest(`Authentication strategy '${strategy}' is not registered.`));
     }
 
-    // NOTE (EK): Passport expects an express/connect
-    // like request object. So we need to create one.
     let request = {
       query: context.data,
       body: context.data,

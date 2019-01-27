@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.8](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.7...@feathersjs/client@3.7.8) (2019-01-26)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+## [3.7.7](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.6...@feathersjs/client@3.7.7) (2019-01-02)
+
+
+### Bug Fixes
+
+* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
+
+
+
+
+
+<a name="3.7.6"></a>
+## [3.7.6](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.5...@feathersjs/client@3.7.6) (2018-12-16)
+
+
+### Bug Fixes
+
+* **chore:** Properly configure and run code linter ([#1092](https://github.com/feathersjs/feathers/issues/1092)) ([fd3fc34](https://github.com/feathersjs/feathers/commit/fd3fc34))
+
+
+
+
+
 <a name="3.7.5"></a>
 ## [3.7.5](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.4...@feathersjs/client@3.7.5) (2018-10-26)
 

@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-oauth1@1.1.0...@feathersjs/authentication-oauth1@1.1.1) (2019-01-26)
+
+
+### Bug Fixes
+
+* **authentication:** Fall back when req.app is not the application when emitting events ([#1185](https://github.com/feathersjs/feathers/issues/1185)) ([6a534f0](https://github.com/feathersjs/feathers/commit/6a534f0))
+
+
+
+
+
+# [1.1.0](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-oauth1@1.0.10...@feathersjs/authentication-oauth1@1.1.0) (2019-01-06)
+
+
+### Features
+
+* Make custom query for oAuth authentication ([#1124](https://github.com/feathersjs/feathers/issues/1124)) ([5d43e3c](https://github.com/feathersjs/feathers/commit/5d43e3c))
+
+
+
+
+
+## [1.0.10](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-oauth1@1.0.9...@feathersjs/authentication-oauth1@1.0.10) (2019-01-02)
+
+
+### Bug Fixes
+
+* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
+
+
+
+
+
+<a name="1.0.9"></a>
+## [1.0.9](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-oauth1@1.0.8...@feathersjs/authentication-oauth1@1.0.9) (2018-12-16)
+
+**Note:** Version bump only for package @feathersjs/authentication-oauth1
+
+
+
+
+
 <a name="1.0.8"></a>
 ## [1.0.8](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-oauth1@1.0.7...@feathersjs/authentication-oauth1@1.0.8) (2018-10-25)
 

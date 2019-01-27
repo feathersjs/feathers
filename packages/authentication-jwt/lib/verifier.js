@@ -30,10 +30,10 @@ class JWTVerifier {
       const newPayload = { [`${this.options.entity}Id`]: id };
       return done(null, entity, newPayload);
     })
-    .catch(error => {
-      debug(`Error populating ${this.options.entity} with id ${id}`, error);
-      return done(error);
-    });
+      .catch(error => {
+        debug(`Error populating ${this.options.entity} with id ${id}`, error);
+        return done(error);
+      });
   }
 }
 

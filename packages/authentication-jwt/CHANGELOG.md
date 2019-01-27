@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.10](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-jwt@2.0.9...@feathersjs/authentication-jwt@2.0.10) (2019-01-26)
+
+**Note:** Version bump only for package @feathersjs/authentication-jwt
+
+
+
+
+
+## [2.0.9](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-jwt@2.0.8...@feathersjs/authentication-jwt@2.0.9) (2019-01-02)
+
+
+### Bug Fixes
+
+* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
+
+
+
+
+
+<a name="2.0.8"></a>
+## [2.0.8](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-jwt@2.0.7...@feathersjs/authentication-jwt@2.0.8) (2018-12-16)
+
+
+### Bug Fixes
+
+* **chore:** Properly configure and run code linter ([#1092](https://github.com/feathersjs/feathers/issues/1092)) ([fd3fc34](https://github.com/feathersjs/feathers/commit/fd3fc34))
+
+
+
+
+
 <a name="2.0.7"></a>
 ## [2.0.7](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-jwt@2.0.6...@feathersjs/authentication-jwt@2.0.7) (2018-10-26)
 

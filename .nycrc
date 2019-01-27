@@ -6,6 +6,12 @@
       "mocha"
     ]
   },
+  "exclude": [
+    "**/test/*",
+    "**/dist/*",
+    "**/*.dist.js",
+    "**/templates/*"
+  ],
   "print": "detail",
   "reporter": [
     "html",

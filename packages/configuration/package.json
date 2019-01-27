@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/configuration",
   "description": "A small configuration module for your Feathers application.",
-  "version": "2.0.4",
+  "version": "2.0.6",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -40,11 +40,11 @@
     "access": "public"
   },
   "dependencies": {
-    "config": "^2.0.0",
+    "config": "^3.0.0",
     "debug": "^4.0.0"
   },
   "devDependencies": {
-    "mocha": "^5.2.0",
-    "@feathersjs/feathers": "^3.2.3"
+    "@feathersjs/feathers": "^3.3.1",
+    "mocha": "^5.2.0"
   }
 }
