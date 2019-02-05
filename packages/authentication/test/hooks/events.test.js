@@ -30,7 +30,7 @@ describe('authentication/hooks/events', () => {
 
     app.once('login', (result, params, context) => {
       try {
-        assert.deepEqual(result, data);
+        assert.deepStrictEqual(result, data);
         assert.ok(params.testParam);
         assert.ok(context.method, 'create');
         done();
@@ -48,7 +48,7 @@ describe('authentication/hooks/events', () => {
   it('logout', done => {
     app.once('logout', (result, params, context) => {
       try {
-        assert.deepEqual(result, {
+        assert.deepStrictEqual(result, {
           id: 'test'
         });
         assert.ok(params.testParam);
@@ -73,7 +73,7 @@ describe('authentication/hooks/events', () => {
     app.on('logout', handler);
     service.once('removed', result => {
       app.removeListener('logout', handler);
-      assert.deepEqual(result, {
+      assert.deepStrictEqual(result, {
         id: 'test'
       });
       done();

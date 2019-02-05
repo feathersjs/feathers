@@ -33,7 +33,7 @@ describe('authentication/hooks/connection', () => {
     return service.create({}, { provider: 'socketio' })
       .then(() => assert.fail('Should never get here'))
       .catch(error => {
-        assert.equal(error.message, `No connection object found. ` +
+        assert.strictEqual(error.message, `No connection object found. ` +
         `Please make sure you are using the latest version of '@feathersjs/socketio' ` +
         `and params.connection is set.`);
       });
@@ -41,7 +41,7 @@ describe('authentication/hooks/connection', () => {
 
   it('create does nothing when there is no connection', () => {
     return service.create({}, {}).then(result => {
-      assert.deepEqual(result, {
+      assert.deepStrictEqual(result, {
         accessToken: '1234'
       });
     });
@@ -51,7 +51,7 @@ describe('authentication/hooks/connection', () => {
     const connection = {};
 
     return service.create({}, { connection }).then(() => {
-      assert.deepEqual(connection, {
+      assert.deepStrictEqual(connection, {
         authentication: { strategy: 'jwt', accessToken: '1234' }
       });
     });
@@ -64,7 +64,7 @@ describe('authentication/hooks/connection', () => {
       connection,
       noAccessToken: true
     }).then(() => {
-      assert.deepEqual(connection, {});
+      assert.deepStrictEqual(connection, {});
     });
   });
 
@@ -74,7 +74,7 @@ describe('authentication/hooks/connection', () => {
     };
 
     return service.remove('test', { connection }).then(() => {
-      assert.deepEqual(connection, {});
+      assert.deepStrictEqual(connection, {});
     });
   });
 
@@ -84,7 +84,7 @@ describe('authentication/hooks/connection', () => {
     };
 
     return service.remove('test', { connection }).then(() => {
-      assert.deepEqual(connection, {
+      assert.deepStrictEqual(connection, {
         authentication: { strategy: 'jwt', accessToken: '12343' }
       });
     });

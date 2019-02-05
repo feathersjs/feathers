@@ -3,201 +3,23 @@ const jwt = require('jsonwebtoken');
 const feathers = require('@feathersjs/feathers');
 
 const getOptions = require('../lib/options');
-const { Service: AuthService } = require('../lib/service');
-
+const AuthService = require('../lib/service');
 const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/;
 
-describe('Authentication service tests', () => {
+describe('authentication/service', () => {
   const message = 'Some payload';
   let app, service;
 
   beforeEach(() => {
     app = feathers();
-    app.set('authentication', getOptions({
-      secret: 'supersecret'
-    }));
-    
-    const { path } = app.get('authentication');
+    app.set('authentication', { secret: 'supersecret' });
+    app.use('/authentication', new AuthService(app));
 
-    app.use(path, new AuthService(app));
-
-    service = app.service(path);
+    service = app.service('/authentication');
   });
 
   it('settings returns authentication options', () => {
-    assert.deepEqual(service.settings, app.get('authentication'));
-  });
-
-  describe('createJWT', () => {
-    it('errors with no payload', () => {
-      return service.createJWT()
-        .then(() => assert.fail('Should never get here'))
-        .catch(error => {
-          assert.equal(error.message, 'payload is required');
-        });
-    });
-
-    it('with default options', () => {
-      const message = 'Some payload';
-
-      return service.createJWT({ message }).then(accessToken => {
-        assert.ok(typeof accessToken === 'string');
-
-        const decoded = jwt.decode(accessToken);
-        const options = app.get('authentication');
-
-        assert.equal(decoded.message, message, 'Set payload');
-        assert.ok(UUID.test(decoded.jti), 'Set `jti` to default UUID');
-        assert.equal(decoded.aud, options.jwt.audience);
-        assert.equal(decoded.iss, options.jwt.issuer);
-      });
-    });
-
-    it('with default and overriden options', () => {
-      const overrides = {
-        issuer: 'someoneelse',
-        audience: 'people',
-        jwtid: 'something'
-      };
-
-      return service.createJWT({ message }, overrides).then(accessToken => {
-        assert.ok(typeof accessToken === 'string');
-
-        const decoded = jwt.decode(accessToken);
-
-        assert.equal(decoded.message, message, 'Set payload');
-        assert.equal(decoded.jti, 'something');
-        assert.equal(decoded.aud, overrides.audience);
-        assert.equal(decoded.iss, overrides.issuer);
-      });
-    });
-
-    it('errors with invalid options', () => {
-      const overrides = {
-        algorithm: 'fdjsklfsndkl'
-      };
-
-      return service.createJWT({}, overrides)
-        .then(() => assert.fail('Should never get here'))
-        .catch(error => {
-          assert.equal(error.message, '"algorithm" must be a valid string enum value');
-        });
-    });
-  });
-
-  describe('verifyJWT', () => {
-    let validToken, expiredToken;
-
-    beforeEach(() => service.createJWT({ message }).then(vt => {
-      validToken = vt;
-
-      return service.createJWT({}, {
-        expiresIn: '1ms'
-      }).then(et => {
-        expiredToken = et;
-      });
-    }));
-
-    it('returns payload when token is valid', () => {
-      return service.verifyJWT(validToken).then(payload => {
-        assert.equal(payload.message, message);
-      });
-    });
-
-    it('errors when custom algorithm property does not match', () => {
-      return service.verifyJWT(validToken, {
-        algorithm: [ 'HS512' ]
-      }).then(() => assert.fail('Should never get here')).catch(error => {
-        assert.equal(error.message, 'invalid algorithm');
-      });
-    });
-
-    it('errors when algorithms property does not match', () => {
-      return service.verifyJWT(validToken, {
-        algorithms: [ 'HS512' ]
-      }).then(() => assert.fail('Should never get here')).catch(error => {
-        assert.equal(error.message, 'invalid algorithm');
-      });
-    });
-
-    it('errors when secret is different', () => {
-      return service.verifyJWT(validToken, {}, 'fdjskl')
-        .then(() => assert.fail('Should never get here'))
-        .catch(error => {
-          assert.equal(error.message, 'invalid signature');
-        });
-    });
-
-    it('errors when other custom options do not match', () => {
-      return service.verifyJWT(validToken, { issuer: 'someonelse' })
-        .then(() => assert.fail('Should never get here'))
-        .catch(error => {
-          assert.ok(/jwt issuer invalid/.test(error.message));
-        });
-    });
-
-    it('errors when token is expired', () => {
-      return service.verifyJWT(expiredToken)
-        .then(() => assert.fail('Should never get here'))
-        .catch(error => {
-          assert.equal(error.message, 'jwt expired');
-        });
-    });
-  });
-
-  describe('getEntity', () => {
-    const sub = 'getEntity';
-
-    beforeEach(() => app.use('/users', {
-      id: 'id',
-      get (id) {
-        return Promise.resolve({
-          id,
-          service: true
-        });
-      }
-    }));
-
-    it('returns the entity from the token subject', () => {
-      return service.create({}, {
-        user: {
-          id: sub
-        }
-      }).then(({ accessToken }) => service.getEntity(accessToken).then(user => {
-        assert.deepEqual(user, {
-          id: sub,
-          service: true
-        });
-      }));
-    });
-
-    it('throws an error if it can not get the `entityId`', () => {
-      delete app.service('users').id;
-      app.get('authentication').entityId = 'invalid';
-
-      return service.create({}, {
-        user: {
-          id: sub
-        }
-      }).then(() => assert.fail('Should never get here')).catch(error => {
-        assert.equal(error.message, 'Can not set valid JWT subject from params.user.invalid');
-      });
-    });
-
-    it('returns null if token subject is not set', () => {
-      return service.create({})
-        .then(({ accessToken }) => service.getEntity(accessToken).then(user => {
-          assert.equal(user, null);
-        }));
-    });
-
-    it('returns `null` if entity is explicitly disabled', () => {
-      app.get('authentication').entity = null;
-
-      return service.getEntity('fdjskl').then(result => {
-        assert.equal(result, null);
-      });
-    });
+    assert.deepStrictEqual(service.configuration, getOptions(app.get('authentication')));
   });
 
   describe('create', () => {
@@ -205,12 +27,12 @@ describe('Authentication service tests', () => {
       return service.create({}).then(result => {
         assert.ok(result.accessToken);
 
-        const options = app.get('authentication');
+        const options = service.configuration;
         const decoded = jwt.decode(result.accessToken);
 
         assert.ok(UUID.test(decoded.jti), 'Set `jti` to default UUID');
-        assert.equal(decoded.aud, options.jwt.audience);
-        assert.equal(decoded.iss, options.jwt.issuer);
+        assert.strictEqual(decoded.aud, options.jwt.audience);
+        assert.strictEqual(decoded.iss, options.jwt.issuer);
       });
     });
 
@@ -220,7 +42,7 @@ describe('Authentication service tests', () => {
       }).then(result => {
         const decoded = jwt.decode(result.accessToken);
 
-        assert.equal(decoded.message, message);
+        assert.strictEqual(decoded.message, message);
       });
     });
 
@@ -239,7 +61,7 @@ describe('Authentication service tests', () => {
       }).then(({ accessToken }) => {
         const decoded = jwt.decode(accessToken);
 
-        assert.equal(decoded.sub, sub);
+        assert.strictEqual(decoded.sub, sub);
       });
     });
 
@@ -259,7 +81,7 @@ describe('Authentication service tests', () => {
       }).then(({ accessToken }) => {
         const decoded = jwt.decode(accessToken);
 
-        assert.equal(decoded.sub, sub);
+        assert.strictEqual(decoded.sub, sub);
       });
     });
   });
@@ -273,7 +95,7 @@ describe('Authentication service tests', () => {
 
     it('can remove a valid token by id', () => {
       return service.remove(accessToken).then(at => {
-        assert.deepEqual(at, { accessToken });
+        assert.deepStrictEqual(at, { accessToken });
       });
     });
 
@@ -284,7 +106,7 @@ describe('Authentication service tests', () => {
           accessToken
         }
       }).then(at => {
-        assert.deepEqual(at, { accessToken });
+        assert.deepStrictEqual(at, { accessToken });
       });
     });
 
@@ -292,7 +114,7 @@ describe('Authentication service tests', () => {
       return service.remove(null)
         .then(() => assert.fail('Should never get here'))
         .catch(error => {
-          assert.equal(error.message, 'jwt must be provided');
+          assert.strictEqual(error.message, 'jwt must be provided');
         });
     });
   });
@@ -302,19 +124,19 @@ describe('Authentication service tests', () => {
       delete app.get('authentication').secret;
 
       try {
-        service.setup();
+        service.setup(app, 'authentication');
         assert.fail('Should never get here');
       } catch (error) {
-        assert.equal(error.message, `A 'secret' must be provided in your authentication configuration`);
+        assert.strictEqual(error.message, `A 'secret' must be provided in your authentication configuration`);
       }
     });
 
     it('throws an error if entity service does not exist', () => {
       try {
-        service.setup();
+        service.setup(app, 'authentication');
         assert.fail('Should never get here');
       } catch (error) {
-        assert.equal(error.message, `The 'users' entity service does not exist (set to 'null' if it is not required)`);
+        assert.strictEqual(error.message, `The 'users' entity service does not exist (set to 'null' if it is not required)`);
       }
     });
 
@@ -324,10 +146,10 @@ describe('Authentication service tests', () => {
       });
       
       try {
-        service.setup();
+        service.setup(app, 'authentication');
         assert.fail('Should never get here');
       } catch (error) {
-        assert.equal(error.message, `The 'users' service does not have an 'id' property and no 'entityId' option is set.`);
+        assert.strictEqual(error.message, `The 'users' service does not have an 'id' property and no 'entityId' option is set.`);
       }
     });
 
@@ -337,13 +159,24 @@ describe('Authentication service tests', () => {
         get () {}
       });
       
-      service.setup();
+      service.setup(app, 'authentication');
     });
 
     it('does nothing when `entity` is explicitly `null`', () => {
       app.get('authentication').entity = null;
 
-      service.setup();
+      service.setup(app, 'authentication');
+    });
+
+    it('sets app.authentication alias after setup', () => {
+      app.use('/users', {
+        id: 'id',
+        get () {}
+      });
+      service.setup(app, 'authentication');
+
+      assert.ok(app.authentication);
+      assert.strictEqual(app.authentication, app.service('authentication'));
     });
   });
 });

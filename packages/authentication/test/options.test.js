@@ -6,10 +6,8 @@ describe('authentication/options', () => {
     const secret = 'supersecret';
     const options = getOptions({ secret });
 
-    assert.deepEqual(options, {
+    assert.deepStrictEqual(options, {
       secret,
-      path: '/authentication',
-      header: 'Authorization',
       entity: 'user',
       service: 'users',
       jwt: {

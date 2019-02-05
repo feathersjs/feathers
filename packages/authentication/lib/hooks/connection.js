@@ -1,3 +1,5 @@
+const debug = require('debug')('@feathersjs/authentication/hooks/connection');
+
 module.exports = () => {
   return context => {
     const {
@@ -14,14 +16,16 @@ module.exports = () => {
       const { authentication: { accessToken: currentToken } = {} } = connection;
 
       if (method === 'remove' && accessToken === currentToken) {
+        debug('Removing authentication information from real-time connection');
         delete connection.authentication;
-      }
-      
-      if (method === 'create' && accessToken) {
+      } else if (method === 'create' && accessToken) {
+        debug('Adding authentication information to real-time connection');
         connection.authentication = {
           strategy: 'jwt',
           accessToken
         };
+      } else {
+        debug('Real-time connection available but no accessToken to set');
       }
     }
 

@@ -1,71 +1,12 @@
-const { promisify } = require('util');
-const uuidv4 = require('uuid/v4');
-const jsonwebtoken = require('jsonwebtoken');
 const { merge, get } = require('lodash');
+const AuthenticationBase = require('./base');
 const { BadRequest } = require('@feathersjs/errors');
-
 const debug = require('debug')('@feathersjs/authentication/service');
+const { connection, events } = require('./hooks');
 
-const createJWT = promisify(jsonwebtoken.sign);
-const verifyJWT = promisify(jsonwebtoken.verify);
-
-class Service {
-  constructor (app) {
-    this.app = app;
-  }
-
-  createJWT (payload, options, _secret) {
-    const { secret, jwt } = this.settings;
-    const jwtSecret = _secret || secret;
-    const jwtOptions = merge({}, jwt, options);
-
-    if (!jwtOptions.jwtid) {
-      jwtOptions.jwtid = uuidv4();
-    }
-
-    return createJWT(payload, jwtSecret, jwtOptions);
-  }
-
-  verifyJWT (accessToken, options, _secret) {
-    const { secret, jwt } = this.settings;
-    const jwtSecret = _secret || secret;
-    const jwtOptions = merge({}, jwt, options);
-    const { algorithm } = jwtOptions;
-
-    if (algorithm && !jwtOptions.algorithms) {
-      jwtOptions.algorithms = Array.isArray(algorithm) ? algorithm : [ algorithm ];
-      delete jwtOptions.algorithm;
-    }
-
-    return verifyJWT(accessToken, jwtSecret, jwtOptions);
-  }
-
-  get settings () {
-    return merge({}, this.app.get('authentication'));
-  }
-
-  getEntity (accessToken, params) {
-    const { entity, service } = this.settings;
-    
-    if (!entity || !service) {
-      debug('No `entity` or `service` option found in configuration, returning null for getEntity');
-      return Promise.resolve(null);
-    }
-    
-    const entityService = this.app.service(service);
-
-    return this.verifyJWT(accessToken).then(payload => {
-      if (!payload.sub) {
-        debug(`Token payload sub is not set, returning null for getEntity`, payload);
-        return null;
-      }
-      
-      return entityService.get(payload.sub, params);
-    });
-  }
-
+module.exports = class AuthenticationService extends AuthenticationBase {
   create (data, params) {
-    const { service, entity, entityId } = this.settings;
+    const { service, entity, entityId } = this.configuration;
     const payload = params.payload || {};
     const jwtOptions = merge({}, params.jwt);
     const hasEntity = service && entity && params[entity];
@@ -100,8 +41,8 @@ class Service {
       .then(() => ({ accessToken }));
   }
 
-  setup () {
-    const { secret, service, entity, entityId } = this.settings;
+  setup (app, path) {
+    const { secret, service, entity, entityId } = this.configuration;
 
     if (typeof secret !== 'string') {
       throw new Error(`A 'secret' must be provided in your authentication configuration`);
@@ -116,9 +57,18 @@ class Service {
         throw new Error(`The '${service}' service does not have an 'id' property and no 'entityId' option is set.`);
       }
     }
+
+    this.path = path;
+
+    Object.defineProperty(app, 'authentication', {
+      enumerable: false,
+      get () {
+        return this.service(path);
+      }
+    });
+
+    this.hooks({
+      after: [ connection, events ]
+    });
   }
-}
-
-module.exports = app => new Service(app);
-
-Object.assign(module.exports, { Service });
+};

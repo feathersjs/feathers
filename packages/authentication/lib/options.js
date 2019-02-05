@@ -1,8 +1,6 @@
 const { merge } = require('lodash');
 
 const defaults = {
-  path: '/authentication',
-  header: 'Authorization',
   entity: 'user',
   service: 'users',
   jwt: {

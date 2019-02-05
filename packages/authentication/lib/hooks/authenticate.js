@@ -1,95 +1,50 @@
-const errors = require('@feathersjs/errors');
-const Debug = require('debug');
-const { merge } = require('lodash');
+const { flatten, merge } = require('lodash');
 const { NotAuthenticated } = require('@feathersjs/errors');
-const debug = Debug('@feathersjs/authentication:hooks:authenticate');
+const debug = require('debug')('@feathersjs/authentication/hooks/authenticate');
 
-module.exports = function authenticate (_strategies, options = {}) {
-  if (!_strategies) {
-    throw new Error(`The 'authenticate' hook requires one of your registered passport strategies.`);
+module.exports = function authenticate (..._strategies) {
+  const strategies = flatten(_strategies);
+  
+  if (strategies.length === 0) {
+    throw new Error('The authenticate hook needs at least one allowed strategy');
   }
 
-  const strategies = Array.isArray(_strategies) ? _strategies : [ _strategies ];
+  return context => {
+    const { app, params, type, data = {}, service, path } = context;
+    const { provider } = params;
+    const authService = app.authentication || app.service('authentication');
+    const isAuthService = authService === service;
+    const authentication = isAuthService ? data : params.authentication;
 
-  return function (context) {
-    const { app, params, type, data = {} } = context;
+    debug(`Running authenticate hook ${isAuthService && 'on the authentication service'} on ${path}`);
 
-    // If called internally or we are already authenticated skip
-    if (!params.provider || params.authenticated) {
-      return Promise.resolve(context);
+    if (type && type !== 'before') {
+      return Promise.reject(
+        new NotAuthenticated('The authenticate hook must be used as a `before` hook')
+      );
     }
 
-    if (type !== 'before') {
-      return Promise.reject(new Error(`The 'authenticate' hook should only be used as a 'before' hook.`));
+    if (!authService || typeof authService.authenticate !== 'function') {
+      return Promise.reject(
+        new NotAuthenticated('Could not find valid authentication service for authenticate hook.')
+      );
     }
 
-    const strategy = context.data.strategy || strategies[0];
+    if (authentication) {
+      debug('Authenticating with', authentication, strategies);
 
-    if (strategies.indexOf(strategy) === -1) {
-      return Promise.reject(new NotAuthenticated(`Strategy '${strategy}' is not permitted`));
+      return authService.authenticate(authentication, ...strategies)
+        .then(authResult => {
+          context.params = merge({}, params, authResult);
+
+          return context;
+        });
+    } else if (!authentication && provider) {
+      return Promise.reject(
+        new NotAuthenticated('Not authenticated.')
+      );
     }
 
-    // Handle the case where authenticate hook was registered without a passport strategy specified
-    if (!strategy) {
-      return Promise.reject(new errors.GeneralError(`You must provide an authentication 'strategy'`));
-    }
-
-    // The client must send a `strategy` name.
-    if (!app.passport._strategy(strategy)) {
-      return Promise.reject(new errors.BadRequest(`Authentication strategy '${strategy}' is not registered.`));
-    }
-
-    let request = {
-      query: context.data,
-      body: context.data,
-      params: context.params,
-      headers: context.params.headers || {},
-      cookies: context.params.cookies || {},
-      session: {}
-    };
-
-    const strategyOptions = merge({}, app.passport.options(strategy), options);
-
-    debug(`Attempting to authenticate using ${strategy} strategy with options`, strategyOptions);
-
-    return app.authenticate(strategy, strategyOptions)(request).then((result = {}) => {
-      if (result.fail && options.allowUnauthenticated !== true) {
-        // TODO (EK): Reject with something...
-        // You get back result.challenge and result.status
-        if (strategyOptions.failureRedirect) {
-          // TODO (EK): Bypass the service?
-          // hook.result = true
-          Object.defineProperty(context.data, '__redirect', { value: { status: 302, url: strategyOptions.failureRedirect } });
-        }
-
-        const { challenge, status = 401 } = result;
-        let message = challenge && challenge.message ? challenge.message : challenge;
-
-        if (strategyOptions.failureMessage) {
-          message = strategyOptions.failureMessage;
-        }
-
-        return Promise.reject(new errors[status](message, challenge));
-      }
-
-      if (result.success || options.allowUnauthenticated === true) {
-        context.params = Object.assign({ authenticated: result.success }, context.params, result.data);
-
-        // Add the user to the original request object so it's available in the socket handler
-        Object.assign(request.params, context.params);
-
-        if (strategyOptions.successRedirect) {
-          // TODO (EK): Bypass the service?
-          // hook.result = true
-          Object.defineProperty(context.data, '__redirect', { value: { status: 302, url: strategyOptions.successRedirect } });
-        }
-      } else if (result.redirect) {
-        // TODO (EK): Bypass the service?
-        // hook.result = true
-        Object.defineProperty(context.data, '__redirect', { value: { status: result.status, url: result.url } });
-      }
-
-      return Promise.resolve(context);
-    });
+    return context;
   };
 };
