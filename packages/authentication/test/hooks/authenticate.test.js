@@ -25,8 +25,8 @@ describe('authentication/hooks/authenticate', () => {
 
     const service = app.service('authentication');
 
-    service.registerStrategy('first', new Strategy1());
-    service.registerStrategy('second', new Strategy2());
+    service.register('first', new Strategy1());
+    service.register('second', new Strategy2());
 
     app.service('users').hooks({
       before: {

@@ -34,7 +34,7 @@ module.exports = class AuthenticationBase {
     return Object.keys(this.strategies);
   }
 
-  registerStrategy (name, strategy) {
+  register (name, strategy) {
     if (typeof strategy.setName === 'function') {
       strategy.setName(name);
     }

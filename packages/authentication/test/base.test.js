@@ -16,8 +16,8 @@ describe('authentication/base', () => {
       secret: 'supersecret'
     });
     
-    auth.registerStrategy('first', new Strategy1());
-    auth.registerStrategy('second', new Strategy2());
+    auth.register('first', new Strategy1());
+    auth.register('second', new Strategy2());
   });
 
   it('configuration', () => {
