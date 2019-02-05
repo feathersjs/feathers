@@ -1,5 +1,6 @@
 const Debug = require('debug');
 const debug = Debug('@feathersjs/authentication-jwt:verify');
+const { omit } = require('lodash');
 
 class JWTVerifier {
   constructor (app, options = {}) {
@@ -17,6 +18,8 @@ class JWTVerifier {
   verify (req, payload, done) {
     debug('Received JWT payload', payload);
 
+    const params = omit(req.params || {}, 'query', 'provider', 'headers', 'session', 'cookies');
+
     const id = payload[`${this.options.entity}Id`];
 
     if (id === undefined) {
@@ -26,7 +29,7 @@ class JWTVerifier {
 
     debug(`Looking up ${this.options.entity} by id`, id);
 
-    this.service.get(id).then(entity => {
+    this.service.get(id, params).then(entity => {
       const newPayload = { [`${this.options.entity}Id`]: id };
       return done(null, entity, newPayload);
     })

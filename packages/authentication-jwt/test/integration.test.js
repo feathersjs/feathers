@@ -17,7 +17,15 @@ describe('integration', () => {
       query: {},
       body: {},
       headers: {},
-      cookies: {}
+      cookies: {},
+      params: {
+        query: {},
+        provider: 'rest',
+        headers: {},
+        session: {},
+        cookies: {},
+        data: 'Hello, world'
+      }
     };
 
     const issueJWT = () => {
@@ -34,12 +42,17 @@ describe('integration', () => {
     };
 
     const app = expressify(feathers());
-
     app.use('/users', memory())
       .configure(authentication({ secret: 'secret' }))
       .configure(jwt());
 
+    let paramsRecieved;
     app.service('users').hooks({
+      before: {
+        get: (hook) => {
+          paramsRecieved = hook.params.data;
+        }
+      },
       after: {
         create: issueJWT()
       }
@@ -54,6 +67,7 @@ describe('integration', () => {
         expect(result.success).to.equal(true);
         expect(result.data.user.email).to.equal(User.email);
         expect(result.data.user.password).to.not.equal(undefined);
+        expect(paramsRecieved).to.equal('Hello, world');
       });
     });
   });
