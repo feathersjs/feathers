@@ -3,9 +3,7 @@ const feathers = require('@feathersjs/feathers');
 const jwt = require('jsonwebtoken');
 
 const AuthenticationBase = require('../lib/base');
-const {
-  firstResult, secondResult, Strategy1, Strategy2
-} = require('./fixtures');
+const { Strategy1, Strategy2 } = require('./fixtures');
 
 const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/;
 
@@ -24,6 +22,7 @@ describe('authentication/base', () => {
 
   it('configuration', () => {
     assert.strictEqual(auth.configuration.entity, 'user');
+    assert.deepStrictEqual(auth.configuration, app.authentication);
   });
 
   describe('strategies', () => {
@@ -39,6 +38,14 @@ describe('authentication/base', () => {
       assert.strictEqual(invalid.length, 3);
       assert.strictEqual(invalid[1], undefined);
     });
+
+    it('calls setName, setApplication and setAuthentication if available', () => {
+      const [ first ] = auth.getStrategies('first');
+
+      assert.strictEqual(first.name, 'first');
+      assert.strictEqual(first.app, app);
+      assert.strictEqual(first.authentication, auth);
+    });
   });
 
   describe('authenticate', () => {
@@ -48,7 +55,7 @@ describe('authentication/base', () => {
           strategy: 'first',
           username: 'David'
         }, 'first', 'second').then(result => {
-          assert.deepStrictEqual(result, firstResult);
+          assert.deepStrictEqual(result, Strategy1.result);
         });
       });
 
@@ -70,7 +77,7 @@ describe('authentication/base', () => {
           v2: true,
           password: 'supersecret'
         }, 'first', 'second').then(result => {
-          assert.deepStrictEqual(result, secondResult);
+          assert.deepStrictEqual(result, Strategy2.result);
         });
       });
 
@@ -78,7 +85,7 @@ describe('authentication/base', () => {
         return auth.authenticate({
           both: true
         }, ...auth.strategyNames).then(result => {
-          assert.deepStrictEqual(result, firstResult);
+          assert.deepStrictEqual(result, Strategy1.result);
         });
       });
 
@@ -101,7 +108,7 @@ describe('authentication/base', () => {
           v2: true,
           password: 'supersecret'
         }, 'first', 'second').then(result => {
-          assert.deepStrictEqual(result, secondResult);
+          assert.deepStrictEqual(result, Strategy2.result);
         });
       });
 
@@ -138,7 +145,7 @@ describe('authentication/base', () => {
       return auth.parse({
         isDave: true
       }, {}, 'first', 'second').then(result => {
-        assert.deepStrictEqual(result, firstResult);
+        assert.deepStrictEqual(result, Strategy1.result);
       });
     });
 
@@ -146,7 +153,7 @@ describe('authentication/base', () => {
       return auth.parse({
         isV2: true
       }, {}, 'first', 'second').then(result => {
-        assert.deepStrictEqual(result, secondResult);
+        assert.deepStrictEqual(result, Strategy2.result);
       });
     });
 

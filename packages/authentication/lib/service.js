@@ -1,6 +1,6 @@
 const { merge, get } = require('lodash');
 const AuthenticationBase = require('./base');
-const { BadRequest } = require('@feathersjs/errors');
+const { NotAuthenticated } = require('@feathersjs/errors');
 const debug = require('debug')('@feathersjs/authentication/service');
 const { connection, events } = require('./hooks');
 
@@ -18,7 +18,7 @@ module.exports = class AuthenticationService extends AuthenticationBase {
 
       if (!subject) {
         return Promise.reject(
-          new BadRequest(`Can not set valid JWT subject from params.${entity}.${id}`)
+          new NotAuthenticated(`Can not set subject from params.${entity}.${id}`)
         );
       }
 
@@ -58,17 +58,9 @@ module.exports = class AuthenticationService extends AuthenticationBase {
       }
     }
 
-    this.path = path;
-
-    Object.defineProperty(app, 'authentication', {
-      enumerable: false,
-      get () {
-        return this.service(path);
-      }
-    });
-
+    this.configuration.path = path;
     this.hooks({
-      after: [ connection, events ]
+      after: [ connection(), events() ]
     });
   }
 };

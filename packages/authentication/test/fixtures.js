@@ -1,16 +1,21 @@
 const { NotAuthenticated } = require('@feathersjs/errors');
 
-const firstResult = exports.firstResult = {
-  user: 'Dave'
-};
-const secondResult = exports.secondResult = {
-  user: 'V2'
-};
-
 exports.Strategy1 = class Strategy1 {
+  setName (name) {
+    this.name = name;
+  }
+
+  setApplication (app) {
+    this.app = app;
+  }
+
+  setAuthentication (authentication) {
+    this.authentication = authentication;
+  }
+  
   authenticate (params) {
     if (params.username === 'David' || params.both) {
-      return Promise.resolve(firstResult);
+      return Promise.resolve(Strategy1.result);
     }
 
     return Promise.reject(new NotAuthenticated('Invalid Dave'));
@@ -18,10 +23,17 @@ exports.Strategy1 = class Strategy1 {
 
   parse (req) {
     if (req.isDave) {
-      return Promise.resolve(firstResult);
+      return Promise.resolve(Strategy1.result);
     }
 
     return Promise.resolve(null);
+  }
+};
+
+exports.Strategy1.result = {
+  user: {
+    id: 123,
+    name: 'Dave'
   }
 };
 
@@ -30,7 +42,7 @@ exports.Strategy2 = class Strategy2 {
     const isV2 = params.v2 === true && params.password === 'supersecret';
     
     if (isV2 || params.both) {
-      return Promise.resolve(secondResult);
+      return Promise.resolve(Strategy2.result);
     }
 
     return Promise.reject(new NotAuthenticated('Invalid v2 user'));
@@ -38,9 +50,16 @@ exports.Strategy2 = class Strategy2 {
 
   parse (req) {
     if (req.isV2) {
-      return Promise.resolve(secondResult);
+      return Promise.resolve(Strategy2.result);
     }
 
     return Promise.resolve(null);
+  }
+};
+
+exports.Strategy2.result = {
+  user: {
+    name: 'V2',
+    version: 2
   }
 };

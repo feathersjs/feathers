@@ -65,6 +65,22 @@ describe('authentication/service', () => {
       });
     });
 
+    it('errors when subject can not be found', () => {
+      app.use('/users', {
+        id: 'id',
+        setup () {}
+      });
+
+      return service.create({}, {
+        user: {}
+      }).then(() => {
+        assert.fail('Should never get here');
+      }).catch(error => {
+        assert.strictEqual(error.name, 'NotAuthenticated');
+        assert.strictEqual(error.message, 'Can not set subject from params.user.id');
+      });
+    });
+
     it('sets the subject params[entity][entityId]', () => {
       const sub = 'someone';
 
@@ -124,7 +140,7 @@ describe('authentication/service', () => {
       delete app.get('authentication').secret;
 
       try {
-        service.setup(app, 'authentication');
+        app.setup();
         assert.fail('Should never get here');
       } catch (error) {
         assert.strictEqual(error.message, `A 'secret' must be provided in your authentication configuration`);
@@ -133,7 +149,7 @@ describe('authentication/service', () => {
 
     it('throws an error if entity service does not exist', () => {
       try {
-        service.setup(app, 'authentication');
+        app.setup();
         assert.fail('Should never get here');
       } catch (error) {
         assert.strictEqual(error.message, `The 'users' entity service does not exist (set to 'null' if it is not required)`);
@@ -146,37 +162,41 @@ describe('authentication/service', () => {
       });
       
       try {
-        service.setup(app, 'authentication');
+        app.setup();
         assert.fail('Should never get here');
       } catch (error) {
         assert.strictEqual(error.message, `The 'users' service does not have an 'id' property and no 'entityId' option is set.`);
       }
     });
 
-    it('passes when entity service exists and `entityId` property is set', () => {
+    it('throws an error if entity service exists but has no `id`', () => {
+      app.use('/users', {
+        get () {}
+      });
+      
+      try {
+        app.setup();
+        assert.fail('Should never get here');
+      } catch (error) {
+        assert.strictEqual(error.message, `The 'users' service does not have an 'id' property and no 'entityId' option is set.`);
+      }
+    });
+
+    it('passes when entity service exists and `entityId` property is set, sets path in configuration', () => {
       app.get('authentication').entityId = 'id';
       app.use('/users', {
         get () {}
       });
       
-      service.setup(app, 'authentication');
+      app.setup();
+
+      assert.strictEqual(app.authentication.path, 'authentication');
     });
 
     it('does nothing when `entity` is explicitly `null`', () => {
       app.get('authentication').entity = null;
 
-      service.setup(app, 'authentication');
-    });
-
-    it('sets app.authentication alias after setup', () => {
-      app.use('/users', {
-        id: 'id',
-        get () {}
-      });
-      service.setup(app, 'authentication');
-
-      assert.ok(app.authentication);
-      assert.strictEqual(app.authentication, app.service('authentication'));
+      app.setup();
     });
   });
 });

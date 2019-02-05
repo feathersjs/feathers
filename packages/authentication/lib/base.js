@@ -12,15 +12,22 @@ const verifyJWT = promisify(jsonwebtoken.verify);
 module.exports = class AuthenticationBase {
   constructor (app, options = {}) {
     const { configKey = 'authentication' } = options;
+
     this.app = app;
     this.strategies = {};
     this.configKey = configKey;
 
     app.set(configKey, getOptions(options, app.get(configKey)));
+
+    Object.defineProperty(app, 'authentication', {
+      get () {
+        return this.get(configKey);
+      }
+    });
   }
 
   get configuration () {
-    return getOptions(this.app.get(this.configKey));
+    return this.app.authentication;
   }
 
   get strategyNames () {
@@ -28,6 +35,18 @@ module.exports = class AuthenticationBase {
   }
 
   registerStrategy (name, strategy) {
+    if (typeof strategy.setName === 'function') {
+      strategy.setName(name);
+    }
+
+    if (typeof strategy.setApplication === 'function') {
+      strategy.setApplication(this.app);
+    }
+
+    if (typeof strategy.setAuthentication === 'function') {
+      strategy.setAuthentication(this);
+    }
+
     this.strategies[name] = strategy;
   }
 

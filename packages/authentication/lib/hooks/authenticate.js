@@ -2,7 +2,7 @@ const { flatten, merge } = require('lodash');
 const { NotAuthenticated } = require('@feathersjs/errors');
 const debug = require('debug')('@feathersjs/authentication/hooks/authenticate');
 
-module.exports = function authenticate (..._strategies) {
+module.exports = (..._strategies) => {
   const strategies = flatten(_strategies);
   
   if (strategies.length === 0) {
@@ -10,23 +10,23 @@ module.exports = function authenticate (..._strategies) {
   }
 
   return context => {
-    const { app, params, type, data = {}, service, path } = context;
+    const { app, params, type, path, service, method, data } = context;
     const { provider } = params;
-    const authService = app.authentication || app.service('authentication');
-    const isAuthService = authService === service;
-    const authentication = isAuthService ? data : params.authentication;
+    const authService = app.service(app.authentication.path);
+    const isAuthCreate = service === authService && method === 'create';
+    const authentication = isAuthCreate ? data : params.authentication;
 
-    debug(`Running authenticate hook ${isAuthService && 'on the authentication service'} on ${path}`);
+    debug(`Running authenticate hook on '${path}'`);
 
     if (type && type !== 'before') {
       return Promise.reject(
-        new NotAuthenticated('The authenticate hook must be used as a `before` hook')
+        new NotAuthenticated('The authenticate hook must be used as a before hook')
       );
     }
 
     if (!authService || typeof authService.authenticate !== 'function') {
       return Promise.reject(
-        new NotAuthenticated('Could not find valid authentication service for authenticate hook.')
+        new NotAuthenticated(`Could not find authentication service at '${app.authentication.path}'`)
       );
     }
 
@@ -41,7 +41,7 @@ module.exports = function authenticate (..._strategies) {
         });
     } else if (!authentication && provider) {
       return Promise.reject(
-        new NotAuthenticated('Not authenticated.')
+        new NotAuthenticated('Not authenticated')
       );
     }
 
