@@ -11,6 +11,12 @@ module.exports = class AuthenticationService extends AuthenticationBase {
     const jwtOptions = merge({}, params.jwt);
     const hasEntity = service && entity && params[entity];
 
+    if (params.provider && Object.keys(data).length === 0) {
+      return Promise.reject(
+        new NotAuthenticated('No authentication information provided')
+      );
+    }
+
     // Set the subject to the entity id if it is available
     if (hasEntity && !jwtOptions.subject) {
       const { id = entityId } = this.app.service(service);
@@ -22,7 +28,7 @@ module.exports = class AuthenticationService extends AuthenticationBase {
         );
       }
 
-      jwtOptions.subject = subject;
+      jwtOptions.subject = `${subject}`;
     }
 
     debug('Creating JWT with', payload, jwtOptions);
@@ -58,7 +64,7 @@ module.exports = class AuthenticationService extends AuthenticationBase {
       }
     }
 
-    this.configuration.path = path;
+    this.app.set(this.configKey, Object.assign(this.configuration, { path }));
     this.hooks({
       after: [ connection(), events() ]
     });

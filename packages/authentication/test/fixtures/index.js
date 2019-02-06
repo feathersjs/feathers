@@ -13,8 +13,8 @@ exports.Strategy1 = class Strategy1 {
     this.authentication = authentication;
   }
   
-  authenticate (params) {
-    if (params.username === 'David' || params.both) {
+  authenticate (authentication) {
+    if (authentication.username === 'David' || authentication.both) {
       return Promise.resolve(Strategy1.result);
     }
 
@@ -38,11 +38,11 @@ exports.Strategy1.result = {
 };
 
 exports.Strategy2 = class Strategy2 {
-  authenticate (params) {
-    const isV2 = params.v2 === true && params.password === 'supersecret';
+  authenticate (authentication, params) {
+    const isV2 = authentication.v2 === true && authentication.password === 'supersecret';
     
-    if (isV2 || params.both) {
-      return Promise.resolve(Strategy2.result);
+    if (isV2 || authentication.both) {
+      return Promise.resolve(Object.assign({}, Strategy2.result, params));
     }
 
     return Promise.reject(new NotAuthenticated('Invalid v2 user'));

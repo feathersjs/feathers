@@ -33,7 +33,7 @@ module.exports = (..._strategies) => {
     if (authentication) {
       debug('Authenticating with', authentication, strategies);
 
-      return authService.authenticate(authentication, ...strategies)
+      return authService.authenticate(authentication, params, ...strategies)
         .then(authResult => {
           context.params = merge({}, params, authResult);
 

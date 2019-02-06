@@ -21,7 +21,7 @@ module.exports = class AuthenticationBase {
 
     Object.defineProperty(app, 'authentication', {
       get () {
-        return this.get(configKey);
+        return merge({}, this.get(configKey));
       }
     });
   }
@@ -80,8 +80,8 @@ module.exports = class AuthenticationBase {
     return verifyJWT(accessToken, jwtSecret, jwtOptions);
   }
 
-  authenticate (params, ...allowed) {
-    const { strategy } = params;
+  authenticate (authentication, params, ...allowed) {
+    const { strategy } = authentication;
 
     if (strategy && !allowed.includes(strategy)) {
       return Promise.reject(
@@ -103,7 +103,7 @@ module.exports = class AuthenticationBase {
     const promise = strategies.reduce((acc, authStrategy) => {
       return acc.then(({ result, error }) => {
         if (!result) {
-          return authStrategy.authenticate(params)
+          return authStrategy.authenticate(authentication, params)
             .then(newResult => ({ result: newResult }))
             .catch(newError => ({ error: error || newError }));
         }

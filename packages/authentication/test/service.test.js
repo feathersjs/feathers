@@ -100,6 +100,17 @@ describe('authentication/service', () => {
         assert.strictEqual(decoded.sub, sub);
       });
     });
+
+    it('errors for external requests with no authentication', () => {
+      return app.service('authentication').create({}, {
+        provider: 'external'
+      }).then(() => {
+        assert.fail('Should never get here');
+      }).catch(error => {
+        assert.strictEqual(error.name, 'NotAuthenticated');
+        assert.strictEqual(error.message, 'No authentication information provided');
+      });
+    });
   });
 
   describe('remove', () => {

@@ -54,7 +54,7 @@ describe('authentication/base', () => {
         return auth.authenticate({
           strategy: 'first',
           username: 'David'
-        }, 'first', 'second').then(result => {
+        }, {}, 'first', 'second').then(result => {
           assert.deepStrictEqual(result, Strategy1.result);
         });
       });
@@ -63,7 +63,7 @@ describe('authentication/base', () => {
         return auth.authenticate({
           strategy: 'first',
           username: 'Steve'
-        }, 'first', 'second').then(() => {
+        }, {}, 'first', 'second').then(() => {
           assert.fail('Should never get here');
         }).catch(error => {
           assert.strictEqual(error.name, 'NotAuthenticated');
@@ -76,15 +76,29 @@ describe('authentication/base', () => {
           strategy: 'second',
           v2: true,
           password: 'supersecret'
-        }, 'first', 'second').then(result => {
+        }, {}, 'first', 'second').then(result => {
           assert.deepStrictEqual(result, Strategy2.result);
+        });
+      });
+
+      it('passes params', () => {
+        const params = {
+          some: 'thing'
+        };
+
+        return auth.authenticate({
+          strategy: 'second',
+          v2: true,
+          password: 'supersecret'
+        }, params, 'first', 'second').then(result => {
+          assert.deepStrictEqual(result, Object.assign({}, Strategy2.result, params));
         });
       });
 
       it('returns first success when both strategies succeed', () => {
         return auth.authenticate({
           both: true
-        }, ...auth.strategyNames).then(result => {
+        }, {}, ...auth.strategyNames).then(result => {
           assert.deepStrictEqual(result, Strategy1.result);
         });
       });
@@ -93,7 +107,7 @@ describe('authentication/base', () => {
         return auth.authenticate({
           strategy: 'first',
           username: 'Dummy'
-        }, 'second').then(() =>
+        }, {}, 'second').then(() =>
           assert.fail('Should never get here')
         ).catch(error => {
           assert.strictEqual(error.name, 'NotAuthenticated');
@@ -107,13 +121,13 @@ describe('authentication/base', () => {
         return auth.authenticate({
           v2: true,
           password: 'supersecret'
-        }, 'first', 'second').then(result => {
+        }, {}, 'first', 'second').then(result => {
           assert.deepStrictEqual(result, Strategy2.result);
         });
       });
 
       it('returns first error when all strategies fail', () => {
-        return auth.authenticate({}, 'first', 'second').then(() => {
+        return auth.authenticate({}, {}, 'first', 'second').then(() => {
           assert.fail('Should never get here');
         }).catch(error => {
           assert.strictEqual(error.name, 'NotAuthenticated');
@@ -122,7 +136,7 @@ describe('authentication/base', () => {
       });
 
       it('errors when there is no valid strategy', () => {
-        return auth.authenticate({}, 'bla').then(() => {
+        return auth.authenticate({}, {}, 'bla').then(() => {
           assert.fail('Should never get here');
         }).catch(error => {
           assert.strictEqual(error.name, 'NotAuthenticated');
