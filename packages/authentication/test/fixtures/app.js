@@ -8,8 +8,8 @@ const authentication = require('../../lib');
 const { authenticate } = authentication;
 
 class ApiKeyStrategy {
-  authenticate (params) {
-    if (params.strategy === 'api-key' && params.apiKey === '12345') {
+  authenticate (authentication) {
+    if (authentication.strategy === 'api-key' && authentication.apiKey === '12345') {
       return Promise.resolve({
         user: {
           id: 33,
@@ -54,7 +54,8 @@ app.use((req, res, next) => {
 });
 app.configure(socketio());
 app.use('/authentication', authentication(app, {
-  secret: 'supersecret'
+  secret: 'supersecret',
+  strategies: [ 'api-key' ]
 }));
 app.use('/users', memory());
 app.use('/protected', {
@@ -67,14 +68,10 @@ app.use('/protected', {
 });
 app.use(express.errorHandler());
 
+app.service('authentication').register('api-key', new ApiKeyStrategy());
+
 app.service('protected').hooks({
   before: [ authenticate('api-key') ]
 });
-
-app.service('authentication').hooks({
-  before: [ authenticate('api-key') ]
-});
-
-app.service('authentication').register('api-key', new ApiKeyStrategy());
 
 module.exports = app;

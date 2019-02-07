@@ -133,7 +133,7 @@ describe('authentication/hooks/authenticate', () => {
     });
   });
 
-  it('uses data instead of params on authentication service create', () => {
+  it('errors when used on the authentication service', () => {
     const auth = app.service('authentication');
 
     auth.hooks({
@@ -145,12 +145,10 @@ describe('authentication/hooks/authenticate', () => {
     return auth.create({
       strategy: 'first',
       username: 'David'
-    }).then(({ accessToken }) => {
-      assert.ok(accessToken);
-
-      return auth.verifyJWT(accessToken);
-    }).then(encoded => {
-      assert.strictEqual(encoded.sub, 'Dave');
+    }).then(() => {
+      assert.fail('Should never get here');
+    }).catch(error => {
+      assert.strictEqual(error.message, 'The authenticate hooks should not be used on the authentication service');
     });
   });
 });

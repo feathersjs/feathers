@@ -5,36 +5,60 @@ const debug = require('debug')('@feathersjs/authentication/service');
 const { connection, events } = require('./hooks');
 
 module.exports = class AuthenticationService extends AuthenticationBase {
-  create (data, params) {
-    const { service, entity, entityId } = this.configuration;
-    const payload = params.payload || {};
-    const jwtOptions = merge({}, params.jwt);
-    const hasEntity = service && entity && params[entity];
+  getPayload (authResult, params) {
+    const { payload = {} } = params;
 
-    if (params.provider && Object.keys(data).length === 0) {
-      return Promise.reject(
-        new NotAuthenticated('No authentication information provided')
-      );
-    }
+    return Promise.resolve(payload);
+  }
+
+  getJwtOptions (authResult, params) {
+    const { service, entity, entityId } = this.configuration;
+    const jwtOptions = merge({}, params.jwt);
+    const hasEntity = service && entity && authResult[entity];
 
     // Set the subject to the entity id if it is available
     if (hasEntity && !jwtOptions.subject) {
       const { id = entityId } = this.app.service(service);
-      const subject = get(params, [ entity, id ]);
+      const subject = get(authResult, [ entity, id ]);
 
       if (!subject) {
         return Promise.reject(
-          new NotAuthenticated(`Can not set subject from params.${entity}.${id}`)
+          new NotAuthenticated(`Can not set subject from ${entity}.${id}`)
         );
       }
 
       jwtOptions.subject = `${subject}`;
     }
 
-    debug('Creating JWT with', payload, jwtOptions);
+    return Promise.resolve(jwtOptions);
+  }
 
-    return this.createJWT(payload, jwtOptions, params.secret)
-      .then(accessToken => ({ accessToken }));
+  create (data, params) {
+    const { strategies = [] } = this.configuration;
+
+    if (!strategies.length) {
+      return Promise.reject(
+        new NotAuthenticated('No authentication strategies allowed for creating a JWT')
+      );
+    }
+
+    return this.authenticate(data, params, ...strategies)
+      .then(authResult => {
+        debug('Got authentication result', authResult);
+
+        return Promise.all([
+          authResult,
+          this.getPayload(authResult, params),
+          this.getJwtOptions(authResult, params)
+        ]);
+      }).then(([ authResult, payload, jwtOptions ]) => {
+        debug('Creating JWT with', payload, jwtOptions);
+
+        return this.createJWT(payload, jwtOptions, params.secret)
+          .then(accessToken => {
+            return Object.assign({}, authResult, { accessToken });
+          });
+      });
   }
 
   remove (id, params) {

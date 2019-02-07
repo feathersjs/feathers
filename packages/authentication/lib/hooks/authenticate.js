@@ -10,17 +10,21 @@ module.exports = (..._strategies) => {
   }
 
   return context => {
-    const { app, params, type, path, service, method, data } = context;
-    const { provider } = params;
+    const { app, params, type, path, service } = context;
+    const { provider, authentication } = params;
     const authService = app.service(app.authentication.path);
-    const isAuthCreate = service === authService && method === 'create';
-    const authentication = isAuthCreate ? data : params.authentication;
 
     debug(`Running authenticate hook on '${path}'`);
 
     if (type && type !== 'before') {
       return Promise.reject(
         new NotAuthenticated('The authenticate hook must be used as a before hook')
+      );
+    }
+
+    if (service === authService) {
+      return Promise.reject(
+        new NotAuthenticated('The authenticate hooks should not be used on the authentication service')
       );
     }
 

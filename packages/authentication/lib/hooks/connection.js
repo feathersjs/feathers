@@ -12,20 +12,24 @@ module.exports = () => {
       throw new Error(`No connection object found. Please make sure you are using the latest version of '@feathersjs/${provider}' and params.connection is set.`);
     }
 
+    if (!accessToken) {
+      return context;
+    }
+
+    context.dispatch = Object.assign({}, context.dispatch, { accessToken });
+
     if (connection) {
       const { authentication: { accessToken: currentToken } = {} } = connection;
 
       if (method === 'remove' && accessToken === currentToken) {
         debug('Removing authentication information from real-time connection');
         delete connection.authentication;
-      } else if (method === 'create' && accessToken) {
+      } else if (method === 'create') {
         debug('Adding authentication information to real-time connection');
         connection.authentication = {
           strategy: 'jwt',
           accessToken
         };
-      } else {
-        debug('Real-time connection available but no accessToken to set');
       }
     }
 

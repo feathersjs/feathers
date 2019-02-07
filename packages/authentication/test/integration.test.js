@@ -3,6 +3,10 @@ const axios = require('axios');
 // const io = require('socket.io-client');
 const app = require('./fixtures/app');
 
+// app.on('login', (...args) => {
+//   console.log('Login', args);
+// });
+
 describe('authentication integration', () => {
   let server;
 
@@ -71,6 +75,10 @@ describe('authentication integration', () => {
         apiKey: '12345'
       }).then(response => {
         const { accessToken } = response.data;
+
+        assert.strictEqual(Object.keys(response.data).length, 1,
+          'Only accessToken returned'
+        );
 
         return app.service('authentication').verifyJWT(accessToken);
       }).then(encoded => {
