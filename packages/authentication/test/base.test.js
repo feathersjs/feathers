@@ -12,7 +12,7 @@ describe('authentication/base', () => {
 
   beforeEach(() => {
     app = feathers();
-    auth = new AuthenticationBase(app, {
+    auth = new AuthenticationBase(app, 'authentication', {
       secret: 'supersecret'
     });
     
@@ -20,9 +20,25 @@ describe('authentication/base', () => {
     auth.register('second', new Strategy2());
   });
 
-  it('configuration', () => {
-    assert.strictEqual(auth.configuration.entity, 'user');
-    assert.deepStrictEqual(auth.configuration, app.authentication);
+  describe('configuration', () => {
+    it('sets defaults', () => {
+      // Getting configuration twice returns a copy
+      assert.notStrictEqual(auth.configuration, auth.configuration);
+      assert.strictEqual(auth.configuration.entity, 'user');
+    });
+
+    it('sets configKey and defaultAuthentication', () => {
+      assert.strictEqual(app.get('defaultAuthentication'), 'authentication');
+      assert.deepStrictEqual(app.get('authentication'), auth.configuration);
+    });
+
+    it('uses default configKey', () => {
+      const otherApp = feathers();
+      const otherAuth = new AuthenticationBase(otherApp);
+
+      assert.strictEqual(otherApp.get('defaultAuthentication'), 'authentication');
+      assert.deepStrictEqual(otherApp.get('authentication'), otherAuth.configuration);
+    });
   });
 
   describe('strategies', () => {

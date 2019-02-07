@@ -55,9 +55,7 @@ module.exports = class AuthenticationService extends AuthenticationBase {
         debug('Creating JWT with', payload, jwtOptions);
 
         return this.createJWT(payload, jwtOptions, params.secret)
-          .then(accessToken => {
-            return Object.assign({}, authResult, { accessToken });
-          });
+          .then(accessToken => Object.assign({}, authResult, { accessToken }));
       });
   }
 
@@ -87,8 +85,7 @@ module.exports = class AuthenticationService extends AuthenticationBase {
         throw new Error(`The '${service}' service does not have an 'id' property and no 'entityId' option is set.`);
       }
     }
-
-    this.app.set(this.configKey, Object.assign(this.configuration, { path }));
+    
     this.hooks({
       after: [ connection(), events() ]
     });

@@ -53,7 +53,7 @@ app.use((req, res, next) => {
     .catch(error => next(error));
 });
 app.configure(socketio());
-app.use('/authentication', authentication(app, {
+app.use('/authentication', authentication(app, 'authentication', {
   secret: 'supersecret',
   strategies: [ 'api-key' ]
 }));

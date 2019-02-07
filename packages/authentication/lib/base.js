@@ -10,24 +10,17 @@ const createJWT = promisify(jsonwebtoken.sign);
 const verifyJWT = promisify(jsonwebtoken.verify);
 
 module.exports = class AuthenticationBase {
-  constructor (app, options = {}) {
-    const { configKey = 'authentication' } = options;
-
+  constructor (app, configKey = 'authentication', options = {}) {
     this.app = app;
     this.strategies = {};
     this.configKey = configKey;
 
+    app.set('defaultAuthentication', app.get('defaultAuthentication') || configKey);
     app.set(configKey, getOptions(options, app.get(configKey)));
-
-    Object.defineProperty(app, 'authentication', {
-      get () {
-        return merge({}, this.get(configKey));
-      }
-    });
   }
 
   get configuration () {
-    return this.app.authentication;
+    return merge({}, this.app.get(this.configKey));
   }
 
   get strategyNames () {

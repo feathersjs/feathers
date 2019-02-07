@@ -10,7 +10,10 @@ describe('authentication/hooks/authenticate', () => {
 
   beforeEach(() => {
     app = feathers();
-    app.use('/authentication', authentication(app, {
+    app.use('/authentication', authentication(app, 'authentication', {
+      secret: 'supersecret'
+    }));
+    app.use('/auth-v2', authentication(app, 'auth-v2', {
       secret: 'supersecret'
     }));
     app.use('/users', {
@@ -27,6 +30,8 @@ describe('authentication/hooks/authenticate', () => {
 
     service.register('first', new Strategy1());
     service.register('second', new Strategy2());
+
+    app.service('auth-v2').register('test', new Strategy1());
 
     app.service('users').hooks({
       before: {
@@ -89,6 +94,28 @@ describe('authentication/hooks/authenticate', () => {
     });
   });
 
+  it('authenticates with different authentication service', () => {
+    const params = {
+      authentication: {
+        strategy: 'first',
+        username: 'David'
+      }
+    };
+
+    app.service('users').hooks({
+      before: {
+        find: [authenticate({
+          service: 'auth-v2',
+          strategies: [ 'test' ]
+        })]
+      }
+    });
+
+    return app.service('users').find(1, params).then(result => {
+      assert.deepStrictEqual(result, []);
+    });
+  });
+
   it('authenticates with second strategy', () => {
     const params = {
       authentication: {
@@ -148,7 +175,9 @@ describe('authentication/hooks/authenticate', () => {
     }).then(() => {
       assert.fail('Should never get here');
     }).catch(error => {
-      assert.strictEqual(error.message, 'The authenticate hooks should not be used on the authentication service');
+      assert.strictEqual(error.message,
+        'The authenticate hook does not need to be used on the authentication service'
+      );
     });
   });
 });

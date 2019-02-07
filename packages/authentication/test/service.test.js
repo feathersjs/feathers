@@ -16,7 +16,7 @@ describe('authentication/service', () => {
 
   beforeEach(() => {
     app = feathers();
-    app.use('/authentication', new AuthService(app, {
+    app.use('/authentication', new AuthService(app, 'authentication', {
       secret: 'supersecret',
       strategies: [ 'first' ]
     }));
@@ -84,6 +84,21 @@ describe('authentication/service', () => {
       });
     });
 
+    it('does not override the subject if already set', () => {
+      const subject = 'Davester';
+      
+      return service.create({
+        strategy: 'first',
+        username: 'David'
+      }, {
+        jwt: { subject }
+      }).then(({ accessToken }) => {
+        const decoded = jwt.decode(accessToken);
+
+        assert.strictEqual(decoded.sub, subject);
+      });
+    });
+
     it('errors when subject can not be found', () => {
       app.service('users').options.id = 'somethingElse';
 
@@ -95,6 +110,24 @@ describe('authentication/service', () => {
       }).catch(error => {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'Can not set subject from user.somethingElse');
+      });
+    });
+
+    it('errors when no allowed strategies are set', () => {
+      const configuration = service.configuration;
+
+      delete configuration.strategies;
+
+      app.set('authentication', configuration);
+
+      return service.create({
+        strategy: 'first',
+        username: 'Dave'
+      }).then(() => {
+        assert.fail('Should never get here');
+      }).catch(error => {
+        assert.strictEqual(error.name, 'NotAuthenticated');
+        assert.strictEqual(error.message, 'No authentication strategies allowed for creating a JWT');
       });
     });
   });
@@ -147,7 +180,7 @@ describe('authentication/service', () => {
     it('throws an error if entity service does not exist', () => {
       const app = feathers();
 
-      app.use('/authentication', new AuthService(app, {
+      app.use('/authentication', new AuthService(app, 'authentication', {
         secret: 'supersecret',
         strategies: [ 'first' ]
       }));
@@ -163,7 +196,7 @@ describe('authentication/service', () => {
     it('throws an error if entity service exists but has no `id`', () => {
       const app = feathers();
 
-      app.use('/authentication', new AuthService(app, {
+      app.use('/authentication', new AuthService(app, 'authentication', {
         secret: 'supersecret',
         strategies: [ 'first' ]
       }));
@@ -180,15 +213,13 @@ describe('authentication/service', () => {
       }
     });
 
-    it('passes when entity service exists and `entityId` property is set, sets path in configuration', () => {
+    it('passes when entity service exists and `entityId` property is set', () => {
       app.get('authentication').entityId = 'id';
       app.use('/users', {
         get () {}
       });
       
       app.setup();
-
-      assert.strictEqual(app.authentication.path, 'authentication');
     });
 
     it('does nothing when `entity` is explicitly `null`', () => {

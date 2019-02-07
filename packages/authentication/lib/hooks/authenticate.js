@@ -2,17 +2,23 @@ const { flatten, merge } = require('lodash');
 const { NotAuthenticated } = require('@feathersjs/errors');
 const debug = require('debug')('@feathersjs/authentication/hooks/authenticate');
 
-module.exports = (..._strategies) => {
-  const strategies = flatten(_strategies);
-  
-  if (strategies.length === 0) {
+module.exports = (_settings, ..._strategies) => {
+  const settings = typeof _settings === 'string'
+    ? { strategies: flatten([ _settings, ..._strategies ]) }
+    : _settings;
+
+  if (!_settings || settings.strategies.length === 0) {
     throw new Error('The authenticate hook needs at least one allowed strategy');
   }
 
   return context => {
     const { app, params, type, path, service } = context;
+    const {
+      service: authPath = app.get('defaultAuthentication'),
+      strategies
+    } = settings;
     const { provider, authentication } = params;
-    const authService = app.service(app.authentication.path);
+    const authService = app.service(authPath);
 
     debug(`Running authenticate hook on '${path}'`);
 
@@ -22,15 +28,15 @@ module.exports = (..._strategies) => {
       );
     }
 
-    if (service === authService) {
+    if (!authService || typeof authService.authenticate !== 'function') {
       return Promise.reject(
-        new NotAuthenticated('The authenticate hooks should not be used on the authentication service')
+        new NotAuthenticated(`Could not find authentication service at '${authPath}'`)
       );
     }
 
-    if (!authService || typeof authService.authenticate !== 'function') {
+    if (service === authService) {
       return Promise.reject(
-        new NotAuthenticated(`Could not find authentication service at '${app.authentication.path}'`)
+        new NotAuthenticated('The authenticate hook does not need to be used on the authentication service')
       );
     }
 
