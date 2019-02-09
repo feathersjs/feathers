@@ -20,6 +20,7 @@ module.exports = class AuthenticationBase {
   }
 
   get configuration () {
+    // Always returns a copy of the authentication configuration
     return merge({}, this.app.get(this.configKey));
   }
 
@@ -28,6 +29,7 @@ module.exports = class AuthenticationBase {
   }
 
   register (name, strategy) {
+    // Call the functions a strategy can implement
     if (typeof strategy.setName === 'function') {
       strategy.setName(name);
     }
@@ -40,64 +42,75 @@ module.exports = class AuthenticationBase {
       strategy.setAuthentication(this);
     }
 
+    // Register strategy as name
     this.strategies[name] = strategy;
   }
 
   getStrategies (...names) {
+    // Returns all strategies for a list of names (including undefined)
     return names.map(name => this.strategies[name]);
   }
 
-  createJWT (payload, options, _secret) {
-    const { secret, jwt } = this.configuration;
+  createJWT (payload, _options, _secret) {
+    const { secret, jwtOptions } = this.configuration;
+    // Use configuration by default but allow overriding the secret
     const jwtSecret = _secret || secret;
-    const jwtOptions = merge({}, jwt, options);
+    // Default jwt options merged with additional options
+    const options = merge({}, jwtOptions, _options);
 
-    if (!jwtOptions.jwtid) {
-      jwtOptions.jwtid = uuidv4();
+    if (!options.jwtid) {
+      // Generate a UUID as JWT ID by default
+      options.jwtid = uuidv4();
     }
 
-    return createJWT(payload, jwtSecret, jwtOptions);
+    return createJWT(payload, jwtSecret, options);
   }
 
-  verifyJWT (accessToken, options, _secret) {
-    const { secret, jwt } = this.configuration;
+  verifyJWT (accessToken, _options, _secret) {
+    const { secret, jwtOptions } = this.configuration;
     const jwtSecret = _secret || secret;
-    const jwtOptions = merge({}, jwt, options);
-    const { algorithm } = jwtOptions;
+    const options = merge({}, jwtOptions, _options);
+    const { algorithm } = options;
 
-    if (algorithm && !jwtOptions.algorithms) {
-      jwtOptions.algorithms = Array.isArray(algorithm) ? algorithm : [ algorithm ];
-      delete jwtOptions.algorithm;
+    // Normalize the `algorithm` setting into the algorithms array
+    if (algorithm && !options.algorithms) {
+      options.algorithms = Array.isArray(algorithm) ? algorithm : [ algorithm ];
+      delete options.algorithm;
     }
 
-    return verifyJWT(accessToken, jwtSecret, jwtOptions);
+    return verifyJWT(accessToken, jwtSecret, options);
   }
 
   authenticate (authentication, params, ...allowed) {
-    const { strategy } = authentication;
-
-    if (strategy && !allowed.includes(strategy)) {
-      return Promise.reject(
-        new NotAuthenticated(`Invalid authentication strategy '${strategy}'`)
-      );
-    }
-      
     debug('Running authenticate for strategies', allowed);
 
     const strategies = this.getStrategies(...allowed)
       .filter(current => current && typeof current.authenticate === 'function');
 
-    if (strategies.length === 0) {
+    if (!authentication || strategies.length === 0) {
+      // If there are no valid strategies or `authentication` is not an object
       return Promise.reject(
         new NotAuthenticated(`No valid authentication strategy available`)
       );
     }
 
+    const { strategy } = authentication;
+
+    // Throw an error is a `strategy` is indicated but not in the allowed strategies
+    if (strategy && !allowed.includes(strategy)) {
+      return Promise.reject(
+        new NotAuthenticated(`Invalid authentication strategy '${strategy}'`)
+      );
+    }
+
+    // Run all strategies and accumulate results and errors
     const promise = strategies.reduce((acc, authStrategy) => {
       return acc.then(({ result, error }) => {
         if (!result) {
           return authStrategy.authenticate(authentication, params)
+            // Set result
             .then(newResult => ({ result: newResult }))
+            // Use caught error or previous error if it already exists
             .catch(newError => ({ error: error || newError }));
         }
         
@@ -117,17 +130,18 @@ module.exports = class AuthenticationBase {
   }
 
   parse (req, res, ...names) {
-    if (names.length === 0) {
+    const strategies = this.getStrategies(...names)
+      .filter(current => current && typeof current.parse === 'function');
+
+    if (strategies.length === 0) {
       return Promise.reject(
         new BadRequest('Authentication HTTP parser needs at least one allowed strategy')
       );
     }
 
-    const strategies = this.getStrategies(...names)
-      .filter(current => current && typeof current.parse === 'function');
-
     debug('Strategies parsing HTTP header for authentication information', names);
 
+    // Call `parse` for all strategies and use the first one that didn't return `null`
     return strategies.reduce((result, authStrategy) => result.then(val => {
       if (!val) {
         return authStrategy.parse(req, res);

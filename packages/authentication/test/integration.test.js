@@ -7,7 +7,7 @@ const app = require('./fixtures/app');
 //   console.log('Login', args);
 // });
 
-describe('authentication integration', () => {
+describe.skip('authentication integration', () => {
   let server;
 
   before(done => {
@@ -75,6 +75,8 @@ describe('authentication integration', () => {
         apiKey: '12345'
       }).then(response => {
         const { accessToken } = response.data;
+
+        console.log(response.data);
 
         assert.strictEqual(Object.keys(response.data).length, 1,
           'Only accessToken returned'

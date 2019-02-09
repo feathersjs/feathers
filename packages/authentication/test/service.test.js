@@ -36,15 +36,14 @@ describe('authentication/service', () => {
         strategy: 'first',
         username: 'David'
       }).then(result => {
+        const settings = service.configuration.jwtOptions;
+        const decoded = jwt.decode(result.accessToken);
+        
         assert.ok(result.accessToken);
         assert.deepStrictEqual(omit(result, 'accessToken'), Strategy1.result);
-
-        const options = service.configuration;
-        const decoded = jwt.decode(result.accessToken);
-
         assert.ok(UUID.test(decoded.jti), 'Set `jti` to default UUID');
-        assert.strictEqual(decoded.aud, options.jwt.audience);
-        assert.strictEqual(decoded.iss, options.jwt.issuer);
+        assert.strictEqual(decoded.aud, settings.audience);
+        assert.strictEqual(decoded.iss, settings.issuer);
       });
     });
 
@@ -133,26 +132,41 @@ describe('authentication/service', () => {
   });
 
   describe('remove', () => {
-    let accessToken;
-
-    beforeEach(() => service.createJWT({ message }).then(vt => {
-      accessToken = vt;
-    }));
-
-    it('can remove a valid token by id', () => {
-      return service.remove(accessToken).then(at => {
-        assert.deepStrictEqual(at, { accessToken });
+    it('can remove with authentication strategy set', () => {
+      return service.remove(null, {
+        authentication: {
+          strategy: 'first',
+          username: 'David'
+        }
+      }).then(authResult => {
+        assert.deepStrictEqual(authResult, Strategy1.result);
       });
     });
 
-    it('can remove a valid token by `params.authentication` with id `null`', () => {
-      return service.remove(null, {
+    it('passes when id is set and matches accessToken', () => {
+      return service.remove('test', {
         authentication: {
-          strategy: 'jwt',
-          accessToken
+          strategy: 'first',
+          username: 'David',
+          accessToken: 'test'
         }
-      }).then(at => {
-        assert.deepStrictEqual(at, { accessToken });
+      }).then(authResult => {
+        assert.deepStrictEqual(authResult, Strategy1.result);
+      });
+    });
+
+    it('passes when id is set and does not match accessToken', () => {
+      return service.remove('test', {
+        authentication: {
+          strategy: 'first',
+          username: 'David',
+          accessToken: 'testing'
+        }
+      }).then(() => {
+        assert.fail('Should never get here');
+      }).catch(error => {
+        assert.strictEqual(error.name, 'NotAuthenticated');
+        assert.strictEqual(error.message, 'Invalid access token');
       });
     });
 
@@ -160,7 +174,7 @@ describe('authentication/service', () => {
       return service.remove(null)
         .then(() => assert.fail('Should never get here'))
         .catch(error => {
-          assert.strictEqual(error.message, 'jwt must be provided');
+          assert.strictEqual(error.message, 'No valid authentication strategy available');
         });
     });
   });

@@ -1,4 +1,4 @@
-const { flatten, merge } = require('lodash');
+const { flatten, merge, omit } = require('lodash');
 const { NotAuthenticated } = require('@feathersjs/errors');
 const debug = require('debug')('@feathersjs/authentication/hooks/authenticate');
 
@@ -41,11 +41,13 @@ module.exports = (_settings, ..._strategies) => {
     }
 
     if (authentication) {
+      const authParams = omit(params, 'provider');
+
       debug('Authenticating with', authentication, strategies);
 
-      return authService.authenticate(authentication, params, ...strategies)
+      return authService.authenticate(authentication, authParams, ...strategies)
         .then(authResult => {
-          context.params = merge({}, params, authResult);
+          context.params = merge({}, params, omit(authResult, 'accessToken'));
 
           return context;
         });

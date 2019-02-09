@@ -6,6 +6,7 @@ const { connection, events } = require('./hooks');
 
 module.exports = class AuthenticationService extends AuthenticationBase {
   getPayload (authResult, params) {
+    // Uses `params.payload` or returns an empty payload
     const { payload = {} } = params;
 
     return Promise.resolve(payload);
@@ -21,7 +22,7 @@ module.exports = class AuthenticationService extends AuthenticationBase {
       const { id = entityId } = this.app.service(service);
       const subject = get(authResult, [ entity, id ]);
 
-      if (!subject) {
+      if (subject === undefined) {
         return Promise.reject(
           new NotAuthenticated(`Can not set subject from ${entity}.${id}`)
         );
@@ -55,21 +56,29 @@ module.exports = class AuthenticationService extends AuthenticationBase {
         debug('Creating JWT with', payload, jwtOptions);
 
         return this.createJWT(payload, jwtOptions, params.secret)
-          .then(accessToken => Object.assign({}, authResult, { accessToken }));
+          .then(accessToken => Object.assign({}, { accessToken }, authResult));
       });
   }
 
   remove (id, params) {
-    const { authentication = {} } = params;
-    const accessToken = id !== null ? id : authentication.accessToken;
+    const { authentication } = params;
+    const { strategies = [] } = this.configuration;
 
-    debug('Verifying JWT in remove');
+    // When an id is passed it is expected to be the authentication `accessToken`
+    if (id !== null && id !== authentication.accessToken) {
+      return Promise.reject(
+        new NotAuthenticated('Invalid access token')
+      );
+    }
+    
+    debug('Verifying authentication strategy in remove');
 
-    return this.verifyJWT(accessToken, params.jwt, params.secret)
-      .then(() => ({ accessToken }));
+    return this.authenticate(authentication, params, ...strategies);
   }
 
   setup (app, path) {
+    // The setup method checks for valid settings and registers the
+    // connection and event (login, logout) hooks
     const { secret, service, entity, entityId } = this.configuration;
 
     if (typeof secret !== 'string') {

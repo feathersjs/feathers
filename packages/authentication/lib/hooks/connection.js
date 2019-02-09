@@ -1,6 +1,6 @@
 const debug = require('debug')('@feathersjs/authentication/hooks/connection');
 
-module.exports = () => {
+module.exports = (strategy = 'jwt') => {
   return context => {
     const {
       method,
@@ -12,24 +12,15 @@ module.exports = () => {
       throw new Error(`No connection object found. Please make sure you are using the latest version of '@feathersjs/${provider}' and params.connection is set.`);
     }
 
-    if (!accessToken) {
-      return context;
-    }
-
-    context.dispatch = Object.assign({}, context.dispatch, { accessToken });
-
     if (connection) {
       const { authentication: { accessToken: currentToken } = {} } = connection;
 
       if (method === 'remove' && accessToken === currentToken) {
         debug('Removing authentication information from real-time connection');
         delete connection.authentication;
-      } else if (method === 'create') {
+      } else if (method === 'create' && accessToken) {
         debug('Adding authentication information to real-time connection');
-        connection.authentication = {
-          strategy: 'jwt',
-          accessToken
-        };
+        connection.authentication = { strategy, accessToken };
       }
     }
 

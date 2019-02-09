@@ -210,15 +210,14 @@ describe('authentication/base', () => {
         const message = 'Some payload';
   
         return auth.createJWT({ message }).then(accessToken => {
-          assert.ok(typeof accessToken === 'string');
-  
           const decoded = jwt.decode(accessToken);
-          const options = auth.configuration;
-  
+          const settings = auth.configuration.jwtOptions;
+          
+          assert.ok(typeof accessToken === 'string');
           assert.strictEqual(decoded.message, message, 'Set payload');
           assert.ok(UUID.test(decoded.jti), 'Set `jti` to default UUID');
-          assert.strictEqual(decoded.aud, options.jwt.audience);
-          assert.strictEqual(decoded.iss, options.jwt.issuer);
+          assert.strictEqual(decoded.aud, settings.audience);
+          assert.strictEqual(decoded.iss, settings.issuer);
         });
       });
   

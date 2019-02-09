@@ -8,13 +8,14 @@ const authentication = require('../../lib');
 const { authenticate } = authentication;
 
 class ApiKeyStrategy {
-  authenticate (authentication) {
+  authenticate (authentication, params) {
     if (authentication.strategy === 'api-key' && authentication.apiKey === '12345') {
       return Promise.resolve({
         user: {
           id: 33,
           name: 'David'
-        }
+        },
+        params
       });
     }
 
