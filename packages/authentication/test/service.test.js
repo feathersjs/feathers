@@ -83,6 +83,19 @@ describe('authentication/service', () => {
       });
     });
 
+    it('sets the subject authResult[entity][entityId]', () => {
+      app.get('authentication').entityId = 'name';
+
+      return service.create({
+        strategy: 'first',
+        username: 'David'
+      }).then(({ accessToken }) => {
+        const decoded = jwt.decode(accessToken);
+
+        assert.strictEqual(decoded.sub, Strategy1.result.user.name.toString());
+      });
+    });
+
     it('does not override the subject if already set', () => {
       const subject = 'Davester';
       

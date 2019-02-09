@@ -19,12 +19,12 @@ module.exports = class AuthenticationService extends AuthenticationBase {
 
     // Set the subject to the entity id if it is available
     if (hasEntity && !jwtOptions.subject) {
-      const { id = entityId } = this.app.service(service);
-      const subject = get(authResult, [ entity, id ]);
+      const idProperty = entityId || this.app.service(service).id;
+      const subject = get(authResult, [ entity, idProperty ]);
 
       if (subject === undefined) {
         return Promise.reject(
-          new NotAuthenticated(`Can not set subject from ${entity}.${id}`)
+          new NotAuthenticated(`Can not set subject from ${entity}.${idProperty}`)
         );
       }
 

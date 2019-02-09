@@ -62,10 +62,7 @@ module.exports = class JWTStrategy {
 
   parse (req) {
     const result = { strategy: this.name };
-    const {
-      header = 'authorization',
-      schemes = []
-    } = this.configuration;
+    const { header, schemes } = this.configuration;
     const headerValue = req.headers && req.headers[header.toLowerCase()];
 
     if (!headerValue || typeof headerValue !== 'string') {
