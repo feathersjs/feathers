@@ -113,7 +113,7 @@ module.exports = class AuthenticationBase {
             // Use caught error or previous error if it already exists
             .catch(newError => ({ error: error || newError }));
         }
-        
+
         return { result, error };
       });
     }, Promise.resolve({}));

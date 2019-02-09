@@ -12,7 +12,7 @@ exports.Strategy1 = class Strategy1 {
   setAuthentication (authentication) {
     this.authentication = authentication;
   }
-  
+
   authenticate (authentication) {
     if (authentication.username === 'David' || authentication.both) {
       return Promise.resolve(Strategy1.result);
@@ -40,7 +40,7 @@ exports.Strategy1.result = {
 exports.Strategy2 = class Strategy2 {
   authenticate (authentication, params) {
     const isV2 = authentication.v2 === true && authentication.password === 'supersecret';
-    
+
     if (isV2 || authentication.both) {
       return Promise.resolve(Object.assign({}, Strategy2.result, params));
     }

@@ -15,7 +15,7 @@ describe('authentication/base', () => {
     auth = new AuthenticationBase(app, 'authentication', {
       secret: 'supersecret'
     });
-    
+
     auth.register('first', new Strategy1());
     auth.register('second', new Strategy2());
   });
@@ -205,14 +205,14 @@ describe('authentication/base', () => {
             assert.strictEqual(error.message, 'payload is required');
           });
       });
-  
+
       it('with default options', () => {
         const message = 'Some payload';
-  
+
         return auth.createJWT({ message }).then(accessToken => {
           const decoded = jwt.decode(accessToken);
           const settings = auth.configuration.jwtOptions;
-          
+
           assert.ok(typeof accessToken === 'string');
           assert.strictEqual(decoded.message, message, 'Set payload');
           assert.ok(UUID.test(decoded.jti), 'Set `jti` to default UUID');
@@ -220,31 +220,31 @@ describe('authentication/base', () => {
           assert.strictEqual(decoded.iss, settings.issuer);
         });
       });
-  
+
       it('with default and overriden options', () => {
         const overrides = {
           issuer: 'someoneelse',
           audience: 'people',
           jwtid: 'something'
         };
-  
+
         return auth.createJWT({ message }, overrides).then(accessToken => {
           assert.ok(typeof accessToken === 'string');
-  
+
           const decoded = jwt.decode(accessToken);
-  
+
           assert.strictEqual(decoded.message, message, 'Set payload');
           assert.strictEqual(decoded.jti, 'something');
           assert.strictEqual(decoded.aud, overrides.audience);
           assert.strictEqual(decoded.iss, overrides.issuer);
         });
       });
-  
+
       it('errors with invalid options', () => {
         const overrides = {
           algorithm: 'fdjsklfsndkl'
         };
-  
+
         return auth.createJWT({}, overrides)
           .then(() => assert.fail('Should never get here'))
           .catch(error => {
@@ -252,26 +252,26 @@ describe('authentication/base', () => {
           });
       });
     });
-  
+
     describe('verifyJWT', () => {
       let validToken, expiredToken;
-  
+
       beforeEach(() => auth.createJWT({ message }).then(vt => {
         validToken = vt;
-  
+
         return auth.createJWT({}, {
           expiresIn: '1ms'
         }).then(et => {
           expiredToken = et;
         });
       }));
-  
+
       it('returns payload when token is valid', () => {
         return auth.verifyJWT(validToken).then(payload => {
           assert.strictEqual(payload.message, message);
         });
       });
-  
+
       it('errors when custom algorithm property does not match', () => {
         return auth.verifyJWT(validToken, {
           algorithm: [ 'HS512' ]
@@ -279,7 +279,7 @@ describe('authentication/base', () => {
           assert.strictEqual(error.message, 'invalid algorithm');
         });
       });
-  
+
       it('errors when algorithms property does not match', () => {
         return auth.verifyJWT(validToken, {
           algorithms: [ 'HS512' ]
@@ -287,7 +287,7 @@ describe('authentication/base', () => {
           assert.strictEqual(error.message, 'invalid algorithm');
         });
       });
-  
+
       it('errors when secret is different', () => {
         return auth.verifyJWT(validToken, {}, 'fdjskl')
           .then(() => assert.fail('Should never get here'))
@@ -295,7 +295,7 @@ describe('authentication/base', () => {
             assert.strictEqual(error.message, 'invalid signature');
           });
       });
-  
+
       it('errors when other custom options do not match', () => {
         return auth.verifyJWT(validToken, { issuer: 'someonelse' })
           .then(() => assert.fail('Should never get here'))
@@ -303,7 +303,7 @@ describe('authentication/base', () => {
             assert.ok(/jwt issuer invalid/.test(error.message));
           });
       });
-  
+
       it('errors when token is expired', () => {
         return auth.verifyJWT(expiredToken)
           .then(() => assert.fail('Should never get here'))

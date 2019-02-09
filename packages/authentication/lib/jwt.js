@@ -27,7 +27,7 @@ module.exports = class JWTStrategy {
         new NotAuthenticated(`Could not find entity service '${service}'`)
       );
     }
-    
+
     return entityService.get(id, params);
   }
 

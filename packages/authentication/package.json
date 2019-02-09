@@ -26,7 +26,7 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "../../node_modules/.bin/nyc ../../node_modules/.bin/mocha --reporter Spec --opts ../../mocha.opts"
+    "test": "mocha --opts ../../mocha.opts"
   },
   "directories": {
     "lib": "lib"
@@ -42,12 +42,8 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "@feathersjs/express": "^1.3.1",
     "@feathersjs/feathers": "^3.3.1",
-    "@feathersjs/socketio": "^3.2.9",
-    "axios": "^0.18.0",
     "feathers-memory": "^3.0.2",
-    "mocha": "^5.2.0",
-    "socket.io-client": "^2.2.0"
+    "mocha": "^5.2.0"
   }
 }

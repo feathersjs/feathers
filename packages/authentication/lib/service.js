@@ -70,7 +70,7 @@ module.exports = class AuthenticationService extends AuthenticationBase {
         new NotAuthenticated('Invalid access token')
       );
     }
-    
+
     debug('Verifying authentication strategy in remove');
 
     return this.authenticate(authentication, params, ...strategies);
@@ -94,7 +94,7 @@ module.exports = class AuthenticationService extends AuthenticationBase {
         throw new Error(`The '${service}' service does not have an 'id' property and no 'entityId' option is set.`);
       }
     }
-    
+
     this.hooks({
       after: [ connection(), events() ]
     });

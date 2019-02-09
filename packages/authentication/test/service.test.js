@@ -38,7 +38,7 @@ describe('authentication/service', () => {
       }).then(result => {
         const settings = service.configuration.jwtOptions;
         const decoded = jwt.decode(result.accessToken);
-        
+
         assert.ok(result.accessToken);
         assert.deepStrictEqual(omit(result, 'accessToken'), Strategy1.result);
         assert.ok(UUID.test(decoded.jti), 'Set `jti` to default UUID');
@@ -98,7 +98,7 @@ describe('authentication/service', () => {
 
     it('does not override the subject if already set', () => {
       const subject = 'Davester';
-      
+
       return service.create({
         strategy: 'first',
         username: 'David'
@@ -231,7 +231,7 @@ describe('authentication/service', () => {
       app.use('/users', {
         get () {}
       });
-      
+
       try {
         app.setup();
         assert.fail('Should never get here');
@@ -245,7 +245,7 @@ describe('authentication/service', () => {
       app.use('/users', {
         get () {}
       });
-      
+
       app.setup();
     });
 

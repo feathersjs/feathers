@@ -9,7 +9,7 @@ describe('authentication/jwt', () => {
 
   beforeEach(() => {
     app = feathers();
-  
+
     app.use('/users', memory());
     app.use('/protected', {
       get (id, params) {
@@ -22,9 +22,9 @@ describe('authentication/jwt', () => {
       secret: 'supersecret',
       strategies: [ 'jwt' ]
     }));
-  
+
     const service = app.service('authentication');
-    
+
     service.register('jwt', authentication.jwt());
 
     app.service('protected').hooks({
