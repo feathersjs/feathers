@@ -48,7 +48,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
           });
           throw new Error('Should never get here');
         } catch (error) {
-          assert.ok(error instanceof errors.NotFound,
+          assert.strictEqual(error.name, 'NotFound',
             'Got a NotFound Feathers error'
           );
         }
@@ -59,7 +59,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
           await service.get('568225fbfe21222432e836ff');
           throw new Error('Should never get here');
         } catch (error) {
-          assert.ok(error instanceof errors.NotFound,
+          assert.strictEqual(error.name, 'NotFound',
             'Error is a NotFound Feathers error'
           );
         }
@@ -77,7 +77,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
           });
           throw new Error('Should never get here');
         } catch (error) {
-          assert.ok(error instanceof errors.NotFound,
+          assert.strictEqual(error.name, 'NotFound',
             'Got a NotFound Feathers error'
           );
         }
@@ -118,7 +118,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
           });
           throw new Error('Should never get here');
         } catch (error) {
-          assert.ok(error instanceof errors.NotFound,
+          assert.strictEqual(error.name, 'NotFound',
             'Got a NotFound Feathers error'
           );
         }
@@ -167,7 +167,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
           });
           throw new Error('Should never get here');
         } catch (error) {
-          assert.ok(error instanceof errors.NotFound,
+          assert.strictEqual(error.name, 'NotFound',
             'Got a NotFound Feathers error'
           );
         }
@@ -217,7 +217,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
           });
           throw new Error('Should never get here');
         } catch (error) {
-          assert.ok(error instanceof errors.NotFound,
+          assert.strictEqual(error.name, 'NotFound',
             'Got a NotFound Feathers error'
           );
         }
@@ -228,7 +228,9 @@ module.exports = (test, app, errors, serviceName, idProp) => {
           await service.update('568225fbfe21222432e836ff', { name: 'NotFound' });
           throw new Error('Should never get here');
         } catch (error) {
-          assert.ok(error instanceof errors.NotFound, 'Error is a NotFound Feathers error');
+          assert.strictEqual(error.name, 'NotFound',
+            'Error is a NotFound Feathers error'
+          );
         }
       });
 
@@ -247,7 +249,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
           });
           throw new Error('Should never get here');
         } catch (error) {
-          assert.ok(error instanceof errors.NotFound,
+          assert.strictEqual(error.name, 'NotFound',
             'Got a NotFound Feathers error'
           );
         }
@@ -293,7 +295,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
           });
           throw new Error('Should never get here');
         } catch (error) {
-          assert.ok(error instanceof errors.NotFound,
+          assert.strictEqual(error.name, 'NotFound',
             'Got a NotFound Feathers error'
           );
         }
@@ -370,7 +372,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
           await service.patch('568225fbfe21222432e836ff', { name: 'PatchDoug' });
           throw new Error('Should never get here');
         } catch (error) {
-          assert.ok(error instanceof errors.NotFound,
+          assert.strictEqual(error.name, 'NotFound',
             'Error is a NotFound Feathers error'
           );
         }
@@ -390,7 +392,7 @@ module.exports = (test, app, errors, serviceName, idProp) => {
           });
           throw new Error('Should never get here');
         } catch (error) {
-          assert.ok(error instanceof errors.NotFound,
+          assert.strictEqual(error.name, 'NotFound',
             'Got a NotFound Feathers error'
           );
         }
