@@ -1,77 +1,102 @@
-const Debug = require('debug');
-const merge = require('lodash.merge');
-const express = require('./express');
+const { merge, get } = require('lodash');
+const AuthenticationCore = require('./core');
+const { NotAuthenticated } = require('@feathersjs/errors');
+const debug = require('debug')('@feathersjs/authentication/service');
+const { connection, events } = require('./hooks');
 
-const debug = Debug('@feathersjs/authentication:authentication:service');
+module.exports = class AuthenticationService extends AuthenticationCore {
+  getPayload (authResult, params) {
+    // Uses `params.payload` or returns an empty payload
+    const { payload = {} } = params;
 
-class Service {
-  constructor (app) {
-    this.app = app;
-    this.passport = app.passport;
+    return Promise.resolve(payload);
   }
 
-  create (data = {}, params = {}) {
-    const defaults = this.app.get('authentication') || this.app.get('auth');
-    const payload = params.payload;
+  getJwtOptions (authResult, params) {
+    const { service, entity, entityId } = this.configuration;
+    const jwtOptions = merge({}, params.jwt);
+    const hasEntity = service && entity && authResult[entity];
 
-    // create accessToken
-    // TODO (EK): Support refresh tokens
-    // TODO (EK): This should likely be a hook
-    // TODO (EK): This service can be datastore backed to support blacklists :)
-    return this.passport
-      .createJWT(payload, merge({}, defaults, params))
-      .then(accessToken => {
-        return { accessToken };
+    // Set the subject to the entity id if it is available
+    if (hasEntity && !jwtOptions.subject) {
+      const idProperty = entityId || this.app.service(service).id;
+      const subject = get(authResult, [ entity, idProperty ]);
+
+      if (subject === undefined) {
+        return Promise.reject(
+          new NotAuthenticated(`Can not set subject from ${entity}.${idProperty}`)
+        );
+      }
+
+      jwtOptions.subject = `${subject}`;
+    }
+
+    return Promise.resolve(jwtOptions);
+  }
+
+  create (data, params) {
+    const { strategies = [] } = this.configuration;
+
+    if (!strategies.length) {
+      return Promise.reject(
+        new NotAuthenticated('No authentication strategies allowed for creating a JWT')
+      );
+    }
+
+    return this.authenticate(data, params, ...strategies)
+      .then(authResult => {
+        debug('Got authentication result', authResult);
+
+        return Promise.all([
+          authResult,
+          this.getPayload(authResult, params),
+          this.getJwtOptions(authResult, params)
+        ]);
+      }).then(([ authResult, payload, jwtOptions ]) => {
+        debug('Creating JWT with', payload, jwtOptions);
+
+        return this.createJWT(payload, jwtOptions, params.secret)
+          .then(accessToken => Object.assign({}, { accessToken }, authResult));
       });
   }
 
   remove (id, params) {
-    const defaults = this.app.get('authentication') || this.app.get('auth');
-    const authHeader = params.headers && params.headers[defaults.header.toLowerCase()];
-    const authParams = authHeader && authHeader.match(/(\S+)\s+(\S+)/);
-    const accessToken = id !== null ? id : (authParams && authParams[2]) || authHeader;
+    const { authentication } = params;
+    const { strategies = [] } = this.configuration;
 
-    // TODO (EK): return error if token is missing?
-    return this.passport
-      .verifyJWT(accessToken, merge(defaults, params))
-      .then(payload => {
-        return { accessToken };
-      });
+    // When an id is passed it is expected to be the authentication `accessToken`
+    if (id !== null && id !== authentication.accessToken) {
+      return Promise.reject(
+        new NotAuthenticated('Invalid access token')
+      );
+    }
+
+    debug('Verifying authentication strategy in remove');
+
+    return this.authenticate(authentication, params, ...strategies);
   }
-}
 
-module.exports = function init (options) {
-  return function () {
-    const app = this;
-    const path = options.path;
-    const {
-      successRedirect,
-      failureRedirect,
-      setCookie,
-      emitEvents
-    } = express;
+  setup (app, path) {
+    // The setup method checks for valid settings and registers the
+    // connection and event (login, logout) hooks
+    const { secret, service, entity, entityId } = this.configuration;
 
-    if (typeof path !== 'string') {
-      throw new Error(`You must provide a 'path' in your authentication configuration or pass one explicitly.`);
+    if (typeof secret !== 'string') {
+      throw new Error(`A 'secret' must be provided in your authentication configuration`);
     }
 
-    debug('Configuring authentication service at path', path);
+    if (entity !== null) {
+      if (this.app.service(service) === undefined) {
+        throw new Error(`The '${service}' entity service does not exist (set to 'null' if it is not required)`);
+      }
 
-    app.use(
-      path,
-      new Service(app, options),
-      emitEvents(options, app),
-      setCookie(options),
-      successRedirect(),
-      failureRedirect(options)
-    );
-
-    const service = app.service(path);
-
-    if (typeof service.publish === 'function') {
-      service.publish(() => false);
+      if (this.app.service(service).id === undefined && entityId === undefined) {
+        throw new Error(`The '${service}' service does not have an 'id' property and no 'entityId' option is set.`);
+      }
     }
-  };
+
+    this.hooks({
+      after: [ connection(), events() ]
+    });
+  }
 };
-
-module.exports.Service = Service;
