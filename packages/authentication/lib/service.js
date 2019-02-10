@@ -1,10 +1,10 @@
 const { merge, get } = require('lodash');
-const AuthenticationBase = require('./base');
+const AuthenticationCore = require('./core');
 const { NotAuthenticated } = require('@feathersjs/errors');
 const debug = require('debug')('@feathersjs/authentication/service');
 const { connection, events } = require('./hooks');
 
-module.exports = class AuthenticationService extends AuthenticationBase {
+module.exports = class AuthenticationService extends AuthenticationCore {
   getPayload (authResult, params) {
     // Uses `params.payload` or returns an empty payload
     const { payload = {} } = params;
