@@ -1,270 +1,183 @@
-/* eslint-disable no-unused-expressions */
-const passport = require('passport');
-const MockStrategy = require('../fixtures/strategy');
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const { authenticate } = require('../../lib/hooks');
-const { expect } = chai;
+const assert = require('assert');
+const feathers = require('@feathersjs/feathers');
 
-chai.use(sinonChai);
+const authentication = require('../../lib');
+const { Strategy1, Strategy2 } = require('../fixtures');
+const { AuthenticationService, authenticate } = authentication;
 
-describe('hooks:authenticate', () => {
-  let hook;
-  let authenticator;
+describe('authentication/hooks/authenticate', () => {
+  let app;
 
   beforeEach(() => {
-    passport.use(new MockStrategy({}, () => {}));
-    authenticator = sinon.stub().returns(Promise.resolve());
-    hook = {
-      type: 'before',
-      app: {
-        passport,
-        authenticate: () => {
-          return authenticator;
-        }
+    app = feathers();
+    app.use('/authentication', new AuthenticationService(app, 'authentication', {
+      secret: 'supersecret'
+    }));
+    app.use('/auth-v2', new AuthenticationService(app, 'auth-v2', {
+      secret: 'supersecret'
+    }));
+    app.use('/users', {
+      id: 'name',
+      find () {
+        return Promise.resolve([]);
       },
-      data: { name: 'Bob' },
-      params: {
-        provider: 'rest',
-        headers: {
-          authorization: 'JWT'
-        },
-        cookies: {
-          'feathers-jwt': 'token'
-        }
-      },
-      path: 'test',
-      method: 'POST'
-    };
-  });
-
-  afterEach(() => {
-    authenticator.resetHistory();
-  });
-
-  describe('when strategy name is missing', () => {
-    it('throws an error', () => {
-      expect(() => {
-        authenticate()(hook);
-      }).to.throw;
+      get (id, params) {
+        return Promise.resolve(params);
+      }
     });
-  });
 
-  describe('when provider is missing', () => {
-    it('does nothing', () => {
-      delete hook.params.provider;
-      return authenticate('mock')(hook).then(returnedHook => {
-        expect(returnedHook).to.deep.equal(hook);
-      });
+    const service = app.service('authentication');
+
+    service.register('first', new Strategy1());
+    service.register('second', new Strategy2());
+
+    app.service('auth-v2').register('test', new Strategy1());
+
+    app.service('users').hooks({
+      before: {
+        get: authenticate('first', 'second')
+      }
     });
+
+    app.setup();
   });
 
-  describe('when hook is already authenticated', () => {
-    it('does nothing', () => {
-      hook.params.authenticated = true;
-      return authenticate('mock')(hook).then(returnedHook => {
-        expect(returnedHook).to.deep.equal(hook);
-      });
+  it('throws an error when no strategies are passed', () => {
+    try {
+      authentication.authenticate();
+      assert.fail('Should never get here');
+    } catch (error) {
+      assert.strictEqual(error.message, 'The authenticate hook needs at least one allowed strategy');
+    }
+  });
+
+  it('throws an error when not a before hook', () => {
+    const users = app.service('users');
+
+    users.hooks({
+      after: authenticate('first')
     });
-  });
 
-  describe('when not called as a before hook', () => {
-    it('returns an error', () => {
-      hook.type = 'after';
-      return authenticate('mock')(hook).catch(error => {
-        expect(error).to.not.equal(undefined);
-      });
-    });
-  });
-
-  describe('when strategy has not been registered with passport', () => {
-    it('returns an error', () => {
-      return authenticate('missing')(hook).catch(error => {
-        expect(error).to.not.equal(undefined);
-      });
-    });
-  });
-
-  it('normalizes request object for passport', () => {
-    return authenticate('mock')(hook).then(() => {
-      expect(authenticator).to.have.been.called;
-      expect(authenticator).to.have.been.calledWith({
-        query: hook.data,
-        body: hook.data,
-        params: hook.params,
-        path: hook.path,
-        method: hook.method,
-        headers: hook.params.headers,
-        cookies: hook.params.cookies,
-        session: {}
-      });
-    });
-  });
-
-  it('throws error when strategy is not allowed', () => {
-    hook.data.strategy = 'something';
-
-    return authenticate('mock')(hook).then(() => {
-      throw new Error('Should never get here');
+    users.find().then(() => {
+      assert.fail('Should never get here');
     }).catch(error => {
-      expect(error.message).to.equal('Strategy something is not permitted');
+      assert.strictEqual(error.name, 'NotAuthenticated');
+      assert.strictEqual(error.message, 'The authenticate hook must be used as a before hook');
     });
   });
 
-  describe('when authentication succeeds', () => {
-    let response;
+  it('throws an error if authentication service is gone', () => {
+    delete app.services.authentication;
 
-    beforeEach(() => {
-      response = {
-        success: true,
-        data: {
-          user: { name: 'bob' },
-          info: { platform: 'feathers' }
-        }
-      };
-      hook.app.authenticate = () => {
-        return () => Promise.resolve(response);
-      };
-    });
-
-    it('exposes result to hook.params', () => {
-      return authenticate('mock')(hook).then(hook => {
-        expect(hook.params.user).to.deep.equal(response.data.user);
-        expect(hook.params.info).to.deep.equal(response.data.info);
-      });
-    });
-
-    it('sets hook.params.authenticated', () => {
-      return authenticate('mock')(hook).then(hook => {
-        expect(hook.params.authenticated).to.equal(true);
-      });
-    });
-
-    it('supports redirecting', () => {
-      const successRedirect = '/app';
-      return authenticate('mock', { successRedirect })(hook).then(hook => {
-        expect(hook.data.__redirect.status).to.equal(302);
-        expect(hook.data.__redirect.url).to.equal(successRedirect);
-      });
+    return app.service('users').get(1, {
+      authentication: {
+        some: 'thing'
+      }
+    }).then(() => {
+      assert.fail('Should never get here');
+    }).catch(error => {
+      assert.strictEqual(error.name, 'NotAuthenticated');
+      assert.strictEqual(error.message, `Could not find authentication service at 'authentication'`);
     });
   });
 
-  describe('when authentication fails', () => {
-    let response;
+  it('authenticates with first strategy, merges params', () => {
+    const params = {
+      authentication: {
+        strategy: 'first',
+        username: 'David'
+      }
+    };
 
-    beforeEach(() => {
-      response = {
-        fail: true,
-        challenge: 'missing credentials'
-      };
-      hook.app.authenticate = () => {
-        return () => Promise.resolve(response);
-      };
-    });
-
-    it('returns an Unauthorized error', () => {
-      return authenticate('mock')(hook).catch(error => {
-        expect(error.code).to.equal(401);
-      });
-    });
-
-    it('does not set hook.params.authenticated', () => {
-      return authenticate('mock')(hook).catch(() => {
-        expect(hook.params.authenticated).to.equal(undefined);
-      });
-    });
-
-    it('returns an error with challenge as the message', () => {
-      return authenticate('mock')(hook).catch(error => {
-        expect(error.message).to.equal(response.challenge);
-      });
-    });
-
-    it('returns an error with the challenge message', () => {
-      response.challenge = { message: 'missing credentials' };
-      hook.app.authenticate = () => {
-        return () => Promise.resolve(response);
-      };
-      authenticate('mock')(hook).catch(error => {
-        expect(error.code).to.equal(401);
-        expect(error.message).to.equal(response.challenge.message);
-      });
-    });
-
-    it('returns an error from a custom status code', () => {
-      response.status = 400;
-      hook.app.authenticate = () => {
-        return () => Promise.resolve(response);
-      };
-      authenticate('mock')(hook).catch(error => {
-        expect(error.code).to.equal(400);
-      });
-    });
-
-    it('supports custom error messages', () => {
-      const failureMessage = 'Custom Error';
-      authenticate('mock', { failureMessage })(hook).catch(error => {
-        expect(error.message).to.equal(failureMessage);
-      });
-    });
-
-    it('supports redirecting', () => {
-      const failureRedirect = '/login';
-      return authenticate('mock', { failureRedirect })(hook).catch(() => {
-        expect(hook.data.__redirect.status).to.equal(302);
-        expect(hook.data.__redirect.url).to.equal(failureRedirect);
-      });
+    return app.service('users').get(1, params).then(result => {
+      assert.deepStrictEqual(result, Object.assign({}, params, Strategy1.result));
     });
   });
 
-  describe('when authentication errors', () => {
-    beforeEach(() => {
-      hook.app.authenticate = () => {
-        return () => Promise.reject(new Error('Authentication Error'));
-      };
+  it('authenticates with different authentication service', () => {
+    const params = {
+      authentication: {
+        strategy: 'first',
+        username: 'David'
+      }
+    };
+
+    app.service('users').hooks({
+      before: {
+        find: [authenticate({
+          service: 'auth-v2',
+          strategies: [ 'test' ]
+        })]
+      }
     });
 
-    it('returns an error', () => {
-      return authenticate('mock')(hook).catch(error => {
-        expect(error).to.not.equal(undefined);
-      });
-    });
-
-    it('does not set hook.params.authenticated', () => {
-      return authenticate('mock')(hook).catch(() => {
-        expect(hook.params.authenticated).to.equal(undefined);
-      });
-    });
-  });
-
-  describe('when authentication redirects', () => {
-    let response;
-
-    beforeEach(() => {
-      response = {
-        redirect: true,
-        status: 302,
-        url: '/app'
-      };
-      hook.app.authenticate = () => {
-        return () => Promise.resolve(response);
-      };
-    });
-
-    it('sets hook.data.__redirect', () => {
-      return authenticate('mock')(hook).then(hook => {
-        expect(hook.data.__redirect.status).to.equal(response.status);
-        expect(hook.data.__redirect.url).to.equal(response.url);
-      });
+    return app.service('users').find(1, params).then(result => {
+      assert.deepStrictEqual(result, []);
     });
   });
 
-  describe('when authentication passes', () => {
-    it('does nothing', () => {
-      return authenticate('mock')(hook).then(returnedHook => {
-        expect(returnedHook).to.deep.equal(hook);
-      });
+  it('authenticates with second strategy', () => {
+    const params = {
+      authentication: {
+        strategy: 'second',
+        v2: true,
+        password: 'supersecret'
+      }
+    };
+
+    return app.service('users').get(1, params).then(result => {
+      assert.deepStrictEqual(result, Object.assign({}, params, Strategy2.result));
+    });
+  });
+
+  it('passes for internal calls without authentication', () => {
+    return app.service('users').get(1).then(result => {
+      assert.deepStrictEqual(result, {});
+    });
+  });
+
+  it('fails for invalid params.authentication', () => {
+    return app.service('users').get(1, {
+      authentication: {
+        some: 'thing'
+      }
+    }).then(() => {
+      assert.fail('Should never get here');
+    }).catch(error => {
+      assert.strictEqual(error.name, 'NotAuthenticated');
+      assert.strictEqual(error.message, 'Invalid Dave');
+    });
+  });
+
+  it('fails for external calls without authentication', () => {
+    return app.service('users').get(1, {
+      provider: 'rest'
+    }).then(() => {
+      assert.fail('Should never get here');
+    }).catch(error => {
+      assert.strictEqual(error.name, 'NotAuthenticated');
+      assert.strictEqual(error.message, 'Not authenticated');
+    });
+  });
+
+  it('errors when used on the authentication service', () => {
+    const auth = app.service('authentication');
+
+    auth.hooks({
+      before: {
+        create: authenticate('first')
+      }
+    });
+
+    return auth.create({
+      strategy: 'first',
+      username: 'David'
+    }).then(() => {
+      assert.fail('Should never get here');
+    }).catch(error => {
+      assert.strictEqual(error.message,
+        'The authenticate hook does not need to be used on the authentication service'
+      );
     });
   });
 });
