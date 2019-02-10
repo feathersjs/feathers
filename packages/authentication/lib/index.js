@@ -1,20 +1,12 @@
 const AuthenticationBase = require('./base');
 const AuthenticationService = require('./service');
-const JwtStrategy = require('./jwt');
+const BaseStrategy = require('./base');
+const JWTStrategy = require('./jwt');
 const hooks = require('./hooks');
-const jwt = (...args) => {
-  return new JwtStrategy(...args);
-};
 
-module.exports = (...args) => {
-  return new AuthenticationService(...args);
-};
-
-Object.assign(module.exports, {
-  JwtStrategy,
-  AuthenticationBase,
-  AuthenticationService,
-  authenticate: hooks.authenticate,
-  hooks,
-  jwt
-});
+exports.BaseStrategy = BaseStrategy;
+exports.JWTStrategy = JWTStrategy;
+exports.AuthenticationBase = AuthenticationBase;
+exports.AuthenticationService = AuthenticationService;
+exports.authenticate = hooks.authenticate;
+exports.hooks = hooks;

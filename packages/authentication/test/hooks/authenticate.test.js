@@ -3,17 +3,17 @@ const feathers = require('@feathersjs/feathers');
 
 const authentication = require('../../lib');
 const { Strategy1, Strategy2 } = require('../fixtures');
-const { authenticate } = authentication;
+const { AuthenticationService, authenticate } = authentication;
 
 describe('authentication/hooks/authenticate', () => {
   let app;
 
   beforeEach(() => {
     app = feathers();
-    app.use('/authentication', authentication(app, 'authentication', {
+    app.use('/authentication', new AuthenticationService(app, 'authentication', {
       secret: 'supersecret'
     }));
-    app.use('/auth-v2', authentication(app, 'auth-v2', {
+    app.use('/auth-v2', new AuthenticationService(app, 'auth-v2', {
       secret: 'supersecret'
     }));
     app.use('/users', {

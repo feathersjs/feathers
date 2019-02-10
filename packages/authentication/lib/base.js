@@ -11,6 +11,10 @@ const verifyJWT = promisify(jsonwebtoken.verify);
 
 module.exports = class AuthenticationBase {
   constructor (app, configKey = 'authentication', options = {}) {
+    if (!app || typeof app.use !== 'function') {
+      throw new Error('An application instance has to be passed to the authentication service');
+    }
+
     this.app = app;
     this.strategies = {};
     this.configKey = configKey;
@@ -48,7 +52,8 @@ module.exports = class AuthenticationBase {
 
   getStrategies (...names) {
     // Returns all strategies for a list of names (including undefined)
-    return names.map(name => this.strategies[name]);
+    return names.map(name => this.strategies[name])
+      .filter(current => !!current);
   }
 
   createJWT (payload, _options, _secret) {

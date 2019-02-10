@@ -3,12 +3,20 @@ const { merge } = require('lodash');
 const feathers = require('@feathersjs/feathers');
 const memory = require('feathers-memory');
 const authentication = require('../lib');
+const { AuthenticationService, JWTStrategy } = authentication;
 
 describe('authentication/jwt', () => {
   let app, user, accessToken, payload;
 
   beforeEach(() => {
     app = feathers();
+
+    const authService = new AuthenticationService(app, 'authentication', {
+      secret: 'supersecret',
+      strategies: [ 'jwt' ]
+    });
+
+    authService.register('jwt', new JWTStrategy());
 
     app.use('/users', memory());
     app.use('/protected', {
@@ -18,14 +26,9 @@ describe('authentication/jwt', () => {
         });
       }
     });
-    app.use('/authentication', authentication(app, 'authentication', {
-      secret: 'supersecret',
-      strategies: [ 'jwt' ]
-    }));
+    app.use('/authentication', authService);
 
     const service = app.service('authentication');
-
-    service.register('jwt', authentication.jwt());
 
     app.service('protected').hooks({
       before: authentication.authenticate('jwt')

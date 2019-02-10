@@ -1,25 +1,10 @@
 const { NotAuthenticated } = require('@feathersjs/errors');
+const BaseStrategy = require('./strategy');
 const SPLIT_HEADER = /(\S+)\s+(\S+)/;
 
-module.exports = class JWTStrategy {
-  setAuthentication (auth) {
-    this.auth = auth;
-  }
-
-  setApplication (app) {
-    this.app = app;
-  }
-
-  setName (name) {
-    this.name = name;
-  }
-
-  get configuration () {
-    return this.auth.configuration[this.name];
-  }
-
+module.exports = class JWTStrategy extends BaseStrategy {
   getEntity (id, params) {
-    const { service } = this.auth.configuration;
+    const { service } = this.authentication.configuration;
     const entityService = this.app.service(service);
 
     if (!entityService) {
@@ -33,13 +18,13 @@ module.exports = class JWTStrategy {
 
   authenticate (authentication, params) {
     const { accessToken, strategy } = authentication;
-    const { entity } = this.auth.configuration;
+    const { entity } = this.authentication.configuration;
 
     if (!accessToken || (strategy && strategy !== this.name)) {
       return Promise.reject(new NotAuthenticated('Not authenticated'));
     }
 
-    return this.auth.verifyJWT(accessToken, params.jwt).then(payload => {
+    return this.authentication.verifyJWT(accessToken, params.jwt).then(payload => {
       const entityId = payload.sub;
       const result = {
         accessToken,

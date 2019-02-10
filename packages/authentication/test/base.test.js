@@ -21,6 +21,18 @@ describe('authentication/base', () => {
   });
 
   describe('configuration', () => {
+    it('throws an error when app is not provided', () => {
+      try {
+        const auth = new AuthenticationBase();
+        assert.fail('Should never get here');
+        assert.ok(auth);
+      } catch (error) {
+        assert.strictEqual(error.message,
+          'An application instance has to be passed to the authentication service'
+        );
+      }
+    });
+
     it('sets defaults', () => {
       // Getting configuration twice returns a copy
       assert.notStrictEqual(auth.configuration, auth.configuration);
@@ -51,8 +63,7 @@ describe('authentication/base', () => {
       const invalid = auth.getStrategies('first', 'invalid', 'second');
 
       assert.strictEqual(first.length, 1);
-      assert.strictEqual(invalid.length, 3);
-      assert.strictEqual(invalid[1], undefined);
+      assert.strictEqual(invalid.length, 2, 'Filtered out invalid strategies');
     });
 
     it('calls setName, setApplication and setAuthentication if available', () => {
