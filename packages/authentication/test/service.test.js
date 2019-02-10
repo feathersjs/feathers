@@ -1,145 +1,258 @@
-/* eslint-disable no-unused-expressions */
+const assert = require('assert');
+const { omit } = require('lodash');
+const jwt = require('jsonwebtoken');
 const feathers = require('@feathersjs/feathers');
-const expressify = require('@feathersjs/express');
-const authentication = require('../lib');
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+const memory = require('feathers-memory');
 
-const { expect } = chai;
-const { express } = authentication;
+const getOptions = require('../lib/options');
+const AuthService = require('../lib/service');
+const { Strategy1 } = require('./fixtures');
 
-chai.use(sinonChai);
+const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/;
 
-describe('/authentication service', () => {
-  let app;
+describe('authentication/service', () => {
+  const message = 'Some payload';
+  let app, service;
 
   beforeEach(() => {
-    sinon.spy(express, 'emitEvents');
-    sinon.spy(express, 'setCookie');
-    sinon.spy(express, 'successRedirect');
-    sinon.spy(express, 'failureRedirect');
+    app = feathers();
+    app.use('/authentication', new AuthService(app, 'authentication', {
+      secret: 'supersecret',
+      strategies: [ 'first' ]
+    }));
+    app.use('/users', memory());
 
-    app = expressify(feathers())
-      .configure(authentication({ secret: 'supersecret' }));
+    service = app.service('/authentication');
+    service.register('first', new Strategy1());
   });
 
-  afterEach(() => {
-    express.emitEvents.restore();
-    express.setCookie.restore();
-    express.successRedirect.restore();
-    express.failureRedirect.restore();
-  });
-
-  it('throws an error when path option is missing', () => {
-    expect(() => {
-      express(feathers()).configure(authentication({
-        secret: 'dummy',
-        path: null
-      }));
-    }).to.throw;
-  });
-
-  it('registers the service at the path', () => {
-    expect(app.service('authentication')).to.not.equal(undefined);
-  });
-
-  it('keeps a reference to app', () => {
-    expect(app.service('authentication').app).to.not.equal(undefined);
-  });
-
-  it('keeps a reference to passport', () => {
-    expect(app.service('authentication').passport).to.not.equal(undefined);
-  });
-
-  it('registers the emitEvents express middleware', () => {
-    expect(express.emitEvents).to.have.been.calledOnce;
-  });
-
-  it('registers the setCookie express middleware', () => {
-    expect(express.setCookie).to.have.been.calledOnce;
-  });
-
-  it('registers the successRedirect express middleware', () => {
-    expect(express.successRedirect).to.have.been.calledOnce;
-  });
-
-  it('registers the failureRedirect express middleware', () => {
-    expect(express.failureRedirect).to.have.been.calledOnce;
+  it('settings returns authentication options', () => {
+    assert.deepStrictEqual(service.configuration, getOptions(app.get('authentication')));
   });
 
   describe('create', () => {
-    const data = {
-      payload: { id: 1 }
-    };
+    it('creates a valid accessToken and includes strategy result', () => {
+      return service.create({
+        strategy: 'first',
+        username: 'David'
+      }).then(result => {
+        const settings = service.configuration.jwtOptions;
+        const decoded = jwt.decode(result.accessToken);
 
-    it('creates an accessToken', () => {
-      return app.service('authentication').create(data).then(result => {
-        expect(result.accessToken).to.not.equal(undefined);
+        assert.ok(result.accessToken);
+        assert.deepStrictEqual(omit(result, 'accessToken'), Strategy1.result);
+        assert.ok(UUID.test(decoded.jti), 'Set `jti` to default UUID');
+        assert.strictEqual(decoded.aud, settings.audience);
+        assert.strictEqual(decoded.iss, settings.issuer);
       });
     });
 
-    it('creates a custom token', () => {
-      const params = {
-        jwt: {
-          header: { typ: 'refresh' },
-          expiresIn: '1y'
-        }
-      };
-
-      return app.service('authentication').create(data, params).then(result => {
-        expect(result.accessToken).to.not.equal(undefined);
+    it('fails when strategy fails', () => {
+      return service.create({
+        strategy: 'first',
+        username: 'Dave'
+      }).then(() => {
+        assert.fail('Should never get here');
+      }).catch(error => {
+        assert.strictEqual(error.name, 'NotAuthenticated');
+        assert.strictEqual(error.message, 'Invalid Dave');
       });
     });
 
-    it('creates multiple custom tokens without side effect on expiration', () => {
-      const params = {
-        jwt: {
-          header: { typ: 'refresh' },
-          expiresIn: '1y'
-        }
-      };
+    it('creates a valid accessToken with strategy and params.payload', () => {
+      return service.create({
+        strategy: 'first',
+        username: 'David'
+      }, {
+        payload: { message }
+      }).then(result => {
+        const decoded = jwt.decode(result.accessToken);
 
-      return app.service('authentication').create(data, params).then(result => {
-        return app.service('authentication').create(data).then(result => {
-          return app.passport
-            .verifyJWT(result.accessToken, app.get('authentication'))
-            .then(payload => {
-              const delta = (payload.exp - payload.iat);
-              expect(delta).to.equal(24 * 60 * 60);
-            });
-        });
+        assert.strictEqual(decoded.message, message);
+      });
+    });
+
+    it('sets the subject authResult[entity][entityService.id]', () => {
+      return service.create({
+        strategy: 'first',
+        username: 'David'
+      }).then(({ accessToken }) => {
+        const decoded = jwt.decode(accessToken);
+
+        assert.strictEqual(decoded.sub, Strategy1.result.user.id.toString());
+      });
+    });
+
+    it('sets the subject authResult[entity][entityId]', () => {
+      app.get('authentication').entityId = 'name';
+
+      return service.create({
+        strategy: 'first',
+        username: 'David'
+      }).then(({ accessToken }) => {
+        const decoded = jwt.decode(accessToken);
+
+        assert.strictEqual(decoded.sub, Strategy1.result.user.name.toString());
+      });
+    });
+
+    it('does not override the subject if already set', () => {
+      const subject = 'Davester';
+
+      return service.create({
+        strategy: 'first',
+        username: 'David'
+      }, {
+        jwt: { subject }
+      }).then(({ accessToken }) => {
+        const decoded = jwt.decode(accessToken);
+
+        assert.strictEqual(decoded.sub, subject);
+      });
+    });
+
+    it('errors when subject can not be found', () => {
+      app.service('users').options.id = 'somethingElse';
+
+      return service.create({
+        strategy: 'first',
+        username: 'David'
+      }).then(() => {
+        assert.fail('Should never get here');
+      }).catch(error => {
+        assert.strictEqual(error.name, 'NotAuthenticated');
+        assert.strictEqual(error.message, 'Can not set subject from user.somethingElse');
+      });
+    });
+
+    it('errors when no allowed strategies are set', () => {
+      const configuration = service.configuration;
+
+      delete configuration.strategies;
+
+      app.set('authentication', configuration);
+
+      return service.create({
+        strategy: 'first',
+        username: 'Dave'
+      }).then(() => {
+        assert.fail('Should never get here');
+      }).catch(error => {
+        assert.strictEqual(error.name, 'NotAuthenticated');
+        assert.strictEqual(error.message, 'No authentication strategies allowed for creating a JWT');
       });
     });
   });
 
   describe('remove', () => {
-    let accessToken;
-
-    beforeEach(() => {
-      return app.passport
-        .createJWT({ id: 1 }, app.get('authentication'))
-        .then(token => { accessToken = token; });
-    });
-
-    it('verifies an accessToken and returns it', () => {
-      return app.service('authentication').remove(accessToken).then(response => {
-        expect(response).to.deep.equal({ accessToken });
+    it('can remove with authentication strategy set', () => {
+      return service.remove(null, {
+        authentication: {
+          strategy: 'first',
+          username: 'David'
+        }
+      }).then(authResult => {
+        assert.deepStrictEqual(authResult, Strategy1.result);
       });
     });
 
-    it('verifies an accessToken in the header', () => {
-      const params = { headers: { authorization: accessToken } };
-      return app.service('authentication').remove(null, params).then(response => {
-        expect(response).to.deep.equal({ accessToken });
+    it('passes when id is set and matches accessToken', () => {
+      return service.remove('test', {
+        authentication: {
+          strategy: 'first',
+          username: 'David',
+          accessToken: 'test'
+        }
+      }).then(authResult => {
+        assert.deepStrictEqual(authResult, Strategy1.result);
       });
     });
 
-    it('verifies an accessToken in the header with Bearer scheme', () => {
-      const params = { headers: { authorization: `Bearer ${accessToken}` } };
-      return app.service('authentication').remove(null, params).then(response => {
-        expect(response).to.deep.equal({ accessToken });
+    it('passes when id is set and does not match accessToken', () => {
+      return service.remove('test', {
+        authentication: {
+          strategy: 'first',
+          username: 'David',
+          accessToken: 'testing'
+        }
+      }).then(() => {
+        assert.fail('Should never get here');
+      }).catch(error => {
+        assert.strictEqual(error.name, 'NotAuthenticated');
+        assert.strictEqual(error.message, 'Invalid access token');
       });
+    });
+
+    it('errors when trying to remove with nothing', () => {
+      return service.remove(null)
+        .then(() => assert.fail('Should never get here'))
+        .catch(error => {
+          assert.strictEqual(error.message, 'No valid authentication strategy available');
+        });
+    });
+  });
+
+  describe('setup', () => {
+    it('errors when there is no secret', () => {
+      delete app.get('authentication').secret;
+
+      try {
+        app.setup();
+        assert.fail('Should never get here');
+      } catch (error) {
+        assert.strictEqual(error.message, `A 'secret' must be provided in your authentication configuration`);
+      }
+    });
+
+    it('throws an error if entity service does not exist', () => {
+      const app = feathers();
+
+      app.use('/authentication', new AuthService(app, 'authentication', {
+        secret: 'supersecret',
+        strategies: [ 'first' ]
+      }));
+
+      try {
+        app.setup();
+        assert.fail('Should never get here');
+      } catch (error) {
+        assert.strictEqual(error.message, `The 'users' entity service does not exist (set to 'null' if it is not required)`);
+      }
+    });
+
+    it('throws an error if entity service exists but has no `id`', () => {
+      const app = feathers();
+
+      app.use('/authentication', new AuthService(app, 'authentication', {
+        secret: 'supersecret',
+        strategies: [ 'first' ]
+      }));
+
+      app.use('/users', {
+        get () {}
+      });
+
+      try {
+        app.setup();
+        assert.fail('Should never get here');
+      } catch (error) {
+        assert.strictEqual(error.message, `The 'users' service does not have an 'id' property and no 'entityId' option is set.`);
+      }
+    });
+
+    it('passes when entity service exists and `entityId` property is set', () => {
+      app.get('authentication').entityId = 'id';
+      app.use('/users', {
+        get () {}
+      });
+
+      app.setup();
+    });
+
+    it('does nothing when `entity` is explicitly `null`', () => {
+      app.get('authentication').entity = null;
+
+      app.setup();
     });
   });
 });
