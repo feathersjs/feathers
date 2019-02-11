@@ -44,7 +44,9 @@ module.exports = function (configurer) {
     // Host the current directory (for index.html)
     .use(express.static(process.cwd()))
     // Host our Todos service on the /todos path
-    .use('/todos', new TodoService());
+    .use('/todos', new TodoService({
+      multi: true
+    }));
 
   const testTodo = {
     text: 'some todo',
