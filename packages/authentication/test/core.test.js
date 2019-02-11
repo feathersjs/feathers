@@ -41,15 +41,15 @@ describe('authentication/core', () => {
 
     it('sets configKey and defaultAuthentication', () => {
       assert.strictEqual(app.get('defaultAuthentication'), 'authentication');
-      assert.deepStrictEqual(app.get('authentication'), auth.configuration);
     });
 
     it('uses default configKey', () => {
       const otherApp = feathers();
       const otherAuth = new AuthenticationCore(otherApp);
 
+      assert.ok(otherAuth);
       assert.strictEqual(otherApp.get('defaultAuthentication'), 'authentication');
-      assert.deepStrictEqual(otherApp.get('authentication'), otherAuth.configuration);
+      assert.deepStrictEqual(otherApp.get('authentication'), {});
     });
   });
 

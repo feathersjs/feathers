@@ -1,10 +1,33 @@
 const { NotAuthenticated } = require('@feathersjs/errors');
-const BaseStrategy = require('./strategy');
 const SPLIT_HEADER = /(\S+)\s+(\S+)/;
 
-module.exports = class JWTStrategy extends BaseStrategy {
+module.exports = class JWTStrategy {
+  setAuthentication (auth) {
+    this.authentication = auth;
+  }
+
+  setApplication (app) {
+    this.app = app;
+  }
+
+  setName (name) {
+    this.name = name;
+  }
+
+  get configuration () {
+    const authConfig = this.authentication.configuration;
+    const config = authConfig[this.name];
+
+    return Object.assign({
+      entity: authConfig.entity,
+      service: authConfig.service,
+      header: 'Authorization',
+      schemes: [ 'Bearer', 'JWT' ]
+    }, config);
+  }
+
   getEntity (id, params) {
-    const { service } = this.authentication.configuration;
+    const { service } = this.configuration;
     const entityService = this.app.service(service);
 
     if (!entityService) {
@@ -18,7 +41,7 @@ module.exports = class JWTStrategy extends BaseStrategy {
 
   authenticate (authentication, params) {
     const { accessToken, strategy } = authentication;
-    const { entity } = this.authentication.configuration;
+    const { entity } = this.configuration;
 
     if (!accessToken || (strategy && strategy !== this.name)) {
       return Promise.reject(new NotAuthenticated('Not authenticated'));
@@ -58,6 +81,10 @@ module.exports = class JWTStrategy extends BaseStrategy {
     const hasScheme = scheme && schemes.some(
       current => new RegExp(current, 'i').test(scheme)
     );
+
+    if (scheme && !hasScheme) {
+      return null;
+    }
 
     return Object.assign(result, {
       accessToken: hasScheme ? schemeValue : headerValue
