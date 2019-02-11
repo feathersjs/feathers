@@ -20,12 +20,12 @@ module.exports = class AuthenticationBase {
     this.configKey = configKey;
 
     app.set('defaultAuthentication', app.get('defaultAuthentication') || configKey);
-    app.set(configKey, getOptions(options, app.get(configKey)));
+    app.set(configKey, merge({}, app.get(configKey), options));
   }
 
   get configuration () {
     // Always returns a copy of the authentication configuration
-    return merge({}, this.app.get(this.configKey));
+    return getOptions(this.app.get(this.configKey));
   }
 
   get strategyNames () {
@@ -44,6 +44,10 @@ module.exports = class AuthenticationBase {
 
     if (typeof strategy.setAuthentication === 'function') {
       strategy.setAuthentication(this);
+    }
+
+    if (typeof strategy.verifyConfiguration === 'function') {
+      strategy.verifyConfiguration();
     }
 
     // Register strategy as name
