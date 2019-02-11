@@ -40,8 +40,8 @@
     "access": "public"
   },
   "dependencies": {
-    "config": "^3.0.0",
-    "debug": "^4.0.0"
+    "config": "^3.0.1",
+    "debug": "^4.1.1"
   },
   "devDependencies": {
     "@feathersjs/feathers": "^3.3.1",
