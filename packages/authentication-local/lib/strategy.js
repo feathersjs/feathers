@@ -22,6 +22,7 @@ module.exports = class LocalStrategy {
     const config = authConfig[this.name];
 
     return Object.assign({}, {
+      hashSize: 10,
       service: authConfig.service,
       entity: authConfig.entity,
       errorMessage: 'Invalid login',
@@ -29,25 +30,31 @@ module.exports = class LocalStrategy {
       entityUsernameField: config.usernameField
     }, config);
   }
-  
+
+  getEntityQuery (query) {
+    return Promise.resolve(Object.assign({
+      $limit: 1
+    }, query));
+  }
+
   findEntity (username, params) {
     const { entityUsernameField, service, errorMessage } = this.configuration;
-    const findParams = Object.assign(omit(params, 'provider'), {
-      query: {
-        [entityUsernameField]: username,
-        '$limit': 1
-      }
-    });
-    const entityService = this.app.service(service);
 
-    debug('Finding entity with query', params.query);
+    return this.getEntityQuery({
+      [entityUsernameField]: username
+    }, params).then(query => {
+      const findParams = Object.assign(omit(params, 'provider'), { query });
+      const entityService = this.app.service(service);
 
-    return entityService.find(findParams).then(result => {
+      debug('Finding entity with query', params.query);
+
+      return entityService.find(findParams);
+    }).then(result => {
       const list = Array.isArray(result) ? result : (result.data || []);
 
       if (list.length === 0) {
         debug(`No entity found`);
-        
+
         return Promise.reject(new NotAuthenticated(errorMessage));
       }
 
@@ -78,11 +85,19 @@ module.exports = class LocalStrategy {
       throw new NotAuthenticated(errorMessage);
     });
   }
-  
+
+  hashPassword (password) {
+    return bcrypt.hash(password, this.configuration.hashSize);
+  }
+
   authenticate (data, params) {
-    const { passwordField, usernameField, entity } = this.configuration;
+    const { passwordField, usernameField, entity, errorMessage } = this.configuration;
     const username = data[usernameField];
     const password = data[passwordField];
+
+    if (data.strategy && data.strategy !== this.name) {
+      return Promise.reject(new NotAuthenticated(errorMessage));
+    }
 
     return this.findEntity(username, params)
       .then(entity => this.comparePassword(entity, password))

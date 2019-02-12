@@ -1,8 +1,5 @@
-/* eslint-disable no-unused-expressions */
-const chai = require('chai');
-
-const { protect } = require('../../lib/hooks');
-const { expect } = chai;
+const assert = require('assert');
+const { protect } = require('../../lib');
 
 function testOmit (title, property) {
   describe(title, () => {
@@ -18,7 +15,7 @@ function testOmit (title, property) {
       };
       const result = fn(context);
 
-      expect(result).to.deep.equal({
+      assert.deepStrictEqual(result, {
         [property]: data,
         dispatch: { email: 'test@user.com' }
       });
@@ -37,7 +34,7 @@ function testOmit (title, property) {
       };
       const result = hook(context);
 
-      expect(result).to.deep.equal({
+      assert.deepStrictEqual(result, {
         [property]: data,
         dispatch: { user: { email: 'test@user.com' } }
       });
@@ -54,7 +51,7 @@ function testOmit (title, property) {
       };
       const result = fn(context);
 
-      expect(result).to.deep.equal({
+      assert.deepStrictEqual(result, {
         [property]: data,
         dispatch: { email: 'test@user.com', data: 'yes' }
       });
@@ -76,7 +73,7 @@ function testOmit (title, property) {
       };
       const result = fn(context);
 
-      expect(result).to.deep.equal({
+      assert.deepStrictEqual(result, {
         [property]: data,
         dispatch: { email: 'test@user.com' }
       });
@@ -95,7 +92,7 @@ function testOmit (title, property) {
       };
       const result = fn(context);
 
-      expect(result).to.deep.equal({
+      assert.deepStrictEqual(result, {
         [property]: data,
         dispatch: [
           { email: 'test1@user.com' },
@@ -121,7 +118,7 @@ function testOmit (title, property) {
       };
       const result = fn(context);
 
-      expect(result).to.deep.equal({
+      assert.deepStrictEqual(result, {
         method: 'find',
         [property]: data,
         dispatch: {
@@ -149,7 +146,7 @@ function testOmit (title, property) {
       };
       const result = fn(context);
 
-      expect(result).to.deep.equal({
+      assert.deepStrictEqual(result, {
         [property]: data,
         params,
         result: [
@@ -165,12 +162,12 @@ function testOmit (title, property) {
   });
 }
 
-describe('hooks:protect', () => {
+describe('@feathersjs/authentication-local/hooks/protect', () => {
   it('does nothing when called with no result', () => {
     const fn = protect();
     const original = {};
 
-    expect(fn(original)).to.deep.equal(original);
+    assert.deepStrictEqual(fn(original), original);
   });
 
   testOmit('with hook.result', 'result');

@@ -1,178 +1,85 @@
-/* eslint-disable no-unused-expressions */
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+const assert = require('assert');
 
-const { hashPassword } = require('../../lib/hooks');
-const { expect } = chai;
+const getApp = require('../fixture');
+const { hashPassword } = require('../../lib');
 
-chai.use(sinonChai);
-
-describe('hooks:hashPassword', () => {
-  let hook;
+describe('@feathersjs/authentication-local/hooks/hash-password', () => {
+  let app;
 
   beforeEach(() => {
-    hook = {
-      type: 'before',
-      data: { password: 'secret' },
-      params: {},
-      app: {
-        get: () => {
-          return {
-            local: {
-              passwordField: 'password'
-            }
-          };
-        }
+    app = getApp();
+  });
+
+  it('throws error when no field provided', () => {
+    try {
+      hashPassword();
+      assert.fail('Should never get here');
+    } catch (error) {
+      assert.strictEqual(error.message, 'The hashPassword hook requires a field name option');
+    }
+  });
+
+  it('errors when authentication service does not exist', () => {
+    delete app.services.authentication;
+
+    return app.service('users').create({
+      email: 'dave@hashpassword.com',
+      password: 'supersecret'
+    }).then(() => assert.fail('Should never get here')).catch(error => {
+      assert.strictEqual(error.message,
+        `Could not find 'authentication' service to hash password`
+      );
+    });
+  });
+
+  it('errors when authentication strategy does not exist', () => {
+    delete app.services.authentication.strategies.local;
+
+    return app.service('users').create({
+      email: 'dave@hashpassword.com',
+      password: 'supersecret'
+    }).then(() => assert.fail('Should never get here')).catch(error => {
+      assert.strictEqual(error.message,
+        `Could not find 'local' strategy to hash password`
+      );
+    });
+  });
+
+  it('errors when authentication strategy does not exist', () => {
+    const users = app.service('users');
+
+    users.hooks({
+      after: {
+        create: hashPassword('password')
       }
-    };
-  });
+    });
 
-  describe('when not called as a before hook', () => {
-    it('returns an error', () => {
-      hook.type = 'after';
-      return hashPassword()(hook).catch(error => {
-        expect(error).to.not.equal(undefined);
-      });
+    return users.create({
+      email: 'dave@hashpassword.com',
+      password: 'supersecret'
+    }).then(() => assert.fail('Should never get here')).catch(error => {
+      assert.strictEqual(error.message,
+        `The 'hashPassword' hook should only be used as a 'before' hook`
+      );
     });
   });
 
-  describe('when data does not exist', () => {
-    it('does not do anything', () => {
-      delete hook.data;
-      return hashPassword()(hook).then(returnedHook => {
-        expect(returnedHook).to.deep.equal(hook);
-      });
+  it('hashes password on field', () => {
+    const password = 'supersecret';
+
+    return app.service('users').create({
+      email: 'dave@hashpassword.com',
+      password
+    }).then(user => {
+      assert.notStrictEqual(user.password, password);
     });
   });
 
-  describe('when data does not have a prototype', () => {
-    it('does not do anything', () => {
-      hook.data = Object.create(null);
-      return hashPassword()(hook).then(returnedHook => {
-        expect(returnedHook).to.deep.equal(hook);
-      });
-    });
-  });
-
-  describe('when password does not exist', () => {
-    it('does not do anything', () => {
-      delete hook.data.password;
-      return hashPassword()(hook).then(returnedHook => {
-        expect(returnedHook).to.deep.equal(hook);
-      });
-    });
-  });
-
-  describe('when password exists', () => {
-    it('hashes with options from global auth config', () => {
-      return hashPassword()(hook).then(hook => {
-        expect(hook.data.password).to.not.equal(undefined);
-        expect(hook.data.password).to.not.equal('secret');
-      });
-    });
-
-    it('does not modify the original object', () => {
-      const data = { password: 'secret' };
-
-      hook.data = data;
-
-      return hashPassword()(hook).then(hook => {
-        expect(hook.data.password).to.not.equal(undefined);
-        expect(hook.data.password).to.not.equal('secret');
-        expect(data.password).to.equal('secret');
-      });
-    });
-
-    it('hashes with custom options', () => {
-      hook.data.pass = 'secret';
-
-      return hashPassword({ passwordField: 'pass' })(hook).then(hook => {
-        expect(hook.data.pass).to.not.equal(undefined);
-        expect(hook.data.pass).to.not.equal('secret');
-      });
-    });
-
-    it('hashes with nested password field custom option', () => {
-      hook.data = {
-        nested: {
-          pass: 'secret'
-        }
-      };
-
-      return hashPassword({ passwordField: 'nested.pass' })(hook).then(hook => {
-        expect(hook.data.nested.pass).to.not.equal(undefined);
-        expect(hook.data.nested.pass).to.not.equal('secret');
-      });
-    });
-
-    it('calls custom hash function', () => {
-      const fn = sinon.stub().returns(Promise.resolve());
-      return hashPassword({ hash: fn })(hook).then(() => {
-        expect(fn).to.have.been.calledOnce;
-        expect(fn).to.have.been.calledWith('secret');
-      });
-    });
-
-    it('returns an error when custom hash is not a function', () => {
-      return hashPassword({ hash: true })(hook).catch(error => {
-        expect(error).to.not.equal(undefined);
-      });
-    });
-  });
-
-  describe('when password exists in bulk', () => {
-    beforeEach(() => {
-      hook.data = [
-        { password: 'secret' },
-        { password: 'secret' }
-      ];
-    });
-
-    it('hashes with options from global auth config', () => {
-      return hashPassword()(hook).then(hook => {
-        hook.data.map(item => {
-          expect(item.password).to.not.equal(undefined);
-          expect(item.password).to.not.equal('secret');
-        });
-      });
-    });
-
-    it('does not remove things if there is no password', () => {
-      hook.data = [
-        { id: 0, password: 'secret' },
-        { id: 1 }
-      ];
-
-      return hashPassword()(hook).then(hook => {
-        const { data } = hook;
-
-        expect(data.length).to.equal(2);
-        expect(data[0].password).to.not.equal('secret');
-        expect(data[1]).to.exist;
-      });
-    });
-
-    it('hashes with custom options', () => {
-      hook.data = [
-        { pass: 'secret' },
-        { pass: 'secret' }
-      ];
-
-      return hashPassword({ passwordField: 'pass' })(hook).then(hook => {
-        hook.data.map(item => {
-          expect(item.pass).to.not.equal(undefined);
-          expect(item.pass).to.not.equal('secret');
-        });
-      });
-    });
-
-    it('calls custom hash function', () => {
-      const fn = sinon.stub().returns(Promise.resolve());
-      return hashPassword({ hash: fn })(hook).then(() => {
-        expect(fn).to.have.been.calledTwice;
-        expect(fn).to.have.been.calledWith('secret');
-      });
+  it('does nothing when field is not present', () => {
+    return app.service('users').create({
+      email: 'dave@hashpassword.com'
+    }).then(user => {
+      assert.strictEqual(user.password, undefined);
     });
   });
 });
