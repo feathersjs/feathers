@@ -43,16 +43,16 @@ module.exports = class LocalStrategy {
     return this.getEntityQuery({
       [entityUsernameField]: username
     }, params).then(query => {
-      const findParams = Object.assign(omit(params, 'provider'), { query });
+      const findParams = Object.assign({}, params, { query });
       const entityService = this.app.service(service);
 
       debug('Finding entity with query', params.query);
 
       return entityService.find(findParams);
     }).then(result => {
-      const list = Array.isArray(result) ? result : (result.data || []);
+      const list = Array.isArray(result) ? result : result.data;
 
-      if (list.length === 0) {
+      if (!Array.isArray(list) || list.length === 0) {
         debug(`No entity found`);
 
         return Promise.reject(new NotAuthenticated(errorMessage));
@@ -99,9 +99,11 @@ module.exports = class LocalStrategy {
       return Promise.reject(new NotAuthenticated(errorMessage));
     }
 
-    return this.findEntity(username, params)
+    return this.findEntity(username, omit(params, 'provider'))
       .then(entity => this.comparePassword(entity, password))
-      .then(authEntity => {
+      .then(entity => params.provider
+        ? this.findEntity(username, params) : entity
+      ).then(authEntity => {
         return {
           authentication: { strategy: this.name },
           [entity]: authEntity

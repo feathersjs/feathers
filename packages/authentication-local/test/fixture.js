@@ -20,7 +20,12 @@ module.exports = () => {
   authentication.register('local', new LocalStrategy());
 
   app.use('/authentication', authentication);
-  app.use('/users', memory());
+  app.use('/users', memory({
+    paginate: {
+      default: 10,
+      max: 20
+    }
+  }));
 
   app.service('users').hooks({
     before: {
