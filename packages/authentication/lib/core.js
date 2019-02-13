@@ -46,6 +46,10 @@ module.exports = class AuthenticationBase {
       strategy.setAuthentication(this);
     }
 
+    if (typeof strategy.verifyConfiguration === 'function') {
+      strategy.verifyConfiguration();
+    }
+
     // Register strategy as name
     this.strategies[name] = strategy;
   }

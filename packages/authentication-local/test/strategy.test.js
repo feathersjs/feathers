@@ -1,4 +1,5 @@
 const assert = require('assert');
+const { LocalStrategy } = require('../lib');
 const getApp = require('./fixture');
 
 describe('@feathersjs/authentication-local/strategy', () => {
@@ -15,6 +16,19 @@ describe('@feathersjs/authentication-local/strategy', () => {
       .then(createdUser => {
         user = createdUser;
       });
+  });
+
+  it('throw error when configuration is not set', () => {
+    const auth = app.service('authentication');
+
+    try {
+      auth.register('something', new LocalStrategy());
+      assert.fail('Should never get here');
+    } catch (error) {
+      assert.strictEqual(error.message,
+        `'something' authentication strategy requires a 'usernameField' setting`
+      );
+    }
   });
 
   it('fails when entity not found', () => {

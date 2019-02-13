@@ -185,5 +185,15 @@ describe('authentication/jwt', () => {
         });
       });
     });
+
+    it('return null when scheme does not match', () => {
+      return app.service('authentication').parse({
+        headers: {
+          authorization: ` Basic something`
+        }
+      }, {}, 'jwt').then(result => {
+        assert.strictEqual(result, null);
+      });
+    });
   });
 });

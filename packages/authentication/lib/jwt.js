@@ -20,7 +20,9 @@ module.exports = class JWTStrategy {
 
     return Object.assign({
       entity: authConfig.entity,
-      service: authConfig.service
+      service: authConfig.service,
+      header: 'Authorization',
+      schemes: [ 'Bearer', 'JWT' ]
     }, config);
   }
 
@@ -79,6 +81,10 @@ module.exports = class JWTStrategy {
     const hasScheme = scheme && schemes.some(
       current => new RegExp(current, 'i').test(scheme)
     );
+
+    if (scheme && !hasScheme) {
+      return null;
+    }
 
     return Object.assign(result, {
       accessToken: hasScheme ? schemeValue : headerValue

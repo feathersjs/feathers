@@ -17,9 +17,19 @@ module.exports = class LocalStrategy {
     this.name = name;
   }
 
+  verifyConfiguration () {
+    const config = this.configuration;
+
+    [ 'usernameField', 'passwordField' ].forEach(prop => {
+      if (typeof config[prop] !== 'string') {
+        throw new Error(`'${this.name}' authentication strategy requires a '${prop}' setting`);
+      }
+    });
+  }
+
   get configuration () {
     const authConfig = this.authentication.configuration;
-    const config = authConfig[this.name];
+    const config = authConfig[this.name] || {};
 
     return Object.assign({}, {
       hashSize: 10,
