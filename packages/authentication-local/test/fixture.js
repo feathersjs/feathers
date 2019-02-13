@@ -4,8 +4,7 @@ const { AuthenticationService } = require('@feathersjs/authentication');
 
 const { LocalStrategy, hashPassword, protect } = require('../lib');
 
-module.exports = () => {
-  const app = feathers();
+module.exports = (app = feathers()) => {
   const authentication = new AuthenticationService(app);
 
   app.set('authentication', {
