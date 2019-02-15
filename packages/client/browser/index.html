@@ -10,7 +10,10 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/core-js/2.5.7/core.min.js" type="text/javascript"></script>
   <script src="/socket.io/socket.io.js" type="text/javascript"></script>
   <script src="/node_modules/mocha/mocha.js" type="text/javascript"></script>
-  <script>mocha.setup('bdd');</script>
+  <script>mocha.setup({
+    ui: 'bdd',
+    timeout: 5000
+  });</script>
   <script src="../dist/feathers.js" type="text/javascript"></script>
   <script src="./test.dist.js" type="text/javascript"></script>
   <script>
