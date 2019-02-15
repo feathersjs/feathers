@@ -1,6 +1,5 @@
 const assert = require('assert');
 const axios = require('axios');
-const bodyParser = require('body-parser');
 
 const feathers = require('@feathersjs/feathers');
 const { Service } = require('@feathersjs/commons/lib/test/fixture');
@@ -92,7 +91,7 @@ describe('@feathersjs/express/rest provider', () => {
     before(function () {
       app = expressify(feathers())
         .configure(rest(rest.formatter))
-        .use(bodyParser.json())
+        .use(expressify.json())
         .use('codes', {
           get (id, params) {
             return Promise.resolve({ id });
@@ -297,7 +296,7 @@ describe('@feathersjs/express/rest provider', () => {
         next();
       })
         .configure(rest(rest.formatter))
-        .use(bodyParser.json())
+        .use(expressify.json())
         .use('/todo', {
           create (data) {
             return Promise.resolve(data);
@@ -325,7 +324,7 @@ describe('@feathersjs/express/rest provider', () => {
       const app = expressify(feathers());
 
       app.configure(rest())
-        .use(bodyParser.json())
+        .use(expressify.json())
         .use('/todo', function (req, res, next) {
           req.body.before = [ 'before first' ];
           next();
@@ -371,7 +370,7 @@ describe('@feathersjs/express/rest provider', () => {
           res.status(200).json(res.data);
         }];
       app.configure(rest())
-        .use(bodyParser.json())
+        .use(expressify.json())
         .use('/array-middleware', middlewareArray);
 
       const server = app.listen(4776);
