@@ -42,9 +42,12 @@
     "uberproto": "^2.0.4"
   },
   "devDependencies": {
+    "@feathersjs/authentication": "^2.1.16",
+    "@feathersjs/authentication-local": "^1.2.9",
     "@feathersjs/feathers": "^3.3.1",
     "axios": "^0.18.0",
     "chai": "^4.2.0",
+    "lodash": "^4.17.11",
     "mocha": "^5.2.0"
   }
 }
