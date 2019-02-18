@@ -43,7 +43,7 @@
     "@feathersjs/socketio": "^3.2.9",
     "chai": "^4.1.2",
     "feathers-memory": "^3.0.0",
-    "mocha": "^5.2.0",
+    "mocha": "^6.0.0",
     "socket.io-client": "^2.0.3"
   }
 }
