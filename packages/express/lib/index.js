@@ -4,6 +4,7 @@ const errorHandler = require('@feathersjs/errors/handler');
 const notFound = require('@feathersjs/errors/not-found');
 const debug = require('debug')('@feathersjs/express');
 
+const authentication = require('./authentication');
 const rest = require('./rest');
 
 function feathersExpress (feathersApp) {
@@ -83,7 +84,7 @@ function feathersExpress (feathersApp) {
 
 module.exports = feathersExpress;
 
-Object.assign(module.exports, express, {
+Object.assign(module.exports, express, authentication, {
   default: feathersExpress,
   original: express,
   rest,
