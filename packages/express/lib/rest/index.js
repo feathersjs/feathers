@@ -30,7 +30,7 @@ function rest (handler = formatter) {
     app.rest = wrappers;
 
     app.use(function (req, res, next) {
-      req.feathers = { provider: 'rest' };
+      req.feathers = Object.assign({ provider: 'rest' }, req.feathers);
       next();
     });
 
