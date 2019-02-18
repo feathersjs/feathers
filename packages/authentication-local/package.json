@@ -50,7 +50,7 @@
     "body-parser": "^1.15.2",
     "chai": "^4.0.2",
     "feathers-memory": "^3.0.0",
-    "mocha": "^5.2.0",
+    "mocha": "^6.0.0",
     "sinon": "^7.2.3",
     "sinon-chai": "^3.0.0"
   }
