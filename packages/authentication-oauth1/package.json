@@ -48,7 +48,7 @@
     "chai": "^4.0.2",
     "express-session": "^1.14.2",
     "feathers-memory": "^3.0.0",
-    "mocha": "^5.2.0",
+    "mocha": "^6.0.0",
     "passport-strategy": "^1.0.0",
     "passport-twitter": "^1.0.4",
     "sinon": "^7.2.3",
