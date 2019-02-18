@@ -48,7 +48,7 @@
     "feathers": "^2.2.3",
     "feathers-memory": "^3.0.0",
     "lodash": "^4.0.1",
-    "mocha": "^5.2.0",
+    "mocha": "^6.0.0",
     "ws": "^6.0.0"
   }
 }
