@@ -119,10 +119,13 @@ module.exports = function setupSocketHandler (app, options, { feathersParams, pr
             lt.clearTimeout(logoutTimer);
           }
 
-          logoutTimer = lt.setTimeout(() => {
-            debug(`Token expired. Logging out.`);
-            logout();
-          }, ms(authSettings.jwt.expiresIn));
+          if (typeof authSettings.jwt.expiresIn != 'undefined')
+          {
+            logoutTimer = lt.setTimeout(() => {
+              debug(`Token expired. Logging out.`);
+              logout();
+            }, ms(authSettings.jwt.expiresIn));
+          }
 
           // TODO (EK): Setup and tear down socket listeners to keep the entity
           // up to date that should be attached to the socket. Need to get the

@@ -13,6 +13,7 @@ const defaults = {
     httpOnly: false,
     secure: true
   },
+  jwtRemoveOptions: [],
   jwt: {
     header: { typ: 'access' }, // by default is an access token but can be any type
     audience: 'https://yourdomain.com', // The resource server where the token is processed
@@ -24,5 +25,11 @@ const defaults = {
 };
 
 module.exports = function (...otherOptions) {
-  return merge({}, defaults, ...otherOptions);
+  const mergedOptions = merge({}, defaults, ...otherOptions);
+  for (let idx in mergedOptions.jwtRemoveOptions)
+  {
+    let optionName = mergedOptions.jwtRemoveOptions[idx];
+    delete mergedOptions.jwt[optionName];
+  }
+  return mergedOptions;
 };
