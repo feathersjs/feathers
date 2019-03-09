@@ -20,6 +20,7 @@ module.exports = _options => {
 
     app.authentication = authentication;
     app.authenticate = authentication.authenticate.bind(authentication);
+    app.reauthenticate = authentication.reauthenticate.bind(authentication);
     app.logout = authentication.logout.bind(authentication);
 
     app.hooks({

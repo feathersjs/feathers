@@ -2,10 +2,9 @@ const { stripSlashes } = require('@feathersjs/commons');
 
 module.exports = () => {
   return context => {
-    const { app, params, path, app: { authentication } } = context;
+    const { app, params, path, method, app: { authentication } } = context;
 
-    // Should not run for authentication service
-    if (stripSlashes(authentication.options.path) === path) {
+    if (stripSlashes(authentication.options.path) === path && method === 'create') {
       return context;
     }
 

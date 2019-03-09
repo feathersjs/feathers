@@ -26,9 +26,10 @@ exports.AuthenticationClient = class AuthenticationClient {
     this.app = app;
     this.app.set('storage', this.app.get('storage') || options.storage);
     this.options = options;
+    this.authenticated = false;
 
     if (socket) {
-      this.handleSocket();
+      this.handleSocket(socket);
     }
   }
 
@@ -43,13 +44,13 @@ exports.AuthenticationClient = class AuthenticationClient {
   handleSocket (socket) {
     // Connection events happen on every reconnect
     const connected = this.app.io ? 'connect' : 'open';
-  
+
     socket.on(connected, () => {
       // Only reconnect when `reAuthenticate()` or `authenticate()`
       // has been called explicitly first
-      if (this.app.get('authentication')) {
+      if (this.authenticated) {
         // Force reauthentication with the server
-        this.reAuthenticate(true);
+        this.reauthenticate(true);
       }
     });
   }
@@ -72,6 +73,7 @@ exports.AuthenticationClient = class AuthenticationClient {
     const authResult = this.app.get('authentication');
 
     this.app.set('authentication', null);
+    this.authenticated = false;
 
     return authResult;
   }
@@ -86,7 +88,7 @@ exports.AuthenticationClient = class AuthenticationClient {
         if (!accessToken) {
           throw new NotAuthenticated('No accessToken found in storage');
         }
-
+        
         return this.authenticate({
           strategy: this.options.jwtStrategy,
           accessToken
@@ -106,11 +108,9 @@ exports.AuthenticationClient = class AuthenticationClient {
       .then(authResult => {
         const { accessToken } = authResult;
 
-        if (accessToken) {
-          return this.setJwt(accessToken).then(() => authResult);
-        }
+        this.authenticated = true;
 
-        return authResult;
+        return this.setJwt(accessToken).then(() => authResult);
       });
 
     this.app.set('authentication', promise);

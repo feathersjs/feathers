@@ -12,7 +12,7 @@ describe('@feathersjs/authentication-client', () => {
 
   beforeEach(() => {
     app = feathers();
-    
+
     app.configure(client());
     app.use('/authentication', {
       create (data) {
@@ -93,37 +93,38 @@ describe('@feathersjs/authentication-client', () => {
       const data = {
         strategy: 'testing'
       };
-  
+
       app.authenticate(data).then(result => {
         assert.deepStrictEqual(result, {
           accessToken,
           data,
           user
         });
-  
+
         return result;
-      }).then(() =>
-        app.authentication.reset()
-      ).then(() => {
-        return Promise.resolve(app.get('storage').getItem('feathers-jwt'));
-      }).then(at => {
-        assert.strictEqual(at, accessToken, 'Set accessToken in storage');
+      }).then(() => app.authentication.reauthenticate())
+        .then(() =>
+          app.authentication.reset()
+        ).then(() => {
+          return Promise.resolve(app.get('storage').getItem('feathers-jwt'));
+        }).then(at => {
+          assert.strictEqual(at, accessToken, 'Set accessToken in storage');
 
-        return app.authentication.reauthenticate();
-      }).then(at => {
-        assert.deepStrictEqual(at, {
-          accessToken,
-          data: { strategy: 'jwt', accessToken: 'testing' },
-          user
+          return app.authentication.reauthenticate();
+        }).then(at => {
+          assert.deepStrictEqual(at, {
+            accessToken,
+            data: { strategy: 'jwt', accessToken: 'testing' },
+            user
+          });
+
+          return app.logout();
+        }).then(() => {
+          return Promise.resolve(app.get('storage').getItem('feathers-jwt'));
+        }).then(at => {
+          assert.ok(!at);
+          assert.ok(!app.get('authentication'));
         });
-
-        return app.logout();
-      }).then(() => {
-        return Promise.resolve(app.get('storage').getItem('feathers-jwt'));
-      }).then(at => {
-        assert.ok(!at);
-        assert.ok(!app.get('authentication'));
-      });
     });
   });
 });

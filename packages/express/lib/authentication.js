@@ -45,7 +45,7 @@ exports.authenticate = (...strategies) => {
   if (!Array.isArray(settings.strategies) || settings.strategies.length === 0) {
     throw new Error(`'authenticate' middleware requires at least one strategy name`);
   }
-  
+
   return function (req, res, next) {
     const { app, authentication } = req;
     const service = getService(settings, app);
