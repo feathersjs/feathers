@@ -1,15 +1,36 @@
+const { AuthenticationClient, Storage } = require('./core');
+const hooks = require('./hooks');
 const defaults = {
   header: 'Authorization',
   scheme: 'Bearer',
   storageKey: 'feathers-jwt',
   jwtStrategy: 'jwt',
   path: '/authentication',
-  entity: 'user',
-  service: 'users'
+  Authentication: AuthenticationClient
 };
 
-module.exports = app => {
-  app.hooks({
-    before: [ ]
-  });
+module.exports = _options => {
+  const options = Object.assign({}, {
+    storage: new Storage()
+  }, defaults, _options);
+  const { Authentication } = options;
+
+  return app => {
+    const authentication = new Authentication(app, options);
+
+    app.authentication = authentication;
+    app.authenticate = authentication.authenticate.bind(authentication);
+    app.logout = authentication.logout.bind(authentication);
+
+    app.hooks({
+      before: [
+        hooks.authentication(),
+        hooks.populateHeader()
+      ]
+    });
+  };
 };
+
+Object.assign(module.exports, {
+  AuthenticationClient, Storage, hooks, defaults
+});

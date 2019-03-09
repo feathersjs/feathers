@@ -1,10 +1,30 @@
 const { NotAuthenticated } = require('@feathersjs/errors');
 
-module.exports = class AuthenticationClient {
+exports.Storage = class Storage {
+  constructor () {
+    this.store = {};
+  }
+
+  getItem (key) {
+    return this.store[key];
+  }
+
+  setItem (key, value) {
+    return (this.store[key] = value);
+  }
+
+  removeItem (key) {
+    delete this.store[key];
+    return this;
+  }
+};
+
+exports.AuthenticationClient = class AuthenticationClient {
   constructor (app, options) {
     const socket = app.io || app.primus;
 
     this.app = app;
+    this.app.set('storage', this.app.get('storage') || options.storage);
     this.options = options;
 
     if (socket) {
@@ -14,6 +34,10 @@ module.exports = class AuthenticationClient {
 
   get service () {
     return this.app.service(this.options.path);
+  }
+
+  get storage () {
+    return this.app.get('storage');
   }
 
   handleSocket (socket) {
@@ -31,21 +55,15 @@ module.exports = class AuthenticationClient {
   }
 
   setJwt (accessToken) {
-    const { storage, storageKey } = this.options;
-
-    return Promise.resolve(storage.setItem(storageKey, accessToken));
+    return Promise.resolve(this.storage.setItem(this.options.storageKey, accessToken));
   }
 
   getJwt () {
-    const { storage, storageKey } = this.options;
-
-    return Promise.resolve(storage.getItem(storageKey));
+    return Promise.resolve(this.storage.getItem(this.options.storageKey));
   }
 
   removeJwt () {
-    const { storage, storageKey } = this.options;
-
-    return Promise.resolve(storage.removeItem(storageKey));
+    return Promise.resolve(this.storage.removeItem(this.options.storageKey));
   }
 
   reset () {
@@ -58,13 +76,13 @@ module.exports = class AuthenticationClient {
     return authResult;
   }
 
-  reAuthenticate (force = false) {
+  reauthenticate (force = false) {
     // Either returns the authentication state or
     // tries to re-authenticate with the stored JWT and strategy
     const authPromise = this.app.get('authentication');
 
     if (!authPromise || force === true) {
-      return authPromise.then(() => this.getJwt()).then(accessToken => {
+      return this.getJwt().then(accessToken => {
         if (!accessToken) {
           throw new NotAuthenticated('No accessToken found in storage');
         }
@@ -81,10 +99,19 @@ module.exports = class AuthenticationClient {
 
   authenticate (authentication) {
     if (!authentication) {
-      return this.reAuthenticate();
+      return this.reauthenticate();
     }
 
-    const promise = this.service.create(authentication);
+    const promise = this.service.create(authentication)
+      .then(authResult => {
+        const { accessToken } = authResult;
+
+        if (accessToken) {
+          return this.setJwt(accessToken).then(() => authResult);
+        }
+
+        return authResult;
+      });
 
     this.app.set('authentication', promise);
 

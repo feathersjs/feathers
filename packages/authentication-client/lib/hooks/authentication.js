@@ -11,19 +11,7 @@ module.exports = () => {
 
     return Promise.resolve(app.get('authentication')).then(authResult => {
       if (authResult) {
-        const { accessToken } = authResult;
-
-        context.params = Object.assign({ authResult }, params);
-
-        // Set REST header if necessary
-        if (app.rest && accessToken) {
-          const { scheme, header } = authentication.options;
-          const authHeader = `${scheme} ${accessToken}`;
-
-          context.params.headers = Object.assign({}, {
-            [header]: authHeader
-          }, context.params.headers);
-        }
+        context.params = Object.assign({}, authResult, params);
       }
 
       return context;
