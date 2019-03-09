@@ -71,7 +71,7 @@ describe('@feathersjs/express/authentication', () => {
     try {
       expressify.authenticate();
       assert.fail('Should never get here');
-    } catch(error) {
+    } catch (error) {
       assert.strictEqual(error.message,
         `'authenticate' middleware requires at least one strategy name`
       );
@@ -87,7 +87,7 @@ describe('@feathersjs/express/authentication', () => {
       assert.strictEqual(authResult.user.email, email);
       assert.strictEqual(authResult.user.password, undefined);
     });
-  
+
     it('local authentication with wrong password fails', () => {
       return axios.post('/authentication', {
         strategy: 'local',
@@ -101,56 +101,56 @@ describe('@feathersjs/express/authentication', () => {
         assert.strictEqual(data.message, 'Invalid login');
       });
     });
-  
+
     it('authenticating with JWT works but returns same accessToken', () => {
       const { accessToken } = authResult;
-  
+
       return axios.post('/authentication', {
         strategy: 'jwt',
         accessToken
       }).then(res => {
         const { data } = res;
-  
+
         assert.strictEqual(data.accessToken, accessToken);
         assert.strictEqual(data.authentication.strategy, 'jwt');
         assert.strictEqual(data.authentication.payload.sub, user.id.toString());
         assert.strictEqual(data.user.email, email);
       });
     });
-  
+
     it('can make a protected request with Authorization header', () => {
       const { accessToken } = authResult;
-  
+
       return axios.get('/dummy/dave', {
         headers: {
           Authorization: accessToken
         }
       }).then(res => {
         const { data, data: { params } } = res;
-  
+
         assert.strictEqual(data.id, 'dave');
         assert.deepStrictEqual(params.user, user);
         assert.strictEqual(params.authentication.accessToken, accessToken);
       });
     });
-  
+
     it('can make a protected request with Authorization header and bearer scheme', () => {
       const { accessToken } = authResult;
-  
+
       return axios.get('/dummy/dave', {
         headers: {
           Authorization: ` Bearer: ${accessToken}`
         }
       }).then(res => {
         const { data, data: { params } } = res;
-  
+
         assert.strictEqual(data.id, 'dave');
         assert.deepStrictEqual(params.user, user);
         assert.strictEqual(params.authentication.accessToken, accessToken);
       });
     });
   });
-  
+
   describe('authenticate middleware', () => {
     it('protected endpoint fails when JWT is not present', () => {
       return axios.get('/protected').then(() => {

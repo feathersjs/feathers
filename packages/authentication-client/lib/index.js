@@ -1,52 +1,37 @@
-const hooks = require('./hooks/index');
-const Passport = require('./passport');
-
+const { AuthenticationClient, Storage } = require('./core');
+const hooks = require('./hooks');
 const defaults = {
   header: 'Authorization',
-  cookie: 'feathers-jwt',
+  scheme: 'Bearer',
   storageKey: 'feathers-jwt',
   jwtStrategy: 'jwt',
   path: '/authentication',
-  entity: 'user',
-  service: 'users',
-  timeout: 5000
+  Authentication: AuthenticationClient
 };
 
-function init (config = {}) {
-  const options = Object.assign({}, defaults, config);
+module.exports = _options => {
+  const options = Object.assign({}, {
+    storage: new Storage()
+  }, defaults, _options);
+  const { Authentication } = options;
 
-  return function () {
-    const app = this;
+  return app => {
+    const authentication = new Authentication(app, options);
 
-    app.passport = new Passport(app, options);
-    app.authenticate = app.passport.authenticate.bind(app.passport);
-    app.logout = app.passport.logout.bind(app.passport);
+    app.authentication = authentication;
+    app.authenticate = authentication.authenticate.bind(authentication);
+    app.reauthenticate = authentication.reauthenticate.bind(authentication);
+    app.logout = authentication.logout.bind(authentication);
 
-    // Set up hook that adds token and user to params so that
-    // it they can be accessed by client side hooks and services
-    app.mixins.push(function (service) {
-      // if (typeof service.hooks !== 'function') {
-      if (app.version < '3.0.0') {
-        throw new Error(`This version of @feathersjs/authentication-client only works with @feathersjs/feathers v3.0.0 or later.`);
-      }
-
-      service.hooks({
-        before: hooks.populateAccessToken(options)
-      });
+    app.hooks({
+      before: [
+        hooks.authentication(),
+        hooks.populateHeader()
+      ]
     });
-
-    // Set up hook that adds authorization header for REST provider
-    if (app.rest) {
-      app.mixins.push(function (service) {
-        service.hooks({
-          before: hooks.populateHeader(options)
-        });
-      });
-    }
   };
-}
+};
 
-module.exports = init;
-
-module.exports.default = init;
-module.exports.defaults = defaults;
+Object.assign(module.exports, {
+  AuthenticationClient, Storage, hooks, defaults
+});
