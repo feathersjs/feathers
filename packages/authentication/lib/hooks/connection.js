@@ -5,23 +5,21 @@ module.exports = (strategy = 'jwt') => {
     const {
       method,
       result: { accessToken },
-      params: { provider, connection }
+      params: { connection }
     } = context;
 
-    if (!connection && (provider === 'socketio' || provider === 'primus')) {
-      throw new Error(`No connection object found. Please make sure you are using the latest version of '@feathersjs/${provider}' and params.connection is set.`);
+    if (!connection) {
+      return context;
     }
 
-    if (connection) {
-      const { authentication: { accessToken: currentToken } = {} } = connection;
+    const { authentication = {} } = connection;
 
-      if (method === 'remove' && accessToken === currentToken) {
-        debug('Removing authentication information from real-time connection');
-        delete connection.authentication;
-      } else if (method === 'create' && accessToken) {
-        debug('Adding authentication information to real-time connection');
-        connection.authentication = { strategy, accessToken };
-      }
+    if (method === 'remove' && accessToken === authentication.accessToken) {
+      debug('Removing authentication information from real-time connection');
+      delete connection.authentication;
+    } else if (method === 'create' && accessToken) {
+      debug('Adding authentication information to real-time connection');
+      connection.authentication = { strategy, accessToken };
     }
 
     return context;
