@@ -29,16 +29,6 @@ describe('authentication/hooks/connection', () => {
     });
   });
 
-  it('throws error if connection is not set for expected provider', () => {
-    return service.create({}, { provider: 'socketio' })
-      .then(() => assert.fail('Should never get here'))
-      .catch(error => {
-        assert.strictEqual(error.message, `No connection object found. ` +
-        `Please make sure you are using the latest version of '@feathersjs/socketio' ` +
-        `and params.connection is set.`);
-      });
-  });
-
   it('create does nothing when there is no connection', () => {
     return service.create({}, {}).then(result => {
       assert.deepStrictEqual(result, {
