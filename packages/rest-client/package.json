@@ -50,7 +50,7 @@
     "body-parser": "^1.17.2",
     "feathers-memory": "^3.0.0",
     "jquery": "^3.2.1",
-    "jsdom": "^13.2.0",
+    "jsdom": "^14.0.0",
     "mocha": "^5.2.0",
     "node-fetch": "^2.0.0",
     "request": "^2.81.0",
