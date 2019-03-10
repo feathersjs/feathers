@@ -47,7 +47,7 @@
     "feathers": "^2.2.4",
     "feathers-memory": "^3.0.2",
     "lodash": "^4.17.11",
-    "mocha": "^5.2.0",
+    "mocha": "^6.0.2",
     "socket.io-client": "^2.2.0"
   }
 }

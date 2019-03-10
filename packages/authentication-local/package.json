@@ -43,6 +43,6 @@
   "devDependencies": {
     "@feathersjs/authentication": "^2.1.16",
     "@feathersjs/feathers": "^3.3.1",
-    "mocha": "^5.2.0"
+    "mocha": "^6.0.2"
   }
 }
