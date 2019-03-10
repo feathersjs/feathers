@@ -41,8 +41,8 @@
 		"@feathersjs/feathers": "^3.3.1",
 		"chai": "^4.2.0",
 		"express": "^4.16.4",
-		"mocha": "^5.2.0",
-		"sinon": "^7.2.3",
+		"mocha": "^6.0.2",
+		"sinon": "^7.2.7",
 		"sinon-chai": "^3.3.0"
 	}
 }

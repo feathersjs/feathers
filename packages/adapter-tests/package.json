@@ -37,6 +37,6 @@
     "@feathersjs/errors": "^3.3.6",
     "@feathersjs/feathers": "^3.3.1",
     "feathers-memory": "^3.0.2",
-    "mocha": "^5.2.0"
+    "mocha": "^6.0.2"
   }
 }
