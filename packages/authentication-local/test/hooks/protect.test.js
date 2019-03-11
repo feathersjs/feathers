@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { protect } = require('../../lib');
+const { hooks: { protect } } = require('../../lib');
 
 function testOmit (title, property) {
   describe(title, () => {

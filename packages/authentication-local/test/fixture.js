@@ -2,7 +2,8 @@ const feathers = require('@feathersjs/feathers');
 const memory = require('feathers-memory');
 const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
 
-const { LocalStrategy, hashPassword, protect } = require('../lib');
+const { LocalStrategy, hooks } = require('../lib');
+const { hashPassword, protect } = hooks;
 
 module.exports = (app = feathers()) => {
   const authentication = new AuthenticationService(app);
