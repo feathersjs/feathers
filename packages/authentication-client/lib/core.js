@@ -88,7 +88,7 @@ exports.AuthenticationClient = class AuthenticationClient {
         if (!accessToken) {
           throw new NotAuthenticated('No accessToken found in storage');
         }
-        
+
         return this.authenticate({
           strategy: this.options.jwtStrategy,
           accessToken
@@ -109,6 +109,8 @@ exports.AuthenticationClient = class AuthenticationClient {
         const { accessToken } = authResult;
 
         this.authenticated = true;
+        this.app.emit('login', authResult);
+        this.app.emit('authenticated', authResult);
 
         return this.setJwt(accessToken).then(() => authResult);
       });
@@ -122,6 +124,7 @@ exports.AuthenticationClient = class AuthenticationClient {
     return this.app.get('authentication')
       .then(() => this.service.remove(null))
       .then(() => this.removeJwt())
-      .then(() => this.reset());
+      .then(() => this.reset())
+      .then(authResult => this.app.emit('logout', authResult));
   }
 };

@@ -53,12 +53,18 @@ describe('@feathersjs/authentication-client', () => {
       .then(res => assert.strictEqual(res, undefined));
   });
 
-  it('authenticate and authentication hook', () => {
+  it('authenticate, authentication hook, login event', () => {
     const data = {
       strategy: 'testing'
     };
 
-    return app.authenticate(data).then(result => {
+    const promise = new Promise(resolve => {
+      app.once('login', resolve);
+    });
+
+    app.authenticate(data);
+
+    return promise.then(result => {
       assert.deepStrictEqual(result, {
         accessToken,
         data,
@@ -77,6 +83,18 @@ describe('@feathersjs/authentication-client', () => {
     }).then(result => {
       assert.deepStrictEqual(result.accessToken, accessToken);
       assert.deepStrictEqual(result.user, user);
+    });
+  });
+
+  it('logout event', () => {
+    const promise = new Promise(resolve => app.once('logout', resolve));
+
+    app.authenticate({
+      strategy: 'testing'
+    }).then(() => app.logout());
+
+    return promise.then(result => {
+      assert.deepStrictEqual(result.accessToken, accessToken);
     });
   });
 
