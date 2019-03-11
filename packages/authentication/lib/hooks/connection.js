@@ -1,7 +1,6 @@
-const { merge } = require('lodash');
 const debug = require('debug')('@feathersjs/authentication/hooks/connection');
 
-module.exports = () => {
+module.exports = (strategy = 'jwt') => {
   return context => {
     const { method, result, params: { connection } } = context;
     const { accessToken, ...rest } = result;
@@ -17,8 +16,8 @@ module.exports = () => {
       delete connection.authentication;
     } else if (method === 'create' && accessToken) {
       debug('Adding authentication information to real-time connection');
-      merge(connection, rest, {
-        authentication: { accessToken }
+      Object.assign(connection, rest, {
+        authentication: { strategy, accessToken }
       });
     }
 
