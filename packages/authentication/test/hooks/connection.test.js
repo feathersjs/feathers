@@ -47,7 +47,7 @@ describe('authentication/hooks/connection', () => {
     return service.create({}, { connection }).then(() => {
       assert.deepStrictEqual(connection, {
         authentication: {
-          strategy: 'test',
+          strategy: 'jwt',
           accessToken: '1234'
         },
         additionalParams: true
