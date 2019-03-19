@@ -40,8 +40,14 @@ module.exports = (_settings, ..._strategies) => {
       );
     }
 
-    if (authentication) {
-      const authParams = omit(params, 'provider', 'authentication');
+    if (!authentication && provider) {
+      return Promise.reject(
+        new NotAuthenticated('Not authenticated')
+      );
+    } else if (authentication && authentication !== true) {
+      const authParams = Object.assign({}, params, {
+        authentication: true
+      });
 
       debug('Authenticating with', authentication, strategies);
 
@@ -51,10 +57,6 @@ module.exports = (_settings, ..._strategies) => {
 
           return context;
         });
-    } else if (!authentication && provider) {
-      return Promise.reject(
-        new NotAuthenticated('Not authenticated')
-      );
     }
 
     return context;

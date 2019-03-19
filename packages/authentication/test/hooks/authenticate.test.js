@@ -160,6 +160,17 @@ describe('authentication/hooks/authenticate', () => {
     });
   });
 
+  it('passes with authentication set to true', () => {
+    const params = {
+      authentication: true,
+      provider: 'rest'
+    };
+
+    return app.service('users').get(1, params).then(result => {
+      assert.deepStrictEqual(result, params);
+    });
+  });
+
   it('errors when used on the authentication service', () => {
     const auth = app.service('authentication');
 
