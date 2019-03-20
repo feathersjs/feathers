@@ -126,7 +126,9 @@ describe('authentication/hooks/authenticate', () => {
     };
 
     return app.service('users').get(1, params).then(result => {
-      assert.deepStrictEqual(result, Object.assign({}, params, Strategy2.result));
+      assert.deepStrictEqual(result, Object.assign({
+        authentication: true
+      }, Strategy2.result));
     });
   });
 

@@ -45,7 +45,7 @@ module.exports = (_settings, ..._strategies) => {
         new NotAuthenticated('Not authenticated')
       );
     } else if (authentication && authentication !== true) {
-      const authParams = Object.assign({}, params, {
+      const authParams = Object.assign(omit(params, 'provider'), {
         authentication: true
       });
 
