@@ -94,7 +94,7 @@ describe('@feathersjs/authentication-client', () => {
     }).then(() => app.logout());
 
     return promise.then(result => {
-      assert.deepStrictEqual(result.accessToken, accessToken);
+      assert.deepStrictEqual(result, { id: null });
     });
   });
 
