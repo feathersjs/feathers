@@ -40,7 +40,7 @@ module.exports = (_settings, ..._strategies) => {
       );
     }
 
-    if (authentication) {
+    if (authentication && authentication !== true) {
       const authParams = omit(params, 'provider', 'authentication');
 
       debug('Authenticating with', authentication, strategies);
