@@ -68,14 +68,10 @@ exports.AuthenticationClient = class AuthenticationClient {
   }
 
   reset () {
-    // Reset the internal authentication state
-    // but not the accessToken from storage
-    const authResult = this.app.get('authentication');
-
     this.app.set('authentication', null);
     this.authenticated = false;
 
-    return authResult;
+    return Promise.resolve(null);
   }
 
   reauthenticate (force = false) {
@@ -88,12 +84,12 @@ exports.AuthenticationClient = class AuthenticationClient {
         if (!accessToken) {
           throw new NotAuthenticated('No accessToken found in storage');
         }
-        
+
         return this.authenticate({
           strategy: this.options.jwtStrategy,
           accessToken
         });
-      });
+      }).catch(error => this.removeJwt().then(() => Promise.reject(error)));
     }
 
     return authPromise;
@@ -109,9 +105,11 @@ exports.AuthenticationClient = class AuthenticationClient {
         const { accessToken } = authResult;
 
         this.authenticated = true;
+        this.app.emit('login', authResult);
+        this.app.emit('authenticated', authResult);
 
         return this.setJwt(accessToken).then(() => authResult);
-      });
+      }).catch(error => this.reset().then(() => Promise.reject(error)));
 
     this.app.set('authentication', promise);
 
@@ -121,7 +119,13 @@ exports.AuthenticationClient = class AuthenticationClient {
   logout () {
     return this.app.get('authentication')
       .then(() => this.service.remove(null))
-      .then(() => this.removeJwt())
-      .then(() => this.reset());
+      .then(authResult => this.removeJwt()
+        .then(this.reset())
+        .then(() => {
+          this.app.emit('logout', authResult);
+
+          return authResult;
+        })
+      );
   }
 };

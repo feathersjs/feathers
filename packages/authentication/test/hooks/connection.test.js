@@ -14,7 +14,9 @@ describe('authentication/hooks/connection', () => {
         }
 
         return Promise.resolve({
-          accessToken: '1234'
+          accessToken: '1234',
+          authentication: { strategy: 'test' },
+          additionalParams: true
         });
       },
 
@@ -32,17 +34,23 @@ describe('authentication/hooks/connection', () => {
   it('create does nothing when there is no connection', () => {
     return service.create({}, {}).then(result => {
       assert.deepStrictEqual(result, {
-        accessToken: '1234'
+        accessToken: '1234',
+        authentication: { strategy: 'test' },
+        additionalParams: true
       });
     });
   });
 
-  it('create (login) updates `params.connection.authentication`', () => {
+  it('create (login) updates `params.connection.authentication` with all params', () => {
     const connection = {};
 
     return service.create({}, { connection }).then(() => {
       assert.deepStrictEqual(connection, {
-        authentication: { strategy: 'jwt', accessToken: '1234' }
+        authentication: {
+          strategy: 'jwt',
+          accessToken: '1234'
+        },
+        additionalParams: true
       });
     });
   });

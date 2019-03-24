@@ -1,7 +1,7 @@
 const assert = require('assert');
 
 const getApp = require('../fixture');
-const { hashPassword } = require('../../lib');
+const { hooks: { hashPassword } } = require('../../lib');
 
 describe('@feathersjs/authentication-local/hooks/hash-password', () => {
   let app;

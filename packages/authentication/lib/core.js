@@ -104,6 +104,7 @@ module.exports = class AuthenticationBase {
     }
 
     const { strategy } = authentication;
+    const authParams = Object.assign(params, { authentication: true });
 
     // Throw an error is a `strategy` is indicated but not in the allowed strategies
     if (strategy && !allowed.includes(strategy)) {
@@ -116,7 +117,7 @@ module.exports = class AuthenticationBase {
     const promise = strategies.reduce((acc, authStrategy) => {
       return acc.then(({ result, error }) => {
         if (!result) {
-          return authStrategy.authenticate(authentication, params)
+          return authStrategy.authenticate(authentication, authParams)
             // Set result
             .then(newResult => ({ result: newResult }))
             // Use caught error or previous error if it already exists
