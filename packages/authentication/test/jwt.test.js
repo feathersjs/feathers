@@ -150,6 +150,19 @@ describe('authentication/jwt', () => {
         assert.deepStrictEqual(authResult.authentication.payload, payload);
       });
     });
+
+    it('errors when trying to set invalid option', () => {
+      app.get('authentication').otherJwt = {
+        expiresIn: 'something'
+      };
+
+      try {
+        app.service('authentication').register('otherJwt', new JWTStrategy());
+        assert.fail('Should never get here');
+      } catch (error) {
+        assert.strictEqual(error.message, `Invalid JwtStrategy option 'authentication.otherJwt.expiresIn'. Did you mean to set it in 'authentication.jwtOptions'?`);
+      }
+    });
   });
 
   describe('parse', () => {

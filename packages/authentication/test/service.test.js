@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const feathers = require('@feathersjs/feathers');
 const memory = require('feathers-memory');
 
-const getOptions = require('../lib/options');
+const defaultOptions = require('../lib/options');
 const AuthService = require('../lib/service');
 const { Strategy1 } = require('./fixtures');
 
@@ -27,7 +27,7 @@ describe('authentication/service', () => {
   });
 
   it('settings returns authentication options', () => {
-    assert.deepStrictEqual(service.configuration, getOptions(app.get('authentication')));
+    assert.deepStrictEqual(service.configuration, Object.assign({}, defaultOptions, app.get('authentication')));
   });
 
   describe('create', () => {
@@ -201,6 +201,17 @@ describe('authentication/service', () => {
         assert.fail('Should never get here');
       } catch (error) {
         assert.strictEqual(error.message, `A 'secret' must be provided in your authentication configuration`);
+      }
+    });
+
+    it('errors when there is stragies', () => {
+      app.get('authentication').strategies = [];
+
+      try {
+        app.setup();
+        assert.fail('Should never get here');
+      } catch (error) {
+        assert.strictEqual(error.message, `At least one valid authentication strategy required in 'authentication.strategies'`);
       }
     });
 

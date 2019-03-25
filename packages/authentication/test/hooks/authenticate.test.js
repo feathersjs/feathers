@@ -11,10 +11,12 @@ describe('authentication/hooks/authenticate', () => {
   beforeEach(() => {
     app = feathers();
     app.use('/authentication', new AuthenticationService(app, 'authentication', {
-      secret: 'supersecret'
+      secret: 'supersecret',
+      strategies: [ 'first' ]
     }));
     app.use('/auth-v2', new AuthenticationService(app, 'auth-v2', {
-      secret: 'supersecret'
+      secret: 'supersecret',
+      strategies: [ 'test' ]
     }));
     app.use('/users', {
       id: 'name',
