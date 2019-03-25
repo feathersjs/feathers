@@ -53,6 +53,10 @@ module.exports = class AuthenticationService extends AuthenticationCore {
           this.getJwtOptions(authResult, params)
         ]);
       }).then(([ authResult, payload, jwtOptions ]) => {
+        if (authResult.accessToken) {
+          return authResult;
+        }
+        
         debug('Creating JWT with', payload, jwtOptions);
 
         return this.createJWT(payload, jwtOptions, params.secret)
