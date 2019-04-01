@@ -39,6 +39,25 @@ describe('authentication/core', () => {
       assert.strictEqual(auth.configuration.entity, 'user');
     });
 
+    it('allows to override jwtOptions, does not merge', () => {
+      const { jwtOptions } = auth.configuration;
+      const auth2options = {
+        jwtOptions: {
+          expiresIn: '1w'
+        }
+      };
+
+      app.set('auth2', auth2options);
+
+      const auth2 = new AuthenticationCore(app, 'auth2');
+
+      assert.ok(jwtOptions);
+      assert.strictEqual(jwtOptions.expiresIn, '1d');
+      assert.strictEqual(jwtOptions.issuer, 'feathers');
+
+      assert.deepStrictEqual(auth2.configuration.jwtOptions, auth2options.jwtOptions);
+    });
+
     it('sets configKey and defaultAuthentication', () => {
       assert.strictEqual(app.get('defaultAuthentication'), 'authentication');
     });

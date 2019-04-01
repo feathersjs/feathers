@@ -4,7 +4,7 @@ const jsonwebtoken = require('jsonwebtoken');
 const uuidv4 = require('uuid/v4');
 const { NotAuthenticated, BadRequest } = require('@feathersjs/errors');
 
-const getOptions = require('./options');
+const defaultOptions = require('./options');
 const debug = require('debug')('@feathersjs/authentication/base');
 const createJWT = promisify(jsonwebtoken.sign);
 const verifyJWT = promisify(jsonwebtoken.verify);
@@ -25,7 +25,7 @@ module.exports = class AuthenticationBase {
 
   get configuration () {
     // Always returns a copy of the authentication configuration
-    return getOptions(this.app.get(this.configKey));
+    return Object.assign({}, defaultOptions, this.app.get(this.configKey));
   }
 
   get strategyNames () {

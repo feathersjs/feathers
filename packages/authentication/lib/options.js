@@ -1,6 +1,4 @@
-const { merge } = require('lodash');
-
-const defaults = {
+module.exports = {
   entity: 'user',
   service: 'users',
   strategies: [],
@@ -11,8 +9,4 @@ const defaults = {
     algorithm: 'HS256',
     expiresIn: '1d'
   }
-};
-
-module.exports = function (...otherOptions) {
-  return merge({}, defaults, ...otherOptions);
 };
