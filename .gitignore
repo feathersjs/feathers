@@ -36,3 +36,5 @@ node_modules
 # Distributables
 dist/
 .nyc_output/
+
+packages/authentication/lib
