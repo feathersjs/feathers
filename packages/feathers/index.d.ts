@@ -10,10 +10,9 @@
 /// <reference types="node" />
 
 import { EventEmitter } from 'events';
-import * as self from './lib';
 
 // tslint:disable-next-line no-unnecessary-generics
-declare const feathers: (<T = any>() => Application<T>) & typeof self;
+declare const feathers: (<T = any>() => Application<T>);
 export default feathers;
 
 export const version: string;
@@ -147,17 +146,25 @@ export interface ServiceMethods<T> {
 
     get?(id: Id, params?: Params): Promise<T>;
 
-    create?(data: T | Partial<T> | Array<Partial<T>>, params: Params): Promise<T | T[]>;
+    create?(data: Partial<T> | Array<Partial<T>>, params?: Params): Promise<T | T[]>;
 
     update?(id: NullableId, data: T, params?: Params): Promise<T>;
 
-    patch?(id: NullableId, data: Partial<T>|Pick<T, keyof T>, params?: Params): Promise<T>;
+    patch?(id: NullableId, data: Partial<T>, params?: Params): Promise<T>;
 
     remove?(id: NullableId, params?: Params): Promise<T>;
 }
 
 export interface SetupMethod {
-    setup?(app: Application, path: string): void;
+    setup(app: Application, path: string): void;
+}
+
+export interface ServiceOverloads<T> {
+    create?(data: Array<Partial<T>>, params?: Params): Promise<T[]>;
+
+    create?(data: Partial<T>, params?: Params): Promise<T>;
+
+    patch?(id: NullableId, data: Pick<T, keyof T>, params?: Params): Promise<T>;
 }
 
 export interface ServiceAddons<T> extends EventEmitter {
@@ -165,7 +172,7 @@ export interface ServiceAddons<T> extends EventEmitter {
     hooks(hooks: Partial<HooksObject>): this;
 }
 
-export type Service<T> = ServiceAddons<T> & ServiceMethods<T>;
+export type Service<T> = ServiceOverloads<T> & ServiceAddons<T> & ServiceMethods<T>;
 
 export interface Application<ServiceTypes = any> extends EventEmitter {
     get(name: string): any;

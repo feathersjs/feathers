@@ -45,6 +45,11 @@ export class JWTStrategy implements AuthenticationStrategy {
     }
   }
 
+  /**
+   * Return the entity for a given id
+   * @param id The id to use
+   * @param params Service call parameters
+   */
   async getEntity(id: string, params: Params) {
     const { service } = this.configuration;
     const entityService = this.app.service(service);

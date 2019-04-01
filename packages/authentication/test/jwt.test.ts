@@ -1,15 +1,21 @@
 import assert from 'assert';
 import { merge } from 'lodash';
-import feathers, { Application } from '@feathersjs/feathers';
+import feathers, { Application, Service } from '@feathersjs/feathers';
 // @ts-ignore
 import memory from 'feathers-memory';
 
 import { AuthenticationService, JWTStrategy, hooks } from '../src';
+import { AuthenticationResult } from '../lib/core';
+import { ServerResponse } from 'http';
+import { MockRequest } from './fixtures';
 
 const { authenticate } = hooks;
 
 describe('authentication/jwt', () => {
-  let app: Application;
+  let app: Application<{
+    authentication: AuthenticationService & Service<AuthenticationResult>,
+    users: Service<any>
+  }>;
   let user: any;
   let accessToken: string;
   let payload: any;
@@ -37,7 +43,9 @@ describe('authentication/jwt', () => {
     const service = app.service('authentication');
 
     app.service('protected').hooks({
-      before: authenticate('jwt')
+      before: {
+        all: [ authenticate('jwt') ]
+      }
     });
 
     user = await app.service('users').create({
@@ -149,7 +157,7 @@ describe('authentication/jwt', () => {
         strategy: 'jwt',
         accessToken
       });
-        
+
       assert.strictEqual(authResult.accessToken, accessToken);
       assert.deepStrictEqual(authResult.user, user);
       assert.deepStrictEqual(authResult.authentication.payload, payload);
@@ -170,18 +178,24 @@ describe('authentication/jwt', () => {
   });
 
   describe('parse', () => {
+    const res = {} as ServerResponse;
+
     it('returns null when header not set', async () => {
-      const result = await app.service('authentication').parse({}, {}, 'jwt');
+      const req = {} as MockRequest;
+
+      const result = await app.service('authentication').parse(req, res, 'jwt');
 
       assert.strictEqual(result, null);
     });
 
     it('parses plain Authorization header', async () => {
-      const result = await app.service('authentication').parse({
+      const req = {
         headers: {
           authorization: accessToken
         }
-      }, {}, 'jwt');
+      } as MockRequest;
+
+      const result = await app.service('authentication').parse(req, res, 'jwt');
 
       assert.deepStrictEqual(result, {
         strategy: 'jwt',
@@ -190,11 +204,13 @@ describe('authentication/jwt', () => {
     });
 
     it('parses Authorization header with Bearer scheme', async () => {
-      const result = await app.service('authentication').parse({
+      const req = {
         headers: {
           authorization: ` Bearer ${accessToken} `
         }
-      }, {}, 'jwt');
+      } as MockRequest;
+
+      const result = await app.service('authentication').parse(req, res, 'jwt');
 
       assert.deepStrictEqual(result, {
         strategy: 'jwt',
@@ -203,11 +219,13 @@ describe('authentication/jwt', () => {
     });
 
     it('return null when scheme does not match', async () => {
-      const result = await app.service('authentication').parse({
+      const req = {
         headers: {
           authorization: ` Basic something`
         }
-      }, {}, 'jwt');
+      } as MockRequest;
+
+      const result = await app.service('authentication').parse(req, res, 'jwt');
 
       assert.strictEqual(result, null);
     });

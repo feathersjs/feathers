@@ -8,6 +8,12 @@ import { Params, ServiceMethods } from '@feathersjs/feathers';
 const debug = Debug('@feathersjs/authentication/service');
 
 export class AuthenticationService extends AuthenticationBase implements ServiceMethods<AuthenticationResult> {
+  /**
+   * Return the payload for a JWT based on the authentication result.
+   * Called internally by the `create` method.
+   * @param _authResult The current authentication result
+   * @param params The service call parameters
+   */
   getPayload(_authResult: AuthenticationResult, params: Params) {
     // Uses `params.payload` or returns an empty payload
     const { payload = {} } = params;
@@ -15,6 +21,12 @@ export class AuthenticationService extends AuthenticationBase implements Service
     return Promise.resolve(payload);
   }
 
+  /**
+   * Returns the JWT options based on an authentication result.
+   * By default sets the JWT subject to the entity id.
+   * @param authResult The authentication result
+   * @param params Service call parameters
+   */
   async getJwtOptions(authResult: AuthenticationResult, params: Params) {
     const { service, entity, entityId } = this.configuration;
     const jwtOptions = merge({}, params.jwt);
@@ -32,9 +44,15 @@ export class AuthenticationService extends AuthenticationBase implements Service
       jwtOptions.subject = `${subject}`;
     }
 
-    return Promise.resolve(jwtOptions);
+    return jwtOptions;
   }
 
+  /**
+   * Create and return a new JWT for a given authentication request.
+   * Will trigger the `login` event.
+   * @param data The authentication request (should include `strategy` key)
+   * @param params Service call parameters
+   */
   async create(data: AuthenticationRequest, params?: Params) {
     const { strategies } = this.configuration;
 
@@ -62,6 +80,12 @@ export class AuthenticationService extends AuthenticationBase implements Service
     return Object.assign({}, { accessToken }, authResult);
   }
 
+  /**
+   * Mark a JWT as removed. By default only verifies the JWT and returns the result.
+   * Triggers the `logout` event.
+   * @param id The JWT to remove or null
+   * @param params Service call parameters
+   */
   async remove(id: null|string, params?: Params) {
     const { authentication } = params;
     const { strategies } = this.configuration;
@@ -76,6 +100,9 @@ export class AuthenticationService extends AuthenticationBase implements Service
     return this.authenticate(authentication, params, ...strategies);
   }
 
+  /**
+   * Validates the service configuration.
+   */
   setup() {
     // The setup method checks for valid settings and registers the
     // connection and event (login, logout) hooks
