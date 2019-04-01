@@ -23,8 +23,8 @@ function init () {
           if (value.indexOf('\\') === 0) {
             value = value.replace('\\', '');
           } else {
-            if (process.env[value]) {
-              value = process.env[value];
+            if (process.env[name]) {
+              value = process.env[name];
             } else if (value.indexOf('.') === 0 || value.indexOf('..') === 0) {
               // Make relative paths absolute
               value = path.resolve(
