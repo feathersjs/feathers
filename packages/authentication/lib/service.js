@@ -53,6 +53,10 @@ module.exports = class AuthenticationService extends AuthenticationCore {
           this.getJwtOptions(authResult, params)
         ]);
       }).then(([ authResult, payload, jwtOptions ]) => {
+        if (authResult.accessToken) {
+          return authResult;
+        }
+        
         debug('Creating JWT with', payload, jwtOptions);
 
         return this.createJWT(payload, jwtOptions, params.secret)
@@ -79,7 +83,7 @@ module.exports = class AuthenticationService extends AuthenticationCore {
   setup (app, path) {
     // The setup method checks for valid settings and registers the
     // connection and event (login, logout) hooks
-    const { secret, service, entity, entityId } = this.configuration;
+    const { secret, service, entity, entityId, strategies } = this.configuration;
 
     if (typeof secret !== 'string') {
       throw new Error(`A 'secret' must be provided in your authentication configuration`);
@@ -93,6 +97,10 @@ module.exports = class AuthenticationService extends AuthenticationCore {
       if (this.app.service(service).id === undefined && entityId === undefined) {
         throw new Error(`The '${service}' service does not have an 'id' property and no 'entityId' option is set.`);
       }
+    }
+
+    if (strategies.length === 0) {
+      throw new Error(`At least one valid authentication strategy required in '${this.configKey}.strategies'`);
     }
 
     this.hooks({

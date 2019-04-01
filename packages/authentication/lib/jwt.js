@@ -26,6 +26,16 @@ module.exports = class JWTStrategy {
     }, config);
   }
 
+  verifyConfiguration () {
+    const allowedKeys = [ 'entity', 'service', 'header', 'schemes' ];
+
+    for (let key of Object.keys(this.configuration)) {
+      if (!allowedKeys.includes(key)) {
+        throw new Error(`Invalid JwtStrategy option 'authentication.${this.name}.${key}'. Did you mean to set it in 'authentication.jwtOptions'?`);
+      }
+    }
+  }
+
   getEntity (id, params) {
     const { service } = this.configuration;
     const entityService = this.app.service(service);
