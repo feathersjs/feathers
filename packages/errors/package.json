@@ -4,6 +4,7 @@
 	"version": "3.3.6",
 	"homepage": "https://feathersjs.com",
 	"main": "lib/index",
+	"types": "lib/index.d.ts",
 	"keywords": [
 		"feathers",
 		"feathers-plugin"
