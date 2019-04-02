@@ -1,19 +1,22 @@
-const assert = require('assert');
-const { LocalStrategy } = require('../lib');
-const getApp = require('./fixture');
+import assert from 'assert';
+import { LocalStrategy } from '../src';
+// @ts-ignore
+import getApp from './fixture';
+import { Application } from '@feathersjs/feathers';
 
 describe('@feathersjs/authentication-local/strategy', () => {
   const password = 'localsecret';
   const email = 'localtester@feathersjs.com';
 
-  let app, user;
+  let app: Application;
+  let user: any;
 
   beforeEach(() => {
     app = getApp();
 
     return app.service('users')
       .create({ email, password })
-      .then(createdUser => {
+      .then((createdUser: any) => {
         user = createdUser;
       });
   });
@@ -39,7 +42,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
       password
     }).then(() => {
       assert.fail('Should never get here');
-    }).catch(error => {
+    }).catch((error: Error) => {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Invalid login');
     });
@@ -53,7 +56,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
       email
     }).then(() => {
       assert.fail('Should never get here');
-    }).catch(error => {
+    }).catch((error: Error) => {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Invalid login');
     });
@@ -67,7 +70,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
       password: 'dummy'
     }).then(() => {
       assert.fail('Should never get here');
-    }).catch(error => {
+    }).catch((error: Error) => {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Invalid login');
     });
@@ -85,7 +88,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
       email: userEmail
     })).then(() => {
       assert.fail('Should never get here');
-    }).catch(error => {
+    }).catch((error: Error) => {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Invalid login');
     });
@@ -97,14 +100,14 @@ describe('@feathersjs/authentication-local/strategy', () => {
       strategy: 'local',
       email,
       password
-    }).then(authResult => {
+    }).then((authResult: any) => {
       const { accessToken } = authResult;
 
       assert.ok(accessToken);
       assert.strictEqual(authResult.user.email, email);
 
       return authService.verifyJWT(accessToken);
-    }).then(decoded => {
+    }).then((decoded: any) => {
       assert.strictEqual(decoded.sub, `${user.id}`);
     });
   });
@@ -118,7 +121,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
     }, {
       provider: 'rest',
       paginate: false
-    }).then(authResult => {
+    }).then((authResult: any) => {
       const { accessToken } = authResult;
 
       assert.ok(accessToken);
@@ -126,7 +129,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
       assert.strictEqual(authResult.user.passsword, undefined);
 
       return authService.verifyJWT(accessToken);
-    }).then(decoded => {
+    }).then((decoded: any) => {
       assert.strictEqual(decoded.sub, `${user.id}`);
     });
   });

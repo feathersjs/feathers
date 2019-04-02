@@ -54,7 +54,7 @@ export interface AuthenticationStrategy {
    * @param req The HTTP request
    * @param res The HTTP response
    */
-  parse(req: IncomingMessage, res: ServerResponse): Promise<AuthenticationRequest|null>;
+  parse?(req: IncomingMessage, res: ServerResponse): Promise<AuthenticationRequest|null>;
 }
 
 export interface JwtVerifyOptions extends VerifyOptions {
