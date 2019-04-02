@@ -37,4 +37,6 @@ node_modules
 dist/
 .nyc_output/
 
+# TypeScript compiled files
 packages/authentication/lib
+packages/authentication-local/lib
