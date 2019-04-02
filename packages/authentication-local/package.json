@@ -26,11 +26,9 @@
     "node": ">= 6"
   },
   "scripts": {
-    "prepublish": "npm run compile",
-    "lint": "tslint --fix src/**/* test/**/*",
+    "prepublishOnly": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
-    "test": "npm run lint && npm run mocha",
-    "mocha": "mocha --opts ../../mocha.ts.opts --recursive test/**.test.ts test/**/*.test.ts"
+    "test": "mocha --opts ../../mocha.ts.opts --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"

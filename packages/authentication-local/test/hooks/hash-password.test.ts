@@ -1,10 +1,14 @@
-const assert = require('assert');
+import assert from 'assert';
+import { Application } from '@feathersjs/feathers';
 
-const getApp = require('../fixture');
-const { hooks: { hashPassword } } = require('../../lib');
+import { hooks } from '../../src';
+// @ts-ignore
+import getApp from '../fixture';
+
+const { hashPassword } = hooks;
 
 describe('@feathersjs/authentication-local/hooks/hash-password', () => {
-  let app;
+  let app: Application;
 
   beforeEach(() => {
     app = getApp();
@@ -12,6 +16,7 @@ describe('@feathersjs/authentication-local/hooks/hash-password', () => {
 
   it('throws error when no field provided', () => {
     try {
+      // @ts-ignore
       hashPassword();
       assert.fail('Should never get here');
     } catch (error) {
@@ -19,33 +24,39 @@ describe('@feathersjs/authentication-local/hooks/hash-password', () => {
     }
   });
 
-  it('errors when authentication service does not exist', () => {
+  it('errors when authentication service does not exist', async () => {
     delete app.services.authentication;
 
-    return app.service('users').create({
-      email: 'dave@hashpassword.com',
-      password: 'supersecret'
-    }).then(() => assert.fail('Should never get here')).catch(error => {
+    try {
+      await app.service('users').create({
+        email: 'dave@hashpassword.com',
+        password: 'supersecret'
+      });
+      assert.fail('Should never get here');
+    } catch (error) {
       assert.strictEqual(error.message,
         `Could not find 'authentication' service to hash password`
       );
-    });
+    }
   });
 
-  it('errors when authentication strategy does not exist', () => {
+  it('errors when authentication strategy does not exist', async () => {
     delete app.services.authentication.strategies.local;
 
-    return app.service('users').create({
-      email: 'dave@hashpassword.com',
-      password: 'supersecret'
-    }).then(() => assert.fail('Should never get here')).catch(error => {
+    try {
+      await app.service('users').create({
+        email: 'dave@hashpassword.com',
+        password: 'supersecret'
+      });
+      assert.fail('Should never get here');
+    } catch (error) {
       assert.strictEqual(error.message,
         `Could not find 'local' strategy to hash password`
       );
-    });
+    }
   });
 
-  it('errors when authentication strategy does not exist', () => {
+  it('errors when authentication strategy does not exist', async () => {
     const users = app.service('users');
 
     users.hooks({
@@ -54,32 +65,35 @@ describe('@feathersjs/authentication-local/hooks/hash-password', () => {
       }
     });
 
-    return users.create({
-      email: 'dave@hashpassword.com',
-      password: 'supersecret'
-    }).then(() => assert.fail('Should never get here')).catch(error => {
+    try {
+      await users.create({
+        email: 'dave@hashpassword.com',
+        password: 'supersecret'
+      });
+      assert.fail('Should never get here');
+    } catch (error) {
       assert.strictEqual(error.message,
         `The 'hashPassword' hook should only be used as a 'before' hook`
       );
-    });
+    }
   });
 
-  it('hashes password on field', () => {
+  it('hashes password on field', async () => {
     const password = 'supersecret';
 
-    return app.service('users').create({
+    const user = await app.service('users').create({
       email: 'dave@hashpassword.com',
       password
-    }).then(user => {
-      assert.notStrictEqual(user.password, password);
     });
+
+    assert.notStrictEqual(user.password, password);
   });
 
-  it('does nothing when field is not present', () => {
-    return app.service('users').create({
+  it('does nothing when field is not present', async () => {
+    const user = await app.service('users').create({
       email: 'dave@hashpassword.com'
-    }).then(user => {
-      assert.strictEqual(user.password, undefined);
     });
+    
+    assert.strictEqual(user.password, undefined);
   });
 });

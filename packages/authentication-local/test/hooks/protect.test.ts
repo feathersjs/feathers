@@ -1,7 +1,10 @@
-const assert = require('assert');
-const { hooks: { protect } } = require('../../lib');
+import assert from 'assert';
+import { hooks } from '../../src';
+import { HookContext } from '@feathersjs/feathers';
 
-function testOmit (title, property) {
+const { protect } = hooks;
+
+function testOmit(title: string, property: string) {
   describe(title, () => {
     const fn = protect('password');
 
@@ -12,7 +15,7 @@ function testOmit (title, property) {
       };
       const context = {
         [property]: data
-      };
+      } as unknown as HookContext;
       const result = fn(context);
 
       assert.deepStrictEqual(result, {
@@ -31,7 +34,7 @@ function testOmit (title, property) {
       };
       const context = {
         [property]: data
-      };
+      } as unknown as HookContext;
       const result = hook(context);
 
       assert.deepStrictEqual(result, {
@@ -48,7 +51,7 @@ function testOmit (title, property) {
       };
       const context = {
         [property]: data
-      };
+      } as unknown as HookContext;
       const result = fn(context);
 
       assert.deepStrictEqual(result, {
@@ -59,7 +62,7 @@ function testOmit (title, property) {
 
     it('uses .toJSON (#48)', () => {
       class MyUser {
-        toJSON () {
+        toJSON() {
           return {
             email: 'test@user.com',
             password: 'supersecret'
@@ -70,7 +73,7 @@ function testOmit (title, property) {
       const data = new MyUser();
       const context = {
         [property]: data
-      };
+      } as unknown as HookContext;
       const result = fn(context);
 
       assert.deepStrictEqual(result, {
@@ -89,7 +92,7 @@ function testOmit (title, property) {
       }];
       const context = {
         [property]: data
-      };
+      } as unknown as HookContext;
       const result = fn(context);
 
       assert.deepStrictEqual(result, {
@@ -115,7 +118,7 @@ function testOmit (title, property) {
       const context = {
         method: 'find',
         [property]: data
-      };
+      } as unknown as HookContext;
       const result = fn(context);
 
       assert.deepStrictEqual(result, {
@@ -143,7 +146,7 @@ function testOmit (title, property) {
       const context = {
         [property]: data,
         params
-      };
+      } as unknown as HookContext;
       const result = fn(context);
 
       assert.deepStrictEqual(result, {
@@ -165,7 +168,7 @@ function testOmit (title, property) {
 describe('@feathersjs/authentication-local/hooks/protect', () => {
   it('does nothing when called with no result', () => {
     const fn = protect();
-    const original = {};
+    const original = {} as unknown as HookContext;
 
     assert.deepStrictEqual(fn(original), original);
   });
