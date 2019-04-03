@@ -5,12 +5,12 @@ module.exports = function (grunt) {
     browserName: 'firefox',
     platform: 'Windows 10'
   }, {
-    browserName: 'googlechrome',
+    browserName: 'chrome',
     platform: 'linux'
   }, {
     browserName: 'safari',
-    platform: 'OS X 10.14',
-    version: '12.0'
+    platform: 'Mac 10.13',
+    version: '11.0'
   }, {
     browserName: 'internet explorer',
     platform: 'Windows 8',
@@ -22,7 +22,7 @@ module.exports = function (grunt) {
   }, {
     browserName: 'MicrosoftEdge',
     platform: 'Windows 10',
-    version: 18
+    version: '18'
   }];
 
   grunt.registerTask('server', 'Start the test server', function () {
