@@ -7,13 +7,11 @@ module.exports = function (grunt) {
   }, {
     browserName: 'googlechrome',
     platform: 'linux'
-  },
-  // {
-  //   browserName: 'safari',
-  //   platform: 'OS X 10.11',
-  //   version: '9.0'
-  // },
-  {
+  }, {
+    browserName: 'safari',
+    platform: 'OS X 10.14',
+    version: '12.0'
+  }, {
     browserName: 'internet explorer',
     platform: 'Windows 8',
     version: '10'
@@ -21,6 +19,10 @@ module.exports = function (grunt) {
     browserName: 'internet explorer',
     platform: 'Windows 10',
     version: '11'
+  }, {
+    browserName: 'MicrosoftEdge',
+    platform: 'Windows 10',
+    version: 18
   }];
 
   grunt.registerTask('server', 'Start the test server', function () {
