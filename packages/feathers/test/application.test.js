@@ -23,10 +23,6 @@ describe('Feathers application', () => {
     assert.strictEqual(app.version, '3.0.0-development');
   });
 
-  it('sets SKIP on main', () => {
-    assert.strictEqual(feathers.SKIP, hooks.SKIP);
-  });
-
   it('is an event emitter', done => {
     const app = feathers();
     const original = { hello: 'world' };
