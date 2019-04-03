@@ -56,6 +56,32 @@ describe('Service events', () => {
       service.create({ message: 'Hello' });
     });
 
+    it('allows to skip event emitting', done => {
+      const app = feathers().use('/creator', {
+        create (data) {
+          return Promise.resolve(data);
+        }
+      });
+
+      const service = app.service('creator');
+
+      service.hooks({
+        before: {
+          create (context) {
+            context.event = null;
+
+            return context;
+          }
+        }
+      });
+
+      service.on('created', data => {
+        done(new Error('Should never get here'));
+      });
+
+      service.create({ message: 'Hello' }).then(() => done());
+    });
+
     it('.update and updated', done => {
       const app = feathers().use('/creator', {
         update (id, data) {

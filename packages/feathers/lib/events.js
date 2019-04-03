@@ -6,7 +6,7 @@ const Proto = require('uberproto');
 const eventHook = exports.eventHook = function eventHook () {
   return function (hook) {
     const { app, service } = hook;
-    const eventName = app.eventMappings[hook.method];
+    const eventName = hook.event === null ? hook.event : app.eventMappings[hook.method];
     const isHookEvent = service._hookEvents && service._hookEvents.indexOf(eventName) !== -1;
 
     // If this event is not being sent yet and we are not in an error hook
