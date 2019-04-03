@@ -1,6 +1,5 @@
 const assert = require('assert');
 const Proto = require('uberproto');
-const { hooks } = require('@feathersjs/commons');
 const feathers = require('../lib');
 
 describe('Feathers application', () => {

@@ -1,4 +1,3 @@
-const { hooks } = require('@feathersjs/commons');
 const Proto = require('uberproto');
 const Application = require('./application');
 const version = require('./version');
