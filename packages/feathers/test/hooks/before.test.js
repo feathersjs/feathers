@@ -182,7 +182,7 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          create (hook, next) {
+          create (hook) {
             assert.strictEqual(hook.type, 'before');
 
             hook.data.modified = 'data';
@@ -191,7 +191,7 @@ describe('`before` hooks', () => {
               modified: 'params'
             });
 
-            next(null, hook);
+            return hook;
           }
         }
       });
@@ -216,10 +216,11 @@ describe('`before` hooks', () => {
 
       someService.hooks({
         before: {
-          create (hook, next) {
+          create (hook) {
             hook.data.appPresent = typeof hook.app !== 'undefined';
             assert.strictEqual(hook.data.appPresent, true);
-            next(null, hook);
+
+            return hook;
           }
         }
       });
@@ -244,8 +245,8 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          update (hook, next) {
-            next(new Error('You are not allowed to update'));
+          update () {
+            throw new Error('You are not allowed to update');
           }
         }
       });
@@ -271,8 +272,8 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          remove (hook, next) {
-            next();
+          remove (hook) {
+            return hook;
           }
         }
       });
@@ -301,20 +302,20 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          create (hook, next) {
+          create (hook) {
             hook.params.modified = 'params';
 
-            next();
+            return hook;
           }
         }
       });
 
       service.hooks({
         before: {
-          create (hook, next) {
+          create (hook) {
             hook.data.modified = 'second data';
 
-            next();
+            return hook;
           }
         }
       });
@@ -344,15 +345,15 @@ describe('`before` hooks', () => {
       service.hooks({
         before: {
           create: [
-            function (hook, next) {
+            function (hook) {
               hook.params.modified = 'params';
 
-              next();
+              return hook;
             },
-            function (hook, next) {
+            function (hook) {
               hook.data.modified = 'second data';
 
-              next();
+              return hook;
             }
           ]
         }
@@ -377,9 +378,10 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          get (hook, next) {
+          get (hook) {
             hook.params.items = ['first'];
-            next();
+
+            return hook;
           }
         }
       });
@@ -387,13 +389,15 @@ describe('`before` hooks', () => {
       service.hooks({
         before: {
           get: [
-            function (hook, next) {
+            function (hook) {
               hook.params.items.push('second');
-              next();
+
+              return hook;
             },
-            function (hook, next) {
+            function (hook) {
               hook.params.items.push('third');
-              next();
+
+              return hook;
             }
           ]
         }
@@ -426,18 +430,20 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          all (hook, next) {
+          all (hook) {
             hook.params.beforeAllObject = true;
-            next();
+
+            return hook;
           }
         }
       });
 
       service.hooks({
         before: [
-          function (hook, next) {
+          function (hook) {
             hook.params.beforeAllMethodArray = true;
-            next();
+
+            return hook;
           }
         ]
       });
@@ -461,9 +467,10 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          get (hook, next) {
+          get (hook) {
             hook.params.test = this.number + 2;
-            next();
+
+            return hook;
           }
         }
       });
@@ -474,35 +481,6 @@ describe('`before` hooks', () => {
           number: 42,
           test: 44
         });
-      });
-    });
-
-    it('calling next() multiple times does not do anything', () => {
-      const app = feathers().use('/dummy', {
-        get (id) {
-          return Promise.resolve({ id });
-        }
-      });
-
-      const service = app.service('dummy');
-
-      service.hooks({
-        before: {
-          get: [
-            function (hook, next) {
-              next();
-            },
-
-            function (hook, next) {
-              next();
-              next();
-            }
-          ]
-        }
-      });
-
-      return service.get(10).then(data => {
-        assert.deepStrictEqual(data, { id: 10 });
       });
     });
   });

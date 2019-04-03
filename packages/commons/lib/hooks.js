@@ -1,9 +1,5 @@
 const { _: { each, pick }, createSymbol } = require('./utils');
 
-// To skip further hooks
-const SKIP = createSymbol('__feathersSkipHooks');
-
-exports.SKIP = SKIP;
 exports.ACTIVATE_HOOKS = createSymbol('__feathersActivateHooks');
 
 exports.createHookObject = function createHookObject (method, data = {}) {
@@ -115,10 +111,6 @@ exports.processHooks = function processHooks (hooks, initialHookObject) {
     // Either use the returned hook object or the current
     // hook object from the chain if the hook returned undefined
     if (current) {
-      if (current === SKIP) {
-        return SKIP;
-      }
-
       if (!exports.isHookObject(current)) {
         throw new Error(`${hookObject.type} hook for '${hookObject.method}' method returned invalid hook object`);
       }
@@ -132,18 +124,8 @@ exports.processHooks = function processHooks (hooks, initialHookObject) {
   const promise = hooks.reduce((promise, fn) => {
     const hook = fn.bind(this);
 
-    if (hook.length === 2) { // function(hook, next)
-      promise = promise.then(hookObject => hookObject === SKIP ? SKIP : new Promise((resolve, reject) => {
-        hook(hookObject, (error, result) =>
-          error ? reject(error) : resolve(result)
-        );
-      }));
-    } else { // function(hook)
-      promise = promise.then(hookObject => hookObject === SKIP ? SKIP : hook(hookObject));
-    }
-
     // Use the returned hook object or the old one
-    return promise.then(updateCurrentHook);
+    return promise.then(hookObject => hook(hookObject)).then(updateCurrentHook);
   }, Promise.resolve(hookObject));
 
   return promise.then(() => hookObject).catch(error => {
