@@ -274,67 +274,14 @@ describe('hook utilities', () => {
           return Promise.resolve(hook);
         },
 
-        function (hook, next) {
-          hook.chain.push('second');
-
-          next();
-        },
-
         hook => {
-          hook.chain.push('third');
+          hook.chain.push('second');
         },
 
         function (hook) {
-          hook.chain.push('fourth');
-
-          return hook;
-        }
-      ], dummyHook);
-
-      return promise.then(result => {
-        expect(result).to.deep.equal({
-          type: 'dummy',
-          method: 'something',
-          chain: [ 'first', 'second', 'third', 'fourth' ]
-        });
-      });
-    });
-
-    it('skip further hooks', () => {
-      const dummyHook = {
-        type: 'dummy',
-        method: 'something'
-      };
-
-      const promise = hooks.processHooks([
-        function (hook) {
-          hook.chain = [ 'first' ];
-
-          return Promise.resolve(hook);
-        },
-
-        function (hook, next) {
-          hook.chain.push('second');
-
-          next();
-        },
-
-        hook => {
           hook.chain.push('third');
 
-          return hooks.SKIP;
-        },
-
-        function (hook) {
-          hook.chain.push('fourth');
-
           return hook;
-        },
-
-        function (hook, next) {
-          hook.chain.push('fourth');
-
-          next();
         }
       ], dummyHook);
 
@@ -344,30 +291,6 @@ describe('hook utilities', () => {
           method: 'something',
           chain: [ 'first', 'second', 'third' ]
         });
-      });
-    });
-
-    it('next and next with error', () => {
-      const dummyHook = {
-        type: 'dummy',
-        method: 'something'
-      };
-
-      const promise = hooks.processHooks([
-        function (hook, next) {
-          hook.test = 'first ran';
-
-          next();
-        },
-
-        function (hook, next) {
-          next(new Error('This did not work'));
-        }
-      ], dummyHook);
-
-      return promise.catch(error => {
-        expect(error.message).to.equal('This did not work');
-        expect(error.hook.test).to.equal('first ran');
       });
     });
 
