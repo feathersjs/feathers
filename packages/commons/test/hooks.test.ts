@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const { hooks } = require('../lib');
+import { expect } from 'chai';
+import { hooks } from '../src';
 
 describe('hook utilities', () => {
   describe('.makeArguments', () => {
@@ -135,7 +135,7 @@ describe('hook utilities', () => {
     const hookData = { app, service };
 
     it('.toJSON', () => {
-      let hookObject = hooks.createHookObject('find', hookData);
+      const hookObject = hooks.createHookObject('find', hookData);
 
       expect(hookObject.toJSON()).to.deep.equal({
         method: 'find',
@@ -268,24 +268,24 @@ describe('hook utilities', () => {
       };
 
       const promise = hooks.processHooks([
-        function (hook) {
+        function (hook: any) {
           hook.chain = [ 'first' ];
 
           return Promise.resolve(hook);
         },
 
-        hook => {
+        (hook: any) => {
           hook.chain.push('second');
         },
 
-        function (hook) {
+        function (hook: any) {
           hook.chain.push('third');
 
           return hook;
         }
       ], dummyHook);
 
-      return promise.then(result => {
+      return promise.then((result: any) => {
         expect(result).to.deep.equal({
           type: 'dummy',
           method: 'something',
@@ -306,7 +306,7 @@ describe('hook utilities', () => {
         }
       ], dummyHook);
 
-      return promise.catch(e => {
+      return promise.catch((e: any) => {
         expect(e.message).to.equal(`dummy hook for 'something' method returned invalid hook object`);
         expect(typeof e.hook).to.equal('object');
       });
@@ -315,7 +315,7 @@ describe('hook utilities', () => {
 
   describe('.enableHooks', () => {
     it('with custom types', () => {
-      const base = {};
+      const base: any = {};
 
       hooks.enableHooks(base, [], ['test']);
 
@@ -325,7 +325,7 @@ describe('hook utilities', () => {
     });
 
     it('does nothing when .hooks method exists', () => {
-      const base = {
+      const base: any = {
         hooks () {}
       };
 
@@ -334,7 +334,7 @@ describe('hook utilities', () => {
     });
 
     describe('.hooks method', () => {
-      let base = {};
+      let base: any = {};
 
       beforeEach(() => {
         base = hooks.enableHooks({}, [ 'testMethod' ], [ 'dummy' ]);

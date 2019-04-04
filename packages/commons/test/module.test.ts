@@ -1,9 +1,9 @@
-const { expect } = require('chai');
-const { _ } = require('../lib');
+import { expect } from 'chai';
+import { _ } from '../src';
 
 describe('module', () => {
   it('is commonjs compatible', () => {
-    let commons = require('../lib');
+    const commons = require('../lib');
 
     expect(typeof commons).to.equal('object');
     expect(typeof commons.stripSlashes).to.equal('function');

@@ -1,11 +1,13 @@
 // Removes all leading and trailing slashes from a path
-exports.stripSlashes = function stripSlashes (name) {
+export function stripSlashes (name: string) {
   return name.replace(/^(\/+)|(\/+)$/g, '');
-};
+}
+
+export type KeyValueCallback<T> = (value: any, key: string) => T;
 
 // A set of lodash-y utility functions that use ES6
-const _ = exports._ = {
-  each (obj, callback) {
+export const _ = {
+  each (obj: any, callback: KeyValueCallback<void>) {
     if (obj && typeof obj.forEach === 'function') {
       obj.forEach(callback);
     } else if (_.isObject(obj)) {
@@ -13,54 +15,54 @@ const _ = exports._ = {
     }
   },
 
-  some (value, callback) {
+  some (value: any, callback: KeyValueCallback<boolean>) {
     return Object.keys(value)
       .map(key => [ value[key], key ])
       .some(([val, key]) => callback(val, key));
   },
 
-  every (value, callback) {
+  every (value: any, callback: KeyValueCallback<boolean>) {
     return Object.keys(value)
       .map(key => [ value[key], key ])
       .every(([val, key]) => callback(val, key));
   },
 
-  keys (obj) {
+  keys (obj: any) {
     return Object.keys(obj);
   },
 
-  values (obj) {
+  values (obj: any) {
     return _.keys(obj).map(key => obj[key]);
   },
 
-  isMatch (obj, item) {
+  isMatch (obj: any, item: any) {
     return _.keys(item).every(key => obj[key] === item[key]);
   },
 
-  isEmpty (obj) {
+  isEmpty (obj: any) {
     return _.keys(obj).length === 0;
   },
 
-  isObject (item) {
+  isObject (item: any) {
     return (typeof item === 'object' && !Array.isArray(item) && item !== null);
   },
 
-  isObjectOrArray (value) {
+  isObjectOrArray (value: any) {
     return typeof value === 'object' && value !== null;
   },
 
-  extend (...args) {
-    return Object.assign(...args);
+  extend (first: any, ...rest: any[]) {
+    return Object.assign(first, ...rest);
   },
 
-  omit (obj, ...keys) {
+  omit (obj: any, ...keys: string[]) {
     const result = _.extend({}, obj);
     keys.forEach(key => delete result[key]);
     return result;
   },
 
-  pick (source, ...keys) {
-    return keys.reduce((result, key) => {
+  pick (source: any, ...keys: string[]) {
+    return keys.reduce((result: { [key: string]: any }, key) => {
       if (source[key] !== undefined) {
         result[key] = source[key];
       }
@@ -70,7 +72,7 @@ const _ = exports._ = {
   },
 
   // Recursively merge the source object into the target object
-  merge (target, source) {
+  merge (target: any, source: any) {
     if (_.isObject(target) && _.isObject(source)) {
       Object.keys(source).forEach(key => {
         if (_.isObject(source[key])) {
@@ -86,15 +88,15 @@ const _ = exports._ = {
     }
     return target;
   }
-};
+}
 
 // Duck-checks if an object looks like a promise
-exports.isPromise = function isPromise (result) {
+export function isPromise (result: any) {
   return _.isObject(result) &&
     typeof result.then === 'function';
-};
+}
 
-exports.makeUrl = function makeUrl (path, app = {}) {
+export function makeUrl (path: string, app: any = {}) {
   const get = typeof app.get === 'function' ? app.get.bind(app) : () => {};
   const env = get('env') || process.env.NODE_ENV;
   const host = get('host') || process.env.HOST_NAME || 'localhost';
@@ -105,8 +107,8 @@ exports.makeUrl = function makeUrl (path, app = {}) {
   path = path || '';
 
   return `${protocol}://${host}${port}/${exports.stripSlashes(path)}`;
-};
+}
 
-exports.createSymbol = name => {
+export function createSymbol(name: string) {
   return typeof Symbol !== 'undefined' ? Symbol(name) : name;
-};
+}

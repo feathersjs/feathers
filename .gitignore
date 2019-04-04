@@ -41,3 +41,4 @@ dist/
 packages/authentication/lib
 packages/authentication-local/lib
 packages/configuration/lib
+packages/commons/lib

@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-expressions */
 
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-const {
+import {
   _,
   stripSlashes,
   isPromise,
   makeUrl,
   createSymbol
-} = require('../lib');
+} from '../src';
 
 describe('@feathersjs/commons utils', () => {
   it('stripSlashes', () => {
@@ -56,7 +56,7 @@ describe('@feathersjs/commons utils', () => {
         expect(value).to.equal('hi');
       });
 
-      _.each('moo', value => expect(false)
+      _.each('moo', () => expect(false)
         .to.equal(true, 'Should never get here')
       );
     });
@@ -172,11 +172,11 @@ describe('@feathersjs/commons utils', () => {
   });
 
   describe('makeUrl', function () {
-    let mockApp;
+    let mockApp: any;
 
     beforeEach(() => {
       mockApp = { env: 'development' };
-      mockApp.get = (value) => {
+      mockApp.get = (value: any) => {
         switch (value) {
           case 'port':
             return 3030;

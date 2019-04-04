@@ -14,7 +14,8 @@
     "object-literal-sort-keys": false,
     "ordered-imports": false,
     "arrow-parens": false,
-    "max-classes-per-file": [true, 5]
+    "max-classes-per-file": [true, 5],
+    "only-arrow-functions": false
   },
   "rulesDirectory": []
 }

@@ -1,8 +1,10 @@
-const { _: { each, pick }, createSymbol } = require('./utils');
+import { createSymbol, _ } from './utils';
 
-exports.ACTIVATE_HOOKS = createSymbol('__feathersActivateHooks');
+const { each, pick } = _;
 
-exports.createHookObject = function createHookObject (method, data = {}) {
+export const ACTIVATE_HOOKS = createSymbol('__feathersActivateHooks');
+
+export function createHookObject (method: string, data: any = {}) {
   const hook = {};
 
   Object.defineProperty(hook, 'toJSON', {
@@ -26,10 +28,10 @@ exports.createHookObject = function createHookObject (method, data = {}) {
         .find(path => app.services[path] === service);
     }
   });
-};
+}
 
 // Fallback used by `makeArguments` which usually won't be used
-exports.defaultMakeArguments = function defaultMakeArguments (hook) {
+export function defaultMakeArguments (hook: any) {
   const result = [];
 
   if (typeof hook.id !== 'undefined') {
@@ -43,11 +45,11 @@ exports.defaultMakeArguments = function defaultMakeArguments (hook) {
   result.push(hook.params || {});
 
   return result;
-};
+}
 
 // Turns a hook object back into a list of arguments
 // to call a service method with
-exports.makeArguments = function makeArguments (hook) {
+export function makeArguments (hook: any) {
   switch (hook.method) {
     case 'find':
       return [ hook.params ];
@@ -61,13 +63,13 @@ exports.makeArguments = function makeArguments (hook) {
       return [ hook.data, hook.params ];
   }
 
-  return exports.defaultMakeArguments(hook);
-};
+  return defaultMakeArguments(hook);
+}
 
 // Converts different hook registration formats into the
 // same internal format
-exports.convertHookData = function convertHookData (obj) {
-  let hook = {};
+export function convertHookData (obj: any) {
+  let hook: any = {};
 
   if (Array.isArray(obj)) {
     hook = { all: obj };
@@ -80,20 +82,20 @@ exports.convertHookData = function convertHookData (obj) {
   }
 
   return hook;
-};
+}
 
 // Duck-checks a given object to be a hook object
 // A valid hook object has `type` and `method`
-exports.isHookObject = function isHookObject (hookObject) {
+export function isHookObject (hookObject: any) {
   return typeof hookObject === 'object' &&
     typeof hookObject.method === 'string' &&
     typeof hookObject.type === 'string';
-};
+}
 
 // Returns all service and application hooks combined
 // for a given method and type `appLast` sets if the hooks
 // from `app` should be added last (or first by default)
-exports.getHooks = function getHooks (app, service, type, method, appLast = false) {
+export function getHooks (app: any, service: any, type: string, method: string, appLast: boolean = false) {
   const appHooks = app.__hooks[type][method] || [];
   const serviceHooks = service.__hooks[type][method] || [];
 
@@ -103,15 +105,16 @@ exports.getHooks = function getHooks (app, service, type, method, appLast = fals
   }
 
   return appHooks.concat(serviceHooks);
-};
+}
 
-exports.processHooks = function processHooks (hooks, initialHookObject) {
+export function processHooks (hooks: any[], initialHookObject: any) {
   let hookObject = initialHookObject;
-  let updateCurrentHook = current => {
+
+  const updateCurrentHook = (current: any) => {
     // Either use the returned hook object or the current
     // hook object from the chain if the hook returned undefined
     if (current) {
-      if (!exports.isHookObject(current)) {
+      if (!isHookObject(current)) {
         throw new Error(`${hookObject.type} hook for '${hookObject.method}' method returned invalid hook object`);
       }
 
@@ -121,11 +124,12 @@ exports.processHooks = function processHooks (hooks, initialHookObject) {
     return hookObject;
   };
   // Go through all hooks and chain them into our promise
-  const promise = hooks.reduce((promise, fn) => {
+  const promise = hooks.reduce((current: Promise<any>, fn) => {
+    // @ts-ignore
     const hook = fn.bind(this);
 
     // Use the returned hook object or the old one
-    return promise.then(hookObject => hook(hookObject)).then(updateCurrentHook);
+    return current.then((currentHook: any) => hook(currentHook)).then(updateCurrentHook);
   }, Promise.resolve(hookObject));
 
   return promise.then(() => hookObject).catch(error => {
@@ -133,44 +137,45 @@ exports.processHooks = function processHooks (hooks, initialHookObject) {
     error.hook = hookObject;
     throw error;
   });
-};
+}
 
 // Add `.hooks` functionality to an object
-exports.enableHooks = function enableHooks (obj, methods, types) {
+export function enableHooks (obj: any, methods: string[], types: string[]) {
   if (typeof obj.hooks === 'function') {
     return obj;
   }
 
-  const __hooks = {};
+  const hookData: any = {};
 
   types.forEach(type => {
     // Initialize properties where hook functions are stored
-    __hooks[type] = {};
+    hookData[type] = {};
   });
 
   // Add non-enumerable `__hooks` property to the object
   Object.defineProperty(obj, '__hooks', {
-    value: __hooks
+    value: hookData
   });
 
   return Object.assign(obj, {
-    hooks (allHooks) {
-      each(allHooks, (obj, type) => {
+    hooks (allHooks: any) {
+      each(allHooks, (current: any, type) => {
+        // @ts-ignore
         if (!this.__hooks[type]) {
           throw new Error(`'${type}' is not a valid hook type`);
         }
 
-        const hooks = exports.convertHookData(obj);
+        const hooks = convertHookData(current);
 
-        each(hooks, (value, method) => {
+        each(hooks, (_value, method) => {
           if (method !== 'all' && methods.indexOf(method) === -1) {
             throw new Error(`'${method}' is not a valid hook method`);
           }
         });
 
         methods.forEach(method => {
-          const myHooks = this.__hooks[type][method] ||
-            (this.__hooks[type][method] = []);
+          // @ts-ignore
+          const myHooks = this.__hooks[type][method] || (this.__hooks[type][method] = []);
 
           if (hooks.all) {
             myHooks.push.apply(myHooks, hooks.all);
@@ -185,4 +190,4 @@ exports.enableHooks = function enableHooks (obj, methods, types) {
       return this;
     }
   });
-};
+}
