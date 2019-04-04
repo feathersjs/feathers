@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
 import { get, omit } from 'lodash';
-import { NotAuthenticated } from '@feathersjs/errors';
-import { AuthenticationStrategy, AuthenticationBase, AuthenticationRequest } from '../../authentication/src/core';
 import Debug from 'debug';
+import { NotAuthenticated } from '@feathersjs/errors';
+import { AuthenticationStrategy, AuthenticationBase, AuthenticationRequest } from '@feathersjs/authentication';
 import { Application, Query, Params } from '@feathersjs/feathers';
 
 const debug = Debug('@feathersjs/authentication-local/strategy');
