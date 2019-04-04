@@ -1,7 +1,7 @@
 import assert from 'assert';
 import feathers, { Params, Service } from '@feathersjs/feathers';
 
-import { AuthenticationRequest } from '../../lib/core';
+import { AuthenticationRequest } from '../../src/core';
 import hook from '../../src/hooks/connection';
 import { AuthenticationService } from '../../src';
 import { AuthenticationResult } from '../../src/core';

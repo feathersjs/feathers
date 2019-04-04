@@ -5,7 +5,7 @@ import feathers, { Application, Service } from '@feathersjs/feathers';
 import memory from 'feathers-memory';
 
 import { AuthenticationService, JWTStrategy, hooks } from '../src';
-import { AuthenticationResult } from '../lib/core';
+import { AuthenticationResult } from '../src/core';
 import { ServerResponse } from 'http';
 import { MockRequest } from './fixtures';
 

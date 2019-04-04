@@ -2,8 +2,7 @@ import assert from 'assert';
 import feathers, { Params, HookContext } from '@feathersjs/feathers';
 
 import hook from '../../src/hooks/events';
-import { AuthenticationRequest } from '../../src/core';
-import { AuthenticationResult } from '../../lib/core';
+import { AuthenticationRequest, AuthenticationResult } from '../../src/core';
 
 describe('authentication/hooks/events', () => {
   const app = feathers().use('/authentication', {

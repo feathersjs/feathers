@@ -5,11 +5,11 @@ import feathers, { Application, Service } from '@feathersjs/feathers';
 // @ts-ignore
 import memory from 'feathers-memory';
 
-import defaultOptions from '../lib/options';
+import defaultOptions from '../src/options';
 import { AuthenticationService } from '../src/service';
+import { AuthenticationResult } from '../src/core';
 
 import { Strategy1 } from './fixtures';
-import { AuthenticationResult } from '../src/core';
 
 const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/;
 

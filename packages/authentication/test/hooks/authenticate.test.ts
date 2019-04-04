@@ -3,7 +3,7 @@ import feathers, { Application, Params, Service } from '@feathersjs/feathers';
 
 import { Strategy1, Strategy2 } from '../fixtures';
 import { AuthenticationService, hooks } from '../../src';
-import { AuthenticationResult } from '../../lib/core';
+import { AuthenticationResult } from '../../src/core';
 
 const { authenticate } = hooks;
 
