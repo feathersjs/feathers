@@ -1,11 +1,11 @@
-const assert = require('assert');
-const feathers = require('@feathersjs/feathers');
-const { join } = require('path');
+import assert from 'assert';
+import { join } from 'path';
+import feathers, { Application } from '@feathersjs/feathers';
 
 describe('@feathersjs/configuration', () => {
-  const originalEnv = {};
-  let app;
-  let plugin;
+  const originalEnv: { [key: string]: any } = {};
+  let app: Application;
+  let plugin: any;
 
   before(() => {
     originalEnv.NODE_ENV = process.env.NODE_ENV;

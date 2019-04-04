@@ -1,16 +1,15 @@
-const makeDebug = require('debug');
-const path = require('path');
+import { Application } from '@feathersjs/feathers';
+import Debug from 'debug';
+import path from 'path';
+import config from 'config';
 
-const debug = makeDebug('@feathersjs/configuration');
-const config = require('config');
+const debug = Debug('@feathersjs/configuration');
 const separator = path.sep;
 
-function init () {
-  return function () {
-    let app = this;
-
-    const convert = current => {
-      const result = Array.isArray(current) ? [] : {};
+export default function init() {
+  return (app: Application|undefined) => {
+    const convert = (current: any) => {
+      const result: { [key: string]: any } = Array.isArray(current) ? [] : {};
 
       Object.keys(current).forEach(name => {
         let value = current[name];
@@ -44,19 +43,22 @@ function init () {
     const env = config.util.getEnv('NODE_ENV');
     const conf = convert(config);
 
-    debug(`Initializing configuration for ${env} environment`);
-
-    if (!app || app === global) {
+    if (!app) {
       return conf;
     }
 
+    debug(`Initializing configuration for ${env} environment`);
+
     Object.keys(conf).forEach(name => {
-      let value = conf[name];
+      const value = conf[name];
       debug(`Setting ${name} configuration value to`, value);
-      app.set(name, value);
+      (app as Application).set(name, value);
     });
+
+    return conf;
   };
 }
 
-module.exports = init;
-module.exports.default = init;
+if (typeof module !== 'undefined') {
+  module.exports = Object.assign(init, module.exports);
+}
