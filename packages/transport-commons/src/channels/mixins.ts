@@ -1,22 +1,29 @@
-const debug = require('debug')('@feathersjs/transport-commons:channels/mixins');
-const Channel = require('./channel/base');
-const CombinedChannel = require('./channel/combined');
+import Debug from 'debug';
+import { Channel } from './channel/base';
+import { CombinedChannel } from './channel/combined';
+import { HookContext } from '@feathersjs/feathers';
 
+const debug = Debug('@feathersjs/transport-commons:channels/mixins');
 const PUBLISHERS = Symbol('@feathersjs/transport-commons/publishers');
 const CHANNELS = Symbol('@feathersjs/transport-commons/channels');
 const ALL_EVENTS = Symbol('@feathersjs/transport-commons/all-events');
 
-exports.keys = {
+export const keys = {
   PUBLISHERS,
   CHANNELS,
   ALL_EVENTS
 };
 
-exports.channelMixin = function channelMixin () {
-  return {
+export interface ChannelMixin {
+  [CHANNELS]: { [key: string]: Channel };
+  channel(...names: string[]): Channel;
+}
+
+export function channelMixin() {
+  const mixin: ChannelMixin = {
     [CHANNELS]: {},
 
-    channel (...names) {
+    channel(...names: string[]): Channel {
       debug('Returning channels', names);
 
       if (names.length === 0) {
@@ -49,13 +56,20 @@ exports.channelMixin = function channelMixin () {
       return new CombinedChannel(channels);
     }
   };
-};
 
-exports.publishMixin = function publishMixin () {
-  return {
+  return mixin;
+}
+
+export interface PublishMixin {
+  [PUBLISHERS]: { [key: string]: Channel };
+  publish(event: string|symbol, callback: (data: any, hook: HookContext) => Channel): any;
+}
+
+export function publishMixin() {
+  const result: PublishMixin = {
     [PUBLISHERS]: {},
 
-    publish (event, callback) {
+    publish(event, callback) {
       debug('Registering publisher', event);
 
       if (!callback && typeof event === 'function') {
@@ -63,15 +77,19 @@ exports.publishMixin = function publishMixin () {
         event = ALL_EVENTS;
       }
 
+      // @ts-ignore
       if (this._serviceEvents && event !== ALL_EVENTS && this._serviceEvents.indexOf(event) === -1) {
-        throw new Error(`'${event}' is not a valid service event`);
+        throw new Error(`'${event.toString()}' is not a valid service event`);
       }
 
       const publishers = this[PUBLISHERS];
 
+      // @ts-ignore
       publishers[event] = callback;
 
       return this;
     }
   };
-};
+
+  return result;
+}

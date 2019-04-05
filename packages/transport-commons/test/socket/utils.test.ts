@@ -1,14 +1,14 @@
-const assert = require('assert');
-const { EventEmitter } = require('events');
-const feathers = require('@feathersjs/feathers');
-const errors = require('@feathersjs/errors');
+import assert from 'assert';
+import { EventEmitter } from 'events';
+import feathers, { Application, Params } from '@feathersjs/feathers';
+import errors from '@feathersjs/errors';
 
-const routing = require('../../lib/routing');
-const {
+import { routing } from '../../src/routing';
+import {
   normalizeError,
   getDispatcher,
   runMethod
-} = require('../../lib/socket/utils');
+} from '../../src/socket/utils';
 
 describe('socket commons utils', () => {
   describe('.normalizeError', () => {
@@ -59,11 +59,14 @@ describe('socket commons utils', () => {
 
   describe('.getDispatcher', () => {
     it('returns a dispatcher function', () =>
-      assert.strictEqual(typeof getDispatcher(), 'function')
+      assert.strictEqual(typeof getDispatcher('test', 'here'), 'function')
     );
 
     describe('dispatcher logic', () => {
-      let dispatcher, dummySocket, dummyHook, dummyChannel;
+      let dispatcher: any;
+      let dummySocket: EventEmitter;
+      let dummyHook: any;
+      let dummyChannel: any;
 
       beforeEach(() => {
         dispatcher = getDispatcher('emit', 'test');
@@ -73,7 +76,7 @@ describe('socket commons utils', () => {
           connections: [{
             test: dummySocket
           }],
-          dataFor () {
+          dataFor(): null {
             return null;
           }
         };
@@ -155,12 +158,12 @@ describe('socket commons utils', () => {
   });
 
   describe('.runMethod', () => {
-    let app;
+    let app: Application;
 
     beforeEach(() => {
       app = feathers().configure(routing());
       app.use('/myservice', {
-        get (id, params) {
+        get (id: number|string, params: Params) {
           if (params.query.error) {
             return Promise.reject(new errors.NotAuthenticated('None shall pass'));
           }
@@ -171,7 +174,7 @@ describe('socket commons utils', () => {
 
     describe('running methods', () => {
       it('basic', done => {
-        const callback = (error, result) => {
+        const callback = (error: any, result: any) => {
           if (error) {
             return done(error);
           }
@@ -187,7 +190,7 @@ describe('socket commons utils', () => {
         const connection = {
           testing: true
         };
-        const callback = (error, result) => {
+        const callback = (error: any, result: any) => {
           if (error) {
             return done(error);
           }
@@ -214,7 +217,7 @@ describe('socket commons utils', () => {
       });
 
       it('with params missing', done => {
-        const callback = (error, result) => {
+        const callback = (error: any, result: any) => {
           if (error) {
             return done(error);
           }
@@ -228,7 +231,7 @@ describe('socket commons utils', () => {
 
       it('with params but missing callback', done => {
         app.use('/otherservice', {
-          get (id) {
+          get (id: number|string) {
             assert.strictEqual(id, 'dishes');
 
             return Promise.resolve({ id }).then(res => {
@@ -243,7 +246,7 @@ describe('socket commons utils', () => {
 
       it('with params and callback missing', done => {
         app.use('/otherservice', {
-          get (id) {
+          get (id: number|string) {
             assert.strictEqual(id, 'laundry');
 
             return Promise.resolve({ id }).then(res => {
@@ -258,7 +261,7 @@ describe('socket commons utils', () => {
     });
 
     it('throws NotFound for invalid service', done => {
-      const callback = error => {
+      const callback = (error: any) => {
         try {
           assert.deepStrictEqual(error, { name: 'NotFound',
             message: 'Service \'ohmyservice\' not found',
@@ -277,7 +280,7 @@ describe('socket commons utils', () => {
     });
 
     it('throws MethodNotAllowed undefined method', done => {
-      const callback = error => {
+      const callback = (error: any) => {
         try {
           assert.deepStrictEqual(error, {
             name: 'MethodNotAllowed',
@@ -297,7 +300,7 @@ describe('socket commons utils', () => {
     });
 
     it('throws MethodNotAllowed for invalid service method', done => {
-      const callback = error => {
+      const callback = (error: any) => {
         try {
           assert.deepStrictEqual(error, {
             name: 'MethodNotAllowed',
@@ -317,7 +320,7 @@ describe('socket commons utils', () => {
     });
 
     it('method error calls back with normalized error', done => {
-      const callback = (error, result) => {
+      const callback = (error: any) => {
         try {
           assert.deepStrictEqual(error, {
             name: 'NotAuthenticated',

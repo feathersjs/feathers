@@ -1,9 +1,11 @@
-const assert = require('assert');
-const feathers = require('@feathersjs/feathers');
-const channels = require('../../lib/channels/');
+import assert from 'assert';
+import feathers, { Application, HookContext } from '@feathersjs/feathers';
+import { channels } from '../../src/channels';
+import { Channel } from '../../src/channels/channel/base';
+import { CombinedChannel } from '../../lib/channels/channel/combined';
 
 describe('app.publish', () => {
-  let app;
+  let app: Application;
 
   beforeEach(() => {
     app = feathers().configure(channels());
@@ -12,7 +14,7 @@ describe('app.publish', () => {
   it('throws an error if service does not send the event', () => {
     try {
       app.use('/test', {
-        create (data) {
+        create(data: any) {
           return Promise.resolve(data);
         }
       });
@@ -34,8 +36,8 @@ describe('app.publish', () => {
       app.use('/test', {
         events: [ 'foo' ],
 
-        create (data) {
-          return Promise.resolve(data);
+        create(payload: any) {
+          return Promise.resolve(payload);
         }
       });
     });
@@ -45,7 +47,7 @@ describe('app.publish', () => {
 
       app.service('test').publish('created', () => app.channel('testing'));
 
-      app.once('publish', function (event, channel, hook) {
+      app.once('publish', (event: string, channel: Channel, hook: HookContext) => {
         assert.strictEqual(event, 'created');
         assert.strictEqual(hook.path, 'test');
         assert.strictEqual(hook.type, 'after');
@@ -66,7 +68,7 @@ describe('app.publish', () => {
       app.publish('created', () => app.channel('testing'));
       app.publish(() => app.channel('other'));
 
-      app.once('publish', function (event, channel, hook) {
+      app.once('publish', (_event: string, channel: Channel) => {
         assert.ok(channel.connections.indexOf(c1) !== -1);
         done();
       });
@@ -91,7 +93,7 @@ describe('app.publish', () => {
         )
       );
 
-      app.once('publish', (event, channel, hook) => {
+      app.once('publish', (_event: string, channel: Channel, hook: HookContext) => {
         assert.deepStrictEqual(hook.result, data);
         assert.deepStrictEqual(channel.connections, [ c1, c2 ]);
         done();
@@ -110,7 +112,7 @@ describe('app.publish', () => {
 
       app.service('test').publish('foo', () => app.channel('testing'));
 
-      app.once('publish', (event, channel, hook) => {
+      app.once('publish', (event: string, channel: Channel, hook: HookContext) => {
         assert.strictEqual(event, 'foo');
         assert.deepStrictEqual(hook, {
           app,
@@ -161,7 +163,7 @@ describe('app.publish', () => {
         app.channel('othertest')
       ]);
 
-      app.once('publish', (event, channel, hook) => {
+      app.once('publish', (_event: string, channel: Channel, hook: HookContext) => {
         assert.deepStrictEqual(hook.result, data);
         assert.deepStrictEqual(channel.connections, [ c1, c2 ]);
         done();
@@ -183,7 +185,7 @@ describe('app.publish', () => {
         app.channel('othertest')
       ]);
 
-      app.once('publish', (event, channel, hook) => {
+      app.once('publish', (_event: string, channel: CombinedChannel, hook: HookContext) => {
         assert.deepStrictEqual(hook.result, data);
         assert.deepStrictEqual(channel.dataFor(c1), c1data);
         assert.ok(channel.dataFor(c2) === null);
@@ -198,9 +200,9 @@ describe('app.publish', () => {
       app.channel('test').join(c1);
 
       app.publish(() => app.channel('test'));
-      app.service('test').publish('created', () => null);
+      app.service('test').publish('created', (): null => null);
 
-      app.once('publish', (event, channel, hook) => done(new Error('Should never get here')));
+      app.once('publish', () => done(new Error('Should never get here')));
 
       app.service('test').create(data).then(() => done()).catch(done);
     });
@@ -218,7 +220,7 @@ describe('app.publish', () => {
         ];
       });
 
-      app.once('publish', (event, channel, hook) => {
+      app.once('publish', (_event: string, channel: CombinedChannel) => {
         assert.strictEqual(channel.dataFor(c1), null);
         assert.deepStrictEqual(channel.connections, [ c1 ]);
         done();

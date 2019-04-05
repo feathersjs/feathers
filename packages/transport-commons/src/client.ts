@@ -1,5 +1,8 @@
-const { convert, Timeout } = require('@feathersjs/errors');
-const debug = require('debug')('@feathersjs/transport-commons/client');
+import Debug from 'debug';
+import { convert, Timeout } from '@feathersjs/errors';
+import { Params } from '@feathersjs/feathers';
+
+const debug = Debug('@feathersjs/transport-commons/client');
 
 const namespacedEmitterMethods = [
   'addListener',
@@ -19,9 +22,9 @@ const otherEmitterMethods = [
   'setMaxListeners'
 ];
 
-const addEmitterMethods = service => {
+const addEmitterMethods = (service: any) => {
   otherEmitterMethods.forEach(method => {
-    service[method] = function (...args) {
+    service[method] = function(...args: any[]) {
       if (typeof this.connection[method] !== 'function') {
         throw new Error(`Can not call '${method}' on the client service connection`);
       }
@@ -32,7 +35,7 @@ const addEmitterMethods = service => {
 
   // Methods that should add the namespace (service path)
   namespacedEmitterMethods.forEach(method => {
-    service[method] = function (name, ...args) {
+    service[method] = function(name: string, ...args: any[]) {
       if (typeof this.connection[method] !== 'function') {
         throw new Error(`Can not call '${method}' on the client service connection`);
       }
@@ -49,8 +52,22 @@ const addEmitterMethods = service => {
   });
 };
 
-module.exports = class Service {
-  constructor (options) {
+interface ServiceOptions {
+  name: string;
+  connection: any;
+  method: string;
+  events?: string[];
+  timeout?: number;
+}
+
+export class Service {
+  events: string[];
+  path: string;
+  connection: any;
+  method: string;
+  timeout: number;
+
+  constructor(options: ServiceOptions) {
     this.events = options.events;
     this.path = options.name;
     this.connection = options.connection;
@@ -60,7 +77,7 @@ module.exports = class Service {
     addEmitterMethods(this);
   }
 
-  send (method, ...args) {
+  send(method: string, ...args: any[]) {
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => reject(
         new Timeout(`Timeout of ${this.timeout}ms exceeded calling ${method} on ${this.path}`, {
@@ -71,7 +88,7 @@ module.exports = class Service {
       ), this.timeout);
 
       args.unshift(method, this.path);
-      args.push(function (error, data) {
+      args.push(function(error: any, data: any) {
         error = convert(error);
         clearTimeout(timeoutId);
 
@@ -84,40 +101,42 @@ module.exports = class Service {
     });
   }
 
-  find (params = {}) {
+  find(params: Params = {}) {
     return this.send('find', params.query || {});
   }
 
-  get (id, params = {}) {
+  get(id: number|string, params: Params = {}) {
     return this.send('get', id, params.query || {});
   }
 
-  create (data, params = {}) {
+  create(data: any, params: Params = {}) {
     return this.send('create', data, params.query || {});
   }
 
-  update (id, data, params = {}) {
+  update(id: number|string, data: any, params: Params = {}) {
     return this.send('update', id, data, params.query || {});
   }
 
-  patch (id, data, params = {}) {
+  patch(id: number|string, data: any, params: Params = {}) {
     return this.send('patch', id, data, params.query || {});
   }
 
-  remove (id, params = {}) {
+  remove(id: number|string, params: Params = {}) {
     return this.send('remove', id, params.query || {});
   }
 
   // `off` is actually not part of the Node event emitter spec
   // but we are adding it since everybody is expecting it because
   // of the emitter-component Socket.io is using
-  off (name, ...args) {
+  off(name: string, ...args: any[]) {
     if (typeof this.connection.off === 'function') {
       return this.connection.off(`${this.path} ${name}`, ...args);
     } else if (args.length === 0) {
+      // @ts-ignore
       return this.removeAllListeners(name);
     }
 
+    // @ts-ignore
     return this.removeListener(name, ...args);
   }
-};
+}

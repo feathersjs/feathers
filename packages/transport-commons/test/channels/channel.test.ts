@@ -1,13 +1,13 @@
-const assert = require('assert');
-const feathers = require('@feathersjs/feathers');
-const channels = require('../../lib/channels');
-const Channel = require('../../lib/channels/channel/base');
-const CombinedChannel = require('../../lib/channels/channel/combined');
+import assert from 'assert';
+import feathers, { Application } from '@feathersjs/feathers';
+import { channels, keys } from '../../src/channels';
+import { Channel, RealTimeConnection } from '../../src/channels/channel/base';
+import { CombinedChannel } from '../../src/channels/channel/combined';
 
-const { CHANNELS } = channels.keys;
+const { CHANNELS } = keys;
 
 describe('app.channel', () => {
-  let app;
+  let app: Application;
 
   beforeEach(() => {
     app = feathers().configure(channels());
@@ -69,7 +69,7 @@ describe('app.channel', () => {
 
       assert.strictEqual(test.length, 3);
 
-      test.leave(connection => connection.leave);
+      test.leave((connection: RealTimeConnection) => connection.leave);
 
       assert.strictEqual(test.length, 2);
       assert.strictEqual(test.connections.indexOf(c1), -1);
@@ -128,7 +128,7 @@ describe('app.channel', () => {
 
       it('removes an empty channel', () => {
         const channel = app.channel('test');
-        const appChannels = app[CHANNELS];
+        const appChannels = (app as any)[CHANNELS];
         const c1 = { id: 1 };
 
         channel.join(c1);
@@ -137,7 +137,7 @@ describe('app.channel', () => {
         assert.strictEqual(Object.keys(appChannels).length, 1);
         channel.leave(c1);
 
-        assert.ok(app[CHANNELS].test === undefined);
+        assert.ok((app as any)[CHANNELS].test === undefined);
         assert.strictEqual(Object.keys(appChannels).length, 0);
       });
 
@@ -151,7 +151,7 @@ describe('app.channel', () => {
 
         channel.join(connection).leave(connection);
 
-        assert.ok(app[CHANNELS].testing === undefined);
+        assert.ok((app as any)[CHANNELS].testing === undefined);
 
         assert.strictEqual(channel.listenerCount('something'), 0);
         assert.strictEqual(channel.listenerCount('empty'), 0);
@@ -214,7 +214,7 @@ describe('app.channel', () => {
       const c2 = { id: 2, leave: true };
       const combined = app.channel('test', 'again').join(c1, c2);
 
-      combined.leave(connection => connection.leave);
+      combined.leave((connection: RealTimeConnection) => connection.leave);
 
       assert.strictEqual(app.channel('test').length, 1);
       assert.strictEqual(app.channel('again').length, 1);

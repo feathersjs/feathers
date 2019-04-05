@@ -142,6 +142,8 @@ export interface HooksObject {
 
 // todo: figure out what to do: These methods don't actually need to be implemented, so they can be undefined at runtime. Yet making them optional gets cumbersome in strict mode.
 export interface ServiceMethods<T> {
+    [key: string]: any;
+    
     find?(params?: Params): Promise<T | T[] | Paginated<T>>;
 
     get?(id: Id, params?: Params): Promise<T>;
@@ -169,10 +171,13 @@ export interface ServiceOverloads<T> {
 
 export interface ServiceAddons<T> extends EventEmitter {
     id?: any;
+    _serviceEvents: string[];
     hooks(hooks: Partial<HooksObject>): this;
 }
 
 export type Service<T> = ServiceOverloads<T> & ServiceAddons<T> & ServiceMethods<T>;
+
+export type ServiceMixin = (service: Service<any>, path: string) => void
 
 export interface Application<ServiceTypes = any> extends EventEmitter {
     get(name: string): any;
@@ -202,4 +207,8 @@ export interface Application<ServiceTypes = any> extends EventEmitter {
     version: string;
 
     services: ServiceTypes;
+
+    mixins: ServiceMixin[];
+
+    methods: string[];
 }

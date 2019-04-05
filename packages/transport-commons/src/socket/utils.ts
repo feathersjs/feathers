@@ -1,8 +1,13 @@
-const errors = require('@feathersjs/errors');
-const debug = require('debug')('@feathersjs/transport-commons');
-const { isEqual } = require('lodash');
+import Debug from 'debug';
+import { isEqual } from 'lodash';
+import errors from '@feathersjs/errors';
+import { HookContext, Application } from '@feathersjs/feathers';
+import { CombinedChannel } from '../channels/channel/combined';
+import { RealTimeConnection } from '../channels/channel/base';
 
-const paramsPositions = exports.paramsPositions = {
+const debug = Debug('@feathersjs/transport-commons');
+
+export const paramsPositions: { [key: string]: number } = {
   find: 0,
   get: 1,
   remove: 1,
@@ -11,7 +16,7 @@ const paramsPositions = exports.paramsPositions = {
   patch: 2
 };
 
-const normalizeError = exports.normalizeError = function (e) {
+export function normalizeError(e: any) {
   const hasToJSON = typeof e.toJSON === 'function';
   const result = hasToJSON ? e.toJSON() : {};
 
@@ -28,10 +33,10 @@ const normalizeError = exports.normalizeError = function (e) {
   delete result.hook;
 
   return result;
-};
+}
 
-exports.getDispatcher = function (emit, socketKey) {
-  return function (event, channel, context, data) {
+export function getDispatcher(emit: string, socketKey: any) {
+  return function(event: string, channel: CombinedChannel, context: HookContext, data: any) {
     debug(`Dispatching '${event}' to ${channel.length} connections`);
 
     channel.connections.forEach(connection => {
@@ -56,9 +61,9 @@ exports.getDispatcher = function (emit, socketKey) {
       }
     });
   };
-};
+}
 
-exports.runMethod = function (app, connection, path, method, args) {
+export function runMethod(app: Application, connection: RealTimeConnection, path: string, method: string, args: any[]) {
   const trace = `method '${method}' on service '${path}'`;
   const methodArgs = args.slice(0);
   const callback = typeof methodArgs[methodArgs.length - 1] === 'function'
@@ -66,7 +71,7 @@ exports.runMethod = function (app, connection, path, method, args) {
 
   debug(`Running ${trace}`, connection, args);
 
-  const handleError = error => {
+  const handleError = (error: any) => {
     debug(`Error in ${trace}`, error);
     callback(normalizeError(error));
   };
@@ -83,6 +88,7 @@ exports.runMethod = function (app, connection, path, method, args) {
     const { service, params: route = {} } = lookup;
 
     // Only service methods are allowed
+    // @ts-ignore
     if (paramsPositions[method] === undefined || typeof service[method] !== 'function') {
       return Promise.reject(new errors.MethodNotAllowed(`Method '${method}' not allowed on service '${path}'`));
     }
@@ -95,18 +101,19 @@ exports.runMethod = function (app, connection, path, method, args) {
 
     methodArgs[position] = params;
 
+    // @ts-ignore
     return service[method](...methodArgs, true);
   };
 
   try {
     // Run and map to the callback that is being called for Socket calls
-    _run().then(hook => {
+    _run().then((hook: HookContext) => {
       const result = hook.dispatch || hook.result;
 
       debug(`Returned successfully ${trace}`, result);
       callback(null, result);
-    }).catch(hook => handleError(hook.type === 'error' ? hook.error : hook));
+    }).catch((hook: HookContext) => handleError(hook.type === 'error' ? hook.error : hook));
   } catch (error) {
     handleError(error);
   }
-};
+}

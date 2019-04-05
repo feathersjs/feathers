@@ -1,11 +1,14 @@
-const assert = require('assert');
+import assert from 'assert';
+import { EventEmitter } from 'events';
+import errors from '@feathersjs/errors';
+import { Service } from '../src/client';
 
-const { EventEmitter } = require('events');
-const errors = require('@feathersjs/errors');
-const Service = require('../lib/client');
+declare type DummyCallback = (err: any, data?: any) => void;
 
 describe('client', () => {
-  let connection, testData, service;
+  let connection: any;
+  let testData: any;
+  let service: Service & EventEmitter;
 
   beforeEach(() => {
     connection = new EventEmitter();
@@ -16,7 +19,7 @@ describe('client', () => {
       method: 'emit',
       timeout: 50,
       connection
-    });
+    }) as Service & EventEmitter;
   });
 
   it('sets `events` property on service', () => {
@@ -24,22 +27,22 @@ describe('client', () => {
   });
 
   it('throws an error when the emitter does not have the method', () => {
-    const service = new Service({
+    const clientService = new Service({
       name: 'todos',
       method: 'emit',
       timeout: 50,
       connection: {}
-    });
+    }) as Service & EventEmitter;
 
     try {
-      service.eventNames();
+      clientService.eventNames();
       assert.ok(false, 'Should never get here');
     } catch (e) {
       assert.strictEqual(e.message, 'Can not call \'eventNames\' on the client service connection');
     }
 
     try {
-      service.on();
+      clientService.on('test', () => {});
       assert.ok(false, 'Should never get here');
     } catch (e) {
       assert.strictEqual(e.message, 'Can not call \'on\' on the client service connection');
@@ -52,7 +55,7 @@ describe('client', () => {
   });
 
   it('initializes and emits namespaced events', done => {
-    connection.once('todos test', data => {
+    connection.once('todos test', (data: any) => {
       assert.deepStrictEqual(data, testData);
       done();
     });
@@ -73,18 +76,18 @@ describe('client', () => {
   });
 
   it('sends all service methods with acknowledgement', () => {
-    const idCb = (path, id, params, callback) =>
+    const idCb = (_path: any, id: any, _params: any, callback: DummyCallback) =>
       callback(null, { id });
-    const idDataCb = (path, id, data, params, callback) =>
+    const idDataCb = (_path: any, _id: any, data: any, _params: any, callback: DummyCallback) =>
       callback(null, data);
 
-    connection.once('create', (path, data, params, callback) => {
+    connection.once('create', (_path: any, data: any, _params: any, callback: DummyCallback) => {
       data.created = true;
       callback(null, data);
     });
 
     return service.create(testData)
-      .then(result => assert.ok(result.created))
+      .then((result: any) => assert.ok(result.created))
       .then(() => {
         connection.once('get', idCb);
 
@@ -110,11 +113,11 @@ describe('client', () => {
           .then(res => assert.deepStrictEqual(res, testData));
       })
       .then(() => {
-        connection.once('find', (path, params, callback) =>
+        connection.once('find', (_path: any, params: any, callback: DummyCallback) =>
           callback(null, { params })
         );
 
-        return service.find({ query: { test: true } }).then(res =>
+        return service.find({ query: { test: true } }).then((res: any) =>
           assert.deepStrictEqual(res, {
             params: { test: true }
           })
@@ -139,7 +142,7 @@ describe('client', () => {
   });
 
   it('converts to feathers-errors (#19)', () => {
-    connection.once('create', (path, data, params, callback) =>
+    connection.once('create', (_path: any, _data: any, _params: any, callback: DummyCallback) =>
       callback(new errors.NotAuthenticated('Test', { hi: 'me' }).toJSON())
     );
 
@@ -153,7 +156,7 @@ describe('client', () => {
   });
 
   it('converts other errors (#19)', () => {
-    connection.once('create', (path, data, params, callback) =>
+    connection.once('create', (_path: string, _data: any, _params: any, callback: (x: string) => void) =>
       callback('Something went wrong') // eslint-disable-line
     );
 
@@ -164,9 +167,9 @@ describe('client', () => {
   });
 
   it('has all EventEmitter methods', done => {
-    const testData = { hello: 'world' };
-    const callback = data => {
-      assert.deepStrictEqual(data, testData);
+    const testing = { hello: 'world' };
+    const callback = (data: any) => {
+      assert.deepStrictEqual(data, testing);
       assert.strictEqual(service.listenerCount('test'), 1);
       service.removeListener('test', callback);
       assert.strictEqual(service.listenerCount('test'), 0);
@@ -175,14 +178,14 @@ describe('client', () => {
 
     service.addListener('test', callback);
 
-    connection.emit('todos test', testData);
+    connection.emit('todos test', testing);
   });
 
   it('properly handles on/off methods', done => {
-    const testData = { hello: 'world' };
+    const testing = { hello: 'world' };
 
-    const callback1 = data => {
-      assert.deepStrictEqual(data, testData);
+    const callback1 = (data: any) => {
+      assert.deepStrictEqual(data, testing);
       assert.strictEqual(service.listenerCount('test'), 3);
       service.off('test', callback1);
       assert.strictEqual(service.listenerCount('test'), 2);
@@ -198,25 +201,26 @@ describe('client', () => {
     service.on('test', callback2);
     service.on('test', callback2);
 
-    connection.emit('todos test', testData);
+    connection.emit('todos test', testing);
   });
 
   it('forwards namespaced call to .off', done => {
     // Use it's own connection and service so off method gets detected
-    const connection = new EventEmitter();
+    const conn = new EventEmitter();
 
-    connection.off = name => {
+    // @ts-ignore
+    conn.off = name => {
       assert.strictEqual(name, 'todos test');
       done();
     };
 
-    const service = new Service({
+    const client = new Service({
       name: 'todos',
       method: 'emit',
       timeout: 50,
-      connection
+      connection: conn
     });
 
-    service.off('test');
+    client.off('test');
   });
 });

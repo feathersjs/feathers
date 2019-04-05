@@ -1,12 +1,38 @@
-const debug = require('debug')('@feathersjs/transport-commons/channels');
-const { get, compact, flattenDeep, noop } = require('lodash');
-const CombinedChannel = require('./channel/combined');
-const { channelMixin, publishMixin, keys } = require('./mixins');
+import Debug from 'debug';
+import { get, compact, flattenDeep, noop } from 'lodash';
+import { Channel } from './channel/base';
+import { CombinedChannel } from './channel/combined';
+import { channelMixin, publishMixin, keys } from './mixins';
+import { Application, Service } from '@feathersjs/feathers';
 
+const debug = Debug('@feathersjs/transport-commons/channels');
 const { CHANNELS, PUBLISHERS, ALL_EVENTS } = keys;
 
-function channels () {
-  return app => {
+declare module '@feathersjs/feathers' {
+  interface ServiceAddons<T> {
+    publish(callback: (data: T, hook: HookContext<T>) => Channel): this;
+
+    publish(event: string, callback: (data: T, hook: HookContext<T>) => Channel): this;
+  }
+
+  interface Application<ServiceTypes> {
+    channels: string[];
+
+    channel(name: string[]): Channel;
+    channel(...names: string[]): Channel;
+
+    // tslint:disable-next-line void-return
+    publish<T>(callback: (data: T, hook: HookContext<T>) => Channel | Channel[] | void): Application<ServiceTypes>;
+
+    // tslint:disable-next-line void-return
+    publish<T>(event: string, callback: (data: T, hook: HookContext<T>) => Channel | Channel[] | void): Application<ServiceTypes>;
+  }
+}
+
+export { keys };
+
+export function channels () {
+  return (app: Application) => {
     if (typeof app.channel === 'function' && typeof app.publish === 'function') {
       return;
     }
@@ -18,14 +44,15 @@ function channels () {
       }
     });
 
-    app.mixins.push(function (service, path) {
+    app.mixins.push((service: Service<any>, path: string) => {
       if (typeof service.publish === 'function' || !service._serviceEvents) {
         return;
       }
 
       Object.assign(service, publishMixin());
 
-      service._serviceEvents.forEach(event => {
+      // @ts-ignore
+      service._serviceEvents.forEach((event: string) => {
         service.on(event, function (data, hook) {
           if (!hook) {
             // Fake hook for custom events
@@ -34,8 +61,8 @@ function channels () {
 
           debug('Publishing event', event, hook.path);
 
-          const servicePublishers = service[PUBLISHERS];
-          const appPublishers = app[PUBLISHERS];
+          const servicePublishers = (service as any)[PUBLISHERS];
+          const appPublishers = (app as any)[PUBLISHERS];
           // This will return the first publisher list that is not empty
           // In the following precedence
           const callback = [
@@ -68,7 +95,3 @@ function channels () {
     });
   };
 }
-
-channels.keys = keys;
-
-module.exports = channels;

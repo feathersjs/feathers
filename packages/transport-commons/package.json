@@ -26,7 +26,10 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "mocha --opts ../../mocha.opts"
+    "prepublish": "npm run compile",
+    "compile": "shx rm -rf lib/ && tsc",
+    "test": "npm run compile && npm run mocha",
+    "mocha": "mocha --opts ../../mocha.ts.opts --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"
@@ -42,7 +45,14 @@
     "radix-router": "^3.0.1"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.3",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^11.12.2",
     "@feathersjs/feathers": "^3.3.1",
+    "shx": "^0.3.2",
+    "ts-node": "^8.0.3",
+    "tslint": "^5.14.0",
+    "typescript": "^3.4.1",
     "mocha": "^6.0.2"
   }
 }

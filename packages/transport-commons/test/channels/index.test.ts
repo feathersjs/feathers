@@ -1,13 +1,13 @@
-const assert = require('assert');
-const feathers = require('@feathersjs/feathers');
-const channels = require('../../lib/channels/');
+import assert from 'assert';
+import feathers from '@feathersjs/feathers';
+import { channels, keys } from '../../src/channels';
 
 describe('feathers-channels', () => {
   it('has app.channel', () => {
     const app = feathers().configure(channels());
 
     assert.strictEqual(typeof app.channel, 'function');
-    assert.strictEqual(typeof app[channels.keys.CHANNELS], 'object');
+    assert.strictEqual(typeof (app as any)[keys.CHANNELS], 'object');
     assert.strictEqual(app.channels.length, 0);
   });
 
@@ -32,10 +32,10 @@ describe('feathers-channels', () => {
     const app = feathers()
       .configure(channels())
       .use('/test', {
-        setup (app, path) {},
+        setup () {},
         publish () {}
       });
 
-    assert.ok(!app.service('test')[channels.keys.DISPATCHERS]);
+    assert.ok(!app.service('test')[keys.PUBLISHERS]);
   });
 });

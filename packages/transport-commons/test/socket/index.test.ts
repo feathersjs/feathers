@@ -1,11 +1,14 @@
-const assert = require('assert');
-const { EventEmitter } = require('events');
-const feathers = require('@feathersjs/feathers');
+import assert from 'assert';
+import { EventEmitter } from 'events';
+import feathers, { Application } from '@feathersjs/feathers';
 
-const commons = require('../../lib/socket');
+import { socket as commons, SocketOptions } from '../../src/socket';
 
 describe('@feathersjs/transport-commons', () => {
-  let provider, options, app, connection;
+  let provider: EventEmitter;
+  let options: SocketOptions;
+  let app: Application;
+  let connection: any;
 
   beforeEach(() => {
     connection = { testing: true };
@@ -51,7 +54,7 @@ describe('@feathersjs/transport-commons', () => {
 
       provider.emit('connection', socket);
 
-      socket.emit('get', 'myservice', 10, (error, result) => {
+      socket.emit('get', 'myservice', 10, (error: any, result: any) => {
         try {
           assert.ok(!error);
           assert.deepStrictEqual(result, {
@@ -74,7 +77,7 @@ describe('@feathersjs/transport-commons', () => {
 
       provider.emit('connection', socket);
 
-      socket.emit('get', null, (error, result) => {
+      socket.emit('get', null, (error: any) => {
         assert.strictEqual(error.name, 'NotFound');
         assert.strictEqual(error.message, `Service 'null' not found`);
         done();
@@ -91,7 +94,7 @@ describe('@feathersjs/transport-commons', () => {
 
       socket.emit('create', 'myservice', data, {
         fromQuery: true
-      }, (error, result) => {
+      }, (error: any, result: any) => {
         try {
           const params = Object.assign({
             query: { fromQuery: true },
@@ -115,7 +118,7 @@ describe('@feathersjs/transport-commons', () => {
 
       provider.emit('connection', socket);
 
-      socket.emit('myservice::get', 10, (error, result) => {
+      socket.emit('myservice::get', 10, (error: any, result: any) => {
         try {
           assert.ok(!error);
           assert.deepStrictEqual(result, {
@@ -143,7 +146,7 @@ describe('@feathersjs/transport-commons', () => {
 
       socket.emit('myservice::create', data, {
         fromQuery: true
-      }, (error, result) => {
+      }, (error: any, result: any) => {
         const params = Object.assign({
           query: { fromQuery: true },
           route: {},
