@@ -1,5 +1,7 @@
-module.exports = () => {
-  return context => {
+import { HookContext } from '@feathersjs/feathers';
+
+export const populateHeader = () => {
+  return (context: HookContext) => {
     const { app, params: { accessToken } } = context;
     const authentication = app.authentication;
 

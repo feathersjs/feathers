@@ -26,7 +26,10 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "mocha --opts ../../mocha.opts"
+    "prepublish": "npm run compile",
+    "compile": "shx rm -rf lib/ && tsc",
+    "test": "npm run compile && npm run mocha",
+    "mocha": "mocha --opts ../../mocha.ts.opts --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"
@@ -35,6 +38,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@feathersjs/commons": "^4.0.0",
     "@feathersjs/errors": "^3.3.6",
     "debug": "^4.1.1"
   },

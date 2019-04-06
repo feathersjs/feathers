@@ -7,11 +7,10 @@
 
 import { Application as FeathersApplication } from '@feathersjs/feathers';
 import * as express from 'express';
-import * as self from '@feathersjs/express';
 
-declare const feathersExpress: (<T>(app: FeathersApplication<T>) => Application<T>) & typeof self;
+declare const feathersExpress: (<T>(app: FeathersApplication<T>) => Application<T>);
 export default feathersExpress;
-export type Application<T> = express.Application & FeathersApplication<T>;
+export type Application<T = any> = express.Application & FeathersApplication<T>;
 
 export function errorHandler(options?: {
     public?: string,
@@ -54,4 +53,6 @@ export {
     urlencoded
 } from 'express';
 
+export function parseAuthentication(...strategies: string[]): express.RequestHandler;
+export function authenticate(...strategies: string[]): express.RequestHandler;
 export const original: typeof express;

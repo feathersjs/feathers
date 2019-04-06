@@ -1,14 +1,14 @@
-const assert = require('assert');
-const feathers = require('@feathersjs/feathers');
+import assert from 'assert';
+import feathers, { Application } from '@feathersjs/feathers';
 
-const client = require('../lib');
+import client, { AuthenticationClient } from '../src';
 
 describe('@feathersjs/authentication-client', () => {
   const accessToken = 'testing';
   const user = {
     name: 'Test User'
   };
-  let app;
+  let app: Application;
 
   beforeEach(() => {
     app = feathers();
@@ -35,7 +35,7 @@ describe('@feathersjs/authentication-client', () => {
   });
 
   it('initializes', () => {
-    assert.ok(app.authentication instanceof client.AuthenticationClient);
+    assert.ok(app.authentication instanceof AuthenticationClient);
     assert.strictEqual(app.get('storage'), app.authentication.storage);
     assert.strictEqual(typeof app.authenticate, 'function');
     assert.strictEqual(typeof app.logout, 'function');

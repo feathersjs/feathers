@@ -1,14 +1,17 @@
-const assert = require('assert');
+import assert from 'assert';
+import { Application } from '@feathersjs/feathers';
+import '../../src';
 
-module.exports = (getApp, getClient, {
-  provider, email, password, restartServer
-}) => {
+export default (getApp: () => Application, getClient: () => Application, {
+  provider, email, password
+}: { provider: string, email: string, password: string }) => {
   describe('common tests', () => {
-    let client, user;
+    let client: Application;
+    let user: any;
 
     before(() => getApp().service('users').create({
       email, password
-    }).then(result => {
+    }).then((result: any) => {
       user = result;
     }));
 
@@ -45,7 +48,7 @@ module.exports = (getApp, getClient, {
     it('errors when not authenticated', () => {
       return client.service('dummy').find()
         .then(() => assert.fail('Should never get here'))
-        .catch(error => {
+        .catch((error: any) => {
           assert.strictEqual(error.name, 'NotAuthenticated');
           assert.strictEqual(error.code, 401);
           assert.strictEqual(error.message, 'Not authenticated');

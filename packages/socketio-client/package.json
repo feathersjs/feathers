@@ -36,13 +36,13 @@
     "access": "public"
   },
   "dependencies": {
+    "@types/socket.io-client": "^1.4.32",
     "@feathersjs/transport-commons": "^4.2.1"
   },
   "devDependencies": {
     "@feathersjs/commons": "^4.0.0",
     "@feathersjs/feathers": "^3.3.1",
     "@feathersjs/socketio": "^3.2.9",
-    "@types/socket.io-client": "^1.4.32",
     "chai": "^4.2.0",
     "feathers-memory": "^3.0.2",
     "mocha": "^6.0.2",

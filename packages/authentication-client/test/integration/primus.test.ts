@@ -1,24 +1,27 @@
-const feathers = require('@feathersjs/feathers');
-const Primus = require('primus');
-const Emitter = require('primus-emitter');
-const primusClient = require('@feathersjs/primus-client');
-const primus = require('@feathersjs/primus');
+// @ts-ignore
+import Primus from 'primus';
+// @ts-ignore
+import Emitter from 'primus-emitter';
+import feathers, { Application } from '@feathersjs/feathers';
+import primusClient from '@feathersjs/primus-client';
+import primus from '@feathersjs/primus';
 
-const authClient = require('../../lib');
-const getApp = require('./fixture');
-const commonTests = require('./commons');
+import authClient from '../../src';
+import getApp from './fixture';
+import commonTests from './commons';
 
 const port = 8998;
 const baseURL = `http://localhost:${port}`;
 const Socket = Primus.createSocket({
   transformer: 'websockets',
   plugin: {
-    'emitter': Emitter
+    emitter: Emitter
   }
 });
 
 describe('@feathersjs/authentication-client Primus integration', () => {
-  let app, server;
+  let app: Application;
+  let server: any;
 
   before(() => {
     app = getApp(feathers().configure(primus({

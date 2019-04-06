@@ -1,26 +1,46 @@
-const { NotAuthenticated } = require('@feathersjs/errors');
+import { NotAuthenticated } from '@feathersjs/errors';
+import { Application } from '@feathersjs/feathers';
+import { AuthenticationRequest, AuthenticationResult } from '@feathersjs/authentication';
 
-exports.Storage = class Storage {
-  constructor () {
+export class Storage {
+  store: { [key: string]: any };
+
+  constructor() {
     this.store = {};
   }
 
-  getItem (key) {
+  getItem(key: string) {
     return this.store[key];
   }
 
-  setItem (key, value) {
+  setItem(key: string, value: any) {
     return (this.store[key] = value);
   }
 
-  removeItem (key) {
+  removeItem(key: string) {
     delete this.store[key];
     return this;
   }
-};
+}
 
-exports.AuthenticationClient = class AuthenticationClient {
-  constructor (app, options) {
+export type ClientConstructor = new (app: Application, options: AuthenticationClientOptions) => AuthenticationClient;
+
+export interface AuthenticationClientOptions {
+  storage?: Storage;
+  header?: string;
+  scheme?: string;
+  storageKey?: string;
+  jwtStrategy?: string;
+  path?: string;
+  Authentication?: ClientConstructor;
+}
+
+export class AuthenticationClient {
+  app: Application;
+  authenticated: boolean;
+  options: AuthenticationClientOptions;
+
+  constructor(app: Application, options: AuthenticationClientOptions) {
     const socket = app.io || app.primus;
 
     this.app = app;
@@ -41,7 +61,7 @@ exports.AuthenticationClient = class AuthenticationClient {
     return this.app.get('storage');
   }
 
-  handleSocket (socket) {
+  handleSocket (socket: any) {
     // Connection events happen on every reconnect
     const connected = this.app.io ? 'connect' : 'open';
 
@@ -55,11 +75,11 @@ exports.AuthenticationClient = class AuthenticationClient {
     });
   }
 
-  setJwt (accessToken) {
+  setJwt(accessToken: string) {
     return Promise.resolve(this.storage.setItem(this.options.storageKey, accessToken));
   }
 
-  getJwt () {
+  getJwt() {
     return Promise.resolve(this.storage.getItem(this.options.storageKey));
   }
 
@@ -74,7 +94,7 @@ exports.AuthenticationClient = class AuthenticationClient {
     return Promise.resolve(null);
   }
 
-  reauthenticate (force = false) {
+  reauthenticate (force: boolean = false): Promise<AuthenticationResult> {
     // Either returns the authentication state or
     // tries to re-authenticate with the stored JWT and strategy
     const authPromise = this.app.get('authentication');
@@ -95,13 +115,13 @@ exports.AuthenticationClient = class AuthenticationClient {
     return authPromise;
   }
 
-  authenticate (authentication) {
+  authenticate (authentication: AuthenticationRequest): Promise<AuthenticationResult> {
     if (!authentication) {
       return this.reauthenticate();
     }
 
     const promise = this.service.create(authentication)
-      .then(authResult => {
+      .then((authResult: AuthenticationResult) => {
         const { accessToken } = authResult;
 
         this.authenticated = true;
@@ -109,7 +129,7 @@ exports.AuthenticationClient = class AuthenticationClient {
         this.app.emit('authenticated', authResult);
 
         return this.setJwt(accessToken).then(() => authResult);
-      }).catch(error => this.reset().then(() => Promise.reject(error)));
+      }).catch((error: any) => this.reset().then(() => Promise.reject(error)));
 
     this.app.set('authentication', promise);
 
@@ -119,8 +139,8 @@ exports.AuthenticationClient = class AuthenticationClient {
   logout () {
     return this.app.get('authentication')
       .then(() => this.service.remove(null))
-      .then(authResult => this.removeJwt()
-        .then(this.reset())
+      .then((authResult: AuthenticationResult) => this.removeJwt()
+        .then(() => this.reset())
         .then(() => {
           this.app.emit('logout', authResult);
 
@@ -128,4 +148,4 @@ exports.AuthenticationClient = class AuthenticationClient {
         })
       );
   }
-};
+}

@@ -3,7 +3,7 @@ import { Application } from '@feathersjs/feathers';
 
 import { hooks } from '../../src';
 // @ts-ignore
-import getApp from '../fixture';
+import createApplication from '../fixture';
 
 const { hashPassword } = hooks;
 
@@ -11,7 +11,7 @@ describe('@feathersjs/authentication-local/hooks/hash-password', () => {
   let app: Application;
 
   beforeEach(() => {
-    app = getApp();
+    app = createApplication();
   });
 
   it('throws error when no field provided', () => {

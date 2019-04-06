@@ -1,14 +1,14 @@
-const io = require('socket.io-client');
-const feathers = require('@feathersjs/feathers');
-const socketio = require('@feathersjs/socketio');
-const socketioClient = require('@feathersjs/socketio-client');
+import io from 'socket.io-client';
+import feathers, { Application } from '@feathersjs/feathers';
+import socketio from '@feathersjs/socketio';
+import socketioClient from '@feathersjs/socketio-client';
 
-const authClient = require('../../lib');
-const getApp = require('./fixture');
-const commonTests = require('./commons');
+import authClient from '../../src';
+import getApp from './fixture';
+import commonTests from './commons';
 
 describe('@feathersjs/authentication-client Socket.io integration', () => {
-  let app;
+  let app: Application;
 
   before(() => {
     app = getApp(feathers().configure(socketio()));

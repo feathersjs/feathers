@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { LocalStrategy } from '../src';
 // @ts-ignore
-import getApp from './fixture';
+import createApplication from './fixture';
 import { Application } from '@feathersjs/feathers';
 
 describe('@feathersjs/authentication-local/strategy', () => {
@@ -12,7 +12,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
   let user: any;
 
   beforeEach(async () => {
-    app = getApp();
+    app = createApplication();
     user = await app.service('users').create({ email, password });
   });
 

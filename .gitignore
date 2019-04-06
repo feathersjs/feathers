@@ -40,6 +40,7 @@ dist/
 # TypeScript compiled files
 packages/authentication/lib
 packages/authentication-local/lib
+packages/authentication-client/lib
 packages/configuration/lib
 packages/commons/lib
 packages/transport-commons/lib

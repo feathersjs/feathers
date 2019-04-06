@@ -1,21 +1,22 @@
-const axios = require('axios');
-const feathers = require('@feathersjs/feathers');
-const express = require('@feathersjs/express');
-const rest = require('@feathersjs/rest-client');
+import axios from 'axios';
+import feathers, { Application as FeathersApplication } from '@feathersjs/feathers';
+import * as express from '@feathersjs/express';
+import rest from '@feathersjs/rest-client';
 
-const authClient = require('../../lib');
-const getApp = require('./fixture');
-const commonTests = require('./commons');
+import authClient from '../../src';
+import getApp from './fixture';
+import commonTests from './commons';
 
 describe('@feathersjs/authentication-client Express integration', () => {
-  let app, server;
+  let app: express.Application;
+  let server: any;
 
   before(() => {
-    const restApp = express(feathers())
+    const restApp = express.default(feathers())
       .use(express.json())
       .configure(express.rest())
       .use(express.parseAuthentication('jwt'));
-    app = getApp(restApp);
+    app = getApp(restApp as unknown as FeathersApplication) as express.Application;
     app.use(express.errorHandler());
 
     server = app.listen(9776);
