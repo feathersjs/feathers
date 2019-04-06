@@ -15,7 +15,7 @@ const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/;
 
 describe('authentication/service', () => {
   const message = 'Some payload';
-  
+
   let app: Application<{
     authentication: AuthenticationService & Service<AuthenticationResult>,
     users: Service<any>
@@ -78,7 +78,7 @@ describe('authentication/service', () => {
       }, {
         payload: { message }
       });
-      
+
       const decoded = jwt.decode(result.accessToken);
 
       if (typeof decoded === 'string') {
@@ -137,7 +137,7 @@ describe('authentication/service', () => {
           username: 'David'
         });
         assert.fail('Should never get here');
-      } catch(error) {
+      } catch (error) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'Can not set subject from user.somethingElse');
       }
@@ -172,7 +172,7 @@ describe('authentication/service', () => {
           username: 'David'
         }
       });
-      
+
       assert.deepStrictEqual(authResult, Strategy1.result);
     });
 
@@ -262,7 +262,7 @@ describe('authentication/service', () => {
       }));
 
       otherApp.use('/users', {
-        async get() {
+        async get () {
           return {};
         }
       });
@@ -278,7 +278,7 @@ describe('authentication/service', () => {
     it('passes when entity service exists and `entityId` property is set', () => {
       app.get('authentication').entityId = 'id';
       app.use('/users', {
-        async get() {
+        async get () {
           return {};
         }
       });

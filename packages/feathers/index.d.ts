@@ -7,7 +7,7 @@
 
 // TypeScript Version: 2.3
 
-/// <reference types="node" />
+/// <reference types='node' />
 
 import { EventEmitter } from 'events';
 
@@ -101,7 +101,7 @@ export interface HookContext<T = any> {
      */
     readonly service: Service<T>;
     /**
-     * A writeable, optional property and contains a "safe" version of the data that
+     * A writeable, optional property and contains a 'safe' version of the data that
      * should be sent to any client. If context.dispatch has not been set context.result
      * will be sent to the client instead.
      */
@@ -114,7 +114,7 @@ export interface HookContext<T = any> {
     /**
      * A read only property with the hook type (one of before, after or error).
      */
-    readonly type: "before" | "after" | "error";
+    readonly type: 'before' | 'after' | 'error';
     /**
      * The real-time connection object
      */
@@ -140,67 +140,43 @@ export interface HooksObject {
 // todo: figure out what to do: These methods don't actually need to be implemented, so they can be undefined at runtime. Yet making them optional gets cumbersome in strict mode.
 export interface ServiceMethods<T> {
     [key: string]: any;
-    
-    find?(params?: Params): Promise<T | T[] | Paginated<T>>;
 
-    get?(id: Id, params?: Params): Promise<T>;
+    find? (params?: Params): Promise<T | T[] | Paginated<T>>;
 
-    create?(data: Partial<T> | Array<Partial<T>>, params?: Params): Promise<T | T[]>;
+    get? (id: Id, params?: Params): Promise<T>;
 
-    update?(id: NullableId, data: T, params?: Params): Promise<T>;
+    create? (data: Partial<T> | Array<Partial<T>>, params?: Params): Promise<T | T[]>;
 
-    patch?(id: NullableId, data: Partial<T>, params?: Params): Promise<T>;
+    update? (id: NullableId, data: T, params?: Params): Promise<T>;
 
-    remove?(id: NullableId, params?: Params): Promise<T>;
+    patch? (id: NullableId, data: Partial<T>, params?: Params): Promise<T>;
+
+    remove? (id: NullableId, params?: Params): Promise<T>;
 }
 
 export interface SetupMethod {
-    setup(app: Application, path: string): void;
+    setup (app: Application, path: string): void;
 }
 
 export interface ServiceOverloads<T> {
-    create?(data: Array<Partial<T>>, params?: Params): Promise<T[]>;
+    create? (data: Array<Partial<T>>, params?: Params): Promise<T[]>;
 
-    create?(data: Partial<T>, params?: Params): Promise<T>;
+    create? (data: Partial<T>, params?: Params): Promise<T>;
 
-    patch?(id: NullableId, data: Pick<T, keyof T>, params?: Params): Promise<T>;
+    patch? (id: NullableId, data: Pick<T, keyof T>, params?: Params): Promise<T>;
 }
 
 export interface ServiceAddons<T> extends EventEmitter {
     id?: any;
     _serviceEvents: string[];
-    hooks(hooks: Partial<HooksObject>): this;
+    hooks (hooks: Partial<HooksObject>): this;
 }
 
 export type Service<T> = ServiceOverloads<T> & ServiceAddons<T> & ServiceMethods<T>;
 
-export type ServiceMixin = (service: Service<any>, path: string) => void
+export type ServiceMixin = (service: Service<any>, path: string) => void;
 
 export interface Application<ServiceTypes = any> extends EventEmitter {
-    get(name: string): any;
-
-    set(name: string, value: any): this;
-
-    disable(name: string): this;
-
-    disabled(name: string): boolean;
-
-    enable(name: string): this;
-
-    enabled(name: string): boolean;
-
-    configure(callback: (this: this, app: this) => void): this;
-
-    hooks(hooks: Partial<HooksObject>): this;
-
-    setup(server?: any): this;
-
-    service<L extends keyof ServiceTypes>(location: L): ServiceTypes[L];
-
-    service(location: string): Service<any>;
-
-    use(path: string, service: Partial<ServiceMethods<any> & SetupMethod> | Application, options?: any): this;
-
     version: string;
 
     services: ServiceTypes;
@@ -208,4 +184,28 @@ export interface Application<ServiceTypes = any> extends EventEmitter {
     mixins: ServiceMixin[];
 
     methods: string[];
+
+    get (name: string): any;
+
+    set (name: string, value: any): this;
+
+    disable (name: string): this;
+
+    disabled (name: string): boolean;
+
+    enable (name: string): this;
+
+    enabled (name: string): boolean;
+
+    configure (callback: (this: this, app: this) => void): this;
+
+    hooks (hooks: Partial<HooksObject>): this;
+
+    setup (server?: any): this;
+
+    service<L extends keyof ServiceTypes> (location: L): ServiceTypes[L];
+
+    service (location: string): Service<any>;
+
+    use (path: string, service: Partial<ServiceMethods<any> & SetupMethod> | Application, options?: any): this;
 }

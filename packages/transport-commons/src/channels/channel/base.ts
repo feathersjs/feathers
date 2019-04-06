@@ -8,7 +8,7 @@ export class Channel extends EventEmitter {
   connections: RealTimeConnection[];
   data: any;
 
-  constructor(connections: RealTimeConnection[] = [], data: any = null) {
+  constructor (connections: RealTimeConnection[] = [], data: any = null) {
     super();
 
     this.connections = connections;
@@ -23,7 +23,7 @@ export class Channel extends EventEmitter {
     connections.forEach(current => {
       if (typeof current === 'function') {
         const callback = current as (connection: RealTimeConnection) => boolean;
-        
+
         this.leave(...this.connections.filter(callback));
       } else {
         const index = this.connections.indexOf(current);

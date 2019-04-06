@@ -9,7 +9,7 @@ describe('app.router', () => {
     app = feathers().configure(routing());
 
     app.use('/my/service', {
-      get(id: string|number) {
+      get (id: string|number) {
         return Promise.resolve({ id });
       }
     });
@@ -56,7 +56,7 @@ describe('app.router', () => {
     const path = '/test/:first/my/:second';
 
     app.use(path, {
-      get(id: string|number) {
+      get (id: string|number) {
         return Promise.resolve({ id });
       }
     });

@@ -26,7 +26,8 @@ module.exports = function (name, options) {
   };
 
   describe('Basic service events', () => {
-    let socket, connection;
+    let socket;
+    let connection;
 
     before(done => {
       options.app.once('connection', conn => {
@@ -114,7 +115,8 @@ module.exports = function (name, options) {
 
   describe('Event channels', () => {
     const eventName = `${name} created`;
-    let connections, sockets;
+    let connections;
+    let sockets;
 
     before(done => {
       let counter = 0;

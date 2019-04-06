@@ -14,7 +14,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
    * @param _authResult The current authentication result
    * @param params The service call parameters
    */
-  getPayload(_authResult: AuthenticationResult, params: Params) {
+  getPayload (_authResult: AuthenticationResult, params: Params) {
     // Uses `params.payload` or returns an empty payload
     const { payload = {} } = params;
 
@@ -27,7 +27,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
    * @param authResult The authentication result
    * @param params Service call parameters
    */
-  async getJwtOptions(authResult: AuthenticationResult, params: Params) {
+  async getJwtOptions (authResult: AuthenticationResult, params: Params) {
     const { service, entity, entityId } = this.configuration;
     const jwtOptions = merge({}, params.jwt);
     const hasEntity = service && entity && authResult[entity];
@@ -53,7 +53,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
    * @param data The authentication request (should include `strategy` key)
    * @param params Service call parameters
    */
-  async create(data: AuthenticationRequest, params?: Params) {
+  async create (data: AuthenticationRequest, params?: Params) {
     const { strategies } = this.configuration;
 
     if (!strategies.length) {
@@ -86,7 +86,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
    * @param id The JWT to remove or null
    * @param params Service call parameters
    */
-  async remove(id: null|string, params?: Params) {
+  async remove (id: null|string, params?: Params) {
     const { authentication } = params;
     const { strategies } = this.configuration;
 
@@ -103,7 +103,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
   /**
    * Validates the service configuration.
    */
-  setup() {
+  setup () {
     // The setup method checks for valid settings and registers the
     // connection and event (login, logout) hooks
     const { secret, service, entity, entityId, strategies } = this.configuration;

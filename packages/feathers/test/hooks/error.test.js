@@ -159,7 +159,8 @@ describe('`error` hooks', () => {
   describe('error in hooks', () => {
     const errorMessage = 'before hook broke';
 
-    let app, service;
+    let app;
+    let service;
 
     beforeEach(() => {
       app = feathers().use('/dummy', {
@@ -246,7 +247,8 @@ describe('`error` hooks', () => {
   it('Error in before hook causes inter-service calls to have wrong hook context (https://github.com/feathersjs/feathers/issues/841)', () => {
     const app = feathers();
 
-    let service1Params, service2Params;
+    let service1Params;
+    let service2Params;
 
     app.use('/service1', {
       find () {

@@ -26,35 +26,35 @@ export interface AuthenticationStrategy {
    * Implement this method to get access to the AuthenticationService
    * @param auth The AuthenticationService
    */
-  setAuthentication?(auth: AuthenticationBase): void;
+  setAuthentication? (auth: AuthenticationBase): void;
   /**
    * Implement this method to get access to the Feathers application
    * @param app The Feathers application instance
    */
-  setApplication?(app: Application): void;
+  setApplication? (app: Application): void;
   /**
    * Implement this method to get access to the strategy name
    * @param name The name of the strategy
    */
-  setName?(name: string): void;
+  setName? (name: string): void;
   /**
-   * Implement this method to verify the current configuration 
+   * Implement this method to verify the current configuration
    * and throw an error if it is invalid.
    */
-  verifyConfiguration?(): void;
+  verifyConfiguration? (): void;
   /**
    * Authenticate an authentication request with this strategy.
    * Should throw an error if the strategy did not succeed.
    * @param authentication The authentication request
    * @param params The service call parameters
    */
-  authenticate(authentication: AuthenticationRequest, params: Params): Promise<AuthenticationResult>;
+  authenticate (authentication: AuthenticationRequest, params: Params): Promise<AuthenticationResult>;
   /**
    * Parse a basic HTTP request and response for authentication request information.
    * @param req The HTTP request
    * @param res The HTTP response
    */
-  parse?(req: IncomingMessage, res: ServerResponse): Promise<AuthenticationRequest|null>;
+  parse? (req: IncomingMessage, res: ServerResponse): Promise<AuthenticationRequest|null>;
 }
 
 export interface JwtVerifyOptions extends VerifyOptions {
@@ -77,7 +77,7 @@ export class AuthenticationBase {
    * @param configKey The configuration key name in `app.get` (default: `authentication`)
    * @param options Optional initial options
    */
-  constructor(app: Application, configKey: string = 'authentication', options = {}) {
+  constructor (app: Application, configKey: string = 'authentication', options = {}) {
     if (!app || typeof app.use !== 'function') {
       throw new Error('An application instance has to be passed to the authentication service');
     }
@@ -93,7 +93,7 @@ export class AuthenticationBase {
   /**
    * Return the current configuration from the application
    */
-  get configuration() {
+  get configuration () {
     // Always returns a copy of the authentication configuration
     return Object.assign({}, defaultOptions, this.app.get(this.configKey));
   }
@@ -101,7 +101,7 @@ export class AuthenticationBase {
   /**
    * A list of all registered strategy names
    */
-  get strategyNames() {
+  get strategyNames () {
     return Object.keys(this.strategies);
   }
 
@@ -110,7 +110,7 @@ export class AuthenticationBase {
    * @param name The name to register the strategy under
    * @param strategy The authentication strategy instance
    */
-  register(name: string, strategy: AuthenticationStrategy) {
+  register (name: string, strategy: AuthenticationStrategy) {
     // Call the functions a strategy can implement
     if (typeof strategy.setName === 'function') {
       strategy.setName(name);
@@ -137,7 +137,7 @@ export class AuthenticationBase {
    * The return value may contain `undefined` if the strategy does not exist.
    * @param names The list or strategy names
    */
-  getStrategies(...names: string[]) {
+  getStrategies (...names: string[]) {
     // Returns all strategies for a list of names (including undefined)
     return names.map(name => this.strategies[name])
       .filter(current => !!current);
@@ -149,7 +149,7 @@ export class AuthenticationBase {
    * @param optsOverride The options to extend the defaults (`configuration.jwtOptions`) with
    * @param secretOverride Use a different secret instead
    */
-  createJWT(payload: string | Buffer | object, optsOverride?: SignOptions, secretOverride?: Secret) {
+  createJWT (payload: string | Buffer | object, optsOverride?: SignOptions, secretOverride?: Secret) {
     const { secret, jwtOptions } = this.configuration;
     // Use configuration by default but allow overriding the secret
     const jwtSecret = secretOverride || secret;
@@ -171,7 +171,7 @@ export class AuthenticationBase {
    * @param optsOverride The options to extend the defaults (`configuration.jwtOptions`) with
    * @param secretOverride Use a different secret instead
    */
-  verifyJWT(accessToken: string, optsOverride?: JwtVerifyOptions, secretOverride?: Secret) {
+  verifyJWT (accessToken: string, optsOverride?: JwtVerifyOptions, secretOverride?: Secret) {
     const { secret, jwtOptions } = this.configuration;
     const jwtSecret = secretOverride || secret;
     const options = merge({}, jwtOptions, optsOverride);
@@ -193,7 +193,7 @@ export class AuthenticationBase {
    * @param params Service call parameters
    * @param allowed A list of allowed strategy names
    */
-  async authenticate(authentication: AuthenticationRequest, params: Params, ...allowed: string[]) {
+  async authenticate (authentication: AuthenticationRequest, params: Params, ...allowed: string[]) {
     debug('Running authenticate for strategies', allowed);
 
     const strategies = this.getStrategies(...allowed)
@@ -234,7 +234,7 @@ export class AuthenticationBase {
    * @param res The HTTP response
    * @param names A list of strategies to use
    */
-  async parse(req: IncomingMessage, res: ServerResponse, ...names: string[]) {
+  async parse (req: IncomingMessage, res: ServerResponse, ...names: string[]) {
     const strategies = this.getStrategies(...names)
       .filter(current => current && typeof current.parse === 'function');
 

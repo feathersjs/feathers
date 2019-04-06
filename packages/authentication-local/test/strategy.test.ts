@@ -31,7 +31,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
 
   it('fails when entity not found', async () => {
     const authService = app.service('authentication');
-    
+
     try {
       await authService.create({
         strategy: 'local',
@@ -130,7 +130,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
     assert.strictEqual(authResult.user.passsword, undefined);
 
     const decoded = await authService.verifyJWT(accessToken);
-    
+
     assert.strictEqual(decoded.sub, `${user.id}`);
   });
 });

@@ -10,19 +10,19 @@ export class JWTStrategy implements AuthenticationStrategy {
   app?: Application;
   name?: string;
 
-  setAuthentication(auth: AuthenticationBase): void {
+  setAuthentication (auth: AuthenticationBase): void {
     this.authentication = auth;
   }
 
-  setApplication(app: Application) {
+  setApplication (app: Application) {
     this.app = app;
   }
 
-  setName(name: string) {
+  setName (name: string) {
     this.name = name;
   }
 
-  get configuration() {
+  get configuration () {
     const authConfig = this.authentication.configuration;
     const config = authConfig[this.name];
 
@@ -35,7 +35,7 @@ export class JWTStrategy implements AuthenticationStrategy {
     };
   }
 
-  verifyConfiguration() {
+  verifyConfiguration () {
     const allowedKeys = [ 'entity', 'service', 'header', 'schemes' ];
 
     for (const key of Object.keys(this.configuration)) {
@@ -50,7 +50,7 @@ export class JWTStrategy implements AuthenticationStrategy {
    * @param id The id to use
    * @param params Service call parameters
    */
-  async getEntity(id: string, params: Params) {
+  async getEntity (id: string, params: Params) {
     const { service } = this.configuration;
     const entityService = this.app.service(service);
 
@@ -62,7 +62,7 @@ export class JWTStrategy implements AuthenticationStrategy {
     return entityService.get(id, params);
   }
 
-  async authenticate(authentication: AuthenticationRequest, params: Params) {
+  async authenticate (authentication: AuthenticationRequest, params: Params) {
     const { accessToken, strategy } = authentication;
     const { entity } = this.configuration;
 
@@ -92,7 +92,7 @@ export class JWTStrategy implements AuthenticationStrategy {
     };
   }
 
-  async parse(req: IncomingMessage) {
+  async parse (req: IncomingMessage) {
     const result = { strategy: this.name };
     const { header, schemes }: { header: any, schemes: string[] } = this.configuration;
     const headerValue = req.headers && req.headers[header.toLowerCase()];

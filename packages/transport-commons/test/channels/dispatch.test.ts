@@ -14,7 +14,7 @@ describe('app.publish', () => {
   it('throws an error if service does not send the event', () => {
     try {
       app.use('/test', {
-        create(data: any) {
+        create (data: any) {
           return Promise.resolve(data);
         }
       });
@@ -36,7 +36,7 @@ describe('app.publish', () => {
       app.use('/test', {
         events: [ 'foo' ],
 
-        create(payload: any) {
+        create (payload: any) {
           return Promise.resolve(payload);
         }
       });

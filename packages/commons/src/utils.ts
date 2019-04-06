@@ -88,7 +88,7 @@ export const _ = {
     }
     return target;
   }
-}
+};
 
 // Duck-checks if an object looks like a promise
 export function isPromise (result: any) {
@@ -109,6 +109,6 @@ export function makeUrl (path: string, app: any = {}) {
   return `${protocol}://${host}${port}/${exports.stripSlashes(path)}`;
 }
 
-export function createSymbol(name: string) {
+export function createSymbol (name: string) {
   return typeof Symbol !== 'undefined' ? Symbol(name) : name;
 }

@@ -76,7 +76,7 @@ describe('socket commons utils', () => {
           connections: [{
             test: dummySocket
           }],
-          dataFor(): null {
+          dataFor (): null {
             return null;
           }
         };
@@ -129,8 +129,8 @@ describe('socket commons utils', () => {
 
         dummySocket.once('testing', data => {
           assert.deepStrictEqual(data, data1);
-          dummySocket.once('testing', data => {
-            assert.deepStrictEqual(data, data2);
+          dummySocket.once('testing', result => {
+            assert.deepStrictEqual(result, data2);
             done();
           });
         });

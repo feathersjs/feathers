@@ -32,7 +32,7 @@ describe('authentication/jwt', () => {
 
     app.use('/users', memory());
     app.use('/protected', {
-      async get(id, params) {
+      async get (id, params) {
         return {
           id, params
         };

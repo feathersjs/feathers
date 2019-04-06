@@ -10,7 +10,7 @@ export interface HashPasswordOptions {
   strategy?: string;
 }
 
-export default function hashPassword(field: string, options: HashPasswordOptions = {}) {
+export default function hashPassword (field: string, options: HashPasswordOptions = {}) {
   if (!field) {
     throw new Error('The hashPassword hook requires a field name option');
   }
@@ -43,7 +43,7 @@ export default function hashPassword(field: string, options: HashPasswordOptions
     }
 
     const hashedPassword: string = await localStrategy.hashPassword(password, params);
-    
+
     context.data = set(cloneDeep(data), field, hashedPassword);
 
     return context;

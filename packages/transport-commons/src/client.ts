@@ -24,7 +24,7 @@ const otherEmitterMethods = [
 
 const addEmitterMethods = (service: any) => {
   otherEmitterMethods.forEach(method => {
-    service[method] = function(...args: any[]) {
+    service[method] = function (...args: any[]) {
       if (typeof this.connection[method] !== 'function') {
         throw new Error(`Can not call '${method}' on the client service connection`);
       }
@@ -35,7 +35,7 @@ const addEmitterMethods = (service: any) => {
 
   // Methods that should add the namespace (service path)
   namespacedEmitterMethods.forEach(method => {
-    service[method] = function(name: string, ...args: any[]) {
+    service[method] = function (name: string, ...args: any[]) {
       if (typeof this.connection[method] !== 'function') {
         throw new Error(`Can not call '${method}' on the client service connection`);
       }
@@ -67,7 +67,7 @@ export class Service {
   method: string;
   timeout: number;
 
-  constructor(options: ServiceOptions) {
+  constructor (options: ServiceOptions) {
     this.events = options.events;
     this.path = options.name;
     this.connection = options.connection;
@@ -77,7 +77,7 @@ export class Service {
     addEmitterMethods(this);
   }
 
-  send(method: string, ...args: any[]) {
+  send (method: string, ...args: any[]) {
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => reject(
         new Timeout(`Timeout of ${this.timeout}ms exceeded calling ${method} on ${this.path}`, {
@@ -88,7 +88,7 @@ export class Service {
       ), this.timeout);
 
       args.unshift(method, this.path);
-      args.push(function(error: any, data: any) {
+      args.push(function (error: any, data: any) {
         error = convert(error);
         clearTimeout(timeoutId);
 
@@ -101,34 +101,34 @@ export class Service {
     });
   }
 
-  find(params: Params = {}) {
+  find (params: Params = {}) {
     return this.send('find', params.query || {});
   }
 
-  get(id: number|string, params: Params = {}) {
+  get (id: number | string, params: Params = {}) {
     return this.send('get', id, params.query || {});
   }
 
-  create(data: any, params: Params = {}) {
+  create (data: any, params: Params = {}) {
     return this.send('create', data, params.query || {});
   }
 
-  update(id: number|string, data: any, params: Params = {}) {
+  update (id: number | string, data: any, params: Params = {}) {
     return this.send('update', id, data, params.query || {});
   }
 
-  patch(id: number|string, data: any, params: Params = {}) {
+  patch (id: number | string, data: any, params: Params = {}) {
     return this.send('patch', id, data, params.query || {});
   }
 
-  remove(id: number|string, params: Params = {}) {
+  remove (id: number | string, params: Params = {}) {
     return this.send('remove', id, params.query || {});
   }
 
   // `off` is actually not part of the Node event emitter spec
   // but we are adding it since everybody is expecting it because
   // of the emitter-component Socket.io is using
-  off(name: string, ...args: any[]) {
+  off (name: string, ...args: any[]) {
     if (typeof this.connection.off === 'function') {
       return this.connection.off(`${this.path} ${name}`, ...args);
     } else if (args.length === 0) {

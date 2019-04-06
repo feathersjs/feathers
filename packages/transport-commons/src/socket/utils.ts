@@ -16,7 +16,7 @@ export const paramsPositions: { [key: string]: number } = {
   patch: 2
 };
 
-export function normalizeError(e: any) {
+export function normalizeError (e: any) {
   const hasToJSON = typeof e.toJSON === 'function';
   const result = hasToJSON ? e.toJSON() : {};
 
@@ -35,8 +35,8 @@ export function normalizeError(e: any) {
   return result;
 }
 
-export function getDispatcher(emit: string, socketKey: any) {
-  return function(event: string, channel: CombinedChannel, context: HookContext, data: any) {
+export function getDispatcher (emit: string, socketKey: any) {
+  return function (event: string, channel: CombinedChannel, context: HookContext, data: any) {
     debug(`Dispatching '${event}' to ${channel.length} connections`);
 
     channel.connections.forEach(connection => {
@@ -63,7 +63,7 @@ export function getDispatcher(emit: string, socketKey: any) {
   };
 }
 
-export function runMethod(app: Application, connection: RealTimeConnection, path: string, method: string, args: any[]) {
+export function runMethod (app: Application, connection: RealTimeConnection, path: string, method: string, args: any[]) {
   const trace = `method '${method}' on service '${path}'`;
   const methodArgs = args.slice(0);
   const callback = typeof methodArgs[methodArgs.length - 1] === 'function'

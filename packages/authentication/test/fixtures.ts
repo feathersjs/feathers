@@ -22,19 +22,19 @@ export class Strategy1 implements AuthenticationStrategy {
   app?: Application;
   authentication?: AuthenticationService;
 
-  setName(name: string) {
+  setName (name: string) {
     this.name = name;
   }
 
-  setApplication(app: Application) {
+  setApplication (app: Application) {
     this.app = app;
   }
 
-  setAuthentication(authentication: AuthenticationService) {
+  setAuthentication (authentication: AuthenticationService) {
     this.authentication = authentication;
   }
 
-  async authenticate(authentication: AuthenticationRequest) {
+  async authenticate (authentication: AuthenticationRequest) {
     if (authentication.username === 'David' || authentication.both) {
       return Strategy1.result;
     }
@@ -42,7 +42,7 @@ export class Strategy1 implements AuthenticationStrategy {
     throw new NotAuthenticated('Invalid Dave');
   }
 
-  async parse(req: MockRequest) {
+  async parse (req: MockRequest) {
     if (req.isDave) {
       return Strategy1.result;
     }
@@ -59,7 +59,7 @@ export class Strategy2 implements AuthenticationStrategy {
     }
   };
 
-  authenticate(authentication: AuthenticationRequest, params: Params) {
+  authenticate (authentication: AuthenticationRequest, params: Params) {
     const isV2 = authentication.v2 === true && authentication.password === 'supersecret';
 
     if (isV2 || authentication.both) {
@@ -69,7 +69,7 @@ export class Strategy2 implements AuthenticationStrategy {
     return Promise.reject(new NotAuthenticated('Invalid v2 user'));
   }
 
-  async parse(req: MockRequest) {
+  async parse (req: MockRequest) {
     if (req.isV2) {
       return Strategy2.result;
     }

@@ -5,19 +5,19 @@ import { AuthenticationRequest, AuthenticationResult } from '@feathersjs/authent
 export class Storage {
   store: { [key: string]: any };
 
-  constructor() {
+  constructor () {
     this.store = {};
   }
 
-  getItem(key: string) {
+  getItem (key: string) {
     return this.store[key];
   }
 
-  setItem(key: string, value: any) {
+  setItem (key: string, value: any) {
     return (this.store[key] = value);
   }
 
-  removeItem(key: string) {
+  removeItem (key: string) {
     delete this.store[key];
     return this;
   }
@@ -40,7 +40,7 @@ export class AuthenticationClient {
   authenticated: boolean;
   options: AuthenticationClientOptions;
 
-  constructor(app: Application, options: AuthenticationClientOptions) {
+  constructor (app: Application, options: AuthenticationClientOptions) {
     const socket = app.io || app.primus;
 
     this.app = app;
@@ -75,11 +75,11 @@ export class AuthenticationClient {
     });
   }
 
-  setJwt(accessToken: string) {
+  setJwt (accessToken: string) {
     return Promise.resolve(this.storage.setItem(this.options.storageKey, accessToken));
   }
 
-  getJwt() {
+  getJwt () {
     return Promise.resolve(this.storage.getItem(this.options.storageKey));
   }
 

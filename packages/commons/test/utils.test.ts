@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-expressions */
+/* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai';
 

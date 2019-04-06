@@ -362,7 +362,7 @@ describe('hook utilities', () => {
 
       it('throws an error when registering invalid hook type', () => {
         try {
-          base.hooks({ wrong: function () {} });
+          base.hooks({ wrong () {} });
           throw new Error('Should never get here');
         } catch (e) {
           expect(e.message).to.equal(`'wrong' is not a valid hook type`);
@@ -372,7 +372,7 @@ describe('hook utilities', () => {
       it('throws an error when registering invalid method', () => {
         try {
           base.hooks({ dummy: {
-            wrongMethod: function () {}
+            wrongMethod () {}
           } });
           throw new Error('Should never get here');
         } catch (e) {

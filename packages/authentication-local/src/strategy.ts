@@ -12,19 +12,19 @@ export class LocalStrategy implements AuthenticationStrategy {
   app?: Application;
   name?: string;
 
-  setAuthentication(auth: AuthenticationBase) {
+  setAuthentication (auth: AuthenticationBase) {
     this.authentication = auth;
   }
 
-  setApplication(app: Application) {
+  setApplication (app: Application) {
     this.app = app;
   }
 
-  setName(name: string) {
+  setName (name: string) {
     this.name = name;
   }
 
-  verifyConfiguration() {
+  verifyConfiguration () {
     const config = this.configuration;
 
     [ 'usernameField', 'passwordField' ].forEach(prop => {
@@ -34,7 +34,7 @@ export class LocalStrategy implements AuthenticationStrategy {
     });
   }
 
-  get configuration() {
+  get configuration () {
     const authConfig = this.authentication.configuration;
     const config = authConfig[this.name] || {};
 
@@ -48,13 +48,13 @@ export class LocalStrategy implements AuthenticationStrategy {
     }, config);
   }
 
-  getEntityQuery(query: Query, _params: Params) {
+  getEntityQuery (query: Query, _params: Params) {
     return Promise.resolve(Object.assign({
       $limit: 1
     }, query));
   }
 
-  async findEntity(username: string, params: Params) {
+  async findEntity (username: string, params: Params) {
     const { entityUsernameField, service, errorMessage } = this.configuration;
     const query = await this.getEntityQuery({
       [entityUsernameField]: username
@@ -79,7 +79,7 @@ export class LocalStrategy implements AuthenticationStrategy {
     return entity;
   }
 
-  async comparePassword(entity: any, password: string) {
+  async comparePassword (entity: any, password: string) {
     const { entityPasswordField, errorMessage } = this.configuration;
     // find password in entity, this allows for dot notation
     const hash = get(entity, entityPasswordField);
@@ -101,11 +101,11 @@ export class LocalStrategy implements AuthenticationStrategy {
     throw new NotAuthenticated(errorMessage);
   }
 
-  async hashPassword(password: string) {
+  async hashPassword (password: string) {
     return bcrypt.hash(password, this.configuration.hashSize);
   }
 
-  async authenticate(data: AuthenticationRequest, params: Params) {
+  async authenticate (data: AuthenticationRequest, params: Params) {
     const { passwordField, usernameField, entity, errorMessage } = this.configuration;
     const username = data[usernameField];
     const password = data[passwordField];
@@ -115,7 +115,7 @@ export class LocalStrategy implements AuthenticationStrategy {
     }
 
     const result = await this.findEntity(username, omit(params, 'provider'));
-    
+
     await this.comparePassword(result, password);
 
     const authEntity = await (params.provider ? this.findEntity(username, params) : result);

@@ -8,7 +8,7 @@ import { AuthenticationResult } from '../../src/core';
 
 describe('authentication/hooks/connection', () => {
   const app = feathers().use('/authentication', {
-    async create(_data: AuthenticationRequest, params: Params) {
+    async create (_data: AuthenticationRequest, params: Params) {
       if (params.noAccessToken) {
         return {};
       }
@@ -20,7 +20,7 @@ describe('authentication/hooks/connection', () => {
       };
     },
 
-    async remove() {
+    async remove () {
       return { accessToken: '1234' };
     }
   });

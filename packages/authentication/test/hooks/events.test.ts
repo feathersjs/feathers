@@ -6,11 +6,11 @@ import { AuthenticationRequest, AuthenticationResult } from '../../src/core';
 
 describe('authentication/hooks/events', () => {
   const app = feathers().use('/authentication', {
-    async create(data: AuthenticationRequest) {
+    async create (data: AuthenticationRequest) {
       return data;
     },
 
-    async remove(id: string) {
+    async remove (id: string) {
       return { id };
     }
   });

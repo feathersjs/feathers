@@ -4,7 +4,7 @@ import { hooks } from '../../src';
 
 const { protect } = hooks;
 
-function testOmit(title: string, property: string) {
+function testOmit (title: string, property: string) {
   describe(title, () => {
     const fn = protect('password');
 
@@ -62,7 +62,7 @@ function testOmit(title: string, property: string) {
 
     it('uses .toJSON (#48)', () => {
       class MyUser {
-        toJSON() {
+        toJSON () {
           return {
             email: 'test@user.com',
             password: 'supersecret'

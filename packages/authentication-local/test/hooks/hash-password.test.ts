@@ -93,7 +93,7 @@ describe('@feathersjs/authentication-local/hooks/hash-password', () => {
     const user = await app.service('users').create({
       email: 'dave@hashpassword.com'
     });
-    
+
     assert.strictEqual(user.password, undefined);
   });
 });

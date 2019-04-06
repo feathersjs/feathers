@@ -25,11 +25,11 @@ describe('authentication/hooks/authenticate', () => {
       strategies: [ 'test' ]
     }));
     app.use('/users', {
-      async find() {
+      async find () {
         return [];
       },
 
-      async get(_id: string|number, params: Params) {
+      async get (_id: string|number, params: Params) {
         return params;
       }
     });

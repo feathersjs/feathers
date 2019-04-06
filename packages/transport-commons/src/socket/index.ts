@@ -14,7 +14,7 @@ export interface SocketOptions {
   getParams: (socket: any) => RealTimeConnection;
 }
 
-export function socket({ done, emit, socketKey, getParams }: SocketOptions) {
+export function socket ({ done, emit, socketKey, getParams }: SocketOptions) {
   return (app: Application) => {
     app.configure(channels());
     app.configure(routing());

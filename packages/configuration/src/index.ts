@@ -6,7 +6,7 @@ import config from 'config';
 const debug = Debug('@feathersjs/configuration');
 const separator = path.sep;
 
-export default function init() {
+export default function init () {
   return (app: Application|undefined) => {
     const convert = (current: any) => {
       const result: { [key: string]: any } = Array.isArray(current) ? [] : {};

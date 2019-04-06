@@ -16,14 +16,14 @@ export const keys = {
 
 export interface ChannelMixin {
   [CHANNELS]: { [key: string]: Channel };
-  channel(...names: string[]): Channel;
+  channel (...names: string[]): Channel;
 }
 
-export function channelMixin() {
+export function channelMixin () {
   const mixin: ChannelMixin = {
     [CHANNELS]: {},
 
-    channel(...names: string[]): Channel {
+    channel (...names: string[]): Channel {
       debug('Returning channels', names);
 
       if (names.length === 0) {
@@ -62,14 +62,14 @@ export function channelMixin() {
 
 export interface PublishMixin {
   [PUBLISHERS]: { [key: string]: Channel };
-  publish(event: string|symbol, callback: (data: any, hook: HookContext) => Channel): any;
+  publish (event: string|symbol, callback: (data: any, hook: HookContext) => Channel): any;
 }
 
-export function publishMixin() {
+export function publishMixin () {
   const result: PublishMixin = {
     [PUBLISHERS]: {},
 
-    publish(event, callback) {
+    publish (event, callback) {
       debug('Registering publisher', event);
 
       if (!callback && typeof event === 'function') {

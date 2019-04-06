@@ -6,7 +6,7 @@ export interface Todo {
   id?: number;
 }
 
-export function setupTests(app: any, name: string) {
+export function setupTests (app: any, name: string) {
   const getService = () => (name && typeof app.service === 'function')
     ? app.service(name) : app;
 

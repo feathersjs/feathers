@@ -1,6 +1,6 @@
 const Base = require('./base');
 
-class jQueryService extends Base {
+class JQueryService extends Base {
   request (options, params) {
     const { connection = {} } = params;
     const headers = Object.assign({}, options.headers, this.options.headers, connection.headers);
@@ -34,4 +34,4 @@ class jQueryService extends Base {
   }
 }
 
-module.exports = jQueryService;
+module.exports = JQueryService;

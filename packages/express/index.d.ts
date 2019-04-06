@@ -12,13 +12,13 @@ declare const feathersExpress: (<T>(app: FeathersApplication<T>) => Application<
 export default feathersExpress;
 export type Application<T = any> = express.Application & FeathersApplication<T>;
 
-export function errorHandler(options?: {
+export function errorHandler (options?: {
     public?: string,
     logger?: { error?: (msg: string) => void },
     html?: any,
-    json?: any,
+    json?: any
 }): express.ErrorRequestHandler;
-export function notFound(): express.RequestHandler;
+export function notFound (): express.RequestHandler;
 
 export const rest: {
     (handler?: express.RequestHandler): () => void;
@@ -53,6 +53,6 @@ export {
     urlencoded
 } from 'express';
 
-export function parseAuthentication(...strategies: string[]): express.RequestHandler;
-export function authenticate(...strategies: string[]): express.RequestHandler;
+export function parseAuthentication (...strategies: string[]): express.RequestHandler;
+export function authenticate (...strategies: string[]): express.RequestHandler;
 export const original: typeof express;

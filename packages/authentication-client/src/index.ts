@@ -9,9 +9,9 @@ declare module '@feathersjs/feathers' {
     rest?: any;
     primus?: any;
     authentication: AuthenticationClient;
-    authenticate(authentication?: AuthenticationRequest): Promise<AuthenticationResult>;
-    reauthenticate(force: boolean): Promise<AuthenticationResult>;
-    logout(): Promise<AuthenticationResult>;
+    authenticate (authentication?: AuthenticationRequest): Promise<AuthenticationResult>;
+    reauthenticate (force: boolean): Promise<AuthenticationResult>;
+    logout (): Promise<AuthenticationResult>;
   }
 }
 

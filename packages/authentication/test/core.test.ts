@@ -129,7 +129,7 @@ describe('authentication/core', () => {
         };
 
         const result = await auth.authenticate(authentication, {}, 'first', 'second');
-      
+
         assert.deepStrictEqual(result, Object.assign({}, Strategy2.result, {
           authentication,
           params: { authentication: true }

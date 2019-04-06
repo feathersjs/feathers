@@ -10,22 +10,22 @@ const { CHANNELS, PUBLISHERS, ALL_EVENTS } = keys;
 
 declare module '@feathersjs/feathers' {
   interface ServiceAddons<T> {
-    publish(callback: (data: T, hook: HookContext<T>) => Channel): this;
+    publish (callback: (data: T, hook: HookContext<T>) => Channel): this;
 
-    publish(event: string, callback: (data: T, hook: HookContext<T>) => Channel): this;
+    publish (event: string, callback: (data: T, hook: HookContext<T>) => Channel): this;
   }
 
   interface Application<ServiceTypes> {
     channels: string[];
 
-    channel(name: string[]): Channel;
-    channel(...names: string[]): Channel;
+    channel (name: string[]): Channel;
+    channel (...names: string[]): Channel;
 
     // tslint:disable-next-line void-return
-    publish<T>(callback: (data: T, hook: HookContext<T>) => Channel | Channel[] | void): Application<ServiceTypes>;
+    publish<T> (callback: (data: T, hook: HookContext<T>) => Channel | Channel[] | void): Application<ServiceTypes>;
 
     // tslint:disable-next-line void-return
-    publish<T>(event: string, callback: (data: T, hook: HookContext<T>) => Channel | Channel[] | void): Application<ServiceTypes>;
+    publish<T> (event: string, callback: (data: T, hook: HookContext<T>) => Channel | Channel[] | void): Application<ServiceTypes>;
   }
 }
 
@@ -81,7 +81,7 @@ export function channels () {
               return;
             }
 
-            const results = Array.isArray(result) ? compact(flattenDeep(result)) : [ result ];
+            const results = Array.isArray(result) ? compact(flattenDeep(result)) : [result];
             const channel = new CombinedChannel(results);
 
             if (channel && channel.length > 0) {

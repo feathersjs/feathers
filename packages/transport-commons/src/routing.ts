@@ -7,7 +7,7 @@ export const ROUTER = Symbol('@feathersjs/transport-commons/router');
 
 declare module '@feathersjs/feathers' {
   interface Application<ServiceTypes> {
-    lookup(path: string): { [key: string]: string };
+    lookup (path: string): { [key: string]: string };
   }
 }
 
@@ -20,7 +20,7 @@ export const routing = () => (app: Application) => {
 
   Object.assign(app, {
     [ROUTER]: router,
-    lookup(path: string): { [key: string]: string } {
+    lookup (path: string): { [key: string]: string } {
       if (!path) {
         return null;
       }
