@@ -6,7 +6,8 @@ const server = require('./server');
 const primus = require('../lib');
 
 describe('feathers-primus/client', () => {
-  let srv, socket;
+  let srv;
+  let socket;
 
   const app = feathers().configure(primus({}, { timeout: 500 }));
   const service = app.service('todos');

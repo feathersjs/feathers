@@ -163,6 +163,6 @@ We :heart: the community and take security very seriously. No one wants their ap
 
 ## License
 
-Copyright (c) 2018 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2019 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).

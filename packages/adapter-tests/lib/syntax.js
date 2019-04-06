@@ -2,7 +2,10 @@ const assert = require('assert');
 
 module.exports = (test, app, errors, serviceName, idProp) => {
   describe('Query Syntax', () => {
-    let bob, alice, doug, service;
+    let bob;
+    let alice;
+    let doug;
+    let service;
 
     beforeEach(async () => {
       service = app.service(serviceName);

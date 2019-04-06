@@ -179,7 +179,8 @@ describe('@feathersjs/errors', () => {
         const E = errors[name];
 
         if (E) {
-          new E('Something went wrong'); // eslint-disable-line no-new
+          // tslint:disable-next-line
+          new E('Something went wrong');
         }
       });
     });

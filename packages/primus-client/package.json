@@ -4,6 +4,7 @@
   "version": "1.1.7",
   "homepage": "https://feathersjs.com",
   "main": "lib/index.js",
+  "types": "index.d.ts",
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -44,6 +45,6 @@
     "chai": "^4.2.0",
     "feathers-memory": "^3.0.2",
     "mocha": "^6.0.2",
-    "ws": "^6.2.0"
+    "ws": "^6.2.1"
   }
 }

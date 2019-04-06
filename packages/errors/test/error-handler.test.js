@@ -1,5 +1,5 @@
-/* eslint-disable handle-callback-err */
-/* eslint-disable no-unused-expressions */
+/* tsline:disable:handle-callback-err */
+/* tslint:disable:no-unused-expression */
 const express = require('express');
 
 const chai = require('chai');

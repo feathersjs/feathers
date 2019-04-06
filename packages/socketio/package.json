@@ -4,6 +4,7 @@
   "version": "3.2.9",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
+  "types": "index.d.ts",
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -35,6 +36,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@types/socket.io": "^2.1.2",
     "@feathersjs/transport-commons": "^4.2.1",
     "debug": "^4.1.1",
     "socket.io": "^2.2.0",

@@ -1,3 +1,4 @@
+/* tslint:disable:no-console */
 const basicTests = require('./basic');
 const methodTests = require('./methods');
 const syntaxTests = require('./syntax');

@@ -2,7 +2,8 @@ const assert = require('assert');
 
 module.exports = (test, app, errors, serviceName, idProp) => {
   describe(' Methods', () => {
-    let doug, service;
+    let doug;
+    let service;
 
     beforeEach(async () => {
       service = app.service(serviceName);

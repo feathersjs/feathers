@@ -13,7 +13,10 @@ describe('@feathersjs/express/authentication', () => {
   const email = 'expresstest@authentication.com';
   const password = 'superexpress';
 
-  let app, server, user, authResult;
+  let app;
+  let server;
+  let user;
+  let authResult;
 
   before(() => {
     const expressApp = expressify(feathers())

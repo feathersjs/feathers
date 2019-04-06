@@ -11,7 +11,9 @@ const eventTests = require('./events');
 const socketio = require('../lib');
 
 describe('@feathersjs/socketio', () => {
-  let app, server, socket;
+  let app;
+  let server;
+  let socket;
 
   const socketParams = {
     user: { name: 'David' },
@@ -135,11 +137,11 @@ describe('@feathersjs/socketio', () => {
   });
 
   it('can set options (#12)', done => {
-    let app = feathers().configure(socketio({
+    let application = feathers().configure(socketio({
       path: '/test/'
-    }, io => assert.ok(io)));
+    }, ioInstance => assert.ok(ioInstance)));
 
-    let srv = app.listen(8987).on('listening', () => {
+    let srv = application.listen(8987).on('listening', () => {
       const url = 'http://localhost:8987/test/socket.io.js';
 
       // eslint-disable-next-line handle-callback-err
