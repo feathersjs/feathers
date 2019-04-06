@@ -54,6 +54,6 @@
     "request": "^2.88.0",
     "rxjs": "^6.4.0",
     "shx": "^0.3.2",
-    "superagent": "^4.1.0"
+    "superagent": "^5.0.2"
   }
 }

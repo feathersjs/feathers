@@ -11,10 +11,12 @@ describe('authentication/hooks/authenticate', () => {
   beforeEach(() => {
     app = feathers();
     app.use('/authentication', new AuthenticationService(app, 'authentication', {
-      secret: 'supersecret'
+      secret: 'supersecret',
+      strategies: [ 'first' ]
     }));
     app.use('/auth-v2', new AuthenticationService(app, 'auth-v2', {
-      secret: 'supersecret'
+      secret: 'supersecret',
+      strategies: [ 'test' ]
     }));
     app.use('/users', {
       id: 'name',
@@ -126,7 +128,10 @@ describe('authentication/hooks/authenticate', () => {
     };
 
     return app.service('users').get(1, params).then(result => {
-      assert.deepStrictEqual(result, Object.assign({}, params, Strategy2.result));
+      assert.deepStrictEqual(result, Object.assign({
+        authentication: params.authentication,
+        params: { authentication: true }
+      }, Strategy2.result));
     });
   });
 
@@ -157,6 +162,18 @@ describe('authentication/hooks/authenticate', () => {
     }).catch(error => {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Not authenticated');
+    });
+  });
+
+  it('passes with authenticaiton true but external call', () => {
+    return app.service('users').get(1, {
+      provider: 'rest',
+      authentication: true
+    }).then(result => {
+      assert.deepStrictEqual(result, {
+        provider: 'rest',
+        authentication: true
+      });
     });
   });
 

@@ -4,7 +4,7 @@ const jsonwebtoken = require('jsonwebtoken');
 const uuidv4 = require('uuid/v4');
 const { NotAuthenticated, BadRequest } = require('@feathersjs/errors');
 
-const getOptions = require('./options');
+const defaultOptions = require('./options');
 const debug = require('debug')('@feathersjs/authentication/base');
 const createJWT = promisify(jsonwebtoken.sign);
 const verifyJWT = promisify(jsonwebtoken.verify);
@@ -25,7 +25,7 @@ module.exports = class AuthenticationBase {
 
   get configuration () {
     // Always returns a copy of the authentication configuration
-    return getOptions(this.app.get(this.configKey));
+    return Object.assign({}, defaultOptions, this.app.get(this.configKey));
   }
 
   get strategyNames () {
@@ -104,6 +104,7 @@ module.exports = class AuthenticationBase {
     }
 
     const { strategy } = authentication;
+    const authParams = Object.assign(params, { authentication: true });
 
     // Throw an error is a `strategy` is indicated but not in the allowed strategies
     if (strategy && !allowed.includes(strategy)) {
@@ -116,7 +117,7 @@ module.exports = class AuthenticationBase {
     const promise = strategies.reduce((acc, authStrategy) => {
       return acc.then(({ result, error }) => {
         if (!result) {
-          return authStrategy.authenticate(authentication, params)
+          return authStrategy.authenticate(authentication, authParams)
             // Set result
             .then(newResult => ({ result: newResult }))
             // Use caught error or previous error if it already exists

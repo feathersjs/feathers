@@ -2,11 +2,8 @@ const debug = require('debug')('@feathersjs/authentication/hooks/connection');
 
 module.exports = (strategy = 'jwt') => {
   return context => {
-    const {
-      method,
-      result: { accessToken },
-      params: { connection }
-    } = context;
+    const { method, result, params: { connection } } = context;
+    const { accessToken, ...rest } = result;
 
     if (!connection) {
       return context;
@@ -19,7 +16,9 @@ module.exports = (strategy = 'jwt') => {
       delete connection.authentication;
     } else if (method === 'create' && accessToken) {
       debug('Adding authentication information to real-time connection');
-      connection.authentication = { strategy, accessToken };
+      Object.assign(connection, rest, {
+        authentication: { strategy, accessToken }
+      });
     }
 
     return context;

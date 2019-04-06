@@ -28,7 +28,7 @@ module.exports = (getApp, getClient, {
       });
     });
 
-    it('authentication with wrong credentials fails', () => {
+    it('authentication with wrong credentials fails, does not maintain state', () => {
       return client.authenticate({
         strategy: 'local',
         email,
@@ -38,6 +38,7 @@ module.exports = (getApp, getClient, {
         .catch(error => {
           assert.strictEqual(error.name, 'NotAuthenticated');
           assert.strictEqual(error.message, 'Invalid login');
+          assert.ok(!client.get('authentication'), 'Reset client state');
         });
     });
 
@@ -91,7 +92,12 @@ module.exports = (getApp, getClient, {
         email,
         password
       }).then(() => client.logout())
-        .then(() => client.service('dummy').find())
+        .then(result => {
+          assert.ok(result.accessToken);
+          assert.ok(result.user);
+
+          return client.service('dummy').find();
+        })
         .then(() => assert.fail('Should never get here'))
         .catch(error => {
           assert.strictEqual(error.name, 'NotAuthenticated');

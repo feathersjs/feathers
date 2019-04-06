@@ -39,6 +39,25 @@ describe('authentication/core', () => {
       assert.strictEqual(auth.configuration.entity, 'user');
     });
 
+    it('allows to override jwtOptions, does not merge', () => {
+      const { jwtOptions } = auth.configuration;
+      const auth2options = {
+        jwtOptions: {
+          expiresIn: '1w'
+        }
+      };
+
+      app.set('auth2', auth2options);
+
+      const auth2 = new AuthenticationCore(app, 'auth2');
+
+      assert.ok(jwtOptions);
+      assert.strictEqual(jwtOptions.expiresIn, '1d');
+      assert.strictEqual(jwtOptions.issuer, 'feathers');
+
+      assert.deepStrictEqual(auth2.configuration.jwtOptions, auth2options.jwtOptions);
+    });
+
     it('sets configKey and defaultAuthentication', () => {
       assert.strictEqual(app.get('defaultAuthentication'), 'authentication');
     });
@@ -99,12 +118,17 @@ describe('authentication/core', () => {
       });
 
       it('returns second success', () => {
-        return auth.authenticate({
+        const authentication = {
           strategy: 'second',
           v2: true,
           password: 'supersecret'
-        }, {}, 'first', 'second').then(result => {
-          assert.deepStrictEqual(result, Strategy2.result);
+        };
+
+        return auth.authenticate(authentication, {}, 'first', 'second').then(result => {
+          assert.deepStrictEqual(result, Object.assign({}, Strategy2.result, {
+            authentication,
+            params: { authentication: true }
+          }));
         });
       });
 
@@ -112,13 +136,19 @@ describe('authentication/core', () => {
         const params = {
           some: 'thing'
         };
-
-        return auth.authenticate({
+        const authentication = {
           strategy: 'second',
           v2: true,
           password: 'supersecret'
-        }, params, 'first', 'second').then(result => {
-          assert.deepStrictEqual(result, Object.assign({}, Strategy2.result, params));
+        };
+
+        return auth.authenticate(authentication, params, 'first', 'second').then(result => {
+          assert.deepStrictEqual(result, Object.assign({
+            params: Object.assign(params, {
+              authentication: true
+            }),
+            authentication
+          }, Strategy2.result));
         });
       });
 
@@ -145,11 +175,16 @@ describe('authentication/core', () => {
 
     describe('with a list of strategies and strategy not set in params', () => {
       it('returns first success in chain', () => {
-        return auth.authenticate({
+        const authentication = {
           v2: true,
           password: 'supersecret'
-        }, {}, 'first', 'second').then(result => {
-          assert.deepStrictEqual(result, Strategy2.result);
+        };
+
+        return auth.authenticate(authentication, {}, 'first', 'second').then(result => {
+          assert.deepStrictEqual(result, Object.assign({
+            authentication,
+            params: { authentication: true }
+          }, Strategy2.result));
         });
       });
 

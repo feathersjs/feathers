@@ -42,7 +42,7 @@ exports.Strategy2 = class Strategy2 {
     const isV2 = authentication.v2 === true && authentication.password === 'supersecret';
 
     if (isV2 || authentication.both) {
-      return Promise.resolve(Object.assign({}, Strategy2.result, params));
+      return Promise.resolve(Object.assign({ params, authentication }, Strategy2.result));
     }
 
     return Promise.reject(new NotAuthenticated('Invalid v2 user'));

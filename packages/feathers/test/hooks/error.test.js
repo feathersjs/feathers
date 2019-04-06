@@ -76,8 +76,8 @@ describe('`error` hooks', () => {
     it('calling `next` with error', () => {
       service.hooks({
         error: {
-          get (hook, next) {
-            next(new Error(errorMessage));
+          get () {
+            throw new Error(errorMessage);
           }
         }
       });
@@ -102,10 +102,10 @@ describe('`error` hooks', () => {
               return Promise.resolve(hook);
             },
 
-            function (hook, next) {
+            function (hook) {
               hook.error.third = true;
 
-              next();
+              return hook;
             }
           ]
         }
