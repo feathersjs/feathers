@@ -14,7 +14,7 @@
     "realtime"
   ],
   "main": "lib/index.js",
-  "types": "./lib/index.d.ts",
+  "types": "index.d.ts",
   "author": {
     "name": "Feathers contributors",
     "email": "hello@feathersjs.com",
