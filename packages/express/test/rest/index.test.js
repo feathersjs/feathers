@@ -86,7 +86,8 @@ describe('@feathersjs/express/rest provider', () => {
   });
 
   describe('CRUD', () => {
-    let server, app;
+    let server;
+    let app;
 
     before(function () {
       app = expressify(feathers())
@@ -398,7 +399,8 @@ describe('@feathersjs/express/rest provider', () => {
   });
 
   describe('HTTP status codes', () => {
-    let app, server;
+    let app;
+    let server;
 
     before(function () {
       app = expressify(feathers())
@@ -476,7 +478,8 @@ describe('@feathersjs/express/rest provider', () => {
   });
 
   describe('route parameters', () => {
-    let server, app;
+    let server;
+    let app;
 
     before(() => {
       app = expressify(feathers())

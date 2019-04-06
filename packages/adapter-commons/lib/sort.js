@@ -8,7 +8,8 @@ exports.compareNSB = function (a, b) {
 };
 
 exports.compareArrays = function (a, b) {
-  var i, comp;
+  var i;
+  var comp;
 
   for (i = 0; i < Math.min(a.length, b.length); i += 1) {
     comp = exports.compare(a[i], b[i]);

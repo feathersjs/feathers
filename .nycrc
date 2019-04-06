@@ -6,6 +6,11 @@
       "mocha"
     ]
   },
+  "extension": [
+    ".ts",
+    ".tsx",
+    ".js"
+  ],
   "exclude": [
     "**/test/*",
     "**/dist/*",
