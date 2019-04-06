@@ -39,6 +39,9 @@
     "debug": "^4.1.1"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.3",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^11.13.0",
     "@feathersjs/authentication": "^2.1.16",
     "@feathersjs/authentication-local": "^1.2.9",
     "@feathersjs/express": "^1.3.1",
@@ -49,9 +52,10 @@
     "@feathersjs/socketio": "^3.2.9",
     "@feathersjs/socketio-client": "^1.2.1",
     "axios": "^0.18.0",
+    "shx": "^0.3.2",
     "mocha": "^6.0.2",
-    "primus": "^7.3.2",
-    "primus-emitter": "^3.1.1",
-    "socket.io-client": "^2.2.0"
+    "ts-node": "^8.0.3",
+    "tslint": "^5.15.0",
+    "typescript": "^3.4.2"
   }
 }

@@ -21,21 +21,14 @@
   "scripts": {
     "install": "lerna bootstrap",
     "publish": "lerna publish",
-    "lint": "semistandard \"packages/**/lib/**/*.js\" \"packages/**/test/**/*.js\" --fix",
-    "test": "npm run lint && nyc lerna run test",
+    "test": "nyc lerna run test",
     "test:client": "grunt"
   },
-  "semistandard": {
-    "env": [
-      "mocha"
-    ]
-  },
   "devDependencies": {
-    "lerna": "^3.4.0",
-    "nyc": "^13.0.1",
-    "semistandard": "^13.0.0",
-    "grunt": "^1.0.3",
-    "grunt-cli": "^1.3.1",
-    "grunt-saucelabs": "^9.0.0"
+    "lerna": "^3.13.1",
+    "nyc": "^13.3.0",
+    "grunt": "^1.0.4",
+    "grunt-cli": "^1.3.2",
+    "grunt-saucelabs": "^9.0.1"
   }
 }
