@@ -7,7 +7,7 @@ import authClient from '../../src';
 import getApp from './fixture';
 import commonTests from './commons';
 
-describe.only('@feathersjs/authentication-client Express integration', () => {
+describe('@feathersjs/authentication-client Express integration', () => {
   let app: express.Application;
   let server: any;
 
