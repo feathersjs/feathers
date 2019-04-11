@@ -15,7 +15,10 @@ describe('authentication/core', () => {
   beforeEach(() => {
     app = feathers();
     auth = new AuthenticationBase(app, 'authentication', {
-      secret: 'supersecret'
+      entity: 'user',
+      service: 'users',
+      secret: 'supersecret',
+      first: { hello: 'test' }
     });
 
     auth.register('first', new Strategy1());
@@ -94,6 +97,12 @@ describe('authentication/core', () => {
       assert.strictEqual(first.name, 'first');
       assert.strictEqual(first.app, app);
       assert.strictEqual(first.authentication, auth);
+    });
+
+    it('strategy configuration getter', () => {
+      const [ first ] = auth.getStrategies('first') as [ Strategy1 ];
+
+      assert.deepStrictEqual(first.configuration, { hello: 'test' });
     });
   });
 

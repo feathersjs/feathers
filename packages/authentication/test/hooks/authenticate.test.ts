@@ -17,12 +17,16 @@ describe('authentication/hooks/authenticate', () => {
   beforeEach(() => {
     app = feathers();
     app.use('/authentication', new AuthenticationService(app, 'authentication', {
+      entity: 'user',
+      service: 'users',
       secret: 'supersecret',
-      strategies: [ 'first' ]
+      jwtStrategies: [ 'first' ]
     }));
     app.use('/auth-v2', new AuthenticationService(app, 'auth-v2', {
+      entity: 'user',
+      service: 'users',
       secret: 'supersecret',
-      strategies: [ 'test' ]
+      jwtStrategies: [ 'test' ]
     }));
     app.use('/users', {
       async find () {

@@ -1,5 +1,4 @@
 const { flatten, merge } = require('lodash');
-const { BadRequest } = require('@feathersjs/errors');
 
 const normalizeStrategy = (_settings = [], ..._strategies) =>
   typeof _settings === 'string'
@@ -7,27 +6,26 @@ const normalizeStrategy = (_settings = [], ..._strategies) =>
     : _settings;
 const getService = (settings, app) => {
   const path = settings.service || app.get('defaultAuthentication');
-  const service = app.service(path);
 
-  if (!service) {
-    throw new BadRequest(`Could not find authentication service '${path}'`);
+  if (typeof path !== 'string') {
+    return null;
   }
 
-  return service;
+  return app.service(path) || null;
 };
 
-exports.parseAuthentication = (...strategies) => {
-  const settings = normalizeStrategy(...strategies);
-
-  if (!Array.isArray(settings.strategies) || settings.strategies.length === 0) {
-    throw new Error(`'parseAuthentication' middleware requires at least one strategy name`);
-  }
-
+exports.parseAuthentication = (settings = {}) => {
   return function (req, res, next) {
     const { app } = req;
     const service = getService(settings, app);
 
-    service.parse(req, res, ...settings.strategies)
+    if (service === null) {
+      return next();
+    }
+
+    const { httpStrategies = [] } = service.configuration;
+
+    service.parse(req, res, ...httpStrategies)
       .then(authentication => {
         merge(req, {
           authentication,

@@ -54,13 +54,13 @@ export class AuthenticationService extends AuthenticationBase implements Service
    * @param params Service call parameters
    */
   async create (data: AuthenticationRequest, params?: Params) {
-    const { strategies } = this.configuration;
+    const { jwtStrategies } = this.configuration;
 
-    if (!strategies.length) {
-      throw new NotAuthenticated('No authentication strategies allowed for creating a JWT');
+    if (!jwtStrategies.length) {
+      throw new NotAuthenticated('No authentication strategies allowed for creating a JWT (`jwtStrategies`)');
     }
 
-    const authResult = await this.authenticate(data, params, ...strategies);
+    const authResult = await this.authenticate(data, params, ...jwtStrategies);
 
     debug('Got authentication result', authResult);
 
@@ -88,7 +88,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
    */
   async remove (id: null|string, params?: Params) {
     const { authentication } = params;
-    const { strategies } = this.configuration;
+    const { jwtStrategies } = this.configuration;
 
     // When an id is passed it is expected to be the authentication `accessToken`
     if (id !== null && id !== authentication.accessToken) {
@@ -97,7 +97,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
 
     debug('Verifying authentication strategy in remove');
 
-    return this.authenticate(authentication, params, ...strategies);
+    return this.authenticate(authentication, params, ...jwtStrategies);
   }
 
   /**
@@ -106,13 +106,17 @@ export class AuthenticationService extends AuthenticationBase implements Service
   setup () {
     // The setup method checks for valid settings and registers the
     // connection and event (login, logout) hooks
-    const { secret, service, entity, entityId, strategies } = this.configuration;
+    const { secret, service, entity, entityId } = this.configuration;
 
     if (typeof secret !== 'string') {
       throw new Error(`A 'secret' must be provided in your authentication configuration`);
     }
 
     if (entity !== null) {
+      if (service === undefined) {
+        throw new Error(`The 'service' options is not set in the authentication configuration`);
+      }
+
       if (this.app.service(service) === undefined) {
         throw new Error(`The '${service}' entity service does not exist (set to 'null' if it is not required)`);
       }
@@ -120,10 +124,6 @@ export class AuthenticationService extends AuthenticationBase implements Service
       if (this.app.service(service).id === undefined && entityId === undefined) {
         throw new Error(`The '${service}' service does not have an 'id' property and no 'entityId' option is set.`);
       }
-    }
-
-    if (strategies.length === 0) {
-      throw new Error(`At least one valid authentication strategy required in '${this.configKey}.strategies'`);
     }
 
     // @ts-ignore

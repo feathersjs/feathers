@@ -10,5 +10,6 @@ export {
   AuthenticationResult,
   AuthenticationStrategy
 } from './core';
+export { AuthenticationBaseStrategy } from './strategy';
 export { AuthenticationService } from './service';
 export { JWTStrategy } from './jwt';
