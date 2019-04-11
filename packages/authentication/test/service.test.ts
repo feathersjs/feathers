@@ -24,8 +24,10 @@ describe('authentication/service', () => {
   beforeEach(() => {
     app = feathers();
     app.use('/authentication', new AuthenticationService(app, 'authentication', {
+      entity: 'user',
+      service: 'users',
       secret: 'supersecret',
-      strategies: [ 'first' ]
+      jwtStrategies: [ 'first' ]
     }));
     app.use('/users', memory());
 
@@ -147,7 +149,7 @@ describe('authentication/service', () => {
       const service = app.service('authentication');
       const configuration = service.configuration;
 
-      delete configuration.strategies;
+      delete configuration.jwtStrategies;
 
       app.set('authentication', configuration);
 
@@ -159,7 +161,7 @@ describe('authentication/service', () => {
         assert.fail('Should never get here');
       } catch (error) {
         assert.strictEqual(error.name, 'NotAuthenticated');
-        assert.strictEqual(error.message, 'No authentication strategies allowed for creating a JWT');
+        assert.strictEqual(error.message, 'No authentication strategies allowed for creating a JWT (`jwtStrategies`)');
       }
     });
   });
@@ -226,23 +228,14 @@ describe('authentication/service', () => {
       }
     });
 
-    it('errors when there is stragies', () => {
-      app.get('authentication').strategies = [];
-
-      try {
-        app.setup();
-        assert.fail('Should never get here');
-      } catch (error) {
-        assert.strictEqual(error.message, `At least one valid authentication strategy required in 'authentication.strategies'`);
-      }
-    });
-
     it('throws an error if entity service does not exist', () => {
       const otherApp = feathers();
 
       otherApp.use('/authentication', new AuthenticationService(otherApp, 'authentication', {
+        entity: 'user',
+        service: 'users',
         secret: 'supersecret',
-        strategies: [ 'first' ]
+        jwtStrategies: [ 'first' ]
       }));
 
       try {
@@ -257,6 +250,8 @@ describe('authentication/service', () => {
       const otherApp = feathers();
 
       otherApp.use('/authentication', new AuthenticationService(otherApp, 'authentication', {
+        entity: 'user',
+        service: 'users',
         secret: 'supersecret',
         strategies: [ 'first' ]
       }));

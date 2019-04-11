@@ -1,38 +1,22 @@
 import { NotAuthenticated } from '@feathersjs/errors';
-import { Application, Params } from '@feathersjs/feathers';
+import { Params } from '@feathersjs/feathers';
 
-import { AuthenticationStrategy, AuthenticationRequest } from '../src/core';
-import { AuthenticationService } from '../src/service';
+import { AuthenticationRequest } from '../src/core';
 import { IncomingMessage } from 'http';
+import { AuthenticationBaseStrategy } from '../src/strategy';
 
 export interface MockRequest extends IncomingMessage {
   isDave?: boolean;
   isV2?: boolean;
 }
 
-export class Strategy1 implements AuthenticationStrategy {
+export class Strategy1 extends AuthenticationBaseStrategy {
   static result = {
     user: {
       id: 123,
       name: 'Dave'
     }
   };
-
-  name?: string;
-  app?: Application;
-  authentication?: AuthenticationService;
-
-  setName (name: string) {
-    this.name = name;
-  }
-
-  setApplication (app: Application) {
-    this.app = app;
-  }
-
-  setAuthentication (authentication: AuthenticationService) {
-    this.authentication = authentication;
-  }
 
   async authenticate (authentication: AuthenticationRequest) {
     if (authentication.username === 'David' || authentication.both) {
@@ -51,7 +35,7 @@ export class Strategy1 implements AuthenticationStrategy {
   }
 }
 
-export class Strategy2 implements AuthenticationStrategy {
+export class Strategy2 extends AuthenticationBaseStrategy {
   static result = {
     user: {
       name: 'V2',
