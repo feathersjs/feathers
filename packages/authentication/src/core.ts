@@ -48,7 +48,7 @@ export interface AuthenticationStrategy {
    * @param authentication The authentication request
    * @param params The service call parameters
    */
-  authenticate? (authentication: AuthenticationRequest, params: Params): Promise<AuthenticationResult>;
+  authenticate (authentication: AuthenticationRequest, params: Params): Promise<AuthenticationResult>;
   /**
    * Parse a basic HTTP request and response for authentication request information.
    * @param req The HTTP request
