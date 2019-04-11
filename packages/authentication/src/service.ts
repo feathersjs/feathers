@@ -116,7 +116,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
       if (service === undefined) {
         throw new Error(`The 'service' options is not set in the authentication configuration`);
       }
-      
+
       if (this.app.service(service) === undefined) {
         throw new Error(`The '${service}' entity service does not exist (set to 'null' if it is not required)`);
       }
