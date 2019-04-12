@@ -16,7 +16,6 @@ declare const feathers: Feathers;
 export = feathers;
 
 interface Feathers {
-    // tslint:disable-next-line no-unnecessary-generics
     <T = any>(): feathers.Application<T>;
     version: string;
     default: Feathers;
