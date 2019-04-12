@@ -34,5 +34,5 @@ interface FeathersExpress extends Express {
 }
 
 declare namespace feathersExpress {
-    type Application<T = any> = express.Application & FeathersApplication<T>;
+    type Application<T = any> = express.Express & FeathersApplication<T>;
 }
