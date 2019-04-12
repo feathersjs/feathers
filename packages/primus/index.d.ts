@@ -1,6 +1,3 @@
-// Definitions by: Jan Lohage <https://github.com/j2L4e>
-/// <reference types="@feathersjs/transport-commons"/>
-
 import Http from 'http';
 
 declare module '@feathersjs/feathers' {
