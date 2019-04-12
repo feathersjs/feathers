@@ -1,7 +1,15 @@
-/// <reference types="socket.io-client" />
+import 'socket.io-client';
 
-export default function feathersSocketIOClient (socket: SocketIOClient.Socket, options?: FeathersSocketIOClientOptions): () => void;
+declare const socketioClient: FeathersSocketIOClient;
+export = socketioClient;
 
-export interface FeathersSocketIOClientOptions {
-    timeout?: number;
+interface FeathersSocketIOClient {
+    (socket: SocketIOClient.Socket, options?: socketioClient.Options): () => void;
+    default: FeathersSocketIOClient;
+}
+
+declare namespace socketioClient {
+    interface Options {
+        timeout?: number;
+    }
 }

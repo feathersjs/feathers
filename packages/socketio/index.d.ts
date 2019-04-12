@@ -1,13 +1,18 @@
-/// <reference types="@feathersjs/transport-commons"/>
-import Http from 'http';
-import SocketIO from 'socket.io';
+import http from 'http';
+import io from 'socket.io';
+
+declare const socketio: FeathersSocketIO;
+export = socketio;
 
 declare module '@feathersjs/feathers' {
   interface Application<ServiceTypes = any> {
-    listen (port: number): Http.Server;
+    listen (port: number): http.Server;
   }
 }
 
-export default function feathersSocketIO (callback?: (io: SocketIO.Server) => void): () => void;
-export default function feathersSocketIO (options: number | SocketIO.ServerOptions, callback?: (io: SocketIO.Server) => void): () => void;
-export default function feathersSocketIO (port: number, options?: SocketIO.ServerOptions, callback?: (io: SocketIO.Server) => void): () => void;
+interface FeathersSocketIO {
+  (callback?: (io: io.Server) => void): () => void;
+  (options: number | io.ServerOptions, callback?: (io: io.Server) => void): () => void;
+  (port: number, options?: io.ServerOptions, callback?: (io: io.Server) => void): () => void;
+  default: FeathersSocketIO;
+}
