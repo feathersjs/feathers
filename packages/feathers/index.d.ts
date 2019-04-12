@@ -133,7 +133,9 @@ declare namespace feathers {
         finally: Partial<HookMap> | Hook | Hook[];
     }
 
-    // todo: figure out what to do: These methods don't actually need to be implemented, so they can be undefined at runtime. Yet making them optional gets cumbersome in strict mode.
+    // todo: figure out what to do: These methods don't actually need to be
+    // implemented, so they can be undefined at runtime. Yet making them
+    // optional gets cumbersome in strict mode.
     interface ServiceMethods<T> {
         [key: string]: any;
 
