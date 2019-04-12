@@ -2,16 +2,19 @@
 
 import { EventEmitter } from 'events';
 
-declare const feathers: Feathers;
-export = feathers;
+declare const createApplication: Feathers;
+export = createApplication;
 
 interface Feathers {
-    <T = any>(): feathers.Application<T>;
+    <T = any>(): createApplication.Application<T>;
+    readonly ACTIVATE_HOOKS: unique symbol;
     version: string;
     default: Feathers;
+    // TODO: Write a definition for activateHooks.
+    // activateHooks(): void
 }
 
-declare namespace feathers {
+declare namespace createApplication {
     type Id = number | string;
     type NullableId = Id | null;
 
