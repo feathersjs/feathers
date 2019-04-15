@@ -25,7 +25,7 @@ module.exports = function (options = {}) {
   return function (error, req, res, next) {
     // Set the error code for HTTP processing semantics
     error.code = !isNaN(parseInt(error.code, 10)) ? parseInt(error.code, 10) : 500;
-    
+
     // Log the error if it didn't come from a service method call
     if (options.logger && typeof options.logger.error === 'function' && !res.hook) {
       if (error.code >= 500) {
