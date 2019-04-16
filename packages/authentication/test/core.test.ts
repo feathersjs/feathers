@@ -227,15 +227,10 @@ describe('authentication/core', () => {
   describe('parse', () => {
     const res = {} as ServerResponse;
 
-    it('errors when no names are given', async () => {
+    it('returns null when no names are given', async () => {
       const req = {} as MockRequest;
 
-      try {
-        await auth.parse(req, res);
-        assert.fail('Should never get here');
-      } catch (error) {
-        assert.strictEqual(error.message, 'Authentication HTTP parser needs at least one allowed strategy');
-      }
+      assert.strictEqual(await auth.parse(req, res), null);
     });
 
     it('successfully parses a request (first)', async () => {

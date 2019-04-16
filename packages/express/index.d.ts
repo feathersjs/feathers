@@ -55,4 +55,4 @@ export {
 
 export function parseAuthentication (...strategies: string[]): express.RequestHandler;
 export function authenticate (...strategies: string[]): express.RequestHandler;
-export const original: typeof express;
+export const original: () => express.Application;

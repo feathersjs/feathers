@@ -1,61 +1,32 @@
-import {
-  AuthenticationStrategy, AuthenticationRequest, AuthenticationBase, AuthenticationResult
-} from '@feathersjs/authentication';
-import { Params, Application, Service } from '@feathersjs/feathers';
-
 // @ts-ignore
-import rc from 'request-compose';
-
-const request = rc.extend({
-  Request: {oauth: require('request-oauth')}
-}).client;
+import getProfile from 'grant-profile/lib/client';
+import {
+  AuthenticationRequest, AuthenticationBaseStrategy
+} from '@feathersjs/authentication';
+import { Params } from '@feathersjs/feathers';
 
 export interface OAuthProfile {
   id?: string|number;
   [key: string]: any;
 }
 
-export class OAuthStrategy implements AuthenticationStrategy {
-  authentication?: AuthenticationBase;
-  app?: Application;
-  name?: string;
-
-  setAuthentication (auth: AuthenticationBase): void {
-    this.authentication = auth;
-  }
-
-  setApplication (app: Application) {
-    this.app = app;
-  }
-
-  setName (name: string) {
-    this.name = name;
-  }
-
+export class OAuthStrategy extends AuthenticationBaseStrategy {
   get configuration () {
     const { entity, service, entityId } = this.authentication.configuration;
-    
-    return { entity, service, entityId };
+
+    return {
+      entity,
+      service,
+      entityId,
+      ...super.configuration
+    };
   }
 
-  get entityService (): Service<any> {
-    return this.app.service(this.configuration.service);
-  }
-
-  async getProfile (authResult: AuthenticationResult, _params: Params) {
+  async getProfile (data: AuthenticationRequest, _params: Params) {
     const config = this.app.get('grant');
-    const { body } = await request({
-      url: 'https://api.twitter.com/1.1/users/show.json',
-      qs: { user_id: authResult.raw.user_id },
-      oauth: {
-        consumer_key: config.twitter.key,
-        consumer_secret: config.twitter.secret,
-        token: authResult.access_token,
-        token_secret: authResult.access_secret
-      }
-    });
+    const provider = config[data.strategy];
 
-    return body;
+    return getProfile(provider, data);
   }
 
   async findEntity (profile: OAuthProfile, params: Params) {
@@ -96,8 +67,8 @@ export class OAuthStrategy implements AuthenticationStrategy {
     const profile = await this.getProfile(authentication, params);
     const existingEntity = await this.findEntity(profile, params);
     const authEntity = existingEntity === null
-      ? this.createEntity(profile, params)
-      : this.updateEntity(existingEntity, profile, params);
+      ? await this.createEntity(profile, params)
+      : await this.updateEntity(existingEntity, profile, params);
 
     return {
       authentication: { strategy: this.name },
