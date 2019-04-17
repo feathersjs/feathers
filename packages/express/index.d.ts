@@ -3,14 +3,30 @@
 // Definitions by: Jan Lohage <https://github.com/j2L4e>
 //                 Aleksey Klimenko <https://github.com/DadUndead>
 // Definitions: https://github.com/feathersjs-ecosystem/feathers-typescript
-// TypeScript Version: 2.3
+// TypeScript Version: 2.8
 
-import { Application as FeathersApplication } from '@feathersjs/feathers';
+import { Application as FeathersApplication, ServiceMethods, SetupMethod } from '@feathersjs/feathers';
 import * as express from 'express';
+import { IRouterHandler, PathParams, RequestHandler, RequestHandlerParams } from 'express-serve-static-core';
 
 declare const feathersExpress: (<T>(app: FeathersApplication<T>) => Application<T>);
 export default feathersExpress;
-export type Application<T = any> = express.Application & FeathersApplication<T>;
+
+type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
+// TypeScript methods cannot be overloaded with a different signature. Derive two application types without the use methods.
+type ExpressAndFeathersApplicationWithoutUse<T> = Omit<express.Application, 'use'> & Omit<FeathersApplication<T>, 'use'>;
+// Give the "any" type for the feathers options object a more precise name.
+export type FeathersServiceOptions = any;
+
+export interface FeathersRouterMatcher<T> {
+    (path: PathParams, ...handlers: Array<(RequestHandler | RequestHandlerParams | Partial<ServiceMethods<any> & SetupMethod> | Application)>): T;
+}
+
+type FeathersApplicationRequestHandler<T> = express.IRouterHandler<T> & FeathersRouterMatcher<T> & ((...handlers: RequestHandlerParams[]) => T);
+
+export interface Application<T = any> extends ExpressAndFeathersApplicationWithoutUse<T> {
+    use: FeathersApplicationRequestHandler<T>;
+}
 
 export function errorHandler (options?: {
     public?: string,
