@@ -1,18 +1,17 @@
-import { merge, each } from 'lodash';
 import Debug from 'debug';
+import { merge, each, omit } from 'lodash';
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationService } from '@feathersjs/authentication';
-import { OAuthStrategy } from './strategy';
+import { OAuthStrategy, OAuthProfile } from './strategy';
 import { default as setupExpress } from './express';
+import { OauthSetupSettings, getDefaultSettings } from './utils';
 
 const debug = Debug('@feathersjs/authentication-oauth');
 
-export interface OauthSetupSettings {
-  service?: string;
-}
+export { OauthSetupSettings, OAuthStrategy, OAuthProfile };
 
 export const setup = (options: OauthSetupSettings = {}) => (app: Application) => {
-  const path = options.service || app.get('defaultAuthentication');
+  const path = options.authService;
   const service: AuthenticationService = app.service(path);
 
   if (!service) {
@@ -22,7 +21,7 @@ export const setup = (options: OauthSetupSettings = {}) => (app: Application) =>
   const { oauth } = service.configuration;
 
   if (!oauth) {
-    debug(`No oauth configuration found on ${path}. Skipping oAuth setup.`);
+    debug(`No oauth configuration found at '${path}'. Skipping oAuth setup.`);
     return;
   }
 
@@ -34,7 +33,7 @@ export const setup = (options: OauthSetupSettings = {}) => (app: Application) =>
       protocol: app.get('env') === 'production' ? 'https' : 'http',
       transport: 'session'
     }
-  }, oauth);
+  }, omit(oauth, 'redirect'));
 
   each(grant, (value, key) => {
     if (key !== 'defaults') {
@@ -50,7 +49,9 @@ export const setup = (options: OauthSetupSettings = {}) => (app: Application) =>
   app.set('grant', grant);
 };
 
-export const express = (options: OauthSetupSettings = {}) => (app: Application) => {
+export const express = (settings: OauthSetupSettings = {}) => (app: Application) => {
+  const options = getDefaultSettings(app, settings);
+  
   app.configure(setup(options));
-  app.configure(setupExpress());
+  app.configure(setupExpress(options));
 };

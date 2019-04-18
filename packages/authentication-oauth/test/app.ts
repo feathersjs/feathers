@@ -21,6 +21,7 @@ app.set('authentication', {
   service: 'users',
   httpStrategies: [ 'jwt' ],
   oauth: {
+    // redirect: '/',
     
   }
 });
