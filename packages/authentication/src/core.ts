@@ -12,6 +12,9 @@ const debug = Debug('@feathersjs/authentication/base');
 const verifyJWT = promisify(jsonwebtoken.verify);
 const createJWT = promisify(jsonwebtoken.sign);
 
+// TypeScript hack because it does not allow symbols as indexes!?
+export const AUTHENTICATE: string = Symbol('@feathersjs/authentication/internal') as any;
+
 export interface AuthenticationResult {
   [key: string]: any;
 }
@@ -205,7 +208,10 @@ export class AuthenticationBase {
     }
 
     const { strategy } = authentication;
-    const authParams = Object.assign(params, { authentication: true });
+    const authParams = {
+      ...params,
+      [AUTHENTICATE]: false
+    };
 
     // Throw an error is a `strategy` is indicated but not in the allowed strategies
     if (strategy && !allowed.includes(strategy)) {
