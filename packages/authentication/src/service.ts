@@ -14,11 +14,11 @@ export class AuthenticationService extends AuthenticationBase implements Service
    * @param _authResult The current authentication result
    * @param params The service call parameters
    */
-  getPayload (_authResult: AuthenticationResult, params: Params) {
+  async getPayload (_authResult: AuthenticationResult, params: Params) {
     // Uses `params.payload` or returns an empty payload
     const { payload = {} } = params;
 
-    return Promise.resolve(payload);
+    return payload;
   }
 
   /**
@@ -29,7 +29,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
    */
   async getJwtOptions (authResult: AuthenticationResult, params: Params) {
     const { service, entity, entityId } = this.configuration;
-    const jwtOptions = merge({}, params.jwt);
+    const jwtOptions = merge({}, params.jwtOptions, params.jwt);
     const hasEntity = service && entity && authResult[entity];
 
     // Set the subject to the entity id if it is available
@@ -53,8 +53,8 @@ export class AuthenticationService extends AuthenticationBase implements Service
    * @param data The authentication request (should include `strategy` key)
    * @param params Service call parameters
    */
-  async create (data: AuthenticationRequest, params?: Params) {
-    const { jwtStrategies } = this.configuration;
+  async create (data: AuthenticationRequest, params: Params) {
+    const jwtStrategies = params.jwtStrategies || this.configuration.jwtStrategies;
 
     if (!jwtStrategies.length) {
       throw new NotAuthenticated('No authentication strategies allowed for creating a JWT (`jwtStrategies`)');
@@ -86,7 +86,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
    * @param id The JWT to remove or null
    * @param params Service call parameters
    */
-  async remove (id: null|string, params?: Params) {
+  async remove (id: null|string, params: Params) {
     const { authentication } = params;
     const { jwtStrategies } = this.configuration;
 
@@ -114,7 +114,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
 
     if (entity !== null) {
       if (service === undefined) {
-        throw new Error(`The 'service' options is not set in the authentication configuration`);
+        throw new Error(`The 'service' option is not set in the authentication configuration`);
       }
 
       if (this.app.service(service) === undefined) {

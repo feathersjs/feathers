@@ -2,7 +2,7 @@ import { promisify } from 'util';
 import { merge } from 'lodash';
 import jsonwebtoken, { SignOptions, Secret, VerifyOptions } from 'jsonwebtoken';
 import uuidv4 from 'uuid/v4';
-import { NotAuthenticated, BadRequest } from '@feathersjs/errors';
+import { NotAuthenticated } from '@feathersjs/errors';
 import Debug from 'debug';
 import { Application, Params } from '@feathersjs/feathers';
 import { IncomingMessage, ServerResponse } from 'http';
@@ -243,10 +243,6 @@ export class AuthenticationBase {
   async parse (req: IncomingMessage, res: ServerResponse, ...names: string[]) {
     const strategies = this.getStrategies(...names)
       .filter(current => current && typeof current.parse === 'function');
-
-    if (strategies.length === 0) {
-      throw new BadRequest('Authentication HTTP parser needs at least one allowed strategy');
-    }
 
     debug('Strategies parsing HTTP header for authentication information', names);
 
