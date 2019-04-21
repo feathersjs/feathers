@@ -228,6 +228,22 @@ describe('authentication/service', () => {
       }
     });
 
+    it('throws an error if service name is not set', () => {
+      const otherApp = feathers();
+
+      otherApp.use('/authentication', new AuthenticationService(otherApp, 'authentication', {
+        secret: 'supersecret',
+        jwtStrategies: [ 'first' ]
+      }));
+
+      try {
+        otherApp.setup();
+        assert.fail('Should never get here');
+      } catch (error) {
+        assert.strictEqual(error.message, `The 'service' option is not set in the authentication configuration`);
+      }
+    });
+
     it('throws an error if entity service does not exist', () => {
       const otherApp = feathers();
 

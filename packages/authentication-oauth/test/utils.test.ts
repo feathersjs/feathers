@@ -19,7 +19,7 @@ describe('@feathersjs/authentication-oauth/utils', () => {
     assert.equal(redirect, '/home#error=OAuth%20Authentication%20not%20successful');
 
     app.get('authentication').oauth.redirect = '/home?';
-    
+
     redirect = await getRedirect(service, { accessToken: 'testing' });
     assert.equal(redirect, '/home?access_token=testing');
 

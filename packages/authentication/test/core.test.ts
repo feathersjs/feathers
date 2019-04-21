@@ -104,6 +104,17 @@ describe('authentication/core', () => {
 
       assert.deepStrictEqual(first.configuration, { hello: 'test' });
     });
+
+    it('strategy configuration getter', () => {
+      const [ first ] = auth.getStrategies('first') as [ Strategy1 ];
+      const oldService = auth.configuration.service;
+
+      delete auth.configuration.service;
+
+      assert.strictEqual(first.entityService, null);
+
+      auth.configuration.service = oldService;
+    });
   });
 
   describe('authenticate', () => {
