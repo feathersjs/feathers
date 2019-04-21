@@ -9,29 +9,31 @@ export interface OauthSetupSettings {
   getRedirect? (service: AuthenticationService, data: AuthenticationResult|Error): Promise<string>;
 }
 
-export const getDefaultSettings = (app: Application, ...other: OauthSetupSettings[]) => {
+export const getRedirect = async (service: AuthenticationService, data: AuthenticationResult|Error) => {
+  const { redirect } = service.configuration.oauth;
+
+  if (!redirect) {
+    return null;
+  }
+  
+  const authResult: AuthenticationResult = data;
+  const query = authResult.accessToken ? {
+    access_token: authResult.accessToken
+  } : {
+    error: data.message || 'OAuth Authentication not successful'
+  };
+
+  return `${redirect}#${querystring.stringify(query)}`;
+};
+
+export const getDefaultSettings = (app: Application, other?: OauthSetupSettings) => {
   const defaults: OauthSetupSettings = {
     path: '/auth',
     authService: app.get('defaultAuthentication'),
     linkStrategy: 'jwt',
-    async getRedirect(service: AuthenticationService, data: AuthenticationResult|Error) {
-      const { redirect = false } = service.configuration.oauth;
-
-      if (redirect === false) {
-        return null;
-      }
-      
-      const authResult: AuthenticationResult = data;
-      const query = (authResult.accessToken ? {
-        access_token: authResult.accessToken
-      } : {
-        error: data.message || 'OAuth Authentication not successful'
-      });
-      const qs = querystring.stringify(query);
-
-      return `${redirect}#${qs}`;
-    }
+    getRedirect,
+    ...other
   };
 
-  return Object.assign(defaults, ...other);
+  return defaults;
 };

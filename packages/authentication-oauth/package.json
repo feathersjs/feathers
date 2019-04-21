@@ -55,6 +55,7 @@
     "@types/lodash": "^4.14.123",
     "@types/mocha": "^5.2.6",
     "@types/node": "^11.13.0",
+    "axios": "^0.18.0",
     "mocha": "^6.0.2",
     "shx": "^0.3.2",
     "ts-node": "^8.0.3",

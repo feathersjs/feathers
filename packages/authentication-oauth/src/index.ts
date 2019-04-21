@@ -10,7 +10,7 @@ const debug = Debug('@feathersjs/authentication-oauth');
 
 export { OauthSetupSettings, OAuthStrategy, OAuthProfile };
 
-export const setup = (options: OauthSetupSettings = {}) => (app: Application) => {
+export const setup = (options: OauthSetupSettings) => (app: Application) => {
   const path = options.authService;
   const service: AuthenticationService = app.service(path);
 

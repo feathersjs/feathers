@@ -14,7 +14,7 @@ import { OauthSetupSettings } from './utils';
 const grant = grantExpress();
 const debug = Debug('@feathersjs/authentication-oauth/express');
 
-export default (options: OauthSetupSettings = {}) => {
+export default (options: OauthSetupSettings) => {
   return (feathersApp: Application) => {
     const { path, authService, linkStrategy } = options;
     const app = feathersApp as ExpressApplication;
@@ -22,7 +22,8 @@ export default (options: OauthSetupSettings = {}) => {
     const secret = Math.random().toString(36).substring(7);
 
     if (!config) {
-      throw new Error(`Grant oAuth configuration not found in app.get('grant')`);
+      debug('No grant configuration found, skipping Express oAuth setup');
+      return;
     }
 
     const grantApp = grant(config);

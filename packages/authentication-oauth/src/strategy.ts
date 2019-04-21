@@ -5,6 +5,7 @@ import {
   AuthenticationRequest, AuthenticationBaseStrategy
 } from '@feathersjs/authentication';
 import { Params } from '@feathersjs/feathers';
+import { NotAuthenticated } from '@feathersjs/errors';
 
 const debug = Debug('@feathersjs/authentication-oauth/strategy');
 
@@ -25,6 +26,11 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     };
   }
 
+  get entityId (): string {
+    return this.configuration.entityId || this.entityService.id;
+  }
+
+  /* istanbul ignore next */
   async getProfile (data: AuthenticationRequest, _params: Params) {
     const config = this.app.get('grant');
     const provider = config[data.strategy];
@@ -34,11 +40,13 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     return getProfile(provider, data);
   }
 
-  async getLinkEntity (params: Params) {
+  async getCurrentEntity (params: Params) {
     const { authentication } = params;
     const { entity } = this.configuration;
 
-    if (authentication && typeof authentication === 'object' && authentication.strategy) {
+    if (authentication && authentication.strategy) {
+      debug('getCurrentEntity with authentication', authentication);
+
       const { strategy } = authentication;
       const authResult = await this.authentication
         .authenticate(authentication, params, strategy);
@@ -50,17 +58,11 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
   }
 
   async findEntity (profile: OAuthProfile, params: Params) {
-    const linkedEntity = await this.getLinkEntity(params);
-
-    if (linkedEntity !== null) {
-      return linkedEntity;
-    }
-
     const query = {
       [`${this.name}Id`]: profile.id
     };
 
-    debug('findEntity with', query);
+    debug('findEntity with query', query);
 
     const result = await this.entityService.find({
       ...params,
@@ -84,8 +86,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
   }
 
   async updateEntity (entity: any, profile: OAuthProfile, params: Params) {
-    const idField = this.configuration.entityId || this.entityService.id;
-    const id = entity[idField];
+    const id = entity[this.entityId];
     const data = {
       [`${this.name}Id`]: profile.id
     };
@@ -97,12 +98,13 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
   async authenticate (authentication: AuthenticationRequest, params: Params) {
     if (authentication.strategy !== this.name) {
-      throw new Error('Nope');
+      throw new NotAuthenticated('Not authenticated');
     }
 
-    const { entity } = this.configuration;
+    const entity: string = this.configuration.entity;
     const profile = await this.getProfile(authentication, params);
-    const existingEntity = await this.findEntity(profile, params);
+    const existingEntity = await this.findEntity(profile, params)
+      || await this.getCurrentEntity(params);
 
     debug(`authenticate with (existing) entity`, existingEntity);
     
