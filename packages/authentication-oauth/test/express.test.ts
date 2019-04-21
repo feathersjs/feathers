@@ -24,7 +24,7 @@ describe('@feathersjs/authentication-oauth/express', () => {
 
   it('auth/test/authenticate', async () => {
     const { data } = await axios.get('http://localhost:9876/auth/test/authenticate?id=expressTest');
-    
+
     assert.ok(data.accessToken);
     assert.equal(data.user.testId, 'expressTest');
   });

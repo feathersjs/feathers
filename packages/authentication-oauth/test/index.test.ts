@@ -7,7 +7,7 @@ describe('@feathersjs/authentication-oauth', () => {
   describe('setup', () => {
     it('errors when service does not exist', () => {
       const app = feathers();
-      
+
       try {
         app.configure(setup({ authService: 'something' }));
         assert.fail('Should never get here');
@@ -22,7 +22,7 @@ describe('@feathersjs/authentication-oauth', () => {
       const app = feathers();
 
       app.use('/authentication', new AuthenticationService(app));
-      
+
       app.configure(express());
     });
   });

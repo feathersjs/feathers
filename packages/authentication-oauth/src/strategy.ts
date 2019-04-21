@@ -107,7 +107,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
       || await this.getCurrentEntity(params);
 
     debug(`authenticate with (existing) entity`, existingEntity);
-    
+
     const authEntity = existingEntity === null
       ? await this.createEntity(profile, params)
       : await this.updateEntity(existingEntity, profile, params);

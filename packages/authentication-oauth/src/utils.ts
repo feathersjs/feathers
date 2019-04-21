@@ -15,7 +15,7 @@ export const getRedirect = async (service: AuthenticationService, data: Authenti
   if (!redirect) {
     return null;
   }
-  
+
   const authResult: AuthenticationResult = data;
   const query = authResult.accessToken ? {
     access_token: authResult.accessToken
