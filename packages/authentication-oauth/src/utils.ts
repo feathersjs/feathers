@@ -16,6 +16,7 @@ export const getRedirect = async (service: AuthenticationService, data: Authenti
     return null;
   }
 
+  const separator = redirect.endsWith('?') ? '' : '#';
   const authResult: AuthenticationResult = data;
   const query = authResult.accessToken ? {
     access_token: authResult.accessToken
@@ -23,7 +24,7 @@ export const getRedirect = async (service: AuthenticationService, data: Authenti
     error: data.message || 'OAuth Authentication not successful'
   };
 
-  return `${redirect}#${querystring.stringify(query)}`;
+  return redirect + separator + querystring.stringify(query);
 };
 
 export const getDefaultSettings = (app: Application, other?: OauthSetupSettings) => {
