@@ -1,38 +1,20 @@
 import { NotAuthenticated } from '@feathersjs/errors';
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationRequest, AuthenticationResult } from '@feathersjs/authentication';
+import { Storage, StorageWrapper } from './storage';
 
-export class Storage {
-  store: { [key: string]: any };
-
-  constructor () {
-    this.store = {};
-  }
-
-  getItem (key: string) {
-    return this.store[key];
-  }
-
-  setItem (key: string, value: any) {
-    return (this.store[key] = value);
-  }
-
-  removeItem (key: string) {
-    delete this.store[key];
-    return this;
-  }
-}
-
-export type ClientConstructor = new (app: Application, options: AuthenticationClientOptions) => AuthenticationClient;
+export type ClientConstructor = new (app: Application, options: AuthenticationClientOptions)
+  => AuthenticationClient;
 
 export interface AuthenticationClientOptions {
-  storage?: Storage;
-  header?: string;
-  scheme?: string;
-  storageKey?: string;
-  jwtStrategy?: string;
-  path?: string;
-  Authentication?: ClientConstructor;
+  storage: Storage;
+  header: string;
+  scheme: string;
+  storageKey: string;
+  locationKey: string;
+  jwtStrategy: string;
+  path: string;
+  Authentication: ClientConstructor;
 }
 
 export class AuthenticationClient {
@@ -42,11 +24,12 @@ export class AuthenticationClient {
 
   constructor (app: Application, options: AuthenticationClientOptions) {
     const socket = app.io || app.primus;
+    const storage = new StorageWrapper(app.get('storage') || options.storage);
 
     this.app = app;
-    this.app.set('storage', this.app.get('storage') || options.storage);
     this.options = options;
     this.authenticated = false;
+    this.app.set('storage', storage);
 
     if (socket) {
       this.handleSocket(socket);
@@ -58,7 +41,7 @@ export class AuthenticationClient {
   }
 
   get storage () {
-    return this.app.get('storage');
+    return this.app.get('storage') as Storage;
   }
 
   handleSocket (socket: any) {
@@ -70,21 +53,44 @@ export class AuthenticationClient {
       // has been called explicitly first
       if (this.authenticated) {
         // Force reauthentication with the server
-        this.reauthenticate(true);
+        this.reAuthenticate(true);
       }
     });
   }
 
   setJwt (accessToken: string) {
-    return Promise.resolve(this.storage.setItem(this.options.storageKey, accessToken));
+    return this.storage.setItem(this.options.storageKey, accessToken);
   }
 
-  getJwt () {
-    return Promise.resolve(this.storage.getItem(this.options.storageKey));
+  getFromLocation (location: Location): Promise<string|null> {
+    const regex = new RegExp(`(?:\&?)${this.options.locationKey}=([^&]*)`);
+    const type = location.hash ? 'hash' : 'search';
+    const match = location[type] ? location[type].match(regex) : null;
+
+    if (match !== null) {
+      const [ , value ] = match;
+
+      location[type] = location[type].replace(regex, '');
+
+      return Promise.resolve(value);
+    }
+
+    return Promise.resolve(null);
+  }
+
+  getJwt (): Promise<string|null> {
+    return this.storage.getItem(this.options.storageKey)
+      .then((accessToken: string) => {
+        if (!accessToken && typeof window !== 'undefined' && window.location) {
+          return this.getFromLocation(window.location);
+        }
+
+        return accessToken || null;
+      });
   }
 
   removeJwt () {
-    return Promise.resolve(this.storage.removeItem(this.options.storageKey));
+    return this.storage.removeItem(this.options.storageKey);
   }
 
   reset () {
@@ -94,7 +100,7 @@ export class AuthenticationClient {
     return Promise.resolve(null);
   }
 
-  reauthenticate (force: boolean = false): Promise<AuthenticationResult> {
+  reAuthenticate (force: boolean = false): Promise<AuthenticationResult> {
     // Either returns the authentication state or
     // tries to re-authenticate with the stored JWT and strategy
     const authPromise = this.app.get('authentication');
@@ -109,7 +115,9 @@ export class AuthenticationClient {
           strategy: this.options.jwtStrategy,
           accessToken
         });
-      }).catch(error => this.removeJwt().then(() => Promise.reject(error)));
+      }).catch((error: Error) =>
+        this.removeJwt().then(() => Promise.reject(error))
+      );
     }
 
     return authPromise;
@@ -117,7 +125,7 @@ export class AuthenticationClient {
 
   authenticate (authentication: AuthenticationRequest): Promise<AuthenticationResult> {
     if (!authentication) {
-      return this.reauthenticate();
+      return this.reAuthenticate();
     }
 
     const promise = this.service.create(authentication)
@@ -129,7 +137,9 @@ export class AuthenticationClient {
         this.app.emit('authenticated', authResult);
 
         return this.setJwt(accessToken).then(() => authResult);
-      }).catch((error: any) => this.reset().then(() => Promise.reject(error)));
+      }).catch((error: Error) =>
+        this.reset().then(() => Promise.reject(error))
+      );
 
     this.app.set('authentication', promise);
 
