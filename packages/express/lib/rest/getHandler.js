@@ -1,6 +1,5 @@
 const errors = require('@feathersjs/errors');
 const { omit } = require('@feathersjs/commons')._;
-
 const debug = require('debug')('@feathersjs/express/rest');
 
 const statusCodes = {
@@ -16,23 +15,47 @@ const methodMap = {
   patch: 'PATCH',
   remove: 'DELETE'
 };
-const allowedMethods = function (service) {
+
+function getAllowedMethods (service, routes) {
+  if (routes) {
+    return routes
+      .filter(({ method }) => typeof service[method] === 'function')
+      .map(methodRoute => methodRoute.verb.toUpperCase())
+      .filter((value, index, list) => list.indexOf(value) === index);
+  }
+
   return Object.keys(methodMap)
     .filter(method => typeof service[method] === 'function')
     .map(method => methodMap[method])
     // Filter out duplicates
     .filter((value, index, list) => list.indexOf(value) === index);
-};
+}
+
+function makeArgsGetter (argsOrder) {
+  return (req, params) => argsOrder.reduce((result, argName) => {
+    switch (argName) {
+      case 'id':
+        return [ ...result, req.params.__feathersId || null ];
+      case 'data':
+        return [ ...result, req.body ];
+      case 'params':
+        return [ ...result, params ];
+    }
+  }, []);
+}
 
 // A function that returns the middleware for a given method and service
 // `getArgs` is a function that should return additional leading service arguments
-function getHandler (method, getArgs) {
-  return service => {
+module.exports = function getHandler (method) {
+  return (service, routes) => {
+    const getArgs = makeArgsGetter(service.methods[method]);
+    const allowedMethods = getAllowedMethods(service, routes);
+
     return function (req, res, next) {
       const { query } = req;
       const route = omit(req.params, '__feathersId');
 
-      res.setHeader('Allow', allowedMethods(service).join(','));
+      res.setHeader('Allow', allowedMethods.join(','));
 
       // Check if the method exists on the service at all. Send 405 (Method not allowed) if not
       if (typeof service[method] !== 'function') {
@@ -52,7 +75,6 @@ function getHandler (method, getArgs) {
         value: true
       });
 
-      // Run the getArgs callback, if available, for additional parameters
       const args = getArgs(req, params);
 
       debug(`REST handler calling \`${method}\` from \`${req.url}\``);
@@ -85,33 +107,4 @@ function getHandler (method, getArgs) {
         });
     };
   };
-}
-
-// Returns no leading parameters
-function reqNone (req, params) {
-  return [ params ];
-}
-
-// Returns the leading parameters for a `get` or `remove` request (the id)
-function reqId (req, params) {
-  return [ req.params.__feathersId || null, params ];
-}
-
-// Returns the leading parameters for an `update` or `patch` request (id, data)
-function reqUpdate (req, params) {
-  return [ req.params.__feathersId || null, req.body, params ];
-}
-
-// Returns the leading parameters for a `create` request (data)
-function reqCreate (req, params) {
-  return [ req.body, params ];
-}
-
-module.exports = {
-  find: getHandler('find', reqNone),
-  get: getHandler('get', reqId),
-  create: getHandler('create', reqCreate),
-  update: getHandler('update', reqUpdate),
-  patch: getHandler('patch', reqUpdate),
-  remove: getHandler('remove', reqId)
 };
