@@ -20,6 +20,7 @@
     "node": ">= 6"
   },
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "clean": "../../node_modules/.bin/shx rm -rf dist/ && ../../node_modules/.bin/shx mkdir -p dist",
     "version": "npm run build",
