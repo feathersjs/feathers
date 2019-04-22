@@ -29,6 +29,7 @@ describe('@feathersjs/primus', () => {
       }, function (primus) {
         primus.authorize(function (req, done) {
           req.feathers.user = { name: 'David' };
+          options.socketParams.headers = req.feathers.headers;
 
           const { channel } = req.query;
 
