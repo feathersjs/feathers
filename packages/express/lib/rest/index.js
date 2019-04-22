@@ -108,7 +108,10 @@ function rest (handler = formatter) {
     };
 
     app.use(function (req, res, next) {
-      req.feathers = Object.assign({ provider: 'rest' }, req.feathers);
+      req.feathers = Object.assign({
+        provider: 'rest',
+        headers: req.headers
+      }, req.feathers);
       next();
     });
 
