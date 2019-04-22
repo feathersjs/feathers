@@ -553,14 +553,15 @@ describe('@feathersjs/express/rest provider', () => {
   });
 
   describe('Custom methods', () => {
-    let server, app;
+    let server;
+    let app;
 
     before(() => {
       app = expressify(feathers())
         .configure(rest())
         .use(expressify.json())
         .use('/todo', {
-          get(id) {
+          get (id) {
             return id;
           },
           // httpMethod is usable as a decorator: @httpMethod('POST', '/:__feathersId/custom-path')
@@ -597,10 +598,6 @@ describe('@feathersjs/express/rest provider', () => {
             id: '42',
             data: { text: 'Do dishes' }
           });
-        })
-        .catch(err => {
-          console.log(err);
-          return Promise.reject(err);
         });
     });
 
@@ -612,10 +609,6 @@ describe('@feathersjs/express/rest provider', () => {
             id: '12',
             data: { text: 'Hmm' }
           });
-        })
-        .catch(err => {
-          console.log(err);
-          return Promise.reject(err);
         });
     });
   });

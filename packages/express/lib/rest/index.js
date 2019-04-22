@@ -28,7 +28,7 @@ function getDefaultUri (path, methods, method) {
     : `/${path}/:__feathersId/${method}`;
 }
 
-function parseRoute(path, methods, method, route) {
+function parseRoute (path, methods, method, route) {
   return {
     method,
     verb: route.verb,
@@ -56,7 +56,7 @@ function getServiceRoutes (service, path, defaultRoutes) {
         parseRoute(path, methods, method, routes)
       ];
     }, defaultRoutes);
-};
+}
 
 function getDefaultRoutes (uri) {
   const idUri = `${uri}/:__feathersId`;
@@ -72,7 +72,7 @@ function getDefaultRoutes (uri) {
     { method: 'remove', verb: 'DELETE', uri: idUri }, // remove(id, data, params)
     { method: 'remove', verb: 'DELETE', uri } // remove(null, data, params)
   ];
-};
+}
 
 function formatter (req, res, next) {
   if (res.data === undefined) {

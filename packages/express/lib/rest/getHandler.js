@@ -16,7 +16,7 @@ const methodMap = {
   remove: 'DELETE'
 };
 
-function getAllowedMethods(service, routes) {
+function getAllowedMethods (service, routes) {
   if (routes) {
     return routes
       .filter(({ method }) => typeof service[method] === 'function')
@@ -29,7 +29,7 @@ function getAllowedMethods(service, routes) {
     .map(method => methodMap[method])
     // Filter out duplicates
     .filter((value, index, list) => list.indexOf(value) === index);
-};
+}
 
 function makeArgsGetter (argsOrder) {
   return (req, params) => argsOrder.reduce((result, argName) => {
