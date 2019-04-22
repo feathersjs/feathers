@@ -21,7 +21,6 @@ describe('@feathersjs/express/authentication', () => {
   before(() => {
     const expressApp = expressify(feathers())
       .use(expressify.json())
-      .use(expressify.parseAuthentication('jwt'))
       .configure(expressify.rest());
 
     app = getApp(expressApp);
@@ -60,26 +59,6 @@ describe('@feathersjs/express/authentication', () => {
   });
 
   after(done => server.close(done));
-
-  it('middleware needs strategies ', () => {
-    try {
-      expressify.parseAuthentication();
-      assert.fail('Should never get here');
-    } catch (error) {
-      assert.strictEqual(error.message,
-        `'parseAuthentication' middleware requires at least one strategy name`
-      );
-    }
-
-    try {
-      expressify.authenticate();
-      assert.fail('Should never get here');
-    } catch (error) {
-      assert.strictEqual(error.message,
-        `'authenticate' middleware requires at least one strategy name`
-      );
-    }
-  });
 
   describe('service authentication', () => {
     it('successful local authentication', () => {

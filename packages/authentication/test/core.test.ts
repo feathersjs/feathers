@@ -2,7 +2,7 @@ import assert from 'assert';
 import feathers, { Application } from '@feathersjs/feathers';
 import jwt from 'jsonwebtoken';
 
-import { AuthenticationBase } from '../src/core';
+import { AuthenticationBase, AUTHENTICATE } from '../src/core';
 import { Strategy1, Strategy2, MockRequest } from './fixtures';
 import { ServerResponse } from 'http';
 
@@ -15,7 +15,10 @@ describe('authentication/core', () => {
   beforeEach(() => {
     app = feathers();
     auth = new AuthenticationBase(app, 'authentication', {
-      secret: 'supersecret'
+      entity: 'user',
+      service: 'users',
+      secret: 'supersecret',
+      first: { hello: 'test' }
     });
 
     auth.register('first', new Strategy1());
@@ -95,6 +98,23 @@ describe('authentication/core', () => {
       assert.strictEqual(first.app, app);
       assert.strictEqual(first.authentication, auth);
     });
+
+    it('strategy configuration getter', () => {
+      const [ first ] = auth.getStrategies('first') as [ Strategy1 ];
+
+      assert.deepStrictEqual(first.configuration, { hello: 'test' });
+    });
+
+    it('strategy configuration getter', () => {
+      const [ first ] = auth.getStrategies('first') as [ Strategy1 ];
+      const oldService = auth.configuration.service;
+
+      delete auth.configuration.service;
+
+      assert.strictEqual(first.entityService, null);
+
+      auth.configuration.service = oldService;
+    });
   });
 
   describe('authenticate', () => {
@@ -132,7 +152,7 @@ describe('authentication/core', () => {
 
         assert.deepStrictEqual(result, Object.assign({}, Strategy2.result, {
           authentication,
-          params: { authentication: true }
+          params: { [AUTHENTICATE]: false }
         }));
       });
 
@@ -150,7 +170,7 @@ describe('authentication/core', () => {
 
         assert.deepStrictEqual(result, Object.assign({
           params: Object.assign(params, {
-            authentication: true
+            [AUTHENTICATE]: false
           }),
           authentication
         }, Strategy2.result));
@@ -189,7 +209,7 @@ describe('authentication/core', () => {
 
         assert.deepStrictEqual(result, Object.assign({
           authentication,
-          params: { authentication: true }
+          params: { [AUTHENTICATE]: false }
         }, Strategy2.result));
       });
 
@@ -218,15 +238,10 @@ describe('authentication/core', () => {
   describe('parse', () => {
     const res = {} as ServerResponse;
 
-    it('errors when no names are given', async () => {
+    it('returns null when no names are given', async () => {
       const req = {} as MockRequest;
 
-      try {
-        await auth.parse(req, res);
-        assert.fail('Should never get here');
-      } catch (error) {
-        assert.strictEqual(error.message, 'Authentication HTTP parser needs at least one allowed strategy');
-      }
+      assert.strictEqual(await auth.parse(req, res), null);
     });
 
     it('successfully parses a request (first)', async () => {

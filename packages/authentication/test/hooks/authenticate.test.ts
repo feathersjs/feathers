@@ -3,7 +3,7 @@ import feathers, { Application, Params, Service } from '@feathersjs/feathers';
 
 import { Strategy1, Strategy2 } from '../fixtures';
 import { AuthenticationService, hooks } from '../../src';
-import { AuthenticationResult } from '../../src/core';
+import { AuthenticationResult, AUTHENTICATE } from '../../src/core';
 
 const { authenticate } = hooks;
 
@@ -17,12 +17,16 @@ describe('authentication/hooks/authenticate', () => {
   beforeEach(() => {
     app = feathers();
     app.use('/authentication', new AuthenticationService(app, 'authentication', {
+      entity: 'user',
+      service: 'users',
       secret: 'supersecret',
-      strategies: [ 'first' ]
+      jwtStrategies: [ 'first' ]
     }));
     app.use('/auth-v2', new AuthenticationService(app, 'auth-v2', {
+      entity: 'user',
+      service: 'users',
       secret: 'supersecret',
-      strategies: [ 'test' ]
+      jwtStrategies: [ 'test' ]
     }));
     app.use('/users', {
       async find () {
@@ -143,7 +147,7 @@ describe('authentication/hooks/authenticate', () => {
 
     assert.deepStrictEqual(result, Object.assign({
       authentication: params.authentication,
-      params: { authentication: true }
+      params: {}
     }, Strategy2.result));
   });
 
@@ -179,16 +183,14 @@ describe('authentication/hooks/authenticate', () => {
     }
   });
 
-  it('passes with authentication true but external call', async () => {
-    const result = await app.service('users').get(1, {
+  it('passes with [AUTHENTICATE]: false but external call', async () => {
+    const params = {
       provider: 'rest',
-      authentication: true
-    });
+      [AUTHENTICATE]: false
+    };
+    const result = await app.service('users').get(1, params);
 
-    assert.deepStrictEqual(result, {
-      provider: 'rest',
-      authentication: true
-    });
+    assert.deepStrictEqual(result, params);
   });
 
   it('errors when used on the authentication service', async () => {

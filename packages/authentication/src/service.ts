@@ -14,11 +14,11 @@ export class AuthenticationService extends AuthenticationBase implements Service
    * @param _authResult The current authentication result
    * @param params The service call parameters
    */
-  getPayload (_authResult: AuthenticationResult, params: Params) {
+  async getPayload (_authResult: AuthenticationResult, params: Params) {
     // Uses `params.payload` or returns an empty payload
     const { payload = {} } = params;
 
-    return Promise.resolve(payload);
+    return payload;
   }
 
   /**
@@ -29,7 +29,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
    */
   async getJwtOptions (authResult: AuthenticationResult, params: Params) {
     const { service, entity, entityId } = this.configuration;
-    const jwtOptions = merge({}, params.jwt);
+    const jwtOptions = merge({}, params.jwtOptions, params.jwt);
     const hasEntity = service && entity && authResult[entity];
 
     // Set the subject to the entity id if it is available
@@ -53,14 +53,14 @@ export class AuthenticationService extends AuthenticationBase implements Service
    * @param data The authentication request (should include `strategy` key)
    * @param params Service call parameters
    */
-  async create (data: AuthenticationRequest, params?: Params) {
-    const { strategies } = this.configuration;
+  async create (data: AuthenticationRequest, params: Params) {
+    const jwtStrategies = params.jwtStrategies || this.configuration.jwtStrategies;
 
-    if (!strategies.length) {
-      throw new NotAuthenticated('No authentication strategies allowed for creating a JWT');
+    if (!jwtStrategies.length) {
+      throw new NotAuthenticated('No authentication strategies allowed for creating a JWT (`jwtStrategies`)');
     }
 
-    const authResult = await this.authenticate(data, params, ...strategies);
+    const authResult = await this.authenticate(data, params, ...jwtStrategies);
 
     debug('Got authentication result', authResult);
 
@@ -86,9 +86,9 @@ export class AuthenticationService extends AuthenticationBase implements Service
    * @param id The JWT to remove or null
    * @param params Service call parameters
    */
-  async remove (id: null|string, params?: Params) {
+  async remove (id: null|string, params: Params) {
     const { authentication } = params;
-    const { strategies } = this.configuration;
+    const { jwtStrategies } = this.configuration;
 
     // When an id is passed it is expected to be the authentication `accessToken`
     if (id !== null && id !== authentication.accessToken) {
@@ -97,7 +97,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
 
     debug('Verifying authentication strategy in remove');
 
-    return this.authenticate(authentication, params, ...strategies);
+    return this.authenticate(authentication, params, ...jwtStrategies);
   }
 
   /**
@@ -106,13 +106,17 @@ export class AuthenticationService extends AuthenticationBase implements Service
   setup () {
     // The setup method checks for valid settings and registers the
     // connection and event (login, logout) hooks
-    const { secret, service, entity, entityId, strategies } = this.configuration;
+    const { secret, service, entity, entityId } = this.configuration;
 
     if (typeof secret !== 'string') {
       throw new Error(`A 'secret' must be provided in your authentication configuration`);
     }
 
     if (entity !== null) {
+      if (service === undefined) {
+        throw new Error(`The 'service' option is not set in the authentication configuration`);
+      }
+
       if (this.app.service(service) === undefined) {
         throw new Error(`The '${service}' entity service does not exist (set to 'null' if it is not required)`);
       }
@@ -120,10 +124,6 @@ export class AuthenticationService extends AuthenticationBase implements Service
       if (this.app.service(service).id === undefined && entityId === undefined) {
         throw new Error(`The '${service}' service does not have an 'id' property and no 'entityId' option is set.`);
       }
-    }
-
-    if (strategies.length === 0) {
-      throw new Error(`At least one valid authentication strategy required in '${this.configKey}.strategies'`);
     }
 
     // @ts-ignore

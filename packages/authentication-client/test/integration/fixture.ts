@@ -11,8 +11,11 @@ export default (app: Application) => {
   const authentication = new AuthenticationService(app);
 
   app.set('authentication', {
+    entity: 'user',
+    service: 'users',
     secret: 'supersecret',
-    strategies: [ 'local', 'jwt' ],
+    httpStrategies: [ 'jwt' ],
+    jwtStrategies: [ 'local', 'jwt' ],
     local: {
       usernameField: 'email',
       passwordField: 'password'

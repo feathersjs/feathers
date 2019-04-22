@@ -8,7 +8,9 @@ export {
   AuthenticationBase,
   AuthenticationRequest,
   AuthenticationResult,
-  AuthenticationStrategy
+  AuthenticationStrategy,
+  AUTHENTICATE
 } from './core';
+export { AuthenticationBaseStrategy } from './strategy';
 export { AuthenticationService } from './service';
 export { JWTStrategy } from './jwt';

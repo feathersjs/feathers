@@ -1,5 +1,6 @@
 const makeDebug = require('debug');
 const wrappers = require('./wrappers');
+const { parseAuthentication } = require('../authentication');
 
 const debug = makeDebug('@feathersjs/express/rest');
 
@@ -33,6 +34,8 @@ function rest (handler = formatter) {
       req.feathers = Object.assign({ provider: 'rest' }, req.feathers);
       next();
     });
+
+    app.use(parseAuthentication());
 
     // Register the REST provider
     app.providers.push(function (service, path, options) {

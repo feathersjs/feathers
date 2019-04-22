@@ -24,8 +24,10 @@ describe('authentication/jwt', () => {
     app = feathers();
 
     const authService = new AuthenticationService(app, 'authentication', {
+      entity: 'user',
+      service: 'users',
       secret: 'supersecret',
-      strategies: [ 'jwt' ]
+      jwtStrategies: [ 'jwt' ]
     });
 
     authService.register('jwt', new JWTStrategy());
@@ -101,7 +103,7 @@ describe('authentication/jwt', () => {
         assert.fail('Should never get here');
       } catch (error) {
         assert.strictEqual(error.name, 'NotAuthenticated');
-        assert.strictEqual(error.message, `Could not find entity service 'users'`);
+        assert.strictEqual(error.message, `Could not find entity service`);
       }
     });
 

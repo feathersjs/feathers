@@ -9,8 +9,11 @@ module.exports = (app = feathers()) => {
   const authentication = new AuthenticationService(app);
 
   app.set('authentication', {
+    entity: 'user',
+    service: 'users',
     secret: 'supersecret',
-    strategies: [ 'local', 'jwt' ],
+    jwtStrategies: [ 'local', 'jwt' ],
+    httpStrategies: [ 'jwt' ],
     local: {
       usernameField: 'email',
       passwordField: 'password'

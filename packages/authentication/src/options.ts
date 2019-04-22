@@ -1,7 +1,6 @@
 export default {
-  entity: 'user',
-  service: 'users',
-  strategies: [],
+  httpStrategies: [],
+  jwtStrategies: [],
   jwtOptions: {
     header: { typ: 'access' }, // by default is an access token but can be any type
     audience: 'https://yourdomain.com', // The resource server where the token is processed

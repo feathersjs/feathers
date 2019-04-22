@@ -1,30 +1,15 @@
 import { NotAuthenticated } from '@feathersjs/errors';
-import { AuthenticationStrategy, AuthenticationBase, AuthenticationRequest } from './core';
-import { Application, Params } from '@feathersjs/feathers';
+import { AuthenticationRequest } from './core';
+import { Params } from '@feathersjs/feathers';
 import { IncomingMessage } from 'http';
+import { AuthenticationBaseStrategy } from './strategy';
 
 const SPLIT_HEADER = /(\S+)\s+(\S+)/;
 
-export class JWTStrategy implements AuthenticationStrategy {
-  authentication?: AuthenticationBase;
-  app?: Application;
-  name?: string;
-
-  setAuthentication (auth: AuthenticationBase): void {
-    this.authentication = auth;
-  }
-
-  setApplication (app: Application) {
-    this.app = app;
-  }
-
-  setName (name: string) {
-    this.name = name;
-  }
-
+export class JWTStrategy extends AuthenticationBaseStrategy {
   get configuration () {
     const authConfig = this.authentication.configuration;
-    const config = authConfig[this.name];
+    const config = super.configuration;
 
     return {
       ...config,
@@ -51,11 +36,10 @@ export class JWTStrategy implements AuthenticationStrategy {
    * @param params Service call parameters
    */
   async getEntity (id: string, params: Params) {
-    const { service } = this.configuration;
-    const entityService = this.app.service(service);
+    const entityService = this.entityService;
 
-    if (!entityService) {
-      throw new NotAuthenticated(`Could not find entity service '${service}'`);
+    if (entityService === null) {
+      throw new NotAuthenticated(`Could not find entity service`);
     }
 
     // @ts-ignore

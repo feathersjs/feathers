@@ -2,28 +2,14 @@ import bcrypt from 'bcryptjs';
 import { get, omit } from 'lodash';
 import Debug from 'debug';
 import { NotAuthenticated } from '@feathersjs/errors';
-import { AuthenticationStrategy, AuthenticationBase, AuthenticationRequest } from '@feathersjs/authentication';
-import { Application, Query, Params } from '@feathersjs/feathers';
+import { Query, Params } from '@feathersjs/feathers';
+import {
+  AuthenticationRequest, AuthenticationBaseStrategy
+} from '@feathersjs/authentication';
 
 const debug = Debug('@feathersjs/authentication-local/strategy');
 
-export class LocalStrategy implements AuthenticationStrategy {
-  authentication?: AuthenticationBase;
-  app?: Application;
-  name?: string;
-
-  setAuthentication (auth: AuthenticationBase) {
-    this.authentication = auth;
-  }
-
-  setApplication (app: Application) {
-    this.app = app;
-  }
-
-  setName (name: string) {
-    this.name = name;
-  }
-
+export class LocalStrategy extends AuthenticationBaseStrategy {
   verifyConfiguration () {
     const config = this.configuration;
 
@@ -36,16 +22,17 @@ export class LocalStrategy implements AuthenticationStrategy {
 
   get configuration () {
     const authConfig = this.authentication.configuration;
-    const config = authConfig[this.name] || {};
+    const config = super.configuration || {};
 
-    return Object.assign({}, {
+    return {
       hashSize: 10,
       service: authConfig.service,
       entity: authConfig.entity,
       errorMessage: 'Invalid login',
       entityPasswordField: config.passwordField,
-      entityUsernameField: config.usernameField
-    }, config);
+      entityUsernameField: config.usernameField,
+      ...config
+    };
   }
 
   getEntityQuery (query: Query, _params: Params) {
