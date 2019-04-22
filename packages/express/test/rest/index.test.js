@@ -152,26 +152,22 @@ describe('@feathersjs/express/rest provider', () => {
 
         return axios.get('http://localhost:4777/hook/dishes?test=param')
           .then(res => {
+            const paramsWithHeaders = {
+              ...params,
+              headers: res.data.params.headers
+            };
+
             assert.deepStrictEqual(res.data, {
               id: 'dishes',
-              params,
+              params: paramsWithHeaders,
               arguments: [
-                'dishes',
-                params
+                'dishes', paramsWithHeaders
               ],
               type: 'after',
               method: 'get',
               path: 'hook',
               result: { description: 'You have to do dishes' },
-              addedProperty: true,
-              arguments: [
-                'dishes',
-                {
-                  route: {},
-                  query: { test: 'param' },
-                  provider: 'rest'
-                }
-              ]
+              addedProperty: true
             });
           });
       });
@@ -241,22 +237,19 @@ describe('@feathersjs/express/rest provider', () => {
 
         return axios('http://localhost:4777/hook-error/dishes')
           .catch(error => {
+            const { data } = error.response;
+            const paramsWithHeaders = {
+              ...params,
+              headers: data.hook.params.headers
+            };
             assert.deepStrictEqual(error.response.data, {
               hook: {
                 id: 'dishes',
-                params,
-                arguments: [ 'dishes', params ],
+                params: paramsWithHeaders,
+                arguments: ['dishes', paramsWithHeaders ],
                 type: 'error',
                 method: 'get',
-                path: 'hook-error',
-                arguments: [
-                  'dishes',
-                  {
-                    route: {},
-                    query: {},
-                    provider: 'rest'
-                  }
-                ]
+                path: 'hook-error'
               },
               error: { message: 'I blew up' }
             });
@@ -286,6 +279,7 @@ describe('@feathersjs/express/rest provider', () => {
       return axios.get('http://localhost:4778/service/bla?some=param&another=thing')
         .then(res => {
           let expected = {
+            headers: res.data.headers,
             test: 'Happy',
             provider: 'rest',
             route: {},
@@ -343,22 +337,22 @@ describe('@feathersjs/express/rest provider', () => {
       app.configure(rest())
         .use(expressify.json())
         .use('/todo', function (req, res, next) {
-          req.body.before = [ 'before first' ];
+          req.body.before = ['before first'];
           next();
         }, function (req, res, next) {
           req.body.before.push('before second');
           next();
         }, {
-          create (data) {
-            return Promise.resolve(data);
-          }
-        }, function (req, res, next) {
-          res.data.after = [ 'after first' ];
-          next();
-        }, function (req, res, next) {
-          res.data.after.push('after second');
-          next();
-        });
+            create (data) {
+              return Promise.resolve(data);
+            }
+          }, function (req, res, next) {
+            res.data.after = ['after first'];
+            next();
+          }, function (req, res, next) {
+            res.data.after.push('after second');
+            next();
+          });
 
       const server = app.listen(4776);
 
@@ -366,8 +360,8 @@ describe('@feathersjs/express/rest provider', () => {
         .then(res => {
           assert.deepStrictEqual(res.data, {
             text: 'Do dishes',
-            before: [ 'before first', 'before second' ],
-            after: [ 'after first', 'after second' ]
+            before: ['before first', 'before second'],
+            after: ['after first', 'after second']
           });
         })
         .then(() => server.close());
