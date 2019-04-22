@@ -75,7 +75,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
 
     debug('Creating JWT with', payload, jwtOptions);
 
-    const accessToken = await this.createJWT(payload, jwtOptions, params.secret);
+    const accessToken = await this.createAccessToken(payload, jwtOptions, params.secret);
 
     return Object.assign({}, { accessToken }, authResult);
   }

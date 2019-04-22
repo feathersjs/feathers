@@ -54,7 +54,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       throw new NotAuthenticated('Not authenticated');
     }
 
-    const payload = await this.authentication.verifyJWT(accessToken, params.jwt);
+    const payload = await this.authentication.verifyAccessToken(accessToken, params.jwt);
     const entityId = payload.sub;
     const result = {
       accessToken,

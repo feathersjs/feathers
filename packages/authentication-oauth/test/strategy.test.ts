@@ -64,7 +64,7 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
       const user = await app.service('users').create({
         name: 'David'
       });
-      const jwt = await authService.createJWT({}, {
+      const jwt = await authService.createAccessToken({}, {
         subject: `${user.id}`
       });
 

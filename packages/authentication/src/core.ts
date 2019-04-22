@@ -147,12 +147,12 @@ export class AuthenticationBase {
   }
 
   /**
-   * Create a new JWT with payload and options.
+   * Create a new access token with payload and options.
    * @param payload The JWT payload
    * @param optsOverride The options to extend the defaults (`configuration.jwtOptions`) with
    * @param secretOverride Use a different secret instead
    */
-  createJWT (payload: string | Buffer | object, optsOverride?: SignOptions, secretOverride?: Secret) {
+  createAccessToken (payload: string | Buffer | object, optsOverride?: SignOptions, secretOverride?: Secret) {
     const { secret, jwtOptions } = this.configuration;
     // Use configuration by default but allow overriding the secret
     const jwtSecret = secretOverride || secret;
@@ -169,12 +169,12 @@ export class AuthenticationBase {
   }
 
   /**
-   * Verifies a JWT.
+   * Verifies an access token.
    * @param accessToken The token to verify
    * @param optsOverride The options to extend the defaults (`configuration.jwtOptions`) with
    * @param secretOverride Use a different secret instead
    */
-  verifyJWT (accessToken: string, optsOverride?: JwtVerifyOptions, secretOverride?: Secret) {
+  verifyAccessToken (accessToken: string, optsOverride?: JwtVerifyOptions, secretOverride?: Secret) {
     const { secret, jwtOptions } = this.configuration;
     const jwtSecret = secretOverride || secret;
     const options = merge({}, jwtOptions, optsOverride);
