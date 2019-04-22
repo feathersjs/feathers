@@ -63,13 +63,18 @@ export function channelMixin () {
 export interface PublishMixin {
   [PUBLISHERS]: { [key: string]: Channel };
   publish (event: string|symbol, callback: (data: any, hook: HookContext) => Channel): any;
+  registerPublisher (event: string|symbol, callback: (data: any, hook: HookContext) => Channel): any;
 }
 
 export function publishMixin () {
   const result: PublishMixin = {
     [PUBLISHERS]: {},
 
-    publish (event, callback) {
+    publish (...args) {
+      return this.registerPublisher(...args);
+    },
+
+    registerPublisher (event, callback) {
       debug('Registering publisher', event);
 
       if (!callback && typeof event === 'function') {

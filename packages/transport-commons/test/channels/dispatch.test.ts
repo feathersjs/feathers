@@ -19,8 +19,8 @@ describe('app.publish', () => {
         }
       });
 
-      app.service('test').publish('created', function () {});
-      app.service('test').publish('bla', function () {});
+      app.service('test').registerPublisher('created', function () {});
+      app.service('test').registerPublisher('bla', function () {});
       assert.ok(false, 'Should never get here');
     } catch (e) {
       assert.strictEqual(e.message, `'bla' is not a valid service event`);
@@ -45,7 +45,7 @@ describe('app.publish', () => {
     it('simple event registration and dispatching', done => {
       app.channel('testing').join(c1);
 
-      app.service('test').publish('created', () => app.channel('testing'));
+      app.service('test').registerPublisher('created', () => app.channel('testing'));
 
       app.once('publish', (event: string, channel: Channel, hook: HookContext) => {
         assert.strictEqual(event, 'created');
@@ -65,8 +65,8 @@ describe('app.publish', () => {
       app.channel('testing').join(c1);
       app.channel('other').join(c2);
 
-      app.publish('created', () => app.channel('testing'));
-      app.publish(() => app.channel('other'));
+      app.registerPublisher('created', () => app.channel('testing'));
+      app.registerPublisher(() => app.channel('other'));
 
       app.once('publish', (_event: string, channel: Channel) => {
         assert.ok(channel.connections.indexOf(c1) !== -1);
@@ -82,12 +82,12 @@ describe('app.publish', () => {
       app.channel('testing').join(c1);
       app.channel('othertest').join(c2);
 
-      app.service('test').publish('created', () =>
+      app.service('test').registerPublisher('created', () =>
         new Promise(resolve =>
           setTimeout(() => resolve(app.channel('testing')), 50)
         )
       );
-      app.service('test').publish('created', () =>
+      app.service('test').registerPublisher('created', () =>
         new Promise(resolve =>
           setTimeout(() => resolve(app.channel('testing', 'othertest')), 100)
         )
@@ -110,7 +110,7 @@ describe('app.publish', () => {
       app.channel('testing').join(c1);
       app.channel('othertest').join(c2);
 
-      app.service('test').publish('foo', () => app.channel('testing'));
+      app.service('test').registerPublisher('foo', () => app.channel('testing'));
 
       app.once('publish', (event: string, channel: Channel, hook: HookContext) => {
         assert.strictEqual(event, 'foo');
@@ -141,7 +141,7 @@ describe('app.publish', () => {
     });
 
     it('does not send `dispatch` event if there are no connections', done => {
-      app.service('test').publish('created', () =>
+      app.service('test').registerPublisher('created', () =>
         app.channel('dummy')
       );
       app.once('publish', () =>
@@ -158,7 +158,7 @@ describe('app.publish', () => {
       app.channel('testing').join(c1);
       app.channel('othertest').join(c2);
 
-      app.service('test').publish('created', () => [
+      app.service('test').registerPublisher('created', () => [
         app.channel('testing'),
         app.channel('othertest')
       ]);
@@ -180,7 +180,7 @@ describe('app.publish', () => {
       app.channel('testing').join(c1);
       app.channel('othertest').join(c2);
 
-      app.service('test').publish('created', () => [
+      app.service('test').registerPublisher('created', () => [
         app.channel('testing').send(c1data),
         app.channel('othertest')
       ]);
@@ -199,8 +199,8 @@ describe('app.publish', () => {
     it('publisher precedence and preventing publishing', done => {
       app.channel('test').join(c1);
 
-      app.publish(() => app.channel('test'));
-      app.service('test').publish('created', (): null => null);
+      app.registerPublisher(() => app.channel('test'));
+      app.service('test').registerPublisher('created', (): null => null);
 
       app.once('publish', () => done(new Error('Should never get here')));
 
@@ -213,7 +213,7 @@ describe('app.publish', () => {
       app.channel('testing').join(c1);
       app.channel('othertest').join(c1);
 
-      app.service('test').publish('created', () => {
+      app.service('test').registerPublisher('created', () => {
         return [
           app.channel('testing'),
           app.channel('othertest').send(sendData)
