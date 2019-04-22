@@ -1,11 +1,13 @@
-const { hooks } = require('@feathersjs/commons');
 const Proto = require('uberproto');
 const Application = require('./application');
 const version = require('./version');
 const { ACTIVATE_HOOKS, activateHooks } = require('./hooks');
+// A base object Prototype that does not inherit from a
+// potentially polluted Object prototype
+const baseObject = Object.create(null);
 
 function createApplication () {
-  const app = {};
+  const app = Object.create(baseObject);
 
   // Mix in the base application
   Proto.mixin(Application, app);
@@ -16,7 +18,6 @@ function createApplication () {
 }
 
 createApplication.version = version;
-createApplication.SKIP = hooks.SKIP;
 createApplication.ACTIVATE_HOOKS = ACTIVATE_HOOKS;
 createApplication.activateHooks = activateHooks;
 

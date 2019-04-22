@@ -16,27 +16,21 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">= 8"
   },
   "scripts": {
     "install": "lerna bootstrap",
     "publish": "lerna publish",
-    "lint": "semistandard packages/**/*.js --fix",
-    "test": "npm run lint && nyc lerna run test --ignore generator-**",
-    "test:client": "grunt",
-    "test:generators": "lerna run test --scope generator-** --stream --concurrency 1"
-  },
-  "semistandard": {
-    "env": [
-      "mocha"
-    ]
+    "lint": "tslint 'packages/**/*.js' 'packages/**/*.ts' -c tslint.json --fix",
+    "test": "npm run lint && nyc lerna run test",
+    "test:client": "grunt"
   },
   "devDependencies": {
-    "lerna": "^3.4.0",
-    "nyc": "^13.0.1",
-    "semistandard": "^12.0.1",
-    "grunt": "^1.0.3",
-    "grunt-cli": "^1.3.1",
-    "grunt-saucelabs": "^9.0.0"
+    "grunt": "^1.0.4",
+    "grunt-cli": "^1.3.2",
+    "grunt-saucelabs": "^9.0.1",
+    "lerna": "^3.13.1",
+    "nyc": "^14.0.0",
+    "tslint": "^5.15.0"
   }
 }

@@ -1,0 +1,42 @@
+{
+  "name": "@feathersjs/adapter-tests",
+  "version": "4.0.0-pre.0",
+  "description": "Feathers shared database adapter test suite",
+  "homepage": "https://feathersjs.com",
+  "keywords": [
+    "feathers"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git"
+  },
+  "author": {
+    "name": "Feathers contributor",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "engines": {
+    "node": ">= 8"
+  },
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha --opts ../../mocha.opts"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@feathersjs/errors": "^4.0.0-pre.0",
+    "@feathersjs/feathers": "^4.0.0-pre.0",
+    "feathers-memory": "^3.0.2",
+    "mocha": "^6.0.2"
+  }
+}

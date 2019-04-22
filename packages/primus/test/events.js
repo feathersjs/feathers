@@ -25,7 +25,8 @@ module.exports = function (name, options) {
   };
 
   describe(`Basic ${name} service events`, () => {
-    let socket, connection;
+    let socket;
+    let connection;
 
     before(done => {
       setTimeout(() => {
@@ -104,7 +105,8 @@ module.exports = function (name, options) {
       };
 
       socket.once(`${name} log`, verifyEvent(done, data => {
-        assert.deepEqual(data, {
+        // Primus does something that makes strict equal fail
+        assert.deepEqual(data, { // eslint-disable-line
           message: `Custom log event`, data: original
         });
         service.create = old;
@@ -116,7 +118,8 @@ module.exports = function (name, options) {
 
   describe('Event channels', () => {
     const eventName = `${name} created`;
-    let connections, sockets;
+    let connections;
+    let sockets;
 
     before(done => {
       let counter = 0;
@@ -170,7 +173,7 @@ module.exports = function (name, options) {
       );
 
       socket.once(eventName, data => {
-        assert.equal(data.room, 'first');
+        assert.strictEqual(data.room, 'first');
         otherSocket.removeListener(eventName, onError);
         done();
       });
@@ -193,7 +196,7 @@ module.exports = function (name, options) {
       };
       const onEvent = data => {
         counter++;
-        assert.equal(data.room, 'second');
+        assert.strictEqual(data.room, 'second');
 
         if (++counter === 2) {
           otherSocket.removeListener(eventName, onError);

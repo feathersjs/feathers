@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/feathers",
   "description": "A REST and realtime API layer for modern applications.",
-  "version": "3.2.3",
+  "version": "4.0.0-pre.0",
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",
@@ -14,8 +14,9 @@
     "realtime"
   ],
   "main": "lib/index.js",
+  "types": "index.d.ts",
   "author": {
-    "name": "Feathers contributor",
+    "name": "Feathers contributors",
     "email": "hello@feathersjs.com",
     "url": "https://feathersjs.com"
   },
@@ -38,12 +39,12 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^3.0.1",
-    "debug": "^4.0.0",
+    "@feathersjs/commons": "^4.0.0-pre.0",
+    "debug": "^4.1.1",
     "events": "^3.0.0",
-    "uberproto": "^2.0.2"
+    "uberproto": "^2.0.4"
   },
   "devDependencies": {
-    "mocha": "^5.2.0"
+    "mocha": "^6.0.2"
   }
 }

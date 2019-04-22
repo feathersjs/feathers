@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v3.2.0-pre.1...v4.0.0-pre.0) (2019-04-21)
+
+
+### Bug Fixes
+
+* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+* Update all dependencies to latest ([#1206](https://github.com/feathersjs/feathers/issues/1206)) ([e51e0f6](https://github.com/feathersjs/feathers/commit/e51e0f6))
+* **package:** update debug to version 3.0.0 ([#83](https://github.com/feathersjs/feathers/issues/83)) ([49f1de9](https://github.com/feathersjs/feathers/commit/49f1de9))
+* **package:** update socket.io to version 2.0.0 ([#75](https://github.com/feathersjs/feathers/issues/75)) ([d4a4b71](https://github.com/feathersjs/feathers/commit/d4a4b71))
+
+
+### chore
+
+* drop support for Node.js 0.10 ([#48](https://github.com/feathersjs/feathers/issues/48)) ([3f7555a](https://github.com/feathersjs/feathers/commit/3f7555a))
+
+
+### Features
+
+* Add TypeScript definitions ([#1275](https://github.com/feathersjs/feathers/issues/1275)) ([9dd6713](https://github.com/feathersjs/feathers/commit/9dd6713))
+
+
+### BREAKING CHANGES
+
+* This module no longer supports Node.js 0.10
+
+
+
+
+
+## [3.2.9](https://github.com/feathersjs/feathers/compare/@feathersjs/socketio@3.2.8...@feathersjs/socketio@3.2.9) (2019-01-02)
+
+**Note:** Version bump only for package @feathersjs/socketio
+
+
+
+
+
+<a name="3.2.8"></a>
+## [3.2.8](https://github.com/feathersjs/feathers/compare/@feathersjs/socketio@3.2.7...@feathersjs/socketio@3.2.8) (2018-12-16)
+
+**Note:** Version bump only for package @feathersjs/socketio
+
+
+
+
+
 <a name="3.2.7"></a>
 ## [3.2.7](https://github.com/feathersjs/feathers/compare/@feathersjs/socketio@3.2.6...@feathersjs/socketio@3.2.7) (2018-10-25)
 

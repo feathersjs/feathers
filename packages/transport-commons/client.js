@@ -1,1 +1,1 @@
-module.exports = require('./lib/client');
+module.exports = require('./lib/client').Service;

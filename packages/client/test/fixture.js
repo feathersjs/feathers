@@ -1,4 +1,3 @@
-const path = require('path');
 const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 const rest = require('@feathersjs/express/rest');
@@ -18,21 +17,21 @@ Object.defineProperty(Error.prototype, 'toJSON', {
   configurable: true
 });
 
-module.exports = function (configurer) {
-  // Create an in-memory CRUD service for our Todos
-  var todoService = memory().extend({
-    get: function (id, params) {
-      if (params.query.error) {
-        return Promise.reject(new Error('Something went wrong'));
-      }
-
-      return this._super(id, params).then(data =>
-        Object.assign({ query: params.query }, data)
-      );
+// Create an in-memory CRUD service for our Todos
+class TodoService extends memory.Service {
+  get (id, params) {
+    if (params.query.error) {
+      return Promise.reject(new Error('Something went wrong'));
     }
-  });
 
-  var app = express(feathers())
+    return super.get(id).then(data =>
+      Object.assign({ query: params.query }, data)
+    );
+  }
+}
+
+module.exports = function (configurer) {
+  const app = express(feathers())
     .configure(rest());
 
   if (typeof configurer === 'function') {
@@ -45,7 +44,9 @@ module.exports = function (configurer) {
     // Host the current directory (for index.html)
     .use(express.static(process.cwd()))
     // Host our Todos service on the /todos path
-    .use('/todos', todoService);
+    .use('/todos', new TodoService({
+      multi: true
+    }));
 
   const testTodo = {
     text: 'some todo',

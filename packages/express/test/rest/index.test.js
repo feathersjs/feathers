@@ -1,9 +1,9 @@
 const assert = require('assert');
 const axios = require('axios');
-const bodyParser = require('body-parser');
 
 const feathers = require('@feathersjs/feathers');
 const { Service } = require('@feathersjs/commons/lib/test/fixture');
+const { BadRequest } = require('@feathersjs/errors');
 
 const expressify = require('../../lib');
 const testCrud = require('./crud');
@@ -18,7 +18,7 @@ describe('@feathersjs/express/rest provider', () => {
         app.configure(rest());
         assert.ok(false, 'Should never get here');
       } catch (e) {
-        assert.equal(e.message, '@feathersjs/express/rest needs an Express compatible app. Feathers apps have to wrapped with feathers-express first.');
+        assert.strictEqual(e.message, '@feathersjs/express/rest needs an Express compatible app. Feathers apps have to wrapped with feathers-express first.');
       }
     });
 
@@ -31,7 +31,7 @@ describe('@feathersjs/express/rest provider', () => {
 
         assert.ok(false, 'Should never get here');
       } catch (e) {
-        assert.equal(e.message, '@feathersjs/express/rest requires an instance of a Feathers application version 3.x or later (got 2.9.9)');
+        assert.strictEqual(e.message, '@feathersjs/express/rest requires an instance of a Feathers application version 3.x or later (got 2.9.9)');
       }
     });
 
@@ -58,7 +58,7 @@ describe('@feathersjs/express/rest provider', () => {
 
       return axios.get('http://localhost:4776/todo/dishes')
         .then(res => {
-          assert.equal(res.data, 'The todo is: You have to do dishes');
+          assert.strictEqual(res.data, 'The todo is: You have to do dishes');
         })
         .then(() => server.close());
     });
@@ -80,18 +80,19 @@ describe('@feathersjs/express/rest provider', () => {
       let server = app.listen(5775);
 
       return axios.get('http://localhost:5775/todo-handler/dishes')
-        .then(res => assert.deepEqual(res.data, data))
+        .then(res => assert.deepStrictEqual(res.data, data))
         .then(() => server.close());
     });
   });
 
   describe('CRUD', () => {
-    let server, app;
+    let server;
+    let app;
 
     before(function () {
       app = expressify(feathers())
         .configure(rest(rest.formatter))
-        .use(bodyParser.json())
+        .use(expressify.json())
         .use('codes', {
           get (id, params) {
             return Promise.resolve({ id });
@@ -101,6 +102,7 @@ describe('@feathersjs/express/rest provider', () => {
             return Promise.resolve(data);
           }
         })
+        .use('/', Service)
         .use('todo', Service);
 
       server = app.listen(4777, () => app.use('tasks', Service));
@@ -109,6 +111,7 @@ describe('@feathersjs/express/rest provider', () => {
     after(done => server.close(done));
 
     testCrud('Services', 'todo');
+    testCrud('Root Service', '/');
     testCrud('Dynamic Services', 'tasks');
 
     describe('res.hook', () => {
@@ -149,7 +152,7 @@ describe('@feathersjs/express/rest provider', () => {
 
         return axios.get('http://localhost:4777/hook/dishes?test=param')
           .then(res => {
-            assert.deepEqual(res.data, {
+            assert.deepStrictEqual(res.data, {
               id: 'dishes',
               params,
               arguments: [
@@ -191,7 +194,7 @@ describe('@feathersjs/express/rest provider', () => {
 
         return axios.get('http://localhost:4777/hook-dispatch/dishes')
           .then(res => {
-            assert.deepEqual(res.data, {
+            assert.deepStrictEqual(res.data, {
               id: 'dishes',
               fromDispatch: true
             });
@@ -212,7 +215,7 @@ describe('@feathersjs/express/rest provider', () => {
         });
 
         return axios.get('http://localhost:4777/hook-status/dishes')
-          .then(res => assert.equal(res.status, 206));
+          .then(res => assert.strictEqual(res.status, 206));
       });
 
       it('sets the hook object in res.hook on error', () => {
@@ -238,7 +241,7 @@ describe('@feathersjs/express/rest provider', () => {
 
         return axios('http://localhost:4777/hook-error/dishes')
           .catch(error => {
-            assert.deepEqual(error.response.data, {
+            assert.deepStrictEqual(error.response.data, {
               hook: {
                 id: 'dishes',
                 params,
@@ -293,7 +296,7 @@ describe('@feathersjs/express/rest provider', () => {
           };
 
           assert.ok(res.status === 200, 'Got OK status code');
-          assert.deepEqual(res.data, expected, 'Got params object back');
+          assert.deepStrictEqual(res.data, expected, 'Got params object back');
         })
         .then(() => server.close());
     });
@@ -310,7 +313,7 @@ describe('@feathersjs/express/rest provider', () => {
         next();
       })
         .configure(rest(rest.formatter))
-        .use(bodyParser.json())
+        .use(expressify.json())
         .use('/todo', {
           create (data) {
             return Promise.resolve(data);
@@ -329,7 +332,7 @@ describe('@feathersjs/express/rest provider', () => {
 
       return axios(options)
         .then(res => {
-          assert.deepEqual(res.data, data);
+          assert.deepStrictEqual(res.data, data);
           server.close();
         });
     });
@@ -338,7 +341,7 @@ describe('@feathersjs/express/rest provider', () => {
       const app = expressify(feathers());
 
       app.configure(rest())
-        .use(bodyParser.json())
+        .use(expressify.json())
         .use('/todo', function (req, res, next) {
           req.body.before = [ 'before first' ];
           next();
@@ -361,7 +364,7 @@ describe('@feathersjs/express/rest provider', () => {
 
       return axios.post('http://localhost:4776/todo', { text: 'Do dishes' })
         .then(res => {
-          assert.deepEqual(res.data, {
+          assert.deepStrictEqual(res.data, {
             text: 'Do dishes',
             before: [ 'before first', 'before second' ],
             after: [ 'after first', 'after second' ]
@@ -384,14 +387,14 @@ describe('@feathersjs/express/rest provider', () => {
           res.status(200).json(res.data);
         }];
       app.configure(rest())
-        .use(bodyParser.json())
+        .use(expressify.json())
         .use('/array-middleware', middlewareArray);
 
       const server = app.listen(4776);
 
-      return axios.post('http://localhost:4776/array-middleware', {text: 'Do dishes'})
+      return axios.post('http://localhost:4776/array-middleware', { text: 'Do dishes' })
         .then(res => {
-          assert.deepEqual(res.data, ['first', 'second', 'Do dishes']);
+          assert.deepStrictEqual(res.data, ['first', 'second', 'Do dishes']);
         })
         .then(() => server.close());
     });
@@ -406,13 +409,14 @@ describe('@feathersjs/express/rest provider', () => {
       const server = app.listen(7988);
 
       return axios.get('http://localhost:7988/test')
-        .then(res => assert.deepEqual(res.data, data))
+        .then(res => assert.deepStrictEqual(res.data, data))
         .then(() => server.close());
     });
   });
 
   describe('HTTP status codes', () => {
-    let app, server;
+    let app;
+    let server;
 
     before(function () {
       app = expressify(feathers())
@@ -459,16 +463,16 @@ describe('@feathersjs/express/rest provider', () => {
       return axios.get('http://localhost:4780/todo/dishes')
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code for .get');
-          assert.deepEqual(res.data, {
+          assert.deepStrictEqual(res.data, {
             description: 'You have to do dishes'
           }, 'Got expected object');
 
           return axios.post('http://localhost:4780/todo');
         })
         .catch(error => {
-          assert.equal(error.response.headers.allow, 'GET,PATCH');
+          assert.strictEqual(error.response.headers.allow, 'GET,PATCH');
           assert.ok(error.response.status === 405, 'Got 405 for .create');
-          assert.deepEqual(error.response.data, {
+          assert.deepStrictEqual(error.response.data, {
             message: 'Method `create` is not supported by this endpoint.'
           }, 'Error serialized as expected');
         });
@@ -490,19 +494,25 @@ describe('@feathersjs/express/rest provider', () => {
   });
 
   describe('route parameters', () => {
-    let server, app;
+    let server;
+    let app;
 
     before(() => {
       app = expressify(feathers())
         .configure(rest())
         .use('/:appId/:id/todo', {
           get (id, params) {
+            if (params.query.error) {
+              return Promise.reject(new BadRequest('Not good'));
+            }
+
             return Promise.resolve({
               id,
               route: params.route
             });
           }
-        });
+        })
+        .use(expressify.errorHandler());
 
       server = app.listen(6880);
     });
@@ -521,7 +531,23 @@ describe('@feathersjs/express/rest provider', () => {
       return axios.get(`http://localhost:6880/theApp/myId/todo/${expected.id}`)
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code');
-          assert.deepEqual(expected, res.data);
+          assert.deepStrictEqual(expected, res.data);
+        });
+    });
+
+    it('properly serializes error for nested routes (#1096)', () => {
+      return axios.get(`http://localhost:6880/theApp/myId/todo/test?error=true`)
+        .catch(error => {
+          const { response } = error;
+
+          assert.strictEqual(response.status, 400);
+          assert.deepStrictEqual(response.data, {
+            name: 'BadRequest',
+            message: 'Not good',
+            code: 400,
+            className: 'bad-request',
+            errors: {}
+          });
         });
     });
   });
@@ -532,7 +558,7 @@ describe('@feathersjs/express/rest provider', () => {
     before(() => {
       app = expressify(feathers())
         .configure(rest())
-        .use(bodyParser.json())
+        .use(expressify.json())
         .use('/todo', {
           get(id) {
             return id;

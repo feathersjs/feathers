@@ -1,5 +1,6 @@
 const { stripSlashes } = require('@feathersjs/commons');
 const debug = require('debug')('@feathersjs/express/rest');
+const { parseAuthentication } = require('../authentication');
 const getHandler = require('./getHandler');
 
 const HTTP_METHOD = Symbol('@feathersjs/express/rest/HTTP_METHOD');
@@ -107,9 +108,11 @@ function rest (handler = formatter) {
     };
 
     app.use(function (req, res, next) {
-      req.feathers = { provider: 'rest' };
+      req.feathers = Object.assign({ provider: 'rest' }, req.feathers);
       next();
     });
+
+    app.use(parseAuthentication());
 
     // Register the REST provider
     app.providers.push(function (service, path, options) {

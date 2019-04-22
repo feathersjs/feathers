@@ -7,10 +7,10 @@ describe('Service events', () => {
   it('app is an event emitter', done => {
     const app = feathers();
 
-    assert.equal(typeof app.on, 'function');
+    assert.strictEqual(typeof app.on, 'function');
 
     app.on('test', data => {
-      assert.deepEqual(data, { message: 'app' });
+      assert.deepStrictEqual(data, { message: 'app' });
       done();
     });
     app.emit('test', { message: 'app' });
@@ -25,7 +25,7 @@ describe('Service events', () => {
     };
 
     service.on('created', data => {
-      assert.deepEqual(data, {
+      assert.deepStrictEqual(data, {
         message: 'testing'
       });
       done();
@@ -49,11 +49,37 @@ describe('Service events', () => {
       const service = app.service('creator');
 
       service.on('created', data => {
-        assert.deepEqual(data, { message: 'Hello' });
+        assert.deepStrictEqual(data, { message: 'Hello' });
         done();
       });
 
       service.create({ message: 'Hello' });
+    });
+
+    it('allows to skip event emitting', done => {
+      const app = feathers().use('/creator', {
+        create (data) {
+          return Promise.resolve(data);
+        }
+      });
+
+      const service = app.service('creator');
+
+      service.hooks({
+        before: {
+          create (context) {
+            context.event = null;
+
+            return context;
+          }
+        }
+      });
+
+      service.on('created', data => {
+        done(new Error('Should never get here'));
+      });
+
+      service.create({ message: 'Hello' }).then(() => done());
     });
 
     it('.update and updated', done => {
@@ -66,7 +92,7 @@ describe('Service events', () => {
       const service = app.service('creator');
 
       service.on('updated', data => {
-        assert.deepEqual(data, { id: 10, message: 'Hello' });
+        assert.deepStrictEqual(data, { id: 10, message: 'Hello' });
         done();
       });
 
@@ -83,7 +109,7 @@ describe('Service events', () => {
       const service = app.service('creator');
 
       service.on('patched', data => {
-        assert.deepEqual(data, { id: 12, message: 'Hello' });
+        assert.deepStrictEqual(data, { id: 12, message: 'Hello' });
         done();
       });
 
@@ -100,7 +126,7 @@ describe('Service events', () => {
       const service = app.service('creator');
 
       service.on('removed', data => {
-        assert.deepEqual(data, { id: 22 });
+        assert.deepStrictEqual(data, { id: 22 });
         done();
       });
 
@@ -130,7 +156,7 @@ describe('Service events', () => {
         return new Promise((resolve, reject) => {
           service.on('created', data => {
             if (data.message === element.message) {
-              assert.deepEqual(data, { message: `Hello ${index}` });
+              assert.deepStrictEqual(data, { message: `Hello ${index}` });
               resolve();
             }
           });
@@ -160,7 +186,7 @@ describe('Service events', () => {
         return new Promise((resolve, reject) => {
           service.on('updated', data => {
             if (data.message === element.message) {
-              assert.deepEqual(data, { id: index, message: `Hello ${index}` });
+              assert.deepStrictEqual(data, { id: index, message: `Hello ${index}` });
               resolve();
             }
           });
@@ -190,7 +216,7 @@ describe('Service events', () => {
         return new Promise((resolve, reject) => {
           service.on('patched', data => {
             if (data.message === element.message) {
-              assert.deepEqual(data, { id: index, message: `Hello ${index}` });
+              assert.deepStrictEqual(data, { id: index, message: `Hello ${index}` });
               resolve();
             }
           });
@@ -220,7 +246,7 @@ describe('Service events', () => {
         return new Promise((resolve, reject) => {
           service.on('removed', data => {
             if (data.message === element.message) {
-              assert.deepEqual(data, { id: index, message: `Hello ${index}` });
+              assert.deepStrictEqual(data, { id: index, message: `Hello ${index}` });
               resolve();
             }
           });
@@ -248,11 +274,11 @@ describe('Service events', () => {
       });
 
       service.on('created', (data, hook) => {
-        assert.deepEqual(data, { message: 'Hi' });
+        assert.deepStrictEqual(data, { message: 'Hi' });
         assert.ok(hook.changed);
-        assert.equal(hook.service, service);
-        assert.equal(hook.method, 'create');
-        assert.equal(hook.type, 'after');
+        assert.strictEqual(hook.service, service);
+        assert.strictEqual(hook.method, 'create');
+        assert.strictEqual(hook.type, 'after');
         done();
       });
 
@@ -270,7 +296,7 @@ describe('Service events', () => {
       const service = app.service('creator');
 
       service.on('created', data => {
-        assert.deepEqual(data, { message: 'custom event' });
+        assert.deepStrictEqual(data, { message: 'custom event' });
         done();
       });
 

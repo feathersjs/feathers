@@ -6,6 +6,17 @@
       "mocha"
     ]
   },
+  "extension": [
+    ".ts",
+    ".tsx",
+    ".js"
+  ],
+  "exclude": [
+    "**/test/*",
+    "**/dist/*",
+    "**/*.dist.js",
+    "**/templates/*"
+  ],
   "print": "detail",
   "reporter": [
     "html",

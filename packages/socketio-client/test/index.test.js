@@ -25,7 +25,7 @@ describe('@feathersjs/socketio-client', () => {
   });
 
   it('exports default', () =>
-    assert.equal(socketio.default, socketio)
+    assert.strictEqual(socketio.default, socketio)
   );
 
   it('throws an error with no connection', () => {
@@ -33,7 +33,7 @@ describe('@feathersjs/socketio-client', () => {
       feathers().configure(socketio());
       assert.ok(false);
     } catch (e) {
-      assert.equal(e.message,
+      assert.strictEqual(e.message,
         'Socket.io connection needs to be provided'
       );
     }
@@ -48,7 +48,7 @@ describe('@feathersjs/socketio-client', () => {
       app.configure(socketio(socket));
       assert.ok(false, 'Should never get here');
     } catch (e) {
-      assert.equal(e.message, 'Only one default client provider can be configured');
+      assert.strictEqual(e.message, 'Only one default client provider can be configured');
     }
   });
 
@@ -58,7 +58,7 @@ describe('@feathersjs/socketio-client', () => {
 
     assert.ok(todos instanceof init.Service, 'Returned service is a client');
 
-    return todos.find().then(todos => assert.deepEqual(todos, [{
+    return todos.find().then(todos => assert.deepStrictEqual(todos, [{
       text: 'some todo',
       complete: false,
       id: 0
@@ -67,9 +67,10 @@ describe('@feathersjs/socketio-client', () => {
 
   it('return 404 for non-existent service', () => {
     return app.service('not-me').create({}).catch(e =>
-      assert.equal(e.message, 'Service \'not-me\' not found')
+      assert.strictEqual(e.message, 'Service \'not-me\' not found')
     );
   });
 
   baseTests(app, 'todos');
+  baseTests(app, '/');
 });

@@ -36,8 +36,8 @@ describe('services withHooks', () => {
       before: testHook
     })(data, params, true)
       .then(hook => {
-        assert.deepEqual(hook.result, data, 'test result');
-        assert.deepEqual(hook, {
+        assert.deepStrictEqual(hook.result, data, 'test result');
+        assert.deepStrictEqual(hook, {
           app,
           params,
           service: svc,
@@ -66,7 +66,7 @@ describe('services withHooks', () => {
       before: testHook
     })(data)
       .then(result => {
-        assert.deepEqual(result, data, 'test result');
+        assert.deepStrictEqual(result, data, 'test result');
       });
   });
 
@@ -84,7 +84,7 @@ describe('services withHooks', () => {
       before: testHook
     })()
       .then(result => {
-        assert.deepEqual(result, data, 'test result');
+        assert.deepStrictEqual(result, data, 'test result');
       });
   });
 
@@ -99,7 +99,7 @@ describe('services withHooks', () => {
       service: svc,
       method: 'find'
     })()().then(result => {
-      assert.deepEqual(result, data, 'test result');
+      assert.deepStrictEqual(result, data, 'test result');
     });
   });
 
@@ -123,7 +123,7 @@ describe('services withHooks', () => {
       }
     })(data)
       .then(result => {
-        assert.deepEqual(result, [{ name: 'John', address: { city: 'Montreal' } }]);
+        assert.deepStrictEqual(result, [{ name: 'John', address: { city: 'Montreal' } }]);
       });
   });
 });

@@ -1,9 +1,10 @@
 {
   "name": "@feathersjs/rest-client",
   "description": "REST client services for different Ajax libraries",
-  "version": "1.4.5",
+  "version": "4.0.0-pre.0",
   "homepage": "https://feathersjs.com",
   "main": "lib/index.js",
+  "types": "index.d.ts",
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -35,28 +36,25 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^3.0.1",
-    "@feathersjs/errors": "^3.3.4",
-    "qs": "^6.5.0"
+    "@feathersjs/commons": "^4.0.0-pre.0",
+    "@feathersjs/errors": "^4.0.0-pre.0",
+    "qs": "^6.7.0"
   },
   "devDependencies": {
-    "mocha": "^5.2.0",
-    "@angular/common": "^6.0.0",
-    "@angular/core": "^6.0.0",
-    "@angular/http": "^6.0.0",
-    "@angular/platform-browser": "^6.0.0",
-    "@feathersjs/express": "^1.2.7",
-    "@feathersjs/feathers": "^3.2.3",
+    "@angular/common": "^7.2.12",
+    "@angular/core": "^7.2.12",
+    "@angular/http": "^7.2.12",
+    "@angular/platform-browser": "^7.2.12",
+    "@feathersjs/express": "^4.0.0-pre.0",
+    "@feathersjs/feathers": "^4.0.0-pre.0",
     "axios": "^0.18.0",
-    "body-parser": "^1.17.2",
-    "feathers-memory": "^2.0.0",
-    "jquery": "^3.2.1",
-    "jsdom": "^12.0.0",
-    "node-fetch": "^2.0.0",
-    "request": "^2.81.0",
-    "rxjs": "^6.1.0",
-    "shx": "^0.3.0",
-    "superagent": "^3.5.2",
-    "xhr2": "^0.1.4"
+    "body-parser": "^1.18.3",
+    "feathers-memory": "^3.0.2",
+    "mocha": "^6.0.2",
+    "node-fetch": "^2.3.0",
+    "request": "^2.88.0",
+    "rxjs": "^6.4.0",
+    "shx": "^0.3.2",
+    "superagent": "^5.0.2"
   }
 }

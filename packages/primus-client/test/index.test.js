@@ -6,7 +6,8 @@ const server = require('./server');
 const primus = require('../lib');
 
 describe('feathers-primus/client', () => {
-  let srv, socket;
+  let srv;
+  let socket;
 
   const app = feathers().configure(primus({}, { timeout: 500 }));
   const service = app.service('todos');
@@ -25,7 +26,7 @@ describe('feathers-primus/client', () => {
   });
 
   it('exports default', () => {
-    assert.equal(primus.default, primus);
+    assert.strictEqual(primus.default, primus);
   });
 
   it('throws an error with no connection', () => {
@@ -33,7 +34,7 @@ describe('feathers-primus/client', () => {
       feathers().configure(primus());
       assert.ok(false);
     } catch (e) {
-      assert.equal(e.message, 'Primus connection needs to be provided');
+      assert.strictEqual(e.message, 'Primus connection needs to be provided');
     }
   });
 
@@ -46,7 +47,7 @@ describe('feathers-primus/client', () => {
       app.configure(primus({}));
       assert.ok(false, 'Should never get here');
     } catch (e) {
-      assert.equal(e.message, 'Only one default client provider can be configured');
+      assert.strictEqual(e.message, 'Only one default client provider can be configured');
     }
   });
 
@@ -56,7 +57,7 @@ describe('feathers-primus/client', () => {
 
     assert.ok(todos instanceof init.Service, 'Returned service is a client');
 
-    return todos.find().then(todos => assert.deepEqual(todos, [
+    return todos.find().then(todos => assert.deepEqual(todos, [ // eslint-disable-line
       {
         text: 'some todo',
         complete: false,
@@ -71,7 +72,7 @@ describe('feathers-primus/client', () => {
     notMe.connection = socket;
 
     return notMe.remove(1).catch(e => {
-      assert.equal(e.message, `Service 'not-me' not found`);
+      assert.strictEqual(e.message, `Service 'not-me' not found`);
     });
   });
 
