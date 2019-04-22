@@ -46,7 +46,7 @@ describe('@feathersjs/authentication-client', () => {
     const token = 'hi';
 
     await auth.setJwt(token);
-      
+
     const res = await auth.getJwt();
 
     assert.strictEqual(res, token);
@@ -58,7 +58,7 @@ describe('@feathersjs/authentication-client', () => {
   it('getFromLocation', async () => {
     const auth = app.authentication;
     let dummyLocation = { hash: 'access_token=testing' } as Location;
-    
+
     let token = await auth.getFromLocation(dummyLocation);
 
     assert.strictEqual(token, 'testing');
