@@ -1,8 +1,78 @@
-const makeDebug = require('debug');
-const wrappers = require('./wrappers');
+const { stripSlashes } = require('@feathersjs/commons');
+const debug = require('debug')('@feathersjs/express/rest');
 const { parseAuthentication } = require('../authentication');
+const getHandler = require('./getHandler');
 
-const debug = makeDebug('@feathersjs/express/rest');
+const HTTP_METHOD = Symbol('@feathersjs/express/rest/HTTP_METHOD');
+
+function httpMethod (verb, uris) {
+  return method => {
+    Object.defineProperty(method, HTTP_METHOD, {
+      enumerable: false,
+      configurable: true,
+      writable: false,
+      value: (Array.isArray(uris) ? uris : [uris])
+        .reduce(
+          (result, uri) => ([...result, { verb, uri }]),
+          method[HTTP_METHOD] || []
+        )
+    });
+
+    return method;
+  };
+}
+
+function getDefaultUri (path, methods, method) {
+  return methods[method].indexOf('id') === -1
+    ? `/${path}/${method}`
+    : `/${path}/:__feathersId/${method}`;
+}
+
+function parseRoute (path, methods, method, route) {
+  return {
+    method,
+    verb: route.verb,
+    uri: route.uri ? `/${path}/${stripSlashes(route.uri)}` : getDefaultUri(path, methods, method)
+  };
+}
+
+function getServiceRoutes (service, path, defaultRoutes) {
+  const { methods } = service;
+
+  return Object.keys(methods)
+    .filter(method => (service[method] && service[method][HTTP_METHOD]))
+    .reduce((result, method) => {
+      const routes = service[method][HTTP_METHOD];
+
+      if (Array.isArray(routes)) {
+        return [
+          ...result,
+          ...routes.map(route => parseRoute(path, methods, method, route))
+        ];
+      }
+
+      return [
+        ...result,
+        parseRoute(path, methods, method, routes)
+      ];
+    }, defaultRoutes);
+}
+
+function getDefaultRoutes (uri) {
+  const idUri = `${uri}/:__feathersId`;
+
+  return [
+    { method: 'find', verb: 'GET', uri }, // find(params)
+    { method: 'get', verb: 'GET', uri: idUri }, // get(id, params)
+    { method: 'create', verb: 'POST', uri }, // create(data, params)
+    { method: 'patch', verb: 'PATCH', uri: idUri }, // patch(id, data, params)
+    { method: 'patch', verb: 'PATCH', uri }, // patch(null, data, params)
+    { method: 'update', verb: 'PUT', uri: idUri }, // update(id, data, params)
+    { method: 'update', verb: 'PUT', uri }, // update(null, data, params)
+    { method: 'remove', verb: 'DELETE', uri: idUri }, // remove(id, data, params)
+    { method: 'remove', verb: 'DELETE', uri } // remove(null, data, params)
+  ];
+}
 
 function formatter (req, res, next) {
   if (res.data === undefined) {
@@ -28,7 +98,14 @@ function rest (handler = formatter) {
       throw new Error(`@feathersjs/express/rest requires an instance of a Feathers application version 3.x or later (got ${app.version})`);
     }
 
-    app.rest = wrappers;
+    app.rest = {
+      find: getHandler('find'),
+      get: getHandler('get'),
+      create: getHandler('create'),
+      update: getHandler('update'),
+      patch: getHandler('patch'),
+      remove: getHandler('remove')
+    };
 
     app.use(function (req, res, next) {
       req.feathers = Object.assign({ provider: 'rest' }, req.feathers);
@@ -39,42 +116,30 @@ function rest (handler = formatter) {
 
     // Register the REST provider
     app.providers.push(function (service, path, options) {
-      const uri = `/${path}`;
-      const baseRoute = app.route(uri);
-      const idRoute = app.route(`${uri}/:__feathersId`);
-
-      let { middleware } = options;
-      let { before, after } = middleware;
+      const baseUri = `/${path}`;
+      let { middleware: { before, after } } = options;
 
       if (typeof handler === 'function') {
         after = after.concat(handler);
       }
 
-      debug(`Adding REST provider for service \`${path}\` at base route \`${uri}\``);
+      debug(`Adding REST provider for service \`${path}\` at base route \`${baseUri}\``);
 
-      // GET / -> service.find(params)
-      baseRoute.get(...before, app.rest.find(service), ...after);
-      // POST / -> service.create(data, params)
-      baseRoute.post(...before, app.rest.create(service), ...after);
-      // PATCH / -> service.patch(null, data, params)
-      baseRoute.patch(...before, app.rest.patch(service), ...after);
-      // PUT / -> service.update(null, data, params)
-      baseRoute.put(...before, app.rest.update(service), ...after);
-      // DELETE / -> service.remove(null, params)
-      baseRoute.delete(...before, app.rest.remove(service), ...after);
+      const routes = getServiceRoutes(service, path, getDefaultRoutes(baseUri));
 
-      // GET /:id -> service.get(id, params)
-      idRoute.get(...before, app.rest.get(service), ...after);
-      // PUT /:id -> service.update(id, data, params)
-      idRoute.put(...before, app.rest.update(service), ...after);
-      // PATCH /:id -> service.patch(id, data, params)
-      idRoute.patch(...before, app.rest.patch(service), ...after);
-      // DELETE /:id -> service.remove(id, params)
-      idRoute.delete(...before, app.rest.remove(service), ...after);
+      for (const { method, verb, uri } of routes) {
+        app.route(uri)[verb.toLowerCase()](
+          ...before,
+          getHandler(method)(service, routes),
+          ...after
+        );
+      }
     });
   };
 }
 
 rest.formatter = formatter;
+rest.httpMethod = httpMethod;
+rest.HTTP_METHOD = HTTP_METHOD;
 
 module.exports = rest;

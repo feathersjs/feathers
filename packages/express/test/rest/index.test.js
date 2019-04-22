@@ -163,7 +163,15 @@ describe('@feathersjs/express/rest provider', () => {
               method: 'get',
               path: 'hook',
               result: { description: 'You have to do dishes' },
-              addedProperty: true
+              addedProperty: true,
+              arguments: [
+                'dishes',
+                {
+                  route: {},
+                  query: { test: 'param' },
+                  provider: 'rest'
+                }
+              ]
             });
           });
       });
@@ -240,7 +248,15 @@ describe('@feathersjs/express/rest provider', () => {
                 arguments: [ 'dishes', params ],
                 type: 'error',
                 method: 'get',
-                path: 'hook-error'
+                path: 'hook-error',
+                arguments: [
+                  'dishes',
+                  {
+                    route: {},
+                    query: {},
+                    provider: 'rest'
+                  }
+                ]
               },
               error: { message: 'I blew up' }
             });
@@ -531,6 +547,67 @@ describe('@feathersjs/express/rest provider', () => {
             code: 400,
             className: 'bad-request',
             errors: {}
+          });
+        });
+    });
+  });
+
+  describe('Custom methods', () => {
+    let server;
+    let app;
+
+    before(() => {
+      app = expressify(feathers())
+        .configure(rest())
+        .use(expressify.json())
+        .use('/todo', {
+          get (id) {
+            return id;
+          },
+          // httpMethod is usable as a decorator: @httpMethod('POST', '/:__feathersId/custom-path')
+          custom: rest.httpMethod('POST')(feathers.activateHooks(['id', 'data', 'params'])(
+            (id, data, params = {}) => {
+              return Promise.resolve({
+                id,
+                data
+              });
+            }
+          )),
+          other: rest.httpMethod('PATCH', ':__feathersId/second-method')(
+            feathers.activateHooks(['id', 'data', 'params'])(
+              (id, data, params = {}) => {
+                return Promise.resolve({
+                  id,
+                  data
+                });
+              }
+            )
+          )
+        });
+
+      server = app.listen(4781);
+    });
+
+    after(done => server.close(done));
+
+    it('works with custom methods', () => {
+      return axios.post('http://localhost:4781/todo/42/custom', { text: 'Do dishes' })
+        .then(res => {
+          assert.equal(res.headers.allow, 'GET,POST,PATCH');
+          assert.deepEqual(res.data, {
+            id: '42',
+            data: { text: 'Do dishes' }
+          });
+        });
+    });
+
+    it('works with custom methods - with route', () => {
+      return axios.patch('http://localhost:4781/todo/12/second-method', { text: 'Hmm' })
+        .then(res => {
+          assert.equal(res.headers.allow, 'GET,POST,PATCH');
+          assert.deepEqual(res.data, {
+            id: '12',
+            data: { text: 'Hmm' }
           });
         });
     });
