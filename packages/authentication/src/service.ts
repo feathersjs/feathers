@@ -54,13 +54,13 @@ export class AuthenticationService extends AuthenticationBase implements Service
    * @param params Service call parameters
    */
   async create (data: AuthenticationRequest, params: Params) {
-    const jwtStrategies = params.jwtStrategies || this.configuration.jwtStrategies;
+    const authStrategies = params.authStrategies || this.configuration.authStrategies;
 
-    if (!jwtStrategies.length) {
-      throw new NotAuthenticated('No authentication strategies allowed for creating a JWT (`jwtStrategies`)');
+    if (!authStrategies.length) {
+      throw new NotAuthenticated('No authentication strategies allowed for creating a JWT (`authStrategies`)');
     }
 
-    const authResult = await this.authenticate(data, params, ...jwtStrategies);
+    const authResult = await this.authenticate(data, params, ...authStrategies);
 
     debug('Got authentication result', authResult);
 
@@ -88,7 +88,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
    */
   async remove (id: null|string, params: Params) {
     const { authentication } = params;
-    const { jwtStrategies } = this.configuration;
+    const { authStrategies } = this.configuration;
 
     // When an id is passed it is expected to be the authentication `accessToken`
     if (id !== null && id !== authentication.accessToken) {
@@ -97,7 +97,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
 
     debug('Verifying authentication strategy in remove');
 
-    return this.authenticate(authentication, params, ...jwtStrategies);
+    return this.authenticate(authentication, params, ...authStrategies);
   }
 
   /**

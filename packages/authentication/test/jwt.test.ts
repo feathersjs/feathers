@@ -27,7 +27,7 @@ describe('authentication/jwt', () => {
       entity: 'user',
       service: 'users',
       secret: 'supersecret',
-      jwtStrategies: [ 'jwt' ]
+      authStrategies: [ 'jwt' ]
     });
 
     authService.register('jwt', new JWTStrategy());

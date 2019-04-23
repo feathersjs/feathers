@@ -20,7 +20,7 @@ export { AuthenticationClient, AuthenticationClientOptions, Storage, MemoryStora
 
 export type ClientConstructor = new (app: Application, options: AuthenticationClientOptions) => AuthenticationClient;
 
-export const defaultStorage: Storage = typeof window !== 'undefined' && window.localStorage ?
+export const defaultStorage: Storage = typeof window !== 'undefined' ?
   new StorageWrapper(window.localStorage) : new MemoryStorage();
 
 export const defaults: AuthenticationClientOptions = {

@@ -20,13 +20,13 @@ describe('authentication/hooks/authenticate', () => {
       entity: 'user',
       service: 'users',
       secret: 'supersecret',
-      jwtStrategies: [ 'first' ]
+      authStrategies: [ 'first' ]
     }));
     app.use('/auth-v2', new AuthenticationService(app, 'auth-v2', {
       entity: 'user',
       service: 'users',
       secret: 'supersecret',
-      jwtStrategies: [ 'test' ]
+      authStrategies: [ 'test' ]
     }));
     app.use('/users', {
       async find () {

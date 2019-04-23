@@ -74,7 +74,7 @@ export default (options: OauthSetupSettings) => {
 
         const params = {
           provider: 'rest',
-          jwtStrategies: [ name ],
+          authStrategies: [ name ],
           authentication: accessToken ? {
             strategy: linkStrategy,
             accessToken

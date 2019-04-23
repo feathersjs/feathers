@@ -35,10 +35,11 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
     };
   }
 
-  getEntityQuery (query: Query, _params: Params) {
-    return Promise.resolve(Object.assign({
-      $limit: 1
-    }, query));
+  async getEntityQuery (query: Query, _params: Params) {
+    return {
+      $limit: 1,
+      ...query
+    };
   }
 
   async findEntity (username: string, params: Params) {

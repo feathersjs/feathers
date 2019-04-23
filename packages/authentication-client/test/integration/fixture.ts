@@ -15,7 +15,7 @@ export default (app: Application) => {
     service: 'users',
     secret: 'supersecret',
     httpStrategies: [ 'jwt' ],
-    jwtStrategies: [ 'local', 'jwt' ],
+    authStrategies: [ 'local', 'jwt' ],
     local: {
       usernameField: 'email',
       passwordField: 'password'
