@@ -1,5 +1,5 @@
 import { Application as FeathersApplication } from '@feathersjs/feathers';
-import * as express from 'express';
+import express from 'express';
 
 declare const feathersExpress: FeathersExpress;
 export = feathersExpress;
