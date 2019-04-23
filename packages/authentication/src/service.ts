@@ -27,7 +27,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
    * @param authResult The authentication result
    * @param params Service call parameters
    */
-  async getJwtOptions (authResult: AuthenticationResult, params: Params) {
+  async getTokenOptions (authResult: AuthenticationResult, params: Params) {
     const { service, entity, entityId } = this.configuration;
     const jwtOptions = merge({}, params.jwtOptions, params.jwt);
     const hasEntity = service && entity && authResult[entity];
@@ -66,7 +66,7 @@ export class AuthenticationService extends AuthenticationBase implements Service
 
     const [ payload, jwtOptions ] = await Promise.all([
       this.getPayload(authResult, params),
-      this.getJwtOptions(authResult, params)
+      this.getTokenOptions(authResult, params)
     ]);
 
     if (authResult.accessToken) {
