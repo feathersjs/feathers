@@ -19,8 +19,8 @@ describe('@feathersjs/express', () => {
     assert.strictEqual(expressify.default, expressify);
     assert.strictEqual(expressify.original, express);
     assert.strictEqual(typeof expressify.rest, 'function');
-    assert.strictEqual(expressify.errorHandler, require('@feathersjs/errors/handler'));
-    assert.strictEqual(expressify.notFound, require('@feathersjs/errors/not-found'));
+    assert.ok(expressify.notFound);
+    assert.ok(expressify.errorHandler);
   });
 
   it('returns an Express application', () => {
