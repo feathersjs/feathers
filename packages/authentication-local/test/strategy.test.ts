@@ -108,7 +108,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
     assert.ok(accessToken);
     assert.strictEqual(authResult.user.email, email);
 
-    const decoded = await authService.verifyJWT(accessToken);
+    const decoded = await authService.verifyAccessToken(accessToken);
 
     assert.strictEqual(decoded.sub, `${user.id}`);
   });
@@ -129,7 +129,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
     assert.strictEqual(authResult.user.email, email);
     assert.strictEqual(authResult.user.passsword, undefined);
 
-    const decoded = await authService.verifyJWT(accessToken);
+    const decoded = await authService.verifyAccessToken(accessToken);
 
     assert.strictEqual(decoded.sub, `${user.id}`);
   });

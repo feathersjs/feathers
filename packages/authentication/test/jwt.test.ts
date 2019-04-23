@@ -54,11 +54,11 @@ describe('authentication/jwt', () => {
       name: 'David'
     });
 
-    accessToken = await service.createJWT({}, {
+    accessToken = await service.createAccessToken({}, {
       subject: `${user.id}`
     });
 
-    payload = await service.verifyJWT(accessToken);
+    payload = await service.verifyAccessToken(accessToken);
   });
 
   describe('with authenticate hook', () => {
