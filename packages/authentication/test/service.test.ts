@@ -27,7 +27,7 @@ describe('authentication/service', () => {
       entity: 'user',
       service: 'users',
       secret: 'supersecret',
-      jwtStrategies: [ 'first' ]
+      authStrategies: [ 'first' ]
     }));
     app.use('/users', memory());
 
@@ -149,7 +149,7 @@ describe('authentication/service', () => {
       const service = app.service('authentication');
       const configuration = service.configuration;
 
-      delete configuration.jwtStrategies;
+      delete configuration.authStrategies;
 
       app.set('authentication', configuration);
 
@@ -161,7 +161,7 @@ describe('authentication/service', () => {
         assert.fail('Should never get here');
       } catch (error) {
         assert.strictEqual(error.name, 'NotAuthenticated');
-        assert.strictEqual(error.message, 'No authentication strategies allowed for creating a JWT (`jwtStrategies`)');
+        assert.strictEqual(error.message, 'No authentication strategies allowed for creating a JWT (`authStrategies`)');
       }
     });
   });
@@ -233,7 +233,7 @@ describe('authentication/service', () => {
 
       otherApp.use('/authentication', new AuthenticationService(otherApp, 'authentication', {
         secret: 'supersecret',
-        jwtStrategies: [ 'first' ]
+        authStrategies: [ 'first' ]
       }));
 
       try {
@@ -251,7 +251,7 @@ describe('authentication/service', () => {
         entity: 'user',
         service: 'users',
         secret: 'supersecret',
-        jwtStrategies: [ 'first' ]
+        authStrategies: [ 'first' ]
       }));
 
       try {
