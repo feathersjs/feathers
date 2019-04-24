@@ -1,5 +1,4 @@
 export default {
-  httpStrategies: [],
   authStrategies: [],
   jwtOptions: {
     header: { typ: 'access' }, // by default is an access token but can be any type

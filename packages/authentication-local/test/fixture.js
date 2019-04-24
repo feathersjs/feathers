@@ -13,7 +13,6 @@ module.exports = (app = feathers()) => {
     service: 'users',
     secret: 'supersecret',
     authStrategies: [ 'local', 'jwt' ],
-    httpStrategies: [ 'jwt' ],
     local: {
       usernameField: 'email',
       passwordField: 'password'

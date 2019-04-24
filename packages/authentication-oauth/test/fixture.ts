@@ -30,7 +30,7 @@ app.set('authentication', {
   secret: 'supersecret',
   entity: 'user',
   service: 'users',
-  httpStrategies: [ 'jwt' ],
+  authStrategies: [ 'jwt' ],
   oauth: {
     defaults: {
       transport: 'query'
