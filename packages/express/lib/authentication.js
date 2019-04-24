@@ -24,14 +24,14 @@ exports.parseAuthentication = (settings = {}) => {
       return next();
     }
 
-    const { httpStrategies = [] } = service.configuration;
+    const { authStrategies = [] } = service.configuration;
 
-    if (httpStrategies.length === 0) {
-      debug('No `httpStrategies` found in authentication configuration');
+    if (authStrategies.length === 0) {
+      debug('No `authStrategies` found in authentication configuration');
       return next();
     }
 
-    service.parse(req, res, ...httpStrategies)
+    service.parse(req, res, ...authStrategies)
       .then(authentication => {
         debug('Parsed authentication from HTTP header', authentication);
         merge(req, {

@@ -116,9 +116,9 @@ describe('@feathersjs/express/authentication', () => {
       });
     });
 
-    it('errors when there are no httpStrategies', () => {
+    it('errors when there are no authStrategies', () => {
       const { accessToken } = authResult;
-      app.get('authentication').httpStrategies = [];
+      app.get('authentication').authStrategies = [];
 
       return axios.get('/dummy/dave', {
         headers: {
@@ -127,7 +127,7 @@ describe('@feathersjs/express/authentication', () => {
       }).then(() => assert.fail('Should never get here'))
       .catch(error => {
         assert.strictEqual(error.response.data.name, 'NotAuthenticated');
-        app.get('authentication').httpStrategies = [ 'jwt' ];
+        app.get('authentication').authStrategies = [ 'jwt', 'local' ];
       });
     });
 
