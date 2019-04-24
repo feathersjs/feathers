@@ -3,6 +3,19 @@ import { Application } from '@feathersjs/feathers';
 import { AuthenticationRequest, AuthenticationResult } from '@feathersjs/authentication';
 import { Storage, StorageWrapper } from './storage';
 
+const getMatch = (location: Location, key: string): [ string, RegExp ] => {
+  const regex = new RegExp(`(?:\&?)${key}=([^&]*)`);
+  const match = location.hash ? location.hash.match(regex) : null;
+
+  if (match !== null) {
+    const [ , value ] = match;
+
+    return [ value, regex ];
+  }
+
+  return [ null, regex ];
+};
+
 export type ClientConstructor = new (app: Application, options: AuthenticationClientOptions)
   => AuthenticationClient;
 
@@ -12,6 +25,7 @@ export interface AuthenticationClientOptions {
   scheme: string;
   storageKey: string;
   locationKey: string;
+  locationErrorKey: string;
   jwtStrategy: string;
   path: string;
   Authentication: ClientConstructor;
@@ -58,27 +72,29 @@ export class AuthenticationClient {
     });
   }
 
-  setJwt (accessToken: string) {
+  setAccessToken (accessToken: string) {
     return this.storage.setItem(this.options.storageKey, accessToken);
   }
 
-  getFromLocation (location: Location): Promise<string|null> {
-    const regex = new RegExp(`(?:\&?)${this.options.locationKey}=([^&]*)`);
-    const type = location.hash ? 'hash' : 'search';
-    const match = location[type] ? location[type].match(regex) : null;
+  async getFromLocation (location: Location) {
+    const [ accessToken, tokenRegex ] = getMatch(location, this.options.locationKey);
 
-    if (match !== null) {
-      const [ , value ] = match;
+    if (accessToken !== null) {
+      location.hash = location.hash.replace(tokenRegex, '');
 
-      location[type] = location[type].replace(regex, '');
-
-      return Promise.resolve(value);
+      return accessToken;
     }
 
-    return Promise.resolve(null);
+    const [ errorMessage ] = getMatch(location, this.options.locationErrorKey);
+
+    if (errorMessage !== null) {
+      throw new NotAuthenticated(errorMessage);
+    }
+
+    return null;
   }
 
-  getJwt (): Promise<string|null> {
+  getAccessToken (): Promise<string|null> {
     return this.storage.getItem(this.options.storageKey)
       .then((accessToken: string) => {
         if (!accessToken && typeof window !== 'undefined' && window.location) {
@@ -89,7 +105,7 @@ export class AuthenticationClient {
       });
   }
 
-  removeJwt () {
+  removeAccessToken () {
     return this.storage.removeItem(this.options.storageKey);
   }
 
@@ -106,7 +122,7 @@ export class AuthenticationClient {
     const authPromise = this.app.get('authentication');
 
     if (!authPromise || force === true) {
-      return this.getJwt().then(accessToken => {
+      return this.getAccessToken().then(accessToken => {
         if (!accessToken) {
           throw new NotAuthenticated('No accessToken found in storage');
         }
@@ -116,7 +132,7 @@ export class AuthenticationClient {
           accessToken
         });
       }).catch((error: Error) =>
-        this.removeJwt().then(() => Promise.reject(error))
+        this.removeAccessToken().then(() => Promise.reject(error))
       );
     }
 
@@ -136,7 +152,7 @@ export class AuthenticationClient {
         this.app.emit('login', authResult);
         this.app.emit('authenticated', authResult);
 
-        return this.setJwt(accessToken).then(() => authResult);
+        return this.setAccessToken(accessToken).then(() => authResult);
       }).catch((error: Error) =>
         this.reset().then(() => Promise.reject(error))
       );
@@ -149,7 +165,7 @@ export class AuthenticationClient {
   logout () {
     return this.app.get('authentication')
       .then(() => this.service.remove(null))
-      .then((authResult: AuthenticationResult) => this.removeJwt()
+      .then((authResult: AuthenticationResult) => this.removeAccessToken()
         .then(() => this.reset())
         .then(() => {
           this.app.emit('logout', authResult);

@@ -28,6 +28,7 @@ export const defaults: AuthenticationClientOptions = {
   scheme: 'Bearer',
   storageKey: 'feathers-jwt',
   locationKey: 'access_token',
+  locationErrorKey: 'error',
   jwtStrategy: 'jwt',
   path: '/authentication',
   Authentication: AuthenticationClient,
