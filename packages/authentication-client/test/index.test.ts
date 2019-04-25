@@ -41,7 +41,7 @@ describe('@feathersjs/authentication-client', () => {
     assert.strictEqual(typeof app.logout, 'function');
   });
 
-  it('setAccessToken, getAccessToken, removeJwt', async () => {
+  it('setAccessToken, getAccessToken, removeAccessToken', async () => {
     const auth = app.authentication;
     const token = 'hi';
 
