@@ -1,7 +1,8 @@
-import { AuthenticationClient, Storage, AuthenticationClientOptions } from './core';
+import { AuthenticationClient, AuthenticationClientOptions } from './core';
 import * as hooks from './hooks';
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationResult, AuthenticationRequest } from '@feathersjs/authentication';
+import { Storage, MemoryStorage, StorageWrapper } from './storage';
 
 declare module '@feathersjs/feathers' {
   interface Application<ServiceTypes = any> {
@@ -10,26 +11,32 @@ declare module '@feathersjs/feathers' {
     primus?: any;
     authentication: AuthenticationClient;
     authenticate (authentication?: AuthenticationRequest): Promise<AuthenticationResult>;
-    reauthenticate (force: boolean): Promise<AuthenticationResult>;
+    reAuthenticate (force: boolean): Promise<AuthenticationResult>;
     logout (): Promise<AuthenticationResult>;
   }
 }
 
+export { AuthenticationClient, AuthenticationClientOptions, Storage, MemoryStorage, hooks };
+
 export type ClientConstructor = new (app: Application, options: AuthenticationClientOptions) => AuthenticationClient;
+
+export const defaultStorage: Storage = typeof window !== 'undefined' ?
+  new StorageWrapper(window.localStorage) : new MemoryStorage();
 
 export const defaults: AuthenticationClientOptions = {
   header: 'Authorization',
   scheme: 'Bearer',
   storageKey: 'feathers-jwt',
+  locationKey: 'access_token',
+  locationErrorKey: 'error',
   jwtStrategy: 'jwt',
   path: '/authentication',
-  Authentication: AuthenticationClient
+  Authentication: AuthenticationClient,
+  storage: defaultStorage
 };
 
-const init = (_options: AuthenticationClientOptions = {}) => {
-  const options: AuthenticationClientOptions = Object.assign({}, {
-    storage: new Storage()
-  }, defaults, _options);
+const init = (_options: Partial<AuthenticationClientOptions> = {}) => {
+  const options: AuthenticationClientOptions = Object.assign({}, defaults, _options);
   const { Authentication } = options;
 
   return (app: Application) => {
@@ -37,7 +44,7 @@ const init = (_options: AuthenticationClientOptions = {}) => {
 
     app.authentication = authentication;
     app.authenticate = authentication.authenticate.bind(authentication);
-    app.reauthenticate = authentication.reauthenticate.bind(authentication);
+    app.reAuthenticate = authentication.reAuthenticate.bind(authentication);
     app.logout = authentication.logout.bind(authentication);
 
     app.hooks({
@@ -51,7 +58,6 @@ const init = (_options: AuthenticationClientOptions = {}) => {
   };
 };
 
-export { AuthenticationClient, AuthenticationClientOptions, Storage, hooks };
 export default init;
 
 if (typeof module !== 'undefined') {

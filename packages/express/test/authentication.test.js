@@ -116,6 +116,21 @@ describe('@feathersjs/express/authentication', () => {
       });
     });
 
+    it('errors when there are no authStrategies', () => {
+      const { accessToken } = authResult;
+      app.get('authentication').authStrategies = [];
+
+      return axios.get('/dummy/dave', {
+        headers: {
+          Authorization: accessToken
+        }
+      }).then(() => assert.fail('Should never get here'))
+      .catch(error => {
+        assert.strictEqual(error.response.data.name, 'NotAuthenticated');
+        app.get('authentication').authStrategies = [ 'jwt', 'local' ];
+      });
+    });
+
     it('can make a protected request with Authorization header and bearer scheme', () => {
       const { accessToken } = authResult;
 
@@ -134,6 +149,15 @@ describe('@feathersjs/express/authentication', () => {
   });
 
   describe('authenticate middleware', () => {
+    it('errors without valid strategies', () => {
+      try {
+        authenticate();
+        assert.fail('Should never get here');
+      } catch (error) {
+        assert.strictEqual(error.message, 'The authenticate hook needs at least one allowed strategy');
+      }
+    });
+
     it('protected endpoint fails when JWT is not present', () => {
       return axios.get('/protected').then(() => {
         assert.fail('Should never get here');

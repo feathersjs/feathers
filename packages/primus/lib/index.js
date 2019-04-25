@@ -42,7 +42,17 @@ function configurePrimus (config, configurer) {
             primus.plugin('emitter', Emitter);
 
             primus.use('feathers', function (req, res, next) {
-              req.feathers = { provider: 'primus' };
+              req.feathers = {
+                headers: Object.keys(req.headers).reduce((key, result) => {
+                  const value = req.headers[key];
+
+                  return typeof value === 'object' ? result : {
+                    ...result,
+                    [key]: value
+                  };
+                }, {}),
+                provider: 'primus'
+              };
 
               next();
             }, 0);
