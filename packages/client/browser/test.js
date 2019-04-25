@@ -1,5 +1,5 @@
 var assert = require('assert');
-var baseTests = require('feathers-commons/lib/test/client');
+var baseTests = require('@feathersjs/tests/lib//client');
 
 var feathers = window.feathers;
 var socket = window.io();

@@ -1,11 +1,12 @@
-const assert = require('assert');
-const axios = require('axios');
-const { verify } = require('@feathersjs/commons/lib/test/fixture');
+import assert from 'assert';
+import axios from 'axios';
 
-module.exports = function crud (description, name) {
+import { verify } from './fixture';
+
+export function crud (description: string, name: string, port: number) {
   describe(description, () => {
     it('GET .find', () => {
-      return axios.get(`http://localhost:4777/${name}`)
+      return axios.get(`http://localhost:${port}/${name}`)
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code');
           verify.find(res.data);
@@ -13,7 +14,7 @@ module.exports = function crud (description, name) {
     });
 
     it('GET .get', () => {
-      return axios.get('http://localhost:4777/todo/dishes')
+      return axios.get(`http://localhost:${port}/${name}/dishes`)
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code');
           verify.get('dishes', res.data);
@@ -21,11 +22,11 @@ module.exports = function crud (description, name) {
     });
 
     it('POST .create', () => {
-      let original = {
+      const original = {
         description: 'POST .create'
       };
 
-      return axios.post(`http://localhost:4777/${name}`, original)
+      return axios.post(`http://localhost:${port}/${name}`, original)
         .then(res => {
           assert.ok(res.status === 201, 'Got CREATED status code');
           verify.create(original, res.data);
@@ -33,11 +34,11 @@ module.exports = function crud (description, name) {
     });
 
     it('PUT .update', () => {
-      let original = {
+      const original = {
         description: 'PUT .update'
       };
 
-      return axios.put('http://localhost:4777/todo/544', original)
+      return axios.put(`http://localhost:${port}/${name}/544`, original)
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code');
           verify.update('544', original, res.data);
@@ -45,12 +46,12 @@ module.exports = function crud (description, name) {
     });
 
     it('PUT .update many', () => {
-      let original = {
+      const original = {
         description: 'PUT .update',
         many: true
       };
 
-      return axios.put(`http://localhost:4777/${name}`, original)
+      return axios.put(`http://localhost:${port}/${name}`, original)
         .then(res => {
           const { data } = res;
           assert.ok(res.status === 200, 'Got OK status code');
@@ -59,11 +60,11 @@ module.exports = function crud (description, name) {
     });
 
     it('PATCH .patch', () => {
-      let original = {
+      const original = {
         description: 'PATCH .patch'
       };
 
-      return axios.patch('http://localhost:4777/todo/544', original)
+      return axios.patch(`http://localhost:${port}/${name}/544`, original)
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code');
           verify.patch('544', original, res.data);
@@ -71,12 +72,12 @@ module.exports = function crud (description, name) {
     });
 
     it('PATCH .patch many', () => {
-      let original = {
+      const original = {
         description: 'PATCH .patch',
         many: true
       };
 
-      return axios.patch(`http://localhost:4777/${name}`, original)
+      return axios.patch(`http://localhost:${port}/${name}`, original)
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code');
           verify.patch(null, original, res.data);
@@ -84,7 +85,7 @@ module.exports = function crud (description, name) {
     });
 
     it('DELETE .remove', () => {
-      return axios.delete('http://localhost:4777/tasks/233')
+      return axios.delete(`http://localhost:${port}/${name}/233`)
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code');
           verify.remove('233', res.data);
@@ -92,11 +93,11 @@ module.exports = function crud (description, name) {
     });
 
     it('DELETE .remove many', () => {
-      return axios.delete('http://localhost:4777/tasks')
+      return axios.delete(`http://localhost:${port}/${name}`)
         .then(res => {
           assert.ok(res.status === 200, 'Got OK status code');
           verify.remove(null, res.data);
         });
     });
   });
-};
+}

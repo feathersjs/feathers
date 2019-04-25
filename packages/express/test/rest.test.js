@@ -2,11 +2,11 @@ const assert = require('assert');
 const axios = require('axios');
 
 const feathers = require('@feathersjs/feathers');
-const { Service } = require('@feathersjs/commons/lib/test/fixture');
 const { BadRequest } = require('@feathersjs/errors');
+const { Service } = require('@feathersjs/tests/lib/fixture');
+const { crud } = require('@feathersjs/tests/lib/crud');
 
-const expressify = require('../../lib');
-const testCrud = require('./crud');
+const expressify = require('../lib');
 const { rest } = expressify;
 
 describe('@feathersjs/express/rest provider', () => {
@@ -110,9 +110,9 @@ describe('@feathersjs/express/rest provider', () => {
 
     after(done => server.close(done));
 
-    testCrud('Services', 'todo');
-    testCrud('Root Service', '/');
-    testCrud('Dynamic Services', 'tasks');
+    crud('Services', 'todo', 4777);
+    crud('Root Service', '/', 4777);
+    crud('Dynamic Services', 'tasks', 4777);
 
     describe('res.hook', () => {
       const convertHook = hook => {
