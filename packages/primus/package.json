@@ -46,6 +46,7 @@
     "@feathersjs/commons": "^4.0.0-pre.0",
     "@feathersjs/express": "^4.0.0-pre.0",
     "@feathersjs/feathers": "^4.0.0-pre.0",
+    "@feathersjs/tests": "^4.0.0-pre.0",
     "feathers": "^2.2.4",
     "feathers-memory": "^3.0.2",
     "lodash": "^4.17.11",

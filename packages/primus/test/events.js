@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { verify } = require('feathers-commons/lib/test/fixture');
+const { verify } = require('@feathersjs/tests/lib/fixture');
 
 module.exports = function (name, options) {
   const call = (method, ...args) => {

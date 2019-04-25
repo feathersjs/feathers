@@ -46,6 +46,7 @@
     "@feathersjs/rest-client": "^4.0.0-pre.0",
     "@feathersjs/socketio": "^4.0.0-pre.0",
     "@feathersjs/socketio-client": "^4.0.0-pre.0",
+    "@feathersjs/tests": "^4.0.0-pre.0",
     "babel-loader": "^8.0.5",
     "body-parser": "^1.18.3",
     "feathers-memory": "^3.0.2",

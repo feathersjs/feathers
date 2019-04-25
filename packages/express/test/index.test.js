@@ -216,8 +216,8 @@ describe('@feathersjs/express', () => {
       .use('/secureTodos', todoService);
 
     const httpsServer = https.createServer({
-      key: fs.readFileSync(path.join(__dirname, 'resources', 'privatekey.pem')),
-      cert: fs.readFileSync(path.join(__dirname, 'resources', 'certificate.pem')),
+      key: fs.readFileSync(path.join(__dirname, '..', '..', 'tests', 'resources', 'privatekey.pem')),
+      cert: fs.readFileSync(path.join(__dirname, '..', '..', 'tests', 'resources', 'certificate.pem')),
       rejectUnauthorized: false,
       requestCert: false
     }, app).listen(7889);
