@@ -2,7 +2,7 @@ import { promisify } from 'util';
 import { merge } from 'lodash';
 import jsonwebtoken, { SignOptions, Secret, VerifyOptions } from 'jsonwebtoken';
 import uuidv4 from 'uuid/v4';
-import { NotAuthenticated, BadRequest } from '@feathersjs/errors';
+import { NotAuthenticated } from '@feathersjs/errors';
 import Debug from 'debug';
 import { Application, Params } from '@feathersjs/feathers';
 import { IncomingMessage, ServerResponse } from 'http';
@@ -11,6 +11,9 @@ import defaultOptions from './options';
 const debug = Debug('@feathersjs/authentication/base');
 const verifyJWT = promisify(jsonwebtoken.verify);
 const createJWT = promisify(jsonwebtoken.sign);
+
+// TypeScript hack because it does not allow symbols as indexes!?
+export const AUTHENTICATE: string = Symbol('@feathersjs/authentication/internal') as any;
 
 export interface AuthenticationResult {
   [key: string]: any;
@@ -144,12 +147,12 @@ export class AuthenticationBase {
   }
 
   /**
-   * Create a new JWT with payload and options.
+   * Create a new access token with payload and options.
    * @param payload The JWT payload
    * @param optsOverride The options to extend the defaults (`configuration.jwtOptions`) with
    * @param secretOverride Use a different secret instead
    */
-  createJWT (payload: string | Buffer | object, optsOverride?: SignOptions, secretOverride?: Secret) {
+  createAccessToken (payload: string | Buffer | object, optsOverride?: SignOptions, secretOverride?: Secret) {
     const { secret, jwtOptions } = this.configuration;
     // Use configuration by default but allow overriding the secret
     const jwtSecret = secretOverride || secret;
@@ -166,12 +169,12 @@ export class AuthenticationBase {
   }
 
   /**
-   * Verifies a JWT.
+   * Verifies an access token.
    * @param accessToken The token to verify
    * @param optsOverride The options to extend the defaults (`configuration.jwtOptions`) with
    * @param secretOverride Use a different secret instead
    */
-  verifyJWT (accessToken: string, optsOverride?: JwtVerifyOptions, secretOverride?: Secret) {
+  verifyAccessToken (accessToken: string, optsOverride?: JwtVerifyOptions, secretOverride?: Secret) {
     const { secret, jwtOptions } = this.configuration;
     const jwtSecret = secretOverride || secret;
     const options = merge({}, jwtOptions, optsOverride);
@@ -205,7 +208,10 @@ export class AuthenticationBase {
     }
 
     const { strategy } = authentication;
-    const authParams = Object.assign(params, { authentication: true });
+    const authParams = {
+      ...params,
+      [AUTHENTICATE]: false
+    };
 
     // Throw an error is a `strategy` is indicated but not in the allowed strategies
     if (strategy && !allowed.includes(strategy)) {
@@ -237,10 +243,6 @@ export class AuthenticationBase {
   async parse (req: IncomingMessage, res: ServerResponse, ...names: string[]) {
     const strategies = this.getStrategies(...names)
       .filter(current => current && typeof current.parse === 'function');
-
-    if (strategies.length === 0) {
-      throw new BadRequest('Authentication HTTP parser needs at least one allowed strategy');
-    }
 
     debug('Strategies parsing HTTP header for authentication information', names);
 

@@ -1,5 +1,7 @@
 import assert from 'assert';
 
+const clone = (data: any) => JSON.parse(JSON.stringify(data));
+
 const findAllData = [{
   id: 0,
   description: 'You have to do something'
@@ -8,7 +10,7 @@ const findAllData = [{
   description: 'You have to do laundry'
 }];
 
-exports.Service = {
+export const Service = {
   events: [ 'log' ],
 
   find () {
@@ -32,7 +34,7 @@ exports.Service = {
   },
 
   create (data: any) {
-    const result = Object.assign({}, data, {
+    const result = Object.assign({}, clone(data), {
       id: 42,
       status: 'created'
     });
@@ -45,7 +47,7 @@ exports.Service = {
   },
 
   update (id: any, data: any) {
-    const result = Object.assign({}, data, {
+    const result = Object.assign({}, clone(data), {
       id, status: 'updated'
     });
 
@@ -57,7 +59,7 @@ exports.Service = {
   },
 
   patch (id: any, data: any) {
-    const result = Object.assign({}, data, {
+    const result = Object.assign({}, clone(data), {
       id, status: 'patched'
     });
 
@@ -73,9 +75,9 @@ exports.Service = {
   }
 };
 
-exports.verify = {
+export const verify = {
   find (data: any) {
-    assert.deepStrictEqual(findAllData, data, 'Data as expected');
+    assert.deepStrictEqual(findAllData, clone(data), 'Data as expected');
   },
 
   get (id: any, data: any) {
@@ -84,30 +86,30 @@ exports.verify = {
   },
 
   create (original: any, current: any) {
-    const expected = Object.assign({}, original, {
+    const expected = Object.assign({}, clone(original), {
       id: 42,
       status: 'created'
     });
-    assert.deepStrictEqual(expected, current, 'Data ran through .create as expected');
+    assert.deepStrictEqual(expected, clone(current), 'Data ran through .create as expected');
   },
 
   update (id: any, original: any, current: any) {
-    const expected = Object.assign({}, original, {
+    const expected = Object.assign({}, clone(original), {
       id,
       status: 'updated'
     });
-    assert.deepStrictEqual(expected, current, 'Data ran through .update as expected');
+    assert.deepStrictEqual(expected, clone(current), 'Data ran through .update as expected');
   },
 
   patch (id: any, original: any, current: any) {
-    const expected = Object.assign({}, original, {
+    const expected = Object.assign({}, clone(original), {
       id,
       status: 'patched'
     });
-    assert.deepStrictEqual(expected, current, 'Data ran through .patch as expected');
+    assert.deepStrictEqual(expected, clone(current), 'Data ran through .patch as expected');
   },
 
   remove (id: any, data: any) {
-    assert.deepStrictEqual({ id }, data, '.remove called');
+    assert.deepStrictEqual({ id }, clone(data), '.remove called');
   }
 };

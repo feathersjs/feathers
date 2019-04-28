@@ -1,4 +1,5 @@
 const { flatten, merge } = require('lodash');
+const debug = require('debug')('@feathersjs/express/authentication');
 
 const normalizeStrategy = (_settings = [], ..._strategies) =>
   typeof _settings === 'string'
@@ -23,10 +24,16 @@ exports.parseAuthentication = (settings = {}) => {
       return next();
     }
 
-    const { httpStrategies = [] } = service.configuration;
+    const { authStrategies = [] } = service.configuration;
 
-    service.parse(req, res, ...httpStrategies)
+    if (authStrategies.length === 0) {
+      debug('No `authStrategies` found in authentication configuration');
+      return next();
+    }
+
+    service.parse(req, res, ...authStrategies)
       .then(authentication => {
+        debug('Parsed authentication from HTTP header', authentication);
         merge(req, {
           authentication,
           feathers: { authentication }
@@ -48,8 +55,11 @@ exports.authenticate = (...strategies) => {
     const { app, authentication } = req;
     const service = getService(settings, app);
 
+    debug('Authenticating with Express middleware and strategies', settings.strategies);
+
     service.authenticate(authentication, req.feathers, ...settings.strategies)
       .then(authResult => {
+        debug('Merging request with', authResult);
         merge(req, authResult);
 
         next();

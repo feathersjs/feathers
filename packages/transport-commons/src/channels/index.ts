@@ -11,8 +11,10 @@ const { CHANNELS, PUBLISHERS, ALL_EVENTS } = keys;
 declare module '@feathersjs/feathers' {
   interface ServiceAddons<T> {
     publish (callback: (data: T, hook: HookContext<T>) => Channel): this;
-
     publish (event: string, callback: (data: T, hook: HookContext<T>) => Channel): this;
+
+    registerPublisher (callback: (data: T, hook: HookContext<T>) => Channel): this;
+    registerPublisher (event: string, callback: (data: T, hook: HookContext<T>) => Channel): this;
   }
 
   interface Application<ServiceTypes> {
@@ -21,11 +23,11 @@ declare module '@feathersjs/feathers' {
     channel (name: string[]): Channel;
     channel (...names: string[]): Channel;
 
-    // tslint:disable-next-line void-return
     publish<T> (callback: (data: T, hook: HookContext<T>) => Channel | Channel[] | void): Application<ServiceTypes>;
-
-    // tslint:disable-next-line void-return
     publish<T> (event: string, callback: (data: T, hook: HookContext<T>) => Channel | Channel[] | void): Application<ServiceTypes>;
+
+    registerPublisher<T> (callback: (data: T, hook: HookContext<T>) => Channel | Channel[] | void): Application<ServiceTypes>;
+    registerPublisher<T> (event: string, callback: (data: T, hook: HookContext<T>) => Channel | Channel[] | void): Application<ServiceTypes>;
   }
 }
 

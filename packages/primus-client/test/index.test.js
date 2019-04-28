@@ -1,6 +1,6 @@
 const assert = require('assert');
 const feathers = require('@feathersjs/feathers');
-const baseTests = require('@feathersjs/commons/lib/test/client');
+const baseTests = require('@feathersjs/tests/lib//client');
 
 const server = require('./server');
 const primus = require('../lib');

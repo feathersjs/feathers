@@ -2,7 +2,7 @@ import assert from 'assert';
 import feathers, { Application } from '@feathersjs/feathers';
 import jwt from 'jsonwebtoken';
 
-import { AuthenticationBase } from '../src/core';
+import { AuthenticationBase, AUTHENTICATE } from '../src/core';
 import { Strategy1, Strategy2, MockRequest } from './fixtures';
 import { ServerResponse } from 'http';
 
@@ -104,6 +104,17 @@ describe('authentication/core', () => {
 
       assert.deepStrictEqual(first.configuration, { hello: 'test' });
     });
+
+    it('strategy configuration getter', () => {
+      const [ first ] = auth.getStrategies('first') as [ Strategy1 ];
+      const oldService = auth.configuration.service;
+
+      delete auth.configuration.service;
+
+      assert.strictEqual(first.entityService, null);
+
+      auth.configuration.service = oldService;
+    });
   });
 
   describe('authenticate', () => {
@@ -141,7 +152,7 @@ describe('authentication/core', () => {
 
         assert.deepStrictEqual(result, Object.assign({}, Strategy2.result, {
           authentication,
-          params: { authentication: true }
+          params: { [AUTHENTICATE]: false }
         }));
       });
 
@@ -159,7 +170,7 @@ describe('authentication/core', () => {
 
         assert.deepStrictEqual(result, Object.assign({
           params: Object.assign(params, {
-            authentication: true
+            [AUTHENTICATE]: false
           }),
           authentication
         }, Strategy2.result));
@@ -198,7 +209,7 @@ describe('authentication/core', () => {
 
         assert.deepStrictEqual(result, Object.assign({
           authentication,
-          params: { authentication: true }
+          params: { [AUTHENTICATE]: false }
         }, Strategy2.result));
       });
 
@@ -227,15 +238,10 @@ describe('authentication/core', () => {
   describe('parse', () => {
     const res = {} as ServerResponse;
 
-    it('errors when no names are given', async () => {
+    it('returns null when no names are given', async () => {
       const req = {} as MockRequest;
 
-      try {
-        await auth.parse(req, res);
-        assert.fail('Should never get here');
-      } catch (error) {
-        assert.strictEqual(error.message, 'Authentication HTTP parser needs at least one allowed strategy');
-      }
+      assert.strictEqual(await auth.parse(req, res), null);
     });
 
     it('successfully parses a request (first)', async () => {
@@ -266,11 +272,11 @@ describe('authentication/core', () => {
   describe('jwt', () => {
     const message = 'Some payload';
 
-    describe('createJWT', () => {
+    describe('createAccessToken', () => {
       // it('errors with no payload', () => {
       //   try {
       //     // @ts-ignore
-      //     await auth.createJWT();
+      //     await auth.createAccessToken();
       //     assert.fail('Should never get here');
       //   } catch (error) {
       //     assert.strictEqual(error.message, 'payload is required');
@@ -280,7 +286,7 @@ describe('authentication/core', () => {
       it('with default options', async () => {
         const msg = 'Some payload';
 
-        const accessToken = await auth.createJWT({ message: msg });
+        const accessToken = await auth.createAccessToken({ message: msg });
         const decoded = jwt.decode(accessToken);
         const settings = auth.configuration.jwtOptions;
 
@@ -302,7 +308,7 @@ describe('authentication/core', () => {
           jwtid: 'something'
         };
 
-        const accessToken = await auth.createJWT({ message }, overrides);
+        const accessToken = await auth.createAccessToken({ message }, overrides);
 
         assert.ok(typeof accessToken === 'string');
 
@@ -324,7 +330,7 @@ describe('authentication/core', () => {
         };
 
         try {
-          await auth.createJWT({}, overrides);
+          await auth.createAccessToken({}, overrides);
           assert.fail('Should never get here');
         } catch (error) {
           assert.strictEqual(error.message, '"algorithm" must be a valid string enum value');
@@ -332,26 +338,26 @@ describe('authentication/core', () => {
       });
     });
 
-    describe('verifyJWT', () => {
+    describe('verifyAccessToken', () => {
       let validToken: string;
       let expiredToken: string;
 
       beforeEach(async () => {
-        validToken = await auth.createJWT({ message });
-        expiredToken = await auth.createJWT({}, {
+        validToken = await auth.createAccessToken({ message });
+        expiredToken = await auth.createAccessToken({}, {
           expiresIn: '1ms'
         });
       });
 
       it('returns payload when token is valid', async () => {
-        const payload = await auth.verifyJWT(validToken);
+        const payload = await auth.verifyAccessToken(validToken);
 
         assert.strictEqual(payload.message, message);
       });
 
       it('errors when custom algorithm property does not match', async () => {
         try {
-          await auth.verifyJWT(validToken, {
+          await auth.verifyAccessToken(validToken, {
             algorithm: [ 'HS512' ]
           });
           assert.fail('Should never get here');
@@ -362,7 +368,7 @@ describe('authentication/core', () => {
 
       it('errors when algorithms property does not match', async () => {
         try {
-          await auth.verifyJWT(validToken, {
+          await auth.verifyAccessToken(validToken, {
             algorithms: [ 'HS512' ]
           });
           assert.fail('Should never get here');
@@ -373,7 +379,7 @@ describe('authentication/core', () => {
 
       it('errors when secret is different', async () => {
         try {
-          await auth.verifyJWT(validToken, {}, 'fdjskl');
+          await auth.verifyAccessToken(validToken, {}, 'fdjskl');
 
           assert.fail('Should never get here');
         } catch (error) {
@@ -383,7 +389,7 @@ describe('authentication/core', () => {
 
       it('errors when other custom options do not match', async () => {
         try {
-          await auth.verifyJWT(validToken, { issuer: 'someonelse' });
+          await auth.verifyAccessToken(validToken, { issuer: 'someonelse' });
 
           assert.fail('Should never get here');
         } catch (error) {
@@ -393,7 +399,7 @@ describe('authentication/core', () => {
 
       it('errors when token is expired', async () => {
         try {
-          await auth.verifyJWT(expiredToken);
+          await auth.verifyAccessToken(expiredToken);
           assert.fail('Should never get here');
         } catch (error) {
           assert.strictEqual(error.message, 'jwt expired');

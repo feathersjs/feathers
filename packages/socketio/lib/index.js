@@ -51,7 +51,8 @@ function configureSocketio (port, options, config) {
 
             io.use((socket, next) => {
               const connection = {
-                provider: 'socketio'
+                provider: 'socketio',
+                headers: socket.handshake.headers
               };
 
               Object.defineProperty(connection, socketKey, {

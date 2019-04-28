@@ -1,38 +1,34 @@
 import { NotAuthenticated } from '@feathersjs/errors';
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationRequest, AuthenticationResult } from '@feathersjs/authentication';
+import { Storage, StorageWrapper } from './storage';
 
-export class Storage {
-  store: { [key: string]: any };
+const getMatch = (location: Location, key: string): [ string, RegExp ] => {
+  const regex = new RegExp(`(?:\&?)${key}=([^&]*)`);
+  const match = location.hash ? location.hash.match(regex) : null;
 
-  constructor () {
-    this.store = {};
+  if (match !== null) {
+    const [ , value ] = match;
+
+    return [ value, regex ];
   }
 
-  getItem (key: string) {
-    return this.store[key];
-  }
+  return [ null, regex ];
+};
 
-  setItem (key: string, value: any) {
-    return (this.store[key] = value);
-  }
-
-  removeItem (key: string) {
-    delete this.store[key];
-    return this;
-  }
-}
-
-export type ClientConstructor = new (app: Application, options: AuthenticationClientOptions) => AuthenticationClient;
+export type ClientConstructor = new (app: Application, options: AuthenticationClientOptions)
+  => AuthenticationClient;
 
 export interface AuthenticationClientOptions {
-  storage?: Storage;
-  header?: string;
-  scheme?: string;
-  storageKey?: string;
-  jwtStrategy?: string;
-  path?: string;
-  Authentication?: ClientConstructor;
+  storage: Storage;
+  header: string;
+  scheme: string;
+  storageKey: string;
+  locationKey: string;
+  locationErrorKey: string;
+  jwtStrategy: string;
+  path: string;
+  Authentication: ClientConstructor;
 }
 
 export class AuthenticationClient {
@@ -42,11 +38,12 @@ export class AuthenticationClient {
 
   constructor (app: Application, options: AuthenticationClientOptions) {
     const socket = app.io || app.primus;
+    const storage = new StorageWrapper(app.get('storage') || options.storage);
 
     this.app = app;
-    this.app.set('storage', this.app.get('storage') || options.storage);
     this.options = options;
     this.authenticated = false;
+    this.app.set('storage', storage);
 
     if (socket) {
       this.handleSocket(socket);
@@ -58,7 +55,7 @@ export class AuthenticationClient {
   }
 
   get storage () {
-    return this.app.get('storage');
+    return this.app.get('storage') as Storage;
   }
 
   handleSocket (socket: any) {
@@ -70,21 +67,46 @@ export class AuthenticationClient {
       // has been called explicitly first
       if (this.authenticated) {
         // Force reauthentication with the server
-        this.reauthenticate(true);
+        this.reAuthenticate(true);
       }
     });
   }
 
-  setJwt (accessToken: string) {
-    return Promise.resolve(this.storage.setItem(this.options.storageKey, accessToken));
+  setAccessToken (accessToken: string) {
+    return this.storage.setItem(this.options.storageKey, accessToken);
   }
 
-  getJwt () {
-    return Promise.resolve(this.storage.getItem(this.options.storageKey));
+  async getFromLocation (location: Location) {
+    const [ accessToken, tokenRegex ] = getMatch(location, this.options.locationKey);
+
+    if (accessToken !== null) {
+      location.hash = location.hash.replace(tokenRegex, '');
+
+      return accessToken;
+    }
+
+    const [ errorMessage ] = getMatch(location, this.options.locationErrorKey);
+
+    if (errorMessage !== null) {
+      throw new NotAuthenticated(errorMessage);
+    }
+
+    return null;
   }
 
-  removeJwt () {
-    return Promise.resolve(this.storage.removeItem(this.options.storageKey));
+  getAccessToken (): Promise<string|null> {
+    return this.storage.getItem(this.options.storageKey)
+      .then((accessToken: string) => {
+        if (!accessToken && typeof window !== 'undefined' && window.location) {
+          return this.getFromLocation(window.location);
+        }
+
+        return accessToken || null;
+      });
+  }
+
+  removeAccessToken () {
+    return this.storage.removeItem(this.options.storageKey);
   }
 
   reset () {
@@ -94,13 +116,13 @@ export class AuthenticationClient {
     return Promise.resolve(null);
   }
 
-  reauthenticate (force: boolean = false): Promise<AuthenticationResult> {
+  reAuthenticate (force: boolean = false): Promise<AuthenticationResult> {
     // Either returns the authentication state or
     // tries to re-authenticate with the stored JWT and strategy
     const authPromise = this.app.get('authentication');
 
     if (!authPromise || force === true) {
-      return this.getJwt().then(accessToken => {
+      return this.getAccessToken().then(accessToken => {
         if (!accessToken) {
           throw new NotAuthenticated('No accessToken found in storage');
         }
@@ -109,7 +131,9 @@ export class AuthenticationClient {
           strategy: this.options.jwtStrategy,
           accessToken
         });
-      }).catch(error => this.removeJwt().then(() => Promise.reject(error)));
+      }).catch((error: Error) =>
+        this.removeAccessToken().then(() => Promise.reject(error))
+      );
     }
 
     return authPromise;
@@ -117,7 +141,7 @@ export class AuthenticationClient {
 
   authenticate (authentication: AuthenticationRequest): Promise<AuthenticationResult> {
     if (!authentication) {
-      return this.reauthenticate();
+      return this.reAuthenticate();
     }
 
     const promise = this.service.create(authentication)
@@ -128,8 +152,10 @@ export class AuthenticationClient {
         this.app.emit('login', authResult);
         this.app.emit('authenticated', authResult);
 
-        return this.setJwt(accessToken).then(() => authResult);
-      }).catch((error: any) => this.reset().then(() => Promise.reject(error)));
+        return this.setAccessToken(accessToken).then(() => authResult);
+      }).catch((error: Error) =>
+        this.reset().then(() => Promise.reject(error))
+      );
 
     this.app.set('authentication', promise);
 
@@ -139,7 +165,7 @@ export class AuthenticationClient {
   logout () {
     return this.app.get('authentication')
       .then(() => this.service.remove(null))
-      .then((authResult: AuthenticationResult) => this.removeJwt()
+      .then((authResult: AuthenticationResult) => this.removeAccessToken()
         .then(() => this.reset())
         .then(() => {
           this.app.emit('logout', authResult);

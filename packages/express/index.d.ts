@@ -14,7 +14,7 @@ export type Application<T = any> = express.Application & FeathersApplication<T>;
 
 export function errorHandler (options?: {
     public?: string,
-    logger?: { error?: (msg: string) => void },
+    logger?: { error?: (msg: string) => void }|null,
     html?: any,
     json?: any
 }): express.ErrorRequestHandler;
@@ -55,4 +55,4 @@ export {
 
 export function parseAuthentication (...strategies: string[]): express.RequestHandler;
 export function authenticate (...strategies: string[]): express.RequestHandler;
-export const original: typeof express;
+export const original: () => express.Application;

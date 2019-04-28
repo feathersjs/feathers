@@ -2,11 +2,11 @@ const assert = require('assert');
 const axios = require('axios');
 
 const feathers = require('@feathersjs/feathers');
-const { Service } = require('@feathersjs/commons/lib/test/fixture');
 const { BadRequest } = require('@feathersjs/errors');
+const { Service } = require('@feathersjs/tests/lib/fixture');
+const { crud } = require('@feathersjs/tests/lib/crud');
 
-const expressify = require('../../lib');
-const testCrud = require('./crud');
+const expressify = require('../lib');
 const { rest } = expressify;
 
 describe('@feathersjs/express/rest provider', () => {
@@ -110,9 +110,9 @@ describe('@feathersjs/express/rest provider', () => {
 
     after(done => server.close(done));
 
-    testCrud('Services', 'todo');
-    testCrud('Root Service', '/');
-    testCrud('Dynamic Services', 'tasks');
+    crud('Services', 'todo', 4777);
+    crud('Root Service', '/', 4777);
+    crud('Dynamic Services', 'tasks', 4777);
 
     describe('res.hook', () => {
       const convertHook = hook => {
@@ -152,12 +152,16 @@ describe('@feathersjs/express/rest provider', () => {
 
         return axios.get('http://localhost:4777/hook/dishes?test=param')
           .then(res => {
+            const paramsWithHeaders = {
+              ...params,
+              headers: res.data.params.headers
+            };
+
             assert.deepStrictEqual(res.data, {
               id: 'dishes',
-              params,
+              params: paramsWithHeaders,
               arguments: [
-                'dishes',
-                params
+                'dishes', paramsWithHeaders
               ],
               type: 'after',
               method: 'get',
@@ -233,11 +237,16 @@ describe('@feathersjs/express/rest provider', () => {
 
         return axios('http://localhost:4777/hook-error/dishes')
           .catch(error => {
+            const { data } = error.response;
+            const paramsWithHeaders = {
+              ...params,
+              headers: data.hook.params.headers
+            };
             assert.deepStrictEqual(error.response.data, {
               hook: {
                 id: 'dishes',
-                params,
-                arguments: [ 'dishes', params ],
+                params: paramsWithHeaders,
+                arguments: ['dishes', paramsWithHeaders ],
                 type: 'error',
                 method: 'get',
                 path: 'hook-error'
@@ -270,6 +279,7 @@ describe('@feathersjs/express/rest provider', () => {
       return axios.get('http://localhost:4778/service/bla?some=param&another=thing')
         .then(res => {
           let expected = {
+            headers: res.data.headers,
             test: 'Happy',
             provider: 'rest',
             route: {},
@@ -327,22 +337,22 @@ describe('@feathersjs/express/rest provider', () => {
       app.configure(rest())
         .use(expressify.json())
         .use('/todo', function (req, res, next) {
-          req.body.before = [ 'before first' ];
+          req.body.before = ['before first'];
           next();
         }, function (req, res, next) {
           req.body.before.push('before second');
           next();
         }, {
-          create (data) {
-            return Promise.resolve(data);
-          }
-        }, function (req, res, next) {
-          res.data.after = [ 'after first' ];
-          next();
-        }, function (req, res, next) {
-          res.data.after.push('after second');
-          next();
-        });
+            create (data) {
+              return Promise.resolve(data);
+            }
+          }, function (req, res, next) {
+            res.data.after = ['after first'];
+            next();
+          }, function (req, res, next) {
+            res.data.after.push('after second');
+            next();
+          });
 
       const server = app.listen(4776);
 
@@ -350,8 +360,8 @@ describe('@feathersjs/express/rest provider', () => {
         .then(res => {
           assert.deepStrictEqual(res.data, {
             text: 'Do dishes',
-            before: [ 'before first', 'before second' ],
-            after: [ 'after first', 'after second' ]
+            before: ['before first', 'before second'],
+            after: ['after first', 'after second']
           });
         })
         .then(() => server.close());
@@ -531,6 +541,67 @@ describe('@feathersjs/express/rest provider', () => {
             code: 400,
             className: 'bad-request',
             errors: {}
+          });
+        });
+    });
+  });
+
+  describe('Custom methods', () => {
+    let server;
+    let app;
+
+    before(() => {
+      app = expressify(feathers())
+        .configure(rest())
+        .use(expressify.json())
+        .use('/todo', {
+          get (id) {
+            return id;
+          },
+          // httpMethod is usable as a decorator: @httpMethod('POST', '/:__feathersId/custom-path')
+          custom: rest.httpMethod('POST')(feathers.activateHooks(['id', 'data', 'params'])(
+            (id, data, params = {}) => {
+              return Promise.resolve({
+                id,
+                data
+              });
+            }
+          )),
+          other: rest.httpMethod('PATCH', ':__feathersId/second-method')(
+            feathers.activateHooks(['id', 'data', 'params'])(
+              (id, data, params = {}) => {
+                return Promise.resolve({
+                  id,
+                  data
+                });
+              }
+            )
+          )
+        });
+
+      server = app.listen(4781);
+    });
+
+    after(done => server.close(done));
+
+    it('works with custom methods', () => {
+      return axios.post('http://localhost:4781/todo/42/custom', { text: 'Do dishes' })
+        .then(res => {
+          assert.equal(res.headers.allow, 'GET,POST,PATCH');
+          assert.deepEqual(res.data, {
+            id: '42',
+            data: { text: 'Do dishes' }
+          });
+        });
+    });
+
+    it('works with custom methods - with route', () => {
+      return axios.patch('http://localhost:4781/todo/12/second-method', { text: 'Hmm' })
+        .then(res => {
+          assert.equal(res.headers.allow, 'GET,POST,PATCH');
+          assert.deepEqual(res.data, {
+            id: '12',
+            data: { text: 'Hmm' }
           });
         });
     });

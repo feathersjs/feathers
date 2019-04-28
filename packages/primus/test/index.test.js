@@ -3,7 +3,7 @@ const express = require('@feathersjs/express');
 const assert = require('assert');
 const request = require('request');
 const _ = require('lodash');
-const { Service } = require('feathers-commons/lib/test-fixture');
+const { Service } = require('@feathersjs/tests/lib/fixture');
 
 const primus = require('../lib');
 const methodTests = require('./methods.js');
@@ -29,6 +29,7 @@ describe('@feathersjs/primus', () => {
       }, function (primus) {
         primus.authorize(function (req, done) {
           req.feathers.user = { name: 'David' };
+          options.socketParams.headers = req.feathers.headers;
 
           const { channel } = req.query;
 

@@ -4,13 +4,13 @@ const assert = require('assert');
 const _ = require('lodash');
 const io = require('socket.io-client');
 const request = require('request');
-const { Service } = require('feathers-commons/lib/test/fixture');
+const { Service } = require('@feathersjs/tests/lib/fixture');
 
 const methodTests = require('./methods.js');
 const eventTests = require('./events');
 const socketio = require('../lib');
 
-describe('@feathersjs/socketio', () => {
+describe.only('@feathersjs/socketio', () => {
   let app;
   let server;
   let socket;
@@ -40,6 +40,7 @@ describe('@feathersjs/socketio', () => {
       .configure(socketio(function (io) {
         io.use(function (socket, next) {
           socket.feathers.user = { name: 'David' };
+          socketParams.headers = socket.feathers.headers;
 
           const { channel } = socket.handshake.query;
 

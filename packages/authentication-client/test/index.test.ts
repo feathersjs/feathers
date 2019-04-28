@@ -41,16 +41,49 @@ describe('@feathersjs/authentication-client', () => {
     assert.strictEqual(typeof app.logout, 'function');
   });
 
-  it('setJwt, getJwt, removeJwt', () => {
+  it('setAccessToken, getAccessToken, removeAccessToken', async () => {
     const auth = app.authentication;
     const token = 'hi';
 
-    return auth.setJwt(token)
-      .then(() => auth.getJwt())
-      .then(res => assert.strictEqual(res, token))
-      .then(() => auth.removeJwt())
-      .then(() => auth.getJwt())
-      .then(res => assert.strictEqual(res, undefined));
+    await auth.setAccessToken(token);
+
+    const res = await auth.getAccessToken();
+
+    assert.strictEqual(res, token);
+
+    await auth.removeAccessToken();
+    assert.strictEqual(await auth.getAccessToken(), null);
+  });
+
+  it('getFromLocation', async () => {
+    const auth = app.authentication;
+    let dummyLocation = { hash: 'access_token=testing' } as Location;
+
+    let token = await auth.getFromLocation(dummyLocation);
+
+    assert.strictEqual(token, 'testing');
+    assert.strictEqual(dummyLocation.hash, '');
+
+    dummyLocation.hash = 'a=b&access_token=otherTest&c=d';
+    token = await auth.getFromLocation(dummyLocation);
+
+    assert.strictEqual(token, 'otherTest');
+    assert.strictEqual(dummyLocation.hash, 'a=b&c=d');
+
+    dummyLocation = { search: 'access_token=testing' } as Location;
+    token = await auth.getFromLocation(dummyLocation);
+
+    assert.strictEqual(await auth.getFromLocation({} as Location), null);
+
+    try {
+      await auth.getFromLocation({
+        hash: 'error=Error Happened&x=y'
+      } as Location);
+      assert.fail('Should never get here');
+    } catch (error) {
+      assert.strictEqual(error.name, 'NotAuthenticated');
+      assert.strictEqual(error.message, 'Error Happened');
+    }
   });
 
   it('authenticate, authentication hook, login event', () => {
@@ -71,7 +104,7 @@ describe('@feathersjs/authentication-client', () => {
         user
       });
 
-      return app.authentication.getJwt();
+      return app.authentication.getAccessToken();
     }).then(at => {
       assert.strictEqual(at, accessToken, 'Set accessToken in storage');
 
@@ -100,7 +133,7 @@ describe('@feathersjs/authentication-client', () => {
 
   describe('reauthenticate', () => {
     it('fails when no token in storage', () => {
-      return app.authentication.reauthenticate().then(() => {
+      return app.authentication.reAuthenticate().then(() => {
         assert.fail('Should never get here');
       }).catch(error => {
         assert.strictEqual(error.message, 'No accessToken found in storage');
@@ -120,7 +153,7 @@ describe('@feathersjs/authentication-client', () => {
         });
 
         return result;
-      }).then(() => app.authentication.reauthenticate())
+      }).then(() => app.authentication.reAuthenticate())
         .then(() =>
           app.authentication.reset()
         ).then(() => {
@@ -128,7 +161,7 @@ describe('@feathersjs/authentication-client', () => {
         }).then(at => {
           assert.strictEqual(at, accessToken, 'Set accessToken in storage');
 
-          return app.authentication.reauthenticate();
+          return app.authentication.reAuthenticate();
         }).then(at => {
           assert.deepStrictEqual(at, {
             accessToken,

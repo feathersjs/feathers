@@ -1,5 +1,5 @@
+const errors = require('@feathersjs/errors');
 const path = require('path');
-const errors = require('./index');
 
 const defaults = {
   public: path.resolve(__dirname, 'public'),
@@ -23,9 +23,16 @@ module.exports = function (options = {}) {
   }
 
   return function (error, req, res, next) {
+    // Set the error code for HTTP processing semantics
+    error.code = !isNaN(parseInt(error.code, 10)) ? parseInt(error.code, 10) : 500;
+
     // Log the error if it didn't come from a service method call
     if (options.logger && typeof options.logger.error === 'function' && !res.hook) {
-      options.logger.error(error);
+      if (error.code >= 500) {
+        options.logger.error(error);
+      } else {
+        options.logger.info(error);
+      }
     }
 
     if (error.type !== 'FeathersError') {
@@ -39,7 +46,6 @@ module.exports = function (options = {}) {
       }
     }
 
-    error.code = !isNaN(parseInt(error.code, 10)) ? parseInt(error.code, 10) : 500;
     const formatter = {};
 
     // If the developer passed a custom function for ALL html errors
