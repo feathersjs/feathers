@@ -3,29 +3,19 @@ const server = require('./packages/client/test/server');
 module.exports = function (grunt) {
   const browsers = [{
     browserName: 'firefox',
-    platform: 'Windows 10'
+    platform: 'linux'
   }, {
     browserName: 'chrome',
     platform: 'linux'
   }, {
-    browserName: 'safari',
-    platform: 'Mac 10.13',
-    version: '11.0'
-  }
-  // , {
-  //   browserName: 'internet explorer',
-  //   platform: 'Windows 8',
-  //   version: '10'
-  // }, {
-  //   browserName: 'internet explorer',
-  //   platform: 'Windows 10',
-  //   version: '11'
-  // }, {
-  //   browserName: 'MicrosoftEdge',
-  //   platform: 'Windows 10',
-  //   version: '18'
-  // }
-  ];
+    browserName: 'internet explorer',
+    platform: 'Windows 8',
+    version: '10'
+  }, {
+    browserName: 'internet explorer',
+    platform: 'Windows 10',
+    version: '11.285'
+  }];
 
   grunt.registerTask('server', 'Start the test server', function () {
     server.on('listening', () => {
