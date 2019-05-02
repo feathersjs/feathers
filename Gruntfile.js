@@ -11,19 +11,21 @@ module.exports = function (grunt) {
     browserName: 'safari',
     platform: 'Mac 10.13',
     version: '11.0'
-  }, {
-    browserName: 'internet explorer',
-    platform: 'Windows 8',
-    version: '10'
-  }, {
-    browserName: 'internet explorer',
-    platform: 'Windows 10',
-    version: '11'
-  }, {
-    browserName: 'MicrosoftEdge',
-    platform: 'Windows 10',
-    version: '18'
-  }];
+  }
+  // , {
+  //   browserName: 'internet explorer',
+  //   platform: 'Windows 8',
+  //   version: '10'
+  // }, {
+  //   browserName: 'internet explorer',
+  //   platform: 'Windows 10',
+  //   version: '11'
+  // }, {
+  //   browserName: 'MicrosoftEdge',
+  //   platform: 'Windows 10',
+  //   version: '18'
+  // }
+  ];
 
   grunt.registerTask('server', 'Start the test server', function () {
     server.on('listening', () => {
