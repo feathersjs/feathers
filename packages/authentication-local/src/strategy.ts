@@ -51,7 +51,7 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
     const findParams = Object.assign({}, params, { query });
     const entityService = this.app.service(service);
 
-    debug('Finding entity with query', params.query);
+    debug('Finding entity with query', findParams.query);
 
     const result = await entityService.find(findParams);
     const list = Array.isArray(result) ? result : result.data;
