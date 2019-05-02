@@ -3,7 +3,6 @@ import { HookContext } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
 import Debug from 'debug';
 import { AuthenticationService } from '../service';
-import { AUTHENTICATE } from '../core';
 
 const debug = Debug('@feathersjs/authentication/hooks/authenticate');
 
@@ -45,7 +44,7 @@ export default (originalSettings: string|AuthenticateHookSettings, ...originalSt
       throw new NotAuthenticated('The authenticate hook does not need to be used on the authentication service');
     }
 
-    if (params[AUTHENTICATE] === false) {
+    if (params.authenticated === true) {
       return context;
     }
 
