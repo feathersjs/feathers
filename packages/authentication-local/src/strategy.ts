@@ -106,7 +106,7 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
 
     await this.comparePassword(result, password);
 
-    const authEntity = await (params.provider ? this.findEntity(username, params) : result);
+    const authEntity = await (params.provider ? this.findEntity(username, { ...params, [entity]: result }) : result);
 
     return {
       authentication: { strategy: this.name },
