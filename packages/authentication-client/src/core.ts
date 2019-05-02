@@ -163,7 +163,7 @@ export class AuthenticationClient {
   }
 
   logout () {
-    return this.app.get('authentication')
+    return Promise.resolve(this.app.get('authentication'))
       .then(() => this.service.remove(null))
       .then((authResult: AuthenticationResult) => this.removeAccessToken()
         .then(() => this.reset())
