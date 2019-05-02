@@ -47,6 +47,7 @@
     "@angular/platform-browser": "^7.2.12",
     "@feathersjs/express": "^4.0.0-pre.0",
     "@feathersjs/feathers": "^4.0.0-pre.0",
+    "@feathersjs/tests": "^4.0.0-pre.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "feathers-memory": "^3.0.2",

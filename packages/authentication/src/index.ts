@@ -8,8 +8,7 @@ export {
   AuthenticationBase,
   AuthenticationRequest,
   AuthenticationResult,
-  AuthenticationStrategy,
-  AUTHENTICATE
+  AuthenticationStrategy
 } from './core';
 export { AuthenticationBaseStrategy } from './strategy';
 export { AuthenticationService } from './service';

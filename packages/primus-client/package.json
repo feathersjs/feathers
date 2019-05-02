@@ -42,9 +42,10 @@
     "@feathersjs/commons": "^4.0.0-pre.0",
     "@feathersjs/feathers": "^4.0.0-pre.0",
     "@feathersjs/primus": "^4.0.0-pre.0",
+    "@feathersjs/tests": "^4.0.0-pre.0",
     "chai": "^4.2.0",
     "feathers-memory": "^3.0.2",
     "mocha": "^6.0.2",
-    "ws": "^6.2.1"
+    "ws": "^7.0.0"
   }
 }

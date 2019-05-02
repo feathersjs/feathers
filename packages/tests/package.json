@@ -1,13 +1,12 @@
 {
-  "name": "@feathersjs/primus",
-  "description": "The Feathers Primus real-time API provider",
+  "name": "@feathersjs/tests",
+  "private": true,
+  "description": "Feathers core module common tests",
   "version": "4.0.0-pre.0",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
-  "types": "index.d.ts",
   "keywords": [
-    "feathers",
-    "feathers-plugin"
+    "feathers"
   ],
   "license": "MIT",
   "repository": {
@@ -27,7 +26,10 @@
     "node": ">= 6"
   },
   "scripts": {
-    "test": "mocha --opts ../../mocha.opts"
+    "prepublish": "npm run compile",
+    "compile": "shx rm -rf lib/ && tsc",
+    "test": "npm run compile && npm run mocha",
+    "mocha": "mocha --opts ../../mocha.ts.opts --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"
@@ -36,21 +38,19 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/transport-commons": "^4.0.0-pre.0",
-    "debug": "^4.1.1",
-    "primus": "^7.3.2",
-    "primus-emitter": "^3.1.1",
-    "uberproto": "^2.0.4"
+    "axios": "^0.18.0",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "@feathersjs/commons": "^4.0.0-pre.0",
-    "@feathersjs/express": "^4.0.0-pre.0",
     "@feathersjs/feathers": "^4.0.0-pre.0",
-    "@feathersjs/tests": "^4.0.0-pre.0",
-    "feathers": "^2.2.4",
-    "feathers-memory": "^3.0.2",
-    "lodash": "^4.17.11",
+    "@types/axios": "^0.14.0",
+    "@types/debug": "^4.1.3",
+    "@types/lodash": "^4.14.123",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^11.13.0",
     "mocha": "^6.0.2",
-    "ws": "^7.0.0"
+    "shx": "^0.3.2",
+    "ts-node": "^8.0.3",
+    "typescript": "^3.4.2"
   }
 }

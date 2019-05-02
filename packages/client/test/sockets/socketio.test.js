@@ -1,6 +1,6 @@
 const io = require('socket.io-client');
 const socketio = require('@feathersjs/socketio');
-const baseTests = require('@feathersjs/commons/lib/test/client');
+const baseTests = require('@feathersjs/tests/lib//client');
 
 const app = require('../fixture');
 const feathers = require('../../');
