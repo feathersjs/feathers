@@ -50,7 +50,7 @@
     "@types/jsonwebtoken": "^8.3.2",
     "@types/lodash": "^4.14.123",
     "@types/mocha": "^5.2.6",
-    "@types/node": "^11.13.0",
+    "@types/node": "^12.0.0",
     "@types/uuid": "^3.4.4",
     "feathers-memory": "^3.0.2",
     "mocha": "^6.0.2",
