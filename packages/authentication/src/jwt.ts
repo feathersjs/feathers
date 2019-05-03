@@ -43,7 +43,13 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     }
 
     // @ts-ignore
-    return entityService.get(id, params);
+    const result = await entityService.get(id, omit(params, ['provider', 'query']));
+
+    if (params.provider) {
+      return entityService.get(id, { ...omit(params, 'query'), [entity]: result });
+    } else {
+      return result;
+    }
   }
 
   async authenticate (authentication: AuthenticationRequest, params: Params) {
