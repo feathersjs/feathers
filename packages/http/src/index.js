@@ -1,5 +1,6 @@
 const http = require('http');
 const { routing } = require('@feathersjs/transport-commons');
+const rest = require('./rest');
 
 
 function createServer(feathersApp) {
@@ -23,6 +24,7 @@ function createServer(feathersApp) {
   });
 
   server.configure(routing());
+  server.configure(rest);
 
   return server;
 }
