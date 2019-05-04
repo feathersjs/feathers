@@ -161,6 +161,7 @@ describe('authentication/hooks/authenticate', () => {
     try {
       await app.service('users').get(1, {
         authentication: {
+          strategy: 'first',
           some: 'thing'
         }
       });

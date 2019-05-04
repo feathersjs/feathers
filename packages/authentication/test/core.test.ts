@@ -2,7 +2,7 @@ import assert from 'assert';
 import feathers, { Application } from '@feathersjs/feathers';
 import jwt from 'jsonwebtoken';
 
-import { AuthenticationBase } from '../src/core';
+import { AuthenticationBase, AuthenticationRequest } from '../src/core';
 import { Strategy1, Strategy2, MockRequest } from './fixtures';
 import { ServerResponse } from 'http';
 
@@ -23,6 +23,11 @@ describe('authentication/core', () => {
 
     auth.register('first', new Strategy1());
     auth.register('second', new Strategy2());
+    auth.register('dummy', {
+      async authenticate (data: AuthenticationRequest) {
+        return data;
+      }
+    });
   });
 
   describe('configuration', () => {
@@ -80,7 +85,7 @@ describe('authentication/core', () => {
 
   describe('strategies', () => {
     it('strategyNames', () => {
-      assert.deepStrictEqual(auth.strategyNames, [ 'first', 'second' ]);
+      assert.deepStrictEqual(auth.strategyNames, [ 'first', 'second', 'dummy' ]);
     });
 
     it('getStrategies', () => {
@@ -176,14 +181,6 @@ describe('authentication/core', () => {
         }, Strategy2.result));
       });
 
-      it('returns first success when both strategies succeed', async () => {
-        const result = await auth.authenticate({
-          both: true
-        }, {}, ...auth.strategyNames);
-
-        assert.deepStrictEqual(result, Strategy1.result);
-      });
-
       it('throws error when allowed and passed strategy does not match', async () => {
         try {
           await auth.authenticate({
@@ -193,43 +190,18 @@ describe('authentication/core', () => {
           assert.fail('Should never get here');
         } catch (error) {
           assert.strictEqual(error.name, 'NotAuthenticated');
-          assert.strictEqual(error.message, `Invalid authentication strategy 'first'`);
-        }
-      });
-    });
-
-    describe('with a list of strategies and strategy not set in params', () => {
-      it('returns first success in chain', async () => {
-        const authentication = {
-          v2: true,
-          password: 'supersecret'
-        };
-
-        const result = await auth.authenticate(authentication, {}, 'first', 'second');
-
-        assert.deepStrictEqual(result, Object.assign({
-          authentication,
-          params: { authenticated: true }
-        }, Strategy2.result));
-      });
-
-      it('returns first error when all strategies fail', async () => {
-        try {
-          await auth.authenticate({}, {}, 'first', 'second');
-          assert.fail('Should never get here');
-        } catch (error) {
-          assert.strictEqual(error.name, 'NotAuthenticated');
-          assert.strictEqual(error.message, 'Invalid Dave');
+          assert.strictEqual(error.message, 'Invalid authentication information');
         }
       });
 
-      it('errors when there is no valid strategy', async () => {
+      it('throws error when strategy is not set', async () => {
         try {
-          await auth.authenticate({}, {}, 'bla');
+          await auth.authenticate({
+            username: 'Dummy'
+          }, {}, 'second');
           assert.fail('Should never get here');
         } catch (error) {
-          assert.strictEqual(error.name, 'NotAuthenticated');
-          assert.strictEqual(error.message, 'No valid authentication strategy available');
+          assert.strictEqual(error.message, 'Invalid authentication information (no `strategy` set)');
         }
       });
     });

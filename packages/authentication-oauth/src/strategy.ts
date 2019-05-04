@@ -5,7 +5,6 @@ import {
   AuthenticationRequest, AuthenticationBaseStrategy
 } from '@feathersjs/authentication';
 import { Params } from '@feathersjs/feathers';
-import { NotAuthenticated } from '@feathersjs/errors';
 
 const debug = Debug('@feathersjs/authentication-oauth/strategy');
 
@@ -97,10 +96,6 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
   }
 
   async authenticate (authentication: AuthenticationRequest, params: Params) {
-    if (authentication.strategy !== this.name) {
-      throw new NotAuthenticated('Not authenticated');
-    }
-
     const entity: string = this.configuration.entity;
     const profile = await this.getProfile(authentication, params);
     const existingEntity = await this.findEntity(profile, params)

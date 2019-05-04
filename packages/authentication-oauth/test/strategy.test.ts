@@ -20,18 +20,6 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
   });
 
   describe('authenticate', () => {
-    it('errors when strategy is not set', async () => {
-      try {
-        await strategy.authenticate({
-          id: 'newEntity'
-        }, {});
-        assert.fail('Should never get here');
-      } catch (error) {
-        assert.equal(error.name, 'NotAuthenticated');
-        assert.equal(error.message, 'Not authenticated');
-      }
-    });
-
     it('with new user', async () => {
       const authResult = await strategy.authenticate({
         strategy: 'test',

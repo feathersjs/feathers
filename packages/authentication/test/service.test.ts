@@ -211,7 +211,7 @@ describe('authentication/service', () => {
         await app.service('authentication').remove(null);
         assert.fail('Should never get here');
       } catch (error) {
-        assert.strictEqual(error.message, 'No valid authentication strategy available');
+        assert.strictEqual(error.message, 'Invalid authentication information (no `strategy` set)');
       }
     });
   });

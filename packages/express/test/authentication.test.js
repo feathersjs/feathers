@@ -165,7 +165,7 @@ describe('@feathersjs/express/authentication', () => {
         const { data } = error.response;
 
         assert.strictEqual(data.name, 'NotAuthenticated');
-        assert.strictEqual(data.message, 'No valid authentication strategy available');
+        assert.strictEqual(data.message, 'Invalid authentication information (no `strategy` set)');
       });
     });
 

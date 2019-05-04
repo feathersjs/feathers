@@ -85,7 +85,7 @@ describe('authentication/jwt', () => {
         assert.fail('Should never get here');
       } catch (error) {
         assert.strictEqual(error.name, 'NotAuthenticated');
-        assert.strictEqual(error.message, 'Not authenticated');
+        assert.strictEqual(error.message, 'Invalid authentication information (no `strategy` set)');
       }
     });
 
