@@ -47,10 +47,10 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
   }
 
   async authenticate (authentication: AuthenticationRequest, params: Params) {
-    const { accessToken, strategy } = authentication;
+    const { accessToken } = authentication;
     const { entity } = this.configuration;
 
-    if (!accessToken || (strategy && strategy !== this.name)) {
+    if (!accessToken) {
       throw new NotAuthenticated('Not authenticated');
     }
 

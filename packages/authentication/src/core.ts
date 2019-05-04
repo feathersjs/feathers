@@ -194,41 +194,20 @@ export class AuthenticationBase {
    * @param allowed A list of allowed strategy names
    */
   async authenticate (authentication: AuthenticationRequest, params: Params, ...allowed: string[]) {
-    debug('Running authenticate for strategies', allowed);
+    const { strategy } = authentication || ({} as AuthenticationRequest);
+    const [ authStrategy ] = this.getStrategies(strategy);
 
-    const strategies = this.getStrategies(...allowed)
-      .filter(current => current && typeof current.authenticate === 'function');
+    debug('Running authenticate for strategy', strategy, allowed);
 
-    if (!authentication || strategies.length === 0) {
+    if (!authentication || !authStrategy || !allowed.includes(strategy)) {
       // If there are no valid strategies or `authentication` is not an object
-      throw new NotAuthenticated(`No valid authentication strategy available`);
+      throw new NotAuthenticated(`Invalid authentication information` + (!strategy ? ' (no `strategy` set)' : ''));
     }
 
-    const { strategy } = authentication;
-    const authParams = {
+    return authStrategy.authenticate(authentication, {
       ...params,
       authenticated: true
-    };
-
-    // Throw an error is a `strategy` is indicated but not in the allowed strategies
-    if (strategy && !allowed.includes(strategy)) {
-      throw new NotAuthenticated(`Invalid authentication strategy '${strategy}'`);
-    }
-
-    let error: Error|null = null;
-
-    for (const authStrategy of strategies) {
-      try {
-        const authResult = await authStrategy.authenticate(authentication, authParams);
-        return authResult;
-      } catch (currentError) {
-        error = error || currentError;
-      }
-    }
-
-    debug('All strategies error. First error is', error);
-
-    throw error;
+    });
   }
 
   /**
