@@ -2,7 +2,7 @@ import assert from 'assert';
 import feathers, { Application } from '@feathersjs/feathers';
 import jwt from 'jsonwebtoken';
 
-import { AuthenticationBase, AUTHENTICATE } from '../src/core';
+import { AuthenticationBase } from '../src/core';
 import { Strategy1, Strategy2, MockRequest } from './fixtures';
 import { ServerResponse } from 'http';
 
@@ -152,7 +152,7 @@ describe('authentication/core', () => {
 
         assert.deepStrictEqual(result, Object.assign({}, Strategy2.result, {
           authentication,
-          params: { [AUTHENTICATE]: false }
+          params: { authenticated: true }
         }));
       });
 
@@ -170,7 +170,7 @@ describe('authentication/core', () => {
 
         assert.deepStrictEqual(result, Object.assign({
           params: Object.assign(params, {
-            [AUTHENTICATE]: false
+            authenticated: true
           }),
           authentication
         }, Strategy2.result));
@@ -209,7 +209,7 @@ describe('authentication/core', () => {
 
         assert.deepStrictEqual(result, Object.assign({
           authentication,
-          params: { [AUTHENTICATE]: false }
+          params: { authenticated: true }
         }, Strategy2.result));
       });
 

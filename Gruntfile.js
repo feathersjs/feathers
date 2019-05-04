@@ -3,24 +3,18 @@ const server = require('./packages/client/test/server');
 module.exports = function (grunt) {
   const browsers = [{
     browserName: 'firefox',
-    platform: 'Windows 10'
-  }, {
-    browserName: 'googlechrome',
     platform: 'linux'
-  },
-  // {
-  //   browserName: 'safari',
-  //   platform: 'OS X 10.11',
-  //   version: '9.0'
-  // },
-  {
+  }, {
+    browserName: 'chrome',
+    platform: 'linux'
+  }, {
     browserName: 'internet explorer',
     platform: 'Windows 8',
     version: '10'
   }, {
     browserName: 'internet explorer',
     platform: 'Windows 10',
-    version: '11'
+    version: '11.285'
   }];
 
   grunt.registerTask('server', 'Start the test server', function () {
