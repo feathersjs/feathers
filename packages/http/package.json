@@ -1,0 +1,40 @@
+{
+  "name": "@feathersjs/http",
+  "description": "HTTP/HTTP2 transport for feathers",
+  "version": "1.0.0",
+  "homepage": "https://feathersjs.com",
+  "main": "src",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "keywords": [
+    "feathers",
+    "http",
+    "http2"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git"
+  },
+  "author": {
+    "name": "Feathers contributors",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [
+    {
+      "name": "Saleel",
+      "url": "https://www.github.com/saleel"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "engines": {
+    "node": ">= 6"
+  },
+  "devDependencies": {
+    "mocha": "^6.1.4"
+  }
+}

@@ -19,7 +19,8 @@
         "packages/rest-client/package.json",
         "packages/socketio-client/package.json",
         "packages/socketio/package.json",
-        "packages/transport-commons/package.json"
+        "packages/transport-commons/package.json",
+        "packages/http/package.json"
       ]
     }
   }
