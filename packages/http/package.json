@@ -34,7 +34,13 @@
   "engines": {
     "node": ">= 6"
   },
+  "dependencies": {
+    "@feathersjs/errors": "^4.0.0-pre.0",
+    "@feathersjs/transport-commons": "^4.0.0-pre.0"
+  },
   "devDependencies": {
-    "mocha": "^6.1.4"
+    "mocha": "^6.1.4",
+    "@feathersjs/feathers": "^4.0.0-pre.0",
+    "@feathersjs/tests": "^4.0.0-pre.0"
   }
 }
