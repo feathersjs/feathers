@@ -42,7 +42,6 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       throw new NotAuthenticated(`Could not find entity service`);
     }
 
-    // @ts-ignore
     return entityService.get(id, params);
   }
 

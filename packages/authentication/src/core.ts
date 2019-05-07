@@ -1,5 +1,5 @@
 import { promisify } from 'util';
-import { merge } from 'lodash';
+import { merge, omit } from 'lodash';
 import jsonwebtoken, { SignOptions, Secret, VerifyOptions } from 'jsonwebtoken';
 import uuidv4 from 'uuid/v4';
 import { NotAuthenticated } from '@feathersjs/errors';
@@ -141,6 +141,16 @@ export class AuthenticationBase {
     // Returns all strategies for a list of names (including undefined)
     return names.map(name => this.strategies[name])
       .filter(current => !!current);
+  }
+
+  /**
+   * Returns the params that combine the original parameters and
+   * an authentication result.
+   * @param authResult The authentication result
+   * @param params The original parameters
+   */
+  getParams (authResult: AuthenticationResult, params: Params) {
+    return merge({}, params, omit(authResult, 'accessToken'));
   }
 
   /**
