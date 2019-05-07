@@ -37,7 +37,9 @@ module.exports = (app = feathers()) => {
     after: {
       all: protect('password'),
       get: [context => {
-        context.result.fromGet = true;
+        if (context.params.provider) {
+          context.result.fromGet = true;
+        }
 
         return context;
       }]

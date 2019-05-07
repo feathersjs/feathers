@@ -60,7 +60,7 @@ describe('authentication/jwt', () => {
           return context;
         }]
       }
-    })
+    });
 
     user = await app.service('users').create({
       name: 'David'
