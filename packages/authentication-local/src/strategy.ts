@@ -76,6 +76,10 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
       throw new NotAuthenticated('Could not get local entity');
     }
 
+    if (!params.provider) {
+      return result;
+    }
+
     return entityService.get(result[entityId], {
       ...params,
       [entity]: result

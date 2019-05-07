@@ -50,6 +50,18 @@ describe('authentication/jwt', () => {
       }
     });
 
+    app.service('users').hooks({
+      after: {
+        get: [context => {
+          if (context.params.provider) {
+            context.result.isExternal = true;
+          }
+
+          return context;
+        }]
+      }
+    })
+
     user = await app.service('users').create({
       name: 'David'
     });
@@ -59,6 +71,23 @@ describe('authentication/jwt', () => {
     });
 
     payload = await service.verifyAccessToken(accessToken);
+  });
+
+  it('getEntity', async () => {
+    const [ strategy ] = app.service('authentication').getStrategies('jwt') as JWTStrategy[];
+
+    let entity = await strategy.getEntity(user.id, {});
+
+    assert.deepStrictEqual(entity, user);
+
+    entity = await strategy.getEntity(user.id, {
+      provider: 'rest'
+    });
+
+    assert.deepStrictEqual(entity, {
+      ...user,
+      isExternal: true
+    });
   });
 
   describe('with authenticate hook', () => {
@@ -104,6 +133,21 @@ describe('authentication/jwt', () => {
       } catch (error) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, `Could not find entity service`);
+      }
+    });
+
+    it('fails when accessToken is not set', async () => {
+      try {
+        await app.service('protected').get('test', {
+          provider: 'rest',
+          authentication: {
+            strategy: 'jwt'
+          }
+        });
+        assert.fail('Should never get here');
+      } catch (error) {
+        assert.strictEqual(error.name, 'NotAuthenticated');
+        assert.strictEqual(error.message, 'No access token');
       }
     });
 

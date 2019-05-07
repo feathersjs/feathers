@@ -34,7 +34,14 @@ module.exports = (app = feathers()) => {
     before: {
       create: hashPassword('password')
     },
-    after: protect('password')
+    after: {
+      all: protect('password'),
+      get: [context => {
+        context.result.fromGet = true;
+
+        return context;
+      }]
+    }
   });
 
   return app;

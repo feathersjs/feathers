@@ -1,4 +1,4 @@
-import { flatten, omit } from 'lodash';
+import { flatten, omit, merge } from 'lodash';
 import { HookContext } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
 import Debug from 'debug';
@@ -55,7 +55,7 @@ export default (originalSettings: string|AuthenticateHookSettings, ...originalSt
 
       const authResult = await authService.authenticate(authentication, authParams, ...strategies);
 
-      context.params = authService.getParams(authResult, params);
+      context.params = merge({}, params, omit(authResult, 'accessToken'));
 
       return context;
     } else if (!authentication && provider) {
