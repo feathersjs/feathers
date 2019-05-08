@@ -12,8 +12,7 @@ module.exports = (app = feathers()) => {
     entity: 'user',
     service: 'users',
     secret: 'supersecret',
-    jwtStrategies: [ 'local', 'jwt' ],
-    httpStrategies: [ 'jwt' ],
+    authStrategies: [ 'local', 'jwt' ],
     local: {
       usernameField: 'email',
       passwordField: 'password'
@@ -35,7 +34,16 @@ module.exports = (app = feathers()) => {
     before: {
       create: hashPassword('password')
     },
-    after: protect('password')
+    after: {
+      all: protect('password'),
+      get: [context => {
+        if (context.params.provider) {
+          context.result.fromGet = true;
+        }
+
+        return context;
+      }]
+    }
   });
 
   return app;

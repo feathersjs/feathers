@@ -1,10 +1,10 @@
 const express = require('express');
 const Proto = require('uberproto');
-const errorHandler = require('@feathersjs/errors/handler');
-const notFound = require('@feathersjs/errors/not-found');
 const debug = require('debug')('@feathersjs/express');
 
+const errorHandler = require('./error-handler');
 const authentication = require('./authentication');
+const notFound = require('./not-found-handler');
 const rest = require('./rest');
 
 function feathersExpress (feathersApp) {

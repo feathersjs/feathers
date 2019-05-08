@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/feathers",
   "description": "A REST and realtime API layer for modern applications.",
-  "version": "4.0.0-pre.0",
+  "version": "4.0.0-pre.1",
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",

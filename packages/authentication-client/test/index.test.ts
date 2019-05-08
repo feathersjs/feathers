@@ -41,18 +41,18 @@ describe('@feathersjs/authentication-client', () => {
     assert.strictEqual(typeof app.logout, 'function');
   });
 
-  it('setJwt, getJwt, removeJwt', async () => {
+  it('setAccessToken, getAccessToken, removeAccessToken', async () => {
     const auth = app.authentication;
     const token = 'hi';
 
-    await auth.setJwt(token);
+    await auth.setAccessToken(token);
 
-    const res = await auth.getJwt();
+    const res = await auth.getAccessToken();
 
     assert.strictEqual(res, token);
 
-    await auth.removeJwt();
-    assert.strictEqual(await auth.getJwt(), null);
+    await auth.removeAccessToken();
+    assert.strictEqual(await auth.getAccessToken(), null);
   });
 
   it('getFromLocation', async () => {
@@ -73,9 +73,17 @@ describe('@feathersjs/authentication-client', () => {
     dummyLocation = { search: 'access_token=testing' } as Location;
     token = await auth.getFromLocation(dummyLocation);
 
-    assert.strictEqual(token, 'testing');
-    assert.strictEqual(dummyLocation.search, '');
     assert.strictEqual(await auth.getFromLocation({} as Location), null);
+
+    try {
+      await auth.getFromLocation({
+        hash: 'error=Error Happened&x=y'
+      } as Location);
+      assert.fail('Should never get here');
+    } catch (error) {
+      assert.strictEqual(error.name, 'NotAuthenticated');
+      assert.strictEqual(error.message, 'Error Happened');
+    }
   });
 
   it('authenticate, authentication hook, login event', () => {
@@ -96,7 +104,7 @@ describe('@feathersjs/authentication-client', () => {
         user
       });
 
-      return app.authentication.getJwt();
+      return app.authentication.getAccessToken();
     }).then(at => {
       assert.strictEqual(at, accessToken, 'Set accessToken in storage');
 

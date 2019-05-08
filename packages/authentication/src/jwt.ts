@@ -1,4 +1,5 @@
 import { NotAuthenticated } from '@feathersjs/errors';
+import { omit } from 'lodash';
 import { AuthenticationRequest } from './core';
 import { Params } from '@feathersjs/feathers';
 import { IncomingMessage } from 'http';
@@ -36,22 +37,28 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
    * @param params Service call parameters
    */
   async getEntity (id: string, params: Params) {
+    const { entity } = this.configuration;
     const entityService = this.entityService;
 
     if (entityService === null) {
       throw new NotAuthenticated(`Could not find entity service`);
     }
 
-    // @ts-ignore
-    return entityService.get(id, params);
+    const result = await entityService.get(id, omit(params, 'provider'));
+
+    if (!params.provider) {
+      return result;
+    }
+
+    return entityService.get(id, { ...params, [entity]: result });
   }
 
   async authenticate (authentication: AuthenticationRequest, params: Params) {
-    const { accessToken, strategy } = authentication;
+    const { accessToken } = authentication;
     const { entity } = this.configuration;
 
-    if (!accessToken || (strategy && strategy !== this.name)) {
-      throw new NotAuthenticated('Not authenticated');
+    if (!accessToken) {
+      throw new NotAuthenticated('No access token');
     }
 
     const payload = await this.authentication.verifyAccessToken(accessToken, params.jwt);

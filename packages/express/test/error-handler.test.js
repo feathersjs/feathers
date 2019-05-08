@@ -2,6 +2,7 @@
 /* tslint:disable:no-unused-expression */
 const express = require('express');
 
+const errors = require('@feathersjs/errors');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
@@ -9,7 +10,6 @@ const request = require('request');
 const fs = require('fs');
 const { join } = require('path');
 
-const errors = require('../lib');
 const handler = require('../lib/error-handler');
 
 chai.use(sinonChai);
@@ -28,10 +28,6 @@ const jsonHandler = sinon.spy(function (error, req, res, next) {
 describe('error-handler', () => {
   it('is CommonJS compatible', () => {
     expect(typeof require('../lib/error-handler')).to.equal('function');
-  });
-
-  it('can be required at the root', () => {
-    expect(typeof require('../handler')).to.equal('function');
   });
 
   it('is import compatible', () => {

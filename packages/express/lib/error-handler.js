@@ -1,5 +1,5 @@
+const errors = require('@feathersjs/errors');
 const path = require('path');
-const errors = require('./index');
 
 const defaults = {
   public: path.resolve(__dirname, 'public'),

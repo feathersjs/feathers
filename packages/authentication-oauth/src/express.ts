@@ -1,7 +1,6 @@
 // @ts-ignore
 import { express as grantExpress } from 'grant';
 import Debug from 'debug';
-import session from 'express-session';
 import querystring from 'querystring';
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationService, AuthenticationResult } from '@feathersjs/authentication';
@@ -10,30 +9,27 @@ import {
   original as express
 } from '@feathersjs/express';
 import { OauthSetupSettings } from './utils';
+import { OAuthStrategy } from '.';
 
 const grant = grantExpress();
 const debug = Debug('@feathersjs/authentication-oauth/express');
 
 export default (options: OauthSetupSettings) => {
   return (feathersApp: Application) => {
-    const { path, authService, linkStrategy } = options;
+    const { authService, linkStrategy } = options;
     const app = feathersApp as ExpressApplication;
     const config = app.get('grant');
-    const secret = Math.random().toString(36).substring(7);
-
+    
     if (!config) {
       debug('No grant configuration found, skipping Express oAuth setup');
       return;
     }
-
+    
+    const { path } = config.defaults;
     const grantApp = grant(config);
     const authApp = express();
 
-    authApp.use(session({
-      secret,
-      resave: true,
-      saveUninitialized: true
-    }));
+    authApp.use(options.expressSession);
 
     authApp.get('/:name', (req, res) => {
       const { name } = req.params;
@@ -56,15 +52,21 @@ export default (options: OauthSetupSettings) => {
       const { name } = req.params;
       const { accessToken, grant } = req.session;
       const service: AuthenticationService = app.service(authService);
+      const [ strategy ] = service.getStrategies(name) as OAuthStrategy[];
       const sendResponse = async (data: AuthenticationResult|Error) => {
-        const redirect = await options.getRedirect(service, data);
+        try {
+          const redirect = await strategy.getRedirect(data);
 
-        if (redirect !== null) {
-          res.redirect(redirect);
-        } else if (data instanceof Error) {
-          next(data);
-        } else {
-          res.json(data);
+          if (redirect !== null) {
+            res.redirect(redirect);
+          } else if (data instanceof Error) {
+            throw data;
+          } else {
+            res.json(data);
+          }
+        } catch (error) {
+          debug('oAuth error', error);
+          next(error);
         }
       };
 
@@ -73,8 +75,7 @@ export default (options: OauthSetupSettings) => {
           grant.response : req.query;
 
         const params = {
-          provider: 'rest',
-          jwtStrategies: [ name ],
+          authStrategies: [ name ],
           authentication: accessToken ? {
             strategy: linkStrategy,
             accessToken
@@ -95,7 +96,7 @@ export default (options: OauthSetupSettings) => {
         await sendResponse(authResult);
       } catch (error) {
         debug('Received oAuth authentication error', error);
-        sendResponse(error);
+        await sendResponse(error);
       }
     });
 
