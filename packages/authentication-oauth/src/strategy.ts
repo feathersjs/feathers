@@ -38,7 +38,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
   async getEntityData (profile: OAuthProfile, _existingEntity: any, _params: Params) {
     return {
-      [`${this.name}Id`]: profile.id
+      [`${this.name}Id`]: profile.sub || profile.id
     };
   }
 
