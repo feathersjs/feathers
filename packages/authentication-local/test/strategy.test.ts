@@ -1,4 +1,5 @@
 import assert from 'assert';
+import { omit } from 'lodash';
 import { LocalStrategy } from '../src';
 // @ts-ignore
 import createApplication from './fixture';
@@ -42,6 +43,29 @@ describe('@feathersjs/authentication-local/strategy', () => {
     } catch (error) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Invalid login');
+    }
+  });
+
+  it('getEntity', async () => {
+    const [ strategy ] = app.service('authentication').getStrategies('local');
+    let entity = await strategy.getEntity(user, {});
+
+    assert.deepStrictEqual(entity, user);
+
+    entity = await strategy.getEntity(user, {
+      provider: 'testing'
+    });
+
+    assert.deepStrictEqual(entity, {
+      ...omit(user, 'password'),
+      fromGet: true
+    });
+
+    try {
+      await strategy.getEntity({}, {});
+      assert.fail('Should never get here');
+    } catch (error) {
+      assert.strictEqual(error.message, 'Could not get local entity');
     }
   });
 
@@ -128,6 +152,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
     assert.ok(accessToken);
     assert.strictEqual(authResult.user.email, email);
     assert.strictEqual(authResult.user.passsword, undefined);
+    assert.ok(authResult.user.fromGet);
 
     const decoded = await authService.verifyAccessToken(accessToken);
 

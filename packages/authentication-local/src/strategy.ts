@@ -28,6 +28,7 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
       hashSize: 10,
       service: authConfig.service,
       entity: authConfig.entity,
+      entityId: authConfig.entityId,
       errorMessage: 'Invalid login',
       entityPasswordField: config.passwordField,
       entityUsernameField: config.usernameField,
@@ -59,12 +60,30 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
     if (!Array.isArray(list) || list.length === 0) {
       debug(`No entity found`);
 
-      return Promise.reject(new NotAuthenticated(errorMessage));
+      throw new NotAuthenticated(errorMessage);
     }
 
     const [ entity ] = list;
 
     return entity;
+  }
+
+  async getEntity (result: any, params: Params) {
+    const { entityService } = this;
+    const { entityId = entityService.id, entity } = this.configuration;
+
+    if (!entityId || result[entityId] === undefined) {
+      throw new NotAuthenticated('Could not get local entity');
+    }
+
+    if (!params.provider) {
+      return result;
+    }
+
+    return entityService.get(result[entityId], {
+      ...params,
+      [entity]: result
+    });
   }
 
   async comparePassword (entity: any, password: string) {
@@ -101,11 +120,9 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
 
     await this.comparePassword(result, password);
 
-    const authEntity = await (params.provider ? this.findEntity(username, params) : result);
-
     return {
       authentication: { strategy: this.name },
-      [entity]: authEntity
+      [entity]: await this.getEntity(result, params)
     };
   }
 }
