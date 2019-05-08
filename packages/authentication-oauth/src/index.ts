@@ -49,7 +49,7 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
   app.set('grant', grant);
 };
 
-export const express = (settings: OauthSetupSettings = {}) => (app: Application) => {
+export const express = (settings: Partial<OauthSetupSettings> = {}) => (app: Application) => {
   const options = getDefaultSettings(app, settings);
 
   app.configure(setup(options));
