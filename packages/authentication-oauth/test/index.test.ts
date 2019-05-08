@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert';
 import feathers from '@feathersjs/feathers';
-import { setup, express } from '../src';
+import { setup, express, OauthSetupSettings } from '../src';
 import { AuthenticationService } from '@feathersjs/authentication/lib';
 
 describe('@feathersjs/authentication-oauth', () => {
@@ -9,7 +9,7 @@ describe('@feathersjs/authentication-oauth', () => {
       const app = feathers();
 
       try {
-        app.configure(setup({ authService: 'something' }));
+        app.configure(setup({ authService: 'something' } as OauthSetupSettings));
         assert.fail('Should never get here');
       } catch (error) {
         assert.equal(error.message,

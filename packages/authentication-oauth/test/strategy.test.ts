@@ -4,12 +4,35 @@ import { AuthenticationService } from '@feathersjs/authentication/lib';
 
 describe('@feathersjs/authentication-oauth/strategy', () => {
   const authService: AuthenticationService = app.service('authentication');
-  const [strategy] = authService.getStrategies('test') as TestOAuthStrategy[];
+  const [ strategy ] = authService.getStrategies('test') as TestOAuthStrategy[];
 
   it('initializes, has .entityId and configuration', () => {
     assert.ok(strategy);
     assert.strictEqual(strategy.entityId, 'id');
     assert.ok(strategy.configuration.entity);
+  });
+
+  it('getRedirect', async () => {
+    app.get('authentication').oauth.redirect = '/home';
+
+    let redirect = await strategy.getRedirect({ accessToken: 'testing' });
+    assert.equal(redirect, '/home#access_token=testing');
+
+    redirect = await strategy.getRedirect(new Error('something went wrong'));
+    assert.equal(redirect, '/home#error=something%20went%20wrong');
+
+    redirect = await strategy.getRedirect(new Error());
+    assert.equal(redirect, '/home#error=OAuth%20Authentication%20not%20successful');
+
+    app.get('authentication').oauth.redirect = '/home?';
+
+    redirect = await strategy.getRedirect({ accessToken: 'testing' });
+    assert.equal(redirect, '/home?access_token=testing');
+
+    delete app.get('authentication').oauth.redirect;
+
+    redirect = await strategy.getRedirect({ accessToken: 'testing' });
+    assert.equal(redirect, null);
   });
 
   it('getProfile', async () => {
