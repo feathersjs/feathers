@@ -6,7 +6,6 @@ describe('@feathersjs/authentication-oauth/utils', () => {
   it('getDefaultSettings', () => {
     const settings = getDefaultSettings(app);
 
-    assert.equal(settings.path, '/auth');
     assert.equal(settings.authService, 'authentication');
     assert.equal(settings.linkStrategy, 'jwt');
   });

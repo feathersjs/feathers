@@ -11,25 +11,26 @@ const debug = Debug('@feathersjs/authentication-oauth');
 export { OauthSetupSettings, OAuthStrategy, OAuthProfile };
 
 export const setup = (options: OauthSetupSettings) => (app: Application) => {
-  const path = options.authService;
-  const service: AuthenticationService = app.service(path);
+  const authPath = options.authService;
+  const service: AuthenticationService = app.service(authPath);
 
   if (!service) {
-    throw new Error(`'${path}' authentication service must exist before registering @feathersjs/authentication-oauth`);
+    throw new Error(`'${authPath}' authentication service must exist before registering @feathersjs/authentication-oauth`);
   }
 
   const { oauth } = service.configuration;
 
   if (!oauth) {
-    debug(`No oauth configuration found at '${path}'. Skipping oAuth setup.`);
+    debug(`No oauth configuration found at '${authPath}'. Skipping oAuth setup.`);
     return;
   }
 
   const { strategyNames } = service;
+  const { path = '/auth' } = oauth.defaults;
   const grant = merge({
     defaults: {
+      path,
       host: `${app.get('host')}:${app.get('port')}`,
-      path: '/auth',
       protocol: app.get('env') === 'production' ? 'https' : 'http',
       transport: 'session'
     }
@@ -37,7 +38,7 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
 
   each(grant, (value, key) => {
     if (key !== 'defaults') {
-      value.callback = value.callback || `/auth/${key}/authenticate`;
+      value.callback = value.callback || `${path}/${key}/authenticate`;
 
       if (!strategyNames.includes(key)) {
         debug(`Registering oAuth default strategy for '${key}'`);

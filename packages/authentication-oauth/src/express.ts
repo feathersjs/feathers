@@ -16,15 +16,16 @@ const debug = Debug('@feathersjs/authentication-oauth/express');
 
 export default (options: OauthSetupSettings) => {
   return (feathersApp: Application) => {
-    const { path, authService, linkStrategy } = options;
+    const { authService, linkStrategy } = options;
     const app = feathersApp as ExpressApplication;
     const config = app.get('grant');
-
+    
     if (!config) {
       debug('No grant configuration found, skipping Express oAuth setup');
       return;
     }
-
+    
+    const { path } = config.defaults;
     const grantApp = grant(config);
     const authApp = express();
 
@@ -74,7 +75,6 @@ export default (options: OauthSetupSettings) => {
           grant.response : req.query;
 
         const params = {
-          provider: 'rest',
           authStrategies: [ name ],
           authentication: accessToken ? {
             strategy: linkStrategy,

@@ -3,7 +3,6 @@ import session from 'express-session';
 import { Application } from '@feathersjs/feathers';
 
 export interface OauthSetupSettings {
-  path: string;
   authService: string;
   linkStrategy: string;
   expressSession: RequestHandler;
@@ -11,7 +10,6 @@ export interface OauthSetupSettings {
 
 export const getDefaultSettings = (app: Application, other?: Partial<OauthSetupSettings>) => {
   const defaults: OauthSetupSettings = {
-    path: '/auth',
     authService: app.get('defaultAuthentication'),
     linkStrategy: 'jwt',
     expressSession: session({
