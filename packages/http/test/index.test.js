@@ -2,8 +2,9 @@ const { it, describe } = require('mocha');
 const assert = require('assert');
 const feathers = require('@feathersjs/feathers');
 const { Service } = require('@feathersjs/tests/lib/fixture');
-// const { crud } = require('@feathersjs/tests/lib/crud');
+const { crud } = require('@feathersjs/tests/lib/crud');
 const axios = require('axios');
+const bodyParser = require('body-parser');
 
 const http = require('../src');
 
@@ -55,6 +56,7 @@ describe('@feathersjs/http', () => {
       app = http(feathers());
       app.use('/', Service);
       app.use('todo', Service);
+      app.use(bodyParser.json());
 
       axiosInstance = axios.create({
         baseURL: 'http://localhost:' + PORT
@@ -97,6 +99,52 @@ describe('@feathersjs/http', () => {
       });
     });
 
-    // crud('Services', 'todo', PORT);
+    it('should create and return valid result', done => {
+      axiosInstance.post('/todo', { data: { description: 'groceries' } }).then(response => {
+        assert.equal(response.status, 201);
+        const todoItem = response.data;
+        assert.deepEqual(todoItem, {
+          id: 42,
+          status: 'created'
+        });
+        done();
+      });
+    });
+
+    it('should update and return valid result', done => {
+      axiosInstance.put('/todo/42', { data: { description: 'buy groceries' } }).then(response => {
+        assert.equal(response.status, 200);
+        const todoItem = response.data;
+        assert.deepEqual(todoItem, {
+          id: 42,
+          status: 'updated'
+        });
+        done();
+      });
+    });
+
+    it('should patch and return valid result', done => {
+      axiosInstance.patch('/todo/42', { data: { description: 'buy groceries' } }).then(response => {
+        assert.equal(response.status, 200);
+        const todoItem = response.data;
+        assert.deepEqual(todoItem, {
+          id: 42,
+          status: 'patched'
+        });
+        done();
+      });
+    });
+
+    it('should remove and return valid result', done => {
+      axiosInstance.delete('/todo/233').then(response => {
+        assert.equal(response.status, 200);
+        const todoItem = response.data;
+        assert.deepEqual(todoItem, {
+          id: 233,
+        });
+        done();
+      });
+    });
+
   });
 });

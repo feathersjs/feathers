@@ -29,7 +29,7 @@ function getServiceMethodArguments({
 }) {
   const args = [];
 
-  if (["get", "delete", "update", "patch"].includes(serviceMethod)) {
+  if (["get", "remove", "update", "patch"].includes(serviceMethod)) {
     args.push(id);
   }
 
