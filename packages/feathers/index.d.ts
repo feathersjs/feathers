@@ -135,7 +135,7 @@ export interface HooksObject {
     before: Partial<HookMap> | Hook | Hook[];
     after: Partial<HookMap> | Hook | Hook[];
     error: Partial<HookMap> | Hook | Hook[];
-    finally: Partial<HookMap> | Hook | Hook[];
+    finally?: Partial<HookMap> | Hook | Hook[];
 }
 
 // todo: figure out what to do: These methods don't actually need to be implemented, so they can be undefined at runtime. Yet making them optional gets cumbersome in strict mode.
