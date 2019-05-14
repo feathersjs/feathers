@@ -113,6 +113,32 @@ describe('@feathersjs/transport-commons', () => {
   });
 
   describe('legacy method socket event format', () => {
+    it('legacy `authenticate`', done => {
+      const socket = new EventEmitter();
+      const data = {
+        test: 'data'
+      };
+
+      app.set('defaultAuthentication', 'myservice');
+      provider.emit('connection', socket);
+
+      socket.emit('authenticate', data, (error: any, result: any) => {
+        try {
+          const params = Object.assign({
+            query: {},
+            route: {},
+            connection
+          }, connection);
+
+          assert.ok(!error);
+          assert.deepStrictEqual(result, Object.assign({ params }, data));
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+    });
+    
     it('.get without params', done => {
       const socket = new EventEmitter();
 
