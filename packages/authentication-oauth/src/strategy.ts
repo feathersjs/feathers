@@ -16,13 +16,14 @@ export interface OAuthProfile {
 
 export class OAuthStrategy extends AuthenticationBaseStrategy {
   get configuration () {
-    const { entity, service, entityId } = this.authentication.configuration;
+    const { entity, service, entityId, oauth } = this.authentication.configuration;
+    const config = oauth[this.name];
 
     return {
       entity,
       service,
       entityId,
-      ...super.configuration
+      ...config
     };
   }
 
