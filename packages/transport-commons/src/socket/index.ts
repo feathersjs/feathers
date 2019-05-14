@@ -20,6 +20,13 @@ export function socket ({ done, emit, socketKey, getParams }: SocketOptions) {
     app.configure(routing());
 
     app.on('publish', getDispatcher(emit, socketKey));
+    app.on('disconnect', connection => {
+      const { channels } = app;
+
+      if (channels.length) {
+        app.channel(app.channels).leave(connection);
+      }
+    });
 
     // `connection` event
     done.then(provider => provider.on('connection', (connection: any) =>
