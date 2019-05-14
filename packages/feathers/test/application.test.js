@@ -18,8 +18,8 @@ describe('Feathers application', () => {
   it('sets the version on main and app instance', () => {
     const app = feathers();
 
-    assert.strictEqual(feathers.version, '4.0.0-pre.0');
-    assert.strictEqual(app.version, '4.0.0-pre.0');
+    assert.ok(feathers.version > '4.0.0');
+    assert.ok(app.version > '4.0.0');
   });
 
   it('is an event emitter', done => {
