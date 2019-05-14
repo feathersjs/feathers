@@ -65,13 +65,7 @@ function configureSocketio (port, options, config) {
             });
 
             io.use((socket, next) => {
-              socket.once('disconnect', () => {
-                const { channels } = app;
-
-                if (channels.length) {
-                  app.channel(app.channels).leave(getParams(socket));
-                }
-              });
+              socket.once('disconnect', () => app.emit('disconnect', getParams(socket)));
               next();
             });
 
