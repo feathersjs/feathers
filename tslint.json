@@ -33,7 +33,8 @@
     "max-classes-per-file": false,
     "only-arrow-functions": false,
     "no-empty": false,
-    "no-shadowed-variable": false
+    "no-shadowed-variable": false,
+    "no-namespace": [ true, "allow-declarations" ]
   },
   "jsRules": true,
   "rulesDirectory": []

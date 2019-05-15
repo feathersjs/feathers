@@ -190,6 +190,24 @@ describe('@feathersjs/primus', () => {
     });
   });
 
+  it('connection and disconnect events (#1243, #1238)', (done) => {
+    const { app, primus } = options;
+    const mySocket = new primus.Socket('http://localhost:7888?channel=dctest');
+
+    app.on('connection', connection => {
+      if (connection.channel === 'dctest') {
+        assert.strictEqual(connection.channel, 'dctest');
+        app.once('disconnect', disconnection => {
+          assert.strictEqual(disconnection.channel, 'dctest');
+          done();
+        });
+        setTimeout(() => mySocket.end(), 100);
+      }
+    });
+
+    assert.ok(mySocket);
+  });
+
   describe('Service method calls', () => {
     describe('(\'method\', \'service\')  event format', () => {
       describe('Service', () => methodTests('todo', options));

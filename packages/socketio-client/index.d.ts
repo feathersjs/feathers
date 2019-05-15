@@ -1,13 +1,15 @@
-// Type definitions for @feathersjs/socketio-client 1.0
-// Project: https://feathersjs.com
-// Definitions by: Jan Lohage <https://github.com/j2L4e>
-// Definitions: https://github.com/feathersjs-ecosystem/feathers-typescript
-// TypeScript Version: 2.3
+import 'socket.io-client';
 
-/// <reference types="socket.io-client" />
+declare const socketioClient: FeathersSocketIOClient;
+export = socketioClient;
 
-export default function feathersSocketIOClient (socket: SocketIOClient.Socket, options?: FeathersSocketIOClientOptions): () => void;
+interface FeathersSocketIOClient {
+    (socket: SocketIOClient.Socket, options?: socketioClient.Options): () => void;
+    default: FeathersSocketIOClient;
+}
 
-export interface FeathersSocketIOClientOptions {
-    timeout?: number;
+declare namespace socketioClient {
+    interface Options {
+        timeout?: number;
+    }
 }

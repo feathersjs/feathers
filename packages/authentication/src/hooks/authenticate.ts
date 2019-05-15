@@ -1,4 +1,4 @@
-import { flatten, merge, omit } from 'lodash';
+import { flatten, omit, merge } from 'lodash';
 import { HookContext } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
 import Debug from 'debug';
@@ -49,7 +49,7 @@ export default (originalSettings: string|AuthenticateHookSettings, ...originalSt
     }
 
     if (authentication) {
-      const authParams = omit(params, 'provider', 'authentication');
+      const authParams = omit(params, 'provider', 'authentication', 'query');
 
       debug('Authenticating with', authentication, strategies);
 

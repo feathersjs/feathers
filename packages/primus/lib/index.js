@@ -43,13 +43,14 @@ function configurePrimus (config, configurer) {
 
             primus.use('feathers', function (req, res, next) {
               req.feathers = {
-                headers: Object.keys(req.headers).reduce((key, result) => {
+                headers: Object.keys(req.headers).reduce((result, key) => {
                   const value = req.headers[key];
 
-                  return typeof value === 'object' ? result : {
-                    ...result,
-                    [key]: value
-                  };
+                  if (typeof value !== 'object') {
+                    result[key] = value;
+                  }
+
+                  return result;
                 }, {}),
                 provider: 'primus'
               };
@@ -63,13 +64,7 @@ function configurePrimus (config, configurer) {
               })
             );
 
-            primus.on('disconnection', spark => {
-              const { channels } = app;
-
-              if (channels.length) {
-                app.channel(app.channels).leave(getParams(spark));
-              }
-            });
+            primus.on('disconnection', spark => app.emit('disconnect', getParams(spark)));
           }
 
           if (typeof configurer === 'function') {

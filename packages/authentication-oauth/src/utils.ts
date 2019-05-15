@@ -1,38 +1,22 @@
-import querystring from 'querystring';
+import { RequestHandler } from 'express';
+import session from 'express-session';
 import { Application } from '@feathersjs/feathers';
-import { AuthenticationService, AuthenticationResult } from '@feathersjs/authentication';
 
 export interface OauthSetupSettings {
-  path?: string;
-  authService?: string;
-  linkStrategy?: string;
-  getRedirect? (service: AuthenticationService, data: AuthenticationResult|Error): Promise<string>;
+  authService: string;
+  linkStrategy: string;
+  expressSession: RequestHandler;
 }
 
-export const getRedirect = async (service: AuthenticationService, data: AuthenticationResult|Error) => {
-  const { redirect } = service.configuration.oauth;
-
-  if (!redirect) {
-    return null;
-  }
-
-  const separator = redirect.endsWith('?') ? '' : '#';
-  const authResult: AuthenticationResult = data;
-  const query = authResult.accessToken ? {
-    access_token: authResult.accessToken
-  } : {
-    error: data.message || 'OAuth Authentication not successful'
-  };
-
-  return redirect + separator + querystring.stringify(query);
-};
-
-export const getDefaultSettings = (app: Application, other?: OauthSetupSettings) => {
+export const getDefaultSettings = (app: Application, other?: Partial<OauthSetupSettings>) => {
   const defaults: OauthSetupSettings = {
-    path: '/auth',
     authService: app.get('defaultAuthentication'),
     linkStrategy: 'jwt',
-    getRedirect,
+    expressSession: session({
+      secret: Math.random().toString(36).substring(7),
+      saveUninitialized: true,
+      resave: true
+    }),
     ...other
   };
 
