@@ -20,7 +20,7 @@
   },
   "scripts": {
     "install": "lerna bootstrap",
-    "publish": "lerna publish",
+    "publish": "lerna publish && git commit -am \"Update version and changelog\" && git push origin master",
     "lint": "tslint 'packages/**/*.js' 'packages/**/*.ts' -c tslint.json --fix",
     "test": "npm run lint && nyc lerna run test",
     "test:client": "grunt"
