@@ -37,7 +37,6 @@
   "dependencies": {
     "@feathersjs/errors": "^4.0.0-pre.0",
     "@feathersjs/transport-commons": "^4.0.0-pre.0",
-    "body-parser": "^1.19.0",
     "middie": "^4.0.1",
     "querystring": "^0.2.0"
   },
@@ -45,6 +44,7 @@
     "@feathersjs/feathers": "^4.0.0-pre.0",
     "@feathersjs/tests": "^4.0.0-pre.0",
     "axios": "^0.18.0",
+    "body-parser": "^1.19.0",
     "mocha": "^6.1.4"
   }
 }
