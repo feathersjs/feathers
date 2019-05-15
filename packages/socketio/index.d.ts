@@ -1,19 +1,19 @@
-// Type definitions for @feathersjs/socketio 3.0
-// Project: https://feathersjs.com
-// Definitions by: Jan Lohage <https://github.com/j2L4e>
-// Definitions: https://github.com/feathersjs-ecosystem/feathers-typescript
-// TypeScript Version: 2.3
+import http from 'http';
+import io from 'socket.io';
 
-/// <reference types="@feathersjs/transport-commons"/>
-import Http from 'http';
-import SocketIO from 'socket.io';
+declare const socketio: FeathersSocketIO;
+export = socketio;
+
+interface FeathersSocketIO {
+  (callback?: (io: io.Server) => void): () => void;
+  (options: number | io.ServerOptions, callback?: (io: io.Server) => void): () => void;
+  (port: number, options?: io.ServerOptions, callback?: (io: io.Server) => void): () => void;
+  readonly SOCKET_KEY: unique symbol;
+  default: FeathersSocketIO;
+}
 
 declare module '@feathersjs/feathers' {
   interface Application<ServiceTypes = any> {
-    listen (port: number): Http.Server;
+    listen (port: number): http.Server;
   }
 }
-
-export default function feathersSocketIO (callback?: (io: SocketIO.Server) => void): () => void;
-export default function feathersSocketIO (options: number | SocketIO.ServerOptions, callback?: (io: SocketIO.Server) => void): () => void;
-export default function feathersSocketIO (port: number, options?: SocketIO.ServerOptions, callback?: (io: SocketIO.Server) => void): () => void;

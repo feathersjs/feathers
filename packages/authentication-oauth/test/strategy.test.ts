@@ -12,6 +12,12 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
     assert.ok(strategy.configuration.entity);
   });
 
+  it('reads configuration from the oauth key', () => {
+    const testConfigValue = Math.random();
+    app.get('authentication').oauth.test.hello = testConfigValue;
+    assert.strictEqual(strategy.configuration.hello, testConfigValue);
+  });
+
   it('getRedirect', async () => {
     app.get('authentication').oauth.redirect = '/home';
 

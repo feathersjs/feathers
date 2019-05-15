@@ -20,6 +20,13 @@ export function socket ({ done, emit, socketKey, getParams }: SocketOptions) {
     app.configure(routing());
 
     app.on('publish', getDispatcher(emit, socketKey));
+    app.on('disconnect', connection => {
+      const { channels } = app;
+
+      if (channels.length) {
+        app.channel(app.channels).leave(connection);
+      }
+    });
 
     // `connection` event
     done.then(provider => provider.on('connection', (connection: any) =>
@@ -36,6 +43,13 @@ export function socket ({ done, emit, socketKey, getParams }: SocketOptions) {
           runMethod(app, getParams(connection), path, method, args);
         });
       }
+
+      connection.on('authenticate', (...args: any[]) => {
+        if (app.get('defaultAuthentication')) {
+          debug('Got legacy authenticate event');
+          runMethod(app, getParams(connection), app.get('defaultAuthentication'), 'create', args);
+        }
+      });
     }));
 
     // Legacy `socket.emit('serviceName::methodName', ...args)` handlers

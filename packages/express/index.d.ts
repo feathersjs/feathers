@@ -1,58 +1,38 @@
-// Type definitions for @feathersjs/express 1.1
-// Project: https://feathersjs.com
-// Definitions by: Jan Lohage <https://github.com/j2L4e>
-//                 Aleksey Klimenko <https://github.com/DadUndead>
-// Definitions: https://github.com/feathersjs-ecosystem/feathers-typescript
-// TypeScript Version: 2.3
-
 import { Application as FeathersApplication } from '@feathersjs/feathers';
-import * as express from 'express';
+import express from 'express';
 
-declare const feathersExpress: (<T>(app: FeathersApplication<T>) => Application<T>);
-export default feathersExpress;
-export type Application<T = any> = express.Application & FeathersApplication<T>;
+declare const feathersExpress: FeathersExpress;
+export = feathersExpress;
 
-export function errorHandler (options?: {
-    public?: string,
-    logger?: { error?: (msg: string) => void }|null,
-    html?: any,
-    json?: any
-}): express.ErrorRequestHandler;
-export function notFound (): express.RequestHandler;
+type Express = typeof express;
 
-export const rest: {
-    (handler?: express.RequestHandler): () => void;
-    formatter: express.RequestHandler;
-};
+interface FeathersExpress extends Express {
+    <T>(app: FeathersApplication<T>): feathersExpress.Application<T>;
 
-/*
- * Re-export of the express package.
- **/
+    (app?: any): express.Express;
 
-export {
-    CookieOptions,
-    Errback,
-    ErrorRequestHandler,
-    Express,
-    Handler,
-    IRoute,
-    IRouter,
-    IRouterHandler,
-    IRouterMatcher,
-    json,
-    MediaType,
-    NextFunction,
-    Request,
-    RequestHandler,
-    RequestParamHandler,
-    Response,
-    Router,
-    RouterOptions,
-    Send,
-    static,
-    urlencoded
-} from 'express';
+    default: FeathersExpress;
 
-export function parseAuthentication (...strategies: string[]): express.RequestHandler;
-export function authenticate (...strategies: string[]): express.RequestHandler;
-export const original: () => express.Application;
+    rest: {
+        (handler?: express.RequestHandler): () => void;
+        formatter: express.RequestHandler;
+    };
+
+    original: Express;
+
+    errorHandler (options?: {
+        public?: string,
+        logger?: { error?: (msg: string) => void | null },
+        html?: any,
+        json?: any
+    }): express.ErrorRequestHandler;
+
+    notFound (): express.RequestHandler;
+
+    parseAuthentication (...strategies: string[]): express.RequestHandler;
+    authenticate (...strategies: string[]): express.RequestHandler;
+}
+
+declare namespace feathersExpress {
+    type Application<T = any> = express.Express & FeathersApplication<T>;
+}

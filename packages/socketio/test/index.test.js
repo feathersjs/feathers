@@ -189,6 +189,21 @@ describe.only('@feathersjs/socketio', () => {
     });
   });
 
+  it('connection and disconnect events (#1243, #1238)', (done) => {
+    const mySocket = io('http://localhost:7886?channel=dctest');
+
+    app.once('connection', connection => {
+      assert.strictEqual(connection.channel, 'dctest');
+      app.once('disconnect', disconnection => {
+        assert.strictEqual(disconnection.channel, 'dctest');
+        done();
+      });
+      setTimeout(() => mySocket.close(), 100);
+    });
+
+    assert.ok(mySocket);
+  });
+
   it('missing parameters in socket call works (#88)', done => {
     let service = app.service('todo');
     let old = { find: service.find };
