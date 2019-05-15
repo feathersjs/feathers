@@ -64,5 +64,6 @@
     "webpack-merge": "^4.2.1",
     "ws": "^6.2.1",
     "xhr2": "^0.1.4"
-  }
+  },
+  "gitHead": "d665b9470435d6db0ecddd1fb152ab4a87266c52"
 }

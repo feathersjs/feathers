@@ -40,5 +40,6 @@
   "dependencies": {
     "@feathersjs/commons": "^4.0.0-pre.0",
     "@feathersjs/errors": "^4.0.0-pre.2"
-  }
+  },
+  "gitHead": "d665b9470435d6db0ecddd1fb152ab4a87266c52"
 }

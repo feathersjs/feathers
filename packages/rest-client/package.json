@@ -57,5 +57,6 @@
     "rxjs": "^6.4.0",
     "shx": "^0.3.2",
     "superagent": "^5.0.2"
-  }
+  },
+  "gitHead": "d665b9470435d6db0ecddd1fb152ab4a87266c52"
 }
