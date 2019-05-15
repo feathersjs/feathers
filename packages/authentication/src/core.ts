@@ -149,7 +149,7 @@ export class AuthenticationBase {
    * @param optsOverride The options to extend the defaults (`configuration.jwtOptions`) with
    * @param secretOverride Use a different secret instead
    */
-  createAccessToken (payload: string | Buffer | object, optsOverride?: SignOptions, secretOverride?: Secret) {
+  async createAccessToken (payload: string | Buffer | object, optsOverride?: SignOptions, secretOverride?: Secret) {
     const { secret, jwtOptions } = this.configuration;
     // Use configuration by default but allow overriding the secret
     const jwtSecret = secretOverride || secret;
@@ -171,7 +171,7 @@ export class AuthenticationBase {
    * @param optsOverride The options to extend the defaults (`configuration.jwtOptions`) with
    * @param secretOverride Use a different secret instead
    */
-  verifyAccessToken (accessToken: string, optsOverride?: JwtVerifyOptions, secretOverride?: Secret) {
+  async verifyAccessToken (accessToken: string, optsOverride?: JwtVerifyOptions, secretOverride?: Secret) {
     const { secret, jwtOptions } = this.configuration;
     const jwtSecret = secretOverride || secret;
     const options = merge({}, jwtOptions, optsOverride);
@@ -183,8 +183,14 @@ export class AuthenticationBase {
       delete options.algorithm;
     }
 
-    // @ts-ignore
-    return verifyJWT(accessToken, jwtSecret, options);
+    try {
+      // @ts-ignore
+      const isValid = await verifyJWT(accessToken, jwtSecret, options);
+
+      return isValid;
+    } catch (error) {
+      throw new NotAuthenticated(error.message, error);
+    }
   }
 
   /**
