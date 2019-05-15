@@ -365,6 +365,7 @@ describe('authentication/core', () => {
 
           assert.fail('Should never get here');
         } catch (error) {
+          assert.strictEqual(error.name, 'NotAuthenticated');
           assert.ok(/jwt issuer invalid/.test(error.message));
         }
       });
@@ -374,7 +375,10 @@ describe('authentication/core', () => {
           await auth.verifyAccessToken(expiredToken);
           assert.fail('Should never get here');
         } catch (error) {
+          assert.strictEqual(error.name, 'NotAuthenticated');
           assert.strictEqual(error.message, 'jwt expired');
+          assert.strictEqual(error.data.name, 'TokenExpiredError');
+          assert.ok(error.data.expiredAt);
         }
       });
     });

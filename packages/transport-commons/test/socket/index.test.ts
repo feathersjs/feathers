@@ -138,7 +138,7 @@ describe('@feathersjs/transport-commons', () => {
         }
       });
     });
-    
+
     it('.get without params', done => {
       const socket = new EventEmitter();
 
