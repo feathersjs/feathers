@@ -146,5 +146,21 @@ describe('@feathersjs/http', () => {
       });
     });
 
+    it('should return proper error code and message in the service throw error', done => {
+      axiosInstance.get('/todo/dishes', { params: { error: true } })
+        .then(() => {
+          assert(false, 'No error occurred');
+        })
+        .catch(e => {
+          assert.strictEqual(e.response.status, 500);
+
+          const responseData = e.response.data;
+          assert.strictEqual(responseData.code, 500);
+          assert.strictEqual(responseData.message, 'Something for dishes went wrong');
+
+          done();
+        });
+    });
+
   });
 });

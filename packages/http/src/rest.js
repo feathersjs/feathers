@@ -1,4 +1,5 @@
 const querystring = require("querystring");
+const errorHandler = require('./error-handler');
 
 const methodMap = {
   POST: "create",
@@ -95,10 +96,7 @@ function rest(app) {
         res.end();
       })
       .catch(error => {
-        console.log(error.message);
-        res.statusCode = 500;
-        res.write(JSON.stringify(error));
-        res.end();
+        errorHandler(error, req, res);
       });
   }
 
