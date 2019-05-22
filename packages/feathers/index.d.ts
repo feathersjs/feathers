@@ -204,7 +204,7 @@ export interface Application<ServiceTypes = any> extends EventEmitter {
 
     setup (server?: any): this;
 
-    service<L extends keyof ServiceTypes> (location: L): ServiceTypes[L];
+    service<L extends keyof ServiceTypes> (location: L): Service<ServiceTypes[L]>;
 
     service (location: string): Service<any>;
 
