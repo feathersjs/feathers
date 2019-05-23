@@ -177,7 +177,7 @@ export type Service<T> = ServiceOverloads<T> & ServiceAddons<T> & ServiceMethods
 
 export type ServiceMixin = (service: Service<any>, path: string) => void;
 
-export interface Application<ServiceTypes = any> extends EventEmitter {
+export interface Application<ServiceTypes = never> extends EventEmitter {
     version: string;
 
     services: ServiceTypes;
@@ -206,7 +206,7 @@ export interface Application<ServiceTypes = any> extends EventEmitter {
 
     service<L extends keyof ServiceTypes> (location: L): Service<ServiceTypes[L]>;
 
-    service (location: string): Service<any>;
+    service (location: string): ServiceTypes extends never ? Service<any> : never;
 
     use (path: string, service: Partial<ServiceMethods<any> & SetupMethod> | Application, options?: any): this;
 }
