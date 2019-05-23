@@ -52,7 +52,7 @@ declare namespace createApplication {
          * A read only property that contains the Feathers application object. This can be used to
          * retrieve other services (via context.app.service('name')) or configuration values.
          */
-        readonly app: Application;
+        readonly app: Application<any><T>;
         /**
          * A writeable property containing the data of a create, update and patch service
          * method call.
@@ -156,7 +156,7 @@ declare namespace createApplication {
     }
 
     interface SetupMethod {
-        setup (app: Application, path: string): void;
+        setup (app: Application<any>, path: string): void;
     }
 
     interface ServiceOverloads<T> {
@@ -177,7 +177,7 @@ declare namespace createApplication {
 
     type ServiceMixin = (service: Service<any>, path: string) => void;
 
-    interface Application<ServiceTypes = any> extends EventEmitter {
+    interface Application<ServiceTypes = never> extends EventEmitter {
         version: string;
 
         services: ServiceTypes;
@@ -204,10 +204,10 @@ declare namespace createApplication {
 
         setup (server?: any): this;
 
-        service<L extends keyof ServiceTypes> (location: L): ServiceTypes[L];
+        service<L extends keyof ServiceTypes> (location: L): Service<ServiceTypes[L]>;
 
-        service (location: string): Service<any>;
+        service (location: string): ServiceTypes extends never ? Service<any> : never;
 
-        use (path: string, service: Partial<ServiceMethods<any> & SetupMethod> | Application, options?: any): this;
+        use (path: string, service: Partial<ServiceMethods<any> & SetupMethod> | Application<any>, options?: any): this;
     }
 }
