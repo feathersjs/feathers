@@ -52,7 +52,7 @@ declare namespace createApplication {
          * A read only property that contains the Feathers application object. This can be used to
          * retrieve other services (via context.app.service('name')) or configuration values.
          */
-        readonly app: Application;
+        readonly app: Application<T>;
         /**
          * A writeable property containing the data of a create, update and patch service
          * method call.
