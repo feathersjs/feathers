@@ -55,7 +55,7 @@ export default (originalSettings: string|AuthenticateHookSettings, ...originalSt
 
       const authResult = await authService.authenticate(authentication, authParams, ...strategies);
 
-      context.params = merge({}, params, omit(authResult, 'accessToken'));
+      context.params = merge({}, params, omit(authResult, 'accessToken'), { authenticated: true });
 
       return context;
     } else if (!authentication && provider) {

@@ -15,7 +15,8 @@ export class Strategy1 extends AuthenticationBaseStrategy {
     user: {
       id: 123,
       name: 'Dave'
-    }
+    },
+    authenticated: true
   };
 
   async authenticate (authentication: AuthenticationRequest) {
@@ -40,7 +41,8 @@ export class Strategy2 extends AuthenticationBaseStrategy {
     user: {
       name: 'V2',
       version: 2
-    }
+    },
+    authenticated: true
   };
 
   authenticate (authentication: AuthenticationRequest, params: Params) {

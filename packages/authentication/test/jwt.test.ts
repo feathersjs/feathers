@@ -162,13 +162,14 @@ describe('authentication/jwt', () => {
 
       const result = await app.service('protected').get('test', params);
 
-      assert.strictEqual(Object.keys(result.params).length, 3);
+      assert.strictEqual(Object.keys(result.params).length, 4);
       assert.ok(!result.params.accessToken, 'Did not merge accessToken');
       assert.deepStrictEqual(result, {
         id: 'test',
         params: merge({}, params, {
           user,
-          authentication: { payload }
+          authentication: { payload },
+          authenticated: true
         })
       });
     });
@@ -186,12 +187,13 @@ describe('authentication/jwt', () => {
 
       const result = await app.service('protected').get('test', params);
 
-      assert.strictEqual(Object.keys(result.params).length, 2);
+      assert.strictEqual(Object.keys(result.params).length, 3);
       assert.ok(!result.params.accessToken, 'Did not merge accessToken');
       assert.deepStrictEqual(result, {
         id: 'test',
         params: merge({}, params, {
-          authentication: { payload }
+          authentication: { payload },
+          authenticated: true
         })
       });
     });
