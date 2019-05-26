@@ -34,8 +34,8 @@
     "access": "public"
   },
   "devDependencies": {
-    "mocha": "^6.0.2",
-    "mongodb": "^3.2.3"
+    "mocha": "^6.1.4",
+    "mongodb": "^3.2.6"
   },
   "dependencies": {
     "@feathersjs/commons": "^4.0.0-pre.0",
