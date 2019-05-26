@@ -36,7 +36,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/transport-commons": "^4.0.0-pre.2"
+    "@feathersjs/transport-commons": "^4.2.1"
   },
   "devDependencies": {
     "@feathersjs/commons": "^4.0.0-pre.0",
@@ -45,7 +45,7 @@
     "@feathersjs/tests": "^4.0.0-pre.2",
     "chai": "^4.2.0",
     "feathers-memory": "^3.0.2",
-    "mocha": "^6.0.2",
+    "mocha": "^6.1.4",
     "ws": "^7.0.0"
   },
   "gitHead": "d665b9470435d6db0ecddd1fb152ab4a87266c52"
