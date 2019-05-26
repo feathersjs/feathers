@@ -56,3 +56,5 @@ export const express = (settings: Partial<OauthSetupSettings> = {}) => (app: App
   app.configure(setup(options));
   app.configure(setupExpress(options));
 };
+
+export const expressOauth = express;

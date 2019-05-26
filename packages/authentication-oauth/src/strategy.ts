@@ -28,7 +28,9 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
   }
 
   get entityId (): string {
-    return this.configuration.entityId || this.entityService.id;
+    const { entityService } = this;
+
+    return this.configuration.entityId || (entityService && entityService.id);
   }
 
   async getEntityQuery (profile: OAuthProfile, _params: Params) {
