@@ -14,7 +14,7 @@ interface FeathersPrimus {
 }
 
 declare module '@feathersjs/feathers' {
-  interface Application<ServiceTypes = any> {
+  interface Application<ServiceTypes = {}> {
     listen (port: number): http.Server;
   }
 }
