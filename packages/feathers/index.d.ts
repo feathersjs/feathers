@@ -204,9 +204,9 @@ declare namespace createApplication {
 
         setup (server?: any): this;
 
-        service<L extends keyof ServiceTypes> (location: L): Service<ServiceTypes[L]>;
+        service<L extends keyof ServiceTypes> (location: L): ServiceTypes[L];
 
-        service(location: string): keyof ServiceTypes extends never ? Service<any> : never;
+        service(location: string): keyof ServiceTypes extends never ? any : never;
 
         use (path: string, service: Partial<ServiceMethods<any> & SetupMethod> | Application, options?: any): this;
     }
