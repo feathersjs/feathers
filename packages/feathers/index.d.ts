@@ -1,6 +1,7 @@
 /// <reference types='node' />
 
 import { EventEmitter } from 'events';
+import http from 'http';
 
 declare const createApplication: Feathers;
 export = createApplication;
@@ -209,5 +210,7 @@ declare namespace createApplication {
         service (location: string): keyof ServiceTypes extends never ? any : never;
 
         use (path: string, service: Partial<ServiceMethods<any> & SetupMethod> | Application, options?: any): this;
+
+        listen (port: number): http.Server;
     }
 }

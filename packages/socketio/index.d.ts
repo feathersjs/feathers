@@ -11,9 +11,3 @@ interface FeathersSocketIO {
   readonly SOCKET_KEY: unique symbol;
   default: FeathersSocketIO;
 }
-
-declare module '@feathersjs/feathers' {
-  interface Application<ServiceTypes = {}> {
-    listen (port: number): http.Server;
-  }
-}
