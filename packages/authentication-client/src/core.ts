@@ -81,10 +81,12 @@ export class AuthenticationClient {
       return Promise.resolve(accessToken);
     }
 
-    const [ errorMessage ] = getMatch(location, this.options.locationErrorKey);
+    const [ message, errorRegex ] = getMatch(location, this.options.locationErrorKey);
 
-    if (errorMessage !== null) {
-      return Promise.reject(new NotAuthenticated(errorMessage));
+    if (message !== null) {
+      location.hash = location.hash.replace(errorRegex, '');
+
+      return Promise.reject(new NotAuthenticated(decodeURIComponent(message)));
     }
 
     return Promise.resolve(null);

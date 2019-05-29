@@ -26,7 +26,7 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
   }
 
   const { strategyNames } = service;
-  const { path = '/auth' } = oauth.defaults;
+  const { path = '/oauth' } = oauth.defaults || {};
   const grant = merge({
     defaults: {
       path,
@@ -36,13 +36,13 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
     }
   }, omit(oauth, 'redirect'));
 
-  each(grant, (value, key) => {
-    if (key !== 'defaults') {
-      value.callback = value.callback || `${path}/${key}/authenticate`;
+  each(grant, (value, name) => {
+    if (name !== 'defaults') {
+      value.callback = value.callback || `${path}/connect/${name}/authenticate`;
 
-      if (!strategyNames.includes(key)) {
-        debug(`Registering oAuth default strategy for '${key}'`);
-        service.register(key, new OAuthStrategy());
+      if (!strategyNames.includes(name)) {
+        debug(`Registering oAuth default strategy for '${name}'`);
+        service.register(name, new OAuthStrategy());
       }
     }
   });
