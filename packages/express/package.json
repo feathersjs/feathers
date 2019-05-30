@@ -48,7 +48,7 @@
     "@feathersjs/authentication-local": "^4.0.0-pre.2",
     "@feathersjs/feathers": "^4.0.0-pre.2",
     "@feathersjs/tests": "^4.0.0-pre.2",
-    "axios": "^0.18.0",
+    "axios": "^0.19.0",
     "chai": "^4.2.0",
     "lodash": "^4.17.11",
     "mocha": "^6.1.4"
