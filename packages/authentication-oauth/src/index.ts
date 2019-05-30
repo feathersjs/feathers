@@ -35,10 +35,16 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
       transport: 'session'
     }
   }, omit(oauth, 'redirect'));
+  const getUrl = (url: string) => {
+    const { defaults } = grant;
+    
+    return `${defaults.protocol}://${defaults.host}${path}/${url}`;
+  };
 
   each(grant, (value, name) => {
     if (name !== 'defaults') {
-      value.callback = value.callback || `${path}/connect/${name}/authenticate`;
+      value.callback = value.callback || getUrl(`${name}/authenticate`);
+      value.redirect_uri = value.redirect_uri || getUrl(`${name}/callback`);
 
       if (!strategyNames.includes(name)) {
         debug(`Registering oAuth default strategy for '${name}'`);

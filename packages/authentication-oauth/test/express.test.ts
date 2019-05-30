@@ -14,35 +14,35 @@ describe('@feathersjs/authentication-oauth/express', () => {
 
   after(() => server.close());
 
-  it('auth/test', async () => {
-    axios.get('http://localhost:9876/oauth/connect/test?feathers_token=testing');
+  it('oauth/test', async () => {
+    axios.get('http://localhost:9876/oauth//test?feathers_token=testing');
   });
 
-  it('auth/test with query', async () => {
-    axios.get('http://localhost:9876/oauth/connect/test?other=test');
+  it('oauth/test with query', async () => {
+    axios.get('http://localhost:9876/oauth//test?other=test');
   });
 
-  it('auth/test/authenticate', async () => {
-    const { data } = await axios.get('http://localhost:9876/oauth/connect/test/authenticate?id=expressTest');
+  it('oauth/test/authenticate', async () => {
+    const { data } = await axios.get('http://localhost:9876/oauth//test/authenticate?id=expressTest');
 
     assert.ok(data.accessToken);
     assert.equal(data.user.testId, 'expressTest');
   });
 
-  it('auth/test/authenticate with redirect', async () => {
+  it('oauth/test/authenticate with redirect', async () => {
     app.get('authentication').oauth.redirect = '/';
 
     try {
-      await axios.get('http://localhost:9876/oauth/connect/test/authenticate');
+      await axios.get('http://localhost:9876/oauth//test/authenticate');
     } catch (error) {
       assert.ok(/Cannot GET/.test(error.response.data));
       delete app.get('authentication').oauth.redirect;
     }
   });
 
-  it('auth/test/authenticate with error', async () => {
+  it('oauth/test/authenticate with error', async () => {
     try {
-      await axios.get('http://localhost:9876/oauth/connect/test/authenticate');
+      await axios.get('http://localhost:9876/oauth//test/authenticate');
     } catch (error) {
       assert.equal(error.response.data.message, 'Data needs an id');
     }

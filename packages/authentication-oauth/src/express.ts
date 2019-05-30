@@ -3,12 +3,13 @@ import { express as grantExpress } from 'grant';
 import Debug from 'debug';
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationService, AuthenticationResult } from '@feathersjs/authentication';
+import qs from 'querystring';
 import {
   Application as ExpressApplication,
   original as express
 } from '@feathersjs/express';
 import { OauthSetupSettings } from './utils';
-import { OAuthStrategy } from '.';
+import { OAuthStrategy } from './strategy';
 
 const grant = grantExpress();
 const debug = Debug('@feathersjs/authentication-oauth/express');
@@ -30,19 +31,22 @@ export default (options: OauthSetupSettings) => {
 
     authApp.use(options.expressSession);
 
-    authApp.get('/connect/:name', (req, _res, next) => {
+    authApp.get('/:name', (req, res) => {
       const { feathers_token, ...query } = req.query;
 
       if (feathers_token) {
         debug(`Got feathers_token query parameter to link accounts`, feathers_token);
         req.session.accessToken = feathers_token;
-        req.query = query;
       }
 
-      next();
+      res.redirect(`${path}/connect/${req.params.name}?${qs.stringify(query)}`);
     });
 
-    authApp.get('/connect/:name/authenticate', async (req, res, next) => {
+    authApp.get('/:name/callback', (req: any, res: any) => {
+      res.redirect(`${path}/connect/${req.params.name}/callback?${qs.stringify(req.query)}`);
+    });
+
+    authApp.get('/:name/authenticate', async (req, res, next) => {
       const { name } = req.params;
       const { accessToken, grant } = req.session;
       const service: AuthenticationService = app.service(authService);
