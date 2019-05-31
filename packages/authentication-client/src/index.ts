@@ -5,7 +5,7 @@ import { AuthenticationResult, AuthenticationRequest } from '@feathersjs/authent
 import { Storage, MemoryStorage, StorageWrapper } from './storage';
 
 declare module '@feathersjs/feathers' {
-  interface Application<ServiceTypes = any> {
+  interface Application<ServiceTypes = {}> {
     io?: any;
     rest?: any;
     primus?: any;

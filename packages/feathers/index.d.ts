@@ -178,10 +178,10 @@ declare namespace createApplication {
 
     type ServiceMixin = (service: Service<any>, path: string) => void;
 
-    interface Application<ServiceTypes = any> extends EventEmitter {
+    interface Application<ServiceTypes = {}> extends EventEmitter {
         version: string;
 
-        services: ServiceTypes;
+        services: keyof ServiceTypes extends never ? any : ServiceTypes;
 
         mixins: ServiceMixin[];
 
@@ -207,7 +207,7 @@ declare namespace createApplication {
 
         service<L extends keyof ServiceTypes> (location: L): ServiceTypes[L];
 
-        service (location: string): Service<any>;
+        service (location: string): keyof ServiceTypes extends never ? any : never;
 
         use (path: string, service: Partial<ServiceMethods<any> & SetupMethod> | Application, options?: any): this;
 
