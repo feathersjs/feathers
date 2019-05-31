@@ -1,15 +1,15 @@
 // @ts-ignore
 import { express as grantExpress } from 'grant';
 import Debug from 'debug';
-import querystring from 'querystring';
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationService, AuthenticationResult } from '@feathersjs/authentication';
+import qs from 'querystring';
 import {
   Application as ExpressApplication,
   original as express
 } from '@feathersjs/express';
 import { OauthSetupSettings } from './utils';
-import { OAuthStrategy } from '.';
+import { OAuthStrategy } from './strategy';
 
 const grant = grantExpress();
 const debug = Debug('@feathersjs/authentication-oauth/express');
@@ -32,20 +32,18 @@ export default (options: OauthSetupSettings) => {
     authApp.use(options.expressSession);
 
     authApp.get('/:name', (req, res) => {
-      const { name } = req.params;
       const { feathers_token, ...query } = req.query;
-      const qs = querystring.stringify(query);
 
       if (feathers_token) {
         debug(`Got feathers_token query parameter to link accounts`, feathers_token);
         req.session.accessToken = feathers_token;
       }
 
-      const redirect = `${path}/connect/${name}${qs.length ? '?' + qs : ''}`;
+      res.redirect(`${path}/connect/${req.params.name}?${qs.stringify(query)}`);
+    });
 
-      debug(`Starting ${name} oAuth flow, redirecting to ${redirect}`);
-
-      res.redirect(redirect);
+    authApp.get('/:name/callback', (req: any, res: any) => {
+      res.redirect(`${path}/connect/${req.params.name}/callback?${qs.stringify(req.query)}`);
     });
 
     authApp.get('/:name/authenticate', async (req, res, next) => {
@@ -95,7 +93,7 @@ export default (options: OauthSetupSettings) => {
 
         await sendResponse(authResult);
       } catch (error) {
-        debug('Received oAuth authentication error', error);
+        debug('Received oAuth authentication error', error.stack);
         await sendResponse(error);
       }
     });

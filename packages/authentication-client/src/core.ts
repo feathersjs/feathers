@@ -72,26 +72,28 @@ export class AuthenticationClient {
     });
   }
 
-  setAccessToken (accessToken: string) {
-    return this.storage.setItem(this.options.storageKey, accessToken);
-  }
-
-  async getFromLocation (location: Location) {
+  getFromLocation (location: Location) {
     const [ accessToken, tokenRegex ] = getMatch(location, this.options.locationKey);
 
     if (accessToken !== null) {
       location.hash = location.hash.replace(tokenRegex, '');
 
-      return accessToken;
+      return Promise.resolve(accessToken);
     }
 
-    const [ errorMessage ] = getMatch(location, this.options.locationErrorKey);
+    const [ message, errorRegex ] = getMatch(location, this.options.locationErrorKey);
 
-    if (errorMessage !== null) {
-      throw new NotAuthenticated(errorMessage);
+    if (message !== null) {
+      location.hash = location.hash.replace(errorRegex, '');
+
+      return Promise.reject(new NotAuthenticated(decodeURIComponent(message)));
     }
 
-    return null;
+    return Promise.resolve(null);
+  }
+
+  setAccessToken (accessToken: string) {
+    return this.storage.setItem(this.options.storageKey, accessToken);
   }
 
   getAccessToken (): Promise<string|null> {
