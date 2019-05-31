@@ -155,11 +155,13 @@ describe('@feathersjs/transport-commons', () => {
               route: {}
             }, connection)
           });
-          done();
+          app.emit('disconnect', socket);
         } catch (e) {
           done(e);
         }
       });
+
+      app.once('disconnect', () => done());
     });
 
     it('.create with params', done => {

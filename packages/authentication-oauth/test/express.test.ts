@@ -33,7 +33,7 @@ describe('@feathersjs/authentication-oauth/express', () => {
     app.get('authentication').oauth.redirect = '/';
 
     try {
-      await axios.get('http://localhost:9876/oauth//test/authenticate');
+      await axios.get('http://localhost:9876/oauth/test/authenticate');
     } catch (error) {
       assert.ok(/Cannot GET/.test(error.response.data));
       delete app.get('authentication').oauth.redirect;
@@ -42,7 +42,7 @@ describe('@feathersjs/authentication-oauth/express', () => {
 
   it('oauth/test/authenticate with error', async () => {
     try {
-      await axios.get('http://localhost:9876/oauth//test/authenticate');
+      await axios.get('http://localhost:9876/oauth/test/authenticate');
     } catch (error) {
       assert.equal(error.response.data.message, 'Data needs an id');
     }

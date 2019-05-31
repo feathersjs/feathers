@@ -37,7 +37,7 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
   }, omit(oauth, 'redirect'));
   const getUrl = (url: string) => {
     const { defaults } = grant;
-    
+
     return `${defaults.protocol}://${defaults.host}${path}/${url}`;
   };
 
