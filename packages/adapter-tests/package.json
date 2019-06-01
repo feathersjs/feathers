@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/adapter-tests",
-  "version": "4.0.0-pre.2",
+  "version": "4.0.0-pre.3",
   "description": "Feathers shared database adapter test suite",
   "homepage": "https://feathersjs.com",
   "keywords": [
@@ -34,8 +34,8 @@
     "access": "public"
   },
   "devDependencies": {
-    "@feathersjs/errors": "^4.0.0-pre.2",
-    "@feathersjs/feathers": "^4.0.0-pre.2",
+    "@feathersjs/errors": "^4.0.0-pre.3",
+    "@feathersjs/feathers": "^4.0.0-pre.3",
     "feathers-memory": "^3.0.2",
     "mocha": "^6.1.4"
   },
