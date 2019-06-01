@@ -49,5 +49,5 @@
     "mocha": "^6.1.4",
     "socket.io-client": "^2.2.0"
   },
-  "gitHead": "d665b9470435d6db0ecddd1fb152ab4a87266c52"
+  "gitHead": "19eb75737659e3e4b57765c1653d23c86fd2e1c3"
 }
