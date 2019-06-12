@@ -1,20 +1,20 @@
 import Debug from 'debug';
-import { get, compact, flattenDeep, noop } from 'lodash';
+import { compact, flattenDeep, noop } from 'lodash';
 import { Channel } from './channel/base';
 import { CombinedChannel } from './channel/combined';
-import { channelMixin, publishMixin, keys } from './mixins';
+import { channelMixin, publishMixin, keys, PublishMixin, Event, Publisher } from './mixins';
 import { Application, Service } from '@feathersjs/feathers';
 
 const debug = Debug('@feathersjs/transport-commons/channels');
-const { CHANNELS, PUBLISHERS, ALL_EVENTS } = keys;
+const { CHANNELS } = keys;
 
 declare module '@feathersjs/feathers' {
   interface ServiceAddons<T> {
-    publish (callback: (data: T, hook: HookContext<T>) => Channel): this;
-    publish (event: string, callback: (data: T, hook: HookContext<T>) => Channel): this;
+    publish (publisher: Publisher<T>): this;
+    publish (event: Event, publisher: Publisher<T>): this;
 
-    registerPublisher (callback: (data: T, hook: HookContext<T>) => Channel): this;
-    registerPublisher (event: string, callback: (data: T, hook: HookContext<T>) => Channel): this;
+    registerPublisher (publisher: Publisher<T>): this;
+    registerPublisher (event: Event, publisher: Publisher<T>): this;
   }
 
   interface Application<ServiceTypes> {
@@ -23,11 +23,11 @@ declare module '@feathersjs/feathers' {
     channel (name: string[]): Channel;
     channel (...names: string[]): Channel;
 
-    publish<T> (callback: (data: T, hook: HookContext<T>) => Channel | Channel[] | void): Application<ServiceTypes>;
-    publish<T> (event: string, callback: (data: T, hook: HookContext<T>) => Channel | Channel[] | void): Application<ServiceTypes>;
+    publish<T> (publisher: Publisher<T>): this;
+    publish<T> (event: Event, publisher: Publisher<T>): this;
 
-    registerPublisher<T> (callback: (data: T, hook: HookContext<T>) => Channel | Channel[] | void): Application<ServiceTypes>;
-    registerPublisher<T> (event: string, callback: (data: T, hook: HookContext<T>) => Channel | Channel[] | void): Application<ServiceTypes>;
+    registerPublisher<T> (publisher: Publisher<T>): this;
+    registerPublisher<T> (event: Event, publisher: Publisher<T>): this;
   }
 }
 
@@ -63,22 +63,24 @@ export function channels () {
 
           debug('Publishing event', event, hook.path);
 
-          const servicePublishers = (service as any)[PUBLISHERS];
-          const appPublishers = (app as any)[PUBLISHERS];
+          const servicePublishers = (service as unknown as PublishMixin)[keys.PUBLISHERS];
+          const appPublishers = (app as unknown as PublishMixin)[keys.PUBLISHERS];
           // This will return the first publisher list that is not empty
           // In the following precedence
-          const callback = [
+          const publisher = (
             // 1. Service publisher for a specific event
-            get(servicePublishers, event),
+            servicePublishers[event] ||
             // 2. Service publisher for all events
-            get(servicePublishers, ALL_EVENTS),
-            // 3. App publishers for a specific event
-            get(appPublishers, event),
-            // 4. App publishers for all events
-            get(appPublishers, ALL_EVENTS)
-          ].find(current => typeof current === 'function') || noop;
+            servicePublishers[keys.ALL_EVENTS] ||
+            // 3. App publisher for a specific event
+            appPublishers[event] ||
+            // 4. App publisher for all events
+            appPublishers[keys.ALL_EVENTS] ||
+            // 5. No publisher
+            noop
+          );
 
-          Promise.resolve(callback(data, hook)).then(result => {
+          Promise.resolve(publisher(data, hook)).then(result => {
             if (!result) {
               return;
             }

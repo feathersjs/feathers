@@ -9,9 +9,9 @@ const CHANNELS = Symbol('@feathersjs/transport-commons/channels');
 const ALL_EVENTS = Symbol('@feathersjs/transport-commons/all-events');
 
 export const keys = {
-  PUBLISHERS,
-  CHANNELS,
-  ALL_EVENTS
+  PUBLISHERS: PUBLISHERS as typeof PUBLISHERS,
+  CHANNELS: CHANNELS as typeof CHANNELS,
+  ALL_EVENTS: ALL_EVENTS as typeof ALL_EVENTS,
 };
 
 export interface ChannelMixin {
@@ -60,10 +60,14 @@ export function channelMixin () {
   return mixin;
 }
 
-export interface PublishMixin {
-  [PUBLISHERS]: { [key: string]: Channel };
-  publish (event: string|symbol, callback: (data: any, hook: HookContext) => Channel): any;
-  registerPublisher (event: string|symbol, callback: (data: any, hook: HookContext) => Channel): any;
+export type Event = string|(typeof ALL_EVENTS);
+
+export type Publisher<T = any> = (data: T, hook: HookContext<T>) => Channel | Channel[] | void | Promise<Channel | Channel[] | void>;
+
+export interface PublishMixin<T = any> {
+  [PUBLISHERS]: { [ALL_EVENTS]?: Publisher<T>, [key: string]: Publisher<T> };
+  publish (event: Event, publisher: Publisher<T>): this;
+  registerPublisher (event: Event, publisher: Publisher<T>): this;
 }
 
 export function publishMixin () {
@@ -74,11 +78,11 @@ export function publishMixin () {
       return this.registerPublisher(...args);
     },
 
-    registerPublisher (event, callback) {
+    registerPublisher (event, publisher) {
       debug('Registering publisher', event);
 
-      if (!callback && typeof event === 'function') {
-        callback = event;
+      if (!publisher && typeof event === 'function') {
+        publisher = event;
         event = ALL_EVENTS;
       }
 
@@ -89,8 +93,7 @@ export function publishMixin () {
 
       const publishers = this[PUBLISHERS];
 
-      // @ts-ignore
-      publishers[event] = callback;
+      publishers[event] = publisher;
 
       return this;
     }
