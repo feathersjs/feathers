@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/commons",
-  "version": "4.0.0-pre.0",
+  "version": "4.0.0-pre.3",
   "description": "Shared Feathers utility functions",
   "homepage": "https://feathersjs.com",
   "keywords": [
@@ -44,5 +44,6 @@
     "shx": "^0.3.2",
     "ts-node": "^8.2.0",
     "typescript": "^3.4.5"
-  }
+  },
+  "gitHead": "19eb75737659e3e4b57765c1653d23c86fd2e1c3"
 }
