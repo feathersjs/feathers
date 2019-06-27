@@ -28,7 +28,7 @@ function feathersExpress (feathersApp) {
       let middleware = Array.from(arguments)
         .slice(1)
         .reduce(function (middleware, arg) {
-          if (typeof arg === 'function') {
+          if (typeof arg === 'function' || Array.isArray(arg)) {
             middleware[service ? 'after' : 'before'].push(arg);
           } else if (!service) {
             service = arg;
@@ -42,7 +42,7 @@ function feathersExpress (feathersApp) {
         });
 
       const hasMethod = methods => methods.some(name =>
-        (service && !Array.isArray(service) && typeof service[name] === 'function')
+        (service && typeof service[name] === 'function')
       );
 
       // Check for service (any object with at least one service method)

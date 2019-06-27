@@ -367,6 +367,42 @@ describe('@feathersjs/express/rest provider', () => {
         .then(() => server.close());
     });
 
+    it('allows middleware arrays before and after a service', () => {
+      const app = expressify(feathers());
+
+      app.configure(rest())
+        .use(expressify.json())
+        .use('/todo', [function (req, res, next) {
+          req.body.before = ['before first'];
+          next();
+        }, function (req, res, next) {
+          req.body.before.push('before second');
+          next();
+        }], {
+            create (data) {
+              return Promise.resolve(data);
+            }
+          }, [function (req, res, next) {
+            res.data.after = ['after first'];
+            next();
+          }], function (req, res, next) {
+            res.data.after.push('after second');
+            next();
+          });
+
+      const server = app.listen(4776);
+
+      return axios.post('http://localhost:4776/todo', { text: 'Do dishes' })
+        .then(res => {
+          assert.deepStrictEqual(res.data, {
+            text: 'Do dishes',
+            before: ['before first', 'before second'],
+            after: ['after first', 'after second']
+          });
+        })
+        .then(() => server.close());
+    });
+
     it('allows an array of middleware without a service', () => {
       const app = expressify(feathers());
       const middlewareArray = [
