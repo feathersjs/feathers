@@ -7,7 +7,7 @@ import { Params, ServiceMethods } from '@feathersjs/feathers';
 
 const debug = Debug('@feathersjs/authentication/service');
 
-export class AuthenticationService extends AuthenticationBase implements ServiceMethods<AuthenticationResult> {
+export class AuthenticationService extends AuthenticationBase implements Partial<ServiceMethods<AuthenticationResult>> {
   /**
    * Return the payload for a JWT based on the authentication result.
    * Called internally by the `create` method.
