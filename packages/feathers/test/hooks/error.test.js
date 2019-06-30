@@ -11,7 +11,7 @@ describe('`error` hooks', () => {
     });
     const service = app.service('dummy');
 
-    afterEach(() => service.__hooks.error.get.pop());
+    afterEach(() => service.__hooks.error.get = []);
 
     it('basic error hook', () => {
       service.hooks({
@@ -153,6 +153,30 @@ describe('`error` hooks', () => {
 
       return app.service('dummy').get(1)
         .then(result => assert.strictEqual(result, null));
+    });
+
+    it('uses the current hook object if thrown in a service method', () => {
+      const app = feathers().use('/dummy', {
+        get () {
+          return Promise.reject(new Error('Something went wrong'));
+        }
+      });
+
+      const service = app.service('dummy');
+
+      service.hooks({
+        before (hook) {
+          return { ...hook, id: 42 };
+        },
+        error (hook) {
+          assert.strictEqual(hook.id, 42);
+        }
+      });
+
+      return service.get(1).then(
+        () => assert.fail('Should never get here'),
+        error => assert.strictEqual(error.message, 'Something went wrong')
+      );
     });
   });
 

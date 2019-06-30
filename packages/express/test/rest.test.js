@@ -249,7 +249,8 @@ describe('@feathersjs/express/rest provider', () => {
                 arguments: ['dishes', paramsWithHeaders ],
                 type: 'error',
                 method: 'get',
-                path: 'hook-error'
+                path: 'hook-error',
+                original: data.hook.original
               },
               error: { message: 'I blew up' }
             });
