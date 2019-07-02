@@ -133,4 +133,62 @@ describe('@feathersjs/adapter-commons/service', () => {
       query: { $something: 'else' }
     });
   });
+
+  it('allowsMulti', () => {
+    context('with true', () => {
+      const service = new AdapterService({multi: true});
+
+      it('does return true for multible methodes', () => {
+        assert.equal(service.allowsMulti('patch'), true);
+      });
+
+      it('does return false for always non-multible methodes', () => {
+        assert.equal(service.allowsMulti('update'), false);
+      });
+
+      it('does return true for unknown methods', () => {
+        assert.equal(service.allowsMulti('other'), true);
+      });
+    });
+
+    context('with false', () => {
+      const service = new AdapterService({multi: false});
+
+      it('does return false for multible methodes', () => {
+        assert.equal(service.allowsMulti('remove'), false);
+      });
+
+      it('does return true for always multible methodes', () => {
+        assert.equal(service.allowsMulti('find'), true);
+      });
+
+      it('does return false for unknown methods', () => {
+        assert.equal(service.allowsMulti('other'), false);
+      });
+    });
+
+    context('with array', () => {
+      const service = new AdapterService({multi: ['create', 'get', 'other']});
+
+      it('does return true for specified multible methodes', () => {
+        assert.equal(service.allowsMulti('create'), true);
+      });
+
+      it('does return false for non-specified multible methodes', () => {
+        assert.equal(service.allowsMulti('patch'), false);
+      });
+
+      it('does return false for specified always multible methodes', () => {
+        assert.equal(service.allowsMulti('get'), false);
+      });
+
+      it('does return true for specified unknown methodes', () => {
+        assert.equal(service.allowsMulti('other'), true);
+      });
+
+      it('does return false for non-specified unknown methodes', () => {
+        assert.equal(service.allowsMulti('another'), false);
+      });
+    });
+  });
 });
