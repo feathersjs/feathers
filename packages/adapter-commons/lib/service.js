@@ -9,12 +9,10 @@ const callMethod = (self, name, ...args) => {
   return self[name](...args);
 };
 
-const checkMulti = (method, option) => {
-  if (option === true) {
-    return true;
-  }
-
-  return Array.isArray(option) ? option.includes(method) : false;
+const alwaysMulti = {
+  find: true,
+  get: false,
+  update: false
 };
 
 module.exports = class AdapterService {
@@ -48,6 +46,22 @@ module.exports = class AdapterService {
     return Object.assign(result, { paginate });
   }
 
+  allowsMulti (method) {
+    const always = alwaysMulti[method];
+
+    if (typeof always !== 'undefined') {
+      return always;
+    }
+
+    const option = this.options.multi;
+
+    if (option === true || option === false) {
+      return option;
+    } else {
+      return option.includes(method);
+    }
+  }
+
   find (params) {
     return callMethod(this, '_find', params);
   }
@@ -57,7 +71,7 @@ module.exports = class AdapterService {
   }
 
   create (data, params) {
-    if (Array.isArray(data) && !checkMulti('create', this.options.multi)) {
+    if (Array.isArray(data) && !this.allowsMulti('create')) {
       return Promise.reject(new MethodNotAllowed(`Can not create multiple entries`));
     }
 
@@ -75,18 +89,18 @@ module.exports = class AdapterService {
   }
 
   patch (id, data, params) {
-    if (id === null && !checkMulti('patch', this.options.multi)) {
+    if (id === null && !this.allowsMulti('patch')) {
       return Promise.reject(new MethodNotAllowed(`Can not patch multiple entries`));
     }
 
     return callMethod(this, '_patch', id, data, params);
   }
 
-  remove (id, data, params) {
-    if (id === null && !checkMulti('remove', this.options.multi)) {
+  remove (id, params) {
+    if (id === null && !this.allowsMulti('remove')) {
       return Promise.reject(new MethodNotAllowed(`Can not remove multiple entries`));
     }
 
-    return callMethod(this, '_remove', id, data, params);
+    return callMethod(this, '_remove', id, params);
   }
 };
