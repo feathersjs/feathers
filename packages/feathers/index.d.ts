@@ -137,23 +137,20 @@ declare namespace createApplication {
         finally?: Partial<HookMap> | Hook | Hook[];
     }
 
-    // todo: figure out what to do: These methods don't actually need to be
-    // implemented, so they can be undefined at runtime. Yet making them
-    // optional gets cumbersome in strict mode.
     interface ServiceMethods<T> {
         [key: string]: any;
 
-        find? (params?: Params): Promise<T | T[] | Paginated<T>>;
+        find (params?: Params): Promise<T | T[] | Paginated<T>>;
 
-        get? (id: Id, params?: Params): Promise<T>;
+        get (id: Id, params?: Params): Promise<T>;
 
-        create? (data: Partial<T> | Array<Partial<T>>, params?: Params): Promise<T | T[]>;
+        create (data: Partial<T> | Array<Partial<T>>, params?: Params): Promise<T | T[]>;
 
-        update? (id: NullableId, data: T, params?: Params): Promise<T>;
+        update (id: NullableId, data: T, params?: Params): Promise<T>;
 
-        patch? (id: NullableId, data: Partial<T>, params?: Params): Promise<T>;
+        patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T>;
 
-        remove? (id: NullableId, params?: Params): Promise<T>;
+        remove (id: NullableId, params?: Params): Promise<T>;
     }
 
     interface SetupMethod {
