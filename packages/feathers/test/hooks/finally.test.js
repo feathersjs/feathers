@@ -73,4 +73,36 @@ describe('`finally` hooks', () => {
       }
     );
   });
+
+  it('runs once, sets error if throws', () => {
+    const app = feathers().use('/dummy', {
+      get (id) {
+        return Promise.resolve({ id });
+      }
+    });
+
+    const service = app.service('dummy');
+
+    let count = 0;
+
+    service.hooks({
+      error (hook) {
+        assert.fail('Should never get here (error hook)');
+      },
+      finally: [
+        function (hook) {
+          assert.strictEqual(++count, 1, 'This should be called only once');
+          throw new Error('This did not work');
+        },
+        function (hook) {
+          assert.fail('Should never get here (second finally hook)');
+        }
+      ]
+    });
+
+    return service.get(42).then(
+      () => assert.fail('Should never get here (result resolve)'),
+      error => assert.strictEqual(error.message, 'This did not work')
+    );
+  });
 });

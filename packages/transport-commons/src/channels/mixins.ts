@@ -11,7 +11,7 @@ const ALL_EVENTS = Symbol('@feathersjs/transport-commons/all-events');
 export const keys = {
   PUBLISHERS: PUBLISHERS as typeof PUBLISHERS,
   CHANNELS: CHANNELS as typeof CHANNELS,
-  ALL_EVENTS: ALL_EVENTS as typeof ALL_EVENTS,
+  ALL_EVENTS: ALL_EVENTS as typeof ALL_EVENTS
 };
 
 export interface ChannelMixin {

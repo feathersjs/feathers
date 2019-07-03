@@ -1,4 +1,4 @@
-const { hooks, isPromise, _ } = require('@feathersjs/commons');
+const { hooks, isPromise } = require('@feathersjs/commons');
 const baseHooks = require('./base');
 
 const {
@@ -8,11 +8,6 @@ const {
   enableHooks,
   ACTIVATE_HOOKS
 } = hooks;
-
-const makeArguments = (service, method, hookObject) => service.methods[ method ].reduce((result, value) => ([
-  ...result,
-  hookObject[ value ]
-]), []);
 
 const withHooks = function withHooks ({
   app,
@@ -33,8 +28,6 @@ const withHooks = function withHooks ({
       const returnHook = args[args.length - 1] === true
         ? args.pop() : false;
 
-      // A reference to the original method
-      const _super = original || service[method].bind(service);
       // Create the hook object that gets passed through
       const hookObject = createHookObject(method, {
         type: 'before', // initial hook object type
@@ -43,9 +36,14 @@ const withHooks = function withHooks ({
         app
       });
 
-      // Process all before hooks
-      return processHooks.call(service, baseHooks.concat(hooks.before), hookObject)
-        // Use the hook object to call the original method
+      return Promise.resolve(hookObject)
+
+        // Run `before` hooks
+        .then(hookObject => {
+          return processHooks.call(service, baseHooks.concat(hooks.before), hookObject);
+        })
+
+        // Run the original method
         .then(hookObject => {
           // If `hookObject.result` is set, skip the original method
           if (typeof hookObject.result !== 'undefined') {
@@ -53,60 +51,78 @@ const withHooks = function withHooks ({
           }
 
           // Otherwise, call it with arguments created from the hook object
-          const promise = _super(...makeArguments(service, method, hookObject));
+          const promise = new Promise(resolve => {
+            const func = original || service[method];
+            const args = service.methods[method].map((value) => hookObject[value]);
+            const result = func.apply(service, args);
 
-          if (!isPromise(promise)) {
-            throw new Error(`Service method '${hookObject.method}' for '${hookObject.path}' service must return a promise`);
-          }
+            if (!isPromise(result)) {
+              throw new Error(`Service method '${hookObject.method}' for '${hookObject.path}' service must return a promise`);
+            }
 
-          return promise.then(result => {
-            hookObject.result = result;
-
-            return hookObject;
+            resolve(result);
           });
+
+          return promise
+            .then(result => {
+              hookObject.result = result;
+              return hookObject;
+            })
+            .catch(error => {
+              error.hook = hookObject;
+              throw error;
+            });
         })
-        // Make a (shallow) copy of hookObject from `before` hooks and update type
-        .then(hookObject => Object.assign({}, hookObject, { type: 'after' }))
-        // Run through all `after` hooks
+
+        // Run `after` hooks
         .then(hookObject => {
-          // Combine all app and service `after` and `finally` hooks and process
-          const hookChain = hooks.after.concat(hooks.finally);
+          const afterHookObject = Object.assign({}, hookObject, {
+            type: 'after'
+          });
 
-          return processHooks.call(service, hookChain, hookObject);
+          return processHooks.call(service, hooks.after, afterHookObject);
         })
-        .then(hookObject =>
-          // Finally, return the result
-          // Or the hook object if the `returnHook` flag is set
-          returnHook ? hookObject : hookObject.result
-        )
-        // Handle errors
-        .catch(error => {
-          // Combine all app and service `error` and `finally` hooks and process
-          const hookChain = hooks.error.concat(hooks.finally);
 
-          // A shallow copy of the hook object
-          const errorHookObject = _.omit(Object.assign({}, error.hook, hookObject, {
+        // Run `errors` hooks
+        .catch(error => {
+          const errorHookObject = Object.assign({}, error.hook, {
             type: 'error',
             original: error.hook,
-            error
-          }), 'result');
+            error,
+            result: undefined
+          });
 
-          return processHooks.call(service, hookChain, errorHookObject)
+          return processHooks.call(service, hooks.error, errorHookObject)
             .catch(error => {
-              errorHookObject.error = error;
+              const errorHookObject = Object.assign({}, error.hook, {
+                error,
+                result: undefined
+              });
 
               return errorHookObject;
-            })
-            .then(hook => {
-              if (returnHook) {
-                // Either resolve or reject with the hook object
-                return typeof hook.result !== 'undefined' ? hook : Promise.reject(hook);
-              }
-
-              // Otherwise return either the result if set (to swallow errors)
-              // Or reject with the hook error
-              return typeof hook.result !== 'undefined' ? hook.result : Promise.reject(hook.error);
             });
+        })
+
+        // Run `finally` hooks
+        .then(hookObject => {
+          return processHooks.call(service, hooks.finally, hookObject)
+            .catch(error => {
+              const errorHookObject = Object.assign({}, error.hook, {
+                error,
+                result: undefined
+              });
+
+              return errorHookObject;
+            });
+        })
+
+        // Resolve with a result or reject with an error
+        .then(hookObject => {
+          if (typeof hookObject.error !== 'undefined' && typeof hookObject.result === 'undefined') {
+            return Promise.reject(returnHook ? hookObject : hookObject.error);
+          } else {
+            return returnHook ? hookObject : hookObject.result;
+          }
         });
     };
   };

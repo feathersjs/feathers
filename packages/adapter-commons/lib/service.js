@@ -82,11 +82,11 @@ module.exports = class AdapterService {
     return callMethod(this, '_patch', id, data, params);
   }
 
-  remove (id, data, params) {
+  remove (id, params) {
     if (id === null && !checkMulti('remove', this.options.multi)) {
       return Promise.reject(new MethodNotAllowed(`Can not remove multiple entries`));
     }
 
-    return callMethod(this, '_remove', id, data, params);
+    return callMethod(this, '_remove', id, params);
   }
 };
