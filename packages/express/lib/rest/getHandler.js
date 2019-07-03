@@ -32,16 +32,16 @@ function getAllowedMethods (service, routes) {
 }
 
 function makeArgsGetter (argsOrder) {
-  return (req, params) => argsOrder.reduce((result, argName) => {
+  return (req, params) => argsOrder.map((argName) => {
     switch (argName) {
       case 'id':
-        return [ ...result, req.params.__feathersId || null ];
+        return req.params.__feathersId || null;
       case 'data':
-        return [ ...result, req.body ];
+        return req.body;
       case 'params':
-        return [ ...result, params ];
+        return params;
     }
-  }, []);
+  });
 }
 
 // A function that returns the middleware for a given method and service
