@@ -1,5 +1,5 @@
-const assert = require('assert');
-const { select } = require('../lib');
+import assert from 'assert';
+import { select } from '../src';
 
 describe('@feathersjs/adapter-commons', () => {
   describe('select', () => {

@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-expressions */
-const assert = require('assert');
-const { sorter } = require('../lib');
+import assert from 'assert';
+import { sorter } from '../src';
 
 describe('@feathersjs/adapter-commons', () => {
   describe('sorter', () => {
