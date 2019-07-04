@@ -24,6 +24,7 @@
     "node": ">= 6"
   },
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
