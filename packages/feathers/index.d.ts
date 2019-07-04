@@ -1,7 +1,7 @@
 /// <reference types='node' />
 
 import { EventEmitter } from 'events';
-import http from 'http';
+import * as http from 'http';
 
 declare const createApplication: Feathers;
 export = createApplication;
