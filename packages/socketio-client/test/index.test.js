@@ -1,7 +1,7 @@
 const assert = require('assert');
 const feathers = require('@feathersjs/feathers');
 const io = require('socket.io-client');
-const baseTests = require('@feathersjs/tests/lib//client');
+const baseTests = require('@feathersjs/tests/lib/client');
 
 const server = require('./server');
 const socketio = require('../lib');
