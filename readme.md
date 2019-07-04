@@ -11,8 +11,6 @@
 [![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 [![Telegram Status](https://img.shields.io/badge/Telegram_RU_chat:-Feathers-216bc1.svg?style=flat)](https://t.me/featherjs)
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/feathersjs.svg)](https://saucelabs.com/u/feathersjs)
-
 Feathers is a real-time, micro-service web framework for NodeJS that gives you control over your data via RESTful resources, sockets and flexible plug-ins.
 
 ## Support

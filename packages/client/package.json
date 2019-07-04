@@ -25,9 +25,9 @@
     "clean": "../../node_modules/.bin/shx rm -rf dist/ && ../../node_modules/.bin/shx mkdir -p dist",
     "version": "npm run build",
     "mocha": "mocha --opts ../../mocha.opts",
-    "test": "npm run build && npm run mocha",
+    "test": "npm run build && npm run mocha && npm run test:browser",
+    "test:browser": "mocha-puppeteer browser/test.js",
     "build": "npm run clean && npm run webpack",
-    "build:test": "cd browser && webpack",
     "webpack": "parallel-webpack"
   },
   "browserslist": [
@@ -54,6 +54,7 @@
     "jquery": "^3.4.1",
     "jsdom": "^15.1.0",
     "mocha": "^6.1.4",
+    "mocha-puppeteer": "^0.14.0",
     "node-fetch": "^2.6.0",
     "parallel-webpack": "^2.3.0",
     "request": "^2.88.0",
