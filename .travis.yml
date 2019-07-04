@@ -1,9 +1,7 @@
 sudo: required
 language: node_js
 install: npm install
-script:
-  - npm test
-  - if [[ "$TRAVIS_NODE_VERSION" = "node" ]]; then if [ -n "$SAUCE_ACCESS_KEY" ]; then npm run test:client; fi; fi;
+script: npm test
 node_js:
   - node
   - 10
