@@ -16,7 +16,7 @@
     "**/dist/*",
     "**/*.dist.js",
     "**/templates/*",
-    "**/packages/src/sort.ts"
+    "**/adapter-commons/src/sort.ts"
   ],
   "print": "detail",
   "reporter": [
