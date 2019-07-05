@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication",
   "description": "Add Authentication to your FeathersJS app.",
-  "version": "4.0.0-pre.3",
+  "version": "4.0.0-pre.4",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -38,14 +38,14 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/errors": "^4.0.0-pre.3",
+    "@feathersjs/errors": "^4.0.0-pre.4",
     "debug": "^4.1.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "^4.0.0-pre.3",
+    "@feathersjs/feathers": "^4.0.0-pre.4",
     "@types/debug": "^4.1.4",
     "@types/jsonwebtoken": "^8.3.2",
     "@types/lodash": "^4.14.132",

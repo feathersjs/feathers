@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-local",
   "description": "Local authentication strategy for @feathers/authentication",
-  "version": "4.0.0-pre.3",
+  "version": "4.0.0-pre.4",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -38,14 +38,14 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/errors": "^4.0.0-pre.3",
+    "@feathersjs/errors": "^4.0.0-pre.4",
     "bcryptjs": "^2.4.3",
     "debug": "^4.1.1",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^4.0.0-pre.3",
-    "@feathersjs/feathers": "^4.0.0-pre.3",
+    "@feathersjs/authentication": "^4.0.0-pre.4",
+    "@feathersjs/feathers": "^4.0.0-pre.4",
     "@types/bcryptjs": "^2.4.2",
     "@types/debug": "^4.1.4",
     "@types/lodash": "^4.14.132",
