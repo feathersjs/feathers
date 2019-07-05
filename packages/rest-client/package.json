@@ -50,7 +50,7 @@
     "@feathersjs/tests": "^4.0.0-pre.4",
     "axios": "^0.19.0",
     "body-parser": "^1.19.0",
-    "feathers-memory": "^3.0.2",
+    "feathers-memory": "^4.0.0",
     "mocha": "^6.1.4",
     "node-fetch": "^2.6.0",
     "request": "^2.88.0",
