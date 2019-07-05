@@ -49,5 +49,6 @@
     "shx": "^0.3.2",
     "ts-node": "^8.2.0",
     "typescript": "^3.4.5"
-  }
+  },
+  "gitHead": "f20fd5899a217afad7ad2a45b3fc3dfdc788c714"
 }
