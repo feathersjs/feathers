@@ -1,15 +1,15 @@
 // Sorting algorithm taken from NeDB (https://github.com/louischatriot/nedb)
 // See https://github.com/louischatriot/nedb/blob/e3f0078499aa1005a59d0c2372e425ab789145c1/lib/model.js#L189
 
-exports.compareNSB = function (a, b) {
+export function compareNSB (a: any, b: any) {
   if (a < b) { return -1; }
   if (a > b) { return 1; }
   return 0;
-};
+}
 
-exports.compareArrays = function (a, b) {
-  var i;
-  var comp;
+export function compareArrays (a: any, b: any) {
+  let i;
+  let comp;
 
   for (i = 0; i < Math.min(a.length, b.length); i += 1) {
     comp = exports.compare(a[i], b[i]);
@@ -19,9 +19,9 @@ exports.compareArrays = function (a, b) {
 
   // Common section was identical, longest one wins
   return exports.compareNSB(a.length, b.length);
-};
+}
 
-exports.compare = function (a, b, compareStrings = exports.compareNSB) {
+export function compare (a: any, b: any, compareStrings: any = exports.compareNSB) {
   const { compareNSB, compare, compareArrays } = exports;
 
   // undefined
@@ -64,23 +64,21 @@ exports.compare = function (a, b, compareStrings = exports.compareNSB) {
   }
 
   return compareNSB(aKeys.length, bKeys.length);
-};
+}
 
 // An in-memory sorting function according to the
 // $sort special query parameter
-exports.sorter = function ($sort) {
+export function sorter ($sort: any) {
   const criteria = Object.keys($sort).map(key => {
     const direction = $sort[key];
 
     return { key, direction };
   });
 
-  return function (a, b) {
+  return function (a: any, b: any) {
     let compare;
 
-    for (let i = 0; i < criteria.length; i++) {
-      const criterion = criteria[i];
-
+    for (const criterion of criteria) {
       compare = criterion.direction * exports.compare(a[criterion.key], b[criterion.key]);
 
       if (compare !== 0) {
@@ -90,4 +88,4 @@ exports.sorter = function ($sort) {
 
     return 0;
   };
-};
+}

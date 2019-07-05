@@ -5,6 +5,7 @@
   ],
   "linterOptions": {
     "exclude": [
+      "packages/adapter-commons/lib/**",
       "packages/authentication/lib/**",
       "packages/authentication-local/lib/**",
       "packages/authentication-client/lib/**",
