@@ -36,7 +36,7 @@
   "devDependencies": {
     "@feathersjs/errors": "^4.0.0-pre.4",
     "@feathersjs/feathers": "^4.0.0-pre.4",
-    "feathers-memory": "^3.0.2",
+    "feathers-memory": "^4.0.0",
     "mocha": "^6.1.4"
   },
   "gitHead": "f20fd5899a217afad7ad2a45b3fc3dfdc788c714"

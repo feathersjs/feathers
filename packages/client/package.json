@@ -50,7 +50,7 @@
     "@feathersjs/tests": "^4.0.0-pre.4",
     "babel-loader": "^8.0.6",
     "body-parser": "^1.19.0",
-    "feathers-memory": "^3.0.2",
+    "feathers-memory": "^4.0.0",
     "jquery": "^3.4.1",
     "jsdom": "^15.1.0",
     "mocha": "^6.1.4",
