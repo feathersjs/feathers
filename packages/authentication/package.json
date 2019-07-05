@@ -52,7 +52,7 @@
     "@types/mocha": "^5.2.6",
     "@types/node": "^12.0.2",
     "@types/uuid": "^3.4.4",
-    "feathers-memory": "^3.0.2",
+    "feathers-memory": "^4.0.0",
     "mocha": "^6.1.4",
     "shx": "^0.3.2",
     "ts-node": "^8.2.0",
