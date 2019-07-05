@@ -44,7 +44,7 @@
     "@feathersjs/primus": "^4.0.0-pre.4",
     "@feathersjs/tests": "^4.0.0-pre.4",
     "chai": "^4.2.0",
-    "feathers-memory": "^3.0.2",
+    "feathers-memory": "^4.0.0",
     "mocha": "^6.1.4",
     "ws": "^7.0.0"
   },
