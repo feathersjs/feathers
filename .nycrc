@@ -15,7 +15,8 @@
     "**/test/*",
     "**/dist/*",
     "**/*.dist.js",
-    "**/templates/*"
+    "**/templates/*",
+    "**/packages/src/sort.ts"
   ],
   "print": "detail",
   "reporter": [
