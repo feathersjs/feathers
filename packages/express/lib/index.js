@@ -7,9 +7,9 @@ const authentication = require('./authentication');
 const notFound = require('./not-found-handler');
 const rest = require('./rest');
 
-function feathersExpress (feathersApp) {
+function feathersExpress (feathersApp, expressApp) {
   if (!feathersApp) {
-    return express();
+    return expressApp || express();
   }
 
   if (typeof feathersApp.setup !== 'function') {
@@ -20,7 +20,8 @@ function feathersExpress (feathersApp) {
     throw new Error(`@feathersjs/express requires an instance of a Feathers application version 3.x or later (got ${feathersApp.version || 'unknown'})`);
   }
 
-  const expressApp = express();
+  expressApp = expressApp || express();
+
   // An Uberproto mixin that provides the extended functionality
   const mixin = {
     use (location) {
