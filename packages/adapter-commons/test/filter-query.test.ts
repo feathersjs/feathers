@@ -1,6 +1,6 @@
-const assert = require('assert');
-const { ObjectId } = require('mongodb');
-const { filterQuery } = require('../lib');
+import assert from 'assert';
+import { ObjectId } from 'mongodb';
+import { filterQuery } from '../src';
 
 describe('@feathersjs/adapter-commons/filterQuery', () => {
   describe('$sort', () => {
@@ -57,12 +57,14 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
   });
 
   describe('$limit', () => {
+    let testQuery: any;
+
     beforeEach(() => {
-      this.query = { $limit: 1 };
+      testQuery = { $limit: 1 };
     });
 
     it('returns $limit when present in query', () => {
-      const { filters, query } = filterQuery(this.query);
+      const { filters, query } = filterQuery(testQuery);
 
       assert.strictEqual(filters.$limit, 1);
       assert.deepStrictEqual(query, {});
@@ -76,7 +78,7 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
     });
 
     it('removes $limit from query when present', () => {
-      assert.deepStrictEqual(filterQuery(this.query).query, {});
+      assert.deepStrictEqual(filterQuery(testQuery).query, {});
     });
 
     it('parses $limit strings into integers (#4)', () => {
@@ -109,18 +111,20 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
   });
 
   describe('$skip', () => {
+    let testQuery: any;
+
     beforeEach(() => {
-      this.query = { $skip: 1 };
+      testQuery = { $skip: 1 };
     });
 
     it('returns $skip when present in query', () => {
-      const { filters } = filterQuery(this.query);
+      const { filters } = filterQuery(testQuery);
 
       assert.strictEqual(filters.$skip, 1);
     });
 
     it('removes $skip from query when present', () => {
-      assert.deepStrictEqual(filterQuery(this.query).query, {});
+      assert.deepStrictEqual(filterQuery(testQuery).query, {});
     });
 
     it('returns undefined when not present in query', () => {
@@ -138,18 +142,20 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
   });
 
   describe('$select', () => {
+    let testQuery: any;
+
     beforeEach(() => {
-      this.query = { $select: 1 };
+      testQuery = { $select: 1 };
     });
 
     it('returns $select when present in query', () => {
-      const { filters } = filterQuery(this.query);
+      const { filters } = filterQuery(testQuery);
 
       assert.strictEqual(filters.$select, 1);
     });
 
     it('removes $select from query when present', () => {
-      assert.deepStrictEqual(filterQuery(this.query).query, {});
+      assert.deepStrictEqual(filterQuery(testQuery).query, {});
     });
 
     it('returns undefined when not present in query', () => {
@@ -177,7 +183,7 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
     });
 
     it('only converts plain objects', () => {
-      const userId = ObjectId();
+      const userId = new ObjectId();
       const original = {
         userId
       };
@@ -211,7 +217,7 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
       const { filters } = filterQuery({
         $known: 1,
         $select: 1
-      }, { filters: { $known: (value) => value.toString() } });
+      }, { filters: { $known: (value: any) => value.toString() } });
 
       assert.strictEqual(filters.$unknown, undefined);
       assert.strictEqual(filters.$known, '1');

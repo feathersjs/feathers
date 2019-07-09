@@ -1,15 +1,17 @@
-const { _ } = require('@feathersjs/commons');
-const { BadRequest } = require('@feathersjs/errors');
+import { _ } from '@feathersjs/commons';
+import { BadRequest } from '@feathersjs/errors';
 
-function parse (number) {
+function parse (number: any) {
   if (typeof number !== 'undefined') {
     return Math.abs(parseInt(number, 10));
   }
+
+  return undefined;
 }
 
 // Returns the pagination limit and will take into account the
 // default and max pagination settings
-function getLimit (limit, paginate) {
+function getLimit (limit: any, paginate: any) {
   if (paginate && paginate.default) {
     const lower = typeof limit === 'number' ? limit : paginate.default;
     const upper = typeof paginate.max === 'number' ? paginate.max : Number.MAX_VALUE;
@@ -21,7 +23,7 @@ function getLimit (limit, paginate) {
 }
 
 // Makes sure that $sort order is always converted to an actual number
-function convertSort (sort) {
+function convertSort (sort: any) {
   if (typeof sort !== 'object' || Array.isArray(sort)) {
     return sort;
   }
@@ -31,12 +33,12 @@ function convertSort (sort) {
       ? sort[key] : parseInt(sort[key], 10);
 
     return result;
-  }, {});
+  }, {} as { [key: string]: number });
 }
 
-function cleanQuery (query, operators, filters) {
+function cleanQuery (query: any, operators: any, filters: any) {
   if (_.isObject(query) && query.constructor === {}.constructor) {
-    const result = {};
+    const result: { [key: string]: any } = {};
 
     _.each(query, (value, key) => {
       if (key[0] === '$') {
@@ -53,6 +55,7 @@ function cleanQuery (query, operators, filters) {
     });
 
     Object.getOwnPropertySymbols(query).forEach(symbol => {
+      // @ts-ignore
       result[symbol] = query[symbol];
     });
 
@@ -62,7 +65,7 @@ function cleanQuery (query, operators, filters) {
   return query;
 }
 
-function assignFilters (object, query, filters, options) {
+function assignFilters (object: any, query: any, filters: any, options: any) {
   if (Array.isArray(filters)) {
     _.each(filters, (key) => {
       if (query[key] !== undefined) {
@@ -82,24 +85,24 @@ function assignFilters (object, query, filters, options) {
   return object;
 }
 
-const FILTERS = {
-  $sort: (value) => convertSort(value),
-  $limit: (value, options) => getLimit(parse(value), options.paginate),
-  $skip: (value) => parse(value),
-  $select: (value) => value
+export const FILTERS = {
+  $sort: (value: any) => convertSort(value),
+  $limit: (value: any, options: any) => getLimit(parse(value), options.paginate),
+  $skip: (value: any) => parse(value),
+  $select: (value: any) => value
 };
 
-const OPERATORS = ['$in', '$nin', '$lt', '$lte', '$gt', '$gte', '$ne', '$or'];
+export const OPERATORS = ['$in', '$nin', '$lt', '$lte', '$gt', '$gte', '$ne', '$or'];
 
 // Converts Feathers special query parameters and pagination settings
 // and returns them separately a `filters` and the rest of the query
 // as `query`
-module.exports = function filterQuery (query, options = {}) {
+export default function filterQuery (query: any, options: any = {}) {
   const {
     filters: additionalFilters = {},
     operators: additionalOperators = []
   } = options;
-  const result = {};
+  const result: { [key: string]: any } = {};
 
   result.filters = assignFilters({}, query, FILTERS, options);
   result.filters = assignFilters(result.filters, query, additionalFilters, options);
@@ -107,6 +110,8 @@ module.exports = function filterQuery (query, options = {}) {
   result.query = cleanQuery(query, OPERATORS.concat(additionalOperators), result.filters);
 
   return result;
-};
+}
 
-Object.assign(module.exports, { OPERATORS, FILTERS });
+if (typeof module !== 'undefined') {
+  module.exports = Object.assign(filterQuery, module.exports);
+}

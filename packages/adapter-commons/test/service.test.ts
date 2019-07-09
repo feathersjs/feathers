@@ -1,7 +1,9 @@
-const assert = require('assert');
-const { NotImplemented } = require('@feathersjs/errors');
-const { AdapterService } = require('../lib');
-const METHODS = [ 'find', 'get', 'create', 'update', 'patch', 'remove' ];
+import assert from 'assert';
+import { NotImplemented } from '@feathersjs/errors';
+import { AdapterService, InternalServiceMethods } from '../src';
+import { Params, Id, NullableId } from '@feathersjs/feathers';
+
+const METHODS: [ 'find', 'get', 'create', 'update', 'patch', 'remove' ] = [ 'find', 'get', 'create', 'update', 'patch', 'remove' ];
 
 describe('@feathersjs/adapter-commons/service', () => {
   class CustomService extends AdapterService {
@@ -10,11 +12,12 @@ describe('@feathersjs/adapter-commons/service', () => {
   describe('errors when method does not exit', () => {
     METHODS.forEach(method => {
       it(`${method}`, () => {
-        const service = new CustomService();
+        const service = new CustomService({});
 
+        // @ts-ignore
         return service[method]().then(() => {
           throw new Error('Should never get here');
-        }).catch(error => {
+        }).catch((error: Error) => {
           assert.ok(error instanceof NotImplemented);
           assert.strictEqual(error.message, `Method _${method} not available`);
         });
@@ -23,35 +26,35 @@ describe('@feathersjs/adapter-commons/service', () => {
   });
 
   describe('works when methods exist', () => {
-    class MethodService extends AdapterService {
-      _find () {
+    class MethodService extends AdapterService implements InternalServiceMethods<any> {
+      _find (_params?: Params) {
         return Promise.resolve([]);
       }
 
-      _get (id) {
+      _get (id: Id, _params?: Params) {
         return Promise.resolve({ id });
       }
 
-      _create (data) {
+      _create (data: Partial<any> | Array<Partial<any>>, _params?: Params) {
         return Promise.resolve(data);
       }
 
-      _update (id) {
+      _update (id: NullableId, _data: any, _params?: Params) {
         return Promise.resolve({ id });
       }
 
-      _patch (id) {
+      _patch (id: NullableId, _data: any, _params?: Params) {
         return Promise.resolve({ id });
       }
 
-      _remove (id) {
+      _remove (id: NullableId, _params?: Params) {
         return Promise.resolve({ id });
       }
     }
 
     METHODS.forEach(method => {
       it(`${method}`, () => {
-        const service = new MethodService();
+        const service = new MethodService({});
         const args = [];
 
         if (method !== 'find') {
@@ -62,12 +65,13 @@ describe('@feathersjs/adapter-commons/service', () => {
           args.push({});
         }
 
+        // @ts-ignore
         return service[method](...args);
       });
     });
 
     it('does not allow multi patch', () => {
-      const service = new MethodService();
+      const service = new MethodService({});
 
       return service.patch(null, {})
         .then(() => assert.ok(false))
@@ -78,7 +82,7 @@ describe('@feathersjs/adapter-commons/service', () => {
     });
 
     it('does not allow multi remove', () => {
-      const service = new MethodService();
+      const service = new MethodService({});
 
       return service.remove(null, {})
         .then(() => assert.ok(false))
@@ -89,7 +93,7 @@ describe('@feathersjs/adapter-commons/service', () => {
     });
 
     it('does not allow multi create', () => {
-      const service = new MethodService();
+      const service = new MethodService({});
 
       return service.create([])
         .then(() => assert.ok(false))
@@ -100,7 +104,7 @@ describe('@feathersjs/adapter-commons/service', () => {
     });
 
     it('multi can be set to true', () => {
-      const service = new MethodService();
+      const service = new MethodService({});
 
       service.options.multi = true;
 
