@@ -3,7 +3,8 @@
   "description": "The authentication plugin for feathers-client",
   "version": "4.0.0-pre.4",
   "homepage": "https://feathersjs.com",
-  "main": "lib/index.js",
+  "main": "lib/",
+  "types": "lib/",
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -53,13 +54,13 @@
     "@feathersjs/socketio": "^4.0.0-pre.4",
     "@feathersjs/socketio-client": "^4.0.0-pre.4",
     "@types/debug": "^4.1.4",
-    "@types/mocha": "^5.2.6",
-    "@types/node": "^12.0.2",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.6.2",
     "axios": "^0.19.0",
     "mocha": "^6.1.4",
     "shx": "^0.3.2",
-    "ts-node": "^8.2.0",
-    "typescript": "^3.4.5"
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
   },
   "gitHead": "f20fd5899a217afad7ad2a45b3fc3dfdc788c714"
 }
