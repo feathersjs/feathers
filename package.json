@@ -25,8 +25,8 @@
     "test": "npm run lint && nyc lerna run test"
   },
   "devDependencies": {
-    "lerna": "^3.13.1",
-    "nyc": "^14.0.0",
-    "tslint": "^5.15.0"
+    "lerna": "^3.15.0",
+    "nyc": "^14.1.1",
+    "tslint": "^5.18.0"
   }
 }
