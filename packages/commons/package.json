@@ -23,7 +23,8 @@
   "engines": {
     "node": ">= 6"
   },
-  "main": "lib/index.js",
+  "main": "lib/",
+  "types": "lib/",
   "scripts": {
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
