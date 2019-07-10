@@ -38,7 +38,7 @@
   "dependencies": {
     "@feathersjs/commons": "^4.0.0-pre.4",
     "@feathersjs/errors": "^4.0.0-pre.4",
-    "@types/express": "^4.16.1",
+    "@types/express": "^4.17.0",
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "uberproto": "^2.0.4"
@@ -50,7 +50,7 @@
     "@feathersjs/tests": "^4.0.0-pre.4",
     "axios": "^0.19.0",
     "chai": "^4.2.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "mocha": "^6.1.4"
   },
   "gitHead": "f20fd5899a217afad7ad2a45b3fc3dfdc788c714"
