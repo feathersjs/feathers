@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/primus",
   "description": "The Feathers Primus real-time API provider",
-  "version": "4.0.0-pre.5",
+  "version": "4.3.0-pre.0",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "index.d.ts",
@@ -36,17 +36,17 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/transport-commons": "^4.2.1",
+    "@feathersjs/transport-commons": "^4.3.0-pre.0",
     "debug": "^4.1.1",
     "primus": "^7.3.3",
     "primus-emitter": "^3.1.1",
     "uberproto": "^2.0.4"
   },
   "devDependencies": {
-    "@feathersjs/commons": "^4.0.0-pre.5",
-    "@feathersjs/express": "^4.0.0-pre.5",
-    "@feathersjs/feathers": "^4.0.0-pre.5",
-    "@feathersjs/tests": "^4.0.0-pre.5",
+    "@feathersjs/commons": "^4.3.0-pre.0",
+    "@feathersjs/express": "^4.3.0-pre.0",
+    "@feathersjs/feathers": "^4.3.0-pre.0",
+    "@feathersjs/tests": "^4.3.0-pre.0",
     "feathers-memory": "^4.0.0",
     "lodash": "^4.17.13",
     "mocha": "^6.1.4",

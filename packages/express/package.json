@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/express",
   "description": "Feathers Express framework bindings and REST provider",
-  "version": "4.0.0-pre.5",
+  "version": "4.3.0-pre.0",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "index.d.ts",
@@ -36,18 +36,18 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^4.0.0-pre.5",
-    "@feathersjs/errors": "^4.0.0-pre.5",
+    "@feathersjs/commons": "^4.3.0-pre.0",
+    "@feathersjs/errors": "^4.3.0-pre.0",
     "@types/express": "^4.17.0",
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "uberproto": "^2.0.4"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^4.0.0-pre.5",
-    "@feathersjs/authentication-local": "^4.0.0-pre.5",
-    "@feathersjs/feathers": "^4.0.0-pre.5",
-    "@feathersjs/tests": "^4.0.0-pre.5",
+    "@feathersjs/authentication": "^4.3.0-pre.0",
+    "@feathersjs/authentication-local": "^4.3.0-pre.0",
+    "@feathersjs/feathers": "^4.3.0-pre.0",
+    "@feathersjs/tests": "^4.3.0-pre.0",
     "axios": "^0.19.0",
     "chai": "^4.2.0",
     "lodash": "^4.17.13",
