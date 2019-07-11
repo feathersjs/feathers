@@ -39,10 +39,10 @@
     "@feathersjs/transport-commons": "^4.3.0-pre.0"
   },
   "devDependencies": {
-    "@feathersjs/commons": "4.3.0-pre.0",
-    "@feathersjs/feathers": "4.3.0-pre.0",
-    "@feathersjs/primus": "4.3.0-pre.0",
-    "@feathersjs/tests": "4.3.0-pre.0",
+    "@feathersjs/commons": "^4.3.0-pre.0",
+    "@feathersjs/feathers": "^4.3.0-pre.0",
+    "@feathersjs/primus": "^4.3.0-pre.0",
+    "@feathersjs/tests": "^4.3.0-pre.0",
     "chai": "^4.2.0",
     "feathers-memory": "^4.0.0",
     "mocha": "^6.1.4",

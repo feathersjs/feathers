@@ -43,10 +43,10 @@
     "uberproto": "^2.0.4"
   },
   "devDependencies": {
-    "@feathersjs/commons": "4.3.0-pre.0",
-    "@feathersjs/express": "4.3.0-pre.0",
-    "@feathersjs/feathers": "4.3.0-pre.0",
-    "@feathersjs/tests": "4.3.0-pre.0",
+    "@feathersjs/commons": "^4.3.0-pre.0",
+    "@feathersjs/express": "^4.3.0-pre.0",
+    "@feathersjs/feathers": "^4.3.0-pre.0",
+    "@feathersjs/tests": "^4.3.0-pre.0",
     "feathers-memory": "^4.0.0",
     "lodash": "^4.17.13",
     "mocha": "^6.1.4",

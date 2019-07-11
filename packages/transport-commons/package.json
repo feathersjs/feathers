@@ -39,14 +39,14 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "4.3.0-pre.0",
-    "@feathersjs/errors": "4.3.0-pre.0",
+    "@feathersjs/commons": "^4.3.0-pre.0",
+    "@feathersjs/errors": "^4.3.0-pre.0",
     "debug": "^4.1.1",
     "lodash": "^4.17.13",
     "radix-router": "^3.0.1"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "4.3.0-pre.0",
+    "@feathersjs/feathers": "^4.3.0-pre.0",
     "@types/debug": "^4.1.4",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.6.2",
