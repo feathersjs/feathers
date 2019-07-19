@@ -34,6 +34,9 @@ declare namespace createApplication {
     interface Params {
         query?: Query;
         paginate?: false | Pick<PaginationOptions, 'max'>;
+        provider?: string;
+        route?: {[key: string]: string};
+        headers?: {[key: string]: any};
 
         [key: string]: any; // (JL) not sure if we want this
     }
