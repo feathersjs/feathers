@@ -24,6 +24,10 @@ describe('@feathersjs/authentication-client', () => {
       },
 
       remove (id) {
+        if (!app.get('authentication')) {
+          throw new Error('Not logged in');
+        }
+        
         return Promise.resolve({ id });
       }
     });
@@ -129,6 +133,12 @@ describe('@feathersjs/authentication-client', () => {
     return promise.then(result => {
       assert.deepStrictEqual(result, { id: null });
     });
+  });
+
+  it('logout when not logged in without error', async () => {
+    const result = await app.logout();
+
+    assert.strictEqual(result, null);
   });
 
   describe('reauthenticate', () => {
