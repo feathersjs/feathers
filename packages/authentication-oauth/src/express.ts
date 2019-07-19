@@ -2,7 +2,7 @@
 import { express as grantExpress } from 'grant';
 import Debug from 'debug';
 import { Application } from '@feathersjs/feathers';
-import { AuthenticationService, AuthenticationResult } from '@feathersjs/authentication';
+import { AuthenticationResult } from '@feathersjs/authentication';
 import qs from 'querystring';
 import {
   Application as ExpressApplication,
@@ -49,7 +49,7 @@ export default (options: OauthSetupSettings) => {
     authApp.get('/:name/authenticate', async (req, res, next) => {
       const { name } = req.params;
       const { accessToken, grant } = req.session;
-      const service: AuthenticationService = app.service(authService);
+      const service = app.defaultAuthentication(authService);
       const [ strategy ] = service.getStrategies(name) as OAuthStrategy[];
       const sendResponse = async (data: AuthenticationResult|Error) => {
         try {

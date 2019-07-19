@@ -1,7 +1,6 @@
 import Debug from 'debug';
 import { merge, each, omit } from 'lodash';
 import { Application } from '@feathersjs/feathers';
-import { AuthenticationService } from '@feathersjs/authentication';
 import { OAuthStrategy, OAuthProfile } from './strategy';
 import { default as setupExpress } from './express';
 import { OauthSetupSettings, getDefaultSettings } from './utils';
@@ -11,17 +10,16 @@ const debug = Debug('@feathersjs/authentication-oauth');
 export { OauthSetupSettings, OAuthStrategy, OAuthProfile };
 
 export const setup = (options: OauthSetupSettings) => (app: Application) => {
-  const authPath = options.authService;
-  const service: AuthenticationService = app.service(authPath);
+  const service = app.defaultAuthentication ? app.defaultAuthentication(options.authService) : null;
 
   if (!service) {
-    throw new Error(`'${authPath}' authentication service must exist before registering @feathersjs/authentication-oauth`);
+    throw new Error('An authentication service must exist before registering @feathersjs/authentication-oauth');
   }
 
   const { oauth } = service.configuration;
 
   if (!oauth) {
-    debug(`No oauth configuration found at '${authPath}'. Skipping oAuth setup.`);
+    debug(`No oauth configuration found in authentication configuration. Skipping oAuth setup.`);
     return;
   }
 

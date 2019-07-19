@@ -2,7 +2,6 @@ import { flatten, omit, merge } from 'lodash';
 import { HookContext } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
 import Debug from 'debug';
-import { AuthenticationService } from '../service';
 
 const debug = Debug('@feathersjs/authentication/hooks/authenticate');
 
@@ -22,12 +21,9 @@ export default (originalSettings: string|AuthenticateHookSettings, ...originalSt
 
   return async (context: HookContext) => {
     const { app, params, type, path, service } = context;
-    const {
-      service: authPath = app.get('defaultAuthentication'),
-      strategies
-    } = settings;
+    const { strategies } = settings;
     const { provider, authentication } = params;
-    const authService = app.service(authPath) as unknown as AuthenticationService;
+    const authService = app.defaultAuthentication(settings.service);
 
     debug(`Running authenticate hook on '${path}'`);
 
@@ -36,7 +32,7 @@ export default (originalSettings: string|AuthenticateHookSettings, ...originalSt
     }
 
     if (!authService || typeof authService.authenticate !== 'function') {
-      throw new NotAuthenticated(`Could not find authentication service at '${authPath}'`);
+      throw new NotAuthenticated('Could not find a valid authentication service');
     }
 
     // @ts-ignore

@@ -2,6 +2,7 @@ import { get, set, cloneDeep } from 'lodash';
 import { BadRequest } from '@feathersjs/errors';
 import Debug from 'debug';
 import { HookContext } from '@feathersjs/feathers';
+import { LocalStrategy } from '../strategy';
 
 const debug = Debug('@feathersjs/authentication-local/hooks/hash-password');
 
@@ -28,15 +29,14 @@ export default function hashPassword (field: string, options: HashPasswordOption
       return context;
     }
 
-    const serviceName = options.authentication || app.get('defaultAuthentication');
-    const authService = app.service(serviceName);
+    const authService = app.defaultAuthentication(options.authentication);
     const { strategy = 'local' } = options;
 
     if (!authService || typeof authService.getStrategies !== 'function') {
-      throw new BadRequest(`Could not find '${serviceName}' service to hash password`);
+      throw new BadRequest(`Could not find an authentication service to hash password`);
     }
 
-    const [ localStrategy ] = authService.getStrategies(strategy);
+    const localStrategy = authService.getStrategies(strategy)[0] as LocalStrategy;
 
     if (!localStrategy || typeof localStrategy.hashPassword !== 'function') {
       throw new BadRequest(`Could not find '${strategy}' strategy to hash password`);
