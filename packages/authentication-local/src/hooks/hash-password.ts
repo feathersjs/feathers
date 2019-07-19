@@ -36,7 +36,7 @@ export default function hashPassword (field: string, options: HashPasswordOption
       throw new BadRequest(`Could not find an authentication service to hash password`);
     }
 
-    const localStrategy = authService.getStrategies(strategy)[0] as LocalStrategy;
+    const [ localStrategy ] = authService.getStrategies(strategy) as LocalStrategy[];
 
     if (!localStrategy || typeof localStrategy.hashPassword !== 'function') {
       throw new BadRequest(`Could not find '${strategy}' strategy to hash password`);
