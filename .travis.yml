@@ -5,7 +5,6 @@ script: npm test
 node_js:
   - node
   - 10
-  - 8
 addons:
   code_climate:
     repo_token: 9840b8b56f6d10209b3478d41f7ba5102d02981435df129bb18554a529359c62
