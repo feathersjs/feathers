@@ -29,7 +29,7 @@ export interface InternalServiceMethods<T = any> {
     _find (params?: Params): Promise<T | T[] | Paginated<T>>;
     _get (id: Id, params?: Params): Promise<T>;
     _create (data: Partial<T> | Array<Partial<T>>, params?: Params): Promise<T | T[]>;
-    _update (id: NullableId, data: T, params?: Params): Promise<T>;
+    _update (id: Id, data: T, params?: Params): Promise<T>;
     _patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T>;
     _remove (id: NullableId, params?: Params): Promise<T>;
 }
@@ -102,7 +102,7 @@ export class AdapterService<T = any> implements ServiceMethods<T> {
     return callMethod(this, '_create', data, params);
   }
 
-  update (id: NullableId, data: T, params?: Params): Promise<T> {
+  update (id: Id, data: T, params?: Params): Promise<T> {
     if (id === null || Array.isArray(data)) {
       return Promise.reject(new BadRequest(
         `You can not replace multiple instances. Did you mean 'patch'?`
