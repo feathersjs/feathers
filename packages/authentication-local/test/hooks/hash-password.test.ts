@@ -35,7 +35,7 @@ describe('@feathersjs/authentication-local/hooks/hash-password', () => {
       assert.fail('Should never get here');
     } catch (error) {
       assert.strictEqual(error.message,
-        `Could not find 'authentication' service to hash password`
+        'Could not find an authentication service to hash password'
       );
     }
   });

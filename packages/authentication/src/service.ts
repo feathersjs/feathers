@@ -3,11 +3,38 @@ import { merge, get } from 'lodash';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { AuthenticationBase, AuthenticationResult, AuthenticationRequest } from './core';
 import { connection, events } from './hooks';
-import { Params, ServiceMethods } from '@feathersjs/feathers';
+import { Application, Params, ServiceMethods } from '@feathersjs/feathers';
 
 const debug = Debug('@feathersjs/authentication/service');
 
+declare module '@feathersjs/feathers' {
+  interface Application<ServiceTypes = {}> {
+
+    /**
+     * Returns the default authentication service or the
+     * authentication service for a given path.
+     *
+     * @param location The service path to use (optional)
+     */
+    defaultAuthentication (location?: string): AuthenticationService;
+  }
+}
+
 export class AuthenticationService extends AuthenticationBase implements Partial<ServiceMethods<AuthenticationResult>> {
+  constructor (app: Application, configKey: string = 'authentication', options = {}) {
+    super(app, configKey, options);
+
+    if (typeof app.defaultAuthentication !== 'function') {
+      app.defaultAuthentication = function (location?: string) {
+        const configKey = app.get('defaultAuthentication');
+        const path = location || Object.keys(this.services).find(current =>
+          this.service(current).configKey === configKey
+        );
+
+        return path ? this.service(path) : null;
+      };
+    }
+  }
   /**
    * Return the payload for a JWT based on the authentication result.
    * Called internally by the `create` method.

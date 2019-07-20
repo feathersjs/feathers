@@ -13,7 +13,7 @@ describe('@feathersjs/authentication-oauth', () => {
         assert.fail('Should never get here');
       } catch (error) {
         assert.equal(error.message,
-          `'something' authentication service must exist before registering @feathersjs/authentication-oauth`
+          'An authentication service must exist before registering @feathersjs/authentication-oauth'
         );
       }
     });

@@ -108,7 +108,7 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
     throw new NotAuthenticated(errorMessage);
   }
 
-  async hashPassword (password: string) {
+  async hashPassword (password: string, _params: Params) {
     return bcrypt.hash(password, this.configuration.hashSize);
   }
 
