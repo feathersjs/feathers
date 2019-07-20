@@ -166,14 +166,20 @@ export class AuthenticationClient {
 
   logout () {
     return Promise.resolve(this.app.get('authentication'))
-      .then(() => this.service.remove(null))
-      .then((authResult: AuthenticationResult) => this.removeAccessToken()
-        .then(() => this.reset())
-        .then(() => {
-          this.app.emit('logout', authResult);
+      .then(auth => {
+        if (!auth) {
+          return null;
+        }
 
-          return authResult;
-        })
-      );
+        return this.service.remove(null)
+          .then((authResult: AuthenticationResult) => this.removeAccessToken()
+            .then(() => this.reset())
+            .then(() => {
+              this.app.emit('logout', authResult);
+
+              return authResult;
+            })
+          );
+      });
   }
 }
