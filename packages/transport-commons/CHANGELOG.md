@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.3.0-pre.2](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.1...v4.3.0-pre.2) (2019-08-02)
+
+
+### Bug Fixes
+
+* Add getEntityId to JWT strategy and fix legacy Socket authentication ([#1488](https://github.com/feathersjs/feathers/issues/1488)) ([9a3b324](https://github.com/feathersjs/feathers/commit/9a3b324))
+* Improve Params typing ([#1474](https://github.com/feathersjs/feathers/issues/1474)) ([54a3aa7](https://github.com/feathersjs/feathers/commit/54a3aa7))
+
+
+
+
+
 # [4.3.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.5...v4.3.0-pre.1) (2019-07-11)
 
 **Note:** Version bump only for package @feathersjs/transport-commons

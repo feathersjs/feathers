@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.3.0-pre.2](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.1...v4.3.0-pre.2) (2019-08-02)
+
+
+### Bug Fixes
+
+* @feathersjs/adapter-commons: `update` id is non-nullable ([#1468](https://github.com/feathersjs/feathers/issues/1468)) ([43ec802](https://github.com/feathersjs/feathers/commit/43ec802))
+
+
+
+
+
 # [4.3.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.5...v4.3.0-pre.1) (2019-07-11)
 
 **Note:** Version bump only for package @feathersjs/adapter-commons
