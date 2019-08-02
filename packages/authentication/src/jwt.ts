@@ -1,6 +1,6 @@
 import { NotAuthenticated } from '@feathersjs/errors';
 import { omit } from 'lodash';
-import { AuthenticationRequest } from './core';
+import { AuthenticationRequest, AuthenticationResult } from './core';
 import { Params } from '@feathersjs/feathers';
 import { IncomingMessage } from 'http';
 import { AuthenticationBaseStrategy } from './strategy';
@@ -53,6 +53,10 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     return entityService.get(id, { ...params, [entity]: result });
   }
 
+  async getEntityId (authResult: AuthenticationResult, _params: Params) {
+    return authResult.authentication.payload.sub;
+  }
+
   async authenticate (authentication: AuthenticationRequest, params: Params) {
     const { accessToken } = authentication;
     const { entity } = this.configuration;
@@ -62,7 +66,6 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     }
 
     const payload = await this.authentication.verifyAccessToken(accessToken, params.jwt);
-    const entityId = payload.sub;
     const result = {
       accessToken,
       authentication: {
@@ -70,6 +73,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
         payload
       }
     };
+    const entityId = await this.getEntityId(result, params);
 
     if (entity === null) {
       return result;
