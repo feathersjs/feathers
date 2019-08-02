@@ -8,6 +8,8 @@ node_js:
 addons:
   code_climate:
     repo_token: 9840b8b56f6d10209b3478d41f7ba5102d02981435df129bb18554a529359c62
+before_install:
+  - 'sudo apt-get install libgconf-2-4'
 before_script:
   - 'npm install -g codeclimate-test-reporter'
 after_script:
