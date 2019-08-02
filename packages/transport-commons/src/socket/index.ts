@@ -50,6 +50,13 @@ export function socket ({ done, emit, socketKey, getParams }: SocketOptions) {
           runMethod(app, getParams(connection), app.get('defaultAuthentication'), 'create', args);
         }
       });
+
+      connection.on('logout', (callback: any) => {
+        if (app.get('defaultAuthentication')) {
+          debug('Got legacy authenticate event');
+          runMethod(app, getParams(connection), app.get('defaultAuthentication'), 'remove', [ null, {}, callback ]);
+        }
+      });
     }));
 
     // Legacy `socket.emit('serviceName::methodName', ...args)` handlers
