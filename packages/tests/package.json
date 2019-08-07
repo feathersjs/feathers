@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "axios": "^0.19.0",
-    "lodash": "^4.17.13"
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
     "@feathersjs/feathers": "^4.3.0-pre.2",
@@ -47,8 +47,8 @@
     "@types/debug": "^4.1.4",
     "@types/lodash": "^4.14.136",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.6.2",
-    "mocha": "^6.1.4",
+    "@types/node": "^12.7.0",
+    "mocha": "^6.2.0",
     "shx": "^0.3.2",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3"
