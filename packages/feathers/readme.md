@@ -1,6 +1,6 @@
 <img style="width: 100%; max-width: 400px;" src="http://feathersjs.com/img/feathers-logo-wide.png" alt="Feathers logo">
 
-## A REST and realtime API layer for modern applications.
+## A framework for real-time applications and REST API with JavaScript and TypeScript
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers.svg)](https://greenkeeper.io/)
 
