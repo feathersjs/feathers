@@ -46,7 +46,7 @@
     "chai": "^4.2.0",
     "feathers-memory": "^4.0.0",
     "mocha": "^6.2.0",
-    "ws": "^7.1.1"
+    "ws": "^7.1.2"
   },
   "gitHead": "4d350e5299315df3090a2231ef3caaf795dee994"
 }

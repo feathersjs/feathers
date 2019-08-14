@@ -50,7 +50,7 @@
     "feathers-memory": "^4.0.0",
     "lodash": "^4.17.15",
     "mocha": "^6.2.0",
-    "ws": "^7.1.1"
+    "ws": "^7.1.2"
   },
   "gitHead": "4d350e5299315df3090a2231ef3caaf795dee994"
 }

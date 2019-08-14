@@ -61,9 +61,9 @@
     "socket.io-client": "^2.2.0",
     "superagent": "^5.1.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^4.39.1",
+    "webpack": "^4.39.2",
     "webpack-merge": "^4.2.1",
-    "ws": "^7.1.1",
+    "ws": "^7.1.2",
     "xhr2": "^0.2.0"
   },
   "gitHead": "4d350e5299315df3090a2231ef3caaf795dee994"
