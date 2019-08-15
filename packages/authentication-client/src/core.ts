@@ -107,7 +107,7 @@ export class AuthenticationClient {
       });
   }
 
-  removeAccessToken () {
+  removeAccessToken (error?: Error) {
     return this.storage.removeItem(this.options.storageKey);
   }
 
@@ -134,7 +134,7 @@ export class AuthenticationClient {
           accessToken
         });
       }).catch((error: Error) =>
-        this.removeAccessToken().then(() => Promise.reject(error))
+        this.removeAccessToken(error).then(() => Promise.reject(error))
       );
     }
 
