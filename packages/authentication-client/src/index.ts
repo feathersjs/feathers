@@ -32,7 +32,8 @@ export const defaults: AuthenticationClientOptions = {
   jwtStrategy: 'jwt',
   path: '/authentication',
   Authentication: AuthenticationClient,
-  storage: defaultStorage
+  storage: defaultStorage,
+  removeTokenOnError: () => true
 };
 
 const init = (_options: Partial<AuthenticationClientOptions> = {}) => {

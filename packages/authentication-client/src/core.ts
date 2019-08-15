@@ -29,6 +29,7 @@ export interface AuthenticationClientOptions {
   jwtStrategy: string;
   path: string;
   Authentication: ClientConstructor;
+  removeTokenOnError (error?: Error): boolean;
 }
 
 export class AuthenticationClient {
@@ -107,15 +108,11 @@ export class AuthenticationClient {
       });
   }
 
-  removeTokenOnError () {
-    return true
-  }
-
   removeAccessToken (error?: Error) {
-    if (this.removeTokenOnError(error)) {
+    if (this.options.removeTokenOnError(error)) {
       return this.storage.removeItem(this.options.storageKey);
     } else {
-      return Promise.resolve()
+      return Promise.resolve();
     }
   }
 
