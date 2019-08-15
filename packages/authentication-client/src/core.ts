@@ -107,8 +107,16 @@ export class AuthenticationClient {
       });
   }
 
+  removeTokenOnError () {
+    return true
+  }
+
   removeAccessToken (error?: Error) {
-    return this.storage.removeItem(this.options.storageKey);
+    if (this.removeTokenOnError(error)) {
+      return this.storage.removeItem(this.options.storageKey);
+    } else {
+      return Promise.resolve()
+    }
   }
 
   reset () {
