@@ -10,16 +10,16 @@ const debug = Debug('@feathersjs/transport-commons');
 export interface SocketOptions {
   done: Promise<any>;
   emit: string;
-  socketKey: any;
+  socketMap: WeakMap<RealTimeConnection, any>;
   getParams: (socket: any) => RealTimeConnection;
 }
 
-export function socket ({ done, emit, socketKey, getParams }: SocketOptions) {
+export function socket ({ done, emit, socketMap, getParams }: SocketOptions) {
   return (app: Application) => {
     app.configure(channels());
     app.configure(routing());
 
-    app.on('publish', getDispatcher(emit, socketKey));
+    app.on('publish', getDispatcher(emit, socketMap));
     app.on('disconnect', connection => {
       const { channels } = app;
 

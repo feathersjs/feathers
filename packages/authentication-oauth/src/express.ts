@@ -33,13 +33,14 @@ export default (options: OauthSetupSettings) => {
 
     authApp.get('/:name', (req, res) => {
       const { feathers_token, ...query } = req.query;
+      const { name } = req.params as any;
 
       if (feathers_token) {
         debug(`Got feathers_token query parameter to link accounts`, feathers_token);
         req.session.accessToken = feathers_token;
       }
 
-      res.redirect(`${path}/connect/${req.params.name}?${qs.stringify(query)}`);
+      res.redirect(`${path}/connect/${name}?${qs.stringify(query)}`);
     });
 
     authApp.get('/:name/callback', (req: any, res: any) => {
@@ -47,7 +48,7 @@ export default (options: OauthSetupSettings) => {
     });
 
     authApp.get('/:name/authenticate', async (req, res, next) => {
-      const { name } = req.params;
+      const { name } = req.params as any;
       const { accessToken, grant } = req.session;
       const service = app.defaultAuthentication(authService);
       const [ strategy ] = service.getStrategies(name) as OAuthStrategy[];

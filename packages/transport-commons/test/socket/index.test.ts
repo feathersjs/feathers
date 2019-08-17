@@ -17,7 +17,7 @@ describe('@feathersjs/transport-commons', () => {
     options = {
       emit: 'emit',
       done: Promise.resolve(provider),
-      socketKey: 'test',
+      socketMap: new WeakMap(),
       getParams () {
         return connection;
       }

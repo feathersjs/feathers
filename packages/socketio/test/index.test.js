@@ -77,8 +77,7 @@ describe.only('@feathersjs/socketio', () => {
     server.close(done);
   });
 
-  it('exports default and SOCKET_KEY', () => {
-    assert.ok(socketio.SOCKET_KEY);
+  it('exports default', () => {
     assert.strictEqual(socketio, socketio.default);
   });
 
