@@ -1,7 +1,7 @@
 import assert from 'assert';
 import feathers, { Params, HookContext } from '@feathersjs/feathers';
 
-import hook from '../../src/hooks/events';
+import hook from '../../src/hooks/event';
 import { AuthenticationRequest, AuthenticationResult } from '../../src/core';
 
 describe('authentication/hooks/events', () => {
@@ -19,7 +19,8 @@ describe('authentication/hooks/events', () => {
 
   service.hooks({
     after: {
-      all: [ hook() ]
+      create: [ hook('login') ],
+      remove: [ hook('logout') ]
     }
   });
 

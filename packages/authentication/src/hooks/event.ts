@@ -2,16 +2,11 @@ import Debug from 'debug';
 import { HookContext } from '@feathersjs/feathers';
 
 const debug = Debug('@feathersjs/authentication/hooks/connection');
-const EVENTS: { [key: string]: string } = {
-  create: 'login',
-  remove: 'logout'
-};
 
-export default () => (context: HookContext) => {
-  const { method, app, result, params } = context;
-  const event = EVENTS[method];
+export default (event: string) => (context: HookContext) => {
+  const { type, app, result, params } = context;
 
-  if (event && params.provider && result) {
+  if (type === 'after' && params.provider && result) {
     debug(`Sending authentication event '${event}'`);
     app.emit(event, result, params, context);
   }

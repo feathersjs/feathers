@@ -27,7 +27,7 @@ describe('@feathersjs/authentication-client', () => {
         if (!app.get('authentication')) {
           throw new Error('Not logged in');
         }
-        
+
         return Promise.resolve({ id });
       }
     });
