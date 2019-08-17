@@ -1,26 +1,23 @@
 import { HookContext } from '@feathersjs/feathers';
-import Debug from 'debug';
+import { omit } from 'lodash';
 
-const debug = Debug('@feathersjs/authentication/hooks/connection');
+import { AuthenticationBase } from '../core';
 
-export default (strategy = 'jwt') => (context: HookContext) => {
-  const { method, result, params: { connection } } = context;
-  const { accessToken, ...rest } = result;
+export default () => async (context: HookContext) => {
+  const { result, params: { connection } } = context;
 
   if (!connection) {
     return context;
   }
 
-  const { authentication = {} } = connection;
+  const service = context.service as unknown as AuthenticationBase;
+  const strategies = service.getStrategies(...Object.keys(service.strategies))
+    .filter(current => typeof current.handleConnection === 'function');
 
-  if (method === 'remove' && accessToken === authentication.accessToken) {
-    debug('Removing authentication information from real-time connection');
-    delete connection.authentication;
-  } else if (method === 'create' && accessToken) {
-    debug('Adding authentication information to real-time connection');
-    Object.assign(connection, rest, {
-      authentication: { strategy, accessToken }
-    });
+  Object.assign(connection, omit(result, 'accessToken', 'authentication'));
+
+  for (const strategy of strategies) {
+    await strategy.handleConnection(connection, context);
   }
 
   return context;

@@ -1,10 +1,13 @@
 import { NotAuthenticated } from '@feathersjs/errors';
-import { omit } from 'lodash';
-import { AuthenticationRequest, AuthenticationResult } from './core';
-import { Params } from '@feathersjs/feathers';
 import { IncomingMessage } from 'http';
-import { AuthenticationBaseStrategy } from './strategy';
+import { omit } from 'lodash';
+import Debug from 'debug';
+import { Params, HookContext } from '@feathersjs/feathers';
 
+import { AuthenticationBaseStrategy } from './strategy';
+import { AuthenticationRequest, AuthenticationResult } from './core';
+
+const debug = Debug('@feathersjs/authentication/jwt');
 const SPLIT_HEADER = /(\S+)\s+(\S+)/;
 
 export class JWTStrategy extends AuthenticationBaseStrategy {
@@ -19,6 +22,25 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       schemes: [ 'Bearer', 'JWT' ],
       ...config
     };
+  }
+
+  async handleConnection (connection: any, context: HookContext) {
+    const { result: { accessToken }, method } = context;
+
+    if (accessToken) {
+      if (method === 'create') {
+        debug('Adding authentication information to connection');
+        connection.authentication = {
+          strategy: this.name,
+          accessToken
+        };
+      } else if (method === 'remove' && accessToken === connection.authentication.accessToken) {
+        debug('Removing authentication information from connection');
+        delete connection.authentication;
+      }
+    }
+
+    return context;
   }
 
   verifyConfiguration () {
@@ -39,6 +61,8 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
   async getEntity (id: string, params: Params) {
     const { entity } = this.configuration;
     const entityService = this.entityService;
+
+    debug('Getting entity', id);
 
     if (entityService === null) {
       throw new NotAuthenticated(`Could not find entity service`);
@@ -95,6 +119,8 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     if (!headerValue || typeof headerValue !== 'string') {
       return null;
     }
+
+    debug('Found parsed header value');
 
     const [ , scheme = null, schemeValue = null ] = headerValue.match(SPLIT_HEADER) || [];
     const hasScheme = scheme && schemes.some(

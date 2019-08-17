@@ -2,7 +2,7 @@ import Debug from 'debug';
 import { merge, get } from 'lodash';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { AuthenticationBase, AuthenticationResult, AuthenticationRequest } from './core';
-import { connection, events } from './hooks';
+import { connection, event } from './hooks';
 import { Application, Params, ServiceMethods } from '@feathersjs/feathers';
 
 const debug = Debug('@feathersjs/authentication/service');
@@ -154,6 +154,12 @@ export class AuthenticationService extends AuthenticationBase implements Partial
     }
 
     // @ts-ignore
-    this.hooks({ after: [ connection(), events() ] });
+    this.hooks({
+      after: [ connection() ],
+      finally: {
+        create: [ event('login') ],
+        remove: [ event('logout') ]
+      }
+    });
   }
 }

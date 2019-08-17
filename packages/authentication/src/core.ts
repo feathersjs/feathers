@@ -4,7 +4,7 @@ import jsonwebtoken, { SignOptions, Secret, VerifyOptions } from 'jsonwebtoken';
 import uuidv4 from 'uuid/v4';
 import { NotAuthenticated } from '@feathersjs/errors';
 import Debug from 'debug';
-import { Application, Params } from '@feathersjs/feathers';
+import { Application, Params, HookContext } from '@feathersjs/feathers';
 import { IncomingMessage, ServerResponse } from 'http';
 import defaultOptions from './options';
 
@@ -49,6 +49,13 @@ export interface AuthenticationStrategy {
    * @param params The service call parameters
    */
   authenticate? (authentication: AuthenticationRequest, params: Params): Promise<AuthenticationResult>;
+  /**
+   * Update a real-time connection according to this strategy.
+   *
+   * @param connection The real-time connection
+   * @param context The hook context
+   */
+  handleConnection? (connection: any, context: HookContext): Promise<HookContext>;
   /**
    * Parse a basic HTTP request and response for authentication request information.
    * @param req The HTTP request

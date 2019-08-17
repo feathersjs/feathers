@@ -72,6 +72,7 @@ describe('authentication/jwt', () => {
     });
 
     payload = await service.verifyAccessToken(accessToken);
+    app.setup();
   });
 
   it('getEntity', async () => {
@@ -88,6 +89,64 @@ describe('authentication/jwt', () => {
     assert.deepStrictEqual(entity, {
       ...user,
       isExternal: true
+    });
+  });
+
+  describe('updateConnection', () => {
+    it('adds authentication information on create', async () => {
+      const connection: any = {};
+
+      await app.service('authentication').create({
+        strategy: 'jwt',
+        accessToken
+      }, { connection });
+
+      assert.deepStrictEqual(connection.user, user);
+      assert.deepStrictEqual(connection.authentication, {
+        strategy: 'jwt',
+        accessToken
+      });
+    });
+
+    it('deletes authentication information on remove', async () => {
+      const connection: any = {};
+
+      await app.service('authentication').create({
+        strategy: 'jwt',
+        accessToken
+      }, { connection });
+
+      assert.ok(connection.authentication);
+
+      await app.service('authentication').remove(null, {
+        authentication: connection.authentication,
+        connection
+      });
+
+      assert.ok(!connection.authentication);
+    });
+
+    it('does not remove if accessToken does not match', async () => {
+      const connection: any = {};
+
+      await app.service('authentication').create({
+        strategy: 'jwt',
+        accessToken
+      }, { connection });
+
+      assert.ok(connection.authentication);
+
+      await app.service('authentication').remove(null, {
+        authentication: {
+          strategy: 'jwt',
+          accessToken: await app.service('authentication').createAccessToken({}, {
+            subject: `${user.id}`
+          })
+        },
+        connection
+      });
+
+      assert.ok(connection.authentication);
     });
   });
 
