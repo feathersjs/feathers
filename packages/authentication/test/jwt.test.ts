@@ -125,6 +125,29 @@ describe('authentication/jwt', () => {
 
       assert.ok(!connection.authentication);
     });
+
+    it('does not remove if accessToken does not match', async () => {
+      const connection: any = {};
+
+      await app.service('authentication').create({
+        strategy: 'jwt',
+        accessToken
+      }, { connection });
+
+      assert.ok(connection.authentication);
+
+      await app.service('authentication').remove(null, {
+        authentication: {
+          strategy: 'jwt',
+          accessToken: await app.service('authentication').createAccessToken({}, {
+            subject: `${user.id}`
+          })
+        },
+        connection
+      });
+
+      assert.ok(connection.authentication);
+    });
   });
 
   describe('with authenticate hook', () => {

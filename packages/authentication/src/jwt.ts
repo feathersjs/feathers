@@ -34,7 +34,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
           strategy: this.name,
           accessToken
         };
-      } else if (method === 'remove') {
+      } else if (method === 'remove' && accessToken === connection.authentication.accessToken) {
         debug('Removing authentication information from connection');
         delete connection.authentication;
       }
