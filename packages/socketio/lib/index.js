@@ -4,8 +4,6 @@ const http = require('http');
 const { socket: commons } = require('@feathersjs/transport-commons');
 const debug = require('debug')('@feathersjs/socketio');
 
-const socketKey = Symbol('@feathersjs/socketio/socket');
-
 function configureSocketio (port, options, config) {
   if (typeof port !== 'number') {
     config = options;
