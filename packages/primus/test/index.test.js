@@ -63,8 +63,7 @@ describe('@feathersjs/primus', () => {
     options.server.close(done);
   });
 
-  it('exports default and SOCKET_KEY', () => {
-    assert.ok(primus.SOCKET_KEY);
+  it('exports default', () => {
     assert.strictEqual(primus, primus.default);
   });
 

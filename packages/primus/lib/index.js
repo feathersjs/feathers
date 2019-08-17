@@ -6,12 +6,13 @@ const http = require('http');
 const Emitter = require('primus-emitter');
 
 const debug = makeDebug('@feathersjs/primus');
-const socketKey = Symbol('@feathersjs/primus/socket');
 
 function configurePrimus (config, configurer) {
-  return function () {
-    const app = this;
+  return function (app) {
+    // Returns the connection object
     const getParams = spark => spark.request.feathers;
+    // Mapping from connection back to its socket
+    const socketMap = new WeakMap();
 
     if (!app.version || app.version < '3.0.0') {
       throw new Error('@feathersjs/primus is not compatible with this version of Feathers. Use the latest at @feathersjs/feathers.');
@@ -58,12 +59,7 @@ function configurePrimus (config, configurer) {
               next();
             }, 0);
 
-            primus.on('connection', spark =>
-              Object.defineProperty(getParams(spark), socketKey, {
-                value: spark
-              })
-            );
-
+            primus.on('connection', spark => socketMap.set(getParams(spark), spark));
             primus.on('disconnection', spark => app.emit('disconnect', getParams(spark)));
           }
 
@@ -81,7 +77,7 @@ function configurePrimus (config, configurer) {
 
     app.configure(commons({
       done,
-      socketKey,
+      socketMap,
       getParams,
       emit: 'send'
     }));
@@ -89,5 +85,4 @@ function configurePrimus (config, configurer) {
 }
 
 module.exports = configurePrimus;
-module.exports.SOCKET_KEY = socketKey;
 module.exports.default = configurePrimus;

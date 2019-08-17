@@ -18,9 +18,11 @@ function configureSocketio (port, options, config) {
     options = {};
   }
 
-  return function () {
-    const app = this;
+  return function (app) {
+    // Function that gets the connection
     const getParams = socket => socket.feathers;
+    // A mapping from connection to socket instance
+    const socketMap = new WeakMap();
 
     if (!app.version || app.version < '3.0.0') {
       throw new Error('@feathersjs/socketio is not compatible with this version of Feathers. Use the latest at @feathersjs/feathers.');
@@ -50,16 +52,12 @@ function configureSocketio (port, options, config) {
               .listen(port || server, options);
 
             io.use((socket, next) => {
-              const connection = {
+              socket.feathers = {
                 provider: 'socketio',
                 headers: socket.handshake.headers
               };
 
-              Object.defineProperty(connection, socketKey, {
-                value: socket
-              });
-
-              socket.feathers = connection;
+              socketMap.set(socket.feathers, socket);
 
               next();
             });
@@ -89,7 +87,7 @@ function configureSocketio (port, options, config) {
 
     app.configure(commons({
       done,
-      socketKey,
+      socketMap,
       getParams,
       emit: 'emit'
     }));
@@ -98,4 +96,3 @@ function configureSocketio (port, options, config) {
 
 module.exports = configureSocketio;
 module.exports.default = configureSocketio;
-module.exports.SOCKET_KEY = socketKey;
