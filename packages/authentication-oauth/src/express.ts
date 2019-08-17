@@ -10,7 +10,6 @@ import {
 } from '@feathersjs/express';
 import { OauthSetupSettings } from './utils';
 import { OAuthStrategy } from './strategy';
-import { ParamsDictionary } from 'express-serve-static-core';
 
 const grant = grantExpress();
 const debug = Debug('@feathersjs/authentication-oauth/express');
@@ -34,7 +33,7 @@ export default (options: OauthSetupSettings) => {
 
     authApp.get('/:name', (req, res) => {
       const { feathers_token, ...query } = req.query;
-      const { name } = req.params as ParamsDictionary;
+      const { name } = req.params as any;
 
       if (feathers_token) {
         debug(`Got feathers_token query parameter to link accounts`, feathers_token);
@@ -49,7 +48,7 @@ export default (options: OauthSetupSettings) => {
     });
 
     authApp.get('/:name/authenticate', async (req, res, next) => {
-      const { name } = req.params as ParamsDictionary;
+      const { name } = req.params as any;
       const { accessToken, grant } = req.session;
       const service = app.defaultAuthentication(authService);
       const [ strategy ] = service.getStrategies(name) as OAuthStrategy[];
