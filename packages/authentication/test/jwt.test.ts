@@ -92,7 +92,7 @@ describe('authentication/jwt', () => {
     });
   });
 
-  describe('updateConnection', () => {
+  describe('handleConnection', () => {
     it('adds authentication information on create', async () => {
       const connection: any = {};
 
@@ -106,6 +106,27 @@ describe('authentication/jwt', () => {
         strategy: 'jwt',
         accessToken
       });
+    });
+
+    it('sends disconnect event when connection token expires and removes authentication', async () => {
+      const connection: any = {};
+      const token: string = await app.service('authentication').createAccessToken({}, {
+        subject: `${user.id}`,
+        expiresIn: '1s'
+      });
+
+      const result = await app.service('authentication').create({
+        strategy: 'jwt',
+        accessToken: token
+      }, { connection });
+
+      assert.ok(connection.authentication);
+
+      assert.strictEqual(result.accessToken, token);
+
+      const disconnection = await new Promise(resolve => app.once('disconnect', resolve));
+
+      assert.strictEqual(disconnection, connection);
     });
 
     it('deletes authentication information on remove', async () => {

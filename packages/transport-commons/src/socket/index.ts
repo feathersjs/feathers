@@ -1,8 +1,8 @@
+import { Application, Params } from '@feathersjs/feathers';
 import Debug from 'debug';
 import { channels } from '../channels';
 import { routing } from '../routing';
 import { getDispatcher, runMethod } from './utils';
-import { Application } from '@feathersjs/feathers';
 import { RealTimeConnection } from '../channels/channel/base';
 
 const debug = Debug('@feathersjs/transport-commons');
@@ -16,15 +16,24 @@ export interface SocketOptions {
 
 export function socket ({ done, emit, socketMap, getParams }: SocketOptions) {
   return (app: Application) => {
-    app.configure(channels());
-    app.configure(routing());
-
-    app.on('publish', getDispatcher(emit, socketMap));
-    app.on('disconnect', connection => {
+    const leaveChannels = (connection: RealTimeConnection) => {
       const { channels } = app;
 
       if (channels.length) {
         app.channel(app.channels).leave(connection);
+      }
+    };
+
+    app.configure(channels());
+    app.configure(routing());
+
+    app.on('publish', getDispatcher(emit, socketMap));
+    app.on('disconnect', leaveChannels);
+    app.on('logout', (_authResult: any, params: Params) => {
+      const { connection } = params;
+
+      if (connection) {
+        leaveChannels(connection);
       }
     });
 

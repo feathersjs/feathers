@@ -1,16 +1,18 @@
-import { NotAuthenticated } from '@feathersjs/errors';
-import { IncomingMessage } from 'http';
-import { omit } from 'lodash';
 import Debug from 'debug';
-import { Params, HookContext } from '@feathersjs/feathers';
+import { omit } from 'lodash';
+import { IncomingMessage } from 'http';
+import { NotAuthenticated } from '@feathersjs/errors';
+import { Params } from '@feathersjs/feathers';
 
 import { AuthenticationBaseStrategy } from './strategy';
-import { AuthenticationRequest, AuthenticationResult } from './core';
+import { AuthenticationRequest, AuthenticationResult, ConnectionEvent } from './core';
 
 const debug = Debug('@feathersjs/authentication/jwt');
 const SPLIT_HEADER = /(\S+)\s+(\S+)/;
 
 export class JWTStrategy extends AuthenticationBaseStrategy {
+  expirationTimers = new WeakMap();
+
   get configuration () {
     const authConfig = this.authentication.configuration;
     const config = super.configuration;
@@ -24,23 +26,33 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     };
   }
 
-  async handleConnection (connection: any, context: HookContext) {
-    const { result: { accessToken }, method } = context;
+  async handleConnection (event: ConnectionEvent, connection: any, authResult?: AuthenticationResult): Promise<void> {
+    const isValidLogout = event === 'logout' && connection.authentication && authResult &&
+      connection.authentication.accessToken === authResult.accessToken;
+    
+    if (authResult && event === 'login') {
+      const { accessToken } = authResult;
+      const { exp } = await this.authentication.verifyAccessToken(accessToken);
+      // The time (in ms) until the token expires
+      const duration = (exp * 1000) - new Date().getTime();
+      // This may have to be a `logout` event but right now we don't want
+      // the whole context object lingering around until the timer is gone
+      const timer = setTimeout(() => this.app.emit('disconnect', connection), duration);
 
-    if (accessToken) {
-      if (method === 'create') {
-        debug('Adding authentication information to connection');
-        connection.authentication = {
-          strategy: this.name,
-          accessToken
-        };
-      } else if (method === 'remove' && accessToken === connection.authentication.accessToken) {
-        debug('Removing authentication information from connection');
-        delete connection.authentication;
-      }
+      debug(`Registering connection expiration timer for ${duration}ms`);
+      this.expirationTimers.set(connection, timer);
+
+      debug('Adding authentication information to connection');
+      connection.authentication = {
+        strategy: this.name,
+        accessToken
+      };
+    } else if (event === 'disconnect' || isValidLogout) {
+      debug('Removing authentication information and expiration timer from connection');
+
+      delete connection.authentication;
+      clearTimeout(this.expirationTimers.get(connection));
     }
-
-    return context;
   }
 
   verifyConfiguration () {

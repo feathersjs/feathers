@@ -10,7 +10,7 @@ const methodTests = require('./methods.js');
 const eventTests = require('./events');
 const socketio = require('../lib');
 
-describe.only('@feathersjs/socketio', () => {
+describe('@feathersjs/socketio', () => {
   let app;
   let server;
   let socket;
