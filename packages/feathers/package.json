@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/feathers",
-  "description": "A REST and realtime API layer for modern applications.",
+  "description": "A framework for real-time applications and REST API with JavaScript and TypeScript",
   "version": "4.3.0-pre.2",
   "homepage": "http://feathersjs.com",
   "repository": {
