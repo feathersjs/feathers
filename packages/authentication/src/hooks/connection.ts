@@ -1,9 +1,8 @@
 import { HookContext } from '@feathersjs/feathers';
 import { omit } from 'lodash';
+import { AuthenticationBase, ConnectionEvent } from '../core';
 
-import { AuthenticationBase } from '../core';
-
-export default () => async (context: HookContext) => {
+export default (event: ConnectionEvent) => async (context: HookContext) => {
   const { result, params: { connection } } = context;
 
   if (!connection) {
@@ -11,14 +10,10 @@ export default () => async (context: HookContext) => {
   }
 
   const service = context.service as unknown as AuthenticationBase;
-  const strategies = service.getStrategies(...Object.keys(service.strategies))
-    .filter(current => typeof current.handleConnection === 'function');
 
   Object.assign(connection, omit(result, 'accessToken', 'authentication'));
 
-  for (const strategy of strategies) {
-    await strategy.handleConnection(connection, context);
-  }
+  await service.handleConnection(event, connection, result);
 
   return context;
 };

@@ -155,10 +155,9 @@ export class AuthenticationService extends AuthenticationBase implements Partial
 
     // @ts-ignore
     this.hooks({
-      after: [ connection() ],
-      finally: {
-        create: [ event('login') ],
-        remove: [ event('logout') ]
+      after: {
+        create: [ connection('login'), event('login') ],
+        remove: [ connection('logout'), event('logout') ]
       }
     });
   }

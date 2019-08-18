@@ -4,7 +4,7 @@ import jsonwebtoken, { SignOptions, Secret, VerifyOptions } from 'jsonwebtoken';
 import uuidv4 from 'uuid/v4';
 import { NotAuthenticated } from '@feathersjs/errors';
 import Debug from 'debug';
-import { Application, Params, HookContext } from '@feathersjs/feathers';
+import { Application, Params } from '@feathersjs/feathers';
 import { IncomingMessage, ServerResponse } from 'http';
 import defaultOptions from './options';
 
@@ -20,6 +20,8 @@ export interface AuthenticationRequest {
   strategy?: string;
   [key: string]: any;
 }
+
+export type ConnectionEvent = 'login'|'logout'|'disconnect';
 
 export interface AuthenticationStrategy {
   /**
@@ -55,7 +57,7 @@ export interface AuthenticationStrategy {
    * @param connection The real-time connection
    * @param context The hook context
    */
-  handleConnection? (connection: any, context: HookContext): Promise<HookContext>;
+  handleConnection? (event: ConnectionEvent, connection: any, authResult?: AuthenticationResult): Promise<void>;
   /**
    * Parse a basic HTTP request and response for authentication request information.
    * @param req The HTTP request
@@ -221,6 +223,15 @@ export class AuthenticationBase {
       ...params,
       authenticated: true
     });
+  }
+
+  async handleConnection (event: ConnectionEvent, connection: any, authResult?: AuthenticationResult) {
+    const strategies = this.getStrategies(...Object.keys(this.strategies))
+      .filter(current => typeof current.handleConnection === 'function');
+
+    for (const strategy of strategies) {
+      await strategy.handleConnection(event, connection, authResult);
+    }
   }
 
   /**
