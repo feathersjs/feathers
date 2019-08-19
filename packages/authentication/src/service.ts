@@ -3,7 +3,8 @@ import { merge, get } from 'lodash';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { AuthenticationBase, AuthenticationResult, AuthenticationRequest } from './core';
 import { connection, event } from './hooks';
-import { Application, Params, ServiceMethods } from '@feathersjs/feathers';
+import '@feathersjs/transport-commons';
+import { Application, Params, ServiceMethods, ServiceAddons } from '@feathersjs/feathers';
 
 const debug = Debug('@feathersjs/authentication/service');
 
@@ -134,6 +135,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
     // The setup method checks for valid settings and registers the
     // connection and event (login, logout) hooks
     const { secret, service, entity, entityId } = this.configuration;
+    const self = this as unknown as ServiceAddons<AuthenticationResult>;
 
     if (typeof secret !== 'string') {
       throw new Error(`A 'secret' must be provided in your authentication configuration`);
@@ -153,12 +155,15 @@ export class AuthenticationService extends AuthenticationBase implements Partial
       }
     }
 
-    // @ts-ignore
-    this.hooks({
+    self.hooks({
       after: {
         create: [ connection('login'), event('login') ],
         remove: [ connection('logout'), event('logout') ]
       }
     });
+
+    if (typeof self.publish !== 'function') {
+      self.publish(() => null);
+    }
   }
 }

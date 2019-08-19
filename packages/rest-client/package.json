@@ -38,7 +38,7 @@
   "dependencies": {
     "@feathersjs/commons": "^4.3.0-pre.2",
     "@feathersjs/errors": "^4.3.0-pre.2",
-    "qs": "^6.7.0"
+    "qs": "^6.8.0"
   },
   "devDependencies": {
     "@angular/common": "^8.2.2",
