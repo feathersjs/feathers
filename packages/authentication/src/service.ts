@@ -162,7 +162,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
       }
     });
 
-    if (typeof self.publish !== 'function') {
+    if (typeof self.publish === 'function') {
       self.publish(() => null);
     }
   }
