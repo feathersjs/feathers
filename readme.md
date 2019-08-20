@@ -27,7 +27,7 @@ $ feathers generate app
 $ npm start
 ```
 
-To learn more about Feathers visit the website at [feathersjs.com](http://feathersjs.com) or jump right into [the Feathers guides](http://docs.feathersjs.com/guides).
+To learn more about Feathers visit the website at [feathersjs.com](http://feathersjs.com) or jump right into [the Feathers guides](https://docs.feathersjs.com/guides/readme.html).
 
 ## Support
 
