@@ -4,6 +4,8 @@ const http = require('http');
 const { socket: commons } = require('@feathersjs/transport-commons');
 const debug = require('debug')('@feathersjs/socketio');
 
+const middleware = require('./middleware');
+
 function configureSocketio (port, options, config) {
   if (typeof port !== 'number') {
     config = options;
@@ -46,24 +48,11 @@ function configureSocketio (port, options, config) {
 
         setup (server) {
           if (!this.io) {
-            const io = this.io = socketio
-              .listen(port || server, options);
+            const io = this.io = socketio.listen(port || server, options);
 
-            io.use((socket, next) => {
-              socket.feathers = {
-                provider: 'socketio',
-                headers: socket.handshake.headers
-              };
-
-              socketMap.set(socket.feathers, socket);
-
-              next();
-            });
-
-            io.use((socket, next) => {
-              socket.once('disconnect', () => app.emit('disconnect', getParams(socket)));
-              next();
-            });
+            io.use(middleware.disconnect(app, getParams));
+            io.use(middleware.params(app, socketMap));
+            io.use(middleware.authentication(app, getParams));
 
             // In Feathers it is easy to hit the standard Node warning limit
             // of event listeners (e.g. by registering 10 services).
