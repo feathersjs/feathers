@@ -21,7 +21,7 @@ describe('@feathersjs/authentication-client Socket.io integration', () => {
 
   it('allows to authenticate with handshake headers and sends login event', async () => {
     const user = { email: 'authtest@example.com', password: 'alsosecret' };
-    
+
     await app.service('users').create(user);
 
     const { accessToken } = await app.service('authentication').create({
@@ -44,7 +44,7 @@ describe('@feathersjs/authentication-client Socket.io integration', () => {
     );
 
     assert.strictEqual(authResult.accessToken, accessToken);
-    
+
     const dummy: any = await new Promise((resolve, reject) => {
       socket.emit('find', 'dummy', {}, (error: Error, page: any) =>
         error ? reject(error) : resolve(page)
