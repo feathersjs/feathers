@@ -38,12 +38,16 @@ const eventMixin = exports.eventMixin = function eventMixin (service) {
   Object.defineProperties(service, {
     // A list of all events that this service sends
     _serviceEvents: {
-      value: Array.isArray(service.events) ? service.events.slice() : []
+      configurable: true,
+      value: Array.isArray(service.events) ? service.events.slice() : [],
+      writable: true
     },
 
     // A list of events that should be handled through the event hooks
     _hookEvents: {
-      value: []
+      configurable: true,
+      value: [],
+      writable: true
     }
   });
 
