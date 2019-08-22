@@ -29,7 +29,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
   async handleConnection (event: ConnectionEvent, connection: any, authResult?: AuthenticationResult): Promise<void> {
     const isValidLogout = event === 'logout' && connection.authentication && authResult &&
       connection.authentication.accessToken === authResult.accessToken;
-    
+
     if (authResult && event === 'login') {
       const { accessToken } = authResult;
       const { exp } = await this.authentication.verifyAccessToken(accessToken);

@@ -24,11 +24,13 @@ exports.parseAuthentication = (settings = {}) => {
 
     service.parse(req, res, ...authStrategies)
       .then(authentication => {
-        debug('Parsed authentication from HTTP header', authentication);
-        merge(req, {
-          authentication,
-          feathers: { authentication }
-        });
+        if (authentication) {
+          debug('Parsed authentication from HTTP header', authentication);
+          merge(req, {
+            authentication,
+            feathers: { authentication }
+          });
+        }
 
         next();
       }).catch(next);
