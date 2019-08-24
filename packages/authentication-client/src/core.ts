@@ -119,12 +119,12 @@ export class AuthenticationClient {
   }
 
   handleError (error: FeathersError, type: 'authenticate'|'logout') {
-    if (error.code === 401) {
+    if (error.code === 401 || error.code === 403) {
       const promise = this.removeAccessToken().then(() => this.reset());
 
       return type === 'logout' ? promise : promise.then(() => Promise.reject(error));
     }
-    
+
     return Promise.reject(error);
   }
 
