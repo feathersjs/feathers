@@ -2,6 +2,7 @@ import assert from 'assert';
 import feathers, { Application } from '@feathersjs/feathers';
 
 import client, { AuthenticationClient } from '../src';
+import { NotAuthenticated } from '@feathersjs/errors';
 
 describe('@feathersjs/authentication-client', () => {
   const accessToken = 'testing';
@@ -25,7 +26,7 @@ describe('@feathersjs/authentication-client', () => {
 
       remove (id) {
         if (!app.get('authentication')) {
-          throw new Error('Not logged in');
+          throw new NotAuthenticated('Not logged in');
         }
 
         return Promise.resolve({ id });
