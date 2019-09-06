@@ -24,18 +24,32 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
   }
 
   const { strategyNames } = service;
+  
+  // Set up all the defaults
   const { path = '/oauth' } = oauth.defaults || {};
+  const port = app.get('port');
+  let host = app.get('host');
+  let protocol = 'https';
+  
+  // Development environments commonly run on HTTP with an extended port
+  if (app.get('env') === 'development') {
+    protocol = 'http';
+    if (String(port) !== '80') {
+      host += ':' + port;
+    }
+  }
+  
   const grant = merge({
     defaults: {
       path,
-      host: `${app.get('host')}:${app.get('port')}`,
-      protocol: app.get('env') === 'production' ? 'https' : 'http',
+      host,
+      protocol,
       transport: 'session'
     }
   }, omit(oauth, 'redirect'));
+  
   const getUrl = (url: string) => {
     const { defaults } = grant;
-
     return `${defaults.protocol}://${defaults.host}${path}/${url}`;
   };
 
