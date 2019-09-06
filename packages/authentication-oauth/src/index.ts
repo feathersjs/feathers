@@ -24,15 +24,19 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
   }
 
   const { strategyNames } = service;
-  const { path = '/oauth' } = oauth.defaults || {};
-  const port = String(app.get('port'));
-  const protocol = app.get('env') !== 'development' ? 'https' : 'http';
   
-  // Dev environments commonly run on an extended port, so we need to append the port
-  // to the default hostname, unless it is the standard port
+  // Set up all the defaults
+  const { path = '/oauth' } = oauth.defaults || {};
+  const port = app.get('port');
   let host = app.get('host');
-  if (app.get('env') === 'development' && port !== '80') {
-    host += ':' + port;
+  let protocol = 'https';
+  
+  // Development environments commonly run on HTTP with an extended port
+  if (app.get('env') === 'development') {
+    protocol = 'http';
+    if (String(port) !== '80') {
+      host += ':' + port;
+    }
   }
   
   const grant = merge({
