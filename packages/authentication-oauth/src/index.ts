@@ -26,11 +26,12 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
   const { strategyNames } = service;
   const { path = '/oauth' } = oauth.defaults || {};
   const port = String(app.get('port'));
-  const protocol = app.get('env') === 'production' ? 'https' : 'http';
+  const protocol = app.get('env') !== 'development' ? 'https' : 'http';
   
-  // Omit standard protocol ports from the default hostname
+  // Dev environments commonly run on an extended port, so we need to append the port
+  // to the default hostname, unless it is the standard port
   let host = app.get('host');
-  if ((protocol === 'https' && port !== '443') || (protocol === 'http' && port !== '80')) {
+  if (app.get('env') === 'development' && port !== '80') {
     host += ':' + port;
   }
   
