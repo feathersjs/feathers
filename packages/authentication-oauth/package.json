@@ -45,7 +45,7 @@
     "debug": "^4.1.1",
     "express-session": "^1.16.2",
     "grant": "^4.6.2",
-    "grant-profile": "^0.0.4",
+    "grant-profile": "^0.0.5",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
