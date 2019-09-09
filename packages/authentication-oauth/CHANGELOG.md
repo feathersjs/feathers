@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.1](https://github.com/feathersjs/feathers/compare/v4.3.0...v4.3.1) (2019-09-09)
+
+
+### Bug Fixes
+
+* Omit standard protocol ports from the default hostname ([#1543](https://github.com/feathersjs/feathers/issues/1543)) ([ef16d29](https://github.com/feathersjs/feathers/commit/ef16d29))
+
+
+
+
+
 # [4.3.0](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.4...v4.3.0) (2019-08-27)
 
 **Note:** Version bump only for package @feathersjs/authentication-oauth
