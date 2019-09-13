@@ -21,6 +21,8 @@ export interface AuthenticationRequest {
   [key: string]: any;
 }
 
+export type ConnectionEvent = 'login'|'logout'|'disconnect';
+
 export interface AuthenticationStrategy {
   /**
    * Implement this method to get access to the AuthenticationService
@@ -49,6 +51,13 @@ export interface AuthenticationStrategy {
    * @param params The service call parameters
    */
   authenticate? (authentication: AuthenticationRequest, params: Params): Promise<AuthenticationResult>;
+  /**
+   * Update a real-time connection according to this strategy.
+   *
+   * @param connection The real-time connection
+   * @param context The hook context
+   */
+  handleConnection? (event: ConnectionEvent, connection: any, authResult?: AuthenticationResult): Promise<void>;
   /**
    * Parse a basic HTTP request and response for authentication request information.
    * @param req The HTTP request
@@ -214,6 +223,15 @@ export class AuthenticationBase {
       ...params,
       authenticated: true
     });
+  }
+
+  async handleConnection (event: ConnectionEvent, connection: any, authResult?: AuthenticationResult) {
+    const strategies = this.getStrategies(...Object.keys(this.strategies))
+      .filter(current => typeof current.handleConnection === 'function');
+
+    for (const strategy of strategies) {
+      await strategy.handleConnection(event, connection, authResult);
+    }
   }
 
   /**

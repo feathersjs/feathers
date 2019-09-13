@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const assert = require('assert');
 const feathers = require('@feathersjs/feathers');
 const errors = require('@feathersjs/errors');
-const baseTests = require('@feathersjs/tests/lib//client');
+const baseTests = require('@feathersjs/tests/lib/client');
 const server = require('./server');
 const rest = require('../lib/index');
 

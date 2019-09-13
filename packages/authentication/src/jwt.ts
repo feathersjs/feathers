@@ -1,13 +1,20 @@
-import { NotAuthenticated } from '@feathersjs/errors';
+import Debug from 'debug';
 import { omit } from 'lodash';
-import { AuthenticationRequest } from './core';
-import { Params } from '@feathersjs/feathers';
 import { IncomingMessage } from 'http';
-import { AuthenticationBaseStrategy } from './strategy';
+import { NotAuthenticated } from '@feathersjs/errors';
+import { Params } from '@feathersjs/feathers';
+// @ts-ignore
+import lt from 'long-timeout';
 
+import { AuthenticationBaseStrategy } from './strategy';
+import { AuthenticationRequest, AuthenticationResult, ConnectionEvent } from './core';
+
+const debug = Debug('@feathersjs/authentication/jwt');
 const SPLIT_HEADER = /(\S+)\s+(\S+)/;
 
 export class JWTStrategy extends AuthenticationBaseStrategy {
+  expirationTimers = new WeakMap();
+
   get configuration () {
     const authConfig = this.authentication.configuration;
     const config = super.configuration;
@@ -19,6 +26,35 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       schemes: [ 'Bearer', 'JWT' ],
       ...config
     };
+  }
+
+  async handleConnection (event: ConnectionEvent, connection: any, authResult?: AuthenticationResult): Promise<void> {
+    const isValidLogout = event === 'logout' && connection.authentication && authResult &&
+      connection.authentication.accessToken === authResult.accessToken;
+
+    if (authResult && event === 'login') {
+      const { accessToken } = authResult;
+      const { exp } = await this.authentication.verifyAccessToken(accessToken);
+      // The time (in ms) until the token expires
+      const duration = (exp * 1000) - new Date().getTime();
+      // This may have to be a `logout` event but right now we don't want
+      // the whole context object lingering around until the timer is gone
+      const timer = lt.setTimeout(() => this.app.emit('disconnect', connection), duration);
+
+      debug(`Registering connection expiration timer for ${duration}ms`);
+      this.expirationTimers.set(connection, timer);
+
+      debug('Adding authentication information to connection');
+      connection.authentication = {
+        strategy: this.name,
+        accessToken
+      };
+    } else if (event === 'disconnect' || isValidLogout) {
+      debug('Removing authentication information and expiration timer from connection');
+
+      delete connection.authentication;
+      lt.clearTimeout(this.expirationTimers.get(connection));
+    }
   }
 
   verifyConfiguration () {
@@ -40,6 +76,8 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     const { entity } = this.configuration;
     const entityService = this.entityService;
 
+    debug('Getting entity', id);
+
     if (entityService === null) {
       throw new NotAuthenticated(`Could not find entity service`);
     }
@@ -53,6 +91,10 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     return entityService.get(id, { ...params, [entity]: result });
   }
 
+  async getEntityId (authResult: AuthenticationResult, _params: Params) {
+    return authResult.authentication.payload.sub;
+  }
+
   async authenticate (authentication: AuthenticationRequest, params: Params) {
     const { accessToken } = authentication;
     const { entity } = this.configuration;
@@ -62,7 +104,6 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     }
 
     const payload = await this.authentication.verifyAccessToken(accessToken, params.jwt);
-    const entityId = payload.sub;
     const result = {
       accessToken,
       authentication: {
@@ -70,6 +111,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
         payload
       }
     };
+    const entityId = await this.getEntityId(result, params);
 
     if (entity === null) {
       return result;
@@ -91,6 +133,8 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     if (!headerValue || typeof headerValue !== 'string') {
       return null;
     }
+
+    debug('Found parsed header value');
 
     const [ , scheme = null, schemeValue = null ] = headerValue.match(SPLIT_HEADER) || [];
     const hasScheme = scheme && schemes.some(

@@ -2,12 +2,40 @@ import Debug from 'debug';
 import { merge, get } from 'lodash';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { AuthenticationBase, AuthenticationResult, AuthenticationRequest } from './core';
-import { connection, events } from './hooks';
-import { Params, ServiceMethods } from '@feathersjs/feathers';
+import { connection, event } from './hooks';
+import '@feathersjs/transport-commons';
+import { Application, Params, ServiceMethods, ServiceAddons } from '@feathersjs/feathers';
 
 const debug = Debug('@feathersjs/authentication/service');
 
+declare module '@feathersjs/feathers' {
+  interface Application<ServiceTypes = {}> {
+
+    /**
+     * Returns the default authentication service or the
+     * authentication service for a given path.
+     *
+     * @param location The service path to use (optional)
+     */
+    defaultAuthentication (location?: string): AuthenticationService;
+  }
+}
+
 export class AuthenticationService extends AuthenticationBase implements Partial<ServiceMethods<AuthenticationResult>> {
+  constructor (app: Application, configKey: string = 'authentication', options = {}) {
+    super(app, configKey, options);
+
+    if (typeof app.defaultAuthentication !== 'function') {
+      app.defaultAuthentication = function (location?: string) {
+        const configKey = app.get('defaultAuthentication');
+        const path = location || Object.keys(this.services).find(current =>
+          this.service(current).configKey === configKey
+        );
+
+        return path ? this.service(path) : null;
+      };
+    }
+  }
   /**
    * Return the payload for a JWT based on the authentication result.
    * Called internally by the `create` method.
@@ -107,6 +135,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
     // The setup method checks for valid settings and registers the
     // connection and event (login, logout) hooks
     const { secret, service, entity, entityId } = this.configuration;
+    const self = this as unknown as ServiceAddons<AuthenticationResult>;
 
     if (typeof secret !== 'string') {
       throw new Error(`A 'secret' must be provided in your authentication configuration`);
@@ -126,7 +155,15 @@ export class AuthenticationService extends AuthenticationBase implements Partial
       }
     }
 
-    // @ts-ignore
-    this.hooks({ after: [ connection(), events() ] });
+    self.hooks({
+      after: {
+        create: [ connection('login'), event('login') ],
+        remove: [ connection('logout'), event('logout') ]
+      }
+    });
+
+    if (typeof self.publish === 'function') {
+      self.publish(() => null);
+    }
   }
 }

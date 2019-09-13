@@ -10,7 +10,7 @@ const methodTests = require('./methods.js');
 const eventTests = require('./events');
 const socketio = require('../lib');
 
-describe.only('@feathersjs/socketio', () => {
+describe('@feathersjs/socketio', () => {
   let app;
   let server;
   let socket;
@@ -77,20 +77,8 @@ describe.only('@feathersjs/socketio', () => {
     server.close(done);
   });
 
-  it('exports default and SOCKET_KEY', () => {
-    assert.ok(socketio.SOCKET_KEY);
+  it('exports default', () => {
     assert.strictEqual(socketio, socketio.default);
-  });
-
-  it('throws an error when using an incompatible version of Feathers', () => {
-    const oldFeathers = require('feathers');
-
-    try {
-      oldFeathers().configure(socketio());
-      assert.ok(false, 'Should never get here');
-    } catch (e) {
-      assert.strictEqual(e.message, '@feathersjs/socketio is not compatible with this version of Feathers. Use the latest at @feathersjs/feathers.');
-    }
   });
 
   it('runs io before setup (#131)', done => {

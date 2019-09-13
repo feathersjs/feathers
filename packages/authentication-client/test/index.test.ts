@@ -2,6 +2,7 @@ import assert from 'assert';
 import feathers, { Application } from '@feathersjs/feathers';
 
 import client, { AuthenticationClient } from '../src';
+import { NotAuthenticated } from '@feathersjs/errors';
 
 describe('@feathersjs/authentication-client', () => {
   const accessToken = 'testing';
@@ -15,7 +16,11 @@ describe('@feathersjs/authentication-client', () => {
 
     app.configure(client());
     app.use('/authentication', {
-      create (data) {
+      create (data: any) {
+        if (data.error) {
+          return Promise.reject(new Error('Did not work'));
+        }
+
         return Promise.resolve({
           accessToken,
           data,
@@ -24,6 +29,10 @@ describe('@feathersjs/authentication-client', () => {
       },
 
       remove (id) {
+        if (!app.get('authentication')) {
+          throw new NotAuthenticated('Not logged in');
+        }
+
         return Promise.resolve({ id });
       }
     });
@@ -129,6 +138,21 @@ describe('@feathersjs/authentication-client', () => {
     return promise.then(result => {
       assert.deepStrictEqual(result, { id: null });
     });
+  });
+
+  it('does not remove AccessToken on other errors', () => {
+    return app.authenticate({
+      strategy: 'testing'
+    }).then(() => app.authenticate({
+      strategy: 'testing'
+    })).then(() => app.authentication.getAccessToken())
+    .then(at => assert.strictEqual(at, accessToken));
+  });
+
+  it('logout when not logged in without error', async () => {
+    const result = await app.logout();
+
+    assert.strictEqual(result, null);
   });
 
   describe('reauthenticate', () => {

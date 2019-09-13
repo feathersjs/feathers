@@ -9,6 +9,7 @@ import {
   getDispatcher,
   runMethod
 } from '../../src/socket/utils';
+import { RealTimeConnection } from '../../src/channels/channel/base';
 
 describe('socket commons utils', () => {
   describe('.normalizeError', () => {
@@ -59,27 +60,52 @@ describe('socket commons utils', () => {
 
   describe('.getDispatcher', () => {
     it('returns a dispatcher function', () =>
-      assert.strictEqual(typeof getDispatcher('test', 'here'), 'function')
+      assert.strictEqual(typeof getDispatcher('test', new WeakMap()), 'function')
     );
+
+    it('works with backwards compatible socketKey', done => {
+      const socketKey = Symbol('@feathersjs/test');
+      const dispatcher = getDispatcher('emit', undefined, socketKey);
+      const socket = new EventEmitter();
+      const connection = {
+        [socketKey]: socket
+      };
+      const channel: any = {
+        connections: [ connection ],
+        dataFor (): null {
+          return null;
+        }
+      };
+
+      socket.once('testing', data => {
+        assert.strictEqual(data, 'hi');
+        done();
+      });
+
+      dispatcher('testing', channel, { result: 'hi' } as any);
+    });
 
     describe('dispatcher logic', () => {
       let dispatcher: any;
       let dummySocket: EventEmitter;
       let dummyHook: any;
       let dummyChannel: any;
+      let dummyConnection: RealTimeConnection;
+      let dummyMap: WeakMap<any, any>;
 
       beforeEach(() => {
-        dispatcher = getDispatcher('emit', 'test');
+        dummyConnection = {};
+        dummyMap =  new WeakMap();
+        dispatcher = getDispatcher('emit', dummyMap);
         dummySocket = new EventEmitter();
         dummyHook = { result: 'hi' };
         dummyChannel = {
-          connections: [{
-            test: dummySocket
-          }],
+          connections: [ dummyConnection ],
           dataFor (): null {
             return null;
           }
         };
+        dummyMap.set(dummyConnection, dummySocket);
       });
 
       it('dispatches a basic event', done => {

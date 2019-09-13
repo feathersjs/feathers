@@ -1,6 +1,6 @@
 import Debug from 'debug';
 import { compact, flattenDeep, noop } from 'lodash';
-import { Channel } from './channel/base';
+import { Channel, RealTimeConnection } from './channel/base';
 import { CombinedChannel } from './channel/combined';
 import { channelMixin, publishMixin, keys, PublishMixin, Event, Publisher } from './mixins';
 import { Application, Service } from '@feathersjs/feathers';
@@ -28,6 +28,10 @@ declare module '@feathersjs/feathers' {
 
     registerPublisher<T> (publisher: Publisher<T>): this;
     registerPublisher<T> (event: Event, publisher: Publisher<T>): this;
+  }
+
+  interface Params {
+    connection?: RealTimeConnection;
   }
 }
 

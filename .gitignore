@@ -36,8 +36,11 @@ node_modules
 # Distributables
 dist/
 .nyc_output/
+.cache
+.mocha-puppeteer
 
 # TypeScript compiled files
+packages/adapter-commons/lib
 packages/authentication/lib
 packages/authentication-local/lib
 packages/authentication-client/lib

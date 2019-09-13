@@ -29,6 +29,13 @@ describe('@feathersjs/express', () => {
     assert.strictEqual(typeof app, 'function');
   });
 
+  it('allows to use an existing Express instance', () => {
+    const expressApp = express();
+    const app = expressify(feathers(), expressApp);
+
+    assert.strictEqual(app, expressApp);
+  });
+
   it('exports `express.rest`', () => {
     assert.ok(typeof expressify.rest === 'function');
   });

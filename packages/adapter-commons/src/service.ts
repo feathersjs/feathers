@@ -1,7 +1,8 @@
-const { NotImplemented, BadRequest, MethodNotAllowed } = require('@feathersjs/errors');
-const filterQuery = require('./filter-query');
+import { NotImplemented, BadRequest, MethodNotAllowed } from '@feathersjs/errors';
+import { ServiceMethods, Params, Paginated, Id, NullableId } from '@feathersjs/feathers';
+import filterQuery from './filter-query';
 
-const callMethod = (self, name, ...args) => {
+const callMethod = (self: any, name: any, ...args: any[]) => {
   if (typeof self[name] !== 'function') {
     return Promise.reject(new NotImplemented(`Method ${name} not available`));
   }
@@ -9,18 +10,41 @@ const callMethod = (self, name, ...args) => {
   return self[name](...args);
 };
 
-const alwaysMulti = {
+const alwaysMulti: { [key: string]: boolean } = {
   find: true,
   get: false,
   update: false
 };
 
-module.exports = class AdapterService {
-  constructor (options) {
+export interface ServiceOptions {
+  events: string[];
+  multi: boolean|string[];
+  id: string;
+  paginate: any;
+  whitelist: string[];
+  filters: string[];
+}
+
+export interface InternalServiceMethods<T = any> {
+    _find (params?: Params): Promise<T | T[] | Paginated<T>>;
+    _get (id: Id, params?: Params): Promise<T>;
+    _create (data: Partial<T> | Array<Partial<T>>, params?: Params): Promise<T | T[]>;
+    _update (id: Id, data: T, params?: Params): Promise<T>;
+    _patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T>;
+    _remove (id: NullableId, params?: Params): Promise<T>;
+}
+
+export class AdapterService<T = any> implements ServiceMethods<T> {
+  options: ServiceOptions;
+
+  constructor (options: Partial<ServiceOptions>) {
     this.options = Object.assign({
+      id: 'id',
       events: [],
       paginate: {},
-      multi: false
+      multi: false,
+      filters: [],
+      whitelist: []
     }, options);
   }
 
@@ -32,7 +56,7 @@ module.exports = class AdapterService {
     return this.options.events;
   }
 
-  filterQuery (params = {}, opts = {}) {
+  filterQuery (params: Params = {}, opts: any = {}) {
     const paginate = typeof params.paginate !== 'undefined'
       ? params.paginate : this.options.paginate;
     const { query = {} } = params;
@@ -46,7 +70,7 @@ module.exports = class AdapterService {
     return Object.assign(result, { paginate });
   }
 
-  allowsMulti (method) {
+  allowsMulti (method: string) {
     const always = alwaysMulti[method];
 
     if (typeof always !== 'undefined') {
@@ -62,15 +86,15 @@ module.exports = class AdapterService {
     }
   }
 
-  find (params) {
+  find (params?: Params): Promise<T | T[] | Paginated<T>> {
     return callMethod(this, '_find', params);
   }
 
-  get (id, params) {
+  get (id: Id, params?: Params): Promise<T> {
     return callMethod(this, '_get', id, params);
   }
 
-  create (data, params) {
+  create (data: Partial<T> | Array<Partial<T>>, params?: Params): Promise<T | T[]> {
     if (Array.isArray(data) && !this.allowsMulti('create')) {
       return Promise.reject(new MethodNotAllowed(`Can not create multiple entries`));
     }
@@ -78,7 +102,7 @@ module.exports = class AdapterService {
     return callMethod(this, '_create', data, params);
   }
 
-  update (id, data, params) {
+  update (id: Id, data: T, params?: Params): Promise<T> {
     if (id === null || Array.isArray(data)) {
       return Promise.reject(new BadRequest(
         `You can not replace multiple instances. Did you mean 'patch'?`
@@ -88,7 +112,7 @@ module.exports = class AdapterService {
     return callMethod(this, '_update', id, data, params);
   }
 
-  patch (id, data, params) {
+  patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T> {
     if (id === null && !this.allowsMulti('patch')) {
       return Promise.reject(new MethodNotAllowed(`Can not patch multiple entries`));
     }
@@ -96,11 +120,11 @@ module.exports = class AdapterService {
     return callMethod(this, '_patch', id, data, params);
   }
 
-  remove (id, params) {
+  remove (id: NullableId, params?: Params): Promise<T> {
     if (id === null && !this.allowsMulti('remove')) {
       return Promise.reject(new MethodNotAllowed(`Can not remove multiple entries`));
     }
 
     return callMethod(this, '_remove', id, params);
   }
-};
+}

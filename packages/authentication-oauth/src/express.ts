@@ -2,7 +2,7 @@
 import { express as grantExpress } from 'grant';
 import Debug from 'debug';
 import { Application } from '@feathersjs/feathers';
-import { AuthenticationService, AuthenticationResult } from '@feathersjs/authentication';
+import { AuthenticationResult } from '@feathersjs/authentication';
 import qs from 'querystring';
 import {
   Application as ExpressApplication,
@@ -33,13 +33,14 @@ export default (options: OauthSetupSettings) => {
 
     authApp.get('/:name', (req, res) => {
       const { feathers_token, ...query } = req.query;
+      const { name } = req.params as any;
 
       if (feathers_token) {
         debug(`Got feathers_token query parameter to link accounts`, feathers_token);
         req.session.accessToken = feathers_token;
       }
 
-      res.redirect(`${path}/connect/${req.params.name}?${qs.stringify(query)}`);
+      res.redirect(`${path}/connect/${name}?${qs.stringify(query)}`);
     });
 
     authApp.get('/:name/callback', (req: any, res: any) => {
@@ -47,9 +48,9 @@ export default (options: OauthSetupSettings) => {
     });
 
     authApp.get('/:name/authenticate', async (req, res, next) => {
-      const { name } = req.params;
+      const { name } = req.params as any;
       const { accessToken, grant } = req.session;
-      const service: AuthenticationService = app.service(authService);
+      const service = app.defaultAuthentication(authService);
       const [ strategy ] = service.getStrategies(name) as OAuthStrategy[];
       const sendResponse = async (data: AuthenticationResult|Error) => {
         try {

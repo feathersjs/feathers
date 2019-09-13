@@ -1,8 +1,8 @@
+import { Application, Params } from '@feathersjs/feathers';
 import Debug from 'debug';
 import { channels } from '../channels';
 import { routing } from '../routing';
 import { getDispatcher, runMethod } from './utils';
-import { Application } from '@feathersjs/feathers';
 import { RealTimeConnection } from '../channels/channel/base';
 
 const debug = Debug('@feathersjs/transport-commons');
@@ -10,21 +10,31 @@ const debug = Debug('@feathersjs/transport-commons');
 export interface SocketOptions {
   done: Promise<any>;
   emit: string;
-  socketKey: any;
+  socketMap: WeakMap<RealTimeConnection, any>;
+  socketKey?: any;
   getParams: (socket: any) => RealTimeConnection;
 }
 
-export function socket ({ done, emit, socketKey, getParams }: SocketOptions) {
+export function socket ({ done, emit, socketMap, socketKey, getParams }: SocketOptions) {
   return (app: Application) => {
-    app.configure(channels());
-    app.configure(routing());
-
-    app.on('publish', getDispatcher(emit, socketKey));
-    app.on('disconnect', connection => {
+    const leaveChannels = (connection: RealTimeConnection) => {
       const { channels } = app;
 
       if (channels.length) {
         app.channel(app.channels).leave(connection);
+      }
+    };
+
+    app.configure(channels());
+    app.configure(routing());
+
+    app.on('publish', getDispatcher(emit, socketMap, socketKey));
+    app.on('disconnect', leaveChannels);
+    app.on('logout', (_authResult: any, params: Params) => {
+      const { connection } = params;
+
+      if (connection) {
+        leaveChannels(connection);
       }
     });
 
@@ -48,6 +58,13 @@ export function socket ({ done, emit, socketKey, getParams }: SocketOptions) {
         if (app.get('defaultAuthentication')) {
           debug('Got legacy authenticate event');
           runMethod(app, getParams(connection), app.get('defaultAuthentication'), 'create', args);
+        }
+      });
+
+      connection.on('logout', (callback: any) => {
+        if (app.get('defaultAuthentication')) {
+          debug('Got legacy authenticate event');
+          runMethod(app, getParams(connection), app.get('defaultAuthentication'), 'remove', [ null, {}, callback ]);
         }
       });
     }));

@@ -1,7 +1,7 @@
 /// <reference types='node' />
 
 import { EventEmitter } from 'events';
-import http from 'http';
+import * as http from 'http';
 
 declare const createApplication: Feathers;
 export = createApplication;
@@ -34,6 +34,9 @@ declare namespace createApplication {
     interface Params {
         query?: Query;
         paginate?: false | Pick<PaginationOptions, 'max'>;
+        provider?: string;
+        route?: {[key: string]: string};
+        headers?: {[key: string]: any};
 
         [key: string]: any; // (JL) not sure if we want this
     }

@@ -6,8 +6,7 @@ import feathers, { Application, Service } from '@feathersjs/feathers';
 import memory from 'feathers-memory';
 
 import defaultOptions from '../src/options';
-import { AuthenticationService } from '../src/service';
-import { AuthenticationResult } from '../src/core';
+import { AuthenticationService, AuthenticationResult } from '../src';
 
 import { Strategy1 } from './fixtures';
 
@@ -36,6 +35,11 @@ describe('authentication/service', () => {
 
   it('settings returns authentication options', () => {
     assert.deepStrictEqual(app.service('authentication').configuration, Object.assign({}, defaultOptions, app.get('authentication')));
+  });
+
+  it('app.defaultAuthentication()', () => {
+    assert.strictEqual(app.defaultAuthentication(), app.service('authentication'));
+    assert.strictEqual(app.defaultAuthentication('dummy'), undefined);
   });
 
   describe('create', () => {

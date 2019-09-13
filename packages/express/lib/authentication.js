@@ -5,20 +5,11 @@ const normalizeStrategy = (_settings = [], ..._strategies) =>
   typeof _settings === 'string'
     ? { strategies: flatten([ _settings, ..._strategies ]) }
     : _settings;
-const getService = (settings, app) => {
-  const path = settings.service || app.get('defaultAuthentication');
-
-  if (typeof path !== 'string') {
-    return null;
-  }
-
-  return app.service(path) || null;
-};
 
 exports.parseAuthentication = (settings = {}) => {
   return function (req, res, next) {
     const { app } = req;
-    const service = getService(settings, app);
+    const service = app.defaultAuthentication ? app.defaultAuthentication(settings.service) : null;
 
     if (service === null) {
       return next();
@@ -33,11 +24,13 @@ exports.parseAuthentication = (settings = {}) => {
 
     service.parse(req, res, ...authStrategies)
       .then(authentication => {
-        debug('Parsed authentication from HTTP header', authentication);
-        merge(req, {
-          authentication,
-          feathers: { authentication }
-        });
+        if (authentication) {
+          debug('Parsed authentication from HTTP header', authentication);
+          merge(req, {
+            authentication,
+            feathers: { authentication }
+          });
+        }
 
         next();
       }).catch(next);
@@ -53,7 +46,7 @@ exports.authenticate = (...strategies) => {
 
   return function (req, res, next) {
     const { app, authentication } = req;
-    const service = getService(settings, app);
+    const service = app.defaultAuthentication(settings.service);
 
     debug('Authenticating with Express middleware and strategies', settings.strategies);
 
