@@ -13,6 +13,7 @@ describe('@feathersjs/configuration', () => {
 
     process.env.NODE_ENV = 'testing';
     process.env.NODE_CONFIG_DIR = join(__dirname, 'config');
+    process.env.PATH_ENV = '../something';
 
     plugin = require('../lib');
     app = feathers().configure(plugin());
@@ -57,6 +58,10 @@ describe('@feathersjs/configuration', () => {
 
   it('normalizes relative path names', () =>
     assert.strictEqual(app.get('path'), join(__dirname, 'something'))
+  );
+
+  it('normalizes relative path names from environment variable', () =>
+    assert.strictEqual(app.get('pathFromEnv'), join(__dirname, 'something'))
   );
 
   it('converts environment variables recursively', () =>

@@ -24,7 +24,8 @@ export default function init () {
           } else {
             if (process.env[value]) {
               value = process.env[value];
-            } else if (value.indexOf('.') === 0 || value.indexOf('..') === 0) {
+            }
+            if (value.indexOf('.') === 0 || value.indexOf('..') === 0) {
               // Make relative paths absolute
               value = path.resolve(
                 path.join(config.util.getEnv('NODE_CONFIG_DIR')),
