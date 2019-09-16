@@ -22,7 +22,7 @@ interface FeathersExpress extends Express {
 
     errorHandler (options?: {
         public?: string,
-        logger?: { error?: (msg: string) => void | null },
+        logger?: { error: (msg: any) => void, info: (msg: any) => void },
         html?: any,
         json?: any
     }): express.ErrorRequestHandler;
