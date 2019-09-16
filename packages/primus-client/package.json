@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/primus-client",
   "description": "Client services for Primus and feathers-primus",
-  "version": "4.3.1",
+  "version": "4.3.2",
   "homepage": "https://feathersjs.com",
   "main": "lib/index.js",
   "types": "index.d.ts",
@@ -36,13 +36,13 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/transport-commons": "^4.3.1"
+    "@feathersjs/transport-commons": "^4.3.2"
   },
   "devDependencies": {
     "@feathersjs/commons": "^4.3.0",
-    "@feathersjs/feathers": "^4.3.1",
-    "@feathersjs/primus": "^4.3.1",
-    "@feathersjs/tests": "^4.3.1",
+    "@feathersjs/feathers": "^4.3.2",
+    "@feathersjs/primus": "^4.3.2",
+    "@feathersjs/tests": "^4.3.2",
     "chai": "^4.2.0",
     "feathers-memory": "^4.0.0",
     "mocha": "^6.2.0",

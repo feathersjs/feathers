@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.2](https://github.com/feathersjs/feathers/compare/v4.3.1...v4.3.2) (2019-09-16)
+
+
+### Bug Fixes
+
+* Add info to express error handler logger type ([#1557](https://github.com/feathersjs/feathers/issues/1557)) ([3e1d26c](https://github.com/feathersjs/feathers/commit/3e1d26c))
+
+
+
+
+
 ## [4.3.1](https://github.com/feathersjs/feathers/compare/v4.3.0...v4.3.1) (2019-09-09)
 
 **Note:** Version bump only for package @feathersjs/express
