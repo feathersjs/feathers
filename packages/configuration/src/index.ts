@@ -7,7 +7,7 @@ const debug = Debug('@feathersjs/configuration');
 const separator = path.sep;
 
 export default function init () {
-  return (app: Application|undefined) => {
+  return (app?: Application) => {
     const convert = (current: any) => {
       const result: { [key: string]: any } = Array.isArray(current) ? [] : {};
 
@@ -53,7 +53,7 @@ export default function init () {
     Object.keys(conf).forEach(name => {
       const value = conf[name];
       debug(`Setting ${name} configuration value to`, value);
-      (app as Application).set(name, value);
+      app!.set(name, value);
     });
 
     return conf;
