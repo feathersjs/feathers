@@ -92,14 +92,14 @@ export class AuthenticationService extends AuthenticationBase implements Partial
 
     debug('Got authentication result', authResult);
 
+    if (authResult.accessToken) {
+      return authResult;
+    }
+
     const [ payload, jwtOptions ] = await Promise.all([
       this.getPayload(authResult, params),
       this.getTokenOptions(authResult, params)
     ]);
-
-    if (authResult.accessToken) {
-      return authResult;
-    }
 
     debug('Creating JWT with', payload, jwtOptions);
 

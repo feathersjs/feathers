@@ -44,11 +44,11 @@
     "access": "public"
   },
   "dependencies": {
+    "@feathersjs/feathers": "^4.3.2",
     "config": "^3.2.2",
     "debug": "^4.1.1"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "^4.3.2",
     "@types/config": "^0.0.34",
     "@types/debug": "^4.1.5",
     "@types/mocha": "^5.2.7",

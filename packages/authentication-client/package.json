@@ -39,15 +39,15 @@
     "access": "public"
   },
   "dependencies": {
+    "@feathersjs/authentication": "^4.3.2",
     "@feathersjs/commons": "^4.3.0",
     "@feathersjs/errors": "^4.3.2",
+    "@feathersjs/feathers": "^4.3.2",
     "debug": "^4.1.1"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^4.3.2",
     "@feathersjs/authentication-local": "^4.3.2",
     "@feathersjs/express": "^4.3.2",
-    "@feathersjs/feathers": "^4.3.2",
     "@feathersjs/primus": "^4.3.2",
     "@feathersjs/primus-client": "^4.3.2",
     "@feathersjs/rest-client": "^4.3.2",
