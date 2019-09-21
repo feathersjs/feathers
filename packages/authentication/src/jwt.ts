@@ -32,8 +32,10 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     const isValidLogout = event === 'logout' && connection.authentication && authResult &&
       connection.authentication.accessToken === authResult.accessToken;
 
-    if (authResult && event === 'login') {
-      const { accessToken } = authResult;
+    const { accessToken } = authResult || {};
+
+    if (accessToken && event === 'login') {
+      debug('Adding authentication information to connection');
       const { exp } = await this.authentication.verifyAccessToken(accessToken);
       // The time (in ms) until the token expires
       const duration = (exp * 1000) - new Date().getTime();
