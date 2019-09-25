@@ -171,7 +171,6 @@ describe('Feathers application', () => {
       app1.use('/testing', app2.service('dummy'));
 
       app1.service('testing').create({ message: 'Hi' });
-
     });
 
     it('async hooks', done => {
