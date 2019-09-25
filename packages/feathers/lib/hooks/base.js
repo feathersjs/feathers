@@ -1,6 +1,6 @@
 const { _ } = require('@feathersjs/commons');
 
-const assignArguments = context => {
+const assignArguments = (context, next) => {
   const { service, method } = context;
   const parameters = service.methods[method];
   const argsObject = context.arguments.reduce((result, value, index) => {
@@ -14,22 +14,22 @@ const assignArguments = context => {
 
   Object.assign(context, argsObject);
 
-  return context;
+  return next();
 };
 
-const validate = context => {
+const validate = (context, next) => {
   const { service, method } = context;
   const parameters = service.methods[method];
 
   if (parameters.includes('id') && context.id === undefined) {
-    throw new Error(`An id must be provided to the '${method}' method`);
+    return next(new Error(`An id must be provided to the '${method}' method`));
   }
 
   if (parameters.includes('data') && !_.isObjectOrArray(context.data)) {
-    throw new Error(`A data object must be provided to the '${method}' method`);
+    return next(new Error(`A data object must be provided to the '${method}' method`));
   }
 
-  return context;
+  return next();
 };
 
 module.exports = [ assignArguments, validate ];
