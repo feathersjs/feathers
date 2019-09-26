@@ -94,7 +94,7 @@ const main = (...args) => {
   } else if (typeof target === 'object') {
     return hookObject(...args);
   }
-  
+
   return hookFunction(...args);
 };
 
