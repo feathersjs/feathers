@@ -256,6 +256,32 @@ describe('`async` hooks', () => {
       });
     });
 
+    it('does not run after hook when there is an error', () => {
+      const dummyService = {
+        remove () {
+          return Promise.reject(new Error('Error removing item'));
+        }
+      };
+
+      const app = feathers().use('/dummy', dummyService);
+      const service = app.service('dummy');
+
+      service.hooks({
+        after: {
+          async remove (context, next) {
+            await next();
+
+            assert.ok(false, 'This should never get called');
+          }
+        }
+      });
+
+      return service.remove(1, {}).catch(error => {
+        assert.ok(error, 'Got error');
+        assert.strictEqual(error.message, 'Error removing item', 'Got error message from service');
+      });
+    });
+
     it('calling back with no arguments uses the old ones', () => {
       const dummyService = {
         remove (id, params) {
