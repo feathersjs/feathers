@@ -38,7 +38,7 @@ const withHooks = function withHooks ({
       const _super = original || service[method].bind(service);
 
       // Create the hook object that gets passed through
-      const hookObject = createHookObject(method, {
+      const initialHookObject = createHookObject(method, {
         type: 'async', // initial hook object type
         arguments: args,
         service,
@@ -46,7 +46,7 @@ const withHooks = function withHooks ({
       });
 
       // Process all before hooks
-      const fn = () => processHooks.call(service, hooks.before, Object.assign({}, hookObject, { type: 'before' }))
+      const fn = () => processHooks.call(service, hooks.before, Object.assign({}, initialHookObject, { type: 'before' }))
         // Use the hook object to call the original method
         .then(hookObject => {
           // If `hookObject.result` is set, skip the original method
@@ -85,7 +85,7 @@ const withHooks = function withHooks ({
       return hooksDecorator(
         fn,
         baseHooks.concat(hooks.async),
-        () => hookObject
+        () => initialHookObject
       ).call(service)
         // Handle errors
         .catch(error => {
@@ -93,7 +93,7 @@ const withHooks = function withHooks ({
           const hookChain = hooks.error.concat(hooks.finally);
 
           // A shallow copy of the hook object
-          const errorHookObject = _.omit(Object.assign({}, error.hook, hookObject, {
+          const errorHookObject = _.omit(Object.assign({}, error.hook, initialHookObject, {
             type: 'error',
             original: error.hook,
             error
