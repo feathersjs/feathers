@@ -244,9 +244,8 @@ describe('`async` hooks', () => {
 
       service.hooks({
         async: {
-          update (hook, next) {
+          update () {
             throw new Error('You are not allowed to update');
-            next();
           }
         }
       });
