@@ -1,4 +1,5 @@
-const compose = require('koa-compose');
+// const compose = require('koa-compose');
+const compose = require('./compose');
 
 const HOOKS = Symbol('@feathersjs/hooks');
 const ORIGINAL = Symbol('@feathersjs/hooks/original');
