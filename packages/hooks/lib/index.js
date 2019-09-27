@@ -45,7 +45,7 @@ function hookFunction (method, _hooks, getContext = defaultGetContext({})) {
     [HOOKS]: hooks,
     [ORIGINAL]: original
   });
-};
+}
 
 const hookObject = (object, hookMap, getContext = defaultGetContext) => {
   const keys = Object.keys(object).concat(Object.getOwnPropertySymbols(object));
