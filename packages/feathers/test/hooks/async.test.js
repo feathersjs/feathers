@@ -43,9 +43,8 @@ describe('`async` hooks', () => {
                 modified: true
               });
             },
-            function (hook, next) {
+            function (hook) {
               assert.ok(hook.modified);
-              return next();
             }
           ]
         }
@@ -74,10 +73,10 @@ describe('`async` hooks', () => {
 
       service.hooks({
         async: {
-          get (hook, next) {
+          get (hook) {
             return new Promise(resolve => {
               hook.params.ran = true;
-              resolve(next());
+              resolve();
             });
           },
 
@@ -85,6 +84,42 @@ describe('`async` hooks', () => {
             return new Promise((resolve, reject) => {
               reject(new Error('This did not work'));
             });
+          }
+        }
+      });
+
+      return service.get('dishes').then(() => service.remove(10))
+        .catch(error => {
+          assert.strictEqual(error.message, 'This did not work');
+        });
+    });
+
+    it('.async hooks do not need to return anything', () => {
+      const app = feathers().use('/dummy', {
+        get (id, params) {
+          assert.ok(params.ran, 'Ran through promise hook');
+
+          return Promise.resolve({
+            id: id,
+            description: `You have to do ${id}`
+          });
+        },
+
+        remove () {
+          assert.ok(false, 'Should never get here');
+        }
+      });
+
+      const service = app.service('dummy');
+
+      service.hooks({
+        async: {
+          get (hook) {
+            hook.params.ran = true;
+          },
+
+          remove () {
+            throw new Error('This did not work');
           }
         }
       });
@@ -156,7 +191,7 @@ describe('`async` hooks', () => {
               modified: 'params'
             });
 
-            return next();
+            return next(null, hook);
           }
         }
       });
@@ -184,7 +219,6 @@ describe('`async` hooks', () => {
           create (hook, next) {
             hook.data.appPresent = typeof hook.app !== 'undefined';
             assert.strictEqual(hook.data.appPresent, true);
-
             return next();
           }
         }
@@ -210,8 +244,9 @@ describe('`async` hooks', () => {
 
       service.hooks({
         async: {
-          update () {
+          update (hook, next) {
             throw new Error('You are not allowed to update');
+            next();
           }
         }
       });
@@ -237,8 +272,8 @@ describe('`async` hooks', () => {
 
       service.hooks({
         async: {
-          remove (hook) {
-            return hook;
+          remove (hook, next) {
+            next();
           }
         }
       });
@@ -267,20 +302,20 @@ describe('`async` hooks', () => {
 
       service.hooks({
         async: {
-          create (hook) {
+          create (hook, next) {
             hook.params.modified = 'params';
 
-            return hook;
+            next();
           }
         }
       });
 
       service.hooks({
         async: {
-          create (hook) {
+          create (hook, next) {
             hook.data.modified = 'second data';
 
-            return hook;
+            next();
           }
         }
       });
@@ -310,15 +345,15 @@ describe('`async` hooks', () => {
       service.hooks({
         async: {
           create: [
-            function (hook) {
+            function (hook, next) {
               hook.params.modified = 'params';
 
-              return hook;
+              next();
             },
-            function (hook) {
+            function (hook, next) {
               hook.data.modified = 'second data';
 
-              return hook;
+              next();
             }
           ]
         }
@@ -343,10 +378,9 @@ describe('`async` hooks', () => {
 
       service.hooks({
         async: {
-          get (hook) {
+          get (hook, next) {
             hook.params.items = ['first'];
-
-            return hook;
+            next();
           }
         }
       });
@@ -354,15 +388,13 @@ describe('`async` hooks', () => {
       service.hooks({
         async: {
           get: [
-            function (hook) {
+            function (hook, next) {
               hook.params.items.push('second');
-
-              return hook;
+              next();
             },
-            function (hook) {
+            function (hook, next) {
               hook.params.items.push('third');
-
-              return hook;
+              next();
             }
           ]
         }
@@ -371,7 +403,7 @@ describe('`async` hooks', () => {
       return service.get(10);
     });
 
-    it('before all hooks (#11)', () => {
+    it('async all hooks (#11)', () => {
       const app = feathers().use('/dummy', {
         get (id, params) {
           assert.ok(params.asyncAllObject);
@@ -395,20 +427,18 @@ describe('`async` hooks', () => {
 
       service.hooks({
         async: {
-          all (hook) {
+          all (hook, next) {
             hook.params.asyncAllObject = true;
-
-            return hook;
+            next();
           }
         }
       });
 
       service.hooks({
         async: [
-          function (hook) {
+          function (hook, next) {
             hook.params.asyncAllMethodArray = true;
-
-            return hook;
+            next();
           }
         ]
       });
@@ -434,7 +464,6 @@ describe('`async` hooks', () => {
         async: {
           get (hook, next) {
             hook.params.test = this.number + 2;
-
             return next();
           }
         }
@@ -446,6 +475,35 @@ describe('`async` hooks', () => {
           number: 42,
           test: 44
         });
+      });
+    });
+
+    it('calling next() multiple times does not do anything', () => {
+      const app = feathers().use('/dummy', {
+        get (id) {
+          return Promise.resolve({ id });
+        }
+      });
+
+      const service = app.service('dummy');
+
+      service.hooks({
+        async: {
+          get: [
+            function (hook, next) {
+              return next();
+            },
+
+            function (hook, next) {
+              next();
+              return next();
+            }
+          ]
+        }
+      });
+
+      return service.get(10).catch(e => {
+        assert.strictEqual(e.message, 'next() called multiple times');
       });
     });
   });
