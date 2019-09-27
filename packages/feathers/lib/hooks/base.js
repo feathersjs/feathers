@@ -22,11 +22,11 @@ const validate = (context, next) => {
   const parameters = service.methods[method];
 
   if (parameters.includes('id') && context.id === undefined) {
-    return next(new Error(`An id must be provided to the '${method}' method`));
+    throw new Error(`An id must be provided to the '${method}' method`);
   }
 
   if (parameters.includes('data') && !_.isObjectOrArray(context.data)) {
-    return next(new Error(`A data object must be provided to the '${method}' method`));
+    throw new Error(`A data object must be provided to the '${method}' method`);
   }
 
   return next();

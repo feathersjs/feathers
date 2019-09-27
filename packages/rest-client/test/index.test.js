@@ -79,19 +79,19 @@ describe('REST client tests', function () {
     const service = app.service('todos');
 
     return service.get().catch(error => {
-      assert.strictEqual(error.message, `id for 'get' can not be undefined`);
+      assert.strictEqual(error.message, `An id must be provided to the 'get' method`);
 
       return service.remove();
     }).catch(error => {
-      assert.strictEqual(error.message, `id for 'remove' can not be undefined, only 'null' when removing multiple entries`);
+      assert.strictEqual(error.message, `An id must be provided to the 'remove' method`);
 
       return service.update();
     }).catch(error => {
-      assert.strictEqual(error.message, `id for 'update' can not be undefined, only 'null' when updating multiple entries`);
+      assert.strictEqual(error.message, `An id must be provided to the 'update' method`);
 
       return service.patch();
     }).catch(error => {
-      assert.strictEqual(error.message, `id for 'patch' can not be undefined, only 'null' when updating multiple entries`);
+      assert.strictEqual(error.message, `An id must be provided to the 'patch' method`);
     });
   });
 });

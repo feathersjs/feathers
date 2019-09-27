@@ -30,12 +30,12 @@ const withHooks = function withHooks ({
       return result;
     }, {});
 
-    // A reference to the original method
-    const _super = original || service[method].bind(service);
-
     return function (...args) {
       const returnHook = args[args.length - 1] === true
         ? args.pop() : false;
+
+      // A reference to the original method
+      const _super = original || service[method].bind(service);
 
       // Create the hook object that gets passed through
       const hookObject = createHookObject(method, {
@@ -80,7 +80,13 @@ const withHooks = function withHooks ({
           // Finally, return the result
           // Or the hook object if the `returnHook` flag is set
           returnHook ? hookObject : hookObject.result
-        )
+        );
+
+      return hooksDecorator(
+        fn,
+        baseHooks.concat(hooks.async),
+        () => hookObject
+      ).call(service)
         // Handle errors
         .catch(error => {
           // Combine all app and service `error` and `finally` hooks and process
@@ -110,12 +116,6 @@ const withHooks = function withHooks ({
               return typeof hook.result !== 'undefined' ? hook.result : Promise.reject(hook.error);
             });
         });
-
-      return hooksDecorator(
-        fn,
-        baseHooks.concat(hooks.async),
-        () => hookObject
-      ).call(service);
     };
   };
 };
