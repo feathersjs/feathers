@@ -115,7 +115,7 @@ const withHooks = function withHooks ({
         fn,
         baseHooks.concat(hooks.async),
         () => hookObject
-      )();
+      ).call(service);
     };
   };
 };

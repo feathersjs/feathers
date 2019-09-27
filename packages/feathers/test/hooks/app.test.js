@@ -25,6 +25,35 @@ describe('app.hooks', () => {
     assert.strictEqual(typeof app.hooks, 'function');
   });
 
+  describe('app.hooks({ async })', () => {
+    it('basic app async hook', () => {
+      const service = app.service('todos');
+
+      app.hooks({
+        async async (hook, next) {
+          assert.strictEqual(hook.app, app);
+          await next();
+          hook.params.ran = true;
+        }
+      });
+
+      return service.get('test').then(result => {
+        assert.deepStrictEqual(result, {
+          id: 'test',
+          params: { ran: true }
+        });
+
+        const data = { test: 'hi' };
+
+        return service.create(data).then(result => {
+          assert.deepStrictEqual(result, {
+            data, params: { ran: true }
+          });
+        });
+      });
+    });
+  });
+
   describe('app.hooks({ before })', () => {
     it('basic app before hook', () => {
       const service = app.service('todos');

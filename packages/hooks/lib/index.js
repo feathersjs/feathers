@@ -6,7 +6,7 @@ const RETURN = Symbol('@feathersjs/hooks/return');
 
 const defaultGetContext = data => args => Object.assign({ arguments: args }, data);
 
-const hookFunction = (method, _hooks, getContext = defaultGetContext({})) => {
+function hookFunction (method, _hooks, getContext = defaultGetContext({})) {
   if (typeof method !== 'function') {
     throw new Error('Can not apply hooks to non-function');
   }
@@ -38,7 +38,7 @@ const hookFunction = (method, _hooks, getContext = defaultGetContext({})) => {
     ];
     const composed = compose(hookChain);
 
-    return composed(context);
+    return composed.call(this, context);
   };
 
   return Object.assign(fn, {
