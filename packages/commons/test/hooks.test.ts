@@ -350,6 +350,22 @@ describe('hook utilities', () => {
         expect(base.__hooks.dummy.testMethod).to.deep.equal([ fn ]);
       });
 
+      it('unshifts hook with custom type and `all` method', () => {
+        expect(typeof base.hooks).to.equal('function');
+
+        const fn = function () {};
+        const fn2 = function () {};
+        const fn3 = function () {};
+
+        base.hooks({ dummy: [fn] });
+        base.hooks({ dummy: {
+          all: { $unshift: [fn2] }
+        } });
+        base.hooks({ dummy: { $unshift: [fn3] } });
+
+        expect(base.__hooks.dummy.testMethod).to.deep.equal([ fn3, fn2, fn ]);
+      });
+
       it('registers hook with custom type and specific method', () => {
         base.hooks({
           dummy: {

@@ -73,6 +73,8 @@ export function convertHookData (obj: any) {
 
   if (Array.isArray(obj)) {
     hook = { all: obj };
+  } else if (obj.$unshift || obj.$push) {
+    hook = { all: obj };
   } else if (typeof obj !== 'object') {
     hook = { all: [ obj ] };
   } else {
@@ -139,6 +141,33 @@ export function processHooks (hooks: any[], initialHookObject: any) {
   });
 }
 
+function registerHooks (myHooks: any, hooks: any): any {
+  if (Array.isArray(hooks)) {
+    hooks.forEach(hook => {
+      if (typeof hook === 'function') {
+        myHooks.push(hook);
+      } else {
+        if (hook.$push) {
+          if (Array.isArray(hook.$push)) {
+            myHooks.push.apply(myHooks, hook.$push);
+          } else {
+            myHooks.push(hook.$push);
+          }
+        }
+        if (hook.$unshift) {
+          if (Array.isArray(hook.$unshift)) {
+            myHooks.unshift.apply(myHooks, hook.$unshift);
+          } else {
+            myHooks.unshift(hook.$unshift);
+          }
+        }
+      }
+    });
+  } else if (hooks) {
+    return registerHooks(myHooks, [hooks]);
+  }
+}
+
 // Add `.hooks` functionality to an object
 export function enableHooks (obj: any, methods: string[], types: string[]) {
   if (typeof obj.hooks === 'function') {
@@ -178,11 +207,11 @@ export function enableHooks (obj: any, methods: string[], types: string[]) {
           const myHooks = this.__hooks[type][method] || (this.__hooks[type][method] = []);
 
           if (hooks.all) {
-            myHooks.push.apply(myHooks, hooks.all);
+            registerHooks(myHooks, hooks.all);
           }
 
           if (hooks[method]) {
-            myHooks.push.apply(myHooks, hooks[method]);
+            registerHooks(myHooks, hooks[method]);
           }
         });
       });
