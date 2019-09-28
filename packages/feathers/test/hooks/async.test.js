@@ -191,7 +191,7 @@ describe('`async` hooks', () => {
               modified: 'params'
             });
 
-            return next(null, hook);
+            return next();
           }
         }
       });
