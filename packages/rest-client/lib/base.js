@@ -29,7 +29,7 @@ class Base {
     }
 
     if (Object.keys(params).length !== 0) {
-      const queryString = query.stringify(params);
+      const queryString = query.stringify(params, this.options.qs);
 
       url += `?${queryString}`;
     }
