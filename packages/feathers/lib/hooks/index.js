@@ -1,4 +1,5 @@
-const { hooks, isPromise, _ } = require('@feathersjs/commons');
+const { hooks: hookCommons, isPromise, _ } = require('@feathersjs/commons');
+const hooksDecorator = require('@feathersjs/hooks');
 const baseHooks = require('./base');
 
 const {
@@ -7,7 +8,7 @@ const {
   processHooks,
   enableHooks,
   ACTIVATE_HOOKS
-} = hooks;
+} = hookCommons;
 
 const makeArguments = (service, method, hookObject) => service.methods[ method ].reduce((result, value) => ([
   ...result,
@@ -35,16 +36,17 @@ const withHooks = function withHooks ({
 
       // A reference to the original method
       const _super = original || service[method].bind(service);
+
       // Create the hook object that gets passed through
-      const hookObject = createHookObject(method, {
-        type: 'before', // initial hook object type
+      const initialHookObject = createHookObject(method, {
+        type: 'async', // initial hook object type
         arguments: args,
         service,
         app
       });
 
       // Process all before hooks
-      return processHooks.call(service, baseHooks.concat(hooks.before), hookObject)
+      const fn = () => processHooks.call(service, hooks.before, Object.assign({}, initialHookObject, { type: 'before' }))
         // Use the hook object to call the original method
         .then(hookObject => {
           // If `hookObject.result` is set, skip the original method
@@ -78,14 +80,20 @@ const withHooks = function withHooks ({
           // Finally, return the result
           // Or the hook object if the `returnHook` flag is set
           returnHook ? hookObject : hookObject.result
-        )
+        );
+
+      return hooksDecorator(
+        fn,
+        baseHooks.concat(hooks.async),
+        () => initialHookObject
+      ).call(service)
         // Handle errors
         .catch(error => {
           // Combine all app and service `error` and `finally` hooks and process
           const hookChain = hooks.error.concat(hooks.finally);
 
           // A shallow copy of the hook object
-          const errorHookObject = _.omit(Object.assign({}, error.hook, hookObject, {
+          const errorHookObject = _.omit(Object.assign({}, error.hook, initialHookObject, {
             type: 'error',
             original: error.hook,
             error
@@ -153,6 +161,7 @@ const hookMixin = exports.hookMixin = function hookMixin (service) {
         method,
         original
       })({
+        async: getHooks(app, service, 'async', method),
         before: getHooks(app, service, 'before', method),
         after: getHooks(app, service, 'after', method, true),
         error: getHooks(app, service, 'error', method, true),
@@ -174,7 +183,7 @@ module.exports = function () {
     // We store a reference of all supported hook types on the app
     // in case someone needs it
     Object.assign(app, {
-      hookTypes: ['before', 'after', 'error', 'finally']
+      hookTypes: ['async', 'before', 'after', 'error', 'finally']
     });
 
     // Add functionality for hooks to be registered as app.hooks

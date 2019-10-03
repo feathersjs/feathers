@@ -1,4 +1,5 @@
-const compose = require('koa-compose');
+// const compose = require('koa-compose');
+const compose = require('./compose');
 
 const HOOKS = Symbol('@feathersjs/hooks');
 const ORIGINAL = Symbol('@feathersjs/hooks/original');
@@ -6,7 +7,7 @@ const RETURN = Symbol('@feathersjs/hooks/return');
 
 const defaultGetContext = data => args => Object.assign({ arguments: args }, data);
 
-const hookFunction = (method, _hooks, getContext = defaultGetContext({})) => {
+function hookFunction (method, _hooks, getContext = defaultGetContext({})) {
   if (typeof method !== 'function') {
     throw new Error('Can not apply hooks to non-function');
   }
@@ -38,14 +39,14 @@ const hookFunction = (method, _hooks, getContext = defaultGetContext({})) => {
     ];
     const composed = compose(hookChain);
 
-    return composed(context);
+    return composed.call(this, context);
   };
 
   return Object.assign(fn, {
     [HOOKS]: hooks,
     [ORIGINAL]: original
   });
-};
+}
 
 const hookObject = (object, hookMap, getContext = defaultGetContext) => {
   const keys = Object.keys(object).concat(Object.getOwnPropertySymbols(object));
@@ -94,7 +95,7 @@ const main = (...args) => {
   } else if (typeof target === 'object') {
     return hookObject(...args);
   }
-  
+
   return hookFunction(...args);
 };
 
