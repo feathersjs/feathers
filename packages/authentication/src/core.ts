@@ -211,12 +211,16 @@ export class AuthenticationBase {
   async authenticate (authentication: AuthenticationRequest, params: Params, ...allowed: string[]) {
     const { strategy } = authentication || ({} as AuthenticationRequest);
     const [ authStrategy ] = this.getStrategies(strategy);
+    const strategyAllowed = allowed.includes(strategy);
 
     debug('Running authenticate for strategy', strategy, allowed);
 
-    if (!authentication || !authStrategy || !allowed.includes(strategy)) {
+    if (!authentication || !authStrategy || !strategyAllowed) {
+      const additionalInfo = (!strategy && ' (no `strategy` set)') ||
+        (!strategyAllowed && ' (strategy not allowed in authStrategies)') || '';
+
       // If there are no valid strategies or `authentication` is not an object
-      throw new NotAuthenticated(`Invalid authentication information` + (!strategy ? ' (no `strategy` set)' : ''));
+      throw new NotAuthenticated('Invalid authentication information' + additionalInfo);
     }
 
     return authStrategy.authenticate(authentication, {
