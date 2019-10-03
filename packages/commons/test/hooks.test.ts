@@ -317,7 +317,7 @@ describe('hook utilities', () => {
     it('with custom types', () => {
       const base: any = {};
 
-      hooks.enableHooks(base, [], ['test']);
+      hooks.enableHooks(base, (): any[] => [], ['test']);
 
       expect(typeof base.__hooks).to.equal('object');
       expect(typeof base.__hooks.test).to.equal('object');
@@ -329,7 +329,7 @@ describe('hook utilities', () => {
         hooks () {}
       };
 
-      hooks.enableHooks(base, [], ['test']);
+      hooks.enableHooks(base, (): any[] => [], ['test']);
       expect(typeof base.__hooks).to.equal('undefined');
     });
 
@@ -337,7 +337,7 @@ describe('hook utilities', () => {
       let base: any = {};
 
       beforeEach(() => {
-        base = hooks.enableHooks({}, [ 'testMethod' ], [ 'dummy' ]);
+        base = hooks.enableHooks({}, () => [ 'testMethod' ], [ 'dummy' ]);
       });
 
       it('registers hook with custom type and `all` method', () => {
@@ -383,8 +383,8 @@ describe('hook utilities', () => {
   });
 
   describe('.getHooks', () => {
-    const app = hooks.enableHooks({}, [ 'testMethod' ], [ 'dummy' ]);
-    const service = hooks.enableHooks({}, [ 'testMethod' ], [ 'dummy' ]);
+    const app = hooks.enableHooks({}, () => [ 'testMethod' ], [ 'dummy' ]);
+    const service = hooks.enableHooks({}, () => [ 'testMethod' ], [ 'dummy' ]);
     const appHook = function () {};
     const serviceHook = function () {};
 

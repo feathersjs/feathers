@@ -1,5 +1,6 @@
 const Proto = require('uberproto');
 const Application = require('./application');
+const Service = require('./Service');
 const version = require('./version');
 const { ACTIVATE_HOOKS, activateHooks } = require('./hooks');
 // A base object Prototype that does not inherit from a
@@ -18,6 +19,7 @@ function createApplication () {
 }
 
 createApplication.version = version;
+createApplication.Service = Service;
 createApplication.ACTIVATE_HOOKS = ACTIVATE_HOOKS;
 createApplication.activateHooks = activateHooks;
 

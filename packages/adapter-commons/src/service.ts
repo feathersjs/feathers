@@ -1,5 +1,5 @@
 import { NotImplemented, BadRequest, MethodNotAllowed } from '@feathersjs/errors';
-import { ServiceMethods, Params, Paginated, Id, NullableId } from '@feathersjs/feathers';
+import {ServiceMethods, Params, Paginated, Id, NullableId, Service} from '@feathersjs/feathers';
 import filterQuery from './filter-query';
 
 const callMethod = (self: any, name: any, ...args: any[]) => {
@@ -17,6 +17,7 @@ const alwaysMulti: { [key: string]: boolean } = {
 };
 
 export interface ServiceOptions {
+  methods: any;
   events: string[];
   multi: boolean|string[];
   id: string;
@@ -34,10 +35,21 @@ export interface InternalServiceMethods<T = any> {
     _remove (id: NullableId, params?: Params): Promise<T>;
 }
 
-export class AdapterService<T = any> implements ServiceMethods<T> {
+export class AdapterService<T = any> extends Service implements ServiceMethods<T> {
   options: ServiceOptions;
 
   constructor (options: Partial<ServiceOptions>) {
+    const methods = Object.assign({
+      find: ['params'],
+      get: ['id', 'params'],
+      create: ['data', 'params'],
+      update: ['id', 'data', 'params'],
+      patch: ['id', 'data', 'params'],
+      remove: ['id', 'params']
+    }, options.methods || {});
+
+    super(Object.assign({}, options, { methods }));
+
     this.options = Object.assign({
       id: 'id',
       events: [],
@@ -45,7 +57,7 @@ export class AdapterService<T = any> implements ServiceMethods<T> {
       multi: false,
       filters: [],
       whitelist: []
-    }, options);
+    }, options, { methods });
   }
 
   get id () {

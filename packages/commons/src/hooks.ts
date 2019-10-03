@@ -140,7 +140,7 @@ export function processHooks (hooks: any[], initialHookObject: any) {
 }
 
 // Add `.hooks` functionality to an object
-export function enableHooks (obj: any, methods: string[], types: string[]) {
+export function enableHooks (obj: any, getMethods: any, types: string[]) {
   if (typeof obj.hooks === 'function') {
     return obj;
   }
@@ -166,6 +166,7 @@ export function enableHooks (obj: any, methods: string[], types: string[]) {
         }
 
         const hooks = convertHookData(current);
+        const methods = getMethods();
 
         each(hooks, (_value, method) => {
           if (method !== 'all' && methods.indexOf(method) === -1) {
@@ -173,7 +174,7 @@ export function enableHooks (obj: any, methods: string[], types: string[]) {
           }
         });
 
-        methods.forEach(method => {
+        methods.forEach((method: string) => {
           // @ts-ignore
           const myHooks = this.__hooks[type][method] || (this.__hooks[type][method] = []);
 

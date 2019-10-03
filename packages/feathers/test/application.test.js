@@ -1,6 +1,7 @@
 const assert = require('assert');
 const Proto = require('uberproto');
 const feathers = require('../lib');
+const Service = require('../lib/Service');
 
 describe('Feathers application', () => {
   it('adds an ES module `default` export', () => {
@@ -166,6 +167,47 @@ describe('Feathers application', () => {
       app1.use('/testing', app2.service('dummy'));
 
       app1.service('testing').create({ message: 'Hi' });
+    });
+
+    it('registers and wraps a new hooked service', () => {
+      class Dummy extends Service {
+        constructor () {
+          super({
+            methods: {
+              create: ['data', 'params']
+            }
+          });
+        }
+
+        setup (app, path) {
+          super.setup(app);
+          this.path = path;
+          return this;
+        }
+
+        create (data) {
+          return Promise.resolve(data);
+        }
+      }
+
+      const svc = new Dummy().setup();
+
+      svc.hooks({
+        before: {
+          create: hook => {
+            hook.data.message = 'Other message';
+          }
+        }
+      });
+
+      const app = feathers().use('/dummy', svc);
+      const wrappedService = app.service('dummy');
+
+      assert.ok(Proto.isPrototypeOf(wrappedService), 'Service got wrapped as Uberproto object');
+
+      return wrappedService.create({
+        message: 'Test message'
+      }).then(data => assert.strictEqual(data.message, 'Other message'));
     });
 
     it('services conserve Symbols', () => {

@@ -11,8 +11,9 @@ interface Feathers {
     readonly ACTIVATE_HOOKS: unique symbol;
     version: string;
     default: Feathers;
-    // TODO: Write a definition for activateHooks.
+    // TODO: Write a definition for activateHooks and Service.
     // activateHooks(): void
+    Service: any;
 }
 
 declare namespace createApplication {

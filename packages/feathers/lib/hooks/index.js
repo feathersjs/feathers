@@ -180,7 +180,7 @@ const hookMixin = exports.hookMixin = function hookMixin (service) {
   }, {});
 
   // Add .hooks method and properties to the service
-  enableHooks(service, methodNames, app.hookTypes);
+  enableHooks(service, () => Object.keys(service.methods), app.hookTypes);
 
   service.mixin(mixin);
 };
@@ -194,7 +194,7 @@ module.exports = function () {
     });
 
     // Add functionality for hooks to be registered as app.hooks
-    enableHooks(app, app.methods, app.hookTypes);
+    enableHooks(app, () => app.methods, app.hookTypes);
 
     app.mixins.push(hookMixin);
   };
