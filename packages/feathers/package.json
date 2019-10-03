@@ -29,8 +29,10 @@
   },
   "scripts": {
     "test": "mocha --opts ../../mocha.opts",
-    "update-version": "node -e \"console.log('module.exports = \\'' + require('./package.json').version + '\\';')\" > lib/version.js",
-    "version": "npm run update-version"
+    "write-version": "node -e \"console.log('module.exports = \\'' + require('./package.json').version + '\\';')\" > lib/version.js",
+    "reset-version": "node -e \"console.log('module.exports = \\'development\\';')\" > lib/version.js",
+    "version": "npm run write-version",
+    "publish": "npm run reset-version"
   },
   "engines": {
     "node": ">= 6"
