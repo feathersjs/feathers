@@ -6,7 +6,6 @@ declare const configurePrimus: FeathersPrimus;
 export = configurePrimus;
 
 interface FeathersPrimus {
-  (options: any, callback?: (primus: any) => void): () => void;
-  readonly SOCKET_KEY: unique symbol;
+  (options?: any, callback?: (primus: any) => void): (app: any) => void;
   default: FeathersPrimus;
 }
