@@ -13,13 +13,13 @@ function primusClient (connection, options) {
     }));
   };
 
-  const initialize = function () {
-    if (typeof this.defaultService === 'function') {
+  const initialize = function (app) {
+    if (typeof app.defaultService === 'function') {
       throw new Error('Only one default client provider can be configured');
     }
 
-    this.primus = connection;
-    this.defaultService = defaultService;
+    app.primus = connection;
+    app.defaultService = defaultService;
   };
 
   initialize.Service = Service;
