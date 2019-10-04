@@ -1,5 +1,5 @@
 import { NotImplemented, BadRequest, MethodNotAllowed } from '@feathersjs/errors';
-import {ServiceMethods, Params, Paginated, Id, NullableId, Service} from '@feathersjs/feathers';
+import { ServiceMethods, Params, Paginated, Id, NullableId, Service } from '@feathersjs/feathers';
 import filterQuery from './filter-query';
 
 const callMethod = (self: any, name: any, ...args: any[]) => {
