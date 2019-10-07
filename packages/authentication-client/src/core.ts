@@ -149,7 +149,7 @@ export class AuthenticationClient {
     return authPromise;
   }
 
-  authenticate (authentication: AuthenticationRequest, params?: Params): Promise<AuthenticationResult> {
+  authenticate (authentication?: AuthenticationRequest, params?: Params): Promise<AuthenticationResult> {
     if (!authentication) {
       return this.reAuthenticate();
     }
@@ -172,7 +172,7 @@ export class AuthenticationClient {
     return promise;
   }
 
-  logout () {
+  logout (): Promise<AuthenticationResult | null> {
     return Promise.resolve(this.app.get('authentication'))
       .then(() => this.service.remove(null)
       .then((authResult: AuthenticationResult) => this.removeAccessToken()

@@ -21,7 +21,7 @@ export interface AuthenticationRequest {
   [key: string]: any;
 }
 
-export type ConnectionEvent = 'login'|'logout'|'disconnect';
+export type ConnectionEvent = 'login' | 'logout' | 'disconnect';
 
 export interface AuthenticationStrategy {
   /**
@@ -63,11 +63,11 @@ export interface AuthenticationStrategy {
    * @param req The HTTP request
    * @param res The HTTP response
    */
-  parse? (req: IncomingMessage, res: ServerResponse): Promise<AuthenticationRequest|null>;
+  parse? (req: IncomingMessage, res: ServerResponse): Promise<AuthenticationRequest | null>;
 }
 
 export interface JwtVerifyOptions extends VerifyOptions {
-  algorithm?: string|string[];
+  algorithm?: string | string[];
 }
 
 /**
