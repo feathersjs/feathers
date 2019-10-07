@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.6](https://github.com/feathersjs/feathers/compare/v4.3.5...v4.3.6) (2019-10-07)
+
+
+### Bug Fixes
+
+* Check query  for NaN ([#1607](https://github.com/feathersjs/feathers/issues/1607)) ([f1a781f](https://github.com/feathersjs/feathers/commit/f1a781f))
+
+
+
+
+
 ## [4.3.4](https://github.com/feathersjs/feathers/compare/v4.3.3...v4.3.4) (2019-10-03)
 
 **Note:** Version bump only for package @feathersjs/adapter-commons
