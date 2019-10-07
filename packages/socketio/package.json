@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/socketio",
   "description": "The Feathers Socket.io real-time API provider",
-  "version": "4.3.4",
+  "version": "4.3.5",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "index.d.ts",
@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@feathersjs/commons": "^4.3.0",
-    "@feathersjs/express": "^4.3.4",
+    "@feathersjs/express": "^4.3.5",
     "@feathersjs/feathers": "^4.3.4",
     "@feathersjs/tests": "^4.3.4",
     "feathers-memory": "^4.0.0",

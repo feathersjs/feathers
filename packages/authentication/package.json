@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication",
   "description": "Add Authentication to your FeathersJS app.",
-  "version": "4.3.4",
+  "version": "4.3.5",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
