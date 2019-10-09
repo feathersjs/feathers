@@ -142,30 +142,28 @@ export function processHooks (hooks: any[], initialHookObject: any) {
 }
 
 function registerHooks (myHooks: any, hooks: any): any {
-  if (Array.isArray(hooks)) {
-    hooks.forEach(hook => {
-      if (typeof hook === 'function') {
-        myHooks.push(hook);
-      } else {
-        if (hook.$push) {
-          if (Array.isArray(hook.$push)) {
-            myHooks.push.apply(myHooks, hook.$push);
-          } else {
-            myHooks.push(hook.$push);
-          }
-        }
-        if (hook.$unshift) {
-          if (Array.isArray(hook.$unshift)) {
-            myHooks.unshift.apply(myHooks, hook.$unshift);
-          } else {
-            myHooks.unshift(hook.$unshift);
-          }
+  const hooksToRegister = Array.isArray(hooks) ? hooks : [hooks];
+
+  hooksToRegister.forEach(hook => {
+    if (typeof hook === 'function') {
+      myHooks.push(hook);
+    } else {
+      if (hook.$push) {
+        if (Array.isArray(hook.$push)) {
+          myHooks.push.apply(myHooks, hook.$push);
+        } else {
+          myHooks.push(hook.$push);
         }
       }
-    });
-  } else if (hooks) {
-    return registerHooks(myHooks, [hooks]);
-  }
+      if (hook.$unshift) {
+        if (Array.isArray(hook.$unshift)) {
+          myHooks.unshift.apply(myHooks, hook.$unshift);
+        } else {
+          myHooks.unshift(hook.$unshift);
+        }
+      }
+    }
+  });
 }
 
 // Add `.hooks` functionality to an object
