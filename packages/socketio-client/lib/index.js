@@ -19,13 +19,13 @@ function socketioClient (connection, options) {
     return new Service(settings);
   };
 
-  const initialize = function () {
-    if (typeof this.defaultService === 'function') {
+  const initialize = function (app) {
+    if (typeof app.defaultService === 'function') {
       throw new Error('Only one default client provider can be configured');
     }
 
-    this.io = connection;
-    this.defaultService = defaultService;
+    app.io = connection;
+    app.defaultService = defaultService;
   };
 
   initialize.Service = Service;

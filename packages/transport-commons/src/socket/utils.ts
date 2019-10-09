@@ -35,13 +35,13 @@ export function normalizeError (e: any) {
   return result;
 }
 
-export function getDispatcher (emit: string, socketMap: WeakMap<RealTimeConnection, any>) {
-  return function (event: string, channel: CombinedChannel, context: HookContext, data: any) {
+export function getDispatcher (emit: string, socketMap: WeakMap<RealTimeConnection, any>, socketKey?: any) {
+  return function (event: string, channel: CombinedChannel, context: HookContext, data?: any) {
     debug(`Dispatching '${event}' to ${channel.length} connections`);
 
     channel.connections.forEach(connection => {
       // The reference between connection and socket is set in `app.setup`
-      const socket = socketMap.get(connection);
+      const socket = socketKey ? connection[socketKey] : socketMap.get(connection);
 
       if (socket) {
         const eventName = `${context.path || ''} ${event}`.trim();

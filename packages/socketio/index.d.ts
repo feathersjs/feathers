@@ -5,8 +5,8 @@ declare const socketio: FeathersSocketIO;
 export = socketio;
 
 interface FeathersSocketIO {
-  (callback?: (io: io.Server) => void): () => void;
-  (options: number | io.ServerOptions, callback?: (io: io.Server) => void): () => void;
-  (port: number, options?: io.ServerOptions, callback?: (io: io.Server) => void): () => void;
+  (callback?: (io: io.Server) => void): (app: any) => void;
+  (options: number | io.ServerOptions, callback?: (io: io.Server) => void): (app: any) => void;
+  (port: number, options?: io.ServerOptions, callback?: (io: io.Server) => void): (app: any) => void;
   default: FeathersSocketIO;
 }

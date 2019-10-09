@@ -1,5 +1,5 @@
-import { NotAuthenticated } from '@feathersjs/errors';
-import { Application } from '@feathersjs/feathers';
+import { NotAuthenticated, FeathersError } from '@feathersjs/errors';
+import { Application, Params } from '@feathersjs/feathers';
 import { AuthenticationRequest, AuthenticationResult } from '@feathersjs/authentication';
 import { Storage, StorageWrapper } from './storage';
 
@@ -118,6 +118,16 @@ export class AuthenticationClient {
     return Promise.resolve(null);
   }
 
+  handleError (error: FeathersError, type: 'authenticate'|'logout') {
+    if (error.code === 401 || error.code === 403) {
+      const promise = this.removeAccessToken().then(() => this.reset());
+
+      return type === 'logout' ? promise : promise.then(() => Promise.reject(error));
+    }
+
+    return Promise.reject(error);
+  }
+
   reAuthenticate (force: boolean = false): Promise<AuthenticationResult> {
     // Either returns the authentication state or
     // tries to re-authenticate with the stored JWT and strategy
@@ -133,20 +143,18 @@ export class AuthenticationClient {
           strategy: this.options.jwtStrategy,
           accessToken
         });
-      }).catch((error: Error) =>
-        this.removeAccessToken().then(() => Promise.reject(error))
-      );
+      });
     }
 
     return authPromise;
   }
 
-  authenticate (authentication: AuthenticationRequest): Promise<AuthenticationResult> {
+  authenticate (authentication?: AuthenticationRequest, params?: Params): Promise<AuthenticationResult> {
     if (!authentication) {
       return this.reAuthenticate();
     }
 
-    const promise = this.service.create(authentication)
+    const promise = this.service.create(authentication, params)
       .then((authResult: AuthenticationResult) => {
         const { accessToken } = authResult;
 
@@ -155,8 +163,8 @@ export class AuthenticationClient {
         this.app.emit('authenticated', authResult);
 
         return this.setAccessToken(accessToken).then(() => authResult);
-      }).catch((error: Error) =>
-        this.reset().then(() => Promise.reject(error))
+      }).catch((error: FeathersError) =>
+        this.handleError(error, 'authenticate')
       );
 
     this.app.set('authentication', promise);
@@ -164,22 +172,19 @@ export class AuthenticationClient {
     return promise;
   }
 
-  logout () {
+  logout (): Promise<AuthenticationResult | null> {
     return Promise.resolve(this.app.get('authentication'))
-      .then(auth => {
-        if (!auth) {
-          return null;
-        }
+      .then(() => this.service.remove(null)
+      .then((authResult: AuthenticationResult) => this.removeAccessToken()
+        .then(() => this.reset())
+        .then(() => {
+          this.app.emit('logout', authResult);
 
-        return this.service.remove(null)
-          .then((authResult: AuthenticationResult) => this.removeAccessToken()
-            .then(() => this.reset())
-            .then(() => {
-              this.app.emit('logout', authResult);
-
-              return authResult;
-            })
-          );
-      });
+          return authResult;
+        })
+      ))
+      .catch((error: FeathersError) =>
+        this.handleError(error, 'logout')
+      );
   }
 }

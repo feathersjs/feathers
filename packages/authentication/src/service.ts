@@ -92,14 +92,14 @@ export class AuthenticationService extends AuthenticationBase implements Partial
 
     debug('Got authentication result', authResult);
 
+    if (authResult.accessToken) {
+      return authResult;
+    }
+
     const [ payload, jwtOptions ] = await Promise.all([
       this.getPayload(authResult, params),
       this.getTokenOptions(authResult, params)
     ]);
-
-    if (authResult.accessToken) {
-      return authResult;
-    }
 
     debug('Creating JWT with', payload, jwtOptions);
 
@@ -114,7 +114,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
    * @param id The JWT to remove or null
    * @param params Service call parameters
    */
-  async remove (id: null|string, params: Params) {
+  async remove (id: string | null, params: Params) {
     const { authentication } = params;
     const { authStrategies } = this.configuration;
 
@@ -131,11 +131,10 @@ export class AuthenticationService extends AuthenticationBase implements Partial
   /**
    * Validates the service configuration.
    */
-  setup () {
+  setup (this: AuthenticationService & ServiceAddons<AuthenticationResult>) {
     // The setup method checks for valid settings and registers the
     // connection and event (login, logout) hooks
     const { secret, service, entity, entityId } = this.configuration;
-    const self = this as unknown as ServiceAddons<AuthenticationResult>;
 
     if (typeof secret !== 'string') {
       throw new Error(`A 'secret' must be provided in your authentication configuration`);
@@ -155,15 +154,19 @@ export class AuthenticationService extends AuthenticationBase implements Partial
       }
     }
 
-    self.hooks({
+    this.hooks({
       after: {
         create: [ connection('login'), event('login') ],
         remove: [ connection('logout'), event('logout') ]
       }
     });
 
-    if (typeof self.publish === 'function') {
-      self.publish(() => null);
+    this.app.on('disconnect', async (connection) => {
+      await this.handleConnection('disconnect', connection);
+    });
+
+    if (typeof this.publish === 'function') {
+      this.publish(() => null);
     }
   }
 }
