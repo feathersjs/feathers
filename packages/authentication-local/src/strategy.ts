@@ -45,6 +45,10 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
 
   async findEntity (username: string, params: Params) {
     const { entityUsernameField, service, errorMessage } = this.configuration;
+    if (!username) { // don't query for users without any condition set.
+      throw new NotAuthenticated(errorMessage);
+    }
+
     const query = await this.getEntityQuery({
       [entityUsernameField]: username
     }, params);

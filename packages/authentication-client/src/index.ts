@@ -1,7 +1,6 @@
 import { AuthenticationClient, AuthenticationClientOptions } from './core';
 import * as hooks from './hooks';
 import { Application } from '@feathersjs/feathers';
-import { AuthenticationResult, AuthenticationRequest } from '@feathersjs/authentication';
 import { Storage, MemoryStorage, StorageWrapper } from './storage';
 
 declare module '@feathersjs/feathers' {
@@ -10,9 +9,9 @@ declare module '@feathersjs/feathers' {
     rest?: any;
     primus?: any;
     authentication: AuthenticationClient;
-    authenticate (authentication?: AuthenticationRequest): Promise<AuthenticationResult>;
-    reAuthenticate (force: boolean): Promise<AuthenticationResult>;
-    logout (): Promise<AuthenticationResult>;
+    authenticate: AuthenticationClient['authenticate'];
+    reAuthenticate: AuthenticationClient['reAuthenticate'];
+    logout: AuthenticationClient['logout'];
   }
 }
 

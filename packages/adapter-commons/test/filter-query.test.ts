@@ -107,6 +107,12 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
         assert.strictEqual(filters.$limit, 10);
         assert.strictEqual(filtersNeg.$limit, 10);
       });
+
+      it('limits with default pagination when not a number', () => {
+        const { filters } = filterQuery({ $limit: 'something' }, { paginate: { default: 5, max: 10 } });
+
+        assert.strictEqual(filters.$limit, 5);
+      });
     });
   });
 

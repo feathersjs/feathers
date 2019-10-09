@@ -32,13 +32,13 @@ function restClient (base = '') {
         return new Service({ base, name, connection, options });
       };
 
-      const initialize = function () {
-        if (typeof this.defaultService === 'function') {
+      const initialize = function (app) {
+        if (typeof app.defaultService === 'function') {
           throw new Error('Only one default client provider can be configured');
         }
 
-        this.rest = connection;
-        this.defaultService = defaultService;
+        app.rest = connection;
+        app.defaultService = defaultService;
       };
 
       initialize.Service = Service;

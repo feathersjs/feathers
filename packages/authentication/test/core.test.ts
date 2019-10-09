@@ -190,7 +190,7 @@ describe('authentication/core', () => {
           assert.fail('Should never get here');
         } catch (error) {
           assert.strictEqual(error.name, 'NotAuthenticated');
-          assert.strictEqual(error.message, 'Invalid authentication information');
+          assert.strictEqual(error.message, 'Invalid authentication information (strategy not allowed in authStrategies)');
         }
       });
 

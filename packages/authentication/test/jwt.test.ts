@@ -127,6 +127,8 @@ describe('authentication/jwt', () => {
       const disconnection = await new Promise(resolve => app.once('disconnect', resolve));
 
       assert.strictEqual(disconnection, connection);
+
+      assert.ok(!connection.authentication);
     });
 
     it('deletes authentication information on remove', async () => {
