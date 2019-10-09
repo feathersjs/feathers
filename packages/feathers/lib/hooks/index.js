@@ -18,7 +18,6 @@ const makeArguments = (service, method, hookObject) => service.methods[ method ]
 function oldHooksProcess (hooks, afterHookObject) {
   return async (ctx, next) => {
     Object.assign(ctx, { type: 'before' });
-
     await processHooks.call(ctx.service, hooks.before, ctx);
 
     if (typeof ctx.result !== 'undefined') {
@@ -33,10 +32,38 @@ function oldHooksProcess (hooks, afterHookObject) {
     }
 
     Object.assign(ctx, { type: 'after' });
-
     await processHooks.call(ctx.service, hooks.after, afterHookObject);
 
     Object.assign(ctx, afterHookObject, { type: 'async' });
+  };
+}
+
+function errorHooksProcess (hooks, beforeHookObject, afterHookObject) {
+  return async (ctx, next) => {
+    try {
+      await next();
+    } catch (error) {
+      beforeHookObject.error = error;
+      afterHookObject.error = error;
+
+      // A shallow copy of the hook object
+      const actualHookObject = afterHookObject.type ? afterHookObject : beforeHookObject;
+      const errorHookObject = _.omit(Object.assign(
+        {},
+        actualHookObject,
+        { type: 'error', original: actualHookObject, error }
+      ), 'result');
+
+      try {
+        await processHooks.call(ctx.service, hooks.error, errorHookObject);
+      } catch (errorInErrorHooks) {
+        errorHookObject.error = errorInErrorHooks;
+      }
+
+      throw errorHookObject;
+    } finally {
+      await processHooks.call(ctx.service, hooks.finally, afterHookObject);
+    }
   };
 }
 
@@ -88,44 +115,23 @@ const withHooks = function withHooks ({
 
       return hooksDecorator(
         fn,
-        baseHooks
+        [errorHooksProcess(hooks, beforeHookObject, afterHookObject)]
+          .concat(baseHooks)
           .concat(hooks.async)
           .concat(oldHooksProcess(hooks, afterHookObject)),
         () => beforeHookObject
       ).call(service, ...args)
-        // Finally hooks
-        .then(() => processHooks.call(service, hooks.finally, afterHookObject))
-        // Return
         .then(() => returnHook ? afterHookObject : afterHookObject.result)
         // Handle errors
-        .catch(error => {
-          // Combine all app and service `error` and `finally` hooks and process
-          const hookChain = hooks.error.concat(hooks.finally);
-          const actualHookObject = afterHookObject.type ? afterHookObject : beforeHookObject;
+        .catch(hook => {
+          if (returnHook) {
+            // Either resolve or reject with the hook object
+            return typeof hook.result !== 'undefined' ? hook : Promise.reject(hook);
+          }
 
-          // A shallow copy of the hook object
-          const errorHookObject = _.omit(Object.assign(
-            {},
-            actualHookObject,
-            { type: 'error', original: actualHookObject, error }
-          ), 'result');
-
-          return processHooks.call(service, hookChain, errorHookObject)
-            .catch(error => {
-              errorHookObject.error = error;
-
-              return errorHookObject;
-            })
-            .then(hook => {
-              if (returnHook) {
-                // Either resolve or reject with the hook object
-                return typeof hook.result !== 'undefined' ? hook : Promise.reject(hook);
-              }
-
-              // Otherwise return either the result if set (to swallow errors)
-              // Or reject with the hook error
-              return typeof hook.result !== 'undefined' ? hook.result : Promise.reject(hook.error);
-            });
+          // Otherwise return either the result if set (to swallow errors)
+          // Or reject with the hook error
+          return typeof hook.result !== 'undefined' ? hook.result : Promise.reject(hook.error);
         });
     };
   };
