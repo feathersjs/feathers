@@ -15,12 +15,19 @@ declare module '@feathersjs/feathers' {
   }
 }
 
+export const getDefaultStorage = () => {
+  try {
+    return new StorageWrapper(window.localStorage);
+  } catch (error) {}
+
+  return new MemoryStorage();
+};
+
 export { AuthenticationClient, AuthenticationClientOptions, Storage, MemoryStorage, hooks };
 
 export type ClientConstructor = new (app: Application, options: AuthenticationClientOptions) => AuthenticationClient;
 
-export const defaultStorage: Storage = typeof window !== 'undefined' ?
-  new StorageWrapper(window.localStorage) : new MemoryStorage();
+export const defaultStorage: Storage = getDefaultStorage();
 
 export const defaults: AuthenticationClientOptions = {
   header: 'Authorization',
