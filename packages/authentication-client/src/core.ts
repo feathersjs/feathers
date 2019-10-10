@@ -1,5 +1,5 @@
 import { NotAuthenticated, FeathersError } from '@feathersjs/errors';
-import { Application } from '@feathersjs/feathers';
+import { Application, Params } from '@feathersjs/feathers';
 import { AuthenticationRequest, AuthenticationResult } from '@feathersjs/authentication';
 import { Storage, StorageWrapper } from './storage';
 
@@ -149,12 +149,12 @@ export class AuthenticationClient {
     return authPromise;
   }
 
-  authenticate (authentication: AuthenticationRequest): Promise<AuthenticationResult> {
+  authenticate (authentication?: AuthenticationRequest, params?: Params): Promise<AuthenticationResult> {
     if (!authentication) {
       return this.reAuthenticate();
     }
 
-    const promise = this.service.create(authentication)
+    const promise = this.service.create(authentication, params)
       .then((authResult: AuthenticationResult) => {
         const { accessToken } = authResult;
 
@@ -172,7 +172,7 @@ export class AuthenticationClient {
     return promise;
   }
 
-  logout () {
+  logout (): Promise<AuthenticationResult | null> {
     return Promise.resolve(this.app.get('authentication'))
       .then(() => this.service.remove(null)
       .then((authResult: AuthenticationResult) => this.removeAccessToken()
