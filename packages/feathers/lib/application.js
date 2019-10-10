@@ -70,7 +70,7 @@ const application = {
     const current = this.services[location];
 
     if (typeof current === 'undefined' && typeof this.defaultService === 'function') {
-      return this.use(`/${location}`, this.defaultService(location))
+      return this.use(location, this.defaultService(location))
         .service(location);
     }
 
@@ -84,9 +84,7 @@ const application = {
 
     const location = stripSlashes(path) || '/';
     const isSubApp = typeof service.service === 'function' && service.services;
-    const isService = this.methods.concat('setup').some(name =>
-      (service && typeof service[name] === 'function')
-    );
+    const isService = this.methods.concat('setup').some(name => typeof service[name] === 'function');
 
     if (isSubApp) {
       const subApp = service;

@@ -63,6 +63,28 @@ describe('socket commons utils', () => {
       assert.strictEqual(typeof getDispatcher('test', new WeakMap()), 'function')
     );
 
+    it('works with backwards compatible socketKey', done => {
+      const socketKey = Symbol('@feathersjs/test');
+      const dispatcher = getDispatcher('emit', undefined, socketKey);
+      const socket = new EventEmitter();
+      const connection = {
+        [socketKey]: socket
+      };
+      const channel: any = {
+        connections: [ connection ],
+        dataFor (): null {
+          return null;
+        }
+      };
+
+      socket.once('testing', data => {
+        assert.strictEqual(data, 'hi');
+        done();
+      });
+
+      dispatcher('testing', channel, { result: 'hi' } as any);
+    });
+
     describe('dispatcher logic', () => {
       let dispatcher: any;
       let dummySocket: EventEmitter;
