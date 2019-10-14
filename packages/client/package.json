@@ -36,7 +36,6 @@
   ],
   "devDependencies": {
     "@babel/core": "^7.6.4",
-    "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.3",
     "@feathersjs/authentication-client": "^4.3.5",
     "@feathersjs/errors": "^4.3.4",
