@@ -26,7 +26,7 @@ export interface ServiceOptions {
 }
 
 export interface InternalServiceMethods<T = any> {
-    _find (params?: Params): Promise<T[] | Paginated<T>>;
+    _find (params?: Params): Promise<T | T[] | Paginated<T>>;
     _get (id: Id, params?: Params): Promise<T>;
     _create (data: Partial<T> | Array<Partial<T>>, params?: Params): Promise<T | T[]>;
     _update (id: Id, data: T, params?: Params): Promise<T>;
