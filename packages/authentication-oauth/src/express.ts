@@ -50,12 +50,20 @@ export default (options: OauthSetupSettings) => {
 
     authApp.get('/:name/authenticate', async (req, res, next) => {
       const { name } = req.params as any;
-      const { accessToken, grant, query } = req.session;
+      const { accessToken, grant, query = {} } = req.session;
       const service = app.defaultAuthentication(authService);
       const [ strategy ] = service.getStrategies(name) as OAuthStrategy[];
+      const params = {
+        authStrategies: [ name ],
+        authentication: accessToken ? {
+          strategy: linkStrategy,
+          accessToken
+        } : null,
+        query
+      };
       const sendResponse = async (data: AuthenticationResult|Error) => {
         try {
-          const redirect = await strategy.getRedirect(data, query);
+          const redirect = await strategy.getRedirect(data, params);
 
           if (redirect !== null) {
             res.redirect(redirect);
@@ -73,15 +81,6 @@ export default (options: OauthSetupSettings) => {
       try {
         const payload = config.defaults.transport === 'session' ?
           grant.response : req.query;
-
-        const params = {
-          authStrategies: [ name ],
-          authentication: accessToken ? {
-            strategy: linkStrategy,
-            accessToken
-          } : null
-        };
-
         const authentication = {
           strategy: name,
           ...payload
