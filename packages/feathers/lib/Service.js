@@ -47,9 +47,7 @@ function hookMixin (service, methods) {
       return mixin;
     }
 
-    const app = this;
-
-    mixin[method] = hookMethodMixin(app, method);
+    mixin[method] = hookMethodMixin(this, method);
 
     return mixin;
   }, {});
