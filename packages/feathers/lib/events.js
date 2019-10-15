@@ -3,7 +3,7 @@ const Proto = require('uberproto');
 
 // Returns a hook that emits service events. Should always be
 // used as the very last hook in the chain
-const eventHook = exports.eventHook = function eventHook () {
+const eventHook = function eventHook () {
   return function (hook) {
     const { app, service } = hook;
     const eventName = hook.event === null ? hook.event : app.eventMappings[hook.method];
@@ -19,7 +19,7 @@ const eventHook = exports.eventHook = function eventHook () {
 };
 
 // Mixin that turns a service into a Node event emitter
-const eventMixin = exports.eventMixin = function eventMixin (service) {
+const eventMixin = function eventMixin (service) {
   if (service._serviceEvents) {
     return;
   }
@@ -83,3 +83,7 @@ module.exports = function () {
     app.mixins.push(eventMixin);
   };
 };
+
+module.exports.eventHook = eventHook;
+
+module.exports.eventMixin = eventMixin;

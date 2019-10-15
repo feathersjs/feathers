@@ -1,25 +1,45 @@
 const { hooks: hookCommons } = require('@feathersjs/commons');
 const Uberproto = require('uberproto');
-const { withHooks } = require('./hooks');
+const { hookMethodMixin } = require('./hooks');
+const { eventMixin, eventHook } = require('./events');
 
 const Proto = Uberproto.extend({
   create: null
 });
 
-const {
-  enableHooks,
-  getHooks
-} = hookCommons;
+const { enableHooks } = hookCommons;
 
-getDefaultApp = svc => ({
-  hookTypes: svc.hookTypes,
-  __hooks: svc.hookTypes.reduce((accu, type) => ({
-    ...accu,
-    [type]: {}
-  }), {})
-});
+getDefaultApp = svc => {
+  const app = {
+    hookTypes: svc.hookTypes,
+    eventMappings: {
+      create: 'created',
+      update: 'updated',
+      remove: 'removed',
+      patch: 'patched',
+    }
+  };
 
-function hookMixin (service, getApp, methods) {
+  const methods = Object.assign(
+    {
+      find: ['params'],
+      get: ['id', 'params'],
+      create: ['data', 'params'],
+      update: ['id', 'data', 'params'],
+      patch: ['id', 'data', 'params'],
+      remove: ['id', 'params']
+    },
+    svc.methods
+  );
+
+  enableHooks(app, () => Object.keys(methods), svc.hookTypes);
+
+  app.hooks({ finally: eventHook() });
+
+  return app;
+};
+
+function hookMixin (service, methods) {
   const methodNames = Object.keys(methods);
   // Assemble the mixin object that contains all "hooked" service methods
   const mixin = methodNames.reduce((mixin, method) => {
@@ -27,25 +47,9 @@ function hookMixin (service, getApp, methods) {
       return mixin;
     }
 
-    const app = getApp();
+    const app = this;
 
-    mixin[method] = function () {
-      const service = this;
-      const args = Array.from(arguments);
-      const original = service._super.bind(service);
-
-      return withHooks({
-        app,
-        service,
-        method,
-        original
-      })({
-        before: getHooks(app, service, 'before', method),
-        after: getHooks(app, service, 'after', method, true),
-        error: getHooks(app, service, 'error', method, true),
-        finally: getHooks(app, service, 'finally', method, true)
-      })(...args);
-    };
+    mixin[method] = hookMethodMixin(app, method);
 
     return mixin;
   }, {});
@@ -85,7 +89,7 @@ class Service {
     enableHooks(this, () => Object.keys(this.methods), this.hookTypes);
 
     if (this._isSetup) {
-      hookMixin(this, () => this.__app, methods);
+      hookMixin.call(this.__app, this, methods);
     }
 
     return this;
@@ -93,17 +97,20 @@ class Service {
 
   // Called on each mounting on an app
   _setup (app) {
+    if (this._isSetup) {
+      return this;
+    }
+
     if (app) {
       this.__app = app;
     }
 
-    if (!this._isSetup) {
-      enableHooks(this, () => Object.keys(this.methods), this.hookTypes);
+    enableHooks(this, () => Object.keys(this.methods), this.hookTypes);
 
-      hookMixin(this, () => this.__app, this.methods);
+    hookMixin.call(this.__app, this, this.methods);
+    eventMixin.call(this.__app, this);
 
-      this._isSetup = true;
-    }
+    this._isSetup = true;
 
     return this;
   }

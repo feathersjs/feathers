@@ -128,6 +128,26 @@ const withHooks = function withHooks ({
   };
 };
 
+function hookMethodMixin (app, method) {
+  return function () {
+    const service = this;
+    const args = Array.from(arguments);
+    const original = service._super.bind(service);
+
+    return withHooks({
+      app,
+      service,
+      method,
+      original
+    })({
+      before: getHooks(app, service, 'before', method),
+      after: getHooks(app, service, 'after', method, true),
+      error: getHooks(app, service, 'error', method, true),
+      finally: getHooks(app, service, 'finally', method, true)
+    })(...args);
+  };
+}
+
 // A service mixin that adds `service.hooks()` method and functionality
 const hookMixin = exports.hookMixin = function hookMixin (service) {
   if (typeof service.hooks === 'function') {
@@ -158,23 +178,7 @@ const hookMixin = exports.hookMixin = function hookMixin (service) {
       return mixin;
     }
 
-    mixin[method] = function () {
-      const service = this;
-      const args = Array.from(arguments);
-      const original = service._super.bind(service);
-
-      return withHooks({
-        app,
-        service,
-        method,
-        original
-      })({
-        before: getHooks(app, service, 'before', method),
-        after: getHooks(app, service, 'after', method, true),
-        error: getHooks(app, service, 'error', method, true),
-        finally: getHooks(app, service, 'finally', method, true)
-      })(...args);
-    };
+    mixin[method] = hookMethodMixin(app, method);
 
     return mixin;
   }, {});
@@ -199,6 +203,8 @@ module.exports = function () {
     app.mixins.push(hookMixin);
   };
 };
+
+module.exports.hookMethodMixin = hookMethodMixin;
 
 module.exports.withHooks = withHooks;
 

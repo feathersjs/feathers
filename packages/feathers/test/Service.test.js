@@ -570,4 +570,339 @@ describe('Service', () => {
       });
     });
   });
+
+  it('services can be re-used (#566)', done => {
+    const app1 = feathers();
+    const app2 = feathers();
+
+    class Dummy extends Service {
+      constructor () {
+        super({
+          methods: {
+            create: ['data', 'params']
+          }
+        });
+      }
+
+      create (data) {
+        return Promise.resolve(data);
+      }
+    }
+
+    const service = new Dummy().setup();
+
+    app2.use('/dummy', service);
+
+    const dummy = app2.service('dummy');
+
+    dummy.hooks({
+      before: {
+        create (hook) {
+          hook.data.fromHook = true;
+        }
+      }
+    });
+
+    dummy.on('created', data => {
+      assert.deepStrictEqual(data, {
+        message: 'Hi',
+        fromHook: true
+      });
+      done();
+    });
+
+    app1.use('/testing', app2.service('dummy'));
+
+    app1.service('testing').create({ message: 'Hi' });
+  });
+
+  describe('events', () => {
+    describe('emits event data on a service', () => {
+      class Creator extends Service {
+        constructor() {
+          super({
+            methods: {
+              create: ['data', 'params'],
+              update: ['id', 'data', 'params'],
+              patch: ['id', 'data', 'params'],
+              remove: ['id', 'params']
+            }
+          })
+        }
+
+        create (data) {
+          return Promise.resolve(data);
+        }
+
+        update (id, data) {
+          return Promise.resolve(Object.assign({ id }, data));
+        }
+
+        patch (id, data) {
+          return Promise.resolve(Object.assign({ id }, data));
+        }
+
+        remove (id) {
+          return Promise.resolve({ id });
+        }
+      }
+
+      it('.create and created', done => {
+        const service = new Creator().setup();
+
+        service.on('created', data => {
+          assert.deepStrictEqual(data, { message: 'Hello' });
+          done();
+        });
+
+        service.create({ message: 'Hello' });
+      });
+
+      it('allows to skip event emitting', done => {
+        const service = new Creator().setup();
+
+        service.hooks({
+          before: {
+            create (context) {
+              context.event = null;
+
+              return context;
+            }
+          }
+        });
+
+        service.on('created', data => {
+          done(new Error('Should never get here'));
+        });
+
+        service.create({ message: 'Hello' }).then(() => done());
+      });
+
+      it('.update and updated', done => {
+        const service = new Creator().setup();
+
+        service.on('updated', data => {
+          assert.deepStrictEqual(data, { id: 10, message: 'Hello' });
+          done();
+        });
+
+        service.update(10, { message: 'Hello' });
+      });
+
+      it('.patch and patched', done => {
+        const service = new Creator().setup();
+
+        service.on('patched', data => {
+          assert.deepStrictEqual(data, { id: 12, message: 'Hello' });
+          done();
+        });
+
+        service.patch(12, { message: 'Hello' });
+      });
+
+      it('.remove and removed', done => {
+        const service = new Creator().setup();
+
+        service.on('removed', data => {
+          assert.deepStrictEqual(data, { id: 22 });
+          done();
+        });
+
+        service.remove(22);
+      });
+    });
+
+    describe('emits event data arrays on a service', () => {
+      class Creator extends Service {
+        constructor() {
+          super({
+            methods: {
+              create: ['data', 'params'],
+              update: ['id', 'data', 'params'],
+              patch: ['id', 'data', 'params'],
+              remove: ['id', 'params']
+            }
+          })
+        }
+
+        create (data) {
+          if (Array.isArray(data)) {
+            return Promise.all(data.map(current => this.create(current)));
+          }
+
+          return Promise.resolve(data);
+        }
+
+        update (id, data) {
+          if (Array.isArray(data)) {
+            return Promise.all(data.map((current, index) => this.update(index, current)));
+          }
+          return Promise.resolve(Object.assign({ id }, data));
+        }
+
+        patch (id, data) {
+          if (Array.isArray(data)) {
+            return Promise.all(data.map((current, index) => this.patch(index, current)));
+          }
+          return Promise.resolve(Object.assign({ id }, data));
+        }
+
+        remove (id, data) {
+          if (Array.isArray(data)) {
+            return Promise.all(data.map((current, index) => this.remove(index, current)));
+          }
+          return Promise.resolve(Object.assign({ id }, data));
+        }
+      }
+
+      it('.create and created with array', done => {
+        const service = new Creator().setup();
+        const createItems = [
+          { message: 'Hello 0' },
+          { message: 'Hello 1' }
+        ];
+
+        Promise.all(createItems.map((element, index) => {
+          return new Promise((resolve, reject) => {
+            service.on('created', data => {
+              if (data.message === element.message) {
+                assert.deepStrictEqual(data, { message: `Hello ${index}` });
+                resolve();
+              }
+            });
+          });
+        })).then(() => done()).catch(done);
+
+        service.create(createItems);
+      });
+
+      it('.update and updated with array', done => {
+        const service = new Creator().setup();
+        const updateItems = [
+          { message: 'Hello 0' },
+          { message: 'Hello 1' }
+        ];
+
+        Promise.all(updateItems.map((element, index) => {
+          return new Promise((resolve, reject) => {
+            service.on('updated', data => {
+              if (data.message === element.message) {
+                assert.deepStrictEqual(data, { id: index, message: `Hello ${index}` });
+                resolve();
+              }
+            });
+          });
+        })).then(() => done()).catch(done);
+
+        service.update(null, updateItems);
+      });
+
+      it('.patch and patched with array', done => {
+        const service = new Creator().setup();
+        const patchItems = [
+          { message: 'Hello 0' },
+          { message: 'Hello 1' }
+        ];
+
+        Promise.all(patchItems.map((element, index) => {
+          return new Promise((resolve, reject) => {
+            service.on('patched', data => {
+              if (data.message === element.message) {
+                assert.deepStrictEqual(data, { id: index, message: `Hello ${index}` });
+                resolve();
+              }
+            });
+          });
+        })).then(() => done()).catch(done);
+
+        service.patch(null, patchItems);
+      });
+
+      it('.remove and removed with array', done => {
+        const service = new Creator().setup();
+        const removeItems = [
+          { message: 'Hello 0' },
+          { message: 'Hello 1' }
+        ];
+
+        Promise.all(removeItems.map((element, index) => {
+          return new Promise((resolve, reject) => {
+            service.on('removed', data => {
+              if (data.message === element.message) {
+                assert.deepStrictEqual(data, { id: index, message: `Hello ${index}` });
+                resolve();
+              }
+            });
+          });
+        })).then(() => done()).catch(done);
+
+        service.remove(null, removeItems);
+      });
+    });
+
+    describe('event format', () => {
+      it('also emits the actual hook object', done => {
+        class Creator extends Service {
+          constructor() {
+            super({
+              methods: {
+                create: ['data', 'params']
+              }
+            })
+          }
+
+          create (data) {
+            return Promise.resolve(data);
+          }
+        }
+
+        const service = new Creator().setup();
+
+        service.hooks({
+          after (hook) {
+            hook.changed = true;
+          }
+        });
+
+        service.on('created', (data, hook) => {
+          assert.deepStrictEqual(data, { message: 'Hi' });
+          assert.ok(hook.changed);
+          assert.strictEqual(hook.service, service);
+          assert.strictEqual(hook.method, 'create');
+          assert.strictEqual(hook.type, 'after');
+          done();
+        });
+
+        service.create({ message: 'Hi' });
+      });
+
+      it('events indicated by the service are not sent automatically', done => {
+        class Creator extends Service {
+          constructor() {
+            super({
+              methods: {
+                create: ['data', 'params']
+              }
+            });
+
+            this.events = ['created'];
+          }
+
+          create (data) {
+            return Promise.resolve(data);
+          }
+        }
+
+        const service = new Creator().setup();
+
+        service.on('created', data => {
+          assert.deepStrictEqual(data, { message: 'custom event' });
+          done();
+        });
+
+        service.create({ message: 'hello' })
+          .then(() => service.emit('created', { message: 'custom event' }));
+      });
+    });
+  });
 });
