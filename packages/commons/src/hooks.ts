@@ -154,7 +154,9 @@ export function enableHooks (obj: any, getMethods: any, types: string[]) {
 
   // Add non-enumerable `__hooks` property to the object
   Object.defineProperty(obj, '__hooks', {
-    value: hookData
+    configurable: true,
+    value: hookData,
+    writable: true
   });
 
   return Object.assign(obj, {

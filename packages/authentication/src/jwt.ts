@@ -44,6 +44,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       const timer = lt.setTimeout(() => this.app.emit('disconnect', connection), duration);
 
       debug(`Registering connection expiration timer for ${duration}ms`);
+      lt.clearTimeout(this.expirationTimers.get(connection));
       this.expirationTimers.set(connection, timer);
 
       debug('Adding authentication information to connection');
@@ -56,6 +57,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
 
       delete connection.authentication;
       lt.clearTimeout(this.expirationTimers.get(connection));
+      this.expirationTimers.delete(connection);
     }
   }
 
@@ -128,8 +130,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
   }
 
   async parse (req: IncomingMessage) {
-    const result = { strategy: this.name };
-    const { header, schemes }: { header: any, schemes: string[] } = this.configuration;
+    const { header, schemes }: { header: string, schemes: string[] } = this.configuration;
     const headerValue = req.headers && req.headers[header.toLowerCase()];
 
     if (!headerValue || typeof headerValue !== 'string') {
@@ -138,7 +139,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
 
     debug('Found parsed header value');
 
-    const [ , scheme = null, schemeValue = null ] = headerValue.match(SPLIT_HEADER) || [];
+    const [ , scheme, schemeValue ] = headerValue.match(SPLIT_HEADER) || [];
     const hasScheme = scheme && schemes.some(
       current => new RegExp(current, 'i').test(scheme)
     );
@@ -148,7 +149,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     }
 
     return {
-      ...result,
+      strategy: this.name,
       accessToken: hasScheme ? schemeValue : headerValue
     };
   }

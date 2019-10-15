@@ -21,7 +21,7 @@ export interface AuthenticationRequest {
   [key: string]: any;
 }
 
-export type ConnectionEvent = 'login'|'logout'|'disconnect';
+export type ConnectionEvent = 'login' | 'logout' | 'disconnect';
 
 export interface AuthenticationStrategy {
   /**
@@ -63,11 +63,11 @@ export interface AuthenticationStrategy {
    * @param req The HTTP request
    * @param res The HTTP response
    */
-  parse? (req: IncomingMessage, res: ServerResponse): Promise<AuthenticationRequest|null>;
+  parse? (req: IncomingMessage, res: ServerResponse): Promise<AuthenticationRequest | null>;
 }
 
 export interface JwtVerifyOptions extends VerifyOptions {
-  algorithm?: string|string[];
+  algorithm?: string | string[];
 }
 
 /**
@@ -211,12 +211,16 @@ export class AuthenticationBase {
   async authenticate (authentication: AuthenticationRequest, params: Params, ...allowed: string[]) {
     const { strategy } = authentication || ({} as AuthenticationRequest);
     const [ authStrategy ] = this.getStrategies(strategy);
+    const strategyAllowed = allowed.includes(strategy);
 
     debug('Running authenticate for strategy', strategy, allowed);
 
-    if (!authentication || !authStrategy || !allowed.includes(strategy)) {
+    if (!authentication || !authStrategy || !strategyAllowed) {
+      const additionalInfo = (!strategy && ' (no `strategy` set)') ||
+        (!strategyAllowed && ' (strategy not allowed in authStrategies)') || '';
+
       // If there are no valid strategies or `authentication` is not an object
-      throw new NotAuthenticated(`Invalid authentication information` + (!strategy ? ' (no `strategy` set)' : ''));
+      throw new NotAuthenticated('Invalid authentication information' + additionalInfo);
     }
 
     return authStrategy.authenticate(authentication, {

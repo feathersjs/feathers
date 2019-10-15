@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/feathers",
   "description": "A framework for real-time applications and REST API with JavaScript and TypeScript",
-  "version": "4.3.3",
+  "version": "4.3.7",
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",
@@ -29,8 +29,10 @@
   },
   "scripts": {
     "test": "mocha --opts ../../mocha.opts",
-    "update-version": "node -e \"console.log('module.exports = \\'' + require('./package.json').version + '\\';')\" > lib/version.js",
-    "version": "npm run update-version"
+    "write-version": "node -e \"console.log('module.exports = \\'' + require('./package.json').version + '\\';')\" > lib/version.js",
+    "reset-version": "node -e \"console.log('module.exports = \\'development\\';')\" > lib/version.js",
+    "version": "npm run write-version",
+    "publish": "npm run reset-version"
   },
   "engines": {
     "node": ">= 6"
@@ -39,13 +41,13 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^4.3.0",
+    "@feathersjs/commons": "^4.3.7",
     "debug": "^4.1.1",
     "events": "^3.0.0",
     "uberproto": "^2.0.4"
   },
   "devDependencies": {
-    "mocha": "^6.2.0"
+    "mocha": "^6.2.1"
   },
   "gitHead": "907510a8f1f8c675b3ec3b8d9962991c76195694"
 }

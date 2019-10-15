@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.8](https://github.com/feathersjs/feathers/compare/v4.3.7...v4.3.8) (2019-10-14)
+
+
+### Bug Fixes
+
+* Remove adapter commons type alternatives ([#1620](https://github.com/feathersjs/feathers/issues/1620)) ([c9f3086](https://github.com/feathersjs/feathers/commit/c9f3086344420b57dbce7c4169cf550c97509f0d))
+
+
+
+
+
+## [4.3.7](https://github.com/feathersjs/feathers/compare/v4.3.6...v4.3.7) (2019-10-14)
+
+
+### Bug Fixes
+
+* improve Service and AdapterService types ([#1567](https://github.com/feathersjs/feathers/issues/1567)) ([baad6a2](https://github.com/feathersjs/feathers/commit/baad6a26f0f543b712ccb40359b3933ad3a21392))
+
+
+
+
+
+## [4.3.6](https://github.com/feathersjs/feathers/compare/v4.3.5...v4.3.6) (2019-10-07)
+
+
+### Bug Fixes
+
+* Check query  for NaN ([#1607](https://github.com/feathersjs/feathers/issues/1607)) ([f1a781f](https://github.com/feathersjs/feathers/commit/f1a781f))
+
+
+
+
+
+## [4.3.4](https://github.com/feathersjs/feathers/compare/v4.3.3...v4.3.4) (2019-10-03)
+
+**Note:** Version bump only for package @feathersjs/adapter-commons
+
+
+
+
+
 ## [4.3.3](https://github.com/feathersjs/feathers/compare/v4.3.2...v4.3.3) (2019-09-21)
 
 **Note:** Version bump only for package @feathersjs/adapter-commons

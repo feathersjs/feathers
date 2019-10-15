@@ -31,8 +31,8 @@ export interface InternalServiceMethods<T = any> {
     _get (id: Id, params?: Params): Promise<T>;
     _create (data: Partial<T> | Array<Partial<T>>, params?: Params): Promise<T | T[]>;
     _update (id: Id, data: T, params?: Params): Promise<T>;
-    _patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T>;
-    _remove (id: NullableId, params?: Params): Promise<T>;
+    _patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T | T[]>;
+    _remove (id: NullableId, params?: Params): Promise<T | T[]>;
 }
 
 export class AdapterService<T = any> extends Service implements ServiceMethods<T> {
@@ -98,7 +98,7 @@ export class AdapterService<T = any> extends Service implements ServiceMethods<T
     }
   }
 
-  find (params?: Params): Promise<T | T[] | Paginated<T>> {
+  find (params?: Params): Promise<T[] | Paginated<T>> {
     return callMethod(this, '_find', params);
   }
 
@@ -124,7 +124,7 @@ export class AdapterService<T = any> extends Service implements ServiceMethods<T
     return callMethod(this, '_update', id, data, params);
   }
 
-  patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T> {
+  patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T | T[]> {
     if (id === null && !this.allowsMulti('patch')) {
       return Promise.reject(new MethodNotAllowed(`Can not patch multiple entries`));
     }
@@ -132,7 +132,7 @@ export class AdapterService<T = any> extends Service implements ServiceMethods<T
     return callMethod(this, '_patch', id, data, params);
   }
 
-  remove (id: NullableId, params?: Params): Promise<T> {
+  remove (id: NullableId, params?: Params): Promise<T | T[]> {
     if (id === null && !this.allowsMulti('remove')) {
       return Promise.reject(new MethodNotAllowed(`Can not remove multiple entries`));
     }
