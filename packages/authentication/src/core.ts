@@ -143,11 +143,9 @@ export class AuthenticationBase {
 
   /**
    * Get the registered authentication strategies for a list of names.
-   * The return value may contain `undefined` if the strategy does not exist.
    * @param names The list or strategy names
    */
   getStrategies (...names: string[]) {
-    // Returns all strategies for a list of names (including undefined)
     return names.map(name => this.strategies[name])
       .filter(current => !!current);
   }
@@ -209,7 +207,7 @@ export class AuthenticationBase {
    * @param allowed A list of allowed strategy names
    */
   async authenticate (authentication: AuthenticationRequest, params: Params, ...allowed: string[]) {
-    const { strategy } = authentication || ({} as AuthenticationRequest);
+    const { strategy } = authentication || {};
     const [ authStrategy ] = this.getStrategies(strategy);
     const strategyAllowed = allowed.includes(strategy);
 
@@ -246,7 +244,7 @@ export class AuthenticationBase {
    */
   async parse (req: IncomingMessage, res: ServerResponse, ...names: string[]) {
     const strategies = this.getStrategies(...names)
-      .filter(current => current && typeof current.parse === 'function');
+      .filter(current => typeof current.parse === 'function');
 
     debug('Strategies parsing HTTP header for authentication information', names);
 
