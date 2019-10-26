@@ -49,7 +49,7 @@
     "debug": "^4.1.1"
   },
   "devDependencies": {
-    "@types/config": "^0.0.34",
+    "@types/config": "^0.0.35",
     "@types/debug": "^4.1.5",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.7.12",

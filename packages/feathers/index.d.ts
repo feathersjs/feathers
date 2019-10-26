@@ -181,6 +181,7 @@ declare namespace createApplication {
     interface ServiceAddons<T> extends EventEmitter {
         id?: any;
         _serviceEvents: string[];
+        methods: {[method: string]: string[]};
         hooks (hooks: Partial<HooksObject>): this;
     }
 

@@ -16,6 +16,7 @@ interface FeathersExpress extends Express {
     rest: {
         (handler?: express.RequestHandler): () => void;
         formatter: express.RequestHandler;
+        httpMethod: (verb: string, uris?: string | string[]) => <T>(method: T) => T;
     };
 
     original: Express;
@@ -38,6 +39,9 @@ declare namespace feathersExpress {
 }
 
 declare module 'express-serve-static-core' {
+    interface Application extends FeathersApplication<any> {
+    }
+
     interface Request {
         feathers?: Partial<FeathersParams>;
     }
