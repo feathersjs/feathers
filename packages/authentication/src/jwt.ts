@@ -38,7 +38,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       debug('Adding authentication information to connection');
       const { exp } = await this.authentication.verifyAccessToken(accessToken);
       // The time (in ms) until the token expires
-      const duration = (exp * 1000) - new Date().getTime();
+      const duration = (exp * 1000) - Date.now();
       // This may have to be a `logout` event but right now we don't want
       // the whole context object lingering around until the timer is gone
       const timer = lt.setTimeout(() => this.app.emit('disconnect', connection), duration);
@@ -115,12 +115,12 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
         payload
       }
     };
-    const entityId = await this.getEntityId(result, params);
 
     if (entity === null) {
       return result;
     }
 
+    const entityId = await this.getEntityId(result, params);
     const value = await this.getEntity(entityId, params);
 
     return {
