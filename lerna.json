@@ -10,6 +10,7 @@
     },
     "publish": {
       "allowBranch": "master",
+      "message": "chore(release): publish %s",
       "conventionalCommits": true,
       "createRelease": "github"
     }
