@@ -39,9 +39,6 @@ declare namespace feathersExpress {
 }
 
 declare module 'express-serve-static-core' {
-    interface Application extends FeathersApplication<any> {
-    }
-
     interface Request {
         feathers?: Partial<FeathersParams>;
     }
