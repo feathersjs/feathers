@@ -10,7 +10,7 @@ export interface AuthenticateHookSettings {
   strategies: string[];
 }
 
-export default (originalSettings: string|AuthenticateHookSettings, ...originalStrategies: string[]) => {
+export default (originalSettings: string | AuthenticateHookSettings, ...originalStrategies: string[]) => {
   const settings = typeof originalSettings === 'string'
     ? { strategies: flatten([ originalSettings, ...originalStrategies ]) }
     : originalSettings;
@@ -54,7 +54,7 @@ export default (originalSettings: string|AuthenticateHookSettings, ...originalSt
       context.params = merge({}, params, omit(authResult, 'accessToken'), { authenticated: true });
 
       return context;
-    } else if (!authentication && provider) {
+    } else if (provider) {
       throw new NotAuthenticated('Not authenticated');
     }
 

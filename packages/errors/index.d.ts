@@ -98,6 +98,22 @@ export interface Errors {
   NotImplemented: NotImplemented;
   BadGateway: BadGateway;
   Unavailable: Unavailable;
+  400: BadRequest;
+  401: NotAuthenticated;
+  402: PaymentError;
+  403: Forbidden;
+  404: NotFound;
+  405: MethodNotAllowed;
+  406: NotAcceptable;
+  408: Timeout;
+  409: Conflict;
+  411: LengthRequired;
+  422: Unprocessable;
+  429: TooManyRequests;
+  500: GeneralError;
+  501: NotImplemented;
+  502: BadGateway;
+  503: Unavailable;
 }
 
 export function convert (error: any): FeathersError;

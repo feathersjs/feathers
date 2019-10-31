@@ -20,13 +20,13 @@
   },
   "scripts": {
     "install": "lerna bootstrap",
-    "publish": "lerna publish && git commit -am \"Update version and changelog\" && git push origin master",
+    "publish": "lerna publish && git commit -am \"chore: Update version and changelog\" && git push origin master",
     "lint": "tslint 'packages/**/*.js' 'packages/**/*.ts' -c tslint.json --fix",
     "test": "npm run lint && nyc lerna run test"
   },
   "devDependencies": {
-    "lerna": "^3.15.0",
+    "lerna": "^3.17.0",
     "nyc": "^14.1.1",
-    "tslint": "^5.18.0"
+    "tslint": "^5.20.0"
   }
 }

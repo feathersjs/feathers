@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/commons",
-  "version": "4.3.0",
+  "version": "4.3.7",
   "description": "Shared Feathers utility functions",
   "homepage": "https://feathersjs.com",
   "keywords": [
@@ -37,14 +37,14 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.0",
+    "@types/chai": "^4.2.3",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.7.2",
+    "@types/node": "^12.7.12",
     "chai": "^4.2.0",
-    "mocha": "^6.2.0",
+    "mocha": "^6.2.1",
     "shx": "^0.3.2",
-    "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4"
   },
   "gitHead": "907510a8f1f8c675b3ec3b8d9962991c76195694"
 }

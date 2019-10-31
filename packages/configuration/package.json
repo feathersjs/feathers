@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/configuration",
   "description": "A small configuration module for your Feathers application.",
-  "version": "4.3.3",
+  "version": "4.3.10",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -44,19 +44,19 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/feathers": "^4.3.3",
-    "config": "^3.2.2",
+    "@feathersjs/feathers": "^4.3.10",
+    "config": "^3.2.3",
     "debug": "^4.1.1"
   },
   "devDependencies": {
-    "@types/config": "^0.0.34",
+    "@types/config": "^0.0.35",
     "@types/debug": "^4.1.5",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.7.2",
-    "mocha": "^6.2.0",
+    "@types/node": "^12.7.12",
+    "mocha": "^6.2.1",
     "shx": "^0.3.2",
-    "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4"
   },
-  "gitHead": "907510a8f1f8c675b3ec3b8d9962991c76195694"
+  "gitHead": "3e5a4a03cfa3a0bd5b13bb5a039ba821848c3335"
 }
