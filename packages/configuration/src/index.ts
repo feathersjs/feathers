@@ -6,7 +6,7 @@ import config from 'config';
 const debug = Debug('@feathersjs/configuration');
 const separator = path.sep;
 
-export default function init () {
+export default function init (scope?: string) {
   return (app?: Application) => {
     const convert = (current: any) => {
       const result: { [key: string]: any } = Array.isArray(current) ? [] : {};
@@ -42,7 +42,7 @@ export default function init () {
     };
 
     const env = config.util.getEnv('NODE_ENV');
-    const conf = convert(config);
+    const conf = scope ? convert(config)[scope] : convert(config);
 
     if (!app) {
       return conf;
