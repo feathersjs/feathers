@@ -10,6 +10,10 @@
     "feathers-plugin"
   ],
   "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git"
