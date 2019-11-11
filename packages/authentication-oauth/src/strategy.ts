@@ -79,7 +79,8 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
       return null;
     }
 
-    const separator = redirect.endsWith('?') ? '' : '#';
+    const separator = redirect.endsWith('?') ? '' :
+      (redirect.indexOf('#') !== -1 ? '?' : '#');
     const authResult: AuthenticationResult = data;
     const query = authResult.accessToken ? {
       access_token: authResult.accessToken
