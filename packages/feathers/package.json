@@ -21,6 +21,10 @@
     "url": "https://feathersjs.com"
   },
   "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
   "bugs": {
     "url": "https://github.com/feathersjs/feathers/issues"
   },
