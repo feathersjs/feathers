@@ -32,16 +32,19 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     const isValidLogout = event === 'logout' && connection.authentication && authResult &&
       connection.authentication.accessToken === authResult.accessToken;
 
-    if (authResult && event === 'login') {
-      const { accessToken } = authResult;
+    const { accessToken } = authResult || {};
+
+    if (accessToken && event === 'login') {
+      debug('Adding authentication information to connection');
       const { exp } = await this.authentication.verifyAccessToken(accessToken);
       // The time (in ms) until the token expires
-      const duration = (exp * 1000) - new Date().getTime();
+      const duration = (exp * 1000) - Date.now();
       // This may have to be a `logout` event but right now we don't want
       // the whole context object lingering around until the timer is gone
       const timer = lt.setTimeout(() => this.app.emit('disconnect', connection), duration);
 
       debug(`Registering connection expiration timer for ${duration}ms`);
+      lt.clearTimeout(this.expirationTimers.get(connection));
       this.expirationTimers.set(connection, timer);
 
       debug('Adding authentication information to connection');
@@ -54,6 +57,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
 
       delete connection.authentication;
       lt.clearTimeout(this.expirationTimers.get(connection));
+      this.expirationTimers.delete(connection);
     }
   }
 
@@ -108,15 +112,16 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       accessToken,
       authentication: {
         strategy: 'jwt',
+        accessToken,
         payload
       }
     };
-    const entityId = await this.getEntityId(result, params);
 
     if (entity === null) {
       return result;
     }
 
+    const entityId = await this.getEntityId(result, params);
     const value = await this.getEntity(entityId, params);
 
     return {
@@ -126,8 +131,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
   }
 
   async parse (req: IncomingMessage) {
-    const result = { strategy: this.name };
-    const { header, schemes }: { header: any, schemes: string[] } = this.configuration;
+    const { header, schemes }: { header: string, schemes: string[] } = this.configuration;
     const headerValue = req.headers && req.headers[header.toLowerCase()];
 
     if (!headerValue || typeof headerValue !== 'string') {
@@ -136,7 +140,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
 
     debug('Found parsed header value');
 
-    const [ , scheme = null, schemeValue = null ] = headerValue.match(SPLIT_HEADER) || [];
+    const [ , scheme, schemeValue ] = headerValue.match(SPLIT_HEADER) || [];
     const hasScheme = scheme && schemes.some(
       current => new RegExp(current, 'i').test(scheme)
     );
@@ -146,7 +150,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     }
 
     return {
-      ...result,
+      strategy: this.name,
       accessToken: hasScheme ? schemeValue : headerValue
     };
   }

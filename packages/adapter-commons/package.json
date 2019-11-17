@@ -1,12 +1,16 @@
 {
   "name": "@feathersjs/adapter-commons",
-  "version": "4.3.1",
+  "version": "4.3.11",
   "description": "Shared database adapter utility functions",
   "homepage": "https://feathersjs.com",
   "keywords": [
     "feathers"
   ],
   "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git"
@@ -37,19 +41,19 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^4.3.0",
-    "@feathersjs/errors": "^4.3.1",
-    "@feathersjs/feathers": "^4.3.1"
+    "@feathersjs/commons": "^4.3.7",
+    "@feathersjs/errors": "^4.3.11",
+    "@feathersjs/feathers": "^4.3.11"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
-    "@types/mongodb": "^3.2.3",
-    "@types/node": "^12.7.2",
-    "mocha": "^6.2.0",
-    "mongodb": "^3.3.0",
+    "@types/mongodb": "^3.3.6",
+    "@types/node": "^12.7.12",
+    "mocha": "^6.2.1",
+    "mongodb": "^3.3.2",
     "shx": "^0.3.2",
-    "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4"
   },
-  "gitHead": "907510a8f1f8c675b3ec3b8d9962991c76195694"
+  "gitHead": "3e5a4a03cfa3a0bd5b13bb5a039ba821848c3335"
 }

@@ -1,4 +1,4 @@
-import { Application as FeathersApplication } from '@feathersjs/feathers';
+import { Application as FeathersApplication, Params as FeathersParams, HookContext } from '@feathersjs/feathers';
 import express from 'express';
 
 declare const feathersExpress: FeathersExpress;
@@ -16,6 +16,7 @@ interface FeathersExpress extends Express {
     rest: {
         (handler?: express.RequestHandler): () => void;
         formatter: express.RequestHandler;
+        httpMethod: (verb: string, uris?: string | string[]) => <T>(method: T) => T;
     };
 
     original: Express;
@@ -35,4 +36,15 @@ interface FeathersExpress extends Express {
 
 declare namespace feathersExpress {
     type Application<T = any> = express.Express & FeathersApplication<T>;
+}
+
+declare module 'express-serve-static-core' {
+    interface Request {
+        feathers?: Partial<FeathersParams>;
+    }
+
+    interface Response {
+        data?: any;
+        hook?: HookContext;
+    }
 }

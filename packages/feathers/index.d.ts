@@ -149,11 +149,11 @@ declare namespace createApplication {
 
         create (data: Partial<T> | Array<Partial<T>>, params?: Params): Promise<T | T[]>;
 
-        update (id: NullableId, data: T, params?: Params): Promise<T>;
+        update (id: NullableId, data: T, params?: Params): Promise<T | T[]>;
 
-        patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T>;
+        patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T | T[]>;
 
-        remove (id: NullableId, params?: Params): Promise<T>;
+        remove (id: NullableId, params?: Params): Promise<T | T[]>;
     }
 
     interface SetupMethod {
@@ -161,16 +161,27 @@ declare namespace createApplication {
     }
 
     interface ServiceOverloads<T> {
-        create? (data: Array<Partial<T>>, params?: Params): Promise<T[]>;
-
         create? (data: Partial<T>, params?: Params): Promise<T>;
 
-        patch? (id: NullableId, data: Pick<T, keyof T>, params?: Params): Promise<T>;
+        create? (data: Array<Partial<T>>, params?: Params): Promise<T[]>;
+
+        update? (id: Id, data: T, params?: Params): Promise<T>;
+
+        update? (id: null, data: T, params?: Params): Promise<T[]>;
+
+        patch? (id: Id, data: Partial<T>, params?: Params): Promise<T>;
+
+        patch? (id: null, data: Partial<T>, params?: Params): Promise<T[]>;
+
+        remove? (id: Id, params?: Params): Promise<T>;
+
+        remove? (id: null, params?: Params): Promise<T[]>;
     }
 
     interface ServiceAddons<T> extends EventEmitter {
         id?: any;
         _serviceEvents: string[];
+        methods: {[method: string]: string[]};
         hooks (hooks: Partial<HooksObject>): this;
     }
 

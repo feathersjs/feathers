@@ -1,7 +1,6 @@
 import { AuthenticationClient, AuthenticationClientOptions } from './core';
 import * as hooks from './hooks';
 import { Application } from '@feathersjs/feathers';
-import { AuthenticationResult, AuthenticationRequest } from '@feathersjs/authentication';
 import { Storage, MemoryStorage, StorageWrapper } from './storage';
 
 declare module '@feathersjs/feathers' {
@@ -10,18 +9,25 @@ declare module '@feathersjs/feathers' {
     rest?: any;
     primus?: any;
     authentication: AuthenticationClient;
-    authenticate (authentication?: AuthenticationRequest): Promise<AuthenticationResult>;
-    reAuthenticate (force: boolean): Promise<AuthenticationResult>;
-    logout (): Promise<AuthenticationResult>;
+    authenticate: AuthenticationClient['authenticate'];
+    reAuthenticate: AuthenticationClient['reAuthenticate'];
+    logout: AuthenticationClient['logout'];
   }
 }
+
+export const getDefaultStorage = () => {
+  try {
+    return new StorageWrapper(window.localStorage);
+  } catch (error) {}
+
+  return new MemoryStorage();
+};
 
 export { AuthenticationClient, AuthenticationClientOptions, Storage, MemoryStorage, hooks };
 
 export type ClientConstructor = new (app: Application, options: AuthenticationClientOptions) => AuthenticationClient;
 
-export const defaultStorage: Storage = typeof window !== 'undefined' ?
-  new StorageWrapper(window.localStorage) : new MemoryStorage();
+export const defaultStorage: Storage = getDefaultStorage();
 
 export const defaults: AuthenticationClientOptions = {
   header: 'Authorization',

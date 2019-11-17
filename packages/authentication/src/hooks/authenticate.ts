@@ -1,4 +1,4 @@
-import { flatten, omit, merge } from 'lodash';
+import { flatten, omit } from 'lodash';
 import { HookContext } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
 import Debug from 'debug';
@@ -10,7 +10,7 @@ export interface AuthenticateHookSettings {
   strategies: string[];
 }
 
-export default (originalSettings: string|AuthenticateHookSettings, ...originalStrategies: string[]) => {
+export default (originalSettings: string | AuthenticateHookSettings, ...originalStrategies: string[]) => {
   const settings = typeof originalSettings === 'string'
     ? { strategies: flatten([ originalSettings, ...originalStrategies ]) }
     : originalSettings;
@@ -51,10 +51,10 @@ export default (originalSettings: string|AuthenticateHookSettings, ...originalSt
 
       const authResult = await authService.authenticate(authentication, authParams, ...strategies);
 
-      context.params = merge({}, params, omit(authResult, 'accessToken'), { authenticated: true });
+      context.params = Object.assign({}, params, omit(authResult, 'accessToken'), { authenticated: true });
 
       return context;
-    } else if (!authentication && provider) {
+    } else if (provider) {
       throw new NotAuthenticated('Not authenticated');
     }
 

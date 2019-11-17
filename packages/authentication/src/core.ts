@@ -21,7 +21,7 @@ export interface AuthenticationRequest {
   [key: string]: any;
 }
 
-export type ConnectionEvent = 'login'|'logout'|'disconnect';
+export type ConnectionEvent = 'login' | 'logout' | 'disconnect';
 
 export interface AuthenticationStrategy {
   /**
@@ -63,11 +63,11 @@ export interface AuthenticationStrategy {
    * @param req The HTTP request
    * @param res The HTTP response
    */
-  parse? (req: IncomingMessage, res: ServerResponse): Promise<AuthenticationRequest|null>;
+  parse? (req: IncomingMessage, res: ServerResponse): Promise<AuthenticationRequest | null>;
 }
 
 export interface JwtVerifyOptions extends VerifyOptions {
-  algorithm?: string|string[];
+  algorithm?: string | string[];
 }
 
 /**
@@ -143,11 +143,9 @@ export class AuthenticationBase {
 
   /**
    * Get the registered authentication strategies for a list of names.
-   * The return value may contain `undefined` if the strategy does not exist.
    * @param names The list or strategy names
    */
   getStrategies (...names: string[]) {
-    // Returns all strategies for a list of names (including undefined)
     return names.map(name => this.strategies[name])
       .filter(current => !!current);
   }
@@ -209,14 +207,18 @@ export class AuthenticationBase {
    * @param allowed A list of allowed strategy names
    */
   async authenticate (authentication: AuthenticationRequest, params: Params, ...allowed: string[]) {
-    const { strategy } = authentication || ({} as AuthenticationRequest);
+    const { strategy } = authentication || {};
     const [ authStrategy ] = this.getStrategies(strategy);
+    const strategyAllowed = allowed.includes(strategy);
 
     debug('Running authenticate for strategy', strategy, allowed);
 
-    if (!authentication || !authStrategy || !allowed.includes(strategy)) {
+    if (!authentication || !authStrategy || !strategyAllowed) {
+      const additionalInfo = (!strategy && ' (no `strategy` set)') ||
+        (!strategyAllowed && ' (strategy not allowed in authStrategies)') || '';
+
       // If there are no valid strategies or `authentication` is not an object
-      throw new NotAuthenticated(`Invalid authentication information` + (!strategy ? ' (no `strategy` set)' : ''));
+      throw new NotAuthenticated('Invalid authentication information' + additionalInfo);
     }
 
     return authStrategy.authenticate(authentication, {
@@ -242,7 +244,7 @@ export class AuthenticationBase {
    */
   async parse (req: IncomingMessage, res: ServerResponse, ...names: string[]) {
     const strategies = this.getStrategies(...names)
-      .filter(current => current && typeof current.parse === 'function');
+      .filter(current => typeof current.parse === 'function');
 
     debug('Strategies parsing HTTP header for authentication information', names);
 

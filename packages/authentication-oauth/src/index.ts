@@ -24,13 +24,13 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
   }
 
   const { strategyNames } = service;
-  
+
   // Set up all the defaults
   const { path = '/oauth' } = oauth.defaults || {};
   const port = app.get('port');
   let host = app.get('host');
   let protocol = 'https';
-  
+
   // Development environments commonly run on HTTP with an extended port
   if (app.get('env') === 'development') {
     protocol = 'http';
@@ -38,7 +38,7 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
       host += ':' + port;
     }
   }
-  
+
   const grant = merge({
     defaults: {
       path,
@@ -47,7 +47,7 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
       transport: 'session'
     }
   }, omit(oauth, 'redirect'));
-  
+
   const getUrl = (url: string) => {
     const { defaults } = grant;
     return `${defaults.protocol}://${defaults.host}${path}/${url}`;
