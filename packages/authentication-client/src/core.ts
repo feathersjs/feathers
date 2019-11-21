@@ -61,14 +61,18 @@ export class AuthenticationClient {
   handleSocket (socket: any) {
     // Connection events happen on every reconnect
     const connected = this.app.io ? 'connect' : 'open';
+    const disconnected = this.app.io ? 'disconnect' : 'disconnection';
 
-    socket.on(connected, () => {
+    socket.on(disconnected, () => {
+      const authPromise = new Promise(resolve =>
+        socket.once(connected, () => resolve())
+      )
       // Only reconnect when `reAuthenticate()` or `authenticate()`
       // has been called explicitly first
-      if (this.authenticated) {
-        // Force reauthentication with the server
-        this.reAuthenticate(true);
-      }
+      // Force reauthentication with the server
+      .then(() => this.authenticated ? this.reAuthenticate(true) : null);
+
+      this.app.set('authentication', authPromise);
     });
   }
 
