@@ -112,6 +112,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       accessToken,
       authentication: {
         strategy: 'jwt',
+        accessToken,
         payload
       }
     };

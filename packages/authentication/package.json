@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication",
   "description": "Add Authentication to your FeathersJS app.",
-  "version": "4.3.10",
+  "version": "4.3.11",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -10,6 +10,10 @@
     "feathers-plugin"
   ],
   "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git"
@@ -39,9 +43,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/errors": "^4.3.10",
-    "@feathersjs/feathers": "^4.3.10",
-    "@feathersjs/transport-commons": "^4.3.10",
+    "@feathersjs/errors": "^4.3.11",
+    "@feathersjs/feathers": "^4.3.11",
+    "@feathersjs/transport-commons": "^4.3.11",
     "@types/jsonwebtoken": "8.3.4",
     "debug": "^4.1.1",
     "jsonwebtoken": "^8.5.1",
