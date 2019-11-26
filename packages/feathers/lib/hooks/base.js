@@ -16,15 +16,15 @@ const assignArguments = context => {
 };
 
 const validate = context => {
-  const { service, method } = context;
+  const { service, method, path } = context;
   const parameters = service.methods[method];
 
   if (parameters.includes('id') && context.id === undefined) {
-    throw new Error(`An id must be provided to the '${method}' method`);
+    throw new Error(`An id must be provided to the '${path}.${method}' method`);
   }
 
   if (parameters.includes('data') && !_.isObjectOrArray(context.data)) {
-    throw new Error(`A data object must be provided to the '${method}' method`);
+    throw new Error(`A data object must be provided to the '${path}.${method}' method`);
   }
 
   return context;
