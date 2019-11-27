@@ -67,7 +67,7 @@ export function channels () {
 
           debug('Publishing event', event, hook.path);
 
-          const logError = (error: any) => console.error(`Error in '${hook.path} ${event}' publisher`, error);
+          const logError = (error: any) => debug(`Error in '${hook.path} ${event}' publisher`, error);
           const servicePublishers = (service as unknown as PublishMixin)[keys.PUBLISHERS];
           const appPublishers = (app as unknown as PublishMixin)[keys.PUBLISHERS];
           // This will return the first publisher list that is not empty
