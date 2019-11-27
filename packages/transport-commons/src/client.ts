@@ -130,7 +130,9 @@ export class Service {
   // of the emitter-component Socket.io is using
   off (name: string, ...args: any[]) {
     if (typeof this.connection.off === 'function') {
-      return this.connection.off(`${this.path} ${name}`, ...args);
+      const result = this.connection.off(`${this.path} ${name}`, ...args);
+      
+      return result === this.connection ? this : result;
     } else if (args.length === 0) {
       // @ts-ignore
       return this.removeAllListeners(name);
