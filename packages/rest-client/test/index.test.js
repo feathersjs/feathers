@@ -79,19 +79,19 @@ describe('REST client tests', function () {
     const service = app.service('todos');
 
     return service.get().catch(error => {
-      assert.strictEqual(error.message, `An id must be provided to the 'get' method`);
+      assert.strictEqual(error.message, `An id must be provided to the 'todos.get' method`);
 
       return service.remove();
     }).catch(error => {
-      assert.strictEqual(error.message, `An id must be provided to the 'remove' method`);
+      assert.strictEqual(error.message, `An id must be provided to the 'todos.remove' method`);
 
       return service.update();
     }).catch(error => {
-      assert.strictEqual(error.message, `An id must be provided to the 'update' method`);
+      assert.strictEqual(error.message, `An id must be provided to the 'todos.update' method`);
 
       return service.patch();
     }).catch(error => {
-      assert.strictEqual(error.message, `An id must be provided to the 'patch' method`);
+      assert.strictEqual(error.message, `An id must be provided to the 'todos.patch' method`);
     });
   });
 });

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.7](https://github.com/feathersjs/feathers/compare/v4.3.6...v4.3.7) (2019-10-14)
+
+
+### Bug Fixes
+
+* make __hooks writable and configurable ([#1520](https://github.com/feathersjs/feathers/issues/1520)) ([1c6c374](https://github.com/feathersjs/feathers/commit/1c6c3742ecf1cb813be56074da89e6736d03ffe8))
+
+
+
+
+
 # [4.3.0](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.4...v4.3.0) (2019-08-27)
 
 **Note:** Version bump only for package @feathersjs/commons

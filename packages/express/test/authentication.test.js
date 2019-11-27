@@ -116,9 +116,10 @@ describe('@feathersjs/express/authentication', () => {
       });
     });
 
-    it('errors when there are no authStrategies', () => {
+    it('errors when there are no authStrategies and parseStrategies', () => {
       const { accessToken } = authResult;
       app.get('authentication').authStrategies = [];
+      delete app.get('authentication').parseStrategies;
 
       return axios.get('/dummy/dave', {
         headers: {

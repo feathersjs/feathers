@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.11](https://github.com/feathersjs/feathers/compare/v4.3.10...v4.3.11) (2019-11-11)
+
+**Note:** Version bump only for package @feathersjs/express
+
+
+
+
+
+## [4.3.10](https://github.com/feathersjs/feathers/compare/v4.3.9...v4.3.10) (2019-10-26)
+
+**Note:** Version bump only for package @feathersjs/express
+
+
+
+
+
+## [4.3.9](https://github.com/feathersjs/feathers/compare/v4.3.8...v4.3.9) (2019-10-26)
+
+
+### Bug Fixes
+
+* Small type improvements ([#1624](https://github.com/feathersjs/feathers/issues/1624)) ([50162c6](https://github.com/feathersjs/feathers/commit/50162c6e562f0a47c6a280c4f01fff7c3afee293))
+
+
+
+
+
+## [4.3.7](https://github.com/feathersjs/feathers/compare/v4.3.6...v4.3.7) (2019-10-14)
+
+
+### Bug Fixes
+
+* Typings for express request and response properties ([#1609](https://github.com/feathersjs/feathers/issues/1609)) ([38cf8c9](https://github.com/feathersjs/feathers/commit/38cf8c950c1a4fb4a6d78d68d70e7fdd63b71c3c))
+
+
+
+
+
 ## [4.3.5](https://github.com/feathersjs/feathers/compare/v4.3.4...v4.3.5) (2019-10-07)
 
 **Note:** Version bump only for package @feathersjs/express

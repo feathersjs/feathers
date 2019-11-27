@@ -49,9 +49,9 @@ declare namespace createApplication {
     }
 
     // tslint:disable-next-line void-return
-    type Hook = (hook: HookContext) => (Promise<HookContext | void> | HookContext | void);
+    type Hook<T = any, S = Service<T>> = (hook: HookContext<T, S>) => (Promise<HookContext<T, S> | void> | HookContext<T, S> | void);
 
-    interface HookContext<T = any> {
+    interface HookContext<T = any, S = Service<T>> {
         /**
          * A read only property that contains the Feathers application object. This can be used to
          * retrieve other services (via context.app.service('name')) or configuration values.
@@ -101,7 +101,7 @@ declare namespace createApplication {
         /**
          * A read only property and contains the service this hook currently runs on.
          */
-        readonly service: Service<T>;
+        readonly service: S;
         /**
          * A writeable, optional property and contains a 'safe' version of the data that
          * should be sent to any client. If context.dispatch has not been set context.result
@@ -181,6 +181,7 @@ declare namespace createApplication {
     interface ServiceAddons<T> extends EventEmitter {
         id?: any;
         _serviceEvents: string[];
+        methods: {[method: string]: string[]};
         hooks (hooks: Partial<HooksObject>): this;
     }
 

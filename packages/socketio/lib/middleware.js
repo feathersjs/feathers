@@ -23,7 +23,8 @@ exports.authentication = (app, getParams, settings = {}) => (socket, next) => {
     return next();
   }
 
-  const { authStrategies = [] } = service.configuration;
+  const config = service.configuration;
+  const authStrategies = config.parseStrategies || config.authStrategies || [];
 
   if (authStrategies.length === 0) {
     return next();

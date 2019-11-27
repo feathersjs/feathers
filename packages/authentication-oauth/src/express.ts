@@ -1,6 +1,7 @@
 // @ts-ignore
 import { express as grantExpress } from 'grant';
 import Debug from 'debug';
+import session from 'express-session';
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationResult } from '@feathersjs/authentication';
 import qs from 'querystring';
@@ -26,10 +27,15 @@ export default (options: OauthSetupSettings) => {
     }
 
     const { path } = config.defaults;
+    const expressSession = options.expressSession || session({
+      secret: Math.random().toString(36).substring(7),
+      saveUninitialized: true,
+      resave: true
+    });
     const grantApp = grant(config);
     const authApp = express();
 
-    authApp.use(options.expressSession);
+    authApp.use(expressSession);
 
     authApp.get('/:name', (req, res) => {
       const { feathers_token, ...query } = req.query;

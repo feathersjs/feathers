@@ -44,6 +44,11 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
 
     redirect = await strategy.getRedirect({ accessToken: 'testing' });
     assert.equal(redirect, null);
+
+    app.get('authentication').oauth.redirect = '/#dashboard';
+
+    redirect = await strategy.getRedirect({ accessToken: 'testing' });
+    assert.equal(redirect, '/#dashboard?access_token=testing');
   });
 
   it('getProfile', async () => {

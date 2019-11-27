@@ -12,11 +12,15 @@
     "url": "https://feathersjs.com"
   },
   "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
   "bugs": {
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 8"
+    "node": ">= 12"
   },
   "scripts": {
     "install": "lerna bootstrap",
@@ -25,8 +29,8 @@
     "test": "npm run lint && nyc lerna run test"
   },
   "devDependencies": {
-    "lerna": "^3.15.0",
+    "lerna": "^3.17.0",
     "nyc": "^14.1.1",
-    "tslint": "^5.18.0"
+    "tslint": "^5.20.0"
   }
 }

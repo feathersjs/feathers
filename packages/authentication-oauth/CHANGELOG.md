@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.11](https://github.com/feathersjs/feathers/compare/v4.3.10...v4.3.11) (2019-11-11)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Allow hash based redirects ([#1676](https://github.com/feathersjs/feathers/issues/1676)) ([ffe7cf3](https://github.com/feathersjs/feathers/commit/ffe7cf3fbb4e62d7689065cf7b61f25f602ce8cf))
+
+
+
+
+
+## [4.3.10](https://github.com/feathersjs/feathers/compare/v4.3.9...v4.3.10) (2019-10-26)
+
+**Note:** Version bump only for package @feathersjs/authentication-oauth
+
+
+
+
+
+## [4.3.9](https://github.com/feathersjs/feathers/compare/v4.3.8...v4.3.9) (2019-10-26)
+
+
+### Bug Fixes
+
+* Only initialize default Express session if oAuth is actually used ([#1648](https://github.com/feathersjs/feathers/issues/1648)) ([9b9b43f](https://github.com/feathersjs/feathers/commit/9b9b43ff09af1080e4aaa537064bac37b881c9a2))
+
+
+
+
+
+## [4.3.7](https://github.com/feathersjs/feathers/compare/v4.3.6...v4.3.7) (2019-10-14)
+
+**Note:** Version bump only for package @feathersjs/authentication-oauth
+
+
+
+
+
 ## [4.3.5](https://github.com/feathersjs/feathers/compare/v4.3.4...v4.3.5) (2019-10-07)
 
 **Note:** Version bump only for package @feathersjs/authentication-oauth

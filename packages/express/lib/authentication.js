@@ -15,10 +15,11 @@ exports.parseAuthentication = (settings = {}) => {
       return next();
     }
 
-    const { authStrategies = [] } = service.configuration;
+    const config = service.configuration;
+    const authStrategies = config.parseStrategies || config.authStrategies || [];
 
     if (authStrategies.length === 0) {
-      debug('No `authStrategies` found in authentication configuration');
+      debug('No `authStrategies` or `parseStrategies` found in authentication configuration');
       return next();
     }
 

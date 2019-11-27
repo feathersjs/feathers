@@ -1,5 +1,5 @@
 import Debug from 'debug';
-import { merge, get } from 'lodash';
+import { merge } from 'lodash';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { AuthenticationBase, AuthenticationResult, AuthenticationRequest } from './core';
 import { connection, event } from './hooks';
@@ -19,7 +19,13 @@ declare module '@feathersjs/feathers' {
      */
     defaultAuthentication (location?: string): AuthenticationService;
   }
+
+  interface Params {
+    authenticated?: boolean;
+  }
 }
+
+export interface AuthenticationService extends ServiceAddons<AuthenticationResult> {}
 
 export class AuthenticationService extends AuthenticationBase implements Partial<ServiceMethods<AuthenticationResult>> {
   constructor (app: Application, configKey: string = 'authentication', options = {}) {
@@ -58,12 +64,12 @@ export class AuthenticationService extends AuthenticationBase implements Partial
   async getTokenOptions (authResult: AuthenticationResult, params: Params) {
     const { service, entity, entityId } = this.configuration;
     const jwtOptions = merge({}, params.jwtOptions, params.jwt);
-    const hasEntity = service && entity && authResult[entity];
+    const value = service && entity && authResult[entity];
 
     // Set the subject to the entity id if it is available
-    if (hasEntity && !jwtOptions.subject) {
+    if (value && !jwtOptions.subject) {
       const idProperty = entityId || this.app.service(service).id;
-      const subject = get(authResult, [ entity, idProperty ]);
+      const subject = value[idProperty];
 
       if (subject === undefined) {
         throw new NotAuthenticated(`Can not set subject from ${entity}.${idProperty}`);
@@ -131,7 +137,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
   /**
    * Validates the service configuration.
    */
-  setup (this: AuthenticationService & ServiceAddons<AuthenticationResult>) {
+  setup () {
     // The setup method checks for valid settings and registers the
     // connection and event (login, logout) hooks
     const { secret, service, entity, entityId } = this.configuration;

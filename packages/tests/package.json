@@ -2,13 +2,17 @@
   "name": "@feathersjs/tests",
   "private": true,
   "description": "Feathers core module common tests",
-  "version": "4.3.4",
+  "version": "4.3.11",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
     "feathers"
   ],
   "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git"
@@ -23,7 +27,7 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">= 12"
   },
   "scripts": {
     "prepublish": "npm run compile",
@@ -42,15 +46,15 @@
     "lodash": "^4.17.15"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "^4.3.4",
+    "@feathersjs/feathers": "^4.3.11",
     "@types/axios": "^0.14.0",
     "@types/debug": "^4.1.5",
-    "@types/lodash": "^4.14.137",
+    "@types/lodash": "^4.14.144",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.7.2",
-    "mocha": "^6.2.0",
+    "@types/node": "^12.7.12",
+    "mocha": "^6.2.1",
     "shx": "^0.3.2",
-    "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4"
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/socketio-client",
   "description": "The client for Socket.io through feathers-socketio",
-  "version": "4.3.5",
+  "version": "4.3.11",
   "homepage": "https://feathersjs.com",
   "main": "lib/index.js",
   "types": "index.d.ts",
@@ -10,6 +10,10 @@
     "feathers-plugin"
   ],
   "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git"
@@ -24,7 +28,7 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 6.0.0"
+    "node": ">= 12"
   },
   "scripts": {
     "test": "mocha --opts ../../mocha.opts"
@@ -36,18 +40,18 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/transport-commons": "^4.3.4",
+    "@feathersjs/transport-commons": "^4.3.11",
     "@types/socket.io-client": "^1.4.32"
   },
   "devDependencies": {
-    "@feathersjs/commons": "^4.3.0",
-    "@feathersjs/feathers": "^4.3.4",
-    "@feathersjs/socketio": "^4.3.5",
-    "@feathersjs/tests": "^4.3.4",
+    "@feathersjs/commons": "^4.3.7",
+    "@feathersjs/feathers": "^4.3.11",
+    "@feathersjs/socketio": "^4.3.11",
+    "@feathersjs/tests": "^4.3.11",
     "chai": "^4.2.0",
-    "feathers-memory": "^4.0.0",
-    "mocha": "^6.2.0",
-    "socket.io-client": "^2.2.0"
+    "feathers-memory": "^4.1.0",
+    "mocha": "^6.2.1",
+    "socket.io-client": "^2.3.0"
   },
-  "gitHead": "907510a8f1f8c675b3ec3b8d9962991c76195694"
+  "gitHead": "3e5a4a03cfa3a0bd5b13bb5a039ba821848c3335"
 }
