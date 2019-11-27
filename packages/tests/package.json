@@ -27,7 +27,7 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">= 12"
   },
   "scripts": {
     "prepublish": "npm run compile",
