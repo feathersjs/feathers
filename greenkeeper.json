@@ -4,10 +4,7 @@
       "packages": [
         "package.json",
         "packages/authentication-client/package.json",
-        "packages/authentication-jwt/package.json",
         "packages/authentication-local/package.json",
-        "packages/authentication-oauth1/package.json",
-        "packages/authentication-oauth2/package.json",
         "packages/authentication/package.json",
         "packages/commons/package.json",
         "packages/configuration/package.json",
