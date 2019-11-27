@@ -67,6 +67,7 @@ export function channels () {
 
           debug('Publishing event', event, hook.path);
 
+          const logError = (error: any) => console.error(`Error in '${hook.path} ${event}' publisher`, error);
           const servicePublishers = (service as unknown as PublishMixin)[keys.PUBLISHERS];
           const appPublishers = (app as unknown as PublishMixin)[keys.PUBLISHERS];
           // This will return the first publisher list that is not empty
@@ -84,20 +85,24 @@ export function channels () {
             noop
           );
 
-          Promise.resolve(publisher(data, hook)).then(result => {
-            if (!result) {
-              return;
-            }
-
-            const results = Array.isArray(result) ? compact(flattenDeep(result)) : [result];
-            const channel = new CombinedChannel(results);
-
-            if (channel && channel.length > 0) {
-              app.emit('publish', event, channel, hook, data);
-            } else {
-              debug('No connections to publish to');
-            }
-          });
+          try {
+            Promise.resolve(publisher(data, hook)).then(result => {
+              if (!result) {
+                return;
+              }
+  
+              const results = Array.isArray(result) ? compact(flattenDeep(result)) : [result];
+              const channel = new CombinedChannel(results);
+  
+              if (channel && channel.length > 0) {
+                app.emit('publish', event, channel, hook, data);
+              } else {
+                debug('No connections to publish to');
+              }
+            }).catch(logError);
+          } catch (error) {
+            logError(error);
+          }
         });
       });
     });

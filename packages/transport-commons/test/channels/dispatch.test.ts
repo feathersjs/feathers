@@ -42,6 +42,18 @@ describe('app.publish', () => {
       });
     });
 
+    it('error in publisher is handled gracefully (#1707)', async () => {
+      app.service('test').publish('created', () => {
+        throw new Error('Something went wrong');
+      });
+
+      try {
+        await app.service('test').create({ message: 'something' });
+      } catch (error) {
+        assert.fail('Should never get here');
+      }
+    });
+
     it('simple event registration and dispatching', done => {
       app.channel('testing').join(c1);
 
