@@ -28,7 +28,7 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 12"
+    "node": ">= 10"
   },
   "scripts": {
     "start": "ts-node test/app",
