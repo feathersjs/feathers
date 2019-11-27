@@ -72,13 +72,15 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     return null;
   }
 
-  async getRedirect (data: AuthenticationResult|Error) {
+  async getRedirect (data: AuthenticationResult|Error, params?: Params) {
+    const queryRedirect = (params && params.query && params.query.redirect) || '';
     const { redirect } = this.authentication.configuration.oauth;
 
     if (!redirect) {
       return null;
     }
 
+    const redirectUrl = redirect + queryRedirect;
     const separator = redirect.endsWith('?') ? '' :
       (redirect.indexOf('#') !== -1 ? '?' : '#');
     const authResult: AuthenticationResult = data;
@@ -88,7 +90,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
       error: data.message || 'OAuth Authentication not successful'
     };
 
-    return redirect + separator + querystring.stringify(query);
+    return redirectUrl + separator + querystring.stringify(query);
   }
 
   async findEntity (profile: OAuthProfile, params: Params) {

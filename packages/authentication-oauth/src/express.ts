@@ -44,6 +44,7 @@ export default (options: OauthSetupSettings) => {
       if (feathers_token) {
         debug(`Got feathers_token query parameter to link accounts`, feathers_token);
         req.session.accessToken = feathers_token;
+        req.session.query = query;
       }
 
       res.redirect(`${path}/connect/${name}?${qs.stringify(query)}`);
@@ -55,12 +56,20 @@ export default (options: OauthSetupSettings) => {
 
     authApp.get('/:name/authenticate', async (req, res, next) => {
       const { name } = req.params as any;
-      const { accessToken, grant } = req.session;
+      const { accessToken, grant, query = {} } = req.session;
       const service = app.defaultAuthentication(authService);
       const [ strategy ] = service.getStrategies(name) as OAuthStrategy[];
+      const params = {
+        authStrategies: [ name ],
+        authentication: accessToken ? {
+          strategy: linkStrategy,
+          accessToken
+        } : null,
+        query
+      };
       const sendResponse = async (data: AuthenticationResult|Error) => {
         try {
-          const redirect = await strategy.getRedirect(data);
+          const redirect = await strategy.getRedirect(data, params);
 
           if (redirect !== null) {
             res.redirect(redirect);
@@ -78,15 +87,6 @@ export default (options: OauthSetupSettings) => {
       try {
         const payload = config.defaults.transport === 'session' ?
           grant.response : req.query;
-
-        const params = {
-          authStrategies: [ name ],
-          authentication: accessToken ? {
-            strategy: linkStrategy,
-            accessToken
-          } : null
-        };
-
         const authentication = {
           strategy: name,
           ...payload

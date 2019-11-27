@@ -24,6 +24,11 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
     let redirect = await strategy.getRedirect({ accessToken: 'testing' });
     assert.equal(redirect, '/home#access_token=testing');
 
+    redirect = await strategy.getRedirect({ accessToken: 'testing' }, {
+      query: { redirect: '/hi-there' }
+    });
+    assert.strictEqual('/home/hi-there#access_token=testing', redirect);
+
     redirect = await strategy.getRedirect(new Error('something went wrong'));
     assert.equal(redirect, '/home#error=something%20went%20wrong');
 
