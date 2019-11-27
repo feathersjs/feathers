@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.4.0](https://github.com/feathersjs/feathers/compare/v4.3.11...v4.4.0) (2019-11-27)
+
+
+### Bug Fixes
+
+* **authentication-client:** Reset authentication promise on socket disconnect ([#1696](https://github.com/feathersjs/feathers/issues/1696)) ([3951626](https://github.com/feathersjs/feathers/commit/395162633ff22e95833a3c2900cb9464bb5b056f))
+* **core:** Improve hook missing parameter message by adding the service name ([#1703](https://github.com/feathersjs/feathers/issues/1703)) ([2331c2a](https://github.com/feathersjs/feathers/commit/2331c2a3dd70d432db7d62a76ed805d359cbbba5))
+* **rest-client:** Allow to customize getting the query ([#1594](https://github.com/feathersjs/feathers/issues/1594)) ([5f21272](https://github.com/feathersjs/feathers/commit/5f212729849414c4da6f0d51edd1986feca992ee))
+* **transport-commons:** Allow to properly chain SocketIo client.off ([#1706](https://github.com/feathersjs/feathers/issues/1706)) ([a4aecbc](https://github.com/feathersjs/feathers/commit/a4aecbcd3578c1cf4ecffb3a58fb6d26e15ee513))
+* **typescript:** Allow specific service typings for `Hook` and `HookContext` ([#1688](https://github.com/feathersjs/feathers/issues/1688)) ([f5d0ddd](https://github.com/feathersjs/feathers/commit/f5d0ddd9724bf5778355535d2103d59daaad6294))
+
+
+### Features
+
+* **authentication:** Add parseStrategies to allow separate strategies for creating JWTs and parsing headers ([#1708](https://github.com/feathersjs/feathers/issues/1708)) ([5e65629](https://github.com/feathersjs/feathers/commit/5e65629b924724c3e81d7c81df047e123d1c8bd7))
+* **authentication-oauth:** Set oAuth redirect URL dynamically ([#1608](https://github.com/feathersjs/feathers/issues/1608)) ([1293e08](https://github.com/feathersjs/feathers/commit/1293e088abbb3d23f4a44680836645a8049ceaae))
+
+
+
+
+
 ## [4.3.11](https://github.com/feathersjs/feathers/compare/v4.3.10...v4.3.11) (2019-11-11)
 
 
