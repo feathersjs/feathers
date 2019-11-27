@@ -39,7 +39,7 @@
     "publish": "npm run reset-version"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">= 12"
   },
   "publishConfig": {
     "access": "public"
