@@ -204,14 +204,15 @@ describe('client', () => {
     connection.emit('todos test', testing);
   });
 
-  it('forwards namespaced call to .off', done => {
+  it('forwards namespaced call to .off, returns service instance', () => {
     // Use it's own connection and service so off method gets detected
     const conn = new EventEmitter();
 
     // @ts-ignore
-    conn.off = name => {
+    conn.off = function (name) {
       assert.strictEqual(name, 'todos test');
-      done();
+
+      return this;
     };
 
     const client = new Service({
@@ -221,6 +222,6 @@ describe('client', () => {
       connection: conn
     });
 
-    client.off('test');
+    assert.strictEqual(client.off('test'), client);
   });
 });
