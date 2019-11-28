@@ -50,7 +50,7 @@
     "debug": "^4.1.1",
     "express-session": "^1.17.0",
     "grant": "^4.6.3",
-    "grant-profile": "^0.0.6",
+    "grant-profile": "^0.0.8",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
