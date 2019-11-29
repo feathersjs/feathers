@@ -60,6 +60,8 @@ function cleanQuery (query: any, operators: any, filters: any) {
     });
 
     return result;
+  } else if (Array.isArray(query)) {
+    return query.map(value => cleanQuery(value, operators, filters));
   }
 
   return query;
