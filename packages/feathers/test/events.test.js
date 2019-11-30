@@ -252,7 +252,7 @@ describe('Service events', () => {
         assert.ok(hook.changed);
         assert.strictEqual(hook.service, service);
         assert.strictEqual(hook.method, 'create');
-        assert.strictEqual(hook.type, 'after');
+        assert.strictEqual(hook.type, 'async');
         done();
       });
 

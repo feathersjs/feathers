@@ -180,7 +180,7 @@ describe('`error` hooks', () => {
         }
       }).hooks({
         error (hook) {
-          assert.strictEqual(hook.error.hook.type, 'before',
+          assert.strictEqual(hook.original.type, 'before',
             'Original hook still set'
           );
           assert.strictEqual(hook.id, 'dishes');
@@ -202,7 +202,7 @@ describe('`error` hooks', () => {
         },
 
         error (hook) {
-          assert.strictEqual(hook.error.hook.type, 'after',
+          assert.strictEqual(hook.original.type, 'after',
             'Original hook still set'
           );
           assert.strictEqual(hook.id, 'dishes');
@@ -232,6 +232,27 @@ describe('`error` hooks', () => {
         error (hook) {
           assert.ok(hook.modified);
           assert.strictEqual(hook.original.type, 'after');
+        }
+      });
+
+      return service.get('laundry')
+        .then(() => {
+          throw new Error('Should never get here');
+        })
+        .catch(error => assert.strictEqual(error.message, errorMessage));
+    });
+
+    it('error in async hook', () => {
+      service.hooks({
+        async (hook) {
+          hook.modified = true;
+
+          throw new Error(errorMessage);
+        },
+
+        error (hook) {
+          assert.ok(hook.modified);
+          assert.strictEqual(hook.original.type, 'async');
         }
       });
 

@@ -142,11 +142,13 @@ describe('`async` hooks', () => {
 
       service.hooks({
         async: {
-          get (hook) {
+          async get (hook, next) {
             hook.result = {
               id: hook.id,
               message: 'Set from hook'
             };
+
+            await next();
           }
         }
       });
