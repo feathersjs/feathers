@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { EventEmitter } from 'events';
-import feathers, { Application } from '@feathersjs/feathers';
+import feathers, { Application, Params } from '@feathersjs/feathers';
 
 import { socket as commons, SocketOptions } from '../../src/socket';
 
@@ -29,7 +29,7 @@ describe('@feathersjs/transport-commons', () => {
           return Promise.resolve({ id, params });
         },
 
-        create (data, params) {
+        create (data: any, params: Params) {
           return Promise.resolve(Object.assign({ params }, data));
         }
       });

@@ -147,13 +147,19 @@ declare namespace createApplication {
 
         get (id: Id, params?: Params): Promise<T>;
 
-        create (data: Partial<T> | Array<Partial<T>>, params?: Params): Promise<T | T[]>;
+        create (data: Partial<T>, params?: Params): Promise<T>;
+
+        create (data: Array<Partial<T>>, params?: Params): Promise<T[]>;
 
         update (id: NullableId, data: T, params?: Params): Promise<T | T[]>;
 
-        patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T | T[]>;
+        patch (id: Id, data: Partial<T>, params?: Params): Promise<T>;
 
-        remove (id: NullableId, params?: Params): Promise<T | T[]>;
+        patch (id: null, data: Partial<T>, params?: Params): Promise<T[]>;
+
+        remove (id: Id, params?: Params): Promise<T>;
+
+        remove (id: null, params?: Params): Promise<T[]>;
     }
 
     interface SetupMethod {
