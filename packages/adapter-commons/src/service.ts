@@ -25,8 +25,10 @@ export interface ServiceOptions {
   filters: string[];
 }
 
-export interface InternalServiceMethods<T = any> {
-    _find (params?: Params): Promise<T | T[] | Paginated<T>>;
+type InternalFindReturnType<T, P> =  P extends { paginate: any } ? Paginated<T> : T | T[];
+
+export interface InternalServiceMethods<T = any, P = {}> {
+    _find (params?: Params): Promise<InternalFindReturnType<T, P>>;
     _get (id: Id, params?: Params): Promise<T>;
     _create (data: Partial<T> | Array<Partial<T>>, params?: Params): Promise<T | T[]>;
     _update (id: Id, data: T, params?: Params): Promise<T>;
@@ -34,7 +36,9 @@ export interface InternalServiceMethods<T = any> {
     _remove (id: NullableId, params?: Params): Promise<T | T[]>;
 }
 
-export class AdapterService<T = any> implements ServiceMethods<T> {
+type FindReturnType<T, P> =  P extends { paginate: any } ? Paginated<T> : T[];
+
+export class AdapterService<T = any, P = {}> implements ServiceMethods<T> {
   options: ServiceOptions;
 
   constructor (options: Partial<ServiceOptions>) {
@@ -86,7 +90,7 @@ export class AdapterService<T = any> implements ServiceMethods<T> {
     }
   }
 
-  find (params?: Params): Promise<T[] | Paginated<T>> {
+  find (params?: Params): Promise<FindReturnType<T, P>> {
     return callMethod(this, '_find', params);
   }
 
