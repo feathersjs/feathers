@@ -38,10 +38,8 @@ function convertSort (sort: any) {
 
 function cleanQuery (query: any, operators: any, filters: any): any {
   if (Array.isArray(query)) {
-    return query.map(current => cleanQuery(current, operators, filters));
-  }
-
-  if (_.isObject(query) && query.constructor === {}.constructor) {
+    return query.map(value => cleanQuery(value, operators, filters));
+  } else if (_.isObject(query) && query.constructor === {}.constructor) {
     const result: { [key: string]: any } = {};
 
     _.each(query, (value, key) => {
@@ -64,8 +62,6 @@ function cleanQuery (query: any, operators: any, filters: any): any {
     });
 
     return result;
-  } else if (Array.isArray(query)) {
-    return query.map(value => cleanQuery(value, operators, filters));
   }
 
   return query;
