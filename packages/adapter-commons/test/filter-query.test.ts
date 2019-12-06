@@ -200,6 +200,19 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
     });
   });
 
+  describe('arrays', () => {
+    it('validates queries in arrays', () => {
+      assert.throws(() => {
+        filterQuery({
+          $or: [{ $exists: false }]
+        });
+      }, {
+        name: 'BadRequest',
+        message: 'Invalid query parameter $exists'
+      });
+    });
+  });
+
   describe('additional filters', () => {
     it('throw error when not set as additionals', () => {
       try {
