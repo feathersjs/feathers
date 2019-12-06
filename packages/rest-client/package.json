@@ -35,7 +35,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^4.0.0",
+    "@feathersjs/commons": "4.0.0",
     "@feathersjs/errors": "^3.3.6",
     "qs": "^6.5.0"
   },
