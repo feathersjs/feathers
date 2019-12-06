@@ -36,7 +36,11 @@ function convertSort (sort: any) {
   }, {} as { [key: string]: number });
 }
 
-function cleanQuery (query: any, operators: any, filters: any) {
+function cleanQuery (query: any, operators: any, filters: any): any {
+  if (Array.isArray(query)) {
+    return query.map(current => cleanQuery(current, operators, filters));
+  }
+
   if (_.isObject(query) && query.constructor === {}.constructor) {
     const result: { [key: string]: any } = {};
 
