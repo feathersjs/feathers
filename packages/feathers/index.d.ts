@@ -117,10 +117,6 @@ declare namespace createApplication {
          * A read only property with the hook type (one of before, after or error).
          */
         readonly type: 'before' | 'after' | 'error';
-        /**
-         * The real-time connection object
-         */
-        connection?: any;
     }
 
     interface HookMap {
