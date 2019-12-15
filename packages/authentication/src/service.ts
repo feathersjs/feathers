@@ -22,6 +22,7 @@ declare module '@feathersjs/feathers' {
 
   interface Params {
     authenticated?: boolean;
+    authentication?: AuthenticationRequest;
   }
 }
 
