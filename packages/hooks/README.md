@@ -8,7 +8,7 @@
 
 ## Installation
 
-```
+```bash
 npm install @feathersjs/hooks --save
 ```
 
@@ -69,7 +69,7 @@ const hookedSayHello = hooks(sayHello, [ logMethod ]);
 
 ### Decorators
 
-Hooks can also be attached through [ES expiremental](https://babeljs.io/docs/en/babel-plugin-proposal-decorators) or TypeScript decorators:
+Hooks can also be attached through [ES experimental](https://babeljs.io/docs/en/babel-plugin-proposal-decorators) or TypeScript decorators:
 
 ```js
 import hooks from '@feathersjs/hooks';
