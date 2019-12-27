@@ -41,7 +41,7 @@
     "@feathersjs/errors": "^4.4.3",
     "@feathersjs/feathers": "^4.4.3",
     "feathers-memory": "^4.1.0",
-    "mocha": "^6.2.1"
+    "mocha": "^6.2.2"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }

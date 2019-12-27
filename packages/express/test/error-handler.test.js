@@ -1,37 +1,31 @@
 /* tsline:disable:handle-callback-err */
 /* tslint:disable:no-unused-expression */
+const { strict: assert } = require('assert');
 const express = require('express');
-
 const errors = require('@feathersjs/errors');
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
 const request = require('request');
 const fs = require('fs');
 const { join } = require('path');
 
 const handler = require('../lib/error-handler');
 
-chai.use(sinonChai);
-
-const { expect } = chai;
 const content = '<html><head></head><body>Error</body></html>';
 
-let htmlHandler = sinon.spy(function (error, req, res, next) {
+let htmlHandler = function (error, req, res, next) {
   res.send(content);
-});
+};
 
-const jsonHandler = sinon.spy(function (error, req, res, next) {
+const jsonHandler = function (error, req, res, next) {
   res.json(error);
-});
+};
 
 describe('error-handler', () => {
   it('is CommonJS compatible', () => {
-    expect(typeof require('../lib/error-handler')).to.equal('function');
+    assert.equal(typeof require('../lib/error-handler'), 'function');
   });
 
   it('is import compatible', () => {
-    expect(typeof handler).to.equal('function');
+    assert.equal(typeof handler, 'function');
   });
 
   describe('supports catch-all custom handlers', function () {
@@ -66,23 +60,16 @@ describe('error-handler', () => {
         }
       };
 
-      it('is called', done => {
-        request(options, (error, res, body) => {
-          expect(htmlHandler).to.be.called; // eslint-disable-line
-          done();
-        });
-      });
-
       it('logs the error', done => {
         request(options, (error, res, body) => {
-          expect(currentError.message).to.equal('Something went wrong');
+          assert.equal(currentError.message, 'Something went wrong');
           done();
         });
       });
 
       it('can send a custom response', done => {
         request(options, (error, res, body) => {
-          expect(body).to.equal(content);
+          assert.equal(body, content);
           done();
         });
       });
@@ -97,13 +84,6 @@ describe('error-handler', () => {
         }
       };
 
-      it('is called', done => {
-        request(options, (error, res, body) => {
-          expect(jsonHandler).to.be.called;
-          done();
-        });
-      });
-
       it('can send a custom response', done => {
         const expected = JSON.stringify({
           name: 'GeneralError',
@@ -114,7 +94,7 @@ describe('error-handler', () => {
           errors: {}
         });
         request(options, (error, res, body) => {
-          expect(body).to.deep.equal(expected);
+          assert.deepEqual(body, expected);
           done();
         });
       });
@@ -130,7 +110,7 @@ describe('error-handler', () => {
         return Object.assign({
           set () {},
           status (code) {
-            expect(code).to.equal(errCode);
+            assert.equal(code, errCode);
           }
         }, props);
       };
@@ -143,7 +123,7 @@ describe('error-handler', () => {
         });
         const res = makeRes(401, {
           sendFile (f) {
-            expect(f).to.equal('path/to/401.html');
+            assert.equal(f, 'path/to/401.html');
             done();
           }
         });
@@ -156,9 +136,9 @@ describe('error-handler', () => {
         const middleware = handler({
           logger: null,
           html: { 402: (_err, _req, _res) => {
-            expect(_err).to.equal(err);
-            expect(_req).to.equal(req);
-            expect(_res).to.equal(res);
+            assert.equal(_err, err);
+            assert.equal(_req, req);
+            assert.equal(_res, res);
             done();
           } }
         });
@@ -171,9 +151,9 @@ describe('error-handler', () => {
         const middleware = handler({
           logger: null,
           html: { default: (_err, _req, _res) => {
-            expect(_err).to.equal(err);
-            expect(_req).to.equal(req);
-            expect(_res).to.equal(res);
+            assert.equal(_err, err);
+            assert.equal(_req, req);
+            assert.equal(_res, res);
             done();
           } }
         });
@@ -189,7 +169,7 @@ describe('error-handler', () => {
         return Object.assign({
           set () {},
           status (code) {
-            expect(code).to.equal(errCode);
+            assert.equal(code, errCode);
           }
         }, props);
       };
@@ -202,7 +182,7 @@ describe('error-handler', () => {
         });
         const res = makeRes(401, {
           json (obj) {
-            expect(obj).to.deep.equal(err.toJSON());
+            assert.deepEqual(obj, err.toJSON());
             done();
           }
         });
@@ -215,9 +195,9 @@ describe('error-handler', () => {
         const middleware = handler({
           logger: null,
           json: { 402: (_err, _req, _res) => {
-            expect(_err).to.equal(err);
-            expect(_req).to.equal(req);
-            expect(_res).to.equal(res);
+            assert.equal(_err, err);
+            assert.equal(_req, req);
+            assert.equal(_res, res);
             done();
           } }
         });
@@ -230,9 +210,9 @@ describe('error-handler', () => {
         const middleware = handler({
           logger: null,
           json: { default: (_err, _req, _res) => {
-            expect(_err).to.equal(err);
-            expect(_req).to.equal(req);
-            expect(_res).to.equal(res);
+            assert.equal(_err, err);
+            assert.equal(_req, req);
+            assert.equal(_res, res);
             done();
           } }
         });
@@ -283,8 +263,8 @@ describe('error-handler', () => {
           url: 'http://localhost:5050/error',
           json: true
         }, (error, res, body) => {
-          expect(res.statusCode).to.equal(500);
-          expect(body).to.deep.equal({
+          assert.equal(res.statusCode, 500);
+          assert.deepEqual(body, {
             name: 'GeneralError',
             message: 'Something went wrong',
             code: 500,
@@ -294,10 +274,6 @@ describe('error-handler', () => {
           });
           done();
         });
-      });
-
-      it.skip('still has a stack trace', () => {
-        expect(handler).to.equal('function');
       });
     });
 
@@ -311,8 +287,8 @@ describe('error-handler', () => {
               'Accept': 'text/html'
             }
           }, (error, res, body) => {
-            expect(res.statusCode).to.equal(404);
-            expect(html.toString()).to.equal(body);
+            assert.equal(res.statusCode, 404);
+            assert.equal(html.toString(), body);
             done();
           });
         });
@@ -327,8 +303,8 @@ describe('error-handler', () => {
               'Accept': 'text/html'
             }
           }, (error, res, body) => {
-            expect(res.statusCode).to.equal(500);
-            expect(html.toString()).to.equal(body);
+            assert.equal(res.statusCode, 500);
+            assert.equal(html.toString(), body);
             done();
           });
         });
@@ -342,8 +318,8 @@ describe('error-handler', () => {
               'Content-Type': 'text/html'
             }
           }, (error, res, body) => {
-            expect(res.statusCode).to.equal(404);
-            expect(html.toString()).to.equal(body);
+            assert.equal(res.statusCode, 404);
+            assert.equal(html.toString(), body);
             done();
           });
         });
@@ -357,8 +333,8 @@ describe('error-handler', () => {
               'Accept': 'text/html'
             }
           }, (error, res, body) => {
-            expect(res.statusCode).to.equal(404);
-            expect(html.toString()).to.equal(body);
+            assert.equal(res.statusCode, 404);
+            assert.equal(html.toString(), body);
             done();
           });
         });
@@ -375,8 +351,8 @@ describe('error-handler', () => {
           },
           json: true
         }, (error, res, body) => {
-          expect(res.statusCode).to.equal(500);
-          expect(body).to.deep.equal({
+          assert.equal(res.statusCode, 500);
+          assert.deepEqual(body, {
             name: 'GeneralError',
             message: 'Something went wrong',
             code: 500,
@@ -397,8 +373,8 @@ describe('error-handler', () => {
           },
           json: true
         }, (error, res, body) => {
-          expect(res.statusCode).to.equal(404);
-          expect(body).to.deep.equal({ name: 'NotFound',
+          assert.equal(res.statusCode, 404);
+          assert.deepEqual(body, { name: 'NotFound',
             message: 'File not found',
             code: 404,
             className: 'not-found',
@@ -417,8 +393,8 @@ describe('error-handler', () => {
           },
           json: true
         }, (error, res, body) => {
-          expect(res.statusCode).to.equal(400);
-          expect(body).to.deep.equal({ name: 'BadRequest',
+          assert.equal(res.statusCode, 400);
+          assert.deepEqual(body, { name: 'BadRequest',
             message: 'Invalid Password',
             code: 400,
             className: 'bad-request',
@@ -443,8 +419,8 @@ describe('error-handler', () => {
           },
           json: true
         }, (error, res, body) => {
-          expect(res.statusCode).to.equal(400);
-          expect(body).to.deep.equal({ name: 'BadRequest',
+          assert.equal(res.statusCode, 400);
+          assert.deepEqual(body, { name: 'BadRequest',
             message: 'Invalid Password',
             code: 400,
             className: 'bad-request',
@@ -469,8 +445,8 @@ describe('error-handler', () => {
           },
           json: true
         }, (error, res, body) => {
-          expect(res.statusCode).to.equal(400);
-          expect(body).to.deep.equal({ name: 'BadRequest',
+          assert.equal(res.statusCode, 400);
+          assert.deepEqual(body, { name: 'BadRequest',
             message: 'Invalid Password',
             code: 400,
             className: 'bad-request',
@@ -505,8 +481,8 @@ describe('error-handler', () => {
           }]
         });
 
-        expect(res.statusCode).to.equal(400);
-        expect(body).to.deep.equal(expected);
+        assert.equal(res.statusCode, 400);
+        assert.deepEqual(body, expected);
         done();
       });
     });

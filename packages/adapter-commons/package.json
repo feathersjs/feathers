@@ -47,13 +47,13 @@
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
-    "@types/mongodb": "^3.3.6",
-    "@types/node": "^12.7.12",
-    "mocha": "^6.2.1",
-    "mongodb": "^3.3.2",
+    "@types/mongodb": "^3.3.14",
+    "@types/node": "^13.1.1",
+    "mocha": "^6.2.2",
+    "mongodb": "^3.4.1",
     "shx": "^0.3.2",
-    "ts-node": "^8.4.1",
-    "typescript": "^3.6.4"
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.4"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }
