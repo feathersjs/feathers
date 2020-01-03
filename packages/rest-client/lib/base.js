@@ -18,6 +18,7 @@ class Base {
     this.options = settings.options;
     this.connection = settings.connection;
     this.base = `${settings.base}/${this.name}`;
+    this.qsStringifyOptions = this.options.qsStringifyOptions || {};
   }
 
   makeUrl (query, id) {
@@ -33,7 +34,7 @@ class Base {
 
   getQuery (query) {
     if (Object.keys(query).length !== 0) {
-      const queryString = qs.stringify(query);
+      const queryString = qs.stringify(query, this.qsStringifyOptions);
 
       return `?${queryString}`;
     }
