@@ -15,7 +15,7 @@ function toError (error) {
 class Base {
   constructor (settings) {
     this.name = stripSlashes(settings.name);
-    this.options = settings.options;
+    this.options = settings.options || {};
     this.connection = settings.connection;
     this.base = `${settings.base}/${this.name}`;
     this.qsStringifyOptions = this.options.qsStringifyOptions || {};
