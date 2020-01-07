@@ -1,5 +1,5 @@
 const { hooks: hookCommons, isPromise, _ } = require('@feathersjs/commons');
-const hooksDecorator = require('@feathersjs/hooks');
+const { hooks: hooksDecorator } = require('@feathersjs/hooks');
 const baseHooks = require('./base');
 
 const {
