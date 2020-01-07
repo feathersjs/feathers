@@ -18,7 +18,6 @@ const makeArguments = (service, method, hookObject) => service.methods[ method ]
 function oldHooksProcess (hooks, afterHookObject) {
   return async (ctx, next) => {
     Object.assign(ctx, { type: 'before' });
-
     await processHooks.call(ctx.service, hooks.before, ctx);
 
     if (typeof ctx.result !== 'undefined') {
@@ -33,7 +32,6 @@ function oldHooksProcess (hooks, afterHookObject) {
     }
 
     Object.assign(ctx, { type: 'after' });
-
     await processHooks.call(ctx.service, hooks.after, afterHookObject);
 
     Object.assign(ctx, afterHookObject, { type: 'async' });
