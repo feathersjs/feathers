@@ -118,4 +118,27 @@ describe('REST client tests', function () {
         });
     });
   });
+
+  it('uses a custom client as second arg', () => {
+    const app = feathers();
+    class MyFetchClient extends FetchClient {
+      find () {
+        return Promise.resolve({
+          connection: this.connection,
+          base: this.base,
+          message: 'Custom fetch client'
+        });
+      }
+    }
+
+    app.configure(rest('http://localhost:8889').fetch(fetch, MyFetchClient));
+
+    return app.service('messages').find().then(data => {
+      assert.deepStrictEqual(data, {
+          connection: fetch,
+          base: 'http://localhost:8889/messages',
+          message: 'Custom fetch client'
+        });
+    });
+  });
 });

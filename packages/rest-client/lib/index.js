@@ -26,6 +26,11 @@ function restClient (base = '') {
         throw new Error(`${key} has to be provided to feathers-rest`);
       }
 
+      if (typeof options === 'function') {
+        Service = options;
+        options = {};
+      }
+
       const defaultService = function (name) {
         return new Service({ base, name, connection, options });
       };
