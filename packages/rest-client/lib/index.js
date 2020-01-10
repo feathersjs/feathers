@@ -1,19 +1,19 @@
-const jQuery = require('./jquery');
-const Superagent = require('./superagent');
-const Request = require('./request');
-const Fetch = require('./fetch');
-const Axios = require('./axios');
-const Angular = require('./angular');
+const jQueryClient = require('./jquery');
+const SuperagentClient = require('./superagent');
+const RequestClient = require('./request');
+const FetchClient = require('./fetch');
+const AxiosClient = require('./axios');
+const AngularClient = require('./angular');
 const Base = require('./base');
 const AngularHttpClient = require('./angular-http-client');
 
 const transports = {
-  jquery: jQuery,
-  superagent: Superagent,
-  request: Request,
-  fetch: Fetch,
-  axios: Axios,
-  angular: Angular,
+  jquery: jQueryClient,
+  superagent: SuperagentClient,
+  request: RequestClient,
+  fetch: FetchClient,
+  axios: AxiosClient,
+  angular: AngularClient,
   angularHttpClient: AngularHttpClient
 };
 
@@ -21,9 +21,7 @@ function restClient (base = '') {
   const result = { Base };
 
   Object.keys(transports).forEach(key => {
-    const Service = transports[key];
-
-    result[key] = function (connection, options = {}) {
+    result[key] = function (connection, options = {}, Service = transports[key]) {
       if (!connection) {
         throw new Error(`${key} has to be provided to feathers-rest`);
       }
@@ -51,5 +49,5 @@ function restClient (base = '') {
   return result;
 }
 
-module.exports = restClient;
+module.exports = Object.assign(restClient, { SuperagentClient, FetchClient, jQueryClient, RequestClient, AxiosClient, AngularClient, AngularHttpClient });
 module.exports.default = restClient;
