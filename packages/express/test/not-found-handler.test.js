@@ -1,20 +1,15 @@
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+const { strict: assert } = require('assert');
 const errors = require('@feathersjs/errors');
 
 const handler = require('../lib/not-found-handler');
 
-const { expect } = chai;
-
-chai.use(sinonChai);
-
 describe('not-found-handler', () => {
   it('is CommonJS compatible', () => {
-    expect(typeof require('../lib/not-found-handler')).to.equal('function');
+    assert.equal(typeof require('../lib/not-found-handler'), 'function');
   });
 
   it('is import compatible', () => {
-    expect(typeof handler).to.equal('function');
+    assert.equal(typeof handler, 'function');
   });
 
   it('returns NotFound error', done => {
@@ -22,9 +17,9 @@ describe('not-found-handler', () => {
       url: 'some/where',
       headers: {}
     }, {}, function (error) {
-      expect(error instanceof errors.NotFound).to.equal(true);
-      expect(error.message).to.equal('Page not found');
-      expect(error.data).to.deep.equal({
+      assert.ok(error instanceof errors.NotFound);
+      assert.equal(error.message, 'Page not found');
+      assert.deepEqual(error.data, {
         url: 'some/where'
       });
       done();
@@ -36,9 +31,9 @@ describe('not-found-handler', () => {
       url: 'some/where',
       headers: {}
     }, {}, function (error) {
-      expect(error instanceof errors.NotFound).to.equal(true);
-      expect(error.message).to.equal('Page not found: some/where');
-      expect(error.data).to.deep.equal({
+      assert.ok(error instanceof errors.NotFound);
+      assert.equal(error.message, 'Page not found: some/where');
+      assert.deepEqual(error.data, {
         url: 'some/where'
       });
       done();
