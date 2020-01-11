@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { strict as assert } from 'assert';
 import { hooks } from '../src';
 
 describe('hook utilities', () => {
@@ -11,7 +11,7 @@ describe('hook utilities', () => {
         method: 'update'
       });
 
-      expect(args).to.deep.equal([2, { my: 'data' }, { some: 'thing' }]);
+      assert.deepEqual(args, [2, { my: 'data' }, { some: 'thing' }]);
 
       args = hooks.makeArguments({
         id: 0,
@@ -20,14 +20,14 @@ describe('hook utilities', () => {
         method: 'update'
       });
 
-      expect(args).to.deep.equal([0, { my: 'data' }, { some: 'thing' }]);
+      assert.deepEqual(args, [0, { my: 'data' }, { some: 'thing' }]);
 
       args = hooks.makeArguments({
         params: { some: 'thing' },
         method: 'find'
       });
 
-      expect(args).to.deep.equal([
+      assert.deepEqual(args, [
         { some: 'thing' }
       ]);
     });
@@ -39,7 +39,7 @@ describe('hook utilities', () => {
         data: { test: 'me' }
       });
 
-      expect(args).to.deep.equal([
+      assert.deepEqual(args, [
         { test: 'me' },
         { some: 'thing' }
       ]);
@@ -49,7 +49,7 @@ describe('hook utilities', () => {
         method: 'something'
       });
 
-      expect(args).to.deep.equal([
+      assert.deepEqual(args, [
         'testing', {}
       ]);
     });
@@ -61,7 +61,7 @@ describe('hook utilities', () => {
         method: 'update'
       });
 
-      expect(args).to.deep.equal([undefined, { my: 'data' }, { some: 'thing' }]);
+      assert.deepEqual(args, [undefined, { my: 'data' }, { some: 'thing' }]);
 
       args = hooks.makeArguments({
         id: 2,
@@ -70,7 +70,7 @@ describe('hook utilities', () => {
         method: 'remove'
       });
 
-      expect(args).to.deep.equal([2, { some: 'thing' }]);
+      assert.deepEqual(args, [2, { some: 'thing' }]);
 
       args = hooks.makeArguments({
         id: 2,
@@ -79,49 +79,48 @@ describe('hook utilities', () => {
         method: 'create'
       });
 
-      expect(args).to.deep.equal([{ my: 'data' }, { some: 'thing' }]);
+      assert.deepEqual(args, [{ my: 'data' }, { some: 'thing' }]);
     });
   });
 
   describe('.convertHookData', () => {
     it('converts existing', () => {
-      expect(hooks.convertHookData('test')).to.deep.equal({
+      assert.deepEqual(hooks.convertHookData('test'), {
         all: [ 'test' ]
       });
     });
 
     it('converts to `all`', () => {
-      expect(hooks.convertHookData([ 'test', 'me' ])).to.deep.equal({
+      assert.deepEqual(hooks.convertHookData([ 'test', 'me' ]), {
         all: [ 'test', 'me' ]
       });
     });
 
     it('converts all properties into arrays', () => {
-      expect(hooks.convertHookData({
+      assert.deepEqual(hooks.convertHookData({
         all: 'thing',
         other: 'value',
         hi: [ 'foo', 'bar' ]
-      }))
-        .to.deep.equal({
-          all: [ 'thing' ],
-          other: [ 'value' ],
-          hi: [ 'foo', 'bar' ]
-        });
+      }), {
+        all: [ 'thing' ],
+        other: [ 'value' ],
+        hi: [ 'foo', 'bar' ]
+      });
     });
   });
 
   describe('.isHookObject', () => {
     it('with a valid hook object', () => {
-      expect(hooks.isHookObject({
+      assert.ok(hooks.isHookObject({
         type: 'before',
         method: 'here'
-      })).to.equal(true);
+      }));
     });
 
     it('with an invalid hook object', () => {
-      expect(hooks.isHookObject({
+      assert.ok(!hooks.isHookObject({
         type: 'before'
-      })).to.equal(false);
+      }));
     });
   });
 
@@ -137,12 +136,12 @@ describe('hook utilities', () => {
     it('.toJSON', () => {
       const hookObject = hooks.createHookObject('find', hookData);
 
-      expect(hookObject.toJSON()).to.deep.equal({
+      assert.deepEqual(hookObject.toJSON(), {
         method: 'find',
         path: 'testing'
       });
 
-      expect(JSON.stringify(hookObject)).to.equal(JSON.stringify({
+      assert.equal(JSON.stringify(hookObject), JSON.stringify({
         method: 'find',
         path: 'testing'
       }));
@@ -151,7 +150,7 @@ describe('hook utilities', () => {
     it('for find', () => {
       let hookObject = hooks.createHookObject('find', hookData);
 
-      expect(hookObject).to.deep.equal({
+      assert.deepEqual(hookObject, {
         method: 'find',
         app,
         service,
@@ -160,14 +159,14 @@ describe('hook utilities', () => {
 
       hookObject = hooks.createHookObject('find');
 
-      expect(hookObject).to.deep.equal({
+      assert.deepEqual(hookObject, {
         method: 'find',
         path: null
       });
 
       hookObject = hooks.createHookObject('find', hookData);
 
-      expect(hookObject).to.deep.equal({
+      assert.deepEqual(hookObject, {
         method: 'find',
         app,
         service,
@@ -178,7 +177,7 @@ describe('hook utilities', () => {
     it('for get', () => {
       let hookObject = hooks.createHookObject('get', hookData);
 
-      expect(hookObject).to.deep.equal({
+      assert.deepEqual(hookObject, {
         method: 'get',
         app,
         service,
@@ -187,7 +186,7 @@ describe('hook utilities', () => {
 
       hookObject = hooks.createHookObject('get', hookData);
 
-      expect(hookObject).to.deep.equal({
+      assert.deepEqual(hookObject, {
         method: 'get',
         app,
         service,
@@ -198,7 +197,7 @@ describe('hook utilities', () => {
     it('for remove', () => {
       let hookObject = hooks.createHookObject('remove', hookData);
 
-      expect(hookObject).to.deep.equal({
+      assert.deepEqual(hookObject, {
         method: 'remove',
         app,
         service,
@@ -207,7 +206,7 @@ describe('hook utilities', () => {
 
       hookObject = hooks.createHookObject('remove', hookData);
 
-      expect(hookObject).to.deep.equal({
+      assert.deepEqual(hookObject, {
         method: 'remove',
         app,
         service,
@@ -218,7 +217,7 @@ describe('hook utilities', () => {
     it('for create', () => {
       const hookObject = hooks.createHookObject('create', hookData);
 
-      expect(hookObject).to.deep.equal({
+      assert.deepEqual(hookObject, {
         method: 'create',
         app,
         service,
@@ -229,7 +228,7 @@ describe('hook utilities', () => {
     it('for update', () => {
       const hookObject = hooks.createHookObject('update', hookData);
 
-      expect(hookObject).to.deep.equal({
+      assert.deepEqual(hookObject, {
         method: 'update',
         app,
         service,
@@ -240,7 +239,7 @@ describe('hook utilities', () => {
     it('for patch', () => {
       const hookObject = hooks.createHookObject('patch', hookData);
 
-      expect(hookObject).to.deep.equal({
+      assert.deepEqual(hookObject, {
         method: 'patch',
         app,
         service,
@@ -251,7 +250,7 @@ describe('hook utilities', () => {
     it('for custom method', () => {
       const hookObject = hooks.createHookObject('custom', hookData);
 
-      expect(hookObject).to.deep.equal({
+      assert.deepEqual(hookObject, {
         method: 'custom',
         app,
         service,
@@ -286,7 +285,7 @@ describe('hook utilities', () => {
       ], dummyHook);
 
       return promise.then((result: any) => {
-        expect(result).to.deep.equal({
+        assert.deepEqual(result, {
           type: 'dummy',
           method: 'something',
           chain: [ 'first', 'second', 'third' ]
@@ -307,8 +306,8 @@ describe('hook utilities', () => {
       ], dummyHook);
 
       return promise.catch((e: any) => {
-        expect(e.message).to.equal(`dummy hook for 'something' method returned invalid hook object`);
-        expect(typeof e.hook).to.equal('object');
+        assert.equal(e.message, `dummy hook for 'something' method returned invalid hook object`);
+        assert.equal(typeof e.hook, 'object');
       });
     });
   });
@@ -319,9 +318,9 @@ describe('hook utilities', () => {
 
       hooks.enableHooks(base, [], ['test']);
 
-      expect(typeof base.__hooks).to.equal('object');
-      expect(typeof base.__hooks.test).to.equal('object');
-      expect(typeof base.__hooks.before).to.equal('undefined');
+      assert.equal(typeof base.__hooks, 'object');
+      assert.equal(typeof base.__hooks.test, 'object');
+      assert.equal(typeof base.__hooks.before, 'undefined');
     });
 
     it('does nothing when .hooks method exists', () => {
@@ -330,7 +329,7 @@ describe('hook utilities', () => {
       };
 
       hooks.enableHooks(base, [], ['test']);
-      expect(typeof base.__hooks).to.equal('undefined');
+      assert.equal(typeof base.__hooks, 'undefined');
     });
 
     describe('.hooks method', () => {
@@ -341,13 +340,13 @@ describe('hook utilities', () => {
       });
 
       it('registers hook with custom type and `all` method', () => {
-        expect(typeof base.hooks).to.equal('function');
+        assert.equal(typeof base.hooks, 'function');
 
         const fn = function () {};
 
         base.hooks({ dummy: fn });
 
-        expect(base.__hooks.dummy.testMethod).to.deep.equal([ fn ]);
+        assert.deepEqual(base.__hooks.dummy.testMethod, [ fn ]);
       });
 
       it('registers hook with custom type and specific method', () => {
@@ -357,7 +356,7 @@ describe('hook utilities', () => {
           }
         });
 
-        expect(base.__hooks.dummy.testMethod.length).to.equal(1);
+        assert.equal(base.__hooks.dummy.testMethod.length, 1);
       });
 
       it('throws an error when registering invalid hook type', () => {
@@ -365,7 +364,7 @@ describe('hook utilities', () => {
           base.hooks({ wrong () {} });
           throw new Error('Should never get here');
         } catch (e) {
-          expect(e.message).to.equal(`'wrong' is not a valid hook type`);
+          assert.equal(e.message, `'wrong' is not a valid hook type`);
         }
       });
 
@@ -376,7 +375,7 @@ describe('hook utilities', () => {
           } });
           throw new Error('Should never get here');
         } catch (e) {
-          expect(e.message).to.equal(`'wrongMethod' is not a valid hook method`);
+          assert.equal(e.message, `'wrongMethod' is not a valid hook method`);
         }
       });
     });
@@ -397,13 +396,15 @@ describe('hook utilities', () => {
     });
 
     it('combines app and service hooks', () => {
-      expect(hooks.getHooks(app, service, 'dummy', 'testMethod'))
-        .to.deep.equal([ appHook, serviceHook ]);
+      assert.deepEqual(hooks.getHooks(app, service, 'dummy', 'testMethod'), [
+        appHook, serviceHook
+      ]);
     });
 
     it('combines app and service hooks with appLast', () => {
-      expect(hooks.getHooks(app, service, 'dummy', 'testMethod', true))
-        .to.deep.equal([ serviceHook, appHook ]);
+      assert.deepEqual(hooks.getHooks(app, service, 'dummy', 'testMethod', true), [
+        serviceHook, appHook
+      ]);
     });
   });
 });

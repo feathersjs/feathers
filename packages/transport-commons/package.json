@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/transport-commons",
   "description": "Shared functionality for websocket providers",
-  "version": "4.4.1",
+  "version": "4.4.3",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -43,21 +43,21 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^4.4.1",
-    "@feathersjs/errors": "^4.4.1",
+    "@feathersjs/commons": "^4.4.3",
+    "@feathersjs/errors": "^4.4.3",
     "debug": "^4.1.1",
     "lodash": "^4.17.15",
     "radix-router": "^3.0.1"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "^4.4.1",
+    "@feathersjs/feathers": "^4.4.3",
     "@types/debug": "^4.1.5",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.7.12",
-    "mocha": "^6.2.1",
+    "@types/node": "^13.1.1",
+    "mocha": "^6.2.2",
     "shx": "^0.3.2",
-    "ts-node": "^8.4.1",
-    "typescript": "^3.6.4"
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.4"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }

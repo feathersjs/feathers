@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/feathers",
   "description": "A framework for real-time applications and REST API with JavaScript and TypeScript",
-  "version": "4.4.1",
+  "version": "4.4.3",
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",
@@ -45,13 +45,13 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^4.4.1",
+    "@feathersjs/commons": "^4.4.3",
     "debug": "^4.1.1",
     "events": "^3.0.0",
     "uberproto": "^2.0.4"
   },
   "devDependencies": {
-    "mocha": "^6.2.1"
+    "mocha": "^6.2.2"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }
