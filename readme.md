@@ -11,9 +11,9 @@
 [![Slack Status](http://slack.feathersjs.com/badge.svg)](http://slack.feathersjs.com)
 [![Telegram Status](https://img.shields.io/badge/Telegram_RU_chat:-Feathers-216bc1.svg?style=flat)](https://t.me/featherjs)
 
-Feathers is a framework for creating real-time applications and REST APIs using JavaScript or TypeScript with Node.JS, React Native and the browser.
+Feathers is a lightweight web-framework for creating real-time applications and REST APIs using JavaScript or TypeScript.
 
-It works with any backend supporting many databases out of the box and with any frontend technology like React, VueJS, Angular, Android or iOS.
+Feathers can interact with any backend technology, supports over a dozen databases and works with any frontend technology like React, VueJS, Angular, React Native, Android or iOS.
 
 ## Getting started
 
