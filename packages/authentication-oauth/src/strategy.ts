@@ -73,7 +73,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
   }
 
   async getRedirect (data: AuthenticationResult|Error, params?: Params) {
-    const queryRedirect = (params && params.query && params.query.redirect) || '';
+    const queryRedirect = (params && params.redirect) || '';
     const { redirect } = this.authentication.configuration.oauth;
 
     if (!redirect) {
