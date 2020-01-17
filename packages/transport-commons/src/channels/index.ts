@@ -90,10 +90,10 @@ export function channels () {
               if (!result) {
                 return;
               }
-  
+
               const results = Array.isArray(result) ? compact(flattenDeep(result)) : [result];
               const channel = new CombinedChannel(results);
-  
+
               if (channel && channel.length > 0) {
                 app.emit('publish', event, channel, hook, data);
               } else {
