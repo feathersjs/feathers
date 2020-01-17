@@ -131,7 +131,7 @@ export class Service {
   off (name: string, ...args: any[]) {
     if (typeof this.connection.off === 'function') {
       const result = this.connection.off(`${this.path} ${name}`, ...args);
-      
+
       return result === this.connection ? this : result;
     } else if (args.length === 0) {
       // @ts-ignore
