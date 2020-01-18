@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.5.0](https://github.com/feathersjs/feathers/compare/v4.4.3...v4.5.0) (2020-01-18)
+
+
+### Bug Fixes
+
+* Add `params.authentication` type, remove `hook.connection` type ([#1732](https://github.com/feathersjs/feathers/issues/1732)) ([d46b7b2](https://github.com/feathersjs/feathers/commit/d46b7b2abac8862c0e4dbfce20d71b8b8a96692f))
+
+
+
+
+
 ## [4.4.3](https://github.com/feathersjs/feathers/compare/v4.4.1...v4.4.3) (2019-12-06)
 
 **Note:** Version bump only for package @feathersjs/authentication

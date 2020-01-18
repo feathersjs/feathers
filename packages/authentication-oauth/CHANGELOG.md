@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.5.0](https://github.com/feathersjs/feathers/compare/v4.4.3...v4.5.0) (2020-01-18)
+
+
+### Features
+
+* **authentication-oauth:** Set oAuth redirect URL dynamically and pass query the service ([#1737](https://github.com/feathersjs/feathers/issues/1737)) ([0b05f0b](https://github.com/feathersjs/feathers/commit/0b05f0b58a257820fa61d695a36f36455209f6a1))
+
+
+
+
+
 ## [4.4.3](https://github.com/feathersjs/feathers/compare/v4.4.1...v4.4.3) (2019-12-06)
 
 **Note:** Version bump only for package @feathersjs/authentication-oauth
