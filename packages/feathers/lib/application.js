@@ -28,7 +28,10 @@ const application = {
     this.configure(events());
   },
 
-  get (name) {
+  get (name, fallback) {
+    if (!this.settings.hasOwnProperty(name)) {
+      return fallback;
+    }
     return this.settings[name];
   },
 

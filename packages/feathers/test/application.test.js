@@ -235,6 +235,20 @@ describe('Feathers application', () => {
         assert.strictEqual(app.get('foo'), undefined);
       });
 
+      it('should return a fallback value when key unset and fallback given', () => {
+        var app = feathers();
+        assert.strictEqual(app.get('foo', 'bar'), 'bar');
+        assert.strictEqual(app.get('foo'), undefined);
+        assert.strictEqual(app.get('foo', 'baz'), 'baz');
+      });
+
+      it('should not implicitly set a key to fallback value', () => {
+        var app = feathers();
+        assert.strictEqual(app.get('foo', 'bar'), 'bar');
+        assert.strictEqual(app.get('foo'), undefined);
+        assert.strictEqual(app.settings.hasOwnProperty('foo'), false);
+      });
+
       it('should otherwise return the value', () => {
         var app = feathers();
         app.set('foo', 'bar');
