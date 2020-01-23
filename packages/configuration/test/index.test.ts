@@ -5,6 +5,7 @@ import feathers, { Application } from '@feathersjs/feathers';
 describe('@feathersjs/configuration', () => {
   const originalEnv: { [key: string]: any } = {};
   let app: Application;
+  let scopedApp: Application;
   let plugin: any;
 
   before(() => {
@@ -17,6 +18,7 @@ describe('@feathersjs/configuration', () => {
 
     plugin = require('../lib');
     app = feathers().configure(plugin());
+    scopedApp = feathers().configure(plugin('scoped'));
   });
 
   after(() => {
@@ -87,5 +89,10 @@ describe('@feathersjs/configuration', () => {
 
   it('supports null value', () => {
     assert.strictEqual(app.get('nullish'), null);
+  });
+
+  it('initialized with scoped configuration', () => {
+    assert.strictEqual(scopedApp.get('port'), 8080);
+    assert.strictEqual(scopedApp.get('path'), undefined);
   });
 });

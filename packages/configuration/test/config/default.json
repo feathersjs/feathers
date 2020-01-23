@@ -8,5 +8,6 @@
   "deeply": { "nested": { "env": "NODE_ENV" } },
   "array": ["one", "two", "three"],
   "deep": { "base": false },
-  "nullish": null
+  "nullish": null,
+  "scoped": { "port": 8080 }
 }
