@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-client",
   "description": "The authentication plugin for feathers-client",
-  "version": "4.3.10",
+  "version": "4.3.11",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -10,6 +10,10 @@
     "feathers-plugin"
   ],
   "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git"
@@ -39,20 +43,20 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^4.3.10",
+    "@feathersjs/authentication": "^4.3.11",
     "@feathersjs/commons": "^4.3.7",
-    "@feathersjs/errors": "^4.3.10",
-    "@feathersjs/feathers": "^4.3.10",
+    "@feathersjs/errors": "^4.3.11",
+    "@feathersjs/feathers": "^4.3.11",
     "debug": "^4.1.1"
   },
   "devDependencies": {
-    "@feathersjs/authentication-local": "^4.3.10",
-    "@feathersjs/express": "^4.3.10",
-    "@feathersjs/primus": "^4.3.10",
-    "@feathersjs/primus-client": "^4.3.10",
-    "@feathersjs/rest-client": "^4.3.10",
-    "@feathersjs/socketio": "^4.3.10",
-    "@feathersjs/socketio-client": "^4.3.10",
+    "@feathersjs/authentication-local": "^4.3.11",
+    "@feathersjs/express": "^4.3.11",
+    "@feathersjs/primus": "^4.3.11",
+    "@feathersjs/primus-client": "^4.3.11",
+    "@feathersjs/rest-client": "^4.3.11",
+    "@feathersjs/socketio": "^4.3.11",
+    "@feathersjs/socketio-client": "^4.3.11",
     "@types/debug": "^4.1.5",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.7.12",

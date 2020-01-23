@@ -1,4 +1,4 @@
-const query = require('qs');
+const qs = require('qs');
 const { Unavailable } = require('@feathersjs/errors');
 const { _ } = require('@feathersjs/commons');
 const { stripSlashes } = require('@feathersjs/commons');
@@ -20,21 +20,25 @@ class Base {
     this.base = `${settings.base}/${this.name}`;
   }
 
-  makeUrl (params, id) {
-    params = params || {};
+  makeUrl (query, id) {
+    query = query || {};
     let url = this.base;
 
     if (typeof id !== 'undefined' && id !== null) {
       url += `/${encodeURIComponent(id)}`;
     }
 
-    if (Object.keys(params).length !== 0) {
-      const queryString = query.stringify(params);
+    return url + this.getQuery(query);
+  }
 
-      url += `?${queryString}`;
+  getQuery (query) {
+    if (Object.keys(query).length !== 0) {
+      const queryString = qs.stringify(query);
+
+      return `?${queryString}`;
     }
 
-    return url;
+    return '';
   }
 
   find (params = {}) {

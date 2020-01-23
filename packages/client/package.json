@@ -1,12 +1,16 @@
 {
   "name": "@feathersjs/client",
   "description": "A module that consolidates Feathers client modules for REST (jQuery, Request, Superagent) and Websocket (Socket.io, Primus) connections",
-  "version": "4.3.10",
+  "version": "4.3.11",
   "repository": {
     "type": "git",
     "url": "https://github.com/feathersjs/feathers.git"
   },
   "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
   "bugs": {
     "url": "https://github.com/feathersjs/feathers/issues"
   },
@@ -37,16 +41,16 @@
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
-    "@feathersjs/authentication-client": "^4.3.10",
-    "@feathersjs/errors": "^4.3.10",
-    "@feathersjs/express": "^4.3.10",
-    "@feathersjs/feathers": "^4.3.10",
-    "@feathersjs/primus": "^4.3.10",
-    "@feathersjs/primus-client": "^4.3.10",
-    "@feathersjs/rest-client": "^4.3.10",
-    "@feathersjs/socketio": "^4.3.10",
-    "@feathersjs/socketio-client": "^4.3.10",
-    "@feathersjs/tests": "^4.3.10",
+    "@feathersjs/authentication-client": "^4.3.11",
+    "@feathersjs/errors": "^4.3.11",
+    "@feathersjs/express": "^4.3.11",
+    "@feathersjs/feathers": "^4.3.11",
+    "@feathersjs/primus": "^4.3.11",
+    "@feathersjs/primus-client": "^4.3.11",
+    "@feathersjs/rest-client": "^4.3.11",
+    "@feathersjs/socketio": "^4.3.11",
+    "@feathersjs/socketio-client": "^4.3.11",
+    "@feathersjs/tests": "^4.3.11",
     "babel-loader": "^8.0.6",
     "body-parser": "^1.19.0",
     "feathers-memory": "^4.1.0",

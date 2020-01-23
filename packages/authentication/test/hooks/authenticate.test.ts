@@ -112,6 +112,29 @@ describe('authentication/hooks/authenticate', () => {
     assert.deepStrictEqual(result, Object.assign({}, params, Strategy1.result));
   });
 
+  it('authenticates with first strategy, keeps references alive (#1629)', async () => {
+    const connection = {};
+    const params = {
+      connection,
+      authentication: {
+        strategy: 'first',
+        username: 'David'
+      }
+    };
+
+    app.service('users').hooks({
+      after: {
+        get: context => {
+          context.result.params = context.params;
+        }
+      }
+    });
+
+    const result = await app.service('users').get(1, params);
+
+    assert.ok(result.params.connection === connection);
+  });
+
   it('authenticates with different authentication service', async () => {
     const params = {
       authentication: {

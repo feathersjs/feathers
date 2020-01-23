@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/socketio",
   "description": "The Feathers Socket.io real-time API provider",
-  "version": "4.3.10",
+  "version": "4.3.11",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "index.d.ts",
@@ -10,6 +10,10 @@
     "feathers-plugin"
   ],
   "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git"
@@ -36,7 +40,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/transport-commons": "^4.3.10",
+    "@feathersjs/transport-commons": "^4.3.11",
     "@types/socket.io": "^2.1.4",
     "debug": "^4.1.1",
     "socket.io": "^2.3.0",
@@ -44,9 +48,9 @@
   },
   "devDependencies": {
     "@feathersjs/commons": "^4.3.7",
-    "@feathersjs/express": "^4.3.10",
-    "@feathersjs/feathers": "^4.3.10",
-    "@feathersjs/tests": "^4.3.10",
+    "@feathersjs/express": "^4.3.11",
+    "@feathersjs/feathers": "^4.3.11",
+    "@feathersjs/tests": "^4.3.11",
     "feathers-memory": "^4.1.0",
     "lodash": "^4.17.15",
     "mocha": "^6.2.1",

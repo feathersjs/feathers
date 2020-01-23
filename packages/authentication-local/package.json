@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-local",
   "description": "Local authentication strategy for @feathers/authentication",
-  "version": "4.3.10",
+  "version": "4.3.11",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -10,6 +10,10 @@
     "feathers-plugin"
   ],
   "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git"
@@ -39,9 +43,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^4.3.10",
-    "@feathersjs/errors": "^4.3.10",
-    "@feathersjs/feathers": "^4.3.10",
+    "@feathersjs/authentication": "^4.3.11",
+    "@feathersjs/errors": "^4.3.11",
+    "@feathersjs/feathers": "^4.3.11",
     "bcryptjs": "^2.4.3",
     "debug": "^4.1.1",
     "lodash": "^4.17.15"
