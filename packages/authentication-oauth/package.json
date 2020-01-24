@@ -49,8 +49,8 @@
     "@feathersjs/feathers": "^4.5.0",
     "debug": "^4.1.1",
     "express-session": "^1.17.0",
-    "grant": "^4.6.5",
-    "grant-profile": "^0.0.9",
+    "grant": "^4.6.6",
+    "grant-profile": "^0.0.10",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
@@ -59,12 +59,12 @@
     "@types/express-session": "^1.15.16",
     "@types/lodash": "^4.14.149",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^13.1.1",
-    "axios": "^0.19.0",
-    "mocha": "^6.2.2",
+    "@types/node": "^13.5.0",
+    "axios": "^0.19.2",
+    "mocha": "^7.0.0",
     "shx": "^0.3.2",
-    "ts-node": "^8.5.4",
-    "typescript": "^3.7.4"
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }
