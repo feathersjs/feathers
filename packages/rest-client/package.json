@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/rest-client",
   "description": "REST client services for different Ajax libraries",
-  "version": "4.5.0",
+  "version": "4.5.1",
   "homepage": "https://feathersjs.com",
   "main": "lib/index.js",
   "types": "index.d.ts",
@@ -40,8 +40,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^4.5.0",
-    "@feathersjs/errors": "^4.5.0",
+    "@feathersjs/commons": "^4.5.1",
+    "@feathersjs/errors": "^4.5.1",
     "qs": "^6.9.1"
   },
   "devDependencies": {
@@ -49,9 +49,9 @@
     "@angular/core": "^8.2.14",
     "@angular/http": "^7.2.16",
     "@angular/platform-browser": "^8.2.14",
-    "@feathersjs/express": "^4.5.0",
-    "@feathersjs/feathers": "^4.5.0",
-    "@feathersjs/tests": "^4.5.0",
+    "@feathersjs/express": "^4.5.1",
+    "@feathersjs/feathers": "^4.5.1",
+    "@feathersjs/tests": "^4.5.1",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "feathers-memory": "^4.1.0",
