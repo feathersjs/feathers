@@ -166,7 +166,7 @@ describe('hooks basics', () => {
 
       return app.service('dummy').get(10, {}, true).then(context => {
         assert.strictEqual(context.service, app.service('dummy'));
-        assert.strictEqual(context.type, 'after');
+        assert.strictEqual(context.type, 'async');
         assert.strictEqual(context.path, 'dummy');
         assert.deepStrictEqual(context.result, {
           id: 10,

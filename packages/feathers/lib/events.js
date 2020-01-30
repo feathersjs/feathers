@@ -4,9 +4,9 @@ const Proto = require('uberproto');
 // Returns a hook that emits service events. Should always be
 // used as the very last hook in the chain
 const eventHook = exports.eventHook = function eventHook () {
-  return async function (hook, next) {
-    const { app, service } = hook;
-    const eventName = app.eventMappings[hook.method];
+  return async function (ctx, next) {
+    const { app, service } = ctx;
+    const eventName = app.eventMappings[ctx.method];
     const isHookEvent = service._hookEvents && service._hookEvents.indexOf(eventName) !== -1;
 
     try {
@@ -15,10 +15,10 @@ const eventHook = exports.eventHook = function eventHook () {
       throw error;
     } finally {
       // If this event is not being sent yet and we are not in an error hook
-      if (eventName && isHookEvent && hook.type !== 'error') {
-        const results = Array.isArray(hook.result) ? hook.result : [ hook.result ];
+      if (eventName && isHookEvent && ctx.type !== 'error') {
+        const results = Array.isArray(ctx.result) ? ctx.result : [ ctx.result ];
 
-        results.forEach(element => service.emit(eventName, element, hook));
+        results.forEach(element => service.emit(eventName, element, ctx));
       }
     }
   };
@@ -81,7 +81,7 @@ module.exports = function () {
 
     // Register the event hook
     // `finally` hooks always run last after `error` and `after` hooks
-    app.hooks({ async: eventHook() });
+    app.hooks({ finally: eventHook() });
 
     // Make the app an event emitter
     Proto.mixin(EventEmitter.prototype, app);

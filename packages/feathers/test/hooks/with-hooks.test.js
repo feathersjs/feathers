@@ -37,16 +37,17 @@ describe('services withHooks', () => {
     })(data, params, true)
       .then(hook => {
         assert.deepStrictEqual(hook.result, data, 'test result');
-        assert.deepStrictEqual(hook, {
+        assert.deepStrictEqual({ ...hook }, {
           app,
           params,
+          self: svc,
           service: svc,
           method: 'create',
           path: 'svc',
           data,
           _called: 'called',
           result: data,
-          type: 'after',
+          type: 'async',
           arguments: [ data, params ]
         }, 'test hook');
       });
