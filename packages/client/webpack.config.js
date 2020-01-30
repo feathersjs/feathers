@@ -20,7 +20,7 @@ function createConfig (name, isProduction = false) {
     module: {
       rules: [{
         test: /\.js/,
-        exclude: /node_modules\/(?!(@feathersjs|debug|koa-compose))/,
+        exclude: /node_modules\/(?!(@feathersjs|debug))/,
         loader: 'babel-loader',
         options: {
           presets: ['@babel/preset-env']
