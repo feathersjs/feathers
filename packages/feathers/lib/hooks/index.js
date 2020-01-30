@@ -20,14 +20,7 @@ function oldHooksProcess (hooks) {
     Object.assign(ctx, { type: 'before' });
     Object.assign(ctx, await processHooks.call(ctx.service, hooks.before, ctx));
 
-    if (typeof ctx.result !== 'undefined') {
-      ctx.result = ctx.result;
-    }
-
-    // If `ctx.result` is set, skip the original method
-    if (typeof ctx.result === 'undefined') {
-      await next();
-    }
+    await next();
 
     Object.assign(ctx, { type: 'after' });
     Object.assign(ctx, await processHooks.call(ctx.service, hooks.after, ctx));
@@ -44,7 +37,6 @@ function errorHooksProcess (hooks) {
       toThrow = error;
 
       ctx.original = { ...ctx };
-
       ctx.error = error;
       ctx.result = undefined;
 
