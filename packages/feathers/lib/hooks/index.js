@@ -18,7 +18,6 @@ const makeArguments = (service, method, hookObject) => service.methods[ method ]
 function oldHooksProcess (hooks) {
   return async (ctx, next) => {
     Object.assign(ctx, { type: 'before' });
-
     Object.assign(ctx, await processHooks.call(ctx.service, hooks.before, ctx));
 
     if (typeof ctx.result !== 'undefined') {
