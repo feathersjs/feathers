@@ -9,17 +9,11 @@ const eventHook = exports.eventHook = function eventHook () {
     const eventName = event === null ? event : app.eventMappings[method];
     const isHookEvent = service._hookEvents && service._hookEvents.indexOf(eventName) !== -1;
 
-    try {
-      // await next();
-    } catch (error) {
-      throw error;
-    } finally {
-      // If this event is not being sent yet and we are not in an error hook
-      if (eventName && isHookEvent && ctx.type !== 'error') {
-        const results = Array.isArray(ctx.result) ? ctx.result : [ ctx.result ];
+    // If this event is not being sent yet and we are not in an error hook
+    if (eventName && isHookEvent && ctx.type !== 'error') {
+      const results = Array.isArray(ctx.result) ? ctx.result : [ ctx.result ];
 
-        results.forEach(element => service.emit(eventName, element, ctx));
-      }
+      results.forEach(element => service.emit(eventName, element, ctx));
     }
   };
 };

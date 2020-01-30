@@ -96,7 +96,9 @@ export function runMethod (app: Application, connection: RealTimeConnection, pat
     const query = methodArgs[position] || {};
     // `params` have to be re-mapped to the query
     // and added with the route
-    methodArgs[position] = Object.assign({ query, route, connection }, connection);
+    const params = Object.assign({ query, route, connection }, connection);
+
+    methodArgs[position] = params;
 
     // @ts-ignore
     return service[method](...methodArgs, true);
@@ -109,7 +111,7 @@ export function runMethod (app: Application, connection: RealTimeConnection, pat
 
       debug(`Returned successfully ${trace}`, result);
       callback(null, result);
-    }).catch((hook: HookContext) => handleError(hook.error !== undefined ? hook.error : hook));
+    }).catch((hook: HookContext) => handleError(hook.type === 'error' ? hook.error : hook));
   } catch (error) {
     handleError(error);
   }

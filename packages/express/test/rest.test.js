@@ -122,7 +122,6 @@ describe('@feathersjs/express/rest provider', () => {
         delete result.service;
         delete result.app;
         delete result.error;
-        // delete result.original;
 
         return result;
       };
