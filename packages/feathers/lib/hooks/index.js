@@ -105,8 +105,6 @@ const withHooks = function withHooks ({
           throw new Error(`Service method '${hookContext.method}' for '${hookContext.path}' service must return a promise`);
         }
 
-        hookContext.type = 'after';
-
         return promise;
       };
 
