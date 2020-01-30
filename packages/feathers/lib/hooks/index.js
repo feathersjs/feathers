@@ -25,8 +25,6 @@ function oldHooksProcess (hooks) {
       ctx.result = ctx.result;
     }
 
-    Object.assign(ctx, { type: 'async' });
-
     // If `ctx.result` is set, skip the original method
     if (typeof ctx.result === 'undefined') {
       await next();
@@ -34,8 +32,6 @@ function oldHooksProcess (hooks) {
 
     Object.assign(ctx, { type: 'after' });
     Object.assign(ctx, await processHooks.call(ctx.service, hooks.after, ctx));
-
-    Object.assign(ctx, { type: 'async' });
   };
 }
 
@@ -63,7 +59,6 @@ function errorHooksProcess (hooks) {
       }
     } finally {
       try {
-        ctx.type = 'finally';
         Object.assign(ctx, await processHooks.call(ctx.service, hooks.finally, ctx));
         toThrow = ctx.error;
       } catch (errorInFinallyHooks) {
@@ -74,6 +69,7 @@ function errorHooksProcess (hooks) {
     }
 
     if (toThrow) {
+      ctx.type = 'error';
       ctx.error = toThrow;
       throw toThrow;
     }
@@ -103,7 +99,7 @@ const withHooks = function withHooks ({
       const _super = original || service[method].bind(service);
 
       const hookContext = new HookContext(createHookObject(method, {
-        type: 'async', // initial hook object type
+        type: 'before', // initial hook object type
         arguments: args,
         service,
         app

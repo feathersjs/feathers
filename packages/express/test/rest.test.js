@@ -165,7 +165,7 @@ describe('@feathersjs/express/rest provider', () => {
               arguments: [
                 'dishes', paramsWithHeaders
               ],
-              type: 'finally',
+              type: 'after',
               method: 'get',
               path: 'hook',
               result: { description: 'You have to do dishes' },
@@ -249,7 +249,7 @@ describe('@feathersjs/express/rest provider', () => {
                 id: 'dishes',
                 params: paramsWithHeaders,
                 arguments: ['dishes', paramsWithHeaders ],
-                type: 'finally',
+                type: 'error',
                 method: 'get',
                 path: 'hook-error',
                 original: data.hook.original

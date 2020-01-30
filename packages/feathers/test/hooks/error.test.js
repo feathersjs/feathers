@@ -277,7 +277,7 @@ describe('`error` hooks', () => {
 
         error (hook) {
           assert.ok(hook.modified);
-          assert.strictEqual(hook.original.type, 'async');
+          assert.strictEqual(hook.original.type, 'before');
         }
       });
 

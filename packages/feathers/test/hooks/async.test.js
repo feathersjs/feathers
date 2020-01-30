@@ -185,7 +185,7 @@ describe('`async` hooks', () => {
       service.hooks({
         async: {
           create (hook, next) {
-            assert.strictEqual(hook.type, 'async');
+            assert.strictEqual(hook.type, 'before');
 
             hook.data.modified = 'data';
 

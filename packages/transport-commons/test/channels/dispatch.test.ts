@@ -62,7 +62,7 @@ describe('app.publish', () => {
       app.once('publish', (event: string, channel: Channel, hook: HookContext) => {
         assert.strictEqual(event, 'created');
         assert.strictEqual(hook.path, 'test');
-        assert.strictEqual(hook.type, 'finally');
+        assert.strictEqual(hook.type, 'after');
         assert.deepStrictEqual(hook.result, data);
         assert.deepStrictEqual(channel.connections, [ c1 ]);
         done();
