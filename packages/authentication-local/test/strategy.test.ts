@@ -151,7 +151,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
 
     assert.ok(accessToken);
     assert.strictEqual(authResult.user.email, email);
-    assert.strictEqual(authResult.user.passsword, undefined);
+    assert.strictEqual(authResult.user.password, undefined);
     assert.ok(authResult.user.fromGet);
 
     const decoded = await authService.verifyAccessToken(accessToken);
