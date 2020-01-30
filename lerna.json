@@ -3,14 +3,16 @@
   "packages": [
     "packages/*"
   ],
-  "version": "independent",
+  "version": "4.5.1",
   "command": {
     "bootstrap": {
       "hoist": true
     },
     "publish": {
       "allowBranch": "master",
-      "conventionalCommits": true
+      "message": "chore(release): publish %s",
+      "conventionalCommits": true,
+      "createRelease": "github"
     }
   },
   "ignoreChanges": [
@@ -20,7 +22,6 @@
     "**/yarn.lock",
     "**/test/**",
     "lerna.json",
-    "readme.md",
-    "package.json"
+    "readme.md"
   ]
 }

@@ -18,11 +18,11 @@ describe('hooks basics', () => {
 
       return app.service('dummy').get();
     }).catch(e => {
-      assert.strictEqual(e.message, `An id must be provided to the 'get' method`);
+      assert.strictEqual(e.message, `An id must be provided to the 'dummy.get' method`);
     }).then(() =>
       app.service('dummy').create()
     ).catch(e => {
-      assert.strictEqual(e.message, `A data object must be provided to the 'create' method`);
+      assert.strictEqual(e.message, `A data object must be provided to the 'dummy.create' method`);
     });
   });
 
@@ -166,7 +166,7 @@ describe('hooks basics', () => {
 
       return app.service('dummy').get(10, {}, true).then(context => {
         assert.strictEqual(context.service, app.service('dummy'));
-        assert.strictEqual(context.type, 'async');
+        assert.strictEqual(context.type, 'finally');
         assert.strictEqual(context.path, 'dummy');
         assert.deepStrictEqual(context.result, {
           id: 10,
@@ -184,7 +184,7 @@ describe('hooks basics', () => {
 
       return app.service('dummy').get(10, {}, true).catch(context => {
         assert.strictEqual(context.service, app.service('dummy'));
-        assert.strictEqual(context.type, 'error');
+        assert.strictEqual(context.type, 'finally');
         assert.strictEqual(context.path, 'dummy');
         assert.strictEqual(context.error.message, 'Something went wrong');
       });
@@ -199,9 +199,9 @@ describe('hooks basics', () => {
 
       return app.service('dummy').get(undefined, {}, true).catch(context => {
         assert.strictEqual(context.service, app.service('dummy'));
-        assert.strictEqual(context.type, 'error');
+        assert.strictEqual(context.type, 'finally');
         assert.strictEqual(context.path, 'dummy');
-        assert.strictEqual(context.error.message, 'An id must be provided to the \'get\' method');
+        assert.strictEqual(context.error.message, 'An id must be provided to the \'dummy.get\' method');
       });
     });
 
@@ -222,7 +222,7 @@ describe('hooks basics', () => {
 
       return app.service('dummy').get(10, {}, true).catch(context => {
         assert.strictEqual(context.service, app.service('dummy'));
-        assert.strictEqual(context.type, 'error');
+        assert.strictEqual(context.type, 'finally');
         assert.strictEqual(context.path, 'dummy');
         assert.strictEqual(context.error.message, 'Error in error hook');
       });

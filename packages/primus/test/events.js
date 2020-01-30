@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { verify } = require('feathers-commons/lib/test/fixture');
+const { verify } = require('@feathersjs/tests/lib/fixture');
 
 module.exports = function (name, options) {
   const call = (method, ...args) => {
@@ -25,7 +25,8 @@ module.exports = function (name, options) {
   };
 
   describe(`Basic ${name} service events`, () => {
-    let socket, connection;
+    let socket;
+    let connection;
 
     before(done => {
       setTimeout(() => {
@@ -117,7 +118,8 @@ module.exports = function (name, options) {
 
   describe('Event channels', () => {
     const eventName = `${name} created`;
-    let connections, sockets;
+    let connections;
+    let sockets;
 
     before(done => {
       let counter = 0;

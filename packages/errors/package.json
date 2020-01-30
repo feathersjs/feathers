@@ -1,9 +1,10 @@
 {
 	"name": "@feathersjs/errors",
 	"description": "Common error types for Feathers apps",
-	"version": "3.3.6",
+	"version": "4.5.1",
 	"homepage": "https://feathersjs.com",
 	"main": "lib/index",
+	"types": "index.d.ts",
 	"keywords": [
 		"feathers",
 		"feathers-plugin"
@@ -23,7 +24,7 @@
 		"url": "https://github.com/feathersjs/feathers/issues"
 	},
 	"engines": {
-		"node": ">= 6"
+		"node": ">= 10"
 	},
 	"directories": {
 		"lib": "lib"
@@ -35,14 +36,12 @@
 		"access": "public"
 	},
 	"dependencies": {
-		"debug": "^4.0.0"
+		"debug": "^4.1.1"
 	},
 	"devDependencies": {
-		"@feathersjs/feathers": "^3.3.1",
-		"chai": "^4.1.2",
-		"express": "^4.16.3",
-		"mocha": "^5.2.0",
-		"sinon": "^6.1.5",
-		"sinon-chai": "^3.2.0"
-	}
+		"@feathersjs/feathers": "^4.5.1",
+		"express": "^4.17.1",
+		"mocha": "^7.0.0"
+	},
+	"gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }

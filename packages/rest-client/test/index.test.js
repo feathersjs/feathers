@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const feathers = require('@feathersjs/feathers');
 const rest = require('../lib/index');
+const { FetchClient } = require('../lib/index');
 const assert = require('assert');
 
 const init = require('../lib');
@@ -79,19 +80,65 @@ describe('REST client tests', function () {
     const service = app.service('todos');
 
     return service.get().catch(error => {
-      assert.strictEqual(error.message, `An id must be provided to the 'get' method`);
+      assert.strictEqual(error.message, `An id must be provided to the 'todos.get' method`);
 
       return service.remove();
     }).catch(error => {
-      assert.strictEqual(error.message, `An id must be provided to the 'remove' method`);
+      assert.strictEqual(error.message, `An id must be provided to the 'todos.remove' method`);
 
       return service.update();
     }).catch(error => {
-      assert.strictEqual(error.message, `An id must be provided to the 'update' method`);
+      assert.strictEqual(error.message, `An id must be provided to the 'todos.update' method`);
 
       return service.patch();
     }).catch(error => {
-      assert.strictEqual(error.message, `An id must be provided to the 'patch' method`);
+      assert.strictEqual(error.message, `An id must be provided to the 'todos.patch' method`);
+    });
+  });
+
+  it('uses a custom client', () => {
+    const app = feathers();
+    class MyFetchClient extends FetchClient {
+      find () {
+        return Promise.resolve({
+          connection: this.connection,
+          base: this.base,
+          message: 'Custom fetch client'
+        });
+      }
+    }
+
+    app.configure(rest('http://localhost:8889').fetch(fetch, {}, MyFetchClient));
+
+    return app.service('messages').find().then(data => {
+      assert.deepStrictEqual(data, {
+          connection: fetch,
+          base: 'http://localhost:8889/messages',
+          message: 'Custom fetch client'
+        });
+    });
+  });
+
+  it('uses a custom client as second arg', () => {
+    const app = feathers();
+    class MyFetchClient extends FetchClient {
+      find () {
+        return Promise.resolve({
+          connection: this.connection,
+          base: this.base,
+          message: 'Custom fetch client'
+        });
+      }
+    }
+
+    app.configure(rest('http://localhost:8889').fetch(fetch, MyFetchClient));
+
+    return app.service('messages').find().then(data => {
+      assert.deepStrictEqual(data, {
+          connection: fetch,
+          base: 'http://localhost:8889/messages',
+          message: 'Custom fetch client'
+        });
     });
   });
 });

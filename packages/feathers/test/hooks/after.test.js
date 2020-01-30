@@ -120,12 +120,12 @@ describe('`after` hooks', () => {
 
       service.hooks({
         after: {
-          create (hook, next) {
+          create (hook) {
             assert.strictEqual(hook.type, 'after');
 
             hook.result.some = 'thing';
 
-            next(null, hook);
+            return hook;
           }
         }
       });
@@ -147,11 +147,11 @@ describe('`after` hooks', () => {
 
       service.hooks({
         after: {
-          create (hook, next) {
+          create (hook) {
             hook.result.appPresent = typeof hook.app !== 'undefined';
             assert.strictEqual(hook.result.appPresent, true);
 
-            next(null, hook);
+            return hook;
           }
         }
       });
@@ -173,8 +173,8 @@ describe('`after` hooks', () => {
 
       service.hooks({
         after: {
-          update (hook, next) {
-            next(new Error('This did not work'));
+          update () {
+            throw new Error('This did not work');
           }
         }
       });
@@ -221,19 +221,18 @@ describe('`after` hooks', () => {
 
       service.hooks({
         after: {
-          create (hook, next) {
+          create (hook) {
             hook.result.some = 'thing';
-            next();
+
+            return hook;
           }
         }
       });
 
       service.hooks({
         after: {
-          create (hook, next) {
+          create (hook) {
             hook.result.other = 'stuff';
-
-            next();
           }
         }
       });
@@ -260,14 +259,15 @@ describe('`after` hooks', () => {
       service.hooks({
         after: {
           create: [
-            function (hook, next) {
+            function (hook) {
               hook.result.some = 'thing';
-              next();
+
+              return hook;
             },
-            function (hook, next) {
+            function (hook) {
               hook.result.other = 'stuff';
 
-              next();
+              return hook;
             }
           ]
         }
@@ -293,9 +293,10 @@ describe('`after` hooks', () => {
 
       service.hooks({
         after: {
-          get (hook, next) {
+          get (hook) {
             hook.result.items = ['first'];
-            next();
+
+            return hook;
           }
         }
       });
@@ -303,13 +304,15 @@ describe('`after` hooks', () => {
       service.hooks({
         after: {
           get: [
-            function (hook, next) {
+            function (hook) {
               hook.result.items.push('second');
-              next();
+
+              return hook;
             },
-            function (hook, next) {
+            function (hook) {
               hook.result.items.push('third');
-              next();
+
+              return hook;
             }
           ]
         }
@@ -338,18 +341,20 @@ describe('`after` hooks', () => {
 
       service.hooks({
         after: {
-          all (hook, next) {
+          all (hook) {
             hook.result.afterAllObject = true;
-            next();
+
+            return hook;
           }
         }
       });
 
       service.hooks({
         after: [
-          function (hook, next) {
+          function (hook) {
             hook.result.afterAllMethodArray = true;
-            next();
+
+            return hook;
           }
         ]
       });
@@ -380,9 +385,10 @@ describe('`after` hooks', () => {
 
       service.hooks({
         after: {
-          get (hook, next) {
+          get (hook) {
             hook.result.test = this.number + 1;
-            next();
+
+            return hook;
           }
         }
       });
@@ -394,33 +400,6 @@ describe('`after` hooks', () => {
           test: 43
         });
       });
-    });
-
-    it('can not call next() multiple times', () => {
-      const app = feathers().use('/dummy', {
-        get (id) {
-          return Promise.resolve({ id });
-        }
-      });
-
-      const service = app.service('dummy');
-
-      service.hooks({
-        after: {
-          get: [
-            function (hook, next) {
-              next();
-            },
-
-            function (hook, next) {
-              next();
-              next();
-            }
-          ]
-        }
-      });
-
-      return service.get(10);
     });
   });
 });

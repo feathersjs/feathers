@@ -3,7 +3,7 @@ const express = require('@feathersjs/express');
 const assert = require('assert');
 const request = require('request');
 const _ = require('lodash');
-const { Service } = require('feathers-commons/lib/test-fixture');
+const { Service } = require('@feathersjs/tests/lib/fixture');
 
 const primus = require('../lib');
 const methodTests = require('./methods.js');
@@ -29,6 +29,7 @@ describe('@feathersjs/primus', () => {
       }, function (primus) {
         primus.authorize(function (req, done) {
           req.feathers.user = { name: 'David' };
+          options.socketParams.headers = req.feathers.headers;
 
           const { channel } = req.query;
 
@@ -62,24 +63,12 @@ describe('@feathersjs/primus', () => {
     options.server.close(done);
   });
 
-  it('exports default and SOCKET_KEY', () => {
-    assert.ok(primus.SOCKET_KEY);
+  it('exports default', () => {
     assert.strictEqual(primus, primus.default);
   });
 
   it('is CommonJS compatible', () => {
     assert.strictEqual(typeof require('../lib'), 'function');
-  });
-
-  it('throws an error when using an incompatible version of Feathers', () => {
-    const oldFeathers = require('feathers');
-
-    try {
-      oldFeathers().configure(primus());
-      assert.ok(false, 'Should never get here');
-    } catch (e) {
-      assert.strictEqual(e.message, '@feathersjs/primus is not compatible with this version of Feathers. Use the latest at @feathersjs/feathers.');
-    }
   });
 
   it('runs primus before setup (#131)', done => {
@@ -187,6 +176,24 @@ describe('@feathersjs/primus', () => {
       _.extend(service, old);
       done();
     });
+  });
+
+  it('connection and disconnect events (#1243, #1238)', (done) => {
+    const { app, primus } = options;
+    const mySocket = new primus.Socket('http://localhost:7888?channel=dctest');
+
+    app.on('connection', connection => {
+      if (connection.channel === 'dctest') {
+        assert.strictEqual(connection.channel, 'dctest');
+        app.once('disconnect', disconnection => {
+          assert.strictEqual(disconnection.channel, 'dctest');
+          done();
+        });
+        setTimeout(() => mySocket.end(), 100);
+      }
+    });
+
+    assert.ok(mySocket);
   });
 
   describe('Service method calls', () => {

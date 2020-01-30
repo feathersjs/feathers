@@ -1,12 +1,24 @@
-var assert = require('assert');
-var baseTests = require('feathers-commons/lib/test/client');
+const assert = require('assert');
+const baseTests = require('@feathersjs/tests/lib/client');
+const memory = require('feathers-memory');
 
-var feathers = window.feathers;
-var socket = window.io();
+const feathers = require('../dist/feathers');
 
-describe('Universal Feathers client browser tests', function () {
-  var app = feathers()
-    .configure(feathers.socketio(socket))
+// Create an in-memory CRUD service for our Todos
+class TodoService extends memory.Service {
+  get (id, params) {
+    if (params.query.error) {
+      return Promise.reject(new Error('Something went wrong'));
+    }
+
+    return super.get(id).then(data =>
+      Object.assign({ query: params.query }, data)
+    );
+  }
+}
+
+describe('Feathers client browser smoke tests', function () {
+  const app = feathers()
     .use('/myservice', {
       get (id) {
         return Promise.resolve({
@@ -17,7 +29,10 @@ describe('Universal Feathers client browser tests', function () {
       create (data) {
         return Promise.resolve(data);
       }
-    });
+    })
+    .use('/todos', new TodoService({
+      multi: true
+    }));
 
   app.service('myservice').hooks({
     before: {
@@ -31,6 +46,11 @@ describe('Universal Feathers client browser tests', function () {
       }
     }
   });
+
+  before(() => app.service('todos').create({
+    text: 'some todo',
+    complete: false
+  }));
 
   after(() => app.service('todos').remove(null));
 
@@ -49,7 +69,7 @@ describe('Universal Feathers client browser tests', function () {
     });
 
     it('create and event with hook', done => {
-      var myservice = app.service('myservice');
+      const myservice = app.service('myservice');
 
       myservice.once('created', data => {
         assert.deepEqual(data, {
@@ -66,7 +86,7 @@ describe('Universal Feathers client browser tests', function () {
       describe('successful error creation', () => {
         describe('without custom message', () => {
           it('default error', () => {
-            var error = new feathers.errors.GeneralError();
+            const error = new feathers.errors.GeneralError();
             assert.equal(error.code, 500);
             assert.equal(error.message, 'Error');
             assert.equal(error.className, 'general-error');

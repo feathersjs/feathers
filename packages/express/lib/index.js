@@ -1,14 +1,15 @@
 const express = require('express');
 const Proto = require('uberproto');
-const errorHandler = require('@feathersjs/errors/handler');
-const notFound = require('@feathersjs/errors/not-found');
 const debug = require('debug')('@feathersjs/express');
 
+const errorHandler = require('./error-handler');
+const authentication = require('./authentication');
+const notFound = require('./not-found-handler');
 const rest = require('./rest');
 
-function feathersExpress (feathersApp) {
+function feathersExpress (feathersApp, expressApp = express()) {
   if (!feathersApp) {
-    return express();
+    return expressApp;
   }
 
   if (typeof feathersApp.setup !== 'function') {
@@ -19,7 +20,6 @@ function feathersExpress (feathersApp) {
     throw new Error(`@feathersjs/express requires an instance of a Feathers application version 3.x or later (got ${feathersApp.version || 'unknown'})`);
   }
 
-  const expressApp = express();
   // An Uberproto mixin that provides the extended functionality
   const mixin = {
     use (location) {
@@ -27,7 +27,7 @@ function feathersExpress (feathersApp) {
       let middleware = Array.from(arguments)
         .slice(1)
         .reduce(function (middleware, arg) {
-          if (typeof arg === 'function') {
+          if (typeof arg === 'function' || Array.isArray(arg)) {
             middleware[service ? 'after' : 'before'].push(arg);
           } else if (!service) {
             service = arg;
@@ -41,7 +41,7 @@ function feathersExpress (feathersApp) {
         });
 
       const hasMethod = methods => methods.some(name =>
-        (service && !Array.isArray(service) && typeof service[name] === 'function')
+        (service && typeof service[name] === 'function')
       );
 
       // Check for service (any object with at least one service method)
@@ -83,7 +83,7 @@ function feathersExpress (feathersApp) {
 
 module.exports = feathersExpress;
 
-Object.assign(module.exports, express, {
+Object.assign(module.exports, express, authentication, {
   default: feathersExpress,
   original: express,
   rest,

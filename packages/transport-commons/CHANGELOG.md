@@ -3,6 +3,249 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.1](https://github.com/feathersjs/feathers/compare/v4.5.0...v4.5.1) (2020-01-24)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [4.5.0](https://github.com/feathersjs/feathers/compare/v4.4.3...v4.5.0) (2020-01-18)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+## [4.4.3](https://github.com/feathersjs/feathers/compare/v4.4.1...v4.4.3) (2019-12-06)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+## [4.4.1](https://github.com/feathersjs/feathers/compare/v4.4.0...v4.4.1) (2019-11-27)
+
+
+### Bug Fixes
+
+* Gracefully handle errors in publishers ([#1710](https://github.com/feathersjs/feathers/issues/1710)) ([0616306](https://github.com/feathersjs/feathers/commit/061630696762e9dbf1dc4e738094992ba16989fc))
+
+
+
+
+
+# [4.4.0](https://github.com/feathersjs/feathers/compare/v4.3.11...v4.4.0) (2019-11-27)
+
+
+### Bug Fixes
+
+* **transport-commons:** Allow to properly chain SocketIo client.off ([#1706](https://github.com/feathersjs/feathers/issues/1706)) ([a4aecbc](https://github.com/feathersjs/feathers/commit/a4aecbcd3578c1cf4ecffb3a58fb6d26e15ee513))
+
+
+
+
+
+## [4.3.11](https://github.com/feathersjs/feathers/compare/v4.3.10...v4.3.11) (2019-11-11)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+## [4.3.10](https://github.com/feathersjs/feathers/compare/v4.3.9...v4.3.10) (2019-10-26)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+## [4.3.9](https://github.com/feathersjs/feathers/compare/v4.3.8...v4.3.9) (2019-10-26)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+## [4.3.7](https://github.com/feathersjs/feathers/compare/v4.3.6...v4.3.7) (2019-10-14)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+## [4.3.4](https://github.com/feathersjs/feathers/compare/v4.3.3...v4.3.4) (2019-10-03)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+## [4.3.3](https://github.com/feathersjs/feathers/compare/v4.3.2...v4.3.3) (2019-09-21)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+## [4.3.2](https://github.com/feathersjs/feathers/compare/v4.3.1...v4.3.2) (2019-09-16)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+## [4.3.1](https://github.com/feathersjs/feathers/compare/v4.3.0...v4.3.1) (2019-09-09)
+
+
+### Bug Fixes
+
+* Fix regression in transport commons ([#1551](https://github.com/feathersjs/feathers/issues/1551)) ([ed9e934](https://github.com/feathersjs/feathers/commit/ed9e934))
+
+
+
+
+
+# [4.3.0](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.4...v4.3.0) (2019-08-27)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [4.3.0-pre.4](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.3...v4.3.0-pre.4) (2019-08-22)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [4.3.0-pre.3](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.2...v4.3.0-pre.3) (2019-08-19)
+
+
+### Bug Fixes
+
+* Expire and remove authenticated real-time connections ([#1512](https://github.com/feathersjs/feathers/issues/1512)) ([2707c33](https://github.com/feathersjs/feathers/commit/2707c33))
+* Update all dependencies ([7d53a00](https://github.com/feathersjs/feathers/commit/7d53a00))
+* Use WeakMap to connect socket to connection ([#1509](https://github.com/feathersjs/feathers/issues/1509)) ([64807e3](https://github.com/feathersjs/feathers/commit/64807e3))
+
+
+
+
+
+# [4.3.0-pre.2](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.1...v4.3.0-pre.2) (2019-08-02)
+
+
+### Bug Fixes
+
+* Add getEntityId to JWT strategy and fix legacy Socket authentication ([#1488](https://github.com/feathersjs/feathers/issues/1488)) ([9a3b324](https://github.com/feathersjs/feathers/commit/9a3b324))
+* Improve Params typing ([#1474](https://github.com/feathersjs/feathers/issues/1474)) ([54a3aa7](https://github.com/feathersjs/feathers/commit/54a3aa7))
+
+
+
+
+
+# [4.3.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.5...v4.3.0-pre.1) (2019-07-11)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [4.0.0-pre.5](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.4...v4.0.0-pre.5) (2019-07-10)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [4.0.0-pre.4](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.3...v4.0.0-pre.4) (2019-07-05)
+
+
+### Bug Fixes
+
+* Clean up hooks code ([#1407](https://github.com/feathersjs/feathers/issues/1407)) ([f25c88b](https://github.com/feathersjs/feathers/commit/f25c88b))
+* Improve transport-commons types ([#1396](https://github.com/feathersjs/feathers/issues/1396)) ([f9d8536](https://github.com/feathersjs/feathers/commit/f9d8536))
+
+
+
+
+
+# [4.0.0-pre.3](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.2...v4.0.0-pre.3) (2019-06-01)
+
+
+### Bug Fixes
+
+* Make oAuth paths more consistent and improve authentication client ([#1377](https://github.com/feathersjs/feathers/issues/1377)) ([adb2543](https://github.com/feathersjs/feathers/commit/adb2543))
+* Update dependencies and fix tests ([#1373](https://github.com/feathersjs/feathers/issues/1373)) ([d743a7f](https://github.com/feathersjs/feathers/commit/d743a7f))
+
+
+
+
+
+# [4.0.0-pre.2](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.1...v4.0.0-pre.2) (2019-05-15)
+
+
+### Bug Fixes
+
+* Add fallback for legacy socket authenticate event ([#1356](https://github.com/feathersjs/feathers/issues/1356)) ([61b1056](https://github.com/feathersjs/feathers/commit/61b1056))
+* Throw NotAuthenticated on token verification errors ([#1357](https://github.com/feathersjs/feathers/issues/1357)) ([e0120df](https://github.com/feathersjs/feathers/commit/e0120df))
+
+
+### Features
+
+* Add global disconnect event ([#1355](https://github.com/feathersjs/feathers/issues/1355)) ([85afcca](https://github.com/feathersjs/feathers/commit/85afcca))
+
+
+
+
+
+# [4.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.0...v4.0.0-pre.1) (2019-05-08)
+
+
+### Bug Fixes
+
+* Add registerPublisher alias for .publish ([#1302](https://github.com/feathersjs/feathers/issues/1302)) ([98fe8f8](https://github.com/feathersjs/feathers/commit/98fe8f8))
+
+
+
+
+
+# [4.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v3.2.0-pre.1...v4.0.0-pre.0) (2019-04-21)
+
+
+### Bug Fixes
+
+* Compare socket event data using lodash's isEqual instead of indexOf ([#1061](https://github.com/feathersjs/feathers/issues/1061)) ([f706db3](https://github.com/feathersjs/feathers/commit/f706db3))
+* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
+* Update all dependencies to latest ([#1206](https://github.com/feathersjs/feathers/issues/1206)) ([e51e0f6](https://github.com/feathersjs/feathers/commit/e51e0f6))
+* **package:** update debug to version 3.0.0 ([#45](https://github.com/feathersjs/feathers/issues/45)) ([9b9bde5](https://github.com/feathersjs/feathers/commit/9b9bde5))
+
+
+### Features
+
+* Add TypeScript definitions ([#1275](https://github.com/feathersjs/feathers/issues/1275)) ([9dd6713](https://github.com/feathersjs/feathers/commit/9dd6713))
+* Allow registering a service at the root level ([#1115](https://github.com/feathersjs/feathers/issues/1115)) ([c73d322](https://github.com/feathersjs/feathers/commit/c73d322))
+
+
+
+
+
 ## [4.2.1](https://github.com/feathersjs/feathers/compare/@feathersjs/transport-commons@4.2.0...@feathersjs/transport-commons@4.2.1) (2019-01-02)
 
 

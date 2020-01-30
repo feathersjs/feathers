@@ -17,7 +17,7 @@ checks:
       threshold: 20
   method-lines:
     config:
-      threshold: 80
+      threshold: 100
   nested-control-flow:
     config:
       threshold: 6
@@ -37,7 +37,8 @@ plugins:
       count_threshold: 3
 exclude_patterns:	
   - "**/test/*"	
-  - "**/tests/*"	
+  - "**/adapter-commons/src/sort.ts"	
+  - "**/adapter-tests/lib/*"	
   - "**/dist/*"	
   - "**/*.dist.js"	
   - "**/templates/*"

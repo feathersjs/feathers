@@ -5,12 +5,12 @@ const Proto = require('uberproto');
 // used as the very last hook in the chain
 const eventHook = exports.eventHook = function eventHook () {
   return async function (ctx, next) {
-    const { app, service } = ctx;
-    const eventName = app.eventMappings[ctx.method];
+    const { app, service, method, event } = ctx;
+    const eventName = event === null ? event : app.eventMappings[method];
     const isHookEvent = service._hookEvents && service._hookEvents.indexOf(eventName) !== -1;
 
     try {
-      await next();
+      // await next();
     } catch (error) {
       throw error;
     } finally {

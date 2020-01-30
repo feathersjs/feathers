@@ -19,14 +19,21 @@ describe('@feathersjs/express', () => {
     assert.strictEqual(expressify.default, expressify);
     assert.strictEqual(expressify.original, express);
     assert.strictEqual(typeof expressify.rest, 'function');
-    assert.strictEqual(expressify.errorHandler, require('@feathersjs/errors/handler'));
-    assert.strictEqual(expressify.notFound, require('@feathersjs/errors/not-found'));
+    assert.ok(expressify.notFound);
+    assert.ok(expressify.errorHandler);
   });
 
   it('returns an Express application', () => {
     const app = expressify(feathers());
 
     assert.strictEqual(typeof app, 'function');
+  });
+
+  it('allows to use an existing Express instance', () => {
+    const expressApp = express();
+    const app = expressify(feathers(), expressApp);
+
+    assert.strictEqual(app, expressApp);
   });
 
   it('exports `express.rest`', () => {
@@ -216,8 +223,8 @@ describe('@feathersjs/express', () => {
       .use('/secureTodos', todoService);
 
     const httpsServer = https.createServer({
-      key: fs.readFileSync(path.join(__dirname, 'resources', 'privatekey.pem')),
-      cert: fs.readFileSync(path.join(__dirname, 'resources', 'certificate.pem')),
+      key: fs.readFileSync(path.join(__dirname, '..', '..', 'tests', 'resources', 'privatekey.pem')),
+      cert: fs.readFileSync(path.join(__dirname, '..', '..', 'tests', 'resources', 'certificate.pem')),
       rejectUnauthorized: false,
       requestCert: false
     }, app).listen(7889);

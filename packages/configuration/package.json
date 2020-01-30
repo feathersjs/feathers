@@ -1,14 +1,19 @@
 {
   "name": "@feathersjs/configuration",
   "description": "A small configuration module for your Feathers application.",
-  "version": "2.0.6",
+  "version": "4.5.1",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
+  "types": "lib/",
   "keywords": [
     "feathers",
     "feathers-plugin"
   ],
   "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git"
@@ -23,10 +28,13 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">= 10"
   },
   "scripts": {
-    "test": "mocha --opts ../../mocha.opts"
+    "prepublish": "npm run compile",
+    "compile": "shx rm -rf lib/ && tsc",
+    "test": "npm run compile && npm run mocha",
+    "mocha": "mocha --opts ../../mocha.ts.opts --recursive test/**.test.ts test/**/*.test.ts"
   },
   "semistandard": {
     "env": [
@@ -40,11 +48,19 @@
     "access": "public"
   },
   "dependencies": {
-    "config": "^3.0.0",
-    "debug": "^4.0.0"
+    "@feathersjs/feathers": "^4.5.1",
+    "config": "^3.2.5",
+    "debug": "^4.1.1"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "^3.3.1",
-    "mocha": "^5.2.0"
-  }
+    "@types/config": "^0.0.36",
+    "@types/debug": "^4.1.5",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^13.5.0",
+    "mocha": "^7.0.0",
+    "shx": "^0.3.2",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  },
+  "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }

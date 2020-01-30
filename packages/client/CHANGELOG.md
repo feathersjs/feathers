@@ -3,6 +3,238 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.1](https://github.com/feathersjs/feathers/compare/v4.5.0...v4.5.1) (2020-01-24)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+# [4.5.0](https://github.com/feathersjs/feathers/compare/v4.4.3...v4.5.0) (2020-01-18)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+## [4.4.3](https://github.com/feathersjs/feathers/compare/v4.4.1...v4.4.3) (2019-12-06)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+## [4.4.1](https://github.com/feathersjs/feathers/compare/v4.4.0...v4.4.1) (2019-11-27)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+# [4.4.0](https://github.com/feathersjs/feathers/compare/v4.3.11...v4.4.0) (2019-11-27)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+## [4.3.11](https://github.com/feathersjs/feathers/compare/v4.3.10...v4.3.11) (2019-11-11)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+## [4.3.10](https://github.com/feathersjs/feathers/compare/v4.3.9...v4.3.10) (2019-10-26)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+## [4.3.9](https://github.com/feathersjs/feathers/compare/v4.3.8...v4.3.9) (2019-10-26)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+## [4.3.7](https://github.com/feathersjs/feathers/compare/v4.3.6...v4.3.7) (2019-10-14)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+## [4.3.5](https://github.com/feathersjs/feathers/compare/v4.3.4...v4.3.5) (2019-10-07)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+## [4.3.4](https://github.com/feathersjs/feathers/compare/v4.3.3...v4.3.4) (2019-10-03)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+## [4.3.3](https://github.com/feathersjs/feathers/compare/v4.3.2...v4.3.3) (2019-09-21)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+## [4.3.2](https://github.com/feathersjs/feathers/compare/v4.3.1...v4.3.2) (2019-09-16)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+## [4.3.1](https://github.com/feathersjs/feathers/compare/v4.3.0...v4.3.1) (2019-09-09)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+# [4.3.0](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.4...v4.3.0) (2019-08-27)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+# [4.3.0-pre.4](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.3...v4.3.0-pre.4) (2019-08-22)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+# [4.3.0-pre.3](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.2...v4.3.0-pre.3) (2019-08-19)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+# [4.3.0-pre.2](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.1...v4.3.0-pre.2) (2019-08-02)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+# [4.3.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.5...v4.3.0-pre.1) (2019-07-11)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+# [4.0.0-pre.5](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.4...v4.0.0-pre.5) (2019-07-10)
+
+
+### Bug Fixes
+
+* Fix feathers-memory dependency that did not get updated ([9422b13](https://github.com/feathersjs/feathers/commit/9422b13))
+
+
+
+
+
+# [4.0.0-pre.4](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.3...v4.0.0-pre.4) (2019-07-05)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
+# [4.0.0-pre.3](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.2...v4.0.0-pre.3) (2019-06-01)
+
+
+### Bug Fixes
+
+* Update dependencies and fix tests ([#1373](https://github.com/feathersjs/feathers/issues/1373)) ([d743a7f](https://github.com/feathersjs/feathers/commit/d743a7f))
+
+
+
+
+
+# [4.0.0-pre.2](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.1...v4.0.0-pre.2) (2019-05-15)
+
+
+### Bug Fixes
+
+* Use `export =` in TypeScript definitions ([#1285](https://github.com/feathersjs/feathers/issues/1285)) ([12d0f4b](https://github.com/feathersjs/feathers/commit/12d0f4b))
+
+
+
+
+
+# [4.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.0...v4.0.0-pre.1) (2019-05-08)
+
+
+### Bug Fixes
+
+* Improve authentication parameter handling ([#1333](https://github.com/feathersjs/feathers/issues/1333)) ([6e77204](https://github.com/feathersjs/feathers/commit/6e77204))
+
+
+
+
+
+# [4.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v3.2.0-pre.1...v4.0.0-pre.0) (2019-04-21)
+
+
+### Bug Fixes
+
+* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
+* Update all dependencies to latest ([#1206](https://github.com/feathersjs/feathers/issues/1206)) ([e51e0f6](https://github.com/feathersjs/feathers/commit/e51e0f6))
+* **chore:** Properly configure and run code linter ([#1092](https://github.com/feathersjs/feathers/issues/1092)) ([fd3fc34](https://github.com/feathersjs/feathers/commit/fd3fc34))
+
+
+### Features
+
+* Add TypeScript definitions ([#1275](https://github.com/feathersjs/feathers/issues/1275)) ([9dd6713](https://github.com/feathersjs/feathers/commit/9dd6713))
+* Authentication v3 core server implementation ([#1205](https://github.com/feathersjs/feathers/issues/1205)) ([1bd7591](https://github.com/feathersjs/feathers/commit/1bd7591))
+
+
+
+
+
+## [3.7.8](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.7...@feathersjs/client@3.7.8) (2019-01-26)
+
+**Note:** Version bump only for package @feathersjs/client
+
+
+
+
+
 ## [3.7.7](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.6...@feathersjs/client@3.7.7) (2019-01-02)
 
 

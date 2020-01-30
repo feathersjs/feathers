@@ -12,30 +12,25 @@
     "url": "https://feathersjs.com"
   },
   "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
   "bugs": {
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">= 10"
   },
   "scripts": {
     "install": "lerna bootstrap",
-    "publish": "lerna publish",
-    "lint": "semistandard \"packages/**/lib/**/*.js\" \"packages/**/test/**/*.js\" --fix",
-    "test": "npm run lint && nyc lerna run test --ignore @feathersjs/authentication-client",
-    "test:client": "grunt"
-  },
-  "semistandard": {
-    "env": [
-      "mocha"
-    ]
+    "publish": "lerna publish && git commit -am \"chore: Update version and changelog\" && git push origin master",
+    "lint": "tslint 'packages/**/*.js' 'packages/**/*.ts' -c tslint.json --fix",
+    "test": "npm run lint && nyc lerna run test"
   },
   "devDependencies": {
-    "lerna": "^3.4.0",
-    "nyc": "^13.0.1",
-    "semistandard": "^13.0.0",
-    "grunt": "^1.0.3",
-    "grunt-cli": "^1.3.1",
-    "grunt-saucelabs": "^9.0.0"
+    "lerna": "^3.19.0",
+    "nyc": "^15.0.0",
+    "tslint": "^5.20.1"
   }
 }

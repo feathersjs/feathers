@@ -4,7 +4,7 @@ const http = require('http');
 const { socket: commons } = require('@feathersjs/transport-commons');
 const debug = require('debug')('@feathersjs/socketio');
 
-const socketKey = Symbol('@feathersjs/socketio/socket');
+const middleware = require('./middleware');
 
 function configureSocketio (port, options, config) {
   if (typeof port !== 'number') {
@@ -18,9 +18,11 @@ function configureSocketio (port, options, config) {
     options = {};
   }
 
-  return function () {
-    const app = this;
+  return function (app) {
+    // Function that gets the connection
     const getParams = socket => socket.feathers;
+    // A mapping from connection to socket instance
+    const socketMap = new WeakMap();
 
     if (!app.version || app.version < '3.0.0') {
       throw new Error('@feathersjs/socketio is not compatible with this version of Feathers. Use the latest at @feathersjs/feathers.');
@@ -46,33 +48,11 @@ function configureSocketio (port, options, config) {
 
         setup (server) {
           if (!this.io) {
-            const io = this.io = socketio
-              .listen(port || server, options);
+            const io = this.io = socketio.listen(port || server, options);
 
-            io.use((socket, next) => {
-              const connection = {
-                provider: 'socketio'
-              };
-
-              Object.defineProperty(connection, socketKey, {
-                value: socket
-              });
-
-              socket.feathers = connection;
-
-              next();
-            });
-
-            io.use((socket, next) => {
-              socket.once('disconnect', () => {
-                const { channels } = app;
-
-                if (channels.length) {
-                  app.channel(app.channels).leave(getParams(socket));
-                }
-              });
-              next();
-            });
+            io.use(middleware.disconnect(app, getParams));
+            io.use(middleware.params(app, socketMap));
+            io.use(middleware.authentication(app, getParams));
 
             // In Feathers it is easy to hit the standard Node warning limit
             // of event listeners (e.g. by registering 10 services).
@@ -94,7 +74,7 @@ function configureSocketio (port, options, config) {
 
     app.configure(commons({
       done,
-      socketKey,
+      socketMap,
       getParams,
       emit: 'emit'
     }));
@@ -103,4 +83,3 @@ function configureSocketio (port, options, config) {
 
 module.exports = configureSocketio;
 module.exports.default = configureSocketio;
-module.exports.SOCKET_KEY = socketKey;

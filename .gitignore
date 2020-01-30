@@ -25,6 +25,7 @@ build/Release
 # Commenting this out is preferred by some people, see
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git-
 node_modules
+.nyc_output
 
 # Users Environment Variables
 .lock-wscript
@@ -35,3 +36,16 @@ node_modules
 # Distributables
 dist/
 .nyc_output/
+.cache
+.mocha-puppeteer
+
+# TypeScript compiled files
+packages/adapter-commons/lib
+packages/authentication/lib
+packages/authentication-local/lib
+packages/authentication-client/lib
+packages/authentication-oauth/lib
+packages/configuration/lib
+packages/commons/lib
+packages/tests/lib
+packages/transport-commons/lib

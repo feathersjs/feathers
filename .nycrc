@@ -6,11 +6,17 @@
       "mocha"
     ]
   },
+  "extension": [
+    ".ts",
+    ".tsx",
+    ".js"
+  ],
   "exclude": [
     "**/test/*",
     "**/dist/*",
     "**/*.dist.js",
-    "**/templates/*"
+    "**/templates/*",
+    "**/adapter-commons/src/sort.ts"
   ],
   "print": "detail",
   "reporter": [

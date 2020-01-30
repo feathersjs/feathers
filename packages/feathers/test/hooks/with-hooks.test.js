@@ -47,7 +47,7 @@ describe('services withHooks', () => {
           data,
           _called: 'called',
           result: data,
-          type: 'async',
+          type: 'finally',
           arguments: [ data, params ]
         }, 'test hook');
       });

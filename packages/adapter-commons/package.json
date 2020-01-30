@@ -1,12 +1,16 @@
 {
   "name": "@feathersjs/adapter-commons",
-  "version": "1.0.7",
+  "version": "4.5.1",
   "description": "Shared database adapter utility functions",
   "homepage": "https://feathersjs.com",
   "keywords": [
     "feathers"
   ],
   "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git"
@@ -21,11 +25,14 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">= 10"
   },
-  "main": "lib/index.js",
+  "main": "lib/",
+  "types": "lib/",
   "scripts": {
-    "test": "mocha --opts ../../mocha.opts"
+    "prepublish": "npm run compile",
+    "compile": "shx rm -rf lib/ && tsc",
+    "test": "mocha --opts ../../mocha.ts.opts --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"
@@ -33,12 +40,20 @@
   "publishConfig": {
     "access": "public"
   },
-  "devDependencies": {
-    "mocha": "^5.2.0",
-    "mongodb": "^3.1.10"
-  },
   "dependencies": {
-    "@feathersjs/commons": "^4.0.0",
-    "@feathersjs/errors": "^3.3.6"
-  }
+    "@feathersjs/commons": "^4.5.1",
+    "@feathersjs/errors": "^4.5.1",
+    "@feathersjs/feathers": "^4.5.1"
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.7",
+    "@types/mongodb": "^3.3.14",
+    "@types/node": "^13.5.0",
+    "mocha": "^7.0.0",
+    "mongodb": "^3.5.2",
+    "shx": "^0.3.2",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  },
+  "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }

@@ -1,4 +1,3 @@
-const { hooks } = require('@feathersjs/commons');
 const Proto = require('uberproto');
 const Application = require('./application');
 const version = require('./version');
@@ -19,7 +18,6 @@ function createApplication () {
 }
 
 createApplication.version = version;
-createApplication.SKIP = hooks.SKIP;
 createApplication.ACTIVATE_HOOKS = ACTIVATE_HOOKS;
 createApplication.activateHooks = activateHooks;
 

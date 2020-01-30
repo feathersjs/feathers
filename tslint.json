@@ -1,0 +1,42 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "linterOptions": {
+    "exclude": [
+      "packages/adapter-commons/lib/**",
+      "packages/authentication/lib/**",
+      "packages/authentication-local/lib/**",
+      "packages/authentication-client/lib/**",
+      "packages/authentication-oauth/lib/**",
+      "packages/configuration/lib/**",
+      "packages/commons/lib/**",
+      "packages/transport-commons/lib/**",
+      "packages/tests/lib/**",
+      "**/node_modules/**",
+      "**/coverage/**",
+      "**/dist/**",
+      "**/*.dist.js"
+    ]
+  },
+  "rules": {
+    "trailing-comma": [ true, { "multiline": "never", "singleline": "never" } ],
+    "quotemark": [ true, "single", "jsx-double" ],
+    "member-access": [ true, "no-public" ],
+    "space-before-function-paren": true,
+    "variable-name": false,
+    "max-line-length": false,
+    "interface-name": false,
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "arrow-parens": false,
+    "max-classes-per-file": false,
+    "only-arrow-functions": false,
+    "no-empty": false,
+    "no-shadowed-variable": false,
+    "no-namespace": [ true, "allow-declarations" ]
+  },
+  "jsRules": true,
+  "rulesDirectory": []
+}

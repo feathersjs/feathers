@@ -3,6 +3,277 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.1](https://github.com/feathersjs/feathers/compare/v4.5.0...v4.5.1) (2020-01-24)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+# [4.5.0](https://github.com/feathersjs/feathers/compare/v4.4.3...v4.5.0) (2020-01-18)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+## [4.4.3](https://github.com/feathersjs/feathers/compare/v4.4.1...v4.4.3) (2019-12-06)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+## [4.4.1](https://github.com/feathersjs/feathers/compare/v4.4.0...v4.4.1) (2019-11-27)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+# [4.4.0](https://github.com/feathersjs/feathers/compare/v4.3.11...v4.4.0) (2019-11-27)
+
+
+### Bug Fixes
+
+* **authentication-client:** Reset authentication promise on socket disconnect ([#1696](https://github.com/feathersjs/feathers/issues/1696)) ([3951626](https://github.com/feathersjs/feathers/commit/395162633ff22e95833a3c2900cb9464bb5b056f))
+
+
+
+
+
+## [4.3.11](https://github.com/feathersjs/feathers/compare/v4.3.10...v4.3.11) (2019-11-11)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+## [4.3.10](https://github.com/feathersjs/feathers/compare/v4.3.9...v4.3.10) (2019-10-26)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+## [4.3.9](https://github.com/feathersjs/feathers/compare/v4.3.8...v4.3.9) (2019-10-26)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+## [4.3.7](https://github.com/feathersjs/feathers/compare/v4.3.6...v4.3.7) (2019-10-14)
+
+
+### Bug Fixes
+
+* Improve authentication client default storage initialization ([#1613](https://github.com/feathersjs/feathers/issues/1613)) ([d7f5107](https://github.com/feathersjs/feathers/commit/d7f5107ef76297b4ca6db580afc5e2b372f5ee4d))
+
+
+
+
+
+## [4.3.5](https://github.com/feathersjs/feathers/compare/v4.3.4...v4.3.5) (2019-10-07)
+
+
+### Bug Fixes
+
+* Authentication type improvements and timeout fix ([#1605](https://github.com/feathersjs/feathers/issues/1605)) ([19854d3](https://github.com/feathersjs/feathers/commit/19854d3))
+
+
+
+
+
+## [4.3.4](https://github.com/feathersjs/feathers/compare/v4.3.3...v4.3.4) (2019-10-03)
+
+
+### Bug Fixes
+
+* Typing improvements ([#1580](https://github.com/feathersjs/feathers/issues/1580)) ([7818aec](https://github.com/feathersjs/feathers/commit/7818aec))
+
+
+
+
+
+## [4.3.3](https://github.com/feathersjs/feathers/compare/v4.3.2...v4.3.3) (2019-09-21)
+
+
+### Bug Fixes
+
+* Small improvements in dependencies and code sturcture ([#1562](https://github.com/feathersjs/feathers/issues/1562)) ([42c13e2](https://github.com/feathersjs/feathers/commit/42c13e2))
+
+
+
+
+
+## [4.3.2](https://github.com/feathersjs/feathers/compare/v4.3.1...v4.3.2) (2019-09-16)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+## [4.3.1](https://github.com/feathersjs/feathers/compare/v4.3.0...v4.3.1) (2019-09-09)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+# [4.3.0](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.4...v4.3.0) (2019-08-27)
+
+
+### Bug Fixes
+
+* Only remove token on NotAuthenticated error in authentication client and handle error better ([#1525](https://github.com/feathersjs/feathers/issues/1525)) ([13a8758](https://github.com/feathersjs/feathers/commit/13a8758))
+
+
+
+
+
+# [4.3.0-pre.4](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.3...v4.3.0-pre.4) (2019-08-22)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+# [4.3.0-pre.3](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.2...v4.3.0-pre.3) (2019-08-19)
+
+
+### Bug Fixes
+
+* Update all dependencies ([7d53a00](https://github.com/feathersjs/feathers/commit/7d53a00))
+
+
+### Features
+
+* Let strategies handle the connection ([#1510](https://github.com/feathersjs/feathers/issues/1510)) ([4329feb](https://github.com/feathersjs/feathers/commit/4329feb))
+
+
+
+
+
+# [4.3.0-pre.2](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.1...v4.3.0-pre.2) (2019-08-02)
+
+
+### Bug Fixes
+
+* Do not error in authentication client on logout ([#1473](https://github.com/feathersjs/feathers/issues/1473)) ([8211b98](https://github.com/feathersjs/feathers/commit/8211b98))
+
+
+
+
+
+# [4.3.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.5...v4.3.0-pre.1) (2019-07-11)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+# [4.0.0-pre.5](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.4...v4.0.0-pre.5) (2019-07-10)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+# [4.0.0-pre.4](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.3...v4.0.0-pre.4) (2019-07-05)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+# [4.0.0-pre.3](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.2...v4.0.0-pre.3) (2019-06-01)
+
+
+### Bug Fixes
+
+* Make oAuth paths more consistent and improve authentication client ([#1377](https://github.com/feathersjs/feathers/issues/1377)) ([adb2543](https://github.com/feathersjs/feathers/commit/adb2543))
+* Typings fix and improvements. ([#1364](https://github.com/feathersjs/feathers/issues/1364)) ([515b916](https://github.com/feathersjs/feathers/commit/515b916))
+* Update dependencies and fix tests ([#1373](https://github.com/feathersjs/feathers/issues/1373)) ([d743a7f](https://github.com/feathersjs/feathers/commit/d743a7f))
+
+
+
+
+
+# [4.0.0-pre.2](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.1...v4.0.0-pre.2) (2019-05-15)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+# [4.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.0...v4.0.0-pre.1) (2019-05-08)
+
+
+### Bug Fixes
+
+* Guard against null in client side logout function ([#1319](https://github.com/feathersjs/feathers/issues/1319)) ([fa7f057](https://github.com/feathersjs/feathers/commit/fa7f057))
+* Handle error oAuth redirect in authentication client ([#1307](https://github.com/feathersjs/feathers/issues/1307)) ([12d48ee](https://github.com/feathersjs/feathers/commit/12d48ee))
+* Merge httpStrategies and authStrategies option ([#1308](https://github.com/feathersjs/feathers/issues/1308)) ([afa4d55](https://github.com/feathersjs/feathers/commit/afa4d55))
+* Rename jwtStrategies option to authStrategies ([#1305](https://github.com/feathersjs/feathers/issues/1305)) ([4aee151](https://github.com/feathersjs/feathers/commit/4aee151))
+* Update version number check ([53575c5](https://github.com/feathersjs/feathers/commit/53575c5))
+
+
+
+
+
+# [4.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v3.2.0-pre.1...v4.0.0-pre.0) (2019-04-21)
+
+
+### Bug Fixes
+
+* Authentication core improvements ([#1260](https://github.com/feathersjs/feathers/issues/1260)) ([c5dc7a2](https://github.com/feathersjs/feathers/commit/c5dc7a2))
+* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
+* Update all dependencies to latest ([#1206](https://github.com/feathersjs/feathers/issues/1206)) ([e51e0f6](https://github.com/feathersjs/feathers/commit/e51e0f6))
+* **package:** update debug to version 3.0.0 ([#61](https://github.com/feathersjs/feathers/issues/61)) ([6f5009c](https://github.com/feathersjs/feathers/commit/6f5009c))
+
+
+### Features
+
+* @feathersjs/authentication-oauth ([#1299](https://github.com/feathersjs/feathers/issues/1299)) ([656bae7](https://github.com/feathersjs/feathers/commit/656bae7))
+* Add authentication through oAuth redirect to authentication client ([#1301](https://github.com/feathersjs/feathers/issues/1301)) ([35d8043](https://github.com/feathersjs/feathers/commit/35d8043))
+* Add AuthenticationBaseStrategy and make authentication option handling more explicit ([#1284](https://github.com/feathersjs/feathers/issues/1284)) ([2667d92](https://github.com/feathersjs/feathers/commit/2667d92))
+* Add TypeScript definitions ([#1275](https://github.com/feathersjs/feathers/issues/1275)) ([9dd6713](https://github.com/feathersjs/feathers/commit/9dd6713))
+* Authentication v3 client ([#1240](https://github.com/feathersjs/feathers/issues/1240)) ([65b43bd](https://github.com/feathersjs/feathers/commit/65b43bd))
+* Authentication v3 core server implementation ([#1205](https://github.com/feathersjs/feathers/issues/1205)) ([1bd7591](https://github.com/feathersjs/feathers/commit/1bd7591))
+
+
+### BREAKING CHANGES
+
+* Rewrite for authentication v3
+
+
+
+
+
+## [1.0.11](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-client@1.0.10...@feathersjs/authentication-client@1.0.11) (2019-01-26)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
 ## [1.0.10](https://github.com/feathersjs/feathers/compare/@feathersjs/authentication-client@1.0.9...@feathersjs/authentication-client@1.0.10) (2019-01-02)
 
 

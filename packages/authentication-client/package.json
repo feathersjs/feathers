@@ -1,14 +1,19 @@
 {
   "name": "@feathersjs/authentication-client",
   "description": "The authentication plugin for feathers-client",
-  "version": "1.0.10",
+  "version": "4.5.1",
   "homepage": "https://feathersjs.com",
-  "main": "lib/index.js",
+  "main": "lib/",
+  "types": "lib/",
   "keywords": [
     "feathers",
     "feathers-plugin"
   ],
   "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git"
@@ -23,10 +28,13 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">= 10"
   },
   "scripts": {
-    "test": "mocha --opts ../../mocha.opts"
+    "prepublish": "npm run compile",
+    "compile": "shx rm -rf lib/ && tsc",
+    "test": "npm run compile && npm run mocha",
+    "mocha": "mocha --opts ../../mocha.ts.opts --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"
@@ -35,30 +43,28 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/errors": "^3.3.6",
-    "debug": "^4.0.0",
-    "jwt-decode": "^2.1.0"
+    "@feathersjs/authentication": "^4.5.1",
+    "@feathersjs/commons": "^4.5.1",
+    "@feathersjs/errors": "^4.5.1",
+    "@feathersjs/feathers": "^4.5.1",
+    "debug": "^4.1.1"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^2.1.15",
-    "@feathersjs/authentication-jwt": "^2.0.9",
-    "@feathersjs/authentication-local": "^1.2.9",
-    "@feathersjs/express": "^1.3.1",
-    "@feathersjs/feathers": "^3.3.1",
-    "@feathersjs/primus": "^3.2.8",
-    "@feathersjs/primus-client": "^1.1.7",
-    "@feathersjs/rest-client": "^1.4.7",
-    "@feathersjs/socketio": "^3.2.9",
-    "@feathersjs/socketio-client": "^1.2.1",
-    "body-parser": "^1.15.2",
-    "chai": "^4.0.0",
-    "feathers-memory": "^3.0.0",
-    "localstorage-memory": "^1.0.2",
-    "mocha": "^5.2.0",
-    "primus": "^7.0.0",
-    "primus-emitter": "^3.1.1",
-    "socket.io-client": "^2.0.0",
-    "superagent": "^4.0.0",
-    "ws": "^6.0.0"
-  }
+    "@feathersjs/authentication-local": "^4.5.1",
+    "@feathersjs/express": "^4.5.1",
+    "@feathersjs/primus": "^4.5.1",
+    "@feathersjs/primus-client": "^4.5.1",
+    "@feathersjs/rest-client": "^4.5.1",
+    "@feathersjs/socketio": "^4.5.1",
+    "@feathersjs/socketio-client": "^4.5.1",
+    "@types/debug": "^4.1.5",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^13.5.0",
+    "axios": "^0.19.2",
+    "mocha": "^7.0.0",
+    "shx": "^0.3.2",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  },
+  "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }

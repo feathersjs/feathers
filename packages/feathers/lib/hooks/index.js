@@ -19,7 +19,7 @@ function oldHooksProcess (hooks) {
   return async (ctx, next) => {
     Object.assign(ctx, { type: 'before' });
 
-    await processHooks.call(ctx.service, hooks.before, ctx);
+    Object.assign(ctx, await processHooks.call(ctx.service, hooks.before, ctx));
 
     if (typeof ctx.result !== 'undefined') {
       ctx.result = ctx.result;
@@ -33,7 +33,7 @@ function oldHooksProcess (hooks) {
     }
 
     Object.assign(ctx, { type: 'after' });
-    await processHooks.call(ctx.service, hooks.after, ctx);
+    Object.assign(ctx, await processHooks.call(ctx.service, hooks.after, ctx));
 
     Object.assign(ctx, { type: 'async' });
   };
@@ -41,24 +41,41 @@ function oldHooksProcess (hooks) {
 
 function errorHooksProcess (hooks) {
   return async (ctx, next) => {
+    let toThrow;
+
     try {
       await next();
     } catch (error) {
+      toThrow = error;
+
       ctx.original = { ...ctx };
 
-      ctx.result = undefined;
       ctx.error = error;
-      ctx.type = 'error';
+      ctx.result = undefined;
 
       try {
-        await processHooks.call(ctx.service, hooks.error, ctx);
+        Object.assign(ctx, await processHooks.call(ctx.service, hooks.error, ctx));
+        toThrow = ctx.error;
       } catch (errorInErrorHooks) {
+        toThrow = errorInErrorHooks;
         ctx.error = errorInErrorHooks;
+        ctx.result = undefined;
       }
-
-      throw error;
     } finally {
-      await processHooks.call(ctx.service, hooks.finally, ctx);
+      try {
+        ctx.type = 'finally';
+        Object.assign(ctx, await processHooks.call(ctx.service, hooks.finally, ctx));
+        toThrow = ctx.error;
+      } catch (errorInFinallyHooks) {
+        toThrow = errorInFinallyHooks;
+        ctx.error = errorInFinallyHooks;
+        ctx.result = undefined;
+      }
+    }
+
+    if (toThrow) {
+      ctx.error = toThrow;
+      throw toThrow;
     }
   };
 }
@@ -115,15 +132,12 @@ const withHooks = function withHooks ({
       ).call(service, ...args, hookContext)
         .then(() => returnHook ? hookContext : hookContext.result)
         // Handle errors
-        .catch(hook => {
-          if (returnHook) {
-            // Either resolve or reject with the hook object
-            return typeof hookContext.result !== 'undefined' ? hookContext : Promise.reject(hookContext);
+        .catch(() => {
+          if (typeof hookContext.error !== 'undefined' && typeof hookContext.result === 'undefined') {
+            return Promise.reject(returnHook ? hookContext : hookContext.error);
+          } else {
+            return returnHook ? hookContext : hookContext.result;
           }
-
-          // Otherwise return either the result if set (to swallow errors)
-          // Or reject with the hook error
-          return typeof hookContext.result !== 'undefined' ? hookContext.result : Promise.reject(hookContext.error);
         });
     };
   };
