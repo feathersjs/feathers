@@ -115,10 +115,10 @@ const hookMixin = exports.hookMixin = function hookMixin (service) {
           finally: getHooks(app, service, 'finally', method, true)
         };
 
-        if (fn && typeof fn.collect === 'function') {
+        if (fn && typeof fn.original === 'function') {
           return [
             ...getMiddleware(self),
-            ...(fn && typeof fn.collect === 'function' ? fn.collect(fn, fn.original, args) : [])
+            ...(fn && typeof fn.collect === 'function' ? fn.collect(fn, fn.original, args) : getMiddleware(fn))
           ];
         }
 
@@ -126,7 +126,7 @@ const hookMixin = exports.hookMixin = function hookMixin (service) {
           errorHooksProcess(hooks),
           ...baseHooks,
           ...getMiddleware(self),
-          ...(fn && typeof fn.collect === 'function' ? fn.collect(fn, fn.original, args) : []), // TODO remove this
+          ...(fn && typeof fn.collect === 'function' ? fn.collect(fn, fn.original, args) : getMiddleware(fn)),
           ...wrap.call(service, hooks)
         ];
       }
