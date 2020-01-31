@@ -56,32 +56,8 @@ function errorHooksProcess (hooks) {
   };
 }
 
-// A service mixin that adds `service.hooks()` method and functionality
-const hookMixin = exports.hookMixin = function hookMixin (service) {
-  if (typeof service.hooks === 'function') {
-    return;
-  }
-
-  service.methods = Object.getOwnPropertyNames(service)
-    .filter(key => typeof service[key] === 'function' && service[key][ACTIVATE_HOOKS])
-    .reduce((result, methodName) => {
-      result[methodName] = service[methodName][ACTIVATE_HOOKS];
-      return result;
-    }, service.methods || {});
-
-  Object.assign(service.methods, {
-    find: ['params'],
-    get: ['id', 'params'],
-    create: ['data', 'params'],
-    update: ['id', 'data', 'params'],
-    patch: ['id', 'data', 'params'],
-    remove: ['id', 'params']
-  });
-
-  const app = this;
-  const methodNames = Object.keys(service.methods);
-
-  const hookMap = methodNames.reduce((accu, method) => {
+function withHooks (app, service, methods) {
+  const hookMap = methods.reduce((accu, method) => {
     if (typeof service[method] !== 'function') {
       return accu;
     }
@@ -136,6 +112,34 @@ const hookMixin = exports.hookMixin = function hookMixin (service) {
   }, {});
 
   hooksDecorator(service, hookMap);
+}
+
+// A service mixin that adds `service.hooks()` method and functionality
+const hookMixin = exports.hookMixin = function hookMixin (service) {
+  if (typeof service.hooks === 'function') {
+    return;
+  }
+
+  service.methods = Object.getOwnPropertyNames(service)
+    .filter(key => typeof service[key] === 'function' && service[key][ACTIVATE_HOOKS])
+    .reduce((result, methodName) => {
+      result[methodName] = service[methodName][ACTIVATE_HOOKS];
+      return result;
+    }, service.methods || {});
+
+  Object.assign(service.methods, {
+    find: ['params'],
+    get: ['id', 'params'],
+    create: ['data', 'params'],
+    update: ['id', 'data', 'params'],
+    patch: ['id', 'data', 'params'],
+    remove: ['id', 'params']
+  });
+
+  const app = this;
+  const methodNames = Object.keys(service.methods);
+
+  withHooks(app, service, methodNames);
 
   // Usefull only for the `returnHook` backwards compatibility with `true`
   const mixin = methodNames.reduce((mixin, method) => {
