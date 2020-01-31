@@ -56,62 +56,91 @@ function errorHooksProcess (hooks) {
   };
 }
 
+function getContextUpdaters (app, service, method) {
+  const parameters = service.methods[method].map(v => (v === 'params' ? ['params', {}] : v));
+
+  return [
+    withParams(...parameters),
+    withProps({
+      app,
+      service,
+      type: 'before',
+      get path() {
+        if (!service || !app || !app.services) {
+          return null;
+        }
+
+        return Object.keys(app.services)
+          .find(path => app.services[path] === service);
+      }
+    })
+  ];
+}
+
+function getCollector (app, service, method) {
+  return (self, fn, args) => {
+    const hooks = {
+      async: getHooks(app, service, 'async', method),
+      before: getHooks(app, service, 'before', method),
+      after: getHooks(app, service, 'after', method, true),
+      error: getHooks(app, service, 'error', method, true),
+      finally: getHooks(app, service, 'finally', method, true)
+    };
+
+    if (fn && typeof fn.original === 'function') {
+      return [
+        ...getMiddleware(self),
+        ...(fn && typeof fn.collect === 'function' ? fn.collect(fn, fn.original, args) : getMiddleware(fn))
+      ];
+    }
+
+    return [
+      errorHooksProcess(hooks),
+      ...baseHooks,
+      ...getMiddleware(self),
+      ...(fn && typeof fn.collect === 'function' ? fn.collect(fn, fn.original, args) : getMiddleware(fn)),
+      ...wrap.call(service, hooks)
+    ];
+  };
+}
+
 function withHooks (app, service, methods) {
   const hookMap = methods.reduce((accu, method) => {
     if (typeof service[method] !== 'function') {
       return accu;
     }
 
-    const parameters = service.methods[method].map(v => (v === 'params' ? ['params', {}] : v));
-
     accu[method] = {
       middleware: [],
-      context: [
-        withParams(...parameters),
-        withProps({
-          app,
-          service,
-          type: 'before',
-          get path () {
-            if (!service || !app || !app.services) {
-              return null;
-            }
-
-            return Object.keys(app.services)
-              .find(path => app.services[path] === service);
-          }
-        })
-      ],
-      collect: (self, fn, args) => {
-        const hooks = {
-          async: getHooks(app, service, 'async', method),
-          before: getHooks(app, service, 'before', method),
-          after: getHooks(app, service, 'after', method, true),
-          error: getHooks(app, service, 'error', method, true),
-          finally: getHooks(app, service, 'finally', method, true)
-        };
-
-        if (fn && typeof fn.original === 'function') {
-          return [
-            ...getMiddleware(self),
-            ...(fn && typeof fn.collect === 'function' ? fn.collect(fn, fn.original, args) : getMiddleware(fn))
-          ];
-        }
-
-        return [
-          errorHooksProcess(hooks),
-          ...baseHooks,
-          ...getMiddleware(self),
-          ...(fn && typeof fn.collect === 'function' ? fn.collect(fn, fn.original, args) : getMiddleware(fn)),
-          ...wrap.call(service, hooks)
-        ];
-      }
+      context: getContextUpdaters(app, service, method),
+      collect: getCollector(app, service, method)
     };
 
     return accu;
   }, {});
 
   hooksDecorator(service, hookMap);
+}
+
+function mixinMethod() {
+  const service = this;
+  const args = Array.from(arguments);
+
+  const returnHook = args[args.length - 1] === true || args[args.length - 1] instanceof HookContext
+    ? args.pop() : false;
+
+  const hookContext = returnHook instanceof HookContext ? returnHook : new HookContext();
+
+  return this._super.call(service, ...args, hookContext)
+    .then(() => returnHook ? hookContext : hookContext.result)
+    // Handle errors
+    .catch(() => {
+      if (typeof hookContext.error !== 'undefined' && typeof hookContext.result === 'undefined') {
+        return Promise.reject(returnHook ? hookContext : hookContext.error);
+      } else {
+        return returnHook ? hookContext : hookContext.result;
+      }
+    });
 }
 
 // A service mixin that adds `service.hooks()` method and functionality
@@ -147,26 +176,7 @@ const hookMixin = exports.hookMixin = function hookMixin (service) {
       return mixin;
     }
 
-    mixin[method] = function () {
-      const service = this;
-      const args = Array.from(arguments);
-
-      const returnHook = args[args.length - 1] === true || args[args.length - 1] instanceof HookContext
-        ? args.pop() : false;
-
-      const hookContext = returnHook instanceof HookContext ? returnHook : new HookContext();
-
-      return this._super.call(service, ...args, hookContext)
-        .then(() => returnHook ? hookContext : hookContext.result)
-        // Handle errors
-        .catch(() => {
-          if (typeof hookContext.error !== 'undefined' && typeof hookContext.result === 'undefined') {
-            return Promise.reject(returnHook ? hookContext : hookContext.error);
-          } else {
-            return returnHook ? hookContext : hookContext.result;
-          }
-        });
-    };
+    mixin[method] = mixinMethod;
 
     return mixin;
   }, {});
