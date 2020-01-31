@@ -27,16 +27,11 @@ function toAfterHook (hook) {
 }
 
 function beforeWrapper (hooks) {
-  return firstHook
-    .concat(hooks)
-    .map(toBeforeHook);
+  return [firstHook, ...[].concat(hooks).map(toBeforeHook)];
 }
 
 function afterWrapper (hooks) {
-  return [].concat(hooks)
-    .reverse()
-    .map(toAfterHook)
-    .concat(lastHook);
+  return [...[].concat(hooks).reverse().map(toAfterHook), lastHook];
 }
 
 function wrap ({ async = [], before = [], after = [] } = {}) {
