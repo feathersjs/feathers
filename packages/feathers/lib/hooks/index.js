@@ -7,54 +7,13 @@ const {
   withProps
 } = require('@feathersjs/hooks');
 const baseHooks = require('./base');
-const { wrap } = require('./wrappers');
+const { wrap, finallyWrapper, errorWrapper } = require('./wrappers');
 
 const {
   getHooks,
-  processHooks,
   enableHooks,
   ACTIVATE_HOOKS
 } = hookCommons;
-
-function errorHooksProcess (hooks) {
-  return async (ctx, next) => {
-    let toThrow;
-
-    try {
-      await next();
-    } catch (error) {
-      toThrow = error;
-
-      ctx.original = { ...ctx };
-      ctx.error = error;
-      ctx.result = undefined;
-
-      try {
-        Object.assign(ctx, _.omit(await processHooks.call(ctx.service, hooks.error, ctx), 'arguments'));
-        toThrow = ctx.error;
-      } catch (errorInErrorHooks) {
-        toThrow = errorInErrorHooks;
-        ctx.error = errorInErrorHooks;
-        ctx.result = undefined;
-      }
-    } finally {
-      try {
-        Object.assign(ctx, _.omit(await processHooks.call(ctx.service, hooks.finally, ctx), 'arguments'));
-        toThrow = ctx.error;
-      } catch (errorInFinallyHooks) {
-        toThrow = errorInFinallyHooks;
-        ctx.error = errorInFinallyHooks;
-        ctx.result = undefined;
-      }
-    }
-
-    if (typeof toThrow !== 'undefined') {
-      ctx.type = 'error';
-      ctx.error = toThrow;
-      throw toThrow;
-    }
-  };
-}
 
 function getContextUpdaters (app, service, method) {
   const parameters = service.methods[method].map(v => (v === 'params' ? ['params', {}] : v));
@@ -65,7 +24,7 @@ function getContextUpdaters (app, service, method) {
       app,
       service,
       type: 'before',
-      get path() {
+      get path () {
         if (!service || !app || !app.services) {
           return null;
         }
@@ -95,11 +54,12 @@ function getCollector (app, service, method) {
     }
 
     return [
-      errorHooksProcess(hooks),
+      ...finallyWrapper(hooks.finally),
+      ...errorWrapper(hooks.error),
       ...baseHooks,
       ...getMiddleware(self),
       ...(fn && typeof fn.collect === 'function' ? fn.collect(fn, fn.original, args) : getMiddleware(fn)),
-      ...wrap.call(service, hooks)
+      ...wrap(hooks)
     ];
   };
 }
@@ -122,7 +82,7 @@ function withHooks (app, service, methods) {
   hooksDecorator(service, hookMap);
 }
 
-function mixinMethod() {
+function mixinMethod () {
   const service = this;
   const args = Array.from(arguments);
 
