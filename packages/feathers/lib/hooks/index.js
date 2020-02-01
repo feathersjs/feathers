@@ -46,19 +46,20 @@ function getCollector (app, service, method) {
       finally: getHooks(app, service, 'finally', method, true)
     };
 
-    if (fn && typeof fn.original === 'function') {
-      return [
-        ...getMiddleware(self),
-        ...(fn && typeof fn.collect === 'function' ? fn.collect(fn, fn.original, args) : getMiddleware(fn))
-      ];
+    const middleware = [
+      ...getMiddleware(self),
+      ...(fn && typeof fn.collect === 'function' ? fn.collect(fn, fn.original, args) : [])
+    ];
+
+    if (typeof self === 'object') {
+      return middleware;
     }
 
     return [
       ...finallyWrapper(hooks.finally),
       ...errorWrapper(hooks.error),
       ...baseHooks,
-      ...getMiddleware(self),
-      ...(fn && typeof fn.collect === 'function' ? fn.collect(fn, fn.original, args) : getMiddleware(fn)),
+      ...middleware,
       ...wrap(hooks)
     ];
   };
