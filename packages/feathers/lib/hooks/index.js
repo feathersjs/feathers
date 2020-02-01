@@ -1,4 +1,4 @@
-const { hooks: hookCommons, _ } = require('@feathersjs/commons');
+const { hooks: hookCommons } = require('@feathersjs/commons');
 const {
   hooks: hooksDecorator,
   HookContext,
