@@ -5,7 +5,7 @@ const feathers = require('../../lib');
 describe('hooks basics', () => {
   it('mix @feathersjs/hooks and .hooks', async () => {
     const svc = {
-      get(id, params) {
+      get (id, params) {
         return Promise.resolve({ id, user: params.user });
       }
     };
@@ -70,7 +70,7 @@ describe('hooks basics', () => {
       '.hooks 2 after',
       '@hooks 1 after',
       '@hooks 2 after'
-    ])
+    ]);
   });
 
   it('validates arguments', () => {

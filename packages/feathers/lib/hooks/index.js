@@ -7,12 +7,14 @@ const {
   withProps
 } = require('@feathersjs/hooks');
 const baseHooks = require('./base');
-const { wrap, finallyWrapper, errorWrapper } = require('./wrappers');
 
 const {
   getHooks,
   enableHooks,
-  ACTIVATE_HOOKS
+  ACTIVATE_HOOKS,
+  finallyWrapper,
+  errorWrapper,
+  wrap
 } = hookCommons;
 
 function getContextUpdaters (app, service, method) {
