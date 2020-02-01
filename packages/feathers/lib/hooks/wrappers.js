@@ -99,7 +99,7 @@ function finallyWrapper (hooks) {
     }
   };
 
-  return [...[].concat(hooks).reverse().map(hook => toFinallyHook(hook, onError, control))];
+  return [].concat(hooks).reverse().map(hook => toFinallyHook(hook, onError, control));
 }
 
 function errorWrapper (hooks) {
@@ -120,7 +120,7 @@ function errorWrapper (hooks) {
     context.type = 'error';
   };
 
-  return [...[noop].concat(hooks).reverse().map(hook => toErrorHook(hook, onError, control))];
+  return [noop].concat(hooks).reverse().map(hook => toErrorHook(hook, onError, control));
 }
 
 function wrap ({ async = [], before = [], after = [] } = {}) {
