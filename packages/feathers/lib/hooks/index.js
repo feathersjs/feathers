@@ -40,14 +40,6 @@ function getContextUpdaters (app, service, method) {
 
 function getCollector (app, service, method) {
   return (self, fn, args) => {
-    const hooks = {
-      async: getHooks(app, service, 'async', method),
-      before: getHooks(app, service, 'before', method),
-      after: getHooks(app, service, 'after', method, true),
-      error: getHooks(app, service, 'error', method, true),
-      finally: getHooks(app, service, 'finally', method, true)
-    };
-
     const middleware = [
       ...getMiddleware(self),
       ...(fn && typeof fn.collect === 'function' ? fn.collect(fn, fn.original, args) : [])
@@ -56,6 +48,14 @@ function getCollector (app, service, method) {
     if (typeof self === 'object') {
       return middleware;
     }
+
+    const hooks = {
+      async: getHooks(app, service, 'async', method),
+      before: getHooks(app, service, 'before', method),
+      after: getHooks(app, service, 'after', method, true),
+      error: getHooks(app, service, 'error', method, true),
+      finally: getHooks(app, service, 'finally', method, true)
+    };
 
     return [
       ...finallyWrapper(hooks.finally),
