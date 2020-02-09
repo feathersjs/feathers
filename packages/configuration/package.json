@@ -55,7 +55,7 @@
   "devDependencies": {
     "@types/config": "^0.0.36",
     "@types/debug": "^4.1.5",
-    "@types/mocha": "^5.2.7",
+    "@types/mocha": "^7.0.1",
     "@types/node": "^13.5.0",
     "mocha": "^7.0.0",
     "shx": "^0.3.2",
