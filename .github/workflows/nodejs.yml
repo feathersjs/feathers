@@ -17,7 +17,11 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - run: npm install -g codeclimate-test-reporter
     - run: npm install
     - run: npm test
       env:
         CI: true
+    - run: codeclimate-test-reporter < coverage/lcov.info
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE }}
