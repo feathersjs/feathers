@@ -1,4 +1,0 @@
---recursive test/
---timeout 20000
---reporter Dot
---exit

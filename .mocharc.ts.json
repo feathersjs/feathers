@@ -1,0 +1,6 @@
+{
+  "timeout": 20000,
+  "require": [ "ts-node/register", "source-map-support/register" ],
+  "reporter": "Dot",
+  "exit": true
+}

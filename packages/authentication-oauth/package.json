@@ -34,7 +34,7 @@
     "start": "ts-node test/app",
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
-    "test": "mocha --opts ../../mocha.ts.opts --recursive test/**.test.ts test/**/*.test.ts"
+    "test": "mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"
@@ -49,7 +49,7 @@
     "@feathersjs/feathers": "^4.5.1",
     "debug": "^4.1.1",
     "express-session": "^1.17.0",
-    "grant": "^4.6.6",
+    "grant": "^4.7.0",
     "grant-profile": "^0.0.10",
     "lodash": "^4.17.15"
   },
@@ -59,9 +59,9 @@
     "@types/express-session": "^1.15.16",
     "@types/lodash": "^4.14.149",
     "@types/mocha": "^7.0.1",
-    "@types/node": "^13.5.0",
+    "@types/node": "^13.7.0",
     "axios": "^0.19.2",
-    "mocha": "^7.0.0",
+    "mocha": "^7.0.1",
     "shx": "^0.3.2",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"

@@ -31,7 +31,7 @@
     "node": ">= 10"
   },
   "scripts": {
-    "test": "mocha --opts ../../mocha.opts"
+    "test": "mocha --config ../../.mocharc.json"
   },
   "directories": {
     "lib": "lib"
@@ -55,7 +55,7 @@
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "feathers-memory": "^4.1.0",
-    "mocha": "^7.0.0",
+    "mocha": "^7.0.1",
     "node-fetch": "^2.6.0",
     "request": "^2.88.0",
     "rxjs": "^6.5.4",

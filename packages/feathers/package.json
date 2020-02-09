@@ -32,7 +32,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "mocha --opts ../../mocha.opts",
+    "test": "mocha --config ../../.mocharc.json",
     "write-version": "node -e \"console.log('module.exports = \\'' + require('./package.json').version + '\\';')\" > lib/version.js",
     "reset-version": "node -e \"console.log('module.exports = \\'development\\';')\" > lib/version.js",
     "version": "npm run write-version",
@@ -48,10 +48,10 @@
     "@feathersjs/commons": "^4.5.1",
     "debug": "^4.1.1",
     "events": "^3.1.0",
-    "uberproto": "^2.0.4"
+    "uberproto": "^2.0.5"
   },
   "devDependencies": {
-    "mocha": "^7.0.0"
+    "mocha": "^7.0.1"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }
