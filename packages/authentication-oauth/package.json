@@ -58,7 +58,7 @@
     "@types/express": "^4.17.2",
     "@types/express-session": "^1.15.16",
     "@types/lodash": "^4.14.149",
-    "@types/mocha": "^5.2.7",
+    "@types/mocha": "^7.0.1",
     "@types/node": "^13.5.0",
     "axios": "^0.19.2",
     "mocha": "^7.0.0",
