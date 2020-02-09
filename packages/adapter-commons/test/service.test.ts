@@ -35,7 +35,7 @@ describe('@feathersjs/adapter-commons/service', () => {
         return Promise.resolve({ id });
       }
 
-      _create (data: Partial<any> | Array<Partial<any>>, _params?: Params) {
+      _create (data: Partial<any> | Partial<any>[], _params?: Params) {
         return Promise.resolve(data);
       }
 
