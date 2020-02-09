@@ -31,6 +31,6 @@
   "devDependencies": {
     "lerna": "^3.19.0",
     "nyc": "^15.0.0",
-    "tslint": "^5.20.1"
+    "tslint": "^6.0.0"
   }
 }
