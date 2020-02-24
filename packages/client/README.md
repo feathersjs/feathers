@@ -1,6 +1,6 @@
 # @feathersjs/client
 
-[![Build Status](https://travis-ci.org/feathersjs/feathers.svg?branch=master)](https://travis-ci.org/feathersjs/feathers)
+[![CI](https://github.com/feathersjs/feathers/workflows/Node.js%20CI/badge.svg)](https://github.com/feathersjs/feathers/actions?query=workflow%3A%22Node.js+CI%22)
 [![Dependency Status](https://img.shields.io/david/feathersjs/client.svg?style=flat-square)](https://david-dm.org/feathersjs/client)
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/client.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/client)
 

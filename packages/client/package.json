@@ -28,7 +28,7 @@
   "scripts": {
     "clean": "../../node_modules/.bin/shx rm -rf dist/ && ../../node_modules/.bin/shx mkdir -p dist",
     "version": "npm run build",
-    "mocha": "mocha --opts ../../mocha.opts",
+    "mocha": "mocha --config ../../.mocharc.json",
     "test": "npm run build && npm run mocha && npm run test:browser",
     "test:browser": "mocha-puppeteer browser/test.js",
     "build": "npm run clean && npm run webpack",
@@ -39,8 +39,8 @@
     "IE 10"
   ],
   "devDependencies": {
-    "@babel/core": "^7.8.3",
-    "@babel/preset-env": "^7.8.3",
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
     "@feathersjs/authentication-client": "^4.5.1",
     "@feathersjs/errors": "^4.5.1",
     "@feathersjs/express": "^4.5.1",
@@ -55,8 +55,8 @@
     "body-parser": "^1.19.0",
     "feathers-memory": "^4.1.0",
     "jquery": "^3.4.1",
-    "jsdom": "^16.0.1",
-    "mocha": "^7.0.0",
+    "jsdom": "^16.1.0",
+    "mocha": "^7.0.1",
     "mocha-puppeteer": "^0.14.0",
     "node-fetch": "^2.6.0",
     "parallel-webpack": "^2.4.0",
