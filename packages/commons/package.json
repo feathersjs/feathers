@@ -41,7 +41,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/hooks": "^0.3.1"
+    "@feathersjs/hooks": "^0.4.0-alpha.0"
   },
   "devDependencies": {
     "@types/mocha": "^7.0.1",
