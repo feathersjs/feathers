@@ -44,7 +44,7 @@
     "debug": "^4.1.1",
     "primus": "^7.3.4",
     "primus-emitter": "^3.1.1",
-    "uberproto": "^2.0.5"
+    "uberproto": "^2.0.6"
   },
   "devDependencies": {
     "@feathersjs/commons": "^4.5.1",
