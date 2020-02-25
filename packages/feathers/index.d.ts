@@ -119,21 +119,21 @@ declare namespace createApplication {
         readonly type: 'before' | 'after' | 'error';
     }
 
-    interface HookMap {
-        all: Hook | Hook[];
-        find: Hook | Hook[];
-        get: Hook | Hook[];
-        create: Hook | Hook[];
-        update: Hook | Hook[];
-        patch: Hook | Hook[];
-        remove: Hook | Hook[];
+    interface HookMap<T = any> {
+        all: Hook<T> | Hook<T>[];
+        find: Hook<T> | Hook<T>[];
+        get: Hook<T> | Hook<T>[];
+        create: Hook<T> | Hook<T>[];
+        update: Hook<T> | Hook<T>[];
+        patch: Hook<T> | Hook<T>[];
+        remove: Hook<T> | Hook<T>[];
     }
 
-    interface HooksObject {
-        before: Partial<HookMap> | Hook | Hook[];
-        after: Partial<HookMap> | Hook | Hook[];
-        error: Partial<HookMap> | Hook | Hook[];
-        finally?: Partial<HookMap> | Hook | Hook[];
+    interface HooksObject<T = any> {
+        before: Partial<HookMap<T>> | Hook<T> | Hook<T>[];
+        after: Partial<HookMap<T>> | Hook<T> | Hook<T>[];
+        error: Partial<HookMap<T>> | Hook<T> | Hook<T>[];
+        finally?: Partial<HookMap<T>> | Hook<T> | Hook<T>[];
     }
 
     interface ServiceMethods<T> {
