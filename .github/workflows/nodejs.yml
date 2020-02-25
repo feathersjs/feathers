@@ -23,6 +23,5 @@ jobs:
       env:
         CI: true
     - run: codeclimate-test-reporter < coverage/lcov.info
-      if: ${{ secrets.codeclimate }}
       env:
         CODECLIMATE_REPO_TOKEN: ${{ secrets.codeclimate }}
