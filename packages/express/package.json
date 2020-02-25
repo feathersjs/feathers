@@ -46,7 +46,7 @@
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
-    "uberproto": "^2.0.5"
+    "uberproto": "^2.0.6"
   },
   "devDependencies": {
     "@feathersjs/authentication": "^4.5.1",
