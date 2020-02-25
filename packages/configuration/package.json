@@ -49,18 +49,18 @@
   },
   "dependencies": {
     "@feathersjs/feathers": "^4.5.1",
-    "config": "^3.2.5",
+    "config": "^3.2.6",
     "debug": "^4.1.1"
   },
   "devDependencies": {
     "@types/config": "^0.0.36",
     "@types/debug": "^4.1.5",
     "@types/mocha": "^7.0.1",
-    "@types/node": "^13.7.0",
+    "@types/node": "^13.7.4",
     "mocha": "^7.0.1",
     "shx": "^0.3.2",
     "ts-node": "^8.6.2",
-    "typescript": "^3.7.5"
+    "typescript": "^3.8.2"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }

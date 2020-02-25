@@ -86,7 +86,7 @@ export function channels () {
           );
 
           try {
-            Promise.resolve(publisher(data, hook)).then(result => {
+            Promise.resolve(publisher(data, hook)).then((result: any) => {
               if (!result) {
                 return;
               }

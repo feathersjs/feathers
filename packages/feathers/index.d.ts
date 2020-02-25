@@ -143,7 +143,7 @@ declare namespace createApplication {
 
         get (id: Id, params?: Params): Promise<T>;
 
-        create (data: Partial<T> | Array<Partial<T>>, params?: Params): Promise<T | T[]>;
+        create (data: Partial<T> | Partial<T>[], params?: Params): Promise<T | T[]>;
 
         update (id: NullableId, data: T, params?: Params): Promise<T | T[]>;
 
@@ -159,7 +159,7 @@ declare namespace createApplication {
     interface ServiceOverloads<T> {
         create? (data: Partial<T>, params?: Params): Promise<T>;
 
-        create? (data: Array<Partial<T>>, params?: Params): Promise<T[]>;
+        create? (data: Partial<T>[], params?: Params): Promise<T[]>;
 
         update? (id: Id, data: T, params?: Params): Promise<T>;
 
