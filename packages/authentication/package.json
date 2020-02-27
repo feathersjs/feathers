@@ -58,7 +58,7 @@
     "@types/lodash": "^4.14.149",
     "@types/mocha": "^7.0.1",
     "@types/node": "^13.7.4",
-    "@types/uuid": "^3.4.7",
+    "@types/uuid": "^7.0.0",
     "feathers-memory": "^4.1.0",
     "mocha": "^7.0.1",
     "shx": "^0.3.2",
