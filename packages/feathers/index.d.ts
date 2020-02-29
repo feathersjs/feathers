@@ -136,14 +136,14 @@ declare namespace createApplication {
         finally?: Partial<HookMap<T>> | Hook<T> | Hook<T>[];
     }
 
-    interface ServiceMethods<T> {
+    interface ServiceMethods<T, TCreateReq = Partial<T>> {
         [key: string]: any;
 
         find (params?: Params): Promise<T | T[] | Paginated<T>>;
 
         get (id: Id, params?: Params): Promise<T>;
 
-        create (data: Partial<T> | Partial<T>[], params?: Params): Promise<T | T[]>;
+        create (data: TCreateReq | TCreateReq[], params?: Params): Promise<T | T[]>;
 
         update (id: NullableId, data: T, params?: Params): Promise<T | T[]>;
 
@@ -156,10 +156,10 @@ declare namespace createApplication {
         setup (app: Application, path: string): void;
     }
 
-    interface ServiceOverloads<T> {
-        create? (data: Partial<T>, params?: Params): Promise<T>;
+    interface ServiceOverloads<T, TCreateReq = Partial<T>> {
+        create? (data: TCreateReq, params?: Params): Promise<T>;
 
-        create? (data: Partial<T>[], params?: Params): Promise<T[]>;
+        create? (data: TCreateReq[], params?: Params): Promise<T[]>;
 
         update? (id: Id, data: T, params?: Params): Promise<T>;
 
@@ -181,7 +181,7 @@ declare namespace createApplication {
         hooks (hooks: Partial<HooksObject>): this;
     }
 
-    type Service<T> = ServiceOverloads<T> & ServiceAddons<T> & ServiceMethods<T>;
+    type Service<T, TCreateReq = Partial<T>> = ServiceOverloads<T, TCreateReq> & ServiceAddons<T> & ServiceMethods<T, TCreateReq>;
 
     type ServiceMixin = (service: Service<any>, path: string) => void;
 

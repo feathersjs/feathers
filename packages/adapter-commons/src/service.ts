@@ -25,16 +25,16 @@ export interface ServiceOptions {
   filters: string[];
 }
 
-export interface InternalServiceMethods<T = any> {
+export interface InternalServiceMethods<T = any, TCreateReq = Partial<T>> {
     _find (params?: Params): Promise<T | T[] | Paginated<T>>;
     _get (id: Id, params?: Params): Promise<T>;
-    _create (data: Partial<T> | Partial<T>[], params?: Params): Promise<T | T[]>;
+    _create (data: TCreateReq | TCreateReq[], params?: Params): Promise<T | T[]>;
     _update (id: Id, data: T, params?: Params): Promise<T>;
     _patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T | T[]>;
     _remove (id: NullableId, params?: Params): Promise<T | T[]>;
 }
 
-export class AdapterService<T = any> implements ServiceMethods<T> {
+export class AdapterService<T = any, TCreateReq = Partial<T>> implements ServiceMethods<T, TCreateReq> {
   options: ServiceOptions;
 
   constructor (options: Partial<ServiceOptions>) {
@@ -94,7 +94,7 @@ export class AdapterService<T = any> implements ServiceMethods<T> {
     return callMethod(this, '_get', id, params);
   }
 
-  create (data: Partial<T> | Partial<T>[], params?: Params): Promise<T | T[]> {
+  create (data: TCreateReq | TCreateReq[], params?: Params): Promise<T | T[]> {
     if (Array.isArray(data) && !this.allowsMulti('create')) {
       return Promise.reject(new MethodNotAllowed(`Can not create multiple entries`));
     }
