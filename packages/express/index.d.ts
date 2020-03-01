@@ -1,4 +1,4 @@
-import { Application as FeathersApplication, Params as FeathersParams, HookContext } from '@feathersjs/feathers';
+import { Application as FeathersApplication, Params as FeathersParams, HookContext, SetupMethod, ServiceMethods } from '@feathersjs/feathers';
 import express from 'express';
 
 declare const feathersExpress: FeathersExpress;
@@ -46,5 +46,15 @@ declare module 'express-serve-static-core' {
     interface Response {
         data?: any;
         hook?: HookContext;
+    }
+
+    type FeathersService = Partial<ServiceMethods<any> & SetupMethod>;
+
+    interface IRouterMatcher<T> {
+        // tslint:disable-next-line callable-types (Required for declaration merging)
+        <P extends Params = ParamsDictionary, ResBody = any, ReqBody = any>(
+            path: PathParams,
+            ...handlers: (RequestHandler<P, ResBody, ReqBody> | FeathersService | Application)[]
+        ): T;
     }
 }
