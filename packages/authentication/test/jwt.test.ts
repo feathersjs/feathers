@@ -306,6 +306,16 @@ describe('authentication/jwt', () => {
         assert.strictEqual(error.message, `Invalid JwtStrategy option 'authentication.otherJwt.expiresIn'. Did you mean to set it in 'authentication.jwtOptions'?`);
       }
     });
+
+    it('errors when `header` option is an object`', () => {
+      app.get('authentication').otherJwt = {
+        header: { message: 'This is wrong' }
+      };
+
+      assert.throws(() => app.service('authentication').register('otherJwt', new JWTStrategy()), {
+        message: `The 'header' option for the otherJwt strategy must be a string`
+      });
+    });
   });
 
   describe('parse', () => {
