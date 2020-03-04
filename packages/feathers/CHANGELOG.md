@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.2](https://github.com/feathersjs/feathers/compare/v4.5.1...v4.5.2) (2020-03-04)
+
+
+### Bug Fixes
+
+* **typescript:** Make HookMap and HookObject generics. ([#1815](https://github.com/feathersjs/feathers/issues/1815)) ([d10145d](https://github.com/feathersjs/feathers/commit/d10145d91a09aef7bce5af80805a3c0fa9d94f26))
+
+
+
+
+
 ## [4.5.1](https://github.com/feathersjs/feathers/compare/v4.5.0...v4.5.1) (2020-01-24)
 
 **Note:** Version bump only for package @feathersjs/feathers

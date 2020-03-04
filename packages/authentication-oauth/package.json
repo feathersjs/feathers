@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-oauth",
   "description": "oAuth 1 and 2 authentication for Feathers. Powered by Grant.",
-  "version": "4.5.1",
+  "version": "4.5.2",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -43,10 +43,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^4.5.1",
-    "@feathersjs/errors": "^4.5.1",
-    "@feathersjs/express": "^4.5.1",
-    "@feathersjs/feathers": "^4.5.1",
+    "@feathersjs/authentication": "^4.5.2",
+    "@feathersjs/errors": "^4.5.2",
+    "@feathersjs/express": "^4.5.2",
+    "@feathersjs/feathers": "^4.5.2",
     "debug": "^4.1.1",
     "express-session": "^1.17.0",
     "grant": "^4.7.0",
