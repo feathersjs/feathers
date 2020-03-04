@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.2](https://github.com/feathersjs/feathers/compare/v4.5.1...v4.5.2) (2020-03-04)
+
+
+### Bug Fixes
+
+* **test:** typo in password ([#1797](https://github.com/feathersjs/feathers/issues/1797)) ([dfba6ec](https://github.com/feathersjs/feathers/commit/dfba6ec2f21adf3aa739218cf870eaaaa5df6e9c))
+
+
+
+
+
 ## [4.5.1](https://github.com/feathersjs/feathers/compare/v4.5.0...v4.5.1) (2020-01-24)
 
 **Note:** Version bump only for package @feathersjs/authentication-local

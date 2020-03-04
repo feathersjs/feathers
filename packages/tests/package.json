@@ -2,7 +2,7 @@
   "name": "@feathersjs/tests",
   "private": true,
   "description": "Feathers core module common tests",
-  "version": "4.5.1",
+  "version": "4.5.2",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -46,7 +46,7 @@
     "lodash": "^4.17.15"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "^4.5.1",
+    "@feathersjs/feathers": "^4.5.2",
     "@types/axios": "^0.14.0",
     "@types/debug": "^4.1.5",
     "@types/lodash": "^4.14.149",

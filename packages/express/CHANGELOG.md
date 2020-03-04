@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.2](https://github.com/feathersjs/feathers/compare/v4.5.1...v4.5.2) (2020-03-04)
+
+
+### Bug Fixes
+
+* Updated typings for express middleware ([#1839](https://github.com/feathersjs/feathers/issues/1839)) ([6b8e897](https://github.com/feathersjs/feathers/commit/6b8e8971a9dbb08913edd1be48826624645d9dc1))
+
+
+
+
+
 ## [4.5.1](https://github.com/feathersjs/feathers/compare/v4.5.0...v4.5.1) (2020-01-24)
 
 **Note:** Version bump only for package @feathersjs/express
