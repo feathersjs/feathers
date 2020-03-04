@@ -22,7 +22,9 @@ jobs:
     - run: npm test
       env:
         CI: true
-    - run: codeclimate-test-reporter < coverage/lcov.info
-      if: secrets.codeclimate
+    - run: |
+        if [ "$CODECLIMATE_REPO_TOKEN" != "" ]; then
+          codeclimate-test-reporter < coverage/lcov.info
+        fi
       env:
         CODECLIMATE_REPO_TOKEN: ${{ secrets.codeclimate }}
