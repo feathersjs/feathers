@@ -69,6 +69,10 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
         throw new Error(`Invalid JwtStrategy option 'authentication.${this.name}.${key}'. Did you mean to set it in 'authentication.jwtOptions'?`);
       }
     }
+
+    if (typeof this.configuration.header !== 'string') {
+      throw new Error(`The 'header' option for the ${this.name} strategy must be a string`);
+    }
   }
 
   /**

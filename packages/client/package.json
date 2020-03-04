@@ -29,7 +29,7 @@
     "clean": "../../node_modules/.bin/shx rm -rf dist/ && ../../node_modules/.bin/shx mkdir -p dist",
     "version": "npm run build",
     "mocha": "mocha --config ../../.mocharc.json",
-    "test": "npm run build && npm run mocha && npm run test:browser",
+    "test": "npm run build && npm run mocha",
     "test:browser": "mocha-puppeteer browser/test.js",
     "build": "npm run clean && npm run webpack",
     "webpack": "parallel-webpack"
