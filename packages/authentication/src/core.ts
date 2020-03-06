@@ -1,5 +1,5 @@
 import { promisify } from 'util';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 import jsonwebtoken, { SignOptions, Secret, VerifyOptions } from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { NotAuthenticated } from '@feathersjs/errors';

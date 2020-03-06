@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import jwt from 'jsonwebtoken';
 import feathers, { Application, Service } from '@feathersjs/feathers';
 // @ts-ignore

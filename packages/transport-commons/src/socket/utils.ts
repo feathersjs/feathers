@@ -1,5 +1,5 @@
 import Debug from 'debug';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import errors from '@feathersjs/errors';
 import { HookContext, Application } from '@feathersjs/feathers';
 import { CombinedChannel } from '../channels/channel/combined';

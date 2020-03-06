@@ -1,5 +1,5 @@
 import Debug from 'debug';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { AuthenticationBase, AuthenticationResult, AuthenticationRequest } from './core';
 import { connection, event } from './hooks';

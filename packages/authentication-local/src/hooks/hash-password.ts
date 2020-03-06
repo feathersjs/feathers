@@ -1,4 +1,6 @@
-import { get, set, cloneDeep } from 'lodash';
+import get from 'lodash/get';
+import set from 'lodash/set';
+import cloneDeep from 'lodash/cloneDeep';
 import { BadRequest } from '@feathersjs/errors';
 import Debug from 'debug';
 import { HookContext } from '@feathersjs/feathers';
