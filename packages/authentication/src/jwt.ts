@@ -1,5 +1,5 @@
 import Debug from 'debug';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import { IncomingMessage } from 'http';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { Params } from '@feathersjs/feathers';

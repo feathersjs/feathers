@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import { LocalStrategy } from '../src';
 // @ts-ignore
 import createApplication from './fixture';

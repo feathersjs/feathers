@@ -1,4 +1,5 @@
-import { flatten, omit } from 'lodash';
+import flatten from 'lodash/flatten';
+import omit from 'lodash/omit';
 import { HookContext } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
 import Debug from 'debug';

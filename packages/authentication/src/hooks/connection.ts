@@ -1,5 +1,5 @@
 import { HookContext } from '@feathersjs/feathers';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import { AuthenticationBase, ConnectionEvent } from '../core';
 
 export default (event: ConnectionEvent) => async (context: HookContext) => {
