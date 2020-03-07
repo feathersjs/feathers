@@ -42,7 +42,7 @@
   "dependencies": {
     "@feathersjs/commons": "^4.5.2",
     "@feathersjs/errors": "^4.5.2",
-    "@types/express": "^4.17.2",
+    "@types/express": "^4.17.3",
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
@@ -55,7 +55,7 @@
     "@feathersjs/tests": "^4.5.2",
     "axios": "^0.19.2",
     "lodash": "^4.17.15",
-    "mocha": "^7.0.1"
+    "mocha": "^7.1.0"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }
