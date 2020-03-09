@@ -1,6 +1,5 @@
 const jQueryClient = require('./jquery');
 const SuperagentClient = require('./superagent');
-const RequestClient = require('./request');
 const FetchClient = require('./fetch');
 const AxiosClient = require('./axios');
 const AngularClient = require('./angular');
@@ -10,7 +9,6 @@ const AngularHttpClient = require('./angular-http-client');
 const transports = {
   jquery: jQueryClient,
   superagent: SuperagentClient,
-  request: RequestClient,
   fetch: FetchClient,
   axios: AxiosClient,
   angular: AngularClient,
@@ -54,5 +52,5 @@ function restClient (base = '') {
   return result;
 }
 
-module.exports = Object.assign(restClient, { SuperagentClient, FetchClient, jQueryClient, RequestClient, AxiosClient, AngularClient, AngularHttpClient });
+module.exports = Object.assign(restClient, { SuperagentClient, FetchClient, jQueryClient, AxiosClient, AngularClient, AngularHttpClient });
 module.exports.default = restClient;
