@@ -4,7 +4,7 @@ const assert = require('assert');
 const omit = require('lodash/omit');
 const extend = require('lodash/extend');
 const io = require('socket.io-client');
-const request = require('request');
+const axios = require('axios');
 const { Service } = require('@feathersjs/tests/lib/fixture');
 
 const methodTests = require('./methods.js');
@@ -108,21 +108,20 @@ describe('@feathersjs/socketio', () => {
     const app = express(feathers())
       .configure(socketio())
       .use('/test', (req, res) => res.json(data));
-    const srv = app.listen(8992).on('listening', () => {
-      const url = 'http://localhost:8992/socket.io/socket.io.js';
-
-      request(url, (err, res) => {
-        assert.ok(!err);
-        assert.strictEqual(res.statusCode, 200);
-
-        const url = 'http://localhost:8992/test';
-
-        request({ url, json: true }, (err, res) => {
-          assert.ok(!err);
-          assert.deepStrictEqual(res.body, data);
-          srv.close(done);
-        });
+    
+    const srv = app.listen(8992).on('listening', async () => {
+      const response = await axios({
+        url: 'http://localhost:8992/socket.io/socket.io.js'
       });
+
+      assert.strictEqual(response.status, 200);
+
+      const res = await axios({
+        url: 'http://localhost:8992/test'
+      });
+
+      assert.deepStrictEqual(res.data, data);
+      srv.close(done);
     });
   });
 
@@ -131,14 +130,11 @@ describe('@feathersjs/socketio', () => {
       path: '/test/'
     }, ioInstance => assert.ok(ioInstance)));
 
-    let srv = application.listen(8987).on('listening', () => {
-      const url = 'http://localhost:8987/test/socket.io.js';
+    let srv = application.listen(8987).on('listening', async () => {
+      const { status } = await axios('http://localhost:8987/test/socket.io.js');
 
-      // eslint-disable-next-line handle-callback-err
-      request(url, (err, res) => {
-        assert.strictEqual(res.statusCode, 200);
-        srv.close(done);
-      });
+      assert.strictEqual(status, 200);
+      srv.close(done);
     });
   });
 

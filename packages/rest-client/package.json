@@ -57,7 +57,6 @@
     "feathers-memory": "^4.1.0",
     "mocha": "^7.1.1",
     "node-fetch": "^2.6.0",
-    "request": "^2.88.2",
     "rxjs": "^6.5.5",
     "shx": "^0.3.2",
     "superagent": "^5.2.2"
