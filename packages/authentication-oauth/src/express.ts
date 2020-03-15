@@ -17,7 +17,7 @@ const debug = Debug('@feathersjs/authentication-oauth/express');
 
 export default (options: OauthSetupSettings) => {
   return (feathersApp: Application) => {
-    const { authService, linkStrategy } = options;
+    const { authService, linkStrategy, serviceParamsCallback } = options;
     const app = feathersApp as ExpressApplication;
     const config = app.get('grant');
 
@@ -61,6 +61,7 @@ export default (options: OauthSetupSettings) => {
       const service = app.defaultAuthentication(authService);
       const [ strategy ] = service.getStrategies(name) as OAuthStrategy[];
       const params = {
+        ...serviceParamsCallback(req),
         authStrategies: [ name ],
         authentication: accessToken ? {
           strategy: linkStrategy,
