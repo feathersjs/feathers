@@ -5,97 +5,97 @@ update_configs:
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/adapter-commons"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/adapter-tests"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/authentication"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/authentication-client"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/authentication-local"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/authentication-oauth"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/client"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/commons"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/configuration"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/errors"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/express"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/feathers"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/primus"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/primus-client"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/rest-client"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
       - match:
           dependency_name: "@angular/*"
   - package_manager: "javascript"
@@ -103,22 +103,22 @@ update_configs:
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/socketio-client"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/tests"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
   - package_manager: "javascript"
     directory: "/packages/transport-commons"
     update_schedule: "weekly"
     ignored_updates:
       - match:
-          dependency_name: "@feathersjs/tests"
+          dependency_name: "@feathersjs/*"
