@@ -45,10 +45,10 @@
     "qs": "^6.9.1"
   },
   "devDependencies": {
-    "@angular/common": "^9.0.5",
-    "@angular/core": "^9.0.5",
+    "@angular/common": "^9.0.6",
+    "@angular/core": "^9.0.6",
     "@angular/http": "^7.2.16",
-    "@angular/platform-browser": "^9.0.5",
+    "@angular/platform-browser": "^9.0.6",
     "@feathersjs/express": "^4.5.2",
     "@feathersjs/feathers": "^4.5.2",
     "@feathersjs/tests": "^4.5.2",
