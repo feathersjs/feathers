@@ -11,8 +11,19 @@ export class TestOAuthStrategy extends OAuthStrategy {
     if (!data.id) {
       throw new Error('Data needs an id');
     }
-
+    
     return data;
+  }
+
+  async authenticate (data: AuthenticationRequest, params: Params) {
+    const { fromMiddleware } = params;
+    const authResult = await super.authenticate(data, params);
+
+    if (fromMiddleware) {
+      authResult.fromMiddleware = fromMiddleware;
+    }
+
+    return authResult;
   }
 }
 
@@ -46,6 +57,10 @@ app.set('authentication', {
   }
 });
 
+app.use((req, _res, next) => {
+  req.feathers = { fromMiddleware: 'testing' };
+  next();
+});
 app.use('/authentication', auth);
 app.use('/users', memory());
 

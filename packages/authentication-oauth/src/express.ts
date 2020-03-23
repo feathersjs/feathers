@@ -61,6 +61,7 @@ export default (options: OauthSetupSettings) => {
       const service = app.defaultAuthentication(authService);
       const [ strategy ] = service.getStrategies(name) as OAuthStrategy[];
       const params = {
+        ...req.feathers,
         authStrategies: [ name ],
         authentication: accessToken ? {
           strategy: linkStrategy,
