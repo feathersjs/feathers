@@ -55,7 +55,10 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     } else if (event === 'disconnect' || isValidLogout) {
       debug('Removing authentication information and expiration timer from connection');
 
-      delete connection.authentication;
+      Object.keys(connection).forEach(name => {
+        delete connection[name];
+      });
+      
       lt.clearTimeout(this.expirationTimers.get(connection));
       this.expirationTimers.delete(connection);
     }
