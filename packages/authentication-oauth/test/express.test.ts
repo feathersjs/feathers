@@ -27,6 +27,7 @@ describe('@feathersjs/authentication-oauth/express', () => {
 
     assert.ok(data.accessToken);
     assert.equal(data.user.testId, 'expressTest');
+    assert.equal(data.fromMiddleware, 'testing');
   });
 
   it('oauth/test/authenticate with redirect', async () => {
