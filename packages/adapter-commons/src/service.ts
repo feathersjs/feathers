@@ -20,7 +20,10 @@ export interface ServiceOptions {
   events: string[];
   multi: boolean|string[];
   id: string;
-  paginate: any;
+  paginate: {
+    default?: number;
+    max?: number;
+  }
   whitelist: string[];
   filters: string[];
 }
