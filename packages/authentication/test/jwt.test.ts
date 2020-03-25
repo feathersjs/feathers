@@ -149,6 +149,7 @@ describe('authentication/jwt', () => {
       });
 
       assert.ok(!connection.authentication);
+      assert.ok(!connection.user);
     });
 
     it('does not remove if accessToken does not match', async () => {
