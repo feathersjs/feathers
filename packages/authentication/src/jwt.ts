@@ -3,8 +3,7 @@ import omit from 'lodash/omit';
 import { IncomingMessage } from 'http';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { Params } from '@feathersjs/feathers';
-// @ts-ignore
-import lt from 'long-timeout';
+import {setLongTimeout, clearLongTimeout} from 'long-settimeout';
 
 import { AuthenticationBaseStrategy } from './strategy';
 import { AuthenticationRequest, AuthenticationResult, ConnectionEvent } from './core';
@@ -41,10 +40,10 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       const duration = (exp * 1000) - Date.now();
       // This may have to be a `logout` event but right now we don't want
       // the whole context object lingering around until the timer is gone
-      const timer = lt.setTimeout(() => this.app.emit('disconnect', connection), duration);
+      const timer = setLongTimeout(() => this.app.emit('disconnect', connection), duration);
 
       debug(`Registering connection expiration timer for ${duration}ms`);
-      lt.clearTimeout(this.expirationTimers.get(connection));
+      clearLongTimeout(this.expirationTimers.get(connection));
       this.expirationTimers.set(connection, timer);
 
       debug('Adding authentication information to connection');
@@ -56,7 +55,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       debug('Removing authentication information and expiration timer from connection');
 
       delete connection.authentication;
-      lt.clearTimeout(this.expirationTimers.get(connection));
+      clearLongTimeout(this.expirationTimers.get(connection));
       this.expirationTimers.delete(connection);
     }
   }
