@@ -77,7 +77,7 @@ declare namespace createApplication {
          * A read only property with the name of the service method (one of find, get,
          * create, update, patch, remove).
          */
-        readonly method: string;
+        readonly method: 'find' | 'get' | 'create' | 'update' | 'patch' | 'remove';
         /**
          * A writeable property that contains the service method parameters (including
          * params.query).
