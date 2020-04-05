@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: '0 0 * * 1'
 name: Update packages
 jobs:
   release:
@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Update npm packages
-        uses: technote-space/create-pr-action@v1
+        uses: technote-space/create-pr-action@v2.0.3
         with:
           EXECUTE_COMMANDS: |
             npm install
