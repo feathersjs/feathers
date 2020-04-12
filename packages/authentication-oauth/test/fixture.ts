@@ -11,7 +11,7 @@ export class TestOAuthStrategy extends OAuthStrategy {
     if (!data.id) {
       throw new Error('Data needs an id');
     }
-    
+
     return data;
   }
 
