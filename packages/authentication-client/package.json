@@ -52,8 +52,6 @@
   "devDependencies": {
     "@feathersjs/authentication-local": "^4.5.2",
     "@feathersjs/express": "^4.5.2",
-    "@feathersjs/primus": "^4.5.2",
-    "@feathersjs/primus-client": "^4.5.2",
     "@feathersjs/rest-client": "^4.5.2",
     "@feathersjs/socketio": "^4.5.2",
     "@feathersjs/socketio-client": "^4.5.2",
