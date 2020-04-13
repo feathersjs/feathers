@@ -51,7 +51,7 @@
     "@types/debug": "^4.1.5",
     "@types/lodash": "^4.14.149",
     "@types/mocha": "^7.0.2",
-    "@types/node": "^13.11.0",
+    "@types/node": "^13.11.1",
     "mocha": "^7.1.1",
     "shx": "^0.3.2",
     "ts-node": "^8.8.2",
