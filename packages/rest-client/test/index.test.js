@@ -12,7 +12,6 @@ describe('REST client tests', function () {
 
     assert.strictEqual(typeof init, 'function');
     assert.strictEqual(typeof transports.jquery, 'function');
-    assert.strictEqual(typeof transports.request, 'function');
     assert.strictEqual(typeof transports.superagent, 'function');
     assert.strictEqual(typeof transports.fetch, 'function');
   });
