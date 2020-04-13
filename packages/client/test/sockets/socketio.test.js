@@ -3,7 +3,7 @@ const socketio = require('@feathersjs/socketio');
 const baseTests = require('@feathersjs/tests/lib/client');
 
 const app = require('../fixture');
-const feathers = require('../../');
+const feathers = require('../../src');
 
 describe('Socket.io connector', function () {
   const socket = io('http://localhost:9988');
