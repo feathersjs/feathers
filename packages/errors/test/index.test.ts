@@ -174,12 +174,10 @@ describe('@feathersjs/errors', () => {
     });
 
     it('instantiates every error', () => {
-      Object.keys(errors).forEach(name => {
-        if (name === 'convert') {
-          return;
-        }
+      const index: any = errors.errors;
 
-        const E = (errors as any).index[name];
+      Object.keys(index).forEach(name => {
+        const E = index[name];
 
         if (E) {
           // tslint:disable-next-line

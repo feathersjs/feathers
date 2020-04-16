@@ -250,7 +250,7 @@ export function convert (error: any) {
     return error;
   }
 
-  const FeathersError = (index as any)[error.name];
+  const FeathersError = (errors as any)[error.name];
   const result = FeathersError
     ? new FeathersError(error.message, error.data)
     : new Error(error.message || error);
