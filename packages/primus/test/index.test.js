@@ -1,7 +1,7 @@
 const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 const assert = require('assert');
-const request = require('request');
+const axios = require('axios');
 const omit = require('lodash/omit');
 const extend = require('lodash/extend');
 const { Service } = require('@feathersjs/tests/lib/fixture');
@@ -96,21 +96,20 @@ describe('@feathersjs/primus', () => {
   });
 
   it('expressified app works', done => {
-    const data = { message: 'Hello world' };
+    const expected = { message: 'Hello world' };
     const app = express(feathers())
       .configure(primus({
         transformer: 'websockets'
       }))
-      .use('/test', (req, res) => res.json(data));
+      .use('/test', (req, res) => res.json(expected));
 
-    const srv = app.listen(8993).on('listening', () => {
+    const srv = app.listen(8993).on('listening', async () => {
       const url = 'http://localhost:8993/test';
 
-      request({ url, json: true }, (err, res) => {
-        assert.ok(!err);
-        assert.deepStrictEqual(res.body, data);
-        srv.close(done);
-      });
+      const { data } = await axios({ url });
+
+      assert.deepStrictEqual(data, expected);
+      srv.close(done);
     });
   });
 

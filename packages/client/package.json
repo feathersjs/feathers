@@ -60,7 +60,6 @@
     "mocha-puppeteer": "^0.14.0",
     "node-fetch": "^2.6.0",
     "parallel-webpack": "^2.6.0",
-    "request": "^2.88.2",
     "socket.io-client": "^2.3.0",
     "superagent": "^5.2.2",
     "uglifyjs-webpack-plugin": "^2.2.0",
