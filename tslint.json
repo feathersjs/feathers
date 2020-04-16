@@ -11,6 +11,7 @@
       "packages/authentication-oauth/lib/**",
       "packages/configuration/lib/**",
       "packages/commons/lib/**",
+      "packages/errors/lib/**",
       "packages/transport-commons/lib/**",
       "packages/tests/lib/**",
       "**/node_modules/**",
