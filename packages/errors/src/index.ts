@@ -10,13 +10,8 @@ export interface FeathersErrorJSON {
 export type DynamicError = Error & { [key: string]: any };
 export type ErrorMessage = string | DynamicError | { [key: string]: any } | any[];
 
-interface ErrorProperties {
-  name: string;
-  code: number;
-  className: string;
+interface ErrorProperties extends Omit<FeathersErrorJSON, 'message'> {
   type: string;
-  data?: any;
-  errors?: any;
 }
 
 export class FeathersError extends Error {
