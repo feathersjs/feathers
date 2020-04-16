@@ -61,8 +61,6 @@ module.exports = [
   createConfig('rest', true),
   createConfig('socketio'),
   createConfig('socketio', true),
-  createConfig('primus'),
-  createConfig('primus', true),
   createConfig('authentication'),
   createConfig('authentication', true)
 ];
