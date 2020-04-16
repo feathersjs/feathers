@@ -1,6 +1,6 @@
 import feathers from '@feathersjs/feathers';
 import authentication from '@feathersjs/authentication-client';
-import errors from '@feathersjs/errors';
+import * as errors from '@feathersjs/errors';
 import rest from '@feathersjs/rest-client';
 import socketio from '@feathersjs/socketio-client';
 

@@ -1,6 +1,6 @@
 import Debug from 'debug';
 import isEqual from 'lodash/isEqual';
-import errors from '@feathersjs/errors';
+import { NotFound, MethodNotAllowed } from '@feathersjs/errors';
 import { HookContext, Application } from '@feathersjs/feathers';
 import { CombinedChannel } from '../channels/channel/combined';
 import { RealTimeConnection } from '../channels/channel/base';
@@ -81,7 +81,7 @@ export function runMethod (app: Application, connection: RealTimeConnection, pat
     // No valid service was found, return a 404
     // just like a REST route would
     if (lookup === null) {
-      return Promise.reject(new errors.NotFound(`Service '${path}' not found`));
+      return Promise.reject(new NotFound(`Service '${path}' not found`));
     }
 
     const { service, params: route = {} } = lookup;
@@ -89,7 +89,7 @@ export function runMethod (app: Application, connection: RealTimeConnection, pat
     // Only service methods are allowed
     // @ts-ignore
     if (paramsPositions[method] === undefined || typeof service[method] !== 'function') {
-      return Promise.reject(new errors.MethodNotAllowed(`Method '${method}' not allowed on service '${path}'`));
+      return Promise.reject(new MethodNotAllowed(`Method '${method}' not allowed on service '${path}'`));
     }
 
     const position = paramsPositions[method];

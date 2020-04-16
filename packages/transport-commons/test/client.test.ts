@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { EventEmitter } from 'events';
-import errors from '@feathersjs/errors';
+import { NotAuthenticated } from '@feathersjs/errors';
 import { Service } from '../src/client';
 
 declare type DummyCallback = (err: any, data?: any) => void;
@@ -143,11 +143,11 @@ describe('client', () => {
 
   it('converts to feathers-errors (#19)', () => {
     connection.once('create', (_path: any, _data: any, _params: any, callback: DummyCallback) =>
-      callback(new errors.NotAuthenticated('Test', { hi: 'me' }).toJSON())
+      callback(new NotAuthenticated('Test', { hi: 'me' }).toJSON())
     );
 
     return service.create(testData).catch(error => {
-      assert.ok(error instanceof errors.NotAuthenticated);
+      assert.ok(error instanceof NotAuthenticated);
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Test');
       assert.strictEqual(error.code, 401);

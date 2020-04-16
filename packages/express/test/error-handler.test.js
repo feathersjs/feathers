@@ -69,9 +69,7 @@ describe('error-handler', () => {
             name: 'GeneralError',
             message: 'Something went wrong',
             code: 500,
-            className: 'general-error',
-            data: {},
-            errors: {}
+            className: 'general-error'
           });
         }
       });
@@ -248,9 +246,7 @@ describe('error-handler', () => {
             name: 'GeneralError',
             message: 'Something went wrong',
             code: 500,
-            className: 'general-error',
-            data: {},
-            errors: {}
+            className: 'general-error'
           });
         }
       });
@@ -313,9 +309,7 @@ describe('error-handler', () => {
             name: 'GeneralError',
             message: 'Something went wrong',
             code: 500,
-            className: 'general-error',
-            data: {},
-            errors: {}
+            className: 'general-error'
           });
         }
       });
@@ -335,8 +329,7 @@ describe('error-handler', () => {
           assert.deepEqual(error.response.data, { name: 'NotFound',
             message: 'File not found',
             code: 404,
-            className: 'not-found',
-            errors: {}
+            className: 'not-found'
           });
         }
       });
@@ -357,9 +350,7 @@ describe('error-handler', () => {
             message: 'Invalid Password',
             code: 400,
             className: 'bad-request',
-            data: {
-              message: 'Invalid Password'
-            },
+            data: {},
             errors: [{
               path: 'password',
               value: null,
@@ -381,9 +372,7 @@ describe('error-handler', () => {
           message: 'Invalid Password',
           code: 400,
           className: 'bad-request',
-          data: {
-            message: 'Invalid Password'
-          },
+          data: {},
           errors: [{
             path: 'password',
             value: null,
