@@ -213,6 +213,8 @@ describe('@feathersjs/errors', () => {
         assert.strictEqual(error.code, 500);
         assert.strictEqual(error.className, 'general-error');
         assert.strictEqual(error.message, 'Error');
+        assert.strictEqual(error.data, undefined);
+        assert.strictEqual(error.errors, undefined);
         assert.notStrictEqual(error.stack, undefined);
         assert.strictEqual(error instanceof errors.GeneralError, true);
         assert.strictEqual(error instanceof errors.FeathersError, true);

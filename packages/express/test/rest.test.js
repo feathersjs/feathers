@@ -576,8 +576,7 @@ describe('@feathersjs/express/rest provider', () => {
             name: 'BadRequest',
             message: 'Not good',
             code: 400,
-            className: 'bad-request',
-            errors: {}
+            className: 'bad-request'
           });
         });
     });

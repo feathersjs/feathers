@@ -1,56 +1,71 @@
 export interface FeathersErrorJSON {
-  readonly name: string;
-  readonly message: string;
-  readonly code: number;
-  readonly className: string;
-  readonly data: any;
-  readonly errors: any;
+  name: string;
+  message: string;
+  code: number;
+  className: string;
+  data?: any;
+  errors?: any;
 }
 
 export type DynamicError = Error & { [key: string]: any };
 export type ErrorMessage = string | DynamicError | { [key: string]: any } | any[];
 
+interface ErrorProperties {
+  name: string;
+  code: number;
+  className: string;
+  type: string;
+  data?: any;
+  errors?: any;
+}
+
 export class FeathersError extends Error {
+  readonly type: string;
   readonly code: number;
   readonly className: string;
   readonly data: any;
   readonly errors: any;
 
-  constructor (err: ErrorMessage, name: string, code: number, className: string, _data: any = {}) {
-    let message = typeof err === 'string' ? err : 'Error';
-    const properties = {
+  constructor (err: ErrorMessage, name: string, code: number, className: string, _data: any) {
+    let msg = typeof err === 'string' ? err : 'Error';
+    const properties: ErrorProperties = {
       name,
       code,
       className,
-      data: {},
-      errors: {}
+      type: 'FeathersError'
     };
 
-    if (err instanceof Error) {
-      message = err.message || message;
-      properties.errors = err.errors || {};
-    } else if (Array.isArray(_data)) {
+    if (Array.isArray(_data)) {
       properties.data = _data;
-    } else {
-      const { errors = {}, ...rest } = typeof err === 'object' ? err : _data;
+    } else if (typeof err === 'object' || _data !== undefined) {
+      const { message, errors, ...rest } = typeof err === 'object' ? err : _data;
 
+      msg = message || msg;
       properties.errors = errors;
       properties.data = rest;
     }
 
-    super(message);
+    super(msg);
     Object.assign(this, properties);
   }
 
-  toJSON (): FeathersErrorJSON {
-    return {
+  toJSON () {
+    const result: FeathersErrorJSON = {
       name: this.name,
       message: this.message,
       code: this.code,
-      className: this.className,
-      data: this.data,
-      errors: this.errors
+      className: this.className
     };
+
+    if (this.data !== undefined) {
+      result.data = this.data;
+    }
+
+    if (this.errors !== undefined) {
+      result.errors = this.errors;
+    }
+
+    return result;
   }
 }
 

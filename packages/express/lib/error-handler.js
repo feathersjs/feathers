@@ -37,9 +37,10 @@ module.exports = function (options = {}) {
 
     if (error.type !== 'FeathersError') {
       let oldError = error;
-      error = new errors.GeneralError(oldError.message, {
+      
+      error = oldError.errors ? new errors.GeneralError(oldError.message, {
         errors: oldError.errors
-      });
+      }) : new errors.GeneralError(oldError.message);
 
       if (oldError.stack) {
         error.stack = oldError.stack;
