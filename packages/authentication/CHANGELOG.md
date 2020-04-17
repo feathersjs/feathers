@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.3](https://github.com/feathersjs/feathers/compare/v4.5.2...v4.5.3) (2020-04-17)
+
+
+### Bug Fixes
+
+* **authentication:** Remove entity from connection information on logout ([#1889](https://github.com/feathersjs/feathers/issues/1889)) ([b062753](https://github.com/feathersjs/feathers/commit/b0627530d61babe15dd84369d3093ccae4b780ca))
+
+
+
+
+
 ## [4.5.2](https://github.com/feathersjs/feathers/compare/v4.5.1...v4.5.2) (2020-03-04)
 
 
