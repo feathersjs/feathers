@@ -53,7 +53,10 @@
     "@feathersjs/tests": "^4.5.2",
     "feathers-memory": "^4.1.0",
     "lodash": "^4.17.15",
-    "mocha": "^7.0.1",
+    "@types/mocha": "^7.0.2",
+    "@types/mongodb": "^3.5.5",
+    "@types/node": "^13.11.1",
+    "mocha": "^7.1.1",
     "socket.io-client": "^2.3.0"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"

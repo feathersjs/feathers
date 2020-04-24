@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/client",
-  "description": "A module that consolidates Feathers client modules for REST (jQuery, Request, Superagent) and Websocket (Socket.io, Primus) connections",
+  "description": "A module that consolidates Feathers client modules for REST and Websocket connections",
   "version": "4.5.2",
   "repository": {
     "type": "git",
@@ -38,35 +38,34 @@
     "last 2 versions",
     "IE 10"
   ],
-  "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/preset-env": "^7.8.4",
+  "dependencies": {
     "@feathersjs/authentication-client": "^4.5.2",
     "@feathersjs/errors": "^4.5.2",
     "@feathersjs/express": "^4.5.2",
     "@feathersjs/feathers": "^4.5.2",
-    "@feathersjs/primus": "^4.5.2",
-    "@feathersjs/primus-client": "^4.5.2",
     "@feathersjs/rest-client": "^4.5.2",
     "@feathersjs/socketio": "^4.5.2",
-    "@feathersjs/socketio-client": "^4.5.2",
+    "@feathersjs/socketio-client": "^4.5.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
     "@feathersjs/tests": "^4.5.2",
-    "babel-loader": "^8.0.6",
+    "babel-loader": "^8.1.0",
     "body-parser": "^1.19.0",
     "feathers-memory": "^4.1.0",
-    "jquery": "^3.4.1",
-    "jsdom": "^16.2.0",
-    "mocha": "^7.0.1",
+    "jquery": "^3.5.0",
+    "jsdom": "^16.2.2",
+    "mocha": "^7.1.1",
     "mocha-puppeteer": "^0.14.0",
     "node-fetch": "^2.6.0",
-    "parallel-webpack": "^2.4.0",
-    "request": "^2.88.2",
+    "parallel-webpack": "^2.6.0",
     "socket.io-client": "^2.3.0",
     "superagent": "^5.2.2",
     "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^4.41.6",
+    "webpack": "^4.42.1",
     "webpack-merge": "^4.2.2",
-    "ws": "^7.2.1",
+    "ws": "^7.2.3",
     "xhr2": "^0.2.0"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"

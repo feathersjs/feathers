@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
-import { get, omit } from 'lodash';
+import get from 'lodash/get';
+import omit from 'lodash/omit';
 import Debug from 'debug';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { Query, Params } from '@feathersjs/feathers';

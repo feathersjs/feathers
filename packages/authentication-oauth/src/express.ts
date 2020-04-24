@@ -48,7 +48,7 @@ export default (options: OauthSetupSettings) => {
       req.session.redirect = redirect;
       req.session.query = query;
 
-      res.redirect(`${path}/connect/${name}?${qs.stringify(query)}`);
+      res.redirect(`${path}/connect/${name}?${qs.stringify(query as any)}`);
     });
 
     authApp.get('/:name/callback', (req: any, res: any) => {
@@ -61,6 +61,7 @@ export default (options: OauthSetupSettings) => {
       const service = app.defaultAuthentication(authService);
       const [ strategy ] = service.getStrategies(name) as OAuthStrategy[];
       const params = {
+        ...req.feathers,
         authStrategies: [ name ],
         authentication: accessToken ? {
           strategy: linkStrategy,

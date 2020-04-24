@@ -7,7 +7,6 @@ declare module '@feathersjs/feathers' {
   interface Application<ServiceTypes = {}> {
     io?: any;
     rest?: any;
-    primus?: any;
     authentication: AuthenticationClient;
     authenticate: AuthenticationClient['authenticate'];
     reAuthenticate: AuthenticationClient['reAuthenticate'];

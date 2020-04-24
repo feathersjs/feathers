@@ -42,23 +42,22 @@
   "dependencies": {
     "@feathersjs/commons": "^4.5.2",
     "@feathersjs/errors": "^4.5.2",
-    "qs": "^6.9.1"
+    "qs": "^6.9.3"
   },
   "devDependencies": {
-    "@angular/common": "^9.0.2",
-    "@angular/core": "^9.0.2",
+    "@angular/common": "^9.1.1",
+    "@angular/core": "^9.1.1",
     "@angular/http": "^7.2.16",
-    "@angular/platform-browser": "^9.0.2",
+    "@angular/platform-browser": "^9.1.1",
     "@feathersjs/express": "^4.5.2",
     "@feathersjs/feathers": "^4.5.2",
     "@feathersjs/tests": "^4.5.2",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "feathers-memory": "^4.1.0",
-    "mocha": "^7.0.1",
+    "mocha": "^7.1.1",
     "node-fetch": "^2.6.0",
-    "request": "^2.88.2",
-    "rxjs": "^6.5.4",
+    "rxjs": "^6.5.5",
     "shx": "^0.3.2",
     "superagent": "^5.2.2"
   },

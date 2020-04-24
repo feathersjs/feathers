@@ -3,7 +3,7 @@
 const { strict: assert } = require('assert');
 const express = require('express');
 const errors = require('@feathersjs/errors');
-const request = require('request');
+const axios = require('axios');
 const fs = require('fs');
 const { join } = require('path');
 
@@ -51,30 +51,6 @@ describe('error-handler', () => {
       this.server.close(done);
     });
 
-    describe('HTML handler', () => {
-      const options = {
-        url: 'http://localhost:5050/error',
-        headers: {
-          'Content-Type': 'text/html',
-          'Accept': 'text/html'
-        }
-      };
-
-      it('logs the error', done => {
-        request(options, (error, res, body) => {
-          assert.equal(currentError.message, 'Something went wrong');
-          done();
-        });
-      });
-
-      it('can send a custom response', done => {
-        request(options, (error, res, body) => {
-          assert.equal(body, content);
-          done();
-        });
-      });
-    });
-
     describe('JSON handler', () => {
       const options = {
         url: 'http://localhost:5050/error',
@@ -84,19 +60,18 @@ describe('error-handler', () => {
         }
       };
 
-      it('can send a custom response', done => {
-        const expected = JSON.stringify({
-          name: 'GeneralError',
-          message: 'Something went wrong',
-          code: 500,
-          className: 'general-error',
-          data: {},
-          errors: {}
-        });
-        request(options, (error, res, body) => {
-          assert.deepEqual(body, expected);
-          done();
-        });
+      it('can send a custom response', async () => {
+        try {
+          await axios(options);
+          assert.fail('Should never get here');
+        } catch (error) {
+          assert.deepEqual(error.response.data, {
+            name: 'GeneralError',
+            message: 'Something went wrong',
+            code: 500,
+            className: 'general-error'
+          });
+        }
       });
     });
   });
@@ -258,233 +233,153 @@ describe('error-handler', () => {
     });
 
     describe('converts an non-feathers error', () => {
-      it('is an instance of GeneralError', done => {
-        request({
-          url: 'http://localhost:5050/error',
-          json: true
-        }, (error, res, body) => {
-          assert.equal(res.statusCode, 500);
-          assert.deepEqual(body, {
+      it('is an instance of GeneralError', async () => {
+        try {
+          await axios({
+            url: 'http://localhost:5050/error',
+            json: true
+          });
+          assert.fail('Should never get here');
+        } catch (error) {
+          assert.equal(error.response.status, 500);
+          assert.deepEqual(error.response.data, {
             name: 'GeneralError',
             message: 'Something went wrong',
             code: 500,
-            className: 'general-error',
-            data: {},
-            errors: {}
+            className: 'general-error'
           });
-          done();
-        });
+        }
       });
     });
 
     describe('text/html format', () => {
       it('serves a 404.html', done => {
-        fs.readFile(join(__dirname, '..', 'lib', 'public', '404.html'), function (err, html) {
-          request({
-            url: 'http://localhost:5050/path/to/nowhere',
-            headers: {
-              'Content-Type': 'text/html',
-              'Accept': 'text/html'
-            }
-          }, (error, res, body) => {
-            assert.equal(res.statusCode, 404);
-            assert.equal(html.toString(), body);
+        fs.readFile(join(__dirname, '..', 'lib', 'public', '404.html'), async function (err, html) {
+          try {
+            await axios({
+              url: 'http://localhost:5050/path/to/nowhere',
+              headers: {
+                'Content-Type': 'text/html',
+                'Accept': 'text/html'
+              }
+            });
+            assert.fail('Should never get here');
+          } catch(error) {
+            assert.equal(error.response.status, 404);
+            assert.equal(error.response.data, html.toString());
             done();
-          });
+          }
         });
       });
 
       it('serves a 500.html', done => {
-        fs.readFile(join(__dirname, '..', 'lib', 'public', 'default.html'), function (err, html) {
-          request({
-            url: 'http://localhost:5050/error',
-            headers: {
-              'Content-Type': 'text/html',
-              'Accept': 'text/html'
-            }
-          }, (error, res, body) => {
-            assert.equal(res.statusCode, 500);
-            assert.equal(html.toString(), body);
+        fs.readFile(join(__dirname, '..', 'lib', 'public', 'default.html'), async function (err, html) {
+          try {
+            await axios({
+              url: 'http://localhost:5050/error',
+              headers: {
+                'Content-Type': 'text/html',
+                'Accept': 'text/html'
+              }
+            });
+            assert.fail('Should never get here');
+          } catch(error) {
+            assert.equal(error.response.status, 500);
+            assert.equal(error.response.data, html.toString());
             done();
-          });
-        });
-      });
-
-      it('returns html when Content-Type header is set', done => {
-        fs.readFile(join(__dirname, '..', 'lib', 'public', '404.html'), function (err, html) {
-          request({
-            url: 'http://localhost:5050/path/to/nowhere',
-            headers: {
-              'Content-Type': 'text/html'
-            }
-          }, (error, res, body) => {
-            assert.equal(res.statusCode, 404);
-            assert.equal(html.toString(), body);
-            done();
-          });
-        });
-      });
-
-      it('returns html when Accept header is set', done => {
-        fs.readFile(join(__dirname, '..', 'lib', 'public', '404.html'), function (err, html) {
-          request({
-            url: 'http://localhost:5050/path/to/nowhere',
-            headers: {
-              'Accept': 'text/html'
-            }
-          }, (error, res, body) => {
-            assert.equal(res.statusCode, 404);
-            assert.equal(html.toString(), body);
-            done();
-          });
+          }
         });
       });
     });
 
     describe('application/json format', () => {
-      it('500', done => {
-        request({
-          url: 'http://localhost:5050/error',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          json: true
-        }, (error, res, body) => {
-          assert.equal(res.statusCode, 500);
-          assert.deepEqual(body, {
+      it('500', async () => {
+        try {
+          await axios({
+            url: 'http://localhost:5050/error',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
+          });
+          assert.fail('Should never get here');
+        } catch (error) {
+          assert.equal(error.response.status, 500);
+          assert.deepEqual(error.response.data, {
             name: 'GeneralError',
             message: 'Something went wrong',
             code: 500,
-            className: 'general-error',
-            data: {},
-            errors: {}
+            className: 'general-error'
           });
-          done();
-        });
+        }
       });
 
-      it('404', done => {
-        request({
-          url: 'http://localhost:5050/path/to/nowhere',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          json: true
-        }, (error, res, body) => {
-          assert.equal(res.statusCode, 404);
-          assert.deepEqual(body, { name: 'NotFound',
+      it('404', async () => {
+        try {
+          await axios({
+            url: 'http://localhost:5050/path/to/nowhere',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
+          });
+          assert.fail('Should never get here');
+        } catch (error) {
+          assert.equal(error.response.status, 404);
+          assert.deepEqual(error.response.data, { name: 'NotFound',
             message: 'File not found',
             code: 404,
-            className: 'not-found',
-            errors: {}
+            className: 'not-found'
           });
-          done();
-        });
+        }
       });
 
-      it('400', done => {
-        request({
-          url: 'http://localhost:5050/bad-request',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          json: true
-        }, (error, res, body) => {
-          assert.equal(res.statusCode, 400);
-          assert.deepEqual(body, { name: 'BadRequest',
+      it('400', async () => {
+        try {
+          await axios({
+            url: 'http://localhost:5050/bad-request',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
+          });
+          assert.fail('Should never get here');
+        } catch (error) {
+          assert.equal(error.response.status, 400);
+          assert.deepEqual(error.response.data, { name: 'BadRequest',
             message: 'Invalid Password',
             code: 400,
             className: 'bad-request',
-            data: {
-              message: 'Invalid Password'
-            },
+            data: {},
             errors: [{
               path: 'password',
               value: null,
               message: `'password' cannot be 'null'`
             }]
           });
-          done();
-        });
-      });
-
-      it('returns JSON when only Content-Type header is set', done => {
-        request({
-          url: 'http://localhost:5050/bad-request',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          json: true
-        }, (error, res, body) => {
-          assert.equal(res.statusCode, 400);
-          assert.deepEqual(body, { name: 'BadRequest',
-            message: 'Invalid Password',
-            code: 400,
-            className: 'bad-request',
-            data: {
-              message: 'Invalid Password'
-            },
-            errors: [{
-              path: 'password',
-              value: null,
-              message: `'password' cannot be 'null'`
-            }]
-          });
-          done();
-        });
-      });
-
-      it('returns JSON when only Accept header is set', done => {
-        request({
-          url: 'http://localhost:5050/bad-request',
-          headers: {
-            'Accept': 'application/json'
-          },
-          json: true
-        }, (error, res, body) => {
-          assert.equal(res.statusCode, 400);
-          assert.deepEqual(body, { name: 'BadRequest',
-            message: 'Invalid Password',
-            code: 400,
-            className: 'bad-request',
-            data: {
-              message: 'Invalid Password'
-            },
-            errors: [{
-              path: 'password',
-              value: null,
-              message: `'password' cannot be 'null'`
-            }]
-          });
-          done();
-        });
+        }
       });
     });
 
-    it('returns JSON by default', done => {
-      request('http://localhost:5050/bad-request', (error, res, body) => {
-        const expected = JSON.stringify({
+    it('returns JSON by default', async () => {
+      try {
+        await axios('http://localhost:5050/bad-request');
+        assert.fail('Should never get here');
+      } catch (error) {
+        assert.equal(error.response.status, 400);
+        assert.deepEqual(error.response.data, {
           name: 'BadRequest',
           message: 'Invalid Password',
           code: 400,
           className: 'bad-request',
-          data: {
-            message: 'Invalid Password'
-          },
+          data: {},
           errors: [{
             path: 'password',
             value: null,
             message: `'password' cannot be 'null'`
           }]
         });
-
-        assert.equal(res.statusCode, 400);
-        assert.deepEqual(body, expected);
-        done();
-      });
+      }
     });
   });
 });

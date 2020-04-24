@@ -1,5 +1,5 @@
 import Debug from 'debug';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import { IncomingMessage } from 'http';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { Params } from '@feathersjs/feathers';
@@ -55,7 +55,11 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     } else if (event === 'disconnect' || isValidLogout) {
       debug('Removing authentication information and expiration timer from connection');
 
+      const { entity } = this.configuration;
+
+      delete connection[entity];
       delete connection.authentication;
+
       lt.clearTimeout(this.expirationTimers.get(connection));
       this.expirationTimers.delete(connection);
     }

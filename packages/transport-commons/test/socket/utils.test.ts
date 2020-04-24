@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { EventEmitter } from 'events';
 import feathers, { Application, Params } from '@feathersjs/feathers';
-import errors from '@feathersjs/errors';
+import { NotAuthenticated } from '@feathersjs/errors';
 
 import { routing } from '../../src/routing';
 import {
@@ -191,7 +191,7 @@ describe('socket commons utils', () => {
       app.use('/myservice', {
         get (id: number|string, params: Params) {
           if (params.query.error) {
-            return Promise.reject(new errors.NotAuthenticated('None shall pass'));
+            return Promise.reject(new NotAuthenticated('None shall pass'));
           }
           return Promise.resolve({ id });
         }
@@ -292,9 +292,7 @@ describe('socket commons utils', () => {
           assert.deepStrictEqual(error, { name: 'NotFound',
             message: 'Service \'ohmyservice\' not found',
             code: 404,
-            className: 'not-found',
-            data: undefined,
-            errors: {}
+            className: 'not-found'
           });
           done();
         } catch (e) {
@@ -312,9 +310,7 @@ describe('socket commons utils', () => {
             name: 'MethodNotAllowed',
             message: 'Method \'create\' not allowed on service \'myservice\'',
             code: 405,
-            className: 'method-not-allowed',
-            data: undefined,
-            errors: {}
+            className: 'method-not-allowed'
           });
           done();
         } catch (e) {
@@ -332,9 +328,7 @@ describe('socket commons utils', () => {
             name: 'MethodNotAllowed',
             message: 'Method \'blabla\' not allowed on service \'myservice\'',
             code: 405,
-            className: 'method-not-allowed',
-            data: undefined,
-            errors: {}
+            className: 'method-not-allowed'
           });
           done();
         } catch (e) {
@@ -351,10 +345,8 @@ describe('socket commons utils', () => {
           assert.deepStrictEqual(error, {
             name: 'NotAuthenticated',
             message: 'None shall pass',
-            data: undefined,
             code: 401,
-            className: 'not-authenticated',
-            errors: {}
+            className: 'not-authenticated'
           });
           done();
         } catch (e) {

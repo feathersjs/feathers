@@ -26,11 +26,14 @@
     "install": "lerna bootstrap",
     "publish": "lerna publish && git commit -am \"chore: Update version and changelog\" && git push origin master",
     "lint": "tslint 'packages/**/*.js' 'packages/**/*.ts' -c tslint.json --fix",
+    "update-dependencies": "ncu -u && lerna exec -- ncu -u",
+    "clean": "find . -name node_modules -exec rm -rf '{}' + && find . -name package-lock.json -exec rm -rf '{}' +",
     "test": "npm run lint && nyc lerna run test"
   },
   "devDependencies": {
     "lerna": "^3.20.2",
-    "nyc": "^15.0.0",
-    "tslint": "^6.0.0"
+    "npm-check-updates": "^4.1.2",
+    "nyc": "^15.0.1",
+    "tslint": "^6.1.1"
   }
 }
