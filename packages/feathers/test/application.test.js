@@ -168,6 +168,36 @@ describe('Feathers application', () => {
       app1.service('testing').create({ message: 'Hi' });
     });
 
+    it('async hooks', done => {
+      const app = feathers();
+
+      app.use('/dummy', {
+        create (data) {
+          return Promise.resolve(data);
+        }
+      });
+
+      const dummy = app.service('dummy');
+
+      dummy.hooks({
+        async: async (ctx, next) => {
+          await next();
+          ctx.params.fromAsyncHook = true;
+        },
+        before: {
+          create (hook) {
+            hook.params.fromAsyncHook = false;
+          }
+        }
+      });
+
+      dummy.create({ message: 'Hi' }, {}, true)
+        .then(ctx => {
+          assert.ok(ctx.params.fromAsyncHook);
+        })
+        .then(done, done);
+    });
+
     it('services conserve Symbols', () => {
       const TEST = Symbol('test');
       const dummyService = {

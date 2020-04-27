@@ -40,6 +40,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "@feathersjs/hooks": "^0.4.0-alpha.0"
+  },
   "devDependencies": {
     "@types/mocha": "^7.0.2",
     "@types/node": "^13.11.1",

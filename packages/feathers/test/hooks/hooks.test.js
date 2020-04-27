@@ -1,7 +1,78 @@
 const assert = require('assert');
+const { hooks, HookContext } = require('@feathersjs/hooks');
 const feathers = require('../../lib');
 
 describe('hooks basics', () => {
+  it('mix @feathersjs/hooks and .hooks', async () => {
+    const svc = {
+      get (id, params) {
+        return Promise.resolve({ id, user: params.user });
+      }
+    };
+
+    hooks(svc, {
+      get: [async (ctx, next) => {
+        ctx.chain.push('@hooks 1 before');
+        await next();
+        ctx.chain.push('@hooks 1 after');
+      }]
+    });
+
+    const app = feathers().use('/dummy', svc);
+    const service = app.service('dummy');
+
+    service.hooks({
+      before: {
+        get: ctx => {
+          ctx.chain.push('.hooks 1 before');
+        }
+      },
+      after: {
+        get: ctx => {
+          ctx.chain.push('.hooks 1 after');
+        }
+      }
+    });
+
+    hooks(service, {
+      get: [async (ctx, next) => {
+        ctx.chain.push('@hooks 2 before');
+        await next();
+        ctx.chain.push('@hooks 2 after');
+      }]
+    });
+
+    service.hooks({
+      before: {
+        get: ctx => {
+          ctx.chain.push('.hooks 2 before');
+        }
+      },
+      after: {
+        get: ctx => {
+          ctx.chain.push('.hooks 2 after');
+        }
+      }
+    });
+
+    const hookContext = new HookContext({
+      chain: []
+    });
+    const resultContext = await service.get(1, {}, hookContext);
+
+    assert.strictEqual(hookContext, resultContext);
+    assert.deepStrictEqual(resultContext.chain, [
+      '@hooks 2 before',
+      '@hooks 1 before',
+      '.hooks 1 before',
+      '.hooks 2 before',
+      '.hooks 1 after',
+      '.hooks 2 after',
+      '@hooks 1 after',
+      '@hooks 2 after'
+    ]);
+  });
+
   it('validates arguments', () => {
     const app = feathers().use('/dummy', {
       get (id, params) {

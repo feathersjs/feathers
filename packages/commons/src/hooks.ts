@@ -1,6 +1,8 @@
+import { HookContext } from '@feathersjs/hooks';
 import { createSymbol, _ } from './utils';
 
-const { each, pick } = _;
+const { each, pick, omit } = _;
+const noop = () => {};
 
 export const ACTIVATE_HOOKS = createSymbol('__feathersActivateHooks');
 
@@ -87,9 +89,13 @@ export function convertHookData (obj: any) {
 // Duck-checks a given object to be a hook object
 // A valid hook object has `type` and `method`
 export function isHookObject (hookObject: any) {
-  return typeof hookObject === 'object' &&
-    typeof hookObject.method === 'string' &&
-    typeof hookObject.type === 'string';
+  return (
+    hookObject instanceof HookContext || (
+      typeof hookObject === 'object' &&
+      typeof hookObject.method === 'string' &&
+      typeof hookObject.type === 'string'
+    )
+  );
 }
 
 // Returns all service and application hooks combined
@@ -192,4 +198,133 @@ export function enableHooks (obj: any, methods: string[], types: string[]) {
       return this;
     }
   });
+}
+
+async function handleError (hook: any, context: any, onError: any) {
+  try {
+    const result = await hook.call(context.self, context);
+    Object.assign(context, omit(result, 'arguments'));
+  } catch (errorError) {
+    if (typeof onError === 'function') {
+      onError(errorError, context);
+    }
+    throw errorError;
+  }
+
+  if (typeof context.error !== 'undefined') {
+    throw context.error;
+  }
+}
+
+export function firstHook (context: any, next: any) {
+  context.type = 'before';
+  return next();
+}
+
+export function lastHook (context: any, next: any) {
+  context.type = 'after';
+  return next();
+}
+
+export function toBeforeHook (hook: any) {
+  return async (context: any, next: any) => {
+    const result = await hook.call(context.self, context);
+    Object.assign(context, omit(result, 'arguments'));
+    await next();
+  };
+}
+
+export function toAfterHook (hook: any) {
+  return async (context: any, next: any) => {
+    await next();
+    const result = await hook.call(context.self, context);
+    Object.assign(context, omit(result, 'arguments'));
+  };
+}
+
+export function toErrorHook (hook: any, onError: any, control: any) {
+  return async (context: any, next: any) => {
+    try {
+      await next();
+    } catch (error) {
+      if (typeof control === 'function') {
+        control(context);
+      }
+
+      context.error = error;
+      context.result = undefined;
+
+      await handleError(hook, context, onError);
+    }
+  };
+}
+
+export function toFinallyHook (hook: any, onError: any, control: any) {
+  return async (context: any, next: any) => {
+    try {
+      await next();
+    } catch (error) {
+      throw error;
+    } finally {
+      if (typeof control === 'function') {
+        control(context);
+      }
+
+      await handleError(hook, context, onError);
+    }
+  };
+}
+
+export function beforeWrapper (hooks: any) {
+  return [firstHook, ...[].concat(hooks).map(toBeforeHook)];
+}
+
+export function afterWrapper (hooks: any) {
+  return [...[].concat(hooks).reverse().map(toAfterHook), lastHook];
+}
+
+export function finallyWrapper (hooks: any) {
+  let errorInFinally: any;
+
+  const onError = (error: any, context: any) => {
+    errorInFinally = error;
+    context.error = error;
+    context.result = undefined;
+  };
+  const control = () => {
+    if (errorInFinally) {
+      throw errorInFinally;
+    }
+  };
+
+  return [].concat(hooks).reverse().map(hook => toFinallyHook(hook, onError, control));
+}
+
+export function errorWrapper (hooks: any) {
+  let errorInError: any;
+
+  const onError = (error: any, context: any) => {
+    errorInError = error;
+    context.error = error;
+    context.result = undefined;
+  };
+  const control = (context: any) => {
+    if (!context.original) {
+      context.original = { ...context };
+    }
+    if (errorInError) {
+      throw errorInError;
+    }
+    context.type = 'error';
+  };
+
+  return [noop].concat(hooks).reverse().map(hook => toErrorHook(hook, onError, control));
+}
+
+export function wrap ({ async = [], before = [], after = [] }: any = {}) {
+  return [
+    ...[].concat(async),
+    ...beforeWrapper(before),
+    ...afterWrapper(after)
+  ];
 }

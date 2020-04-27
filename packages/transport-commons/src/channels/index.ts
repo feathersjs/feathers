@@ -93,7 +93,7 @@ export function channels () {
                 return;
               }
 
-              const results = Array.isArray(result) ? compact(flattenDeep(result)) : [result];
+              const results = (Array.isArray(result) ? compact(flattenDeep(result)) : [result] as Channel[]);
               const channel = new CombinedChannel(results);
 
               if (channel && channel.length > 0) {

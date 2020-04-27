@@ -118,6 +118,7 @@ describe('@feathersjs/express/rest provider', () => {
       const convertHook = hook => {
         const result = Object.assign({}, hook);
 
+        delete result.self;
         delete result.service;
         delete result.app;
         delete result.error;
