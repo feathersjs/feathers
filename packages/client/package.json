@@ -56,7 +56,7 @@
     "feathers-memory": "^4.1.0",
     "jquery": "^3.5.0",
     "jsdom": "^16.2.2",
-    "mocha": "^7.1.1",
+    "mocha": "^7.1.2",
     "mocha-puppeteer": "^0.14.0",
     "node-fetch": "^2.6.0",
     "parallel-webpack": "^2.6.0",
@@ -64,9 +64,9 @@
     "socket.io-client": "^2.3.0",
     "superagent": "^5.2.2",
     "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^4.42.1",
+    "webpack": "^4.43.0",
     "webpack-merge": "^4.2.2",
-    "ws": "^7.2.3",
+    "ws": "^7.2.5",
     "xhr2": "^0.2.0"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"

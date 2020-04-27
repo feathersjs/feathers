@@ -53,8 +53,8 @@
     "@feathersjs/tests": "^4.5.3",
     "feathers-memory": "^4.1.0",
     "lodash": "^4.17.15",
-    "mocha": "^7.1.1",
-    "ws": "^7.2.3"
+    "mocha": "^7.1.2",
+    "ws": "^7.2.5"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }
