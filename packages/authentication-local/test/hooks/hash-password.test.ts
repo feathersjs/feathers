@@ -89,6 +89,21 @@ describe('@feathersjs/authentication-local/hooks/hash-password', () => {
     assert.notStrictEqual(user.password, password);
   });
 
+  it('hashes password on array data', async () => {
+    const password = 'supersecret';
+
+    const users = await app.service('users').create([{
+      email: 'dave@hashpassword.com',
+      password
+    }, {
+      email: 'dave2@hashpassword.com',
+      password: 'secret2'
+    }]);
+
+    assert.notStrictEqual(users[0].password, password);
+    assert.notStrictEqual(users[1].password, 'secret2');
+  });
+
   it('does nothing when field is not present', async () => {
     const user = await app.service('users').create({
       email: 'dave@hashpassword.com'
