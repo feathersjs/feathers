@@ -25,6 +25,7 @@ module.exports = (app = feathers()) => {
 
   app.use('/authentication', authentication);
   app.use('/users', memory({
+    multi: [ 'create' ],
     paginate: {
       default: 10,
       max: 20
