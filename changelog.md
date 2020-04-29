@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.4](https://github.com/feathersjs/feathers/compare/v4.5.3...v4.5.4) (2020-04-29)
+
+
+### Bug Fixes
+
+* **authentication-local:** Allow to hash passwords in array data ([#1936](https://github.com/feathersjs/feathers/issues/1936)) ([64705f5](https://github.com/feathersjs/feathers/commit/64705f5d9d4dc27f799da3a074efaf74379a3398))
+* **authentication-oauth:** Add getEntity method to oAuth authentication and remove provider field for other calls ([#1935](https://github.com/feathersjs/feathers/issues/1935)) ([d925c1b](https://github.com/feathersjs/feathers/commit/d925c1bd193b5c19cb23a246f04fc46d0429fc75))
+
+
+
+
+
 ## [4.5.3](https://github.com/feathersjs/feathers/compare/v4.5.2...v4.5.3) (2020-04-17)
 
 
