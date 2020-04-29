@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-local",
   "description": "Local authentication strategy for @feathers/authentication",
-  "version": "4.5.3",
+  "version": "4.5.4",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
