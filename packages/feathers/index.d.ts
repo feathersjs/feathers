@@ -282,6 +282,18 @@ declare namespace createApplication {
         remove? (id: null, params?: Params): Promise<T[]>;
     }
 
+    /**
+     * Hook-less service methods. Directly call database adapter service methods without
+     * running any service-level hooks. This can be useful if you need the raw data
+     * from the service and don't want to trigger any of its hooks.
+     *
+     * Important: These methods are only available internally on the server, not on the client
+     * side and only for the Feathers database adapters.
+     *
+     * These methods do not trigger events.
+     *
+     * @see {@link https://docs.feathersjs.com/guides/migrating.html#hook-less-service-methods}
+     */
     interface HookLessServiceMethods<T> {
         /**
          * Retrieve all resources from this service, skipping any service-level hooks.
