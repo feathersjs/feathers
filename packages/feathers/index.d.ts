@@ -299,6 +299,7 @@ declare namespace createApplication {
          * Retrieve all resources from this service, skipping any service-level hooks.
          *
          * @param params - Service call parameters {@link Params}
+         * @see {@link HookLessServiceMethods}
          * @see {@link https://docs.feathersjs.com/api/services.html#find-params|Feathers API Documentation: .find(params)}
          */
         _find (params?: Params): Promise<T | T[] | Paginated<T>>;
@@ -308,6 +309,7 @@ declare namespace createApplication {
          *
          * @param id - ID of the resource to locate
          * @param params - Service call parameters {@link Params}
+         * @see {@link HookLessServiceMethods}
          * @see {@link https://docs.feathersjs.com/api/services.html#get-id-params|Feathers API Documentation: .get(id, params)}
          */
         _get (id: Id, params?: Params): Promise<T>;
@@ -317,6 +319,7 @@ declare namespace createApplication {
          *
          * @param data - Data to insert into this service.
          * @param params - Service call parameters {@link Params}
+         * @see {@link HookLessServiceMethods}
          * @see {@link https://docs.feathersjs.com/api/services.html#create-data-params|Feathers API Documentation: .create(data, params)}
          */
         _create (data: Partial<T> | Partial<T>[], params?: Params): Promise<T | T[]>;
@@ -327,6 +330,7 @@ declare namespace createApplication {
          * @param id - ID of the resource to be updated
          * @param data - Data to be put in place of the current resource.
          * @param params - Service call parameters {@link Params}
+         * @see {@link HookLessServiceMethods}
          * @see {@link https://docs.feathersjs.com/api/services.html#update-id-data-params|Feathers API Documentation: .update(id, data, params)}
          */
         _update (id: NullableId, data: T, params?: Params): Promise<T | T[]>;
@@ -337,6 +341,7 @@ declare namespace createApplication {
          * @param id - ID of the resource to be patched
          * @param data - Data to merge with the current resource.
          * @param params - Service call parameters {@link Params}
+         * @see {@link HookLessServiceMethods}
          * @see {@link https://docs.feathersjs.com/api/services.html#patch-id-data-params|Feathers API Documentation: .patch(id, data, params)}
          */
         _patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T | T[]>;
@@ -346,6 +351,7 @@ declare namespace createApplication {
          *
          * @param id - ID of the resource to be removed
          * @param params - Service call parameters {@link Params}
+         * @see {@link HookLessServiceMethods}
          * @see {@link https://docs.feathersjs.com/api/services.html#remove-id-params|Feathers API Documentation: .remove(id, params)}
          */
         _remove (id: NullableId, params?: Params): Promise<T | T[]>;
