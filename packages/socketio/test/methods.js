@@ -1,12 +1,11 @@
 const assert = require('assert');
 const { verify } = require('@feathersjs/tests/lib/fixture');
 
-module.exports = function (name, options, legacy = false) {
+module.exports = function (name, options) {
   const call = (method, ...args) =>
     new Promise((resolve, reject) => {
       const { socket } = options;
-      const prefix = legacy ? [ `${name}::${method}` ]
-        : [ method, name ];
+      const prefix = [ method, name ];
       const emitArgs = prefix.concat(args);
 
       socket.emit(...emitArgs, (error, result) =>

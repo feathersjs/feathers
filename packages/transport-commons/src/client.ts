@@ -1,5 +1,5 @@
 import Debug from 'debug';
-import { convert, Timeout } from '@feathersjs/errors';
+import { convert } from '@feathersjs/errors';
 import { Params } from '@feathersjs/feathers';
 
 const debug = Debug('@feathersjs/transport-commons/client');
@@ -57,7 +57,6 @@ interface ServiceOptions {
   connection: any;
   method: string;
   events?: string[];
-  timeout?: number;
 }
 
 export class Service {
@@ -65,34 +64,21 @@ export class Service {
   path: string;
   connection: any;
   method: string;
-  timeout: number;
 
   constructor (options: ServiceOptions) {
     this.events = options.events;
     this.path = options.name;
     this.connection = options.connection;
     this.method = options.method;
-    this.timeout = options.timeout || 5000;
 
     addEmitterMethods(this);
   }
 
   send (method: string, ...args: any[]) {
     return new Promise((resolve, reject) => {
-      const timeoutId = setTimeout(() => reject(
-        new Timeout(`Timeout of ${this.timeout}ms exceeded calling ${method} on ${this.path}`, {
-          timeout: this.timeout,
-          method,
-          path: this.path
-        })
-      ), this.timeout);
-
       args.unshift(method, this.path);
       args.push(function (error: any, data: any) {
-        error = convert(error);
-        clearTimeout(timeoutId);
-
-        return error ? reject(error) : resolve(data);
+        return error ? reject(convert(error)) : resolve(data);
       });
 
       debug(`Sending socket.${this.method}`, args);
