@@ -24,10 +24,9 @@ export default function hashPassword (field: string, options: HashPasswordOption
     }
 
     const { app, data, params } = context;
-    const password = get(data, field);
 
-    if (data === undefined || password === undefined) {
-      debug(`hook.data or hook.data.${field} is undefined. Skipping hashPassword hook.`);
+    if (data === undefined) {
+      debug(`hook.data is undefined. Skipping hashPassword hook.`);
       return context;
     }
 
@@ -44,9 +43,21 @@ export default function hashPassword (field: string, options: HashPasswordOption
       throw new BadRequest(`Could not find '${strategy}' strategy to hash password`);
     }
 
-    const hashedPassword: string = await localStrategy.hashPassword(password, params);
+    const addHashedPassword = async (data: any) => {
+      const password = get(data, field);
 
-    context.data = set(cloneDeep(data), field, hashedPassword);
+      if (password === undefined) {
+        debug(`hook.data.${field} is undefined, not hashing password`);
+        return data;
+      }
+
+      const hashedPassword: string = await localStrategy.hashPassword(password, params);
+
+      return set(cloneDeep(data), field, hashedPassword);
+    }
+
+    context.data = Array.isArray(data) ? await Promise.all(data.map(addHashedPassword)) :
+      await addHashedPassword(data);
 
     return context;
   };

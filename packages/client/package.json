@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/client",
-  "description": "A module that consolidates Feathers client modules for REST and Websocket connections",
-  "version": "4.5.2",
+  "description": "A module that consolidates Feathers client modules for REST (jQuery, Request, Superagent) and Websocket (Socket.io, Primus) connections",
+  "version": "4.5.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/feathersjs/feathers.git"
@@ -39,13 +39,13 @@
     "IE 10"
   ],
   "dependencies": {
-    "@feathersjs/authentication-client": "^4.5.2",
-    "@feathersjs/errors": "^4.5.2",
-    "@feathersjs/express": "^4.5.2",
-    "@feathersjs/feathers": "^4.5.2",
-    "@feathersjs/rest-client": "^4.5.2",
-    "@feathersjs/socketio": "^4.5.2",
-    "@feathersjs/socketio-client": "^4.5.2"
+    "@feathersjs/authentication-client": "^4.5.3",
+    "@feathersjs/errors": "^4.5.3",
+    "@feathersjs/express": "^4.5.3",
+    "@feathersjs/feathers": "^4.5.3",
+    "@feathersjs/rest-client": "^4.5.3",
+    "@feathersjs/socketio": "^4.5.3",
+    "@feathersjs/socketio-client": "^4.5.3"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

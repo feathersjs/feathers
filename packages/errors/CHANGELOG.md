@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.3](https://github.com/feathersjs/feathers/compare/v4.5.2...v4.5.3) (2020-04-17)
+
+
+### Bug Fixes
+
+* **errors:** Add 410 Gone to errors ([#1849](https://github.com/feathersjs/feathers/issues/1849)) ([6801428](https://github.com/feathersjs/feathers/commit/6801428f8fd17dbfebcdb6f1b0cd01433a4033dc))
+
+
+
+
+
 ## [4.5.2](https://github.com/feathersjs/feathers/compare/v4.5.1...v4.5.2) (2020-03-04)
 
 **Note:** Version bump only for package @feathersjs/errors
