@@ -210,11 +210,6 @@ describe('@feathersjs/socketio', () => {
       describe('Service', () => methodTests('todo', options));
       describe('Dynamic Service', () => methodTests('todo', options));
     });
-
-    describe('(\'service::method\') legacy event format', () => {
-      describe('Service', () => methodTests('tasks', options, true));
-      describe('Dynamic Service', () => methodTests('tasks', options, true));
-    });
   });
 
   describe('Service events', () => {

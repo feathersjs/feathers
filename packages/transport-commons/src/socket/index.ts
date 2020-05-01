@@ -68,24 +68,5 @@ export function socket ({ done, emit, socketMap, socketKey, getParams }: SocketO
         }
       });
     }));
-
-    // Legacy `socket.emit('serviceName::methodName', ...args)` handlers
-    app.mixins.push((service, path) => done.then(provider => {
-      provider.on('connection', (socket: any) => {
-        const methods = app.methods.filter(current =>
-          // @ts-ignore
-          typeof service[current] === 'function'
-        );
-
-        for (const method of methods) {
-          const eventName = `${path}::${method}`;
-
-          socket.on(eventName, (...args: any[]) => {
-            debug(`Got legacy method call '${eventName}'`);
-            runMethod(app, getParams(socket), path, method, args);
-          });
-        }
-      });
-    }));
   };
 }

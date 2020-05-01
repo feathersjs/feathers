@@ -17,7 +17,6 @@ describe('client', () => {
       events: [ 'created' ],
       name: 'todos',
       method: 'emit',
-      timeout: 50,
       connection
     }) as Service & EventEmitter;
   });
@@ -30,7 +29,6 @@ describe('client', () => {
     const clientService = new Service({
       name: 'todos',
       method: 'emit',
-      timeout: 50,
       connection: {}
     }) as Service & EventEmitter;
 
@@ -125,22 +123,6 @@ describe('client', () => {
       });
   });
 
-  it('times out on undefined methods', () => {
-    return service.remove(10).then(() => {
-      throw new Error('Should never get here');
-    }).catch(error =>
-      assert.strictEqual(error.message, 'Timeout of 50ms exceeded calling remove on todos')
-    );
-  });
-
-  it('throws a Timeout error when send times out waiting for a response', () => {
-    return service.remove(10).then(() => {
-      throw new Error('Should never get here');
-    }).catch(error =>
-      assert.strictEqual(error.name, 'Timeout')
-    );
-  });
-
   it('converts to feathers-errors (#19)', () => {
     connection.once('create', (_path: any, _data: any, _params: any, callback: DummyCallback) =>
       callback(new NotAuthenticated('Test', { hi: 'me' }).toJSON())
@@ -218,7 +200,6 @@ describe('client', () => {
     const client = new Service({
       name: 'todos',
       method: 'emit',
-      timeout: 50,
       connection: conn
     });
 
