@@ -1,4 +1,5 @@
-const { flatten, merge } = require('lodash');
+const flatten = require('lodash/flatten');
+const merge = require('lodash/merge');
 const debug = require('debug')('@feathersjs/express/authentication');
 
 const normalizeStrategy = (_settings = [], ..._strategies) =>

@@ -6,6 +6,7 @@ import {
   AuthenticationRequest, AuthenticationBaseStrategy, AuthenticationResult
 } from '@feathersjs/authentication';
 import { Params } from '@feathersjs/feathers';
+import { NotAuthenticated } from '@feathersjs/errors';
 
 const debug = Debug('@feathersjs/authentication-oauth/strategy');
 
@@ -72,8 +73,8 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     return null;
   }
 
-  async getRedirect (data: AuthenticationResult|Error, params?: Params) {
-    const queryRedirect = (params && params.query && params.query.redirect) || '';
+  async getRedirect (data: AuthenticationResult|Error, params?: Params): Promise<string | null> {
+    const queryRedirect = (params && params.redirect) || '';
     const { redirect } = this.authentication.configuration.oauth;
 
     if (!redirect) {
@@ -126,8 +127,27 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     return this.entityService.patch(id, data, params);
   }
 
-  async authenticate (authentication: AuthenticationRequest, params: Params) {
+  async getEntity (result: any, params: Params) {
+    const { entityService } = this;
+    const { entityId = entityService.id, entity } = this.configuration;
+
+    if (!entityId || result[entityId] === undefined) {
+      throw new NotAuthenticated('Could not get oAuth entity');
+    }
+
+    if (!params.provider) {
+      return result;
+    }
+
+    return entityService.get(result[entityId], {
+      ...params,
+      [entity]: result
+    });
+  }
+
+  async authenticate (authentication: AuthenticationRequest, originalParams: Params) {
     const entity: string = this.configuration.entity;
+    const { provider, ...params } = originalParams;
     const profile = await this.getProfile(authentication, params);
     const existingEntity = await this.findEntity(profile, params)
       || await this.getCurrentEntity(params);
@@ -139,7 +159,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
     return {
       authentication: { strategy: this.name },
-      [entity]: authEntity
+      [entity]: await this.getEntity(authEntity, originalParams)
     };
   }
 }

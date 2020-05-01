@@ -1,5 +1,7 @@
 import Debug from 'debug';
-import { merge, each, omit } from 'lodash';
+import merge from 'lodash/merge';
+import each from 'lodash/each';
+import omit from 'lodash/omit';
 import { Application } from '@feathersjs/feathers';
 import { OAuthStrategy, OAuthProfile } from './strategy';
 import { default as setupExpress } from './express';

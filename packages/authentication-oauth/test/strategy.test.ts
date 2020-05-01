@@ -25,7 +25,7 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
     assert.equal(redirect, '/home#access_token=testing');
 
     redirect = await strategy.getRedirect({ accessToken: 'testing' }, {
-      query: { redirect: '/hi-there' }
+      redirect: '/hi-there'
     });
     assert.strictEqual('/home/hi-there#access_token=testing', redirect);
 

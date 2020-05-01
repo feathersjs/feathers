@@ -38,16 +38,17 @@ export default (options: OauthSetupSettings) => {
     authApp.use(expressSession);
 
     authApp.get('/:name', (req, res) => {
-      const { feathers_token, ...query } = req.query;
+      const { feathers_token, redirect, ...query } = req.query;
       const { name } = req.params as any;
 
       if (feathers_token) {
         debug(`Got feathers_token query parameter to link accounts`, feathers_token);
         req.session.accessToken = feathers_token;
-        req.session.query = query;
       }
+      req.session.redirect = redirect;
+      req.session.query = query;
 
-      res.redirect(`${path}/connect/${name}?${qs.stringify(query)}`);
+      res.redirect(`${path}/connect/${name}?${qs.stringify(query as any)}`);
     });
 
     authApp.get('/:name/callback', (req: any, res: any) => {
@@ -56,16 +57,18 @@ export default (options: OauthSetupSettings) => {
 
     authApp.get('/:name/authenticate', async (req, res, next) => {
       const { name } = req.params as any;
-      const { accessToken, grant, query = {} } = req.session;
+      const { accessToken, grant, query = {}, redirect } = req.session;
       const service = app.defaultAuthentication(authService);
       const [ strategy ] = service.getStrategies(name) as OAuthStrategy[];
       const params = {
+        ...req.feathers,
         authStrategies: [ name ],
         authentication: accessToken ? {
           strategy: linkStrategy,
           accessToken
         } : null,
-        query
+        query,
+        redirect
       };
       const sendResponse = async (data: AuthenticationResult|Error) => {
         try {

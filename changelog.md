@@ -3,6 +3,73 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.4](https://github.com/feathersjs/feathers/compare/v4.5.3...v4.5.4) (2020-04-29)
+
+
+### Bug Fixes
+
+* **authentication-local:** Allow to hash passwords in array data ([#1936](https://github.com/feathersjs/feathers/issues/1936)) ([64705f5](https://github.com/feathersjs/feathers/commit/64705f5d9d4dc27f799da3a074efaf74379a3398))
+* **authentication-oauth:** Add getEntity method to oAuth authentication and remove provider field for other calls ([#1935](https://github.com/feathersjs/feathers/issues/1935)) ([d925c1b](https://github.com/feathersjs/feathers/commit/d925c1bd193b5c19cb23a246f04fc46d0429fc75))
+
+
+
+
+
+## [4.5.3](https://github.com/feathersjs/feathers/compare/v4.5.2...v4.5.3) (2020-04-17)
+
+
+### Bug Fixes
+
+* **authentication:** Remove entity from connection information on logout ([#1889](https://github.com/feathersjs/feathers/issues/1889)) ([b062753](https://github.com/feathersjs/feathers/commit/b0627530d61babe15dd84369d3093ccae4b780ca))
+* **authentication-oauth:** Allow req.feathers to be used in oAuth authentication requests ([#1886](https://github.com/feathersjs/feathers/issues/1886)) ([854c9ca](https://github.com/feathersjs/feathers/commit/854c9cac9a9a5f8f89054a90feb24ab5c4766f5f))
+* **errors:** Add 410 Gone to errors ([#1849](https://github.com/feathersjs/feathers/issues/1849)) ([6801428](https://github.com/feathersjs/feathers/commit/6801428f8fd17dbfebcdb6f1b0cd01433a4033dc))
+* **typescript:** Add type keys to service pagination options. ([#1888](https://github.com/feathersjs/feathers/issues/1888)) ([859c601](https://github.com/feathersjs/feathers/commit/859c601519c7cb399e8b1667bb50073466812d5c))
+* **typescript:** Use stricter type for HookContext 'method' prop ([#1896](https://github.com/feathersjs/feathers/issues/1896)) ([24a41b7](https://github.com/feathersjs/feathers/commit/24a41b74486ddadccad18f3ae63afdac5bd373c7))
+
+
+
+
+
+## [4.5.2](https://github.com/feathersjs/feathers/compare/v4.5.1...v4.5.2) (2020-03-04)
+
+
+### Bug Fixes
+
+* Updated typings for express middleware ([#1839](https://github.com/feathersjs/feathers/issues/1839)) ([6b8e897](https://github.com/feathersjs/feathers/commit/6b8e8971a9dbb08913edd1be48826624645d9dc1))
+* **authentication:** Improve JWT strategy configuration error message ([#1844](https://github.com/feathersjs/feathers/issues/1844)) ([2c771db](https://github.com/feathersjs/feathers/commit/2c771dbb22d53d4f7de3c3f514e57afa1a186322))
+* **package:** update grant-profile to version 0.0.11 ([#1841](https://github.com/feathersjs/feathers/issues/1841)) ([5dcd2aa](https://github.com/feathersjs/feathers/commit/5dcd2aa3483059cc7a2546b145dd72b4705fe2fe))
+* **test:** typo in password ([#1797](https://github.com/feathersjs/feathers/issues/1797)) ([dfba6ec](https://github.com/feathersjs/feathers/commit/dfba6ec2f21adf3aa739218cf870eaaaa5df6e9c))
+* **typescript:** Make HookMap and HookObject generics. ([#1815](https://github.com/feathersjs/feathers/issues/1815)) ([d10145d](https://github.com/feathersjs/feathers/commit/d10145d91a09aef7bce5af80805a3c0fa9d94f26))
+
+
+
+
+
+## [4.5.1](https://github.com/feathersjs/feathers/compare/v4.5.0...v4.5.1) (2020-01-24)
+
+**Note:** Version bump only for package feathers
+
+
+
+
+
+# [4.5.0](https://github.com/feathersjs/feathers/compare/v4.4.3...v4.5.0) (2020-01-18)
+
+
+### Bug Fixes
+
+* Add `params.authentication` type, remove `hook.connection` type ([#1732](https://github.com/feathersjs/feathers/issues/1732)) ([d46b7b2](https://github.com/feathersjs/feathers/commit/d46b7b2abac8862c0e4dbfce20d71b8b8a96692f))
+
+
+### Features
+
+* **authentication-oauth:** Set oAuth redirect URL dynamically and pass query the service ([#1737](https://github.com/feathersjs/feathers/issues/1737)) ([0b05f0b](https://github.com/feathersjs/feathers/commit/0b05f0b58a257820fa61d695a36f36455209f6a1))
+* **rest-client:** Allow for customising rest clients ([#1780](https://github.com/feathersjs/feathers/issues/1780)) ([c5cfec7](https://github.com/feathersjs/feathers/commit/c5cfec7a4aafcaffaab0cdacb9b5d297ff20320f))
+
+
+
+
+
 ## [4.4.3](https://github.com/feathersjs/feathers/compare/v4.4.1...v4.4.3) (2019-12-06)
 
 

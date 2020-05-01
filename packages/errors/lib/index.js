@@ -144,6 +144,13 @@ function Conflict (message, data) {
 
 inheritsFrom(Conflict, FeathersError);
 
+// 410 - Gone
+function Gone (message, data) {
+  FeathersError(this, message, 'Gone', 410, 'gone', data);
+}
+
+inheritsFrom(Gone, FeathersError);
+
 // 411 - Length Required
 function LengthRequired (message, data) {
   FeathersError.call(this, message, 'LengthRequired', 411, 'length-required', data);
@@ -204,6 +211,7 @@ const errors = {
   NotAcceptable,
   Timeout,
   Conflict,
+  Gone,
   LengthRequired,
   Unprocessable,
   TooManyRequests,
@@ -220,6 +228,7 @@ const errors = {
   406: NotAcceptable,
   408: Timeout,
   409: Conflict,
+  410: Gone,
   411: LengthRequired,
   422: Unprocessable,
   429: TooManyRequests,

@@ -1,5 +1,5 @@
 import Debug from 'debug';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import { IncomingMessage } from 'http';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { Params } from '@feathersjs/feathers';
@@ -55,7 +55,11 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     } else if (event === 'disconnect' || isValidLogout) {
       debug('Removing authentication information and expiration timer from connection');
 
+      const { entity } = this.configuration;
+
+      delete connection[entity];
       delete connection.authentication;
+
       lt.clearTimeout(this.expirationTimers.get(connection));
       this.expirationTimers.delete(connection);
     }
@@ -68,6 +72,10 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       if (!allowedKeys.includes(key)) {
         throw new Error(`Invalid JwtStrategy option 'authentication.${this.name}.${key}'. Did you mean to set it in 'authentication.jwtOptions'?`);
       }
+    }
+
+    if (typeof this.configuration.header !== 'string') {
+      throw new Error(`The 'header' option for the ${this.name} strategy must be a string`);
     }
   }
 

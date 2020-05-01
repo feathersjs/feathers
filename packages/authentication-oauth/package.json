@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-oauth",
   "description": "oAuth 1 and 2 authentication for Feathers. Powered by Grant.",
-  "version": "4.4.3",
+  "version": "4.5.4",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -34,7 +34,7 @@
     "start": "ts-node test/app",
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
-    "test": "mocha --opts ../../mocha.ts.opts --recursive test/**.test.ts test/**/*.test.ts"
+    "test": "mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"
@@ -43,28 +43,28 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^4.4.3",
-    "@feathersjs/errors": "^4.4.3",
-    "@feathersjs/express": "^4.4.3",
-    "@feathersjs/feathers": "^4.4.3",
+    "@feathersjs/authentication": "^4.5.3",
+    "@feathersjs/errors": "^4.5.3",
+    "@feathersjs/express": "^4.5.4",
+    "@feathersjs/feathers": "^4.5.3",
     "debug": "^4.1.1",
     "express-session": "^1.17.0",
-    "grant": "^4.6.5",
-    "grant-profile": "^0.0.9",
+    "grant": "^4.7.0",
+    "grant-profile": "^0.0.11",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
-    "@types/express": "^4.17.2",
-    "@types/express-session": "^1.15.16",
+    "@types/express": "^4.17.6",
+    "@types/express-session": "^1.17.0",
     "@types/lodash": "^4.14.149",
-    "@types/mocha": "^5.2.7",
-    "@types/node": "^13.1.1",
-    "axios": "^0.19.0",
-    "mocha": "^6.2.2",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.11.1",
+    "axios": "^0.19.2",
+    "mocha": "^7.1.1",
     "shx": "^0.3.2",
-    "ts-node": "^8.5.4",
-    "typescript": "^3.7.4"
+    "ts-node": "^8.8.2",
+    "typescript": "^3.8.3"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }

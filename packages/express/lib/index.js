@@ -51,7 +51,7 @@ function feathersExpress (feathersApp, expressApp = express()) {
       }
 
       debug('Registering service with middleware', middleware);
-      // Since this is a serivce, call Feathers `.use`
+      // Since this is a service, call Feathers `.use`
       feathersApp.use.call(this, location, service, { middleware });
 
       return this;

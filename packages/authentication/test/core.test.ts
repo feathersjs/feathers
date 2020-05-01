@@ -302,6 +302,7 @@ describe('authentication/core', () => {
         };
 
         try {
+          // @ts-ignore
           await auth.createAccessToken({}, overrides);
           assert.fail('Should never get here');
         } catch (error) {

@@ -1,7 +1,8 @@
 const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 const assert = require('assert');
-const _ = require('lodash');
+const omit = require('lodash/omit');
+const extend = require('lodash/extend');
 const io = require('socket.io-client');
 const request = require('request');
 const { Service } = require('@feathersjs/tests/lib/fixture');
@@ -149,12 +150,12 @@ describe('@feathersjs/socketio', () => {
     };
 
     service.create = function (data, params) {
-      assert.deepStrictEqual(_.omit(params, 'query', 'route', 'connection'), socketParams, 'Passed handshake parameters');
+      assert.deepStrictEqual(omit(params, 'query', 'route', 'connection'), socketParams, 'Passed handshake parameters');
       return old.create.apply(this, arguments);
     };
 
     service.update = function (id, data, params) {
-      assert.deepStrictEqual(params, _.extend({
+      assert.deepStrictEqual(params, extend({
         route: {},
         connection: socketParams,
         query: {
@@ -171,7 +172,7 @@ describe('@feathersjs/socketio', () => {
         test: 'param'
       }, error => {
         assert.ok(!error);
-        _.extend(service, old);
+        extend(service, old);
         done();
       });
     });
@@ -197,13 +198,13 @@ describe('@feathersjs/socketio', () => {
     let old = { find: service.find };
 
     service.find = function (params) {
-      assert.deepStrictEqual(_.omit(params, 'query', 'route', 'connection'), socketParams, 'Handshake parameters passed on proper position');
+      assert.deepStrictEqual(omit(params, 'query', 'route', 'connection'), socketParams, 'Handshake parameters passed on proper position');
       return old.find.apply(this, arguments);
     };
 
     socket.emit('find', 'todo', error => {
       assert.ok(!error);
-      _.extend(service, old);
+      extend(service, old);
       done();
     });
   });

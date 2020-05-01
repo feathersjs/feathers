@@ -2,7 +2,7 @@
   "name": "@feathersjs/tests",
   "private": true,
   "description": "Feathers core module common tests",
-  "version": "4.4.3",
+  "version": "4.5.3",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -33,7 +33,7 @@
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
     "test": "npm run compile && npm run mocha",
-    "mocha": "mocha --opts ../../mocha.ts.opts --recursive test/**.test.ts test/**/*.test.ts"
+    "mocha": "mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"
@@ -42,19 +42,19 @@
     "access": "public"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.19.2",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "^4.4.3",
+    "@feathersjs/feathers": "^4.5.3",
     "@types/axios": "^0.14.0",
     "@types/debug": "^4.1.5",
     "@types/lodash": "^4.14.149",
-    "@types/mocha": "^5.2.7",
-    "@types/node": "^13.1.1",
-    "mocha": "^6.2.2",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.11.1",
+    "mocha": "^7.1.1",
     "shx": "^0.3.2",
-    "ts-node": "^8.5.4",
-    "typescript": "^3.7.4"
+    "ts-node": "^8.8.2",
+    "typescript": "^3.8.3"
   }
 }

@@ -1,0 +1,30 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 13.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install -g codeclimate-test-reporter
+    - run: npm install
+    - run: npm test
+      env:
+        CI: true
+    - run: |
+        if [ "$CODECLIMATE_REPO_TOKEN" != "" ]; then
+          codeclimate-test-reporter < coverage/lcov.info
+        fi
+      env:
+        CODECLIMATE_REPO_TOKEN: ${{ secrets.codeclimate }}

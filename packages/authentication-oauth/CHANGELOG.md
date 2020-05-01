@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.4](https://github.com/feathersjs/feathers/compare/v4.5.3...v4.5.4) (2020-04-29)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Add getEntity method to oAuth authentication and remove provider field for other calls ([#1935](https://github.com/feathersjs/feathers/issues/1935)) ([d925c1b](https://github.com/feathersjs/feathers/commit/d925c1bd193b5c19cb23a246f04fc46d0429fc75))
+
+
+
+
+
+## [4.5.3](https://github.com/feathersjs/feathers/compare/v4.5.2...v4.5.3) (2020-04-17)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Allow req.feathers to be used in oAuth authentication requests ([#1886](https://github.com/feathersjs/feathers/issues/1886)) ([854c9ca](https://github.com/feathersjs/feathers/commit/854c9cac9a9a5f8f89054a90feb24ab5c4766f5f))
+
+
+
+
+
+## [4.5.2](https://github.com/feathersjs/feathers/compare/v4.5.1...v4.5.2) (2020-03-04)
+
+
+### Bug Fixes
+
+* **package:** update grant-profile to version 0.0.11 ([#1841](https://github.com/feathersjs/feathers/issues/1841)) ([5dcd2aa](https://github.com/feathersjs/feathers/commit/5dcd2aa3483059cc7a2546b145dd72b4705fe2fe))
+
+
+
+
+
+## [4.5.1](https://github.com/feathersjs/feathers/compare/v4.5.0...v4.5.1) (2020-01-24)
+
+**Note:** Version bump only for package @feathersjs/authentication-oauth
+
+
+
+
+
+# [4.5.0](https://github.com/feathersjs/feathers/compare/v4.4.3...v4.5.0) (2020-01-18)
+
+
+### Features
+
+* **authentication-oauth:** Set oAuth redirect URL dynamically and pass query the service ([#1737](https://github.com/feathersjs/feathers/issues/1737)) ([0b05f0b](https://github.com/feathersjs/feathers/commit/0b05f0b58a257820fa61d695a36f36455209f6a1))
+
+
+
+
+
 ## [4.4.3](https://github.com/feathersjs/feathers/compare/v4.4.1...v4.4.3) (2019-12-06)
 
 **Note:** Version bump only for package @feathersjs/authentication-oauth

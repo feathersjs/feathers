@@ -1,0 +1,22 @@
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+name: Update packages
+jobs:
+  release:
+    name: Update npm packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update npm packages
+        uses: technote-space/create-pr-action@v2.0.3
+        with:
+          EXECUTE_COMMANDS: |
+            npm install
+            npm run update-dependencies
+            npm run clean
+            npm install
+          COMMIT_MESSAGE: 'chore(dependencies): Update all dependencies'
+          COMMIT_NAME: 'GitHub Actions'
+          COMMIT_EMAIL: 'daff@neyeon.com'
+          PR_BRANCH_NAME: 'chore-npm-update-${PR_ID}'
+          PR_TITLE: 'chore(dependencies): Update all dependencies'

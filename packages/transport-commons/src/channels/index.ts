@@ -1,5 +1,7 @@
 import Debug from 'debug';
-import { compact, flattenDeep, noop } from 'lodash';
+import compact from 'lodash/compact';
+import flattenDeep from 'lodash/flattenDeep';
+import noop from 'lodash/noop';
 import { Channel, RealTimeConnection } from './channel/base';
 import { CombinedChannel } from './channel/combined';
 import { channelMixin, publishMixin, keys, PublishMixin, Event, Publisher } from './mixins';
@@ -86,14 +88,14 @@ export function channels () {
           );
 
           try {
-            Promise.resolve(publisher(data, hook)).then(result => {
+            Promise.resolve(publisher(data, hook)).then((result: any) => {
               if (!result) {
                 return;
               }
-  
+
               const results = Array.isArray(result) ? compact(flattenDeep(result)) : [result];
               const channel = new CombinedChannel(results);
-  
+
               if (channel && channel.length > 0) {
                 app.emit('publish', event, channel, hook, data);
               } else {

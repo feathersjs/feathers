@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/socketio",
   "description": "The Feathers Socket.io real-time API provider",
-  "version": "4.4.3",
+  "version": "4.5.4",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "index.d.ts",
@@ -31,7 +31,7 @@
     "node": ">= 10"
   },
   "scripts": {
-    "test": "mocha --opts ../../mocha.opts"
+    "test": "mocha --config ../../.mocharc.json"
   },
   "directories": {
     "lib": "lib"
@@ -40,20 +40,23 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/transport-commons": "^4.4.3",
+    "@feathersjs/transport-commons": "^4.5.3",
     "@types/socket.io": "^2.1.4",
     "debug": "^4.1.1",
     "socket.io": "^2.3.0",
-    "uberproto": "^2.0.4"
+    "uberproto": "^2.0.6"
   },
   "devDependencies": {
-    "@feathersjs/commons": "^4.4.3",
-    "@feathersjs/express": "^4.4.3",
-    "@feathersjs/feathers": "^4.4.3",
-    "@feathersjs/tests": "^4.4.3",
+    "@feathersjs/commons": "^4.5.3",
+    "@feathersjs/express": "^4.5.4",
+    "@feathersjs/feathers": "^4.5.3",
+    "@feathersjs/tests": "^4.5.3",
+    "@types/mocha": "^7.0.2",
+    "@types/mongodb": "^3.5.5",
+    "@types/node": "^13.11.1",
     "feathers-memory": "^4.1.0",
     "lodash": "^4.17.15",
-    "mocha": "^6.2.2",
+    "mocha": "^7.1.1",
     "socket.io-client": "^2.3.0"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"

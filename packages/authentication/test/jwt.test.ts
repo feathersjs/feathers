@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 import feathers, { Application, Service } from '@feathersjs/feathers';
 // @ts-ignore
 import memory from 'feathers-memory';
@@ -108,7 +108,7 @@ describe('authentication/jwt', () => {
       });
     });
 
-    it('sends disconnect event when connection token expires and removes authentication', async () => {
+    it('sends disconnect event when connection token expires and removes all connection information', async () => {
       const connection: any = {};
       const token: string = await app.service('authentication').createAccessToken({}, {
         subject: `${user.id}`,
@@ -129,6 +129,8 @@ describe('authentication/jwt', () => {
       assert.strictEqual(disconnection, connection);
 
       assert.ok(!connection.authentication);
+      assert.ok(!connection.user);
+      assert.strictEqual(Object.keys(connection).length, 0);
     });
 
     it('deletes authentication information on remove', async () => {
@@ -147,6 +149,7 @@ describe('authentication/jwt', () => {
       });
 
       assert.ok(!connection.authentication);
+      assert.ok(!connection.user);
     });
 
     it('does not remove if accessToken does not match', async () => {
@@ -305,6 +308,16 @@ describe('authentication/jwt', () => {
       } catch (error) {
         assert.strictEqual(error.message, `Invalid JwtStrategy option 'authentication.otherJwt.expiresIn'. Did you mean to set it in 'authentication.jwtOptions'?`);
       }
+    });
+
+    it('errors when `header` option is an object`', () => {
+      app.get('authentication').otherJwt = {
+        header: { message: 'This is wrong' }
+      };
+
+      assert.throws(() => app.service('authentication').register('otherJwt', new JWTStrategy()), {
+        message: `The 'header' option for the otherJwt strategy must be a string`
+      });
     });
   });
 
