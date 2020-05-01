@@ -1,11 +1,5 @@
 {
   "port": 3030,
-  "environment": "NODE_ENV",
-  "path": "../something",
-  "pathFromEnv": "PATH_ENV",
-  "unescaped": "\\NODE_ENV",
-  "from": "default",
-  "deeply": { "nested": { "env": "NODE_ENV" } },
   "array": ["one", "two", "three"],
   "deep": { "base": false },
   "nullish": null
