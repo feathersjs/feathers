@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@feathersjs/commons": "^4.5.3",
-    "@feathersjs/express": "^4.5.3",
+    "@feathersjs/express": "^4.5.4",
     "@feathersjs/feathers": "^4.5.3",
     "@feathersjs/tests": "^4.5.3",
     "@types/mocha": "^7.0.2",

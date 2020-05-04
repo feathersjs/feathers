@@ -59,7 +59,7 @@
     "@types/node": "^13.13.4",
     "mocha": "^7.1.2",
     "shx": "^0.3.2",
-    "ts-node": "^8.9.1",
+    "ts-node": "^8.10.1",
     "typescript": "^3.8.3"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"

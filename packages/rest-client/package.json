@@ -42,14 +42,14 @@
   "dependencies": {
     "@feathersjs/commons": "^4.5.3",
     "@feathersjs/errors": "^4.5.3",
-    "qs": "^6.9.3"
+    "qs": "^6.9.4"
   },
   "devDependencies": {
-    "@angular/common": "^9.1.3",
-    "@angular/core": "^9.1.3",
+    "@angular/common": "^9.1.4",
+    "@angular/core": "^9.1.4",
     "@angular/http": "^7.2.16",
-    "@angular/platform-browser": "^9.1.3",
-    "@feathersjs/express": "^4.5.3",
+    "@angular/platform-browser": "^9.1.4",
+    "@feathersjs/express": "^4.5.4",
     "@feathersjs/feathers": "^4.5.3",
     "@feathersjs/tests": "^4.5.3",
     "axios": "^0.19.2",

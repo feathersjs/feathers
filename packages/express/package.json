@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@feathersjs/authentication": "^4.5.3",
-    "@feathersjs/authentication-local": "^4.5.3",
+    "@feathersjs/authentication-local": "^4.5.4",
     "@feathersjs/feathers": "^4.5.3",
     "@feathersjs/tests": "^4.5.3",
     "axios": "^0.19.2",
