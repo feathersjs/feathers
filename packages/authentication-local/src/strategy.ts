@@ -127,7 +127,7 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
 
     return {
       authentication: { strategy: this.name },
-      [entity]: await this.getEntity(result, params)
+      [entity]: await this.getEntity(result, omit(params, 'provider'))
     };
   }
 }
