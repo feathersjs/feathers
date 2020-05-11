@@ -50,7 +50,7 @@
     "debug": "^4.1.1",
     "express-session": "^1.17.1",
     "grant": "^5.0.1",
-    "grant-profile": "^1.0.0",
+    "grant-profile": "^1.0.1",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
@@ -59,7 +59,7 @@
     "@types/express-session": "^1.17.0",
     "@types/lodash": "^4.14.150",
     "@types/mocha": "^7.0.2",
-    "@types/node": "^13.13.4",
+    "@types/node": "^13.13.5",
     "axios": "^0.19.2",
     "mocha": "^7.1.2",
     "shx": "^0.3.2",
