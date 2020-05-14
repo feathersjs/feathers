@@ -47,5 +47,6 @@ packages/authentication-oauth/lib
 packages/configuration/lib
 packages/commons/lib
 packages/errors/lib
+packages/feathers/lib
 packages/tests/lib
 packages/transport-commons/lib

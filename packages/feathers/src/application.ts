@@ -1,16 +1,26 @@
-const debug = require('debug')('feathers:application');
-const { stripSlashes } = require('@feathersjs/commons');
+import Debug from 'debug';
+import { stripSlashes } from '@feathersjs/commons';
 
-const Uberproto = require('uberproto');
-const events = require('./events');
-const hooks = require('./hooks');
-const version = require('./version');
+// @ts-ignore
+import Uberproto from 'uberproto';
+import events from './events';
+import hooks from './hooks';
+import version from './version';
+import { BaseApplication, Service } from './declarations';
+
+const debug = Debug('feathers:application');
 
 const Proto = Uberproto.extend({
   create: null
 });
 
-const application = {
+interface AppExtensions {
+  _isSetup: boolean;
+  init (): void;
+  services: { [key: string]: Service<any> };
+}
+
+export default {
   init () {
     Object.assign(this, {
       version,
@@ -61,11 +71,7 @@ const application = {
     return this;
   },
 
-  service (path, service) {
-    if (typeof service !== 'undefined') {
-      throw new Error('Registering a new service with `app.service(path, service)` is no longer supported. Use `app.use(path, service)` instead.');
-    }
-
+  service (path: string) {
     const location = stripSlashes(path) || '/';
     const current = this.services[location];
 
@@ -77,14 +83,14 @@ const application = {
     return current;
   },
 
-  use (path, service, options = {}) {
+  use (path, service, options: any = {}) {
     if (typeof path !== 'string') {
       throw new Error(`'${path}' is not a valid service path.`);
     }
 
     const location = stripSlashes(path) || '/';
     const isSubApp = typeof service.service === 'function' && service.services;
-    const isService = this.methods.concat('setup').some(name => typeof service[name] === 'function');
+    const isService = this.methods.concat('setup').some(name => typeof (service as any)[name] === 'function');
 
     if (isSubApp) {
       const subApp = service;
@@ -144,6 +150,4 @@ const application = {
 
     return this;
   }
-};
-
-module.exports = application;
+} as BaseApplication & AppExtensions ;

@@ -1,13 +1,15 @@
-const { hooks: hookCommons } = require('@feathersjs/commons');
-const {
-  hooks: hooksDecorator,
+import * as hookCommons from './commons';
+import {
+  hooks as hooksDecorator,
   HookContext,
   getMiddleware,
   withParams,
   withProps
-} = require('@feathersjs/hooks');
-const baseHooks = require('./base');
+} from '@feathersjs/hooks';
+import { assignArguments, validate } from './base';
+import { Application, Service } from '../declarations';
 
+const baseHooks = [ assignArguments, validate ];
 const {
   getHooks,
   enableHooks,
@@ -17,8 +19,8 @@ const {
   wrap
 } = hookCommons;
 
-function getContextUpdaters (app, service, method) {
-  const parameters = service.methods[method].map(v => (v === 'params' ? ['params', {}] : v));
+function getContextUpdaters (app: Application, service: Service<any>, method: string) {
+  const parameters: any = service.methods[method].map(v => (v === 'params' ? ['params', {}] : v));
 
   return [
     withParams(...parameters),
@@ -38,8 +40,8 @@ function getContextUpdaters (app, service, method) {
   ];
 }
 
-function getCollector (app, service, method) {
-  return (self, fn, args) => {
+function getCollector (app: Application, service: Service<any>, method: string) {
+  return (self: any, fn: any, args: any[]) => {
     const middleware = [
       ...getMiddleware(self),
       ...(fn && typeof fn.collect === 'function' ? fn.collect(fn, fn.original, args) : [])
@@ -67,7 +69,7 @@ function getCollector (app, service, method) {
   };
 }
 
-function withHooks (app, service, methods) {
+function withHooks (app: any, service: any, methods: string[]) {
   const hookMap = methods.reduce((accu, method) => {
     if (typeof service[method] !== 'function') {
       return accu;
@@ -80,12 +82,12 @@ function withHooks (app, service, methods) {
     };
 
     return accu;
-  }, {});
+  }, {} as any);
 
   hooksDecorator(service, hookMap);
 }
 
-function mixinMethod () {
+function mixinMethod (this: any) {
   const service = this;
   const args = Array.from(arguments);
 
@@ -107,7 +109,7 @@ function mixinMethod () {
 }
 
 // A service mixin that adds `service.hooks()` method and functionality
-const hookMixin = exports.hookMixin = function hookMixin (service) {
+const hookMixin = exports.hookMixin = function hookMixin (service: any) {
   if (typeof service.hooks === 'function') {
     return;
   }
@@ -142,7 +144,7 @@ const hookMixin = exports.hookMixin = function hookMixin (service) {
     mixin[method] = mixinMethod;
 
     return mixin;
-  }, {});
+  }, {} as any);
 
   // Add .hooks method and properties to the service
   enableHooks(service, methodNames, app.hookTypes);
@@ -150,8 +152,8 @@ const hookMixin = exports.hookMixin = function hookMixin (service) {
   service.mixin(mixin);
 };
 
-module.exports = function () {
-  return function (app) {
+export default function () {
+  return function (app: any) {
     // We store a reference of all supported hook types on the app
     // in case someone needs it
     Object.assign(app, {
@@ -165,10 +167,8 @@ module.exports = function () {
   };
 };
 
-module.exports.ACTIVATE_HOOKS = ACTIVATE_HOOKS;
-
-module.exports.activateHooks = function activateHooks (args) {
-  return fn => {
+export function activateHooks (args: any[]) {
+  return (fn: any) => {
     Object.defineProperty(fn, ACTIVATE_HOOKS, { value: args });
     return fn;
   };

@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/commons",
-  "version": "4.5.3",
+  "version": "4.5.4",
   "description": "Shared Feathers utility functions",
   "homepage": "https://feathersjs.com",
   "keywords": [
@@ -40,9 +40,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "@feathersjs/hooks": "^0.4.0-alpha.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/mocha": "^7.0.2",
     "@types/node": "^14.0.1",

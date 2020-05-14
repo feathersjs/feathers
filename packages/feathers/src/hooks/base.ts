@@ -1,11 +1,12 @@
-const { _ } = require('@feathersjs/commons');
+import { _ } from '@feathersjs/commons';
+import { HookContext } from '../declarations';
 
-const assignArguments = (context, next) => {
+export const assignArguments = (context: HookContext, next: any) => {
   const { service, method } = context;
   const parameters = service.methods[method];
 
   context.arguments.forEach((value, index) => {
-    context[parameters[index]] = value;
+    (context as any)[parameters[index]] = value;
   });
 
   if (!context.params) {
@@ -15,7 +16,7 @@ const assignArguments = (context, next) => {
   return next();
 };
 
-const validate = (context, next) => {
+export const validate = (context: HookContext, next: any) => {
   const { service, method, path } = context;
   const parameters = service.methods[method];
 
@@ -29,5 +30,3 @@ const validate = (context, next) => {
 
   return next();
 };
-
-module.exports = [ assignArguments, validate ];

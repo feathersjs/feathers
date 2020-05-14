@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import { hooks } from '../src';
+import * as hooks from '../../src/hooks/commons';
 
 describe('hook utilities', () => {
   describe('.makeArguments', () => {
