@@ -1,10 +1,8 @@
 import feathers, { Params } from '@feathersjs/feathers';
-import express, { rest, errorHandler } from '@feathersjs/express';
+import express from '@feathersjs/express';
+import memory from 'feathers-memory';
 import { AuthenticationService, JWTStrategy, AuthenticationRequest } from '@feathersjs/authentication';
 import { express as oauth, OAuthStrategy } from '../src';
-
-// @ts-ignore
-import memory from 'feathers-memory';
 
 export class TestOAuthStrategy extends OAuthStrategy {
   async getProfile (data: AuthenticationRequest, _params: Params) {
@@ -27,14 +25,15 @@ export class TestOAuthStrategy extends OAuthStrategy {
   }
 }
 
+export const app = express(feathers());
+
 const port = 3000;
-const app = express(feathers());
 const auth = new AuthenticationService(app);
 
 auth.register('jwt', new JWTStrategy());
 auth.register('test', new TestOAuthStrategy());
 
-app.configure(rest());
+app.configure(express.rest());
 app.set('host', '127.0.0.1');
 app.set('port', port);
 app.set('authentication', {
@@ -65,6 +64,4 @@ app.use('/authentication', auth);
 app.use('/users', memory());
 
 app.configure(oauth());
-app.use(errorHandler({ logger: null }));
-
-export { app };
+app.use(express.errorHandler({ logger: null }));

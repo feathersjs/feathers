@@ -49,12 +49,12 @@
     "@feathersjs/feathers": "^4.5.3",
     "@types/axios": "^0.14.0",
     "@types/debug": "^4.1.5",
-    "@types/lodash": "^4.14.149",
+    "@types/lodash": "^4.14.151",
     "@types/mocha": "^7.0.2",
-    "@types/node": "^13.11.1",
-    "mocha": "^7.1.1",
+    "@types/node": "^14.0.1",
+    "mocha": "^7.1.2",
     "shx": "^0.3.2",
-    "ts-node": "^8.8.2",
-    "typescript": "^3.8.3"
+    "ts-node": "^8.10.1",
+    "typescript": "^3.9.2"
   }
 }
