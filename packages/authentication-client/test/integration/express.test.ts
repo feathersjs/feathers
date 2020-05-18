@@ -1,6 +1,6 @@
 import axios from 'axios';
 import feathers, { Application as FeathersApplication } from '@feathersjs/feathers';
-import * as express from '@feathersjs/express';
+import express from '@feathersjs/express';
 import rest from '@feathersjs/rest-client';
 
 import authClient from '../../src';
