@@ -1,7 +1,8 @@
 import assert from 'assert';
 import feathers, { Application } from '@feathersjs/feathers';
 
-import client, { AuthenticationClient } from '../src';
+import client from '../src';
+import { AuthenticationClient } from '../src';
 import { NotAuthenticated } from '@feathersjs/errors';
 
 describe('@feathersjs/authentication-client', () => {

@@ -1,4 +1,3 @@
-import { promisify } from 'util';
 import merge from 'lodash/merge';
 import jsonwebtoken, { SignOptions, Secret, VerifyOptions } from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,8 +8,6 @@ import { IncomingMessage, ServerResponse } from 'http';
 import defaultOptions from './options';
 
 const debug = Debug('@feathersjs/authentication/base');
-const verifyJWT = promisify(jsonwebtoken.verify);
-const createJWT = promisify(jsonwebtoken.sign);
 
 export interface AuthenticationResult {
   [key: string]: any;
@@ -168,8 +165,7 @@ export class AuthenticationBase {
       options.jwtid = uuidv4();
     }
 
-    // @ts-ignore
-    return createJWT(payload, jwtSecret, options);
+    return jsonwebtoken.sign(payload, jwtSecret, options);
   }
 
   /**
@@ -191,10 +187,9 @@ export class AuthenticationBase {
     }
 
     try {
-      // @ts-ignore
-      const isValid = await verifyJWT(accessToken, jwtSecret, options);
+      const verified = await jsonwebtoken.verify(accessToken, jwtSecret, options);
 
-      return isValid;
+      return verified as any;
     } catch (error) {
       throw new NotAuthenticated(error.message, error);
     }
