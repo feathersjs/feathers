@@ -31,6 +31,11 @@ declare namespace createApplication {
     type ClientSideParams = Pick<Params, 'query' | 'paginate'>;
     type ServerSideParams = Params;
 
+    /**
+     * Service call parameters
+     *
+     * @see {@link https://docs.feathersjs.com/api/services.html#params}
+     */
     interface Params {
         query?: Query;
         paginate?: false | Pick<PaginationOptions, 'max'>;
@@ -136,41 +141,144 @@ declare namespace createApplication {
         finally?: Partial<HookMap<T>> | Hook<T> | Hook<T>[];
     }
 
-    interface ServiceMethods<T> {
-        [key: string]: any;
-
-        find (params?: Params): Promise<T | T[] | Paginated<T>>;
-
-        get (id: Id, params?: Params): Promise<T>;
-
-        create (data: Partial<T> | Partial<T>[], params?: Params): Promise<T | T[]>;
-
-        update (id: NullableId, data: T, params?: Params): Promise<T | T[]>;
-
-        patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T | T[]>;
-
-        remove (id: NullableId, params?: Params): Promise<T | T[]>;
-    }
-
     interface SetupMethod {
         setup (app: Application, path: string): void;
     }
 
+    interface ServiceMethods<T> {
+        [key: string]: any;
+
+        /**
+         * Retrieve all resources from this service.
+         *
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#find-params|Feathers API Documentation: .find(params)}
+         */
+        find (params?: Params): Promise<T | T[] | Paginated<T>>;
+
+        /**
+         * Retrieve a single resource matching the given ID.
+         *
+         * @param id - ID of the resource to locate
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#get-id-params|Feathers API Documentation: .get(id, params)}
+         */
+        get (id: Id, params?: Params): Promise<T>;
+
+        /**
+         * Create a new resource for this service.
+         *
+         * @param data - Data to insert into this service.
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#create-data-params|Feathers API Documentation: .create(data, params)}
+         */
+        create (data: Partial<T> | Partial<T>[], params?: Params): Promise<T | T[]>;
+
+        /**
+         * Replace any resources matching the given ID with the given data.
+         *
+         * @param id - ID of the resource to be updated
+         * @param data - Data to be put in place of the current resource.
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#update-id-data-params|Feathers API Documentation: .update(id, data, params)}
+         */
+        update (id: NullableId, data: T, params?: Params): Promise<T | T[]>;
+
+        /**
+         * Merge any resources matching the given ID with the given data.
+         *
+         * @param id - ID of the resource to be patched
+         * @param data - Data to merge with the current resource.
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#patch-id-data-params|Feathers API Documentation: .patch(id, data, params)}
+         */
+        patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T | T[]>;
+
+        /**
+         * Remove resources matching the given ID from the this service.
+         *
+         * @param id - ID of the resource to be removed
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#remove-id-params|Feathers API Documentation: .remove(id, params)}
+         */
+        remove (id: NullableId, params?: Params): Promise<T | T[]>;
+    }
+
     interface ServiceOverloads<T> {
+        /**
+         * Create a new resource for this service.
+         *
+         * @param data - Data to insert into this service.
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#create-data-params|Feathers API Documentation: .create(data, params)}
+         */
         create? (data: Partial<T>, params?: Params): Promise<T>;
 
+        /**
+         * Create a new resource for this service.
+         *
+         * @param data - Data to insert into this service.
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#create-data-params|Feathers API Documentation: .create(data, params)}
+         */
         create? (data: Partial<T>[], params?: Params): Promise<T[]>;
 
+        /**
+         * Replace any resources matching the given ID with the given data.
+         *
+         * @param id - ID of the resource to be updated
+         * @param data - Data to be put in place of the current resource.
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#update-id-data-params|Feathers API Documentation: .update(id, data, params)}
+         */
         update? (id: Id, data: T, params?: Params): Promise<T>;
 
+        /**
+         * Replace any resources matching the given ID with the given data.
+         *
+         * @param id - ID of the resource to be updated
+         * @param data - Data to be put in place of the current resource.
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#update-id-data-params|Feathers API Documentation: .update(id, data, params)}
+         */
         update? (id: null, data: T, params?: Params): Promise<T[]>;
 
+        /**
+         * Merge any resources matching the given ID with the given data.
+         *
+         * @param id - ID of the resource to be patched
+         * @param data - Data to merge with the current resource.
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#patch-id-data-params|Feathers API Documentation: .patch(id, data, params)}
+         */
         patch? (id: Id, data: Partial<T>, params?: Params): Promise<T>;
 
+        /**
+         * Merge any resources matching the given ID with the given data.
+         *
+         * @param id - ID of the resource to be patched
+         * @param data - Data to merge with the current resource.
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#patch-id-data-params|Feathers API Documentation: .patch(id, data, params)}
+         */
         patch? (id: null, data: Partial<T>, params?: Params): Promise<T[]>;
 
+        /**
+         * Remove resources matching the given ID from the this service.
+         *
+         * @param id - ID of the resource to be removed
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#remove-id-params|Feathers API Documentation: .remove(id, params)}
+         */
         remove? (id: Id, params?: Params): Promise<T>;
 
+        /**
+         * Remove resources matching the given ID from the this service.
+         *
+         * @param id - ID of the resource to be removed
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#remove-id-params|Feathers API Documentation: .remove(id, params)}
+         */
         remove? (id: null, params?: Params): Promise<T[]>;
     }
 

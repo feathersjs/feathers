@@ -12,9 +12,9 @@ describe('@feathersjs/errors', () => {
         expando: 'Me'
       });
 
-      assert.ok(error instanceof errors.BadRequest);
       assert.strictEqual(error.message, 'Hi');
       assert.strictEqual(error.expando, 'Me');
+      assert.ok(error instanceof errors.BadRequest);
     });
 
     it('converts other object to error', () => {
