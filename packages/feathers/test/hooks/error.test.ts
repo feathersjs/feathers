@@ -1,5 +1,5 @@
-const assert = require('assert');
-const feathers = require('../../lib');
+import assert from 'assert';
+import { feathers, Service, Application } from '../../src';
 
 describe('`error` hooks', () => {
   describe('on direct service method errors', () => {
@@ -16,7 +16,7 @@ describe('`error` hooks', () => {
     it('basic error hook', () => {
       service.hooks({
         error: {
-          get (hook) {
+          get (hook: any) {
             assert.strictEqual(hook.type, 'error');
             assert.strictEqual(hook.id, 'test');
             assert.strictEqual(hook.method, 'get');
@@ -34,13 +34,13 @@ describe('`error` hooks', () => {
     it('can change the error', () => {
       service.hooks({
         error: {
-          get (hook) {
+          get (hook: any) {
             hook.error = new Error(errorMessage);
           }
         }
       });
 
-      return service.get('test').catch(error => {
+      return service.get('test').catch((error: any) => {
         assert.strictEqual(error.message, errorMessage);
       });
     });
@@ -54,7 +54,7 @@ describe('`error` hooks', () => {
         }
       });
 
-      return service.get('test').catch(error => {
+      return service.get('test').catch((error: any) => {
         assert.strictEqual(error.message, errorMessage);
       });
     });
@@ -68,7 +68,7 @@ describe('`error` hooks', () => {
         }
       });
 
-      return service.get('test').catch(error => {
+      return service.get('test').catch((error: any) => {
         assert.strictEqual(error.message, errorMessage);
       });
     });
@@ -82,7 +82,7 @@ describe('`error` hooks', () => {
         }
       });
 
-      return service.get('test').catch(error => {
+      return service.get('test').catch((error: any) => {
         assert.strictEqual(error.message, errorMessage);
       });
     });
@@ -91,18 +91,18 @@ describe('`error` hooks', () => {
       service.hooks({
         error: {
           get: [
-            function (hook) {
+            function (hook: any) {
               hook.error = new Error(errorMessage);
               hook.error.first = true;
             },
 
-            function (hook) {
+            function (hook: any) {
               hook.error.second = true;
 
               return Promise.resolve(hook);
             },
 
-            function (hook) {
+            function (hook: any) {
               hook.error.third = true;
 
               return hook;
@@ -111,7 +111,7 @@ describe('`error` hooks', () => {
         }
       });
 
-      return service.get('test').catch(error => {
+      return service.get('test').catch((error: any) => {
         assert.strictEqual(error.message, errorMessage);
         assert.ok(error.first);
         assert.ok(error.second);
@@ -126,14 +126,14 @@ describe('`error` hooks', () => {
 
       service.hooks({
         error: {
-          get (hook) {
+          get (hook: any) {
             hook.result = data;
           }
         }
       });
 
       return service.get(10)
-        .then(result => assert.deepStrictEqual(result, data));
+        .then((result: any) => assert.deepStrictEqual(result, data));
     });
 
     it('allows to set `context.result = null` in error hooks (#865)', () => {
@@ -145,14 +145,14 @@ describe('`error` hooks', () => {
 
       app.service('dummy').hooks({
         error: {
-          get (context) {
+          get (context: any) {
             context.result = null;
           }
         }
       });
 
       return app.service('dummy').get(1)
-        .then(result => assert.strictEqual(result, null));
+        .then((result: any) => assert.strictEqual(result, null));
     });
 
     it('uses the current hook object if thrown in a service method', () => {
@@ -165,17 +165,17 @@ describe('`error` hooks', () => {
       const service = app.service('dummy');
 
       service.hooks({
-        before (hook) {
+        before (hook: any) {
           return { ...hook, id: 42 };
         },
-        error (hook) {
+        error (hook: any) {
           assert.strictEqual(hook.id, 42);
         }
       });
 
       return service.get(1).then(
         () => assert.fail('Should never get here'),
-        error => assert.strictEqual(error.message, 'Something went wrong')
+        (error: any) => assert.strictEqual(error.message, 'Something went wrong')
       );
     });
   });
@@ -183,12 +183,12 @@ describe('`error` hooks', () => {
   describe('error in hooks', () => {
     const errorMessage = 'before hook broke';
 
-    let app;
-    let service;
+    let app: Application;
+    let service: Service<any>;
 
     beforeEach(() => {
       app = feathers().use('/dummy', {
-        get (id) {
+        get (id: any) {
           return Promise.resolve({
             id, text: `You have to do ${id}`
           });
@@ -204,7 +204,7 @@ describe('`error` hooks', () => {
           throw new Error(errorMessage);
         }
       }).hooks({
-        error (hook) {
+        error (hook: any) {
           assert.strictEqual(hook.original.type, 'before',
             'Original hook still set'
           );
@@ -226,7 +226,7 @@ describe('`error` hooks', () => {
           throw new Error(errorMessage);
         },
 
-        error (hook) {
+        error (hook: any) {
           assert.strictEqual(hook.original.type, 'after',
             'Original hook still set'
           );
@@ -248,13 +248,13 @@ describe('`error` hooks', () => {
 
     it('uses the current hook object if thrown in a hook and sets hook.original', () => {
       service.hooks({
-        after (hook) {
+        after (hook: any) {
           hook.modified = true;
 
           throw new Error(errorMessage);
         },
 
-        error (hook) {
+        error (hook: any) {
           assert.ok(hook.modified);
           assert.strictEqual(hook.original.type, 'after');
         }
@@ -269,13 +269,13 @@ describe('`error` hooks', () => {
 
     it('error in async hook', () => {
       service.hooks({
-        async (hook) {
+        async (hook: any) {
           hook.modified = true;
 
           throw new Error(errorMessage);
         },
 
-        error (hook) {
+        error (hook: any) {
           assert.ok(hook.modified);
           assert.strictEqual(hook.original.type, 'before');
         }
@@ -292,8 +292,8 @@ describe('`error` hooks', () => {
   it('Error in before hook causes inter-service calls to have wrong hook context (https://github.com/feathersjs/feathers/issues/841)', () => {
     const app = feathers();
 
-    let service1Params;
-    let service2Params;
+    let service1Params: any;
+    let service2Params: any;
 
     app.use('/service1', {
       find () {
@@ -302,14 +302,14 @@ describe('`error` hooks', () => {
     });
 
     app.service('service1').hooks({
-      before (context) {
+      before (context: any) {
         service1Params = context.params;
         return Promise.reject(new Error('Error in service1 before hook'));
       }
     });
 
     app.use('/service2', {
-      find (params) {
+      find () {
         return app.service('/service1').find({}).then(() => {
           return { message: 'service2 success' };
         });
@@ -317,11 +317,11 @@ describe('`error` hooks', () => {
     });
 
     app.service('service2').hooks({
-      before (context) {
+      before (context: any) {
         service2Params = context.params;
         context.params.foo = 'bar';
       },
-      error (context) {
+      error (context: any) {
         assert.ok(service1Params !== context.params);
         assert.ok(service2Params === context.params);
         assert.strictEqual(context.path, 'service2');
@@ -329,7 +329,7 @@ describe('`error` hooks', () => {
       }
     });
 
-    return app.service('/service2').find().catch(error => {
+    return app.service('/service2').find().catch((error: any) => {
       assert.strictEqual(error.message, 'Error in service1 before hook');
     });
   });

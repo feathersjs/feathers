@@ -1,12 +1,10 @@
-const assert = require('assert');
-const Proto = require('uberproto');
-const feathers = require('../lib');
+// @ts-ignore
+import Proto from 'uberproto';
+import assert from 'assert';
+import { feathers, version } from '../src'
+import { HookContext } from '@feathersjs/hooks/lib';
 
 describe('Feathers application', () => {
-  it('adds an ES module `default` export', () => {
-    assert.strictEqual(feathers, feathers.default);
-  });
-
   it('initializes', () => {
     const app = feathers();
 
@@ -18,7 +16,7 @@ describe('Feathers application', () => {
   it('sets the version on main and app instance', () => {
     const app = feathers();
 
-    assert.ok(feathers.version > '4.0.0');
+    assert.ok(version > '4.0.0');
     assert.ok(app.version > '4.0.0');
   });
 
@@ -26,7 +24,7 @@ describe('Feathers application', () => {
     const app = feathers();
     const original = { hello: 'world' };
 
-    app.on('test', data => {
+    app.on('test', (data: any) => {
       assert.deepStrictEqual(original, data);
       done();
     });
@@ -49,10 +47,10 @@ describe('Feathers application', () => {
 
     assert.ok(!app.service('/todos/'));
 
-    app.defaultService = function (path) {
+    app.defaultService = function (path: string) {
       assert.strictEqual(path, 'todos');
       return {
-        get (id) {
+        get (id: string) {
           return Promise.resolve({
             id, description: `You have to do ${id}!`
           });
@@ -60,7 +58,7 @@ describe('Feathers application', () => {
       };
     };
 
-    return app.service('/todos/').get('dishes').then(data => {
+    return app.service('/todos/').get('dishes').then((data: any) => {
       assert.deepStrictEqual(data, {
         id: 'dishes',
         description: 'You have to do dishes!'
@@ -69,7 +67,7 @@ describe('Feathers application', () => {
   });
 
   it('additionally passes `app` as .configure parameter (#558)', done => {
-    feathers().configure(function (app) {
+    feathers().configure(function (this: any, app: any) {
       assert.strictEqual(this, app);
       done();
     });
@@ -105,11 +103,11 @@ describe('Feathers application', () => {
 
     it('registers and wraps a new service', () => {
       const dummyService = {
-        setup (app, path) {
+        setup (this: any, _app: any, path: string) {
           this.path = path;
         },
 
-        create (data) {
+        create (data: any) {
           return Promise.resolve(data);
         }
       };
@@ -121,18 +119,18 @@ describe('Feathers application', () => {
 
       return wrappedService.create({
         message: 'Test message'
-      }).then(data => assert.strictEqual(data.message, 'Test message'));
+      }).then((data: any) => assert.strictEqual(data.message, 'Test message'));
     });
 
     it('can use a root level service', () => {
       const app = feathers().use('/', {
-        get (id) {
+        get (id: string) {
           return Promise.resolve({ id });
         }
       });
 
       return app.service('/').get('test')
-        .then(result => assert.deepStrictEqual(result, { id: 'test' }));
+        .then((result: any) => assert.deepStrictEqual(result, { id: 'test' }));
     });
 
     it('services can be re-used (#566)', done => {
@@ -140,7 +138,7 @@ describe('Feathers application', () => {
       const app2 = feathers();
 
       app2.use('/dummy', {
-        create (data) {
+        create (data: any) {
           return Promise.resolve(data);
         }
       });
@@ -149,13 +147,13 @@ describe('Feathers application', () => {
 
       dummy.hooks({
         before: {
-          create (hook) {
+          create (hook: HookContext) {
             hook.data.fromHook = true;
           }
         }
       });
 
-      dummy.on('created', data => {
+      dummy.on('created', (data: any) => {
         assert.deepStrictEqual(data, {
           message: 'Hi',
           fromHook: true
@@ -172,7 +170,7 @@ describe('Feathers application', () => {
       const app = feathers();
 
       app.use('/dummy', {
-        create (data) {
+        create (data: any) {
           return Promise.resolve(data);
         }
       });
@@ -180,19 +178,19 @@ describe('Feathers application', () => {
       const dummy = app.service('dummy');
 
       dummy.hooks({
-        async: async (ctx, next) => {
+        async: async (ctx: any, next: any) => {
           await next();
           ctx.params.fromAsyncHook = true;
         },
         before: {
-          create (hook) {
+          create (hook: any) {
             hook.params.fromAsyncHook = false;
           }
         }
       });
 
       dummy.create({ message: 'Hi' }, {}, true)
-        .then(ctx => {
+        .then((ctx: any) => {
           assert.ok(ctx.params.fromAsyncHook);
         })
         .then(done, done);
@@ -203,11 +201,11 @@ describe('Feathers application', () => {
       const dummyService = {
         [TEST]: true,
 
-        setup (app, path) {
+        setup (this: any, _app: any, path: string) {
           this.path = path;
         },
 
-        create (data) {
+        create (data: any) {
           return Promise.resolve(data);
         }
       };
@@ -221,16 +219,16 @@ describe('Feathers application', () => {
     it('methods conserve Symbols', () => {
       const TEST = Symbol('test');
       const dummyService = {
-        setup (app, path) {
+        setup (this: any, _app: any, path: string) {
           this.path = path;
         },
 
-        create (data) {
+        create (data: any) {
           return Promise.resolve(data);
         }
       };
 
-      dummyService.create[TEST] = true;
+      (dummyService.create as any)[TEST] = true;
 
       const app = feathers().use('/dummy', dummyService);
       const wrappedService = app.service('dummy');
@@ -243,30 +241,30 @@ describe('Feathers application', () => {
   describe('Express app options compatibility', function () {
     describe('.set()', () => {
       it('should set a value', () => {
-        var app = feathers();
+        const app = feathers();
         app.set('foo', 'bar');
         assert.strictEqual(app.get('foo'), 'bar');
       });
 
       it('should return the app', () => {
-        var app = feathers();
+        const app = feathers();
         assert.strictEqual(app.set('foo', 'bar'), app);
       });
 
       it('should return the app when undefined', () => {
-        var app = feathers();
+        const app = feathers();
         assert.strictEqual(app.set('foo', undefined), app);
       });
     });
 
     describe('.get()', () => {
       it('should return undefined when unset', () => {
-        var app = feathers();
+        const app = feathers();
         assert.strictEqual(app.get('foo'), undefined);
       });
 
       it('should otherwise return the value', () => {
-        var app = feathers();
+        const app = feathers();
         app.set('foo', 'bar');
         assert.strictEqual(app.get('foo'), 'bar');
       });
@@ -274,7 +272,7 @@ describe('Feathers application', () => {
 
     describe('.enable()', () => {
       it('should set the value to true', () => {
-        var app = feathers();
+        const app = feathers();
         assert.strictEqual(app.enable('tobi'), app);
         assert.strictEqual(app.get('tobi'), true);
       });
@@ -282,7 +280,7 @@ describe('Feathers application', () => {
 
     describe('.disable()', () => {
       it('should set the value to false', () => {
-        var app = feathers();
+        const app = feathers();
         assert.strictEqual(app.disable('tobi'), app);
         assert.strictEqual(app.get('tobi'), false);
       });
@@ -290,12 +288,12 @@ describe('Feathers application', () => {
 
     describe('.enabled()', () => {
       it('should default to false', () => {
-        var app = feathers();
+        const app = feathers();
         assert.strictEqual(app.enabled('foo'), false);
       });
 
       it('should return true when set', () => {
-        var app = feathers();
+        const app = feathers();
         app.set('foo', 'bar');
         assert.strictEqual(app.enabled('foo'), true);
       });
@@ -303,12 +301,12 @@ describe('Feathers application', () => {
 
     describe('.disabled()', () => {
       it('should default to true', () => {
-        var app = feathers();
+        const app = feathers();
         assert.strictEqual(app.disabled('foo'), true);
       });
 
       it('should return false when set', () => {
-        var app = feathers();
+        const app = feathers();
         app.set('foo', 'bar');
         assert.strictEqual(app.disabled('foo'), false);
       });
@@ -321,7 +319,7 @@ describe('Feathers application', () => {
       let setupCount = 0;
 
       app.use('/dummy', {
-        setup (appRef, path) {
+        setup (appRef: any, path: any) {
           setupCount++;
           assert.strictEqual(appRef, app);
           assert.strictEqual(path, 'dummy');
@@ -329,13 +327,13 @@ describe('Feathers application', () => {
       });
 
       app.use('/simple', {
-        get (id) {
+        get (id: string) {
           return Promise.resolve({ id });
         }
       });
 
       app.use('/dummy2', {
-        setup (appRef, path) {
+        setup (appRef: any, path: any) {
           setupCount++;
           assert.strictEqual(appRef, app);
           assert.strictEqual(path, 'dummy2');
@@ -354,7 +352,7 @@ describe('Feathers application', () => {
       app.setup();
 
       app.use('/dummy', {
-        setup (appRef, path) {
+        setup (appRef: any, path: any) {
           assert.ok(app._isSetup);
           assert.strictEqual(appRef, app);
           assert.strictEqual(path, 'dummy');
@@ -368,7 +366,7 @@ describe('Feathers application', () => {
 
       app.use('/dummy', {
         get () {},
-        _setup (appRef, path) {
+        _setup (appRef: any, path: any) {
           _setup = true;
           assert.strictEqual(appRef, app);
           assert.strictEqual(path, 'dummy');
@@ -384,7 +382,7 @@ describe('Feathers application', () => {
       const app = feathers();
       let providerRan = false;
 
-      app.providers.push(function (service, location, options) {
+      app.providers.push(function (service: any, location: any, options: any) {
         assert.ok(service.dummy);
         assert.strictEqual(location, 'dummy');
         assert.deepStrictEqual(options, {});
@@ -407,7 +405,7 @@ describe('Feathers application', () => {
 
       let providerRan = false;
 
-      app.providers.push(function (service, location, options) {
+      app.providers.push(function (service: any, location: any, options: any) {
         assert.ok(service.dummy);
         assert.strictEqual(location, 'dummy');
         assert.deepStrictEqual(options, opts);
@@ -431,31 +429,31 @@ describe('Feathers application', () => {
       const subApp = feathers();
 
       subApp.use('/service1', {
-        get (id) {
+        get (id: string) {
           return Promise.resolve({
             id, name: 'service1'
           });
         }
       }).use('/service2', {
-        get (id) {
+        get (id: string) {
           return Promise.resolve({
             id, name: 'service2'
           });
         },
 
-        create (data) {
+        create (data: any) {
           return Promise.resolve(data);
         }
       });
 
       app.use('/api/', subApp);
 
-      app.service('/api/service2').once('created', data => {
+      app.service('/api/service2').once('created', (data: any) => {
         assert.deepStrictEqual(data, {
           message: 'This is a test'
         });
 
-        subApp.service('service2').once('created', data => {
+        subApp.service('service2').once('created', (data: any) => {
           assert.deepStrictEqual(data, {
             message: 'This is another test'
           });
@@ -468,11 +466,11 @@ describe('Feathers application', () => {
         });
       });
 
-      app.service('/api/service1').get(10).then(data => {
+      app.service('/api/service1').get(10).then((data: any) => {
         assert.strictEqual(data.name, 'service1');
 
         return app.service('/api/service2').get(1);
-      }).then(data => {
+      }).then((data: any) => {
         assert.strictEqual(data.name, 'service2');
 
         return subApp.service('service2').create({

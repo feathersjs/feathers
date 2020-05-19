@@ -1,17 +1,17 @@
-const assert = require('assert');
-const { hooks, HookContext } = require('@feathersjs/hooks');
-const feathers = require('../../lib');
+import assert from 'assert';
+import { hooks, HookContext } from '@feathersjs/hooks';
+import { feathers, activateHooks } from '../../src';
 
 describe('hooks basics', () => {
   it('mix @feathersjs/hooks and .hooks', async () => {
     const svc = {
-      get (id, params) {
+      get (id: any, params: any) {
         return Promise.resolve({ id, user: params.user });
       }
     };
 
     hooks(svc, {
-      get: [async (ctx, next) => {
+      get: [async (ctx: any, next: any) => {
         ctx.chain.push('@hooks 1 before');
         await next();
         ctx.chain.push('@hooks 1 after');
@@ -23,19 +23,19 @@ describe('hooks basics', () => {
 
     service.hooks({
       before: {
-        get: ctx => {
+        get: (ctx: any) => {
           ctx.chain.push('.hooks 1 before');
         }
       },
       after: {
-        get: ctx => {
+        get: (ctx: any) => {
           ctx.chain.push('.hooks 1 after');
         }
       }
     });
 
     hooks(service, {
-      get: [async (ctx, next) => {
+      get: [async (ctx: any, next: any) => {
         ctx.chain.push('@hooks 2 before');
         await next();
         ctx.chain.push('@hooks 2 after');
@@ -44,12 +44,12 @@ describe('hooks basics', () => {
 
     service.hooks({
       before: {
-        get: ctx => {
+        get: (ctx: any) => {
           ctx.chain.push('.hooks 2 before');
         }
       },
       after: {
-        get: ctx => {
+        get: (ctx: any) => {
           ctx.chain.push('.hooks 2 after');
         }
       }
@@ -75,31 +75,31 @@ describe('hooks basics', () => {
 
   it('validates arguments', () => {
     const app = feathers().use('/dummy', {
-      get (id, params) {
+      get (id: any, params: any) {
         return Promise.resolve({ id, user: params.user });
       },
 
-      create (data) {
+      create (data: any) {
         return Promise.resolve(data);
       }
     });
 
-    return app.service('dummy').get(1, {}, function () {}).catch(e => {
+    return app.service('dummy').get(1, {}, function () {}).catch((e: any) => {
       assert.strictEqual(e.message, 'Callbacks are no longer supported. Use Promises or async/await instead.');
 
       return app.service('dummy').get();
-    }).catch(e => {
+    }).catch((e: any) => {
       assert.strictEqual(e.message, `An id must be provided to the 'dummy.get' method`);
     }).then(() =>
       app.service('dummy').create()
-    ).catch(e => {
+    ).catch((e: any) => {
       assert.strictEqual(e.message, `A data object must be provided to the 'dummy.create' method`);
     });
   });
 
   it('works with services that return a promise (feathers-hooks#28)', () => {
     const app = feathers().use('/dummy', {
-      get (id, params) {
+      get (id: any, params: any) {
         return Promise.resolve({ id, user: params.user });
       }
     });
@@ -108,25 +108,25 @@ describe('hooks basics', () => {
 
     service.hooks({
       before: {
-        get (hook) {
+        get (hook: any) {
           hook.params.user = 'David';
         }
       },
       after: {
-        get (hook) {
+        get (hook: any) {
           hook.result.after = true;
         }
       }
     });
 
-    return service.get(10).then(data => {
+    return service.get(10).then((data: any) => {
       assert.deepStrictEqual(data, { id: 10, user: 'David', after: true });
     });
   });
 
   it('has hook.app, hook.service and hook.path', () => {
     const app = feathers().use('/dummy', {
-      get (id) {
+      get (id: any) {
         return Promise.resolve({ id });
       }
     });
@@ -134,7 +134,7 @@ describe('hooks basics', () => {
     const service = app.service('dummy');
 
     service.hooks({
-      before (hook) {
+      before (hook: any) {
         assert.strictEqual(this, service);
         assert.strictEqual(hook.service, service);
         assert.strictEqual(hook.app, app);
@@ -147,7 +147,7 @@ describe('hooks basics', () => {
 
   it('does not error when result is null', () => {
     const app = feathers().use('/dummy', {
-      get (id) {
+      get (id: any) {
         return Promise.resolve({ id });
       }
     });
@@ -157,7 +157,7 @@ describe('hooks basics', () => {
     service.hooks({
       after: {
         get: [
-          function (hook) {
+          function (hook: any) {
             hook.result = null;
             return hook;
           }
@@ -166,12 +166,12 @@ describe('hooks basics', () => {
     });
 
     return service.get(1)
-      .then(result => assert.strictEqual(result, null));
+      .then((result: any) => assert.strictEqual(result, null));
   });
 
   it('invalid type in .hooks throws error', () => {
     const app = feathers().use('/dummy', {
-      get (id, params) {
+      get (id: any, params: any) {
         return Promise.resolve({ id, params });
       }
     });
@@ -188,7 +188,7 @@ describe('hooks basics', () => {
 
   it('invalid hook method throws error', () => {
     const app = feathers().use('/dummy', {
-      get (id, params) {
+      get (id: any, params: any) {
         return Promise.resolve({ id, params });
       }
     });
@@ -207,7 +207,7 @@ describe('hooks basics', () => {
 
   it('registering an already hooked service works (#154)', () => {
     const app = feathers().use('/dummy', {
-      get (id, params) {
+      get (id: any, params: any) {
         return Promise.resolve({ id, params });
       }
     });
@@ -222,7 +222,7 @@ describe('hooks basics', () => {
       }
     });
 
-    return app.service('dummy').get(1).catch(e => {
+    return app.service('dummy').get(1).catch((e: any) => {
       assert.strictEqual(e.message, `Service method 'get' for 'dummy' service must return a promise`);
     });
   });
@@ -230,12 +230,12 @@ describe('hooks basics', () => {
   describe('returns the hook object when passing true as last parameter', () => {
     it('on normal method call', () => {
       const app = feathers().use('/dummy', {
-        get (id, params) {
+        get (id: any, params: any) {
           return Promise.resolve({ id, params });
         }
       });
 
-      return app.service('dummy').get(10, {}, true).then(context => {
+      return app.service('dummy').get(10, {}, true).then((context: any) => {
         assert.strictEqual(context.service, app.service('dummy'));
         assert.strictEqual(context.type, 'after');
         assert.strictEqual(context.path, 'dummy');
@@ -253,7 +253,7 @@ describe('hooks basics', () => {
         }
       });
 
-      return app.service('dummy').get(10, {}, true).catch(context => {
+      return app.service('dummy').get(10, {}, true).catch((context: any) => {
         assert.strictEqual(context.service, app.service('dummy'));
         assert.strictEqual(context.type, 'error');
         assert.strictEqual(context.path, 'dummy');
@@ -263,12 +263,12 @@ describe('hooks basics', () => {
 
     it('on argument validation error (https://github.com/feathersjs/express/issues/19)', () => {
       const app = feathers().use('/dummy', {
-        get (id) {
+        get (id: string) {
           return Promise.resolve({ id });
         }
       });
 
-      return app.service('dummy').get(undefined, {}, true).catch(context => {
+      return app.service('dummy').get(undefined, {}, true).catch((context: any) => {
         assert.strictEqual(context.service, app.service('dummy'));
         assert.strictEqual(context.type, 'error');
         assert.strictEqual(context.path, 'dummy');
@@ -278,20 +278,20 @@ describe('hooks basics', () => {
 
     it('on error in error hook (https://github.com/feathersjs/express/issues/21)', () => {
       const app = feathers().use('/dummy', {
-        get (id) {
+        get () {
           return Promise.reject(new Error('Nope'));
         }
       });
 
       app.service('dummy').hooks({
         error: {
-          get (context) {
+          get () {
             throw new Error('Error in error hook');
           }
         }
       });
 
-      return app.service('dummy').get(10, {}, true).catch(context => {
+      return app.service('dummy').get(10, {}, true).catch((context: any) => {
         assert.strictEqual(context.service, app.service('dummy'));
         assert.strictEqual(context.type, 'error');
         assert.strictEqual(context.path, 'dummy');
@@ -308,12 +308,12 @@ describe('hooks basics', () => {
       });
 
       app.service('dummy').hooks({
-        error (context) {
+        error (context: any) {
           context.result = result;
         }
       });
 
-      return app.service('dummy').get(10, {}, true).then(hook => {
+      return app.service('dummy').get(10, {}, true).then((hook: any) => {
         assert.ok(hook.error);
         assert.deepStrictEqual(hook.result, result);
       }).catch(() => {
@@ -328,12 +328,12 @@ describe('hooks basics', () => {
         custom: ['id', 'data', 'params']
       },
       get () {},
-      custom (id, data, params) {
+      custom (id: any, data: any, params: any) {
         return Promise.resolve([id, data, params]);
       },
       // activateHooks is usable as a decorator: @activateHooks(['id', 'data', 'params'])
-      other: feathers.activateHooks(['id', 'data', 'params'])(
-        (id, data, params) => {
+      other: activateHooks(['id', 'data', 'params'])(
+        (id: any, data: any, params: any) => {
           return Promise.resolve([id, data, params]);
         }
       )
@@ -341,18 +341,18 @@ describe('hooks basics', () => {
 
     app.service('dummy').hooks({
       before: {
-        all (context) {
+        all (context: any) {
           context.test = ['all::before'];
         },
-        custom (context) {
+        custom (context: any) {
           context.test.push('custom::before');
         }
       },
       after: {
-        all (context) {
+        all (context: any) {
           context.test.push('all::after');
         },
-        custom (context) {
+        custom (context: any) {
           context.test.push('custom::after');
         }
       }
@@ -372,12 +372,12 @@ describe('hooks basics', () => {
     });
 
     return app.service('dummy').custom(...args, true)
-      .then(hook => {
+      .then((hook: any) => {
         assert.deepStrictEqual(hook.result, args);
         assert.deepStrictEqual(hook.test, ['all::before', 'custom::before', 'all::after', 'custom::after']);
 
         app.service('dummy').other(...args, true)
-          .then(hook => {
+          .then((hook: any) => {
             assert.deepStrictEqual(hook.result, args);
             assert.deepStrictEqual(hook.test, ['all::before', 'all::after']);
           });
@@ -390,17 +390,17 @@ describe('hooks basics', () => {
         custom: ['id', 'params']
       },
       get () {},
-      custom (id, params) {
+      custom (id: any, params: any) {
         return Promise.resolve([id, params]);
       }
     });
 
     app.service('dummy').hooks({
       before: {
-        all (context) {
+        all (context: any) {
           context.test = ['all::before'];
         },
-        custom (context) {
+        custom (context: any) {
           context.data = { post: 'title' };
         }
       }
@@ -409,19 +409,19 @@ describe('hooks basics', () => {
     const args = [1, { provider: 'rest' }];
 
     return app.service('dummy').custom(...args)
-      .then(result => {
+      .then((result: any) => {
         assert.deepStrictEqual(result, args);
       });
   });
 
   it('normalizes params to object even when it is falsy (#1001)', () => {
     const app = feathers().use('/dummy', {
-      get (id, params) {
+      get (id: any, params: any) {
         return Promise.resolve({ id, params });
       }
     });
 
-    return app.service('dummy').get('test', null).then(result => {
+    return app.service('dummy').get('test', null).then((result: any) => {
       assert.deepStrictEqual(result, {
         id: 'test',
         params: {}

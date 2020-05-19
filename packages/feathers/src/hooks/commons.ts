@@ -1,5 +1,5 @@
 import { HookContext } from '@feathersjs/hooks';
-import { createSymbol, _ } from './utils';
+import { createSymbol, _ } from '@feathersjs/commons';
 
 const { each, pick, omit } = _;
 const noop = () => {};

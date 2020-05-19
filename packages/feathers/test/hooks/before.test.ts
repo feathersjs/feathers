@@ -1,11 +1,11 @@
-const assert = require('assert');
-const feathers = require('../../lib');
+import assert from 'assert';
+import {feathers} from '../../src';
 
 describe('`before` hooks', () => {
   describe('function([hook])', () => {
     it('returning a non-hook object throws error', () => {
       const app = feathers().use('/dummy', {
-        get (id) {
+        get (id: any) {
           return Promise.resolve({ id });
         }
       });
@@ -19,14 +19,14 @@ describe('`before` hooks', () => {
         }
       });
 
-      return service.get(10).catch(e => {
+      return service.get(10).catch((e: any) => {
         assert.strictEqual(e.message, 'before hook for \'get\' method returned invalid hook object');
       });
     });
 
     it('hooks in chain can be replaced', () => {
       const app = feathers().use('/dummy', {
-        get (id) {
+        get (id: any) {
           return Promise.resolve({
             id, description: `You have to do ${id}`
           });
@@ -38,12 +38,12 @@ describe('`before` hooks', () => {
       service.hooks({
         before: {
           get: [
-            function (hook) {
+            function (hook: any) {
               return Object.assign({}, hook, {
                 modified: true
               });
             },
-            function (hook) {
+            function (hook: any) {
               assert.ok(hook.modified);
             }
           ]
@@ -55,11 +55,11 @@ describe('`before` hooks', () => {
 
     it('.before hooks can return a promise', () => {
       const app = feathers().use('/dummy', {
-        get (id, params) {
+        get (id: any, params: any) {
           assert.ok(params.ran, 'Ran through promise hook');
 
           return Promise.resolve({
-            id: id,
+            id,
             description: `You have to do ${id}`
           });
         },
@@ -73,7 +73,7 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          get (hook) {
+          get (hook: any) {
             return new Promise(resolve => {
               hook.params.ran = true;
               resolve();
@@ -81,7 +81,7 @@ describe('`before` hooks', () => {
           },
 
           remove () {
-            return new Promise((resolve, reject) => {
+            return new Promise((_resolve, reject) => {
               reject(new Error('This did not work'));
             });
           }
@@ -89,18 +89,18 @@ describe('`before` hooks', () => {
       });
 
       return service.get('dishes').then(() => service.remove(10))
-        .catch(error => {
+        .catch((error: any) => {
           assert.strictEqual(error.message, 'This did not work');
         });
     });
 
     it('.before hooks do not need to return anything', () => {
       const app = feathers().use('/dummy', {
-        get (id, params) {
+        get (id: any, params: any) {
           assert.ok(params.ran, 'Ran through promise hook');
 
           return Promise.resolve({
-            id: id,
+            id,
             description: `You have to do ${id}`
           });
         },
@@ -114,7 +114,7 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          get (hook) {
+          get (hook: any) {
             hook.params.ran = true;
           },
 
@@ -125,14 +125,14 @@ describe('`before` hooks', () => {
       });
 
       return service.get('dishes').then(() => service.remove(10))
-        .catch(error => {
+        .catch((error: any) => {
           assert.strictEqual(error.message, 'This did not work');
         });
     });
 
     it('.before hooks can set hook.result which will skip service method', () => {
       const app = feathers().use('/dummy', {
-        get (id) {
+        get (id: any) {
           assert.ok(false, 'This should never run');
           return Promise.resolve({ id });
         }
@@ -142,7 +142,7 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          get (hook) {
+          get (hook: any) {
             hook.result = {
               id: hook.id,
               message: 'Set from hook'
@@ -151,7 +151,7 @@ describe('`before` hooks', () => {
         }
       });
 
-      return service.get(10, {}).then(data => {
+      return service.get(10, {}).then((data: any) => {
         assert.deepStrictEqual(data, {
           id: 10,
           message: 'Set from hook'
@@ -163,7 +163,7 @@ describe('`before` hooks', () => {
   describe('function(hook, next)', () => {
     it('gets mixed into a service and modifies data', () => {
       const dummyService = {
-        create (data, params) {
+        create (data: any, params: any) {
           assert.deepStrictEqual(data, {
             some: 'thing',
             modified: 'data'
@@ -182,7 +182,7 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          create (hook) {
+          create (hook: any) {
             assert.strictEqual(hook.type, 'before');
 
             hook.data.modified = 'data';
@@ -196,7 +196,7 @@ describe('`before` hooks', () => {
         }
       });
 
-      return service.create({ some: 'thing' }).then(data => {
+      return service.create({ some: 'thing' }).then((data: any) => {
         assert.deepStrictEqual(data, {
           some: 'thing',
           modified: 'data'
@@ -206,7 +206,7 @@ describe('`before` hooks', () => {
 
     it('contains the app object at hook.app', () => {
       const someServiceConfig = {
-        create (data, params, callback) {
+        create (data: any) {
           return Promise.resolve(data);
         }
       };
@@ -216,7 +216,7 @@ describe('`before` hooks', () => {
 
       someService.hooks({
         before: {
-          create (hook) {
+          create (hook: any) {
             hook.data.appPresent = typeof hook.app !== 'undefined';
             assert.strictEqual(hook.data.appPresent, true);
 
@@ -225,7 +225,7 @@ describe('`before` hooks', () => {
         }
       });
 
-      return someService.create({ some: 'thing' }).then(data => {
+      return someService.create({ some: 'thing' }).then((data: any) => {
         assert.deepStrictEqual(data, {
           some: 'thing',
           appPresent: true
@@ -251,7 +251,7 @@ describe('`before` hooks', () => {
         }
       });
 
-      return service.update(1, {}).catch(error => {
+      return service.update(1, {}).catch((error: any) => {
         assert.ok(error, 'Got an error');
         assert.strictEqual(error.message, 'You are not allowed to update', 'Got error message');
       });
@@ -259,7 +259,7 @@ describe('`before` hooks', () => {
 
     it('calling back with no arguments uses the old ones', () => {
       const dummyService = {
-        remove (id, params) {
+        remove (id: any, params: any) {
           assert.strictEqual(id, 1, 'Got id');
           assert.deepStrictEqual(params, { my: 'param' });
 
@@ -272,7 +272,7 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          remove (hook) {
+          remove (hook: any) {
             return hook;
           }
         }
@@ -283,7 +283,7 @@ describe('`before` hooks', () => {
 
     it('adds .hooks() and chains multiple hooks for the same method', () => {
       const dummyService = {
-        create (data, params) {
+        create (data: any, params: any) {
           assert.deepStrictEqual(data, {
             some: 'thing',
             modified: 'second data'
@@ -302,7 +302,7 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          create (hook) {
+          create (hook: any) {
             hook.params.modified = 'params';
 
             return hook;
@@ -312,7 +312,7 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          create (hook) {
+          create (hook: any) {
             hook.data.modified = 'second data';
 
             return hook;
@@ -325,7 +325,7 @@ describe('`before` hooks', () => {
 
     it('chains multiple before hooks using array syntax', () => {
       const dummyService = {
-        create (data, params) {
+        create (data: any, params: any) {
           assert.deepStrictEqual(data, {
             some: 'thing',
             modified: 'second data'
@@ -345,12 +345,12 @@ describe('`before` hooks', () => {
       service.hooks({
         before: {
           create: [
-            function (hook) {
+            function (hook: any) {
               hook.params.modified = 'params';
 
               return hook;
             },
-            function (hook) {
+            function (hook: any) {
               hook.data.modified = 'second data';
 
               return hook;
@@ -364,11 +364,11 @@ describe('`before` hooks', () => {
 
     it('.before hooks run in the correct order (#13)', () => {
       const app = feathers().use('/dummy', {
-        get (id, params, callback) {
+        get (id: any, params: any) {
           assert.deepStrictEqual(params.items, ['first', 'second', 'third']);
 
           return Promise.resolve({
-            id: id,
+            id,
             items: []
           });
         }
@@ -378,7 +378,7 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          get (hook) {
+          get (hook: any) {
             hook.params.items = ['first'];
 
             return hook;
@@ -389,12 +389,12 @@ describe('`before` hooks', () => {
       service.hooks({
         before: {
           get: [
-            function (hook) {
+            function (hook: any) {
               hook.params.items.push('second');
 
               return hook;
             },
-            function (hook) {
+            function (hook: any) {
               hook.params.items.push('third');
 
               return hook;
@@ -408,17 +408,17 @@ describe('`before` hooks', () => {
 
     it('before all hooks (#11)', () => {
       const app = feathers().use('/dummy', {
-        get (id, params) {
+        get (id: any, params: any) {
           assert.ok(params.beforeAllObject);
           assert.ok(params.beforeAllMethodArray);
 
           return Promise.resolve({
-            id: id,
+            id,
             items: []
           });
         },
 
-        find (params) {
+        find (params: any) {
           assert.ok(params.beforeAllObject);
           assert.ok(params.beforeAllMethodArray);
 
@@ -430,7 +430,7 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          all (hook) {
+          all (hook: any) {
             hook.params.beforeAllObject = true;
 
             return hook;
@@ -440,7 +440,7 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: [
-          function (hook) {
+          function (hook: any) {
             hook.params.beforeAllMethodArray = true;
 
             return hook;
@@ -454,9 +454,9 @@ describe('`before` hooks', () => {
     it('before hooks have service as context and keep it in service method (#17)', () => {
       const app = feathers().use('/dummy', {
         number: 42,
-        get (id, params) {
+        get (id: any, params: any) {
           return Promise.resolve({
-            id: id,
+            id,
             number: this.number,
             test: params.test
           });
@@ -467,7 +467,7 @@ describe('`before` hooks', () => {
 
       service.hooks({
         before: {
-          get (hook) {
+          get (this: any, hook: any) {
             hook.params.test = this.number + 2;
 
             return hook;
@@ -475,7 +475,7 @@ describe('`before` hooks', () => {
         }
       });
 
-      return service.get(10).then(data => {
+      return service.get(10).then((data: any) => {
         assert.deepStrictEqual(data, {
           id: 10,
           number: 42,

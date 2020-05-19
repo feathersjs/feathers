@@ -12,6 +12,7 @@
       "packages/configuration/lib/**",
       "packages/commons/lib/**",
       "packages/errors/lib/**",
+      "packages/feathers/lib/**",
       "packages/transport-commons/lib/**",
       "packages/tests/lib/**",
       "**/node_modules/**",

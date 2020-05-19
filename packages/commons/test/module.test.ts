@@ -7,7 +7,6 @@ describe('module', () => {
 
     assert.equal(typeof commons, 'object');
     assert.equal(typeof commons.stripSlashes, 'function');
-    assert.equal(typeof commons.hooks, 'object');
     assert.equal(typeof commons._, 'object');
   });
 
