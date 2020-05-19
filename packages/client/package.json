@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/client",
   "description": "A module that consolidates Feathers client modules for REST (jQuery, Request, Superagent) and Websocket (Socket.io, Primus) connections",
-  "version": "4.5.4",
+  "version": "5.0.0-pre.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/feathersjs/feathers.git"
@@ -39,18 +39,18 @@
     "IE 10"
   ],
   "dependencies": {
-    "@feathersjs/authentication-client": "^4.5.4",
-    "@feathersjs/errors": "^4.5.3",
-    "@feathersjs/express": "^4.5.3",
-    "@feathersjs/feathers": "^4.5.3",
-    "@feathersjs/rest-client": "^4.5.3",
-    "@feathersjs/socketio": "^4.5.3",
-    "@feathersjs/socketio-client": "^4.5.3"
+    "@feathersjs/authentication-client": "^5.0.0-pre.0",
+    "@feathersjs/errors": "^5.0.0-pre.0",
+    "@feathersjs/express": "^5.0.0-pre.0",
+    "@feathersjs/feathers": "^5.0.0-pre.0",
+    "@feathersjs/rest-client": "^5.0.0-pre.0",
+    "@feathersjs/socketio": "^5.0.0-pre.0",
+    "@feathersjs/socketio-client": "^5.0.0-pre.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
-    "@feathersjs/tests": "^4.5.2",
+    "@feathersjs/tests": "^5.0.0-pre.0",
     "babel-loader": "^8.1.0",
     "body-parser": "^1.19.0",
     "feathers-memory": "^4.1.0",
