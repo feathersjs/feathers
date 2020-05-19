@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v4.5.4...v5.0.0-pre.0) (2020-05-19)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Updated typings for projects with strictNullChecks ([#1941](https://github.com/feathersjs/feathers/issues/1941)) ([be91206](https://github.com/feathersjs/feathers/commit/be91206e3dba1e65a81412b7aa636bece3ab4aa2))
+* **errors:** Format package.json with spaces ([cbd31c1](https://github.com/feathersjs/feathers/commit/cbd31c10c2c574de63d6ca5e55dbfb73a5fdd758))
+
+
+### chore
+
+* **configuration:** Remove environment variable substitution ([#1942](https://github.com/feathersjs/feathers/issues/1942)) ([caaa21f](https://github.com/feathersjs/feathers/commit/caaa21ffdc6a8dcac82fb403c91d9d4b781a6c0a))
+* **package:** Remove @feathersjs/primus packages from core ([#1919](https://github.com/feathersjs/feathers/issues/1919)) ([d20b7d5](https://github.com/feathersjs/feathers/commit/d20b7d5a70f4d3306e294696156e8aa0337c35e9)), closes [#1899](https://github.com/feathersjs/feathers/issues/1899)
+
+
+### Features
+
+* **core:** Migrate @feathersjs/feathers to TypeScript ([#1963](https://github.com/feathersjs/feathers/issues/1963)) ([7812529](https://github.com/feathersjs/feathers/commit/7812529ff0f1008e21211f1d01efbc49795dbe55))
+* **core:** use @feathers/hooks and add async type ([#1929](https://github.com/feathersjs/feathers/issues/1929)) ([a5c4756](https://github.com/feathersjs/feathers/commit/a5c47562eae8410c82fe2f6308f26f8e78b6a3e8))
+* **transport-commons:** Remove legacy message format and unnecessary client timeouts ([#1939](https://github.com/feathersjs/feathers/issues/1939)) ([5538881](https://github.com/feathersjs/feathers/commit/5538881a08bc130de42c5984055729d8336f8615))
+
+
+### BREAKING CHANGES
+
+* **configuration:** Falls back to node-config instead of adding additional
+functionality like path replacements and automatic environment variable insertion.
+* **transport-commons:** Removes the old message format and client service timeout
+* **package:** Remove primus packages to be moved into the ecosystem.
+
+
+
+
+
 ## [4.5.4](https://github.com/feathersjs/feathers/compare/v4.5.3...v4.5.4) (2020-04-29)
 
 
