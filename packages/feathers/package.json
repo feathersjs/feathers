@@ -32,8 +32,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "write-version": "node -e \"console.log('export default \\'' + require('./package.json').version + '\\';')\" > lib/version.js",
-    "reset-version": "node -e \"console.log('export default \\'development\\';')\" > lib/version.js",
+    "write-version": "node -e \"console.log('export default \\'' + require('./package.json').version + '\\';')\" > src/version.js",
+    "reset-version": "node -e \"console.log('export default \\'development\\';')\" > src/version.js",
     "version": "npm run write-version && npm run compile",
     "publish": "npm run reset-version",
     "compile": "shx rm -rf lib/ && tsc",
