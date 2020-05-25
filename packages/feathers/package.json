@@ -51,7 +51,7 @@
     "uberproto": "^2.0.6"
   },
   "devDependencies": {
-    "mocha": "^7.1.2"
+    "mocha": "^7.2.0"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }
