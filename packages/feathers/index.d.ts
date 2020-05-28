@@ -206,6 +206,22 @@ declare namespace createApplication {
 
     interface ServiceOverloads<T> {
         /**
+         * Retrieve all resources from this service.
+         *
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#find-params|Feathers API Documentation: .find(params)}
+         */
+        find? (params: Params & { paginate: false}): Promise<T[]>
+
+        /**
+         * Retrieve all resources from this service.
+         *
+         * @param params - Service call parameters {@link Params}
+         * @see {@link https://docs.feathersjs.com/api/services.html#find-params|Feathers API Documentation: .find(params)}
+         */
+        find? (params?: Params): Promise<Paginated<T>>
+
+        /**
          * Create a new resource for this service.
          *
          * @param data - Data to insert into this service.
