@@ -103,7 +103,8 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
       ...params,
       query
     });
-    const [ entity = null ] = result.data ? result.data : result;
+
+    const [ entity = null ] = Array.isArray(result) ? result : result.data
 
     debug('findEntity returning', entity);
 
