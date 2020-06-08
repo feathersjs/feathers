@@ -58,9 +58,8 @@
     "@feathersjs/feathers": "^5.0.0-pre.0",
     "debug": "^4.1.1",
     "express-session": "^1.17.1",
-    "grant": "^4.7.0",
-    "grant-profile": "^0.0.11",
-    "lodash": "^4.17.20"
+    "grant": "^5.2.0",
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",

@@ -28,7 +28,7 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
   const { strategyNames } = service;
 
   // Set up all the defaults
-  const { path = '/oauth' } = oauth.defaults || {};
+  const { prefix = '/oauth' } = oauth.defaults || {};
   const port = app.get('port');
   let host = app.get('host');
   let protocol = 'https';
@@ -43,16 +43,16 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
 
   const grant = merge({
     defaults: {
-      path,
-      host,
-      protocol,
-      transport: 'session'
+      prefix,
+      origin: `${protocol}://${host}`,
+      transport: 'session',
+      response: ['tokens', 'raw', 'profile']
     }
   }, omit(oauth, 'redirect'));
 
   const getUrl = (url: string) => {
     const { defaults } = grant;
-    return `${defaults.protocol}://${defaults.host}${path}/${url}`;
+    return `${defaults.origin}${prefix}/${url}`;
   };
 
   each(grant, (value, name) => {

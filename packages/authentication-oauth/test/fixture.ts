@@ -5,14 +5,6 @@ import { AuthenticationService, JWTStrategy, AuthenticationRequest } from '@feat
 import { express as oauth, OAuthStrategy } from '../src';
 
 export class TestOAuthStrategy extends OAuthStrategy {
-  async getProfile (data: AuthenticationRequest, _params: Params) {
-    if (!data.id) {
-      throw new Error('Data needs an id');
-    }
-
-    return data;
-  }
-
   async authenticate (data: AuthenticationRequest, params: Params) {
     const { fromMiddleware } = params;
     const authResult = await super.authenticate(data, params);
@@ -27,7 +19,7 @@ export class TestOAuthStrategy extends OAuthStrategy {
 
 export const app = express(feathers());
 
-const port = 3000;
+const port = 9876;
 const auth = new AuthenticationService(app);
 
 auth.register('jwt', new JWTStrategy());
@@ -43,7 +35,7 @@ app.set('authentication', {
   authStrategies: [ 'jwt' ],
   oauth: {
     defaults: {
-      transport: 'query'
+      transport: 'querystring'
     },
     test: {
       key: 'some-key',
