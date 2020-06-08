@@ -53,7 +53,7 @@
     "@feathersjs/tests": "^4.5.3",
     "@types/mocha": "^7.0.2",
     "@types/mongodb": "^3.5.20",
-    "@types/node": "^14.0.6",
+    "@types/node": "^14.0.11",
     "feathers-memory": "^4.1.0",
     "lodash": "^4.17.15",
     "mocha": "^7.2.0",
