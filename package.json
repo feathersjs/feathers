@@ -31,8 +31,8 @@
     "test": "npm run lint && nyc lerna run test"
   },
   "devDependencies": {
-    "lerna": "^3.22.0",
-    "npm-check-updates": "^6.0.1",
+    "lerna": "^3.22.1",
+    "npm-check-updates": "^7.0.1",
     "nyc": "^15.1.0",
     "tslint": "^6.1.2"
   }
