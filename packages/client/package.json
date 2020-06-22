@@ -39,8 +39,8 @@
     "IE 10"
   ],
   "devDependencies": {
-    "@babel/core": "^7.10.2",
-    "@babel/preset-env": "^7.10.2",
+    "@babel/core": "^7.10.3",
+    "@babel/preset-env": "^7.10.3",
     "@feathersjs/authentication-client": "^4.5.4",
     "@feathersjs/errors": "^4.5.3",
     "@feathersjs/express": "^4.5.4",
