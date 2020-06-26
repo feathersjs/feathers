@@ -130,7 +130,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     }
 
     const entityId = await this.getEntityId(result, params);
-    const value = await this.getEntity(entityId, params);
+    const value = await this.getEntity(entityId, omit(params, 'provider'));
 
     return {
       ...result,
