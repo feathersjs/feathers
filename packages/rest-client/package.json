@@ -45,10 +45,10 @@
     "qs": "^6.9.4"
   },
   "devDependencies": {
-    "@angular/common": "^10.0.1",
-    "@angular/core": "^10.0.1",
+    "@angular/common": "^10.0.2",
+    "@angular/core": "^10.0.2",
     "@angular/http": "^7.2.16",
-    "@angular/platform-browser": "^10.0.1",
+    "@angular/platform-browser": "^10.0.2",
     "@feathersjs/express": "^4.5.4",
     "@feathersjs/feathers": "^4.5.3",
     "@feathersjs/tests": "^4.5.3",
@@ -58,7 +58,7 @@
     "mocha": "^8.0.1",
     "node-fetch": "^2.6.0",
     "request": "^2.88.2",
-    "rxjs": "^6.5.5",
+    "rxjs": "^6.6.0",
     "shx": "^0.3.2",
     "superagent": "^5.3.1"
   },
