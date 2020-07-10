@@ -1,5 +1,6 @@
 import flatten from 'lodash/flatten';
 import omit from 'lodash/omit';
+import pick from 'lodash/pick';
 import { HookContext } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
 import Debug from 'debug';
@@ -22,8 +23,8 @@ export default (originalSettings: string | AuthenticateHookSettings, ...original
 
   return async (context: HookContext) => {
     const { app, params, type, path, service } = context;
-    const { strategies } = settings;
-    const { provider, authentication } = params;
+    const { strategies, whitelist } = settings;
+    const { provider, authentication, query } = params;
     const authService = app.defaultAuthentication(settings.service);
 
     debug(`Running authenticate hook on '${path}'`);
@@ -46,9 +47,10 @@ export default (originalSettings: string | AuthenticateHookSettings, ...original
     }
 
     if (authentication) {
-      const authParams = omit(params, 'provider', 'authentication', 'query');
+      const authQuery = pick(query, whitelist);
+      const authParams = Object.assign({}, omit(params, 'provider', 'authentication', 'query'), { query: authQuery });
 
-      debug('Authenticating with', authentication, strategies);
+      debug('Authenticating with', authentication, strategies, whitelist);
 
       const authResult = await authService.authenticate(authentication, authParams, ...strategies);
 
