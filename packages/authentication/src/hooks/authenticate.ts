@@ -46,7 +46,7 @@ export default (originalSettings: string | AuthenticateHookSettings, ...original
     }
 
     if (authentication) {
-      const authParams = omit(params, 'provider', 'authentication', 'query');
+      const authParams = omit(params, 'provider', 'authentication');
 
       debug('Authenticating with', authentication, strategies);
 
