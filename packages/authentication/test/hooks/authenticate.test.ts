@@ -170,7 +170,7 @@ describe('authentication/hooks/authenticate', () => {
 
     assert.deepStrictEqual(result, Object.assign({
       authentication: params.authentication,
-      params: { authenticated: true }
+      params: { authenticated: true, query: {} }
     }, Strategy2.result));
   });
 
