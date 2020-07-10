@@ -10,6 +10,7 @@ const debug = Debug('@feathersjs/authentication/hooks/authenticate');
 export interface AuthenticateHookSettings {
   service?: string;
   strategies: string[];
+  whitelist?: string[];
 }
 
 export default (originalSettings: string | AuthenticateHookSettings, ...originalStrategies: string[]) => {
