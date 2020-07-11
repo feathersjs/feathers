@@ -1,7 +1,7 @@
 ### Summary
 
 (If you have not already please refer to the contributing guideline as [described
-here](https://github.com/feathersjs/feathers/blob/master/.github/contributing.md#pull-requests))
+here](https://github.com/feathersjs/feathers/blob/crow/.github/contributing.md#pull-requests))
 
 - [ ] Tell us about the problem your pull request is solving.
 - [ ] Are there any open issues that are related to this?

@@ -1,7 +1,7 @@
 ### Steps to reproduce
 
 (First please check that this issue is not already solved as [described
-here](https://github.com/feathersjs/feathers/blob/master/.github/contributing.md#report-a-bug))
+here](https://github.com/feathersjs/feathers/blob/crow/.github/contributing.md#report-a-bug))
 
 - [ ] Tell us what broke. The more detailed the better.
 - [ ] If you can, please create a simple example that reproduces the issue and link to a gist, jsbin, repo, etc. This makes it much easier for us to debug and issues that have a reproducable example will get higher priority.
