@@ -49,21 +49,21 @@
     "@types/jsonwebtoken": "^8.5.0",
     "debug": "^4.1.1",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "long-timeout": "^0.1.1",
-    "uuid": "^8.0.0"
+    "uuid": "^8.2.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
-    "@types/lodash": "^4.14.151",
+    "@types/lodash": "^4.14.157",
     "@types/mocha": "^7.0.2",
-    "@types/node": "^14.0.1",
-    "@types/uuid": "^7.0.3",
+    "@types/node": "^14.0.22",
+    "@types/uuid": "^8.0.0",
     "feathers-memory": "^4.1.0",
-    "mocha": "^7.1.2",
+    "mocha": "^8.0.1",
     "shx": "^0.3.2",
-    "ts-node": "^8.10.1",
-    "typescript": "^3.9.2"
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.6"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }
