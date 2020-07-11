@@ -122,6 +122,11 @@ declare namespace createApplication {
          * A read only property with the hook type (one of before, after or error).
          */
         readonly type: 'before' | 'after' | 'error';
+        /**
+         * A writeable, optional property that allows service events to be skipped by
+         * setting it to `null`
+         */
+        event?: null;
     }
 
     interface HookMap<T = any> {
