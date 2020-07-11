@@ -46,18 +46,18 @@
     "@feathersjs/commons": "^4.5.3",
     "@feathersjs/errors": "^4.5.3",
     "debug": "^4.1.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "radix-router": "^3.0.1"
   },
   "devDependencies": {
     "@feathersjs/feathers": "^4.5.3",
     "@types/debug": "^4.1.5",
     "@types/mocha": "^7.0.2",
-    "@types/node": "^14.0.1",
-    "mocha": "^7.1.2",
+    "@types/node": "^14.0.22",
+    "mocha": "^8.0.1",
     "shx": "^0.3.2",
-    "ts-node": "^8.10.1",
-    "typescript": "^3.9.2"
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.6"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }
