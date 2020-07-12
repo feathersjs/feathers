@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.6](https://github.com/feathersjs/feathers/compare/v4.5.5...v4.5.6) (2020-07-12)
+
+
+### Bug Fixes
+
+* **authentication:** Omit query in JWT strategy ([#2011](https://github.com/feathersjs/feathers/issues/2011)) ([04ce7e9](https://github.com/feathersjs/feathers/commit/04ce7e98515fe9d495cd0e83e0da097e9bcd7382))
+
+
+
+
+
 ## [4.5.5](https://github.com/feathersjs/feathers/compare/v4.5.4...v4.5.5) (2020-07-11)
 
 

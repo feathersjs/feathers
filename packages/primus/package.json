@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/primus",
   "description": "The Feathers Primus real-time API provider",
-  "version": "4.5.5",
+  "version": "4.5.6",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "index.d.ts",
@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@feathersjs/commons": "^4.5.5",
-    "@feathersjs/express": "^4.5.5",
+    "@feathersjs/express": "^4.5.6",
     "@feathersjs/feathers": "^4.5.5",
     "@feathersjs/tests": "^4.5.5",
     "feathers-memory": "^4.1.0",
