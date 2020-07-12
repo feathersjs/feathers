@@ -94,7 +94,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       throw new NotAuthenticated(`Could not find entity service`);
     }
 
-    const result = await entityService.get(id, omit(params, 'provider'));
+    const result = await entityService.get(id, omit(params, 'provider', 'query'));
 
     if (!params.provider) {
       return result;
