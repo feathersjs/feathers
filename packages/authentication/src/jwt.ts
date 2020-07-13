@@ -2,7 +2,7 @@ import Debug from 'debug';
 import omit from 'lodash/omit';
 import { IncomingMessage } from 'http';
 import { NotAuthenticated } from '@feathersjs/errors';
-import { Params } from '@feathersjs/feathers';
+import { Query, Params } from '@feathersjs/feathers';
 // @ts-ignore
 import lt from 'long-timeout';
 
@@ -79,14 +79,20 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     }
   }
 
+  async getEntityQuery (query: Query, _params: Params) {
+    return {
+      ...query
+    };
+  }
+
   /**
    * Return the entity for a given id
    * @param id The id to use
    * @param params Service call parameters
    */
   async getEntity (id: string, params: Params) {
-    const { entity } = this.configuration;
     const entityService = this.entityService;
+    const { entityId = entityService.id, entity } = this.configuration;
 
     debug('Getting entity', id);
 
@@ -94,13 +100,18 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       throw new NotAuthenticated(`Could not find entity service`);
     }
 
-    const result = await entityService.get(id, omit(params, 'provider', 'query'));
+    const query = await this.getEntityQuery({
+      [entityId]: id
+    }, params);
+
+    const getParams = Object.assign({}, omit(params, 'provider', 'query'), { query });
+    const result = await entityService.get(id, getParams);
 
     if (!params.provider) {
       return result;
     }
 
-    return entityService.get(id, { ...params, [entity]: result });
+    return entityService.get(id, { ...params, { query }, [entity]: result });
   }
 
   async getEntityId (authResult: AuthenticationResult, _params: Params) {
