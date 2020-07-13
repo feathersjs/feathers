@@ -51,7 +51,7 @@
     "@feathersjs/express": "^4.5.6",
     "@feathersjs/feathers": "^4.5.5",
     "@feathersjs/tests": "^4.5.5",
-    "@types/mocha": "^7.0.2",
+    "@types/mocha": "^8.0.0",
     "@types/mongodb": "^3.5.25",
     "@types/node": "^14.0.22",
     "feathers-memory": "^4.1.0",
