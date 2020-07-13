@@ -20,8 +20,9 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     const config = super.configuration;
 
     return {
-      entity: authConfig.entity,
       service: authConfig.service,
+      entity: authConfig.entity,
+      entityId: authConfig.entityId,
       header: 'Authorization',
       schemes: [ 'Bearer', 'JWT' ],
       ...config
