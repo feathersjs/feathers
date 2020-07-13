@@ -67,7 +67,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
   }
 
   verifyConfiguration () {
-    const allowedKeys = [ 'entity', 'service', 'header', 'schemes' ];
+    const allowedKeys = [ 'entity', 'entityId', 'service', 'header', 'schemes' ];
 
     for (const key of Object.keys(this.configuration)) {
       if (!allowedKeys.includes(key)) {
