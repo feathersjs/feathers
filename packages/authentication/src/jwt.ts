@@ -104,14 +104,14 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       [entityId]: id
     }, params);
 
-    const getParams = Object.assign({}, omit(params, 'provider', 'query'), { query });
+    const getParams = Object.assign({}, omit(params, 'provider'), { query });
     const result = await entityService.get(id, getParams);
 
     if (!params.provider) {
       return result;
     }
 
-    return entityService.get(id, { ...params, { query }, [entity]: result });
+    return entityService.get(id, { ...params, [entity]: result });
   }
 
   async getEntityId (authResult: AuthenticationResult, _params: Params) {
