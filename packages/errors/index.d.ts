@@ -3,14 +3,14 @@ export interface FeathersErrorJSON {
   readonly message: string;
   readonly code: number;
   readonly className: string;
-  readonly data: any;
+  readonly data?: any;
   readonly errors: any;
 }
 
 export class FeathersError extends Error {
   readonly code: number;
   readonly className: string;
-  readonly data: any;
+  readonly data?: unknown;
   readonly errors: any;
   constructor (msg: string | Error, name: string, code: number, className: string, data: any);
   toJSON (): FeathersErrorJSON;
