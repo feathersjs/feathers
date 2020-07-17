@@ -45,6 +45,10 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     };
   }
 
+  async getProfile (data: AuthenticationRequest, _params: Params) {
+    return data.profile
+  }
+
   async getCurrentEntity (params: Params) {
     const { authentication } = params;
     const { entity } = this.configuration;
@@ -137,7 +141,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
   async authenticate (authentication: AuthenticationRequest, originalParams: Params) {
     const entity: string = this.configuration.entity;
     const { provider, ...params } = originalParams;
-    const { profile } = authentication;
+    const profile = await this.getProfile(authentication, params);
     const existingEntity = await this.findEntity(profile, params)
       || await this.getCurrentEntity(params);
 
