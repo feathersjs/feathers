@@ -2,7 +2,7 @@ import Debug from 'debug';
 import omit from 'lodash/omit';
 import { IncomingMessage } from 'http';
 import { NotAuthenticated } from '@feathersjs/errors';
-import { Query, Params } from '@feathersjs/feathers';
+import { Params } from '@feathersjs/feathers';
 // @ts-ignore
 import lt from 'long-timeout';
 
@@ -80,7 +80,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     }
   }
 
-  async getEntityQuery (params: Params) {
+  async getEntityQuery (_params: Params) {
     return {};
   }
 
