@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.7](https://github.com/feathersjs/feathers/compare/v4.5.6...v4.5.7) (2020-07-24)
+
+
+### Bug Fixes
+
+* **authentication:** Add JWT getEntityQuery ([#2013](https://github.com/feathersjs/feathers/issues/2013)) ([e0e7fb5](https://github.com/feathersjs/feathers/commit/e0e7fb5162940fe776731283b40026c61d9c8a33))
+* **typescript:** Revert add overload types for `find` service methods ([#1972](https://github.com/feathersjs/feathers/issues/1972))" ([#2025](https://github.com/feathersjs/feathers/issues/2025)) ([a9501ac](https://github.com/feathersjs/feathers/commit/a9501acb4d3ef58dfb87d62c57a9bf76569da281))
+
+
+
+
+
 ## [4.5.6](https://github.com/feathersjs/feathers/compare/v4.5.5...v4.5.6) (2020-07-12)
 
 
