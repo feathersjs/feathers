@@ -6,6 +6,8 @@ import feathers, { Application, Service } from '@feathersjs/feathers';
 import memory from 'feathers-memory';
 
 import defaultOptions from '../../authentication/src/options';
+import options from '../src/options';
+
 import { RefreshTokenAuthenticationService } from '../src';
 import { AuthenticationResult } from '@feathersjs/authentication';
 import { Strategy1 } from './fixtures';
@@ -29,20 +31,7 @@ describe('authentication/service', () => {
         entity: 'user',
         service: 'users',
         secret: 'supersecret',
-        authStrategies: ['first'],
-        'refresh-token': {
-          secret: 'super secret',
-          service: 'refresh-tokens',
-          entity: 'refreshToken',
-          entityId: 'id',
-          jwtOptions: {
-            header: { typ: 'refresh' }, // default type: refresh
-            audience: 'https://yourdomain.com', // The resource server where the token is processed
-            issuer: 'feathers', // The issuing server, application or resource
-            algorithm: 'HS256',
-            expiresIn: '360d' //default expiration settings after 360 days
-          }
-        }
+        authStrategies: ['first']
       })
     );
     app.use('/users', memory());
@@ -54,7 +43,11 @@ describe('authentication/service', () => {
   it('settings returns authentication options', () => {
     assert.deepStrictEqual(
       app.service('authentication').configuration,
-      Object.assign({}, defaultOptions, app.get('authentication'))
+      Object.assign(
+        { 'refresh-token': options },
+        defaultOptions,
+        app.get('authentication')
+      )
     );
   });
 

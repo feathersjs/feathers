@@ -9,6 +9,7 @@ import { RefreshTokenAuthenticationService } from '../src';
 import { Strategy1 } from './fixtures';
 
 describe('authentication/refresh-token-service', () => {
+  // refresh-token is stateful service, needs to keep the state and follow certain order for testing
   let refreshToken: string;
   let accessToken: string;
   let userId: string;
@@ -20,6 +21,7 @@ describe('authentication/refresh-token-service', () => {
     'refresh-tokens': Service<any>;
   }>;
 
+  // init the state of refresh-token
   before(() => {
     app = feathers();
     app.use(
@@ -80,8 +82,8 @@ describe('authentication/refresh-token-service', () => {
     });
   });
 
-  describe('patch refresh-token', () => {
-    it('failed to refresh access-token with invalid refresh-token', async () => {
+  describe('refresh access-token', () => {
+    it('cannot refresh access-token with invalid refresh-token', async () => {
       try {
         await app.service('authentication').patch(null, {
           id: userId,
@@ -102,7 +104,7 @@ describe('authentication/refresh-token-service', () => {
     });
   });
 
-  describe('remove refresh-token', () => {
+  describe('logout user by removing refresh-token', () => {
     it('can remove with authentication strategy set', async () => {
       const authResult = await app.service('authentication').remove(null, {
         authentication: {
@@ -118,8 +120,8 @@ describe('authentication/refresh-token-service', () => {
     });
   });
 
-  describe('renew access-token with invalid refresh-token', () => {
-    it('fail when refresh access-token with deleted refresh-token', async () => {
+  describe('refresh access-token with deleted refresh-token', () => {
+    it('cannot refresh access-token with deleted refresh-token', async () => {
       try {
         await app.service('authentication').patch(null, {
           id: userId,
