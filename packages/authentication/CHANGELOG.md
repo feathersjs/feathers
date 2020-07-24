@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.7](https://github.com/feathersjs/feathers/compare/v4.5.6...v4.5.7) (2020-07-24)
+
+
+### Bug Fixes
+
+* **authentication:** Add JWT getEntityQuery ([#2013](https://github.com/feathersjs/feathers/issues/2013)) ([e0e7fb5](https://github.com/feathersjs/feathers/commit/e0e7fb5162940fe776731283b40026c61d9c8a33))
+
+
+
+
+
 ## [4.5.6](https://github.com/feathersjs/feathers/compare/v4.5.5...v4.5.6) (2020-07-12)
 
 

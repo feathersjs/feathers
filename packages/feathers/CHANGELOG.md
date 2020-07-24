@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.7](https://github.com/feathersjs/feathers/compare/v4.5.6...v4.5.7) (2020-07-24)
+
+
+### Bug Fixes
+
+* **typescript:** Revert add overload types for `find` service methods ([#1972](https://github.com/feathersjs/feathers/issues/1972))" ([#2025](https://github.com/feathersjs/feathers/issues/2025)) ([a9501ac](https://github.com/feathersjs/feathers/commit/a9501acb4d3ef58dfb87d62c57a9bf76569da281))
+
+
+
+
+
 ## [4.5.5](https://github.com/feathersjs/feathers/compare/v4.5.4...v4.5.5) (2020-07-11)
 
 
