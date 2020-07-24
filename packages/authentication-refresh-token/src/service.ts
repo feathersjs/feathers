@@ -1,11 +1,14 @@
 import { Params } from '@feathersjs/feathers';
 import { NotAuthenticated, BadRequest } from '@feathersjs/errors';
 import Debug from 'debug';
+// import { IncomingMessage, ServerResponse } from 'http';
 import {
   AuthenticationService,
   AuthenticationRequest
 } from '../../authentication';
 import defaultOptions from './options';
+import { RefreshTokenData, RefreshTokenOptions } from './core';
+
 // import { queryRefreshToken } from './hooks/common';
 
 const debug = Debug('@feathersjs/authentication/refresh-token');
@@ -23,8 +26,37 @@ export class RefreshTokenAuthenticationService extends AuthenticationService {
     );
   }
 
+  // Internal method to query refresh-token from refreshToken entity service
+  // used by create/remove/patch
+  // params: query params
+  async queryRefreshToken(params: Params) {
+    const {
+      'refresh-token': { service }
+    }: { 'refresh-token': RefreshTokenOptions } = this.configuration;
+    const entityService = this.app.service(service);
+
+    if (!entityService) {
+      throw new Error(`No refresh token entity service is configured!`);
+    }
+
+    // TODO: figure out how to handle the situation when query returns multiple results
+    // now simply return the first record
+    const existingToken = await entityService.find(params);
+
+    if (Array.isArray(existingToken)) {
+      if (existingToken.length > 0) return existingToken[0] as RefreshTokenData;
+      else return null;
+    }
+
+    // if refresh token already exists, simply return
+    if (existingToken && existingToken.total > 0 && existingToken.data) {
+      return existingToken.data[0] as RefreshTokenData;
+    }
+    return null;
+  }
+
   /**
-   * Create and return a new JWT for a given authentication request.
+   * Create and return a new JWT along with refreshToken for a given authentication request.
    * Will trigger the `login` event.
    * @param data The authentication request (should include `strategy` key)
    * @param params Service call parameters
@@ -54,18 +86,20 @@ export class RefreshTokenAuthenticationService extends AuthenticationService {
       throw new Error(`No refresh token entity service is configured!`);
     }
 
-    const existingToken = await entityService.find({ query: { userId } });
+    const existingToken = await this.queryRefreshToken({
+      query: { userId, isValid: true }
+    });
 
     debug(`existing token`, existingToken);
 
     // if refresh token already exists, simply return
-    if (existingToken && existingToken.length > 0) {
+    if (existingToken) {
       Object.assign(authResult, {
-        refreshToken: existingToken[0].refreshToken
+        refreshToken: existingToken.refreshToken
       });
       return authResult;
     }
-    // Use authentication service to generate the refresh token with user ID
+    // Generate the refresh token with sub set to user ID
     const refreshToken = await this.createAccessToken(
       {
         sub: userId // refresh token subject is the user ID
@@ -75,7 +109,7 @@ export class RefreshTokenAuthenticationService extends AuthenticationService {
     );
 
     // save the refresh token
-    await entityService?.create({
+    await entityService.create({
       refreshToken, // could be hashed like password prior saving to DB to make it more secure
       userId,
       isValid: true
@@ -86,12 +120,20 @@ export class RefreshTokenAuthenticationService extends AuthenticationService {
   }
 
   /**
-   * Mark a JWT as removed. By default only verifies the JWT and returns the result.
+   * Mark a JWT as removed and delete the refreshToken (revoked). By default only verifies the JWT and returns the result.
+   * // TODO: soft delete instead of hard delete? Is there any use-case that may need to query revoked refresh-token?
    * Triggers the `logout` event.
    * @param id The JWT to remove or null
    * @param params Service call parameters
    */
   async remove(id: string | null, params: Params) {
+    // must reset query or it will be used to query user entity
+    let query;
+    if (params.query) {
+      query = { ...params.query };
+      params.query = {};
+    }
+
     const authResult = await super.remove(id, params);
 
     const {
@@ -109,9 +151,7 @@ export class RefreshTokenAuthenticationService extends AuthenticationService {
       debug(`${userEntityId} doesn't exist in auth result`, authResult);
       throw new Error(`Could not find user ID`);
     }
-
     const entityService = this.app.service(service);
-    const { query } = params;
 
     debug('Logout hook id and params', params);
 
@@ -126,12 +166,13 @@ export class RefreshTokenAuthenticationService extends AuthenticationService {
       throw new Error(`No refresh token entity service is configured!`);
     }
 
-    const existingToken = await entityService.find({
-      query: { userId, refreshToken: query[entity] }
+    const existingToken = await this.queryRefreshToken({
+      query: { userId, isValid: true, refreshToken: query[entity] }
     });
 
-    if (existingToken && existingToken.length > 0) {
-      const tokenId = existingToken[0][entityId];
+    if (existingToken) {
+      // get the refresh-token ID
+      const tokenId = existingToken[entityId as 'id' | '_id'];
 
       if (tokenId === null || tokenId === undefined) {
         throw new Error('Invalid refresh token!');
@@ -156,7 +197,7 @@ export class RefreshTokenAuthenticationService extends AuthenticationService {
 
     const {
       entityId: userEntityId,
-      'refresh-token': { entity, service, jwtOptions, secret }
+      'refresh-token': { entity, jwtOptions, secret }
     } = this.configuration;
 
     const { [userEntityId]: userId, [entity]: refreshToken } = data;
@@ -164,24 +205,19 @@ export class RefreshTokenAuthenticationService extends AuthenticationService {
     if (!userId || !refreshToken) {
       throw new BadRequest(`Bad request`);
     }
-    const entityService = this.app.service(service);
 
-    if (!entityService) {
-      throw new Error(`No refresh token entity service is configured!`);
-    }
-
-    const existingToken = await entityService.find({
-      query: { userId, refreshToken: data[entity] }
+    const existingToken = await this.queryRefreshToken({
+      query: { userId, isValid: true, refreshToken: data[entity] }
     });
 
-    if (existingToken && existingToken.length > 0) {
-      // verify refresh-token
-      // must use refresh-token jwtOptions and secret
+    if (existingToken) {
+      // Use refresh-token jwtOptions and secret verify refresh-token
       const tokenVerifyResult = await this.verifyAccessToken(
-        existingToken[0].refreshToken,
+        existingToken.refreshToken,
         jwtOptions,
         secret
       );
+
       // userId must match the sub in Refresh Token
       if (`${tokenVerifyResult.sub}` !== `${userId}`) {
         throw new Error(`Invalid token`);
@@ -203,6 +239,7 @@ export class RefreshTokenAuthenticationService extends AuthenticationService {
   }
 
   // Validate refresh-token options, pretty much the same checking as authentication service
+  // Used by setup()
   validateRefreshTokenOptions() {
     const {
       'refresh-token': { secret, service, entity, entityId }
@@ -235,6 +272,7 @@ export class RefreshTokenAuthenticationService extends AuthenticationService {
       }
     }
   }
+
   /**
    * Validates the refresh token service configuration.
    */
