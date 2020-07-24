@@ -80,10 +80,8 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     }
   }
 
-  async getEntityQuery (query: Query, _params: Params) {
-    return {
-      ...query
-    };
+  async getEntityQuery (params: Params) {
+    return {};
   }
 
   /**
@@ -101,8 +99,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       throw new NotAuthenticated(`Could not find entity service`);
     }
 
-    const query = await this.getEntityQuery({}, params);
-
+    const query = await this.getEntityQuery(params);
     const getParams = Object.assign({}, omit(params, 'provider'), { query });
     const result = await entityService.get(id, getParams);
 
