@@ -12,6 +12,27 @@
 npm install @feathersjs/authentication-refresh-token --save
 ```
 
+## Usage
+
+Refresh access-token
+
+```http
+PATCH http://localhost:3030/authentication
+Content-Type: application/json
+
+{
+  "_id": "fbOVXFZ0m1Z9XH90",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6InJlZnJlc2gifQ.eyJzdWIiOiJmYk9WWEZaMG0xWjlYSDkwIiwiaWF0IjoxNTk1NTYxNDg1LCJleHAiOjE2MjY2NjU0ODUsImF1ZCI6Imh0dHBzOi8vZXhhbXBsZS5jb20iLCJpc3MiOiJleGFtcGxlIiwianRpIjoiOTYxZDJiNTctNzNhOS00YWJmLTgyNmUtMDAxMjU1ZmUxNDg3In0.IEw7gU0GBR2GucmI3z3oRNRozb_h1VPoYLuLqb73rFs"
+}
+```
+
+Logout user
+
+```http
+DELETE http://localhost:3030/authentication?refreshToken=<refresh-token>
+Authorization: <access-token>
+```
+
 ## Documentation
 
 Refer to the [Feathers authentication API documentation](https://docs.feathersjs.com/api/authentication/) for more details.
