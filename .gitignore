@@ -43,6 +43,7 @@ dist/
 packages/authentication/lib
 packages/authentication-local/lib
 packages/authentication-client/lib
+packages/authentication-refresh-token/lib
 packages/authentication-oauth/lib
 packages/configuration/lib
 packages/commons/lib
