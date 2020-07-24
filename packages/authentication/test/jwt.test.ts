@@ -75,7 +75,7 @@ describe('authentication/jwt', () => {
     app.setup();
   });
 
-  it('getEntity (and params.query)', async () => {
+  it('getEntity', async () => {
     const [ strategy ] = app.service('authentication').getStrategies('jwt') as JWTStrategy[];
 
     let entity = await strategy.getEntity(user.id, {

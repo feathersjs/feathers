@@ -45,7 +45,7 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
   }
 
   async findEntity (username: string, params: Params) {
-    const { entityUsernameField, service, errorMessage } = this.configuration;
+    const { entityUsernameField, errorMessage } = this.configuration;
     if (!username) { // don't query for users without any condition set.
       throw new NotAuthenticated(errorMessage);
     }
@@ -55,7 +55,7 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
     }, params);
 
     const findParams = Object.assign({}, params, { query });
-    const entityService = this.app.service(service);
+    const entityService = this.entityService;
 
     debug('Finding entity with query', params.query);
 
@@ -74,7 +74,7 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
   }
 
   async getEntity (result: any, params: Params) {
-    const { entityService } = this;
+    const entityService = this.entityService;
     const { entityId = entityService.id, entity } = this.configuration;
 
     if (!entityId || result[entityId] === undefined) {

@@ -20,8 +20,9 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     const config = super.configuration;
 
     return {
-      entity: authConfig.entity,
       service: authConfig.service,
+      entity: authConfig.entity,
+      entityId: authConfig.entityId,
       header: 'Authorization',
       schemes: [ 'Bearer', 'JWT' ],
       ...config
@@ -66,7 +67,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
   }
 
   verifyConfiguration () {
-    const allowedKeys = [ 'entity', 'service', 'header', 'schemes' ];
+    const allowedKeys = [ 'entity', 'entityId', 'service', 'header', 'schemes' ];
 
     for (const key of Object.keys(this.configuration)) {
       if (!allowedKeys.includes(key)) {
@@ -79,14 +80,18 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     }
   }
 
+  async getEntityQuery (_params: Params) {
+    return {};
+  }
+
   /**
    * Return the entity for a given id
    * @param id The id to use
    * @param params Service call parameters
    */
   async getEntity (id: string, params: Params) {
-    const { entity } = this.configuration;
     const entityService = this.entityService;
+    const { entity } = this.configuration;
 
     debug('Getting entity', id);
 
@@ -94,7 +99,9 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       throw new NotAuthenticated(`Could not find entity service`);
     }
 
-    const result = await entityService.get(id, omit(params, 'provider', 'query'));
+    const query = await this.getEntityQuery(params);
+    const getParams = Object.assign({}, omit(params, 'provider'), { query });
+    const result = await entityService.get(id, getParams);
 
     if (!params.provider) {
       return result;
