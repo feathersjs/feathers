@@ -39,8 +39,8 @@
     "IE 10"
   ],
   "devDependencies": {
-    "@babel/core": "^7.10.5",
-    "@babel/preset-env": "^7.10.4",
+    "@babel/core": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
     "@feathersjs/authentication-client": "^4.5.7",
     "@feathersjs/errors": "^4.5.7",
     "@feathersjs/express": "^4.5.7",
@@ -56,7 +56,7 @@
     "feathers-memory": "^4.1.0",
     "jquery": "^3.5.1",
     "jsdom": "^16.3.0",
-    "mocha": "^8.0.1",
+    "mocha": "^8.1.0",
     "mocha-puppeteer": "^0.14.0",
     "node-fetch": "^2.6.0",
     "parallel-webpack": "^2.6.0",
@@ -64,7 +64,7 @@
     "socket.io-client": "^2.3.0",
     "superagent": "^5.3.1",
     "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^4.44.0",
+    "webpack": "^4.44.1",
     "webpack-merge": "^5.0.9",
     "ws": "^7.3.1",
     "xhr2": "^0.2.0"

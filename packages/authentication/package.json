@@ -51,16 +51,16 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.19",
     "long-timeout": "^0.1.1",
-    "uuid": "^8.2.0"
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
     "@types/lodash": "^4.14.158",
-    "@types/mocha": "^8.0.0",
-    "@types/node": "^14.0.26",
+    "@types/mocha": "^8.0.1",
+    "@types/node": "^14.0.27",
     "@types/uuid": "^8.0.0",
     "feathers-memory": "^4.1.0",
-    "mocha": "^8.0.1",
+    "mocha": "^8.1.0",
     "shx": "^0.3.2",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.7"
