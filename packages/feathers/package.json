@@ -37,7 +37,8 @@
     "README.md",
     "src/**",
     "lib/**",
-    "*.d.ts"
+    "*.d.ts",
+    "*.js"
   ],
   "scripts": {
     "test": "mocha --config ../../.mocharc.json",

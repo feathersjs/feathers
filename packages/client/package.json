@@ -32,8 +32,8 @@
     "src/**",
     "lib/**",
     "dist/**",
-    "*.js",
-    "*.d.ts"
+    "*.d.ts",
+    "*.js"
   ],
   "scripts": {
     "clean": "../../node_modules/.bin/shx rm -rf dist/ && ../../node_modules/.bin/shx mkdir -p dist",

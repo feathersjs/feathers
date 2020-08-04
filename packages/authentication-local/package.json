@@ -36,7 +36,8 @@
     "README.md",
     "src/**",
     "lib/**",
-    "*.d.ts"
+    "*.d.ts",
+    "*.js"
   ],
   "scripts": {
     "prepublish": "npm run compile",

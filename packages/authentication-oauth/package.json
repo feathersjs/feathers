@@ -36,7 +36,8 @@
     "README.md",
     "src/**",
     "lib/**",
-    "*.d.ts"
+    "*.d.ts",
+    "*.js"
   ],
   "scripts": {
     "start": "ts-node test/app",
