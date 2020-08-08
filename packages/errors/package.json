@@ -29,6 +29,15 @@
 	"directories": {
 		"lib": "lib"
 	},
+	"files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "*.d.ts",
+    "*.js"
+  ],
 	"scripts": {
 		"test": "mocha --config ../../.mocharc.json"
 	},
