@@ -8,8 +8,8 @@
   },
   "license": "MIT",
   "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/feathers"
+    "type": "github",
+    "url": "https://github.com/sponsors/daffl"
   },
   "bugs": {
     "url": "https://github.com/feathersjs/feathers/issues"
@@ -25,6 +25,16 @@
   },
   "main": "index.js",
   "types": "index.d.ts",
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "dist/**",
+    "*.d.ts",
+    "*.js"
+  ],
   "scripts": {
     "clean": "../../node_modules/.bin/shx rm -rf dist/ && ../../node_modules/.bin/shx mkdir -p dist",
     "version": "npm run build",

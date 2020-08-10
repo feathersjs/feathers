@@ -11,8 +11,8 @@
   ],
   "license": "MIT",
   "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/feathers"
+    "type": "github",
+    "url": "https://github.com/sponsors/daffl"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,15 @@
   "engines": {
     "node": ">= 10"
   },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "*.d.ts",
+    "*.js"
+  ],
   "scripts": {
     "start": "ts-node test/app",
     "prepublish": "npm run compile",

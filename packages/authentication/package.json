@@ -11,8 +11,8 @@
   ],
   "license": "MIT",
   "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/feathers"
+    "type": "github",
+    "url": "https://github.com/sponsors/daffl"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,15 @@
     "email": "hello@feathersjs.com",
     "url": "https://feathersjs.com"
   },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "*.d.ts",
+    "*.js"
+  ],
   "contributors": [],
   "bugs": {
     "url": "https://github.com/feathersjs/feathers/issues"

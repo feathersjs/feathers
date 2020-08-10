@@ -3,7 +3,7 @@
 ## A framework for real-time applications and REST APIs with JavaScript and TypeScript
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers.svg)](https://greenkeeper.io/)
-[![CI](https://github.com/feathersjs/feathers/workflows/Node.js%20CI/badge.svg)](https://github.com/feathersjs/feathers/actions?query=workflow%3A%22Node.js+CI%22)
+[![CI](https://github.com/feathersjs/feathers/workflows/CI/badge.svg)](https://github.com/feathersjs/feathers/actions?query=workflow%3ACI)
 [![Maintainability](https://api.codeclimate.com/v1/badges/cb5ec42a2d0cc1a47a02/maintainability)](https://codeclimate.com/github/feathersjs/feathers/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/cb5ec42a2d0cc1a47a02/test_coverage)](https://codeclimate.com/github/feathersjs/feathers/test_coverage)
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/feathers.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/feathers)
