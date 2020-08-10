@@ -70,7 +70,7 @@
     "@types/mocha": "^8.0.1",
     "@types/node": "^14.0.27",
     "axios": "^0.19.2",
-    "mocha": "^8.1.0",
+    "mocha": "^8.1.1",
     "shx": "^0.3.2",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.7"

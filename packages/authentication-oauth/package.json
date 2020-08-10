@@ -58,7 +58,7 @@
     "@feathersjs/feathers": "^4.5.7",
     "debug": "^4.1.1",
     "express-session": "^1.17.1",
-    "grant": "^5.2.0",
+    "grant": "^5.3.0",
     "grant-profile": "^1.0.2",
     "lodash": "^4.17.19"
   },
@@ -66,11 +66,11 @@
     "@types/debug": "^4.1.5",
     "@types/express": "^4.17.7",
     "@types/express-session": "^1.17.0",
-    "@types/lodash": "^4.14.158",
+    "@types/lodash": "^4.14.159",
     "@types/mocha": "^8.0.1",
     "@types/node": "^14.0.27",
     "axios": "^0.19.2",
-    "mocha": "^8.1.0",
+    "mocha": "^8.1.1",
     "shx": "^0.3.2",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.7"

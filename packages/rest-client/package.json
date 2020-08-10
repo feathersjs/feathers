@@ -54,22 +54,22 @@
     "qs": "^6.9.4"
   },
   "devDependencies": {
-    "@angular/common": "^10.0.7",
-    "@angular/core": "^10.0.7",
+    "@angular/common": "^10.0.8",
+    "@angular/core": "^10.0.8",
     "@angular/http": "^7.2.16",
-    "@angular/platform-browser": "^10.0.7",
+    "@angular/platform-browser": "^10.0.8",
     "@feathersjs/express": "^4.5.7",
     "@feathersjs/feathers": "^4.5.7",
     "@feathersjs/tests": "^4.5.7",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "feathers-memory": "^4.1.0",
-    "mocha": "^8.1.0",
+    "mocha": "^8.1.1",
     "node-fetch": "^2.6.0",
     "request": "^2.88.2",
     "rxjs": "^6.6.2",
     "shx": "^0.3.2",
-    "superagent": "^5.3.1"
+    "superagent": "^6.0.0"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }
