@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.8](https://github.com/feathersjs/feathers/compare/v4.5.7...v4.5.8) (2020-08-12)
+
+
+### Bug Fixes
+
+* **authentication-client:** Fix storage type so it works with all supported interfaces ([#2041](https://github.com/feathersjs/feathers/issues/2041)) ([6ee0e78](https://github.com/feathersjs/feathers/commit/6ee0e78d55cf1214f61458f386b94c350eec32af))
+
+
+
+
+
 ## [4.5.7](https://github.com/feathersjs/feathers/compare/v4.5.6...v4.5.7) (2020-07-24)
 
 
