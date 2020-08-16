@@ -115,7 +115,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
     const auth = {
       authentication: {
           accessToken,
-          payload: jsonwebtoken.decode(accessToken),
+          payload: jsonwebtoken.decode(accessToken)
       }
     };
 
