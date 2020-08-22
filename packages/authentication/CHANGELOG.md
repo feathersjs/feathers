@@ -9,6 +9,45 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+## [4.5.8](https://github.com/feathersjs/feathers/compare/v4.5.7...v4.5.8) (2020-08-12)
+
+**Note:** Version bump only for package @feathersjs/authentication
+
+
+
+
+
+## [4.5.7](https://github.com/feathersjs/feathers/compare/v4.5.6...v4.5.7) (2020-07-24)
+
+
+### Bug Fixes
+
+* **authentication:** Add JWT getEntityQuery ([#2013](https://github.com/feathersjs/feathers/issues/2013)) ([e0e7fb5](https://github.com/feathersjs/feathers/commit/e0e7fb5162940fe776731283b40026c61d9c8a33))
+
+
+
+
+
+## [4.5.6](https://github.com/feathersjs/feathers/compare/v4.5.5...v4.5.6) (2020-07-12)
+
+
+### Bug Fixes
+
+* **authentication:** Omit query in JWT strategy ([#2011](https://github.com/feathersjs/feathers/issues/2011)) ([04ce7e9](https://github.com/feathersjs/feathers/commit/04ce7e98515fe9d495cd0e83e0da097e9bcd7382))
+
+
+
+
+
+## [4.5.5](https://github.com/feathersjs/feathers/compare/v4.5.4...v4.5.5) (2020-07-11)
+
+
+### Bug Fixes
+
+* **authentication:** Include query params when authenticating via authenticate hook [#2009](https://github.com/feathersjs/feathers/issues/2009) ([4cdb7bf](https://github.com/feathersjs/feathers/commit/4cdb7bf2898385ddac7a1692bc9ac2f6cf5ad446))
+
+
+
 
 
 ## [4.5.3](https://github.com/feathersjs/feathers/compare/v4.5.2...v4.5.3) (2020-04-17)

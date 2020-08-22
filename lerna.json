@@ -10,7 +10,7 @@
     },
     "publish": {
       "allowBranch": [
-        "master",
+        "crow",
         "dove"
       ],
       "message": "chore(release): publish %s",

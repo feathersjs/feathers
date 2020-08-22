@@ -11,8 +11,8 @@
   ],
   "license": "MIT",
   "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/feathers"
+    "type": "github",
+    "url": "https://github.com/sponsors/daffl"
   },
   "repository": {
     "type": "git",
@@ -48,8 +48,9 @@
     "@feathersjs/feathers": "^5.0.0-pre.0",
     "@feathersjs/socketio": "^5.0.0-pre.0",
     "@feathersjs/tests": "^5.0.0-pre.0",
-    "feathers-memory": "^4.1.0",
-    "mocha": "^7.1.2",
+    "@feathersjs/transport-commons": "^4.5.8",
+    "@types/socket.io-client": "^1.4.33",
+    "mocha": "^8.1.1",
     "socket.io-client": "^2.3.0"
   },
   "gitHead": "e6b82b809c21da298501a12b82e72e166468994b"

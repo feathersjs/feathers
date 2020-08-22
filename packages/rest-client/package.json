@@ -11,8 +11,8 @@
   ],
   "license": "MIT",
   "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/feathers"
+    "type": "github",
+    "url": "https://github.com/sponsors/daffl"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,15 @@
   "engines": {
     "node": ">= 10"
   },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "*.d.ts",
+    "*.js"
+  ],
   "scripts": {
     "test": "mocha --config ../../.mocharc.json"
   },
@@ -45,21 +54,21 @@
     "qs": "^6.9.4"
   },
   "devDependencies": {
-    "@angular/common": "^9.1.7",
-    "@angular/core": "^9.1.7",
+    "@angular/common": "^10.0.11",
+    "@angular/core": "^10.0.11",
     "@angular/http": "^7.2.16",
-    "@angular/platform-browser": "^9.1.7",
+    "@angular/platform-browser": "^10.0.11",
     "@feathersjs/express": "^5.0.0-pre.0",
     "@feathersjs/feathers": "^5.0.0-pre.0",
     "@feathersjs/tests": "^5.0.0-pre.0",
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "body-parser": "^1.19.0",
     "feathers-memory": "^4.1.0",
-    "mocha": "^7.1.2",
+    "mocha": "^8.1.1",
     "node-fetch": "^2.6.0",
-    "rxjs": "^6.5.5",
+    "rxjs": "^6.6.2",
     "shx": "^0.3.2",
-    "superagent": "^5.2.2"
+    "superagent": "^6.0.0"
   },
   "gitHead": "e6b82b809c21da298501a12b82e72e166468994b"
 }

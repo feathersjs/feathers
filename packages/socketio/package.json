@@ -11,8 +11,8 @@
   ],
   "license": "MIT",
   "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/feathers"
+    "type": "github",
+    "url": "https://github.com/sponsors/daffl"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,15 @@
   "engines": {
     "node": ">= 10"
   },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "*.d.ts",
+    "*.js"
+  ],
   "scripts": {
     "test": "mocha --config ../../.mocharc.json"
   },
@@ -41,7 +50,7 @@
   },
   "dependencies": {
     "@feathersjs/transport-commons": "^5.0.0-pre.0",
-    "@types/socket.io": "^2.1.6",
+    "@types/socket.io": "^2.1.11",
     "debug": "^4.1.1",
     "socket.io": "^2.3.0",
     "uberproto": "^2.0.6"
@@ -51,12 +60,12 @@
     "@feathersjs/express": "^5.0.0-pre.0",
     "@feathersjs/feathers": "^5.0.0-pre.0",
     "@feathersjs/tests": "^5.0.0-pre.0",
-    "@types/mocha": "^7.0.2",
-    "@types/mongodb": "^3.5.17",
-    "@types/node": "^14.0.1",
+    "@types/mocha": "^8.0.3",
+    "@types/mongodb": "^3.5.26",
+    "@types/node": "^14.6.0",
     "feathers-memory": "^4.1.0",
-    "lodash": "^4.17.15",
-    "mocha": "^7.1.2",
+    "lodash": "^4.17.20",
+    "mocha": "^8.1.1",
     "socket.io-client": "^2.3.0"
   },
   "gitHead": "e6b82b809c21da298501a12b82e72e166468994b"

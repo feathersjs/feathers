@@ -13,8 +13,8 @@
   },
   "license": "MIT",
   "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/feathers"
+    "type": "github",
+    "url": "https://github.com/sponsors/daffl"
   },
   "bugs": {
     "url": "https://github.com/feathersjs/feathers/issues"
@@ -24,7 +24,7 @@
   },
   "scripts": {
     "install": "lerna bootstrap",
-    "publish": "lerna publish && git commit -am \"chore: Update version and changelog\" && git push origin master",
+    "publish": "lerna publish && git commit -am \"chore: Update changelog\" && git push origin",
     "publish:premajor": "lerna publish premajor --preid pre --pre-dist-tag pre && git commit -am \"chore: Update version and changelog\" && git push origin master",
     "publish:prerelease": "lerna publish prerelease --preid pre --pre-dist-tag pre && git commit -am \"chore: Update version and changelog\" && git push origin master",
     "lint": "tslint 'packages/**/*.js' 'packages/**/*.ts' -c tslint.json --fix",
@@ -33,9 +33,9 @@
     "test": "npm run lint && nyc lerna run test"
   },
   "devDependencies": {
-    "lerna": "^3.21.0",
-    "npm-check-updates": "^6.0.1",
-    "nyc": "^15.0.1",
-    "tslint": "^6.1.2"
+    "lerna": "^3.22.1",
+    "npm-check-updates": "^7.1.1",
+    "nyc": "^15.1.0",
+    "tslint": "^6.1.3"
   }
 }

@@ -11,8 +11,8 @@
   ],
   "license": "MIT",
   "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/feathers"
+    "type": "github",
+    "url": "https://github.com/sponsors/daffl"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,15 @@
     "email": "hello@feathersjs.com",
     "url": "https://feathersjs.com"
   },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "*.d.ts",
+    "*.js"
+  ],
   "contributors": [],
   "bugs": {
     "url": "https://github.com/feathersjs/feathers/issues"
@@ -49,21 +58,21 @@
     "@types/jsonwebtoken": "^8.5.0",
     "debug": "^4.1.1",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.20",
     "long-timeout": "^0.1.1",
-    "uuid": "^8.0.0"
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
-    "@types/lodash": "^4.14.151",
-    "@types/mocha": "^7.0.2",
-    "@types/node": "^14.0.1",
-    "@types/uuid": "^7.0.3",
+    "@types/lodash": "^4.14.159",
+    "@types/mocha": "^8.0.3",
+    "@types/node": "^14.6.0",
+    "@types/uuid": "^8.3.0",
     "feathers-memory": "^4.1.0",
-    "mocha": "^7.1.2",
+    "mocha": "^8.1.1",
     "shx": "^0.3.2",
-    "ts-node": "^8.10.1",
-    "typescript": "^3.9.2"
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
   },
   "gitHead": "e6b82b809c21da298501a12b82e72e166468994b"
 }

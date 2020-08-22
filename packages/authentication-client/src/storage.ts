@@ -1,7 +1,7 @@
 export interface Storage {
-  getItem (key: string): Promise<any>;
-  setItem? (key: string, value: any): Promise<any>;
-  removeItem? (key: string): Promise<any>;
+  getItem (key: string): any;
+  setItem? (key: string, value: any): any;
+  removeItem? (key: string): any;
 }
 
 export class MemoryStorage implements Storage {

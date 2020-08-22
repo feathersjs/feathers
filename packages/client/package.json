@@ -8,8 +8,8 @@
   },
   "license": "MIT",
   "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/feathers"
+    "type": "github",
+    "url": "https://github.com/sponsors/daffl"
   },
   "bugs": {
     "url": "https://github.com/feathersjs/feathers/issues"
@@ -25,6 +25,16 @@
   },
   "main": "index.js",
   "types": "index.d.ts",
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "dist/**",
+    "*.d.ts",
+    "*.js"
+  ],
   "scripts": {
     "clean": "../../node_modules/.bin/shx rm -rf dist/ && ../../node_modules/.bin/shx mkdir -p dist",
     "version": "npm run build",
@@ -48,24 +58,24 @@
     "@feathersjs/socketio-client": "^5.0.0-pre.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.0",
+    "@babel/core": "^7.11.4",
+    "@babel/preset-env": "^7.11.0",
     "@feathersjs/tests": "^5.0.0-pre.0",
     "babel-loader": "^8.1.0",
     "body-parser": "^1.19.0",
     "feathers-memory": "^4.1.0",
     "jquery": "^3.5.1",
-    "jsdom": "^16.2.2",
-    "mocha": "^7.1.2",
+    "jsdom": "^16.4.0",
+    "mocha": "^8.1.1",
     "mocha-puppeteer": "^0.14.0",
     "node-fetch": "^2.6.0",
     "parallel-webpack": "^2.6.0",
     "socket.io-client": "^2.3.0",
-    "superagent": "^5.2.2",
+    "superagent": "^6.0.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^4.43.0",
-    "webpack-merge": "^4.2.2",
-    "ws": "^7.3.0",
+    "webpack": "^4.44.1",
+    "webpack-merge": "^5.1.2",
+    "ws": "^7.3.1",
     "xhr2": "^0.2.0"
   },
   "gitHead": "e6b82b809c21da298501a12b82e72e166468994b"

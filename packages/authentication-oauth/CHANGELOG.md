@@ -5,10 +5,44 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [5.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v4.5.4...v5.0.0-pre.0) (2020-05-19)
 
+**Note:** Version bump only for package @feathersjs/authentication-oauth
+
+
+
+## [4.5.8](https://github.com/feathersjs/feathers/compare/v4.5.7...v4.5.8) (2020-08-12)
+
+**Note:** Version bump only for package @feathersjs/authentication-oauth
+
+
+
+
+
+## [4.5.7](https://github.com/feathersjs/feathers/compare/v4.5.6...v4.5.7) (2020-07-24)
+
+
+### Bug Fixes
+
+* **typescript:** Revert add overload types for `find` service methods ([#1972](https://github.com/feathersjs/feathers/issues/1972))" ([#2025](https://github.com/feathersjs/feathers/issues/2025)) ([a9501ac](https://github.com/feathersjs/feathers/commit/a9501acb4d3ef58dfb87d62c57a9bf76569da281))
+
+
+
+
+
+## [4.5.6](https://github.com/feathersjs/feathers/compare/v4.5.5...v4.5.6) (2020-07-12)
+
+**Note:** Version bump only for package @feathersjs/authentication-oauth
+
+
+
+
+
+## [4.5.5](https://github.com/feathersjs/feathers/compare/v4.5.4...v4.5.5) (2020-07-11)
+
 
 ### Bug Fixes
 
 * **authentication-oauth:** Updated typings for projects with strictNullChecks ([#1941](https://github.com/feathersjs/feathers/issues/1941)) ([be91206](https://github.com/feathersjs/feathers/commit/be91206e3dba1e65a81412b7aa636bece3ab4aa2))
+* **typescript:** add overload types for `find` service methods ([#1972](https://github.com/feathersjs/feathers/issues/1972)) ([ef55af0](https://github.com/feathersjs/feathers/commit/ef55af088d05d9d36aba9d9f8d6c2c908a4f20dd))
 
 
 

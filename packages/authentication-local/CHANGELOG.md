@@ -9,6 +9,39 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+## [4.5.8](https://github.com/feathersjs/feathers/compare/v4.5.7...v4.5.8) (2020-08-12)
+
+**Note:** Version bump only for package @feathersjs/authentication-local
+
+
+
+
+
+## [4.5.7](https://github.com/feathersjs/feathers/compare/v4.5.6...v4.5.7) (2020-07-24)
+
+
+### Bug Fixes
+
+* **authentication:** Add JWT getEntityQuery ([#2013](https://github.com/feathersjs/feathers/issues/2013)) ([e0e7fb5](https://github.com/feathersjs/feathers/commit/e0e7fb5162940fe776731283b40026c61d9c8a33))
+
+
+
+
+
+## [4.5.6](https://github.com/feathersjs/feathers/compare/v4.5.5...v4.5.6) (2020-07-12)
+
+**Note:** Version bump only for package @feathersjs/authentication-local
+
+
+
+
+
+## [4.5.5](https://github.com/feathersjs/feathers/compare/v4.5.4...v4.5.5) (2020-07-11)
+
+**Note:** Version bump only for package @feathersjs/authentication-local
+
+
+
 
 
 ## [4.5.4](https://github.com/feathersjs/feathers/compare/v4.5.3...v4.5.4) (2020-04-29)

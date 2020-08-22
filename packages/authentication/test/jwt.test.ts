@@ -78,7 +78,11 @@ describe('authentication/jwt', () => {
   it('getEntity', async () => {
     const [ strategy ] = app.service('authentication').getStrategies('jwt') as JWTStrategy[];
 
-    let entity = await strategy.getEntity(user.id, {});
+    let entity = await strategy.getEntity(user.id, {
+      query: {
+        name: 'Dave'
+      }
+    });
 
     assert.deepStrictEqual(entity, user);
 
