@@ -49,7 +49,7 @@
     "IE 10"
   ],
   "devDependencies": {
-    "@babel/core": "^7.11.1",
+    "@babel/core": "^7.11.4",
     "@babel/preset-env": "^7.11.0",
     "@feathersjs/authentication-client": "^4.5.8",
     "@feathersjs/errors": "^4.5.8",
@@ -75,7 +75,7 @@
     "superagent": "^6.0.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.44.1",
-    "webpack-merge": "^5.1.1",
+    "webpack-merge": "^5.1.2",
     "ws": "^7.3.1",
     "xhr2": "^0.2.0"
   },
