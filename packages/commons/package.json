@@ -54,7 +54,7 @@
     "@types/node": "^14.0.25",
     "mocha": "^8.0.1",
     "shx": "^0.3.2",
-    "ts-node": "^8.10.2",
+    "ts-node": "^9.0.0",
     "typescript": "^3.9.7"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
