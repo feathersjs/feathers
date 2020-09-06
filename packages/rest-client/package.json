@@ -69,7 +69,7 @@
     "request": "^2.88.2",
     "rxjs": "^6.6.0",
     "shx": "^0.3.2",
-    "superagent": "^5.3.1"
+    "superagent": "^6.1.0"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }
