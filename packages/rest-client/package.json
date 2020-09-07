@@ -61,7 +61,7 @@
     "@feathersjs/express": "^4.5.8",
     "@feathersjs/feathers": "^4.5.8",
     "@feathersjs/tests": "^4.5.8",
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "body-parser": "^1.19.0",
     "feathers-memory": "^4.1.0",
     "mocha": "^8.0.1",
