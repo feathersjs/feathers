@@ -64,6 +64,14 @@ describe('@feathersjs/configuration', () => {
     assert.strictEqual(app.get('pathFromEnv'), join(__dirname, 'something'))
   );
 
+  it('does not normalize values that start with . but are not a relative path', () =>
+    assert.strictEqual(app.get('notDotPath'), '.dot')
+  );
+
+  it('does not normalize values that start with .. but are not a relative path', () =>
+    assert.strictEqual(app.get('notDotDotPath'), '..dotdot')
+  );
+
   it('converts environment variables recursively', () =>
     assert.strictEqual(app.get('deeply').nested.env, 'testing')
   );

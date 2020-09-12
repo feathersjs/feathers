@@ -2,6 +2,8 @@
   "port": 3030,
   "environment": "NODE_ENV",
   "path": "../something",
+  "notDotPath": ".dot",
+  "notDotDotPath": "..dotdot",
   "pathFromEnv": "PATH_ENV",
   "unescaped": "\\NODE_ENV",
   "from": "default",
