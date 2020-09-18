@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs';
+import { verify, hash } from '@node-rs/bcrypt';
 import get from 'lodash/get';
 import omit from 'lodash/omit';
 import Debug from 'debug';
@@ -104,7 +104,7 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
 
     debug('Verifying password');
 
-    const result = await bcrypt.compare(password, hash);
+    const result = await verify(password, hash);
 
     if (result) {
       return entity;
@@ -114,7 +114,7 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
   }
 
   async hashPassword (password: string, _params: Params) {
-    return bcrypt.hash(password, this.configuration.hashSize);
+    return hash(password, this.configuration.hashSize);
   }
 
   async authenticate (data: AuthenticationRequest, params: Params) {
