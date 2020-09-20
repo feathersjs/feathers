@@ -56,19 +56,19 @@
     "@feathersjs/errors": "^4.5.8",
     "@feathersjs/feathers": "^4.5.8",
     "bcryptjs": "^2.4.3",
-    "debug": "^4.1.1",
-    "lodash": "^4.17.19"
+    "debug": "^4.2.0",
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/debug": "^4.1.5",
-    "@types/lodash": "^4.14.158",
-    "@types/mocha": "^8.0.0",
-    "@types/node": "^14.0.25",
-    "mocha": "^8.0.1",
+    "@types/lodash": "^4.14.161",
+    "@types/mocha": "^8.0.3",
+    "@types/node": "^14.11.1",
+    "mocha": "^8.1.3",
     "shx": "^0.3.2",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.7"
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }
