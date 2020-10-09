@@ -82,14 +82,16 @@ function testOmit (title: string, property: string) {
       });
     });
 
-    it('omits from array', () => {
+    it('omits from array but only objects (#2053)', () => {
       const data = [{
         email: 'test1@user.com',
         password: 'supersecret'
       }, {
         email: 'test2@user.com',
         password: 'othersecret'
-      }];
+      }, [
+        'one', 'two', 'three'
+      ], 'test'];
       const context = {
         [property]: data
       } as unknown as HookContext;
@@ -99,7 +101,9 @@ function testOmit (title: string, property: string) {
         [property]: data,
         dispatch: [
           { email: 'test1@user.com' },
-          { email: 'test2@user.com' }
+          { email: 'test2@user.com' }, [
+            'one', 'two', 'three'
+          ], 'test'
         ]
       });
     });

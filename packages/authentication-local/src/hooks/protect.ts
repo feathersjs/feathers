@@ -4,9 +4,14 @@ import { HookContext } from '@feathersjs/feathers';
 export default (...fields: string[]) => (context: HookContext) => {
   const result = context.dispatch || context.result;
   const o = (current: any) => {
-    const data = typeof current.toJSON === 'function'
-      ? current.toJSON() : current;
-    return omit(data, fields);
+    if (typeof current === 'object' && !Array.isArray(current)) {
+      const data = typeof current.toJSON === 'function'
+        ? current.toJSON() : current;
+  
+      return omit(data, fields);
+    }
+
+    return current;
   };
 
   if (!result) {
