@@ -30,7 +30,11 @@ class FetchService extends Base {
       return response;
     }
 
-    return response.json().then(error => {
+    return response.json().catch(() => {
+      const ErrorClass = errors[response.status] || Error;
+      
+      return new ErrorClass('JSON parsing error');
+    }).then(error => {
       error.response = response;
       throw error;
     });
