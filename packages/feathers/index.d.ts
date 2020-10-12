@@ -42,6 +42,7 @@ declare namespace createApplication {
         provider?: string;
         route?: {[key: string]: string};
         headers?: {[key: string]: any};
+        user?: {[key: string]: string};
 
         [key: string]: any; // (JL) not sure if we want this
     }
