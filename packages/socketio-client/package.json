@@ -41,17 +41,17 @@
   },
   "dependencies": {
     "@feathersjs/transport-commons": "^5.0.0-pre.0",
-    "@types/socket.io-client": "^1.4.33"
+    "@types/socket.io-client": "^1.4.34"
   },
   "devDependencies": {
     "@feathersjs/commons": "^5.0.0-pre.0",
     "@feathersjs/feathers": "^5.0.0-pre.0",
     "@feathersjs/socketio": "^5.0.0-pre.0",
     "@feathersjs/tests": "^5.0.0-pre.0",
-    "@feathersjs/transport-commons": "^4.5.8",
-    "@types/socket.io-client": "^1.4.33",
-    "mocha": "^8.1.1",
-    "socket.io-client": "^2.3.0"
+    "@feathersjs/transport-commons": "^4.5.9",
+    "@types/socket.io-client": "^1.4.34",
+    "mocha": "^8.2.0",
+    "socket.io-client": "^2.3.1"
   },
   "gitHead": "e6b82b809c21da298501a12b82e72e166468994b"
 }

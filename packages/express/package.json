@@ -51,8 +51,8 @@
   "dependencies": {
     "@feathersjs/commons": "^5.0.0-pre.0",
     "@feathersjs/errors": "^5.0.0-pre.0",
-    "@types/express": "^4.17.7",
-    "debug": "^4.1.1",
+    "@types/express": "^4.17.8",
+    "debug": "^4.2.0",
     "express": "^4.17.1",
     "lodash": "^4.17.20",
     "uberproto": "^2.0.6"
@@ -64,7 +64,7 @@
     "@feathersjs/tests": "^5.0.0-pre.0",
     "axios": "^0.20.0",
     "lodash": "^4.17.20",
-    "mocha": "^8.1.1"
+    "mocha": "^8.2.0"
   },
   "gitHead": "e6b82b809c21da298501a12b82e72e166468994b"
 }
