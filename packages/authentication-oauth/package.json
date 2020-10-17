@@ -59,7 +59,7 @@
     "debug": "^4.1.1",
     "express-session": "^1.17.1",
     "grant": "^5.2.0",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
