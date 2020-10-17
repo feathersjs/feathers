@@ -7,7 +7,7 @@ export default (...fields: string[]) => (context: HookContext) => {
     if (typeof current === 'object' && !Array.isArray(current)) {
       const data = typeof current.toJSON === 'function'
         ? current.toJSON() : current;
-  
+
       return omit(data, fields);
     }
 
