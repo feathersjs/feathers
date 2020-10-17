@@ -89,6 +89,10 @@ export default (options: OauthSetupSettings) => {
           ...payload
         };
 
+        await new Promise((resolve, reject) =>
+          req.session.destroy(err => err ? reject(err) : resolve())
+        );
+
         debug(`Calling ${authService}.create authentication with strategy ${name}`);
 
         const authResult = await service.create(authentication, params);

@@ -15,6 +15,17 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### BREAKING CHANGES
 
 * **transport-commons:** Removes the old message format and client service timeout
+
+
+
+## [4.5.9](https://github.com/feathersjs/feathers/compare/v4.5.8...v4.5.9) (2020-10-09)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
 ## [4.5.8](https://github.com/feathersjs/feathers/compare/v4.5.7...v4.5.8) (2020-08-12)
 
 **Note:** Version bump only for package @feathersjs/transport-commons

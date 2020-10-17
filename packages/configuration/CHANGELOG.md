@@ -18,6 +18,18 @@ functionality like path replacements and automatic environment variable insertio
 
 
 
+
+## [4.5.9](https://github.com/feathersjs/feathers/compare/v4.5.8...v4.5.9) (2020-10-09)
+
+
+### Bug Fixes
+
+* **configuration:** Fix handling of config values that start with . or .. but are not actually relative paths; e.g. ".foo" or "..bar" ([#2065](https://github.com/feathersjs/feathers/issues/2065)) ([d07bf59](https://github.com/feathersjs/feathers/commit/d07bf5902e9c8c606f16b9523472972d3d2e9b49))
+
+
+
+
+
 ## [4.5.8](https://github.com/feathersjs/feathers/compare/v4.5.7...v4.5.8) (2020-08-12)
 
 **Note:** Version bump only for package @feathersjs/configuration

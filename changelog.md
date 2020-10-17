@@ -5,7 +5,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [5.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v4.5.4...v5.0.0-pre.0) (2020-05-19)
 
-
 ### Bug Fixes
 
 * **authentication-oauth:** Updated typings for projects with strictNullChecks ([#1941](https://github.com/feathersjs/feathers/issues/1941)) ([be91206](https://github.com/feathersjs/feathers/commit/be91206e3dba1e65a81412b7aa636bece3ab4aa2))
@@ -34,7 +33,23 @@ functionality like path replacements and automatic environment variable insertio
 
 
 
+
+## [4.5.9](https://github.com/feathersjs/feathers/compare/v4.5.8...v4.5.9) (2020-10-09)
+
+
+### Bug Fixes
+
+* **authentication-local:** Keep non-objects in protect hook ([#2085](https://github.com/feathersjs/feathers/issues/2085)) ([5a65e2e](https://github.com/feathersjs/feathers/commit/5a65e2e6cee0a15614f23ee2e0d3c25d3365027d))
+* **authentication-oauth:** Always end session after oAuth flows are finished ([#2087](https://github.com/feathersjs/feathers/issues/2087)) ([d219d0d](https://github.com/feathersjs/feathers/commit/d219d0d89c5e45aa289dd67cb0c8bdc05044c846))
+* **configuration:** Fix handling of config values that start with . or .. but are not actually relative paths; e.g. ".foo" or "..bar" ([#2065](https://github.com/feathersjs/feathers/issues/2065)) ([d07bf59](https://github.com/feathersjs/feathers/commit/d07bf5902e9c8c606f16b9523472972d3d2e9b49))
+* **rest-client:** Handle non-JSON errors with fetch adapter ([#2086](https://github.com/feathersjs/feathers/issues/2086)) ([e24217a](https://github.com/feathersjs/feathers/commit/e24217ad1e784ad71cd9d64fe1727dd02f039991))
+
+
+
+
+
 ## [4.5.8](https://github.com/feathersjs/feathers/compare/v4.5.7...v4.5.8) (2020-08-12)
+
 
 * **authentication-client:** Fix storage type so it works with all supported interfaces ([#2041](https://github.com/feathersjs/feathers/issues/2041)) ([6ee0e78](https://github.com/feathersjs/feathers/commit/6ee0e78d55cf1214f61458f386b94c350eec32af))
 

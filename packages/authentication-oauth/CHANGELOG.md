@@ -9,6 +9,18 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+
+## [4.5.9](https://github.com/feathersjs/feathers/compare/v4.5.8...v4.5.9) (2020-10-09)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Always end session after oAuth flows are finished ([#2087](https://github.com/feathersjs/feathers/issues/2087)) ([d219d0d](https://github.com/feathersjs/feathers/commit/d219d0d89c5e45aa289dd67cb0c8bdc05044c846))
+
+
+
+
+
 ## [4.5.8](https://github.com/feathersjs/feathers/compare/v4.5.7...v4.5.8) (2020-08-12)
 
 **Note:** Version bump only for package @feathersjs/authentication-oauth
