@@ -51,18 +51,13 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
     assert.equal(redirect, '/#dashboard?access_token=testing');
   });
 
-  it('getProfile', async () => {
-    const data = { id: 'getProfileTest' };
-    const profile = await strategy.getProfile(data, {});
-
-    assert.deepEqual(profile, data);
-  });
-
   describe('authenticate', () => {
     it('with new user', async () => {
       const authResult = await strategy.authenticate({
         strategy: 'test',
-        id: 'newEntity'
+        profile: {
+          id: 'newEntity'
+        }
       }, {});
 
       assert.deepEqual(authResult, {
@@ -78,7 +73,9 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
       });
       const authResult = await strategy.authenticate({
         strategy: 'test',
-        id: 'existingEntity'
+        profile: {
+          id: 'existingEntity'
+        }
       }, {});
 
       assert.deepEqual(authResult, {
@@ -97,7 +94,9 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
 
       const authResult = await strategy.authenticate({
         strategy: 'test',
-        id: 'linkedEntity'
+        profile: {
+          id: 'linkedEntity'
+        }
       }, {
         authentication: {
           strategy: 'jwt',

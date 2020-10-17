@@ -1,5 +1,4 @@
 // @ts-ignore
-import getProfile from 'grant-profile/lib/client';
 import querystring from 'querystring';
 import Debug from 'debug';
 import {
@@ -46,14 +45,8 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     };
   }
 
-  /* istanbul ignore next */
   async getProfile (data: AuthenticationRequest, _params: Params) {
-    const config = this.app.get('grant');
-    const provider = config[data.strategy];
-
-    debug('getProfile of oAuth profile from grant-profile with', data);
-
-    return getProfile(provider, data);
+    return data.profile
   }
 
   async getCurrentEntity (params: Params) {

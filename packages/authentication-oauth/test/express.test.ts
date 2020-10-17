@@ -15,15 +15,23 @@ describe('@feathersjs/authentication-oauth/express', () => {
   after(() => server.close());
 
   it('oauth/test', async () => {
-    axios.get('http://localhost:9876/oauth//test?feathers_token=testing');
+    try {
+      await axios.get('http://localhost:9876/oauth/test?feathers_token=testing', { maxRedirects: 0 });
+    } catch (error) {
+      assert.equal(error.response.status, 302)
+    }
   });
 
   it('oauth/test with query', async () => {
-    axios.get('http://localhost:9876/oauth//test?other=test');
+    try {
+      await axios.get('http://localhost:9876/oauth/test?other=test', { maxRedirects: 0 });
+    } catch (error) {
+      assert.equal(error.response.status, 302)
+    }
   });
 
   it('oauth/test/authenticate', async () => {
-    const { data } = await axios.get('http://localhost:9876/oauth//test/authenticate?id=expressTest');
+    const { data } = await axios.get('http://localhost:9876/oauth/test/authenticate?profile[sub]=expressTest');
 
     assert.ok(data.accessToken);
     assert.equal(data.user.testId, 'expressTest');
@@ -38,14 +46,6 @@ describe('@feathersjs/authentication-oauth/express', () => {
     } catch (error) {
       assert.ok(/Cannot GET/.test(error.response.data));
       delete app.get('authentication').oauth.redirect;
-    }
-  });
-
-  it('oauth/test/authenticate with error', async () => {
-    try {
-      await axios.get('http://localhost:9876/oauth/test/authenticate');
-    } catch (error) {
-      assert.equal(error.response.data.message, 'Data needs an id');
     }
   });
 });
