@@ -1,7 +1,8 @@
-const Base = require('./base');
+import { Params } from '@feathersjs/feathers';
+import { Base } from './base';
 
-class AxiosService extends Base {
-  request (options, params) {
+export class AxiosClient extends Base {
+  request (options: any, params: Params) {
     const config = Object.assign({
       url: options.url,
       method: options.method,
@@ -12,13 +13,11 @@ class AxiosService extends Base {
     }, params.connection);
 
     return this.connection.request(config)
-      .then(res => res.data)
-      .catch(error => {
+      .then((res: any) => res.data)
+      .catch((error: any) => {
         const response = error.response || error;
 
         throw response instanceof Error ? response : (response.data || response);
       });
   }
 }
-
-module.exports = AxiosService;

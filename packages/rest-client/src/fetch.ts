@@ -1,8 +1,10 @@
-const Base = require('./base');
+import { Params } from '@feathersjs/feathers';
+import { errors } from '@feathersjs/errors';
+import { Base } from './base';
 
-class FetchService extends Base {
-  request (options, params) {
-    let fetchOptions = Object.assign({}, options, params.connection);
+export class FetchClient extends Base {
+  request (options: any, params: Params) {
+    const fetchOptions = Object.assign({}, options, params.connection);
 
     fetchOptions.headers = Object.assign({
       Accept: 'application/json'
@@ -16,7 +18,7 @@ class FetchService extends Base {
 
     return fetch(options.url, fetchOptions)
       .then(this.checkStatus)
-      .then(response => {
+      .then((response: any) => {
         if (response.status === 204) {
           return null;
         }
@@ -25,20 +27,18 @@ class FetchService extends Base {
       });
   }
 
-  checkStatus (response) {
+  checkStatus (response: any) {
     if (response.ok) {
       return response;
     }
 
     return response.json().catch(() => {
-      const ErrorClass = errors[response.status] || Error;
-      
+      const ErrorClass = (errors as any)[response.status] || Error;
+
       return new ErrorClass('JSON parsing error');
-    }).then(error => {
+    }).then((error: any) => {
       error.response = response;
       throw error;
     });
   }
 }
-
-module.exports = FetchService;

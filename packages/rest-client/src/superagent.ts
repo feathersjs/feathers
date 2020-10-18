@@ -1,7 +1,8 @@
-const Base = require('./base');
+import { Params } from '@feathersjs/feathers';
+import { Base } from './base';
 
-class SuperagentService extends Base {
-  request (options, params) {
+export class SuperagentClient extends Base {
+  request (options: any, params: Params) {
     const superagent = this.connection(options.method, options.url)
       .set(this.options.headers || {})
       .set('Accept', 'application/json')
@@ -16,7 +17,7 @@ class SuperagentService extends Base {
         superagent.send(options.body);
       }
 
-      superagent.end(function (error, res) {
+      superagent.end(function (error: any, res: any) {
         if (error) {
           try {
             const response = error.response;
@@ -32,5 +33,3 @@ class SuperagentService extends Base {
     });
   }
 }
-
-module.exports = SuperagentService;
