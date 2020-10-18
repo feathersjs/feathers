@@ -18,6 +18,7 @@ describe('REST client tests', function () {
     const transports = init();
 
     try {
+      //@ts-ignore
       transports.fetch();
     } catch (e) {
       assert.strictEqual(e.message, 'fetch has to be provided to feathers-rest');

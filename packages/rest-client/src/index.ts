@@ -11,34 +11,30 @@ const transports = {
   axios: AxiosClient
 };
 
-// interface HandlerResult extends Function {
-//   /**
-//    * initialize service
-//    */
-//   (): void;
+interface HandlerResult extends Function {
+  /**
+   * initialize service
+   */
+  (): void;
 
-//   /**
-//    * Transport Service
-//    */
-//   Service: any;
+  /**
+   * Transport Service
+   */
+  Service: any;
 
-//   /**
-//    * default Service
-//    */
-//   service: any;
-// }
+  /**
+   * default Service
+   */
+  service: any;
+}
 
-// type Handler = (connection: any, options?: any) => () => HandlerResult;
+export type Handler = (connection: any, options?: any, Service?: any) => HandlerResult;
 
-// interface Transport {
-//   jquery: Handler;
-//   superagent: Handler;
-//   request: Handler;
-//   fetch: Handler;
-//   axios: Handler;
-//   angular: Handler;
-//   angularHttpClient: Handler;
-// }
+export interface Transport {
+  superagent: Handler;
+  fetch: Handler;
+  axios: Handler;
+}
 
 export default function restClient (base: string = '') {
   const result: any = { Base };
@@ -74,7 +70,7 @@ export default function restClient (base: string = '') {
     };
   });
 
-  return result;
+  return result as Transport;
 }
 
 if (typeof module !== 'undefined') {
