@@ -15,6 +15,7 @@
       "packages/feathers/lib/**",
       "packages/transport-commons/lib/**",
       "packages/tests/lib/**",
+      "packages/rest-client/lib/**",
       "**/node_modules/**",
       "**/coverage/**",
       "**/dist/**",

@@ -1,16 +1,15 @@
-const feathers = require('@feathersjs/feathers');
-const expressify = require('@feathersjs/express');
-const bodyParser = require('body-parser');
-const { Service } = require('feathers-memory');
-const errors = require('@feathersjs/errors');
-const rest = require('@feathersjs/express/rest');
+import feathers, { Id, NullableId, Params } from '@feathersjs/feathers';
+import expressify from '@feathersjs/express';
+import bodyParser from 'body-parser';
+import { Service } from 'feathers-memory';
+import { FeathersError, NotAcceptable } from '@feathersjs/errors';
 
 // eslint-disable-next-line no-extend-native
 Object.defineProperty(Error.prototype, 'toJSON', {
-  value: function () {
-    var alt = {};
+  value () {
+    const alt: any = {};
 
-    Object.getOwnPropertyNames(this).forEach(function (key) {
+    Object.getOwnPropertyNames(this).forEach((key: string) => {
       alt[key] = this[key];
     }, this);
 
@@ -20,27 +19,26 @@ Object.defineProperty(Error.prototype, 'toJSON', {
   writable: true
 });
 
-let errorHandler = function (error, req, res, next) {
-  const code = !isNaN(parseInt(error.code, 10)) ? parseInt(error.code, 10) : 500;
+const errorHandler = function (error: FeathersError, _req: any, res: any, _next: any) {
+  const code = !isNaN(parseInt(error.code as any, 10)) ? parseInt(error.code as any, 10) : 500;
   res.status(code);
 
   res.format({
-    'application/json': function () {
-      let output = Object.assign({}, error.toJSON());
-      res.json(output);
+    'application/json' () {
+      res.json(Object.assign({}, error.toJSON()));
     }
   });
 };
 
 // Create an in-memory CRUD service for our Todos
 class TodoService extends Service {
-  get (id, params) {
+  get (id: Id, params: Params) {
     if (params.query.error) {
       throw new Error('Something went wrong');
     }
 
     if (params.query.feathersError) {
-      throw new errors.NotAcceptable('This is a Feathers error', { data: true });
+      throw new NotAcceptable('This is a Feathers error', { data: true });
     }
 
     return super.get(id)
@@ -55,7 +53,7 @@ class TodoService extends Service {
       });
   }
 
-  remove (id, params) {
+  remove (id: NullableId, params: Params) {
     if (id === null) {
       return Promise.resolve({
         id, text: 'deleted many'
@@ -70,9 +68,9 @@ class TodoService extends Service {
   }
 }
 
-module.exports = function (configurer) {
+export default (configurer?: any) => {
   const app = expressify(feathers())
-    .configure(rest(function formatter (req, res, next) {
+    .configure(expressify.rest(function formatter (_req, res, next) {
       if (!res.data) {
         next();
       }

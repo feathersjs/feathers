@@ -4,7 +4,6 @@
   "version": "5.0.0-pre.0",
   "homepage": "https://feathersjs.com",
   "main": "lib/index.js",
-  "types": "index.d.ts",
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -40,7 +39,9 @@
     "*.js"
   ],
   "scripts": {
-    "test": "mocha --config ../../.mocharc.json"
+    "prepublish": "npm run compile",
+    "compile": "shx rm -rf lib/ && tsc",
+    "test": "mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"
@@ -51,16 +52,16 @@
   "dependencies": {
     "@feathersjs/commons": "^5.0.0-pre.0",
     "@feathersjs/errors": "^5.0.0-pre.0",
+    "@types/node-fetch": "^2.5.7",
+    "@types/superagent": "^4.1.10",
     "qs": "^6.9.4"
   },
   "devDependencies": {
-    "@angular/common": "^10.1.6",
-    "@angular/core": "^10.1.6",
-    "@angular/http": "^7.2.16",
-    "@angular/platform-browser": "^10.1.6",
     "@feathersjs/express": "^5.0.0-pre.0",
     "@feathersjs/feathers": "^5.0.0-pre.0",
     "@feathersjs/tests": "^5.0.0-pre.0",
+    "@types/mocha": "^8.0.3",
+    "@types/node": "^14.11.10",
     "axios": "^0.20.0",
     "body-parser": "^1.19.0",
     "feathers-memory": "^4.1.0",
@@ -68,7 +69,9 @@
     "node-fetch": "^2.6.1",
     "rxjs": "^6.6.3",
     "shx": "^0.3.2",
-    "superagent": "^6.1.0"
+    "superagent": "^6.1.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
   },
   "gitHead": "e6b82b809c21da298501a12b82e72e166468994b"
 }
