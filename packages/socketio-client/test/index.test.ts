@@ -29,7 +29,7 @@ describe('@feathersjs/socketio-client', () => {
 
   it('throws an error with no connection', () => {
     try {
-      //@ts-ignore
+      // @ts-ignore
       feathers().configure(socketio());
       assert.ok(false);
     } catch (e) {
@@ -59,8 +59,8 @@ describe('@feathersjs/socketio-client', () => {
     assert.ok(totoService instanceof init.Service, 'Returned service is a client');
 
     const todos = await totoService.find();
-    
-    assert.strictEqual(todos, [{
+
+    assert.deepEqual(todos, [{
       text: 'some todo',
       complete: false,
       id: 0

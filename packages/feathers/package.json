@@ -43,7 +43,8 @@
   "scripts": {
     "write-version": "node -e \"console.log('export default \\'' + require('./package.json').version + '\\';')\" > src/version.ts",
     "reset-version": "node -e \"console.log('export default \\'development\\';')\" > src/version.ts",
-    "version": "npm run write-version && npm run compile",
+    "prepublish": "npm run compile",
+    "version": "npm run write-version",
     "publish": "npm run reset-version",
     "compile": "shx rm -rf lib/ && tsc",
     "test": "npm run compile && mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts"

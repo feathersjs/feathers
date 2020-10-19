@@ -1,4 +1,4 @@
-import feathers from '@feathersjs/feathers';
+import feathers, { Id, Params } from '@feathersjs/feathers';
 import socketio from '@feathersjs/socketio';
 import '@feathersjs/transport-commons';
 import { Service } from 'feathers-memory';
@@ -20,14 +20,14 @@ Object.defineProperty(Error.prototype, 'toJSON', {
 
 // Create an in-memory CRUD service for our Todos
 class TodoService extends Service {
-  get (id, params) {
+  async get (id: Id, params: Params) {
     if (params.query.error) {
-      return Promise.reject(new Error('Something went wrong'));
+      throw new Error('Something went wrong');
     }
 
-    return super.get(id).then(data =>
-      Object.assign({ query: params.query }, data)
-    );
+    const data = await super.get(id);
+
+    return Object.assign({ query: params.query }, data)
   }
 }
 
