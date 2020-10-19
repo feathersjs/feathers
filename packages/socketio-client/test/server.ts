@@ -1,19 +1,21 @@
-const feathers = require('@feathersjs/feathers');
-const socketio = require('@feathersjs/socketio');
-const { Service } = require('feathers-memory');
+import feathers from '@feathersjs/feathers';
+import socketio from '@feathersjs/socketio';
+import '@feathersjs/transport-commons';
+import { Service } from 'feathers-memory';
 
 // eslint-disable-next-line no-extend-native
 Object.defineProperty(Error.prototype, 'toJSON', {
-  value: function () {
-    var alt = {};
+  value () {
+    const alt: any = {};
 
-    Object.getOwnPropertyNames(this).forEach(function (key) {
+    Object.getOwnPropertyNames(this).forEach((key: string) => {
       alt[key] = this[key];
     }, this);
 
     return alt;
   },
-  configurable: true
+  configurable: true,
+  writable: true
 });
 
 // Create an in-memory CRUD service for our Todos
@@ -29,7 +31,7 @@ class TodoService extends Service {
   }
 }
 
-module.exports = function () {
+export function createServer () {
   const app = feathers()
     .configure(socketio())
     .use('/', new TodoService())

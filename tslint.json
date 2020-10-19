@@ -5,17 +5,7 @@
   ],
   "linterOptions": {
     "exclude": [
-      "packages/authentication/lib/**",
-      "packages/authentication-local/lib/**",
-      "packages/authentication-client/lib/**",
-      "packages/authentication-oauth/lib/**",
-      "packages/configuration/lib/**",
-      "packages/commons/lib/**",
-      "packages/errors/lib/**",
-      "packages/feathers/lib/**",
-      "packages/transport-commons/lib/**",
-      "packages/tests/lib/**",
-      "packages/rest-client/lib/**",
+      "**/lib/**",
       "**/node_modules/**",
       "**/coverage/**",
       "**/dist/**",
