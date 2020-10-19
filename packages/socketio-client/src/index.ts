@@ -1,11 +1,15 @@
-const Service = require('@feathersjs/transport-commons/client');
+import { Service } from '@feathersjs/transport-commons/lib/client';
 
-function socketioClient (connection, options) {
+export interface SocketIOClientOptions {
+    timeout?: number;
+}
+
+export default function socketioClient (connection: SocketIOClient.Socket, options?: SocketIOClientOptions) {
   if (!connection) {
     throw new Error('Socket.io connection needs to be provided');
   }
 
-  const defaultService = function (name) {
+  const defaultService = function (this: any, name: string) {
     const events = Object.keys(this.eventMappings || {})
       .map(method => this.eventMappings[method]);
 
@@ -19,7 +23,7 @@ function socketioClient (connection, options) {
     return new Service(settings);
   };
 
-  const initialize = function (app) {
+  const initialize = function (app: any) {
     if (typeof app.defaultService === 'function') {
       throw new Error('Only one default client provider can be configured');
     }
@@ -34,5 +38,6 @@ function socketioClient (connection, options) {
   return initialize;
 }
 
-module.exports = socketioClient;
-module.exports.default = socketioClient;
+if (typeof module !== 'undefined') {
+  module.exports = Object.assign(socketioClient, module.exports);
+}

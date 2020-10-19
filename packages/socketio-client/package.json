@@ -4,7 +4,6 @@
   "version": "5.0.0-pre.0",
   "homepage": "https://feathersjs.com",
   "main": "lib/index.js",
-  "types": "index.d.ts",
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -31,11 +30,22 @@
     "node": ">= 10"
   },
   "scripts": {
-    "test": "mocha --config ../../.mocharc.json"
+    "prepublish": "npm run compile",
+    "compile": "shx rm -rf lib/ && tsc",
+    "test": "mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"
   },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "*.d.ts",
+    "*.js"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -49,9 +59,13 @@
     "@feathersjs/socketio": "^5.0.0-pre.0",
     "@feathersjs/tests": "^5.0.0-pre.0",
     "@feathersjs/transport-commons": "^4.5.9",
-    "@types/socket.io-client": "^1.4.34",
+    "socket.io-client": "^2.3.1",
+    "@types/mocha": "^8.0.3",
+    "@types/node": "^14.11.10",
     "mocha": "^8.2.0",
-    "socket.io-client": "^2.3.1"
+    "shx": "^0.3.2",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
   },
   "gitHead": "e6b82b809c21da298501a12b82e72e166468994b"
 }

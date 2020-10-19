@@ -18,6 +18,6 @@ Refer to the [Feathers SocketIO API documentation](https://docs.feathersjs.com/a
 
 ## License
 
-Copyright (c) 2019 [Feathers contributors](https://github.com/feathersjs/client/graphs/contributors)
+Copyright (c) 2020 [Feathers contributors](https://github.com/feathersjs/client/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).
