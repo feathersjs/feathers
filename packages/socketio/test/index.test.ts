@@ -106,7 +106,7 @@ describe('@feathersjs/socketio', () => {
     const app = express(feathers())
       .configure(socketio())
       .use('/test', (_req, res) => res.json(data));
-    
+
     const srv = app.listen(8992).on('listening', async () => {
       const response = await axios({
         url: 'http://localhost:8992/socket.io/socket.io.js'

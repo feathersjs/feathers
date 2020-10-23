@@ -28,7 +28,7 @@ export const params = (_app: Application, socketMap: WeakMap<any, any>) =>
     next();
   }
 
-export const authentication = (app: Application, getParams: ParamsGetter, settings: any = {}) => 
+export const authentication = (app: Application, getParams: ParamsGetter, settings: any = {}) =>
   (socket: FeathersSocket, next: NextFunction) => {
     const service = (app as any).defaultAuthentication ? (app as any).defaultAuthentication(settings.service) : null;
 

@@ -116,7 +116,7 @@ export default (name: string, options: any) => {
 
   describe('Event channels', () => {
     const eventName = `${name} created`;
-    
+
     let connections: RealTimeConnection[];
     let sockets: any[];
 
