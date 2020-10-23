@@ -1,21 +1,22 @@
-const assert = require('assert');
-const io = require('socket.io-client');
-const { verify } = require('@feathersjs/tests/lib/fixture');
+import { strict as assert } from 'assert';
+import io from 'socket.io-client';
+import { verify } from '@feathersjs/tests/lib/fixture';
+import { RealTimeConnection } from '@feathersjs/transport-commons/lib/channels/channel/base';
 
-module.exports = function (name, options) {
-  const call = (method, ...args) => {
+export default (name: string, options: any) => {
+  const call = (method: string, ...args: any[]) => {
     return new Promise((resolve, reject) => {
       const { socket } = options;
       const emitArgs = [ method, name ].concat(args);
 
-      socket.emit(...emitArgs, (error, result) =>
+      socket.emit(...emitArgs, (error: any, result: any) =>
         error ? reject(error) : resolve(result)
       );
     });
   };
 
-  const verifyEvent = (done, callback) => {
-    return function (data) {
+  const verifyEvent = (done: (err?: any) => void, callback: (data: any) => void) => {
+    return function (data: any) {
       try {
         callback(data);
         done();
@@ -26,11 +27,11 @@ module.exports = function (name, options) {
   };
 
   describe('Basic service events', () => {
-    let socket;
-    let connection;
+    let socket: SocketIOClient.Socket;
+    let connection: RealTimeConnection;
 
     before(done => {
-      options.app.once('connection', conn => {
+      options.app.once('connection', (conn: RealTimeConnection) => {
         connection = conn;
 
         options.app.channel('default').join(connection);
@@ -46,7 +47,7 @@ module.exports = function (name, options) {
     });
 
     it(`${name} created`, done => {
-      let original = {
+      const original = {
         name: `created event`
       };
 
@@ -58,11 +59,11 @@ module.exports = function (name, options) {
     });
 
     it(`${name} updated`, done => {
-      let original = {
+      const original = {
         name: `updated event`
       };
 
-      socket.once(`${name} updated`, verifyEvent(done, data =>
+      socket.once(`${name} updated`, verifyEvent(done, (data: any) =>
         verify.update(10, original, data)
       ));
 
@@ -70,11 +71,11 @@ module.exports = function (name, options) {
     });
 
     it(`${name} patched`, done => {
-      let original = {
+      const original = {
         name: `patched event`
       };
 
-      socket.once(`${name} patched`, verifyEvent(done, data =>
+      socket.once(`${name} patched`, verifyEvent(done, (data: any) =>
         verify.patch(12, original, data)
       ));
 
@@ -82,7 +83,7 @@ module.exports = function (name, options) {
     });
 
     it(`${name} removed`, done => {
-      socket.once(`${name} removed`, verifyEvent(done, data =>
+      socket.once(`${name} removed`, verifyEvent(done, (data: any) =>
         verify.remove(333, data)
       ));
 
@@ -90,19 +91,19 @@ module.exports = function (name, options) {
     });
 
     it(`${name} custom events`, done => {
-      let service = options.app.service(name);
-      let original = {
+      const service = options.app.service(name);
+      const original = {
         name: `created event`
       };
-      let old = service.create;
+      const old = service.create;
 
-      service.create = function (data) {
+      service.create = function (data: any) {
         this.emit('log', { message: 'Custom log event', data });
         service.create = old;
         return old.apply(this, arguments);
       };
 
-      socket.once(`${name} log`, verifyEvent(done, data => {
+      socket.once(`${name} log`, verifyEvent(done, (data: any) => {
         assert.deepStrictEqual(data, {
           message: `Custom log event`, data: original
         });
@@ -115,12 +116,13 @@ module.exports = function (name, options) {
 
   describe('Event channels', () => {
     const eventName = `${name} created`;
-    let connections;
-    let sockets;
+    
+    let connections: RealTimeConnection[];
+    let sockets: any[];
 
     before(done => {
       let counter = 0;
-      const handler = connection => {
+      const handler = (connection: RealTimeConnection) => {
         counter++;
 
         options.app.channel(connection.channel).join(connection);
@@ -164,11 +166,11 @@ module.exports = function (name, options) {
         done(new Error('Should not get this event'));
       };
 
-      service.publish('created', data =>
+      service.publish('created', (data: any) =>
         options.app.channel(data.room)
       );
 
-      socket.once(eventName, data => {
+      socket.once(eventName, (data: any) => {
         assert.strictEqual(data.room, 'first');
         otherSocket.removeEventListener(eventName, onError);
         done();
@@ -190,7 +192,7 @@ module.exports = function (name, options) {
       const onError = () => {
         done(new Error('Should not get this event'));
       };
-      const onEvent = data => {
+      const onEvent = (data: any) => {
         counter++;
         assert.strictEqual(data.room, 'second');
 
@@ -200,7 +202,7 @@ module.exports = function (name, options) {
         }
       };
 
-      service.publish('created', data =>
+      service.publish('created', (data: any) =>
         options.app.channel(data.room)
       );
 

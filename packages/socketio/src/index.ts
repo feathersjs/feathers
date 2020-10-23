@@ -1,12 +1,19 @@
-const socketio = require('socket.io');
-const Proto = require('uberproto');
-const http = require('http');
-const { socket: commons } = require('@feathersjs/transport-commons');
-const debug = require('debug')('@feathersjs/socketio');
+import Debug from 'debug';
+import socketio, { Server, ServerOptions } from 'socket.io';
+// @ts-ignore
+import Proto from 'uberproto';
+import http from 'http';
+import { Application } from '@feathersjs/feathers';
+import { socket } from '@feathersjs/transport-commons';
 
-const middleware = require('./middleware');
+import { disconnect, params, authentication, FeathersSocket } from './middleware';
 
-function configureSocketio (port, options, config) {
+const debug = Debug('@feathersjs/socketio');
+
+function configureSocketio (callback?: (io: Server) => void): (app: Application) => void;
+function configureSocketio (options: number | ServerOptions, callback?: (io: Server) => void): (app: Application) => void;
+function configureSocketio (port: number, options?: ServerOptions, callback?: (io: Server) => void): (app: Application) => void;
+function configureSocketio (port?: any, options?: any, config?: any) {
   if (typeof port !== 'number') {
     config = options;
     options = port;
@@ -18,9 +25,9 @@ function configureSocketio (port, options, config) {
     options = {};
   }
 
-  return function (app) {
+  return (app: Application) => {
     // Function that gets the connection
-    const getParams = socket => socket.feathers;
+    const getParams = (socket: FeathersSocket) => socket.feathers;
     // A mapping from connection to socket instance
     const socketMap = new WeakMap();
 
@@ -32,7 +39,7 @@ function configureSocketio (port, options, config) {
     // when `setup` has been called (with a server)
     const done = new Promise(resolve => {
       Proto.mixin({
-        listen (...args) {
+        listen (...args: any[]) {
           if (typeof this._super === 'function') {
             // If `listen` already exists
             // usually the case when the app has been expressified
@@ -46,13 +53,13 @@ function configureSocketio (port, options, config) {
           return server.listen(...args);
         },
 
-        setup (server) {
+        setup (server: http.Server) {
           if (!this.io) {
             const io = this.io = socketio.listen(port || server, options);
 
-            io.use(middleware.disconnect(app, getParams));
-            io.use(middleware.params(app, socketMap));
-            io.use(middleware.authentication(app, getParams));
+            io.use(disconnect(app, getParams));
+            io.use(params(app, socketMap));
+            io.use(authentication(app, getParams));
 
             // In Feathers it is easy to hit the standard Node warning limit
             // of event listeners (e.g. by registering 10 services).
@@ -72,7 +79,7 @@ function configureSocketio (port, options, config) {
       }, app);
     });
 
-    app.configure(commons({
+    app.configure(socket({
       done,
       socketMap,
       getParams,
@@ -81,5 +88,8 @@ function configureSocketio (port, options, config) {
   };
 }
 
-module.exports = configureSocketio;
-module.exports.default = configureSocketio;
+export default configureSocketio;
+
+if (typeof module !== 'undefined') {
+  module.exports = Object.assign(configureSocketio, module.exports);
+}
