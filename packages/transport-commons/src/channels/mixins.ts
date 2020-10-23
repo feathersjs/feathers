@@ -62,7 +62,7 @@ export function channelMixin () {
 
 export type Event = string|(typeof ALL_EVENTS);
 
-export type Publisher<T = any> = (data: T, hook: HookContext<T>) => Channel | Channel[] | void | Promise<Channel | Channel[] | void>;
+export type Publisher<T = any> = (data: T, context: HookContext<T>) => Channel | Channel[] | void | Promise<Channel | Channel[] | void>;
 
 export interface PublishMixin<T = any> {
   [PUBLISHERS]: { [ALL_EVENTS]?: Publisher<T>, [key: string]: Publisher<T> };
