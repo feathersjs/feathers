@@ -1,22 +1,23 @@
-const feathers = require('@feathersjs/feathers');
-const express = require('@feathersjs/express');
-const assert = require('assert');
-const omit = require('lodash/omit');
-const extend = require('lodash/extend');
-const io = require('socket.io-client');
-const axios = require('axios');
-const { Service } = require('@feathersjs/tests/lib/fixture');
+import { strict as assert } from 'assert';
+import feathers, { Application, HookContext, NullableId, Params } from '@feathersjs/feathers';
+import express from '@feathersjs/express';
+import { omit, extend } from 'lodash';
+import io from 'socket.io-client';
+import axios from 'axios';
+import { Server } from 'http';
+import { Service } from '@feathersjs/tests/lib/fixture';
 
-const methodTests = require('./methods.js');
-const eventTests = require('./events');
-const socketio = require('../lib');
+import methodTests from './methods';
+import eventTests from './events';
+import socketio from '../src';
+import { FeathersSocket, NextFunction } from '../src/middleware.js';
 
 describe('@feathersjs/socketio', () => {
-  let app;
-  let server;
-  let socket;
+  let app: Application;
+  let server: Server;
+  let socket: SocketIOClient.Socket;
 
-  const socketParams = {
+  const socketParams: any = {
     user: { name: 'David' },
     provider: 'socketio'
   };
@@ -31,15 +32,15 @@ describe('@feathersjs/socketio', () => {
   };
 
   before(done => {
-    const errorHook = function (hook) {
+    const errorHook = (hook: HookContext) => {
       if (hook.params.query.hookError) {
         throw new Error(`Error from ${hook.method}, ${hook.type} hook`);
       }
     };
 
     app = feathers()
-      .configure(socketio(function (io) {
-        io.use(function (socket, next) {
+      .configure(socketio(io => {
+        io.use(function (socket: FeathersSocket, next: NextFunction) {
           socket.feathers.user = { name: 'David' };
           socketParams.headers = socket.feathers.headers;
 
@@ -60,7 +61,8 @@ describe('@feathersjs/socketio', () => {
       }
     });
 
-    server = app.listen(7886, function () {
+    server = app.listen(7886);
+    server.once('listening', () => {
       app.use('/tasks', Service);
       app.service('tasks').hooks({
         before: {
@@ -78,27 +80,23 @@ describe('@feathersjs/socketio', () => {
     server.close(done);
   });
 
-  it('exports default', () => {
-    assert.strictEqual(socketio, socketio.default);
-  });
-
   it('runs io before setup (#131)', done => {
     let counter = 0;
-    let app = feathers().configure(socketio(() => {
+    const app = feathers().configure(socketio(() => {
       assert.strictEqual(counter, 0);
       counter++;
     }));
 
-    let srv = app.listen(8887).on('listening', () => srv.close(done));
+    const srv: Server = app.listen(8887).on('listening', () => srv.close(done));
   });
 
   it('can set MaxListeners', done => {
-    let app = feathers().configure(socketio(io =>
+    const app = feathers().configure(socketio(io =>
       io.sockets.setMaxListeners(100)
     ));
 
-    let srv = app.listen(8987).on('listening', () => {
-      assert.strictEqual(app.io.sockets.getMaxListeners(), 100);
+    const srv = app.listen(8987).on('listening', () => {
+      assert.strictEqual((app as any).io.sockets.getMaxListeners(), 100);
       srv.close(done);
     });
   });
@@ -107,8 +105,8 @@ describe('@feathersjs/socketio', () => {
     const data = { message: 'Hello world' };
     const app = express(feathers())
       .configure(socketio())
-      .use('/test', (req, res) => res.json(data));
-    
+      .use('/test', (_req, res) => res.json(data));
+
     const srv = app.listen(8992).on('listening', async () => {
       const response = await axios({
         url: 'http://localhost:8992/socket.io/socket.io.js'
@@ -126,11 +124,11 @@ describe('@feathersjs/socketio', () => {
   });
 
   it('can set options (#12)', done => {
-    let application = feathers().configure(socketio({
+    const application = feathers().configure(socketio({
       path: '/test/'
     }, ioInstance => assert.ok(ioInstance)));
 
-    let srv = application.listen(8987).on('listening', async () => {
+    const srv = application.listen(8987).on('listening', async () => {
       const { status } = await axios('http://localhost:8987/test/socket.io.js');
 
       assert.strictEqual(status, 200);
@@ -139,18 +137,18 @@ describe('@feathersjs/socketio', () => {
   });
 
   it('passes handshake as service parameters', done => {
-    let service = app.service('todo');
-    let old = {
+    const service = app.service('todo');
+    const old = {
       create: service.create,
       update: service.update
     };
 
-    service.create = function (data, params) {
+    service.create = function (_data: any, params: Params) {
       assert.deepStrictEqual(omit(params, 'query', 'route', 'connection'), socketParams, 'Passed handshake parameters');
       return old.create.apply(this, arguments);
     };
 
-    service.update = function (id, data, params) {
+    service.update = function (_id: NullableId, _data: any, params: Params) {
       assert.deepStrictEqual(params, extend({
         route: {},
         connection: socketParams,
@@ -161,12 +159,12 @@ describe('@feathersjs/socketio', () => {
       return old.update.apply(this, arguments);
     };
 
-    socket.emit('create', 'todo', {}, error => {
+    socket.emit('create', 'todo', {}, (error: any) => {
       assert.ok(!error);
 
       socket.emit('update', 'todo', 1, {}, {
         test: 'param'
-      }, error => {
+      }, (error: any) => {
         assert.ok(!error);
         extend(service, old);
         done();
@@ -190,15 +188,15 @@ describe('@feathersjs/socketio', () => {
   });
 
   it('missing parameters in socket call works (#88)', done => {
-    let service = app.service('todo');
-    let old = { find: service.find };
+    const service = app.service('todo');
+    const old = { find: service.find };
 
-    service.find = function (params) {
+    service.find = function (params: Params) {
       assert.deepStrictEqual(omit(params, 'query', 'route', 'connection'), socketParams, 'Handshake parameters passed on proper position');
       return old.find.apply(this, arguments);
     };
 
-    socket.emit('find', 'todo', error => {
+    socket.emit('find', 'todo', (error: any) => {
       assert.ok(!error);
       extend(service, old);
       done();

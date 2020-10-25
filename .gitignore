@@ -52,3 +52,4 @@ packages/tests/lib
 packages/transport-commons/lib
 packages/rest-client/lib
 packages/socketio-client/lib
+packages/socketio/lib
