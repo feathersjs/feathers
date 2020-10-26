@@ -42,7 +42,7 @@
     "access": "public"
   },
   "dependencies": {
-    "axios": "^0.20.0",
+    "axios": "^0.21.0",
     "lodash": "^4.17.20"
   },
   "devDependencies": {
