@@ -95,9 +95,14 @@ export default (options: OauthSetupSettings) => {
           ...payload
         };
 
-        await new Promise((resolve, reject) =>
-          req.session!.destroy(err => err ? reject(err) : resolve())
-        );
+        await new Promise((resolve, reject) => {
+          if (!req.session.destroy) {
+            req.session = null;
+            resolve();
+          }
+
+          req.session.destroy(err => err ? reject(err) : resolve());
+        });
 
         debug(`Calling ${authService}.create authentication with strategy ${name}`);
 
