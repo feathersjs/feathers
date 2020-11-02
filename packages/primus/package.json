@@ -51,7 +51,7 @@
   "dependencies": {
     "@feathersjs/transport-commons": "^4.5.9",
     "debug": "^4.2.0",
-    "primus": "^7.3.5",
+    "primus": "^8.0.0",
     "primus-emitter": "^3.1.1",
     "uberproto": "^2.0.6"
   },
