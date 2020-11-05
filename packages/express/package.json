@@ -62,9 +62,9 @@
     "@feathersjs/authentication-local": "^4.5.9",
     "@feathersjs/feathers": "^4.5.9",
     "@feathersjs/tests": "^4.5.9",
-    "axios": "^0.20.0",
+    "axios": "^0.21.0",
     "lodash": "^4.17.20",
-    "mocha": "^8.2.0"
+    "mocha": "^8.2.1"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }
