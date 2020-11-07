@@ -64,15 +64,15 @@
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
-    "@types/lodash": "^4.14.162",
+    "@types/lodash": "^4.14.164",
     "@types/mocha": "^8.0.3",
-    "@types/node": "^14.11.10",
+    "@types/node": "^14.14.6",
     "@types/uuid": "^8.3.0",
     "feathers-memory": "^4.1.0",
-    "mocha": "^8.2.0",
-    "shx": "^0.3.2",
+    "mocha": "^8.2.1",
+    "shx": "^0.3.3",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.5"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }
