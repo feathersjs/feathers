@@ -112,14 +112,13 @@ export class AuthenticationService extends AuthenticationBase implements Partial
     debug('Creating JWT with', payload, jwtOptions);
 
     const accessToken = await this.createAccessToken(payload, jwtOptions, params.secret);
-    const auth = {
+
+    return merge({ accessToken }, authResult, {
       authentication: {
           accessToken,
           payload: jsonwebtoken.decode(accessToken)
       }
-    };
-
-    return merge({}, { accessToken }, authResult, auth);
+    });
   }
 
   /**
