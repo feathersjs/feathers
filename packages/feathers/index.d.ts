@@ -54,7 +54,7 @@ declare namespace createApplication {
     }
 
     // tslint:disable-next-line void-return
-    type Hook<T = any, S = Service<T>> = (hook: HookContext<T, S>) => (Promise<HookContext<T, S> | void> | HookContext<T, S> | void);
+    type Hook<T = any, S = Service<T>> = (context: HookContext<T, S>) => (Promise<HookContext<T, S> | void> | HookContext<T, S> | void);
 
     interface HookContext<T = any, S = Service<T>> {
         /**
