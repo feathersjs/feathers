@@ -1,7 +1,7 @@
 {
 	"name": "@feathersjs/errors",
 	"description": "Common error types for Feathers apps",
-	"version": "4.5.9",
+	"version": "4.5.10",
 	"homepage": "https://feathersjs.com",
 	"main": "lib/index",
 	"types": "index.d.ts",
@@ -48,7 +48,7 @@
 		"debug": "^4.2.0"
 	},
 	"devDependencies": {
-		"@feathersjs/feathers": "^4.5.9",
+		"@feathersjs/feathers": "^4.5.10",
 		"express": "^4.17.1",
 		"mocha": "^8.2.1"
 	},
