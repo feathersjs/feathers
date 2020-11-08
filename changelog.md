@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.10](https://github.com/feathersjs/feathers/compare/v4.5.9...v4.5.10) (2020-11-08)
+
+
+### Bug Fixes
+
+* **authentication:** consistent response return between local and jwt strategy ([#2042](https://github.com/feathersjs/feathers/issues/2042)) ([8d25be1](https://github.com/feathersjs/feathers/commit/8d25be101a2593a9e789375c928a07780b9e28cf))
+* **authentication-oauth:** session.destroy is undefined when use cookie-session package ([#2100](https://github.com/feathersjs/feathers/issues/2100)) ([46e84b8](https://github.com/feathersjs/feathers/commit/46e84b83f2acce985380243fc6d08c64e96f0068))
+* **package:** Fix clean script in non Unix environments ([#2110](https://github.com/feathersjs/feathers/issues/2110)) ([09b62c0](https://github.com/feathersjs/feathers/commit/09b62c0c7e636caf620904ba87d61f168a020f05))
+* **typescript:** Add user property to the Params. ([#2090](https://github.com/feathersjs/feathers/issues/2090)) ([1e94265](https://github.com/feathersjs/feathers/commit/1e942651fbaaf07fc66c159225fbc992a0174bf4))
+
+
+
+
+
 ## [4.5.9](https://github.com/feathersjs/feathers/compare/v4.5.8...v4.5.9) (2020-10-09)
 
 
