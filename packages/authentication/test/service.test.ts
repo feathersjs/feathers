@@ -58,7 +58,8 @@ describe('authentication/service', () => {
       }
 
       assert.ok(result.accessToken);
-      assert.deepStrictEqual(omit(result, 'accessToken'), Strategy1.result);
+      assert.deepStrictEqual(omit(result, 'accessToken', 'authentication'), Strategy1.result);
+      assert.deepStrictEqual(result.authentication.payload, decoded);
       assert.ok(UUID.test(decoded.jti), 'Set `jti` to default UUID');
       assert.strictEqual(decoded.aud, settings.audience);
       assert.strictEqual(decoded.iss, settings.issuer);
