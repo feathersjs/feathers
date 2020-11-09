@@ -66,7 +66,7 @@
     "feathers-memory": "^4.1.0",
     "lodash": "^4.17.20",
     "mocha": "^8.2.1",
-    "socket.io-client": "^2.3.1"
+    "socket.io-client": "^3.0.1"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }

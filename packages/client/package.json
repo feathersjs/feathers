@@ -71,7 +71,7 @@
     "node-fetch": "^2.6.1",
     "parallel-webpack": "^2.6.0",
     "request": "^2.88.2",
-    "socket.io-client": "^2.3.1",
+    "socket.io-client": "^3.0.1",
     "superagent": "^6.1.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^5.4.0",
