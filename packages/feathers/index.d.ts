@@ -130,7 +130,7 @@ declare namespace createApplication {
         event?: null;
     }
 
-    interface HookMap<T = any, S = any, A = any> {
+    interface HookMap<T = any, S = Service<T>, A = Application> {
         all: Hook<T, S, A> | Hook<T, S, A>[];
         find: Hook<T, S, A> | Hook<T, S, A>[];
         get: Hook<T, S, A> | Hook<T, S, A>[];
@@ -140,11 +140,11 @@ declare namespace createApplication {
         remove: Hook<T, S, A> | Hook<T, S, A>[];
     }
 
-    interface HooksObject<T = any, S = any, A = any> {
-        before: Partial<HookMap<T, S, A>> | Hook<T, S, A> | Hook<T, S, A>[];
-        after: Partial<HookMap<T, S, A>> | Hook<T, S, A> | Hook<T, S, A>[];
-        error: Partial<HookMap<T, S, A>> | Hook<T, S, A> | Hook<T, S, A>[];
-        finally?: Partial<HookMap<T, S, A>> | Hook<T, S, A> | Hook<T, S, A>[];
+    interface HooksObject<T = any, A = Application> {
+        before: Partial<HookMap<T, Service<T>, A>> | Hook<T, Service<T>, A> | Hook<T, Service<T>, A>[];
+        after: Partial<HookMap<T, Service<T>, A>> | Hook<T, Service<T>, A> | Hook<T, Service<T>, A>[];
+        error: Partial<HookMap<T, Service<T>, A>> | Hook<T, Service<T>, A> | Hook<T, Service<T>, A>[];
+        finally?: Partial<HookMap<T, Service<T>, A>> | Hook<T, Service<T>, A> | Hook<T, Service<T>, A>[];
     }
 
     interface SetupMethod {
