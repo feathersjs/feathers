@@ -55,14 +55,14 @@ declare namespace createApplication {
     }
 
     // tslint:disable-next-line void-return
-    type Hook<T = any, S = Service<T>> = (context: HookContext<T, S>) => (Promise<HookContext<T, S> | void> | HookContext<T, S> | void);
+    type Hook<T = any, S = Service<T>, A = Application> = (context: HookContext<T, S, A>) => (Promise<HookContext<T, S> | void> | HookContext<T, S> | void);
 
-    interface HookContext<T = any, S = Service<T>> {
+    interface HookContext<T = any, S = Service<T>, A = Application> {
         /**
          * A read only property that contains the Feathers application object. This can be used to
          * retrieve other services (via context.app.service('name')) or configuration values.
          */
-        readonly app: Application;
+        readonly app: A;
         /**
          * A writeable property containing the data of a create, update and patch service
          * method call.
@@ -130,21 +130,21 @@ declare namespace createApplication {
         event?: null;
     }
 
-    interface HookMap<T = any> {
-        all: Hook<T> | Hook<T>[];
-        find: Hook<T> | Hook<T>[];
-        get: Hook<T> | Hook<T>[];
-        create: Hook<T> | Hook<T>[];
-        update: Hook<T> | Hook<T>[];
-        patch: Hook<T> | Hook<T>[];
-        remove: Hook<T> | Hook<T>[];
+    interface HookMap<T = any, S = any, A = any> {
+        all: Hook<T, S, A> | Hook<T, S, A>[];
+        find: Hook<T, S, A> | Hook<T, S, A>[];
+        get: Hook<T, S, A> | Hook<T, S, A>[];
+        create: Hook<T, S, A> | Hook<T, S, A>[];
+        update: Hook<T, S, A> | Hook<T, S, A>[];
+        patch: Hook<T, S, A> | Hook<T, S, A>[];
+        remove: Hook<T, S, A> | Hook<T, S, A>[];
     }
 
-    interface HooksObject<T = any> {
-        before: Partial<HookMap<T>> | Hook<T> | Hook<T>[];
-        after: Partial<HookMap<T>> | Hook<T> | Hook<T>[];
-        error: Partial<HookMap<T>> | Hook<T> | Hook<T>[];
-        finally?: Partial<HookMap<T>> | Hook<T> | Hook<T>[];
+    interface HooksObject<T = any, S = any, A = any> {
+        before: Partial<HookMap<T, S, A>> | Hook<T, S, A> | Hook<T, S, A>[];
+        after: Partial<HookMap<T, S, A>> | Hook<T, S, A> | Hook<T, S, A>[];
+        error: Partial<HookMap<T, S, A>> | Hook<T, S, A> | Hook<T, S, A>[];
+        finally?: Partial<HookMap<T, S, A>> | Hook<T, S, A> | Hook<T, S, A>[];
     }
 
     interface SetupMethod {
