@@ -55,9 +55,9 @@ declare namespace createApplication {
     }
 
     // tslint:disable-next-line void-return
-    type Hook<T = any, S = Service<T>, A = Application> = (context: HookContext<T, S, A>) => (Promise<HookContext<T, S> | void> | HookContext<T, S> | void);
+    type Hook<T = any, S = Service<T>, A extends Application = Application> = (context: HookContext<T, S, A>) => (Promise<HookContext<T, S, A> | void> | HookContext<T, S, A> | void);
 
-    interface HookContext<T = any, S = Service<T>, A = Application> {
+    interface HookContext<T = any, S = Service<T>, A extends Application = any> {
         /**
          * A read only property that contains the Feathers application object. This can be used to
          * retrieve other services (via context.app.service('name')) or configuration values.
@@ -130,21 +130,21 @@ declare namespace createApplication {
         event?: null;
     }
 
-    interface HookMap<T = any, S = Service<T>, A = Application> {
-        all: Hook<T, S, A> | Hook<T, S, A>[];
-        find: Hook<T, S, A> | Hook<T, S, A>[];
-        get: Hook<T, S, A> | Hook<T, S, A>[];
-        create: Hook<T, S, A> | Hook<T, S, A>[];
-        update: Hook<T, S, A> | Hook<T, S, A>[];
-        patch: Hook<T, S, A> | Hook<T, S, A>[];
-        remove: Hook<T, S, A> | Hook<T, S, A>[];
+    interface HookMap<T = any, A extends Application = Application> {
+        all: Hook<T, Service<T>, A> | Hook<T, Service<T>, A>[];
+        find: Hook<T, Service<T>, A> | Hook<T, Service<T>, A>[];
+        get: Hook<T, Service<T>, A> | Hook<T, Service<T>, A>[];
+        create: Hook<T, Service<T>, A> | Hook<T, Service<T>, A>[];
+        update: Hook<T, Service<T>, A> | Hook<T, Service<T>, A>[];
+        patch: Hook<T, Service<T>, A> | Hook<T, Service<T>, A>[];
+        remove: Hook<T, Service<T>, A> | Hook<T, Service<T>, A>[];
     }
 
-    interface HooksObject<T = any, A = Application> {
-        before: Partial<HookMap<T, Service<T>, A>> | Hook<T, Service<T>, A> | Hook<T, Service<T>, A>[];
-        after: Partial<HookMap<T, Service<T>, A>> | Hook<T, Service<T>, A> | Hook<T, Service<T>, A>[];
-        error: Partial<HookMap<T, Service<T>, A>> | Hook<T, Service<T>, A> | Hook<T, Service<T>, A>[];
-        finally?: Partial<HookMap<T, Service<T>, A>> | Hook<T, Service<T>, A> | Hook<T, Service<T>, A>[];
+    interface HooksObject<T = any, A extends Application = Application> {
+        before: Partial<HookMap<T, A>> | Hook<T, A> | Hook<T, Service<T>, A>[];
+        after: Partial<HookMap<T, A>> | Hook<T, A> | Hook<T, Service<T>, A>[];
+        error: Partial<HookMap<T, A>> | Hook<T, A> | Hook<T, Service<T>, A>[];
+        finally?: Partial<HookMap<T, A>> | Hook<T, A> | Hook<T, Service<T>, A>[];
     }
 
     interface SetupMethod {
@@ -288,11 +288,11 @@ declare namespace createApplication {
         remove? (id: null, params?: Params): Promise<T[]>;
     }
 
-    interface ServiceAddons<T> extends EventEmitter {
+    interface ServiceAddons<T, A extends Application = Application> extends EventEmitter {
         id?: any;
         _serviceEvents: string[];
         methods: {[method: string]: string[]};
-        hooks (hooks: Partial<HooksObject>): this;
+        hooks<A extends Application = Application> (hooks: Partial<HooksObject<T, A>>): this;
     }
 
     type Service<T> = ServiceOverloads<T> & ServiceAddons<T> & ServiceMethods<T>;
