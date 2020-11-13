@@ -55,9 +55,9 @@ declare namespace createApplication {
     }
 
     // tslint:disable-next-line void-return
-    type Hook<T = any, S = Service<T>> = (context: HookContext<T, S>) => (Promise<HookContext<T, S> | void> | HookContext<T, S> | void);
+    type Hook<T = any, R = T, S = Service<T, R>> = (context: HookContext<T, R, S>) => (Promise<HookContext<T, R, S> | void> | HookContext<T, R, S> | void);
 
-    interface HookContext<T = any, S = Service<T>> {
+    interface HookContext<T = any, R = T, S = Service<T, R>> {
         /**
          * A read only property that contains the Feathers application object. This can be used to
          * retrieve other services (via context.app.service('name')) or configuration values.
@@ -103,7 +103,7 @@ declare namespace createApplication {
          *  - A before hook to skip the actual service method (database) call
          *  - An error hook to swallow the error and return a result instead
          */
-        result?: T;
+        result?: R;
         /**
          * A read only property and contains the service this hook currently runs on.
          */
@@ -113,7 +113,7 @@ declare namespace createApplication {
          * should be sent to any client. If context.dispatch has not been set context.result
          * will be sent to the client instead.
          */
-        dispatch?: T;
+        dispatch?: R;
         /**
          * A writeable, optional property that allows to override the standard HTTP status
          * code that should be returned.
@@ -151,7 +151,7 @@ declare namespace createApplication {
         setup (app: Application, path: string): void;
     }
 
-    interface ServiceMethods<T> {
+    interface ServiceMethods<T, R = T> {
         [key: string]: any;
 
         /**
@@ -160,7 +160,7 @@ declare namespace createApplication {
          * @param params - Service call parameters {@link Params}
          * @see {@link https://docs.feathersjs.com/api/services.html#find-params|Feathers API Documentation: .find(params)}
          */
-        find (params?: Params): Promise<T | T[] | Paginated<T>>;
+        find (params?: Params): Promise<R | R[] | Paginated<R>>;
 
         /**
          * Retrieve a single resource matching the given ID.
@@ -169,7 +169,7 @@ declare namespace createApplication {
          * @param params - Service call parameters {@link Params}
          * @see {@link https://docs.feathersjs.com/api/services.html#get-id-params|Feathers API Documentation: .get(id, params)}
          */
-        get (id: Id, params?: Params): Promise<T>;
+        get (id: Id, params?: Params): Promise<R>;
 
         /**
          * Create a new resource for this service.
@@ -178,7 +178,7 @@ declare namespace createApplication {
          * @param params - Service call parameters {@link Params}
          * @see {@link https://docs.feathersjs.com/api/services.html#create-data-params|Feathers API Documentation: .create(data, params)}
          */
-        create (data: Partial<T> | Partial<T>[], params?: Params): Promise<T | T[]>;
+        create (data: Partial<T> | Partial<T>[], params?: Params): Promise<R | R[]>;
 
         /**
          * Replace any resources matching the given ID with the given data.
@@ -188,7 +188,7 @@ declare namespace createApplication {
          * @param params - Service call parameters {@link Params}
          * @see {@link https://docs.feathersjs.com/api/services.html#update-id-data-params|Feathers API Documentation: .update(id, data, params)}
          */
-        update (id: NullableId, data: T, params?: Params): Promise<T | T[]>;
+        update (id: NullableId, data: T, params?: Params): Promise<R | R[]>;
 
         /**
          * Merge any resources matching the given ID with the given data.
@@ -198,7 +198,7 @@ declare namespace createApplication {
          * @param params - Service call parameters {@link Params}
          * @see {@link https://docs.feathersjs.com/api/services.html#patch-id-data-params|Feathers API Documentation: .patch(id, data, params)}
          */
-        patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T | T[]>;
+        patch (id: NullableId, data: Partial<T>, params?: Params): Promise<R | R[]>;
 
         /**
          * Remove resources matching the given ID from the this service.
@@ -207,10 +207,10 @@ declare namespace createApplication {
          * @param params - Service call parameters {@link Params}
          * @see {@link https://docs.feathersjs.com/api/services.html#remove-id-params|Feathers API Documentation: .remove(id, params)}
          */
-        remove (id: NullableId, params?: Params): Promise<T | T[]>;
+        remove (id: NullableId, params?: Params): Promise<R | R[]>;
     }
 
-    interface ServiceOverloads<T> {
+    interface ServiceOverloads<T, R = T> {
         /**
          * Create a new resource for this service.
          *
@@ -218,7 +218,7 @@ declare namespace createApplication {
          * @param params - Service call parameters {@link Params}
          * @see {@link https://docs.feathersjs.com/api/services.html#create-data-params|Feathers API Documentation: .create(data, params)}
          */
-        create? (data: Partial<T>, params?: Params): Promise<T>;
+        create? (data: Partial<T>, params?: Params): Promise<R>;
 
         /**
          * Create a new resource for this service.
@@ -227,7 +227,7 @@ declare namespace createApplication {
          * @param params - Service call parameters {@link Params}
          * @see {@link https://docs.feathersjs.com/api/services.html#create-data-params|Feathers API Documentation: .create(data, params)}
          */
-        create? (data: Partial<T>[], params?: Params): Promise<T[]>;
+        create? (data: Partial<T>[], params?: Params): Promise<R[]>;
 
         /**
          * Replace any resources matching the given ID with the given data.
@@ -237,7 +237,7 @@ declare namespace createApplication {
          * @param params - Service call parameters {@link Params}
          * @see {@link https://docs.feathersjs.com/api/services.html#update-id-data-params|Feathers API Documentation: .update(id, data, params)}
          */
-        update? (id: Id, data: T, params?: Params): Promise<T>;
+        update? (id: Id, data: T, params?: Params): Promise<R>;
 
         /**
          * Replace any resources matching the given ID with the given data.
@@ -247,7 +247,7 @@ declare namespace createApplication {
          * @param params - Service call parameters {@link Params}
          * @see {@link https://docs.feathersjs.com/api/services.html#update-id-data-params|Feathers API Documentation: .update(id, data, params)}
          */
-        update? (id: null, data: T, params?: Params): Promise<T[]>;
+        update? (id: null, data: T, params?: Params): Promise<R[]>;
 
         /**
          * Merge any resources matching the given ID with the given data.
@@ -257,7 +257,7 @@ declare namespace createApplication {
          * @param params - Service call parameters {@link Params}
          * @see {@link https://docs.feathersjs.com/api/services.html#patch-id-data-params|Feathers API Documentation: .patch(id, data, params)}
          */
-        patch? (id: Id, data: Partial<T>, params?: Params): Promise<T>;
+        patch? (id: Id, data: Partial<T>, params?: Params): Promise<R>;
 
         /**
          * Merge any resources matching the given ID with the given data.
@@ -267,7 +267,7 @@ declare namespace createApplication {
          * @param params - Service call parameters {@link Params}
          * @see {@link https://docs.feathersjs.com/api/services.html#patch-id-data-params|Feathers API Documentation: .patch(id, data, params)}
          */
-        patch? (id: null, data: Partial<T>, params?: Params): Promise<T[]>;
+        patch? (id: null, data: Partial<T>, params?: Params): Promise<R[]>;
 
         /**
          * Remove resources matching the given ID from the this service.
@@ -276,7 +276,7 @@ declare namespace createApplication {
          * @param params - Service call parameters {@link Params}
          * @see {@link https://docs.feathersjs.com/api/services.html#remove-id-params|Feathers API Documentation: .remove(id, params)}
          */
-        remove? (id: Id, params?: Params): Promise<T>;
+        remove? (id: Id, params?: Params): Promise<R>;
 
         /**
          * Remove resources matching the given ID from the this service.
@@ -285,7 +285,7 @@ declare namespace createApplication {
          * @param params - Service call parameters {@link Params}
          * @see {@link https://docs.feathersjs.com/api/services.html#remove-id-params|Feathers API Documentation: .remove(id, params)}
          */
-        remove? (id: null, params?: Params): Promise<T[]>;
+        remove? (id: null, params?: Params): Promise<R[]>;
     }
 
     interface ServiceAddons<T> extends EventEmitter {
@@ -295,7 +295,7 @@ declare namespace createApplication {
         hooks (hooks: Partial<HooksObject>): this;
     }
 
-    type Service<T> = ServiceOverloads<T> & ServiceAddons<T> & ServiceMethods<T>;
+    type Service<T, R = T> = ServiceOverloads<T, R> & ServiceAddons<R> & ServiceMethods<T, R>;
 
     type ServiceMixin = (service: Service<any>, path: string) => void;
 
