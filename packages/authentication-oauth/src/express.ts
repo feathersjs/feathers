@@ -15,6 +15,15 @@ import { OAuthStrategy } from './strategy';
 const grant = grantExpress();
 const debug = Debug('@feathersjs/authentication-oauth/express');
 
+declare module 'express-session' {
+  interface SessionData {
+      redirect: string;
+      accessToken: string;
+      query: { [key: string]: any };
+      grant: { [key: string]: any };
+  }
+}
+
 export default (options: OauthSetupSettings) => {
   return (feathersApp: Application) => {
     const { authService, linkStrategy } = options;
@@ -43,9 +52,9 @@ export default (options: OauthSetupSettings) => {
 
       if (feathers_token) {
         debug(`Got feathers_token query parameter to link accounts`, feathers_token);
-        req.session.accessToken = feathers_token;
+        req.session.accessToken = feathers_token as string;
       }
-      req.session.redirect = redirect;
+      req.session.redirect = redirect as string;
       req.session.query = query;
 
       res.redirect(`${path}/connect/${name}?${qs.stringify(query as any)}`);
