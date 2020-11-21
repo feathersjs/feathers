@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { hooks, HookContext } from '@feathersjs/hooks';
+import { hooks } from '@feathersjs/hooks';
 import { feathers, activateHooks } from '../../src';
 
 describe('hooks basics', () => {
@@ -55,21 +55,21 @@ describe('hooks basics', () => {
       }
     });
 
-    const hookContext = new HookContext({
+    const hookContext = service.get.createContext({
       chain: []
     });
     const resultContext = await service.get(1, {}, hookContext);
 
     assert.strictEqual(hookContext, resultContext);
     assert.deepStrictEqual(resultContext.chain, [
-      '@hooks 2 before',
       '@hooks 1 before',
       '.hooks 1 before',
       '.hooks 2 before',
+      '@hooks 2 before',
+      '@hooks 2 after',
       '.hooks 1 after',
       '.hooks 2 after',
-      '@hooks 1 after',
-      '@hooks 2 after'
+      '@hooks 1 after'
     ]);
   });
 

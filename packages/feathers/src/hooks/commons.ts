@@ -203,7 +203,7 @@ export function enableHooks (obj: any, methods: string[], types: string[]) {
 async function handleError (hook: any, context: any, onError: any) {
   try {
     const result = await hook.call(context.self, context);
-    Object.assign(context, omit(result, 'arguments'));
+    Object.assign(context, omit(result, 'arguments', 'path'));
   } catch (errorError) {
     if (typeof onError === 'function') {
       onError(errorError, context);
@@ -229,7 +229,7 @@ export function lastHook (context: any, next: any) {
 export function toBeforeHook (hook: any) {
   return async (context: any, next: any) => {
     const result = await hook.call(context.self, context);
-    Object.assign(context, omit(result, 'arguments'));
+    Object.assign(context, omit(result, 'arguments', 'path'));
     await next();
   };
 }
@@ -238,7 +238,7 @@ export function toAfterHook (hook: any) {
   return async (context: any, next: any) => {
     await next();
     const result = await hook.call(context.self, context);
-    Object.assign(context, omit(result, 'arguments'));
+    Object.assign(context, omit(result, 'arguments', 'path'));
   };
 }
 

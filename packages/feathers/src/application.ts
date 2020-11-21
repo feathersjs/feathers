@@ -150,4 +150,4 @@ export default {
 
     return this;
   }
-} as BaseApplication & AppExtensions ;
+} as BaseApplication & AppExtensions;
