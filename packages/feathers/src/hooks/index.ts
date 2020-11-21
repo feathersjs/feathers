@@ -1,14 +1,14 @@
 import * as hookCommons from './commons';
 import {
   hooks as hooksDecorator,
+  HookManager,
   HookContext,
-  getMiddleware,
-  withParams,
-  withProps
+  HookMap,
+  Middleware,
+  middleware
 } from '@feathersjs/hooks';
 import { assignArguments, validate } from './base';
 import { Application, Service } from '../declarations';
-
 const baseHooks = [ assignArguments, validate ];
 const {
   getHooks,
@@ -19,12 +19,14 @@ const {
   wrap
 } = hookCommons;
 
-function getContextUpdaters (app: Application, service: Service<any>, method: string) {
-  const parameters: any = service.methods[method].map(v => (v === 'params' ? ['params', {}] : v));
+function getMiddlewareOptions (app: Application, service: Service<any>, method: string) {
+  const params: string[] = service.methods[method];
+  const defaults = params.find(v => v === 'params') ? { params: {} } : null;
 
-  return [
-    withParams(...parameters),
-    withProps({
+  return {
+    params,
+    defaults,
+    props: {
       app,
       service,
       type: 'before',
@@ -36,19 +38,19 @@ function getContextUpdaters (app: Application, service: Service<any>, method: st
         return Object.keys(app.services)
           .find(path => app.services[path] === service);
       }
-    })
-  ];
+    }
+  };
 }
 
 function getCollector (app: Application, service: Service<any>, method: string) {
-  return (self: any, fn: any, args: any[]) => {
-    const middleware = [
-      ...getMiddleware(self),
-      ...(fn && typeof fn.collect === 'function' ? fn.collect(fn, fn.original, args) : [])
-    ];
+  return function (this: HookManager): Middleware[] {
+    const previous = this._parent && this._parent.getMiddleware();
+    let result;
 
-    if (typeof self === 'object') {
-      return middleware;
+    if (previous && this._middleware) {
+      result = previous.concat(this._middleware);
+    } else {
+      result = previous || this._middleware || [];
     }
 
     const hooks = {
@@ -63,26 +65,26 @@ function getCollector (app: Application, service: Service<any>, method: string) 
       ...finallyWrapper(hooks.finally),
       ...errorWrapper(hooks.error),
       ...baseHooks,
-      ...middleware,
+      ...result,
       ...wrap(hooks)
     ];
   };
 }
 
-function withHooks (app: any, service: any, methods: string[]) {
+function withHooks (app: Application, service: Service<any>, methods: string[]) {
   const hookMap = methods.reduce((accu, method) => {
     if (typeof service[method] !== 'function') {
       return accu;
     }
 
-    accu[method] = {
-      middleware: [],
-      context: getContextUpdaters(app, service, method),
-      collect: getCollector(app, service, method)
-    };
+    const hookManager = middleware([], getMiddlewareOptions(app, service, method));
+
+    hookManager.getMiddleware = getCollector(app, service, method);
+
+    accu[method] = hookManager;
 
     return accu;
-  }, {} as any);
+  }, {} as HookMap);
 
   hooksDecorator(service, hookMap);
 }
@@ -94,7 +96,7 @@ function mixinMethod (this: any) {
   const returnHook = args[args.length - 1] === true || args[args.length - 1] instanceof HookContext
     ? args.pop() : false;
 
-  const hookContext = returnHook instanceof HookContext ? returnHook : new HookContext();
+  const hookContext = returnHook instanceof HookContext ? returnHook : this._super.createContext();
 
   return this._super.call(service, ...args, hookContext)
     .then(() => returnHook ? hookContext : hookContext.result)
@@ -172,4 +174,4 @@ export function activateHooks (args: any[]) {
     Object.defineProperty(fn, ACTIVATE_HOOKS, { value: args });
     return fn;
   };
-};
+}
