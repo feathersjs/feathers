@@ -104,7 +104,7 @@ describe('app.channel', () => {
       it('is an EventEmitter', () => {
         const channel = app.channel('emitchannel');
 
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
           channel.once('message', data => {
             assert.strictEqual(data, 'hello');
             resolve();

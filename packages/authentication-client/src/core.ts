@@ -65,7 +65,7 @@ export class AuthenticationClient {
 
     socket.on(disconnected, () => {
       const authPromise = new Promise(resolve =>
-        socket.once(connected, () => resolve())
+        socket.once(connected, (data: any) => resolve(data))
       )
       // Only reconnect when `reAuthenticate()` or `authenticate()`
       // has been called explicitly first

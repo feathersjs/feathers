@@ -9,7 +9,7 @@ describe('@feathersjs/authentication-oauth/express', () => {
   before(async () => {
     server = app.listen(9876);
 
-    await new Promise(resolve => server.once('listening', () => resolve()));
+    await new Promise<void>(resolve => server.once('listening', () => resolve()));
   });
 
   after(() => server.close());
