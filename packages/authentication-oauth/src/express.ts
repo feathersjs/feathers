@@ -104,7 +104,7 @@ export default (options: OauthSetupSettings) => {
           ...payload
         };
 
-        await new Promise((resolve, reject) => {
+        await new Promise<void>((resolve, reject) => {
           if (!req.session.destroy) {
             req.session = null;
             resolve();
