@@ -35,8 +35,9 @@ plugins:
     enabled: true
     config:
       count_threshold: 3
-exclude_patterns:	
+exclude_patterns:
   - "**/test/*"	
   - "**/dist/*"	
   - "**/*.dist.js"	
   - "**/templates/*"
+  - "**/adapter-commons/*"
