@@ -56,7 +56,7 @@
     "@feathersjs/errors": "^4.5.10",
     "@feathersjs/feathers": "^4.5.10",
     "bcryptjs": "^2.4.3",
-    "debug": "^4.2.0",
+    "debug": "^4.3.1",
     "lodash": "^4.17.20"
   },
   "devDependencies": {
@@ -64,11 +64,11 @@
     "@types/debug": "^4.1.5",
     "@types/lodash": "^4.14.165",
     "@types/mocha": "^8.0.4",
-    "@types/node": "^14.14.7",
+    "@types/node": "^14.14.10",
     "mocha": "^8.2.1",
     "shx": "^0.3.3",
-    "ts-node": "^9.0.0",
-    "typescript": "^4.0.5"
+    "ts-node": "^9.1.0",
+    "typescript": "^4.1.2"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
 }

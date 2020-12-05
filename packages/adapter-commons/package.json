@@ -1,19 +1,19 @@
 {
-  "name": "@feathersjs/commons",
-  "version": "4.5.10",
-  "description": "Shared Feathers utility functions",
+  "name": "@feathersjs/adapter-commons",
+  "version": "4.5.7",
+  "description": "Shared database adapter utility functions",
   "homepage": "https://feathersjs.com",
   "keywords": [
     "feathers"
   ],
   "license": "MIT",
   "funding": {
-    "type": "github",
-    "url": "https://github.com/sponsors/daffl"
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/feathers.git"
+    "url": "git://github.com/feathersjs/databases.git"
   },
   "author": {
     "name": "Feathers contributor",
@@ -22,22 +22,13 @@
   },
   "contributors": [],
   "bugs": {
-    "url": "https://github.com/feathersjs/feathers/issues"
+    "url": "https://github.com/feathersjs/databases/issues"
   },
   "engines": {
     "node": ">= 10"
   },
   "main": "lib/",
   "types": "lib/",
-  "files": [
-    "CHANGELOG.md",
-    "LICENSE",
-    "README.md",
-    "src/**",
-    "lib/**",
-    "*.d.ts",
-    "*.js"
-  ],
   "scripts": {
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
@@ -46,13 +37,27 @@
   "directories": {
     "lib": "lib"
   },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**"
+  ],
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "@feathersjs/commons": "^4.5.10",
+    "@feathersjs/errors": "^4.5.10",
+    "@feathersjs/feathers": "^4.5.10"
+  },
   "devDependencies": {
     "@types/mocha": "^8.0.4",
+    "@types/mongodb": "^3.6.1",
     "@types/node": "^14.14.10",
     "mocha": "^8.2.1",
+    "mongodb": "^3.6.3",
     "shx": "^0.3.3",
     "ts-node": "^9.1.0",
     "typescript": "^4.1.2"

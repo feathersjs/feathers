@@ -49,8 +49,8 @@
     "IE 10"
   ],
   "devDependencies": {
-    "@babel/core": "^7.12.3",
-    "@babel/preset-env": "^7.12.1",
+    "@babel/core": "^7.12.9",
+    "@babel/preset-env": "^7.12.7",
     "@feathersjs/authentication-client": "^4.5.10",
     "@feathersjs/errors": "^4.5.10",
     "@feathersjs/express": "^4.5.10",
@@ -61,7 +61,7 @@
     "@feathersjs/socketio": "^4.5.10",
     "@feathersjs/socketio-client": "^4.5.10",
     "@feathersjs/tests": "^4.5.10",
-    "babel-loader": "^8.2.1",
+    "babel-loader": "^8.2.2",
     "body-parser": "^1.19.0",
     "feathers-memory": "^4.1.0",
     "jquery": "^3.5.1",
@@ -74,9 +74,9 @@
     "socket.io-client": "^2.3.1",
     "superagent": "^6.1.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^5.4.0",
+    "webpack": "^5.10.0",
     "webpack-merge": "^5.4.0",
-    "ws": "^7.4.0",
+    "ws": "^7.4.1",
     "xhr2": "^0.2.0"
   },
   "gitHead": "9b9f0f13387341bdd320f1e66feda828fca2c9f2"
