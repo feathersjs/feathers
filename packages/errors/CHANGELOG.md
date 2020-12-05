@@ -5,10 +5,19 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [5.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v4.5.4...v5.0.0-pre.0) (2020-05-19)
 
-
 ### Bug Fixes
 
 * **errors:** Format package.json with spaces ([cbd31c1](https://github.com/feathersjs/feathers/commit/cbd31c10c2c574de63d6ca5e55dbfb73a5fdd758))
+* **typescript:** Fix `data` property definition in @feathersjs/errors ([#2018](https://github.com/feathersjs/feathers/issues/2018)) ([ef1398c](https://github.com/feathersjs/feathers/commit/ef1398cd5b19efa50929e8c9511ca5684a18997f))
+
+## [4.5.11](https://github.com/feathersjs/feathers/compare/v4.5.10...v4.5.11) (2020-12-05)
+
+**Note:** Version bump only for package @feathersjs/errors
+
+## [4.5.10](https://github.com/feathersjs/feathers/compare/v4.5.9...v4.5.10) (2020-11-08)
+
+**Note:** Version bump only for package @feathersjs/errors
+
 
 
 

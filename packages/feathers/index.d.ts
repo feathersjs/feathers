@@ -42,6 +42,7 @@ declare namespace createApplication {
         provider?: string;
         route?: {[key: string]: string};
         headers?: {[key: string]: any};
+        user?: {[key: string]: any};
 
         [key: string]: any; // (JL) not sure if we want this
     }
@@ -54,7 +55,7 @@ declare namespace createApplication {
     }
 
     // tslint:disable-next-line void-return
-    type Hook<T = any, S = Service<T>> = (hook: HookContext<T, S>) => (Promise<HookContext<T, S> | void> | HookContext<T, S> | void);
+    type Hook<T = any, S = Service<T>> = (context: HookContext<T, S>) => (Promise<HookContext<T, S> | void> | HookContext<T, S> | void);
 
     interface HookContext<T = any, S = Service<T>> {
         /**

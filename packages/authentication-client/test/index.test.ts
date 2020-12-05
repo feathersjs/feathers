@@ -202,5 +202,27 @@ describe('@feathersjs/authentication-client', () => {
           assert.ok(!app.get('authentication'));
         });
     });
+
+    it('reauthenticates using different strategy', async () => {
+      app.configure(client({ jwtStrategy: 'any' }));
+
+      const data = {
+        strategy: 'testing'
+      };
+
+      let result = await app.authenticate(data);
+      assert.deepStrictEqual(result, {
+        accessToken,
+        data,
+        user
+      });
+
+      result = await app.authentication.reAuthenticate(false, 'jwt');
+      assert.deepStrictEqual(result, {
+        accessToken,
+        data,
+        user
+      });
+    })
   });
 });

@@ -36,7 +36,7 @@
     "*.js"
   ],
   "scripts": {
-    "clean": "../../node_modules/.bin/shx rm -rf dist/ && ../../node_modules/.bin/shx mkdir -p dist",
+    "clean": "shx rm -rf dist/ && shx mkdir -p dist",
     "version": "npm run build",
     "mocha": "mocha --config ../../.mocharc.json test/ --recursive",
     "test": "npm run build && npm run mocha",

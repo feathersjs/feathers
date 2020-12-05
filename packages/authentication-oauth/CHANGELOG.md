@@ -9,7 +9,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
 ## [4.5.9](https://github.com/feathersjs/feathers/compare/v4.5.8...v4.5.9) (2020-10-09)
 
 

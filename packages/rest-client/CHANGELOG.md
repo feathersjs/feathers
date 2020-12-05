@@ -6,8 +6,18 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 # [5.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v4.5.4...v5.0.0-pre.0) (2020-05-19)
 
 
+
+## [4.5.11](https://github.com/feathersjs/feathers/compare/v4.5.10...v4.5.11) (2020-12-05)
+
 **Note:** Version bump only for package @feathersjs/rest-client
 
+
+
+
+
+## [4.5.10](https://github.com/feathersjs/feathers/compare/v4.5.9...v4.5.10) (2020-11-08)
+
+**Note:** Version bump only for package @feathersjs/rest-client
 
 
 
