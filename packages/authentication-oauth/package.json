@@ -56,23 +56,23 @@
     "@feathersjs/errors": "^5.0.0-pre.0",
     "@feathersjs/express": "^5.0.0-pre.0",
     "@feathersjs/feathers": "^5.0.0-pre.0",
-    "debug": "^4.2.0",
+    "debug": "^4.3.1",
     "express-session": "^1.17.1",
-    "grant": "^5.4.5",
+    "grant": "^5.4.9",
     "lodash": "^4.17.20"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
-    "@types/express": "^4.17.8",
-    "@types/express-session": "^1.17.0",
-    "@types/lodash": "^4.14.162",
-    "@types/mocha": "^8.0.3",
-    "@types/node": "^14.11.10",
-    "axios": "^0.20.0",
-    "mocha": "^8.2.0",
-    "shx": "^0.3.2",
-    "ts-node": "^9.0.0",
-    "typescript": "^4.0.3"
+    "@types/express": "^4.17.9",
+    "@types/express-session": "^1.17.3",
+    "@types/lodash": "^4.14.165",
+    "@types/mocha": "^8.0.4",
+    "@types/node": "^14.14.10",
+    "axios": "^0.21.0",
+    "mocha": "^8.2.1",
+    "shx": "^0.3.3",
+    "ts-node": "^9.1.0",
+    "typescript": "^4.1.2"
   },
   "gitHead": "e6b82b809c21da298501a12b82e72e166468994b"
 }

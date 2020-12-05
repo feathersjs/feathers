@@ -45,19 +45,19 @@
   "dependencies": {
     "@feathersjs/commons": "^5.0.0-pre.0",
     "@feathersjs/errors": "^5.0.0-pre.0",
-    "debug": "^4.2.0",
+    "debug": "^4.3.1",
     "lodash": "^4.17.20",
     "radix-router": "^3.0.1"
   },
   "devDependencies": {
     "@feathersjs/feathers": "^5.0.0-pre.0",
     "@types/debug": "^4.1.5",
-    "@types/mocha": "^8.0.3",
-    "@types/node": "^14.11.10",
-    "mocha": "^8.2.0",
-    "shx": "^0.3.2",
-    "ts-node": "^9.0.0",
-    "typescript": "^4.0.3"
+    "@types/mocha": "^8.0.4",
+    "@types/node": "^14.14.10",
+    "mocha": "^8.2.1",
+    "shx": "^0.3.3",
+    "ts-node": "^9.1.0",
+    "typescript": "^4.1.2"
   },
   "gitHead": "e6b82b809c21da298501a12b82e72e166468994b"
 }

@@ -56,7 +56,7 @@
     "@feathersjs/feathers": "^5.0.0-pre.0",
     "@feathersjs/transport-commons": "^5.0.0-pre.0",
     "@types/jsonwebtoken": "^8.5.0",
-    "debug": "^4.2.0",
+    "debug": "^4.3.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "long-timeout": "^0.1.1",
@@ -64,15 +64,15 @@
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
-    "@types/lodash": "^4.14.162",
-    "@types/mocha": "^8.0.3",
-    "@types/node": "^14.11.10",
+    "@types/lodash": "^4.14.165",
+    "@types/mocha": "^8.0.4",
+    "@types/node": "^14.14.10",
     "@types/uuid": "^8.3.0",
     "feathers-memory": "^4.1.0",
-    "mocha": "^8.2.0",
-    "shx": "^0.3.2",
-    "ts-node": "^9.0.0",
-    "typescript": "^4.0.3"
+    "mocha": "^8.2.1",
+    "shx": "^0.3.3",
+    "ts-node": "^9.1.0",
+    "typescript": "^4.1.2"
   },
   "gitHead": "e6b82b809c21da298501a12b82e72e166468994b"
 }
