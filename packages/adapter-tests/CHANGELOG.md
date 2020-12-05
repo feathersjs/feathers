@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.11](https://github.com/feathersjs/databases/compare/v4.5.10...v4.5.11) (2020-12-05)
+
+**Note:** Version bump only for package @feathersjs/adapter-tests
+
+
+
+
+
 ## [4.5.4](https://github.com/feathersjs/databases/compare/@feathersjs/adapter-tests@4.5.3...@feathersjs/adapter-tests@4.5.4) (2020-09-27)
 
 **Note:** Version bump only for package @feathersjs/adapter-tests

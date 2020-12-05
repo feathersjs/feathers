@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.11](https://github.com/feathersjs/feathers/compare/v4.5.10...v4.5.11) (2020-12-05)
+
+
+### Bug Fixes
+
+* **socketio-client:** Throw an error and show a warning if someone tries to use socket.io-client v3 ([#2135](https://github.com/feathersjs/feathers/issues/2135)) ([cc3521c](https://github.com/feathersjs/feathers/commit/cc3521c935a1cbd690e29b7057998e3898f282db))
+
+
+
+
+
 ## [4.5.10](https://github.com/feathersjs/feathers/compare/v4.5.9...v4.5.10) (2020-11-08)
 
 **Note:** Version bump only for package @feathersjs/socketio-client
