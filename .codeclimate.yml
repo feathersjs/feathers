@@ -40,4 +40,3 @@ exclude_patterns:
   - "**/dist/*"	
   - "**/*.dist.js"	
   - "**/templates/*"
-  - "**/adapter-commons/*"
