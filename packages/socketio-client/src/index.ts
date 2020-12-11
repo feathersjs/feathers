@@ -1,10 +1,11 @@
 import { Service } from '@feathersjs/transport-commons/lib/client';
+import { Socket } from 'socket.io-client';
 
 export interface SocketIOClientOptions {
     timeout?: number;
 }
 
-export default function socketioClient (connection: SocketIOClient.Socket, options?: SocketIOClientOptions) {
+export default function socketioClient (connection: Socket, options?: SocketIOClientOptions) {
   if (!connection) {
     throw new Error('Socket.io connection needs to be provided');
   }

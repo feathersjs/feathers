@@ -50,8 +50,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/transport-commons": "^5.0.0-pre.0",
-    "@types/socket.io-client": "^1.4.34"
+    "@feathersjs/transport-commons": "^5.0.0-pre.0"
   },
   "devDependencies": {
     "@feathersjs/commons": "^5.0.0-pre.0",
@@ -59,7 +58,7 @@
     "@feathersjs/socketio": "^5.0.0-pre.0",
     "@feathersjs/tests": "^5.0.0-pre.0",
     "@feathersjs/transport-commons": "^4.5.11",
-    "socket.io-client": "^2.3.1",
+    "socket.io-client": "^3.0.3",
     "@types/mocha": "^8.0.4",
     "@types/node": "^14.14.10",
     "mocha": "^8.2.1",

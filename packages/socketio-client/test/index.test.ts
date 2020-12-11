@@ -1,7 +1,7 @@
 import { strict as assert } from 'assert';
 import { Server } from 'http';
 import feathers from '@feathersjs/feathers';
-import io from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { setupTests } from '@feathersjs/tests/lib/client';
 
 import { createServer } from './server';
@@ -10,7 +10,7 @@ import socketio from '../src';
 describe('@feathersjs/socketio-client', () => {
   const app = feathers();
 
-  let socket: SocketIOClient.Socket;
+  let socket: Socket;
   let server: Server;
 
   before(done => {
