@@ -8,6 +8,7 @@ import { HookContext, Service, Application } from './declarations';
 export function eventHook () {
   return function (ctx: HookContext) {
     const { app, service, method, event, type, result } = ctx;
+
     const eventName = event === null ? event : (app as any).eventMappings[method];
     const isHookEvent = service._hookEvents && service._hookEvents.indexOf(eventName) !== -1;
 
