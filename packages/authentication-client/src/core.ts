@@ -65,7 +65,7 @@ export class AuthenticationClient {
 
     socket.on(disconnected, () => {
       const authPromise = new Promise(resolve =>
-        socket.once(connected, () => resolve())
+        socket.once(connected, (data: any) => resolve(data))
       )
       // Only reconnect when `reAuthenticate()` or `authenticate()`
       // has been called explicitly first
@@ -132,7 +132,7 @@ export class AuthenticationClient {
     return Promise.reject(error);
   }
 
-  reAuthenticate (force: boolean = false): Promise<AuthenticationResult> {
+  reAuthenticate (force: boolean = false, strategy?: string): Promise<AuthenticationResult> {
     // Either returns the authentication state or
     // tries to re-authenticate with the stored JWT and strategy
     const authPromise = this.app.get('authentication');
@@ -144,7 +144,7 @@ export class AuthenticationClient {
         }
 
         return this.authenticate({
-          strategy: this.options.jwtStrategy,
+          strategy: strategy || this.options.jwtStrategy,
           accessToken
         });
       });

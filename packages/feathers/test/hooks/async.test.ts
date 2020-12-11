@@ -74,7 +74,7 @@ describe('`async` hooks', () => {
       service.hooks({
         async: {
           get (hook: any) {
-            return new Promise(resolve => {
+            return new Promise<void>(resolve => {
               hook.params.ran = true;
               resolve();
             });

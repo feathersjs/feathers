@@ -1,7 +1,7 @@
-import Debug from 'debug';
-import socketio, { Server, ServerOptions } from 'socket.io';
 // @ts-ignore
 import Proto from 'uberproto';
+import Debug from 'debug';
+import { Server, ServerOptions } from 'socket.io';
 import http from 'http';
 import { Application } from '@feathersjs/feathers';
 import { socket } from '@feathersjs/transport-commons';
@@ -11,8 +11,8 @@ import { disconnect, params, authentication, FeathersSocket } from './middleware
 const debug = Debug('@feathersjs/socketio');
 
 function configureSocketio (callback?: (io: Server) => void): (app: Application) => void;
-function configureSocketio (options: number | ServerOptions, callback?: (io: Server) => void): (app: Application) => void;
-function configureSocketio (port: number, options?: ServerOptions, callback?: (io: Server) => void): (app: Application) => void;
+function configureSocketio (options: number | Partial<ServerOptions>, callback?: (io: Server) => void): (app: Application) => void;
+function configureSocketio (port: number, options?: Partial<ServerOptions>, callback?: (io: Server) => void): (app: Application) => void;
 function configureSocketio (port?: any, options?: any, config?: any) {
   if (typeof port !== 'number') {
     config = options;
@@ -55,7 +55,7 @@ function configureSocketio (port?: any, options?: any, config?: any) {
 
         setup (server: http.Server) {
           if (!this.io) {
-            const io = this.io = socketio.listen(port || server, options);
+            const io = this.io = new Server(port || server, options);
 
             io.use(disconnect(app, getParams));
             io.use(params(app, socketMap));

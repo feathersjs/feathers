@@ -2,10 +2,11 @@ import { strict as assert } from 'assert';
 import feathers, { Application, HookContext, NullableId, Params } from '@feathersjs/feathers';
 import express from '@feathersjs/express';
 import { omit, extend } from 'lodash';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 import axios from 'axios';
 import { Server } from 'http';
 import { Service } from '@feathersjs/tests/lib/fixture';
+import { Socket } from 'socket.io-client';
 
 import methodTests from './methods';
 import eventTests from './events';
@@ -15,7 +16,7 @@ import { FeathersSocket, NextFunction } from '../src/middleware.js';
 describe('@feathersjs/socketio', () => {
   let app: Application;
   let server: Server;
-  let socket: SocketIOClient.Socket;
+  let socket: Socket;
 
   const socketParams: any = {
     user: { name: 'David' },
@@ -44,7 +45,7 @@ describe('@feathersjs/socketio', () => {
           socket.feathers.user = { name: 'David' };
           socketParams.headers = socket.feathers.headers;
 
-          const { channel } = socket.handshake.query;
+          const { channel } = socket.handshake.query as any;
 
           if (channel) {
             socket.feathers.channel = channel;

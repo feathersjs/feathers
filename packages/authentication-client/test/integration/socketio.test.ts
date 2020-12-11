@@ -1,4 +1,4 @@
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 import assert from 'assert';
 import feathers, { Application } from '@feathersjs/feathers';
 import socketio from '@feathersjs/socketio';

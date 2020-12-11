@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import io from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { verify } from '@feathersjs/tests/lib/fixture';
 import { RealTimeConnection } from '@feathersjs/transport-commons/lib/channels/channel/base';
 
@@ -27,7 +27,7 @@ export default (name: string, options: any) => {
   };
 
   describe('Basic service events', () => {
-    let socket: SocketIOClient.Socket;
+    let socket: Socket;
     let connection: RealTimeConnection;
 
     before(done => {

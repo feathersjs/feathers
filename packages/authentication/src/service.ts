@@ -5,6 +5,7 @@ import { AuthenticationBase, AuthenticationResult, AuthenticationRequest } from 
 import { connection, event } from './hooks';
 import '@feathersjs/transport-commons';
 import { Application, Params, ServiceMethods, ServiceAddons } from '@feathersjs/feathers';
+import jsonwebtoken from 'jsonwebtoken';
 
 const debug = Debug('@feathersjs/authentication/service');
 
@@ -112,7 +113,12 @@ export class AuthenticationService extends AuthenticationBase implements Partial
 
     const accessToken = await this.createAccessToken(payload, jwtOptions, params.secret);
 
-    return Object.assign({}, { accessToken }, authResult);
+    return merge({ accessToken }, authResult, {
+      authentication: {
+          accessToken,
+          payload: jsonwebtoken.decode(accessToken)
+      }
+    });
   }
 
   /**

@@ -3,6 +3,7 @@ const _axios = require('axios');
 const feathers = require('@feathersjs/feathers');
 const getApp = require('@feathersjs/authentication-local/test/fixture');
 const { authenticate } = require('@feathersjs/authentication');
+const omit = require('lodash/omit');
 
 const expressify = require('../lib');
 const axios = _axios.create({
@@ -63,8 +64,9 @@ describe('@feathersjs/express/authentication', () => {
   describe('service authentication', () => {
     it('successful local authentication', () => {
       assert.ok(authResult.accessToken);
-      assert.deepStrictEqual(authResult.authentication, {
-        strategy: 'local'
+      assert.deepStrictEqual(omit(authResult.authentication, 'payload'), {
+        strategy: 'local',
+        accessToken: authResult.accessToken
       });
       assert.strictEqual(authResult.user.email, email);
       assert.strictEqual(authResult.user.password, undefined);

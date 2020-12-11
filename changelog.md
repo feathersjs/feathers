@@ -33,6 +33,32 @@ functionality like path replacements and automatic environment variable insertio
 
 
 
+## [4.5.11](https://github.com/feathersjs/feathers/compare/v4.5.10...v4.5.11) (2020-12-05)
+
+
+### Bug Fixes
+
+* **authentication-client:** Allow reAuthentication using specific strategy ([#2140](https://github.com/feathersjs/feathers/issues/2140)) ([2a2bbf7](https://github.com/feathersjs/feathers/commit/2a2bbf7f8ee6d32b9fac8afab3421286b06e6443))
+* **socketio-client:** Throw an error and show a warning if someone tries to use socket.io-client v3 ([#2135](https://github.com/feathersjs/feathers/issues/2135)) ([cc3521c](https://github.com/feathersjs/feathers/commit/cc3521c935a1cbd690e29b7057998e3898f282db))
+* **typescript:** Fix `data` property definition in @feathersjs/errors ([#2018](https://github.com/feathersjs/feathers/issues/2018)) ([ef1398c](https://github.com/feathersjs/feathers/commit/ef1398cd5b19efa50929e8c9511ca5684a18997f))
+
+
+
+
+
+## [4.5.10](https://github.com/feathersjs/feathers/compare/v4.5.9...v4.5.10) (2020-11-08)
+
+
+### Bug Fixes
+
+* **authentication:** consistent response return between local and jwt strategy ([#2042](https://github.com/feathersjs/feathers/issues/2042)) ([8d25be1](https://github.com/feathersjs/feathers/commit/8d25be101a2593a9e789375c928a07780b9e28cf))
+* **authentication-oauth:** session.destroy is undefined when use cookie-session package ([#2100](https://github.com/feathersjs/feathers/issues/2100)) ([46e84b8](https://github.com/feathersjs/feathers/commit/46e84b83f2acce985380243fc6d08c64e96f0068))
+* **package:** Fix clean script in non Unix environments ([#2110](https://github.com/feathersjs/feathers/issues/2110)) ([09b62c0](https://github.com/feathersjs/feathers/commit/09b62c0c7e636caf620904ba87d61f168a020f05))
+* **typescript:** Add user property to the Params. ([#2090](https://github.com/feathersjs/feathers/issues/2090)) ([1e94265](https://github.com/feathersjs/feathers/commit/1e942651fbaaf07fc66c159225fbc992a0174bf4))
+
+
+
+
 
 ## [4.5.9](https://github.com/feathersjs/feathers/compare/v4.5.8...v4.5.9) (2020-10-09)
 

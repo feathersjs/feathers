@@ -153,7 +153,7 @@ describe('Service events', () => {
       ];
 
       Promise.all(createItems.map((element, index) => {
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
           service.on('created', (data: any) => {
             if (data.message === element.message) {
               assert.deepStrictEqual(data, { message: `Hello ${index}` });
@@ -183,7 +183,7 @@ describe('Service events', () => {
       ];
 
       Promise.all(updateItems.map((element, index) => {
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
           service.on('updated', (data: any) => {
             if (data.message === element.message) {
               assert.deepStrictEqual(data, { id: index, message: `Hello ${index}` });
@@ -213,7 +213,7 @@ describe('Service events', () => {
       ];
 
       Promise.all(patchItems.map((element, index) => {
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
           service.on('patched', (data: any) => {
             if (data.message === element.message) {
               assert.deepStrictEqual(data, { id: index, message: `Hello ${index}` });
@@ -243,7 +243,7 @@ describe('Service events', () => {
       ];
 
       Promise.all(removeItems.map((element, index) => {
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
           service.on('removed', (data: any) => {
             if (data.message === element.message) {
               assert.deepStrictEqual(data, { id: index, message: `Hello ${index}` });
