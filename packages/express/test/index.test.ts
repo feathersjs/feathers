@@ -1,22 +1,21 @@
-const assert = require('assert');
-const express = require('express');
-const axios = require('axios');
-const fs = require('fs');
-const path = require('path');
-const https = require('https');
-const feathers = require('@feathersjs/feathers');
+import { strict as assert } from 'assert';
+import express, { Request, Response, NextFunction } from 'express';
+import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
+import https from 'https';
+import feathers, { HookContext, Id } from '@feathersjs/feathers';
 
-const expressify = require('../lib');
+import * as expressify from '../src';
 
 describe('@feathersjs/express', () => {
   const service = {
-    get (id) {
-      return Promise.resolve({ id });
+    async get (id: Id) {
+      return { id };
     }
   };
 
   it('exports .default, .original .rest, .notFound and .errorHandler', () => {
-    assert.strictEqual(expressify.default, expressify);
     assert.strictEqual(expressify.original, express);
     assert.strictEqual(typeof expressify.rest, 'function');
     assert.ok(expressify.notFound);
@@ -24,14 +23,14 @@ describe('@feathersjs/express', () => {
   });
 
   it('returns an Express application', () => {
-    const app = expressify(feathers());
+    const app = expressify.default(feathers());
 
     assert.strictEqual(typeof app, 'function');
   });
 
   it('allows to use an existing Express instance', () => {
     const expressApp = express();
-    const app = expressify(feathers(), expressApp);
+    const app = expressify.default(feathers(), expressApp);
 
     assert.strictEqual(app, expressApp);
   });
@@ -41,7 +40,7 @@ describe('@feathersjs/express', () => {
   });
 
   it('returns a plain express app when no app is provided', () => {
-    const app = expressify();
+    const app = expressify.default();
 
     assert.strictEqual(typeof app.use, 'function');
     assert.strictEqual(typeof app.service, 'undefined');
@@ -50,7 +49,8 @@ describe('@feathersjs/express', () => {
 
   it('errors when app with wrong version is provided', () => {
     try {
-      expressify({});
+      // @ts-ignore
+      expressify.default({});
     } catch (e) {
       assert.strictEqual(e.message, '@feathersjs/express requires a valid Feathers application instance');
     }
@@ -59,7 +59,7 @@ describe('@feathersjs/express', () => {
       const app = feathers();
       app.version = '2.9.9';
 
-      expressify(app);
+      expressify.default(app);
     } catch (e) {
       assert.strictEqual(e.message, '@feathersjs/express requires an instance of a Feathers application version 3.x or later (got 2.9.9)');
     }
@@ -68,34 +68,34 @@ describe('@feathersjs/express', () => {
       const app = feathers();
       delete app.version;
 
-      expressify(app);
+      expressify.default(app);
     } catch (e) {
       assert.strictEqual(e.message, '@feathersjs/express requires an instance of a Feathers application version 3.x or later (got unknown)');
     }
   });
 
   it('Can use Express sub-apps', () => {
-    const app = expressify(feathers());
+    const app = expressify.default(feathers());
     const child = express();
 
     app.use('/path', child);
-    assert.strictEqual(child.parent, app);
+    assert.strictEqual((child as any).parent, app);
   });
 
   it('Can use express.static', () => {
-    const app = expressify(feathers());
+    const app = expressify.default(feathers());
 
     app.use('/path', expressify.static(__dirname));
   });
 
-  it('has Feathers functionality', () => {
-    const app = expressify(feathers());
+  it('has Feathers functionality', async () => {
+    const app = expressify.default(feathers());
 
     app.use('/myservice', service);
 
     app.hooks({
       after: {
-        get (hook) {
+        get (hook: HookContext) {
           hook.result.fromAppHook = true;
         }
       }
@@ -103,46 +103,52 @@ describe('@feathersjs/express', () => {
 
     app.service('myservice').hooks({
       after: {
-        get (hook) {
+        get (hook: HookContext) {
           hook.result.fromHook = true;
         }
       }
     });
 
-    return app.service('myservice').get(10)
-      .then(data => assert.deepStrictEqual(data, {
-        id: 10,
-        fromHook: true,
-        fromAppHook: true
-      }));
+    const data = await app.service('myservice').get(10);
+
+    assert.deepStrictEqual(data, {
+      id: 10,
+      fromHook: true,
+      fromAppHook: true
+    });
   });
 
   it('can register a service and start an Express server', done => {
-    const app = expressify(feathers());
+    const app = expressify.default(feathers());
     const response = {
       message: 'Hello world'
     };
 
     app.use('/myservice', service);
-    app.use((req, res) => res.json(response));
+    app.use((_req, res) => res.json(response));
 
-    const server = app.listen(8787).on('listening', () => {
-      app.service('myservice').get(10)
-        .then(data => assert.deepStrictEqual(data, { id: 10 }))
-        .then(() => axios.get('http://localhost:8787'))
-        .then(res => assert.deepStrictEqual(res.data, response))
-        .then(() => server.close(() => done()))
-        .catch(done);
+    const server = app.listen(8787).on('listening', async () => {
+      try {
+        const data = await app.service('myservice').get(10);
+        assert.deepStrictEqual(data, { id: 10 });
+
+        const res = await await axios.get('http://localhost:8787');
+        assert.deepStrictEqual(res.data, response);
+
+        server.close(() => done());
+      } catch (error) {
+        done(error);
+      }
     });
   });
 
   it('.listen calls .setup', done => {
-    const app = expressify(feathers());
+    const app = expressify.default(feathers());
     let called = false;
 
     app.use('/myservice', {
-      get (id) {
-        return Promise.resolve({ id });
+      async get (id) {
+        return { id };
       },
 
       setup (appParam, path) {
@@ -168,14 +174,14 @@ describe('@feathersjs/express', () => {
 
   it('passes middleware as options', () => {
     const feathersApp = feathers();
-    const app = expressify(feathersApp);
+    const app = expressify.default(feathersApp);
     const oldUse = feathersApp.use;
-    const a = (req, res, next) => next();
-    const b = (req, res, next) => next();
-    const c = (req, res, next) => next();
+    const a = (_req: Request, _res: Response, next: NextFunction) => next();
+    const b = (_req: Request, _res: Response, next: NextFunction) => next();
+    const c = (_req: Request, _res: Response, next: NextFunction) => next();
     const service = {
-      get (id) {
-        return Promise.resolve({ id });
+      async get (id: Id) {
+        return { id };
       }
     };
 
@@ -186,7 +192,7 @@ describe('@feathersjs/express', () => {
         before: [a, b],
         after: [c]
       });
-      return oldUse.apply(this, arguments);
+      return (oldUse as any).apply(this, arguments);
     };
 
     app.use('/myservice', a, b, service, c);
@@ -194,10 +200,10 @@ describe('@feathersjs/express', () => {
 
   it('throws an error for invalid middleware options', () => {
     const feathersApp = feathers();
-    const app = expressify(feathersApp);
+    const app = expressify.default(feathersApp);
     const service = {
-      get (id) {
-        return Promise.resolve({ id });
+      async get (id: any) {
+        return { id };
       }
     };
 
@@ -210,15 +216,15 @@ describe('@feathersjs/express', () => {
 
   it('Works with HTTPS', done => {
     const todoService = {
-      get (name) {
-        return Promise.resolve({
+      async get (name: Id) {
+        return {
           id: name,
           description: `You have to do ${name}!`
-        });
+        };
       }
     };
 
-    const app = expressify(feathers())
+    const app = expressify.default(feathers())
       .configure(expressify.rest())
       .use('/secureTodos', todoService);
 

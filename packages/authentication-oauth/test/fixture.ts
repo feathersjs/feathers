@@ -1,5 +1,5 @@
 import feathers, { Params } from '@feathersjs/feathers';
-import express from '@feathersjs/express';
+import express, { rest, errorHandler } from '@feathersjs/express';
 import memory from 'feathers-memory';
 import { AuthenticationService, JWTStrategy, AuthenticationRequest } from '@feathersjs/authentication';
 import { express as oauth, OAuthStrategy } from '../src';
@@ -25,7 +25,7 @@ const auth = new AuthenticationService(app);
 auth.register('jwt', new JWTStrategy());
 auth.register('test', new TestOAuthStrategy());
 
-app.configure(express.rest());
+app.configure(rest());
 app.set('host', '127.0.0.1');
 app.set('port', port);
 app.set('authentication', {
@@ -56,4 +56,4 @@ app.use('/authentication', auth);
 app.use('/users', memory());
 
 app.configure(oauth());
-app.use(express.errorHandler({ logger: null }));
+app.use(errorHandler({ logger: null }));
