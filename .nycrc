@@ -15,7 +15,9 @@
     "**/test/*",
     "**/dist/*",
     "**/*.dist.js",
-    "**/templates/*"
+    "**/templates/*",
+    "**/tests/*",
+    "**/adapter-tests/*"
   ],
   "print": "detail",
   "reporter": [
