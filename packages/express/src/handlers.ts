@@ -1,14 +1,31 @@
-const errors = require('@feathersjs/errors');
-const path = require('path');
+import path from 'path';
+import { NotFound, GeneralError } from '@feathersjs/errors';
+import { Request, Response, NextFunction, ErrorRequestHandler, RequestHandler } from 'express';
 
 const defaults = {
-  public: path.resolve(__dirname, 'public'),
+  public: path.resolve(__dirname, '..', 'public'),
   logger: console
 };
 const defaultHtmlError = path.resolve(defaults.public, 'default.html');
 
-module.exports = function (options = {}) {
-  options = Object.assign({}, defaults, options);
+export function notFound ({ verbose = false } = {}): RequestHandler {
+  return function (req: Request, _res: Response, next: NextFunction) {
+    const { url } = req;
+    const message = `Page not found${verbose ? ': ' + url : ''}`;
+
+    next(new NotFound(message, { url }));
+  };
+}
+
+export type ErrorHandlerOptions = {
+  public?: string,
+  logger?: boolean|{ error?: (msg: any) => void, info?: (msg: any) => void },
+  html?: any,
+  json?: any
+};
+
+export function errorHandler (_options: ErrorHandlerOptions = {}): ErrorRequestHandler {
+  const options = Object.assign({}, defaults, _options);
 
   if (typeof options.html === 'undefined') {
     options.html = {
@@ -36,18 +53,18 @@ module.exports = function (options = {}) {
     }
 
     if (error.type !== 'FeathersError') {
-      let oldError = error;
-      
-      error = oldError.errors ? new errors.GeneralError(oldError.message, {
+      const oldError = error;
+
+      error = oldError.errors ? new GeneralError(oldError.message, {
         errors: oldError.errors
-      }) : new errors.GeneralError(oldError.message);
+      }) : new GeneralError(oldError.message);
 
       if (oldError.stack) {
         error.stack = oldError.stack;
       }
     }
 
-    const formatter = {};
+    const formatter: { [key: string]: any } = {};
 
     // If the developer passed a custom function for ALL html errors
     if (typeof options.html === 'function') {
@@ -72,7 +89,7 @@ module.exports = function (options = {}) {
     if (typeof options.json === 'function') {
       formatter['application/json'] = options.json;
     } else {
-      let handler = options.json[error.code] || options.json.default;
+      const handler = options.json[error.code] || options.json.default;
       // If the developer passed a custom function for individual json errors
       if (typeof handler === 'function') {
         formatter['application/json'] = handler;
@@ -83,7 +100,7 @@ module.exports = function (options = {}) {
         }
 
         formatter['application/json'] = function () {
-          let output = Object.assign({}, error.toJSON());
+          const output = Object.assign({}, error.toJSON());
 
           if (process.env.NODE_ENV === 'production') {
             delete output.stack;
@@ -110,4 +127,4 @@ module.exports = function (options = {}) {
       formatter['application/json'](error, req, res, next);
     }
   };
-};
+}

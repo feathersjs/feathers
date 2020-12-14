@@ -1,15 +1,22 @@
-const flatten = require('lodash/flatten');
-const merge = require('lodash/merge');
-const debug = require('debug')('@feathersjs/express/authentication');
+import Debug from 'debug';
+import { merge, flatten } from 'lodash';
+import { NextFunction, RequestHandler } from 'express';
 
-const normalizeStrategy = (_settings = [], ..._strategies) =>
+const debug = Debug('@feathersjs/express/authentication');
+
+type StrategyOptions = {
+  service?: string;
+  strategies: string[]
+};
+
+const normalizeStrategy = (_settings: string|StrategyOptions, ..._strategies: string[]) =>
   typeof _settings === 'string'
     ? { strategies: flatten([ _settings, ..._strategies ]) }
     : _settings;
 
-exports.parseAuthentication = (settings = {}) => {
+export function parseAuthentication (settings: any = {}): RequestHandler {
   return function (req, res, next) {
-    const { app } = req;
+    const { app } = req as any;
     const service = app.defaultAuthentication ? app.defaultAuthentication(settings.service) : null;
 
     if (service === null) {
@@ -25,7 +32,7 @@ exports.parseAuthentication = (settings = {}) => {
     }
 
     service.parse(req, res, ...authStrategies)
-      .then(authentication => {
+      .then((authentication: any) => {
         if (authentication) {
           debug('Parsed authentication from HTTP header', authentication);
           merge(req, {
@@ -39,21 +46,22 @@ exports.parseAuthentication = (settings = {}) => {
   };
 };
 
-exports.authenticate = (...strategies) => {
-  const settings = normalizeStrategy(...strategies);
+export function authenticate (_settings: string|StrategyOptions, ..._strategies: string[]) {
+  const settings = normalizeStrategy(_settings, ..._strategies);
 
   if (!Array.isArray(settings.strategies) || settings.strategies.length === 0) {
     throw new Error(`'authenticate' middleware requires at least one strategy name`);
   }
 
-  return function (req, res, next) {
+  return (_req: Request, _res: Response, next: NextFunction) => {
+    const req = _req as any;
     const { app, authentication } = req;
     const service = app.defaultAuthentication(settings.service);
 
     debug('Authenticating with Express middleware and strategies', settings.strategies);
 
     service.authenticate(authentication, req.feathers, ...settings.strategies)
-      .then(authResult => {
+      .then((authResult: any) => {
         debug('Merging request with', authResult);
         merge(req, authResult);
 

@@ -1,13 +1,18 @@
-const errors = require('@feathersjs/errors');
-const { omit } = require('@feathersjs/commons')._;
-const debug = require('debug')('@feathersjs/express/rest');
+import  Debug from 'debug';
+import { Request, Response, NextFunction } from 'express';
+import { MethodNotAllowed } from '@feathersjs/errors';
+import { _  } from '@feathersjs/commons';
+import { HookContext } from '@feathersjs/feathers';
 
-const statusCodes = {
+const { omit } = _;
+const debug = Debug('@feathersjs/express/rest');
+
+export const statusCodes = {
   created: 201,
   noContent: 204,
   methodNotAllowed: 405
 };
-const methodMap = {
+export const methodMap = {
   find: 'GET',
   get: 'GET',
   create: 'POST',
@@ -16,23 +21,23 @@ const methodMap = {
   remove: 'DELETE'
 };
 
-function getAllowedMethods (service, routes) {
+export function getAllowedMethods (service: any, routes: any) {
   if (routes) {
     return routes
-      .filter(({ method }) => typeof service[method] === 'function')
-      .map(methodRoute => methodRoute.verb.toUpperCase())
-      .filter((value, index, list) => list.indexOf(value) === index);
+      .filter(({ method }: any) => typeof service[method] === 'function')
+      .map((methodRoute: any) => methodRoute.verb.toUpperCase())
+      .filter((value: any, index: number, list: any) => list.indexOf(value) === index);
   }
 
   return Object.keys(methodMap)
-    .filter(method => typeof service[method] === 'function')
-    .map(method => methodMap[method])
+    .filter((method: any) => typeof service[method] === 'function')
+    .map((method: any) => (methodMap as any)[method])
     // Filter out duplicates
-    .filter((value, index, list) => list.indexOf(value) === index);
+    .filter((value: any, index: number, list: any) => list.indexOf(value) === index);
 }
 
-function makeArgsGetter (argsOrder) {
-  return (req, params) => argsOrder.map((argName) => {
+export function makeArgsGetter (argsOrder: any) {
+  return (req: Request, params: any) => argsOrder.map((argName: string) => {
     switch (argName) {
       case 'id':
         return req.params.__feathersId || null;
@@ -46,12 +51,12 @@ function makeArgsGetter (argsOrder) {
 
 // A function that returns the middleware for a given method and service
 // `getArgs` is a function that should return additional leading service arguments
-module.exports = function getHandler (method) {
-  return (service, routes) => {
+export function getHandler (method: string) {
+  return (service: any, routes: any) => {
     const getArgs = makeArgsGetter(service.methods[method]);
     const allowedMethods = getAllowedMethods(service, routes);
 
-    return function (req, res, next) {
+    return (req: Request, res: Response, next: NextFunction) => {
       const { query } = req;
       const route = omit(req.params, '__feathersId');
 
@@ -62,7 +67,7 @@ module.exports = function getHandler (method) {
         debug(`Method '${method}' not allowed on '${req.url}'`);
         res.status(statusCodes.methodNotAllowed);
 
-        return next(new errors.MethodNotAllowed(`Method \`${method}\` is not supported by this endpoint.`));
+        return next(new MethodNotAllowed(`Method \`${method}\` is not supported by this endpoint.`));
       }
 
       // Grab the service parameters. Use req.feathers
@@ -80,7 +85,7 @@ module.exports = function getHandler (method) {
       debug(`REST handler calling \`${method}\` from \`${req.url}\``);
 
       service[method](...args, true)
-        .then(hook => {
+        .then((hook: HookContext) => {
           const data = hook.dispatch !== undefined ? hook.dispatch : hook.result;
 
           res.data = data;
@@ -97,7 +102,7 @@ module.exports = function getHandler (method) {
 
           return next();
         })
-        .catch(hook => {
+        .catch((hook: HookContext) => {
           const { error } = hook;
 
           debug(`Error in handler: \`${error.message}\``);

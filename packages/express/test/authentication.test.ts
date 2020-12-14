@@ -1,11 +1,14 @@
-const assert = require('assert');
-const _axios = require('axios');
-const feathers = require('@feathersjs/feathers');
-const getApp = require('@feathersjs/authentication-local/test/fixture');
-const { authenticate } = require('@feathersjs/authentication');
-const omit = require('lodash/omit');
+import { omit } from 'lodash';
+import { strict as assert } from 'assert';
+import { default as _axios } from 'axios';
+import feathers from '@feathersjs/feathers';
 
-const expressify = require('../lib');
+// @ts-ignore
+import getApp from '@feathersjs/authentication-local/test/fixture';
+import { authenticate, AuthenticationResult } from '@feathersjs/authentication';
+import * as express from '../src';
+
+const expressify = express.default;
 const axios = _axios.create({
   baseURL: 'http://localhost:9876/'
 });
@@ -14,15 +17,15 @@ describe('@feathersjs/express/authentication', () => {
   const email = 'expresstest@authentication.com';
   const password = 'superexpress';
 
-  let app;
-  let server;
-  let user;
-  let authResult;
+  let app: express.Application;
+  let server: any;
+  let user: any;
+  let authResult: AuthenticationResult;
 
-  before(() => {
+  before(async () => {
     const expressApp = expressify(feathers())
-      .use(expressify.json())
-      .configure(expressify.rest());
+      .use(express.json())
+      .configure(express.rest());
 
     app = getApp(expressApp);
     server = app.listen(9876);
@@ -33,11 +36,11 @@ describe('@feathersjs/express/authentication', () => {
       }
     });
 
-    app.use('/protected', expressify.authenticate('jwt'), (req, res) => {
-      res.json(req.user);
+    app.use('/protected', express.authenticate('jwt'), (req, res) => {
+      res.json((req as any).user);
     });
 
-    app.use(expressify.errorHandler({
+    app.use(express.errorHandler({
       logger: false
     }));
 
@@ -45,18 +48,17 @@ describe('@feathersjs/express/authentication', () => {
       before: [ authenticate('jwt') ]
     });
 
-    return app.service('users').create({ email, password })
-      .then(result => {
-        user = result;
+    const result = await app.service('users').create({ email, password });
 
-        return axios.post('/authentication', {
-          strategy: 'local',
-          password,
-          email
-        });
-      }).then(res => {
-        authResult = res.data;
-      });
+    user = result;
+
+    const res = await axios.post('/authentication', {
+      strategy: 'local',
+      password,
+      email
+    });
+
+    authResult = res.data;
   });
 
   after(done => server.close(done));
@@ -154,6 +156,7 @@ describe('@feathersjs/express/authentication', () => {
   describe('authenticate middleware', () => {
     it('errors without valid strategies', () => {
       try {
+        // @ts-ignore
         authenticate();
         assert.fail('Should never get here');
       } catch (error) {

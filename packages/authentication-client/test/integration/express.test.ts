@@ -1,6 +1,6 @@
 import axios from 'axios';
 import feathers, { Application as FeathersApplication } from '@feathersjs/feathers';
-import express from '@feathersjs/express';
+import * as express from '@feathersjs/express';
 import rest from '@feathersjs/rest-client';
 
 import authClient from '../../src';
@@ -15,7 +15,7 @@ describe('@feathersjs/authentication-client Express integration', () => {
     const restApp = express.default(feathers())
       .use(express.json())
       .configure(express.rest())
-      .use(express.parseAuthentication('jwt'));
+      .use(express.parseAuthentication());
     app = getApp(restApp as unknown as FeathersApplication) as express.Application;
     app.use(express.errorHandler());
 

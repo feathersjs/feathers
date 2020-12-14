@@ -1,5 +1,5 @@
 import feathers, { Id, NullableId, Params } from '@feathersjs/feathers';
-import expressify from '@feathersjs/express';
+import expressify, { rest } from '@feathersjs/express';
 import bodyParser from 'body-parser';
 import { Service } from 'feathers-memory';
 import { FeathersError, NotAcceptable } from '@feathersjs/errors';
@@ -70,7 +70,7 @@ class TodoService extends Service {
 
 export default (configurer?: any) => {
   const app = expressify(feathers())
-    .configure(expressify.rest(function formatter (_req, res, next) {
+    .configure(rest(function formatter (_req, res, next) {
       if (!res.data) {
         next();
       }

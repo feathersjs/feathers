@@ -1,15 +1,50 @@
-const express = require('express');
-const Proto = require('uberproto');
-const debug = require('debug')('@feathersjs/express');
+// @ts-ignore
+import Proto from 'uberproto';
+import express, { Express, static as _static, json, raw, text, urlencoded, query } from 'express';
+import Debug from 'debug';
+import {
+  Application as FeathersApplication, Params as FeathersParams,
+  HookContext, ServiceMethods, SetupMethod
+} from '@feathersjs/feathers';
 
-const errorHandler = require('./error-handler');
-const authentication = require('./authentication');
-const notFound = require('./not-found-handler');
-const rest = require('./rest');
+import { errorHandler, notFound } from './handlers';
+import { rest } from './rest';
+import { parseAuthentication, authenticate } from './authentication';
 
-function feathersExpress (feathersApp, expressApp = express()) {
+export {
+  _static as static, json, raw, text, urlencoded, query,
+  errorHandler, notFound, rest, express as original,
+  authenticate, parseAuthentication
+};
+
+const debug = Debug('@feathersjs/express');
+
+declare module 'express-serve-static-core' {
+  interface Request {
+      feathers?: Partial<FeathersParams>;
+  }
+
+  interface Response {
+      data?: any;
+      hook?: HookContext;
+  }
+
+  type FeathersService = Partial<ServiceMethods<any> & SetupMethod>;
+
+  interface IRouterMatcher<T> {
+      // tslint:disable-next-line callable-types (Required for declaration merging)
+      <P extends Params = ParamsDictionary, ResBody = any, ReqBody = any>(
+          path: PathParams,
+          ...handlers: (RequestHandler<P, ResBody, ReqBody> | FeathersService | Application)[]
+      ): T;
+  }
+}
+
+export type Application<T = any> = Express & FeathersApplication<T>;
+
+export default function feathersExpress<T = any> (feathersApp?: FeathersApplication, expressApp: Express = express()): Application<T> {
   if (!feathersApp) {
-    return expressApp;
+    return expressApp as any;
   }
 
   if (typeof feathersApp.setup !== 'function') {
@@ -21,11 +56,10 @@ function feathersExpress (feathersApp, expressApp = express()) {
   }
 
   // An Uberproto mixin that provides the extended functionality
-  const mixin = {
-    use (location) {
-      let service;
-      let middleware = Array.from(arguments)
-        .slice(1)
+  const mixin: any = {
+    use (location: string) {
+      let service: any;
+      const middleware = Array.from(arguments).slice(1)
         .reduce(function (middleware, arg) {
           if (typeof arg === 'function' || Array.isArray(arg)) {
             middleware[service ? 'after' : 'before'].push(arg);
@@ -40,7 +74,7 @@ function feathersExpress (feathersApp, expressApp = express()) {
           after: []
         });
 
-      const hasMethod = methods => methods.some(name =>
+      const hasMethod = (methods: string[]) => methods.some(name =>
         (service && typeof service[name] === 'function')
       );
 
@@ -81,12 +115,6 @@ function feathersExpress (feathersApp, expressApp = express()) {
   return Proto.mixin(mixin, expressApp);
 }
 
-module.exports = feathersExpress;
-
-Object.assign(module.exports, express, authentication, {
-  default: feathersExpress,
-  original: express,
-  rest,
-  notFound,
-  errorHandler
-});
+if (typeof module !== 'undefined') {
+  module.exports = Object.assign(feathersExpress, module.exports);
+}
