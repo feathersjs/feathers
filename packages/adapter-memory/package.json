@@ -1,5 +1,5 @@
 {
-  "name": "feathers-memory",
+  "name": "@feathersjs/adapter-memory",
   "description": "An in memory service store",
   "version": "5.0.0-pre.0",
   "homepage": "https://github.com/feathersjs/databases",
@@ -49,6 +49,7 @@
     "sift": "^12.0.0"
   },
   "devDependencies": {
+    "@feathersjs/feathers": "^5.0.0-pre.0",
     "@feathersjs/adapter-tests": "^5.0.0-pre.0",
     "@types/mocha": "^8.0.4",
     "@types/node": "^14.14.10",

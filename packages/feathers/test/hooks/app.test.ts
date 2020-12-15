@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import { feathers, Application } from '../../src';
+import feathers, { Application } from '../../src';
 
 describe('app.hooks', () => {
   let app: Application;

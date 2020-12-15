@@ -21,7 +21,7 @@ const _select = (data: any, params: any, ...args: any[]) => {
   return base(JSON.parse(JSON.stringify(data)));
 };
 
-export class MemoryService<T = any> extends AdapterService<T> implements InternalServiceMethods<T> {
+export class Service<T = any> extends AdapterService<T> implements InternalServiceMethods<T> {
   options: MemoryServiceOptions;
   store: MemoryServiceStore<T>;
   _uId: number;
@@ -152,5 +152,5 @@ export class MemoryService<T = any> extends AdapterService<T> implements Interna
 }
 
 export function memory (options: Partial<MemoryServiceOptions> = {}) {
-  return new MemoryService(options);
+  return new Service(options);
 }

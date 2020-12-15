@@ -1,5 +1,5 @@
 import assert from 'assert';
-import {feathers} from '../../src';
+import feathers from '../../src';
 
 describe('`async` hooks', () => {
   describe('function([hook])', () => {
@@ -478,7 +478,7 @@ describe('`async` hooks', () => {
         get (id: any, params: any) {
           return Promise.resolve({
             id,
-            number: this.number,
+            number: (this as any).number,
             test: params.test
           });
         }

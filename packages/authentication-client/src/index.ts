@@ -3,7 +3,7 @@ import * as hooks from './hooks';
 import { Application } from '@feathersjs/feathers';
 import { Storage, MemoryStorage, StorageWrapper } from './storage';
 
-declare module '@feathersjs/feathers' {
+declare module '@feathersjs/feathers/lib/declarations' {
   interface Application<ServiceTypes = {}> {
     io?: any;
     rest?: any;

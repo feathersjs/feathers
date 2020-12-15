@@ -1,6 +1,13 @@
 import { NotImplemented, BadRequest, MethodNotAllowed } from '@feathersjs/errors';
-import { ServiceMethods, Params, Paginated, Id, NullableId } from '@feathersjs/feathers';
+import { ServiceMethods, Params, Id, NullableId } from '@feathersjs/feathers';
 import filterQuery from './filter-query';
+
+export interface Paginated<T> {
+  total: number;
+  limit: number;
+  skip: number;
+  data: T[];
+}
 
 const callMethod = (self: any, name: any, ...args: any[]) => {
   if (typeof self[name] !== 'function') {
@@ -104,7 +111,7 @@ export interface InternalServiceMethods<T = any> {
   _remove (id: NullableId, params?: Params): Promise<T | T[]>;
 }
 
-export class AdapterService<T = any> implements ServiceMethods<T> {
+export class AdapterService<T = any> implements ServiceMethods<T|Paginated<T>> {
   options: ServiceOptions;
 
   constructor (options: Partial<ServiceOptions>) {

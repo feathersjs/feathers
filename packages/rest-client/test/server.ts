@@ -1,7 +1,7 @@
+import bodyParser from 'body-parser';
 import feathers, { Id, NullableId, Params } from '@feathersjs/feathers';
 import expressify, { rest } from '@feathersjs/express';
-import bodyParser from 'body-parser';
-import { Service } from 'feathers-memory';
+import { Service } from '@feathersjs/adapter-memory';
 import { FeathersError, NotAcceptable } from '@feathersjs/errors';
 
 // eslint-disable-next-line no-extend-native

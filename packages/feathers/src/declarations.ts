@@ -198,13 +198,13 @@ export interface ServiceOverloads<T> {
   remove? (id: null, params?: Params): Promise<T[]>;
 }
 
-export interface ServiceAddons extends EventEmitter {
+export interface ServiceAddons<T> extends EventEmitter {
   id?: any;
   _serviceEvents: string[];
   methods: { [method: string]: string[] };
-  hooks (hooks: Partial<HooksObject>): this;
+  hooks (hooks: Partial<HooksObject<T>>): this;
 }
 
-export type Service<T> = ServiceOverloads<T> & ServiceAddons & ServiceMethods<T>;
+export type Service<T> = ServiceOverloads<T> & ServiceAddons<T> & ServiceMethods<T>;
 
 export type ServiceMixin = (service: Service<any>, path: string, options?: any) => void;
