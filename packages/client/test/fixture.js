@@ -1,7 +1,7 @@
 const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 const { rest } = require('@feathersjs/express');
-const memory = require('feathers-memory');
+const memory = require('@feathersjs/adapter-memory');
 
 // eslint-disable-next-line no-extend-native
 Object.defineProperty(Error.prototype, 'toJSON', {

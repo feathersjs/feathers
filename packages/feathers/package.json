@@ -13,8 +13,8 @@
     "socket.io",
     "realtime"
   ],
-  "main": "lib/index.js",
-  "types": "index.d.ts",
+  "main": "lib/",
+  "types": "lib/",
   "author": {
     "name": "Feathers contributors",
     "email": "hello@feathersjs.com",

@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { EventEmitter } from 'events';
 
-import { feathers } from '../src';
+import feathers from '../src';
 
 describe('Service events', () => {
   it('app is an event emitter', done => {
@@ -139,7 +139,9 @@ describe('Service events', () => {
       const app = feathers().use('/creator', {
         create (data: any) {
           if (Array.isArray(data)) {
-            return Promise.all(data.map(current => this.create(current)));
+            return Promise.all(data.map(current =>
+              (this as any).create(current))
+            );
           }
 
           return Promise.resolve(data);
@@ -170,7 +172,9 @@ describe('Service events', () => {
       const app = feathers().use('/creator', {
         update (id: any, data: any) {
           if (Array.isArray(data)) {
-            return Promise.all(data.map((current, index) => this.update(index, current)));
+            return Promise.all(data.map((current, index) =>
+              (this as any).update(index, current))
+            );
           }
           return Promise.resolve(Object.assign({ id }, data));
         }
@@ -200,7 +204,9 @@ describe('Service events', () => {
       const app = feathers().use('/creator', {
         patch (id: any, data: any) {
           if (Array.isArray(data)) {
-            return Promise.all(data.map((current, index) => this.patch(index, current)));
+            return Promise.all(data.map((current, index) =>
+              (this as any).patch(index, current))
+            );
           }
           return Promise.resolve(Object.assign({ id }, data));
         }
@@ -230,7 +236,9 @@ describe('Service events', () => {
       const app = feathers().use('/creator', {
         remove (id: any, data: any) {
           if (Array.isArray(data)) {
-            return Promise.all(data.map((current, index) => this.remove(index, current)));
+            return Promise.all(data.map((current, index) =>
+              (this as any).remove(index, current))
+            );
           }
           return Promise.resolve(Object.assign({ id }, data));
         }

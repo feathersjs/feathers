@@ -1,5 +1,5 @@
 import assert from 'assert';
-import {feathers} from '../../src';
+import feathers from '../../src';
 
 describe('`finally` hooks', () => {
   it('runs after `after` hooks, app level last', () => {

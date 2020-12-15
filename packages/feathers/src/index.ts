@@ -3,10 +3,11 @@ import Proto from 'uberproto';
 import { _ } from '@feathersjs/commons';
 import Application from './application';
 import version from './version';
+import { Application as ApplicationType } from './declarations'
 
 const baseObject = Object.create(null);
 
-export function feathers () {
+export default function feathers<ServiceTypes = {}> (): ApplicationType<ServiceTypes> {
   const app = Object.create(baseObject);
 
   // Mix in the base application

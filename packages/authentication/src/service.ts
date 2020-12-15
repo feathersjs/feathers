@@ -9,7 +9,7 @@ import jsonwebtoken from 'jsonwebtoken';
 
 const debug = Debug('@feathersjs/authentication/service');
 
-declare module '@feathersjs/feathers' {
+declare module '@feathersjs/feathers/lib/declarations' {
   interface Application<ServiceTypes = {}> {
 
     /**

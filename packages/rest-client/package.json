@@ -57,6 +57,7 @@
     "qs": "^6.9.4"
   },
   "devDependencies": {
+    "@feathersjs/adapter-memory": "^5.0.0-pre.0",
     "@feathersjs/express": "^5.0.0-pre.0",
     "@feathersjs/feathers": "^5.0.0-pre.0",
     "@feathersjs/tests": "^5.0.0-pre.0",
@@ -64,7 +65,6 @@
     "@types/node": "^14.14.10",
     "axios": "^0.21.0",
     "body-parser": "^1.19.0",
-    "feathers-memory": "^4.1.0",
     "mocha": "^8.2.1",
     "node-fetch": "^2.6.1",
     "rxjs": "^6.6.3",

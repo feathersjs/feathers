@@ -5,7 +5,7 @@ import { Application } from '@feathersjs/feathers';
 
 export const ROUTER = Symbol('@feathersjs/transport-commons/router');
 
-declare module '@feathersjs/feathers' {
+declare module '@feathersjs/feathers/lib/declarations' {
   interface Application<ServiceTypes> {
     lookup (path: string): { [key: string]: string };
   }

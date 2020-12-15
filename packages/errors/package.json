@@ -37,6 +37,15 @@
   "publishConfig": {
     "access": "public"
   },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "*.d.ts",
+    "*.js"
+  ],
   "devDependencies": {
     "@feathersjs/feathers": "^5.0.0-pre.0",
     "@types/mocha": "^8.0.4",

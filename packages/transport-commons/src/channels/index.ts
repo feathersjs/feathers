@@ -1,7 +1,5 @@
 import Debug from 'debug';
-import compact from 'lodash/compact';
-import flattenDeep from 'lodash/flattenDeep';
-import noop from 'lodash/noop';
+import { compact, flattenDeep, noop } from 'lodash';
 import { Channel, RealTimeConnection } from './channel/base';
 import { CombinedChannel } from './channel/combined';
 import { channelMixin, publishMixin, keys, PublishMixin, Event, Publisher } from './mixins';
@@ -10,7 +8,7 @@ import { Application, Service } from '@feathersjs/feathers';
 const debug = Debug('@feathersjs/transport-commons/channels');
 const { CHANNELS } = keys;
 
-declare module '@feathersjs/feathers' {
+declare module '@feathersjs/feathers/lib/declarations' {
   interface ServiceAddons<T> {
     publish (publisher: Publisher<T>): this;
     publish (event: Event, publisher: Publisher<T>): this;
@@ -19,7 +17,7 @@ declare module '@feathersjs/feathers' {
     registerPublisher (event: Event, publisher: Publisher<T>): this;
   }
 
-  interface Application<ServiceTypes> {
+  interface Application<ServiceTypes = {}> {
     channels: string[];
 
     channel (name: string[]): Channel;

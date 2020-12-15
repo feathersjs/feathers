@@ -1,6 +1,6 @@
 import { _ } from '@feathersjs/commons';
 
-export { AdapterService, InternalServiceMethods, ServiceOptions } from './service';
+export { AdapterService, InternalServiceMethods, ServiceOptions, Paginated } from './service';
 export { default as filterQuery, FILTERS, OPERATORS } from './filter-query';
 export * from './sort';
 

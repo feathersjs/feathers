@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { hooks } from '@feathersjs/hooks';
-import { feathers, activateHooks } from '../../src';
+import feathers, { activateHooks, Id } from '../../src';
 
 describe('hooks basics', () => {
   it('mix @feathersjs/hooks and .hooks', async () => {
@@ -217,7 +217,7 @@ describe('hooks basics', () => {
 
   it('not returning a promise errors', () => {
     const app = feathers().use('/dummy', {
-      get () {
+      async get () {
         return {};
       }
     });
@@ -327,7 +327,9 @@ describe('hooks basics', () => {
       methods: {
         custom: ['id', 'data', 'params']
       },
-      get () {},
+      async get (id: Id) {
+        return { id };
+      },
       custom (id: any, data: any, params: any) {
         return Promise.resolve([id, data, params]);
       },
@@ -389,7 +391,9 @@ describe('hooks basics', () => {
       methods: {
         custom: ['id', 'params']
       },
-      get () {},
+      async get (id: Id) {
+        return { id };
+      },
       custom (id: any, params: any) {
         return Promise.resolve([id, params]);
       }

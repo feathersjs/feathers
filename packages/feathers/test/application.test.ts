@@ -1,7 +1,7 @@
 // @ts-ignore
 import Proto from 'uberproto';
 import assert from 'assert';
-import { feathers, version } from '../src'
+import feathers, { Id, version } from '../src'
 import { HookContext } from '@feathersjs/hooks/lib';
 
 describe('Feathers application', () => {
@@ -36,6 +36,7 @@ describe('Feathers application', () => {
     const app = feathers();
 
     try {
+      // @ts-ignore
       app.service('/test', {});
     } catch (e) {
       assert.strictEqual(e.message, 'Registering a new service with `app.service(path, service)` is no longer supported. Use `app.use(path, service)` instead.');
@@ -84,6 +85,7 @@ describe('Feathers application', () => {
       }
 
       try {
+        // @ts-ignore
         app.use({}, {});
       } catch (e) {
         assert.strictEqual(e.message, `'[object Object]' is not a valid service path.`);
@@ -342,7 +344,7 @@ describe('Feathers application', () => {
 
       app.setup();
 
-      assert.ok(app._isSetup);
+      assert.ok((app as any)._isSetup);
       assert.strictEqual(setupCount, 2);
     });
 
@@ -353,7 +355,7 @@ describe('Feathers application', () => {
 
       app.use('/dummy', {
         setup (appRef: any, path: any) {
-          assert.ok(app._isSetup);
+          assert.ok((app as any)._isSetup);
           assert.strictEqual(appRef, app);
           assert.strictEqual(path, 'dummy');
         }
@@ -365,7 +367,9 @@ describe('Feathers application', () => {
       let _setup = false;
 
       app.use('/dummy', {
-        get () {},
+        async get (id: Id) {
+          return { id };
+        },
         _setup (appRef: any, path: any) {
           _setup = true;
           assert.strictEqual(appRef, app);
@@ -391,7 +395,9 @@ describe('Feathers application', () => {
 
       app.use('/dummy', {
         dummy: true,
-        get () {}
+        async get (id: Id) {
+          return { id };
+        }
       });
 
       assert.ok(providerRan);
@@ -414,7 +420,9 @@ describe('Feathers application', () => {
 
       app.use('/dummy', {
         dummy: true,
-        get () {}
+        async get (id: Id) {
+          return { id };
+        }
       }, opts);
 
       assert.ok(providerRan);
