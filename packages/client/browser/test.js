@@ -1,11 +1,11 @@
 const assert = require('assert');
 const baseTests = require('@feathersjs/tests/lib/client');
-const { memory } = require('@feathersjs/adapter-memory');
+const { Service } = require('@feathersjs/adapter-memory');
 
 const feathers = require('../dist/feathers');
 
 // Create an in-memory CRUD service for our Todos
-class TodoService extends memory.Service {
+class TodoService extends Service {
   get (id, params) {
     if (params.query.error) {
       return Promise.reject(new Error('Something went wrong'));

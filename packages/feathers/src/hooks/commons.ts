@@ -200,19 +200,29 @@ export function enableHooks (obj: any, methods: string[], types: string[]) {
   });
 }
 
-async function handleError (hook: any, context: any, onError: any) {
+function handleError (hook: any, context: any, onError: any) {
   try {
-    const result = await hook.call(context.self, context);
-    Object.assign(context, omit(result, 'arguments', 'path'));
-  } catch (errorError) {
+    return Promise.resolve(hook.call(context.self, context))
+      .catch((error: any) => {
+        if (typeof onError === 'function') {
+          onError(error, context);
+        }
+        throw error;
+      })
+      .then((result: any) => {
+        Object.assign(context, omit(result, 'arguments', 'path'));
+
+        if (typeof context.error !== 'undefined') {
+          throw context.error;
+        }
+
+        return result;
+      });
+  } catch(errorError: any) {
     if (typeof onError === 'function') {
       onError(errorError, context);
     }
     throw errorError;
-  }
-
-  if (typeof context.error !== 'undefined') {
-    throw context.error;
   }
 }
 
@@ -227,51 +237,47 @@ export function lastHook (context: any, next: any) {
 }
 
 export function toBeforeHook (hook: any) {
-  return async (context: any, next: any) => {
-    const result = await hook.call(context.self, context);
-    Object.assign(context, omit(result, 'arguments', 'path'));
-    await next();
+  return (context: any, next: any) => {
+    return Promise.resolve(hook.call(context.self, context))
+      .then((result: any) => Object.assign(context, omit(result, 'arguments', 'path')))
+      .then(() => next());
   };
 }
 
 export function toAfterHook (hook: any) {
-  return async (context: any, next: any) => {
-    await next();
-    const result = await hook.call(context.self, context);
-    Object.assign(context, omit(result, 'arguments', 'path'));
-  };
+  return (context: any, next: any) => {
+    return next()
+      .then(() => hook.call(context.self, context))
+      .then((result: any) => Object.assign(context, omit(result, 'arguments', 'path')));
+  }
 }
 
 export function toErrorHook (hook: any, onError: any, control: any) {
-  return async (context: any, next: any) => {
-    try {
-      await next();
-    } catch (error) {
-      if (typeof control === 'function') {
-        control(context);
-      }
+  return (context: any, next: any) => {
+    return next()
+      .catch((error: any) => {
+        if (typeof control === 'function') {
+          control(context);
+        }
 
-      context.error = error;
-      context.result = undefined;
+        context.error = error;
+        context.result = undefined;
 
-      await handleError(hook, context, onError);
-    }
+        return handleError(hook, context, onError);
+      });
   };
 }
 
 export function toFinallyHook (hook: any, onError: any, control: any) {
-  return async (context: any, next: any) => {
-    try {
-      await next();
-    } catch (error) {
-      throw error;
-    } finally {
-      if (typeof control === 'function') {
-        control(context);
-      }
+  return (context: any, next: any) => {
+    return next()
+      .finally(() => {
+        if (typeof control === 'function') {
+          control(context);
+        }
 
-      await handleError(hook, context, onError);
-    }
+        return handleError(hook, context, onError);
+      })
   };
 }
 

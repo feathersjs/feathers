@@ -1,16 +1,15 @@
-const feathers = require('@feathersjs/feathers');
-const express = require('@feathersjs/express');
-const { rest } = require('@feathersjs/express');
-const memory = require('@feathersjs/adapter-memory');
+import feathers, { Application, HookContext, Id, Params } from '@feathersjs/feathers';
+import * as express from '@feathersjs/express';
+import { Service } from '@feathersjs/adapter-memory';
 
 // eslint-disable-next-line no-extend-native
 Object.defineProperty(Error.prototype, 'toJSON', {
-  value: function () {
-    var alt = {};
+  value () {
+    const alt: any = {};
 
-    Object.getOwnPropertyNames(this).forEach(function (key) {
+    Object.getOwnPropertyNames(this).forEach((key: string) => {
       alt[key] = this[key];
-    }, this);
+    });
 
     return alt;
   },
@@ -18,10 +17,10 @@ Object.defineProperty(Error.prototype, 'toJSON', {
 });
 
 // Create an in-memory CRUD service for our Todos
-class TodoService extends memory.Service {
-  get (id, params) {
+class TodoService extends Service {
+  async get (id: Id, params: Params) {
     if (params.query.error) {
-      return Promise.reject(new Error('Something went wrong'));
+      throw new Error('Something went wrong');
     }
 
     return super.get(id).then(data =>
@@ -30,12 +29,12 @@ class TodoService extends memory.Service {
   }
 }
 
-module.exports = function (configurer) {
-  const app = express(feathers())
-    .configure(rest());
+export default (configurer?: (app: Application) => void) => {
+  const app = express.default(feathers())
+    .configure(express.rest());
 
   if (typeof configurer === 'function') {
-    configurer.call(app);
+    configurer.call(app, app);
   }
 
   // Parse HTTP bodies
@@ -57,7 +56,7 @@ module.exports = function (configurer) {
   service.create(testTodo);
   service.hooks({
     after: {
-      remove (hook) {
+      remove (hook: HookContext) {
         if (hook.id === null) {
           service._uId = 0;
           return service.create(testTodo)

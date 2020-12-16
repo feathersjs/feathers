@@ -23,49 +23,46 @@
   "engines": {
     "node": ">= 10"
   },
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "dist/feathers",
+  "types": "dist/",
   "files": [
     "CHANGELOG.md",
     "LICENSE",
     "README.md",
     "src/**",
-    "lib/**",
     "dist/**",
     "*.d.ts",
     "*.js"
   ],
   "scripts": {
-    "clean": "shx rm -rf dist/ && shx mkdir -p dist",
+    "compile": "tsc",
     "version": "npm run build",
-    "mocha": "mocha --config ../../.mocharc.json test/ --recursive",
+    "clean": "shx rm -rf dist/ && shx mkdir -p dist",
+    "build": "npm run clean && npm run compile && npm run webpack",
+    "mocha": "mocha --config ../../.mocharc.ts.json --recursive test/**/*.test.ts",
     "test": "npm run build && npm run mocha",
     "test:browser": "mocha-puppeteer browser/test.js",
-    "build": "npm run clean && npm run webpack",
     "webpack": "parallel-webpack"
   },
   "browserslist": [
     "last 2 versions",
-    "IE 10"
+    "IE 11"
   ],
   "dependencies": {
+    "@feathersjs/feathers": "^5.0.0-pre.0",
     "@feathersjs/authentication-client": "^5.0.0-pre.0",
     "@feathersjs/errors": "^5.0.0-pre.0",
-    "@feathersjs/express": "^5.0.0-pre.0",
-    "@feathersjs/feathers": "^5.0.0-pre.0",
     "@feathersjs/rest-client": "^5.0.0-pre.0",
-    "@feathersjs/socketio": "^5.0.0-pre.0",
     "@feathersjs/socketio-client": "^5.0.0-pre.0"
   },
   "devDependencies": {
     "@feathersjs/adapter-memory": "^5.0.0-pre.0",
+    "@feathersjs/tests": "^5.0.0-pre.0",
+    "@feathersjs/socketio": "^5.0.0-pre.0",
+    "@feathersjs/express": "^5.0.0-pre.0",
     "@babel/core": "^7.12.9",
     "@babel/preset-env": "^7.12.7",
-    "@feathersjs/tests": "^5.0.0-pre.0",
     "babel-loader": "^8.2.2",
-    "body-parser": "^1.19.0",
-    "jquery": "^3.5.1",
-    "jsdom": "^16.4.0",
     "mocha": "^8.2.1",
     "mocha-puppeteer": "^0.14.0",
     "node-fetch": "^2.6.1",
@@ -73,11 +70,10 @@
     "shx": "^0.3.3",
     "socket.io-client": "^3.0.3",
     "superagent": "^6.1.0",
-    "uglifyjs-webpack-plugin": "^2.2.0",
+    "ts-loader": "^8.0.12",
+    "typescript": "^4.1.2",
     "webpack": "^5.10.0",
-    "webpack-merge": "^5.4.0",
-    "ws": "^7.4.1",
-    "xhr2": "^0.2.0"
+    "webpack-merge": "^5.4.0"
   },
   "gitHead": "e6b82b809c21da298501a12b82e72e166468994b"
 }

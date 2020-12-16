@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig",
+  "sourceMap": false,
+  "include": [
+    "src/**/*.ts"
+  ],
+  "compilerOptions": {
+    "outDir": "dist/"    
+  }
+}
