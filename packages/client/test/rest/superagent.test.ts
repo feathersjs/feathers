@@ -1,12 +1,12 @@
-const superagent = require('superagent');
-const baseTests = require('@feathersjs/tests/lib/client');
+import superagent from 'superagent';
+import { setupTests } from '@feathersjs/tests/src/client';
 
-const app = require('../fixture');
-const feathers = require('../../');
+import * as feathers from '../../dist/feathers';
+import app from '../fixture';
 
 describe('Superagent REST connector', function () {
   const rest = feathers.rest('http://localhost:8889');
-  const client = feathers()
+  const client = feathers.default()
     .configure(rest.superagent(superagent));
 
   before(function (done) {
@@ -17,5 +17,5 @@ describe('Superagent REST connector', function () {
     this.server.close(done);
   });
 
-  baseTests(client, 'todos');
+  setupTests(client, 'todos');
 });

@@ -1,12 +1,12 @@
-const fetch = require('node-fetch');
-const baseTests = require('@feathersjs/tests/lib/client');
+import fetch from 'node-fetch';
+import { setupTests } from '@feathersjs/tests/src/client';
 
-const app = require('../fixture');
-const feathers = require('../../index');
+import * as feathers from '../../dist/feathers';
+import app from '../fixture';
 
 describe('fetch REST connector', function () {
   const rest = feathers.rest('http://localhost:8889');
-  const client = feathers()
+  const client = feathers.default()
     .configure(rest.fetch(fetch));
 
   before(function (done) {
@@ -17,5 +17,5 @@ describe('fetch REST connector', function () {
     this.server.close(done);
   });
 
-  baseTests(client, 'todos');
+  setupTests(client, 'todos');
 });
