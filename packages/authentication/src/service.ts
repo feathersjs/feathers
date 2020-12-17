@@ -27,7 +27,8 @@ declare module '@feathersjs/feathers/lib/declarations' {
   }
 }
 
-export type AuthenticationService = ServiceAddons<AuthenticationResult>
+// eslint-disable-next-line
+export interface AuthenticationService extends ServiceAddons<AuthenticationResult> {}
 
 export class AuthenticationService extends AuthenticationBase implements Partial<ServiceMethods<AuthenticationResult>> {
   constructor (app: Application, configKey = 'authentication', options = {}) {

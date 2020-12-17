@@ -37,7 +37,7 @@ describe('@feathersjs/express/authentication', () => {
     });
 
     app.use('/protected', express.authenticate('jwt'), (req, res) => {
-      res.json((req ).user);
+      res.json((req as any).user);
     });
 
     app.use(express.errorHandler({

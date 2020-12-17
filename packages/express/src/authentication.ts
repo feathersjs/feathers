@@ -16,7 +16,7 @@ const normalizeStrategy = (_settings: string|StrategyOptions, ..._strategies: st
 
 export function parseAuthentication (settings: any = {}): RequestHandler {
   return function (req, res, next) {
-    const { app } = req ;
+    const app = req.app as any;
     const service = app.defaultAuthentication ? app.defaultAuthentication(settings.service) : null;
 
     if (service === null) {
