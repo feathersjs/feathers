@@ -39,6 +39,9 @@
     "test": "npm run compile && npm run mocha",
     "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "directories": {
     "lib": "lib"
   },
