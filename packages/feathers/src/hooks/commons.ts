@@ -32,42 +32,6 @@ export function createHookObject (method: string, data: any = {}) {
   });
 }
 
-// Fallback used by `makeArguments` which usually won't be used
-export function defaultMakeArguments (hook: any) {
-  const result = [];
-
-  if (typeof hook.id !== 'undefined') {
-    result.push(hook.id);
-  }
-
-  if (hook.data) {
-    result.push(hook.data);
-  }
-
-  result.push(hook.params || {});
-
-  return result;
-}
-
-// Turns a hook object back into a list of arguments
-// to call a service method with
-export function makeArguments (hook: any) {
-  switch (hook.method) {
-    case 'find':
-      return [ hook.params ];
-    case 'get':
-    case 'remove':
-      return [ hook.id, hook.params ];
-    case 'update':
-    case 'patch':
-      return [ hook.id, hook.data, hook.params ];
-    case 'create':
-      return [ hook.data, hook.params ];
-  }
-
-  return defaultMakeArguments(hook);
-}
-
 // Converts different hook registration formats into the
 // same internal format
 export function convertHookData (obj: any) {
