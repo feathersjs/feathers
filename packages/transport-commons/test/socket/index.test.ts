@@ -79,7 +79,7 @@ describe('@feathersjs/transport-commons', () => {
 
       socket.emit('get', null, (error: any) => {
         assert.strictEqual(error.name, 'NotFound');
-        assert.strictEqual(error.message, `Service 'null' not found`);
+        assert.strictEqual(error.message, 'Service \'null\' not found');
         done();
       });
     });

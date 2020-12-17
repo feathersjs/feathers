@@ -1,4 +1,4 @@
-/* tslint:disable:no-console */
+/* eslint-disable no-console */
 import basicTests from './basic';
 import methodTests from './methods';
 import syntaxTests from './syntax';

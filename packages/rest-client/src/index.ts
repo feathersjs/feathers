@@ -36,7 +36,7 @@ export interface Transport {
   axios: Handler;
 }
 
-export default function restClient (base: string = '') {
+export default function restClient (base = '') {
   const result: any = { Base };
 
   Object.keys(transports).forEach(key => {

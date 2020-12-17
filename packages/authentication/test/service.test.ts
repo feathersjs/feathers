@@ -228,7 +228,7 @@ describe('authentication/service', () => {
         app.setup();
         assert.fail('Should never get here');
       } catch (error) {
-        assert.strictEqual(error.message, `A 'secret' must be provided in your authentication configuration`);
+        assert.strictEqual(error.message, 'A \'secret\' must be provided in your authentication configuration');
       }
     });
 
@@ -244,7 +244,7 @@ describe('authentication/service', () => {
         otherApp.setup();
         assert.fail('Should never get here');
       } catch (error) {
-        assert.strictEqual(error.message, `The 'service' option is not set in the authentication configuration`);
+        assert.strictEqual(error.message, 'The \'service\' option is not set in the authentication configuration');
       }
     });
 
@@ -262,7 +262,7 @@ describe('authentication/service', () => {
         otherApp.setup();
         assert.fail('Should never get here');
       } catch (error) {
-        assert.strictEqual(error.message, `The 'users' entity service does not exist (set to 'null' if it is not required)`);
+        assert.strictEqual(error.message, 'The \'users\' entity service does not exist (set to \'null\' if it is not required)');
       }
     });
 
@@ -286,7 +286,7 @@ describe('authentication/service', () => {
         otherApp.setup();
         assert.fail('Should never get here');
       } catch (error) {
-        assert.strictEqual(error.message, `The 'users' service does not have an 'id' property and no 'entityId' option is set.`);
+        assert.strictEqual(error.message, 'The \'users\' service does not have an \'id\' property and no \'entityId\' option is set.');
       }
     });
 

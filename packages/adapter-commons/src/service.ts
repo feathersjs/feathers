@@ -173,7 +173,7 @@ export class AdapterService<T = any> implements ServiceMethods<T|Paginated<T>> {
 
   create (data: Partial<T> | Partial<T>[], params?: Params): Promise<T | T[]> {
     if (Array.isArray(data) && !this.allowsMulti('create')) {
-      return Promise.reject(new MethodNotAllowed(`Can not create multiple entries`));
+      return Promise.reject(new MethodNotAllowed('Can not create multiple entries'));
     }
 
     return callMethod(this, '_create', data, params);
@@ -182,7 +182,7 @@ export class AdapterService<T = any> implements ServiceMethods<T|Paginated<T>> {
   update (id: Id, data: T, params?: Params): Promise<T> {
     if (id === null || Array.isArray(data)) {
       return Promise.reject(new BadRequest(
-        `You can not replace multiple instances. Did you mean 'patch'?`
+        'You can not replace multiple instances. Did you mean \'patch\'?'
       ));
     }
 
@@ -191,7 +191,7 @@ export class AdapterService<T = any> implements ServiceMethods<T|Paginated<T>> {
 
   patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T | T[]> {
     if (id === null && !this.allowsMulti('patch')) {
-      return Promise.reject(new MethodNotAllowed(`Can not patch multiple entries`));
+      return Promise.reject(new MethodNotAllowed('Can not patch multiple entries'));
     }
 
     return callMethod(this, '_patch', id, data, params);
@@ -199,7 +199,7 @@ export class AdapterService<T = any> implements ServiceMethods<T|Paginated<T>> {
 
   remove (id: NullableId, params?: Params): Promise<T | T[]> {
     if (id === null && !this.allowsMulti('remove')) {
-      return Promise.reject(new MethodNotAllowed(`Can not remove multiple entries`));
+      return Promise.reject(new MethodNotAllowed('Can not remove multiple entries'));
     }
 
     return callMethod(this, '_remove', id, params);

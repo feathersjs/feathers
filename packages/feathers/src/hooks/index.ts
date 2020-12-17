@@ -167,7 +167,7 @@ export default function () {
 
     app.mixins.push(hookMixin);
   };
-};
+}
 
 export function activateHooks (args: any[]) {
   return (fn: any) => {

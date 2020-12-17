@@ -5,10 +5,6 @@ import plugin from '../src';
 describe('@feathersjs/configuration', () => {
   const app: Application = feathers().configure(plugin());
 
-  it('exports default', () => {
-    assert.ok(typeof require('../lib') === 'function');
-  });
-
   it('initialized app with default.json', () => {
     assert.equal(app.get('port'), 3030);
     assert.deepEqual(app.get('array'), [

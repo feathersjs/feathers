@@ -8,7 +8,7 @@ export type ParamsGetter = (socket: Socket) => any;
 export type NextFunction = (err?: any) => void;
 export interface FeathersSocket extends Socket {
   feathers?: Params
-};
+}
 
 export const disconnect = (app: Application, getParams: ParamsGetter) =>
   (socket: FeathersSocket, next: NextFunction) => {

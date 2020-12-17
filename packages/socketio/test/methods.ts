@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import { verify } from '@feathersjs/tests/lib/fixture';
+import { verify } from '@feathersjs/tests/src/fixture';
 
 export default (name: string, options: any) => {
   const call = (method: string, ...args: any[]) =>
@@ -13,7 +13,7 @@ export default (name: string, options: any) => {
       );
     });
 
-  it(`invalid arguments cause an error`, () =>
+  it('invalid arguments cause an error', () =>
     call('find', 1, {}).catch(e =>
       assert.strictEqual(e.message, 'Too many arguments for \'find\' method')
     )
@@ -54,9 +54,9 @@ export default (name: string, options: any) => {
     }
   });
 
-  it(`.create`, async () => {
+  it('.create', async () => {
     const original = {
-      name: `creating`
+      name: 'creating'
     };
 
     const data = await call('create', original, {});
@@ -64,9 +64,9 @@ export default (name: string, options: any) => {
     verify.create(original, data);
   });
 
-  it(`.create without parameters`, async () => {
+  it('.create without parameters', async () => {
     const original = {
-      name: `creating again`
+      name: 'creating again'
     };
 
     const data = await call('create', original);
@@ -86,7 +86,7 @@ export default (name: string, options: any) => {
 
   it('.update many', async () => {
     const original = {
-      name: `updating`,
+      name: 'updating',
       many: true
     };
 
@@ -97,7 +97,7 @@ export default (name: string, options: any) => {
 
   it('.patch', async () => {
     const original = {
-      name: `patching`
+      name: 'patching'
     };
 
     const data = await call('patch', 25, original);
@@ -107,7 +107,7 @@ export default (name: string, options: any) => {
 
   it('.patch many', async () => {
     const original = {
-      name: `patching`,
+      name: 'patching',
       many: true
     };
 

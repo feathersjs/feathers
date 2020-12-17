@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import bcrypt from 'bcryptjs';
 import get from 'lodash/get';
 import omit from 'lodash/omit';
@@ -63,7 +64,7 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
     const list = Array.isArray(result) ? result : result.data;
 
     if (!Array.isArray(list) || list.length === 0) {
-      debug(`No entity found`);
+      debug('No entity found');
 
       throw new NotAuthenticated(errorMessage);
     }

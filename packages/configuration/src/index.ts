@@ -15,7 +15,7 @@ export default function init () {
     Object.keys(config).forEach(name => {
       const value = (config as any)[name];
       debug(`Setting ${name} configuration value to`, value);
-      app!.set(name, value);
+      app.set(name, value);
     });
 
     return config;

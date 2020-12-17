@@ -19,7 +19,7 @@ Object.defineProperty(Error.prototype, 'toJSON', {
   writable: true
 });
 
-const errorHandler = function (error: FeathersError, _req: any, res: any, _next: any) {
+const errorHandler = function (error: FeathersError, _req: any, res: any, _next: any) { // eslint-disable-line @typescript-eslint/no-unused-vars
   const code = !isNaN(parseInt(error.code as any, 10)) ? parseInt(error.code as any, 10) : 500;
   res.status(code);
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { strict as assert } from 'assert';
 import axios from 'axios';
 
@@ -564,7 +565,7 @@ describe('@feathersjs/express/rest provider', () => {
 
     it('properly serializes error for nested routes (#1096)', async () => {
       try {
-        await axios.get(`http://localhost:6880/theApp/myId/todo/test?error=true`);
+        await axios.get('http://localhost:6880/theApp/myId/todo/test?error=true');
         assert.fail('Should never het here');
       } catch (error) {
         const { response } = error;

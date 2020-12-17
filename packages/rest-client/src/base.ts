@@ -66,7 +66,7 @@ export abstract class Base {
 
   get (id: Id, params: Params = {}) {
     if (typeof id === 'undefined') {
-      return Promise.reject(new Error(`id for 'get' can not be undefined`));
+      return Promise.reject(new Error('id for \'get\' can not be undefined'));
     }
 
     return this.request({
@@ -87,7 +87,7 @@ export abstract class Base {
 
   update (id: NullableId, body: any, params: Params = {}) {
     if (typeof id === 'undefined') {
-      return Promise.reject(new Error(`id for 'update' can not be undefined, only 'null' when updating multiple entries`));
+      return Promise.reject(new Error('id for \'update\' can not be undefined, only \'null\' when updating multiple entries'));
     }
 
     return this.request({
@@ -100,7 +100,7 @@ export abstract class Base {
 
   patch (id: NullableId, body: any, params: Params = {}) {
     if (typeof id === 'undefined') {
-      return Promise.reject(new Error(`id for 'patch' can not be undefined, only 'null' when updating multiple entries`));
+      return Promise.reject(new Error('id for \'patch\' can not be undefined, only \'null\' when updating multiple entries'));
     }
 
     return this.request({
@@ -113,7 +113,7 @@ export abstract class Base {
 
   remove (id: NullableId, params: Params = {}) {
     if (typeof id === 'undefined') {
-      return Promise.reject(new Error(`id for 'remove' can not be undefined, only 'null' when removing multiple entries`));
+      return Promise.reject(new Error('id for \'remove\' can not be undefined, only \'null\' when removing multiple entries'));
     }
 
     return this.request({

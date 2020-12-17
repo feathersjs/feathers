@@ -31,13 +31,10 @@ declare module 'express-serve-static-core' {
 
   type FeathersService = Partial<ServiceMethods<any> & SetupMethod>;
 
-  interface IRouterMatcher<T> {
-      // tslint:disable-next-line callable-types (Required for declaration merging)
-      <P extends Params = ParamsDictionary, ResBody = any, ReqBody = any>(
+  type IRouterMatcher<T> = <P extends Params = ParamsDictionary, ResBody = any, ReqBody = any>(
           path: PathParams,
           ...handlers: (RequestHandler<P, ResBody, ReqBody> | FeathersService | Application)[]
-      ): T;
-  }
+      ) => T;
 }
 
 export type Application<T = any> = Express & FeathersApplication<T>;

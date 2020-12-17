@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import assert from 'assert';
 import { NotImplemented } from '@feathersjs/errors';
 import { AdapterService, InternalServiceMethods } from '../src';

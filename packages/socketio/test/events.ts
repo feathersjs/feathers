@@ -1,7 +1,7 @@
 import { strict as assert } from 'assert';
 import { io, Socket } from 'socket.io-client';
-import { verify } from '@feathersjs/tests/lib/fixture';
-import { RealTimeConnection } from '@feathersjs/transport-commons/lib/channels/channel/base';
+import { verify } from '@feathersjs/tests/src/fixture';
+import { RealTimeConnection } from '@feathersjs/transport-commons/src/channels/channel/base';
 
 export default (name: string, options: any) => {
   const call = (method: string, ...args: any[]) => {
@@ -48,7 +48,7 @@ export default (name: string, options: any) => {
 
     it(`${name} created`, done => {
       const original = {
-        name: `created event`
+        name: 'created event'
       };
 
       socket.once(`${name} created`, verifyEvent(done, data =>
@@ -60,7 +60,7 @@ export default (name: string, options: any) => {
 
     it(`${name} updated`, done => {
       const original = {
-        name: `updated event`
+        name: 'updated event'
       };
 
       socket.once(`${name} updated`, verifyEvent(done, (data: any) =>
@@ -72,7 +72,7 @@ export default (name: string, options: any) => {
 
     it(`${name} patched`, done => {
       const original = {
-        name: `patched event`
+        name: 'patched event'
       };
 
       socket.once(`${name} patched`, verifyEvent(done, (data: any) =>
@@ -93,7 +93,7 @@ export default (name: string, options: any) => {
     it(`${name} custom events`, done => {
       const service = options.app.service(name);
       const original = {
-        name: `created event`
+        name: 'created event'
       };
       const old = service.create;
 
@@ -105,7 +105,7 @@ export default (name: string, options: any) => {
 
       socket.once(`${name} log`, verifyEvent(done, (data: any) => {
         assert.deepStrictEqual(data, {
-          message: `Custom log event`, data: original
+          message: 'Custom log event', data: original
         });
         service.create = old;
       }));

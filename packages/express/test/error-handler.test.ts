@@ -1,5 +1,4 @@
-/* tsline:disable:handle-callback-err */
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { strict as assert } from 'assert';
 import express, { Request, Response, NextFunction } from 'express';
 import axios from 'axios';
@@ -199,7 +198,7 @@ describe('error-handler', () => {
             errors: [{
               path: 'password',
               value: null,
-              message: `'password' cannot be 'null'`
+              message: '\'password\' cannot be \'null\''
             }]
           }));
         })
@@ -339,7 +338,7 @@ describe('error-handler', () => {
             errors: [{
               path: 'password',
               value: null,
-              message: `'password' cannot be 'null'`
+              message: '\'password\' cannot be \'null\''
             }]
           });
         }
@@ -361,7 +360,7 @@ describe('error-handler', () => {
           errors: [{
             path: 'password',
             value: null,
-            message: `'password' cannot be 'null'`
+            message: '\'password\' cannot be \'null\''
           }]
         });
       }

@@ -2,7 +2,7 @@
 import Proto from 'uberproto';
 import assert from 'assert';
 import feathers, { Id, version } from '../src'
-import { HookContext } from '@feathersjs/hooks/lib';
+import { HookContext } from '@feathersjs/hooks';
 
 describe('Feathers application', () => {
   it('initializes', () => {
@@ -81,14 +81,14 @@ describe('Feathers application', () => {
       try {
         app.use(null, {});
       } catch (e) {
-        assert.strictEqual(e.message, `'null' is not a valid service path.`);
+        assert.strictEqual(e.message, '\'null\' is not a valid service path.');
       }
 
       try {
         // @ts-ignore
         app.use({}, {});
       } catch (e) {
-        assert.strictEqual(e.message, `'[object Object]' is not a valid service path.`);
+        assert.strictEqual(e.message, '\'[object Object]\' is not a valid service path.');
       }
     });
 

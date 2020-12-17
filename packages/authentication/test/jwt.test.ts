@@ -221,7 +221,7 @@ describe('authentication/jwt', () => {
         assert.fail('Should never get here');
       } catch (error) {
         assert.strictEqual(error.name, 'NotAuthenticated');
-        assert.strictEqual(error.message, `Could not find entity service`);
+        assert.strictEqual(error.message, 'Could not find entity service');
       }
     });
 
@@ -309,7 +309,7 @@ describe('authentication/jwt', () => {
         app.service('authentication').register('otherJwt', new JWTStrategy());
         assert.fail('Should never get here');
       } catch (error) {
-        assert.strictEqual(error.message, `Invalid JwtStrategy option 'authentication.otherJwt.expiresIn'. Did you mean to set it in 'authentication.jwtOptions'?`);
+        assert.strictEqual(error.message, 'Invalid JwtStrategy option \'authentication.otherJwt.expiresIn\'. Did you mean to set it in \'authentication.jwtOptions\'?');
       }
     });
 
@@ -319,7 +319,7 @@ describe('authentication/jwt', () => {
       };
 
       assert.throws(() => app.service('authentication').register('otherJwt', new JWTStrategy()), {
-        message: `The 'header' option for the otherJwt strategy must be a string`
+        message: 'The \'header\' option for the otherJwt strategy must be a string'
       });
     });
   });
@@ -368,7 +368,7 @@ describe('authentication/jwt', () => {
     it('return null when scheme does not match', async () => {
       const req = {
         headers: {
-          authorization: ` Basic something`
+          authorization: ' Basic something'
         }
       } as MockRequest;
 

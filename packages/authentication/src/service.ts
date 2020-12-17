@@ -10,7 +10,7 @@ import jsonwebtoken from 'jsonwebtoken';
 const debug = Debug('@feathersjs/authentication/service');
 
 declare module '@feathersjs/feathers/lib/declarations' {
-  interface Application<ServiceTypes = {}> {
+  interface Application<ServiceTypes = {}> { // eslint-disable-line
 
     /**
      * Returns the default authentication service or the
@@ -27,10 +27,10 @@ declare module '@feathersjs/feathers/lib/declarations' {
   }
 }
 
-export interface AuthenticationService extends ServiceAddons<AuthenticationResult> {}
+export type AuthenticationService = ServiceAddons<AuthenticationResult>
 
 export class AuthenticationService extends AuthenticationBase implements Partial<ServiceMethods<AuthenticationResult>> {
-  constructor (app: Application, configKey: string = 'authentication', options = {}) {
+  constructor (app: Application, configKey = 'authentication', options = {}) {
     super(app, configKey, options);
 
     if (typeof app.defaultAuthentication !== 'function') {
@@ -47,6 +47,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
   /**
    * Return the payload for a JWT based on the authentication result.
    * Called internally by the `create` method.
+   *
    * @param _authResult The current authentication result
    * @param params The service call parameters
    */
@@ -60,6 +61,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
   /**
    * Returns the JWT options based on an authentication result.
    * By default sets the JWT subject to the entity id.
+   *
    * @param authResult The authentication result
    * @param params Service call parameters
    */
@@ -86,6 +88,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
   /**
    * Create and return a new JWT for a given authentication request.
    * Will trigger the `login` event.
+   *
    * @param data The authentication request (should include `strategy` key)
    * @param params Service call parameters
    */
@@ -124,6 +127,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
   /**
    * Mark a JWT as removed. By default only verifies the JWT and returns the result.
    * Triggers the `logout` event.
+   *
    * @param id The JWT to remove or null
    * @param params Service call parameters
    */
@@ -150,12 +154,12 @@ export class AuthenticationService extends AuthenticationBase implements Partial
     const { secret, service, entity, entityId } = this.configuration;
 
     if (typeof secret !== 'string') {
-      throw new Error(`A 'secret' must be provided in your authentication configuration`);
+      throw new Error('A \'secret\' must be provided in your authentication configuration');
     }
 
     if (entity !== null) {
       if (service === undefined) {
-        throw new Error(`The 'service' option is not set in the authentication configuration`);
+        throw new Error('The \'service\' option is not set in the authentication configuration');
       }
 
       if (this.app.service(service) === undefined) {

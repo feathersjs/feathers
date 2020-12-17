@@ -306,7 +306,7 @@ describe('hook utilities', () => {
       ], dummyHook);
 
       return promise.catch((e: any) => {
-        assert.equal(e.message, `dummy hook for 'something' method returned invalid hook object`);
+        assert.equal(e.message, 'dummy hook for \'something\' method returned invalid hook object');
         assert.equal(typeof e.hook, 'object');
       });
     });
@@ -364,7 +364,7 @@ describe('hook utilities', () => {
           base.hooks({ wrong () {} });
           throw new Error('Should never get here');
         } catch (e) {
-          assert.equal(e.message, `'wrong' is not a valid hook type`);
+          assert.equal(e.message, '\'wrong\' is not a valid hook type');
         }
       });
 
@@ -375,7 +375,7 @@ describe('hook utilities', () => {
           } });
           throw new Error('Should never get here');
         } catch (e) {
-          assert.equal(e.message, `'wrongMethod' is not a valid hook method`);
+          assert.equal(e.message, '\'wrongMethod\' is not a valid hook method');
         }
       });
     });

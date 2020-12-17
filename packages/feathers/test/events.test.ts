@@ -75,7 +75,7 @@ describe('Service events', () => {
         }
       });
 
-      service.on('created', (_data: any) => {
+      service.on('created', () => {
         done(new Error('Should never get here'));
       });
 

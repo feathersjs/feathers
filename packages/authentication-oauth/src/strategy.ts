@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // @ts-ignore
 import querystring from 'querystring';
 import Debug from 'debug';
@@ -74,7 +75,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
       return null;
     }
 
-    const redirectUrl = redirect + queryRedirect;
+    const redirectUrl = `${redirect}${queryRedirect}`;
     const separator = redirect.endsWith('?') ? '' :
       (redirect.indexOf('#') !== -1 ? '?' : '#');
     const authResult: AuthenticationResult = data;
@@ -84,7 +85,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
       error: data.message || 'OAuth Authentication not successful'
     };
 
-    return redirectUrl + separator + querystring.stringify(query);
+    return `${redirectUrl}${separator}${querystring.stringify(query)}`;
   }
 
   async findEntity (profile: OAuthProfile, params: Params) {
@@ -145,7 +146,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     const existingEntity = await this.findEntity(profile, params)
       || await this.getCurrentEntity(params);
 
-    debug(`authenticate with (existing) entity`, existingEntity);
+    debug('authenticate with (existing) entity', existingEntity);
 
     const authEntity = !existingEntity ? await this.createEntity(profile, params)
       : await this.updateEntity(existingEntity, profile, params);

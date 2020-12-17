@@ -51,7 +51,7 @@ describe('@feathersjs/authentication-local/hooks/hash-password', () => {
       assert.fail('Should never get here');
     } catch (error) {
       assert.strictEqual(error.message,
-        `Could not find 'local' strategy to hash password`
+        'Could not find \'local\' strategy to hash password'
       );
     }
   });
@@ -73,7 +73,7 @@ describe('@feathersjs/authentication-local/hooks/hash-password', () => {
       assert.fail('Should never get here');
     } catch (error) {
       assert.strictEqual(error.message,
-        `The 'hashPassword' hook should only be used as a 'before' hook`
+        'The \'hashPassword\' hook should only be used as a \'before\' hook'
       );
     }
   });

@@ -1,4 +1,4 @@
-import { Service } from '@feathersjs/transport-commons/lib/client';
+import { Service } from '@feathersjs/transport-commons/src/client';
 import { Socket } from 'socket.io-client';
 
 export interface SocketIOClientOptions {

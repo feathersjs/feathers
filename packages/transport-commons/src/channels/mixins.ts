@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import Debug from 'debug';
 import { Channel } from './channel/base';
 import { CombinedChannel } from './channel/combined';
