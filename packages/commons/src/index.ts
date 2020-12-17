@@ -96,19 +96,6 @@ export function isPromise (result: any) {
     typeof result.then === 'function';
 }
 
-export function makeUrl (path: string, app: any = {}) {
-  const get = typeof app.get === 'function' ? app.get.bind(app) : () => {};
-  const env = get('env') || process.env.NODE_ENV;
-  const host = get('host') || process.env.HOST_NAME || 'localhost';
-  const protocol = (env === 'development' || env === 'test' || (env === undefined)) ? 'http' : 'https';
-  const PORT = get('port') || process.env.PORT || 3030;
-  const port = (env === 'development' || env === 'test' || (env === undefined)) ? `:${PORT}` : '';
-
-  path = path || '';
-
-  return `${protocol}://${host}${port}/${exports.stripSlashes(path)}`;
-}
-
 export function createSymbol (name: string) {
   return typeof Symbol !== 'undefined' ? Symbol(name) : name;
 }

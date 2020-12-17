@@ -132,7 +132,7 @@ describe('@feathersjs/express', () => {
         const data = await app.service('myservice').get(10);
         assert.deepStrictEqual(data, { id: 10 });
 
-        const res = await await axios.get('http://localhost:8787');
+        const res = await axios.get('http://localhost:8787');
         assert.deepStrictEqual(res.data, response);
 
         server.close(() => done());

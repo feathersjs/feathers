@@ -19,7 +19,7 @@ export function eventHook () {
       results.forEach(element => service.emit(eventName, element, ctx));
     }
   };
-};
+}
 
 // Mixin that turns a service into a Node event emitter
 export function eventMixin (this: Application, service: Service<any>) {
@@ -62,7 +62,7 @@ export function eventMixin (this: Application, service: Service<any>) {
       service._hookEvents.push(event);
     }
   });
-};
+}
 
 export default function () {
   return function (app: any) {
@@ -85,4 +85,4 @@ export default function () {
 
     app.mixins.push(eventMixin);
   };
-};
+}

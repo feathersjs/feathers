@@ -3,6 +3,7 @@ import { _ } from '../src';
 
 describe('module', () => {
   it('is commonjs compatible', () => {
+    // eslint-disable-next-line
     const commons = require('../lib');
 
     assert.equal(typeof commons, 'object');

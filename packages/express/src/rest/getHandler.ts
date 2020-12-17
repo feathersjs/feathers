@@ -112,4 +112,4 @@ export function getHandler (method: string) {
         });
     };
   };
-};
+}

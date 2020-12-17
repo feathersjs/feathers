@@ -21,7 +21,7 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
   const { oauth } = service.configuration;
 
   if (!oauth) {
-    debug(`No oauth configuration found in authentication configuration. Skipping oAuth setup.`);
+    debug('No oauth configuration found in authentication configuration. Skipping oAuth setup.');
     return;
   }
 
@@ -37,7 +37,7 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
   if (app.get('env') === 'development') {
     protocol = 'http';
     if (String(port) !== '80') {
-      host += ':' + port;
+      host += `:${port}`;
     }
   }
 

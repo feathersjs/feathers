@@ -132,7 +132,7 @@ export class AuthenticationClient {
     return Promise.reject(error);
   }
 
-  reAuthenticate (force: boolean = false, strategy?: string): Promise<AuthenticationResult> {
+  reAuthenticate (force = false, strategy?: string): Promise<AuthenticationResult> {
     // Either returns the authentication state or
     // tries to re-authenticate with the stored JWT and strategy
     const authPromise = this.app.get('authentication');

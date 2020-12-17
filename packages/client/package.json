@@ -39,7 +39,7 @@
     "version": "npm run build",
     "clean": "shx rm -rf dist/ && shx mkdir -p dist",
     "build": "npm run clean && npm run compile && npm run webpack",
-    "mocha": "mocha --config ../../.mocharc.ts.json --recursive test/**/*.test.ts",
+    "mocha": "mocha --config ../../.mocharc.json --recursive test/**/*.test.ts",
     "test": "npm run build && npm run mocha",
     "test:browser": "mocha-puppeteer browser/test.js",
     "webpack": "parallel-webpack"

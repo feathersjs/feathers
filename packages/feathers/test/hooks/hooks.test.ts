@@ -89,11 +89,11 @@ describe('hooks basics', () => {
 
       return app.service('dummy').get();
     }).catch((e: any) => {
-      assert.strictEqual(e.message, `An id must be provided to the 'dummy.get' method`);
+      assert.strictEqual(e.message, 'An id must be provided to the \'dummy.get\' method');
     }).then(() =>
       app.service('dummy').create()
     ).catch((e: any) => {
-      assert.strictEqual(e.message, `A data object must be provided to the 'dummy.create' method`);
+      assert.strictEqual(e.message, 'A data object must be provided to the \'dummy.create\' method');
     });
   });
 
@@ -182,7 +182,7 @@ describe('hooks basics', () => {
       });
       assert.ok(false);
     } catch (e) {
-      assert.strictEqual(e.message, `'invalid' is not a valid hook type`);
+      assert.strictEqual(e.message, '\'invalid\' is not a valid hook type');
     }
   });
 
@@ -201,7 +201,7 @@ describe('hooks basics', () => {
       });
       assert.ok(false);
     } catch (e) {
-      assert.strictEqual(e.message, `'invalid' is not a valid hook method`);
+      assert.strictEqual(e.message, '\'invalid\' is not a valid hook method');
     }
   });
 
@@ -223,7 +223,7 @@ describe('hooks basics', () => {
     });
 
     return app.service('dummy').get(1).catch((e: any) => {
-      assert.strictEqual(e.message, `Service method 'get' for 'dummy' service must return a promise`);
+      assert.strictEqual(e.message, 'Service method \'get\' for \'dummy\' service must return a promise');
     });
   });
 

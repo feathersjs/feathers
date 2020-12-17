@@ -69,7 +69,7 @@ export class Service<T = any> extends AdapterService<T> implements InternalServi
       data: values.map(value => _select(value, params))
     };
 
-    if (!(paginate && (paginate as any).default)) {
+    if (!(paginate && (paginate ).default)) {
       return result.data;
     }
 
@@ -107,8 +107,8 @@ export class Service<T = any> extends AdapterService<T> implements InternalServi
     // We don't want our id to change type if it can be coerced
     const oldId = oldEntry[this.id];
 
-    // tslint:disable-next-line
-    id = oldId == id ? oldId : id; 
+    // eslint-disable-next-line eqeqeq
+    id = oldId == id ? oldId : id;
 
     this.store[id] = _.extend({}, data, { [this.id]: id });
 

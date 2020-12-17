@@ -3,7 +3,7 @@ import { strict as assert } from 'assert';
 import axios from 'axios';
 import { Server } from 'http';
 import feathers from '@feathersjs/feathers';
-import { setupTests } from '@feathersjs/tests/lib/client';
+import { setupTests } from '@feathersjs/tests/src/client';
 import { NotAcceptable } from '@feathersjs/errors';
 
 import createServer from './server';

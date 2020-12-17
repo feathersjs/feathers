@@ -32,7 +32,7 @@ declare module 'express-serve-static-core' {
   type FeathersService = Partial<ServiceMethods<any> & SetupMethod>;
 
   interface IRouterMatcher<T> {
-      // tslint:disable-next-line callable-types (Required for declaration merging)
+      // eslint-disable-next-line
       <P extends Params = ParamsDictionary, ResBody = any, ReqBody = any>(
           path: PathParams,
           ...handlers: (RequestHandler<P, ResBody, ReqBody> | FeathersService | Application)[]

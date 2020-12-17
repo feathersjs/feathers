@@ -66,7 +66,7 @@ const testSuite = adapterTests([
 ]);
 
 describe('Feathers Memory Service', () => {
-  it('loads the test suite', async () => {
+  it('loads the test suite', () => {
     assert.ok(typeof testSuite === 'function');
   });
 

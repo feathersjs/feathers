@@ -1,4 +1,4 @@
-/* tslint:disable:no-console */
+/* eslint-disable no-console */
 import basicTests from './basic';
 import methodTests from './methods';
 import syntaxTests from './syntax';
@@ -46,8 +46,4 @@ const adapterTests = (testNames: string[]) => {
   };
 };
 
-export default adapterTests;
-
-if (typeof module !== 'undefined') {
-  module.exports = adapterTests;
-}
+export = adapterTests;

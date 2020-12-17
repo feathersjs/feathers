@@ -115,8 +115,8 @@ export interface HookContext<T = any, S = Service<T>> {
    *
    * `context.result` can also be set in
    *
-   *  - A before hook to skip the actual service method (database) call
-   *  - An error hook to swallow the error and return a result instead
+   * - A before hook to skip the actual service method (database) call
+   * - An error hook to swallow the error and return a result instead
    */
   result?: T;
   /**

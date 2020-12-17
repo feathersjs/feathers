@@ -101,7 +101,7 @@ export function isHookObject (hookObject: any) {
 // Returns all service and application hooks combined
 // for a given method and type `appLast` sets if the hooks
 // from `app` should be added last (or first by default)
-export function getHooks (app: any, service: any, type: string, method: string, appLast: boolean = false) {
+export function getHooks (app: any, service: any, type: string, method: string, appLast = false) {
   const appHooks = app.__hooks[type][method] || [];
   const serviceHooks = service.__hooks[type][method] || [];
 

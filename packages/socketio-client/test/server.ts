@@ -55,4 +55,4 @@ export function createServer () {
   service.publish(publisher);
 
   return app;
-};
+}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Debug from 'debug';
 import omit from 'lodash/omit';
 import { IncomingMessage } from 'http';
@@ -86,6 +87,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
 
   /**
    * Return the entity for a given id
+   *
    * @param id The id to use
    * @param params Service call parameters
    */
@@ -96,7 +98,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     debug('Getting entity', id);
 
     if (entityService === null) {
-      throw new NotAuthenticated(`Could not find entity service`);
+      throw new NotAuthenticated('Could not find entity service');
     }
 
     const query = await this.getEntityQuery(params);

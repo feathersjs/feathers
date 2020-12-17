@@ -1,14 +1,6 @@
 /* tslint:disable:no-unused-expression */
-
 import { strict as assert } from 'assert';
-
-import {
-  _,
-  stripSlashes,
-  isPromise,
-  makeUrl,
-  createSymbol
-} from '../src';
+import { _, stripSlashes, isPromise, createSymbol } from '../src';
 
 describe('@feathersjs/commons utils', () => {
   it('stripSlashes', () => {
@@ -166,66 +158,6 @@ describe('@feathersjs/commons utils', () => {
       });
 
       assert.equal(_.merge('hello', {}), 'hello');
-    });
-  });
-
-  describe('makeUrl', function () {
-    let mockApp: any;
-
-    beforeEach(() => {
-      mockApp = { env: 'development' };
-      mockApp.get = (value: any) => {
-        switch (value) {
-          case 'port':
-            return 3030;
-          case 'host':
-            return 'feathersjs.com';
-          case 'env':
-            return mockApp.env;
-        }
-      };
-    });
-
-    it('when in development mode returns the correct url', () => {
-      const uri = makeUrl('test', mockApp);
-      assert.equal(uri, 'http://feathersjs.com:3030/test');
-    });
-
-    it('when in test mode returns the correct url', () => {
-      mockApp.env = 'test';
-      const uri = makeUrl('test', mockApp);
-      assert.equal(uri, 'http://feathersjs.com:3030/test');
-    });
-
-    it('when in production mode returns the correct url', () => {
-      mockApp.env = 'production';
-      const uri = makeUrl('test', mockApp);
-      assert.equal(uri, 'https://feathersjs.com/test');
-    });
-
-    it('when path is not provided returns a default url', () => {
-      const uri = makeUrl(null, mockApp);
-      assert.equal(uri, 'http://feathersjs.com:3030/');
-    });
-
-    it('when app is not defined returns the correct url', () => {
-      const uri = makeUrl('test');
-      assert.equal(uri, 'http://localhost:3030/test');
-    });
-
-    it('strips leading slashes on path', () => {
-      const uri = makeUrl('/test');
-      assert.equal(uri, 'http://localhost:3030/test');
-    });
-
-    it('strips trailing slashes on path', () => {
-      const uri = makeUrl('test/');
-      assert.equal(uri, 'http://localhost:3030/test');
-    });
-
-    it('works with query strings', () => {
-      const uri = makeUrl('test?admin=true');
-      assert.equal(uri, 'http://localhost:3030/test?admin=true');
     });
   });
 });

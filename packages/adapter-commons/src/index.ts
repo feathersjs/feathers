@@ -1,7 +1,7 @@
 import { _ } from '@feathersjs/commons';
 
 export { AdapterService, InternalServiceMethods, ServiceOptions, Paginated } from './service';
-export { default as filterQuery, FILTERS, OPERATORS } from './filter-query';
+export { filterQuery, FILTERS, OPERATORS } from './filter-query';
 export * from './sort';
 
 // Return a function that filters a result object or array

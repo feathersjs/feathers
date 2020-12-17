@@ -16,7 +16,7 @@ const normalizeStrategy = (_settings: string|StrategyOptions, ..._strategies: st
 
 export function parseAuthentication (settings: any = {}): RequestHandler {
   return function (req, res, next) {
-    const { app } = req as any;
+    const app = req.app as any;
     const service = app.defaultAuthentication ? app.defaultAuthentication(settings.service) : null;
 
     if (service === null) {
@@ -44,13 +44,13 @@ export function parseAuthentication (settings: any = {}): RequestHandler {
         next();
       }).catch(next);
   };
-};
+}
 
 export function authenticate (_settings: string|StrategyOptions, ..._strategies: string[]) {
   const settings = normalizeStrategy(_settings, ..._strategies);
 
   if (!Array.isArray(settings.strategies) || settings.strategies.length === 0) {
-    throw new Error(`'authenticate' middleware requires at least one strategy name`);
+    throw new Error('\'authenticate\' middleware requires at least one strategy name');
   }
 
   return (_req: Request, _res: Response, next: NextFunction) => {
@@ -68,4 +68,4 @@ export function authenticate (_settings: string|StrategyOptions, ..._strategies:
         next();
       }).catch(next);
   };
-};
+}

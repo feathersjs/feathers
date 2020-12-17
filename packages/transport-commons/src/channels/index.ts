@@ -17,7 +17,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
     registerPublisher (event: Event, publisher: Publisher<T>): this;
   }
 
-  interface Application<ServiceTypes = {}> {
+  interface Application<ServiceTypes = {}> { // eslint-disable-line
     channels: string[];
 
     channel (name: string[]): Channel;

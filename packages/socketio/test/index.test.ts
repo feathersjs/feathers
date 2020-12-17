@@ -5,7 +5,7 @@ import { omit, extend } from 'lodash';
 import { io } from 'socket.io-client';
 import axios from 'axios';
 import { Server } from 'http';
-import { Service } from '@feathersjs/tests/lib/fixture';
+import { Service } from '@feathersjs/tests/src/fixture';
 import { Socket } from 'socket.io-client';
 
 import methodTests from './methods';

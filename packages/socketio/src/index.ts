@@ -88,8 +88,4 @@ function configureSocketio (port?: any, options?: any, config?: any) {
   };
 }
 
-export default configureSocketio;
-
-if (typeof module !== 'undefined') {
-  module.exports = Object.assign(configureSocketio, module.exports);
-}
+export = configureSocketio;

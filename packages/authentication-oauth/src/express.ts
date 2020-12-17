@@ -49,7 +49,7 @@ export default (options: OauthSetupSettings) => {
       const { feathers_token, redirect, ...query } = req.query;
 
       if (feathers_token) {
-        debug(`Got feathers_token query parameter to link accounts`, feathers_token);
+        debug('Got feathers_token query parameter to link accounts', feathers_token);
         req.session.accessToken = feathers_token as string;
       }
       req.session.redirect = redirect as string;
@@ -59,7 +59,7 @@ export default (options: OauthSetupSettings) => {
     });
 
     authApp.get('/:name/authenticate', async (req, res, next) => {
-      const { name } = req.params as any;
+      const { name } = req.params ;
       const { accessToken, grant, query = {}, redirect } = req.session;
       const service = app.defaultAuthentication(authService);
       const [ strategy ] = service.getStrategies(name) as OAuthStrategy[];

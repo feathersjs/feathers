@@ -1,11 +1,11 @@
-import { Service } from '@feathersjs/transport-commons/lib/client';
+import { Service } from '@feathersjs/transport-commons/src/client';
 import { Socket } from 'socket.io-client';
 
-export interface SocketIOClientOptions {
+interface SocketIOClientOptions {
     timeout?: number;
 }
 
-export default function socketioClient (connection: Socket, options?: SocketIOClientOptions) {
+function socketioClient (connection: Socket, options?: SocketIOClientOptions) {
   if (!connection) {
     throw new Error('Socket.io connection needs to be provided');
   }
@@ -39,6 +39,4 @@ export default function socketioClient (connection: Socket, options?: SocketIOCl
   return initialize;
 }
 
-if (typeof module !== 'undefined') {
-  module.exports = Object.assign(socketioClient, module.exports);
-}
+export = socketioClient;

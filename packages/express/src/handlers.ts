@@ -10,7 +10,7 @@ const defaultHtmlError = path.resolve(defaults.public, 'default.html');
 
 export function notFound ({ verbose = false } = {}): RequestHandler {
   return function (req: Request, _res: Response, next: NextFunction) {
-    const { url } = req;
+    const url = `${req.url}`;
     const message = `Page not found${verbose ? ': ' + url : ''}`;
 
     next(new NotFound(message, { url }));
@@ -39,7 +39,7 @@ export function errorHandler (_options: ErrorHandlerOptions = {}): ErrorRequestH
     options.json = {};
   }
 
-  return function (error, req, res, next) {
+  return function (error: any, req: Request, res: Response, next: NextFunction) {
     // Set the error code for HTTP processing semantics
     error.code = !isNaN(parseInt(error.code, 10)) ? parseInt(error.code, 10) : 500;
 

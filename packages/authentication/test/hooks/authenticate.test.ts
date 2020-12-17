@@ -95,7 +95,7 @@ describe('authentication/hooks/authenticate', () => {
       assert.fail('Should never get here');
     } catch (error) {
       assert.strictEqual(error.name, 'NotAuthenticated');
-      assert.strictEqual(error.message, `Could not find a valid authentication service`);
+      assert.strictEqual(error.message, 'Could not find a valid authentication service');
     }
   });
 

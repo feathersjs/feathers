@@ -1,6 +1,5 @@
 // @ts-ignore
 import Proto from 'uberproto';
-import { _ } from '@feathersjs/commons';
 import Application from './application';
 import version from './version';
 import { Application as ApplicationType } from './declarations'

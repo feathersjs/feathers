@@ -20,13 +20,13 @@ export default function hashPassword (field: string, options: HashPasswordOption
 
   return async (context: HookContext) => {
     if (context.type !== 'before') {
-      throw new Error(`The 'hashPassword' hook should only be used as a 'before' hook`);
+      throw new Error('The \'hashPassword\' hook should only be used as a \'before\' hook');
     }
 
     const { app, data, params } = context;
 
     if (data === undefined) {
-      debug(`hook.data is undefined. Skipping hashPassword hook.`);
+      debug('hook.data is undefined. Skipping hashPassword hook.');
       return context;
     }
 
@@ -34,7 +34,7 @@ export default function hashPassword (field: string, options: HashPasswordOption
     const { strategy = 'local' } = options;
 
     if (!authService || typeof authService.getStrategies !== 'function') {
-      throw new BadRequest(`Could not find an authentication service to hash password`);
+      throw new BadRequest('Could not find an authentication service to hash password');
     }
 
     const [ localStrategy ] = authService.getStrategies(strategy) as LocalStrategy[];

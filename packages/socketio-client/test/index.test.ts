@@ -2,7 +2,7 @@ import { strict as assert } from 'assert';
 import { Server } from 'http';
 import feathers from '@feathersjs/feathers';
 import { io, Socket } from 'socket.io-client';
-import { setupTests } from '@feathersjs/tests/lib/client';
+import { setupTests } from '@feathersjs/tests/src/client';
 
 import { createServer } from './server';
 import socketio from '../src';
