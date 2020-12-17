@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
+
+
+
+# [5.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v4.5.4...v5.0.0-pre.0) (2020-05-19)
+
+
+### chore
+
+* **configuration:** Remove environment variable substitution ([#1942](https://github.com/feathersjs/feathers/issues/1942)) ([caaa21f](https://github.com/feathersjs/feathers/commit/caaa21ffdc6a8dcac82fb403c91d9d4b781a6c0a))
+
+
+### BREAKING CHANGES
+
+* **configuration:** Falls back to node-config instead of adding additional
+functionality like path replacements and automatic environment variable insertion.
+
+
+
+
+
 # [5.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v4.5.4...v5.0.0-pre.0) (2020-05-19)
 
 

@@ -1,5 +1,21 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [5.0.0-pre.1](https://github.com/feathersjs/databases/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
+
+
+### Features
+
+* **memory:** Move feathers-memory into @feathersjs/adapter-memory ([#2153](https://github.com/feathersjs/databases/issues/2153)) ([dd61fe3](https://github.com/feathersjs/databases/commit/dd61fe371fb0502f78b8ccbe1f45a030e31ecff6))
+
+
+
+
+
+# Change Log
+
 ## [v4.1.0](https://github.com/feathersjs-ecosystem/feathers-memory/tree/v4.1.0) (2019-10-07)
 [Full Changelog](https://github.com/feathersjs-ecosystem/feathers-memory/compare/v4.0.1...v4.1.0)
 

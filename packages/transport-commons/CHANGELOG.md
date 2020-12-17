@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
+
+
+
+# [5.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v4.5.4...v5.0.0-pre.0) (2020-05-19)
+
+
+### Features
+
+* **core:** use @feathers/hooks and add async type ([#1929](https://github.com/feathersjs/feathers/issues/1929)) ([a5c4756](https://github.com/feathersjs/feathers/commit/a5c47562eae8410c82fe2f6308f26f8e78b6a3e8))
+* **transport-commons:** Remove legacy message format and unnecessary client timeouts ([#1939](https://github.com/feathersjs/feathers/issues/1939)) ([5538881](https://github.com/feathersjs/feathers/commit/5538881a08bc130de42c5984055729d8336f8615))
+
+
+### BREAKING CHANGES
+
+* **transport-commons:** Removes the old message format and client service timeout
+
+
+
+
+
 # [5.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v4.5.4...v5.0.0-pre.0) (2020-05-19)
 
 
