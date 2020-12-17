@@ -99,7 +99,7 @@ export const OPERATORS = ['$in', '$nin', '$lt', '$lte', '$gt', '$gte', '$ne', '$
 // Converts Feathers special query parameters and pagination settings
 // and returns them separately a `filters` and the rest of the query
 // as `query`
-export default function filterQuery (query: any, options: any = {}) {
+export function filterQuery (query: any, options: any = {}) {
   const {
     filters: additionalFilters = {},
     operators: additionalOperators = []
@@ -112,8 +112,4 @@ export default function filterQuery (query: any, options: any = {}) {
   result.query = cleanQuery(query, OPERATORS.concat(additionalOperators), result.filters);
 
   return result;
-}
-
-if (typeof module !== 'undefined') {
-  module.exports = Object.assign(filterQuery, module.exports);
 }

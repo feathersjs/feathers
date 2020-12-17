@@ -46,8 +46,4 @@ const adapterTests = (testNames: string[]) => {
   };
 };
 
-export default adapterTests;
-
-if (typeof module !== 'undefined') {
-  module.exports = adapterTests;
-}
+export = adapterTests;

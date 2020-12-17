@@ -1,6 +1,6 @@
 import { NotImplemented, BadRequest, MethodNotAllowed } from '@feathersjs/errors';
 import { ServiceMethods, Params, Id, NullableId } from '@feathersjs/feathers';
-import filterQuery from './filter-query';
+import { filterQuery } from './filter-query';
 
 export interface Paginated<T> {
   total: number;

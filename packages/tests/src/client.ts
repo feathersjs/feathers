@@ -92,7 +92,3 @@ export function setupTests (app: any, name: string) {
     });
   });
 }
-
-if (typeof module !== 'undefined') {
-  module.exports = Object.assign(setupTests, module.exports);
-}
