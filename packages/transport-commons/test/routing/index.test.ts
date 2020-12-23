@@ -1,6 +1,6 @@
 import assert from 'assert';
 import feathers, { Application } from '@feathersjs/feathers';
-import { routing, ROUTER } from '../src/routing';
+import { routing } from '../../src/routing';
 
 describe('app.router', () => {
   let app: Application;
@@ -19,10 +19,9 @@ describe('app.router', () => {
     feathers().configure(routing()).configure(routing());
   });
 
-  it('has app.lookup and ROUTER symbol', () => {
+  it('has app.lookup and app.router', () => {
     assert.strictEqual(typeof app.lookup, 'function');
-    // @ts-ignore
-    assert.ok(app[ROUTER]);
+    assert.ok(app.routing);
   });
 
   it('returns null when nothing is found', () => {

@@ -55,8 +55,7 @@
     "@feathersjs/commons": "^5.0.0-pre.1",
     "@feathersjs/errors": "^5.0.0-pre.1",
     "debug": "^4.3.1",
-    "lodash": "^4.17.20",
-    "radix-router": "^3.0.1"
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "@feathersjs/feathers": "^5.0.0-pre.1",
