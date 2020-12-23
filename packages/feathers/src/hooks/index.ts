@@ -43,7 +43,7 @@ function getMiddlewareOptions (app: Application, service: Service<any>, method: 
 }
 
 function getCollector (app: Application, service: Service<any>, method: string) {
-  return function (this: HookManager): Middleware[] {
+  return function collectMiddleware (this: HookManager): Middleware[] {
     const previous = this._parent && this._parent.getMiddleware();
     let result;
 
