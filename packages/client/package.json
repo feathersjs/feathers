@@ -56,8 +56,8 @@
     "@feathersjs/socketio-client": "^5.0.0-pre.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9",
-    "@babel/preset-env": "^7.12.7",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
     "@feathersjs/adapter-memory": "^5.0.0-pre.1",
     "@feathersjs/express": "^5.0.0-pre.1",
     "@feathersjs/socketio": "^5.0.0-pre.1",
@@ -68,12 +68,12 @@
     "node-fetch": "^2.6.1",
     "parallel-webpack": "^2.6.0",
     "shx": "^0.3.3",
-    "socket.io-client": "^3.0.3",
+    "socket.io-client": "^3.0.4",
     "superagent": "^6.1.0",
     "ts-loader": "^8.0.12",
-    "typescript": "^4.1.2",
-    "webpack": "^5.10.0",
-    "webpack-merge": "^5.4.0"
+    "typescript": "^4.1.3",
+    "webpack": "^5.11.0",
+    "webpack-merge": "^5.7.3"
   },
   "gitHead": "3756506935c520fc50d4be416ff649c2158afdac"
 }
