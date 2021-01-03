@@ -78,6 +78,10 @@ export class Router<T> {
   }
 
   lookup (path: string) {
+    if (typeof path !== 'string') {
+      return null;
+    }
+    
     return this.root.lookup(this.getPath(path), { params: {} });
   }
 }

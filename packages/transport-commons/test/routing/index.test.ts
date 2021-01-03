@@ -2,7 +2,7 @@ import assert from 'assert';
 import feathers, { Application } from '@feathersjs/feathers';
 import { routing } from '../../src/routing';
 
-describe('app.router', () => {
+describe('app.routes', () => {
   let app: Application;
 
   beforeEach(() => {
@@ -19,9 +19,9 @@ describe('app.router', () => {
     feathers().configure(routing()).configure(routing());
   });
 
-  it('has app.lookup and app.router', () => {
+  it('has app.lookup and app.routes', () => {
     assert.strictEqual(typeof app.lookup, 'function');
-    assert.ok(app.routing);
+    assert.ok(app.routes);
   });
 
   it('returns null when nothing is found', () => {
@@ -39,7 +39,7 @@ describe('app.router', () => {
   it('can look up and strips slashes', () => {
     const result = app.lookup('my/service');
 
-    assert.strictEqual(result.service, app.service('/my/service'));
+    assert.strictEqual(result.service, app.service('/my/service/'));
   });
 
   it('can look up with id', () => {
@@ -55,8 +55,8 @@ describe('app.router', () => {
     const path = '/test/:first/my/:second';
 
     app.use(path, {
-      get (id: string|number) {
-        return Promise.resolve({ id });
+      async get (id: string|number) {
+        return { id };
       }
     });
 

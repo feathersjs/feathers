@@ -3,7 +3,7 @@ import { Router } from './router';
 
 declare module '@feathersjs/feathers/lib/declarations' {
   interface Application<ServiceTypes> { // eslint-disable-line
-    routing: Router<any>;
+    routes: Router<any>;
     lookup (path: string): { [key: string]: string };
   }
 }
@@ -15,22 +15,17 @@ export const routing = () => (app: Application) => {
     return;
   }
 
-  const routing = new Router();
+  const routes = new Router();
 
   Object.assign(app, {
-    routing,
+    routes,
     lookup (this: Application, path: string) {
-      if (!path || typeof path !== 'string') {
-        return null;
-      }
-
-      const result = this.routing.lookup(path);
+      const result = this.routes.lookup(path);
 
       if (result !== null) {
-        return {
-          params: result.params,
-          service: result.data
-        }
+        const { params, data: service } = result;
+
+        return { params, service };
       }
 
       return result;
@@ -39,7 +34,7 @@ export const routing = () => (app: Application) => {
 
   // Add a mixin that registers a service on the router
   app.mixins.push((service: Service<any>, path: string) => {
-    app.routing.insert(path, service);
-    app.routing.insert(`${path}/:__id`, service);
+    app.routes.insert(path, service);
+    app.routes.insert(`${path}/:__id`, service);
   });
 };
