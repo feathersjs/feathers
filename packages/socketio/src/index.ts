@@ -1,5 +1,3 @@
-// @ts-ignore
-import Proto from 'uberproto';
 import Debug from 'debug';
 import { Server, ServerOptions } from 'socket.io';
 import http from 'http';
@@ -38,12 +36,14 @@ function configureSocketio (port?: any, options?: any, config?: any) {
     // Promise that resolves with the Socket.io `io` instance
     // when `setup` has been called (with a server)
     const done = new Promise(resolve => {
-      Proto.mixin({
-        listen (...args: any[]) {
-          if (typeof this._super === 'function') {
+      const { listen, setup } = app as any;
+
+      Object.assign(app, {
+        listen (this: any, ...args: any[]) {
+          if (typeof listen === 'function') {
             // If `listen` already exists
             // usually the case when the app has been expressified
-            return this._super(...args);
+            return listen.call(this, ...args);
           }
 
           const server = http.createServer();
@@ -53,7 +53,7 @@ function configureSocketio (port?: any, options?: any, config?: any) {
           return server.listen(...args);
         },
 
-        setup (server: http.Server) {
+        setup (this: any, server: http.Server, ...rest: any[]) {
           if (!this.io) {
             const io = this.io = new Server(port || server, options);
 
@@ -74,9 +74,9 @@ function configureSocketio (port?: any, options?: any, config?: any) {
 
           resolve(this.io);
 
-          return this._super.apply(this, arguments);
+          return setup.call(this, server, ...rest);
         }
-      }, app);
+      });
     });
 
     app.configure(socket({

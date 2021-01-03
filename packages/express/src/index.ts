@@ -1,5 +1,3 @@
-// @ts-ignore
-import Proto from 'uberproto';
 import express, { Express, static as _static, json, raw, text, urlencoded, query } from 'express';
 import Debug from 'debug';
 import {
@@ -55,9 +53,10 @@ export default function feathersExpress<T = any> (feathersApp?: FeathersApplicat
     throw new Error(`@feathersjs/express requires an instance of a Feathers application version 3.x or later (got ${feathersApp.version || 'unknown'})`);
   }
 
+  const { use, listen } = expressApp as any;
   // An Uberproto mixin that provides the extended functionality
   const mixin: any = {
-    use (location: string) {
+    use (location: string, ...rest: any[]) {
       let service: any;
       const middleware = Array.from(arguments).slice(1)
         .reduce(function (middleware, arg) {
@@ -81,7 +80,7 @@ export default function feathersExpress<T = any> (feathersApp?: FeathersApplicat
       // Check for service (any object with at least one service method)
       if (hasMethod(['handle', 'set']) || !hasMethod(this.methods.concat('setup'))) {
         debug('Passing app.use call to Express app');
-        return this._super.apply(this, arguments);
+        return use.call(this, location, ...rest);
       }
 
       debug('Registering service with middleware', middleware);
@@ -91,8 +90,8 @@ export default function feathersExpress<T = any> (feathersApp?: FeathersApplicat
       return this;
     },
 
-    listen () {
-      const server = this._super.apply(this, arguments);
+    listen (...args: any[]) {
+      const server = listen.call(this, ...args);
 
       this.setup(server);
       debug('Feathers application listening');
@@ -112,7 +111,7 @@ export default function feathersExpress<T = any> (feathersApp?: FeathersApplicat
     }
   });
 
-  return Proto.mixin(mixin, expressApp);
+  return Object.assign(expressApp, mixin);
 }
 
 if (typeof module !== 'undefined') {
