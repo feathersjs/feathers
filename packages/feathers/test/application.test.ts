@@ -1,5 +1,3 @@
-// @ts-ignore
-import Proto from 'uberproto';
 import assert from 'assert';
 import feathers, { Id, version } from '../src'
 import { HookContext } from '@feathersjs/hooks';
@@ -117,7 +115,7 @@ describe('Feathers application', () => {
       const app = feathers().use('/dummy', dummyService);
       const wrappedService = app.service('dummy');
 
-      assert.ok(Proto.isPrototypeOf(wrappedService), 'Service got wrapped as Uberproto object');
+      assert.strictEqual(Object.getPrototypeOf(wrappedService), dummyService, 'Object points to original service prototype');
 
       return wrappedService.create({
         message: 'Test message'

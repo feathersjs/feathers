@@ -1,18 +1,12 @@
 import Debug from 'debug';
 import { stripSlashes } from '@feathersjs/commons';
 
-// @ts-ignore
-import Uberproto from 'uberproto';
 import events from './events';
 import hooks from './hooks';
 import version from './version';
 import { BaseApplication, Service } from './declarations';
 
 const debug = Debug('feathers:application');
-
-const Proto = Uberproto.extend({
-  create: null
-});
 
 interface AppExtensions {
   _isSetup: boolean;
@@ -106,8 +100,8 @@ export default {
       throw new Error(`Invalid service object passed for path \`${location}\``);
     }
 
-    // If the service is already Uberproto'd use it directly
-    const protoService = Proto.isPrototypeOf(service) ? service : Proto.extend(service);
+    // Create a new object with the prototype pointing to the original service
+    const protoService = Object.create(service);
 
     debug(`Registering new service at \`${location}\``);
 

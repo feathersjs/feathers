@@ -89,16 +89,16 @@ function withHooks (app: Application, service: Service<any>, methods: string[]) 
   hooksDecorator(service, hookMap);
 }
 
-function mixinMethod (this: any) {
+const mixinMethod = (_super: any) => function (this: any) {
   const service = this;
   const args = Array.from(arguments);
 
   const returnHook = args[args.length - 1] === true || args[args.length - 1] instanceof HookContext
     ? args.pop() : false;
 
-  const hookContext = returnHook instanceof HookContext ? returnHook : this._super.createContext();
+  const hookContext = returnHook instanceof HookContext ? returnHook : _super.createContext();
 
-  return this._super.call(service, ...args, hookContext)
+  return _super.call(service, ...args, hookContext)
     .then(() => returnHook ? hookContext : hookContext.result)
     // Handle errors
     .catch(() => {
@@ -143,7 +143,7 @@ const hookMixin = exports.hookMixin = function hookMixin (service: any) {
       return mixin;
     }
 
-    mixin[method] = mixinMethod;
+    mixin[method] = mixinMethod(service[method]);
 
     return mixin;
   }, {} as any);
@@ -151,7 +151,7 @@ const hookMixin = exports.hookMixin = function hookMixin (service: any) {
   // Add .hooks method and properties to the service
   enableHooks(service, methodNames, app.hookTypes);
 
-  service.mixin(mixin);
+  Object.assign(service, mixin);
 };
 
 export default function () {
