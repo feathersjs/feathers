@@ -31,7 +31,7 @@ export class RouteNode<T = any> {
       if (!placeholder) {
         this.placeholder = new RouteNode(name);
       } else if(placeholder.name !== name) {
-        throw new BadRequest(`Can not add new placeholder ':${name}' because placeholder ':${placeholder.name}' already exists`);
+        throw new BadRequest(`Can not add route with placeholder ':${name}' because placeholder ':${placeholder.name}' already exists`);
       }
 
       return this.placeholder.insert(rest, data);

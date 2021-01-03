@@ -2,9 +2,14 @@ import { Application, Service } from '@feathersjs/feathers';
 import { Router } from './router';
 
 declare module '@feathersjs/feathers/lib/declarations' {
+  interface RouteLookup {
+    service: Service<any>,
+    params: { [key: string]: string }
+  }
+
   interface Application<ServiceTypes> { // eslint-disable-line
     routes: Router<any>;
-    lookup (path: string): { [key: string]: string };
+    lookup (path: string): RouteLookup;
   }
 }
 

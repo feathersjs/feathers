@@ -72,7 +72,7 @@ describe('router', () => {
       r.insert('/hello/:id', 'one');
       r.insert('/hello/:test/you', 'two');
     }, {
-      message: 'Can not add new placeholder \':test\' because placeholder \':id\' already exists'
+      message: 'Can not add route with placeholder \':test\' because placeholder \':id\' already exists'
     });
   });
 });
