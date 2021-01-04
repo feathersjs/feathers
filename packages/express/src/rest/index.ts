@@ -9,16 +9,10 @@ const HTTP_METHOD = Symbol('@feathersjs/express/rest/HTTP_METHOD');
 
 export function httpMethod (verb: any, uris?: any) {
   return (method: any) => {
-    Object.defineProperty(method, HTTP_METHOD, {
-      enumerable: false,
-      configurable: true,
-      writable: false,
-      value: (Array.isArray(uris) ? uris : [uris])
-        .reduce(
-          (result, uri) => ([...result, { verb, uri }]),
-          method[HTTP_METHOD] || []
-        )
-    });
+    method[HTTP_METHOD] = (Array.isArray(uris) ? uris : [uris]).reduce(
+      (result, uri) => ([...result, { verb, uri }]),
+      method[HTTP_METHOD] || []
+    );
 
     return method;
   };
