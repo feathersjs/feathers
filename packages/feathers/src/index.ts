@@ -3,11 +3,11 @@ import version from './version';
 import { Application as ApplicationType } from './declarations'
 
 export default function feathers<ServiceTypes = {}> (): ApplicationType<ServiceTypes> {
-  const app = Object.create(Application);
+  const app = Object.assign({}, Application);
 
   app.init();
 
-  return app;
+  return app as any as ApplicationType<ServiceTypes>;
 }
 
 export { version };

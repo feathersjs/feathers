@@ -93,12 +93,12 @@ const mixinMethod = (_super: any) => {
   const result = function (this: any) {
     const service = this;
     const args = Array.from(arguments);
-  
+
     const returnHook = args[args.length - 1] === true || args[args.length - 1] instanceof HookContext
       ? args.pop() : false;
-  
+
     const hookContext = returnHook instanceof HookContext ? returnHook : _super.createContext();
-  
+
     return _super.call(service, ...args, hookContext)
       .then(() => returnHook ? hookContext : hookContext.result)
       // Handle errors
