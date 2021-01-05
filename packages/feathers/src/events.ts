@@ -30,7 +30,7 @@ export function eventMixin (this: Application, service: Service<any>) {
   const isEmitter = typeof service.on === 'function' &&
     typeof service.emit === 'function';
 
-  // If not, mix add EventEmitter functionality
+  // If not, add EventEmitter functionality
   if (!isEmitter) {
     Object.assign(service, EventEmitter.prototype);
   }

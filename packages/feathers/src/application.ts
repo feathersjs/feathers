@@ -100,7 +100,7 @@ export default {
       throw new Error(`Invalid service object passed for path \`${location}\``);
     }
 
-    // User use existing service or create a new object with prototype pointing to original
+    // Use existing service or create a new object with prototype pointing to original
     const isFeathersService = typeof service.hooks === 'function' && (service as any)._serviceEvents;
     const protoService = isFeathersService ? service : Object.create(service);
 
