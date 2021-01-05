@@ -47,7 +47,8 @@
     "version": "npm run write-version",
     "publish": "npm run reset-version",
     "compile": "shx rm -rf lib/ && tsc",
-    "test": "npm run compile && mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+    "test": "npm run compile && npm run mocha",
+    "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "engines": {
     "node": ">= 12"
@@ -59,8 +60,7 @@
     "@feathersjs/commons": "^5.0.0-pre.1",
     "@feathersjs/hooks": "^0.6.1",
     "debug": "^4.3.1",
-    "events": "^3.2.0",
-    "uberproto": "^2.0.6"
+    "events": "^3.2.0"
   },
   "devDependencies": {
     "@types/mocha": "^8.2.0",

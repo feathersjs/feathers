@@ -539,7 +539,7 @@ export default (test: any, app: any, _errors: any, serviceName: string, idProp: 
       let throwing: any;
 
       before(() => {
-        throwing = app.service(serviceName).extend({
+        throwing = Object.assign(Object.create(app.service(serviceName)), {
           get store () {
             return app.service(serviceName).store;
           },

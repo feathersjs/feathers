@@ -1,5 +1,3 @@
-// @ts-ignore
-import Proto from 'uberproto';
 import { EventEmitter } from 'events';
 import { HookContext, Service, Application } from './declarations';
 
@@ -32,9 +30,9 @@ export function eventMixin (this: Application, service: Service<any>) {
   const isEmitter = typeof service.on === 'function' &&
     typeof service.emit === 'function';
 
-  // If not, mix it in (the service is always an Uberproto object that has a .mixin)
-  if (typeof service.mixin === 'function' && !isEmitter) {
-    service.mixin(EventEmitter.prototype);
+  // If not, add EventEmitter functionality
+  if (!isEmitter) {
+    Object.assign(service, EventEmitter.prototype);
   }
 
   // Define non-enumerable properties of
@@ -81,7 +79,7 @@ export default function () {
     app.hooks({ finally: eventHook() });
 
     // Make the app an event emitter
-    Proto.mixin(EventEmitter.prototype, app);
+    Object.assign(app, EventEmitter.prototype);
 
     app.mixins.push(eventMixin);
   };
