@@ -6,20 +6,19 @@ describe('app.hooks', () => {
   let app: Application;
 
   beforeEach(() => {
-    app = feathers()
-      .use('/todos', {
-        get (id: any, params: any) {
-          if (id === 'error') {
-            return Promise.reject(new Error('Something went wrong'));
-          }
-
-          return Promise.resolve({ id, params });
-        },
-
-        create (data: any, params: any) {
-          return Promise.resolve({ data, params });
+    app = feathers().use('/todos', {
+      async get (id: any, params: any) {
+        if (id === 'error') {
+          throw new Error('Something went wrong');
         }
-      });
+
+        return { id, params };
+      },
+
+      async create (data: any, params: any) {
+        return { data, params };
+      }
+    });
   });
 
   it('app has the .hooks method', () => {
@@ -27,7 +26,7 @@ describe('app.hooks', () => {
   });
 
   describe('app.hooks({ async })', () => {
-    it('basic app async hook', () => {
+    it('basic app async hook', async () => {
       const service = app.service('todos');
 
       app.hooks({
@@ -38,25 +37,25 @@ describe('app.hooks', () => {
         }
       });
 
-      return service.get('test').then((result: any) => {
-        assert.deepStrictEqual(result, {
-          id: 'test',
-          params: { ran: true }
-        });
+      let result = await service.get('test');
 
-        const data = { test: 'hi' };
+      assert.deepStrictEqual(result, {
+        id: 'test',
+        params: { ran: true }
+      });
 
-        return service.create(data).then((result: any) => {
-          assert.deepStrictEqual(result, {
-            data, params: { ran: true }
-          });
-        });
+      const data = { test: 'hi' };
+
+      result = await service.create(data);
+
+      assert.deepStrictEqual(result, {
+        data, params: { ran: true }
       });
     });
   });
 
   describe('app.hooks({ before })', () => {
-    it('basic app before hook', () => {
+    it('basic app before hook', async () => {
       const service = app.service('todos');
 
       app.hooks({
@@ -66,23 +65,23 @@ describe('app.hooks', () => {
         }
       });
 
-      return service.get('test').then((result: any) => {
-        assert.deepStrictEqual(result, {
-          id: 'test',
-          params: { ran: true }
-        });
+      let result = await service.get('test');
 
-        const data = { test: 'hi' };
+      assert.deepStrictEqual(result, {
+        id: 'test',
+        params: { ran: true }
+      });
 
-        return service.create(data).then((result: any) => {
-          assert.deepStrictEqual(result, {
-            data, params: { ran: true }
-          });
-        });
+      const data = { test: 'hi' };
+
+      result = await service.create(data);
+
+      assert.deepStrictEqual(result, {
+        data, params: { ran: true }
       });
     });
 
-    it('app before hooks always run first', () => {
+    it('app before hooks always run first', async () => {
       app.service('todos').hooks({
         before (hook: any) {
           assert.strictEqual(hook.app, app);
@@ -105,19 +104,19 @@ describe('app.hooks', () => {
         }
       });
 
-      return app.service('todos').get('test').then((result: any) => {
-        assert.deepStrictEqual(result, {
-          id: 'test',
-          params: {
-            order: [ 'app.before', 'service.before', 'service.before 1' ]
-          }
-        });
+      const result = await app.service('todos').get('test');
+
+      assert.deepStrictEqual(result, {
+        id: 'test',
+        params: {
+          order: [ 'app.before', 'service.before', 'service.before 1' ]
+        }
       });
     });
   });
 
   describe('app.hooks({ after })', () => {
-    it('basic app after hook', () => {
+    it('basic app after hook', async () => {
       app.hooks({
         after (hook: any) {
           assert.strictEqual(hook.app, app);
@@ -125,16 +124,16 @@ describe('app.hooks', () => {
         }
       });
 
-      return app.service('todos').get('test').then((result: any) => {
-        assert.deepStrictEqual(result, {
-          id: 'test',
-          params: {},
-          ran: true
-        });
+      const result = await app.service('todos').get('test');
+
+      assert.deepStrictEqual(result, {
+        id: 'test',
+        params: {},
+        ran: true
       });
     });
 
-    it('app after hooks always run last', () => {
+    it('app after hooks always run last', async () => {
       app.hooks({
         after (hook: any) {
           assert.strictEqual(hook.app, app);
@@ -157,18 +156,18 @@ describe('app.hooks', () => {
         }
       });
 
-      return app.service('todos').get('test').then((result: any) => {
-        assert.deepStrictEqual(result, {
-          id: 'test',
-          params: {},
-          order: [ 'service.after', 'service.after 1', 'app.after' ]
-        });
+      const result = await app.service('todos').get('test');
+
+      assert.deepStrictEqual(result, {
+        id: 'test',
+        params: {},
+        order: [ 'service.after', 'service.after 1', 'app.after' ]
       });
     });
   });
 
   describe('app.hooks({ error })', () => {
-    it('basic app error hook', () => {
+    it('basic app error hook', async () => {
       app.hooks({
         error (hook: any) {
           assert.strictEqual(hook.app, app);
@@ -176,12 +175,12 @@ describe('app.hooks', () => {
         }
       });
 
-      return app.service('todos').get('error').catch((error: any) => {
-        assert.strictEqual(error.message, 'App hook ran');
+      await assert.rejects(() => app.service('todos').get('error'), {
+        message: 'App hook ran'
       });
     });
 
-    it('app error hooks always run last', () => {
+    it('app error hooks always run last', async () => {
       app.hooks({
         error (hook: any) {
           assert.strictEqual(hook.app, app);
@@ -203,8 +202,8 @@ describe('app.hooks', () => {
         }
       });
 
-      return app.service('todos').get('error').catch((error: any) => {
-        assert.strictEqual(error.message, 'Something went wrong service.after service.after 1 app.after');
+      await assert.rejects(() => app.service('todos').get('error'), {
+        message: 'Something went wrong service.after service.after 1 app.after'
       });
     });
   });

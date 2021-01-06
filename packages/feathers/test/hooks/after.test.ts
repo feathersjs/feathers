@@ -3,79 +3,56 @@ import feathers from '../../src';
 
 describe('`after` hooks', () => {
   describe('function(hook)', () => {
-    it('returning a non-hook object throws error', () => {
+    it('.after hooks can return a promise', async () => {
       const app = feathers().use('/dummy', {
-        get (id: any) {
-          return Promise.resolve({ id });
-        }
-      });
-      const service = app.service('dummy');
-
-      service.hooks({
-        after: {
-          get () {
-            return {};
-          }
-        }
-      });
-
-      return service.get(10).catch((e: any) => {
-        assert.strictEqual(e.message, 'after hook for \'get\' method returned invalid hook object');
-      });
-    });
-
-    it('.after hooks can return a promise', () => {
-      const app = feathers().use('/dummy', {
-        get (id: any) {
-          return Promise.resolve({
+        async get (id: any) {
+          return {
             id, description: `You have to do ${id}`
-          });
+          };
         },
 
-        find () {
-          return Promise.resolve([]);
+        async find () {
+          return [];
         }
       });
       const service = app.service('dummy');
 
       service.hooks({
         after: {
-          get (hook: any) {
+          async get (hook: any) {
             hook.result.ran = true;
-            return Promise.resolve(hook);
+            return hook;
           },
 
-          find () {
-            return Promise.reject(new Error('You can not see this'));
+          async find () {
+            throw new Error('You can not see this');
           }
         }
       });
 
-      return service.get('laundry', {}).then((data: any) => {
-        assert.deepStrictEqual(data, {
-          id: 'laundry',
-          description: 'You have to do laundry',
-          ran: true
-        });
+      const data = await service.get('laundry', {});
 
-        return service.find({}).then(() => {
-          throw new Error('Should never get here');
-        }).catch((error: any) => {
-          assert.strictEqual(error.message, 'You can not see this');
-        });
+      assert.deepStrictEqual(data, {
+        id: 'laundry',
+        description: 'You have to do laundry',
+        ran: true
+      });
+
+      await assert.rejects(() => service.find({}), {
+        message: 'You can not see this'
       });
     });
 
-    it('.after hooks do not need to return anything', () => {
+    it('.after hooks do not need to return anything', async () => {
       const app = feathers().use('/dummy', {
-        get (id: any) {
-          return Promise.resolve({
+        async get (id: any) {
+          return {
             id, description: `You have to do ${id}`
-          });
+          };
         },
 
-        find () {
-          return Promise.resolve([]);
+        async find () {
+          return [];
         }
       });
       const service = app.service('dummy');
@@ -92,25 +69,25 @@ describe('`after` hooks', () => {
         }
       });
 
-      return service.get('laundry').then((data: any) => {
-        assert.deepStrictEqual(data, {
-          id: 'laundry',
-          description: 'You have to do laundry',
-          ran: true
-        });
+      const data = await service.get('laundry');
 
-        return service.find().catch((error: any) => {
-          assert.strictEqual(error.message, 'You can not see this');
-        });
+      assert.deepStrictEqual(data, {
+        id: 'laundry',
+        description: 'You have to do laundry',
+        ran: true
+      });
+
+      await assert.rejects(() => service.find(), {
+        message: 'You can not see this'
       });
     });
   });
 
   describe('function(hook, next)', () => {
-    it('gets mixed into a service and modifies data', () => {
+    it('gets mixed into a service and modifies data', async () => {
       const dummyService = {
-        create (data: any) {
-          return Promise.resolve(data);
+        async create (data: any) {
+          return data;
         }
       };
 
@@ -129,15 +106,15 @@ describe('`after` hooks', () => {
         }
       });
 
-      return service.create({ my: 'data' }).then((data: any) => {
-        assert.deepStrictEqual({ my: 'data', some: 'thing' }, data, 'Got modified data');
-      });
+      const data = await service.create({ my: 'data' });
+
+      assert.deepStrictEqual({ my: 'data', some: 'thing' }, data, 'Got modified data');
     });
 
-    it('also makes the app available at hook.app', () => {
+    it('also makes the app available at hook.app', async () => {
       const dummyService = {
-        create (data: any) {
-          return Promise.resolve(data);
+        async create (data: any) {
+          return data;
         }
       };
 
@@ -155,15 +132,15 @@ describe('`after` hooks', () => {
         }
       });
 
-      return service.create({ my: 'data' }).then((data: any) => {
-        assert.deepStrictEqual({ my: 'data', appPresent: true }, data, 'The app was present in the hook.');
-      });
+      const data = await service.create({ my: 'data' });
+
+      assert.deepStrictEqual({ my: 'data', appPresent: true }, data, 'The app was present in the hook.');
     });
 
-    it('returns errors', () => {
+    it('returns errors', async () => {
       const dummyService = {
-        update (_id: any, data: any) {
-          return Promise.resolve(data);
+        async update (_id: any, data: any) {
+          return data;
         }
       };
 
@@ -178,16 +155,15 @@ describe('`after` hooks', () => {
         }
       });
 
-      return service.update(1, { my: 'data' }).catch((error: any) => {
-        assert.ok(error, 'Got an error');
-        assert.strictEqual(error.message, 'This did not work', 'Got expected error message from hook');
+      await assert.rejects(() => service.update(1, { my: 'data' }), {
+        message: 'This did not work'
       });
     });
 
-    it('does not run after hook when there is an error', () => {
+    it('does not run after hook when there is an error', async () => {
       const dummyService = {
-        remove () {
-          return Promise.reject(new Error('Error removing item'));
+        async remove () {
+          throw new Error('Error removing item');
         }
       };
 
@@ -202,16 +178,15 @@ describe('`after` hooks', () => {
         }
       });
 
-      return service.remove(1, {}).catch((error: any) => {
-        assert.ok(error, 'Got error');
-        assert.strictEqual(error.message, 'Error removing item', 'Got error message from service');
+      await assert.rejects(() => service.remove(1, {}), {
+        message: 'Error removing item'
       });
     });
 
-    it('adds .after() and chains multiple hooks for the same method', () => {
+    it('adds .after() and chains multiple hooks for the same method', async () => {
       const dummyService = {
-        create (data: any) {
-          return Promise.resolve(data);
+        async create (data: any) {
+          return data;
         }
       };
 
@@ -236,19 +211,19 @@ describe('`after` hooks', () => {
         }
       });
 
-      service.create({ my: 'data' }).then((data: any) => {
-        assert.deepStrictEqual({
-          my: 'data',
-          some: 'thing',
-          other: 'stuff'
-        }, data, 'Got modified data');
-      });
+      const data = await service.create({ my: 'data' });
+
+      assert.deepStrictEqual({
+        my: 'data',
+        some: 'thing',
+        other: 'stuff'
+      }, data, 'Got modified data');
     });
 
-    it('chains multiple after hooks using array syntax', () => {
+    it('chains multiple after hooks using array syntax', async () => {
       const dummyService = {
-        create (data: any) {
-          return Promise.resolve(data);
+        async create (data: any) {
+          return data;
         }
       };
 
@@ -272,22 +247,21 @@ describe('`after` hooks', () => {
         }
       });
 
-      return service.create({ my: 'data' }).then((data: any) => {
-        assert.deepStrictEqual({
-          my: 'data',
-          some: 'thing',
-          other: 'stuff'
-        }, data, 'Got modified data');
-      });
+      const data = await service.create({ my: 'data' });
+
+      assert.deepStrictEqual({
+        my: 'data',
+        some: 'thing',
+        other: 'stuff'
+      }, data, 'Got modified data');
     });
 
-    it('.after hooks run in the correct order (#13)', () => {
+    it('.after hooks run in the correct order (#13)', async () => {
       const app = feathers().use('/dummy', {
-        get (id: any) {
-          return Promise.resolve({ id });
+        async get (id: any) {
+          return { id };
         }
       });
-
       const service = app.service('dummy');
 
       service.hooks({
@@ -317,22 +291,21 @@ describe('`after` hooks', () => {
         }
       });
 
-      service.get(10).then((data: any) => {
-        assert.deepStrictEqual(data.items, ['first', 'second', 'third']);
-      });
+      const data = await service.get(10);
+
+      assert.deepStrictEqual(data.items, ['first', 'second', 'third']);
     });
 
-    it('after all hooks (#11)', () => {
+    it('after all hooks (#11)', async () => {
       const app = feathers().use('/dummy', {
-        get (id: any) {
-          return Promise.resolve({
-            id,
-            items: []
-          });
+        async get (id: any) {
+          const items: any[] = [];
+
+          return { id, items };
         },
 
-        find () {
-          return Promise.resolve([]);
+        async find () {
+          return [];
         }
       });
 
@@ -358,25 +331,25 @@ describe('`after` hooks', () => {
         ]
       });
 
-      return service.find({}).then((data: any) => {
-        assert.ok(data.afterAllObject);
-        assert.ok(data.afterAllMethodArray);
+      let data = await service.find({});
 
-        return service.get(1, {}).then((data: any) => {
-          assert.ok(data.afterAllObject);
-          assert.ok(data.afterAllMethodArray);
-        });
-      });
+      assert.ok(data.afterAllObject);
+      assert.ok(data.afterAllMethodArray);
+
+      data = await service.get(1, {});
+
+      assert.ok(data.afterAllObject);
+      assert.ok(data.afterAllMethodArray);
     });
 
-    it('after hooks have service as context and keep it in service method (#17)', () => {
+    it('after hooks have service as context and keep it in service method (#17)', async () => {
       const app = feathers().use('/dummy', {
         number: 42,
-        get (id: any) {
-          return Promise.resolve({
+        async get (id: any) {
+          return {
             id,
             number: this.number
-          });
+          };
         }
       });
 
@@ -392,12 +365,12 @@ describe('`after` hooks', () => {
         }
       });
 
-      service.get(10).then((data: any) => {
-        assert.deepStrictEqual(data, {
-          id: 10,
-          number: 42,
-          test: 43
-        });
+      const data = await service.get(10);
+
+      assert.deepStrictEqual(data, {
+        id: 10,
+        number: 42,
+        test: 43
       });
     });
   });

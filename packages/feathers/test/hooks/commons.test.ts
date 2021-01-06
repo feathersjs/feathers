@@ -179,13 +179,13 @@ describe('hook utilities', () => {
   });
 
   describe('.processHooks', () => {
-    it('runs through a hook chain with various formats', () => {
+    it('runs through a hook chain with various formats', async () => {
       const dummyHook = {
         type: 'dummy',
         method: 'something'
       };
 
-      const promise = hooks.processHooks([
+      const result = await hooks.processHooks([
         function (hook: any) {
           hook.chain = [ 'first' ];
 
@@ -203,30 +203,25 @@ describe('hook utilities', () => {
         }
       ], dummyHook);
 
-      return promise.then((result: any) => {
-        assert.deepEqual(result, {
-          type: 'dummy',
-          method: 'something',
-          chain: [ 'first', 'second', 'third' ]
-        });
+      assert.deepEqual(result, {
+        type: 'dummy',
+        method: 'something',
+        chain: [ 'first', 'second', 'third' ]
       });
     });
 
-    it('errors when invalid hook object is returned', () => {
+    it('errors when invalid hook object is returned', async () => {
       const dummyHook = {
         type: 'dummy',
         method: 'something'
       };
 
-      const promise = hooks.processHooks([
+      await assert.rejects(() => hooks.processHooks([
         function () {
           return {};
         }
-      ], dummyHook);
-
-      return promise.catch((e: any) => {
-        assert.equal(e.message, 'dummy hook for \'something\' method returned invalid hook object');
-        assert.equal(typeof e.hook, 'object');
+      ], dummyHook), {
+        message: 'dummy hook for \'something\' method returned invalid hook object'
       });
     });
   });

@@ -14,8 +14,8 @@ describe('Feathers application', () => {
   it('sets the version on main and app instance', () => {
     const app = feathers();
 
-    assert.ok(version > '4.0.0');
-    assert.ok(app.version > '4.0.0');
+    assert.ok(version > '5.0.0');
+    assert.ok(app.version > '5.0.0');
   });
 
   it('is an event emitter', done => {
@@ -41,7 +41,7 @@ describe('Feathers application', () => {
     }
   });
 
-  it('uses .defaultService if available', () => {
+  it('uses .defaultService if available', async () => {
     const app = feathers();
 
     assert.ok(!app.service('/todos/'));
@@ -49,19 +49,19 @@ describe('Feathers application', () => {
     app.defaultService = function (path: string) {
       assert.strictEqual(path, 'todos');
       return {
-        get (id: string) {
-          return Promise.resolve({
+        async get (id: string) {
+          return {
             id, description: `You have to do ${id}!`
-          });
+          };
         }
       };
     };
 
-    return app.service('/todos/').get('dishes').then((data: any) => {
-      assert.deepStrictEqual(data, {
-        id: 'dishes',
-        description: 'You have to do dishes!'
-      });
+    const data = await app.service('/todos/').get('dishes');
+
+    assert.deepStrictEqual(data, {
+      id: 'dishes',
+      description: 'You have to do dishes!'
     });
   });
 
@@ -101,14 +101,14 @@ describe('Feathers application', () => {
       }
     });
 
-    it('registers and wraps a new service', () => {
+    it('registers and wraps a new service', async () => {
       const dummyService = {
         setup (this: any, _app: any, path: string) {
           this.path = path;
         },
 
-        create (data: any) {
-          return Promise.resolve(data);
+        async create (data: any) {
+          return data;
         }
       };
 
@@ -117,20 +117,23 @@ describe('Feathers application', () => {
 
       assert.strictEqual(Object.getPrototypeOf(wrappedService), dummyService, 'Object points to original service prototype');
 
-      return wrappedService.create({
+      const data = await wrappedService.create({
         message: 'Test message'
-      }).then((data: any) => assert.strictEqual(data.message, 'Test message'));
+      });
+      
+      assert.strictEqual(data.message, 'Test message');
     });
 
-    it('can use a root level service', () => {
+    it('can use a root level service', async () => {
       const app = feathers().use('/', {
-        get (id: string) {
-          return Promise.resolve({ id });
+        async get (id: string) {
+          return { id };
         }
       });
 
-      return app.service('/').get('test')
-        .then((result: any) => assert.deepStrictEqual(result, { id: 'test' }));
+      const result = await app.service('/').get('test');
+
+      assert.deepStrictEqual(result, { id: 'test' });
     });
 
     it('services can be re-used (#566)', done => {
@@ -138,8 +141,8 @@ describe('Feathers application', () => {
       const app2 = feathers();
 
       app2.use('/dummy', {
-        create (data: any) {
-          return Promise.resolve(data);
+        async create (data: any) {
+          return data;
         }
       });
 
@@ -166,12 +169,12 @@ describe('Feathers application', () => {
       app1.service('testing').create({ message: 'Hi' });
     });
 
-    it('async hooks', done => {
+    it('async hooks', async () => {
       const app = feathers();
 
       app.use('/dummy', {
-        create (data: any) {
-          return Promise.resolve(data);
+        async  create (data: any) {
+          return data;
         }
       });
 
@@ -189,11 +192,9 @@ describe('Feathers application', () => {
         }
       });
 
-      dummy.create({ message: 'Hi' }, {}, true)
-        .then((ctx: any) => {
-          assert.ok(ctx.params.fromAsyncHook);
-        })
-        .then(done, done);
+      const ctx = await dummy.create({ message: 'Hi' }, {}, true);
+      
+      assert.ok(ctx.params.fromAsyncHook);
     });
 
     it('services conserve Symbols', () => {
@@ -205,8 +206,8 @@ describe('Feathers application', () => {
           this.path = path;
         },
 
-        create (data: any) {
-          return Promise.resolve(data);
+        async create (data: any) {
+          return data;
         }
       };
 
@@ -223,8 +224,8 @@ describe('Feathers application', () => {
           this.path = path;
         },
 
-        create (data: any) {
-          return Promise.resolve(data);
+        async create (data: any) {
+          return data;
         }
       };
 
@@ -435,20 +436,20 @@ describe('Feathers application', () => {
       const subApp = feathers();
 
       subApp.use('/service1', {
-        get (id: string) {
-          return Promise.resolve({
+        async get (id: string) {
+          return {
             id, name: 'service1'
-          });
+          };
         }
       }).use('/service2', {
-        get (id: string) {
-          return Promise.resolve({
+        async get (id: string) {
+          return {
             id, name: 'service2'
-          });
+          };
         },
 
-        create (data: any) {
-          return Promise.resolve(data);
+        async create (data: any) {
+          return data;
         }
       });
 
@@ -472,17 +473,17 @@ describe('Feathers application', () => {
         });
       });
 
-      app.service('/api/service1').get(10).then((data: any) => {
+      (async () => {
+        let data = await app.service('/api/service1').get(10);
         assert.strictEqual(data.name, 'service1');
-
-        return app.service('/api/service2').get(1);
-      }).then((data: any) => {
+  
+        data = await app.service('/api/service2').get(1);
         assert.strictEqual(data.name, 'service2');
 
-        return subApp.service('service2').create({
+        await subApp.service('service2').create({
           message: 'This is a test'
         });
-      });
+      })();
     });
   });
 });
