@@ -2,10 +2,10 @@ import assert from 'assert';
 import feathers from '../../src';
 
 describe('`finally` hooks', () => {
-  it('runs after `after` hooks, app level last', () => {
+  it('runs after `after` hooks, app level last', async () => {
     const app = feathers().use('/dummy', {
-      get (id: any) {
-        return Promise.resolve({ id });
+      async get (id: any) {
+        return { id };
       }
     });
 
@@ -26,18 +26,18 @@ describe('`finally` hooks', () => {
       }
     });
 
-    return service.get(42).then((data: any) => {
-      assert.deepStrictEqual(data, {
-        id: 42,
-        chain: [ 'service after', 'service finally', 'app finally' ]
-      });
+    const data = await service.get(42);
+
+    assert.deepStrictEqual(data, {
+      id: 42,
+      chain: [ 'service after', 'service finally', 'app finally' ]
     });
   });
 
-  it('runs after `error` hooks, app level last', () => {
+  it('runs after `error` hooks, app level last', async () => {
     const app = feathers().use('/dummy', {
       get (id: any) {
-        return Promise.reject(new Error(`${id} is not the answer`));
+        throw new Error(`${id} is not the answer`);
       }
     });
 
@@ -61,26 +61,22 @@ describe('`finally` hooks', () => {
       }
     });
 
-    return service.get(42).then(
-      () => assert(false, 'Should never get here'),
-      (error: any) => {
-        assert.deepStrictEqual(error.chain, [
-          'service error',
-          'service finally',
-          'app finally'
-        ]);
-        assert.deepStrictEqual(error.message, '42 is not the answer');
-      }
-    );
+    await assert.rejects(() => service.get(42), {
+      message: '42 is not the answer',
+      chain: [
+        'service error',
+        'service finally',
+        'app finally'
+      ]
+    });
   });
 
-  it('runs once, sets error if throws', () => {
+  it('runs once, sets error if throws', async () => {
     const app = feathers().use('/dummy', {
-      get (id: any) {
-        return Promise.resolve({ id });
+      async get (id: any) {
+        return { id };
       }
     });
-
     const service = app.service('dummy');
 
     let count = 0;
@@ -100,9 +96,8 @@ describe('`finally` hooks', () => {
       ]
     });
 
-    return service.get(42).then(
-      () => assert.fail('Should never get here (result resolve)'),
-      (error: any) => assert.strictEqual(error.message, 'This did not work')
-    );
+    await assert.rejects(() => service.get(42), {
+      message: 'This did not work'
+    });
   });
 });

@@ -5,8 +5,8 @@ import feathers, { activateHooks, Id } from '../../src';
 describe('hooks basics', () => {
   it('mix @feathersjs/hooks and .hooks', async () => {
     const svc = {
-      get (id: any, params: any) {
-        return Promise.resolve({ id, user: params.user });
+      async get (id: any, params: any) {
+        return { id, user: params.user };
       }
     };
 
@@ -73,37 +73,31 @@ describe('hooks basics', () => {
     ]);
   });
 
-  it('validates arguments', () => {
+  it('validates arguments', async () => {
     const app = feathers().use('/dummy', {
-      get (id: any, params: any) {
-        return Promise.resolve({ id, user: params.user });
+      async get (id: any, params: any) {
+        return { id, user: params.user };
       },
 
-      create (data: any) {
-        return Promise.resolve(data);
+      async create (data: any) {
+        return data;
       }
     });
 
-    return app.service('dummy').get(1, {}, function () {}).catch((e: any) => {
-      assert.strictEqual(e.message, 'Callbacks are no longer supported. Use Promises or async/await instead.');
-
-      return app.service('dummy').get();
-    }).catch((e: any) => {
-      assert.strictEqual(e.message, 'An id must be provided to the \'dummy.get\' method');
-    }).then(() =>
-      app.service('dummy').create()
-    ).catch((e: any) => {
-      assert.strictEqual(e.message, 'A data object must be provided to the \'dummy.create\' method');
+    await assert.rejects(() => app.service('dummy').get(), {
+      message: 'An id must be provided to the \'dummy.get\' method'
+    });
+    await assert.rejects(() => app.service('dummy').create(), {
+      message: 'A data object must be provided to the \'dummy.create\' method'
     });
   });
 
-  it('works with services that return a promise (feathers-hooks#28)', () => {
+  it('works with services that return a promise (feathers-hooks#28)', async () => {
     const app = feathers().use('/dummy', {
-      get (id: any, params: any) {
-        return Promise.resolve({ id, user: params.user });
+      async get (id: any, params: any) {
+        return { id, user: params.user };
       }
     });
-
     const service = app.service('dummy');
 
     service.hooks({
@@ -119,18 +113,17 @@ describe('hooks basics', () => {
       }
     });
 
-    return service.get(10).then((data: any) => {
-      assert.deepStrictEqual(data, { id: 10, user: 'David', after: true });
-    });
+    const data = await service.get(10);
+
+    assert.deepStrictEqual(data, { id: 10, user: 'David', after: true });
   });
 
-  it('has hook.app, hook.service and hook.path', () => {
+  it('has hook.app, hook.service and hook.path', async () => {
     const app = feathers().use('/dummy', {
-      get (id: any) {
-        return Promise.resolve({ id });
+      async get (id: any) {
+        return { id };
       }
     });
-
     const service = app.service('dummy');
 
     service.hooks({
@@ -142,16 +135,15 @@ describe('hooks basics', () => {
       }
     });
 
-    return service.get('test');
+    await service.get('test');
   });
 
-  it('does not error when result is null', () => {
+  it('does not error when result is null', async () => {
     const app = feathers().use('/dummy', {
-      get (id: any) {
-        return Promise.resolve({ id });
+      async get (id: any) {
+        return { id };
       }
     });
-
     const service = app.service('dummy');
 
     service.hooks({
@@ -165,121 +157,105 @@ describe('hooks basics', () => {
       }
     });
 
-    return service.get(1)
-      .then((result: any) => assert.strictEqual(result, null));
+    const result = await service.get(1);
+    
+    assert.strictEqual(result, null);
   });
 
   it('invalid type in .hooks throws error', () => {
     const app = feathers().use('/dummy', {
-      get (id: any, params: any) {
-        return Promise.resolve({ id, params });
+      async get (id: any, params: any) {
+        return{ id, params };
       }
     });
 
-    try {
-      app.service('dummy').hooks({
-        invalid: {}
-      });
-      assert.ok(false);
-    } catch (e) {
-      assert.strictEqual(e.message, '\'invalid\' is not a valid hook type');
-    }
+    assert.throws(() => app.service('dummy').hooks({
+      invalid: {}
+    }), {
+      message: '\'invalid\' is not a valid hook type'
+    });
   });
 
   it('invalid hook method throws error', () => {
     const app = feathers().use('/dummy', {
-      get (id: any, params: any) {
-        return Promise.resolve({ id, params });
+      async get (id: any, params: any) {
+        return { id, params };
       }
     });
 
-    try {
-      app.service('dummy').hooks({
-        before: {
-          invalid () {}
-        }
-      });
-      assert.ok(false);
-    } catch (e) {
-      assert.strictEqual(e.message, '\'invalid\' is not a valid hook method');
-    }
+    assert.throws(() => app.service('dummy').hooks({
+      before: {
+        invalid () {}
+      }
+    }), {
+      message: '\'invalid\' is not a valid hook method'
+    });
   });
 
   it('registering an already hooked service works (#154)', () => {
     const app = feathers().use('/dummy', {
-      get (id: any, params: any) {
-        return Promise.resolve({ id, params });
+      async get (id: any, params: any) {
+        return { id, params };
       }
     });
 
     app.use('/dummy2', app.service('dummy'));
   });
 
-  it('not returning a promise errors', () => {
-    const app = feathers().use('/dummy', {
-      async get () {
-        return {};
-      }
-    });
-
-    return app.service('dummy').get(1).catch((e: any) => {
-      assert.strictEqual(e.message, 'Service method \'get\' for \'dummy\' service must return a promise');
-    });
-  });
-
   describe('returns the hook object when passing true as last parameter', () => {
-    it('on normal method call', () => {
+    it('on normal method call', async () => {
       const app = feathers().use('/dummy', {
-        get (id: any, params: any) {
-          return Promise.resolve({ id, params });
+        async get (id: any, params: any) {
+          return { id, params };
         }
       });
 
-      return app.service('dummy').get(10, {}, true).then((context: any) => {
-        assert.strictEqual(context.service, app.service('dummy'));
-        assert.strictEqual(context.type, 'after');
-        assert.strictEqual(context.path, 'dummy');
-        assert.deepStrictEqual(context.result, {
-          id: 10,
-          params: {}
-        });
+      const context = await app.service('dummy').get(10, {}, true);
+
+      assert.strictEqual(context.service, app.service('dummy'));
+      assert.strictEqual(context.type, 'after');
+      assert.strictEqual(context.path, 'dummy');
+      assert.deepStrictEqual(context.result, {
+        id: 10,
+        params: {}
       });
     });
 
-    it('on error', () => {
+    it('on error', async () => {
       const app = feathers().use('/dummy', {
         get () {
-          return Promise.reject(new Error('Something went wrong'));
+          throw new Error('Something went wrong');
         }
       });
 
-      return app.service('dummy').get(10, {}, true).catch((context: any) => {
-        assert.strictEqual(context.service, app.service('dummy'));
-        assert.strictEqual(context.type, 'error');
-        assert.strictEqual(context.path, 'dummy');
-        assert.strictEqual(context.error.message, 'Something went wrong');
+      await assert.rejects(() => app.service('dummy').get(10, {}, true), {
+        service: app.service('dummy'),
+        type: 'error',
+        path: 'dummy'
       });
     });
 
-    it('on argument validation error (https://github.com/feathersjs/express/issues/19)', () => {
+    it('on argument validation error (https://github.com/feathersjs/express/issues/19)', async () => {
       const app = feathers().use('/dummy', {
-        get (id: string) {
-          return Promise.resolve({ id });
+        async get (id: string) {
+          return { id };
         }
       });
 
-      return app.service('dummy').get(undefined, {}, true).catch((context: any) => {
+      await assert.rejects(() => app.service('dummy').get(undefined, {}, true), context => {
         assert.strictEqual(context.service, app.service('dummy'));
         assert.strictEqual(context.type, 'error');
         assert.strictEqual(context.path, 'dummy');
         assert.strictEqual(context.error.message, 'An id must be provided to the \'dummy.get\' method');
+
+        return true;
       });
     });
 
-    it('on error in error hook (https://github.com/feathersjs/express/issues/21)', () => {
+    it('on error in error hook (https://github.com/feathersjs/express/issues/21)', async () => {
       const app = feathers().use('/dummy', {
-        get () {
-          return Promise.reject(new Error('Nope'));
+        async get () {
+          throw new Error('Nope');
         }
       });
 
@@ -291,19 +267,21 @@ describe('hooks basics', () => {
         }
       });
 
-      return app.service('dummy').get(10, {}, true).catch((context: any) => {
+      await assert.rejects(() => app.service('dummy').get(10, {}, true), context => {
         assert.strictEqual(context.service, app.service('dummy'));
         assert.strictEqual(context.type, 'error');
         assert.strictEqual(context.path, 'dummy');
         assert.strictEqual(context.error.message, 'Error in error hook');
+
+        return true;
       });
     });
 
-    it('still swallows error if context.result is set', () => {
+    it('still swallows error if context.result is set', async () => {
       const result = { message: 'this is a test' };
       const app = feathers().use('/dummy', {
-        get () {
-          return Promise.reject(new Error('Something went wrong'));
+        async get () {
+          throw new Error('Something went wrong');
         }
       });
 
@@ -313,16 +291,14 @@ describe('hooks basics', () => {
         }
       });
 
-      return app.service('dummy').get(10, {}, true).then((hook: any) => {
-        assert.ok(hook.error);
-        assert.deepStrictEqual(hook.result, result);
-      }).catch(() => {
-        throw new Error('Should never get here');
-      });
+      const hook = await app.service('dummy').get(10, {}, true);
+
+      assert.ok(hook.error);
+      assert.deepStrictEqual(hook.result, result);
     });
   });
 
-  it('can register hooks on a custom method', () => {
+  it('can register hooks on a custom method', async () => {
     const app = feathers().use('/dummy', {
       methods: {
         custom: ['id', 'data', 'params']
@@ -330,8 +306,8 @@ describe('hooks basics', () => {
       async get (id: Id) {
         return { id };
       },
-      custom (id: any, data: any, params: any) {
-        return Promise.resolve([id, data, params]);
+      async custom (id: any, data: any, params: any) {
+        return [id, data, params];
       },
       // activateHooks is usable as a decorator: @activateHooks(['id', 'data', 'params'])
       other: activateHooks(['id', 'data', 'params'])(
@@ -373,20 +349,18 @@ describe('hooks basics', () => {
       other: ['id', 'data', 'params']
     });
 
-    return app.service('dummy').custom(...args, true)
-      .then((hook: any) => {
-        assert.deepStrictEqual(hook.result, args);
-        assert.deepStrictEqual(hook.test, ['all::before', 'custom::before', 'all::after', 'custom::after']);
+    let hook = await app.service('dummy').custom(...args, true);
 
-        app.service('dummy').other(...args, true)
-          .then((hook: any) => {
-            assert.deepStrictEqual(hook.result, args);
-            assert.deepStrictEqual(hook.test, ['all::before', 'all::after']);
-          });
-      });
+    assert.deepStrictEqual(hook.result, args);
+    assert.deepStrictEqual(hook.test, ['all::before', 'custom::before', 'all::after', 'custom::after']);
+
+    hook = await app.service('dummy').other(...args, true);
+
+    assert.deepStrictEqual(hook.result, args);
+    assert.deepStrictEqual(hook.test, ['all::before', 'all::after']);
   });
 
-  it('context.data should not change arguments', () => {
+  it('context.data should not change arguments', async () => {
     const app = feathers().use('/dummy', {
       methods: {
         custom: ['id', 'params']
@@ -394,8 +368,8 @@ describe('hooks basics', () => {
       async get (id: Id) {
         return { id };
       },
-      custom (id: any, params: any) {
-        return Promise.resolve([id, params]);
+      async custom (id: any, params: any) {
+        return [id, params];
       }
     });
 
@@ -411,25 +385,23 @@ describe('hooks basics', () => {
     });
 
     const args = [1, { provider: 'rest' }];
+    const result = await app.service('dummy').custom(...args)
 
-    return app.service('dummy').custom(...args)
-      .then((result: any) => {
-        assert.deepStrictEqual(result, args);
-      });
+    assert.deepStrictEqual(result, args);
   });
 
-  it('normalizes params to object even when it is falsy (#1001)', () => {
+  it('normalizes params to object even when it is falsy (#1001)', async () => {
     const app = feathers().use('/dummy', {
-      get (id: any, params: any) {
-        return Promise.resolve({ id, params });
+      async get (id: any, params: any) {
+        return { id, params };
       }
     });
 
-    return app.service('dummy').get('test', null).then((result: any) => {
-      assert.deepStrictEqual(result, {
-        id: 'test',
-        params: {}
-      });
+    const result = await app.service('dummy').get('test', null);
+
+    assert.deepStrictEqual(result, {
+      id: 'test',
+      params: {}
     });
   });
 });

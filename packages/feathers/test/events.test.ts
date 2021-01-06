@@ -20,8 +20,8 @@ describe('Service events', () => {
     const app = feathers();
     const service: any = new EventEmitter();
 
-    service.create = function (data: any) {
-      return Promise.resolve(data);
+    service.create = async function (data: any) {
+      return data;
     };
 
     service.on('created', (data: any) => {
@@ -41,8 +41,8 @@ describe('Service events', () => {
   describe('emits event data on a service', () => {
     it('.create and created', done => {
       const app = feathers().use('/creator', {
-        create (data: any) {
-          return Promise.resolve(data);
+        async create (data: any) {
+          return data;
         }
       });
 
@@ -58,8 +58,8 @@ describe('Service events', () => {
 
     it('allows to skip event emitting', done => {
       const app = feathers().use('/creator', {
-        create (data: any) {
-          return Promise.resolve(data);
+        async create (data: any) {
+          return data;
         }
       });
 
@@ -84,8 +84,8 @@ describe('Service events', () => {
 
     it('.update and updated', done => {
       const app = feathers().use('/creator', {
-        update (id: any, data: any) {
-          return Promise.resolve(Object.assign({ id }, data));
+        async update (id: any, data: any) {
+          return Object.assign({ id }, data);
         }
       });
 
@@ -101,8 +101,8 @@ describe('Service events', () => {
 
     it('.patch and patched', done => {
       const app = feathers().use('/creator', {
-        patch (id: any, data: any) {
-          return Promise.resolve(Object.assign({ id }, data));
+        async patch (id: any, data: any) {
+          return Object.assign({ id }, data);
         }
       });
 
@@ -118,8 +118,8 @@ describe('Service events', () => {
 
     it('.remove and removed', done => {
       const app = feathers().use('/creator', {
-        remove (id: any) {
-          return Promise.resolve({ id });
+        async remove (id: any) {
+          return { id };
         }
       });
 
@@ -135,16 +135,16 @@ describe('Service events', () => {
   });
 
   describe('emits event data arrays on a service', () => {
-    it('.create and created with array', done => {
+    it('.create and created with array', async () => {
       const app = feathers().use('/creator', {
-        create (data: any) {
+        async create (data: any) {
           if (Array.isArray(data)) {
             return Promise.all(data.map(current =>
               (this as any).create(current))
             );
           }
 
-          return Promise.resolve(data);
+          return data;
         }
       });
 
@@ -154,7 +154,7 @@ describe('Service events', () => {
         { message: 'Hello 1' }
       ];
 
-      Promise.all(createItems.map((element, index) => {
+      const events = Promise.all(createItems.map((element, index) => {
         return new Promise<void>((resolve) => {
           service.on('created', (data: any) => {
             if (data.message === element.message) {
@@ -163,20 +163,21 @@ describe('Service events', () => {
             }
           });
         });
-      })).then(() => done()).catch(done);
+      }));
 
-      service.create(createItems);
+      await service.create(createItems);
+      await events;
     });
 
-    it('.update and updated with array', done => {
+    it('.update and updated with array', async () => {
       const app = feathers().use('/creator', {
-        update (id: any, data: any) {
+        async update (id: any, data: any) {
           if (Array.isArray(data)) {
             return Promise.all(data.map((current, index) =>
               (this as any).update(index, current))
             );
           }
-          return Promise.resolve(Object.assign({ id }, data));
+          return Object.assign({ id }, data);
         }
       });
 
@@ -186,7 +187,7 @@ describe('Service events', () => {
         { message: 'Hello 1' }
       ];
 
-      Promise.all(updateItems.map((element, index) => {
+      const events = Promise.all(updateItems.map((element, index) => {
         return new Promise<void>((resolve) => {
           service.on('updated', (data: any) => {
             if (data.message === element.message) {
@@ -195,20 +196,21 @@ describe('Service events', () => {
             }
           });
         });
-      })).then(() => done()).catch(done);
+      }));
 
-      service.update(null, updateItems);
+      await service.update(null, updateItems);
+      await events;
     });
 
-    it('.patch and patched with array', done => {
+    it('.patch and patched with array', async () => {
       const app = feathers().use('/creator', {
-        patch (id: any, data: any) {
+        async patch (id: any, data: any) {
           if (Array.isArray(data)) {
             return Promise.all(data.map((current, index) =>
               (this as any).patch(index, current))
             );
           }
-          return Promise.resolve(Object.assign({ id }, data));
+          return Object.assign({ id }, data);
         }
       });
 
@@ -218,7 +220,7 @@ describe('Service events', () => {
         { message: 'Hello 1' }
       ];
 
-      Promise.all(patchItems.map((element, index) => {
+      const events = Promise.all(patchItems.map((element, index) => {
         return new Promise<void>((resolve) => {
           service.on('patched', (data: any) => {
             if (data.message === element.message) {
@@ -227,20 +229,21 @@ describe('Service events', () => {
             }
           });
         });
-      })).then(() => done()).catch(done);
+      }));
 
-      service.patch(null, patchItems);
+      await service.patch(null, patchItems);
+      await events;
     });
 
-    it('.remove and removed with array', done => {
+    it('.remove and removed with array', async () => {
       const app = feathers().use('/creator', {
-        remove (id: any, data: any) {
+        async remove (id: any, data: any) {
           if (Array.isArray(data)) {
             return Promise.all(data.map((current, index) =>
               (this as any).remove(index, current))
             );
           }
-          return Promise.resolve(Object.assign({ id }, data));
+          return Object.assign({ id }, data);
         }
       });
 
@@ -250,7 +253,7 @@ describe('Service events', () => {
         { message: 'Hello 1' }
       ];
 
-      Promise.all(removeItems.map((element, index) => {
+      const events = Promise.all(removeItems.map((element, index) => {
         return new Promise<void>((resolve) => {
           service.on('removed', (data: any) => {
             if (data.message === element.message) {
@@ -259,17 +262,18 @@ describe('Service events', () => {
             }
           });
         });
-      })).then(() => done()).catch(done);
+      }));
 
-      service.remove(null, removeItems);
+      await service.remove(null, removeItems);
+      await events;
     });
   });
 
   describe('event format', () => {
     it('also emits the actual hook object', done => {
       const app = feathers().use('/creator', {
-        create (data: any) {
-          return Promise.resolve(data);
+        async create (data: any) {
+          return data;
         }
       });
 
@@ -296,8 +300,8 @@ describe('Service events', () => {
     it('events indicated by the service are not sent automatically', done => {
       const app = feathers().use('/creator', {
         events: ['created'],
-        create (data: any) {
-          return Promise.resolve(data);
+        async create (data: any) {
+          return data;
         }
       });
 
@@ -308,8 +312,8 @@ describe('Service events', () => {
         done();
       });
 
-      service.create({ message: 'hello' })
-        .then(() => service.emit('created', { message: 'custom event' }));
+      service.create({ message: 'hello' });
+      service.emit('created', { message: 'custom event' });
     });
   });
 });
