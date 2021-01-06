@@ -158,7 +158,7 @@ describe('hooks basics', () => {
     });
 
     const result = await service.get(1);
-    
+
     assert.strictEqual(result, null);
   });
 

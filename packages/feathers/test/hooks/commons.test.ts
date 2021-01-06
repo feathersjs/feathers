@@ -221,7 +221,7 @@ describe('hook utilities', () => {
           return {};
         }
       ], dummyHook), {
-        message: 'dummy hook for \'something\' method returned invalid hook object',
+        message: 'dummy hook for \'something\' method returned invalid hook object'
       });
     });
   });

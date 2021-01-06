@@ -67,7 +67,7 @@ describe('`async` hooks', () => {
       });
 
       await service.get('dishes')
-      
+
       assert.rejects(() => service.remove(10), {
         message: 'This did not work'
       });
