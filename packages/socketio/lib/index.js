@@ -58,6 +58,9 @@ function configureSocketio (port, options, config) {
             // of event listeners (e.g. by registering 10 services).
             // So we set it to a higher number. 64 should be enough for everyone.
             io.sockets.setMaxListeners(64);
+            io.origins((_, callback) => {
+              callback(null, true);
+            });
           }
 
           if (typeof config === 'function') {
