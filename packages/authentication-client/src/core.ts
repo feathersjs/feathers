@@ -3,6 +3,12 @@ import { Application, Params } from '@feathersjs/feathers';
 import { AuthenticationRequest, AuthenticationResult } from '@feathersjs/authentication';
 import { Storage, StorageWrapper } from './storage';
 
+class OauthError extends FeathersError {
+  constructor (message: string, data?: any) {
+    super(message, 'OauthError', 401, 'oauth-error', data);
+  }
+}
+
 const getMatch = (location: Location, key: string): [ string, RegExp ] => {
   const regex = new RegExp(`(?:\&?)${key}=([^&]*)`);
   const match = location.hash ? location.hash.match(regex) : null;
@@ -90,7 +96,7 @@ export class AuthenticationClient {
     if (message !== null) {
       location.hash = location.hash.replace(errorRegex, '');
 
-      return Promise.reject(new NotAuthenticated(decodeURIComponent(message)));
+      return Promise.reject(new OauthError(decodeURIComponent(message)));
     }
 
     return Promise.resolve(null);
