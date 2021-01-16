@@ -91,7 +91,7 @@ describe('@feathersjs/authentication-client', () => {
       } as Location);
       assert.fail('Should never get here');
     } catch (error) {
-      assert.strictEqual(error.name, 'NotAuthenticated');
+      assert.strictEqual(error.name, 'OauthError');
       assert.strictEqual(error.message, 'Error Happened');
     }
   });
