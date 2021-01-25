@@ -37,7 +37,7 @@
     "@typescript-eslint/parser": "^4.11.0",
     "eslint": "^7.16.0",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsdoc": "^30.7.9",
+    "eslint-plugin-jsdoc": "^31.3.3",
     "eslint-plugin-prefer-arrow": "^1.2.2",
     "lerna": "^3.22.1",
     "npm-check-updates": "^10.2.5",
