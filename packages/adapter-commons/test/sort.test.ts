@@ -176,4 +176,69 @@ describe('@feathersjs/adapter-commons', () => {
       ]);
     });
   });
+
+  describe('sorter mongoDB-like sorting on embedded objects', () => {
+    let data: any[] = [];
+
+    beforeEach(() => {
+      data = [
+        { _id: 1, item: { category: "cake", type: "chiffon" }, amount: 10 },
+        { _id: 2, item: { category: "cookies", type: "chocolate chip" }, amount: 50 },
+        { _id: 3, item: { category: "cookies", type: "chocolate chip" }, amount: 15 },
+        { _id: 4, item: { category: "cake", type: "lemon" }, amount: 30 },
+        { _id: 5, item: { category: "cake", type: "carrot" }, amount: 20 },
+        { _id: 6, item: { category: "brownies", type: "blondie" }, amount: 10 }
+      ];
+
+    });
+
+    it('straight test', () => {
+      const sort = sorter({
+        amount: -1
+      });
+
+      assert.deepStrictEqual(data.sort(sort), [
+        { _id: 2, item: { category: "cookies", type: "chocolate chip" }, amount: 50 },
+        { _id: 4, item: { category: "cake", type: "lemon" }, amount: 30 },
+        { _id: 5, item: { category: "cake", type: "carrot" }, amount: 20 },
+        { _id: 3, item: { category: "cookies", type: "chocolate chip" }, amount: 15 },
+        { _id: 1, item: { category: "cake", type: "chiffon" }, amount: 10 },
+        { _id: 6, item: { category: "brownies", type: "blondie" }, amount: 10 }
+      ]);
+    });
+
+    it('embedded sort 1', () => {
+      const sort = sorter({
+        "item.category": 1,
+        "item.type": 1,
+      });
+
+      assert.deepStrictEqual(data.sort(sort), [
+        { _id: 6, item: { category: "brownies", type: "blondie" }, amount: 10 },
+        { _id: 5, item: { category: "cake", type: "carrot" }, amount: 20 },
+        { _id: 1, item: { category: "cake", type: "chiffon" }, amount: 10 },
+        { _id: 4, item: { category: "cake", type: "lemon" }, amount: 30 },
+        { _id: 2, item: { category: "cookies", type: "chocolate chip" }, amount: 50 },
+        { _id: 3, item: { category: "cookies", type: "chocolate chip" }, amount: 15 }
+      ]);
+    });
+
+    it('embedded sort 2', () => {
+      const sort = sorter({
+        "item.category": 1,
+        "item.type": 1,
+        amount: 1
+      });
+
+      assert.deepStrictEqual(data.sort(sort), [
+        { _id: 6, item: { category: "brownies", type: "blondie" }, amount: 10 },
+        { _id: 5, item: { category: "cake", type: "carrot" }, amount: 20 },
+        { _id: 1, item: { category: "cake", type: "chiffon" }, amount: 10 },
+        { _id: 4, item: { category: "cake", type: "lemon" }, amount: 30 },
+        { _id: 3, item: { category: "cookies", type: "chocolate chip" }, amount: 15 },
+        { _id: 2, item: { category: "cookies", type: "chocolate chip" }, amount: 50 }
+      ]);
+    });
+ });
+
 });
