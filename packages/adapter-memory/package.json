@@ -49,13 +49,13 @@
     "@feathersjs/adapter-commons": "^5.0.0-pre.1",
     "@feathersjs/commons": "^5.0.0-pre.1",
     "@feathersjs/errors": "^5.0.0-pre.1",
-    "sift": "^13.4.0"
+    "sift": "^13.5.0"
   },
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.0-pre.1",
     "@feathersjs/feathers": "^5.0.0-pre.1",
     "@types/mocha": "^8.2.0",
-    "@types/node": "^14.14.14",
+    "@types/node": "^14.14.22",
     "mocha": "^8.2.1",
     "shx": "^0.3.3",
     "ts-node": "^9.1.1",
