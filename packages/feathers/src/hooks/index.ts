@@ -1,181 +1,96 @@
-import * as hookCommons from './commons';
-import {
-  hooks as hooksDecorator,
-  HookManager,
-  HookContext,
-  HookMap,
-  Middleware,
-  middleware
-} from '@feathersjs/hooks';
-import { assignArguments, validate } from './base';
-import { Application, Service } from '../declarations';
-const baseHooks = [ assignArguments, validate ];
-const {
-  getHooks,
-  enableHooks,
-  ACTIVATE_HOOKS,
-  finallyWrapper,
-  errorWrapper,
-  wrap
-} = hookCommons;
+import { HookManager, hooks, Middleware, HookContext, NextFunction } from '@feathersjs/hooks';
+import { Service, ServiceOptions, Application } from '../declarations';
+import { defaultServiceArguments } from '../service';
+import { eventHook } from '../events';
 
-function getMiddlewareOptions (app: Application, service: Service<any>, method: string) {
-  const params: string[] = service.methods[method];
-  const defaults = params.find(v => v === 'params') ? { params: {} } : null;
+export class FeathersHookManager<A> extends HookManager {
+  app: A;
 
-  return {
-    params,
-    defaults,
-    props: {
-      app,
-      service,
-      type: 'before',
-      get path () {
-        if (!service || !app || !app.services) {
-          return null;
+  constructor (app: A) {
+    super();
+    this.app = app;
+  }
+}
+
+export function getFeathersHook ({ app, service, method, path }: {
+  service: Service<any>;
+  app: Application;
+  method: string;
+  path: string;
+}) {
+  const args = defaultServiceArguments[method] || defaultServiceArguments.default;
+  // The base properties to define on the context
+  const baseProperties: PropertyDescriptorMap = {
+    app: {
+      value: app
+    },
+    service: {
+      value: service
+    },
+    method: {
+      enumerable: true,
+      writable: true,
+      value: method
+    },
+    path: {
+      enumerable: true,
+      value: path
+    }
+  };
+  // Add method arguments (based on `arguments` array)
+  const properties = args.reduce((result, name, index) => {
+    result[name] = {
+      enumerable: true,
+      get (this: any) {
+        return this?.arguments[index];
+      },
+      set (this: any, value: any) {
+        if (!this.arguments) {
+          this.arguments = new Array(args.length);
         }
 
-        return Object.keys(app.services)
-          .find(path => app.services[path] === service);
+        this.arguments[index] = value;
       }
     }
-  };
+
+    return result;
+  }, baseProperties);
+
+  return async function feathersHook (context: HookContext, next: NextFunction) {
+    Object.defineProperties(context, properties);
+    context.params = context.params || {};
+    await next();
+  }
 }
 
-function getCollector (app: Application, service: Service<any>, method: string) {
-  return function collectMiddleware (this: HookManager): Middleware[] {
-    const previous = this._parent && this._parent.getMiddleware();
-    let result;
+export const protectedMethods = [
+  'all', 'hooks', 'publish', 'on', 'emit', 'removeListener', 'removeAllListeners'
+];
 
-    if (previous && this._middleware) {
-      result = previous.concat(this._middleware);
-    } else {
-      result = previous || this._middleware || [];
-    }
-
-    const hooks = {
-      async: getHooks(app, service, 'async', method),
-      before: getHooks(app, service, 'before', method),
-      after: getHooks(app, service, 'after', method, true),
-      error: getHooks(app, service, 'error', method, true),
-      finally: getHooks(app, service, 'finally', method, true)
-    };
-
-    return [
-      ...finallyWrapper(hooks.finally),
-      ...errorWrapper(hooks.error),
-      ...baseHooks,
-      ...result,
-      ...wrap(hooks)
-    ];
-  };
-}
-
-function withHooks (app: Application, service: Service<any>, methods: string[]) {
-  const hookMap = methods.reduce((accu, method) => {
-    if (typeof service[method] !== 'function') {
-      return accu;
-    }
-
-    const hookManager = middleware([], getMiddlewareOptions(app, service, method));
-
-    hookManager.getMiddleware = getCollector(app, service, method);
-
-    accu[method] = hookManager;
-
-    return accu;
-  }, {} as HookMap);
-
-  hooksDecorator(service, hookMap);
-}
-
-const mixinMethod = (_super: any) => {
-  const result = function (this: any) {
-    const service = this;
-    const args = Array.from(arguments);
-
-    const returnHook = args[args.length - 1] === true || args[args.length - 1] instanceof HookContext
-      ? args.pop() : false;
-
-    const hookContext = returnHook instanceof HookContext ? returnHook : _super.createContext();
-
-    return _super.call(service, ...args, hookContext)
-      .then(() => returnHook ? hookContext : hookContext.result)
-      // Handle errors
-      .catch(() => {
-        if (typeof hookContext.error !== 'undefined' && typeof hookContext.result === 'undefined') {
-          return Promise.reject(returnHook ? hookContext : hookContext.error);
-        } else {
-          return returnHook ? hookContext : hookContext.result;
-        }
-      });
-  };
-
-  return Object.assign(result, _super);
-}
-
-// A service mixin that adds `service.hooks()` method and functionality
-const hookMixin = exports.hookMixin = function hookMixin (service: any) {
+export function hookMixin (
+  this: Application, service: Service<any>, path: string, options: ServiceOptions<any>
+) {
   if (typeof service.hooks === 'function') {
-    return;
+    return service;
   }
 
-  service.methods = Object.getOwnPropertyNames(Object.getPrototypeOf(service))
-    .filter(key => typeof service[key] === 'function' && service[key][ACTIVATE_HOOKS])
-    .reduce((result, methodName) => {
-      result[methodName] = service[methodName][ACTIVATE_HOOKS];
-      return result;
-    }, service.methods || {});
-
-  Object.assign(service.methods, {
-    find: ['params'],
-    get: ['id', 'params'],
-    create: ['data', 'params'],
-    update: ['id', 'data', 'params'],
-    patch: ['id', 'data', 'params'],
-    remove: ['id', 'params']
-  });
-
   const app = this;
-  const methodNames = Object.keys(service.methods);
-
-  withHooks(app, service, methodNames);
-
-  // Usefull only for the `returnHook` backwards compatibility with `true`
-  const mixin = methodNames.reduce((mixin, method) => {
-    if (typeof service[method] !== 'function') {
-      return mixin;
+  const hookMap = Object.keys(options.methods).reduce((res, method) => {
+    if (protectedMethods.includes(method)) {
+      throw new Error(`'${method}' is not a valid service method name`);
     }
+    
+    const feathersHook = getFeathersHook({ app, service, method, path });
 
-    mixin[method] = mixinMethod(service[method]);
+    res[method] = new FeathersHookManager(app, [
+      feathersHook,
+      eventHook
+    ]);
 
-    return mixin;
+    return res;
   }, {} as any);
 
-  // Add .hooks method and properties to the service
-  enableHooks(service, methodNames, app.hookTypes);
+  hooks(service, hookMap);
 
-  Object.assign(service, mixin);
-};
-
-export default function () {
-  return function (app: any) {
-    // We store a reference of all supported hook types on the app
-    // in case someone needs it
-    Object.assign(app, {
-      hookTypes: ['async', 'before', 'after', 'error', 'finally']
-    });
-
-    // Add functionality for hooks to be registered as app.hooks
-    enableHooks(app, app.methods, app.hookTypes);
-
-    app.mixins.push(hookMixin);
-  };
-}
-
-export function activateHooks (args: any[]) {
-  return (fn: any) => {
-    Object.defineProperty(fn, ACTIVATE_HOOKS, { value: args });
-    return fn;
-  };
+  return service;
 }

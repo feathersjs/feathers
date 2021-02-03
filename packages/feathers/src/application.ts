@@ -1,122 +1,101 @@
 import Debug from 'debug';
+import { EventEmitter } from 'events';
 import { stripSlashes } from '@feathersjs/commons';
 
-import events from './events';
-import hooks from './hooks';
 import version from './version';
-import { BaseApplication, Service } from './declarations';
+import { eventMixin } from './events';
+import { hookMixin } from './hooks';
+import { wrapService, getServiceOptions } from './service';
+import {
+  FeathersApplication,
+  ServiceMixin,
+  Service,
+  ServiceOptions,
+  ServiceAddons,
+  Application,
+  BaseService
+} from './declarations';
 
-const debug = Debug('feathers:application');
+const debug = Debug('@feathersjs/feathers');
 
-interface AppExtensions {
-  _isSetup: boolean;
-  init (): void;
-  services: { [key: string]: Service<any> };
-}
+export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements FeathersApplication<ServiceTypes, AppSettings> {
+  services: ServiceTypes = ({} as ServiceTypes);
+  settings: AppSettings = ({} as AppSettings);
+  mixins: ServiceMixin[] = [ hookMixin, eventMixin ];
+  version: string = version;
+  _isSetup = false;
 
-export default {
-  init () {
-    Object.assign(this, {
-      version,
-      methods: [
-        'find', 'get', 'create', 'update', 'patch', 'remove'
-      ],
-      mixins: [],
-      services: {},
-      providers: [],
-      _setup: false,
-      settings: {}
-    });
+  get<L extends keyof AppSettings> (
+    name: AppSettings[L] extends never ? string : L
+  ): (AppSettings[L] extends never ? any : AppSettings[L])|undefined {
+    return (this.settings as any)[name];
+  }
 
-    this.configure(hooks());
-    this.configure(events());
-  },
-
-  get (name) {
-    return this.settings[name];
-  },
-
-  set (name, value) {
-    this.settings[name] = value;
+  set<L extends keyof AppSettings> (
+    name: AppSettings[L] extends never ? string : L,
+    value: AppSettings[L] extends never ? any : AppSettings[L]
+  ) {
+    (this.settings as any)[name] = value;
     return this;
-  },
+  }
 
-  disable (name) {
-    this.settings[name] = false;
-    return this;
-  },
-
-  disabled (name) {
-    return !this.settings[name];
-  },
-
-  enable (name) {
-    this.settings[name] = true;
-    return this;
-  },
-
-  enabled (name) {
-    return !!this.settings[name];
-  },
-
-  configure (fn) {
-    fn.call(this, this);
+  configure (callback: (this: this, app: this) => void) {
+    callback.call(this, this);
 
     return this;
-  },
+  }
 
-  service (path: string) {
-    const location = stripSlashes(path) || '/';
-    const current = this.services[location];
+  defaultService (location: string): BaseService {
+    throw new Error(`Can not find service '${location}'`);
+  }
 
-    if (typeof current === 'undefined' && typeof this.defaultService === 'function') {
-      return this.use(location, this.defaultService(location))
-        .service(location);
+  service<L extends keyof ServiceTypes> (
+    location: ServiceTypes[L] extends never ? string : L
+  ): (ServiceTypes[L] extends never ? Service<any> : (
+    ServiceTypes[L] & ServiceAddons<any, Application<ServiceTypes, AppSettings>, any>
+  )) {
+    const path: any = stripSlashes(location as string) || '/';
+    const current = (this.services as any)[path];
+
+    if (typeof current === 'undefined') {
+      this.use(path, this.defaultService(path) as any);
+      return this.service(path);
     }
 
     return current;
-  },
+  }
 
-  use (path, service, options: any = {}) {
+  use<L extends keyof ServiceTypes> (
+    path: ServiceTypes[L] extends never ? string : L,
+    service: (ServiceTypes[L] extends never ?
+      BaseService : ServiceTypes[L]
+    ) | FeathersApplication,
+    options: ServiceOptions<
+      ServiceTypes[L] extends never ? any : ServiceTypes[L]
+    > = {}
+  ): this {
     if (typeof path !== 'string') {
       throw new Error(`'${path}' is not a valid service path.`);
     }
 
     const location = stripSlashes(path) || '/';
-    const isSubApp = typeof service.service === 'function' && service.services;
-    const isService = this.methods.concat('setup').some(name => typeof (service as any)[name] === 'function');
+    const subApp = service as FeathersApplication;
+    const isSubApp = typeof subApp.service === 'function' && subApp.services;
 
     if (isSubApp) {
-      const subApp = service;
-
       Object.keys(subApp.services).forEach(subPath =>
-        this.use(`${location}/${subPath}`, subApp.service(subPath))
+        this.use(`${location}/${subPath}` as any, subApp.service(subPath) as any)
       );
 
       return this;
     }
-
-    if (!isService) {
-      throw new Error(`Invalid service object passed for path \`${location}\``);
-    }
-
-    // Use existing service or create a new object with prototype pointing to original
-    const isFeathersService = typeof service.hooks === 'function' && (service as any)._serviceEvents;
-    const protoService = isFeathersService ? service : Object.create(service);
+    const protoService = wrapService(location, service, options);
+    const serviceOptions = getServiceOptions(service);
 
     debug(`Registering new service at \`${location}\``);
 
     // Add all the mixins
-    this.mixins.forEach(fn => fn.call(this, protoService, location, options));
-
-    if (typeof protoService._setup === 'function') {
-      protoService._setup(this, location);
-    }
-
-    // Run the provider functions to register the service
-    this.providers.forEach(provider =>
-      provider.call(this, protoService, location, options)
-    );
+    this.mixins.forEach(fn => fn.call(this, protoService, location, serviceOptions));
 
     // If we ran setup already, set this service up explicitly
     if (this._isSetup && typeof protoService.setup === 'function') {
@@ -124,25 +103,25 @@ export default {
       protoService.setup(this, location);
     }
 
-    this.services[location] = protoService;
+    (this.services as any)[location] = protoService;
 
     return this;
-  },
+  }
 
-  setup () {
+  async setup () {
     // Setup each service (pass the app so that they can look up other services etc.)
-    Object.keys(this.services).forEach(path => {
-      const service = this.services[path];
-
-      debug(`Setting up service for \`${path}\``);
-
+    for (const path of Object.keys(this.services)) {
+      const service: any = this.service(path as any);
+      
       if (typeof service.setup === 'function') {
-        service.setup(this, path);
+        debug(`Setting up service for \`${path}\``);
+
+        await service.setup(this, path);
       }
-    });
+    }
 
     this._isSetup = true;
 
     return this;
   }
-} as BaseApplication & AppExtensions;
+}
