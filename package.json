@@ -33,14 +33,14 @@
     "test": "npm run lint && nyc lerna run test"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.11.0",
-    "@typescript-eslint/parser": "^4.11.0",
-    "eslint": "^7.16.0",
+    "@typescript-eslint/eslint-plugin": "^4.14.2",
+    "@typescript-eslint/parser": "^4.14.2",
+    "eslint": "^7.19.0",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsdoc": "^30.7.9",
-    "eslint-plugin-prefer-arrow": "^1.2.2",
+    "eslint-plugin-jsdoc": "^31.6.0",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
     "lerna": "^3.22.1",
-    "npm-check-updates": "^10.2.5",
+    "npm-check-updates": "^11.1.1",
     "nyc": "^15.1.0",
     "typescript": "^4.1.3"
   }
