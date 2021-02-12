@@ -70,9 +70,7 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     service: (ServiceTypes[L] extends never ?
       BaseService : ServiceTypes[L]
     ) | FeathersApplication,
-    options: ServiceOptions<
-      ServiceTypes[L] extends never ? any : ServiceTypes[L]
-    > = {}
+    options: ServiceOptions = {}
   ): this {
     if (typeof path !== 'string') {
       throw new Error(`'${path}' is not a valid service path.`);
@@ -89,6 +87,7 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
 
       return this;
     }
+
     const protoService = wrapService(location, service, options);
     const serviceOptions = getServiceOptions(service);
 
@@ -97,7 +96,7 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     // Add all the mixins
     this.mixins.forEach(fn => fn.call(this, protoService, location, serviceOptions));
 
-    // If we ran setup already, set this service up explicitly
+    // If we ran setup already, set this service up explicitly, this will not `await`
     if (this._isSetup && typeof protoService.setup === 'function') {
       debug(`Setting up service for \`${location}\``);
       protoService.setup(this, location);

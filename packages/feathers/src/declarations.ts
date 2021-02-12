@@ -1,15 +1,11 @@
 import { EventEmitter } from 'events';
-import { NextFunction } from '@feathersjs/hooks';
+import {
+  NextFunction, HookContext as BaseHookContext
+} from '@feathersjs/hooks';
 
-export interface ServiceOptions<Service> {
+export interface ServiceOptions {
   events?: string[];
-  methods?: {
-    [M in keyof Service]?: {
-      external: boolean;
-      event?: string;
-      arguments?: string[];
-    }
-  }
+  methods?: string[];
 }
 
 export interface ServiceMethods<T> {
@@ -48,14 +44,18 @@ export interface ServiceOverloads<T> {
   remove? (id: null, params?: Params): Promise<T[]>;
 }
 
-export interface ServiceAddons<T, A, S> extends EventEmitter {
+export interface ServiceAddons<_T, _A, _S> extends EventEmitter {
   id?: any;
-  hooks (hooks: HookSettings<T, A, S>): this;
+  hooks (hooks: any): this;
+  // hooks (hooks: HookSettings<T, A, S>): this;
+  // hooks (map: BaseHookMap) : this;
 }
 
 export type Service<T> = ServiceOverloads<T> & ServiceAddons<T, any, any> & ServiceMethods<T>;
 
 export type ServiceMixin = (service: Service<any>, path: string, options?: any) => void;
+
+export type ServiceGeneric<T> = T extends Service<infer U> ? U : any;
 
 export type BaseService = Partial<ServiceMethods<any> & SetupMethod>;
 
@@ -117,10 +117,7 @@ export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
     service: (ServiceTypes[L] extends never ?
       BaseService : ServiceTypes[L]
     ) | FeathersApplication,
-    options?: ServiceOptions<(ServiceTypes[L] extends never ?
-      ServiceMethods<any> & SetupMethod :
-      ServiceTypes[L]
-    )>
+    options?: ServiceOptions
   ): this;
 
   defaultService (location: string): BaseService;
@@ -128,12 +125,12 @@ export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
   service<L extends keyof ServiceTypes> (
     location: ServiceTypes[L] extends never ? string : L
   ): (ServiceTypes[L] extends never ? Service<any> : (
-    ServiceTypes[L] & ServiceAddons<any, Application<ServiceTypes, AppSettings>, any>
+    ServiceTypes[L] & ServiceAddons<ServiceGeneric<ServiceTypes[L]>, Application<ServiceTypes, AppSettings>, ServiceTypes[L]>
   ));
 
   setup (server?: any): Promise<this>;
 
-  // hooks (hooks: Partial<HooksObject>): this;
+  // hooks (hooks: any): this;
   
   // listen (port: number): any;
 }
@@ -156,7 +153,7 @@ export interface Params {
   [key: string]: any; // (JL) not sure if we want this
 }
 
-export interface HookContext<T = any, A = FeathersApplication, S = Service<T>> {
+export interface HookContext<T = any, A = FeathersApplication, S = Service<T>> extends BaseHookContext<T> {
   /**
    * A read only property that contains the Feathers application object. This can be used to
    * retrieve other services (via context.app.service('name')) or configuration values.
@@ -222,7 +219,7 @@ export interface HookContext<T = any, A = FeathersApplication, S = Service<T>> {
    * code that should be returned.
    */
   statusCode?: number;
-  event?: string;
+  event: string|null;
   arguments: any[];
 }
 

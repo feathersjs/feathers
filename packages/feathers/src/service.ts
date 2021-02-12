@@ -1,82 +1,55 @@
 import { createSymbol } from '@feathersjs/commons';
-import { ServiceOptions, Service } from './declarations';
 
-type ServiceMethodOptions = ServiceOptions<any>['methods'];
+import { ServiceOptions } from './declarations';
 
 export const SERVICE = createSymbol('@feathersjs/service');
 
-export const defaultServiceArguments: { [key: string]: string[] } = {
+export const defaultServiceArguments = {
   find: [ 'params' ],
   get: [ 'id', 'params' ],
   create: [ 'data', 'params' ],
   update: [ 'id', 'data', 'params' ],
   patch: [ 'id', 'data', 'params' ],
-  remove: [ 'id', 'params' ],
-  setup: ['app', 'path']
+  remove: [ 'id', 'params' ]
 }
 
-export const defaultServiceMethods: ServiceMethodOptions = {
-  find: { external: true },
-  get: { external: true },
-  create: {
-    event: 'created',
-    external: true
-  },
-  update: {
-    event: 'updated',
-    external: true
-  },
-  patch: {
-    event: 'patched',
-    external: true
-  },
-  remove: {
-    event: 'removed',
-    external: true
-  },
-  setup: {
-    external: false
-  }
-};
+export const defaultServiceMethods = Object.keys(defaultServiceArguments).concat('setup');
+
+export const defaultEventMap = {
+  create: 'created',
+  update: 'updated',
+  patch: 'patched',
+  remove: 'removed'
+}
 
 export function getServiceOptions<S> (
-  service: S, options: ServiceOptions<S> = {}
-): ServiceOptions<S> {
+  service: S, options: ServiceOptions = {}
+): ServiceOptions {
   const existingOptions = (service as any)[SERVICE];
 
   if (existingOptions) {
     return existingOptions;
   }
 
-  const events = [].concat(options.events || []).concat((service as any).events || []);
-  const existingMethods = options.methods || defaultServiceMethods;
-  const methods: ServiceMethodOptions = {};
-
-  for (const name of Object.keys(existingMethods)) {
-    if (typeof (service as any)[name] === 'function') {
-      const definition = (existingMethods as any)[name];
-      const defaultDefinition = defaultServiceMethods[name];
-      const mergedDefinition = {
-        ...defaultDefinition,
-        ...definition
-      }
-
-      methods[name] = mergedDefinition;
-    }
-  }
+  const {
+    methods = defaultServiceMethods.filter(method =>
+      typeof (service as any)[method] === 'function'
+    ),
+    events = (service as any).events || []
+  } = options;
 
   return { events, methods };
 }
 
-export function wrapService<S = Service<any>> (
-  location: string, service: S, options: ServiceOptions<S>
+export function wrapService (
+  location: string, service: any, options: ServiceOptions
 ) {
   // Do nothing if this is already an initialized
-  if ((service as any)[SERVICE]) {
+  if (service[SERVICE]) {
     return service;
   }
 
-  const protoService = Object.create(service as any);
+  const protoService = Object.create(service);
   const serviceOptions = getServiceOptions(service, options);
   
   if (Object.keys(serviceOptions.methods).length === 0) {
