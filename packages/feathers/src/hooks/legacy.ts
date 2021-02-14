@@ -1,40 +1,72 @@
 import { _ } from '@feathersjs/commons';
+import { LegacyHookFunction } from '../declarations';
 
 const { each } = _;
 
-export function toBeforeHook (hook: any) {
+export function fromBeforeHook (hook: LegacyHookFunction) {
   return (context: any, next: any) => {
     context.type = 'before';
 
-    return Promise.resolve(hook.call(context.self, context))
-      .then(() => {
-        delete context.type;
-        return next();
-      });
+    return Promise.resolve(hook.call(context.self, context)).then(() => {
+      context.type = null;
+      return next();
+    });
   };
 }
 
-export function toAfterHook (hook: any) {
+export function fromAfterHook (hook: LegacyHookFunction) {
   return (context: any, next: any) => {
-    return next()
-      .then(() => {
-        context.type = 'after';
-        return hook.call(context.self, context)
-      }).then(() => {
-        delete context.type;
-      });
+    return next().then(() => {
+      context.type = 'after';
+      return hook.call(context.self, context)
+    }).then(() => {
+      context.type = null;
+    });
   }
 }
 
-export function collectLegacyHooks (_app: any, service: any, method: string) {
+export function fromErrorHooks (hooks: LegacyHookFunction[]) {
+  return (context: any, next: any) => {
+    return next().catch((error: any) => {
+      let promise: Promise<any> = Promise.resolve();
+      
+      context.original = { ...context };
+      context.error = error;
+      context.type = 'error';
+      
+      delete context.result;
+
+      for (const hook of hooks) {
+        promise = promise.then(() => hook.call(context.self, context))
+      }
+
+      return promise.then(() => {
+        context.type = null;
+
+        if (context.result === undefined) {
+          throw context.error;
+        }
+      });
+    });
+  }
+}
+
+export function collectLegacyHooks (app: any, service: any, method: string) {
   const {
     before: { [method]: serviceBefore = [] },
-    after: { [method]: serviceAfter = [] }
+    after: { [method]: serviceAfter = [] },
+    error: { [method]: serviceError = [] }
   } = service.__hooks;
-  const beforeHooks = serviceBefore.length ? serviceBefore : [];
-  const afterHooks = serviceAfter.length ? [...serviceAfter].reverse() : [];
+  const {
+    before: { [method]: appBefore = [] },
+    after: { [method]: appAfter = [] },
+    error: { [method]: appError = [] }
+  } = app.__hooks;
+  const beforeHooks = [...appBefore, ...serviceBefore];
+  const afterHooks = [...serviceAfter, ...appAfter].reverse();
+  const errorHook = fromErrorHooks([...serviceError, ...appError]);
 
-  return beforeHooks.concat(afterHooks);
+  return [errorHook, ...beforeHooks, ...afterHooks];
 }
 
 // Converts different hook registration formats into the
@@ -61,10 +93,6 @@ export function enableLegacyHooks (
   methods: string[] = ['find', 'get', 'create', 'update', 'patch', 'remove'],
   types: string[] = ['before', 'after', 'error']
 ) {
-  if (typeof obj.hooks === 'function') {
-    return obj;
-  }
-
   const hookData: any = {};
 
   types.forEach(type => {
@@ -99,11 +127,11 @@ export function enableLegacyHooks (
         this.__hooks[type][method] = this.__hooks[type][method] || [];
 
         if (type === 'before') {
-          currentHooks = currentHooks.map(toBeforeHook);
+          currentHooks = currentHooks.map(fromBeforeHook);
         }
 
         if (type === 'after') {
-          currentHooks = currentHooks.map(toAfterHook);
+          currentHooks = currentHooks.map(fromAfterHook);
         }
 
         this.__hooks[type][method].push(...currentHooks);

@@ -3,61 +3,108 @@ import {
   NextFunction, HookContext as BaseHookContext
 } from '@feathersjs/hooks';
 
+type SelfOrArray<S> = S | S[];
+type OptionalPick<T, K extends PropertyKey> = Pick<T, Extract<keyof T, K>>
+
+export { NextFunction };
+
 export interface ServiceOptions {
   events?: string[];
   methods?: string[];
 }
 
-export interface ServiceMethods<T> {
+export interface ServiceMethods<T, D, A = Application> {
   find (params?: Params): Promise<T | T[]>;
 
   get (id: Id, params?: Params): Promise<T>;
 
-  create (data: Partial<T> | Partial<T>[], params?: Params): Promise<T | T[]>;
+  create (data: D | D[], params?: Params): Promise<T | T[]>;
 
-  update (id: NullableId, data: T, params?: Params): Promise<T | T[]>;
+  update (id: NullableId, data: D, params?: Params): Promise<T | T[]>;
 
-  patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T | T[]>;
+  patch (id: NullableId, data: D, params?: Params): Promise<T | T[]>;
 
   remove (id: NullableId, params?: Params): Promise<T | T[]>;
+
+  setup (app: A, path: string): Promise<void>;
 }
 
-export interface SetupMethod {
-  setup (app: FeathersApplication, path: string): void;
-}
+export interface ServiceOverloads<T, D> {
+  create? (data: D, params?: Params): Promise<T>;
 
-export interface ServiceOverloads<T> {
-  create? (data: Partial<T>, params?: Params): Promise<T>;
+  create? (data: D[], params?: Params): Promise<T[]>;
 
-  create? (data: Partial<T>[], params?: Params): Promise<T[]>;
+  update? (id: Id, data: D, params?: Params): Promise<T>;
 
-  update? (id: Id, data: T, params?: Params): Promise<T>;
+  update? (id: null, data: D, params?: Params): Promise<T[]>;
 
-  update? (id: null, data: T, params?: Params): Promise<T[]>;
+  patch? (id: Id, data: D, params?: Params): Promise<T>;
 
-  patch? (id: Id, data: Partial<T>, params?: Params): Promise<T>;
-
-  patch? (id: null, data: Partial<T>, params?: Params): Promise<T[]>;
+  patch? (id: null, data: D, params?: Params): Promise<T[]>;
 
   remove? (id: Id, params?: Params): Promise<T>;
 
   remove? (id: null, params?: Params): Promise<T[]>;
 }
 
-export interface ServiceAddons<_T, _A, _S> extends EventEmitter {
-  id?: any;
-  hooks (hooks: any): this;
-  // hooks (hooks: HookSettings<T, A, S>): this;
-  // hooks (map: BaseHookMap) : this;
+export type Service<T, D = Partial<T>> =
+  ServiceMethods<T, D> &
+  ServiceOverloads<T, D>;
+
+export type ServiceInterface<T, D = Partial<T>, A = Application> =
+  Partial<ServiceMethods<T, D, A>>;
+
+export interface ServiceAddons<A, S> extends EventEmitter {
+  id?: string;
+  hooks (options: HookOptions<A, S>): this;
 }
 
-export type Service<T> = ServiceOverloads<T> & ServiceAddons<T, any, any> & ServiceMethods<T>;
+export interface ServiceHookOverloads<S> {
+  find (
+    params: Params,
+    context: HookContext
+  ): Promise<HookContext>;
 
-export type ServiceMixin = (service: Service<any>, path: string, options?: any) => void;
+  get (
+    id: Id,
+    params: Params,
+    context: HookContext
+  ): Promise<HookContext>;
 
-export type ServiceGeneric<T> = T extends Service<infer U> ? U : any;
+  create (
+    data: ServiceGenericData<S> | ServiceGenericData<S>[],
+    params: Params,
+    context: HookContext
+  ): Promise<HookContext>;
 
-export type BaseService = Partial<ServiceMethods<any> & SetupMethod>;
+  update (
+    id: NullableId,
+    data: ServiceGenericData<S>,
+    params: Params,
+    context: HookContext
+  ): Promise<HookContext>;
+
+  patch (
+    id: NullableId,
+    data: ServiceGenericData<S>,
+    params: Params,
+    context: HookContext
+  ): Promise<HookContext>;
+
+  remove (
+    id: NullableId,
+    params: Params,
+    context: HookContext
+  ): Promise<HookContext>;
+}
+
+export type FeathersService<A = FeathersApplication, S = Service<any>> =
+  S & ServiceAddons<A, S> & OptionalPick<ServiceHookOverloads<S>, keyof S>;
+
+export type ServiceMixin<A> = (service: FeathersService<A>, path: string, options?: ServiceOptions) => void;
+
+export type ServiceGenericType<S> = S extends ServiceInterface<infer T> ? T : any;
+export type ServiceGenericData<S> = S extends ServiceInterface<infer _T, infer D> ? D : any;
 
 export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
   /**
@@ -68,10 +115,13 @@ export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
   /**
    * A list of callbacks that run when a new service is registered
    */
-  mixins: ServiceMixin[];
+  mixins: ServiceMixin<Application<ServiceTypes, AppSettings>>[];
 
   /**
    * The index of all services keyed by their path.
+   *
+   * __Important:__ Services should always be retrieved via `app.service('name')`
+   * not via `app.services`.
    */
   services: ServiceTypes;
 
@@ -88,6 +138,7 @@ export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
 
   /**
    * Retrieve an application setting by name
+   *
    * @param name The setting name
    */
   get<L extends keyof AppSettings> (
@@ -96,6 +147,7 @@ export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
 
   /**
    * Set an application setting
+   *
    * @param name The setting name
    * @param value The setting value
    */
@@ -104,35 +156,62 @@ export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
     value: AppSettings[L] extends never ? any : AppSettings[L]
   ): this;
 
+  /**
+   * Runs a callback configure function with the current application instance.
+   *
+   * @param callback The callback `(app: Application) => {}` to run
+   */
   configure (callback: (this: this, app: this) => void): this;
 
   /**
-   * Register a new service
+   * Returns a fallback service instance that will be registered
+   * when no service was found. Usually throws a `NotFound` error
+   * but also used to instantiate client side services.
+   *
+   * @param location The path of the service
+   */
+  defaultService (location: string): ServiceInterface<any>;
+
+  /**
+   * Register a new service or a sub-app. When passed another
+   * Feathers application, all its services will be re-registered
+   * with the `path` prefix.
+   *
    * @param path The path for the service to register
-   * @param service The service object to register
+   * @param service The service object to register or another
+   * Feathers application to use a sub-app under the `path` prefix.
    * @param options The options for this service
    */
   use<L extends keyof ServiceTypes> (
     path: ServiceTypes[L] extends never ? string : L,
     service: (ServiceTypes[L] extends never ?
-      BaseService : ServiceTypes[L]
-    ) | FeathersApplication,
+      ServiceInterface<any> : ServiceTypes[L]
+    ) | Application,
     options?: ServiceOptions
   ): this;
 
-  defaultService (location: string): BaseService;
-
+  /**
+   * Get the Feathers service instance for a path. This will
+   * be the service originally registered with Feathers functionality
+   * like hooks and events added.
+   *
+   * @param path The name of the service.
+   */
   service<L extends keyof ServiceTypes> (
-    location: ServiceTypes[L] extends never ? string : L
-  ): (ServiceTypes[L] extends never ? Service<any> : (
-    ServiceTypes[L] & ServiceAddons<ServiceGeneric<ServiceTypes[L]>, Application<ServiceTypes, AppSettings>, ServiceTypes[L]>
-  ));
+    path: ServiceTypes[L] extends never ? string : L
+  ): (ServiceTypes[L] extends never
+    ? FeathersService<this, Service<any>>
+    : FeathersService<this, ServiceTypes[L]>
+  );
 
   setup (server?: any): Promise<this>;
 
-  // hooks (hooks: any): this;
-  
-  // listen (port: number): any;
+  /**
+   * Register application level hooks.
+   *
+   * @param map The application hook settings.
+   */
+  hooks (map: HookOptions<this, any>): this;
 }
 
 export type Application<ServiceTypes = {}, AppSettings = {}> =
@@ -153,7 +232,7 @@ export interface Params {
   [key: string]: any; // (JL) not sure if we want this
 }
 
-export interface HookContext<T = any, A = FeathersApplication, S = Service<T>> extends BaseHookContext<T> {
+export interface HookContext<A = FeathersApplication, S = any> extends BaseHookContext<ServiceGenericType<S>> {
   /**
    * A read only property that contains the Feathers application object. This can be used to
    * retrieve other services (via context.app.service('name')) or configuration values.
@@ -175,13 +254,19 @@ export interface HookContext<T = any, A = FeathersApplication, S = Service<T>> e
   readonly service: S;
   /**
    * A read only property with the hook type (one of before, after or error).
+   * Will be `null` for asynchronous hooks.
    */
-  readonly type: 'before' | 'after' | 'error' | 'async';
+  readonly type: null | 'before' | 'after' | 'error';
+  /**
+   * The list of method arguments. Should not be modified, modify the
+   * `params`, `data` and `id` properties instead.
+   */
+  readonly arguments: any[];
   /**
    * A writeable property containing the data of a create, update and patch service
    * method call.
    */
-  data?: T;
+  data?: ServiceGenericData<S>;
   /**
    * A writeable property with the error object that was thrown in a failed method call.
    * It is only available in error hooks.
@@ -204,42 +289,51 @@ export interface HookContext<T = any, A = FeathersApplication, S = Service<T>> e
    *
    * `context.result` can also be set in
    *
-   *  - A before hook to skip the actual service method (database) call
-   *  - An error hook to swallow the error and return a result instead
+   * - A before hook to skip the actual service method (database) call
+   * - An error hook to swallow the error and return a result instead
    */
-  result?: T;
+  result?: ServiceGenericType<S>;
   /**
    * A writeable, optional property and contains a 'safe' version of the data that
    * should be sent to any client. If context.dispatch has not been set context.result
    * will be sent to the client instead.
    */
-  dispatch?: Partial<T>;
+  dispatch?: ServiceGenericType<S>;
   /**
    * A writeable, optional property that allows to override the standard HTTP status
    * code that should be returned.
    */
   statusCode?: number;
+  /**
+   * The event emitted by this method. Can be set to `null` to skip event emitting.
+   */
   event: string|null;
-  arguments: any[];
 }
 
-export type Hook<T = any, A = Application, S = Service<T>> =
-  (hook: HookContext<T, A, S>) =>
-  (Promise<HookContext<T, S> | void> | HookContext<T, S> | void);
+// Legacy hook typings
+export type LegacyHookFunction<A = Application, S = Service<any, any>> =
+  (this: S, context: HookContext<A, S>) => (Promise<HookContext<A, S> | void> | HookContext<A, S> | void);
 
-export type AsyncHook<T = any, A = Application, S = Service<T>> =
-  (hook: HookContext<T, A, S>, next: NextFunction) => Promise<void>;
+type LegacyHookMethodMap<A, S> =
+  { [L in keyof S]?: SelfOrArray<LegacyHookFunction<A, S>>; } &
+  { all?: SelfOrArray<LegacyHookFunction<A, S>> };
 
-export type HookMap<T, A, S, H = Hook<T, A, S>> = {
-  [L in keyof S & 'all']: H|H[];
+type LegacyHookTypeMap<A, S> =
+  SelfOrArray<LegacyHookFunction<A, S>> | LegacyHookMethodMap<A, S>;
+
+export type LegacyHookMap<A, S> = {
+  before?: LegacyHookTypeMap<A, S>,
+  after?: LegacyHookTypeMap<A, S>,
+  error?: LegacyHookTypeMap<A, S>
 }
 
-export interface HooksObject<T, A, S> {
-  async: Partial<HookMap<T, A, S, AsyncHook<T, A, S>>> | AsyncHook<T, A, S>[];
-  before: Partial<HookMap<T, A, S>> | Hook<T, A, S>[];
-  after: Partial<HookMap<T, A, S>> | Hook<T, A, S>[];
-  error: Partial<HookMap<T, A, S>> | Hook<T, A, S>[];
-}
+// New @feathersjs/hook typings
+export type HookFunction<A = Application, S = Service<any, any>> =
+  (context: HookContext<A, S>, next: NextFunction) => Promise<void>;
 
-export type HookSettings<T, A, S> = Partial<HooksObject<T, A, S>>|
-  Partial<HookMap<T, A, S, AsyncHook<T, A, S>>>;
+export type HookMap<A, S> = {
+  [L in keyof S]?: HookFunction<A, S>[];
+};
+
+export type HookOptions<A, S> =
+  HookMap<A, S> | HookFunction<A, S>[] | LegacyHookMap<A, S>;

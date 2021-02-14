@@ -21,9 +21,9 @@ describe('`before` hooks', () => {
 
     service.hooks({
       before: {
-        get (hook: any) {
+        get (context) {
           return new Promise<void>(resolve => {
-            hook.params.ran = true;
+            context.params.ran = true;
             resolve();
           });
         },
@@ -61,8 +61,8 @@ describe('`before` hooks', () => {
 
     service.hooks({
       before: {
-        get (hook: any) {
-          hook.params.ran = true;
+        get (context) {
+          context.params.ran = true;
         },
 
         remove () {
@@ -77,7 +77,7 @@ describe('`before` hooks', () => {
     });
   });
 
-  it('.before hooks can set hook.result which will skip service method', async () => {
+  it('.before hooks can set context.result which will skip service method', async () => {
     const app = feathers().use('/dummy', {
       async get () {
         assert.ok(false, 'This should never run');
@@ -87,9 +87,9 @@ describe('`before` hooks', () => {
 
     service.hooks({
       before: {
-        get (hook: any) {
-          hook.result = {
-            id: hook.id,
+        get (context) {
+          context.result = {
+            id: context.id,
             message: 'Set from hook'
           };
         }
@@ -124,16 +124,16 @@ describe('`before` hooks', () => {
 
     service.hooks({
       before: {
-        create (hook: any) {
-          assert.strictEqual(hook.type, 'before');
+        create (context) {
+          assert.strictEqual(context.type, 'before');
 
-          hook.data.modified = 'data';
-          
-          Object.assign(hook.params, {
+          context.data.modified = 'data';
+
+          Object.assign(context.params, {
             modified: 'params'
           });
-          
-          return hook;
+
+          return context;
         }
       }
     });
@@ -146,7 +146,7 @@ describe('`before` hooks', () => {
     }, 'Data got modified');
   });
 
-  it('contains the app object at hook.app', async () => {
+  it('contains the app object at context.app', async () => {
     const someServiceConfig = {
       async create (data: any) {
         return data;
@@ -157,11 +157,11 @@ describe('`before` hooks', () => {
 
     someService.hooks({
       before: {
-        create (hook: any) {
-          hook.data.appPresent = typeof hook.app !== 'undefined';
-          assert.strictEqual(hook.data.appPresent, true);
+        create (context) {
+          context.data.appPresent = typeof context.app !== 'undefined';
+          assert.strictEqual(context.data.appPresent, true);
 
-          return hook;
+          return context;
         }
       }
     });
@@ -211,8 +211,8 @@ describe('`before` hooks', () => {
 
     service.hooks({
       before: {
-        remove (hook: any) {
-          return hook;
+        remove (context) {
+          return context;
         }
       }
     });
@@ -240,20 +240,20 @@ describe('`before` hooks', () => {
 
     service.hooks({
       before: {
-        create (hook: any) {
-          hook.params.modified = 'params';
+        create (context) {
+          context.params.modified = 'params';
 
-          return hook;
+          return context;
         }
       }
     });
 
     service.hooks({
       before: {
-        create (hook: any) {
-          hook.data.modified = 'second data';
+        create (context) {
+          context.data.modified = 'second data';
 
-          return hook;
+          return context;
         }
       }
     });
@@ -283,15 +283,15 @@ describe('`before` hooks', () => {
     service.hooks({
       before: {
         create: [
-          function (hook: any) {
-            hook.params.modified = 'params';
+          function (context) {
+            context.params.modified = 'params';
 
-            return hook;
+            return context;
           },
-          function (hook: any) {
-            hook.data.modified = 'second data';
+          function (context) {
+            context.data.modified = 'second data';
 
-            return hook;
+            return context;
           }
         ]
       }
@@ -315,10 +315,10 @@ describe('`before` hooks', () => {
 
     service.hooks({
       before: {
-        get (hook: any) {
-          hook.params.items = ['first'];
+        get (context) {
+          context.params.items = ['first'];
 
-          return hook;
+          return context;
         }
       }
     });
@@ -326,15 +326,15 @@ describe('`before` hooks', () => {
     service.hooks({
       before: {
         get: [
-          function (hook: any) {
-            hook.params.items.push('second');
+          function (context) {
+            context.params.items.push('second');
 
-            return hook;
+            return context;
           },
-          function (hook: any) {
-            hook.params.items.push('third');
+          function (context) {
+            context.params.items.push('third');
 
-            return hook;
+            return context;
           }
         ]
       }
@@ -367,20 +367,20 @@ describe('`before` hooks', () => {
 
     service.hooks({
       before: {
-        all (hook: any) {
-          hook.params.beforeAllObject = true;
+        all (context) {
+          context.params.beforeAllObject = true;
 
-          return hook;
+          return context;
         }
       }
     });
 
     service.hooks({
       before: [
-        function (hook: any) {
-          hook.params.beforeAllMethodArray = true;
+        function (context) {
+          context.params.beforeAllMethodArray = true;
 
-          return hook;
+          return context;
         }
       ]
     });
@@ -406,10 +406,10 @@ describe('`before` hooks', () => {
 
     service.hooks({
       before: {
-        get (this: any, hook: any) {
-          hook.params.test = this.number + 2;
+        get (this: any, context) {
+          context.params.test = this.number + 2;
 
-          return hook;
+          return context;
         }
       }
     });

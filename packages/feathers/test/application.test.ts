@@ -1,6 +1,5 @@
 import assert from 'assert';
-import { feathers, Feathers, version } from '../src'
-// import { HookContext } from '@feathersjs/hooks';
+import { feathers, Feathers, getServiceOptions, Id, version } from '../src'
 
 describe('Feathers application', () => {
   it('initializes', () => {
@@ -86,7 +85,7 @@ describe('Feathers application', () => {
 
     it('registers and wraps a new service', async () => {
       const dummyService = {
-        setup (this: any, _app: any, path: string) {
+        async setup (this: any, _app: any, path: string) {
           this.path = path;
         },
 
@@ -103,7 +102,7 @@ describe('Feathers application', () => {
       const data = await wrappedService.create({
         message: 'Test message'
       });
-      
+
       assert.strictEqual(data.message, 'Test message');
     });
 
@@ -119,73 +118,79 @@ describe('Feathers application', () => {
       assert.deepStrictEqual(result, { id: 'test' });
     });
 
-    // it('services can be re-used (#566)', done => {
-    //   const app1 = feathers();
-    //   const app2 = feathers();
+    it('services can be re-used (#566)', done => {
+      const app1 = feathers();
+      const app2 = feathers();
 
-    //   app2.use('/dummy', {
-    //     async create (data: any) {
-    //       return data;
-    //     }
-    //   });
+      app2.use('/dummy', {
+        async create (data: any) {
+          return data;
+        }
+      });
 
-    //   const dummy = app2.service('dummy');
+      const dummy = app2.service('dummy');
 
-    //   dummy.hooks({
-    //     before: {
-    //       create (hook: HookContext) {
-    //         hook.data.fromHook = true;
-    //       }
-    //     }
-    //   });
+      dummy.hooks({
+        before: {
+          create: [hook => {
+            hook.data.fromHook = true;
+          }]
+        }
+      });
 
-    //   dummy.on('created', (data: any) => {
-    //     assert.deepStrictEqual(data, {
-    //       message: 'Hi',
-    //       fromHook: true
-    //     });
-    //     done();
-    //   });
+      dummy.on('created', (data: any) => {
+        assert.deepStrictEqual(data, {
+          message: 'Hi',
+          fromHook: true
+        });
+        done();
+      });
 
-    //   app1.use('/testing', app2.service('dummy'));
+      app1.use('/testing', app2.service('dummy'));
 
-    //   app1.service('testing').create({ message: 'Hi' });
-    // });
+      app1.service('testing').create({ message: 'Hi' });
+    });
 
-    // it('async hooks', async () => {
-    //   const app = feathers();
+    it('async hooks run before legacy hooks', async () => {
+      const app = feathers();
 
-    //   app.use('/dummy', {
-    //     async  create (data: any) {
-    //       return data;
-    //     }
-    //   });
+      app.use('/dummy', {
+        async  create (data: any) {
+          return data;
+        }
+      });
 
-    //   const dummy = app.service('dummy');
+      const dummy = app.service('dummy');
 
-    //   dummy.hooks({
-    //     async: async (ctx: any, next: any) => {
-    //       await next();
-    //       ctx.params.fromAsyncHook = true;
-    //     },
-    //     before: {
-    //       create (hook: any) {
-    //         hook.params.fromAsyncHook = false;
-    //       }
-    //     }
-    //   });
+      dummy.hooks({
+        before: {
+          create (ctx) {
+            ctx.data.order.push('before');
+          }
+        }
+      });
 
-    //   const ctx = await dummy.create({ message: 'Hi' }, {}, true);
+      dummy.hooks([async (ctx: any, next: any) => {
+        ctx.data.order = [ 'async' ];
+        await next();
+      }]);
       
-    //   assert.ok(ctx.params.fromAsyncHook);
-    // });
+      const result = await dummy.create({
+        message: 'hi'
+      });
+      
+      assert.deepStrictEqual(result, {
+        message: 'hi',
+        order: ['async', 'before']
+      });
+    });
 
     it('services conserve Symbols', () => {
       const TEST = Symbol('test');
       const dummyService = {
         [TEST]: true,
 
-        setup (this: any, _app: any, path: string) {
+        async setup (this: any, _app: any, path: string) {
           this.path = path;
         },
 
@@ -203,7 +208,7 @@ describe('Feathers application', () => {
     it('methods conserve Symbols', () => {
       const TEST = Symbol('test');
       const dummyService = {
-        setup (this: any, _app: any, path: string) {
+        async setup (this: any, _app: any, path: string) {
           this.path = path;
         },
 
@@ -275,7 +280,7 @@ describe('Feathers application', () => {
       });
 
       app.use('/dummy2', {
-        setup (appRef: any, path: any) {
+        async setup (appRef: any, path: any) {
           setupCount++;
           assert.strictEqual(appRef, app);
           assert.strictEqual(path, 'dummy2');
@@ -291,123 +296,120 @@ describe('Feathers application', () => {
     it('registering a service after app.setup will be set up', done => {
       const app = feathers();
 
-      app.setup();
-
-      app.use('/dummy', {
-        setup (appRef: any, path: any) {
-          assert.ok((app as any)._isSetup);
-          assert.strictEqual(appRef, app);
-          assert.strictEqual(path, 'dummy');
-          done();
-        }
+      app.setup().then(() => {
+        app.use('/dummy', {
+          async setup (appRef: any, path: any) {
+            assert.ok((app as any)._isSetup);
+            assert.strictEqual(appRef, app);
+            assert.strictEqual(path, 'dummy');
+            done();
+          }
+        });
       });
     });
   });
 
-  // describe('providers', () => {
-  //   it('are getting called with a service', () => {
-  //     const app = feathers();
-  //     let providerRan = false;
+  describe('mixins', () => {
+    class Dummy {
+      dummy = true;
+      async get (id: Id) {
+        return { id };
+      }
+    }
 
-  //     app.providers.push(function (service: any, location: any, options: any) {
-  //       assert.ok(service.dummy);
-  //       assert.strictEqual(location, 'dummy');
-  //       assert.deepStrictEqual(options, {});
-  //       providerRan = true;
-  //     });
+    it('are getting called with a service and default options', () => {
+      const app = feathers();
+      let mixinRan = false;
 
-  //     app.use('/dummy', {
-  //       dummy: true,
-  //       async get (id: Id) {
-  //         return { id };
-  //       }
-  //     });
+      app.mixins.push(function (service: any, location: any, options: any) {
+        assert.ok(service.dummy);
+        assert.strictEqual(location, 'dummy');
+        assert.deepStrictEqual(options, getServiceOptions(new Dummy()));
+        mixinRan = true;
+      });
 
-  //     assert.ok(providerRan);
+      app.use('/dummy', new Dummy());
 
-  //     app.setup();
-  //   });
+      assert.ok(mixinRan);
 
-  //   it('are getting called with a service and options', () => {
-  //     const app = feathers();
-  //     const opts = { test: true };
+      app.setup();
+    });
 
-  //     let providerRan = false;
+    it('are getting called with a service and service options', () => {
+      const app = feathers();
+      const opts = { events: ['bla'] };
 
-  //     app.providers.push(function (service: any, location: any, options: any) {
-  //       assert.ok(service.dummy);
-  //       assert.strictEqual(location, 'dummy');
-  //       assert.deepStrictEqual(options, opts);
-  //       providerRan = true;
-  //     });
+      let mixinRan = false;
 
-  //     app.use('/dummy', {
-  //       dummy: true,
-  //       async get (id: Id) {
-  //         return { id };
-  //       }
-  //     }, opts);
+      app.mixins.push(function (service: any, location: any, options: any) {
+        assert.ok(service.dummy);
+        assert.strictEqual(location, 'dummy');
+        assert.deepStrictEqual(options, getServiceOptions(new Dummy(), opts));
+        mixinRan = true;
+      });
 
-  //     assert.ok(providerRan);
+      app.use('/dummy', new Dummy(), opts);
 
-  //     app.setup();
-  //   });
-  // });
+      assert.ok(mixinRan);
 
-  // describe('sub apps', () => {
-  //   it('re-registers sub-app services with prefix', done => {
-  //     const app = feathers();
-  //     const subApp = feathers();
+      app.setup();
+    });
+  });
 
-  //     subApp.use('/service1', {
-  //       async get (id: string) {
-  //         return {
-  //           id, name: 'service1'
-  //         };
-  //       }
-  //     }).use('/service2', {
-  //       async get (id: string) {
-  //         return {
-  //           id, name: 'service2'
-  //         };
-  //       },
+  describe('sub apps', () => {
+    it('re-registers sub-app services with prefix', done => {
+      const app = feathers();
+      const subApp = feathers();
 
-  //       async create (data: any) {
-  //         return data;
-  //       }
-  //     });
+      subApp.use('/service1', {
+        async get (id: string) {
+          return {
+            id, name: 'service1'
+          };
+        }
+      }).use('/service2', {
+        async get (id: string) {
+          return {
+            id, name: 'service2'
+          };
+        },
 
-  //     app.use('/api/', subApp);
+        async create (data: any) {
+          return data;
+        }
+      });
 
-  //     app.service('/api/service2').once('created', (data: any) => {
-  //       assert.deepStrictEqual(data, {
-  //         message: 'This is a test'
-  //       });
+      app.use('/api/', subApp);
 
-  //       subApp.service('service2').once('created', (data: any) => {
-  //         assert.deepStrictEqual(data, {
-  //           message: 'This is another test'
-  //         });
+      app.service('/api/service2').once('created', (data: any) => {
+        assert.deepStrictEqual(data, {
+          message: 'This is a test'
+        });
 
-  //         done();
-  //       });
+        subApp.service('service2').once('created', (data: any) => {
+          assert.deepStrictEqual(data, {
+            message: 'This is another test'
+          });
 
-  //       app.service('api/service2').create({
-  //         message: 'This is another test'
-  //       });
-  //     });
+          done();
+        });
 
-  //     (async () => {
-  //       let data = await app.service('/api/service1').get(10);
-  //       assert.strictEqual(data.name, 'service1');
-  
-  //       data = await app.service('/api/service2').get(1);
-  //       assert.strictEqual(data.name, 'service2');
+        app.service('api/service2').create({
+          message: 'This is another test'
+        });
+      });
 
-  //       await subApp.service('service2').create({
-  //         message: 'This is a test'
-  //       });
-  //     })();
-  //   });
-  // });
+      (async () => {
+        let data = await app.service('/api/service1').get(10);
+        assert.strictEqual(data.name, 'service1');
+
+        data = await app.service('/api/service2').get(1);
+        assert.strictEqual(data.name, 'service2');
+
+        await subApp.service('service2').create({
+          message: 'This is a test'
+        });
+      })();
+    });
+  });
 });

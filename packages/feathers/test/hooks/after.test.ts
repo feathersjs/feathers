@@ -1,10 +1,10 @@
 import assert from 'assert';
-import { feathers } from '../../src';
+import { feathers, Id } from '../../src';
 
 describe('`after` hooks', () => {
   it('.after hooks can return a promise', async () => {
     const app = feathers().use('/dummy', {
-      async get (id: any) {
+      async get (id: Id) {
         return {
           id, description: `You have to do ${id}`
         };
@@ -18,7 +18,7 @@ describe('`after` hooks', () => {
 
     service.hooks({
       after: {
-        async get (hook: any) {
+        async get (hook) {
           hook.result.ran = true;
           return hook;
         },
@@ -44,7 +44,7 @@ describe('`after` hooks', () => {
 
   it('.after hooks do not need to return anything', async () => {
     const app = feathers().use('/dummy', {
-      async get (id: any) {
+      async get (id: Id) {
         return {
           id, description: `You have to do ${id}`
         };
@@ -58,8 +58,8 @@ describe('`after` hooks', () => {
 
     service.hooks({
       after: {
-        get (hook: any) {
-          hook.result.ran = true;
+        get (context) {
+          context.result.ran = true;
         },
 
         find () {
@@ -93,12 +93,12 @@ describe('`after` hooks', () => {
 
     service.hooks({
       after: {
-        create (hook: any) {
-          assert.strictEqual(hook.type, 'after');
+        create (context) {
+          assert.strictEqual(context.type, 'after');
 
-          hook.result.some = 'thing';
+          context.result.some = 'thing';
 
-          return hook;
+          return context;
         }
       }
     });
@@ -120,11 +120,11 @@ describe('`after` hooks', () => {
 
     service.hooks({
       after: {
-        create (hook: any) {
-          hook.result.appPresent = typeof hook.app !== 'undefined';
-          assert.strictEqual(hook.result.appPresent, true);
+        create (context) {
+          context.result.appPresent = typeof context.app !== 'undefined';
+          assert.strictEqual(context.result.appPresent, true);
 
-          return hook;
+          return context;
         }
       }
     });
@@ -192,18 +192,18 @@ describe('`after` hooks', () => {
 
     service.hooks({
       after: {
-        create (hook: any) {
-          hook.result.some = 'thing';
+        create (context) {
+          context.result.some = 'thing';
 
-          return hook;
+          return context;
         }
       }
     });
 
     service.hooks({
       after: {
-        create (hook: any) {
-          hook.result.other = 'stuff';
+        create (context) {
+          context.result.other = 'stuff';
         }
       }
     });
@@ -230,15 +230,15 @@ describe('`after` hooks', () => {
     service.hooks({
       after: {
         create: [
-          function (hook: any) {
-            hook.result.some = 'thing';
+          function (context) {
+            context.result.some = 'thing';
 
-            return hook;
+            return context;
           },
-          function (hook: any) {
-            hook.result.other = 'stuff';
+          function (context) {
+            context.result.other = 'stuff';
 
-            return hook;
+            return context;
           }
         ]
       }
@@ -263,10 +263,10 @@ describe('`after` hooks', () => {
 
     service.hooks({
       after: {
-        get (hook: any) {
-          hook.result.items = ['first'];
+        get (context) {
+          context.result.items = ['first'];
 
-          return hook;
+          return context;
         }
       }
     });
@@ -274,15 +274,15 @@ describe('`after` hooks', () => {
     service.hooks({
       after: {
         get: [
-          function (hook: any) {
-            hook.result.items.push('second');
+          function (context) {
+            context.result.items.push('second');
 
-            return hook;
+            return context;
           },
-          function (hook: any) {
-            hook.result.items.push('third');
+          function (context) {
+            context.result.items.push('third');
 
-            return hook;
+            return context;
           }
         ]
       }
@@ -310,20 +310,20 @@ describe('`after` hooks', () => {
 
     service.hooks({
       after: {
-        all (hook: any) {
-          hook.result.afterAllObject = true;
+        all (context) {
+          context.result.afterAllObject = true;
 
-          return hook;
+          return context;
         }
       }
     });
 
     service.hooks({
       after: [
-        function (hook: any) {
-          hook.result.afterAllMethodArray = true;
+        function (context) {
+          context.result.afterAllMethodArray = true;
 
-          return hook;
+          return context;
         }
       ]
     });
@@ -355,7 +355,7 @@ describe('`after` hooks', () => {
 
     service.hooks({
       after: {
-        get (this: any, hook: any) {
+        get (this: any, hook) {
           hook.result.test = this.number + 1;
 
           return hook;

@@ -1,11 +1,29 @@
-import { HookManager, HookMap, hooks, Middleware } from '@feathersjs/hooks';
-import { Service, ServiceOptions, Application } from '../declarations';
+import { HookContextData, HookManager, HookMap, hooks, Middleware } from '@feathersjs/hooks';
+import { Service, ServiceOptions, HookContext, FeathersService } from '../declarations';
 import { defaultServiceArguments } from '../service';
 import { eventHook } from '../events';
-import { collectLegacyHooks, enableLegacyHooks } from './legacy';
+import {
+  collectLegacyHooks,
+  enableLegacyHooks,
+  fromAfterHook,
+  fromBeforeHook,
+  fromErrorHooks
+} from './legacy';
 
-export class FeathersHookManager extends HookManager {
-  constructor (public app: Application, public method: string) {
+export { fromAfterHook, fromBeforeHook, fromErrorHooks };
+
+export function createContext (service: Service<any>, method: string, data: HookContextData = {}) {
+  const createContext = (service as any)[method].createContext;
+
+  if (typeof createContext !== 'function') {
+    throw new Error(`Can not create context for method ${method}`);
+  }
+  
+  return createContext(data) as HookContext;
+}
+
+export class FeathersHookManager<A> extends HookManager {
+  constructor (public app: A, public method: string) {
     super();
   }
 
@@ -17,8 +35,8 @@ export class FeathersHookManager extends HookManager {
   }
 }
 
-export function hookMixin (
-  this: Application, service: Service<any>, path: string, options: ServiceOptions
+export function hookMixin<A> (
+  this: A, service: FeathersService<A>, path: string, options: ServiceOptions
 ) {
   if (typeof service.hooks === 'function') {
     return service;
@@ -28,14 +46,15 @@ export function hookMixin (
   const hookMap = options.methods.reduce((res, method) => {
     const params = (defaultServiceArguments as any)[method] || [ 'data', 'params' ];
 
-    res[method] = new FeathersHookManager(app, method)
+    res[method] = new FeathersHookManager<A>(app, method)
       .params(...params)
       .props({
         app,
         path,
         method,
         service,
-        event: null
+        event: null,
+        type: null
       })
       .defaults(() => {
         return { params: {} }

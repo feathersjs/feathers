@@ -1,7 +1,7 @@
 import { NextFunction } from '@feathersjs/hooks';
 import { EventEmitter } from 'events';
 
-import { Service, HookContext } from './declarations';
+import { HookContext, FeathersService } from './declarations';
 import { getServiceOptions, defaultEventMap } from './service';
 
 export async function eventHook (context: HookContext, next: NextFunction) {
@@ -21,7 +21,7 @@ export async function eventHook (context: HookContext, next: NextFunction) {
   }
 }
 
-export function eventMixin (service: Service<any>) {
+export function eventMixin<A> (service: FeathersService<A>) {
   const isEmitter = typeof service.on === 'function' &&
     typeof service.emit === 'function';
 

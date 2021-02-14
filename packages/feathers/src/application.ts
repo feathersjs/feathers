@@ -11,19 +11,31 @@ import {
   ServiceMixin,
   Service,
   ServiceOptions,
-  ServiceAddons,
+  ServiceInterface,
   Application,
-  BaseService
+  HookOptions,
+  FeathersService,
+  HookMap,
+  LegacyHookMap
 } from './declarations';
+import { enableLegacyHooks } from './hooks/legacy';
 
 const debug = Debug('@feathersjs/feathers');
 
-export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements FeathersApplication<ServiceTypes, AppSettings> {
+export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements Application<ServiceTypes, AppSettings> {
   services: ServiceTypes = ({} as ServiceTypes);
   settings: AppSettings = ({} as AppSettings);
-  mixins: ServiceMixin[] = [ hookMixin, eventMixin ];
+  mixins: ServiceMixin<Application<ServiceTypes, AppSettings>>[] = [ hookMixin, eventMixin ];
   version: string = version;
   _isSetup = false;
+  appHooks: HookMap<Application<ServiceTypes, AppSettings>, any> = {};
+
+  private legacyHooks: (this: any, allHooks: any) => any;
+
+  constructor () {
+    super();
+    this.legacyHooks = enableLegacyHooks(this);
+  }
 
   get<L extends keyof AppSettings> (
     name: AppSettings[L] extends never ? string : L
@@ -45,15 +57,16 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     return this;
   }
 
-  defaultService (location: string): BaseService {
+  defaultService (location: string): ServiceInterface<any> {
     throw new Error(`Can not find service '${location}'`);
   }
 
   service<L extends keyof ServiceTypes> (
     location: ServiceTypes[L] extends never ? string : L
-  ): (ServiceTypes[L] extends never ? Service<any> : (
-    ServiceTypes[L] & ServiceAddons<any, Application<ServiceTypes, AppSettings>, any>
-  )) {
+  ): (ServiceTypes[L] extends never
+    ? FeathersService<this, Service<any>>
+    : FeathersService<this, ServiceTypes[L]>
+  ) {
     const path: any = stripSlashes(location as string) || '/';
     const current = (this.services as any)[path];
 
@@ -68,9 +81,9 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
   use<L extends keyof ServiceTypes> (
     path: ServiceTypes[L] extends never ? string : L,
     service: (ServiceTypes[L] extends never ?
-      BaseService : ServiceTypes[L]
-    ) | FeathersApplication,
-    options: ServiceOptions = {}
+      ServiceInterface<any> : ServiceTypes[L]
+    ) | Application,
+    options?: ServiceOptions
   ): this {
     if (typeof path !== 'string') {
       throw new Error(`'${path}' is not a valid service path.`);
@@ -89,7 +102,7 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     }
 
     const protoService = wrapService(location, service, options);
-    const serviceOptions = getServiceOptions(service);
+    const serviceOptions = getServiceOptions(service, options);
 
     debug(`Registering new service at \`${location}\``);
 
@@ -107,11 +120,26 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     return this;
   }
 
+  hooks (hookMap: HookOptions<this, any>) {
+    const legacyMap = hookMap as LegacyHookMap<this, any>;
+
+    if (legacyMap.before || legacyMap.after || legacyMap.error) {
+      return this.legacyHooks(legacyMap);
+    }
+
+    this.appHooks = {
+      ...this.appHooks,
+      ...hookMap as HookMap<Application<ServiceTypes, AppSettings>, any>
+    };
+
+    return this;
+  }
+
   async setup () {
     // Setup each service (pass the app so that they can look up other services etc.)
     for (const path of Object.keys(this.services)) {
       const service: any = this.service(path as any);
-      
+
       if (typeof service.setup === 'function') {
         debug(`Setting up service for \`${path}\``);
 
