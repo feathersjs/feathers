@@ -1,7 +1,6 @@
-import { HookContextData, HookManager, HookMap, hooks, Middleware } from '@feathersjs/hooks';
-import { Service, ServiceOptions, HookContext, FeathersService } from '../declarations';
+import { getManager, HookContextData, HookManager, HookMap, HOOKS, hooks, Middleware } from '@feathersjs/hooks';
+import { Service, ServiceOptions, HookContext, FeathersService, Application } from '../declarations';
 import { defaultServiceArguments } from '../service';
-import { eventHook } from '../events';
 import {
   collectLegacyHooks,
   enableLegacyHooks,
@@ -18,20 +17,29 @@ export function createContext (service: Service<any>, method: string, data: Hook
   if (typeof createContext !== 'function') {
     throw new Error(`Can not create context for method ${method}`);
   }
-  
+
   return createContext(data) as HookContext;
 }
 
 export class FeathersHookManager<A> extends HookManager {
   constructor (public app: A, public method: string) {
     super();
+    this._middleware = [];
   }
 
   collectMiddleware (self: any, args: any[]): Middleware[] {
-    const mw = super.collectMiddleware(self, args);
-    const legacyHooks = collectLegacyHooks(this.app, self, this.method);
+    const app = this.app as any as Application;
+    const appHooks = app.appHooks[HOOKS].concat(app.appHooks[this.method] || []);
+    const legacyAppHooks = collectLegacyHooks(this.app, this.method);
+    const middleware = super.collectMiddleware(self, args);
+    const legacyHooks = collectLegacyHooks(self, this.method);
 
-    return mw.concat(legacyHooks);
+    return [...appHooks, ...legacyAppHooks, ...middleware, ...legacyHooks];
+  }
+
+  middleware (mw: Middleware[]) {
+    this._middleware.push(...mw);
+    return this;
   }
 }
 
@@ -43,7 +51,7 @@ export function hookMixin<A> (
   }
 
   const app = this;
-  const hookMap = options.methods.reduce((res, method) => {
+  const serviceMethodHooks = options.methods.reduce((res, method) => {
     const params = (defaultServiceArguments as any)[method] || [ 'data', 'params' ];
 
     res[method] = new FeathersHookManager<A>(app, method)
@@ -58,23 +66,35 @@ export function hookMixin<A> (
       })
       .defaults(() => {
         return { params: {} }
-      })
-      .middleware([ eventHook ]);
+      });
 
     return res;
   }, {} as HookMap);
-
   const handleLegacyHooks = enableLegacyHooks(service);
 
-  service.hooks = function (this: typeof service, hookMap: any) {
-    if (hookMap.before || hookMap.after || hookMap.error) {
-      return handleLegacyHooks.call(this, hookMap);
-    }
-    
-    return hooks(this, hookMap);
-  }
+  hooks(service, serviceMethodHooks);
 
-  service.hooks(hookMap);
+  service.hooks = function (this: any, hookOptions: any) {
+    if (hookOptions.before || hookOptions.after || hookOptions.error) {
+      return handleLegacyHooks.call(this, hookOptions);
+    }
+
+    if (Array.isArray(hookOptions)) {
+      return hooks(this, hookOptions);
+    }
+
+    Object.keys(hookOptions).forEach(method => {
+      const manager = getManager(this[method]);
+
+      if (!(manager instanceof FeathersHookManager)) {
+        throw new Error(`Method ${method} is not a Feathers hooks enabled service method`);
+      }
+
+      manager.middleware(hookOptions[method]);
+    });
+
+    return this;
+  }
 
   return service;
 }

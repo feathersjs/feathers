@@ -29,11 +29,11 @@ export function fromErrorHooks (hooks: LegacyHookFunction[]) {
   return (context: any, next: any) => {
     return next().catch((error: any) => {
       let promise: Promise<any> = Promise.resolve();
-      
+
       context.original = { ...context };
       context.error = error;
       context.type = 'error';
-      
+
       delete context.result;
 
       for (const hook of hooks) {
@@ -51,20 +51,15 @@ export function fromErrorHooks (hooks: LegacyHookFunction[]) {
   }
 }
 
-export function collectLegacyHooks (app: any, service: any, method: string) {
+export function collectLegacyHooks (target: any, method: string) {
   const {
-    before: { [method]: serviceBefore = [] },
-    after: { [method]: serviceAfter = [] },
-    error: { [method]: serviceError = [] }
-  } = service.__hooks;
-  const {
-    before: { [method]: appBefore = [] },
-    after: { [method]: appAfter = [] },
-    error: { [method]: appError = [] }
-  } = app.__hooks;
-  const beforeHooks = [...appBefore, ...serviceBefore];
-  const afterHooks = [...serviceAfter, ...appAfter].reverse();
-  const errorHook = fromErrorHooks([...serviceError, ...appError]);
+    before: { [method]: before = [] },
+    after: { [method]: after = [] },
+    error: { [method]: error = [] }
+  } = target.__hooks;
+  const beforeHooks = before;
+  const afterHooks = [...after].reverse();
+  const errorHook = fromErrorHooks(error);
 
   return [errorHook, ...beforeHooks, ...afterHooks];
 }

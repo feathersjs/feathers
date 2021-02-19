@@ -11,7 +11,7 @@ export function feathers<T = {}, S = {}> () {
 export { version, Feathers };
 export * from './declarations';
 export * from './service';
-export * from './hooks/index';
+export * from './hooks';
 
 if (typeof module !== 'undefined') {
   module.exports = Object.assign(feathers, module.exports);

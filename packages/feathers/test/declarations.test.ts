@@ -15,7 +15,7 @@ interface TodoData {
   completed?: boolean;
 }
 
-class TodoService implements ServiceInterface<Todo, TodoData, Application<Services, Configuration>> {
+class TodoService implements ServiceInterface<Todo, TodoData> {
   constructor (public todos: Todo[] = []) {}
 
   async find () {
@@ -35,7 +35,7 @@ class TodoService implements ServiceInterface<Todo, TodoData, Application<Servic
     return todo;
   }
 
-  async setup (app: Application<Services, Configuration>) {
+  async setup (app: Application) {
     assert.ok(app);
   }
 }

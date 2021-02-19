@@ -13,7 +13,7 @@ export interface ServiceOptions {
   methods?: string[];
 }
 
-export interface ServiceMethods<T, D, A = Application> {
+export interface ServiceMethods<T, D> {
   find (params?: Params): Promise<T | T[]>;
 
   get (id: Id, params?: Params): Promise<T>;
@@ -26,7 +26,7 @@ export interface ServiceMethods<T, D, A = Application> {
 
   remove (id: NullableId, params?: Params): Promise<T | T[]>;
 
-  setup (app: A, path: string): Promise<void>;
+  setup (app: Application, path: string): Promise<void>;
 }
 
 export interface ServiceOverloads<T, D> {
@@ -51,8 +51,8 @@ export type Service<T, D = Partial<T>> =
   ServiceMethods<T, D> &
   ServiceOverloads<T, D>;
 
-export type ServiceInterface<T, D = Partial<T>, A = Application> =
-  Partial<ServiceMethods<T, D, A>>;
+export type ServiceInterface<T, D = Partial<T>> =
+  Partial<ServiceMethods<T, D>>;
 
 export interface ServiceAddons<A, S> extends EventEmitter {
   id?: string;
@@ -137,6 +137,11 @@ export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
   _isSetup: boolean;
 
   /**
+   * Contains all registered application level hooks.
+   */
+  appHooks: HookMap<Application<ServiceTypes, AppSettings>, any>;
+
+  /**
    * Retrieve an application setting by name
    *
    * @param name The setting name
@@ -211,7 +216,7 @@ export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
    *
    * @param map The application hook settings.
    */
-  hooks (map: HookOptions<this, any>): this;
+  hooks (map: HookOptions<Application<ServiceTypes, AppSettings>, any>): this;
 }
 
 export type Application<ServiceTypes = {}, AppSettings = {}> =

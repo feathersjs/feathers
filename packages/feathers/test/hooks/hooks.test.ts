@@ -1,76 +1,105 @@
 import assert from 'assert';
-import { createContext, feathers } from '../../src';
+import { hooks, NextFunction } from '@feathersjs/hooks';
+import { HookContext, createContext, feathers, Id, Params } from '../../src';
 
 describe('hooks basics', () => {
-  // it('mix @feathersjs/hooks and .hooks', async () => {
-  //   const svc = {
-  //     async get (id: any, params: any) {
-  //       return { id, user: params.user };
-  //     }
-  //   };
+  it('mix @feathersjs/hooks and .hooks', async () => {
+    class SimpleService {
+      async get (id: Id, params: Params) {
+        return { id, chain: params.chain };
+      }
+    }
 
-  //   hooks(svc, {
-  //     get: [async (ctx: any, next: any) => {
-  //       ctx.chain.push('@hooks 1 before');
-  //       await next();
-  //       ctx.chain.push('@hooks 1 after');
-  //     }]
-  //   });
+    hooks(SimpleService.prototype, [async (ctx: HookContext, next: NextFunction) => {
+      ctx.params.chain.push('@hooks all before');
+      await next();
+      ctx.params.chain.push('@hooks all after');
+    }]);
 
-  //   const app = feathers().use('/dummy', svc);
-  //   const service = app.service('dummy');
+    hooks(SimpleService, {
+      get: [async (ctx: HookContext, next: NextFunction) => {
+        assert.ok(ctx.app);
+        assert.ok(ctx.service);
+        ctx.params.chain.push('@hooks get before');
+        await next();
+        ctx.params.chain.push('@hooks get after');
+      }]
+    });
 
-  //   service.hooks({
-  //     before: {
-  //       get: (ctx: any) => {
-  //         ctx.chain.push('.hooks 1 before');
-  //       }
-  //     },
-  //     after: {
-  //       get: (ctx: any) => {
-  //         ctx.chain.push('.hooks 1 after');
-  //       }
-  //     }
-  //   });
+    const app = feathers().use('/dummy', new SimpleService());
+    const service = app.service('dummy');
 
-  //   hooks(service, {
-  //     get: [async (ctx: any, next: any) => {
-  //       ctx.chain.push('@hooks 2 before');
-  //       await next();
-  //       ctx.chain.push('@hooks 2 after');
-  //     }]
-  //   });
+    app.hooks([async function appHook (ctx: HookContext, next: NextFunction) {
+      assert.ok(ctx.app);
+      assert.ok(ctx.service);
 
-  //   service.hooks({
-  //     before: {
-  //       get: (ctx: any) => {
-  //         ctx.chain.push('.hooks 2 before');
-  //       }
-  //     },
-  //     after: {
-  //       get: (ctx: any) => {
-  //         ctx.chain.push('.hooks 2 after');
-  //       }
-  //     }
-  //   });
+      ctx.params.chain = [ 'app.hooks before'];
+      await next();
+      ctx.params.chain.push('app.hooks after');
+    }]);
 
-  //   const hookContext = service.get.createContext({
-  //     chain: []
-  //   });
-  //   const resultContext = await service.get(1, {}, hookContext);
+    app.hooks({
+      before: [(ctx: HookContext) => {
+        ctx.params.chain.push('app.hooks legacy before');
+      }],
+      after: [(ctx: HookContext) => {
+        ctx.params.chain.push('app.hooks legacy after');
+      }]
+    });
 
-  //   assert.strictEqual(hookContext, resultContext);
-  //   assert.deepStrictEqual(resultContext.chain, [
-  //     '@hooks 1 before',
-  //     '.hooks 1 before',
-  //     '.hooks 2 before',
-  //     '@hooks 2 before',
-  //     '@hooks 2 after',
-  //     '.hooks 1 after',
-  //     '.hooks 2 after',
-  //     '@hooks 1 after'
-  //   ]);
-  // });
+    service.hooks({
+      before: {
+        get: (ctx: HookContext) => {
+          ctx.params.chain.push('service.hooks legacy before');
+        }
+      },
+      after: {
+        get: (ctx: HookContext) => {
+          ctx.params.chain.push('service.hooks legacy after');
+        }
+      }
+    });
+
+    service.hooks({
+      get: [async (ctx: HookContext, next: NextFunction) => {
+        ctx.params.chain.push('service.hooks get before');
+        await next();
+        ctx.params.chain.push('service.hooks get after');
+      }]
+    });
+
+    service.hooks({
+      before: {
+        get: (ctx: HookContext) => {
+          ctx.params.chain.push('service.hooks 2 legacy before');
+        }
+      },
+      after: {
+        get: (ctx: HookContext) => {
+          ctx.params.chain.push('service.hooks 2 legacy after');
+        }
+      }
+    });
+
+    const { chain } = await service.get(1, {});
+
+    assert.deepStrictEqual(chain, [
+      'app.hooks before',
+      'app.hooks legacy before',
+      '@hooks all before',
+      '@hooks get before',
+      'service.hooks get before',
+      'service.hooks legacy before',
+      'service.hooks 2 legacy before',
+      'service.hooks legacy after',
+      'service.hooks 2 legacy after',
+      'service.hooks get after',
+      '@hooks get after',
+      '@hooks all after',
+      'app.hooks legacy after',
+      'app.hooks after'
+    ])
+  });
 
   // it('validates arguments', async () => {
   //   const app = feathers().use('/dummy', {
@@ -274,97 +303,37 @@ describe('hooks basics', () => {
     });
   });
 
-  // it('can register hooks on a custom method', async () => {
-  //   const app = feathers().use('/dummy', {
-  //     methods: {
-  //       custom: ['id', 'data', 'params']
-  //     },
-  //     async get (id: Id) {
-  //       return { id };
-  //     },
-  //     async custom (id: any, data: any, params: any) {
-  //       return [id, data, params];
-  //     },
-  //     // activateHooks is usable as a decorator: @activateHooks(['id', 'data', 'params'])
-  //     other: activateHooks(['id', 'data', 'params'])(
-  //       (id: any, data: any, params: any) => {
-  //         return Promise.resolve([id, data, params]);
-  //       }
-  //     )
-  //   });
+  it('can register hooks on a custom method', async () => {
+    class Dummy {
+      async get (id: Id) {
+        return { id };
+      }
 
-  //   app.service('dummy').hooks({
-  //     before: {
-  //       all (context: any) {
-  //         context.test = ['all::before'];
-  //       },
-  //       custom (context: any) {
-  //         context.test.push('custom::before');
-  //       }
-  //     },
-  //     after: {
-  //       all (context: any) {
-  //         context.test.push('all::after');
-  //       },
-  //       custom (context: any) {
-  //         context.test.push('custom::after');
-  //       }
-  //     }
-  //   });
+      async custom (data: any) {
+        return data;
+      }
+    }
 
-  //   const args = [1, { test: 'ok' }, { provider: 'rest' }];
+    const app = feathers<{
+      dummy: Dummy
+    }>().use('dummy', new Dummy(), {
+      methods: [ 'get', 'custom' ]
+    });
 
-  //   assert.deepStrictEqual(app.service('dummy').methods, {
-  //     find: ['params'],
-  //     get: ['id', 'params'],
-  //     create: ['data', 'params'],
-  //     update: ['id', 'data', 'params'],
-  //     patch: ['id', 'data', 'params'],
-  //     remove: ['id', 'params'],
-  //     custom: ['id', 'data', 'params'],
-  //     other: ['id', 'data', 'params']
-  //   });
+    app.service('dummy').hooks({
+      custom: [async (context, next) => {
+        (context.data as any).fromHook = true;
+        await next();
+      }]
+    });
 
-  //   let hook = await app.service('dummy').custom(...args, true);
-
-  //   assert.deepStrictEqual(context.result, args);
-  //   assert.deepStrictEqual(context.test, ['all::before', 'custom::before', 'all::after', 'custom::after']);
-
-  //   hook = await app.service('dummy').other(...args, true);
-
-  //   assert.deepStrictEqual(context.result, args);
-  //   assert.deepStrictEqual(context.test, ['all::before', 'all::after']);
-  // });
-
-  // it('context.data should not change arguments', async () => {
-  //   const app = feathers().use('/dummy', {
-  //     methods: {
-  //       custom: ['id', 'params']
-  //     },
-  //     async get (id: Id) {
-  //       return { id };
-  //     },
-  //     async custom (id: any, params: any) {
-  //       return [id, params];
-  //     }
-  //   });
-
-  //   app.service('dummy').hooks({
-  //     before: {
-  //       all (context: any) {
-  //         context.test = ['all::before'];
-  //       },
-  //       custom (context: any) {
-  //         context.data = { post: 'title' };
-  //       }
-  //     }
-  //   });
-
-  //   const args = [1, { provider: 'rest' }];
-  //   const result = await app.service('dummy').custom(...args)
-
-  //   assert.deepStrictEqual(result, args);
-  // });
+    assert.deepStrictEqual(await app.service('dummy').custom({
+      message: 'testing'
+    }), {
+      message: 'testing',
+      fromHook: true
+    });
+  });
 
   // it('normalizes params to object even when it is falsy (#1001)', async () => {
   //   const app = feathers().use('/dummy', {

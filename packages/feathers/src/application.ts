@@ -1,9 +1,10 @@
 import Debug from 'debug';
 import { EventEmitter } from 'events';
 import { stripSlashes } from '@feathersjs/commons';
+import { HOOKS } from '@feathersjs/hooks';
 
 import version from './version';
-import { eventMixin } from './events';
+import { eventHook, eventMixin } from './events';
 import { hookMixin } from './hooks';
 import { wrapService, getServiceOptions } from './service';
 import {
@@ -28,7 +29,9 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
   mixins: ServiceMixin<Application<ServiceTypes, AppSettings>>[] = [ hookMixin, eventMixin ];
   version: string = version;
   _isSetup = false;
-  appHooks: HookMap<Application<ServiceTypes, AppSettings>, any> = {};
+  appHooks: HookMap<Application<ServiceTypes, AppSettings>, any> = {
+    [HOOKS]: [ (eventHook as any) ]
+  };
 
   private legacyHooks: (this: any, allHooks: any) => any;
 
@@ -120,17 +123,24 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     return this;
   }
 
-  hooks (hookMap: HookOptions<this, any>) {
+  hooks (hookMap: HookOptions<Application<ServiceTypes, AppSettings>, any>) {
     const legacyMap = hookMap as LegacyHookMap<this, any>;
 
     if (legacyMap.before || legacyMap.after || legacyMap.error) {
       return this.legacyHooks(legacyMap);
     }
 
-    this.appHooks = {
-      ...this.appHooks,
-      ...hookMap as HookMap<Application<ServiceTypes, AppSettings>, any>
-    };
+    if (Array.isArray(hookMap)) {
+      this.appHooks[HOOKS].push(...hookMap);
+    } else {
+      const methodHookMap = hookMap as HookMap<Application<ServiceTypes, AppSettings>, any>;
+
+      Object.keys(methodHookMap).forEach(key => {
+        const methodHooks = this.appHooks[key] || [];
+
+        methodHooks.push(...methodHookMap[key]);
+      });
+    }
 
     return this;
   }
