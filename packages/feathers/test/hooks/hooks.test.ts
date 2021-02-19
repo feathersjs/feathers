@@ -335,18 +335,18 @@ describe('hooks basics', () => {
     });
   });
 
-  // it('normalizes params to object even when it is falsy (#1001)', async () => {
-  //   const app = feathers().use('/dummy', {
-  //     async get (id: any, params: any) {
-  //       return { id, params };
-  //     }
-  //   });
+  it('normalizes params to object even when it is falsy (#1001)', async () => {
+    const app = feathers().use('/dummy', {
+      async get (id: Id, params: Params) {
+        return { id, params };
+      }
+    });
 
-  //   const result = await app.service('dummy').get('test', null);
+    const result = await app.service('dummy').get('test', null);
 
-  //   assert.deepStrictEqual(result, {
-  //     id: 'test',
-  //     params: {}
-  //   });
-  // });
+    assert.deepStrictEqual(result, {
+      id: 'test',
+      params: {}
+    });
+  });
 });

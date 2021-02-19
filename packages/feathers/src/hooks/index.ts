@@ -37,6 +37,14 @@ export class FeathersHookManager<A> extends HookManager {
     return [...appHooks, ...legacyAppHooks, ...middleware, ...legacyHooks];
   }
 
+  initializeContext (self: any, args: any[], context: HookContext) {
+    const ctx = super.initializeContext(self, args, context);
+
+    ctx.params = ctx.params || {};
+    
+    return ctx;
+  }
+
   middleware (mw: Middleware[]) {
     this._middleware.push(...mw);
     return this;
@@ -63,9 +71,6 @@ export function hookMixin<A> (
         service,
         event: null,
         type: null
-      })
-      .defaults(() => {
-        return { params: {} }
       });
 
     return res;

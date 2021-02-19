@@ -25,34 +25,34 @@ describe('app.hooks', () => {
     assert.strictEqual(typeof app.hooks, 'function');
   });
 
-  // describe('app.hooks({ async })', () => {
-  //   it('basic app async hook', async () => {
-  //     const service = app.service('todos');
+  describe('app.hooks({ async })', () => {
+    it('basic app async hook', async () => {
+      const service = app.service('todos');
 
-  //     app.hooks({
-  //       async async (context, next: any) {
-  //         assert.strictEqual(context.app, app);
-  //         await next();
-  //         context.params.ran = true;
-  //       }
-  //     });
+      app.hooks([
+        async (context, next) => {
+          assert.strictEqual(context.app, app);
+          await next();
+          context.params.ran = true;
+        }
+      ]);
 
-  //     let result = await service.get('test');
+      let result = await service.get('test');
 
-  //     assert.deepStrictEqual(result, {
-  //       id: 'test',
-  //       params: { ran: true }
-  //     });
+      assert.deepStrictEqual(result, {
+        id: 'test',
+        params: { ran: true }
+      });
 
-  //     const data = { test: 'hi' };
+      const data = { test: 'hi' };
 
-  //     result = await service.create(data);
+      result = await service.create(data);
 
-  //     assert.deepStrictEqual(result, {
-  //       data, params: { ran: true }
-  //     });
-  //   });
-  // });
+      assert.deepStrictEqual(result, {
+        data, params: { ran: true }
+      });
+    });
+  });
 
   describe('app.hooks({ before })', () => {
     it('basic app before hook', async () => {

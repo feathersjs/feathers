@@ -247,25 +247,6 @@ describe('`error` hooks', () => {
         message: errorMessage
       });
     });
-
-    it.skip('error in async hook', async () => {
-      // service.hooks({
-      //   async (context) {
-      //     context.modified = true;
-
-      //     throw new Error(errorMessage);
-      //   },
-
-      //   error (context) {
-      //     assert.ok(context.modified);
-      //     assert.strictEqual(context.original.type, 'before');
-      //   }
-      // });
-
-      // await assert.rejects(() => service.get('laundry'), {
-      //   message: errorMessage
-      // });
-    });
   });
 
   it('Error in before hook causes inter-service calls to have wrong hook context (#841)', async () => {

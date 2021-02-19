@@ -226,7 +226,6 @@ describe('Feathers application', () => {
     });
   });
 
-  // Copied from the Express tests (without special cases)
   describe('Express app options compatibility', function () {
     describe('.set()', () => {
       it('should set a value', () => {
