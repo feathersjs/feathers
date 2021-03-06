@@ -1,5 +1,6 @@
 import { Service } from '@feathersjs/transport-commons/client';
 import { Socket } from 'socket.io-client';
+import { defaultEventMap } from '@feathersjs/feathers';
 
 interface SocketIOClientOptions {
     timeout?: number;
@@ -11,9 +12,7 @@ function socketioClient (connection: Socket, options?: SocketIOClientOptions) {
   }
 
   const defaultService = function (this: any, name: string) {
-    const events = Object.keys(this.eventMappings || {})
-      .map(method => this.eventMappings[method]);
-
+    const events = Object.values(defaultEventMap);
     const settings = Object.assign({}, options, {
       events,
       name,
@@ -25,7 +24,7 @@ function socketioClient (connection: Socket, options?: SocketIOClientOptions) {
   };
 
   const initialize = function (app: any) {
-    if (typeof app.defaultService === 'function') {
+    if (app.io !== undefined) {
       throw new Error('Only one default client provider can be configured');
     }
 

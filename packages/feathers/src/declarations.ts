@@ -11,6 +11,7 @@ export { NextFunction };
 export interface ServiceOptions {
   events?: string[];
   methods?: string[];
+  serviceEvents?: string[];
 }
 
 export interface ServiceMethods<T, D> {
@@ -219,8 +220,11 @@ export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
   hooks (map: HookOptions<Application<ServiceTypes, AppSettings>, any>): this;
 }
 
-export type Application<ServiceTypes = {}, AppSettings = {}> =
-  FeathersApplication<ServiceTypes, AppSettings> & EventEmitter;
+// This needs to be an interface instead of a type
+// so that the declaration can be extended by other modules
+export interface Application<ServiceTypes = {}, AppSettings = {}> extends FeathersApplication<ServiceTypes, AppSettings>, EventEmitter {
+
+}
 
 export type Id = number | string;
 export type NullableId = Id | null;
@@ -237,7 +241,7 @@ export interface Params {
   [key: string]: any; // (JL) not sure if we want this
 }
 
-export interface HookContext<A = FeathersApplication, S = any> extends BaseHookContext<ServiceGenericType<S>> {
+export interface HookContext<A = Application, S = any> extends BaseHookContext<ServiceGenericType<S>> {
   /**
    * A read only property that contains the Feathers application object. This can be used to
    * retrieve other services (via context.app.service('name')) or configuration values.

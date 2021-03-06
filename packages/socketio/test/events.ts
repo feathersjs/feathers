@@ -95,22 +95,17 @@ export default (name: string, options: any) => {
       const original = {
         name: 'created event'
       };
-      const old = service.create;
-
-      service.create = function (data: any) {
-        this.emit('log', { message: 'Custom log event', data });
-        service.create = old;
-        return old.apply(this, arguments);
-      };
 
       socket.once(`${name} log`, verifyEvent(done, (data: any) => {
         assert.deepStrictEqual(data, {
           message: 'Custom log event', data: original
         });
-        service.create = old;
       }));
 
-      call('create', original);
+      service.emit('log', {
+        data: original,
+        message: 'Custom log event'
+      });
     });
   });
 

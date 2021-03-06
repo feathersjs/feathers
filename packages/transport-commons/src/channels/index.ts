@@ -3,21 +3,22 @@ import { compact, flattenDeep, noop } from 'lodash';
 import { Channel, RealTimeConnection } from './channel/base';
 import { CombinedChannel } from './channel/combined';
 import { channelMixin, publishMixin, keys, PublishMixin, Event, Publisher } from './mixins';
-import { Application, Service } from '@feathersjs/feathers';
+import { Application, FeathersService, getServiceOptions } from '@feathersjs/feathers';
+import EventEmitter from 'events';
 
 const debug = Debug('@feathersjs/transport-commons/channels');
 const { CHANNELS } = keys;
 
 declare module '@feathersjs/feathers/lib/declarations' {
-  interface ServiceAddons<T> {
-    publish (publisher: Publisher<T>): this;
-    publish (event: Event, publisher: Publisher<T>): this;
+  interface ServiceAddons<A, S> extends EventEmitter {
+    publish (publisher: Publisher<ServiceGenericType<S>>): this;
+    publish (event: Event, publisher: Publisher<ServiceGenericType<S>>): this;
 
-    registerPublisher (publisher: Publisher<T>): this;
-    registerPublisher (event: Event, publisher: Publisher<T>): this;
+    registerPublisher (publisher: Publisher<ServiceGenericType<S>>): this;
+    registerPublisher (event: Event, publisher: Publisher<ServiceGenericType<S>>): this;
   }
 
-  interface Application<ServiceTypes = {}> { // eslint-disable-line
+  interface Application<ServiceTypes = {}, AppSettings = {}> {
     channels: string[];
 
     channel (name: string[]): Channel;
@@ -50,15 +51,16 @@ export function channels () {
       }
     });
 
-    app.mixins.push((service: Service<any>, path: string) => {
-      if (typeof service.publish === 'function' || !service._serviceEvents) {
+    app.mixins.push((service: FeathersService<any>, path: string) => {
+      const { serviceEvents } = getServiceOptions(service);
+
+      if (typeof service.publish === 'function') {
         return;
       }
 
       Object.assign(service, publishMixin());
 
-      // @ts-ignore
-      service._serviceEvents.forEach((event: string) => {
+      serviceEvents.forEach((event: string) => {
         service.on(event, function (data, hook) {
           if (!hook) {
             // Fake hook for custom events

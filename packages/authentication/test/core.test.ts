@@ -1,5 +1,5 @@
 import assert from 'assert';
-import feathers, { Application } from '@feathersjs/feathers';
+import { feathers, Application } from '@feathersjs/feathers';
 import jwt from 'jsonwebtoken';
 
 import { AuthenticationBase, AuthenticationRequest } from '../src/core';

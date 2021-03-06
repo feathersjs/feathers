@@ -1,5 +1,5 @@
 import assert from 'assert';
-import feathers, { Application, Params, Service } from '@feathersjs/feathers';
+import { feathers, Application, Params, Service } from '@feathersjs/feathers';
 
 import { Strategy1, Strategy2 } from '../fixtures';
 import { AuthenticationService, hooks } from '../../src';

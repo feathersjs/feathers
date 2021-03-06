@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert';
 import { Server } from 'http';
-import feathers from '@feathersjs/feathers';
+import { feathers } from '@feathersjs/feathers';
 import { io, Socket } from 'socket.io-client';
 import { setupTests } from '@feathersjs/tests/src/client';
 
@@ -14,11 +14,13 @@ describe('@feathersjs/socketio-client', () => {
   let server: Server;
 
   before(done => {
-    server = createServer().listen(9988);
-    server.once('listening', () => {
-      socket = io('http://localhost:9988');
-      app.configure(socketio(socket));
-      done();
+    createServer().listen(9988).then(srv => {
+      server = srv;
+      server.once('listening', () => {
+        socket = io('http://localhost:9988');
+        app.configure(socketio(socket));
+        done();
+      });
     });
   });
 

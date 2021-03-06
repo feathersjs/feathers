@@ -22,10 +22,10 @@ export const defaultEventMap = {
   remove: 'removed'
 }
 
-export function getServiceOptions<S> (
-  service: S, options: ServiceOptions = {}
+export function getServiceOptions (
+  service: any, options: ServiceOptions = {}
 ): ServiceOptions {
-  const existingOptions = (service as any)[SERVICE];
+  const existingOptions = service[SERVICE];
 
   if (existingOptions) {
     return existingOptions;
@@ -33,12 +33,15 @@ export function getServiceOptions<S> (
 
   const {
     methods = defaultServiceMethods.filter(method =>
-      typeof (service as any)[method] === 'function'
+      typeof service[method] === 'function'
     ),
-    events = (service as any).events || []
+    events = service.events || []
+  } = options;
+  const {
+    serviceEvents = Object.values(defaultEventMap).concat(events)
   } = options;
 
-  return { events, methods };
+  return { events, methods, serviceEvents };
 }
 
 export function wrapService (
@@ -51,7 +54,7 @@ export function wrapService (
 
   const protoService = Object.create(service);
   const serviceOptions = getServiceOptions(service, options);
-  
+
   if (Object.keys(serviceOptions.methods).length === 0) {
     throw new Error(`Invalid service object passed for path \`${location}\``);
   }

@@ -23,7 +23,7 @@ import { enableLegacyHooks } from './hooks/legacy';
 
 const debug = Debug('@feathersjs/feathers');
 
-export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements Application<ServiceTypes, AppSettings> {
+export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements FeathersApplication<ServiceTypes, AppSettings> {
   services: ServiceTypes = ({} as ServiceTypes);
   settings: AppSettings = ({} as AppSettings);
   mixins: ServiceMixin<Application<ServiceTypes, AppSettings>>[] = [ hookMixin, eventMixin ];

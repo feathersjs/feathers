@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import feathers, { Application } from '@feathersjs/feathers';
+import { feathers, Application } from '@feathersjs/feathers';
 import plugin from '../src';
 
 describe('@feathersjs/configuration', () => {

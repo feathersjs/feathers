@@ -1,4 +1,4 @@
-import feathers, { Id, Params } from '@feathersjs/feathers';
+import { feathers, Id, Params } from '@feathersjs/feathers';
 import socketio from '@feathersjs/socketio';
 import '@feathersjs/transport-commons';
 import { Service } from '@feathersjs/adapter-memory';

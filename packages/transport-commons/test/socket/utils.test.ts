@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { EventEmitter } from 'events';
-import feathers, { Application, Params } from '@feathersjs/feathers';
+import { feathers, Application, Params } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
 
 import { routing } from '../../src/routing';
