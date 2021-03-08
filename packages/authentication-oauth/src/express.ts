@@ -41,11 +41,15 @@ export default (options: OauthSetupSettings) => {
       resave: true
     });
     const grantApp = grant(config);
-    const authApp = express();
-
+    const authAppWithRouter = express();
+    // Fix to delete deprecated router function
+    const authApp: any = {
+      ...authAppWithRouter,
+      router: undefined
+    };
     authApp.use(expressSession);
 
-    authApp.get('/:name', (req, _res, next) => {
+    authApp.get('/:name', (req: { query: { [x: string]: any; feathers_token: any; redirect: any; }; session: { accessToken: string; redirect: string; query: any; }; }, _res: any, next: () => void) => {
       const { feathers_token, redirect, ...query } = req.query;
 
       if (feathers_token) {
@@ -58,7 +62,7 @@ export default (options: OauthSetupSettings) => {
       next()
     });
 
-    authApp.get('/:name/authenticate', async (req, res, next) => {
+    authApp.get('/:name/authenticate', async (req: { params: { name: any; }; session: { destroy?: any; accessToken?: any; grant?: any; query?: any; redirect?: any; }; feathers: any; query: any; }, res: { redirect: (arg0: string) => void; json: (arg0: AuthenticationResult) => void; }, next: (arg0: any) => void) => {
       const { name } = req.params ;
       const { accessToken, grant, query = {}, redirect } = req.session;
       const service = app.defaultAuthentication(authService);
@@ -104,7 +108,7 @@ export default (options: OauthSetupSettings) => {
             resolve();
           }
 
-          req.session.destroy(err => err ? reject(err) : resolve());
+          req.session.destroy((err: any) => err ? reject(err) : resolve());
         });
 
         debug(`Calling ${authService}.create authentication with strategy ${name}`);
