@@ -1,34 +1,35 @@
 import assert from 'assert';
-import { feathers, Application, Params, Service } from '@feathersjs/feathers';
+import { feathers, Application, Params, ServiceMethods } from '@feathersjs/feathers';
 
 import { Strategy1, Strategy2 } from '../fixtures';
 import { AuthenticationService, hooks } from '../../src';
-import { AuthenticationResult } from '../../src/core';
 
 const { authenticate } = hooks;
 
 describe('authentication/hooks/authenticate', () => {
   let app: Application<{
-    authentication: AuthenticationService & Service<AuthenticationResult>,
+    authentication: AuthenticationService,
     'auth-v2': AuthenticationService,
-    users: Service<any> & { id: string }
+    users: Partial<ServiceMethods<any>> & { id: string }
   }>;
 
   beforeEach(() => {
     app = feathers();
-    app.use('/authentication', new AuthenticationService(app, 'authentication', {
+    app.use('authentication', new AuthenticationService(app, 'authentication', {
       entity: 'user',
       service: 'users',
       secret: 'supersecret',
       authStrategies: [ 'first' ]
     }));
-    app.use('/auth-v2', new AuthenticationService(app, 'auth-v2', {
+    app.use('auth-v2', new AuthenticationService(app, 'auth-v2', {
       entity: 'user',
       service: 'users',
       secret: 'supersecret',
       authStrategies: [ 'test' ]
     }));
-    app.use('/users', {
+    app.use('users', {
+      id: 'id',
+
       async find () {
         return [];
       },

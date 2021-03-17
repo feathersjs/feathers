@@ -203,7 +203,7 @@ describe('@feathersjs/express/rest provider', () => {
         assert.strictEqual(res.status, 206);
       });
 
-      it.skip('sets the hook object in res.hook on error', async () => {
+      it('sets the hook object in res.hook on error', async () => {
         const params = {
           route: {},
           query: {},
@@ -239,7 +239,8 @@ describe('@feathersjs/express/rest provider', () => {
               id: 'dishes',
               params: paramsWithHeaders,
               arguments: ['dishes', paramsWithHeaders ],
-              type: 'error',
+              type: null,
+              event: null,
               method: 'get',
               path: 'hook-error',
               original: data.hook.original
@@ -472,7 +473,7 @@ describe('@feathersjs/express/rest provider', () => {
 
     after(done => server.close(done));
 
-    it.skip('throws a 405 for undefined service methods and sets Allow header (#99)', async () => {
+    it('throws a 405 for undefined service methods (#99)', async () => {
       const res = await axios.get('http://localhost:4780/todo/dishes');
 
       assert.ok(res.status === 200, 'Got OK status code for .get');
@@ -484,7 +485,6 @@ describe('@feathersjs/express/rest provider', () => {
         await axios.post('http://localhost:4780/todo');
         assert.fail('Should never get here');
       } catch (error) {
-        assert.strictEqual(error.response.headers.allow, 'GET,PATCH');
         assert.ok(error.response.status === 405, 'Got 405 for .create');
         assert.deepStrictEqual(error.response.data, {
           message: 'Method `create` is not supported by this endpoint.'

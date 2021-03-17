@@ -3,7 +3,7 @@ import { app, TestOAuthStrategy } from './fixture';
 import { AuthenticationService } from '@feathersjs/authentication';
 
 describe('@feathersjs/authentication-oauth/strategy', () => {
-  const authService: AuthenticationService = app.service('authentication');
+  const authService = app.service('authentication') as unknown as AuthenticationService;
   const [ strategy ] = authService.getStrategies('test') as TestOAuthStrategy[];
 
   it('initializes, has .entityId and configuration', () => {

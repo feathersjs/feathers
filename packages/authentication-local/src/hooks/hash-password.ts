@@ -18,7 +18,7 @@ export default function hashPassword (field: string, options: HashPasswordOption
     throw new Error('The hashPassword hook requires a field name option');
   }
 
-  return async (context: HookContext) => {
+  return async (context: HookContext<any, any>) => {
     if (context.type !== 'before') {
       throw new Error('The \'hashPassword\' hook should only be used as a \'before\' hook');
     }

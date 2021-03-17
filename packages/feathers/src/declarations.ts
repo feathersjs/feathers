@@ -14,12 +14,12 @@ export interface ServiceOptions {
   serviceEvents?: string[];
 }
 
-export interface ServiceMethods<T, D> {
+export interface ServiceMethods<T, D = Partial<T>> {
   find (params?: Params): Promise<T | T[]>;
 
   get (id: Id, params?: Params): Promise<T>;
 
-  create (data: D | D[], params?: Params): Promise<T | T[]>;
+  create (data: D, params?: Params): Promise<T>;
 
   update (id: NullableId, data: D, params?: Params): Promise<T | T[]>;
 
@@ -31,8 +31,6 @@ export interface ServiceMethods<T, D> {
 }
 
 export interface ServiceOverloads<T, D> {
-  create? (data: D, params?: Params): Promise<T>;
-
   create? (data: D[], params?: Params): Promise<T[]>;
 
   update? (id: Id, data: D, params?: Params): Promise<T>;

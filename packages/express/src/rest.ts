@@ -59,7 +59,6 @@ export const serviceMiddleware = (callback: ServiceCallback) =>
           : context.result;
 
         res.data = data;
-        res.hook = context as any;
 
         if (context.statusCode) {
           res.status(context.statusCode);
@@ -93,6 +92,9 @@ export const serviceMethodHandler = (
 
   const args = getArgs(options);
   const context = createContext(service, method);
+
+  res.hook = context as any;
+  
   const result = await service[method](...args, context);
 
   if (method === 'create') {
