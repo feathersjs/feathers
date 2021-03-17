@@ -2,7 +2,7 @@ import { strict as assert } from 'assert';
 
 import superagent from 'superagent';
 import { Server } from 'http';
-import feathers from '@feathersjs/feathers';
+import { feathers } from '@feathersjs/feathers';
 import { setupTests } from '@feathersjs/tests/src/client';
 import { NotAcceptable } from '@feathersjs/errors';
 
@@ -17,8 +17,8 @@ describe('Superagent REST connector', function () {
   const app = feathers().configure(setup);
   const service = app.service('todos');
 
-  before(done => {
-    server = createServer().listen(8889, done);
+  before(async () => {
+    server = await createServer().listen(8889);
   });
 
   after(done => server.close(done));
@@ -81,7 +81,7 @@ describe('Superagent REST connector', function () {
   });
 
   it('remove many', async () => {
-    const todo = await service.remove(null);
+    const todo: any = await service.remove(null);
 
     assert.strictEqual(todo.id, null);
     assert.strictEqual(todo.text, 'deleted many');

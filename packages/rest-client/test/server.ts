@@ -1,5 +1,5 @@
 import bodyParser from 'body-parser';
-import feathers, { Id, NullableId, Params } from '@feathersjs/feathers';
+import { feathers, Id, NullableId, Params } from '@feathersjs/feathers';
 import expressify, { rest } from '@feathersjs/express';
 import { Service } from '@feathersjs/adapter-memory';
 import { FeathersError, NotAcceptable } from '@feathersjs/errors';

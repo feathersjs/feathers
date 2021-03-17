@@ -41,7 +41,12 @@ export function getServiceOptions (
     serviceEvents = Object.values(defaultEventMap).concat(events)
   } = options;
 
-  return { events, methods, serviceEvents };
+  return {
+    ...options,
+    events,
+    methods,
+    serviceEvents
+  };
 }
 
 export function wrapService (

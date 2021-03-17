@@ -55,7 +55,7 @@ export default function restClient (base = '') {
       };
 
       const initialize = (app: any) => {
-        if (typeof app.defaultService === 'function') {
+        if (app.rest !== undefined) {
           throw new Error('Only one default client provider can be configured');
         }
 
