@@ -59,7 +59,7 @@ class TodoService extends Service {
         id, text: 'deleted many'
       });
     }
-
+    
     if (params.query.noContent) {
       return Promise.resolve();
     }

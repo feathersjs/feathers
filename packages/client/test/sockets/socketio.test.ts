@@ -1,22 +1,24 @@
 import { io } from 'socket.io-client';
 import socketio from '@feathersjs/socketio';
+import { Server } from 'http';
 import { setupTests } from '@feathersjs/tests/src/client';
 
 import * as feathers from '../../dist/feathers';
 import app from '../fixture';
 
 describe('Socket.io connector', function () {
+  let server: Server;
   const socket = io('http://localhost:9988');
   const client = feathers.default()
     .configure(feathers.socketio(socket));
 
-  before(function (done) {
-    this.server = app(app => app.configure(socketio())).listen(9988, done);
+  before(async () => {
+    server = await app(app => app.configure(socketio())).listen(9988);
   });
 
   after(function (done) {
     socket.once('disconnect', () => {
-      this.server.close();
+      server.close();
       done();
     });
     socket.disconnect();

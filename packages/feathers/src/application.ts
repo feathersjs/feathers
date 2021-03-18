@@ -145,20 +145,25 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     return this;
   }
 
-  async setup () {
+  setup () {
+    let promise = Promise.resolve();
+
     // Setup each service (pass the app so that they can look up other services etc.)
     for (const path of Object.keys(this.services)) {
-      const service: any = this.service(path as any);
-
-      if (typeof service.setup === 'function') {
-        debug(`Setting up service for \`${path}\``);
-
-        await service.setup(this, path);
-      }
+      promise = promise.then(() => {
+        const service: any = this.service(path as any);
+  
+        if (typeof service.setup === 'function') {
+          debug(`Setting up service for \`${path}\``);
+  
+          return service.setup(this, path);
+        }
+      });
     }
 
-    this._isSetup = true;
-
-    return this;
+    return promise.then(() => {
+      this._isSetup = true;
+      return this;
+    });
   }
 }

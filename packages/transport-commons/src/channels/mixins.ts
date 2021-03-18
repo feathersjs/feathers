@@ -88,7 +88,7 @@ export function publishMixin () {
       }
 
       const { serviceEvents } = getServiceOptions(this);
-      
+
       if (event !== ALL_EVENTS && !serviceEvents.includes(event)) {
         throw new Error(`'${event.toString()}' is not a valid service event`);
       }

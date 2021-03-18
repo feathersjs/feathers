@@ -41,7 +41,7 @@ export class FeathersHookManager<A> extends HookManager {
     const ctx = super.initializeContext(self, args, context);
 
     ctx.params = ctx.params || {};
-    
+
     return ctx;
   }
 

@@ -53,19 +53,19 @@ describe('REST client tests', function () {
     const service = app.service('todos');
 
     await assert.rejects(() => service.get(undefined), {
-      message: 'An id must be provided to the \'todos.get\' method'
+      message: 'id for \'get\' can not be undefined'
     });
 
     await assert.rejects(() => service.remove(undefined), {
-      message: 'An id must be provided to the \'todos.remove\' method'
+      message: 'id for \'remove\' can not be undefined, only \'null\' when removing multiple entries'
     });
 
     await assert.rejects(() => service.update(undefined, {}), {
-      message: 'An id must be provided to the \'todos.update\' method'
+      message: 'id for \'update\' can not be undefined, only \'null\' when updating multiple entries'
     });
 
     await assert.rejects(() => service.patch(undefined, {}), {
-      message: 'An id must be provided to the \'todos.patch\' method'
+      message: 'id for \'patch\' can not be undefined, only \'null\' when updating multiple entries'
     });
   });
 

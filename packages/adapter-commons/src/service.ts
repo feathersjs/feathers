@@ -171,6 +171,8 @@ export class AdapterService<T = any> implements ServiceMethods<T|Paginated<T>> {
     return callMethod(this, '_get', id, params);
   }
 
+  create (data: Partial<T>, params?: Params): Promise<T>;
+  create (data: Partial<T>[], params?: Params): Promise<T[]>;
   create (data: Partial<T> | Partial<T>[], params?: Params): Promise<T | T[]> {
     if (Array.isArray(data) && !this.allowsMulti('create')) {
       return Promise.reject(new MethodNotAllowed('Can not create multiple entries'));
@@ -204,4 +206,6 @@ export class AdapterService<T = any> implements ServiceMethods<T|Paginated<T>> {
 
     return callMethod(this, '_remove', id, params);
   }
+
+  async setup () {}
 }

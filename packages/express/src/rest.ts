@@ -128,7 +128,7 @@ export function rest (handler: RequestHandler = formatter) {
       const create = serviceMethodHandler(service, 'create', ({ data, params }) => [ data, params ], METHOD_HEADER);
       const update = serviceMethodHandler(service, 'update', ({ id, data, params }) => [ id, data, params ]);
       const patch = serviceMethodHandler(service, 'patch', ({ id, data, params }) => [ id, data, params ]);
-      const remove = serviceMethodHandler(service, 'remove', ({ id, data, params }) => [ id, data, params ]);
+      const remove = serviceMethodHandler(service, 'remove', ({ id, params }) => [ id, params ]);
 
       debug(`Adding REST provider for service \`${path}\` at base route \`${baseUri}\``);
 
