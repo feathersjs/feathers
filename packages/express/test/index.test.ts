@@ -187,7 +187,7 @@ describe('@feathersjs/express', () => {
     app.use('/myservice', a, b, service, c);
   });
 
-  it.skip('Works with HTTPS', done => {
+  it('Works with HTTPS', done => {
     const todoService = {
       async get (name: Id) {
         return {

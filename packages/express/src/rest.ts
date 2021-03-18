@@ -21,7 +21,8 @@ export type ServiceCallback = (req: Request, res: Response, options: ServicePara
 export const statusCodes = {
   created: 201,
   noContent: 204,
-  methodNotAllowed: 405
+  methodNotAllowed: 405,
+  success: 200
 };
 
 export const feathersParams = (req: Request, _res: Response, next: NextFunction) => {
@@ -45,30 +46,46 @@ export const formatter = (_req: Request, res: Response, next: NextFunction) => {
   });
 }
 
+const getData = (context: HookContext) => {
+  if (!(context instanceof HookContext)) {
+    return context;
+  }
+
+  return context.dispatch !== undefined
+    ? context.dispatch
+    : context.result;
+}
+
+const getStatusCode = (context: HookContext, res: Response) => {
+  if (context instanceof HookContext) {
+    if (context.statusCode) {
+      return context.statusCode;
+    }
+
+    if (context.method === 'create') {
+      return statusCodes.created;
+    }
+  }
+
+  if (!res.data) {
+    return statusCodes.noContent;
+  }
+
+  return statusCodes.success;
+}
+
 export const serviceMiddleware = (callback: ServiceCallback) =>
   async (req: Request, res: Response, next: NextFunction) => {
+    debug(`Running service middleware for '${req.url}'`);
+
     try {
       const { query, body: data } = req;
       const { __feathersId: id = null, ...route } = req.params;
       const params = { query, route, ...req.feathers };
       const context = await callback(req, res, { id, data, params });
 
-      if (context instanceof HookContext) {
-        const data = context.dispatch !== undefined
-          ? context.dispatch
-          : context.result;
-
-        res.data = data;
-
-        if (context.statusCode) {
-          res.status(context.statusCode);
-        } else if (!data) {
-          debug(`No content returned for '${req.url}'`);
-          res.status(statusCodes.noContent);
-        }
-      } else {
-        res.data = context;
-      }
+      res.data = getData(context);
+      res.status(getStatusCode(context, res));
 
       next();
     } catch (error) {
@@ -83,8 +100,8 @@ export const serviceMethodHandler = (
     ? req.headers[header] as string
     : methodName
   const { methods } = getServiceOptions(service);
-  
-  if (!methods.includes(method) || typeof service[method] !== 'function') {
+
+  if (!methods.includes(method)) {
     res.status(statusCodes.methodNotAllowed);
 
     throw new MethodNotAllowed(`Method \`${method}\` is not supported by this endpoint.`);
@@ -94,14 +111,8 @@ export const serviceMethodHandler = (
   const context = createContext(service, method);
 
   res.hook = context as any;
-  
-  const result = await service[method](...args, context);
 
-  if (method === 'create') {
-    res.status(statusCodes.created);
-  }
-
-  return result;
+  return service[method](...args, context);
 });
 
 export function rest (handler: RequestHandler = formatter) {
