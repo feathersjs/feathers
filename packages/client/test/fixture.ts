@@ -45,7 +45,8 @@ export default (configurer?: (app: Application) => void) => {
     // Host our Todos service on the /todos path
     .use('/todos', new TodoService({
       multi: true
-    }));
+    }))
+    .use(express.errorHandler());
 
   const testTodo = {
     text: 'some todo',
