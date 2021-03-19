@@ -21,7 +21,7 @@
   ],
   "author": "Feathers contributors",
   "engines": {
-    "node": ">= 10"
+    "node": ">= 12"
   },
   "main": "dist/feathers",
   "types": "dist/",
@@ -42,7 +42,7 @@
     "mocha": "mocha --config ../../.mocharc.json --recursive test/**/*.test.ts",
     "test": "npm run build && npm run mocha",
     "test:browser": "mocha-puppeteer browser/test.js",
-    "webpack": "parallel-webpack"
+    "webpack": "webpack --config webpack/feathers.js && webpack --config webpack/feathers.min.js && webpack --config webpack/core.js && webpack --config webpack/core.min.js"
   },
   "browserslist": [
     "last 2 versions",
@@ -56,23 +56,23 @@
     "@feathersjs/socketio-client": "^5.0.0-pre.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.13",
-    "@babel/preset-env": "^7.12.13",
+    "@babel/core": "^7.13.10",
+    "@babel/preset-env": "^7.13.10",
     "@feathersjs/adapter-memory": "^5.0.0-pre.1",
     "@feathersjs/express": "^5.0.0-pre.1",
     "@feathersjs/socketio": "^5.0.0-pre.1",
     "@feathersjs/tests": "^5.0.0-pre.1",
     "babel-loader": "^8.2.2",
-    "mocha": "^8.2.1",
+    "mocha": "^8.3.2",
     "mocha-puppeteer": "^0.14.0",
     "node-fetch": "^2.6.1",
-    "parallel-webpack": "^2.6.0",
     "shx": "^0.3.3",
-    "socket.io-client": "^3.1.0",
+    "socket.io-client": "^4.0.0",
     "superagent": "^6.1.0",
-    "ts-loader": "^8.0.14",
-    "typescript": "^4.1.3",
-    "webpack": "^5.20.0",
+    "ts-loader": "^8.0.18",
+    "typescript": "^4.2.3",
+    "webpack": "^5.27.0",
+    "webpack-cli": "^4.5.0",
     "webpack-merge": "^5.7.3"
   },
   "gitHead": "3756506935c520fc50d4be416ff649c2158afdac"

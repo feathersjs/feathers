@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 
-function createConfig (output, isProduction = false) {
+module.exports = function createConfig (output, isProduction = false) {
   const commons = {
     entry: [
       `./src/${output}.ts`
@@ -52,10 +52,3 @@ function createConfig (output, isProduction = false) {
 
   return merge(commons, isProduction ? production : dev);
 }
-
-module.exports = [
-  createConfig('feathers'),
-  createConfig('feathers', true),
-  createConfig('core'),
-  createConfig('core', true)
-];
