@@ -31,7 +31,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
   get entityId (): string {
     const { entityService } = this;
 
-    return this.configuration.entityId || (entityService && entityService.id);
+    return this.configuration.entityId || (entityService && (entityService as any).id);
   }
 
   async getEntityQuery (profile: OAuthProfile, _params: Params) {
@@ -123,7 +123,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
   async getEntity (result: any, params: Params) {
     const { entityService } = this;
-    const { entityId = entityService.id, entity } = this.configuration;
+    const { entityId = (entityService as any).id, entity } = this.configuration;
 
     if (!entityId || result[entityId] === undefined) {
       throw new NotAuthenticated('Could not get oAuth entity');

@@ -76,7 +76,7 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
 
   async getEntity (result: any, params: Params) {
     const entityService = this.entityService;
-    const { entityId = entityService.id, entity } = this.configuration;
+    const { entityId = (entityService as any).id, entity } = this.configuration;
 
     if (!entityId || result[entityId] === undefined) {
       throw new NotAuthenticated('Could not get local entity');

@@ -1,5 +1,5 @@
 import assert from 'assert';
-import feathers, { Service, Application } from '../../src';
+import { feathers, Application, FeathersService } from '../../src';
 
 describe('`error` hooks', () => {
   describe('on direct service method errors', () => {
@@ -11,17 +11,17 @@ describe('`error` hooks', () => {
     });
     const service = app.service('dummy');
 
-    afterEach(() => service.__hooks.error.get = []);
+    afterEach(() => (service as any).__hooks.error.get = []);
 
     it('basic error hook', async () => {
       service.hooks({
         error: {
-          get (hook: any) {
-            assert.strictEqual(hook.type, 'error');
-            assert.strictEqual(hook.id, 'test');
-            assert.strictEqual(hook.method, 'get');
-            assert.strictEqual(hook.app, app);
-            assert.strictEqual(hook.error.message, 'Something went wrong');
+          get (context) {
+            assert.strictEqual(context.type, 'error');
+            assert.strictEqual(context.id, 'test');
+            assert.strictEqual(context.method, 'get');
+            assert.strictEqual(context.app, app);
+            assert.strictEqual(context.error.message, 'Something went wrong');
           }
         }
       });
@@ -34,8 +34,8 @@ describe('`error` hooks', () => {
     it('can change the error', async () => {
       service.hooks({
         error: {
-          get (hook: any) {
-            hook.error = new Error(errorMessage);
+          get (context) {
+            context.error = new Error(errorMessage);
           }
         }
       });
@@ -77,21 +77,21 @@ describe('`error` hooks', () => {
       service.hooks({
         error: {
           get: [
-            function (hook: any) {
-              hook.error = new Error(errorMessage);
-              hook.error.first = true;
+            function (context) {
+              context.error = new Error(errorMessage);
+              context.error.first = true;
             },
 
-            function (hook: any) {
-              hook.error.second = true;
+            function (context) {
+              context.error.second = true;
 
-              return Promise.resolve(hook);
+              return Promise.resolve(context);
             },
 
-            function (hook: any) {
-              hook.error.third = true;
+            function (context) {
+              context.error.third = true;
 
-              return hook;
+              return context;
             }
           ]
         }
@@ -105,15 +105,15 @@ describe('`error` hooks', () => {
       });
     });
 
-    it('setting `hook.result` will return result', async () => {
+    it('setting `context.result` will return result', async () => {
       const data = {
         message: 'It worked'
       };
 
       service.hooks({
         error: {
-          get (hook: any) {
-            hook.result = data;
+          get (context) {
+            context.result = data;
           }
         }
       });
@@ -152,11 +152,11 @@ describe('`error` hooks', () => {
       const service = app.service('dummy');
 
       service.hooks({
-        before (hook: any) {
-          return { ...hook, id: 42 };
+        before (context) {
+          context.id = 42;
         },
-        error (hook: any) {
-          assert.strictEqual(hook.id, 42);
+        error (context) {
+          assert.strictEqual(context.id, 42);
         }
       });
 
@@ -170,7 +170,7 @@ describe('`error` hooks', () => {
     const errorMessage = 'before hook broke';
 
     let app: Application;
-    let service: Service<any>;
+    let service: FeathersService<any>;
 
     beforeEach(() => {
       app = feathers().use('/dummy', {
@@ -191,12 +191,12 @@ describe('`error` hooks', () => {
           throw new Error(errorMessage);
         }
       }).hooks({
-        error (hook: any) {
-          assert.strictEqual(hook.original.type, 'before',
+        error (context) {
+          assert.strictEqual(context.original.type, 'before',
             'Original hook still set'
           );
-          assert.strictEqual(hook.id, 'dishes');
-          assert.strictEqual(hook.error.message, errorMessage);
+          assert.strictEqual(context.id, 'dishes');
+          assert.strictEqual(context.error.message, errorMessage);
         }
       });
 
@@ -211,16 +211,16 @@ describe('`error` hooks', () => {
           throw new Error(errorMessage);
         },
 
-        error (hook: any) {
-          assert.strictEqual(hook.original.type, 'after',
+        error (context) {
+          assert.strictEqual(context.original.type, 'after',
             'Original hook still set'
           );
-          assert.strictEqual(hook.id, 'dishes');
-          assert.deepStrictEqual(hook.original.result, {
+          assert.strictEqual(context.id, 'dishes');
+          assert.deepStrictEqual(context.original.result, {
             id: 'dishes',
             text: 'You have to do dishes'
           });
-          assert.strictEqual(hook.error.message, errorMessage);
+          assert.strictEqual(context.error.message, errorMessage);
         }
       });
 
@@ -229,36 +229,17 @@ describe('`error` hooks', () => {
       });
     });
 
-    it('uses the current hook object if thrown in a hook and sets hook.original', async () => {
+    it('uses the current hook object if thrown in a hook and sets context.original', async () => {
       service.hooks({
-        after (hook: any) {
-          hook.modified = true;
+        after (context) {
+          context.modified = true;
 
           throw new Error(errorMessage);
         },
 
-        error (hook: any) {
-          assert.ok(hook.modified);
-          assert.strictEqual(hook.original.type, 'after');
-        }
-      });
-
-      await assert.rejects(() => service.get('laundry'), {
-        message: errorMessage
-      });
-    });
-
-    it('error in async hook', async () => {
-      service.hooks({
-        async (hook: any) {
-          hook.modified = true;
-
-          throw new Error(errorMessage);
-        },
-
-        error (hook: any) {
-          assert.ok(hook.modified);
-          assert.strictEqual(hook.original.type, 'before');
+        error (context) {
+          assert.ok(context.modified);
+          assert.strictEqual(context.original.type, 'after');
         }
       });
 

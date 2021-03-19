@@ -11,30 +11,41 @@ export function setupTests (app: any, name: string) {
     ? app.service(name) : app;
 
   describe('Service base tests', () => {
-    it('.find', () => {
-      return getService().find().then((todos: Todo[]) =>
-        assert.deepEqual(todos, [{ // eslint-disable-line
-          text: 'some todo',
-          complete: false,
-          id: 0
-        }])
-      );
+    it('.find', async () => {
+      const todos = await getService().find();
+
+      assert.deepEqual(todos, [{ // eslint-disable-line
+        text: 'some todo',
+        complete: false,
+        id: 0
+      }]);
     });
 
-    it('.get and params passing', () => {
+    it('.get and params passing', async () => {
       const query = {
         some: 'thing',
         other: ['one', 'two'],
         nested: { a: { b: 'object' } }
       };
 
-      return getService().get(0, { query })
-        .then((todo: Todo) => assert.deepEqual(todo, { // eslint-disable-line
-          id: 0,
-          text: 'some todo',
-          complete: false,
-          query
-        }));
+      const todo = await getService().get(0, { query });
+
+      assert.deepEqual(todo, { // eslint-disable-line
+        id: 0,
+        text: 'some todo',
+        complete: false,
+        query
+      });
+    });
+
+    it('.create', async () => {
+      const todo = await getService().create({ text: 'created todo', complete: true });
+
+      assert.deepEqual(todo, { // eslint-disable-line
+        id: 1,
+        text: 'created todo',
+        complete: true
+      });
     });
 
     it('.create and created event', done => {
@@ -55,10 +66,12 @@ export function setupTests (app: any, name: string) {
       });
 
       getService().create({ text: 'todo to update', complete: false })
-        .then((todo: Todo) => getService().update(todo.id, {
-          text: 'updated todo',
-          complete: true
-        }));
+        .then((todo: Todo) => {
+          getService().update(todo.id, {
+            text: 'updated todo',
+            complete: true
+          });
+        });
     });
 
     it('.patch and patched event', done => {
@@ -83,12 +96,12 @@ export function setupTests (app: any, name: string) {
         .then((todo: Todo) => getService().remove(todo.id)).catch(done);
     });
 
-    it('.get with error', () => {
+    it('.get with error', async () => {
       const query = { error: true };
 
-      return getService().get(0, { query }).catch((error: Error) =>
-        assert.ok(error && error.message)
-      );
+      await assert.rejects(() => getService().get(0, { query }), {
+        message: 'Something went wrong'
+      });
     });
   });
 }

@@ -1,4 +1,4 @@
-import feathers, { Application, HookContext, Id, Params } from '@feathersjs/feathers';
+import { feathers, Application, HookContext, Id, Params } from '@feathersjs/feathers';
 import * as express from '@feathersjs/express';
 import { Service } from '@feathersjs/adapter-memory';
 
@@ -45,18 +45,19 @@ export default (configurer?: (app: Application) => void) => {
     // Host our Todos service on the /todos path
     .use('/todos', new TodoService({
       multi: true
-    }));
+    }))
+    .use(express.errorHandler());
 
   const testTodo = {
     text: 'some todo',
     complete: false
   };
-  const service = app.service('todos');
+  const service: any = app.service('todos');
 
   service.create(testTodo);
   service.hooks({
     after: {
-      remove (hook: HookContext) {
+      remove (hook: HookContext<any, any>) {
         if (hook.id === null) {
           service._uId = 0;
           return service.create(testTodo)
@@ -67,7 +68,7 @@ export default (configurer?: (app: Application) => void) => {
   });
 
   app.on('connection', connection =>
-    app.channel('general').join(connection)
+    (app as any).channel('general').join(connection)
   );
 
   if (service.publish) {

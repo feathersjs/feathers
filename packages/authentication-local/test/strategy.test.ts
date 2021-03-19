@@ -1,15 +1,15 @@
 import assert from 'assert';
 import omit from 'lodash/omit';
-import { LocalStrategy } from '../src';
-// @ts-ignore
-import createApplication from './fixture';
 import { Application } from '@feathersjs/feathers';
+
+import { LocalStrategy } from '../src';
+import { createApplication, ServiceTypes } from './fixture';
 
 describe('@feathersjs/authentication-local/strategy', () => {
   const password = 'localsecret';
   const email = 'localtester@feathersjs.com';
 
-  let app: Application;
+  let app: Application<ServiceTypes>;
   let user: any;
 
   beforeEach(async () => {
@@ -47,7 +47,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
   });
 
   it('getEntity', async () => {
-    const [ strategy ] = app.service('authentication').getStrategies('local');
+    const [ strategy ] = app.service('authentication').getStrategies('local') as [ LocalStrategy ];
     let entity = await strategy.getEntity(user, {});
 
     assert.deepStrictEqual(entity, user);
@@ -72,17 +72,14 @@ describe('@feathersjs/authentication-local/strategy', () => {
   it('strategy fails when strategy is different', async () => {
     const [ local ] = app.service('authentication').getStrategies('local');
 
-    try {
-      await local.authenticate({
-        strategy: 'not-me',
-        password: 'dummy',
-        email
-      });
-      assert.fail('Should never get here');
-    } catch (error) {
-      assert.strictEqual(error.name, 'NotAuthenticated');
-      assert.strictEqual(error.message, 'Invalid login');
-    }
+    await assert.rejects(() => local.authenticate({
+      strategy: 'not-me',
+      password: 'dummy',
+      email
+    }, {}), {
+      name: 'NotAuthenticated',
+      message: 'Invalid login'
+    });
   });
 
   it('fails when password is wrong', async () => {

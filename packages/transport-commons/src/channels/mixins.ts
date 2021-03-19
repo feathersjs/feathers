@@ -2,7 +2,7 @@
 import Debug from 'debug';
 import { Channel } from './channel/base';
 import { CombinedChannel } from './channel/combined';
-import { HookContext } from '@feathersjs/feathers';
+import { HookContext, getServiceOptions } from '@feathersjs/feathers';
 
 const debug = Debug('@feathersjs/transport-commons:channels/mixins');
 const PUBLISHERS = Symbol('@feathersjs/transport-commons/publishers');
@@ -87,8 +87,9 @@ export function publishMixin () {
         event = ALL_EVENTS;
       }
 
-      // @ts-ignore
-      if (this._serviceEvents && event !== ALL_EVENTS && this._serviceEvents.indexOf(event) === -1) {
+      const { serviceEvents } = getServiceOptions(this);
+
+      if (event !== ALL_EVENTS && !serviceEvents.includes(event)) {
         throw new Error(`'${event.toString()}' is not a valid service event`);
       }
 

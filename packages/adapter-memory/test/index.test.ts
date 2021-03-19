@@ -1,7 +1,7 @@
 import assert from 'assert';
 import adapterTests from '@feathersjs/adapter-tests';
 import errors from '@feathersjs/errors';
-import feathers from '@feathersjs/feathers';
+import { feathers } from '@feathersjs/feathers';
 
 import { memory } from '../src';
 
@@ -85,7 +85,7 @@ describe('Feathers Memory Service', () => {
       age: 33
     });
 
-    const updatedPerson = await people.update(person.id.toString(), person);
+    const updatedPerson: any = await people.update(person.id.toString(), person);
 
     assert.strictEqual(typeof updatedPerson.id, 'number');
 

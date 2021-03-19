@@ -2,13 +2,12 @@ import assert from 'assert';
 import { Application } from '@feathersjs/feathers';
 
 import { hooks } from '../../src';
-// @ts-ignore
-import createApplication from '../fixture';
+import { createApplication, ServiceTypes } from '../fixture';
 
 const { hashPassword } = hooks;
 
 describe('@feathersjs/authentication-local/hooks/hash-password', () => {
-  let app: Application;
+  let app: Application<ServiceTypes>;
 
   beforeEach(() => {
     app = createApplication();

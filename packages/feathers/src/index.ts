@@ -1,18 +1,17 @@
-import Application from './application';
+import { _ } from '@feathersjs/commons';
+
 import version from './version';
-import { Application as ApplicationType } from './declarations'
+import { Feathers } from './application';
+import { Application } from './declarations';
 
-export default function feathers<ServiceTypes = {}> (): ApplicationType<ServiceTypes> {
-  const app = Object.assign({}, Application);
-
-  app.init();
-
-  return app as any as ApplicationType<ServiceTypes>;
+export function feathers<T = {}, S = {}> () {
+  return new Feathers<T, S>() as Application<T, S>;
 }
 
-export { version };
+export { version, Feathers };
 export * from './declarations';
-export * from './hooks/index';
+export * from './service';
+export * from './hooks';
 
 if (typeof module !== 'undefined') {
   module.exports = Object.assign(feathers, module.exports);

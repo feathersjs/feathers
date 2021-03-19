@@ -7,7 +7,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
     params: { [key: string]: string }
   }
 
-  interface Application<ServiceTypes> { // eslint-disable-line
+  interface Application<ServiceTypes = {}, AppSettings = {}> { // eslint-disable-line
     routes: Router<any>;
     lookup (path: string): RouteLookup;
   }

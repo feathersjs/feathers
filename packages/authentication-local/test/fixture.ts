@@ -1,11 +1,16 @@
-const feathers = require('@feathersjs/feathers');
-const { memory } = require('@feathersjs/adapter-memory');
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
+import { feathers } from '@feathersjs/feathers';
+import { memory, Service as MemoryService } from '@feathersjs/adapter-memory';
+import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 
-const { LocalStrategy, hooks } = require('../src');
+import { LocalStrategy, hooks } from '../src';
 const { hashPassword, protect } = hooks;
 
-module.exports = (app = feathers()) => {
+export type ServiceTypes = {
+  authentication: AuthenticationService;
+  users: MemoryService;
+}
+
+export function createApplication (app = feathers<ServiceTypes>()) {
   const authentication = new AuthenticationService(app);
 
   app.set('authentication', {
@@ -23,8 +28,8 @@ module.exports = (app = feathers()) => {
   authentication.register('jwt', new JWTStrategy());
   authentication.register('local', new LocalStrategy());
 
-  app.use('/authentication', authentication);
-  app.use('/users', memory({
+  app.use('authentication', authentication);
+  app.use('users', memory({
     multi: [ 'create' ],
     paginate: {
       default: 10,
@@ -34,10 +39,10 @@ module.exports = (app = feathers()) => {
 
   app.service('users').hooks({
     before: {
-      create: hashPassword('password')
+      create: [ hashPassword('password') ]
     },
     after: {
-      all: protect('password'),
+      all: [ protect('password') ],
       get: [context => {
         if (context.params.provider) {
           context.result.fromGet = true;
@@ -49,4 +54,4 @@ module.exports = (app = feathers()) => {
   });
 
   return app;
-};
+}

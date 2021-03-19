@@ -1,10 +1,8 @@
 import { omit } from 'lodash';
 import { strict as assert } from 'assert';
 import { default as _axios } from 'axios';
-import feathers from '@feathersjs/feathers';
-
-// @ts-ignore
-import getApp from '@feathersjs/authentication-local/test/fixture';
+import { feathers } from '@feathersjs/feathers';
+import { createApplication } from '@feathersjs/authentication-local/test/fixture';
 import { authenticate, AuthenticationResult } from '@feathersjs/authentication';
 import * as express from '../src';
 
@@ -27,8 +25,8 @@ describe('@feathersjs/express/authentication', () => {
       .use(express.json())
       .configure(express.rest());
 
-    app = getApp(expressApp);
-    server = app.listen(9876);
+    app = createApplication(expressApp as any) as unknown as express.Application;
+    server = await app.listen(9876);
 
     app.use('/dummy', {
       get (id, params) {
@@ -36,8 +34,9 @@ describe('@feathersjs/express/authentication', () => {
       }
     });
 
+    //@ts-ignore
     app.use('/protected', express.authenticate('jwt'), (req, res) => {
-      res.json((req as any).user);
+      res.json(req.user);
     });
 
     app.use(express.errorHandler({

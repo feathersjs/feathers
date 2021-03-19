@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 import assert from 'assert';
-import feathers, { Application } from '@feathersjs/feathers';
+import { feathers, Application } from '@feathersjs/feathers';
 import socketio from '@feathersjs/socketio';
 import socketioClient from '@feathersjs/socketio-client';
 
@@ -11,10 +11,10 @@ import commonTests from './commons';
 describe('@feathersjs/authentication-client Socket.io integration', () => {
   let app: Application;
 
-  before(() => {
+  before(async () => {
     app = getApp(feathers().configure(socketio()));
 
-    app.listen(9777);
+    await app.listen(9777);
   });
 
   after(done => app.io.close(() => done()));

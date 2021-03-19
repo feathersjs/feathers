@@ -1,4 +1,4 @@
-import feathers, { Params } from '@feathersjs/feathers';
+import { feathers, Params } from '@feathersjs/feathers';
 import express, { rest, errorHandler } from '@feathersjs/express';
 import { memory } from '@feathersjs/adapter-memory';
 import { AuthenticationService, JWTStrategy, AuthenticationRequest } from '@feathersjs/authentication';

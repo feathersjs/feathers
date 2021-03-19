@@ -1,7 +1,7 @@
 import omit from 'lodash/omit';
 import { HookContext } from '@feathersjs/feathers';
 
-export default (...fields: string[]) => (context: HookContext) => {
+export default (...fields: string[]) => (context: HookContext<any, any>) => {
   const result = context.dispatch || context.result;
   const o = (current: any) => {
     if (typeof current === 'object' && !Array.isArray(current)) {

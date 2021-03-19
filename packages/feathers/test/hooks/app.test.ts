@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import feathers, { Application } from '../../src';
+import { feathers, Application } from '../../src';
 
 describe('app.hooks', () => {
   let app: Application;
@@ -25,17 +25,17 @@ describe('app.hooks', () => {
     assert.strictEqual(typeof app.hooks, 'function');
   });
 
-  describe('app.hooks({ async })', () => {
+  describe('app.hooks([ async ])', () => {
     it('basic app async hook', async () => {
       const service = app.service('todos');
 
-      app.hooks({
-        async async (hook: any, next: any) {
-          assert.strictEqual(hook.app, app);
+      app.hooks([
+        async (context, next) => {
+          assert.strictEqual(context.app, app);
           await next();
-          hook.params.ran = true;
+          context.params.ran = true;
         }
-      });
+      ]);
 
       let result = await service.get('test');
 
@@ -54,14 +54,35 @@ describe('app.hooks', () => {
     });
   });
 
+  describe('app.hooks({ method: [ async ] })', () => {
+    it('basic app async method hook', async () => {
+      const service = app.service('todos');
+
+      app.hooks({
+        get: [async (context, next) => {
+          assert.strictEqual(context.app, app);
+          await next();
+          context.params.ran = true;
+        }]
+      });
+
+      const result = await service.get('test');
+
+      assert.deepStrictEqual(result, {
+        id: 'test',
+        params: { ran: true }
+      });
+    });
+  });
+
   describe('app.hooks({ before })', () => {
     it('basic app before hook', async () => {
       const service = app.service('todos');
 
       app.hooks({
-        before (hook: any) {
-          assert.strictEqual(hook.app, app);
-          hook.params.ran = true;
+        before (context) {
+          assert.strictEqual(context.app, app);
+          context.params.ran = true;
         }
       });
 
@@ -83,24 +104,24 @@ describe('app.hooks', () => {
 
     it('app before hooks always run first', async () => {
       app.service('todos').hooks({
-        before (hook: any) {
-          assert.strictEqual(hook.app, app);
-          hook.params.order.push('service.before');
+        before (context) {
+          assert.strictEqual(context.app, app);
+          context.params.order.push('service.before');
         }
       });
 
       app.service('todos').hooks({
-        before (hook: any) {
-          assert.strictEqual(hook.app, app);
-          hook.params.order.push('service.before 1');
+        before (context) {
+          assert.strictEqual(context.app, app);
+          context.params.order.push('service.before 1');
         }
       });
 
       app.hooks({
-        before (hook: any) {
-          assert.strictEqual(hook.app, app);
-          hook.params.order = [];
-          hook.params.order.push('app.before');
+        before (context) {
+          assert.strictEqual(context.app, app);
+          context.params.order = [];
+          context.params.order.push('app.before');
         }
       });
 
@@ -118,9 +139,9 @@ describe('app.hooks', () => {
   describe('app.hooks({ after })', () => {
     it('basic app after hook', async () => {
       app.hooks({
-        after (hook: any) {
-          assert.strictEqual(hook.app, app);
-          hook.result.ran = true;
+        after (context) {
+          assert.strictEqual(context.app, app);
+          context.result.ran = true;
         }
       });
 
@@ -135,24 +156,24 @@ describe('app.hooks', () => {
 
     it('app after hooks always run last', async () => {
       app.hooks({
-        after (hook: any) {
-          assert.strictEqual(hook.app, app);
-          hook.result.order.push('app.after');
+        after (context) {
+          assert.strictEqual(context.app, app);
+          context.result.order.push('app.after');
         }
       });
 
       app.service('todos').hooks({
-        after (hook: any) {
-          assert.strictEqual(hook.app, app);
-          hook.result.order = [];
-          hook.result.order.push('service.after');
+        after (context) {
+          assert.strictEqual(context.app, app);
+          context.result.order = [];
+          context.result.order.push('service.after');
         }
       });
 
       app.service('todos').hooks({
-        after (hook: any) {
-          assert.strictEqual(hook.app, app);
-          hook.result.order.push('service.after 1');
+        after (context) {
+          assert.strictEqual(context.app, app);
+          context.result.order.push('service.after 1');
         }
       });
 
@@ -169,9 +190,9 @@ describe('app.hooks', () => {
   describe('app.hooks({ error })', () => {
     it('basic app error hook', async () => {
       app.hooks({
-        error (hook: any) {
-          assert.strictEqual(hook.app, app);
-          hook.error = new Error('App hook ran');
+        error (context) {
+          assert.strictEqual(context.app, app);
+          context.error = new Error('App hook ran');
         }
       });
 
@@ -182,23 +203,23 @@ describe('app.hooks', () => {
 
     it('app error hooks always run last', async () => {
       app.hooks({
-        error (hook: any) {
-          assert.strictEqual(hook.app, app);
-          hook.error = new Error(`${hook.error.message} app.after`);
+        error (context) {
+          assert.strictEqual(context.app, app);
+          context.error = new Error(`${context.error.message} app.after`);
         }
       });
 
       app.service('todos').hooks({
-        error (hook: any) {
-          assert.strictEqual(hook.app, app);
-          hook.error = new Error(`${hook.error.message} service.after`);
+        error (context) {
+          assert.strictEqual(context.app, app);
+          context.error = new Error(`${context.error.message} service.after`);
         }
       });
 
       app.service('todos').hooks({
-        error (hook: any) {
-          assert.strictEqual(hook.app, app);
-          hook.error = new Error(`${hook.error.message} service.after 1`);
+        error (context) {
+          assert.strictEqual(context.app, app);
+          context.error = new Error(`${context.error.message} service.after 1`);
         }
       });
 

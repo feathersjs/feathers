@@ -1,11 +1,11 @@
 import assert from 'assert';
 import omit from 'lodash/omit';
 import jwt from 'jsonwebtoken';
-import feathers, { Application, Service } from '@feathersjs/feathers';
-import { memory } from '@feathersjs/adapter-memory';
+import { feathers, Application } from '@feathersjs/feathers';
+import { memory, Service as MemoryService } from '@feathersjs/adapter-memory';
 
 import defaultOptions from '../src/options';
-import { AuthenticationService, AuthenticationResult } from '../src';
+import { AuthenticationService } from '../src';
 
 import { Strategy1 } from './fixtures';
 
@@ -15,19 +15,19 @@ describe('authentication/service', () => {
   const message = 'Some payload';
 
   let app: Application<{
-    authentication: AuthenticationService & Service<AuthenticationResult>,
-    users: Service<any>
+    authentication: AuthenticationService,
+    users: MemoryService
   }>;
 
   beforeEach(() => {
     app = feathers();
-    app.use('/authentication', new AuthenticationService(app, 'authentication', {
+    app.use('authentication', new AuthenticationService(app, 'authentication', {
       entity: 'user',
       service: 'users',
       secret: 'supersecret',
       authStrategies: [ 'first' ]
     }));
-    app.use('/users', memory());
+    app.use('users', memory());
 
     app.service('authentication').register('first', new Strategy1());
   });
@@ -38,7 +38,9 @@ describe('authentication/service', () => {
 
   it('app.defaultAuthentication()', () => {
     assert.strictEqual(app.defaultAuthentication(), app.service('authentication'));
-    assert.strictEqual(app.defaultAuthentication('dummy'), undefined);
+    assert.throws(() => app.defaultAuthentication('dummy'), {
+      message: 'Can not find service \'dummy\''
+    });
   });
 
   describe('create', () => {
@@ -221,18 +223,15 @@ describe('authentication/service', () => {
   });
 
   describe('setup', () => {
-    it('errors when there is no secret', () => {
+    it('errors when there is no secret', async () => {
       delete app.get('authentication').secret;
 
-      try {
-        app.setup();
-        assert.fail('Should never get here');
-      } catch (error) {
-        assert.strictEqual(error.message, 'A \'secret\' must be provided in your authentication configuration');
-      }
+      await assert.rejects(() => app.setup(), {
+        message: 'A \'secret\' must be provided in your authentication configuration'
+      });
     });
 
-    it('throws an error if service name is not set', () => {
+    it('throws an error if service name is not set', async () => {
       const otherApp = feathers();
 
       otherApp.use('/authentication', new AuthenticationService(otherApp, 'authentication', {
@@ -240,15 +239,12 @@ describe('authentication/service', () => {
         authStrategies: [ 'first' ]
       }));
 
-      try {
-        otherApp.setup();
-        assert.fail('Should never get here');
-      } catch (error) {
-        assert.strictEqual(error.message, 'The \'service\' option is not set in the authentication configuration');
-      }
+      await assert.rejects(() => otherApp.setup(), {
+        message: 'The \'service\' option is not set in the authentication configuration'
+      });
     });
 
-    it('throws an error if entity service does not exist', () => {
+    it('throws an error if entity service does not exist', async () => {
       const otherApp = feathers();
 
       otherApp.use('/authentication', new AuthenticationService(otherApp, 'authentication', {
@@ -258,15 +254,12 @@ describe('authentication/service', () => {
         authStrategies: [ 'first' ]
       }));
 
-      try {
-        otherApp.setup();
-        assert.fail('Should never get here');
-      } catch (error) {
-        assert.strictEqual(error.message, 'The \'users\' entity service does not exist (set to \'null\' if it is not required)');
-      }
+      await assert.rejects(() => otherApp.setup(), {
+        message: 'Can not find service \'users\''
+      });
     });
 
-    it('throws an error if entity service exists but has no `id`', () => {
+    it('throws an error if entity service exists but has no `id`', async () => {
       const otherApp = feathers();
 
       otherApp.use('/authentication', new AuthenticationService(otherApp, 'authentication', {
@@ -282,21 +275,14 @@ describe('authentication/service', () => {
         }
       });
 
-      try {
-        otherApp.setup();
-        assert.fail('Should never get here');
-      } catch (error) {
-        assert.strictEqual(error.message, 'The \'users\' service does not have an \'id\' property and no \'entityId\' option is set.');
-      }
+      await assert.rejects(() => otherApp.setup(), {
+        message: 'The \'users\' service does not have an \'id\' property and no \'entityId\' option is set.'
+      });
     });
 
     it('passes when entity service exists and `entityId` property is set', () => {
       app.get('authentication').entityId = 'id';
-      app.use('/users', {
-        async get () {
-          return {};
-        }
-      });
+      app.use('users', memory());
 
       app.setup();
     });

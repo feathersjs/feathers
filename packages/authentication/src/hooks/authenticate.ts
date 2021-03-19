@@ -20,7 +20,7 @@ export default (originalSettings: string | AuthenticateHookSettings, ...original
     throw new Error('The authenticate hook needs at least one allowed strategy');
   }
 
-  return async (context: HookContext) => {
+  return async (context: HookContext<any, any>) => {
     const { app, params, type, path, service } = context;
     const { strategies } = settings;
     const { provider, authentication } = params;

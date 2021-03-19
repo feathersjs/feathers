@@ -1,14 +1,11 @@
 import assert from 'assert';
-import feathers, { Id, version } from '../src'
-import { HookContext } from '@feathersjs/hooks';
+import { feathers, Feathers, getServiceOptions, Id, version } from '../src'
 
 describe('Feathers application', () => {
   it('initializes', () => {
     const app = feathers();
 
-    assert.strictEqual(typeof app.use, 'function');
-    assert.strictEqual(typeof app.service, 'function');
-    assert.strictEqual(typeof app.services, 'object');
+    assert.ok(app instanceof Feathers);
   });
 
   it('sets the version on main and app instance', () => {
@@ -30,24 +27,15 @@ describe('Feathers application', () => {
     app.emit('test', original);
   });
 
-  it('throws an error for old app.service(path, service)', () => {
-    const app = feathers();
-
-    try {
-      // @ts-ignore
-      app.service('/test', {});
-    } catch (e) {
-      assert.strictEqual(e.message, 'Registering a new service with `app.service(path, service)` is no longer supported. Use `app.use(path, service)` instead.');
-    }
-  });
-
   it('uses .defaultService if available', async () => {
     const app = feathers();
 
-    assert.ok(!app.service('/todos/'));
+    assert.throws(() => app.service('/todos/'), {
+      message: 'Can not find service \'todos\''
+    });
 
-    app.defaultService = function (path: string) {
-      assert.strictEqual(path, 'todos');
+    app.defaultService = function (location: string) {
+      assert.strictEqual(location, 'todos');
       return {
         async get (id: string) {
           return {
@@ -66,7 +54,7 @@ describe('Feathers application', () => {
   });
 
   it('additionally passes `app` as .configure parameter (#558)', done => {
-    feathers().configure(function (this: any, app: any) {
+    feathers().configure(function (app) {
       assert.strictEqual(this, app);
       done();
     });
@@ -76,34 +64,28 @@ describe('Feathers application', () => {
     it('calling .use with invalid path throws', () => {
       const app = feathers();
 
-      try {
-        app.use(null, {});
-      } catch (e) {
-        assert.strictEqual(e.message, '\'null\' is not a valid service path.');
-      }
+      assert.throws(() => app.use(null, {}), {
+        message: '\'null\' is not a valid service path.'
+      });
 
-      try {
-        // @ts-ignore
-        app.use({}, {});
-      } catch (e) {
-        assert.strictEqual(e.message, '\'[object Object]\' is not a valid service path.');
-      }
+      // @ts-ignore
+      assert.throws(() => app.use({}, {}), {
+        message: '\'[object Object]\' is not a valid service path.'
+      });
     });
 
     it('calling .use with a non service object throws', () => {
       const app = feathers();
 
-      try {
-        app.use('/bla', function () {});
-        assert.ok(false, 'Should never get here');
-      } catch (e) {
-        assert.strictEqual(e.message, 'Invalid service object passed for path `bla`');
-      }
+      // @ts-ignore
+      assert.throws(() => app.use('/bla', function () {}), {
+        message: 'Invalid service object passed for path `bla`'
+      })
     });
 
     it('registers and wraps a new service', async () => {
       const dummyService = {
-        setup (this: any, _app: any, path: string) {
+        async setup (this: any, _app: any, path: string) {
           this.path = path;
         },
 
@@ -120,7 +102,7 @@ describe('Feathers application', () => {
       const data = await wrappedService.create({
         message: 'Test message'
       });
-      
+
       assert.strictEqual(data.message, 'Test message');
     });
 
@@ -150,9 +132,9 @@ describe('Feathers application', () => {
 
       dummy.hooks({
         before: {
-          create (hook: HookContext) {
+          create: [hook => {
             hook.data.fromHook = true;
-          }
+          }]
         }
       });
 
@@ -169,7 +151,7 @@ describe('Feathers application', () => {
       app1.service('testing').create({ message: 'Hi' });
     });
 
-    it('async hooks', async () => {
+    it('async hooks run before legacy hooks', async () => {
       const app = feathers();
 
       app.use('/dummy', {
@@ -181,20 +163,26 @@ describe('Feathers application', () => {
       const dummy = app.service('dummy');
 
       dummy.hooks({
-        async: async (ctx: any, next: any) => {
-          await next();
-          ctx.params.fromAsyncHook = true;
-        },
         before: {
-          create (hook: any) {
-            hook.params.fromAsyncHook = false;
+          create (ctx) {
+            ctx.data.order.push('before');
           }
         }
       });
 
-      const ctx = await dummy.create({ message: 'Hi' }, {}, true);
+      dummy.hooks([async (ctx: any, next: any) => {
+        ctx.data.order = [ 'async' ];
+        await next();
+      }]);
       
-      assert.ok(ctx.params.fromAsyncHook);
+      const result = await dummy.create({
+        message: 'hi'
+      });
+      
+      assert.deepStrictEqual(result, {
+        message: 'hi',
+        order: ['async', 'before']
+      });
     });
 
     it('services conserve Symbols', () => {
@@ -202,7 +190,7 @@ describe('Feathers application', () => {
       const dummyService = {
         [TEST]: true,
 
-        setup (this: any, _app: any, path: string) {
+        async setup (this: any, _app: any, path: string) {
           this.path = path;
         },
 
@@ -214,13 +202,13 @@ describe('Feathers application', () => {
       const app = feathers().use('/dummy', dummyService);
       const wrappedService = app.service('dummy');
 
-      assert.ok(wrappedService[TEST]);
+      assert.ok((wrappedService as any)[TEST]);
     });
 
     it('methods conserve Symbols', () => {
       const TEST = Symbol('test');
       const dummyService = {
-        setup (this: any, _app: any, path: string) {
+        async setup (this: any, _app: any, path: string) {
           this.path = path;
         },
 
@@ -234,11 +222,10 @@ describe('Feathers application', () => {
       const app = feathers().use('/dummy', dummyService);
       const wrappedService = app.service('dummy');
 
-      assert.ok(wrappedService.create[TEST]);
+      assert.ok((wrappedService.create as any)[TEST]);
     });
   });
 
-  // Copied from the Express tests (without special cases)
   describe('Express app options compatibility', function () {
     describe('.set()', () => {
       it('should set a value', () => {
@@ -270,57 +257,15 @@ describe('Feathers application', () => {
         assert.strictEqual(app.get('foo'), 'bar');
       });
     });
-
-    describe('.enable()', () => {
-      it('should set the value to true', () => {
-        const app = feathers();
-        assert.strictEqual(app.enable('tobi'), app);
-        assert.strictEqual(app.get('tobi'), true);
-      });
-    });
-
-    describe('.disable()', () => {
-      it('should set the value to false', () => {
-        const app = feathers();
-        assert.strictEqual(app.disable('tobi'), app);
-        assert.strictEqual(app.get('tobi'), false);
-      });
-    });
-
-    describe('.enabled()', () => {
-      it('should default to false', () => {
-        const app = feathers();
-        assert.strictEqual(app.enabled('foo'), false);
-      });
-
-      it('should return true when set', () => {
-        const app = feathers();
-        app.set('foo', 'bar');
-        assert.strictEqual(app.enabled('foo'), true);
-      });
-    });
-
-    describe('.disabled()', () => {
-      it('should default to true', () => {
-        const app = feathers();
-        assert.strictEqual(app.disabled('foo'), true);
-      });
-
-      it('should return false when set', () => {
-        const app = feathers();
-        app.set('foo', 'bar');
-        assert.strictEqual(app.disabled('foo'), false);
-      });
-    });
   });
 
   describe('.setup', () => {
-    it('app.setup calls .setup on all services', () => {
+    it('app.setup calls .setup on all services', async () => {
       const app = feathers();
       let setupCount = 0;
 
       app.use('/dummy', {
-        setup (appRef: any, path: any) {
+        async setup (appRef: any, path: any) {
           setupCount++;
           assert.strictEqual(appRef, app);
           assert.strictEqual(path, 'dummy');
@@ -334,97 +279,77 @@ describe('Feathers application', () => {
       });
 
       app.use('/dummy2', {
-        setup (appRef: any, path: any) {
+        async setup (appRef: any, path: any) {
           setupCount++;
           assert.strictEqual(appRef, app);
           assert.strictEqual(path, 'dummy2');
         }
       });
 
-      app.setup();
+      await app.setup();
 
       assert.ok((app as any)._isSetup);
       assert.strictEqual(setupCount, 2);
     });
 
-    it('registering a service after app.setup will be set up', () => {
+    it('registering a service after app.setup will be set up', done => {
       const app = feathers();
 
-      app.setup();
-
-      app.use('/dummy', {
-        setup (appRef: any, path: any) {
-          assert.ok((app as any)._isSetup);
-          assert.strictEqual(appRef, app);
-          assert.strictEqual(path, 'dummy');
-        }
+      app.setup().then(() => {
+        app.use('/dummy', {
+          async setup (appRef: any, path: any) {
+            assert.ok((app as any)._isSetup);
+            assert.strictEqual(appRef, app);
+            assert.strictEqual(path, 'dummy');
+            done();
+          }
+        });
       });
-    });
-
-    it('calls _setup on a service right away', () => {
-      const app = feathers();
-      let _setup = false;
-
-      app.use('/dummy', {
-        async get (id: Id) {
-          return { id };
-        },
-        _setup (appRef: any, path: any) {
-          _setup = true;
-          assert.strictEqual(appRef, app);
-          assert.strictEqual(path, 'dummy');
-        }
-      });
-
-      assert.ok(_setup);
     });
   });
 
-  describe('providers', () => {
-    it('are getting called with a service', () => {
-      const app = feathers();
-      let providerRan = false;
+  describe('mixins', () => {
+    class Dummy {
+      dummy = true;
+      async get (id: Id) {
+        return { id };
+      }
+    }
 
-      app.providers.push(function (service: any, location: any, options: any) {
+    it('are getting called with a service and default options', () => {
+      const app = feathers();
+      let mixinRan = false;
+
+      app.mixins.push(function (service: any, location: any, options: any) {
         assert.ok(service.dummy);
         assert.strictEqual(location, 'dummy');
-        assert.deepStrictEqual(options, {});
-        providerRan = true;
+        assert.deepStrictEqual(options, getServiceOptions(new Dummy()));
+        mixinRan = true;
       });
 
-      app.use('/dummy', {
-        dummy: true,
-        async get (id: Id) {
-          return { id };
-        }
-      });
+      app.use('/dummy', new Dummy());
 
-      assert.ok(providerRan);
+      assert.ok(mixinRan);
 
       app.setup();
     });
 
-    it('are getting called with a service and options', () => {
+    it('are getting called with a service and service options', () => {
       const app = feathers();
-      const opts = { test: true };
+      const opts = { events: ['bla'] };
 
-      let providerRan = false;
+      let mixinRan = false;
 
-      app.providers.push(function (service: any, location: any, options: any) {
+      app.mixins.push(function (service: any, location: any, options: any) {
         assert.ok(service.dummy);
         assert.strictEqual(location, 'dummy');
-        assert.deepStrictEqual(options, opts);
-        providerRan = true;
+        assert.deepStrictEqual(options, getServiceOptions(new Dummy(), opts));
+        mixinRan = true;
       });
 
-      app.use('/dummy', {
-        dummy: true,
-        async get (id: Id) {
-          return { id };
-        }
-      }, opts);
+      app.use('/dummy', new Dummy(), opts);
 
-      assert.ok(providerRan);
+      assert.ok(mixinRan);
 
       app.setup();
     });
@@ -476,7 +401,7 @@ describe('Feathers application', () => {
       (async () => {
         let data = await app.service('/api/service1').get(10);
         assert.strictEqual(data.name, 'service1');
-  
+
         data = await app.service('/api/service2').get(1);
         assert.strictEqual(data.name, 'service2');
 
