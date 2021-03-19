@@ -138,7 +138,7 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
       Object.keys(methodHookMap).forEach(key => {
         const methodHooks = this.appHooks[key] || [];
 
-        methodHooks.push(...methodHookMap[key]);
+        this.appHooks[key] = methodHooks.concat(methodHookMap[key]);
       });
     }
 

@@ -24,7 +24,7 @@ describe('@feathersjs/authentication-local/hooks/hash-password', () => {
   });
 
   it('errors when authentication service does not exist', async () => {
-    delete (app as any).services.authentication;
+    delete app.services.authentication;
 
     try {
       await app.service('users').create({

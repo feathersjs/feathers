@@ -21,7 +21,7 @@ describe('authentication/service', () => {
 
   beforeEach(() => {
     app = feathers();
-    app.use('authentication', new AuthenticationService(app as any, 'authentication', {
+    app.use('authentication', new AuthenticationService(app, 'authentication', {
       entity: 'user',
       service: 'users',
       secret: 'supersecret',

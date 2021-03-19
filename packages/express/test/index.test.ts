@@ -4,7 +4,7 @@ import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 import https from 'https';
-import { feathers, HookContext, Id } from '@feathersjs/feathers';
+import { feathers, HookContext, Id, Application } from '@feathersjs/feathers';
 
 import * as expressify from '../src';
 import { RequestListener } from 'http';
@@ -24,7 +24,7 @@ describe('@feathersjs/express', () => {
   });
 
   it('returns an Express application', () => {
-    const app = expressify.default(feathers());
+    const app: Application = expressify.default(feathers());
 
     assert.strictEqual(typeof app, 'function');
   });

@@ -86,7 +86,7 @@ export async function runMethod (app: Application, connection: RealTimeConnectio
     const { methods } = getServiceOptions(service);
 
     // Only service methods are allowed
-    if (!methods.includes(method) || typeof (service as any)[method] !== 'function') {
+    if (!methods.includes(method)) {
       throw new MethodNotAllowed(`Method '${method}' not allowed on service '${path}'`);
     }
 
