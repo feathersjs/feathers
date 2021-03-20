@@ -21,7 +21,7 @@ export * from './declarations';
 
 const debug = Debug('@feathersjs/express');
 
-export default function feathersExpress<S = {}, C = {}> (feathersApp?: FeathersApplication, expressApp: Express = express()): Application<S, C> {
+export default function feathersExpress<S = any, C = any> (feathersApp?: FeathersApplication, expressApp: Express = express()): Application<S, C> {
   if (!feathersApp) {
     return expressApp as any;
   }

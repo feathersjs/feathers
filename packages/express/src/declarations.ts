@@ -25,7 +25,7 @@ export interface ExpressOverrides<ServiceTypes> {
   use: ExpressUseHandler<this, ServiceTypes>;
 }
 
-export type Application<ServiceTypes = {}, AppSettings = {}> =
+export type Application<ServiceTypes = any, AppSettings = any> =
   Omit<Express, 'listen'|'use'> &
   FeathersApplication<ServiceTypes, AppSettings> &
   ExpressOverrides<ServiceTypes>;

@@ -105,7 +105,7 @@ export type ServiceMixin<A> = (service: FeathersService<A>, path: string, option
 export type ServiceGenericType<S> = S extends ServiceInterface<infer T> ? T : any;
 export type ServiceGenericData<S> = S extends ServiceInterface<infer _T, infer D> ? D : any;
 
-export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
+export interface FeathersApplication<ServiceTypes = any, AppSettings = any> {
   /**
    * The Feathers application version
    */
@@ -145,9 +145,7 @@ export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
    *
    * @param name The setting name
    */
-  get<L extends keyof AppSettings> (
-    name: AppSettings[L] extends never ? string : L
-  ): (AppSettings[L] extends never ? any : AppSettings[L]);
+  get<L extends keyof AppSettings & string> (name: L): AppSettings[L];
 
   /**
    * Set an application setting
@@ -155,10 +153,7 @@ export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
    * @param name The setting name
    * @param value The setting value
    */
-  set<L extends keyof AppSettings> (
-    name: AppSettings[L] extends never ? string : L,
-    value: AppSettings[L] extends never ? any : AppSettings[L]
-  ): this;
+  set<L extends keyof AppSettings & string> (name: L, value: AppSettings[L]): this;
 
   /**
    * Runs a callback configure function with the current application instance.
@@ -186,11 +181,9 @@ export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
    * Feathers application to use a sub-app under the `path` prefix.
    * @param options The options for this service
    */
-  use<L extends keyof ServiceTypes> (
-    path: ServiceTypes[L] extends never ? string : L,
-    service: (ServiceTypes[L] extends never ?
-      ServiceInterface<any> : ServiceTypes[L]
-    ) | Application,
+  use<L extends keyof ServiceTypes & string> (
+    path: L,
+    service: (keyof any extends keyof ServiceTypes ? ServiceInterface<any> : ServiceTypes[L]) | Application,
     options?: ServiceOptions
   ): this;
 
@@ -201,12 +194,9 @@ export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
    *
    * @param path The name of the service.
    */
-  service<L extends keyof ServiceTypes> (
-    path: ServiceTypes[L] extends never ? string : L
-  ): (ServiceTypes[L] extends never
-    ? FeathersService<this, Service<any>>
-    : FeathersService<this, ServiceTypes[L]>
-  );
+  service<L extends keyof ServiceTypes & string> (
+    path: L
+  ): FeathersService<this, keyof any extends keyof ServiceTypes ? Service<any> : ServiceTypes[L]>;
 
   setup (server?: any): Promise<this>;
 
@@ -220,7 +210,7 @@ export interface FeathersApplication<ServiceTypes = {}, AppSettings = {}> {
 
 // This needs to be an interface instead of a type
 // so that the declaration can be extended by other modules
-export interface Application<ServiceTypes = {}, AppSettings = {}> extends FeathersApplication<ServiceTypes, AppSettings>, EventEmitter {
+export interface Application<ServiceTypes = any, AppSettings = any> extends FeathersApplication<ServiceTypes, AppSettings>, EventEmitter {
 
 }
 
