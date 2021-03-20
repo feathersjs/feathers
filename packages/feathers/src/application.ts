@@ -40,17 +40,12 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     this.legacyHooks = enableLegacyHooks(this);
   }
 
-  get<L extends keyof AppSettings> (
-    name: AppSettings[L] extends never ? string : L
-  ): (AppSettings[L] extends never ? any : AppSettings[L])|undefined {
-    return (this.settings as any)[name];
+  get<L extends keyof AppSettings & string> (name: L): AppSettings[L] {
+    return this.settings[name];
   }
 
-  set<L extends keyof AppSettings> (
-    name: AppSettings[L] extends never ? string : L,
-    value: AppSettings[L] extends never ? any : AppSettings[L]
-  ) {
-    (this.settings as any)[name] = value;
+  set<L extends keyof AppSettings & string> (name: L, value: AppSettings[L]) {
+    this.settings[name] = value;
     return this;
   }
 
@@ -64,35 +59,30 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     throw new Error(`Can not find service '${location}'`);
   }
 
-  service<L extends keyof ServiceTypes> (
-    location: ServiceTypes[L] extends never ? string : L
-  ): (ServiceTypes[L] extends never
-    ? FeathersService<this, Service<any>>
-    : FeathersService<this, ServiceTypes[L]>
-  ) {
-    const path: any = stripSlashes(location as string) || '/';
-    const current = (this.services as any)[path];
+  service<L extends keyof ServiceTypes & string> (
+    location: L
+  ): FeathersService<this, keyof any extends keyof ServiceTypes ? Service<any> : ServiceTypes[L]> {
+    const path = (stripSlashes(location) || '/') as L;
+    const current = this.services[path];
 
     if (typeof current === 'undefined') {
       this.use(path, this.defaultService(path) as any);
       return this.service(path);
     }
 
-    return current;
+    return current as any;
   }
 
-  use<L extends keyof ServiceTypes> (
-    path: ServiceTypes[L] extends never ? string : L,
-    service: (ServiceTypes[L] extends never ?
-      ServiceInterface<any> : ServiceTypes[L]
-    ) | Application,
+  use<L extends keyof ServiceTypes & string> (
+    path: L,
+    service: (keyof any extends keyof ServiceTypes ? ServiceInterface<any> : ServiceTypes[L]) | Application,
     options?: ServiceOptions
   ): this {
     if (typeof path !== 'string') {
       throw new Error(`'${path}' is not a valid service path.`);
     }
 
-    const location = stripSlashes(path) || '/';
+    const location = (stripSlashes(path) || '/') as L;
     const subApp = service as FeathersApplication;
     const isSubApp = typeof subApp.service === 'function' && subApp.services;
 
@@ -118,7 +108,7 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
       protoService.setup(this, location);
     }
 
-    (this.services as any)[location] = protoService;
+    this.services[location] = protoService;
 
     return this;
   }

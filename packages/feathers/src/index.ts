@@ -4,7 +4,7 @@ import version from './version';
 import { Feathers } from './application';
 import { Application } from './declarations';
 
-export function feathers<T = {}, S = {}> () {
+export function feathers<T = any, S = any> () {
   return new Feathers<T, S>() as Application<T, S>;
 }
 
