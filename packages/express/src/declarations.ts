@@ -6,13 +6,14 @@ import {
 } from '@feathersjs/feathers';
 
 interface ExpressUseHandler<T, ServiceTypes> {
-  <L extends keyof ServiceTypes> (
-    path: ServiceTypes[L] extends never ? string|RegExp : L,
+  <L extends keyof ServiceTypes & string> (
+    path: L,
     ...middlewareOrService: (
       Express|express.RequestHandler|
-      (ServiceTypes[L] extends never ? ServiceInterface<any> : ServiceTypes[L])
+      (keyof any extends keyof ServiceTypes ? ServiceInterface<any> : ServiceTypes[L])
     )[]
   ): T;
+  (path: RegExp, ...expressHandlers: express.RequestHandler[]): T;
   (...expressHandlers: express.RequestHandler[]): T;
   (handler: Express|express.ErrorRequestHandler): T;
 }

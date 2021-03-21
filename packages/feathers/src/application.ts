@@ -75,7 +75,7 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
 
   use<L extends keyof ServiceTypes & string> (
     path: L,
-    service: (keyof any extends keyof ServiceTypes ? ServiceInterface<any> : ServiceTypes[L]) | Application,
+    service: keyof any extends keyof ServiceTypes ? ServiceInterface<any> | Application : ServiceTypes[L],
     options?: ServiceOptions
   ): this {
     if (typeof path !== 'string') {
@@ -83,7 +83,7 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     }
 
     const location = (stripSlashes(path) || '/') as L;
-    const subApp = service as FeathersApplication;
+    const subApp = service as Application;
     const isSubApp = typeof subApp.service === 'function' && subApp.services;
 
     if (isSubApp) {
@@ -113,7 +113,7 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     return this;
   }
 
-  hooks (hookMap: HookOptions<Application<ServiceTypes, AppSettings>, any>) {
+  hooks (hookMap: HookOptions<this, any>) {
     const legacyMap = hookMap as LegacyHookMap<this, any>;
 
     if (legacyMap.before || legacyMap.after || legacyMap.error) {
@@ -121,7 +121,7 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     }
 
     if (Array.isArray(hookMap)) {
-      this.appHooks[HOOKS].push(...hookMap);
+      this.appHooks[HOOKS].push(...hookMap as any);
     } else {
       const methodHookMap = hookMap as HookMap<Application<ServiceTypes, AppSettings>, any>;
 
