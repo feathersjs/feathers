@@ -183,7 +183,7 @@ export interface FeathersApplication<ServiceTypes = any, AppSettings = any> {
    */
   use<L extends keyof ServiceTypes & string> (
     path: L,
-    service: (keyof any extends keyof ServiceTypes ? ServiceInterface<any> : ServiceTypes[L]) | Application,
+    service: keyof any extends keyof ServiceTypes ? ServiceInterface<any> | Application : ServiceTypes[L],
     options?: ServiceOptions
   ): this;
 
@@ -205,7 +205,7 @@ export interface FeathersApplication<ServiceTypes = any, AppSettings = any> {
    *
    * @param map The application hook settings.
    */
-  hooks (map: HookOptions<Application<ServiceTypes, AppSettings>, any>): this;
+  hooks (map: HookOptions<this, any>): this;
 }
 
 // This needs to be an interface instead of a type
@@ -309,7 +309,7 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
 
 // Legacy hook typings
 export type LegacyHookFunction<A = Application, S = Service<any, any>> =
-  (this: S, context: HookContext<A, S>) => (Promise<HookContext<A, S> | void> | HookContext<A, S> | void);
+  (this: S, context: HookContext<A, S>) => (Promise<HookContext<Application, S> | void> | HookContext<Application, S> | void);
 
 type LegacyHookMethodMap<A, S> =
   { [L in keyof S]?: SelfOrArray<LegacyHookFunction<A, S>>; } &

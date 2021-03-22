@@ -21,7 +21,7 @@ export * from './declarations';
 
 const debug = Debug('@feathersjs/express');
 
-export default function feathersExpress<S = any, C = any> (feathersApp?: FeathersApplication, expressApp: Express = express()): Application<S, C> {
+export default function feathersExpress<S = any, C = any> (feathersApp?: FeathersApplication<S, C>, expressApp: Express = express()): Application<S, C> {
   if (!feathersApp) {
     return expressApp as any;
   }
@@ -62,7 +62,7 @@ export default function feathersExpress<S = any, C = any> (feathersApp?: Feather
 
       debug('Registering service with middleware', middleware);
       // Since this is a service, call Feathers `.use`
-      feathersApp.use.call(this, location, service, { middleware });
+      (feathersApp as FeathersApplication).use.call(this, location, service, { middleware });
 
       return this;
     },
