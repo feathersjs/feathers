@@ -50,7 +50,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/mocha": "^8.2.1",
+    "@types/mocha": "^8.2.2",
     "@types/node": "^14.14.35",
     "mocha": "^8.3.2",
     "shx": "^0.3.3",

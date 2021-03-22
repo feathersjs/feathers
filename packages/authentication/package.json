@@ -66,7 +66,7 @@
     "@feathersjs/adapter-memory": "^5.0.0-pre.1",
     "@types/debug": "^4.1.5",
     "@types/lodash": "^4.14.168",
-    "@types/mocha": "^8.2.1",
+    "@types/mocha": "^8.2.2",
     "@types/node": "^14.14.35",
     "@types/uuid": "^8.3.0",
     "mocha": "^8.3.2",

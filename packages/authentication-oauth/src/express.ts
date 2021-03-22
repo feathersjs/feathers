@@ -1,17 +1,16 @@
-// @ts-ignore
-import { express as grantExpress } from 'grant';
+import grant from 'grant';
 import Debug from 'debug';
 import session from 'express-session';
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationResult } from '@feathersjs/authentication';
 import {
   Application as ExpressApplication,
-  original as express
+  original as originalExpress
 } from '@feathersjs/express';
 import { OauthSetupSettings } from './utils';
 import { OAuthStrategy } from './strategy';
 
-const grant = grantExpress();
+const grantInstance = grant.express();
 const debug = Debug('@feathersjs/authentication-oauth/express');
 
 declare module 'express-session' {
@@ -40,8 +39,8 @@ export default (options: OauthSetupSettings) => {
       saveUninitialized: true,
       resave: true
     });
-    const grantApp = grant(config);
-    const authApp = express();
+    const grantApp = grantInstance(config);
+    const authApp = originalExpress();
 
     authApp.use(expressSession);
 
