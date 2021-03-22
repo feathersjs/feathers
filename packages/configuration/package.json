@@ -59,7 +59,7 @@
   "dependencies": {
     "@feathersjs/feathers": "^5.0.0-pre.1",
     "config": "^3.3.6",
-    "debug": "^4.3.1"
+    "debug": "^2.6.9"
   },
   "devDependencies": {
     "@types/config": "^0.0.38",
