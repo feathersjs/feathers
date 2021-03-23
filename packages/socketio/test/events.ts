@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert';
 import { io, Socket } from 'socket.io-client';
-import { verify } from '@feathersjs/tests/src/fixture';
+import { verify } from '@feathersjs/tests';
 import { RealTimeConnection } from '@feathersjs/transport-commons/src/channels/channel/base';
 
 export default (name: string, options: any) => {

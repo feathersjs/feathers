@@ -1,9 +1,9 @@
 import superagent from 'superagent';
-import { setupTests } from '@feathersjs/tests/src/client';
+import { clientTests } from '@feathersjs/tests';
 import { Server } from 'http';
 
-import * as feathers from '../../dist/feathers';
-import app from '../fixture';
+import * as feathers from '../dist/feathers';
+import app from './fixture';
 
 describe('Superagent REST connector', function () {
   let server: Server;
@@ -19,5 +19,5 @@ describe('Superagent REST connector', function () {
     server.close(done);
   });
 
-  setupTests(client, 'todos');
+  clientTests(client, 'todos');
 });

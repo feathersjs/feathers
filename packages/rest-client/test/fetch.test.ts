@@ -1,7 +1,7 @@
 import { strict as assert } from 'assert';
 
 import { feathers } from '@feathersjs/feathers';
-import { setupTests } from '@feathersjs/tests/src/client';
+import { clientTests } from '@feathersjs/tests';
 import { NotAcceptable } from '@feathersjs/errors';
 import fetch from 'node-fetch';
 
@@ -21,8 +21,6 @@ describe('fetch REST connector', function () {
   });
 
   after(done => server.close(done));
-
-  setupTests(service, 'todos');
 
   it('supports custom headers', async () => {
     const headers = {
@@ -117,4 +115,6 @@ describe('fetch REST connector', function () {
 
     assert.strictEqual(response, null)
   });
+
+  clientTests(service, 'todos');
 });

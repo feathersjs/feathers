@@ -2,7 +2,7 @@ import { strict as assert } from 'assert';
 import { Server } from 'http';
 import { feathers } from '@feathersjs/feathers';
 import { io, Socket } from 'socket.io-client';
-import { setupTests } from '@feathersjs/tests/src/client';
+import { clientTests } from '@feathersjs/tests';
 
 import { createServer } from './server';
 import socketio from '../src';
@@ -78,6 +78,6 @@ describe('@feathersjs/socketio-client', () => {
     }
   });
 
-  setupTests(app, 'todos');
-  setupTests(app, '/');
+  clientTests(app, 'todos');
+  clientTests(app, '/');
 });
