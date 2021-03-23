@@ -12,7 +12,7 @@ function parse (number: any) {
 // Returns the pagination limit and will take into account the
 // default and max pagination settings
 function getLimit (limit: any, paginate: any) {
-  if (paginate) {
+  if (paginate && (paginate.default || paginate.max)) {
     const base = paginate.default || 0;
     const lower = typeof limit === 'number' && !isNaN(limit) ? limit : base;
     const upper = typeof paginate.max === 'number' ? paginate.max : Number.MAX_VALUE;
