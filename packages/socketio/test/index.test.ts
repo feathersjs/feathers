@@ -1,11 +1,11 @@
 import { strict as assert } from 'assert';
 import { feathers, Application, HookContext, NullableId, Params } from '@feathersjs/feathers';
-// import express from '@feathersjs/express';
+import express from '@feathersjs/express';
 import { omit, extend } from 'lodash';
 import { io } from 'socket.io-client';
 import axios from 'axios';
 import { Server } from 'http';
-import { Service } from '@feathersjs/tests/src/fixture';
+import { Service } from '@feathersjs/tests';
 import { Socket } from 'socket.io-client';
 
 import methodTests from './methods';
@@ -123,26 +123,26 @@ describe('@feathersjs/socketio', () => {
     });
   });
 
-  it.skip('expressified app works', _done => {
-    // const data = { message: 'Hello world' };
-    // const app = express(feathers())
-    //   .configure(socketio())
-    //   .use('/test', (_req, res) => res.json(data));
+  it('expressified app works', async () => {
+    const data = { message: 'Hello world' };
+    const app = express(feathers())
+      .configure(socketio())
+      .use('/test', (_req, res) => res.json(data));
 
-    // const srv = app.listen(8992).on('listening', async () => {
-    //   const response = await axios({
-    //     url: 'http://localhost:8992/socket.io/socket.io.js'
-    //   });
+    const srv = await app.listen(8992);
+    const response = await axios({
+      url: 'http://localhost:8992/socket.io/socket.io.js'
+    });
 
-    //   assert.strictEqual(response.status, 200);
+    assert.strictEqual(response.status, 200);
 
-    //   const res = await axios({
-    //     url: 'http://localhost:8992/test'
-    //   });
+    const res = await axios({
+      url: 'http://localhost:8992/test'
+    });
 
-    //   assert.deepStrictEqual(res.data, data);
-    //   srv.close(done);
-    // });
+    assert.deepStrictEqual(res.data, data);
+    
+    await new Promise(resolve => srv.close(() => resolve(srv)));
   });
 
   it('can set options (#12)', done => {

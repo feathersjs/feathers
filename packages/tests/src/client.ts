@@ -6,7 +6,7 @@ export interface Todo {
   id?: number;
 }
 
-export function setupTests (app: any, name: string) {
+export function clientTests (app: any, name: string) {
   const getService = () => (name && typeof app.service === 'function')
     ? app.service(name) : app;
 
@@ -99,9 +99,12 @@ export function setupTests (app: any, name: string) {
     it('.get with error', async () => {
       const query = { error: true };
 
-      await assert.rejects(() => getService().get(0, { query }), {
-        message: 'Something went wrong'
-      });
+      try {
+        await getService().get(0, { query });
+        assert.fail('Should never get here');
+      } catch (error) {
+        assert.strictEqual(error.message, 'Something went wrong');
+      }
     });
   });
 }

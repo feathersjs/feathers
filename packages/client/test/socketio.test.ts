@@ -1,10 +1,10 @@
 import { io } from 'socket.io-client';
 import socketio from '@feathersjs/socketio';
 import { Server } from 'http';
-import { setupTests } from '@feathersjs/tests/src/client';
+import { clientTests } from '@feathersjs/tests';
 
-import * as feathers from '../../dist/feathers';
-import app from '../fixture';
+import * as feathers from '../dist/feathers';
+import app from './fixture';
 
 describe('Socket.io connector', function () {
   let server: Server;
@@ -24,5 +24,5 @@ describe('Socket.io connector', function () {
     socket.disconnect();
   });
 
-  setupTests(client, 'todos');
+  clientTests(client, 'todos');
 });

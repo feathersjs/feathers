@@ -11,7 +11,7 @@ module.exports = function createConfig (output, isProduction = false) {
       library: 'feathers',
       libraryTarget: 'umd',
       globalObject: 'this',
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, '..', 'dist'),
       filename: `${output}.js`
     },
     resolve: {

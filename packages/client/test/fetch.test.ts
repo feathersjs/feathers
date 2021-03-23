@@ -1,9 +1,9 @@
 import fetch from 'node-fetch';
 import { Server } from 'http';
-import { setupTests } from '@feathersjs/tests/src/client';
+import { clientTests } from '@feathersjs/tests';
 
-import * as feathers from '../../dist/feathers';
-import app from '../fixture';
+import * as feathers from '../dist/feathers';
+import app from './fixture';
 
 describe('fetch REST connector', function () {
   let server: Server;
@@ -19,5 +19,5 @@ describe('fetch REST connector', function () {
     server.close(done);
   });
 
-  setupTests(client, 'todos');
+  clientTests(client, 'todos');
 });

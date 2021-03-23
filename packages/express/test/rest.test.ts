@@ -4,8 +4,7 @@ import axios from 'axios';
 
 import { Server } from 'http';
 import { feathers, HookContext, Id, Params } from '@feathersjs/feathers';
-import { Service } from '@feathersjs/tests/src/fixture';
-import { crud } from '@feathersjs/tests/src/crud';
+import { Service, testRest } from '@feathersjs/tests';
 
 import * as express from '../src'
 import { Request, Response, NextFunction } from 'express';
@@ -100,9 +99,9 @@ describe('@feathersjs/express/rest provider', () => {
 
     after(done => server.close(done));
 
-    crud('Services', 'todo', 4777);
-    crud('Root Service', '/', 4777);
-    crud('Dynamic Services', 'tasks', 4777);
+    testRest('Services', 'todo', 4777);
+    testRest('Root Service', '/', 4777);
+    testRest('Dynamic Services', 'tasks', 4777);
 
     describe('res.hook', () => {
       const convertHook = (hook: HookContext) => {

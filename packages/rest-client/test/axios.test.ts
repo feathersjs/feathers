@@ -3,7 +3,7 @@ import { strict as assert } from 'assert';
 import axios from 'axios';
 import { Server } from 'http';
 import { feathers } from '@feathersjs/feathers';
-import { setupTests } from '@feathersjs/tests/src/client';
+import { clientTests } from '@feathersjs/tests';
 import { NotAcceptable } from '@feathersjs/errors';
 
 import createServer from './server';
@@ -21,8 +21,6 @@ describe('Axios REST connector', function () {
   });
 
   after(done => server.close(done));
-
-  setupTests(service, 'todos');
 
   it('supports custom headers', async () => {
     const headers = {
@@ -115,4 +113,6 @@ describe('Axios REST connector', function () {
       assert.ok(e.data.config);
     }
   });
+
+  clientTests(service, 'todos');
 });
