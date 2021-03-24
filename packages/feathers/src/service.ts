@@ -13,7 +13,7 @@ export const defaultServiceArguments = {
   remove: [ 'id', 'params' ]
 }
 
-export const defaultServiceMethods = Object.keys(defaultServiceArguments).concat('setup');
+export const defaultServiceMethods = Object.keys(defaultServiceArguments);
 
 export const defaultEventMap = {
   create: 'created',
@@ -60,7 +60,7 @@ export function wrapService (
   const protoService = Object.create(service);
   const serviceOptions = getServiceOptions(service, options);
 
-  if (Object.keys(serviceOptions.methods).length === 0) {
+  if (Object.keys(serviceOptions.methods).length === 0 && typeof service.setup !== 'function') {
     throw new Error(`Invalid service object passed for path \`${location}\``);
   }
 

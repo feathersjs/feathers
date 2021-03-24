@@ -174,19 +174,20 @@ describe('@feathersjs/express/authentication', () => {
       });
     });
 
-    it.skip('protected endpoint fails with invalid Authorization header', () => {
-      return axios.get('/protected', {
-        headers: {
-          Authorization: 'Bearer: something wrong'
-        }
-      }).then(() => {
+    it.skip('protected endpoint fails with invalid Authorization header', async () => {
+      try {
+        await axios.get('/protected', {
+          headers: {
+            Authorization: 'Bearer: something wrong'
+          }
+        });
         assert.fail('Should never get here');
-      }).catch(error => {
+      } catch (error) {
         const { data } = error.response;
 
         assert.strictEqual(data.name, 'NotAuthenticated');
         assert.strictEqual(data.message, 'Not authenticated');
-      });
+      }
     });
 
     it('can request protected endpoint with JWT present', () => {

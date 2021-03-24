@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { verify } from './fixture';
 
-export function testRest (description: string, name: string, port: number) {
+export function restTests (description: string, name: string, port: number) {
   describe(description, () => {
     it('GET .find', () => {
       return axios.get(`http://localhost:${port}/${name}`)

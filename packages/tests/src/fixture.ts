@@ -73,6 +73,18 @@ export class Service {
   async remove (id: any) {
     return { id };
   }
+
+  async customMethod (data: any, params: any) {
+    return {
+      data,
+      method: 'customMethod',
+      provider: params.provider
+    };
+  }
+
+  async internalMethod () {
+    throw new Error('Should never get here');
+  }
 }
 
 export const verify = {

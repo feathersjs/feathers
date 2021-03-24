@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { strict as assert } from 'assert';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import { Server } from 'http';
 import { feathers, HookContext, Id, Params } from '@feathersjs/feathers';
-import { Service, testRest } from '@feathersjs/tests';
+import { Service, restTests } from '@feathersjs/tests';
 
 import * as express from '../src'
 import { Request, Response, NextFunction } from 'express';
@@ -99,9 +99,9 @@ describe('@feathersjs/express/rest provider', () => {
 
     after(done => server.close(done));
 
-    testRest('Services', 'todo', 4777);
-    testRest('Root Service', '/', 4777);
-    testRest('Dynamic Services', 'tasks', 4777);
+    restTests('Services', 'todo', 4777);
+    restTests('Root Service', '/', 4777);
+    restTests('Dynamic Services', 'tasks', 4777);
 
     describe('res.hook', () => {
       const convertHook = (hook: HookContext) => {
@@ -566,62 +566,66 @@ describe('@feathersjs/express/rest provider', () => {
     });
   });
 
-  // describe('Custom methods', () => {
-  //   let server: Server;
-  //   let app: express.Application;
+  describe('Custom methods', () => {
+    let server: Server;
+    let app: express.Application;
 
-  //   before(async () => {
-  //     app = expressify(feathers())
-  //       .configure(rest())
-  //       .use(express.json())
-  //       .use('/todo', {
-  //         async get (id) {
-  //           return id;
-  //         },
-  //         // httpMethod is usable as a decorator: @httpMethod('POST', '/:__feathersId/custom-path')
-  //         custom: rest.httpMethod('POST')((feathers as any).activateHooks(['id', 'data', 'params'])(
-  //           (id: any, data: any) => {
-  //             return Promise.resolve({
-  //               id,
-  //               data
-  //             });
-  //           }
-  //         )),
-  //         other: rest.httpMethod('PATCH', ':__feathersId/second-method')(
-  //           (feathers as any).activateHooks(['id', 'data', 'params'])(
-  //             (id: any, data: any) => {
-  //               return Promise.resolve({
-  //                 id,
-  //                 data
-  //               });
-  //             }
-  //           )
-  //         )
-  //       });
+    before(async () => {
+      app = expressify(feathers())
+        .configure(rest())
+        .use(express.json())
+        .use('/todo', new Service(), {
+          methods: ['customMethod']
+        })
+        .use(express.errorHandler());
 
-  //     server = await app.listen(4781);
-  //   });
+      server = await app.listen(4781);
+    });
 
-  //   after(done => server.close(done));
+    after(done => server.close(done));
 
-  //   it('works with custom methods', async () => {
-  //     const res = await axios.post('http://localhost:4781/todo/42/custom', { text: 'Do dishes' });
+    it('calls .customMethod with X-Service-Method header', async () => {
+      const payload = { text: 'Do dishes' };
+      const res = await axios.post('http://localhost:4781/todo', payload, {
+        headers: {
+          'X-Service-Method': 'customMethod'
+        }
+      });
 
-  //     assert.equal(res.headers.allow, 'GET,POST,PATCH');
-  //     assert.deepEqual(res.data, {
-  //       id: '42',
-  //       data: { text: 'Do dishes' }
-  //     });
-  //   });
+      assert.deepEqual(res.data, {
+        data: payload,
+        method: 'customMethod',
+        provider: 'rest'
+      });
+    });
 
-  //   it('works with custom methods - with route', async () => {
-  //     const res = await axios.patch('http://localhost:4781/todo/12/second-method', { text: 'Hmm' });
+    it('throws MethodNotImplement for setup and methods not passed as options', async () => {
+      const options: AxiosRequestConfig = {
+        method: 'POST',
+        url: 'http://localhost:4781/todo',
+        data: { text: 'Do dishes' }
+      };
+      const testMethod = (name: string) => {
+        return assert.rejects(() => axios({
+          ...options,
+          headers: {
+            'X-Service-Method': name
+          }
+        }), (error: any) => {
+          assert.deepEqual(error.response.data, {
+            name: 'MethodNotAllowed',
+            message: `Method \`${name}\` is not supported by this endpoint.`,
+            code: 405,
+            className: 'method-not-allowed'
+          });
+  
+          return true;
+        });
+      }
 
-  //     assert.equal(res.headers.allow, 'GET,POST,PATCH');
-  //     assert.deepEqual(res.data, {
-  //       id: '12',
-  //       data: { text: 'Hmm' }
-  //     });
-  //   });
-  // });
+      await testMethod('setup');
+      await testMethod('internalMethod');
+      await testMethod('nonExisting');
+    });
+  });
 });
