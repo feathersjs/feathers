@@ -181,6 +181,12 @@ describe('app.channel', () => {
       assert.strictEqual(combined.length, 2);
     });
 
+    it('does nothing when the channel is undefined (#2207)', () => {
+      const channel = app.channel('test', 'me');
+      
+      channel.join(undefined);
+    });
+
     it('.join all child channels', () => {
       const c1 = { id: 1 };
       const c2 = { id: 2 };

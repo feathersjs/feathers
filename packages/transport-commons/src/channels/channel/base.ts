@@ -43,7 +43,7 @@ export class Channel extends EventEmitter {
 
   join (...connections: RealTimeConnection[]) {
     connections.forEach(connection => {
-      if (this.connections.indexOf(connection) === -1) {
+      if (connection && this.connections.indexOf(connection) === -1) {
         this.connections.push(connection);
       }
     });
