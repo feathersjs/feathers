@@ -3,15 +3,18 @@ import { strict as assert } from 'assert';
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { Server } from 'http';
+import { Request, Response, NextFunction } from 'express';
 import { feathers, HookContext, Id, Params } from '@feathersjs/feathers';
 import { Service, restTests } from '@feathersjs/tests';
+import { BadRequest } from '@feathersjs/errors';
 
 import * as express from '../src'
-import { Request, Response, NextFunction } from 'express';
-import { BadRequest } from '@feathersjs/errors/lib';
 
 const expressify = express.default;
 const { rest } = express;
+const errorHandler = express.errorHandler({
+  logger: false
+});
 
 describe('@feathersjs/express/rest provider', () => {
   describe('base functionality', () => {
@@ -526,7 +529,7 @@ describe('@feathersjs/express/rest provider', () => {
             };
           }
         })
-        .use(express.errorHandler());
+        .use(errorHandler);
 
       server = await app.listen(6880);
     });
@@ -575,9 +578,9 @@ describe('@feathersjs/express/rest provider', () => {
         .configure(rest())
         .use(express.json())
         .use('/todo', new Service(), {
-          methods: ['customMethod']
+          methods: ['find', 'customMethod']
         })
-        .use(express.errorHandler());
+        .use(errorHandler);
 
       server = await app.listen(4781);
     });
@@ -599,7 +602,7 @@ describe('@feathersjs/express/rest provider', () => {
       });
     });
 
-    it('throws MethodNotImplement for setup and methods not passed as options', async () => {
+    it('throws MethodNotImplement for .setup, non option and default methods', async () => {
       const options: AxiosRequestConfig = {
         method: 'POST',
         url: 'http://localhost:4781/todo',
@@ -618,7 +621,7 @@ describe('@feathersjs/express/rest provider', () => {
             code: 405,
             className: 'method-not-allowed'
           });
-  
+
           return true;
         });
       }
@@ -626,6 +629,8 @@ describe('@feathersjs/express/rest provider', () => {
       await testMethod('setup');
       await testMethod('internalMethod');
       await testMethod('nonExisting');
+      await testMethod('create');
+      await testMethod('find');
     });
   });
 });

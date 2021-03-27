@@ -10,7 +10,7 @@ const debug = Debug('@feathersjs/transport-commons/channels');
 const { CHANNELS } = keys;
 
 declare module '@feathersjs/feathers/lib/declarations' {
-  interface ServiceAddons<A, S> extends EventEmitter {
+  interface ServiceAddons<A, S> extends EventEmitter { // eslint-disable-line
     publish (publisher: Publisher<ServiceGenericType<S>>): this;
     publish (event: Event, publisher: Publisher<ServiceGenericType<S>>): this;
 

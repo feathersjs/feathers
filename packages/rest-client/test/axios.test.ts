@@ -8,13 +8,17 @@ import { NotAcceptable } from '@feathersjs/errors';
 
 import createServer from './server';
 import rest from '../src';
+import { ServiceTypes } from './declarations';
+
 
 describe('Axios REST connector', function () {
   const url = 'http://localhost:8889';
   const setup = rest(url).axios(axios);
-  const app = feathers().configure(setup);
+  const app = feathers<ServiceTypes>().configure(setup);
   const service = app.service('todos');
   let server: Server;
+
+  service.methods('customMethod');
 
   before(async () => {
     server = await createServer().listen(8889);
@@ -112,6 +116,16 @@ describe('Axios REST connector', function () {
       assert.strictEqual(err.message, 'connect ECONNREFUSED 127.0.0.1:60000');
       assert.ok(e.data.config);
     }
+  });
+
+  it('works with custom method .customMethod', async () => {
+    const result = await service.customMethod({ message: 'hi' });
+
+    assert.deepEqual(result, {
+      data: { message: 'hi' },
+      provider: 'rest',
+      type: 'customMethod'
+    });
   });
 
   clientTests(service, 'todos');

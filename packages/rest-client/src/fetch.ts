@@ -14,9 +14,7 @@ export class FetchClient extends Base {
       fetchOptions.body = JSON.stringify(options.body);
     }
 
-    const fetch = this.connection;
-
-    return fetch(options.url, fetchOptions)
+    return this.connection(options.url, fetchOptions)
       .then(this.checkStatus)
       .then((response: any) => {
         if (response.status === 204) {

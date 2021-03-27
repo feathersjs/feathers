@@ -36,6 +36,8 @@ export interface Transport {
   axios: Handler;
 }
 
+export type RestService<T = any, D = Partial<any>> = Base<T, D>;
+
 export default function restClient (base = '') {
   const result: any = { Base };
 

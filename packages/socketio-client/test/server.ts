@@ -29,13 +29,25 @@ class TodoService extends Service {
 
     return Object.assign({ query: params.query }, data)
   }
+
+  async customMethod (data: any, { provider }: Params) {
+    return {
+      data,
+      provider,
+      type: 'customMethod'
+    }
+  }
 }
 
 export function createServer () {
   const app = feathers()
     .configure(socketio())
     .use('/', new TodoService())
-    .use('/todos', new TodoService());
+    .use('/todos', new TodoService(), {
+      methods: [
+        'find', 'get', 'create', 'update', 'patch', 'remove', 'customMethod'
+      ]
+    });
   const service = app.service('todos');
   const rootService = app.service('/');
   const publisher = () => app.channel('general');

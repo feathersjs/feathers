@@ -4,17 +4,20 @@ import { feathers } from '@feathersjs/feathers';
 import { clientTests } from '@feathersjs/tests';
 import { NotAcceptable } from '@feathersjs/errors';
 import fetch from 'node-fetch';
-
-import createServer from './server';
-import rest from '../src';
 import { Server } from 'http';
+
+import rest from '../src';
+import createServer from './server';
+import { ServiceTypes } from './declarations';
 
 describe('fetch REST connector', function () {
   const url = 'http://localhost:8889';
   const setup = rest(url).fetch(fetch);
-  const app = feathers().configure(setup);
+  const app = feathers<ServiceTypes>().configure(setup);
   const service = app.service('todos');
   let server: Server;
+
+  service.methods('customMethod');
 
   before(async () => {
     server = await createServer().listen(8889);
@@ -114,6 +117,16 @@ describe('fetch REST connector', function () {
     });
 
     assert.strictEqual(response, null)
+  });
+
+  it('works with custom method .customMethod', async () => {
+    const result = await service.customMethod({ message: 'hi' });
+
+    assert.deepEqual(result, {
+      data: { message: 'hi' },
+      provider: 'rest',
+      type: 'customMethod'
+    });
   });
 
   clientTests(service, 'todos');

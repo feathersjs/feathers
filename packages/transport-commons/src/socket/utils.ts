@@ -1,6 +1,6 @@
 import Debug from 'debug';
 import isEqual from 'lodash/isEqual';
-import { NotFound, MethodNotAllowed } from '@feathersjs/errors';
+import { NotFound, MethodNotAllowed, BadRequest } from '@feathersjs/errors';
 import { HookContext, Application, createContext, getServiceOptions } from '@feathersjs/feathers';
 import { CombinedChannel } from '../channels/channel/combined';
 import { RealTimeConnection } from '../channels/channel/base';
@@ -94,6 +94,11 @@ export async function runMethod (app: Application, connection: RealTimeConnectio
     const query = methodArgs[position] || {};
     // `params` have to be re-mapped to the query and added with the route
     const params = Object.assign({ query, route, connection }, connection);
+
+    // `params` is always the last parameter. Error if we got more arguments.
+    if (methodArgs.length > (position + 1)) {
+      throw new BadRequest(`Too many arguments for '${method}' method`);
+    }
 
     methodArgs[position] = params;
 

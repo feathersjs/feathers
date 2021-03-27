@@ -38,7 +38,7 @@ describe('feathers-channels', () => {
         }
       });
 
-    const service = app.service('test') as any;
+    const service: any = app.service('test') ;
 
     assert.ok(!service[keys.PUBLISHERS]);
   });

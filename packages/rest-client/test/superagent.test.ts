@@ -6,16 +6,19 @@ import { feathers } from '@feathersjs/feathers';
 import { clientTests } from '@feathersjs/tests';
 import { NotAcceptable } from '@feathersjs/errors';
 
-import createServer from './server';
 import rest from '../src';
+import createServer from './server';
+import { ServiceTypes } from './declarations';
 
 describe('Superagent REST connector', function () {
   let server: Server;
 
   const url = 'http://localhost:8889';
   const setup = rest(url).superagent(superagent);
-  const app = feathers().configure(setup);
+  const app = feathers<ServiceTypes>().configure(setup);
   const service = app.service('todos');
+  
+  service.methods('customMethod');
 
   before(async () => {
     server = await createServer().listen(8889);
@@ -95,6 +98,16 @@ describe('Superagent REST connector', function () {
       assert.strictEqual(error.code, 406);
       assert.ok((error as any).response);
     }
+  });
+
+  it('works with custom method .customMethod', async () => {
+    const result = await service.customMethod({ message: 'hi' });
+
+    assert.deepEqual(result, {
+      data: { message: 'hi' },
+      provider: 'rest',
+      type: 'customMethod'
+    });
   });
 
   clientTests(service, 'todos');
