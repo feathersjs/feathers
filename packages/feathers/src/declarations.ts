@@ -101,7 +101,7 @@ export type FeathersService<A = FeathersApplication, S = Service<any>> =
   S & ServiceAddons<A, S> & OptionalPick<ServiceHookOverloads<S>, keyof S>;
 
 export type CustomMethod<Methods extends string> = {
-  [k in Methods]: (data: any, params?: Params) => Promise<any>;
+  [k in Methods]: <X = any> (data: any, params?: Params) => Promise<X>;
 }
 
 export type ServiceMixin<A> = (service: FeathersService<A>, path: string, options?: ServiceOptions) => void;

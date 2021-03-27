@@ -1,9 +1,7 @@
 import qs  from 'qs';
-import { Unavailable }  from '@feathersjs/errors';
-import { _ }  from '@feathersjs/commons';
-import { stripSlashes }  from '@feathersjs/commons';
-import { convert }  from '@feathersjs/errors';
-import { Params, Id, Query, NullableId } from '@feathersjs/feathers';
+import { Params, Id, Query, NullableId, ServiceInterface } from '@feathersjs/feathers';
+import { Unavailable, convert }  from '@feathersjs/errors';
+import { _, stripSlashes } from '@feathersjs/commons';
 
 function toError (error: Error & { code: string }) {
   if (error.code === 'ECONNREFUSED') {
@@ -20,7 +18,7 @@ interface RestClientSettings {
   options: any;
 }
 
-export abstract class Base {
+export abstract class Base<T = any, D = Partial<T>> implements ServiceInterface<T, D> {
   name: string;
   base: string;
   connection: any;
@@ -34,8 +32,9 @@ export abstract class Base {
   }
 
   makeUrl (query: Query, id?: string|number|null) {
-    query = query || {};
     let url = this.base;
+
+    query = query || {};
 
     if (typeof id !== 'undefined' && id !== null) {
       url += `/${encodeURIComponent(id)}`;
@@ -55,6 +54,24 @@ export abstract class Base {
   }
 
   abstract request (options: any, params: Params): any;
+
+  methods (this: any, ...names: string[]) {
+    names.forEach(method => {
+      this[method] = function (body: any, params: Params = {}) {
+        return this.request({
+          body,
+          url: this.makeUrl(params.query),
+          method: 'POST',
+          headers: Object.assign({
+            'Content-Type': 'application/json',
+            'X-Service-Method': method
+          }, params.headers)
+        }, params).catch(toError);
+      }
+    });
+
+    return this;
+  }
 
   find (params: Params = {}) {
     return this.request({
@@ -76,7 +93,7 @@ export abstract class Base {
     }, params).catch(toError);
   }
 
-  create (body: any, params: Params = {}) {
+  create (body: D, params: Params = {}) {
     return this.request({
       url: this.makeUrl(params.query),
       body,
@@ -85,7 +102,7 @@ export abstract class Base {
     }, params).catch(toError);
   }
 
-  update (id: NullableId, body: any, params: Params = {}) {
+  update (id: NullableId, body: D, params: Params = {}) {
     if (typeof id === 'undefined') {
       return Promise.reject(new Error('id for \'update\' can not be undefined, only \'null\' when updating multiple entries'));
     }
@@ -98,7 +115,7 @@ export abstract class Base {
     }, params).catch(toError);
   }
 
-  patch (id: NullableId, body: any, params: Params = {}) {
+  patch (id: NullableId, body: D, params: Params = {}) {
     if (typeof id === 'undefined') {
       return Promise.reject(new Error('id for \'patch\' can not be undefined, only \'null\' when updating multiple entries'));
     }
