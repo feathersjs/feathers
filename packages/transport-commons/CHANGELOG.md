@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-beta.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
+
+
+### Bug Fixes
+
+* **transport-commons:** Do not error when adding an undefined connection to a channel ([#2268](https://github.com/feathersjs/feathers/issues/2268)) ([28114c4](https://github.com/feathersjs/feathers/commit/28114c495d6564868bb3ffbf619bf80b774dce4b))
+* Update Grant usage and other dependencies ([#2264](https://github.com/feathersjs/feathers/issues/2264)) ([7b0f8fa](https://github.com/feathersjs/feathers/commit/7b0f8fad252419ed0ad0bf259cdf3104d322ab60))
+* **socketio-client:** Fix client transport-commons reference ([#2164](https://github.com/feathersjs/feathers/issues/2164)) ([3a42c54](https://github.com/feathersjs/feathers/commit/3a42c544058456b19c7e21827226541bfa6ad621))
+
+
+### Features
+
+* **core:** Public custom service methods ([#2270](https://github.com/feathersjs/feathers/issues/2270)) ([e65abfb](https://github.com/feathersjs/feathers/commit/e65abfb5388df6c19a11c565cf1076a29f32668d))
+* Application service types default to any ([#1566](https://github.com/feathersjs/feathers/issues/1566)) ([d93ba9a](https://github.com/feathersjs/feathers/commit/d93ba9a17edd20d3397bb00f4f6e82e804e42ed6))
+* Feathers v5 core refactoring and features ([#2255](https://github.com/feathersjs/feathers/issues/2255)) ([2dafb7c](https://github.com/feathersjs/feathers/commit/2dafb7ce14ba57406aeec13d10ca45b1e709bee9))
+* **transport-commons:** New built-in high performance radix router ([#2177](https://github.com/feathersjs/feathers/issues/2177)) ([6d18065](https://github.com/feathersjs/feathers/commit/6d180651b4eb40289ecea3df3575f207aa6c5d1f))
+
+
+
+
+
 # [5.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
 
 

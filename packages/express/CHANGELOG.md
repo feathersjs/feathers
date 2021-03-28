@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-beta.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
+
+
+### Bug Fixes
+
+* Resolve some type problems ([#2260](https://github.com/feathersjs/feathers/issues/2260)) ([a3d75fa](https://github.com/feathersjs/feathers/commit/a3d75fa29490e8a19412a12bc993ee7bb573068f))
+* Update Grant usage and other dependencies ([#2264](https://github.com/feathersjs/feathers/issues/2264)) ([7b0f8fa](https://github.com/feathersjs/feathers/commit/7b0f8fad252419ed0ad0bf259cdf3104d322ab60))
+
+
+### Features
+
+* **core:** Public custom service methods ([#2270](https://github.com/feathersjs/feathers/issues/2270)) ([e65abfb](https://github.com/feathersjs/feathers/commit/e65abfb5388df6c19a11c565cf1076a29f32668d))
+* Application service types default to any ([#1566](https://github.com/feathersjs/feathers/issues/1566)) ([d93ba9a](https://github.com/feathersjs/feathers/commit/d93ba9a17edd20d3397bb00f4f6e82e804e42ed6))
+* Feathers v5 core refactoring and features ([#2255](https://github.com/feathersjs/feathers/issues/2255)) ([2dafb7c](https://github.com/feathersjs/feathers/commit/2dafb7ce14ba57406aeec13d10ca45b1e709bee9))
+* **core:** Remove Uberproto ([#2178](https://github.com/feathersjs/feathers/issues/2178)) ([ddf8821](https://github.com/feathersjs/feathers/commit/ddf8821f53317e6a378657f7d66acb03a037ee47))
+
+
+### BREAKING CHANGES
+
+* **core:** Services no longer extend Uberproto objects and
+`service.mixin()` is no longer available.
+
+
+
+
+
 # [5.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
 
 

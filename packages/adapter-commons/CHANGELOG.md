@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-beta.0](https://github.com/feathersjs/databases/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
+
+
+### Bug Fixes
+
+* **adapter-commons:** Always respect paginate.max ([#2267](https://github.com/feathersjs/databases/issues/2267)) ([f588257](https://github.com/feathersjs/databases/commit/f5882575536624ed3a32bb6e3ff1919fa17e366d))
+* Update Grant usage and other dependencies ([#2264](https://github.com/feathersjs/databases/issues/2264)) ([7b0f8fa](https://github.com/feathersjs/databases/commit/7b0f8fad252419ed0ad0bf259cdf3104d322ab60))
+* **adapter-commons:** Return missing overloads ([#2203](https://github.com/feathersjs/databases/issues/2203)) ([bbe7e2a](https://github.com/feathersjs/databases/commit/bbe7e2a131633e9a6e7aac7f7fa02a312bca63c7))
+
+
+### Features
+
+* Feathers v5 core refactoring and features ([#2255](https://github.com/feathersjs/databases/issues/2255)) ([2dafb7c](https://github.com/feathersjs/databases/commit/2dafb7ce14ba57406aeec13d10ca45b1e709bee9))
+
+
+
+
+
 # [5.0.0-pre.1](https://github.com/feathersjs/databases/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
 
 

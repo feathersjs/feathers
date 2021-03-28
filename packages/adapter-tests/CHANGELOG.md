@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-beta.0](https://github.com/feathersjs/databases/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
+
+
+### Features
+
+* **core:** Remove Uberproto ([#2178](https://github.com/feathersjs/databases/issues/2178)) ([ddf8821](https://github.com/feathersjs/databases/commit/ddf8821f53317e6a378657f7d66acb03a037ee47))
+
+
+### BREAKING CHANGES
+
+* **core:** Services no longer extend Uberproto objects and
+`service.mixin()` is no longer available.
+
+
+
+
+
 # [5.0.0-pre.1](https://github.com/feathersjs/databases/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
 
 
