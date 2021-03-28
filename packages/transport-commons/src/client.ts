@@ -1,6 +1,6 @@
 import Debug from 'debug';
 import { convert } from '@feathersjs/errors';
-import { Params } from '@feathersjs/feathers';
+import { Id, NullableId, Params, ServiceInterface } from '@feathersjs/feathers';
 
 const debug = Debug('@feathersjs/transport-commons/client');
 
@@ -59,7 +59,9 @@ interface ServiceOptions {
   events?: string[];
 }
 
-export class Service {
+export type SocketService<T = any, D = Partial<any>> = Service<T, D>;
+
+export class Service<T = any, D = Partial<T>> implements ServiceInterface<T, D> {
   events: string[];
   path: string;
   connection: any;
@@ -74,8 +76,8 @@ export class Service {
     addEmitterMethods(this);
   }
 
-  send (method: string, ...args: any[]) {
-    return new Promise((resolve, reject) => {
+  send<X = any> (method: string, ...args: any[]) {
+    return new Promise<X>((resolve, reject) => {
       args.unshift(method, this.path);
       args.push(function (error: any, data: any) {
         return error ? reject(convert(error)) : resolve(data);
@@ -87,28 +89,37 @@ export class Service {
     });
   }
 
-  find (params: Params = {}) {
-    return this.send('find', params.query || {});
+  methods (this: any, ...names: string[]) {
+    names.forEach(name => {
+      this[name] = function (data: any, params: Params = {}) {
+        return this.send(name, data, params.query || {});
+      }
+    });
+    return this;
   }
 
-  get (id: number | string, params: Params = {}) {
-    return this.send('get', id, params.query || {});
+  find (params: Params = {}) {
+    return this.send<T|T[]>('find', params.query || {});
+  }
+
+  get (id: Id, params: Params = {}) {
+    return this.send<T>('get', id, params.query || {});
   }
 
   create (data: any, params: Params = {}) {
-    return this.send('create', data, params.query || {});
+    return this.send<T>('create', data, params.query || {});
   }
 
-  update (id: number | string, data: any, params: Params = {}) {
-    return this.send('update', id, data, params.query || {});
+  update (id: Id, data: any, params: Params = {}) {
+    return this.send<T> ('update', id, data, params.query || {});
   }
 
-  patch (id: number | string, data: any, params: Params = {}) {
-    return this.send('patch', id, data, params.query || {});
+  patch (id: NullableId, data: any, params: Params = {}) {
+    return this.send<T|T[]> ('patch', id, data, params.query || {});
   }
 
-  remove (id: number | string, params: Params = {}) {
-    return this.send('remove', id, params.query || {});
+  remove (id: NullableId, params: Params = {}) {
+    return this.send<T|T[]> ('remove', id, params.query || {});
   }
 
   // `off` is actually not part of the Node event emitter spec

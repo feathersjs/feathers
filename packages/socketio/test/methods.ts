@@ -13,11 +13,11 @@ export default (name: string, options: any) => {
       );
     });
 
-  it('invalid arguments cause an error', () =>
-    call('find', 1, {}).catch(e =>
-      assert.strictEqual(e.message, 'Too many arguments for \'find\' method')
-    )
-  );
+  it('invalid arguments cause an error', async () => {
+    await assert.rejects(() => call('find', 1, {}), {
+      message: 'Too many arguments for \'find\' method'
+    });
+  });
 
   it('.find', () => async () => {
     await call('find', {}).then(data => verify.find(data));

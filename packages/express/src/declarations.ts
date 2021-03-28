@@ -33,7 +33,7 @@ export type Application<ServiceTypes = any, AppSettings = any> =
 
 declare module '@feathersjs/feathers/lib/declarations' {
   export interface ServiceOptions {
-    middleware: {
+    middleware?: {
       before: express.RequestHandler[],
       after: express.RequestHandler[]
     }

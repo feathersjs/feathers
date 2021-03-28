@@ -35,12 +35,15 @@ export default function feathersExpress<S = any, C = any> (feathersApp?: Feather
   const mixin: any = {
     use (location: string, ...rest: any[]) {
       let service: any;
-      const middleware = Array.from(arguments).slice(1)
-        .reduce(function (middleware, arg) {
+      let options = {};
+
+      const middleware = rest.reduce(function (middleware, arg) {
           if (typeof arg === 'function' || Array.isArray(arg)) {
             middleware[service ? 'after' : 'before'].push(arg);
           } else if (!service) {
             service = arg;
+          } else if (arg.methods || arg.events) {
+            options = arg;
           } else {
             throw new Error('Invalid options passed to app.use');
           }
@@ -62,7 +65,10 @@ export default function feathersExpress<S = any, C = any> (feathersApp?: Feather
 
       debug('Registering service with middleware', middleware);
       // Since this is a service, call Feathers `.use`
-      (feathersApp as FeathersApplication).use.call(this, location, service, { middleware });
+      (feathersApp as FeathersApplication).use.call(this, location, service, {
+        ...options,
+        middleware
+      });
 
       return this;
     },

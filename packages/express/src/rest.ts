@@ -1,7 +1,7 @@
 import Debug from 'debug';
 import { MethodNotAllowed } from '@feathersjs/errors';
 import { HookContext } from '@feathersjs/hooks';
-import { createContext, getServiceOptions, NullableId, Params } from '@feathersjs/feathers';
+import { createContext, defaultServiceMethods, getServiceOptions, NullableId, Params } from '@feathersjs/feathers';
 import { Request, Response, NextFunction, RequestHandler, Router } from 'express';
 
 import { parseAuthentication } from './authentication';
@@ -94,14 +94,13 @@ export const serviceMiddleware = (callback: ServiceCallback) =>
   }
 
 export const serviceMethodHandler = (
-  service: any, methodName: string, getArgs: (opts: ServiceParams) => any[], header?: string
+  service: any, methodName: string, getArgs: (opts: ServiceParams) => any[], headerOverride?: string
 ) => serviceMiddleware(async (req, res, options) => {
-  const method = (typeof header === 'string' && req.headers[header])
-    ? req.headers[header] as string
-    : methodName
+  const methodOverride = typeof headerOverride === 'string' && (req.headers[headerOverride] as string);
+  const method = methodOverride ? methodOverride : methodName
   const { methods } = getServiceOptions(service);
 
-  if (!methods.includes(method)) {
+  if (!methods.includes(method) || defaultServiceMethods.includes(methodOverride)) {
     res.status(statusCodes.methodNotAllowed);
 
     throw new MethodNotAllowed(`Method \`${method}\` is not supported by this endpoint.`);

@@ -1,14 +1,20 @@
 import { strict as assert } from 'assert';
 import { Server } from 'http';
-import { feathers } from '@feathersjs/feathers';
+import { CustomMethod, feathers } from '@feathersjs/feathers';
 import { io, Socket } from 'socket.io-client';
 import { clientTests } from '@feathersjs/tests';
 
 import { createServer } from './server';
-import socketio from '../src';
+import socketio, { SocketService } from '../src';
+
+type ServiceTypes = {
+  '/': SocketService,
+  'todos': SocketService & CustomMethod<'customMethod'>,
+  [key: string]: any;
+}
 
 describe('@feathersjs/socketio-client', () => {
-  const app = feathers();
+  const app = feathers<ServiceTypes>();
 
   let socket: Socket;
   let server: Server;
@@ -76,6 +82,17 @@ describe('@feathersjs/socketio-client', () => {
     } catch(e) {
       assert.strictEqual(e.message, 'Service \'not/me\' not found')
     }
+  });
+
+  it('calls .customMethod', async () => {
+    const service = app.service('todos').methods('customMethod');
+    const result = await service.customMethod({ message: 'hi' });
+
+    assert.deepStrictEqual(result, {
+      data: { message: 'hi' },
+      provider: 'socketio',
+      type: 'customMethod'
+    });
   });
 
   clientTests(app, 'todos');
