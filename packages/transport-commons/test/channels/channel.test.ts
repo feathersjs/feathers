@@ -183,7 +183,7 @@ describe('app.channel', () => {
 
     it('does nothing when the channel is undefined (#2207)', () => {
       const channel = app.channel('test', 'me');
-      
+
       channel.join(undefined);
     });
 
