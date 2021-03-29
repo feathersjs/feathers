@@ -299,6 +299,20 @@ export default (test: any, app: any, _errors: any, serviceName: string, idProp: 
         assert.strictEqual(page.data[0].name, 'Doug');
       });
 
+      test('.find + paginate + query', async () => {
+        const page = await service.find({
+          query: {
+            $sort: { name: -1 },
+            name: 'Doug'
+          }
+        });
+
+        assert.strictEqual(page.total, 1);
+        assert.strictEqual(page.limit, 1);
+        assert.strictEqual(page.skip, 0);
+        assert.strictEqual(page.data[0].name, 'Doug');
+      });
+
       test('.find + paginate + $limit + $skip', async () => {
         const params = {
           query: {
