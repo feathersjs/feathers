@@ -1,6 +1,6 @@
 import { getManager, HookContextData, HookManager, HookMap, HOOKS, hooks, Middleware } from '@feathersjs/hooks';
 import { Service, ServiceOptions, HookContext, FeathersService, Application } from '../declarations';
-import { defaultServiceArguments } from '../service';
+import { defaultServiceArguments, defaultServiceMethods } from '../service';
 import {
   collectLegacyHooks,
   enableLegacyHooks,
@@ -59,7 +59,11 @@ export function hookMixin<A> (
   }
 
   const app = this;
-  const serviceMethodHooks = options.methods.reduce((res, method) => {
+  const { methods } = options;
+  const serviceMethods = defaultServiceMethods.filter(m =>
+    typeof (service as any)[m] === 'function' && !methods.includes(m)
+  ).concat(methods);
+  const serviceMethodHooks = serviceMethods.reduce((res, method) => {
     const params = (defaultServiceArguments as any)[method] || [ 'data', 'params' ];
 
     res[method] = new FeathersHookManager<A>(app, method)
