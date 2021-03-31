@@ -303,10 +303,14 @@ describe('hooks basics', () => {
     });
   });
 
-  it('can register hooks on a custom method', async () => {
+  it('can register hooks on a custom method, still adds hooks to default methods', async () => {
     class Dummy {
       async get (id: Id) {
         return { id };
+      }
+
+      async create (data: any) {
+        return data;
       }
 
       async custom (data: any) {
@@ -322,9 +326,10 @@ describe('hooks basics', () => {
 
     app.service('dummy').hooks({
       custom: [async (context, next) => {
-        (context.data as any).fromHook = true;
+        context.data.fromHook = true;
         await next();
-      }]
+      }],
+      create: [async (_context, next) => next()]
     });
 
     assert.deepStrictEqual(await app.service('dummy').custom({
