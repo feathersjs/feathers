@@ -8,6 +8,6 @@
 
 ## License
 
-Copyright (c) 2019 [Feathers contributors](https://github.com/feathersjs/client/graphs/contributors)
+Copyright (c) 2021 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).

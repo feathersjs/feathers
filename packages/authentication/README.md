@@ -18,6 +18,6 @@ Refer to the [Feathers authentication API documentation](https://docs.feathersjs
 
 ## License
 
-Copyright (c) 2019
+Copyright (c) 2021 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).
