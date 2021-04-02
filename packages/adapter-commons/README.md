@@ -17,6 +17,6 @@ This is a repository for handling Feathers common database syntax. See the [API 
 
 ## License
 
-Copyright (c) 2019 Feathers contributors
+Copyright (c) 2021 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).
