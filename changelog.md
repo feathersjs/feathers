@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-beta.1](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.0...v5.0.0-beta.1) (2021-04-03)
+
+
+### Bug Fixes
+
+* **adapter-tests:** Add test that verified paginated total ([#2273](https://github.com/feathersjs/feathers/issues/2273)) ([879bd6b](https://github.com/feathersjs/feathers/commit/879bd6b24f42e04eeeeba110ddddda3e1e1dea34))
+* **dependencies:** Fix transport-commons dependency and update other dependencies ([#2284](https://github.com/feathersjs/feathers/issues/2284)) ([05b03b2](https://github.com/feathersjs/feathers/commit/05b03b27b40604d956047e3021d8053c3a137616))
+* **feathers:** Always enable hooks on default service methods ([#2275](https://github.com/feathersjs/feathers/issues/2275)) ([827cc9b](https://github.com/feathersjs/feathers/commit/827cc9b752eecdaf63605d7dffd86f531b7e4af3))
+
+
+### Features
+
+* **adapter-commons:** Added mongoDB like search in embedded objects ([687e3c7](https://github.com/feathersjs/feathers/commit/687e3c7c36904221b2707d0220c0893e3cb1faa9))
+
+
+
+
+
 # [5.0.0-beta.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
 
 
