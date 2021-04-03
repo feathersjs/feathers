@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-beta.1](https://github.com/feathersjs/databases/compare/v5.0.0-beta.0...v5.0.0-beta.1) (2021-04-03)
+
+
+### Bug Fixes
+
+* **adapter-tests:** Add test that verified paginated total ([#2273](https://github.com/feathersjs/databases/issues/2273)) ([879bd6b](https://github.com/feathersjs/databases/commit/879bd6b24f42e04eeeeba110ddddda3e1e1dea34))
+
+
+
+
+
 # [5.0.0-beta.0](https://github.com/feathersjs/databases/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
 
 
