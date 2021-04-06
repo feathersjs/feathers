@@ -24,9 +24,9 @@
   },
   "scripts": {
     "install": "lerna bootstrap",
-    "publish": "lerna publish && git commit -am \"chore: Update changelog\" && git push origin",
-    "publish:premajor": "lerna publish premajor --preid pre --pre-dist-tag pre && git commit -am \"chore: Update version and changelog\" && git push origin",
-    "publish:prerelease": "lerna publish prerelease --preid pre --pre-dist-tag pre --dist-tag pre && git commit -am \"chore: Update version and changelog\" && git push origin",
+    "publish": "lerna publish",
+    "publish:premajor": "lerna publish premajor --preid pre --pre-dist-tag pre",
+    "publish:prerelease": "lerna publish prerelease --preid pre --pre-dist-tag pre --dist-tag pre",
     "lint": "eslint packages/**/src/**/*.ts packages/**/test/**/*.ts --fix",
     "update-dependencies": "ncu -u && lerna exec -- ncu -u",
     "clean": "find . -name node_modules -exec rm -rf '{}' + && find . -name package-lock.json -exec rm -rf '{}' +",
