@@ -50,6 +50,8 @@
     "access": "public"
   },
   "dependencies": {
+    "ajv": "^8.0.5",
+    "json-schema-to-ts": "^1.6.1"
   },
   "devDependencies": {
     "@types/mocha": "^8.2.2",
