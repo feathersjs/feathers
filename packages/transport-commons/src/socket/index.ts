@@ -1,11 +1,11 @@
 import { Application, getServiceOptions, Params } from '@feathersjs/feathers';
-import Debug from 'debug';
+import { createDebug } from '@feathersjs/commons';
 import { channels } from '../channels';
 import { routing } from '../routing';
 import { getDispatcher, runMethod } from './utils';
 import { RealTimeConnection } from '../channels/channel/base';
 
-const debug = Debug('@feathersjs/transport-commons');
+const debug = createDebug('@feathersjs/transport-commons');
 
 export interface SocketOptions {
   done: Promise<any>;

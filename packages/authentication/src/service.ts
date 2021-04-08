@@ -1,13 +1,13 @@
-import Debug from 'debug';
 import merge from 'lodash/merge';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { AuthenticationBase, AuthenticationResult, AuthenticationRequest } from './core';
 import { connection, event } from './hooks';
 import '@feathersjs/transport-commons';
+import { createDebug } from '@feathersjs/commons';
 import { Params, ServiceMethods, ServiceAddons } from '@feathersjs/feathers';
 import jsonwebtoken from 'jsonwebtoken';
 
-const debug = Debug('@feathersjs/authentication/service');
+const debug = createDebug('@feathersjs/authentication/service');
 
 declare module '@feathersjs/feathers/lib/declarations' {
   interface FeathersApplication<ServiceTypes, AppSettings> { // eslint-disable-line

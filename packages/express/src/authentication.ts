@@ -1,8 +1,8 @@
-import Debug from 'debug';
+import { createDebug } from '@feathersjs/commons';
 import { merge, flatten } from 'lodash';
 import { NextFunction, RequestHandler } from 'express';
 
-const debug = Debug('@feathersjs/express/authentication');
+const debug = createDebug('@feathersjs/express/authentication');
 
 type StrategyOptions = {
   service?: string;

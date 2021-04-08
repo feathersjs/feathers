@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import Debug from 'debug';
+import { HookContext, getServiceOptions } from '@feathersjs/feathers';
+import { createDebug } from '@feathersjs/commons';
 import { Channel } from './channel/base';
 import { CombinedChannel } from './channel/combined';
-import { HookContext, getServiceOptions } from '@feathersjs/feathers';
 
-const debug = Debug('@feathersjs/transport-commons:channels/mixins');
+const debug = createDebug('@feathersjs/transport-commons:channels/mixins');
 const PUBLISHERS = Symbol('@feathersjs/transport-commons/publishers');
 const CHANNELS = Symbol('@feathersjs/transport-commons/channels');
 const ALL_EVENTS = Symbol('@feathersjs/transport-commons/all-events');

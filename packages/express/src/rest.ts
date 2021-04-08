@@ -1,12 +1,12 @@
-import Debug from 'debug';
 import { MethodNotAllowed } from '@feathersjs/errors';
 import { HookContext } from '@feathersjs/hooks';
+import { createDebug } from '@feathersjs/commons';
 import { createContext, defaultServiceMethods, getServiceOptions, NullableId, Params } from '@feathersjs/feathers';
 import { Request, Response, NextFunction, RequestHandler, Router } from 'express';
 
 import { parseAuthentication } from './authentication';
 
-const debug = Debug('@feathersjs/express/rest');
+const debug = createDebug('@feathersjs/express/rest');
 
 export const METHOD_HEADER = 'x-service-method';
 
