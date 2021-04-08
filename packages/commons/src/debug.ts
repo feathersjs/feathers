@@ -7,12 +7,6 @@ export function noopDebug (): DebugFunction {
   return () => {}
 }
 
-export function simpleConsole (name: string): DebugFunction {
-  return (...args: any[]) => {
-    console.log(name, ...args); // eslint-disable-line
-  }
-}
-
 let defaultInitializer: DebugInitializer = noopDebug;
 
 export function setDebug (debug: DebugInitializer) {

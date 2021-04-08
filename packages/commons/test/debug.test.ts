@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import { createDebug, setDebug, noopDebug, simpleConsole } from '../src';
+import { createDebug, setDebug, noopDebug } from '../src';
 
 const myDebug = createDebug('hello test');
 
@@ -8,15 +8,7 @@ describe('debug', () => {
     assert.equal(myDebug('hi', 'there'), undefined);
   });
 
-  it('simpleConsole', () => {
-    setDebug(simpleConsole);
-
-    assert.equal(myDebug('hi', 'there'), undefined);
-
-    setDebug(noopDebug);
-  });
-
-  it('can set other debug later', () => {
+  it('can set custom debug later', () => {
     let call;
 
     const customDebug = (name: string) => (...args: any[]) => {
