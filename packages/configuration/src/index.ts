@@ -1,8 +1,8 @@
 import { Application } from '@feathersjs/feathers';
-import Debug from 'debug';
+import { createDebug } from '@feathersjs/commons';
 import config from 'config';
 
-const debug = Debug('@feathersjs/configuration');
+const debug = createDebug('@feathersjs/configuration');
 
 export = function init () {
   return (app?: Application) => {

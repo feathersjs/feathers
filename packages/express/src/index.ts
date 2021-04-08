@@ -1,10 +1,10 @@
-import Debug from 'debug';
 import express, {
   Express, static as _static, json, raw, text, urlencoded, query
 } from 'express';
 import {
   Application as FeathersApplication, defaultServiceMethods
 } from '@feathersjs/feathers';
+import { createDebug } from '@feathersjs/commons';
 
 import { Application } from './declarations';
 import { errorHandler, notFound } from './handlers';
@@ -19,7 +19,7 @@ export {
 export * from './rest';
 export * from './declarations';
 
-const debug = Debug('@feathersjs/express');
+const debug = createDebug('@feathersjs/express');
 
 export default function feathersExpress<S = any, C = any> (feathersApp?: FeathersApplication<S, C>, expressApp: Express = express()): Application<S, C> {
   if (!feathersApp) {

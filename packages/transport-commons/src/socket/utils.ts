@@ -1,11 +1,11 @@
-import Debug from 'debug';
-import isEqual from 'lodash/isEqual';
-import { NotFound, MethodNotAllowed, BadRequest } from '@feathersjs/errors';
 import { HookContext, Application, createContext, getServiceOptions } from '@feathersjs/feathers';
+import { NotFound, MethodNotAllowed, BadRequest } from '@feathersjs/errors';
+import { createDebug } from '@feathersjs/commons';
+import isEqual from 'lodash/isEqual';
 import { CombinedChannel } from '../channels/channel/combined';
 import { RealTimeConnection } from '../channels/channel/base';
 
-const debug = Debug('@feathersjs/transport-commons');
+const debug = createDebug('@feathersjs/transport-commons');
 
 export const DEFAULT_PARAMS_POSITION = 1;
 

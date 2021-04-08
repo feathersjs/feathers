@@ -24,7 +24,7 @@ export const defaultEventMap = {
 
 export function getHookMethods (service: any, options: ServiceOptions) {
   const { methods } = options;
-  
+
   return defaultServiceMethods.filter(m =>
     typeof service[m] === 'function' && !methods.includes(m)
   ).concat(methods);

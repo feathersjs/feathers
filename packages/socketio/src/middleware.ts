@@ -1,8 +1,8 @@
 import { Application, Params } from '@feathersjs/feathers';
-import Debug from 'debug';
+import { createDebug } from '@feathersjs/commons';
 import { Socket } from 'socket.io';
 
-const debug = Debug('@feathersjs/socketio/middleware');
+const debug = createDebug('@feathersjs/socketio/middleware');
 
 export type ParamsGetter = (socket: Socket) => any;
 export type NextFunction = (err?: any) => void;

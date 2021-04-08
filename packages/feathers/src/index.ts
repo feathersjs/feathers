@@ -1,4 +1,4 @@
-import { _ } from '@feathersjs/commons';
+import * as commons from '@feathersjs/commons';
 
 import version from './version';
 import { Feathers } from './application';
@@ -8,7 +8,9 @@ export function feathers<T = any, S = any> () {
   return new Feathers<T, S>() as Application<T, S>;
 }
 
-export { version, Feathers };
+feathers.setDebug = commons.setDebug;
+
+export { version, commons, Feathers };
 export * from './declarations';
 export * from './service';
 export * from './hooks';
