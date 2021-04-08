@@ -59,7 +59,6 @@
   "dependencies": {
     "@feathersjs/commons": "^5.0.0-pre.2",
     "@feathersjs/hooks": "^0.6.3",
-    "debug": "^4.3.1",
     "events": "^3.3.0"
   },
   "devDependencies": {

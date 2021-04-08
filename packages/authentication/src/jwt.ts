@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Debug from 'debug';
 import omit from 'lodash/omit';
 import { IncomingMessage } from 'http';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { Params } from '@feathersjs/feathers';
+import { createDebug } from '@feathersjs/commons';
 // @ts-ignore
 import lt from 'long-timeout';
 
 import { AuthenticationBaseStrategy } from './strategy';
 import { AuthenticationRequest, AuthenticationResult, ConnectionEvent } from './core';
 
-const debug = Debug('@feathersjs/authentication/jwt');
+const debug = createDebug('@feathersjs/authentication/jwt');
 const SPLIT_HEADER = /(\S+)\s+(\S+)/;
 
 export class JWTStrategy extends AuthenticationBaseStrategy {

@@ -1,6 +1,6 @@
 import grant from 'grant';
-import Debug from 'debug';
 import session from 'express-session';
+import { createDebug } from '@feathersjs/commons';
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationResult } from '@feathersjs/authentication';
 import {
@@ -11,7 +11,7 @@ import { OauthSetupSettings } from './utils';
 import { OAuthStrategy } from './strategy';
 
 const grantInstance = grant.express();
-const debug = Debug('@feathersjs/authentication-oauth/express');
+const debug = createDebug('@feathersjs/authentication-oauth/express');
 
 declare module 'express-session' {
   interface SessionData {

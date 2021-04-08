@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // @ts-ignore
 import querystring from 'querystring';
-import Debug from 'debug';
 import {
   AuthenticationRequest, AuthenticationBaseStrategy, AuthenticationResult
 } from '@feathersjs/authentication';
 import { Params } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
+import { createDebug } from '@feathersjs/commons';
 
-const debug = Debug('@feathersjs/authentication-oauth/strategy');
+const debug = createDebug('@feathersjs/authentication-oauth/strategy');
 
 export interface OAuthProfile {
   id?: string|number;

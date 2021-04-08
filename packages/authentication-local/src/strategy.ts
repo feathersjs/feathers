@@ -2,14 +2,14 @@
 import bcrypt from 'bcryptjs';
 import get from 'lodash/get';
 import omit from 'lodash/omit';
-import Debug from 'debug';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { Query, Params } from '@feathersjs/feathers';
 import {
   AuthenticationRequest, AuthenticationBaseStrategy
 } from '@feathersjs/authentication';
+import { createDebug } from '@feathersjs/commons';
 
-const debug = Debug('@feathersjs/authentication-local/strategy');
+const debug = createDebug('@feathersjs/authentication-local/strategy');
 
 export class LocalStrategy extends AuthenticationBaseStrategy {
   verifyConfiguration () {

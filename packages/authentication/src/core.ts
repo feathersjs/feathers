@@ -2,12 +2,12 @@ import merge from 'lodash/merge';
 import jsonwebtoken, { SignOptions, Secret, VerifyOptions } from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { NotAuthenticated } from '@feathersjs/errors';
-import Debug from 'debug';
+import { createDebug } from '@feathersjs/commons';
 import { Application, Params } from '@feathersjs/feathers';
 import { IncomingMessage, ServerResponse } from 'http';
 import defaultOptions from './options';
 
-const debug = Debug('@feathersjs/authentication/base');
+const debug = createDebug('@feathersjs/authentication/base');
 
 export interface AuthenticationResult {
   [key: string]: any;

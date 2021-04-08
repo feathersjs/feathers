@@ -50,8 +50,8 @@
     "access": "public"
   },
   "dependencies": {
+    "@feathersjs/commons": "^5.0.0-pre.2",
     "@feathersjs/transport-commons": "^5.0.0-pre.2",
-    "debug": "^4.3.1",
     "socket.io": "^4.0.1"
   },
   "devDependencies": {

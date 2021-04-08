@@ -1,6 +1,5 @@
-import Debug from 'debug';
 import { EventEmitter } from 'events';
-import { stripSlashes } from '@feathersjs/commons';
+import { stripSlashes, createDebug } from '@feathersjs/commons';
 import { HOOKS } from '@feathersjs/hooks';
 
 import version from './version';
@@ -21,7 +20,7 @@ import {
 } from './declarations';
 import { enableLegacyHooks } from './hooks/legacy';
 
-const debug = Debug('@feathersjs/feathers');
+const debug = createDebug('@feathersjs/feathers');
 
 export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements FeathersApplication<ServiceTypes, AppSettings> {
   services: ServiceTypes = ({} as ServiceTypes);

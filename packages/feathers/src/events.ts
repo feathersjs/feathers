@@ -15,7 +15,7 @@ export function eventHook (context: HookContext, next: NextFunction) {
     // This is used for custom events and for client services receiving event from the server
     if (typeof context.event === 'string' && !events.includes(context.event)) {
       const results = Array.isArray(context.result) ? context.result : [ context.result ];
-  
+
       results.forEach(element => (context as any).self.emit(context.event, element, context));
     }
   });
@@ -28,6 +28,6 @@ export function eventMixin<A> (service: FeathersService<A>) {
   if (!isEmitter) {
     Object.assign(service, EventEmitter.prototype);
   }
-  
+
   return service;
 }

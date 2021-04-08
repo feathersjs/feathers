@@ -1,12 +1,12 @@
-import Debug from 'debug';
-import { Server, ServerOptions } from 'socket.io';
 import http from 'http';
+import { Server, ServerOptions } from 'socket.io';
+import { createDebug } from '@feathersjs/commons';
 import { Application } from '@feathersjs/feathers';
 import { socket } from '@feathersjs/transport-commons';
 
 import { disconnect, params, authentication, FeathersSocket } from './middleware';
 
-const debug = Debug('@feathersjs/socketio');
+const debug = createDebug('@feathersjs/socketio');
 
 declare module '@feathersjs/feathers/lib/declarations' {
   interface Application<ServiceTypes, AppSettings> { // eslint-disable-line

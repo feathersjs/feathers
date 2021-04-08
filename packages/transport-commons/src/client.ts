@@ -1,8 +1,8 @@
-import Debug from 'debug';
 import { convert } from '@feathersjs/errors';
+import { createDebug } from '@feathersjs/commons';
 import { Id, NullableId, Params, ServiceInterface } from '@feathersjs/feathers';
 
-const debug = Debug('@feathersjs/transport-commons/client');
+const debug = createDebug('@feathersjs/transport-commons/client');
 
 const namespacedEmitterMethods = [
   'addListener',
