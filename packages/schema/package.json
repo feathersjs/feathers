@@ -50,7 +50,10 @@
     "access": "public"
   },
   "dependencies": {
+    "@feathersjs/adapter-memory": "^5.0.0-pre.2",
+    "@feathersjs/feathers": "^5.0.0-pre.2",
     "ajv": "^8.0.5",
+    "json-schema": "^0.3.0",
     "json-schema-to-ts": "^1.6.1"
   },
   "devDependencies": {
