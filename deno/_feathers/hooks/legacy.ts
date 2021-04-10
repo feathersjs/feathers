@@ -1,5 +1,7 @@
-import { _ } from '../dependencies';
-import { LegacyHookFunction } from '../declarations';
+// DO NOT MODIFY - generated from packages/feathers/src/hooks/legacy.ts
+
+import { _ } from '../dependencies.ts';
+import { LegacyHookFunction } from '../declarations.ts';
 
 const { each } = _;
 

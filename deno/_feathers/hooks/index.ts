@@ -1,17 +1,19 @@
+// DO NOT MODIFY - generated from packages/feathers/src/hooks/index.ts
+
 import {
   getManager, HookContextData, HookManager, HookMap, HOOKS, hooks, Middleware
-} from '../dependencies';
+} from '../dependencies.ts';
 import {
   Service, ServiceOptions, HookContext, FeathersService, Application
-} from '../declarations';
-import { defaultServiceArguments, getHookMethods } from '../service';
+} from '../declarations.ts';
+import { defaultServiceArguments, getHookMethods } from '../service.ts';
 import {
   collectLegacyHooks,
   enableLegacyHooks,
   fromAfterHook,
   fromBeforeHook,
   fromErrorHooks
-} from './legacy';
+} from './legacy.ts';
 
 export { fromAfterHook, fromBeforeHook, fromErrorHooks };
 

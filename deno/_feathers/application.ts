@@ -1,10 +1,12 @@
-import version from './version';
+// DO NOT MODIFY - generated from packages/feathers/src/application.ts
+
+import version from './version.ts';
 import {
   EventEmitter, stripSlashes, createDebug, HOOKS
-} from './dependencies';
-import { eventHook, eventMixin } from './events';
-import { hookMixin } from './hooks/index';
-import { wrapService, getServiceOptions } from './service';
+} from './dependencies.ts';
+import { eventHook, eventMixin } from './events.ts';
+import { hookMixin } from './hooks/index.ts';
+import { wrapService, getServiceOptions } from './service.ts';
 import {
   FeathersApplication,
   ServiceMixin,
@@ -16,8 +18,8 @@ import {
   FeathersService,
   HookMap,
   LegacyHookMap
-} from './declarations';
-import { enableLegacyHooks } from './hooks/legacy';
+} from './declarations.ts';
+import { enableLegacyHooks } from './hooks/legacy.ts';
 
 const debug = createDebug('@feathersjs/feathers');
 

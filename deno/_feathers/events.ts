@@ -1,6 +1,8 @@
-import { NextFunction, EventEmitter } from './dependencies';
-import { HookContext, FeathersService } from './declarations';
-import { getServiceOptions, defaultEventMap } from './service';
+// DO NOT MODIFY - generated from packages/feathers/src/events.ts
+
+import { NextFunction, EventEmitter } from './dependencies.ts';
+import { HookContext, FeathersService } from './declarations.ts';
+import { getServiceOptions, defaultEventMap } from './service.ts';
 
 export function eventHook (context: HookContext, next: NextFunction) {
   const { events } = getServiceOptions((context as any).self);
