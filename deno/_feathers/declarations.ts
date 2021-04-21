@@ -1,6 +1,8 @@
+// DO NOT MODIFY - generated from packages/feathers/src/declarations.ts
+
 import {
   EventEmitter, NextFunction, HookContext as BaseHookContext
-} from './dependencies';
+} from './dependencies.ts';
 
 type SelfOrArray<S> = S | S[];
 type OptionalPick<T, K extends PropertyKey> = Pick<T, Extract<keyof T, K>>

@@ -1,5 +1,7 @@
-import { createSymbol } from './dependencies';
-import { ServiceOptions } from './declarations';
+// DO NOT MODIFY - generated from packages/feathers/src/service.ts
+
+import { createSymbol } from './dependencies.ts';
+import { ServiceOptions } from './declarations.ts';
 
 export const SERVICE = createSymbol('@feathersjs/service');
 
