@@ -76,7 +76,8 @@ describe('@feathersjs/express', () => {
   });
 
   it('Can use Express sub-apps', () => {
-    const app = expressify.default(feathers());
+    const typedApp = feathers<{}>();
+    const app = expressify.default(typedApp);
     const child = express();
 
     app.use('/path', child);

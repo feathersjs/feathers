@@ -54,7 +54,7 @@ export type Service<T, D = Partial<T>> =
 export type ServiceInterface<T, D = Partial<T>> =
   Partial<ServiceMethods<T, D>>;
 
-export interface ServiceAddons<A, S> extends EventEmitter {
+export interface ServiceAddons<A = Application, S = Service<any, any>> extends EventEmitter {
   id?: string;
   hooks (options: HookOptions<A, S>): this;
 }
@@ -315,6 +315,8 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
 // Legacy hook typings
 export type LegacyHookFunction<A = Application, S = Service<any, any>> =
   (this: S, context: HookContext<A, S>) => (Promise<HookContext<Application, S> | void> | HookContext<Application, S> | void);
+
+export type Hook<A = Application, S = Service<any, any>> = LegacyHookFunction<A, S>;
 
 type LegacyHookMethodMap<A, S> =
   { [L in keyof S]?: SelfOrArray<LegacyHookFunction<A, S>>; } &

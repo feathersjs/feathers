@@ -58,16 +58,16 @@
   },
   "dependencies": {
     "@feathersjs/commons": "^5.0.0-pre.2",
-    "@feathersjs/hooks": "^0.6.3",
+    "@feathersjs/hooks": "^0.6.5",
     "events": "^3.3.0"
   },
   "devDependencies": {
     "@types/mocha": "^8.2.2",
-    "@types/node": "^14.14.37",
+    "@types/node": "^14.14.41",
     "mocha": "^8.3.2",
     "shx": "^0.3.3",
     "ts-node": "^9.1.1",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.4"
   },
   "gitHead": "6e1f888dc5b612d2d77653177622e3f66245a0fb"
 }

@@ -1,5 +1,5 @@
 import { MethodNotAllowed } from '@feathersjs/errors';
-import { HookContext } from '@feathersjs/hooks';
+import { BaseHookContext, HookContext } from '@feathersjs/hooks';
 import { createDebug } from '@feathersjs/commons';
 import { createContext, defaultServiceMethods, getServiceOptions, NullableId, Params } from '@feathersjs/feathers';
 import { Request, Response, NextFunction, RequestHandler, Router } from 'express';
@@ -47,7 +47,7 @@ export const formatter = (_req: Request, res: Response, next: NextFunction) => {
 }
 
 const getData = (context: HookContext) => {
-  if (!(context instanceof HookContext)) {
+  if (!(context instanceof BaseHookContext)) {
     return context;
   }
 
@@ -57,7 +57,7 @@ const getData = (context: HookContext) => {
 }
 
 const getStatusCode = (context: HookContext, res: Response) => {
-  if (context instanceof HookContext) {
+  if (context instanceof BaseHookContext) {
     if (context.statusCode) {
       return context.statusCode;
     }
