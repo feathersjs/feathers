@@ -1,58 +1,42 @@
-import { FeathersKoaContext } from './utils';
 import { Next } from 'koa';
-
-export const methodMap: { [key: string]: any } = {
-  POST: 'create',
-  PATCH: 'patch',
-  PUT: 'update',
-  DELETE: 'remove'
-};
-
-export const getMethod = (httpMethod: string, id: any): string|null => {
-  if (httpMethod === 'GET') {
-    return id === null ? 'find' : 'get';
-  }
-
-  return methodMap[httpMethod] || null;
-};
-
-export const getArguments = (method: string, id: any, data: any, params: any) => {
-  const args = [];
-
-  // id
-  if (method !== 'create' && method !== 'find') {
-    args.push(id);
-  }
-
-  // data
-  if (method === 'create' || method === 'update' || method === 'patch') {
-    args.push(data);
-  }
-
-  // params
-  args.push(params);
-
-  return args;
-};
+import { http } from '@feathersjs/transport-commons';
+import { getServiceOptions, defaultServiceMethods, createContext } from '@feathersjs/feathers';
+import { MethodNotAllowed } from '@feathersjs/errors';
+import { FeathersKoaContext } from './utils';
 
 export const rest = () => async (ctx: FeathersKoaContext, next: Next) => {
   const { app, request } = ctx;
-  const { query = {}, path, method: httpMethod } = request;
+  const { query = {}, path, body: data, method: httpMethod } = request;
+  const methodOverride = request.headers[http.METHOD_HEADER] ?
+    (request.headers[http.METHOD_HEADER] as string).toLowerCase() : null;
   const lookup = app.lookup(path);
 
   if (lookup !== null) {
-    const { service, params: lookupParams = {} } = lookup;
-    const { __id: id = null, ...route } = lookupParams;
-    const method = getMethod(httpMethod, id);
-    const args = getArguments(method, id, request.body, {
+    const { service, params: { __id: id = null, ...route } = {} } = lookup;
+    const method = http.getServiceMethod(httpMethod, id, methodOverride);
+    const { methods } = getServiceOptions(service);
+
+    if (!methods.includes(method) || defaultServiceMethods.includes(methodOverride)) {
+      ctx.response.status = http.statusCodes.methodNotAllowed;
+
+      throw new MethodNotAllowed(`Method \`${method}\` is not supported by this endpoint.`);
+    }
+
+    const createArguments = (http.argumentsFor as any)[method] || http.argumentsFor.default;
+    const params = {
       ...ctx.feathers,
       query,
       route
-    });
-    const result = await (service as any)[method](...args);
+    };
+    const args = createArguments({ id, data, params });
+    const hookContext = createContext(service, method);
 
-    ctx.response.status = method === 'create' ? 201 : 200;
-    ctx.body = result;
+    ctx.hook = hookContext as any;
+
+    const result = await (service as any)[method](...args, hookContext);
+
+    ctx.response.status = http.getStatusCode(result, {});
+    ctx.body = http.getData(result);
   }
 
   return next();

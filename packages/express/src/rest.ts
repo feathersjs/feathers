@@ -1,29 +1,15 @@
 import { MethodNotAllowed } from '@feathersjs/errors';
-import { BaseHookContext, HookContext } from '@feathersjs/hooks';
+import { HookContext } from '@feathersjs/hooks';
 import { createDebug } from '@feathersjs/commons';
-import { createContext, defaultServiceMethods, getServiceOptions, NullableId, Params } from '@feathersjs/feathers';
+import { http } from '@feathersjs/transport-commons';
+import { createContext, defaultServiceMethods, getServiceOptions } from '@feathersjs/feathers';
 import { Request, Response, NextFunction, RequestHandler, Router } from 'express';
 
 import { parseAuthentication } from './authentication';
 
 const debug = createDebug('@feathersjs/express/rest');
 
-export const METHOD_HEADER = 'x-service-method';
-
-export interface ServiceParams {
-  id: NullableId,
-  data: any,
-  params: Params
-}
-
-export type ServiceCallback = (req: Request, res: Response, options: ServiceParams) => Promise<HookContext|any>;
-
-export const statusCodes = {
-  created: 201,
-  noContent: 204,
-  methodNotAllowed: 405,
-  success: 200
-};
+export type ServiceCallback = (req: Request, res: Response, options: http.ServiceParams) => Promise<HookContext|any>;
 
 export const feathersParams = (req: Request, _res: Response, next: NextFunction) => {
   req.feathers = {
@@ -46,33 +32,6 @@ export const formatter = (_req: Request, res: Response, next: NextFunction) => {
   });
 }
 
-const getData = (context: HookContext) => {
-  if (!(context instanceof BaseHookContext)) {
-    return context;
-  }
-
-  return context.dispatch !== undefined
-    ? context.dispatch
-    : context.result;
-}
-
-const getStatusCode = (context: HookContext, res: Response) => {
-  if (context instanceof BaseHookContext) {
-    if (context.statusCode) {
-      return context.statusCode;
-    }
-
-    if (context.method === 'create') {
-      return statusCodes.created;
-    }
-  }
-
-  if (!res.data) {
-    return statusCodes.noContent;
-  }
-
-  return statusCodes.success;
-}
 
 export const serviceMiddleware = (callback: ServiceCallback) =>
   async (req: Request, res: Response, next: NextFunction) => {
@@ -83,9 +42,10 @@ export const serviceMiddleware = (callback: ServiceCallback) =>
       const { __feathersId: id = null, ...route } = req.params;
       const params = { query, route, ...req.feathers };
       const context = await callback(req, res, { id, data, params });
+      const result = http.getData(context);
 
-      res.data = getData(context);
-      res.status(getStatusCode(context, res));
+      res.data = result;
+      res.status(http.getStatusCode(context, result));
 
       next();
     } catch (error) {
@@ -94,14 +54,14 @@ export const serviceMiddleware = (callback: ServiceCallback) =>
   }
 
 export const serviceMethodHandler = (
-  service: any, methodName: string, getArgs: (opts: ServiceParams) => any[], headerOverride?: string
+  service: any, methodName: string, getArgs: (opts: http.ServiceParams) => any[], headerOverride?: string
 ) => serviceMiddleware(async (req, res, options) => {
   const methodOverride = typeof headerOverride === 'string' && (req.headers[headerOverride] as string);
   const method = methodOverride ? methodOverride : methodName
   const { methods } = getServiceOptions(service);
 
   if (!methods.includes(method) || defaultServiceMethods.includes(methodOverride)) {
-    res.status(statusCodes.methodNotAllowed);
+    res.status(http.statusCodes.methodNotAllowed);
 
     throw new MethodNotAllowed(`Method \`${method}\` is not supported by this endpoint.`);
   }
@@ -133,12 +93,12 @@ export function rest (handler: RequestHandler = formatter) {
       }
 
       const baseUri = `/${path}`;
-      const find = serviceMethodHandler(service, 'find', ({ params }) => [ params ]);
-      const get = serviceMethodHandler(service, 'get', ({ id, params }) => [ id, params ]);
-      const create = serviceMethodHandler(service, 'create', ({ data, params }) => [ data, params ], METHOD_HEADER);
-      const update = serviceMethodHandler(service, 'update', ({ id, data, params }) => [ id, data, params ]);
-      const patch = serviceMethodHandler(service, 'patch', ({ id, data, params }) => [ id, data, params ]);
-      const remove = serviceMethodHandler(service, 'remove', ({ id, params }) => [ id, params ]);
+      const find = serviceMethodHandler(service, 'find', http.argumentsFor.find);
+      const get = serviceMethodHandler(service, 'get', http.argumentsFor.get);
+      const create = serviceMethodHandler(service, 'create', http.argumentsFor.create, http.METHOD_HEADER);
+      const update = serviceMethodHandler(service, 'update', http.argumentsFor.update);
+      const patch = serviceMethodHandler(service, 'patch', http.argumentsFor.patch);
+      const remove = serviceMethodHandler(service, 'remove', http.argumentsFor.remove);
 
       debug(`Adding REST provider for service \`${path}\` at base route \`${baseUri}\``);
 

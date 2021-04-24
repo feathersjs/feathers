@@ -6,6 +6,7 @@ export const errorHandler = () => async (ctx: FeathersKoaContext, next: () => Pr
   } catch (error) {
     ctx.response.status = error.code || 500;
 
+    console.log('!', error);
     ctx.body = typeof error.toJSON === 'function' ? error.toJSON() : {
       message: error.message
     };
