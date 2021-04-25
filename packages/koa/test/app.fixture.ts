@@ -1,4 +1,4 @@
-import memory from 'feathers-memory';
+import { memory } from '@feathersjs/adapter-memory';
 import { feathers, Params, HookContext } from '@feathersjs/feathers';
 import { authenticate, AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { LocalStrategy, hooks } from '@feathersjs/authentication-local';
@@ -9,6 +9,7 @@ const { protect, hashPassword } = hooks;
 const app = koa(feathers());
 const authentication = new AuthenticationService(app);
 
+app.use(errorHandler());
 app.use(bodyParser());
 app.use(rest());
 app.set('authentication', {
@@ -41,7 +42,7 @@ app.service('users').hooks({
     ]
   },
   after: {
-    all: protect('password'),
+    all: [protect('password')],
     get: [(context: HookContext) => {
       if (context.params.provider) {
         context.result.fromGet = true;
@@ -59,9 +60,7 @@ app.use('/dummy', {
 });
 
 app.service('dummy').hooks({
-  before: [ authenticate('jwt') ]
+  before: [authenticate('jwt')]
 });
-
-app.use(errorHandler());
 
 export default app;

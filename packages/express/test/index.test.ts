@@ -188,6 +188,28 @@ describe('@feathersjs/express', () => {
     app.use('/myservice', a, b, service, c);
   });
 
+  it('Express wrapped and context.app are the same', async () => {
+    const app = expressify.default(feathers());
+
+    app.use('/test', {
+      async get (id: Id) {
+        return { id };
+      }
+    });
+
+    app.service('test').hooks({
+      before: {
+        get: [context => {
+          assert.ok(context.app === app);
+        }]
+      }
+    });
+
+    assert.deepStrictEqual(await app.service('test').get('testing'), {
+      id: 'testing'
+    });
+  });
+
   it('Works with HTTPS', done => {
     const todoService = {
       async get (name: Id) {

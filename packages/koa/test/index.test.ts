@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import { feathers } from '@feathersjs/feathers';
+import { feathers, Id } from '@feathersjs/feathers';
 import { Service, restTests } from '@feathersjs/tests';
 import { koa, rest, Application, bodyParser } from '../src';
 import { Server } from 'http';
@@ -40,6 +40,28 @@ describe('@feathersjs/koa', () => {
     } catch (error) {
       assert.equal(error.message, '@feathersjs/koa requires a valid Feathers application instance');
     }
+  });
+
+  it('Koa wrapped and context.app are the same', async () => {
+    const app = koa(feathers());
+    
+    app.use('/test', {
+      async get (id: Id) {
+        return { id };
+      }
+    });
+
+    app.service('test').hooks({
+      before: {
+        get: [context => {
+          assert.ok(context.app === app);
+        }]
+      }
+    });
+
+    assert.deepStrictEqual(await app.service('test').get('testing'), {
+      id: 'testing'
+    });
   });
 
   it('starts as a Koa and Feathers application', async () => {

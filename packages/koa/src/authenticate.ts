@@ -1,7 +1,6 @@
 import Debug from 'debug';
-import merge from 'lodash/merge';
 
-import { FeathersKoaContext } from './utils';
+import { FeathersKoaContext } from './declarations';
 
 const debug = Debug('@feathersjs/koa/authentication');
 
@@ -27,18 +26,14 @@ export function parseAuthentication (settings: MiddlewareSettings = {}) {
       return next();
     }
 
-    const req = ctx.request as any;
-    const res = ctx.response as any;
+    const { req, res } = ctx as any;
     const authentication = await service.parse(req, res, ...authStrategies);
 
     if (authentication) {
       debug('Parsed authentication from HTTP header', authentication);
-      merge(ctx.request, {
-        authentication,
-        feathers: { authentication }
-      });
+      ctx.feathers.authentication = authentication;
     }
 
     return next();
   };
-};
+}
