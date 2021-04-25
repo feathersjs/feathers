@@ -24,11 +24,7 @@ describe('@feathersjs/koa', () => {
       }
     });
 
-    server = app.listen(8465);
-
-    await new Promise(resolve =>
-      server.once('listening', () => resolve(null))
-    );
+    server = await app.listen(8465);
   });
 
   after(() => server.close());

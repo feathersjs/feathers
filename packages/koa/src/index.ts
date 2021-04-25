@@ -3,6 +3,7 @@ import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import { Application as FeathersApplication, Service } from '@feathersjs/feathers';
 import { routing } from '@feathersjs/transport-commons';
+
 import { Application } from './declarations';
 import { parseAuthentication } from './authenticate';
 import { errorHandler } from './error-handler';
@@ -17,7 +18,7 @@ export function koa (_app?: FeathersApplication): Application<any> {
   const koaApp = new Koa();
 
   if (!_app) {
-    return koaApp as Application<any>;
+    return koaApp as unknown as Application<any>;
   }
 
   if (typeof _app.setup !== 'function') {
@@ -37,10 +38,10 @@ export function koa (_app?: FeathersApplication): Application<any> {
       return koaUse.call(this, location);
     },
 
-    listen (port?: number, ...args: any[]) {
+    async listen (port?: number, ...args: any[]) {
       const server = koaListen.call(this, port, ...args);
 
-      this.setup(server);
+      await this.setup(server);
       debug('Feathers application listening');
 
       return server;

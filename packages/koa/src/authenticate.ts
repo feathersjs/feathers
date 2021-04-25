@@ -1,8 +1,9 @@
-import Debug from 'debug';
+import { Next } from 'koa';
+import { createDebug } from '@feathersjs/commons';
 
 import { FeathersKoaContext } from './declarations';
 
-const debug = Debug('@feathersjs/koa/authentication');
+const debug = createDebug('@feathersjs/koa:authentication');
 
 interface MiddlewareSettings {
   service?: string;
@@ -10,7 +11,7 @@ interface MiddlewareSettings {
 }
 
 export function parseAuthentication (settings: MiddlewareSettings = {}) {
-  return async (ctx: FeathersKoaContext, next: () => Promise<any>) => {
+  return async (ctx: FeathersKoaContext, next: Next) => {
     const { app } = ctx;
     const service = app.defaultAuthentication ? app.defaultAuthentication(settings.service) : null;
 

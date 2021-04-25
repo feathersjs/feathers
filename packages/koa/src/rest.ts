@@ -1,8 +1,11 @@
 import { Next } from 'koa';
 import { http } from '@feathersjs/transport-commons';
+import { createDebug } from '@feathersjs/commons';
 import { getServiceOptions, defaultServiceMethods, createContext } from '@feathersjs/feathers';
 import { MethodNotAllowed } from '@feathersjs/errors';
 import { FeathersKoaContext } from './declarations';
+
+const debug = createDebug('@feathersjs/koa:rest');
 
 export function rest (){
   return async (ctx: FeathersKoaContext, next: Next) => {
@@ -17,6 +20,8 @@ export function rest (){
       const { service, params: { __id: id = null, ...route } = {} } = lookup;
       const method = http.getServiceMethod(httpMethod, id, methodOverride);
       const { methods } = getServiceOptions(service);
+      
+      debug(`Found service for path ${path}, attempting to run '${method}' service method`);
 
       if (!methods.includes(method) || defaultServiceMethods.includes(methodOverride)) {
         ctx.response.status = http.statusCodes.methodNotAllowed;

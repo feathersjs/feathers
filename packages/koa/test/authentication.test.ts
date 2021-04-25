@@ -18,7 +18,7 @@ describe('@feathersjs/koa/authentication', () => {
   let user: any;
 
   before(async () => {
-    server = app.listen(9776);
+    server = await app.listen(9776);
     user = await app.service('users').create({ email, password });
     authResult = (await axios.post('/authentication', {
       strategy: 'local',
