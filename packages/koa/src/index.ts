@@ -1,7 +1,7 @@
 import Debug from 'debug';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
-import { Application as FeathersApplication, Service } from '@feathersjs/feathers';
+import { Application as FeathersApplication } from '@feathersjs/feathers';
 import { routing } from '@feathersjs/transport-commons';
 
 import { Application } from './declarations';
@@ -30,9 +30,9 @@ export function koa (_app?: FeathersApplication): Application<any> {
   const oldUse = app.use;
 
   Object.assign(app, {
-    use (location: string|Koa.Middleware, service: Service<any>) {
+    use (location: string|Koa.Middleware, ...args: any[]) {
       if (typeof location === 'string') {
-        return oldUse.call(this, location, service);
+        return (oldUse as any).call(this, location, ...args);
       }
 
       return koaUse.call(this, location);

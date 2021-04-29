@@ -1,9 +1,10 @@
 import { strict as assert } from 'assert';
+import Koa  from 'koa';
+import axios from 'axios';
+import { Server } from 'http';
 import { feathers, Id } from '@feathersjs/feathers';
 import { Service, restTests } from '@feathersjs/tests';
-import { koa, rest, Application, bodyParser } from '../src';
-import { Server } from 'http';
-import axios from 'axios';
+import { koa, rest, Application, bodyParser, errorHandler } from '../src';
 
 describe('@feathersjs/koa', () => {
   let app: Application;
@@ -11,10 +12,16 @@ describe('@feathersjs/koa', () => {
 
   before(async () => {
     app = koa(feathers());
+    app.use(errorHandler());
     app.use(bodyParser());
     app.use(rest());
     app.use('/', new Service());
-    app.use('todo', new Service());
+    app.use('todo', new Service(), {
+      methods: [
+        'get', 'find', 'create', 'update',
+        'patch', 'remove', 'customMethod'
+      ]
+    });
     app.use(ctx => {
       if (ctx.request.path === '/middleware') {
         ctx.body = {
@@ -36,6 +43,10 @@ describe('@feathersjs/koa', () => {
     } catch (error) {
       assert.equal(error.message, '@feathersjs/koa requires a valid Feathers application instance');
     }
+  });
+
+  it('returns Koa instance when no Feathers app is passed', () => {
+    assert.ok(koa() instanceof Koa);
   });
 
   it('Koa wrapped and context.app are the same', async () => {
@@ -76,6 +87,35 @@ describe('@feathersjs/koa', () => {
       id: 'dishes',
       description: 'You have to do dishes!'
     });
+  });
+
+  it('works with custom methods that are allowed', async () => {
+    const { data } = await axios.post('http://localhost:8465/todo', {
+      message: 'Custom hello'
+    }, {
+      headers: {
+        'X-Service-Method': 'customMethod'
+      }
+    });
+    
+    assert.deepStrictEqual(data, {
+      data: { message: 'Custom hello' },
+      method: 'customMethod',
+      provider: 'rest'
+    });
+
+    await assert.rejects(() => axios.post('http://localhost:8465/todo', {}, {
+      headers: {
+        'X-Service-Method': 'internalMethod'
+      }
+    }), error => {
+      const { data } = error.response;
+
+      assert.strictEqual(data.code, 405);
+      assert.strictEqual(data.message, 'Method `internalMethod` is not supported by this endpoint.');
+      
+      return true;
+    })
   });
 
   restTests('Services', 'todo', 8465);

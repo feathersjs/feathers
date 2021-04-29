@@ -13,7 +13,7 @@ export function rest (){
     const { query: koaQuery, path, body: data, method: httpMethod } = request;
     const query = { ...koaQuery };
     const methodOverride = request.headers[http.METHOD_HEADER] ?
-      (request.headers[http.METHOD_HEADER] as string).toLowerCase() : null;
+      request.headers[http.METHOD_HEADER] as string : null;
     const lookup = app.lookup(path);
 
     if (lookup !== null) {
