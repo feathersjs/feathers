@@ -1,0 +1,78 @@
+version: 2
+registries:
+  npm-registry-registry-npmjs-org:
+    type: npm-registry
+    url: https://registry.npmjs.org
+    token: "${{secrets.NPM_REGISTRY_REGISTRY_NPMJS_ORG_TOKEN}}"
+
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "10:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: ts-loader
+    versions:
+    - 9.0.0
+  - dependency-name: eslint
+    versions:
+    - 7.18.0
+    - 7.19.0
+    - 7.20.0
+    - 7.21.0
+    - 7.22.0
+    - 7.24.0
+  - dependency-name: debug
+    versions:
+    - 2.6.9
+  - dependency-name: grant
+    versions:
+    - 5.4.12
+  - dependency-name: eslint-plugin-jsdoc
+    versions:
+    - 31.3.3
+    - 31.6.0
+    - 31.6.1
+    - 32.0.0
+    - 32.1.0
+    - 32.3.0
+  - dependency-name: npm-check-updates
+    versions:
+    - 11.0.2
+    - 11.1.1
+    - 11.1.4
+    - 11.1.9
+    - 11.2.0
+    - 11.3.0
+  - dependency-name: "@typescript-eslint/parser"
+    versions:
+    - 4.14.0
+    - 4.15.0
+    - 4.15.1
+    - 4.15.2
+    - 4.17.0
+  - dependency-name: "@typescript-eslint/eslint-plugin"
+    versions:
+    - 4.14.0
+    - 4.14.1
+    - 4.15.1
+    - 4.15.2
+    - 4.17.0
+  - dependency-name: lerna
+    versions:
+    - 4.0.0
+  - dependency-name: typescript
+    versions:
+    - 4.1.5
+    - 4.2.2
+    - 4.2.3
+  - dependency-name: eslint-plugin-prefer-arrow
+    versions:
+    - 1.2.3
+  - dependency-name: "@types/config"
+    versions:
+    - 0.0.38
+  registries:
+  - npm-registry-registry-npmjs-org
