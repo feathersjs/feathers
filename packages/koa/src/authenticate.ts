@@ -10,7 +10,7 @@ interface MiddlewareSettings {
   strategies?: string[];
 }
 
-export function parseAuthentication (settings: MiddlewareSettings = {}) {
+export function authentication (settings: MiddlewareSettings = {}) {
   return async (ctx: FeathersKoaContext, next: Next) => {
     const { app } = ctx;
     const service = app.defaultAuthentication ? app.defaultAuthentication(settings.service) : null;

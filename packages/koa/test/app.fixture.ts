@@ -3,13 +3,14 @@ import { feathers, Params, HookContext } from '@feathersjs/feathers';
 import { authenticate, AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { LocalStrategy, hooks } from '@feathersjs/authentication-local';
 
-import { koa, rest, bodyParser, errorHandler } from '../src';
+import { koa, rest, bodyParser, errorHandler, authentication } from '../src';
 
 const { protect, hashPassword } = hooks;
 const app = koa(feathers());
-const authentication = new AuthenticationService(app);
+const authService = new AuthenticationService(app);
 
 app.use(errorHandler());
+app.use(authentication());
 app.use(bodyParser());
 app.use(rest());
 app.set('authentication', {
@@ -24,10 +25,10 @@ app.set('authentication', {
   }
 });
 
-authentication.register('jwt', new JWTStrategy());
-authentication.register('local', new LocalStrategy());
+authService.register('jwt', new JWTStrategy());
+authService.register('local', new LocalStrategy());
 
-app.use('/authentication', authentication);
+app.use('/authentication', authService);
 app.use('/users', memory({
   paginate: {
     default: 10,

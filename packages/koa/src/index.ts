@@ -5,12 +5,12 @@ import { Application as FeathersApplication, Service } from '@feathersjs/feather
 import { routing } from '@feathersjs/transport-commons';
 
 import { Application } from './declarations';
-import { parseAuthentication } from './authenticate';
 import { errorHandler } from './error-handler';
 
 const debug = Debug('@feathersjs/koa');
 
 export * from './declarations';
+export * from './authenticate';
 export { rest } from './rest';
 export { Koa, bodyParser, errorHandler };
 
@@ -74,7 +74,6 @@ export function koa (_app?: FeathersApplication): Application<any> {
 
     return next();
   });
-  app.use(parseAuthentication());
 
   return app;
 }
