@@ -49,7 +49,7 @@
     "@feathersjs/adapter-commons": "^5.0.0-pre.3",
     "@feathersjs/commons": "^5.0.0-pre.3",
     "@feathersjs/errors": "^5.0.0-pre.3",
-    "sift": "^13.5.0"
+    "sift": "^13.5.2"
   },
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.0-pre.3",

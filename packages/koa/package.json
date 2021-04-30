@@ -1,18 +1,14 @@
 {
-  "name": "@feathersjs/express",
-  "description": "Feathers Express framework bindings and REST provider",
+  "name": "@feathersjs/koa",
+  "description": "Feathers KoaJS framework bindings and REST provider",
   "version": "5.0.0-pre.3",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
     "feathers",
-    "feathers-plugin"
+    "koajs"
   ],
   "license": "MIT",
-  "funding": {
-    "type": "github",
-    "url": "https://github.com/sponsors/daffl"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git"
@@ -27,7 +23,7 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 12"
+    "node": ">= 6"
   },
   "files": [
     "CHANGELOG.md",
@@ -35,12 +31,14 @@
     "README.md",
     "src/**",
     "lib/**",
-    "public/**"
+    "*.d.ts",
+    "*.js"
   ],
   "scripts": {
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
-    "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+    "test": "npm run compile && npm run mocha",
+    "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"
@@ -49,26 +47,26 @@
     "access": "public"
   },
   "dependencies": {
+    "@feathersjs/authentication": "^5.0.0-pre.3",
     "@feathersjs/commons": "^5.0.0-pre.3",
     "@feathersjs/errors": "^5.0.0-pre.3",
     "@feathersjs/transport-commons": "^5.0.0-pre.3",
-    "@types/express": "^4.17.11",
-    "express": "^4.17.1",
-    "lodash": "^4.17.21"
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^5.0.0-pre.3",
+    "@feathersjs/adapter-memory": "^5.0.0-pre.3",
     "@feathersjs/authentication-local": "^5.0.0-pre.3",
     "@feathersjs/feathers": "^5.0.0-pre.3",
     "@feathersjs/tests": "^5.0.0-pre.3",
+    "@types/debug": "^4.1.5",
+    "@types/koa": "^2.13.1",
+    "@types/koa-bodyparser": "^4.3.0",
     "@types/mocha": "^8.2.2",
     "@types/node": "^14.14.41",
-    "axios": "^0.21.1",
-    "lodash": "^4.17.21",
     "mocha": "^8.3.2",
     "shx": "^0.3.3",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
-  },
-  "gitHead": "6e1f888dc5b612d2d77653177622e3f66245a0fb"
+  }
 }

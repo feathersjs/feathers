@@ -36,12 +36,12 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
-    "eslint": "^7.24.0",
+    "eslint": "^7.25.0",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsdoc": "^32.3.0",
+    "eslint-plugin-jsdoc": "^32.3.1",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "lerna": "^4.0.0",
-    "npm-check-updates": "^11.5.0",
+    "npm-check-updates": "^11.5.1",
     "nyc": "^15.1.0",
     "typescript": "^4.2.4"
   }
