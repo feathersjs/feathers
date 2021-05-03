@@ -63,7 +63,7 @@
     "@types/koa": "^2.13.1",
     "@types/koa-bodyparser": "^4.3.0",
     "@types/mocha": "^8.2.2",
-    "@types/node": "^14.14.41",
+    "@types/node": "^15.0.1",
     "mocha": "^8.3.2",
     "shx": "^0.3.3",
     "ts-node": "^9.1.1",
