@@ -7,6 +7,13 @@ type OptionalPick<T, K extends PropertyKey> = Pick<T, Extract<keyof T, K>>
 
 export type { NextFunction };
 
+export interface Paginated<T> {
+  total: number;
+  limit: number;
+  skip: number;
+  data: T[];
+}
+
 export interface ServiceOptions {
   events?: string[];
   methods?: string[];

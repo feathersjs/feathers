@@ -1,13 +1,6 @@
 import { NotImplemented, BadRequest, MethodNotAllowed } from '@feathersjs/errors';
-import { ServiceMethods, Params, Id, NullableId } from '@feathersjs/feathers';
+import { ServiceMethods, Params, Id, NullableId, Paginated } from '@feathersjs/feathers';
 import { filterQuery } from './filter-query';
-
-export interface Paginated<T> {
-  total: number;
-  limit: number;
-  skip: number;
-  data: T[];
-}
 
 const callMethod = (self: any, name: any, ...args: any[]) => {
   if (typeof self[name] !== 'function') {
