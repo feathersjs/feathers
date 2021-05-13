@@ -48,7 +48,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/node": "^15.0.2",
+    "@types/node": "^15.0.3",
     "mocha": "^8.4.0",
     "shx": "^0.3.3",
     "ts-node": "^9.1.1",

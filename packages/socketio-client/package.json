@@ -59,10 +59,10 @@
     "@feathersjs/socketio": "^5.0.0-pre.3",
     "@feathersjs/tests": "^5.0.0-pre.3",
     "@types/mocha": "^8.2.2",
-    "@types/node": "^15.0.2",
+    "@types/node": "^15.0.3",
     "mocha": "^8.4.0",
     "shx": "^0.3.3",
-    "socket.io-client": "^4.0.2",
+    "socket.io-client": "^4.1.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
   },
