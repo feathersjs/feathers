@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.4](https://github.com/feathersjs/databases/compare/v5.0.0-pre.3...v5.0.0-pre.4) (2021-05-13)
+
+
+### Bug Fixes
+
+* **typescript:** Move Paginated type back for better compatibility ([#2350](https://github.com/feathersjs/databases/issues/2350)) ([2917d05](https://github.com/feathersjs/databases/commit/2917d05fffb4716d3c4cdaa5ac6a1aee0972e8a6))
+
+
+
+
+
 # [5.0.0-pre.3](https://github.com/feathersjs/databases/compare/v5.0.0-pre.2...v5.0.0-pre.3) (2021-04-21)
 
 
