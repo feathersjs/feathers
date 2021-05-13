@@ -60,7 +60,7 @@
     "@feathersjs/feathers": "^5.0.0-pre.3",
     "@types/debug": "^4.1.5",
     "@types/mocha": "^8.2.2",
-    "@types/node": "^15.0.2",
+    "@types/node": "^15.0.3",
     "mocha": "^8.4.0",
     "shx": "^0.3.3",
     "ts-node": "^9.1.1",
