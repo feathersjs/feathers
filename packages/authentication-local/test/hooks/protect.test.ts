@@ -8,7 +8,7 @@ function testOmit (title: string, property: string) {
   describe(title, () => {
     const fn = protect('password');
 
-    it('omits from object', () => {
+    it('omits from object', async () => {
       const data = {
         email: 'test@user.com',
         password: 'supersecret'
@@ -16,15 +16,16 @@ function testOmit (title: string, property: string) {
       const context = {
         [property]: data
       } as unknown as HookContext;
-      const result = fn(context);
 
-      assert.deepStrictEqual(result, {
+      await fn(context);
+
+      assert.deepStrictEqual(context, {
         [property]: data,
         dispatch: { email: 'test@user.com' }
       });
     });
 
-    it('omits from nested object', () => {
+    it('omits from nested object', async () => {
       const hook = protect('user.password');
       const data = {
         user: {
@@ -35,15 +36,16 @@ function testOmit (title: string, property: string) {
       const context = {
         [property]: data
       } as unknown as HookContext;
-      const result = hook(context);
 
-      assert.deepStrictEqual(result, {
+      await hook(context);
+
+      assert.deepStrictEqual(context, {
         [property]: data,
         dispatch: { user: { email: 'test@user.com' } }
       });
     });
 
-    it('handles `data` property only for find', () => {
+    it('handles `data` property only for find', async () => {
       const data = {
         email: 'test@user.com',
         password: 'supersecret',
@@ -52,15 +54,16 @@ function testOmit (title: string, property: string) {
       const context = {
         [property]: data
       } as unknown as HookContext;
-      const result = fn(context);
 
-      assert.deepStrictEqual(result, {
+      await fn(context);
+
+      assert.deepStrictEqual(context, {
         [property]: data,
         dispatch: { email: 'test@user.com', data: 'yes' }
       });
     });
 
-    it('uses .toJSON (#48)', () => {
+    it('uses .toJSON (#48)', async () => {
       class MyUser {
         toJSON () {
           return {
@@ -74,15 +77,16 @@ function testOmit (title: string, property: string) {
       const context = {
         [property]: data
       } as unknown as HookContext;
-      const result = fn(context);
 
-      assert.deepStrictEqual(result, {
+      await fn(context);
+
+      assert.deepStrictEqual(context, {
         [property]: data,
         dispatch: { email: 'test@user.com' }
       });
     });
 
-    it('omits from array but only objects (#2053)', () => {
+    it('omits from array but only objects (#2053)', async () => {
       const data = [{
         email: 'test1@user.com',
         password: 'supersecret'
@@ -95,9 +99,10 @@ function testOmit (title: string, property: string) {
       const context = {
         [property]: data
       } as unknown as HookContext;
-      const result = fn(context);
 
-      assert.deepStrictEqual(result, {
+      await fn(context);
+
+      assert.deepStrictEqual(context, {
         [property]: data,
         dispatch: [
           { email: 'test1@user.com' },
@@ -108,7 +113,7 @@ function testOmit (title: string, property: string) {
       });
     });
 
-    it('omits from pagination object', () => {
+    it('omits from pagination object', async () => {
       const data = {
         total: 2,
         data: [{
@@ -123,9 +128,10 @@ function testOmit (title: string, property: string) {
         method: 'find',
         [property]: data
       } as unknown as HookContext;
-      const result = fn(context);
 
-      assert.deepStrictEqual(result, {
+      await fn(context);
+
+      assert.deepStrictEqual(context, {
         method: 'find',
         [property]: data,
         dispatch: {
@@ -138,7 +144,7 @@ function testOmit (title: string, property: string) {
       });
     });
 
-    it('updates result if params.provider is set', () => {
+    it('updates result if params.provider is set', async () => {
       const data = [{
         email: 'test1@user.com',
         password: 'supersecret'
@@ -151,9 +157,10 @@ function testOmit (title: string, property: string) {
         [property]: data,
         params
       } as unknown as HookContext;
-      const result = fn(context);
 
-      assert.deepStrictEqual(result, {
+      await fn(context);
+
+      assert.deepStrictEqual(context, {
         [property]: data,
         params,
         result: [
@@ -170,11 +177,10 @@ function testOmit (title: string, property: string) {
 }
 
 describe('@feathersjs/authentication-local/hooks/protect', () => {
-  it('does nothing when called with no result', () => {
+  it('does nothing when called with no result', async () => {
     const fn = protect();
-    const original = {} as unknown as HookContext;
 
-    assert.deepStrictEqual(fn(original), original);
+    assert.deepStrictEqual(await fn({} as any), undefined);
   });
 
   testOmit('with hook.result', 'result');

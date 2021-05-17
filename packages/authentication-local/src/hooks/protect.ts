@@ -1,8 +1,7 @@
 import omit from 'lodash/omit';
-import { HookContext } from '@feathersjs/feathers';
+import { HookContext, NextFunction } from '@feathersjs/feathers';
 
-export default (...fields: string[]) => (context: HookContext<any, any>) => {
-  const result = context.dispatch || context.result;
+export default (...fields: string[]) => async (context: HookContext<any, any>, next?: NextFunction) => {
   const o = (current: any) => {
     if (typeof current === 'object' && !Array.isArray(current)) {
       const data = typeof current.toJSON === 'function'
@@ -14,23 +13,25 @@ export default (...fields: string[]) => (context: HookContext<any, any>) => {
     return current;
   };
 
-  if (!result) {
-    return context;
+  if (typeof next === 'function') {
+    await next();
   }
 
-  if (Array.isArray(result)) {
-    context.dispatch = result.map(o);
-  } else if (result.data && context.method === 'find') {
-    context.dispatch = Object.assign({}, result, {
-      data: result.data.map(o)
-    });
-  } else {
-    context.dispatch = o(result);
-  }
+  const result = context.dispatch || context.result;
 
-  if (context.params && context.params.provider) {
-    context.result = context.dispatch;
-  }
+  if (result) {
+    if (Array.isArray(result)) {
+      context.dispatch = result.map(o);
+    } else if (result.data && context.method === 'find') {
+      context.dispatch = Object.assign({}, result, {
+        data: result.data.map(o)
+      });
+    } else {
+      context.dispatch = o(result);
+    }
 
-  return context;
+    if (context.params && context.params.provider) {
+      context.result = context.dispatch;
+    }
+  }
 };
