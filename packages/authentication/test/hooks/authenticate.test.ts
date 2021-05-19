@@ -47,9 +47,7 @@ describe('authentication/hooks/authenticate', () => {
     app.service('auth-v2').register('test', new Strategy1());
 
     app.service('users').hooks({
-      before: {
-        get: authenticate('first', 'second')
-      }
+      get: [authenticate('first', 'second')]
     });
 
     app.service('users').id = 'name';
