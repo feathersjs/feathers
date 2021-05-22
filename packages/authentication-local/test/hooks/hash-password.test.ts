@@ -55,28 +55,6 @@ describe('@feathersjs/authentication-local/hooks/hash-password', () => {
     }
   });
 
-  it('errors when authentication strategy does not exist', async () => {
-    const users = app.service('users');
-
-    users.hooks({
-      after: {
-        create: hashPassword('password')
-      }
-    });
-
-    try {
-      await users.create({
-        email: 'dave@hashpassword.com',
-        password: 'supersecret'
-      });
-      assert.fail('Should never get here');
-    } catch (error) {
-      assert.strictEqual(error.message,
-        'The \'hashPassword\' hook should only be used as a \'before\' hook'
-      );
-    }
-  });
-
   it('hashes password on field', async () => {
     const password = 'supersecret';
 

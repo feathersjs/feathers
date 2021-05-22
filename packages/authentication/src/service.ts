@@ -172,10 +172,8 @@ export class AuthenticationService extends AuthenticationBase implements Partial
     }
 
     (this as any).hooks({
-      after: {
-        create: [ connection('login'), event('login') ],
-        remove: [ connection('logout'), event('logout') ]
-      }
+      create: [ connection('login'), event('login') ],
+      remove: [ connection('logout'), event('logout') ]
     });
 
     this.app.on('disconnect', async (connection) => {

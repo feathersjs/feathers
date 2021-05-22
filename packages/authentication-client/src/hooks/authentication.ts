@@ -1,20 +1,18 @@
-import { HookContext } from '@feathersjs/feathers';
+import { HookContext, NextFunction } from '@feathersjs/feathers';
 import { stripSlashes } from '@feathersjs/commons';
 
 export const authentication = () => {
-  return (context: HookContext) => {
+  return (context: HookContext, next: NextFunction) => {
     const { app, params, path, method, app: { authentication: service } } = context;
 
     if (stripSlashes(service.options.path) === path && method === 'create') {
-      return context;
+      return next();
     }
 
     return Promise.resolve(app.get('authentication')).then(authResult => {
       if (authResult) {
         context.params = Object.assign({}, authResult, params);
       }
-
-      return context;
-    });
+    }).then(next);
   };
 };

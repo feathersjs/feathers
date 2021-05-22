@@ -1,7 +1,7 @@
-import { HookContext } from '@feathersjs/feathers';
+import { HookContext, NextFunction } from '@feathersjs/feathers';
 
 export const populateHeader = () => {
-  return (context: HookContext) => {
+  return (context: HookContext, next: NextFunction) => {
     const { app, params: { accessToken } } = context;
     const authentication = app.authentication;
 
@@ -15,6 +15,6 @@ export const populateHeader = () => {
       }, context.params.headers);
     }
 
-    return context;
+    return next();
   };
 };
