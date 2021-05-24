@@ -58,7 +58,7 @@
     "@feathersjs/feathers": "^5.0.0-pre.4"
   },
   "devDependencies": {
-    "@feathersjs/adapter-memory": "^5.0.0-pre.4",
+    "@feathersjs/memory": "^5.0.0-pre.4",
     "@feathersjs/authentication-local": "^5.0.0-pre.4",
     "@feathersjs/express": "^5.0.0-pre.4",
     "@feathersjs/rest-client": "^5.0.0-pre.4",

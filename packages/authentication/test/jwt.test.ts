@@ -1,7 +1,7 @@
 import assert from 'assert';
 import merge from 'lodash/merge';
 import { feathers, Application, Service } from '@feathersjs/feathers';
-import { memory } from '@feathersjs/adapter-memory';
+import { memory } from '@feathersjs/memory';
 
 import { AuthenticationService, JWTStrategy, hooks } from '../src';
 import { ServerResponse } from 'http';
