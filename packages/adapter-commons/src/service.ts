@@ -30,7 +30,7 @@ export interface ServiceOptions {
 }
 
 export interface AdapterOptions<M = any> extends Pick<ServiceOptions, 'multi'|'allow'|'paginate'> {
-  model?: M;
+  Model?: M;
 }
 
 export interface AdapterParams<M = any> extends Params {
