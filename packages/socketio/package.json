@@ -55,7 +55,7 @@
     "socket.io": "^4.1.1"
   },
   "devDependencies": {
-    "@feathersjs/adapter-memory": "^5.0.0-pre.4",
+    "@feathersjs/memory": "^5.0.0-pre.4",
     "@feathersjs/commons": "^5.0.0-pre.2",
     "@feathersjs/express": "^5.0.0-pre.4",
     "@feathersjs/feathers": "^5.0.0-pre.4",

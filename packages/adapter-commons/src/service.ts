@@ -17,15 +17,24 @@ const alwaysMulti: { [key: string]: boolean } = {
 };
 
 export interface ServiceOptions {
-  events: string[];
+  events?: string[];
   multi: boolean|string[];
   id: string;
   paginate: {
     default?: number;
     max?: number;
   }
-  whitelist: string[];
+  whitelist?: string[];
+  allow: string[];
   filters: string[];
+}
+
+export interface AdapterOptions<M = any> extends Pick<ServiceOptions, 'multi'|'allow'|'paginate'> {
+  Model?: M;
+}
+
+export interface AdapterParams<M = any> extends Params {
+  adapter?: Partial<AdapterOptions<M>>;
 }
 
 /**
@@ -49,7 +58,7 @@ export interface InternalServiceMethods<T = any> {
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#find-params|Feathers API Documentation: .find(params)}
    */
-  _find (params?: Params): Promise<T | T[] | Paginated<T>>;
+  _find (params?: AdapterParams): Promise<T | T[] | Paginated<T>>;
 
   /**
    * Retrieve a single resource matching the given ID, skipping any service-level hooks.
@@ -59,7 +68,7 @@ export interface InternalServiceMethods<T = any> {
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#get-id-params|Feathers API Documentation: .get(id, params)}
    */
-  _get (id: Id, params?: Params): Promise<T>;
+  _get (id: Id, params?: AdapterParams): Promise<T>;
 
   /**
    * Create a new resource for this service, skipping any service-level hooks.
@@ -69,7 +78,7 @@ export interface InternalServiceMethods<T = any> {
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#create-data-params|Feathers API Documentation: .create(data, params)}
    */
-  _create (data: Partial<T> | Partial<T>[], params?: Params): Promise<T | T[]>;
+  _create (data: Partial<T> | Partial<T>[], params?: AdapterParams): Promise<T | T[]>;
 
   /**
    * Replace any resources matching the given ID with the given data, skipping any service-level hooks.
@@ -80,7 +89,7 @@ export interface InternalServiceMethods<T = any> {
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#update-id-data-params|Feathers API Documentation: .update(id, data, params)}
    */
-  _update (id: Id, data: T, params?: Params): Promise<T>;
+  _update (id: Id, data: T, params?: AdapterParams): Promise<T>;
 
   /**
    * Merge any resources matching the given ID with the given data, skipping any service-level hooks.
@@ -91,7 +100,7 @@ export interface InternalServiceMethods<T = any> {
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#patch-id-data-params|Feathers API Documentation: .patch(id, data, params)}
    */
-  _patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T | T[]>;
+  _patch (id: NullableId, data: Partial<T>, params?: AdapterParams): Promise<T | T[]>;
 
   /**
    * Remove resources matching the given ID from the this service, skipping any service-level hooks.
@@ -101,7 +110,7 @@ export interface InternalServiceMethods<T = any> {
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#remove-id-params|Feathers API Documentation: .remove(id, params)}
    */
-  _remove (id: NullableId, params?: Params): Promise<T | T[]>;
+  _remove (id: NullableId, params?: AdapterParams): Promise<T | T[]>;
 }
 
 export class AdapterService<T = any> implements ServiceMethods<T|Paginated<T>> {
@@ -114,7 +123,7 @@ export class AdapterService<T = any> implements ServiceMethods<T|Paginated<T>> {
       paginate: {},
       multi: false,
       filters: [],
-      whitelist: []
+      allow: []
     }, options);
   }
 
@@ -126,12 +135,13 @@ export class AdapterService<T = any> implements ServiceMethods<T|Paginated<T>> {
     return this.options.events;
   }
 
-  filterQuery (params: Params = {}, opts: any = {}) {
+  filterQuery (params: AdapterParams = {}, opts: any = {}) {
     const paginate = typeof params.paginate !== 'undefined'
-      ? params.paginate : this.options.paginate;
+      ? params.paginate
+      : this.getOptions(params).paginate;
     const { query = {} } = params;
     const options = Object.assign({
-      operators: this.options.whitelist || [],
+      operators: this.options.whitelist || this.options.allow || [],
       filters: this.options.filters,
       paginate
     }, opts);
@@ -140,41 +150,48 @@ export class AdapterService<T = any> implements ServiceMethods<T|Paginated<T>> {
     return Object.assign(result, { paginate });
   }
 
-  allowsMulti (method: string) {
+  allowsMulti (method: string, params: AdapterParams = {}) {
     const always = alwaysMulti[method];
 
     if (typeof always !== 'undefined') {
       return always;
     }
 
-    const option = this.options.multi;
+    const { multi: option } = this.getOptions(params);
 
     if (option === true || option === false) {
       return option;
-    } else {
-      return option.includes(method);
+    }
+
+    return option.includes(method);
+  }
+
+  getOptions (params: AdapterParams): ServiceOptions & { model?: any } {
+    return {
+      ...this.options,
+      ...params.adapter
     }
   }
 
-  find (params?: Params): Promise<T[] | Paginated<T>> {
+  find (params?: AdapterParams): Promise<T[] | Paginated<T>> {
     return callMethod(this, '_find', params);
   }
 
-  get (id: Id, params?: Params): Promise<T> {
+  get (id: Id, params?: AdapterParams): Promise<T> {
     return callMethod(this, '_get', id, params);
   }
 
-  create (data: Partial<T>, params?: Params): Promise<T>;
-  create (data: Partial<T>[], params?: Params): Promise<T[]>;
-  create (data: Partial<T> | Partial<T>[], params?: Params): Promise<T | T[]> {
-    if (Array.isArray(data) && !this.allowsMulti('create')) {
+  create (data: Partial<T>, params?: AdapterParams): Promise<T>;
+  create (data: Partial<T>[], params?: AdapterParams): Promise<T[]>;
+  create (data: Partial<T> | Partial<T>[], params?: AdapterParams): Promise<T | T[]> {
+    if (Array.isArray(data) && !this.allowsMulti('create', params)) {
       return Promise.reject(new MethodNotAllowed('Can not create multiple entries'));
     }
 
     return callMethod(this, '_create', data, params);
   }
 
-  update (id: Id, data: T, params?: Params): Promise<T> {
+  update (id: Id, data: T, params?: AdapterParams): Promise<T> {
     if (id === null || Array.isArray(data)) {
       return Promise.reject(new BadRequest(
         'You can not replace multiple instances. Did you mean \'patch\'?'
@@ -184,22 +201,22 @@ export class AdapterService<T = any> implements ServiceMethods<T|Paginated<T>> {
     return callMethod(this, '_update', id, data, params);
   }
 
-  patch (id: Id, data: Partial<T>, params?: Params): Promise<T>;
-  patch (id: null, data: Partial<T>, params?: Params): Promise<T[]>;
-  patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T | T[]>;
-  patch (id: NullableId, data: Partial<T>, params?: Params): Promise<T | T[]> {
-    if (id === null && !this.allowsMulti('patch')) {
+  patch (id: Id, data: Partial<T>, params?: AdapterParams): Promise<T>;
+  patch (id: null, data: Partial<T>, params?: AdapterParams): Promise<T[]>;
+  patch (id: NullableId, data: Partial<T>, params?: AdapterParams): Promise<T | T[]>;
+  patch (id: NullableId, data: Partial<T>, params?: AdapterParams): Promise<T | T[]> {
+    if (id === null && !this.allowsMulti('patch', params)) {
       return Promise.reject(new MethodNotAllowed('Can not patch multiple entries'));
     }
 
     return callMethod(this, '_patch', id, data, params);
   }
 
-  remove (id: Id, params?: Params): Promise<T>;
-  remove (id: null, params?: Params): Promise<T[]>;
-  remove (id: NullableId, params?: Params): Promise<T | T[]>;
-  remove (id: NullableId, params?: Params): Promise<T | T[]> {
-    if (id === null && !this.allowsMulti('remove')) {
+  remove (id: Id, params?: AdapterParams): Promise<T>;
+  remove (id: null, params?: AdapterParams): Promise<T[]>;
+  remove (id: NullableId, params?: AdapterParams): Promise<T | T[]>;
+  remove (id: NullableId, params?: AdapterParams): Promise<T | T[]> {
+    if (id === null && !this.allowsMulti('remove', params)) {
       return Promise.reject(new MethodNotAllowed('Can not remove multiple entries'));
     }
 

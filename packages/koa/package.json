@@ -55,7 +55,7 @@
     "koa-bodyparser": "^4.3.0"
   },
   "devDependencies": {
-    "@feathersjs/adapter-memory": "^5.0.0-pre.4",
+    "@feathersjs/memory": "^5.0.0-pre.4",
     "@feathersjs/authentication-local": "^5.0.0-pre.4",
     "@feathersjs/feathers": "^5.0.0-pre.4",
     "@feathersjs/tests": "^5.0.0-pre.4",

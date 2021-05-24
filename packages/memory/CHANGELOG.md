@@ -27,7 +27,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [5.0.0-pre.2](https://github.com/feathersjs/databases/compare/v5.0.0-beta.1...v5.0.0-pre.2) (2021-04-06)
 
-**Note:** Version bump only for package @feathersjs/adapter-memory
+**Note:** Version bump only for package @feathersjs/memory
 
 
 
@@ -35,7 +35,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [5.0.0-beta.1](https://github.com/feathersjs/databases/compare/v5.0.0-beta.0...v5.0.0-beta.1) (2021-04-03)
 
-**Note:** Version bump only for package @feathersjs/adapter-memory
+**Note:** Version bump only for package @feathersjs/memory
 
 
 
@@ -62,7 +62,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* **memory:** Move feathers-memory into @feathersjs/adapter-memory ([#2153](https://github.com/feathersjs/databases/issues/2153)) ([dd61fe3](https://github.com/feathersjs/databases/commit/dd61fe371fb0502f78b8ccbe1f45a030e31ecff6))
+* **memory:** Move feathers-memory into @feathersjs/memory ([#2153](https://github.com/feathersjs/databases/issues/2153)) ([dd61fe3](https://github.com/feathersjs/databases/commit/dd61fe371fb0502f78b8ccbe1f45a030e31ecff6))
 
 
 

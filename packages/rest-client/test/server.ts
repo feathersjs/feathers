@@ -1,6 +1,6 @@
 import { feathers, Id, NullableId, Params } from '@feathersjs/feathers';
 import expressify, { rest, urlencoded, json } from '@feathersjs/express';
-import { Service } from '@feathersjs/adapter-memory';
+import { Service } from '@feathersjs/memory';
 import { FeathersError, NotAcceptable } from '@feathersjs/errors';
 
 // eslint-disable-next-line no-extend-native

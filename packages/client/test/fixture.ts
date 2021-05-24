@@ -1,6 +1,6 @@
 import { feathers, Application, HookContext, Id, Params } from '@feathersjs/feathers';
 import * as express from '@feathersjs/express';
-import { Service } from '@feathersjs/adapter-memory';
+import { Service } from '@feathersjs/memory';
 
 // eslint-disable-next-line no-extend-native
 Object.defineProperty(Error.prototype, 'toJSON', {

@@ -2,7 +2,7 @@ import assert from 'assert';
 import omit from 'lodash/omit';
 import jwt from 'jsonwebtoken';
 import { feathers, Application } from '@feathersjs/feathers';
-import { memory, Service as MemoryService } from '@feathersjs/adapter-memory';
+import { memory, Service as MemoryService } from '@feathersjs/memory';
 
 import defaultOptions from '../src/options';
 import { AuthenticationService } from '../src';
