@@ -65,11 +65,11 @@
   "devDependencies": {
     "@types/debug": "^4.1.5",
     "@types/mocha": "^8.2.2",
-    "@types/node": "^15.0.3",
+    "@types/node": "^15.6.1",
     "mocha": "^8.4.0",
     "shx": "^0.3.3",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.4"
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.2"
   },
   "gitHead": "d2f1d200b6d9a790a03dc3e6e345f4e0ab726720"
 }
