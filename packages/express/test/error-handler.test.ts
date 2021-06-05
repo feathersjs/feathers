@@ -21,7 +21,7 @@ const jsonHandler = function (error: Error, _req: Request, res: Response, _next:
 describe('error-handler', () => {
   describe('supports catch-all custom handlers', function () {
     before(function () {
-      this.app = express().get('/error', function (_req, _res, next) {
+      this.app = express().get('/error', function (_req: Request, _res: Response, next: NextFunction) {
         next(new Error('Something went wrong'));
       }).use(errorHandler({
         html: htmlHandler,
@@ -183,16 +183,16 @@ describe('error-handler', () => {
   describe('use as app error handler', function () {
     before(function () {
       this.app = express()
-        .get('/error', function (_req, _res, next) {
+        .get('/error', function (_req: Request, _res: Response, next: NextFunction) {
           next(new Error('Something went wrong'));
         })
-        .get('/string-error', function (_req, _res, next) {
+        .get('/string-error', function (_req: Request, _res: Response, next: NextFunction) {
           const e: any = new Error('Something was not found');
           e.code = '404';
 
           next(e);
         })
-        .get('/bad-request', function (_req, _res, next) {
+        .get('/bad-request', function (_req: Request, _res: Response, next: NextFunction) {
           next(new BadRequest({
             message: 'Invalid Password',
             errors: [{
@@ -202,7 +202,7 @@ describe('error-handler', () => {
             }]
           }));
         })
-        .use(function (_req, _res, next) {
+        .use(function (_req: Request, _res: Response, next: NextFunction) {
           next(new NotFound('File not found'));
         })
         .use(errorHandler({
