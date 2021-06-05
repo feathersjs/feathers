@@ -1,6 +1,7 @@
 import { strict as assert } from 'assert';
 import { feathers, Application, HookContext, NullableId, Params } from '@feathersjs/feathers';
 import express from '@feathersjs/express';
+import { Request, Response } from 'express';
 import { omit, extend } from 'lodash';
 import { io } from 'socket.io-client';
 import axios from 'axios';
@@ -127,7 +128,7 @@ describe('@feathersjs/socketio', () => {
     const data = { message: 'Hello world' };
     const app = express(feathers())
       .configure(socketio())
-      .use('/test', (_req, res) => res.json(data));
+      .use('/test', (_req: Request, res: Response) => res.json(data));
 
     const srv = await app.listen(8992);
     const response = await axios({
