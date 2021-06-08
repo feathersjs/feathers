@@ -147,7 +147,10 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     };
   }
 
-  async parse (req: IncomingMessage) {
+  async parse (req: IncomingMessage): Promise<{
+    strategy: string;
+    accessToken: string;
+  } | null> {
     const { header, schemes }: { header: string, schemes: string[] } = this.configuration;
     const headerValue = req.headers && req.headers[header.toLowerCase()];
 
