@@ -3,29 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [5.0.0-pre.4](https://github.com/feathersjs/databases/compare/v5.0.0-pre.3...v5.0.0-pre.4) (2021-05-13)
+# [5.0.0-pre.4](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.3...v5.0.0-pre.4) (2021-05-13)
 
 
 ### Bug Fixes
 
-* **typescript:** Move Paginated type back for better compatibility ([#2350](https://github.com/feathersjs/databases/issues/2350)) ([2917d05](https://github.com/feathersjs/databases/commit/2917d05fffb4716d3c4cdaa5ac6a1aee0972e8a6))
+* **typescript:** Move Paginated type back for better compatibility ([#2350](https://github.com/feathersjs/feathers/issues/2350)) ([2917d05](https://github.com/feathersjs/feathers/commit/2917d05fffb4716d3c4cdaa5ac6a1aee0972e8a6))
 
 
 
 
 
-# [5.0.0-pre.3](https://github.com/feathersjs/databases/compare/v5.0.0-pre.2...v5.0.0-pre.3) (2021-04-21)
+# [5.0.0-pre.3](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.2...v5.0.0-pre.3) (2021-04-21)
 
 
 ### Bug Fixes
 
-* **typescript:** Improve TypeScript backwards compatibility ([#2310](https://github.com/feathersjs/databases/issues/2310)) ([f33be73](https://github.com/feathersjs/databases/commit/f33be73fc46a533efb15df9aab0658e3240d3897))
+* **typescript:** Improve TypeScript backwards compatibility ([#2310](https://github.com/feathersjs/feathers/issues/2310)) ([f33be73](https://github.com/feathersjs/feathers/commit/f33be73fc46a533efb15df9aab0658e3240d3897))
 
 
 
 
 
-# [5.0.0-pre.2](https://github.com/feathersjs/databases/compare/v5.0.0-beta.1...v5.0.0-pre.2) (2021-04-06)
+# [5.0.0-pre.2](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.1...v5.0.0-pre.2) (2021-04-06)
 
 **Note:** Version bump only for package @feathersjs/adapter-commons
 
@@ -33,52 +33,52 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-# [5.0.0-beta.1](https://github.com/feathersjs/databases/compare/v5.0.0-beta.0...v5.0.0-beta.1) (2021-04-03)
+# [5.0.0-beta.1](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.0...v5.0.0-beta.1) (2021-04-03)
 
 
 ### Bug Fixes
 
-* **dependencies:** Fix transport-commons dependency and update other dependencies ([#2284](https://github.com/feathersjs/databases/issues/2284)) ([05b03b2](https://github.com/feathersjs/databases/commit/05b03b27b40604d956047e3021d8053c3a137616))
+* **dependencies:** Fix transport-commons dependency and update other dependencies ([#2284](https://github.com/feathersjs/feathers/issues/2284)) ([05b03b2](https://github.com/feathersjs/feathers/commit/05b03b27b40604d956047e3021d8053c3a137616))
 
 
 ### Features
 
-* **adapter-commons:** Added mongoDB like search in embedded objects ([687e3c7](https://github.com/feathersjs/databases/commit/687e3c7c36904221b2707d0220c0893e3cb1faa9))
+* **adapter-commons:** Added mongoDB like search in embedded objects ([687e3c7](https://github.com/feathersjs/feathers/commit/687e3c7c36904221b2707d0220c0893e3cb1faa9))
 
 
 
 
 
-# [5.0.0-beta.0](https://github.com/feathersjs/databases/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
+# [5.0.0-beta.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
 
 
 ### Bug Fixes
 
-* **adapter-commons:** Always respect paginate.max ([#2267](https://github.com/feathersjs/databases/issues/2267)) ([f588257](https://github.com/feathersjs/databases/commit/f5882575536624ed3a32bb6e3ff1919fa17e366d))
-* Update Grant usage and other dependencies ([#2264](https://github.com/feathersjs/databases/issues/2264)) ([7b0f8fa](https://github.com/feathersjs/databases/commit/7b0f8fad252419ed0ad0bf259cdf3104d322ab60))
-* **adapter-commons:** Return missing overloads ([#2203](https://github.com/feathersjs/databases/issues/2203)) ([bbe7e2a](https://github.com/feathersjs/databases/commit/bbe7e2a131633e9a6e7aac7f7fa02a312bca63c7))
+* **adapter-commons:** Always respect paginate.max ([#2267](https://github.com/feathersjs/feathers/issues/2267)) ([f588257](https://github.com/feathersjs/feathers/commit/f5882575536624ed3a32bb6e3ff1919fa17e366d))
+* Update Grant usage and other dependencies ([#2264](https://github.com/feathersjs/feathers/issues/2264)) ([7b0f8fa](https://github.com/feathersjs/feathers/commit/7b0f8fad252419ed0ad0bf259cdf3104d322ab60))
+* **adapter-commons:** Return missing overloads ([#2203](https://github.com/feathersjs/feathers/issues/2203)) ([bbe7e2a](https://github.com/feathersjs/feathers/commit/bbe7e2a131633e9a6e7aac7f7fa02a312bca63c7))
 
 
 ### Features
 
-* Feathers v5 core refactoring and features ([#2255](https://github.com/feathersjs/databases/issues/2255)) ([2dafb7c](https://github.com/feathersjs/databases/commit/2dafb7ce14ba57406aeec13d10ca45b1e709bee9))
+* Feathers v5 core refactoring and features ([#2255](https://github.com/feathersjs/feathers/issues/2255)) ([2dafb7c](https://github.com/feathersjs/feathers/commit/2dafb7ce14ba57406aeec13d10ca45b1e709bee9))
 
 
 
 
 
-# [5.0.0-pre.1](https://github.com/feathersjs/databases/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
+# [5.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
 
 
 ### Features
 
-* **memory:** Move feathers-memory into @feathersjs/memory ([#2153](https://github.com/feathersjs/databases/issues/2153)) ([dd61fe3](https://github.com/feathersjs/databases/commit/dd61fe371fb0502f78b8ccbe1f45a030e31ecff6))
+* **memory:** Move feathers-memory into @feathersjs/memory ([#2153](https://github.com/feathersjs/feathers/issues/2153)) ([dd61fe3](https://github.com/feathersjs/feathers/commit/dd61fe371fb0502f78b8ccbe1f45a030e31ecff6))
 
 
 
 
 
-## [4.5.11](https://github.com/feathersjs/databases/compare/v4.5.10...v4.5.11) (2020-12-05)
+## [4.5.11](https://github.com/feathersjs/feathers/compare/v4.5.10...v4.5.11) (2020-12-05)
 
 **Note:** Version bump only for package @feathersjs/adapter-commons
 
@@ -86,7 +86,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [4.5.7](https://github.com/feathersjs/databases/compare/@feathersjs/adapter-commons@4.5.6...@feathersjs/adapter-commons@4.5.7) (2020-10-21)
+## [4.5.7](https://github.com/feathersjs/feathers/compare/v4.5.6...v4.5.7) (2020-10-21)
 
 
 ### Bug Fixes
@@ -97,7 +97,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [4.5.6](https://github.com/feathersjs/databases/compare/@feathersjs/adapter-commons@4.5.5...@feathersjs/adapter-commons@4.5.6) (2020-10-21)
+## [4.5.6](https://github.com/feathersjs/feathers/compare/v4.5.5...v4.5.6) (2020-10-21)
 
 
 ### Bug Fixes
@@ -108,7 +108,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [4.5.5](https://github.com/feathersjs/databases/compare/@feathersjs/adapter-commons@4.5.4...@feathersjs/adapter-commons@4.5.5) (2020-10-21)
+## [4.5.5](https://github.com/feathersjs/feathers/compare/v4.5.4...v4.5.5) (2020-10-21)
 
 
 ### Bug Fixes
@@ -119,7 +119,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [4.5.4](https://github.com/feathersjs/databases/compare/@feathersjs/adapter-commons@4.5.3...@feathersjs/adapter-commons@4.5.4) (2020-09-27)
+## [4.5.4](https://github.com/feathersjs/feathers/compare/v4.5.3...v4.5.4) (2020-09-27)
 
 **Note:** Version bump only for package @feathersjs/adapter-commons
 

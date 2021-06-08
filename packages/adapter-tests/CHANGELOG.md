@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [5.0.0-pre.4](https://github.com/feathersjs/databases/compare/v5.0.0-pre.3...v5.0.0-pre.4) (2021-05-13)
+# [5.0.0-pre.4](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.3...v5.0.0-pre.4) (2021-05-13)
 
 **Note:** Version bump only for package @feathersjs/adapter-tests
 
@@ -11,18 +11,18 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-# [5.0.0-pre.3](https://github.com/feathersjs/databases/compare/v5.0.0-pre.2...v5.0.0-pre.3) (2021-04-21)
+# [5.0.0-pre.3](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.2...v5.0.0-pre.3) (2021-04-21)
 
 
 ### Bug Fixes
 
-* **typescript:** Improve TypeScript backwards compatibility ([#2310](https://github.com/feathersjs/databases/issues/2310)) ([f33be73](https://github.com/feathersjs/databases/commit/f33be73fc46a533efb15df9aab0658e3240d3897))
+* **typescript:** Improve TypeScript backwards compatibility ([#2310](https://github.com/feathersjs/feathers/issues/2310)) ([f33be73](https://github.com/feathersjs/feathers/commit/f33be73fc46a533efb15df9aab0658e3240d3897))
 
 
 
 
 
-# [5.0.0-pre.2](https://github.com/feathersjs/databases/compare/v5.0.0-beta.1...v5.0.0-pre.2) (2021-04-06)
+# [5.0.0-pre.2](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.1...v5.0.0-pre.2) (2021-04-06)
 
 **Note:** Version bump only for package @feathersjs/adapter-tests
 
@@ -30,23 +30,23 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-# [5.0.0-beta.1](https://github.com/feathersjs/databases/compare/v5.0.0-beta.0...v5.0.0-beta.1) (2021-04-03)
+# [5.0.0-beta.1](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.0...v5.0.0-beta.1) (2021-04-03)
 
 
 ### Bug Fixes
 
-* **adapter-tests:** Add test that verified paginated total ([#2273](https://github.com/feathersjs/databases/issues/2273)) ([879bd6b](https://github.com/feathersjs/databases/commit/879bd6b24f42e04eeeeba110ddddda3e1e1dea34))
+* **adapter-tests:** Add test that verified paginated total ([#2273](https://github.com/feathersjs/feathers/issues/2273)) ([879bd6b](https://github.com/feathersjs/feathers/commit/879bd6b24f42e04eeeeba110ddddda3e1e1dea34))
 
 
 
 
 
-# [5.0.0-beta.0](https://github.com/feathersjs/databases/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
+# [5.0.0-beta.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
 
 
 ### Features
 
-* **core:** Remove Uberproto ([#2178](https://github.com/feathersjs/databases/issues/2178)) ([ddf8821](https://github.com/feathersjs/databases/commit/ddf8821f53317e6a378657f7d66acb03a037ee47))
+* **core:** Remove Uberproto ([#2178](https://github.com/feathersjs/feathers/issues/2178)) ([ddf8821](https://github.com/feathersjs/feathers/commit/ddf8821f53317e6a378657f7d66acb03a037ee47))
 
 
 ### BREAKING CHANGES
@@ -58,18 +58,18 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-# [5.0.0-pre.1](https://github.com/feathersjs/databases/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
+# [5.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
 
 
 ### Features
 
-* **memory:** Move feathers-memory into @feathersjs/memory ([#2153](https://github.com/feathersjs/databases/issues/2153)) ([dd61fe3](https://github.com/feathersjs/databases/commit/dd61fe371fb0502f78b8ccbe1f45a030e31ecff6))
+* **memory:** Move feathers-memory into @feathersjs/memory ([#2153](https://github.com/feathersjs/feathers/issues/2153)) ([dd61fe3](https://github.com/feathersjs/feathers/commit/dd61fe371fb0502f78b8ccbe1f45a030e31ecff6))
 
 
 
 
 
-## [4.5.11](https://github.com/feathersjs/databases/compare/v4.5.10...v4.5.11) (2020-12-05)
+## [4.5.11](https://github.com/feathersjs/feathers/compare/v4.5.10...v4.5.11) (2020-12-05)
 
 **Note:** Version bump only for package @feathersjs/adapter-tests
 
@@ -77,7 +77,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [4.5.4](https://github.com/feathersjs/databases/compare/@feathersjs/adapter-tests@4.5.3...@feathersjs/adapter-tests@4.5.4) (2020-09-27)
+## [4.5.4](https://github.com/feathersjs/feathers/compare/v4.5.3...v4.5.4) (2020-09-27)
 
 **Note:** Version bump only for package @feathersjs/adapter-tests
 

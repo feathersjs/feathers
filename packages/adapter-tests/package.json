@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/databases.git"
+    "url": "git://github.com/feathersjs/feathers.git"
   },
   "author": {
     "name": "Feathers contributor",
@@ -22,7 +22,7 @@
   },
   "contributors": [],
   "bugs": {
-    "url": "https://github.com/feathersjs/databases/issues"
+    "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
     "node": ">= 12"
