@@ -1,0 +1,86 @@
+{
+  "name": "@feathersjs/cli",
+  "description": "The command line interface for creating Feathers applications",
+  "version": "0.0.0",
+  "homepage": "https://feathersjs.com",
+  "main": "lib/",
+  "bin": {
+    "feathers": "./bin/feathers"
+  },
+  "keywords": [
+    "feathers",
+    "feathers-plugin"
+  ],
+  "license": "MIT",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/daffl"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git"
+  },
+  "author": {
+    "name": "Feathers contributors",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "engines": {
+    "node": ">= 12"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "bin/**",
+    "templates/**",
+    "*.d.ts",
+    "*.js"
+  ],
+  "scripts": {
+    "prepublish": "npm run compile",
+    "compile": "shx rm -rf lib/ && tsc",
+    "test": "mocha --timeout 60000 --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@types/update-notifier": "^5.0.0",
+    "enquirer": "^2.3.6",
+    "execa": "^5.1.1",
+    "hygen": "^6.1.0",
+    "latest-version": "^5.1.0",
+    "update-notifier": "^5.1.0"
+  },
+  "devDependencies": {
+    "@feathersjs/authentication": "^5.0.0-pre.5",
+    "@feathersjs/configuration": "^5.0.0-pre.5",
+    "@feathersjs/errors": "^5.0.0-pre.5",
+    "@feathersjs/feathers": "^5.0.0-pre.5",
+    "@feathersjs/koa": "^5.0.0-pre.5",
+    "@feathersjs/express": "^5.0.0-pre.5",
+    "@feathersjs/socketio": "^5.0.0-pre.5",
+    "@feathersjs/transport-commons": "^5.0.0-pre.5",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^15.12.4",
+    "mocha": "^9.0.1",
+    "shx": "^0.3.3",
+    "typescript": "^4.3.4",
+    "koa-static": "^5.0.0",
+    "winston": "^3.3.3",
+    "axios": "^0.21.1",
+    "nodemon": "^2.0.9",
+    "koa-static": "^5.0.0",
+    "winston": "^3.3.3"
+  }
+}
