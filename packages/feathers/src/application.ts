@@ -4,7 +4,7 @@ import {
 } from './dependencies';
 import { eventHook, eventMixin } from './events';
 import { hookMixin } from './hooks/index';
-import { wrapService, getServiceOptions } from './service';
+import { wrapService, getServiceOptions, protectedMethods } from './service';
 import {
   FeathersApplication,
   ServiceMixin,
@@ -94,6 +94,12 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
 
     const protoService = wrapService(location, service, options);
     const serviceOptions = getServiceOptions(service, options);
+
+    for (const name of protectedMethods) {
+      if (serviceOptions.methods.includes(name)) {
+        throw new Error(`'${name}' on service '${location}' is not allowed as a custom method name`);
+      }
+    }
 
     debug(`Registering new service at \`${location}\``);
 
