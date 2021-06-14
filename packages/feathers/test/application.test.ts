@@ -106,6 +106,29 @@ describe('Feathers application', () => {
       assert.strictEqual(data.message, 'Test message');
     });
 
+    it('can not register custom methods on a protected methods', async () => {
+      const dummyService = {
+        async create (data: any) {
+          return data;
+        },
+        async removeListener (data: any) {
+          return data;
+        },
+        async setup () {}
+      };
+
+      assert.throws(() => feathers().use('/dummy', dummyService, {
+        methods: ['create', 'removeListener']
+      }), {
+        message: '\'removeListener\' on service \'dummy\' is not allowed as a custom method name'
+      });
+      assert.throws(() => feathers().use('/dummy', dummyService, {
+        methods: ['create', 'setup']
+      }), {
+        message: '\'setup\' on service \'dummy\' is not allowed as a custom method name'
+      });
+    });
+
     it('can use a root level service', async () => {
       const app = feathers().use('/', {
         async get (id: string) {
