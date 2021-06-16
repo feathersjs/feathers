@@ -49,7 +49,7 @@ export interface AdapterParams<M = any> extends Params {
  *
  * @see {@link https://docs.feathersjs.com/guides/migrating.html#hook-less-service-methods}
  */
-export interface InternalServiceMethods<T = any> {
+export interface InternalServiceMethods<T = any, D = Partial<T>> {
 
   /**
    * Retrieve all resources from this service, skipping any service-level hooks.
@@ -78,7 +78,7 @@ export interface InternalServiceMethods<T = any> {
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#create-data-params|Feathers API Documentation: .create(data, params)}
    */
-  _create (data: Partial<T> | Partial<T>[], params?: AdapterParams): Promise<T | T[]>;
+  _create (data: D | D[], params?: AdapterParams): Promise<T | T[]>;
 
   /**
    * Replace any resources matching the given ID with the given data, skipping any service-level hooks.
@@ -89,7 +89,7 @@ export interface InternalServiceMethods<T = any> {
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#update-id-data-params|Feathers API Documentation: .update(id, data, params)}
    */
-  _update (id: Id, data: T, params?: AdapterParams): Promise<T>;
+  _update (id: Id, data: D, params?: AdapterParams): Promise<T>;
 
   /**
    * Merge any resources matching the given ID with the given data, skipping any service-level hooks.
@@ -100,7 +100,7 @@ export interface InternalServiceMethods<T = any> {
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#patch-id-data-params|Feathers API Documentation: .patch(id, data, params)}
    */
-  _patch (id: NullableId, data: Partial<T>, params?: AdapterParams): Promise<T | T[]>;
+  _patch (id: NullableId, data: D, params?: AdapterParams): Promise<T | T[]>;
 
   /**
    * Remove resources matching the given ID from the this service, skipping any service-level hooks.
@@ -113,10 +113,14 @@ export interface InternalServiceMethods<T = any> {
   _remove (id: NullableId, params?: AdapterParams): Promise<T | T[]>;
 }
 
-export class AdapterService<T = any> implements ServiceMethods<T|Paginated<T>> {
+export class AdapterService<
+  T = any,
+  D = Partial<T>,
+  O extends Partial<ServiceOptions> = Partial<ServiceOptions>
+> implements ServiceMethods<T|Paginated<T>, D> {
   options: ServiceOptions;
 
-  constructor (options: Partial<ServiceOptions>) {
+  constructor (options: O) {
     this.options = Object.assign({
       id: 'id',
       events: [],
@@ -191,7 +195,7 @@ export class AdapterService<T = any> implements ServiceMethods<T|Paginated<T>> {
     return callMethod(this, '_create', data, params);
   }
 
-  update (id: Id, data: T, params?: AdapterParams): Promise<T> {
+  update (id: Id, data: D, params?: AdapterParams): Promise<T> {
     if (id === null || Array.isArray(data)) {
       return Promise.reject(new BadRequest(
         'You can not replace multiple instances. Did you mean \'patch\'?'
