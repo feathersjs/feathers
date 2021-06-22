@@ -69,12 +69,7 @@ export function koa (_app?: FeathersApplication): Application<any> {
     }
   });
 
-  const queryParser = app.get('query parser') || 'extended';
-
-  if (queryParser === 'extended') {
-    koaQs(app as any);
-  }
-
+  koaQs(app as any);
   app.configure(routing());
   app.use((ctx, next) => {
     ctx.feathers = { provider: 'rest' };
