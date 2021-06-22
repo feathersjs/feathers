@@ -7,7 +7,7 @@ import { FeathersKoaContext } from './declarations';
 
 const debug = createDebug('@feathersjs/koa:rest');
 
-export function rest (){
+export function rest () {
   return async (ctx: FeathersKoaContext, next: Next) => {
     const { app, request } = ctx;
     const { query: koaQuery, path, body: data, method: httpMethod } = request;

@@ -68,13 +68,19 @@ describe('@feathersjs/koa/authentication', () => {
     it('can make a protected request with Authorization header', async () => {
       const { accessToken } = authResult;
 
-      const { data } = await axios.get('/dummy/dave', {
+      const { data } = await axios.get('/dummy/dave?user[name]=thing&user[message]=hi', {
         headers: {
           Authorization: accessToken
         }
       });
 
       assert.strictEqual(data.id, 'dave');
+      assert.deepStrictEqual(data.params.query, {
+        user: {
+          name: 'thing',
+          message: 'hi'
+        }
+      });
       assert.deepStrictEqual(data.params.user, user);
       assert.strictEqual(data.params.authentication.accessToken, accessToken);
     });

@@ -1,6 +1,7 @@
 import Debug from 'debug';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
+import koaQs from 'koa-qs';
 import { Application as FeathersApplication } from '@feathersjs/feathers';
 import { routing } from '@feathersjs/transport-commons';
 
@@ -67,6 +68,12 @@ export function koa (_app?: FeathersApplication): Application<any> {
       Object.defineProperty(app, prop, koaProp);
     }
   });
+
+  const queryParser = app.get('query parser') || 'extended';
+
+  if (queryParser === 'extended') {
+    koaQs(app as any);
+  }
 
   app.configure(routing());
   app.use((ctx, next) => {
