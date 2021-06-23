@@ -109,7 +109,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
     debug('createEntity with data', data);
 
-    return this.entityService.create(data, params);
+    return this.entityService.create(data, omit(params, 'query'));
   }
 
   async updateEntity (entity: any, profile: OAuthProfile, params: Params) {
@@ -134,7 +134,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     }
 
     return entityService.get(result[entityId], {
-      ...params,
+      ...omit(params, 'query'),
       [entity]: result
     });
   }
