@@ -6,7 +6,7 @@ import {
 } from '@feathersjs/authentication';
 import { Params } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
-import { createDebug, omit } from '@feathersjs/commons';
+import { createDebug, _ } from '@feathersjs/commons';
 
 const debug = createDebug('@feathersjs/authentication-oauth/strategy');
 
@@ -109,7 +109,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
     debug('createEntity with data', data);
 
-    return this.entityService.create(data, omit(params, 'query'));
+    return this.entityService.create(data, _.omit(params, 'query'));
   }
 
   async updateEntity (entity: any, profile: OAuthProfile, params: Params) {
@@ -118,7 +118,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
     debug(`updateEntity with id ${id} and data`, data);
 
-    return this.entityService.patch(id, data, omit(params, 'query'));
+    return this.entityService.patch(id, data, _.omit(params, 'query'));
   }
 
   async getEntity (result: any, params: Params) {
@@ -134,7 +134,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     }
 
     return entityService.get(result[entityId], {
-      ...omit(params, 'query'),
+      ..._.omit(params, 'query'),
       [entity]: result
     });
   }
