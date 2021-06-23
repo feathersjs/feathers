@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.5](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.4...v5.0.0-pre.5) (2021-06-23)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Omit query from internal calls ([#2398](https://github.com/feathersjs/feathers/issues/2398)) ([04c7c83](https://github.com/feathersjs/feathers/commit/04c7c83eeaa6a7466c84b958071b468ed42f0b0f))
+* **core:** Add list of protected methods that can not be used for custom methods ([#2390](https://github.com/feathersjs/feathers/issues/2390)) ([6584a21](https://github.com/feathersjs/feathers/commit/6584a216e5a7d5f2a45822be6bfcb91c35cc2252))
+* **hooks:** Migrate built-in hooks and allow backwards compatibility ([#2358](https://github.com/feathersjs/feathers/issues/2358)) ([759c5a1](https://github.com/feathersjs/feathers/commit/759c5a19327a731af965c3604119393b3d09a406))
+* **koa:** Use extended query parser for compatibility ([#2397](https://github.com/feathersjs/feathers/issues/2397)) ([b2944ba](https://github.com/feathersjs/feathers/commit/b2944bac3ec6d5ecc80dc518cd4e58093692db74))
+* Update database adapter common repository urls ([#2380](https://github.com/feathersjs/feathers/issues/2380)) ([3f4db68](https://github.com/feathersjs/feathers/commit/3f4db68d6700c7d9023ecd17d0d39893f75a19fd))
+
+
+### Features
+
+* **typescript:** Allow to pass generic service options to adapter services ([#2392](https://github.com/feathersjs/feathers/issues/2392)) ([f9431f2](https://github.com/feathersjs/feathers/commit/f9431f242354f804cafb835519f98dd405ac4f0b))
+* Support being a built-in CodeSandbox sandbox ([#2381](https://github.com/feathersjs/feathers/issues/2381)) ([a2ac25a](https://github.com/feathersjs/feathers/commit/a2ac25a26e80530f7c50b88ef15eef46ee2b0634))
+* **adapter-commons:** Add support for params.adapter option and move memory adapter to @feathersjs/memory ([#2367](https://github.com/feathersjs/feathers/issues/2367)) ([a43e7da](https://github.com/feathersjs/feathers/commit/a43e7da22b6b981a96d1321736ea9a0cb924fb4f))
+
+
+
+
+
 # [5.0.0-pre.4](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.3...v5.0.0-pre.4) (2021-05-13)
 
 
