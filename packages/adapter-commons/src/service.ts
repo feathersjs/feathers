@@ -118,7 +118,7 @@ export class AdapterService<
   D = Partial<T>,
   O extends Partial<ServiceOptions> = Partial<ServiceOptions>
 > implements ServiceMethods<T|Paginated<T>, D> {
-  options: ServiceOptions;
+  options: ServiceOptions & O;
 
   constructor (options: O) {
     this.options = Object.assign({
