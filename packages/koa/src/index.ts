@@ -1,13 +1,14 @@
-import Debug from 'debug';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
+import koaQs from 'koa-qs';
 import { Application as FeathersApplication } from '@feathersjs/feathers';
 import { routing } from '@feathersjs/transport-commons';
+import { createDebug } from '@feathersjs/commons';
 
 import { Application } from './declarations';
 import { errorHandler } from './error-handler';
 
-const debug = Debug('@feathersjs/koa');
+const debug = createDebug('@feathersjs/koa');
 
 export * from './declarations';
 export * from './authenticate';
@@ -68,6 +69,7 @@ export function koa (_app?: FeathersApplication): Application<any> {
     }
   });
 
+  koaQs(app as any);
   app.configure(routing());
   app.use((ctx, next) => {
     ctx.feathers = { provider: 'rest' };

@@ -64,7 +64,6 @@
     "@feathersjs/rest-client": "^5.0.0-pre.4",
     "@feathersjs/socketio": "^5.0.0-pre.4",
     "@feathersjs/socketio-client": "^5.0.0-pre.4",
-    "@types/debug": "^4.1.5",
     "@types/mocha": "^8.2.2",
     "@types/node": "^15.12.1",
     "axios": "^0.21.1",
