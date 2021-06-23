@@ -6,7 +6,7 @@ import {
 } from '@feathersjs/authentication';
 import { Params } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
-import { createDebug } from '@feathersjs/commons';
+import { createDebug, omit } from '@feathersjs/commons';
 
 const debug = createDebug('@feathersjs/authentication-oauth/strategy');
 
@@ -118,7 +118,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
     debug(`updateEntity with id ${id} and data`, data);
 
-    return this.entityService.patch(id, data, params);
+    return this.entityService.patch(id, data, omit(params, 'query'));
   }
 
   async getEntity (result: any, params: Params) {
