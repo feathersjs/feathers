@@ -1,6 +1,8 @@
+import fs from 'fs';
 import path from 'path';
-import { stat, readFile } from 'fs/promises';
 import { Logger } from 'hygen';
+
+const { stat, readFile } = fs.promises;
 
 export const TEMPLATE_PATH = '_templates';
 
@@ -42,6 +44,7 @@ export async function getHelpers (pkg: PackageJSON, self: PackageJSON, _logger: 
     lib: pkg.directories?.lib,
     test: pkg.directories?.test,
     feathers: pkg.feathers,
+    bin: path.join(__dirname, '..', 'bin', 'feathers'),
     installPackages (names: string[], dev = false) {
       // Adds version numbers to dependencies if it is registered
       const deps = names.filter(name => !!name).map(name =>

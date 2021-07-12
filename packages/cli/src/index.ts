@@ -9,9 +9,11 @@ import { RunnerConfig } from 'hygen/dist/types';
 
 const selfPkg = require('../package.json');
 
+export const DEFAULT_SUBTYPE = 'create';
+
 export async function generator (args: string[], config?: RunnerConfig) {
   const [type, _subtype, ...otherArgs] = args;
-  const subtype = !_subtype || _subtype.startsWith('--') ? 'new' : _subtype;
+  const subtype = !_subtype || _subtype.startsWith('--') ? DEFAULT_SUBTYPE : _subtype;
   const runnerArgs =  [type, subtype, ...otherArgs];
   const logger = new Logger(console.log.bind(console));
   const pkg = await loadJSON(path.join(process.cwd(), 'package.json'));

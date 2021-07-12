@@ -1,8 +1,10 @@
 import os from 'os';
 import path from 'path';
-import { mkdtemp } from 'fs/promises';
+import fs from 'fs';
 import assert from 'assert';
 import { generator } from '../src';
+
+const { mkdtemp } = fs.promises;
 
 describe('@feathersjs/cli', () => {
   let tmpDir: string;
@@ -27,7 +29,6 @@ describe('@feathersjs/cli', () => {
   });
 
   it('generates and app', async () => {
-    console.log(tmpDir);
     // Emulates a `feathers generate app`
     const { success } = await generator(['app'], {
       cwd: tmpDir,

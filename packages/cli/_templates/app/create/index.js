@@ -1,5 +1,5 @@
 const path = require('path');
-const { readFile } = require('fs/promises');
+const { readFile } = require('fs').promises;
 const loadJSON = name => readFile(name).then(JSON.parse).catch(() => ({}));
 
 module.exports = {
