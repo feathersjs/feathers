@@ -118,6 +118,26 @@ describe('@feathersjs/koa', () => {
     })
   });
 
+  it('throws a 404 NotFound JSON error', async () => {
+    await assert.rejects(() => axios.post('http://localhost:8465/no/where', {}, {
+      headers: {
+        'X-Service-Method': 'internalMethod',
+        Accept: 'application/json'
+      }
+    }), error => {
+      const { data } = error.response;
+
+      assert.deepStrictEqual(data, {
+        name: 'NotFound',
+        message: 'Not Found',
+        code: 404,
+        className: 'not-found'
+      });
+
+      return true;
+    });
+  });
+
   restTests('Services', 'todo', 8465);
   restTests('Root service', '/', 8465);
 });
