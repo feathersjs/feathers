@@ -17,7 +17,7 @@ describe('@feathersjs/cli', () => {
     packager: 'npm',
     database: 'sequelize',
     tester: 'mocha',
-    framework: 'express',
+    framework: 'koa',
     transports: [
       'rest',
       'websockets'

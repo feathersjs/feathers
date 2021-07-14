@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { Logger } from 'hygen';
 
+type PackageJSON = { [key: string]: any };
+
 const { stat, readFile } = fs.promises;
 
 export const TEMPLATE_PATH = '_templates';
@@ -36,15 +38,17 @@ export function locateTemplates (args: string[]) {
     });
 }
 
-type PackageJSON = { [key: string]: any };
-
 export async function getHelpers (pkg: PackageJSON, self: PackageJSON, _logger: Logger) {
   const helpers = {
     pkg,
     lib: pkg.directories?.lib,
     test: pkg.directories?.test,
     feathers: pkg.feathers,
-    bin: path.join(__dirname, '..', 'bin', 'feathers'),
+    generate (...args: string[]) {
+      const binary = path.join(__dirname, '..', 'bin', 'feathers');
+
+      return `${binary} generate ${args.join(' ')}`;
+    },
     installPackages (names: string[], dev = false) {
       // Adds version numbers to dependencies if it is registered
       const deps = names.filter(name => !!name).map(name =>

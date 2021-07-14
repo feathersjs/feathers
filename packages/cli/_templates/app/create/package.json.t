@@ -1,6 +1,6 @@
 ---
 to: package.json
-sh: cd <%= cwd %>; <%= h.bin %> generate app <%= language %>
+sh: cd <%= cwd %>; <%= h.generate('app', language) %>
 ---
 <%
   // Our package.json as a JavaScript object using the
