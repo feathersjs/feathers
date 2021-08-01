@@ -42,17 +42,17 @@
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
-    "@types/lodash": "^4.14.170",
+    "@types/lodash": "^4.14.171",
     "axios": "^0.21.1",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@feathersjs/feathers": "^5.0.0-pre.5",
-    "@types/mocha": "^8.2.2",
-    "@types/node": "^15.12.4",
-    "mocha": "^9.0.1",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.4.9",
+    "mocha": "^9.0.3",
     "shx": "^0.3.3",
-    "ts-node": "^10.0.0",
-    "typescript": "^4.3.4"
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
   }
 }
