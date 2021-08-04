@@ -1,5 +1,5 @@
 ---
-to: readme.md
+to: "readme.md"
 ---
 
 # <%= name %>

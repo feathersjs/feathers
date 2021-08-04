@@ -1,39 +1,34 @@
 /* eslint-disable @typescript-eslint/no-var-requires, no-console */
 import path from 'path';
-import { runner, Logger } from 'hygen';
+import {
+  engine, getRunnerArgs, Logger, RunnerConfig, RunnerArgs
+} from '@feathersjs/hygen';
 import updateNotifier from 'update-notifier';
 import program from 'commander';
 
 import { loadJSON, locateTemplates, getHelpers } from './utils';
-import { RunnerConfig } from 'hygen/dist/types';
 
 const selfPkg = require('../package.json');
 
 export const DEFAULT_SUBTYPE = 'create';
 
-export async function generator (args: string[], config?: RunnerConfig) {
-  const [type, ...otherArgs] = args;
-  const runnerArgs = !args[1] || args[1].startsWith('--')
-    ? [type, DEFAULT_SUBTYPE, ...otherArgs]
-    : [...args];
+export async function generate (runnerArgs: RunnerArgs, config?: RunnerConfig) {
   const logger = new Logger(console.log.bind(console));
   const pkg = await loadJSON(path.join(process.cwd(), 'package.json'));
-  const helpers = await getHelpers(pkg, selfPkg, logger);
+  const { language } = pkg.feathers || {};
+  const helpers = await getHelpers(pkg, selfPkg, logger, generate);
   const templates = await locateTemplates(runnerArgs);
 
-  if (!process.env.HYGEN_TMPLS) {
-    // Workaround to force the templates we want to use, otherwise
-    // Hygen will always look in the local _templates first
-    process.env.HYGEN_TMPLS = templates;
-  }
-
-  return runner(runnerArgs, {
+  return engine({
+    ...runnerArgs,
+    subaction: language
+  }, {
     helpers,
-    templates,
     logger,
+    templates,
+    debug: true,
     cwd: process.cwd(),
-    debug: !!process.env.DEBUG,
-    exec: (action, body) => {
+    exec: (action: string, body: any) => {
       const opts = body && body.length > 0 ? { input: body } : {};
       const execa = require('execa').command(action, { ...opts, shell: true });
 
@@ -54,8 +49,16 @@ export function cli (argv: string[]) {
     .alias('g')
     .description('Run a Feathers generator')
     .allowUnknownOption()
-    .action((_command, args) => {
-      generator(args)
+    .action((_command: any, args: string[]) => {
+      const [type, ...otherArgs] = args;
+      const _args = !args[1] || args[1].startsWith('--')
+        ? [type, DEFAULT_SUBTYPE, ...otherArgs]
+        : [...args];
+
+      generate(getRunnerArgs(_args))
+        .then(() => {
+          return { success: true };
+        })
         .catch(error => {
           console.error(error);
           return { success: false };

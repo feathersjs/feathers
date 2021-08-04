@@ -1,10 +1,9 @@
 ---
-to: <%= h.lib %>/services/<%= path %>.js
+to: "<%= h.lib %>/services/<%= path %>.js"
 inject: true
-before: "hooks\\(<%= className %>"
+after: "The <%= className %> service class"
 ---
 
-// <%= className %> service class
 export class <%= className %> {
   constructor (options) {
     this.options = options || {};

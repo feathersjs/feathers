@@ -1,10 +1,8 @@
 const path = require('path');
-const { readFile } = require('fs').promises;
-const loadJSON = name => readFile(name).then(JSON.parse).catch(() => ({}));
 
 module.exports = {
-  async prompt ({ prompter, args }) {
-    const pkg = await loadJSON(path.join(process.cwd(), 'package.json'));
+  async prompt ({ prompter, args, config }) {
+    const { pkg } = config.helpers;
     const name = pkg.name || process.cwd().split(path.sep).pop();
     const data = await prompter.prompt([{
       type: 'select',
@@ -86,5 +84,13 @@ module.exports = {
     }]);
 
     return data;
+  },
+
+  async rendered (_result, config) {
+    // Generate the TS/JS specific code files
+    await config.helpers.generate({
+      generator: 'app',
+      action: 'base'
+    });
   }
 }

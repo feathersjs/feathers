@@ -2,7 +2,7 @@ import os from 'os';
 import path from 'path';
 import fs from 'fs';
 import assert from 'assert';
-import { generator } from '../src';
+import { generate } from '../src';
 
 const { mkdtemp } = fs.promises;
 
@@ -30,7 +30,11 @@ describe('@feathersjs/cli', () => {
 
   it('generates and app', async () => {
     // Emulates a `feathers generate app`
-    const { success } = await generator(['app'], {
+    const result = await generate({
+      generator: 'app',
+      action: 'create',
+      args: {}
+    }, {
       cwd: tmpDir,
       createPrompter () {
         return {
@@ -41,6 +45,6 @@ describe('@feathersjs/cli', () => {
       }
     });
 
-    assert.ok(success);
+    assert.ok(result.actions);
   });
 });

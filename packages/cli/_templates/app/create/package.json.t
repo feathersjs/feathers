@@ -1,10 +1,9 @@
 ---
-to: package.json
-sh: cd <%= cwd %>; <%= h.generate('app', language) %>
+to: "package.json"
 ---
 <%
   // Our package.json as a JavaScript object using the
-  // global template variables
+  // global template variables from the prompts in `index.js`
   const pkg = {
     name,
     description,
@@ -16,7 +15,7 @@ sh: cd <%= cwd %>; <%= h.generate('app', language) %>
     contributors: [],
     bugs: {},
     engines: {
-      node: '>= 14.0.0'
+      node: '>= ' + process.version.substring(1)
     },
     feathers: {
       language,
@@ -28,7 +27,7 @@ sh: cd <%= cwd %>; <%= h.generate('app', language) %>
     },
     directories: {
       lib,
-      test: 'test/'
+      test: 'test'
     },
     main: `${lib}/`
   }

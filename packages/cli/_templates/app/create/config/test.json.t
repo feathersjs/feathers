@@ -1,5 +1,5 @@
 ---
-to: config/test.json
+to: "config/test.json"
 ---
 {
   "port": 8998

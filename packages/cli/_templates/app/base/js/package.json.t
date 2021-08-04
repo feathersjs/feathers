@@ -1,5 +1,5 @@
 ---
-to: package.json
+to: "package.json"
 force: true
 sh: "<%= h.install(...dependencies) %>; <%= h.installDev(...devDependencies) %>"
 ---
@@ -10,6 +10,7 @@ const pkg = {
   ...h.pkg,
   type: 'module',
   scripts: {
+    ...h.scripts,
     start: `node ${h.lib}/`,
     dev: `nodemon ${h.lib}/`,
     test: h.feathers.tester === 'mocha' ? 'mocha test/ --recursive --exit' : 'jest  --forceExit'

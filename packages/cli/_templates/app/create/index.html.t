@@ -1,5 +1,5 @@
 ---
-to: public/index.html
+to: "public/index.html"
 ---
 <!DOCTYPE html>
 <html lang="en">

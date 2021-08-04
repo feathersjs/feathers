@@ -1,13 +1,15 @@
 ---
-to: <%= h.lib %>/services/<%= path %>.js
-sh: <%= h.generate('custom', 'service', '--name', name, '--path', path, '--className', className) %>
+to: "<%= h.lib %>/services/<%= path %>.js"
 ---
 import { hooks } from '@feathersjs/hooks';
 
+// The <%= className %> service class
+
+// Register hooks that run on all service methods
 hooks(<%= className %>.prototype, [
-  authenticate('jwt')
 ]);
 
+// Register service method specific hooks
 hooks(<%= className %>, {
   find: [],
   get: [],
@@ -17,6 +19,7 @@ hooks(<%= className %>, {
   remove: []
 });
 
+// A configure function that registers the service via `app.configure`
 export function <%= configureFunction %> (app) {
   const options = {
     paginate: app.get('paginate')

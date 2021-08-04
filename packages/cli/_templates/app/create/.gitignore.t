@@ -1,5 +1,5 @@
 ---
-to: .gitignore
+to: ".gitignore"
 ---
 # Logs
 logs

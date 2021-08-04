@@ -1,5 +1,5 @@
 ---
-to: config/default.json
+to: "config/default.json"
 ---
 {
   "host": "localhost",

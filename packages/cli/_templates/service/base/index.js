@@ -1,7 +1,6 @@
-const _ = require('lodash');
-
 module.exports = {
-  async prompt ({ prompter, args }) {
+  async prompt ({ prompter, args, config }) {
+    const { _ } = config.helpers;
     const { name } = await prompter.prompt([{
       type: 'input',
       name: 'name',
@@ -18,10 +17,12 @@ module.exports = {
     const className = `${_.upperFirst(_.camelCase(name))}Service`;
     const kebabName = _.kebabCase(name);
     const configureFunction = _.camelCase(name);
+    const relative = path.split('/').map(() => '..').join('/');
 
     return {
       name,
       path,
+      relative,
       className,
       kebabName,
       configureFunction

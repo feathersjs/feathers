@@ -1,11 +1,7 @@
-const path = require('path');
-const { readFile } = require('fs').promises;
-const loadJSON = name => readFile(name).then(JSON.parse).catch(() => ({}));
-
 module.exports = {
-  async prompt () {
-    const { feathers } = await loadJSON(path.join(process.cwd(), 'package.json'));
-    const hasSocketio = feathers.transports.includes('websockets');
+  async prompt ({ config }) {
+    const { feathers } = config.helpers;
+    const hasSocketio = feathers.transports && feathers.transports.includes('websockets');
     const dependencies = [
       '@feathersjs/feathers',
       '@feathersjs/errors',
