@@ -4,7 +4,7 @@ inject: true
 after: "The <%= className %> service class"
 ---
 
-export class <%= className %> {
+class <%= className %> {
   constructor (options) {
     this.options = options || {};
   }

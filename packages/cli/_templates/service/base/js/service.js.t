@@ -11,13 +11,21 @@ hooks(<%= className %>.prototype, [
 
 // Register service method specific hooks
 hooks(<%= className %>, {
-  find: [],
-  get: [],
-  create: [],
-  update: [],
-  patch: [],
-  remove: []
+  find: [
+  ],
+  get: [
+  ],
+  create: [
+  ],
+  update: [
+  ],
+  patch: [
+  ],
+  remove: [
+  ]
 });
+
+export { <%= className %> };
 
 // A configure function that registers the service via `app.configure`
 export function <%= configureFunction %> (app) {

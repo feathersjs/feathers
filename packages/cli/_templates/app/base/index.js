@@ -39,6 +39,17 @@ module.exports = {
       );
     }
 
+    if (feathers.language === 'ts') {
+      devDependencies.push(
+        `@types/${feathers.tester}`,
+        feathers.framework === 'koa' ? '@types/koa-static' : '@types/compression',
+        '@types/node',
+        'ts-node-dev',
+        'typescript',
+        'shx'
+      )
+    }
+
     return {
       hasSocketio,
       dependencies,

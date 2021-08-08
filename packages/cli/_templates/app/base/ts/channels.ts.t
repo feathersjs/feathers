@@ -1,9 +1,11 @@
 ---
-to: "<%= h.lib %>/channels.js"
+to: "<%= h.lib %>/channels.ts"
 ---
-import { logger } from './logger.js';
+import '@feathersjs/transport-commons';
+import { Application, HookContext } from './declarations';
+import { logger } from './logger';
 
-export default app => {
+export default function(app: Application) {
   if(typeof app.channel !== 'function') {
     // If no real-time functionality has been configured just return
     return;
@@ -11,12 +13,12 @@ export default app => {
 
   logger.warn('Publishing all events to all authenticated users. See `channels.js` and https://docs.feathersjs.com/api/channels.html for more information.');
 
-  app.on('connection', connection => {
+  app.on('connection', (connection: any) => {
     // On a new real-time connection, add it to the anonymous channel
     app.channel('anonymous').join(connection);
   });
 
-  app.on('login', (authResult, { connection }) => {
+  app.on('login', (authResult: any, { connection }: any) => {
     // connection can be undefined if there is no
     // real-time connection, e.g. when logging in via REST
     if(connection) {
@@ -44,9 +46,11 @@ export default app => {
   });
 
   // eslint-disable-next-line no-unused-vars
-  app.publish((data, hook) => {
+  app.publish((data: any, hook: HookContext) => {
     // Here you can add event publishers to channels set up in `channels.js`
     // To publish only for a specific event use `app.publish(eventname, () => {})`
+
+    console.log('Publishing all events to all authenticated users. See `channels.js` and https://docs.feathersjs.com/api/channels.html for more information.'); // eslint-disable-line
 
     // e.g. to publish all service events to all authenticated users use
     return app.channel('authenticated');

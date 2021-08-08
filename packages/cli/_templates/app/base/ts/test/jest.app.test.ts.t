@@ -1,15 +1,16 @@
 ---
-to: "<%= h.feathers.tester === 'jest' ? `${h.test}/app.test.js` : null %>"
+to: "<%= h.feathers.tester === 'jest' ? `${h.test}/app.test.ts` : null %>"
 ---
 import assert from 'assert';
 import axios from 'axios';
-import { app } from '../<%= h.lib %>/app.js';
+import { Server } from 'http';
+import { app } from '../<%= h.lib %>/app';
 
 const port = app.get('port');
 const appUrl = `http://${app.get('host')}:${port}`;
 
 describe('Feathers application tests', () => {
-  let server;
+  let server: Server;
 
   beforeAll(async => {
     server = await app.listen(port);

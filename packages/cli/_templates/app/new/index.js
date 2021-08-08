@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  async prompt ({ prompter, args, config }) {
+  async prompt ({ prompter, config }) {
     const { pkg } = config.helpers;
     const name = pkg.name || process.cwd().split(path.sep).pop();
     const data = await prompter.prompt([{
@@ -11,19 +11,16 @@ module.exports = {
       choices: [
         { message: 'JavaScript', name: 'js' },
         { message: 'TypeScript', name: 'ts'  }
-      ],
-      skip: args.language
+      ]
     }, {
       type: 'input',
       name: 'name',
       message: 'What is the name of your application?',
-      default: name,
-      skip: args.name
+      default: name
     }, {
       type: 'input',
       name: 'description',
-      message: 'Description',
-      skip: pkg.description || args.description
+      message: 'Description'
     }, {
       type: 'select',
       name: 'database',
@@ -34,17 +31,14 @@ module.exports = {
         { name: 'sequelize', message: 'SQL (Sequelize)' },
         { name: 'mongodb', message: 'MongoDB' },
         { name: 'custom', message: 'Custom services/another database' }
-      ],
-      skip: args.database
+      ]
     }, {
       type: 'input',
       name: 'lib',
       message: 'What folder should the source files live in?',
-      default: 'src',
-      skip: pkg.directories?.lib || args.lib
+      default: 'src'
     }, {
       name: 'packager',
-      skip: args.packager,
       type: 'select',
       message: 'Which package manager are you using?',
       hint: 'Has to be installed globally',
@@ -54,7 +48,6 @@ module.exports = {
       ]
     }, {
       type: 'select',
-      skip: args.tests,
       name: 'tester',
       message: 'Which testing framework do you prefer?',
       choices: [
@@ -64,7 +57,6 @@ module.exports = {
     }, {
       type: 'multiselect',
       name: 'transports',
-      skip: args.transports,
       message: 'What APIs do you want to offer?',
       initial: [0, 1],
       choices: [
@@ -74,7 +66,6 @@ module.exports = {
     }, {
       type: 'select',
       name: 'framework',
-      skip: args.framework,
       message: 'Which HTTP framework do you want to use?',
       hint: 'Your app will be fully compatible with the chosen framework',
       choices: [

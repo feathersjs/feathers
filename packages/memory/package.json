@@ -29,6 +29,7 @@
     "CHANGELOG.md",
     "LICENSE",
     "README.md",
+    "_templates/**",
     "src/**",
     "lib/**",
     "*.js"
