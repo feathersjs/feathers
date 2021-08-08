@@ -47,14 +47,6 @@ module.exports = {
         { name: 'Yarn', value: 'yarn'  }
       ]
     }, {
-      type: 'select',
-      name: 'tester',
-      message: 'Which testing framework do you prefer?',
-      choices: [
-        { name: 'mocha', message: 'Mocha' },
-        { name: 'jest', message: 'Jest' }
-      ]
-    }, {
       type: 'multiselect',
       name: 'transports',
       message: 'What APIs do you want to offer?',

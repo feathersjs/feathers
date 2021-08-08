@@ -1,8 +1,8 @@
 ---
-to: "<%= h.feathers.tester === 'mocha' ? `${h.test}/services/${path}.test.js` : null %>"
+to: "<%= h.test %>/services/%<= path %>.test.ts"
 ---
 import assert from 'assert';
-import { app } from '../<%= relative %>/<%= h.lib %>/app.js';
+import { app } from '../<%= relative %>/<%= h.lib %>/app';
 
 describe('\'<%= name %>\' service', () => {
   it('registered the service', () => {

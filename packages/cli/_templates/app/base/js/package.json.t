@@ -13,7 +13,7 @@ const pkg = {
     ...h.scripts,
     start: `node ${h.lib}/`,
     dev: `nodemon ${h.lib}/`,
-    test: h.feathers.tester === 'mocha' ? 'mocha test/ --recursive --exit' : 'jest  --forceExit'
+    test: 'mocha test/ --recursive --exit'
   }
 };
 

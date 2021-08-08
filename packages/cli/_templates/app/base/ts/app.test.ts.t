@@ -1,46 +1,43 @@
 ---
-to: "<%= h.feathers.tester === 'jest' ? `${h.test}/app.test.js` : null %>"
+to: "<%= h.test %>/app.test.ts"
 ---
 import assert from 'assert';
 import axios from 'axios';
-import { app } from '../<%= h.lib %>/app.js';
+import { Server } from 'http';
+import { app } from '../<%= h.lib %>/app';
 
 const port = app.get('port');
 const appUrl = `http://${app.get('host')}:${port}`;
 
 describe('Feathers application tests', () => {
-  let server;
+  let server: Server;
 
-  beforeAll(async => {
+  before(async () => {
     server = await app.listen(port);
   });
 
-  afterAll(done => {
+  after(done => {
     server.close(done);
   });
 
   it('starts and shows the index page', async () => {
-    expect.assertions(1);
-
     const { data } = await axios.get(appUrl);
 
-    expect(data.indexOf('<html lang="en">')).not.toBe(-1);
+    assert.ok(data.indexOf('<html lang="en">') !== -1);
   });
 
   it('shows a 404 JSON error', async () => {
-    expect.assertions(4);
-    
     try {
       await axios.get(`${appUrl}/path/to/nowhere`, {
         responseType: 'json'
       });
+      assert.fail('should never get here');
     } catch (error) {
       const { response } = error;
 
-      expect(response.status).toBe(404);
-      expect(response.data.code).toBe(404);
-      expect(response.data.message).toBe('Page not found');
-      expect(response.data.name).toBe('NotFound');
+      assert.strictEqual(response.status, 404);
+      assert.strictEqual(response.data.code, 404);
+      assert.strictEqual(response.data.name, 'NotFound');
     }
   });
 });

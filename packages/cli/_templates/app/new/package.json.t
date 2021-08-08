@@ -21,7 +21,6 @@ to: "package.json"
       language,
       packager,
       database,
-      tester,
       framework,
       transports
     },

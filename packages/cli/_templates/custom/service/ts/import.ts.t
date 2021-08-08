@@ -4,4 +4,4 @@ inject: true
 prepend: true
 ---
 import { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers';
-import { Application } from '<%= relative %>declarations';
+import { Application } from '<%= relative %>/declarations';

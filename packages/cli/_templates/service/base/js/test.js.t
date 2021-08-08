@@ -1,11 +1,13 @@
 ---
-to: "<%= h.feathers.tester === 'jest' ? `${h.test}/services/${path}.test.js` : null %>"
+to: "<%= h.test %>/services/<%= path %>.test.js"
 ---
+import assert from 'assert';
 import { app } from '../<%= relative %>/<%= h.lib %>/app.js';
 
 describe('\'<%= name %>\' service', () => {
   it('registered the service', () => {
     const service = app.service('<%= path %>');
-    expect(service).toBeTruthy();
+
+    assert.ok(service, 'Registered the service');
   });
 });

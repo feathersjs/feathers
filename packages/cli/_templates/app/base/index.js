@@ -13,7 +13,7 @@ module.exports = {
     const devDependencies = [
       'nodemon',
       'axios',
-      feathers.tester
+      'mocha'
     ];
 
     if (hasSocketio) {
@@ -41,13 +41,13 @@ module.exports = {
 
     if (feathers.language === 'ts') {
       devDependencies.push(
-        `@types/${feathers.tester}`,
+        '@types/mocha',
         feathers.framework === 'koa' ? '@types/koa-static' : '@types/compression',
         '@types/node',
         'ts-node-dev',
         'typescript',
         'shx'
-      )
+      );
     }
 
     return {

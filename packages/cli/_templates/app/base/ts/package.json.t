@@ -10,12 +10,10 @@ const pkg = {
   ...h.pkg,
   scripts: {
     ...h.pkg.scripts,
-    dev: `ts-node-dev --no-notify ${h.lib}/`,
-    compile: `shx rm -rf lib/ && tsc`,
-    start: `npm run compile && node lib/`,
-    test: h.feathers.tester === 'mocha' 
-      ? 'mocha test/**/*.ts --require ts-node/register --recursive --exit'
-      : 'jest  --forceExit'
+    dev: 'ts-node-dev --no-notify ${h.lib}/',
+    compile: 'shx rm -rf lib/ && tsc',
+    start: 'npm run compile && node lib/',
+    test: 'mocha test/ --require ts-node/register --recursive --extension .ts --exit'
   }
 };
 

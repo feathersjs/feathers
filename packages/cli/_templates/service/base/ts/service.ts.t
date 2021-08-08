@@ -1,5 +1,5 @@
 ---
-to: "<%= h.lib %>/services/<%= path %>.js"
+to: "<%= h.lib %>/services/<%= path %>.ts"
 ---
 import { hooks } from '@feathersjs/hooks';
 
@@ -27,11 +27,17 @@ hooks(<%= className %>, {
 
 export { <%= className %> };
 
+// Add this service to the service type index
+declare module '<%= relative %>/declarations' {
+  interface ServiceTypes {
+    '<%= path %>': <%= className %>;
+  }
+}
+
 // A configure function that registers the service via `app.configure`
 export function <%= configureFunction %> (app) {
   const options = {
-    paginate: app.get('paginate'),
-    app
+    paginate: app.get('paginate')
   }
 
   app.use('<%= path %>', new <%= className %>(options));
