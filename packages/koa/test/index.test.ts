@@ -108,12 +108,12 @@ describe('@feathersjs/koa', () => {
       headers: {
         'X-Service-Method': 'internalMethod'
       }
-    }), error => {
+    }), (error: any) => {
       const { data } = error.response;
 
       assert.strictEqual(data.code, 405);
       assert.strictEqual(data.message, 'Method `internalMethod` is not supported by this endpoint.');
-      
+
       return true;
     })
   });
@@ -124,7 +124,7 @@ describe('@feathersjs/koa', () => {
         'X-Service-Method': 'internalMethod',
         Accept: 'application/json'
       }
-    }), error => {
+    }), (error: any) => {
       const { data } = error.response;
 
       assert.deepStrictEqual(data, {
