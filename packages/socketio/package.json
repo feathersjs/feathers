@@ -68,5 +68,5 @@
     "socket.io-client": "^4.1.3",
     "typescript": "^4.3.5"
   },
-  "gitHead": "738f84f91fb72d5e10a0bf57b58db75b0b03d3ff"
+  "gitHead": "3d1721a7286e6a7f37bbc38695fe45084023f13b"
 }
