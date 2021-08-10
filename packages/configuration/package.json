@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/configuration",
   "description": "A small configuration module for your Feathers application.",
-  "version": "5.0.0-pre.6",
+  "version": "5.0.0-pre.9",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -57,8 +57,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^5.0.0-pre.6",
-    "@feathersjs/feathers": "^5.0.0-pre.6",
+    "@feathersjs/commons": "^5.0.0-pre.9",
+    "@feathersjs/feathers": "^5.0.0-pre.9",
     "@types/config": "^0.0.39",
     "config": "^3.3.6"
   },
@@ -70,5 +70,5 @@
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
   },
-  "gitHead": "738f84f91fb72d5e10a0bf57b58db75b0b03d3ff"
+  "gitHead": "3d1721a7286e6a7f37bbc38695fe45084023f13b"
 }
