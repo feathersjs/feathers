@@ -74,6 +74,6 @@ module.exports = {
     await config.helpers.generate({
       generator: 'app',
       action: 'base'
-    });
+    }, config);
   }
 }

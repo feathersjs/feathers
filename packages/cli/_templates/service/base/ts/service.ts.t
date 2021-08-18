@@ -35,9 +35,10 @@ declare module '<%= relative %>/declarations' {
 }
 
 // A configure function that registers the service via `app.configure`
-export function <%= configureFunction %> (app) {
+export function <%= configureFunction %> (app: Application) {
   const options = {
-    paginate: app.get('paginate')
+    paginate: app.get('paginate'),
+    app
   }
 
   app.use('<%= path %>', new <%= className %>(options));

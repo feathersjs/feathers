@@ -3,20 +3,20 @@ to: "<%= h.lib %>/services/<%= path %>.ts"
 inject: true
 after: "The <%= className %> service class"
 ---
-interface <%= className %>Data {}
-interface <%= className %>Options {
+interface Data {}
+interface Options {
   app: Application;
   paginate: any;
 }
 
-class <%= className %> implements Partial<ServiceMethods<className %>Data>> {
-  options: <%= className %>Options;
+class <%= className %> implements Partial<ServiceMethods<Data>> {
+  options: Options;
 
-  constructor (options: <%= className %>Options) {
+  constructor (options: Options) {
     this.options = options;
   }
 
-  async find (params?: Params): Promise<Data[] | Paginated<Data>> {
+  async find (params?: Params): Promise<Data[]> {
     return [];
   }
 

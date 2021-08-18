@@ -46,7 +46,7 @@ describe('@feathersjs/cli', () => {
 
   for (const { language, framework } of combinations) {
     it(`generates ${language} ${framework} app and passes tests`, async () => {
-      const prompts = {
+      const appPrompts = {
         framework,
         language,
         name: 'feathers-cli-test',
@@ -59,8 +59,12 @@ describe('@feathersjs/cli', () => {
           'websockets'
         ]
       }
+      const servicePrompts = {
+        name: 'test',
+        path: 'tests'
+      }
       // Emulates a `feathers generate app`
-      const result = await generate({
+      const appResult = await generate({
         generator: 'app',
         action: 'new',
         args: {}
@@ -68,13 +72,30 @@ describe('@feathersjs/cli', () => {
         createPrompter () {
           return {
             async prompt () {
-              return prompts;
+              return appPrompts;
             }
           } as any;
         }
       });
 
-      assert.ok(result.actions);
+      assert.ok(appResult.actions);
+
+      // Emulates a `feathers generate app`
+      const serviceResult = await generate({
+        generator: 'custom',
+        action: 'service',
+        args: {}
+      }, {
+        createPrompter () {
+          return {
+            async prompt () {
+              return servicePrompts;
+            }
+          } as any;
+        }
+      });
+
+      assert.ok(serviceResult.actions);
 
       const command = execa.command('npm test', { shell: true });
 

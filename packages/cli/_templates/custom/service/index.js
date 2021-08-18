@@ -5,7 +5,7 @@ module.exports = {
       generator: 'service',
       action: 'base',
       args
-    });
+    }, config);
 
     return result.args;
   }

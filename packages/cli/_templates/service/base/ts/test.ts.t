@@ -1,5 +1,5 @@
 ---
-to: "<%= h.test %>/services/%<= path %>.test.ts"
+to: "<%= h.test %>/services/<%= path %>.test.ts"
 ---
 import assert from 'assert';
 import { app } from '../<%= relative %>/<%= h.lib %>/app';

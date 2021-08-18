@@ -23,23 +23,23 @@ export async function generate (runnerArgs: RunnerArgs, config?: RunnerConfig) {
     ...runnerArgs,
     subaction: runnerArgs.subaction || (language && `\\/${language}\\/`)
   }, {
-    helpers,
-    logger,
-    templates,
     debug: !!process.env.FEATHERS_DEBUG,
     cwd: process.cwd(),
-    exec: (action: string, body: any) => {
-      const opts = body && body.length > 0 ? { input: body } : {};
-      const command = require('execa').command(action, { ...opts, shell: true });
+    exec: (action: string) => {
+      const [command, ...args] = action.split(' ');
+      const spawn = require('execa');
 
-      logger.notice(`\nRunning "${action.split(' ')[0]}", hold tight...\n`);
-      command.stdout.pipe(process.stdout);
-      command.stderr.pipe(process.stderr);
+      logger.notice(`\nRunning "${command}", hold tight...\n`);
 
-      return command;
+      return spawn(command, args, {
+        stdio: 'inherit'
+      });
     },
     createPrompter: () => require('enquirer'),
-    ...config
+    ...config,
+    helpers,
+    logger,
+    templates
   });
 }
 
