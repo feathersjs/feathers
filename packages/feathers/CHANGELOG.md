@@ -3,6 +3,81 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.9](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.8...v5.0.0-pre.9) (2021-08-09)
+
+**Note:** Version bump only for package @feathersjs/feathers
+
+
+
+
+
+# [5.0.0-pre.8](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.7...v5.0.0-pre.8) (2021-08-09)
+
+**Note:** Version bump only for package @feathersjs/feathers
+
+
+
+
+
+# [5.0.0-pre.7](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.6...v5.0.0-pre.7) (2021-08-09)
+
+
+### Bug Fixes
+
+* **core:** Clean up readme ([eb3b4f2](https://github.com/feathersjs/feathers/commit/eb3b4f248c0816c92a2300cceed18a6f2518508a))
+* **core:** Set version back to development ([b328767](https://github.com/feathersjs/feathers/commit/b3287676cd773e164fd646ba4cffbf81983a9157))
+
+
+
+
+
+# [5.0.0-pre.6](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.5...v5.0.0-pre.6) (2021-08-08)
+
+**Note:** Version bump only for package @feathersjs/feathers
+
+
+
+
+
+# [5.0.0-pre.5](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.4...v5.0.0-pre.5) (2021-06-23)
+
+
+### Bug Fixes
+
+* **core:** Add list of protected methods that can not be used for custom methods ([#2390](https://github.com/feathersjs/feathers/issues/2390)) ([6584a21](https://github.com/feathersjs/feathers/commit/6584a216e5a7d5f2a45822be6bfcb91c35cc2252))
+
+
+
+
+
+# [5.0.0-pre.4](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.3...v5.0.0-pre.4) (2021-05-13)
+
+
+### Bug Fixes
+
+* **typescript:** Move Paginated type back for better compatibility ([#2350](https://github.com/feathersjs/feathers/issues/2350)) ([2917d05](https://github.com/feathersjs/feathers/commit/2917d05fffb4716d3c4cdaa5ac6a1aee0972e8a6))
+
+
+
+
+
+# [5.0.0-pre.3](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.2...v5.0.0-pre.3) (2021-04-21)
+
+
+### Bug Fixes
+
+* **typescript:** Improve TypeScript backwards compatibility ([#2310](https://github.com/feathersjs/feathers/issues/2310)) ([f33be73](https://github.com/feathersjs/feathers/commit/f33be73fc46a533efb15df9aab0658e3240d3897))
+
+
+### Features
+
+* **deno:** Feathers core build for Deno ([#2299](https://github.com/feathersjs/feathers/issues/2299)) ([dece8fb](https://github.com/feathersjs/feathers/commit/dece8fbc0e7601f1505ce8bbb1e4e69cc26e8f98))
+* **dependencies:** Remove direct debug dependency ([#2296](https://github.com/feathersjs/feathers/issues/2296)) ([501d416](https://github.com/feathersjs/feathers/commit/501d4164d30c6a126906dc640cdfdc82207ba34a))
+
+
+
+
+
 # [5.0.0-pre.2](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.1...v5.0.0-pre.2) (2021-04-06)
 
 **Note:** Version bump only for package @feathersjs/feathers

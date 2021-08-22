@@ -41,3 +41,4 @@ exclude_patterns:
   - "**/dist/*"	
   - "**/*.dist.js"	
   - "**/templates/*"
+  - "**/_**"

@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { feathers, HookContext } from '@feathersjs/feathers';
-import { memory } from '@feathersjs/adapter-memory';
+import { memory } from '@feathersjs/memory';
 
 import { schema, resolveSchemas, Infer } from '../src';
 

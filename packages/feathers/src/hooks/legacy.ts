@@ -1,4 +1,4 @@
-import { _ } from '@feathersjs/commons';
+import { _ } from '../dependencies';
 import { LegacyHookFunction } from '../declarations';
 
 const { each } = _;

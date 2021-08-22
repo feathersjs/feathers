@@ -1,8 +1,8 @@
 import { NotFound } from '@feathersjs/errors';
 import { _ } from '@feathersjs/commons';
-import { sorter, select, AdapterService, ServiceOptions, InternalServiceMethods } from '@feathersjs/adapter-commons';
+import { sorter, select, AdapterService, ServiceOptions, InternalServiceMethods, AdapterParams } from '@feathersjs/adapter-commons';
 import sift from 'sift';
-import { Params, NullableId, Id } from '@feathersjs/feathers';
+import { NullableId, Id } from '@feathersjs/feathers';
 
 export interface MemoryServiceStore<T> {
   [key: string]: T;
@@ -21,7 +21,7 @@ const _select = (data: any, params: any, ...args: any[]) => {
   return base(JSON.parse(JSON.stringify(data)));
 };
 
-export class Service<T = any> extends AdapterService<T> implements InternalServiceMethods<T> {
+export class Service<T = any, D = Partial<any>> extends AdapterService<T, D> implements InternalServiceMethods<T> {
   options: MemoryServiceOptions;
   store: MemoryServiceStore<T>;
   _uId: number;
@@ -45,7 +45,7 @@ export class Service<T = any> extends AdapterService<T> implements InternalServi
     }) as any) as Promise<T[]>;
   }
 
-  async _find (params: Params = {}) {
+  async _find (params: AdapterParams = {}) {
     const { query, filters, paginate } = this.filterQuery(params);
     let values = _.values(this.store).filter(this.options.matcher(query));
     const total = values.length;
@@ -76,7 +76,7 @@ export class Service<T = any> extends AdapterService<T> implements InternalServi
     return result;
   }
 
-  async _get (id: Id, params: Params = {}) {
+  async _get (id: Id, params: AdapterParams = {}) {
     if (id in this.store) {
       const { query } = this.filterQuery(params);
       const value = this.store[id];
@@ -90,7 +90,7 @@ export class Service<T = any> extends AdapterService<T> implements InternalServi
   }
 
   // Create without hooks and mixins that can be used internally
-  async _create (data: Partial<T> | Partial<T>[], params: Params = {}): Promise<T | T[]> {
+  async _create (data: Partial<T> | Partial<T>[], params: AdapterParams = {}): Promise<T | T[]> {
     if (Array.isArray(data)) {
       return Promise.all(data.map(current => this._create(current, params) as Promise<T>));
     }
@@ -102,7 +102,7 @@ export class Service<T = any> extends AdapterService<T> implements InternalServi
     return _select(result, params, this.id);
   }
 
-  async _update (id: NullableId, data: T, params: Params = {}) {
+  async _update (id: NullableId, data: T, params: AdapterParams = {}) {
     const oldEntry = await this._get(id);
     // We don't want our id to change type if it can be coerced
     const oldId = oldEntry[this.id];
@@ -115,7 +115,7 @@ export class Service<T = any> extends AdapterService<T> implements InternalServi
     return this._get(id, params);
   }
 
-  async _patch (id: NullableId, data: Partial<T>, params: Params = {}) {
+  async _patch (id: NullableId, data: Partial<T>, params: AdapterParams = {}) {
     const patchEntry = (entry: T) => {
       const currentId = (entry as any)[this.id];
 
@@ -134,7 +134,7 @@ export class Service<T = any> extends AdapterService<T> implements InternalServi
   }
 
   // Remove without hooks and mixins that can be used internally
-  async _remove (id: NullableId, params: Params = {}): Promise<T|T[]> {
+  async _remove (id: NullableId, params: AdapterParams = {}): Promise<T|T[]> {
     if (id === null) {
       const entries = await this.getEntries(params);
 

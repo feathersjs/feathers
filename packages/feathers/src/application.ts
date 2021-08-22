@@ -1,11 +1,10 @@
-import { EventEmitter } from 'events';
-import { stripSlashes, createDebug } from '@feathersjs/commons';
-import { HOOKS } from '@feathersjs/hooks';
-
 import version from './version';
+import {
+  EventEmitter, stripSlashes, createDebug, HOOKS
+} from './dependencies';
 import { eventHook, eventMixin } from './events';
-import { hookMixin } from './hooks';
-import { wrapService, getServiceOptions } from './service';
+import { hookMixin } from './hooks/index';
+import { wrapService, getServiceOptions, protectedMethods } from './service';
 import {
   FeathersApplication,
   ServiceMixin,
@@ -95,6 +94,12 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
 
     const protoService = wrapService(location, service, options);
     const serviceOptions = getServiceOptions(service, options);
+
+    for (const name of protectedMethods) {
+      if (serviceOptions.methods.includes(name)) {
+        throw new Error(`'${name}' on service '${location}' is not allowed as a custom method name`);
+      }
+    }
 
     debug(`Registering new service at \`${location}\``);
 

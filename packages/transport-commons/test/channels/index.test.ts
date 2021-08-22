@@ -36,7 +36,7 @@ describe('feathers-channels', () => {
         publish () {
           return this;
         }
-      });
+      } as any);
 
     const service: any = app.service('test') ;
 

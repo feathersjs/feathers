@@ -1,5 +1,6 @@
 import grant from 'grant';
 import session from 'express-session';
+import { Request, Response, NextFunction } from 'express';
 import { createDebug } from '@feathersjs/commons';
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationResult } from '@feathersjs/authentication';
@@ -44,7 +45,7 @@ export default (options: OauthSetupSettings) => {
 
     authApp.use(expressSession);
 
-    authApp.get('/:name', (req, _res, next) => {
+    authApp.get('/:name', (req: Request, _res: Response, next: NextFunction) => {
       const { feathers_token, redirect, ...query } = req.query;
 
       if (feathers_token) {
@@ -57,7 +58,7 @@ export default (options: OauthSetupSettings) => {
       next()
     });
 
-    authApp.get('/:name/authenticate', async (req, res, next) => {
+    authApp.get('/:name/authenticate', async (req: Request, res: Response, next: NextFunction) => {
       const { name } = req.params ;
       const { accessToken, grant, query = {}, redirect } = req.session;
       const service = app.defaultAuthentication(authService);
@@ -103,7 +104,7 @@ export default (options: OauthSetupSettings) => {
             resolve();
           }
 
-          req.session.destroy(err => err ? reject(err) : resolve());
+          req.session.destroy((err: any) => err ? reject(err) : resolve());
         });
 
         debug(`Calling ${authService}.create authentication with strategy ${name}`);

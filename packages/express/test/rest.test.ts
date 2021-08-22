@@ -419,7 +419,7 @@ describe('@feathersjs/express/rest provider', () => {
       const data = { message: 'It worked' };
       const app = expressify(feathers()).use('/test',
         express.formatter,
-        (_req, res) => res.json(data)
+        (_req: Request, res: Response) => res.json(data)
       );
 
       const server = await app.listen(7988);

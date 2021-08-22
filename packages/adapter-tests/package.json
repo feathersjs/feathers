@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/adapter-tests",
-  "version": "5.0.0-pre.2",
+  "version": "5.0.0-pre.9",
   "description": "Feathers shared database adapter test suite",
   "homepage": "https://feathersjs.com",
   "keywords": [
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/databases.git"
+    "url": "git://github.com/feathersjs/feathers.git"
   },
   "author": {
     "name": "Feathers contributor",
@@ -22,7 +22,7 @@
   },
   "contributors": [],
   "bugs": {
-    "url": "https://github.com/feathersjs/databases/issues"
+    "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
     "node": ">= 12"
@@ -48,11 +48,11 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/node": "^14.14.37",
-    "mocha": "^8.3.2",
+    "@types/node": "^16.6.1",
+    "mocha": "^9.0.3",
     "shx": "^0.3.3",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.3"
+    "ts-node": "^10.2.0",
+    "typescript": "^4.3.5"
   },
-  "gitHead": "6e1f888dc5b612d2d77653177622e3f66245a0fb"
+  "gitHead": "3d1721a7286e6a7f37bbc38695fe45084023f13b"
 }

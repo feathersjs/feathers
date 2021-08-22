@@ -1,16 +1,16 @@
-# @feathersjs/adapter-memory
+# @feathersjs/memory
 
 [![CI](https://github.com/feathersjs/feathers/workflows/CI/badge.svg)](https://github.com/feathersjs/feathers/actions?query=workflow%3ACI)
 [![Dependency Status](https://img.shields.io/david/feathersjs/feathers.svg?style=flat-square&path=packages/memory)](https://david-dm.org/feathersjs/feathers?path=packages/memory)
-[![Download Status](https://img.shields.io/npm/dm/@feathersjs/adapter-memory.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/adapter-memory)
+[![Download Status](https://img.shields.io/npm/dm/@feathersjs/memory.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/memory)
 
 A [Feathers](https://feathersjs.com) service adapter for in-memory data storage that works on all platforms.
 
 ```bash
-$ npm install --save @feathersjs/adapter-memory
+$ npm install --save @feathersjs/memory
 ```
 
-> __Important:__ `@feathersjs/adapter-memory` implements the [Feathers Common database adapter API](https://docs.feathersjs.com/api/databases/common.html) and [querying syntax](https://docs.feathersjs.com/api/databases/querying.html).
+> __Important:__ `@feathersjs/memory` implements the [Feathers Common database adapter API](https://docs.feathersjs.com/api/databases/common.html) and [querying syntax](https://docs.feathersjs.com/api/databases/querying.html).
 
 
 ## API
@@ -20,7 +20,7 @@ $ npm install --save @feathersjs/adapter-memory
 Returns a new service instance initialized with the given options.
 
 ```js
-const service = require('@feathersjs/adapter-memory');
+const service = require('@feathersjs/memory');
 
 app.use('/messages', service());
 app.use('/messages', service({ id, startId, store, events, paginate }));
@@ -41,7 +41,7 @@ __Options:__
 Here is an example of a Feathers server with a `messages` in-memory service that supports pagination:
 
 ```
-$ npm install @feathersjs/feathers @feathersjs/express @feathersjs/socketio @feathersjs/errors @feathersjs/adapter-memory
+$ npm install @feathersjs/feathers @feathersjs/express @feathersjs/socketio @feathersjs/errors @feathersjs/memory
 ```
 
 In `app.js`:
@@ -51,7 +51,7 @@ const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 const socketio = require('@feathersjs/socketio');
 
-const memory = require('@feathersjs/adapter-memory');
+const memory = require('@feathersjs/memory');
 
 // Create an Express compatible Feathers application instance.
 const app = express(feathers());

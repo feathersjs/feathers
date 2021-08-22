@@ -1,5 +1,5 @@
 import { feathers } from '@feathersjs/feathers';
-import { memory, Service as MemoryService } from '@feathersjs/adapter-memory';
+import { memory, Service as MemoryService } from '@feathersjs/memory';
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 
 import { LocalStrategy, hooks } from '../src';
@@ -37,20 +37,20 @@ export function createApplication (app = feathers<ServiceTypes>()) {
     }
   }));
 
+  app.service('users').hooks([
+    protect('password')
+  ]);
   app.service('users').hooks({
-    before: {
-      create: [ hashPassword('password') ]
-    },
-    after: {
-      all: [ protect('password') ],
-      get: [context => {
-        if (context.params.provider) {
-          context.result.fromGet = true;
-        }
+    create: [
+      hashPassword('password')
+    ],
+    get: [ async (context, next) => {
+      await next();
 
-        return context;
-      }]
-    }
+      if (context.params.provider) {
+        context.result.fromGet = true;
+      }
+    }]
   });
 
   return app;

@@ -52,14 +52,10 @@ const init = (_options: Partial<AuthenticationClientOptions> = {}) => {
     app.reAuthenticate = authentication.reAuthenticate.bind(authentication);
     app.logout = authentication.logout.bind(authentication);
 
-    app.hooks({
-      before: {
-        all: [
-          hooks.authentication(),
-          hooks.populateHeader()
-        ]
-      }
-    });
+    app.hooks([
+      hooks.authentication(),
+      hooks.populateHeader()
+    ]);
   };
 };
 

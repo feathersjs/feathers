@@ -139,6 +139,30 @@ describe('@feathersjs/adapter-commons/service', () => {
     });
   });
 
+  it('getOptions', () => {
+    const service = new AdapterService({
+      multi: true
+    });
+    const opts = service.getOptions({
+      adapter: {
+        multi: [ 'create' ],
+        paginate: {
+          default: 10,
+          max: 100
+        }
+      }
+    });
+
+    assert.deepStrictEqual(opts, {
+      id: 'id',
+      events: [],
+      paginate: { default: 10, max: 100 },
+      multi: [ 'create' ],
+      filters: [],
+      allow: []
+    });
+  });
+
   it('allowsMulti', () => {
     context('with true', () => {
       const service = new AdapterService({multi: true});

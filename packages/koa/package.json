@@ -1,0 +1,74 @@
+{
+  "name": "@feathersjs/koa",
+  "description": "Feathers KoaJS framework bindings and REST provider",
+  "version": "5.0.0-pre.9",
+  "homepage": "https://feathersjs.com",
+  "main": "lib/",
+  "keywords": [
+    "feathers",
+    "koajs"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git"
+  },
+  "author": {
+    "name": "Feathers contributors",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "engines": {
+    "node": ">= 6"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "*.d.ts",
+    "*.js"
+  ],
+  "scripts": {
+    "prepublish": "npm run compile",
+    "compile": "shx rm -rf lib/ && tsc",
+    "test": "npm run compile && npm run mocha",
+    "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@feathersjs/authentication": "^5.0.0-pre.9",
+    "@feathersjs/commons": "^5.0.0-pre.9",
+    "@feathersjs/errors": "^5.0.0-pre.9",
+    "@feathersjs/transport-commons": "^5.0.0-pre.9",
+    "@types/koa": "^2.13.4",
+    "@types/koa-bodyparser": "^4.3.3",
+    "@types/koa-qs": "^2.0.0",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-qs": "^3.0.0"
+  },
+  "devDependencies": {
+    "@feathersjs/authentication-local": "^5.0.0-pre.9",
+    "@feathersjs/feathers": "^5.0.0-pre.9",
+    "@feathersjs/memory": "^5.0.0-pre.9",
+    "@feathersjs/tests": "^5.0.0-pre.9",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.6.1",
+    "mocha": "^9.0.3",
+    "shx": "^0.3.3",
+    "ts-node": "^10.2.0",
+    "typescript": "^4.3.5"
+  },
+  "gitHead": "3d1721a7286e6a7f37bbc38695fe45084023f13b"
+}

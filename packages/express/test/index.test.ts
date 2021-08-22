@@ -76,7 +76,8 @@ describe('@feathersjs/express', () => {
   });
 
   it('Can use Express sub-apps', () => {
-    const app = expressify.default(feathers());
+    const typedApp = feathers<{}>();
+    const app = expressify.default(typedApp);
     const child = express();
 
     app.use('/path', child);
@@ -185,6 +186,28 @@ describe('@feathersjs/express', () => {
     };
 
     app.use('/myservice', a, b, service, c);
+  });
+
+  it('Express wrapped and context.app are the same', async () => {
+    const app = expressify.default(feathers());
+
+    app.use('/test', {
+      async get (id: Id) {
+        return { id };
+      }
+    });
+
+    app.service('test').hooks({
+      before: {
+        get: [context => {
+          assert.ok(context.app === app);
+        }]
+      }
+    });
+
+    assert.deepStrictEqual(await app.service('test').get('testing'), {
+      id: 'testing'
+    });
   });
 
   it('Works with HTTPS', done => {

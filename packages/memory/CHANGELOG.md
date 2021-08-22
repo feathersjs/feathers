@@ -3,44 +3,115 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [5.0.0-pre.2](https://github.com/feathersjs/databases/compare/v5.0.0-beta.1...v5.0.0-pre.2) (2021-04-06)
+# [5.0.0-pre.9](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.8...v5.0.0-pre.9) (2021-08-09)
 
-**Note:** Version bump only for package @feathersjs/adapter-memory
-
-
-
-
-
-# [5.0.0-beta.1](https://github.com/feathersjs/databases/compare/v5.0.0-beta.0...v5.0.0-beta.1) (2021-04-03)
-
-**Note:** Version bump only for package @feathersjs/adapter-memory
+**Note:** Version bump only for package @feathersjs/memory
 
 
 
 
 
-# [5.0.0-beta.0](https://github.com/feathersjs/databases/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
+# [5.0.0-pre.8](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.7...v5.0.0-pre.8) (2021-08-09)
+
+**Note:** Version bump only for package @feathersjs/memory
+
+
+
+
+
+# [5.0.0-pre.7](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.6...v5.0.0-pre.7) (2021-08-09)
+
+**Note:** Version bump only for package @feathersjs/memory
+
+
+
+
+
+# [5.0.0-pre.6](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.5...v5.0.0-pre.6) (2021-08-08)
+
+**Note:** Version bump only for package @feathersjs/memory
+
+
+
+
+
+# [5.0.0-pre.5](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.4...v5.0.0-pre.5) (2021-06-23)
 
 
 ### Bug Fixes
 
-* Update Grant usage and other dependencies ([#2264](https://github.com/feathersjs/databases/issues/2264)) ([7b0f8fa](https://github.com/feathersjs/databases/commit/7b0f8fad252419ed0ad0bf259cdf3104d322ab60))
+* Update database adapter common repository urls ([#2380](https://github.com/feathersjs/feathers/issues/2380)) ([3f4db68](https://github.com/feathersjs/feathers/commit/3f4db68d6700c7d9023ecd17d0d39893f75a19fd))
 
 
 ### Features
 
-* Feathers v5 core refactoring and features ([#2255](https://github.com/feathersjs/databases/issues/2255)) ([2dafb7c](https://github.com/feathersjs/databases/commit/2dafb7ce14ba57406aeec13d10ca45b1e709bee9))
+* **adapter-commons:** Add support for params.adapter option and move memory adapter to @feathersjs/memory ([#2367](https://github.com/feathersjs/feathers/issues/2367)) ([a43e7da](https://github.com/feathersjs/feathers/commit/a43e7da22b6b981a96d1321736ea9a0cb924fb4f))
+* **typescript:** Allow to pass generic service options to adapter services ([#2392](https://github.com/feathersjs/feathers/issues/2392)) ([f9431f2](https://github.com/feathersjs/feathers/commit/f9431f242354f804cafb835519f98dd405ac4f0b))
 
 
 
 
 
-# [5.0.0-pre.1](https://github.com/feathersjs/databases/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
+# [5.0.0-pre.4](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.3...v5.0.0-pre.4) (2021-05-13)
 
 
 ### Features
 
-* **memory:** Move feathers-memory into @feathersjs/adapter-memory ([#2153](https://github.com/feathersjs/databases/issues/2153)) ([dd61fe3](https://github.com/feathersjs/databases/commit/dd61fe371fb0502f78b8ccbe1f45a030e31ecff6))
+* **koa:** KoaJS transport adapter ([#2315](https://github.com/feathersjs/feathers/issues/2315)) ([2554b57](https://github.com/feathersjs/feathers/commit/2554b57cf05731df58feeba9c12faab18e442107))
+
+
+
+
+
+# [5.0.0-pre.3](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.2...v5.0.0-pre.3) (2021-04-21)
+
+
+### Bug Fixes
+
+* **typescript:** Improve TypeScript backwards compatibility ([#2310](https://github.com/feathersjs/feathers/issues/2310)) ([f33be73](https://github.com/feathersjs/feathers/commit/f33be73fc46a533efb15df9aab0658e3240d3897))
+
+
+
+
+
+# [5.0.0-pre.2](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.1...v5.0.0-pre.2) (2021-04-06)
+
+**Note:** Version bump only for package @feathersjs/memory
+
+
+
+
+
+# [5.0.0-beta.1](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.0...v5.0.0-beta.1) (2021-04-03)
+
+**Note:** Version bump only for package @feathersjs/memory
+
+
+
+
+
+# [5.0.0-beta.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
+
+
+### Bug Fixes
+
+* Update Grant usage and other dependencies ([#2264](https://github.com/feathersjs/feathers/issues/2264)) ([7b0f8fa](https://github.com/feathersjs/feathers/commit/7b0f8fad252419ed0ad0bf259cdf3104d322ab60))
+
+
+### Features
+
+* Feathers v5 core refactoring and features ([#2255](https://github.com/feathersjs/feathers/issues/2255)) ([2dafb7c](https://github.com/feathersjs/feathers/commit/2dafb7ce14ba57406aeec13d10ca45b1e709bee9))
+
+
+
+
+
+# [5.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
+
+
+### Features
+
+* **memory:** Move feathers-memory into @feathersjs/memory ([#2153](https://github.com/feathersjs/feathers/issues/2153)) ([dd61fe3](https://github.com/feathersjs/feathers/commit/dd61fe371fb0502f78b8ccbe1f45a030e31ecff6))
 
 
 

@@ -3,6 +3,101 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.9](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.8...v5.0.0-pre.9) (2021-08-09)
+
+**Note:** Version bump only for package feathers
+
+
+
+
+
+# [5.0.0-pre.8](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.7...v5.0.0-pre.8) (2021-08-09)
+
+**Note:** Version bump only for package feathers
+
+
+
+
+
+# [5.0.0-pre.7](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.6...v5.0.0-pre.7) (2021-08-09)
+
+
+### Bug Fixes
+
+* **core:** Clean up readme ([eb3b4f2](https://github.com/feathersjs/feathers/commit/eb3b4f248c0816c92a2300cceed18a6f2518508a))
+* **core:** Set version back to development ([b328767](https://github.com/feathersjs/feathers/commit/b3287676cd773e164fd646ba4cffbf81983a9157))
+
+
+
+
+
+# [5.0.0-pre.6](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.5...v5.0.0-pre.6) (2021-08-08)
+
+
+### Bug Fixes
+
+* **koa:** Throw a NotFound Feathers error on missing paths ([#2415](https://github.com/feathersjs/feathers/issues/2415)) ([e013f98](https://github.com/feathersjs/feathers/commit/e013f98315d550ced6eacffd615c61bb0912b4ba))
+
+
+
+
+
+# [5.0.0-pre.5](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.4...v5.0.0-pre.5) (2021-06-23)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Omit query from internal calls ([#2398](https://github.com/feathersjs/feathers/issues/2398)) ([04c7c83](https://github.com/feathersjs/feathers/commit/04c7c83eeaa6a7466c84b958071b468ed42f0b0f))
+* **core:** Add list of protected methods that can not be used for custom methods ([#2390](https://github.com/feathersjs/feathers/issues/2390)) ([6584a21](https://github.com/feathersjs/feathers/commit/6584a216e5a7d5f2a45822be6bfcb91c35cc2252))
+* **hooks:** Migrate built-in hooks and allow backwards compatibility ([#2358](https://github.com/feathersjs/feathers/issues/2358)) ([759c5a1](https://github.com/feathersjs/feathers/commit/759c5a19327a731af965c3604119393b3d09a406))
+* **koa:** Use extended query parser for compatibility ([#2397](https://github.com/feathersjs/feathers/issues/2397)) ([b2944ba](https://github.com/feathersjs/feathers/commit/b2944bac3ec6d5ecc80dc518cd4e58093692db74))
+* Update database adapter common repository urls ([#2380](https://github.com/feathersjs/feathers/issues/2380)) ([3f4db68](https://github.com/feathersjs/feathers/commit/3f4db68d6700c7d9023ecd17d0d39893f75a19fd))
+
+
+### Features
+
+* **typescript:** Allow to pass generic service options to adapter services ([#2392](https://github.com/feathersjs/feathers/issues/2392)) ([f9431f2](https://github.com/feathersjs/feathers/commit/f9431f242354f804cafb835519f98dd405ac4f0b))
+* Support being a built-in CodeSandbox sandbox ([#2381](https://github.com/feathersjs/feathers/issues/2381)) ([a2ac25a](https://github.com/feathersjs/feathers/commit/a2ac25a26e80530f7c50b88ef15eef46ee2b0634))
+* **adapter-commons:** Add support for params.adapter option and move memory adapter to @feathersjs/memory ([#2367](https://github.com/feathersjs/feathers/issues/2367)) ([a43e7da](https://github.com/feathersjs/feathers/commit/a43e7da22b6b981a96d1321736ea9a0cb924fb4f))
+
+
+
+
+
+# [5.0.0-pre.4](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.3...v5.0.0-pre.4) (2021-05-13)
+
+
+### Bug Fixes
+
+* **transport-commons:** Fix route placeholder registration and improve radix router performance ([#2336](https://github.com/feathersjs/feathers/issues/2336)) ([4d84dfd](https://github.com/feathersjs/feathers/commit/4d84dfd092ce0510312e975d5cd57e04973fb311))
+* **typescript:** Move Paginated type back for better compatibility ([#2350](https://github.com/feathersjs/feathers/issues/2350)) ([2917d05](https://github.com/feathersjs/feathers/commit/2917d05fffb4716d3c4cdaa5ac6a1aee0972e8a6))
+
+
+### Features
+
+* **koa:** KoaJS transport adapter ([#2315](https://github.com/feathersjs/feathers/issues/2315)) ([2554b57](https://github.com/feathersjs/feathers/commit/2554b57cf05731df58feeba9c12faab18e442107))
+
+
+
+
+
+# [5.0.0-pre.3](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.2...v5.0.0-pre.3) (2021-04-21)
+
+
+### Bug Fixes
+
+* **typescript:** Improve TypeScript backwards compatibility ([#2310](https://github.com/feathersjs/feathers/issues/2310)) ([f33be73](https://github.com/feathersjs/feathers/commit/f33be73fc46a533efb15df9aab0658e3240d3897))
+
+
+### Features
+
+* **deno:** Feathers core build for Deno ([#2299](https://github.com/feathersjs/feathers/issues/2299)) ([dece8fb](https://github.com/feathersjs/feathers/commit/dece8fbc0e7601f1505ce8bbb1e4e69cc26e8f98))
+* **dependencies:** Remove direct debug dependency ([#2296](https://github.com/feathersjs/feathers/issues/2296)) ([501d416](https://github.com/feathersjs/feathers/commit/501d4164d30c6a126906dc640cdfdc82207ba34a))
+
+
+
+
+
 # [5.0.0-pre.2](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.1...v5.0.0-pre.2) (2021-04-06)
 
 **Note:** Version bump only for package feathers
@@ -66,7 +161,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* **memory:** Move feathers-memory into @feathersjs/adapter-memory ([#2153](https://github.com/feathersjs/feathers/issues/2153)) ([dd61fe3](https://github.com/feathersjs/feathers/commit/dd61fe371fb0502f78b8ccbe1f45a030e31ecff6))
+* **memory:** Move feathers-memory into @feathersjs/memory ([#2153](https://github.com/feathersjs/feathers/issues/2153)) ([dd61fe3](https://github.com/feathersjs/feathers/commit/dd61fe371fb0502f78b8ccbe1f45a030e31ecff6))
 
 
 

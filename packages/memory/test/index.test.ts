@@ -20,6 +20,7 @@ const testSuite = adapterTests([
   '.get + NotFound',
   '.get + id + query id',
   '.find',
+  '.find + paginate + query',
   '.remove',
   '.remove + $select',
   '.remove + id + query',
@@ -30,11 +31,14 @@ const testSuite = adapterTests([
   '.update + id + query',
   '.update + NotFound',
   '.update + id + query id',
+  '.update + query + NotFound',
   '.patch',
   '.patch + $select',
   '.patch + id + query',
   '.patch multiple',
-  '.patch multi query',
+  '.patch multi query same',
+  '.patch multi query changed',
+  '.patch + query + NotFound',
   '.patch + NotFound',
   '.patch + id + query id',
   '.create',
@@ -67,7 +71,9 @@ const testSuite = adapterTests([
   '.find + paginate',
   '.find + paginate + $limit + $skip',
   '.find + paginate + $limit 0',
-  '.find + paginate + params'
+  '.find + paginate + params',
+  'params.adapter + paginate',
+  'params.adapter + multi'
 ]);
 
 describe('Feathers Memory Service', () => {

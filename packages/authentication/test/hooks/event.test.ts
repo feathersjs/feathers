@@ -18,10 +18,8 @@ describe('authentication/hooks/events', () => {
   const service = app.service('authentication');
 
   service.hooks({
-    after: {
-      create: [ hook('login') ],
-      remove: [ hook('logout') ]
-    }
+    create: [ hook('login') ],
+    remove: [ hook('logout') ]
   });
 
   it('login', done => {
