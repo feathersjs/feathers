@@ -15,19 +15,22 @@ describe('@feathersjs/schema/resolver', () => {
         password: { type: 'string' }
       }
     } as const);
-    const userResolver = resolve({
+
+    type User = Infer<typeof userSchema> & {
+      name: string
+    };
+
+    const userResolver = resolve<User, any>({
       properties: {
-        password: async () => {
+        password: async (): Promise<string> => {
           return undefined;
         },
 
-        name: async (_name: unknown, user: any) => {
+        name: async (_name, user) => {
           return `${user.firstName} ${user.lastName}`;
         }
       }
     });
-
-    type User = Infer<typeof userSchema, typeof userResolver>;
 
     const u: User = await userResolver.resolve({
       firstName: 'Dave',

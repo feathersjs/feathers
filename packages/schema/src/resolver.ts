@@ -1,25 +1,19 @@
 import { BadRequest } from '@feathersjs/errors';
 
-export type PropertyResolver = (value: any, obj: any, context: any) => any;
+export type PropertyResolver<V, T, C> = (value: V|undefined, obj: T, context: C) => Promise<V|undefined>;
 
-export type PropertyResolverMap = {
-  [key: string]: PropertyResolver;
+export type PropertyResolverMap<T, C> = {
+  [key in keyof T]?: PropertyResolver<T[key], T, C>
 }
 
-export interface ResolverOptions {
-  properties: PropertyResolverMap
+export interface ResolverOptions<T, C> {
+  properties: PropertyResolverMap<T, C>
 }
 
-export type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
+export class Resolver<T, C> {
+  readonly _type!: T;
 
-export type FromResolver<R extends ResolverOptions> = {
-  [K in keyof R['properties']]: ThenArg<ReturnType<R['properties'][K]>>
-}
-
-export class Resolver<R extends ResolverOptions = any, C = any> {
-  readonly _type!: FromResolver<R>;
-
-  constructor (public options: R) {
+  constructor (public options: ResolverOptions<T, C>) {
   }
 
   convertErrors (results: PromiseSettledResult<void>[], names: string[]) {
@@ -39,12 +33,12 @@ export class Resolver<R extends ResolverOptions = any, C = any> {
     return new BadRequest('Error resolving data', data);
   }
 
-  async resolve<D> (data: D, context?: C): Promise<FromResolver<R> & D> {
+  async resolve<D> (data: D, context?: C): Promise<T> {
     const result: any = { ...data };
     const { properties } = this.options;
     const names = Object.keys(properties);
     const results = await Promise.allSettled(names.map(async name => {
-      const resolver = properties[name];
+      const resolver = (properties as any)[name];
       const value = (data as any)[name];
       const resolved = await resolver(value, data, context);
 
@@ -64,6 +58,6 @@ export class Resolver<R extends ResolverOptions = any, C = any> {
   }
 }
 
-export function resolve <R extends ResolverOptions> (options: R) {
-  return new Resolver(options);
+export function resolve <T, C> (options: ResolverOptions<T, C>) {
+  return new Resolver<T, C>(options);
 }
