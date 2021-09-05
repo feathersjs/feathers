@@ -93,11 +93,7 @@ export const validateQuery = (schema: Schema<any>) =>
 
       return next();
     } catch (error: any) {
-      if (error.ajv) {
-        throw new BadRequest(error.message, error.errors);
-      }
-
-      throw error;
+      throw (error.ajv ? new BadRequest(error.message, error.errors) : error);
     }
   };
 
@@ -114,11 +110,7 @@ export const validateData = (schema: Schema<any>) =>
         context.data = await schema.validate(data);
       }
     } catch (error: any) {
-      if (error.ajv) {
-        throw new BadRequest(error.message, error.errors);
-      }
-
-      throw error;
+      throw (error.ajv ? new BadRequest(error.message, error.errors) : error);
     }
 
     return next();
