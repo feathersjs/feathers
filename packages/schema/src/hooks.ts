@@ -106,7 +106,13 @@ export const validateData = (schema: Schema<any>) =>
     const data = context.data;
 
     try {
-      context.data = await schema.validate(data);
+      if (Array.isArray(data)) {
+        context.data = await Promise.all(data.map(current =>
+          schema.validate(current)
+        ));
+      } else {
+        context.data = await schema.validate(data);
+      }
     } catch (error: any) {
       if (error.ajv) {
         throw new BadRequest(error.message, error.errors);

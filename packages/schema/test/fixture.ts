@@ -125,7 +125,9 @@ type ServiceTypes = {
 type Application = FeathersApplication<ServiceTypes>;
 
 const app = feathers<ServiceTypes>()
-  .use('users', memory())
+  .use('users', memory({
+    multi: ['create']
+  }))
   .use('messages', memory());
 
 app.service('messages').hooks([

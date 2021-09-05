@@ -29,6 +29,7 @@ describe('@feathersjs/schema/schema', () => {
       upvotes: '10'
     });
 
+    assert.deepStrictEqual(messageSchema.toJSON(), messageSchema.definition);
     assert.deepStrictEqual(message, {
       text: 'hi',
       read: false,

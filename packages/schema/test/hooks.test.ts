@@ -8,10 +8,10 @@ describe('@feathersjs/schema/hooks', () => {
   let user: UserResult;
 
   before(async () => {
-    user = await app.service('users').create({
+    user = (await app.service('users').create([{
       email: 'hello@feathersjs.com',
       password: 'supersecret'
-    });
+    }]))[0];
     message = await app.service('messages').create({
       text,
       userId: user.id
