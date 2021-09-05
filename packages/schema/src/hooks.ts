@@ -13,13 +13,13 @@ const getContext = (context: HookContext) => {
   }
 }
 
-export type FeathersType = 'data'|'result'|'query';
-
 export const resolveQuery = <T> (resolver: Resolver<T, HookContext>) =>
   async (context: HookContext, next: NextFunction) => {
     const ctx = getContext(context);
     const data = context?.params?.query || {};
-    const query = await resolver.resolve(data, ctx);
+    const query = await resolver.resolve(data, ctx, {
+      originalContext: context
+    });
 
     context.params = {
       ...context.params,
@@ -33,13 +33,16 @@ export const resolveData = <T> (resolver: Resolver<T, HookContext>) =>
   async (context: HookContext, next: NextFunction) => {
     const ctx = getContext(context);
     const data = context.data;
+    const status = {
+      originalContext: context
+    };
 
     if (Array.isArray(data)) {
       context.data = await Promise.all(data.map(current =>
-        resolver.resolve(current, ctx)
+        resolver.resolve(current, ctx, status)
       ));
     } else {
-      context.data = await resolver.resolve(data, ctx);
+      context.data = await resolver.resolve(data, ctx, status);
     }
 
     return next();
@@ -47,19 +50,32 @@ export const resolveData = <T> (resolver: Resolver<T, HookContext>) =>
 
 export const resolveResult = <T> (resolver: Resolver<T, HookContext>) =>
   async (context: HookContext, next: NextFunction) => {
+    const { $resolve: properties, ...query } = context.params?.query || {};
+    const { resolve } = context.params;
+    const status = {
+      originalContext: context,
+      ...resolve,
+      properties
+    };
+
+    context.params = {
+      ...context.params,
+      query
+    }
+
     await next();
 
     const ctx = getContext(context);
-    const data = context.method === 'find'
-      ? (context.result.data || context.result)
+    const data = context.method === 'find' && context.result.data
+      ? context.result.data
       : context.result;
 
     if (Array.isArray(data)) {
       context.result = await Promise.all(data.map(current =>
-        resolver.resolve(current, ctx)
+        resolver.resolve(current, ctx, status)
       ));
     } else {
-      context.result = await resolver.resolve(data, ctx);
+      context.result = await resolver.resolve(data, ctx, status);
     }
   };
 
@@ -76,7 +92,7 @@ export const validateQuery = (schema: Schema<any>) =>
       }
 
       return next();
-    } catch (error) {
+    } catch (error: any) {
       if (error.ajv) {
         throw new BadRequest(error.message, error.errors);
       }
@@ -91,7 +107,7 @@ export const validateData = (schema: Schema<any>) =>
 
     try {
       context.data = await schema.validate(data);
-    } catch (error) {
+    } catch (error: any) {
       if (error.ajv) {
         throw new BadRequest(error.message, error.errors);
       }

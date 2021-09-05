@@ -1,63 +1,102 @@
 import { BadRequest } from '@feathersjs/errors';
 
-export type PropertyResolver<V, T, C> = (value: V|undefined, obj: T, context: C) => Promise<V|undefined>;
+export type PropertyResolver<T, V, C> = (
+  value: V|undefined,
+  obj: any,
+  context: C,
+  status: ResolverStatus<T, C>
+) => Promise<V|undefined>;
 
 export type PropertyResolverMap<T, C> = {
-  [key in keyof T]?: PropertyResolver<T[key], T, C>
+  [key in keyof T]?: PropertyResolver<T, T[key], C>
 }
 
-export interface ResolverOptions<T, C> {
+export interface ResolverConfig<T, C> {
   properties: PropertyResolverMap<T, C>
+}
+
+export interface ResolverStatus<T, C> {
+  path: string[];
+  originalContext?: C;
+  properties?: (keyof T)[];
+  stack: PropertyResolver<T, any, C>[];
 }
 
 export class Resolver<T, C> {
   readonly _type!: T;
 
-  constructor (public options: ResolverOptions<T, C>) {
+  constructor (public options: ResolverConfig<T, C>) {
   }
 
-  convertErrors (results: PromiseSettledResult<void>[], names: string[]) {
-    const data = results.reduce((res, value, index) => {
-      if (value.status === 'rejected') {
-        const name = names[index];
-        const data = typeof value.reason.toJSON === 'function'
-          ? value.reason.toJSON()
-          : { message: value.reason.message || value };
+  async resolveProperty<D, K extends keyof T> (
+    name: K,
+    data: D,
+    context: C,
+    status: Partial<ResolverStatus<T, C>> = {}
+  ): Promise<T[K]> {
+    const resolver = this.options.properties[name];
+    const value = (data as any)[name];
+    const { path = [], stack = [] } = status || {};
 
-        res[name] = data;
-      }
+    // This prevents circular dependencies
+    if (stack.includes(resolver)) {
+      return undefined;
+    }
 
-      return res;
-    }, {} as any);
+    const resolverStatus = {
+      ...status,
+      path: [...path, name as string],
+      stack: [...stack, resolver]
+    }
 
-    return new BadRequest('Error resolving data', data);
+    return resolver(value, data, context, resolverStatus);
   }
 
-  async resolve<D> (data: D, context?: C): Promise<T> {
-    const result: any = { ...data };
-    const { properties } = this.options;
-    const names = Object.keys(properties);
-    const results = await Promise.allSettled(names.map(async name => {
-      const resolver = (properties as any)[name];
+  async resolve<D> (data: D, context: C, status?: Partial<ResolverStatus<T, C>>): Promise<T> {
+    const { properties: resolvers } = this.options;
+    const propertyList = (Array.isArray(status?.properties)
+      ? status?.properties
+      // By default get all data and resolver keys but remove duplicates
+      : [...new Set(Object.keys(data).concat(Object.keys(resolvers)))]
+    ) as (keyof T)[];
+
+    const result: any = {};
+    const errors: any = {};
+    let hasErrors = false;
+
+    // Not the most elegant but better performance
+    await Promise.all(propertyList.map(async name => {
       const value = (data as any)[name];
-      const resolved = await resolver(value, data, context);
 
-      if (resolved === undefined) {
-        delete result[name];
-      } else {
-        result[name] = resolved;
+      if (resolvers[name]) {
+        try {
+          const resolved = await this.resolveProperty(name, data, context, status);
+
+          if (resolved !== undefined) {
+            result[name] = resolved;
+          }
+        } catch (error: any) {
+          // TODO add error stacks
+          const convertedError = typeof error.toJSON === 'function'
+            ? error.toJSON()
+            : { message: error.message || error };
+
+          errors[name] = convertedError;
+          hasErrors = true;
+        }
+      } else if (value !== undefined) {
+        result[name] = value;
       }
     }));
-    const hasErrors = results.some(({ status }) => status === 'rejected');
 
     if (hasErrors) {
-      throw this.convertErrors(results, names);
+      throw new BadRequest(`Error resolving data ${status?.properties.join('.')}`, errors);
     }
 
     return result;
   }
 }
 
-export function resolve <T, C> (options: ResolverOptions<T, C>) {
+export function resolve <T, C> (options: ResolverConfig<T, C>) {
   return new Resolver<T, C>(options);
 }

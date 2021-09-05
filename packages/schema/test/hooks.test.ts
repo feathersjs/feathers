@@ -1,11 +1,11 @@
 import assert from 'assert';
-import { app, MessageResult, User } from './fixture';
+import { app, MessageResult, UserResult } from './fixture';
 
 describe('@feathersjs/schema/hooks', () => {
   const text = 'Hi there';
 
   let message: MessageResult;
-  let user: User;
+  let user: UserResult;
 
   before(async () => {
     user = await app.service('users').create({
@@ -77,28 +77,34 @@ describe('@feathersjs/schema/hooks', () => {
     assert.strictEqual(userMessages.length, 1);
     assert.strictEqual(userMessages[0].userId, user.id);
 
-    try {
-      await app.service('messages').find({
-        query: {
-          thing: 'me'
+    const msg = await app.service('messages').get(userMessages[0].id, {
+      query: {
+        $resolve: ['user']
+      }
+    });
+
+    assert.deepStrictEqual(msg, {
+      user
+    });
+
+    assert.rejects(() => app.service('messages').find({
+      query: {
+        thing: 'me'
+      }
+    }), {
+      name: 'BadRequest',
+      message: 'validation failed',
+      code: 400,
+      className: 'bad-request',
+      data: [
+        {
+          instancePath: '',
+          schemaPath: '#/additionalProperties',
+          keyword: 'additionalProperties',
+          params: { additionalProperty: 'thing' },
+          message: 'must NOT have additional properties'
         }
-      });
-    } catch (error) {
-      assert.deepStrictEqual(error.toJSON(), {
-        name: 'BadRequest',
-        message: 'validation failed',
-        code: 400,
-        className: 'bad-request',
-        data: [
-          {
-            instancePath: '',
-            schemaPath: '#/additionalProperties',
-            keyword: 'additionalProperties',
-            params: { additionalProperty: 'thing' },
-            message: 'must NOT have additional properties'
-          }
-        ]
-      });
-    }
+      ]
+    });
   });
 });

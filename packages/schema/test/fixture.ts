@@ -5,22 +5,30 @@ import { memory, Service } from '@feathersjs/memory';
 
 import {
   schema, resolve, Infer, resolveResult,
-  propertyQuery, selectQuery,
-  validateQuery, validateData, resolveQuery, resolveData
+  queryProperty, queryArray, resolveQuery,
+  validateQuery, validateData, resolveData
 } from '../src';
 
 export const userSchema = schema({
+  $id: 'UserData',
   type: 'object',
   additionalProperties: false,
   required: ['email'],
   properties: {
-    id: { type: 'number' },
     email: { type: 'string' },
     password: { type: 'string' }
   }
 } as const);
 
+export const userResultSchema = userSchema.extend({
+  $id: 'UserResult',
+  properties: {
+    id: { type: 'number' }
+  }
+});
+
 export type User = Infer<typeof userSchema>;
+export type UserResult = Infer<typeof userResultSchema>;
 
 export const userDataResolver = resolve<User, HookContext<Application>>({
   properties: {
@@ -30,7 +38,7 @@ export const userDataResolver = resolve<User, HookContext<Application>>({
   }
 });
 
-export const userResultResolver = resolve<User, HookContext<Application>>({
+export const userResultResolver = resolve<UserResult, HookContext<Application>>({
   properties: {
     password: async (value, _user, context) => {
       return context.params.provider ? undefined : value;
@@ -39,6 +47,7 @@ export const userResultResolver = resolve<User, HookContext<Application>>({
 });
 
 export const messageSchema = schema({
+  $id: 'MessageData',
   type: 'object',
   additionalProperties: false,
   required: ['text', 'userId'],
@@ -48,11 +57,20 @@ export const messageSchema = schema({
   }
 } as const);
 
+export const messageResultSchema = messageSchema.extend({
+  $id: 'MessageResult',
+  properties: {
+    id: { type: 'number' },
+    user: { $ref: 'UserResult' }
+  }
+});
+
 export const messageQuerySchema = schema({
+  $id: 'MessageQuery',
   type: 'object',
   additionalProperties: false,
   properties: {
-    $select: selectQuery(['text', 'userId']),
+    $resolve: queryArray(messageResultSchema.propertyNames),
     $limit: {
       type: 'number',
       minimum: 0,
@@ -61,7 +79,7 @@ export const messageQuerySchema = schema({
     $skip: {
       type: 'number'
     },
-    userId: propertyQuery({
+    userId: queryProperty({
       type: 'number'
     })
   }
@@ -71,6 +89,10 @@ export type MessageQuery = Infer<typeof messageQuerySchema>;
 
 export const messageQueryResolver = resolve<MessageQuery, HookContext<Application>>({
   properties: {
+    $resolve: async (value) => {
+      return value || messageResultSchema.propertyNames;
+    },
+
     userId: async (value, _query, context) => {
       if (context.params?.user) {
         return context.params.user.id;
@@ -82,7 +104,7 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext<Applicatio
 });
 
 export type Message = Infer<typeof messageSchema>;
-export type MessageResult = Message & {
+export type MessageResult = Infer<typeof messageResultSchema> & {
   user: User;
 };
 
@@ -97,7 +119,7 @@ export const messageResultResolver = resolve<MessageResult, HookContext<Applicat
 });
 
 type ServiceTypes = {
-  users: Service<User>,
+  users: Service<UserResult, User>,
   messages: Service<MessageResult, Message>
 }
 type Application = FeathersApplication<ServiceTypes>;
