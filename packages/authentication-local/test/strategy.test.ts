@@ -97,6 +97,20 @@ describe('@feathersjs/authentication-local/strategy', () => {
     }
   });
 
+  it('fails when password is not provided', async () => {
+    const authService = app.service('authentication');
+    try {
+      await authService.create({
+        strategy: 'local',
+        email,
+      });
+      assert.fail('Should never get here');
+    } catch (error) {
+      assert.strictEqual(error.name, 'NotAuthenticated');
+      assert.strictEqual(error.message, 'Invalid login');
+    }
+  });
+
   it('fails when password field is not available', async () => {
     const userEmail = 'someuser@localtest.com';
     const authService = app.service('authentication');
