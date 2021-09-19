@@ -9,7 +9,7 @@ export const errorHandler = () => async (ctx: FeathersKoaContext, next: () => Pr
       throw new NotFound('Not Found');
     }
     
-  } catch (error) {
+  } catch (error: any) {
     ctx.response.status = error.code || 500;
     ctx.body = typeof error.toJSON === 'function' ? error.toJSON() : {
       message: error.message

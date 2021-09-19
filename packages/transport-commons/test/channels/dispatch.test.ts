@@ -30,7 +30,7 @@ describe('app.publish', () => {
       app.service('test').registerPublisher('created', function () {});
       app.service('test').registerPublisher('bla', function () {});
       assert.ok(false, 'Should never get here');
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, '\'bla\' is not a valid service event');
     }
   });
@@ -51,7 +51,7 @@ describe('app.publish', () => {
 
       try {
         await app.service('test').create({ message: 'something' });
-      } catch (error) {
+      } catch (error: any) {
         assert.fail('Should never get here');
       }
     });
@@ -68,7 +68,7 @@ describe('app.publish', () => {
           assert.deepStrictEqual(hook.result, data);
           assert.deepStrictEqual(channel.connections, [ c1 ]);
           done();
-        } catch (error) {
+        } catch (error: any) {
           done(error);
         }
       });

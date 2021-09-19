@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/client",
   "description": "A module that consolidates Feathers client modules for REST (jQuery, Request, Superagent) and Websocket (Socket.io, Primus) connections",
-  "version": "5.0.0-pre.9",
+  "version": "5.0.0-pre.10",
   "repository": {
     "type": "git",
     "url": "https://github.com/feathersjs/feathers.git"
@@ -48,31 +48,31 @@
     "IE 11"
   ],
   "dependencies": {
-    "@feathersjs/authentication-client": "^5.0.0-pre.9",
-    "@feathersjs/errors": "^5.0.0-pre.9",
-    "@feathersjs/feathers": "^5.0.0-pre.9",
-    "@feathersjs/rest-client": "^5.0.0-pre.9",
-    "@feathersjs/socketio-client": "^5.0.0-pre.9"
+    "@feathersjs/authentication-client": "^5.0.0-pre.10",
+    "@feathersjs/errors": "^5.0.0-pre.10",
+    "@feathersjs/feathers": "^5.0.0-pre.10",
+    "@feathersjs/rest-client": "^5.0.0-pre.10",
+    "@feathersjs/socketio-client": "^5.0.0-pre.10"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.0",
-    "@babel/preset-env": "^7.15.0",
-    "@feathersjs/express": "^5.0.0-pre.9",
-    "@feathersjs/memory": "^5.0.0-pre.9",
-    "@feathersjs/socketio": "^5.0.0-pre.9",
-    "@feathersjs/tests": "^5.0.0-pre.9",
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.6",
+    "@feathersjs/express": "^5.0.0-pre.10",
+    "@feathersjs/memory": "^5.0.0-pre.10",
+    "@feathersjs/socketio": "^5.0.0-pre.10",
+    "@feathersjs/tests": "^5.0.0-pre.10",
     "babel-loader": "^8.2.2",
-    "mocha": "^9.0.3",
+    "mocha": "^9.1.1",
     "mocha-puppeteer": "^0.14.0",
     "node-fetch": "^2.6.1",
     "shx": "^0.3.3",
-    "socket.io-client": "^4.1.3",
+    "socket.io-client": "^4.2.0",
     "superagent": "^6.1.0",
     "ts-loader": "^9.2.5",
-    "typescript": "^4.3.5",
-    "webpack": "^5.49.0",
-    "webpack-cli": "^4.7.2",
+    "typescript": "^4.4.3",
+    "webpack": "^5.53.0",
+    "webpack-cli": "^4.8.0",
     "webpack-merge": "^5.8.0"
   },
-  "gitHead": "3d1721a7286e6a7f37bbc38695fe45084023f13b"
+  "gitHead": "a9f7865cce8db2305b7c0d2ef4a165c2724034ef"
 }

@@ -81,7 +81,7 @@ describe('@feathersjs/transport-commons', () => {
             }, connection)
           });
           done();
-        } catch (e) {
+        } catch (e: any) {
           done(e);
         }
       });
@@ -120,7 +120,7 @@ describe('@feathersjs/transport-commons', () => {
           assert.ok(!error);
           assert.deepStrictEqual(result, Object.assign({ params }, data));
           done();
-        } catch (e) {
+        } catch (e: any) {
           done(e);
         }
       });
@@ -151,7 +151,7 @@ describe('@feathersjs/transport-commons', () => {
             message: 'From custom method'
           });
           done();
-        } catch (e) {
+        } catch (e: any) {
           done(e);
         }
       });

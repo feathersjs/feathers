@@ -1,0 +1,68 @@
+{
+  "name": "@feathersjs/schema",
+  "description": "A common data schema definition format",
+  "version": "5.0.0-pre.10",
+  "homepage": "https://feathersjs.com",
+  "main": "lib/",
+  "keywords": [
+    "feathers",
+    "feathers-plugin"
+  ],
+  "license": "MIT",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/daffl"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git"
+  },
+  "author": {
+    "name": "Feathers contributors",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "engines": {
+    "node": ">= 12"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "*.d.ts",
+    "*.js"
+  ],
+  "scripts": {
+    "prepublish": "npm run compile",
+    "compile": "shx rm -rf lib/ && tsc",
+    "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@feathersjs/errors": "^5.0.0-pre.10",
+    "@feathersjs/feathers": "^5.0.0-pre.10",
+    "ajv": "^8.6.3",
+    "json-schema": "^0.3.0",
+    "json-schema-to-ts": "^1.6.4"
+  },
+  "devDependencies": {
+    "@feathersjs/memory": "^5.0.0-pre.10",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.9.4",
+    "mocha": "^9.1.1",
+    "shx": "^0.3.3",
+    "typescript": "^4.4.3"
+  },
+  "gitHead": "a9f7865cce8db2305b7c0d2ef4a165c2724034ef"
+}

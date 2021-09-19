@@ -33,7 +33,7 @@ describe('authentication/hooks/events', () => {
         assert.ok(params.testParam);
         assert.ok(context.method, 'create');
         done();
-      } catch (error) {
+      } catch (error: any) {
         done(error);
       }
     });
@@ -53,7 +53,7 @@ describe('authentication/hooks/events', () => {
         assert.ok(params.testParam);
         assert.ok(context.method, 'remove');
         done();
-      } catch (error) {
+      } catch (error: any) {
         done(error);
       }
     });

@@ -42,7 +42,7 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
         const query = { $foo: 1 };
         filterQuery(query);
         assert.ok(false, 'Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'BadRequest');
         assert.strictEqual(error.message, 'Invalid query parameter $foo');
       }
@@ -230,7 +230,7 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
       try {
         filterQuery({ $select: 1, $known: 1 });
         assert.ok(false, 'Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.message, 'Invalid query parameter $known');
       }
     });

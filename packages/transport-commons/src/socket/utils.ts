@@ -108,7 +108,7 @@ export async function runMethod (app: Application, connection: RealTimeConnectio
 
     debug(`Returned successfully ${trace}`, result);
     callback(null, result);
-  } catch (error) {
+  } catch (error: any) {
     handleError(error);
   }
 }

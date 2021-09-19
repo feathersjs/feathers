@@ -73,14 +73,14 @@
     "@feathersjs/socketio": "^5.0.0-pre.6",
     "@feathersjs/transport-commons": "^5.0.0-pre.6",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^16.4.13",
-    "axios": "^0.21.1",
+    "@types/node": "^16.9.4",
+    "axios": "^0.21.4",
     "execa": "^5.1.1",
     "koa-static": "^5.0.0",
-    "mocha": "^9.0.3",
+    "mocha": "^9.1.1",
     "nodemon": "^2.0.12",
     "shx": "^0.3.3",
-    "typescript": "^4.3.5",
+    "typescript": "^4.4.3",
     "winston": "^3.3.3"
   }
 }

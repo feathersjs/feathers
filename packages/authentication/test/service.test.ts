@@ -73,7 +73,7 @@ describe('authentication/service', () => {
           username: 'Dave'
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'Invalid Dave');
       }
@@ -145,7 +145,7 @@ describe('authentication/service', () => {
           username: 'David'
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'Can not set subject from user.somethingElse');
       }
@@ -165,7 +165,7 @@ describe('authentication/service', () => {
           username: 'Dave'
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'No authentication strategies allowed for creating a JWT (`authStrategies`)');
       }
@@ -206,7 +206,7 @@ describe('authentication/service', () => {
           }
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'Invalid access token');
       }
@@ -216,7 +216,7 @@ describe('authentication/service', () => {
       try {
         await app.service('authentication').remove(null);
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.message, 'Invalid authentication information (no `strategy` set)');
       }
     });

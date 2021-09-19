@@ -94,7 +94,7 @@ describe('Axios REST connector', function () {
     try {
       await service.get(0, { query: { feathersError: true } });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.ok(error instanceof NotAcceptable);
       assert.strictEqual(error.message, 'This is a Feathers error');
       assert.strictEqual(error.code, 406);
@@ -109,7 +109,7 @@ describe('Axios REST connector', function () {
     try {
       await app.service('something').find();
       assert.fail('Should never get here');
-    } catch(e) {
+    } catch (e: any) {
       const err = JSON.parse(JSON.stringify(e));
 
       assert.strictEqual(err.name, 'Unavailable');

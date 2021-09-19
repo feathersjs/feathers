@@ -293,7 +293,7 @@ describe('Service events', () => {
           assert.strictEqual(hook.method, 'create');
           assert.strictEqual(hook.type, null);
           done();
-        } catch (error) {
+        } catch (error: any) {
           done(error);
         }
       });

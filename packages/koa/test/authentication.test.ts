@@ -44,7 +44,7 @@ describe('@feathersjs/koa/authentication', () => {
           email
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         const { data } = error.response;
         assert.strictEqual(data.name, 'NotAuthenticated');
         assert.strictEqual(data.message, 'Invalid login');
@@ -98,7 +98,7 @@ describe('@feathersjs/koa/authentication', () => {
           }
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.response.data.name, 'NotAuthenticated');
         app.get('authentication').authStrategies = [ 'jwt', 'local' ];
       }

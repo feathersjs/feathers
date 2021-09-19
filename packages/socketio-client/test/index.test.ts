@@ -40,7 +40,7 @@ describe('@feathersjs/socketio-client', () => {
       // @ts-ignore
       feathers().configure(socketio());
       assert.ok(false);
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message,
         'Socket.io connection needs to be provided'
       );
@@ -55,7 +55,7 @@ describe('@feathersjs/socketio-client', () => {
     try {
       app.configure(socketio(socket));
       assert.ok(false, 'Should never get here');
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, 'Only one default client provider can be configured');
     }
   });
@@ -79,7 +79,7 @@ describe('@feathersjs/socketio-client', () => {
     try {
       await app.service('not/me').create({});
       assert.fail('Should never get here');
-    } catch(e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, 'Service \'not/me\' not found')
     }
   });

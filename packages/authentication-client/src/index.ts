@@ -17,7 +17,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
 export const getDefaultStorage = () => {
   try {
     return new StorageWrapper(window.localStorage);
-  } catch (error) {}
+  } catch (error: any) {}
 
   return new MemoryStorage();
 };
