@@ -102,7 +102,7 @@ describe('fetch REST connector', function () {
     try {
       await service.get(0, { query: { feathersError: true } });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.ok(error.response);
       assert.ok(error instanceof NotAcceptable);
       assert.strictEqual(error.message, 'This is a Feathers error');

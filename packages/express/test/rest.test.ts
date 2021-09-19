@@ -230,7 +230,7 @@ describe('@feathersjs/express/rest provider', () => {
         try {
           await axios('http://localhost:4777/hook-error/dishes');
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           const { data } = error.response;
           const paramsWithHeaders = {
             ...params,
@@ -486,7 +486,7 @@ describe('@feathersjs/express/rest provider', () => {
       try {
         await axios.post('http://localhost:4780/todo');
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.ok(error.response.status === 405, 'Got 405 for .create');
         assert.deepStrictEqual(error.response.data, {
           message: 'Method `create` is not supported by this endpoint.'
@@ -498,7 +498,7 @@ describe('@feathersjs/express/rest provider', () => {
       try {
         await axios.get('http://localhost:4780/todo/foo/bar');
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.ok(error.response.status === 404, 'Got Not Found code');
       }
     });
@@ -555,7 +555,7 @@ describe('@feathersjs/express/rest provider', () => {
       try {
         await axios.get('http://localhost:6880/theApp/myId/todo/test?error=true');
         assert.fail('Should never het here');
-      } catch (error) {
+      } catch (error: any) {
         const { response } = error;
 
         assert.strictEqual(response.status, 400);

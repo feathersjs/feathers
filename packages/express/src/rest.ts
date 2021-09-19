@@ -48,7 +48,7 @@ export const serviceMiddleware = (callback: ServiceCallback) =>
       res.status(http.getStatusCode(context, result));
 
       next();
-    } catch (error) {
+    } catch (error: any) {
       next(error);
     }
   }

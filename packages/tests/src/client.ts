@@ -102,7 +102,7 @@ export function clientTests (app: any, name: string) {
       try {
         await getService().get(0, { query });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.message, 'Something went wrong');
       }
     });

@@ -51,7 +51,7 @@ describe('app.publish', () => {
 
       try {
         await app.service('test').create({ message: 'something' });
-      } catch (error) {
+      } catch (error: any) {
         assert.fail('Should never get here');
       }
     });
@@ -68,7 +68,7 @@ describe('app.publish', () => {
           assert.deepStrictEqual(hook.result, data);
           assert.deepStrictEqual(channel.connections, [ c1 ]);
           done();
-        } catch (error) {
+        } catch (error: any) {
           done(error);
         }
       });

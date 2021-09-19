@@ -84,7 +84,7 @@ export default (options: OauthSetupSettings) => {
           } else {
             res.json(data);
           }
-        } catch (error) {
+        } catch (error: any) {
           debug('oAuth error', error);
           next(error);
         }
@@ -114,7 +114,7 @@ export default (options: OauthSetupSettings) => {
         debug('Successful oAuth authentication, sending response');
 
         await sendResponse(authResult);
-      } catch (error) {
+      } catch (error: any) {
         debug('Received oAuth authentication error', error.stack);
         await sendResponse(error);
       }

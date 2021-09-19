@@ -51,11 +51,11 @@
   },
   "devDependencies": {
     "@types/mocha": "^9.0.0",
-    "@types/node": "^16.6.1",
-    "mocha": "^9.0.3",
+    "@types/node": "^16.9.4",
+    "mocha": "^9.1.1",
     "shx": "^0.3.3",
-    "ts-node": "^10.2.0",
-    "typescript": "^4.3.5"
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
   },
   "gitHead": "3d1721a7286e6a7f37bbc38695fe45084023f13b"
 }

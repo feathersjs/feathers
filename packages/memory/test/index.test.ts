@@ -184,7 +184,7 @@ describe('Feathers Memory Service', () => {
     try {
       await app.service('people').update(null, {});
       throw new Error('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message, 'You can not replace multiple instances. Did you mean \'patch\'?');
     }
   });

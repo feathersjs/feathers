@@ -48,7 +48,7 @@ describe('error-handler', () => {
         try {
           await axios(options);
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           assert.deepEqual(error.response.data, {
             name: 'GeneralError',
             message: 'Something went wrong',
@@ -224,7 +224,7 @@ describe('error-handler', () => {
             responseType: 'json'
           });
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           assert.equal(error.response.status, 500);
           assert.deepEqual(error.response.data, {
             name: 'GeneralError',
@@ -287,7 +287,7 @@ describe('error-handler', () => {
             }
           });
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           assert.equal(error.response.status, 500);
           assert.deepEqual(error.response.data, {
             name: 'GeneralError',
@@ -308,7 +308,7 @@ describe('error-handler', () => {
             }
           });
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           assert.equal(error.response.status, 404);
           assert.deepEqual(error.response.data, { name: 'NotFound',
             message: 'File not found',
@@ -328,7 +328,7 @@ describe('error-handler', () => {
             }
           });
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           assert.equal(error.response.status, 400);
           assert.deepEqual(error.response.data, { name: 'BadRequest',
             message: 'Invalid Password',
@@ -349,7 +349,7 @@ describe('error-handler', () => {
       try {
         await axios('http://localhost:5050/bad-request');
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.equal(error.response.status, 400);
         assert.deepEqual(error.response.data, {
           name: 'BadRequest',
