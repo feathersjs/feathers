@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-client",
   "description": "The authentication plugin for feathers-client",
-  "version": "5.0.0-pre.9",
+  "version": "5.0.0-pre.10",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -52,18 +52,18 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^5.0.0-pre.9",
-    "@feathersjs/commons": "^5.0.0-pre.9",
-    "@feathersjs/errors": "^5.0.0-pre.9",
-    "@feathersjs/feathers": "^5.0.0-pre.9"
+    "@feathersjs/authentication": "^5.0.0-pre.10",
+    "@feathersjs/commons": "^5.0.0-pre.10",
+    "@feathersjs/errors": "^5.0.0-pre.10",
+    "@feathersjs/feathers": "^5.0.0-pre.10"
   },
   "devDependencies": {
-    "@feathersjs/authentication-local": "^5.0.0-pre.9",
-    "@feathersjs/express": "^5.0.0-pre.9",
-    "@feathersjs/memory": "^5.0.0-pre.9",
-    "@feathersjs/rest-client": "^5.0.0-pre.9",
-    "@feathersjs/socketio": "^5.0.0-pre.9",
-    "@feathersjs/socketio-client": "^5.0.0-pre.9",
+    "@feathersjs/authentication-local": "^5.0.0-pre.10",
+    "@feathersjs/express": "^5.0.0-pre.10",
+    "@feathersjs/memory": "^5.0.0-pre.10",
+    "@feathersjs/rest-client": "^5.0.0-pre.10",
+    "@feathersjs/socketio": "^5.0.0-pre.10",
+    "@feathersjs/socketio-client": "^5.0.0-pre.10",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.9.4",
     "axios": "^0.21.4",

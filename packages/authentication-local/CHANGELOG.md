@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.10](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.9...v5.0.0-pre.10) (2021-09-19)
+
+
+### Bug Fixes
+
+* **authentication-local:** adds error handling for undefined/null password field ([#2444](https://github.com/feathersjs/feathers/issues/2444)) ([4323f98](https://github.com/feathersjs/feathers/commit/4323f9859a66a7fe3f7f15d81476bd81b735c226))
+
+
+
+
+
 # [5.0.0-pre.9](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.8...v5.0.0-pre.9) (2021-08-09)
 
 **Note:** Version bump only for package @feathersjs/authentication-local

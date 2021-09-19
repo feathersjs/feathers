@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/adapter-tests",
-  "version": "5.0.0-pre.9",
+  "version": "5.0.0-pre.10",
   "description": "Feathers shared database adapter test suite",
   "homepage": "https://feathersjs.com",
   "keywords": [
