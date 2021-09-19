@@ -1,9 +1,10 @@
 import { strict as assert } from 'assert';
 
+//@ts-ignore
+import fetch from 'node-fetch';
 import { feathers } from '@feathersjs/feathers';
 import { clientTests } from '@feathersjs/tests';
 import { NotAcceptable } from '@feathersjs/errors';
-import fetch from 'node-fetch';
 import { Server } from 'http';
 
 import rest from '../src';
@@ -63,7 +64,7 @@ describe('fetch REST connector', function () {
     try {
       await service.get(-1, {});
       assert.fail('Should never get here');
-    } catch(error) {
+    } catch (error: any) {
       assert.strictEqual(error.code, 404)
     }
   });

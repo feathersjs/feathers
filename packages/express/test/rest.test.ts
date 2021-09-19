@@ -24,7 +24,7 @@ describe('@feathersjs/express/rest provider', () => {
       try {
         app.configure(rest());
         assert.ok(false, 'Should never get here');
-      } catch (e) {
+      } catch (e: any) {
         assert.strictEqual(e.message, '@feathersjs/express/rest needs an Express compatible app.');
       }
     });

@@ -109,7 +109,7 @@ describe('Axios REST connector', function () {
     try {
       await app.service('something').find();
       assert.fail('Should never get here');
-    } catch(e) {
+    } catch (e: any) {
       const err = JSON.parse(JSON.stringify(e));
 
       assert.strictEqual(err.name, 'Unavailable');

@@ -1,7 +1,8 @@
 
+//@ts-ignore
+import fetch from 'node-fetch';
 import { strict as assert } from 'assert';
 import { feathers } from '@feathersjs/feathers';
-import fetch from 'node-fetch';
 import { default as init, FetchClient } from '../src';
 
 describe('REST client tests', function () {
@@ -20,7 +21,7 @@ describe('REST client tests', function () {
     try {
       // @ts-ignore
       transports.fetch();
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, 'fetch has to be provided to feathers-rest');
     }
   });
@@ -41,7 +42,7 @@ describe('REST client tests', function () {
     try {
       app.configure(init('http://localhost:8889').fetch(fetch));
       assert.ok(false, 'Should never get here');
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, 'Only one default client provider can be configured');
     }
   });

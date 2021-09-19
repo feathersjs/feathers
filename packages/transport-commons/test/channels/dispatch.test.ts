@@ -30,7 +30,7 @@ describe('app.publish', () => {
       app.service('test').registerPublisher('created', function () {});
       app.service('test').registerPublisher('bla', function () {});
       assert.ok(false, 'Should never get here');
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, '\'bla\' is not a valid service event');
     }
   });

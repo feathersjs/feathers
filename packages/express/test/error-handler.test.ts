@@ -248,7 +248,7 @@ describe('error-handler', () => {
               }
             });
             assert.fail('Should never get here');
-          } catch(error) {
+          } catch (error: any) {
             assert.equal(error.response.status, 404);
             assert.equal(error.response.data, html.toString());
             done();
@@ -267,7 +267,7 @@ describe('error-handler', () => {
               }
             });
             assert.fail('Should never get here');
-          } catch(error) {
+          } catch (error: any) {
             assert.equal(error.response.status, 500);
             assert.equal(error.response.data, html.toString());
             done();
