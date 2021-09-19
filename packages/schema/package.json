@@ -52,16 +52,16 @@
   "dependencies": {
     "@feathersjs/errors": "^5.0.0-pre.9",
     "@feathersjs/feathers": "^5.0.0-pre.9",
-    "ajv": "^8.6.2",
+    "ajv": "^8.6.3",
     "json-schema": "^0.3.0",
     "json-schema-to-ts": "^1.6.4"
   },
   "devDependencies": {
     "@feathersjs/memory": "^5.0.0-pre.9",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^16.6.1",
-    "mocha": "^9.0.3",
+    "@types/node": "^16.9.4",
+    "mocha": "^9.1.1",
     "shx": "^0.3.3",
-    "typescript": "^4.3.5"
+    "typescript": "^4.4.3"
   }
 }

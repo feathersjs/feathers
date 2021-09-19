@@ -15,7 +15,7 @@ describe('@feathersjs/authentication-oauth/express', () => {
   it('oauth/test', async () => {
     try {
       await axios.get('http://localhost:9876/oauth/test?feathers_token=testing', { maxRedirects: 0 });
-    } catch (error) {
+    } catch (error: any) {
       assert.equal(error.response.status, 302)
     }
   });
@@ -23,7 +23,7 @@ describe('@feathersjs/authentication-oauth/express', () => {
   it('oauth/test with query', async () => {
     try {
       await axios.get('http://localhost:9876/oauth/test?other=test', { maxRedirects: 0 });
-    } catch (error) {
+    } catch (error: any) {
       assert.equal(error.response.status, 302)
     }
   });
@@ -41,7 +41,7 @@ describe('@feathersjs/authentication-oauth/express', () => {
 
     try {
       await axios.get('http://localhost:9876/oauth/test/authenticate');
-    } catch (error) {
+    } catch (error: any) {
       assert.ok(/Cannot GET/.test(error.response.data));
       delete app.get('authentication').oauth.redirect;
     }

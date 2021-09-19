@@ -31,7 +31,7 @@ export default (name: string, options: any) => {
     try {
       await call('get', 'laundry', { error: true });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message, 'Something for laundry went wrong');
     }
   });
@@ -40,7 +40,7 @@ export default (name: string, options: any) => {
     try {
       await call('get', 'laundry', { runtimeError: true });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message, 'thingThatDoesNotExist is not defined')
     }
   });
@@ -49,7 +49,7 @@ export default (name: string, options: any) => {
     try {
       await call('get', 'laundry', { hookError: true });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message, 'Error from get, before hook');
     }
   });

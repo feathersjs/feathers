@@ -158,7 +158,7 @@ describe('@feathersjs/express/authentication', () => {
         // @ts-ignore
         authenticate();
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.message, 'The authenticate hook needs at least one allowed strategy');
       }
     });
@@ -182,7 +182,7 @@ describe('@feathersjs/express/authentication', () => {
           }
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         const { data } = error.response;
 
         assert.strictEqual(data.name, 'NotAuthenticated');

@@ -59,7 +59,7 @@ describe('authentication/hooks/authenticate', () => {
       // @ts-ignore
       authenticate();
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message, 'The authenticate hook needs at least one allowed strategy');
     }
   });
@@ -76,7 +76,7 @@ describe('authentication/hooks/authenticate', () => {
     try {
       await users.find();
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'The authenticate hook must be used as a before hook');
     }
@@ -92,7 +92,7 @@ describe('authentication/hooks/authenticate', () => {
         }
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Could not find a valid authentication service');
     }
@@ -188,7 +188,7 @@ describe('authentication/hooks/authenticate', () => {
         }
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Invalid Dave');
     }
@@ -200,7 +200,7 @@ describe('authentication/hooks/authenticate', () => {
         provider: 'rest'
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Not authenticated');
     }
@@ -231,7 +231,7 @@ describe('authentication/hooks/authenticate', () => {
         username: 'David'
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message,
         'The authenticate hook does not need to be used on the authentication service'
       );

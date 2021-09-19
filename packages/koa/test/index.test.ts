@@ -40,7 +40,7 @@ describe('@feathersjs/koa', () => {
     try {
       koa({} as Application);
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.equal(error.message, '@feathersjs/koa requires a valid Feathers application instance');
     }
   });

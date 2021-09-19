@@ -52,7 +52,7 @@ describe('@feathersjs/express', () => {
     try {
       // @ts-ignore
       expressify.default({});
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, '@feathersjs/express requires a valid Feathers application instance');
     }
 
@@ -61,7 +61,7 @@ describe('@feathersjs/express', () => {
       app.version = '2.9.9';
 
       expressify.default(app);
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, '@feathersjs/express requires an instance of a Feathers application version 3.x or later (got 2.9.9)');
     }
 
@@ -70,7 +70,7 @@ describe('@feathersjs/express', () => {
       delete app.version;
 
       expressify.default(app);
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, '@feathersjs/express requires an instance of a Feathers application version 3.x or later (got unknown)');
     }
   });

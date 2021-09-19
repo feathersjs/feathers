@@ -20,7 +20,7 @@ export default (name: string, options: any) => {
       try {
         callback(data);
         done();
-      } catch (error) {
+      } catch (error: any) {
         done(error);
       }
     };

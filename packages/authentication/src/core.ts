@@ -200,7 +200,7 @@ export class AuthenticationBase {
       const verified = jsonwebtoken.verify(accessToken, jwtSecret, options);
 
       return verified as any;
-    } catch (error) {
+    } catch (error: any) {
       throw new NotAuthenticated(error.message, error);
     }
   }
