@@ -1,6 +1,7 @@
 import assert from 'assert';
 import { hooks, NextFunction } from '@feathersjs/hooks';
 import { HookContext, createContext, feathers, Id, Params } from '../../src';
+import { groupBasicHooksByType } from '../../src/hooks/basic'
 
 describe('hooks basics', () => {
   it('mix @feathersjs/hooks and .hooks', async () => {
@@ -40,22 +41,22 @@ describe('hooks basics', () => {
 
     app.hooks({
       before: [(ctx: HookContext) => {
-        ctx.params.chain.push('app.hooks legacy before');
+        ctx.params.chain.push('app.hooks basic before');
       }],
       after: [(ctx: HookContext) => {
-        ctx.params.chain.push('app.hooks legacy after');
+        ctx.params.chain.push('app.hooks basic after');
       }]
     });
 
     service.hooks({
       before: {
         get: (ctx: HookContext) => {
-          ctx.params.chain.push('service.hooks legacy before');
+          ctx.params.chain.push('service.hooks basic before');
         }
       },
       after: {
         get: (ctx: HookContext) => {
-          ctx.params.chain.push('service.hooks legacy after');
+          ctx.params.chain.push('service.hooks basic after');
         }
       }
     });
@@ -71,12 +72,12 @@ describe('hooks basics', () => {
     service.hooks({
       before: {
         get: (ctx: HookContext) => {
-          ctx.params.chain.push('service.hooks 2 legacy before');
+          ctx.params.chain.push('service.hooks 2 basic before');
         }
       },
       after: {
         get: (ctx: HookContext) => {
-          ctx.params.chain.push('service.hooks 2 legacy after');
+          ctx.params.chain.push('service.hooks 2 basic after');
         }
       }
     });
@@ -85,21 +86,117 @@ describe('hooks basics', () => {
 
     assert.deepStrictEqual(chain, [
       'app.hooks before',
-      'app.hooks legacy before',
+      'app.hooks basic before',
       '@hooks all before',
       '@hooks get before',
       'service.hooks get before',
-      'service.hooks legacy before',
-      'service.hooks 2 legacy before',
-      'service.hooks legacy after',
-      'service.hooks 2 legacy after',
+      'service.hooks basic before',
+      'service.hooks 2 basic before',
+      'service.hooks basic after',
+      'service.hooks 2 basic after',
       'service.hooks get after',
       '@hooks get after',
       '@hooks all after',
-      'app.hooks legacy after',
+      'app.hooks basic after',
       'app.hooks after'
     ])
   });
+
+  it('converts basic hooks grouped by method into grouped by type', async () => {
+    const hooksByMethod = {
+      find: { before: [1], after: [2], error: [3] },
+      get: { before: [4], after: [5], error: [6] },
+      create: { before: [7], after: [8], error: [9] },
+      update: { before: [10], after: [11], error: [12] },
+      patch: { before: [13], after: [14], error: [15] },
+      remove: { before: [16], after: [17], error: [18] }
+    }
+    const hooksByType = groupBasicHooksByType(hooksByMethod)
+    const expectedHooksByType = {
+      before: {
+        find: [1],
+        get: [4],
+        create: [7],
+        update: [10],
+        patch: [13],
+        remove: [16]
+      },
+      after: {
+        find: [2],
+        get: [5],
+        create: [8],
+        update: [11],
+        patch: [14],
+        remove: [17]
+      },
+      error: {
+        find: [3],
+        get: [6],
+        create: [9],
+        update: [12],
+        patch: [15],
+        remove: [18]
+      }
+    }
+    assert.deepStrictEqual(hooksByType, expectedHooksByType, 'should convert complete object')
+
+    const hooksByMethod2 = {
+      find: { before: [1], after: [2] },
+      get: { after: [5], error: [6] },
+      customMethod: { before: [7], error: [9] }
+    }
+    const hooksByType2 = groupBasicHooksByType(hooksByMethod2)
+    const expectedHooksByType2 = {
+      before: {
+        find: [1],
+        customMethod: [7]
+      },
+      after: {
+        find: [2],
+        get: [5]
+      },
+      error: {
+        get: [6],
+        customMethod: [9]
+      }
+    }
+    assert.deepStrictEqual(hooksByType2, expectedHooksByType2, 'should handle missing values and custom methods')
+  })
+
+  it('supports basic hooks grouped by method', async () => {
+    class SimpleService {
+      async get (id: Id, params: Params) {
+        return { id, chain: params.chain };
+      }
+    }
+
+    const app = feathers().use('/dummy', new SimpleService());
+    const service = app.service('dummy');
+
+    service.hooks({
+      get: {
+        // @ts-ignore
+        before: [
+          (ctx: HookContext) => {
+            ctx.params.chain = []
+            ctx.params.chain.push('basic hook 1 before');
+          }
+        ],
+        after: [
+          (ctx: HookContext) => {
+            ctx.params.chain.push('basic hook 1 after');
+          }
+        ]
+      }
+    });
+
+    const { chain } = await service.get(1, {});
+
+    assert.deepStrictEqual(chain, [
+      'basic hook 1 before',
+      'basic hook 1 after'
+    ])
+  })
 
   // it('validates arguments', async () => {
   //   const app = feathers().use('/dummy', {

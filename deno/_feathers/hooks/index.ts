@@ -8,12 +8,12 @@ import {
 } from '../declarations.ts';
 import { defaultServiceArguments, getHookMethods } from '../service.ts';
 import {
-  collectLegacyHooks,
-  enableLegacyHooks,
+  collectBasicHooks,
+  enableBasicHooks,
   fromAfterHook,
   fromBeforeHook,
   fromErrorHooks
-} from './legacy.ts';
+} from './basic.ts';
 
 export { fromAfterHook, fromBeforeHook, fromErrorHooks };
 
@@ -36,11 +36,11 @@ export class FeathersHookManager<A> extends HookManager {
   collectMiddleware (self: any, args: any[]): Middleware[] {
     const app = this.app as any as Application;
     const appHooks = app.appHooks[HOOKS].concat(app.appHooks[this.method] || []);
-    const legacyAppHooks = collectLegacyHooks(this.app, this.method);
+    const basicAppHooks = collectBasicHooks(this.app, this.method);
     const middleware = super.collectMiddleware(self, args);
-    const legacyHooks = collectLegacyHooks(self, this.method);
+    const basicHooks = collectBasicHooks(self, this.method);
 
-    return [...appHooks, ...legacyAppHooks, ...middleware, ...legacyHooks];
+    return [...appHooks, ...basicAppHooks, ...middleware, ...basicHooks];
   }
 
   initializeContext (self: any, args: any[], context: HookContext) {
@@ -81,7 +81,7 @@ export function hookMixin<A> (
 
     return res;
   }, {} as HookMap);
-  const handleLegacyHooks = enableLegacyHooks(service);
+  const handleLegacyHooks = enableBasicHooks(service);
 
   hooks(service, serviceMethodHooks);
 

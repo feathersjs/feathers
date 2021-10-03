@@ -318,22 +318,22 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
 }
 
 // Legacy hook typings
-export type LegacyHookFunction<A = Application, S = Service<any, any>> =
+export type BasicHookFunction<A = Application, S = Service<any, any>> =
   (this: S, context: HookContext<A, S>) => (Promise<HookContext<Application, S> | void> | HookContext<Application, S> | void);
 
-export type Hook<A = Application, S = Service<any, any>> = LegacyHookFunction<A, S>;
+export type Hook<A = Application, S = Service<any, any>> = BasicHookFunction<A, S>;
 
-type LegacyHookMethodMap<A, S> =
-  { [L in keyof S]?: SelfOrArray<LegacyHookFunction<A, S>>; } &
-  { all?: SelfOrArray<LegacyHookFunction<A, S>> };
+type BasicHookMethodMap<A, S> =
+  { [L in keyof S]?: SelfOrArray<BasicHookFunction<A, S>>; } &
+  { all?: SelfOrArray<BasicHookFunction<A, S>> };
 
-type LegacyHookTypeMap<A, S> =
-  SelfOrArray<LegacyHookFunction<A, S>> | LegacyHookMethodMap<A, S>;
+type BasicHookTypeMap<A, S> =
+  SelfOrArray<BasicHookFunction<A, S>> | BasicHookMethodMap<A, S>;
 
-export type LegacyHookMap<A, S> = {
-  before?: LegacyHookTypeMap<A, S>,
-  after?: LegacyHookTypeMap<A, S>,
-  error?: LegacyHookTypeMap<A, S>
+export type BasicHookMap<A, S> = {
+  before?: BasicHookTypeMap<A, S>,
+  after?: BasicHookTypeMap<A, S>,
+  error?: BasicHookTypeMap<A, S>
 }
 
 // New @feathersjs/hook typings
@@ -345,4 +345,4 @@ export type HookMap<A, S> = {
 };
 
 export type HookOptions<A, S> =
-  HookMap<A, S> | HookFunction<A, S>[] | LegacyHookMap<A, S>;
+  HookMap<A, S> | HookFunction<A, S>[] | BasicHookMap<A, S>;

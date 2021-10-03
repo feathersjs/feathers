@@ -6,12 +6,13 @@ import {
 } from '../declarations';
 import { defaultServiceArguments, getHookMethods } from '../service';
 import {
-  collectLegacyHooks,
-  enableLegacyHooks,
+  collectBasicHooks,
+  enableBasicHooks,
   fromAfterHook,
   fromBeforeHook,
-  fromErrorHooks
-} from './legacy';
+  fromErrorHooks,
+  groupBasicHooksByType
+} from './basic';
 
 export { fromAfterHook, fromBeforeHook, fromErrorHooks };
 
@@ -34,11 +35,11 @@ export class FeathersHookManager<A> extends HookManager {
   collectMiddleware (self: any, args: any[]): Middleware[] {
     const app = this.app as any as Application;
     const appHooks = app.appHooks[HOOKS].concat(app.appHooks[this.method] || []);
-    const legacyAppHooks = collectLegacyHooks(this.app, this.method);
+    const basicAppHooks = collectBasicHooks(this.app, this.method);
     const middleware = super.collectMiddleware(self, args);
-    const legacyHooks = collectLegacyHooks(self, this.method);
+    const basicHooks = collectBasicHooks(self, this.method);
 
-    return [...appHooks, ...legacyAppHooks, ...middleware, ...legacyHooks];
+    return [...appHooks, ...basicAppHooks, ...middleware, ...basicHooks];
   }
 
   initializeContext (self: any, args: any[], context: HookContext) {
@@ -79,13 +80,17 @@ export function hookMixin<A> (
 
     return res;
   }, {} as HookMap);
-  const handleLegacyHooks = enableLegacyHooks(service);
+  const handleBasicHooks = enableBasicHooks(service);
 
   hooks(service, serviceMethodHooks);
 
   service.hooks = function (this: any, hookOptions: any) {
+    // If `isGroupedByMethod`, hooks are formatted with the method, first, like `find: { before: [] }`
+    const isGroupedByMethod = Object.values(hookOptions).some((o: any) => o?.before || o?.after || o?.error)
+    if (isGroupedByMethod) hookOptions = groupBasicHooksByType(hookOptions)
+
     if (hookOptions.before || hookOptions.after || hookOptions.error) {
-      return handleLegacyHooks.call(this, hookOptions);
+      return handleBasicHooks.call(this, hookOptions);
     }
 
     if (Array.isArray(hookOptions)) {

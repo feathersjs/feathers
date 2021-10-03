@@ -26,7 +26,7 @@ describe('app.hooks', () => {
   });
 
   describe('app.hooks([ async ])', () => {
-    it('basic app async hook', async () => {
+    it('basic app advanced hook', async () => {
       const service = app.service('todos');
 
       app.hooks([

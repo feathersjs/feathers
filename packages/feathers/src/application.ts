@@ -15,9 +15,9 @@ import {
   HookOptions,
   FeathersService,
   HookMap,
-  LegacyHookMap
+  BasicHookMap
 } from './declarations';
-import { enableLegacyHooks } from './hooks/legacy';
+import { enableBasicHooks } from './hooks/basic';
 
 const debug = createDebug('@feathersjs/feathers');
 
@@ -31,11 +31,11 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     [HOOKS]: [ (eventHook as any) ]
   };
 
-  private legacyHooks: (this: any, allHooks: any) => any;
+  private basicHooks: (this: any, allHooks: any) => any;
 
   constructor () {
     super();
-    this.legacyHooks = enableLegacyHooks(this);
+    this.basicHooks = enableBasicHooks(this);
   }
 
   get<L extends keyof AppSettings & string> (name: L): AppSettings[L] {
@@ -118,10 +118,12 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
   }
 
   hooks (hookMap: HookOptions<this, any>) {
-    const legacyMap = hookMap as LegacyHookMap<this, any>;
+    const basicHookMap = hookMap as BasicHookMap<this, any>;
 
-    if (legacyMap.before || legacyMap.after || legacyMap.error) {
-      return this.legacyHooks(legacyMap);
+    // Registering basic hooks
+    const isGroupedByMethod = Object.values(basicHookMap).some((o: any) => o.before || o.after || o.error)
+    if (basicHookMap.before || basicHookMap.after || basicHookMap.error || isGroupedByMethod) {
+      return this.basicHooks(basicHookMap);
     }
 
     if (Array.isArray(hookMap)) {
@@ -146,10 +148,10 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     for (const path of Object.keys(this.services)) {
       promise = promise.then(() => {
         const service: any = this.service(path as any);
-  
+
         if (typeof service.setup === 'function') {
           debug(`Setting up service for \`${path}\``);
-  
+
           return service.setup(this, path);
         }
       });

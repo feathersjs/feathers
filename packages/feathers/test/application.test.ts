@@ -174,7 +174,7 @@ describe('Feathers application', () => {
       app1.service('testing').create({ message: 'Hi' });
     });
 
-    it('async hooks run before legacy hooks', async () => {
+    it('advanced hooks run before basic hooks', async () => {
       const app = feathers();
 
       app.use('/dummy', {
@@ -197,11 +197,11 @@ describe('Feathers application', () => {
         ctx.data.order = [ 'async' ];
         await next();
       }]);
-      
+
       const result = await dummy.create({
         message: 'hi'
       });
-      
+
       assert.deepStrictEqual(result, {
         message: 'hi',
         order: ['async', 'before']

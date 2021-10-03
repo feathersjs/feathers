@@ -1,11 +1,9 @@
-// DO NOT MODIFY - generated from packages/feathers/src/hooks/legacy.ts
-
-import { _ } from '../dependencies.ts';
-import { LegacyHookFunction } from '../declarations.ts';
+import { _ } from '../dependencies';
+import { BasicHookFunction } from '../declarations';
 
 const { each } = _;
 
-export function fromBeforeHook (hook: LegacyHookFunction) {
+export function fromBeforeHook (hook: BasicHookFunction) {
   return (context: any, next: any) => {
     context.type = 'before';
 
@@ -16,7 +14,7 @@ export function fromBeforeHook (hook: LegacyHookFunction) {
   };
 }
 
-export function fromAfterHook (hook: LegacyHookFunction) {
+export function fromAfterHook (hook: BasicHookFunction) {
   return (context: any, next: any) => {
     return next().then(() => {
       context.type = 'after';
@@ -27,7 +25,7 @@ export function fromAfterHook (hook: LegacyHookFunction) {
   }
 }
 
-export function fromErrorHooks (hooks: LegacyHookFunction[]) {
+export function fromErrorHooks (hooks: BasicHookFunction[]) {
   return (context: any, next: any) => {
     return next().catch((error: any) => {
       let promise: Promise<any> = Promise.resolve();
@@ -53,7 +51,7 @@ export function fromErrorHooks (hooks: LegacyHookFunction[]) {
   }
 }
 
-export function collectLegacyHooks (target: any, method: string) {
+export function collectBasicHooks (target: any, method: string) {
   const {
     before: { [method]: before = [] },
     after: { [method]: after = [] },
@@ -84,8 +82,21 @@ export function convertHookData (obj: any) {
   return hook;
 }
 
+// Takes hooks grouped by method `find: { before: [] }` into grouped by type `before: { find: [] }`
+export function groupBasicHooksByType (hookOptions: any) {
+  return Object.keys(hookOptions).reduce((hookObj: any, method) => {
+    ['before', 'after', 'error'].forEach(type => {
+      hookObj[type] = hookObj[type] || {}
+      if (Array.isArray(hookOptions[method][type])) {
+        hookObj[type][method] = hookOptions[method][type]
+      }
+    })
+    return hookObj
+  }, {})
+}
+
 // Add `.hooks` functionality to an object
-export function enableLegacyHooks (
+export function enableBasicHooks (
   obj: any,
   methods: string[] = ['find', 'get', 'create', 'update', 'patch', 'remove'],
   types: string[] = ['before', 'after', 'error']
@@ -104,7 +115,7 @@ export function enableLegacyHooks (
     writable: true
   });
 
-  return function legacyHooks (this: any, allHooks: any) {
+  return function basicHooks (this: any, allHooks: any) {
     each(allHooks, (current: any, type) => {
       if (!this.__hooks[type]) {
         throw new Error(`'${type}' is not a valid hook type`);

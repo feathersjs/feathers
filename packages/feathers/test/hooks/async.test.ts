@@ -1,8 +1,8 @@
 import assert from 'assert';
 import { feathers } from '../../src';
 
-describe('`async` hooks', () => {
-  it('async hooks can set hook.result which will skip service method', async () => {
+describe('`advanced` hooks', () => {
+  it('advanced hooks can set hook.result which will skip service method', async () => {
     const app = feathers().use('/dummy', {
       async get () {
         assert.ok(false, 'This should never run');
@@ -169,7 +169,7 @@ describe('`async` hooks', () => {
     await service.create({ some: 'thing' });
   });
 
-  it('async hooks run in the correct order', async () => {
+  it('advanced hooks run in the correct order', async () => {
     const app = feathers().use('/dummy', {
       async get (id: any, params: any) {
         assert.deepStrictEqual(params.items, ['first', 'second', 'third']);
@@ -244,7 +244,7 @@ describe('`async` hooks', () => {
     await service.find();
   });
 
-  it('async hooks have service as context and keep it in service method (#17)', async () => {
+  it('advanced hooks have service as context and keep it in service method (#17)', async () => {
     class Dummy {
       number= 42;
 
