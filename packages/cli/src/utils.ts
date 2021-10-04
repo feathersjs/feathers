@@ -54,8 +54,13 @@ export async function getHelpers (pkg: PackageJSON, self: PackageJSON, _logger: 
           ? `${name}@${self.devDependencies[name]}`
           : name
       );
-      const { packager } = pkg.feathers;
-      const command = `${packager} install ${deps.join(' ')} --${dev ? 'save-dev' : 'save'}`;
+      const packagerName = pkg.feathers.packager
+      const packagerCmd = packagerName.toLowerCase()
+      const isYarn = packagerName === 'Yarn'
+      const installCmd = isYarn ? 'add' : 'install'
+      const devArg = isYarn ? '--dev' : '--save-dev'
+      const cmdArgs = dev ? ' ' + devArg : ''
+      const command = `${packagerCmd} ${installCmd} ${deps.join(' ')}${cmdArgs}`
 
       return command;
     },
