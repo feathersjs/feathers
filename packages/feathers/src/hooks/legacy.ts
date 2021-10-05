@@ -7,10 +7,14 @@ export function fromBeforeHook (hook: LegacyHookFunction) {
   return (context: any, next: any) => {
     context.type = 'before';
 
-    return Promise.resolve(hook.call(context.self, context)).then(() => {
-      context.type = null;
-      return next();
-    });
+    return Promise.resolve(hook.call(context.self, context))
+      .then(ctx => {
+        if (ctx && ctx !== context) {
+          Object.assign(context, ctx);
+        }
+        context.type = null;
+        return next();
+      });
   };
 }
 
@@ -19,7 +23,10 @@ export function fromAfterHook (hook: LegacyHookFunction) {
     return next().then(() => {
       context.type = 'after';
       return hook.call(context.self, context)
-    }).then(() => {
+    }).then((ctx: any) => {
+      if (ctx && ctx !== context) {
+        Object.assign(context, ctx);
+      }
       context.type = null;
     });
   }
@@ -38,6 +45,11 @@ export function fromErrorHooks (hooks: LegacyHookFunction[]) {
 
       for (const hook of hooks) {
         promise = promise.then(() => hook.call(context.self, context))
+          .then(ctx => {
+            if (ctx && ctx !== context) {
+              Object.assign(context, ctx);
+            }
+          })
       }
 
       return promise.then(() => {
