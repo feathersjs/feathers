@@ -2,16 +2,20 @@ import { _ } from '../dependencies';
 import { LegacyHookFunction } from '../declarations';
 
 const { each } = _;
+const mergeContext = (context: any) => (res: any) => {
+  if (res && res !== context) {
+    Object.assign(context, res);
+  }
+  return res;
+}
 
 export function fromBeforeHook (hook: LegacyHookFunction) {
   return (context: any, next: any) => {
     context.type = 'before';
 
     return Promise.resolve(hook.call(context.self, context))
-      .then(ctx => {
-        if (ctx && ctx !== context) {
-          Object.assign(context, ctx);
-        }
+      .then(mergeContext(context))
+      .then(() => {
         context.type = null;
         return next();
       });
@@ -20,15 +24,15 @@ export function fromBeforeHook (hook: LegacyHookFunction) {
 
 export function fromAfterHook (hook: LegacyHookFunction) {
   return (context: any, next: any) => {
-    return next().then(() => {
-      context.type = 'after';
-      return hook.call(context.self, context)
-    }).then((ctx: any) => {
-      if (ctx && ctx !== context) {
-        Object.assign(context, ctx);
-      }
-      context.type = null;
-    });
+    return next()
+      .then(() => {
+        context.type = 'after';
+        return hook.call(context.self, context)
+      })
+      .then(mergeContext(context))
+      .then(() => {
+        context.type = null;
+      });
   }
 }
 
@@ -45,11 +49,7 @@ export function fromErrorHooks (hooks: LegacyHookFunction[]) {
 
       for (const hook of hooks) {
         promise = promise.then(() => hook.call(context.self, context))
-          .then(ctx => {
-            if (ctx && ctx !== context) {
-              Object.assign(context, ctx);
-            }
-          })
+          .then(mergeContext(context))
       }
 
       return promise.then(() => {
