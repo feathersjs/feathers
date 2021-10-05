@@ -354,4 +354,42 @@ describe('hooks basics', () => {
       params: {}
     });
   });
+
+  it('allows to return new context in basic hooks (#2451)', async () => {
+    const app = feathers().use('/dummy', {
+      async get () {
+        return {};
+      }
+    });
+    const service = app.service('dummy');
+
+    service.hooks({
+      before: {
+        get: [
+          context => {
+            return {
+              ...context,
+              value: 'something'
+            };
+          },
+          context => {
+            assert.strictEqual(context.value, 'something');
+          }
+        ]
+      },
+      after: {
+        get: [context => {
+          context.result = {
+            value: context.value
+          }
+        }]
+      }
+    });
+
+    const data = await service.get(10);
+
+    assert.deepStrictEqual(data, {
+      value: 'something'
+    });
+  });
 });
