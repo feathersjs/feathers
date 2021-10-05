@@ -31,8 +31,8 @@ function combinate<O extends Record<string | number, any[]>> (obj: O) {
   }
   return combos;
 }
-// Github CI can't handle the matrix... GITHUB_REF is refs/heads/feature-branch-1
-const combinations = process.env.CI && !process.env.GITHUB_REF ? combinate(matrix) : [defaultCombination];
+
+const combinations = process.env.CI ? combinate(matrix) : [defaultCombination];
 
 describe('@feathersjs/cli', () => {
   const oldCwd = process.cwd();
