@@ -11,8 +11,8 @@ import { errorHandler, notFound } from './handlers';
 import { parseAuthentication, authenticate } from './authentication';
 
 export {
-  _static as static, json, raw, text, urlencoded, query,
-  errorHandler, notFound, express as original,
+  _static as serveStatic, _static as static, json, raw, text,
+  urlencoded, query, errorHandler, notFound, express as original,
   authenticate, parseAuthentication
 };
 
