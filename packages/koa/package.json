@@ -54,7 +54,7 @@
     "@types/koa": "^2.13.4",
     "@types/koa-bodyparser": "^4.3.3",
     "@types/koa-qs": "^2.0.0",
-    "koa": "^2.13.1",
+    "koa": "^2.13.3",
     "koa-bodyparser": "^4.3.0",
     "koa-qs": "^3.0.0"
   },
@@ -64,8 +64,8 @@
     "@feathersjs/memory": "^5.0.0-pre.10",
     "@feathersjs/tests": "^5.0.0-pre.10",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^16.9.4",
-    "mocha": "^9.1.1",
+    "@types/node": "^16.10.2",
+    "mocha": "^9.1.2",
     "shx": "^0.3.3",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
