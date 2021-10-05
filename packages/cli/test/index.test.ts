@@ -31,25 +31,22 @@ function combinate<O extends Record<string | number, any[]>> (obj: O) {
   }
   return combos;
 }
+
 const combinations = process.env.CI ? combinate(matrix) : [defaultCombination];
 
 describe('@feathersjs/cli', () => {
   const oldCwd = process.cwd();
-  let tmpDir: string;
-
-  beforeEach(async () => {
-    tmpDir = await mkdtemp(path.join(os.tmpdir(), 'feathers-'));
-    process.chdir(tmpDir);
-  });
 
   afterEach(() => process.chdir(oldCwd));
 
   for (const { language, framework } of combinations) {
     it(`generates ${language} ${framework} app and passes tests`, async () => {
+      const name = `feathers_${language}_${framework}`;
+      const tmpDir = await mkdtemp(path.join(os.tmpdir(), name + '-'));
       const appPrompts = {
         framework,
         language,
-        name: 'feathers-cli-test',
+        name: name,
         description: 'The Feathers CLI test app',
         lib: 'src',
         packager: 'npm',
