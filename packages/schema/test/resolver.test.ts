@@ -4,26 +4,26 @@ import { BadRequest } from '@feathersjs/errors';
 import { schema, resolve, Infer } from '../src';
 
 describe('@feathersjs/schema/resolver', () => {
+  const userSchema = schema({
+    $id: 'simple-user',
+    type: 'object',
+    required: ['firstName', 'lastName'],
+    additionalProperties: false,
+    properties: {
+      firstName: { type: 'string' },
+      lastName: { type: 'string' },
+      password: { type: 'string' }
+    }
+  } as const);
+  const context = {
+    isContext: true
+  };
+
+  type User = Infer<typeof userSchema> & {
+    name: string
+  };
+
   it('simple resolver', async () => {
-    const userSchema = schema({
-      $id: 'simple-user',
-      type: 'object',
-      required: ['firstName', 'lastName'],
-      additionalProperties: false,
-      properties: {
-        firstName: { type: 'string' },
-        lastName: { type: 'string' },
-        password: { type: 'string' }
-      }
-    } as const);
-    const context = {
-      isContext: true
-    };
-
-    type User = Infer<typeof userSchema> & {
-      name: string
-    };
-
     const userResolver = resolve<User, typeof context>({
       properties: {
         password: async (): Promise<string> => {
@@ -61,6 +61,33 @@ describe('@feathersjs/schema/resolver', () => {
     assert.deepStrictEqual(withProps, {
       name: 'David L',
       lastName: 'L'
+    });
+  });
+
+  it('simple resolver with schema and validation', async () => {
+    const userBeforeResolver = resolve<User, typeof context>({
+      schema: userSchema,
+      validate: 'before',
+      properties: {
+        name: async (_name, user) => `${user.firstName} ${user.lastName}`
+      }
+    });
+    const userAfterResolver = resolve<User, typeof context>({
+      schema: userSchema,
+      validate: 'after',
+      properties: {
+        firstName: async () => undefined
+      }
+    });
+
+    await assert.rejects(() => userBeforeResolver.resolve({}, context), {
+      message: 'validation failed'
+    });
+    await assert.rejects(() => userAfterResolver.resolve({
+      firstName: 'Test',
+      lastName: 'Me'
+    }, context), {
+      message: 'validation failed'
     });
   });
 
