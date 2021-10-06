@@ -1,93 +1,44 @@
-name: Bug Report
-description: File a bug report
-title: "[Bug]: "
-labels: ["bug", "triage"]
-assignees:
-  - octocat
+name: "\U0001F680 New feature proposal"
+description: Propose a new feature to be added to Feathers
+labels: ["enhancement: pending triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        First please check that this issue is not already solved as
-        [described here](https://github.com/feathersjs/feathers/blob/crow/.github/contributing.md#report-a-bug)
+        Thanks for your interest in the project and taking the time to fill out this feature report!
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Clear and concise description of the problem
+      description: "As a developer using Feathers I want [goal / wish] so that [benefit]. If you intend to submit a PR for this issue, tell us in the description. Thanks!"
+    validations:
+      required: true
+  - type: textarea
+    id: suggested-solution
+    attributes:
+      label: Suggested solution
+      description: "In module [xy] we could provide following implementation..."
+    validations:
+      required: true
+  - type: textarea
+    id: alternative
+    attributes:
+      label: Alternative
+      description: Clear and concise description of any alternative solutions or features you've considered.
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Any other context or screenshots about the feature request here.
   - type: checkboxes
-    id: duplicate-box
+    id: checkboxes
     attributes:
-      label: Contributing
+      label: Validations
+      description: Before submitting the issue, please make sure you do the following
       options:
-        - label: I've searched and did not find any similar issues
+        - label: Read the [https://github.com/feathersjs/feathers/blob/master/.github/contributing.md).
           required: true
-  - type: input
-    id: repro-link
-    attributes:
-      label: Minimal Reproduction
-      description: |
-        If you can, please create a simple example that reproduces the issue and link to a gist, jsbin,
-        repo, etc. This makes it much easier for us to debug and issues that have a reproducible example
-        will get higher priority.
-      placeholder: gist, jsbin, repo, CodeSandbox, Glitch, etc
-    validations:
-      required: false
-  - type: textarea
-    id: reproduction-steps
-    attributes:
-      label: Steps to Reproduce
-      description: Steps we would need to take to reproduce the issue
-      value: |
-        1. Run npm start
-        2. ...
-    validations:
-      required: true
-  - type: textarea
-    id: what-happened
-    attributes:
-      label: What happened?
-      description: Tell us what broke. The more detailed the better.
-      placeholder: Tell us what you see!
-      value: |
-        Tell us what broke. The more detailed the better.
-    validations:
-      required: true
-  - type: textarea
-    id: expected-behavior
-    attributes:
-      label: Expected behavior
-      description: What did you expect to happen?
-      placeholder: Tell us what you expected
-  - type: input
-    id: version
-    attributes:
-      label: Feathers Version
-      description: What version of Feathers are you running?
-    validations:
-      required: true
-  - type: dropdown
-    id: browsers
-    attributes:
-      label: What browsers are you seeing the problem on?
-      multiple: true
-      options:
-        - Firefox
-        - Chrome
-        - Safari
-        - Other
-        - Does not apply
-  - type: textarea
-    id: sysconfig
-    attributes:
-      label: System Configuration
-      description: Tell us about the applicable parts of your setup.
-      render: markdown
-      value: |
-        **Module versions** (especially the part that's not working):  
-        **NodeJS version**:  
-        **Operating System**:  
-        **Browser Version**:  
-        **React Native Version**:  
-        **Module Loader**:
-  - type: textarea
-    id: logs
-    attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: shell
+        - label: Read the [docs](https://docs.feathersjs.com/).
+          required: true
+        - label: Check that there isn't already an issue that request the same feature to avoid creating a duplicate.
+          required: true
