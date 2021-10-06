@@ -3,7 +3,7 @@
   "packages": [
     "packages/*"
   ],
-  "version": "5.0.0-pre.10",
+  "version": "5.0.0-pre.11",
   "command": {
     "bootstrap": {
       "hoist": true
