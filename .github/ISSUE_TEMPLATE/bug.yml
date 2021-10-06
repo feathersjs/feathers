@@ -1,0 +1,100 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees:
+  - octocat
+body:
+  - type: input
+    id: repro-link
+    attributes:
+      label: Minimal Reproduction
+      description: |
+        If you can, please create a simple example that reproduces the issue and link to a gist, jsbin,
+        repo, etc. This makes it much easier for us to debug and issues that have a reproducible example
+        will get higher priority.
+      placeholder: gist, jsbin, repo, CodeSandbox, Glitch, etc
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps to Reproduce
+      description: Steps we would need to take to reproduce the issue
+      value: |
+        1. Run npm start
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Tell us what broke. The more detailed the better.
+      placeholder: Tell us what you see!
+      value: |
+        Tell us what broke. The more detailed the better. 
+        Screenshots and code are helpful.
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+      placeholder: Tell us what you expected
+  - type: input
+    id: version
+    attributes:
+      label: Feathers Version
+      description: What version of Feathers are you running?
+    validations:
+      required: true
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers are you seeing the problem on?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Other
+        - Does not apply
+  - type: textarea
+    id: sysconfig
+    attributes:
+      label: System Configuration
+      description: Tell us about the applicable parts of your setup.
+      render: markdown
+      value: |
+        **Module versions** (especially the part that's not working):  
+        **NodeJS version**:  
+        **Operating System**:  
+        **Browser Version**:  
+        **Module Loader**:
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        Optional if provided reproduction. Please try not to insert an image but copy paste the log text.
+
+        1. Provide the error logs here.
+      render: shell
+  - type: checkboxes
+    id: checkboxes
+    attributes:
+      label: Validations
+      description: Before submitting the issue, please make sure you do the following
+      options:
+        - label: Read the [Contributing Guidelines](https://github.com/feathersjs/feathers/blob/master/.github/contributing.md).
+          required: true
+        - label: Read the [docs](https://docs.feathersjs.com/).
+          required: true
+        - label: Check that there isn't [already an issue](https://github.com/feathersjs/feathers/issues) that reports the same bug to avoid creating a duplicate.
+          required: true
+        - label: Make sure this is a Feathers issue and not an ecosystem or third-party module issue. For example, if it's a MongoDB adapter, Vuex or Redux module related bug, it should likely be reported to https://github.com/orgs/feathersjs-ecosystem/ instead.
+          required: true
+        - label: Check that this is a concrete bug. For Q&A open join our [Chat Server](https://feathersjs.slack.com/messages/D2G5G66CE/).
+          required: true
