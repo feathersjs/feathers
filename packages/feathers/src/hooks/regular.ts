@@ -1,5 +1,5 @@
 import { _ } from '../dependencies';
-import { LegacyHookFunction } from '../declarations';
+import { RegularHookFunction } from '../declarations';
 
 const { each } = _;
 const mergeContext = (context: any) => (res: any) => {
@@ -9,7 +9,7 @@ const mergeContext = (context: any) => (res: any) => {
   return res;
 }
 
-export function fromBeforeHook (hook: LegacyHookFunction) {
+export function fromBeforeHook (hook: RegularHookFunction) {
   return (context: any, next: any) => {
     context.type = 'before';
 
@@ -22,7 +22,7 @@ export function fromBeforeHook (hook: LegacyHookFunction) {
   };
 }
 
-export function fromAfterHook (hook: LegacyHookFunction) {
+export function fromAfterHook (hook: RegularHookFunction) {
   return (context: any, next: any) => {
     return next()
       .then(() => {
@@ -36,7 +36,7 @@ export function fromAfterHook (hook: LegacyHookFunction) {
   }
 }
 
-export function fromErrorHooks (hooks: LegacyHookFunction[]) {
+export function fromErrorHooks (hooks: RegularHookFunction[]) {
   return (context: any, next: any) => {
     return next().catch((error: any) => {
       let promise: Promise<any> = Promise.resolve();
@@ -63,7 +63,7 @@ export function fromErrorHooks (hooks: LegacyHookFunction[]) {
   }
 }
 
-export function collectLegacyHooks (target: any, method: string) {
+export function collectRegularHooks (target: any, method: string) {
   const {
     before: { [method]: before = [] },
     after: { [method]: after = [] },
@@ -95,7 +95,7 @@ export function convertHookData (obj: any) {
 }
 
 // Add `.hooks` functionality to an object
-export function enableLegacyHooks (
+export function enableRegularHooks (
   obj: any,
   methods: string[] = ['find', 'get', 'create', 'update', 'patch', 'remove'],
   types: string[] = ['before', 'after', 'error']
@@ -114,7 +114,7 @@ export function enableLegacyHooks (
     writable: true
   });
 
-  return function legacyHooks (this: any, allHooks: any) {
+  return function regularHooks (this: any, allHooks: any) {
     each(allHooks, (current: any, type) => {
       if (!this.__hooks[type]) {
         throw new Error(`'${type}' is not a valid hook type`);

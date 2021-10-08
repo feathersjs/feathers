@@ -6,12 +6,12 @@ import {
 } from '../declarations';
 import { defaultServiceArguments, getHookMethods } from '../service';
 import {
-  collectLegacyHooks,
-  enableLegacyHooks,
+  collectRegularHooks,
+  enableRegularHooks,
   fromAfterHook,
   fromBeforeHook,
   fromErrorHooks
-} from './legacy';
+} from './regular';
 
 export { fromAfterHook, fromBeforeHook, fromErrorHooks };
 
@@ -34,11 +34,11 @@ export class FeathersHookManager<A> extends HookManager {
   collectMiddleware (self: any, args: any[]): Middleware[] {
     const app = this.app as any as Application;
     const appHooks = app.appHooks[HOOKS].concat(app.appHooks[this.method] || []);
-    const legacyAppHooks = collectLegacyHooks(this.app, this.method);
+    const regularAppHooks = collectRegularHooks(this.app, this.method);
     const middleware = super.collectMiddleware(self, args);
-    const legacyHooks = collectLegacyHooks(self, this.method);
+    const regularHooks = collectRegularHooks(self, this.method);
 
-    return [...appHooks, ...legacyAppHooks, ...middleware, ...legacyHooks];
+    return [...appHooks, ...regularAppHooks, ...middleware, ...regularHooks];
   }
 
   initializeContext (self: any, args: any[], context: HookContext) {
@@ -79,13 +79,13 @@ export function hookMixin<A> (
 
     return res;
   }, {} as HookMap);
-  const handleLegacyHooks = enableLegacyHooks(service);
+  const handleRegularHooks = enableRegularHooks(service);
 
   hooks(service, serviceMethodHooks);
 
   service.hooks = function (this: any, hookOptions: any) {
     if (hookOptions.before || hookOptions.after || hookOptions.error) {
-      return handleLegacyHooks.call(this, hookOptions);
+      return handleRegularHooks.call(this, hookOptions);
     }
 
     if (Array.isArray(hookOptions)) {
