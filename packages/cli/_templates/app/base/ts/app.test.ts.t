@@ -33,11 +33,14 @@ describe('Feathers application tests', () => {
       });
       assert.fail('should never get here');
     } catch (error) {
-      const { response } = error;
-
-      assert.strictEqual(response.status, 404);
-      assert.strictEqual(response.data.code, 404);
-      assert.strictEqual(response.data.name, 'NotFound');
+      if (axios.isAxiosError(error)) {
+        const { response } = error
+        assert.strictEqual(response?.status, 404)
+        assert.strictEqual(response?.data?.code, 404)
+        assert.strictEqual(response?.data?.name, 'NotFound')
+      } else {
+        assert.fail('Response is not an AxiosError')
+      }
     }
   });
 });
