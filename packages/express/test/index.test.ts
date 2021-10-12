@@ -134,7 +134,7 @@ describe('@feathersjs/express', () => {
 
     assert.deepStrictEqual(data, { id: 10 });
 
-    const res = await axios.get('http://localhost:8787');
+    const res = await axios.get<any>('http://localhost:8787');
     assert.deepStrictEqual(res.data, response);
 
     await new Promise(resolve => server.close(() => resolve(server)));
@@ -240,7 +240,7 @@ describe('@feathersjs/express', () => {
         })
       });
 
-      instance.get('https://localhost:7889/secureTodos/dishes').then(response => {
+      instance.get<any>('https://localhost:7889/secureTodos/dishes').then(response => {
         assert.ok(response.status === 200, 'Got OK status code');
         assert.strictEqual(response.data.description, 'You have to do dishes!');
         httpsServer.close(() => done());
