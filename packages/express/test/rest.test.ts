@@ -48,7 +48,7 @@ describe('@feathersjs/express/rest provider', () => {
 
       const server = await app.listen(4776);
 
-      const res = await axios.get('http://localhost:4776/todo/dishes');
+      const res = await axios.get<any>('http://localhost:4776/todo/dishes');
 
       assert.strictEqual(res.data, 'The todo is: You have to do dishes');
       server.close();
@@ -69,7 +69,7 @@ describe('@feathersjs/express/rest provider', () => {
         .use((_req: Request, res: Response) => res.json(data));
 
       const server = await app.listen(5775);
-      const res = await axios.get('http://localhost:5775/todo-handler/dishes')
+      const res = await axios.get<any>('http://localhost:5775/todo-handler/dishes')
 
       assert.deepStrictEqual(res.data, data);
 
@@ -143,7 +143,7 @@ describe('@feathersjs/express/rest provider', () => {
           }
         });
 
-        const res = await axios.get('http://localhost:4777/hook/dishes?test=param');
+        const res = await axios.get<any>('http://localhost:4777/hook/dishes?test=param');
         const paramsWithHeaders = {
           ...params,
           headers: res.data.params.headers
@@ -180,7 +180,7 @@ describe('@feathersjs/express/rest provider', () => {
           }
         });
 
-        const res = await axios.get('http://localhost:4777/hook-dispatch/dishes');
+        const res = await axios.get<any>('http://localhost:4777/hook-dispatch/dishes');
         assert.deepStrictEqual(res.data, {
           id: 'dishes',
           fromDispatch: true
@@ -200,7 +200,7 @@ describe('@feathersjs/express/rest provider', () => {
           }
         });
 
-        const res = await axios.get('http://localhost:4777/hook-status/dishes');
+        const res = await axios.get<any>('http://localhost:4777/hook-status/dishes');
 
         assert.strictEqual(res.status, 206);
       });
@@ -272,7 +272,7 @@ describe('@feathersjs/express/rest provider', () => {
         .use('service', service);
       const server = await app.listen(4778);
 
-      const res = await axios.get('http://localhost:4778/service/bla?some=param&another=thing');
+      const res = await axios.get<any>('http://localhost:4778/service/bla?some=param&another=thing');
       const expected = {
         headers: res.data.headers,
         test: 'Happy',
@@ -346,7 +346,7 @@ describe('@feathersjs/express/rest provider', () => {
         });
 
       const server = await app.listen(4776);
-      const res = await axios.post('http://localhost:4776/todo', { text: 'Do dishes' });
+      const res = await axios.post<any>('http://localhost:4776/todo', { text: 'Do dishes' });
 
       assert.deepStrictEqual(res.data, {
         text: 'Do dishes',
@@ -381,7 +381,7 @@ describe('@feathersjs/express/rest provider', () => {
         });
 
       const server = await app.listen(4776);
-      const res = await axios.post('http://localhost:4776/todo', { text: 'Do dishes' });
+      const res = await axios.post<any>('http://localhost:4776/todo', { text: 'Do dishes' });
 
       assert.deepStrictEqual(res.data, {
         text: 'Do dishes',
@@ -409,7 +409,7 @@ describe('@feathersjs/express/rest provider', () => {
         .use('/array-middleware', middlewareArray);
 
       const server = await app.listen(4776);
-      const res = await axios.post('http://localhost:4776/array-middleware', { text: 'Do dishes' });
+      const res = await axios.post<any>('http://localhost:4776/array-middleware', { text: 'Do dishes' });
 
       assert.deepStrictEqual(res.data, ['first', 'second', 'Do dishes']);
       server.close();
@@ -423,7 +423,7 @@ describe('@feathersjs/express/rest provider', () => {
       );
 
       const server = await app.listen(7988);
-      const res = await axios.get('http://localhost:7988/test');
+      const res = await axios.get<any>('http://localhost:7988/test');
 
       assert.deepStrictEqual(res.data, data);
       server.close();
@@ -476,7 +476,7 @@ describe('@feathersjs/express/rest provider', () => {
     after(done => server.close(done));
 
     it('throws a 405 for undefined service methods (#99)', async () => {
-      const res = await axios.get('http://localhost:4780/todo/dishes');
+      const res = await axios.get<any>('http://localhost:4780/todo/dishes');
 
       assert.ok(res.status === 200, 'Got OK status code for .get');
       assert.deepStrictEqual(res.data, {
@@ -484,7 +484,7 @@ describe('@feathersjs/express/rest provider', () => {
       }, 'Got expected object');
 
       try {
-        await axios.post('http://localhost:4780/todo');
+        await axios.post<any>('http://localhost:4780/todo');
         assert.fail('Should never get here');
       } catch (error: any) {
         assert.ok(error.response.status === 405, 'Got 405 for .create');
@@ -496,7 +496,7 @@ describe('@feathersjs/express/rest provider', () => {
 
     it('throws a 404 for undefined route', async () => {
       try {
-        await axios.get('http://localhost:4780/todo/foo/bar');
+        await axios.get<any>('http://localhost:4780/todo/foo/bar');
         assert.fail('Should never get here');
       } catch (error: any) {
         assert.ok(error.response.status === 404, 'Got Not Found code');
@@ -504,7 +504,7 @@ describe('@feathersjs/express/rest provider', () => {
     });
 
     it('empty response sets 204 status codes, does not run other middleware (#391)', async () => {
-      const res = await axios.get('http://localhost:4780/todo');
+      const res = await axios.get<any>('http://localhost:4780/todo');
 
       assert.ok(res.status === 204, 'Got empty status code');
     });
@@ -545,7 +545,7 @@ describe('@feathersjs/express/rest provider', () => {
         }
       };
 
-      const res = await axios.get(`http://localhost:6880/theApp/myId/todo/${expected.id}`);
+      const res = await axios.get<any>(`http://localhost:6880/theApp/myId/todo/${expected.id}`);
 
       assert.ok(res.status === 200, 'Got OK status code');
       assert.deepStrictEqual(expected, res.data);
@@ -553,7 +553,7 @@ describe('@feathersjs/express/rest provider', () => {
 
     it('properly serializes error for nested routes (#1096)', async () => {
       try {
-        await axios.get('http://localhost:6880/theApp/myId/todo/test?error=true');
+        await axios.get<any>('http://localhost:6880/theApp/myId/todo/test?error=true');
         assert.fail('Should never het here');
       } catch (error: any) {
         const { response } = error;
@@ -589,7 +589,7 @@ describe('@feathersjs/express/rest provider', () => {
 
     it('calls .customMethod with X-Service-Method header', async () => {
       const payload = { text: 'Do dishes' };
-      const res = await axios.post('http://localhost:4781/todo', payload, {
+      const res = await axios.post<any>('http://localhost:4781/todo', payload, {
         headers: {
           'X-Service-Method': 'customMethod'
         }

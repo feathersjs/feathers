@@ -20,7 +20,7 @@ describe('@feathersjs/koa/authentication', () => {
   before(async () => {
     server = await app.listen(9776);
     user = await app.service('users').create({ email, password });
-    authResult = (await axios.post('/authentication', {
+    authResult = (await axios.post<any>('/authentication', {
       strategy: 'local',
       password,
       email
@@ -38,7 +38,7 @@ describe('@feathersjs/koa/authentication', () => {
 
     it('local authentication with wrong password fails', async () => {
       try {
-        await axios.post('/authentication', {
+        await axios.post<any>('/authentication', {
           strategy: 'local',
           password: 'wrong',
           email
@@ -54,7 +54,7 @@ describe('@feathersjs/koa/authentication', () => {
     it('authenticating with JWT works but returns same accessToken', async () => {
       const { accessToken } = authResult;
 
-      const { data } = await axios.post('/authentication', {
+      const { data } = await axios.post<any>('/authentication', {
         strategy: 'jwt',
         accessToken
       });
@@ -68,7 +68,7 @@ describe('@feathersjs/koa/authentication', () => {
     it('can make a protected request with Authorization header', async () => {
       const { accessToken } = authResult;
 
-      const { data } = await axios.get('/dummy/dave?user[name]=thing&user[message]=hi', {
+      const { data } = await axios.get<any>('/dummy/dave?user[name]=thing&user[message]=hi', {
         headers: {
           Authorization: accessToken
         }
@@ -92,7 +92,7 @@ describe('@feathersjs/koa/authentication', () => {
       delete app.get('authentication').parseStrategies;
 
       try {
-        await axios.get('/dummy/dave', {
+        await axios.get<any>('/dummy/dave', {
           headers: {
             Authorization: accessToken
           }
@@ -107,7 +107,7 @@ describe('@feathersjs/koa/authentication', () => {
     it('can make a protected request with Authorization header and bearer scheme', () => {
       const { accessToken } = authResult;
 
-      return axios.get('/dummy/dave', {
+      return axios.get<any>('/dummy/dave', {
         headers: {
           Authorization: ` Bearer: ${accessToken}`
         }
