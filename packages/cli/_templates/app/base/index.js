@@ -5,6 +5,7 @@ module.exports = {
     const dependencies = [
       '@feathersjs/feathers',
       '@feathersjs/errors',
+      '@feathersjs/schema',
       '@feathersjs/configuration',
       '@feathersjs/authentication',
       '@feathersjs/transport-commons',
@@ -55,5 +56,12 @@ module.exports = {
       dependencies,
       devDependencies
     };
+  },
+
+  async rendered (result, config) {
+    const { args: { dependencies, devDependencies } } = result;
+
+    await config.helpers.install(config, dependencies);
+    await config.helpers.install(config, devDependencies, true);
   }
 }

@@ -1,7 +1,8 @@
 import fs from 'fs';
 import _ from 'lodash';
 import path from 'path';
-import { Logger, RunnerArgs } from '@feathersjs/hygen';
+import { Logger, RunnerArgs, RunnerConfig } from '@feathersjs/hygen';
+import { ChildProcess } from 'child_process';
 
 type PackageJSON = { [key: string]: any };
 
@@ -47,7 +48,7 @@ export async function getHelpers (pkg: PackageJSON, self: PackageJSON, _logger: 
     lib: pkg.directories?.lib,
     test: pkg.directories?.test,
     feathers: pkg.feathers,
-    installPackages (names: string[], dev = false) {
+    install (config: RunnerConfig, names: string[], dev = false) {
       // Adds version numbers to dependencies if it is registered
       const deps = names.filter(name => !!name).map(name =>
         self.devDependencies[name]
@@ -56,14 +57,17 @@ export async function getHelpers (pkg: PackageJSON, self: PackageJSON, _logger: 
       );
       const { packager } = pkg.feathers;
       const command = `${packager} install ${deps.join(' ')} --${dev ? 'save-dev' : 'save'}`;
+      const execute = (command: string) => {
+        const child = config.exec(command, '');
+        return new Promise((resolve, reject) => child.on('exit', code => {
+          if (code !== 0) {
+            reject(new Error(`Error executing command ${command}`));
+          }
+          resolve(code);
+        }));
+      }
 
-      return command;
-    },
-    install (...names: string[]) {
-      return helpers.installPackages(names, false);
-    },
-    installDev (...names: string[]) {
-      return helpers.installPackages(names, true);
+      return execute(command);
     }
   }
 

@@ -35,7 +35,7 @@ declare module '<%= relative %>/declarations' {
 }
 
 // A configure function that registers the service via `app.configure`
-export function <%= configureFunction %> (app: Application) {
+export function <%= camelName %> (app: Application) {
   const options = {
     paginate: app.get('paginate'),
     app

@@ -1,7 +1,6 @@
 ---
 to: "package.json"
 force: true
-sh: "<%= h.install(...dependencies) %>; <%= h.installDev(...devDependencies) %>"
 ---
 <%
 

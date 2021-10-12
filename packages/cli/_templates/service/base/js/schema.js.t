@@ -5,7 +5,8 @@ import { schema, resolve } from '@feathersjs/schema';
 
 export const <%= camelName %>DataSchema = schema({
   $id: '<%= camelName %>Data',
-  additionalPoperties: false,
+  type: 'object',
+  additionalProperties: false,
   required: [ 'text' ],
   properties: {
     text: {
@@ -14,18 +15,14 @@ export const <%= camelName %>DataSchema = schema({
   }
 });
 
-export const <%= camelName %>PartialSchema = <%= camelName %>DataSchema.extend({
-  $id: '<%= camelName %>Partial',
-  required: []
-})
-
 export const <%= camelName %>ResultSchema = <%= camelName %>DataSchema.extend({
-  $id: '<%= camelName %>Data'
+  $id: '<%= camelName %>Result'
 })
 
 export const <%= camelName %>QuerySchema = schema({
   $id: '<%= camelName %>Query',
-  additionalPoperties: false,
+  type: 'object',
+  additionalProperties: false,
   properties: {
     $limit: {
       type: 'integer',
@@ -40,13 +37,19 @@ export const <%= camelName %>QuerySchema = schema({
 });
 
 export const <%= camelName %>QueryResolver = resolve({
+  schema: <%= camelName %>QuerySchema,
+  validate: 'before',
   properties: {}
 });
 
 export const <%= camelName %>DataResolver = resolve({
+  schema: <%= camelName %>DataSchema,
+  validate: 'before',
   properties: {}
 });
 
 export const <%= camelName %>ResultResolver = resolve({
+  schema: <%= camelName %>ResultSchema,
+  validate: false,
   properties: {}
 });

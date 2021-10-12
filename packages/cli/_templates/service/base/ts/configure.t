@@ -1,7 +1,7 @@
 ---
 to: "<%= h.lib %>/services/index.ts"
 inject: true
-skip_if: "app.configure\\(<%= configureFunction %>\\)"
+skip_if: "app.configure\\(<%= camelName %>\\)"
 after: "export default"
 ---
-  app.configure(<%= configureFunction %>);
+  app.configure(<%= camelName %>);

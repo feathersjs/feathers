@@ -14,10 +14,9 @@ module.exports = {
       message: 'What is the path the service should be registered on?',
       default: `${_.kebabCase(name)}`
     }]);
-    const camelName = _.upperFirst(_.camelCase(name));
-    const className = `${camelName}Service`;
+    const camelName = _.camelCase(name);
+    const className = `${_.upperFirst(camelName)}Service`;
     const kebabName = _.kebabCase(name);
-    const configureFunction = _.camelCase(name);
     const relative = path.split('/').map(() => '..').join('/');
 
     return {
@@ -26,8 +25,7 @@ module.exports = {
       relative,
       className,
       camelName,
-      kebabName,
-      configureFunction
+      kebabName
     };
   }
 }

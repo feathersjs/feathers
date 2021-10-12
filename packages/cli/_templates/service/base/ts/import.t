@@ -2,6 +2,6 @@
 to: "<%= h.lib %>/services/index.ts"
 inject: true
 prepend: true
-skip_if: "import { <%= configureFunction %> }"
+skip_if: "import { <%= camelName %> }"
 ---
-import { <%= configureFunction %> } from './<%= path %>';
+import { <%= camelName %> } from './<%= path %>';
