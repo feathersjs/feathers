@@ -6,14 +6,14 @@ import { verify } from './fixture';
 export function restTests (description: string, name: string, port: number) {
   describe(description, () => {
     it('GET .find', async () => {
-      const res = await axios.get(`http://localhost:${port}/${name}`);
+      const res = await axios.get<any>(`http://localhost:${port}/${name}`);
 
       assert.ok(res.status === 200, 'Got OK status code');
       verify.find(res.data);
     });
 
     it('GET .get', async () => {
-      const res = await axios.get(`http://localhost:${port}/${name}/dishes`);
+      const res = await axios.get<any>(`http://localhost:${port}/${name}/dishes`);
 
       assert.ok(res.status === 200, 'Got OK status code');
       verify.get('dishes', res.data);
@@ -24,7 +24,7 @@ export function restTests (description: string, name: string, port: number) {
         description: 'POST .create'
       };
 
-      const res = await axios.post(`http://localhost:${port}/${name}`, original);
+      const res = await axios.post<any>(`http://localhost:${port}/${name}`, original);
 
       assert.ok(res.status === 201, 'Got CREATED status code');
       verify.create(original, res.data);

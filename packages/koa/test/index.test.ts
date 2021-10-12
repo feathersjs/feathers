@@ -72,7 +72,7 @@ describe('@feathersjs/koa', () => {
   });
 
   it('starts as a Koa and Feathers application', async () => {
-    const { data } = await axios.get('http://localhost:8465/middleware');
+    const { data } = await axios.get<any>('http://localhost:8465/middleware');
     const todo = await app.service('todo').get('dishes', {
       query: {}
     });
@@ -90,7 +90,7 @@ describe('@feathersjs/koa', () => {
   });
 
   it('works with custom methods that are allowed', async () => {
-    const { data } = await axios.post('http://localhost:8465/todo', {
+    const { data } = await axios.post<any>('http://localhost:8465/todo', {
       message: 'Custom hello'
     }, {
       headers: {
@@ -104,7 +104,7 @@ describe('@feathersjs/koa', () => {
       provider: 'rest'
     });
 
-    await assert.rejects(() => axios.post('http://localhost:8465/todo', {}, {
+    await assert.rejects(() => axios.post<any>('http://localhost:8465/todo', {}, {
       headers: {
         'X-Service-Method': 'internalMethod'
       }
@@ -119,7 +119,7 @@ describe('@feathersjs/koa', () => {
   });
 
   it('throws a 404 NotFound JSON error', async () => {
-    await assert.rejects(() => axios.post('http://localhost:8465/no/where', {}, {
+    await assert.rejects(() => axios.post<any>('http://localhost:8465/no/where', {}, {
       headers: {
         'X-Service-Method': 'internalMethod',
         Accept: 'application/json'
