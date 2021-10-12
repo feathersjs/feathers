@@ -30,7 +30,6 @@ module.exports = {
     "plugins": [
         "eslint-plugin-import",
         "eslint-plugin-prefer-arrow",
-        "eslint-plugin-jsdoc",
         "@typescript-eslint"
     ],
     "rules": {
