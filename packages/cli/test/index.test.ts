@@ -12,8 +12,8 @@ const matrix = {
   framework: ['koa', 'express']
 }
 const defaultCombination = {
-  language: 'js',
-  framework: 'koa'
+  language: process.env.LANGUAGE || 'js',
+  framework: process.env.FRAMEWORK || 'koa'
 }
 
 function combinate<O extends Record<string | number, any[]>> (obj: O) {
@@ -43,10 +43,11 @@ describe('@feathersjs/cli', () => {
     it(`generates ${language} ${framework} app and passes tests`, async () => {
       const name = `feathers_${language}_${framework}`;
       const tmpDir = await mkdtemp(path.join(os.tmpdir(), name + '-'));
+      process.chdir(tmpDir);
       const appPrompts = {
         framework,
         language,
-        name: name,
+        name,
         description: 'The Feathers CLI test app',
         lib: 'src',
         packager: 'npm',

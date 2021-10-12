@@ -21,7 +21,7 @@ describe('Feathers application tests', () => {
   });
 
   it('starts and shows the index page', async () => {
-    const { data } = await axios.get(appUrl);
+    const { data } = await axios.get<string>(appUrl);
 
     assert.ok(data.indexOf('<html lang="en">') !== -1);
   });
@@ -32,15 +32,11 @@ describe('Feathers application tests', () => {
         responseType: 'json'
       });
       assert.fail('should never get here');
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const { response } = error
-        assert.strictEqual(response?.status, 404)
-        assert.strictEqual(response?.data?.code, 404)
-        assert.strictEqual(response?.data?.name, 'NotFound')
-      } else {
-        assert.fail('Response is not an AxiosError')
-      }
+    } catch (error: any) {
+      const { response } = error
+      assert.strictEqual(response?.status, 404)
+      assert.strictEqual(response?.data?.code, 404)
+      assert.strictEqual(response?.data?.name, 'NotFound')
     }
   });
 });
