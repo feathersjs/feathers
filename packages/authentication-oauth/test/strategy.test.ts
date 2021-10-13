@@ -51,6 +51,43 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
     assert.equal(redirect, '/#dashboard?access_token=testing');
   });
 
+  it('getRedirect with referrer and allowed origins (#2430)', async () => {
+    app.get('authentication').oauth.origins = [
+      'https://feathersjs.com',
+      'https://feathers.cloud'
+    ];
+
+    let redirect = await strategy.getRedirect({ accessToken: 'testing' }, {
+      headers: {
+        referer: 'https://feathersjs.com/somewhere'
+      }
+    });
+    assert.equal(redirect, 'https://feathersjs.com#access_token=testing');
+
+    redirect = await strategy.getRedirect({ accessToken: 'testing' }, {
+      headers: {
+        referer: 'HTTPS://feathers.CLOUD'
+      }
+    });
+    assert.equal(redirect, 'https://feathers.cloud#access_token=testing');
+
+    redirect = await strategy.getRedirect({ accessToken: 'testing' }, {
+      redirect: '/home',
+      headers: {
+        referer: 'https://feathersjs.com/somewhere'
+      }
+    });
+    assert.equal(redirect, 'https://feathersjs.com/home#access_token=testing');
+
+    await assert.rejects(() => strategy.getRedirect({ accessToken: 'testing' }, {
+      headers: {
+        referer: 'https://example.com'
+      }
+    }), {
+      message: 'Referer "https://example.com" not allowed.'
+    });
+  });
+
   describe('authenticate', () => {
     it('with new user', async () => {
       const authResult = await strategy.authenticate({

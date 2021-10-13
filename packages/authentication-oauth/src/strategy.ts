@@ -67,9 +67,26 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     return null;
   }
 
+  async getAllowedOrigin (params?: Params) {
+    const { redirect, origins } = this.authentication.configuration.oauth;
+
+    if (Array.isArray(origins)) {
+      const referer = params?.headers?.referer || '';
+      const allowedOrigin = origins.find(current => referer.toLowerCase().startsWith(current.toLowerCase()));
+
+      if(!allowedOrigin) {
+        throw new NotAuthenticated(`Referer "${referer || '[header not available]'}" not allowed.`);
+      }
+
+      return allowedOrigin;
+    }
+
+    return redirect;
+  }
+
   async getRedirect (data: AuthenticationResult|Error, params?: Params): Promise<string | null> {
     const queryRedirect = (params && params.redirect) || '';
-    const { redirect } = this.authentication.configuration.oauth;
+    const redirect = await this.getAllowedOrigin(params);
 
     if (!redirect) {
       return null;
