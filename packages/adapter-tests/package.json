@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/adapter-tests",
-  "version": "5.0.0-pre.11",
+  "version": "5.0.0-pre.14",
   "description": "Feathers shared database adapter test suite",
   "homepage": "https://feathersjs.com",
   "keywords": [
@@ -54,5 +54,5 @@
     "ts-node": "^10.3.0",
     "typescript": "^4.4.4"
   },
-  "gitHead": "a9f7865cce8db2305b7c0d2ef4a165c2724034ef"
+  "gitHead": "9bb26276938aead1f3f582be5517a49a8ce00f09"
 }
