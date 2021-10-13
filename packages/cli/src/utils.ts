@@ -58,7 +58,7 @@ export async function getHelpers (pkg: PackageJSON, self: PackageJSON, _logger: 
       const { packager } = pkg.feathers;
       const command = `${packager} install ${deps.join(' ')} --${dev ? 'save-dev' : 'save'}`;
       const execute = (command: string) => {
-        const child = config.exec(command, '');
+        const child = config.exec(command, '') as any as ChildProcess;
         return new Promise((resolve, reject) => child.on('exit', code => {
           if (code !== 0) {
             reject(new Error(`Error executing command ${command}`));
