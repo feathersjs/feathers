@@ -96,6 +96,12 @@ describe('authentication/core', () => {
       assert.strictEqual(invalid.length, 2, 'Filtered out invalid strategies');
     });
 
+    it('getStrategy', () => {
+      const first = auth.getStrategy('first');
+
+      assert.ok(first);
+    });
+
     it('calls setName, setApplication and setAuthentication if available', () => {
       const [ first ] = auth.getStrategies('first') as [ Strategy1 ];
 
