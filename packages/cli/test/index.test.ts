@@ -32,7 +32,9 @@ function combinate<O extends Record<string | number, any[]>> (obj: O) {
   return combos;
 }
 
-const combinations = process.env.CI ? combinate(matrix) : [defaultCombination];
+const combinations = process.version > 'v16.0.0'
+  ? process.env.CI ? combinate(matrix) : [defaultCombination]
+  : [];
 
 describe('@feathersjs/cli', () => {
   const oldCwd = process.cwd();
