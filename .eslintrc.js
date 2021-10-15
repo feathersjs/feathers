@@ -30,7 +30,6 @@ module.exports = {
     "plugins": [
         "eslint-plugin-import",
         "eslint-plugin-prefer-arrow",
-        "eslint-plugin-jsdoc",
         "@typescript-eslint"
     ],
     "rules": {
@@ -38,6 +37,7 @@ module.exports = {
         "prefer-spread": "off",
         "@typescript-eslint/no-unsafe-member-access": "off",
         "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/no-unsafe-argument": "off",
         "@typescript-eslint/no-unsafe-member-access": "off",
         "@typescript-eslint/no-unsafe-call": "off",
         "@typescript-eslint/no-unsafe-return": "off",
@@ -109,9 +109,9 @@ module.exports = {
         "id-blacklist": "off",
         "id-match": "off",
         "import/order": "off",
-        "jsdoc/check-alignment": "error",
-        "jsdoc/check-indentation": "error",
-        "jsdoc/newline-after-description": "error",
+        // "jsdoc/check-alignment": "error",
+        // "jsdoc/check-indentation": "error",
+        // "jsdoc/newline-after-description": "error",
         "max-classes-per-file": "off",
         "max-len": "off",
         "new-parens": "error",

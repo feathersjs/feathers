@@ -1,4 +1,5 @@
 import { BadRequest } from '@feathersjs/errors';
+import { Schema } from './schema';
 
 export type PropertyResolver<T, V, C> = (
   value: V|undefined,
@@ -12,6 +13,8 @@ export type PropertyResolverMap<T, C> = {
 }
 
 export interface ResolverConfig<T, C> {
+  schema?: Schema<any>,
+  validate?: 'before'|'after'|false,
   properties: PropertyResolverMap<T, C>
 }
 
@@ -52,8 +55,9 @@ export class Resolver<T, C> {
     return resolver(value, data, context, resolverStatus);
   }
 
-  async resolve<D> (data: D, context: C, status?: Partial<ResolverStatus<T, C>>): Promise<T> {
-    const { properties: resolvers } = this.options;
+  async resolve<D> (_data: D, context: C, status?: Partial<ResolverStatus<T, C>>): Promise<T> {
+    const { properties: resolvers, schema, validate } = this.options;
+    const data = schema && validate === 'before' ? await schema.validate(_data) : _data;
     const propertyList = (Array.isArray(status?.properties)
       ? status?.properties
       // By default get all data and resolver keys but remove duplicates
@@ -66,7 +70,7 @@ export class Resolver<T, C> {
 
     // Not the most elegant but better performance
     await Promise.all(propertyList.map(async name => {
-      const value = (data as any)[name];
+      const value = data[name];
 
       if (resolvers[name]) {
         try {
@@ -93,7 +97,9 @@ export class Resolver<T, C> {
       throw new BadRequest(`Error resolving data ${status?.properties.join('.')}`, errors);
     }
 
-    return result;
+    return schema && validate === 'after'
+      ? await schema.validate(result)
+      : result;
   }
 }
 

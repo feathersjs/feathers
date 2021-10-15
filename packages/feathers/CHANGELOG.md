@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.14](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.13...v5.0.0-pre.14) (2021-10-13)
+
+**Note:** Version bump only for package @feathersjs/feathers
+
+
+
+
+
+# [5.0.0-pre.13](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.12...v5.0.0-pre.13) (2021-10-13)
+
+**Note:** Version bump only for package @feathersjs/feathers
+
+
+
+
+
+# [5.0.0-pre.12](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.11...v5.0.0-pre.12) (2021-10-12)
+
+**Note:** Version bump only for package @feathersjs/feathers
+
+
+
+
+
+# [5.0.0-pre.11](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.10...v5.0.0-pre.11) (2021-10-06)
+
+
+### Bug Fixes
+
+* **core:** Allow to return a new hook context in basic hooks ([#2462](https://github.com/feathersjs/feathers/issues/2462)) ([422b6fc](https://github.com/feathersjs/feathers/commit/422b6fc11cf9e42f4234f0823a0b06a4df50982d))
+
+
+
+
+
 # [5.0.0-pre.10](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.9...v5.0.0-pre.10) (2021-09-19)
 
 **Note:** Version bump only for package @feathersjs/feathers

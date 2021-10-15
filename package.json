@@ -28,21 +28,20 @@
     "publish:premajor": "lerna publish premajor --preid pre --pre-dist-tag pre && git commit -am \"chore: Update version and changelog\" && git push origin",
     "publish:prerelease": "lerna publish prerelease --preid pre --pre-dist-tag pre --dist-tag pre && git commit -am \"chore: Update version and changelog\" && git push origin",
     "lint": "eslint packages/**/src/**/*.ts packages/**/test/**/*.ts --fix",
-    "update-dependencies": "ncu -u && lerna exec -- ncu -u",
+    "update-dependencies": "ncu -u && lerna exec -- ncu -u -x node-fetch",
     "clean": "find . -name node_modules -exec rm -rf '{}' + && find . -name package-lock.json -exec rm -rf '{}' +",
     "test:deno": "deno test --config deno/tsconfig.json deno/test.ts",
     "test": "npm run lint && nyc lerna run test"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.31.1",
-    "@typescript-eslint/parser": "^4.31.1",
-    "eslint": "^7.32.0",
-    "eslint-plugin-import": "^2.24.2",
-    "eslint-plugin-jsdoc": "^36.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.0",
+    "eslint-plugin-import": "^2.25.1",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "lerna": "^4.0.0",
     "npm-check-updates": "^11.8.5",
     "nyc": "^15.1.0",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.4"
   }
 }
