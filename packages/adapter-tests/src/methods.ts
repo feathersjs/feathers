@@ -157,6 +157,66 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
         assert.ok(names.includes('David'), 'David removed');
       });
 
+      test('.remove + multi default pagination', async () => {
+        try {
+          await service.remove(doug[idProp]);
+        } catch (error: any) {}
+
+        const count = 14;
+        const defaultPaginate = 10;
+
+        assert.ok(count > defaultPaginate, 'count is bigger than default pagination');
+
+        const multiBefore = service.options.multi;
+        const paginateBefore = service.options.paginate;
+
+        try {
+          service.options.multi = true;
+          service.options.paginate = {
+            'default': defaultPaginate,
+            'max': 100
+          };
+
+          let emptyItems = await service.find({ paginate: false });
+          assert.strictEqual(emptyItems.length, 0, 'no entries before')
+
+          const createdItems = await service.create(
+            Array.from(Array(count)).map((_, i) => ({ name: `name-${i}`, age: 3, created: true }))
+          );
+          assert.strictEqual(createdItems.length, count, `created ${count} entries`);
+
+          let foundItems = await service.find({ paginate: false });
+          assert.strictEqual(foundItems.length, count, `created ${count} entries`);
+
+          const foundPaginatedItems = await service.find({});
+          assert.strictEqual(foundPaginatedItems.data.length, defaultPaginate, 'found paginated data');
+
+          const data1 = await service.remove(null, { query: { created: true }, paginate: false });
+
+          assert.strictEqual(data1.length, count, `returned all ${ count } entries`);
+
+          emptyItems = await service.find({ paginate: false });
+          assert.strictEqual(emptyItems.length, 0, 'no entries before')
+
+          await service.create(
+            Array.from(Array(count)).map((_, i) => ({ name: `name-${i}`, age: 3, created: true }))
+          );
+
+          foundItems = await service.find({ paginate: false });
+          assert.strictEqual(foundItems.length, count, `created ${count} entries`);
+
+          const data2 = await service.remove(null, { query: { created: true } });
+
+          assert.strictEqual(data2.length, defaultPaginate, `returned paginated ${ defaultPaginate } entries`);
+
+        } finally {
+          await service.remove(null, { query: { created: true }, paginate: false });
+
+          service.options.multi = multiBefore;
+          service.options.paginate = paginateBefore;
+        }
+      });
+
       test('.remove + id + query id', async () => {
         const alice = await service.create({
           name: 'Alice',
