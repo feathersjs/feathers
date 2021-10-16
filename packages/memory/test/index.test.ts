@@ -36,6 +36,7 @@ const testSuite = adapterTests([
   '.patch + $select',
   '.patch + id + query',
   '.patch multiple',
+  '.patch multiple default pagination',
   '.patch multi query same',
   '.patch multi query changed',
   '.patch + query + NotFound',
