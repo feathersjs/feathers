@@ -1,6 +1,7 @@
 import assert from 'assert';
+import { AdapterSyntaxTest } from './declarations';
 
-export default (test: any, app: any, _errors: any, serviceName: string, idProp: string) => {
+export default (test: AdapterSyntaxTest, app: any, _errors: any, serviceName: string, idProp: string) => {
   describe('Query Syntax', () => {
     let bob: any;
     let alice: any;
@@ -283,7 +284,7 @@ export default (test: any, app: any, _errors: any, serviceName: string, idProp: 
             paginate: { default: 3 }
           }
         });
-  
+
         assert.strictEqual(page.limit, 3);
         assert.strictEqual(page.skip, 0);
       });
@@ -307,7 +308,7 @@ export default (test: any, app: any, _errors: any, serviceName: string, idProp: 
         const users = await service.create(items, multiParams);
 
         assert.strictEqual(users.length, 2);
-        
+
         await service.remove(users[0][idProp]);
         await service.remove(users[1][idProp]);
         await assert.rejects(() => service.patch(null, { age: 2 }, multiParams), {

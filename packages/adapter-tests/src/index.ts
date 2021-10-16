@@ -1,18 +1,19 @@
 /* eslint-disable no-console */
 import basicTests from './basic';
+import { AdapterTestName } from './declarations';
 import methodTests from './methods';
 import syntaxTests from './syntax';
 
-const adapterTests = (testNames: string[]) => {
+const adapterTests = (testNames: AdapterTestName[]) => {
   return (app: any, errors: any, serviceName: any, idProp = 'id') => {
     if (!serviceName) {
       throw new Error('You must pass a service name');
     }
 
-    const skippedTests: string[] = [];
-    const allTests: string[] = [];
+    const skippedTests: AdapterTestName[] = [];
+    const allTests: AdapterTestName[] = [];
 
-    const test = (name: string, runner: any) => {
+    const test = (name: AdapterTestName, runner: any) => {
       const skip = !testNames.includes(name);
       const its = skip ? it.skip : it;
 
@@ -46,4 +47,10 @@ const adapterTests = (testNames: string[]) => {
   };
 };
 
-export = adapterTests;
+export * from './declarations'
+
+export default adapterTests;
+
+if (typeof module !== 'undefined') {
+  module.exports = Object.assign(adapterTests, module.exports);
+}
