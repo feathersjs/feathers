@@ -392,11 +392,15 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
           const foundItems = await service.find({ paginate: false });
           assert.strictEqual(foundItems.length, count, `created ${count} entries`);
 
+          const foundPaginatedItems = await service.find({});
+          assert.strictEqual(foundPaginatedItems.data.length, defaultPaginate, 'found paginated data')
+
+
           const data1 = await service.patch(null, {
             age: 4
           }, { query: { created: true }, paginate: false })
 
-          assert.strictEqual(data1.length, defaultPaginate, `returned all ${ count } entries`);
+          assert.strictEqual(data1.length, count, `returned all ${ count } entries`);
 
           const data2 = await service.patch(null, {
             age: 2
