@@ -45,7 +45,8 @@ module.exports = {
         '@types/mocha',
         feathers.framework === 'koa' ? '@types/koa-static' : '@types/compression',
         '@types/node',
-        'ts-node-dev',
+        'nodemon',
+        'ts-node',
         'typescript',
         'shx'
       );
