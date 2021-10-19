@@ -2,8 +2,11 @@
 to: "tsconfig.json"
 ---
 {
+  "ts-node": {
+    "files": true
+  },
   "compilerOptions": {
-    "target": "es2018",
+    "target": "es2020",
     "module": "commonjs",
     "outDir": "./lib",
     "rootDir": "./<%= h.lib %>",
