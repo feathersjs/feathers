@@ -1,5 +1,5 @@
 import { Application as FeathersApplication, Params as FeathersParams, HookContext, SetupMethod, ServiceMethods } from '@feathersjs/feathers';
-import express from 'express';
+import * as express from 'express';
 
 declare const feathersExpress: FeathersExpress;
 export = feathersExpress;
