@@ -51,13 +51,13 @@
   },
   "dependencies": {
     "@feathersjs/commons": "^5.0.0-pre.14",
+    "@feathersjs/feathers": "^5.0.0-pre.14",
     "@feathersjs/transport-commons": "^5.0.0-pre.14",
     "socket.io": "^4.2.0"
   },
   "devDependencies": {
     "@feathersjs/commons": "^5.0.0-pre.2",
     "@feathersjs/express": "^5.0.0-pre.14",
-    "@feathersjs/feathers": "^5.0.0-pre.14",
     "@feathersjs/memory": "^5.0.0-pre.14",
     "@feathersjs/tests": "^5.0.0-pre.14",
     "@types/mocha": "^9.0.0",

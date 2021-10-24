@@ -52,6 +52,7 @@
   "dependencies": {
     "@feathersjs/errors": "^5.0.0-pre.14",
     "@feathersjs/feathers": "^5.0.0-pre.14",
+    "@types/json-schema": "^7.0.9",
     "ajv": "^8.6.3",
     "json-schema": "^0.3.0",
     "json-schema-to-ts": "^1.6.4"
