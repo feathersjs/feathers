@@ -1,6 +1,6 @@
 import Koa from 'koa';
 import { Server } from 'http';
-import { Application as FeathersApplication } from '@feathersjs/feathers';
+import { Application as FeathersApplication, HookContext, Params } from '@feathersjs/feathers';
 import '@feathersjs/authentication';
 
 export type ApplicationAddons = {
@@ -13,3 +13,10 @@ export type Application<T = any, C = any> =
 export type FeathersKoaContext<A = Application> = Koa.Context & {
   app: A;
 };
+
+declare module 'koa' {
+  interface ExtendableContext {
+    feathers?: Partial<Params>;
+    hook?: HookContext;
+  }
+}
