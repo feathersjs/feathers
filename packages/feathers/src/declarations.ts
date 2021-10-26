@@ -106,8 +106,8 @@ export interface ServiceHookOverloads<S> {
 export type FeathersService<A = FeathersApplication, S = Service> =
   S & ServiceAddons<A, S> & OptionalPick<ServiceHookOverloads<S>, keyof S>;
 
-export type CustomMethod<Methods extends string> = {
-  [k in Methods]: <X = any> (data: any, params?: Params) => Promise<X>;
+export type CustomMethods<T extends {[key: string]: [any, any]}> = {
+  [K in keyof T]: (data: T[K][0], params?: Params) => Promise<T[K][1]>;
 }
 
 export type ServiceMixin<A> = (service: FeathersService<A>, path: string, options?: ServiceOptions) => void;
