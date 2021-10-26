@@ -170,7 +170,7 @@ describe('`error` hooks', () => {
     const errorMessage = 'before hook broke';
 
     let app: Application;
-    let service: FeathersService<any>;
+    let service: FeathersService;
 
     beforeEach(() => {
       app = feathers().use('/dummy', {

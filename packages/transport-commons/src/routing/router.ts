@@ -77,7 +77,7 @@ export class RouteNode<T = any> {
   }
 }
 
-export class Router<T> {
+export class Router<T = any> {
   constructor (public root: RouteNode<T> = new RouteNode<T>('', 0)) {}
 
   getPath (path: string) {

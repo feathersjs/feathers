@@ -10,7 +10,7 @@ interface ExpressUseHandler<T, Services> {
     path: L,
     ...middlewareOrService: (
       Express|express.RequestHandler|
-      (keyof any extends keyof Services ? ServiceInterface<any> : Services[L])
+      (keyof any extends keyof Services ? ServiceInterface : Services[L])
     )[]
   ): T;
   (path: string|RegExp, ...expressHandlers: express.RequestHandler[]): T;
@@ -32,7 +32,7 @@ export type Application<Services = any, Settings = any> =
   ExpressOverrides<Services>;
 
 declare module '@feathersjs/feathers/lib/declarations' {
-  export interface ServiceOptions {
+  interface ServiceOptions {
     middleware?: {
       before: express.RequestHandler[],
       after: express.RequestHandler[]
@@ -54,7 +54,7 @@ declare module 'express-serve-static-core' {
       // eslint-disable-next-line
       <P extends Params = ParamsDictionary, ResBody = any, ReqBody = any>(
           path: PathParams,
-          ...handlers: (RequestHandler<P, ResBody, ReqBody> | Partial<ServiceMethods<any, any>> | Application)[]
+          ...handlers: (RequestHandler<P, ResBody, ReqBody> | Partial<ServiceMethods> | Application)[]
       ): T;
   }
 }

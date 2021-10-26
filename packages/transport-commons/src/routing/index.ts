@@ -3,12 +3,12 @@ import { Router } from './router';
 
 declare module '@feathersjs/feathers/lib/declarations' {
   interface RouteLookup {
-    service: Service<any>,
+    service: Service,
     params: { [key: string]: string }
   }
 
   interface Application<Services, Settings> {  // eslint-disable-line
-    routes: Router<any>;
+    routes: Router;
     lookup (path: string): RouteLookup;
   }
 }
@@ -38,7 +38,7 @@ export const routing = () => (app: Application) => {
   });
 
   // Add a mixin that registers a service on the router
-  app.mixins.push((service: Service<any>, path: string) => {
+  app.mixins.push((service: Service, path: string) => {
     app.routes.insert(path, service);
     app.routes.insert(`${path}/:__id`, service);
   });

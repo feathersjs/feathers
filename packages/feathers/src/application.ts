@@ -53,13 +53,13 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
     return this;
   }
 
-  defaultService (location: string): ServiceInterface<any> {
+  defaultService (location: string): ServiceInterface {
     throw new Error(`Can not find service '${location}'`);
   }
 
   service<L extends keyof Services & string> (
     location: L
-  ): FeathersService<this, keyof any extends keyof Services ? Service<any> : Services[L]> {
+  ): FeathersService<this, keyof any extends keyof Services ? Service : Services[L]> {
     const path = (stripSlashes(location) || '/') as L;
     const current = this.services[path];
 

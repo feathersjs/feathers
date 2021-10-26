@@ -15,7 +15,7 @@ import {
 
 export { fromAfterHook, fromBeforeHook, fromErrorHooks };
 
-export function createContext (service: Service<any>, method: string, data: HookContextData = {}) {
+export function createContext (service: Service, method: string, data: HookContextData = {}) {
   const createContext = (service as any)[method].createContext;
 
   if (typeof createContext !== 'function') {

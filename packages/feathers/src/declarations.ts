@@ -20,7 +20,7 @@ export interface ServiceOptions {
   serviceEvents?: string[];
 }
 
-export interface ServiceMethods<T, D = Partial<T>> {
+export interface ServiceMethods<T = any, D = Partial<T>> {
   find (params?: Params): Promise<T | T[]>;
 
   get (id: Id, params?: Params): Promise<T>;
@@ -36,7 +36,7 @@ export interface ServiceMethods<T, D = Partial<T>> {
   setup (app: Application, path: string): Promise<void>;
 }
 
-export interface ServiceOverloads<T, D> {
+export interface ServiceOverloads<T = any, D = Partial<T>> {
   create? (data: D[], params?: Params): Promise<T[]>;
 
   update? (id: Id, data: D, params?: Params): Promise<T>;
@@ -52,14 +52,14 @@ export interface ServiceOverloads<T, D> {
   remove? (id: null, params?: Params): Promise<T[]>;
 }
 
-export type Service<T, D = Partial<T>> =
+export type Service<T = any, D = Partial<T>> =
   ServiceMethods<T, D> &
   ServiceOverloads<T, D>;
 
-export type ServiceInterface<T, D = Partial<T>> =
+export type ServiceInterface<T = any, D = Partial<T>> =
   Partial<ServiceMethods<T, D>>;
 
-export interface ServiceAddons<A = Application, S = Service<any, any>> extends EventEmitter {
+export interface ServiceAddons<A = Application, S = Service> extends EventEmitter {
   id?: string;
   hooks (options: HookOptions<A, S>): this;
 }
@@ -103,7 +103,7 @@ export interface ServiceHookOverloads<S> {
   ): Promise<HookContext>;
 }
 
-export type FeathersService<A = FeathersApplication, S = Service<any>> =
+export type FeathersService<A = FeathersApplication, S = Service> =
   S & ServiceAddons<A, S> & OptionalPick<ServiceHookOverloads<S>, keyof S>;
 
 export type CustomMethod<Methods extends string> = {
@@ -179,7 +179,7 @@ export interface FeathersApplication<Services = any, Settings = any> {
    *
    * @param location The path of the service
    */
-  defaultService (location: string): ServiceInterface<any>;
+  defaultService (location: string): ServiceInterface;
 
   /**
    * Register a new service or a sub-app. When passed another
@@ -206,7 +206,7 @@ export interface FeathersApplication<Services = any, Settings = any> {
    */
   service<L extends keyof Services & string> (
     path: L
-  ): FeathersService<this, keyof any extends keyof Services ? Service<any> : Services[L]>;
+  ): FeathersService<this, keyof any extends keyof Services ? Service : Services[L]>;
 
   setup (server?: any): Promise<this>;
 
@@ -318,10 +318,10 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
 }
 
 // Legacy hook typings
-export type LegacyHookFunction<A = Application, S = Service<any, any>> =
+export type LegacyHookFunction<A = Application, S = Service> =
   (this: S, context: HookContext<A, S>) => (Promise<HookContext<Application, S> | void> | HookContext<Application, S> | void);
 
-export type Hook<A = Application, S = Service<any, any>> = LegacyHookFunction<A, S>;
+export type Hook<A = Application, S = Service> = LegacyHookFunction<A, S>;
 
 type LegacyHookMethodMap<A, S> =
   { [L in keyof S]?: SelfOrArray<LegacyHookFunction<A, S>>; } &
@@ -337,7 +337,7 @@ export type LegacyHookMap<A, S> = {
 }
 
 // New @feathersjs/hook typings
-export type HookFunction<A = Application, S = Service<any, any>> =
+export type HookFunction<A = Application, S = Service> =
   (context: HookContext<A, S>, next: NextFunction) => Promise<void>;
 
 export type HookMap<A, S> = {
