@@ -63,7 +63,9 @@ export function hookMixin<A> (
   }
 
   const app = this;
-  const serviceMethodHooks = getHookMethods(service, options).reduce((res, method) => {
+  const hookMethods = getHookMethods(service, options);
+
+  const serviceMethodHooks = hookMethods.reduce((res, method) => {
     const params = (defaultServiceArguments as any)[method] || [ 'data', 'params' ];
 
     res[method] = new FeathersHookManager<A>(app, method)
@@ -79,7 +81,8 @@ export function hookMixin<A> (
 
     return res;
   }, {} as HookMap);
-  const handleLegacyHooks = enableLegacyHooks(service);
+
+  const handleLegacyHooks = enableLegacyHooks(service, hookMethods);
 
   hooks(service, serviceMethodHooks);
 
