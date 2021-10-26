@@ -55,7 +55,6 @@
     "@feathersjs/commons": "^5.0.0-pre.14",
     "@feathersjs/errors": "^5.0.0-pre.14",
     "@feathersjs/feathers": "^5.0.0-pre.14",
-    "@feathersjs/hooks": "^0.6.5",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
