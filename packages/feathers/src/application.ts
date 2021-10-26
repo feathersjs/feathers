@@ -21,13 +21,13 @@ import { enableLegacyHooks } from './hooks/legacy';
 
 const debug = createDebug('@feathersjs/feathers');
 
-export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements FeathersApplication<ServiceTypes, AppSettings> {
-  services: ServiceTypes = ({} as ServiceTypes);
-  settings: AppSettings = ({} as AppSettings);
-  mixins: ServiceMixin<Application<ServiceTypes, AppSettings>>[] = [ hookMixin, eventMixin ];
+export class Feathers<Services, Settings> extends EventEmitter implements FeathersApplication<Services, Settings> {
+  services: Services = ({} as Services);
+  settings: Settings = ({} as Settings);
+  mixins: ServiceMixin<Application<Services, Settings>>[] = [ hookMixin, eventMixin ];
   version: string = version;
   _isSetup = false;
-  appHooks: HookMap<Application<ServiceTypes, AppSettings>, any> = {
+  appHooks: HookMap<Application<Services, Settings>, any> = {
     [HOOKS]: [ (eventHook as any) ]
   };
 
@@ -38,11 +38,11 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     this.legacyHooks = enableLegacyHooks(this);
   }
 
-  get<L extends keyof AppSettings & string> (name: L): AppSettings[L] {
+  get<L extends keyof Settings & string> (name: L): Settings[L] {
     return this.settings[name];
   }
 
-  set<L extends keyof AppSettings & string> (name: L, value: AppSettings[L]) {
+  set<L extends keyof Settings & string> (name: L, value: Settings[L]) {
     this.settings[name] = value;
     return this;
   }
@@ -57,9 +57,9 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     throw new Error(`Can not find service '${location}'`);
   }
 
-  service<L extends keyof ServiceTypes & string> (
+  service<L extends keyof Services & string> (
     location: L
-  ): FeathersService<this, keyof any extends keyof ServiceTypes ? Service<any> : ServiceTypes[L]> {
+  ): FeathersService<this, keyof any extends keyof Services ? Service<any> : Services[L]> {
     const path = (stripSlashes(location) || '/') as L;
     const current = this.services[path];
 
@@ -71,9 +71,9 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     return current as any;
   }
 
-  use<L extends keyof ServiceTypes & string> (
+  use<L extends keyof Services & string> (
     path: L,
-    service: keyof any extends keyof ServiceTypes ? ServiceInterface<any> | Application : ServiceTypes[L],
+    service: keyof any extends keyof Services ? ServiceInterface | Application : Services[L],
     options?: ServiceOptions
   ): this {
     if (typeof path !== 'string') {
@@ -127,7 +127,7 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     if (Array.isArray(hookMap)) {
       this.appHooks[HOOKS].push(...hookMap as any);
     } else {
-      const methodHookMap = hookMap as HookMap<Application<ServiceTypes, AppSettings>, any>;
+      const methodHookMap = hookMap as HookMap<Application<Services, Settings>, any>;
 
       Object.keys(methodHookMap).forEach(key => {
         const methodHooks = this.appHooks[key] || [];

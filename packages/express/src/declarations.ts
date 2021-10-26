@@ -5,12 +5,12 @@ import {
   HookContext, ServiceMethods, ServiceInterface
 } from '@feathersjs/feathers';
 
-interface ExpressUseHandler<T, ServiceTypes> {
-  <L extends keyof ServiceTypes & string> (
+interface ExpressUseHandler<T, Services> {
+  <L extends keyof Services & string> (
     path: L,
     ...middlewareOrService: (
       Express|express.RequestHandler|
-      (keyof any extends keyof ServiceTypes ? ServiceInterface<any> : ServiceTypes[L])
+      (keyof any extends keyof Services ? ServiceInterface<any> : Services[L])
     )[]
   ): T;
   (path: string|RegExp, ...expressHandlers: express.RequestHandler[]): T;
@@ -18,18 +18,18 @@ interface ExpressUseHandler<T, ServiceTypes> {
   (handler: Express|express.ErrorRequestHandler): T;
 }
 
-export interface ExpressOverrides<ServiceTypes> {
+export interface ExpressOverrides<Services> {
   listen(port: number, hostname: string, backlog: number, callback?: () => void): Promise<http.Server>;
   listen(port: number, hostname: string, callback?: () => void): Promise<http.Server>;
   listen(port: number|string|any, callback?: () => void): Promise<http.Server>;
   listen(callback?: () => void): Promise<http.Server>;
-  use: ExpressUseHandler<this, ServiceTypes>;
+  use: ExpressUseHandler<this, Services>;
 }
 
-export type Application<ServiceTypes = any, AppSettings = any> =
+export type Application<Services = any, Settings = any> =
   Omit<Express, 'listen'|'use'> &
-  FeathersApplication<ServiceTypes, AppSettings> &
-  ExpressOverrides<ServiceTypes>;
+  FeathersApplication<Services, Settings> &
+  ExpressOverrides<Services>;
 
 declare module '@feathersjs/feathers/lib/declarations' {
   export interface ServiceOptions {

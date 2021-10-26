@@ -115,7 +115,7 @@ export type ServiceMixin<A> = (service: FeathersService<A>, path: string, option
 export type ServiceGenericType<S> = S extends ServiceInterface<infer T> ? T : any;
 export type ServiceGenericData<S> = S extends ServiceInterface<infer _T, infer D> ? D : any;
 
-export interface FeathersApplication<ServiceTypes = any, AppSettings = any> {
+export interface FeathersApplication<Services = any, Settings = any> {
   /**
    * The Feathers application version
    */
@@ -124,7 +124,7 @@ export interface FeathersApplication<ServiceTypes = any, AppSettings = any> {
   /**
    * A list of callbacks that run when a new service is registered
    */
-  mixins: ServiceMixin<Application<ServiceTypes, AppSettings>>[];
+  mixins: ServiceMixin<Application<Services, Settings>>[];
 
   /**
    * The index of all services keyed by their path.
@@ -132,13 +132,13 @@ export interface FeathersApplication<ServiceTypes = any, AppSettings = any> {
    * __Important:__ Services should always be retrieved via `app.service('name')`
    * not via `app.services`.
    */
-  services: ServiceTypes;
+  services: Services;
 
   /**
    * The application settings that can be used via
    * `app.get` and `app.set`
    */
-  settings: AppSettings;
+  settings: Settings;
 
   /**
    * A private-ish indicator if `app.setup()` has been called already
@@ -148,14 +148,14 @@ export interface FeathersApplication<ServiceTypes = any, AppSettings = any> {
   /**
    * Contains all registered application level hooks.
    */
-  appHooks: HookMap<Application<ServiceTypes, AppSettings>, any>;
+  appHooks: HookMap<Application<Services, Settings>, any>;
 
   /**
    * Retrieve an application setting by name
    *
    * @param name The setting name
    */
-  get<L extends keyof AppSettings & string> (name: L): AppSettings[L];
+  get<L extends keyof Settings & string> (name: L): Settings[L];
 
   /**
    * Set an application setting
@@ -163,7 +163,7 @@ export interface FeathersApplication<ServiceTypes = any, AppSettings = any> {
    * @param name The setting name
    * @param value The setting value
    */
-  set<L extends keyof AppSettings & string> (name: L, value: AppSettings[L]): this;
+  set<L extends keyof Settings & string> (name: L, value: Settings[L]): this;
 
   /**
    * Runs a callback configure function with the current application instance.
@@ -191,9 +191,9 @@ export interface FeathersApplication<ServiceTypes = any, AppSettings = any> {
    * Feathers application to use a sub-app under the `path` prefix.
    * @param options The options for this service
    */
-  use<L extends keyof ServiceTypes & string> (
+  use<L extends keyof Services & string> (
     path: L,
-    service: keyof any extends keyof ServiceTypes ? ServiceInterface<any> | Application : ServiceTypes[L],
+    service: keyof any extends keyof Services ? ServiceInterface | Application : Services[L],
     options?: ServiceOptions
   ): this;
 
@@ -204,9 +204,9 @@ export interface FeathersApplication<ServiceTypes = any, AppSettings = any> {
    *
    * @param path The name of the service.
    */
-  service<L extends keyof ServiceTypes & string> (
+  service<L extends keyof Services & string> (
     path: L
-  ): FeathersService<this, keyof any extends keyof ServiceTypes ? Service<any> : ServiceTypes[L]>;
+  ): FeathersService<this, keyof any extends keyof Services ? Service<any> : Services[L]>;
 
   setup (server?: any): Promise<this>;
 
@@ -220,7 +220,7 @@ export interface FeathersApplication<ServiceTypes = any, AppSettings = any> {
 
 // This needs to be an interface instead of a type
 // so that the declaration can be extended by other modules
-export interface Application<ServiceTypes = any, AppSettings = any> extends FeathersApplication<ServiceTypes, AppSettings>, EventEmitter {
+export interface Application<Services = any, Settings = any> extends FeathersApplication<Services, Settings>, EventEmitter {
 
 }
 
