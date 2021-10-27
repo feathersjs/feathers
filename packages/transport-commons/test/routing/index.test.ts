@@ -69,4 +69,19 @@ describe('app.routes', () => {
       second: '::special'
     });
   });
+
+  it('can register routes with preset params', () => {
+    app.routes.insert('/my/service/:__id/preset', {
+      service: app.service('/my/service'),
+      params: { preset: true }
+    });
+
+    const result = app.lookup('/my/service/1234/preset');
+
+    assert.strictEqual(result.service, app.service('/my/service'));
+    assert.deepStrictEqual(result.params, {
+      preset: true,
+      __id: '1234'
+    });
+  });
 });
