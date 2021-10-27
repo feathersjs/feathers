@@ -313,6 +313,10 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
    */
   statusCode?: number;
   /**
+   * A writeable, optional property that allows to set a redirect location.
+   */
+  redirect?: string;
+  /**
    * The event emitted by this method. Can be set to `null` to skip event emitting.
    */
   event: string|null;

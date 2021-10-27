@@ -37,14 +37,19 @@ export function rest () {
         route
       };
       const args = createArguments({ id, data, params });
-      const hookContext = createContext(service, method);
+      const contextBase = createContext(service, method);
+      ctx.hook = contextBase;
 
-      ctx.hook = hookContext as any;
+      const context = await (service as any)[method](...args, contextBase);
+      ctx.hook = context;
 
-      const result = await (service as any)[method](...args, hookContext);
+      const result = http.getData(context);
+      const statusCode = http.getStatusCode(context, result);
+      const location = http.getLocation(context, ctx.get('Referrer'));
 
-      ctx.response.status = http.getStatusCode(result, {});
-      ctx.body = http.getData(result);
+      ctx.body = result;
+      ctx.status = statusCode;
+      if (location) ctx.set('Location', location);
     }
 
     return next();

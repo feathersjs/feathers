@@ -1,5 +1,6 @@
 import { MethodNotAllowed } from '@feathersjs/errors/lib';
 import { HookContext, NullableId, Params } from '@feathersjs/feathers';
+import encodeUrl from 'encodeurl';
 
 export const METHOD_HEADER = 'x-service-method';
 
@@ -13,7 +14,8 @@ export const statusCodes = {
   created: 201,
   noContent: 204,
   methodNotAllowed: 405,
-  success: 200
+  success: 200,
+  seeOther: 303
 };
 
 export const knownMethods: { [key: string]: string } = {
@@ -68,9 +70,23 @@ export function getStatusCode (context: HookContext, data?: any) {
     return statusCodes.created;
   }
 
+  if (context.redirect) {
+    return statusCodes.seeOther;
+  }
+
   if (!data) {
     return statusCodes.noContent;
   }
 
   return statusCodes.success;
+}
+
+export function getLocation(context: HookContext, referrer?: string) {
+  const redirect = context.redirect;
+
+  if (redirect === 'back') {
+    return encodeUrl(referrer || '/');
+  }
+
+  return redirect && encodeUrl(redirect);
 }

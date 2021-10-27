@@ -55,9 +55,11 @@
     "@feathersjs/commons": "^5.0.0-pre.14",
     "@feathersjs/errors": "^5.0.0-pre.14",
     "@feathersjs/feathers": "^5.0.0-pre.14",
+    "encodeurl": "^1.0.2",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@types/encodeurl": "^1.0.0",
     "@types/lodash": "^4.14.176",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.11.6",

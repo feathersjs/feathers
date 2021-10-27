@@ -40,11 +40,16 @@ export const serviceMiddleware = (callback: ServiceCallback) =>
       const { query, body: data } = req;
       const { __feathersId: id = null, ...route } = req.params;
       const params = { query, route, ...req.feathers };
+
       const context = await callback(req, res, { id, data, params });
+
       const result = http.getData(context);
+      const statusCode = http.getStatusCode(context, result);
+      const location = http.getLocation(context, req.get('Referrer'));
 
       res.data = result;
-      res.status(http.getStatusCode(context, result));
+      res.status(statusCode);
+      if (location) res.set('Location', location);
 
       next();
     } catch (error: any) {
@@ -66,11 +71,13 @@ export const serviceMethodHandler = (
   }
 
   const args = getArgs(options);
-  const context = createContext(service, method);
+  const contextBase = createContext(service, method);
+  res.hook = contextBase;
 
+  const context = await service[method](...args, contextBase);
   res.hook = context;
 
-  return service[method](...args, context);
+  return context;
 });
 
 export function rest (handler: RequestHandler = formatter) {
