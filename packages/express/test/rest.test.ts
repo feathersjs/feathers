@@ -244,8 +244,7 @@ describe('@feathersjs/express/rest provider', () => {
               type: null,
               event: null,
               method: 'get',
-              path: 'hook-error',
-              original: data.hook.original
+              path: 'hook-error'
             },
             error: { message: 'I blew up' }
           });
