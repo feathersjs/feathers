@@ -66,95 +66,141 @@ export function collectLegacyHooks (target: any, method: string) {
 
 // Converts different hook registration formats into the
 // same internal format
-export function convertHookData (obj: any) {
-  let hook: any = {};
+export function convertHookData (input: any) {
+  const result: { [ method: string ]: LegacyHookFunction[] } = {};
 
-  if (Array.isArray(obj)) {
-    hook = { all: obj };
-  } else if (typeof obj !== 'object') {
-    hook = { all: [ obj ] };
+  if (Array.isArray(input)) {
+    result.all = input;
+  } else if (typeof input !== 'object') {
+    result.all = [ input ];
   } else {
-    for (const [key, value] of Object.entries(obj)) {
-      hook[key] = !Array.isArray(value) ? [ value ] : value;
+    for (const key of Object.keys(input)) {
+      const value = input[key];
+      result[key] = Array.isArray(value) ? value : [ value ];
     }
   }
 
-  return hook;
+  return result;
 }
 
-const types = ['before', 'after', 'error'];
+type LegacyType = 'before' | 'after' | 'error';
 
-const wrappers: any = {
+type LegacyMap = { [ type in LegacyType ]: ReturnType< typeof convertHookData > };
+
+type LegacyAdapter = HookFunction & { hooks: LegacyHookFunction[] };
+
+type LegacyStore = {
+  before: { [ method: string ]: LegacyAdapter },
+  after: { [ method: string ]: LegacyAdapter },
+  error: { [ method: string ]: LegacyAdapter },
+  hooks: { [ method: string ]: HookFunction[] }
+};
+
+const types: LegacyType[] = ['before', 'after', 'error'];
+
+const isType = (value: any): value is LegacyType => types.includes(value);
+
+const wrappers = {
   before: fromBeforeHooks,
   after: fromAfterHooks,
   error: fromErrorHooks,
 };
 
-// Add `.hooks` functionality to an object
-export function enableLegacyHooks (
-  obj: any,
-  methods: string[] = defaultServiceMethods
-) {
-  const hookData: any = {hooks: {}};
-
-  for (const type of types) {
-    hookData[type] = {};
-  }
+const createStore = (methods: string[]) => {
+  const store: LegacyStore = {
+    before: {},
+    after: {},
+    error: {},
+    hooks: {}
+  };
 
   for (const method of methods) {
-    hookData.hooks[method] = [];
+    store.hooks[method] = [];
   }
 
-  // Add non-enumerable `__hooks` property to the object
-  Object.defineProperty(obj, '__hooks', {
+  return store;
+};
+
+const setStore = (object: any, store: LegacyStore) => {
+  Object.defineProperty(object, '__hooks', {
     configurable: true,
-    value: hookData,
+    value: store,
     writable: true
   });
+};
 
-  return function legacyHooks (this: any, allHooks: LegacyHookMap<any, any>) {
-    const touched = new Set<string>();
+const getStore = (object: any): LegacyStore => object.__hooks;
 
-    for (const [type, current] of Object.entries(allHooks)) {
-      if (!types.includes(type)) {
-        throw new Error(`'${type}' is not a valid hook type`);
-      }
+const createMap = (input: LegacyHookMap<any, any>, methods: string[]) => {
+  const map = {} as LegacyMap;
 
-      const hooks = convertHookData(current);
+  for (const type of Object.keys(input)) {
+    if (!isType(type)) {
+      throw new Error(`'${type}' is not a valid hook type`);
+    }
 
-      for (const method of Object.keys(hooks)) {
-        if (method !== 'all' && !methods.includes(method)) {
-          throw new Error(`'${method}' is not a valid hook method`);
-        }
-      }
+    const data = convertHookData(input[type]);
 
-      for (const method of methods) {
-        if (!hooks.all?.length && !hooks[method]?.length) continue;
-
-        const hook = this.__hooks[type][method] ||= (() => {
-          const hooks: LegacyHookFunction[] = [];
-          const hook = wrappers[type](hooks);
-          hook.hooks = hooks;
-          touched.add(method);
-          return hook;
-        })();
-
-        hook.hooks.push(...(hooks.all || []), ...(hooks[method] || []));
+    for (const method of Object.keys(data)) {
+      if (method !== 'all' && !methods.includes(method)) {
+        throw new Error(`'${method}' is not a valid hook method`);
       }
     }
 
-    for (const method of touched) {
-      const before = this.__hooks.before[method];
-      const after = this.__hooks.after[method];
-      const error = this.__hooks.error[method];
+    map[type] = data;
+  }
 
-      const hooks: HookFunction[] = [];
-      if (error) hooks.push(error);
-      if (before) hooks.push(before);
-      if (after) hooks.push(after);
+  return map;
+};
 
-      this.__hooks.hooks[method] = hooks;
+const createAdapter = (type: LegacyType) => {
+  const hooks: LegacyHookFunction[] = [];
+  const hook = wrappers[type](hooks);
+  const adapter = Object.assign(hook, { hooks });
+
+  return adapter;
+};
+
+const updateStore = (store: LegacyStore, map: LegacyMap) => {
+  for (const method of Object.keys(store.hooks)) {
+    let adapted = false;
+
+    for (const key of Object.keys(map)) {
+      const type = key as LegacyType;
+      const allHooks = map[type].all || [];
+      const methodHooks = map[type][method] || [];
+
+      if (allHooks.length || methodHooks.length) {
+        const adapter = store[type][method] ||= (adapted = true, createAdapter(type));
+
+        adapter.hooks.push(...allHooks, ...methodHooks);
+      }
     }
+
+    if (adapted) {
+      store.hooks[method] = [
+        store.error[method],
+        store.before[method],
+        store.after[method]
+      ].filter(hook => hook);
+    }
+  }
+};
+
+// Add `.hooks` functionality to an object
+export function enableLegacyHooks (
+  object: any,
+  methods: string[] = defaultServiceMethods
+) {
+  const store = createStore(methods);
+
+  setStore(object, store);
+
+  return function legacyHooks (this: any, input: LegacyHookMap<any, any>) {
+    const store = getStore(this);
+    const map = createMap(input, methods);
+
+    updateStore(store, map);
 
     return this;
   }
