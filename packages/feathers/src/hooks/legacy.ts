@@ -134,21 +134,21 @@ const getStore = (object: any): LegacyStore => object.__hooks;
 const createMap = (input: LegacyHookMap<any, any>, methods: string[]) => {
   const map = {} as LegacyMap;
 
-  for (const type of Object.keys(input)) {
+  Object.keys(input).forEach((type) => {
     if (!isType(type)) {
       throw new Error(`'${type}' is not a valid hook type`);
     }
 
     const data = convertHookData(input[type]);
 
-    for (const method of Object.keys(data)) {
+    Object.keys(data).forEach((method) => {
       if (method !== 'all' && !methods.includes(method)) {
         throw new Error(`'${method}' is not a valid hook method`);
       }
-    }
+    });
 
     map[type] = data;
-  }
+  });
 
   return map;
 };
@@ -162,10 +162,10 @@ const createAdapter = (type: LegacyType) => {
 };
 
 const updateStore = (store: LegacyStore, map: LegacyMap) => {
-  for (const method of Object.keys(store.hooks)) {
+  Object.keys(store.hooks).forEach((method) => {
     let adapted = false;
 
-    for (const key of Object.keys(map)) {
+    Object.keys(map).forEach((key) => {
       const type = key as LegacyType;
       const allHooks = map[type].all || [];
       const methodHooks = map[type][method] || [];
@@ -175,7 +175,7 @@ const updateStore = (store: LegacyStore, map: LegacyMap) => {
 
         adapter.hooks.push(...allHooks, ...methodHooks);
       }
-    }
+    });
 
     if (adapted) {
       store.hooks[method] = [
@@ -184,7 +184,7 @@ const updateStore = (store: LegacyStore, map: LegacyMap) => {
         store.after[method]
       ].filter(hook => hook);
     }
-  }
+  });
 };
 
 // Add `.hooks` functionality to an object
