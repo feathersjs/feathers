@@ -159,6 +159,7 @@ describe('@feathersjs/express/rest provider', () => {
           method: 'get',
           path: 'hook',
           event: null,
+          exposed: true,
           result: { description: 'You have to do dishes' },
           addedProperty: true
         });
@@ -245,6 +246,7 @@ describe('@feathersjs/express/rest provider', () => {
               event: null,
               method: 'get',
               path: 'hook-error',
+              exposed: true,
               original: data.hook.original
             },
             error: { message: 'I blew up' }

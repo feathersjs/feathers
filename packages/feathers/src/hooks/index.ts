@@ -22,7 +22,10 @@ export function createContext (service: Service<any>, method: string, data: Hook
     throw new Error(`Can not create context for method ${method}`);
   }
 
-  return createContext(data) as HookContext;
+  const context = createContext(data);
+  context.exposed = true;
+
+  return context as HookContext;
 }
 
 export class FeathersHookManager<A> extends HookManager {
@@ -74,7 +77,8 @@ export function hookMixin<A> (
         method,
         service,
         event: null,
-        type: null
+        type: null,
+        exposed: false
       });
 
     return res;

@@ -146,7 +146,7 @@ describe('hooks basics', () => {
     assert.deepStrictEqual(data, { id: 10, user: 'David', after: true });
   });
 
-  it('has context.app, context.service and context.path', async () => {
+  it('has app, service, path, method, type and exposed', async () => {
     const app = feathers().use('/dummy', {
       async get (id: any) {
         return { id };
@@ -160,6 +160,9 @@ describe('hooks basics', () => {
         assert.strictEqual(context.service, service);
         assert.strictEqual(context.app, app);
         assert.strictEqual(context.path, 'dummy');
+        assert.strictEqual(context.method, 'get');
+        assert.strictEqual(context.type, 'before');
+        assert.strictEqual(context.exposed, false);
       }
     });
 
@@ -215,6 +218,7 @@ describe('hooks basics', () => {
       assert.strictEqual(returnedContext.service, app.service('dummy'));
       assert.strictEqual(returnedContext.type, null);
       assert.strictEqual(returnedContext.path, 'dummy');
+      assert.strictEqual(returnedContext.exposed, true);
       assert.deepStrictEqual(returnedContext.result, {
         id: 10,
         params: {}

@@ -270,6 +270,11 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
    */
   readonly arguments: any[];
   /**
+   * A read only property that says if the method call will return full
+   * context object or only the result.
+   */
+  readonly exposed: boolean;
+  /**
    * A writeable property containing the data of a create, update and patch service
    * method call.
    */
