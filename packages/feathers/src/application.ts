@@ -106,13 +106,13 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
     // Add all the mixins
     this.mixins.forEach(fn => fn.call(this, protoService, location, serviceOptions));
 
+    this.services[location] = protoService;
+
     // If we ran setup already, set this service up explicitly, this will not `await`
     if (this._isSetup && typeof protoService.setup === 'function') {
       debug(`Setting up service for \`${location}\``);
       protoService.setup(this, location);
     }
-
-    this.services[location] = protoService;
 
     return this;
   }
@@ -140,6 +140,8 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
   }
 
   setup () {
+    this._isSetup = true;
+
     let promise = Promise.resolve();
 
     // Setup each service (pass the app so that they can look up other services etc.)
@@ -155,9 +157,6 @@ export class Feathers<ServiceTypes, AppSettings> extends EventEmitter implements
       });
     }
 
-    return promise.then(() => {
-      this._isSetup = true;
-      return this;
-    });
+    return promise.then(() => this);
   }
 }
