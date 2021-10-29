@@ -4,7 +4,7 @@ import { createDebug } from '@feathersjs/commons';
 import { Channel } from './channel/base';
 import { CombinedChannel } from './channel/combined';
 
-const debug = createDebug('@feathersjs/transport-commons:channels/mixins');
+const debug = createDebug('@feathersjs/transport-commons/channels/mixins');
 const PUBLISHERS = Symbol('@feathersjs/transport-commons/publishers');
 const CHANNELS = Symbol('@feathersjs/transport-commons/channels');
 const ALL_EVENTS = Symbol('@feathersjs/transport-commons/all-events');

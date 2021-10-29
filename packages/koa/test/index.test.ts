@@ -14,21 +14,23 @@ describe('@feathersjs/koa', () => {
     app = koa(feathers());
     app.use(errorHandler());
     app.use(bodyParser());
-    app.use(rest());
+    app.use(async (ctx, next) => {
+      if (ctx.request.path === '/middleware') {
+        ctx.body = {
+          feathers: ctx.feathers,
+          message: 'Hello from middleware'
+        };
+      } else {
+        await next();
+      }
+    });
+    app.configure(rest());
     app.use('/', new Service());
     app.use('todo', new Service(), {
       methods: [
         'get', 'find', 'create', 'update',
         'patch', 'remove', 'customMethod'
       ]
-    });
-    app.use(ctx => {
-      if (ctx.request.path === '/middleware') {
-        ctx.body = {
-          feathers: ctx.feathers,
-          message: 'Hello from middleware'
-        };
-      }
     });
 
     server = await app.listen(8465);

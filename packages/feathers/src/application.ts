@@ -93,7 +93,7 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
     }
 
     const protoService = wrapService(location, service, options);
-    const serviceOptions = getServiceOptions(service, options);
+    const serviceOptions = getServiceOptions(protoService);
 
     for (const name of protectedMethods) {
       if (serviceOptions.methods.includes(name)) {
