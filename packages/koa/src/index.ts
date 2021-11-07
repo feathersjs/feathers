@@ -15,11 +15,11 @@ export * from './authenticate';
 export { rest } from './rest';
 export { Koa, bodyParser, errorHandler };
 
-export function koa (_app?: FeathersApplication): Application<any> {
+export function koa (_app?: FeathersApplication): Application {
   const koaApp = new Koa();
 
   if (!_app) {
-    return koaApp as unknown as Application<any>;
+    return koaApp as unknown as Application;
   }
 
   if (typeof _app.setup !== 'function') {

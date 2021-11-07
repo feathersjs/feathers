@@ -22,7 +22,7 @@ export class AuthenticationBaseStrategy implements AuthenticationStrategy {
     return this.authentication.configuration[this.name];
   }
 
-  get entityService (): Service<any> {
+  get entityService (): Service {
     const { service } = this.configuration;
 
     if (!service) {

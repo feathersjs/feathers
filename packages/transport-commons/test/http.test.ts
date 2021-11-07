@@ -1,32 +1,29 @@
 import assert from 'assert';
 import { HookContext } from '@feathersjs/feathers';
-import { BaseHookContext } from '@feathersjs/hooks';
-
 import { http } from '../src';
 
 describe('@feathersjs/transport-commons HTTP helpers', () => {
   it('getData', () => {
     const plainData = { message: 'hi' };
     const dispatch = { message: 'from dispatch' };
-    const resultContext = new BaseHookContext({
+    const resultContext = {
       result: plainData
-    });
-    const dispatchContext = new BaseHookContext({
+    };
+    const dispatchContext = {
       dispatch
-    });
+    };
 
-    assert.deepStrictEqual(http.getData(plainData), plainData);
-    assert.deepStrictEqual(http.getData(resultContext), plainData);
-    assert.deepStrictEqual(http.getData(dispatchContext), dispatch);
+    assert.deepStrictEqual(http.getData(resultContext as HookContext), plainData);
+    assert.deepStrictEqual(http.getData(dispatchContext as HookContext), dispatch);
   });
 
   it('getStatusCode', async () => {
-    const statusContext = new BaseHookContext({
+    const statusContext = {
       statusCode: 202
-    });
-    const createContext = new BaseHookContext({
+    };
+    const createContext = {
       method: 'create'
-    });
+    };
 
     assert.strictEqual(http.getStatusCode(statusContext as HookContext, {}), 202);
     assert.strictEqual(http.getStatusCode(createContext as HookContext, {}), http.statusCodes.created);

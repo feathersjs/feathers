@@ -9,7 +9,7 @@ import { disconnect, params, authentication, FeathersSocket } from './middleware
 const debug = createDebug('@feathersjs/socketio');
 
 declare module '@feathersjs/feathers/lib/declarations' {
-  interface Application<ServiceTypes, AppSettings> { // eslint-disable-line
+  interface Application<Services, Settings> { // eslint-disable-line
     io: Server;
     listen (options: any): Promise<http.Server>;
   }

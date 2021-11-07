@@ -63,6 +63,7 @@
     "@feathersjs/tests": "^5.0.0-pre.14",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.10.4",
+    "@types/qs": "^6.9.7",
     "axios": "^0.23.0",
     "mocha": "^9.1.2",
     "node-fetch": "^2.6.1",

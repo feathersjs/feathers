@@ -1,15 +1,14 @@
 import { MethodNotAllowed } from '@feathersjs/errors';
-import { HookContext } from '@feathersjs/hooks';
 import { createDebug } from '@feathersjs/commons';
 import { http } from '@feathersjs/transport-commons';
-import { createContext, defaultServiceMethods, getServiceOptions } from '@feathersjs/feathers';
+import { HookContext, createContext, defaultServiceMethods, getServiceOptions } from '@feathersjs/feathers';
 import { Request, Response, NextFunction, RequestHandler, Router } from 'express';
 
 import { parseAuthentication } from './authentication';
 
 const debug = createDebug('@feathersjs/express/rest');
 
-export type ServiceCallback = (req: Request, res: Response, options: http.ServiceParams) => Promise<HookContext|any>;
+export type ServiceCallback = (req: Request, res: Response, options: http.ServiceParams) => Promise<HookContext>;
 
 export const feathersParams = (req: Request, _res: Response, next: NextFunction) => {
   req.feathers = {
@@ -69,7 +68,7 @@ export const serviceMethodHandler = (
   const args = getArgs(options);
   const context = createContext(service, method);
 
-  res.hook = context as any;
+  res.hook = context;
 
   return service[method](...args, context);
 });
