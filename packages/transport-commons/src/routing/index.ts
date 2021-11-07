@@ -1,4 +1,4 @@
-import { Application, Service } from '@feathersjs/feathers';
+import { Application, Service, ServiceOptions } from '@feathersjs/feathers';
 import { Router } from './router';
 
 declare module '@feathersjs/feathers/lib/declarations' {
@@ -41,8 +41,10 @@ export const routing = () => (app: Application) => {
   app.lookup = lookup;
 
   // Add a mixin that registers a service on the router
-  app.mixins.push((service: Service, path: string) => {
-    app.routes.insert(path, { service });
-    app.routes.insert(`${path}/:__id`, { service });
+  app.mixins.push((service: Service, path: string, options: ServiceOptions) => {
+    const { routeParams: params = {} } = options;
+
+    app.routes.insert(path, { service, params });
+    app.routes.insert(`${path}/:__id`, { service, params });
   });
 };

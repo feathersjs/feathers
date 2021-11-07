@@ -18,6 +18,7 @@ export interface ServiceOptions {
   events?: string[];
   methods?: string[];
   serviceEvents?: string[];
+  routeParams?: { [key: string]: any };
 }
 
 export interface ServiceMethods<T = any, D = Partial<T>> {
@@ -110,7 +111,7 @@ export type CustomMethods<T extends {[key: string]: [any, any]}> = {
   [K in keyof T]: (data: T[K][0], params?: Params) => Promise<T[K][1]>;
 }
 
-export type ServiceMixin<A> = (service: FeathersService<A>, path: string, options?: ServiceOptions) => void;
+export type ServiceMixin<A> = (service: FeathersService<A>, path: string, options: ServiceOptions) => void;
 
 export type ServiceGenericType<S> = S extends ServiceInterface<infer T> ? T : any;
 export type ServiceGenericData<S> = S extends ServiceInterface<infer _T, infer D> ? D : any;
@@ -234,7 +235,7 @@ export interface Query {
 export interface Params {
   query?: Query;
   provider?: string;
-  route?: { [key: string]: string };
+  route?: { [key: string]: any };
   headers?: { [key: string]: any };
   [key: string]: any; // (JL) not sure if we want this
 }
