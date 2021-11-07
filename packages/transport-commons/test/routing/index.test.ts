@@ -84,4 +84,22 @@ describe('app.routes', () => {
       __id: '1234'
     });
   });
+
+  it('can pass route params during a service registration', () => {
+    app.use('/other/service', {
+      async get (id: any) {
+        return id;
+      }
+    }, {
+      routeParams: { used: true }
+    });
+
+    const result = app.lookup('/other/service/1234');
+
+    assert.strictEqual(result.service, app.service('/other/service'));
+    assert.deepStrictEqual(result.params, {
+      used: true,
+      __id: '1234'
+    });
+  });
 });
