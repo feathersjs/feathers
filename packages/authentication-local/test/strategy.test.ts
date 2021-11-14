@@ -1,15 +1,15 @@
 import assert from 'assert';
 import omit from 'lodash/omit';
-import { LocalStrategy } from '../src';
-// @ts-ignore
-import createApplication from './fixture';
 import { Application } from '@feathersjs/feathers';
+
+import { LocalStrategy } from '../src';
+import { createApplication, ServiceTypes } from './fixture';
 
 describe('@feathersjs/authentication-local/strategy', () => {
   const password = 'localsecret';
   const email = 'localtester@feathersjs.com';
 
-  let app: Application;
+  let app: Application<ServiceTypes>;
   let user: any;
 
   beforeEach(async () => {
@@ -23,7 +23,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
     try {
       auth.register('something', new LocalStrategy());
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message,
         '\'something\' authentication strategy requires a \'usernameField\' setting'
       );
@@ -40,14 +40,14 @@ describe('@feathersjs/authentication-local/strategy', () => {
         password
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Invalid login');
     }
   });
 
   it('getEntity', async () => {
-    const [ strategy ] = app.service('authentication').getStrategies('local');
+    const [ strategy ] = app.service('authentication').getStrategies('local') as [ LocalStrategy ];
     let entity = await strategy.getEntity(user, {});
 
     assert.deepStrictEqual(entity, user);
@@ -64,7 +64,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
     try {
       await strategy.getEntity({}, {});
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message, 'Could not get local entity');
     }
   });
@@ -72,17 +72,14 @@ describe('@feathersjs/authentication-local/strategy', () => {
   it('strategy fails when strategy is different', async () => {
     const [ local ] = app.service('authentication').getStrategies('local');
 
-    try {
-      await local.authenticate({
-        strategy: 'not-me',
-        password: 'dummy',
-        email
-      });
-      assert.fail('Should never get here');
-    } catch (error) {
-      assert.strictEqual(error.name, 'NotAuthenticated');
-      assert.strictEqual(error.message, 'Invalid login');
-    }
+    await assert.rejects(() => local.authenticate({
+      strategy: 'not-me',
+      password: 'dummy',
+      email
+    }, {}), {
+      name: 'NotAuthenticated',
+      message: 'Invalid login'
+    });
   });
 
   it('fails when password is wrong', async () => {
@@ -94,7 +91,21 @@ describe('@feathersjs/authentication-local/strategy', () => {
         password: 'dummy'
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
+      assert.strictEqual(error.name, 'NotAuthenticated');
+      assert.strictEqual(error.message, 'Invalid login');
+    }
+  });
+
+  it('fails when password is not provided', async () => {
+    const authService = app.service('authentication');
+    try {
+      await authService.create({
+        strategy: 'local',
+        email,
+      });
+      assert.fail('Should never get here');
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Invalid login');
     }
@@ -114,7 +125,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
         email: userEmail
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Invalid login');
     }

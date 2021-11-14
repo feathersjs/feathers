@@ -1,24 +1,32 @@
 import { strict as assert } from 'assert';
 import { Server } from 'http';
-import feathers from '@feathersjs/feathers';
+import { CustomMethods, feathers } from '@feathersjs/feathers';
 import { io, Socket } from 'socket.io-client';
-import { setupTests } from '@feathersjs/tests/src/client';
+import { clientTests } from '@feathersjs/tests';
 
 import { createServer } from './server';
-import socketio from '../src';
+import socketio, { SocketService } from '../src';
+
+type ServiceTypes = {
+  '/': SocketService,
+  'todos': SocketService & CustomMethods<{customMethod: any}>,
+  [key: string]: any;
+}
 
 describe('@feathersjs/socketio-client', () => {
-  const app = feathers();
+  const app = feathers<ServiceTypes>();
 
   let socket: Socket;
   let server: Server;
 
   before(done => {
-    server = createServer().listen(9988);
-    server.once('listening', () => {
-      socket = io('http://localhost:9988');
-      app.configure(socketio(socket));
-      done();
+    createServer().listen(9988).then(srv => {
+      server = srv;
+      server.once('listening', () => {
+        socket = io('http://localhost:9988');
+        app.configure(socketio(socket));
+        done();
+      });
     });
   });
 
@@ -32,7 +40,7 @@ describe('@feathersjs/socketio-client', () => {
       // @ts-ignore
       feathers().configure(socketio());
       assert.ok(false);
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message,
         'Socket.io connection needs to be provided'
       );
@@ -47,7 +55,7 @@ describe('@feathersjs/socketio-client', () => {
     try {
       app.configure(socketio(socket));
       assert.ok(false, 'Should never get here');
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, 'Only one default client provider can be configured');
     }
   });
@@ -71,11 +79,22 @@ describe('@feathersjs/socketio-client', () => {
     try {
       await app.service('not/me').create({});
       assert.fail('Should never get here');
-    } catch(e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, 'Service \'not/me\' not found')
     }
   });
 
-  setupTests(app, 'todos');
-  setupTests(app, '/');
+  it('calls .customMethod', async () => {
+    const service = app.service('todos').methods('customMethod');
+    const result = await service.customMethod({ message: 'hi' });
+
+    assert.deepStrictEqual(result, {
+      data: { message: 'hi' },
+      provider: 'socketio',
+      type: 'customMethod'
+    });
+  });
+
+  clientTests(app, 'todos');
+  clientTests(app, '/');
 });

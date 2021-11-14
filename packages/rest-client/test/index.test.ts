@@ -1,7 +1,8 @@
 
-import { strict as assert } from 'assert';
-import feathers from '@feathersjs/feathers';
+//@ts-ignore
 import fetch from 'node-fetch';
+import { strict as assert } from 'assert';
+import { feathers } from '@feathersjs/feathers';
 import { default as init, FetchClient } from '../src';
 
 describe('REST client tests', function () {
@@ -20,7 +21,7 @@ describe('REST client tests', function () {
     try {
       // @ts-ignore
       transports.fetch();
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, 'fetch has to be provided to feathers-rest');
     }
   });
@@ -41,31 +42,31 @@ describe('REST client tests', function () {
     try {
       app.configure(init('http://localhost:8889').fetch(fetch));
       assert.ok(false, 'Should never get here');
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, 'Only one default client provider can be configured');
     }
   });
 
-  it('errors when id property for get, patch, update or remove is undefined', () => {
+  it('errors when id property for get, patch, update or remove is undefined', async () => {
     const app = feathers().configure(init('http://localhost:8889')
       .fetch(fetch));
 
     const service = app.service('todos');
 
-    return service.get().catch((error: any) => {
-      assert.strictEqual(error.message, 'An id must be provided to the \'todos.get\' method');
+    await assert.rejects(() => service.get(undefined), {
+      message: 'id for \'get\' can not be undefined'
+    });
 
-      return service.remove();
-    }).catch((error: any) => {
-      assert.strictEqual(error.message, 'An id must be provided to the \'todos.remove\' method');
+    await assert.rejects(() => service.remove(undefined), {
+      message: 'id for \'remove\' can not be undefined, only \'null\' when removing multiple entries'
+    });
 
-      return service.update();
-    }).catch((error: any) => {
-      assert.strictEqual(error.message, 'An id must be provided to the \'todos.update\' method');
+    await assert.rejects(() => service.update(undefined, {}), {
+      message: 'id for \'update\' can not be undefined, only \'null\' when updating multiple entries'
+    });
 
-      return service.patch();
-    }).catch((error: any) => {
-      assert.strictEqual(error.message, 'An id must be provided to the \'todos.patch\' method');
+    await assert.rejects(() => service.patch(undefined, {}), {
+      message: 'id for \'patch\' can not be undefined, only \'null\' when updating multiple entries'
     });
   });
 

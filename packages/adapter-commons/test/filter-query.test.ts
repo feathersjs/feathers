@@ -42,7 +42,7 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
         const query = { $foo: 1 };
         filterQuery(query);
         assert.ok(false, 'Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'BadRequest');
         assert.strictEqual(error.message, 'Invalid query parameter $foo');
       }
@@ -112,6 +112,18 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
         const { filters } = filterQuery({ $limit: 'something' }, { paginate: { default: 5, max: 10 } });
 
         assert.strictEqual(filters.$limit, 5);
+      });
+
+      it('limits to 0 when no paginate.default and not a number', () => {
+        const { filters } = filterQuery({ $limit: 'something' }, { paginate: { max: 10 } });
+
+        assert.strictEqual(filters.$limit, 0);
+      });
+
+      it('still uses paginate.max when there is no paginate.default (#2104)', () => {
+        const { filters } = filterQuery({ $limit: 100 }, { paginate: { max: 10 } });
+
+        assert.strictEqual(filters.$limit, 10);
       });
     });
   });
@@ -218,7 +230,7 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
       try {
         filterQuery({ $select: 1, $known: 1 });
         assert.ok(false, 'Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.message, 'Invalid query parameter $known');
       }
     });

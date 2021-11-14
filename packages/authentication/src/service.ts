@@ -1,24 +1,23 @@
-import Debug from 'debug';
 import merge from 'lodash/merge';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { AuthenticationBase, AuthenticationResult, AuthenticationRequest } from './core';
 import { connection, event } from './hooks';
 import '@feathersjs/transport-commons';
-import { Application, Params, ServiceMethods, ServiceAddons } from '@feathersjs/feathers';
+import { createDebug } from '@feathersjs/commons';
+import { Params, ServiceMethods, ServiceAddons } from '@feathersjs/feathers';
 import jsonwebtoken from 'jsonwebtoken';
 
-const debug = Debug('@feathersjs/authentication/service');
+const debug = createDebug('@feathersjs/authentication/service');
 
 declare module '@feathersjs/feathers/lib/declarations' {
-  interface Application<ServiceTypes = {}> { // eslint-disable-line
-
+  interface FeathersApplication<Services, Settings> { // eslint-disable-line
     /**
      * Returns the default authentication service or the
      * authentication service for a given path.
      *
      * @param location The service path to use (optional)
      */
-    defaultAuthentication (location?: string): AuthenticationService;
+    defaultAuthentication? (location?: string): AuthenticationService;
   }
 
   interface Params {
@@ -28,10 +27,10 @@ declare module '@feathersjs/feathers/lib/declarations' {
 }
 
 // eslint-disable-next-line
-export interface AuthenticationService extends ServiceAddons<AuthenticationResult> {}
+export interface AuthenticationService extends ServiceAddons<AuthenticationResult, AuthenticationResult> {}
 
 export class AuthenticationService extends AuthenticationBase implements Partial<ServiceMethods<AuthenticationResult>> {
-  constructor (app: Application, configKey = 'authentication', options = {}) {
+  constructor (app: any, configKey = 'authentication', options = {}) {
     super(app, configKey, options);
 
     if (typeof app.defaultAuthentication !== 'function') {
@@ -93,7 +92,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
    * @param data The authentication request (should include `strategy` key)
    * @param params Service call parameters
    */
-  async create (data: AuthenticationRequest, params: Params) {
+  async create (data: AuthenticationRequest, params?: Params) {
     const authStrategies = params.authStrategies || this.configuration.authStrategies;
 
     if (!authStrategies.length) {
@@ -132,7 +131,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
    * @param id The JWT to remove or null
    * @param params Service call parameters
    */
-  async remove (id: string | null, params: Params) {
+  async remove (id: string | null, params?: Params) {
     const { authentication } = params;
     const { authStrategies } = this.configuration;
 
@@ -149,7 +148,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
   /**
    * Validates the service configuration.
    */
-  setup () {
+  async setup () {
     // The setup method checks for valid settings and registers the
     // connection and event (login, logout) hooks
     const { secret, service, entity, entityId } = this.configuration;
@@ -172,11 +171,9 @@ export class AuthenticationService extends AuthenticationBase implements Partial
       }
     }
 
-    this.hooks({
-      after: {
-        create: [ connection('login'), event('login') ],
-        remove: [ connection('logout'), event('logout') ]
-      }
+    (this as any).hooks({
+      create: [ connection('login'), event('login') ],
+      remove: [ connection('logout'), event('logout') ]
     });
 
     this.app.on('disconnect', async (connection) => {

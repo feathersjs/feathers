@@ -1,17 +1,32 @@
 import { strict as assert } from 'assert';
-import feathers, { Application, HookContext, NullableId, Params } from '@feathersjs/feathers';
+import { feathers, Application, HookContext, NullableId, Params } from '@feathersjs/feathers';
 import express from '@feathersjs/express';
+import { Request, Response } from 'express';
 import { omit, extend } from 'lodash';
 import { io } from 'socket.io-client';
 import axios from 'axios';
 import { Server } from 'http';
-import { Service } from '@feathersjs/tests/src/fixture';
+import { Service } from '@feathersjs/tests';
 import { Socket } from 'socket.io-client';
 
 import methodTests from './methods';
 import eventTests from './events';
 import socketio from '../src';
 import { FeathersSocket, NextFunction } from '../src/middleware.js';
+
+class VerifierService {
+  async find (params: Params) {
+    return { params };
+  }
+
+  async create (data: any, params: Params) {
+    return { data, params };
+  }
+
+  async update (id: NullableId, data: any, params: Params) {
+    return { id, data, params };
+  }
+}
 
 describe('@feathersjs/socketio', () => {
   let app: Application;
@@ -54,7 +69,8 @@ describe('@feathersjs/socketio', () => {
           next();
         });
       }))
-      .use('/todo', Service);
+      .use('/todo', new Service())
+      .use('/verify', new VerifierService());
 
     app.service('todo').hooks({
       before: {
@@ -62,13 +78,15 @@ describe('@feathersjs/socketio', () => {
       }
     });
 
-    server = app.listen(7886);
-    server.once('listening', () => {
-      app.use('/tasks', Service);
-      app.service('tasks').hooks({
-        before: {
-          get: errorHook
-        }
+    app.listen(7886).then(srv => {
+      server = srv;
+      server.once('listening', () => {
+        app.use('/tasks', new Service());
+        app.service('tasks').hooks({
+          before: {
+            get: errorHook
+          }
+        });
       });
     });
 
@@ -88,7 +106,9 @@ describe('@feathersjs/socketio', () => {
       counter++;
     }));
 
-    const srv: Server = app.listen(8887).on('listening', () => srv.close(done));
+    app.listen(8887).then(srv => {
+      srv.on('listening', () => srv.close(done));
+    });
   });
 
   it('can set MaxListeners', done => {
@@ -96,32 +116,34 @@ describe('@feathersjs/socketio', () => {
       io.sockets.setMaxListeners(100)
     ));
 
-    const srv = app.listen(8987).on('listening', () => {
-      assert.strictEqual((app as any).io.sockets.getMaxListeners(), 100);
-      srv.close(done);
+    app.listen(8987).then(srv => {
+      srv.on('listening', () => {
+        assert.strictEqual(app.io.sockets.getMaxListeners(), 100);
+        srv.close(done);
+      });
     });
   });
 
-  it('expressified app works', done => {
+  it('expressified app works', async () => {
     const data = { message: 'Hello world' };
     const app = express(feathers())
       .configure(socketio())
-      .use('/test', (_req, res) => res.json(data));
+      .use('/test', (_req: Request, res: Response) => res.json(data));
 
-    const srv = app.listen(8992).on('listening', async () => {
-      const response = await axios({
-        url: 'http://localhost:8992/socket.io/socket.io.js'
-      });
-
-      assert.strictEqual(response.status, 200);
-
-      const res = await axios({
-        url: 'http://localhost:8992/test'
-      });
-
-      assert.deepStrictEqual(res.data, data);
-      srv.close(done);
+    const srv = await app.listen(8992);
+    const response = await axios({
+      url: 'http://localhost:8992/socket.io/socket.io.js'
     });
+
+    assert.strictEqual(response.status, 200);
+
+    const res = await axios({
+      url: 'http://localhost:8992/test'
+    });
+
+    assert.deepStrictEqual(res.data, data);
+    
+    await new Promise(resolve => srv.close(() => resolve(srv)));
   });
 
   it('can set options (#12)', done => {
@@ -129,45 +151,34 @@ describe('@feathersjs/socketio', () => {
       path: '/test/'
     }, ioInstance => assert.ok(ioInstance)));
 
-    const srv = application.listen(8987).on('listening', async () => {
-      const { status } = await axios('http://localhost:8987/test/socket.io.js');
+    application.listen(8987).then(srv => {
+      srv.on('listening', async () => {
+        const { status } = await axios('http://localhost:8987/test/socket.io.js');
 
-      assert.strictEqual(status, 200);
-      srv.close(done);
-    });
+        assert.strictEqual(status, 200);
+        srv.close(done);
+      });
+    })
   });
 
   it('passes handshake as service parameters', done => {
-    const service = app.service('todo');
-    const old = {
-      create: service.create,
-      update: service.update
-    };
-
-    service.create = function (_data: any, params: Params) {
-      assert.deepStrictEqual(omit(params, 'query', 'route', 'connection'), socketParams, 'Passed handshake parameters');
-      return old.create.apply(this, arguments);
-    };
-
-    service.update = function (_id: NullableId, _data: any, params: Params) {
-      assert.deepStrictEqual(params, extend({
-        route: {},
-        connection: socketParams,
-        query: {
-          test: 'param'
-        }
-      }, socketParams), 'Passed handshake parameters as query');
-      return old.update.apply(this, arguments);
-    };
-
-    socket.emit('create', 'todo', {}, (error: any) => {
+    socket.emit('create', 'verify', {}, (error: any, data: any) => {
       assert.ok(!error);
+      assert.deepStrictEqual(omit(data.params, 'query', 'route', 'connection'), socketParams,
+        'Passed handshake parameters'
+      );
 
-      socket.emit('update', 'todo', 1, {}, {
+      socket.emit('update', 'verify', 1, {}, {
         test: 'param'
-      }, (error: any) => {
+      }, (error: any, data: any) => {
         assert.ok(!error);
-        extend(service, old);
+        assert.deepStrictEqual(data.params, extend({
+          route: {},
+          connection: socketParams,
+          query: {
+            test: 'param'
+          }
+        }, socketParams), 'Passed handshake parameters as query');
         done();
       });
     });
@@ -189,17 +200,11 @@ describe('@feathersjs/socketio', () => {
   });
 
   it('missing parameters in socket call works (#88)', done => {
-    const service = app.service('todo');
-    const old = { find: service.find };
-
-    service.find = function (params: Params) {
-      assert.deepStrictEqual(omit(params, 'query', 'route', 'connection'), socketParams, 'Handshake parameters passed on proper position');
-      return old.find.apply(this, arguments);
-    };
-
-    socket.emit('find', 'todo', (error: any) => {
+    socket.emit('find', 'verify', (error: any, data: any) => {
       assert.ok(!error);
-      extend(service, old);
+      assert.deepStrictEqual(omit(data.params, 'query', 'route', 'connection'), socketParams,
+        'Handshake parameters passed on proper position'
+      );
       done();
     });
   });

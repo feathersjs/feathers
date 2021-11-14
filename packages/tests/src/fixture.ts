@@ -10,16 +10,16 @@ const findAllData = [{
   description: 'You have to do laundry'
 }];
 
-export const Service = {
-  events: [ 'log' ],
+export class Service {
+  events = [ 'log' ];
 
-  find () {
-    return Promise.resolve(findAllData);
-  },
+  async find () {
+    return findAllData;
+  }
 
-  get (name: string, params: any) {
+  async get (name: string, params: any) {
     if (params.query.error) {
-      return Promise.reject(new Error(`Something for ${name} went wrong`));
+      throw new Error(`Something for ${name} went wrong`);
     }
 
     if (params.query.runtimeError) {
@@ -31,9 +31,9 @@ export const Service = {
       id: name,
       description: `You have to do ${name}!`
     });
-  },
+  }
 
-  create (data: any) {
+  async create (data: any) {
     const result = Object.assign({}, clone(data), {
       id: 42,
       status: 'created'
@@ -43,10 +43,10 @@ export const Service = {
       result.many = true;
     }
 
-    return Promise.resolve(result);
-  },
+    return result;
+  }
 
-  update (id: any, data: any) {
+  async update (id: any, data: any) {
     const result = Object.assign({}, clone(data), {
       id, status: 'updated'
     });
@@ -55,10 +55,10 @@ export const Service = {
       result.many = true;
     }
 
-    return Promise.resolve(result);
-  },
+    return result;
+  }
 
-  patch (id: any, data: any) {
+  async patch (id: any, data: any) {
     const result = Object.assign({}, clone(data), {
       id, status: 'patched'
     });
@@ -67,13 +67,25 @@ export const Service = {
       result.many = true;
     }
 
-    return Promise.resolve(result);
-  },
-
-  remove (id: any) {
-    return Promise.resolve({ id });
+    return result;
   }
-};
+
+  async remove (id: any) {
+    return { id };
+  }
+
+  async customMethod (data: any, params: any) {
+    return {
+      data,
+      method: 'customMethod',
+      provider: params.provider
+    };
+  }
+
+  async internalMethod () {
+    throw new Error('Should never get here');
+  }
+}
 
 export const verify = {
   find (data: any) {

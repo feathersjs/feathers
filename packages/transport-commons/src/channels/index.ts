@@ -1,33 +1,34 @@
-import Debug from 'debug';
+import { Application, FeathersService, getServiceOptions } from '@feathersjs/feathers';
+import { createDebug } from '@feathersjs/commons';
 import { compact, flattenDeep, noop } from 'lodash';
 import { Channel, RealTimeConnection } from './channel/base';
 import { CombinedChannel } from './channel/combined';
 import { channelMixin, publishMixin, keys, PublishMixin, Event, Publisher } from './mixins';
-import { Application, Service } from '@feathersjs/feathers';
+import EventEmitter from 'events';
 
-const debug = Debug('@feathersjs/transport-commons/channels');
+const debug = createDebug('@feathersjs/transport-commons/channels');
 const { CHANNELS } = keys;
 
 declare module '@feathersjs/feathers/lib/declarations' {
-  interface ServiceAddons<T> {
-    publish (publisher: Publisher<T>): this;
-    publish (event: Event, publisher: Publisher<T>): this;
+  interface ServiceAddons<A, S> extends EventEmitter { // eslint-disable-line
+    publish (publisher: Publisher<ServiceGenericType<S>, A, this>): this;
+    publish (event: Event, publisher: Publisher<ServiceGenericType<S>, A, this>): this;
 
-    registerPublisher (publisher: Publisher<T>): this;
-    registerPublisher (event: Event, publisher: Publisher<T>): this;
+    registerPublisher (publisher: Publisher<ServiceGenericType<S>, A, this>): this;
+    registerPublisher (event: Event, publisher: Publisher<ServiceGenericType<S>, A, this>): this;
   }
 
-  interface Application<ServiceTypes = {}> { // eslint-disable-line
+  interface Application<Services, Settings> { // eslint-disable-line
     channels: string[];
 
-    channel (name: string[]): Channel;
+    channel (name: string | string[]): Channel;
     channel (...names: string[]): Channel;
 
-    publish<T> (publisher: Publisher<T>): this;
-    publish<T> (event: Event, publisher: Publisher<T>): this;
+    publish<T> (publisher: Publisher<T, this>): this;
+    publish<T> (event: Event, publisher: Publisher<T, this>): this;
 
-    registerPublisher<T> (publisher: Publisher<T>): this;
-    registerPublisher<T> (event: Event, publisher: Publisher<T>): this;
+    registerPublisher<T> (publisher: Publisher<T, this>): this;
+    registerPublisher<T> (event: Event, publisher: Publisher<T, this>): this;
   }
 
   interface Params {
@@ -50,15 +51,16 @@ export function channels () {
       }
     });
 
-    app.mixins.push((service: Service<any>, path: string) => {
-      if (typeof service.publish === 'function' || !service._serviceEvents) {
+    app.mixins.push((service: FeathersService, path: string) => {
+      const { serviceEvents } = getServiceOptions(service);
+
+      if (typeof service.publish === 'function') {
         return;
       }
 
       Object.assign(service, publishMixin());
 
-      // @ts-ignore
-      service._serviceEvents.forEach((event: string) => {
+      serviceEvents.forEach((event: string) => {
         service.on(event, function (data, hook) {
           if (!hook) {
             // Fake hook for custom events
@@ -100,7 +102,7 @@ export function channels () {
                 debug('No connections to publish to');
               }
             }).catch(logError);
-          } catch (error) {
+          } catch (error: any) {
             logError(error);
           }
         });

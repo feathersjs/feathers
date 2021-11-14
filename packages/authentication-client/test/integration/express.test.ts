@@ -1,5 +1,6 @@
 import axios from 'axios';
-import feathers, { Application as FeathersApplication } from '@feathersjs/feathers';
+import { Server } from 'http';
+import { feathers, Application as FeathersApplication } from '@feathersjs/feathers';
 import * as express from '@feathersjs/express';
 import rest from '@feathersjs/rest-client';
 
@@ -9,9 +10,9 @@ import commonTests from './commons';
 
 describe('@feathersjs/authentication-client Express integration', () => {
   let app: express.Application;
-  let server: any;
+  let server: Server;
 
-  before(() => {
+  before(async () => {
     const restApp = express.default(feathers())
       .use(express.json())
       .configure(express.rest())
@@ -19,7 +20,7 @@ describe('@feathersjs/authentication-client Express integration', () => {
     app = getApp(restApp as unknown as FeathersApplication) as express.Application;
     app.use(express.errorHandler());
 
-    server = app.listen(9776);
+    server = await app.listen(9776);
   });
 
   after(done => server.close(() => done()));

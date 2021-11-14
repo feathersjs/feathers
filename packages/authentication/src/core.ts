@@ -2,12 +2,12 @@ import merge from 'lodash/merge';
 import jsonwebtoken, { SignOptions, Secret, VerifyOptions } from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { NotAuthenticated } from '@feathersjs/errors';
-import Debug from 'debug';
+import { createDebug } from '@feathersjs/commons';
 import { Application, Params } from '@feathersjs/feathers';
 import { IncomingMessage, ServerResponse } from 'http';
 import defaultOptions from './options';
 
-const debug = Debug('@feathersjs/authentication/base');
+const debug = createDebug('@feathersjs/authentication/base');
 
 export interface AuthenticationResult {
   [key: string]: any;
@@ -156,6 +156,16 @@ export class AuthenticationBase {
   }
 
   /**
+   * Returns a single strategy by name
+   * 
+   * @param name The strategy name
+   * @returns The authentication strategy or undefined
+   */
+  getStrategy (name: string) {
+    return this.strategies[name];
+  }
+
+  /**
    * Create a new access token with payload and options.
    *
    * @param payload The JWT payload
@@ -200,7 +210,7 @@ export class AuthenticationBase {
       const verified = jsonwebtoken.verify(accessToken, jwtSecret, options);
 
       return verified as any;
-    } catch (error) {
+    } catch (error: any) {
       throw new NotAuthenticated(error.message, error);
     }
   }

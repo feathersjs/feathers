@@ -7,31 +7,29 @@ describe('@feathersjs/authentication-oauth/express', () => {
   let server: Server;
 
   before(async () => {
-    server = app.listen(9876);
-
-    await new Promise<void>(resolve => server.once('listening', () => resolve()));
+    server = await app.listen(9876);
   });
 
   after(() => server.close());
 
   it('oauth/test', async () => {
     try {
-      await axios.get('http://localhost:9876/oauth/test?feathers_token=testing', { maxRedirects: 0 });
-    } catch (error) {
+      await axios.get<any>('http://localhost:9876/oauth/test?feathers_token=testing', { maxRedirects: 0 });
+    } catch (error: any) {
       assert.equal(error.response.status, 302)
     }
   });
 
   it('oauth/test with query', async () => {
     try {
-      await axios.get('http://localhost:9876/oauth/test?other=test', { maxRedirects: 0 });
-    } catch (error) {
+      await axios.get<any>('http://localhost:9876/oauth/test?other=test', { maxRedirects: 0 });
+    } catch (error: any) {
       assert.equal(error.response.status, 302)
     }
   });
 
   it('oauth/test/authenticate', async () => {
-    const { data } = await axios.get('http://localhost:9876/oauth/test/authenticate?profile[sub]=expressTest');
+    const { data } = await axios.get<any>('http://localhost:9876/oauth/test/authenticate?profile[sub]=expressTest');
 
     assert.ok(data.accessToken);
     assert.equal(data.user.testId, 'expressTest');
@@ -42,8 +40,8 @@ describe('@feathersjs/authentication-oauth/express', () => {
     app.get('authentication').oauth.redirect = '/';
 
     try {
-      await axios.get('http://localhost:9876/oauth/test/authenticate');
-    } catch (error) {
+      await axios.get<any>('http://localhost:9876/oauth/test/authenticate');
+    } catch (error: any) {
       assert.ok(/Cannot GET/.test(error.response.data));
       delete app.get('authentication').oauth.redirect;
     }

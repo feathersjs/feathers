@@ -2,14 +2,14 @@
 import bcrypt from 'bcryptjs';
 import get from 'lodash/get';
 import omit from 'lodash/omit';
-import Debug from 'debug';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { Query, Params } from '@feathersjs/feathers';
 import {
   AuthenticationRequest, AuthenticationBaseStrategy
 } from '@feathersjs/authentication';
+import { createDebug } from '@feathersjs/commons';
 
-const debug = Debug('@feathersjs/authentication-local/strategy');
+const debug = createDebug('@feathersjs/authentication-local/strategy');
 
 export class LocalStrategy extends AuthenticationBaseStrategy {
   verifyConfiguration () {
@@ -76,7 +76,7 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
 
   async getEntity (result: any, params: Params) {
     const entityService = this.entityService;
-    const { entityId = entityService.id, entity } = this.configuration;
+    const { entityId = (entityService as any).id, entity } = this.configuration;
 
     if (!entityId || result[entityId] === undefined) {
       throw new NotAuthenticated('Could not get local entity');
@@ -119,9 +119,14 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
   }
 
   async authenticate (data: AuthenticationRequest, params: Params) {
-    const { passwordField, usernameField, entity } = this.configuration;
+    const { passwordField, usernameField, entity, errorMessage } = this.configuration;
     const username = data[usernameField];
     const password = data[passwordField];
+
+    if (!password) { // exit early if there is no password
+      throw new NotAuthenticated(errorMessage);
+    }
+
     const result = await this.findEntity(username, omit(params, 'provider'));
 
     await this.comparePassword(result, password);

@@ -1,5 +1,5 @@
 import assert from 'assert';
-import feathers, { Params, HookContext } from '@feathersjs/feathers';
+import { feathers, Params, HookContext } from '@feathersjs/feathers';
 
 import hook from '../../src/hooks/event';
 import { AuthenticationRequest, AuthenticationResult } from '../../src/core';
@@ -18,10 +18,8 @@ describe('authentication/hooks/events', () => {
   const service = app.service('authentication');
 
   service.hooks({
-    after: {
-      create: [ hook('login') ],
-      remove: [ hook('logout') ]
-    }
+    create: [ hook('login') ],
+    remove: [ hook('logout') ]
   });
 
   it('login', done => {
@@ -35,7 +33,7 @@ describe('authentication/hooks/events', () => {
         assert.ok(params.testParam);
         assert.ok(context.method, 'create');
         done();
-      } catch (error) {
+      } catch (error: any) {
         done(error);
       }
     });
@@ -55,7 +53,7 @@ describe('authentication/hooks/events', () => {
         assert.ok(params.testParam);
         assert.ok(context.method, 'remove');
         done();
-      } catch (error) {
+      } catch (error: any) {
         done(error);
       }
     });

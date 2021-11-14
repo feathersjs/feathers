@@ -1,19 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { strict as assert } from 'assert';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import { Server } from 'http';
-import feathers, { HookContext, Id, Params } from '@feathersjs/feathers';
-// import { BadRequest } from '@feathersjs/errors';
-import { Service } from '@feathersjs/tests/src/fixture';
-import { crud } from '@feathersjs/tests/src/crud';
+import { Request, Response, NextFunction } from 'express';
+import { feathers, HookContext, Id, Params } from '@feathersjs/feathers';
+import { Service, restTests } from '@feathersjs/tests';
+import { BadRequest } from '@feathersjs/errors';
 
 import * as express from '../src'
-import { Request, Response, NextFunction } from 'express';
-import { BadRequest } from '@feathersjs/errors/lib';
 
 const expressify = express.default;
 const { rest } = express;
+const errorHandler = express.errorHandler({
+  logger: false
+});
 
 describe('@feathersjs/express/rest provider', () => {
   describe('base functionality', () => {
@@ -23,21 +24,8 @@ describe('@feathersjs/express/rest provider', () => {
       try {
         app.configure(rest());
         assert.ok(false, 'Should never get here');
-      } catch (e) {
-        assert.strictEqual(e.message, '@feathersjs/express/rest needs an Express compatible app. Feathers apps have to wrapped with feathers-express first.');
-      }
-    });
-
-    it('throws an error for incompatible Feathers version', () => {
-      try {
-        const app = expressify(feathers());
-
-        app.version = '2.9.9';
-        app.configure(rest());
-
-        assert.ok(false, 'Should never get here');
-      } catch (e) {
-        assert.strictEqual(e.message, '@feathersjs/express/rest requires an instance of a Feathers application version 3.x or later (got 2.9.9)');
+      } catch (e: any) {
+        assert.strictEqual(e.message, '@feathersjs/express/rest needs an Express compatible app.');
       }
     });
 
@@ -51,16 +39,16 @@ describe('@feathersjs/express/rest provider', () => {
           }
         });
       })).use('/todo', {
-        get (id) {
-          return Promise.resolve({
+        async get (id: Id) {
+          return {
             description: `You have to do ${id}`
-          });
+          };
         }
       });
 
-      const server = app.listen(4776);
+      const server = await app.listen(4776);
 
-      const res = await axios.get('http://localhost:4776/todo/dishes');
+      const res = await axios.get<any>('http://localhost:4776/todo/dishes');
 
       assert.strictEqual(res.data, 'The todo is: You have to do dishes');
       server.close();
@@ -72,17 +60,16 @@ describe('@feathersjs/express/rest provider', () => {
 
       app.configure(rest(null))
         .use('/todo', {
-          get (id) {
-            return Promise.resolve({
+          async get (id: Id) {
+            return {
               description: `You have to do ${id}`
-            });
+            };
           }
         })
-        .use((_req, res) => res.json(data));
+        .use((_req: Request, res: Response) => res.json(data));
 
-      const server = app.listen(5775);
-
-      const res = await axios.get('http://localhost:5775/todo-handler/dishes')
+      const server = await app.listen(5775);
+      const res = await axios.get<any>('http://localhost:5775/todo-handler/dishes')
 
       assert.deepStrictEqual(res.data, data);
 
@@ -94,30 +81,30 @@ describe('@feathersjs/express/rest provider', () => {
     let server: Server;
     let app: express.Application;
 
-    before(function () {
+    before(async () => {
       app = expressify(feathers())
-        .configure(rest(rest.formatter))
+        .configure(rest(express.formatter))
         .use(express.json())
         .use('codes', {
-          async get (id) {
+          async get (id: Id) {
             return { id };
           },
 
-          async create (data) {
+          async create (data: any) {
             return data;
           }
         })
-        .use('/', Service)
-        .use('todo', Service);
+        .use('/', new Service())
+        .use('todo', new Service());
 
-      server = app.listen(4777, () => app.use('tasks', Service));
+      server = await app.listen(4777, () => app.use('tasks', new Service()));
     });
 
     after(done => server.close(done));
 
-    crud('Services', 'todo', 4777);
-    crud('Root Service', '/', 4777);
-    crud('Dynamic Services', 'tasks', 4777);
+    restTests('Services', 'todo', 4777);
+    restTests('Root Service', '/', 4777);
+    restTests('Dynamic Services', 'tasks', 4777);
 
     describe('res.hook', () => {
       const convertHook = (hook: HookContext) => {
@@ -144,7 +131,7 @@ describe('@feathersjs/express/rest provider', () => {
               description: `You have to do ${id}`
             };
           }
-        }, function (_req, res, next) {
+        }, function (_req: Request, res: Response, next: NextFunction) {
           res.data = convertHook(res.hook);
 
           next();
@@ -156,7 +143,7 @@ describe('@feathersjs/express/rest provider', () => {
           }
         });
 
-        const res = await axios.get('http://localhost:4777/hook/dishes?test=param');
+        const res = await axios.get<any>('http://localhost:4777/hook/dishes?test=param');
         const paramsWithHeaders = {
           ...params,
           headers: res.data.params.headers
@@ -168,9 +155,10 @@ describe('@feathersjs/express/rest provider', () => {
           arguments: [
             'dishes', paramsWithHeaders
           ],
-          type: 'after',
+          type: null,
           method: 'get',
           path: 'hook',
+          event: null,
           result: { description: 'You have to do dishes' },
           addedProperty: true
         });
@@ -192,7 +180,7 @@ describe('@feathersjs/express/rest provider', () => {
           }
         });
 
-        const res = await axios.get('http://localhost:4777/hook-dispatch/dishes');
+        const res = await axios.get<any>('http://localhost:4777/hook-dispatch/dishes');
         assert.deepStrictEqual(res.data, {
           id: 'dishes',
           fromDispatch: true
@@ -212,7 +200,7 @@ describe('@feathersjs/express/rest provider', () => {
           }
         });
 
-        const res = await axios.get('http://localhost:4777/hook-status/dishes');
+        const res = await axios.get<any>('http://localhost:4777/hook-status/dishes');
 
         assert.strictEqual(res.status, 206);
       });
@@ -228,7 +216,8 @@ describe('@feathersjs/express/rest provider', () => {
           async get () {
             throw new Error('I blew up');
           }
-        }, function (error: Error, _req: Request, res: Response, _next: NextFunction) {
+        });
+        app.use(function (error: Error, _req: Request, res: Response, _next: NextFunction) {
           res.status(500);
           res.json({
             hook: convertHook(res.hook),
@@ -241,7 +230,7 @@ describe('@feathersjs/express/rest provider', () => {
         try {
           await axios('http://localhost:4777/hook-error/dishes');
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           const { data } = error.response;
           const paramsWithHeaders = {
             ...params,
@@ -252,7 +241,8 @@ describe('@feathersjs/express/rest provider', () => {
               id: 'dishes',
               params: paramsWithHeaders,
               arguments: ['dishes', paramsWithHeaders ],
-              type: 'error',
+              type: null,
+              event: null,
               method: 'get',
               path: 'hook-error',
               original: data.hook.original
@@ -272,17 +262,17 @@ describe('@feathersjs/express/rest provider', () => {
         }
       };
 
-      const server = expressify(feathers())
-        .configure(rest(rest.formatter))
-        .use(function (req, _res, next) {
+      const app = expressify(feathers())
+        .configure(rest(express.formatter))
+        .use(function (req: Request, _res: Response, next: NextFunction) {
           assert.ok(req.feathers, 'Feathers object initialized');
           req.feathers.test = 'Happy';
           next();
         })
-        .use('service', service)
-        .listen(4778);
+        .use('service', service);
+      const server = await app.listen(4778);
 
-      const res = await axios.get('http://localhost:4778/service/bla?some=param&another=thing');
+      const res = await axios.get<any>('http://localhost:4778/service/bla?some=param&another=thing');
       const expected = {
         headers: res.data.headers,
         test: 'Happy',
@@ -310,16 +300,15 @@ describe('@feathersjs/express/rest provider', () => {
         req.headers['content-type'] = req.headers['content-type'] || 'application/json';
         next();
       })
-        .configure(rest(rest.formatter))
+        .configure(rest(express.formatter))
         .use(express.json())
         .use('/todo', {
-          create (data) {
-            return Promise.resolve(data);
+          async create (data: any) {
+            return data;
           }
         });
 
-      const server = app.listen(4775);
-
+      const server = await app.listen(4775);
       const res = await axios({
         url: 'http://localhost:4775/todo',
         method: 'post',
@@ -345,19 +334,19 @@ describe('@feathersjs/express/rest provider', () => {
           req.body.before.push('before second');
           next();
         }, {
-            create (data) {
-              return Promise.resolve(data);
-            }
-          }, function (_req, res, next) {
-            res.data.after = ['after first'];
-            next();
-          }, function (_req, res, next) {
-            res.data.after.push('after second');
-            next();
-          });
+          async create (data: any) {
+            return data;
+          }
+        }, function (_req, res, next) {
+          res.data.after = ['after first'];
+          next();
+        }, function (_req, res, next) {
+          res.data.after.push('after second');
+          next();
+        });
 
-      const server = app.listen(4776);
-      const res = await axios.post('http://localhost:4776/todo', { text: 'Do dishes' });
+      const server = await app.listen(4776);
+      const res = await axios.post<any>('http://localhost:4776/todo', { text: 'Do dishes' });
 
       assert.deepStrictEqual(res.data, {
         text: 'Do dishes',
@@ -391,8 +380,8 @@ describe('@feathersjs/express/rest provider', () => {
           next();
         });
 
-      const server = app.listen(4776);
-      const res = await axios.post('http://localhost:4776/todo', { text: 'Do dishes' });
+      const server = await app.listen(4776);
+      const res = await axios.post<any>('http://localhost:4776/todo', { text: 'Do dishes' });
 
       assert.deepStrictEqual(res.data, {
         text: 'Do dishes',
@@ -419,8 +408,8 @@ describe('@feathersjs/express/rest provider', () => {
         .use(express.json())
         .use('/array-middleware', middlewareArray);
 
-      const server = app.listen(4776);
-      const res = await axios.post('http://localhost:4776/array-middleware', { text: 'Do dishes' });
+      const server = await app.listen(4776);
+      const res = await axios.post<any>('http://localhost:4776/array-middleware', { text: 'Do dishes' });
 
       assert.deepStrictEqual(res.data, ['first', 'second', 'Do dishes']);
       server.close();
@@ -429,12 +418,12 @@ describe('@feathersjs/express/rest provider', () => {
     it('formatter does nothing when there is no res.data', async () => {
       const data = { message: 'It worked' };
       const app = expressify(feathers()).use('/test',
-        rest.formatter,
-        (_req, res) => res.json(data)
+        express.formatter,
+        (_req: Request, res: Response) => res.json(data)
       );
 
-      const server = app.listen(7988);
-      const res = await axios.get('http://localhost:7988/test');
+      const server = await app.listen(7988);
+      const res = await axios.get<any>('http://localhost:7988/test');
 
       assert.deepStrictEqual(res.data, data);
       server.close();
@@ -445,9 +434,9 @@ describe('@feathersjs/express/rest provider', () => {
     let app: express.Application;
     let server: Server;
 
-    before(function () {
+    before(async () => {
       app = expressify(feathers())
-        .configure(rest(rest.formatter))
+        .configure(rest(express.formatter))
         .use('todo', {
           async get (id: Id) {
             return {
@@ -481,13 +470,13 @@ describe('@feathersjs/express/rest provider', () => {
         res.json({ message: error.message });
       });
 
-      server = app.listen(4780);
+      server = await app.listen(4780);
     });
 
     after(done => server.close(done));
 
-    it('throws a 405 for undefined service methods and sets Allow header (#99)', async () => {
-      const res = await axios.get('http://localhost:4780/todo/dishes');
+    it('throws a 405 for undefined service methods (#99)', async () => {
+      const res = await axios.get<any>('http://localhost:4780/todo/dishes');
 
       assert.ok(res.status === 200, 'Got OK status code for .get');
       assert.deepStrictEqual(res.data, {
@@ -495,10 +484,9 @@ describe('@feathersjs/express/rest provider', () => {
       }, 'Got expected object');
 
       try {
-        await axios.post('http://localhost:4780/todo');
+        await axios.post<any>('http://localhost:4780/todo');
         assert.fail('Should never get here');
-      } catch (error) {
-        assert.strictEqual(error.response.headers.allow, 'GET,PATCH');
+      } catch (error: any) {
         assert.ok(error.response.status === 405, 'Got 405 for .create');
         assert.deepStrictEqual(error.response.data, {
           message: 'Method `create` is not supported by this endpoint.'
@@ -508,15 +496,15 @@ describe('@feathersjs/express/rest provider', () => {
 
     it('throws a 404 for undefined route', async () => {
       try {
-        await axios.get('http://localhost:4780/todo/foo/bar');
+        await axios.get<any>('http://localhost:4780/todo/foo/bar');
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.ok(error.response.status === 404, 'Got Not Found code');
       }
     });
 
     it('empty response sets 204 status codes, does not run other middleware (#391)', async () => {
-      const res = await axios.get('http://localhost:4780/todo');
+      const res = await axios.get<any>('http://localhost:4780/todo');
 
       assert.ok(res.status === 204, 'Got empty status code');
     });
@@ -526,7 +514,7 @@ describe('@feathersjs/express/rest provider', () => {
     let server: Server;
     let app: express.Application;
 
-    before(() => {
+    before(async () => {
       app = expressify(feathers())
         .configure(rest())
         .use('/:appId/:id/todo', {
@@ -541,9 +529,9 @@ describe('@feathersjs/express/rest provider', () => {
             };
           }
         })
-        .use(express.errorHandler());
+        .use(errorHandler);
 
-      server = app.listen(6880);
+      server = await app.listen(6880);
     });
 
     after(done => server.close(done));
@@ -557,7 +545,7 @@ describe('@feathersjs/express/rest provider', () => {
         }
       };
 
-      const res = await axios.get(`http://localhost:6880/theApp/myId/todo/${expected.id}`);
+      const res = await axios.get<any>(`http://localhost:6880/theApp/myId/todo/${expected.id}`);
 
       assert.ok(res.status === 200, 'Got OK status code');
       assert.deepStrictEqual(expected, res.data);
@@ -565,9 +553,9 @@ describe('@feathersjs/express/rest provider', () => {
 
     it('properly serializes error for nested routes (#1096)', async () => {
       try {
-        await axios.get('http://localhost:6880/theApp/myId/todo/test?error=true');
+        await axios.get<any>('http://localhost:6880/theApp/myId/todo/test?error=true');
         assert.fail('Should never het here');
-      } catch (error) {
+      } catch (error: any) {
         const { response } = error;
 
         assert.strictEqual(response.status, 400);
@@ -585,58 +573,64 @@ describe('@feathersjs/express/rest provider', () => {
     let server: Server;
     let app: express.Application;
 
-    before(() => {
+    before(async () => {
       app = expressify(feathers())
         .configure(rest())
         .use(express.json())
-        .use('/todo', {
-          async get (id) {
-            return id;
-          },
-          // httpMethod is usable as a decorator: @httpMethod('POST', '/:__feathersId/custom-path')
-          custom: rest.httpMethod('POST')((feathers as any).activateHooks(['id', 'data', 'params'])(
-            (id: any, data: any) => {
-              return Promise.resolve({
-                id,
-                data
-              });
-            }
-          )),
-          other: rest.httpMethod('PATCH', ':__feathersId/second-method')(
-            (feathers as any).activateHooks(['id', 'data', 'params'])(
-              (id: any, data: any) => {
-                return Promise.resolve({
-                  id,
-                  data
-                });
-              }
-            )
-          )
-        });
+        .use('/todo', new Service(), {
+          methods: ['find', 'customMethod']
+        })
+        .use(errorHandler);
 
-      server = app.listen(4781);
+      server = await app.listen(4781);
     });
 
     after(done => server.close(done));
 
-    it('works with custom methods', async () => {
-      const res = await axios.post('http://localhost:4781/todo/42/custom', { text: 'Do dishes' });
+    it('calls .customMethod with X-Service-Method header', async () => {
+      const payload = { text: 'Do dishes' };
+      const res = await axios.post<any>('http://localhost:4781/todo', payload, {
+        headers: {
+          'X-Service-Method': 'customMethod'
+        }
+      });
 
-      assert.equal(res.headers.allow, 'GET,POST,PATCH');
       assert.deepEqual(res.data, {
-        id: '42',
-        data: { text: 'Do dishes' }
+        data: payload,
+        method: 'customMethod',
+        provider: 'rest'
       });
     });
 
-    it('works with custom methods - with route', async () => {
-      const res = await axios.patch('http://localhost:4781/todo/12/second-method', { text: 'Hmm' });
+    it('throws MethodNotImplement for .setup, non option and default methods', async () => {
+      const options: AxiosRequestConfig = {
+        method: 'POST',
+        url: 'http://localhost:4781/todo',
+        data: { text: 'Do dishes' }
+      };
+      const testMethod = (name: string) => {
+        return assert.rejects(() => axios({
+          ...options,
+          headers: {
+            'X-Service-Method': name
+          }
+        }), (error: any) => {
+          assert.deepEqual(error.response.data, {
+            name: 'MethodNotAllowed',
+            message: `Method \`${name}\` is not supported by this endpoint.`,
+            code: 405,
+            className: 'method-not-allowed'
+          });
 
-      assert.equal(res.headers.allow, 'GET,POST,PATCH');
-      assert.deepEqual(res.data, {
-        id: '12',
-        data: { text: 'Hmm' }
-      });
+          return true;
+        });
+      }
+
+      await testMethod('setup');
+      await testMethod('internalMethod');
+      await testMethod('nonExisting');
+      await testMethod('create');
+      await testMethod('find');
     });
   });
 });

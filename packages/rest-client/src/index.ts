@@ -36,6 +36,8 @@ export interface Transport {
   axios: Handler;
 }
 
+export type RestService<T = any, D = Partial<any>> = Base<T, D>;
+
 export default function restClient (base = '') {
   const result: any = { Base };
 
@@ -55,7 +57,7 @@ export default function restClient (base = '') {
       };
 
       const initialize = (app: any) => {
-        if (typeof app.defaultService === 'function') {
+        if (app.rest !== undefined) {
           throw new Error('Only one default client provider can be configured');
         }
 

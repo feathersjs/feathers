@@ -27,7 +27,7 @@ describe('@feathersjs/adapter-commons/service', () => {
   });
 
   describe('works when methods exist', () => {
-    class MethodService extends AdapterService implements InternalServiceMethods<any> {
+    class MethodService extends AdapterService implements InternalServiceMethods {
       _find (_params?: Params) {
         return Promise.resolve([]);
       }
@@ -136,6 +136,30 @@ describe('@feathersjs/adapter-commons/service', () => {
       paginate: {},
       filters: { $limit: 10 },
       query: { $something: 'else' }
+    });
+  });
+
+  it('getOptions', () => {
+    const service = new AdapterService({
+      multi: true
+    });
+    const opts = service.getOptions({
+      adapter: {
+        multi: [ 'create' ],
+        paginate: {
+          default: 10,
+          max: 100
+        }
+      }
+    });
+
+    assert.deepStrictEqual(opts, {
+      id: 'id',
+      events: [],
+      paginate: { default: 10, max: 100 },
+      multi: [ 'create' ],
+      filters: [],
+      allow: []
     });
   });
 

@@ -40,6 +40,10 @@ describe('router', () => {
 
     const first = r.lookup('hello/there/');
 
+    assert.throws(() => r.insert('/hello/:id/you', 'two'), {
+      message: 'Path hello/:id/you already exists'
+    });
+
     assert.deepStrictEqual(first, {
       params: { id: 'there' },
       data: 'one'
@@ -65,14 +69,30 @@ describe('router', () => {
     assert.strictEqual(r.lookup('hello/yes/they/here'), null);
   });
 
-  it('errors when placeholder in a path is different', () => {
+  it('works with different placeholders in different paths (#2327)', () => {
     const r = new Router<string>();
 
-    assert.throws(() => {
-      r.insert('/hello/:id', 'one');
-      r.insert('/hello/:test/you', 'two');
-    }, {
-      message: 'Can not add route with placeholder \':test\' because placeholder \':id\' already exists'
+    r.insert('/hello/:id', 'one');
+    r.insert('/hello/:test/you', 'two');
+    r.insert('/hello/:test/:two/hi/:three', 'three');
+    r.insert('/hello/:test/:two/hi', 'four');
+
+    assert.deepStrictEqual(r.lookup('/hello/there'), {
+      params: { id: 'there' },
+      data: 'one'
+    });
+    assert.deepStrictEqual(r.lookup('/hello/there/you'), {
+      params: { test: 'there' },
+      data: 'two'
+    });
+    assert.strictEqual(r.lookup('/hello/there/bla'), null);
+    assert.deepStrictEqual(r.lookup('/hello/there/maybe/hi'), {
+      params: { test: 'there', two: 'maybe' },
+      data: 'four'
+    });
+    assert.deepStrictEqual(r.lookup('/hello/there/maybe/hi/test'), {
+      params: { three: 'test', two: 'maybe', test: 'there' },
+      data: 'three'
     });
   });
 });

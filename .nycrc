@@ -15,7 +15,7 @@
     "**/test/*",
     "**/dist/*",
     "**/*.dist.js",
-    "**/templates/*",
+    "**/_templates/*",
     "**/tests/*",
     "**/adapter-tests/*"
   ],

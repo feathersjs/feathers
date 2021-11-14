@@ -1,18 +1,18 @@
-// @ts-ignore
-import { express as grantExpress } from 'grant';
-import Debug from 'debug';
+import grant from 'grant';
 import session from 'express-session';
+import { Request, Response, NextFunction } from 'express';
+import { createDebug } from '@feathersjs/commons';
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationResult } from '@feathersjs/authentication';
 import {
   Application as ExpressApplication,
-  original as express
+  original as originalExpress
 } from '@feathersjs/express';
 import { OauthSetupSettings } from './utils';
 import { OAuthStrategy } from './strategy';
 
-const grant = grantExpress();
-const debug = Debug('@feathersjs/authentication-oauth/express');
+const grantInstance = grant.express();
+const debug = createDebug('@feathersjs/authentication-oauth/express');
 
 declare module 'express-session' {
   interface SessionData {
@@ -20,6 +20,7 @@ declare module 'express-session' {
       accessToken: string;
       query: { [key: string]: any };
       grant: { [key: string]: any };
+      headers: { [key: string]: any };
   }
 }
 
@@ -40,12 +41,12 @@ export default (options: OauthSetupSettings) => {
       saveUninitialized: true,
       resave: true
     });
-    const grantApp = grant(config);
-    const authApp = express();
+    const grantApp = grantInstance(config);
+    const authApp = originalExpress();
 
     authApp.use(expressSession);
 
-    authApp.get('/:name', (req, _res, next) => {
+    authApp.get('/:name', (req: Request, _res: Response, next: NextFunction) => {
       const { feathers_token, redirect, ...query } = req.query;
 
       if (feathers_token) {
@@ -54,13 +55,14 @@ export default (options: OauthSetupSettings) => {
       }
       req.session.redirect = redirect as string;
       req.session.query = query;
+      req.session.headers = req.headers;
 
       next()
     });
 
-    authApp.get('/:name/authenticate', async (req, res, next) => {
+    authApp.get('/:name/authenticate', async (req: Request, res: Response, next: NextFunction) => {
       const { name } = req.params ;
-      const { accessToken, grant, query = {}, redirect } = req.session;
+      const { accessToken, grant, query = {}, redirect, headers } = req.session;
       const service = app.defaultAuthentication(authService);
       const [ strategy ] = service.getStrategies(name) as OAuthStrategy[];
       const params = {
@@ -71,7 +73,8 @@ export default (options: OauthSetupSettings) => {
           accessToken
         } : null,
         query,
-        redirect
+        redirect,
+        headers
       };
       const sendResponse = async (data: AuthenticationResult|Error) => {
         try {
@@ -84,7 +87,7 @@ export default (options: OauthSetupSettings) => {
           } else {
             res.json(data);
           }
-        } catch (error) {
+        } catch (error: any) {
           debug('oAuth error', error);
           next(error);
         }
@@ -104,7 +107,7 @@ export default (options: OauthSetupSettings) => {
             resolve();
           }
 
-          req.session.destroy(err => err ? reject(err) : resolve());
+          req.session.destroy((err: any) => err ? reject(err) : resolve());
         });
 
         debug(`Calling ${authService}.create authentication with strategy ${name}`);
@@ -114,7 +117,7 @@ export default (options: OauthSetupSettings) => {
         debug('Successful oAuth authentication, sending response');
 
         await sendResponse(authResult);
-      } catch (error) {
+      } catch (error: any) {
         debug('Received oAuth authentication error', error.stack);
         await sendResponse(error);
       }

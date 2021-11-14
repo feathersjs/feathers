@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // @ts-ignore
 import querystring from 'querystring';
-import Debug from 'debug';
 import {
   AuthenticationRequest, AuthenticationBaseStrategy, AuthenticationResult
 } from '@feathersjs/authentication';
 import { Params } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
+import { createDebug, _ } from '@feathersjs/commons';
 
-const debug = Debug('@feathersjs/authentication-oauth/strategy');
+const debug = createDebug('@feathersjs/authentication-oauth/strategy');
 
 export interface OAuthProfile {
   id?: string|number;
@@ -31,7 +31,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
   get entityId (): string {
     const { entityService } = this;
 
-    return this.configuration.entityId || (entityService && entityService.id);
+    return this.configuration.entityId || (entityService && (entityService as any).id);
   }
 
   async getEntityQuery (profile: OAuthProfile, _params: Params) {
@@ -67,9 +67,26 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     return null;
   }
 
+  async getAllowedOrigin (params?: Params) {
+    const { redirect, origins } = this.authentication.configuration.oauth;
+
+    if (Array.isArray(origins)) {
+      const referer = params?.headers?.referer || '';
+      const allowedOrigin = origins.find(current => referer.toLowerCase().startsWith(current.toLowerCase()));
+
+      if(!allowedOrigin) {
+        throw new NotAuthenticated(`Referer "${referer || '[header not available]'}" not allowed.`);
+      }
+
+      return allowedOrigin;
+    }
+
+    return redirect;
+  }
+
   async getRedirect (data: AuthenticationResult|Error, params?: Params): Promise<string | null> {
     const queryRedirect = (params && params.redirect) || '';
-    const { redirect } = this.authentication.configuration.oauth;
+    const redirect = await this.getAllowedOrigin(params);
 
     if (!redirect) {
       return null;
@@ -109,7 +126,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
     debug('createEntity with data', data);
 
-    return this.entityService.create(data, params);
+    return this.entityService.create(data, _.omit(params, 'query'));
   }
 
   async updateEntity (entity: any, profile: OAuthProfile, params: Params) {
@@ -118,12 +135,12 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
     debug(`updateEntity with id ${id} and data`, data);
 
-    return this.entityService.patch(id, data, params);
+    return this.entityService.patch(id, data, _.omit(params, 'query'));
   }
 
   async getEntity (result: any, params: Params) {
     const { entityService } = this;
-    const { entityId = entityService.id, entity } = this.configuration;
+    const { entityId = (entityService as any).id, entity } = this.configuration;
 
     if (!entityId || result[entityId] === undefined) {
       throw new NotAuthenticated('Could not get oAuth entity');
@@ -134,7 +151,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     }
 
     return entityService.get(result[entityId], {
-      ...params,
+      ..._.omit(params, 'query'),
       [entity]: result
     });
   }

@@ -1,34 +1,35 @@
 import assert from 'assert';
-import feathers, { Application, Params, Service } from '@feathersjs/feathers';
+import { feathers, Application, Params, ServiceMethods } from '@feathersjs/feathers';
 
 import { Strategy1, Strategy2 } from '../fixtures';
 import { AuthenticationService, hooks } from '../../src';
-import { AuthenticationResult } from '../../src/core';
 
 const { authenticate } = hooks;
 
 describe('authentication/hooks/authenticate', () => {
   let app: Application<{
-    authentication: AuthenticationService & Service<AuthenticationResult>,
+    authentication: AuthenticationService,
     'auth-v2': AuthenticationService,
-    users: Service<any> & { id: string }
+    users: Partial<ServiceMethods> & { id: string }
   }>;
 
   beforeEach(() => {
     app = feathers();
-    app.use('/authentication', new AuthenticationService(app, 'authentication', {
+    app.use('authentication', new AuthenticationService(app, 'authentication', {
       entity: 'user',
       service: 'users',
       secret: 'supersecret',
       authStrategies: [ 'first' ]
     }));
-    app.use('/auth-v2', new AuthenticationService(app, 'auth-v2', {
+    app.use('auth-v2', new AuthenticationService(app, 'auth-v2', {
       entity: 'user',
       service: 'users',
       secret: 'supersecret',
       authStrategies: [ 'test' ]
     }));
-    app.use('/users', {
+    app.use('users', {
+      id: 'id',
+
       async find () {
         return [];
       },
@@ -46,9 +47,7 @@ describe('authentication/hooks/authenticate', () => {
     app.service('auth-v2').register('test', new Strategy1());
 
     app.service('users').hooks({
-      before: {
-        get: authenticate('first', 'second')
-      }
+      get: [authenticate('first', 'second')]
     });
 
     app.service('users').id = 'name';
@@ -60,7 +59,7 @@ describe('authentication/hooks/authenticate', () => {
       // @ts-ignore
       authenticate();
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message, 'The authenticate hook needs at least one allowed strategy');
     }
   });
@@ -77,7 +76,7 @@ describe('authentication/hooks/authenticate', () => {
     try {
       await users.find();
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'The authenticate hook must be used as a before hook');
     }
@@ -93,7 +92,7 @@ describe('authentication/hooks/authenticate', () => {
         }
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Could not find a valid authentication service');
     }
@@ -189,7 +188,7 @@ describe('authentication/hooks/authenticate', () => {
         }
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Invalid Dave');
     }
@@ -201,7 +200,7 @@ describe('authentication/hooks/authenticate', () => {
         provider: 'rest'
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Not authenticated');
     }
@@ -232,7 +231,7 @@ describe('authentication/hooks/authenticate', () => {
         username: 'David'
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message,
         'The authenticate hook does not need to be used on the authentication service'
       );

@@ -1,12 +1,19 @@
-import Debug from 'debug';
-import { Server, ServerOptions } from 'socket.io';
 import http from 'http';
+import { Server, ServerOptions } from 'socket.io';
+import { createDebug } from '@feathersjs/commons';
 import { Application } from '@feathersjs/feathers';
 import { socket } from '@feathersjs/transport-commons';
 
 import { disconnect, params, authentication, FeathersSocket } from './middleware';
 
-const debug = Debug('@feathersjs/socketio');
+const debug = createDebug('@feathersjs/socketio');
+
+declare module '@feathersjs/feathers/lib/declarations' {
+  interface Application<Services, Settings> { // eslint-disable-line
+    io: Server;
+    listen (options: any): Promise<http.Server>;
+  }
+}
 
 function configureSocketio (callback?: (io: Server) => void): (app: Application) => void;
 function configureSocketio (options: number | Partial<ServerOptions>, callback?: (io: Server) => void): (app: Application) => void;
@@ -28,18 +35,13 @@ function configureSocketio (port?: any, options?: any, config?: any) {
     const getParams = (socket: FeathersSocket) => socket.feathers;
     // A mapping from connection to socket instance
     const socketMap = new WeakMap();
-
-    if (!app.version || app.version < '3.0.0') {
-      throw new Error('@feathersjs/socketio is not compatible with this version of Feathers. Use the latest at @feathersjs/feathers.');
-    }
-
     // Promise that resolves with the Socket.io `io` instance
     // when `setup` has been called (with a server)
     const done = new Promise(resolve => {
       const { listen, setup } = app as any;
 
       Object.assign(app, {
-        listen (this: any, ...args: any[]) {
+        async listen (this: any, ...args: any[]) {
           if (typeof listen === 'function') {
             // If `listen` already exists
             // usually the case when the app has been expressified
@@ -48,12 +50,12 @@ function configureSocketio (port?: any, options?: any, config?: any) {
 
           const server = http.createServer();
 
-          this.setup(server);
+          await this.setup(server);
 
           return server.listen(...args);
         },
 
-        setup (this: any, server: http.Server, ...rest: any[]) {
+        async setup (this: any, server: http.Server, ...rest: any[]) {
           if (!this.io) {
             const io = this.io = new Server(port || server, options);
 

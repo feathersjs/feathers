@@ -276,6 +276,46 @@ export default (test: any, app: any, _errors: any, serviceName: string, idProp: 
       assert.strictEqual(data[1].name, 'Doug');
     });
 
+    describe('params.adapter', () => {
+      test('params.adapter + paginate', async () => {
+        const page = await service.find({
+          adapter: {
+            paginate: { default: 3 }
+          }
+        });
+  
+        assert.strictEqual(page.limit, 3);
+        assert.strictEqual(page.skip, 0);
+      });
+
+      test('params.adapter + multi', async () => {
+        const items = [
+          {
+            name: 'Garald',
+            age: 200
+          },
+          {
+            name: 'Harald',
+            age: 24
+          }
+        ];
+        const multiParams = {
+          adapter: {
+            multi: ['create']
+          }
+        };
+        const users = await service.create(items, multiParams);
+
+        assert.strictEqual(users.length, 2);
+        
+        await service.remove(users[0][idProp]);
+        await service.remove(users[1][idProp]);
+        await assert.rejects(() => service.patch(null, { age: 2 }, multiParams), {
+          message: 'Can not patch multiple entries'
+        });
+      });
+    });
+
     describe('paginate', function () {
       beforeEach(() => {
         service.options.paginate = {
@@ -294,6 +334,20 @@ export default (test: any, app: any, _errors: any, serviceName: string, idProp: 
         });
 
         assert.strictEqual(page.total, 3);
+        assert.strictEqual(page.limit, 1);
+        assert.strictEqual(page.skip, 0);
+        assert.strictEqual(page.data[0].name, 'Doug');
+      });
+
+      test('.find + paginate + query', async () => {
+        const page = await service.find({
+          query: {
+            $sort: { name: -1 },
+            name: 'Doug'
+          }
+        });
+
+        assert.strictEqual(page.total, 1);
         assert.strictEqual(page.limit, 1);
         assert.strictEqual(page.skip, 0);
         assert.strictEqual(page.data[0].name, 'Doug');

@@ -1,8 +1,16 @@
 import assert from 'assert';
-import feathers, { Application, HookContext } from '@feathersjs/feathers';
+import { feathers, Application, HookContext } from '@feathersjs/feathers';
 import { channels } from '../../src/channels';
 import { Channel } from '../../src/channels/channel/base';
 import { CombinedChannel } from '../../src/channels/channel/combined';
+
+class TestService {
+  events = ['foo'];
+
+  async create (payload: any) {
+    return payload;
+  }
+}
 
 describe('app.publish', () => {
   let app: Application;
@@ -22,7 +30,7 @@ describe('app.publish', () => {
       app.service('test').registerPublisher('created', function () {});
       app.service('test').registerPublisher('bla', function () {});
       assert.ok(false, 'Should never get here');
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, '\'bla\' is not a valid service event');
     }
   });
@@ -33,13 +41,7 @@ describe('app.publish', () => {
     const data = { message: 'This is a test' };
 
     beforeEach(() => {
-      app.use('/test', {
-        events: [ 'foo' ],
-
-        create (payload: any) {
-          return Promise.resolve(payload);
-        }
-      });
+      app.use('/test', new TestService());
     });
 
     it('error in publisher is handled gracefully (#1707)', async () => {
@@ -49,7 +51,7 @@ describe('app.publish', () => {
 
       try {
         await app.service('test').create({ message: 'something' });
-      } catch (error) {
+      } catch (error: any) {
         assert.fail('Should never get here');
       }
     });
@@ -60,12 +62,15 @@ describe('app.publish', () => {
       app.service('test').registerPublisher('created', () => app.channel('testing'));
 
       app.once('publish', (event: string, channel: Channel, hook: HookContext) => {
-        assert.strictEqual(event, 'created');
-        assert.strictEqual(hook.path, 'test');
-        assert.strictEqual(hook.type, 'after');
-        assert.deepStrictEqual(hook.result, data);
-        assert.deepStrictEqual(channel.connections, [ c1 ]);
-        done();
+        try {
+          assert.strictEqual(event, 'created');
+          assert.strictEqual(hook.path, 'test');
+          assert.deepStrictEqual(hook.result, data);
+          assert.deepStrictEqual(channel.connections, [ c1 ]);
+          done();
+        } catch (error: any) {
+          done(error);
+        }
       });
 
       app.service('test')

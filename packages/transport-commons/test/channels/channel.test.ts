@@ -1,5 +1,5 @@
 import assert from 'assert';
-import feathers, { Application } from '@feathersjs/feathers';
+import { feathers, Application } from '@feathersjs/feathers';
 import { channels, keys } from '../../src/channels';
 import { Channel, RealTimeConnection } from '../../src/channels/channel/base';
 import { CombinedChannel } from '../../src/channels/channel/combined';
@@ -179,6 +179,12 @@ describe('app.channel', () => {
 
       assert.ok(combined instanceof CombinedChannel);
       assert.strictEqual(combined.length, 2);
+    });
+
+    it('does nothing when the channel is undefined (#2207)', () => {
+      const channel = app.channel('test', 'me');
+
+      channel.join(undefined);
     });
 
     it('.join all child channels', () => {

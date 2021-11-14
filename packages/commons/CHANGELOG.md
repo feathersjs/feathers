@@ -3,6 +3,137 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.14](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.13...v5.0.0-pre.14) (2021-10-13)
+
+**Note:** Version bump only for package @feathersjs/commons
+
+
+
+
+
+# [5.0.0-pre.13](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.12...v5.0.0-pre.13) (2021-10-13)
+
+**Note:** Version bump only for package @feathersjs/commons
+
+
+
+
+
+# [5.0.0-pre.12](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.11...v5.0.0-pre.12) (2021-10-12)
+
+**Note:** Version bump only for package @feathersjs/commons
+
+
+
+
+
+# [5.0.0-pre.11](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.10...v5.0.0-pre.11) (2021-10-06)
+
+**Note:** Version bump only for package @feathersjs/commons
+
+
+
+
+
+# [5.0.0-pre.10](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.9...v5.0.0-pre.10) (2021-09-19)
+
+**Note:** Version bump only for package @feathersjs/commons
+
+
+
+
+
+# [5.0.0-pre.9](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.8...v5.0.0-pre.9) (2021-08-09)
+
+**Note:** Version bump only for package @feathersjs/commons
+
+
+
+
+
+# [5.0.0-pre.8](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.7...v5.0.0-pre.8) (2021-08-09)
+
+**Note:** Version bump only for package @feathersjs/commons
+
+
+
+
+
+# [5.0.0-pre.7](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.6...v5.0.0-pre.7) (2021-08-09)
+
+**Note:** Version bump only for package @feathersjs/commons
+
+
+
+
+
+# [5.0.0-pre.6](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.5...v5.0.0-pre.6) (2021-08-08)
+
+**Note:** Version bump only for package @feathersjs/commons
+
+
+
+
+
+# [5.0.0-pre.5](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.4...v5.0.0-pre.5) (2021-06-23)
+
+**Note:** Version bump only for package @feathersjs/commons
+
+
+
+
+
+# [5.0.0-pre.4](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.3...v5.0.0-pre.4) (2021-05-13)
+
+**Note:** Version bump only for package @feathersjs/commons
+
+
+
+
+
+# [5.0.0-pre.3](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.2...v5.0.0-pre.3) (2021-04-21)
+
+
+### Bug Fixes
+
+* **typescript:** Improve TypeScript backwards compatibility ([#2310](https://github.com/feathersjs/feathers/issues/2310)) ([f33be73](https://github.com/feathersjs/feathers/commit/f33be73fc46a533efb15df9aab0658e3240d3897))
+
+
+### Features
+
+* **dependencies:** Remove direct debug dependency ([#2296](https://github.com/feathersjs/feathers/issues/2296)) ([501d416](https://github.com/feathersjs/feathers/commit/501d4164d30c6a126906dc640cdfdc82207ba34a))
+
+
+
+
+
+# [5.0.0-pre.2](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.1...v5.0.0-pre.2) (2021-04-06)
+
+**Note:** Version bump only for package @feathersjs/commons
+
+
+
+
+
+# [5.0.0-beta.1](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.0...v5.0.0-beta.1) (2021-04-03)
+
+**Note:** Version bump only for package @feathersjs/commons
+
+
+
+
+
+# [5.0.0-beta.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
+
+
+### Bug Fixes
+
+* Update Grant usage and other dependencies ([#2264](https://github.com/feathersjs/feathers/issues/2264)) ([7b0f8fa](https://github.com/feathersjs/feathers/commit/7b0f8fad252419ed0ad0bf259cdf3104d322ab60))
+
+
+
+
+
 # [5.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
 
 

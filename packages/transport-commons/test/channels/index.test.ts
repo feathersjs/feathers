@@ -1,5 +1,5 @@
 import assert from 'assert';
-import feathers from '@feathersjs/feathers';
+import { feathers } from '@feathersjs/feathers';
 import { channels, keys } from '../../src/channels';
 
 describe('feathers-channels', () => {
@@ -17,7 +17,7 @@ describe('feathers-channels', () => {
     try {
       app.channel();
       assert.ok(false, 'Should never get here');
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, 'app.channel needs at least one channel name');
     }
   });
@@ -32,10 +32,14 @@ describe('feathers-channels', () => {
     const app = feathers()
       .configure(channels())
       .use('/test', {
-        setup () {},
-        publish () {}
-      });
+        async setup () {},
+        publish () {
+          return this;
+        }
+      } as any);
 
-    assert.ok(!app.service('test')[keys.PUBLISHERS]);
+    const service: any = app.service('test') ;
+
+    assert.ok(!service[keys.PUBLISHERS]);
   });
 });

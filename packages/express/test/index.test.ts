@@ -4,9 +4,10 @@ import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 import https from 'https';
-import feathers, { HookContext, Id } from '@feathersjs/feathers';
+import { feathers, HookContext, Id, Application } from '@feathersjs/feathers';
 
 import * as expressify from '../src';
+import { RequestListener } from 'http';
 
 describe('@feathersjs/express', () => {
   const service = {
@@ -23,7 +24,7 @@ describe('@feathersjs/express', () => {
   });
 
   it('returns an Express application', () => {
-    const app = expressify.default(feathers());
+    const app: Application = expressify.default(feathers());
 
     assert.strictEqual(typeof app, 'function');
   });
@@ -51,7 +52,7 @@ describe('@feathersjs/express', () => {
     try {
       // @ts-ignore
       expressify.default({});
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, '@feathersjs/express requires a valid Feathers application instance');
     }
 
@@ -60,7 +61,7 @@ describe('@feathersjs/express', () => {
       app.version = '2.9.9';
 
       expressify.default(app);
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, '@feathersjs/express requires an instance of a Feathers application version 3.x or later (got 2.9.9)');
     }
 
@@ -69,13 +70,14 @@ describe('@feathersjs/express', () => {
       delete app.version;
 
       expressify.default(app);
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, '@feathersjs/express requires an instance of a Feathers application version 3.x or later (got unknown)');
     }
   });
 
   it('Can use Express sub-apps', () => {
-    const app = expressify.default(feathers());
+    const typedApp = feathers<{}>();
+    const app = expressify.default(typedApp);
     const child = express();
 
     app.use('/path', child);
@@ -118,58 +120,46 @@ describe('@feathersjs/express', () => {
     });
   });
 
-  it('can register a service and start an Express server', done => {
+  it('can register a service and start an Express server', async () => {
     const app = expressify.default(feathers());
     const response = {
       message: 'Hello world'
     };
 
     app.use('/myservice', service);
-    app.use((_req, res) => res.json(response));
+    app.use((_req: Request, res: Response) => res.json(response));
 
-    const server = app.listen(8787).on('listening', async () => {
-      try {
-        const data = await app.service('myservice').get(10);
-        assert.deepStrictEqual(data, { id: 10 });
+    const server = await app.listen(8787);
+    const data = await app.service('myservice').get(10);
 
-        const res = await axios.get('http://localhost:8787');
-        assert.deepStrictEqual(res.data, response);
+    assert.deepStrictEqual(data, { id: 10 });
 
-        server.close(() => done());
-      } catch (error) {
-        done(error);
-      }
-    });
+    const res = await axios.get<any>('http://localhost:8787');
+    assert.deepStrictEqual(res.data, response);
+
+    await new Promise(resolve => server.close(() => resolve(server)));
   });
 
-  it('.listen calls .setup', done => {
+  it('.listen calls .setup', async () => {
     const app = expressify.default(feathers());
     let called = false;
 
     app.use('/myservice', {
-      async get (id) {
+      async get (id: Id) {
         return { id };
       },
 
-      setup (appParam, path) {
-        try {
-          assert.strictEqual(appParam, app);
-          assert.strictEqual(path, 'myservice');
-          called = true;
-        } catch (e) {
-          done(e);
-        }
+      async setup (appParam, path) {
+        assert.strictEqual(appParam, app);
+        assert.strictEqual(path, 'myservice');
+        called = true;
       }
     });
 
-    const server = app.listen(8787).on('listening', () => {
-      try {
-        assert.ok(called);
-        server.close(() => done());
-      } catch (e) {
-        done(e);
-      }
-    });
+    const server = await app.listen(8787);
+
+    assert.ok(called);
+    await new Promise(resolve => server.close(() => resolve(server)));
   });
 
   it('passes middleware as options', () => {
@@ -198,20 +188,26 @@ describe('@feathersjs/express', () => {
     app.use('/myservice', a, b, service, c);
   });
 
-  it('throws an error for invalid middleware options', () => {
-    const feathersApp = feathers();
-    const app = expressify.default(feathersApp);
-    const service = {
-      async get (id: any) {
+  it('Express wrapped and context.app are the same', async () => {
+    const app = expressify.default(feathers());
+
+    app.use('/test', {
+      async get (id: Id) {
         return { id };
       }
-    };
+    });
 
-    try {
-      app.use('/myservice', service, 'hi');
-    } catch (e) {
-      assert.strictEqual(e.message, 'Invalid options passed to app.use');
-    }
+    app.service('test').hooks({
+      before: {
+        get: [context => {
+          assert.ok(context.app === app);
+        }]
+      }
+    });
+
+    assert.deepStrictEqual(await app.service('test').get('testing'), {
+      id: 'testing'
+    });
   });
 
   it('Works with HTTPS', done => {
@@ -224,16 +220,16 @@ describe('@feathersjs/express', () => {
       }
     };
 
-    const app = expressify.default(feathers())
-      .configure(expressify.rest())
-      .use('/secureTodos', todoService);
+    const app = expressify.default(feathers()).configure(expressify.rest());
+
+    app.use('/secureTodos', todoService);
 
     const httpsServer = https.createServer({
       key: fs.readFileSync(path.join(__dirname, '..', '..', 'tests', 'resources', 'privatekey.pem')),
       cert: fs.readFileSync(path.join(__dirname, '..', '..', 'tests', 'resources', 'certificate.pem')),
       rejectUnauthorized: false,
       requestCert: false
-    }, app).listen(7889);
+    }, app as unknown as RequestListener).listen(7889);
 
     app.setup(httpsServer);
 
@@ -244,7 +240,7 @@ describe('@feathersjs/express', () => {
         })
       });
 
-      instance.get('https://localhost:7889/secureTodos/dishes').then(response => {
+      instance.get<any>('https://localhost:7889/secureTodos/dishes').then(response => {
         assert.ok(response.status === 200, 'Got OK status code');
         assert.strictEqual(response.data.description, 'You have to do dishes!');
         httpsServer.close(() => done());

@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import { verify } from '@feathersjs/tests/src/fixture';
+import { verify } from '@feathersjs/tests';
 
 export default (name: string, options: any) => {
   const call = (method: string, ...args: any[]) =>
@@ -13,11 +13,11 @@ export default (name: string, options: any) => {
       );
     });
 
-  it('invalid arguments cause an error', () =>
-    call('find', 1, {}).catch(e =>
-      assert.strictEqual(e.message, 'Too many arguments for \'find\' method')
-    )
-  );
+  it('invalid arguments cause an error', async () => {
+    await assert.rejects(() => call('find', 1, {}), {
+      message: 'Too many arguments for \'find\' method'
+    });
+  });
 
   it('.find', () => async () => {
     await call('find', {}).then(data => verify.find(data));
@@ -31,7 +31,7 @@ export default (name: string, options: any) => {
     try {
       await call('get', 'laundry', { error: true });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message, 'Something for laundry went wrong');
     }
   });
@@ -40,7 +40,7 @@ export default (name: string, options: any) => {
     try {
       await call('get', 'laundry', { runtimeError: true });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message, 'thingThatDoesNotExist is not defined')
     }
   });
@@ -49,7 +49,7 @@ export default (name: string, options: any) => {
     try {
       await call('get', 'laundry', { hookError: true });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message, 'Error from get, before hook');
     }
   });

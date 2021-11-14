@@ -1,45 +1,50 @@
-import { Application, Service } from '@feathersjs/feathers';
+import { Application, Service, ServiceOptions } from '@feathersjs/feathers';
 import { Router } from './router';
 
 declare module '@feathersjs/feathers/lib/declarations' {
   interface RouteLookup {
-    service: Service<any>,
-    params: { [key: string]: string }
+    service: Service,
+    params: { [key: string]: any }
   }
 
-  interface Application<ServiceTypes> { // eslint-disable-line
-    routes: Router<any>;
+  interface Application<Services, Settings> {  // eslint-disable-line
+    routes: Router<{
+      service: Service,
+      params?: { [key: string]: any }
+    }>;
     lookup (path: string): RouteLookup;
   }
 }
 
 export * from './router';
 
+const lookup = function(this: Application, path: string) {
+  const result = this.routes.lookup(path);
+
+  if (result === null) {
+    return null;
+  }
+
+  const { params: colonParams, data: { service, params: dataParams } } = result;
+
+  const params = dataParams ? { ...dataParams, ...colonParams } : colonParams;
+
+  return { service, params };
+};
+
 export const routing = () => (app: Application) => {
   if (typeof app.lookup === 'function') {
     return;
   }
 
-  const routes = new Router();
-
-  Object.assign(app, {
-    routes,
-    lookup (this: Application, path: string) {
-      const result = this.routes.lookup(path);
-
-      if (result !== null) {
-        const { params, data: service } = result;
-
-        return { params, service };
-      }
-
-      return result;
-    }
-  });
+  app.routes = new Router();
+  app.lookup = lookup;
 
   // Add a mixin that registers a service on the router
-  app.mixins.push((service: Service<any>, path: string) => {
-    app.routes.insert(path, service);
-    app.routes.insert(`${path}/:__id`, service);
+  app.mixins.push((service: Service, path: string, options: ServiceOptions) => {
+    const { routeParams: params = {} } = options;
+
+    app.routes.insert(path, { service, params });
+    app.routes.insert(`${path}/:__id`, { service, params });
   });
 };

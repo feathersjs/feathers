@@ -48,8 +48,7 @@ export class CombinedChannel extends Channel {
   }
 
   private callChildren (method: string, connections: RealTimeConnection[]) {
-    // @ts-ignore
-    this.children.forEach(child => child[method](...connections));
+    this.children.forEach((child: any) => child[method](...connections));
     this.refresh();
 
     return this;

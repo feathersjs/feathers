@@ -1,5 +1,5 @@
 import assert from 'assert';
-import feathers, { Application } from '@feathersjs/feathers';
+import { feathers, Application } from '@feathersjs/feathers';
 import jwt from 'jsonwebtoken';
 
 import { AuthenticationBase, AuthenticationRequest } from '../src/core';
@@ -37,7 +37,7 @@ describe('authentication/core', () => {
         const otherAuth = new AuthenticationBase();
         assert.fail('Should never get here');
         assert.ok(otherAuth);
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.message,
           'An application instance has to be passed to the authentication service'
         );
@@ -96,6 +96,12 @@ describe('authentication/core', () => {
       assert.strictEqual(invalid.length, 2, 'Filtered out invalid strategies');
     });
 
+    it('getStrategy', () => {
+      const first = auth.getStrategy('first');
+
+      assert.ok(first);
+    });
+
     it('calls setName, setApplication and setAuthentication if available', () => {
       const [ first ] = auth.getStrategies('first') as [ Strategy1 ];
 
@@ -140,7 +146,7 @@ describe('authentication/core', () => {
             username: 'Steve'
           }, {}, 'first', 'second');
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           assert.strictEqual(error.name, 'NotAuthenticated');
           assert.strictEqual(error.message, 'Invalid Dave');
         }
@@ -188,7 +194,7 @@ describe('authentication/core', () => {
             username: 'Dummy'
           }, {}, 'second');
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           assert.strictEqual(error.name, 'NotAuthenticated');
           assert.strictEqual(error.message, 'Invalid authentication information (strategy not allowed in authStrategies)');
         }
@@ -200,7 +206,7 @@ describe('authentication/core', () => {
             username: 'Dummy'
           }, {}, 'second');
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           assert.strictEqual(error.message, 'Invalid authentication information (no `strategy` set)');
         }
       });
@@ -250,7 +256,7 @@ describe('authentication/core', () => {
       //     // @ts-ignore
       //     await auth.createAccessToken();
       //     assert.fail('Should never get here');
-      //   } catch (error) {
+      //   } catch (error: any) {
       //     assert.strictEqual(error.message, 'payload is required');
       //   }
       // });
@@ -305,7 +311,7 @@ describe('authentication/core', () => {
           // @ts-ignore
           await auth.createAccessToken({}, overrides);
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           assert.strictEqual(error.message, '"algorithm" must be a valid string enum value');
         }
       });
@@ -334,7 +340,7 @@ describe('authentication/core', () => {
             algorithm: [ 'HS512' ]
           });
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           assert.strictEqual(error.message, 'invalid algorithm');
         }
       });
@@ -345,7 +351,7 @@ describe('authentication/core', () => {
             algorithms: [ 'HS512' ]
           });
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           assert.strictEqual(error.message, 'invalid algorithm');
         }
       });
@@ -355,7 +361,7 @@ describe('authentication/core', () => {
           await auth.verifyAccessToken(validToken, {}, 'fdjskl');
 
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           assert.strictEqual(error.message, 'invalid signature');
         }
       });
@@ -365,7 +371,7 @@ describe('authentication/core', () => {
           await auth.verifyAccessToken(validToken, { issuer: 'someonelse' });
 
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           assert.strictEqual(error.name, 'NotAuthenticated');
           assert.ok(/jwt issuer invalid/.test(error.message));
         }
@@ -375,7 +381,7 @@ describe('authentication/core', () => {
         try {
           await auth.verifyAccessToken(expiredToken);
           assert.fail('Should never get here');
-        } catch (error) {
+        } catch (error: any) {
           assert.strictEqual(error.name, 'NotAuthenticated');
           assert.strictEqual(error.message, 'jwt expired');
           assert.strictEqual(error.data.name, 'TokenExpiredError');

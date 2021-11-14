@@ -1,13 +1,13 @@
-import Debug from 'debug';
 import merge from 'lodash/merge';
 import each from 'lodash/each';
 import omit from 'lodash/omit';
+import { createDebug } from '@feathersjs/commons';
 import { Application } from '@feathersjs/feathers';
 import { OAuthStrategy, OAuthProfile } from './strategy';
 import { default as setupExpress } from './express';
 import { OauthSetupSettings, getDefaultSettings } from './utils';
 
-const debug = Debug('@feathersjs/authentication-oauth');
+const debug = createDebug('@feathersjs/authentication-oauth');
 
 export { OauthSetupSettings, OAuthStrategy, OAuthProfile };
 

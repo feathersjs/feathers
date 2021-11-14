@@ -3,18 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [5.0.0-pre.1](https://github.com/feathersjs/databases/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
-
-
-### Features
-
-* **memory:** Move feathers-memory into @feathersjs/adapter-memory ([#2153](https://github.com/feathersjs/databases/issues/2153)) ([dd61fe3](https://github.com/feathersjs/databases/commit/dd61fe371fb0502f78b8ccbe1f45a030e31ecff6))
-
-
-
-
-
-## [4.5.11](https://github.com/feathersjs/databases/compare/v4.5.10...v4.5.11) (2020-12-05)
+# [5.0.0-pre.14](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.13...v5.0.0-pre.14) (2021-10-13)
 
 **Note:** Version bump only for package @feathersjs/adapter-tests
 
@@ -22,7 +11,161 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [4.5.4](https://github.com/feathersjs/databases/compare/@feathersjs/adapter-tests@4.5.3...@feathersjs/adapter-tests@4.5.4) (2020-09-27)
+# [5.0.0-pre.13](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.12...v5.0.0-pre.13) (2021-10-13)
+
+**Note:** Version bump only for package @feathersjs/adapter-tests
+
+
+
+
+
+# [5.0.0-pre.12](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.11...v5.0.0-pre.12) (2021-10-12)
+
+**Note:** Version bump only for package @feathersjs/adapter-tests
+
+
+
+
+
+# [5.0.0-pre.11](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.10...v5.0.0-pre.11) (2021-10-06)
+
+**Note:** Version bump only for package @feathersjs/adapter-tests
+
+
+
+
+
+# [5.0.0-pre.10](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.9...v5.0.0-pre.10) (2021-09-19)
+
+**Note:** Version bump only for package @feathersjs/adapter-tests
+
+
+
+
+
+# [5.0.0-pre.9](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.8...v5.0.0-pre.9) (2021-08-09)
+
+**Note:** Version bump only for package @feathersjs/adapter-tests
+
+
+
+
+
+# [5.0.0-pre.8](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.7...v5.0.0-pre.8) (2021-08-09)
+
+**Note:** Version bump only for package @feathersjs/adapter-tests
+
+
+
+
+
+# [5.0.0-pre.7](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.6...v5.0.0-pre.7) (2021-08-09)
+
+**Note:** Version bump only for package @feathersjs/adapter-tests
+
+
+
+
+
+# [5.0.0-pre.6](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.5...v5.0.0-pre.6) (2021-08-08)
+
+**Note:** Version bump only for package @feathersjs/adapter-tests
+
+
+
+
+
+# [5.0.0-pre.5](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.4...v5.0.0-pre.5) (2021-06-23)
+
+
+### Bug Fixes
+
+* Update database adapter common repository urls ([#2380](https://github.com/feathersjs/feathers/issues/2380)) ([3f4db68](https://github.com/feathersjs/feathers/commit/3f4db68d6700c7d9023ecd17d0d39893f75a19fd))
+
+
+### Features
+
+* **adapter-commons:** Add support for params.adapter option and move memory adapter to @feathersjs/memory ([#2367](https://github.com/feathersjs/feathers/issues/2367)) ([a43e7da](https://github.com/feathersjs/feathers/commit/a43e7da22b6b981a96d1321736ea9a0cb924fb4f))
+
+
+
+
+
+# [5.0.0-pre.4](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.3...v5.0.0-pre.4) (2021-05-13)
+
+**Note:** Version bump only for package @feathersjs/adapter-tests
+
+
+
+
+
+# [5.0.0-pre.3](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.2...v5.0.0-pre.3) (2021-04-21)
+
+
+### Bug Fixes
+
+* **typescript:** Improve TypeScript backwards compatibility ([#2310](https://github.com/feathersjs/feathers/issues/2310)) ([f33be73](https://github.com/feathersjs/feathers/commit/f33be73fc46a533efb15df9aab0658e3240d3897))
+
+
+
+
+
+# [5.0.0-pre.2](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.1...v5.0.0-pre.2) (2021-04-06)
+
+**Note:** Version bump only for package @feathersjs/adapter-tests
+
+
+
+
+
+# [5.0.0-beta.1](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.0...v5.0.0-beta.1) (2021-04-03)
+
+
+### Bug Fixes
+
+* **adapter-tests:** Add test that verified paginated total ([#2273](https://github.com/feathersjs/feathers/issues/2273)) ([879bd6b](https://github.com/feathersjs/feathers/commit/879bd6b24f42e04eeeeba110ddddda3e1e1dea34))
+
+
+
+
+
+# [5.0.0-beta.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
+
+
+### Features
+
+* **core:** Remove Uberproto ([#2178](https://github.com/feathersjs/feathers/issues/2178)) ([ddf8821](https://github.com/feathersjs/feathers/commit/ddf8821f53317e6a378657f7d66acb03a037ee47))
+
+
+### BREAKING CHANGES
+
+* **core:** Services no longer extend Uberproto objects and
+`service.mixin()` is no longer available.
+
+
+
+
+
+# [5.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
+
+
+### Features
+
+* **memory:** Move feathers-memory into @feathersjs/memory ([#2153](https://github.com/feathersjs/feathers/issues/2153)) ([dd61fe3](https://github.com/feathersjs/feathers/commit/dd61fe371fb0502f78b8ccbe1f45a030e31ecff6))
+
+
+
+
+
+## [4.5.11](https://github.com/feathersjs/feathers/compare/v4.5.10...v4.5.11) (2020-12-05)
+
+**Note:** Version bump only for package @feathersjs/adapter-tests
+
+
+
+
+
+## [4.5.4](https://github.com/feathersjs/feathers/compare/v4.5.3...v4.5.4) (2020-09-27)
 
 **Note:** Version bump only for package @feathersjs/adapter-tests
 

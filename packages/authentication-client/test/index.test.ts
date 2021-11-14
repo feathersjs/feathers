@@ -1,5 +1,5 @@
 import assert from 'assert';
-import feathers, { Application } from '@feathersjs/feathers';
+import { feathers, Application } from '@feathersjs/feathers';
 
 import client from '../src';
 import { AuthenticationClient } from '../src';
@@ -90,7 +90,7 @@ describe('@feathersjs/authentication-client', () => {
         hash: 'error=Error Happened&x=y'
       } as Location);
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'OauthError');
       assert.strictEqual(error.message, 'Error Happened');
     }

@@ -1,5 +1,4 @@
 import { stripSlashes } from '@feathersjs/commons';
-import { BadRequest } from '@feathersjs/errors';
 
 export interface LookupData {
   params: { [key: string]: string };
@@ -12,62 +11,74 @@ export interface LookupResult<T> extends LookupData {
 export class RouteNode<T = any> {
   data?: T;
   children: { [key: string]: RouteNode } = {};
-  placeholder?: RouteNode;
+  placeholders: RouteNode[] = [];
 
-  constructor (public name: string) {}
+  constructor (public name: string, public depth: number) {}
 
   insert (path: string[], data: T): RouteNode<T> {
-    if (path.length === 0) {
+    if (this.depth === path.length) {
+      if (this.data !== undefined) {
+        throw new Error(`Path ${path.join('/')} already exists`);
+      }
+
       this.data = data;
       return this;
     }
 
-    const [ current, ...rest ] = path;
+    const current = path[this.depth];
+    const nextDepth = this.depth + 1;
 
     if (current.startsWith(':')) {
-      const { placeholder } = this;
-      const name = current.substring(1);
+      // Insert a placeholder node like /messages/:id
+      const placeholderName = current.substring(1);
+      let placeholder = this.placeholders.find(p => p.name === placeholderName);
 
       if (!placeholder) {
-        this.placeholder = new RouteNode(name);
-      } else if(placeholder.name !== name) {
-        throw new BadRequest(`Can not add route with placeholder ':${name}' because placeholder ':${placeholder.name}' already exists`);
+        placeholder = new RouteNode(placeholderName, nextDepth);
+        this.placeholders.push(placeholder);
       }
 
-      return this.placeholder.insert(rest, data);
+      return placeholder.insert(path, data);
     }
 
-    this.children[current] = this.children[current] || new RouteNode(current);
+    const child = this.children[current] || new RouteNode(current, nextDepth);
 
-    return this.children[current].insert(rest, data);
+    this.children[current] = child;
+
+    return child.insert(path, data);
   }
 
   lookup (path: string[], info: LookupData): LookupResult<T>|null {
-    if (path.length === 0) {
-      return {
+    if (path.length === this.depth) {
+      return this.data === undefined ? null : {
         ...info,
         data: this.data
       }
     }
 
-    const [ current, ...rest ] = path;
+    const current = path[this.depth];
     const child = this.children[current];
 
     if (child) {
-      return child.lookup(rest, info);
+      return child.lookup(path, info);
     }
 
-    if (this.placeholder) {
-      info.params[this.placeholder.name] = current;
-      return this.placeholder.lookup(rest, info);
+    // This will return the first placeholder that matches early
+    for(const placeholder of this.placeholders) {
+      const result = placeholder.lookup(path, info);
+
+      if (result !== null) {
+        result.params[placeholder.name] = current;
+        return result;
+      }
     }
 
     return null;
   }
 }
 
-export class Router<T> {
-  root: RouteNode<T> = new RouteNode<T>('');
+export class Router<T = any> {
+  constructor (public root: RouteNode<T> = new RouteNode<T>('', 0)) {}
 
   getPath (path: string) {
     return stripSlashes(path).split('/');

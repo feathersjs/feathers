@@ -99,3 +99,5 @@ export function isPromise (result: any) {
 export function createSymbol (name: string) {
   return typeof Symbol !== 'undefined' ? Symbol(name) : name;
 }
+
+export * from './debug';

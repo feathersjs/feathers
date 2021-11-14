@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { EventEmitter } from 'events';
 
-import feathers from '../src';
+import { feathers } from '../src';
 
 describe('Service events', () => {
   it('app is an event emitter', done => {
@@ -286,25 +286,29 @@ describe('Service events', () => {
       });
 
       service.on('created', (data: any, hook: any) => {
-        assert.deepStrictEqual(data, { message: 'Hi' });
-        assert.ok(hook.changed);
-        assert.strictEqual(hook.service, service);
-        assert.strictEqual(hook.method, 'create');
-        assert.strictEqual(hook.type, 'after');
-        done();
+        try {
+          assert.deepStrictEqual(data, { message: 'Hi' });
+          assert.ok(hook.changed);
+          assert.strictEqual(hook.service, service);
+          assert.strictEqual(hook.method, 'create');
+          assert.strictEqual(hook.type, null);
+          done();
+        } catch (error: any) {
+          done(error);
+        }
       });
 
       service.create({ message: 'Hi' });
     });
 
     it('events indicated by the service are not sent automatically', done => {
-      const app = feathers().use('/creator', {
-        events: ['created'],
+      class Creator {
+        events = [ 'created' ];
         async create (data: any) {
           return data;
         }
-      });
-
+      }
+      const app = feathers().use('/creator', new Creator());
       const service = app.service('creator');
 
       service.on('created', (data: any) => {

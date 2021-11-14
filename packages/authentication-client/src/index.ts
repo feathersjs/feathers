@@ -4,7 +4,7 @@ import { Application } from '@feathersjs/feathers';
 import { Storage, MemoryStorage, StorageWrapper } from './storage';
 
 declare module '@feathersjs/feathers/lib/declarations' {
-  interface Application<ServiceTypes = {}> { // eslint-disable-line
+  interface Application<Services, Settings> { // eslint-disable-line
     io?: any;
     rest?: any;
     authentication: AuthenticationClient;
@@ -17,7 +17,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
 export const getDefaultStorage = () => {
   try {
     return new StorageWrapper(window.localStorage);
-  } catch (error) {}
+  } catch (error: any) {}
 
   return new MemoryStorage();
 };
@@ -52,14 +52,10 @@ const init = (_options: Partial<AuthenticationClientOptions> = {}) => {
     app.reAuthenticate = authentication.reAuthenticate.bind(authentication);
     app.logout = authentication.logout.bind(authentication);
 
-    app.hooks({
-      before: {
-        all: [
-          hooks.authentication(),
-          hooks.populateHeader()
-        ]
-      }
-    });
+    app.hooks([
+      hooks.authentication(),
+      hooks.populateHeader()
+    ]);
   };
 };
 

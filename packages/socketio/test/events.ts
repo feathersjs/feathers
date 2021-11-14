@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert';
 import { io, Socket } from 'socket.io-client';
-import { verify } from '@feathersjs/tests/src/fixture';
+import { verify } from '@feathersjs/tests';
 import { RealTimeConnection } from '@feathersjs/transport-commons/src/channels/channel/base';
 
 export default (name: string, options: any) => {
@@ -20,7 +20,7 @@ export default (name: string, options: any) => {
       try {
         callback(data);
         done();
-      } catch (error) {
+      } catch (error: any) {
         done(error);
       }
     };
@@ -95,22 +95,17 @@ export default (name: string, options: any) => {
       const original = {
         name: 'created event'
       };
-      const old = service.create;
-
-      service.create = function (data: any) {
-        this.emit('log', { message: 'Custom log event', data });
-        service.create = old;
-        return old.apply(this, arguments);
-      };
 
       socket.once(`${name} log`, verifyEvent(done, (data: any) => {
         assert.deepStrictEqual(data, {
           message: 'Custom log event', data: original
         });
-        service.create = old;
       }));
 
-      call('create', original);
+      service.emit('log', {
+        data: original,
+        message: 'Custom log event'
+      });
     });
   });
 

@@ -1,0 +1,65 @@
+{
+  "name": "@feathersjs/memory",
+  "description": "An in memory service store",
+  "version": "5.0.0-pre.14",
+  "homepage": "https://github.com/feathersjs/feathers",
+  "main": "lib/",
+  "keywords": [
+    "feathers",
+    "feathers-plugin"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git"
+  },
+  "author": {
+    "name": "Feathers contributors",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "engines": {
+    "node": ">= 12"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "*.js"
+  ],
+  "scripts": {
+    "prepublish": "npm run compile",
+    "compile": "shx rm -rf lib/ && tsc",
+    "test": "npm run compile && npm run mocha",
+    "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "@feathersjs/adapter-commons": "^5.0.0-pre.14",
+    "@feathersjs/commons": "^5.0.0-pre.14",
+    "@feathersjs/errors": "^5.0.0-pre.14",
+    "sift": "^15.0.0"
+  },
+  "devDependencies": {
+    "@feathersjs/adapter-tests": "^5.0.0-pre.14",
+    "@feathersjs/feathers": "^5.0.0-pre.14",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.11.6",
+    "mocha": "^9.1.3",
+    "shx": "^0.3.3",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  },
+  "gitHead": "9bb26276938aead1f3f582be5517a49a8ce00f09"
+}

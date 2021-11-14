@@ -16,6 +16,6 @@ This is a repository that contains the test suite for the common database adapte
 
 ## License
 
-Copyright (c) 2019 Feathers contributors
+Copyright (c) 2021 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).

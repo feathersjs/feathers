@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-client",
   "description": "The authentication plugin for feathers-client",
-  "version": "5.0.0-pre.1",
+  "version": "5.0.0-pre.14",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -28,7 +28,7 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 10"
+    "node": ">= 12"
   },
   "files": [
     "CHANGELOG.md",
@@ -52,27 +52,25 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^5.0.0-pre.1",
-    "@feathersjs/commons": "^5.0.0-pre.1",
-    "@feathersjs/errors": "^5.0.0-pre.1",
-    "@feathersjs/feathers": "^5.0.0-pre.1",
-    "debug": "^4.3.1"
+    "@feathersjs/authentication": "^5.0.0-pre.14",
+    "@feathersjs/commons": "^5.0.0-pre.14",
+    "@feathersjs/errors": "^5.0.0-pre.14",
+    "@feathersjs/feathers": "^5.0.0-pre.14"
   },
   "devDependencies": {
-    "@feathersjs/adapter-memory": "^5.0.0-pre.1",
-    "@feathersjs/authentication-local": "^5.0.0-pre.1",
-    "@feathersjs/express": "^5.0.0-pre.1",
-    "@feathersjs/rest-client": "^5.0.0-pre.1",
-    "@feathersjs/socketio": "^5.0.0-pre.1",
-    "@feathersjs/socketio-client": "^5.0.0-pre.1",
-    "@types/debug": "^4.1.5",
-    "@types/mocha": "^8.2.0",
-    "@types/node": "^14.14.14",
-    "axios": "^0.21.1",
-    "mocha": "^8.2.1",
+    "@feathersjs/authentication-local": "^5.0.0-pre.14",
+    "@feathersjs/express": "^5.0.0-pre.14",
+    "@feathersjs/memory": "^5.0.0-pre.14",
+    "@feathersjs/rest-client": "^5.0.0-pre.14",
+    "@feathersjs/socketio": "^5.0.0-pre.14",
+    "@feathersjs/socketio-client": "^5.0.0-pre.14",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.11.6",
+    "axios": "^0.24.0",
+    "mocha": "^9.1.3",
     "shx": "^0.3.3",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.1.3"
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
   },
-  "gitHead": "3756506935c520fc50d4be416ff649c2158afdac"
+  "gitHead": "9bb26276938aead1f3f582be5517a49a8ce00f09"
 }

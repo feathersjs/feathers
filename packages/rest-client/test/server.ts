@@ -1,7 +1,6 @@
-import bodyParser from 'body-parser';
-import feathers, { Id, NullableId, Params } from '@feathersjs/feathers';
-import expressify, { rest } from '@feathersjs/express';
-import { Service } from '@feathersjs/adapter-memory';
+import { feathers, Id, NullableId, Params } from '@feathersjs/feathers';
+import expressify, { rest, urlencoded, json } from '@feathersjs/express';
+import { Service } from '@feathersjs/memory';
 import { FeathersError, NotAcceptable } from '@feathersjs/errors';
 
 // eslint-disable-next-line no-extend-native
@@ -66,6 +65,14 @@ class TodoService extends Service {
 
     return super.remove(id, params);
   }
+
+  async customMethod (data: any, { provider }: Params) {
+    return {
+      data,
+      provider,
+      type: 'customMethod'
+    }
+  }
 }
 
 export default (configurer?: any) => {
@@ -92,10 +99,14 @@ export default (configurer?: any) => {
       next();
     })
     // Parse HTTP bodies
-    .use(bodyParser.json())
-    .use(bodyParser.urlencoded({ extended: true }))
+    .use(json())
+    .use(urlencoded({ extended: true }))
     // Host our Todos service on the /todos path
-    .use('/todos', new TodoService())
+    .use('/todos', new TodoService(), {
+      methods: [
+        'find', 'get', 'create', 'patch', 'update', 'remove', 'customMethod'
+      ]
+    })
     .use(errorHandler);
 
   if (typeof configurer === 'function') {

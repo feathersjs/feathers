@@ -1,6 +1,6 @@
 import { authenticate } from '@feathersjs/authentication';
 import { HookContext, Application } from '@feathersjs/feathers';
-import { memory } from '@feathersjs/adapter-memory';
+import { memory } from '@feathersjs/memory';
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { LocalStrategy, hooks } from '@feathersjs/authentication-local';
 

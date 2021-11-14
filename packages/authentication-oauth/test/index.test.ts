@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import feathers from '@feathersjs/feathers';
+import { feathers } from '@feathersjs/feathers';
 import { setup, express, OauthSetupSettings } from '../src';
 import { AuthenticationService } from '@feathersjs/authentication';
 
@@ -11,7 +11,7 @@ describe('@feathersjs/authentication-oauth', () => {
       try {
         app.configure(setup({ authService: 'something' } as OauthSetupSettings));
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.equal(error.message,
           'An authentication service must exist before registering @feathersjs/authentication-oauth'
         );

@@ -343,7 +343,7 @@ describe('@feathersjs/errors', () => {
     it('has proper stack trace (#78)', () => {
       try {
         throw new errors.NotFound('Not the error you are looking for');
-      } catch (e) {
+      } catch (e: any) {
         const text = 'NotFound: Not the error you are looking for';
 
         assert.strictEqual(e.stack.indexOf(text), 0);
@@ -356,7 +356,7 @@ describe('@feathersjs/errors', () => {
 
         try {
           throw new errors.NotFound('Not the error you are looking for');
-        } catch (e) {
+        } catch (e: any) {
           assert.ok(e);
           Error.captureStackTrace = oldCST;
         }

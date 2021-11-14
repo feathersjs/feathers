@@ -2,27 +2,29 @@ import { strict as assert } from 'assert';
 
 import axios from 'axios';
 import { Server } from 'http';
-import feathers from '@feathersjs/feathers';
-import { setupTests } from '@feathersjs/tests/src/client';
+import { feathers } from '@feathersjs/feathers';
+import { clientTests } from '@feathersjs/tests';
 import { NotAcceptable } from '@feathersjs/errors';
 
 import createServer from './server';
 import rest from '../src';
+import { ServiceTypes } from './declarations';
+
 
 describe('Axios REST connector', function () {
   const url = 'http://localhost:8889';
   const setup = rest(url).axios(axios);
-  const app = feathers().configure(setup);
+  const app = feathers<ServiceTypes>().configure(setup);
   const service = app.service('todos');
   let server: Server;
 
-  before(done => {
-    server = createServer().listen(8889, done);
+  service.methods('customMethod');
+
+  before(async () => {
+    server = await createServer().listen(8889);
   });
 
   after(done => server.close(done));
-
-  setupTests(service, 'todos');
 
   it('supports custom headers', async () => {
     const headers = {
@@ -82,7 +84,7 @@ describe('Axios REST connector', function () {
   });
 
   it('remove many', async () => {
-    const todo = await service.remove(null);
+    const todo: any = await service.remove(null);
 
     assert.strictEqual(todo.id, null);
     assert.strictEqual(todo.text, 'deleted many');
@@ -92,7 +94,7 @@ describe('Axios REST connector', function () {
     try {
       await service.get(0, { query: { feathersError: true } });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.ok(error instanceof NotAcceptable);
       assert.strictEqual(error.message, 'This is a Feathers error');
       assert.strictEqual(error.code, 406);
@@ -107,7 +109,7 @@ describe('Axios REST connector', function () {
     try {
       await app.service('something').find();
       assert.fail('Should never get here');
-    } catch(e) {
+    } catch (e: any) {
       const err = JSON.parse(JSON.stringify(e));
 
       assert.strictEqual(err.name, 'Unavailable');
@@ -115,4 +117,16 @@ describe('Axios REST connector', function () {
       assert.ok(e.data.config);
     }
   });
+
+  it('works with custom method .customMethod', async () => {
+    const result = await service.customMethod({ message: 'hi' });
+
+    assert.deepEqual(result, {
+      data: { message: 'hi' },
+      provider: 'rest',
+      type: 'customMethod'
+    });
+  });
+
+  clientTests(service, 'todos');
 });

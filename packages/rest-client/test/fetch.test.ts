@@ -1,28 +1,30 @@
 import { strict as assert } from 'assert';
 
-import feathers from '@feathersjs/feathers';
-import { setupTests } from '@feathersjs/tests/src/client';
-import { NotAcceptable } from '@feathersjs/errors';
+//@ts-ignore
 import fetch from 'node-fetch';
-
-import createServer from './server';
-import rest from '../src';
+import { feathers } from '@feathersjs/feathers';
+import { clientTests } from '@feathersjs/tests';
+import { NotAcceptable } from '@feathersjs/errors';
 import { Server } from 'http';
+
+import rest from '../src';
+import createServer from './server';
+import { ServiceTypes } from './declarations';
 
 describe('fetch REST connector', function () {
   const url = 'http://localhost:8889';
   const setup = rest(url).fetch(fetch);
-  const app = feathers().configure(setup);
+  const app = feathers<ServiceTypes>().configure(setup);
   const service = app.service('todos');
   let server: Server;
 
-  before(done => {
-    server = createServer().listen(8889, done);
+  service.methods('customMethod');
+
+  before(async () => {
+    server = await createServer().listen(8889);
   });
 
   after(done => server.close(done));
-
-  setupTests(service, 'todos');
 
   it('supports custom headers', async () => {
     const headers = {
@@ -62,7 +64,7 @@ describe('fetch REST connector', function () {
     try {
       await service.get(-1, {});
       assert.fail('Should never get here');
-    } catch(error) {
+    } catch (error: any) {
       assert.strictEqual(error.code, 404)
     }
   });
@@ -91,7 +93,7 @@ describe('fetch REST connector', function () {
   });
 
   it('remove many', async () => {
-    const todo = await service.remove(null);
+    const todo: any = await service.remove(null);
 
     assert.strictEqual(todo.id, null);
     assert.strictEqual(todo.text, 'deleted many');
@@ -101,7 +103,7 @@ describe('fetch REST connector', function () {
     try {
       await service.get(0, { query: { feathersError: true } });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.ok(error.response);
       assert.ok(error instanceof NotAcceptable);
       assert.strictEqual(error.message, 'This is a Feathers error');
@@ -117,4 +119,16 @@ describe('fetch REST connector', function () {
 
     assert.strictEqual(response, null)
   });
+
+  it('works with custom method .customMethod', async () => {
+    const result = await service.customMethod({ message: 'hi' });
+
+    assert.deepEqual(result, {
+      data: { message: 'hi' },
+      provider: 'rest',
+      type: 'customMethod'
+    });
+  });
+
+  clientTests(service, 'todos');
 });

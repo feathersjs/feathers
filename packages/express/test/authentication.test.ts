@@ -1,10 +1,8 @@
 import { omit } from 'lodash';
 import { strict as assert } from 'assert';
 import { default as _axios } from 'axios';
-import feathers from '@feathersjs/feathers';
-
-// @ts-ignore
-import getApp from '@feathersjs/authentication-local/test/fixture';
+import { feathers } from '@feathersjs/feathers';
+import { createApplication } from '@feathersjs/authentication-local/test/fixture';
 import { authenticate, AuthenticationResult } from '@feathersjs/authentication';
 import * as express from '../src';
 
@@ -27,8 +25,8 @@ describe('@feathersjs/express/authentication', () => {
       .use(express.json())
       .configure(express.rest());
 
-    app = getApp(expressApp);
-    server = app.listen(9876);
+    app = createApplication(expressApp as any) as unknown as express.Application;
+    server = await app.listen(9876);
 
     app.use('/dummy', {
       get (id, params) {
@@ -36,8 +34,9 @@ describe('@feathersjs/express/authentication', () => {
       }
     });
 
+    //@ts-ignore
     app.use('/protected', express.authenticate('jwt'), (req, res) => {
-      res.json((req as any).user);
+      res.json(req.user);
     });
 
     app.use(express.errorHandler({
@@ -52,7 +51,7 @@ describe('@feathersjs/express/authentication', () => {
 
     user = result;
 
-    const res = await axios.post('/authentication', {
+    const res = await axios.post<any>('/authentication', {
       strategy: 'local',
       password,
       email
@@ -74,82 +73,78 @@ describe('@feathersjs/express/authentication', () => {
       assert.strictEqual(authResult.user.password, undefined);
     });
 
-    it('local authentication with wrong password fails', () => {
-      return axios.post('/authentication', {
-        strategy: 'local',
-        password: 'wrong',
-        email
-      }).then(() => {
+    it('local authentication with wrong password fails', async () => {
+      try {
+        await axios.post<any>('/authentication', {
+          strategy: 'local',
+          password: 'wrong',
+          email
+        });
         assert.fail('Should never get here');
-      }).catch(error => {
+      } catch (error: any) {
         const { data } = error.response;
         assert.strictEqual(data.name, 'NotAuthenticated');
         assert.strictEqual(data.message, 'Invalid login');
-      });
+      }
     });
 
-    it('authenticating with JWT works but returns same accessToken', () => {
+    it('authenticating with JWT works but returns same accessToken', async () => {
       const { accessToken } = authResult;
-
-      return axios.post('/authentication', {
+      const { data } = await axios.post<any>('/authentication', {
         strategy: 'jwt',
         accessToken
-      }).then(res => {
-        const { data } = res;
-
-        assert.strictEqual(data.accessToken, accessToken);
-        assert.strictEqual(data.authentication.strategy, 'jwt');
-        assert.strictEqual(data.authentication.payload.sub, user.id.toString());
-        assert.strictEqual(data.user.email, email);
       });
+
+      assert.strictEqual(data.accessToken, accessToken);
+      assert.strictEqual(data.authentication.strategy, 'jwt');
+      assert.strictEqual(data.authentication.payload.sub, user.id.toString());
+      assert.strictEqual(data.user.email, email);
     });
 
-    it('can make a protected request with Authorization header', () => {
+    it('can make a protected request with Authorization header', async () => {
       const { accessToken } = authResult;
 
-      return axios.get('/dummy/dave', {
+      const { data, data: { params } } = await axios.get<any>('/dummy/dave', {
         headers: {
           Authorization: accessToken
         }
-      }).then(res => {
-        const { data, data: { params } } = res;
-
-        assert.strictEqual(data.id, 'dave');
-        assert.deepStrictEqual(params.user, user);
-        assert.strictEqual(params.authentication.accessToken, accessToken);
       });
+
+      assert.strictEqual(data.id, 'dave');
+      assert.deepStrictEqual(params.user, user);
+      assert.strictEqual(params.authentication.accessToken, accessToken);
     });
 
-    it('errors when there are no authStrategies and parseStrategies', () => {
+    it('errors when there are no authStrategies and parseStrategies', async () => {
       const { accessToken } = authResult;
       app.get('authentication').authStrategies = [];
       delete app.get('authentication').parseStrategies;
 
-      return axios.get('/dummy/dave', {
-        headers: {
-          Authorization: accessToken
-        }
-      }).then(() => assert.fail('Should never get here'))
-      .catch(error => {
+      try {
+        await axios.get<any>('/dummy/dave', {
+          headers: {
+            Authorization: accessToken
+          }
+        });
+        assert.fail('Should never get here');
+      } catch (error: any) {
         assert.strictEqual(error.response.data.name, 'NotAuthenticated');
         app.get('authentication').authStrategies = [ 'jwt', 'local' ];
-      });
+      }
     });
 
-    it('can make a protected request with Authorization header and bearer scheme', () => {
+    it('can make a protected request with Authorization header and bearer scheme', async () => {
       const { accessToken } = authResult;
 
-      return axios.get('/dummy/dave', {
+      const { data, data: { params } } = await axios.get<any>('/dummy/dave', {
         headers: {
           Authorization: ` Bearer: ${accessToken}`
         }
-      }).then(res => {
-        const { data, data: { params } } = res;
-
-        assert.strictEqual(data.id, 'dave');
-        assert.deepStrictEqual(params.user, user);
-        assert.strictEqual(params.authentication.accessToken, accessToken);
       });
+
+      assert.strictEqual(data.id, 'dave');
+      assert.deepStrictEqual(params.user, user);
+      assert.strictEqual(params.authentication.accessToken, accessToken);
     });
   });
 
@@ -159,13 +154,13 @@ describe('@feathersjs/express/authentication', () => {
         // @ts-ignore
         authenticate();
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.message, 'The authenticate hook needs at least one allowed strategy');
       }
     });
 
     it('protected endpoint fails when JWT is not present', () => {
-      return axios.get('/protected').then(() => {
+      return axios.get<any>('/protected').then(() => {
         assert.fail('Should never get here');
       }).catch(error => {
         const { data } = error.response;
@@ -175,33 +170,32 @@ describe('@feathersjs/express/authentication', () => {
       });
     });
 
-    it.skip('protected endpoint fails with invalid Authorization header', () => {
-      return axios.get('/protected', {
-        headers: {
-          Authorization: 'Bearer: something wrong'
-        }
-      }).then(() => {
+    it.skip('protected endpoint fails with invalid Authorization header', async () => {
+      try {
+        await axios.get<any>('/protected', {
+          headers: {
+            Authorization: 'Bearer: something wrong'
+          }
+        });
         assert.fail('Should never get here');
-      }).catch(error => {
+      } catch (error: any) {
         const { data } = error.response;
 
         assert.strictEqual(data.name, 'NotAuthenticated');
         assert.strictEqual(data.message, 'Not authenticated');
-      });
+      }
     });
 
-    it('can request protected endpoint with JWT present', () => {
-      return axios.get('/protected', {
+    it('can request protected endpoint with JWT present', async () => {
+      const { data } = await axios.get<any>('/protected', {
         headers: {
           Authorization: `Bearer ${authResult.accessToken}`
         }
-      }).then(res => {
-        const { data } = res;
-
-        assert.strictEqual(data.email, user.email);
-        assert.strictEqual(data.id, user.id);
-        assert.strictEqual(data.password, undefined, 'Passed provider information');
       });
+
+      assert.strictEqual(data.email, user.email);
+      assert.strictEqual(data.id, user.id);
+      assert.strictEqual(data.password, undefined, 'Passed provider information');
     });
   });
 });

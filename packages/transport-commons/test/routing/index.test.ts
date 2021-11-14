@@ -1,5 +1,5 @@
 import assert from 'assert';
-import feathers, { Application } from '@feathersjs/feathers';
+import { feathers, Application } from '@feathersjs/feathers';
 import { routing } from '../../src/routing';
 
 describe('app.routes', () => {
@@ -67,6 +67,39 @@ describe('app.routes', () => {
       __id: 'testing',
       first: 'me',
       second: '::special'
+    });
+  });
+
+  it('can register routes with preset params', () => {
+    app.routes.insert('/my/service/:__id/preset', {
+      service: app.service('/my/service'),
+      params: { preset: true }
+    });
+
+    const result = app.lookup('/my/service/1234/preset');
+
+    assert.strictEqual(result.service, app.service('/my/service'));
+    assert.deepStrictEqual(result.params, {
+      preset: true,
+      __id: '1234'
+    });
+  });
+
+  it('can pass route params during a service registration', () => {
+    app.use('/other/service', {
+      async get (id: any) {
+        return id;
+      }
+    }, {
+      routeParams: { used: true }
+    });
+
+    const result = app.lookup('/other/service/1234');
+
+    assert.strictEqual(result.service, app.service('/other/service'));
+    assert.deepStrictEqual(result.params, {
+      used: true,
+      __id: '1234'
     });
   });
 });

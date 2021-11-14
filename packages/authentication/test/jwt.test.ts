@@ -1,10 +1,9 @@
 import assert from 'assert';
 import merge from 'lodash/merge';
-import feathers, { Application, Service } from '@feathersjs/feathers';
-import { memory } from '@feathersjs/adapter-memory';
+import { feathers, Application, Service } from '@feathersjs/feathers';
+import { memory } from '@feathersjs/memory';
 
 import { AuthenticationService, JWTStrategy, hooks } from '../src';
-import { AuthenticationResult } from '../src/core';
 import { ServerResponse } from 'http';
 import { MockRequest } from './fixtures';
 
@@ -12,9 +11,9 @@ const { authenticate } = hooks;
 
 describe('authentication/jwt', () => {
   let app: Application<{
-    authentication: AuthenticationService & Service<AuthenticationResult>,
-    users: Service<any>,
-    protected: Service<any>
+    authentication: AuthenticationService,
+    users: Partial<Service>,
+    protected: Partial<Service>
   }>;
   let user: any;
   let accessToken: string;
@@ -32,15 +31,15 @@ describe('authentication/jwt', () => {
 
     authService.register('jwt', new JWTStrategy());
 
-    app.use('/users', memory());
-    app.use('/protected', {
+    app.use('users', memory());
+    app.use('protected', {
       async get (id, params) {
         return {
           id, params
         };
       }
     });
-    app.use('/authentication', authService);
+    app.use('authentication', authService);
 
     const service = app.service('authentication');
 
@@ -186,7 +185,7 @@ describe('authentication/jwt', () => {
           provider: 'rest'
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'Not authenticated');
       }
@@ -201,7 +200,7 @@ describe('authentication/jwt', () => {
           }
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'Invalid authentication information (no `strategy` set)');
       }
@@ -210,19 +209,15 @@ describe('authentication/jwt', () => {
     it('fails when entity service was not found', async () => {
       delete app.services.users;
 
-      try {
-        await app.service('protected').get('test', {
-          provider: 'rest',
-          authentication: {
-            strategy: 'jwt',
-            accessToken
-          }
-        });
-        assert.fail('Should never get here');
-      } catch (error) {
-        assert.strictEqual(error.name, 'NotAuthenticated');
-        assert.strictEqual(error.message, 'Could not find entity service');
-      }
+      await assert.rejects(() => app.service('protected').get('test', {
+        provider: 'rest',
+        authentication: {
+          strategy: 'jwt',
+          accessToken
+        }
+      }), {
+        message: 'Can not find service \'users\''
+      });
     });
 
     it('fails when accessToken is not set', async () => {
@@ -234,7 +229,7 @@ describe('authentication/jwt', () => {
           }
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'No access token');
       }
@@ -308,7 +303,7 @@ describe('authentication/jwt', () => {
       try {
         app.service('authentication').register('otherJwt', new JWTStrategy());
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.message, 'Invalid JwtStrategy option \'authentication.otherJwt.expiresIn\'. Did you mean to set it in \'authentication.jwtOptions\'?');
       }
     });

@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { EventEmitter } from 'events';
-import feathers, { Application, Params } from '@feathersjs/feathers';
+import { feathers, Application, Params } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
 
 import { routing } from '../../src/routing';
@@ -295,7 +295,7 @@ describe('socket commons utils', () => {
             className: 'not-found'
           });
           done();
-        } catch (e) {
+        } catch (e: any) {
           done(e);
         }
       };
@@ -313,7 +313,7 @@ describe('socket commons utils', () => {
             className: 'method-not-allowed'
           });
           done();
-        } catch (e) {
+        } catch (e: any) {
           done(e);
         }
       };
@@ -331,7 +331,7 @@ describe('socket commons utils', () => {
             className: 'method-not-allowed'
           });
           done();
-        } catch (e) {
+        } catch (e: any) {
           done(e);
         }
       };
@@ -349,7 +349,7 @@ describe('socket commons utils', () => {
             className: 'not-authenticated'
           });
           done();
-        } catch (e) {
+        } catch (e: any) {
           done(e);
         }
       };

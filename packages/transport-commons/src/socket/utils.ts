@@ -1,17 +1,16 @@
-import Debug from 'debug';
+import { HookContext, Application, createContext, getServiceOptions } from '@feathersjs/feathers';
+import { NotFound, MethodNotAllowed, BadRequest } from '@feathersjs/errors';
+import { createDebug } from '@feathersjs/commons';
 import isEqual from 'lodash/isEqual';
-import { NotFound, MethodNotAllowed } from '@feathersjs/errors';
-import { HookContext, Application } from '@feathersjs/feathers';
 import { CombinedChannel } from '../channels/channel/combined';
 import { RealTimeConnection } from '../channels/channel/base';
 
-const debug = Debug('@feathersjs/transport-commons');
+const debug = createDebug('@feathersjs/transport-commons');
+
+export const DEFAULT_PARAMS_POSITION = 1;
 
 export const paramsPositions: { [key: string]: number } = {
   find: 0,
-  get: 1,
-  remove: 1,
-  create: 1,
   update: 2,
   patch: 2
 };
@@ -62,7 +61,7 @@ export function getDispatcher (emit: string, socketMap: WeakMap<RealTimeConnecti
   };
 }
 
-export function runMethod (app: Application, connection: RealTimeConnection, path: string, method: string, args: any[]) {
+export async function runMethod (app: Application, connection: RealTimeConnection, path: string, method: string, args: any[]) {
   const trace = `method '${method}' on service '${path}'`;
   const methodArgs = args.slice(0);
   const callback = typeof methodArgs[methodArgs.length - 1] === 'function'
@@ -74,45 +73,42 @@ export function runMethod (app: Application, connection: RealTimeConnection, pat
     debug(`Error in ${trace}`, error);
     callback(normalizeError(error));
   };
-  // A wrapper function that runs the method and returns a promise
-  const _run = () => {
+
+  try {
     const lookup = app.lookup(path);
 
-    // No valid service was found, return a 404
-    // just like a REST route would
+    // No valid service was found throw a NotFound error
     if (lookup === null) {
-      return Promise.reject(new NotFound(`Service '${path}' not found`));
+      throw new NotFound(`Service '${path}' not found`);
     }
 
     const { service, params: route = {} } = lookup;
+    const { methods } = getServiceOptions(service);
 
     // Only service methods are allowed
-    // @ts-ignore
-    if (paramsPositions[method] === undefined || typeof service[method] !== 'function') {
-      return Promise.reject(new MethodNotAllowed(`Method '${method}' not allowed on service '${path}'`));
+    if (!methods.includes(method)) {
+      throw new MethodNotAllowed(`Method '${method}' not allowed on service '${path}'`);
     }
 
-    const position = paramsPositions[method];
+    const position = paramsPositions[method] !== undefined ? paramsPositions[method] : DEFAULT_PARAMS_POSITION;
     const query = methodArgs[position] || {};
-    // `params` have to be re-mapped to the query
-    // and added with the route
+    // `params` have to be re-mapped to the query and added with the route
     const params = Object.assign({ query, route, connection }, connection);
+
+    // `params` is always the last parameter. Error if we got more arguments.
+    if (methodArgs.length > (position + 1)) {
+      throw new BadRequest(`Too many arguments for '${method}' method`);
+    }
 
     methodArgs[position] = params;
 
-    // @ts-ignore
-    return service[method](...methodArgs, true);
-  };
+    const ctx = createContext(service, method);
+    const returnedCtx: HookContext = await (service as any)[method](...methodArgs, ctx);
+    const result = returnedCtx.dispatch || returnedCtx.result;
 
-  try {
-    // Run and map to the callback that is being called for Socket calls
-    _run().then((hook: HookContext) => {
-      const result = hook.dispatch || hook.result;
-
-      debug(`Returned successfully ${trace}`, result);
-      callback(null, result);
-    }).catch((hook: HookContext) => handleError(hook.type === 'error' ? hook.error : hook));
-  } catch (error) {
+    debug(`Returned successfully ${trace}`, result);
+    callback(null, result);
+  } catch (error: any) {
     handleError(error);
   }
 }

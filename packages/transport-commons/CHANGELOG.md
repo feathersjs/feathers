@@ -3,6 +3,158 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.14](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.13...v5.0.0-pre.14) (2021-10-13)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [5.0.0-pre.13](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.12...v5.0.0-pre.13) (2021-10-13)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [5.0.0-pre.12](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.11...v5.0.0-pre.12) (2021-10-12)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [5.0.0-pre.11](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.10...v5.0.0-pre.11) (2021-10-06)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [5.0.0-pre.10](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.9...v5.0.0-pre.10) (2021-09-19)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [5.0.0-pre.9](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.8...v5.0.0-pre.9) (2021-08-09)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [5.0.0-pre.8](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.7...v5.0.0-pre.8) (2021-08-09)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [5.0.0-pre.7](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.6...v5.0.0-pre.7) (2021-08-09)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [5.0.0-pre.6](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.5...v5.0.0-pre.6) (2021-08-08)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [5.0.0-pre.5](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.4...v5.0.0-pre.5) (2021-06-23)
+
+
+### Bug Fixes
+
+* **koa:** Use extended query parser for compatibility ([#2397](https://github.com/feathersjs/feathers/issues/2397)) ([b2944ba](https://github.com/feathersjs/feathers/commit/b2944bac3ec6d5ecc80dc518cd4e58093692db74))
+
+
+
+
+
+# [5.0.0-pre.4](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.3...v5.0.0-pre.4) (2021-05-13)
+
+
+### Bug Fixes
+
+* **transport-commons:** Fix route placeholder registration and improve radix router performance ([#2336](https://github.com/feathersjs/feathers/issues/2336)) ([4d84dfd](https://github.com/feathersjs/feathers/commit/4d84dfd092ce0510312e975d5cd57e04973fb311))
+
+
+### Features
+
+* **koa:** KoaJS transport adapter ([#2315](https://github.com/feathersjs/feathers/issues/2315)) ([2554b57](https://github.com/feathersjs/feathers/commit/2554b57cf05731df58feeba9c12faab18e442107))
+
+
+
+
+
+# [5.0.0-pre.3](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.2...v5.0.0-pre.3) (2021-04-21)
+
+
+### Bug Fixes
+
+* **typescript:** Improve TypeScript backwards compatibility ([#2310](https://github.com/feathersjs/feathers/issues/2310)) ([f33be73](https://github.com/feathersjs/feathers/commit/f33be73fc46a533efb15df9aab0658e3240d3897))
+
+
+### Features
+
+* **dependencies:** Remove direct debug dependency ([#2296](https://github.com/feathersjs/feathers/issues/2296)) ([501d416](https://github.com/feathersjs/feathers/commit/501d4164d30c6a126906dc640cdfdc82207ba34a))
+
+
+
+
+
+# [5.0.0-pre.2](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.1...v5.0.0-pre.2) (2021-04-06)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [5.0.0-beta.1](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.0...v5.0.0-beta.1) (2021-04-03)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+# [5.0.0-beta.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
+
+
+### Bug Fixes
+
+* **transport-commons:** Do not error when adding an undefined connection to a channel ([#2268](https://github.com/feathersjs/feathers/issues/2268)) ([28114c4](https://github.com/feathersjs/feathers/commit/28114c495d6564868bb3ffbf619bf80b774dce4b))
+* Update Grant usage and other dependencies ([#2264](https://github.com/feathersjs/feathers/issues/2264)) ([7b0f8fa](https://github.com/feathersjs/feathers/commit/7b0f8fad252419ed0ad0bf259cdf3104d322ab60))
+* **socketio-client:** Fix client transport-commons reference ([#2164](https://github.com/feathersjs/feathers/issues/2164)) ([3a42c54](https://github.com/feathersjs/feathers/commit/3a42c544058456b19c7e21827226541bfa6ad621))
+
+
+### Features
+
+* **core:** Public custom service methods ([#2270](https://github.com/feathersjs/feathers/issues/2270)) ([e65abfb](https://github.com/feathersjs/feathers/commit/e65abfb5388df6c19a11c565cf1076a29f32668d))
+* Application service types default to any ([#1566](https://github.com/feathersjs/feathers/issues/1566)) ([d93ba9a](https://github.com/feathersjs/feathers/commit/d93ba9a17edd20d3397bb00f4f6e82e804e42ed6))
+* Feathers v5 core refactoring and features ([#2255](https://github.com/feathersjs/feathers/issues/2255)) ([2dafb7c](https://github.com/feathersjs/feathers/commit/2dafb7ce14ba57406aeec13d10ca45b1e709bee9))
+* **transport-commons:** New built-in high performance radix router ([#2177](https://github.com/feathersjs/feathers/issues/2177)) ([6d18065](https://github.com/feathersjs/feathers/commit/6d180651b4eb40289ecea3df3575f207aa6c5d1f))
+
+
+
+
+
 # [5.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
 
 

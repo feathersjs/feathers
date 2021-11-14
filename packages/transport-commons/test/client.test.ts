@@ -1,14 +1,15 @@
 import assert from 'assert';
 import { EventEmitter } from 'events';
+import { CustomMethods } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
-import { Service } from '../src/client';
+import { Service, SocketService } from '../src/client';
 
 declare type DummyCallback = (err: any, data?: any) => void;
 
 describe('client', () => {
   let connection: any;
   let testData: any;
-  let service: Service & EventEmitter;
+  let service: SocketService & CustomMethods<{customMethod: any}> & EventEmitter;
 
   beforeEach(() => {
     connection = new EventEmitter();
@@ -18,7 +19,7 @@ describe('client', () => {
       name: 'todos',
       method: 'emit',
       connection
-    }) as Service & EventEmitter;
+    }) as any;
   });
 
   it('sets `events` property on service', () => {
@@ -35,14 +36,14 @@ describe('client', () => {
     try {
       clientService.eventNames();
       assert.ok(false, 'Should never get here');
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, 'Can not call \'eventNames\' on the client service connection');
     }
 
     try {
       clientService.on('test', () => {});
       assert.ok(false, 'Should never get here');
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, 'Can not call \'on\' on the client service connection');
     }
   });
@@ -73,78 +74,76 @@ describe('client', () => {
     connection.emit('todos thing', testData);
   });
 
-  it('sends all service methods with acknowledgement', () => {
+  it('sends all service and custom methods with acknowledgement', async () => {
     const idCb = (_path: any, id: any, _params: any, callback: DummyCallback) =>
       callback(null, { id });
     const idDataCb = (_path: any, _id: any, data: any, _params: any, callback: DummyCallback) =>
       callback(null, data);
-
-    connection.once('create', (_path: any, data: any, _params: any, callback: DummyCallback) => {
+    const dataCb = (_path: any, data: any, _params: any, callback: DummyCallback) => {
       data.created = true;
       callback(null, data);
+    };
+
+    connection.once('create', dataCb);
+    service.methods('customMethod');
+
+    let res = await service.create(testData);
+
+    assert.ok(res.created);
+
+    connection.once('get', idCb);
+    res = await service.get(1);
+    assert.deepStrictEqual(res, { id: 1 });
+
+    connection.once('remove', idCb);
+    res = await service.remove(12)
+    assert.deepStrictEqual(res, { id: 12 });
+
+    connection.once('update', idDataCb);
+    res = await service.update(12, testData);
+    assert.deepStrictEqual(res, testData);
+
+    connection.once('patch', idDataCb);
+    res = await service.patch(12, testData);
+    assert.deepStrictEqual(res, testData);
+
+    connection.once('customMethod', dataCb);
+    res = await service.customMethod({ message: 'test' });
+    assert.deepStrictEqual(res, {
+      created: true,
+      message: 'test'
     });
 
-    return service.create(testData)
-      .then((result: any) => assert.ok(result.created))
-      .then(() => {
-        connection.once('get', idCb);
+    connection.once('find', (_path: any, params: any, callback: DummyCallback) =>
+      callback(null, { params })
+    );
 
-        return service.get(1)
-          .then(res => assert.deepStrictEqual(res, { id: 1 }));
-      })
-      .then(() => {
-        connection.once('remove', idCb);
-
-        return service.remove(12)
-          .then(res => assert.deepStrictEqual(res, { id: 12 }));
-      })
-      .then(() => {
-        connection.once('update', idDataCb);
-
-        return service.update(12, testData)
-          .then(res => assert.deepStrictEqual(res, testData));
-      })
-      .then(() => {
-        connection.once('patch', idDataCb);
-
-        return service.patch(12, testData)
-          .then(res => assert.deepStrictEqual(res, testData));
-      })
-      .then(() => {
-        connection.once('find', (_path: any, params: any, callback: DummyCallback) =>
-          callback(null, { params })
-        );
-
-        return service.find({ query: { test: true } }).then((res: any) =>
-          assert.deepStrictEqual(res, {
-            params: { test: true }
-          })
-        );
-      });
+    res = await service.find({ query: { test: true } });
+    assert.deepStrictEqual(res, {
+      params: { test: true }
+    });
   });
 
-  it('converts to feathers-errors (#19)', () => {
+  it('converts to feathers-errors (#19)', async () => {
     connection.once('create', (_path: any, _data: any, _params: any, callback: DummyCallback) =>
       callback(new NotAuthenticated('Test', { hi: 'me' }).toJSON())
     );
 
-    return service.create(testData).catch(error => {
-      assert.ok(error instanceof NotAuthenticated);
-      assert.strictEqual(error.name, 'NotAuthenticated');
-      assert.strictEqual(error.message, 'Test');
-      assert.strictEqual(error.code, 401);
-      assert.deepStrictEqual(error.data, { hi: 'me' });
+    await assert.rejects(() => service.create(testData), {
+      name: 'NotAuthenticated',
+      message: 'Test',
+      code: 401,
+      data: { hi: 'me' }
     });
   });
 
-  it('converts other errors (#19)', () => {
+  it('converts other errors (#19)', async () => {
     connection.once('create', (_path: string, _data: any, _params: any, callback: (x: string) => void) =>
       callback('Something went wrong') // eslint-disable-line
     );
 
-    return service.create(testData).catch(error => {
-      assert.ok(error instanceof Error);
-      assert.strictEqual(error.message, 'Something went wrong');
+    await assert.rejects(() => service.create(testData), {
+      message: 'Something went wrong'
     });
   });
 

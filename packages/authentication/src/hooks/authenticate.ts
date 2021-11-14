@@ -1,10 +1,10 @@
 import flatten from 'lodash/flatten';
 import omit from 'lodash/omit';
-import { HookContext } from '@feathersjs/feathers';
+import { HookContext, NextFunction } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
-import Debug from 'debug';
+import { createDebug } from '@feathersjs/commons';
 
-const debug = Debug('@feathersjs/authentication/hooks/authenticate');
+const debug = createDebug('@feathersjs/authentication/hooks/authenticate');
 
 export interface AuthenticateHookSettings {
   service?: string;
@@ -20,7 +20,8 @@ export default (originalSettings: string | AuthenticateHookSettings, ...original
     throw new Error('The authenticate hook needs at least one allowed strategy');
   }
 
-  return async (context: HookContext) => {
+  return async (context: HookContext, _next?: NextFunction) => {
+    const next = typeof _next === 'function' ? _next : async () => context;
     const { app, params, type, path, service } = context;
     const { strategies } = settings;
     const { provider, authentication } = params;
@@ -42,7 +43,7 @@ export default (originalSettings: string | AuthenticateHookSettings, ...original
     }
 
     if (params.authenticated === true) {
-      return context;
+      return next();
     }
 
     if (authentication) {
@@ -53,12 +54,10 @@ export default (originalSettings: string | AuthenticateHookSettings, ...original
       const authResult = await authService.authenticate(authentication, authParams, ...strategies);
 
       context.params = Object.assign({}, params, omit(authResult, 'accessToken'), { authenticated: true });
-
-      return context;
     } else if (provider) {
       throw new NotAuthenticated('Not authenticated');
     }
 
-    return context;
+    return next();
   };
 };

@@ -1,8 +1,29 @@
 import assert from 'assert';
 import { EventEmitter } from 'events';
-import feathers, { Application } from '@feathersjs/feathers';
+import { feathers, Application, Id, Params } from '@feathersjs/feathers';
 
 import { socket as commons, SocketOptions } from '../../src/socket';
+
+class DummyService {
+  async get (id: Id, params: Params) {
+    return { id, params };
+  }
+
+  async create (data: any, params: Params) {
+    return {
+      ...data,
+      params
+    };
+  }
+
+  async custom (data: any, params: Params) {
+    return {
+      ...data,
+      params,
+      message: 'From custom method'
+    }
+  }
+}
 
 describe('@feathersjs/transport-commons', () => {
   let provider: EventEmitter;
@@ -24,14 +45,8 @@ describe('@feathersjs/transport-commons', () => {
     };
     app = feathers()
       .configure(commons(options))
-      .use('/myservice', {
-        get (id, params) {
-          return Promise.resolve({ id, params });
-        },
-
-        create (data, params) {
-          return Promise.resolve(Object.assign({ params }, data));
-        }
+      .use('/myservice', new DummyService(), {
+        methods: [ 'get', 'create', 'custom' ]
       });
 
     return options.done;
@@ -66,7 +81,7 @@ describe('@feathersjs/transport-commons', () => {
             }, connection)
           });
           done();
-        } catch (e) {
+        } catch (e: any) {
           done(e);
         }
       });
@@ -105,7 +120,38 @@ describe('@feathersjs/transport-commons', () => {
           assert.ok(!error);
           assert.deepStrictEqual(result, Object.assign({ params }, data));
           done();
-        } catch (e) {
+        } catch (e: any) {
+          done(e);
+        }
+      });
+    });
+
+    it('custom method with params', done => {
+      const socket = new EventEmitter();
+      const data = {
+        test: 'data'
+      };
+
+      provider.emit('connection', socket);
+
+      socket.emit('custom', 'myservice', data, {
+        fromQuery: true
+      }, (error: any, result: any) => {
+        try {
+          const params = Object.assign({
+            query: { fromQuery: true },
+            route: {},
+            connection
+          }, connection);
+
+          assert.ok(!error);
+          assert.deepStrictEqual(result, {
+            ...data,
+            params,
+            message: 'From custom method'
+          });
+          done();
+        } catch (e: any) {
           done(e);
         }
       });
