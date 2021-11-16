@@ -61,8 +61,7 @@ it('adapter-commons: select with other fields', () => {
 
   return Promise.resolve(data)
     .then(selector)
-    .then(result => assertEquals(result, {
-      id: 'me',
-      name: 'David'
-    }));
+    .then(result => {
+      assertEquals(result, { id: 'me', name: 'David' })
+    });
 });

@@ -1,5 +1,5 @@
 import { NotImplemented, BadRequest, MethodNotAllowed } from '../../errors/src/index.ts';
-import { ServiceMethods, Params, Id, NullableId, Paginated } from '../../feathers/src/declarations.ts';
+import type { ServiceMethods, Params, Id, NullableId, Paginated } from '../../feathers/src/declarations.ts';
 import { filterQuery } from './filter-query.ts';
 
 const callMethod = (self: any, name: any, ...args: any[]) => {
