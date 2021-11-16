@@ -1,0 +1,141 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import * as bcrypt from 'https://deno.land/x/bcrypt@v0.2.4/mod.ts';
+import { get, omit } from 'https://deno.land/x/lodash@4.17.19/lodash.js';
+import { NotAuthenticated } from '../../errors/src/index.ts';
+import { Query, Params } from '../../feathers/src/index.ts';
+import {
+  AuthenticationRequest, AuthenticationBaseStrategy
+} from '../../authentication/src/index.ts';
+import { createDebug } from '../../commons/src/index.ts';
+
+const debug = createDebug('@feathersjs/authentication-local/strategy');
+
+export class LocalStrategy extends AuthenticationBaseStrategy {
+  verifyConfiguration () {
+    const config = this.configuration;
+
+    [ 'usernameField', 'passwordField' ].forEach(prop => {
+      if (typeof config[prop] !== 'string') {
+        throw new Error(`'${this.name}' authentication strategy requires a '${prop}' setting`);
+      }
+    });
+  }
+
+  get configuration () {
+    const authConfig = this.authentication?.configuration;
+    const config = super.configuration || {};
+
+    return {
+      hashSize: 10,
+      service: authConfig.service,
+      entity: authConfig.entity,
+      entityId: authConfig.entityId,
+      errorMessage: 'Invalid login',
+      entityPasswordField: config.passwordField,
+      entityUsernameField: config.usernameField,
+      ...config
+    };
+  }
+
+  // deno-lint-ignore require-await
+  async getEntityQuery (query: Query, _params: Params) {
+    return {
+      $limit: 1,
+      ...query
+    };
+  }
+
+  async findEntity (username: string, params: Params) {
+    const { entityUsernameField, errorMessage } = this.configuration;
+    if (!username) { // don't query for users without any condition set.
+      throw new NotAuthenticated(errorMessage);
+    }
+
+    const query = await this.getEntityQuery({
+      [entityUsernameField]: username
+    }, params);
+
+    const findParams = Object.assign({}, params, { query });
+    const entityService = this.entityService;
+
+    debug('Finding entity with query', params.query);
+
+    const result = await entityService?.find(findParams);
+    const list = Array.isArray(result) ? result : result.data;
+
+    if (!Array.isArray(list) || list.length === 0) {
+      debug('No entity found');
+
+      throw new NotAuthenticated(errorMessage);
+    }
+
+    const [ entity ] = list;
+
+    return entity;
+  }
+
+  // deno-lint-ignore require-await
+  async getEntity (result: any, params: Params) {
+    const entityService = this.entityService;
+    const { entityId = (entityService as any).id, entity } = this.configuration;
+
+    if (!entityId || result[entityId] === undefined) {
+      throw new NotAuthenticated('Could not get local entity');
+    }
+
+    if (!params.provider) {
+      return result;
+    }
+
+    return entityService?.get(result[entityId], {
+      ...params,
+      [entity]: result
+    });
+  }
+
+  async comparePassword (entity: any, password: string) {
+    const { entityPasswordField, errorMessage } = this.configuration;
+    // find password in entity, this allows for dot notation
+    const hash = get(entity, entityPasswordField);
+
+    if (!hash) {
+      debug(`Record is missing the '${entityPasswordField}' password field`);
+
+      throw new NotAuthenticated(errorMessage);
+    }
+
+    debug('Verifying password');
+
+    const result = await bcrypt.compare(password, hash);
+
+    if (result) {
+      return entity;
+    }
+
+    throw new NotAuthenticated(errorMessage);
+  }
+
+  // deno-lint-ignore require-await
+  async hashPassword (password: string, _params: Params) {
+    return bcrypt.hash(password, this.configuration.hashSize);
+  }
+
+  async authenticate (data: AuthenticationRequest, params: Params) {
+    const { passwordField, usernameField, entity, errorMessage } = this.configuration;
+    const username = data[usernameField];
+    const password = data[passwordField];
+
+    if (!password) { // exit early if there is no password
+      throw new NotAuthenticated(errorMessage);
+    }
+
+    const result = await this.findEntity(username, omit(params, 'provider'));
+
+    await this.comparePassword(result, password);
+
+    return {
+      authentication: { strategy: this.name },
+      [entity]: await this.getEntity(result, params)
+    };
+  }
+}

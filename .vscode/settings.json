@@ -1,0 +1,11 @@
+{
+  "deno.enable": true,
+  "deno.lint": true,
+  "deno.unstable": true,
+  "deno.codeLens.references": true,
+  "deno.codeLens.implementations": true,
+  "deno.suggest.completeFunctionCalls": true,
+  "deno.suggest.imports.hosts": {
+    "https://deno.land": false
+  }
+}
