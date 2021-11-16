@@ -1,270 +1,256 @@
-import assert from 'assert';
-import { ObjectId } from 'mongodb';
-import { filterQuery } from '../src';
+import { it, assert, assertEquals, assertStrictEquals, assertThrows } from '../../commons/src/testing.ts'
+import { errors } from '../../errors/src/index.ts'
+import { objectId } from 'https://deno.land/x/objectid@0.2.0/mod.ts';
 
-describe('@feathersjs/adapter-commons/filterQuery', () => {
-  describe('$sort', () => {
-    it('returns $sort when present in query', () => {
-      const originalQuery = { $sort: { name: 1 } };
-      const { filters, query } = filterQuery(originalQuery);
+import { filterQuery } from '../src/filter-query.ts';
 
-      assert.strictEqual(filters.$sort.name, 1);
-      assert.deepStrictEqual(query, {});
-      assert.deepStrictEqual(originalQuery, {
-        $sort: { name: 1 }
-      }, 'does not modify original query');
-    });
+// const { ObjectId } = Bson
+const makeLimitQuery = () => ({ $limit: 1 })
+const makeSkipQuery = () => ({ $skip: 1 })
+const makeSelectQuery = () => ({ $select: 1 })
 
-    it('returns $sort when present in query as an object', () => {
-      const { filters, query } = filterQuery({ $sort: { name: { something: 10 } } });
+// describe('@feathersjs/adapter-commons/filterQuery', () => {
+// describe('$sort', () => {
+it('returns $sort when present in query', () => {
+  const originalQuery = { $sort: { name: 1 } };
+  const { filters, query } = filterQuery(originalQuery);
 
-      assert.strictEqual(filters.$sort.name.something, 10);
-      assert.deepStrictEqual(query, {});
-    });
+  assertStrictEquals(filters.$sort.name, 1);
+  assertEquals(query, {});
+  assertEquals(originalQuery, {
+    $sort: { name: 1 }
+  }, 'does not modify original query');
+});
 
-    it('converts strings in $sort', () => {
-      const { filters, query } = filterQuery({ $sort: { test: '-1' } });
+it('returns $sort when present in query as an object', () => {
+  const { filters, query } = filterQuery({ $sort: { name: { something: 10 } } });
 
-      assert.strictEqual(filters.$sort.test, -1);
-      assert.deepStrictEqual(query, {});
-    });
+  assertStrictEquals(filters.$sort.name.something, 10);
+  assertEquals(query, {});
+});
 
-    it('does not convert $sort arrays', () => {
-      const $sort = [ [ 'test', '-1' ], [ 'a', '1' ] ];
-      const { filters, query } = filterQuery({ $sort });
+it('converts strings in $sort', () => {
+  const { filters, query } = filterQuery({ $sort: { test: '-1' } });
 
-      assert.strictEqual(filters.$sort, $sort);
-      assert.deepStrictEqual(query, {});
-    });
+  assertStrictEquals(filters.$sort.test, -1);
+  assertEquals(query, {});
+});
 
-    it('throws an error when special parameter is not known', () => {
-      try {
-        const query = { $foo: 1 };
-        filterQuery(query);
-        assert.ok(false, 'Should never get here');
-      } catch (error: any) {
-        assert.strictEqual(error.name, 'BadRequest');
-        assert.strictEqual(error.message, 'Invalid query parameter $foo');
-      }
-    });
+it('does not convert $sort arrays', () => {
+  const $sort = [ [ 'test', '-1' ], [ 'a', '1' ] ];
+  const { filters, query } = filterQuery({ $sort });
 
-    it('returns undefined when not present in query', () => {
-      const query = { foo: 1 };
-      const { filters } = filterQuery(query);
+  assertEquals(filters.$sort, $sort);
+  assertEquals(query, {});
+});
 
-      assert.strictEqual(filters.$sort, undefined);
-    });
+it('throws an error when special parameter is not known', () => {
+  try {
+    const query = { $foo: 1 };
+    filterQuery(query);
+    assert(false, 'Should never get here');
+  } catch (error: any) {
+    assertStrictEquals(error.name, 'BadRequest');
+    assertStrictEquals(error.message, 'Invalid query parameter $foo');
+  }
+});
+
+it('returns undefined when not present in query', () => {
+  const query = { foo: 1 };
+  const { filters } = filterQuery(query);
+
+  assertStrictEquals(filters.$sort, undefined);
+});
+
+it('returns $limit when present in query', () => {
+  const limitQuery = makeLimitQuery()
+  const { filters, query } = filterQuery(limitQuery);
+
+  assertStrictEquals(filters.$limit, 1);
+  assertEquals(query, {});
+});
+
+it('returns undefined when not present in query', () => {
+  const query = { foo: 1 };
+  const { filters } = filterQuery(query);
+
+  assertStrictEquals(filters.$limit, undefined);
+});
+
+it('removes $limit from query when present', () => {
+  const limitQuery = makeLimitQuery()
+  assertEquals(filterQuery(limitQuery).query, {});
+});
+
+it('parses $limit strings into integers (#4)', () => {
+  const { filters } = filterQuery({ $limit: '2' });
+
+  assertStrictEquals(filters.$limit, 2);
+});
+
+it('allows $limit 0', () => {
+  const { filters } = filterQuery({ $limit: 0 }, { default: 10 });
+
+  assertStrictEquals(filters.$limit, 0);
+});
+
+// describe('pagination', () => {
+it('limits with default pagination', () => {
+  const { filters } = filterQuery({}, { paginate: { default: 10 } });
+
+  assertStrictEquals(filters.$limit, 10);
+});
+
+it('limits with max pagination', () => {
+  const { filters } = filterQuery({ $limit: 20 }, { paginate: { default: 5, max: 10 } });
+  const { filters: filtersNeg } = filterQuery({ $limit: -20 }, { paginate: { default: 5, max: 10 } });
+
+  assertStrictEquals(filters.$limit, 10);
+  assertStrictEquals(filtersNeg.$limit, 10);
+});
+
+it('limits with default pagination when not a number', () => {
+  const { filters } = filterQuery({ $limit: 'something' }, { paginate: { default: 5, max: 10 } });
+
+  assertStrictEquals(filters.$limit, 5);
+});
+
+it('limits to 0 when no paginate.default and not a number', () => {
+  const { filters } = filterQuery({ $limit: 'something' }, { paginate: { max: 10 } });
+
+  assertStrictEquals(filters.$limit, 0);
+});
+
+it('still uses paginate.max when there is no paginate.default (#2104)', () => {
+  const { filters } = filterQuery({ $limit: 100 }, { paginate: { max: 10 } });
+
+  assertStrictEquals(filters.$limit, 10);
+});
+
+// describe('$skip', () => {
+it('returns $skip when present in query', () => {
+  const skipQuery = makeSkipQuery()
+  const { filters } = filterQuery(skipQuery);
+
+  assertStrictEquals(filters.$skip, 1);
+});
+
+it('removes $skip from query when present', () => {
+  const skipQuery = makeSkipQuery()
+  assertEquals(filterQuery(skipQuery).query, {});
+});
+
+it('returns undefined when not present in query', () => {
+  const query = { foo: 1 };
+  const { filters } = filterQuery(query);
+
+  assertStrictEquals(filters.$skip, undefined);
+});
+
+it('parses $skip strings into integers (#4)', () => {
+  const { filters } = filterQuery({ $skip: '33' });
+
+  assertStrictEquals(filters.$skip, 33);
+});
+
+// describe('$select', () => {
+it('returns $select when present in query', () => {
+  const selectQuery = makeSelectQuery()
+  const { filters } = filterQuery(selectQuery);
+
+  assertStrictEquals(filters.$select, 1);
+});
+
+it('removes $select from query when present', () => {
+  const selectQuery = makeSelectQuery()
+  assertEquals(filterQuery(selectQuery).query, {});
+});
+
+it('returns undefined when not present in query', () => {
+  const query = { foo: 1 };
+  const { filters } = filterQuery(query);
+
+  assertStrictEquals(filters.$select, undefined);
+});
+
+it('includes Symbols', () => {
+  const TEST = Symbol('testing');
+  const original = {
+    [TEST]: 'message',
+    other: true,
+    sub: { [TEST]: 'othermessage' }
+  };
+
+  const { query } = filterQuery(original);
+
+  assertEquals(query, {
+    [TEST]: 'message',
+    other: true,
+    sub: { [TEST]: 'othermessage' }
   });
+});
 
-  describe('$limit', () => {
-    let testQuery: any;
+it('only converts plain objects', () => {
+  const userId = objectId().toString();
+  const original = {
+    userId
+  };
 
-    beforeEach(() => {
-      testQuery = { $limit: 1 };
-    });
+  const { query } = filterQuery(original);
 
-    it('returns $limit when present in query', () => {
-      const { filters, query } = filterQuery(testQuery);
+  assertEquals(query, original);
+});
 
-      assert.strictEqual(filters.$limit, 1);
-      assert.deepStrictEqual(query, {});
-    });
-
-    it('returns undefined when not present in query', () => {
-      const query = { foo: 1 };
-      const { filters } = filterQuery(query);
-
-      assert.strictEqual(filters.$limit, undefined);
-    });
-
-    it('removes $limit from query when present', () => {
-      assert.deepStrictEqual(filterQuery(testQuery).query, {});
-    });
-
-    it('parses $limit strings into integers (#4)', () => {
-      const { filters } = filterQuery({ $limit: '2' });
-
-      assert.strictEqual(filters.$limit, 2);
-    });
-
-    it('allows $limit 0', () => {
-      const { filters } = filterQuery({ $limit: 0 }, { default: 10 });
-
-      assert.strictEqual(filters.$limit, 0);
-    });
-
-    describe('pagination', () => {
-      it('limits with default pagination', () => {
-        const { filters } = filterQuery({}, { paginate: { default: 10 } });
-
-        assert.strictEqual(filters.$limit, 10);
+// describe('arrays', () => {
+it('validates queries in arrays', () => {
+  assertThrows(
+    () => {
+      filterQuery({
+        $or: [{ $exists: false }]
       });
+    },
+    errors.BadRequest,
+    'Invalid query parameter $exists'
+  );
+});
 
-      it('limits with max pagination', () => {
-        const { filters } = filterQuery({ $limit: 20 }, { paginate: { default: 5, max: 10 } });
-        const { filters: filtersNeg } = filterQuery({ $limit: -20 }, { paginate: { default: 5, max: 10 } });
+// describe('additional filters', () => {
+it('throw error when not set as additionals', () => {
+  try {
+    filterQuery({ $select: 1, $known: 1 });
+    assert(false, 'Should never get here');
+  } catch (error: any) {
+    assertStrictEquals(error.message, 'Invalid query parameter $known');
+  }
+});
 
-        assert.strictEqual(filters.$limit, 10);
-        assert.strictEqual(filtersNeg.$limit, 10);
-      });
+it('returns default and known additional filters (array)', () => {
+  const query = { $select: ['a', 'b'], $known: 1, $unknown: 1 };
+  const { filters } = filterQuery(query, { filters: [ '$known', '$unknown' ] });
 
-      it('limits with default pagination when not a number', () => {
-        const { filters } = filterQuery({ $limit: 'something' }, { paginate: { default: 5, max: 10 } });
+  assertStrictEquals(filters.$unknown, 1);
+  assertStrictEquals(filters.$known, 1);
+  assertEquals(filters.$select, [ 'a', 'b' ]);
+});
 
-        assert.strictEqual(filters.$limit, 5);
-      });
+it('returns default and known additional filters (object)', () => {
+  const { filters } = filterQuery({
+    $known: 1,
+    $select: 1
+  }, { filters: { $known: (value: any) => value.toString() } });
 
-      it('limits to 0 when no paginate.default and not a number', () => {
-        const { filters } = filterQuery({ $limit: 'something' }, { paginate: { max: 10 } });
+  assertStrictEquals(filters.$unknown, undefined);
+  assertStrictEquals(filters.$known, '1');
+  assertStrictEquals(filters.$select, 1);
+});
 
-        assert.strictEqual(filters.$limit, 0);
-      });
+// describe('additional operators', () => {
+it('returns query with default and known additional operators', () => {
+  const { query } = filterQuery({
+    $ne: 1, $known: 1
+  }, { operators: [ '$known' ] });
 
-      it('still uses paginate.max when there is no paginate.default (#2104)', () => {
-        const { filters } = filterQuery({ $limit: 100 }, { paginate: { max: 10 } });
-
-        assert.strictEqual(filters.$limit, 10);
-      });
-    });
-  });
-
-  describe('$skip', () => {
-    let testQuery: any;
-
-    beforeEach(() => {
-      testQuery = { $skip: 1 };
-    });
-
-    it('returns $skip when present in query', () => {
-      const { filters } = filterQuery(testQuery);
-
-      assert.strictEqual(filters.$skip, 1);
-    });
-
-    it('removes $skip from query when present', () => {
-      assert.deepStrictEqual(filterQuery(testQuery).query, {});
-    });
-
-    it('returns undefined when not present in query', () => {
-      const query = { foo: 1 };
-      const { filters } = filterQuery(query);
-
-      assert.strictEqual(filters.$skip, undefined);
-    });
-
-    it('parses $skip strings into integers (#4)', () => {
-      const { filters } = filterQuery({ $skip: '33' });
-
-      assert.strictEqual(filters.$skip, 33);
-    });
-  });
-
-  describe('$select', () => {
-    let testQuery: any;
-
-    beforeEach(() => {
-      testQuery = { $select: 1 };
-    });
-
-    it('returns $select when present in query', () => {
-      const { filters } = filterQuery(testQuery);
-
-      assert.strictEqual(filters.$select, 1);
-    });
-
-    it('removes $select from query when present', () => {
-      assert.deepStrictEqual(filterQuery(testQuery).query, {});
-    });
-
-    it('returns undefined when not present in query', () => {
-      const query = { foo: 1 };
-      const { filters } = filterQuery(query);
-
-      assert.strictEqual(filters.$select, undefined);
-    });
-
-    it('includes Symbols', () => {
-      const TEST = Symbol('testing');
-      const original = {
-        [TEST]: 'message',
-        other: true,
-        sub: { [TEST]: 'othermessage' }
-      };
-
-      const { query } = filterQuery(original);
-
-      assert.deepStrictEqual(query, {
-        [TEST]: 'message',
-        other: true,
-        sub: { [TEST]: 'othermessage' }
-      });
-    });
-
-    it('only converts plain objects', () => {
-      const userId = new ObjectId();
-      const original = {
-        userId
-      };
-
-      const { query } = filterQuery(original);
-
-      assert.deepStrictEqual(query, original);
-    });
-  });
-
-  describe('arrays', () => {
-    it('validates queries in arrays', () => {
-      assert.throws(() => {
-        filterQuery({
-          $or: [{ $exists: false }]
-        });
-      }, {
-        name: 'BadRequest',
-        message: 'Invalid query parameter $exists'
-      });
-    });
-  });
-
-  describe('additional filters', () => {
-    it('throw error when not set as additionals', () => {
-      try {
-        filterQuery({ $select: 1, $known: 1 });
-        assert.ok(false, 'Should never get here');
-      } catch (error: any) {
-        assert.strictEqual(error.message, 'Invalid query parameter $known');
-      }
-    });
-
-    it('returns default and known additional filters (array)', () => {
-      const query = { $select: ['a', 'b'], $known: 1, $unknown: 1 };
-      const { filters } = filterQuery(query, { filters: [ '$known', '$unknown' ] });
-
-      assert.strictEqual(filters.$unknown, 1);
-      assert.strictEqual(filters.$known, 1);
-      assert.deepStrictEqual(filters.$select, [ 'a', 'b' ]);
-    });
-
-    it('returns default and known additional filters (object)', () => {
-      const { filters } = filterQuery({
-        $known: 1,
-        $select: 1
-      }, { filters: { $known: (value: any) => value.toString() } });
-
-      assert.strictEqual(filters.$unknown, undefined);
-      assert.strictEqual(filters.$known, '1');
-      assert.strictEqual(filters.$select, 1);
-    });
-  });
-
-  describe('additional operators', () => {
-    it('returns query with default and known additional operators', () => {
-      const { query } = filterQuery({
-        $ne: 1, $known: 1
-      }, { operators: [ '$known' ] });
-
-      assert.strictEqual(query.$ne, 1);
-      assert.strictEqual(query.$known, 1);
-      assert.strictEqual(query.$unknown, undefined);
-    });
-  });
+  assertStrictEquals(query.$ne, 1);
+  assertStrictEquals(query.$known, 1);
+  assertStrictEquals(query.$unknown, undefined);
 });

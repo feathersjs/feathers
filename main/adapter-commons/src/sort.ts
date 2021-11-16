@@ -70,10 +70,10 @@ export function sorter ($sort: any) {
   let sortLevels = false; // True if $sort has tags with '.' i.e. '{a: 1, b: -1, "c.x.z": 1}'
 
   const getVal = (a: any, sortKeys: any[]) => {
-    let keys = sortKeys.map(key => key);
+    const keys = sortKeys.map(key => key);
     let val = a;
     do {
-      let key = keys.shift();
+      const key = keys.shift();
       val = val[key];
     } while (keys.length);
 
