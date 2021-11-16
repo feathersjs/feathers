@@ -2,6 +2,8 @@ import {
   EventEmitter, NextFunction, HookContext as BaseHookContext
 } from './dependencies.ts';
 
+type Emitter = typeof EventEmitter
+
 type SelfOrArray<S> = S | S[];
 type OptionalPick<T, K extends PropertyKey> = Pick<T, Extract<keyof T, K>>
 
@@ -60,7 +62,7 @@ export type Service<T = any, D = Partial<T>> =
 export type ServiceInterface<T = any, D = Partial<T>> =
   Partial<ServiceMethods<T, D>>;
 
-export interface ServiceAddons<A = Application, S = Service> extends EventEmitter {
+export interface ServiceAddons<A = Application, S = Service> extends Emitter {
   id?: string;
   hooks (options: HookOptions<A, S>): this;
 }
@@ -221,7 +223,7 @@ export interface FeathersApplication<Services = any, Settings = any> {
 
 // This needs to be an interface instead of a type
 // so that the declaration can be extended by other modules
-export interface Application<Services = any, Settings = any> extends FeathersApplication<Services, Settings>, EventEmitter {
+export interface Application<Services = any, Settings = any> extends FeathersApplication<Services, Settings>, Emitter {
 
 }
 
