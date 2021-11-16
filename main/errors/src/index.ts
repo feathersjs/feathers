@@ -15,13 +15,13 @@ interface ErrorProperties extends Omit<FeathersErrorJSON, 'message'> {
 }
 
 export class FeathersError extends Error {
-  readonly type: string;
-  readonly code: number;
-  readonly className: string;
+  readonly type!: string;
+  readonly code!: number;
+  readonly className!: string;
   readonly data: any;
   readonly errors: any;
 
-  constructor (err: ErrorMessage, name: string, code: number, className: string, _data: any) {
+  constructor (err: ErrorMessage | undefined, name: string, code: number, className: string, _data: any) {
     let msg = typeof err === 'string' ? err : 'Error';
     const properties: ErrorProperties = {
       name,
