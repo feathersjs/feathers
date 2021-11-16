@@ -3,8 +3,7 @@ import * as errors from '../src/index.ts';
 
 const { convert } = errors;
 
-// describe('@feathersjs/errors', () => {
-// describe('errors.convert', () => {
+// 'errors.convert'
 it('converts objects to feathers errors', () => {
   const error = convert({
     name: 'BadRequest',
@@ -35,7 +34,7 @@ it('converts nothing', () =>
   assertEquals(convert(null), null)
 );
 
-// describe('error types', () => {
+// 'error types'
 it('Bad Request', () => {
   assertNotStrictEquals(typeof errors.BadRequest, 'undefined', 'has BadRequest');
 });
@@ -185,7 +184,7 @@ it('instantiates every error', () => {
   });
 });
 
-// describe('inheritance', () => {
+// 'inheritance'
 it('instanceof differentiates between error types', () => {
   const error = new errors.MethodNotAllowed();
   assert(!(error instanceof errors.BadRequest));
@@ -203,8 +202,8 @@ it('has the correct constructors', () => {
   assert(error.constructor.name === 'NotFound');
 });
 
-// describe('successful error creation', () => {
-// describe('without custom message', () => {
+// 'successful error creation'
+// 'without custom message'
 it('default error', () => {
   const error = new errors.GeneralError();
   assertStrictEquals(error.code, 500);
@@ -251,7 +250,7 @@ it('with data', () => {
   assertEquals(error.data, data);
 });
 
-// describe('with custom message', () => {
+// 'with custom message'
 it('contains our message', () => {
   const error = new errors.BadRequest('Invalid Password');
   assertStrictEquals(error.code, 400);
