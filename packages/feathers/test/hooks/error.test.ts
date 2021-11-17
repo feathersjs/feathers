@@ -11,7 +11,10 @@ describe('`error` hooks', () => {
     });
     const service = app.service('dummy');
 
-    afterEach(() => (service as any).__hooks.error.get = []);
+    afterEach(() => {
+      (service as any).__hooks.error.get = undefined;
+      (service as any).__hooks.hooks.get = [];
+    });
 
     it('basic error hook', async () => {
       service.hooks({

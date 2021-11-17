@@ -7,13 +7,17 @@ import {
 import { defaultServiceArguments, getHookMethods } from '../service';
 import {
   collectLegacyHooks,
-  enableLegacyHooks,
-  fromAfterHook,
-  fromBeforeHook,
-  fromErrorHooks
+  enableLegacyHooks
 } from './legacy';
 
-export { fromAfterHook, fromBeforeHook, fromErrorHooks };
+export {
+  fromBeforeHook,
+  fromBeforeHooks,
+  fromAfterHook,
+  fromAfterHooks,
+  fromErrorHook,
+  fromErrorHooks
+} from './legacy';
 
 export function createContext (service: Service, method: string, data: HookContextData = {}) {
   const createContext = (service as any)[method].createContext;
