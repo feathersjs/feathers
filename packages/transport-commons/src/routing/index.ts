@@ -18,7 +18,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
 
 export * from './router';
 
-const lookup = function(this: Application, path: string) {
+const lookup = function (this: Application, path: string) {
   const result = this.routes.lookup(path);
 
   if (result === null) {
