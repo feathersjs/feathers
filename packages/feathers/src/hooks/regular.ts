@@ -1,7 +1,7 @@
-import { HookFunction, LegacyHookFunction, LegacyHookMap } from '../declarations';
+import { HookFunction, RegularHookFunction, RegularHookMap } from '../declarations';
 import { defaultServiceMethods } from '../service';
 
-const runHook = <A, S> (hook: LegacyHookFunction<A, S>, context: any, type?: string) => {
+const runHook = <A, S> (hook: RegularHookFunction<A, S>, context: any, type?: string) => {
   if (type) context.type = type;
   return Promise.resolve(hook.call(context.self, context))
     .then((res: any) => {
@@ -12,19 +12,19 @@ const runHook = <A, S> (hook: LegacyHookFunction<A, S>, context: any, type?: str
     });
 };
 
-export function fromBeforeHook<A, S> (hook: LegacyHookFunction<A, S>): HookFunction<A, S> {
+export function fromBeforeHook<A, S> (hook: RegularHookFunction<A, S>): HookFunction<A, S> {
   return (context, next) => {
     return runHook(hook, context, 'before').then(next);
   };
 }
 
-export function fromAfterHook<A, S> (hook: LegacyHookFunction<A, S>): HookFunction<A, S> {
+export function fromAfterHook<A, S> (hook: RegularHookFunction<A, S>): HookFunction<A, S> {
   return (context, next) => {
     return next().then(() => runHook(hook, context, 'after'));
   }
 }
 
-export function fromErrorHook<A, S> (hook: LegacyHookFunction<A, S>): HookFunction<A, S> {
+export function fromErrorHook<A, S> (hook: RegularHookFunction<A, S>): HookFunction<A, S> {
   return (context, next) => {
     return next().catch((error: any) => {
       if (context.error !== error || context.result !== undefined) {
@@ -42,32 +42,32 @@ export function fromErrorHook<A, S> (hook: LegacyHookFunction<A, S>): HookFuncti
   }
 }
 
-const RunHooks = <A, S> (hooks: LegacyHookFunction<A, S>[]) => (context: any) => {
+const RunHooks = <A, S> (hooks: RegularHookFunction<A, S>[]) => (context: any) => {
   return hooks.reduce((promise, hook) => {
     return promise.then(() => runHook(hook, context))
   }, Promise.resolve(undefined));
 };
 
-export function fromBeforeHooks<A, S> (hooks: LegacyHookFunction<A, S>[]) {
+export function fromBeforeHooks<A, S> (hooks: RegularHookFunction<A, S>[]) {
   return fromBeforeHook(RunHooks(hooks));
 }
 
-export function fromAfterHooks<A, S> (hooks: LegacyHookFunction<A, S>[]) {
+export function fromAfterHooks<A, S> (hooks: RegularHookFunction<A, S>[]) {
   return fromAfterHook(RunHooks(hooks));
 }
 
-export function fromErrorHooks<A, S> (hooks: LegacyHookFunction<A, S>[]) {
+export function fromErrorHooks<A, S> (hooks: RegularHookFunction<A, S>[]) {
   return fromErrorHook(RunHooks(hooks));
 }
 
-export function collectLegacyHooks (target: any, method: string) {
+export function collectRegularHooks (target: any, method: string) {
   return target.__hooks.hooks[method] || [];
 }
 
 // Converts different hook registration formats into the
 // same internal format
 export function convertHookData (input: any) {
-  const result: { [ method: string ]: LegacyHookFunction[] } = {};
+  const result: { [ method: string ]: RegularHookFunction[] } = {};
 
   if (Array.isArray(input)) {
     result.all = input;
@@ -83,31 +83,31 @@ export function convertHookData (input: any) {
   return result;
 }
 
-type LegacyType = 'before' | 'after' | 'error';
+type RegularType = 'before' | 'after' | 'error';
 
-type LegacyMap = { [ type in LegacyType ]: ReturnType< typeof convertHookData > };
+type RegularMap = { [ type in RegularType ]: ReturnType< typeof convertHookData > };
 
-type LegacyAdapter = HookFunction & { hooks: LegacyHookFunction[] };
+type RegularAdapter = HookFunction & { hooks: RegularHookFunction[] };
 
-type LegacyStore = {
-  before: { [ method: string ]: LegacyAdapter },
-  after: { [ method: string ]: LegacyAdapter },
-  error: { [ method: string ]: LegacyAdapter },
+type RegularStore = {
+  before: { [ method: string ]: RegularAdapter },
+  after: { [ method: string ]: RegularAdapter },
+  error: { [ method: string ]: RegularAdapter },
   hooks: { [ method: string ]: HookFunction[] }
 };
 
-const types: LegacyType[] = ['before', 'after', 'error'];
+const types: RegularType[] = ['before', 'after', 'error'];
 
-const isType = (value: any): value is LegacyType => types.includes(value);
+const isType = (value: any): value is RegularType => types.includes(value);
 
 const wrappers = {
   before: fromBeforeHooks,
   after: fromAfterHooks,
-  error: fromErrorHooks,
+  error: fromErrorHooks
 };
 
 const createStore = (methods: string[]) => {
-  const store: LegacyStore = {
+  const store: RegularStore = {
     before: {},
     after: {},
     error: {},
@@ -121,7 +121,7 @@ const createStore = (methods: string[]) => {
   return store;
 };
 
-const setStore = (object: any, store: LegacyStore) => {
+const setStore = (object: any, store: RegularStore) => {
   Object.defineProperty(object, '__hooks', {
     configurable: true,
     value: store,
@@ -129,10 +129,10 @@ const setStore = (object: any, store: LegacyStore) => {
   });
 };
 
-const getStore = (object: any): LegacyStore => object.__hooks;
+const getStore = (object: any): RegularStore => object.__hooks;
 
-const createMap = (input: LegacyHookMap<any, any>, methods: string[]) => {
-  const map = {} as LegacyMap;
+const createMap = (input: RegularHookMap<any, any>, methods: string[]) => {
+  const map = {} as RegularMap;
 
   Object.keys(input).forEach((type) => {
     if (!isType(type)) {
@@ -153,20 +153,20 @@ const createMap = (input: LegacyHookMap<any, any>, methods: string[]) => {
   return map;
 };
 
-const createAdapter = (type: LegacyType) => {
-  const hooks: LegacyHookFunction[] = [];
+const createAdapter = (type: RegularType) => {
+  const hooks: RegularHookFunction[] = [];
   const hook = wrappers[type](hooks);
   const adapter = Object.assign(hook, { hooks });
 
   return adapter;
 };
 
-const updateStore = (store: LegacyStore, map: LegacyMap) => {
+const updateStore = (store: RegularStore, map: RegularMap) => {
   Object.keys(store.hooks).forEach((method) => {
     let adapted = false;
 
     Object.keys(map).forEach((key) => {
-      const type = key as LegacyType;
+      const type = key as RegularType;
       const allHooks = map[type].all || [];
       const methodHooks = map[type][method] || [];
 
@@ -188,7 +188,7 @@ const updateStore = (store: LegacyStore, map: LegacyMap) => {
 };
 
 // Add `.hooks` functionality to an object
-export function enableLegacyHooks (
+export function enableRegularHooks (
   object: any,
   methods: string[] = defaultServiceMethods
 ) {
@@ -196,7 +196,7 @@ export function enableLegacyHooks (
 
   setStore(object, store);
 
-  return function legacyHooks (this: any, input: LegacyHookMap<any, any>) {
+  return function regularHooks (this: any, input: RegularHookMap<any, any>) {
     const store = getStore(this);
     const map = createMap(input, methods);
 
