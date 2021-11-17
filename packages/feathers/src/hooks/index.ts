@@ -15,7 +15,7 @@ import {
 
 export { fromAfterHook, fromBeforeHook, fromErrorHooks };
 
-export function createContext (service: Service<any>, method: string, data: HookContextData = {}) {
+export function createContext (service: Service, method: string, data: HookContextData = {}) {
   const createContext = (service as any)[method].createContext;
 
   if (typeof createContext !== 'function') {
@@ -63,7 +63,9 @@ export function hookMixin<A> (
   }
 
   const app = this;
-  const serviceMethodHooks = getHookMethods(service, options).reduce((res, method) => {
+  const hookMethods = getHookMethods(service, options);
+
+  const serviceMethodHooks = hookMethods.reduce((res, method) => {
     const params = (defaultServiceArguments as any)[method] || [ 'data', 'params' ];
 
     res[method] = new FeathersHookManager<A>(app, method)
@@ -80,7 +82,7 @@ export function hookMixin<A> (
     return res;
   }, {} as HookMap);
   const handleRegularHooks = enableRegularHooks(service);
-
+  
   hooks(service, serviceMethodHooks);
 
   service.hooks = function (this: any, hookOptions: any) {

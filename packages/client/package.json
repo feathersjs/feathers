@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/client",
   "description": "A module that consolidates Feathers client modules for REST (jQuery, Request, Superagent) and Websocket (Socket.io, Primus) connections",
-  "version": "5.0.0-pre.11",
+  "version": "5.0.0-pre.14",
   "repository": {
     "type": "git",
     "url": "https://github.com/feathersjs/feathers.git"
@@ -48,31 +48,31 @@
     "IE 11"
   ],
   "dependencies": {
-    "@feathersjs/authentication-client": "^5.0.0-pre.11",
-    "@feathersjs/errors": "^5.0.0-pre.11",
-    "@feathersjs/feathers": "^5.0.0-pre.11",
-    "@feathersjs/rest-client": "^5.0.0-pre.11",
-    "@feathersjs/socketio-client": "^5.0.0-pre.11"
+    "@feathersjs/authentication-client": "^5.0.0-pre.14",
+    "@feathersjs/errors": "^5.0.0-pre.14",
+    "@feathersjs/feathers": "^5.0.0-pre.14",
+    "@feathersjs/rest-client": "^5.0.0-pre.14",
+    "@feathersjs/socketio-client": "^5.0.0-pre.14"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.5",
-    "@babel/preset-env": "^7.15.6",
-    "@feathersjs/express": "^5.0.0-pre.11",
-    "@feathersjs/memory": "^5.0.0-pre.11",
-    "@feathersjs/socketio": "^5.0.0-pre.11",
-    "@feathersjs/tests": "^5.0.0-pre.11",
-    "babel-loader": "^8.2.2",
-    "mocha": "^9.1.2",
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "@feathersjs/express": "^5.0.0-pre.14",
+    "@feathersjs/memory": "^5.0.0-pre.14",
+    "@feathersjs/socketio": "^5.0.0-pre.14",
+    "@feathersjs/tests": "^5.0.0-pre.14",
+    "babel-loader": "^8.2.3",
+    "mocha": "^9.1.3",
     "mocha-puppeteer": "^0.14.0",
     "node-fetch": "^2.6.1",
     "shx": "^0.3.3",
-    "socket.io-client": "^4.2.0",
+    "socket.io-client": "^4.3.2",
     "superagent": "^6.1.0",
     "ts-loader": "^9.2.6",
-    "typescript": "^4.4.3",
-    "webpack": "^5.55.1",
-    "webpack-cli": "^4.8.0",
+    "typescript": "^4.4.4",
+    "webpack": "^5.62.1",
+    "webpack-cli": "^4.9.1",
     "webpack-merge": "^5.8.0"
   },
-  "gitHead": "a9f7865cce8db2305b7c0d2ef4a165c2724034ef"
+  "gitHead": "9bb26276938aead1f3f582be5517a49a8ce00f09"
 }

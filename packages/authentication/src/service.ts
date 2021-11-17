@@ -10,7 +10,7 @@ import jsonwebtoken from 'jsonwebtoken';
 const debug = createDebug('@feathersjs/authentication/service');
 
 declare module '@feathersjs/feathers/lib/declarations' {
-  interface FeathersApplication<ServiceTypes, AppSettings> { // eslint-disable-line
+  interface FeathersApplication<Services, Settings> { // eslint-disable-line
     /**
      * Returns the default authentication service or the
      * authentication service for a given path.

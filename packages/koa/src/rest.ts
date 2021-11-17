@@ -10,7 +10,7 @@ const debug = createDebug('@feathersjs/koa:rest');
 export function rest () {
   return async (ctx: FeathersKoaContext, next: Next) => {
     const { app, request } = ctx;
-    const { query: koaQuery, path, body: data, method: httpMethod } = request;
+    const { query: koaQuery, headers, path, body: data, method: httpMethod } = request;
     const query = { ...koaQuery };
     const methodOverride = request.headers[http.METHOD_HEADER] ?
       request.headers[http.METHOD_HEADER] as string : null;
@@ -33,6 +33,7 @@ export function rest () {
       const params = {
         ...ctx.feathers,
         query,
+        headers,
         route
       };
       const args = createArguments({ id, data, params });

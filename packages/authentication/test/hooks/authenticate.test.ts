@@ -10,7 +10,7 @@ describe('authentication/hooks/authenticate', () => {
   let app: Application<{
     authentication: AuthenticationService,
     'auth-v2': AuthenticationService,
-    users: Partial<ServiceMethods<any>> & { id: string }
+    users: Partial<ServiceMethods> & { id: string }
   }>;
 
   beforeEach(() => {

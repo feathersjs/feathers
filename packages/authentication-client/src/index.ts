@@ -4,7 +4,7 @@ import { Application } from '@feathersjs/feathers';
 import { Storage, MemoryStorage, StorageWrapper } from './storage';
 
 declare module '@feathersjs/feathers/lib/declarations' {
-  interface Application<ServiceTypes, AppSettings> { // eslint-disable-line
+  interface Application<Services, Settings> { // eslint-disable-line
     io?: any;
     rest?: any;
     authentication: AuthenticationClient;

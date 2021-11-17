@@ -20,6 +20,7 @@ declare module 'express-session' {
       accessToken: string;
       query: { [key: string]: any };
       grant: { [key: string]: any };
+      headers: { [key: string]: any };
   }
 }
 
@@ -54,13 +55,14 @@ export default (options: OauthSetupSettings) => {
       }
       req.session.redirect = redirect as string;
       req.session.query = query;
+      req.session.headers = req.headers;
 
       next()
     });
 
     authApp.get('/:name/authenticate', async (req: Request, res: Response, next: NextFunction) => {
       const { name } = req.params ;
-      const { accessToken, grant, query = {}, redirect } = req.session;
+      const { accessToken, grant, query = {}, redirect, headers } = req.session;
       const service = app.defaultAuthentication(authService);
       const [ strategy ] = service.getStrategies(name) as OAuthStrategy[];
       const params = {
@@ -71,7 +73,8 @@ export default (options: OauthSetupSettings) => {
           accessToken
         } : null,
         query,
-        redirect
+        redirect,
+        headers
       };
       const sendResponse = async (data: AuthenticationResult|Error) => {
         try {
