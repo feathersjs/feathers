@@ -69,7 +69,7 @@ export function compare (a: any, b: any, compareStrings: any = exports.compareNS
 // An in-memory sorting function according to the
 // $sort special query parameter
 export function sorter ($sort: any) {
-  let sortLevels = false; // True if $sort has tags with '.' i.e. '{a: 1, b: -1, "c.x.z": 1}'
+  let sortLevels = 0; // > 0 if $sort has tags with '.' i.e. '{a: 1, b: -1, "c.x.z": 1}'
 
   const getVal = (a: any, sortKeys: any[]) => {
     let keys = sortKeys.map(key => key);
@@ -85,7 +85,7 @@ export function sorter ($sort: any) {
     const criteria = Object.keys($sort).map(key => {
       const direction = $sort[key];
       const keys = key.split('.');
-      sortLevels = keys.length > 1;
+      sortLevels += (keys.length > 1) ? 1 : 0;
 
       return { keys, direction };
     });
