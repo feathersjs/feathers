@@ -240,6 +240,14 @@ export interface Params {
   [key: string]: any; // (JL) not sure if we want this
 }
 
+export interface Http {
+  /**
+   * A writeable, optional property that allows to override the standard HTTP status
+   * code that should be returned.
+   */
+  statusCode?: number;
+}
+
 export interface HookContext<A = Application, S = any> extends BaseHookContext<ServiceGenericType<S>> {
   /**
    * A read only property that contains the Feathers application object. This can be used to
@@ -310,8 +318,14 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
   /**
    * A writeable, optional property that allows to override the standard HTTP status
    * code that should be returned.
+   *
+   * @deprecated Use `http.statusCode` instead.
    */
   statusCode?: number;
+  /**
+   * A writeable, optional property that contains options specific to HTTP transports.
+   */
+  http?: Http;
   /**
    * The event emitted by this method. Can be set to `null` to skip event emitting.
    */

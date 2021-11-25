@@ -37,7 +37,7 @@ export function rest () {
         route
       };
       const args = createArguments({ id, data, params });
-      const hookContext = createContext(service, method);
+      const hookContext = createContext(service, method, { http: {} });
 
       ctx.hook = hookContext as any;
 

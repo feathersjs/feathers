@@ -60,8 +60,8 @@ export function getData (context: HookContext) {
 }
 
 export function getStatusCode (context: HookContext, data?: any) {
-  if (context.statusCode) {
-    return context.statusCode;
+  if (context.http?.statusCode) {
+    return context.http.statusCode;
   }
 
   if (context.method === 'create') {
