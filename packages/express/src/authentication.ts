@@ -1,6 +1,6 @@
 import { createDebug } from '@feathersjs/commons';
 import { merge, flatten } from 'lodash';
-import { NextFunction, RequestHandler } from 'express';
+import { NextFunction, RequestHandler, Request, Response } from 'express';
 
 const debug = createDebug('@feathersjs/express/authentication');
 
