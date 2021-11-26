@@ -19,7 +19,7 @@ describe('@feathersjs/transport-commons HTTP helpers', () => {
 
   it('getStatusCode', async () => {
     const statusContext = {
-      statusCode: 202
+      http: { statusCode: 202 }
     };
     const createContext = {
       method: 'create'

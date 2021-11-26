@@ -66,7 +66,7 @@ export const serviceMethodHandler = (
   }
 
   const args = getArgs(options);
-  const context = createContext(service, method);
+  const context = createContext(service, method, { http: {} });
 
   res.hook = context;
 

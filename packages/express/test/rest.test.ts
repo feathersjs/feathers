@@ -158,6 +158,7 @@ describe('@feathersjs/express/rest provider', () => {
           type: null,
           method: 'get',
           path: 'hook',
+          http: {},
           event: null,
           result: { description: 'You have to do dishes' },
           addedProperty: true
@@ -196,7 +197,7 @@ describe('@feathersjs/express/rest provider', () => {
 
         app.service('hook-status').hooks({
           after (hook: HookContext) {
-            hook.statusCode = 206;
+            hook.http!.statusCode = 206;
           }
         });
 
@@ -244,7 +245,8 @@ describe('@feathersjs/express/rest provider', () => {
               type: null,
               event: null,
               method: 'get',
-              path: 'hook-error'
+              path: 'hook-error',
+              http: {}
             },
             error: { message: 'I blew up' }
           });
