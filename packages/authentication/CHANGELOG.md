@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.15](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.14...v5.0.0-pre.15) (2021-11-27)
+
+
+### Bug Fixes
+
+* **typescript:** Overall typing improvements ([#2478](https://github.com/feathersjs/feathers/issues/2478)) ([b8eb804](https://github.com/feathersjs/feathers/commit/b8eb804158556d9651a8607e3c3fda15e0bfd110))
+
+
+### Features
+
+* **authentication-oauth:** Allow dynamic oAuth redirect ([#2469](https://github.com/feathersjs/feathers/issues/2469)) ([b7143d4](https://github.com/feathersjs/feathers/commit/b7143d4c0fbe961e714f79512be04449b9bbd7d9))
+
+
+
+
+
 # [5.0.0-pre.14](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.13...v5.0.0-pre.14) (2021-10-13)
 
 **Note:** Version bump only for package @feathersjs/authentication
