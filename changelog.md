@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.15](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.14...v5.0.0-pre.15) (2021-11-27)
+
+
+### Bug Fixes
+
+* **adapter-commons:** clean up in sort.ts and select function ([#2492](https://github.com/feathersjs/feathers/issues/2492)) ([c3ec8a4](https://github.com/feathersjs/feathers/commit/c3ec8a418bdc85506e3c5100015720a45454d8d3))
+* **adapter-commons:** Fix sorting for embedded objects ([#2488](https://github.com/feathersjs/feathers/issues/2488)) ([9c22f70](https://github.com/feathersjs/feathers/commit/9c22f70a838cb6341775d91705a7527c8fc5590e))
+* missing express types for Request, Response ([#2498](https://github.com/feathersjs/feathers/issues/2498)) ([ee67131](https://github.com/feathersjs/feathers/commit/ee67131bbaa24c54d3d781bdf8820015759ac488))
+* **typescript:** Overall typing improvements ([#2478](https://github.com/feathersjs/feathers/issues/2478)) ([b8eb804](https://github.com/feathersjs/feathers/commit/b8eb804158556d9651a8607e3c3fda15e0bfd110))
+
+
+### Features
+
+* **authentication-oauth:** Allow dynamic oAuth redirect ([#2469](https://github.com/feathersjs/feathers/issues/2469)) ([b7143d4](https://github.com/feathersjs/feathers/commit/b7143d4c0fbe961e714f79512be04449b9bbd7d9))
+* **core:** add `context.http` and move `statusCode` there ([#2496](https://github.com/feathersjs/feathers/issues/2496)) ([b701bf7](https://github.com/feathersjs/feathers/commit/b701bf77fb83048aa1dffa492b3d77dd53f7b72b))
+* **core:** Improve legacy hooks integration ([08c8b40](https://github.com/feathersjs/feathers/commit/08c8b40999bf3889c61a4d4fad97a2c4f78bafc9))
+* **transport-commons:** Ability to register routes with custom params ([#2482](https://github.com/feathersjs/feathers/issues/2482)) ([497990a](https://github.com/feathersjs/feathers/commit/497990ae4a980e5a52a1f0f932db12cd0e6e254a))
+
+
+
+
+
 # [5.0.0-pre.14](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.13...v5.0.0-pre.14) (2021-10-13)
 
 **Note:** Version bump only for package feathers
