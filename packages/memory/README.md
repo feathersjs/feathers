@@ -33,7 +33,8 @@ __Options:__
 - `store` (*optional*) - An object with id to item assignments to pre-initialize the data store
 - `events` (*optional*) - A list of [custom service events](https://docs.feathersjs.com/api/events.html#custom-events) sent by this service
 - `paginate` (*optional*) - A [pagination object](https://docs.feathersjs.com/api/databases/common.html#pagination) containing a `default` and `max` page size
-- `whitelist` (*optional*) - A list of additional query parameters to allow
+- `whitelist` (*DEPRECATED*) - renamed to `allow`
+- `allow` (*optional*) - A list of additional query parameters to allow
 - `multi` (*optional*) - Allow `create` with arrays and `update` and `remove` with `id` `null` to change multiple items. Can be `true` for all methods or an array of allowed methods (e.g. `[ 'remove', 'create' ]`)
 
 ## Example
