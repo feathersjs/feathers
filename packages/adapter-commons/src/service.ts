@@ -18,15 +18,18 @@ const alwaysMulti: { [key: string]: boolean } = {
 
 export interface ServiceOptions {
   events?: string[];
-  multi: boolean|string[];
-  id: string;
-  paginate: {
+  multi?: boolean|string[];
+  id?: string;
+  paginate?: {
     default?: number;
     max?: number;
   }
+  /**
+   * @deprecated renamed to `allow`.
+   */
   whitelist?: string[];
-  allow: string[];
-  filters: string[];
+  allow?: string[];
+  filters?: string[];
 }
 
 export interface AdapterOptions<M = any> extends Pick<ServiceOptions, 'multi'|'allow'|'paginate'> {
