@@ -209,6 +209,8 @@ export interface FeathersApplication<Services = any, Settings = any> {
     path: L
   ): FeathersService<this, keyof any extends keyof Services ? Service : Services[L]>;
 
+  addSetup (setup: Setup<this>): this;
+
   setup (server?: any): Promise<this>;
 
   /**
@@ -361,3 +363,5 @@ export type HookMap<A, S> = {
 
 export type HookOptions<A, S> =
   HookMap<A, S> | HookFunction<A, S>[] | RegularHookMap<A, S>;
+
+export type Setup<A = Application> = (app: A, server?: any) => void | Promise<void>;

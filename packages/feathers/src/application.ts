@@ -15,7 +15,8 @@ import {
   HookOptions,
   FeathersService,
   HookMap,
-  RegularHookMap
+  RegularHookMap,
+  Setup
 } from './declarations';
 import { enableRegularHooks } from './hooks/regular';
 
@@ -32,6 +33,7 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
   };
 
   private regularHooks: (this: any, allHooks: any) => any;
+  private setups: Setup<this>[] = [];
 
   constructor () {
     super();
@@ -106,13 +108,20 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
     // Add all the mixins
     this.mixins.forEach(fn => fn.call(this, protoService, location, serviceOptions));
 
-    // If we ran setup already, set this service up explicitly, this will not `await`
-    if (this._isSetup && typeof protoService.setup === 'function') {
-      debug(`Setting up service for \`${location}\``);
-      protoService.setup(this, location);
-    }
-
     this.services[location] = protoService;
+
+    if (typeof protoService.setup === 'function') {
+      const setup = () => {
+        debug(`Setting up service for \`${location}\``);
+        return protoService.setup(this, location);
+      };
+
+      if (this._isSetup) {
+        setup(); // If we ran setup already, set this service up explicitly, this will not `await`
+      } else {
+        this.addSetup(setup);
+      }
+    }
 
     return this;
   }
@@ -139,25 +148,23 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
     return this;
   }
 
-  setup () {
-    let promise = Promise.resolve();
-
-    // Setup each service (pass the app so that they can look up other services etc.)
-    for (const path of Object.keys(this.services)) {
-      promise = promise.then(() => {
-        const service: any = this.service(path as any);
-
-        if (typeof service.setup === 'function') {
-          debug(`Setting up service for \`${path}\``);
-
-          return service.setup(this, path);
-        }
-      });
+  addSetup (setup: Setup<this>) {
+    if (this._isSetup) {
+      throw new Error(`Cannot add a setup step after app.setup() was called.`);
     }
 
-    return promise.then(() => {
-      this._isSetup = true;
-      return this;
-    });
+    this.setups.push(setup);
+
+    return this;
+  }
+
+  setup (server?: any) {
+    this._isSetup = true;
+
+    const promise = this.setups.reduce((promise, setup) => {
+      return promise.then(() => setup(this, server));
+    }, Promise.resolve());
+
+    return promise.then(() => this);
   }
 }
