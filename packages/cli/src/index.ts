@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires, no-console */
 import path from 'path';
-import {
-  engine, getRunnerArgs, Logger, RunnerConfig, RunnerArgs
-} from '@feathersjs/hygen';
 import updateNotifier from 'update-notifier';
 import program from 'commander';
 
-import { loadJSON, locateTemplates, getHelpers } from './utils';
+import type { RunnerArgs, RunnerConfig } from './types';
+
+import { loadJSON, locateTemplates, getHelpers, getRunnerArgs } from './utils';
+import Logger from './logger';
+import engine from './engine';
 
 const selfPkg = require('../package.json');
 
@@ -25,13 +26,13 @@ export async function generate (runnerArgs: RunnerArgs, config?: RunnerConfig) {
   }, {
     debug: !!process.env.FEATHERS_DEBUG,
     cwd: process.cwd(),
-    exec: (action: string) => {
+    exec: async (action: string) => {
       const [command, ...args] = action.split(' ');
-      const spawn = require('execa');
+      const spawn = await import('execa');
 
       logger.notice(`\nRunning "${command}", hold tight...\n`);
 
-      return spawn(command, args, {
+      return spawn.default(command, args, {
         stdio: 'inherit'
       });
     },
@@ -76,3 +77,5 @@ export function cli (argv: string[]) {
     program.help();
   }
 }
+
+export * from './types';

@@ -1,12 +1,12 @@
-import fs from 'fs';
+import { promises as fsPromises } from 'fs';
 import _ from 'lodash';
 import path from 'path';
-import { Logger, RunnerArgs, RunnerConfig } from '@feathersjs/hygen';
-import { ChildProcess } from 'child_process';
+import { Helpers, PackageJson, RunnerArgs } from './types';
+import yargs from 'yargs-parser'
+import Logger from './logger';
+import { RunnerConfig } from '.';
 
-type PackageJSON = { [key: string]: any };
-
-const { stat, readFile } = fs.promises;
+const { stat, readFile } = fsPromises;
 
 export const TEMPLATE_PATH = '_templates';
 
@@ -40,15 +40,20 @@ export function locateTemplates (args: RunnerArgs) {
     });
 }
 
-export async function getHelpers (pkg: PackageJSON, self: PackageJSON, _logger: Logger, generate: any) {
-  const helpers = {
+export async function getHelpers (
+  pkg: PackageJson,
+  self: PackageJson,
+  _logger: Logger,
+  generate: any
+): Promise<Helpers> {
+  const helpers: Helpers = {
     _,
     pkg,
     generate,
     lib: pkg.directories?.lib,
     test: pkg.directories?.test,
     feathers: pkg.feathers,
-    install (config: RunnerConfig, names: string[], dev = false) {
+    install: async (config: RunnerConfig, names: string[], dev = false) => {
       // Adds version numbers to dependencies if it is registered
       const deps = names.filter(name => !!name).map(name =>
         self.devDependencies[name]
@@ -57,14 +62,12 @@ export async function getHelpers (pkg: PackageJSON, self: PackageJSON, _logger: 
       );
       const { packager } = pkg.feathers;
       const command = `${packager} install ${deps.join(' ')} --${dev ? 'save-dev' : 'save'}`;
-      const execute = (command: string) => {
-        const child = config.exec(command, '') as any as ChildProcess;
-        return new Promise((resolve, reject) => child.on('exit', code => {
-          if (code !== 0) {
-            reject(new Error(`Error executing command ${command}`));
-          }
-          resolve(code);
-        }));
+      const execute = async (command: string) => {
+        try {
+          await config.exec(command, '')
+        } catch(err) {
+          throw new Error(`Error executing command ${command}`);
+        }
       }
 
       return execute(command);
@@ -73,3 +76,32 @@ export async function getHelpers (pkg: PackageJSON, self: PackageJSON, _logger: 
 
   return helpers;
 }
+
+// #region hygen-stuff
+
+export const getRunnerArgs = (argv: RunnerArgs | string[]): RunnerArgs => {
+  if (Array.isArray(argv)) {
+    const parsed = yargs(argv)
+    const [generator, _action, name] = parsed._
+    const { _, ...args } = parsed
+    const [action, subaction] = _action.split(':')
+
+    return {
+      generator,
+      action,
+      subaction,
+      name,
+      args
+    }
+  }
+
+  const [action, subaction] = argv.action.split(':')
+
+  return {
+    action,
+    subaction,
+    ...argv
+  }
+}
+
+// #endregion
