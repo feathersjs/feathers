@@ -1,8 +1,7 @@
-// taken from @feathersjs/hygen
-
 import path from 'path'
-import { RunnerConfig, ParamsResult, RunnerArgs, HookModule } from './types'
 import prompt from './prompt'
+
+import type { RunnerConfig, ParamsResult, RunnerArgs, HookModule } from './types'
 
 const getParams = async (
   config: RunnerConfig,

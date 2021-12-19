@@ -1,6 +1,6 @@
-import { RenderedAction } from '../types'
 import newline from '../newline'
-import { RenderAttributes } from '..'
+
+import type { RenderedAction, RenderAttributes } from '../types'
 
 const EOLRegex = /\r?\n/
 
@@ -53,6 +53,7 @@ const indexByLocation = (
   }
   return -1
 }
+
 const injector = (action: RenderedAction, content: string): string => {
   const {
     attributes: { skipIf, eofLast },

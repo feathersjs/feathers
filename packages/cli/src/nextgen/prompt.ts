@@ -1,6 +1,4 @@
-// taken from @feathersjs/hygen
-
-import {
+import type {
   Arguments,
   InteractiveHook,
   RunnerConfig,

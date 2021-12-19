@@ -1,6 +1,6 @@
-import { RenderedAction, RunnerConfig } from '..'
-import { ActionResult } from '../types'
 import createResult from './result'
+
+import type { ActionResult, RenderedAction, RunnerConfig } from '../types'
 
 const notEmpty = (x: string) => x && x.length > 0
 

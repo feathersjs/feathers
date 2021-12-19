@@ -6,8 +6,7 @@ import program from 'commander';
 import type { RunnerArgs, RunnerConfig } from './types';
 
 import { loadJSON, locateTemplates, getHelpers, getRunnerArgs } from './utils';
-import Logger from './logger';
-import engine from './engine';
+import { Logger, engine } from './nextgen';
 
 const selfPkg = require('../package.json');
 
@@ -28,11 +27,11 @@ export async function generate (runnerArgs: RunnerArgs, config?: RunnerConfig) {
     cwd: process.cwd(),
     exec: async (action: string) => {
       const [command, ...args] = action.split(' ');
-      const spawn = await import('execa');
+      const spawn = (await import('execa')).default;
 
       logger.notice(`\nRunning "${command}", hold tight...\n`);
 
-      return spawn.default(command, args, {
+      return spawn(command, args, {
         stdio: 'inherit'
       });
     },

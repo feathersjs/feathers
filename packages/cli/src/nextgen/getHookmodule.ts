@@ -1,8 +1,7 @@
-// taken from @feathersjs/hygen
-
 import fs from 'fs'
 import path from 'path'
-import { RunnerArgs, HookModule, RunnerConfig } from './types'
+
+import type { RunnerArgs, HookModule, RunnerConfig } from './types'
 
 export default async (
   config: RunnerConfig,

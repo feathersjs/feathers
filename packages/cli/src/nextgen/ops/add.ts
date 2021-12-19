@@ -1,9 +1,9 @@
-import { ActionResult, RunnerConfig, RenderedAction } from '../types'
-import createResult from './result'
-
 import path from 'path'
 import fs from 'fs-extra'
 import { red } from 'picocolors'
+import createResult from './result'
+
+import type { ActionResult, RunnerConfig, RenderedAction } from '../types'
 
 const add = async (
   action: RenderedAction,

@@ -1,29 +1,27 @@
-// taken from @feathersjs/hygen
-
 import fs from 'fs-extra'
+import getParams from './getParams'
+import getHookModule from './getHookmodule'
 
-import {
+import type {
   EngineResult,
   InteractiveHook,
   RunnerArgs,
   RunnerConfig
 } from './types'
-import getParams from './getParams'
-import loadHookModule from './hookmodule'
 
-class ShowHelpError extends Error {
+export class ShowHelpError extends Error {
   constructor (message: string) {
     super(message)
     Object.setPrototypeOf(this, ShowHelpError.prototype)
   }
 }
 
-const engine = async (
+export const engine = async (
   runnerArgs: RunnerArgs,
   config: RunnerConfig
 ): Promise<EngineResult> => {
   const { cwd, templates, logger } = config
-  const hookModule = await loadHookModule(config, runnerArgs)
+  const hookModule = await getHookModule(config, runnerArgs)
 
   const params = await getParams(config, runnerArgs, hookModule);
 
@@ -65,11 +63,11 @@ Options:
 
   // lazy loading these dependencies gives a better feel once
   // a user is exploring hygen (not specifying what to execute)
-  const render = await import('./render')
-  const rendered = await render.default(args, config);
+  const render = (await import('./render')).default
+  const rendered = await render(args, config);
 
-  const execute = await import('./execute')
-  const actions = await execute.default(rendered, args, config)
+  const execute = (await import('./ops/')).execute
+  const actions = await execute(rendered, args, config)
 
   const result: EngineResult = { args, actions, hookModule }
   const interactiveHook = hookModule as InteractiveHook
@@ -80,6 +78,3 @@ Options:
 
   return result
 }
-
-export { ShowHelpError }
-export default engine

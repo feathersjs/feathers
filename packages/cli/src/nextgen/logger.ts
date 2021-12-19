@@ -1,15 +1,13 @@
-// copied from @feathersjs/hygen
-
 import picocolors from 'picocolors'
 import { createColorize } from 'colorize-template'
 
 const colorize = createColorize({
-    ...picocolors,
-    success: picocolors.green,
-    error: picocolors.red
-  })
+  ...picocolors,
+  success: picocolors.green,
+  error: picocolors.red
+})
 
-export default class Logger {
+export class Logger {
   log: (message?: any, ...optionalParams: any[]) => void
 
   constructor (log: (message?: any, ...optionalParams: any[]) => void) {

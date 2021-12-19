@@ -1,10 +1,10 @@
 import { promises as fsPromises } from 'fs';
 import _ from 'lodash';
 import path from 'path';
-import { Helpers, PackageJson, RunnerArgs } from './types';
 import yargs from 'yargs-parser'
-import Logger from './logger';
-import { RunnerConfig } from '.';
+import { Logger } from './nextgen';
+
+import type { Helpers, PackageJson, RunnerArgs, RunnerConfig } from './types';
 
 const { stat, readFile } = fsPromises;
 
