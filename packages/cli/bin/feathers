@@ -2,4 +2,6 @@
 
 'use strict';
 
-require('../lib').cli(process.argv);
+require("ts-node/register");
+
+require('../src').cli(process.argv);
