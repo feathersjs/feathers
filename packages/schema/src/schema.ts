@@ -44,6 +44,6 @@ export class Schema<S extends JSONSchemaDefinition> {
   }
 }
 
-export function schema <S extends JSONSchemaDefinition> (definition: S) {
-  return new Schema(definition);
+export function schema <S extends JSONSchemaDefinition> (definition: S, ajv: Ajv = AJV) {
+  return new Schema(definition, ajv);
 }

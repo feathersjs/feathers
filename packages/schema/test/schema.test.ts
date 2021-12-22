@@ -1,6 +1,14 @@
 import assert from 'assert';
 
 import { schema, Infer } from '../src';
+import Ajv from 'ajv'
+import addFormats from 'ajv-formats'
+
+const customAjv = new Ajv({
+  coerceTypes: true
+})
+addFormats(customAjv)
+
 
 describe('@feathersjs/schema/schema', () => {
   it('type inference and validation', async () => {
@@ -35,6 +43,37 @@ describe('@feathersjs/schema/schema', () => {
       read: false,
       upvotes: 10
     });
+  });
+
+  it('uses custom AJV with format validation', async () => {
+    const formatsSchema = schema({
+      $id: 'formats-test',
+      type: 'object',
+      required: [],
+      additionalProperties: false,
+      properties: {
+        dobString: {
+          type: 'string',
+          format: 'date'
+        },
+        createdAt: {
+          type: 'string',
+          format: 'date-time'
+        }
+      }
+    } as const, customAjv);
+
+    await formatsSchema.validate({
+      createdAt: '2021-12-22T23:59:59.999Z'
+    });
+
+    try {
+      await formatsSchema.validate({
+        createdAt: '2021-12-22T23:59:59.bbb'
+      });
+    } catch (error: any) {
+      assert.equal(error.errors[0].message, 'must match format "date-time"')
+    }
   });
 
   it('schema extension and type inference', async () => {
