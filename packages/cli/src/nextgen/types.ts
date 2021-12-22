@@ -49,7 +49,7 @@ export interface EngineResult {
 
 export type ActionResult = any
 
-export interface Prompter<Q, T> {
+export interface Prompter<Q = any, T = any> {
   prompt: (arg0: Q) => Promise<T>
 }
 
@@ -91,8 +91,8 @@ export type RenderAttributes = {
   // locations
   prepend?: boolean
   append?: boolean
-  before?: boolean
-  after?: string
+  before?: string | RegExp
+  after?: string | RegExp
   atLine?: number
   unlessExists?: boolean
   force?: boolean

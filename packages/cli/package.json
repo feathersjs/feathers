@@ -46,13 +46,27 @@
   "scripts": {
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
-    "test": "mocha --timeout 60000 --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+    "test": "jest && mocha --timeout 60000 --config ../../.mocharc.json test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "src/nextgen/test/.*\\.test\\.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   },
   "dependencies": {
     "@types/update-notifier": "^5.1.0",
@@ -77,6 +91,7 @@
     "@feathersjs/schema": "^5.0.0-pre.14",
     "@feathersjs/socketio": "^5.0.0-pre.14",
     "@feathersjs/transport-commons": "^5.0.0-pre.14",
+    "@jest/globals": "^27.4.4",
     "@types/fs-extra": "^9.0.13",
     "@types/ignore-walk": "^4.0.0",
     "@types/mocha": "^9.0.0",
@@ -84,10 +99,12 @@
     "@types/yargs-parser": "^20.2.1",
     "axios": "^0.23.0",
     "execa": "^5.1.1",
+    "jest": "^27.4.5",
     "koa-static": "^5.0.0",
     "mocha": "^9.1.2",
     "nodemon": "^2.0.13",
     "shx": "^0.3.3",
+    "ts-jest": "^27.1.2",
     "typescript": "^4.4.4",
     "winston": "^3.3.3"
   }
