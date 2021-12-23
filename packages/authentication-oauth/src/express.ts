@@ -57,7 +57,13 @@ export default (options: OauthSetupSettings) => {
       req.session.redirect = redirect as string;
       req.session.query = query;
 
-      res.redirect(`${path}/connect/${name}?${qs.stringify(query as any)}`);
+      req.session.save((err: any) => {
+        if (err) {
+          res.status(500).send(`Error storing session: ${err}`);
+        } else {
+          res.redirect(`${path}/connect/${name}?${qs.stringify(query as any)}`);
+        }
+      });
     });
 
     authApp.get('/:name/callback', (req: any, res: any) => {
