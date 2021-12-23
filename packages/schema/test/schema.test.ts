@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import { schema, Infer } from '../src';
+import { schema, Infer, queryProperty } from '../src';
 import Ajv, { AnySchemaObject } from 'ajv'
 import addFormats from 'ajv-formats'
 
@@ -98,11 +98,11 @@ describe('@feathersjs/schema/schema', () => {
       required: [],
       additionalProperties: false,
       properties: {
-        dobString: {
+        dobString: queryProperty({
           type: 'string',
           format: 'date',
           convert: true
-        },
+        }),
         createdAt: {
           type: 'string',
           format: 'date-time',
@@ -112,11 +112,11 @@ describe('@feathersjs/schema/schema', () => {
     } as const, customAjv);
 
     const validated = await formatsSchema.validate({
-      dobString: '2025-04-25',
+      dobString: { $gt: '2025-04-25' },
       createdAt: '2021-12-22T23:59:59.999Z'
     });
 
-    assert.ok(validated.dobString as any instanceof Date)
+    assert.ok((validated.dobString as any).$gt  instanceof Date)
     assert.ok(validated.createdAt as any instanceof Date)
   });
 
