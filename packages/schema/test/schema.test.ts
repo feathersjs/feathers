@@ -1,7 +1,7 @@
 import assert from 'assert';
 
 import { schema, Infer } from '../src';
-import Ajv from 'ajv'
+import Ajv, { AnySchemaObject } from 'ajv'
 import addFormats from 'ajv-formats'
 
 const customAjv = new Ajv({
@@ -9,6 +9,21 @@ const customAjv = new Ajv({
 })
 addFormats(customAjv)
 
+// Utility for converting "date" and "date-time" string formats into Dates.
+customAjv.addKeyword({
+  keyword: 'convert',
+  type: 'string',
+  compile (schemaVal: boolean, parentSchema: AnySchemaObject) {
+    return ['date-time', 'date'].includes(parentSchema.format) && schemaVal
+      ? function (value: string, obj: any) {
+          const { parentData, parentDataProperty } = obj;
+          // Update date-time string to Date object
+          parentData[parentDataProperty] = new Date(value);
+          return true;
+        }
+      : () => true;
+  }
+});
 
 describe('@feathersjs/schema/schema', () => {
   it('type inference and validation', async () => {
@@ -74,6 +89,35 @@ describe('@feathersjs/schema/schema', () => {
     } catch (error: any) {
       assert.equal(error.errors[0].message, 'must match format "date-time"')
     }
+  });
+
+  it('custom AJV can convert dates', async () => {
+    const formatsSchema = schema({
+      $id: 'converts-formats-test',
+      type: 'object',
+      required: [],
+      additionalProperties: false,
+      properties: {
+        dobString: {
+          type: 'string',
+          format: 'date',
+          convert: true
+        },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          convert: true
+        }
+      }
+    } as const, customAjv);
+
+    const validated = await formatsSchema.validate({
+      dobString: '2025-04-25',
+      createdAt: '2021-12-22T23:59:59.999Z'
+    });
+
+    assert.ok(validated.dobString as any instanceof Date)
+    assert.ok(validated.createdAt as any instanceof Date)
   });
 
   it('schema extension and type inference', async () => {
