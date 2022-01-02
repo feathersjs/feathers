@@ -315,6 +315,31 @@ describe('Feathers application', () => {
       assert.strictEqual(setupCount, 2);
     });
 
+    it('app.setup calls functions passed to .addSetup', async () => {
+      const app = feathers();
+      const server = {};
+      let setupCount = 0;
+
+      const funcSetup = (count: number) => (appRef: typeof app, serverRef: any) => {
+        assert.strictEqual(setupCount++, count);
+        assert.strictEqual(appRef, app);
+        assert.strictEqual(serverRef, server);
+      };
+      const serviceSetup = (count: number) => async () => {
+        assert.strictEqual(setupCount++, count);
+      };
+
+      app.addSetup(funcSetup(0));
+      app.use('/first', { setup: serviceSetup(1) });
+      app.addSetup(funcSetup(2));
+      app.use('/second', { setup: serviceSetup(3) });
+      app.addSetup(funcSetup(4));
+      assert.strictEqual(setupCount, 0);
+
+      await app.setup(server);
+      assert.strictEqual(setupCount, 5);
+    });
+
     it('registering a service after app.setup will be set up', done => {
       const app = feathers();
 
