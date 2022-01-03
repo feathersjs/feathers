@@ -81,10 +81,10 @@ export function hookMixin<A> (
         service,
         event: null,
         type: null,
-        get statusCode() {
+        get statusCode () {
           return this.http?.statusCode;
         },
-        set statusCode(value: number) {
+        set statusCode (value: number) {
           (this.http ||= {}).statusCode = value;
         }
       });
