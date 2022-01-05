@@ -187,7 +187,7 @@ describe('authentication/jwt', () => {
           provider: 'rest'
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'Not authenticated');
       }
@@ -202,7 +202,7 @@ describe('authentication/jwt', () => {
           }
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'Invalid authentication information (no `strategy` set)');
       }
@@ -220,7 +220,7 @@ describe('authentication/jwt', () => {
           }
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, `Could not find entity service`);
       }
@@ -235,7 +235,7 @@ describe('authentication/jwt', () => {
           }
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'No access token');
       }
@@ -309,7 +309,7 @@ describe('authentication/jwt', () => {
       try {
         app.service('authentication').register('otherJwt', new JWTStrategy());
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.message, `Invalid JwtStrategy option 'authentication.otherJwt.expiresIn'. Did you mean to set it in 'authentication.jwtOptions'?`);
       }
     });

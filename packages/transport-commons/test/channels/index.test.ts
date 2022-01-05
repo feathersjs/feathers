@@ -17,7 +17,7 @@ describe('feathers-channels', () => {
     try {
       app.channel();
       assert.ok(false, 'Should never get here');
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, 'app.channel needs at least one channel name');
     }
   });

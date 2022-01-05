@@ -297,7 +297,7 @@ describe('socket commons utils', () => {
             errors: {}
           });
           done();
-        } catch (e) {
+        } catch (e: any) {
           done(e);
         }
       };
@@ -317,7 +317,7 @@ describe('socket commons utils', () => {
             errors: {}
           });
           done();
-        } catch (e) {
+        } catch (e: any) {
           done(e);
         }
       };
@@ -337,7 +337,7 @@ describe('socket commons utils', () => {
             errors: {}
           });
           done();
-        } catch (e) {
+        } catch (e: any) {
           done(e);
         }
       };
@@ -357,7 +357,7 @@ describe('socket commons utils', () => {
             errors: {}
           });
           done();
-        } catch (e) {
+        } catch (e: any) {
           done(e);
         }
       };

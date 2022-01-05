@@ -19,7 +19,7 @@ describe('@feathersjs/authentication-local/hooks/hash-password', () => {
       // @ts-ignore
       hashPassword();
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message, 'The hashPassword hook requires a field name option');
     }
   });
@@ -33,7 +33,7 @@ describe('@feathersjs/authentication-local/hooks/hash-password', () => {
         password: 'supersecret'
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message,
         'Could not find an authentication service to hash password'
       );
@@ -49,7 +49,7 @@ describe('@feathersjs/authentication-local/hooks/hash-password', () => {
         password: 'supersecret'
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message,
         `Could not find 'local' strategy to hash password`
       );
@@ -71,7 +71,7 @@ describe('@feathersjs/authentication-local/hooks/hash-password', () => {
         password: 'supersecret'
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message,
         `The 'hashPassword' hook should only be used as a 'before' hook`
       );

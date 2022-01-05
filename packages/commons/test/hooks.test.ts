@@ -363,7 +363,7 @@ describe('hook utilities', () => {
         try {
           base.hooks({ wrong () {} });
           throw new Error('Should never get here');
-        } catch (e) {
+        } catch (e: any) {
           assert.equal(e.message, `'wrong' is not a valid hook type`);
         }
       });
@@ -374,7 +374,7 @@ describe('hook utilities', () => {
             wrongMethod () {}
           } });
           throw new Error('Should never get here');
-        } catch (e) {
+        } catch (e: any) {
           assert.equal(e.message, `'wrongMethod' is not a valid hook method`);
         }
       });

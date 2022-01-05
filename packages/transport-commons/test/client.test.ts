@@ -37,14 +37,14 @@ describe('client', () => {
     try {
       clientService.eventNames();
       assert.ok(false, 'Should never get here');
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, 'Can not call \'eventNames\' on the client service connection');
     }
 
     try {
       clientService.on('test', () => {});
       assert.ok(false, 'Should never get here');
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, 'Can not call \'on\' on the client service connection');
     }
   });

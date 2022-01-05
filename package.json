@@ -28,7 +28,7 @@
     "lint": "tslint 'packages/**/*.js' 'packages/**/*.ts' -c tslint.json --fix",
     "update-dependencies": "ncu -u && lerna exec -- ncu -u",
     "clean": "find . -name node_modules -exec rm -rf '{}' + && find . -name package-lock.json -exec rm -rf '{}' +",
-    "test": "npm run lint && nyc lerna run test"
+    "test": "nyc lerna run test"
   },
   "devDependencies": {
     "lerna": "^3.22.1",

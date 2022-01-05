@@ -46,7 +46,7 @@ export default (options: OauthSetupSettings) => {
 
     authApp.use(expressSession);
 
-    authApp.get('/:name', (req, res) => {
+    authApp.get('/:name', (req: any, res: any) => {
       const { feathers_token, redirect, ...query } = req.query;
       const { name } = req.params as any;
 
@@ -64,7 +64,7 @@ export default (options: OauthSetupSettings) => {
       res.redirect(`${path}/connect/${req.params.name}/callback?${qs.stringify(req.query)}`);
     });
 
-    authApp.get('/:name/authenticate', async (req, res, next) => {
+    authApp.get('/:name/authenticate', async (req: any, res: any, next: any) => {
       const { name } = req.params as any;
       const { accessToken, grant, query = {}, redirect } = req.session;
       const service = app.defaultAuthentication(authService);
@@ -90,7 +90,7 @@ export default (options: OauthSetupSettings) => {
           } else {
             res.json(data);
           }
-        } catch (error) {
+        } catch (error: any) {
           debug('oAuth error', error);
           next(error);
         }
@@ -110,7 +110,7 @@ export default (options: OauthSetupSettings) => {
             resolve();
           }
 
-          req.session.destroy(err => err ? reject(err) : resolve());
+          req.session.destroy((err: any) => err ? reject(err) : resolve());
         });
 
         debug(`Calling ${authService}.create authentication with strategy ${name}`);
@@ -120,7 +120,7 @@ export default (options: OauthSetupSettings) => {
         debug('Successful oAuth authentication, sending response');
 
         await sendResponse(authResult);
-      } catch (error) {
+      } catch (error: any) {
         debug('Received oAuth authentication error', error.stack);
         await sendResponse(error);
       }

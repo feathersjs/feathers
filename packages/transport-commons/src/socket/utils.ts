@@ -112,7 +112,7 @@ export function runMethod (app: Application, connection: RealTimeConnection, pat
       debug(`Returned successfully ${trace}`, result);
       callback(null, result);
     }).catch((hook: HookContext) => handleError(hook.type === 'error' ? hook.error : hook));
-  } catch (error) {
+  } catch (error: any) {
     handleError(error);
   }
 }

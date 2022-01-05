@@ -90,7 +90,7 @@ describe('@feathersjs/authentication-client', () => {
         hash: 'error=Error Happened&x=y'
       } as Location);
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Error Happened');
     }

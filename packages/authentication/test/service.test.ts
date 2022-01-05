@@ -72,7 +72,7 @@ describe('authentication/service', () => {
           username: 'Dave'
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'Invalid Dave');
       }
@@ -144,7 +144,7 @@ describe('authentication/service', () => {
           username: 'David'
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'Can not set subject from user.somethingElse');
       }
@@ -164,7 +164,7 @@ describe('authentication/service', () => {
           username: 'Dave'
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'No authentication strategies allowed for creating a JWT (`authStrategies`)');
       }
@@ -205,7 +205,7 @@ describe('authentication/service', () => {
           }
         });
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated');
         assert.strictEqual(error.message, 'Invalid access token');
       }
@@ -215,7 +215,7 @@ describe('authentication/service', () => {
       try {
         await app.service('authentication').remove(null);
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.message, 'Invalid authentication information (no `strategy` set)');
       }
     });
@@ -228,7 +228,7 @@ describe('authentication/service', () => {
       try {
         app.setup();
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.message, `A 'secret' must be provided in your authentication configuration`);
       }
     });
@@ -244,7 +244,7 @@ describe('authentication/service', () => {
       try {
         otherApp.setup();
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.message, `The 'service' option is not set in the authentication configuration`);
       }
     });
@@ -262,7 +262,7 @@ describe('authentication/service', () => {
       try {
         otherApp.setup();
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.message, `The 'users' entity service does not exist (set to 'null' if it is not required)`);
       }
     });
@@ -286,7 +286,7 @@ describe('authentication/service', () => {
       try {
         otherApp.setup();
         assert.fail('Should never get here');
-      } catch (error) {
+      } catch (error: any) {
         assert.strictEqual(error.message, `The 'users' service does not have an 'id' property and no 'entityId' option is set.`);
       }
     });

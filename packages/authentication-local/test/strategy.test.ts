@@ -23,7 +23,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
     try {
       auth.register('something', new LocalStrategy());
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message,
         `'something' authentication strategy requires a 'usernameField' setting`
       );
@@ -40,7 +40,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
         password
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Invalid login');
     }
@@ -64,7 +64,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
     try {
       await strategy.getEntity({}, {});
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.message, 'Could not get local entity');
     }
   });
@@ -79,7 +79,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
         email
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Invalid login');
     }
@@ -94,7 +94,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
         password: 'dummy'
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Invalid login');
     }
@@ -114,7 +114,7 @@ describe('@feathersjs/authentication-local/strategy', () => {
         email: userEmail
       });
       assert.fail('Should never get here');
-    } catch (error) {
+    } catch (error: any) {
       assert.strictEqual(error.name, 'NotAuthenticated');
       assert.strictEqual(error.message, 'Invalid login');
     }

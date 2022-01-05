@@ -102,7 +102,7 @@ export function channels () {
                 debug('No connections to publish to');
               }
             }).catch(logError);
-          } catch (error) {
+          } catch (error: any) {
             logError(error);
           }
         });
