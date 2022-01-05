@@ -205,4 +205,34 @@ describe('@feathersjs/schema/schema', () => {
       user: { email: 'hello@feathersjs.com', age: 42 }
     });
   });
+
+  it('works with oneOf properties (#2508)', async () => {
+    const oneOfSchema = schema({
+      $id: 'schemaA',
+      oneOf: [
+        {
+          type: 'object',
+          additionalProperties: false,
+          required: ['x'],
+          properties: {
+            x: { type:'number'}
+          }
+        },
+        {
+          type: 'object',
+          additionalProperties: false,
+          required: ['y'],
+          properties: {
+            y: { type:'number'}
+          }
+        }
+      ]
+    } as const);
+
+    const res = await oneOfSchema.validate({
+      x: '3'
+    });
+
+    assert.deepStrictEqual(res, { x: 3 });
+  });
 });
