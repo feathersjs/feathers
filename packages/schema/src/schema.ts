@@ -12,17 +12,19 @@ export class Schema<S extends JSONSchemaDefinition> {
   ajv: Ajv;
   validate: AsyncValidateFunction<FromSchema<S>>;
   definition: JSONSchema6;
-  propertyNames: string[];
   readonly _type!: FromSchema<S>;
 
   constructor (definition: S, ajv: Ajv = AJV) {
     this.ajv = ajv;
     this.definition = definition as JSONSchema6;
-    this.propertyNames = Object.keys(this.definition.properties)
     this.validate = this.ajv.compile({
       $async: true,
       ...this.definition
     });
+  }
+
+  get propertyNames () {
+    return Object.keys(this.definition.properties || {});
   }
 
   extend <D extends JSONSchemaDefinition> (definition: D) {
