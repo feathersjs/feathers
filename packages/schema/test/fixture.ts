@@ -5,7 +5,7 @@ import { memory, Service } from '@feathersjs/memory';
 
 import {
   schema, resolve, Infer, resolveResult,
-  queryProperty, queryArray, resolveQuery,
+  queryProperty, resolveQuery,
   validateQuery, validateData, resolveData
 } from '../src';
 
@@ -20,15 +20,19 @@ export const userSchema = schema({
   }
 } as const);
 
-export const userResultSchema = userSchema.extend({
+export const userResultSchema = schema({
   $id: 'UserResult',
+  type: 'object',
+  additionalProperties: false,
+  required: ['id'],
+  allOf: [{ $ref: 'UserData' }],
   properties: {
     id: { type: 'number' }
   }
-});
+} as const);
 
 export type User = Infer<typeof userSchema>;
-export type UserResult = Infer<typeof userResultSchema>;
+export type UserResult = User & Infer<typeof userResultSchema>;
 
 export const userDataResolver = resolve<User, HookContext<Application>>({
   properties: {
@@ -57,11 +61,30 @@ export const messageSchema = schema({
   }
 } as const);
 
-export const messageResultSchema = messageSchema.extend({
+export const messageResultSchema = schema({
   $id: 'MessageResult',
+  type: 'object',
+  additionalProperties: false,
+  required: ['id', 'user'],
+  allOf: [{ $ref: 'MessageData' }],
   properties: {
     id: { type: 'number' },
     user: { $ref: 'UserResult' }
+  }
+} as const);
+
+export type Message = Infer<typeof messageSchema>;
+export type MessageResult = Message & Infer<typeof messageResultSchema> & {
+  user: User;
+};
+
+export const messageResultResolver = resolve<MessageResult, HookContext<Application>>({
+  properties: {
+    user: async (_value, message, context) => {
+      const { userId } = message;
+
+      return context.app.service('users').get(userId, context.params);
+    }
   }
 });
 
@@ -70,7 +93,6 @@ export const messageQuerySchema = schema({
   type: 'object',
   additionalProperties: false,
   properties: {
-    $resolve: queryArray(messageResultSchema.propertyNames),
     $limit: {
       type: 'number',
       minimum: 0,
@@ -78,6 +100,10 @@ export const messageQuerySchema = schema({
     },
     $skip: {
       type: 'number'
+    },
+    $resolve: {
+      type: 'array',
+      items: { type: 'string' }
     },
     userId: queryProperty({
       type: 'number'
@@ -89,31 +115,12 @@ export type MessageQuery = Infer<typeof messageQuerySchema>;
 
 export const messageQueryResolver = resolve<MessageQuery, HookContext<Application>>({
   properties: {
-    $resolve: async (value) => {
-      return value || messageResultSchema.propertyNames;
-    },
-
     userId: async (value, _query, context) => {
       if (context.params?.user) {
         return context.params.user.id;
       }
 
       return value;
-    }
-  }
-});
-
-export type Message = Infer<typeof messageSchema>;
-export type MessageResult = Infer<typeof messageResultSchema> & {
-  user: User;
-};
-
-export const messageResultResolver = resolve<MessageResult, HookContext<Application>>({
-  properties: {
-    user: async (_value, message, context) => {
-      const { userId } = message;
-
-      return context.app.service('users').get(userId, context.params);
     }
   }
 });

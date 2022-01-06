@@ -24,11 +24,3 @@ export const queryProperty = <T extends JSONSchema> (definition: T) => ({
     }
   ]
 } as const);
-
-export const queryArray = <T extends readonly string[]> (fields: T) => ({
-  type: 'array',
-  items: {
-    type: 'string',
-    enum: fields
-  }
-} as const);
