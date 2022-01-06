@@ -24,15 +24,15 @@ export const userResultSchema = schema({
   $id: 'UserResult',
   type: 'object',
   additionalProperties: false,
-  required: ['id'],
-  allOf: [{ $ref: 'UserData' }],
+  required: ['id', ...userSchema.definition.required ],
   properties: {
+    ...userSchema.definition.properties,
     id: { type: 'number' }
   }
 } as const);
 
 export type User = Infer<typeof userSchema>;
-export type UserResult = User & Infer<typeof userResultSchema>;
+export type UserResult = Infer<typeof userResultSchema>;
 
 export const userDataResolver = resolve<User, HookContext<Application>>({
   properties: {
@@ -65,16 +65,16 @@ export const messageResultSchema = schema({
   $id: 'MessageResult',
   type: 'object',
   additionalProperties: false,
-  required: ['id', 'user'],
-  allOf: [{ $ref: 'MessageData' }],
+  required: ['id', 'user', ...messageSchema.definition.required],
   properties: {
+    ...messageSchema.definition.properties,
     id: { type: 'number' },
     user: { $ref: 'UserResult' }
   }
 } as const);
 
 export type Message = Infer<typeof messageSchema>;
-export type MessageResult = Message & Infer<typeof messageResultSchema> & {
+export type MessageResult = Infer<typeof messageResultSchema> & {
   user: User;
 };
 
