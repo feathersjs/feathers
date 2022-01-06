@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.12](https://github.com/feathersjs/feathers/compare/v4.5.11...v4.5.12) (2022-01-06)
+
+
+### Bug Fixes
+
+* Update all dependencies for crow release ([#2520](https://github.com/feathersjs/feathers/issues/2520)) ([1c63e6b](https://github.com/feathersjs/feathers/commit/1c63e6be37ff85edbe8dd318415ca6919864c033))
+
+
+
+
+
 ## [4.5.11](https://github.com/feathersjs/feathers/compare/v4.5.10...v4.5.11) (2020-12-05)
 
 **Note:** Version bump only for package @feathersjs/primus-client
