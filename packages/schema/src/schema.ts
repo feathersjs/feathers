@@ -1,44 +1,34 @@
-import Ajv, { AsyncValidateFunction } from 'ajv';
-import { JSONSchema6 } from 'json-schema';
+import Ajv, { AsyncValidateFunction, ValidateFunction } from 'ajv';
 import { FromSchema, JSONSchema } from 'json-schema-to-ts';
+import { BadRequest } from '@feathersjs/errors';
 
 export const AJV = new Ajv({
   coerceTypes: true
 });
 
-export type JSONSchemaDefinition = JSONSchema & { $id: string };
+export type JSONSchemaDefinition = JSONSchema & { $id: string, $async?: boolean };
 
 export class Schema<S extends JSONSchemaDefinition> {
   ajv: Ajv;
-  validate: AsyncValidateFunction<FromSchema<S>>;
-  definition: JSONSchema6;
+  validator: AsyncValidateFunction;
   readonly _type!: FromSchema<S>;
 
-  constructor (definition: S, ajv: Ajv = AJV) {
+  constructor (public definition: S, ajv: Ajv = AJV) {
     this.ajv = ajv;
-    this.definition = definition as JSONSchema6;
-    this.validate = this.ajv.compile({
+    this.validator = this.ajv.compile({
       $async: true,
-      ...this.definition
-    });
+      ...(this.definition as any)
+    }) as AsyncValidateFunction;
   }
 
-  get propertyNames () {
-    return Object.keys(this.definition.properties || {});
-  }
+  async validate <T = FromSchema<S>> (...args: Parameters<ValidateFunction<T>>) {
+    try {
+      const validated = await this.validator(...args) as T;
 
-  extend <D extends JSONSchemaDefinition> (definition: D) {
-    const def = definition as JSONSchema6;
-    const extended = {
-      ...this.definition,
-      ...def,
-      properties: {
-        ...this.definition.properties,
-        ...def.properties
-      }
-    } as const;
-
-    return new Schema <D & S> (extended as any, this.ajv);
+      return validated;
+    } catch (error: any) {
+      throw new BadRequest(error.message, error.errors);
+    }
   }
 
   toJSON () {

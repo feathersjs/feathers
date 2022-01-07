@@ -1,8 +1,8 @@
 import assert from 'assert';
 
 import { schema, Infer, queryProperty } from '../src';
-import Ajv, { AnySchemaObject } from 'ajv'
-import addFormats from 'ajv-formats'
+import Ajv, { AnySchemaObject } from 'ajv';
+import addFormats from 'ajv-formats';
 
 const customAjv = new Ajv({
   coerceTypes: true
@@ -46,7 +46,7 @@ describe('@feathersjs/schema/schema', () => {
     } as const);
     type Message = Infer<typeof messageSchema>;
 
-    const message: Message = await messageSchema.validate({
+    const message = await messageSchema.validate<Message>({
       text: 'hi',
       read: 0,
       upvotes: '10'
@@ -57,6 +57,19 @@ describe('@feathersjs/schema/schema', () => {
       text: 'hi',
       read: false,
       upvotes: 10
+    });
+
+    await assert.rejects(() => messageSchema.validate({ text: 'failing' }), {
+      name: 'BadRequest',
+      data: [{
+        instancePath: '',
+        keyword: 'required',
+        message: 'must have required property \'read\'',
+        params: {
+          missingProperty: 'read'
+        },
+        schemaPath: '#/required'
+      }]
     });
   });
 
@@ -87,7 +100,7 @@ describe('@feathersjs/schema/schema', () => {
         createdAt: '2021-12-22T23:59:59.bbb'
       });
     } catch (error: any) {
-      assert.equal(error.errors[0].message, 'must match format "date-time"')
+      assert.equal(error.data[0].message, 'must match format "date-time"')
     }
   });
 
@@ -135,10 +148,14 @@ describe('@feathersjs/schema/schema', () => {
         }
       }
     } as const);
-    const messageResultSchema = messageSchema.extend({
+
+    const messageResultSchema = schema({
       $id: 'message-ext-vote',
-      required: [ 'upvotes' ],
+      type: 'object',
+      required: [ 'upvotes', ...messageSchema.definition.required ],
+      additionalProperties: false,
       properties: {
+        ...messageSchema.definition.properties,
         upvotes: {
           type: 'number'
         }
@@ -147,7 +164,7 @@ describe('@feathersjs/schema/schema', () => {
 
     type MessageResult = Infer<typeof messageResultSchema>;
 
-    const m: MessageResult = await messageResultSchema.validate({
+    const m = await messageResultSchema.validate<MessageResult>({
       text: 'Hi',
       read: 'false',
       upvotes: '23'
@@ -160,11 +177,12 @@ describe('@feathersjs/schema/schema', () => {
     });
   });
 
-  it('with references and type extension', async () => {
+  it('with references', async () => {
     const userSchema = schema({
       $id: 'ref-user',
       type: 'object',
       required: [ 'email' ],
+      additionalProperties: false,
       properties: {
         email: { type: 'string' },
         age: { type: 'number' }
@@ -190,14 +208,13 @@ describe('@feathersjs/schema/schema', () => {
       user: User
     };
 
-    // TODO find a way to not have to force cast this
-    const res = await messageSchema.validate({
+    const res = await messageSchema.validate<Message>({
       text: 'Hello',
       user: {
         email: 'hello@feathersjs.com',
         age: '42'
       }
-    }) as Message;
+    });
 
     assert.ok(userSchema);
     assert.deepStrictEqual(res, {
