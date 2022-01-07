@@ -58,6 +58,19 @@ describe('@feathersjs/schema/schema', () => {
       read: false,
       upvotes: 10
     });
+
+    await assert.rejects(() => messageSchema.validate({ text: 'failing' }), {
+      name: 'BadRequest',
+      data: [{
+        instancePath: '',
+        keyword: 'required',
+        message: 'must have required property \'read\'',
+        params: {
+          missingProperty: 'read'
+        },
+        schemaPath: '#/required'
+      }]
+    });
   });
 
   it('uses custom AJV with format validation', async () => {
@@ -87,7 +100,7 @@ describe('@feathersjs/schema/schema', () => {
         createdAt: '2021-12-22T23:59:59.bbb'
       });
     } catch (error: any) {
-      assert.equal(error.errors[0].message, 'must match format "date-time"')
+      assert.equal(error.data[0].message, 'must match format "date-time"')
     }
   });
 

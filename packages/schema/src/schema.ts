@@ -1,5 +1,6 @@
 import Ajv, { AsyncValidateFunction, ValidateFunction } from 'ajv';
 import { FromSchema, JSONSchema } from 'json-schema-to-ts';
+import { BadRequest } from '@feathersjs/errors';
 
 export const AJV = new Ajv({
   coerceTypes: true
@@ -20,8 +21,14 @@ export class Schema<S extends JSONSchemaDefinition> {
     }) as AsyncValidateFunction;
   }
 
-  validate <T = FromSchema<S>> (...args: Parameters<ValidateFunction<T>>) {
-    return this.validator(...args) as any as Promise<T>;
+  async validate <T = FromSchema<S>> (...args: Parameters<ValidateFunction<T>>) {
+    try {
+      const validated = await this.validator(...args) as T;
+
+      return validated;
+    } catch (error: any) {
+      throw new BadRequest(error.message, error.errors);
+    }
   }
 
   toJSON () {
