@@ -3,7 +3,7 @@ import { Schema } from './schema';
 
 export type PropertyResolver<T, V, C> = (
   value: V|undefined,
-  obj: any,
+  obj: T,
   context: C,
   status: ResolverStatus<T, C>
 ) => Promise<V|undefined>;
@@ -52,7 +52,7 @@ export class Resolver<T, C> {
       stack: [...stack, resolver]
     }
 
-    return resolver(value, data, context, resolverStatus);
+    return resolver(value, data as any, context, resolverStatus);
   }
 
   async resolve<D> (_data: D, context: C, status?: Partial<ResolverStatus<T, C>>): Promise<T> {
