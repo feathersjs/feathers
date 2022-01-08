@@ -5,8 +5,7 @@ import { memory, Service } from '@feathersjs/memory';
 
 import {
   schema, resolve, Infer, resolveResult,
-  queryProperty, resolveQuery,
-  validateQuery, validateData, resolveData
+  queryProperty, resolveQuery, resolveData
 } from '../src';
 
 export const userSchema = schema({
@@ -24,7 +23,7 @@ export const userResultSchema = schema({
   $id: 'UserResult',
   type: 'object',
   additionalProperties: false,
-  required: ['id', ...userSchema.definition.required ],
+  required: ['id', ...userSchema.definition.required],
   properties: {
     ...userSchema.definition.properties,
     id: { type: 'number' }
@@ -35,6 +34,8 @@ export type User = Infer<typeof userSchema>;
 export type UserResult = Infer<typeof userResultSchema>;
 
 export const userDataResolver = resolve<User, HookContext<Application>>({
+  schema: userSchema,
+  validate: 'before',
   properties: {
     password: async () => {
       return 'hashed';
@@ -43,6 +44,7 @@ export const userDataResolver = resolve<User, HookContext<Application>>({
 });
 
 export const userResultResolver = resolve<UserResult, HookContext<Application>>({
+  schema: userResultSchema,
   properties: {
     password: async (value, _user, context) => {
       return context.params.provider ? undefined : value;
@@ -79,6 +81,7 @@ export type MessageResult = Infer<typeof messageResultSchema> & {
 };
 
 export const messageResultResolver = resolve<MessageResult, HookContext<Application>>({
+  schema: messageResultSchema,
   properties: {
     user: async (_value, message, context) => {
       const { userId } = message;
@@ -114,6 +117,8 @@ export const messageQuerySchema = schema({
 export type MessageQuery = Infer<typeof messageQuerySchema>;
 
 export const messageQueryResolver = resolve<MessageQuery, HookContext<Application>>({
+  schema: messageQuerySchema,
+  validate: 'before',
   properties: {
     userId: async (value, _query, context) => {
       if (context.params?.user) {
@@ -138,7 +143,6 @@ const app = feathers<ServiceTypes>()
   .use('messages', memory());
 
 app.service('messages').hooks([
-  validateQuery(messageQuerySchema),
   resolveQuery(messageQueryResolver),
   resolveResult(messageResultResolver)
 ]);
@@ -149,7 +153,6 @@ app.service('users').hooks([
 
 app.service('users').hooks({
   create: [
-    validateData(userSchema),
     resolveData(userDataResolver)
   ]
 });
