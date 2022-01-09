@@ -157,7 +157,7 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
         assert.ok(names.includes('David'), 'David removed');
       });
 
-      test('.remove + multi default pagination', async () => {
+      test('.remove + multi no pagination', async () => {
         try {
           await service.remove(doug[idProp]);
         } catch (error: any) {}
@@ -177,38 +177,23 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
             'max': 100
           };
 
-          let emptyItems = await service.find({ paginate: false });
-          assert.strictEqual(emptyItems.length, 0, 'no entries before')
+          const emptyItems = await service.find({ paginate: false });
+          assert.strictEqual(emptyItems.length, 0, 'no items before')
 
           const createdItems = await service.create(
             Array.from(Array(count)).map((_, i) => ({ name: `name-${i}`, age: 3, created: true }))
           );
-          assert.strictEqual(createdItems.length, count, `created ${count} entries`);
+          assert.strictEqual(createdItems.length, count, `created ${count} items`);
 
-          let foundItems = await service.find({ paginate: false });
-          assert.strictEqual(foundItems.length, count, `created ${count} entries`);
+          const foundItems = await service.find({ paginate: false });
+          assert.strictEqual(foundItems.length, count, `created ${count} items`);
 
           const foundPaginatedItems = await service.find({});
-          assert.strictEqual(foundPaginatedItems.data.length, defaultPaginate, 'found paginated data');
+          assert.strictEqual(foundPaginatedItems.data.length, defaultPaginate, 'found paginated items');
 
-          const data1 = await service.remove(null, { query: { created: true }, paginate: false });
+          const allItems = await service.remove(null, { query: { created: true } });
 
-          assert.strictEqual(data1.length, count, `returned all ${ count } entries`);
-
-          emptyItems = await service.find({ paginate: false });
-          assert.strictEqual(emptyItems.length, 0, 'no entries before')
-
-          await service.create(
-            Array.from(Array(count)).map((_, i) => ({ name: `name-${i}`, age: 3, created: true }))
-          );
-
-          foundItems = await service.find({ paginate: false });
-          assert.strictEqual(foundItems.length, count, `created ${count} entries`);
-
-          const data2 = await service.remove(null, { query: { created: true } });
-
-          assert.strictEqual(data2.length, defaultPaginate, `returned paginated ${ defaultPaginate } entries`);
-
+          assert.strictEqual(allItems.length, count, `removed all ${ count } items`);
         } finally {
           await service.remove(null, { query: { created: true }, paginate: false });
 
@@ -418,7 +403,7 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
         await service.remove(david[idProp]);
       });
 
-      test('.patch multiple default pagination', async () => {
+      test('.patch multiple no pagination', async () => {
         try {
           await service.remove(doug[idProp]);
         } catch (error: any) {}
@@ -441,33 +426,23 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
           };
 
           const emptyItems = await service.find({ paginate: false });
-          assert.strictEqual(emptyItems.length, 0, 'no entries before')
+          assert.strictEqual(emptyItems.length, 0, 'no items before')
 
           const createdItems = await service.create(
             Array.from(Array(count)).map((_, i) => ({ name: `name-${i}`, age: 3, created: true }))
           );
-          assert.strictEqual(createdItems.length, count, `created ${count} entries`);
+          assert.strictEqual(createdItems.length, count, `created ${count} items`);
           ids = createdItems.map((item: any) => item[idProp]);
 
           const foundItems = await service.find({ paginate: false });
-          assert.strictEqual(foundItems.length, count, `created ${count} entries`);
+          assert.strictEqual(foundItems.length, count, `created ${count} items`);
 
           const foundPaginatedItems = await service.find({});
           assert.strictEqual(foundPaginatedItems.data.length, defaultPaginate, 'found paginated data')
 
+          const allItems = await service.patch(null, { age: 4 }, { query: { created: true } })
 
-          const data1 = await service.patch(null, {
-            age: 4
-          }, { query: { created: true }, paginate: false })
-
-          assert.strictEqual(data1.length, count, `returned all ${ count } entries`);
-
-          const data2 = await service.patch(null, {
-            age: 2
-          }, { query: { created: true } });
-
-          assert.strictEqual(data2.length, defaultPaginate, `returned paginated ${ defaultPaginate } entries`);
-
+          assert.strictEqual(allItems.length, count, `patched all ${ count } items`);
         } finally {
           service.options.multi = multiBefore;
           service.options.paginate = paginateBefore;

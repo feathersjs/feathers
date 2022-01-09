@@ -28,7 +28,7 @@ export type AdapterMethodsTestName =
   '.remove + $select' |
   '.remove + id + query' |
   '.remove + multi' |
-  '.remove + multi default pagination' |
+  '.remove + multi no pagination' |
   '.remove + id + query id' |
   '.update' |
   '.update + $select' |
@@ -40,7 +40,7 @@ export type AdapterMethodsTestName =
   '.patch + $select' |
   '.patch + id + query' |
   '.patch multiple' |
-  '.patch multiple default pagination' |
+  '.patch multiple no pagination' |
   '.patch multi query same' |
   '.patch multi query changed' |
   '.patch + NotFound' |
