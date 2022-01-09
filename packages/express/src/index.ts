@@ -1,23 +1,16 @@
-import express, {
-  Express, static as _static, json, raw, text, urlencoded, query
-} from 'express';
-import {
-  Application as FeathersApplication, defaultServiceMethods
-} from '@feathersjs/feathers';
+import express, { Express } from 'express';
+import { Application as FeathersApplication, defaultServiceMethods } from '@feathersjs/feathers';
+import { routing } from '@feathersjs/transport-commons';
 import { createDebug } from '@feathersjs/commons';
 
 import { Application } from './declarations';
-import { errorHandler, notFound } from './handlers';
-import { parseAuthentication, authenticate } from './authentication';
 
-export {
-  _static as serveStatic, _static as static, json, raw, text,
-  urlencoded, query, errorHandler, notFound, express as original,
-  authenticate, parseAuthentication
-};
+export { default as original, static, static as serveStatic, json, raw, text, urlencoded, query } from 'express';
 
-export * from './rest';
+export * from './authentication';
 export * from './declarations';
+export * from './handlers';
+export * from './rest';
 
 const debug = createDebug('@feathersjs/express');
 
@@ -30,10 +23,12 @@ export default function feathersExpress<S = any, C = any> (feathersApp?: Feather
     throw new Error('@feathersjs/express requires a valid Feathers application instance');
   }
 
-  const { use, listen } = expressApp as any;
-  // A mixin that provides the extended functionality
-  const mixin: any = {
-    use (location: string, ...rest: any[]) {
+  const app = expressApp as any as Application<S, C>;
+  const { use: expressUse, listen: expressListen } = expressApp as any;
+  const feathersUse = feathersApp.use;
+
+  Object.assign(app, {
+    use (location: string & keyof S, ...rest: any[]) {
       let service: any;
       let options = {};
 
@@ -60,46 +55,56 @@ export default function feathersExpress<S = any, C = any> (feathersApp?: Feather
       // Check for service (any object with at least one service method)
       if (hasMethod(['handle', 'set']) || !hasMethod(defaultServiceMethods)) {
         debug('Passing app.use call to Express app');
-        return use.call(this, location, ...rest);
+        return expressUse.call(this, location, ...rest);
       }
 
       debug('Registering service with middleware', middleware);
       // Since this is a service, call Feathers `.use`
-      (feathersApp as FeathersApplication).use.call(this, location, service, {
+      feathersUse.call(this, location, service, {
         ...options,
-        middleware
+        express: middleware
       });
 
       return this;
     },
 
     async listen (...args: any[]) {
-      const server = listen.call(this, ...args);
+      const server = expressListen.call(this, ...args);
 
       await this.setup(server);
       debug('Feathers application listening');
 
       return server;
     }
-  };
+  } as Application<S, C>);
 
-  const feathersDescriptors = {
+  const appDescriptors = {
+    ...Object.getOwnPropertyDescriptors(Object.getPrototypeOf(app)),
+    ...Object.getOwnPropertyDescriptors(app)
+  };
+  const newDescriptors = {
     ...Object.getOwnPropertyDescriptors(Object.getPrototypeOf(feathersApp)),
     ...Object.getOwnPropertyDescriptors(feathersApp)
   };
 
   // Copy all non-existing properties (including non-enumerables)
   // that don't already exist on the Express app
-  Object.keys(feathersDescriptors).forEach(prop => {
-    const feathersProp = feathersDescriptors[prop];
-    const expressProp = Object.getOwnPropertyDescriptor(expressApp, prop);
+  Object.keys(newDescriptors).forEach(prop => {
+    const appProp = appDescriptors[prop];
+    const newProp = newDescriptors[prop];
 
-    if (expressProp === undefined && feathersProp !== undefined) {
-      Object.defineProperty(expressApp, prop, feathersProp);
+    if (appProp === undefined && newProp !== undefined) {
+      Object.defineProperty(expressApp, prop, newProp);
     }
   });
 
-  return Object.assign(expressApp, mixin);
+  app.configure(routing() as any);
+  app.use((req, _res, next) => {
+    req.feathers = { ...req.feathers, provider: 'rest' };
+    return next();
+  });
+
+  return app;
 }
 
 if (typeof module !== 'undefined') {

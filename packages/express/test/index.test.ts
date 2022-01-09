@@ -178,7 +178,7 @@ describe('@feathersjs/express', () => {
     feathersApp.use = function (path, serviceArg, options) {
       assert.strictEqual(path, '/myservice');
       assert.strictEqual(serviceArg, service);
-      assert.deepStrictEqual(options.middleware, {
+      assert.deepStrictEqual(options.express, {
         before: [a, b],
         after: [c]
       });

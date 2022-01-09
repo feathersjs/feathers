@@ -22,7 +22,7 @@ describe('@feathersjs/express/rest provider', () => {
       const app = feathers();
 
       try {
-        app.configure(rest());
+        app.configure(rest() as any);
         assert.ok(false, 'Should never get here');
       } catch (e: any) {
         assert.strictEqual(e.message, '@feathersjs/express/rest needs an Express compatible app.');
@@ -83,8 +83,8 @@ describe('@feathersjs/express/rest provider', () => {
 
     before(async () => {
       app = expressify(feathers())
-        .configure(rest(express.formatter))
         .use(express.json())
+        .configure(rest(express.formatter))
         .use('codes', {
           async get (id: Id) {
             return { id };
@@ -264,12 +264,12 @@ describe('@feathersjs/express/rest provider', () => {
       };
 
       const app = expressify(feathers())
-        .configure(rest(express.formatter))
         .use(function (req: Request, _res: Response, next: NextFunction) {
           assert.ok(req.feathers, 'Feathers object initialized');
           req.feathers.test = 'Happy';
           next();
         })
+        .configure(rest(express.formatter))
         .use('service', service);
       const server = await app.listen(4778);
 
@@ -301,8 +301,8 @@ describe('@feathersjs/express/rest provider', () => {
         req.headers['content-type'] = req.headers['content-type'] || 'application/json';
         next();
       })
-        .configure(rest(express.formatter))
         .use(express.json())
+        .configure(rest(express.formatter))
         .use('/todo', {
           async create (data: any) {
             return data;
@@ -326,8 +326,9 @@ describe('@feathersjs/express/rest provider', () => {
     it('allows middleware before and after a service', async () => {
       const app = expressify(feathers());
 
-      app.configure(rest())
+      app
         .use(express.json())
+        .configure(rest())
         .use('/todo', function (req, _res, next) {
           req.body.before = ['before first'];
           next();
@@ -361,8 +362,9 @@ describe('@feathersjs/express/rest provider', () => {
     it('allows middleware arrays before and after a service', async () => {
       const app = expressify(feathers());
 
-      app.configure(rest())
+      app
         .use(express.json())
+        .configure(rest())
         .use('/todo', [function (req: Request, _res: Response, next: NextFunction) {
           req.body.before = ['before first'];
           next();
@@ -405,8 +407,9 @@ describe('@feathersjs/express/rest provider', () => {
           res.data.push(req.body.text);
           res.status(200).json(res.data);
         }];
-      app.configure(rest())
+      app
         .use(express.json())
+        .configure(rest())
         .use('/array-middleware', middlewareArray);
 
       const server = await app.listen(4776);
@@ -576,8 +579,8 @@ describe('@feathersjs/express/rest provider', () => {
 
     before(async () => {
       app = expressify(feathers())
-        .configure(rest())
         .use(express.json())
+        .configure(rest())
         .use('/todo', new Service(), {
           methods: ['find', 'customMethod']
         })

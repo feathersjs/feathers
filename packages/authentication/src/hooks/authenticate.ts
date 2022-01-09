@@ -8,7 +8,7 @@ const debug = createDebug('@feathersjs/authentication/hooks/authenticate');
 
 export interface AuthenticateHookSettings {
   service?: string;
-  strategies: string[];
+  strategies?: string[];
 }
 
 export default (originalSettings: string | AuthenticateHookSettings, ...originalStrategies: string[]) => {

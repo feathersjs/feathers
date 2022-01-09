@@ -3,16 +3,15 @@ import { feathers, Params, HookContext } from '@feathersjs/feathers';
 import { authenticate, AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { LocalStrategy, hooks } from '@feathersjs/authentication-local';
 
-import { koa, rest, bodyParser, errorHandler, authentication } from '../src';
+import { koa, rest, bodyParser, errorHandler } from '../src';
 
 const { protect, hashPassword } = hooks;
 const app = koa(feathers());
 const authService = new AuthenticationService(app);
 
 app.use(errorHandler());
-app.use(authentication());
 app.use(bodyParser());
-app.use(rest());
+app.configure(rest());
 app.set('authentication', {
   entity: 'user',
   service: 'users',
