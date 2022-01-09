@@ -32,14 +32,16 @@ const serviceMiddleware = (): Middleware => {
     const contextBase = createContext(service, method, { http: {} });
     ctx.hook = contextBase;
 
-    const context = await (service as any)[method](...args, contextBase);
+    const context = await (service as any)[method](...args, contextBase);
     ctx.hook = context;
 
     const result = http.getData(context);
     const statusCode = http.getStatusCode(context, result);
+    const responseHeaders = http.getResponseHeaders(context);
 
     ctx.body = result;
     ctx.status = statusCode;
+    ctx.set(responseHeaders);
 
     return next();
   };

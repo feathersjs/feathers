@@ -260,6 +260,10 @@ export interface Http {
    * code that should be returned.
    */
   statusCode?: number;
+  /**
+   * A writeable, optional property that allows to provide HTTP response headers.
+   */
+  responseHeaders?: { [key: string]: string | string[] };
 }
 
 export interface HookContext<A = Application, S = any> extends BaseHookContext<ServiceGenericType<S>> {

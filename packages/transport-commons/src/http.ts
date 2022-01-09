@@ -74,3 +74,7 @@ export function getStatusCode (context: HookContext, data?: any) {
 
   return statusCodes.success;
 }
+
+export function getResponseHeaders (context: HookContext) {
+  return context.http?.responseHeaders ?? {};
+}

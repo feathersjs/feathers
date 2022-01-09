@@ -205,6 +205,25 @@ describe('@feathersjs/express/rest provider', () => {
         assert.strictEqual(res.status, 206);
       });
 
+      it('allows to set response headers in a hook', async () => {
+        app.use('/hook-headers', {
+          async get () {
+            return {};
+          }
+        });
+
+        app.service('hook-headers').hooks({
+          after (hook: HookContext) {
+            hook.http!.responseHeaders = { foo: 'first', bar: ['second', 'third'] };
+          }
+        });
+
+        const res = await axios.get<any>('http://localhost:4777/hook-headers/dishes');
+
+        assert.strictEqual(res.headers['foo'], 'first');
+        assert.strictEqual(res.headers['bar'], 'second, third');
+      });
+
       it('sets the hook object in res.hook on error', async () => {
         const params = {
           route: {},

@@ -13,11 +13,11 @@ describe('@feathersjs/transport-commons HTTP helpers', () => {
       dispatch
     };
 
-    assert.deepStrictEqual(http.getData(resultContext as HookContext), plainData);
-    assert.deepStrictEqual(http.getData(dispatchContext as HookContext), dispatch);
+    assert.strictEqual(http.getData(resultContext as HookContext), plainData);
+    assert.strictEqual(http.getData(dispatchContext as HookContext), dispatch);
   });
 
-  it('getStatusCode', async () => {
+  it('getStatusCode', () => {
     const statusContext = {
       http: { statusCode: 202 }
     };
@@ -38,5 +38,16 @@ describe('@feathersjs/transport-commons HTTP helpers', () => {
     assert.strictEqual(http.getServiceMethod('PoST', null, 'customMethod'), 'customMethod');
     assert.strictEqual(http.getServiceMethod('delete', null), 'remove');
     assert.throws(() => http.getServiceMethod('nonsense', null));
+  });
+
+  it('getResponseHeaders', () => {
+    const responseHeaders = { key: 'value' };
+    const headersContext = {
+      http: { responseHeaders }
+    };
+
+    assert.deepStrictEqual(http.getResponseHeaders({} as HookContext), {});
+    assert.deepStrictEqual(http.getResponseHeaders({http: {}} as HookContext), {});
+    assert.strictEqual(http.getResponseHeaders(headersContext as any as HookContext), responseHeaders);
   });
 });
