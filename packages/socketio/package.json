@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "@feathersjs/transport-commons": "^4.5.12",
-    "@types/socket.io": "^3.0.1",
+    "@types/socket.io": "^2.1.11",
     "debug": "^4.3.3",
     "socket.io": "^2.3.0",
     "uberproto": "^2.0.6"
