@@ -3,7 +3,7 @@ import { HookContext } from '@feathersjs/feathers';
 import { http } from '../src';
 
 describe('@feathersjs/transport-commons HTTP helpers', () => {
-  it('getData', () => {
+  it('getResponse body', () => {
     const plainData = { message: 'hi' };
     const dispatch = { message: 'from dispatch' };
     const resultContext = {
@@ -13,22 +13,41 @@ describe('@feathersjs/transport-commons HTTP helpers', () => {
       dispatch
     };
 
-    assert.strictEqual(http.getData(resultContext as HookContext), plainData);
-    assert.strictEqual(http.getData(dispatchContext as HookContext), dispatch);
+    assert.strictEqual(http.getResponse(resultContext as HookContext).body, plainData);
+    assert.strictEqual(http.getResponse(dispatchContext as HookContext).body, dispatch);
   });
 
-  it('getStatusCode', () => {
+  it('getResponse status', () => {
     const statusContext = {
-      http: { statusCode: 202 }
+      http: { status: 202 }
     };
     const createContext = {
       method: 'create'
     };
+    const redirectContext = {
+      http: { location: '/' }
+    };
 
-    assert.strictEqual(http.getStatusCode(statusContext as HookContext, {}), 202);
-    assert.strictEqual(http.getStatusCode(createContext as HookContext, {}), http.statusCodes.created);
-    assert.strictEqual(http.getStatusCode({} as HookContext), http.statusCodes.noContent);
-    assert.strictEqual(http.getStatusCode({} as HookContext, {}), http.statusCodes.success);
+    assert.strictEqual(http.getResponse(statusContext as HookContext).status, 202);
+    assert.strictEqual(http.getResponse(createContext as HookContext).status, http.statusCodes.created);
+    assert.strictEqual(http.getResponse(redirectContext as HookContext).status, http.statusCodes.seeOther);
+    assert.strictEqual(http.getResponse({} as HookContext).status, http.statusCodes.noContent);
+    assert.strictEqual(http.getResponse({result: true} as HookContext).status, http.statusCodes.success);
+  });
+
+  it('getResponse headers', () => {
+    const headers = { key: 'value' } as any;
+    const headersContext = {
+      http: { headers }
+    };
+    const locationContext = {
+      http: { location: '/' }
+    };
+
+    assert.deepStrictEqual(http.getResponse({} as HookContext).headers, {});
+    assert.deepStrictEqual(http.getResponse({http: {}} as HookContext).headers, {});
+    assert.strictEqual(http.getResponse(headersContext as HookContext).headers, headers);
+    assert.deepStrictEqual(http.getResponse(locationContext as HookContext).headers, { Location: '/' });
   });
 
   it('getServiceMethod', () => {
@@ -38,16 +57,5 @@ describe('@feathersjs/transport-commons HTTP helpers', () => {
     assert.strictEqual(http.getServiceMethod('PoST', null, 'customMethod'), 'customMethod');
     assert.strictEqual(http.getServiceMethod('delete', null), 'remove');
     assert.throws(() => http.getServiceMethod('nonsense', null));
-  });
-
-  it('getResponseHeaders', () => {
-    const responseHeaders = { key: 'value' };
-    const headersContext = {
-      http: { responseHeaders }
-    };
-
-    assert.deepStrictEqual(http.getResponseHeaders({} as HookContext), {});
-    assert.deepStrictEqual(http.getResponseHeaders({http: {}} as HookContext), {});
-    assert.strictEqual(http.getResponseHeaders(headersContext as any as HookContext), responseHeaders);
   });
 });

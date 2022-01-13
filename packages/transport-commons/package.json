@@ -53,12 +53,14 @@
     "*.js"
   ],
   "dependencies": {
-    "@feathersjs/commons": "^5.0.0-pre.17",
-    "@feathersjs/errors": "^5.0.0-pre.17",
-    "@feathersjs/feathers": "^5.0.0-pre.17",
+    "@feathersjs/commons": "^5.0.0-pre.16",
+    "@feathersjs/errors": "^5.0.0-pre.16",
+    "@feathersjs/feathers": "^5.0.0-pre.16",
+    "encodeurl": "^1.0.2",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@types/encodeurl": "^1.0.0",
     "@types/lodash": "^4.14.181",
     "@types/mocha": "^9.1.0",
     "@types/node": "^17.0.23",

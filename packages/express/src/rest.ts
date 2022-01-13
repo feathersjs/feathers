@@ -39,13 +39,10 @@ const serviceMiddleware = (): RequestHandler => {
     const context = await (service as any)[method](...args, contextBase);
     res.hook = context;
 
-    const result = http.getData(context);
-    const statusCode = http.getStatusCode(context, result);
-    const responseHeaders = http.getResponseHeaders(context);
-
-    res.data = result;
-    res.statusCode = statusCode;
-    res.set(responseHeaders);
+    const response = http.getResponse(context);
+    res.statusCode = response.status;
+    res.set(response.headers);
+    res.data = response.body;
 
     return next();
   });

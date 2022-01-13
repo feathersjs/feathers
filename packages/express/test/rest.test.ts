@@ -196,7 +196,7 @@ describe('@feathersjs/express/rest provider', () => {
 
         app.service('hook-status').hooks({
           after (hook: HookContext) {
-            hook.http.statusCode = 206;
+            hook.http.status = 206;
           }
         });
 
@@ -214,14 +214,14 @@ describe('@feathersjs/express/rest provider', () => {
 
         app.service('hook-headers').hooks({
           after (hook: HookContext) {
-            hook.http!.responseHeaders = { foo: 'first', bar: ['second', 'third'] };
+            hook.http.headers = { foo: 'first', bar: ['second', 'third'] };
           }
         });
 
         const res = await axios.get<any>('http://localhost:4777/hook-headers/dishes');
 
-        assert.strictEqual(res.headers['foo'], 'first');
-        assert.strictEqual(res.headers['bar'], 'second, third');
+        assert.strictEqual(res.headers.foo, 'first');
+        assert.strictEqual(res.headers.bar, 'second, third');
       });
 
       it('sets the hook object in res.hook on error', async () => {

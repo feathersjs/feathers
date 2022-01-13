@@ -1,5 +1,6 @@
 import { MethodNotAllowed } from '@feathersjs/errors/lib';
 import { HookContext, NullableId, Params } from '@feathersjs/feathers';
+import encodeUrl from 'encodeurl';
 
 export const METHOD_HEADER = 'x-service-method';
 
@@ -13,7 +14,8 @@ export const statusCodes = {
   created: 201,
   noContent: 204,
   methodNotAllowed: 405,
-  success: 200
+  success: 200,
+  seeOther: 303
 };
 
 export const knownMethods: { [key: string]: string } = {
@@ -53,28 +55,32 @@ export const argumentsFor = {
   default: ({ data, params }: ServiceParams) => [ data, params ]
 }
 
-export function getData (context: HookContext) {
-  return context.dispatch !== undefined
-    ? context.dispatch
-    : context.result;
-}
+export function getResponse (context: HookContext) {
+  const http = context.http || {};
 
-export function getStatusCode (context: HookContext, data?: any) {
-  if (context.http?.statusCode) {
-    return context.http.statusCode;
+  let status = statusCodes.success;
+  let headers = http.headers || {};
+  let location = headers[ 'Location' ];
+  let body = context.result;
+
+  if (context.dispatch !== undefined) {
+    body = context.dispatch;
   }
 
-  if (context.method === 'create') {
-    return statusCodes.created;
+  if (http.location !== undefined) {
+    location = encodeUrl(http.location);
+    headers = { ...headers, Location: location };
   }
 
-  if (!data) {
-    return statusCodes.noContent;
+  if (http.status) {
+    status = http.status;
+  } else if (context.method === 'create') {
+    status = statusCodes.created;
+  } else if (location !== undefined) {
+    status = statusCodes.seeOther;
+  } else if (!body) {
+    status = statusCodes.noContent;
   }
 
-  return statusCodes.success;
-}
-
-export function getResponseHeaders (context: HookContext) {
-  return context.http?.responseHeaders ?? {};
+  return { status, headers, body };
 }

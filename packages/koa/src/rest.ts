@@ -35,13 +35,10 @@ const serviceMiddleware = (): Middleware => {
     const context = await (service as any)[method](...args, contextBase);
     ctx.hook = context;
 
-    const result = http.getData(context);
-    const statusCode = http.getStatusCode(context, result);
-    const responseHeaders = http.getResponseHeaders(context);
-
-    ctx.body = result;
-    ctx.status = statusCode;
-    ctx.set(responseHeaders);
+    const response = http.getResponse(context);
+    ctx.status = response.status;
+    ctx.set(response.headers);
+    ctx.body = response.body;
 
     return next();
   };
