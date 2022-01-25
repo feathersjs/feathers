@@ -23,9 +23,19 @@ describe('@feathersjs/express', () => {
     assert.ok(expressify.errorHandler);
   });
 
-  it('returns an Express application', () => {
-    const app: Application = expressify.default(feathers());
+  it('returns an Express application, keeps Feathers service and configuration typings typings', () => {
+    type Config = {
+      hostname: string;
+      port: number;
+    }
 
+    const app = expressify.default<{}, Config>(feathers());
+
+    app.set('hostname', 'test.com');
+
+    const hostname = app.get('hostname');
+
+    assert.strictEqual(hostname, 'test.com');
     assert.strictEqual(typeof app, 'function');
   });
 
