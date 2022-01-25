@@ -2,6 +2,7 @@ import {
   feathers, HookContext, Application as FeathersApplication
 } from '@feathersjs/feathers';
 import { memory, Service } from '@feathersjs/memory';
+import { GeneralError } from '@feathersjs/errors';
 
 import {
   schema, resolve, Infer, resolveResult,
@@ -85,6 +86,10 @@ export const messageResultResolver = resolve<MessageResult, HookContext<Applicat
   properties: {
     user: async (_value, message, context) => {
       const { userId } = message;
+
+      if (context.params.error === true) {
+        throw new GeneralError('This is an error');
+      }
 
       return context.app.service('users').get(userId, context.params);
     }

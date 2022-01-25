@@ -24,7 +24,7 @@ describe('@feathersjs/schema/hooks', () => {
     });
   });
 
-  it('resolves results', async () => {
+  it('resolves results and handles resolver errors (#2534)', async () => {
     // eslint-disable-next-line
     const { password, ...externalUser } = user;
     const payload = {
@@ -49,6 +49,24 @@ describe('@feathersjs/schema/hooks', () => {
       user: externalUser,
       ...payload
     }]);
+
+    await assert.rejects(() => app.service('messages').find({
+      provider: 'external',
+      error: true
+    }), {
+      name: 'BadRequest',
+      message: 'Error resolving data',
+      code: 400,
+      className: 'bad-request',
+      data: {
+        user: {
+          name: 'GeneralError',
+          message: 'This is an error',
+          code: 500,
+          className: 'general-error'
+        }
+      }
+    });
   });
 
   it('validates and converts the query', async () => {
