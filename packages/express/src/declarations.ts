@@ -27,7 +27,7 @@ export interface ExpressOverrides<Services> {
 }
 
 export type Application<Services = any, Settings = any> =
-  Omit<Express, 'listen'|'use'> &
+  Omit<Express, 'listen'|'use'|'get'|'set'> &
   FeathersApplication<Services, Settings> &
   ExpressOverrides<Services>;
 
