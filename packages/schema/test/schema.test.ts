@@ -252,4 +252,49 @@ describe('@feathersjs/schema/schema', () => {
 
     assert.deepStrictEqual(res, { x: 3 });
   });
+
+  it('can handle compound queryProperty', async () => {
+    const formatsSchema = schema({
+      $id: 'compoundQueryProperty',
+      type: 'object',
+      required: [],
+      additionalProperties: false,
+      properties: {
+        dobString: queryProperty({
+          oneOf: [
+            { type: 'string', format: 'date', convert: true },
+            { type: 'string', format: 'date-time', convert: true },
+            { type: 'object' }
+          ]
+        })
+      }
+    } as const, customAjv);
+
+    const validated = await formatsSchema.validate({
+      dobString: { $gt: '2025-04-25', $lte: new Date('2027-04-25') }
+    });
+
+    assert.ok(validated)
+  });
+
+  it('can still fail queryProperty validation', async () => {
+    const formatsSchema = schema({
+      $id: 'compoundQueryPropertyFail',
+      type: 'object',
+      required: [],
+      additionalProperties: false,
+      properties: {
+        dobString: queryProperty({ type: 'string' })
+      }
+    } as const, customAjv);
+
+    try {
+      const validated = await formatsSchema.validate({
+        dobString: { $moose: 'test' }
+      });
+      assert(!validated, 'should not have gotten here')
+    } catch (error: any) {
+      assert.ok(error.data?.length > 0)
+    }
+  });
 });
