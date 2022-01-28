@@ -1,7 +1,7 @@
 import { JSONSchema } from 'json-schema-to-ts';
 
 export const queryProperty = <T extends JSONSchema> (definition: T) => ({
-  oneOf: [
+  anyOf: [
     definition,
     {
       type: 'object',
