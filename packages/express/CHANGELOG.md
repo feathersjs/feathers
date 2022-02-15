@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.17](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.16...v5.0.0-pre.17) (2022-02-15)
+
+
+### Bug Fixes
+
+* **express:** Fix application typings to work with typed configuration ([#2539](https://github.com/feathersjs/feathers/issues/2539)) ([b9dfaee](https://github.com/feathersjs/feathers/commit/b9dfaee834b13864c1ed4f2f6a244eb5bb70395b))
+
+
+
+
+
 # [5.0.0-pre.16](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.15...v5.0.0-pre.16) (2022-01-12)
 
 
