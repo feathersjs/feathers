@@ -30,6 +30,7 @@ export const protectedMethods = Object.keys(Object.prototype)
     'error',
     'hooks',
     'setup',
+    'teardown',
     'publish'
   ]);
 

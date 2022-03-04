@@ -2,6 +2,7 @@ import express, { Express } from 'express';
 import { Application as FeathersApplication, defaultServiceMethods } from '@feathersjs/feathers';
 import { routing } from '@feathersjs/transport-commons';
 import { createDebug } from '@feathersjs/commons';
+import http from 'http';
 
 import { Application } from './declarations';
 
@@ -26,6 +27,7 @@ export default function feathersExpress<S = any, C = any> (feathersApp?: Feather
   const app = expressApp as any as Application<S, C>;
   const { use: expressUse, listen: expressListen } = expressApp as any;
   const feathersUse = feathersApp.use;
+  let server:http.Server | undefined;
 
   Object.assign(app, {
     use (location: string & keyof S, ...rest: any[]) {
@@ -69,12 +71,25 @@ export default function feathersExpress<S = any, C = any> (feathersApp?: Feather
     },
 
     async listen (...args: any[]) {
-      const server = expressListen.call(this, ...args);
+      server = expressListen.call(this, ...args);
 
       await this.setup(server);
       debug('Feathers application listening');
 
       return server;
+    },
+
+    async close () {
+      if ( server ) {
+        server.close();
+
+        await new Promise((resolve) => {
+          server.on('close', () => { resolve(true) });
+        })
+      }
+
+      debug('Feathers application closing');
+      await this.teardown();
     }
   } as Application<S, C>);
 

@@ -35,6 +35,8 @@ export interface ServiceMethods<T = any, D = Partial<T>> {
   remove (id: NullableId, params?: Params): Promise<T | T[]>;
 
   setup (app: Application, path: string): Promise<void>;
+
+  teardown (app: Application, path: string): Promise<void>;
 }
 
 export interface ServiceOverloads<T = any, D = Partial<T>> {
@@ -217,6 +219,8 @@ export interface FeathersApplication<Services = any, Settings = any> {
    * @param map The application hook settings.
    */
   hooks (map: HookOptions<this, any>): this;
+
+  teardown (cb?: () => Promise<void>): Promise<this>;
 }
 
 // This needs to be an interface instead of a type

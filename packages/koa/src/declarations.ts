@@ -5,6 +5,7 @@ import '@feathersjs/authentication';
 
 export type ApplicationAddons = {
   listen (port?: number, ...args: any[]): Promise<Server>;
+  close (): Promise<void>;
 }
 
 export type Application<T = any, C = any> =
