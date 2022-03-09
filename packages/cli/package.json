@@ -30,58 +30,39 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 12"
+    "node": ">= 14"
   },
   "files": [
     "CHANGELOG.md",
     "LICENSE",
     "README.md",
-    "_templates/**",
-    "src/**",
-    "lib/**",
+    "dist/**",
     "bin/**",
     "*.d.ts",
     "*.js"
   ],
   "scripts": {
     "prepublish": "npm run compile",
-    "compile": "shx rm -rf lib/ && tsc",
+    "compile": "shx rm -rf dist/ && tsc && shx cp -r generators/. dist/",
     "test": "mocha --timeout 60000 --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
-    "lib": "lib"
+    "lib": "dist/cli"
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/hygen": "^6.2.0-feathers.3",
-    "@types/update-notifier": "^5.1.0",
-    "enquirer": "^2.3.6",
-    "execa": "^5.1.1",
-    "latest-version": "^6.0.0",
-    "lodash": "^4.17.21",
-    "update-notifier": "^5.1.0"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^5.0.0-pre.14",
-    "@feathersjs/configuration": "^5.0.0-pre.14",
-    "@feathersjs/errors": "^5.0.0-pre.14",
-    "@feathersjs/express": "^5.0.0-pre.14",
-    "@feathersjs/feathers": "^5.0.0-pre.14",
-    "@feathersjs/koa": "^5.0.0-pre.14",
-    "@feathersjs/socketio": "^5.0.0-pre.14",
-    "@feathersjs/schema": "^5.0.0-pre.14",
-    "@feathersjs/transport-commons": "^5.0.0-pre.14",
-    "@types/mocha": "^9.0.0",
-    "@types/node": "^16.10.4",
-    "axios": "^0.23.0",
-    "execa": "^5.1.1",
-    "koa-static": "^5.0.0",
-    "mocha": "^9.1.2",
-    "nodemon": "^2.0.13",
-    "shx": "^0.3.3",
-    "typescript": "^4.4.4",
-    "winston": "^3.3.3"
+    "@feathersjs/authentication": "^5.0.0-pre.16",
+    "@feathersjs/configuration": "^5.0.0-pre.16",
+    "@feathersjs/errors": "^5.0.0-pre.16",
+    "@feathersjs/express": "^5.0.0-pre.16",
+    "@feathersjs/feathers": "^5.0.0-pre.16",
+    "@feathersjs/koa": "^5.0.0-pre.16",
+    "@feathersjs/socketio": "^5.0.0-pre.16",
+    "@feathersjs/schema": "^5.0.0-pre.16",
+    "@feathersjs/transport-commons": "^5.0.0-pre.16"
   }
 }

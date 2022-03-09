@@ -1,5 +1,9 @@
 #!/usr/bin/env node
-
 'use strict';
 
-require('../lib').cli(process.argv);
+const { yargs } = require('@feathershq/pinion')
+const { command } = require('../dist')
+
+const cli = cmd => command(yargs(cmd)).argv
+
+cli(process.argv.slice(2));

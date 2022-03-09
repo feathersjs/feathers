@@ -1,9 +1,9 @@
 {
   "extends": "../../tsconfig",
   "include": [
-    "src/**/*.ts"
+    "generators/**/*.ts"
   ],
   "compilerOptions": {
-    "outDir": "lib"
+    "outDir": "dist"
   }
 }
