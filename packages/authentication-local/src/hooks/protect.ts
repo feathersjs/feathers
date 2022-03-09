@@ -1,7 +1,7 @@
 import omit from 'lodash/omit';
 import { HookContext, NextFunction } from '@feathersjs/feathers';
 
-export default (...fields: string[]) => async (context: HookContext<any, any>, next?: NextFunction) => {
+export default (...fields: string[]) => async (context: HookContext, next?: NextFunction) => {
   const o = (current: any) => {
     if (typeof current === 'object' && !Array.isArray(current)) {
       const data = typeof current.toJSON === 'function'

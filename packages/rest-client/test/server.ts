@@ -77,6 +77,15 @@ class TodoService extends Service {
 
 export default (configurer?: any) => {
   const app = expressify(feathers())
+    .use(function (req, res, next) {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Headers', 'Authorization');
+      req.feathers.authorization = req.headers.authorization;
+      next();
+    })
+    // Parse HTTP bodies
+    .use(json())
+    .use(urlencoded({ extended: true }))
     .configure(rest(function formatter (_req, res, next) {
       if (!res.data) {
         next();
@@ -92,15 +101,6 @@ export default (configurer?: any) => {
         }
       });
     }))
-    .use(function (req, res, next) {
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header('Access-Control-Allow-Headers', 'Authorization');
-      req.feathers.authorization = req.headers.authorization;
-      next();
-    })
-    // Parse HTTP bodies
-    .use(json())
-    .use(urlencoded({ extended: true }))
     // Host our Todos service on the /todos path
     .use('/todos', new TodoService(), {
       methods: [

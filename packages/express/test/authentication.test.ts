@@ -36,7 +36,7 @@ describe('@feathersjs/express/authentication', () => {
 
     //@ts-ignore
     app.use('/protected', express.authenticate('jwt'), (req, res) => {
-      res.json(req.user);
+      res.json(req.feathers.user);
     });
 
     app.use(express.errorHandler({
@@ -166,7 +166,7 @@ describe('@feathersjs/express/authentication', () => {
         const { data } = error.response;
 
         assert.strictEqual(data.name, 'NotAuthenticated');
-        assert.strictEqual(data.message, 'Invalid authentication information (no `strategy` set)');
+        assert.strictEqual(data.message, 'Not authenticated');
       });
     });
 
@@ -195,7 +195,7 @@ describe('@feathersjs/express/authentication', () => {
 
       assert.strictEqual(data.email, user.email);
       assert.strictEqual(data.id, user.id);
-      assert.strictEqual(data.password, undefined, 'Passed provider information');
+      assert.strictEqual(data.password, user.password);
     });
   });
 });

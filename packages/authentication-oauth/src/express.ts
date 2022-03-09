@@ -56,8 +56,13 @@ export default (options: OauthSetupSettings) => {
       req.session.redirect = redirect as string;
       req.session.query = query;
       req.session.headers = req.headers;
-
-      next()
+      req.session.save((err: any) => {
+        if (err) {
+          next(`Error storing session: ${err}`);
+        } else {
+          next();
+        }
+      });
     });
 
     authApp.get('/:name/authenticate', async (req: Request, res: Response, next: NextFunction) => {

@@ -18,7 +18,7 @@ export default function hashPassword (field: string, options: HashPasswordOption
     throw new Error('The hashPassword hook requires a field name option');
   }
 
-  return async (context: HookContext<any, any>, next?: NextFunction) => {
+  return async (context: HookContext, next?: NextFunction) => {
     const { app, data, params } = context;
 
     if (data !== undefined) {

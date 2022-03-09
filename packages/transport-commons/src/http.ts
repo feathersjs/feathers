@@ -1,6 +1,5 @@
 import { MethodNotAllowed } from '@feathersjs/errors/lib';
 import { HookContext, NullableId, Params } from '@feathersjs/feathers';
-import { BaseHookContext } from '@feathersjs/hooks';
 
 export const METHOD_HEADER = 'x-service-method';
 
@@ -17,7 +16,7 @@ export const statusCodes = {
   success: 200
 };
 
-export const knownMethods: { [key: string]: any } = {
+export const knownMethods: { [key: string]: string } = {
   post: 'create',
   patch: 'patch',
   put: 'update',
@@ -54,25 +53,19 @@ export const argumentsFor = {
   default: ({ data, params }: ServiceParams) => [ data, params ]
 }
 
-export function getData (context: HookContext|{ [key: string]: any }) {
-  if (!(context instanceof BaseHookContext)) {
-    return context;
-  }
-
+export function getData (context: HookContext) {
   return context.dispatch !== undefined
     ? context.dispatch
     : context.result;
 }
 
 export function getStatusCode (context: HookContext, data?: any) {
-  if (context instanceof BaseHookContext) {
-    if (context.statusCode) {
-      return context.statusCode;
-    }
+  if (context.http?.statusCode) {
+    return context.http.statusCode;
+  }
 
-    if (context.method === 'create') {
-      return statusCodes.created;
-    }
+  if (context.method === 'create') {
+    return statusCodes.created;
   }
 
   if (!data) {

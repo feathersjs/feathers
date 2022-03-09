@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { EventEmitter } from 'events';
-import { CustomMethod } from '@feathersjs/feathers';
+import { CustomMethods } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { Service, SocketService } from '../src/client';
 
@@ -9,7 +9,7 @@ declare type DummyCallback = (err: any, data?: any) => void;
 describe('client', () => {
   let connection: any;
   let testData: any;
-  let service: SocketService & CustomMethod<'customMethod'> & EventEmitter;
+  let service: SocketService & CustomMethods<{customMethod: any}> & EventEmitter;
 
   beforeEach(() => {
     connection = new EventEmitter();
