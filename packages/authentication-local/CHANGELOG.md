@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.17](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.16...v5.0.0-pre.17) (2022-02-15)
+
+
+### Bug Fixes
+
+* **hooks:** Allow all built-in hooks to be used the async and regular way ([#2559](https://github.com/feathersjs/feathers/issues/2559)) ([8f9f631](https://github.com/feathersjs/feathers/commit/8f9f631e0ce89de349207db72def84e7ab496a4a))
+
+
+
+
+
 # [5.0.0-pre.16](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.15...v5.0.0-pre.16) (2022-01-12)
 
 **Note:** Version bump only for package @feathersjs/authentication-local

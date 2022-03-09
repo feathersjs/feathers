@@ -110,3 +110,5 @@ export function channels () {
     });
   };
 }
+
+export { Channel, RealTimeConnection, CombinedChannel }

@@ -1,6 +1,7 @@
 import assert from 'assert';
+import { AdapterBasicTest } from './declarations';
 
-export default (test: any, app: any, _errors: any, serviceName: string, idProp: string) => {
+export default (test: AdapterBasicTest, app: any, _errors: any, serviceName: string, idProp: string) => {
   describe('Basic Functionality', () => {
     let service: any;
 
