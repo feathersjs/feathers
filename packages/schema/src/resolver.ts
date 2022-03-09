@@ -22,7 +22,7 @@ export interface ResolverConfig<T, C> {
 export interface ResolverStatus<T, C> {
   path: string[];
   originalContext?: C;
-  properties?: (keyof T)[];
+  properties?: string[];
   stack: PropertyResolver<T, any, C>[];
 }
 

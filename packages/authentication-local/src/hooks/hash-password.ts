@@ -53,7 +53,7 @@ export default function hashPassword (field: string, options: HashPasswordOption
     }
 
     if (typeof next === 'function') {
-      await next();
+      return next();
     }
   };
 }
