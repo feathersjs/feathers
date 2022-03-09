@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert';
 import { Server } from 'http';
-import { CustomMethod, feathers } from '@feathersjs/feathers';
+import { CustomMethods, feathers } from '@feathersjs/feathers';
 import { io, Socket } from 'socket.io-client';
 import { clientTests } from '@feathersjs/tests';
 
@@ -9,7 +9,7 @@ import socketio, { SocketService } from '../src';
 
 type ServiceTypes = {
   '/': SocketService,
-  'todos': SocketService & CustomMethod<'customMethod'>,
+  'todos': SocketService & CustomMethods<{customMethod: any}>,
   [key: string]: any;
 }
 

@@ -1,9 +1,8 @@
 import { BadRequest } from '@feathersjs/errors';
-import { Schema } from './schema';
 
 export type PropertyResolver<T, V, C> = (
   value: V|undefined,
-  obj: any,
+  obj: T,
   context: C,
   status: ResolverStatus<T, C>
 ) => Promise<V|undefined>;
@@ -13,7 +12,9 @@ export type PropertyResolverMap<T, C> = {
 }
 
 export interface ResolverConfig<T, C> {
-  schema?: Schema<any>,
+  // TODO this should be `Schema<any>` but has recently produced an error, see
+  // https://github.com/ThomasAribart/json-schema-to-ts/issues/53
+  schema?: any,
   validate?: 'before'|'after'|false,
   properties: PropertyResolverMap<T, C>
 }
@@ -21,7 +22,7 @@ export interface ResolverConfig<T, C> {
 export interface ResolverStatus<T, C> {
   path: string[];
   originalContext?: C;
-  properties?: (keyof T)[];
+  properties?: string[];
   stack: PropertyResolver<T, any, C>[];
 }
 
@@ -52,7 +53,7 @@ export class Resolver<T, C> {
       stack: [...stack, resolver]
     }
 
-    return resolver(value, data, context, resolverStatus);
+    return resolver(value, data as any, context, resolverStatus);
   }
 
   async resolve<D> (_data: D, context: C, status?: Partial<ResolverStatus<T, C>>): Promise<T> {
@@ -94,7 +95,9 @@ export class Resolver<T, C> {
     }));
 
     if (hasErrors) {
-      throw new BadRequest(`Error resolving data ${status?.properties.join('.')}`, errors);
+      const propertyName = status?.properties ? ` ${status.properties.join('.')}` : '';
+
+      throw new BadRequest('Error resolving data' + propertyName, errors);
     }
 
     return schema && validate === 'after'

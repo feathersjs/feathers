@@ -6,16 +6,20 @@ import {
 } from '../declarations';
 import { defaultServiceArguments, getHookMethods } from '../service';
 import {
-  collectLegacyHooks,
-  enableLegacyHooks,
-  fromAfterHook,
+  collectRegularHooks,
+  enableRegularHooks
+} from './regular';
+
+export {
   fromBeforeHook,
+  fromBeforeHooks,
+  fromAfterHook,
+  fromAfterHooks,
+  fromErrorHook,
   fromErrorHooks
-} from './legacy';
+} from './regular';
 
-export { fromAfterHook, fromBeforeHook, fromErrorHooks };
-
-export function createContext (service: Service<any>, method: string, data: HookContextData = {}) {
+export function createContext (service: Service, method: string, data: HookContextData = {}) {
   const createContext = (service as any)[method].createContext;
 
   if (typeof createContext !== 'function') {
@@ -34,11 +38,11 @@ export class FeathersHookManager<A> extends HookManager {
   collectMiddleware (self: any, args: any[]): Middleware[] {
     const app = this.app as any as Application;
     const appHooks = app.appHooks[HOOKS].concat(app.appHooks[this.method] || []);
-    const legacyAppHooks = collectLegacyHooks(this.app, this.method);
+    const regularAppHooks = collectRegularHooks(this.app, this.method);
     const middleware = super.collectMiddleware(self, args);
-    const legacyHooks = collectLegacyHooks(self, this.method);
+    const regularHooks = collectRegularHooks(self, this.method);
 
-    return [...appHooks, ...legacyAppHooks, ...middleware, ...legacyHooks];
+    return [...appHooks, ...regularAppHooks, ...middleware, ...regularHooks];
   }
 
   initializeContext (self: any, args: any[], context: HookContext) {
@@ -63,7 +67,9 @@ export function hookMixin<A> (
   }
 
   const app = this;
-  const serviceMethodHooks = getHookMethods(service, options).reduce((res, method) => {
+  const hookMethods = getHookMethods(service, options);
+
+  const serviceMethodHooks = hookMethods.reduce((res, method) => {
     const params = (defaultServiceArguments as any)[method] || [ 'data', 'params' ];
 
     res[method] = new FeathersHookManager<A>(app, method)
@@ -74,18 +80,25 @@ export function hookMixin<A> (
         method,
         service,
         event: null,
-        type: null
+        type: null,
+        get statusCode () {
+          return this.http?.statusCode;
+        },
+        set statusCode (value: number) {
+          (this.http ||= {}).statusCode = value;
+        }
       });
 
     return res;
   }, {} as HookMap);
-  const handleLegacyHooks = enableLegacyHooks(service);
+
+  const handleRegularHooks = enableRegularHooks(service, hookMethods);
 
   hooks(service, serviceMethodHooks);
 
   service.hooks = function (this: any, hookOptions: any) {
     if (hookOptions.before || hookOptions.after || hookOptions.error) {
-      return handleLegacyHooks.call(this, hookOptions);
+      return handleRegularHooks.call(this, hookOptions);
     }
 
     if (Array.isArray(hookOptions)) {

@@ -18,10 +18,10 @@ export function notFound ({ verbose = false } = {}): RequestHandler {
 }
 
 export type ErrorHandlerOptions = {
-  public?: string,
-  logger?: boolean|{ error?: (msg: any) => void, info?: (msg: any) => void },
-  html?: any,
-  json?: any
+  public?: string;
+  logger?: boolean|{ error?: (msg: any) => void, info?: (msg: any) => void };
+  html?: any;
+  json?: any;
 };
 
 export function errorHandler (_options: ErrorHandlerOptions = {}): ErrorRequestHandler {

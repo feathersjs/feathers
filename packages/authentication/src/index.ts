@@ -1,9 +1,5 @@
-import * as hooks from './hooks';
-
-const { authenticate } = hooks;
-
-export { hooks };
-export { authenticate };
+export * as hooks from './hooks';
+export { authenticate } from './hooks';
 export {
   AuthenticationBase,
   AuthenticationRequest,

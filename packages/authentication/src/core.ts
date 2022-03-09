@@ -156,6 +156,16 @@ export class AuthenticationBase {
   }
 
   /**
+   * Returns a single strategy by name
+   * 
+   * @param name The strategy name
+   * @returns The authentication strategy or undefined
+   */
+  getStrategy (name: string) {
+    return this.strategies[name];
+  }
+
+  /**
    * Create a new access token with payload and options.
    *
    * @param payload The JWT payload

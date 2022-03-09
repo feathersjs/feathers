@@ -1,26 +1,73 @@
+import { Request, Response, RequestHandler, Router } from 'express';
 import { MethodNotAllowed } from '@feathersjs/errors';
-import { HookContext } from '@feathersjs/hooks';
 import { createDebug } from '@feathersjs/commons';
 import { http } from '@feathersjs/transport-commons';
 import { createContext, defaultServiceMethods, getServiceOptions } from '@feathersjs/feathers';
-import { Request, Response, NextFunction, RequestHandler, Router } from 'express';
 
-import { parseAuthentication } from './authentication';
+import { AuthenticationSettings, parseAuthentication } from './authentication';
+import { Application } from './declarations';
 
 const debug = createDebug('@feathersjs/express/rest');
 
-export type ServiceCallback = (req: Request, res: Response, options: http.ServiceParams) => Promise<HookContext|any>;
+const toHandler = (func: (req: Request, res: Response, next: () => void) => Promise<void>): RequestHandler => {
+  return (req, res, next) => func(req, res, next).catch(error => next(error));
+};
 
-export const feathersParams = (req: Request, _res: Response, next: NextFunction) => {
-  req.feathers = {
-    ...req.feathers,
-    provider: 'rest',
-    headers: req.headers
-  };
-  next();
-}
+const serviceMiddleware = (): RequestHandler => {
+  return toHandler(async (req, res, next) => {
+    const { query, headers, path, body: data, method: httpMethod } = req;
+    const methodOverride = req.headers[http.METHOD_HEADER] as string | undefined;
 
-export const formatter = (_req: Request, res: Response, next: NextFunction) => {
+    const { service, params: { __id: id = null, ...route } = {} } = req.lookup!;
+    const method = http.getServiceMethod(httpMethod, id, methodOverride);
+    const { methods } = getServiceOptions(service);
+
+    debug(`Found service for path ${path}, attempting to run '${method}' service method`);
+
+    if (!methods.includes(method) || defaultServiceMethods.includes(methodOverride)) {
+      const error = new MethodNotAllowed(`Method \`${method}\` is not supported by this endpoint.`);
+      res.statusCode = error.code;
+      throw error;
+    }
+
+    const createArguments = http.argumentsFor[method as 'get'] || http.argumentsFor.default;
+    const params = { query, headers, route, ...req.feathers };
+    const args = createArguments({ id, data, params });
+    const contextBase = createContext(service, method, { http: {} });
+    res.hook = contextBase;
+
+    const context = await (service as any)[method](...args, contextBase);
+    res.hook = context;
+
+    const result = http.getData(context);
+    const statusCode = http.getStatusCode(context, result);
+
+    res.data = result;
+    res.statusCode = statusCode;
+
+    return next();
+  });
+};
+
+const servicesMiddleware = (): RequestHandler => {
+  return toHandler(async (req, res, next) => {
+    const app = req.app as any as Application;
+    const lookup = app.lookup(req.path);
+
+    if (!lookup) {
+      return next();
+    }
+
+    req.lookup = lookup;
+
+    const options = getServiceOptions(lookup.service);
+    const middleware = options.express!.composed!;
+
+    return middleware(req, res, next);
+  });
+};
+
+export const formatter: RequestHandler = (_req, res, next) => {
   if (res.data === undefined) {
     return next();
   }
@@ -30,91 +77,35 @@ export const formatter = (_req: Request, res: Response, next: NextFunction) => {
       res.json(res.data);
     }
   });
-}
+};
 
+export type RestOptions = {
+  formatter?: RequestHandler;
+  authentication?: AuthenticationSettings;
+};
 
-export const serviceMiddleware = (callback: ServiceCallback) =>
-  async (req: Request, res: Response, next: NextFunction) => {
-    debug(`Running service middleware for '${req.url}'`);
+export const rest = (options?: RestOptions | RequestHandler) => {
+  options = typeof options === 'function' ? { formatter: options } : options || {};
 
-    try {
-      const { query, body: data } = req;
-      const { __feathersId: id = null, ...route } = req.params;
-      const params = { query, route, ...req.feathers };
-      const context = await callback(req, res, { id, data, params });
-      const result = http.getData(context);
+  const formatterMiddleware = options.formatter || formatter;
+  const authenticationOptions = options.authentication;
 
-      res.data = result;
-      res.status(http.getStatusCode(context, result));
-
-      next();
-    } catch (error: any) {
-      next(error);
-    }
-  }
-
-export const serviceMethodHandler = (
-  service: any, methodName: string, getArgs: (opts: http.ServiceParams) => any[], headerOverride?: string
-) => serviceMiddleware(async (req, res, options) => {
-  const methodOverride = typeof headerOverride === 'string' && (req.headers[headerOverride] as string);
-  const method = methodOverride ? methodOverride : methodName
-  const { methods } = getServiceOptions(service);
-
-  if (!methods.includes(method) || defaultServiceMethods.includes(methodOverride)) {
-    res.status(http.statusCodes.methodNotAllowed);
-
-    throw new MethodNotAllowed(`Method \`${method}\` is not supported by this endpoint.`);
-  }
-
-  const args = getArgs(options);
-  const context = createContext(service, method);
-
-  res.hook = context as any;
-
-  return service[method](...args, context);
-});
-
-export function rest (handler: RequestHandler = formatter) {
-  return function (this: any, app: any) {
+  return (app: Application) => {
     if (typeof app.route !== 'function') {
       throw new Error('@feathersjs/express/rest needs an Express compatible app.');
     }
 
-    app.use(feathersParams);
-    app.use(parseAuthentication());
+    app.use(parseAuthentication(authenticationOptions));
+    app.use(servicesMiddleware());
 
-    // Register the REST provider
-    app.mixins.push(function (service: any, path: string, options: any) {
-      const { middleware: { before = [] } } = options;
-      let { middleware: { after = [] } } = options;
+    app.mixins.push((_service, _path, options) => {
+      const { express: { before = [], after = [] } = {} } = options;
 
-      if (typeof handler === 'function') {
-        after = after.concat(handler);
-      }
+      const middlewares = [].concat(before, serviceMiddleware(), after, formatterMiddleware);
+      const middleware = Router().use(middlewares);
 
-      const baseUri = `/${path}`;
-      const find = serviceMethodHandler(service, 'find', http.argumentsFor.find);
-      const get = serviceMethodHandler(service, 'get', http.argumentsFor.get);
-      const create = serviceMethodHandler(service, 'create', http.argumentsFor.create, http.METHOD_HEADER);
-      const update = serviceMethodHandler(service, 'update', http.argumentsFor.update);
-      const patch = serviceMethodHandler(service, 'patch', http.argumentsFor.patch);
-      const remove = serviceMethodHandler(service, 'remove', http.argumentsFor.remove);
-
-      debug(`Adding REST provider for service \`${path}\` at base route \`${baseUri}\``);
-
-      const idRoute = '/:__feathersId';
-      const serviceRouter = Router({ mergeParams: true })
-        .get('/', find)
-        .post('/', create)
-        .get(idRoute, get)
-        .put('/', update)
-        .put(idRoute, update)
-        .patch('/', patch)
-        .patch(idRoute, patch)
-        .delete('/', remove)
-        .delete(idRoute, remove);
-
-      app.use(baseUri, ...before, serviceRouter, ...after);
+      options.express ||= {};
+      options.express.composed = middleware;
     });
   };
 }

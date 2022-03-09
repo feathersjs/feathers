@@ -1,71 +1,61 @@
+import { RequestHandler, Request, Response } from 'express';
+import { HookContext } from '@feathersjs/feathers';
 import { createDebug } from '@feathersjs/commons';
-import { merge, flatten } from 'lodash';
-import { NextFunction, RequestHandler } from 'express';
+import { authenticate as AuthenticateHook } from '@feathersjs/authentication';
+
+import { Application } from './declarations';
 
 const debug = createDebug('@feathersjs/express/authentication');
 
-type StrategyOptions = {
-  service?: string;
-  strategies: string[]
+const toHandler = (func: (req: Request, res: Response, next: () => void) => Promise<void>): RequestHandler => {
+  return (req, res, next) => func(req, res, next).catch(error => next(error));
 };
 
-const normalizeStrategy = (_settings: string|StrategyOptions, ..._strategies: string[]) =>
-  typeof _settings === 'string'
-    ? { strategies: flatten([ _settings, ..._strategies ]) }
-    : _settings;
+export type AuthenticationSettings = {
+  service?: string;
+  strategies?: string[];
+};
 
-export function parseAuthentication (settings: any = {}): RequestHandler {
-  return function (req, res, next) {
-    const app = req.app as any;
-    const service = app.defaultAuthentication ? app.defaultAuthentication(settings.service) : null;
+export function parseAuthentication (settings: AuthenticationSettings = {}): RequestHandler {
+  return toHandler(async (req, res, next) => {
+    const app = req.app as any as Application;
+    const service = app.defaultAuthentication?.(settings.service);
 
-    if (service === null) {
+    if (!service) {
       return next();
     }
 
     const config = service.configuration;
-    const authStrategies = config.parseStrategies || config.authStrategies || [];
+    const authStrategies = settings.strategies || config.parseStrategies || config.authStrategies || [];
 
     if (authStrategies.length === 0) {
       debug('No `authStrategies` or `parseStrategies` found in authentication configuration');
       return next();
     }
 
-    service.parse(req, res, ...authStrategies)
-      .then((authentication: any) => {
-        if (authentication) {
-          debug('Parsed authentication from HTTP header', authentication);
-          merge(req, {
-            authentication,
-            feathers: { authentication }
-          });
-        }
+    const authentication = await service.parse(req, res, ...authStrategies)
 
-        next();
-      }).catch(next);
-  };
+    if (authentication) {
+      debug('Parsed authentication from HTTP header', authentication);
+      req.feathers = { ...req.feathers, authentication };
+    }
+
+    return next();
+  });
 }
 
-export function authenticate (_settings: string|StrategyOptions, ..._strategies: string[]) {
-  const settings = normalizeStrategy(_settings, ..._strategies);
+export function authenticate (settings: string | AuthenticationSettings, ...strategies: string[]): RequestHandler {
+  const hook = AuthenticateHook(settings, ...strategies);
 
-  if (!Array.isArray(settings.strategies) || settings.strategies.length === 0) {
-    throw new Error('\'authenticate\' middleware requires at least one strategy name');
-  }
+  return toHandler(async (req, _res, next) => {
+    const app = req.app as any as Application;
+    const params = req.feathers;
+    const context = { app, params } as any as HookContext;
 
-  return (_req: Request, _res: Response, next: NextFunction) => {
-    const req = _req as any;
-    const { app, authentication } = req;
-    const service = app.defaultAuthentication(settings.service);
+    await hook(context);
 
-    debug('Authenticating with Express middleware and strategies', settings.strategies);
+    req.feathers = context.params;
 
-    service.authenticate(authentication, req.feathers, ...settings.strategies)
-      .then((authResult: any) => {
-        debug('Merging request with', authResult);
-        merge(req, authResult);
-
-        next();
-      }).catch(next);
-  };
+    return next();
+  });
 }

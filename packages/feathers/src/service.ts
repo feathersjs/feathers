@@ -24,6 +24,7 @@ export const defaultEventMap = {
 export const protectedMethods = Object.keys(Object.prototype)
   .concat(Object.keys(EventEmitter.prototype))
   .concat([
+    'all',
     'before',
     'after',
     'error',

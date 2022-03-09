@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.17](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.16...v5.0.0-pre.17) (2022-02-15)
+
+
+### Bug Fixes
+
+* **express:** Fix application typings to work with typed configuration ([#2539](https://github.com/feathersjs/feathers/issues/2539)) ([b9dfaee](https://github.com/feathersjs/feathers/commit/b9dfaee834b13864c1ed4f2f6a244eb5bb70395b))
+
+
+
+
+
+# [5.0.0-pre.16](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.15...v5.0.0-pre.16) (2022-01-12)
+
+
+### Features
+
+* **express, koa:** make transports similar ([#2486](https://github.com/feathersjs/feathers/issues/2486)) ([26aa937](https://github.com/feathersjs/feathers/commit/26aa937c114fb8596dfefc599b1f53cead69c159))
+
+
+
+
+
+# [5.0.0-pre.15](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.14...v5.0.0-pre.15) (2021-11-27)
+
+
+### Bug Fixes
+
+* missing express types for Request, Response ([#2498](https://github.com/feathersjs/feathers/issues/2498)) ([ee67131](https://github.com/feathersjs/feathers/commit/ee67131bbaa24c54d3d781bdf8820015759ac488))
+* **typescript:** Overall typing improvements ([#2478](https://github.com/feathersjs/feathers/issues/2478)) ([b8eb804](https://github.com/feathersjs/feathers/commit/b8eb804158556d9651a8607e3c3fda15e0bfd110))
+
+
+### Features
+
+* **core:** add `context.http` and move `statusCode` there ([#2496](https://github.com/feathersjs/feathers/issues/2496)) ([b701bf7](https://github.com/feathersjs/feathers/commit/b701bf77fb83048aa1dffa492b3d77dd53f7b72b))
+* **core:** Improve legacy hooks integration ([08c8b40](https://github.com/feathersjs/feathers/commit/08c8b40999bf3889c61a4d4fad97a2c4f78bafc9))
+
+
+
+
+
 # [5.0.0-pre.14](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.13...v5.0.0-pre.14) (2021-10-13)
 
 **Note:** Version bump only for package @feathersjs/express

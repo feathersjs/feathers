@@ -40,22 +40,22 @@ describe('hooks basics', () => {
 
     app.hooks({
       before: [(ctx: HookContext) => {
-        ctx.params.chain.push('app.hooks legacy before');
+        ctx.params.chain.push('app.hooks regular before');
       }],
       after: [(ctx: HookContext) => {
-        ctx.params.chain.push('app.hooks legacy after');
+        ctx.params.chain.push('app.hooks regular after');
       }]
     });
 
     service.hooks({
       before: {
         get: (ctx: HookContext) => {
-          ctx.params.chain.push('service.hooks legacy before');
+          ctx.params.chain.push('service.hooks regular before');
         }
       },
       after: {
         get: (ctx: HookContext) => {
-          ctx.params.chain.push('service.hooks legacy after');
+          ctx.params.chain.push('service.hooks regular after');
         }
       }
     });
@@ -71,12 +71,12 @@ describe('hooks basics', () => {
     service.hooks({
       before: {
         get: (ctx: HookContext) => {
-          ctx.params.chain.push('service.hooks 2 legacy before');
+          ctx.params.chain.push('service.hooks 2 regular before');
         }
       },
       after: {
         get: (ctx: HookContext) => {
-          ctx.params.chain.push('service.hooks 2 legacy after');
+          ctx.params.chain.push('service.hooks 2 regular after');
         }
       }
     });
@@ -85,18 +85,18 @@ describe('hooks basics', () => {
 
     assert.deepStrictEqual(chain, [
       'app.hooks before',
-      'app.hooks legacy before',
+      'app.hooks regular before',
       '@hooks all before',
       '@hooks get before',
       'service.hooks get before',
-      'service.hooks legacy before',
-      'service.hooks 2 legacy before',
-      'service.hooks legacy after',
-      'service.hooks 2 legacy after',
+      'service.hooks regular before',
+      'service.hooks 2 regular before',
+      'service.hooks regular after',
+      'service.hooks 2 regular after',
       'service.hooks get after',
       '@hooks get after',
       '@hooks all after',
-      'app.hooks legacy after',
+      'app.hooks regular after',
       'app.hooks after'
     ])
   });
