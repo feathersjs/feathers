@@ -5,10 +5,10 @@ import { routing } from '@feathersjs/transport-commons';
 import { createDebug } from '@feathersjs/commons';
 
 import { Application } from './declarations';
-
+import bodyParser from 'koa-bodyparser'
 export { default as Koa } from 'koa';
-export { default as bodyParser } from 'koa-bodyparser';
 
+export { bodyParser }
 export * from './authentication';
 export * from './declarations';
 export * from './handlers';

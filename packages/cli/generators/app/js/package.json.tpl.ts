@@ -1,8 +1,7 @@
-import { fromFile, generator, toFile, loadJSON, writeJSON } from '@feathershq/pinion'
+import { generator, toFile, writeJSON } from '@feathershq/pinion'
 import { AppGeneratorContext } from '../index'
 
 export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(loadJSON(fromFile('package.json'), pkg => ({ pkg })))
   .then(writeJSON(({ pkg, lib }: AppGeneratorContext) => ({
     ...pkg,
     type: 'module',
@@ -12,4 +11,4 @@ export const generate = (ctx: AppGeneratorContext) => generator(ctx)
       dev: `nodemon ${lib}/`,
       test: 'mocha test/ --recursive --exit'
     }
-  }), toFile('package.json')))
+  }), toFile('package.json'), { force: true }))
