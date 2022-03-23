@@ -11,6 +11,7 @@ const addVersions = (dependencies: string[], versions: DependencyVersions) =>
 
 export interface AppGeneratorData extends FeathersAppInfo {
   name: string
+  lib: string
   description: string
 }
 

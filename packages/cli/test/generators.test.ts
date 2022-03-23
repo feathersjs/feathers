@@ -47,6 +47,7 @@ describe('@feathersjs/cli', () => {
         framework,
         language,
         name,
+        lib: 'src',
         description: 'A Feathers test app',
         packager: 'npm',
         database: 'sequelize',
@@ -54,7 +55,6 @@ describe('@feathersjs/cli', () => {
       }
       const context = getContext<AppGeneratorContext>({
         ...settings,
-        lib: 'src',
         _: ['app']
       }, { cwd });
       const finalContext = await generate(context);
