@@ -4,7 +4,8 @@
   "version": "5.0.0-pre.17",
   "repository": {
     "type": "git",
-    "url": "https://github.com/feathersjs/feathers.git"
+    "url": "https://github.com/feathersjs/feathers.git",
+    "directory": "packages/client"
   },
   "license": "MIT",
   "funding": {
