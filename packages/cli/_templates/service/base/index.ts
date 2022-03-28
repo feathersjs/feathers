@@ -1,4 +1,4 @@
-import { PromptOptions } from "../../../src";
+import { PromptOptions } from '../../../src';
 
 export type VariablesServicePrompts = {
   name: string,

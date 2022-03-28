@@ -30,13 +30,16 @@ export const generate = (ctx: FeathersBaseContext) => generator(ctx)
   }))
   .then(runGenerator(__dirname, (ctx: FeathersBaseContext) => `${ctx._[0]}`, 'index'))
 
+export const commandRunner = (argv: any) => {
+  const ctx = getContext<FeathersBaseContext>({
+    ...argv
+  })
+
+  return generate(ctx)
+}
+
 export const command = (yargs: Argv) => yargs
   .usage('Usage: $0 <command> [options]')
-  .command('app', 'Generate a new app', () => {}, argv => {
-    const ctx = getContext<FeathersBaseContext>({
-      ...argv
-    })
-
-    return generate(ctx)
-  })
+  .command('app', 'Generate a new app', () => {}, commandRunner)
+  .command('service', 'Generate a service', () => {}, commandRunner)
   .help()
