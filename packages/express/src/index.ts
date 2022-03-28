@@ -2,7 +2,6 @@ import express, { Express } from 'express';
 import { Application as FeathersApplication, defaultServiceMethods } from '@feathersjs/feathers';
 import { routing } from '@feathersjs/transport-commons';
 import { createDebug } from '@feathersjs/commons';
-import http from 'http';
 
 import { Application } from './declarations';
 
@@ -26,8 +25,7 @@ export default function feathersExpress<S = any, C = any> (feathersApp?: Feather
 
   const app = expressApp as any as Application<S, C>;
   const { use: expressUse, listen: expressListen } = expressApp as any;
-  const feathersUse = feathersApp.use;
-  let server:http.Server | undefined;
+  const { use: feathersUse, teardown: feathersTeardown } = feathersApp;
 
   Object.assign(app, {
     use (location: string & keyof S, ...rest: any[]) {
@@ -71,25 +69,19 @@ export default function feathersExpress<S = any, C = any> (feathersApp?: Feather
     },
 
     async listen (...args: any[]) {
-      server = expressListen.call(this, ...args);
+      const server = expressListen.call(this, ...args);
 
+      this.server = server;
       await this.setup(server);
       debug('Feathers application listening');
 
       return server;
     },
 
-    async close () {
-      if ( server ) {
-        server.close();
-
-        await new Promise((resolve) => {
-          server.on('close', () => { resolve(true) });
-        })
-      }
-
-      debug('Feathers application closing');
-      await this.teardown();
+    async teardown (server?: any) {
+      return feathersTeardown.call(this, server).then(() =>
+        new Promise((resolve, reject) => this.server.close(e => e ? reject(e) : resolve(this)))
+      );
     }
   } as Application<S, C>);
 

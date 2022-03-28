@@ -293,14 +293,21 @@ describe('Feathers application', () => {
     });
   });
 
-  describe('.setup', () => {
-    it('app.setup calls .setup on all services', async () => {
+  describe('.setup and .teardown', () => {
+    it('app.setup and app.teardown calls .setup and .teardown on all services', async () => {
       const app = feathers();
       let setupCount = 0;
+      let teardownCount = 0;
 
       app.use('/dummy', {
         async setup (appRef: any, path: any) {
           setupCount++;
+          assert.strictEqual(appRef, app);
+          assert.strictEqual(path, 'dummy');
+        },
+
+        async teardown (appRef: any, path: any) {
+          teardownCount++;
           assert.strictEqual(appRef, app);
           assert.strictEqual(path, 'dummy');
         }
@@ -317,6 +324,12 @@ describe('Feathers application', () => {
           setupCount++;
           assert.strictEqual(appRef, app);
           assert.strictEqual(path, 'dummy2');
+        },
+
+        async teardown (appRef: any, path: any) {
+          teardownCount++;
+          assert.strictEqual(appRef, app);
+          assert.strictEqual(path, 'dummy2');
         }
       });
 
@@ -324,6 +337,11 @@ describe('Feathers application', () => {
 
       assert.ok((app as any)._isSetup);
       assert.strictEqual(setupCount, 2);
+
+      await app.teardown();
+
+      assert.ok(!(app as any)._isSetup);
+      assert.strictEqual(teardownCount, 2);
     });
 
     it('registering a service after app.setup will be set up', done => {

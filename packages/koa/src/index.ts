@@ -3,7 +3,6 @@ import koaQs from 'koa-qs';
 import { Application as FeathersApplication } from '@feathersjs/feathers';
 import { routing } from '@feathersjs/transport-commons';
 import { createDebug } from '@feathersjs/commons';
-import http from 'http';
 
 import { Application } from './declarations';
 
@@ -28,39 +27,31 @@ export function koa<S = any, C = any> (feathersApp?: FeathersApplication<S, C>, 
 
   const app = feathersApp as any as Application<S, C>;
   const { listen: koaListen, use: koaUse } = koaApp;
-  const feathersUse = feathersApp.use as any;
-  let server:http.Server | undefined;
+  const { use: feathersUse, teardown: feathersTeardown } = feathersApp;
 
   Object.assign(app, {
     use (location: string|Koa.Middleware, ...args: any[]) {
       if (typeof location === 'string') {
-        return feathersUse.call(this, location, ...args);
+        return (feathersUse as any).call(this, location, ...args);
       }
 
       return koaUse.call(this, location);
     },
 
     async listen (port?: number, ...args: any[]) {
-      server = koaListen.call(this, port, ...args);
+      const server = koaListen.call(this, port, ...args);
 
+      this.server = server;
       await this.setup(server);
       debug('Feathers application listening');
 
       return server;
     },
 
-    async close () {
-      if ( server ) {
-        server.close();
-
-        await new Promise((resolve) => {
-          server.on('close', () => { resolve(true) });
-        })
-      }
-
-      debug('Feathers server closed');
-
-      await this.teardown();
+    async teardown (server?: any) {
+      return feathersTeardown.call(this, server).then(() =>
+        new Promise((resolve, reject) => this.server.close(e => e ? reject(e) : resolve(this)))
+      );
     }
   } as Application);
 

@@ -174,30 +174,7 @@ describe('@feathersjs/express', () => {
     await new Promise(resolve => server.close(() => resolve(server)));
   });
 
-  it('.close calls .teardown', async () => {
-    const app = feathersExpress(feathers());
-    let called = false;
-
-    app.use('/myservice', {
-      async get (id: Id) {
-        return { id };
-      },
-
-      async teardown (appParam, path) {
-        assert.strictEqual(appParam, app);
-        assert.strictEqual(path, 'myservice');
-        called = true;
-      }
-
-    });
-
-    await app.listen(8787);
-    await app.close();
-
-    assert.ok(called);
-  });
-
-  it('.close closes http server', async () => {
+  it('.teardown closes http server', async () => {
     const app = feathersExpress(feathers());
     let called = false;
 
@@ -206,7 +183,7 @@ describe('@feathersjs/express', () => {
       called = true;
     })
 
-    await app.close();
+    await app.teardown();
     assert.ok(called);
   });
 

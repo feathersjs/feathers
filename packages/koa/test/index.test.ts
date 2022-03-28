@@ -1,14 +1,12 @@
 import { strict as assert } from 'assert';
 import Koa  from 'koa';
 import axios from 'axios';
-import { Server } from 'http';
 import { feathers, Id } from '@feathersjs/feathers';
 import { Service, restTests } from '@feathersjs/tests';
 import { koa, rest, Application, bodyParser, errorHandler } from '../src';
 
 describe('@feathersjs/koa', () => {
   let app: Application;
-  let server: Server;
 
   before(async () => {
     app = koa(feathers());
@@ -33,10 +31,10 @@ describe('@feathersjs/koa', () => {
       ]
     });
 
-    server = await app.listen(8465);
+    await app.listen(8465);
   });
 
-  after(() => server.close());
+  after(() => app.teardown());
 
   it('throws an error when initialized with invalid application', () => {
     try {
@@ -99,7 +97,7 @@ describe('@feathersjs/koa', () => {
         'X-Service-Method': 'customMethod'
       }
     });
-    
+
     assert.deepStrictEqual(data, {
       data: { message: 'Custom hello' },
       method: 'customMethod',
@@ -140,30 +138,7 @@ describe('@feathersjs/koa', () => {
     });
   });
 
-  it('.close calls .teardown', async () => {
-    const app = koa(feathers());
-    let called = false;
-
-    app.use('/myservice', {
-      async get (id: Id) {
-        return { id };
-      },
-
-      async teardown (appParam, path) {
-        assert.strictEqual(appParam, app);
-        assert.strictEqual(path, 'myservice');
-        called = true;
-      }
-
-    });
-
-    await app.listen(8787);
-    await app.close();
-
-    assert.ok(called);
-  });
-
-  it('.close closes http server', async () => {
+  it('.teardown closes http server', async () => {
     const app = koa(feathers());
     let called = false;
 
@@ -172,7 +147,7 @@ describe('@feathersjs/koa', () => {
       called = true;
     })
 
-    await app.close();
+    await app.teardown();
     assert.ok(called);
   });
 
