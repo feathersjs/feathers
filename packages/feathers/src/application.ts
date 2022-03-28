@@ -161,7 +161,7 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
     });
   }
 
-  async teardown () {
+  teardown () {
     let promise = Promise.resolve();
 
     // Teardown each service (pass the app so that they can look up other services etc.)
