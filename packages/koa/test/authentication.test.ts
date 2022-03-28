@@ -1,6 +1,5 @@
 import { strict as assert } from 'assert';
 import _axios from 'axios';
-import { Server } from 'http';
 import { AuthenticationResult } from '@feathersjs/authentication';
 
 import app from './app.fixture';
@@ -13,12 +12,11 @@ describe('@feathersjs/koa/authentication', () => {
   const email = 'koatest@authentication.com';
   const password = 'superkoa';
 
-  let server: Server;
   let authResult: AuthenticationResult;
   let user: any;
 
   before(async () => {
-    server = await app.listen(9776);
+    await app.listen(9776);
     user = await app.service('users').create({ email, password });
     authResult = (await axios.post<any>('/authentication', {
       strategy: 'local',
@@ -27,7 +25,7 @@ describe('@feathersjs/koa/authentication', () => {
     })).data;
   });
 
-  after(done => server.close(done));
+  after(() => app.teardown());
 
   describe('service authentication', () => {
     it('successful local authentication', () => {

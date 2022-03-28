@@ -140,11 +140,8 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
   }
 
   setup () {
-    let promise = Promise.resolve();
-
-    // Setup each service (pass the app so that they can look up other services etc.)
-    for (const path of Object.keys(this.services)) {
-      promise = promise.then(() => {
+    return Object.keys(this.services).reduce((current, path) => current
+      .then(() => {
         const service: any = this.service(path as any);
 
         if (typeof service.setup === 'function') {
@@ -152,34 +149,27 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
 
           return service.setup(this, path);
         }
+      }), Promise.resolve())
+      .then(() => {
+        this._isSetup = true;
+        return this;
       });
-    }
-
-    return promise.then(() => {
-      this._isSetup = true;
-      return this;
-    });
   }
 
   teardown () {
-    let promise = Promise.resolve();
-
-    // Teardown each service (pass the app so that they can look up other services etc.)
-    for (const path of Object.keys(this.services)) {
-      promise = promise.then(() => {
+    return Object.keys(this.services).reduce((current, path) => current
+      .then(() => {
         const service: any = this.service(path as any);
 
         if (typeof service.teardown === 'function') {
-          debug(`Teardown service for \`${path}\``);
+          debug(`Tearing down service for \`${path}\``);
 
           return service.teardown(this, path);
         }
+      }), Promise.resolve())
+      .then(() => {
+        this._isSetup = false;
+        return this;
       });
-    }
-
-    return promise.then(() => {
-      this._isSetup = false;
-      return this;
-    });
   }
 }
