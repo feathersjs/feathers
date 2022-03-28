@@ -53,7 +53,7 @@ describe('@feathersjs/koa', () => {
 
   it('Koa wrapped and context.app are the same', async () => {
     const app = koa(feathers());
-    
+
     app.use('/test', {
       async get (id: Id) {
         return { id };
@@ -138,6 +138,42 @@ describe('@feathersjs/koa', () => {
 
       return true;
     });
+  });
+
+  it('.close calls .teardown', async () => {
+    const app = koa(feathers());
+    let called = false;
+
+    app.use('/myservice', {
+      async get (id: Id) {
+        return { id };
+      },
+
+      async teardown (appParam, path) {
+        assert.strictEqual(appParam, app);
+        assert.strictEqual(path, 'myservice');
+        called = true;
+      }
+
+    });
+
+    await app.listen(8787);
+    await app.close();
+
+    assert.ok(called);
+  });
+
+  it('.close closes http server', async () => {
+    const app = koa(feathers());
+    let called = false;
+
+    const server = await app.listen(8787);
+    server.on('close', () => {
+      called = true;
+    })
+
+    await app.close();
+    assert.ok(called);
   });
 
   restTests('Services', 'todo', 8465);

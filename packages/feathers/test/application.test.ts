@@ -89,6 +89,10 @@ describe('Feathers application', () => {
           this.path = path;
         },
 
+        async teardown (this: any, _app: any, path: string) {
+          this.path = path;
+        },
+
         async create (data: any) {
           return data;
         }
@@ -114,7 +118,9 @@ describe('Feathers application', () => {
         async removeListener (data: any) {
           return data;
         },
-        async setup () {}
+        async setup () {},
+
+        async teardown () {}
       };
 
       assert.throws(() => feathers().use('/dummy', dummyService, {
@@ -126,6 +132,11 @@ describe('Feathers application', () => {
         methods: ['create', 'setup']
       }), {
         message: '\'setup\' on service \'dummy\' is not allowed as a custom method name'
+      });
+      assert.throws(() => feathers().use('/dummy', dummyService, {
+        methods: ['create', 'teardown']
+      }), {
+        message: '\'teardown\' on service \'dummy\' is not allowed as a custom method name'
       });
     });
 
@@ -328,6 +339,43 @@ describe('Feathers application', () => {
           }
         });
       });
+    });
+  });
+
+  describe('.teardown', () => {
+    it('app.teardown calls .teardown on all services', async () => {
+      const app = feathers();
+      let teardownCount = 0;
+
+      app.use('/dummy', {
+        async setup () {},
+        async teardown (appRef: any, path: any) {
+          teardownCount++;
+          assert.strictEqual(appRef, app);
+          assert.strictEqual(path, 'dummy');
+        }
+      });
+
+      app.use('/simple', {
+        get (id: string) {
+          return Promise.resolve({ id });
+        }
+      });
+
+      app.use('/dummy2', {
+        async setup () {},
+        async teardown (appRef: any, path: any) {
+          teardownCount++;
+          assert.strictEqual(appRef, app);
+          assert.strictEqual(path, 'dummy2');
+        }
+      });
+
+      await app.setup();
+      await app.teardown();
+
+      assert.equal((app as any)._isSetup, false);
+      assert.strictEqual(teardownCount, 2);
     });
   });
 

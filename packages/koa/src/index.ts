@@ -3,6 +3,7 @@ import koaQs from 'koa-qs';
 import { Application as FeathersApplication } from '@feathersjs/feathers';
 import { routing } from '@feathersjs/transport-commons';
 import { createDebug } from '@feathersjs/commons';
+import http from 'http';
 
 import { Application } from './declarations';
 
@@ -28,6 +29,7 @@ export function koa<S = any, C = any> (feathersApp?: FeathersApplication<S, C>, 
   const app = feathersApp as any as Application<S, C>;
   const { listen: koaListen, use: koaUse } = koaApp;
   const feathersUse = feathersApp.use as any;
+  let server:http.Server | undefined;
 
   Object.assign(app, {
     use (location: string|Koa.Middleware, ...args: any[]) {
@@ -39,12 +41,26 @@ export function koa<S = any, C = any> (feathersApp?: FeathersApplication<S, C>, 
     },
 
     async listen (port?: number, ...args: any[]) {
-      const server = koaListen.call(this, port, ...args);
+      server = koaListen.call(this, port, ...args);
 
       await this.setup(server);
       debug('Feathers application listening');
 
       return server;
+    },
+
+    async close () {
+      if ( server ) {
+        server.close();
+
+        await new Promise((resolve) => {
+          server.on('close', () => { resolve(true) });
+        })
+      }
+
+      debug('Feathers server closed');
+
+      await this.teardown();
     }
   } as Application);
 

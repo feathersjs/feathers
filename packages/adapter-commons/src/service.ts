@@ -231,4 +231,6 @@ export class AdapterService<
   }
 
   async setup () {}
+
+  async teardown () {}
 }

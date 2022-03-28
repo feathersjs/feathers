@@ -23,6 +23,7 @@ export interface ExpressOverrides<Services> {
   listen(port: number, hostname: string, callback?: () => void): Promise<http.Server>;
   listen(port: number|string|any, callback?: () => void): Promise<http.Server>;
   listen(callback?: () => void): Promise<http.Server>;
+  close (): Promise<void>;
   use: ExpressUseHandler<this, Services>;
 }
 
