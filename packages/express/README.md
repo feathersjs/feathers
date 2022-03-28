@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/feathersjs/feathers/workflows/CI/badge.svg)](https://github.com/feathersjs/feathers/actions?query=workflow%3ACI)
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/express.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/express)
+[![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/qa8kez8QBx)
 
 > Feathers Express framework bindings and REST provider
 
