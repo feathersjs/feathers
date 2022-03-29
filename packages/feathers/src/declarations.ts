@@ -230,7 +230,7 @@ export interface FeathersApplication<Services = any, Settings = any> {
    *
    * @param map The application hook settings.
    */
-  hooks (map: HookOptions<this, any>): this;
+  hooks (map: ApplicationHookOptions<this>): this;
 }
 
 // This needs to be an interface instead of a type
@@ -376,7 +376,17 @@ export type HookMap<A, S> = {
 export type HookOptions<A, S> =
   HookMap<A, S> | HookFunction<A, S>[] | RegularHookMap<A, S>;
 
-export type AppHookOptions<A> = HookOptions<A, any> & {
-  setup: any[],
-  teardown: any[]
+export interface ApplicationHookContext<A = Application> extends BaseHookContext {
+  app: A;
+  server: any;
 }
+
+export type ApplicationHookFunction<A> =
+  (context: ApplicationHookContext<A>, next: NextFunction) => Promise<void>;
+
+export type ApplicationHookMap<A> = {
+  setup?: ApplicationHookFunction<A>[],
+  teardown?: ApplicationHookFunction<A>[]
+}
+
+export type ApplicationHookOptions<A> = HookOptions<A, any> | ApplicationHookMap<A>
