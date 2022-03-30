@@ -30,6 +30,22 @@ To learn more about Feathers visit the website at [feathersjs.com](http://feathe
 
 The [Feathers docs](http://docs.feathersjs.com) are loaded with awesome stuff and tell you every thing you need to know about using and configuring Feathers.
 
+## Dependencies
+
+Here's a list of third party dependencies and why they may be included when using the feathers generator.
+
+- axios
+  - A Fetch API alternative that works in Node 16 and older. Used in the default tests.
+- feathers-sequelize
+  - Known bug, you may need this if you use SQL, but it get's included in generated projects regardless. Feel free to remove it.
+- install
+  - Included for compatibility... will be removed in Feathers v6
+- mocha (Installed upon request)
+- shx
+  - A set of convenient shell utilities. Used by default on generated tests.
+- winston
+  - A very popular logger with many plugins. This is easy to remove should you prefer another logger. There are no tight integrations with Feathers by default, it's merely preconfigured with the bare minimum.
+
 ## License
 
 Copyright (c) 2022 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
