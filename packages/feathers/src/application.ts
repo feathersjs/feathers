@@ -106,13 +106,13 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
     // Add all the mixins
     this.mixins.forEach(fn => fn.call(this, protoService, location, serviceOptions));
 
+    this.services[location] = protoService;
+
     // If we ran setup already, set this service up explicitly, this will not `await`
     if (this._isSetup && typeof protoService.setup === 'function') {
       debug(`Setting up service for \`${location}\``);
       protoService.setup(this, location);
     }
-
-    this.services[location] = protoService;
 
     return this;
   }
