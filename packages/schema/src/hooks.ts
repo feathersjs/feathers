@@ -14,7 +14,7 @@ const getContext = (context: HookContext) => {
 }
 
 export const resolveQuery = <T> (resolver: Resolver<T, HookContext>) =>
-  async (context: HookContext, next: NextFunction) => {
+  async (context: HookContext, next?: NextFunction) => {
     const ctx = getContext(context);
     const data = context?.params?.query || {};
     const query = await resolver.resolve(data, ctx, {
@@ -26,11 +26,13 @@ export const resolveQuery = <T> (resolver: Resolver<T, HookContext>) =>
       query
     }
 
-    return next();
+    if (typeof next === 'function') {
+      return next();
+    }
   };
 
 export const resolveData = <T> (resolver: Resolver<T, HookContext>) =>
-  async (context: HookContext, next: NextFunction) => {
+  async (context: HookContext, next?: NextFunction) => {
     const ctx = getContext(context);
     const data = context.data;
     const status = {
@@ -45,27 +47,32 @@ export const resolveData = <T> (resolver: Resolver<T, HookContext>) =>
       context.data = await resolver.resolve(data, ctx, status);
     }
 
-    return next();
+    if (typeof next === 'function') {
+      return next();
+    }
   };
 
 export const resolveResult = <T> (resolver: Resolver<T, HookContext>) =>
-  async (context: HookContext, next: NextFunction) => {
-    const { $resolve: properties, ...query } = context.params?.query || {};
-    const { resolve } = context.params;
-    const status = {
-      originalContext: context,
-      ...resolve,
-      properties
-    };
+  async (context: HookContext, next?: NextFunction) => {
+    if (typeof next === 'function') {
+      const { $resolve: properties, ...query } = context.params?.query || {};
+      const resolve = {
+        originalContext: context,
+        ...context.params.resolve,
+        properties
+      };
 
-    context.params = {
-      ...context.params,
-      query
+      context.params = {
+        ...context.params,
+        resolve,
+        query
+      }
+
+      await next();
     }
 
-    await next();
-
     const ctx = getContext(context);
+    const status = context.params.resolve;
     const data = context.method === 'find' && context.result.data
       ? context.result.data
       : context.result;
@@ -80,7 +87,7 @@ export const resolveResult = <T> (resolver: Resolver<T, HookContext>) =>
   };
 
 export const validateQuery = (schema: Schema<any>) =>
-  async (context: HookContext, next: NextFunction) => {
+  async (context: HookContext, next?: NextFunction) => {
     const data = context?.params?.query || {};
 
     try {
@@ -91,14 +98,16 @@ export const validateQuery = (schema: Schema<any>) =>
         query
       }
 
-      return next();
+      if (typeof next === 'function') {
+        return next();
+      }
     } catch (error: any) {
       throw (error.ajv ? new BadRequest(error.message, error.errors) : error);
     }
   };
 
 export const validateData = (schema: Schema<any>) =>
-  async (context: HookContext, next: NextFunction) => {
+  async (context: HookContext, next?: NextFunction) => {
     const data = context.data;
 
     try {
@@ -113,5 +122,7 @@ export const validateData = (schema: Schema<any>) =>
       throw (error.ajv ? new BadRequest(error.message, error.errors) : error);
     }
 
-    return next();
+    if (typeof next === 'function') {
+      return next();
+    }
   };

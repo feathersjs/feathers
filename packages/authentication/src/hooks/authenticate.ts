@@ -8,7 +8,7 @@ const debug = createDebug('@feathersjs/authentication/hooks/authenticate');
 
 export interface AuthenticateHookSettings {
   service?: string;
-  strategies: string[];
+  strategies?: string[];
 }
 
 export default (originalSettings: string | AuthenticateHookSettings, ...originalStrategies: string[]) => {
@@ -20,7 +20,7 @@ export default (originalSettings: string | AuthenticateHookSettings, ...original
     throw new Error('The authenticate hook needs at least one allowed strategy');
   }
 
-  return async (context: HookContext<any, any>, _next?: NextFunction) => {
+  return async (context: HookContext, _next?: NextFunction) => {
     const next = typeof _next === 'function' ? _next : async () => context;
     const { app, params, type, path, service } = context;
     const { strategies } = settings;

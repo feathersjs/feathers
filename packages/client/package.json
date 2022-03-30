@@ -1,10 +1,11 @@
 {
   "name": "@feathersjs/client",
   "description": "A module that consolidates Feathers client modules for REST (jQuery, Request, Superagent) and Websocket (Socket.io, Primus) connections",
-  "version": "5.0.0-pre.14",
+  "version": "5.0.0-pre.17",
   "repository": {
     "type": "git",
-    "url": "https://github.com/feathersjs/feathers.git"
+    "url": "https://github.com/feathersjs/feathers.git",
+    "directory": "packages/client"
   },
   "license": "MIT",
   "funding": {
@@ -48,31 +49,31 @@
     "IE 11"
   ],
   "dependencies": {
-    "@feathersjs/authentication-client": "^5.0.0-pre.14",
-    "@feathersjs/errors": "^5.0.0-pre.14",
-    "@feathersjs/feathers": "^5.0.0-pre.14",
-    "@feathersjs/rest-client": "^5.0.0-pre.14",
-    "@feathersjs/socketio-client": "^5.0.0-pre.14"
+    "@feathersjs/authentication-client": "^5.0.0-pre.17",
+    "@feathersjs/errors": "^5.0.0-pre.17",
+    "@feathersjs/feathers": "^5.0.0-pre.17",
+    "@feathersjs/rest-client": "^5.0.0-pre.17",
+    "@feathersjs/socketio-client": "^5.0.0-pre.17"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.8",
-    "@babel/preset-env": "^7.15.8",
-    "@feathersjs/express": "^5.0.0-pre.14",
-    "@feathersjs/memory": "^5.0.0-pre.14",
-    "@feathersjs/socketio": "^5.0.0-pre.14",
-    "@feathersjs/tests": "^5.0.0-pre.14",
-    "babel-loader": "^8.2.2",
-    "mocha": "^9.1.2",
+    "@babel/core": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "@feathersjs/express": "^5.0.0-pre.17",
+    "@feathersjs/memory": "^5.0.0-pre.17",
+    "@feathersjs/socketio": "^5.0.0-pre.17",
+    "@feathersjs/tests": "^5.0.0-pre.17",
+    "babel-loader": "^8.2.3",
+    "mocha": "^9.2.0",
     "mocha-puppeteer": "^0.14.0",
     "node-fetch": "^2.6.1",
-    "shx": "^0.3.3",
-    "socket.io-client": "^4.2.0",
-    "superagent": "^6.1.0",
+    "shx": "^0.3.4",
+    "socket.io-client": "^4.4.1",
+    "superagent": "^7.1.1",
     "ts-loader": "^9.2.6",
-    "typescript": "^4.4.4",
-    "webpack": "^5.58.1",
-    "webpack-cli": "^4.9.0",
+    "typescript": "^4.5.5",
+    "webpack": "^5.68.0",
+    "webpack-cli": "^4.9.2",
     "webpack-merge": "^5.8.0"
   },
-  "gitHead": "9bb26276938aead1f3f582be5517a49a8ce00f09"
+  "gitHead": "d828748e57b40abfaa15710663afed417de14a1d"
 }

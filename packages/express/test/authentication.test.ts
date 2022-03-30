@@ -16,7 +16,6 @@ describe('@feathersjs/express/authentication', () => {
   const password = 'superexpress';
 
   let app: express.Application;
-  let server: any;
   let user: any;
   let authResult: AuthenticationResult;
 
@@ -26,7 +25,8 @@ describe('@feathersjs/express/authentication', () => {
       .configure(express.rest());
 
     app = createApplication(expressApp as any) as unknown as express.Application;
-    server = await app.listen(9876);
+
+    await app.listen(9876);
 
     app.use('/dummy', {
       get (id, params) {
@@ -34,9 +34,9 @@ describe('@feathersjs/express/authentication', () => {
       }
     });
 
-    //@ts-ignore
+    // @ts-ignore
     app.use('/protected', express.authenticate('jwt'), (req, res) => {
-      res.json(req.user);
+      res.json(req.feathers.user);
     });
 
     app.use(express.errorHandler({
@@ -60,7 +60,7 @@ describe('@feathersjs/express/authentication', () => {
     authResult = res.data;
   });
 
-  after(done => server.close(done));
+  after(() => app.teardown());
 
   describe('service authentication', () => {
     it('successful local authentication', () => {
@@ -166,7 +166,7 @@ describe('@feathersjs/express/authentication', () => {
         const { data } = error.response;
 
         assert.strictEqual(data.name, 'NotAuthenticated');
-        assert.strictEqual(data.message, 'Invalid authentication information (no `strategy` set)');
+        assert.strictEqual(data.message, 'Not authenticated');
       });
     });
 
@@ -195,7 +195,7 @@ describe('@feathersjs/express/authentication', () => {
 
       assert.strictEqual(data.email, user.email);
       assert.strictEqual(data.id, user.id);
-      assert.strictEqual(data.password, undefined, 'Passed provider information');
+      assert.strictEqual(data.password, user.password);
     });
   });
 });

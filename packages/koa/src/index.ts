@@ -1,39 +1,38 @@
 import Koa from 'koa';
-import bodyParser from 'koa-bodyparser';
 import koaQs from 'koa-qs';
 import { Application as FeathersApplication } from '@feathersjs/feathers';
 import { routing } from '@feathersjs/transport-commons';
 import { createDebug } from '@feathersjs/commons';
 
 import { Application } from './declarations';
-import { errorHandler } from './error-handler';
+
+export { default as Koa } from 'koa';
+export { default as bodyParser } from 'koa-bodyparser';
+
+export * from './authentication';
+export * from './declarations';
+export * from './handlers';
+export * from './rest';
 
 const debug = createDebug('@feathersjs/koa');
 
-export * from './declarations';
-export * from './authenticate';
-export { rest } from './rest';
-export { Koa, bodyParser, errorHandler };
-
-export function koa (_app?: FeathersApplication): Application<any> {
-  const koaApp = new Koa();
-
-  if (!_app) {
-    return koaApp as unknown as Application<any>;
+export function koa<S = any, C = any> (feathersApp?: FeathersApplication<S, C>, koaApp: Koa = new Koa()): Application<S, C> {
+  if (!feathersApp) {
+    return koaApp as any;
   }
 
-  if (typeof _app.setup !== 'function') {
+  if (typeof feathersApp.setup !== 'function') {
     throw new Error('@feathersjs/koa requires a valid Feathers application instance');
   }
 
-  const app = _app as Application;
+  const app = feathersApp as any as Application<S, C>;
   const { listen: koaListen, use: koaUse } = koaApp;
-  const oldUse = app.use;
+  const { use: feathersUse, teardown: feathersTeardown } = feathersApp;
 
   Object.assign(app, {
     use (location: string|Koa.Middleware, ...args: any[]) {
       if (typeof location === 'string') {
-        return (oldUse as any).call(this, location, ...args);
+        return (feathersUse as any).call(this, location, ...args);
       }
 
       return koaUse.call(this, location);
@@ -42,38 +41,45 @@ export function koa (_app?: FeathersApplication): Application<any> {
     async listen (port?: number, ...args: any[]) {
       const server = koaListen.call(this, port, ...args);
 
+      this.server = server;
       await this.setup(server);
       debug('Feathers application listening');
 
       return server;
+    },
+
+    async teardown (server?: any) {
+      return feathersTeardown.call(this, server).then(() =>
+        new Promise((resolve, reject) => this.server.close(e => e ? reject(e) : resolve(this)))
+      );
     }
   } as Application);
 
-  const feathersDescriptors = {
+  const appDescriptors = {
     ...Object.getOwnPropertyDescriptors(Object.getPrototypeOf(app)),
     ...Object.getOwnPropertyDescriptors(app)
   };
-  const koaDescriptors = {
+  const newDescriptors = {
     ...Object.getOwnPropertyDescriptors(Object.getPrototypeOf(koaApp)),
     ...Object.getOwnPropertyDescriptors(koaApp)
   };
 
   // Copy all non-existing properties (including non-enumerables)
   // that don't already exist on the Express app
-  Object.keys(koaDescriptors).forEach(prop => {
-    const feathersProp = feathersDescriptors[prop];
-    const koaProp = koaDescriptors[prop];
+  Object.keys(newDescriptors).forEach(prop => {
+    const appProp = appDescriptors[prop];
+    const newProp = newDescriptors[prop];
 
-    if (koaProp !== undefined && feathersProp === undefined) {
-      Object.defineProperty(app, prop, koaProp);
+    if (appProp === undefined && newProp !== undefined) {
+      Object.defineProperty(app, prop, newProp);
     }
   });
 
   koaQs(app as any);
-  app.configure(routing());
-  app.use((ctx, next) => {
-    ctx.feathers = { provider: 'rest' };
 
+  app.configure(routing() as any);
+  app.use((ctx, next) => {
+    ctx.feathers = { ...ctx.feathers, provider: 'rest' };
     return next();
   });
 

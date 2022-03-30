@@ -6,9 +6,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/cb5ec42a2d0cc1a47a02/maintainability)](https://codeclimate.com/github/feathersjs/feathers/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/cb5ec42a2d0cc1a47a02/test_coverage)](https://codeclimate.com/github/feathersjs/feathers/test_coverage)
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/feathers.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/feathers)
-
-[![Slack Status](https://img.shields.io/badge/Slack-Join-brightgreen)](http://slack.feathersjs.com)
-[![Telegram Status](https://img.shields.io/badge/Telegram_RU_chat:-Feathers-216bc1.svg?style=flat)](https://t.me/featherjs)
+[![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/qa8kez8QBx)
 
 Feathers is a lightweight web-framework for creating real-time applications and REST APIs using JavaScript or TypeScript.
 
@@ -34,6 +32,6 @@ The [Feathers docs](http://docs.feathersjs.com) are loaded with awesome stuff an
 
 ## License
 
-Copyright (c) 2021 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2022 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).

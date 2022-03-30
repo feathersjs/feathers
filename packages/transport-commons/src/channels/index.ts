@@ -11,24 +11,24 @@ const { CHANNELS } = keys;
 
 declare module '@feathersjs/feathers/lib/declarations' {
   interface ServiceAddons<A, S> extends EventEmitter { // eslint-disable-line
-    publish (publisher: Publisher<ServiceGenericType<S>>): this;
-    publish (event: Event, publisher: Publisher<ServiceGenericType<S>>): this;
+    publish (publisher: Publisher<ServiceGenericType<S>, A, this>): this;
+    publish (event: Event, publisher: Publisher<ServiceGenericType<S>, A, this>): this;
 
-    registerPublisher (publisher: Publisher<ServiceGenericType<S>>): this;
-    registerPublisher (event: Event, publisher: Publisher<ServiceGenericType<S>>): this;
+    registerPublisher (publisher: Publisher<ServiceGenericType<S>, A, this>): this;
+    registerPublisher (event: Event, publisher: Publisher<ServiceGenericType<S>, A, this>): this;
   }
 
-  interface Application<ServiceTypes, AppSettings> { // eslint-disable-line
+  interface Application<Services, Settings> { // eslint-disable-line
     channels: string[];
 
-    channel (name: string[]): Channel;
+    channel (name: string | string[]): Channel;
     channel (...names: string[]): Channel;
 
-    publish<T> (publisher: Publisher<T>): this;
-    publish<T> (event: Event, publisher: Publisher<T>): this;
+    publish<T> (publisher: Publisher<T, this>): this;
+    publish<T> (event: Event, publisher: Publisher<T, this>): this;
 
-    registerPublisher<T> (publisher: Publisher<T>): this;
-    registerPublisher<T> (event: Event, publisher: Publisher<T>): this;
+    registerPublisher<T> (publisher: Publisher<T, this>): this;
+    registerPublisher<T> (event: Event, publisher: Publisher<T, this>): this;
   }
 
   interface Params {
@@ -51,7 +51,7 @@ export function channels () {
       }
     });
 
-    app.mixins.push((service: FeathersService<any>, path: string) => {
+    app.mixins.push((service: FeathersService, path: string) => {
       const { serviceEvents } = getServiceOptions(service);
 
       if (typeof service.publish === 'function') {
@@ -110,3 +110,5 @@ export function channels () {
     });
   };
 }
+
+export { Channel, CombinedChannel, RealTimeConnection }

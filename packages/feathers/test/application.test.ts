@@ -89,6 +89,10 @@ describe('Feathers application', () => {
           this.path = path;
         },
 
+        async teardown (this: any, _app: any, path: string) {
+          this.path = path;
+        },
+
         async create (data: any) {
           return data;
         }
@@ -114,7 +118,9 @@ describe('Feathers application', () => {
         async removeListener (data: any) {
           return data;
         },
-        async setup () {}
+        async setup () {},
+
+        async teardown () {}
       };
 
       assert.throws(() => feathers().use('/dummy', dummyService, {
@@ -126,6 +132,11 @@ describe('Feathers application', () => {
         methods: ['create', 'setup']
       }), {
         message: '\'setup\' on service \'dummy\' is not allowed as a custom method name'
+      });
+      assert.throws(() => feathers().use('/dummy', dummyService, {
+        methods: ['create', 'teardown']
+      }), {
+        message: '\'teardown\' on service \'dummy\' is not allowed as a custom method name'
       });
     });
 
@@ -174,7 +185,7 @@ describe('Feathers application', () => {
       app1.service('testing').create({ message: 'Hi' });
     });
 
-    it('async hooks run before legacy hooks', async () => {
+    it('async hooks run before regular hooks', async () => {
       const app = feathers();
 
       app.use('/dummy', {
@@ -197,11 +208,11 @@ describe('Feathers application', () => {
         ctx.data.order = [ 'async' ];
         await next();
       }]);
-      
+
       const result = await dummy.create({
         message: 'hi'
       });
-      
+
       assert.deepStrictEqual(result, {
         message: 'hi',
         order: ['async', 'before']
@@ -282,14 +293,21 @@ describe('Feathers application', () => {
     });
   });
 
-  describe('.setup', () => {
-    it('app.setup calls .setup on all services', async () => {
+  describe('.setup and .teardown', () => {
+    it('app.setup and app.teardown calls .setup and .teardown on all services', async () => {
       const app = feathers();
       let setupCount = 0;
+      let teardownCount = 0;
 
       app.use('/dummy', {
         async setup (appRef: any, path: any) {
           setupCount++;
+          assert.strictEqual(appRef, app);
+          assert.strictEqual(path, 'dummy');
+        },
+
+        async teardown (appRef: any, path: any) {
+          teardownCount++;
           assert.strictEqual(appRef, app);
           assert.strictEqual(path, 'dummy');
         }
@@ -306,6 +324,12 @@ describe('Feathers application', () => {
           setupCount++;
           assert.strictEqual(appRef, app);
           assert.strictEqual(path, 'dummy2');
+        },
+
+        async teardown (appRef: any, path: any) {
+          teardownCount++;
+          assert.strictEqual(appRef, app);
+          assert.strictEqual(path, 'dummy2');
         }
       });
 
@@ -313,6 +337,11 @@ describe('Feathers application', () => {
 
       assert.ok((app as any)._isSetup);
       assert.strictEqual(setupCount, 2);
+
+      await app.teardown();
+
+      assert.ok(!(app as any)._isSetup);
+      assert.strictEqual(teardownCount, 2);
     });
 
     it('registering a service after app.setup will be set up', done => {
@@ -328,6 +357,43 @@ describe('Feathers application', () => {
           }
         });
       });
+    });
+  });
+
+  describe('.teardown', () => {
+    it('app.teardown calls .teardown on all services', async () => {
+      const app = feathers();
+      let teardownCount = 0;
+
+      app.use('/dummy', {
+        async setup () {},
+        async teardown (appRef: any, path: any) {
+          teardownCount++;
+          assert.strictEqual(appRef, app);
+          assert.strictEqual(path, 'dummy');
+        }
+      });
+
+      app.use('/simple', {
+        get (id: string) {
+          return Promise.resolve({ id });
+        }
+      });
+
+      app.use('/dummy2', {
+        async setup () {},
+        async teardown (appRef: any, path: any) {
+          teardownCount++;
+          assert.strictEqual(appRef, app);
+          assert.strictEqual(path, 'dummy2');
+        }
+      });
+
+      await app.setup();
+      await app.teardown();
+
+      assert.equal((app as any)._isSetup, false);
+      assert.strictEqual(teardownCount, 2);
     });
   });
 

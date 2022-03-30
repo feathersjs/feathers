@@ -27,7 +27,7 @@ describe('@feathersjs/adapter-commons/service', () => {
   });
 
   describe('works when methods exist', () => {
-    class MethodService extends AdapterService implements InternalServiceMethods<any> {
+    class MethodService extends AdapterService implements InternalServiceMethods {
       _find (_params?: Params) {
         return Promise.resolve([]);
       }

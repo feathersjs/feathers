@@ -31,17 +31,18 @@ class TodoService extends Service {
 
 export default (configurer?: (app: Application) => void) => {
   const app = express.default(feathers())
+    // Parse HTTP bodies
+    .use(express.json())
+    .use(express.urlencoded({ extended: true }))
+    // Host the current directory (for index.html)
+    .use(express.static(process.cwd()))
     .configure(express.rest());
 
   if (typeof configurer === 'function') {
     configurer.call(app, app);
   }
 
-  // Parse HTTP bodies
-  app.use(express.json())
-    .use(express.urlencoded({ extended: true }))
-    // Host the current directory (for index.html)
-    .use(express.static(process.cwd()))
+  app
     // Host our Todos service on the /todos path
     .use('/todos', new TodoService({
       multi: true

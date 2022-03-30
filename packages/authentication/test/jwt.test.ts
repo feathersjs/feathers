@@ -12,8 +12,8 @@ const { authenticate } = hooks;
 describe('authentication/jwt', () => {
   let app: Application<{
     authentication: AuthenticationService,
-    users: Partial<Service<any>>,
-    protected: Partial<Service<any>>
+    users: Partial<Service>,
+    protected: Partial<Service>
   }>;
   let user: any;
   let accessToken: string;

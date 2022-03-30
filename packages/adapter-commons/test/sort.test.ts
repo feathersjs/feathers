@@ -239,6 +239,55 @@ describe('@feathersjs/adapter-commons', () => {
         { _id: 2, item: { category: "cookies", type: "chocolate chip" }, amount: 50 }
       ]);
     });
+
+    it('embedded sort 3', () => {
+      const sort = sorter({
+        "item.category": 1,
+        "item.type": 1,
+        amount: -1
+      });
+
+      assert.deepStrictEqual(data.sort(sort), [
+        { _id: 6, item: { category: "brownies", type: "blondie" }, amount: 10 },
+        { _id: 5, item: { category: "cake", type: "carrot" }, amount: 20 },
+        { _id: 1, item: { category: "cake", type: "chiffon" }, amount: 10 },
+        { _id: 4, item: { category: "cake", type: "lemon" }, amount: 30 },
+        { _id: 2, item: { category: "cookies", type: "chocolate chip" }, amount: 50 },
+        { _id: 3, item: { category: "cookies", type: "chocolate chip" }, amount: 15 }
+      ]);
+    });
+
+    it('embedded sort 4', () => {
+      const sort = sorter({
+        amount: -1,
+        "item.category": 1
+      });
+
+      assert.deepStrictEqual(data.sort(sort), [
+        { _id: 2, item: { category: "cookies", type: "chocolate chip" }, amount: 50 },
+        { _id: 4, item: { category: "cake", type: "lemon" }, amount: 30 },
+        { _id: 5, item: { category: "cake", type: "carrot" }, amount: 20 },
+        { _id: 3, item: { category: "cookies", type: "chocolate chip" }, amount: 15 },
+        { _id: 6, item: { category: "brownies", type: "blondie" }, amount: 10 },
+        { _id: 1, item: { category: "cake", type: "chiffon" }, amount: 10 }
+      ]);
+    });
+
+    it('embedded sort 5', () => {
+      const sort = sorter({
+        "item.category": 1,
+        amount: 1
+      });
+
+      assert.deepStrictEqual(data.sort(sort), [
+        { _id: 6, item: { category: "brownies", type: "blondie" }, amount: 10 },
+        { _id: 1, item: { category: "cake", type: "chiffon" }, amount: 10 },
+        { _id: 5, item: { category: "cake", type: "carrot" }, amount: 20 },
+        { _id: 4, item: { category: "cake", type: "lemon" }, amount: 30 },
+        { _id: 3, item: { category: "cookies", type: "chocolate chip" }, amount: 15 },
+        { _id: 2, item: { category: "cookies", type: "chocolate chip" }, amount: 50 }
+      ]);
+    });
  });
 
 });

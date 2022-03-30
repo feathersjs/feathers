@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import { HookContext, getServiceOptions } from '@feathersjs/feathers';
+import { Application, HookContext, getServiceOptions } from '@feathersjs/feathers';
 import { createDebug } from '@feathersjs/commons';
 import { Channel } from './channel/base';
 import { CombinedChannel } from './channel/combined';
 
-const debug = createDebug('@feathersjs/transport-commons:channels/mixins');
+const debug = createDebug('@feathersjs/transport-commons/channels/mixins');
 const PUBLISHERS = Symbol('@feathersjs/transport-commons/publishers');
 const CHANNELS = Symbol('@feathersjs/transport-commons/channels');
 const ALL_EVENTS = Symbol('@feathersjs/transport-commons/all-events');
@@ -63,7 +63,7 @@ export function channelMixin () {
 
 export type Event = string|(typeof ALL_EVENTS);
 
-export type Publisher<T = any> = (data: T, context: HookContext<T>) => Channel | Channel[] | void | Promise<Channel | Channel[] | void>;
+export type Publisher<T = any, A = Application, S = any> = (data: T, context: HookContext<A, S>) => Channel | Channel[] | void | Promise<Channel | Channel[] | void>;
 
 export interface PublishMixin<T = any> {
   [PUBLISHERS]: { [ALL_EVENTS]?: Publisher<T>, [key: string]: Publisher<T> };

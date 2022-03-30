@@ -1,8 +1,8 @@
 # @feathersjs/memory
 
 [![CI](https://github.com/feathersjs/feathers/workflows/CI/badge.svg)](https://github.com/feathersjs/feathers/actions?query=workflow%3ACI)
-[![Dependency Status](https://img.shields.io/david/feathersjs/feathers.svg?style=flat-square&path=packages/memory)](https://david-dm.org/feathersjs/feathers?path=packages/memory)
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/memory.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/memory)
+[![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/qa8kez8QBx)
 
 A [Feathers](https://feathersjs.com) service adapter for in-memory data storage that works on all platforms.
 
@@ -33,7 +33,8 @@ __Options:__
 - `store` (*optional*) - An object with id to item assignments to pre-initialize the data store
 - `events` (*optional*) - A list of [custom service events](https://docs.feathersjs.com/api/events.html#custom-events) sent by this service
 - `paginate` (*optional*) - A [pagination object](https://docs.feathersjs.com/api/databases/common.html#pagination) containing a `default` and `max` page size
-- `whitelist` (*optional*) - A list of additional query parameters to allow
+- `whitelist` (*DEPRECATED*) - renamed to `allow`
+- `allow` (*optional*) - A list of additional query parameters to allow
 - `multi` (*optional*) - Allow `create` with arrays and `update` and `remove` with `id` `null` to change multiple items. Can be `true` for all methods or an array of allowed methods (e.g. `[ 'remove', 'create' ]`)
 
 ## Example
@@ -91,6 +92,6 @@ Run the example with `node app` and go to [localhost:3030/messages](http://local
 
 ## License
 
-Copyright (c) 2021 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2022 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).
