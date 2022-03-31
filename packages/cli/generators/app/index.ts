@@ -10,8 +10,17 @@ const addVersions = (dependencies: string[], versions: DependencyVersions) =>
   dependencies.map(dep => `${dep}@${versions[dep] ? versions[dep] : 'latest'}`)
 
 export interface AppGeneratorData extends FeathersAppInfo {
+  /**
+   * The application name
+   */
   name: string
+  /**
+   * THe source file folder
+   */
   lib: string
+  /**
+   * A short description of the app
+   */
   description: string
 }
 

@@ -2,7 +2,7 @@ import { generator, renderTemplate, toFile } from '@feathershq/pinion'
 import { AppGeneratorContext } from '../index'
 
 const template = ({}: AppGeneratorContext) =>
-`import { Application } from '../declarations';
+`import { Application } from '../declarations'
 
 export default (app: Application) => {
 }

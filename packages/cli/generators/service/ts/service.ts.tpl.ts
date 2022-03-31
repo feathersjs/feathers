@@ -1,62 +1,29 @@
 import { generator, inject, prepend, renderTemplate, toFile, after } from '@feathershq/pinion'
 import { ServiceGeneratorContext } from '../index'
 
-const template = ({ relative, path, className, camelName }: ServiceGeneratorContext) =>
-`import { hooks } from '@feathersjs/hooks';
-import { resolveData, resolveQuery, resolveResult } from '@feathersjs/schema';
+const template = ({ relative, path, className, camelName, upperName }: ServiceGeneratorContext) =>
+`import { resolveData, resolveQuery, resolveResult } from '@feathersjs/schema'
+import { Application } from '${relative}/declarations'
 
 import {
+  ${upperName}Data,
+  ${upperName}Result,
   ${camelName}QueryResolver,
   ${camelName}DataResolver,
+  ${camelName}PatchResolver,
   ${camelName}ResultResolver
-} from '${relative}/schema/${path}.schema.ts'
+} from '${relative}/schemas/${path}.schema.js'
 
 // The ${className} service class
 
-export const hooks = {
-  before: {
-    all: [ authenticate('jwt') ],
-    find: [],
-    get: [],
-    create: [processMessage()],
-    update: [],
-    patch: [],
-    remove: []
-  },
+export const serviceHooks = [
+  resolveResult(${camelName}ResultResolver),
+  resolveQuery(${camelName}QueryResolver)
+]
 
-  after: {
-    all: [populateUser()],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
-  },
-
-  error: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
-  }
-};
-
-// Register hooks that run on all service methods
-hooks(${className}.prototype, [
-  resolveQuery(${camelName}QueryResolver),
-  resolveResult(${camelName}ResultResolver)
-]);
-
-// Register service method specific hooks
-hooks(${className}, {
-  find: [
-  ],
-  get: [
-  ],
+export const methodHooks = {
+  find: [],
+  get: [],
   create: [
     resolveData(${camelName}DataResolver)
   ],
@@ -64,32 +31,43 @@ hooks(${className}, {
     resolveData(${camelName}DataResolver)
   ],
   patch: [
-    resolveData(${camelName}DataResolver)
+    resolveData(${camelName}PatchResolver)
   ],
-  remove: [
-  ]
-});
+  remove: []
+}
 
-export { ${className} };
+export const regularHooks = {
+  before: {},
+  after: {},
+  error: {}
+}
 
-// A configure function that registers the service via \`app.configure\`
-export function ${camelName} (app) {
+// A configure function that registers the service and its hooks via \`app.configure\`
+export function ${camelName} (app: Application) {
   const options = {
     paginate: app.get('paginate'),
     app
   }
 
-  app.use('${path}', new ${className}(options));
-  app.service().hooks(hooks)
+  app.use('${path}', new ${className}(options))
+  app.service('${path}').hooks(serviceHooks)
+  app.service('${path}').hooks(methodHooks)
+  app.service('${path}').hooks(regularHooks)
+}
+
+// Add this service to the service type index
+declare module '${relative}/declarations' {
+  interface ServiceTypes {
+    '${path}': ${className}
+  }
 }
 `
 
 const importTemplate = ({ camelName, path } : ServiceGeneratorContext) =>
-`import { ${camelName} } from './${path}.ts';`
+`import { ${camelName} } from './${path}'`
 
 const configureTemplate = ({ camelName } : ServiceGeneratorContext) =>
-`  app.configure(${camelName});
-`
+`  app.configure(${camelName})`
 
 const toServiceIndex = toFile(({ lib } : ServiceGeneratorContext) => [ lib, 'services/index.ts' ])
 

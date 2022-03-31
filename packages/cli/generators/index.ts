@@ -4,10 +4,25 @@ import {
 } from '@feathershq/pinion'
 
 export type FeathersAppInfo = {
+  /**
+   * The application language
+   */
   language: 'ts'|'js'
+  /**
+   * The main database
+   */
   database: 'sequelize'|'mongodb'|'custom'
+  /**
+   * The package manager used
+   */
   packager: 'yarn'|'npm'
+  /**
+   * A list of all chosen transports
+   */
   transports: ('rest'|'websockets')[]
+  /**
+   * The HTTP framework used
+   */
   framework: 'koa'|'express'
 }
 
@@ -16,8 +31,17 @@ export interface AppPackageJson extends PackageJson {
 }
 
 export interface FeathersBaseContext extends PinionContext {
+  /**
+   * The package.json file
+   */
   pkg: AppPackageJson
+  /**
+   * The folder where source files are put
+   */
   lib: string
+  /**
+   * The folder where test files are put
+   */
   test: string
 }
 

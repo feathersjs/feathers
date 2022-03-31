@@ -2,7 +2,7 @@ import { generator, inject, prepend, renderTemplate, toFile, after } from '@feat
 import { ServiceGeneratorContext } from '../index'
 
 const template = ({ relative, path, className, camelName }: ServiceGeneratorContext) =>
-`import { resolveData, resolveQuery, resolveResult } from '@feathersjs/schema';
+`import { resolveData, resolveQuery, resolveResult } from '@feathersjs/schema'
 
 import {
   ${camelName}QueryResolver,
@@ -13,65 +13,51 @@ import {
 
 // The ${className} service class
 
-export const hooks = {
-  before: {
-    all: [
-      resolveQuery(${camelName}QueryResolver)
-    ],
-    find: [],
-    get: [],
-    create: [
-      resolveData(${camelName}DataResolver)
-    ],
-    update: [
-      resolveData(${camelName}DataResolver)
-    ],
-    patch: [
-      resolveData(${camelName}PatchResolver)
-    ],
-    remove: []
-  },
+export const serviceHooks = [
+  resolveResult(${camelName}ResultResolver),
+  resolveQuery(${camelName}QueryResolver)
+]
 
-  after: {
-    all: [
-      resolveResult(${camelName}ResultResolver)
-    ],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
-  },
+export const methodHooks = {
+  find: [],
+  get: [],
+  create: [
+    resolveData(${camelName}DataResolver)
+  ],
+  update: [
+    resolveData(${camelName}DataResolver)
+  ],
+  patch: [
+    resolveData(${camelName}PatchResolver)
+  ],
+  remove: []
+}
 
-  error: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
-  }
-};
+export const regularHooks = {
+  before: {},
+  after: {},
+  error: {}
+}
 
-// A configure function that registers the service via \`app.configure\`
+// A configure function that registers the service and its hooks via \`app.configure\`
 export function ${camelName} (app) {
   const options = {
     paginate: app.get('paginate'),
     app
   }
 
-  app.use('${path}', new ${className}(options));
-  app.service('${path}').hooks(hooks)
+  app.use('${path}', new ${className}(options))
+  app.service('${path}').hooks(serviceHooks)
+  app.service('${path}').hooks(methodHooks)
+  app.service('${path}').hooks(regularHooks)
 }
 `
 
 const importTemplate = ({ camelName, path } : ServiceGeneratorContext) =>
-`import { ${camelName} } from './${path}.js';`
+`import { ${camelName} } from './${path}.js'`
 
 const configureTemplate = ({ camelName } : ServiceGeneratorContext) =>
-`  app.configure(${camelName});`
+`  app.configure(${camelName})`
 
 const toServiceIndex = toFile(({ lib } : ServiceGeneratorContext) => [ lib, 'services/index.js' ])
 

@@ -2,7 +2,7 @@ import { generator, renderTemplate, toFile } from '@feathershq/pinion'
 import { ServiceGeneratorContext } from '../index'
 
 const template = ({ camelName, className }: ServiceGeneratorContext) =>
-`import { schema, resolve } from '@feathersjs/schema';
+`import { schema, resolve } from '@feathersjs/schema'
 
 // Schema and resolver for the basic data model (e.g. creating new entries)
 export const ${camelName}DataSchema = schema({

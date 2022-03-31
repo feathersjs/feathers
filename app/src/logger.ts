@@ -1,9 +1,6 @@
-import { generator, renderTemplate, toFile } from '@feathershq/pinion'
-import { AppGeneratorContext } from '../index'
-
-const template = ({}: AppGeneratorContext) =>
-`import { createLogger, format, transports } from 'winston'
-import { HookContext, NextFunction } from './declarations'
+import { createLogger, format, transports } from 'winston'
+import { NextFunction } from '@feathersjs/feathers'
+import { HookContext } from './declarations'
 
 // Configure the Winston logger. For the complete documentation see https://github.com/winstonjs/winston
 export const logger = createLogger({
@@ -26,7 +23,3 @@ export const logErrorHook = async (context: HookContext, next: NextFunction) => 
     throw error
   }
 }
-`
-
-export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(renderTemplate(template, toFile(({ lib }: AppGeneratorContext) => lib, 'logger.ts')))
