@@ -4,6 +4,7 @@ import { Application as FeathersApplication, HookContext, Params, RouteLookup } 
 import '@feathersjs/authentication';
 
 export type ApplicationAddons = {
+  server: Server;
   listen (port?: number, ...args: any[]): Promise<Server>;
 }
 

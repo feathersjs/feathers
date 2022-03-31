@@ -6,9 +6,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/cb5ec42a2d0cc1a47a02/maintainability)](https://codeclimate.com/github/feathersjs/feathers/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/cb5ec42a2d0cc1a47a02/test_coverage)](https://codeclimate.com/github/feathersjs/feathers/test_coverage)
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/feathers.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/feathers)
-
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/qa8kez8QBx)
-[![Telegram Status](https://img.shields.io/badge/Telegram_RU_chat:-Feathers-216bc1.svg?style=flat)](https://t.me/featherjs)
 
 Feathers is a lightweight web-framework for creating real-time applications and REST APIs using JavaScript or TypeScript.
 

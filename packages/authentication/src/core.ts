@@ -45,6 +45,12 @@ export interface AuthenticationStrategy {
    */
   verifyConfiguration? (): void;
   /**
+   * Implement this method to setup this strategy
+   * @param auth The AuthenticationService
+   * @param name The name of the strategy
+   */
+  setup? (auth: AuthenticationBase, name: string): Promise<void>;
+  /**
    * Authenticate an authentication request with this strategy.
    * Should throw an error if the strategy did not succeed.
    *
@@ -77,10 +83,9 @@ export interface JwtVerifyOptions extends VerifyOptions {
  */
 export class AuthenticationBase {
   app: Application;
+  strategies: { [key: string]: AuthenticationStrategy };
   configKey: string;
-  strategies: {
-    [key: string]: AuthenticationStrategy;
-  };
+  isReady: boolean;
 
   /**
    * Create a new authentication service.
@@ -97,6 +102,7 @@ export class AuthenticationBase {
     this.app = app;
     this.strategies = {};
     this.configKey = configKey;
+    this.isReady = false;
 
     app.set('defaultAuthentication', app.get('defaultAuthentication') || configKey);
     app.set(configKey, merge({}, app.get(configKey), options));
@@ -143,6 +149,10 @@ export class AuthenticationBase {
 
     // Register strategy as name
     this.strategies[name] = strategy;
+
+    if (this.isReady) {
+      strategy.setup?.(this, name);
+    }
   }
 
   /**
@@ -274,5 +284,15 @@ export class AuthenticationBase {
     }
 
     return null;
+  }
+
+  async setup () {
+    this.isReady = true;
+
+    for (const name of Object.keys(this.strategies)) {
+      const strategy = this.strategies[name];
+
+      await strategy.setup?.(this, name);
+    }
   }
 }

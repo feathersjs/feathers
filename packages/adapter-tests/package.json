@@ -13,7 +13,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/feathers.git"
+    "url": "git://github.com/feathersjs/feathers.git",
+    "directory": "packages/adapter-tests"
   },
   "author": {
     "name": "Feathers contributor",

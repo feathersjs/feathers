@@ -78,7 +78,6 @@ describe('@feathersjs/express/rest provider', () => {
   });
 
   describe('CRUD', () => {
-    let server: Server;
     let app: express.Application;
 
     before(async () => {
@@ -97,10 +96,10 @@ describe('@feathersjs/express/rest provider', () => {
         .use('/', new Service())
         .use('todo', new Service());
 
-      server = await app.listen(4777, () => app.use('tasks', new Service()));
+      await app.listen(4777, () => app.use('tasks', new Service()));
     });
 
-    after(done => server.close(done));
+    after(() => app.teardown());
 
     restTests('Services', 'todo', 4777);
     restTests('Root Service', '/', 4777);
@@ -197,7 +196,7 @@ describe('@feathersjs/express/rest provider', () => {
 
         app.service('hook-status').hooks({
           after (hook: HookContext) {
-            hook.http!.statusCode = 206;
+            hook.http.statusCode = 206;
           }
         });
 

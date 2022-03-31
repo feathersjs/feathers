@@ -174,6 +174,19 @@ describe('@feathersjs/express', () => {
     await new Promise(resolve => server.close(() => resolve(server)));
   });
 
+  it('.teardown closes http server', async () => {
+    const app = feathersExpress(feathers());
+    let called = false;
+
+    const server = await app.listen(8787);
+    server.on('close', () => {
+      called = true;
+    })
+
+    await app.teardown();
+    assert.ok(called);
+  });
+
   it('passes middleware as options', () => {
     const feathersApp = feathers();
     const app = feathersExpress(feathersApp);

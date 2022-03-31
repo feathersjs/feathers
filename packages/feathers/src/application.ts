@@ -106,13 +106,13 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
     // Add all the mixins
     this.mixins.forEach(fn => fn.call(this, protoService, location, serviceOptions));
 
+    this.services[location] = protoService;
+
     // If we ran setup already, set this service up explicitly, this will not `await`
     if (this._isSetup && typeof protoService.setup === 'function') {
       debug(`Setting up service for \`${location}\``);
       protoService.setup(this, location);
     }
-
-    this.services[location] = protoService;
 
     return this;
   }
@@ -140,11 +140,8 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
   }
 
   setup () {
-    let promise = Promise.resolve();
-
-    // Setup each service (pass the app so that they can look up other services etc.)
-    for (const path of Object.keys(this.services)) {
-      promise = promise.then(() => {
+    return Object.keys(this.services).reduce((current, path) => current
+      .then(() => {
         const service: any = this.service(path as any);
 
         if (typeof service.setup === 'function') {
@@ -152,12 +149,27 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
 
           return service.setup(this, path);
         }
+      }), Promise.resolve())
+      .then(() => {
+        this._isSetup = true;
+        return this;
       });
-    }
+  }
 
-    return promise.then(() => {
-      this._isSetup = true;
-      return this;
-    });
+  teardown () {
+    return Object.keys(this.services).reduce((current, path) => current
+      .then(() => {
+        const service: any = this.service(path as any);
+
+        if (typeof service.teardown === 'function') {
+          debug(`Tearing down service for \`${path}\``);
+
+          return service.teardown(this, path);
+        }
+      }), Promise.resolve())
+      .then(() => {
+        this._isSetup = false;
+        return this;
+      });
   }
 }

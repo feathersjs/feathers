@@ -149,6 +149,8 @@ export class AuthenticationService extends AuthenticationBase implements Partial
    * Validates the service configuration.
    */
   async setup () {
+    await super.setup();
+
     // The setup method checks for valid settings and registers the
     // connection and event (login, logout) hooks
     const { secret, service, entity, entityId } = this.configuration;

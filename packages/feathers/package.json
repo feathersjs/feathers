@@ -5,7 +5,8 @@
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/feathers.git"
+    "url": "git://github.com/feathersjs/feathers.git",
+    "directory": "packages/feathers"
   },
   "keywords": [
     "feathers",

@@ -27,12 +27,12 @@ export function koa<S = any, C = any> (feathersApp?: FeathersApplication<S, C>, 
 
   const app = feathersApp as any as Application<S, C>;
   const { listen: koaListen, use: koaUse } = koaApp;
-  const feathersUse = feathersApp.use as any;
+  const { use: feathersUse, teardown: feathersTeardown } = feathersApp;
 
   Object.assign(app, {
     use (location: string|Koa.Middleware, ...args: any[]) {
       if (typeof location === 'string') {
-        return feathersUse.call(this, location, ...args);
+        return (feathersUse as any).call(this, location, ...args);
       }
 
       return koaUse.call(this, location);
@@ -41,10 +41,17 @@ export function koa<S = any, C = any> (feathersApp?: FeathersApplication<S, C>, 
     async listen (port?: number, ...args: any[]) {
       const server = koaListen.call(this, port, ...args);
 
+      this.server = server;
       await this.setup(server);
       debug('Feathers application listening');
 
       return server;
+    },
+
+    async teardown (server?: any) {
+      return feathersTeardown.call(this, server).then(() =>
+        new Promise((resolve, reject) => this.server.close(e => e ? reject(e) : resolve(this)))
+      );
     }
   } as Application);
 

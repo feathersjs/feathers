@@ -35,6 +35,8 @@ export interface ServiceMethods<T = any, D = Partial<T>> {
   remove (id: NullableId, params?: Params): Promise<T | T[]>;
 
   setup (app: Application, path: string): Promise<void>;
+
+  teardown (app: Application, path: string): Promise<void>;
 }
 
 export interface ServiceOverloads<T = any, D = Partial<T>> {
@@ -209,7 +211,19 @@ export interface FeathersApplication<Services = any, Settings = any> {
     path: L
   ): FeathersService<this, keyof any extends keyof Services ? Service : Services[L]>;
 
+  /**
+   * Set up the application and call all services `.setup` method if available.
+   *
+   * @param server A server instance (optional)
+   */
   setup (server?: any): Promise<this>;
+
+  /**
+   * Tear down the application and call all services `.teardown` method if available.
+   *
+   * @param server A server instance (optional)
+   */
+  teardown (server?: any): Promise<this>;
 
   /**
    * Register application level hooks.
@@ -361,3 +375,8 @@ export type HookMap<A, S> = {
 
 export type HookOptions<A, S> =
   HookMap<A, S> | HookFunction<A, S>[] | RegularHookMap<A, S>;
+
+export type AppHookOptions<A> = HookOptions<A, any> & {
+  setup: any[],
+  teardown: any[]
+}
