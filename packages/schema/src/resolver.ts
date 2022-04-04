@@ -1,4 +1,5 @@
 import { BadRequest } from '@feathersjs/errors';
+import { Schema } from './schema';
 
 export type PropertyResolver<T, V, C> = (
   value: V|undefined,
@@ -12,9 +13,7 @@ export type PropertyResolverMap<T, C> = {
 }
 
 export interface ResolverConfig<T, C> {
-  // TODO this should be `Schema<any>` but has recently produced an error, see
-  // https://github.com/ThomasAribart/json-schema-to-ts/issues/53
-  schema?: any,
+  schema?: Schema<T>,
   validate?: 'before'|'after'|false,
   properties: PropertyResolverMap<T, C>
 }
@@ -71,7 +70,7 @@ export class Resolver<T, C> {
 
     // Not the most elegant but better performance
     await Promise.all(propertyList.map(async name => {
-      const value = data[name];
+      const value = (data as any)[name];
 
       if (resolvers[name]) {
         try {

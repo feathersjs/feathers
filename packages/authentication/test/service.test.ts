@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { feathers, Application } from '@feathersjs/feathers';
 import { memory, Service as MemoryService } from '@feathersjs/memory';
 
-import defaultOptions from '../src/options';
+import { defaultOptions } from '../src/options';
 import { AuthenticationService } from '../src';
 
 import { Strategy1 } from './fixtures';

@@ -5,7 +5,7 @@ import { NotAuthenticated } from '@feathersjs/errors';
 import { createDebug } from '@feathersjs/commons';
 import { Application, Params } from '@feathersjs/feathers';
 import { IncomingMessage, ServerResponse } from 'http';
-import defaultOptions from './options';
+import { defaultOptions } from './options';
 
 const debug = createDebug('@feathersjs/authentication/base');
 
@@ -167,7 +167,7 @@ export class AuthenticationBase {
 
   /**
    * Returns a single strategy by name
-   * 
+   *
    * @param name The strategy name
    * @returns The authentication strategy or undefined
    */

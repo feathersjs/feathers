@@ -2,18 +2,24 @@ import Ajv, { AsyncValidateFunction, ValidateFunction } from 'ajv';
 import { FromSchema, JSONSchema } from 'json-schema-to-ts';
 import { BadRequest } from '@feathersjs/errors';
 
-export const AJV = new Ajv({
+export const DEFAULT_AJV = new Ajv({
   coerceTypes: true
 });
 
+export { Ajv };
+
 export type JSONSchemaDefinition = JSONSchema & { $id: string, $async?: boolean };
 
-export class Schema<S extends JSONSchemaDefinition> {
+export interface Schema<T> {
+  validate <X = T> (...args: Parameters<ValidateFunction<X>>): Promise<X>;
+}
+
+export class SchemaWrapper<S extends JSONSchemaDefinition> implements Schema<FromSchema<S>> {
   ajv: Ajv;
   validator: AsyncValidateFunction;
   readonly _type!: FromSchema<S>;
 
-  constructor (public definition: S, ajv: Ajv = AJV) {
+  constructor (public definition: S, ajv: Ajv = DEFAULT_AJV) {
     this.ajv = ajv;
     this.validator = this.ajv.compile({
       $async: true,
@@ -36,6 +42,6 @@ export class Schema<S extends JSONSchemaDefinition> {
   }
 }
 
-export function schema <S extends JSONSchemaDefinition> (definition: S, ajv: Ajv = AJV) {
-  return new Schema(definition, ajv);
+export function schema <S extends JSONSchemaDefinition> (definition: S, ajv: Ajv = DEFAULT_AJV) {
+  return new SchemaWrapper(definition, ajv);
 }
