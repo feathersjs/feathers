@@ -27,7 +27,7 @@ export const knownMethods: { [key: string]: string } = {
 
 export function getServiceMethod (_httpMethod: string, id: unknown, headerOverride?: string) {
   const httpMethod = _httpMethod.toLowerCase();
-  
+
   if (httpMethod === 'post' && headerOverride) {
     return headerOverride;
   }
@@ -55,32 +55,41 @@ export const argumentsFor = {
   default: ({ data, params }: ServiceParams) => [ data, params ]
 }
 
-export function getResponse (context: HookContext) {
-  const http = context.http || {};
+export function getStatusCode (context: HookContext, body: any, location: string|string[]) {
+  const { http = {} } = context;
 
-  let status = statusCodes.success;
-  let headers = http.headers || {};
-  let location = headers[ 'Location' ];
-  let body = context.result;
-
-  if (context.dispatch !== undefined) {
-    body = context.dispatch;
+  if (http.status) {
+    return http.status;
   }
+
+  if (context.method === 'create') {
+    return statusCodes.created;
+  }
+
+  if (location !== undefined) {
+    return statusCodes.seeOther;
+  }
+
+  if (!body) {
+    return statusCodes.noContent;
+  }
+
+  return statusCodes.success;
+}
+
+export function getResponse (context: HookContext) {
+  const { http = {} } = context;
+  const body = context.dispatch !== undefined ? context.dispatch : context.result;
+
+  let headers = http.headers || {};
+  let location = headers.Location;
 
   if (http.location !== undefined) {
     location = encodeUrl(http.location);
     headers = { ...headers, Location: location };
   }
 
-  if (http.status) {
-    status = http.status;
-  } else if (context.method === 'create') {
-    status = statusCodes.created;
-  } else if (location !== undefined) {
-    status = statusCodes.seeOther;
-  } else if (!body) {
-    status = statusCodes.noContent;
-  }
+  const status = getStatusCode(context, body, location);
 
   return { status, headers, body };
 }
