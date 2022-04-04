@@ -3,7 +3,8 @@
   "description": "REST client services for different Ajax libraries",
   "version": "5.0.0-pre.17",
   "homepage": "https://feathersjs.com",
-  "main": "lib/index.js",
+  "main": "lib/",
+  "types": "lib/",
   "keywords": [
     "feathers",
     "feathers-plugin"
