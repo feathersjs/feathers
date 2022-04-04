@@ -59,6 +59,7 @@
   "dependencies": {
     "@feathersjs/commons": "^5.0.0-pre.17",
     "@feathersjs/feathers": "^5.0.0-pre.17",
+    "@feathersjs/schema": "^5.0.0-pre.17",
     "@types/config": "^0.0.41",
     "config": "^3.3.7"
   },
