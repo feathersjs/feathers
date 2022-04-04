@@ -256,10 +256,17 @@ export interface Params {
 
 export interface Http {
   /**
-   * A writeable, optional property that allows to override the standard HTTP status
-   * code that should be returned.
+   * A writeable, optional property with status code override.
    */
-  statusCode?: number;
+  status?: number;
+  /**
+   * A writeable, optional property with headers.
+   */
+  headers?: { [key: string]: string | string[] };
+  /**
+   * A writeable, optional property with `Location` header's value.
+   */
+  location?: string;
 }
 
 export interface HookContext<A = Application, S = any> extends BaseHookContext<ServiceGenericType<S>> {
@@ -333,11 +340,11 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
    * A writeable, optional property that allows to override the standard HTTP status
    * code that should be returned.
    *
-   * @deprecated Use `http.statusCode` instead.
+   * @deprecated Use `http.status` instead.
    */
   statusCode?: number;
   /**
-   * A writeable, optional property that contains options specific to HTTP transports.
+   * A writeable, optional property with options specific to HTTP transports.
    */
   http?: Http;
   /**
