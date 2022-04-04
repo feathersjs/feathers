@@ -48,15 +48,17 @@ export const authenticationSettingsSchema = {
     },
     jwt: {
       type: 'object',
-      header: {
-        type: 'string',
-        default: 'Authorization',
-        description: 'The HTTP header containing the JWT'
-      },
-      schemes: {
-        type: 'array',
-        items: { type: 'string' },
-        description: 'An array of schemes to support'
+      properties: {
+        header: {
+          type: 'string',
+          default: 'Authorization',
+          description: 'The HTTP header containing the JWT'
+        },
+        schemes: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'An array of schemes to support'
+        }
       }
     },
     local: {

@@ -1,8 +1,10 @@
 import assert from 'assert';
 import { feathers, Application } from '@feathersjs/feathers';
 import jwt from 'jsonwebtoken';
+import { Infer, schema } from '@feathersjs/schema';
 
 import { AuthenticationBase, AuthenticationRequest } from '../src/core';
+import { authenticationSettingsSchema } from '../src/options';
 import { Strategy1, Strategy2, MockRequest } from './fixtures';
 import { ServerResponse } from 'http';
 
@@ -31,6 +33,21 @@ describe('authentication/core', () => {
   });
 
   describe('configuration', () => {
+    it('infers configuration from settings schema', async () => {
+      const settingsSchema = schema({
+        $id: 'AuthSettingsSchema',
+        ...authenticationSettingsSchema
+      } as const);
+      type Settings = Infer<typeof settingsSchema>;
+      const config: Settings = {
+        entity: 'user',
+        secret: 'supersecret',
+        authStrategies: [ 'some', 'thing' ]
+      }
+
+      await settingsSchema.validate(config);
+    });
+
     it('throws an error when app is not provided', () => {
       try {
         // @ts-ignore
