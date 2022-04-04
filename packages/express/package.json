@@ -4,6 +4,7 @@
   "version": "5.0.0-pre.17",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
+  "type": "lib/",
   "keywords": [
     "feathers",
     "feathers-plugin"

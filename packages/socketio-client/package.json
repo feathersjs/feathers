@@ -3,7 +3,8 @@
   "description": "The client for Socket.io through feathers-socketio",
   "version": "5.0.0-pre.17",
   "homepage": "https://feathersjs.com",
-  "main": "lib/index.js",
+  "main": "lib/",
+  "types": "lib/",
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -33,7 +34,8 @@
   "scripts": {
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
-    "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+    "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
+    "test": "npm run mocha"
   },
   "directories": {
     "lib": "lib"

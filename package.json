@@ -31,7 +31,7 @@
     "update-dependencies": "ncu -u && lerna exec -- ncu -u -x node-fetch",
     "clean": "find . -name node_modules -exec rm -rf '{}' + && find . -name package-lock.json -exec rm -rf '{}' +",
     "test:deno": "deno test --config deno/tsconfig.json deno/test.ts",
-    "test": "npm run lint && nyc lerna run test"
+    "test": "npm run lint && lerna run compile && nyc lerna run test"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.10.2",

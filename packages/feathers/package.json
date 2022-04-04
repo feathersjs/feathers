@@ -48,8 +48,7 @@
     "version": "npm run write-version",
     "publish": "npm run reset-version",
     "compile": "shx rm -rf lib/ && tsc",
-    "test": "npm run compile && npm run mocha",
-    "mocha": "mocha --config ../../.mocharc.json --recursive test/"
+    "test": "mocha --config ../../.mocharc.json --recursive test/"
   },
   "engines": {
     "node": ">= 12"
