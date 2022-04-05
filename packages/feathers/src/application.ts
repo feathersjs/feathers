@@ -158,8 +158,7 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
 
           return service.setup(this, path);
         }
-      }), Promise.resolve())
-      .then(() => this);
+      }), Promise.resolve()).then(() => this);
   }
 
   teardown () {
