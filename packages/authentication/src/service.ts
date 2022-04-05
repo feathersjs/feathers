@@ -29,7 +29,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
 // eslint-disable-next-line
 export interface AuthenticationService extends ServiceAddons<AuthenticationResult, AuthenticationResult> {}
 
-export class AuthenticationService extends AuthenticationBase implements Partial<ServiceMethods<AuthenticationResult>> {
+export class AuthenticationService extends AuthenticationBase implements Partial<ServiceMethods<AuthenticationResult, AuthenticationRequest>> {
   constructor (app: any, configKey = 'authentication', options = {}) {
     super(app, configKey, options);
 

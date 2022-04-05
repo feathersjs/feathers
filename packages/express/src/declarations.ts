@@ -44,7 +44,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
 
 declare module 'express-serve-static-core' {
   interface Request {
-    feathers?: Partial<FeathersParams>;
+    feathers?: Partial<FeathersParams> & { [key: string]: any };
     lookup?: RouteLookup;
   }
 

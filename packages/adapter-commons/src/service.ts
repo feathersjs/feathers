@@ -16,14 +16,16 @@ const alwaysMulti: { [key: string]: boolean } = {
   update: false
 };
 
+export interface PaginationOptions {
+  default?: number;
+  max?: number;
+}
+
 export interface ServiceOptions {
   events?: string[];
   multi?: boolean|string[];
   id?: string;
-  paginate?: {
-    default?: number;
-    max?: number;
-  }
+  paginate?: PaginationOptions
   /**
    * @deprecated renamed to `allow`.
    */
@@ -38,6 +40,7 @@ export interface AdapterOptions<M = any> extends Pick<ServiceOptions, 'multi'|'a
 
 export interface AdapterParams<M = any> extends Params {
   adapter?: Partial<AdapterOptions<M>>;
+  paginate?: false|PaginationOptions;
 }
 
 /**
