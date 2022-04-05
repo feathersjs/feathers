@@ -1,4 +1,5 @@
 const Base = require('./base');
+const errors = require('@feathersjs/errors');
 
 class FetchService extends Base {
   request (options, params) {
