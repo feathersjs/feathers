@@ -147,6 +147,8 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
   }
 
   setup () {
+    this._isSetup = true;
+
     return Object.keys(this.services).reduce((current, path) => current
       .then(() => {
         const service: any = this.service(path as any);
@@ -156,14 +158,12 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
 
           return service.setup(this, path);
         }
-      }), Promise.resolve())
-      .then(() => {
-        this._isSetup = true;
-        return this;
-      });
+      }), Promise.resolve()).then(() => this);
   }
 
   teardown () {
+    this._isSetup = false;
+
     return Object.keys(this.services).reduce((current, path) => current
       .then(() => {
         const service: any = this.service(path as any);
@@ -173,10 +173,6 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
 
           return service.teardown(this, path);
         }
-      }), Promise.resolve())
-      .then(() => {
-        this._isSetup = false;
-        return this;
-      });
+      }), Promise.resolve()).then(() => this)
   }
 }
