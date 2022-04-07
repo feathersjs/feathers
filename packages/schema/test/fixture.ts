@@ -138,6 +138,7 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext<Applicatio
 type ServiceTypes = {
   users: Service<UserResult, User>,
   messages: Service<MessageResult, Message>
+  pagintedMessages: Service<MessageResult, Message>
 }
 type Application = FeathersApplication<ServiceTypes>;
 
@@ -145,9 +146,17 @@ const app = feathers<ServiceTypes>()
   .use('users', memory({
     multi: ['create']
   }))
-  .use('messages', memory());
+  .use('messages', memory())
+  .use('pagintedMessages', memory({paginate: { default: 10 }}))
+  ;
 
 app.service('messages').hooks([
+  validateQuery(messageQuerySchema),
+  resolveQuery(messageQueryResolver),
+  resolveResult(messageResultResolver)
+]);
+
+app.service('pagintedMessages').hooks([
   validateQuery(messageQuerySchema),
   resolveQuery(messageQueryResolver),
   resolveResult(messageResultResolver)

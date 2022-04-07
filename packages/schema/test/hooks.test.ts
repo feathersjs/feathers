@@ -5,6 +5,7 @@ describe('@feathersjs/schema/hooks', () => {
   const text = 'Hi there';
 
   let message: MessageResult;
+  let messageOnPaginatedService: MessageResult;
   let user: UserResult;
 
   before(async () => {
@@ -13,6 +14,10 @@ describe('@feathersjs/schema/hooks', () => {
       password: 'supersecret'
     }]))[0];
     message = await app.service('messages').create({
+      text,
+      userId: user.id
+    });
+    messageOnPaginatedService = await app.service('pagintedMessages').create({
       text,
       userId: user.id
     });
@@ -67,6 +72,64 @@ describe('@feathersjs/schema/hooks', () => {
         }
       }
     });
+  });
+
+  it('resolves get result with the object on result', async () => {
+    // eslint-disable-next-line
+    const { password, ...externalUser } = user;
+    const payload = {
+      userId: user.id,
+      text
+    }
+
+    assert.ok(user);
+    assert.strictEqual(user.password, 'hashed', 'Resolved data');
+    assert.deepStrictEqual(message, {
+      id: 0,
+      user,
+      ...payload
+    });
+
+    const result = await app.service('messages').get(0, {
+      provider: 'external'
+    });
+
+    assert.deepStrictEqual(result, {
+      id: 0,
+      user: externalUser,
+      ...payload
+    });
+  });
+
+  it('resolves find results with paginated result object', async () => {
+    // eslint-disable-next-line
+    const { password, ...externalUser } = user;
+    const payload = {
+      userId: user.id,
+      text
+    }
+
+    assert.ok(user);
+    assert.strictEqual(user.password, 'hashed', 'Resolved data');
+    assert.deepStrictEqual(messageOnPaginatedService, {
+      id: 0,
+      user,
+      ...payload
+    });
+
+    const messages = await app.service('pagintedMessages').find({
+      provider: 'external',
+      query: {
+        $limit: 1,
+        $skip: 0
+      }
+    });
+
+    assert.deepStrictEqual(messages, { limit: 1, skip: 0, total: 1, data: [{
+      id: 0,
+      user: externalUser,
+      ...payload
+    }]});
   });
 
   it('validates and converts the query', async () => {
