@@ -10,3 +10,4 @@ export {
 export { AuthenticationBaseStrategy } from './strategy';
 export { AuthenticationService } from './service';
 export { JWTStrategy } from './jwt';
+export { authenticationSettingsSchema } from './options';

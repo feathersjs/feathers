@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import { feathers, Application } from '../../src';
+import { feathers, Application, ApplicationHookMap } from '../../src';
 
 describe('app.hooks', () => {
   let app: Application;
@@ -23,6 +23,39 @@ describe('app.hooks', () => {
 
   it('app has the .hooks method', () => {
     assert.strictEqual(typeof app.hooks, 'function');
+  });
+
+  it('.setup and .teardown special hooks', async () => {
+    const app = feathers();
+    const order: string[] = [];
+    const hooks: ApplicationHookMap<typeof app> = {
+      setup: [async (context, next) => {
+        assert.strictEqual(context.app, app);
+        order.push('setup 1');
+        await next();
+      }, async (_context, next) => {
+        order.push('setup 2');
+        await next();
+        order.push('setup after');
+      }],
+      teardown: [async (context, next) => {
+        assert.strictEqual(context.app, app);
+        order.push('teardown 1');
+        await next();
+      }, async (_context, next) => {
+        order.push('teardown 2');
+        await next();
+      }]
+    }
+
+    app.hooks(hooks);
+
+    await app.setup();
+    await app.teardown();
+
+    assert.deepStrictEqual(order, [
+      'setup 1', 'setup 2', 'setup after', 'teardown 1', 'teardown 2'
+    ])
   });
 
   describe('app.hooks([ async ])', () => {

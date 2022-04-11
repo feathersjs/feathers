@@ -6,7 +6,7 @@ import { GeneralError } from '@feathersjs/errors';
 
 import {
   schema, resolve, Infer, resolveResult,
-  queryProperty, resolveQuery, resolveData
+  queryProperty, resolveQuery, resolveData, validateData, validateQuery
 } from '../src';
 
 export const userSchema = schema({
@@ -148,6 +148,7 @@ const app = feathers<ServiceTypes>()
   .use('messages', memory());
 
 app.service('messages').hooks([
+  validateQuery(messageQuerySchema),
   resolveQuery(messageQueryResolver),
   resolveResult(messageResultResolver)
 ]);
@@ -158,6 +159,7 @@ app.service('users').hooks([
 
 app.service('users').hooks({
   create: [
+    validateData(userSchema),
     resolveData(userDataResolver)
   ]
 });

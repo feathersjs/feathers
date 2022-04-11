@@ -230,7 +230,7 @@ export interface FeathersApplication<Services = any, Settings = any> {
    *
    * @param map The application hook settings.
    */
-  hooks (map: HookOptions<this, any>): this;
+  hooks (map: ApplicationHookOptions<this>): this;
 }
 
 // This needs to be an interface instead of a type
@@ -256,10 +256,17 @@ export interface Params {
 
 export interface Http {
   /**
-   * A writeable, optional property that allows to override the standard HTTP status
-   * code that should be returned.
+   * A writeable, optional property with status code override.
    */
-  statusCode?: number;
+  status?: number;
+  /**
+   * A writeable, optional property with headers.
+   */
+  headers?: { [key: string]: string | string[] };
+  /**
+   * A writeable, optional property with `Location` header's value.
+   */
+  location?: string;
 }
 
 export interface HookContext<A = Application, S = any> extends BaseHookContext<ServiceGenericType<S>> {
@@ -333,11 +340,11 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
    * A writeable, optional property that allows to override the standard HTTP status
    * code that should be returned.
    *
-   * @deprecated Use `http.statusCode` instead.
+   * @deprecated Use `http.status` instead.
    */
   statusCode?: number;
   /**
-   * A writeable, optional property that contains options specific to HTTP transports.
+   * A writeable, optional property with options specific to HTTP transports.
    */
   http?: Http;
   /**
@@ -376,7 +383,17 @@ export type HookMap<A, S> = {
 export type HookOptions<A, S> =
   HookMap<A, S> | HookFunction<A, S>[] | RegularHookMap<A, S>;
 
-export type AppHookOptions<A> = HookOptions<A, any> & {
-  setup: any[],
-  teardown: any[]
+export interface ApplicationHookContext<A = Application> extends BaseHookContext {
+  app: A;
+  server: any;
 }
+
+export type ApplicationHookFunction<A> =
+  (context: ApplicationHookContext<A>, next: NextFunction) => Promise<void>;
+
+export type ApplicationHookMap<A> = {
+  setup?: ApplicationHookFunction<A>[],
+  teardown?: ApplicationHookFunction<A>[]
+}
+
+export type ApplicationHookOptions<A> = HookOptions<A, any> | ApplicationHookMap<A>

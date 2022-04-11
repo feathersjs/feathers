@@ -1,6 +1,6 @@
 import version from './version';
 import {
-  EventEmitter, stripSlashes, createDebug, HOOKS
+  EventEmitter, stripSlashes, createDebug, HOOKS, hooks, middleware
 } from './dependencies';
 import { eventHook, eventMixin } from './events';
 import { hookMixin } from './hooks/index';
@@ -12,10 +12,9 @@ import {
   ServiceOptions,
   ServiceInterface,
   Application,
-  HookOptions,
   FeathersService,
   HookMap,
-  RegularHookMap
+  ApplicationHookOptions
 } from './declarations';
 import { enableRegularHooks } from './hooks/regular';
 
@@ -36,6 +35,14 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
   constructor () {
     super();
     this.regularHooks = enableRegularHooks(this);
+    hooks(this, {
+      setup: middleware().params('server').props({
+        app: this
+      }),
+      teardown: middleware().params('server').props({
+        app: this
+      })
+    });
   }
 
   get<L extends keyof Settings & string> (name: L): Settings[L] {
@@ -117,14 +124,14 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
     return this;
   }
 
-  hooks (hookMap: HookOptions<this, any>) {
-    const regularMap = hookMap as RegularHookMap<this, any>;
+  hooks (hookMap: ApplicationHookOptions<this>) {
+    const untypedMap = hookMap as any;
 
-    if (regularMap.before || regularMap.after || regularMap.error) {
-      return this.regularHooks(regularMap);
-    }
-
-    if (Array.isArray(hookMap)) {
+    if (untypedMap.before || untypedMap.after || untypedMap.error) {
+      this.regularHooks(untypedMap);
+    } else if (untypedMap.setup || untypedMap.teardown) {
+      hooks(this, untypedMap);
+   } else if (Array.isArray(hookMap)) {
       this.appHooks[HOOKS].push(...hookMap as any);
     } else {
       const methodHookMap = hookMap as HookMap<Application<Services, Settings>, any>;
@@ -140,6 +147,8 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
   }
 
   setup () {
+    this._isSetup = true;
+
     return Object.keys(this.services).reduce((current, path) => current
       .then(() => {
         const service: any = this.service(path as any);
@@ -149,14 +158,12 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
 
           return service.setup(this, path);
         }
-      }), Promise.resolve())
-      .then(() => {
-        this._isSetup = true;
-        return this;
-      });
+      }), Promise.resolve()).then(() => this);
   }
 
   teardown () {
+    this._isSetup = false;
+
     return Object.keys(this.services).reduce((current, path) => current
       .then(() => {
         const service: any = this.service(path as any);
@@ -166,10 +173,6 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
 
           return service.teardown(this, path);
         }
-      }), Promise.resolve())
-      .then(() => {
-        this._isSetup = false;
-        return this;
-      });
+      }), Promise.resolve()).then(() => this)
   }
 }

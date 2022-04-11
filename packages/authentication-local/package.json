@@ -43,8 +43,7 @@
   "scripts": {
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
-    "test": "npm run compile && npm run mocha",
-    "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+    "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"
@@ -63,13 +62,13 @@
   "devDependencies": {
     "@feathersjs/memory": "^5.0.0-pre.17",
     "@types/bcryptjs": "^2.4.2",
-    "@types/lodash": "^4.14.178",
+    "@types/lodash": "^4.14.181",
     "@types/mocha": "^9.1.0",
-    "@types/node": "^17.0.15",
-    "mocha": "^9.2.0",
+    "@types/node": "^17.0.23",
+    "mocha": "^9.2.2",
     "shx": "^0.3.4",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.5.5"
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
   },
   "gitHead": "d828748e57b40abfaa15710663afed417de14a1d"
 }

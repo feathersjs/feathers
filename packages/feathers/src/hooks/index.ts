@@ -82,10 +82,10 @@ export function hookMixin<A> (
         event: null,
         type: null,
         get statusCode () {
-          return this.http?.statusCode;
+          return this.http?.status;
         },
         set statusCode (value: number) {
-          (this.http ||= {}).statusCode = value;
+          (this.http ||= {}).status = value;
         }
       });
 

@@ -344,18 +344,18 @@ describe('Feathers application', () => {
       assert.strictEqual(teardownCount, 2);
     });
 
-    it('registering a service after app.setup will be set up', done => {
+    it('registering app.setup but while still pending will be set up', done => {
       const app = feathers();
 
-      app.setup().then(() => {
-        app.use('/dummy', {
-          async setup (appRef: any, path: any) {
-            assert.ok((app as any)._isSetup);
-            assert.strictEqual(appRef, app);
-            assert.strictEqual(path, 'dummy');
-            done();
-          }
-        });
+      app.setup();
+
+      app.use('/dummy', {
+        async setup (appRef: any, path: any) {
+          assert.ok((app as any)._isSetup);
+          assert.strictEqual(appRef, app);
+          assert.strictEqual(path, 'dummy');
+          done();
+        }
       });
     });
   });
