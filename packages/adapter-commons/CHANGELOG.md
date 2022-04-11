@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.18](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.17...v5.0.0-pre.18) (2022-04-11)
+
+
+### Features
+
+* **core:** Add app.teardown functionality ([#2570](https://github.com/feathersjs/feathers/issues/2570)) ([fcdf524](https://github.com/feathersjs/feathers/commit/fcdf524ae1995bb59265d39f12e98b7794bed023))
+* **core:** Finalize app.teardown() functionality ([#2584](https://github.com/feathersjs/feathers/issues/2584)) ([1a166f3](https://github.com/feathersjs/feathers/commit/1a166f3ded811ecacf0ae8cb67880bc9fa2eeafa))
+
+
+
+
+
 # [5.0.0-pre.17](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.16...v5.0.0-pre.17) (2022-02-15)
 
 **Note:** Version bump only for package @feathersjs/adapter-commons

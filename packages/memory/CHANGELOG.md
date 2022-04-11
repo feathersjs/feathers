@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.18](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.17...v5.0.0-pre.18) (2022-04-11)
+
+
+### Bug Fixes
+
+* **adapter-tests:** Add tests for pagination in multi updates ([#2472](https://github.com/feathersjs/feathers/issues/2472)) ([98a811a](https://github.com/feathersjs/feathers/commit/98a811ac605575ff812a08d0504729a5efe7a69c))
+
+
+
+
+
 # [5.0.0-pre.17](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.16...v5.0.0-pre.17) (2022-02-15)
 
 **Note:** Version bump only for package @feathersjs/memory
