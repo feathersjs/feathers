@@ -56,7 +56,7 @@
   "dependencies": {
     "@feathershq/pinion": "^0.2.3",
     "lodash": "^4.17.21",
-    "chalk": "^5.0.1"
+    "chalk": "^4.0.0"
   },
   "devDependencies": {
     "@feathersjs/authentication": "^5.0.0-pre.16",
