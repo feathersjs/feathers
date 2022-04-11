@@ -73,16 +73,18 @@ export const resolveResult = <T> (resolver: Resolver<T, HookContext>) =>
 
     const ctx = getContext(context);
     const status = context.params.resolve;
-    const data = context.method === 'find' && context.result.data
-      ? context.result.data
-      : context.result;
 
-    if (Array.isArray(data)) {
-      context.result = await Promise.all(data.map(current =>
-        resolver.resolve(current, ctx, status)
-      ));
+    const isPaginated = context.method === 'find' && context.result.data;
+    const data = isPaginated ? context.result.data : context.result;
+
+    const result = Array.isArray(data) ?
+      await Promise.all(data.map(async current => resolver.resolve(current, ctx, status))) :
+      await resolver.resolve(data, ctx, status);
+
+    if (isPaginated) {
+      context.result.data = result;
     } else {
-      context.result = await resolver.resolve(data, ctx, status);
+      context.result = result;
     }
   };
 
