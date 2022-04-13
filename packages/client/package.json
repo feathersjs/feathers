@@ -25,7 +25,7 @@
     "node": ">= 12"
   },
   "main": "dist/feathers",
-  "types": "dist/",
+  "types": "dist/feathers",
   "files": [
     "CHANGELOG.md",
     "LICENSE",
