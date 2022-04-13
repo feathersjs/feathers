@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { EventEmitter } from 'events';
 import feathers, { Application } from '@feathersjs/feathers';
-
+import _ from 'lodash';
 import { socket as commons, SocketOptions } from '../../src/socket';
 
 describe('@feathersjs/transport-commons', () => {
@@ -26,6 +26,10 @@ describe('@feathersjs/transport-commons', () => {
       .configure(commons(options))
       .use('/myservice', {
         get (id, params) {
+          if (!_.isPlainObject(params.query)) {
+            throw new Error('Should be a plain object');
+          }
+
           return Promise.resolve({ id, params });
         },
 
@@ -162,6 +166,32 @@ describe('@feathersjs/transport-commons', () => {
       });
 
       app.once('disconnect', () => done());
+    });
+
+    it('queries are always plain objects', done => {
+      const socket = new EventEmitter();
+      const callback = (error: any, result: any) => {
+        try {
+          assert.ok(!error);
+          assert.deepStrictEqual(result, {
+            id: 10,
+            params: Object.assign({
+              connection,
+              query: {},
+              route: {}
+            }, connection)
+          });
+          done();
+        } catch (e: any) {
+          done(e);
+        }
+      };
+
+      provider.emit('connection', socket);
+
+      socket.emit('myservice::get', 10, {
+        __proto__: []
+      }, callback);
     });
 
     it('.create with params', done => {

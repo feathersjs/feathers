@@ -93,7 +93,7 @@ export function runMethod (app: Application, connection: RealTimeConnection, pat
     }
 
     const position = paramsPositions[method];
-    const query = methodArgs[position] || {};
+    const query = Object.assign({}, methodArgs[position]);
     // `params` have to be re-mapped to the query
     // and added with the route
     const params = Object.assign({ query, route, connection }, connection);
