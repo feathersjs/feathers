@@ -91,7 +91,7 @@ export async function runMethod (app: Application, connection: RealTimeConnectio
     }
 
     const position = paramsPositions[method] !== undefined ? paramsPositions[method] : DEFAULT_PARAMS_POSITION;
-    const query = methodArgs[position] || {};
+    const query = Object.assign({}, methodArgs[position]);
     // `params` have to be re-mapped to the query and added with the route
     const params = Object.assign({ query, route, connection }, connection);
 
