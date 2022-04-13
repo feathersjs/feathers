@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/express",
   "description": "Feathers Express framework bindings and REST provider",
-  "version": "4.5.12",
+  "version": "4.5.14",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "index.d.ts",
@@ -58,8 +58,8 @@
     "uberproto": "^2.0.6"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^4.5.12",
-    "@feathersjs/authentication-local": "^4.5.12",
+    "@feathersjs/authentication": "^4.5.14",
+    "@feathersjs/authentication-local": "^4.5.14",
     "@feathersjs/feathers": "^4.5.12",
     "@feathersjs/tests": "^4.5.12",
     "axios": "^0.24.0",

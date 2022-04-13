@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/rest-client",
   "description": "REST client services for different Ajax libraries",
-  "version": "4.5.12",
+  "version": "4.5.14",
   "homepage": "https://feathersjs.com",
   "main": "lib/index.js",
   "types": "index.d.ts",
@@ -58,7 +58,7 @@
     "@angular/core": "^11.0.3",
     "@angular/http": "^7.2.16",
     "@angular/platform-browser": "^11.0.3",
-    "@feathersjs/express": "^4.5.12",
+    "@feathersjs/express": "^4.5.14",
     "@feathersjs/feathers": "^4.5.12",
     "@feathersjs/tests": "^4.5.12",
     "axios": "^0.24.0",

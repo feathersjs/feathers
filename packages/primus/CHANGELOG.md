@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.14](https://github.com/feathersjs/feathers/compare/v4.5.13...v4.5.14) (2022-04-13)
+
+**Note:** Version bump only for package @feathersjs/primus
+
+
+
+
+
 ## [4.5.12](https://github.com/feathersjs/feathers/compare/v4.5.11...v4.5.12) (2022-01-06)
 
 
