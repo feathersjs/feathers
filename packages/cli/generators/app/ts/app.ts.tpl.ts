@@ -8,15 +8,17 @@ import configuration from '@feathersjs/configuration'
 import { koa, rest, bodyParser, errorHandler, parseAuthentication } from '@feathersjs/koa'
 ${transports.includes('websockets') ? 'import socketio from \'@feathersjs/socketio\'' : ''}
 
-import services from './services'
-import channels from './channels'
+import { configurationSchema } from './schemas/configuration.schema'
 import { logErrorHook } from './logger'
 import { Application } from './declarations'
+import services from './services'
+import channels from './channels'
+import authentication from './authentication'
 
 const app: Application = koa(feathers())
 
 // Load our app configuration (see config/ folder)
-app.configure(configuration())
+app.configure(configuration(configurationSchema))
 
 // Set up Koa middleware
 app.use(serveStatic(app.get('public')))
@@ -27,6 +29,7 @@ app.use(bodyParser())
 // Configure services and transports
 app.configure(rest())
 ${transports.includes('websockets') ? 'app.configure(socketio())' : ''}
+app.configure(authentication)
 app.configure(services)
 app.configure(channels)
 app.hooks([ logErrorHook ])
@@ -43,16 +46,17 @@ import * as express from '@feathersjs/express'
 import configuration from '@feathersjs/configuration'
 ${transports.includes('websockets') ? 'import socketio from \'@feathersjs/socketio\'' : ''}
 
-import { logger } from './logger'
+import { configurationSchema } from './schemas/configuration.schema'
+import { logger, logErrorHook } from './logger'
+import { Application } from './declarations'
 import services from './services'
 import channels from './channels'
-import { logErrorHook } from './logger'
-import { Application } from './declarations'
+import authentication from './authentication'
 
 const app: Application = express.default(feathers())
 
 // Load app configuration
-app.configure(configuration())
+app.configure(configuration(configurationSchema))
 app.use(helmet())
 app.use(compress())
 app.use(express.json())
@@ -63,6 +67,7 @@ app.use('/', express.static(app.get('public')))
 // Configure services and real-time functionality
 app.configure(express.rest())
 ${transports.includes('websockets') ? 'app.configure(socketio())' : ''}
+app.configure(authentication)
 app.configure(services)
 app.configure(channels)
 
@@ -78,4 +83,4 @@ const template = (ctx: AppGeneratorContext) =>
   ctx.framework === 'express' ? expressAppTemplate(ctx) : koaAppTemplate(ctx)
 
 export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(renderTemplate(template, toFile(({ lib }: AppGeneratorContext) => lib, 'app.ts')))
+  .then(renderTemplate(template, toFile<AppGeneratorContext>(({ lib }) => lib, 'app.ts')))

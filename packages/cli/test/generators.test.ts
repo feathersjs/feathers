@@ -51,11 +51,12 @@ describe('@feathersjs/cli', () => {
         description: 'A Feathers test app',
         packager: 'npm',
         database: 'sequelize',
-        transports: ['rest', 'websockets']
+        transports: ['rest', 'websockets'],
+        authStrategies: ['local', 'github']
       }
       const context = getContext<AppGeneratorContext>({
         ...settings,
-        _: ['app']
+        _: ['generate', 'app']
       }, { cwd });
       const finalContext = await generate(context);
       const testResult = await context.pinion.exec('npm', ['test'], { cwd });

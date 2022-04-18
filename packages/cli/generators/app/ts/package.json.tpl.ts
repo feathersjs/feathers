@@ -2,7 +2,7 @@ import { generator, toFile, writeJSON } from '@feathershq/pinion'
 import { AppGeneratorContext } from '../index'
 
 export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(writeJSON(({ pkg, lib }: AppGeneratorContext) => ({
+  .then(writeJSON<AppGeneratorContext>(({ pkg, lib }) => ({
     ...pkg,
     scripts: {
       ...pkg.scripts,

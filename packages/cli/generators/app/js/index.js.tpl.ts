@@ -14,4 +14,4 @@ app.listen(port).then(() => {
 `
 
 export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(renderTemplate(template, toFile(({ lib }: AppGeneratorContext) => lib, 'index.js')))
+  .then(renderTemplate(template, toFile<AppGeneratorContext>(({ lib }) => lib, 'index.js')))

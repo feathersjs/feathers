@@ -8,4 +8,4 @@ export default app => {
 `
 
 export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(renderTemplate(template, toFile(({ lib }: AppGeneratorContext) => lib, 'services', 'index.js')))
+  .then(renderTemplate(template, toFile<AppGeneratorContext>(({ lib }) => lib, 'services', 'index.js')))

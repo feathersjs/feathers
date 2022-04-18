@@ -52,18 +52,20 @@ export const generate = (ctx: FeathersBaseContext) => generator(ctx)
     test: ctx.pkg?.directories?.test,
     ...ctx
   }))
-  .then(runGenerator(__dirname, (ctx: FeathersBaseContext) => `${ctx._[0]}`, 'index'))
+  .then(runGenerator(__dirname, (ctx: FeathersBaseContext) => `${ctx._[1]}`, 'index'))
 
-export const commandRunner = (argv: any) => {
+export const commandRunner = (yarg: any) => {
   const ctx = getContext<FeathersBaseContext>({
-    ...argv
+    ...yarg.argv
   })
 
   return generate(ctx)
 }
 
 export const command = (yargs: Argv) => yargs
+  .command('generate', 'Run a generator', yarg =>
+    yarg.command('app', 'Generate a new app', commandRunner)
+      .command('service', 'Generate a service', commandRunner)
+  )
   .usage('Usage: $0 <command> [options]')
-  .command('app', 'Generate a new app', () => {}, commandRunner)
-  .command('service', 'Generate a service', () => {}, commandRunner)
   .help()

@@ -6,7 +6,7 @@ export const template = ({ className, upperName }: ServiceGeneratorContext) =>
   app: Application
 }
 
-export class ${className} implements Partial<ServiceMethods<${upperName}Result, ${upperName}Data>> {
+export class ${className} implements ServiceInterface<${upperName}Result, ${upperName}Data> {
   constructor (public options: ${className}Options) {
   }
 

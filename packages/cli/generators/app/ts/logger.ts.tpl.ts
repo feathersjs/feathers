@@ -29,4 +29,4 @@ export const logErrorHook = async (context: HookContext, next: NextFunction) => 
 `
 
 export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(renderTemplate(template, toFile(({ lib }: AppGeneratorContext) => lib, 'logger.ts')))
+  .then(renderTemplate(template, toFile<AppGeneratorContext>(({ lib }) => lib, 'logger.ts')))

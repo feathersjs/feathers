@@ -1,7 +1,7 @@
 import { sep, join } from 'path'
 import { PackageJson } from 'type-fest'
 import chalk from 'chalk'
-import { generator, prompt, runGenerators, loadJSON, fromFile, install } from '@feathershq/pinion'
+import { generator, prompt, runGenerators, loadJSON, fromFile, install, runGenerator, copyFiles, toFile } from '@feathershq/pinion'
 import { FeathersBaseContext, FeathersAppInfo } from '../index'
 
 type DependencyVersions = { [key: string]: string }
@@ -22,6 +22,10 @@ export interface AppGeneratorData extends FeathersAppInfo {
    * A short description of the app
    */
   description: string
+  /**
+   * A list of selected authentication methods
+   */
+  authStrategies: string[]
 }
 
 export type AppGeneratorContext = FeathersBaseContext & AppGeneratorData & {
@@ -59,8 +63,8 @@ export const generate = (ctx: AppGeneratorContext) => generator(ctx)
     message: 'What is your main database?',
     suffix: chalk.grey(' Other databases can be added at any time'),
     choices: [
-      { value: 'sequelize', name: 'SQL (Sequelize)' },
       { value: 'mongodb', name: 'MongoDB' },
+      { value: 'sequelize', name: 'SQL (Sequelize)' },
       { value: 'custom', name: 'Custom services/another database' }
     ]
   }, {
@@ -78,6 +82,32 @@ export const generate = (ctx: AppGeneratorContext) => generator(ctx)
       { value: 'npm', name: 'npm' },
       { value: 'yarn', name: 'Yarn'  }
     ]
+  }, {
+    type: 'checkbox',
+    name: 'authStrategies',
+    when: !ctx.authStrategies,
+    message: 'Which user authentication methods do you want to provide?',
+    suffix: chalk.grey(' Other methods and providers can be added at any time.'),
+    choices: [{
+      name: 'Email + Password',
+      value: 'local',
+      checked: true
+    }, {
+      name: 'Google',
+      value: 'google'
+    }, {
+      name: 'Facebook',
+      value: 'facebook'
+    }, {
+      name: 'Twitter',
+      value: 'twitter'
+    }, {
+      name: 'GitHub',
+      value: 'github'
+    }, {
+      name: 'Auth0',
+      value: 'auth0'
+    }]
   }, {
     type: 'checkbox',
     name: 'transports',
@@ -98,7 +128,7 @@ export const generate = (ctx: AppGeneratorContext) => generator(ctx)
     ]
   }]))
   .then(runGenerators(__dirname, 'common'))
-  .then(install(({ transports, database, framework, dependencyVersions }: AppGeneratorContext) => {
+  .then(install(({ transports, database, framework, dependencyVersions, authStrategies }: AppGeneratorContext) => {
     const hasSocketio = transports.includes('websockets')
     const dependencies = [
       '@feathersjs/feathers',
@@ -107,8 +137,14 @@ export const generate = (ctx: AppGeneratorContext) => generator(ctx)
       '@feathersjs/configuration',
       '@feathersjs/authentication',
       '@feathersjs/transport-commons',
+      '@feathersjs/authentication',
+      '@feathersjs/authentication-oauth',
       'winston'
     ];
+
+    if (authStrategies.includes('local')) {
+      dependencies.push('@feathersjs/authentication-local');
+    }
 
     if (hasSocketio) {
       dependencies.push('@feathersjs/socketio');
@@ -157,4 +193,6 @@ export const generate = (ctx: AppGeneratorContext) => generator(ctx)
     return addVersions(devDependencies, dependencyVersions)
   }, true))
   .then(loadJSON(fromFile('package.json'), pkg => ({ pkg })))
+  .then(copyFiles(fromFile(__dirname, 'static'), toFile('.')))
   .then(runGenerators(__dirname, (ctx: AppGeneratorContext) => ctx.language))
+  .then(runGenerator(__dirname, '..', 'connection', 'index'))

@@ -68,4 +68,4 @@ export default app => {
 `
 
 export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(renderTemplate(template, toFile(({ lib }: AppGeneratorContext) => lib, 'channels.js')))
+  .then(renderTemplate(template, toFile<AppGeneratorContext>(({ lib }) => lib, 'channels.js')))

@@ -2,7 +2,7 @@ import { generator, toFile, writeJSON } from '@feathershq/pinion'
 import { AppGeneratorContext } from '../index'
 
 export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(writeJSON(({ lib }: AppGeneratorContext) => ({
+  .then(writeJSON<AppGeneratorContext>(({ lib }) => ({
     'ts-node': {
       files: true
     },
