@@ -53,7 +53,7 @@ describe('@feathersjs/schema/hooks', () => {
     await assert.rejects(() => app.service('messages').find({
       provider: 'external',
       error: true
-    }), {
+    } as any), {
       name: 'BadRequest',
       message: 'Error resolving data',
       code: 400,
@@ -90,7 +90,7 @@ describe('@feathersjs/schema/hooks', () => {
 
     const userMessages = await app.service('messages').find({
       user
-    }) as MessageResult[];
+    } as any) as MessageResult[];
 
     assert.strictEqual(userMessages.length, 1);
     assert.strictEqual(userMessages[0].userId, user.id);

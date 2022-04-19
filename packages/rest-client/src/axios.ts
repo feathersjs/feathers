@@ -1,8 +1,7 @@
-import { Params } from '@feathersjs/feathers';
-import { Base } from './base';
+import { Base, RestClientParams } from './base';
 
 export class AxiosClient extends Base {
-  request (options: any, params: Params) {
+  request (options: any, params: RestClientParams) {
     const config = Object.assign({
       url: options.url,
       method: options.method,

@@ -8,7 +8,7 @@ import { createDebug } from '@feathersjs/commons';
 import lt from 'long-timeout';
 
 import { AuthenticationBaseStrategy } from './strategy';
-import { AuthenticationRequest, AuthenticationResult, ConnectionEvent } from './core';
+import { AuthenticationParams, AuthenticationRequest, AuthenticationResult, ConnectionEvent } from './core';
 
 const debug = createDebug('@feathersjs/authentication/jwt');
 const SPLIT_HEADER = /(\S+)\s+(\S+)/;
@@ -116,7 +116,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     return authResult.authentication.payload.sub;
   }
 
-  async authenticate (authentication: AuthenticationRequest, params: Params) {
+  async authenticate (authentication: AuthenticationRequest, params: AuthenticationParams) {
     const { accessToken } = authentication;
     const { entity } = this.configuration;
 

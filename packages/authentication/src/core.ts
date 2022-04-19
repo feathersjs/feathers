@@ -18,6 +18,14 @@ export interface AuthenticationRequest {
   [key: string]: any;
 }
 
+export interface AuthenticationParams extends Params {
+  payload?: { [key: string]: any };
+  jwtOptions?: SignOptions;
+  authStrategies?: string[];
+  secret?: string;
+  [key: string]: any;
+}
+
 export type ConnectionEvent = 'login' | 'logout' | 'disconnect';
 
 export interface AuthenticationStrategy {
@@ -57,7 +65,7 @@ export interface AuthenticationStrategy {
    * @param authentication The authentication request
    * @param params The service call parameters
    */
-  authenticate? (authentication: AuthenticationRequest, params: Params): Promise<AuthenticationResult>;
+  authenticate? (authentication: AuthenticationRequest, params: AuthenticationParams): Promise<AuthenticationResult>;
   /**
    * Update a real-time connection according to this strategy.
    *
@@ -232,7 +240,7 @@ export class AuthenticationBase {
    * @param params Service call parameters
    * @param allowed A list of allowed strategy names
    */
-  async authenticate (authentication: AuthenticationRequest, params: Params, ...allowed: string[]) {
+  async authenticate (authentication: AuthenticationRequest, params: AuthenticationParams, ...allowed: string[]) {
     const { strategy } = authentication || {};
     const [ authStrategy ] = this.getStrategies(strategy);
     const strategyAllowed = allowed.includes(strategy);

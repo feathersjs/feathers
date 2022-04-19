@@ -1,11 +1,11 @@
 import assert from 'assert';
-import { feathers, Params, HookContext } from '@feathersjs/feathers';
+import { feathers, HookContext } from '@feathersjs/feathers';
 
 import hook from '../../src/hooks/event';
-import { AuthenticationRequest, AuthenticationResult } from '../../src/core';
+import { AuthenticationParams, AuthenticationRequest, AuthenticationResult } from '../../src/core';
 
 describe('authentication/hooks/events', () => {
-  const app = feathers().use('/authentication', {
+  const app = feathers().use('authentication', {
     async create (data: AuthenticationRequest) {
       return data;
     },
@@ -27,7 +27,7 @@ describe('authentication/hooks/events', () => {
       message: 'test'
     };
 
-    app.once('login', (result: AuthenticationResult, params: Params, context: HookContext) => {
+    app.once('login', (result: AuthenticationResult, params: AuthenticationParams, context: HookContext) => {
       try {
         assert.deepStrictEqual(result, data);
         assert.ok(params.testParam);
@@ -41,11 +41,11 @@ describe('authentication/hooks/events', () => {
     service.create(data, {
       testParam: true,
       provider: 'test'
-    });
+    }as any);
   });
 
   it('logout', done => {
-    app.once('logout', (result: AuthenticationResult, params: Params, context: HookContext) => {
+    app.once('logout', (result: AuthenticationResult, params: AuthenticationParams, context: HookContext) => {
       try {
         assert.deepStrictEqual(result, {
           id: 'test'
@@ -61,7 +61,7 @@ describe('authentication/hooks/events', () => {
     service.remove('test', {
       testParam: true,
       provider: 'test'
-    });
+    } as any);
   });
 
   it('does nothing when provider is not set', done => {

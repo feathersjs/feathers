@@ -2,7 +2,7 @@
 // @ts-ignore
 import querystring from 'querystring';
 import {
-  AuthenticationRequest, AuthenticationBaseStrategy, AuthenticationResult
+  AuthenticationRequest, AuthenticationBaseStrategy, AuthenticationResult, AuthenticationParams
 } from '@feathersjs/authentication';
 import { Params } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
@@ -84,7 +84,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     return redirect;
   }
 
-  async getRedirect (data: AuthenticationResult|Error, params?: Params): Promise<string | null> {
+  async getRedirect (data: AuthenticationResult|Error, params?: AuthenticationParams): Promise<string | null> {
     const queryRedirect = (params && params.redirect) || '';
     const redirect = await this.getAllowedOrigin(params);
 
@@ -156,7 +156,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     });
   }
 
-  async authenticate (authentication: AuthenticationRequest, originalParams: Params) {
+  async authenticate (authentication: AuthenticationRequest, originalParams: AuthenticationParams) {
     const entity: string = this.configuration.entity;
     const { provider, ...params } = originalParams;
     const profile = await this.getProfile(authentication, params);

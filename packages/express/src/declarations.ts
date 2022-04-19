@@ -9,7 +9,7 @@ interface ExpressUseHandler<T, Services> {
   <L extends keyof Services & string> (
     path: L,
     ...middlewareOrService: (
-      Express|express.RequestHandler|
+      Express|express.RequestHandler|express.RequestHandler[]|
       (keyof any extends keyof Services ? ServiceInterface : Services[L])
     )[]
   ): T;
