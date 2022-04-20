@@ -380,10 +380,9 @@ describe('@feathersjs/express/rest provider', () => {
     it('allows middleware arrays before and after a service', async () => {
       const app = expressify(feathers());
 
-      app
-        .use(express.json())
-        .configure(rest())
-        .use('/todo', [function (req: Request, _res: Response, next: NextFunction) {
+      app.use(express.json());
+      app.configure(rest());
+      app.use('/todo', [function (req: Request, _res: Response, next: NextFunction) {
           req.body.before = ['before first'];
           next();
         }, function (req: Request, _res: Response, next: NextFunction) {

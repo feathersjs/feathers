@@ -7,7 +7,7 @@ const debug = createDebug('@feathersjs/socketio/middleware');
 export type ParamsGetter = (socket: Socket) => any;
 export type NextFunction = (err?: any) => void;
 export interface FeathersSocket extends Socket {
-  feathers?: Params
+  feathers?: Params & { [key: string]: any }
 }
 
 export const disconnect = (app: Application, getParams: ParamsGetter) =>

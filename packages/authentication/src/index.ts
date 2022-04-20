@@ -5,6 +5,7 @@ export {
   AuthenticationRequest,
   AuthenticationResult,
   AuthenticationStrategy,
+  AuthenticationParams,
   ConnectionEvent
 } from './core';
 export { AuthenticationBaseStrategy } from './strategy';

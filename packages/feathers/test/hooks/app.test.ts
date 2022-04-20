@@ -1,12 +1,29 @@
 import assert from 'assert';
 
-import { feathers, Application, ApplicationHookMap } from '../../src';
+import { feathers, Application, ApplicationHookMap, ServiceInterface, Params } from '../../src';
+
+type Todo = {
+  id?: string,
+  params?: TodoParams,
+  data?: any,
+  test?: string,
+  order?: string[]
+}
+
+interface TodoParams extends Params {
+  order: string[];
+  ran: boolean;
+}
+
+type TodoService = ServiceInterface<Todo, Todo, TodoParams>;
+
+type App = Application<{ todos: TodoService }>;
 
 describe('app.hooks', () => {
-  let app: Application;
+  let app: App;
 
   beforeEach(() => {
-    app = feathers().use('/todos', {
+    app = feathers().use('todos', {
       async get (id: any, params: any) {
         if (id === 'error') {
           throw new Error('Something went wrong');

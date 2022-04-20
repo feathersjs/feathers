@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { feathers } from '../../src';
+import { feathers, Params, ServiceInterface } from '../../src';
 
 describe('`async` hooks', () => {
   it('async hooks can set hook.result which will skip service method', async () => {
@@ -137,8 +137,12 @@ describe('`async` hooks', () => {
   });
 
   it('adds .hooks() and chains multiple hooks for the same method', async () => {
-    const dummyService = {
-      create (data: any, params: any) {
+    interface DummyParams extends Params {
+      modified: string
+    }
+
+    class DummyService implements ServiceInterface<any, any, DummyParams> {
+      create (data: any, params?: any) {
         assert.deepStrictEqual(data, {
           some: 'thing',
           modified: 'second data'
@@ -150,8 +154,9 @@ describe('`async` hooks', () => {
 
         return Promise.resolve(data);
       }
-    };
-    const app = feathers().use('/dummy', dummyService);
+    }
+
+    const app = feathers<{ dummy: DummyService }>().use('dummy', new DummyService());
     const service = app.service('dummy');
 
     service.hooks({
@@ -170,16 +175,22 @@ describe('`async` hooks', () => {
   });
 
   it('async hooks run in the correct order', async () => {
-    const app = feathers().use('/dummy', {
-      async get (id: any, params: any) {
+    interface DummyParams extends Params<{ name: string }> {
+      items: string[]
+    }
+
+    class DummyService implements ServiceInterface<any, any, DummyParams> {
+      async get (id: any, params?: DummyParams) {
         assert.deepStrictEqual(params.items, ['first', 'second', 'third']);
 
         return {
           id,
-          items: []
+          items: [] as string[]
         };
       }
-    });
+    }
+
+    const app = feathers<{ dummy: DummyService }>().use('dummy', new DummyService());
     const service = app.service('dummy');
 
     service.hooks({
@@ -206,7 +217,14 @@ describe('`async` hooks', () => {
   });
 
   it('async all hooks (#11)', async () => {
-    const app = feathers().use('/dummy', {
+    interface DummyParams extends Params {
+      asyncAllObject: boolean;
+      asyncAllMethodArray: boolean;
+    }
+
+    type DummyService = ServiceInterface<any, any, DummyParams>;
+
+    const app = feathers<{ dummy: DummyService }>().use('dummy', {
       async get (id: any, params: any) {
         assert.ok(params.asyncAllObject);
         assert.ok(params.asyncAllMethodArray);
@@ -245,10 +263,14 @@ describe('`async` hooks', () => {
   });
 
   it('async hooks have service as context and keep it in service method (#17)', async () => {
-    class Dummy {
+    interface DummyParams extends Params {
+      test: number;
+    }
+
+    class Dummy implements ServiceInterface<any, any, DummyParams> {
       number= 42;
 
-      async get (id: any, params: any) {
+      async get (id: any, params?: DummyParams) {
         return {
           id,
           number: (this as any).number,
@@ -257,7 +279,7 @@ describe('`async` hooks', () => {
       }
     }
 
-    const app = feathers().use('/dummy', new Dummy());
+    const app = feathers<{ dummy: Dummy }>().use('dummy', new Dummy());
 
     const service = app.service('dummy');
 

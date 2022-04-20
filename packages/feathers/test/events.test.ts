@@ -236,10 +236,15 @@ describe('Service events', () => {
     });
 
     it('.remove and removed with array', async () => {
+      const removeItems = [
+        { message: 'Hello 0' },
+        { message: 'Hello 1' }
+      ];
+
       const app = feathers().use('/creator', {
         async remove (id: any, data: any) {
-          if (Array.isArray(data)) {
-            return Promise.all(data.map((current, index) =>
+          if (id === null) {
+            return Promise.all(removeItems.map((current, index) =>
               (this as any).remove(index, current))
             );
           }
@@ -248,10 +253,6 @@ describe('Service events', () => {
       });
 
       const service = app.service('creator');
-      const removeItems = [
-        { message: 'Hello 0' },
-        { message: 'Hello 1' }
-      ];
 
       const events = Promise.all(removeItems.map((element, index) => {
         return new Promise<void>((resolve) => {
@@ -264,7 +265,7 @@ describe('Service events', () => {
         });
       }));
 
-      await service.remove(null, removeItems);
+      await service.remove(null);
       await events;
     });
   });

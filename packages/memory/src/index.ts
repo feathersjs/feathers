@@ -22,7 +22,7 @@ const _select = (data: any, params: any, ...args: any[]) => {
 };
 
 export class Service<T = any, D = Partial<T>> extends AdapterService<T, D> implements InternalServiceMethods<T> {
-  options: MemoryServiceOptions;
+  options: MemoryServiceOptions<T>;
   store: MemoryServiceStore<T>;
   _uId: number;
 

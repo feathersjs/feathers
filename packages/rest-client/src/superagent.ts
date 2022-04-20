@@ -1,8 +1,7 @@
-import { Params } from '@feathersjs/feathers';
-import { Base } from './base';
+import { Base, RestClientParams } from './base';
 
 export class SuperagentClient extends Base {
-  request (options: any, params: Params) {
+  request (options: any, params: RestClientParams) {
     const superagent = this.connection(options.method, options.url)
       .set(this.options.headers || {})
       .set('Accept', 'application/json')

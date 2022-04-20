@@ -29,9 +29,13 @@ const errorHandler = function (error: FeathersError, _req: any, res: any, _next:
   });
 };
 
+interface TodoServiceParams extends Params {
+  authorization: any;
+}
+
 // Create an in-memory CRUD service for our Todos
 class TodoService extends Service {
-  get (id: Id, params: Params) {
+  get (id: Id, params: TodoServiceParams) {
     if (params.query.error) {
       throw new Error('Something went wrong');
     }
