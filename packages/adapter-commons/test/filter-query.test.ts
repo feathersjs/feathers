@@ -88,7 +88,7 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
     });
 
     it('allows $limit 0', () => {
-      const { filters } = filterQuery({ $limit: 0 }, { default: 10 });
+      const { filters } = filterQuery({ $limit: 0 }, { paginate: { default: 10 } });
 
       assert.strictEqual(filters.$limit, 0);
     });

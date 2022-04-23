@@ -1,13 +1,14 @@
 import {
   feathers, HookContext, Application as FeathersApplication
 } from '@feathersjs/feathers';
-import { memory, Service } from '@feathersjs/memory';
+import { memory, MemoryService } from '@feathersjs/memory';
 import { GeneralError } from '@feathersjs/errors';
 
 import {
   schema, resolve, Infer, resolveResult,
   queryProperty, resolveQuery, resolveData, validateData, validateQuery
 } from '../src';
+import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib';
 
 export const userSchema = schema({
   $id: 'UserData',
@@ -135,10 +136,15 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext<Applicatio
   }
 });
 
+interface ServiceParams extends AdapterParams {
+  user?: User;
+  error?: boolean;
+}
+
 type ServiceTypes = {
-  users: Service<UserResult, User>,
-  messages: Service<MessageResult, Message>
-  pagintedMessages: Service<MessageResult, Message>
+  users: MemoryService<UserResult, User, ServiceParams>,
+  messages: MemoryService<MessageResult, Message, ServiceParams>
+  paginatedMessages: MemoryService<MessageResult, Message, ServiceParams>
 }
 type Application = FeathersApplication<ServiceTypes>;
 
@@ -147,8 +153,7 @@ const app = feathers<ServiceTypes>()
     multi: ['create']
   }))
   .use('messages', memory())
-  .use('pagintedMessages', memory({paginate: { default: 10 }}))
-  ;
+  .use('paginatedMessages', memory({paginate: { default: 10 }}));
 
 app.service('messages').hooks([
   validateQuery(messageQuerySchema),
@@ -156,7 +161,7 @@ app.service('messages').hooks([
   resolveResult(messageResultResolver)
 ]);
 
-app.service('pagintedMessages').hooks([
+app.service('paginatedMessages').hooks([
   validateQuery(messageQuerySchema),
   resolveQuery(messageQueryResolver),
   resolveResult(messageResultResolver)

@@ -17,7 +17,7 @@ describe('@feathersjs/schema/hooks', () => {
       text,
       userId: user.id
     });
-    messageOnPaginatedService = await app.service('pagintedMessages').create({
+    messageOnPaginatedService = await app.service('paginatedMessages').create({
       text,
       userId: user.id
     });
@@ -58,7 +58,7 @@ describe('@feathersjs/schema/hooks', () => {
     await assert.rejects(() => app.service('messages').find({
       provider: 'external',
       error: true
-    } as any), {
+    }), {
       name: 'BadRequest',
       message: 'Error resolving data',
       code: 400,
@@ -117,7 +117,7 @@ describe('@feathersjs/schema/hooks', () => {
       ...payload
     });
 
-    const messages = await app.service('pagintedMessages').find({
+    const messages = await app.service('paginatedMessages').find({
       provider: 'external',
       query: {
         $limit: 1,
@@ -144,16 +144,18 @@ describe('@feathersjs/schema/hooks', () => {
     });
 
     const messages = await app.service('messages').find({
+      paginate: false,
       query: {
         userId: `${user.id}`
       }
-    }) as MessageResult[];
+    });
 
     assert.strictEqual(messages.length, 1);
 
     const userMessages = await app.service('messages').find({
+      paginate: false,
       user
-    } as any) as MessageResult[];
+    });
 
     assert.strictEqual(userMessages.length, 1);
     assert.strictEqual(userMessages[0].userId, user.id);
