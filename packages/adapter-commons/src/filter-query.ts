@@ -1,5 +1,7 @@
 import { _ } from '@feathersjs/commons';
 import { BadRequest } from '@feathersjs/errors';
+import { Query } from '@feathersjs/feathers';
+import { FilterQueryOptions, FilterSettings } from './declarations';
 
 function parse (number: any) {
   if (typeof number !== 'undefined') {
@@ -37,7 +39,7 @@ function convertSort (sort: any) {
   }, {} as { [key: string]: number });
 }
 
-function cleanQuery (query: any, operators: any, filters: any): any {
+function cleanQuery (query: Query, operators: any, filters: any): any {
   if (Array.isArray(query)) {
     return query.map(value => cleanQuery(value, operators, filters));
   } else if (_.isObject(query) && query.constructor === {}.constructor) {
@@ -68,7 +70,7 @@ function cleanQuery (query: any, operators: any, filters: any): any {
   return query;
 }
 
-function assignFilters (object: any, query: any, filters: any, options: any) {
+function assignFilters (object: any, query: Query, filters: FilterSettings, options: any): { [key: string]: any } {
   if (Array.isArray(filters)) {
     _.each(filters, (key) => {
       if (query[key] !== undefined) {
@@ -88,7 +90,7 @@ function assignFilters (object: any, query: any, filters: any, options: any) {
   return object;
 }
 
-export const FILTERS = {
+export const FILTERS: FilterSettings = {
   $sort: (value: any) => convertSort(value),
   $limit: (value: any, options: any) => getLimit(parse(value), options.paginate),
   $skip: (value: any) => parse(value),
@@ -100,17 +102,16 @@ export const OPERATORS = ['$in', '$nin', '$lt', '$lte', '$gt', '$gte', '$ne', '$
 // Converts Feathers special query parameters and pagination settings
 // and returns them separately a `filters` and the rest of the query
 // as `query`
-export function filterQuery (query: any, options: any = {}) {
+export function filterQuery (query: Query, options: FilterQueryOptions = {}) {
   const {
-    filters: additionalFilters = {},
+    filters: additionalFilters = [],
     operators: additionalOperators = []
   } = options;
-  const result: { [key: string]: any } = {};
+  const baseFilters = assignFilters({}, query, FILTERS, options);
+  const filters = assignFilters(baseFilters, query, additionalFilters, options);
 
-  result.filters = assignFilters({}, query, FILTERS, options);
-  result.filters = assignFilters(result.filters, query, additionalFilters, options);
-
-  result.query = cleanQuery(query, OPERATORS.concat(additionalOperators), result.filters);
-
-  return result;
+  return {
+    filters,
+    query: cleanQuery(query, OPERATORS.concat(additionalOperators), filters) as Query
+  }
 }

@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import assert from 'assert';
 import { NotImplemented } from '@feathersjs/errors';
-import { AdapterService, InternalServiceMethods } from '../src';
-import { Params, Id, NullableId } from '@feathersjs/feathers';
+import { AdapterService, InternalServiceMethods, PaginationOptions } from '../src';
+import { Id, NullableId, Paginated } from '@feathersjs/feathers';
+import { AdapterParams } from '../lib';
 
 const METHODS: [ 'find', 'get', 'create', 'update', 'patch', 'remove' ] = [ 'find', 'get', 'create', 'update', 'patch', 'remove' ];
 
@@ -27,29 +28,67 @@ describe('@feathersjs/adapter-commons/service', () => {
   });
 
   describe('works when methods exist', () => {
-    class MethodService extends AdapterService implements InternalServiceMethods {
-      _find (_params?: Params) {
-        return Promise.resolve([]);
+    type Data = {
+      id: Id
+    }
+
+    class MethodService extends AdapterService<Data> implements InternalServiceMethods<Data> {
+      _find (_params?: AdapterParams & { paginate?: PaginationOptions }): Promise<Paginated<Data>>;
+      _find (_params?: AdapterParams & { paginate: false }): Promise<Data[]>;
+      async _find (params?: AdapterParams): Promise<Paginated<Data>|Data[]> {
+        if (params && params.paginate === false) {
+          return {
+            total: 0,
+            limit: 10,
+            skip: 0,
+            data: []
+          }
+        }
+
+        return [];
       }
 
-      _get (id: Id, _params?: Params) {
+      async _get (id: Id, _params?: AdapterParams) {
+        return { id };
+      }
+
+      async _create (data: Partial<Data>[], _params?: AdapterParams): Promise<Data[]>;
+      async _create (data: Partial<Data>, _params?: AdapterParams): Promise<Data>;
+      async _create (data: Partial<Data>|Partial<Data>[], _params?: AdapterParams): Promise<Data|Data[]> {
+        if (Array.isArray(data)) {
+          return [{
+            id: 'something'
+          }];
+        }
+
+        return {
+          id: 'something',
+          ...data
+        }
+      }
+
+      async _update (id: NullableId, _data: any, _params?: AdapterParams) {
         return Promise.resolve({ id });
       }
 
-      _create (data: Partial<any> | Partial<any>[], _params?: Params) {
-        return Promise.resolve(data);
+      async _patch (id: null, _data: any, _params?: AdapterParams): Promise<Data[]>;
+      async _patch (id: Id, _data: any, _params?: AdapterParams): Promise<Data>;
+      async _patch (id: NullableId, _data: any, _params?: AdapterParams): Promise<Data|Data[]> {
+        if (id === null) {
+          return []
+        }
+
+        return { id };
       }
 
-      _update (id: NullableId, _data: any, _params?: Params) {
-        return Promise.resolve({ id });
-      }
+      async _remove (id: null, _params?: AdapterParams): Promise<Data[]>;
+      async _remove (id: Id, _params?: AdapterParams): Promise<Data>;
+      async _remove (id: NullableId, _params?: AdapterParams) {
+        if (id === null) {
+          return [] as Data[];
+        }
 
-      _patch (id: NullableId, _data: any, _params?: Params) {
-        return Promise.resolve({ id });
-      }
-
-      _remove (id: NullableId, _params?: Params) {
-        return Promise.resolve({ id });
+        return { id };
       }
     }
 
@@ -116,24 +155,24 @@ describe('@feathersjs/adapter-commons/service', () => {
 
   it('filterQuery', () => {
     const service = new CustomService({
-      whitelist: [ '$something' ]
+      allow: [ '$something' ]
     });
     const filtered = service.filterQuery({
       query: { $limit: 10, test: 'me' }
     });
 
     assert.deepStrictEqual(filtered, {
-      paginate: {},
+      paginate: false,
       filters: { $limit: 10 },
       query: { test: 'me' }
     });
 
-    const withWhitelisted = service.filterQuery({
+    const withAllowed = service.filterQuery({
       query: { $limit: 10, $something: 'else' }
     });
 
-    assert.deepStrictEqual(withWhitelisted, {
-      paginate: {},
+    assert.deepStrictEqual(withAllowed, {
+      paginate: false,
       filters: { $limit: 10 },
       query: { $something: 'else' }
     });

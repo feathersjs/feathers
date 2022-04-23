@@ -34,9 +34,9 @@ export interface ServiceMethods<T = any, D = Partial<T>, P = Params> {
 
   remove (id: NullableId, params?: P): Promise<T | T[]>;
 
-  setup (app: Application, path: string): Promise<void>;
+  setup? (app: Application, path: string): Promise<void>;
 
-  teardown (app: Application, path: string): Promise<void>;
+  teardown? (app: Application, path: string): Promise<void>;
 }
 
 export interface ServiceOverloads<T = any, D = Partial<T>, P = Params> {
