@@ -29,7 +29,7 @@ export class AdapterBase<O extends Partial<AdapterServiceOptions> = Partial<Adap
       events: [],
       paginate: false,
       multi: false,
-      filters: [],
+      filters: {},
       allow: []
     }, options);
   }
@@ -48,7 +48,7 @@ export class AdapterBase<O extends Partial<AdapterServiceOptions> = Partial<Adap
       : this.getOptions(params).paginate;
     const query: Query = { ...params.query };
     const options = {
-      operators:  this.options.whitelist || this.options.allow || [],
+      operators:  this.options.whitelist || this.options.operators || [],
       filters: this.options.filters,
       paginate,
       ...opts

@@ -1,7 +1,15 @@
 import { Query, Params, Paginated, Id, NullableId } from '@feathersjs/feathers';
 
-export type FilterSettings = string[]|{
-  [key: string]: (value: any, options: any) => any
+export type FilterQueryOptions = {
+  filters?: FilterSettings;
+  operators?: string[];
+  paginate?: PaginationParams;
+}
+
+export type QueryFilter = (value: any, options: FilterQueryOptions) => any
+
+export type FilterSettings = {
+  [key: string]: QueryFilter|true
 }
 
 export interface PaginationOptions {
@@ -11,26 +19,39 @@ export interface PaginationOptions {
 
 export type PaginationParams = false|PaginationOptions;
 
-export type FilterQueryOptions = {
-  filters?: FilterSettings;
-  operators?: string[];
-  paginate?: PaginationParams;
-}
-
 export interface AdapterServiceOptions {
-  events?: string[];
+  /**
+   * Whether to allow multiple updates for everything (`true`) or specific methods (e.g. `['create', 'remove']`)
+   */
   multi?: boolean|string[];
+  /**
+   * The name of the id property
+   */
   id?: string;
+  /**
+   * Pagination settings for this service
+   */
   paginate?: PaginationOptions
   /**
-   * @deprecated renamed to `allow`.
+   * A list of additional property query operators to allow in a query
    */
+  operators?: string[];
+  /**
+   * An object of additional top level query filters, e.g. `{ $populate: true }`
+   * Can also be a converter function like `{ $ignoreCase: (value) => value === 'true' ? true : false }`
+   */
+  filters?: FilterSettings;
+  /**
+   * @deprecated Use service `events` option when registering the service with `app.use`.
+   */
+   events?: string[];
+   /**
+  * @deprecated renamed to `operators`.
+  */
   whitelist?: string[];
-  allow?: string[];
-  filters?: string[];
 }
 
-export interface AdapterOptions<M = any> extends Pick<AdapterServiceOptions, 'multi'|'allow'|'paginate'> {
+export interface AdapterOptions<M = any> extends Pick<AdapterServiceOptions, 'multi'|'filters'|'operators'|'paginate'> {
   Model?: M;
 }
 

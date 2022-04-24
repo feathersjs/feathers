@@ -155,7 +155,9 @@ describe('@feathersjs/adapter-commons/service', () => {
 
   it('filterQuery', () => {
     const service = new CustomService({
-      allow: [ '$something' ]
+      filters: {
+        $something: true
+      }
     });
     const filtered = service.filterQuery({
       query: { $limit: 10, test: 'me' }
@@ -173,8 +175,11 @@ describe('@feathersjs/adapter-commons/service', () => {
 
     assert.deepStrictEqual(withAllowed, {
       paginate: false,
-      filters: { $limit: 10 },
-      query: { $something: 'else' }
+      filters: {
+        $limit: 10,
+        $something: 'else'
+      },
+      query: {}
     });
   });
 
@@ -197,7 +202,7 @@ describe('@feathersjs/adapter-commons/service', () => {
       events: [],
       paginate: { default: 10, max: 100 },
       multi: [ 'create' ],
-      filters: [],
+      filters: {},
       allow: []
     });
   });

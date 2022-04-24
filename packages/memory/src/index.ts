@@ -1,8 +1,11 @@
 import { MethodNotAllowed, NotFound } from '@feathersjs/errors';
 import { _ } from '@feathersjs/commons';
-import { sorter, select, AdapterBase, AdapterServiceOptions, InternalServiceMethods, PaginationOptions } from '@feathersjs/adapter-commons';
+import {
+  sorter, select, AdapterBase, AdapterServiceOptions, InternalServiceMethods,
+  PaginationOptions, AdapterParams, FilterQueryOptions
+} from '@feathersjs/adapter-commons';
 import sift from 'sift';
-import { NullableId, Id, Params, ServiceMethods, Paginated } from '@feathersjs/feathers';
+import { NullableId, Id, Params, ServiceMethods, Paginated, Query } from '@feathersjs/feathers';
 
 export interface MemoryServiceStore<T> {
   [key: string]: T;
@@ -48,6 +51,19 @@ export class MemoryAdapter<T = any, D = Partial<T>, P extends Params = Params> e
       paginate: false,
       query
     });
+  }
+
+  filterQuery (params?: AdapterParams<Query, any>, opts?: FilterQueryOptions) {
+    const result = super.filterQuery(params, opts);
+    const { query, filters } = result;
+
+    // $or is not treated as a filter but needs to be part of the query to work with SiftJS
+    result.query = {
+      ...query,
+      ...(filters.$or ? { $or: filters.$or } : {})
+    }
+
+    return result;
   }
 
   async _find (_params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>;

@@ -3,115 +3,135 @@ import { BadRequest } from '@feathersjs/errors';
 import { Query } from '@feathersjs/feathers';
 import { FilterQueryOptions, FilterSettings } from './declarations';
 
-function parse (number: any) {
-  if (typeof number !== 'undefined') {
-    return Math.abs(parseInt(number, 10));
+const parse = (value: any) => typeof value !== 'undefined' ? parseInt(value, 10) : value;
+
+const isPlainObject = (value: any) => _.isObject(value) && value.constructor === {}.constructor;
+
+const validateQueryProperty = (query: any, operators: string[] = []): Query => {
+  if (!isPlainObject(query)) {
+    return query;
   }
 
-  return undefined;
+  for (const key of Object.keys(query)) {
+    if (key.startsWith('$') && !operators.includes(key)) {
+      throw new BadRequest(`Invalid query parameter ${key}`, query);
+    }
+
+    const value = query[key];
+
+    if (isPlainObject(value)) {
+      query[key] = validateQueryProperty(value, operators);
+    }
+  }
+
+  return {
+    ...query
+  }
 }
 
-// Returns the pagination limit and will take into account the
-// default and max pagination settings
-function getLimit (limit: any, paginate: any) {
-  if (paginate && (paginate.default || paginate.max)) {
-    const base = paginate.default || 0;
-    const lower = typeof limit === 'number' && !isNaN(limit) ? limit : base;
-    const upper = typeof paginate.max === 'number' ? paginate.max : Number.MAX_VALUE;
+const getFilters = (query: Query, settings: FilterQueryOptions) => {
+  const filterNames = Object.keys(settings.filters);
 
-    return Math.min(lower, upper);
-  }
+  return filterNames.reduce((current, key) => {
+    const queryValue = query[key];
+    const filter = settings.filters[key];
 
-  return limit;
+    if (filter) {
+      const value = typeof filter === 'function' ? filter(queryValue, settings) : queryValue;
+
+      if (value !== undefined) {
+        current[key] = value;
+      }
+    }
+
+    return current;
+  }, {} as { [key: string]: any });
 }
 
-// Makes sure that $sort order is always converted to an actual number
-function convertSort (sort: any) {
-  if (typeof sort !== 'object' || Array.isArray(sort)) {
-    return sort;
-  }
+const getQuery = (query: Query, settings: FilterQueryOptions) => {
+  const keys = Object.keys(query).concat(Object.getOwnPropertySymbols(query) as any as string[]);
 
-  return Object.keys(sort).reduce((result, key) => {
-    result[key] = typeof sort[key] === 'object'
-      ? sort[key] : parseInt(sort[key], 10);
+  return keys.reduce((result, key) => {
+    if (typeof key === 'string' && key.startsWith('$')) {
+      if (settings.filters[key] === undefined) {
+        throw new BadRequest(`Invalid filter value ${key}`);
+      }
+    } else {
+      result[key] = validateQueryProperty(query[key], settings.operators);
+    }
 
     return result;
-  }, {} as { [key: string]: number });
+  }, {} as Query)
 }
-
-function cleanQuery (query: Query, operators: any, filters: any): any {
-  if (Array.isArray(query)) {
-    return query.map(value => cleanQuery(value, operators, filters));
-  } else if (_.isObject(query) && query.constructor === {}.constructor) {
-    const result: { [key: string]: any } = {};
-
-    _.each(query, (value, key) => {
-      if (key[0] === '$') {
-        if (filters[key] !== undefined) {
-          return;
-        }
-
-        if (!operators.includes(key)) {
-          throw new BadRequest(`Invalid query parameter ${key}`, query);
-        }
-      }
-
-      result[key] = cleanQuery(value, operators, filters);
-    });
-
-    Object.getOwnPropertySymbols(query).forEach(symbol => {
-      // @ts-ignore
-      result[symbol] = query[symbol];
-    });
-
-    return result;
-  }
-
-  return query;
-}
-
-function assignFilters (object: any, query: Query, filters: FilterSettings, options: any): { [key: string]: any } {
-  if (Array.isArray(filters)) {
-    _.each(filters, (key) => {
-      if (query[key] !== undefined) {
-        object[key] = query[key];
-      }
-    });
-  } else {
-    _.each(filters, (converter, key) => {
-      const converted = converter(query[key], options);
-
-      if (converted !== undefined) {
-        object[key] = converted;
-      }
-    });
-  }
-
-  return object;
-}
-
-export const FILTERS: FilterSettings = {
-  $sort: (value: any) => convertSort(value),
-  $limit: (value: any, options: any) => getLimit(parse(value), options.paginate),
-  $skip: (value: any) => parse(value),
-  $select: (value: any) => value
-};
 
 export const OPERATORS = ['$in', '$nin', '$lt', '$lte', '$gt', '$gte', '$ne', '$or'];
 
-// Converts Feathers special query parameters and pagination settings
-// and returns them separately a `filters` and the rest of the query
-// as `query`
+export const FILTERS: FilterSettings = {
+  $skip: (value: any) => parse(value),
+  $sort: (sort: any): { [key: string]: number } => {
+    if (typeof sort !== 'object' || Array.isArray(sort)) {
+      return sort;
+    }
+
+    return Object.keys(sort).reduce((result, key) => {
+      result[key] = typeof sort[key] === 'object'
+        ? sort[key] : parse(sort[key]);
+
+      return result;
+    }, {} as { [key: string]: number });
+  },
+  $limit: (_limit: any, { paginate }: FilterQueryOptions) => {
+    const limit = parse(_limit);
+
+    if (paginate && (paginate.default || paginate.max)) {
+      const base = paginate.default || 0;
+      const lower = typeof limit === 'number' && !isNaN(limit) && limit >= 0 ? limit : base;
+      const upper = typeof paginate.max === 'number' ? paginate.max : Number.MAX_VALUE;
+
+      return Math.min(lower, upper);
+    }
+
+    return limit;
+  },
+  $select: (select: any) => {
+    if (Array.isArray(select)) {
+      return select.map(current => `${current}`);
+    }
+
+    return select;
+  },
+  $or: (or: any, { operators }: FilterQueryOptions) => {
+    if (Array.isArray(or)) {
+      return or.map(current => validateQueryProperty(current, operators));
+    }
+
+    return or;
+  }
+};
+
+/**
+ * Converts Feathers special query parameters and pagination settings
+ * and returns them separately as `filters` and the rest of the query
+ * as `query`. `options` also gets passed the pagination settings and
+ * a list of additional `operators` to allow when querying properties.
+ *
+ * @param query The initial query
+ * @param options Options for filtering the query
+ * @returns An object with `query` which contains the query without `filters`
+ * and `filters` which contains the converted values for each filter.
+ */
 export function filterQuery (query: Query, options: FilterQueryOptions = {}) {
-  const {
-    filters: additionalFilters = [],
-    operators: additionalOperators = []
-  } = options;
-  const baseFilters = assignFilters({}, query, FILTERS, options);
-  const filters = assignFilters(baseFilters, query, additionalFilters, options);
+  const settings = {
+    ...options,
+    filters: {
+      ...FILTERS,
+      ...options.filters
+    },
+    operators: OPERATORS.concat(options.operators || [])
+  }
 
   return {
-    filters,
-    query: cleanQuery(query, OPERATORS.concat(additionalOperators), filters) as Query
+    filters: getFilters(query, settings),
+    query: getQuery(query, settings)
   }
 }

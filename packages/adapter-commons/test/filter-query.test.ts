@@ -44,7 +44,7 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
         assert.ok(false, 'Should never get here');
       } catch (error: any) {
         assert.strictEqual(error.name, 'BadRequest');
-        assert.strictEqual(error.message, 'Invalid query parameter $foo');
+        assert.strictEqual(error.message, 'Invalid filter value $foo');
       }
     });
 
@@ -96,16 +96,16 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
     describe('pagination', () => {
       it('limits with default pagination', () => {
         const { filters } = filterQuery({}, { paginate: { default: 10 } });
+        const { filters: filtersNeg } = filterQuery({ $limit: -20 }, { paginate: { default: 5, max: 10 } });
 
         assert.strictEqual(filters.$limit, 10);
+        assert.strictEqual(filtersNeg.$limit, 5);
       });
 
       it('limits with max pagination', () => {
         const { filters } = filterQuery({ $limit: 20 }, { paginate: { default: 5, max: 10 } });
-        const { filters: filtersNeg } = filterQuery({ $limit: -20 }, { paginate: { default: 5, max: 10 } });
 
         assert.strictEqual(filters.$limit, 10);
-        assert.strictEqual(filtersNeg.$limit, 10);
       });
 
       it('limits with default pagination when not a number', () => {
@@ -223,6 +223,16 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
         message: 'Invalid query parameter $exists'
       });
     });
+
+    it('allows default operators in $or', () => {
+      const { filters } = filterQuery({
+        $or: [{ value: { $gte: 10 } }]
+      });
+
+      assert.deepStrictEqual(filters, {
+        $or: [{ value: { $gte: 10 } }]
+      });
+    });
   });
 
   describe('additional filters', () => {
@@ -231,13 +241,18 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
         filterQuery({ $select: 1, $known: 1 });
         assert.ok(false, 'Should never get here');
       } catch (error: any) {
-        assert.strictEqual(error.message, 'Invalid query parameter $known');
+        assert.strictEqual(error.message, 'Invalid filter value $known');
       }
     });
 
     it('returns default and known additional filters (array)', () => {
       const query = { $select: ['a', 'b'], $known: 1, $unknown: 1 };
-      const { filters } = filterQuery(query, { filters: [ '$known', '$unknown' ] });
+      const { filters } = filterQuery(query, {
+        filters: {
+          $known: true,
+          $unknown: true
+        }
+      });
 
       assert.strictEqual(filters.$unknown, 1);
       assert.strictEqual(filters.$known, 1);
@@ -259,12 +274,18 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
   describe('additional operators', () => {
     it('returns query with default and known additional operators', () => {
       const { query } = filterQuery({
-        $ne: 1, $known: 1
+        prop: { $ne: 1, $known: 1 }
       }, { operators: [ '$known' ] });
 
-      assert.strictEqual(query.$ne, 1);
-      assert.strictEqual(query.$known, 1);
-      assert.strictEqual(query.$unknown, undefined);
+      assert.deepStrictEqual(query, { prop: { '$ne': 1, '$known': 1 } });
+    });
+
+    it('throws an error with unknown query operator', () => {
+      assert.throws(() => filterQuery({
+        prop: { $unknown: 'something' }
+      }), {
+        message: 'Invalid query parameter $unknown'
+      });
     });
   });
 });
