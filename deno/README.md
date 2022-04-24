@@ -10,7 +10,7 @@ This folder contains the Deno build of Feathers.
 // app.ts
 import { feathers } from 'https://deno.land/x/feathers@v5.0.0-pre.3/mod.ts';
 
-type Message {
+type Message = {
   message: string;
 }
 
@@ -20,7 +20,7 @@ class MyService {
   }
 }
 
-type ServiceTypes {
+type ServiceTypes = {
   myservice: MyService
 }
 
