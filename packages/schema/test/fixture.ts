@@ -33,7 +33,7 @@ export const userResultSchema = schema({
 } as const);
 
 export type User = Infer<typeof userSchema>;
-export type UserResult = Infer<typeof userResultSchema>;
+export type UserResult = Infer<typeof userResultSchema> & { name: string };
 
 export const userDataResolver = resolve<User, HookContext<Application>>({
   schema: userSchema,
@@ -48,9 +48,17 @@ export const userDataResolver = resolve<User, HookContext<Application>>({
 export const userResultResolver = resolve<UserResult, HookContext<Application>>({
   schema: userResultSchema,
   properties: {
+    name: async (_value, user) => user.email.split('@')[0],
     password: async (value, _user, context) => {
       return context.params.provider ? undefined : value;
     }
+  }
+});
+
+export const secondUserResultResolver = resolve<UserResult, HookContext<Application>>({
+  schema: userResultSchema,
+  properties: {
+    name: async (value, user) => `${value} (${user.email})`
   }
 });
 
@@ -168,7 +176,7 @@ app.service('paginatedMessages').hooks([
 ]);
 
 app.service('users').hooks([
-  resolveResult(userResultResolver)
+  resolveResult(userResultResolver, secondUserResultResolver)
 ]);
 
 app.service('users').hooks({
