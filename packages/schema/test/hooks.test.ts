@@ -23,6 +23,10 @@ describe('@feathersjs/schema/hooks', () => {
     });
   });
 
+  it('ran resolvers in sequence', async () => {
+    assert.strictEqual(user.name, 'hello (hello@feathersjs.com)');
+  });
+
   it('validates data', async () => {
     assert.rejects(() => app.service('users').create({ password: 'failing' }), {
       name: 'BadRequest'

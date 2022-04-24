@@ -1,6 +1,6 @@
 import { HookContext, NextFunction } from '@feathersjs/feathers';
 import { BadRequest } from '../../errors/lib';
-import { Resolver } from './resolver';
+import { Resolver, ResolverStatus } from './resolver';
 import { Schema } from './schema';
 
 const getContext = (context: HookContext) => {
@@ -13,13 +13,26 @@ const getContext = (context: HookContext) => {
   }
 }
 
-export const resolveQuery = <T> (resolver: Resolver<T, HookContext>) =>
+const runResolvers = async <T> (
+  resolvers: Resolver<T, HookContext>[],
+  data: any,
+  ctx: HookContext,
+  status?: Partial<ResolverStatus<T, HookContext>>
+) => {
+  let current: any = data;
+
+  for (const resolver of resolvers) {
+    current = await resolver.resolve(current, ctx, status);
+  }
+
+  return current as T;
+}
+
+export const resolveQuery = <T> (...resolvers: Resolver<T, HookContext>[]) =>
   async (context: HookContext, next?: NextFunction) => {
     const ctx = getContext(context);
     const data = context?.params?.query || {};
-    const query = await resolver.resolve(data, ctx, {
-      originalContext: context
-    });
+    const query = await runResolvers(resolvers, data, ctx);
 
     context.params = {
       ...context.params,
@@ -31,7 +44,7 @@ export const resolveQuery = <T> (resolver: Resolver<T, HookContext>) =>
     }
   };
 
-export const resolveData = <T> (resolver: Resolver<T, HookContext>) =>
+export const resolveData = <T> (...resolvers: Resolver<T, HookContext>[]) =>
   async (context: HookContext, next?: NextFunction) => {
     const ctx = getContext(context);
     const data = context.data;
@@ -41,10 +54,10 @@ export const resolveData = <T> (resolver: Resolver<T, HookContext>) =>
 
     if (Array.isArray(data)) {
       context.data = await Promise.all(data.map(current =>
-        resolver.resolve(current, ctx, status)
+        runResolvers(resolvers, current, ctx, status)
       ));
     } else {
-      context.data = await resolver.resolve(data, ctx, status);
+      context.data = await runResolvers(resolvers, data, ctx, status);
     }
 
     if (typeof next === 'function') {
@@ -52,7 +65,7 @@ export const resolveData = <T> (resolver: Resolver<T, HookContext>) =>
     }
   };
 
-export const resolveResult = <T> (resolver: Resolver<T, HookContext>) =>
+export const resolveResult = <T> (...resolvers: Resolver<T, HookContext>[]) =>
   async (context: HookContext, next?: NextFunction) => {
     if (typeof next === 'function') {
       const { $resolve: properties, ...query } = context.params?.query || {};
@@ -78,8 +91,8 @@ export const resolveResult = <T> (resolver: Resolver<T, HookContext>) =>
     const data = isPaginated ? context.result.data : context.result;
 
     const result = Array.isArray(data) ?
-      await Promise.all(data.map(async current => resolver.resolve(current, ctx, status))) :
-      await resolver.resolve(data, ctx, status);
+      await Promise.all(data.map(async current => runResolvers(resolvers, current, ctx, status))) :
+      await runResolvers(resolvers, data, ctx, status);
 
     if (isPaginated) {
       context.result.data = result;
