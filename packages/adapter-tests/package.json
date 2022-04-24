@@ -26,13 +26,23 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 12"
+    "node": ">= 14"
   },
-  "main": "lib/",
-  "types": "lib/",
+  "module": "./esm/index.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    }
+  },
   "scripts": {
     "prepublish": "npm run compile",
-    "compile": "shx rm -rf lib/ && tsc",
+    "compile:esm": "shx rm -rf esm/ && tsc --target es2020 --module es2020 --outDir esm/",
+    "compile:lib": "shx rm -rf lib/ && tsc --outDir lib/",
+    "compile": "npm run compile:lib && npm run compile:esm",
     "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
@@ -43,6 +53,7 @@
     "LICENSE",
     "README.md",
     "src/**",
+    "esm/**",
     "lib/**"
   ],
   "publishConfig": {
