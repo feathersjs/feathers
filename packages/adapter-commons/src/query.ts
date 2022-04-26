@@ -107,7 +107,7 @@ export const FILTERS: FilterSettings = {
 
     return or;
   }
-};
+}
 
 /**
  * Converts Feathers special query parameters and pagination settings
@@ -120,7 +120,8 @@ export const FILTERS: FilterSettings = {
  * @returns An object with `query` which contains the query without `filters`
  * and `filters` which contains the converted values for each filter.
  */
-export function filterQuery (query: Query, options: FilterQueryOptions = {}) {
+export function filterQuery (_query: Query, options: FilterQueryOptions = {}) {
+  const query = _query || {};
   const settings = {
     ...options,
     filters: {

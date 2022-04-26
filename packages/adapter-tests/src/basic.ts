@@ -49,6 +49,30 @@ export default (test: AdapterBasicTest, app: any, _errors: any, serviceName: str
       test('._remove', () => {
         assert.strictEqual(typeof service._remove, 'function');
       });
+
+      test('.$get', () => {
+        assert.strictEqual(typeof service.$get, 'function');
+      });
+
+      test('.$find', () => {
+        assert.strictEqual(typeof service.$find, 'function');
+      });
+
+      test('.$create', () => {
+        assert.strictEqual(typeof service.$create, 'function');
+      });
+
+      test('.$update', () => {
+        assert.strictEqual(typeof service.$update, 'function');
+      });
+
+      test('.$patch', () => {
+        assert.strictEqual(typeof service.$patch, 'function');
+      });
+
+      test('.$remove', () => {
+        assert.strictEqual(typeof service.$remove, 'function');
+      });
     });
   });
 };

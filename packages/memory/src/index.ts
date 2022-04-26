@@ -1,11 +1,8 @@
-import { MethodNotAllowed, NotFound } from '@feathersjs/errors';
+import { NotFound } from '@feathersjs/errors';
 import { _ } from '@feathersjs/commons';
-import {
-  sorter, select, AdapterBase, AdapterServiceOptions, InternalServiceMethods,
-  PaginationOptions, AdapterParams, FilterQueryOptions
-} from '@feathersjs/adapter-commons';
+import { sorter, select, AdapterBase, AdapterServiceOptions, PaginationOptions } from '@feathersjs/adapter-commons';
 import sift from 'sift';
-import { NullableId, Id, Params, ServiceMethods, Paginated, Query } from '@feathersjs/feathers';
+import { NullableId, Id, Params, ServiceMethods, Paginated } from '@feathersjs/feathers';
 
 export interface MemoryServiceStore<T> {
   [key: string]: T;
@@ -24,8 +21,7 @@ const _select = (data: any, params: any, ...args: any[]) => {
   return base(JSON.parse(JSON.stringify(data)));
 };
 
-export class MemoryAdapter<T = any, D = Partial<T>, P extends Params = Params> extends AdapterBase<MemoryServiceOptions<T>>
-    implements InternalServiceMethods<T, D, P> {
+export class MemoryAdapter<T = any, D = Partial<T>, P extends Params = Params> extends AdapterBase<T, D, P, MemoryServiceOptions<T>> {
   store: MemoryServiceStore<T>;
   _uId: number;
 
@@ -44,34 +40,29 @@ export class MemoryAdapter<T = any, D = Partial<T>, P extends Params = Params> e
 
   async getEntries (_params?: P) {
     const params = _params || {} as P;
-    const { query } = this.filterQuery(params);
 
-    return this._find({
+    return this.$find({
       ...params,
-      paginate: false,
-      query
+      paginate: false
     });
   }
 
-  filterQuery (params?: AdapterParams<Query, any>, opts?: FilterQueryOptions) {
-    const result = super.filterQuery(params, opts);
-    const { query, filters } = result;
+  getQuery (params: P) {
+    const { $skip, $sort, $limit, $select, ...query } = params.query || {};
 
-    // $or is not treated as a filter but needs to be part of the query to work with SiftJS
-    result.query = {
-      ...query,
-      ...(filters.$or ? { $or: filters.$or } : {})
+    return {
+      query,
+      filters: { $skip, $sort, $limit, $select }
     }
-
-    return result;
   }
 
-  async _find (_params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>;
-  async _find (_params?: P & { paginate: false }): Promise<T[]>;
-  async _find (_params?: P): Promise<Paginated<T>|T[]>;
-  async _find (_params?: P): Promise<Paginated<T>|T[]> {
-    const params = _params || {} as P;
-    const { query, filters, paginate } = this.filterQuery(params);
+  async $find (_params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>;
+  async $find (_params?: P & { paginate: false }): Promise<T[]>;
+  async $find (_params?: P): Promise<Paginated<T>|T[]>;
+  async $find (params: P = {} as P): Promise<Paginated<T>|T[]> {
+    const { paginate } = this.getOptions(params);
+    const { query, filters } = this.getQuery(params);
+
     let values = _.values(this.store).filter(this.options.matcher(query));
     const total = values.length;
 
@@ -94,18 +85,17 @@ export class MemoryAdapter<T = any, D = Partial<T>, P extends Params = Params> e
       data: values.map(value => _select(value, params))
     };
 
-    if (!(paginate && paginate.default)) {
+    if (!paginate) {
       return result.data;
     }
 
     return result;
   }
 
-  async _get (id: Id, _params?: P): Promise<T> {
-    const params = _params || {} as P;
+  async $get (id: Id, params: P = {} as P): Promise<T> {
+    const { query } = this.getQuery(params);
 
     if (id in this.store) {
-      const { query } = this.filterQuery(params);
       const value = this.store[id];
 
       if (this.options.matcher(query)(value)) {
@@ -116,19 +106,12 @@ export class MemoryAdapter<T = any, D = Partial<T>, P extends Params = Params> e
     throw new NotFound(`No record found for id '${id}'`);
   }
 
-  // Create without hooks and mixins that can be used internally
-  async _create (data: Partial<D>, params?: P): Promise<T>;
-  async _create (data: Partial<D>[], params?: P): Promise<T[]>;
-  async _create (data: Partial<D>|Partial<D>[], _params?: P): Promise<T|T[]>;
-  async _create (data: Partial<D>|Partial<D>[], _params?: P): Promise<T|T[]> {
-    const params = _params || {} as P;
-
+  async $create (data: Partial<D>, params?: P): Promise<T>;
+  async $create (data: Partial<D>[], params?: P): Promise<T[]>;
+  async $create (data: Partial<D>|Partial<D>[], _params?: P): Promise<T|T[]>;
+  async $create (data: Partial<D>|Partial<D>[], params: P = {} as P): Promise<T|T[]> {
     if (Array.isArray(data)) {
-      if (!this.allowsMulti('create', params)) {
-        throw new MethodNotAllowed('Can not create multiple entries');
-      }
-
-      return Promise.all(data.map(current => this._create(current, params)));
+      return Promise.all(data.map(current => this.$create(current, params)));
     }
 
     const id = (data as any)[this.id] || this._uId++;
@@ -138,12 +121,8 @@ export class MemoryAdapter<T = any, D = Partial<T>, P extends Params = Params> e
     return _select(result, params, this.id) as T;
   }
 
-  async _update (id: Id, data: D, params: P = {} as P): Promise<T> {
-    if (id === null || Array.isArray(data)) {
-      throw new MethodNotAllowed('You can not replace multiple instances. Did you mean \'patch\'?');
-    }
-
-    const oldEntry = await this._get(id);
+  async $update (id: Id, data: D, params: P = {} as P): Promise<T> {
+    const oldEntry = await this.$get(id);
     // We don't want our id to change type if it can be coerced
     const oldId = (oldEntry as any)[this.id];
 
@@ -152,14 +131,14 @@ export class MemoryAdapter<T = any, D = Partial<T>, P extends Params = Params> e
 
     this.store[id] = _.extend({}, data, { [this.id]: id });
 
-    return this._get(id, params);
+    return this.$get(id, params);
   }
 
-  async _patch (id: null, data: Partial<D>, params?: P): Promise<T[]>;
-  async _patch (id: Id, data: Partial<D>, params?: P): Promise<T>;
-  async _patch (id: NullableId, data: Partial<D>, _params?: P): Promise<T|T[]>;
-  async _patch (id: NullableId, data: Partial<D>, _params?: P): Promise<T|T[]> {
-    const params = _params || {} as P;
+  async $patch (id: null, data: Partial<D>, params?: P): Promise<T[]>;
+  async $patch (id: Id, data: Partial<D>, params?: P): Promise<T>;
+  async $patch (id: NullableId, data: Partial<D>, _params?: P): Promise<T|T[]>;
+  async $patch (id: NullableId, data: Partial<D>, params: P = {} as P): Promise<T|T[]> {
+    const { query } = this.getQuery(params);
     const patchEntry = (entry: T) => {
       const currentId = (entry as any)[this.id];
 
@@ -169,38 +148,35 @@ export class MemoryAdapter<T = any, D = Partial<T>, P extends Params = Params> e
     };
 
     if (id === null) {
-      if(!this.allowsMulti('patch', params)) {
-        throw new MethodNotAllowed('Can not patch multiple entries');
-      }
-
-      const entries = await this.getEntries(params);
+      const entries = await this.getEntries({
+        ...params,
+        query
+      });
 
       return entries.map(patchEntry);
     }
 
-    return patchEntry(await this._get(id, params)); // Will throw an error if not found
+    return patchEntry(await this.$get(id, params)); // Will throw an error if not found
   }
 
-  // Remove without hooks and mixins that can be used internally
-  async _remove (id: null, params?: P): Promise<T[]>;
-  async _remove (id: Id, params?: P): Promise<T>;
-  async _remove (id: NullableId, _params?: P): Promise<T|T[]>;
-  async _remove (id: NullableId, _params?: P): Promise<T|T[]>  {
-    const params = _params || {} as P;
+  async $remove (id: null, params?: P): Promise<T[]>;
+  async $remove (id: Id, params?: P): Promise<T>;
+  async $remove (id: NullableId, _params?: P): Promise<T|T[]>;
+  async $remove (id: NullableId, params: P = {} as P): Promise<T|T[]>  {
+    const { query } = this.getQuery(params);
 
     if (id === null) {
-      if(!this.allowsMulti('remove', params)) {
-        throw new MethodNotAllowed('Can not remove multiple entries');
-      }
+      const entries = await this.getEntries({
+        ...params,
+        query
+      });
 
-      const entries = await this.getEntries(params);
-
-      return Promise.all(entries.map(current =>
-        this._remove((current as any)[this.id] as Id, params)
+      return Promise.all(entries.map((current: any) =>
+        this.$remove(current[this.id] as Id, params)
       ));
     }
 
-    const entry = await this._get(id, params);
+    const entry = await this.$get(id, params);
 
     delete this.store[id];
 
@@ -214,7 +190,7 @@ export class MemoryService<T = any, D = Partial<T>, P extends Params = Params>
   async find (params?: P & { paginate: false }): Promise<T[]>;
   async find (params?: P): Promise<Paginated<T>|T[]>;
   async find (params?: P): Promise<Paginated<T>|T[]> {
-    return this._find(params)
+    return this._find(params) as any;
   }
 
   async get (id: Id, params?: P): Promise<T> {
