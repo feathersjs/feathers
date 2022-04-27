@@ -15,7 +15,13 @@ export type AdapterBasicTestName =
   '._create' |
   '._update' |
   '._patch' |
-  '._remove';
+  '._remove'|
+  '.$get' |
+  '.$find' |
+  '.$create' |
+  '.$update' |
+  '.$patch' |
+  '.$remove';
 
 export type AdapterMethodsTestName =
   '.get' |

@@ -1,7 +1,15 @@
 import { Query, Params, Paginated, Id, NullableId } from '@feathersjs/feathers';
 
-export type FilterSettings = string[]|{
-  [key: string]: (value: any, options: any) => any
+export type FilterQueryOptions = {
+  filters?: FilterSettings;
+  operators?: string[];
+  paginate?: PaginationParams;
+}
+
+export type QueryFilter = (value: any, options: FilterQueryOptions) => any
+
+export type FilterSettings = {
+  [key: string]: QueryFilter | true
 }
 
 export interface PaginationOptions {
@@ -9,28 +17,41 @@ export interface PaginationOptions {
   max?: number;
 }
 
-export type PaginationParams = false|PaginationOptions;
-
-export type FilterQueryOptions = {
-  filters?: FilterSettings;
-  operators?: string[];
-  paginate?: PaginationParams;
-}
+export type PaginationParams = false | PaginationOptions;
 
 export interface AdapterServiceOptions {
-  events?: string[];
-  multi?: boolean|string[];
+  /**
+   * Whether to allow multiple updates for everything (`true`) or specific methods (e.g. `['create', 'remove']`)
+   */
+  multi?: boolean | string[];
+  /**
+   * The name of the id property
+   */
   id?: string;
+  /**
+   * Pagination settings for this service
+   */
   paginate?: PaginationOptions
   /**
-   * @deprecated renamed to `allow`.
+   * A list of additional property query operators to allow in a query
    */
+  operators?: string[];
+  /**
+   * An object of additional top level query filters, e.g. `{ $populate: true }`
+   * Can also be a converter function like `{ $ignoreCase: (value) => value === 'true' ? true : false }`
+   */
+  filters?: FilterSettings;
+  /**
+   * @deprecated Use service `events` option when registering the service with `app.use`.
+   */
+  events?: string[];
+  /**
+ * @deprecated renamed to `operators`.
+ */
   whitelist?: string[];
-  allow?: string[];
-  filters?: string[];
 }
 
-export interface AdapterOptions<M = any> extends Pick<AdapterServiceOptions, 'multi'|'allow'|'paginate'> {
+export interface AdapterOptions<M = any> extends Pick<AdapterServiceOptions, 'multi' | 'filters' | 'operators' | 'paginate'> {
   Model?: M;
 }
 
@@ -41,7 +62,7 @@ export interface AdapterParams<Q = Query, M = any> extends Params<Q> {
 
 /**
  * Hook-less (internal) service methods. Directly call database adapter service methods
- * without running any service-level hooks. This can be useful if you need the raw data
+ * without running any service-level hooks or sanitization. This can be useful if you need the raw data
  * from the service and don't want to trigger any of its hooks.
  *
  * Important: These methods are only available internally on the server, not on the client
@@ -51,42 +72,44 @@ export interface AdapterParams<Q = Query, M = any> extends Params<Q> {
  *
  * @see {@link https://docs.feathersjs.com/guides/migrating.html#hook-less-service-methods}
  */
- export interface InternalServiceMethods<T = any, D = Partial<T>, P extends AdapterParams = AdapterParams> {
+export interface InternalServiceMethods<T = any, D = Partial<T>, P extends AdapterParams = AdapterParams> {
   /**
-   * Retrieve all resources from this service, skipping any service-level hooks.
+   * Retrieve all resources from this service.
+   * Does not sanitize the query and should only be used on the server.
    *
-   * @param params - Service call parameters {@link Params}
-   * @see {@link HookLessServiceMethods}
-   * @see {@link https://docs.feathersjs.com/api/services.html#find-params|Feathers API Documentation: .find(params)}
+   * @param _params - Service call parameters {@link Params}
    */
-  _find (_params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>;
-  _find (_params?: P & { paginate: false }): Promise<T[]>;
-  _find (params?: P): Promise<T | T[] | Paginated<T>>;
+  $find(_params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>;
+  $find(_params?: P & { paginate: false }): Promise<T[]>;
+  $find(params?: P): Promise<T[] | Paginated<T>>;
 
   /**
    * Retrieve a single resource matching the given ID, skipping any service-level hooks.
+   * Does not sanitize the query and should only be used on the server.
    *
    * @param id - ID of the resource to locate
    * @param params - Service call parameters {@link Params}
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#get-id-params|Feathers API Documentation: .get(id, params)}
    */
-  _get (id: Id, params?: P): Promise<T>;
+  $get(id: Id, params?: P): Promise<T>;
 
   /**
    * Create a new resource for this service, skipping any service-level hooks.
+   * Does not sanitize data or checks if multiple updates are allowed and should only be used on the server.
    *
    * @param data - Data to insert into this service.
    * @param params - Service call parameters {@link Params}
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#create-data-params|Feathers API Documentation: .create(data, params)}
    */
-   _create (data: Partial<D>, params?: P): Promise<T>;
-   _create (data: Partial<D>[], params?: P): Promise<T[]>;
-   _create (data: Partial<D>|Partial<D>[], params?: P): Promise<T|T[]>;
+  $create(data: Partial<D>, params?: P): Promise<T>;
+  $create(data: Partial<D>[], params?: P): Promise<T[]>;
+  $create(data: Partial<D> | Partial<D>[], params?: P): Promise<T | T[]>;
 
   /**
-   * Replace any resources matching the given ID with the given data, skipping any service-level hooks.
+   * Completely replace the resource identified by id, skipping any service-level hooks.
+   * Does not sanitize data or query and should only be used on the server.
    *
    * @param id - ID of the resource to be updated
    * @param data - Data to be put in place of the current resource.
@@ -94,10 +117,11 @@ export interface AdapterParams<Q = Query, M = any> extends Params<Q> {
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#update-id-data-params|Feathers API Documentation: .update(id, data, params)}
    */
-  _update (id: Id, data: D, params?: P): Promise<T>;
+  $update(id: Id, data: D, params?: P): Promise<T>;
 
   /**
    * Merge any resources matching the given ID with the given data, skipping any service-level hooks.
+   * Does not sanitize the data or query and should only be used on the server.
    *
    * @param id - ID of the resource to be patched
    * @param data - Data to merge with the current resource.
@@ -105,19 +129,20 @@ export interface AdapterParams<Q = Query, M = any> extends Params<Q> {
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#patch-id-data-params|Feathers API Documentation: .patch(id, data, params)}
    */
-  _patch (id: null, data: Partial<D>, params?: P): Promise<T[]>;
-  _patch (id: Id, data: Partial<D>, params?: P): Promise<T>;
-  _patch (id: NullableId, data: Partial<D>, params?: P): Promise<T|T[]>;
+  $patch(id: null, data: Partial<D>, params?: P): Promise<T[]>;
+  $patch(id: Id, data: Partial<D>, params?: P): Promise<T>;
+  $patch(id: NullableId, data: Partial<D>, params?: P): Promise<T | T[]>;
 
   /**
    * Remove resources matching the given ID from the this service, skipping any service-level hooks.
+   * Does not sanitize query and should only be used on the server.
    *
    * @param id - ID of the resource to be removed
    * @param params - Service call parameters {@link Params}
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#remove-id-params|Feathers API Documentation: .remove(id, params)}
    */
-  _remove (id: null, params?: P): Promise<T[]>;
-  _remove (id: Id, params?: P): Promise<T>;
-  _remove (id: NullableId, params?: P): Promise<T|T[]>;
+   $remove(id: null, params?: P): Promise<T[]>;
+   $remove(id: Id, params?: P): Promise<T>;
+   $remove(id: NullableId, params?: P): Promise<T | T[]>;
 }
