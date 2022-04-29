@@ -69,14 +69,14 @@ describe('@feathersjs/adapter-commons/service', () => {
     });
 
     assert.deepStrictEqual(await service.sanitizeQuery({
-      query: { $limit: '10', test: 'me' }
+      query: { $limit: '10', test: 'me' } as any
     }), { $limit: 10, test: 'me' });
 
     assert.deepStrictEqual(await service.sanitizeQuery({
       adapter: {
         paginate: { max: 2 }
       },
-      query: { $limit: '10', test: 'me' }
+      query: { $limit: '10', test: 'me' } as any
     }), { $limit: 2, test: 'me' });
 
     await assert.rejects(() => service.sanitizeQuery({

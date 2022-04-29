@@ -15,6 +15,12 @@ const testSuite = adapterTests([
   '._update',
   '._patch',
   '._remove',
+  '.$get',
+  '.$find',
+  '.$create',
+  '.$update',
+  '.$patch',
+  '.$remove',
   '.get',
   '.get + $select',
   '.get + id + query',
@@ -135,10 +141,10 @@ describe('Feathers MongoDB Service', () => {
   })
 
   describe('Service utility functions', () => {
-    describe('objectifyId', () => {
+    describe('getObjectId', () => {
       it('returns an ObjectID instance for a valid ID', () => {
         const id = new ObjectId()
-        const objectify = app.service('people')._objectifyId(id.toString())
+        const objectify = app.service('people').getObjectId(id.toString())
 
         assert.ok(objectify instanceof ObjectId)
         assert.strictEqual(objectify.toString(), id.toString())
@@ -146,79 +152,10 @@ describe('Feathers MongoDB Service', () => {
 
       it('returns an ObjectID instance for a valid ID', () => {
         const id = 'non-valid object id'
-        const objectify = app.service('people')._objectifyId(id.toString())
+        const objectify = app.service('people').getObjectId(id.toString())
 
         assert.ok(!(objectify instanceof ObjectId))
         assert.strictEqual(objectify, id)
-      })
-    })
-
-    describe('_multiOptions', () => {
-      const params = {
-        query: {
-          age: 21
-        },
-        options: {
-          limit: 5
-        }
-      }
-
-      it('returns valid result when passed an ID', () => {
-        const id = new ObjectId()
-        const result = app.service('people')._multiOptions(id, params)
-
-        assert.deepStrictEqual(result.query, {
-          ...params.query,
-          $and: [{ _id: id }]
-        })
-        assert.deepStrictEqual(result.options, {
-          ...params.options,
-          multi: false
-        })
-      })
-
-      it('returns original object', () => {
-        const result = app.service('people')._multiOptions(null, params)
-
-        assert.deepStrictEqual(result.query, params.query)
-        assert.deepStrictEqual(result.options, {
-          ...params.options,
-          multi: true
-        })
-      })
-    })
-
-    describe('_options', () => {
-      const params = {
-        query: {
-          age: 21
-        },
-        options: {
-          limit: 5
-        }
-      }
-
-      it('returns original object', () => {
-        const result = app.service('people')._options(params)
-
-        assert.deepStrictEqual(result.options, params.options)
-      })
-    })
-
-    describe('getSelect', () => {
-      const projectFields = { name: 1, age: 1 }
-      const selectFields = ['name', 'age']
-
-      it('returns Mongo project object when an array is passed', () => {
-        const result = app.service('people')._getSelect(selectFields)
-
-        assert.deepStrictEqual(result, projectFields)
-      })
-
-      it('returns original object', () => {
-        const result = app.service('people')._getSelect(projectFields)
-
-        assert.deepStrictEqual(result, projectFields)
       })
     })
   })
@@ -293,11 +230,11 @@ describe('Feathers MongoDB Service', () => {
       assert.ok(indexOfName(results, 'aaa') < indexOfName(results, 'AAA'))
     })
 
-    it.skip('sorts using collation param if present', async () => {
+    it('sorts using collation param if present', async () => {
       const results = await peopleService.find({
         paginate: false,
         query: { $sort: { name: -1 } },
-        collation: { locale: 'en', strength: 1 }
+        mongodb: { collation: { locale: 'en', strength: 1 } }
       })
 
       assert.ok(indexOfName(results, 'aaa') > indexOfName(results, 'AAA'))
@@ -313,14 +250,15 @@ describe('Feathers MongoDB Service', () => {
     })
 
     it('removes using collation param if present', async () => {
-      await peopleService.remove(null, {
-        query: { name: { $gt: 'AAA' } },
-        collation: { locale: 'en', strength: 1 }
+      const removed = await peopleService.remove(null, {
+        query: { name: 'AAA' },
+        mongodb: { collation: { locale: 'en', strength: 1 } }
       })
-
       const results = await peopleService.find({ paginate: false })
 
-      assert.strictEqual(results.length, 3)
+      assert.strictEqual(removed.length, 2)
+      assert.strictEqual(results[0].name, 'ccc')
+      assert.strictEqual(results.length, 1)
     })
 
     it('updates with default behavior without collation param', async () => {
@@ -337,7 +275,7 @@ describe('Feathers MongoDB Service', () => {
     it('updates using collation param if present', async () => {
       const result = await peopleService.patch(null, { age: 110 }, {
         query: { name: { $gt: 'AAA' } },
-        collation: { locale: 'en', strength: 1 }
+        mongodb: { collation: { locale: 'en', strength: 1 } }
       })
 
       assert.strictEqual(result.length, 1)
@@ -364,9 +302,10 @@ describe('Feathers MongoDB Service', () => {
       const result = await peopleService.find({
         paginate: false,
         query: {},
-        hint: { name: 1 }
+        mongodb: { hint: { name: 1 } }
       })
 
+      assert.strictEqual(result[0].name, 'Indexed')
       assert.strictEqual(result.length, 1)
 
       await peopleService.remove(indexed._id)
