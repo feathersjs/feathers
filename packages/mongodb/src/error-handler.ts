@@ -1,10 +1,10 @@
-import errors from '@feathersjs/errors'
+import { GeneralError } from '@feathersjs/errors'
 import { MongoError } from 'mongodb'
 
 export function errorHandler (error: MongoError): any {
   // See https://github.com/mongodb/mongo/blob/master/docs/errors.md
-  if (error.name === 'MongoError') {
-    throw new errors.GeneralError(error, {
+  if (error && error.name && error.name.startsWith('Mongo')) {
+    throw new GeneralError(error, {
       name: error.name,
       code: error.code
     })

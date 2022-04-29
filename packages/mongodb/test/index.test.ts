@@ -1,10 +1,12 @@
 import { Db, MongoClient, ObjectId } from 'mongodb'
 import adapterTests from '@feathersjs/adapter-tests'
 import assert from 'assert'
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
 import { feathers } from '@feathersjs/feathers'
 import errors from '@feathersjs/errors'
 import { MongoDBService } from '../src'
+
 
 const testSuite = adapterTests([
   '.options',
@@ -106,15 +108,18 @@ describe('Feathers MongoDB Service', () => {
 
   let db: Db
   let mongoClient: MongoClient
+  let mongod: MongoMemoryServer
 
   before(async () => {
-    const client = await MongoClient.connect('mongodb://localhost:27017/feathers-test')
+    mongod = await MongoMemoryServer.create();
+
+    const client = await MongoClient.connect(mongod.getUri())
 
     mongoClient = client
     db = client.db('feathers-test')
 
     app.use('people', new MongoDBService({
-      Model: db.collection('people-customid'),
+      Model: db.collection('people'),
       events: ['testing']
     }))
     app.use('people-customid', new MongoDBService({
@@ -122,8 +127,6 @@ describe('Feathers MongoDB Service', () => {
       id: 'customid',
       events: ['testing']
     }))
-
-    app.service('people').Model = db.collection('people')
 
     db.collection('people-customid').deleteMany({})
     db.collection('people').deleteMany({})
@@ -138,6 +141,7 @@ describe('Feathers MongoDB Service', () => {
   after(async () => {
     await db.dropDatabase();
     await mongoClient.close();
+    await mongod.stop();
   })
 
   describe('Service utility functions', () => {
@@ -259,6 +263,16 @@ describe('Feathers MongoDB Service', () => {
       assert.strictEqual(removed.length, 2)
       assert.strictEqual(results[0].name, 'ccc')
       assert.strictEqual(results.length, 1)
+    })
+
+    it('handles errors', async () => {
+      await assert.rejects(() => peopleService.create({
+        name: 'Dave'
+      }, {
+        mongodb: { collation: { locale: 'fdsfdsfds', strength: 1 } }
+      }), {
+        name: 'GeneralError'
+      })
     })
 
     it('updates with default behavior without collation param', async () => {

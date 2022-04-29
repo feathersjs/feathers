@@ -32,14 +32,6 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams = 
     })
   }
 
-  get Model () {
-    return this.options.Model
-  }
-
-  set Model (value) {
-    this.options.Model = value
-  }
-
   getObjectId (id: Id|ObjectId) {
     if (this.options.disableObjectify) {
       return id
@@ -80,11 +72,11 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams = 
     return select
   }
 
-  async _findOrGet (id: NullableId, params: P) {
+  async $findOrGet (id: NullableId, params: P) {
     return id === null ? await this.$find(params) : await this.$get(id, params)
   }
 
-  _normalizeId (id: NullableId, data: Partial<D>): Partial<D> {
+  normalizeId (id: NullableId, data: Partial<D>): Partial<D> {
     if (this.id === '_id') {
       // Default Mongo IDs cannot be updated. The Mongo library handles
       // this automatically.
@@ -96,30 +88,6 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams = 
         ...data,
         [this.id]: id
       }
-    }
-    return data
-  }
-
-  // Map stray records into $set
-  _remapModifiers (data: { [key: string]: any }) {
-    let set: { [key: string]: any } = {}
-    // Step through the rooot
-    for (const key of Object.keys(data)) {
-      // Check for keys that aren't modifiers
-      if (key.charAt(0) !== '$') {
-        // Move them to set, and remove their record
-        set[key] = data[key]
-        delete data[key]
-      }
-      // If the '$set' modifier is used, add that to the temp variable
-      if (key === '$set') {
-        set = Object.assign(set, data[key])
-        delete data[key]
-      }
-    }
-    // If we have a $set, then attach to the data object
-    if (Object.keys(set).length > 0) {
-      (data as any).$set = set
     }
     return data
   }
@@ -215,10 +183,10 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams = 
     }
     const promise = Array.isArray(data)
       ? model.insertMany(data.map(setId), writeOptions).then(async result =>
-        Promise.all(Object.values(result.insertedIds).map(async _id => await model.findOne({ _id })))
+        Promise.all(Object.values(result.insertedIds).map(async _id => model.findOne({ _id })))
       )
       : model.insertOne(setId(data), writeOptions).then(async result =>
-        await model.findOne({ _id: result.insertedId })
+        model.findOne({ _id: result.insertedId })
       )
 
     return promise.then(select(params, this.id)).catch(errorHandler)
@@ -227,31 +195,49 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams = 
   async $patch (id: null, data: Partial<D>, params?: P): Promise<T[]>;
   async $patch (id: Id, data: Partial<D>, params?: P): Promise<T>;
   async $patch (id: NullableId, data: Partial<D>, _params?: P): Promise<T|T[]>;
-  async $patch (id: NullableId, data: Partial<D>, params: P = {} as P): Promise<T|T[]> {
+  async $patch (id: NullableId, _data: Partial<D>, params: P = {} as P): Promise<T|T[]> {
+    const data = this.normalizeId(id, _data)
     const { Model } = this.getOptions(params)
     const model = await Promise.resolve(Model)
-    const { query } = this.filterQuery(id, params)
+    const { query, filters: { $select, $limit } } = this.filterQuery(id, params)
     const updateOptions = { ...params.mongodb }
-    const remapModifier = this._remapModifiers(this._normalizeId(id, data))
-    const idParams = {
+    const modifier = Object.keys(data).reduce((current, key) => {
+      const value = (data as any)[key]
+
+      if (key.charAt(0) !== '$') {
+        current.$set = {
+          ...current.$set,
+          [key]: value
+        }
+      } else {
+        current[key] = value
+      }
+
+      return current
+    }, {} as any)
+    const originalIds = await this.$findOrGet(id, {
       ...params,
-      query,
+      query: {
+        ...query,
+        $select: [ this.id ]
+      },
       paginate: false
-    }
-    const originalItems = await this._findOrGet(id, idParams)
-    const items = Array.isArray(originalItems) ? originalItems : [originalItems]
+    })
+    const items = (Array.isArray(originalIds) ? originalIds : [originalIds])
     const idList = items.map((item: any) => item[this.id])
     const findParams = {
       ...params,
       paginate: false,
-      query: { [this.id]: { $in: idList } }
+      query: {
+        ...($limit === 0 ? { $limit: 0 } : {}),
+        [this.id]: { $in: idList },
+        $select
+      }
     }
 
-    await model.updateMany(query, remapModifier, updateOptions)
+    await model.updateMany(query, modifier, updateOptions)
 
-    return this._findOrGet(id, findParams)
-      .then(select(params, this.id))
-      .catch(errorHandler)
+    return this.$findOrGet(id, findParams).catch(errorHandler)
   }
 
   async $update (id: Id, data: D, params: P = {} as P): Promise<T> {
@@ -260,11 +246,9 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams = 
     const { query } = this.filterQuery(id, params)
     const replaceOptions = { ...params.mongodb }
 
-    await model.replaceOne(query, this._normalizeId(id, data), replaceOptions)
+    await model.replaceOne(query, this.normalizeId(id, data), replaceOptions)
 
-    return this._findOrGet(id, params)
-      .then(select(params, this.id))
-      .catch(errorHandler)
+    return this.$findOrGet(id, params).catch(errorHandler)
   }
 
   async $remove (id: null, params?: P): Promise<T[]>;
@@ -273,20 +257,23 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams = 
   async $remove (id: NullableId, params: P = {} as P): Promise<T|T[]> {
     const { Model } = this.getOptions(params)
     const model = await Promise.resolve(Model)
-    const { query } = this.filterQuery(id, params)
+    const { query, filters: { $select, $limit } } = this.filterQuery(id, params)
     const deleteOptions = { ...params.mongodb }
     const findParams = {
       ...params,
       paginate: false,
-      query
+      query: {
+        ...query,
+        ...($limit === 0 ? { $limit: 0 } : {}),
+        $select
+      }
     }
 
-    return this._findOrGet(id, findParams)
+    return this.$findOrGet(id, findParams)
       .then(async items => {
         await model.deleteMany(query, deleteOptions)
         return items
       })
-      .then(select(params, this.id))
       .catch(errorHandler)
   }
 }
