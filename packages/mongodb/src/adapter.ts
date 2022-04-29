@@ -5,7 +5,7 @@ import {
 import { NotFound } from '@feathersjs/errors'
 import { _ } from '@feathersjs/commons'
 import { AdapterBase, select, AdapterParams, AdapterServiceOptions, PaginationOptions, AdapterQuery } from '@feathersjs/adapter-commons'
-import { NullableId, Query, Id, Paginated } from '@feathersjs/feathers'
+import { NullableId, Id, Paginated } from '@feathersjs/feathers'
 import { errorHandler } from './error-handler'
 
 export interface MongoDBAdapterOptions extends AdapterServiceOptions {
@@ -14,7 +14,7 @@ export interface MongoDBAdapterOptions extends AdapterServiceOptions {
   useEstimatedDocumentCount?: boolean
 }
 
-export interface MongoDBAdapterParams<Q = Query> extends AdapterParams<Q, MongoDBAdapterOptions> {
+export interface MongoDBAdapterParams<Q = AdapterQuery> extends AdapterParams<Q, Partial<MongoDBAdapterOptions>> {
   mongodb?: BulkWriteOptions|FindOptions|InsertOneOptions|DeleteOptions|CountDocumentsOptions|ReplaceOptions
 }
 
