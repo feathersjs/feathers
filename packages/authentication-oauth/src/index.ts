@@ -1,4 +1,4 @@
-import merge from 'lodash/merge';
+import defaultsDeep from 'lodash/defaultsDeep';
 import each from 'lodash/each';
 import omit from 'lodash/omit';
 import { createDebug } from '@feathersjs/commons';
@@ -41,14 +41,14 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
     }
   }
 
-  const grant = merge({
+  const grant = defaultsDeep({}, omit(oauth, 'redirect'), {
     defaults: {
       prefix,
       origin: `${protocol}://${host}`,
       transport: 'session',
       response: ['tokens', 'raw', 'profile']
     }
-  }, omit(oauth, 'redirect'));
+  });
 
   const getUrl = (url: string) => {
     const { defaults } = grant;
