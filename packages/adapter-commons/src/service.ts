@@ -17,9 +17,9 @@ export abstract class AdapterBase<
   T = any,
   D = Partial<T>,
   P extends AdapterParams = AdapterParams,
-  O extends Partial<AdapterServiceOptions> = Partial<AdapterServiceOptions>
-  > implements InternalServiceMethods<T, D, P> {
-  options: AdapterServiceOptions & O;
+  O extends AdapterServiceOptions = AdapterServiceOptions
+> implements InternalServiceMethods<T, D, P> {
+  options: O;
 
   constructor (options: O) {
     this.options = {
@@ -70,7 +70,7 @@ export abstract class AdapterBase<
    * @param params The parameters for the service method call
    * @returns The actual options for this call
    */
-  getOptions (params: P): AdapterServiceOptions {
+  getOptions (params: P): O {
     const paginate = params.paginate !== undefined ? params.paginate : this.options.paginate;
 
     return {

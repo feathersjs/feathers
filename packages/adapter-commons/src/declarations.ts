@@ -31,7 +31,7 @@ export interface AdapterServiceOptions {
   /**
    * Pagination settings for this service
    */
-  paginate?: PaginationOptions
+  paginate?: PaginationParams;
   /**
    * A list of additional property query operators to allow in a query
    */
@@ -51,12 +51,17 @@ export interface AdapterServiceOptions {
   whitelist?: string[];
 }
 
-export interface AdapterOptions<M = any> extends Pick<AdapterServiceOptions, 'multi' | 'filters' | 'operators' | 'paginate'> {
-  Model?: M;
+export interface AdapterQuery extends Query {
+  $limit?: number,
+  $skip?: number,
+  $select?: string[],
+  $sort?: { [key: string]: 1|-1 }
 }
-
-export interface AdapterParams<Q = Query, M = any> extends Params<Q> {
-  adapter?: Partial<AdapterOptions<M>>;
+/**
+ * Additional `params` that can be passed to an adapter service method call.
+ */
+export interface AdapterParams<Q = AdapterQuery, A extends Partial<AdapterServiceOptions> = Partial<AdapterServiceOptions>> extends Params<Q> {
+  adapter?: A;
   paginate?: PaginationParams;
 }
 

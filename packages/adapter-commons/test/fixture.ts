@@ -1,5 +1,5 @@
 import { AdapterBase, AdapterParams, InternalServiceMethods, PaginationOptions } from '../src';
-import { Id, NullableId, Paginated, Query } from '@feathersjs/feathers';
+import { Id, NullableId, Paginated } from '@feathersjs/feathers';
 
 export type Data = {
   id: Id
@@ -71,7 +71,7 @@ export class MethodBase extends AdapterBase<Data, Partial<Data>, AdapterParams> 
 }
 
 export class MethodService extends MethodBase {
-  find (params?: AdapterParams<Query, any>): Promise<Data|Data[]|Paginated<Data>> {
+  find (params?: AdapterParams): Promise<Data|Data[]|Paginated<Data>> {
     return this._find(params);
   }
 

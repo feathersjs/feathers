@@ -1,6 +1,6 @@
 import { NotFound } from '@feathersjs/errors';
 import { _ } from '@feathersjs/commons';
-import { sorter, select, AdapterBase, AdapterServiceOptions, PaginationOptions } from '@feathersjs/adapter-commons';
+import { sorter, select, AdapterBase, AdapterServiceOptions, PaginationOptions, AdapterParams } from '@feathersjs/adapter-commons';
 import sift from 'sift';
 import { NullableId, Id, Params, ServiceMethods, Paginated } from '@feathersjs/feathers';
 
@@ -9,8 +9,8 @@ export interface MemoryServiceStore<T> {
 }
 
 export interface MemoryServiceOptions<T = any> extends AdapterServiceOptions {
-  store: MemoryServiceStore<T>;
-  startId: number;
+  store?: MemoryServiceStore<T>;
+  startId?: number;
   matcher?: (query: any) => any;
   sorter?: (sort: any) => any;
 }
@@ -25,7 +25,7 @@ export class MemoryAdapter<T = any, D = Partial<T>, P extends Params = Params> e
   store: MemoryServiceStore<T>;
   _uId: number;
 
-  constructor (options: Partial<MemoryServiceOptions<T>> = {}) {
+  constructor (options: MemoryServiceOptions<T> = {}) {
     super({
       id: 'id',
       matcher: sift,
@@ -184,7 +184,7 @@ export class MemoryAdapter<T = any, D = Partial<T>, P extends Params = Params> e
   }
 }
 
-export class MemoryService<T = any, D = Partial<T>, P extends Params = Params>
+export class MemoryService<T = any, D = Partial<T>, P extends AdapterParams = AdapterParams>
     extends MemoryAdapter<T, D, P> implements ServiceMethods<T|Paginated<T>, D, P> {
   async find (params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>;
   async find (params?: P & { paginate: false }): Promise<T[]>;
