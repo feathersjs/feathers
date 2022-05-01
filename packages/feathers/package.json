@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/feathers",
   "description": "A framework for real-time applications and REST API with JavaScript and TypeScript",
-  "version": "5.0.0-pre.18",
+  "version": "5.0.0-pre.19",
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",
@@ -57,7 +57,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^5.0.0-pre.18",
+    "@feathersjs/commons": "^5.0.0-pre.19",
     "@feathersjs/hooks": "^0.7.4",
     "events": "^3.3.0"
   },
@@ -69,5 +69,5 @@
     "ts-node": "^10.7.0",
     "typescript": "^4.6.4"
   },
-  "gitHead": "c0b7b67d872dcd6b6d94e4587f21332c8a519b50"
+  "gitHead": "57f3e18bb62735e1869ffafee90286498738fdfa"
 }

@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.19](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.18...v5.0.0-pre.19) (2022-05-01)
+
+
+### Bug Fixes
+
+* **adapter-commons:** Clarify adapter query filtering ([#2607](https://github.com/feathersjs/feathers/issues/2607)) ([2dac771](https://github.com/feathersjs/feathers/commit/2dac771b0a3298d6dd25994d05186701b0617718))
+
+
+### Features
+
+* **mongodb:** Add feathers-mongodb adapter as @feathersjs/mongodb ([#2610](https://github.com/feathersjs/feathers/issues/2610)) ([6d43734](https://github.com/feathersjs/feathers/commit/6d43734a53db02c435cafc52a22dca414e5d0940))
+* **typescript:** Improve adapter typings ([#2605](https://github.com/feathersjs/feathers/issues/2605)) ([3b2ca0a](https://github.com/feathersjs/feathers/commit/3b2ca0a6a8e03e8390272c4d7e930b4bffdaacf5))
+* **typescript:** Improve params and query typeability ([#2600](https://github.com/feathersjs/feathers/issues/2600)) ([df28b76](https://github.com/feathersjs/feathers/commit/df28b7619161f1df5e700326f52cca1a92dc5d28))
+
+
+### BREAKING CHANGES
+
+* **adapter-commons:** Changes the common adapter base class to use `sanitizeQuery` and `sanitizeData`
+
+
+
+
+
 # [5.0.0-pre.18](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.17...v5.0.0-pre.18) (2022-04-11)
 
 

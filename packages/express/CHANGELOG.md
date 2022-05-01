@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.19](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.18...v5.0.0-pre.19) (2022-05-01)
+
+
+### Bug Fixes
+
+* **express:** Fix typo in types reference in package.json ([#2613](https://github.com/feathersjs/feathers/issues/2613)) ([eacf1b3](https://github.com/feathersjs/feathers/commit/eacf1b3474e6d9da69b8671244c23a75cff87d95))
+
+
+### Features
+
+* **typescript:** Improve params and query typeability ([#2600](https://github.com/feathersjs/feathers/issues/2600)) ([df28b76](https://github.com/feathersjs/feathers/commit/df28b7619161f1df5e700326f52cca1a92dc5d28))
+
+
+
+
+
 # [5.0.0-pre.18](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.17...v5.0.0-pre.18) (2022-04-11)
 
 
