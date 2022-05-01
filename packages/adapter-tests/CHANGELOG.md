@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.19](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.18...v5.0.0-pre.19) (2022-05-01)
+
+
+### Bug Fixes
+
+* **adapter-commons:** Clarify adapter query filtering ([#2607](https://github.com/feathersjs/feathers/issues/2607)) ([2dac771](https://github.com/feathersjs/feathers/commit/2dac771b0a3298d6dd25994d05186701b0617718))
+* **adapter-tests:** Ensure multi tests can run standalone ([#2608](https://github.com/feathersjs/feathers/issues/2608)) ([d7243f2](https://github.com/feathersjs/feathers/commit/d7243f20e84d9dde428ad8dfc7f48388ca569e6e))
+
+
+### BREAKING CHANGES
+
+* **adapter-commons:** Changes the common adapter base class to use `sanitizeQuery` and `sanitizeData`
+
+
+
+
+
 # [5.0.0-pre.18](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.17...v5.0.0-pre.18) (2022-04-11)
 
 
