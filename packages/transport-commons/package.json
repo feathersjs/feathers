@@ -61,13 +61,13 @@
   },
   "devDependencies": {
     "@types/encodeurl": "^1.0.0",
-    "@types/lodash": "^4.14.181",
-    "@types/mocha": "^9.1.0",
-    "@types/node": "^17.0.23",
-    "mocha": "^9.2.2",
+    "@types/lodash": "^4.14.182",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^17.0.31",
+    "mocha": "^10.0.0",
     "shx": "^0.3.4",
     "ts-node": "^10.7.0",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.4"
   },
   "gitHead": "c0b7b67d872dcd6b6d94e4587f21332c8a519b50"
 }
