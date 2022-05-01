@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.18](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.17...v5.0.0-pre.18) (2022-04-11)
+
+
+### Bug Fixes
+
+* **schema:** result resolver correctly resolves paginated find result ([#2594](https://github.com/feathersjs/feathers/issues/2594)) ([6511e45](https://github.com/feathersjs/feathers/commit/6511e45bd0624f1a629530719709f4b27fecbe0b))
+
+
+### Features
+
+* **configuration:** Allow app configuration to be validated against a schema ([#2590](https://github.com/feathersjs/feathers/issues/2590)) ([a268f86](https://github.com/feathersjs/feathers/commit/a268f86da92a8ada14ed11ab456aac0a4bba5bb0))
+
+
+
+
+
 # [5.0.0-pre.17](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.16...v5.0.0-pre.17) (2022-02-15)
 
 

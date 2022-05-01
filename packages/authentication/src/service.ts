@@ -1,10 +1,10 @@
 import merge from 'lodash/merge';
 import { NotAuthenticated } from '@feathersjs/errors';
-import { AuthenticationBase, AuthenticationResult, AuthenticationRequest } from './core';
+import { AuthenticationBase, AuthenticationResult, AuthenticationRequest, AuthenticationParams } from './core';
 import { connection, event } from './hooks';
 import '@feathersjs/transport-commons';
 import { createDebug } from '@feathersjs/commons';
-import { Params, ServiceMethods, ServiceAddons } from '@feathersjs/feathers';
+import { ServiceMethods, ServiceAddons } from '@feathersjs/feathers';
 import jsonwebtoken from 'jsonwebtoken';
 
 const debug = createDebug('@feathersjs/authentication/service');
@@ -29,7 +29,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
 // eslint-disable-next-line
 export interface AuthenticationService extends ServiceAddons<AuthenticationResult, AuthenticationResult> {}
 
-export class AuthenticationService extends AuthenticationBase implements Partial<ServiceMethods<AuthenticationResult>> {
+export class AuthenticationService extends AuthenticationBase implements Partial<ServiceMethods<AuthenticationResult, AuthenticationRequest, AuthenticationParams>> {
   constructor (app: any, configKey = 'authentication', options = {}) {
     super(app, configKey, options);
 
@@ -51,7 +51,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
    * @param _authResult The current authentication result
    * @param params The service call parameters
    */
-  async getPayload (_authResult: AuthenticationResult, params: Params) {
+  async getPayload (_authResult: AuthenticationResult, params: AuthenticationParams) {
     // Uses `params.payload` or returns an empty payload
     const { payload = {} } = params;
 
@@ -65,7 +65,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
    * @param authResult The authentication result
    * @param params Service call parameters
    */
-  async getTokenOptions (authResult: AuthenticationResult, params: Params) {
+  async getTokenOptions (authResult: AuthenticationResult, params: AuthenticationParams) {
     const { service, entity, entityId } = this.configuration;
     const jwtOptions = merge({}, params.jwtOptions, params.jwt);
     const value = service && entity && authResult[entity];
@@ -92,7 +92,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
    * @param data The authentication request (should include `strategy` key)
    * @param params Service call parameters
    */
-  async create (data: AuthenticationRequest, params?: Params) {
+  async create (data: AuthenticationRequest, params?: AuthenticationParams) {
     const authStrategies = params.authStrategies || this.configuration.authStrategies;
 
     if (!authStrategies.length) {
@@ -131,7 +131,7 @@ export class AuthenticationService extends AuthenticationBase implements Partial
    * @param id The JWT to remove or null
    * @param params Service call parameters
    */
-  async remove (id: string | null, params?: Params) {
+  async remove (id: string | null, params?: AuthenticationParams) {
     const { authentication } = params;
     const { authStrategies } = this.configuration;
 

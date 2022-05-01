@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.18](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.17...v5.0.0-pre.18) (2022-04-11)
+
+
+### Features
+
+* **authentication:** Add setup method for auth strategies ([#1611](https://github.com/feathersjs/feathers/issues/1611)) ([a3c3581](https://github.com/feathersjs/feathers/commit/a3c35814dccdbbf6de96f04f60b226ce206c6dbe))
+* **configuration:** Allow app configuration to be validated against a schema ([#2590](https://github.com/feathersjs/feathers/issues/2590)) ([a268f86](https://github.com/feathersjs/feathers/commit/a268f86da92a8ada14ed11ab456aac0a4bba5bb0))
+
+
+
+
+
 # [5.0.0-pre.17](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.16...v5.0.0-pre.17) (2022-02-15)
 
 **Note:** Version bump only for package @feathersjs/authentication

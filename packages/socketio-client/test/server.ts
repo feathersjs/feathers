@@ -1,7 +1,7 @@
 import { feathers, Id, Params } from '@feathersjs/feathers';
 import socketio from '@feathersjs/socketio';
 import '@feathersjs/transport-commons';
-import { Service } from '@feathersjs/memory';
+import { MemoryService } from '@feathersjs/memory';
 
 // eslint-disable-next-line no-extend-native
 Object.defineProperty(Error.prototype, 'toJSON', {
@@ -19,7 +19,7 @@ Object.defineProperty(Error.prototype, 'toJSON', {
 });
 
 // Create an in-memory CRUD service for our Todos
-class TodoService extends Service {
+class TodoService extends MemoryService {
   async get (id: Id, params: Params) {
     if (params.query.error) {
       throw new Error('Something went wrong');

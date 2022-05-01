@@ -1,11 +1,11 @@
-import { feathers, Params } from '@feathersjs/feathers';
+import { feathers } from '@feathersjs/feathers';
 import express, { rest, errorHandler } from '@feathersjs/express';
 import { memory } from '@feathersjs/memory';
-import { AuthenticationService, JWTStrategy, AuthenticationRequest } from '@feathersjs/authentication';
+import { AuthenticationService, JWTStrategy, AuthenticationRequest, AuthenticationParams } from '@feathersjs/authentication';
 import { express as oauth, OAuthStrategy } from '../src';
 
 export class TestOAuthStrategy extends OAuthStrategy {
-  async authenticate (data: AuthenticationRequest, params: Params) {
+  async authenticate (data: AuthenticationRequest, params: AuthenticationParams) {
     const { fromMiddleware } = params;
     const authResult = await super.authenticate(data, params);
 

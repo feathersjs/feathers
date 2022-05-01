@@ -21,87 +21,87 @@ export interface ServiceOptions {
   routeParams?: { [key: string]: any };
 }
 
-export interface ServiceMethods<T = any, D = Partial<T>> {
-  find (params?: Params): Promise<T | T[]>;
+export interface ServiceMethods<T = any, D = Partial<T>, P = Params> {
+  find (params?: P): Promise<T | T[]>;
 
-  get (id: Id, params?: Params): Promise<T>;
+  get (id: Id, params?: P): Promise<T>;
 
-  create (data: D, params?: Params): Promise<T>;
+  create (data: D, params?: P): Promise<T>;
 
-  update (id: NullableId, data: D, params?: Params): Promise<T | T[]>;
+  update (id: NullableId, data: D, params?: P): Promise<T | T[]>;
 
-  patch (id: NullableId, data: D, params?: Params): Promise<T | T[]>;
+  patch (id: NullableId, data: D, params?: P): Promise<T | T[]>;
 
-  remove (id: NullableId, params?: Params): Promise<T | T[]>;
+  remove (id: NullableId, params?: P): Promise<T | T[]>;
 
-  setup (app: Application, path: string): Promise<void>;
+  setup? (app: Application, path: string): Promise<void>;
 
-  teardown (app: Application, path: string): Promise<void>;
+  teardown? (app: Application, path: string): Promise<void>;
 }
 
-export interface ServiceOverloads<T = any, D = Partial<T>> {
-  create? (data: D[], params?: Params): Promise<T[]>;
+export interface ServiceOverloads<T = any, D = Partial<T>, P = Params> {
+  create? (data: D[], params?: P): Promise<T[]>;
 
-  update? (id: Id, data: D, params?: Params): Promise<T>;
+  update? (id: Id, data: D, params?: P): Promise<T>;
 
-  update? (id: null, data: D, params?: Params): Promise<T[]>;
+  update? (id: null, data: D, params?: P): Promise<T[]>;
 
-  patch? (id: Id, data: D, params?: Params): Promise<T>;
+  patch? (id: Id, data: D, params?: P): Promise<T>;
 
-  patch? (id: null, data: D, params?: Params): Promise<T[]>;
+  patch? (id: null, data: D, params?: P): Promise<T[]>;
 
-  remove? (id: Id, params?: Params): Promise<T>;
+  remove? (id: Id, params?: P): Promise<T>;
 
-  remove? (id: null, params?: Params): Promise<T[]>;
+  remove? (id: null, params?: P): Promise<T[]>;
 }
 
-export type Service<T = any, D = Partial<T>> =
-  ServiceMethods<T, D> &
-  ServiceOverloads<T, D>;
+export type Service<T = any, D = Partial<T>, P = Params> =
+  ServiceMethods<T, D, P> &
+  ServiceOverloads<T, D, P>;
 
-export type ServiceInterface<T = any, D = Partial<T>> =
-  Partial<ServiceMethods<T, D>>;
+export type ServiceInterface<T = any, D = Partial<T>, P = Params> =
+  Partial<ServiceMethods<T, D, P>>;
 
 export interface ServiceAddons<A = Application, S = Service> extends EventEmitter {
   id?: string;
   hooks (options: HookOptions<A, S>): this;
 }
 
-export interface ServiceHookOverloads<S> {
+export interface ServiceHookOverloads<S, P = Params> {
   find (
-    params: Params,
+    params: P,
     context: HookContext
   ): Promise<HookContext>;
 
   get (
     id: Id,
-    params: Params,
+    params: P,
     context: HookContext
   ): Promise<HookContext>;
 
   create (
     data: ServiceGenericData<S> | ServiceGenericData<S>[],
-    params: Params,
+    params: P,
     context: HookContext
   ): Promise<HookContext>;
 
   update (
     id: NullableId,
     data: ServiceGenericData<S>,
-    params: Params,
+    params: P,
     context: HookContext
   ): Promise<HookContext>;
 
   patch (
     id: NullableId,
     data: ServiceGenericData<S>,
-    params: Params,
+    params: P,
     context: HookContext
   ): Promise<HookContext>;
 
   remove (
     id: NullableId,
-    params: Params,
+    params: P,
     context: HookContext
   ): Promise<HookContext>;
 }
@@ -117,6 +117,7 @@ export type ServiceMixin<A> = (service: FeathersService<A>, path: string, option
 
 export type ServiceGenericType<S> = S extends ServiceInterface<infer T> ? T : any;
 export type ServiceGenericData<S> = S extends ServiceInterface<infer _T, infer D> ? D : any;
+export type ServiceGenericParams<S> = S extends ServiceInterface<infer _T, infer _D, infer P> ? P : any;
 
 export interface FeathersApplication<Services = any, Settings = any> {
   /**
@@ -246,12 +247,11 @@ export interface Query {
   [key: string]: any;
 }
 
-export interface Params {
-  query?: Query;
+export interface Params<Q = Query> {
+  query?: Q;
   provider?: string;
   route?: { [key: string]: any };
   headers?: { [key: string]: any };
-  [key: string]: any; // (JL) not sure if we want this
 }
 
 export interface Http {
@@ -319,7 +319,7 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
    * A writeable property that contains the service method parameters (including
    * params.query).
    */
-  params: Params;
+  params: ServiceGenericParams<S>;
   /**
    * A writeable property containing the result of the successful service method call.
    * It is only available in after hooks.

@@ -2,6 +2,7 @@ import assert from 'assert';
 import { EventEmitter } from 'events';
 import { feathers, Application, Params } from '@feathersjs/feathers';
 import { NotAuthenticated } from '@feathersjs/errors';
+import { isPlainObject } from 'lodash';
 
 import { routing } from '../../src/routing';
 import {
@@ -189,11 +190,15 @@ describe('socket commons utils', () => {
     beforeEach(() => {
       app = feathers().configure(routing());
       app.use('/myservice', {
-        get (id: number|string, params: Params) {
+        async get (id: number|string, params: Params) {
           if (params.query.error) {
-            return Promise.reject(new NotAuthenticated('None shall pass'));
+            throw new NotAuthenticated('None shall pass');
           }
-          return Promise.resolve({ id });
+          if (!isPlainObject(params.query)) {
+            throw new Error('Query is not a plain object');
+          }
+
+          return { id };
         }
       });
     });
@@ -210,6 +215,21 @@ describe('socket commons utils', () => {
         };
 
         runMethod(app, {}, 'myservice', 'get', [ 10, {}, callback ]);
+      });
+
+      it('queries are always plain objects', done => {
+        const callback = (error: any, result: any) => {
+          if (error) {
+            return done(error);
+          }
+
+          assert.deepStrictEqual(result, { id: 10 });
+          done();
+        };
+
+        runMethod(app, {}, 'myservice', 'get', [ 10, {
+          __proto__: []
+        }, callback ]);
       });
 
       it('merges params with connection and passes connection', done => {

@@ -56,13 +56,18 @@ export default (options: OauthSetupSettings) => {
       req.session.redirect = redirect as string;
       req.session.query = query;
       req.session.headers = req.headers;
-      req.session.save((err: any) => {
-        if (err) {
-          next(`Error storing session: ${err}`);
-        } else {
-          next();
-        }
-      });
+      if (typeof(req.session.save) === 'function') {
+        req.session.save((err: any) => {
+          if (err) {
+            next(`Error storing session: ${err}`);
+          } else {
+            next();
+          }
+        });
+      }
+      else {
+        next();
+      }
     });
 
     authApp.get('/:name/authenticate', async (req: Request, res: Response, next: NextFunction) => {
@@ -107,12 +112,13 @@ export default (options: OauthSetupSettings) => {
         };
 
         await new Promise<void>((resolve, reject) => {
-          if (!req.session.destroy) {
+          if (req.session.destroy) {
+            req.session.destroy((err: any) => err ? reject(err) : resolve());
+          }
+          else {
             req.session = null;
             resolve();
           }
-
-          req.session.destroy((err: any) => err ? reject(err) : resolve());
         });
 
         debug(`Calling ${authService}.create authentication with strategy ${name}`);

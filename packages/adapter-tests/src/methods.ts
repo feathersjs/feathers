@@ -456,6 +456,10 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
 
       test('.patch multi query same', async () => {
         const service = app.service(serviceName);
+        const multiBefore = service.options.multi;
+
+        service.options.multi = true;
+
         const params = {
           query: { age: { $lt: 10 } }
         };
@@ -480,10 +484,16 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
 
         await service.remove(dave[idProp]);
         await service.remove(david[idProp]);
+
+        service.options.multi = multiBefore;
       });
 
       test('.patch multi query changed', async () => {
         const service = app.service(serviceName);
+        const multiBefore = service.options.multi;
+
+        service.options.multi = true;
+
         const params = {
           query: { age: 10 }
         };
@@ -508,6 +518,8 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
 
         await service.remove(dave[idProp]);
         await service.remove(david[idProp]);
+
+        service.options.multi = multiBefore;
       });
 
       test('.patch + NotFound', async () => {

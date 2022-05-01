@@ -9,7 +9,7 @@ interface ExpressUseHandler<T, Services> {
   <L extends keyof Services & string> (
     path: L,
     ...middlewareOrService: (
-      Express|express.RequestHandler|
+      Express|express.RequestHandler|express.RequestHandler[]|
       (keyof any extends keyof Services ? ServiceInterface : Services[L])
     )[]
   ): T;
@@ -44,7 +44,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
 
 declare module 'express-serve-static-core' {
   interface Request {
-    feathers?: Partial<FeathersParams>;
+    feathers?: Partial<FeathersParams> & { [key: string]: any };
     lookup?: RouteLookup;
   }
 

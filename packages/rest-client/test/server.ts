@@ -1,6 +1,6 @@
 import { feathers, Id, NullableId, Params } from '@feathersjs/feathers';
 import expressify, { rest, urlencoded, json } from '@feathersjs/express';
-import { Service } from '@feathersjs/memory';
+import { MemoryService } from '@feathersjs/memory';
 import { FeathersError, NotAcceptable } from '@feathersjs/errors';
 
 // eslint-disable-next-line no-extend-native
@@ -29,9 +29,13 @@ const errorHandler = function (error: FeathersError, _req: any, res: any, _next:
   });
 };
 
+interface TodoServiceParams extends Params {
+  authorization: any;
+}
+
 // Create an in-memory CRUD service for our Todos
-class TodoService extends Service {
-  get (id: Id, params: Params) {
+class TodoService extends MemoryService {
+  get (id: Id, params: TodoServiceParams) {
     if (params.query.error) {
       throw new Error('Something went wrong');
     }

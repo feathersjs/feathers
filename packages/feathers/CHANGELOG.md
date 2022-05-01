@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.18](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.17...v5.0.0-pre.18) (2022-04-11)
+
+
+### Bug Fixes
+
+* **core:** Ensure that dynamically registered services are always set up ([#2593](https://github.com/feathersjs/feathers/issues/2593)) ([27cc7d0](https://github.com/feathersjs/feathers/commit/27cc7d08321861cd69e6b66e1fdfa43c50664820))
+
+
+### Features
+
+* **authentication:** Add setup method for auth strategies ([#1611](https://github.com/feathersjs/feathers/issues/1611)) ([a3c3581](https://github.com/feathersjs/feathers/commit/a3c35814dccdbbf6de96f04f60b226ce206c6dbe))
+* **core:** Add app.setup and app.teardown hook support ([#2585](https://github.com/feathersjs/feathers/issues/2585)) ([ae4ebee](https://github.com/feathersjs/feathers/commit/ae4ebee5d39957651473007c4d3adb210160e040))
+* **core:** Add app.teardown functionality ([#2570](https://github.com/feathersjs/feathers/issues/2570)) ([fcdf524](https://github.com/feathersjs/feathers/commit/fcdf524ae1995bb59265d39f12e98b7794bed023))
+* **core:** Finalize app.teardown() functionality ([#2584](https://github.com/feathersjs/feathers/issues/2584)) ([1a166f3](https://github.com/feathersjs/feathers/commit/1a166f3ded811ecacf0ae8cb67880bc9fa2eeafa))
+* **transport-commons:** add `context.http.response` ([#2524](https://github.com/feathersjs/feathers/issues/2524)) ([5bc9d44](https://github.com/feathersjs/feathers/commit/5bc9d447043c2e2b742c73ed28ecf3b3264dd9e5))
+
+
+
+
+
 # [5.0.0-pre.17](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.16...v5.0.0-pre.17) (2022-02-15)
 
 **Note:** Version bump only for package @feathersjs/feathers

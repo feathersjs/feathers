@@ -1,11 +1,15 @@
 import assert from 'assert';
 import { hooks, NextFunction } from '@feathersjs/hooks';
-import { HookContext, createContext, feathers, Id, Params } from '../../src';
+import { HookContext, createContext, feathers, Id, Params, ServiceInterface } from '../../src';
 
 describe('hooks basics', () => {
   it('mix @feathersjs/hooks and .hooks', async () => {
+    interface SimpleParams extends Params {
+      chain: string[];
+
+    }
     class SimpleService {
-      async get (id: Id, params: Params) {
+      async get (id: Id, params: SimpleParams) {
         return { id, chain: params.chain };
       }
     }
@@ -121,7 +125,11 @@ describe('hooks basics', () => {
   // });
 
   it('works with services that return a promise (feathers-hooks#28)', async () => {
-    const app = feathers().use('/dummy', {
+    interface DummyParams extends Params {
+      user: string;
+    }
+
+    const app = feathers<{ dummy: ServiceInterface<any, any, DummyParams> }>().use('dummy', {
       async get (id: any, params: any) {
         return { id, user: params.user };
       }

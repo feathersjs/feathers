@@ -1,13 +1,14 @@
 import {
   feathers, HookContext, Application as FeathersApplication
 } from '@feathersjs/feathers';
-import { memory, Service } from '@feathersjs/memory';
+import { memory, MemoryService } from '@feathersjs/memory';
 import { GeneralError } from '@feathersjs/errors';
 
 import {
   schema, resolve, Infer, resolveResult,
   queryProperty, resolveQuery, resolveData, validateData, validateQuery
 } from '../src';
+import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib';
 
 export const userSchema = schema({
   $id: 'UserData',
@@ -32,7 +33,7 @@ export const userResultSchema = schema({
 } as const);
 
 export type User = Infer<typeof userSchema>;
-export type UserResult = Infer<typeof userResultSchema>;
+export type UserResult = Infer<typeof userResultSchema> & { name: string };
 
 export const userDataResolver = resolve<User, HookContext<Application>>({
   schema: userSchema,
@@ -47,9 +48,17 @@ export const userDataResolver = resolve<User, HookContext<Application>>({
 export const userResultResolver = resolve<UserResult, HookContext<Application>>({
   schema: userResultSchema,
   properties: {
+    name: async (_value, user) => user.email.split('@')[0],
     password: async (value, _user, context) => {
       return context.params.provider ? undefined : value;
     }
+  }
+});
+
+export const secondUserResultResolver = resolve<UserResult, HookContext<Application>>({
+  schema: userResultSchema,
+  properties: {
+    name: async (value, user) => `${value} (${user.email})`
   }
 });
 
@@ -135,9 +144,15 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext<Applicatio
   }
 });
 
+interface ServiceParams extends AdapterParams {
+  user?: User;
+  error?: boolean;
+}
+
 type ServiceTypes = {
-  users: Service<UserResult, User>,
-  messages: Service<MessageResult, Message>
+  users: MemoryService<UserResult, User, ServiceParams>,
+  messages: MemoryService<MessageResult, Message, ServiceParams>
+  paginatedMessages: MemoryService<MessageResult, Message, ServiceParams>
 }
 type Application = FeathersApplication<ServiceTypes>;
 
@@ -145,7 +160,8 @@ const app = feathers<ServiceTypes>()
   .use('users', memory({
     multi: ['create']
   }))
-  .use('messages', memory());
+  .use('messages', memory())
+  .use('paginatedMessages', memory({paginate: { default: 10 }}));
 
 app.service('messages').hooks([
   validateQuery(messageQuerySchema),
@@ -153,8 +169,14 @@ app.service('messages').hooks([
   resolveResult(messageResultResolver)
 ]);
 
+app.service('paginatedMessages').hooks([
+  validateQuery(messageQuerySchema),
+  resolveQuery(messageQueryResolver),
+  resolveResult(messageResultResolver)
+]);
+
 app.service('users').hooks([
-  resolveResult(userResultResolver)
+  resolveResult(userResultResolver, secondUserResultResolver)
 ]);
 
 app.service('users').hooks({

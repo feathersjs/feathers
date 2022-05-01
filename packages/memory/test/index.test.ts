@@ -3,7 +3,7 @@ import adapterTests from '@feathersjs/adapter-tests';
 import errors from '@feathersjs/errors';
 import { feathers } from '@feathersjs/feathers';
 
-import { memory } from '../src';
+import { MemoryService } from '../src';
 
 const testSuite = adapterTests([
   '.options',
@@ -14,6 +14,12 @@ const testSuite = adapterTests([
   '._update',
   '._patch',
   '._remove',
+  '.$get',
+  '.$find',
+  '.$create',
+  '.$update',
+  '.$patch',
+  '.$remove',
   '.get',
   '.get + $select',
   '.get + id + query',
@@ -79,12 +85,30 @@ const testSuite = adapterTests([
 ]);
 
 describe('Feathers Memory Service', () => {
+  type Person = {
+    id: number;
+    name: string;
+    age: number;
+  }
+
+  type Animal = {
+    type: string;
+    age: number;
+  }
+
   const events = [ 'testing' ];
-  const app = feathers()
-    .use('/people', memory({ events }))
-    .use('/people-customid', memory({
-      id: 'customid', events
-    }));
+  const app = feathers<{
+    people: MemoryService<Person>,
+    'people-customid': MemoryService<Person>,
+    animals: MemoryService<Animal>,
+    matcher: MemoryService
+  }>();
+
+  app.use('people', new MemoryService<Person>({ events }));
+  app.use('people-customid', new MemoryService<Person>({
+    id: 'customid',
+    events
+  }));
 
   it('update with string id works', async () => {
     const people = app.service('people');
@@ -101,7 +125,7 @@ describe('Feathers Memory Service', () => {
   });
 
   it('patch record with prop also in query', async () => {
-    app.use('/animals', memory({ multi: true }));
+    app.use('animals', new MemoryService<Animal>({ multi: true }));
     const animals = app.service('animals');
     await animals.create([{
       type: 'cat',
@@ -122,7 +146,7 @@ describe('Feathers Memory Service', () => {
     let sorterCalled = false;
     let matcherCalled = false;
 
-    app.use('/matcher', memory({
+    app.use('matcher', new MemoryService({
       matcher () {
         matcherCalled = true;
         return function () {
@@ -169,6 +193,7 @@ describe('Feathers Memory Service', () => {
       name: 'Tester'
     });
     const results = await people.find({
+      paginate: false,
       query: {
         name: 'Tester',
         $select: ['name']
