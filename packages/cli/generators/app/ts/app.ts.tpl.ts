@@ -11,9 +11,9 @@ ${transports.includes('websockets') ? 'import socketio from \'@feathersjs/socket
 import { configurationSchema } from './schemas/configuration.schema'
 import { logErrorHook } from './logger'
 import { Application } from './declarations'
-import services from './services'
-import channels from './channels'
-import authentication from './authentication'
+import { services } from './services'
+import { channels } from './channels'
+import { authentication } from './authentication'
 
 const app: Application = koa(feathers())
 

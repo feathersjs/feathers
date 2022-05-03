@@ -1,7 +1,7 @@
 import { generator, renderTemplate, toFile } from '@feathershq/pinion'
 import { ServiceGeneratorContext } from '../index'
 
-const template = ({ camelName, className, upperName, relative }: ServiceGeneratorContext) =>
+const template = ({ camelName, upperName, relative, type }: ServiceGeneratorContext) =>
 `import { schema, resolve, Infer } from '@feathersjs/schema'
 import { HookContext } from '${relative}/declarations'
 
@@ -20,7 +20,7 @@ export const ${camelName}DataSchema = schema({
 
 export type ${upperName}Data = Infer<typeof ${camelName}DataSchema>
 
-export const ${camelName}DataResolver = resolve<${className}Data, HookContext>({
+export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
   schema: ${camelName}DataSchema,
   validate: 'before',
   properties: {}
@@ -40,7 +40,7 @@ export const ${camelName}PatchSchema = schema({
 
 export type ${upperName}Patch = Infer<typeof ${camelName}PatchSchema>
 
-export const ${camelName}PatchResolver = resolve<${className}Patch, HookContext>({
+export const ${camelName}PatchResolver = resolve<${upperName}Patch, HookContext>({
   schema: ${camelName}PatchSchema,
   validate: 'before',
   properties: {}
@@ -52,10 +52,10 @@ export const ${camelName}ResultSchema = schema({
   $id: '${upperName}Result',
   type: 'object',
   additionalProperties: false,
-  required: [ 'text', 'id' ],
+  required: [ 'text', '${type === 'mongodb' ? '_id' : 'id'}' ],
   properties: {
     ...${camelName}DataSchema.definition.properties,
-    id: {
+    ${type === 'mongodb' ? '_id' : 'id'}: {
       type: 'string'
     }
   }
@@ -63,7 +63,7 @@ export const ${camelName}ResultSchema = schema({
 
 export type ${upperName}Result = Infer<typeof ${camelName}ResultSchema>
 
-export const ${camelName}ResultResolver = resolve<${className}Result, HookContext>({
+export const ${camelName}ResultResolver = resolve<${upperName}Result, HookContext>({
   schema: ${camelName}ResultSchema,
   validate: false,
   properties: {}
@@ -90,7 +90,7 @@ export const ${camelName}QuerySchema = schema({
 
 export type ${upperName}Query = Infer<typeof ${camelName}QuerySchema>
 
-export const ${camelName}QueryResolver = resolve<${className}Query, HookContext>({
+export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
   schema: ${camelName}QuerySchema,
   validate: 'before',
   properties: {}

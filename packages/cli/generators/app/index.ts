@@ -2,7 +2,7 @@ import { sep, join } from 'path'
 import { PackageJson } from 'type-fest'
 import chalk from 'chalk'
 import { generator, prompt, runGenerators, loadJSON, fromFile, install, runGenerator, copyFiles, toFile } from '@feathershq/pinion'
-import { FeathersBaseContext, FeathersAppInfo } from '../index'
+import { FeathersBaseContext, FeathersAppInfo, initializeBaseContext } from '../index'
 
 type DependencyVersions = { [key: string]: string }
 
@@ -15,10 +15,6 @@ export interface AppGeneratorData extends FeathersAppInfo {
    */
   name: string
   /**
-   * THe source file folder
-   */
-  lib: string
-  /**
    * A short description of the app
    */
   description: string
@@ -30,11 +26,15 @@ export interface AppGeneratorData extends FeathersAppInfo {
 
 export type AppGeneratorContext = FeathersBaseContext & AppGeneratorData & {
   dependencyVersions: DependencyVersions
+  dependencies: string[]
+  devDependencies: string[]
 }
 
 export const generate = (ctx: AppGeneratorContext) => generator(ctx)
   .then(loadJSON(join(__dirname, '..', '..', 'package.json'), (pkg: PackageJson) => ({
-    dependencyVersions: pkg.devDependencies
+    dependencyVersions: pkg.devDependencies,
+    dependencies: [],
+    devDependencies: []
   })))
   .then(prompt((ctx: AppGeneratorContext) => [{
     name: 'language',
@@ -55,24 +55,25 @@ export const generate = (ctx: AppGeneratorContext) => generator(ctx)
     name: 'description',
     type: 'input',
     when: !ctx.description,
-    message: 'Description'
+    message: 'Write a short description'
   }, {
-    name: 'database',
     type: 'list',
-    when: !ctx.database,
-    message: 'What is your main database?',
-    suffix: chalk.grey(' Other databases can be added at any time'),
+    name: 'framework',
+    when: !ctx.framework,
+    message: 'Which HTTP framework do you want to use?',
     choices: [
-      { value: 'mongodb', name: 'MongoDB' },
-      { value: 'sequelize', name: 'SQL (Sequelize)' },
-      { value: 'custom', name: 'Custom services/another database' }
+      { value: 'koa', name: `KoaJS ${chalk.grey('(recommended)')}` },
+      { value: 'express', name: 'Express' }
     ]
   }, {
-    type: 'input',
-    name: 'lib',
-    when: !ctx.lib,
-    message: 'What folder should the source files live in?',
-    default: 'src'
+    type: 'checkbox',
+    name: 'transports',
+    when: !ctx.transports,
+    message: 'What APIs do you want to offer?',
+    choices: [
+      { value: 'rest', name: 'HTTP (REST)', checked: true },
+      { value: 'websockets', name: 'Real-time (websockets)', checked: true }
+    ]
   }, {
     name: 'packager',
     type: 'list',
@@ -86,7 +87,7 @@ export const generate = (ctx: AppGeneratorContext) => generator(ctx)
     type: 'checkbox',
     name: 'authStrategies',
     when: !ctx.authStrategies,
-    message: 'Which user authentication methods do you want to provide?',
+    message: 'Which user authentication methods do you want to use?',
     suffix: chalk.grey(' Other methods and providers can be added at any time.'),
     choices: [{
       name: 'Email + Password',
@@ -108,29 +109,16 @@ export const generate = (ctx: AppGeneratorContext) => generator(ctx)
       name: 'Auth0',
       value: 'auth0'
     }]
-  }, {
-    type: 'checkbox',
-    name: 'transports',
-    when: !ctx.transports,
-    message: 'What APIs do you want to offer?',
-    choices: [
-      { value: 'rest', name: 'HTTP (REST)', checked: true },
-      { value: 'websockets', name: 'Real-time (Websockets)', checked: true }
-    ]
-  }, {
-    type: 'list',
-    name: 'framework',
-    when: !ctx.framework,
-    message: 'Which HTTP framework do you want to use?',
-    choices: [
-      { value: 'koa', name: `KoaJS ${chalk.grey('(recommended)')}` },
-      { value: 'express', name: 'Express' }
-    ]
   }]))
   .then(runGenerators(__dirname, 'common'))
-  .then(install(({ transports, database, framework, dependencyVersions, authStrategies }: AppGeneratorContext) => {
+  .then(initializeBaseContext())
+  .then(copyFiles(fromFile(__dirname, 'static'), toFile('.')))
+  .then(runGenerators(__dirname, (ctx: AppGeneratorContext) => ctx.language))
+  .then(runGenerator(__dirname, '..', 'connection', 'index'))
+  .then(install<AppGeneratorContext>(({ transports, database, framework, dependencyVersions, authStrategies, dependencies }) => {
     const hasSocketio = transports.includes('websockets')
-    const dependencies = [
+
+    dependencies.push(
       '@feathersjs/feathers',
       '@feathersjs/errors',
       '@feathersjs/schema',
@@ -140,7 +128,7 @@ export const generate = (ctx: AppGeneratorContext) => generator(ctx)
       '@feathersjs/authentication',
       '@feathersjs/authentication-oauth',
       'winston'
-    ];
+    );
 
     if (authStrategies.includes('local')) {
       dependencies.push('@feathersjs/authentication-local');
@@ -171,12 +159,12 @@ export const generate = (ctx: AppGeneratorContext) => generator(ctx)
 
     return addVersions(dependencies, dependencyVersions)
   }))
-  .then(install(({ language, framework, dependencyVersions }: AppGeneratorContext) => {
-    const devDependencies = [
+  .then(install<AppGeneratorContext>(({ language, framework, devDependencies, dependencyVersions }) => {
+    devDependencies.push(
       'nodemon',
       'axios',
       'mocha'
-    ];
+    );
 
     if (language === 'ts') {
       devDependencies.push(
@@ -192,7 +180,3 @@ export const generate = (ctx: AppGeneratorContext) => generator(ctx)
 
     return addVersions(devDependencies, dependencyVersions)
   }, true))
-  .then(loadJSON(fromFile('package.json'), pkg => ({ pkg })))
-  .then(copyFiles(fromFile(__dirname, 'static'), toFile('.')))
-  .then(runGenerators(__dirname, (ctx: AppGeneratorContext) => ctx.language))
-  .then(runGenerator(__dirname, '..', 'connection', 'index'))

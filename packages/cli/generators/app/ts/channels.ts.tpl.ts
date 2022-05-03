@@ -6,7 +6,7 @@ const template = ({}: AppGeneratorContext) =>
 import { Application, HookContext } from './declarations'
 import { logger } from './logger'
 
-export default function(app: Application) {
+export const channels = (app: Application) => {
   if(typeof app.channel !== 'function') {
     // If no real-time functionality has been configured just return
     return

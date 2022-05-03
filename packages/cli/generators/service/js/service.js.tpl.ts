@@ -66,4 +66,4 @@ export const generate = (ctx: ServiceGeneratorContext) => generator(ctx)
     [lib, 'services', ...folder, `${kebabName}.js`]
   )))
   .then(inject(importTemplate, prepend(), toServiceIndex))
-  .then(inject(configureTemplate, after('export default'), toServiceIndex))
+  .then(inject(configureTemplate, after('export const services'), toServiceIndex))

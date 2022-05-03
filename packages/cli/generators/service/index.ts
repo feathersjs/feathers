@@ -61,7 +61,7 @@ export const generate = (ctx: ServiceGeneratorContext) => generator(ctx)
       type: 'list',
       when: !ctx.type,
       message: 'What kind of service is it?',
-      default: ctx.pkg?.feathers.database,
+      default: ctx?.feathers.database,
       choices: [
         { value: 'custom', name: 'A custom service' },
         { value: 'sequelize', name: 'SQL (Sequelize)' },
@@ -85,6 +85,7 @@ export const generate = (ctx: ServiceGeneratorContext) => generator(ctx)
       upperName,
       className,
       kebabName,
+      camelName,
       relative,
       ...ctx
     }

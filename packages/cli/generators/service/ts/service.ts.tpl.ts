@@ -8,11 +8,12 @@ import { Application } from '${relative}/declarations'
 import {
   ${upperName}Data,
   ${upperName}Result,
+  ${upperName}Query,
   ${camelName}QueryResolver,
   ${camelName}DataResolver,
   ${camelName}PatchResolver,
   ${camelName}ResultResolver
-} from '${relative}/schemas/${path}.schema.js'
+} from '${relative}/schemas/${path}.schema'
 
 // The ${className} service class
 
@@ -49,7 +50,14 @@ export function ${camelName} (app: Application) {
     app
   }
 
-  app.use('${path}', new ${className}(options))
+  // Register out service on the Feathers application
+  app.use('${path}', new ${className}(options), {
+    // A list of all methods this service exposes externally
+    methods: ['find', 'get', 'create', 'update', 'patch', 'remove'],
+    // You can add additional custom events to be sent to clients here
+    events: []
+  })
+  // Initialize hooks
   app.service('${path}').hooks(serviceHooks)
   app.service('${path}').hooks(methodHooks)
   app.service('${path}').hooks(regularHooks)
@@ -76,4 +84,4 @@ export const generate = (ctx: ServiceGeneratorContext) => generator(ctx)
     [lib, 'services', ...folder, `${kebabName}.ts`]
   )))
   .then(inject(importTemplate, prepend(), toServiceIndex))
-  .then(inject(configureTemplate, after('export default'), toServiceIndex))
+  .then(inject(configureTemplate, after('export const services'), toServiceIndex))

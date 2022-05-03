@@ -4,7 +4,7 @@ import { AppGeneratorContext } from '../index'
 const template = ({}: AppGeneratorContext) =>
 `import { Application } from '../declarations'
 
-export default (app: Application) => {
+export const services = (app: Application) => {
 }
 `
 

@@ -22,10 +22,10 @@ export const mongodb = (app: Application) => {
 `
 
 const importTemplate = 'import { mongodb } from \'./mongodb\''
-const configureTemplate = '  app.configure(mongodb)'
+const configureTemplate = 'app.configure(mongodb)'
 const toAppFile = toFile<AppGeneratorContext>(({ lib }) => lib, 'app.ts')
 
 export const generate = (ctx: AppGeneratorContext) => generator(ctx)
   .then(renderTemplate(template, toFile<AppGeneratorContext>(({ lib }) => lib, 'mongodb.ts')))
-  .then(inject(importTemplate, before('import services from'), toAppFile))
+  .then(inject(importTemplate, before('import { services } from'), toAppFile))
   .then(inject(configureTemplate, before('app.configure(services)'), toAppFile))

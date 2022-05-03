@@ -10,9 +10,9 @@ ${transports.includes('websockets') ? 'import socketio from \'@feathersjs/socket
 
 import { logErrorHook } from './logger.js'
 import { configurationSchema } from './schemas/configuration.schema.js'
-import authentication from './authentication.js'
-import services from './services/index.js'
-import channels from './channels.js'
+import { authentication } from './authentication.js'
+import { services } from './services/index.js'
+import { channels } from './channels.js'
 
 const { koa, rest, bodyParser, errorHandler, parseAuthentication } = feathersKoa
 const app = koa(feathers())
@@ -49,9 +49,9 @@ ${transports.includes('websockets') ? 'import socketio from \'@feathersjs/socket
 
 import { configurationSchema } from './schemas/configuration.schema.js'
 import { logger, logErrorHook } from './logger.js'
-import authentication from './authentication.js'
-import services from './services/index.js'
-import channels from './channels.js'
+import { authentication } from './authentication.js'
+import { services } from './services/index.js'
+import { channels } from './channels.js'
 
 const app = express(feathers())
 

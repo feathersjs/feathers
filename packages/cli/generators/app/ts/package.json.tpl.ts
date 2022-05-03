@@ -1,8 +1,8 @@
-import { generator, toFile, writeJSON } from '@feathershq/pinion'
+import { generator, mergeJSON, toFile } from '@feathershq/pinion'
 import { AppGeneratorContext } from '../index'
 
 export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(writeJSON<AppGeneratorContext>(({ pkg, lib }) => ({
+  .then(mergeJSON<AppGeneratorContext>(({ pkg, lib }) => ({
     ...pkg,
     scripts: {
       ...pkg.scripts,
@@ -11,4 +11,4 @@ export const generate = (ctx: AppGeneratorContext) => generator(ctx)
       start: 'npm run compile && node lib/',
       test: 'mocha test/ --require ts-node/register --recursive --extension .ts --exit'
     }
-  }), toFile('package.json'), { force: true }))
+  }), toFile('package.json')))

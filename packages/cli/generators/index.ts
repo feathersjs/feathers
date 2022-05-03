@@ -11,7 +11,7 @@ export type FeathersAppInfo = {
   /**
    * The main database
    */
-  database: 'sequelize'|'mongodb'|'custom'
+  database: 'knex'|'mongodb'|'custom'
   /**
    * The package manager used
    */
@@ -27,10 +27,24 @@ export type FeathersAppInfo = {
 }
 
 export interface AppPackageJson extends PackageJson {
-  feathers: FeathersAppInfo
+  feathers?: FeathersAppInfo
 }
 
+export const initializeBaseContext = () => <C extends FeathersBaseContext> (ctx: C) => Promise.resolve(ctx)
+  .then(loadJSON(fromFile('package.json'), pkg => ({ pkg }), {}))
+  .then(ctx => ({
+    ...ctx,
+    lib: ctx.pkg?.directories?.lib || 'src',
+    test: ctx.pkg?.directories?.test || 'test',
+    feathers: ctx.pkg?.feathers
+  } as C))
+
 export interface FeathersBaseContext extends PinionContext {
+  /**
+   * Information about the Feathers application (like chosen language, database etc.)
+   * usually taken from `package.json`
+   */
+  feathers: FeathersAppInfo;
   /**
    * The package.json file
    */
@@ -46,12 +60,7 @@ export interface FeathersBaseContext extends PinionContext {
 }
 
 export const generate = (ctx: FeathersBaseContext) => generator(ctx)
-  .then(loadJSON(fromFile('package.json'), pkg => ({ pkg }), {}))
-  .then(ctx => ({
-    lib: ctx.pkg?.directories?.lib,
-    test: ctx.pkg?.directories?.test,
-    ...ctx
-  }))
+  .then(initializeBaseContext())
   .then(runGenerator(__dirname, (ctx: FeathersBaseContext) => `${ctx._[1]}`, 'index'))
 
 export const commandRunner = (yarg: any) => {

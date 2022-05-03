@@ -3,7 +3,7 @@ import { AppGeneratorContext } from '../index'
 
 const template = ({}: AppGeneratorContext) =>
 `
-export default app => {
+export const services = app => {
 }
 `
 

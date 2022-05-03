@@ -4,7 +4,7 @@ import { AppGeneratorContext } from '../index'
 const template = ({}: AppGeneratorContext) =>
 `import { logger } from './logger.js'
 
-export default app => {
+export const channels = app => {
   if(typeof app.channel !== 'function') {
     // If no real-time functionality has been configured just return
     return
