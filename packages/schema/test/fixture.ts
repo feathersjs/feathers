@@ -5,8 +5,8 @@ import { memory, MemoryService } from '@feathersjs/memory';
 import { GeneralError } from '@feathersjs/errors';
 
 import {
-  schema, resolve, Infer, resolveResult,
-  queryProperty, resolveQuery, resolveData, validateData, validateQuery
+  schema, resolve, Infer, resolveResult, resolveQuery,
+  resolveData, validateData, validateQuery, querySyntax
 } from '../src';
 import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib';
 
@@ -27,7 +27,7 @@ export const userResultSchema = schema({
   additionalProperties: false,
   required: ['id', ...userSchema.definition.required],
   properties: {
-    ...userSchema.definition.properties,
+    ...userSchema.properties,
     id: { type: 'number' }
   }
 } as const);
@@ -79,7 +79,7 @@ export const messageResultSchema = schema({
   additionalProperties: false,
   required: ['id', 'user', ...messageSchema.definition.required],
   properties: {
-    ...messageSchema.definition.properties,
+    ...messageSchema.properties,
     id: { type: 'number' },
     user: { $ref: 'UserResult' }
   }
@@ -109,22 +109,13 @@ export const messageQuerySchema = schema({
   $id: 'MessageQuery',
   type: 'object',
   additionalProperties: false,
+  required: [],
   properties: {
-    $limit: {
-      type: 'number',
-      minimum: 0,
-      maximum: 100
-    },
-    $skip: {
-      type: 'number'
-    },
+    ...querySyntax(messageSchema.properties),
     $resolve: {
       type: 'array',
       items: { type: 'string' }
-    },
-    userId: queryProperty({
-      type: 'number'
-    })
+    }
   }
 } as const);
 
@@ -157,11 +148,12 @@ type ServiceTypes = {
 type Application = FeathersApplication<ServiceTypes>;
 
 const app = feathers<ServiceTypes>()
-  .use('users', memory({
-    multi: ['create']
-  }))
-  .use('messages', memory())
-  .use('paginatedMessages', memory({paginate: { default: 10 }}));
+
+app.use('users', memory({
+  multi: ['create']
+}))
+app.use('messages', memory())
+app.use('paginatedMessages', memory({paginate: { default: 10 }}));
 
 app.service('messages').hooks([
   validateQuery(messageQuerySchema),
