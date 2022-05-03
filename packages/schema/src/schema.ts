@@ -12,6 +12,7 @@ export type JSONSchemaDefinition = JSONSchema & {
   $id: string,
   $async?: boolean,
   properties?: { [key: string]: JSONSchema }
+  required?: readonly string[]
 };
 
 export interface Schema<T> {
@@ -32,7 +33,11 @@ export class SchemaWrapper<S extends JSONSchemaDefinition> implements Schema<Fro
   }
 
   get properties () {
-    return this.definition.properties as S['properties']
+    return this.definition.properties as S['properties'];
+  }
+
+  get required () {
+    return this.definition.required as S['required'];
   }
 
   async validate <T = FromSchema<S>> (...args: Parameters<ValidateFunction<T>>) {

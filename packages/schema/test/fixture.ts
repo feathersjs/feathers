@@ -25,7 +25,7 @@ export const userResultSchema = schema({
   $id: 'UserResult',
   type: 'object',
   additionalProperties: false,
-  required: ['id', ...userSchema.definition.required],
+  required: ['id', ...userSchema.required],
   properties: {
     ...userSchema.properties,
     id: { type: 'number' }
@@ -77,7 +77,7 @@ export const messageResultSchema = schema({
   $id: 'MessageResult',
   type: 'object',
   additionalProperties: false,
-  required: ['id', 'user', ...messageSchema.definition.required],
+  required: ['id', 'user', ...messageSchema.required],
   properties: {
     ...messageSchema.properties,
     id: { type: 'number' },
