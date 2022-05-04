@@ -52,18 +52,18 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^5.0.0-pre.19",
-    "@feathersjs/commons": "^5.0.0-pre.19",
-    "@feathersjs/errors": "^5.0.0-pre.19",
-    "@feathersjs/feathers": "^5.0.0-pre.19"
+    "@feathersjs/authentication": "5.0.0-pre.19",
+    "@feathersjs/commons": "5.0.0-pre.19",
+    "@feathersjs/errors": "5.0.0-pre.19",
+    "@feathersjs/feathers": "5.0.0-pre.19"
   },
   "devDependencies": {
-    "@feathersjs/authentication-local": "^5.0.0-pre.19",
-    "@feathersjs/express": "^5.0.0-pre.19",
-    "@feathersjs/memory": "^5.0.0-pre.19",
-    "@feathersjs/rest-client": "^5.0.0-pre.19",
-    "@feathersjs/socketio": "^5.0.0-pre.19",
-    "@feathersjs/socketio-client": "^5.0.0-pre.19",
+    "@feathersjs/authentication-local": "5.0.0-pre.19",
+    "@feathersjs/express": "5.0.0-pre.19",
+    "@feathersjs/memory": "5.0.0-pre.19",
+    "@feathersjs/rest-client": "5.0.0-pre.19",
+    "@feathersjs/socketio": "5.0.0-pre.19",
+    "@feathersjs/socketio-client": "5.0.0-pre.19",
     "@types/mocha": "^9.1.1",
     "@types/node": "^17.0.31",
     "axios": "^0.27.2",

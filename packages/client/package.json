@@ -49,19 +49,19 @@
     "IE 11"
   ],
   "dependencies": {
-    "@feathersjs/authentication-client": "^5.0.0-pre.19",
-    "@feathersjs/errors": "^5.0.0-pre.19",
-    "@feathersjs/feathers": "^5.0.0-pre.19",
-    "@feathersjs/rest-client": "^5.0.0-pre.19",
-    "@feathersjs/socketio-client": "^5.0.0-pre.19"
+    "@feathersjs/authentication-client": "5.0.0-pre.19",
+    "@feathersjs/errors": "5.0.0-pre.19",
+    "@feathersjs/feathers": "5.0.0-pre.19",
+    "@feathersjs/rest-client": "5.0.0-pre.19",
+    "@feathersjs/socketio-client": "5.0.0-pre.19"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
     "@babel/preset-env": "^7.17.10",
-    "@feathersjs/express": "^5.0.0-pre.19",
-    "@feathersjs/memory": "^5.0.0-pre.19",
-    "@feathersjs/socketio": "^5.0.0-pre.19",
-    "@feathersjs/tests": "^5.0.0-pre.19",
+    "@feathersjs/express": "5.0.0-pre.19",
+    "@feathersjs/memory": "5.0.0-pre.19",
+    "@feathersjs/socketio": "5.0.0-pre.19",
+    "@feathersjs/tests": "5.0.0-pre.19",
     "babel-loader": "^8.2.5",
     "mocha": "^10.0.0",
     "mocha-puppeteer": "^0.14.0",

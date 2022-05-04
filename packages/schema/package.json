@@ -53,15 +53,15 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/errors": "^5.0.0-pre.19",
-    "@feathersjs/feathers": "^5.0.0-pre.19",
+    "@feathersjs/errors": "5.0.0-pre.19",
+    "@feathersjs/feathers": "5.0.0-pre.19",
     "@types/json-schema": "^7.0.11",
     "ajv": "^8.11.0",
     "json-schema": "^0.4.0",
     "json-schema-to-ts": "^2.3.0"
   },
   "devDependencies": {
-    "@feathersjs/memory": "^5.0.0-pre.19",
+    "@feathersjs/memory": "5.0.0-pre.19",
     "@types/mocha": "^9.1.1",
     "@types/node": "^17.0.31",
     "ajv-formats": "^2.1.1",
