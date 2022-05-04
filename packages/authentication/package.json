@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication",
   "description": "Add Authentication to your FeathersJS app.",
-  "version": "5.0.0-pre.19",
+  "version": "5.0.0-pre.20",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -52,10 +52,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "5.0.0-pre.19",
-    "@feathersjs/errors": "5.0.0-pre.19",
-    "@feathersjs/feathers": "5.0.0-pre.19",
-    "@feathersjs/transport-commons": "5.0.0-pre.19",
+    "@feathersjs/commons": "^5.0.0-pre.20",
+    "@feathersjs/errors": "^5.0.0-pre.20",
+    "@feathersjs/feathers": "^5.0.0-pre.20",
+    "@feathersjs/transport-commons": "^5.0.0-pre.20",
     "@types/jsonwebtoken": "^8.5.8",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
@@ -63,8 +63,8 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@feathersjs/memory": "5.0.0-pre.19",
-    "@feathersjs/schema": "5.0.0-pre.19",
+    "@feathersjs/memory": "^5.0.0-pre.20",
+    "@feathersjs/schema": "^5.0.0-pre.20",
     "@types/lodash": "^4.14.182",
     "@types/mocha": "^9.1.1",
     "@types/node": "^17.0.31",

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.20](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.19...v5.0.0-pre.20) (2022-05-04)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Don't send origins in Grant's config, as it will be considered another provider ([#2617](https://github.com/feathersjs/feathers/issues/2617)) ([ae3dddd](https://github.com/feathersjs/feathers/commit/ae3dddd8a654924465512d56b4651413912c6932))
+* **dependencies:** Lock monorepo package version numbers ([#2623](https://github.com/feathersjs/feathers/issues/2623)) ([5640c10](https://github.com/feathersjs/feathers/commit/5640c1020cc139994e695d658c08bad3494db507))
+
+
+
+
+
 # [5.0.0-pre.19](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.18...v5.0.0-pre.19) (2022-05-01)
 
 

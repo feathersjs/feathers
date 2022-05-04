@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.20](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.19...v5.0.0-pre.20) (2022-05-04)
+
+
+### Bug Fixes
+
+* **dependencies:** Lock monorepo package version numbers ([#2623](https://github.com/feathersjs/feathers/issues/2623)) ([5640c10](https://github.com/feathersjs/feathers/commit/5640c1020cc139994e695d658c08bad3494db507))
+
+
+### Features
+
+* **schema:** Add querySyntax helper to create full query schemas ([#2621](https://github.com/feathersjs/feathers/issues/2621)) ([2bbb103](https://github.com/feathersjs/feathers/commit/2bbb103b2f3e30fb0fff935f92ad3276a1a67e41))
+
+
+
+
+
 # [5.0.0-pre.19](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.18...v5.0.0-pre.19) (2022-05-01)
 
 
