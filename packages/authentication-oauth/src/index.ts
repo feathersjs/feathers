@@ -41,7 +41,7 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
     }
   }
 
-  const grant = defaultsDeep({}, omit(oauth, 'redirect'), {
+  const grant = defaultsDeep({}, omit(oauth, ['redirect', 'origins']), {
     defaults: {
       prefix,
       origin: `${protocol}://${host}`,

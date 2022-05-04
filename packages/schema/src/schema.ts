@@ -8,7 +8,12 @@ export const DEFAULT_AJV = new Ajv({
 
 export { Ajv };
 
-export type JSONSchemaDefinition = JSONSchema & { $id: string, $async?: boolean };
+export type JSONSchemaDefinition = JSONSchema & {
+  $id: string,
+  $async?: boolean,
+  properties?: { [key: string]: JSONSchema }
+  required?: readonly string[]
+};
 
 export interface Schema<T> {
   validate <X = T> (...args: Parameters<ValidateFunction<X>>): Promise<X>;
@@ -25,6 +30,14 @@ export class SchemaWrapper<S extends JSONSchemaDefinition> implements Schema<Fro
       $async: true,
       ...(this.definition as any)
     }) as AsyncValidateFunction;
+  }
+
+  get properties () {
+    return this.definition.properties as S['properties'];
+  }
+
+  get required () {
+    return this.definition.required as S['required'];
   }
 
   async validate <T = FromSchema<S>> (...args: Parameters<ValidateFunction<T>>) {
