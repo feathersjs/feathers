@@ -57,9 +57,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^5.0.0-pre.19",
-    "@feathersjs/feathers": "^5.0.0-pre.19",
-    "@feathersjs/schema": "^5.0.0-pre.19",
+    "@feathersjs/commons": "5.0.0-pre.19",
+    "@feathersjs/feathers": "5.0.0-pre.19",
+    "@feathersjs/schema": "5.0.0-pre.19",
     "@types/config": "^0.0.41",
     "config": "^3.3.7"
   },
