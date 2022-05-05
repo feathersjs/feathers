@@ -3,7 +3,7 @@ import { BadRequest } from '../../errors/lib';
 import { Resolver, ResolverStatus } from './resolver';
 import { Schema } from './schema';
 
-const getContext = (context: HookContext) => {
+const getContext = <H extends HookContext> (context: H) => {
   return {
     ...context,
     params: {
@@ -13,11 +13,11 @@ const getContext = (context: HookContext) => {
   }
 }
 
-const runResolvers = async <T> (
-  resolvers: Resolver<T, HookContext>[],
+const runResolvers = async <T, H extends HookContext> (
+  resolvers: Resolver<T, H>[],
   data: any,
-  ctx: HookContext,
-  status?: Partial<ResolverStatus<T, HookContext>>
+  ctx: H,
+  status?: Partial<ResolverStatus<T, H>>
 ) => {
   let current: any = data;
 
@@ -28,8 +28,8 @@ const runResolvers = async <T> (
   return current as T;
 }
 
-export const resolveQuery = <T> (...resolvers: Resolver<T, HookContext>[]) =>
-  async (context: HookContext, next?: NextFunction) => {
+export const resolveQuery = <T, H extends HookContext> (...resolvers: Resolver<T, H>[]) =>
+  async (context: H, next?: NextFunction) => {
     const ctx = getContext(context);
     const data = context?.params?.query || {};
     const query = await runResolvers(resolvers, data, ctx);
@@ -44,8 +44,8 @@ export const resolveQuery = <T> (...resolvers: Resolver<T, HookContext>[]) =>
     }
   };
 
-export const resolveData = <T> (...resolvers: Resolver<T, HookContext>[]) =>
-  async (context: HookContext, next?: NextFunction) => {
+export const resolveData = <T, H extends HookContext> (...resolvers: Resolver<T, H>[]) =>
+  async (context: H, next?: NextFunction) => {
     const ctx = getContext(context);
     const data = context.data;
     const status = {
@@ -65,8 +65,8 @@ export const resolveData = <T> (...resolvers: Resolver<T, HookContext>[]) =>
     }
   };
 
-export const resolveResult = <T> (...resolvers: Resolver<T, HookContext>[]) =>
-  async (context: HookContext, next?: NextFunction) => {
+export const resolveResult = <T, H extends HookContext> (...resolvers: Resolver<T, H>[]) =>
+  async (context: H, next?: NextFunction) => {
     if (typeof next === 'function') {
       const { $resolve: properties, ...query } = context.params?.query || {};
       const resolve = {
@@ -101,8 +101,8 @@ export const resolveResult = <T> (...resolvers: Resolver<T, HookContext>[]) =>
     }
   };
 
-export const validateQuery = (schema: Schema<any>) =>
-  async (context: HookContext, next?: NextFunction) => {
+export const validateQuery = <H extends HookContext> (schema: Schema<any>) =>
+  async (context: H, next?: NextFunction) => {
     const data = context?.params?.query || {};
 
     try {
@@ -121,8 +121,8 @@ export const validateQuery = (schema: Schema<any>) =>
     }
   };
 
-export const validateData = (schema: Schema<any>) =>
-  async (context: HookContext, next?: NextFunction) => {
+export const validateData = <H extends HookContext> (schema: Schema<any>) =>
+  async (context: H, next?: NextFunction) => {
     const data = context.data;
 
     try {
