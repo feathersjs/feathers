@@ -2,7 +2,7 @@ import { generator, renderTemplate, toFile } from '@feathershq/pinion'
 import { ServiceGeneratorContext } from '../index'
 
 const template = ({ camelName, upperName, relative, type }: ServiceGeneratorContext) =>
-`import { schema, resolve, Infer } from '@feathersjs/schema'
+`import { schema, resolve, querySyntax, Infer } from '@feathersjs/schema'
 import { HookContext } from '${relative}/declarations'
 
 // Schema and resolver for the basic data model (e.g. creating new entries)
@@ -34,7 +34,7 @@ export const ${camelName}PatchSchema = schema({
   additionalProperties: false,
   required: [],
   properties: {
-    ...${camelName}DataSchema.definition.properties
+    ...${camelName}DataSchema.properties
   }
 } as const)
 
@@ -52,7 +52,7 @@ export const ${camelName}ResultSchema = schema({
   $id: '${upperName}Result',
   type: 'object',
   additionalProperties: false,
-  required: [ 'text', '${type === 'mongodb' ? '_id' : 'id'}' ],
+  required: [ ...${camelName}DataSchema.required, '${type === 'mongodb' ? '_id' : 'id'}' ],
   properties: {
     ...${camelName}DataSchema.definition.properties,
     ${type === 'mongodb' ? '_id' : 'id'}: {
@@ -76,15 +76,7 @@ export const ${camelName}QuerySchema = schema({
   type: 'object',
   additionalProperties: false,
   properties: {
-    $limit: {
-      type: 'integer',
-      minimum: 0,
-      maximum: 100
-    },
-    $skip: {
-      type: 'integer',
-      minimum: 0
-    }
+    ...querySyntax(${camelName}ResultSchema.properties)
   }
 } as const)
 
