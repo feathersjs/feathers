@@ -4,7 +4,7 @@ import { AppGeneratorContext } from '../../app'
 const template = ({}: AppGeneratorContext) =>
 `import { MongoClient } from 'mongodb'
 
-export const mongodb app => {
+export const mongodb = (app) => {
   const connection = app.get('mongodb');
   const database = connection.substr(connection.lastIndexOf('/') + 1);
   const mongoClient = MongoClient.connect(connection)
