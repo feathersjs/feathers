@@ -45,7 +45,7 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
     defaults: {
       prefix,
       origin: `${oauth?.defaults?.protocol ?? protocol}://${oauth?.defaults?.host ?? host}`,
-      transport: 'session',
+      transport:  oauth?.defaults?.transport ?? 'session',
       response: ['tokens', 'raw', 'profile']
     }
   }, omit(oauth, ['redirect', 'origins']));
