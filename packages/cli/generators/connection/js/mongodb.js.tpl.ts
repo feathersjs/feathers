@@ -5,14 +5,11 @@ const template = ({}: AppGeneratorContext) =>
 `import { MongoClient } from 'mongodb'
 
 export const mongodb = (app) => {
-  const connection = app.get('mongodb');
-  const database = connection.substr(connection.lastIndexOf('/') + 1);
-  const mongoClient = MongoClient.connect(connection)
-    .then(client => client.db(database));
-
-  app.set('mongoClient', mongoClient);
-};
-`
+  const connection = app.get('database')
+  const database = connection.substring(connection.lastIndexOf('/') + 1)
+  const mongoClient = MongoClient.connect(connection).then((client) => client.db(database))
+  app.set('mongoClient', mongoClient)
+}`
 
 const importTemplate = 'import { mongodb } from \'./mongodb.js\''
 const configureTemplate = 'app.configure(mongodb)'
