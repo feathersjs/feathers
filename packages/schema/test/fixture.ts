@@ -6,7 +6,7 @@ import { GeneralError } from '@feathersjs/errors';
 
 import {
   schema, resolve, Infer, resolveResult, resolveQuery,
-  resolveData, validateData, validateQuery, querySyntax
+  resolveData, validateData, validateQuery, querySyntax, Combine
 } from '../src';
 import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib';
 
@@ -77,7 +77,7 @@ export const messageResultSchema = schema({
   $id: 'MessageResult',
   type: 'object',
   additionalProperties: false,
-  required: ['id', 'user', ...messageSchema.required],
+  required: ['id', ...messageSchema.required],
   properties: {
     ...messageSchema.properties,
     id: { type: 'number' },
@@ -86,9 +86,9 @@ export const messageResultSchema = schema({
 } as const);
 
 export type Message = Infer<typeof messageSchema>;
-export type MessageResult = Infer<typeof messageResultSchema> & {
+export type MessageResult = Combine<typeof messageResultSchema, {
   user: User;
-};
+}>;
 
 export const messageResultResolver = resolve<MessageResult, HookContext<Application>>({
   schema: messageResultSchema,
