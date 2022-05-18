@@ -19,7 +19,7 @@ export interface MongoDBAdapterParams<Q = AdapterQuery> extends AdapterParams<Q,
 }
 
 // Create the service.
-export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams = MongoDBAdapterParams>
+export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams<any> = MongoDBAdapterParams>
     extends AdapterBase<T, D, P, MongoDBAdapterOptions> {
   constructor (options: MongoDBAdapterOptions) {
     if (!options) {
