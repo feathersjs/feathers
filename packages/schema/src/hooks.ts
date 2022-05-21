@@ -28,6 +28,8 @@ const runResolvers = async <T, H extends HookContext> (
   return current as T;
 }
 
+export const DISPATCH = Symbol('@feathersjs/schema/dispatch');
+
 export const resolveQuery = <T, H extends HookContext> (...resolvers: Resolver<T, H>[]) =>
   async (context: H, next?: NextFunction) => {
     const ctx = getContext(context);
@@ -99,6 +101,44 @@ export const resolveResult = <T, H extends HookContext> (...resolvers: Resolver<
     } else {
       context.result = result;
     }
+  };
+
+export const resolveDispatch = <T, H extends HookContext> (...resolvers: Resolver<T, H>[]) =>
+  async (context: H, next?: NextFunction) => {
+    if (typeof next === 'function') {
+      await next();
+    }
+
+    const ctx = getContext(context);
+    const status = context.params.resolve;
+
+    const isPaginated = context.method === 'find' && context.result.data;
+    const data = isPaginated ? context.result.data : context.result;
+    const resolveDispatch = async (current: any) => {
+      const resolved = await runResolvers(resolvers, current, ctx, status)
+
+      return Object.keys(resolved).reduce((res, key) => {
+        const value = current[key];
+        const hasDispatch = typeof value === 'object' && value !== null && value[DISPATCH] !== undefined;
+
+        res[key] = hasDispatch ? value[DISPATCH] : value;
+
+        return res
+      }, {} as any)
+    }
+
+    const result = await (Array.isArray(data) ? Promise.all(data.map(resolveDispatch)) : resolveDispatch(data));
+    const dispatch = isPaginated ? {
+      ...context.result,
+      data: result
+    } : result;
+
+    context.dispatch = dispatch;
+    Object.defineProperty(context.result, DISPATCH, {
+      value: dispatch,
+      enumerable: false,
+      configurable: false
+    });
   };
 
 export const validateQuery = <H extends HookContext> (schema: Schema<any>) =>

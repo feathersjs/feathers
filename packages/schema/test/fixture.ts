@@ -6,7 +6,7 @@ import { GeneralError } from '@feathersjs/errors';
 
 import {
   schema, resolve, Infer, resolveResult, resolveQuery,
-  resolveData, validateData, validateQuery, querySyntax, Combine
+  resolveData, validateData, validateQuery, querySyntax, Combine, resolveDispatch
 } from '../src';
 import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib';
 
@@ -48,10 +48,14 @@ export const userDataResolver = resolve<User, HookContext<Application>>({
 export const userResultResolver = resolve<UserResult, HookContext<Application>>({
   schema: userResultSchema,
   properties: {
-    name: async (_value, user) => user.email.split('@')[0],
-    password: async (value, _user, context) => {
-      return context.params.provider ? undefined : value;
-    }
+    name: async (_value, user) => user.email.split('@')[0]
+  }
+});
+
+export const userDispatchResolver = resolve<UserResult, HookContext<Application>>({
+  schema: userResultSchema,
+  properties: {
+    password: () => undefined
   }
 });
 
@@ -69,7 +73,8 @@ export const messageSchema = schema({
   required: ['text', 'userId'],
   properties: {
     text: { type: 'string' },
-    userId: { type: 'number' }
+    userId: { type: 'number' },
+    secret: { type: 'boolean' }
   }
 } as const);
 
@@ -104,6 +109,12 @@ export const messageResultResolver = resolve<MessageResult, HookContext<Applicat
     }
   }
 });
+
+export const messageDispatchResolver = resolve<MessageResult, HookContext<Application>>({
+  properties: {
+    secret: () => undefined
+  }
+})
 
 export const messageQuerySchema = schema({
   $id: 'MessageQuery',
@@ -156,6 +167,7 @@ app.use('messages', memory())
 app.use('paginatedMessages', memory({paginate: { default: 10 }}));
 
 app.service('messages').hooks([
+  resolveDispatch(messageDispatchResolver),
   validateQuery(messageQuerySchema),
   resolveQuery(messageQueryResolver),
   resolveResult(messageResultResolver)
@@ -168,6 +180,7 @@ app.service('paginatedMessages').hooks([
 ]);
 
 app.service('users').hooks([
+  resolveDispatch(userDispatchResolver),
   resolveResult(userResultResolver, secondUserResultResolver)
 ]);
 
