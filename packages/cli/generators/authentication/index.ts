@@ -1,0 +1,89 @@
+import chalk from 'chalk'
+import { generator, runGenerators, prompt, install } from '@feathershq/pinion'
+import { FeathersBaseContext } from '../commons'
+import { generate as serviceGenerator } from '../service/index'
+
+export interface AuthenticationGeneratorContext extends FeathersBaseContext {
+  service: string
+  entity: string
+  authStrategies: string[]
+  dependencies: string[]
+}
+
+export type AuthenticationGeneratorArguments = FeathersBaseContext
+  & Partial<Pick<AuthenticationGeneratorContext, 'service'|'authStrategies'|'entity'>>
+
+export const generate = (ctx: AuthenticationGeneratorArguments) => generator(ctx)
+  .then(prompt<AuthenticationGeneratorArguments, AuthenticationGeneratorContext>(ctx => [{
+    type: 'checkbox',
+    name: 'authStrategies',
+    when: !ctx.authStrategies,
+    message: 'Which authentication methods do you want to use?',
+    suffix: chalk.grey(' Other methods and providers can be added at any time.'),
+    choices: [{
+      name: 'Email + Password',
+      value: 'local',
+      checked: true
+    }, {
+      name: 'Google',
+      value: 'google'
+    }, {
+      name: 'Facebook',
+      value: 'facebook'
+    }, {
+      name: 'Twitter',
+      value: 'twitter'
+    }, {
+      name: 'GitHub',
+      value: 'github'
+    }, {
+      name: 'Auth0',
+      value: 'auth0'
+    }]
+  }, {
+    name: 'service',
+    type: 'input',
+    when: !ctx.service,
+    message: 'What is your authentication service name?',
+    default: 'users'
+  }, {
+    name: 'entity',
+    type: 'input',
+    when: !ctx.entity,
+    message: 'What is your authenticated entity name?',
+    suffix: chalk.grey(' Will be available in params (e.g. params.user)'),
+    default: 'user'
+  }]))
+  .then(async ctx => {
+    await serviceGenerator({
+      ...ctx,
+      name: ctx.service,
+      path: ctx.service,
+      type: ctx.feathers.database
+    })
+
+    return ctx
+  })
+  .then(runGenerators(__dirname, 'templates'))
+  .then(ctx => {
+    const dependencies: string[] = []
+
+    dependencies.push(
+      '@feathersjs/authentication-oauth'
+    )
+
+    if (ctx.authStrategies.includes('local')) {
+      dependencies.push('@feathersjs/authentication-local');
+    }
+
+    if(ctx.dependencies) {
+      return {
+        ...ctx,
+        dependencies: [...ctx.dependencies, ...dependencies]
+      }
+    }
+
+    const installer = install<AuthenticationGeneratorContext>(dependencies)
+
+    return installer(ctx)
+  })

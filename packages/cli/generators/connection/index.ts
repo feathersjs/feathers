@@ -1,16 +1,18 @@
 import { generator, runGenerator, prompt, install, mergeJSON, toFile } from '@feathershq/pinion'
 import chalk from 'chalk'
-import { FeathersBaseContext } from '../index'
+import { FeathersBaseContext } from '../commons'
 
 export interface ConnectionGeneratorContext extends FeathersBaseContext {
   database: string
   connectionString: string
-  name: string
   dependencies: string[]
 }
 
-export const generate = (ctx: ConnectionGeneratorContext) => generator(ctx)
-  .then(prompt<ConnectionGeneratorContext>(({ database }) => [{
+export type ConnectionGeneratorArguments = FeathersBaseContext
+  & Partial<Pick<ConnectionGeneratorContext, 'database'|'connectionString'>>
+
+export const generate = (ctx: ConnectionGeneratorArguments) => generator(ctx)
+  .then(prompt<ConnectionGeneratorArguments>(({ database }) => [{
     name: 'database',
     type: 'list',
     when: !database,
@@ -22,20 +24,20 @@ export const generate = (ctx: ConnectionGeneratorContext) => generator(ctx)
       { value: 'custom', name: 'Custom services/another database' }
     ]
   }]))
-  .then(prompt<ConnectionGeneratorContext>(({ connectionString, database, name }) =>
+  .then(prompt<ConnectionGeneratorArguments, ConnectionGeneratorContext>(({
+    connectionString,
+    database,
+    pkg
+  }) =>
     database !== 'custom' ? [{
       name: 'connectionString',
       type: 'input',
       when: !connectionString,
       message: 'Enter your database connection string',
-      default: `mongodb://localhost:27017/${name}`
-    }] : [])
-  )
-  .then(runGenerator<ConnectionGeneratorContext>(
-    __dirname,
-    ({ feathers: { language } }) => language,
-    ({ database, feathers: { language } }) => `${database}.${language}.tpl`)
-  )
+      default: `mongodb://localhost:27017/${pkg.name}`
+    }] : []
+  ))
+  .then(runGenerator<ConnectionGeneratorContext>(__dirname, 'templates', ({ database }) => `${database}.tpl`))
   .then(mergeJSON<ConnectionGeneratorContext>(({ connectionString }) => ({
     database: connectionString
   }), toFile('config', 'default.json')))
@@ -53,5 +55,5 @@ export const generate = (ctx: ConnectionGeneratorContext) => generator(ctx)
       }
     }
 
-    return install<ConnectionGeneratorContext>(dependencies)(ctx)
+    return install(dependencies)(ctx)
   })

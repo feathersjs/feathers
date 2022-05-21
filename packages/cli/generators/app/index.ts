@@ -1,8 +1,12 @@
 import { sep, join } from 'path'
 import { PackageJson } from 'type-fest'
 import chalk from 'chalk'
-import { generator, prompt, runGenerators, loadJSON, fromFile, install, runGenerator, copyFiles, toFile } from '@feathershq/pinion'
-import { FeathersBaseContext, FeathersAppInfo, initializeBaseContext } from '../index'
+import {
+  generator, prompt, runGenerators, loadJSON, fromFile, install, copyFiles, toFile
+} from '@feathershq/pinion'
+import { FeathersBaseContext, FeathersAppInfo, initializeBaseContext } from '../commons'
+import { generate as authenticationGenerator } from '../authentication'
+import { generate as connectionGenerator } from '../connection'
 
 type DependencyVersions = { [key: string]: string }
 
@@ -18,10 +22,6 @@ export interface AppGeneratorData extends FeathersAppInfo {
    * A short description of the app
    */
   description: string
-  /**
-   * A list of selected authentication methods
-   */
-  authStrategies: string[]
 }
 
 export type AppGeneratorContext = FeathersBaseContext & AppGeneratorData & {
@@ -30,13 +30,15 @@ export type AppGeneratorContext = FeathersBaseContext & AppGeneratorData & {
   devDependencies: string[]
 }
 
-export const generate = (ctx: AppGeneratorContext) => generator(ctx)
+export type AppGeneratorArguments = FeathersBaseContext & Partial<AppGeneratorData>
+
+export const generate = (ctx: AppGeneratorArguments) => generator(ctx)
   .then(loadJSON(join(__dirname, '..', '..', 'package.json'), (pkg: PackageJson) => ({
     dependencyVersions: pkg.devDependencies,
     dependencies: [],
     devDependencies: []
   })))
-  .then(prompt((ctx: AppGeneratorContext) => [{
+  .then(prompt<AppGeneratorArguments, AppGeneratorContext>(ctx => [{
     name: 'language',
     type: 'list',
     message: 'Do you want to use JavaScript or TypeScript?',
@@ -83,39 +85,33 @@ export const generate = (ctx: AppGeneratorContext) => generator(ctx)
       { value: 'npm', name: 'npm' },
       { value: 'yarn', name: 'Yarn'  }
     ]
-  }, {
-    type: 'checkbox',
-    name: 'authStrategies',
-    when: !ctx.authStrategies,
-    message: 'Which user authentication methods do you want to use?',
-    suffix: chalk.grey(' Other methods and providers can be added at any time.'),
-    choices: [{
-      name: 'Email + Password',
-      value: 'local',
-      checked: true
-    }, {
-      name: 'Google',
-      value: 'google'
-    }, {
-      name: 'Facebook',
-      value: 'facebook'
-    }, {
-      name: 'Twitter',
-      value: 'twitter'
-    }, {
-      name: 'GitHub',
-      value: 'github'
-    }, {
-      name: 'Auth0',
-      value: 'auth0'
-    }]
   }]))
-  .then(runGenerators(__dirname, 'common'))
-  .then(initializeBaseContext())
+  .then(runGenerators(__dirname, 'templates'))
   .then(copyFiles(fromFile(__dirname, 'static'), toFile('.')))
-  .then(runGenerators(__dirname, (ctx: AppGeneratorContext) => ctx.language))
-  .then(runGenerator(__dirname, '..', 'connection', 'index'))
-  .then(install<AppGeneratorContext>(({ transports, database, framework, dependencyVersions, authStrategies, dependencies }) => {
+  .then(initializeBaseContext())
+  .then(async ctx => {
+    const { dependencies } = await connectionGenerator(ctx)
+
+    return {
+      ...ctx,
+      dependencies
+    }
+  })
+  .then(async ctx => {
+    const { dependencies } = await authenticationGenerator({
+      ...ctx,
+      service: 'users',
+      entity: 'user'
+    })
+
+    return {
+      ...ctx,
+      dependencies
+    }
+  })
+  .then(install<AppGeneratorContext>(({
+    transports, framework, dependencyVersions, dependencies
+  }) => {
     const hasSocketio = transports.includes('websockets')
 
     dependencies.push(
@@ -123,23 +119,13 @@ export const generate = (ctx: AppGeneratorContext) => generator(ctx)
       '@feathersjs/errors',
       '@feathersjs/schema',
       '@feathersjs/configuration',
-      '@feathersjs/authentication',
       '@feathersjs/transport-commons',
       '@feathersjs/authentication',
-      '@feathersjs/authentication-oauth',
       'winston'
     );
 
-    if (authStrategies.includes('local')) {
-      dependencies.push('@feathersjs/authentication-local');
-    }
-
     if (hasSocketio) {
       dependencies.push('@feathersjs/socketio');
-    }
-
-    if (database !== 'custom') {
-      dependencies.push(`feathers-${database}`);
     }
 
     if (framework === 'koa') {

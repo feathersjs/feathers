@@ -1,7 +1,7 @@
-import { generator, runGenerator, runGenerators } from '@feathershq/pinion'
 import _ from 'lodash'
-import { join } from 'path'
-import { FeathersBaseContext } from '../index'
+import { generator, runGenerator, runGenerators, prompt } from '@feathershq/pinion'
+
+import { FeathersBaseContext } from '../commons'
 
 export interface ServiceGeneratorContext extends FeathersBaseContext {
   /**
@@ -39,39 +39,56 @@ export interface ServiceGeneratorContext extends FeathersBaseContext {
   /**
    * The chosen service type
    */
-  type: 'custom'|'mongodb'|'sequelize'
+  type: 'knex'|'mongodb'|'custom'
 }
 
-export const generate = (ctx: ServiceGeneratorContext) => generator(ctx)
-  .then(async ctx => {
-    const { name }: ServiceGeneratorContext = await ctx.pinion.prompt([{
+/**
+ * Parameters the generator is called with
+ */
+export type ServiceGeneratorArguments = FeathersBaseContext & Partial<Pick<ServiceGeneratorContext, 'name'|'path'|'type'>>
+
+export const generate = (ctx: ServiceGeneratorArguments) => generator(ctx)
+  .then(prompt<ServiceGeneratorArguments>(({ name }) => [{
       name: 'name',
       type: 'input',
-      when: !ctx.name,
+      when: !name,
       message: 'What is the name of your service?'
-    }])
-    const { path, type }: ServiceGeneratorContext = await ctx.pinion.prompt([{
-      name: 'path',
-      type: 'input',
-      when: !ctx.path,
-      message: 'Which path should the service be registered on?',
-      default: `${_.kebabCase(name)}`
-    }, {
-      name: 'type',
-      type: 'list',
-      when: !ctx.type,
-      message: 'What kind of service is it?',
-      default: ctx?.feathers.database,
-      choices: [
-        { value: 'custom', name: 'A custom service' },
-        { value: 'sequelize', name: 'SQL (Sequelize)' },
-        { value: 'mongodb', name: 'MongoDB' }
-      ]
-    }])
-    const kebabName = _.kebabCase(name);
-    const camelName = _.camelCase(name);
-    const upperName = _.upperFirst(camelName);
-    const className = `${upperName}Service`;
+    }]))
+  .then(prompt<ServiceGeneratorArguments>(({ name, path, type }) => [{
+    name: 'path',
+    type: 'input',
+    when: !path,
+    message: 'Which path should the service be registered on?',
+    default: `${_.kebabCase(name)}`
+  }, {
+    name: 'type',
+    type: 'list',
+    when: !type,
+    message: 'What kind of service is it?',
+    choices: [
+      {
+        value: 'custom',
+        name: 'A custom service',
+        checked: ctx?.feathers.database === 'custom'
+      },
+      {
+        value: 'knex',
+        name: 'SQL',
+        checked: ctx?.feathers.database === 'knex'
+      },
+      {
+        value: 'mongodb',
+        name: 'MongoDB',
+        checked: ctx?.feathers.database === 'mongodb'
+      }
+    ]
+  }]))
+  .then(async ctx => {
+    const { name, path, type } = ctx
+    const kebabName = _.kebabCase(name)
+    const camelName = _.camelCase(name)
+    const upperName = _.upperFirst(camelName)
+    const className = `${upperName}Service`
 
     const pathElements = path.split('/').filter(el => el !== '')
     const relative = pathElements.map(() => '..').join('/');
@@ -90,7 +107,5 @@ export const generate = (ctx: ServiceGeneratorContext) => generator(ctx)
       ...ctx
     }
   })
-  .then(runGenerators<ServiceGeneratorContext>(__dirname, ({ pkg }) => pkg.feathers.language))
-  .then(runGenerator<ServiceGeneratorContext>(({ pkg, type }) =>
-    join(__dirname, pkg.feathers.language, 'type', `${type}.tpl`)
-  ))
+  .then(runGenerators<ServiceGeneratorContext>(__dirname, 'templates'))
+  .then(runGenerator<ServiceGeneratorContext>(__dirname, 'type', ({ type }) => `${type}.tpl`))
