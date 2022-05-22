@@ -13,6 +13,13 @@ const getContext = <H extends HookContext> (context: H) => {
   }
 }
 
+const getData = <H extends HookContext> (context: H) => {
+  const isPaginated = context.method === 'find' && context.result.data;
+  const data = isPaginated ? context.result.data : context.result;
+
+  return { isPaginated, data };
+}
+
 const runResolvers = async <T, H extends HookContext> (
   resolvers: Resolver<T, H>[],
   data: any,
@@ -88,9 +95,7 @@ export const resolveResult = <T, H extends HookContext> (...resolvers: Resolver<
 
     const ctx = getContext(context);
     const status = context.params.resolve;
-
-    const isPaginated = context.method === 'find' && context.result.data;
-    const data = isPaginated ? context.result.data : context.result;
+    const { isPaginated, data } = getData(context);
 
     const result = Array.isArray(data) ?
       await Promise.all(data.map(async current => runResolvers(resolvers, current, ctx, status))) :
@@ -111,9 +116,7 @@ export const resolveDispatch = <T, H extends HookContext> (...resolvers: Resolve
 
     const ctx = getContext(context);
     const status = context.params.resolve;
-
-    const isPaginated = context.method === 'find' && context.result.data;
-    const data = isPaginated ? context.result.data : context.result;
+    const { isPaginated, data } = getData(context);
     const resolveDispatch = async (current: any) => {
       const resolved = await runResolvers(resolvers, current, ctx, status)
 
