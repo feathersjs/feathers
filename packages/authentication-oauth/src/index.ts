@@ -44,8 +44,8 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
   const grant = defaultsDeep({
     defaults: {
       prefix,
-      origin: `${oauth?.defaults?.protocol ?? protocol}://${oauth?.defaults?.host ?? host}`,
-      transport:  oauth?.defaults?.transport ?? 'session',
+      origin: `${protocol}://${host}`,
+      transport: 'session',
       response: ['tokens', 'raw', 'profile']
     }
   }, omit(oauth, ['redirect', 'origins']));
