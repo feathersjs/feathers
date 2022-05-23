@@ -6,7 +6,7 @@ import { GeneralError } from '@feathersjs/errors';
 
 import {
   schema, resolve, Infer, resolveResult, resolveQuery,
-  resolveData, validateData, validateQuery, querySyntax, Combine, resolveDispatch
+  resolveData, validateData, validateQuery, querySyntax, Combine, resolveDispatch, resolveAll
 } from '../src';
 import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib';
 
@@ -167,10 +167,12 @@ app.use('messages', memory())
 app.use('paginatedMessages', memory({paginate: { default: 10 }}));
 
 app.service('messages').hooks([
-  resolveDispatch(messageDispatchResolver),
-  validateQuery(messageQuerySchema),
-  resolveQuery(messageQueryResolver),
-  resolveResult(messageResultResolver)
+  resolveAll({
+    dispatch: messageDispatchResolver,
+    result: messageResultResolver,
+    query: messageQueryResolver
+  }),
+  validateQuery(messageQuerySchema)
 ]);
 
 app.service('paginatedMessages').hooks([
