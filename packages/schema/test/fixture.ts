@@ -6,7 +6,7 @@ import { GeneralError } from '@feathersjs/errors';
 
 import {
   schema, resolve, Infer, resolveResult, resolveQuery,
-  resolveData, validateData, validateQuery, querySyntax
+  resolveData, validateData, validateQuery, querySyntax, Combine, resolveDispatch, resolveAll
 } from '../src';
 import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib';
 
@@ -48,10 +48,14 @@ export const userDataResolver = resolve<User, HookContext<Application>>({
 export const userResultResolver = resolve<UserResult, HookContext<Application>>({
   schema: userResultSchema,
   properties: {
-    name: async (_value, user) => user.email.split('@')[0],
-    password: async (value, _user, context) => {
-      return context.params.provider ? undefined : value;
-    }
+    name: async (_value, user) => user.email.split('@')[0]
+  }
+});
+
+export const userDispatchResolver = resolve<UserResult, HookContext<Application>>({
+  schema: userResultSchema,
+  properties: {
+    password: () => undefined
   }
 });
 
@@ -69,7 +73,8 @@ export const messageSchema = schema({
   required: ['text', 'userId'],
   properties: {
     text: { type: 'string' },
-    userId: { type: 'number' }
+    userId: { type: 'number' },
+    secret: { type: 'boolean' }
   }
 } as const);
 
@@ -77,7 +82,7 @@ export const messageResultSchema = schema({
   $id: 'MessageResult',
   type: 'object',
   additionalProperties: false,
-  required: ['id', 'user', ...messageSchema.required],
+  required: ['id', ...messageSchema.required],
   properties: {
     ...messageSchema.properties,
     id: { type: 'number' },
@@ -86,9 +91,9 @@ export const messageResultSchema = schema({
 } as const);
 
 export type Message = Infer<typeof messageSchema>;
-export type MessageResult = Infer<typeof messageResultSchema> & {
+export type MessageResult = Combine<typeof messageResultSchema, {
   user: User;
-};
+}>;
 
 export const messageResultResolver = resolve<MessageResult, HookContext<Application>>({
   schema: messageResultSchema,
@@ -104,6 +109,12 @@ export const messageResultResolver = resolve<MessageResult, HookContext<Applicat
     }
   }
 });
+
+export const messageDispatchResolver = resolve<MessageResult, HookContext<Application>>({
+  properties: {
+    secret: () => undefined
+  }
+})
 
 export const messageQuerySchema = schema({
   $id: 'MessageQuery',
@@ -156,9 +167,12 @@ app.use('messages', memory())
 app.use('paginatedMessages', memory({paginate: { default: 10 }}));
 
 app.service('messages').hooks([
-  validateQuery(messageQuerySchema),
-  resolveQuery(messageQueryResolver),
-  resolveResult(messageResultResolver)
+  resolveAll({
+    dispatch: messageDispatchResolver,
+    result: messageResultResolver,
+    query: messageQueryResolver
+  }),
+  validateQuery(messageQuerySchema)
 ]);
 
 app.service('paginatedMessages').hooks([
@@ -168,6 +182,7 @@ app.service('paginatedMessages').hooks([
 ]);
 
 app.service('users').hooks([
+  resolveDispatch(userDispatchResolver),
   resolveResult(userResultResolver, secondUserResultResolver)
 ]);
 

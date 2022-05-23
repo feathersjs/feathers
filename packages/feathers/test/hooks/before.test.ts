@@ -38,7 +38,9 @@ describe('`before` hooks', () => {
           return new Promise((_resolve, reject) => {
             reject(new Error('This did not work'));
           });
-        }
+        },
+
+        find: []
       }
     });
 

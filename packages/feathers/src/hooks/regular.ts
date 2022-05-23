@@ -142,7 +142,7 @@ const createMap = (input: RegularHookMap<any, any>, methods: string[]) => {
     const data = convertHookData(input[type]);
 
     Object.keys(data).forEach((method) => {
-      if (method !== 'all' && !methods.includes(method)) {
+      if (method !== 'all' && !methods.includes(method) && !defaultServiceMethods.includes(method)) {
         throw new Error(`'${method}' is not a valid hook method`);
       }
     });

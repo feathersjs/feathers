@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.21](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.20...v5.0.0-pre.21) (2022-05-23)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Fix regression using incorrect callback and redirect_uri ([#2631](https://github.com/feathersjs/feathers/issues/2631)) ([43d8a08](https://github.com/feathersjs/feathers/commit/43d8a082d7e1807f8a431c44a1dbd9b04c3af0d2))
+
+
+
+
+
 # [5.0.0-pre.20](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.19...v5.0.0-pre.20) (2022-05-04)
 
 

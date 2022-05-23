@@ -91,6 +91,29 @@ describe('@feathersjs/schema/resolver', () => {
     });
   });
 
+  it('simple resolver with converter', async () => {
+    const userConverterResolver = resolve<User, typeof context>({
+      schema: userSchema,
+      validate: 'before',
+      converter: async data => ({
+        firstName: 'Default',
+        lastName: 'Name',
+        ...data
+      }),
+      properties: {
+        name: async (_name, user) => `${user.firstName} ${user.lastName}`
+      }
+    });
+
+    const u = await userConverterResolver.resolve({}, context);
+
+    assert.deepStrictEqual(u, {
+      firstName: 'Default',
+      lastName: 'Name',
+      name: 'Default Name'
+    });
+  });
+
   it('resolving with errors', async () => {
     const dummyResolver = resolve({
       properties: {

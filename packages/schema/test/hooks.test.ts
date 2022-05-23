@@ -1,3 +1,4 @@
+import { createContext } from '@feathersjs/feathers';
 import assert from 'assert';
 import { app, MessageResult, UserResult } from './fixture';
 
@@ -15,7 +16,8 @@ describe('@feathersjs/schema/hooks', () => {
     }]))[0];
     message = await app.service('messages').create({
       text,
-      userId: user.id
+      userId: user.id,
+      secret: true
     });
     messageOnPaginatedService = await app.service('paginatedMessages').create({
       text,
@@ -34,10 +36,9 @@ describe('@feathersjs/schema/hooks', () => {
   });
 
   it('resolves results and handles resolver errors (#2534)', async () => {
-    // eslint-disable-next-line
-    const { password, ...externalUser } = user;
     const payload = {
       userId: user.id,
+      secret: true,
       text
     }
 
@@ -55,7 +56,7 @@ describe('@feathersjs/schema/hooks', () => {
 
     assert.deepStrictEqual(messages, [{
       id: 0,
-      user: externalUser,
+      user,
       ...payload
     }]);
 
@@ -79,10 +80,9 @@ describe('@feathersjs/schema/hooks', () => {
   });
 
   it('resolves get result with the object on result', async () => {
-    // eslint-disable-next-line
-    const { password, ...externalUser } = user;
     const payload = {
       userId: user.id,
+      secret: true,
       text
     }
 
@@ -100,14 +100,12 @@ describe('@feathersjs/schema/hooks', () => {
 
     assert.deepStrictEqual(result, {
       id: 0,
-      user: externalUser,
+      user,
       ...payload
     });
   });
 
   it('resolves find results with paginated result object', async () => {
-    // eslint-disable-next-line
-    const { password, ...externalUser } = user;
     const payload = {
       userId: user.id,
       text
@@ -129,11 +127,35 @@ describe('@feathersjs/schema/hooks', () => {
       }
     });
 
-    assert.deepStrictEqual(messages, { limit: 1, skip: 0, total: 1, data: [{
+    assert.deepStrictEqual(messages, {
+      limit: 1,
+      skip: 0,
+      total: 1,
+      data: [{
+        id: 0,
+        user,
+        ...payload
+      }]
+    });
+  });
+
+  it('resolves safe dispatch data recursively', async () => {
+    const service = app.service('messages');
+    const context = await service.get(0, {}, createContext(service as any, 'get'))
+
+    assert.ok(context.result.secret)
+    assert.strictEqual(context.result.user.password, 'hashed')
+
+    assert.deepStrictEqual(context.dispatch, {
+      text: 'Hi there',
+      userId: 0,
       id: 0,
-      user: externalUser,
-      ...payload
-    }]});
+      user: {
+        email: 'hello@feathersjs.com',
+        id: 0,
+        name: 'hello (hello@feathersjs.com)'
+      }
+    })
   });
 
   it('validates and converts the query', async () => {
