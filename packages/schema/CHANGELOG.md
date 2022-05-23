@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.21](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.20...v5.0.0-pre.21) (2022-05-23)
+
+
+### Bug Fixes
+
+* **schema:** Add Combine helper to allow merging schema types that use ([#2637](https://github.com/feathersjs/feathers/issues/2637)) ([06d03e9](https://github.com/feathersjs/feathers/commit/06d03e91abb1347576c2351c12322d01c58473e5))
+* **typescript:** Make additional types generic to work with extended types ([#2625](https://github.com/feathersjs/feathers/issues/2625)) ([269fdec](https://github.com/feathersjs/feathers/commit/269fdecc5961092dc8608b3cbe16f433c80bfa96))
+
+
+### Features
+
+* **schema:** Add resolveAll hook ([#2643](https://github.com/feathersjs/feathers/issues/2643)) ([85527d7](https://github.com/feathersjs/feathers/commit/85527d71cb78852880696e5d96abdcdf24593934))
+* **schema:** Add resolver for safe external data dispatching ([#2641](https://github.com/feathersjs/feathers/issues/2641)) ([72b980e](https://github.com/feathersjs/feathers/commit/72b980e05631136d30c8f1468dee45ec6a8d2503))
+* **schema:** Add schema resolver converter functionality ([#2640](https://github.com/feathersjs/feathers/issues/2640)) ([26d9e05](https://github.com/feathersjs/feathers/commit/26d9e05327d6e0144466cd57d6fcc11ac7ecb06a))
+
+
+
+
+
 # [5.0.0-pre.20](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.19...v5.0.0-pre.20) (2022-05-04)
 
 
