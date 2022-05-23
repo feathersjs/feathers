@@ -87,6 +87,13 @@ export const ${camelName}QueryResolver = resolve({
   validate: 'before',
   properties: {}
 })
+
+// Export all resolvers in a format that can be used with the resolveAll hook
+export const ${camelName}Resolvers = {
+  result: ${camelName}ResultResolver,
+  data: ${camelName}DataResolver,
+  query: ${camelName}QueryResolver
+}
 `
 
 const ts = ({ camelName, upperName, relative, type }: ServiceGeneratorContext) =>
@@ -175,6 +182,13 @@ export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>
   validate: 'before',
   properties: {}
 })
+
+// Export all resolvers in a format that can be used with the resolveAll hook
+export const ${camelName}Resolvers = {
+  result: ${camelName}ResultResolver,
+  data: ${camelName}DataResolver,
+  query: ${camelName}QueryResolver
+}
 `
 
 export const generate = (ctx: ServiceGeneratorContext) => generator(ctx)

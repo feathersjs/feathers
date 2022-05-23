@@ -30,5 +30,5 @@ describe('${name} service', () => {
 
 export const generate = (ctx: ServiceGeneratorContext) => generator(ctx)
   .then(renderSource({ js, ts }, toFile<ServiceGeneratorContext>(({ test, folder, kebabName }) =>
-    [test, 'services', ...folder, `${kebabName}.test.ts`]
+    [test, 'services', ...folder, `${kebabName}.test`]
   )))

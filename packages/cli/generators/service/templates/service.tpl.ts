@@ -3,34 +3,21 @@ import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
 const js = ({ relative, path, className, camelName }: ServiceGeneratorContext) =>
-`import { resolveData, resolveQuery, resolveResult } from '@feathersjs/schema'
-
-import {
-  ${camelName}QueryResolver,
-  ${camelName}DataResolver,
-  ${camelName}PatchResolver,
-  ${camelName}ResultResolver
-} from '${relative}/schemas/${path}.schema.js'
+`import { resolveAll } from '@feathersjs/schema'
+import { ${camelName}Resolvers } from '${relative}/schemas/${path}.schema.js'
 
 // The ${className} service class
 
 export const serviceHooks = [
-  resolveResult(${camelName}ResultResolver),
-  resolveQuery(${camelName}QueryResolver)
+  resolveAll(${camelName}Resolvers)
 ]
 
 export const methodHooks = {
   find: [],
   get: [],
-  create: [
-    resolveData(${camelName}DataResolver)
-  ],
-  update: [
-    resolveData(${camelName}DataResolver)
-  ],
-  patch: [
-    resolveData(${camelName}PatchResolver)
-  ],
+  create: [],
+  update: [],
+  patch: [],
   remove: []
 }
 
@@ -55,38 +42,28 @@ export function ${camelName} (app) {
 `
 
 const ts = ({ relative, path, className, camelName, upperName }: ServiceGeneratorContext) =>
-`import { resolveData, resolveQuery, resolveResult } from '@feathersjs/schema'
+`import { resolveAll } from '@feathersjs/schema'
 import { Application } from '${relative}/declarations'
 
 import {
   ${upperName}Data,
   ${upperName}Result,
   ${upperName}Query,
-  ${camelName}QueryResolver,
-  ${camelName}DataResolver,
-  ${camelName}PatchResolver,
-  ${camelName}ResultResolver
+  ${camelName}Resolvers
 } from '${relative}/schemas/${path}.schema'
 
 // The ${className} service class
 
 export const serviceHooks = [
-  resolveResult(${camelName}ResultResolver),
-  resolveQuery(${camelName}QueryResolver)
+  resolveAll(${camelName}Resolvers)
 ]
 
 export const methodHooks = {
   find: [],
   get: [],
-  create: [
-    resolveData(${camelName}DataResolver)
-  ],
-  update: [
-    resolveData(${camelName}DataResolver)
-  ],
-  patch: [
-    resolveData(${camelName}PatchResolver)
-  ],
+  create: [],
+  update: [],
+  patch: [],
   remove: []
 }
 
