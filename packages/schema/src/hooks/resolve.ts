@@ -1,7 +1,6 @@
 import { HookContext, NextFunction } from '@feathersjs/feathers';
-import { BadRequest } from '../../errors/lib';
-import { Resolver, ResolverStatus } from './resolver';
-import { Schema } from './schema';
+import { compose } from '@feathersjs/hooks';
+import { Resolver, ResolverStatus } from '../resolver';
 
 const getContext = <H extends HookContext> (context: H) => {
   return {
@@ -55,18 +54,21 @@ export const resolveQuery = <T, H extends HookContext> (...resolvers: Resolver<T
 
 export const resolveData = <T, H extends HookContext> (...resolvers: Resolver<T, H>[]) =>
   async (context: H, next?: NextFunction) => {
-    const ctx = getContext(context);
-    const data = context.data;
-    const status = {
-      originalContext: context
-    };
+    if (context.method === 'create' || context.method === 'patch' || context.method === 'update') {
+      const ctx = getContext(context);
+      const data = context.data;
 
-    if (Array.isArray(data)) {
-      context.data = await Promise.all(data.map(current =>
-        runResolvers(resolvers, current, ctx, status)
-      ));
-    } else {
-      context.data = await runResolvers(resolvers, data, ctx, status);
+      const status = {
+        originalContext: context
+      };
+
+      if (Array.isArray(data)) {
+        context.data = await Promise.all(data.map(current =>
+          runResolvers(resolvers, current, ctx, status)
+        ));
+      } else {
+        context.data = await runResolvers(resolvers, data, ctx, status);
+      }
     }
 
     if (typeof next === 'function') {
@@ -144,43 +146,25 @@ export const resolveDispatch = <T, H extends HookContext> (...resolvers: Resolve
     });
   };
 
-export const validateQuery = <H extends HookContext> (schema: Schema<any>) =>
-  async (context: H, next?: NextFunction) => {
-    const data = context?.params?.query || {};
+export type ResolveAllSettings<H extends HookContext> = {
+  data?: Resolver<any, H>|Resolver<any, H>[]
+  query?: Resolver<any, H>|Resolver<any, H>[]
+  result?: Resolver<any, H>|Resolver<any, H>[]
+  dispatch?: Resolver<any, H>|Resolver<any, H>[]
+}
 
-    try {
-      const query = await schema.validate(data);
+const getResolvers = <H extends HookContext> (
+  map: ResolveAllSettings<H>,
+  name: keyof ResolveAllSettings<H>
+) => {
+  const value = map[name];
 
-      context.params = {
-        ...context.params,
-        query
-      }
+  return Array.isArray(value) ? value : (value !== undefined ? [ value ] : []);
+}
 
-      if (typeof next === 'function') {
-        return next();
-      }
-    } catch (error: any) {
-      throw (error.ajv ? new BadRequest(error.message, error.errors) : error);
-    }
-  };
-
-export const validateData = <H extends HookContext> (schema: Schema<any>) =>
-  async (context: H, next?: NextFunction) => {
-    const data = context.data;
-
-    try {
-      if (Array.isArray(data)) {
-        context.data = await Promise.all(data.map(current =>
-          schema.validate(current)
-        ));
-      } else {
-        context.data = await schema.validate(data);
-      }
-    } catch (error: any) {
-      throw (error.ajv ? new BadRequest(error.message, error.errors) : error);
-    }
-
-    if (typeof next === 'function') {
-      return next();
-    }
-  };
+export const resolveAll = <H extends HookContext> (map: ResolveAllSettings<H>) => compose([
+  resolveDispatch(...getResolvers(map, 'dispatch')),
+  resolveResult(...getResolvers(map, 'result')),
+  resolveQuery(...getResolvers(map, 'query')),
+  resolveData(...getResolvers(map, 'data'))
+])
