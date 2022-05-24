@@ -34,6 +34,21 @@ const runResolvers = async <T, H extends HookContext> (
   return current as T;
 }
 
+export type ResolverSetting<H extends HookContext> = Resolver<any, H>|Resolver<any, H>[];
+
+export type DataResolvers<H extends HookContext> = {
+  create: Resolver<any, H>
+  patch: Resolver<any, H>
+  update: Resolver<any, H>
+}
+
+export type ResolveAllSettings<H extends HookContext> = {
+  data?: DataResolvers<H>
+  query?: Resolver<any, H>
+  result?: Resolver<any, H>
+  dispatch?: Resolver<any, H>
+}
+
 export const DISPATCH = Symbol('@feathersjs/schema/dispatch');
 
 export const resolveQuery = <T, H extends HookContext> (...resolvers: Resolver<T, H>[]) =>
@@ -52,9 +67,10 @@ export const resolveQuery = <T, H extends HookContext> (...resolvers: Resolver<T
     }
   };
 
-export const resolveData = <T, H extends HookContext> (...resolvers: Resolver<T, H>[]) =>
+export const resolveData = <H extends HookContext> (settings: DataResolvers<H>|Resolver<any, H>) =>
   async (context: H, next?: NextFunction) => {
     if (context.method === 'create' || context.method === 'patch' || context.method === 'update') {
+      const resolvers = settings instanceof Resolver ? [ settings ] : [ settings[context.method] ];
       const ctx = getContext(context);
       const data = context.data;
 
@@ -146,25 +162,24 @@ export const resolveDispatch = <T, H extends HookContext> (...resolvers: Resolve
     });
   };
 
-export type ResolveAllSettings<H extends HookContext> = {
-  data?: Resolver<any, H>|Resolver<any, H>[]
-  query?: Resolver<any, H>|Resolver<any, H>[]
-  result?: Resolver<any, H>|Resolver<any, H>[]
-  dispatch?: Resolver<any, H>|Resolver<any, H>[]
+export const resolveAll = <H extends HookContext> (map: ResolveAllSettings<H>) => {
+  const middleware = [];
+
+  if (map.dispatch) {
+    middleware.push(resolveDispatch(map.dispatch));
+  }
+
+  if (map.result) {
+    middleware.push(resolveResult(map.result));
+  }
+
+  if (map.query) {
+    middleware.push(resolveQuery(map.query));
+  }
+
+  if (map.data) {
+    middleware.push(resolveData(map.data));
+  }
+
+  return compose(middleware);
 }
-
-const getResolvers = <H extends HookContext> (
-  map: ResolveAllSettings<H>,
-  name: keyof ResolveAllSettings<H>
-) => {
-  const value = map[name];
-
-  return Array.isArray(value) ? value : (value !== undefined ? [ value ] : []);
-}
-
-export const resolveAll = <H extends HookContext> (map: ResolveAllSettings<H>) => compose([
-  resolveDispatch(...getResolvers(map, 'dispatch')),
-  resolveResult(...getResolvers(map, 'result')),
-  resolveQuery(...getResolvers(map, 'query')),
-  resolveData(...getResolvers(map, 'data'))
-])

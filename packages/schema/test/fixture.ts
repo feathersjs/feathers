@@ -189,7 +189,11 @@ app.service('users').hooks([
 app.service('users').hooks({
   create: [
     validateData(userSchema),
-    resolveData(userDataResolver)
+    resolveData({
+      create: userDataResolver,
+      patch: userDataResolver,
+      update: userDataResolver
+    })
   ]
 });
 
