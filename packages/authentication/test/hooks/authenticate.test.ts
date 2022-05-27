@@ -1,102 +1,109 @@
-import assert from 'assert';
-import { feathers, Application, Params, ServiceMethods } from '@feathersjs/feathers';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import assert from 'assert'
+import { feathers, Application, Params, ServiceMethods } from '@feathersjs/feathers'
 
-import { Strategy1, Strategy2 } from '../fixtures';
-import { AuthenticationService, hooks } from '../../src';
+import { Strategy1, Strategy2 } from '../fixtures'
+import { AuthenticationService, hooks } from '../../src'
 
-const { authenticate } = hooks;
+const { authenticate } = hooks
 
 describe('authentication/hooks/authenticate', () => {
   let app: Application<{
-    authentication: AuthenticationService,
-    'auth-v2': AuthenticationService,
+    authentication: AuthenticationService
+    'auth-v2': AuthenticationService
     users: Partial<ServiceMethods> & { id: string }
-  }>;
+  }>
 
   beforeEach(() => {
-    app = feathers();
-    app.use('authentication', new AuthenticationService(app, 'authentication', {
-      entity: 'user',
-      service: 'users',
-      secret: 'supersecret',
-      authStrategies: [ 'first' ]
-    }));
-    app.use('auth-v2', new AuthenticationService(app, 'auth-v2', {
-      entity: 'user',
-      service: 'users',
-      secret: 'supersecret',
-      authStrategies: [ 'test' ]
-    }));
+    app = feathers()
+    app.use(
+      'authentication',
+      new AuthenticationService(app, 'authentication', {
+        entity: 'user',
+        service: 'users',
+        secret: 'supersecret',
+        authStrategies: ['first']
+      })
+    )
+    app.use(
+      'auth-v2',
+      new AuthenticationService(app, 'auth-v2', {
+        entity: 'user',
+        service: 'users',
+        secret: 'supersecret',
+        authStrategies: ['test']
+      })
+    )
     app.use('users', {
       id: 'id',
 
-      async find () {
-        return [];
+      async find() {
+        return []
       },
 
-      async get (_id: string|number, params: Params) {
-        return params;
+      async get(_id: string | number, params: Params) {
+        return params
       }
-    });
+    })
 
-    const service = app.service('authentication');
+    const service = app.service('authentication')
 
-    service.register('first', new Strategy1());
-    service.register('second', new Strategy2());
+    service.register('first', new Strategy1())
+    service.register('second', new Strategy2())
 
-    app.service('auth-v2').register('test', new Strategy1());
+    app.service('auth-v2').register('test', new Strategy1())
 
     app.service('users').hooks({
       get: [authenticate('first', 'second')]
-    });
+    })
 
-    app.service('users').id = 'name';
-    app.setup();
-  });
+    app.service('users').id = 'name'
+    app.setup()
+  })
 
   it('throws an error when no strategies are passed', () => {
     try {
       // @ts-ignore
-      authenticate();
-      assert.fail('Should never get here');
+      authenticate()
+      assert.fail('Should never get here')
     } catch (error: any) {
-      assert.strictEqual(error.message, 'The authenticate hook needs at least one allowed strategy');
+      assert.strictEqual(error.message, 'The authenticate hook needs at least one allowed strategy')
     }
-  });
+  })
 
   it('throws an error when not a before hook', async () => {
-    const users = app.service('users');
+    const users = app.service('users')
 
     users.hooks({
       after: {
-        all: [ authenticate('first') ]
+        all: [authenticate('first')]
       }
-    });
+    })
 
     try {
-      await users.find();
-      assert.fail('Should never get here');
+      await users.find()
+      assert.fail('Should never get here')
     } catch (error: any) {
-      assert.strictEqual(error.name, 'NotAuthenticated');
-      assert.strictEqual(error.message, 'The authenticate hook must be used as a before hook');
+      assert.strictEqual(error.name, 'NotAuthenticated')
+      assert.strictEqual(error.message, 'The authenticate hook must be used as a before hook')
     }
-  });
+  })
 
   it('throws an error if authentication service is gone', async () => {
-    delete app.services.authentication;
+    delete app.services.authentication
 
     try {
       await app.service('users').get(1, {
         authentication: {
           some: 'thing'
         }
-      });
-      assert.fail('Should never get here');
+      })
+      assert.fail('Should never get here')
     } catch (error: any) {
-      assert.strictEqual(error.name, 'NotAuthenticated');
-      assert.strictEqual(error.message, 'Could not find a valid authentication service');
+      assert.strictEqual(error.name, 'NotAuthenticated')
+      assert.strictEqual(error.message, 'Could not find a valid authentication service')
     }
-  });
+  })
 
   it('authenticates with first strategy, merges params', async () => {
     const params = {
@@ -104,35 +111,35 @@ describe('authentication/hooks/authenticate', () => {
         strategy: 'first',
         username: 'David'
       }
-    };
+    }
 
-    const result = await app.service('users').get(1, params);
+    const result = await app.service('users').get(1, params)
 
-    assert.deepStrictEqual(result, Object.assign({}, params, Strategy1.result));
-  });
+    assert.deepStrictEqual(result, Object.assign({}, params, Strategy1.result))
+  })
 
   it('authenticates with first strategy, keeps references alive (#1629)', async () => {
-    const connection = {};
+    const connection = {}
     const params = {
       connection,
       authentication: {
         strategy: 'first',
         username: 'David'
       }
-    };
+    }
 
     app.service('users').hooks({
       after: {
-        get: context => {
-          context.result.params = context.params;
+        get: (context) => {
+          context.result.params = context.params
         }
       }
-    });
+    })
 
-    const result = await app.service('users').get(1, params);
+    const result = await app.service('users').get(1, params)
 
-    assert.ok(result.params.connection === connection);
-  });
+    assert.ok(result.params.connection === connection)
+  })
 
   it('authenticates with different authentication service', async () => {
     const params = {
@@ -140,21 +147,23 @@ describe('authentication/hooks/authenticate', () => {
         strategy: 'test',
         username: 'David'
       }
-    };
+    }
 
     app.service('users').hooks({
       before: {
-        find: [authenticate({
-          service: 'auth-v2',
-          strategies: [ 'test' ]
-        })]
+        find: [
+          authenticate({
+            service: 'auth-v2',
+            strategies: ['test']
+          })
+        ]
       }
-    });
+    })
 
-    const result = await app.service('users').find(params);
+    const result = await app.service('users').find(params)
 
-    assert.deepStrictEqual(result, []);
-  });
+    assert.deepStrictEqual(result, [])
+  })
 
   it('authenticates with second strategy', async () => {
     const params = {
@@ -163,21 +172,27 @@ describe('authentication/hooks/authenticate', () => {
         v2: true,
         password: 'supersecret'
       }
-    };
+    }
 
-    const result = await app.service('users').get(1, params);
+    const result = await app.service('users').get(1, params)
 
-    assert.deepStrictEqual(result, Object.assign({
-      authentication: params.authentication,
-      params: { authenticated: true }
-    }, Strategy2.result));
-  });
+    assert.deepStrictEqual(
+      result,
+      Object.assign(
+        {
+          authentication: params.authentication,
+          params: { authenticated: true }
+        },
+        Strategy2.result
+      )
+    )
+  })
 
   it('passes for internal calls without authentication', async () => {
-    const result = await app.service('users').get(1);
+    const result = await app.service('users').get(1)
 
-    assert.deepStrictEqual(result, {});
-  });
+    assert.deepStrictEqual(result, {})
+  })
 
   it('fails for invalid params.authentication', async () => {
     try {
@@ -186,55 +201,53 @@ describe('authentication/hooks/authenticate', () => {
           strategy: 'first',
           some: 'thing'
         }
-      });
-      assert.fail('Should never get here');
+      })
+      assert.fail('Should never get here')
     } catch (error: any) {
-      assert.strictEqual(error.name, 'NotAuthenticated');
-      assert.strictEqual(error.message, 'Invalid Dave');
+      assert.strictEqual(error.name, 'NotAuthenticated')
+      assert.strictEqual(error.message, 'Invalid Dave')
     }
-  });
+  })
 
   it('fails for external calls without authentication', async () => {
     try {
       await app.service('users').get(1, {
         provider: 'rest'
-      });
-      assert.fail('Should never get here');
+      })
+      assert.fail('Should never get here')
     } catch (error: any) {
-      assert.strictEqual(error.name, 'NotAuthenticated');
-      assert.strictEqual(error.message, 'Not authenticated');
+      assert.strictEqual(error.name, 'NotAuthenticated')
+      assert.strictEqual(error.message, 'Not authenticated')
     }
-  });
+  })
 
   it('passes with authenticated: true but external call', async () => {
     const params = {
       provider: 'rest',
       authenticated: true
-    };
-    const result = await app.service('users').get(1, params);
+    }
+    const result = await app.service('users').get(1, params)
 
-    assert.deepStrictEqual(result, params);
-  });
+    assert.deepStrictEqual(result, params)
+  })
 
   it('errors when used on the authentication service', async () => {
-    const auth = app.service('authentication');
+    const auth = app.service('authentication')
 
     auth.hooks({
       before: {
         create: authenticate('first')
       }
-    });
+    })
 
     try {
       await auth.create({
         strategy: 'first',
         username: 'David'
-      });
-      assert.fail('Should never get here');
+      })
+      assert.fail('Should never get here')
     } catch (error: any) {
-      assert.strictEqual(error.message,
-        'The authenticate hook does not need to be used on the authentication service'
-      );
+      assert.strictEqual(error.message, 'The authenticate hook does not need to be used on the authentication service')
     }
-  });
-});
+  })
+})

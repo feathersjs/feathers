@@ -1,13 +1,14 @@
-import { HookContext, NextFunction } from '@feathersjs/feathers';
-import { BadRequest } from '../../../errors/lib';
-import { Schema } from '../schema';
+import { HookContext, NextFunction } from '@feathersjs/feathers'
+import { BadRequest } from '../../../errors/lib'
+import { Schema } from '../schema'
 
-export const validateQuery = <H extends HookContext> (schema: Schema<any>) =>
+export const validateQuery =
+  <H extends HookContext>(schema: Schema<any>) =>
   async (context: H, next?: NextFunction) => {
-    const data = context?.params?.query || {};
+    const data = context?.params?.query || {}
 
     try {
-      const query = await schema.validate(data);
+      const query = await schema.validate(data)
 
       context.params = {
         ...context.params,
@@ -15,30 +16,29 @@ export const validateQuery = <H extends HookContext> (schema: Schema<any>) =>
       }
 
       if (typeof next === 'function') {
-        return next();
+        return next()
       }
     } catch (error: any) {
-      throw (error.ajv ? new BadRequest(error.message, error.errors) : error);
+      throw error.ajv ? new BadRequest(error.message, error.errors) : error
     }
-  };
+  }
 
-  export const validateData = <H extends HookContext> (schema: Schema<any>) =>
+export const validateData =
+  <H extends HookContext>(schema: Schema<any>) =>
   async (context: H, next?: NextFunction) => {
-    const data = context.data;
+    const data = context.data
 
     try {
       if (Array.isArray(data)) {
-        context.data = await Promise.all(data.map(current =>
-          schema.validate(current)
-        ));
+        context.data = await Promise.all(data.map((current) => schema.validate(current)))
       } else {
-        context.data = await schema.validate(data);
+        context.data = await schema.validate(data)
       }
     } catch (error: any) {
-      throw (error.ajv ? new BadRequest(error.message, error.errors) : error);
+      throw error.ajv ? new BadRequest(error.message, error.errors) : error
     }
 
     if (typeof next === 'function') {
-      return next();
+      return next()
     }
-  };
+  }
