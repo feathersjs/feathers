@@ -1,41 +1,48 @@
-import { errors } from '@feathersjs/errors';
-import { Base, RestClientParams } from './base';
+import { errors } from '@feathersjs/errors'
+import { Base, RestClientParams } from './base'
 
 export class FetchClient extends Base {
-  request (options: any, params: RestClientParams) {
-    const fetchOptions = Object.assign({}, options, params.connection);
+  request(options: any, params: RestClientParams) {
+    const fetchOptions = Object.assign({}, options, params.connection)
 
-    fetchOptions.headers = Object.assign({
-      Accept: 'application/json'
-    }, this.options.headers, fetchOptions.headers);
+    fetchOptions.headers = Object.assign(
+      {
+        Accept: 'application/json'
+      },
+      this.options.headers,
+      fetchOptions.headers
+    )
 
     if (options.body) {
-      fetchOptions.body = JSON.stringify(options.body);
+      fetchOptions.body = JSON.stringify(options.body)
     }
 
     return this.connection(options.url, fetchOptions)
       .then(this.checkStatus)
       .then((response: any) => {
         if (response.status === 204) {
-          return null;
+          return null
         }
 
-        return response.json();
-      });
+        return response.json()
+      })
   }
 
-  checkStatus (response: any) {
+  checkStatus(response: any) {
     if (response.ok) {
-      return response;
+      return response
     }
 
-    return response.json().catch(() => {
-      const ErrorClass = (errors as any)[response.status] || Error;
+    return response
+      .json()
+      .catch(() => {
+        const ErrorClass = (errors as any)[response.status] || Error
 
-      return new ErrorClass('JSON parsing error');
-    }).then((error: any) => {
-      error.response = response;
-      throw error;
-    });
+        return new ErrorClass('JSON parsing error')
+      })
+      .then((error: any) => {
+        error.response = response
+        throw error
+      })
   }
 }

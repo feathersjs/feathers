@@ -1,156 +1,175 @@
-import { strict as assert } from 'assert';
-import Koa  from 'koa';
-import axios from 'axios';
-import { feathers, Id } from '@feathersjs/feathers';
-import { Service, restTests } from '@feathersjs/tests';
-import { koa, rest, Application, bodyParser, errorHandler } from '../src';
+import { strict as assert } from 'assert'
+import Koa from 'koa'
+import axios from 'axios'
+import { feathers, Id } from '@feathersjs/feathers'
+import { Service, restTests } from '@feathersjs/tests'
+import { koa, rest, Application, bodyParser, errorHandler } from '../src'
 
 describe('@feathersjs/koa', () => {
-  let app: Application;
+  let app: Application
 
   before(async () => {
-    app = koa(feathers());
-    app.use(errorHandler());
-    app.use(bodyParser());
+    app = koa(feathers())
+    app.use(errorHandler())
+    app.use(bodyParser())
     app.use(async (ctx, next) => {
       if (ctx.request.path === '/middleware') {
         ctx.body = {
           feathers: ctx.feathers,
           message: 'Hello from middleware'
-        };
+        }
       } else {
-        await next();
+        await next()
       }
-    });
-    app.configure(rest());
-    app.use('/', new Service());
+    })
+    app.configure(rest())
+    app.use('/', new Service())
     app.use('todo', new Service(), {
-      methods: [
-        'get', 'find', 'create', 'update',
-        'patch', 'remove', 'customMethod'
-      ]
-    });
+      methods: ['get', 'find', 'create', 'update', 'patch', 'remove', 'customMethod']
+    })
 
-    await app.listen(8465);
-  });
+    await app.listen(8465)
+  })
 
-  after(() => app.teardown());
+  after(() => app.teardown())
 
   it('throws an error when initialized with invalid application', () => {
     try {
-      koa({} as Application);
-      assert.fail('Should never get here');
+      koa({} as Application)
+      assert.fail('Should never get here')
     } catch (error: any) {
-      assert.equal(error.message, '@feathersjs/koa requires a valid Feathers application instance');
+      assert.equal(error.message, '@feathersjs/koa requires a valid Feathers application instance')
     }
-  });
+  })
 
   it('returns Koa instance when no Feathers app is passed', () => {
-    assert.ok(koa() instanceof Koa);
-  });
+    assert.ok(koa() instanceof Koa)
+  })
 
   it('Koa wrapped and context.app are the same', async () => {
-    const app = koa(feathers());
+    const app = koa(feathers())
 
     app.use('/test', {
-      async get (id: Id) {
-        return { id };
+      async get(id: Id) {
+        return { id }
       }
-    });
+    })
 
     app.service('test').hooks({
       before: {
-        get: [context => {
-          assert.ok(context.app === app);
-        }]
+        get: [
+          (context) => {
+            assert.ok(context.app === app)
+          }
+        ]
       }
-    });
+    })
 
     assert.deepStrictEqual(await app.service('test').get('testing'), {
       id: 'testing'
-    });
-  });
+    })
+  })
 
   it('starts as a Koa and Feathers application', async () => {
-    const { data } = await axios.get<any>('http://localhost:8465/middleware');
+    const { data } = await axios.get<any>('http://localhost:8465/middleware')
     const todo = await app.service('todo').get('dishes', {
       query: {}
-    });
+    })
 
     assert.deepEqual(data, {
       message: 'Hello from middleware',
       feathers: {
         provider: 'rest'
       }
-    });
+    })
     assert.deepEqual(todo, {
       id: 'dishes',
       description: 'You have to do dishes!'
-    });
-  });
+    })
+  })
 
   it('works with custom methods that are allowed', async () => {
-    const { data } = await axios.post<any>('http://localhost:8465/todo', {
-      message: 'Custom hello'
-    }, {
-      headers: {
-        'X-Service-Method': 'customMethod'
+    const { data } = await axios.post<any>(
+      'http://localhost:8465/todo',
+      {
+        message: 'Custom hello'
+      },
+      {
+        headers: {
+          'X-Service-Method': 'customMethod'
+        }
       }
-    });
+    )
 
     assert.deepStrictEqual(data, {
       data: { message: 'Custom hello' },
       method: 'customMethod',
       provider: 'rest'
-    });
-
-    await assert.rejects(() => axios.post<any>('http://localhost:8465/todo', {}, {
-      headers: {
-        'X-Service-Method': 'internalMethod'
-      }
-    }), (error: any) => {
-      const { data } = error.response;
-
-      assert.strictEqual(data.code, 405);
-      assert.strictEqual(data.message, 'Method `internalMethod` is not supported by this endpoint.');
-
-      return true;
     })
-  });
+
+    await assert.rejects(
+      () =>
+        axios.post<any>(
+          'http://localhost:8465/todo',
+          {},
+          {
+            headers: {
+              'X-Service-Method': 'internalMethod'
+            }
+          }
+        ),
+      (error: any) => {
+        const { data } = error.response
+
+        assert.strictEqual(data.code, 405)
+        assert.strictEqual(data.message, 'Method `internalMethod` is not supported by this endpoint.')
+
+        return true
+      }
+    )
+  })
 
   it('throws a 404 NotFound JSON error', async () => {
-    await assert.rejects(() => axios.post<any>('http://localhost:8465/no/where', {}, {
-      headers: {
-        'X-Service-Method': 'internalMethod',
-        Accept: 'application/json'
+    await assert.rejects(
+      () =>
+        axios.post<any>(
+          'http://localhost:8465/no/where',
+          {},
+          {
+            headers: {
+              'X-Service-Method': 'internalMethod',
+              Accept: 'application/json'
+            }
+          }
+        ),
+      (error: any) => {
+        const { data } = error.response
+
+        assert.deepStrictEqual(data, {
+          name: 'NotFound',
+          message: 'Not Found',
+          code: 404,
+          className: 'not-found'
+        })
+
+        return true
       }
-    }), (error: any) => {
-      const { data } = error.response;
-
-      assert.deepStrictEqual(data, {
-        name: 'NotFound',
-        message: 'Not Found',
-        code: 404,
-        className: 'not-found'
-      });
-
-      return true;
-    });
-  });
+    )
+  })
 
   it('.teardown closes http server', async () => {
-    const app = koa(feathers());
-    let called = false;
+    const app = koa(feathers())
+    let called = false
 
-    const server = await app.listen(8787);
+    const server = await app.listen(8787)
     server.on('close', () => {
-      called = true;
+      called = true
     })
 
-    await app.teardown();
-    assert.ok(called);
-  });
+    await app.teardown()
+    assert.ok(called)
+  })
 
-  restTests('Services', 'todo', 8465);
-  restTests('Root service', '/', 8465);
-});
+  restTests('Services', 'todo', 8465)
+  restTests('Root service', '/', 8465)
+})

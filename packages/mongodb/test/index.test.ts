@@ -1,12 +1,11 @@
 import { Db, MongoClient, ObjectId } from 'mongodb'
 import adapterTests from '@feathersjs/adapter-tests'
 import assert from 'assert'
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import { MongoMemoryServer } from 'mongodb-memory-server'
 
 import { feathers } from '@feathersjs/feathers'
 import errors from '@feathersjs/errors'
 import { MongoDBService } from '../src'
-
 
 const testSuite = adapterTests([
   '.options',
@@ -91,17 +90,17 @@ describe('Feathers MongoDB Service', () => {
   type Person = {
     _id: string
     name: string
-    age: number,
-    friends?: string[],
-    team: string,
+    age: number
+    friends?: string[]
+    team: string
     $push: {
       friends: string
     }
   }
 
   type ServiceTypes = {
-    people: MongoDBService<Person>,
-    'people-customid': MongoDBService<Person>,
+    people: MongoDBService<Person>
+    'people-customid': MongoDBService<Person>
   }
 
   const app = feathers<ServiceTypes>()
@@ -111,37 +110,40 @@ describe('Feathers MongoDB Service', () => {
   let mongod: MongoMemoryServer
 
   before(async () => {
-    mongod = await MongoMemoryServer.create();
+    mongod = await MongoMemoryServer.create()
 
     const client = await MongoClient.connect(mongod.getUri())
 
     mongoClient = client
     db = client.db('feathers-test')
 
-    app.use('people', new MongoDBService({
-      Model: db.collection('people'),
-      events: ['testing']
-    }))
-    app.use('people-customid', new MongoDBService({
-      Model: db.collection('people-customid'),
-      id: 'customid',
-      events: ['testing']
-    }))
+    app.use(
+      'people',
+      new MongoDBService({
+        Model: db.collection('people'),
+        events: ['testing']
+      })
+    )
+    app.use(
+      'people-customid',
+      new MongoDBService({
+        Model: db.collection('people-customid'),
+        id: 'customid',
+        events: ['testing']
+      })
+    )
 
     db.collection('people-customid').deleteMany({})
     db.collection('people').deleteMany({})
     db.collection('todos').deleteMany({})
 
-    db.collection('people').createIndex(
-      { name: 1 },
-      { partialFilterExpression: { team: 'blue' } }
-    )
+    db.collection('people').createIndex({ name: 1 }, { partialFilterExpression: { team: 'blue' } })
   })
 
   after(async () => {
-    await db.dropDatabase();
-    await mongoClient.close();
-    await mongod.stop();
+    await db.dropDatabase()
+    await mongoClient.close()
+    await mongod.stop()
   })
 
   describe('Service utility functions', () => {
@@ -165,38 +167,39 @@ describe('Feathers MongoDB Service', () => {
   })
 
   describe('Special collation param', () => {
-    let peopleService: MongoDBService<Person>;
-    let people: Person[];
+    let peopleService: MongoDBService<Person>
+    let people: Person[]
 
-    function indexOfName (results: Person[], name: string) {
-      let index = 0;
+    function indexOfName(results: Person[], name: string) {
+      let index = 0
 
       for (const person of results) {
         if (person.name === name) {
           return index
         }
-        index++;
+        index++
       }
 
-      return -1;
+      return -1
     }
 
     beforeEach(async () => {
       peopleService = app.service('people')
       peopleService.options.multi = true
       peopleService.options.disableObjectify = true
-      people = await peopleService.create([
-        { name: 'AAA' }, { name: 'aaa' }, { name: 'ccc' }
-      ])
+      people = await peopleService.create([{ name: 'AAA' }, { name: 'aaa' }, { name: 'ccc' }])
     })
 
     afterEach(async () => {
       peopleService.options.multi = false
-      await Promise.all([
-        peopleService.remove(people[0]._id),
-        peopleService.remove(people[1]._id),
-        peopleService.remove(people[2]._id)
-      ]).catch(() => {})
+
+      try {
+        await Promise.all([
+          peopleService.remove(people[0]._id),
+          peopleService.remove(people[1]._id),
+          peopleService.remove(people[2]._id)
+        ])
+      } catch (error: unknown) {}
     })
 
     it('queries for ObjectId in find', async () => {
@@ -266,13 +269,20 @@ describe('Feathers MongoDB Service', () => {
     })
 
     it('handles errors', async () => {
-      await assert.rejects(() => peopleService.create({
-        name: 'Dave'
-      }, {
-        mongodb: { collation: { locale: 'fdsfdsfds', strength: 1 } }
-      }), {
-        name: 'GeneralError'
-      })
+      await assert.rejects(
+        () =>
+          peopleService.create(
+            {
+              name: 'Dave'
+            },
+            {
+              mongodb: { collation: { locale: 'fdsfdsfds', strength: 1 } }
+            }
+          ),
+        {
+          name: 'GeneralError'
+        }
+      )
     })
 
     it('updates with default behavior without collation param', async () => {
@@ -281,37 +291,52 @@ describe('Feathers MongoDB Service', () => {
       const result = await peopleService.patch(null, { age: 99 }, { query })
 
       assert.strictEqual(result.length, 2)
-      result.forEach(person => {
+      result.forEach((person) => {
         assert.strictEqual(person.age, 99)
       })
     })
 
     it('updates using collation param if present', async () => {
-      const result = await peopleService.patch(null, { age: 110 }, {
-        query: { name: { $gt: 'AAA' } },
-        mongodb: { collation: { locale: 'en', strength: 1 } }
-      })
+      const result = await peopleService.patch(
+        null,
+        { age: 110 },
+        {
+          query: { name: { $gt: 'AAA' } },
+          mongodb: { collation: { locale: 'en', strength: 1 } }
+        }
+      )
 
       assert.strictEqual(result.length, 1)
       assert.strictEqual(result[0].name, 'ccc')
     })
 
     it('pushes to an array using patch', async () => {
-      const result = await peopleService.patch(null, { $push: { friends: 'Adam' } }, {
-        query: { name: { $gt: 'AAA' } }
-      })
+      const result = await peopleService.patch(
+        null,
+        { $push: { friends: 'Adam' } },
+        {
+          query: { name: { $gt: 'AAA' } }
+        }
+      )
 
       assert.strictEqual(result[0].friends.length, 1)
 
-      const patched = await peopleService.patch(null, {
-        $push: { friends: 'Bell' }
-      }, { query: { name: { $gt: 'AAA' } } })
+      const patched = await peopleService.patch(
+        null,
+        {
+          $push: { friends: 'Bell' }
+        },
+        { query: { name: { $gt: 'AAA' } } }
+      )
 
       assert.strictEqual(patched[0].friends.length, 2)
     })
 
     it('overrides default index selection using hint param if present', async () => {
-      const indexed = await peopleService.create({ name: 'Indexed', team: 'blue' })
+      const indexed = await peopleService.create({
+        name: 'Indexed',
+        team: 'blue'
+      })
 
       const result = await peopleService.find({
         paginate: false,

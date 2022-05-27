@@ -1,78 +1,74 @@
-import assert from 'assert';
-import { AdapterBasicTest } from './declarations';
+import assert from 'assert'
+import { AdapterBasicTest } from './declarations'
 
 export default (test: AdapterBasicTest, app: any, _errors: any, serviceName: string, idProp: string) => {
   describe('Basic Functionality', () => {
-    let service: any;
+    let service: any
 
     beforeEach(() => {
-      service = app.service(serviceName);
-    });
+      service = app.service(serviceName)
+    })
 
     it('.id', () => {
-      assert.strictEqual(service.id, idProp,
-        'id property is set to expected name'
-      );
-    });
+      assert.strictEqual(service.id, idProp, 'id property is set to expected name')
+    })
 
     test('.options', () => {
-      assert.ok(service.options, 'Options are available in service.options');
-    });
+      assert.ok(service.options, 'Options are available in service.options')
+    })
 
     test('.events', () => {
-      assert.ok(service.events.includes('testing'),
-        'service.events is set and includes "testing"'
-      );
-    });
+      assert.ok(service.events.includes('testing'), 'service.events is set and includes "testing"')
+    })
 
     describe('Raw Methods', () => {
       test('._get', () => {
-        assert.strictEqual(typeof service._get, 'function');
-      });
+        assert.strictEqual(typeof service._get, 'function')
+      })
 
       test('._find', () => {
-        assert.strictEqual(typeof service._find, 'function');
-      });
+        assert.strictEqual(typeof service._find, 'function')
+      })
 
       test('._create', () => {
-        assert.strictEqual(typeof service._create, 'function');
-      });
+        assert.strictEqual(typeof service._create, 'function')
+      })
 
       test('._update', () => {
-        assert.strictEqual(typeof service._update, 'function');
-      });
+        assert.strictEqual(typeof service._update, 'function')
+      })
 
       test('._patch', () => {
-        assert.strictEqual(typeof service._patch, 'function');
-      });
+        assert.strictEqual(typeof service._patch, 'function')
+      })
 
       test('._remove', () => {
-        assert.strictEqual(typeof service._remove, 'function');
-      });
+        assert.strictEqual(typeof service._remove, 'function')
+      })
 
       test('.$get', () => {
-        assert.strictEqual(typeof service.$get, 'function');
-      });
+        assert.strictEqual(typeof service.$get, 'function')
+      })
 
       test('.$find', () => {
-        assert.strictEqual(typeof service.$find, 'function');
-      });
+        assert.strictEqual(typeof service.$find, 'function')
+      })
 
       test('.$create', () => {
-        assert.strictEqual(typeof service.$create, 'function');
-      });
+        assert.strictEqual(typeof service.$create, 'function')
+      })
 
       test('.$update', () => {
-        assert.strictEqual(typeof service.$update, 'function');
-      });
+        assert.strictEqual(typeof service.$update, 'function')
+      })
 
       test('.$patch', () => {
-        assert.strictEqual(typeof service.$patch, 'function');
-      });
+        assert.strictEqual(typeof service.$patch, 'function')
+      })
 
       test('.$remove', () => {
-        assert.strictEqual(typeof service.$remove, 'function');
-      });
-    });
-  });
-};
+        assert.strictEqual(typeof service.$remove, 'function')
+      })
+    })
+  })
+}
