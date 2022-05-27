@@ -1,61 +1,61 @@
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'events'
 
 export interface RealTimeConnection {
-  [key: string]: any;
+  [key: string]: any
 }
 
 export class Channel extends EventEmitter {
-  connections: RealTimeConnection[];
-  data: any;
+  connections: RealTimeConnection[]
+  data: any
 
-  constructor (connections: RealTimeConnection[] = [], data: any = null) {
-    super();
+  constructor(connections: RealTimeConnection[] = [], data: any = null) {
+    super()
 
-    this.connections = connections;
-    this.data = data;
+    this.connections = connections
+    this.data = data
   }
 
-  get length () {
-    return this.connections.length;
+  get length() {
+    return this.connections.length
   }
 
-  leave (...connections: RealTimeConnection[]) {
-    connections.forEach(current => {
+  leave(...connections: RealTimeConnection[]) {
+    connections.forEach((current) => {
       if (typeof current === 'function') {
-        const callback = current as (connection: RealTimeConnection) => boolean;
+        const callback = current as (connection: RealTimeConnection) => boolean
 
-        this.leave(...this.connections.filter(callback));
+        this.leave(...this.connections.filter(callback))
       } else {
-        const index = this.connections.indexOf(current);
+        const index = this.connections.indexOf(current)
 
         if (index !== -1) {
-          this.connections.splice(index, 1);
+          this.connections.splice(index, 1)
         }
       }
-    });
+    })
 
     if (this.length === 0) {
-      this.emit('empty');
+      this.emit('empty')
     }
 
-    return this;
+    return this
   }
 
-  join (...connections: RealTimeConnection[]) {
-    connections.forEach(connection => {
+  join(...connections: RealTimeConnection[]) {
+    connections.forEach((connection) => {
       if (connection && this.connections.indexOf(connection) === -1) {
-        this.connections.push(connection);
+        this.connections.push(connection)
       }
-    });
+    })
 
-    return this;
+    return this
   }
 
-  filter (fn: (connection: RealTimeConnection) => boolean) {
-    return new Channel(this.connections.filter(fn), this.data);
+  filter(fn: (connection: RealTimeConnection) => boolean) {
+    return new Channel(this.connections.filter(fn), this.data)
   }
 
-  send (data: any) {
-    return new Channel(this.connections, data);
+  send(data: any) {
+    return new Channel(this.connections, data)
   }
 }
