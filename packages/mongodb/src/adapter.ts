@@ -1,27 +1,43 @@
 import {
-  ObjectId, Collection, FindOptions, BulkWriteOptions,
-  InsertOneOptions, DeleteOptions, CountDocumentsOptions, ReplaceOptions
+  ObjectId,
+  Collection,
+  FindOptions,
+  BulkWriteOptions,
+  InsertOneOptions,
+  DeleteOptions,
+  CountDocumentsOptions,
+  ReplaceOptions
 } from 'mongodb'
 import { NotFound } from '@feathersjs/errors'
 import { _ } from '@feathersjs/commons'
-import { AdapterBase, select, AdapterParams, AdapterServiceOptions, PaginationOptions, AdapterQuery } from '@feathersjs/adapter-commons'
+import {
+  AdapterBase,
+  select,
+  AdapterParams,
+  AdapterServiceOptions,
+  PaginationOptions,
+  AdapterQuery
+} from '@feathersjs/adapter-commons'
 import { NullableId, Id, Paginated } from '@feathersjs/feathers'
 import { errorHandler } from './error-handler'
 
 export interface MongoDBAdapterOptions extends AdapterServiceOptions {
-  Model: Collection|Promise<Collection>,
-  disableObjectify?: boolean,
+  Model: Collection | Promise<Collection>
+  disableObjectify?: boolean
   useEstimatedDocumentCount?: boolean
 }
 
 export interface MongoDBAdapterParams<Q = AdapterQuery> extends AdapterParams<Q, Partial<MongoDBAdapterOptions>> {
-  mongodb?: BulkWriteOptions|FindOptions|InsertOneOptions|DeleteOptions|CountDocumentsOptions|ReplaceOptions
+  mongodb?: BulkWriteOptions | FindOptions | InsertOneOptions | DeleteOptions | CountDocumentsOptions | ReplaceOptions
 }
 
 // Create the service.
-export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams<any> = MongoDBAdapterParams>
-    extends AdapterBase<T, D, P, MongoDBAdapterOptions> {
-  constructor (options: MongoDBAdapterOptions) {
+export class MongoDbAdapter<
+  T,
+  D = Partial<T>,
+  P extends MongoDBAdapterParams<any> = MongoDBAdapterParams
+> extends AdapterBase<T, D, P, MongoDBAdapterOptions> {
+  constructor(options: MongoDBAdapterOptions) {
     if (!options) {
       throw new Error('MongoDB options have to be provided')
     }
@@ -32,7 +48,7 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams<an
     })
   }
 
-  getObjectId (id: Id|ObjectId) {
+  getObjectId(id: Id | ObjectId) {
     if (this.options.disableObjectify) {
       return id
     }
@@ -44,11 +60,13 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams<an
     return id
   }
 
-  filterQuery (id: NullableId, params: P) {
-    const { $select, $sort, $limit, $skip, ...query } = (params.query || {}) as AdapterQuery;
+  filterQuery(id: NullableId, params: P) {
+    const { $select, $sort, $limit, $skip, ...query } = (params.query || {}) as AdapterQuery
 
     if (id !== null) {
-      query.$and = (query.$and || []).concat({ [this.id]: this.getObjectId(id) })
+      query.$and = (query.$and || []).concat({
+        [this.id]: this.getObjectId(id)
+      })
     }
 
     if (query[this.id]) {
@@ -61,22 +79,25 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams<an
     }
   }
 
-  getSelect (select: string[]|{ [key: string]: number }) {
+  getSelect(select: string[] | { [key: string]: number }) {
     if (Array.isArray(select)) {
-      return select.reduce<{ [key: string]: number }>((value, name) => ({
-        ...value,
-        [name]: 1
-      }), {})
+      return select.reduce<{ [key: string]: number }>(
+        (value, name) => ({
+          ...value,
+          [name]: 1
+        }),
+        {}
+      )
     }
 
     return select
   }
 
-  async $findOrGet (id: NullableId, params: P) {
+  async $findOrGet(id: NullableId, params: P) {
     return id === null ? await this.$find(params) : await this.$get(id, params)
   }
 
-  normalizeId (id: NullableId, data: Partial<D>): Partial<D> {
+  normalizeId(id: NullableId, data: Partial<D>): Partial<D> {
     if (this.id === '_id') {
       // Default Mongo IDs cannot be updated. The Mongo library handles
       // this automatically.
@@ -92,22 +113,28 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams<an
     return data
   }
 
-  async $get (id: Id, params: P = {} as P): Promise<T> {
-    const { Model } = this.getOptions(params);
-    const { query, filters: { $select } } = this.filterQuery(id, params);
-    const projection = $select ? {
-      projection: {
-        ...this.getSelect($select),
-        [this.id]: 1
-      }
-    } : {}
+  async $get(id: Id, params: P = {} as P): Promise<T> {
+    const { Model } = this.getOptions(params)
+    const {
+      query,
+      filters: { $select }
+    } = this.filterQuery(id, params)
+    const projection = $select
+      ? {
+          projection: {
+            ...this.getSelect($select),
+            [this.id]: 1
+          }
+        }
+      : {}
     const findOptions: FindOptions = {
       ...params.mongodb,
       ...projection
     }
 
-    return Promise.resolve(Model).then(model => model.findOne(query, findOptions))
-      .then(data => {
+    return Promise.resolve(Model)
+      .then((model) => model.findOne(query, findOptions))
+      .then((data) => {
         if (data == null) {
           throw new NotFound(`No record found for id '${id}'`)
         }
@@ -117,10 +144,10 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams<an
       .catch(errorHandler)
   }
 
-  async $find (params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>;
-  async $find (params?: P & { paginate: false }): Promise<T[]>;
-  async $find (params?: P): Promise<Paginated<T>|T[]>;
-  async $find (params: P = {} as P): Promise<Paginated<T>|T[]> {
+  async $find(params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>
+  async $find(params?: P & { paginate: false }): Promise<T[]>
+  async $find(params?: P): Promise<Paginated<T> | T[]>
+  async $find(params: P = {} as P): Promise<Paginated<T> | T[]> {
     const { filters, query } = this.filterQuery(null, params)
     const { paginate, Model, useEstimatedDocumentCount } = this.getOptions(params)
     const findOptions = { ...params.mongodb }
@@ -147,24 +174,24 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams<an
       total,
       limit: filters.$limit,
       skip: filters.$skip || 0,
-      data: filters.$limit === 0 ? [] : (await q.toArray()) as any as T[]
+      data: filters.$limit === 0 ? [] : ((await q.toArray()) as any as T[])
     })
 
     if (paginate && paginate.default) {
-      if (useEstimatedDocumentCount && (typeof model.estimatedDocumentCount === 'function')) {
+      if (useEstimatedDocumentCount && typeof model.estimatedDocumentCount === 'function') {
         return model.estimatedDocumentCount().then(runQuery)
       }
 
       return model.countDocuments(query, findOptions).then(runQuery)
     }
 
-    return runQuery(0).then(page => page.data)
+    return runQuery(0).then((page) => page.data)
   }
 
-  async $create (data: Partial<D>, params?: P): Promise<T>;
-  async $create (data: Partial<D>[], params?: P): Promise<T[]>;
-  async $create (data: Partial<D>|Partial<D>[], _params?: P): Promise<T|T[]>;
-  async $create (data: Partial<D>|Partial<D>[], params: P = {} as P): Promise<T|T[]> {
+  async $create(data: Partial<D>, params?: P): Promise<T>
+  async $create(data: Partial<D>[], params?: P): Promise<T[]>
+  async $create(data: Partial<D> | Partial<D>[], _params?: P): Promise<T | T[]>
+  async $create(data: Partial<D> | Partial<D>[], params: P = {} as P): Promise<T | T[]> {
     const writeOptions = params.mongodb
     const { Model } = this.getOptions(params)
     const model = await Promise.resolve(Model)
@@ -182,24 +209,27 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams<an
       return entry
     }
     const promise = Array.isArray(data)
-      ? model.insertMany(data.map(setId), writeOptions).then(async result =>
-        Promise.all(Object.values(result.insertedIds).map(async _id => model.findOne({ _id })))
-      )
-      : model.insertOne(setId(data), writeOptions).then(async result =>
-        model.findOne({ _id: result.insertedId })
-      )
+      ? model
+          .insertMany(data.map(setId), writeOptions)
+          .then(async (result) =>
+            Promise.all(Object.values(result.insertedIds).map(async (_id) => model.findOne({ _id })))
+          )
+      : model.insertOne(setId(data), writeOptions).then(async (result) => model.findOne({ _id: result.insertedId }))
 
     return promise.then(select(params, this.id)).catch(errorHandler)
   }
 
-  async $patch (id: null, data: Partial<D>, params?: P): Promise<T[]>;
-  async $patch (id: Id, data: Partial<D>, params?: P): Promise<T>;
-  async $patch (id: NullableId, data: Partial<D>, _params?: P): Promise<T|T[]>;
-  async $patch (id: NullableId, _data: Partial<D>, params: P = {} as P): Promise<T|T[]> {
+  async $patch(id: null, data: Partial<D>, params?: P): Promise<T[]>
+  async $patch(id: Id, data: Partial<D>, params?: P): Promise<T>
+  async $patch(id: NullableId, data: Partial<D>, _params?: P): Promise<T | T[]>
+  async $patch(id: NullableId, _data: Partial<D>, params: P = {} as P): Promise<T | T[]> {
     const data = this.normalizeId(id, _data)
     const { Model } = this.getOptions(params)
     const model = await Promise.resolve(Model)
-    const { query, filters: { $select, $limit } } = this.filterQuery(id, params)
+    const {
+      query,
+      filters: { $select, $limit }
+    } = this.filterQuery(id, params)
     const updateOptions = { ...params.mongodb }
     const modifier = Object.keys(data).reduce((current, key) => {
       const value = (data as any)[key]
@@ -219,11 +249,11 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams<an
       ...params,
       query: {
         ...query,
-        $select: [ this.id ]
+        $select: [this.id]
       },
       paginate: false
     })
-    const items = (Array.isArray(originalIds) ? originalIds : [originalIds])
+    const items = Array.isArray(originalIds) ? originalIds : [originalIds]
     const idList = items.map((item: any) => item[this.id])
     const findParams = {
       ...params,
@@ -240,7 +270,7 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams<an
     return this.$findOrGet(id, findParams).catch(errorHandler)
   }
 
-  async $update (id: Id, data: D, params: P = {} as P): Promise<T> {
+  async $update(id: Id, data: D, params: P = {} as P): Promise<T> {
     const { Model } = this.getOptions(params)
     const model = await Promise.resolve(Model)
     const { query } = this.filterQuery(id, params)
@@ -251,13 +281,16 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams<an
     return this.$findOrGet(id, params).catch(errorHandler)
   }
 
-  async $remove (id: null, params?: P): Promise<T[]>;
-  async $remove (id: Id, params?: P): Promise<T>;
-  async $remove (id: NullableId, _params?: P): Promise<T|T[]>;
-  async $remove (id: NullableId, params: P = {} as P): Promise<T|T[]> {
+  async $remove(id: null, params?: P): Promise<T[]>
+  async $remove(id: Id, params?: P): Promise<T>
+  async $remove(id: NullableId, _params?: P): Promise<T | T[]>
+  async $remove(id: NullableId, params: P = {} as P): Promise<T | T[]> {
     const { Model } = this.getOptions(params)
     const model = await Promise.resolve(Model)
-    const { query, filters: { $select, $limit } } = this.filterQuery(id, params)
+    const {
+      query,
+      filters: { $select, $limit }
+    } = this.filterQuery(id, params)
     const deleteOptions = { ...params.mongodb }
     const findParams = {
       ...params,
@@ -270,7 +303,7 @@ export class MongoDbAdapter<T, D = Partial<T>, P extends MongoDBAdapterParams<an
     }
 
     return this.$findOrGet(id, findParams)
-      .then(async items => {
+      .then(async (items) => {
         await model.deleteMany(query, deleteOptions)
         return items
       })

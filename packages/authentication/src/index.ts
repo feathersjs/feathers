@@ -1,5 +1,5 @@
-export * as hooks from './hooks';
-export { authenticate } from './hooks';
+export * as hooks from './hooks'
+export { authenticate } from './hooks'
 export {
   AuthenticationBase,
   AuthenticationRequest,
@@ -7,8 +7,8 @@ export {
   AuthenticationStrategy,
   AuthenticationParams,
   ConnectionEvent
-} from './core';
-export { AuthenticationBaseStrategy } from './strategy';
-export { AuthenticationService } from './service';
-export { JWTStrategy } from './jwt';
-export { authenticationSettingsSchema } from './options';
+} from './core'
+export { AuthenticationBaseStrategy } from './strategy'
+export { AuthenticationService } from './service'
+export { JWTStrategy } from './jwt'
+export { authenticationSettingsSchema } from './options'

@@ -1,14 +1,22 @@
-import {
-  feathers, HookContext, Application as FeathersApplication
-} from '@feathersjs/feathers';
-import { memory, MemoryService } from '@feathersjs/memory';
-import { GeneralError } from '@feathersjs/errors';
+import { feathers, HookContext, Application as FeathersApplication } from '@feathersjs/feathers'
+import { memory, MemoryService } from '@feathersjs/memory'
+import { GeneralError } from '@feathersjs/errors'
 
 import {
-  schema, resolve, Infer, resolveResult, resolveQuery,
-  resolveData, validateData, validateQuery, querySyntax, Combine, resolveDispatch, resolveAll
-} from '../src';
-import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib';
+  schema,
+  resolve,
+  Infer,
+  resolveResult,
+  resolveQuery,
+  resolveData,
+  validateData,
+  validateQuery,
+  querySyntax,
+  Combine,
+  resolveDispatch,
+  resolveAll
+} from '../src'
+import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib'
 
 export const userSchema = schema({
   $id: 'UserData',
@@ -19,7 +27,7 @@ export const userSchema = schema({
     email: { type: 'string' },
     password: { type: 'string' }
   }
-} as const);
+} as const)
 
 export const userResultSchema = schema({
   $id: 'UserResult',
@@ -30,41 +38,41 @@ export const userResultSchema = schema({
     ...userSchema.properties,
     id: { type: 'number' }
   }
-} as const);
+} as const)
 
-export type User = Infer<typeof userSchema>;
-export type UserResult = Infer<typeof userResultSchema> & { name: string };
+export type User = Infer<typeof userSchema>
+export type UserResult = Infer<typeof userResultSchema> & { name: string }
 
 export const userDataResolver = resolve<User, HookContext<Application>>({
   schema: userSchema,
   validate: 'before',
   properties: {
     password: async () => {
-      return 'hashed';
+      return 'hashed'
     }
   }
-});
+})
 
 export const userResultResolver = resolve<UserResult, HookContext<Application>>({
   schema: userResultSchema,
   properties: {
     name: async (_value, user) => user.email.split('@')[0]
   }
-});
+})
 
 export const userDispatchResolver = resolve<UserResult, HookContext<Application>>({
   schema: userResultSchema,
   properties: {
     password: () => undefined
   }
-});
+})
 
 export const secondUserResultResolver = resolve<UserResult, HookContext<Application>>({
   schema: userResultSchema,
   properties: {
     name: async (value, user) => `${value} (${user.email})`
   }
-});
+})
 
 export const messageSchema = schema({
   $id: 'MessageData',
@@ -76,7 +84,7 @@ export const messageSchema = schema({
     userId: { type: 'number' },
     secret: { type: 'boolean' }
   }
-} as const);
+} as const)
 
 export const messageResultSchema = schema({
   $id: 'MessageResult',
@@ -88,27 +96,30 @@ export const messageResultSchema = schema({
     id: { type: 'number' },
     user: { $ref: 'UserResult' }
   }
-} as const);
+} as const)
 
-export type Message = Infer<typeof messageSchema>;
-export type MessageResult = Combine<typeof messageResultSchema, {
-  user: User;
-}>;
+export type Message = Infer<typeof messageSchema>
+export type MessageResult = Combine<
+  typeof messageResultSchema,
+  {
+    user: User
+  }
+>
 
 export const messageResultResolver = resolve<MessageResult, HookContext<Application>>({
   schema: messageResultSchema,
   properties: {
     user: async (_value, message, context) => {
-      const { userId } = message;
+      const { userId } = message
 
       if (context.params.error === true) {
-        throw new GeneralError('This is an error');
+        throw new GeneralError('This is an error')
       }
 
-      return context.app.service('users').get(userId, context.params);
+      return context.app.service('users').get(userId, context.params)
     }
   }
-});
+})
 
 export const messageDispatchResolver = resolve<MessageResult, HookContext<Application>>({
   properties: {
@@ -128,9 +139,9 @@ export const messageQuerySchema = schema({
       items: { type: 'string' }
     }
   }
-} as const);
+} as const)
 
-export type MessageQuery = Infer<typeof messageQuerySchema>;
+export type MessageQuery = Infer<typeof messageQuerySchema>
 
 export const messageQueryResolver = resolve<MessageQuery, HookContext<Application>>({
   schema: messageQuerySchema,
@@ -138,33 +149,36 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext<Applicatio
   properties: {
     userId: async (value, _query, context) => {
       if (context.params?.user) {
-        return context.params.user.id;
+        return context.params.user.id
       }
 
-      return value;
+      return value
     }
   }
-});
+})
 
 interface ServiceParams extends AdapterParams {
-  user?: User;
-  error?: boolean;
+  user?: User
+  error?: boolean
 }
 
 type ServiceTypes = {
-  users: MemoryService<UserResult, User, ServiceParams>,
+  users: MemoryService<UserResult, User, ServiceParams>
   messages: MemoryService<MessageResult, Message, ServiceParams>
   paginatedMessages: MemoryService<MessageResult, Message, ServiceParams>
 }
-type Application = FeathersApplication<ServiceTypes>;
+type Application = FeathersApplication<ServiceTypes>
 
 const app = feathers<ServiceTypes>()
 
-app.use('users', memory({
-  multi: ['create']
-}))
+app.use(
+  'users',
+  memory({
+    multi: ['create']
+  })
+)
 app.use('messages', memory())
-app.use('paginatedMessages', memory({paginate: { default: 10 }}));
+app.use('paginatedMessages', memory({ paginate: { default: 10 } }))
 
 app.service('messages').hooks([
   resolveAll({
@@ -173,18 +187,15 @@ app.service('messages').hooks([
     query: messageQueryResolver
   }),
   validateQuery(messageQuerySchema)
-]);
+])
 
-app.service('paginatedMessages').hooks([
-  validateQuery(messageQuerySchema),
-  resolveQuery(messageQueryResolver),
-  resolveResult(messageResultResolver)
-]);
+app
+  .service('paginatedMessages')
+  .hooks([validateQuery(messageQuerySchema), resolveQuery(messageQueryResolver), resolveResult(messageResultResolver)])
 
-app.service('users').hooks([
-  resolveDispatch(userDispatchResolver),
-  resolveResult(userResultResolver, secondUserResultResolver)
-]);
+app
+  .service('users')
+  .hooks([resolveDispatch(userDispatchResolver), resolveResult(userResultResolver, secondUserResultResolver)])
 
 app.service('users').hooks({
   create: [
@@ -195,6 +206,6 @@ app.service('users').hooks({
       update: userDataResolver
     })
   ]
-});
+})
 
-export { app };
+export { app }

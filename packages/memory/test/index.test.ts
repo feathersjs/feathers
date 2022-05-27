@@ -1,9 +1,9 @@
-import assert from 'assert';
-import adapterTests from '@feathersjs/adapter-tests';
-import errors from '@feathersjs/errors';
-import { feathers } from '@feathersjs/feathers';
+import assert from 'assert'
+import adapterTests from '@feathersjs/adapter-tests'
+import errors from '@feathersjs/errors'
+import { feathers } from '@feathersjs/feathers'
 
-import { MemoryService } from '../src';
+import { MemoryService } from '../src'
 
 const testSuite = adapterTests([
   '.options',
@@ -82,140 +82,147 @@ const testSuite = adapterTests([
   '.find + paginate + params',
   'params.adapter + paginate',
   'params.adapter + multi'
-]);
+])
 
 describe('Feathers Memory Service', () => {
   type Person = {
-    id: number;
-    name: string;
-    age: number;
+    id: number
+    name: string
+    age: number
   }
 
   type Animal = {
-    type: string;
-    age: number;
+    type: string
+    age: number
   }
 
-  const events = [ 'testing' ];
+  const events = ['testing']
   const app = feathers<{
-    people: MemoryService<Person>,
-    'people-customid': MemoryService<Person>,
-    animals: MemoryService<Animal>,
+    people: MemoryService<Person>
+    'people-customid': MemoryService<Person>
+    animals: MemoryService<Animal>
     matcher: MemoryService
-  }>();
+  }>()
 
-  app.use('people', new MemoryService<Person>({ events }));
-  app.use('people-customid', new MemoryService<Person>({
-    id: 'customid',
-    events
-  }));
+  app.use('people', new MemoryService<Person>({ events }))
+  app.use(
+    'people-customid',
+    new MemoryService<Person>({
+      id: 'customid',
+      events
+    })
+  )
 
   it('update with string id works', async () => {
-    const people = app.service('people');
+    const people = app.service('people')
     const person = await people.create({
       name: 'Tester',
       age: 33
-    });
+    })
 
-    const updatedPerson: any = await people.update(person.id.toString(), person);
+    const updatedPerson: any = await people.update(person.id.toString(), person)
 
-    assert.strictEqual(typeof updatedPerson.id, 'number');
+    assert.strictEqual(typeof updatedPerson.id, 'number')
 
-    await people.remove(person.id.toString());
-  });
+    await people.remove(person.id.toString())
+  })
 
   it('patch record with prop also in query', async () => {
-    app.use('animals', new MemoryService<Animal>({ multi: true }));
-    const animals = app.service('animals');
-    await animals.create([{
-      type: 'cat',
-      age: 30
-    }, {
-      type: 'dog',
-      age: 10
-    }]);
+    app.use('animals', new MemoryService<Animal>({ multi: true }))
+    const animals = app.service('animals')
+    await animals.create([
+      {
+        type: 'cat',
+        age: 30
+      },
+      {
+        type: 'dog',
+        age: 10
+      }
+    ])
 
-    const [updated] = await animals.patch(null, { age: 40 }, { query: { age: 30 } });
+    const [updated] = await animals.patch(null, { age: 40 }, { query: { age: 30 } })
 
-    assert.strictEqual(updated.age, 40);
+    assert.strictEqual(updated.age, 40)
 
-    await animals.remove(null, {});
-  });
+    await animals.remove(null, {})
+  })
 
   it('allows to pass custom find and sort matcher', async () => {
-    let sorterCalled = false;
-    let matcherCalled = false;
+    let sorterCalled = false
+    let matcherCalled = false
 
-    app.use('matcher', new MemoryService({
-      matcher () {
-        matcherCalled = true;
-        return function () {
-          return true;
-        };
-      },
+    app.use(
+      'matcher',
+      new MemoryService({
+        matcher() {
+          matcherCalled = true
+          return function () {
+            return true
+          }
+        },
 
-      sorter () {
-        sorterCalled = true;
-        return function () {
-          return 0;
-        };
-      }
-    }));
+        sorter() {
+          sorterCalled = true
+          return function () {
+            return 0
+          }
+        }
+      })
+    )
 
     await app.service('matcher').find({
       query: { $sort: { something: 1 } }
-    });
+    })
 
-    assert.ok(sorterCalled, 'sorter called');
-    assert.ok(matcherCalled, 'matcher called');
-  });
+    assert.ok(sorterCalled, 'sorter called')
+    assert.ok(matcherCalled, 'matcher called')
+  })
 
   it('does not modify the original data', async () => {
-    const people = app.service('people');
+    const people = app.service('people')
 
     const person = await people.create({
       name: 'Delete tester',
       age: 33
-    });
+    })
 
-    delete person.age;
+    delete person.age
 
-    const otherPerson = await people.get(person.id);
+    const otherPerson = await people.get(person.id)
 
-    assert.strictEqual(otherPerson.age, 33);
+    assert.strictEqual(otherPerson.age, 33)
 
-    await people.remove(person.id);
-  });
+    await people.remove(person.id)
+  })
 
   it('does not $select the id', async () => {
-    const people = app.service('people');
+    const people = app.service('people')
     const person = await people.create({
       name: 'Tester'
-    });
+    })
     const results = await people.find({
       paginate: false,
       query: {
         name: 'Tester',
         $select: ['name']
       }
-    });
+    })
 
-    assert.deepStrictEqual(results[0], { name: 'Tester' },
-      'deepEquals the same'
-    );
+    assert.deepStrictEqual(results[0], { name: 'Tester' }, 'deepEquals the same')
 
-    await people.remove(person.id);
-  });
+    await people.remove(person.id)
+  })
 
   it('update with null throws error', async () => {
     try {
-      await app.service('people').update(null, {});
-      throw new Error('Should never get here');
+      await app.service('people').update(null, {})
+      throw new Error('Should never get here')
     } catch (error: any) {
-      assert.strictEqual(error.message, 'You can not replace multiple instances. Did you mean \'patch\'?');
+      assert.strictEqual(error.message, "You can not replace multiple instances. Did you mean 'patch'?")
     }
-  });
+  })
 
-  testSuite(app, errors, 'people');
-  testSuite(app, errors, 'people-customid', 'customid');
-});
+  testSuite(app, errors, 'people')
+  testSuite(app, errors, 'people-customid', 'customid')
+})

@@ -1,80 +1,80 @@
-import { Base } from './base';
-import { AxiosClient } from './axios';
-import { FetchClient } from './fetch';
-import { SuperagentClient } from './superagent';
+import { Base } from './base'
+import { AxiosClient } from './axios'
+import { FetchClient } from './fetch'
+import { SuperagentClient } from './superagent'
 
-export { AxiosClient, FetchClient, SuperagentClient };
+export { AxiosClient, FetchClient, SuperagentClient }
 
 const transports = {
   superagent: SuperagentClient,
   fetch: FetchClient,
   axios: AxiosClient
-};
+}
 
 interface HandlerResult extends Function {
   /**
    * initialize service
    */
-  (): void;
+  (): void
 
   /**
    * Transport Service
    */
-  Service: any;
+  Service: any
 
   /**
    * default Service
    */
-  service: any;
+  service: any
 }
 
-export type Handler = (connection: any, options?: any, Service?: any) => HandlerResult;
+export type Handler = (connection: any, options?: any, Service?: any) => HandlerResult
 
 export interface Transport {
-  superagent: Handler;
-  fetch: Handler;
-  axios: Handler;
+  superagent: Handler
+  fetch: Handler
+  axios: Handler
 }
 
-export type RestService<T = any, D = Partial<any>> = Base<T, D>;
+export type RestService<T = any, D = Partial<any>> = Base<T, D>
 
-export default function restClient (base = '') {
-  const result: any = { Base };
+export default function restClient(base = '') {
+  const result: any = { Base }
 
-  Object.keys(transports).forEach(key => {
+  Object.keys(transports).forEach((key) => {
     result[key] = function (connection: any, options: any = {}, Service: Base = (transports as any)[key]) {
       if (!connection) {
-        throw new Error(`${key} has to be provided to feathers-rest`);
+        throw new Error(`${key} has to be provided to feathers-rest`)
       }
 
       if (typeof options === 'function') {
-        Service = options;
-        options = {};
+        Service = options
+        options = {}
       }
 
       const defaultService = function (name: string) {
-        return new (Service as any)({ base, name, connection, options });
-      };
+        return new (Service as any)({ base, name, connection, options })
+      }
 
       const initialize = (app: any) => {
         if (app.rest !== undefined) {
-          throw new Error('Only one default client provider can be configured');
+          throw new Error('Only one default client provider can be configured')
         }
 
-        app.rest = connection;
-        app.defaultService = defaultService;
-      };
+        app.rest = connection
+        app.defaultService = defaultService
+      }
 
-      initialize.Service = Service;
-      initialize.service = defaultService;
+      initialize.Service = Service
+      initialize.service = defaultService
 
-      return initialize;
-    };
-  });
+      return initialize
+    }
+  })
 
-  return result as Transport;
+  return result as Transport
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = Object.assign(restClient, module.exports);
+  module.exports = Object.assign(restClient, module.exports)
 }

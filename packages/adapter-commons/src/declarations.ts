@@ -1,9 +1,9 @@
-import { Query, Params, Paginated, Id, NullableId } from '@feathersjs/feathers';
+import { Query, Params, Paginated, Id, NullableId } from '@feathersjs/feathers'
 
 export type FilterQueryOptions = {
-  filters?: FilterSettings;
-  operators?: string[];
-  paginate?: PaginationParams;
+  filters?: FilterSettings
+  operators?: string[]
+  paginate?: PaginationParams
 }
 
 export type QueryFilter = (value: any, options: FilterQueryOptions) => any
@@ -13,56 +13,59 @@ export type FilterSettings = {
 }
 
 export interface PaginationOptions {
-  default?: number;
-  max?: number;
+  default?: number
+  max?: number
 }
 
-export type PaginationParams = false | PaginationOptions;
+export type PaginationParams = false | PaginationOptions
 
 export interface AdapterServiceOptions {
   /**
    * Whether to allow multiple updates for everything (`true`) or specific methods (e.g. `['create', 'remove']`)
    */
-  multi?: boolean | string[];
+  multi?: boolean | string[]
   /**
    * The name of the id property
    */
-  id?: string;
+  id?: string
   /**
    * Pagination settings for this service
    */
-  paginate?: PaginationParams;
+  paginate?: PaginationParams
   /**
    * A list of additional property query operators to allow in a query
    */
-  operators?: string[];
+  operators?: string[]
   /**
    * An object of additional top level query filters, e.g. `{ $populate: true }`
    * Can also be a converter function like `{ $ignoreCase: (value) => value === 'true' ? true : false }`
    */
-  filters?: FilterSettings;
+  filters?: FilterSettings
   /**
    * @deprecated Use service `events` option when registering the service with `app.use`.
    */
-  events?: string[];
+  events?: string[]
   /**
- * @deprecated renamed to `operators`.
- */
-  whitelist?: string[];
+   * @deprecated renamed to `operators`.
+   */
+  whitelist?: string[]
 }
 
 export interface AdapterQuery extends Query {
-  $limit?: number,
-  $skip?: number,
-  $select?: string[],
-  $sort?: { [key: string]: 1|-1 }
+  $limit?: number
+  $skip?: number
+  $select?: string[]
+  $sort?: { [key: string]: 1 | -1 }
 }
 /**
  * Additional `params` that can be passed to an adapter service method call.
  */
-export interface AdapterParams<Q = AdapterQuery, A extends Partial<AdapterServiceOptions> = Partial<AdapterServiceOptions>> extends Params<Q> {
-  adapter?: A;
-  paginate?: PaginationParams;
+export interface AdapterParams<
+  Q = AdapterQuery,
+  A extends Partial<AdapterServiceOptions> = Partial<AdapterServiceOptions>
+> extends Params<Q> {
+  adapter?: A
+  paginate?: PaginationParams
 }
 
 /**
@@ -84,9 +87,9 @@ export interface InternalServiceMethods<T = any, D = Partial<T>, P extends Adapt
    *
    * @param _params - Service call parameters {@link Params}
    */
-  $find(_params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>;
-  $find(_params?: P & { paginate: false }): Promise<T[]>;
-  $find(params?: P): Promise<T[] | Paginated<T>>;
+  $find(_params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>
+  $find(_params?: P & { paginate: false }): Promise<T[]>
+  $find(params?: P): Promise<T[] | Paginated<T>>
 
   /**
    * Retrieve a single resource matching the given ID, skipping any service-level hooks.
@@ -97,7 +100,7 @@ export interface InternalServiceMethods<T = any, D = Partial<T>, P extends Adapt
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#get-id-params|Feathers API Documentation: .get(id, params)}
    */
-  $get(id: Id, params?: P): Promise<T>;
+  $get(id: Id, params?: P): Promise<T>
 
   /**
    * Create a new resource for this service, skipping any service-level hooks.
@@ -108,9 +111,9 @@ export interface InternalServiceMethods<T = any, D = Partial<T>, P extends Adapt
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#create-data-params|Feathers API Documentation: .create(data, params)}
    */
-  $create(data: Partial<D>, params?: P): Promise<T>;
-  $create(data: Partial<D>[], params?: P): Promise<T[]>;
-  $create(data: Partial<D> | Partial<D>[], params?: P): Promise<T | T[]>;
+  $create(data: Partial<D>, params?: P): Promise<T>
+  $create(data: Partial<D>[], params?: P): Promise<T[]>
+  $create(data: Partial<D> | Partial<D>[], params?: P): Promise<T | T[]>
 
   /**
    * Completely replace the resource identified by id, skipping any service-level hooks.
@@ -122,7 +125,7 @@ export interface InternalServiceMethods<T = any, D = Partial<T>, P extends Adapt
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#update-id-data-params|Feathers API Documentation: .update(id, data, params)}
    */
-  $update(id: Id, data: D, params?: P): Promise<T>;
+  $update(id: Id, data: D, params?: P): Promise<T>
 
   /**
    * Merge any resources matching the given ID with the given data, skipping any service-level hooks.
@@ -134,9 +137,9 @@ export interface InternalServiceMethods<T = any, D = Partial<T>, P extends Adapt
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#patch-id-data-params|Feathers API Documentation: .patch(id, data, params)}
    */
-  $patch(id: null, data: Partial<D>, params?: P): Promise<T[]>;
-  $patch(id: Id, data: Partial<D>, params?: P): Promise<T>;
-  $patch(id: NullableId, data: Partial<D>, params?: P): Promise<T | T[]>;
+  $patch(id: null, data: Partial<D>, params?: P): Promise<T[]>
+  $patch(id: Id, data: Partial<D>, params?: P): Promise<T>
+  $patch(id: NullableId, data: Partial<D>, params?: P): Promise<T | T[]>
 
   /**
    * Remove resources matching the given ID from the this service, skipping any service-level hooks.
@@ -147,7 +150,7 @@ export interface InternalServiceMethods<T = any, D = Partial<T>, P extends Adapt
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#remove-id-params|Feathers API Documentation: .remove(id, params)}
    */
-   $remove(id: null, params?: P): Promise<T[]>;
-   $remove(id: Id, params?: P): Promise<T>;
-   $remove(id: NullableId, params?: P): Promise<T | T[]>;
+  $remove(id: null, params?: P): Promise<T[]>
+  $remove(id: Id, params?: P): Promise<T>
+  $remove(id: NullableId, params?: P): Promise<T | T[]>
 }

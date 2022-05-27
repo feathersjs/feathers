@@ -1,47 +1,50 @@
-import merge from 'lodash/merge';
-import { NotAuthenticated } from '@feathersjs/errors';
-import { AuthenticationBase, AuthenticationResult, AuthenticationRequest, AuthenticationParams } from './core';
-import { connection, event } from './hooks';
-import '@feathersjs/transport-commons';
-import { createDebug } from '@feathersjs/commons';
-import { ServiceMethods, ServiceAddons } from '@feathersjs/feathers';
-import jsonwebtoken from 'jsonwebtoken';
+import merge from 'lodash/merge'
+import { NotAuthenticated } from '@feathersjs/errors'
+import { AuthenticationBase, AuthenticationResult, AuthenticationRequest, AuthenticationParams } from './core'
+import { connection, event } from './hooks'
+import '@feathersjs/transport-commons'
+import { createDebug } from '@feathersjs/commons'
+import { ServiceMethods, ServiceAddons } from '@feathersjs/feathers'
+import jsonwebtoken from 'jsonwebtoken'
 
-const debug = createDebug('@feathersjs/authentication/service');
+const debug = createDebug('@feathersjs/authentication/service')
 
 declare module '@feathersjs/feathers/lib/declarations' {
-  interface FeathersApplication<Services, Settings> { // eslint-disable-line
+  interface FeathersApplication<Services, Settings> {
+    // eslint-disable-line
     /**
      * Returns the default authentication service or the
      * authentication service for a given path.
      *
      * @param location The service path to use (optional)
      */
-    defaultAuthentication? (location?: string): AuthenticationService;
+    defaultAuthentication?(location?: string): AuthenticationService
   }
 
   interface Params {
-    authenticated?: boolean;
-    authentication?: AuthenticationRequest;
+    authenticated?: boolean
+    authentication?: AuthenticationRequest
   }
 }
 
 // eslint-disable-next-line
 export interface AuthenticationService extends ServiceAddons<AuthenticationResult, AuthenticationResult> {}
 
-export class AuthenticationService extends AuthenticationBase implements Partial<ServiceMethods<AuthenticationResult, AuthenticationRequest, AuthenticationParams>> {
-  constructor (app: any, configKey = 'authentication', options = {}) {
-    super(app, configKey, options);
+export class AuthenticationService
+  extends AuthenticationBase
+  implements Partial<ServiceMethods<AuthenticationResult, AuthenticationRequest, AuthenticationParams>>
+{
+  constructor(app: any, configKey = 'authentication', options = {}) {
+    super(app, configKey, options)
 
     if (typeof app.defaultAuthentication !== 'function') {
       app.defaultAuthentication = function (location?: string) {
-        const configKey = app.get('defaultAuthentication');
-        const path = location || Object.keys(this.services).find(current =>
-          this.service(current).configKey === configKey
-        );
+        const configKey = app.get('defaultAuthentication')
+        const path =
+          location || Object.keys(this.services).find((current) => this.service(current).configKey === configKey)
 
-        return path ? this.service(path) : null;
-      };
+        return path ? this.service(path) : null
+      }
     }
   }
   /**
@@ -51,11 +54,11 @@ export class AuthenticationService extends AuthenticationBase implements Partial
    * @param _authResult The current authentication result
    * @param params The service call parameters
    */
-  async getPayload (_authResult: AuthenticationResult, params: AuthenticationParams) {
+  async getPayload(_authResult: AuthenticationResult, params: AuthenticationParams) {
     // Uses `params.payload` or returns an empty payload
-    const { payload = {} } = params;
+    const { payload = {} } = params
 
-    return payload;
+    return payload
   }
 
   /**
@@ -65,24 +68,24 @@ export class AuthenticationService extends AuthenticationBase implements Partial
    * @param authResult The authentication result
    * @param params Service call parameters
    */
-  async getTokenOptions (authResult: AuthenticationResult, params: AuthenticationParams) {
-    const { service, entity, entityId } = this.configuration;
-    const jwtOptions = merge({}, params.jwtOptions, params.jwt);
-    const value = service && entity && authResult[entity];
+  async getTokenOptions(authResult: AuthenticationResult, params: AuthenticationParams) {
+    const { service, entity, entityId } = this.configuration
+    const jwtOptions = merge({}, params.jwtOptions, params.jwt)
+    const value = service && entity && authResult[entity]
 
     // Set the subject to the entity id if it is available
     if (value && !jwtOptions.subject) {
-      const idProperty = entityId || this.app.service(service).id;
-      const subject = value[idProperty];
+      const idProperty = entityId || this.app.service(service).id
+      const subject = value[idProperty]
 
       if (subject === undefined) {
-        throw new NotAuthenticated(`Can not set subject from ${entity}.${idProperty}`);
+        throw new NotAuthenticated(`Can not set subject from ${entity}.${idProperty}`)
       }
 
-      jwtOptions.subject = `${subject}`;
+      jwtOptions.subject = `${subject}`
     }
 
-    return jwtOptions;
+    return jwtOptions
   }
 
   /**
@@ -92,36 +95,36 @@ export class AuthenticationService extends AuthenticationBase implements Partial
    * @param data The authentication request (should include `strategy` key)
    * @param params Service call parameters
    */
-  async create (data: AuthenticationRequest, params?: AuthenticationParams) {
-    const authStrategies = params.authStrategies || this.configuration.authStrategies;
+  async create(data: AuthenticationRequest, params?: AuthenticationParams) {
+    const authStrategies = params.authStrategies || this.configuration.authStrategies
 
     if (!authStrategies.length) {
-      throw new NotAuthenticated('No authentication strategies allowed for creating a JWT (`authStrategies`)');
+      throw new NotAuthenticated('No authentication strategies allowed for creating a JWT (`authStrategies`)')
     }
 
-    const authResult = await this.authenticate(data, params, ...authStrategies);
+    const authResult = await this.authenticate(data, params, ...authStrategies)
 
-    debug('Got authentication result', authResult);
+    debug('Got authentication result', authResult)
 
     if (authResult.accessToken) {
-      return authResult;
+      return authResult
     }
 
-    const [ payload, jwtOptions ] = await Promise.all([
+    const [payload, jwtOptions] = await Promise.all([
       this.getPayload(authResult, params),
       this.getTokenOptions(authResult, params)
-    ]);
+    ])
 
-    debug('Creating JWT with', payload, jwtOptions);
+    debug('Creating JWT with', payload, jwtOptions)
 
-    const accessToken = await this.createAccessToken(payload, jwtOptions, params.secret);
+    const accessToken = await this.createAccessToken(payload, jwtOptions, params.secret)
 
     return merge({ accessToken }, authResult, {
       authentication: {
-          accessToken,
-          payload: jsonwebtoken.decode(accessToken)
+        accessToken,
+        payload: jsonwebtoken.decode(accessToken)
       }
-    });
+    })
   }
 
   /**
@@ -131,59 +134,59 @@ export class AuthenticationService extends AuthenticationBase implements Partial
    * @param id The JWT to remove or null
    * @param params Service call parameters
    */
-  async remove (id: string | null, params?: AuthenticationParams) {
-    const { authentication } = params;
-    const { authStrategies } = this.configuration;
+  async remove(id: string | null, params?: AuthenticationParams) {
+    const { authentication } = params
+    const { authStrategies } = this.configuration
 
     // When an id is passed it is expected to be the authentication `accessToken`
     if (id !== null && id !== authentication.accessToken) {
-      throw new NotAuthenticated('Invalid access token');
+      throw new NotAuthenticated('Invalid access token')
     }
 
-    debug('Verifying authentication strategy in remove');
+    debug('Verifying authentication strategy in remove')
 
-    return this.authenticate(authentication, params, ...authStrategies);
+    return this.authenticate(authentication, params, ...authStrategies)
   }
 
   /**
    * Validates the service configuration.
    */
-  async setup () {
-    await super.setup();
+  async setup() {
+    await super.setup()
 
     // The setup method checks for valid settings and registers the
     // connection and event (login, logout) hooks
-    const { secret, service, entity, entityId } = this.configuration;
+    const { secret, service, entity, entityId } = this.configuration
 
     if (typeof secret !== 'string') {
-      throw new Error('A \'secret\' must be provided in your authentication configuration');
+      throw new Error("A 'secret' must be provided in your authentication configuration")
     }
 
     if (entity !== null) {
       if (service === undefined) {
-        throw new Error('The \'service\' option is not set in the authentication configuration');
+        throw new Error("The 'service' option is not set in the authentication configuration")
       }
 
       if (this.app.service(service) === undefined) {
-        throw new Error(`The '${service}' entity service does not exist (set to 'null' if it is not required)`);
+        throw new Error(`The '${service}' entity service does not exist (set to 'null' if it is not required)`)
       }
 
       if (this.app.service(service).id === undefined && entityId === undefined) {
-        throw new Error(`The '${service}' service does not have an 'id' property and no 'entityId' option is set.`);
+        throw new Error(`The '${service}' service does not have an 'id' property and no 'entityId' option is set.`)
       }
     }
 
-    (this as any).hooks({
-      create: [ connection('login'), event('login') ],
-      remove: [ connection('logout'), event('logout') ]
-    });
+    this.hooks({
+      create: [connection('login'), event('login')],
+      remove: [connection('logout'), event('logout')]
+    } as any)
 
     this.app.on('disconnect', async (connection) => {
-      await this.handleConnection('disconnect', connection);
-    });
+      await this.handleConnection('disconnect', connection)
+    })
 
     if (typeof this.publish === 'function') {
-      this.publish(() => null);
+      this.publish(() => null)
     }
   }
 }
