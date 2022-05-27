@@ -42,4 +42,4 @@ exclude_patterns:
   - "**/*.dist.js"
   - "**/templates/*"
   - "**/_**"
-  - "**/adapter-commons/src/sort"
+  - "**/adapter-commons/src/sort.ts"
