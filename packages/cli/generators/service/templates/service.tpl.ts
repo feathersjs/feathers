@@ -3,7 +3,7 @@ import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
 const js = ({ relative, path, className, camelName }: ServiceGeneratorContext) =>
-`import { resolveAll } from '@feathersjs/schema'
+  `import { resolveAll } from '@feathersjs/schema'
 import { ${camelName}Resolvers } from '${relative}/schemas/${path}.schema.js'
 
 // The ${className} service class
@@ -42,7 +42,7 @@ export function ${camelName} (app) {
 `
 
 const ts = ({ relative, path, className, camelName, upperName }: ServiceGeneratorContext) =>
-`import { resolveAll } from '@feathersjs/schema'
+  `import { resolveAll } from '@feathersjs/schema'
 import { Application } from '${relative}/declarations'
 
 import {
@@ -101,19 +101,19 @@ declare module '${relative}/declarations' {
 }
 `
 
-const importTemplate = ({ camelName, path } : ServiceGeneratorContext) =>
-`import { ${camelName} } from './${path}'`
+const importTemplate = ({ camelName, path }: ServiceGeneratorContext) => `import { ${camelName} } from './${path}'`
 
-const configureTemplate = ({ camelName } : ServiceGeneratorContext) =>
-`  app.configure(${camelName})`
+const configureTemplate = ({ camelName }: ServiceGeneratorContext) => `  app.configure(${camelName})`
 
-const toServiceIndex = toFile(({ lib, language } : ServiceGeneratorContext) => [
-  lib, 'services', `index.${language}`
-])
+const toServiceIndex = toFile(({ lib, language }: ServiceGeneratorContext) => [lib, 'services', `index.${language}`])
 
-export const generate = (ctx: ServiceGeneratorContext) => generator(ctx)
-  .then(renderSource({ ts, js }, toFile<ServiceGeneratorContext>(({ lib, folder, kebabName }) =>
-    [lib, 'services', ...folder, kebabName]
-  )))
-  .then(inject(importTemplate, prepend(), toServiceIndex))
-  .then(inject(configureTemplate, after('export const services'), toServiceIndex))
+export const generate = (ctx: ServiceGeneratorContext) =>
+  generator(ctx)
+    .then(
+      renderSource(
+        { ts, js },
+        toFile<ServiceGeneratorContext>(({ lib, folder, kebabName }) => [lib, 'services', ...folder, kebabName])
+      )
+    )
+    .then(inject(importTemplate, prepend(), toServiceIndex))
+    .then(inject(configureTemplate, after('export const services'), toServiceIndex))

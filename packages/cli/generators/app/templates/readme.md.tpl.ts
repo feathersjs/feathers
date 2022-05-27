@@ -2,7 +2,7 @@ import { generator, renderTemplate, toFile } from '@feathershq/pinion'
 import { AppGeneratorContext } from '../index'
 
 const template = ({ name, description }: AppGeneratorContext) =>
-`# ${name}
+  `# ${name}
 
 > ${description}
 
@@ -47,5 +47,4 @@ $ feathers help                           # Show all commands
 For more information on all the things you can do with Feathers visit [docs.feathersjs.com](http://docs.feathersjs.com).
 `
 
-export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(renderTemplate(template, toFile('readme.md')))
+export const generate = (ctx: AppGeneratorContext) => generator(ctx).then(renderTemplate(template, toFile('readme.md')))

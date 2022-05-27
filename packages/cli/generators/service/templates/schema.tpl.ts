@@ -3,7 +3,7 @@ import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
 const js = ({ camelName, className, type }: ServiceGeneratorContext) =>
-`import { schema, resolve, querySyntax } from '@feathersjs/schema'
+  `import { schema, resolve, querySyntax } from '@feathersjs/schema'
 
 // Schema and resolver for the basic data model (e.g. creating new entries)
 export const ${camelName}DataSchema = schema({
@@ -93,7 +93,7 @@ export const ${camelName}Resolvers = {
 `
 
 const ts = ({ camelName, upperName, relative, type }: ServiceGeneratorContext) =>
-`import { schema, resolve, querySyntax, Infer } from '@feathersjs/schema'
+  `import { schema, resolve, querySyntax, Infer } from '@feathersjs/schema'
 import { HookContext } from '${relative}/declarations'
 
 // Schema and resolver for the basic data model (e.g. creating new entries)
@@ -191,7 +191,15 @@ export const ${camelName}Resolvers = {
 }
 `
 
-export const generate = (ctx: ServiceGeneratorContext) => generator(ctx)
-  .then(renderSource({ ts, js }, toFile(({ lib, folder, kebabName }: ServiceGeneratorContext) =>
-    [lib, 'schemas', ...folder, `${kebabName}.schema`]
-  )))
+export const generate = (ctx: ServiceGeneratorContext) =>
+  generator(ctx).then(
+    renderSource(
+      { ts, js },
+      toFile(({ lib, folder, kebabName }: ServiceGeneratorContext) => [
+        lib,
+        'schemas',
+        ...folder,
+        `${kebabName}.schema`
+      ])
+    )
+  )

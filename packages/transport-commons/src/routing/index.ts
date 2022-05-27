@@ -1,50 +1,54 @@
-import { Application, Service, ServiceOptions } from '@feathersjs/feathers';
-import { Router } from './router';
+import { Application, Service, ServiceOptions } from '@feathersjs/feathers'
+import { Router } from './router'
 
 declare module '@feathersjs/feathers/lib/declarations' {
   interface RouteLookup {
-    service: Service,
+    service: Service
     params: { [key: string]: any }
   }
 
-  interface Application<Services, Settings> {  // eslint-disable-line
+  interface Application<Services, Settings> {
+    // eslint-disable-line
     routes: Router<{
-      service: Service,
+      service: Service
       params?: { [key: string]: any }
-    }>;
-    lookup (path: string): RouteLookup;
+    }>
+    lookup(path: string): RouteLookup
   }
 }
 
-export * from './router';
+export * from './router'
 
 const lookup = function (this: Application, path: string) {
-  const result = this.routes.lookup(path);
+  const result = this.routes.lookup(path)
 
   if (result === null) {
-    return null;
+    return null
   }
 
-  const { params: colonParams, data: { service, params: dataParams } } = result;
+  const {
+    params: colonParams,
+    data: { service, params: dataParams }
+  } = result
 
-  const params = dataParams ? { ...dataParams, ...colonParams } : colonParams;
+  const params = dataParams ? { ...dataParams, ...colonParams } : colonParams
 
-  return { service, params };
-};
+  return { service, params }
+}
 
 export const routing = () => (app: Application) => {
   if (typeof app.lookup === 'function') {
-    return;
+    return
   }
 
-  app.routes = new Router();
-  app.lookup = lookup;
+  app.routes = new Router()
+  app.lookup = lookup
 
   // Add a mixin that registers a service on the router
   app.mixins.push((service: Service, path: string, options: ServiceOptions) => {
-    const { routeParams: params = {} } = options;
+    const { routeParams: params = {} } = options
 
-    app.routes.insert(path, { service, params });
-    app.routes.insert(`${path}/:__id`, { service, params });
-  });
-};
+    app.routes.insert(path, { service, params })
+    app.routes.insert(`${path}/:__id`, { service, params })
+  })
+}

@@ -3,7 +3,7 @@ import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
 const js = ({}: AppGeneratorContext) =>
-`import winston from 'winston'
+  `import winston from 'winston'
 
 const { createLogger, format, transports } = winston
 
@@ -31,7 +31,7 @@ export const logErrorHook = async (context, next) => {
 `
 
 const ts = ({}: AppGeneratorContext) =>
-`import { createLogger, format, transports } from 'winston'
+  `import { createLogger, format, transports } from 'winston'
 import { HookContext, NextFunction } from './declarations'
 
 // Configure the Winston logger. For the complete documentation see https://github.com/winstonjs/winston
@@ -57,5 +57,10 @@ export const logErrorHook = async (context: HookContext, next: NextFunction) => 
 }
 `
 
-export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(renderSource({ js, ts }, toFile<AppGeneratorContext>(({ lib }) => lib, 'logger')))
+export const generate = (ctx: AppGeneratorContext) =>
+  generator(ctx).then(
+    renderSource(
+      { js, ts },
+      toFile<AppGeneratorContext>(({ lib }) => lib, 'logger')
+    )
+  )

@@ -3,7 +3,7 @@ import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
 const js = ({}: AppGeneratorContext) =>
-`import { app } from './app.js'
+  `import { app } from './app.js'
 import { logger } from './logger.js'
 
 const port = app.get('port')
@@ -15,7 +15,7 @@ app.listen(port).then(() => {
 `
 
 const ts = ({}: AppGeneratorContext) =>
-`import { app } from './app'
+  `import { app } from './app'
 import { logger } from './logger'
 
 const port = app.get('port')
@@ -26,5 +26,10 @@ app.listen(port).then(() => {
 })
 `
 
-export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(renderSource({ js, ts }, toFile<AppGeneratorContext>(({ lib }) => lib, 'index')))
+export const generate = (ctx: AppGeneratorContext) =>
+  generator(ctx).then(
+    renderSource(
+      { js, ts },
+      toFile<AppGeneratorContext>(({ lib }) => lib, 'index')
+    )
+  )

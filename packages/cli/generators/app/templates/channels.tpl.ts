@@ -3,7 +3,7 @@ import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
 const js = ({}: AppGeneratorContext) =>
-`import { logger } from './logger.js'
+  `import { logger } from './logger.js'
 
 export const channels = app => {
   if(typeof app.channel !== 'function') {
@@ -69,7 +69,7 @@ export const channels = app => {
 `
 
 const ts = ({}: AppGeneratorContext) =>
-`import '@feathersjs/transport-commons'
+  `import '@feathersjs/transport-commons'
 import { Application, HookContext } from './declarations'
 import { logger } from './logger'
 
@@ -138,5 +138,10 @@ export const channels = (app: Application) => {
 }
 `
 
-export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(renderSource({ js, ts }, toFile<AppGeneratorContext>(({ lib }) => lib, 'channels')))
+export const generate = (ctx: AppGeneratorContext) =>
+  generator(ctx).then(
+    renderSource(
+      { js, ts },
+      toFile<AppGeneratorContext>(({ lib }) => lib, 'channels')
+    )
+  )

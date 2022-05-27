@@ -6,7 +6,7 @@ import { MongoDBAdapterParams, MongoDbAdapter } from \'@feathersjs/mongodb\'
 `
 
 export const ts = ({ className, upperName }: ServiceGeneratorContext) =>
-`export interface ${upperName}Params extends MongoDBAdapterParams<${upperName}Query> {
+  `export interface ${upperName}Params extends MongoDBAdapterParams<${upperName}Query> {
 
 }
 
@@ -38,14 +38,20 @@ export class ${className} extends MongoDbAdapter<${upperName}Result, ${upperName
 }
 `
 
-const toServiceFile = toFile<ServiceGeneratorContext>(({ lib, folder, kebabName }) =>
-  [lib, 'services', ...folder, `${kebabName}.ts`]
-)
+const toServiceFile = toFile<ServiceGeneratorContext>(({ lib, folder, kebabName }) => [
+  lib,
+  'services',
+  ...folder,
+  `${kebabName}.ts`
+])
 
-export const generate = (ctx: ServiceGeneratorContext) => generator(ctx)
-  .then(inject(
-    ts,
-    after<ServiceGeneratorContext>(({ className }) => `// The ${className} service class`),
-    toServiceFile
-  ))
-  .then(inject(importTemplate, prepend(), toServiceFile))
+export const generate = (ctx: ServiceGeneratorContext) =>
+  generator(ctx)
+    .then(
+      inject(
+        ts,
+        after<ServiceGeneratorContext>(({ className }) => `// The ${className} service class`),
+        toServiceFile
+      )
+    )
+    .then(inject(importTemplate, prepend(), toServiceFile))

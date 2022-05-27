@@ -1,26 +1,26 @@
-import { _ } from '@feathersjs/commons';
-import { BadRequest } from '@feathersjs/errors';
-import { Query } from '@feathersjs/feathers';
-import { FilterQueryOptions, FilterSettings } from './declarations';
+import { _ } from '@feathersjs/commons'
+import { BadRequest } from '@feathersjs/errors'
+import { Query } from '@feathersjs/feathers'
+import { FilterQueryOptions, FilterSettings } from './declarations'
 
-const parse = (value: any) => typeof value !== 'undefined' ? parseInt(value, 10) : value;
+const parse = (value: any) => (typeof value !== 'undefined' ? parseInt(value, 10) : value)
 
-const isPlainObject = (value: any) => _.isObject(value) && value.constructor === {}.constructor;
+const isPlainObject = (value: any) => _.isObject(value) && value.constructor === {}.constructor
 
 const validateQueryProperty = (query: any, operators: string[] = []): Query => {
   if (!isPlainObject(query)) {
-    return query;
+    return query
   }
 
   for (const key of Object.keys(query)) {
     if (key.startsWith('$') && !operators.includes(key)) {
-      throw new BadRequest(`Invalid query parameter ${key}`, query);
+      throw new BadRequest(`Invalid query parameter ${key}`, query)
     }
 
-    const value = query[key];
+    const value = query[key]
 
     if (isPlainObject(value)) {
-      query[key] = validateQueryProperty(value, operators);
+      query[key] = validateQueryProperty(value, operators)
     }
   }
 
@@ -30,82 +30,81 @@ const validateQueryProperty = (query: any, operators: string[] = []): Query => {
 }
 
 const getFilters = (query: Query, settings: FilterQueryOptions) => {
-  const filterNames = Object.keys(settings.filters);
+  const filterNames = Object.keys(settings.filters)
 
   return filterNames.reduce((current, key) => {
-    const queryValue = query[key];
-    const filter = settings.filters[key];
+    const queryValue = query[key]
+    const filter = settings.filters[key]
 
     if (filter) {
-      const value = typeof filter === 'function' ? filter(queryValue, settings) : queryValue;
+      const value = typeof filter === 'function' ? filter(queryValue, settings) : queryValue
 
       if (value !== undefined) {
-        current[key] = value;
+        current[key] = value
       }
     }
 
-    return current;
-  }, {} as { [key: string]: any });
+    return current
+  }, {} as { [key: string]: any })
 }
 
 const getQuery = (query: Query, settings: FilterQueryOptions) => {
-  const keys = Object.keys(query).concat(Object.getOwnPropertySymbols(query) as any as string[]);
+  const keys = Object.keys(query).concat(Object.getOwnPropertySymbols(query) as any as string[])
 
   return keys.reduce((result, key) => {
     if (typeof key === 'string' && key.startsWith('$')) {
       if (settings.filters[key] === undefined) {
-        throw new BadRequest(`Invalid filter value ${key}`);
+        throw new BadRequest(`Invalid filter value ${key}`)
       }
     } else {
-      result[key] = validateQueryProperty(query[key], settings.operators);
+      result[key] = validateQueryProperty(query[key], settings.operators)
     }
 
-    return result;
+    return result
   }, {} as Query)
 }
 
-export const OPERATORS = ['$in', '$nin', '$lt', '$lte', '$gt', '$gte', '$ne', '$or'];
+export const OPERATORS = ['$in', '$nin', '$lt', '$lte', '$gt', '$gte', '$ne', '$or']
 
 export const FILTERS: FilterSettings = {
   $skip: (value: any) => parse(value),
   $sort: (sort: any): { [key: string]: number } => {
     if (typeof sort !== 'object' || Array.isArray(sort)) {
-      return sort;
+      return sort
     }
 
     return Object.keys(sort).reduce((result, key) => {
-      result[key] = typeof sort[key] === 'object'
-        ? sort[key] : parse(sort[key]);
+      result[key] = typeof sort[key] === 'object' ? sort[key] : parse(sort[key])
 
-      return result;
-    }, {} as { [key: string]: number });
+      return result
+    }, {} as { [key: string]: number })
   },
   $limit: (_limit: any, { paginate }: FilterQueryOptions) => {
-    const limit = parse(_limit);
+    const limit = parse(_limit)
 
     if (paginate && (paginate.default || paginate.max)) {
-      const base = paginate.default || 0;
-      const lower = typeof limit === 'number' && !isNaN(limit) && limit >= 0 ? limit : base;
-      const upper = typeof paginate.max === 'number' ? paginate.max : Number.MAX_VALUE;
+      const base = paginate.default || 0
+      const lower = typeof limit === 'number' && !isNaN(limit) && limit >= 0 ? limit : base
+      const upper = typeof paginate.max === 'number' ? paginate.max : Number.MAX_VALUE
 
-      return Math.min(lower, upper);
+      return Math.min(lower, upper)
     }
 
-    return limit;
+    return limit
   },
   $select: (select: any) => {
     if (Array.isArray(select)) {
-      return select.map(current => `${current}`);
+      return select.map((current) => `${current}`)
     }
 
-    return select;
+    return select
   },
   $or: (or: any, { operators }: FilterQueryOptions) => {
     if (Array.isArray(or)) {
-      return or.map(current => validateQueryProperty(current, operators));
+      return or.map((current) => validateQueryProperty(current, operators))
     }
 
-    return or;
+    return or
   }
 }
 
@@ -120,8 +119,8 @@ export const FILTERS: FilterSettings = {
  * @returns An object with `query` which contains the query without `filters`
  * and `filters` which contains the converted values for each filter.
  */
-export function filterQuery (_query: Query, options: FilterQueryOptions = {}) {
-  const query = _query || {};
+export function filterQuery(_query: Query, options: FilterQueryOptions = {}) {
+  const query = _query || {}
   const settings = {
     ...options,
     filters: {

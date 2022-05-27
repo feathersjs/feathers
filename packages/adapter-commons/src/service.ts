@@ -1,13 +1,13 @@
-import { BadRequest, MethodNotAllowed } from '@feathersjs/errors';
-import { Id, NullableId, Paginated, Query } from '@feathersjs/feathers';
-import { AdapterParams, AdapterServiceOptions, InternalServiceMethods, PaginationOptions } from './declarations';
-import { filterQuery } from './query';
+import { BadRequest, MethodNotAllowed } from '@feathersjs/errors'
+import { Id, NullableId, Paginated, Query } from '@feathersjs/feathers'
+import { AdapterParams, AdapterServiceOptions, InternalServiceMethods, PaginationOptions } from './declarations'
+import { filterQuery } from './query'
 
 const alwaysMulti: { [key: string]: boolean } = {
   find: true,
   get: false,
   update: false
-};
+}
 
 /**
  * An abstract base class that a database adapter can extend from to implement the
@@ -18,10 +18,11 @@ export abstract class AdapterBase<
   D = Partial<T>,
   P extends AdapterParams = AdapterParams,
   O extends AdapterServiceOptions = AdapterServiceOptions
-> implements InternalServiceMethods<T, D, P> {
-  options: O;
+> implements InternalServiceMethods<T, D, P>
+{
+  options: O
 
-  constructor (options: O) {
+  constructor(options: O) {
     this.options = {
       id: 'id',
       events: [],
@@ -30,15 +31,15 @@ export abstract class AdapterBase<
       filters: {},
       operators: [],
       ...options
-    };
+    }
   }
 
-  get id () {
-    return this.options.id;
+  get id() {
+    return this.options.id
   }
 
-  get events () {
-    return this.options.events;
+  get events() {
+    return this.options.events
   }
 
   /**
@@ -47,20 +48,20 @@ export abstract class AdapterBase<
    * @param params The service call params.
    * @returns Wether or not multiple updates are allowed.
    */
-   allowsMulti (method: string, params: P = {} as P) {
-    const always = alwaysMulti[method];
+  allowsMulti(method: string, params: P = {} as P) {
+    const always = alwaysMulti[method]
 
     if (typeof always !== 'undefined') {
-      return always;
+      return always
     }
 
-    const { multi } = this.getOptions(params);
+    const { multi } = this.getOptions(params)
 
     if (multi === true || multi === false) {
-      return multi;
+      return multi
     }
 
-    return multi.includes(method);
+    return multi.includes(method)
   }
 
   /**
@@ -70,8 +71,8 @@ export abstract class AdapterBase<
    * @param params The parameters for the service method call
    * @returns The actual options for this call
    */
-  getOptions (params: P): O {
-    const paginate = params.paginate !== undefined ? params.paginate : this.options.paginate;
+  getOptions(params: P): O {
+    const paginate = params.paginate !== undefined ? params.paginate : this.options.paginate
 
     return {
       ...this.options,
@@ -87,8 +88,8 @@ export abstract class AdapterBase<
    * @param _params Service call parameters
    * @returns The sanitized data
    */
-  async sanitizeData<X = Partial<D>> (data: X, _params: P) {
-    return data;
+  async sanitizeData<X = Partial<D>>(data: X, _params: P) {
+    return data
   }
 
   /**
@@ -100,19 +101,19 @@ export abstract class AdapterBase<
    * @param params The service call parameter.
    * @returns A new object containing the sanitized query.
    */
-  async sanitizeQuery (params: P = {} as P): Promise<Query> {
-    const options = this.getOptions(params);
+  async sanitizeQuery(params: P = {} as P): Promise<Query> {
+    const options = this.getOptions(params)
     const { query, filters } = filterQuery(params.query, options)
 
     return {
       ...filters,
       ...query
-    };
+    }
   }
 
-  abstract $find(_params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>;
-  abstract $find(_params?: P & { paginate: false }): Promise<T[]>;
-  abstract $find(params?: P): Promise<T[] | Paginated<T>>;
+  abstract $find(_params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>
+  abstract $find(_params?: P & { paginate: false }): Promise<T[]>
+  abstract $find(params?: P): Promise<T[] | Paginated<T>>
 
   /**
    * Retrieve all resources from this service, skipping any service-level hooks but sanitize the query
@@ -122,19 +123,19 @@ export abstract class AdapterBase<
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#find-params|Feathers API Documentation: .find(params)}
    */
-  async _find(_params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>;
-  async _find(_params?: P & { paginate: false }): Promise<T[]>;
-  async _find(params?: P): Promise<T | T[] | Paginated<T>>;
-  async _find (params?: P): Promise<T | T[] | Paginated<T>> {
-    const query = await this.sanitizeQuery(params);
+  async _find(_params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>
+  async _find(_params?: P & { paginate: false }): Promise<T[]>
+  async _find(params?: P): Promise<T | T[] | Paginated<T>>
+  async _find(params?: P): Promise<T | T[] | Paginated<T>> {
+    const query = await this.sanitizeQuery(params)
 
     return this.$find({
       ...params,
       query
-    });
+    })
   }
 
-  abstract $get(id: Id, params?: P): Promise<T>;
+  abstract $get(id: Id, params?: P): Promise<T>
 
   /**
    * Retrieve a single resource matching the given ID, skipping any service-level hooks but sanitize the query
@@ -145,18 +146,18 @@ export abstract class AdapterBase<
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#get-id-params|Feathers API Documentation: .get(id, params)}
    */
-  async _get (id: Id, params?: P): Promise<T> {
-    const query = await this.sanitizeQuery(params);
+  async _get(id: Id, params?: P): Promise<T> {
+    const query = await this.sanitizeQuery(params)
 
     return this.$get(id, {
       ...params,
       query
-    });
+    })
   }
 
-  abstract $create(data: Partial<D>, params?: P): Promise<T>;
-  abstract $create(data: Partial<D>[], params?: P): Promise<T[]>;
-  abstract $create(data: Partial<D> | Partial<D>[], params?: P): Promise<T | T[]>;
+  abstract $create(data: Partial<D>, params?: P): Promise<T>
+  abstract $create(data: Partial<D>[], params?: P): Promise<T[]>
+  abstract $create(data: Partial<D> | Partial<D>[], params?: P): Promise<T | T[]>
 
   /**
    * Create a new resource for this service, skipping any service-level hooks, sanitize the data
@@ -167,22 +168,22 @@ export abstract class AdapterBase<
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#create-data-params|Feathers API Documentation: .create(data, params)}
    */
-  async _create(data: Partial<D>, params?: P): Promise<T>;
-  async _create(data: Partial<D>[], params?: P): Promise<T[]>;
-  async _create(data: Partial<D> | Partial<D>[], params?: P): Promise<T | T[]>;
-  async _create (data: Partial<D> | Partial<D>[], params?: P): Promise<T | T[]> {
+  async _create(data: Partial<D>, params?: P): Promise<T>
+  async _create(data: Partial<D>[], params?: P): Promise<T[]>
+  async _create(data: Partial<D> | Partial<D>[], params?: P): Promise<T | T[]>
+  async _create(data: Partial<D> | Partial<D>[], params?: P): Promise<T | T[]> {
     if (Array.isArray(data) && !this.allowsMulti('create', params)) {
-      throw new MethodNotAllowed('Can not create multiple entries');
+      throw new MethodNotAllowed('Can not create multiple entries')
     }
 
     const payload = Array.isArray(data)
-      ? (await Promise.all(data.map(current => this.sanitizeData(current, params))))
-      : (await this.sanitizeData(data, params));
+      ? await Promise.all(data.map((current) => this.sanitizeData(current, params)))
+      : await this.sanitizeData(data, params)
 
-    return this.$create(payload, params);
+    return this.$create(payload, params)
   }
 
-  abstract $update(id: Id, data: D, params?: P): Promise<T>;
+  abstract $update(id: Id, data: D, params?: P): Promise<T>
 
   /**
    * Replace any resources matching the given ID with the given data, skipping any service-level hooks.
@@ -193,25 +194,23 @@ export abstract class AdapterBase<
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#update-id-data-params|Feathers API Documentation: .update(id, data, params)}
    */
-  async _update (id: Id, data: D, params?: P): Promise<T> {
+  async _update(id: Id, data: D, params?: P): Promise<T> {
     if (id === null || Array.isArray(data)) {
-      throw new BadRequest(
-        'You can not replace multiple instances. Did you mean \'patch\'?'
-      );
+      throw new BadRequest("You can not replace multiple instances. Did you mean 'patch'?")
     }
 
-    const payload = await this.sanitizeData(data, params);
-    const query = await this.sanitizeQuery(params);
+    const payload = await this.sanitizeData(data, params)
+    const query = await this.sanitizeQuery(params)
 
     return this.$update(id, payload, {
       ...params,
       query
-    });
+    })
   }
 
-  abstract $patch(id: null, data: Partial<D>, params?: P): Promise<T[]>;
-  abstract $patch(id: Id, data: Partial<D>, params?: P): Promise<T>;
-  abstract $patch(id: NullableId, data: Partial<D>, params?: P): Promise<T | T[]>;
+  abstract $patch(id: null, data: Partial<D>, params?: P): Promise<T[]>
+  abstract $patch(id: Id, data: Partial<D>, params?: P): Promise<T>
+  abstract $patch(id: NullableId, data: Partial<D>, params?: P): Promise<T | T[]>
 
   /**
    * Merge any resources matching the given ID with the given data, skipping any service-level hooks.
@@ -223,26 +222,26 @@ export abstract class AdapterBase<
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#patch-id-data-params|Feathers API Documentation: .patch(id, data, params)}
    */
-  async _patch(id: null, data: Partial<D>, params?: P): Promise<T[]>;
-  async _patch(id: Id, data: Partial<D>, params?: P): Promise<T>;
-  async _patch(id: NullableId, data: Partial<D>, params?: P): Promise<T | T[]>;
-  async _patch (id: NullableId, data: Partial<D>, params?: P): Promise<T | T[]> {
+  async _patch(id: null, data: Partial<D>, params?: P): Promise<T[]>
+  async _patch(id: Id, data: Partial<D>, params?: P): Promise<T>
+  async _patch(id: NullableId, data: Partial<D>, params?: P): Promise<T | T[]>
+  async _patch(id: NullableId, data: Partial<D>, params?: P): Promise<T | T[]> {
     if (id === null && !this.allowsMulti('patch', params)) {
-      throw new MethodNotAllowed('Can not patch multiple entries');
+      throw new MethodNotAllowed('Can not patch multiple entries')
     }
 
-    const query = await this.sanitizeQuery(params);
-    const payload = await this.sanitizeData(data, params);
+    const query = await this.sanitizeQuery(params)
+    const payload = await this.sanitizeData(data, params)
 
     return this.$patch(id, payload, {
       ...params,
       query
-    });
+    })
   }
 
-  abstract $remove(id: null, params?: P): Promise<T[]>;
-  abstract $remove(id: Id, params?: P): Promise<T>;
-  abstract $remove(id: NullableId, params?: P): Promise<T | T[]>;
+  abstract $remove(id: null, params?: P): Promise<T[]>
+  abstract $remove(id: Id, params?: P): Promise<T>
+  abstract $remove(id: NullableId, params?: P): Promise<T | T[]>
 
   /**
    * Remove resources matching the given ID from the this service, skipping any service-level hooks.
@@ -253,19 +252,19 @@ export abstract class AdapterBase<
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#remove-id-params|Feathers API Documentation: .remove(id, params)}
    */
-  async _remove(id: null, params?: P): Promise<T[]>;
-  async _remove(id: Id, params?: P): Promise<T>;
-  async _remove(id: NullableId, params?: P): Promise<T | T[]>;
-  async _remove (id: NullableId, params?: P): Promise<T | T[]> {
+  async _remove(id: null, params?: P): Promise<T[]>
+  async _remove(id: Id, params?: P): Promise<T>
+  async _remove(id: NullableId, params?: P): Promise<T | T[]>
+  async _remove(id: NullableId, params?: P): Promise<T | T[]> {
     if (id === null && !this.allowsMulti('remove', params)) {
-      throw new MethodNotAllowed('Can not remove multiple entries');
+      throw new MethodNotAllowed('Can not remove multiple entries')
     }
 
-    const query = await this.sanitizeQuery(params);
+    const query = await this.sanitizeQuery(params)
 
     return this.$remove(id, {
       ...params,
       query
-    });
+    })
   }
 }

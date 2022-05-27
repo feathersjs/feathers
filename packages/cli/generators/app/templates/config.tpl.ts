@@ -16,6 +16,7 @@ const testConfig = {
   port: 8998
 }
 
-export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(writeJSON(defaultConfig, toFile('config', 'default.json')))
-  .then(writeJSON(testConfig, toFile('config', 'test.json')))
+export const generate = (ctx: AppGeneratorContext) =>
+  generator(ctx)
+    .then(writeJSON(defaultConfig, toFile('config', 'default.json')))
+    .then(writeJSON(testConfig, toFile('config', 'test.json')))

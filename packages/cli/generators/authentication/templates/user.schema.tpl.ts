@@ -3,24 +3,29 @@ import { renderSource } from '../../commons'
 import { AuthenticationGeneratorContext } from '../index'
 
 const js = ({ camelName, upperName, authStrategies, type }: AuthenticationGeneratorContext) =>
-`import { schema, resolve, querySyntax } from '@feathersjs/schema'
+  `import { schema, resolve, querySyntax } from '@feathersjs/schema'
 
 // Schema and resolver for the basic data model (e.g. creating new entries)
 export const ${camelName}DataSchema = schema({
   $id: '${upperName}Data',
   type: 'object',
   additionalProperties: false,
-  required: [ ${authStrategies.includes('local') ? '\'email\', \'password\'' : ''} ],
+  required: [ ${authStrategies.includes('local') ? "'email', 'password'" : ''} ],
   properties: {
-    ${authStrategies.map(name => name === 'local' ? `email: {
+    ${authStrategies
+      .map((name) =>
+        name === 'local'
+          ? `email: {
       type: 'string'
     },
     password: {
       type: 'string'
-    }` :
-    `${name}Id: {
+    }`
+          : `${name}Id: {
       type: 'string'
-    }`).join(',\n')}
+    }`
+      )
+      .join(',\n')}
   }
 })
 
@@ -28,12 +33,15 @@ export const ${camelName}DataResolver = resolve({
   schema: ${camelName}DataSchema,
   validate: 'before',
   properties: {
-    ${authStrategies.includes('local') ?
-    `password: async (value, ${camelName}, context) => {
+    ${
+      authStrategies.includes('local')
+        ? `password: async (value, ${camelName}, context) => {
       const localStrategy = app.service('authentication').getStrategy('local')
 
       return localStrategy.hashPassword(value)
-    }` : ''}
+    }`
+        : ''
+    }
   }
 })
 
@@ -119,26 +127,31 @@ export const ${camelName}Resolvers = {
 `
 
 const ts = ({ camelName, upperName, relative, authStrategies, type }: AuthenticationGeneratorContext) =>
-`import { schema, resolve, querySyntax, Infer } from '@feathersjs/schema'
+  `import { schema, resolve, querySyntax, Infer } from '@feathersjs/schema'
 import { HookContext } from '${relative}/declarations'
-${authStrategies.includes('local') ? 'import { LocalStrategy } from \'@feathersjs/authentication-local\'' : ''}
+${authStrategies.includes('local') ? "import { LocalStrategy } from '@feathersjs/authentication-local'" : ''}
 
 // Schema and resolver for the basic data model (e.g. creating new entries)
 export const ${camelName}DataSchema = schema({
   $id: '${upperName}Data',
   type: 'object',
   additionalProperties: false,
-  required: [ ${authStrategies.includes('local') ? '\'email\', \'password\'' : ''} ],
+  required: [ ${authStrategies.includes('local') ? "'email', 'password'" : ''} ],
   properties: {
-    ${authStrategies.map(name => name === 'local' ? `email: {
+    ${authStrategies
+      .map((name) =>
+        name === 'local'
+          ? `email: {
       type: 'string'
     },
     password: {
       type: 'string'
-    }` :
-    `${name}Id: {
+    }`
+          : `${name}Id: {
       type: 'string'
-    }`).join(',\n')}
+    }`
+      )
+      .join(',\n')}
   }
 } as const)
 
@@ -148,13 +161,16 @@ export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
   schema: ${camelName}DataSchema,
   validate: 'before',
   properties: {
-    ${authStrategies.includes('local') ?
-    `password: async (value, users, context) => {
+    ${
+      authStrategies.includes('local')
+        ? `password: async (value, users, context) => {
       const { app, params } = context
       const localStrategy = app.service('authentication').getStrategy('local') as LocalStrategy
 
       return localStrategy.hashPassword(value as string, params)
-    }` : ''}    
+    }`
+        : ''
+    }    
   }
 })
 
@@ -244,7 +260,16 @@ export const ${camelName}Resolvers = {
 }
 `
 
-export const generate = (ctx: AuthenticationGeneratorContext) => generator(ctx)
-  .then(renderSource({ ts, js }, toFile(({ lib, folder, kebabName }: AuthenticationGeneratorContext) =>
-    [lib, 'schemas', ...folder, `${kebabName}.schema`]
-  ), { force: true }))
+export const generate = (ctx: AuthenticationGeneratorContext) =>
+  generator(ctx).then(
+    renderSource(
+      { ts, js },
+      toFile(({ lib, folder, kebabName }: AuthenticationGeneratorContext) => [
+        lib,
+        'schemas',
+        ...folder,
+        `${kebabName}.schema`
+      ]),
+      { force: true }
+    )
+  )

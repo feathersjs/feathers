@@ -1,140 +1,166 @@
-import assert from 'assert';
-import { feathers, Params, ServiceInterface } from '../../src';
+import assert from 'assert'
+import { feathers, Params, ServiceInterface } from '../../src'
 
 describe('`async` hooks', () => {
   it('async hooks can set hook.result which will skip service method', async () => {
     const app = feathers().use('/dummy', {
-      async get () {
-        assert.ok(false, 'This should never run');
+      async get() {
+        assert.ok(false, 'This should never run')
       }
-    });
-    const service = app.service('dummy');
+    })
+    const service = app.service('dummy')
 
     service.hooks({
-      get: [async (hook, next) => {
-        hook.result = {
-          id: hook.id,
-          message: 'Set from hook'
-        };
+      get: [
+        async (hook, next) => {
+          hook.result = {
+            id: hook.id,
+            message: 'Set from hook'
+          }
 
-        await next();
-      }]
-    });
+          await next()
+        }
+      ]
+    })
 
-    const data = await service.get(10, {});
+    const data = await service.get(10, {})
 
     assert.deepStrictEqual(data, {
       id: 10,
       message: 'Set from hook'
-    });
-  });
+    })
+  })
 
   it('gets mixed into a service and modifies data', async () => {
     const dummyService = {
-      async create (data: any, params: any) {
-        assert.deepStrictEqual(data, {
-          some: 'thing',
-          modified: 'data'
-        }, 'Data modified');
+      async create(data: any, params: any) {
+        assert.deepStrictEqual(
+          data,
+          {
+            some: 'thing',
+            modified: 'data'
+          },
+          'Data modified'
+        )
 
-        assert.deepStrictEqual(params, {
-          modified: 'params'
-        }, 'Params modified');
+        assert.deepStrictEqual(
+          params,
+          {
+            modified: 'params'
+          },
+          'Params modified'
+        )
 
-        return data;
+        return data
       }
-    };
-    const app = feathers().use('/dummy', dummyService);
-    const service = app.service('dummy');
+    }
+    const app = feathers().use('/dummy', dummyService)
+    const service = app.service('dummy')
 
     service.hooks({
-      create: [async (hook, next) => {
-        assert.strictEqual(hook.type, null);
+      create: [
+        async (hook, next) => {
+          assert.strictEqual(hook.type, null)
 
-        hook.data.modified = 'data';
+          hook.data.modified = 'data'
 
-        Object.assign(hook.params, {
-          modified: 'params'
-        });
+          Object.assign(hook.params, {
+            modified: 'params'
+          })
 
-        await next();
-      }]
-    });
+          await next()
+        }
+      ]
+    })
 
-    const data = await service.create({ some: 'thing' });
+    const data = await service.create({ some: 'thing' })
 
-    assert.deepStrictEqual(data, {
-      some: 'thing',
-      modified: 'data'
-    }, 'Data got modified');
-  });
+    assert.deepStrictEqual(
+      data,
+      {
+        some: 'thing',
+        modified: 'data'
+      },
+      'Data got modified'
+    )
+  })
 
   it('contains the app object at hook.app', async () => {
     const someServiceConfig = {
-      async create (data: any) {
-        return data;
+      async create(data: any) {
+        return data
       }
-    };
-    const app = feathers().use('/some-service', someServiceConfig);
-    const someService = app.service('some-service');
+    }
+    const app = feathers().use('/some-service', someServiceConfig)
+    const someService = app.service('some-service')
 
     someService.hooks({
-      create: [async (hook, next) => {
-        hook.data.appPresent = typeof hook.app !== 'undefined';
-        assert.strictEqual(hook.data.appPresent, true);
-        return next();
-      }]
-    });
+      create: [
+        async (hook, next) => {
+          hook.data.appPresent = typeof hook.app !== 'undefined'
+          assert.strictEqual(hook.data.appPresent, true)
+          return next()
+        }
+      ]
+    })
 
-    const data = await someService.create({ some: 'thing' });
+    const data = await someService.create({ some: 'thing' })
 
-    assert.deepStrictEqual(data, {
-      some: 'thing',
-      appPresent: true
-    }, 'App object was present');
-  });
+    assert.deepStrictEqual(
+      data,
+      {
+        some: 'thing',
+        appPresent: true
+      },
+      'App object was present'
+    )
+  })
 
   it('passes errors', async () => {
     const dummyService = {
-      update () {
-        assert.ok(false, 'Never should be called');
+      update() {
+        assert.ok(false, 'Never should be called')
       }
-    };
-    const app = feathers().use('/dummy', dummyService);
-    const service = app.service('dummy');
+    }
+    const app = feathers().use('/dummy', dummyService)
+    const service = app.service('dummy')
 
     service.hooks({
-      update: [async () => {
-        throw new Error('You are not allowed to update');
-      }]
-    });
+      update: [
+        async () => {
+          throw new Error('You are not allowed to update')
+        }
+      ]
+    })
 
     await assert.rejects(() => service.update(1, {}), {
       message: 'You are not allowed to update'
-    });
-  });
+    })
+  })
 
   it('does not run after hook when there is an error', async () => {
     const dummyService = {
-      async remove () {
-        throw new Error('Error removing item');
+      async remove() {
+        throw new Error('Error removing item')
       }
-    };
-    const app = feathers().use('/dummy', dummyService);
-    const service = app.service('dummy');
+    }
+    const app = feathers().use('/dummy', dummyService)
+    const service = app.service('dummy')
 
     service.hooks({
-      remove: [async (_context, next) => {
-        await next();
+      remove: [
+        async (_context, next) => {
+          await next()
 
-        assert.ok(false, 'This should never get called');
-      }]
-    });
+          assert.ok(false, 'This should never get called')
+        }
+      ]
+    })
 
     await assert.rejects(() => service.remove(1, {}), {
       message: 'Error removing item'
-    });
-  });
+    })
+  })
 
   it('adds .hooks() and chains multiple hooks for the same method', async () => {
     interface DummyParams extends Params {
@@ -142,37 +168,48 @@ describe('`async` hooks', () => {
     }
 
     class DummyService implements ServiceInterface<any, any, DummyParams> {
-      create (data: any, params?: any) {
-        assert.deepStrictEqual(data, {
-          some: 'thing',
-          modified: 'second data'
-        }, 'Data modified');
+      create(data: any, params?: any) {
+        assert.deepStrictEqual(
+          data,
+          {
+            some: 'thing',
+            modified: 'second data'
+          },
+          'Data modified'
+        )
 
-        assert.deepStrictEqual(params, {
-          modified: 'params'
-        }, 'Params modified');
+        assert.deepStrictEqual(
+          params,
+          {
+            modified: 'params'
+          },
+          'Params modified'
+        )
 
-        return Promise.resolve(data);
+        return Promise.resolve(data)
       }
     }
 
-    const app = feathers<{ dummy: DummyService }>().use('dummy', new DummyService());
-    const service = app.service('dummy');
+    const app = feathers<{ dummy: DummyService }>().use('dummy', new DummyService())
+    const service = app.service('dummy')
 
     service.hooks({
-      create: [async (hook, next) => {
-        hook.params.modified = 'params';
+      create: [
+        async (hook, next) => {
+          hook.params.modified = 'params'
 
-        await next();
-      }, async (hook, next) => {
-        hook.data.modified = 'second data';
+          await next()
+        },
+        async (hook, next) => {
+          hook.data.modified = 'second data'
 
-        next();
-      }]
-    });
+          next()
+        }
+      ]
+    })
 
-    await service.create({ some: 'thing' });
-  });
+    await service.create({ some: 'thing' })
+  })
 
   it('async hooks run in the correct order', async () => {
     interface DummyParams extends Params<{ name: string }> {
@@ -180,123 +217,127 @@ describe('`async` hooks', () => {
     }
 
     class DummyService implements ServiceInterface<any, any, DummyParams> {
-      async get (id: any, params?: DummyParams) {
-        assert.deepStrictEqual(params.items, ['first', 'second', 'third']);
+      async get(id: any, params?: DummyParams) {
+        assert.deepStrictEqual(params.items, ['first', 'second', 'third'])
 
         return {
           id,
           items: [] as string[]
-        };
+        }
       }
     }
 
-    const app = feathers<{ dummy: DummyService }>().use('dummy', new DummyService());
-    const service = app.service('dummy');
+    const app = feathers<{ dummy: DummyService }>().use('dummy', new DummyService())
+    const service = app.service('dummy')
 
     service.hooks({
-      get: [async (hook, next) => {
-        hook.params.items = ['first'];
-        await next();
-      }]
-    });
+      get: [
+        async (hook, next) => {
+          hook.params.items = ['first']
+          await next()
+        }
+      ]
+    })
 
     service.hooks({
       get: [
         async function (hook, next) {
-          hook.params.items.push('second');
-          next();
+          hook.params.items.push('second')
+          next()
         },
         async function (hook, next) {
-          hook.params.items.push('third');
-          next();
+          hook.params.items.push('third')
+          next()
         }
       ]
-    });
+    })
 
-    await service.get(10);
-  });
+    await service.get(10)
+  })
 
   it('async all hooks (#11)', async () => {
     interface DummyParams extends Params {
-      asyncAllObject: boolean;
-      asyncAllMethodArray: boolean;
+      asyncAllObject: boolean
+      asyncAllMethodArray: boolean
     }
 
-    type DummyService = ServiceInterface<any, any, DummyParams>;
+    type DummyService = ServiceInterface<any, any, DummyParams>
 
     const app = feathers<{ dummy: DummyService }>().use('dummy', {
-      async get (id: any, params: any) {
-        assert.ok(params.asyncAllObject);
-        assert.ok(params.asyncAllMethodArray);
+      async get(id: any, params: any) {
+        assert.ok(params.asyncAllObject)
+        assert.ok(params.asyncAllMethodArray)
 
         return {
           id,
           items: []
-        };
+        }
       },
 
-      async find (params: any) {
-        assert.ok(params.asyncAllObject);
-        assert.ok(params.asyncAllMethodArray);
+      async find(params: any) {
+        assert.ok(params.asyncAllObject)
+        assert.ok(params.asyncAllMethodArray)
 
-        return [];
+        return []
       }
-    });
+    })
 
-    const service = app.service('dummy');
+    const service = app.service('dummy')
 
     service.hooks([
       async (hook, next) => {
-        hook.params.asyncAllObject = true;
-        next();
+        hook.params.asyncAllObject = true
+        next()
       }
-    ]);
+    ])
 
     service.hooks([
       async function (hook, next) {
-        hook.params.asyncAllMethodArray = true;
-        next();
+        hook.params.asyncAllMethodArray = true
+        next()
       }
-    ]);
+    ])
 
-    await service.find();
-  });
+    await service.find()
+  })
 
   it('async hooks have service as context and keep it in service method (#17)', async () => {
     interface DummyParams extends Params {
-      test: number;
+      test: number
     }
 
     class Dummy implements ServiceInterface<any, any, DummyParams> {
-      number= 42;
+      number = 42
 
-      async get (id: any, params?: DummyParams) {
+      async get(id: any, params?: DummyParams) {
         return {
           id,
           number: (this as any).number,
           test: params.test
-        };
+        }
       }
     }
 
-    const app = feathers<{ dummy: Dummy }>().use('dummy', new Dummy());
+    const app = feathers<{ dummy: Dummy }>().use('dummy', new Dummy())
 
-    const service = app.service('dummy');
+    const service = app.service('dummy')
 
     service.hooks({
-      get: [async function (this: any, hook, next) {
-        hook.params.test = this.number + 2;
+      get: [
+        async function (this: any, hook, next) {
+          hook.params.test = this.number + 2
 
-        await next();
-      }]
-    });
+          await next()
+        }
+      ]
+    })
 
-    const data = await service.get(10);
+    const data = await service.get(10)
 
     assert.deepStrictEqual(data, {
       id: 10,
       number: 42,
       test: 44
-    });
-  });
-});
+    })
+  })
+})

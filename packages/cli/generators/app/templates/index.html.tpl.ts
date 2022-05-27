@@ -2,7 +2,7 @@ import { generator, renderTemplate, toFile } from '@feathershq/pinion'
 import { AppGeneratorContext } from '../index'
 
 const template = ({ name, description }: AppGeneratorContext) =>
-`<!DOCTYPE html>
+  `<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>${name}</title>
@@ -81,5 +81,5 @@ const template = ({ name, description }: AppGeneratorContext) =>
 </html>
 `
 
-export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(renderTemplate(template, toFile('public', 'index.html')))
+export const generate = (ctx: AppGeneratorContext) =>
+  generator(ctx).then(renderTemplate(template, toFile('public', 'index.html')))

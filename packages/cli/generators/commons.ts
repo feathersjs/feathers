@@ -1,29 +1,27 @@
 import { PackageJson } from 'type-fest'
-import {
-  Callable, PinionContext, loadJSON, fromFile, getCallable, renderTemplate
-} from '@feathershq/pinion'
+import { Callable, PinionContext, loadJSON, fromFile, getCallable, renderTemplate } from '@feathershq/pinion'
 
 export type FeathersAppInfo = {
   /**
    * The application language
    */
-  language: 'ts'|'js'
+  language: 'ts' | 'js'
   /**
    * The main database
    */
-  database: 'knex'|'mongodb'|'custom'
+  database: 'knex' | 'mongodb' | 'custom'
   /**
    * The package manager used
    */
-  packager: 'yarn'|'npm'
+  packager: 'yarn' | 'npm'
   /**
    * A list of all chosen transports
    */
-  transports: ('rest'|'websockets')[]
+  transports: ('rest' | 'websockets')[]
   /**
    * The HTTP framework used
    */
-  framework: 'koa'|'express'
+  framework: 'koa' | 'express'
 }
 
 export interface AppPackageJson extends PackageJson {
@@ -51,7 +49,7 @@ export interface FeathersBaseContext extends PinionContext {
   /**
    * The language the app is generated in
    */
-  language: 'js'|'ts'
+  language: 'js' | 'ts'
 }
 
 /**
@@ -60,18 +58,21 @@ export interface FeathersBaseContext extends PinionContext {
  *
  * @returns The updated context
  */
-export const initializeBaseContext = () => <C extends FeathersBaseContext> (ctx: C) => Promise.resolve(ctx)
-  .then(loadJSON(fromFile('package.json'), pkg => ({ pkg }), {}))
-  .then(ctx => ({
-    ...ctx,
-    lib: ctx.pkg?.directories?.lib || 'src',
-    test: ctx.pkg?.directories?.test || 'test',
-    language: ctx.pkg?.feathers?.language || 'ts',
-    feathers: ctx.pkg?.feathers
-  }))
+export const initializeBaseContext =
+  () =>
+  <C extends FeathersBaseContext>(ctx: C) =>
+    Promise.resolve(ctx)
+      .then(loadJSON(fromFile('package.json'), (pkg) => ({ pkg }), {}))
+      .then((ctx) => ({
+        ...ctx,
+        lib: ctx.pkg?.directories?.lib || 'src',
+        test: ctx.pkg?.directories?.test || 'test',
+        language: ctx.pkg?.feathers?.language || 'ts',
+        feathers: ctx.pkg?.feathers
+      }))
 
-type LanguageTemplates <C extends PinionContext> = {
-  js?: Callable<string, C>,
+type LanguageTemplates<C extends PinionContext> = {
+  js?: Callable<string, C>
   ts?: Callable<string, C>
 }
 
@@ -83,11 +84,12 @@ type LanguageTemplates <C extends PinionContext> = {
  * @param toFile The target filename without extension (will be added based on language)
  * @returns The updated context
  */
-export const renderSource = <C extends PinionContext & { language: 'js'|'ts' }>(
-  templates: LanguageTemplates<C>,
-  toFile: Callable<string, C>,
-  options?: { force: boolean }
-) =>
+export const renderSource =
+  <C extends PinionContext & { language: 'js' | 'ts' }>(
+    templates: LanguageTemplates<C>,
+    toFile: Callable<string, C>,
+    options?: { force: boolean }
+  ) =>
   async (ctx: C) => {
     const { language } = ctx
     const fileName = await getCallable<string, C>(toFile, ctx)

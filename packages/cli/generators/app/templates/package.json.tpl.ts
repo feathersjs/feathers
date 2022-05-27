@@ -20,14 +20,22 @@ const tsPackageJson = (lib: string) => ({
 })
 
 const packageJson = ({
-  name, description, language, packager, database, framework, transports, lib, test
+  name,
+  description,
+  language,
+  packager,
+  database,
+  framework,
+  transports,
+  lib,
+  test
 }: AppGeneratorContext) => ({
   name,
   description,
   version: '0.0.0',
   homepage: '',
   private: true,
-  keywords: [ 'feathers' ],
+  keywords: ['feathers'],
   author: {},
   contributors: [] as string[],
   bugs: {},
@@ -49,5 +57,5 @@ const packageJson = ({
   ...(language === 'ts' ? tsPackageJson(lib) : jsPackageJson(lib))
 })
 
-export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(writeJSON(packageJson, toFile('package.json')))
+export const generate = (ctx: AppGeneratorContext) =>
+  generator(ctx).then(writeJSON(packageJson, toFile('package.json')))

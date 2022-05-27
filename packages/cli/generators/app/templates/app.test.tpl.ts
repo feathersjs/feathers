@@ -3,7 +3,7 @@ import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
 const js = ({ lib }: AppGeneratorContext) =>
-`import assert from 'assert'
+  `import assert from 'assert'
 import axios from 'axios'
 import { app } from '../${lib}/app.js'
 
@@ -45,7 +45,7 @@ describe('Feathers application tests', () => {
 `
 
 const ts = ({ lib }: AppGeneratorContext) =>
-`import assert from 'assert'
+  `import assert from 'assert'
 import axios from 'axios'
 import { Server } from 'http'
 import { app } from '../${lib}/app'
@@ -86,5 +86,5 @@ describe('Feathers application tests', () => {
 })
 `
 
-export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(renderSource({ js, ts }, toFile('test', 'app.test')))
+export const generate = (ctx: AppGeneratorContext) =>
+  generator(ctx).then(renderSource({ js, ts }, toFile('test', 'app.test')))

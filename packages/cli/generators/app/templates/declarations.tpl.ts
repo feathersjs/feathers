@@ -3,7 +3,7 @@ import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
 const ts = ({ framework }: AppGeneratorContext) =>
-`import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers'
+  `import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers'
 import { Application as FeathersApplication } from '@feathersjs/${framework}'
 import { ConfigurationSchema } from './schemas/configuration.schema'
 
@@ -22,5 +22,10 @@ export type Application = FeathersApplication<ServiceTypes, Configuration>
 export type HookContext = FeathersHookContext<Application>
 `
 
-export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(renderSource({ ts }, toFile<AppGeneratorContext>(({ lib }) => lib, 'declarations')))
+export const generate = (ctx: AppGeneratorContext) =>
+  generator(ctx).then(
+    renderSource(
+      { ts },
+      toFile<AppGeneratorContext>(({ lib }) => lib, 'declarations')
+    )
+  )

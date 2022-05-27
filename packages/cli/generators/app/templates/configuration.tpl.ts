@@ -3,7 +3,7 @@ import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
 const js = ({}: AppGeneratorContext) =>
-`import { schema, Ajv } from '@feathersjs/schema'
+  `import { schema, Ajv } from '@feathersjs/schema'
 import { authenticationSettingsSchema } from '@feathersjs/authentication'
 
 export const configurationSchema = schema({
@@ -31,7 +31,7 @@ export const configurationSchema = schema({
 `
 
 const ts = ({}: AppGeneratorContext) =>
-`import { schema, Infer, Ajv } from '@feathersjs/schema'
+  `import { schema, Infer, Ajv } from '@feathersjs/schema'
 import { authenticationSettingsSchema } from '@feathersjs/authentication'
 
 export const configurationSchema = schema({
@@ -60,7 +60,10 @@ export const configurationSchema = schema({
 export type ConfigurationSchema = Infer<typeof configurationSchema>
 `
 
-export const generate = (ctx: AppGeneratorContext) => generator(ctx)
-  .then(renderSource({ js, ts }, toFile<AppGeneratorContext>(
-    ({ lib }) => lib, 'schemas', 'configuration.schema'))
+export const generate = (ctx: AppGeneratorContext) =>
+  generator(ctx).then(
+    renderSource(
+      { js, ts },
+      toFile<AppGeneratorContext>(({ lib }) => lib, 'schemas', 'configuration.schema')
+    )
   )
