@@ -85,11 +85,26 @@ export const generate = (ctx: AppGeneratorArguments) => generator(ctx)
       { value: 'npm', name: 'npm' },
       { value: 'yarn', name: 'Yarn'  }
     ]
+  }, {
+    name: 'database',
+    type: 'list',
+    when: !ctx.database,
+    message: 'What is your main database?',
+    suffix: chalk.grey(' Other databases can be added at any time'),
+    choices: [
+      { value: 'mongodb', name: 'MongoDB' },
+      { value: 'knex', name: 'SQL (PostgreSQL, SQLite etc.)' },
+      { value: 'custom', name: 'Custom services/another database' }
+    ]
   }]))
   .then(runGenerators(__dirname, 'templates'))
   .then(copyFiles(fromFile(__dirname, 'static'), toFile('.')))
   .then(initializeBaseContext())
   .then(async ctx => {
+    if (ctx.database === 'custom') {
+      return ctx
+    }
+
     const { dependencies } = await connectionGenerator(ctx)
 
     return {

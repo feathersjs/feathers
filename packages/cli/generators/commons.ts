@@ -85,7 +85,8 @@ type LanguageTemplates <C extends PinionContext> = {
  */
 export const renderSource = <C extends PinionContext & { language: 'js'|'ts' }>(
   templates: LanguageTemplates<C>,
-  toFile: Callable<string, C>
+  toFile: Callable<string, C>,
+  options?: { force: boolean }
 ) =>
   async (ctx: C) => {
     const { language } = ctx
@@ -93,7 +94,7 @@ export const renderSource = <C extends PinionContext & { language: 'js'|'ts' }>(
     const template = templates[language]
 
     if (template) {
-      const renderer = renderTemplate(template, `${fileName}.${language}`)
+      const renderer = renderTemplate(template, `${fileName}.${language}`, options)
 
       return renderer(ctx)
     }

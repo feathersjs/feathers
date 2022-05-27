@@ -1,9 +1,9 @@
 import chalk from 'chalk'
 import { generator, runGenerators, prompt, install } from '@feathershq/pinion'
 import { FeathersBaseContext } from '../commons'
-import { generate as serviceGenerator } from '../service/index'
+import { generate as serviceGenerator, ServiceGeneratorContext } from '../service/index'
 
-export interface AuthenticationGeneratorContext extends FeathersBaseContext {
+export interface AuthenticationGeneratorContext extends ServiceGeneratorContext {
   service: string
   entity: string
   authStrategies: string[]
@@ -55,14 +55,17 @@ export const generate = (ctx: AuthenticationGeneratorArguments) => generator(ctx
     default: 'user'
   }]))
   .then(async ctx => {
-    await serviceGenerator({
+    const serviceContext = await serviceGenerator({
       ...ctx,
       name: ctx.service,
       path: ctx.service,
       type: ctx.feathers.database
     })
 
-    return ctx
+    return {
+      ...ctx,
+      ...serviceContext
+    }
   })
   .then(runGenerators(__dirname, 'templates'))
   .then(ctx => {

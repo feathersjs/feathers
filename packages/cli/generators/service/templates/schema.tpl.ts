@@ -2,8 +2,8 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-const js = ({ camelName, className }: ServiceGeneratorContext) =>
-`import { schema, resolve } from '@feathersjs/schema'
+const js = ({ camelName, className, type }: ServiceGeneratorContext) =>
+`import { schema, resolve, querySyntax } from '@feathersjs/schema'
 
 // Schema and resolver for the basic data model (e.g. creating new entries)
 export const ${camelName}DataSchema = schema({
@@ -32,7 +32,7 @@ export const ${camelName}PatchSchema = schema({
   additionalProperties: false,
   required: [],
   properties: {
-    ...${camelName}DataSchema.definition.properties
+    ...${camelName}DataSchema.properties
   }
 })
 
@@ -48,10 +48,10 @@ export const ${camelName}ResultSchema = schema({
   $id: '${className}Result',
   type: 'object',
   additionalProperties: false,
-  required: [ 'text', 'id' ],
+  required: [ 'text', ${type === 'mongodb' ? '_id' : 'id'} ],
   properties: {
-    ...${camelName}DataSchema.definition.properties,
-    id: {
+    ...${camelName}DataSchema.properties,
+    ${type === 'mongodb' ? '_id' : 'id'}: {
       type: 'string'
     }
   }
@@ -70,15 +70,7 @@ export const ${camelName}QuerySchema = schema({
   type: 'object',
   additionalProperties: false,
   properties: {
-    $limit: {
-      type: 'integer',
-      minimum: 0,
-      maximum: 100
-    },
-    $skip: {
-      type: 'integer',
-      minimum: 0
-    }
+    ...querySyntax(${camelName}ResultSchema.properties)
   }
 })
 
@@ -91,7 +83,11 @@ export const ${camelName}QueryResolver = resolve({
 // Export all resolvers in a format that can be used with the resolveAll hook
 export const ${camelName}Resolvers = {
   result: ${camelName}ResultResolver,
-  data: ${camelName}DataResolver,
+  data: {
+    create: ${camelName}DataResolver,
+    update: ${camelName}DataResolver,
+    patch: ${camelName}PatchResolver
+  },
   query: ${camelName}QueryResolver
 }
 `
@@ -149,7 +145,7 @@ export const ${camelName}ResultSchema = schema({
   additionalProperties: false,
   required: [ ...${camelName}DataSchema.required, '${type === 'mongodb' ? '_id' : 'id'}' ],
   properties: {
-    ...${camelName}DataSchema.definition.properties,
+    ...${camelName}DataSchema.properties,
     ${type === 'mongodb' ? '_id' : 'id'}: {
       type: 'string'
     }
@@ -186,7 +182,11 @@ export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>
 // Export all resolvers in a format that can be used with the resolveAll hook
 export const ${camelName}Resolvers = {
   result: ${camelName}ResultResolver,
-  data: ${camelName}DataResolver,
+  data: {
+    create: ${camelName}DataResolver,
+    update: ${camelName}DataResolver,
+    patch: ${camelName}PatchResolver
+  },
   query: ${camelName}QueryResolver
 }
 `
