@@ -28,7 +28,9 @@ const runResolvers = async <T, H extends HookContext>(
   let current: any = data
 
   for (const resolver of resolvers) {
-    current = await resolver.resolve(current, ctx, status)
+    if (resolver && typeof resolver.resolve === 'function') {
+      current = await resolver.resolve(current, ctx, status)
+    }
   }
 
   return current as T
@@ -169,9 +171,7 @@ export const resolveDispatch =
 export const resolveAll = <H extends HookContext>(map: ResolveAllSettings<H>) => {
   const middleware = []
 
-  if (map.dispatch) {
-    middleware.push(resolveDispatch(map.dispatch))
-  }
+  middleware.push(resolveDispatch(map.dispatch))
 
   if (map.result) {
     middleware.push(resolveResult(map.result))

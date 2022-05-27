@@ -81,8 +81,7 @@ export const messageSchema = schema({
   required: ['text', 'userId'],
   properties: {
     text: { type: 'string' },
-    userId: { type: 'number' },
-    secret: { type: 'boolean' }
+    userId: { type: 'number' }
   }
 } as const)
 
@@ -118,12 +117,6 @@ export const messageResultResolver = resolve<MessageResult, HookContext<Applicat
 
       return context.app.service('users').get(userId, context.params)
     }
-  }
-})
-
-export const messageDispatchResolver = resolve<MessageResult, HookContext<Application>>({
-  properties: {
-    secret: () => undefined
   }
 })
 
@@ -182,7 +175,6 @@ app.use('paginatedMessages', memory({ paginate: { default: 10 } }))
 
 app.service('messages').hooks([
   resolveAll({
-    dispatch: messageDispatchResolver,
     result: messageResultResolver,
     query: messageQueryResolver
   }),
