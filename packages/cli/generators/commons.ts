@@ -71,11 +71,6 @@ export const initializeBaseContext =
         feathers: ctx.pkg?.feathers
       }))
 
-type LanguageTemplates<C extends PinionContext> = {
-  js?: Callable<string, C>
-  ts?: Callable<string, C>
-}
-
 /**
  * Render a source file template for the language set in the context. Will do nothing
  * it there is no template for the selected language.
@@ -86,14 +81,13 @@ type LanguageTemplates<C extends PinionContext> = {
  */
 export const renderSource =
   <C extends PinionContext & { language: 'js' | 'ts' }>(
-    templates: LanguageTemplates<C>,
+    template: Callable<string, C>,
     toFile: Callable<string, C>,
     options?: { force: boolean }
   ) =>
   async (ctx: C) => {
     const { language } = ctx
     const fileName = await getCallable<string, C>(toFile, ctx)
-    const template = templates[language]
 
     if (template) {
       const renderer = renderTemplate(template, `${fileName}.${language}`, options)

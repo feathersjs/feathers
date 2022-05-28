@@ -2,97 +2,7 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-const js = ({ camelName, className, type }: ServiceGeneratorContext) =>
-  `import { schema, resolve, querySyntax } from '@feathersjs/schema'
-
-// Schema and resolver for the basic data model (e.g. creating new entries)
-export const ${camelName}DataSchema = schema({
-  $id: '${className}Data',
-  type: 'object',
-  additionalProperties: false,
-  required: [ 'text' ],
-  properties: {
-    text: {
-      type: 'string'
-    }
-  }
-})
-
-export const ${camelName}DataResolver = resolve({
-  schema: ${camelName}DataSchema,
-  validate: 'before',
-  properties: {}
-})
-
-
-// Schema and resolver for making partial updates
-export const ${camelName}PatchSchema = schema({
-  $id: '${className}Patch',
-  type: 'object',
-  additionalProperties: false,
-  required: [],
-  properties: {
-    ...${camelName}DataSchema.properties
-  }
-})
-
-export const ${camelName}PatchResolver = resolve({
-  schema: ${camelName}PatchSchema,
-  validate: 'before',
-  properties: {}
-})
-
-
-// Schema and resolver for the data that is being returned
-export const ${camelName}ResultSchema = schema({
-  $id: '${className}Result',
-  type: 'object',
-  additionalProperties: false,
-  required: [ 'text', ${type === 'mongodb' ? '_id' : 'id'} ],
-  properties: {
-    ...${camelName}DataSchema.properties,
-    ${type === 'mongodb' ? '_id' : 'id'}: {
-      type: 'string'
-    }
-  }
-})
-
-export const ${camelName}ResultResolver = resolve({
-  schema: ${camelName}ResultSchema,
-  validate: false,
-  properties: {}
-})
-
-
-// Schema and resolver for allowed query properties
-export const ${camelName}QuerySchema = schema({
-  $id: '${camelName}Query',
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    ...querySyntax(${camelName}ResultSchema.properties)
-  }
-})
-
-export const ${camelName}QueryResolver = resolve({
-  schema: ${camelName}QuerySchema,
-  validate: 'before',
-  properties: {}
-})
-
-// Export all resolvers in a format that can be used with the resolveAll hook
-export const ${camelName}Resolvers = {
-  result: ${camelName}ResultResolver,
-  data: {
-    create: ${camelName}DataResolver,
-    update: ${camelName}DataResolver,
-    patch: ${camelName}PatchResolver
-  },
-  query: ${camelName}QueryResolver
-}
-`
-
-const ts = ({ camelName, upperName, relative, type }: ServiceGeneratorContext) =>
+const template = ({ camelName, upperName, relative, type }: ServiceGeneratorContext) =>
   `import { schema, resolve, querySyntax, Infer } from '@feathersjs/schema'
 import { HookContext } from '${relative}/declarations'
 
@@ -194,7 +104,7 @@ export const ${camelName}Resolvers = {
 export const generate = (ctx: ServiceGeneratorContext) =>
   generator(ctx).then(
     renderSource(
-      { ts, js },
+      template,
       toFile(({ lib, folder, kebabName }: ServiceGeneratorContext) => [
         lib,
         'schemas',

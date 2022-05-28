@@ -2,18 +2,7 @@ import { generator, toFile, inject, before } from '@feathershq/pinion'
 import { ConnectionGeneratorContext } from '../index'
 import { renderSource } from '../../commons'
 
-const js = ({}: ConnectionGeneratorContext) =>
-  `import { MongoClient } from 'mongodb'
-
-export const mongodb = (app) => {
-  const connection = app.get('database')
-  const database = connection.substring(connection.lastIndexOf('/') + 1)
-  const mongoClient = MongoClient.connect(connection).then((client) => client.db(database))
-
-  app.set('mongoClient', mongoClient)
-}`
-
-const ts = ({}: ConnectionGeneratorContext) =>
+const template = ({}: ConnectionGeneratorContext) =>
   `import { MongoClient, Db } from 'mongodb'
 import { Application } from './declarations'
 
@@ -33,19 +22,15 @@ export const mongodb = (app: Application) => {
 }
 `
 
-const importTemplate = ({ language }: ConnectionGeneratorContext) =>
-  language === 'js' ? "import { mongodb } from './mongodb.js'" : "import { mongodb } from './mongodb'"
+const importTemplate = "import { mongodb } from './mongodb'"
 const configureTemplate = 'app.configure(mongodb)'
-const toAppFile = toFile<ConnectionGeneratorContext>(
-  ({ lib }) => lib,
-  ({ language }) => `app.${language}`
-)
+const toAppFile = toFile<ConnectionGeneratorContext>(({ lib, language }) => [lib, `app.${language}`])
 
 export const generate = (ctx: ConnectionGeneratorContext) =>
   generator(ctx)
     .then(
       renderSource(
-        { js, ts },
+        template,
         toFile<ConnectionGeneratorContext>(({ lib }) => lib, 'mongodb')
       )
     )

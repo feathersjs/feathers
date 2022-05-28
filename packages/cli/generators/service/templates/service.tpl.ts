@@ -2,46 +2,7 @@ import { generator, inject, prepend, toFile, after } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-const js = ({ relative, path, className, camelName }: ServiceGeneratorContext) =>
-  `import { resolveAll } from '@feathersjs/schema'
-import { ${camelName}Resolvers } from '${relative}/schemas/${path}.schema.js'
-
-// The ${className} service class
-
-export const serviceHooks = [
-  resolveAll(${camelName}Resolvers)
-]
-
-export const methodHooks = {
-  find: [],
-  get: [],
-  create: [],
-  update: [],
-  patch: [],
-  remove: []
-}
-
-export const regularHooks = {
-  before: {},
-  after: {},
-  error: {}
-}
-
-// A configure function that registers the service and its hooks via \`app.configure\`
-export function ${camelName} (app) {
-  const options = {
-    paginate: app.get('paginate'),
-    app
-  }
-
-  app.use('${path}', new ${className}(options))
-  app.service('${path}').hooks(serviceHooks)
-  app.service('${path}').hooks(methodHooks)
-  app.service('${path}').hooks(regularHooks)
-}
-`
-
-const ts = ({ relative, path, className, camelName, upperName }: ServiceGeneratorContext) =>
+const template = ({ relative, path, className, camelName, upperName }: ServiceGeneratorContext) =>
   `import { resolveAll } from '@feathersjs/schema'
 import { Application } from '${relative}/declarations'
 
@@ -111,7 +72,7 @@ export const generate = (ctx: ServiceGeneratorContext) =>
   generator(ctx)
     .then(
       renderSource(
-        { ts, js },
+        template,
         toFile<ServiceGeneratorContext>(({ lib, folder, kebabName }) => [lib, 'services', ...folder, kebabName])
       )
     )
