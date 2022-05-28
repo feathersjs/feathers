@@ -20,8 +20,7 @@ describe('@feathersjs/schema/hooks', () => {
     )[0]
     message = await app.service('messages').create({
       text,
-      userId: user.id,
-      secret: true
+      userId: user.id
     })
     messageOnPaginatedService = await app.service('paginatedMessages').create({
       text,
@@ -42,7 +41,6 @@ describe('@feathersjs/schema/hooks', () => {
   it('resolves results and handles resolver errors (#2534)', async () => {
     const payload = {
       userId: user.id,
-      secret: true,
       text
     }
 
@@ -92,7 +90,6 @@ describe('@feathersjs/schema/hooks', () => {
   it('resolves get result with the object on result', async () => {
     const payload = {
       userId: user.id,
-      secret: true,
       text
     }
 
@@ -155,7 +152,6 @@ describe('@feathersjs/schema/hooks', () => {
     const service = app.service('messages')
     const context = await service.get(0, {}, createContext(service as any, 'get'))
 
-    assert.ok(context.result.secret)
     assert.strictEqual(context.result.user.password, 'hashed')
 
     assert.deepStrictEqual(context.dispatch, {

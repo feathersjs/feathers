@@ -28,7 +28,9 @@ const runResolvers = async <T, H extends HookContext>(
   let current: any = data
 
   for (const resolver of resolvers) {
-    current = await resolver.resolve(current, ctx, status)
+    if (resolver && typeof resolver.resolve === 'function') {
+      current = await resolver.resolve(current, ctx, status)
+    }
   }
 
   return current as T
@@ -50,6 +52,9 @@ export type ResolveAllSettings<H extends HookContext> = {
 }
 
 export const DISPATCH = Symbol('@feathersjs/schema/dispatch')
+
+export const getDispatch = (value: any) =>
+  typeof value === 'object' && value !== null && value[DISPATCH] !== undefined ? value[DISPATCH] : value
 
 export const resolveQuery =
   <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) =>
@@ -137,20 +142,19 @@ export const resolveDispatch =
     const ctx = getContext(context)
     const status = context.params.resolve
     const { isPaginated, data } = getData(context)
-    const resolveDispatch = async (current: any) => {
+    const resolveAndGetDispatch = async (current: any) => {
       const resolved = await runResolvers(resolvers, current, ctx, status)
 
       return Object.keys(resolved).reduce((res, key) => {
-        const value = current[key]
-        const hasDispatch = typeof value === 'object' && value !== null && value[DISPATCH] !== undefined
-
-        res[key] = hasDispatch ? value[DISPATCH] : value
+        res[key] = getDispatch(current[key])
 
         return res
       }, {} as any)
     }
 
-    const result = await (Array.isArray(data) ? Promise.all(data.map(resolveDispatch)) : resolveDispatch(data))
+    const result = await (Array.isArray(data)
+      ? Promise.all(data.map(resolveAndGetDispatch))
+      : resolveAndGetDispatch(data))
     const dispatch = isPaginated
       ? {
           ...context.result,
@@ -169,9 +173,7 @@ export const resolveDispatch =
 export const resolveAll = <H extends HookContext>(map: ResolveAllSettings<H>) => {
   const middleware = []
 
-  if (map.dispatch) {
-    middleware.push(resolveDispatch(map.dispatch))
-  }
+  middleware.push(resolveDispatch(map.dispatch))
 
   if (map.result) {
     middleware.push(resolveResult(map.result))
