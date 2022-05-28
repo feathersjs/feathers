@@ -311,4 +311,26 @@ describe('@feathersjs/schema/schema', () => {
       assert.ok(error.data?.length > 0)
     }
   })
+
+  it('removes default from queryProperty schemas like $gt', async () => {
+    const validator = schema(
+      {
+        $id: 'noDefault$gt',
+        type: 'object',
+        required: [],
+        additionalProperties: false,
+        properties: {
+          someDate: queryProperty({ default: '0000-00-00', type: 'string' })
+        }
+      } as const,
+      customAjv
+    )
+
+    assert.equal(
+      validator.definition.properties.someDate.anyOf[1].properties.$gt.type,
+      'string',
+      'type is found under $gt'
+    )
+    assert(!validator.definition.properties.someDate.anyOf[1].properties.$gt.default, 'no default under $gt')
+  })
 })

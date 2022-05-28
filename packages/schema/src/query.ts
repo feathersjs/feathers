@@ -1,3 +1,4 @@
+import { _ } from '@feathersjs/commons'
 import { JSONSchema } from 'json-schema-to-ts'
 
 export type PropertyQuery<D extends JSONSchema> = {
@@ -25,8 +26,9 @@ export type PropertyQuery<D extends JSONSchema> = {
   ]
 }
 
-export const queryProperty = <T extends JSONSchema>(definition: T) =>
-  ({
+export const queryProperty = <T extends JSONSchema>(def: T) => {
+  const definition = _.omit(def, 'default')
+  return {
     anyOf: [
       definition,
       {
@@ -49,7 +51,8 @@ export const queryProperty = <T extends JSONSchema>(definition: T) =>
         }
       }
     ]
-  } as const)
+  } as const
+}
 
 export const queryProperties = <T extends { [key: string]: JSONSchema }>(definition: T) =>
   Object.keys(definition).reduce((res, key) => {
