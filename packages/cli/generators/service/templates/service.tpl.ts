@@ -37,8 +37,6 @@ export const regularHooks = {
 // A configure function that registers the service and its hooks via \`app.configure\`
 export function ${camelName} (app: Application) {
   const options = {
-    paginate: app.get('paginate'),
-    app
   }
 
   // Register our service on the Feathers application

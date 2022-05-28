@@ -1,5 +1,4 @@
-import { generator, toFile } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
+import { generator, toFile, when, renderTemplate } from '@feathershq/pinion'
 import { AppGeneratorContext } from '../index'
 
 const template = ({ framework }: AppGeneratorContext) =>
@@ -24,8 +23,11 @@ export type HookContext = FeathersHookContext<Application>
 
 export const generate = (ctx: AppGeneratorContext) =>
   generator(ctx).then(
-    renderSource(
-      template,
-      toFile<AppGeneratorContext>(({ lib }) => lib, 'declarations')
+    when<AppGeneratorContext>(
+      ({ language }) => language === 'ts',
+      renderTemplate(
+        template,
+        toFile<AppGeneratorContext>(({ lib }) => lib, 'declarations.ts')
+      )
     )
   )

@@ -38,6 +38,10 @@ export class ${className} extends MongoDbAdapter<${upperName}Result, ${upperName
 }
 `
 
+const optionTemplate = ({ kebabName }: ServiceGeneratorContext) =>
+  `   paginate: app.get('paginate'),
+    Model: app.get('mongoClient').then(db => db.collection('${kebabName}'))`
+
 const toServiceFile = toFile<ServiceGeneratorContext>(({ lib, folder, kebabName }) => [
   lib,
   'services',
@@ -55,3 +59,4 @@ export const generate = (ctx: ServiceGeneratorContext) =>
       )
     )
     .then(inject(importTemplate, prepend(), toServiceFile))
+    .then(inject(optionTemplate, after('const options ='), toServiceFile))
