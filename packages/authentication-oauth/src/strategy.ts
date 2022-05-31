@@ -87,7 +87,10 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     return redirect
   }
 
-  async getRedirect(data: AuthenticationResult | Error, params?: AuthenticationParams): Promise<string | null> {
+  async getRedirect(
+    data: AuthenticationResult | Error,
+    params?: AuthenticationParams
+  ): Promise<string | null> {
     const queryRedirect = (params && params.redirect) || ''
     const redirect = await this.getAllowedOrigin(params)
 

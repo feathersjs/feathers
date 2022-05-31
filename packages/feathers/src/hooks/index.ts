@@ -1,4 +1,12 @@
-import { getManager, HookContextData, HookManager, HookMap, HOOKS, hooks, Middleware } from '../dependencies'
+import {
+  getManager,
+  HookContextData,
+  HookManager,
+  HookMap,
+  HOOKS,
+  hooks,
+  Middleware
+} from '@feathersjs/hooks'
 import { Service, ServiceOptions, HookContext, FeathersService, Application } from '../declarations'
 import { defaultServiceArguments, getHookMethods } from '../service'
 import { collectRegularHooks, enableRegularHooks } from './regular'

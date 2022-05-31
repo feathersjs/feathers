@@ -8,7 +8,9 @@ export type ApplicationAddons = {
   listen(port?: number, ...args: any[]): Promise<Server>
 }
 
-export type Application<T = any, C = any> = Omit<Koa, 'listen'> & FeathersApplication<T, C> & ApplicationAddons
+export type Application<T = any, C = any> = Omit<Koa, 'listen'> &
+  FeathersApplication<T, C> &
+  ApplicationAddons
 
 export type FeathersKoaContext<A = Application> = Koa.Context & {
   app: A

@@ -460,7 +460,9 @@ describe('@feathersjs/express/rest provider', () => {
       app.use(express.json()).configure(rest()).use('/array-middleware', middlewareArray)
 
       const server = await app.listen(4776)
-      const res = await axios.post<any>('http://localhost:4776/array-middleware', { text: 'Do dishes' })
+      const res = await axios.post<any>('http://localhost:4776/array-middleware', {
+        text: 'Do dishes'
+      })
 
       assert.deepStrictEqual(res.data, ['first', 'second', 'Do dishes'])
       server.close()
