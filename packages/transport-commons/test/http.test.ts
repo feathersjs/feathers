@@ -47,7 +47,9 @@ describe('@feathersjs/transport-commons HTTP helpers', () => {
     assert.deepStrictEqual(http.getResponse({} as HookContext).headers, {})
     assert.deepStrictEqual(http.getResponse({ http: {} } as HookContext).headers, {})
     assert.strictEqual(http.getResponse(headersContext as HookContext).headers, headers)
-    assert.deepStrictEqual(http.getResponse(locationContext as HookContext).headers, { Location: '/' })
+    assert.deepStrictEqual(http.getResponse(locationContext as HookContext).headers, {
+      Location: '/'
+    })
   })
 
   it('getServiceMethod', () => {

@@ -39,7 +39,9 @@ export default (originalSettings: string | AuthenticateHookSettings, ...original
     }
 
     if (service === authService) {
-      throw new NotAuthenticated('The authenticate hook does not need to be used on the authentication service')
+      throw new NotAuthenticated(
+        'The authenticate hook does not need to be used on the authentication service'
+      )
     }
 
     if (params.authenticated === true) {
@@ -53,7 +55,9 @@ export default (originalSettings: string | AuthenticateHookSettings, ...original
 
       const authResult = await authService.authenticate(authentication, authParams, ...strategies)
 
-      context.params = Object.assign({}, params, omit(authResult, 'accessToken'), { authenticated: true })
+      context.params = Object.assign({}, params, omit(authResult, 'accessToken'), {
+        authenticated: true
+      })
     } else if (provider) {
       throw new NotAuthenticated('Not authenticated')
     }

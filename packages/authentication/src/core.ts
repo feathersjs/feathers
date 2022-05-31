@@ -65,7 +65,10 @@ export interface AuthenticationStrategy {
    * @param authentication The authentication request
    * @param params The service call parameters
    */
-  authenticate?(authentication: AuthenticationRequest, params: AuthenticationParams): Promise<AuthenticationResult>
+  authenticate?(
+    authentication: AuthenticationRequest,
+    params: AuthenticationParams
+  ): Promise<AuthenticationResult>
   /**
    * Update a real-time connection according to this strategy.
    *
@@ -189,7 +192,11 @@ export class AuthenticationBase {
    * @param optsOverride The options to extend the defaults (`configuration.jwtOptions`) with
    * @param secretOverride Use a different secret instead
    */
-  async createAccessToken(payload: string | Buffer | object, optsOverride?: SignOptions, secretOverride?: Secret) {
+  async createAccessToken(
+    payload: string | Buffer | object,
+    optsOverride?: SignOptions,
+    secretOverride?: Secret
+  ) {
     const { secret, jwtOptions } = this.configuration
     // Use configuration by default but allow overriding the secret
     const jwtSecret = secretOverride || secret
@@ -239,7 +246,11 @@ export class AuthenticationBase {
    * @param params Service call parameters
    * @param allowed A list of allowed strategy names
    */
-  async authenticate(authentication: AuthenticationRequest, params: AuthenticationParams, ...allowed: string[]) {
+  async authenticate(
+    authentication: AuthenticationRequest,
+    params: AuthenticationParams,
+    ...allowed: string[]
+  ) {
     const { strategy } = authentication || {}
     const [authStrategy] = this.getStrategies(strategy)
     const strategyAllowed = allowed.includes(strategy)
@@ -248,7 +259,9 @@ export class AuthenticationBase {
 
     if (!authentication || !authStrategy || !strategyAllowed) {
       const additionalInfo =
-        (!strategy && ' (no `strategy` set)') || (!strategyAllowed && ' (strategy not allowed in authStrategies)') || ''
+        (!strategy && ' (no `strategy` set)') ||
+        (!strategyAllowed && ' (strategy not allowed in authStrategies)') ||
+        ''
 
       // If there are no valid strategies or `authentication` is not an object
       throw new NotAuthenticated('Invalid authentication information' + additionalInfo)

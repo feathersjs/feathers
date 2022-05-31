@@ -247,7 +247,10 @@ describe('authentication/hooks/authenticate', () => {
       })
       assert.fail('Should never get here')
     } catch (error: any) {
-      assert.strictEqual(error.message, 'The authenticate hook does not need to be used on the authentication service')
+      assert.strictEqual(
+        error.message,
+        'The authenticate hook does not need to be used on the authentication service'
+      )
     }
   })
 })

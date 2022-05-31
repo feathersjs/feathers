@@ -180,7 +180,10 @@ describe('authentication/service', () => {
         assert.fail('Should never get here')
       } catch (error: any) {
         assert.strictEqual(error.name, 'NotAuthenticated')
-        assert.strictEqual(error.message, 'No authentication strategies allowed for creating a JWT (`authStrategies`)')
+        assert.strictEqual(
+          error.message,
+          'No authentication strategies allowed for creating a JWT (`authStrategies`)'
+        )
       }
     })
   })

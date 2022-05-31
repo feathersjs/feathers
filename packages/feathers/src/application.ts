@@ -1,5 +1,7 @@
 import version from './version'
-import { EventEmitter, stripSlashes, createDebug, HOOKS, hooks, middleware } from './dependencies'
+import { EventEmitter } from 'events'
+import { stripSlashes, createDebug } from '@feathersjs/commons'
+import { HOOKS, hooks, middleware } from '@feathersjs/hooks'
 import { eventHook, eventMixin } from './events'
 import { hookMixin } from './hooks/index'
 import { wrapService, getServiceOptions, protectedMethods } from './service'
@@ -11,20 +13,23 @@ import {
   ServiceInterface,
   Application,
   FeathersService,
-  HookMap,
+  AroundHookMap,
   ApplicationHookOptions
 } from './declarations'
 import { enableRegularHooks } from './hooks/regular'
 
 const debug = createDebug('@feathersjs/feathers')
 
-export class Feathers<Services, Settings> extends EventEmitter implements FeathersApplication<Services, Settings> {
+export class Feathers<Services, Settings>
+  extends EventEmitter
+  implements FeathersApplication<Services, Settings>
+{
   services: Services = {} as Services
   settings: Settings = {} as Settings
   mixins: ServiceMixin<Application<Services, Settings>>[] = [hookMixin, eventMixin]
   version: string = version
   _isSetup = false
-  appHooks: HookMap<Application<Services, Settings>, any> = {
+  appHooks: AroundHookMap<Application<Services, Settings>, any> = {
     [HOOKS]: [eventHook as any]
   }
 
@@ -132,7 +137,7 @@ export class Feathers<Services, Settings> extends EventEmitter implements Feathe
     } else if (Array.isArray(hookMap)) {
       this.appHooks[HOOKS].push(...(hookMap as any))
     } else {
-      const methodHookMap = hookMap as HookMap<Application<Services, Settings>, any>
+      const methodHookMap = hookMap as AroundHookMap<Application<Services, Settings>, any>
 
       Object.keys(methodHookMap).forEach((key) => {
         const methodHooks = this.appHooks[key] || []

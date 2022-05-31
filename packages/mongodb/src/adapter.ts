@@ -27,8 +27,15 @@ export interface MongoDBAdapterOptions extends AdapterServiceOptions {
   useEstimatedDocumentCount?: boolean
 }
 
-export interface MongoDBAdapterParams<Q = AdapterQuery> extends AdapterParams<Q, Partial<MongoDBAdapterOptions>> {
-  mongodb?: BulkWriteOptions | FindOptions | InsertOneOptions | DeleteOptions | CountDocumentsOptions | ReplaceOptions
+export interface MongoDBAdapterParams<Q = AdapterQuery>
+  extends AdapterParams<Q, Partial<MongoDBAdapterOptions>> {
+  mongodb?:
+    | BulkWriteOptions
+    | FindOptions
+    | InsertOneOptions
+    | DeleteOptions
+    | CountDocumentsOptions
+    | ReplaceOptions
 }
 
 // Create the service.
@@ -214,7 +221,9 @@ export class MongoDbAdapter<
           .then(async (result) =>
             Promise.all(Object.values(result.insertedIds).map(async (_id) => model.findOne({ _id })))
           )
-      : model.insertOne(setId(data), writeOptions).then(async (result) => model.findOne({ _id: result.insertedId }))
+      : model
+          .insertOne(setId(data), writeOptions)
+          .then(async (result) => model.findOne({ _id: result.insertedId }))
 
     return promise.then(select(params, this.id)).catch(errorHandler)
   }

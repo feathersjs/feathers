@@ -168,7 +168,9 @@ describe('app.publish', () => {
       app.channel('testing').join(c1)
       app.channel('othertest').join(c2)
 
-      app.service('test').registerPublisher('created', () => [app.channel('testing'), app.channel('othertest')])
+      app
+        .service('test')
+        .registerPublisher('created', () => [app.channel('testing'), app.channel('othertest')])
 
       app.once('publish', (_event: string, channel: Channel, hook: HookContext) => {
         assert.deepStrictEqual(hook.result, data)

@@ -12,7 +12,11 @@ export type PropertyResolverMap<T, C> = {
   [key in keyof T]?: PropertyResolver<T, T[key], C>
 }
 
-export type ResolverConverter<T, C> = (obj: any, context: C, status: ResolverStatus<T, C>) => Promise<T | undefined>
+export type ResolverConverter<T, C> = (
+  obj: any,
+  context: C,
+  status: ResolverStatus<T, C>
+) => Promise<T | undefined>
 
 export interface ResolverConfig<T, C> {
   schema?: Schema<T>

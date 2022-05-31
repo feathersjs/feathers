@@ -1,4 +1,5 @@
-import { EventEmitter, NextFunction, HookContext as BaseHookContext } from './dependencies'
+import { EventEmitter } from 'events'
+import { NextFunction, HookContext as BaseHookContext } from '@feathersjs/hooks'
 
 type SelfOrArray<S> = S | S[]
 type OptionalPick<T, K extends PropertyKey> = Pick<T, Extract<keyof T, K>>
@@ -67,7 +68,11 @@ export interface ServiceHookOverloads<S, P = Params> {
 
   get(id: Id, params: P, context: HookContext): Promise<HookContext>
 
-  create(data: ServiceGenericData<S> | ServiceGenericData<S>[], params: P, context: HookContext): Promise<HookContext>
+  create(
+    data: ServiceGenericData<S> | ServiceGenericData<S>[],
+    params: P,
+    context: HookContext
+  ): Promise<HookContext>
 
   update(id: NullableId, data: ServiceGenericData<S>, params: P, context: HookContext): Promise<HookContext>
 
@@ -123,7 +128,7 @@ export interface FeathersApplication<Services = any, Settings = any> {
   /**
    * Contains all registered application level hooks.
    */
-  appHooks: HookMap<Application<Services, Settings>, any>
+  appHooks: AroundHookMap<Application<Services, Settings>, any>
 
   /**
    * Retrieve an application setting by name
@@ -338,30 +343,34 @@ type RegularHookMethodMap<A, S> = {
 
 type RegularHookTypeMap<A, S> = SelfOrArray<RegularHookFunction<A, S>> | RegularHookMethodMap<A, S>
 
-export type RegularHookMap<A, S> = {
+// New @feathersjs/hook typings
+export type AroundHookFunction<A = Application, S = Service> = (
+  context: HookContext<A, S>,
+  next: NextFunction
+) => Promise<void>
+
+export type AroundHookMap<A, S> = {
+  [L in keyof S]?: AroundHookFunction<A, S>[]
+}
+
+export type HookMap<A, S> = {
+  around?: AroundHookMap<A, S>
   before?: RegularHookTypeMap<A, S>
   after?: RegularHookTypeMap<A, S>
   error?: RegularHookTypeMap<A, S>
 }
 
-// New @feathersjs/hook typings
-export type HookFunction<A = Application, S = Service> = (
-  context: HookContext<A, S>,
-  next: NextFunction
-) => Promise<void>
-
-export type HookMap<A, S> = {
-  [L in keyof S]?: HookFunction<A, S>[]
-}
-
-export type HookOptions<A, S> = HookMap<A, S> | HookFunction<A, S>[] | RegularHookMap<A, S>
+export type HookOptions<A, S> = AroundHookMap<A, S> | AroundHookFunction<A, S>[] | HookMap<A, S>
 
 export interface ApplicationHookContext<A = Application> extends BaseHookContext {
   app: A
   server: any
 }
 
-export type ApplicationHookFunction<A> = (context: ApplicationHookContext<A>, next: NextFunction) => Promise<void>
+export type ApplicationHookFunction<A> = (
+  context: ApplicationHookContext<A>,
+  next: NextFunction
+) => Promise<void>
 
 export type ApplicationHookMap<A> = {
   setup?: ApplicationHookFunction<A>[]

@@ -25,7 +25,10 @@ export const getDefaultStorage = () => {
 
 export { AuthenticationClient, AuthenticationClientOptions, Storage, MemoryStorage, hooks }
 
-export type ClientConstructor = new (app: Application, options: AuthenticationClientOptions) => AuthenticationClient
+export type ClientConstructor = new (
+  app: Application,
+  options: AuthenticationClientOptions
+) => AuthenticationClient
 
 export const defaultStorage: Storage = getDefaultStorage()
 

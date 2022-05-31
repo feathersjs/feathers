@@ -7,7 +7,9 @@ import { Application } from './declarations'
 
 const debug = createDebug('@feathersjs/express/authentication')
 
-const toHandler = (func: (req: Request, res: Response, next: () => void) => Promise<void>): RequestHandler => {
+const toHandler = (
+  func: (req: Request, res: Response, next: () => void) => Promise<void>
+): RequestHandler => {
   return (req, res, next) => func(req, res, next).catch((error) => next(error))
 }
 
@@ -44,7 +46,10 @@ export function parseAuthentication(settings: AuthenticationSettings = {}): Requ
   })
 }
 
-export function authenticate(settings: string | AuthenticationSettings, ...strategies: string[]): RequestHandler {
+export function authenticate(
+  settings: string | AuthenticationSettings,
+  ...strategies: string[]
+): RequestHandler {
   const hook = AuthenticateHook(settings, ...strategies)
 
   return toHandler(async (req, _res, next) => {

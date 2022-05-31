@@ -5,7 +5,16 @@ import { createDebug } from '@feathersjs/commons'
 
 import { Application } from './declarations'
 
-export { default as original, static, static as serveStatic, json, raw, text, urlencoded, query } from 'express'
+export {
+  default as original,
+  static,
+  static as serveStatic,
+  json,
+  raw,
+  text,
+  urlencoded,
+  query
+} from 'express'
 
 export * from './authentication'
 export * from './declarations'
@@ -54,7 +63,8 @@ export default function feathersExpress<S = any, C = any>(
         }
       )
 
-      const hasMethod = (methods: string[]) => methods.some((name) => service && typeof service[name] === 'function')
+      const hasMethod = (methods: string[]) =>
+        methods.some((name) => service && typeof service[name] === 'function')
 
       // Check for service (any object with at least one service method)
       if (hasMethod(['handle', 'set']) || !hasMethod(defaultServiceMethods)) {
@@ -85,7 +95,9 @@ export default function feathersExpress<S = any, C = any>(
     async teardown(server?: any) {
       return feathersTeardown
         .call(this, server)
-        .then(() => new Promise((resolve, reject) => this.server.close((e) => (e ? reject(e) : resolve(this)))))
+        .then(
+          () => new Promise((resolve, reject) => this.server.close((e) => (e ? reject(e) : resolve(this))))
+        )
     }
   } as Application<S, C>)
 

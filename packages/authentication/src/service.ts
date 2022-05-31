@@ -41,7 +41,8 @@ export class AuthenticationService
       app.defaultAuthentication = function (location?: string) {
         const configKey = app.get('defaultAuthentication')
         const path =
-          location || Object.keys(this.services).find((current) => this.service(current).configKey === configKey)
+          location ||
+          Object.keys(this.services).find((current) => this.service(current).configKey === configKey)
 
         return path ? this.service(path) : null
       }
@@ -168,11 +169,15 @@ export class AuthenticationService
       }
 
       if (this.app.service(service) === undefined) {
-        throw new Error(`The '${service}' entity service does not exist (set to 'null' if it is not required)`)
+        throw new Error(
+          `The '${service}' entity service does not exist (set to 'null' if it is not required)`
+        )
       }
 
       if (this.app.service(service).id === undefined && entityId === undefined) {
-        throw new Error(`The '${service}' service does not have an 'id' property and no 'entityId' option is set.`)
+        throw new Error(
+          `The '${service}' service does not have an 'id' property and no 'entityId' option is set.`
+        )
       }
     }
 

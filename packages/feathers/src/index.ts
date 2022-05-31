@@ -1,4 +1,5 @@
-import { setDebug } from './dependencies'
+import { setDebug } from '@feathersjs/commons'
+
 import version from './version'
 import { Feathers } from './application'
 import { Application } from './declarations'

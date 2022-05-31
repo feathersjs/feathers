@@ -183,7 +183,11 @@ app.service('messages').hooks([
 
 app
   .service('paginatedMessages')
-  .hooks([validateQuery(messageQuerySchema), resolveQuery(messageQueryResolver), resolveResult(messageResultResolver)])
+  .hooks([
+    validateQuery(messageQuerySchema),
+    resolveQuery(messageQueryResolver),
+    resolveResult(messageResultResolver)
+  ])
 
 app
   .service('users')

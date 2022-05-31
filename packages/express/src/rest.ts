@@ -9,7 +9,9 @@ import { Application } from './declarations'
 
 const debug = createDebug('@feathersjs/express/rest')
 
-const toHandler = (func: (req: Request, res: Response, next: () => void) => Promise<void>): RequestHandler => {
+const toHandler = (
+  func: (req: Request, res: Response, next: () => void) => Promise<void>
+): RequestHandler => {
   return (req, res, next) => func(req, res, next).catch((error) => next(error))
 }
 

@@ -1,4 +1,4 @@
-import { HookFunction, RegularHookFunction, RegularHookMap } from '../declarations'
+import { AroundHookFunction, RegularHookFunction, HookMap } from '../declarations'
 import { defaultServiceMethods } from '../service'
 
 const runHook = <A, S>(hook: RegularHookFunction<A, S>, context: any, type?: string) => {
@@ -11,19 +11,19 @@ const runHook = <A, S>(hook: RegularHookFunction<A, S>, context: any, type?: str
   })
 }
 
-export function fromBeforeHook<A, S>(hook: RegularHookFunction<A, S>): HookFunction<A, S> {
+export function fromBeforeHook<A, S>(hook: RegularHookFunction<A, S>): AroundHookFunction<A, S> {
   return (context, next) => {
     return runHook(hook, context, 'before').then(next)
   }
 }
 
-export function fromAfterHook<A, S>(hook: RegularHookFunction<A, S>): HookFunction<A, S> {
+export function fromAfterHook<A, S>(hook: RegularHookFunction<A, S>): AroundHookFunction<A, S> {
   return (context, next) => {
     return next().then(() => runHook(hook, context, 'after'))
   }
 }
 
-export function fromErrorHook<A, S>(hook: RegularHookFunction<A, S>): HookFunction<A, S> {
+export function fromErrorHook<A, S>(hook: RegularHookFunction<A, S>): AroundHookFunction<A, S> {
   return (context, next) => {
     return next().catch((error: any) => {
       if (context.error !== error || context.result !== undefined) {
@@ -88,13 +88,13 @@ type RegularType = 'before' | 'after' | 'error'
 
 type RegularMap = { [type in RegularType]: ReturnType<typeof convertHookData> }
 
-type RegularAdapter = HookFunction & { hooks: RegularHookFunction[] }
+type RegularAdapter = AroundHookFunction & { hooks: RegularHookFunction[] }
 
 type RegularStore = {
   before: { [method: string]: RegularAdapter }
   after: { [method: string]: RegularAdapter }
   error: { [method: string]: RegularAdapter }
-  hooks: { [method: string]: HookFunction[] }
+  hooks: { [method: string]: AroundHookFunction[] }
 }
 
 const types: RegularType[] = ['before', 'after', 'error']
@@ -132,7 +132,7 @@ const setStore = (object: any, store: RegularStore) => {
 
 const getStore = (object: any): RegularStore => object.__hooks
 
-const createMap = (input: RegularHookMap<any, any>, methods: string[]) => {
+const createMap = (input: HookMap<any, any>, methods: string[]) => {
   const map = {} as RegularMap
 
   Object.keys(input).forEach((type) => {
@@ -179,7 +179,9 @@ const updateStore = (store: RegularStore, map: RegularMap) => {
     })
 
     if (adapted) {
-      store.hooks[method] = [store.error[method], store.before[method], store.after[method]].filter((hook) => hook)
+      store.hooks[method] = [store.error[method], store.before[method], store.after[method]].filter(
+        (hook) => hook
+      )
     }
   })
 }
@@ -190,7 +192,7 @@ export function enableRegularHooks(object: any, methods: string[] = defaultServi
 
   setStore(object, store)
 
-  return function regularHooks(this: any, input: RegularHookMap<any, any>) {
+  return function regularHooks(this: any, input: HookMap<any, any>) {
     const store = getStore(this)
     const map = createMap(input, methods)
 

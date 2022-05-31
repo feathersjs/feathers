@@ -83,7 +83,8 @@ describe('client', () => {
 
   it('sends all service and custom methods with acknowledgement', async () => {
     const idCb = (_path: any, id: any, _params: any, callback: DummyCallback) => callback(null, { id })
-    const idDataCb = (_path: any, _id: any, data: any, _params: any, callback: DummyCallback) => callback(null, data)
+    const idDataCb = (_path: any, _id: any, data: any, _params: any, callback: DummyCallback) =>
+      callback(null, data)
     const dataCb = (_path: any, data: any, _params: any, callback: DummyCallback) => {
       data.created = true
       callback(null, data)

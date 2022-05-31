@@ -22,7 +22,10 @@ const getMatch = (location: Location, key: string): [string, RegExp] => {
   return [null, regex]
 }
 
-export type ClientConstructor = new (app: Application, options: AuthenticationClientOptions) => AuthenticationClient
+export type ClientConstructor = new (
+  app: Application,
+  options: AuthenticationClientOptions
+) => AuthenticationClient
 
 export interface AuthenticationClientOptions {
   storage: Storage

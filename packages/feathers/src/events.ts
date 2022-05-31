@@ -1,4 +1,5 @@
-import { NextFunction, EventEmitter } from './dependencies'
+import { EventEmitter } from 'events'
+import { NextFunction } from '@feathersjs/hooks'
 import { HookContext, FeathersService } from './declarations'
 import { getServiceOptions, defaultEventMap } from './service'
 
