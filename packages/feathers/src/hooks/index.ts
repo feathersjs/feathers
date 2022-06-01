@@ -94,8 +94,17 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
   hooks(service, serviceMethodHooks)
 
   service.hooks = function (this: any, hookOptions: any) {
-    if (hookOptions.before || hookOptions.after || hookOptions.error) {
-      return handleRegularHooks.call(this, hookOptions)
+    if (hookOptions.before || hookOptions.after || hookOptions.error || hookOptions.around) {
+      const { around, ...regularHooks } = hookOptions
+
+      if (around) {
+        const { all: aroundAllHooks = [], ...aroundMethodHooks } = around
+
+        this.hooks(aroundAllHooks)
+        this.hooks(aroundMethodHooks)
+      }
+
+      return handleRegularHooks.call(this, regularHooks)
     }
 
     if (Array.isArray(hookOptions)) {

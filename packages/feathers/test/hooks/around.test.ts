@@ -1,8 +1,8 @@
 import assert from 'assert'
 import { feathers, Params, ServiceInterface } from '../../src'
 
-describe('`async` hooks', () => {
-  it('async hooks can set hook.result which will skip service method', async () => {
+describe('`around` hooks', () => {
+  it('around hooks can set hook.result which will skip service method', async () => {
     const app = feathers().use('/dummy', {
       async get() {
         assert.ok(false, 'This should never run')
@@ -28,6 +28,48 @@ describe('`async` hooks', () => {
     assert.deepStrictEqual(data, {
       id: 10,
       message: 'Set from hook'
+    })
+  })
+
+  it('works with traditional registration format and all syntax', async () => {
+    const app = feathers().use('/dummy', {
+      async get() {
+        assert.ok(false, 'This should never run')
+      }
+    })
+    const service = app.service('dummy')
+
+    service.hooks({
+      around: {
+        all: [
+          async (hook, next) => {
+            hook.result = {
+              id: hook.id,
+              all: 'Set from around all'
+            }
+
+            await next()
+          }
+        ],
+        get: [
+          async (hook, next) => {
+            hook.result = {
+              ...hook.result,
+              get: 'Set from around get'
+            }
+
+            await next()
+          }
+        ]
+      }
+    })
+
+    const data = await service.get(10, {})
+
+    assert.deepStrictEqual(data, {
+      id: 10,
+      all: 'Set from around all',
+      get: 'Set from around get'
     })
   })
 
@@ -211,7 +253,7 @@ describe('`async` hooks', () => {
     await service.create({ some: 'thing' })
   })
 
-  it('async hooks run in the correct order', async () => {
+  it('around hooks run in the correct order', async () => {
     interface DummyParams extends Params<{ name: string }> {
       items: string[]
     }
@@ -255,7 +297,7 @@ describe('`async` hooks', () => {
     await service.get(10)
   })
 
-  it('async all hooks (#11)', async () => {
+  it('around all hooks (#11)', async () => {
     interface DummyParams extends Params {
       asyncAllObject: boolean
       asyncAllMethodArray: boolean
@@ -301,7 +343,7 @@ describe('`async` hooks', () => {
     await service.find()
   })
 
-  it('async hooks have service as context and keep it in service method (#17)', async () => {
+  it('around hooks have service as context and keep it in service method (#17)', async () => {
     interface DummyParams extends Params {
       test: number
     }

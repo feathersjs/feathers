@@ -24,7 +24,7 @@ export const defaultEventMap = {
 
 export const protectedMethods = Object.keys(Object.prototype)
   .concat(Object.keys(EventEmitter.prototype))
-  .concat(['all', 'before', 'after', 'error', 'hooks', 'setup', 'teardown', 'publish'])
+  .concat(['all', 'around', 'before', 'after', 'error', 'hooks', 'setup', 'teardown', 'publish'])
 
 export function getHookMethods(service: any, options: ServiceOptions) {
   const { methods } = options

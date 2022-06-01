@@ -351,7 +351,7 @@ export type AroundHookFunction<A = Application, S = Service> = (
 
 export type AroundHookMap<A, S> = {
   [L in keyof S]?: AroundHookFunction<A, S>[]
-}
+} & { all?: AroundHookFunction<A, S>[] }
 
 export type HookMap<A, S> = {
   around?: AroundHookMap<A, S>
