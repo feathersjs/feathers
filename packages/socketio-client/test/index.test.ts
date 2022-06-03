@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { strict as assert } from 'assert'
 import { Server } from 'http'
-import { CustomMethods, feathers } from '@feathersjs/feathers'
+import { CustomMethod, feathers } from '@feathersjs/feathers'
 import { io, Socket } from 'socket.io-client'
 import { clientTests } from '@feathersjs/tests'
 
@@ -10,7 +10,9 @@ import socketio, { SocketService } from '../src'
 
 type ServiceTypes = {
   '/': SocketService
-  todos: SocketService & CustomMethods<{ customMethod: any }>
+  todos: SocketService & {
+    customMethod: CustomMethod<{ message: string }>
+  }
   [key: string]: any
 }
 
@@ -22,12 +24,14 @@ describe('@feathersjs/socketio-client', () => {
 
   before(async () => {
     server = await createServer().listen(9988)
+    socket = io('http://localhost:9988')
 
     const connection = socketio(socket)
 
-    socket = io('http://localhost:9988')
     app.configure(connection)
-    app.use('todos', connection.service('todos'))
+    app.use('todos', connection.service('todos'), {
+      methods: ['find', 'get', 'create', 'patch', 'customMethod']
+    })
   })
 
   after((done) => {
