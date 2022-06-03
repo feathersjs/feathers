@@ -109,7 +109,7 @@ export default (configurer?: any) => {
       })
     )
     // Host our Todos service on the /todos path
-    .use('/todos', new TodoService(), {
+    .use('todos', new TodoService(), {
       methods: ['find', 'get', 'create', 'patch', 'update', 'remove', 'customMethod']
     })
     .use(errorHandler)

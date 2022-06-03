@@ -20,17 +20,14 @@ describe('@feathersjs/socketio-client', () => {
   let socket: Socket
   let server: Server
 
-  before((done) => {
-    createServer()
-      .listen(9988)
-      .then((srv) => {
-        server = srv
-        server.once('listening', () => {
-          socket = io('http://localhost:9988')
-          app.configure(socketio(socket))
-          done()
-        })
-      })
+  before(async () => {
+    server = await createServer().listen(9988)
+
+    const connection = socketio(socket)
+
+    socket = io('http://localhost:9988')
+    app.configure(connection)
+    app.use('todos', connection.service('todos'))
   })
 
   after((done) => {
@@ -88,7 +85,7 @@ describe('@feathersjs/socketio-client', () => {
   })
 
   it('calls .customMethod', async () => {
-    const service = app.service('todos').methods('customMethod')
+    const service = app.service('todos')
     const result = await service.customMethod({ message: 'hi' })
 
     assert.deepStrictEqual(result, {
