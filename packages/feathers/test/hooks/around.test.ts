@@ -355,7 +355,7 @@ describe('`around` hooks', () => {
     await service.find()
   })
 
-  it('around hooks have service as context and keep it in service method, works with app hooks (#17)', async () => {
+  it('around hooks have service as context and keep it in service method (#17)', async () => {
     interface DummyParams extends Params {
       test: number
     }
