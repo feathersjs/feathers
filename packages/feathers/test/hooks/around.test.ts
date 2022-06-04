@@ -31,7 +31,7 @@ describe('`around` hooks', () => {
     })
   })
 
-  it('works with traditional registration format and all syntax', async () => {
+  it('works with traditional registration format, all syntax and app hooks', async () => {
     const app = feathers().use('/dummy', {
       async get() {
         assert.ok(false, 'This should never run')
@@ -39,12 +39,23 @@ describe('`around` hooks', () => {
     })
     const service = app.service('dummy')
 
+    app.hooks([
+      async function (this: any, hook, next) {
+        hook.result = {
+          id: hook.id,
+          app: 'Set from app around all'
+        }
+
+        await next()
+      }
+    ])
+
     service.hooks({
       around: {
         all: [
           async (hook, next) => {
             hook.result = {
-              id: hook.id,
+              ...hook.result,
               all: 'Set from around all'
             }
 
@@ -68,6 +79,7 @@ describe('`around` hooks', () => {
 
     assert.deepStrictEqual(data, {
       id: 10,
+      app: 'Set from app around all',
       all: 'Set from around all',
       get: 'Set from around get'
     })
@@ -364,20 +376,10 @@ describe('`around` hooks', () => {
 
     const service = app.service('dummy')
 
-    app.hooks({
-      get: [
-        async function (this: any, hook, next) {
-          hook.params.test = this.number + 2
-
-          await next()
-        }
-      ]
-    })
-
     service.hooks({
       get: [
         async function (this: any, hook, next) {
-          hook.params.test = hook.params.test + 2
+          hook.params.test = this.number + 2
 
           await next()
         }
@@ -389,7 +391,7 @@ describe('`around` hooks', () => {
     assert.deepStrictEqual(data, {
       id: 10,
       number: 42,
-      test: 46
+      test: 44
     })
   })
 })
