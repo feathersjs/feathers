@@ -11,7 +11,7 @@ export function feathers<T = any, S = any>() {
 feathers.setDebug = setDebug
 
 export { version, Feathers }
-export * from './hooks/index'
+export * from './hooks'
 export * from './declarations'
 export * from './service'
 

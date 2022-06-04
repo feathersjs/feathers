@@ -1,9 +1,9 @@
 import version from './version'
 import { EventEmitter } from 'events'
 import { stripSlashes, createDebug } from '@feathersjs/commons'
-import { HOOKS, hooks, middleware } from '@feathersjs/hooks'
+import { hooks, middleware } from '@feathersjs/hooks'
 import { eventHook, eventMixin } from './events'
-import { hookMixin } from './hooks/index'
+import { hookMixin } from './hooks'
 import { wrapService, getServiceOptions, protectedMethods } from './service'
 import {
   FeathersApplication,
@@ -13,10 +13,9 @@ import {
   ServiceInterface,
   Application,
   FeathersService,
-  AroundHookMap,
   ApplicationHookOptions
 } from './declarations'
-import { enableRegularHooks } from './hooks/regular'
+import { enableHooks } from './hooks'
 
 const debug = createDebug('@feathersjs/feathers')
 
@@ -29,15 +28,11 @@ export class Feathers<Services, Settings>
   mixins: ServiceMixin<Application<Services, Settings>>[] = [hookMixin, eventMixin]
   version: string = version
   _isSetup = false
-  appHooks: AroundHookMap<Application<Services, Settings>, any> = {
-    [HOOKS]: [eventHook as any]
-  }
 
-  private regularHooks: (this: any, allHooks: any) => any
+  protected registerHooks: (this: any, allHooks: any) => any
 
   constructor() {
     super()
-    this.regularHooks = enableRegularHooks(this)
     hooks(this, {
       setup: middleware().params('server').props({
         app: this
@@ -45,6 +40,10 @@ export class Feathers<Services, Settings>
       teardown: middleware().params('server').props({
         app: this
       })
+    })
+    this.registerHooks = enableHooks(this)
+    this.registerHooks({
+      around: [eventHook]
     })
   }
 
@@ -130,19 +129,16 @@ export class Feathers<Services, Settings>
   hooks(hookMap: ApplicationHookOptions<this>) {
     const untypedMap = hookMap as any
 
-    if (untypedMap.before || untypedMap.after || untypedMap.error) {
-      this.regularHooks(untypedMap)
+    if (untypedMap.before || untypedMap.after || untypedMap.error || untypedMap.around) {
+      // regular hooks for all service methods
+      this.registerHooks(untypedMap)
     } else if (untypedMap.setup || untypedMap.teardown) {
+      // .setup and .teardown application hooks
       hooks(this, untypedMap)
-    } else if (Array.isArray(hookMap)) {
-      this.appHooks[HOOKS].push(...(hookMap as any))
     } else {
-      const methodHookMap = hookMap as AroundHookMap<Application<Services, Settings>, any>
-
-      Object.keys(methodHookMap).forEach((key) => {
-        const methodHooks = this.appHooks[key] || []
-
-        this.appHooks[key] = methodHooks.concat(methodHookMap[key])
+      // Other registration formats are just `around` hooks
+      this.registerHooks({
+        around: untypedMap
       })
     }
 

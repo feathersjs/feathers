@@ -343,7 +343,7 @@ describe('`around` hooks', () => {
     await service.find()
   })
 
-  it('around hooks have service as context and keep it in service method (#17)', async () => {
+  it('around hooks have service as context and keep it in service method, works with app hooks (#17)', async () => {
     interface DummyParams extends Params {
       test: number
     }
@@ -364,10 +364,20 @@ describe('`around` hooks', () => {
 
     const service = app.service('dummy')
 
-    service.hooks({
+    app.hooks({
       get: [
         async function (this: any, hook, next) {
           hook.params.test = this.number + 2
+
+          await next()
+        }
+      ]
+    })
+
+    service.hooks({
+      get: [
+        async function (this: any, hook, next) {
+          hook.params.test = hook.params.test + 2
 
           await next()
         }
@@ -379,7 +389,7 @@ describe('`around` hooks', () => {
     assert.deepStrictEqual(data, {
       id: 10,
       number: 42,
-      test: 44
+      test: 46
     })
   })
 })

@@ -56,7 +56,7 @@
     "@feathersjs/errors": "^5.0.0-pre.22",
     "@feathersjs/feathers": "^5.0.0-pre.22",
     "@feathersjs/commons": "^5.0.0-pre.22",
-    "@feathersjs/hooks": "^0.7.4",
+    "@feathersjs/hooks": "^0.7.5",
     "@types/json-schema": "^7.0.11",
     "ajv": "^8.11.0",
     "json-schema": "^0.4.0",

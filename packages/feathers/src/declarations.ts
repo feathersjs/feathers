@@ -126,11 +126,6 @@ export interface FeathersApplication<Services = any, Settings = any> {
   _isSetup: boolean
 
   /**
-   * Contains all registered application level hooks.
-   */
-  appHooks: AroundHookMap<Application<Services, Settings>, any>
-
-  /**
    * Retrieve an application setting by name
    *
    * @param name The setting name
@@ -330,18 +325,18 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
 }
 
 // Regular hook typings
-export type RegularHookFunction<A = Application, S = Service> = (
+export type HookFunction<A = Application, S = Service> = (
   this: S,
   context: HookContext<A, S>
 ) => Promise<HookContext<Application, S> | void> | HookContext<Application, S> | void
 
-export type Hook<A = Application, S = Service> = RegularHookFunction<A, S>
+export type Hook<A = Application, S = Service> = HookFunction<A, S>
 
-type RegularHookMethodMap<A, S> = {
-  [L in keyof S]?: SelfOrArray<RegularHookFunction<A, S>>
-} & { all?: SelfOrArray<RegularHookFunction<A, S>> }
+type HookMethodMap<A, S> = {
+  [L in keyof S]?: SelfOrArray<HookFunction<A, S>>
+} & { all?: SelfOrArray<HookFunction<A, S>> }
 
-type RegularHookTypeMap<A, S> = SelfOrArray<RegularHookFunction<A, S>> | RegularHookMethodMap<A, S>
+type HookTypeMap<A, S> = SelfOrArray<HookFunction<A, S>> | HookMethodMap<A, S>
 
 // New @feathersjs/hook typings
 export type AroundHookFunction<A = Application, S = Service> = (
@@ -355,9 +350,9 @@ export type AroundHookMap<A, S> = {
 
 export type HookMap<A, S> = {
   around?: AroundHookMap<A, S>
-  before?: RegularHookTypeMap<A, S>
-  after?: RegularHookTypeMap<A, S>
-  error?: RegularHookTypeMap<A, S>
+  before?: HookTypeMap<A, S>
+  after?: HookTypeMap<A, S>
+  error?: HookTypeMap<A, S>
 }
 
 export type HookOptions<A, S> = AroundHookMap<A, S> | AroundHookFunction<A, S>[] | HookMap<A, S>
