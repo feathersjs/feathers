@@ -122,10 +122,6 @@ export default function feathersExpress<S = any, C = any>(
   })
 
   app.configure(routing() as any)
-  app.use((req, _res, next) => {
-    req.feathers = { ...req.feathers, provider: 'rest' }
-    return next()
-  })
 
   return app
 }
