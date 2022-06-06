@@ -3,9 +3,10 @@ import { renderSource } from '../../commons'
 import { AuthenticationGeneratorContext } from '../index'
 
 const template = ({ camelName, upperName, relative, authStrategies, type }: AuthenticationGeneratorContext) =>
-  `import { schema, resolve, querySyntax, Infer } from '@feathersjs/schema'
+  `import { schema, resolve, querySyntax, Infer } from '@feathersjs/schema'${
+    authStrategies.includes('local') ? "import { LocalStrategy } from '@feathersjs/authentication-local'" : ''
+  }
 import { HookContext } from '${relative}/declarations'
-${authStrategies.includes('local') ? "import { LocalStrategy } from '@feathersjs/authentication-local'" : ''}
 
 // Schema and resolver for the basic data model (e.g. creating new entries)
 export const ${camelName}DataSchema = schema({
@@ -120,8 +121,18 @@ export type ${upperName}Query = Infer<typeof ${camelName}QuerySchema>
 export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
   schema: ${camelName}QuerySchema,
   validate: 'before',
-  properties: {}
+  properties: {
+    // If there is a user (e.g. with authentication), they are only allowed to see their own data
+    ${type === 'mongodb' ? '_id' : 'id'}: async (value, user, context) => {
+      if (context.params.user) {
+        return context.params.user.${type === 'mongodb' ? '_id' : 'id'}
+      }
+
+      return value
+    }
+  }
 })
+
 
 // Export all resolvers in a format that can be used with the resolveAll hook
 export const ${camelName}Resolvers = {

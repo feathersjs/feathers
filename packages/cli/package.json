@@ -36,19 +36,19 @@
     "CHANGELOG.md",
     "LICENSE",
     "README.md",
-    "dist/**",
+    "lib/**",
     "bin/**",
     "*.d.ts",
     "*.js"
   ],
   "scripts": {
     "prepublish": "npm run compile",
-    "compile": "shx rm -rf dist/ && tsc && shx cp -r generators/. dist/",
+    "compile": "shx rm -rf lib/ && tsc && shx cp -r generators/. lib/",
     "mocha": "mocha --timeout 60000 --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
     "test": "npm run compile && npm run mocha"
   },
   "directories": {
-    "lib": "dist/cli"
+    "lib": "lib/cli"
   },
   "publishConfig": {
     "access": "public"

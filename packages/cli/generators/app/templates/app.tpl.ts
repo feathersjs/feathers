@@ -76,7 +76,8 @@ app.hooks([ logErrorHook ])
 export { app }
 `
 
-const template = (ctx: AppGeneratorContext) => (ctx.framework === 'express' ? tsExpressApp(ctx) : tsKoaApp(ctx))
+const template = (ctx: AppGeneratorContext) =>
+  ctx.framework === 'express' ? tsExpressApp(ctx) : tsKoaApp(ctx)
 
 export const generate = (ctx: AppGeneratorContext) =>
   generator(ctx).then(

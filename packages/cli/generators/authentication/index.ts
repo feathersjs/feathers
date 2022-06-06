@@ -73,6 +73,7 @@ export const generate = (ctx: AuthenticationGeneratorArguments) =>
         ...ctx,
         name: ctx.service,
         path: ctx.service,
+        isEntityService: true,
         type: ctx.feathers.database
       })
 

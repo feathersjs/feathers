@@ -14,36 +14,33 @@ export type ConnectionGeneratorArguments = FeathersBaseContext &
 export const generate = (ctx: ConnectionGeneratorArguments) =>
   generator(ctx)
     .then(
-      prompt<ConnectionGeneratorArguments>(({ database }) => [
-        {
-          name: 'database',
-          type: 'list',
-          when: !database,
-          message: 'Which database are you connecting to?',
-          suffix: chalk.grey(' Other databases can be added at any time'),
-          choices: [
-            { value: 'mongodb', name: 'MongoDB' },
-            { value: 'knex', name: 'SQL (PostgreSQL, SQLite etc.)' }
-          ]
-        }
-      ])
-    )
-    .then(
-      prompt<ConnectionGeneratorArguments, ConnectionGeneratorContext>(({ connectionString, database, pkg }) =>
-        database !== 'custom'
-          ? [
-              {
-                name: 'connectionString',
-                type: 'input',
-                when: !connectionString,
-                message: 'Enter your database connection string',
-                default: `mongodb://localhost:27017/${pkg.name}`
-              }
+      prompt<ConnectionGeneratorArguments, ConnectionGeneratorContext>(
+        ({ database, connectionString, pkg }) => [
+          {
+            name: 'database',
+            type: 'list',
+            when: !database,
+            message: 'Which database are you connecting to?',
+            suffix: chalk.grey(' Other databases can be added at any time'),
+            choices: [
+              { value: 'mongodb', name: 'MongoDB' },
+              { value: 'knex', name: 'SQL (PostgreSQL, SQLite etc.)' }
             ]
-          : []
+          },
+          {
+            name: 'connectionString',
+            type: 'input',
+            when: (answers: ConnectionGeneratorArguments) =>
+              !connectionString && answers.database !== 'custom',
+            message: 'Enter your database connection string',
+            default: `mongodb://localhost:27017/${pkg.name}`
+          }
+        ]
       )
     )
-    .then(runGenerator<ConnectionGeneratorContext>(__dirname, 'templates', ({ database }) => `${database}.tpl`))
+    .then(
+      runGenerator<ConnectionGeneratorContext>(__dirname, 'templates', ({ database }) => `${database}.tpl`)
+    )
     .then(
       mergeJSON<ConnectionGeneratorContext>(
         ({ connectionString }) => ({

@@ -2,9 +2,18 @@ import { generator, inject, prepend, toFile, after } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-const template = ({ relative, path, className, camelName, upperName }: ServiceGeneratorContext) =>
+const template = ({
+  relative,
+  path,
+  className,
+  camelName,
+  upperName,
+  isEntityService,
+  authentication
+}: ServiceGeneratorContext) =>
   `import { resolveAll } from '@feathersjs/schema'
 import { Application } from '${relative}/declarations'
+${isEntityService || authentication ? `import { authenticate } from '@feathersjs/authentication'` : ''}
 
 import {
   ${upperName}Data,
@@ -13,22 +22,37 @@ import {
   ${camelName}Resolvers
 } from '${relative}/schemas/${path}.schema'
 
-// The ${className} service class
-
-export const serviceHooks = [
-  resolveAll(${camelName}Resolvers)
-]
-
-export const methodHooks = {
-  find: [],
-  get: [],
-  create: [],
-  update: [],
-  patch: [],
-  remove: []
-}
-
-export const regularHooks = {
+export const hooks = {
+  around: {
+    all: [${
+      authentication
+        ? `
+      authenticate('jwt'),`
+        : ''
+    }
+      resolveAll(${camelName}Resolvers)
+    ]${
+      isEntityService
+        ? `,
+    get: [
+      authenticate('jwt')
+    ],
+    find: [
+      authenticate('jwt')
+    ],
+    create: [],
+    patch: [
+      authenticate('jwt')
+    ],
+    update: [
+      authenticate('jwt')
+    ],
+    remove: [
+      authenticate('jwt')
+    ]`
+        : ''
+    }
+  },
   before: {},
   after: {},
   error: {}
@@ -47,9 +71,7 @@ export function ${camelName} (app: Application) {
     events: []
   })
   // Initialize hooks
-  app.service('${path}').hooks(serviceHooks)
-  app.service('${path}').hooks(methodHooks)
-  app.service('${path}').hooks(regularHooks)
+  app.service('${path}').hooks(hooks)
 }
 
 // Add this service to the service type index
@@ -60,18 +82,28 @@ declare module '${relative}/declarations' {
 }
 `
 
-const importTemplate = ({ camelName, path }: ServiceGeneratorContext) => `import { ${camelName} } from './${path}'`
+const importTemplate = ({ camelName, path }: ServiceGeneratorContext) =>
+  `import { ${camelName} } from './${path}'`
 
 const configureTemplate = ({ camelName }: ServiceGeneratorContext) => `  app.configure(${camelName})`
 
-const toServiceIndex = toFile(({ lib, language }: ServiceGeneratorContext) => [lib, 'services', `index.${language}`])
+const toServiceIndex = toFile(({ lib, language }: ServiceGeneratorContext) => [
+  lib,
+  'services',
+  `index.${language}`
+])
 
 export const generate = (ctx: ServiceGeneratorContext) =>
   generator(ctx)
     .then(
       renderSource(
         template,
-        toFile<ServiceGeneratorContext>(({ lib, folder, kebabName }) => [lib, 'services', ...folder, kebabName])
+        toFile<ServiceGeneratorContext>(({ lib, folder, kebabName }) => [
+          lib,
+          'services',
+          ...folder,
+          kebabName
+        ])
       )
     )
     .then(inject(importTemplate, prepend(), toServiceIndex))

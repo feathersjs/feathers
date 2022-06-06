@@ -1,7 +1,16 @@
 import { sep, join } from 'path'
 import { PackageJson } from 'type-fest'
 import chalk from 'chalk'
-import { generator, prompt, runGenerators, loadJSON, fromFile, install, copyFiles, toFile } from '@feathershq/pinion'
+import {
+  generator,
+  prompt,
+  runGenerators,
+  loadJSON,
+  fromFile,
+  install,
+  copyFiles,
+  toFile
+} from '@feathershq/pinion'
 import { FeathersBaseContext, FeathersAppInfo, initializeBaseContext } from '../commons'
 import { generate as authenticationGenerator } from '../authentication'
 import { generate as connectionGenerator } from '../connection'
@@ -20,6 +29,14 @@ export interface AppGeneratorData extends FeathersAppInfo {
    * A short description of the app
    */
   description: string
+  /**
+   * The selected user authentication strategies
+   */
+  authStrategies: string[]
+  /**
+   * The database connection string
+   */
+  connectionString: string
 }
 
 export type AppGeneratorContext = FeathersBaseContext &
@@ -82,7 +99,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
           message: 'What APIs do you want to offer?',
           choices: [
             { value: 'rest', name: 'HTTP (REST)', checked: true },
-            { value: 'websockets', name: 'Real-time (websockets)', checked: true }
+            { value: 'websockets', name: 'Real-time (So)', checked: true }
           ]
         },
         {
@@ -105,6 +122,47 @@ export const generate = (ctx: AppGeneratorArguments) =>
             { value: 'mongodb', name: 'MongoDB' },
             { value: 'knex', name: 'SQL (PostgreSQL, SQLite etc.)' },
             { value: 'custom', name: 'Custom services/another database' }
+          ]
+        },
+        {
+          name: 'connectionString',
+          type: 'input',
+          when: (answers: AppGeneratorArguments) => !ctx.connectionString && answers.database !== 'custom',
+          message: 'Enter your database connection string',
+          default: (answers: AppGeneratorArguments) => `mongodb://localhost:27017/${answers.name}`
+        },
+        {
+          type: 'checkbox',
+          name: 'authStrategies',
+          when: !ctx.authStrategies,
+          message: 'Which user authentication methods do you want to use?',
+          suffix: chalk.grey(' Other methods and providers can be added at any time.'),
+          choices: [
+            {
+              name: 'Email + Password',
+              value: 'local',
+              checked: true
+            },
+            {
+              name: 'Google',
+              value: 'google'
+            },
+            {
+              name: 'Facebook',
+              value: 'facebook'
+            },
+            {
+              name: 'Twitter',
+              value: 'twitter'
+            },
+            {
+              name: 'GitHub',
+              value: 'github'
+            },
+            {
+              name: 'Auth0',
+              value: 'auth0'
+            }
           ]
         }
       ])

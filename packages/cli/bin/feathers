@@ -2,7 +2,7 @@
 'use strict';
 
 const { yargs } = require('@feathershq/pinion')
-const { command } = require('../dist')
+const { command } = require('../lib')
 
 const cli = cmd => command(yargs(cmd)).argv
 

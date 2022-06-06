@@ -40,59 +40,69 @@ export interface ServiceGeneratorContext extends FeathersBaseContext {
    * The chosen service type
    */
   type: 'knex' | 'mongodb' | 'custom'
+  /**
+   * Wether this service uses authentication
+   */
+  authentication: boolean
+  /**
+   * Set to true if this service is for an authentication entity
+   */
+  isEntityService?: boolean
 }
 
 /**
  * Parameters the generator is called with
  */
 export type ServiceGeneratorArguments = FeathersBaseContext &
-  Partial<Pick<ServiceGeneratorContext, 'name' | 'path' | 'type'>>
+  Partial<Pick<ServiceGeneratorContext, 'name' | 'path' | 'type' | 'authentication' | 'isEntityService'>>
 
 export const generate = (ctx: ServiceGeneratorArguments) =>
   generator(ctx)
     .then(
-      prompt<ServiceGeneratorArguments>(({ name }) => [
-        {
-          name: 'name',
-          type: 'input',
-          when: !name,
-          message: 'What is the name of your service?'
-        }
-      ])
-    )
-    .then(
-      prompt<ServiceGeneratorArguments>(({ name, path, type }) => [
-        {
-          name: 'path',
-          type: 'input',
-          when: !path,
-          message: 'Which path should the service be registered on?',
-          default: `${_.kebabCase(name)}`
-        },
-        {
-          name: 'type',
-          type: 'list',
-          when: !type,
-          message: 'What kind of service is it?',
-          choices: [
-            {
-              value: 'custom',
-              name: 'A custom service',
-              checked: ctx?.feathers.database === 'custom'
-            },
-            {
-              value: 'knex',
-              name: 'SQL',
-              checked: ctx?.feathers.database === 'knex'
-            },
-            {
-              value: 'mongodb',
-              name: 'MongoDB',
-              checked: ctx?.feathers.database === 'mongodb'
-            }
-          ]
-        }
-      ])
+      prompt<ServiceGeneratorArguments, ServiceGeneratorContext>(
+        ({ name, path, type, authentication, isEntityService }) => [
+          {
+            name: 'name',
+            type: 'input',
+            when: !name,
+            message: 'What is the name of your service?'
+          },
+          {
+            name: 'path',
+            type: 'input',
+            when: !path,
+            message: 'Which path should the service be registered on?',
+            default: (answers: ServiceGeneratorArguments) => `${_.kebabCase(answers.name)}`
+          },
+          {
+            name: 'authentication',
+            type: 'confirm',
+            when: authentication === undefined && !isEntityService,
+            message: 'Does this service require authentication?'
+          },
+          {
+            name: 'type',
+            type: 'list',
+            when: !type,
+            message: 'What kind of service is it?',
+            default: ctx.feathers.database,
+            choices: [
+              {
+                value: 'mongodb',
+                name: 'MongoDB'
+              },
+              {
+                value: 'knex',
+                name: 'SQL'
+              },
+              {
+                value: 'custom',
+                name: 'A custom service'
+              }
+            ]
+          }
+        ]
+      )
     )
     .then(async (ctx) => {
       const { name, path, type } = ctx

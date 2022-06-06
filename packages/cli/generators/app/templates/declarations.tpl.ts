@@ -8,9 +8,7 @@ import { ConfigurationSchema } from './schemas/configuration.schema'
 
 export { NextFunction }
 
-export interface Configuration extends ConfigurationSchema {
-  // Add additional application types here
-}
+export interface Configuration extends ConfigurationSchema {}
 
 // A mapping of service names to types. Will be extended in service files.
 export interface ServiceTypes {}

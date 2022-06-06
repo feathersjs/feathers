@@ -17,7 +17,9 @@ export const generate = (ctx: FeathersBaseContext) =>
 export const command = (yargs: Argv) =>
   yargs
     .command('generate', 'Run a generator', (yarg) =>
-      yarg.command('app', 'Generate a new app', commandRunner).command('service', 'Generate a service', commandRunner)
+      yarg
+        .command('app', 'Generate a new app', commandRunner)
+        .command('service', 'Generate a service', commandRunner)
     )
     .usage('Usage: $0 <command> [options]')
     .help()

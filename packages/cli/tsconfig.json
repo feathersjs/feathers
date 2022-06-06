@@ -4,6 +4,6 @@
     "generators/**/*.ts"
   ],
   "compilerOptions": {
-    "outDir": "dist"
+    "outDir": "lib"
   }
 }
