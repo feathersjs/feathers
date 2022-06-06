@@ -6,9 +6,18 @@ const paramsTemplate = ({
   entity
 }: AuthenticationGeneratorContext) => `declare module '@feathersjs/feathers' {
   interface Params {
-    ${entity}: ${}Result
+    ${entity}: ${''}Result
   }
 }`
 
-export const generate = (ctx: AuthenticationGeneratorContext) => generator(ctx)
-  .then(when(ctx => ctx.language === 'ts', inject(paramsTemplate, append(), toFile<AuthenticationGeneratorContext>(ctx => ctx.lib, 'declarations.ts'))))
+export const generate = (ctx: AuthenticationGeneratorContext) =>
+  generator(ctx).then(
+    when(
+      (ctx) => ctx.language === 'ts',
+      inject(
+        paramsTemplate,
+        append(),
+        toFile<AuthenticationGeneratorContext>((ctx) => ctx.lib, 'declarations.ts')
+      )
+    )
+  )

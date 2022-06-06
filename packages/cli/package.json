@@ -43,7 +43,7 @@
   ],
   "scripts": {
     "prepublish": "npm run compile",
-    "compile": "shx rm -rf lib/ && tsc && shx cp -r generators/. lib/",
+    "compile": "shx rm -rf lib/ && tsc && shx cp -r src/. lib/",
     "mocha": "mocha --timeout 60000 --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
     "test": "npm run compile && npm run mocha"
   },
