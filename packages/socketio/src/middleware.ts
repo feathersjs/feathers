@@ -31,7 +31,9 @@ export const params =
 export const authentication =
   (app: Application, getParams: ParamsGetter, settings: any = {}) =>
   (socket: FeathersSocket, next: NextFunction) => {
-    const service = (app as any).defaultAuthentication ? (app as any).defaultAuthentication(settings.service) : null
+    const service = (app as any).defaultAuthentication
+      ? (app as any).defaultAuthentication(settings.service)
+      : null
 
     if (service === null) {
       return next()

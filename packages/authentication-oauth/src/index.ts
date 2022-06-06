@@ -15,7 +15,9 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
   const service = app.defaultAuthentication ? app.defaultAuthentication(options.authService) : null
 
   if (!service) {
-    throw new Error('An authentication service must exist before registering @feathersjs/authentication-oauth')
+    throw new Error(
+      'An authentication service must exist before registering @feathersjs/authentication-oauth'
+    )
   }
 
   const { oauth } = service.configuration

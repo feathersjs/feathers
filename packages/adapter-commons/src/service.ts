@@ -1,6 +1,11 @@
 import { BadRequest, MethodNotAllowed } from '@feathersjs/errors'
 import { Id, NullableId, Paginated, Query } from '@feathersjs/feathers'
-import { AdapterParams, AdapterServiceOptions, InternalServiceMethods, PaginationOptions } from './declarations'
+import {
+  AdapterParams,
+  AdapterServiceOptions,
+  InternalServiceMethods,
+  PaginationOptions
+} from './declarations'
 import { filterQuery } from './query'
 
 const alwaysMulti: { [key: string]: boolean } = {

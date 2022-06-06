@@ -14,7 +14,9 @@ describe('@feathersjs/authentication-oauth/express', () => {
 
   it('oauth/test', async () => {
     try {
-      await axios.get<any>('http://localhost:9876/oauth/test?feathers_token=testing', { maxRedirects: 0 })
+      await axios.get<any>('http://localhost:9876/oauth/test?feathers_token=testing', {
+        maxRedirects: 0
+      })
     } catch (error: any) {
       assert.equal(error.response.status, 302)
     }
@@ -31,7 +33,9 @@ describe('@feathersjs/authentication-oauth/express', () => {
   })
 
   it('oauth/test/authenticate', async () => {
-    const { data } = await axios.get<any>('http://localhost:9876/oauth/test/authenticate?profile[sub]=expressTest')
+    const { data } = await axios.get<any>(
+      'http://localhost:9876/oauth/test/authenticate?profile[sub]=expressTest'
+    )
 
     assert.ok(data.accessToken)
     assert.equal(data.user.testId, 'expressTest')

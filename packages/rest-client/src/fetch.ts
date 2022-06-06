@@ -1,7 +1,8 @@
 import { errors } from '@feathersjs/errors'
+import { Params } from '@feathersjs/feathers'
 import { Base, RestClientParams } from './base'
 
-export class FetchClient extends Base {
+export class FetchClient<T = any, D = Partial<T>, P extends Params = RestClientParams> extends Base<T, D, P> {
   request(options: any, params: RestClientParams) {
     const fetchOptions = Object.assign({}, options, params.connection)
 

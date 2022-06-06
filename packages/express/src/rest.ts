@@ -9,7 +9,9 @@ import { Application } from './declarations'
 
 const debug = createDebug('@feathersjs/express/rest')
 
-const toHandler = (func: (req: Request, res: Response, next: () => void) => Promise<void>): RequestHandler => {
+const toHandler = (
+  func: (req: Request, res: Response, next: () => void) => Promise<void>
+): RequestHandler => {
   return (req, res, next) => func(req, res, next).catch((error) => next(error))
 }
 
@@ -94,6 +96,10 @@ export const rest = (options?: RestOptions | RequestHandler) => {
       throw new Error('@feathersjs/express/rest needs an Express compatible app.')
     }
 
+    app.use((req, _res, next) => {
+      req.feathers = { ...req.feathers, provider: 'rest' }
+      return next()
+    })
     app.use(parseAuthentication(authenticationOptions))
     app.use(servicesMiddleware())
 

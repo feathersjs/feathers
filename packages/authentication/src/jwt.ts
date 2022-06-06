@@ -30,7 +30,11 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     }
   }
 
-  async handleConnection(event: ConnectionEvent, connection: any, authResult?: AuthenticationResult): Promise<void> {
+  async handleConnection(
+    event: ConnectionEvent,
+    connection: any,
+    authResult?: AuthenticationResult
+  ): Promise<void> {
     const isValidLogout =
       event === 'logout' &&
       connection.authentication &&

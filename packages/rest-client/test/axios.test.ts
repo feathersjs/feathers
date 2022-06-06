@@ -12,12 +12,14 @@ import { ServiceTypes } from './declarations'
 
 describe('Axios REST connector', function () {
   const url = 'http://localhost:8889'
-  const setup = rest(url).axios(axios)
-  const app = feathers<ServiceTypes>().configure(setup)
+  const connection = rest(url).axios(axios)
+  const app = feathers<ServiceTypes>()
+    .configure(connection)
+    .use('todos', connection.service('todos'), {
+      methods: ['get', 'find', 'create', 'patch', 'customMethod']
+    })
   const service = app.service('todos')
   let server: Server
-
-  service.methods('customMethod')
 
   before(async () => {
     server = await createServer().listen(8889)

@@ -56,7 +56,10 @@ describe('authentication/core', () => {
         assert.fail('Should never get here')
         assert.ok(otherAuth)
       } catch (error: any) {
-        assert.strictEqual(error.message, 'An application instance has to be passed to the authentication service')
+        assert.strictEqual(
+          error.message,
+          'An application instance has to be passed to the authentication service'
+        )
       }
     })
 

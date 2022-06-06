@@ -261,7 +261,9 @@ export function convert(error: any) {
   }
 
   const FeathersError = (errors as any)[error.name]
-  const result = FeathersError ? new FeathersError(error.message, error.data) : new Error(error.message || error)
+  const result = FeathersError
+    ? new FeathersError(error.message, error.data)
+    : new Error(error.message || error)
 
   if (typeof error === 'object') {
     Object.assign(result, error)

@@ -1,4 +1,5 @@
-import { EventEmitter, NextFunction, HookContext as BaseHookContext } from './dependencies'
+import { EventEmitter } from 'events'
+import { NextFunction, HookContext as BaseHookContext } from '@feathersjs/hooks'
 
 type SelfOrArray<S> = S | S[]
 type OptionalPick<T, K extends PropertyKey> = Pick<T, Extract<keyof T, K>>
@@ -67,7 +68,11 @@ export interface ServiceHookOverloads<S, P = Params> {
 
   get(id: Id, params: P, context: HookContext): Promise<HookContext>
 
-  create(data: ServiceGenericData<S> | ServiceGenericData<S>[], params: P, context: HookContext): Promise<HookContext>
+  create(
+    data: ServiceGenericData<S> | ServiceGenericData<S>[],
+    params: P,
+    context: HookContext
+  ): Promise<HookContext>
 
   update(id: NullableId, data: ServiceGenericData<S>, params: P, context: HookContext): Promise<HookContext>
 
@@ -83,6 +88,8 @@ export type FeathersService<A = FeathersApplication, S = Service> = S &
 export type CustomMethods<T extends { [key: string]: [any, any] }> = {
   [K in keyof T]: (data: T[K][0], params?: Params) => Promise<T[K][1]>
 }
+
+export type CustomMethod<T = any, R = T, P extends Params = Params> = (data: T, params?: P) => Promise<R>
 
 export type ServiceMixin<A> = (service: FeathersService<A>, path: string, options: ServiceOptions) => void
 
@@ -119,11 +126,6 @@ export interface FeathersApplication<Services = any, Settings = any> {
    * A private-ish indicator if `app.setup()` has been called already
    */
   _isSetup: boolean
-
-  /**
-   * Contains all registered application level hooks.
-   */
-  appHooks: HookMap<Application<Services, Settings>, any>
 
   /**
    * Retrieve an application setting by name
@@ -325,43 +327,47 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
 }
 
 // Regular hook typings
-export type RegularHookFunction<A = Application, S = Service> = (
+export type HookFunction<A = Application, S = Service> = (
   this: S,
   context: HookContext<A, S>
 ) => Promise<HookContext<Application, S> | void> | HookContext<Application, S> | void
 
-export type Hook<A = Application, S = Service> = RegularHookFunction<A, S>
+export type Hook<A = Application, S = Service> = HookFunction<A, S>
 
-type RegularHookMethodMap<A, S> = {
-  [L in keyof S]?: SelfOrArray<RegularHookFunction<A, S>>
-} & { all?: SelfOrArray<RegularHookFunction<A, S>> }
+type HookMethodMap<A, S> = {
+  [L in keyof S]?: SelfOrArray<HookFunction<A, S>>
+} & { all?: SelfOrArray<HookFunction<A, S>> }
 
-type RegularHookTypeMap<A, S> = SelfOrArray<RegularHookFunction<A, S>> | RegularHookMethodMap<A, S>
-
-export type RegularHookMap<A, S> = {
-  before?: RegularHookTypeMap<A, S>
-  after?: RegularHookTypeMap<A, S>
-  error?: RegularHookTypeMap<A, S>
-}
+type HookTypeMap<A, S> = SelfOrArray<HookFunction<A, S>> | HookMethodMap<A, S>
 
 // New @feathersjs/hook typings
-export type HookFunction<A = Application, S = Service> = (
+export type AroundHookFunction<A = Application, S = Service> = (
   context: HookContext<A, S>,
   next: NextFunction
 ) => Promise<void>
 
+export type AroundHookMap<A, S> = {
+  [L in keyof S]?: AroundHookFunction<A, S>[]
+} & { all?: AroundHookFunction<A, S>[] }
+
 export type HookMap<A, S> = {
-  [L in keyof S]?: HookFunction<A, S>[]
+  around?: AroundHookMap<A, S>
+  before?: HookTypeMap<A, S>
+  after?: HookTypeMap<A, S>
+  error?: HookTypeMap<A, S>
 }
 
-export type HookOptions<A, S> = HookMap<A, S> | HookFunction<A, S>[] | RegularHookMap<A, S>
+export type HookOptions<A, S> = AroundHookMap<A, S> | AroundHookFunction<A, S>[] | HookMap<A, S>
 
 export interface ApplicationHookContext<A = Application> extends BaseHookContext {
   app: A
   server: any
 }
 
-export type ApplicationHookFunction<A> = (context: ApplicationHookContext<A>, next: NextFunction) => Promise<void>
+export type ApplicationHookFunction<A> = (
+  context: ApplicationHookContext<A>,
+  next: NextFunction
+) => Promise<void>
 
 export type ApplicationHookMap<A> = {
   setup?: ApplicationHookFunction<A>[]

@@ -52,7 +52,9 @@ export function koa<S = any, C = any>(
     async teardown(server?: any) {
       return feathersTeardown
         .call(this, server)
-        .then(() => new Promise((resolve, reject) => this.server.close((e) => (e ? reject(e) : resolve(this)))))
+        .then(
+          () => new Promise((resolve, reject) => this.server.close((e) => (e ? reject(e) : resolve(this))))
+        )
     }
   } as Application)
 

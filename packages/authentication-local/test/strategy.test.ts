@@ -24,7 +24,10 @@ describe('@feathersjs/authentication-local/strategy', () => {
       auth.register('something', new LocalStrategy())
       assert.fail('Should never get here')
     } catch (error: any) {
-      assert.strictEqual(error.message, "'something' authentication strategy requires a 'usernameField' setting")
+      assert.strictEqual(
+        error.message,
+        "'something' authentication strategy requires a 'usernameField' setting"
+      )
     }
   })
 

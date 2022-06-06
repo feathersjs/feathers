@@ -290,8 +290,10 @@ describe('@feathersjs/express/rest provider', () => {
 
       const app = expressify(feathers())
         .use(function (req: Request, _res: Response, next: NextFunction) {
-          assert.ok(req.feathers, 'Feathers object initialized')
-          req.feathers.test = 'Happy'
+          req.feathers = {
+            ...req.feathers,
+            test: 'Happy'
+          }
           next()
         })
         .configure(rest(express.formatter))
@@ -460,7 +462,9 @@ describe('@feathersjs/express/rest provider', () => {
       app.use(express.json()).configure(rest()).use('/array-middleware', middlewareArray)
 
       const server = await app.listen(4776)
-      const res = await axios.post<any>('http://localhost:4776/array-middleware', { text: 'Do dishes' })
+      const res = await axios.post<any>('http://localhost:4776/array-middleware', {
+        text: 'Do dishes'
+      })
 
       assert.deepStrictEqual(res.data, ['first', 'second', 'Do dishes'])
       server.close()

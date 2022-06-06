@@ -70,8 +70,9 @@ export async function runMethod(
 ) {
   const trace = `method '${method}' on service '${path}'`
   const methodArgs = args.slice(0)
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const callback = typeof methodArgs[methodArgs.length - 1] === 'function' ? methodArgs.pop() : function () {}
+  const callback =
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    typeof methodArgs[methodArgs.length - 1] === 'function' ? methodArgs.pop() : function () {}
 
   debug(`Running ${trace}`, connection, args)
 

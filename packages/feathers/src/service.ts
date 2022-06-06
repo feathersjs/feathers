@@ -1,4 +1,5 @@
-import { createSymbol, EventEmitter } from './dependencies'
+import { EventEmitter } from 'events'
+import { createSymbol } from '@feathersjs/commons'
 import { ServiceOptions } from './declarations'
 
 export const SERVICE = createSymbol('@feathersjs/service')
@@ -23,12 +24,14 @@ export const defaultEventMap = {
 
 export const protectedMethods = Object.keys(Object.prototype)
   .concat(Object.keys(EventEmitter.prototype))
-  .concat(['all', 'before', 'after', 'error', 'hooks', 'setup', 'teardown', 'publish'])
+  .concat(['all', 'around', 'before', 'after', 'error', 'hooks', 'setup', 'teardown', 'publish'])
 
 export function getHookMethods(service: any, options: ServiceOptions) {
   const { methods } = options
 
-  return defaultServiceMethods.filter((m) => typeof service[m] === 'function' && !methods.includes(m)).concat(methods)
+  return defaultServiceMethods
+    .filter((m) => typeof service[m] === 'function' && !methods.includes(m))
+    .concat(methods)
 }
 
 export function getServiceOptions(service: any, options: ServiceOptions = {}): ServiceOptions {

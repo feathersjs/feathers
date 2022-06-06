@@ -1,4 +1,5 @@
-import { setDebug } from './dependencies'
+import { setDebug } from '@feathersjs/commons'
+
 import version from './version'
 import { Feathers } from './application'
 import { Application } from './declarations'
@@ -10,7 +11,7 @@ export function feathers<T = any, S = any>() {
 feathers.setDebug = setDebug
 
 export { version, Feathers }
-export * from './hooks/index'
+export * from './hooks'
 export * from './declarations'
 export * from './service'
 
