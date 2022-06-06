@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/rest-client",
   "description": "REST client services for different Ajax libraries",
-  "version": "5.0.0-pre.22",
+  "version": "5.0.0-pre.23",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -52,19 +52,19 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^5.0.0-pre.22",
-    "@feathersjs/errors": "^5.0.0-pre.22",
-    "@feathersjs/feathers": "^5.0.0-pre.22",
+    "@feathersjs/commons": "^5.0.0-pre.23",
+    "@feathersjs/errors": "^5.0.0-pre.23",
+    "@feathersjs/feathers": "^5.0.0-pre.23",
     "@types/superagent": "^4.1.15",
     "qs": "^6.10.3"
   },
   "devDependencies": {
-    "@feathersjs/express": "^5.0.0-pre.22",
-    "@feathersjs/memory": "^5.0.0-pre.22",
-    "@feathersjs/tests": "^5.0.0-pre.22",
-    "@types/node-fetch": "^2.6.1",
+    "@feathersjs/express": "^5.0.0-pre.23",
+    "@feathersjs/memory": "^5.0.0-pre.23",
+    "@feathersjs/tests": "^5.0.0-pre.23",
     "@types/mocha": "^9.1.1",
     "@types/node": "^17.0.40",
+    "@types/node-fetch": "^2.6.1",
     "@types/qs": "^6.9.7",
     "axios": "^0.27.2",
     "mocha": "^10.0.0",
