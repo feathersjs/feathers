@@ -89,6 +89,8 @@ export type CustomMethods<T extends { [key: string]: [any, any] }> = {
   [K in keyof T]: (data: T[K][0], params?: Params) => Promise<T[K][1]>
 }
 
+export type CustomMethod<T = any, R = T, P extends Params = Params> = (data: T, params?: P) => Promise<R>
+
 export type ServiceMixin<A> = (service: FeathersService<A>, path: string, options: ServiceOptions) => void
 
 export type ServiceGenericType<S> = S extends ServiceInterface<infer T> ? T : any

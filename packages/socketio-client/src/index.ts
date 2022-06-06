@@ -1,8 +1,18 @@
 import { Service, SocketService } from '@feathersjs/transport-commons/client'
 import { Socket } from 'socket.io-client'
-import { defaultEventMap } from '@feathersjs/feathers'
+import { Application, defaultEventMap, defaultServiceMethods } from '@feathersjs/feathers'
 
 export { SocketService }
+
+declare module '@feathersjs/feathers/lib/declarations' {
+  interface FeathersApplication<Services, Settings> {
+    /**
+     * The Socket.io client instance. Usually does not need
+     * to be accessed directly.
+     */
+    io?: Socket
+  }
+}
 
 export default function socketioClient(connection: Socket, options?: any) {
   if (!connection) {
@@ -18,16 +28,23 @@ export default function socketioClient(connection: Socket, options?: any) {
       method: 'emit'
     })
 
-    return new Service(settings)
+    return new Service(settings) as any
   }
 
-  const initialize = function (app: any) {
+  const initialize = function (app: Application) {
     if (app.io !== undefined) {
       throw new Error('Only one default client provider can be configured')
     }
 
-    app.io = connection
+    app.io = connection as any
     app.defaultService = defaultService
+    app.mixins.unshift((service, _location, options) => {
+      if (options && options.methods && service instanceof Service) {
+        const customMethods = options.methods.filter((name) => !defaultServiceMethods.includes(name))
+
+        service.methods(...customMethods)
+      }
+    })
   }
 
   initialize.Service = Service

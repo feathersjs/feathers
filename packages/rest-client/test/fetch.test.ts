@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { strict as assert } from 'assert'
-
-// @ts-ignore
 import fetch from 'node-fetch'
 import { feathers } from '@feathersjs/feathers'
 import { clientTests } from '@feathersjs/tests'
@@ -14,12 +11,25 @@ import { ServiceTypes } from './declarations'
 
 describe('fetch REST connector', function () {
   const url = 'http://localhost:8889'
-  const setup = rest(url).fetch(fetch)
-  const app = feathers<ServiceTypes>().configure(setup)
+  const connection = rest(url).fetch(fetch)
+  const app = feathers<ServiceTypes>()
+    .configure(connection)
+    .use('todos', connection.service('todos'), {
+      methods: ['get', 'find', 'create', 'patch', 'customMethod']
+    })
+
   const service = app.service('todos')
   let server: Server
 
-  service.methods('customMethod')
+  service.hooks({
+    after: {
+      customMethod: [
+        (context) => {
+          context.result.data.message += '!'
+        }
+      ]
+    }
+  })
 
   before(async () => {
     server = await createServer().listen(8889)
@@ -127,7 +137,7 @@ describe('fetch REST connector', function () {
     const result = await service.customMethod({ message: 'hi' })
 
     assert.deepEqual(result, {
-      data: { message: 'hi' },
+      data: { message: 'hi!' },
       provider: 'rest',
       type: 'customMethod'
     })
