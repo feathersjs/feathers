@@ -85,7 +85,10 @@ export default (configurer?: any) => {
     .use(function (req, res, next) {
       res.header('Access-Control-Allow-Origin', '*')
       res.header('Access-Control-Allow-Headers', 'Authorization')
-      req.feathers.authorization = req.headers.authorization
+      req.feathers = {
+        ...req.feathers,
+        authorization: req.headers.authorization
+      }
       next()
     })
     // Parse HTTP bodies
