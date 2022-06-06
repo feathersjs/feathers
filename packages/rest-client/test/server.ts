@@ -85,7 +85,10 @@ export default (configurer?: any) => {
     .use(function (req, res, next) {
       res.header('Access-Control-Allow-Origin', '*')
       res.header('Access-Control-Allow-Headers', 'Authorization')
-      req.feathers.authorization = req.headers.authorization
+      req.feathers = {
+        ...req.feathers,
+        authorization: req.headers.authorization
+      }
       next()
     })
     // Parse HTTP bodies
@@ -109,7 +112,7 @@ export default (configurer?: any) => {
       })
     )
     // Host our Todos service on the /todos path
-    .use('/todos', new TodoService(), {
+    .use('todos', new TodoService(), {
       methods: ['find', 'get', 'create', 'patch', 'update', 'remove', 'customMethod']
     })
     .use(errorHandler)

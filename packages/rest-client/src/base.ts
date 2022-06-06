@@ -22,7 +22,9 @@ interface RestClientSettings {
   options: any
 }
 
-export abstract class Base<T = any, D = Partial<T>> implements ServiceInterface<T, D> {
+export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClientParams>
+  implements ServiceInterface<T, D, P>
+{
   name: string
   base: string
   connection: any
@@ -57,7 +59,7 @@ export abstract class Base<T = any, D = Partial<T>> implements ServiceInterface<
     return ''
   }
 
-  abstract request(options: any, params: Params): any
+  abstract request(options: any, params: P): any
 
   methods(this: any, ...names: string[]) {
     names.forEach((method) => {
@@ -83,7 +85,7 @@ export abstract class Base<T = any, D = Partial<T>> implements ServiceInterface<
     return this
   }
 
-  find(params: RestClientParams = {}) {
+  find(params?: P) {
     return this.request(
       {
         url: this.makeUrl(params.query),
@@ -94,7 +96,7 @@ export abstract class Base<T = any, D = Partial<T>> implements ServiceInterface<
     ).catch(toError)
   }
 
-  get(id: Id, params: RestClientParams = {}) {
+  get(id: Id, params?: P) {
     if (typeof id === 'undefined') {
       return Promise.reject(new Error("id for 'get' can not be undefined"))
     }
@@ -109,7 +111,7 @@ export abstract class Base<T = any, D = Partial<T>> implements ServiceInterface<
     ).catch(toError)
   }
 
-  create(body: D, params: RestClientParams = {}) {
+  create(body: D, params?: P) {
     return this.request(
       {
         url: this.makeUrl(params.query),
@@ -121,7 +123,7 @@ export abstract class Base<T = any, D = Partial<T>> implements ServiceInterface<
     ).catch(toError)
   }
 
-  update(id: NullableId, body: D, params: RestClientParams = {}) {
+  update(id: NullableId, body: D, params?: P) {
     if (typeof id === 'undefined') {
       return Promise.reject(
         new Error("id for 'update' can not be undefined, only 'null' when updating multiple entries")
@@ -139,7 +141,7 @@ export abstract class Base<T = any, D = Partial<T>> implements ServiceInterface<
     ).catch(toError)
   }
 
-  patch(id: NullableId, body: D, params: RestClientParams = {}) {
+  patch(id: NullableId, body: D, params?: P) {
     if (typeof id === 'undefined') {
       return Promise.reject(
         new Error("id for 'patch' can not be undefined, only 'null' when updating multiple entries")
@@ -157,7 +159,7 @@ export abstract class Base<T = any, D = Partial<T>> implements ServiceInterface<
     ).catch(toError)
   }
 
-  remove(id: NullableId, params: RestClientParams = {}) {
+  remove(id: NullableId, params?: P) {
     if (typeof id === 'undefined') {
       return Promise.reject(
         new Error("id for 'remove' can not be undefined, only 'null' when removing multiple entries")

@@ -1,6 +1,11 @@
+import { Params } from '@feathersjs/feathers'
 import { Base, RestClientParams } from './base'
 
-export class SuperagentClient extends Base {
+export class SuperagentClient<T = any, D = Partial<T>, P extends Params = RestClientParams> extends Base<
+  T,
+  D,
+  P
+> {
   request(options: any, params: RestClientParams) {
     const superagent = this.connection(options.method, options.url)
       .set(this.options.headers || {})

@@ -1,3 +1,5 @@
+import { Application, defaultServiceMethods } from '@feathersjs/feathers'
+
 import { Base } from './base'
 import { AxiosClient } from './axios'
 import { FetchClient } from './fetch'
@@ -56,13 +58,20 @@ export default function restClient(base = '') {
         return new (Service as any)({ base, name, connection, options })
       }
 
-      const initialize = (app: any) => {
+      const initialize = (app: Application & { rest: any }) => {
         if (app.rest !== undefined) {
           throw new Error('Only one default client provider can be configured')
         }
 
         app.rest = connection
         app.defaultService = defaultService
+        app.mixins.unshift((service, _location, options) => {
+          if (options && options.methods && service instanceof Base) {
+            const customMethods = options.methods.filter((name) => !defaultServiceMethods.includes(name))
+
+            service.methods(...customMethods)
+          }
+        })
       }
 
       initialize.Service = Service
