@@ -5,12 +5,10 @@ export const importTemplate = `import { MongoDBAdapterParams, MongoDBService } f
 
 export const ts = ({ className, upperName }: ServiceGeneratorContext) =>
   `export interface ${upperName}Params extends MongoDBAdapterParams<${upperName}Query> {
-
 }
 
 // By default calls the standard MongoDB adapter service methods but can be customized with your own functionality.
 export class ${className} extends MongoDBService<${upperName}Result, ${upperName}Data, ${upperName}Params> {
-
 }
 `
 

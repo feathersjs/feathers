@@ -24,7 +24,7 @@ export const generate = (ctx: ConnectionGeneratorArguments) =>
             suffix: chalk.grey(' Other databases can be added at any time'),
             choices: [
               { value: 'mongodb', name: 'MongoDB' },
-              { value: 'knex', name: 'SQL (PostgreSQL, SQLite etc.)' }
+              { value: 'knex', name: 'SQL (PostgreSQL, SQLite etc.)', disabled: true }
             ]
           },
           {

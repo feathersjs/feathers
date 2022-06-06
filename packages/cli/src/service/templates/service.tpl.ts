@@ -5,6 +5,8 @@ import { ServiceGeneratorContext } from '../index'
 const template = ({
   relative,
   path,
+  folder,
+  kebabName,
   className,
   camelName,
   upperName,
@@ -12,15 +14,15 @@ const template = ({
   authentication
 }: ServiceGeneratorContext) =>
   `import { resolveAll } from '@feathersjs/schema'
-import { Application } from '${relative}/declarations'
 ${isEntityService || authentication ? `import { authenticate } from '@feathersjs/authentication'` : ''}
+import { Application } from '${relative}/declarations'
 
 import {
   ${upperName}Data,
   ${upperName}Result,
   ${upperName}Query,
   ${camelName}Resolvers
-} from '${relative}/schemas/${path}.schema'
+} from '${relative}/schemas/${folder.join('/')}/${kebabName}.schema'
 
 export const hooks = {
   around: {
@@ -30,25 +32,37 @@ export const hooks = {
       authenticate('jwt'),`
         : ''
     }
-      resolveAll(${camelName}Resolvers)
+    ${
+      !isEntityService
+        ? `
+      resolveAll(${camelName}Resolvers)`
+        : ''
+    }
     ]${
       isEntityService
         ? `,
     get: [
-      authenticate('jwt')
+      authenticate('jwt'),
+      resolveAll(${camelName}Resolvers)
     ],
     find: [
-      authenticate('jwt')
+      authenticate('jwt'),
+      resolveAll(${camelName}Resolvers)
     ],
-    create: [],
+    create: [
+      resolveAll(${camelName}Resolvers)
+    ],
     patch: [
-      authenticate('jwt')
+      authenticate('jwt'),
+      resolveAll(${camelName}Resolvers)
     ],
     update: [
-      authenticate('jwt')
+      authenticate('jwt'),
+      resolveAll(${camelName}Resolvers)
     ],
     remove: [
-      authenticate('jwt')
+      authenticate('jwt'),
+      resolveAll(${camelName}Resolvers)
     ]`
         : ''
     }

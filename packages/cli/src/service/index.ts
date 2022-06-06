@@ -93,7 +93,8 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
               },
               {
                 value: 'knex',
-                name: 'SQL'
+                name: 'SQL',
+                disabled: false
               },
               {
                 value: 'custom',
