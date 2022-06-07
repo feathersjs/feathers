@@ -5,7 +5,11 @@ import { MongoDbAdapter, MongoDBAdapterParams } from './adapter'
 export * from './adapter'
 export * from './error-handler'
 
-export class MongoDBService<T = any, D = Partial<T>, P extends MongoDBAdapterParams = MongoDBAdapterParams>
+export class MongoDBService<
+    T = any,
+    D = Partial<T>,
+    P extends MongoDBAdapterParams<any> = MongoDBAdapterParams
+  >
   extends MongoDbAdapter<T, D, P>
   implements ServiceMethods<T | Paginated<T>, D, P>
 {

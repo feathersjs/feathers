@@ -1,8 +1,9 @@
 import assert from 'assert'
 import omit from 'lodash/omit'
-import { Application } from '@feathersjs/feathers'
+import { Application, HookContext } from '@feathersjs/feathers'
+import { resolve } from '@feathersjs/schema'
 
-import { LocalStrategy } from '../src'
+import { LocalStrategy, passwordHash } from '../src'
 import { createApplication, ServiceTypes } from './fixture'
 
 describe('@feathersjs/authentication-local/strategy', () => {
@@ -179,5 +180,19 @@ describe('@feathersjs/authentication-local/strategy', () => {
     const decoded = await authService.verifyAccessToken(accessToken)
 
     assert.strictEqual(decoded.sub, `${user.id}`)
+  })
+
+  it('passwordHash property resolver', async () => {
+    const userResolver = resolve<{ password: string }, HookContext>({
+      properties: {
+        password: passwordHash({
+          strategy: 'local'
+        })
+      }
+    })
+
+    const resolvedData = await userResolver.resolve({ password: 'supersecret' }, { app } as HookContext)
+
+    assert.notStrictEqual(resolvedData.password, 'supersecret')
   })
 })

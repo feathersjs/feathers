@@ -1,6 +1,10 @@
 import omit from 'lodash/omit'
 import { HookContext, NextFunction } from '@feathersjs/feathers'
 
+/**
+ * @deprecated For reliable safe data representations use Feathers schema dispatch resolvers.
+ * See https://dove.docs.feathersjs.com/api/schema/resolvers.html#safe-data-resolvers for more information.
+ */
 export default (...fields: string[]) => {
   const o = (current: any) => {
     if (typeof current === 'object' && !Array.isArray(current)) {
