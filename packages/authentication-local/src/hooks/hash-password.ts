@@ -13,6 +13,12 @@ export interface HashPasswordOptions {
   strategy?: string
 }
 
+/**
+ * @deprecated Use Feathers schema resolvers and the `passwordHash` resolver instead
+ * @param field
+ * @param options
+ * @returns
+ */
 export default function hashPassword(field: string, options: HashPasswordOptions = {}) {
   if (!field) {
     throw new Error('The hashPassword hook requires a field name option')
