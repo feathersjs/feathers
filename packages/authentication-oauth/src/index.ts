@@ -30,7 +30,6 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
   const { strategyNames } = service
 
   // Set up all the defaults
-  const { prefix = '/oauth' } = oauth.defaults || {}
   const port = app.get('port')
   let host = app.get('host')
   let protocol = 'https'
