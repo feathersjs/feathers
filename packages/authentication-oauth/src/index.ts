@@ -48,9 +48,9 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
     omit(oauth, ['redirect', 'origins']),
     {
       defaults: {
-        prefix,
-        origin: `${oauth?.defaults?.protocol ?? protocol}://${oauth?.defaults?.host ?? host}`,
-        transport: oauth?.defaults?.transport ?? 'session',
+        prefix: '/oauth',
+        origin: `${protocol}://${host}`,
+        transport: 'session',
         response: ['tokens', 'raw', 'profile']
       }
     }
@@ -58,7 +58,7 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
 
   const getUrl = (url: string) => {
     const { defaults } = grant
-    return `${defaults.origin}${prefix}/${url}`
+    return `${defaults.origin}${defaults.prefix}/${url}`
   }
 
   each(grant, (value, name) => {
