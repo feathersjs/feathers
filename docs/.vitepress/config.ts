@@ -83,7 +83,8 @@ export default defineConfig({
 
     nav: [
       { text: 'Guides', link: '/guides/readme' },
-      { text: 'API', link: '/api/' },
+      { text: 'API', link: '/api/readme' },
+      { text: 'Help', link: '/help/readme' },
       {
         text: `v${version}`,
         items: [
@@ -101,11 +102,30 @@ export default defineConfig({
           },
         ],
       },
-      { text: 'Blog', link: '/api/' },
+      {
+        text: 'Ecosystem',
+        items: [{
+          text: 'Awesome Feathersjs',
+          link: 'https://github.com/feathersjs/awesome-feathersjs'
+        }, {
+          text: 'YouTube Playlist',
+          link: 'https://www.youtube.com/playlist?list=PLwSdIiqnDlf_lb5y1liQK2OW5daXYgKOe'
+        }, {
+          text: 'Feathers Pinia',
+          link: 'https://feathers-pinia.pages.dev/'
+        }, {
+          text: 'Feathers Vuex',
+          link: 'https://vuex.feathersjs.com/'
+        }, {
+          text: 'Common Hooks',
+          link: 'https://hooks-common.feathersjs.com/'
+        },
+        ]
+      },
+      { text: 'Blog', link: 'https://blog.feathersjs.com/' },
     ],
 
     sidebar: {
-      // TODO: bring sidebar of apis and config back
       '/guides': [
         {
           text: 'The Feathers Guide',
@@ -161,6 +181,172 @@ export default defineConfig({
             {
               text: 'Migration Guide',
               link: '/guides/migrating.md',
+            },
+          ],
+        },
+      ],
+      '/api': [
+        {
+          text: 'Core',
+          collapsible: true,
+          items: [
+            {
+              text: 'Application',
+              link: '/api/application',
+            },
+            {
+              text: 'Services',
+              link: '/api/services',
+            },
+            {
+              text: 'Hooks',
+              link: '/api/hooks',
+            },
+            {
+              text: 'Events',
+              link: '/api/events',
+            },
+            {
+              text: 'Errors',
+              link: '/api/errors',
+            },
+            {
+              text: 'Configuration',
+              link: '/api/configuration',
+            },
+          ],
+        },
+        {
+          text: 'Transports',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            {
+              text: 'Koa',
+              link: '/api/koa',
+            },
+            {
+              text: 'Express',
+              link: '/api/express',
+            },
+            {
+              text: 'Socket.io',
+              link: '/api/socketio',
+            },
+            {
+              text: 'Channels',
+              link: '/api/channels',
+            },
+          ],
+        },
+        {
+          text: 'Schemas',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            {
+              text: 'Overview',
+              link: '/api/schema/readme',
+            },
+            {
+              text: 'Schemas',
+              link: '/api/schema/schema',
+            },
+            {
+              text: 'Resolvers',
+              link: '/api/schema/resolvers',
+            },
+          ],
+        },
+        {
+          text: 'Client',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            {
+              text: 'Feathers Client',
+              link: '/api/client',
+            },
+            {
+              text: 'REST Client',
+              link: '/api/client/rest',
+            },
+            {
+              text: 'Socket.io Client',
+              link: '/api/client/socketio',
+            },
+          ],
+        },
+        {
+          text: 'Authentication',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            {
+              text: 'Overview',
+              link: '/api/authentication/readme',
+            },
+            {
+              text: 'Service',
+              link: '/api/authentication/service',
+            },
+            {
+              text: 'Hook',
+              link: '/api/authentication/hook',
+            },
+            {
+              text: 'Strategies',
+              link: '/api/authentication/strategy',
+            },
+            {
+              text: 'JWT Strategy',
+              link: '/api/authentication/jwt',
+            },
+            {
+              text: 'Local Strategy',
+              link: '/api/authentication/local',
+            },
+            {
+              text: 'OAuth Strategy',
+              link: '/api/authentication/oauth',
+            },
+            {
+              text: 'Client',
+              link: '/api/authentication/client',
+            },
+          ],
+        },
+        {
+          text: 'Databases',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            {
+              text: 'Adapters',
+              link: '/api/databases/adapters',
+            },
+            {
+              text: 'Common API',
+              link: '/api/databases/common',
+            },
+            {
+              text: 'Querying',
+              link: '/api/databases/querying',
+            },
+          ],
+        },
+      ],
+      '/help': [
+        {
+          text: 'Help',
+          items: [
+            {
+              text: 'Getting Help',
+              link: '/help/readme',
+            },
+            {
+              text: 'FAQ',
+              link: '/help/faq',
             },
           ],
         },
