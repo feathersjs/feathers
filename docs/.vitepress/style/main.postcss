@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+:root body {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+}
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Home Page Toolbar Overrides */
+.home-page .VPNavBar {
+  border-bottom: none;
+}
+/* Remove the search button from the home page. Keyboard shortcut still works. */
+.home-page #docsearch {
+  /* display: none; */
+}
+/* Hide the default footer because FeathersLayout.vue uses a custom footer */
+.home-page .VPFooter {
+  display:none;
+}
+/* Hide the white gradient at the bottom of the page */
+.aside-curtain {
+  display:none
+}
+
+/* TODO: Move to UnoCSS Rules */
+body .bg-primary {
+  background: var(--primary)
+}
+body .text-primary-content {
+  background: var(--primary-content)
+}
+body .bg-secondary {
+  background: var(--secondary)
+}
+body .text-secondary-content {
+  background: var(--secondary-content)
+}
+/* For secondary colors, switch the cloud color to charcoal in dark mode */
+.dark body .bg-secondary {
+  background: var(--accent)
+}
+.dark body .text-secondary-content {
+  background: var(--accent-content)
+}
+
+body .bg-neutral {
+  background: var(--neutral);
+}
+body .text-neutral-content {
+  color: var(--neutral-content);
+}
+body .bg-base-100 {
+  background: var(--vp-c-bg)
+}
+
+.logo, .title {
+  transition: all 300ms;
+}
+.title {
+  text-transform: lowercase;
+}
+.home-page .title, .feathers-footer .title {
+  font-size: 32px;
+}
+.home-page .logo, .feathers-footer .logo {
+  height: 48px;
+  fill: blue;
+}
+.dark .logo {
+  filter: invert(1)
+}
+
+/* Overrides */
+
+.VPSocialLink {
+  transform: scale(0.9);
+}
+
+.vp-doc th, .vp-doc td {
+  padding: 6px 10px;
+  border: 1px solid #8882;
+}
+
+/* h3 breaks SEO => replaced with h2 with the same size */
+.home-content h2 {
+  margin-top: 2rem;
+  font-size: 1.35rem;
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+img.resizable-img {
+  width: unset;
+  height: unset;
+}
