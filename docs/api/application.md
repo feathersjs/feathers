@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Application
 
 ```
@@ -75,7 +79,7 @@ app.use('/my/todos', {
 
 const todoService = app.service('my/todos');
 // todoService is an event emitter
-todoService.on('created', todo => 
+todoService.on('created', todo =>
   console.log('Created todo', todo)
 );
 ```
@@ -119,7 +123,7 @@ Normally `app.setup` will be called automatically when starting the application 
 
 ## .set(name, value)
 
-`app.set(name, value) -> app` assigns setting `name` to `value`. 
+`app.set(name, value) -> app` assigns setting `name` to `value`.
 
 ## .get(name)
 
