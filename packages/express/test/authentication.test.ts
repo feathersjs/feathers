@@ -67,8 +67,7 @@ describe('@feathersjs/express/authentication', () => {
     it('successful local authentication', () => {
       assert.ok(authResult.accessToken)
       assert.deepStrictEqual(omit(authResult.authentication, 'payload'), {
-        strategy: 'local',
-        accessToken: authResult.accessToken
+        strategy: 'local'
       })
       assert.strictEqual(authResult.user.email, email)
       assert.strictEqual(authResult.user.password, undefined)

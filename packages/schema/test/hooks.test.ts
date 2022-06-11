@@ -159,8 +159,8 @@ describe('@feathersjs/schema/hooks', () => {
       userId: 0,
       id: 0,
       user: {
-        email: 'hello@feathersjs.com',
         id: 0,
+        email: '[redacted]',
         name: 'hello (hello@feathersjs.com)'
       }
     })
