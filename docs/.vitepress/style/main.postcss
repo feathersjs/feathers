@@ -55,10 +55,10 @@ body .bg-base-100 {
   background: var(--vp-c-bg)
 }
 
-.logo, .title {
+.VPNav .logo, .VPNav .title {
   transition: all 300ms;
 }
-.title {
+.VPNav .logo, .VPNav .title {
   text-transform: lowercase;
 }
 .home-page .title, .feathers-footer .title {
@@ -71,6 +71,31 @@ body .bg-base-100 {
 .dark .logo {
   filter: invert(1)
 }
+
+
+@media (min-width: 960px) {
+  .home-page .VPNav {
+    position: static;
+    background: none;
+  }
+  #app.home-page .VPNav {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  #app:not('.home-page') .VPNav.no-sidebar {
+    backdrop-filter: saturate(50%) blur(2px);
+    -webkit-backdrop-filter: saturate(50%) blur(2px);
+  }
+  #app:not('.home-page') .VPNavBar.has-sidebar .content[data-v-1dc33fef] {
+    backdrop-filter: saturate(50%) blur(2px);
+    -webkit-backdrop-filter: saturate(50%) blur(2px);
+    background: #FFFFFFCC;
+  }
+  .dark #app:not('.home-page') .VPNavBar.has-sidebar .content[data-v-1dc33fef] {
+    background: #242424CC;
+  }
+}
+
 
 /* Overrides */
 
