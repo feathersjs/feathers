@@ -40,7 +40,7 @@ const restClient = rest();
 // Connect to a different URL
 const restClient = rest('http://feathers-api.com')
 
-// Configure an AJAX library (see below) with that client 
+// Configure an AJAX library (see below) with that client
 app.configure(restClient.fetch(window.fetch.bind(window)));
 
 // Connect to the `http://feathers-api.com/messages` service
@@ -57,7 +57,7 @@ const messages = app.service('messages');
   // Connect to a different URL
   var restClient = feathers.rest('http://feathers-api.com')
 
-  // Configure an AJAX library (see below) with that client 
+  // Configure an AJAX library (see below) with that client
   app.configure(restClient.fetch(window.fetch.bind(window)));
 
   // Connect to the `http://feathers-api.com/messages` service
@@ -189,7 +189,7 @@ const restClient = rest();
 // Connect to a different URL
 const restClient = rest('http://feathers-api.com').fetch(window.fetch.bind(window))
 
-// Configure an AJAX library (see below) with that client 
+// Configure an AJAX library (see below) with that client
 client.configure(restClient);
 
 // Register a REST client service with all methods listed
@@ -226,7 +226,7 @@ const restClient = rest().fetch(window.fetch);
 // Connect to a different URL
 const restClient = rest('http://feathers-api.com').fetch(window.fetch);
 
-// Configure an AJAX library (see below) with that client 
+// Configure an AJAX library (see below) with that client
 client.configure(restClient);
 
 // Register a REST client service with all methods listed
@@ -346,7 +346,7 @@ Then to authenticate subsequent requests, add the returned `accessToken` to the 
 curl -H "Content-Type: application/json" -H "Authorization: Bearer <your access token>" http://localhost:3030/messages
 ```
 
-For more information see the [authentication API documentation](../readme.md).
+For more information see the [authentication API documentation](../).
 
 ### find
 
@@ -458,7 +458,7 @@ Will call `messages.patch(null, { complete: true }, { query: { complete: 'false'
 
 > **Note:** With a [database adapters](../databases/adapters.md) the [`multi` option](../databases/common.md) has to be set to support patching multiple entries.
 
-This is supported out of the box by the Feathers [database adapters](../databases/adapters.md) 
+This is supported out of the box by the Feathers [database adapters](../databases/adapters.md)
 
 ### remove
 

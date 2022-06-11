@@ -82,9 +82,9 @@ export default defineConfig({
     },
 
     nav: [
-      { text: 'Guides', link: '/guides/readme' },
-      { text: 'API', link: '/api/readme' },
-      { text: 'Help', link: '/help/readme' },
+      { text: 'Guides', link: '/guides/' },
+      { text: 'API', link: '/api/' },
+      { text: 'Help', link: '/help/' },
       {
         text: `v${version}`,
         items: [
@@ -246,7 +246,7 @@ export default defineConfig({
           items: [
             {
               text: 'Overview',
-              link: '/api/schema/readme',
+              link: '/api/schema/',
             },
             {
               text: 'Schemas',
@@ -284,7 +284,7 @@ export default defineConfig({
           items: [
             {
               text: 'Overview',
-              link: '/api/authentication/readme',
+              link: '/api/authentication/',
             },
             {
               text: 'Service',
@@ -342,7 +342,7 @@ export default defineConfig({
           items: [
             {
               text: 'Getting Help',
-              link: '/help/readme',
+              link: '/help/',
             },
             {
               text: 'FAQ',

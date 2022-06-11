@@ -12,7 +12,7 @@ If you want to learn how to use Feathers as a client in Node.js, React Native, o
 
 ## The Feathers chat
 
-The [Feathers Chat application](../guides/readme) from guide gives a basic intro to using the Feathers Client in a vanilla JavaScript environment. That's a good place to start to see how things fit together. Framework specific repositories can be found at:
+The [Feathers Chat application](../guides/) from guide gives a basic intro to using the Feathers Client in a vanilla JavaScript environment. That's a good place to start to see how things fit together. Framework specific repositories can be found at:
 
 - JavaScript + plain JS frontend: [feathersjs/feathers-chat](https://github.com/feathersjs/feathers-chat)
 - TypeScript + plain JS frontend: [feathersjs/feathers-chat-ts](https://github.com/feathersjs/feathers-chat-ts)

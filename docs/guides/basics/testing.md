@@ -363,4 +363,4 @@ This will print out some additional coverage information.
 
 ## What's next?
 
-That’s it - our chat guide is completed! We now have a fully-tested REST and real-time API, with a plain JavaScript frontend including login and signup. Follow up in the [Feathers API documentation](../../api/readme.md) for more details about using Feathers, or start building your own first Feathers application!
+That’s it - our chat guide is completed! We now have a fully-tested REST and real-time API, with a plain JavaScript frontend including login and signup. Follow up in the [Feathers API documentation](../../api/) for more details about using Feathers, or start building your own first Feathers application!
