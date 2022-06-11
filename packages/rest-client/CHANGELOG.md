@@ -3,6 +3,61 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.23](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.22...v5.0.0-pre.23) (2022-06-06)
+
+
+### Bug Fixes
+
+* **express:** Ensure Express options can be set before configuring REST transport ([#2655](https://github.com/feathersjs/feathers/issues/2655)) ([c9b8f74](https://github.com/feathersjs/feathers/commit/c9b8f74a0196acb99be44ac5e0fff3f1128288cd))
+
+
+### Features
+
+* **client:** Improve client side custom method support ([#2654](https://github.com/feathersjs/feathers/issues/2654)) ([c138acf](https://github.com/feathersjs/feathers/commit/c138acf50affbe6b66177d084d3c7a3e9220f09f))
+
+
+
+
+
+# [5.0.0-pre.22](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.21...v5.0.0-pre.22) (2022-05-24)
+
+**Note:** Version bump only for package @feathersjs/rest-client
+
+
+
+
+
+# [5.0.0-pre.21](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.20...v5.0.0-pre.21) (2022-05-23)
+
+**Note:** Version bump only for package @feathersjs/rest-client
+
+
+
+
+
+# [5.0.0-pre.20](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.19...v5.0.0-pre.20) (2022-05-04)
+
+
+### Bug Fixes
+
+* **dependencies:** Lock monorepo package version numbers ([#2623](https://github.com/feathersjs/feathers/issues/2623)) ([5640c10](https://github.com/feathersjs/feathers/commit/5640c1020cc139994e695d658c08bad3494db507))
+
+
+
+
+
+# [5.0.0-pre.19](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.18...v5.0.0-pre.19) (2022-05-01)
+
+
+### Features
+
+* **typescript:** Improve adapter typings ([#2605](https://github.com/feathersjs/feathers/issues/2605)) ([3b2ca0a](https://github.com/feathersjs/feathers/commit/3b2ca0a6a8e03e8390272c4d7e930b4bffdaacf5))
+* **typescript:** Improve params and query typeability ([#2600](https://github.com/feathersjs/feathers/issues/2600)) ([df28b76](https://github.com/feathersjs/feathers/commit/df28b7619161f1df5e700326f52cca1a92dc5d28))
+
+
+
+
+
 # [5.0.0-pre.18](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.17...v5.0.0-pre.18) (2022-04-11)
 
 **Note:** Version bump only for package @feathersjs/rest-client

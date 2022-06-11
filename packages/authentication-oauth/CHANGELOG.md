@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.23](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.22...v5.0.0-pre.23) (2022-06-06)
+
+**Note:** Version bump only for package @feathersjs/authentication-oauth
+
+
+
+
+
+# [5.0.0-pre.22](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.21...v5.0.0-pre.22) (2022-05-24)
+
+**Note:** Version bump only for package @feathersjs/authentication-oauth
+
+
+
+
+
+# [5.0.0-pre.21](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.20...v5.0.0-pre.21) (2022-05-23)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Fix regression using incorrect callback and redirect_uri ([#2631](https://github.com/feathersjs/feathers/issues/2631)) ([43d8a08](https://github.com/feathersjs/feathers/commit/43d8a082d7e1807f8a431c44a1dbd9b04c3af0d2))
+
+
+
+
+
+# [5.0.0-pre.20](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.19...v5.0.0-pre.20) (2022-05-04)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Don't send origins in Grant's config, as it will be considered another provider ([#2617](https://github.com/feathersjs/feathers/issues/2617)) ([ae3dddd](https://github.com/feathersjs/feathers/commit/ae3dddd8a654924465512d56b4651413912c6932))
+* **dependencies:** Lock monorepo package version numbers ([#2623](https://github.com/feathersjs/feathers/issues/2623)) ([5640c10](https://github.com/feathersjs/feathers/commit/5640c1020cc139994e695d658c08bad3494db507))
+
+
+
+
+
+# [5.0.0-pre.19](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.18...v5.0.0-pre.19) (2022-05-01)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Fix issue with overriding the default Grant configuration ([#2615](https://github.com/feathersjs/feathers/issues/2615)) ([b345857](https://github.com/feathersjs/feathers/commit/b3458578532f9750de2940aeb8afdc75cb0b46f2))
+* **authentication-oauth:** Make oAuth authentication work with cookie-session ([#2614](https://github.com/feathersjs/feathers/issues/2614)) ([9f10bfc](https://github.com/feathersjs/feathers/commit/9f10bfc75083d5bcabea77cfb385aa3965cdf6d6))
+
+
+### Features
+
+* **typescript:** Improve params and query typeability ([#2600](https://github.com/feathersjs/feathers/issues/2600)) ([df28b76](https://github.com/feathersjs/feathers/commit/df28b7619161f1df5e700326f52cca1a92dc5d28))
+
+
+
+
+
 # [5.0.0-pre.18](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.17...v5.0.0-pre.18) (2022-04-11)
 
 **Note:** Version bump only for package @feathersjs/authentication-oauth

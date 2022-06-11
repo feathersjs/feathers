@@ -3,6 +3,82 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.23](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.22...v5.0.0-pre.23) (2022-06-06)
+
+
+### Bug Fixes
+
+* **schema:** Always resolve dispatch in resolveAll and add getDispatch method ([#2645](https://github.com/feathersjs/feathers/issues/2645)) ([145b366](https://github.com/feathersjs/feathers/commit/145b366435695438fbc8db9fdb161162ca9049ad))
+* **schema:** remove `default` from queryProperty schemas ([#2646](https://github.com/feathersjs/feathers/issues/2646)) ([940a2b6](https://github.com/feathersjs/feathers/commit/940a2b6868d2f77f81edb1661f6417ec2ea6e372))
+
+
+### Features
+
+* **core:** Rename async hooks to around hooks, allow usual registration format ([#2652](https://github.com/feathersjs/feathers/issues/2652)) ([2a485a0](https://github.com/feathersjs/feathers/commit/2a485a07929184261f27437fc0fdfe5a44694834))
+
+
+
+
+
+# [5.0.0-pre.22](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.21...v5.0.0-pre.22) (2022-05-24)
+
+
+### Bug Fixes
+
+* **schema:** Allows resolveData with different resolvers based on method ([#2644](https://github.com/feathersjs/feathers/issues/2644)) ([be71fa2](https://github.com/feathersjs/feathers/commit/be71fa2fe260e05b7dcc0d5f439e33f2e9ec2434))
+
+
+
+
+
+# [5.0.0-pre.21](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.20...v5.0.0-pre.21) (2022-05-23)
+
+
+### Bug Fixes
+
+* **schema:** Add Combine helper to allow merging schema types that use ([#2637](https://github.com/feathersjs/feathers/issues/2637)) ([06d03e9](https://github.com/feathersjs/feathers/commit/06d03e91abb1347576c2351c12322d01c58473e5))
+* **typescript:** Make additional types generic to work with extended types ([#2625](https://github.com/feathersjs/feathers/issues/2625)) ([269fdec](https://github.com/feathersjs/feathers/commit/269fdecc5961092dc8608b3cbe16f433c80bfa96))
+
+
+### Features
+
+* **schema:** Add resolveAll hook ([#2643](https://github.com/feathersjs/feathers/issues/2643)) ([85527d7](https://github.com/feathersjs/feathers/commit/85527d71cb78852880696e5d96abdcdf24593934))
+* **schema:** Add resolver for safe external data dispatching ([#2641](https://github.com/feathersjs/feathers/issues/2641)) ([72b980e](https://github.com/feathersjs/feathers/commit/72b980e05631136d30c8f1468dee45ec6a8d2503))
+* **schema:** Add schema resolver converter functionality ([#2640](https://github.com/feathersjs/feathers/issues/2640)) ([26d9e05](https://github.com/feathersjs/feathers/commit/26d9e05327d6e0144466cd57d6fcc11ac7ecb06a))
+
+
+
+
+
+# [5.0.0-pre.20](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.19...v5.0.0-pre.20) (2022-05-04)
+
+
+### Bug Fixes
+
+* **dependencies:** Lock monorepo package version numbers ([#2623](https://github.com/feathersjs/feathers/issues/2623)) ([5640c10](https://github.com/feathersjs/feathers/commit/5640c1020cc139994e695d658c08bad3494db507))
+
+
+### Features
+
+* **schema:** Add querySyntax helper to create full query schemas ([#2621](https://github.com/feathersjs/feathers/issues/2621)) ([2bbb103](https://github.com/feathersjs/feathers/commit/2bbb103b2f3e30fb0fff935f92ad3276a1a67e41))
+
+
+
+
+
+# [5.0.0-pre.19](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.18...v5.0.0-pre.19) (2022-05-01)
+
+
+### Features
+
+* **schema:** Allow hooks to run resolvers in sequence ([#2609](https://github.com/feathersjs/feathers/issues/2609)) ([d85c507](https://github.com/feathersjs/feathers/commit/d85c507c76d07e48fc8e7e28ff7de0ef435e0ef8))
+* **typescript:** Improve adapter typings ([#2605](https://github.com/feathersjs/feathers/issues/2605)) ([3b2ca0a](https://github.com/feathersjs/feathers/commit/3b2ca0a6a8e03e8390272c4d7e930b4bffdaacf5))
+* **typescript:** Improve params and query typeability ([#2600](https://github.com/feathersjs/feathers/issues/2600)) ([df28b76](https://github.com/feathersjs/feathers/commit/df28b7619161f1df5e700326f52cca1a92dc5d28))
+
+
+
+
+
 # [5.0.0-pre.18](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.17...v5.0.0-pre.18) (2022-04-11)
 
 

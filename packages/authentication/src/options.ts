@@ -7,7 +7,7 @@ export const defaultOptions = {
     algorithm: 'HS256',
     expiresIn: '1d'
   }
-};
+}
 
 export const authenticationSettingsSchema = {
   type: 'object',
@@ -18,11 +18,14 @@ export const authenticationSettingsSchema = {
       description: 'The JWT signing secret'
     },
     entity: {
-      oneOf: [{
-        type: 'null'
-      }, {
-        type: 'string'
-      }],
+      oneOf: [
+        {
+          type: 'null'
+        },
+        {
+          type: 'string'
+        }
+      ],
       description: 'The name of the authentication entity (e.g. user)'
     },
     entityId: {
@@ -41,7 +44,8 @@ export const authenticationSettingsSchema = {
     parseStrategies: {
       type: 'array',
       items: { type: 'string' },
-      description: 'A list of authentication strategy names that should parse HTTP headers for authentication information (defaults to `authStrategies`)'
+      description:
+        'A list of authentication strategy names that should parse HTTP headers for authentication information (defaults to `authStrategies`)'
     },
     jwtOptions: {
       type: 'object'
@@ -84,11 +88,13 @@ export const authenticationSettingsSchema = {
         },
         entityUsernameField: {
           type: 'string',
-          description: 'Name of the username field on the entity if authentication request data and entity field names are different'
+          description:
+            'Name of the username field on the entity if authentication request data and entity field names are different'
         },
         entityPasswordField: {
           type: 'string',
-          description: 'Name of the password field on the entity if authentication request data and entity field names are different'
+          description:
+            'Name of the password field on the entity if authentication request data and entity field names are different'
         }
       }
     },
@@ -112,4 +118,4 @@ export const authenticationSettingsSchema = {
       }
     }
   }
-} as const;
+} as const

@@ -1,63 +1,67 @@
-import flatten from 'lodash/flatten';
-import omit from 'lodash/omit';
-import { HookContext, NextFunction } from '@feathersjs/feathers';
-import { NotAuthenticated } from '@feathersjs/errors';
-import { createDebug } from '@feathersjs/commons';
+import flatten from 'lodash/flatten'
+import omit from 'lodash/omit'
+import { HookContext, NextFunction } from '@feathersjs/feathers'
+import { NotAuthenticated } from '@feathersjs/errors'
+import { createDebug } from '@feathersjs/commons'
 
-const debug = createDebug('@feathersjs/authentication/hooks/authenticate');
+const debug = createDebug('@feathersjs/authentication/hooks/authenticate')
 
 export interface AuthenticateHookSettings {
-  service?: string;
-  strategies?: string[];
+  service?: string
+  strategies?: string[]
 }
 
 export default (originalSettings: string | AuthenticateHookSettings, ...originalStrategies: string[]) => {
-  const settings = typeof originalSettings === 'string'
-    ? { strategies: flatten([ originalSettings, ...originalStrategies ]) }
-    : originalSettings;
+  const settings =
+    typeof originalSettings === 'string'
+      ? { strategies: flatten([originalSettings, ...originalStrategies]) }
+      : originalSettings
 
   if (!originalSettings || settings.strategies.length === 0) {
-    throw new Error('The authenticate hook needs at least one allowed strategy');
+    throw new Error('The authenticate hook needs at least one allowed strategy')
   }
 
   return async (context: HookContext, _next?: NextFunction) => {
-    const next = typeof _next === 'function' ? _next : async () => context;
-    const { app, params, type, path, service } = context;
-    const { strategies } = settings;
-    const { provider, authentication } = params;
-    const authService = app.defaultAuthentication(settings.service);
+    const next = typeof _next === 'function' ? _next : async () => context
+    const { app, params, type, path, service } = context
+    const { strategies } = settings
+    const { provider, authentication } = params
+    const authService = app.defaultAuthentication(settings.service)
 
-    debug(`Running authenticate hook on '${path}'`);
+    debug(`Running authenticate hook on '${path}'`)
 
     if (type && type !== 'before') {
-      throw new NotAuthenticated('The authenticate hook must be used as a before hook');
+      throw new NotAuthenticated('The authenticate hook must be used as a before hook')
     }
 
     if (!authService || typeof authService.authenticate !== 'function') {
-      throw new NotAuthenticated('Could not find a valid authentication service');
+      throw new NotAuthenticated('Could not find a valid authentication service')
     }
 
-    // @ts-ignore
     if (service === authService) {
-      throw new NotAuthenticated('The authenticate hook does not need to be used on the authentication service');
+      throw new NotAuthenticated(
+        'The authenticate hook does not need to be used on the authentication service'
+      )
     }
 
     if (params.authenticated === true) {
-      return next();
+      return next()
     }
 
     if (authentication) {
-      const authParams = omit(params, 'provider', 'authentication');
+      const authParams = omit(params, 'provider', 'authentication')
 
-      debug('Authenticating with', authentication, strategies);
+      debug('Authenticating with', authentication, strategies)
 
-      const authResult = await authService.authenticate(authentication, authParams, ...strategies);
+      const authResult = await authService.authenticate(authentication, authParams, ...strategies)
 
-      context.params = Object.assign({}, params, omit(authResult, 'accessToken'), { authenticated: true });
+      context.params = Object.assign({}, params, omit(authResult, 'accessToken'), {
+        authenticated: true
+      })
     } else if (provider) {
-      throw new NotAuthenticated('Not authenticated');
+      throw new NotAuthenticated('Not authenticated')
     }
 
-    return next();
-  };
-};
+    return next()
+  }
+}

@@ -1,41 +1,58 @@
-import { Service, SocketService } from '@feathersjs/transport-commons/client';
-import { Socket } from 'socket.io-client';
-import { defaultEventMap } from '@feathersjs/feathers';
+import { Service, SocketService } from '@feathersjs/transport-commons/client'
+import { Socket } from 'socket.io-client'
+import { Application, defaultEventMap, defaultServiceMethods } from '@feathersjs/feathers'
 
-export { SocketService };
+export { SocketService }
 
-export default function socketioClient (connection: Socket, options?: any) {
+declare module '@feathersjs/feathers/lib/declarations' {
+  interface FeathersApplication<Services, Settings> {
+    /**
+     * The Socket.io client instance. Usually does not need
+     * to be accessed directly.
+     */
+    io?: Socket
+  }
+}
+
+export default function socketioClient(connection: Socket, options?: any) {
   if (!connection) {
-    throw new Error('Socket.io connection needs to be provided');
+    throw new Error('Socket.io connection needs to be provided')
   }
 
   const defaultService = function (this: any, name: string) {
-    const events = Object.values(defaultEventMap);
+    const events = Object.values(defaultEventMap)
     const settings = Object.assign({}, options, {
       events,
       name,
       connection,
       method: 'emit'
-    });
+    })
 
-    return new Service(settings);
-  };
+    return new Service(settings) as any
+  }
 
-  const initialize = function (app: any) {
+  const initialize = function (app: Application) {
     if (app.io !== undefined) {
-      throw new Error('Only one default client provider can be configured');
+      throw new Error('Only one default client provider can be configured')
     }
 
-    app.io = connection;
-    app.defaultService = defaultService;
-  };
+    app.io = connection as any
+    app.defaultService = defaultService
+    app.mixins.unshift((service, _location, options) => {
+      if (options && options.methods && service instanceof Service) {
+        const customMethods = options.methods.filter((name) => !defaultServiceMethods.includes(name))
 
-  initialize.Service = Service;
-  initialize.service = defaultService;
+        service.methods(...customMethods)
+      }
+    })
+  }
 
-  return initialize;
+  initialize.Service = Service
+  initialize.service = defaultService
+
+  return initialize
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = Object.assign(socketioClient, module.exports);
+  module.exports = Object.assign(socketioClient, module.exports)
 }

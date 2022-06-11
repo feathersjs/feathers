@@ -1,39 +1,42 @@
-import omit from 'lodash/omit';
-import { HookContext, NextFunction } from '@feathersjs/feathers';
+import omit from 'lodash/omit'
+import { HookContext, NextFunction } from '@feathersjs/feathers'
 
+/**
+ * @deprecated For reliable safe data representations use Feathers schema dispatch resolvers.
+ * See https://dove.docs.feathersjs.com/api/schema/resolvers.html#safe-data-resolvers for more information.
+ */
 export default (...fields: string[]) => {
   const o = (current: any) => {
     if (typeof current === 'object' && !Array.isArray(current)) {
-      const data = typeof current.toJSON === 'function'
-        ? current.toJSON() : current;
+      const data = typeof current.toJSON === 'function' ? current.toJSON() : current
 
-      return omit(data, fields);
+      return omit(data, fields)
     }
 
-    return current;
-  };
+    return current
+  }
 
   return async (context: HookContext, next?: NextFunction) => {
     if (typeof next === 'function') {
-      await next();
+      await next()
     }
 
-    const result = context.dispatch || context.result;
+    const result = context.dispatch || context.result
 
     if (result) {
       if (Array.isArray(result)) {
-        context.dispatch = result.map(o);
+        context.dispatch = result.map(o)
       } else if (result.data && context.method === 'find') {
         context.dispatch = Object.assign({}, result, {
           data: result.data.map(o)
-        });
+        })
       } else {
-        context.dispatch = o(result);
+        context.dispatch = o(result)
       }
 
       if (context.params && context.params.provider) {
-        context.result = context.dispatch;
+        context.result = context.dispatch
       }
     }
-  };
-};
+  }
+}

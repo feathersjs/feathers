@@ -3,6 +3,63 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.23](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.22...v5.0.0-pre.23) (2022-06-06)
+
+
+### Features
+
+* **client:** Improve client side custom method support ([#2654](https://github.com/feathersjs/feathers/issues/2654)) ([c138acf](https://github.com/feathersjs/feathers/commit/c138acf50affbe6b66177d084d3c7a3e9220f09f))
+* **core:** Rename async hooks to around hooks, allow usual registration format ([#2652](https://github.com/feathersjs/feathers/issues/2652)) ([2a485a0](https://github.com/feathersjs/feathers/commit/2a485a07929184261f27437fc0fdfe5a44694834))
+
+
+
+
+
+# [5.0.0-pre.22](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.21...v5.0.0-pre.22) (2022-05-24)
+
+
+### Bug Fixes
+
+* **schema:** Allows resolveData with different resolvers based on method ([#2644](https://github.com/feathersjs/feathers/issues/2644)) ([be71fa2](https://github.com/feathersjs/feathers/commit/be71fa2fe260e05b7dcc0d5f439e33f2e9ec2434))
+
+
+
+
+
+# [5.0.0-pre.21](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.20...v5.0.0-pre.21) (2022-05-23)
+
+
+### Bug Fixes
+
+* **core:** Do not throw missing method error for regular hook methods ([#2636](https://github.com/feathersjs/feathers/issues/2636)) ([afe9a3b](https://github.com/feathersjs/feathers/commit/afe9a3b3d49897eff045ee237ca2937a6b975291))
+
+
+
+
+
+# [5.0.0-pre.20](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.19...v5.0.0-pre.20) (2022-05-04)
+
+
+### Bug Fixes
+
+* **dependencies:** Lock monorepo package version numbers ([#2623](https://github.com/feathersjs/feathers/issues/2623)) ([5640c10](https://github.com/feathersjs/feathers/commit/5640c1020cc139994e695d658c08bad3494db507))
+
+
+
+
+
+# [5.0.0-pre.19](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.18...v5.0.0-pre.19) (2022-05-01)
+
+
+### Features
+
+* **typescript:** Improve adapter typings ([#2605](https://github.com/feathersjs/feathers/issues/2605)) ([3b2ca0a](https://github.com/feathersjs/feathers/commit/3b2ca0a6a8e03e8390272c4d7e930b4bffdaacf5))
+* **typescript:** Improve params and query typeability ([#2600](https://github.com/feathersjs/feathers/issues/2600)) ([df28b76](https://github.com/feathersjs/feathers/commit/df28b7619161f1df5e700326f52cca1a92dc5d28))
+
+
+
+
+
 # [5.0.0-pre.18](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.17...v5.0.0-pre.18) (2022-04-11)
 
 

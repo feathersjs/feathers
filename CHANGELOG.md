@@ -3,6 +3,105 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.23](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.22...v5.0.0-pre.23) (2022-06-06)
+
+
+### Bug Fixes
+
+* **express:** Ensure Express options can be set before configuring REST transport ([#2655](https://github.com/feathersjs/feathers/issues/2655)) ([c9b8f74](https://github.com/feathersjs/feathers/commit/c9b8f74a0196acb99be44ac5e0fff3f1128288cd))
+* **schema:** Always resolve dispatch in resolveAll and add getDispatch method ([#2645](https://github.com/feathersjs/feathers/issues/2645)) ([145b366](https://github.com/feathersjs/feathers/commit/145b366435695438fbc8db9fdb161162ca9049ad))
+* **schema:** remove `default` from queryProperty schemas ([#2646](https://github.com/feathersjs/feathers/issues/2646)) ([940a2b6](https://github.com/feathersjs/feathers/commit/940a2b6868d2f77f81edb1661f6417ec2ea6e372))
+
+
+### Features
+
+* **client:** Improve client side custom method support ([#2654](https://github.com/feathersjs/feathers/issues/2654)) ([c138acf](https://github.com/feathersjs/feathers/commit/c138acf50affbe6b66177d084d3c7a3e9220f09f))
+* **core:** Rename async hooks to around hooks, allow usual registration format ([#2652](https://github.com/feathersjs/feathers/issues/2652)) ([2a485a0](https://github.com/feathersjs/feathers/commit/2a485a07929184261f27437fc0fdfe5a44694834))
+
+
+
+
+
+# [5.0.0-pre.22](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.21...v5.0.0-pre.22) (2022-05-24)
+
+
+### Bug Fixes
+
+* **schema:** Allows resolveData with different resolvers based on method ([#2644](https://github.com/feathersjs/feathers/issues/2644)) ([be71fa2](https://github.com/feathersjs/feathers/commit/be71fa2fe260e05b7dcc0d5f439e33f2e9ec2434))
+
+
+
+
+
+# [5.0.0-pre.21](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.20...v5.0.0-pre.21) (2022-05-23)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Fix regression using incorrect callback and redirect_uri ([#2631](https://github.com/feathersjs/feathers/issues/2631)) ([43d8a08](https://github.com/feathersjs/feathers/commit/43d8a082d7e1807f8a431c44a1dbd9b04c3af0d2))
+* **core:** Do not throw missing method error for regular hook methods ([#2636](https://github.com/feathersjs/feathers/issues/2636)) ([afe9a3b](https://github.com/feathersjs/feathers/commit/afe9a3b3d49897eff045ee237ca2937a6b975291))
+* **schema:** Add Combine helper to allow merging schema types that use ([#2637](https://github.com/feathersjs/feathers/issues/2637)) ([06d03e9](https://github.com/feathersjs/feathers/commit/06d03e91abb1347576c2351c12322d01c58473e5))
+* **typescript:** Make additional types generic to work with extended types ([#2625](https://github.com/feathersjs/feathers/issues/2625)) ([269fdec](https://github.com/feathersjs/feathers/commit/269fdecc5961092dc8608b3cbe16f433c80bfa96))
+
+
+### Features
+
+* **schema:** Add resolveAll hook ([#2643](https://github.com/feathersjs/feathers/issues/2643)) ([85527d7](https://github.com/feathersjs/feathers/commit/85527d71cb78852880696e5d96abdcdf24593934))
+* **schema:** Add resolver for safe external data dispatching ([#2641](https://github.com/feathersjs/feathers/issues/2641)) ([72b980e](https://github.com/feathersjs/feathers/commit/72b980e05631136d30c8f1468dee45ec6a8d2503))
+* **schema:** Add schema resolver converter functionality ([#2640](https://github.com/feathersjs/feathers/issues/2640)) ([26d9e05](https://github.com/feathersjs/feathers/commit/26d9e05327d6e0144466cd57d6fcc11ac7ecb06a))
+
+
+
+
+
+# [5.0.0-pre.20](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.19...v5.0.0-pre.20) (2022-05-04)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Don't send origins in Grant's config, as it will be considered another provider ([#2617](https://github.com/feathersjs/feathers/issues/2617)) ([ae3dddd](https://github.com/feathersjs/feathers/commit/ae3dddd8a654924465512d56b4651413912c6932))
+* **configuration:** Only validate the initial configuration against the schema ([#2622](https://github.com/feathersjs/feathers/issues/2622)) ([386c5e2](https://github.com/feathersjs/feathers/commit/386c5e2e67bfad4fb4333f2e3e17f7d7e09ac27e))
+* **dependencies:** Lock monorepo package version numbers ([#2623](https://github.com/feathersjs/feathers/issues/2623)) ([5640c10](https://github.com/feathersjs/feathers/commit/5640c1020cc139994e695d658c08bad3494db507))
+
+
+### Features
+
+* **schema:** Add querySyntax helper to create full query schemas ([#2621](https://github.com/feathersjs/feathers/issues/2621)) ([2bbb103](https://github.com/feathersjs/feathers/commit/2bbb103b2f3e30fb0fff935f92ad3276a1a67e41))
+
+
+
+
+
+# [5.0.0-pre.19](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.18...v5.0.0-pre.19) (2022-05-01)
+
+
+### Bug Fixes
+
+* **adapter-commons:** Clarify adapter query filtering ([#2607](https://github.com/feathersjs/feathers/issues/2607)) ([2dac771](https://github.com/feathersjs/feathers/commit/2dac771b0a3298d6dd25994d05186701b0617718))
+* **adapter-tests:** Ensure multi tests can run standalone ([#2608](https://github.com/feathersjs/feathers/issues/2608)) ([d7243f2](https://github.com/feathersjs/feathers/commit/d7243f20e84d9dde428ad8dfc7f48388ca569e6e))
+* **authentication-oauth:** Fix issue with overriding the default Grant configuration ([#2615](https://github.com/feathersjs/feathers/issues/2615)) ([b345857](https://github.com/feathersjs/feathers/commit/b3458578532f9750de2940aeb8afdc75cb0b46f2))
+* **authentication-oauth:** Make oAuth authentication work with cookie-session ([#2614](https://github.com/feathersjs/feathers/issues/2614)) ([9f10bfc](https://github.com/feathersjs/feathers/commit/9f10bfc75083d5bcabea77cfb385aa3965cdf6d6))
+* **client:** Fix @feathersjs/client types field ([#2596](https://github.com/feathersjs/feathers/issues/2596)) ([d719f54](https://github.com/feathersjs/feathers/commit/d719f54daee63daf9ed5cc762626ca15131086de))
+* **express:** Fix typo in types reference in package.json ([#2613](https://github.com/feathersjs/feathers/issues/2613)) ([eacf1b3](https://github.com/feathersjs/feathers/commit/eacf1b3474e6d9da69b8671244c23a75cff87d95))
+* **transport-commons:** Ensure socket queries are always plain objects ([#2597](https://github.com/feathersjs/feathers/issues/2597)) ([97313e1](https://github.com/feathersjs/feathers/commit/97313e121cfee4199f10012e95b8507557aa507e))
+
+
+### Features
+
+* **mongodb:** Add feathers-mongodb adapter as @feathersjs/mongodb ([#2610](https://github.com/feathersjs/feathers/issues/2610)) ([6d43734](https://github.com/feathersjs/feathers/commit/6d43734a53db02c435cafc52a22dca414e5d0940))
+* **schema:** Allow hooks to run resolvers in sequence ([#2609](https://github.com/feathersjs/feathers/issues/2609)) ([d85c507](https://github.com/feathersjs/feathers/commit/d85c507c76d07e48fc8e7e28ff7de0ef435e0ef8))
+* **typescript:** Improve adapter typings ([#2605](https://github.com/feathersjs/feathers/issues/2605)) ([3b2ca0a](https://github.com/feathersjs/feathers/commit/3b2ca0a6a8e03e8390272c4d7e930b4bffdaacf5))
+* **typescript:** Improve params and query typeability ([#2600](https://github.com/feathersjs/feathers/issues/2600)) ([df28b76](https://github.com/feathersjs/feathers/commit/df28b7619161f1df5e700326f52cca1a92dc5d28))
+
+
+### BREAKING CHANGES
+
+* **adapter-commons:** Changes the common adapter base class to use `sanitizeQuery` and `sanitizeData`
+
+
+
+
+
 # [5.0.0-pre.18](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.17...v5.0.0-pre.18) (2022-04-11)
 
 
