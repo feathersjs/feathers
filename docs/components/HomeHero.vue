@@ -11,7 +11,7 @@ onBeforeUnmount(toggleHomeClass)
 
 <template>
   <div class="home-hero">
-    <div class="illustration md:-top-16 lg:-top-20">
+    <div class="illustration">
       <div class="feathers-home-hero relative">
         <img class="hero-bg-dark w-screen" src="/img/illustration/combined-night.svg" />
         <img
@@ -27,8 +27,8 @@ onBeforeUnmount(toggleHomeClass)
             lg="text-5xl"
             xl="text-6xl"
           >
-            The Real-time Application <br />
-            and API Framework
+            The API and Real-time <br />
+            Application Framework
           </div>
           <div class="mx-auto mt-4 lg:mt-12">
             <CTAButton primary>Get Started</CTAButton>
@@ -49,6 +49,17 @@ onBeforeUnmount(toggleHomeClass)
 </template>
 
 <style lang="postcss">
+@media (min-width: 768px) {
+  .home-hero {
+    margin-top: -56px;
+  }
+}
+@media (min-width: 960px) {
+  .home-hero {
+    margin-top: -144px;
+  }
+}
+
 .illustration {
   /* height: 69vw; */
   justify-content: center;

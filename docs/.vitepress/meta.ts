@@ -3,7 +3,7 @@
 /* Texts */
 export const feathersName = 'feathers'
 export const feathersShortName = 'feathers'
-export const feathersDescription = 'The Real-time App & API Framework'
+export const feathersDescription = 'The API & Real-time Application Framework'
 
 /* CDN fonts and styles */
 export const googleapis = 'https://fonts.googleapis.com'
