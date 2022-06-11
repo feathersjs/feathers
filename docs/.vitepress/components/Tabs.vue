@@ -5,6 +5,7 @@ import { useGlobalLanguage } from "../theme/store"
 
 const props = defineProps({
   groupName: String,
+  showTabs: Boolean,
 })
 
 // Tabs
@@ -23,7 +24,7 @@ const setActiveTab = (index: number) => {
   // if (tab.globalId) activeGlobalId.value = tab.globalId
 }
 
-provide("tab-state", { addTab, activeIndex })
+provide("tab-state", { addTab, activeIndex, showTabs: props.showTabs })
 
 // Global ID
 const activeGlobalId = useGlobalLanguage()
@@ -34,8 +35,8 @@ watch(activeGlobalId, (id) => {
 </script>
 
 <template>
-  <div class="tabs my-8 border-b-1 border-gray-500/30">
-    <div class="flex flex-row">
+  <div class="tabs mt-10 mb-8">
+    <div v-if="showTabs" class="flex flex-row">
       <button
         type="button"
         v-for="(tab, index) in tabs"
