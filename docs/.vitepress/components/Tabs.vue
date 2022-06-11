@@ -19,7 +19,8 @@ const activeIndex: any = useStorage(props.groupName as string, 0)
 const setActiveTab = (index: number) => {
   const tab = tabs.value[index]
   activeIndex.value = index
-  if (tab.globalId) activeGlobalId.value = tab.globalId
+  // Update the globalId to sync tabs.
+  // if (tab.globalId) activeGlobalId.value = tab.globalId
 }
 
 provide("tab-state", { addTab, activeIndex })
