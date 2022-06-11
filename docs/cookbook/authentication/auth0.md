@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Auth0
 
 To enable OAuth logins with [Auth0](http://auth0.com), we need the following settings after creating an application:

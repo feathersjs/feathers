@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Discord
 
 Discord login can be initialized like any other [OAuth provider](../../api/authentication/oauth.md) by adding the app id and secret to `config/default.json`:
@@ -64,14 +68,14 @@ export default class DiscordStrategy extends OAuthStrategy {
   async getEntityData(profile: OAuthProfile) {
     // `profile` is the data returned by getProfile
     const baseData = await super.getEntityData(profile);
-    
+
     if (profile.avatar == null) {
       profile.avatar = 'https://cdn.discordapp.com/embed/avatars/0.png'
     } else {
       const isGif = profile.avatar.startsWith('a_');
       profile.avatar = `https://cdn.discordapp.com/avatars/${profile['id']}/${profile['avatar']}.${isGif ? 'gif' : 'png'}`
     }
-    
+
     return {
       ...baseData,
       username: profile.username,

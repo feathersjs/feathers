@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Server Side Rendering
 
 Since Feathers is just an extension of Express it's really simple to render templated views on the server with data from your Feathers services. There are a few different ways that you can structure your app so this guide will show you 3 typical ways you might have your Feathers app organized.
@@ -88,7 +92,7 @@ module.exports = function (app) {
       next(error);
     }
   });
-  
+
   // Remove the authentication information from the session to log out
   app.get('logout', (req, res) => {
     delete req.session.authentication;

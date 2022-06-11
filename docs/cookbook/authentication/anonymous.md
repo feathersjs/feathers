@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Anonymous authentication
 
 Anonymous authentication can be allowed by creating a [custom strategy](../../api/authentication/strategy.md) that returns the `params` that you would like to use to identify an authenticated user.

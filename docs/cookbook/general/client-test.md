@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Client/server testing
 
 You can write tests which start up both a server for your app, and a Feathers client which your test can use to call the server. Such tests can expose faults in the interaction between the client and the server. They are also useful in testing the authentication of requests from the client. Install it as a development dependency:

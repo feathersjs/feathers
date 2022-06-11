@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Getting ready
 
 Alright then! Let's learn what Feathers is all about. First we'll have a look at what we are going to do in this guide, what you should already know and what needs to be installed to use Feathers.
@@ -8,7 +12,7 @@ In this guide we will get a [quick start](./starting.md) by creating our first s
 
 ![The Feathers chat application](./assets/feathers-chat.png)
 
-You can find the final version at 
+You can find the final version at
 
 :::: tabs :options="{ useUrlFragment: false }"
 ::: tab "JavaScript"

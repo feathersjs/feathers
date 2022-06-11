@@ -1,8 +1,12 @@
+---
+outline: deep
+---
+
 # Firebase
 
-[Firebase](https://firebase.google.com/docs/auth) requires a custom [OAuth Authentication Strategy](../../api/authentication/oauth.html#oauthstrategy). This is because one is not provided to us, by the default [Grant](https://github.com/simov/grant) configuration Feathers uses for [OAuth](https://docs.feathersjs.com/api/authentication/oauth.html#oauth). 
+[Firebase](https://firebase.google.com/docs/auth) requires a custom [OAuth Authentication Strategy](../../api/authentication/oauth.html#oauthstrategy). This is because one is not provided to us, by the default [Grant](https://github.com/simov/grant) configuration Feathers uses for [OAuth](https://docs.feathersjs.com/api/authentication/oauth.html#oauth).
 
-Since Firebase does not provide a UI for us to redirect to, we use flow #2 outlined in [OAuth Flow](../../api/authentication/oauth.html#flow). 
+Since Firebase does not provide a UI for us to redirect to, we use flow #2 outlined in [OAuth Flow](../../api/authentication/oauth.html#flow).
 
 
 ## Authentation Setup
@@ -22,7 +26,7 @@ Update `config/default.json`:
 }
 
 ```
-> Note: Since Firebase can be used for more than just authentication, we'll store our service account in the root of our config. Otherwise, if preferred, you can store under `authentication.oauth`. 
+> Note: Since Firebase can be used for more than just authentication, we'll store our service account in the root of our config. Otherwise, if preferred, you can store under `authentication.oauth`.
 
 ## Authentication Strategy
 
@@ -49,7 +53,7 @@ function initialize(app){
 }
 
 class FirebaseStrategy extends OAuthStrategy {
-  
+
   async authenticate(authentication, params){
     logger.debug('firebase:strategy:authenticate');
     return super.authenticate(authentication, params);
@@ -65,7 +69,7 @@ class FirebaseStrategy extends OAuthStrategy {
       logger.error(e);
       throw new NotAuthenticated();
     }
-    
+
     logger.debug(`firebase:strategy:getProfile:successful ${user.user_id}`);
 
     return {
@@ -73,7 +77,7 @@ class FirebaseStrategy extends OAuthStrategy {
       id: user.user_id
     };
   }
-  
+
   async getEntityData(profile) {
     const baseData = await super.getEntityData(profile);
 
@@ -105,7 +109,7 @@ module.exports = app => {
 };
 ```
 
-## Building frontend 
+## Building frontend
 
 To save time, you can leverage the pre-built UI provided by [Firebase UI](https://firebase.google.com/docs/auth/web/firebaseui).
 
@@ -122,15 +126,15 @@ First, create a `public/firebase_auth.html` file that initializes everything we'
   <title>Firebase Authentication Example</title>
   <!-- The core Firebase JS SDK is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-app.js"></script>
-  
+
   <!-- TODO: Add SDKs for Firebase products that you want to use
        https://firebase.google.com/docs/web/setup#available-libraries -->
   <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-auth.js"></script>
-  
+
   <!-- Firebase UI -->
   <script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
   <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
-  
+
 </head>
 <body>
   <!-- The surrounding HTML is left untouched by FirebaseUI.
@@ -143,12 +147,12 @@ First, create a `public/firebase_auth.html` file that initializes everything we'
   <!-- App for guests to auth, etc. -->
   <div id="app-guest" style="display: none;">
     <div id="firebaseui-auth-container"></div>
-    <div id="loader">Loading...</div>   
+    <div id="loader">Loading...</div>
   </div>
 
   <!-- App for members only -->
   <div id="app-member" style="display: none;"></div>
-     
+
   <!-- Custom -->
   <script src="//unpkg.com/@feathersjs/client@^4.3.0/dist/feathers.js"></script>
   <script src="/socket.io/socket.io.js"></script>
@@ -158,9 +162,9 @@ First, create a `public/firebase_auth.html` file that initializes everything we'
 ```
 
 ### Initialize client w/Firebase auth
-Now, let's make a `public/client.js` file where all of our JavaScript will live. 
+Now, let's make a `public/client.js` file where all of our JavaScript will live.
 
-> Be sure to update `firebaseConfig` with the one provided from your [Firebase Console](https://console.firebase.google.com/). Additionally, checkout [Firebase UI](https://firebase.google.com/docs/auth/web/firebaseui) docs for more information on customizing `ui.start`. This includes theming options, all providers supported by Firebase & more. 
+> Be sure to update `firebaseConfig` with the one provided from your [Firebase Console](https://console.firebase.google.com/). Additionally, checkout [Firebase UI](https://firebase.google.com/docs/auth/web/firebaseui) docs for more information on customizing `ui.start`. This includes theming options, all providers supported by Firebase & more.
 
 
 ```js
@@ -192,10 +196,10 @@ async function initializeAuth(){
     await client.reAuthenticate();
     showMemberApp();
   } catch(e){
-    // Error re-authenticating, so let's start Firebase UI 
+    // Error re-authenticating, so let's start Firebase UI
     showGuestApp();
   }
-  
+
   // No longer need to prepare anything
   document.getElementById('app-preparing').style.display = 'none';
 }
@@ -284,9 +288,9 @@ const addEventListener = (selector, event, handler) => {
 // "Logout" button click handler
 addEventListener('#logout', 'click', async () => {
   await client.logout();
-    
+
   showGuestApp();
 });
 ```
 
-Now you should be able to visit your [Firebase Auth](http://localhost:3030/firebase_auth.html) page locally and authenticate w/any Firebase Providers you've set up in your Firebase Project 🔥 
+Now you should be able to visit your [Firebase Auth](http://localhost:3030/firebase_auth.html) page locally and authenticate w/any Firebase Providers you've set up in your Firebase Project 🔥

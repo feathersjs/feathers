@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Services
 
 Services are the heart of every Feathers application. You probably remember the service we created in the [getting started chapter](./starting.md) to create and find messages. In this chapter we will dive more into services and update the existing user service in our chat application to include an avatar image.
@@ -86,7 +90,7 @@ app.use('/my-service', myService);
 </Tab>
 </Tabs>
 
-<Tabs group-name="Test">
+<Tabs group-name="Test" show-tabs>
 
 <Tab name="TypeScript" global-id="ts" >
 

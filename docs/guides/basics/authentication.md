@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Authentication
 
 We now have a fully functional chat application consisting of [services](./services.md) and [hooks](./hooks.md). The services come with authentication enabled by default, so before we can use it we need to create a new user and learn how Feathers authentication works. We will look at authenticating our REST API, and then how to authenticate with Feathers in the browser. Finally, we will discuss how to add "Login with GitHub" functionality using OAuth 2.0.
@@ -32,7 +36,7 @@ This will return something like this:
 {
   "_id": "<random id>",
   "email": "hello@feathersjs.com",
-  "avatar": "https://s.gravatar.com/avatar/ffe2a09df37d7c646e974a2d2b8d3e03?s=60"  
+  "avatar": "https://s.gravatar.com/avatar/ffe2a09df37d7c646e974a2d2b8d3e03?s=60"
 }
 ```
 

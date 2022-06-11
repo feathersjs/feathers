@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Revoking JWTs
 
 By default a valid JWT can be used for as long as it is valid. To do a normal logout the client just "forgets" their JWT (usually by removing it from localStorage).
@@ -68,7 +72,7 @@ class RedisAuthService extends AuthenticationService {
     super(app, configKey);
 
     const client = redis.createClient();
-    
+
     this.redis = {
       client,
       get: client.get.bind(client),
@@ -76,7 +80,7 @@ class RedisAuthService extends AuthenticationService {
       exists: client.exists.bind(client),
       expireat: client.exists.bind(client)
     }
-    
+
     (async () => {
       await this.redis.client.connect();
     })()

@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Getting Help
 
 There are many ways that you can get help if you are stuck or have a question about Feathers.
@@ -27,7 +31,7 @@ If none of those work it's a very real possibility that we screwed something up 
 
 [Join the Discord server >](https://discord.gg/qa8kez8QBx)
 
-[Submit your issue to GitHub >](https://github.com/feathersjs/feathers/issues/new) 
+[Submit your issue to GitHub >](https://github.com/feathersjs/feathers/issues/new)
 
 [Ask on StackOverflow using the `feathersjs` tag >](http://stackoverflow.com)
 

@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Facebook
 
 Facebook login can be initialized like any other [OAuth provider](../../api/authentication/oauth.md) by adding the app id and secret to `config/default.json`:
@@ -65,7 +69,7 @@ class FacebookStrategy extends OAuthStrategy {
         authorization: `Bearer ${accessToken}`
       },
       params: {
-        // There are 
+        // There are
         fields: 'id,name,email,picture'
       }
     });
@@ -123,7 +127,7 @@ class FacebookStrategy extends OAuthStrategy {
         authorization: `Bearer ${accessToken}`
       },
       params: {
-        // There are 
+        // There are
         fields: 'id,name,email'
       }
     });

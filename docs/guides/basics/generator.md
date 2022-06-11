@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Generating an app
 
 In the [getting started chapter](./starting.md) we created a Feathers application in a single file to get a better understanding how Feathers itself works. The Feathers CLI allows us to initialize a new Feathers server with a recommended structure and helps with generating things we commonly need like authentication, a database connection, new services or hooks (more about hooks in a little bit). It can be installed via:
@@ -169,7 +173,7 @@ The server can now be started by running
 npm start
 ```
 
-After that, you can see a welcome page at [localhost:3030](http://localhost:3030). 
+After that, you can see a welcome page at [localhost:3030](http://localhost:3030).
 
 The app also comes with a set of basic tests which can be run with
 

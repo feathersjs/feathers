@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Scaling
 
 Depending on your requirements, your feathers application may need to provide high availability. Feathers is designed to scale.

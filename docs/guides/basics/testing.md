@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Writing tests
 
 The best way to test an application is by writing tests that make sure it behaves to clients as we would expect. Feathers makes testing your application a lot easier because the services we create can be tested directly instead of having to fake HTTP requests and responses. In this chapter we will implement unit tests for our users and messages services.

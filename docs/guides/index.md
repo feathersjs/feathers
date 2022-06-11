@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Getting started with Feathers
 
 Welcome to the Feathers guides! This is the place to find all the resources to get started with Feathers.

@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Google
 
 To enable Google login, add the app id, app secret and scope property to `config/default.json`:
@@ -16,11 +20,11 @@ To enable Google login, add the app id, app secret and scope property to `config
 }
 ```
 
-According to the [documentation of Google](https://developers.google.com/identity/protocols/OpenIDConnect#scope-param): 
+According to the [documentation of Google](https://developers.google.com/identity/protocols/OpenIDConnect#scope-param):
 "The scope value must begin with the string openid and then include profile or email or both.".
 
 
-To also request the email address, add the string "email" to the array of the 'scope' property: 
+To also request the email address, add the string "email" to the array of the 'scope' property:
 ```js
 {
   "authentication": {
@@ -49,7 +53,7 @@ The client id (App ID) and secret can be acquired by creating a [OAuth client ID
 **Important**: Fill in the callback url, in a default Feathers setup it will be /oauth/google/callback.
 
 3. Replace `<App ID>` and `<App Secret>` with the id and secret of the created OAuth client ID application
-  
+
 ```js
 {
   "authentication": {
@@ -81,10 +85,10 @@ const { OAuthStrategy } = require('@feathersjs/authentication-oauth');
 
 class GoogleStrategy extends OAuthStrategy {
   async getEntityData(profile) {
-  
+
     // this will set 'googleId'
     const baseData = await super.getEntityData(profile);
-    
+
     // this will grab the picture and email address of the Google profile
     return {
       ...baseData,
@@ -106,5 +110,5 @@ module.exports = app => {
 };
 ```
 **Important**: googleId, profilePicture and email are properties that should exist on the database model!
-    
+
 

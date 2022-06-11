@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Dockerize a Feathers application
 
 A Feathers application can be [dockerized like any other Node.js application](https://nodejs.org/en/docs/guides/nodejs-docker-webapp/).

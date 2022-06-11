@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Migrating
 
 This guide explains the new features and changes to migrate to the Feathers v4 (Crow) release. It expects applications to be using the previous Feathers v3 (Buzzard).
@@ -155,9 +159,9 @@ async function authenticate() {
       email: 'admin@feathersjs.com',
       password: 'admin'
     });
-    
+
     console.log('User authenticated', user);
-    
+
     console.log('Authentication information is', await app.get('authentication'));
   } catch (error) {
     // Authentication failed
@@ -279,7 +283,7 @@ const message = await app.service('/messages')._get('<message id>');
 
 ### Multi updates
 
-Creating, updating or removing multiple records at once has always been part of the Feathers adapter specification but it turned out to be quite easy to miss. 
+Creating, updating or removing multiple records at once has always been part of the Feathers adapter specification but it turned out to be quite easy to miss.
 
 This means applications could be open to queries that a developer did not anticipate (like deleting or creating multiple records at once). Additionally, it could also lead to unexpected data in a hook that require special cases (like `context.data` or `context.result` being an array).
 

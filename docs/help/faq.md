@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # FAQ
 
 We've been collecting some commonly asked questions here. We'll either be updating the guide directly, providing answers here, or both.
@@ -94,7 +98,7 @@ app.service('users/:userId/posts').hooks({
     create: mapUserIdToData,
     update: mapUserIdToData,
     patch: mapUserIdToData
-  }  
+  }
 })
 ```
 
@@ -249,16 +253,16 @@ The hooks workflow allows you to handle these situations quite gracefully.  It d
 
 ```js
 async context => {
-  
+
   // Send an email by calling to the email service.
   context.app.service('emails').create({
     to: 'user@email.com',
     body: 'You are so great!'
   });
-  
+
   // Send a message to some logging service.
   context.app.service('logging').create(context.data);
-  
+
   return context;
 }
 ```
@@ -298,7 +302,7 @@ client.hooks({
           platform: 'ios',
           version: '1.0'
         };
-        
+
         return context;
       }
     ]

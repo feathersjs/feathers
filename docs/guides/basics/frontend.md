@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Building a frontend
 
 As we have seen [when getting started](./starting.md), Feathers works great in the browser and comes with client services that allow to easily connect to a Feathers server.
@@ -154,7 +158,7 @@ const addUser = user => {
 
     // Update the number of users
     const userCount = document.querySelectorAll('.user-list li').length;
-    
+
     document.querySelector('.online-count').innerHTML = userCount;
   }
 };
@@ -217,7 +221,7 @@ const showChat = async () => {
       $limit: 25
     }
   });
-  
+
   // We want to show the newest message last
   messages.data.reverse().forEach(addMessage);
 
@@ -290,7 +294,7 @@ const addEventListener = (selector, event, handler) => {
 addEventListener('#signup', 'click', async () => {
   // For signup, create a new user and then log them in
   const credentials = getCredentials();
-    
+
   // First create the user
   await client.service('users').create(credentials);
   // If successful log them in
@@ -307,7 +311,7 @@ addEventListener('#login', 'click', async () => {
 // "Logout" button click handler
 addEventListener('#logout', 'click', async () => {
   await client.logout();
-    
+
   document.getElementById('app').innerHTML = loginHTML;
 });
 

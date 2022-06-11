@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Stateless JWT
 
 By default, an authentication token is associated to an entity (usually a user). It is also possible to issue tokens that are stateless and not tied to an entity lookup. This can be useful when all the information necessary can be contained in the token payload. The drawback is that the token information can not be changed and will always be valid until the token expires so it is e.g. not possible to disable a user or change their permissions before the token expires.

@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Security
 
 We take security very seriously at Feathers. We welcome any peer review of our 100% open source code to ensure nobody's Feathers app is ever compromised or hacked. However, as a web application developer, you are responsible for the security of your application. We do our very best to make sure Feathers is as secure as possible.
