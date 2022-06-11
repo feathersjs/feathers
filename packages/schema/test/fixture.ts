@@ -63,7 +63,8 @@ export const userResultResolver = resolve<UserResult, HookContext<Application>>(
 export const userDispatchResolver = resolve<UserResult, HookContext<Application>>({
   schema: userResultSchema,
   properties: {
-    password: () => undefined
+    password: async () => undefined,
+    email: async () => '[redacted]'
   }
 })
 
