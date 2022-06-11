@@ -5,17 +5,22 @@ import { mkdtemp } from 'fs/promises'
 import assert from 'assert'
 import { getContext } from '@feathershq/pinion'
 
-import { generate } from '../dist'
-import { AppGeneratorData, AppGeneratorContext } from '../dist/app'
+import { generate } from '../lib'
+import { AppGeneratorData, AppGeneratorContext } from '../src/app'
 
-const matrix = {
-  language: ['js', 'ts'] as const,
-  framework: ['koa', 'express'] as const
-}
+// const matrix = {
+//   language: ['js', 'ts'] as const,
+//   framework: ['koa', 'express'] as const
+// }
+
+// const defaultCombination = {
+//   language: process.env.FEATHERS_LANGUAGE || 'ts',
+//   framework: process.env.FEATHERS_FRAMEWORK || 'koa'
+// }
 
 const defaultCombination = {
-  language: process.env.FEATHERS_LANGUAGE || 'ts',
-  framework: process.env.FEATHERS_FRAMEWORK || 'koa'
+  language: 'ts',
+  framework: 'koa'
 }
 
 function combinate<O extends Record<string | number, any[]>>(obj: O) {
@@ -34,8 +39,8 @@ function combinate<O extends Record<string | number, any[]>>(obj: O) {
   return combos
 }
 
-const combinations =
-  process.version > 'v16.0.0' ? (process.env.CI ? combinate(matrix as any) : [defaultCombination]) : []
+const combinations = [defaultCombination]
+// process.version > 'v16.0.0' ? (process.env.CI ? combinate(matrix as any) : [defaultCombination]) : []
 
 describe('@feathersjs/cli', () => {
   for (const { language, framework } of combinations) {
@@ -50,6 +55,7 @@ describe('@feathersjs/cli', () => {
         description: 'A Feathers test app',
         packager: 'npm',
         database: 'mongodb',
+        connectionString: 'mongodb://localhost:27017/feathersapp',
         transports: ['rest', 'websockets'],
         authStrategies: ['local', 'github']
       }

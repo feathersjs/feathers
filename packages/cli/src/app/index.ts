@@ -37,6 +37,10 @@ export interface AppGeneratorData extends FeathersAppInfo {
    * The database connection string
    */
   connectionString: string
+  /**
+   * The source folder where files are put
+   */
+  lib: string
 }
 
 export type AppGeneratorContext = FeathersBaseContext &

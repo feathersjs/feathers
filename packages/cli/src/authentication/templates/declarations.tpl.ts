@@ -2,7 +2,8 @@ import { generator, inject, before, toFile, when, append } from '@feathershq/pin
 import { AuthenticationGeneratorContext } from '../index'
 
 const importTemplate = ({ upperName, folder, kebabName }: AuthenticationGeneratorContext) =>
-  `import { ${upperName}Result } from './schemas/${folder.join('/')}/${kebabName}.schema`
+  `import { ${upperName}Result } from './schemas/${folder.join('/')}/${kebabName}.schema'
+`
 
 const paramsTemplate = ({
   entity,

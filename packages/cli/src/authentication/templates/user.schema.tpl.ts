@@ -3,9 +3,12 @@ import { renderSource } from '../../commons'
 import { AuthenticationGeneratorContext } from '../index'
 
 const template = ({ camelName, upperName, relative, authStrategies, type }: AuthenticationGeneratorContext) =>
-  `import { schema, resolve, querySyntax, Infer } from '@feathersjs/schema'${
-    authStrategies.includes('local') ? "import { LocalStrategy } from '@feathersjs/authentication-local'" : ''
-  }
+  `import { schema, resolve, querySyntax, Infer } from '@feathersjs/schema'
+${
+  authStrategies.includes('local')
+    ? `import { LocalStrategy, passwordHash } from '@feathersjs/authentication-local'`
+    : ''
+}
 import { HookContext } from '${relative}/declarations'
 
 // Schema and resolver for the basic data model (e.g. creating new entries)
@@ -40,12 +43,9 @@ export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
   properties: {
     ${
       authStrategies.includes('local')
-        ? `password: async (value, users, context) => {
-      const { app, params } = context
-      const localStrategy = app.service('authentication').getStrategy('local') as LocalStrategy
-
-      return localStrategy.hashPassword(value as string, params)
-    }`
+        ? `password: passwordHash({
+          strategy: 'local'
+        })`
         : ''
     }    
   }

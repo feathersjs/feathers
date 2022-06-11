@@ -31,13 +31,12 @@ export const hooks = {
         ? `
       authenticate('jwt'),`
         : ''
-    }
-    ${
-      !isEntityService
-        ? `
+    } ${
+    !isEntityService
+      ? `
       resolveAll(${camelName}Resolvers)`
-        : ''
-    }
+      : ''
+  }
     ]${
       isEntityService
         ? `,
