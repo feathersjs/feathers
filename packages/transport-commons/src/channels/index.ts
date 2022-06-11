@@ -1,10 +1,12 @@
-import { Application, FeathersService, getServiceOptions } from '@feathersjs/feathers';
+import type { Application, FeathersService} from '@feathersjs/feathers';
+import { getServiceOptions } from '@feathersjs/feathers';
 import { createDebug } from '@feathersjs/commons';
 import { compact, flattenDeep, noop } from 'lodash';
 import { Channel, RealTimeConnection } from './channel/base';
 import { CombinedChannel } from './channel/combined';
-import { channelMixin, publishMixin, keys, PublishMixin, Event, Publisher } from './mixins';
-import EventEmitter from 'events';
+import type { PublishMixin, Event, Publisher } from './mixins';
+import { channelMixin, publishMixin, keys } from './mixins';
+import type EventEmitter from 'events';
 
 const debug = createDebug('@feathersjs/transport-commons/channels');
 const { CHANNELS } = keys;
@@ -111,4 +113,4 @@ export function channels () {
   };
 }
 
-export { Channel, CombinedChannel, RealTimeConnection }
+export { Channel, RealTimeConnection, CombinedChannel }
