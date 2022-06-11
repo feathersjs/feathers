@@ -10,7 +10,7 @@ const { Layout } = DefaultTheme
 <template>
   <Layout>
     <template #aside-outline-before>
-      <!-- <div>My custom sidebar top content</div> -->
+      <LanguageSelect class="mb-5" />
     </template>
     <template #aside-outline-after>
       <!-- <div>My custom sidebar top content</div> -->

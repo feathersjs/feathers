@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, provide } from "vue"
 import { useStorage } from "@vueuse/core"
-import { useGlobalState } from "../theme/store"
+import { useGlobalLanguage } from "../theme/store"
 
 const props = defineProps({
   groupName: String,
@@ -25,7 +25,7 @@ const setActiveTab = (index: number) => {
 provide("tab-state", { addTab, activeIndex })
 
 // Global ID
-const activeGlobalId = useGlobalState()
+const activeGlobalId = useGlobalLanguage()
 watch(activeGlobalId, (id) => {
   const matchingTabIndex = tabs.value.findIndex((t) => t.globalId === id)
   if (matchingTabIndex != -1) activeIndex.value = matchingTabIndex
