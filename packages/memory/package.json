@@ -46,7 +46,7 @@
   ],
   "scripts": {
     "prepublish": "npm run compile",
-    "compile:esm": "shx rm -rf esm/ && tsc --target es2020 --module es2020 --outDir esm/",
+    "compile:esm": "shx rm -rf esm/ && tsc --target es2020 --module es2020 --outDir esm/ --moduleResolution node",
     "compile:lib": "shx rm -rf lib/ && tsc --outDir lib/",
     "compile": "npm run compile:lib && npm run compile:esm",
     "test": "mocha --config ../../.mocharc.json --recursive test/**/*.test.ts"
