@@ -17,7 +17,7 @@ module.exports = {
         "@typescript-eslint",
         "prettier"
     ],
-    "ignorePatterns": ["**/lib/", "**/dist/"],
+    "ignorePatterns": ["**/lib/", "**/dist/", "**/esm/"],
     "rules": {
         "prettier/prettier": "error",
         "@typescript-eslint/no-explicit-any": "off"
