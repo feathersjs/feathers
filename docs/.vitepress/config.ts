@@ -22,9 +22,27 @@ export default defineConfig({
   head: [
     ['meta', { name: 'theme-color', content: '#ffffff' }],
     ['link', { rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' }],
-    ['link', { rel: 'alternate icon', href: '/favicon.ico', type: 'image/png', sizes: '16x16' }],
-    ['meta', { name: 'author', content: `${teamMembers.map(c => c.name).join(', ')} and ${feathersName} contributors` }],
-    ['meta', { name: 'keywords', content: 'feathersjs, feathers, react, vue, preact, svelte, solid, typescript, esm, node, deno, cloudflare, workers' }],
+    [
+      'link',
+      { rel: 'alternate icon', href: '/favicon.ico', type: 'image/png', sizes: '16x16' },
+    ],
+    [
+      'meta',
+      {
+        name: 'author',
+        content: `${teamMembers
+          .map((c) => c.name)
+          .join(', ')} and ${feathersName} contributors`,
+      },
+    ],
+    [
+      'meta',
+      {
+        name: 'keywords',
+        content:
+          'feathersjs, feathers, react, vue, preact, svelte, solid, typescript, esm, node, deno, cloudflare, workers',
+      },
+    ],
     ['meta', { property: 'og:title', content: feathersName }],
     ['meta', { property: 'og:description', content: feathersDescription }],
     ['meta', { property: 'og:url', content: ogUrl }],
@@ -35,7 +53,10 @@ export default defineConfig({
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['link', { href: font, rel: 'stylesheet' }],
     ['link', { rel: 'mask-icon', href: '/logo.svg', color: '#ffffff' }],
-    ['link', { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180' }],
+    [
+      'link',
+      { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180' },
+    ],
   ],
   lastUpdated: true,
   markdown: {
@@ -57,7 +78,7 @@ export default defineConfig({
     algolia: {
       appId: 'QK3SV4AQ1E',
       apiKey: '3e8a4c82e7a1b57cd1a4809ceb86878e',
-      indexName: 'feathersjs'
+      indexName: 'feathersjs',
       // searchParameters: {
       //   facetFilters: ['tags:en'],
       // },
@@ -104,25 +125,31 @@ export default defineConfig({
       },
       {
         text: 'Ecosystem',
-        items: [{
-          text: 'Awesome Feathersjs',
-          link: 'https://github.com/feathersjs/awesome-feathersjs'
-        }, {
-          text: 'YouTube Playlist',
-          link: 'https://www.youtube.com/playlist?list=PLwSdIiqnDlf_lb5y1liQK2OW5daXYgKOe'
-        }, {
-          text: 'Feathers Pinia',
-          link: 'https://feathers-pinia.pages.dev/'
-        }, {
-          text: 'Feathers Vuex',
-          link: 'https://vuex.feathersjs.com/'
-        }, {
-          text: 'Common Hooks',
-          link: 'https://hooks-common.feathersjs.com/'
-        },
-        ]
+        items: [
+          { text: 'Blog', link: 'https://blog.feathersjs.com/' },
+          {
+            text: 'Awesome Feathers',
+            link: 'https://github.com/feathersjs/awesome-feathersjs',
+          },
+          {
+            text: 'YouTube Playlist',
+            link:
+              'https://www.youtube.com/playlist?list=PLwSdIiqnDlf_lb5y1liQK2OW5daXYgKOe',
+          },
+          {
+            text: 'Feathers Pinia - Vue',
+            link: 'https://feathers-pinia.pages.dev/',
+          },
+          {
+            text: 'Figbird - React',
+            link: 'https://humaans.github.io/figbird/',
+          },
+          {
+            text: 'Common Hooks',
+            link: 'https://hooks-common.feathersjs.com/',
+          },
+        ],
       },
-      { text: 'Blog', link: 'https://blog.feathersjs.com/' },
     ],
 
     sidebar: {
