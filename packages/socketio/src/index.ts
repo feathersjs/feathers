@@ -100,4 +100,8 @@ function configureSocketio(port?: any, options?: any, config?: any) {
   }
 }
 
-export = configureSocketio
+export default configureSocketio
+
+if (typeof module !== 'undefined') {
+  module.exports = Object.assign(configureSocketio, module.exports)
+}

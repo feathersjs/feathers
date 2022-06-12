@@ -5,7 +5,7 @@ import config from 'config'
 
 const debug = createDebug('@feathersjs/configuration')
 
-export = function init(schema?: Schema<any>) {
+export default function init(schema?: Schema<any>) {
   return (app?: Application) => {
     if (!app) {
       return config
@@ -37,5 +37,5 @@ export = function init(schema?: Schema<any>) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = Object.assign(init, module.exports);
+  module.exports = Object.assign(init, module.exports)
 }
