@@ -127,6 +127,7 @@ export default defineConfig({
         text: 'Ecosystem',
         items: [
           { text: 'Blog', link: 'https://blog.feathersjs.com/' },
+          { text: 'Cookbook', link: '/cookbook/' },
           {
             text: 'Awesome Feathers',
             link: 'https://github.com/feathersjs/awesome-feathersjs',
@@ -374,6 +375,80 @@ export default defineConfig({
             {
               text: 'FAQ',
               link: '/help/faq',
+            },
+          ],
+        },
+      ],
+      '/cookbook': [
+        {
+          text: 'General',
+          items: [
+            {
+              text: 'Scaling',
+              link: '/cookbook/general/scaling',
+            },
+          ],
+        },
+        {
+          text: 'Authentication',
+          items: [
+            {
+              text: 'Anonymous',
+              link: '/cookbook/authentication/anonymous',
+            },
+            {
+              text: 'API Key',
+              link: '/cookbook/authentication/apiKey',
+            },
+            {
+              text: 'Auth0',
+              link: '/cookbook/authentication/auth0',
+            },
+            {
+              text: 'Facebook',
+              link: '/cookbook/authentication/facebook',
+            },
+            {
+              text: 'Google',
+              link: '/cookbook/authentication/google',
+            },
+            {
+              text: 'Firebase',
+              link: '/cookbook/authentication/firebase',
+            },
+            {
+              text: 'Discord',
+              link: '/cookbook/authentication/_discord',
+            },
+            {
+              text: 'Stateless JWT',
+              link: '/cookbook/authentication/stateless',
+            },
+            {
+              text: 'Revoking JWTs',
+              link: '/cookbook/authentication/revoke-jwt',
+            },
+          ],
+        },
+        {
+          text: 'Express',
+          items: [
+            {
+              text: 'File Uploads',
+              link: '/cookbook/express/file-uploading',
+            },
+            {
+              text: 'View Engine SSR',
+              link: '/cookbook/express/view-engine',
+            },
+          ],
+        },
+        {
+          text: 'Deployment',
+          items: [
+            {
+              text: 'Dockerize a Feathers App',
+              link: '/cookbook/deploy/docker',
             },
           ],
         },
