@@ -15,23 +15,20 @@ By [becoming a sponsor](https://github.com/sponsors/daffl/) you support Feathers
 
 Existing resources may already have an answer to your question, so it always makes sense checking them first:
 
-[The API documentation >](../api/)
-
-[Read the FAQ >](./faq.md)
-
-[Check our blog posts >](https://blog.feathersjs.com/)
-
-[Search our GitHub issues >](https://github.com/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+user%3Afeathersjs+)
-
-[Browse Feathers questions on Stackoverflow >](http://stackoverflow.com/questions/tagged/feathersjs)
+- [API Docs >](../api/)
+- [FAQ >](./faq.md)
+- [Cookbook](/cookbook/)
+- [Blog >](https://blog.feathersjs.com/)
+- [GitHub issues >](https://github.com/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+user%3Afeathersjs+)
+- [Stack Overflow >](http://stackoverflow.com/questions/tagged/feathersjs)
 
 ## Help channels
 
 If none of those work it's a very real possibility that we screwed something up or it's just not clear. We're sorry :disappointed_relieved:. We want to hear about it and are very friendly so feel free to come talk to us:
 
-[Join the Discord server >](https://discord.gg/qa8kez8QBx)
+[Join our Discord server >](https://discord.gg/qa8kez8QBx)
 
-[Submit your issue to GitHub >](https://github.com/feathersjs/feathers/issues/new)
+[Submit an issue to GitHub >](https://github.com/feathersjs/feathers/issues/new)
 
 [Ask on StackOverflow using the `feathersjs` tag >](http://stackoverflow.com)
 
