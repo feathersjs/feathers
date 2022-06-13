@@ -5,9 +5,9 @@ import { ServiceGeneratorContext } from '../index'
 const template = ({
   relative,
   path,
-  folder,
-  kebabName,
   className,
+  schemaPath,
+  resolverPath,
   camelName,
   upperName,
   isEntityService,
@@ -16,13 +16,12 @@ const template = ({
   `import { resolveAll } from '@feathersjs/schema'
 ${isEntityService || authentication ? `import { authenticate } from '@feathersjs/authentication'` : ''}
 import { Application } from '${relative}/declarations'
-
 import {
   ${upperName}Data,
   ${upperName}Result,
   ${upperName}Query,
-  ${camelName}Resolvers
-} from '${relative}/schemas/${folder.join('/')}/${kebabName}.schema'
+} from '${relative}/${schemaPath}'
+import { ${camelName}Resolvers } from '${relative}/${resolverPath}'
 
 export const hooks = {
   around: {

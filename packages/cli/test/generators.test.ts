@@ -5,22 +5,18 @@ import { mkdtemp } from 'fs/promises'
 import assert from 'assert'
 import { getContext } from '@feathershq/pinion'
 
+import { AppGeneratorData, AppGeneratorContext, DependencyVersions } from '../src/app'
 import { generate } from '../lib'
-import { AppGeneratorData, AppGeneratorContext } from '../src/app'
+import pkg from '../package.json'
 
-// const matrix = {
-//   language: ['js', 'ts'] as const,
-//   framework: ['koa', 'express'] as const
-// }
-
-// const defaultCombination = {
-//   language: process.env.FEATHERS_LANGUAGE || 'ts',
-//   framework: process.env.FEATHERS_FRAMEWORK || 'koa'
-// }
+const matrix = {
+  language: [/*'js', */ 'ts'] as const,
+  framework: ['koa', 'express'] as const
+}
 
 const defaultCombination = {
-  language: 'ts',
-  framework: 'koa'
+  language: process.env.FEATHERS_LANGUAGE || 'ts',
+  framework: process.env.FEATHERS_FRAMEWORK || 'koa'
 }
 
 function combinate<O extends Record<string | number, any[]>>(obj: O) {
@@ -39,8 +35,18 @@ function combinate<O extends Record<string | number, any[]>>(obj: O) {
   return combos
 }
 
-const combinations = [defaultCombination]
-// process.version > 'v16.0.0' ? (process.env.CI ? combinate(matrix as any) : [defaultCombination]) : []
+const combinations =
+  process.version > 'v16.0.0' ? (process.env.CI ? combinate(matrix as any) : [defaultCombination]) : []
+// Use local packages for testing instead of the versions from npm
+const dependencyVersions = Object.keys(pkg.devDependencies)
+  .filter((dep) => dep.startsWith('@feathersjs/'))
+  .reduce((acc, dep) => {
+    const [, name] = dep.split('/')
+
+    acc[dep] = `file://${path.join(__dirname, '..', '..', name)}`
+
+    return acc
+  }, {} as DependencyVersions)
 
 describe('@feathersjs/cli', () => {
   for (const { language, framework } of combinations) {
@@ -48,9 +54,10 @@ describe('@feathersjs/cli', () => {
       const name = `feathers_${language}_${framework}`
       const cwd = await mkdtemp(path.join(os.tmpdir(), name + '-'))
       const settings: AppGeneratorData = {
+        name,
         framework,
         language,
-        name,
+        dependencyVersions,
         lib: 'src',
         description: 'A Feathers test app',
         packager: 'npm',
