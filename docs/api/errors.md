@@ -17,43 +17,10 @@ The `@feathersjs/errors` module contains a set of standard error classes used by
 
 Here are a few ways that you can use them:
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs>
 
-::: tab "JavaScript"
-```js
-const { NotFound, GeneralError, BadRequest } = require('@feathersjs/errors');
+<Tab name="TypeScript" global-id="ts">
 
-// If you were to create an error yourself.
-const notFound = new NotFound('User does not exist');
-
-// You can wrap existing errors
-const existing = new GeneralError(new Error('I exist'));
-
-// You can also pass additional data
-const data = new BadRequest('Invalid email', {
-  email: 'sergey@google.com'
-});
-
-// You can also pass additional data without a message
-const dataWithoutMessage = new BadRequest({
-  email: 'sergey@google.com'
-});
-
-// If you need to pass multiple errors
-const validationErrors = new BadRequest('Invalid Parameters', {
-  errors: { email: 'Email already taken' }
-});
-
-// You can also omit the error message and we'll put in a default one for you
-const validationErrors = new BadRequest({
-  errors: {
-    email: 'Invalid Email'
-  }
-});
-```
-:::
-
-::: tab "TypeScript"
 ```ts
 import { NotFound, GeneralError, BadRequest } from '@feathersjs/errors';
 
@@ -85,9 +52,46 @@ const validationErrors = new BadRequest({
   }
 });
 ```
-:::
 
-::::
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+const { NotFound, GeneralError, BadRequest } = require('@feathersjs/errors');
+
+// If you were to create an error yourself.
+const notFound = new NotFound('User does not exist');
+
+// You can wrap existing errors
+const existing = new GeneralError(new Error('I exist'));
+
+// You can also pass additional data
+const data = new BadRequest('Invalid email', {
+  email: 'sergey@google.com'
+});
+
+// You can also pass additional data without a message
+const dataWithoutMessage = new BadRequest({
+  email: 'sergey@google.com'
+});
+
+// If you need to pass multiple errors
+const validationErrors = new BadRequest('Invalid Parameters', {
+  errors: { email: 'Email already taken' }
+});
+
+// You can also omit the error message and we'll put in a default one for you
+const validationErrors = new BadRequest({
+  errors: {
+    email: 'Invalid Email'
+  }
+});
+```
+
+</Tab>
+
+</Tabs>
 
 ## Feathers errors
 

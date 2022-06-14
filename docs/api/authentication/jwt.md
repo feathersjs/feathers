@@ -87,27 +87,10 @@ Parse the HTTP request headers for JWT authentication information. Returns a pro
 
 ## Customization
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs>
 
-::: tab "JavaScript"
-```js
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
+<Tab name="TypeScript" global-id="ts">
 
-class MyJwtStrategy extends JWTStrategy {
-}
-
-module.exports = app => {
-  const authService = new AuthenticationService(app);
-
-  authService.register('jwt', new MyJwtStrategy());
-
-  // ...
-  app.use('/authentication', authService);
-}
-```
-:::
-
-::: tab "TypeScript"
 ```typescript
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
@@ -125,6 +108,27 @@ export default (app: Application) => {
   app.use('/authentication', authService);
 }
 ```
-:::
 
-::::
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
+
+class MyJwtStrategy extends JWTStrategy {
+}
+
+module.exports = app => {
+  const authService = new AuthenticationService(app);
+
+  authService.register('jwt', new MyJwtStrategy());
+
+  // ...
+  app.use('/authentication', authService);
+}
+```
+
+</Tab>
+
+</Tabs>

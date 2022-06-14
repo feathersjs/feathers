@@ -22,7 +22,7 @@ Some examples where channels are used:
 
 When using channels, the server pushes events (such as "created", "removed" etc. for a particular service) down to its clients via *channels*. The client doesn’t listen to individual channels directly, but rather subscribes to specific events on services that it is interested in. Those events will only fire on the client if the server pushes data to one or more channels that the client has been added to.
 
-You can have any number of channels. This helps to organise how data is sent and to control the volume of data, by not sending things that aren't relevant. 
+You can have any number of channels. This helps to organise how data is sent and to control the volume of data, by not sending things that aren't relevant.
 
 When a new client connects, the server explicitly adds that *connection* to any relevant channels. This is how clients are given access to events that they are allowed to see.
 
@@ -34,75 +34,10 @@ The server needs to explicitly *publish* channels it is interested in sharing wi
 
 The example below shows the generated `channels.js` file illustrating how the different parts fit together:
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs>
 
-::: tab "JavaScript"
-```js
-module.exports = function(app) {
-  if(typeof app.channel !== 'function') {
-    // If no real-time functionality has been configured just return
-    return;
-  }
+<Tab name="TypeScript" global-id="ts">
 
-  app.on('connection', connection => {
-    // On a new real-time connection, add it to the anonymous channel
-    app.channel('anonymous').join(connection);
-  });
-
-  app.on('login', (authResult, { connection }) => {
-    // connection can be undefined if there is no
-    // real-time connection, e.g. when logging in via REST
-    if(connection) {
-      // Obtain the logged in user from the connection
-      // const user = connection.user;
-      
-      // The connection is no longer anonymous, remove it
-      app.channel('anonymous').leave(connection);
-
-      // Add it to the authenticated user channel
-      app.channel('authenticated').join(connection);
-
-      // Channels can be named anything and joined on any condition 
-      
-      // E.g. to send real-time events only to admins use
-      // if(user.isAdmin) { app.channel('admins').join(connection); }
-
-      // If the user has joined e.g. chat rooms
-      // if(Array.isArray(user.rooms)) user.rooms.forEach(room => app.channel(`rooms/${room.id}`).join(connection));
-      
-      // Easily organize users by email and userid for things like messaging
-      // app.channel(`emails/${user.email}`).join(connection);
-      // app.channel(`userIds/${user.id}`).join(connection);
-    }
-  });
-
-  // eslint-disable-next-line no-unused-vars
-  app.publish((data, hook) => {
-    // Here you can add event publishers to channels set up in `channels.js`
-    // To publish only for a specific event use `app.publish(eventname, () => {})`
-
-    console.log('Publishing all events to all authenticated users. See `channels.js` and https://docs.feathersjs.com/api/channels.html for more information.'); // eslint-disable-line
-
-    // e.g. to publish all service events to all authenticated users use
-    return app.channel('authenticated');
-  });
-
-  // Here you can also add service specific event publishers
-  // e.g. the publish the `users` service `created` event to the `admins` channel
-  // app.service('users').publish('created', () => app.channel('admins'));
-  
-  // With the userid and email organization from above you can easily select involved users
-  // app.service('messages').publish(data => {
-  //   return [
-  //     app.channel(`userIds/${data.createdBy}`),
-  //     app.channel(`emails/${data.recipientEmail}`)
-  //   ];
-  // });
-};
-```
-:::
-
-::: tab "TypeScript"
 ```ts
 export default function(app: any) {
   if(typeof app.channel !== 'function') {
@@ -121,21 +56,21 @@ export default function(app: any) {
     if(connection) {
       // Obtain the logged in user from the connection
       // const user = connection.user;
-      
+
       // The connection is no longer anonymous, remove it
       app.channel('anonymous').leave(connection);
 
       // Add it to the authenticated user channel
       app.channel('authenticated').join(connection);
 
-      // Channels can be named anything and joined on any condition 
-      
+      // Channels can be named anything and joined on any condition
+
       // E.g. to send real-time events only to admins use
       // if(user.isAdmin) { app.channel('admins').join(connection); }
 
       // If the user has joined e.g. chat rooms
       // if(Array.isArray(user.rooms)) user.rooms.forEach(room => app.channel(`rooms/${room.id}`).join(connection));
-      
+
       // Easily organize users by email and userid for things like messaging
       // app.channel(`emails/${user.email}`).join(connection);
       // app.channel(`userIds/${user.id}`).join(connection);
@@ -156,7 +91,7 @@ export default function(app: any) {
   // Here you can also add service specific event publishers
   // e.g. the publish the `users` service `created` event to the `admins` channel
   // app.service('users').publish('created', () => app.channel('admins'));
-  
+
   // With the userid and email organization from above you can easily select involved users
   // app.service('messages').publish(data => {
   //   return [
@@ -166,9 +101,78 @@ export default function(app: any) {
   // });
 };
 ```
-:::
 
-::::
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+module.exports = function(app) {
+  if(typeof app.channel !== 'function') {
+    // If no real-time functionality has been configured just return
+    return;
+  }
+
+  app.on('connection', connection => {
+    // On a new real-time connection, add it to the anonymous channel
+    app.channel('anonymous').join(connection);
+  });
+
+  app.on('login', (authResult, { connection }) => {
+    // connection can be undefined if there is no
+    // real-time connection, e.g. when logging in via REST
+    if(connection) {
+      // Obtain the logged in user from the connection
+      // const user = connection.user;
+
+      // The connection is no longer anonymous, remove it
+      app.channel('anonymous').leave(connection);
+
+      // Add it to the authenticated user channel
+      app.channel('authenticated').join(connection);
+
+      // Channels can be named anything and joined on any condition
+
+      // E.g. to send real-time events only to admins use
+      // if(user.isAdmin) { app.channel('admins').join(connection); }
+
+      // If the user has joined e.g. chat rooms
+      // if(Array.isArray(user.rooms)) user.rooms.forEach(room => app.channel(`rooms/${room.id}`).join(connection));
+
+      // Easily organize users by email and userid for things like messaging
+      // app.channel(`emails/${user.email}`).join(connection);
+      // app.channel(`userIds/${user.id}`).join(connection);
+    }
+  });
+
+  // eslint-disable-next-line no-unused-vars
+  app.publish((data, hook) => {
+    // Here you can add event publishers to channels set up in `channels.js`
+    // To publish only for a specific event use `app.publish(eventname, () => {})`
+
+    console.log('Publishing all events to all authenticated users. See `channels.js` and https://docs.feathersjs.com/api/channels.html for more information.'); // eslint-disable-line
+
+    // e.g. to publish all service events to all authenticated users use
+    return app.channel('authenticated');
+  });
+
+  // Here you can also add service specific event publishers
+  // e.g. the publish the `users` service `created` event to the `admins` channel
+  // app.service('users').publish('created', () => app.channel('admins'));
+
+  // With the userid and email organization from above you can easily select involved users
+  // app.service('messages').publish(data => {
+  //   return [
+  //     app.channel(`userIds/${data.createdBy}`),
+  //     app.channel(`emails/${data.recipientEmail}`)
+  //   ];
+  // });
+};
+```
+
+</Tab>
+
+</Tabs>
 
 ## Connections
 

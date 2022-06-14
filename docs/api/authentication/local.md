@@ -79,36 +79,10 @@ Standard local authentication can be configured with those options in `config/de
 
 The `LocalStrategy` can be customized like any ES6 class and then registered on the [AuthenticationService](./service.md):
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs>
 
-::: tab "JavaScript"
-```js
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
-const { LocalStrategy } = require('@feathersjs/authentication-local');
+<Tab name="TypeScript" global-id="ts">
 
-class MyLocalStrategy extends LocalStrategy {
-  async getEntityQuery(query, params) {
-    // Query for user but only include users marked as `active`
-    return {
-      ...query,
-      active: true,
-      $limit: 1
-    }
-  }
-}
-
-module.exports = app => {
-  const authService = new AuthenticationService(app);
-
-  authService.register('local', new MyLocalStrategy());
-
-  // ...
-  app.use('/authentication', authService);
-}
-```
-:::
-
-::: tab "TypeScript"
 ```typescript
 import { Application, Params, Query } from '@feathersjs/feathers';
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
@@ -134,9 +108,39 @@ export default (app: Application) => {
   app.use('/authentication', authService);
 }
 ```
-:::
 
-::::
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
+const { LocalStrategy } = require('@feathersjs/authentication-local');
+
+class MyLocalStrategy extends LocalStrategy {
+  async getEntityQuery(query, params) {
+    // Query for user but only include users marked as `active`
+    return {
+      ...query,
+      active: true,
+      $limit: 1
+    }
+  }
+}
+
+module.exports = app => {
+  const authService = new AuthenticationService(app);
+
+  authService.register('local', new MyLocalStrategy());
+
+  // ...
+  app.use('/authentication', authService);
+}
+```
+
+</Tab>
+
+</Tabs>
 
 ## Hooks
 

@@ -6,45 +6,10 @@
 
 Service methods are pre-defined [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) and [custom methods](#custommethod-data-params) that your service provides (or that have already been implemented by one of the [database adapters](./databases/common.md)). Below is an example of a Feathers service using [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) as a normal object or a [JavaScript or Typescript class](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes):
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs show-tabs>
 
-::: tab "Object"
-```js
-const myService = {
-  async find(params) {
-    return [];
-  },
-  async get(id, params) {},
-  async create(data, params) {},
-  async update(id, data, params) {},
-  async patch(id, data, params) {},
-  async remove(id, params) {},
-  async setup(app, path) {}
-}
+<Tab name="TypeScript" global-id="ts">
 
-app.use('/my-service', myService);
-```
-:::
-
-::: tab "JavaScript"
-```js
-class MyService {
-  async find(params) {
-    return [];
-  }
-  async get(id, params) {}
-  async create(data, params) {}
-  async update(id, data, params) {}
-  async patch(id, data, params) {}
-  async remove(id, params) {}
-  async setup(app, path) {}
-}
-
-app.use('/my-service', new MyService());
-```
-:::
-
-::: tab "TypeScript"
 ```typescript
 import { ServiceMethods, Params, Id, NullableId } from "@feathersjs/feathers";
 import { Application } from "../../declarations";
@@ -63,9 +28,51 @@ class MyService implements ServiceMethods<any> {
 
 app.use('/my-service', new MyService());
 ```
-:::
 
-::::
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+class MyService {
+  async find(params) {
+    return [];
+  }
+  async get(id, params) {}
+  async create(data, params) {}
+  async update(id, data, params) {}
+  async patch(id, data, params) {}
+  async remove(id, params) {}
+  async setup(app, path) {}
+}
+
+app.use('/my-service', new MyService());
+```
+
+</Tab>
+
+
+<Tab name="Object">
+
+```js
+const myService = {
+  async find(params) {
+    return [];
+  },
+  async get(id, params) {},
+  async create(data, params) {},
+  async update(id, data, params) {},
+  async patch(id, data, params) {},
+  async remove(id, params) {},
+  async setup(app, path) {}
+}
+
+app.use('/my-service', myService);
+```
+
+</Tab>
+
+</Tabs>
 
 > **ProTip:** Methods are optional and if a method is not implemented Feathers will automatically emit a `NotImplemented` error. At least one of the methods (e.g. `setup`) must be implemented to be considered a service.
 
@@ -170,7 +177,7 @@ app.use('/messages', {
 
 > **Important:** A successful `update` method call emits the [`updated` service event](./events.md#updated-patched).
 
-> **Note:** The [database adapters](./databases/adapters.md) do not support completely replacing multiple entries. 
+> **Note:** The [database adapters](./databases/adapters.md) do not support completely replacing multiple entries.
 
 ### .patch(id, data, params)
 
@@ -194,7 +201,7 @@ The method should return with the complete, updated resource data. Implement `pa
 
 ### .setup(app, path)
 
-`service.setup(app, path) -> Promise` is a special method that initializes the service, passing an instance of the Feathers application and the path it has been registered on. 
+`service.setup(app, path) -> Promise` is a special method that initializes the service, passing an instance of the Feathers application and the path it has been registered on.
 
 For services registered before `app.listen` is invoked, the `setup` function of each registered service is called on invoking `app.listen`. For services registered after `app.listen` is invoked, `setup` is called automatically by Feathers when a service is registered.
 
@@ -223,7 +230,7 @@ class MyService {
   async get(name, params) {
     const messages = this.app.service('messages');
     const message = await messages.get(1, params);
-    
+
     return { name, message };
   }
 }
@@ -251,7 +258,7 @@ class MyService {
   async get(name, params) {
     const messages = this.app.service('messages');
     const message = await messages.get(1, params);
-    
+
     return { name, message };
   }
 

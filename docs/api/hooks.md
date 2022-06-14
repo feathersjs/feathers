@@ -10,9 +10,10 @@ Hooks are commonly used to handle things like validation, logging, populating re
 
 The following example adds a `createdAt` and `updatedAt` property before saving the data to the database and logs any errors on the service:
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs>
 
-::: tab "JavaScript"
+<Tab name="JavaScript" global-id="js">
+
 ```js
 const feathers = require('@feathersjs/feathers');
 
@@ -47,9 +48,11 @@ app.service('messages').hooks({
     }]
 });
 ```
-:::
 
-::: tab "TypeScript"
+</Tab>
+
+<Tab name="TypeScript" global-id="ts">
+
 ```js
 import { default as feathers, HookContext } from '@feathersjs/feathers';
 
@@ -71,7 +74,7 @@ app.service('messages').hooks({
 
     patch: [async (context: HookContext) => {
       context.data.updatedAt = new Date();
-      
+
       return context;
     }]
   },
@@ -84,9 +87,9 @@ app.service('messages').hooks({
     }]
 });
 ```
-:::
+</Tab>
 
-::::
+</Tabs>
 
 ## Hook functions
 
@@ -393,7 +396,7 @@ app.hooks({
   setup: [
     async (context, next) => {
       const mongodb = new MongoClient(yourConnectionURI);
-      
+
       await mongodb.connect();
       context.app.set('mongodb', mongodb);
     }
