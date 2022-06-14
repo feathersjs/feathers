@@ -257,38 +257,10 @@ app.configure(expressOauth({
 
 Normally, any OAuth provider set up in the [configuration](#configuration) will be initialized with the default [OAuthStrategy](#oauthstrategy). The flow for a specific provider can be customized by extending `OAuthStrategy` class and registering it under that name on the [AuthenticationService](./service.md):
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs>
 
-::: tab "JavaScript"
-```js
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
-const { OAuthStrategy } = require('@feathersjs/authentication-oauth');
+<Tab name="TypeScript" global-id="ts">
 
-class MyGithubStrategy extends OAuthStrategy {
-  async getEntityData(profile) {
-    // Include the `email` from the GitHub profile when creating
-    // or updating a user that logged in with GitHub
-    const baseData = await super.getEntityData(profile);
-
-    return {
-      ...baseData,
-      email: profile.email
-    };
-  }
-}
-
-module.exports = app => {
-  const authService = new AuthenticationService(app);
-
-  authService.register('github', new MyGithubStrategy());
-
-  // ...
-  app.use('/authentication', authService);
-}
-```
-:::
-
-::: tab "TypeScript"
 ```typescript
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
@@ -316,6 +288,38 @@ export default (app: Application) => {
   app.use('/authentication', authService);
 }
 ```
-:::
 
-::::
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
+const { OAuthStrategy } = require('@feathersjs/authentication-oauth');
+
+class MyGithubStrategy extends OAuthStrategy {
+  async getEntityData(profile) {
+    // Include the `email` from the GitHub profile when creating
+    // or updating a user that logged in with GitHub
+    const baseData = await super.getEntityData(profile);
+
+    return {
+      ...baseData,
+      email: profile.email
+    };
+  }
+}
+
+module.exports = app => {
+  const authService = new AuthenticationService(app);
+
+  authService.register('github', new MyGithubStrategy());
+
+  // ...
+  app.use('/authentication', authService);
+}
+```
+
+</Tab>
+
+</Tabs>
