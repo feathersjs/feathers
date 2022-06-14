@@ -1,6 +1,8 @@
-<img style="width: 100%; max-width: 400px;" src="http://feathersjs.com/img/feathers-logo-wide.png" alt="Feathers logo">
+<a href="https://feathersjs.com" title="FeathersJS">
+  <img src="https://user-images.githubusercontent.com/128857/173478258-0b062d50-2ef3-44a0-9da2-8085cc7e1d51.jpg" alt="The FeathersJS Family of Birds">
+</a>
 
-## A framework for real-time applications and REST APIs with JavaScript and TypeScript
+## The API and Real-time Application Framework
 
 [![CI](https://github.com/feathersjs/feathers/workflows/CI/badge.svg)](https://github.com/feathersjs/feathers/actions?query=workflow%3ACI)
 [![Maintainability](https://api.codeclimate.com/v1/badges/cb5ec42a2d0cc1a47a02/maintainability)](https://codeclimate.com/github/feathersjs/feathers/maintainability)
