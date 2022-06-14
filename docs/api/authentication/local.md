@@ -1,4 +1,4 @@
-# Local
+# Local Strategy
 
 <Badges>
 
@@ -142,7 +142,7 @@ export default (app: Application) => {
 
 ### hashPassword(field)
 
-The `hashPassword(field [, options])` hook should be used as a `before` hook for `create`, `patch` or `update`. It will replace the plain text `field` on `data` with a hashed password using [LocalStrategy.hashPassword]() before storing it in the database. 
+The `hashPassword(field [, options])` hook should be used as a `before` hook for `create`, `patch` or `update`. It will replace the plain text `field` on `data` with a hashed password using [LocalStrategy.hashPassword]() before storing it in the database.
 
 `options` is optional and may contain the following settings:
 

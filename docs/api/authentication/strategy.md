@@ -1,4 +1,4 @@
-# Strategies
+# Authentication Strategies
 
 An authentication strategy is any object or class that implements at least an [authenticate(data, params)]() method. They can be registered with the AuthenticationService to authenticate service calls and other requests. The following strategies already come with Feathers:
 

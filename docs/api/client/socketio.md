@@ -200,7 +200,7 @@ socket.emit('create', 'authentication', {
   email: 'hello@feathersjs.com',
   password: 'supersecret'
 }, function(error, authResult) {
-  console.log(authResult); 
+  console.log(authResult);
   // authResult will be {"accessToken": "your token", "user": user }
   // You can now send authenticated messages to the server
 });
@@ -214,7 +214,7 @@ socket.on('connect', () => {
     strategy: 'jwt',
     accessToken: authResult.accessToken
   }, function(error, newAuthResult) {
-    console.log(newAuthResult); 
+    console.log(newAuthResult);
   });
 });
 ```

@@ -1,4 +1,4 @@
-# JWT
+# JWT Strategy
 
 <Badges>
 
@@ -72,7 +72,7 @@ Returns a promise that resolves with the following format:
 
 ### getEntityQuery(params)
 
-Returns the `query` to use when calling `entityService.get` (default: `{}`). 
+Returns the `query` to use when calling `entityService.get` (default: `{}`).
 
 ### parse(req, res)
 

@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import HomeFeatureCard from "./HomeFeatureGridCard.vue"
+import HomeFeatureCard from './HomeFeatureGridCard.vue'
 
 const cards = [
   {
-    title: "Fast",
-    imgSrc: "/img/feature-icons/Fast_Icon.svg",
+    title: 'Fast',
+    imgSrc: '/img/feature-icons/Fast_Icon.svg',
     description:
-      "Leveraging a unique architecture, Feathers lets you focus on building your APIs and real-time applications quickly. You automatically get scalable REST, GraphQL and real-time APIs and stay prepared for whatever else the future might bring.",
+      'Leveraging a unique architecture, Feathers lets you focus on building your APIs and real-time applications quickly. You automatically get scalable REST, GraphQL and real-time APIs and stay prepared for whatever else the future might bring.',
   },
   {
-    title: "Universal",
-    imgSrc: "/img/feature-icons/Universal_Icon.svg",
+    title: 'Universal',
+    imgSrc: '/img/feature-icons/Universal_Icon.svg',
     description:
-      "Feathers can be used with NodeJS, Deno, in the browser, with React Native or with any other API client. You can use any database with many supported out of the box and connect your API seamlessly to any frontend framework.",
+      'Feathers can be used with NodeJS, in the browser, with React Native or with any other API client. You can use any database with many supported out of the box and connect your API seamlessly to any frontend framework.',
   },
   {
-    title: "Flexible",
-    imgSrc: "/img/feature-icons/Flexible_Icon.svg",
+    title: 'Flexible',
+    imgSrc: '/img/feature-icons/Flexible_Icon.svg',
     description:
-      "Built for TypeScript and JavaScript, Feathers provides the structure to create complex applications but is flexible enough to not be in the way. With a large ecosystem of plugins you can include exactly what you need. No more, no less.",
+      'Built for TypeScript and JavaScript, Feathers provides the structure to create complex applications but is flexible enough to not be in the way. With a large ecosystem of plugins you can include exactly what you need. No more, no less.',
   },
 ]
 </script>
@@ -48,7 +48,7 @@ const cards = [
   background-color: var(--vp-c-bg);
   border-radius: 50%;
   bottom: 0;
-  content: "";
+  content: '';
   height: 300px;
   position: absolute;
   width: 150%;

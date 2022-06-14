@@ -1,4 +1,4 @@
-# Overview
+# Authentication Overview
 
 The `@feathersjs/authentication` plugins provide a collection of tools for managing username/password, JWT and OAuth (GitHub, Facebook etc.) authentication as well as custom authentication mechanisms and for authenticating on the client.
 

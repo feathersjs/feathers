@@ -1,4 +1,4 @@
-# Hook
+# Authenticate Hook
 
 The `authenticate` hook will use `params.authentication` of the service method call and run [authenticationService.authenticate()]().
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount } from "vue"
-import CTAButton from "./CTAButton.vue"
+import { onMounted, onBeforeUnmount } from 'vue'
+import CTAButton from './CTAButton.vue'
 
 const toggleHomeClass = () =>
-  document.getElementById("app")?.classList.toggle("home-page")
+  document.getElementById('app')?.classList.toggle('home-page')
 
 onMounted(toggleHomeClass)
 onBeforeUnmount(toggleHomeClass)
@@ -38,7 +38,7 @@ onBeforeUnmount(toggleHomeClass)
 
       <div class="illustration-roundb text-center text-neutral-content pt-4 font-bold">
         <p class="text-xs md:text-base lg:text-lg xl:text-2xl">
-          For Node.js, Deno, and Cloudflare Workers
+          For Node.js and Cloudflare Workers
         </p>
         <div class="scale-80">
           <CTAButton primary class="mt-3 mb-6 md:mb-10">Get Started</CTAButton>
@@ -71,7 +71,7 @@ onBeforeUnmount(toggleHomeClass)
   background: var(--neutral);
   border-radius: 50%;
   bottom: 0;
-  content: "";
+  content: '';
   height: 300px;
   position: absolute;
   width: 150%;

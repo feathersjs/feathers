@@ -182,7 +182,7 @@ app.setup(server);
 | .remove()       | DELETE      | /messages/1 |
 
 
-To expose services through a RESTful API we will have to configure `express.rest` and provide our own body parser middleware (usually the standard [Express 4 body-parser](https://github.com/expressjs/body-parser)) to make REST `.create`, `.update` and `.patch` calls parse the data in the HTTP body. If you would like to add other middleware _before_ the REST handler, call `app.use(middleware)` before registering any services. 
+To expose services through a RESTful API we will have to configure `express.rest` and provide our own body parser middleware (usually the standard [Express 4 body-parser](https://github.com/expressjs/body-parser)) to make REST `.create`, `.update` and `.patch` calls parse the data in the HTTP body. If you would like to add other middleware _before_ the REST handler, call `app.use(middleware)` before registering any services.
 
 > **Important:** The body-parser middleware has to be registered _before_ any service. Otherwise the service method will throw a `No data provided` or `First parameter for 'create' must be an object` error.
 
@@ -226,7 +226,7 @@ app.configure(express.rest(function(req, res) {
     'text/plain': function() {
       res.end(`The Message is: "${res.data.text}"`);
     }
-  });  
+  });
 }))
 ```
 
@@ -464,14 +464,14 @@ When clicking a normal link, web browsers do _not_ send the appropriate header. 
 const { authenticate } = require('@feathersjs/express');
 const setQueryAuthentication = (req, res, next) => {
   const { access_token } = req.query;
-  
+
   if (access_token) {
     req.authentication = {
       strategy: 'jwt',
       accessToken: access_token
     }
   }
-  
+
   next();
 }
 

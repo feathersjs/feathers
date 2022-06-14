@@ -1,4 +1,4 @@
-# OAuth
+# OAuth Strategy
 
 <Badges>
 
@@ -77,7 +77,7 @@ overrides | `[provider]` | [static overrides](#static-overrides) for a provider
 response | `[provider]` | [limit](#limit-response-data) the response data
 token_endpoint_auth_method | `[provider]` | authentication method for the [token endpoint](#token-endpoint-auth-method)
 name | generated | provider's [name](#grant), used to generate `redirect_uri`
-profile_url | [grant-profile](https://github.com/simov/grant-profile) | The URL to retrieve the user profile from  
+profile_url | [grant-profile](https://github.com/simov/grant-profile) | The URL to retrieve the user profile from
 [provider] | generated | provider's [name](#grant) as key
 redirect_uri | generated | OAuth app [redirect URI](#redirect-uri), generated using `protocol`, `host`, `path` and `name`
 

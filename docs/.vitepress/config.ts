@@ -268,7 +268,7 @@ export default defineConfig({
           ],
         },
         {
-          text: 'Schemas',
+          text: 'Schema',
           collapsible: true,
           collapsed: true,
           items: [

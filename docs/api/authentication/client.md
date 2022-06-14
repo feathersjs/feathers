@@ -1,4 +1,4 @@
-# Client
+# Authentication Client
 
 <Badges>
 
@@ -65,7 +65,7 @@ app.reAuthenticate().then(() => {
 `app.authenticate(data) -> Promise` will try to authenticate with a Feathers server by passing a `strategy` and other properties as credentials.
 
 ```js
-// Authenticate with the local email/password strategy 
+// Authenticate with the local email/password strategy
 app.authenticate({
   strategy: 'local',
   email: 'my@email.com',
@@ -170,7 +170,7 @@ class MyAuthenticationClient extends auth.AuthenticationClient {
   getFromLocation(location) {
     // Do custom location things here
     return super.getFromLocation(location);
-  } 
+  }
 }
 
 // Setup the transport (Rest, Socket, etc.) here

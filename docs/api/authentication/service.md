@@ -1,4 +1,4 @@
-# Service
+# Authentication Service
 
 <Badges>
 
@@ -107,7 +107,7 @@ Additionally to the above configuration, most [strategies](./strategy.md) will l
 
 ## Authentication flows
 
-The following 
+The following
 
 ### To _create a new JWT_
 
@@ -140,7 +140,7 @@ For any service that uses the [authenticate hook](./hook.md) called internally y
 
 `const authService = new AuthenticationService(app, configKey = 'authentication')` initializes a new authentication service with the [Feathers application](../application.md) instance and a `configKey` which is the name of the configuration property to use via [app.get()](../application.md#get-name) (default: `app.get('authentication')`). Upon initialization it will also update the configuration with the [default settings](#configuration).
 
-> __Important:__ Unless otherwise [customized](#customization) `configKey` 
+> __Important:__ Unless otherwise [customized](#customization) `configKey`
 
 ### authenticate(data, params, ...strategies)
 
