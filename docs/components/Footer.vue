@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import FooterList from "./FooterList.vue"
-import { useData } from "vitepress"
-import { useWindowSize } from "@vueuse/core"
-import { computed } from "vue"
+import FooterList from './FooterList.vue'
+import { useData } from 'vitepress'
+import { useWindowSize } from '@vueuse/core'
+import { computed } from 'vue'
 
 const { theme } = useData()
 
@@ -12,20 +12,30 @@ const addLeftMargin = computed(() => {
   return width.value > 960
 })
 
-const list1 = [
-  { label: "Philosophy", link: "/philosophy" },
-  { label: "Comparison", link: "/comparison" },
-  { label: "Ecosystem", link: "/ecosystem" },
+const aboutList = [
+  {
+    label: 'Philosophy',
+    link:
+      'https://blog.feathersjs.com/why-we-built-the-best-web-framework-you-ve-probably-never-heard-of-until-now-176afc5c6aac',
+  },
+  { label: 'Comparison', link: '/comparison' },
+  { label: 'Ecosystem', link: 'https://github.com/feathersjs/awesome-feathersjs' },
 ]
-const list2 = [
-  { label: "Documentation", link: "/docs" },
-  { label: "Guides", link: "/guides" },
-  { label: "Blog", link: "/blog" },
+const learnList = [
+  { label: 'Guides', link: '/guides/' },
+  { label: 'API', link: '/api/' },
+  { label: 'Blog', link: 'https://blog.feathersjs.com' },
 ]
-const list3 = [
-  { label: "Become a Backer", link: "/become-a-backer" },
-  { label: "Find Help", link: "/help" },
-  { label: "Github Issues", link: "https://github.com/feathersjs/feathers/issues" },
+const comparisonList = [
+  { label: 'Feathers vs Firebase', link: '/feathers-vs-firebase' },
+  { label: 'Feathers vs Meteor', link: '/feathers-vs-meteor' },
+  { label: 'Feathers vs Sails', link: '/feathers-vs-sails' },
+  { label: 'Feathers vs LoopBack', link: '/feathers-vs-loopback' },
+]
+const ecosystemList = [
+  { label: 'Become a Backer', link: 'https://github.com/sponsors/daffl' },
+  { label: 'Find Help', link: '/help/' },
+  { label: 'Github Issues', link: 'https://github.com/feathersjs/feathers/issues' },
 ]
 </script>
 
@@ -42,9 +52,10 @@ const list3 = [
         </div>
 
         <div class="flex flex-row flex-wrap mt-2">
-          <FooterList title="About" :items="list1" class="m-6" />
-          <FooterList title="Comparison" :items="list2" class="m-6" />
-          <FooterList title="Ecosystem" :items="list3" class="m-6" />
+          <FooterList title="About" :items="aboutList" class="m-6" />
+          <FooterList title="Learn" :items="learnList" class="m-6" />
+          <FooterList title="Comparison" :items="comparisonList" class="m-6" />
+          <FooterList title="Ecosystem" :items="ecosystemList" class="m-6" />
         </div>
 
         <div class="h-1 bg-primary rounded-full mt-16"></div>

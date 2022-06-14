@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { computed } from "vue"
+import { computed } from 'vue'
 
 const props = defineProps({
   primary: Boolean,
 })
 
 const classes = computed(() => {
-  return { "btn-primary": props.primary }
+  return { 'btn-primary': props.primary }
 })
 </script>
 
 <template>
-  <button
-    type="button"
+  <a
+    href="/guides/"
     class="btn text-md font-bold uppercase px-6 py-0.5 rounded-full"
     md="text-lg px-8 py-1.6"
     lg="py-2.8 px-12"
     :class="classes"
   >
     <slot />
-  </button>
+  </a>
 </template>
 
 <style lang="postcss">

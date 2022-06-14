@@ -15,6 +15,34 @@ import {
 } from './meta'
 import { teamMembers } from './contributors'
 
+const comparisonSidebar = [
+  {
+    text: 'Compare Feathers',
+    items: [
+      {
+        text: 'Overview',
+        link: '/comparison',
+      },
+      {
+        text: 'Feathers vs Firebase',
+        link: '/feathers-vs-firebase',
+      },
+      {
+        text: 'Feathers vs Meteor',
+        link: '/feathers-vs-meteor',
+      },
+      {
+        text: 'Feathers vs Sails',
+        link: '/feathers-vs-sails',
+      },
+      {
+        text: 'Feathers vs Loopback',
+        link: '/feathers-vs-loopback',
+      },
+    ],
+  },
+]
+
 export default defineConfig({
   lang: 'en-US',
   title: feathersName,
@@ -453,6 +481,12 @@ export default defineConfig({
           ],
         },
       ],
+      '/comparison': comparisonSidebar,
+      '/feathers-vs-firebase': comparisonSidebar,
+      '/feathers-vs-meteor': comparisonSidebar,
+      '/feathers-vs-sails': comparisonSidebar,
+      '/feathers-vs-loopback': comparisonSidebar,
     },
   },
 })
+

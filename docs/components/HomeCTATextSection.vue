@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CTAButton from "./CTAButton.vue"
+import CTAButton from './CTAButton.vue'
 
 defineProps({
   text: String,
