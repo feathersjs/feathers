@@ -1,0 +1,61 @@
+{
+  "name": "app",
+  "description": "",
+  "version": "0.0.0",
+  "homepage": "",
+  "private": true,
+  "keywords": [
+    "feathers"
+  ],
+  "author": {},
+  "contributors": [],
+  "bugs": {},
+  "engines": {
+    "node": ">= 16.13.0"
+  },
+  "feathers": {
+    "language": "ts",
+    "packager": "npm",
+    "database": "sequelize",
+    "framework": "koa",
+    "transports": [
+      "rest",
+      "websockets"
+    ]
+  },
+  "directories": {
+    "lib": "src",
+    "test": "test"
+  },
+  "main": "src/",
+  "dependencies": {
+    "@feathersjs/authentication": "^5.0.0-pre.16",
+    "@feathersjs/configuration": "^5.0.0-pre.16",
+    "@feathersjs/errors": "^5.0.0-pre.16",
+    "@feathersjs/feathers": "^5.0.0-pre.16",
+    "@feathersjs/koa": "^5.0.0-pre.16",
+    "@feathersjs/schema": "^5.0.0-pre.16",
+    "@feathersjs/socketio": "^5.0.0-pre.16",
+    "@feathersjs/transport-commons": "^5.0.0-pre.16",
+    "feathers-sequelize": "^6.3.2",
+    "koa-static": "^5.0.0",
+    "winston": "^3.6.0"
+  },
+  "devDependencies": {
+    "@types/koa-static": "^4.0.2",
+    "@types/mocha": "^9.1.0",
+    "@types/node": "^17.0.23",
+    "axios": "^0.25.0",
+    "mocha": "^9.2.2",
+    "nodemon": "^2.0.15",
+    "shx": "^0.3.4",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
+  },
+  "scripts": {
+    "dev": "nodemon -x ts-node src/index.ts",
+    "compile": "shx rm -rf lib/ && tsc",
+    "start": "npm run compile && node lib/",
+    "test": "mocha test/ --require ts-node/register --recursive --extension .ts --exit"
+  }
+}
