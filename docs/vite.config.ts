@@ -3,6 +3,7 @@ import type { Plugin } from 'vite'
 import { defineConfig } from 'vite'
 import Components from 'unplugin-vue-components/vite'
 import Unocss from 'unocss/vite'
+import transformerDirective from '@unocss/transformer-directives'
 import { presetAttributify, presetIcons, presetUno, presetTypography } from 'unocss'
 import { resolve } from 'pathe'
 import type { VitePluginPWAAPI } from 'vite-plugin-pwa'
@@ -103,6 +104,7 @@ export default defineConfig({
         }),
         presetTypography(),
       ],
+      transformers: [transformerDirective()]
     }),
     IncludesPlugin(),
     PWA,

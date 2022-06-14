@@ -9,6 +9,7 @@ import FeathersLayout from './FeathersLayout.vue'
 import Tab from '../components/Tab.vue'
 import Tabs from '../components/Tabs.vue'
 import LanguageSelect from '../components/LanguageSelect.vue'
+import Badges from '../components/Badges.vue'
 
 if (inBrowser)
   import('./pwa')
@@ -21,6 +22,7 @@ export default {
     app.component('Tabs', Tabs)
     app.component('Tab', Tab)
     app.component('LanguageSelect', LanguageSelect)
+    app.component('Badges', Badges)
   }
 }
 

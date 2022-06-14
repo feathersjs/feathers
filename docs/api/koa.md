@@ -1,7 +1,11 @@
 # Koa
 
+<Badges>
+
 [![npm version](https://img.shields.io/npm/v/@feathersjs/koa.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/koa)
-[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/crow/packages/koa/CHANGELOG.md)
+[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/dove/packages/koa/CHANGELOG.md)
+
+</Badges>
 
 ```
 npm install @feathersjs/koa --save

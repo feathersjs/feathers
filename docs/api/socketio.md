@@ -1,7 +1,11 @@
 # Socket.io
 
+<Badges>
+
 [![npm version](https://img.shields.io/npm/v/@feathersjs/socketio.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/socketio)
-[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/crow/packages/socketio/CHANGELOG.md)
+[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/dove/packages/socketio/CHANGELOG.md)
+
+</Badges>
 
 ```
 npm install @feathersjs/socketio --save
@@ -49,7 +53,7 @@ app.configure(socketio(function(io) {
       console.log(data);
     });
   });
-  
+
   // Registering Socket.io middleware
   io.use(function (socket, next) {
     // Exposing a request property to services and hooks
