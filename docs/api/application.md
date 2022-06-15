@@ -17,27 +17,98 @@ npm install @feathersjs/feathers --save
 
 The core `@feathersjs/feathers` module provides the ability to initialize a new Feathers application instance. It works in Node, React Native and the browser (see the [client](./client.md) chapter for more information). Each instance allows for registration and retrieval of [services](./services.md), [hooks](./hooks.md), plugin configuration, and getting and setting configuration options. An initialized Feathers application is referred to as the **app object**.
 
-```js
-const feathers = require('@feathersjs/feathers');
+<Tabs>
+<Tab name="TypeScript" global-id="ts">
 
-const app = feathers();
+```js
+import { feathers } from '@feathersjs/feathers'
+
+type ServiceTypes = {
+  // Add registered services here
+}
+
+// Types for `app.set(name, value)` and `app.get(name)`
+type Configuration = {
+  port: number
+}
+
+const app = feathers<ServiceTypes, Configuration>()
 ```
+
+</Tab>
+<Tab name="JavaScript" global-id="js">
+
+```js
+import { feathers } from '@feathersjs/feathers'
+
+const app = feathers()
+```
+
+</Tab>
+</Tabs>
+
+
 
 ## .use(path, service [, options])
 
 `app.use(path, service [, options]) -> app` allows registering a [service object](./services.md) on a given `path`.
 
-```js
-// Add a service.
-app.use('/messages', {
-  async get(id) {
+<Tabs>
+<Tab name="TypeScript" global-id="ts">
+
+```ts
+import { feathers, Id } from '@feathersjs/feathers'
+
+class MessageService {
+  async get (id: Id) {
     return {
       id,
-      text: `This is the ${id} message!`
-    };
+      text: `This it the ${id} message!`
+    }
   }
-});
+}
+
+type ServiceTypes = {
+  // Add services path to type mapping here
+  messages: MessageService
+}
+
+const app = feathers<ServiceTypes>()
+
+// Register a service instance on the app
+app.use('messages', new MessageService())
+
+// Get the service and call the service method with the correct types
+const message = await app.service('messages').get('test')
 ```
+
+</Tab>
+<Tab name="JavaScript" global-id="js">
+
+```js
+import { feathers } from '@feathersjs/feathers'
+
+const app = feathers()
+
+class MessageService {
+  async get (id) {
+    return {
+      id,
+      text: `This it the ${id} message!`
+    }
+  }
+}
+
+// Register a service instance on the app
+app.use('messages', new MessageService())
+
+// Get the service and call the service method
+const message = await app.service('messages').get('test')
+```
+
+</Tab>
+</Tabs>
+
 
 > __Note:__ `path` can be `/` to register a service at the root level.
 
@@ -221,7 +292,7 @@ app.use('/info', {
 
 ## .defaultService
 
-`app.defaultService` can be a function that returns an instance of a new standard service for `app.service(path)` if there isn't one registered yet.
+`app.defaultService` can be a function that returns an instance of a new standard service for `app.service(path)` if there isn't one registered yet. By default it throws a `NotFound` error when you are trying to access a service that doesn't exist.
 
 ```js
 const memory = require('feathers-memory');
