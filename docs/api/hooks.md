@@ -12,6 +12,44 @@ The following example adds a `createdAt` and `updatedAt` property before saving 
 
 <Tabs>
 
+<Tab name="TypeScript" global-id="ts">
+
+```js
+import { default as feathers, HookContext } from '@feathersjs/feathers';
+
+const app = feathers();
+
+app.service('messages').hooks({
+  before: {
+    create: [async (context: HookContext) => {
+      context.data.createdAt = new Date();
+
+      return context;
+    }],
+
+    update: [async (context: HookContext) => {
+      context.data.updatedAt = new Date();
+
+      return context;
+    }],
+
+    patch: [async (context: HookContext) => {
+      context.data.updatedAt = new Date();
+
+      return context;
+    }]
+  },
+
+  error: {
+    all: [async (context: HookContext) => {
+      console.error(`Error in ${context.path} calling ${context.method}  method`, context.error);
+
+      return context;
+    }]
+});
+```
+</Tab>
+
 <Tab name="JavaScript" global-id="js">
 
 ```js
@@ -49,44 +87,6 @@ app.service('messages').hooks({
 });
 ```
 
-</Tab>
-
-<Tab name="TypeScript" global-id="ts">
-
-```js
-import { default as feathers, HookContext } from '@feathersjs/feathers';
-
-const app = feathers();
-
-app.service('messages').hooks({
-  before: {
-    create: [async (context: HookContext) => {
-      context.data.createdAt = new Date();
-
-      return context;
-    }],
-
-    update: [async (context: HookContext) => {
-      context.data.updatedAt = new Date();
-
-      return context;
-    }],
-
-    patch: [async (context: HookContext) => {
-      context.data.updatedAt = new Date();
-
-      return context;
-    }]
-  },
-
-  error: {
-    all: [async (context: HookContext) => {
-      console.error(`Error in ${context.path} calling ${context.method}  method`, context.error);
-
-      return context;
-    }]
-});
-```
 </Tab>
 
 </Tabs>
