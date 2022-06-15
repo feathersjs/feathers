@@ -91,33 +91,6 @@ app.use('/my-service', myService);
 
 </Tabs>
 
-<Tabs group-name="Test" show-tabs>
-
-<Tab name="TypeScript" global-id="ts" >
-
-```ts
-// TypeScript
-```
-
-</Tab>
-<Tab name="JavaScript" global-id="js">
-
-```js
-// JavaScript
-```
-
-</Tab>
-
-<Tab name="Object">
-
-```js
-// Object
-```
-
-</Tab>
-
-</Tabs>
-
 The parameters for service methods are:
 
 - `id` - The unique identifier for the data
