@@ -4,7 +4,9 @@ outline: deep
 
 # Quick start
 
-Now that we are [ready to roll](./setup.md) we can create our first Feathers application. In this quick start guide we'll create our first Feathers REST and real-time API server and a simple website to use it from scratch. It will show how easy it is to get started with Feathers even without a generator or boilerplate.
+Now that we are [ready to roll](./setup.md) we can create our first Feathers application. In this quick start guide we'll create our first Feathers API server and a simple website to use it from scratch. It will show how easy it is to get started with Feathers even without a generator or boilerplate.
+
+<img style="margin: 2em;" src="/img/main-character-bench.svg" alt="Getting started">
 
 Let's create a new folder for our application:
 
@@ -19,14 +21,12 @@ Since any Feathers application is a Node application, we can create a default [p
 
 <Tab name="TypeScript" global-id="ts">
 
-
 ```sh
-# Install TypeScript and its NodeJS wrapper globally
-npm i typescript ts-node -g
-
 npm init --yes
+# Install TypeScript and its NodeJS wrapper
+npm i typescript ts-node --save-dev
 # Also initialize a TS configuration file that uses modern JavaScript
-tsc --init --target es2018
+npx tsc --init --target es2020
 ```
 
 </Tab>
@@ -43,7 +43,7 @@ npm init --yes
 
 ## Installing Feathers
 
-Feathers can be installed like any other Node module by installing the [@feathersjs/feathers](https://www.npmjs.com/package/@feathersjs/feathers) package through [npm](https://www.npmjs.com). The same package can also be used with a module loader like Webpack or Browserify and in React Native.
+Feathers can be installed like any other Node module by installing the [@feathersjs/feathers](https://www.npmjs.com/package/@feathersjs/feathers) package through [npm](https://www.npmjs.com). The same package can also be used with a module loader like Webpack and in React Native.
 
 ```sh
 npm install @feathersjs/feathers --save
@@ -57,12 +57,12 @@ Now we can create a Feathers application with a simple messages service that all
 
 <Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+<Tab name="TypeScript" global-id="ts" >
 
 Create a file called `app.ts` with the following content:
 
 ```ts
-import feathers from '@feathersjs/feathers';
+import feathers from '@feathersjs/feathers'
 
 // This is the interface for the message data
 interface Message {
@@ -73,11 +73,11 @@ interface Message {
 // A messages service that allows to create new
 // and return all existing messages
 class MessageService {
-  messages: Message[] = [];
+  messages: Message[] = []
 
   async find () {
     // Just return all our messages
-    return this.messages;
+    return this.messages
   }
 
   async create (data: Pick<Message, 'text'>) {
@@ -91,19 +91,24 @@ class MessageService {
     // Add new message to the list
     this.messages.push(message);
 
-    return message;
+    return message
   }
 }
 
-const app = feathers();
+// This tells TypeScript what services we are registering
+type ServiceTypes = {
+  messages: MessageService
+}
+
+const app = feathers<ServiceTypes>();
 
 // Register the message service on the Feathers application
-app.use('messages', new MessageService());
+app.use('messages', new MessageService())
 
 // Log every time a new message has been created
 app.service('messages').on('created', (message: Message) => {
-  console.log('A new message has been created', message);
-});
+  console.log('A new message has been created', message)
+})
 
 // A function that creates messages and then logs
 // all existing messages on the service
@@ -111,42 +116,48 @@ const main = async () => {
   // Create a new message on our message service
   await app.service('messages').create({
     text: 'Hello Feathers'
-  });
+  })
 
   // And another one
   await app.service('messages').create({
     text: 'Hello again'
-  });
+  })
 
   // Find all existing messages
-  const messages = await app.service('messages').find();
+  const messages = await app.service('messages').find()
 
-  console.log('All messages', messages);
-};
+  console.log('All messages', messages)
+}
 
-main();
+main()
+```
+
+We can run it with
+
+```sh
+npx ts-node app.ts
 ```
 
 </Tab>
-
 <Tab name="JavaScript" global-id="js">
 
 Create a file called `app.js` with the following content:
 
 ```js
-const feathers = require('@feathersjs/feathers');
-const app = feathers();
+import { feathers } from '@feathersjs/feathers'
+
+const app = feathers()
 
 // A messages service that allows to create new
 // and return all existing messages
 class MessageService {
   constructor() {
-    this.messages = [];
+    this.messages = []
   }
 
   async find () {
     // Just return all our messages
-    return this.messages;
+    return this.messages
   }
 
   async create (data) {
@@ -158,19 +169,19 @@ class MessageService {
     }
 
     // Add new message to the list
-    this.messages.push(message);
+    this.messages.push(message)
 
-    return message;
+    return message
   }
 }
 
 // Register the message service on the Feathers application
-app.use('messages', new MessageService());
+app.use('messages', new MessageService())
 
 // Log every time a new message has been created
 app.service('messages').on('created', message => {
-  console.log('A new message has been created', message);
-});
+  console.log('A new message has been created', message)
+})
 
 // A function that creates new messages and then logs
 // all existing messages
@@ -178,38 +189,20 @@ const main = async () => {
   // Create a new message on our message service
   await app.service('messages').create({
     text: 'Hello Feathers'
-  });
+  })
 
   await app.service('messages').create({
     text: 'Hello again'
-  });
+  })
 
   // Find all existing messages
-  const messages = await app.service('messages').find();
+  const messages = await app.service('messages').find()
 
-  console.log('All messages', messages);
+  console.log('All messages', messages)
 };
 
-main();
+main()
 ```
-
-</Tab>
-
-</Tabs>
-
-We can run it with
-
-<Tabs>
-
-<Tab name="TypeScript" global-id="ts">
-
-```sh
-ts-node app.ts
-```
-
-</Tab>
-
-<Tab name="JavaScript" global-id="js">
 
 ```sh
 node app.js
@@ -219,7 +212,7 @@ node app.js
 
 </Tabs>
 
-And should see
+We will see something like this:
 
 ```sh
 A new message has been created { id: 0, text: 'Hello Feathers' }
@@ -236,16 +229,16 @@ Ok, so we created a Feathers application and a service and we are listening to e
 
 In the following example we will take our existing service and use
 
-- `@feathersjs/express` which uses Express to automatically turn our services into a REST API
+- `@feathersjs/koa` which uses [KoaJS](https://koajs.com/) to automatically turn our services into a REST API
 - `@feathersjs/socketio` which uses Socket.io to do the same as a websocket real-time API (as we will see in a bit this is where the `created` event we saw above comes in handy)
 
 ```sh
-npm install @feathersjs/socketio @feathersjs/express --save
+npm install @feathersjs/socketio @feathersjs/koa --save
 ```
 
 <Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+<Tab name="TypeScript" global-id="ts" >
 
 Update `app.ts` with the following content:
 
@@ -323,6 +316,12 @@ app.service('messages').create({
 });
 ```
 
+We can start the server with
+
+```sh
+npx ts-node app.ts
+```
+
 </Tab>
 
 <Tab name="JavaScript" global-id="js">
@@ -398,23 +397,7 @@ app.service('messages').create({
 });
 ```
 
-</Tab>
-
-</Tabs>
-
-Now you can run the server via
-
-<Tabs>
-
-<Tab name="TypeScript" global-id="ts">
-
-```sh
-ts-node app.ts
-```
-
-</Tab>
-
-<Tab name="JavaScript" global-id="js">
+We can start the server with
 
 ```sh
 node app.js

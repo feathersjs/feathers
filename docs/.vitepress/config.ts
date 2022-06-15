@@ -266,10 +266,6 @@ export default defineConfig({
               text: 'Errors',
               link: '/api/errors',
             },
-            {
-              text: 'Configuration',
-              link: '/api/configuration',
-            },
           ],
         },
         {
@@ -277,6 +273,10 @@ export default defineConfig({
           collapsible: true,
           collapsed: true,
           items: [
+            {
+              text: 'Configuration',
+              link: '/api/configuration',
+            },
             {
               text: 'Koa',
               link: '/api/koa',
@@ -292,25 +292,6 @@ export default defineConfig({
             {
               text: 'Channels',
               link: '/api/channels',
-            },
-          ],
-        },
-        {
-          text: 'Schema',
-          collapsible: true,
-          collapsed: true,
-          items: [
-            {
-              text: 'Overview',
-              link: '/api/schema/',
-            },
-            {
-              text: 'Schemas',
-              link: '/api/schema/schema',
-            },
-            {
-              text: 'Resolvers',
-              link: '/api/schema/resolvers',
             },
           ],
         },
@@ -369,6 +350,25 @@ export default defineConfig({
             {
               text: 'Client',
               link: '/api/authentication/client',
+            },
+          ],
+        },
+        {
+          text: 'Schema',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            {
+              text: 'Overview',
+              link: '/api/schema/',
+            },
+            {
+              text: 'Schemas',
+              link: '/api/schema/schema',
+            },
+            {
+              text: 'Resolvers',
+              link: '/api/schema/resolvers',
             },
           ],
         },

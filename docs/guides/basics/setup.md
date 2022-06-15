@@ -14,9 +14,9 @@ In this guide we will get a [quick start](./starting.md) by creating our first s
 
 You can find the final version at
 
-<Tabs>
+<Tabs group-name="Feathers Chat">
 
-<Tab name="TypeScript" global-id="ts">
+<Tab name="TypeScript" global-id="ts" >
 
 The [feathersjs/feathers-chat-ts](https://github.com/feathersjs/feathers-chat-ts) repository
 
@@ -32,35 +32,27 @@ The [feathersjs/feathers-chat](https://github.com/feathersjs/feathers-chat) repo
 
 ## Prerequisites
 
-Feathers works with NodeJS v10.0.0 and later. We recommend using the latest available version from the [NodeJS website](https://nodejs.org/en/). On MacOS and other Unix systems the [Node Version Manager](https://github.com/creationix/nvm) is a good way to quickly install the latest version of NodeJS and keep it up to date.
+Feathers works with NodeJS 14 and later and will always support the [currently active releases](https://github.com/nodejs/Release#release-schedule). We recommend using the latest available version from the [NodeJS website](https://nodejs.org/en/). On MacOS and other Unix systems the [Node Version Manager](https://github.com/creationix/nvm) is a good way to quickly install the latest version of NodeJS and keep it up to date.
 
 After successful installation, the `node` and `npm` commands should be available on the terminal and show something similar when running the following commands:
 
 ```
 $ node --version
-v12.0.0
 ```
 
 ```
 $ npm --version
-6.9.0
 ```
 
 > __Note:__ Running NodeJS and npm should not require admin or root privileges.
 
-Feathers does work in the browser and supports IE 10 and up. The browser examples used in the guides will however only work in the most recent versions of Chrome, Firefox, Safari and Edge.
+Feathers does work in the browser and supports all modern browser. The browser examples used in the guides will work with all browser versions that support `async/await`.
 
 ## What you should know
 
-In order to get the most out of this guide you should have reasonable JavaScript experience using [ES6](http://es6-features.org/) and later as well as [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) and some experience with NodeJS and the JavaScript features it supports like the [module system](https://nodejs.org/api/modules.html). You can read more about `async/await` in [this blog post](https://blog.risingstack.com/mastering-async-await-in-nodejs/). Some familiarity with HTTP and [REST APIs](https://en.wikipedia.org/wiki/Representational_state_transfer) as well as websockets is also helpful but not necessary.
+In order to get the most out of this guide you should have reasonable JavaScript experience using [ES6](http://es6-features.org/) and later as well as [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) and some experience with NodeJS and the JavaScript features it supports like the [module system](https://nodejs.org/api/modules.html). If you selected TypeScript as the language, you should be familiar with TypeScript (including generics). Some familiarity with HTTP and [REST APIs](https://en.wikipedia.org/wiki/Representational_state_transfer) as well as websockets is also helpful but not necessary.
 
-Feathers works standalone but also provides [an integration](../../api/express.md) with [Express](http://expressjs.com/). This guide does not require any in-depth knowledge of Express but some experience with Express can be helpful in the future.
-
-## What we won't cover
-
-Although Feathers works with many databases, this guide will only use [NeDB](https://github.com/louischatriot/nedb/) which is a file-system based database so there is no need to run a database server. More information about specific databases can be found in the [databases API](../../api/databases/adapters.md).
-
-This guide will also only focus on Feathers core functionality. Once you are finished with the guide, have a look at the [ecosystem page](https://github.com/feathersjs/awesome-feathersjs) for more advanced plugins.
+Feathers works standalone but also provide an integration with [Koa](../../api/koa.md) or [Express](../../api/express.md). This guide does not require any in-depth knowledge of the web framework you chose but some experience can be helpful in the future.
 
 ## What's next?
 
