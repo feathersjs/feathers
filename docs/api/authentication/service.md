@@ -24,27 +24,10 @@ The `AuthenticationService` is a [Feathers service](../services.md) that allows 
 
 The standard setup of [the generator]() initializes an [AuthenticationService](#authenticationservice) at the `/authentication` path with a [JWT strategy](./jwt.md), [Local strategy](./local.md) and [OAuth authentication](./oauth.md).
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs>
 
-::: tab "JavaScript"
-```js
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
-const { LocalStrategy } = require('@feathersjs/authentication-local');
-const { expressOauth } = require('@feathersjs/authentication-oauth');
+<Tab name="TypeScript" global-id="ts">
 
-module.exports = app => {
-  const authService = new AuthenticationService(app);
-
-  authService.register('jwt', new JWTStrategy());
-  authService.register('local', new LocalStrategy());
-
-  app.use('/authentication', authService);
-  app.configure(expressOauth());
-}
-```
-:::
-
-::: tab "TypeScript"
 ```typescript
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
@@ -61,9 +44,30 @@ export default (app: Application) => {
   app.configure(expressOauth());
 }
 ```
-:::
 
-::::
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
+const { LocalStrategy } = require('@feathersjs/authentication-local');
+const { expressOauth } = require('@feathersjs/authentication-oauth');
+
+module.exports = app => {
+  const authService = new AuthenticationService(app);
+
+  authService.register('jwt', new JWTStrategy());
+  authService.register('local', new LocalStrategy());
+
+  app.use('/authentication', authService);
+  app.configure(expressOauth());
+}
+```
+
+</Tab>
+
+</Tabs>
 
 ## Configuration
 

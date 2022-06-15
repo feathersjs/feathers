@@ -42,37 +42,10 @@ A fully working example with just API key authentication:
 
 Next we will be creating a [custom strategy](../../api/authentication/strategy.md) that returns the `params` that you would like to use to identify an authenticated user/request.
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-In `src/authentication.js`:
+<Tabs>
 
-```js
-const { AuthenticationBaseStrategy, AuthenticationService } = require('@feathersjs/authentication');
-const { NotAuthenticated } = require('@feathersjs/errors');
+<Tab name="TypeScript" global-id="ts">
 
-class ApiKeyStrategy extends AuthenticationBaseStrategy {
-  async authenticate(authentication) {
-    const { token } = authentication;
-  
-    const config = this.authentication.configuration[this.name];
-
-    const match = config.allowedKeys.includes(token);
-    if (!match) throw new NotAuthenticated('Incorrect API Key');
-  
-    return {
-      apiKey: true
-    }
-  }
-}
-
-module.exports = app => {
-  const authentication = new AuthenticationService(app);
-  // ... authentication service setup
-  authentication.register('apiKey', new ApiKeyStrategy());
-}
-```
-:::
-::: tab "TypeScript"
 ```ts
 import { AuthenticationBaseStrategy, AuthenticationResult, AuthenticationService } from '@feathersjs/authentication';
 import { NotAuthenticated } from '@feathersjs/errors';
@@ -117,38 +90,49 @@ export default function (app: Application) {
   app.use('/authentication', authentication);
 }
 ```
-:::
-::::
+
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+In `src/authentication.js`:
+
+```js
+const { AuthenticationBaseStrategy, AuthenticationService } = require('@feathersjs/authentication');
+const { NotAuthenticated } = require('@feathersjs/errors');
+
+class ApiKeyStrategy extends AuthenticationBaseStrategy {
+  async authenticate(authentication) {
+    const { token } = authentication;
+
+    const config = this.authentication.configuration[this.name];
+
+    const match = config.allowedKeys.includes(token);
+    if (!match) throw new NotAuthenticated('Incorrect API Key');
+
+    return {
+      apiKey: true
+    }
+  }
+}
+
+module.exports = app => {
+  const authentication = new AuthenticationService(app);
+  // ... authentication service setup
+  authentication.register('apiKey', new ApiKeyStrategy());
+}
+```
+
+</Tab>
+
+</Tabs>
 
 Next, we create a hook called `allow-apiKey` that sets `params.authentication` if it does not exist and if `params.provider` exists (which means it is an external call) to use that `apiKey` strategy. We will also provide the capability for the apiKey to be read from the request header: (you could also read the token as a query parameter but you will have to filter it out before it's passed to Feathers calls like `get` and `find`.
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-```js
-/* eslint-disable require-atomic-updates */
-module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
-  return async context => {
-    const { params, app } = context;
-    
-    const headerField = app.get('authentication').apiKey.header;
-    const token = params.headers[headerField];
+<Tabs>
 
-    if (token && params.provider && !params.authentication) {
-      context.params = {
-        ...params,
-        authentication: {
-          strategy: 'apiKey',
-          token
-        }
-      };
-    }
+<Tab name="TypeScript" global-id="ts">
 
-    return context;
-  };
-};
-```
-:::
-::: tab "TypeScript"
 ```ts
 import { Hook, HookContext } from '@feathersjs/feathers';
 
@@ -173,8 +157,38 @@ export default (): Hook => {
   }
 }
 ```
-:::
-::::
+
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+/* eslint-disable require-atomic-updates */
+module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
+  return async context => {
+    const { params, app } = context;
+
+    const headerField = app.get('authentication').apiKey.header;
+    const token = params.headers[headerField];
+
+    if (token && params.provider && !params.authentication) {
+      context.params = {
+        ...params,
+        authentication: {
+          strategy: 'apiKey',
+          token
+        }
+      };
+    }
+
+    return context;
+  };
+};
+```
+
+</Tab>
+
+</Tabs>
 
 This hook should be added __before__ the [authenticate hook](../../api/authentication/hook.md) wherever API Key authentication should be allowed:
 

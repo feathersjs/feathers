@@ -30,40 +30,10 @@ This should be added in your configuration (usually `config/default.json`) as fo
 
 To use Auth0 in the chat application from the [Feathers guide](../../guides/) we have to do the same modifications as already shown [for the GitHub login in the authentication guide](../../guides/basics/authentication.md).
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
+<Tabs>
 
-In `src/authentication.js` like this:
+<Tab name="TypeScript" global-id="ts">
 
-```js
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
-const { LocalStrategy } = require('@feathersjs/authentication-local');
-const { expressOauth, OAuthStrategy } = require('@feathersjs/authentication-oauth');
-
-class Auth0Strategy extends OAuthStrategy {
-  async getEntityData(profile) {
-    const baseData = await super.getEntityData(profile);
-
-    return {
-      ...baseData,
-      email: profile.email
-    };
-  }
-}
-
-module.exports = app => {
-  const authentication = new AuthenticationService(app);
-
-  authentication.register('jwt', new JWTStrategy());
-  authentication.register('local', new LocalStrategy());
-  authentication.register('auth0', new Auth0Strategy());
-
-  app.use('/authentication', authentication);
-  app.configure(expressOauth());
-};
-```
-:::
-::: tab "TypeScript"
 In `src/authentication.ts` like this:
 
 ```ts
@@ -102,7 +72,43 @@ export default function(app: Application) {
   app.configure(expressOauth());
 }
 ```
-:::
-::::
+
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+In `src/authentication.js` like this:
+
+```js
+const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
+const { LocalStrategy } = require('@feathersjs/authentication-local');
+const { expressOauth, OAuthStrategy } = require('@feathersjs/authentication-oauth');
+
+class Auth0Strategy extends OAuthStrategy {
+  async getEntityData(profile) {
+    const baseData = await super.getEntityData(profile);
+
+    return {
+      ...baseData,
+      email: profile.email
+    };
+  }
+}
+
+module.exports = app => {
+  const authentication = new AuthenticationService(app);
+
+  authentication.register('jwt', new JWTStrategy());
+  authentication.register('local', new LocalStrategy());
+  authentication.register('auth0', new Auth0Strategy());
+
+  app.use('/authentication', authentication);
+  app.configure(expressOauth());
+};
+```
+
+</Tab>
+
+</Tabs>
 
 Additionally, `auth0Id` needs to be included in the data in the users service class.

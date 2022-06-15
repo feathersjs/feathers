@@ -25,9 +25,10 @@ The `@feathersjs/socketio-client` module allows to connect to services exposed t
 
 Initialize the Socket.io client using a given socket and the default options.
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs show-tabs>
 
-::: tab "Modular"
+<Tab name="Modular">
+
 ``` javascript
 const feathers = require('@feathersjs/feathers');
 const socketio = require('@feathersjs/socketio-client');
@@ -48,9 +49,11 @@ app.service('messages').create({
   text: 'A message from a REST client'
 });
 ```
-:::
 
-::: tab "@feathersjs/client"
+</Tab>
+
+<Tab name="@feathersjs/client">
+
 ``` html
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/core-js/2.1.4/core.min.js"></script>
 <script src="//unpkg.com/@feathersjs/client@^3.0.0/dist/feathers.js"></script>
@@ -76,9 +79,10 @@ app.service('messages').create({
   // feathers.errors is an object with all of the custom error types.
 </script>
 ```
-:::
 
-::::
+</Tab>
+
+</Tabs>
 
 ### app.io
 
@@ -94,31 +98,10 @@ app.io.on('disconnect', (reason) => {
 
 On the client, [custom service methods](../services.md#custom-methods) are also registered using the `methods` option when registering the service via `socketClient.service()`:
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs>
 
-::: tab "JavaScript"
-```js
-const feathers = require('@feathersjs/feathers');
-const socketio = require('@feathersjs/socketio-client');
-const io = require('socket.io-client');
+<Tab name="TypeScript" global-id="ts">
 
-const socket = io('http://api.feathersjs.com');
-const client = feathers();
-const socketClient = socketio(socket)
-
-// Set up Socket.io client with the socket
-client.configure(socketClient);
-
-client.service('myservice', connection.service('myservice'), {
-  methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'myCustomMethod']
-});
-
-// Then it can be used like other service methods
-client.service('myservice').myCustomMethod(data, params);
-```
-:::
-
-::: tab "TypeScript"
 ```typescript
 import { feathers, CustomMethod } from '@feathersjs/feathers';
 import socketio, { SocketService } from '@feathersjs/socketio-client';
@@ -150,9 +133,34 @@ client.service('myservice', socketClient.service('myservice'), {
 // Then it can be used like other service methods
 client.service('myservice').myCustomMethod(data, params);
 ```
-:::
 
-::::
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+const feathers = require('@feathersjs/feathers');
+const socketio = require('@feathersjs/socketio-client');
+const io = require('socket.io-client');
+
+const socket = io('http://api.feathersjs.com');
+const client = feathers();
+const socketClient = socketio(socket)
+
+// Set up Socket.io client with the socket
+client.configure(socketClient);
+
+client.service('myservice', connection.service('myservice'), {
+  methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'myCustomMethod']
+});
+
+// Then it can be used like other service methods
+client.service('myservice').myCustomMethod(data, params);
+```
+
+</Tab>
+
+</Tabs>
 
 > __Note:__ Just like on the server *all* methods you want to use have to be listed in the `methods` option.
 

@@ -200,44 +200,10 @@ Find the `authentication` section in `config/default.json` add a configuration s
 
 This tells the OAuth strategy to redirect back to our index page after a successful login and already makes a basic login with GitHub possible. Because of the changes we made in the `users` service in the [services chapter](./services.md) we do need a small customization though. Instead of only adding `githubId` to a new user when they log in with GitHub we also include their email (if it is available), the display name to show in the chat and the avatar image from the profile we get back. We can do this by extending the standard OAuth strategy and registering it as a GitHub specific one and overwriting the `getEntityData` method:
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-Update `src/authentication.js` as follows:
+<Tabs>
 
-```js
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
-const { LocalStrategy } = require('@feathersjs/authentication-local');
-const { expressOauth, OAuthStrategy } = require('@feathersjs/authentication-oauth');
+<Tab name="TypeScript" global-id="ts">
 
-class GitHubStrategy extends OAuthStrategy {
-  async getEntityData(profile) {
-    const baseData = await super.getEntityData(profile);
-
-    return {
-      ...baseData,
-      // You can also set the display name to profile.name
-      name: profile.login,
-      // The GitHub profile image
-      avatar: profile.avatar_url,
-      // The user email address (if available)
-      email: profile.email
-    };
-  }
-}
-
-module.exports = app => {
-  const authentication = new AuthenticationService(app);
-
-  authentication.register('jwt', new JWTStrategy());
-  authentication.register('local', new LocalStrategy());
-  authentication.register('github', new GitHubStrategy());
-
-  app.use('/authentication', authentication);
-  app.configure(expressOauth());
-};
-```
-:::
-::: tab "TypeScript"
 Update `src/authentication.ts` as follows:
 
 ```ts
@@ -281,8 +247,49 @@ export default function(app: Application) {
   app.configure(expressOauth());
 }
 ```
-:::
-::::
+
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+Update `src/authentication.js` as follows:
+
+```js
+const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
+const { LocalStrategy } = require('@feathersjs/authentication-local');
+const { expressOauth, OAuthStrategy } = require('@feathersjs/authentication-oauth');
+
+class GitHubStrategy extends OAuthStrategy {
+  async getEntityData(profile) {
+    const baseData = await super.getEntityData(profile);
+
+    return {
+      ...baseData,
+      // You can also set the display name to profile.name
+      name: profile.login,
+      // The GitHub profile image
+      avatar: profile.avatar_url,
+      // The user email address (if available)
+      email: profile.email
+    };
+  }
+}
+
+module.exports = app => {
+  const authentication = new AuthenticationService(app);
+
+  authentication.register('jwt', new JWTStrategy());
+  authentication.register('local', new LocalStrategy());
+  authentication.register('github', new GitHubStrategy());
+
+  app.use('/authentication', authentication);
+  app.configure(expressOauth());
+};
+```
+
+</Tab>
+
+</Tabs>
 
 > __Pro tip:__ For more information about the OAuth flow and strategy see the [OAuth API documentation](../../api/authentication/oauth.md).
 

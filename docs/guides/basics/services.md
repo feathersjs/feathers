@@ -88,6 +88,7 @@ app.use('/my-service', myService);
 ```
 
 </Tab>
+
 </Tabs>
 
 <Tabs group-name="Test" show-tabs>
@@ -114,6 +115,7 @@ app.use('/my-service', myService);
 ```
 
 </Tab>
+
 </Tabs>
 
 The parameters for service methods are:
@@ -210,50 +212,10 @@ This is it, we now have a database backed messages service with authentication e
 
 Feathers has two ways for customizing existing database adapter services. Either by using hooks, which we will look at [in the next chapter](./hooks.md) or by extending the adapter service class. Let's extend our existing `users` service to add a link to the [Gravatar](http://en.gravatar.com/) image associated with the user's email address so we can display a user avatar. We will then add that data to the database by calling the original (`super.create`) method.
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-Update `src/services/users/users.class.js` with the following:
+<Tabs>
 
-```js
-// This is the database adapter service class
-const { Service } = require('feathers-nedb');
-// We need this to create the MD5 hash
-const crypto = require('crypto');
+<Tab name="TypeScript" global-id="ts">
 
-// The Gravatar image service
-const gravatarUrl = 'https://s.gravatar.com/avatar';
-// The size query. Our chat needs 60px images
-const query = 's=60';
-// Returns the Gravatar image for an email
-const getGravatar = email => {
-  // Gravatar uses MD5 hashes from an email address (all lowercase) to get the image
-  const hash = crypto.createHash('md5').update(email.toLowerCase()).digest('hex');
-  // Return the full avatar URL
-  return `${gravatarUrl}/${hash}?${query}`;
-};
-
-exports.Users = class Users extends Service {
-  create (data, params) {
-    // This is the information we want from the user signup data
-    const { email, password, githubId, name } = data;
-    // Use the existing avatar image or return the Gravatar for the email
-    const avatar = data.avatar || getGravatar(email);
-    // The complete user
-    const userData = {
-      email,
-      name,
-      password,
-      githubId,
-      avatar
-    };
-
-    // Call the original `create` method with existing `params` and new data
-    return super.create(userData, params);
-  }
-};
-```
-:::
-::: tab "TypeScript"
 Update `src/services/users/users.class.ts` with the following:
 
 ```ts
@@ -308,8 +270,55 @@ export class Users extends Service<UserData> {
   }
 }
 ```
-:::
-::::
+
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+Update `src/services/users/users.class.js` with the following:
+
+```js
+// This is the database adapter service class
+const { Service } = require('feathers-nedb');
+// We need this to create the MD5 hash
+const crypto = require('crypto');
+
+// The Gravatar image service
+const gravatarUrl = 'https://s.gravatar.com/avatar';
+// The size query. Our chat needs 60px images
+const query = 's=60';
+// Returns the Gravatar image for an email
+const getGravatar = email => {
+  // Gravatar uses MD5 hashes from an email address (all lowercase) to get the image
+  const hash = crypto.createHash('md5').update(email.toLowerCase()).digest('hex');
+  // Return the full avatar URL
+  return `${gravatarUrl}/${hash}?${query}`;
+};
+
+exports.Users = class Users extends Service {
+  create (data, params) {
+    // This is the information we want from the user signup data
+    const { email, password, githubId, name } = data;
+    // Use the existing avatar image or return the Gravatar for the email
+    const avatar = data.avatar || getGravatar(email);
+    // The complete user
+    const userData = {
+      email,
+      name,
+      password,
+      githubId,
+      avatar
+    };
+
+    // Call the original `create` method with existing `params` and new data
+    return super.create(userData, params);
+  }
+};
+```
+
+</Tab>
+
+</Tabs>
 
 Now we can sign up users with email and password and it will automatically set an avatar image for them. If they have no gravatar, it will return a placeholder image.
 

@@ -15,13 +15,10 @@ cd feathers-basics
 
 Since any Feathers application is a Node application, we can create a default [package.json](https://docs.npmjs.com/files/package.json) using `npm`:
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-```sh
-npm init --yes
-```
-:::
-::: tab "TypeScript"
+<Tabs>
+
+<Tab name="TypeScript" global-id="ts">
+
 
 ```sh
 # Install TypeScript and its NodeJS wrapper globally
@@ -31,8 +28,18 @@ npm init --yes
 # Also initialize a TS configuration file that uses modern JavaScript
 tsc --init --target es2018
 ```
-:::
-::::
+
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```sh
+npm init --yes
+```
+
+</Tab>
+
+</Tabs>
 
 ## Installing Feathers
 
@@ -48,71 +55,10 @@ npm install @feathersjs/feathers --save
 
 Now we can create a Feathers application with a simple messages service that allows to create new messages and find all existing ones.
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-Create a file called `app.js` with the following content:
+<Tabs>
 
-```js
-const feathers = require('@feathersjs/feathers');
-const app = feathers();
+<Tab name="TypeScript" global-id="ts">
 
-// A messages service that allows to create new
-// and return all existing messages
-class MessageService {
-  constructor() {
-    this.messages = [];
-  }
-
-  async find () {
-    // Just return all our messages
-    return this.messages;
-  }
-
-  async create (data) {
-    // The new message is the data merged with a unique identifier
-    // using the messages length since it changes whenever we add one
-    const message = {
-      id: this.messages.length,
-      text: data.text
-    }
-
-    // Add new message to the list
-    this.messages.push(message);
-
-    return message;
-  }
-}
-
-// Register the message service on the Feathers application
-app.use('messages', new MessageService());
-
-// Log every time a new message has been created
-app.service('messages').on('created', message => {
-  console.log('A new message has been created', message);
-});
-
-// A function that creates new messages and then logs
-// all existing messages
-const main = async () => {
-  // Create a new message on our message service
-  await app.service('messages').create({
-    text: 'Hello Feathers'
-  });
-
-  await app.service('messages').create({
-    text: 'Hello again'
-  });
-
-  // Find all existing messages
-  const messages = await app.service('messages').find();
-
-  console.log('All messages', messages);
-};
-
-main();
-```
-:::
-::: tab "TypeScript"
 Create a file called `app.ts` with the following content:
 
 ```ts
@@ -180,57 +126,16 @@ const main = async () => {
 
 main();
 ```
-:::
-::::
 
-We can run it with
+</Tab>
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-```sh
-node app.js
-```
-:::
-::: tab "TypeScript"
-```sh
-ts-node app.ts
-```
-:::
-::::
+<Tab name="JavaScript" global-id="js">
 
-And should see
-
-```sh
-A new message has been created { id: 0, text: 'Hello Feathers' }
-A new message has been created { id: 1, text: 'Hello again' }
-All messages [ { id: 0, text: 'Hello Feathers' },
-  { id: 1, text: 'Hello again' } ]
-```
-
-Here we implemented only `find` and `create` but a service can also have a few other methods, specifically `get`, `update`, `patch` and `remove`. We will learn more about service methods and events throughout this guide but this sums up some of the most important concepts that Feathers is built on.
-
-## An API server
-
-Ok, so we created a Feathers application and a service and we are listening to events but it is only a simple NodeJS script that prints some output and then exits. What we really want is hosting it as an API webserver. This is where Feathers transports come in. A transport takes a service like the one we created above and turns it into a server that other clients (like a web- or mobile application) can talk to.
-
-In the following example we will take our existing service and use
-
-- `@feathersjs/express` which uses Express to automatically turn our services into a REST API
-- `@feathersjs/socketio` which uses Socket.io to do the same as a websocket real-time API (as we will see in a bit this is where the `created` event we saw above comes in handy)
-
-```sh
-npm install @feathersjs/socketio @feathersjs/express --save
-```
-
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-
-Update `app.js` with the following content:
+Create a file called `app.js` with the following content:
 
 ```js
 const feathers = require('@feathersjs/feathers');
-const express = require('@feathersjs/express');
-const socketio = require('@feathersjs/socketio');
+const app = feathers();
 
 // A messages service that allows to create new
 // and return all existing messages
@@ -259,44 +164,88 @@ class MessageService {
   }
 }
 
-// Creates an ExpressJS compatible Feathers application
-const app = express(feathers());
+// Register the message service on the Feathers application
+app.use('messages', new MessageService());
 
-// Parse HTTP JSON bodies
-app.use(express.json());
-// Parse URL-encoded params
-app.use(express.urlencoded({ extended: true }));
-// Host static files from the current folder
-app.use(express.static(__dirname));
-// Add REST API support
-app.configure(express.rest());
-// Configure Socket.io real-time APIs
-app.configure(socketio());
-// Register an in-memory messages service
-app.use('/messages', new MessageService());
-// Register a nicer error handler than the default Express one
-app.use(express.errorHandler());
-
-// Add any new real-time connection to the `everybody` channel
-app.on('connection', connection =>
-  app.channel('everybody').join(connection)
-);
-// Publish all events to the `everybody` channel
-app.publish(data => app.channel('everybody'));
-
-// Start the server
-app.listen(3030).on('listening', () =>
-  console.log('Feathers server listening on localhost:3030')
-);
-
-// For good measure let's create a message
-// So our API doesn't look so empty
-app.service('messages').create({
-  text: 'Hello world from the server'
+// Log every time a new message has been created
+app.service('messages').on('created', message => {
+  console.log('A new message has been created', message);
 });
+
+// A function that creates new messages and then logs
+// all existing messages
+const main = async () => {
+  // Create a new message on our message service
+  await app.service('messages').create({
+    text: 'Hello Feathers'
+  });
+
+  await app.service('messages').create({
+    text: 'Hello again'
+  });
+
+  // Find all existing messages
+  const messages = await app.service('messages').find();
+
+  console.log('All messages', messages);
+};
+
+main();
 ```
-:::
-::: tab "TypeScript"
+
+</Tab>
+
+</Tabs>
+
+We can run it with
+
+<Tabs>
+
+<Tab name="TypeScript" global-id="ts">
+
+```sh
+ts-node app.ts
+```
+
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```sh
+node app.js
+```
+
+</Tab>
+
+</Tabs>
+
+And should see
+
+```sh
+A new message has been created { id: 0, text: 'Hello Feathers' }
+A new message has been created { id: 1, text: 'Hello again' }
+All messages [ { id: 0, text: 'Hello Feathers' },
+  { id: 1, text: 'Hello again' } ]
+```
+
+Here we implemented only `find` and `create` but a service can also have a few other methods, specifically `get`, `update`, `patch` and `remove`. We will learn more about service methods and events throughout this guide but this sums up some of the most important concepts that Feathers is built on.
+
+## An API server
+
+Ok, so we created a Feathers application and a service and we are listening to events but it is only a simple NodeJS script that prints some output and then exits. What we really want is hosting it as an API webserver. This is where Feathers transports come in. A transport takes a service like the one we created above and turns it into a server that other clients (like a web- or mobile application) can talk to.
+
+In the following example we will take our existing service and use
+
+- `@feathersjs/express` which uses Express to automatically turn our services into a REST API
+- `@feathersjs/socketio` which uses Socket.io to do the same as a websocket real-time API (as we will see in a bit this is where the `created` event we saw above comes in handy)
+
+```sh
+npm install @feathersjs/socketio @feathersjs/express --save
+```
+
+<Tabs>
+
+<Tab name="TypeScript" global-id="ts">
 
 Update `app.ts` with the following content:
 
@@ -373,23 +322,107 @@ app.service('messages').create({
   text: 'Hello world from the server'
 });
 ```
-:::
-::::
+
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+Update `app.js` with the following content:
+
+```js
+const feathers = require('@feathersjs/feathers');
+const express = require('@feathersjs/express');
+const socketio = require('@feathersjs/socketio');
+
+// A messages service that allows to create new
+// and return all existing messages
+class MessageService {
+  constructor() {
+    this.messages = [];
+  }
+
+  async find () {
+    // Just return all our messages
+    return this.messages;
+  }
+
+  async create (data) {
+    // The new message is the data merged with a unique identifier
+    // using the messages length since it changes whenever we add one
+    const message = {
+      id: this.messages.length,
+      text: data.text
+    }
+
+    // Add new message to the list
+    this.messages.push(message);
+
+    return message;
+  }
+}
+
+// Creates an ExpressJS compatible Feathers application
+const app = express(feathers());
+
+// Parse HTTP JSON bodies
+app.use(express.json());
+// Parse URL-encoded params
+app.use(express.urlencoded({ extended: true }));
+// Host static files from the current folder
+app.use(express.static(__dirname));
+// Add REST API support
+app.configure(express.rest());
+// Configure Socket.io real-time APIs
+app.configure(socketio());
+// Register an in-memory messages service
+app.use('/messages', new MessageService());
+// Register a nicer error handler than the default Express one
+app.use(express.errorHandler());
+
+// Add any new real-time connection to the `everybody` channel
+app.on('connection', connection =>
+  app.channel('everybody').join(connection)
+);
+// Publish all events to the `everybody` channel
+app.publish(data => app.channel('everybody'));
+
+// Start the server
+app.listen(3030).on('listening', () =>
+  console.log('Feathers server listening on localhost:3030')
+);
+
+// For good measure let's create a message
+// So our API doesn't look so empty
+app.service('messages').create({
+  text: 'Hello world from the server'
+});
+```
+
+</Tab>
+
+</Tabs>
 
 Now you can run the server via
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-```sh
-node app.js
-```
-:::
-::: tab "TypeScript"
+<Tabs>
+
+<Tab name="TypeScript" global-id="ts">
+
 ```sh
 ts-node app.ts
 ```
-:::
-::::
+
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```sh
+node app.js
+```
+
+</Tab>
+
+</Tabs>
 
 > __Note:__ The server will stay running until you stop it by pressing Control + C in the terminal.
 

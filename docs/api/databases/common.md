@@ -10,27 +10,31 @@ All database adapters implement a common interface for initialization, paginatio
 
 Each adapter exports a `Service` class that can be exported and extended.
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs>
 
-::: tab "JavaScript"
-```js
-const { Service } = require('feathers-<adaptername>');
+<Tab name="TypeScript" global-id="ts">
 
-app.use('/messages', new Service());
-app.use('/messages', new Service({ id, events, paginate }));
-```
-:::
-
-::: tab "TypeScript"
 ```js
 import { Service } from 'feathers-<adaptername>';
 
 app.use('/messages', new Service());
 app.use('/messages', new Service({ id, events, paginate }));
 ```
-:::
 
-::::
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+const { Service } = require('feathers-<adaptername>');
+
+app.use('/messages', new Service());
+app.use('/messages', new Service({ id, events, paginate }));
+```
+
+</Tab>
+
+</Tabs>
 
 ### `service([options])`
 
@@ -161,7 +165,7 @@ app.service('todos').hooks({
     create: [
       (context) => context.data.createdAt = new Date()
     ],
-    
+
     update: [
       (context) => context.data.updatedAt = new Date()
     ]
@@ -205,9 +209,9 @@ app.service('messages').hooks({
           $group: {_id: null, total_quantity: {$sum: '$quantity'} }
         }
       ]).toArray();
-      
+
       // Do something with results
-      
+
       return context;
     }
   }

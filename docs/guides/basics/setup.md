@@ -14,14 +14,21 @@ In this guide we will get a [quick start](./starting.md) by creating our first s
 
 You can find the final version at
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-The [feathersjs/feathers-chat](https://github.com/feathersjs/feathers-chat) repository
-:::
-::: tab "TypeScript"
+<Tabs>
+
+<Tab name="TypeScript" global-id="ts">
+
 The [feathersjs/feathers-chat-ts](https://github.com/feathersjs/feathers-chat-ts) repository
-:::
-::::
+
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+The [feathersjs/feathers-chat](https://github.com/feathersjs/feathers-chat) repository
+
+</Tab>
+
+</Tabs>
 
 ## Prerequisites
 

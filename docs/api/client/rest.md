@@ -29,9 +29,10 @@ npm install @feathersjs/rest-client --save
 
 REST client services can be initialized by loading `@feathersjs/rest-client` and initializing a client object with a base URL:
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs show-tabs>
 
-::: tab "Modular"
+<Tab name="Modular">
+
 ``` javascript
 const feathers = require('@feathersjs/feathers');
 const rest = require('@feathersjs/rest-client');
@@ -50,9 +51,11 @@ app.configure(restClient.fetch(window.fetch.bind(window)));
 // Connect to the `http://feathers-api.com/messages` service
 const messages = app.service('messages');
 ```
-:::
 
-::: tab "@feathersjs/client"
+</Tab>
+
+<Tab name="@feathersjs/client">
+
 ``` html
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/core-js/2.1.4/core.min.js"></script>
 <script src="//unpkg.com/@feathersjs/client@^3.0.0/dist/feathers.js"></script>
@@ -68,9 +71,10 @@ const messages = app.service('messages');
   const messages = app.service('messages');
 </script>
 ```
-:::
 
-::::
+</Tab>
+
+</Tabs>
 
 <!-- -->
 
@@ -178,35 +182,10 @@ app.configure(restClient.axios(axios.create({
 
 On the client, [custom service methods](../services.md#custom-methods) are also registered using the `methods` option when registering the service via `restClient.service()`:
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs>
 
-::: tab "JavaScript"
-```js
-const feathers = require('@feathersjs/feathers');
-const rest = require('@feathersjs/rest-client');
+<Tab name="TypeScript" global-id="ts">
 
-const client = feathers();
-
-// Connect to the same as the browser URL (only in the browser)
-const restClient = rest();
-
-// Connect to a different URL
-const restClient = rest('http://feathers-api.com').fetch(window.fetch.bind(window))
-
-// Configure an AJAX library (see below) with that client
-client.configure(restClient);
-
-// Register a REST client service with all methods listed
-client.service('myservice', restClient.service('myservice'), {
-  methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'myCustomMethod']
-});
-
-// Then it can be used like other service methods
-client.service('myservice').myCustomMethod(data, params);
-```
-:::
-
-::: tab "TypeScript"
 ```typescript
 import { feathers, CustomMethod } from '@feathersjs/feathers';
 import rest, { RestService } from '@feathersjs/rest-client';
@@ -241,9 +220,38 @@ client.service('myservice', restClient.service('myservice'), {
 // Then it can be used like other service methods
 client.service('myservice').myCustomMethod(data, params);
 ```
-:::
 
-::::
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+const feathers = require('@feathersjs/feathers');
+const rest = require('@feathersjs/rest-client');
+
+const client = feathers();
+
+// Connect to the same as the browser URL (only in the browser)
+const restClient = rest();
+
+// Connect to a different URL
+const restClient = rest('http://feathers-api.com').fetch(window.fetch.bind(window))
+
+// Configure an AJAX library (see below) with that client
+client.configure(restClient);
+
+// Register a REST client service with all methods listed
+client.service('myservice', restClient.service('myservice'), {
+  methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'myCustomMethod']
+});
+
+// Then it can be used like other service methods
+client.service('myservice').myCustomMethod(data, params);
+```
+
+</Tab>
+
+</Tabs>
 
 > __Note:__ Just like on the server *all* methods you want to use have to be listed in the `methods` option.
 

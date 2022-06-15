@@ -353,14 +353,21 @@ That’s it. We now have a plain JavaScript real-time chat frontend with login a
 
 If you run into an issue, remember you can find the complete working example at
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-The [feathersjs/feathers-chat](https://github.com/feathersjs/feathers-chat) repository
-:::
-::: tab "TypeScript"
+<Tabs>
+
+<Tab name="TypeScript" global-id="ts">
+
 The [feathersjs/feathers-chat-ts](https://github.com/feathersjs/feathers-chat-ts) repository
-:::
-::::
+
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+The [feathersjs/feathers-chat](https://github.com/feathersjs/feathers-chat) repository
+
+</Tab>
+
+</Tabs>
 
 ## What's next?
 

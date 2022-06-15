@@ -45,27 +45,10 @@ The `@feathersjs/authentication-*` modules have been completely rewritten to inc
 
 To upgrade manually, replace the existing authentication configuration (usually `src/authentication.js` or `src/authentication.ts`) with the following:
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs>
 
-::: tab "JavaScript"
-```js
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
-const { LocalStrategy } = require('@feathersjs/authentication-local');
-const { expressOauth } = require('@feathersjs/authentication-oauth');
+<Tab name="TypeScript" global-id="ts">
 
-module.exports = app => {
-  const authentication = new AuthenticationService(app);
-
-  authentication.register('jwt', new JWTStrategy());
-  authentication.register('local', new LocalStrategy());
-
-  app.use('/authentication', authentication);
-  app.configure(expressOauth());
-};
-```
-:::
-
-::: tab "TypeScript"
 ```typescript
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
@@ -82,9 +65,30 @@ export default (app: Application) => {
   app.configure(expressOauth());
 }
 ```
-:::
 
-::::
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
+const { LocalStrategy } = require('@feathersjs/authentication-local');
+const { expressOauth } = require('@feathersjs/authentication-oauth');
+
+module.exports = app => {
+  const authentication = new AuthenticationService(app);
+
+  authentication.register('jwt', new JWTStrategy());
+  authentication.register('local', new LocalStrategy());
+
+  app.use('/authentication', authentication);
+  app.configure(expressOauth());
+};
+```
+
+</Tab>
+
+</Tabs>
 
 > __Important:__ The `@feathersjs/authentication-jwt` is deprecated since the JWT strategy is now directly included in `@feathersjs/authentication`.
 

@@ -36,19 +36,10 @@ npm install shx --save-dev
 
 Now we can update the `scripts` section of our `package.json` to the following:
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-```js
-  "scripts": {
-    "test": "npm run eslint && npm run mocha",
-    "eslint": "eslint src/. test/. --config .eslintrc.json",
-    "start": "node src/",
-    "clean": "shx rm -rf test/data/",
-    "mocha": "npm run clean && NODE_ENV=test mocha test/ --recursive --exit"
-  }
-```
-:::
-::: tab "TypeScript"
+<Tabs>
+
+<Tab name="TypeScript" global-id="ts">
+
 ```ts
   "scripts": {
     "test": "npm run compile && npm run mocha",
@@ -59,8 +50,24 @@ Now we can update the `scripts` section of our `package.json` to the following:
     "compile": "shx rm -rf lib/ && tsc"
   },
 ```
-:::
-::::
+
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+  "scripts": {
+    "test": "npm run eslint && npm run mocha",
+    "eslint": "eslint src/. test/. --config .eslintrc.json",
+    "start": "node src/",
+    "clean": "shx rm -rf test/data/",
+    "mocha": "npm run clean && NODE_ENV=test mocha test/ --recursive --exit"
+  }
+```
+
+</Tab>
+
+</Tabs>
 
 On Windows the `mocha` command should look like this:
 
@@ -78,24 +85,10 @@ But there is a much faster, easier and complete approach. Since everything on to
 
 By default, the generator creates a service test file that only tests that the service exists.
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-E.g. like this in `test/services/users.test.js`:
+<Tabs>
 
-```js
-const assert = require('assert');
-const app = require('../../src/app');
+<Tab name="TypeScript" global-id="ts">
 
-describe('\'users\' service', () => {
-  it('registered the service', () => {
-    const service = app.service('users');
-
-    assert.ok(service, 'Registered the service');
-  });
-});
-```
-:::
-::: tab "TypeScript"
 E.g. like this in `test/services/users.test.ts`:
 
 ```ts
@@ -110,14 +103,12 @@ describe('\'users\' service', () => {
   });
 });
 ```
-:::
-::::
 
-We can then add similar tests that use the service. The first test below verifies that users can be created, the profile image gets set and the password gets encrypted. The second verifies that the password does not get sent to external requests:
+</Tab>
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-Replace `test/services/users.test.js` with the following:
+<Tab name="JavaScript" global-id="js">
+
+E.g. like this in `test/services/users.test.js`:
 
 ```js
 const assert = require('assert');
@@ -129,35 +120,19 @@ describe('\'users\' service', () => {
 
     assert.ok(service, 'Registered the service');
   });
-
-  it('creates a user, encrypts password and adds gravatar', async () => {
-    const user = await app.service('users').create({
-      email: 'test@example.com',
-      password: 'secret'
-    });
-
-    // Verify Gravatar has been set as we'd expect
-    assert.equal(user.avatar, 'https://s.gravatar.com/avatar/55502f40dc8b7c769880b10874abc9d0?s=60');
-    // Makes sure the password got encrypted
-    assert.ok(user.password !== 'secret');
-  });
-
-  it('removes password for external requests', async () => {
-    // Setting `provider` indicates an external request
-    const params = { provider: 'rest' };
-
-    const user = await app.service('users').create({
-      email: 'test2@example.com',
-      password: 'secret'
-    }, params);
-
-    // Make sure password has been removed
-    assert.ok(!user.password);
-  });
 });
 ```
-:::
-::: tab "TypeScript"
+
+</Tab>
+
+</Tabs>
+
+We can then add similar tests that use the service. The first test below verifies that users can be created, the profile image gets set and the password gets encrypted. The second verifies that the password does not get sent to external requests:
+
+<Tabs>
+
+<Tab name="TypeScript" global-id="ts">
+
 Replace `test/services/users.test.ts` with the following:
 
 ```ts
@@ -197,52 +172,61 @@ describe('\'users\' service', () => {
   });
 });
 ```
-:::
-::::
 
-We take a similar approach for the messages service test. We create a test-specific user from the `users` service, then pass it as `params.user` when creating a new message and validates that message's content:
+</Tab>
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-Update `test/services/messages.test.js` as follows:
+<Tab name="JavaScript" global-id="js">
+
+Replace `test/services/users.test.js` with the following:
 
 ```js
 const assert = require('assert');
 const app = require('../../src/app');
 
-describe('\'messages\' service', () => {
+describe('\'users\' service', () => {
   it('registered the service', () => {
-    const service = app.service('messages');
+    const service = app.service('users');
 
     assert.ok(service, 'Registered the service');
   });
 
-  it('creates and processes message, adds user information', async () => {
-    // Create a new user we can use for testing
+  it('creates a user, encrypts password and adds gravatar', async () => {
     const user = await app.service('users').create({
-      email: 'messagetest@example.com',
-      password: 'supersecret'
+      email: 'test@example.com',
+      password: 'secret'
     });
 
-    // The messages service call params (with the user we just created)
-    const params = { user };
-    const message = await app.service('messages').create({
-      text: 'a test',
-      additional: 'should be removed'
+    // Verify Gravatar has been set as we'd expect
+    assert.equal(user.avatar, 'https://s.gravatar.com/avatar/55502f40dc8b7c769880b10874abc9d0?s=60');
+    // Makes sure the password got encrypted
+    assert.ok(user.password !== 'secret');
+  });
+
+  it('removes password for external requests', async () => {
+    // Setting `provider` indicates an external request
+    const params = { provider: 'rest' };
+
+    const user = await app.service('users').create({
+      email: 'test2@example.com',
+      password: 'secret'
     }, params);
 
-    assert.equal(message.text, 'a test');
-    // `userId` should be set to passed users it
-    assert.equal(message.userId, user._id);
-    // Additional property has been removed
-    assert.ok(!message.additional);
-    // `user` has been populated
-    assert.deepEqual(message.user, user);
+    // Make sure password has been removed
+    assert.ok(!user.password);
   });
 });
 ```
-:::
-::: tab "TypeScript"
+
+</Tab>
+
+</Tabs>
+
+We take a similar approach for the messages service test. We create a test-specific user from the `users` service, then pass it as `params.user` when creating a new message and validates that message's content:
+
+<Tabs>
+
+<Tab name="TypeScript" global-id="ts">
+
 Update `test/services/messages.test.ts` as follows:
 
 ```ts
@@ -280,8 +264,52 @@ describe('\'messages\' service', () => {
   });
 });
 ```
-:::
-::::
+
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+Update `test/services/messages.test.js` as follows:
+
+```js
+const assert = require('assert');
+const app = require('../../src/app');
+
+describe('\'messages\' service', () => {
+  it('registered the service', () => {
+    const service = app.service('messages');
+
+    assert.ok(service, 'Registered the service');
+  });
+
+  it('creates and processes message, adds user information', async () => {
+    // Create a new user we can use for testing
+    const user = await app.service('users').create({
+      email: 'messagetest@example.com',
+      password: 'supersecret'
+    });
+
+    // The messages service call params (with the user we just created)
+    const params = { user };
+    const message = await app.service('messages').create({
+      text: 'a test',
+      additional: 'should be removed'
+    }, params);
+
+    assert.equal(message.text, 'a test');
+    // `userId` should be set to passed users it
+    assert.equal(message.userId, user._id);
+    // Additional property has been removed
+    assert.ok(!message.additional);
+    // `user` has been populated
+    assert.deepEqual(message.user, user);
+  });
+});
+```
+
+</Tab>
+
+</Tabs>
 
 Run `npm test` one more time, to verify that all tests are passing.
 
@@ -295,21 +323,10 @@ npm install nyc --save-dev
 
 Now we have to update the `scripts` section of our `package.json` to:
 
-:::: tabs :options="{ useUrlFragment: false }"
-::: tab "JavaScript"
-```js
-  "scripts": {
-    "test": "npm run eslint && npm run coverage",
-    "coverage": "nyc npm run mocha",
-    "eslint": "eslint src/. test/. --config .eslintrc.json",
-    "dev": "nodemon src/",
-    "start": "node src/",
-    "clean": "shx rm -rf test/data/",
-    "mocha": "npm run clean && NODE_ENV=test mocha test/ --recursive --exit"
-  },
-```
-:::
-::: tab "TypeScript"
+<Tabs>
+
+<Tab name="TypeScript" global-id="ts">
+
 For TypeScript we also have to install the TypeScript reporter:
 
 ```sh
@@ -341,8 +358,26 @@ And then update the `package.json` like this:
     "compile": "shx rm -rf lib/ && tsc"
   },
 ```
-:::
-::::
+
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+  "scripts": {
+    "test": "npm run eslint && npm run coverage",
+    "coverage": "nyc npm run mocha",
+    "eslint": "eslint src/. test/. --config .eslintrc.json",
+    "dev": "nodemon src/",
+    "start": "node src/",
+    "clean": "shx rm -rf test/data/",
+    "mocha": "npm run clean && NODE_ENV=test mocha test/ --recursive --exit"
+  },
+```
+
+</Tab>
+
+</Tabs>
 
 
 On Windows, the `coverage` command looks like this:

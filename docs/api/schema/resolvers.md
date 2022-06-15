@@ -18,55 +18,10 @@ Resolvers usually work together with [schema definitions](./schema.md) but can a
 
 Here is an example for a standalone resolver using a custom context:
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs>
 
-::: tab "JavaScript"
-```js
-import { resolve } from '@feathersjs/schema';
+<Tab name="TypeScript" global-id="ts">
 
-const context = {
-  async getUser (id) {
-    return {
-      id,
-      name: 'David'
-    }
-  },
-  async getLikes (messageId) {
-    return 10;
-  }
-}
-
-const messageResolver = resolve({
-  properties: {
-    likes: async (value, message, context) => {
-      return context.getLikes(message.id);
-    },
-    user: async (value, message, context) => {
-      return context.getUser(message.userId);
-    }
-  }
-});
-
-const resolvedMessage = await messageResolver.resolve({
-  id: 1,
-  userId: 23,
-  text: 'Hello!'
-}, context);
-
-// { id: 1, userId: 10, likes: 10, text: 'Hello', user: { id: 23, name: 'David' } }
-const partialMessage = await messageResolver.resolve({
-  id: 1,
-  userId: 23,
-  text: 'Hello!'
-}, context, {
-  properties: [ 'id', 'text', 'user' ]
-});
-
-// { id: 1, text: 'Hello', user: { id: 23, name: 'David' } }
-```
-:::
-
-::: tab "TypeScript"
 ```ts
 import { resolve } from '@feathersjs/schema';
 
@@ -125,9 +80,58 @@ const partialMessage: Pick<User, 'id'|'text'|'user'> = await messageResolver.res
 
 // { id: 1, text: 'Hello', user: { id: 23, name: 'David' } }
 ```
-:::
 
-::::
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+import { resolve } from '@feathersjs/schema';
+
+const context = {
+  async getUser (id) {
+    return {
+      id,
+      name: 'David'
+    }
+  },
+  async getLikes (messageId) {
+    return 10;
+  }
+}
+
+const messageResolver = resolve({
+  properties: {
+    likes: async (value, message, context) => {
+      return context.getLikes(message.id);
+    },
+    user: async (value, message, context) => {
+      return context.getUser(message.userId);
+    }
+  }
+});
+
+const resolvedMessage = await messageResolver.resolve({
+  id: 1,
+  userId: 23,
+  text: 'Hello!'
+}, context);
+
+// { id: 1, userId: 10, likes: 10, text: 'Hello', user: { id: 23, name: 'David' } }
+const partialMessage = await messageResolver.resolve({
+  id: 1,
+  userId: 23,
+  text: 'Hello!'
+}, context, {
+  properties: [ 'id', 'text', 'user' ]
+});
+
+// { id: 1, text: 'Hello', user: { id: 23, name: 'David' } }
+```
+
+</Tab>
+
+</Tabs>
 
 ## Options
 
@@ -203,7 +207,7 @@ app.service('users').hooks({
   ]
 });
 ```
- 
+
 ### Result resolvers
 
 `result` resolvers use the `resolveResult` hook and modify the data that is returned by a service call ([context.result](../hooks.md#context-result) in a hook). This can be used to populate associations or protect properties from being returned for external requests. A result resolver should also have a schema to know the shape of the data that will be returned but it does not need to run any validation.
@@ -272,7 +276,7 @@ app.service('users').hooks({
 });
 ```
 
-> __Important:__ In order to get the safe data from resolved associations, all services involved need the `resolveDispatch` or `resolveAll` hook registered. The `resolveDispatch` hook should also be registered before the `resolveResult` hook so that it gets the final result data. 
+> __Important:__ In order to get the safe data from resolved associations, all services involved need the `resolveDispatch` or `resolveAll` hook registered. The `resolveDispatch` hook should also be registered before the `resolveResult` hook so that it gets the final result data.
 
 ### Query resolvers
 

@@ -6,27 +6,10 @@
 
 If you are not familiar with JSON schema have a look at the [official getting started guide](https://json-schema.org/learn/getting-started-step-by-step). Here is an example for a possible user schema:
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs>
 
-::: tab "JavaScript"
-```js
-import { schema } from '@feathersjs/schema';
+<Tab name="TypeScript" global-id="ts">
 
-export const userSchema = schema({
-  $id: 'User',
-  type: 'object',
-  additionalProperties: false,
-  required: ['email', 'password'],
-  properties: {
-    id: { type: 'number' },
-    email: { type: 'string' },
-    password: { type: 'string' }
-  }
-});
-```
-:::
-
-::: tab "TypeScript"
 ```ts
 import { HookContext } from './definitions';
 import { schema, Infer } from '@feathersjs/schema';
@@ -45,9 +28,30 @@ export const userSchema = schema({
 
 export type User = Infer<typeof userSchema>;
 ```
-:::
 
-::::
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+import { schema } from '@feathersjs/schema';
+
+export const userSchema = schema({
+  $id: 'User',
+  type: 'object',
+  additionalProperties: false,
+  required: ['email', 'password'],
+  properties: {
+    id: { type: 'number' },
+    email: { type: 'string' },
+    password: { type: 'string' }
+  }
+});
+```
+
+</Tab>
+
+</Tabs>
 
 > __Very Important:__ To get the correct TypeScript types the definition always needs to be declared via `schema({} as const)`.
 
@@ -84,40 +88,10 @@ export const userSchema = schema({
 
 To create a new schema that extends an existing one, combine the schema properties from `schema.properties` (an `schema.required` if needed) with the new properties:
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs>
 
-::: tab "JavaScript"
-```js
-import { schema } from '@feathersjs/schema';
+<Tab name="TypeScript" global-id="ts">
 
-export const userSchema = schema({
-  $id: 'User',
-  type: 'object',
-  additionalProperties: false,
-  required: ['email', 'password'],
-  properties: {
-    id: { type: 'number' },
-    email: { type: 'string' },
-    password: { type: 'string' }
-  }
-});
-
-// The user result has all properties from the user but also an
-// additional `id` added by the database
-export const userResultSchema = schema({
-  $id: 'UserResult',
-  type: 'object',
-  additionalProperties: false,
-  required: [...userSchema.required, 'id'],
-  properties: {
-    ...userSchema.properties,
-    id: { type: 'number' }
-  }
-});
-```
-:::
-
-::: tab "TypeScript"
 ```ts
 import { HookContext } from './definitions';
 import { schema, Infer } from '@feathersjs/schema';
@@ -148,17 +122,11 @@ export const userResultSchema = schema({
 
 export type User = Infer<typeof userResultSchema>;
 ```
-:::
 
-::::
+</Tab>
 
-## Associations
+<Tab name="JavaScript" global-id="js">
 
-Associated schemas can be initialized via the `$ref` keyword referencing the `$id` set during schema definition.
-
-:::: tabs :options="{ useUrlFragment: false }"
-
-::: tab "JavaScript"
 ```js
 import { schema } from '@feathersjs/schema';
 
@@ -174,20 +142,32 @@ export const userSchema = schema({
   }
 });
 
-export const messageSchema = schema({
-  $id: 'Message',
+// The user result has all properties from the user but also an
+// additional `id` added by the database
+export const userResultSchema = schema({
+  $id: 'UserResult',
   type: 'object',
   additionalProperties: false,
-  required: ['text'],
+  required: [...userSchema.required, 'id'],
   properties: {
-    text: { type: 'string' },
-    user: { $ref: 'User' }
+    ...userSchema.properties,
+    id: { type: 'number' }
   }
 });
 ```
-:::
 
-::: tab "TypeScript"
+</Tab>
+
+</Tabs>
+
+## Associations
+
+Associated schemas can be initialized via the `$ref` keyword referencing the `$id` set during schema definition.
+
+<Tabs>
+
+<Tab name="TypeScript" global-id="ts">
+
 In TypeScript the referenced type needs to be added explicitly.
 
 ```ts
@@ -223,15 +203,47 @@ export type Message = Infer<typeof messageSchema> & {
   user: User
 }
 ```
-:::
 
-::::
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+import { schema } from '@feathersjs/schema';
+
+export const userSchema = schema({
+  $id: 'User',
+  type: 'object',
+  additionalProperties: false,
+  required: ['email', 'password'],
+  properties: {
+    id: { type: 'number' },
+    email: { type: 'string' },
+    password: { type: 'string' }
+  }
+});
+
+export const messageSchema = schema({
+  $id: 'Message',
+  type: 'object',
+  additionalProperties: false,
+  required: ['text'],
+  properties: {
+    text: { type: 'string' },
+    user: { $ref: 'User' }
+  }
+});
+```
+
+</Tab>
+
+</Tabs>
 
 ## Query helper
 
 Schema ships with the following helpers to automatically create schemas that follow the [Feathers query syntax](../databases/querying.md) (like `$gt`, `$ne` etc.):
 
-- `queryProperty` helper takes a definition for a single property (usually `{ type: '<type>' }`) and returns a schema that allows the default query operators 
+- `queryProperty` helper takes a definition for a single property (usually `{ type: '<type>' }`) and returns a schema that allows the default query operators
 - `queryProperties(schema.properties)` takes the all properties of a schema and converts them into query schema properties (using `queryProperty`)
 - `querySyntax(schema.properties)` initializes all properties the additional query syntax properties `$limit`, `$skip`, `$select` and `$sort`. `$select` and `$sort` will be typed so they only allow existing schema properties.
 

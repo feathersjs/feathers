@@ -24,48 +24,10 @@
 
 Here is an example of a user schema definition and resolver:
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs>
 
-::: tab "JavaScript"
-```js
-import { schema, resolve } from '@feathersjs/schema';
+<Tab name="TypeScript" global-id="ts">
 
-export const userSchema = schema({
-  $id: 'User',
-  type: 'object',
-  additionalProperties: false,
-  required: ['email', 'password'],
-  properties: {
-    id: { type: 'number' },
-    email: { type: 'string' },
-    password: { type: 'string' }
-  }
-});
-
-export const userDataResolver = resolve({
-  properties: {
-    password: async (value) => {
-      // Return a hashed version of the password before storing it in the database
-      return bcrypt(value);
-    }
-  }
-});
-
-export const userResultResolver = resolve({
-  properties: {
-    password: async (value, _user, context) => {
-      // Do not return the password for external requests
-      if (context.params.provider) {
-        return undefined;
-      }
-      return value;
-    }
-  }
-});
-```
-:::
-
-::: tab "TypeScript"
 ```ts
 import { HookContext } from './definitions';
 import { schema, resolve, Infer } from '@feathersjs/schema';
@@ -106,6 +68,48 @@ export const userResultResolver = resolve<User, HookContext>({
   }
 });
 ```
-:::
 
-::::
+</Tab>
+
+<Tab name="JavaScript" global-id="js">
+
+```js
+import { schema, resolve } from '@feathersjs/schema';
+
+export const userSchema = schema({
+  $id: 'User',
+  type: 'object',
+  additionalProperties: false,
+  required: ['email', 'password'],
+  properties: {
+    id: { type: 'number' },
+    email: { type: 'string' },
+    password: { type: 'string' }
+  }
+});
+
+export const userDataResolver = resolve({
+  properties: {
+    password: async (value) => {
+      // Return a hashed version of the password before storing it in the database
+      return bcrypt(value);
+    }
+  }
+});
+
+export const userResultResolver = resolve({
+  properties: {
+    password: async (value, _user, context) => {
+      // Do not return the password for external requests
+      if (context.params.provider) {
+        return undefined;
+      }
+      return value;
+    }
+  }
+});
+```
+
+</Tab>
+
+</Tabs>
