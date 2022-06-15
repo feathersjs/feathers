@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Overview
 
 Feathers database adapters are modules that provide [services](../services.md) that implement standard [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) functionality for a specific database using a [common API](./common.md) for initialization and settings and providing a [common query syntax](./querying.md).

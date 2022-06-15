@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Querying
 
 All official database adapters support a common way for querying, sorting, limiting and selecting `find` method calls as part of `params.query`. Querying also applies `update`, `patch` and `remove` method calls if the `id` is set to `null`.

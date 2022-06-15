@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # JWT Strategy
 
 <Badges>

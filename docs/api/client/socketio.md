@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Socket.io Client
 
 ## @feathersjs/socketio-client

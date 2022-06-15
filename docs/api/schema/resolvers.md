@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Resolvers
 
 Resolvers dynamically resolve individual properties based on a context, in a Feathers application usually the [hook context](../hooks.md#hook-context).

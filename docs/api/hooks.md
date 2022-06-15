@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Hooks
 
 Hooks are pluggable middleware functions that can be registered __before__, __after__ or on __error__(s) of a [service method](./services.md). You can register a single hook function or create a chain of them to create complex work-flows. Most of the time multiple hooks are registered so the examples show the "hook chain" array style registration.

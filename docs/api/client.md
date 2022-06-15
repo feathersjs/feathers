@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Feathers Client
 
 One of the most notable features of Feathers is that it can also be used as the client. In contrast with most other frameworks, it isn't a separate library; instead you get the exact same functionality with a client and on a server. This means you can use [services](./services.md) and [hooks](./hooks.md) and configure plugins. By default, a Feathers client automatically creates services that talk to a Feathers server.

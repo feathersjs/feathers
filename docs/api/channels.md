@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Channels
 
 On a Feathers server with a real-time transport (like [Socket.io](./socketio.md)) set up, event channels determine which connected clients to send [real-time events](./events.md) to and how the sent data should look like.

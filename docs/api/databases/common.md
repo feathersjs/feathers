@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Common API
 
 All database adapters implement a common interface for initialization, pagination, extending and querying. This chapter describes the common adapter initialization and options, how to enable and use pagination, the details on how specific service methods behave and how to extend an adapter with custom functionality.

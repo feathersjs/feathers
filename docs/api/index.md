@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # API
 
 This section describes all the individual modules and APIs of Feathers. There are three main sections of the API:

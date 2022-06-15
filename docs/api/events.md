@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Events
 
 Events are the key part of Feathers real-time functionality. All events in Feathers are provided through the [NodeJS EventEmitter](https://nodejs.org/api/events.html) interface. This section describes

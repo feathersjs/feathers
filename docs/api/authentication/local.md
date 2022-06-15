@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Local Strategy
 
 <Badges>
