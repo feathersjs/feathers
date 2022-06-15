@@ -1,5 +1,5 @@
 <a href="https://feathersjs.com" title="FeathersJS">
-  <img src="https://user-images.githubusercontent.com/128857/173478258-0b062d50-2ef3-44a0-9da2-8085cc7e1d51.jpg" alt="The FeathersJS Family of Birds">
+  <img src="https://user-images.githubusercontent.com/128857/173851241-b52de3b8-468d-4ac3-a4b3-eaae9c8b7f77.jpg" alt="The FeathersJS Family of Birds">
 </a>
 
 ## The API and Real-time Application Framework
