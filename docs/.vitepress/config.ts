@@ -389,6 +389,18 @@ export default defineConfig({
               text: 'Querying',
               link: '/api/databases/querying',
             },
+            {
+              text: 'Adapter - Memory',
+              link: '/api/databases/memory',
+            },
+            {
+              text: 'Adapter - MongoDB',
+              link: '/api/databases/mongodb',
+            },
+            {
+              text: 'Adapter - Knex',
+              link: '/api/databases/knex',
+            },
           ],
         },
       ],
