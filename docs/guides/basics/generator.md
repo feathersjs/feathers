@@ -36,7 +36,9 @@ Let's have a brief look at the files that have been generated:
 
 <Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+<Tab name="For TypeScript Apps" global-id="ts">
+
+<div class="pb-2" />
 
 * `config/` contains the configuration files for the app
   * `default.json` contains the basic application configuration
@@ -72,7 +74,9 @@ Let's have a brief look at the files that have been generated:
 
 </Tab>
 
-<Tab name="JavaScript" global-id="js">
+<Tab name="For JavaScript Apps" global-id="js">
+
+<div class="pb-2" />
 
 * `config/` contains the configuration files for the app
   * `default.json` contains the basic application configuration
@@ -117,7 +121,9 @@ For example, have a look at the following files:
 
 <Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+<Tab name="For TypeScript Apps" global-id="ts">
+
+<div class="pb-2" />
 
 `src/services/index.ts` looks like this:
 
@@ -146,7 +152,9 @@ app.configure(services);
 
 </Tab>
 
-<Tab name="JavaScript" global-id="js">
+<Tab name="For JavaScript Apps" global-id="js">
+
+<div class="pb-2" />
 
 `src/services/index.js` looks like this:
 
