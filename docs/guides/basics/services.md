@@ -152,13 +152,26 @@ Now that we have all those service methods we could go ahead and implement any k
 
 Writing all that code yourself for every service is pretty repetitive and cumbersome though which is why Feathers has a collection of pre-built services for different databases. They offer most of the basic functionality and can always be fully customized (as we will see in a bit). Feathers database adapters support a common [usage API](../../api/databases/common.md), pagination and [querying syntax](../../api/databases/querying.md) for many popular databases and NodeJS ORMs:
 
+### Core Database Adapters
+
+These database adapters are maintained as part of FeathersJS Core.
+
 | Database | Adapter |
 |---|---|
-| In memory | [feathers-memory](https://github.com/feathersjs-ecosystem/feathers-memory), [feathers-nedb](https://github.com/feathersjs-ecosystem/feathers-nedb) |
+| In memory | [feathers-memory](https://github.com/feathersjs/feathers/tree/dove/packages/memory) |
+| MongoDB | [feathers-mongodb](https://github.com/feathersjs/feathers/tree/dove/packages/mongodb) |
+| MySQL, PostgreSQL, MariaDB, SQLite, MSSQL | [feathers-knex](https://github.com/feathersjs/feathers/tree/dove/packages) |
+
+### Community Adapters
+
+These full-featured adapters are maintained by the community.
+
+| Database | Adapter |
+|---|---|
 | Localstorage, AsyncStorage | [feathers-localstorage](https://github.com/feathersjs-ecosystem/feathers-localstorage) |
 | Filesystem | [feathers-nedb](https://github.com/feathersjs-ecosystem/feathers-nedb) |
-| MongoDB | [feathers-mongodb](https://github.com/feathersjs-ecosystem/feathers-mongodb), [feathers-mongoose](https://github.com/feathersjs-ecosystem/feathers-mongoose) |
-| MySQL, PostgreSQL, MariaDB, SQLite, MSSQL | [feathers-knex](https://github.com/feathersjs-ecosystem/feathers-knex), [feathers-sequelize](https://github.com/feathersjs-ecosystem/feathers-sequelize), [feathers-objection](https://github.com/feathersjs-ecosystem/feathers-objection) |
+| MongoDB | [feathers-mongoose](https://github.com/feathersjs-ecosystem/feathers-mongoose) |
+| MySQL, PostgreSQL, MariaDB, SQLite, MSSQL | [feathers-sequelize](https://github.com/feathersjs-ecosystem/feathers-sequelize), [feathers-objection](https://github.com/feathersjs-ecosystem/feathers-objection) |
 | Elasticsearch | [feathers-elasticsearch](https://github.com/feathersjs-ecosystem/feathers-elasticsearch) |
 
 > __Pro tip:__ Each one of the linked adapters has a complete standalone REST API example in their readme.
