@@ -4,52 +4,44 @@ outline: deep
 
 # Hooks
 
-Hooks are pluggable middleware functions that can be registered __before__, __after__ or on __error__(s) of a [service method](./services.md). You can register a single hook function or create a chain of them to create complex work-flows. Most of the time multiple hooks are registered so the examples show the "hook chain" array style registration.
+Hooks are pluggable middleware functions that can be registered __around__, __before__, __after__ or on __error__(s) of a [service method](./services.md). Multiple hook functions can be chained to create complex work-flows.  A hook is **transport independent**, which means it does not matter if it has been called internally on the server, through HTTP(S) (REST), websockets or any other transport Feathers may support. They are also service agnostic, meaning they can be used with ​**any**​ service regardless of whether they have a model or not.
 
-A hook is **transport independent**, which means it does not matter if it has been called through HTTP(S) (REST), websockets or any other transport Feathers may support. They are also service agnostic, meaning they can be used with ​**any**​ service regardless of whether they have a model or not.
-
-Hooks are commonly used to handle things like validation, logging, populating related entities, sending notifications and more. This pattern keeps your application logic flexible, composable, and much easier to trace through and debug. For more information about the design patterns behind hooks see [this blog post](https://blog.feathersjs.com/api-service-composition-with-hooks-47af13aa6c01).
+Hooks are commonly used to handle things like validation, logging, [authentication](./authentication/hook.md), [handling data schemas and resolvers](./schema/index.md), sending notifications and more. This pattern keeps your application logic flexible, composable, and much easier to trace through and debug. For more information about the design patterns behind hooks see [this blog post](https://blog.feathersjs.com/api-service-composition-with-hooks-47af13aa6c01).
 
 ## Quick Example
 
-The following example adds a `createdAt` and `updatedAt` property before saving the data to the database and logs any errors on the service:
+The following example adds a `createdAt` property before saving the data to the database, logs the total runtime of any method call and any errors on the service:
 
 <Tabs>
 
 <Tab name="TypeScript" global-id="ts">
 
 ```js
-import { default as feathers, HookContext } from '@feathersjs/feathers';
+import { feathers, HookContext } from '@feathersjs/feathers';
 
 const app = feathers();
 
 app.service('messages').hooks({
+  around: {
+    all: [
+      // A hook that wraps around all other hooks and the service method
+      // logging the total runtime of a successful call
+      async (context, next) => {
+        const startTime = Date.now()
+
+        await next()
+
+        console.log(`Method ${context.method} on ${context.path} took ${Date.now() - start}ms`)
+      } 
+    ]
+  }
   before: {
-    create: [async (context: HookContext) => {
+    create: [async (context) => {
       context.data.createdAt = new Date();
 
       return context;
-    }],
-
-    update: [async (context: HookContext) => {
-      context.data.updatedAt = new Date();
-
-      return context;
-    }],
-
-    patch: [async (context: HookContext) => {
-      context.data.updatedAt = new Date();
-
-      return context;
     }]
-  },
-
-  error: {
-    all: [async (context: HookContext) => {
-      console.error(`Error in ${context.path} calling ${context.method}  method`, context.error);
-
-      return context;
-    }]
+  }
 });
 ```
 </Tab>

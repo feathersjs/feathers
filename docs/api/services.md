@@ -4,21 +4,20 @@ outline: deep
 
 # Services
 
-"Services" are the heart of every Feathers application. Services are JavaScript objects (or instances of [ES6 classes](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes)) that implement [certain methods](#service-methods). Feathers itself will also add some [additional methods and functionality](#feathers-functionality) to its services.
+"Services" are the heart of every Feathers application. Services are objects (or instances of [classes](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes)) that implement [certain methods](#service-methods). Feathers itself will also add some [additional methods and functionality](#feathers-functionality) to its services.
 
 ## Service methods
 
-Service methods are pre-defined [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) and [custom methods](#custommethod-data-params) that your service provides (or that have already been implemented by one of the [database adapters](./databases/common.md)). Below is an example of a Feathers service using [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) as a normal object or a [JavaScript or Typescript class](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes):
+Service methods are pre-defined [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) and [custom methods](#custommethod-data-params) that your service provides (or that have already been implemented by one of the [database adapters](./databases/common.md)). Below is an example of a Feathers service using [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) as a class or object.
 
-<Tabs show-tabs>
+<Tabs>
 
 <Tab name="TypeScript" global-id="ts">
 
 ```typescript
-import { ServiceMethods, Params, Id, NullableId } from "@feathersjs/feathers";
-import { Application } from "../../declarations";
+import { feathers, Params, Id, NullableId } from "@feathersjs/feathers";
 
-class MyService implements ServiceMethods<any> {
+class MyServiceClass {
   async find(params: Params) {
     return [];
   }
@@ -28,9 +27,31 @@ class MyService implements ServiceMethods<any> {
   async patch(id: NullableId, data: any, params: Params) {}
   async remove(id: NullableId, params: Params) {}
   async setup(app: Application, path: string) {}
+  async teardown(app: Application, path: string) {}
 }
 
-app.use('/my-service', new MyService());
+const myServiceObject = {
+  async find(params: Params) {
+    return [];
+  },
+  async get(id: Id, params: Params) {},
+  async create(data: any, params: Params) {},
+  async update(id: NullableId, data: any, params: Params) {},
+  async patch(id: NullableId, data: any, params: Params) {},
+  async remove(id: NullableId, params: Params) {},
+  async setup(app: Application, path: string) {},
+  async teardown(app: Application, path: string) {}
+}
+
+type ServiceTypes = {
+  'my-service': MyServiceClass,
+  'my-service-object': typeof myServiceObject
+}
+
+const app = feathers<ServiceTypes>()
+
+app.use('my-service', new MyService())
+app.use('my-service-object', myServiceObject)
 ```
 
 </Tab>
@@ -38,40 +59,38 @@ app.use('/my-service', new MyService());
 <Tab name="JavaScript" global-id="js">
 
 ```js
-class MyService {
-  async find(params) {
-    return [];
-  }
-  async get(id, params) {}
-  async create(data, params) {}
-  async update(id, data, params) {}
-  async patch(id, data, params) {}
-  async remove(id, params) {}
-  async setup(app, path) {}
+import { feathers } from '@feathersjs/feathers'
+
+class MyServiceClass {
+    async find(params) {
+        return [];
+    }
+    async get(id, params) {}
+    async create(data, params) {}
+    async update(id, data, params) {}
+    async patch(id, data, params) {}
+    async remove(id, params) {}
+    async setup(app, path) {}
+    async teardown(app, path) {}
 }
 
-app.use('/my-service', new MyService());
-```
-
-</Tab>
-
-
-<Tab name="Object">
-
-```js
-const myService = {
-  async find(params) {
-    return [];
-  },
-  async get(id, params) {},
-  async create(data, params) {},
-  async update(id, data, params) {},
-  async patch(id, data, params) {},
-  async remove(id, params) {},
-  async setup(app, path) {}
+const myServiceObject = {
+    async find(params) {
+        return [];
+    },
+    async get(id, params) {},
+    async create(data, params) {},
+    async update(id, data, params) {},
+    async patch(id, data, params) {},
+    async remove(id, params) {},
+    async setup(app, path) {},
+    async teardown(app, path) {}
 }
 
-app.use('/my-service', myService);
+const app = feathers()
+
+app.use('my-service', new MyService())
+app.use('my-service-object', myServiceObject)
 ```
 
 </Tab>
@@ -79,8 +98,6 @@ app.use('/my-service', myService);
 </Tabs>
 
 > **ProTip:** Methods are optional and if a method is not implemented Feathers will automatically emit a `NotImplemented` error. At least one of the methods (e.g. `setup`) must be implemented to be considered a service.
-
-> **ProTip:** Notice that the TypeScript version of the example `MyService` class implements the `ServiceMethods` interface. If you look at, for instance, the users service that the Feathers CLI generates for you when you scaffold a new Feathers application you will notice that the users service class extends the chosen [database adapter](./databases/common.md) service class. The database adapter service classes actually extend a class named `AdapterService`, which implements the `ServiceMethods` interface.
 
 > __Important:__ Always use the service returned by `app.service(path)` not the service object (the `myService` object above) directly. See the [app.service documentation](./application.md#servicepath) for more information.
 
@@ -247,11 +264,15 @@ const app = feathers()
 app.listen(3030);
 ```
 
+### .teardown(app, path)
+
+`service.teardown(app, path) -> Promise` is a special method that shuts down the service, passing an instance of the Feathers application and the path it has been registered on. If a service implements a `teardown` method, it will be called during `app.teardown()`.
+
 ## Custom Methods
 
-A custom method is any other service method you want to expose publicly. A custom method always has a signature of `(data, params)` with the same semantics as standard service methods (`data` is the payload, `params` is the service [params](#params)). They can be used with hooks (including authentication) and must be `async` or return a Promise.
+A custom method is any other service method you want to expose publicly. A custom method always has a signature of `(data, params)` with the same semantics as standard service methods (`data` is the payload, `params` is the service [params](#params)). They can be used with [hooks](./hooks.md) (including authentication) and must be `async` or return a Promise.
 
-In order to register a public custom method, the names of *all methods* have to be passed as the `methods` option when registering the service:
+In order to register a public custom method, the names of *all methods* have to be passed as the `methods` option when registering the service with [app.use()](./application.md#usepath-service--options)
 
 ```js
 class MyService {
@@ -302,14 +323,14 @@ Register an event publishing callback. For more information, see the [channels c
 
 Provided by the core [NodeJS EventEmitter .on](https://nodejs.org/api/events.html#events_emitter_on_eventname_listener). Registers a `listener` method (`function(data) {}`) for the given `eventname`.
 
-> **Important:** For more information about service events, see the [Events chapter](./events.md).
+> **Note:** For more information about service events, see the [Events chapter](./events.md).
 
 
 ### .emit(eventname, data)
 
 Provided by the core [NodeJS EventEmitter .emit](https://nodejs.org/api/events.html#events_emitter_emit_eventname_args). Emits the event `eventname` to all event listeners.
 
-> **Important:** For more information about service events, see the [Events chapter](./events.md).
+> **Note:** For more information about service events, see the [Events chapter](./events.md).
 
 
 ### .removeListener(eventname)
