@@ -409,7 +409,13 @@ node app.js
 
 > __Note:__ The server will stay running until you stop it by pressing Control + C in the terminal.
 
-And visit [localhost:3030/messages](http://localhost:3030/messages) to see an array with the one message we created on the server.
+And visit 
+
+```
+http://localhost:3030/messages
+```
+
+to see an array with the one message we created on the server.
 
 > __Pro Tip:__ The built-in [JSON viewer in Firefox](https://developer.mozilla.org/en-US/docs/Tools/JSON_viewer) or a browser plugin like [JSON viewer for Chrome](https://chrome.google.com/webstore/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh) makes it nicer to view JSON responses in the browser.
 
@@ -484,7 +490,17 @@ Now we can look at one of the really cool features of Feathers. It works the sam
 </html>
 ```
 
-If you now go to [localhost:3030](http://localhost:3030) you will see a simple website that allows to create new messages. It is possible to open the page in two tabs and see new messages show up on either side in real-time. You can verify that the messages got created by visiting [localhost:3030/messages](http://localhost:3030/messages).
+If you now go to 
+
+```
+http://localhost:3030
+```
+
+you will see a simple website that allows to create new messages. It is possible to open the page in two tabs and see new messages show up on either side in real-time. You can verify that the messages got created by visiting 
+
+```
+http://localhost:3030/messages
+```
 
 ## What's next?
 

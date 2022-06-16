@@ -195,7 +195,11 @@ The server can now be started by running
 npm start
 ```
 
-After that, you can see a welcome page at [localhost:3030](http://localhost:3030).
+After that, you can see a welcome page at 
+
+```
+http://localhost:3030
+```
 
 The app also comes with a set of basic tests which can be run with
 

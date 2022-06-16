@@ -440,7 +440,7 @@ The following options can be passed when creating a new localstorage service:
 
 ## express.authenticate()
 
-`express.authenticate(...strategies)` allows to protect an Express middleware with an [authentication service](./authentication/server.md) that has [strategies](./authentication/strategy.md) registered that can parse HTTP headers. It will set the authentication information on the `req` object (e.g. `req.user`). The following example protects the `/hello` endpoint with the JWT strategy (so the `Authorization: Bearer <JWT>` header needs to be set) and uses the user email to render the message:
+`express.authenticate(...strategies)` allows to protect an Express middleware with an [authentication service](./authentication/service.md) that has [strategies](./authentication/strategy.md) registered that can parse HTTP headers. It will set the authentication information on the `req` object (e.g. `req.user`). The following example protects the `/hello` endpoint with the JWT strategy (so the `Authorization: Bearer <JWT>` header needs to be set) and uses the user email to render the message:
 
 ```js
 const { authenticate } = require('@feathersjs/express');

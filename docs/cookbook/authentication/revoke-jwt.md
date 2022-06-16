@@ -10,7 +10,7 @@ To add the ability to revoke an access token so that it can be no longer used ev
 
 ## Basic example
 
-The following example shows the basic flow of how a JWT can be revoked by storing it in a plain object. In a normal application you would use something like the [Redis storage shown below](using-redis).
+The following example shows the basic flow of how a JWT can be revoked by storing it in a plain object. In a normal application you would use something like the [Redis storage shown below](#using-redis).
 
 ```js
 const { AuthenticationService } = require('@feathersjs/authentication');

@@ -160,7 +160,13 @@ const main = async () => {
 main();
 ```
 
-If you now open the console and visit [localhost:3030](http://localhost:3030) you will see that our user has been authenticated.
+If you now open the console and visit 
+
+```
+http://localhost:3030
+```
+
+you will see that our user has been authenticated.
 
 ## GitHub login (OAuth)
 
@@ -293,7 +299,13 @@ module.exports = app => {
 
 > __Pro tip:__ For more information about the OAuth flow and strategy see the [OAuth API documentation](../../api/authentication/oauth.md).
 
-When we set up the [authentication client in the browser](#browser-authentication) it can also already handle OAuth logins. To log in with GitHub, visit [localhost:3030/oauth/github](http://localhost:3030/oauth/github). It will redirect to GitHub and ask to authorize our application. If everything went well, you will see a user with your GitHub email address being logged in the console.
+When we set up the [authentication client in the browser](#browser-authentication) it can also already handle OAuth logins. To log in with GitHub, visit 
+
+```
+http://localhost:3030/oauth/github
+```
+
+It will redirect to GitHub and ask to authorize our application. If everything went well, you will see a user with your GitHub email address being logged in the console.
 
 > __Note:__ The authentication client will not use the token from the OAuth login if there is already another token logged in. See the [OAuth API](../../api/authentication/oauth.md) for how to link to an existing account.
 

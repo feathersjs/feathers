@@ -46,7 +46,7 @@ The standard OAuth strategy only returns the default profile fields (`id` and `n
 
 > __Pro tip:__ Facebook API requests can be tested via the [Graph API explorer](https://developers.facebook.com/tools/explorer/).
 
-The following example allows to log in with Facebook in the [chat application from the guide](../../guides):
+The following example allows to log in with Facebook in the [chat application from the guide](../../guides/index.md):
 
 <Tabs>
 

@@ -293,4 +293,10 @@ addEventListener('#logout', 'click', async () => {
 });
 ```
 
-Now you should be able to visit your [Firebase Auth](http://localhost:3030/firebase_auth.html) page locally and authenticate w/any Firebase Providers you've set up in your Firebase Project 🔥
+Now you should be able to visit your Firebase auth at the
+
+```
+http://localhost:3030/firebase_auth.html
+```
+
+page locally and authenticate w/any Firebase Providers you've set up in your Firebase Project 🔥
