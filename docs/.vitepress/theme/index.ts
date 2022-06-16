@@ -10,6 +10,8 @@ import Tab from '../components/Tab.vue'
 import Tabs from '../components/Tabs.vue'
 import LanguageSelect from '../components/LanguageSelect.vue'
 import Badges from '../components/Badges.vue'
+import Logo from '../components/Logo.vue'
+import BlockQuote from '../components/BlockQuote.vue'
 
 if (inBrowser)
   import('./pwa')
@@ -23,6 +25,8 @@ export default {
     app.component('Tab', Tab)
     app.component('LanguageSelect', LanguageSelect)
     app.component('Badges', Badges)
+    app.component('Logo', Logo)
+    app.component('BlockQuote', BlockQuote)
   }
 }
 
