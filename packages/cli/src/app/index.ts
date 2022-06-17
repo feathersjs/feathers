@@ -9,7 +9,8 @@ import {
   fromFile,
   install,
   copyFiles,
-  toFile
+  toFile,
+  when
 } from '@feathershq/pinion'
 import { FeathersBaseContext, FeathersAppInfo, initializeBaseContext } from '../commons'
 import { generate as authenticationGenerator } from '../authentication'
@@ -110,7 +111,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
           message: 'What APIs do you want to offer?',
           choices: [
             { value: 'rest', name: 'HTTP (REST)', checked: true },
-            { value: 'websockets', name: 'Real-time (So)', checked: true }
+            { value: 'websockets', name: 'Real-time', checked: true }
           ]
         },
         {
@@ -180,30 +181,36 @@ export const generate = (ctx: AppGeneratorArguments) =>
     .then(runGenerators(__dirname, 'templates'))
     .then(copyFiles(fromFile(__dirname, 'static'), toFile('.')))
     .then(initializeBaseContext())
-    .then(async (ctx) => {
-      if (ctx.database === 'custom') {
-        return ctx
-      }
+    .then(
+      when<AppGeneratorContext>(
+        ({ authStrategies, database }) => authStrategies.length > 0 && database !== 'custom',
+        async (ctx) => {
+          const { dependencies } = await connectionGenerator(ctx)
 
-      const { dependencies } = await connectionGenerator(ctx)
+          return {
+            ...ctx,
+            dependencies
+          }
+        }
+      )
+    )
+    .then(
+      when<AppGeneratorContext>(
+        ({ authStrategies }) => authStrategies.length > 0,
+        async (ctx) => {
+          const { dependencies } = await authenticationGenerator({
+            ...ctx,
+            service: 'users',
+            entity: 'user'
+          })
 
-      return {
-        ...ctx,
-        dependencies
-      }
-    })
-    .then(async (ctx) => {
-      const { dependencies } = await authenticationGenerator({
-        ...ctx,
-        service: 'users',
-        entity: 'user'
-      })
-
-      return {
-        ...ctx,
-        dependencies
-      }
-    })
+          return {
+            ...ctx,
+            dependencies
+          }
+        }
+      )
+    )
     .then(
       install<AppGeneratorContext>(({ transports, framework, dependencyVersions, dependencies }) => {
         const hasSocketio = transports.includes('websockets')

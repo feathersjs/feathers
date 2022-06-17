@@ -8,7 +8,7 @@ const template = ({ name, description }: AppGeneratorContext) =>
 
 ## About
 
-This project uses [Feathers](http://feathersjs.com). An open source web framework for building APIs and real-time applications.
+This project uses [Feathers](http://feathersjs.com). An open source framework for building APIs and real-time applications.
 
 ## Getting Started
 
@@ -38,7 +38,6 @@ Feathers has a powerful command line interface. Here are a few things it can do:
 $ npm install -g @feathersjs/cli          # Install Feathers CLI
 
 $ feathers generate service               # Generate a new Service
-$ feathers generate hook                  # Generate a new Hook
 $ feathers help                           # Show all commands
 \`\`\`
 
