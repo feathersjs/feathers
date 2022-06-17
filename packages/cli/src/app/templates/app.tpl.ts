@@ -42,8 +42,8 @@ import helmet from 'helmet'
 
 import { feathers } from '@feathersjs/feathers'
 import express, {
-  rest, json, urlEncoded,
-  static as serveFolder, notFound, errorHandler
+  rest, json, urlencoded,
+  serveStatic, notFound, errorHandler
 } from '@feathersjs/express'
 import configuration from '@feathersjs/configuration'
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
@@ -63,7 +63,7 @@ app.use(compress())
 app.use(json())
 app.use(urlencoded({ extended: true }))
 // Host the public folder
-app.use('/', serveFolder(app.get('public')))
+app.use('/', serveStatic(app.get('public')))
 
 // Configure services and real-time functionality
 app.configure(rest())
