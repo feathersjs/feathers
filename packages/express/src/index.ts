@@ -22,6 +22,7 @@ export {
   formatter,
   errorHandler,
   notFound,
+  Application,
   ErrorHandlerOptions,
   ExpressOverrides,
   AuthenticationSettings,
