@@ -57,7 +57,7 @@ Now we can create a Feathers application with a simple messages service that all
 
 <Tabs>
 
-<Tab name="TypeScript" global-id="ts" >
+<Tab name="TypeScript" global-id="ts" class="pt-0.5">
 
 Create a file called `app.ts` with the following content:
 
@@ -139,7 +139,7 @@ npx ts-node app.ts
 ```
 
 </Tab>
-<Tab name="JavaScript" global-id="js">
+<Tab name="JavaScript" global-id="js" class="pt-0.5">
 
 Create a file called `app.js` with the following content:
 
@@ -238,7 +238,7 @@ npm install @feathersjs/socketio @feathersjs/koa --save
 
 <Tabs>
 
-<Tab name="TypeScript" global-id="ts" >
+<Tab name="TypeScript" global-id="ts" class="pt-0.5">
 
 Update `app.ts` with the following content:
 
@@ -324,7 +324,7 @@ npx ts-node app.ts
 
 </Tab>
 
-<Tab name="JavaScript" global-id="js">
+<Tab name="JavaScript" global-id="js" class="pt-0.5">
 
 Update `app.js` with the following content:
 
@@ -409,7 +409,7 @@ node app.js
 
 > __Note:__ The server will stay running until you stop it by pressing Control + C in the terminal.
 
-And visit 
+And visit
 
 ```
 http://localhost:3030/messages
@@ -490,13 +490,13 @@ Now we can look at one of the really cool features of Feathers. It works the sam
 </html>
 ```
 
-If you now go to 
+If you now go to
 
 ```
 http://localhost:3030
 ```
 
-you will see a simple website that allows to create new messages. It is possible to open the page in two tabs and see new messages show up on either side in real-time. You can verify that the messages got created by visiting 
+you will see a simple website that allows to create new messages. It is possible to open the page in two tabs and see new messages show up on either side in real-time. You can verify that the messages got created by visiting
 
 ```
 http://localhost:3030/messages
