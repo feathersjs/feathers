@@ -1,9 +1,11 @@
 import { generator, inject, toFile, before, after, prepend } from '@feathershq/pinion'
+import { getSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-export const importTemplate = `import { MongoDBAdapterParams, MongoDBService } from \'@feathersjs/mongodb\'`
+export const importTemplate = `import { MongoDBService } from \'@feathersjs/mongodb\'
+import type { MongoDBAdapterParams } from \'@feathersjs/mongodb\'`
 
-export const ts = ({ className, upperName }: ServiceGeneratorContext) =>
+export const classCode = ({ className, upperName }: ServiceGeneratorContext) =>
   `export interface ${upperName}Params extends MongoDBAdapterParams<${upperName}Query> {
 }
 
@@ -25,6 +27,8 @@ const toServiceFile = toFile<ServiceGeneratorContext>(({ lib, folder, kebabName,
 
 export const generate = (ctx: ServiceGeneratorContext) =>
   generator(ctx)
-    .then(inject(ts, before<ServiceGeneratorContext>('export const hooks ='), toServiceFile))
-    .then(inject(importTemplate, prepend(), toServiceFile))
+    .then(
+      inject(getSource(classCode), before<ServiceGeneratorContext>('export const hooks ='), toServiceFile)
+    )
+    .then(inject(getSource(importTemplate), prepend(), toServiceFile))
     .then(inject(optionTemplate, after('const options ='), toServiceFile))
