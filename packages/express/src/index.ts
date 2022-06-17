@@ -12,6 +12,7 @@ import { default as original, static as serveStatic, json, raw, text, urlencoded
 export {
   original,
   serveStatic,
+  serveStatic as static,
   json,
   raw,
   text,
