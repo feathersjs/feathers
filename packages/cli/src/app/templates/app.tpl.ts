@@ -48,7 +48,7 @@ ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketi
 import type { Application } from './declarations'
 import { configurationSchema } from './schemas/configuration.schema'
 import { logger, logErrorHook } from './logger'
-import { services } from './services'
+import { services } from './services/index'
 import { channels } from './channels'
 
 const app: Application = express.default(feathers())
