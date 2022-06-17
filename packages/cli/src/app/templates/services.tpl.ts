@@ -3,9 +3,10 @@ import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
 const template = ({}: AppGeneratorContext) =>
-  `import { Application } from '../declarations'
+  `import type { Application } from '../declarations'
 
 export const services = (app: Application) => {
+  // All services will be registered here
 }
 `
 

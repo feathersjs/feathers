@@ -3,7 +3,8 @@ import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
 const template = ({}: AppGeneratorContext) =>
-  `import { schema, Infer, Ajv } from '@feathersjs/schema'
+  `import { schema, Ajv } from '@feathersjs/schema'
+import type { Infer } from '@feathersjs/schema'
 import { authenticationSettingsSchema } from '@feathersjs/authentication'
 
 export const configurationSchema = schema({

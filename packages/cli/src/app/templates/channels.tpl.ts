@@ -4,7 +4,7 @@ import { AppGeneratorContext } from '../index'
 
 const template = ({}: AppGeneratorContext) =>
   `import '@feathersjs/transport-commons'
-import { Application, HookContext } from './declarations'
+import type { Application, HookContext } from './declarations'
 import { logger } from './logger'
 
 export const channels = (app: Application) => {

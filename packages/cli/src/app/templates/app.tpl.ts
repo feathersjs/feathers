@@ -9,10 +9,10 @@ import configuration from '@feathersjs/configuration'
 import { koa, rest, bodyParser, errorHandler, parseAuthentication } from '@feathersjs/koa'
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
+import type { Application } from './declarations'
 import { configurationSchema } from './schemas/configuration.schema'
 import { logErrorHook } from './logger'
-import { Application } from './declarations'
-import { services } from './services'
+import { services } from './services/index'
 import { channels } from './channels'
 
 const app: Application = koa(feathers())
@@ -55,36 +55,39 @@ const tsExpressApp = ({ transports }: AppGeneratorContext) =>
 import helmet from 'helmet'
 
 import { feathers } from '@feathersjs/feathers'
-import * as express from '@feathersjs/express'
+import express, {
+  rest, json, urlencoded,
+  serveStatic, notFound, errorHandler
+} from '@feathersjs/express'
 import configuration from '@feathersjs/configuration'
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
+import type { Application } from './declarations'
 import { configurationSchema } from './schemas/configuration.schema'
 import { logger, logErrorHook } from './logger'
-import { Application } from './declarations'
-import { services } from './services'
+import { services } from './services/index'
 import { channels } from './channels'
 
-const app: Application = express.default(feathers())
+const app: Application = express(feathers())
 
 // Load app configuration
 app.configure(configuration(configurationSchema))
 app.use(helmet())
 app.use(compress())
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(json())
+app.use(urlencoded({ extended: true }))
 // Host the public folder
-app.use('/', express.static(app.get('public')))
+app.use('/', serveStatic(app.get('public')))
 
 // Configure services and real-time functionality
-app.configure(express.rest())
+app.configure(rest())
 ${transports.includes('websockets') ? 'app.configure(socketio())' : ''}
 app.configure(services)
 app.configure(channels)
 
 // Configure a middleware for 404s and the error handler
-app.use(express.notFound())
-app.use(express.errorHandler({ logger }))
+app.use(notFound())
+app.use(errorHandler({ logger }))
 
 // Register hooks that run on all service methods
 app.hooks({

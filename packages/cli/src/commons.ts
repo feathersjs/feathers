@@ -1,5 +1,7 @@
 import { PackageJson } from 'type-fest'
 import { Callable, PinionContext, loadJSON, fromFile, getCallable, renderTemplate } from '@feathershq/pinion'
+import * as ts from 'typescript'
+import prettier from 'prettier'
 
 export type FeathersAppInfo = {
   /**
@@ -67,9 +69,33 @@ export const initializeBaseContext =
         ...ctx,
         lib: ctx.pkg?.directories?.lib || 'src',
         test: ctx.pkg?.directories?.test || 'test',
-        language: ctx.pkg?.feathers?.language || 'ts',
         feathers: ctx.pkg?.feathers
       }))
+
+const importRegex = /from '(\..*)'/g
+const escapeNewLines = (code: string) => code.replace(/\n\n/g, '\n/* :newline: */')
+const restoreNewLines = (code: string) => code.replace(/\/\* :newline: \*\//g, '\n')
+const fixLocalImports = (code: string) => code.replace(importRegex, "from '$1.js'")
+
+export const getJavaScript = (typescript: string, options: ts.TranspileOptions = {}) => {
+  const source = escapeNewLines(typescript)
+  const transpiled = ts.transpileModule(source, {
+    ...options,
+    compilerOptions: {
+      module: ts.ModuleKind.ESNext,
+      target: ts.ScriptTarget.ES2020,
+      preserveValueImports: true,
+      ...options.compilerOptions
+    }
+  })
+  const code = fixLocalImports(restoreNewLines(transpiled.outputText))
+
+  return prettier.format(code, {
+    semi: false,
+    parser: 'babel',
+    singleQuote: true
+  })
+}
 
 /**
  * Render a source file template for the language set in the context. Will do nothing
@@ -86,14 +112,29 @@ export const renderSource =
     options?: { force: boolean }
   ) =>
   async (ctx: C) => {
-    const { language } = ctx
-    const fileName = await getCallable<string, C>(toFile, ctx)
-
-    if (template) {
-      const renderer = renderTemplate(template, `${fileName}.${language}`, options)
-
-      return renderer(ctx)
+    if (!template) {
+      return ctx
     }
 
-    return ctx
+    const { language } = ctx
+    const fileName = await getCallable<string, C>(toFile, ctx)
+    const content = language === 'js' ? getJavaScript(await getCallable<string, C>(template, ctx)) : template
+    const renderer = renderTemplate(content, `${fileName}.${language}`, options)
+
+    return renderer(ctx)
+  }
+
+/**
+ * Returns the TypeScript or transpiled JavaScript source code
+ *
+ * @param template The source template
+ * @returns
+ */
+export const getSource =
+  <C extends PinionContext & { language: 'js' | 'ts' }>(template: Callable<string, C>) =>
+  async <T extends C>(ctx: T) => {
+    const { language } = ctx
+    const source = await getCallable<string, C>(template, ctx)
+
+    return language === 'js' ? getJavaScript(source) : source
   }

@@ -1,5 +1,5 @@
 import { generator, inject, prepend, toFile, after } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
+import { getSource, renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
 const template = ({
@@ -15,8 +15,8 @@ const template = ({
 }: ServiceGeneratorContext) =>
   `import { resolveAll } from '@feathersjs/schema'
 ${isEntityService || authentication ? `import { authenticate } from '@feathersjs/authentication'` : ''}
-import { Application } from '${relative}/declarations'
-import {
+import type { Application } from '${relative}/declarations'
+import type {
   ${upperName}Data,
   ${upperName}Result,
   ${upperName}Query,
@@ -72,7 +72,7 @@ export const hooks = {
 
 // A configure function that registers the service and its hooks via \`app.configure\`
 export function ${camelName} (app: Application) {
-  const options = {
+  const options = { // Service options will go here
   }
 
   // Register our service on the Feathers application
@@ -118,5 +118,5 @@ export const generate = (ctx: ServiceGeneratorContext) =>
         ])
       )
     )
-    .then(inject(importTemplate, prepend(), toServiceIndex))
+    .then(inject(getSource(importTemplate), prepend(), toServiceIndex))
     .then(inject(configureTemplate, after('export const services'), toServiceIndex))

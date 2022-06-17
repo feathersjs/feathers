@@ -12,12 +12,14 @@ const template = ({
 }: AuthenticationGeneratorContext) =>
   `import { resolve } from '@feathersjs/schema'
 ${authStrategies.includes('local') ? `import { passwordHash } from '@feathersjs/authentication-local'` : ''}
-import { HookContext } from '${relative}/declarations'
-import {
+import type { HookContext } from '${relative}/declarations'
+import type {
   ${upperName}Data,
   ${upperName}Patch,
   ${upperName}Result,
   ${upperName}Query,
+} from '../${schemaPath}' 
+import {
   ${camelName}DataSchema,
   ${camelName}PatchSchema,
   ${camelName}ResultSchema,

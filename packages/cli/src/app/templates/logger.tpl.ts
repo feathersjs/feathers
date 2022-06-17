@@ -4,7 +4,7 @@ import { AppGeneratorContext } from '../index'
 
 const template = ({}: AppGeneratorContext) =>
   `import { createLogger, format, transports } from 'winston'
-import { HookContext, NextFunction } from './declarations'
+import type { HookContext, NextFunction } from './declarations'
 
 // Configure the Winston logger. For the complete documentation see https://github.com/winstonjs/winston
 export const logger = createLogger({

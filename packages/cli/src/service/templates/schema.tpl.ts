@@ -3,8 +3,8 @@ import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
 const template = ({ camelName, upperName, type }: ServiceGeneratorContext) =>
-  `import { schema, querySyntax, Infer } from '@feathersjs/schema'
-
+  `import { schema, querySyntax } from '@feathersjs/schema'
+import type { Infer } from '@feathersjs/schema'
 
 // Schema for the basic data model (e.g. creating new entries)
 export const ${camelName}DataSchema = schema({
