@@ -3,23 +3,31 @@ import { Application as FeathersApplication, defaultServiceMethods } from '@feat
 import { routing } from '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
 
-import { Application } from './declarations'
+import { rest, RestOptions, formatter } from './rest'
+import { errorHandler, notFound, ErrorHandlerOptions } from './handlers'
+import { Application, ExpressOverrides } from './declarations'
+import { AuthenticationSettings, authenticate, parseAuthentication } from './authentication'
+import { default as original, static as serveStatic, json, raw, text, urlencoded, query } from 'express'
 
 export {
-  default as original,
-  static,
-  static as serveStatic,
+  original,
+  serveStatic,
   json,
   raw,
   text,
   urlencoded,
-  query
-} from 'express'
-
-export * from './authentication'
-export * from './declarations'
-export * from './handlers'
-export * from './rest'
+  query,
+  rest,
+  RestOptions,
+  formatter,
+  errorHandler,
+  notFound,
+  ErrorHandlerOptions,
+  ExpressOverrides,
+  AuthenticationSettings,
+  parseAuthentication,
+  authenticate
+}
 
 const debug = createDebug('@feathersjs/express')
 
