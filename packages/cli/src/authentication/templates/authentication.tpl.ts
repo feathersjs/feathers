@@ -1,12 +1,12 @@
 import { generator, inject, before, toFile } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
+import { getSource, renderSource } from '../../commons'
 import { AuthenticationGeneratorContext } from '../index'
 
 const template = ({ authStrategies }: AuthenticationGeneratorContext) =>
   `import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
 import { LocalStrategy } from '@feathersjs/authentication-local'
 import { expressOauth } from '@feathersjs/authentication-oauth'
-import { Application } from './declarations'
+import type { Application } from './declarations'
 
 declare module './declarations' {
   interface ServiceTypes {
@@ -37,5 +37,5 @@ export const generate = (ctx: AuthenticationGeneratorContext) =>
         toFile<AuthenticationGeneratorContext>(({ lib }) => lib, 'authentication')
       )
     )
-    .then(inject(importTemplate, before('import { services } from'), toAppFile))
-    .then(inject(configureTemplate, before('app.configure(services)'), toAppFile))
+    .then(inject(getSource(importTemplate), before('import { services } from'), toAppFile))
+    .then(inject(getSource(configureTemplate), before('app.configure(services)'), toAppFile))

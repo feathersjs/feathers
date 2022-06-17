@@ -1,4 +1,5 @@
 import { generator, inject, before, toFile, when, append } from '@feathershq/pinion'
+import { getSource } from '../../commons'
 import { AuthenticationGeneratorContext } from '../index'
 
 const importTemplate = ({ upperName, schemaPath }: AuthenticationGeneratorContext) =>
@@ -23,7 +24,7 @@ export const generate = (ctx: AuthenticationGeneratorContext) =>
     .then(
       when(
         (ctx) => ctx.language === 'ts',
-        inject(importTemplate, before('export { NextFunction }'), toDeclarationFile)
+        inject(getSource(importTemplate), before('export { NextFunction }'), toDeclarationFile)
       )
     )
     .then(when((ctx) => ctx.language === 'ts', inject(paramsTemplate, append(), toDeclarationFile)))

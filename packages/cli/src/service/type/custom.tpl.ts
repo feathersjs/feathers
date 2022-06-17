@@ -1,4 +1,5 @@
 import { generator, inject, toFile, after, prepend } from '@feathershq/pinion'
+import { getSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
 export const template = ({ className, upperName }: ServiceGeneratorContext) =>
@@ -42,7 +43,8 @@ export class ${className} implements ServiceInterface<${upperName}Result, ${uppe
 }
 `
 
-export const importTemplate = "import { Id, NullableId, Params, ServiceMethods } from '@feathersjs/feathers'"
+export const importTemplate =
+  "import type { Id, NullableId, Params, ServiceMethods } from '@feathersjs/feathers'"
 
 const toServiceFile = toFile<ServiceGeneratorContext>(({ lib, folder, kebabName }) => [
   lib,
@@ -55,9 +57,9 @@ export const generate = (ctx: ServiceGeneratorContext) =>
   generator(ctx)
     .then(
       inject(
-        template,
+        getSource(template),
         after<ServiceGeneratorContext>(({ className }) => `// The ${className} service class`),
         toServiceFile
       )
     )
-    .then(inject(importTemplate, prepend(), toServiceFile))
+    .then(inject(getSource(importTemplate), prepend(), toServiceFile))

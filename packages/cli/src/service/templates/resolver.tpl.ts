@@ -4,13 +4,15 @@ import { ServiceGeneratorContext } from '../index'
 
 const template = ({ camelName, upperName, relative, schemaPath }: ServiceGeneratorContext) =>
   `import { resolve } from '@feathersjs/schema'
-import { HookContext } from '${relative}/declarations'
+import type { HookContext } from '${relative}/declarations'
 
-import {
+import type {
   ${upperName}Data,
   ${upperName}Patch,
   ${upperName}Result,
   ${upperName}Query,
+} from '../${schemaPath}'
+import {
   ${camelName}DataSchema,
   ${camelName}PatchSchema,
   ${camelName}ResultSchema,

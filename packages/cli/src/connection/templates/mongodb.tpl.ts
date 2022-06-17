@@ -1,10 +1,11 @@
 import { generator, toFile, inject, before } from '@feathershq/pinion'
 import { ConnectionGeneratorContext } from '../index'
-import { renderSource } from '../../commons'
+import { getSource, renderSource } from '../../commons'
 
 const template = ({}: ConnectionGeneratorContext) =>
-  `import { MongoClient, Db } from 'mongodb'
-import { Application } from './declarations'
+  `import { MongoClient } from 'mongodb'
+import type { Db } from 'mongodb'
+import type { Application } from './declarations'
 
 declare module './declarations' {
   interface Configuration {
@@ -34,5 +35,5 @@ export const generate = (ctx: ConnectionGeneratorContext) =>
         toFile<ConnectionGeneratorContext>(({ lib }) => lib, 'mongodb')
       )
     )
-    .then(inject(importTemplate, before('import { services } from'), toAppFile))
-    .then(inject(configureTemplate, before('app.configure(services)'), toAppFile))
+    .then(inject(getSource(importTemplate), before('import { services } from'), toAppFile))
+    .then(inject(getSource(configureTemplate), before('app.configure(services)'), toAppFile))

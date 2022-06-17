@@ -5,7 +5,7 @@ import { AppGeneratorContext } from '../index'
 const template = ({ lib }: AppGeneratorContext) =>
   `import assert from 'assert'
 import axios from 'axios'
-import { Server } from 'http'
+import type { Server } from 'http'
 import { app } from '../${lib}/app'
 
 const port = app.get('port')

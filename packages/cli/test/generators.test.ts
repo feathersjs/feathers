@@ -10,7 +10,7 @@ import { generate } from '../lib'
 import pkg from '../package.json'
 
 const matrix = {
-  language: [/*'js', */ 'ts'] as const,
+  language: ['js', 'ts'] as const,
   framework: ['koa', 'express'] as const
 }
 
