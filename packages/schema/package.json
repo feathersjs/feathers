@@ -3,8 +3,8 @@
   "description": "A common data schema definition format",
   "version": "5.0.0-pre.23",
   "homepage": "https://feathersjs.com",
-  "main": "lib/",
-  "types": "lib/index.d.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "keywords": [
     "feathers",
     "feathers-plugin"
