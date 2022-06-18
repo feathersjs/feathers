@@ -4,7 +4,7 @@
   "version": "5.0.0-pre.23",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
-  "types": "lib/",
+  "types": "lib/index.d.ts",
   "keywords": [
     "feathers",
     "feathers-plugin"
