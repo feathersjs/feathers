@@ -54,6 +54,7 @@ const packageJson = ({
     test
   },
   main: `${lib}/`,
+  browser: language === 'ts' ? 'dist/client' : `${lib}/client`,
   ...(language === 'ts' ? tsPackageJson(lib) : jsPackageJson(lib))
 })
 
