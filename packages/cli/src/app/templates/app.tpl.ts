@@ -31,7 +31,21 @@ app.configure(rest())
 ${transports.includes('websockets') ? 'app.configure(socketio())' : ''}
 app.configure(services)
 app.configure(channels)
-app.hooks([ logErrorHook ])
+
+// Register hooks that run on all service methods
+app.hooks({
+  around: {
+    all: [ logErrorHook ]
+  },
+  before: {},
+  after: {},
+  error: {}
+})
+// Register application setup and teardown hooks here
+app.hooks({
+  setup: [],
+  teardown: []
+})
 
 export { app }
 `
@@ -74,7 +88,21 @@ app.configure(channels)
 // Configure a middleware for 404s and the error handler
 app.use(notFound())
 app.use(errorHandler({ logger }))
-app.hooks([ logErrorHook ])
+
+// Register hooks that run on all service methods
+app.hooks({
+  around: {
+    all: [ logErrorHook ]
+  },
+  before: {},
+  after: {},
+  error: {}
+})
+// Register application setup and teardown hooks here
+app.hooks({
+  setup: [],
+  teardown: []
+})
 
 export { app }
 `

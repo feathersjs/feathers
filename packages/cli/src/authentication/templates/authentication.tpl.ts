@@ -2,10 +2,11 @@ import { generator, inject, before, toFile } from '@feathershq/pinion'
 import { getSource, renderSource } from '../../commons'
 import { AuthenticationGeneratorContext } from '../index'
 
-const template = ({ authStrategies }: AuthenticationGeneratorContext) =>
+const template = ({ authStrategies, feathers }: AuthenticationGeneratorContext) =>
   `import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
 import { LocalStrategy } from '@feathersjs/authentication-local'
-import { expressOauth } from '@feathersjs/authentication-oauth'
+import { OAuthStrategy } from '@feathersjs/authentication-oauth'
+${feathers.framework === 'express' ? `import { expressOauth } from '@feathersjs/authentication-oauth'` : ''}
 import type { Application } from './declarations'
 
 declare module './declarations' {
@@ -18,10 +19,21 @@ export const authentication = (app: Application) => {
   const authentication = new AuthenticationService(app)
 
   authentication.register('jwt', new JWTStrategy())
-  ${authStrategies.includes('local') ? "authentication.register('local', new LocalStrategy())" : ''}
+  ${authStrategies
+    .map(
+      (strategy) =>
+        `  authentication.register('${strategy}', ${
+          strategy === 'local' ? `new LocalStrategy()` : `new OAuthStrategy()`
+        })`
+    )
+    .join('\n')}
 
-  app.use('authentication', authentication)
-  app.configure(expressOauth())
+  app.use('authentication', authentication)${
+    feathers.framework === 'express'
+      ? `
+  app.configure(expressOauth())`
+      : ''
+  }
 }
 `
 
