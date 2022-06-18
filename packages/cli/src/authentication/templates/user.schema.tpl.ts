@@ -51,7 +51,7 @@ export const ${camelName}ResultSchema = schema({
   $id: '${upperName}Result',
   type: 'object',
   additionalProperties: false,
-  required: [ ...${camelName}DataSchema.required, '${type === 'mongodb' ? '_id' : 'id'}' ],
+  required: [ '${type === 'mongodb' ? '_id' : 'id'}' ],
   properties: {
     ...${camelName}DataSchema.properties,
     ${type === 'mongodb' ? '_id' : 'id'}: {
@@ -62,6 +62,8 @@ export const ${camelName}ResultSchema = schema({
 
 export type ${upperName}Result = Infer<typeof ${camelName}ResultSchema>
 
+// Queries shouldn't allow doing anything with the password
+const { password, ...${camelName}QueryProperties } = ${camelName}ResultSchema.properties
 
 // Schema for allowed query properties
 export const ${camelName}QuerySchema = schema({
@@ -69,7 +71,7 @@ export const ${camelName}QuerySchema = schema({
   type: 'object',
   additionalProperties: false,
   properties: {
-    ...querySyntax(${camelName}ResultSchema.properties)
+    ...querySyntax(${camelName}QueryProperties)
   }
 } as const)
 

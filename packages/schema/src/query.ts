@@ -63,7 +63,7 @@ export const queryProperties = <T extends { [key: string]: JSONSchema }>(definit
     return result
   }, {} as { [K in keyof T]: PropertyQuery<T[K]> })
 
-export const querySyntax = <T extends { [key: string]: JSONSchema }>(definition: T) =>
+export const querySyntax = <T extends { [key: string]: any }>(definition: T) =>
   ({
     $limit: {
       type: 'number',
