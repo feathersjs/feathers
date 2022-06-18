@@ -20,29 +20,12 @@ The core `@feathersjs/feathers` module provides the ability to initialize a new 
 <Tabs>
 <Tab name="TypeScript" global-id="ts">
 
-```js
-import { feathers } from '@feathersjs/feathers'
-
-type ServiceTypes = {
-  // Add registered services here
-}
-
-// Types for `app.set(name, value)` and `app.get(name)`
-type Configuration = {
-  port: number
-}
-
-const app = feathers<ServiceTypes, Configuration>()
-```
+<<< @/examples/application.ts
 
 </Tab>
 <Tab name="JavaScript" global-id="js">
 
-```js
-import { feathers } from '@feathersjs/feathers'
-
-const app = feathers()
-```
+<<< @/examples/application.js
 
 </Tab>
 </Tabs>
@@ -56,55 +39,12 @@ const app = feathers()
 <Tabs>
 <Tab name="TypeScript" global-id="ts">
 
-```ts
-import { feathers, Id } from '@feathersjs/feathers'
-
-class MessageService {
-  async get (id: Id) {
-    return {
-      id,
-      text: `This it the ${id} message!`
-    }
-  }
-}
-
-type ServiceTypes = {
-  // Add services path to type mapping here
-  messages: MessageService
-}
-
-const app = feathers<ServiceTypes>()
-
-// Register a service instance on the app
-app.use('messages', new MessageService())
-
-// Get the service and call the service method with the correct types
-const message = await app.service('messages').get('test')
-```
+<<< @/examples/application-use.ts
 
 </Tab>
 <Tab name="JavaScript" global-id="js">
 
-```js
-import { feathers } from '@feathersjs/feathers'
-
-const app = feathers()
-
-class MessageService {
-  async get (id) {
-    return {
-      id,
-      text: `This it the ${id} message!`
-    }
-  }
-}
-
-// Register a service instance on the app
-app.use('messages', new MessageService())
-
-// Get the service and call the service method
-const message = await app.service('messages').get('test')
-```
+<<< @/examples/application-use.js
 
 </Tab>
 </Tabs>
