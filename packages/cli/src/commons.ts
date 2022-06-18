@@ -69,6 +69,7 @@ export const initializeBaseContext =
         ...ctx,
         lib: ctx.pkg?.directories?.lib || 'src',
         test: ctx.pkg?.directories?.test || 'test',
+        language: ctx.pkg?.feathers?.language || 'ts',
         feathers: ctx.pkg?.feathers
       }))
 
