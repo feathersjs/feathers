@@ -1,18 +1,11 @@
 import { Id, NullableId, Paginated, Query } from '@feathersjs/feathers'
 import { _ } from '@feathersjs/commons'
-import {
-  AdapterBase,
-  AdapterServiceOptions,
-  AdapterParams,
-  AdapterQuery,
-  PaginationOptions,
-  filterQuery
-} from '@feathersjs/adapter-commons'
+import { AdapterBase, PaginationOptions, filterQuery } from '@feathersjs/adapter-commons'
 import { NotFound } from '@feathersjs/errors'
 import { Knex } from 'knex'
 
 import { errorHandler } from './error-handler'
-
+import { KnexAdapterOptions, KnexAdapterParams } from './declarations'
 const METHODS = {
   $ne: 'whereNot',
   $in: 'whereIn',
@@ -29,17 +22,6 @@ const OPERATORS = {
   $like: 'like',
   $notlike: 'not like',
   $ilike: 'ilike'
-}
-
-export interface KnexAdapterOptions extends AdapterServiceOptions {
-  Model: Knex
-  name: string
-  schema?: string
-}
-
-export interface KnexAdapterParams<Q = AdapterQuery> extends AdapterParams<Q, Partial<KnexAdapterOptions>> {
-  knex?: Knex.QueryBuilder
-  transaction?: Knex.Transaction
 }
 
 export class KnexAdapter<
@@ -81,16 +63,15 @@ export class KnexAdapter<
     return this.schema ? `${this.schema}.${this.table}` : this.table
   }
 
-  db(_params?: P) {
-    // const { Model, table, schema, fullName } = this
+  db(params?: P) {
+    const { Model, table, schema } = this
 
-    // if (params && params.transaction) {
-    //   const { trx, id } = params.transaction
-    //   debug('ran %s with transaction %s', fullName, id)
-    //   return schema ? trx.withSchema(schema).table(table) : trx(table)
-    // }
-    // return schema ? Model.withSchema(schema).table(table) : Model(table)
-    return this.Model(this.table)
+    if (params && params.transaction && params.transaction.trx) {
+      const { trx } = params.transaction
+      // debug('ran %s with transaction %s', fullName, id)
+      return schema ? (trx.withSchema(schema).table(table) as Knex.QueryBuilder) : trx(table)
+    }
+    return schema ? (Model.withSchema(schema).table(table) as Knex.QueryBuilder) : Model(table)
   }
 
   knexify(knexQuery: Knex.QueryBuilder, query: Query = {}, parentKey?: string): Knex.QueryBuilder {
@@ -108,6 +89,7 @@ export class KnexAdapter<
 
       if (method) {
         if (key === '$or' || key === '$and') {
+          // This will create a nested query
           currentQuery.where(function (this: any) {
             for (const condition of value) {
               this[method](function (this: Knex.QueryBuilder) {
@@ -143,16 +125,11 @@ export class KnexAdapter<
       builder.select(`${table}.*`)
     }
 
-    if (filters.$and) {
-      query.$and = filters.$and
-    }
-
-    if (filters.$or) {
-      query.$or = filters.$or
-    }
-
-    // build up the knex query out of the query params
-    this.knexify(builder, query)
+    // build up the knex query out of the query params, include $and and $or filters
+    this.knexify(builder, {
+      ...query,
+      ..._.pick(filters, '$and', '$or')
+    })
 
     // Handle $sort
     if (filters.$sort) {
@@ -192,7 +169,7 @@ export class KnexAdapter<
 
     // provide default sorting if its not set
     if (!filters.$sort) {
-      builder.orderBy(this.id, 'asc')
+      builder.orderBy(`${this.table}.${this.id}`, 'asc')
     }
 
     const data = filters.$limit === 0 ? [] : await builder

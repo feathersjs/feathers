@@ -5,7 +5,7 @@ import adapterTests from '@feathersjs/adapter-tests'
 import { errors } from '@feathersjs/errors'
 
 import connection from './connection'
-import { KnexService } from '../src/index'
+import { KnexService, transaction } from '../src/index'
 
 const testSuite = adapterTests([
   '.options',
@@ -162,11 +162,11 @@ const users = new KnexService({
 
 describe('Feathers Knex Service', () => {
   const app = feathers<ServiceTypes>()
-    // .hooks({
-    //   before: transaction.start(),
-    //   after: transaction.end(),
-    //   error: transaction.rollback()
-    // })
+    .hooks({
+      before: [transaction.start()],
+      after: [transaction.end()],
+      error: [transaction.rollback()]
+    })
     .use('people', people)
     .use('people-customid', peopleId)
     .use('users', users)

@@ -1,111 +1,101 @@
-// import { createDebug } from '@feathersjs/commons'
-// import { HookContext } from '@feathersjs/feathers'
+import { createDebug } from '@feathersjs/commons'
+import { HookContext } from '@feathersjs/feathers'
+import { Knex } from 'knex'
+import { KnexAdapterTransaction } from './declarations'
 
-// const debug = createDebug('feathers-knex-transaction')
+const debug = createDebug('feathers-knex-transaction')
 
-// const ROLLBACK = { rollback: true }
+const ROLLBACK = { rollback: true }
 
-// const getKnex = (context: HookContext) => {
-//   const knex = context.service.Model
+export const getKnex = (context: HookContext): Knex => {
+  const knex = context.service.Model
 
-//   return knex && typeof knex.transaction === 'function' ? knex : undefined
-// }
+  return knex && typeof knex.transaction === 'function' ? knex : undefined
+}
 
-// const start = (options = {}) => {
-//   options = Object.assign({ getKnex }, options)
+export const start =
+  () =>
+  async (context: HookContext): Promise<void> => {
+    const { transaction } = context.params
+    const parent = transaction
+    const knex: Knex = transaction ? transaction.trx : getKnex(context)
 
-//   return (context: HookContext) => {
-//     const { transaction } = context.params
-//     const parent = transaction
-//     const knex = transaction ? transaction.trx : options.getKnex(context)
+    if (!knex) {
+      return
+    }
 
-//     if (!knex) {
-//       return
-//     }
+    return new Promise<void>((resolve, reject) => {
+      const transaction: KnexAdapterTransaction = {
+        starting: true
+      }
 
-//     return new Promise((resolve, reject) => {
-//       const transaction = {}
+      if (parent) {
+        transaction.parent = parent
+        transaction.committed = parent.committed
+      } else {
+        transaction.committed = new Promise((resolve) => {
+          transaction.resolve = resolve
+        })
+      }
 
-//       if (parent) {
-//         transaction.parent = parent
-//         transaction.committed = parent.committed
-//       } else {
-//         transaction.committed = new Promise((resolve) => {
-//           transaction.resolve = resolve
-//         })
-//       }
+      transaction.starting = true
+      transaction.promise = knex
+        .transaction((trx) => {
+          transaction.trx = trx
+          transaction.id = Date.now()
 
-//       transaction.starting = true
-//       transaction.promise = knex
-//         .transaction((trx) => {
-//           transaction.trx = trx
-//           transaction.id = Date.now()
+          context.params = { ...context.params, transaction }
 
-//           context.params = { ...context.params, transaction }
+          debug('started a new transaction %s', transaction.id)
 
-//           debug('started a new transaction %s', transaction.id)
+          resolve()
+        })
+        .catch((error) => {
+          if (transaction.starting) {
+            reject(error)
+          } else if (error !== ROLLBACK) {
+            throw error
+          }
+        })
+    })
+  }
 
-//           resolve()
-//         })
-//         .catch((error) => {
-//           if (transaction.starting) {
-//             reject(error)
-//           } else if (error !== ROLLBACK) {
-//             throw error
-//           }
-//         })
-//     })
-//   }
-// }
+export const end = () => (context: HookContext) => {
+  const { transaction } = context.params
 
-// const end = () => {
-//   return (hook) => {
-//     const { transaction } = hook.params
+  if (!transaction) {
+    return
+  }
 
-//     if (!transaction) {
-//       return
-//     }
+  const { trx, id, promise, parent } = transaction
 
-//     const { trx, id, promise, parent } = transaction
+  context.params = { ...context.params, transaction: parent }
+  transaction.starting = false
 
-//     hook.params = { ...hook.params, transaction: parent }
-//     transaction.starting = false
+  return trx
+    .commit()
+    .then(() => promise)
+    .then(() => transaction.resolve && transaction.resolve(true))
+    .then(() => debug('ended transaction %s', id))
+    .then(() => context)
+}
 
-//     return trx
-//       .commit()
-//       .then(() => promise)
-//       .then(() => transaction.resolve && transaction.resolve(true))
-//       .then(() => debug('ended transaction %s', id))
-//       .then(() => hook)
-//   }
-// }
+export const rollback = () => (context: HookContext) => {
+  const { transaction } = context.params
 
-// const rollback = () => {
-//   return (hook) => {
-//     const { transaction } = hook.params
+  if (!transaction) {
+    return
+  }
 
-//     if (!transaction) {
-//       return
-//     }
+  const { trx, id, promise, parent } = transaction
 
-//     const { trx, id, promise, parent } = transaction
+  context.params = { ...context.params, transaction: parent }
+  transaction.starting = false
 
-//     hook.params = { ...hook.params, transaction: parent }
-//     transaction.starting = false
-
-//     return trx
-//       .rollback(ROLLBACK)
-//       .then(() => promise)
-//       .then(() => transaction.resolve && transaction.resolve(false))
-//       .then(() => debug('rolled back transaction %s', id))
-//       .then(() => hook)
-//   }
-// }
-
-// module.exports = {
-//   transaction: {
-//     start,
-//     end,
-//     rollback
-//   }
-// }
+  return trx
+    .rollback(ROLLBACK)
+    .then(() => promise)
+    .then(() => transaction.resolve && transaction.resolve(false))
+    .then(() => debug('rolled back transaction %s', id))
+    .then(() => context)
+}
