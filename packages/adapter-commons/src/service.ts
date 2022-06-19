@@ -235,7 +235,7 @@ export abstract class AdapterBase<
       throw new MethodNotAllowed('Can not patch multiple entries')
     }
 
-    const query = await this.sanitizeQuery(params)
+    const { $limit, ...query } = await this.sanitizeQuery(params)
     const payload = await this.sanitizeData(data, params)
 
     return this.$patch(id, payload, {
@@ -265,7 +265,7 @@ export abstract class AdapterBase<
       throw new MethodNotAllowed('Can not remove multiple entries')
     }
 
-    const query = await this.sanitizeQuery(params)
+    const { $limit, ...query } = await this.sanitizeQuery(params)
 
     return this.$remove(id, {
       ...params,

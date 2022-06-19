@@ -41,3 +41,4 @@ dist/
 
 # TypeScript compiled files
 packages/**/lib
+*.sqlite
