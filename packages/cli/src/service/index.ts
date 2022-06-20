@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { generator, runGenerator, runGenerators, prompt } from '@feathershq/pinion'
 
-import { FeathersBaseContext } from '../commons'
+import { FeathersBaseContext, getDatabaseAdapter } from '../commons'
 
 export interface ServiceGeneratorContext extends FeathersBaseContext {
   /**
@@ -93,16 +93,15 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
             type: 'list',
             when: !type,
             message: 'What kind of service is it?',
-            default: ctx.feathers.database,
+            default: getDatabaseAdapter(ctx.feathers.database),
             choices: [
+              {
+                value: 'knex',
+                name: 'SQL'
+              },
               {
                 value: 'mongodb',
                 name: 'MongoDB'
-              },
-              {
-                value: 'knex',
-                name: 'SQL',
-                disabled: false
               },
               {
                 value: 'custom',

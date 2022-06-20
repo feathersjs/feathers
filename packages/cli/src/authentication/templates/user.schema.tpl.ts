@@ -22,7 +22,7 @@ export const ${camelName}DataSchema = schema({
     password: {
       type: 'string'
     }`
-          : `${name}Id: {
+          : `    ${name}Id: {
       type: 'string'
     }`
       )

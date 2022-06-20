@@ -69,6 +69,7 @@
     "@feathersjs/feathers": "^5.0.0-pre.22",
     "@feathersjs/koa": "^5.0.0-pre.22",
     "@feathersjs/mongodb": "^5.0.0-pre.22",
+    "@feathersjs/knex": "^5.0.0-pre.22",
     "@feathersjs/schema": "^5.0.0-pre.22",
     "@feathersjs/socketio": "^5.0.0-pre.22",
     "@feathersjs/transport-commons": "^5.0.0-pre.22",

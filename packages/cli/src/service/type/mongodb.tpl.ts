@@ -16,7 +16,7 @@ export class ${className} extends MongoDBService<${upperName}Result, ${upperName
 
 const optionTemplate = ({ kebabName }: ServiceGeneratorContext) =>
   `    paginate: app.get('paginate'),
-    Model: app.get('mongoClient').then(db => db.collection('${kebabName}'))`
+    Model: app.get('mongodbClient').then(db => db.collection('${kebabName}'))`
 
 const toServiceFile = toFile<ServiceGeneratorContext>(({ lib, folder, kebabName, language }) => [
   lib,

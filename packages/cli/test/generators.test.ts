@@ -23,7 +23,7 @@ function combinate<O extends Record<string | number, any[]>>(obj: O) {
   let combos: { [k in keyof O]: O[k][number] }[] = []
   for (const key of Object.keys(obj)) {
     const values = obj[key]
-    const all = []
+    const all: any[] = []
     for (let i = 0; i < values.length; i++) {
       for (let j = 0; j < (combos.length || 1); j++) {
         const newCombo = { ...combos[j], [key]: values[i] }
@@ -53,6 +53,7 @@ describe('@feathersjs/cli', () => {
     it(`generates ${language} ${framework} app and passes tests`, async () => {
       const name = `feathers_${language}_${framework}`
       const cwd = await mkdtemp(path.join(os.tmpdir(), name + '-'))
+      console.log(cwd)
       const settings: AppGeneratorData = {
         name,
         framework,
@@ -61,8 +62,8 @@ describe('@feathersjs/cli', () => {
         lib: 'src',
         description: 'A Feathers test app',
         packager: 'npm',
-        database: 'mongodb',
-        connectionString: 'mongodb://localhost:27017/feathersapp',
+        database: 'sqlite',
+        connectionString: `${name}.sqlite`,
         transports: ['rest', 'websockets'],
         authStrategies: ['local', 'github']
       }

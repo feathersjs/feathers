@@ -3,6 +3,19 @@ import { Callable, PinionContext, loadJSON, fromFile, getCallable, renderTemplat
 import * as ts from 'typescript'
 import prettier from 'prettier'
 
+/**
+ * The database types supported by this generator
+ */
+export type DatabaseType = 'mongodb' | 'mysql' | 'postgresql' | 'sqlite' | 'mssql'
+
+/**
+ * Returns the name of the Feathers database adapter for a supported database type
+ *
+ * @param database The type of the database
+ * @returns The name of the adapter
+ */
+export const getDatabaseAdapter = (database: DatabaseType) => (database === 'mongodb' ? 'mongodb' : 'knex')
+
 export type FeathersAppInfo = {
   /**
    * The application language
@@ -11,7 +24,7 @@ export type FeathersAppInfo = {
   /**
    * The main database
    */
-  database: 'knex' | 'mongodb' | 'custom'
+  database: DatabaseType
   /**
    * The package manager used
    */

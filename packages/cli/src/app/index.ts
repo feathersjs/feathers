@@ -13,8 +13,8 @@ import {
   when
 } from '@feathershq/pinion'
 import { FeathersBaseContext, FeathersAppInfo, initializeBaseContext } from '../commons'
-import { generate as authenticationGenerator } from '../authentication'
-import { generate as connectionGenerator } from '../connection'
+import { generate as authenticationGenerator, prompts as authenticationPrompts } from '../authentication'
+import { generate as connectionGenerator, prompts as connectionPrompts } from '../connection'
 
 export type DependencyVersions = { [key: string]: string }
 
@@ -124,58 +124,12 @@ export const generate = (ctx: AppGeneratorArguments) =>
             { value: 'yarn', name: 'Yarn' }
           ]
         },
-        {
-          name: 'database',
-          type: 'list',
-          when: !ctx.database,
-          message: 'What is your main database?',
-          suffix: chalk.grey(' Other databases can be added at any time'),
-          choices: [
-            { value: 'mongodb', name: 'MongoDB' },
-            { value: 'knex', name: 'SQL (PostgreSQL, SQLite etc.)', disabled: true }
-          ]
-        },
-        {
-          name: 'connectionString',
-          type: 'input',
-          when: (answers: AppGeneratorArguments) => !ctx.connectionString && answers.database !== 'custom',
-          message: 'Enter your database connection string',
-          default: (answers: AppGeneratorArguments) => `mongodb://localhost:27017/${answers.name}`
-        },
-        {
-          type: 'checkbox',
-          name: 'authStrategies',
-          when: !ctx.authStrategies,
-          message: 'Which user authentication methods do you want to use?',
-          suffix: chalk.grey(' Other methods and providers can be added at any time.'),
-          choices: [
-            {
-              name: 'Email + Password',
-              value: 'local',
-              checked: true
-            },
-            {
-              name: 'Google',
-              value: 'google'
-            },
-            {
-              name: 'Facebook',
-              value: 'facebook'
-            },
-            {
-              name: 'Twitter',
-              value: 'twitter'
-            },
-            {
-              name: 'GitHub',
-              value: 'github'
-            },
-            {
-              name: 'Auth0',
-              value: 'auth0'
-            }
-          ]
-        }
+        ...connectionPrompts(ctx),
+        ...authenticationPrompts({
+          ...ctx,
+          service: 'users',
+          entity: 'user'
+        })
       ])
     )
     .then(runGenerators(__dirname, 'templates'))
@@ -183,7 +137,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
     .then(initializeBaseContext())
     .then(
       when<AppGeneratorContext>(
-        ({ authStrategies, database }) => authStrategies.length > 0 && database !== 'custom',
+        ({ authStrategies }) => authStrategies.length > 0,
         async (ctx) => {
           const { dependencies } = await connectionGenerator(ctx)
 
@@ -242,7 +196,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
     )
     .then(
       install<AppGeneratorContext>(({ language, framework, devDependencies, dependencyVersions }) => {
-        devDependencies.push('nodemon', 'axios', 'mocha')
+        devDependencies.push('nodemon', 'axios', 'mocha', 'cross-env')
 
         if (language === 'ts') {
           devDependencies.push(
