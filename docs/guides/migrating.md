@@ -1,425 +1,259 @@
----
-outline: deep
----
-
 # Migrating
 
-This guide explains the new features and changes to migrate to the Feathers v4 (Crow) release. It expects applications to be using the previous Feathers v3 (Buzzard).
+This guide explains the new features and changes necessary to migrate to the Feathers v5 (Dove) release. It expects applications to be using the previous Feathers v4 (Crow). See the [v4 (Crow) migration guide](https://crow.docs.feathersjs.com/guides/migrating.html) for upgrading to the previous version.
 
-## Versioning
+## Status
 
-Instead of separate versioning, all modules in the `@feathersjs` namespace have been updated to use the same version number. This means that the current release (Crow) will be **Feathers v4** and using this release means all `@feathersjs/` module dependencies show a version of `4.x.x` (`4.0.0-pre.x` for prereleases). For historical reasons the first official version will be `4.3.0`.
+The final v5 release is expected in the first quarter of 2022. Aside from the breaking changes and new features documented here. For more information
 
-The [database adapters](../api/databases/adapters.md) will continue to be individually versioned, since they can be used with most Feathers versions from v2 and up.
+- Follow [the v5 milestone](https://github.com/feathersjs/feathers/milestone/11) - open issues are in development, closed issues are already published as a prerelease
+- See the current [v5 Changelog](https://github.com/feathersjs/feathers/blob/dove/CHANGELOG.md)
 
-## Auto upgrade
+## Testing the prerelease
 
-The `@feathersjs/cli` comes with a command to automatically upgrade applications generated through `@feathersjs/cli` (v3.x) with most of the changes necessary for v4. To update the CLI and upgrade your application run:
+You can run the following to test the latest Dove pre-release in your application:
 
 ```
-npm i @feathersjs/cli -g
-cd myapp
-feathers upgrade
+npx npm-check-updates --upgrade --target newest --filter /@feathersjs/
+npm install
 ```
 
-This will update the dependencies in `package.json`, update the `src/authentication.js` and `config/default.json` with the new authentication setup. The old contents will be kept in `src/authentication.backup.js` and `config/default.backup.json` but can be removed once upgrade is completed.
+You can see the migration steps necessary for the Feathers chat [here for Javascript](https://github.com/feathersjs/feathers-chat/compare/dove-pre) and [here for TypeScript](https://github.com/feathersjs/feathers-chat-ts/compare/dove-pre).
 
-__Manual steps are necessary for__
+## Features
 
-- The `hashPassword()` hook in `service/users/users.hooks.js` which now requires the password field name (usually `hashPassword('password')`)
-- Configuring OAuth providers - see [OAuth API](../api/authentication/oauth.md)
-- The authentication Express middleware has been moved to `const { authenticate } = require('@feathersjs/express');`
-- Any other authentication specific customization - see [authentication service API](../api/authentication/service.md)
-- Feathers client authentication - see [authentication client API](../api/authentication/client.md)
+### Schemas and resolvers
 
-## Authentication
+[`@feathersjs/schema`](../api/schema/readme.md) provides a way to define data models and to dynamically resolve them. It comes in two main parts:
 
-The `@feathersjs/authentication-*` modules have been completely rewritten to include more secure defaults, be easier to customize, framework independent and no longer rely on PassportJS. It comes with:
+- [Schema](../api/schema/schema.md) - Uses [JSON schema](https://json-schema.org/) to define a data model with TypeScript types and basic validations. This allows us to:
+- [Resolvers](../api/schema/resolvers.md) - Resolve schema properties based on a context (usually the [hook context](../api/hooks.md)).
 
-- An extensible [authentication service](../api/authentication/service.md) that can register strategies and create authentication tokens (JWT by default but pluggable for anything else)
-- Protocol independent, fully customizable authentication strategies
-- Better [OAuth authentication](../api/authentication/oauth.md) with 180+ providers supported out of the box without any additional configuration (other than adding the application key and secret)
-- Built-in OAuth account linking and cross-domain OAuth redirects
+### Configuration schemas
 
-### Manual upgrade
+[Feathers configuration](../api/configuration.md) can now be passed a schema instance to validate the configuration on application start (`app.listen` or `app.setup`).
 
-To upgrade manually, replace the existing authentication configuration (usually `src/authentication.js` or `src/authentication.ts`) with the following:
+### Custom methods
 
-<Tabs>
+Provides a way to expose custom service methods to external clients. See the [services API custom method docs](../api/services.md#custom-methods) how to set up custom service methods and the [REST client](../api/client/rest.md#feathersjs-rest-client) and [Socket.io client](../api/client/socketio.md#feathersjs-socketio-client) chapters on how to use them on the client.
 
-<Tab name="TypeScript" global-id="ts">
+### setup and teardown
 
-```typescript
-import { Application } from '@feathersjs/feathers';
-import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
-import { LocalStrategy } from '@feathersjs/authentication-local';
-import { expressOauth } from '@feathersjs/authentication-oauth';
+`service.setup`, `app.setup`, the new `app.teardown` and `app.listen` now run asynchronously and return a Promise. It is also possible to register [`setup` and `teardown` application hooks](../api/hooks.md#setup-and-teardown) to e.g. establish and gracefully close database connections when the application starts up.
 
-export default (app: Application) => {
-  const authentication = new AuthenticationService(app);
+### Async hooks
 
-  authentication.register('jwt', new JWTStrategy());
-  authentication.register('local', new LocalStrategy());
+See the documentation for [feathersjs/hooks](https://github.com/feathersjs/hooks) for the new general purpose hook format that is now also supported by Feathers services (additional documentation to follow).
 
-  app.use('/authentication', authentication);
-  app.configure(expressOauth());
+## TypeScript
+
+The new version comes with major improvements in TypeScript support from improved service typings, fully typed hook context and typed configuration. You can see the changes necessary in the Feathers chat [here](https://github.com/feathersjs/feathers-chat-ts/compare/dove-pre).
+
+### Application and hook context
+
+To get the typed hook context and application configuration update your `declarations.ts` as follows:
+
+```ts
+import '@feathersjs/transport-commons';
+import { Application as ExpressFeathers } from '@feathersjs/express';
+import { HookContext as FeathersHookContext } from '@feathersjs/feathers';
+
+export interface Configuration {
+  // Put types for app.get and app.set here
+  port: number;
+}
+// A mapping of service names to types. Will be extended in service files.
+export interface ServiceTypes {}
+// The application instance type that will be used everywhere else
+export type Application = ExpressFeathers<ServiceTypes, Configuration>;
+export type HookContext = FeathersHookContext<Application>;
+```
+
+Now `import { HookContext } from './declarations'` can be used as the context in hooks.
+
+### Service types
+
+Service types now only need the actual service class type and should no longer include the `& ServiceAddons<any>`. E.g. for the messages service like this:
+
+```ts
+// Add this service to the service type index
+declare module '../../declarations' {
+  interface ServiceTypes {
+    'messages': Messages;
+  }
 }
 ```
 
-</Tab>
+### Configuration types
 
-<Tab name="JavaScript" global-id="js">
+A Feathers application can now also include types for the values of `app.set` and `app.get`. The configuration can also be validated and the type inferred from a [Feathers schema](../api/schema/readme.md).
 
-```js
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
-const { LocalStrategy } = require('@feathersjs/authentication-local');
-const { expressOauth } = require('@feathersjs/authentication-oauth');
+### Typed params and query
 
-module.exports = app => {
-  const authentication = new AuthenticationService(app);
+Service `Params` no longer include a catchall property type and need to be explicitly declared for services that use extended `params`. It is also possible to pass your own query type to use with `params.query`:
 
-  authentication.register('jwt', new JWTStrategy());
-  authentication.register('local', new LocalStrategy());
+```ts
+import { Params } from '@feathersjs/feathers'
 
-  app.use('/authentication', authentication);
-  app.configure(expressOauth());
-};
+export type MyQuery = {
+  name: string;
+}
+
+export type MyServiceParams extends Params<MyQuery> {
+  user: User;
+}
 ```
 
-</Tab>
+You can revert to the previous behaviour by overriding he `Params` declaration:
 
-</Tabs>
+```ts
+declare module '@feathersjs/feathers/lib/declarations' {
+  interface Params {
+    [key: string]: any;
+  }
+}
+```
 
-> __Important:__ The `@feathersjs/authentication-jwt` is deprecated since the JWT strategy is now directly included in `@feathersjs/authentication`.
+## Deprecations and breaking changes
 
-This will register `local`, `jwt` and OAuth authentication strategies using the standard authentication service on the `/authentication` path. OAuth will only be active if provider information is added to the configuration. The authentication configuration (usually in `config/default.json`) should be updated as follows:
+### Asynchronous setup
+
+`service.setup`, `app.setup` and `app.listen` return a Promise:
+
+```js
+// Before
+const server = app.listen(3030);
+
+// Now
+app.listen(3030).then(server => {
+});
+```
+
+Usually you would call `app.listen`. In case you are calling `app.setup` instead (e.g. for internal jobs or seed scripts) it is now also asynchronous:
+
+```js
+// Before
+app.setup();
+// Do something here
+
+// Now
+await app.setup();
+// Do something here
+```
+
+### Socket.io 4 and Grant 5
+
+The Socket.io and Grant (oAuth) dependencies have been updated to their latest versions. For more information on breaking changes see:
+
+- The Socket.io [version 3](https://socket.io/docs/v3/migrating-from-2-x-to-3-0/index.html#How-to-upgrade-an-existing-production-deployment) and [version 4](https://socket.io/docs/v3/migrating-from-3-x-to-4-0/) upgrade guide. Important points to note are a new improved [CORS policy](https://socket.io/docs/v3/migrating-from-2-x-to-3-0/index.html#CORS-handling) and an [explicit v2 client compatibility opt-in](https://socket.io/docs/v3/migrating-from-2-x-to-3-0/index.html#How-to-upgrade-an-existing-production-deployment)
+- For oAuth authentication the Grant standard configuration should continue to work as is. If you customized any other settings, see the [Grant v4 to v5 migration guide](https://github.com/simov/grant/blob/master/MIGRATION.md) for the changes necessary.
+
+### Configuration
+
+The automatic environment variable substitution in `@feathersjs/configuration` was causing subtle and hard to debug issues. It has been removed to instead rely on the functionality already provided and battle tested by the underlying [node-config](https://github.com/lorenwest/node-config). To update your configuration:
+
+- Relative paths are no longer relative to the configuration file, but instead to where the application runs. This normally (when running from the application folder) means that paths starting with `../` and `./` have to be replaced with `./` and `./config/`.
+- Configuration through environment variables should be included via the `NODE_CONFIG` JSON string or as [Custom Environment Variable support](https://github.com/lorenwest/node-config/wiki/Environment-Variables#custom-environment-variables). To use existing environment variables add the following configuration file in `config/custom-environment-variables.<json|yaml|js>` like this:
 
 ```json
-"authentication": {
-  "entity": "user",
-  "service": "users",
-  "secret": "<your secret>",
-  "authStrategies": [ "jwt", "local" ],
-  "jwtOptions": {
-    "header": { "typ": "access" },
-    "audience": "https://yourdomain.com",
-    "issuer": "feathers",
-    "algorithm": "HS256",
-    "expiresIn": "1d"
-  },
-  "local": {
-    "usernameField": "email",
-    "passwordField": "password"
-  }
-}
-```
-
-### Authentication client
-
-The v4 authentication client comes with many usability improvements and more reliable socket (re)connection. Since the server side authentication now includes all necessary information, it is no longer necessary to encode the token and get the user separately.
-
-Instead of
-
-```js
-const feathersClient = feathers();
-
-feathersClient.configure(rest('http://localhost:3030').superagent(superagent))
-  .configure(auth({ storage: localStorage }));
-
-feathersClient.authenticate({
-  strategy: 'local',
-  email: 'admin@feathersjs.com',
-  password: 'admin'
-})
-.then(response => {
-  console.log('Authenticated!', response);
-  return feathersClient.passport.verifyJWT(response.accessToken);
-})
-.then(payload => {
-  console.log('JWT Payload', payload);
-  return feathersClient.service('users').get(payload.userId);
-})
-.then(user => {
-  feathersClient.set('user', user);
-  console.log('User', feathersClient.get('user'));
-})
-.catch(function(error){
-  console.error('Error authenticating!', error);
-});
-```
-
-Can now be done as
-
-```js
-const feathersClient = feathers();
-
-feathersClient.configure(rest('http://localhost:3030').superagent(superagent))
-  .configure(auth({ storage: localStorage }));
-
-async function authenticate() {
-  try {
-    const { user } = await feathersClient.authenticate({
-      strategy: 'local',
-      email: 'admin@feathersjs.com',
-      password: 'admin'
-    });
-
-    console.log('User authenticated', user);
-
-    console.log('Authentication information is', await app.get('authentication'));
-  } catch (error) {
-    // Authentication failed
-    // E.g. show login form
-  }
-```
-
-The `feathersClient.authenticate()` with no parameters to authenticate with an existing token is still avaiable but should be replaced by the more clear `feathersClient.reAuthenticate()`.
-
-To access the current authentication information, the `app.get('authentication')` promise can be used:
-
-```js
-// user is the authenticated user
-const { user } = await app.get('authentication');
-
-// As a promise instead of async/await
-app.get('authentication').then(authInfo => {
-  const { user } = authInfo;
-});
-```
-
-### Upgrade Notes
-
-Important things to note:
-
-- Because of extensive changes and security improvements, you should change your JWT secret so that all users will be prompted to log in again.
-- The `jwt` options have been moved to `jwtOptions`. It takes all [jsonwebtoken options](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback). The `subject` option __should be removed__ when using the standard setup.
-- `authStrategies` are the strategies that are allowed on the `/authentication` endpoint
-- The `hashPassword` hook now explicitly requires the name of the field to hash instead of using a default (change any `hashPassword()` to e.g. `hashPassword('password')`).
-- For websockets, the `authenticate` event is no longer available. See [Socket.io Authentication direct usage](../api/client/socketio.md#authentication) for more information.
-
-## Feathers core
-
-The following new features and deprecations are included in Feathers v4 core.
-
-### Typescript definitions included
-
-All `@feathersjs` modules now come with up-to-date TypeScript definitions. Any definitions using `@types/feathersjs__*` _should be removed_ from your project.
-
-### Services at the root level
-
-Any Feathers application now allows to register a service at the root level with a name of `/`:
-
-```js
-app.use('/', myService);
-```
-
-It will be available via `app.service('/')` through the client and directly at `http://feathers-server.com/` via REST.
-
-### Skip event emitting
-
-Service events can now be skipped by setting `context.event` to `null`.
-
-```js
-context => {
-  // Skip sending event
-  context.event = null;
-}
-```
-
-### `disconnect` event
-
-There is now an application level `disconnect` event when a connection gets disconnect:
-
-```js
-app.on('disconnect', connection => {
-  // Do something on disconnect here
-});
-```
-
-> __Note:__ Disconnected connections will be removed from all channels already automatically.
-
-### Deprecated `(context, next)` and SKIP functionality
-
-In preparation to support Koa style hooks (see [feathersjs/feathers#932](https://github.com/feathersjs/feathers/issues/932)) returning `SKIP` and calling the deprecated `next` function in hooks has been removed. Returning `SKIP` in hooks was causing issues because
-
-- It is not easily possible to see if a hook makes its following hooks skip. This made hook chains very hard to debug.
-- Returning SKIP also causes problems with Feathers internals like the event system
-
-The use-cases for `feathers.SKIP` can now be explicitly handled by
-
-- [Running hooks conditionally](https://hooks-common.feathersjs.com/hooks.html#iff) through a flag
-- [Calling the hook-less service methods](#hook-less-service-methods) of the database adapters
-- Setting `context.event = null` to skip event emitting
-
-### `@feathersjs/express`
-
-- `@feathersjs/express/errors` has been moved to `const { errorHandler } = require('@feathersjs/express');`. It is no longer available via `@feathersjs/errors`.
-- `@feathersjs/express/not-found` has been moved to `const { notFound } = require('@feathersjs/express');`.
-
-## Database adapters
-
-The latest versions of the Feathers database adapters include some important security and usability updates by requiring to explicitly enable certain functionality that was previously available by default.
-
-> __Important:__ The latest versions of the database adapters also work with previous versions of Feathers. An upgrade of the `@feathersjs/` modules is recommended but not necessary to use the latest database adapter features.
-
-### Querying by id
-
-All database adapters now support additional query parameters for `get`, `remove`, `update` and `patch`. If the record does not match that query, even if the `id` is valid, a `NotFound` error will be thrown. This is very useful for the common case of e.g. restricting requests to the users company the same way as you already would in a `find` method:
-
-```js
-// Will throw `NotFound` if `companyId` does not match
-// Even if the `id` is available
-app.service('/messages').get('<message id>', {
-  query: { companyId: '<my company>' }
-});
-```
-
-### Hook-less service methods
-
-The database adapters now support calling their service methods without any hooks by adding a `_` in front of the method name as `_find`, `_get`, `_create`, `_patch`, `_update` and `_remove`. This can be useful if you need the raw data from the service and don't want to trigger any of its hooks.
-
-```js
-// Call `get` without running any hooks
-const message = await app.service('/messages')._get('<message id>');
-```
-
-> _Note:_ These methods are only available internally on the server, not on the client side and only for the Feathers database adapters. They do *not* send any events.
-
-### Multi updates
-
-Creating, updating or removing multiple records at once has always been part of the Feathers adapter specification but it turned out to be quite easy to miss.
-
-This means applications could be open to queries that a developer did not anticipate (like deleting or creating multiple records at once). Additionally, it could also lead to unexpected data in a hook that require special cases (like `context.data` or `context.result` being an array).
-
-Now, multiple `create`, `patch` and `remove` calls (with the `id` value set to `null`) are disabled by default and have to be enabled explicitly by setting the `multi` option:
-
-```js
-const service = require('feathers-<database>');
-
-// Allow multi create, patch and remove
-service({
-  multi: true
-});
-
-// Only allow create with an array
-service({
-  multi: [ 'create' ]
-});
-
-// Only allow multi patch and remove (with `id` set to `null`)
-service({
-  multi: [ 'patch', 'remove' ]
-});
-```
-
-> _Important:_ When enabling multiple remove and patch requests, make sure to restrict the allowed query (e.g. based on the authenticated user id), otherwise it could be possible to delete or patch every record in the database.
-
-### Whitelisting
-
-Some database adapters allowed additional query parameters outside of the official Feathers query syntax. To reduce the risk of allowing malicious queries, only the standard query syntax is now allowed.
-
-Non-standard query parameters (any query property starting with a `$`) will now throw an error. To allow them, they have to be explicitly whitelisted using the `whitelist` option:
-
-```js
-const service = require('feathers-<database>');
-
-// Allow to use $regex in query parameters
-service({
-  whitelist: [ '$regex' ]
-});
-```
-
-> _Important:_ Be aware of potential security implications of manually whitelisted options. E.g. Enabling Mongoose `$populate` can expose fields that are normally protected at the service level (e.g. a users password) and have to be removed separately.
-
-## Backwards compatibility
-
-The REST authentication flow is still the same and the previous socket authentication mechanism is also still supported. New websocket authentication works the same as authentication via REST.
-
-For security reasons, the authentication secret should be changed so that all current JWTs will become invalid and prompt the users to log in again and issue new valid access tokens. The authentication Feathers clients should be updated since it includes many bug fixes on reconnection issues and usability improvements.
-
-### Old client JWT compatibility
-
-Although upgrading the clients and issuing new tokens is highly recommended, the following setup can be used to provide backwards compatible authentication:
-
-```js
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
-const { LocalStrategy } = require('@feathersjs/authentication-local');
-const { expressOauth } = require('@feathersjs/authentication-oauth');
-
-class MyAuthenticationService extends AuthenticationService {
-  async getPayload(authResult, params) {
-    // Call original `getPayload` first
-    const payload = await super.getPayload(authResult, params);
-    const { user } = authResult;
-
-    return {
-      ...payload,
-      userId: user.id
-    };
-  }
-}
-
-class LegacyJWTStrategy extends JWTStrategy {
-  getEntityId(authResult) {
-    const { authentication: { payload } } = authResult;
-
-    return payload.userId || payload.sub;
-  }
-}
-
-module.exports = app => {
-  const authentication = new MyAuthenticationService(app);
-
-  authentication.register('jwt', new LegacyJWTStrategy());
-  authentication.register('local', new LocalStrategy());
-
-  app.use('/authentication', authentication);
-  app.configure(expressOauth());
-};
-```
-
-### OAuth cookies
-
-To support OAuth for the old authentication client that was using a cookie instead of the redirect to transmit the access token the following middleware can be used:
-
-> __Note:__ This is only necessary if the Feathers authentication client is not updated at the same time and if OAuth is being used.
-
-```js
-const authService = new AuthenticationService(app);
-
-authService.register('jwt', new JWTStrategy());
-authService.register('local', new LocalStrategy());
-authService.register('github', new GitHubStrategy());
-
-app.use('/authentication', authService);
-app.get('/oauth/cookie', (req, res) => {
-  const { access_token } = req.query;
-
-  if (access_token) {
-    res.cookie('feathers-jwt', access_token, {
-      httpOnly: false
-      // other cookie options here
-    });
-  }
-
-  res.redirect('/redirect-url');
-});
-
-app.configure(expressOauth());
-```
-
-Also update `config/default.json` `redirect` with `/oauth/cookie?`:
-
-```json
+// config/custom-environment-variables.json
 {
-  "authentication": {
-    "oauth": {
-      "redirect": "/oauth/cookie?"
+  "hostname": "HOSTNAME",
+  "port": "PORT",
+  "someSetting": {
+    "apiKey": "MY_CUSTOM_API_KEY"
+  }
+}
+```
+
+### Debugging
+
+The `debug` module has been removed as a direct dependency. This reduces the the client bundle size and allows to support other platforms (like Deno). The original `debug` functionality can now be initialized as follows:
+
+```js
+const feathers = require('@feathersjs/feathers');
+const debug = require('debug');
+
+feathers.setDebug(debug);
+```
+
+It is also possible to set a custom logger like this:
+
+```js
+const feathers = require('@feathersjs/feathers');
+
+const customDebug = name => (...args) => {
+  console.log(name, ...args);
+}
+
+feathers.setDebug(customDebug);
+```
+
+Setting the debugger will apply to all `@feathersjs` modules.
+
+### Client
+
+- The `request` library has been deprecated and request support has been removed from the REST client.
+- Since all modern browsers now support built-in [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), the Angular and jQuery REST clients have been removed as well.
+- The `@feathersjs/client` package now only comes with a full (`dist/feathers.js`) and core (`dist/core.js`) browser build. Using Feathers [with a module loader](../api/client.md#module-loaders) is recommended for all other use cases.
+
+### Removed primus transport
+
+Due to low usage `@feathersjs/primus` and `@feathers/primus-client` have been removed from Feathers core.
+
+### Legacy socket format and timeouts
+
+- The legacy `servicename::method` socket message format has been deprecated in Feathers 3 and has now been removed. Use a v3 or later [Feathers client](../api/client.md) or the [current Socket.io direct connection API](../api/client/socketio.md).
+- The `timeout` setting for socket services has been removed. It was mainly intended as a fallback for the old message format and interfered with the underlying timeout and retry mechanism provided by the websocket libraries themselves.
+
+### Removed `service.mixin()`
+
+Services are no longer Uberproto (an ES5 inheritance utility) objects and instead rely on modern JavaScript classes and extension. This means `app.service(name).mixin(data)` is no longer available which can be replaced with a basic `Object.assign(app.service(name), data)`:
+
+```js
+// Before
+app.mixins.push((service, path) => {
+  service.mixin({
+    create (data, params) {
+      // do something here
+      return this._super(data, params);
+    }
+  });
+});
+
+// Now
+app.mixins.push((service, path) => {
+  const { create } = service;
+
+  Object.assign(service, {
+    create (data, params) {
+      // do something here, then invoke the old method
+      // through normal JavaScript functionality
+      return create.call(this, data, params);
+    }
+  });
+});
+```
+
+### `finally` hook
+
+The undocumented `finally` hook type is no longer available and should be replaced by the new asynchronous hooks which offer the same functionality using plain JavaScript:
+
+```js
+app.service('myservice').hooks([
+  async (context, next) => {
+    try {
+      await next();
+    } finally {
+      // Do finally hook stuff here
     }
   }
-}
+]);
 ```
 
-### PassportJS
+### Other internal changes
 
-PassportJS is the quasi-standard authentication mechanism for Express applications. Unfortunately it doesn't play very well with other frameworks (which Feathers can easily support otherwise) or real time connections. PassportJS can still be used through its direct Express middleware usage and then passing the authentication information [as service `params`](../api/express.md#params).
+- The undocumented `service._setup` method introduced in v1 will no longer be called. It was used to circumvent middleware inconsistencies from Express 3 and is no longer necessary.
+- The undocumented `app.providers` has been removed since it provided the same functionality as [`app.mixins`](../api/application.md#mixins)
+- `app.disable`, `app.disabled`, `app.enable` and `app.enabled` have been removed from basic Feathers applications. It will still be available in an Express compatible Feathers application. `app.get()` and `app.set()` should be used instead.
+- The Express `rest` adapter now needs to be configured in the correct order, usually right after the `json()` middleware. This is already the case in generated applications but it may have to be adjusted in a custom setup.

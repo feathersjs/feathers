@@ -235,8 +235,12 @@ export default defineConfig({
               link: '/guides/security.md',
             },
             {
-              text: 'Migration Guide',
+              text: 'Migration Guide v4 to 5',
               link: '/guides/migrating.md',
+            },
+            {
+              text: 'Migration Guide v3 to 4',
+              link: '/guides/migrating-v3-to-v4.md',
             },
           ],
         },
