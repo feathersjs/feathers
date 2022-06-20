@@ -1,4 +1,4 @@
-# Feathers vs Sails
+# Feathers vs LoopBack
 
 Both LoopBack, and Feathers are frameworks primarily meant for building APIs, and mediating between front-end clients, and backend data sources.
 
