@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import { generator, runGenerators, prompt, install } from '@feathershq/pinion'
-import { FeathersBaseContext, getDatabaseAdapter } from '../commons'
+import { addVersions, FeathersBaseContext, getDatabaseAdapter } from '../commons'
 import { generate as serviceGenerator, ServiceGeneratorContext } from '../service/index'
 
 export interface AuthenticationGeneratorContext extends ServiceGeneratorContext {
@@ -99,7 +99,5 @@ export const generate = (ctx: AuthenticationGeneratorArguments) =>
         }
       }
 
-      const installer = install<AuthenticationGeneratorContext>(dependencies)
-
-      return installer(ctx)
+      return install<AuthenticationGeneratorContext>(addVersions(dependencies, ctx.dependencyVersions))(ctx)
     })

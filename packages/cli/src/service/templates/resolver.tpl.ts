@@ -11,13 +11,13 @@ import type {
   ${upperName}Patch,
   ${upperName}Result,
   ${upperName}Query,
-} from '../${schemaPath}'
+} from '${relative}/${schemaPath}'
 import {
   ${camelName}DataSchema,
   ${camelName}PatchSchema,
   ${camelName}ResultSchema,
   ${camelName}QuerySchema
-} from '../${schemaPath}'
+} from '${relative}/${schemaPath}'
 
 
 // Resolver for the basic data model (e.g. creating new entries)

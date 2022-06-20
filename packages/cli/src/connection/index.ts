@@ -1,6 +1,6 @@
 import { generator, runGenerator, prompt, install, mergeJSON, toFile } from '@feathershq/pinion'
 import chalk from 'chalk'
-import { FeathersBaseContext, DatabaseType, getDatabaseAdapter } from '../commons'
+import { FeathersBaseContext, DatabaseType, getDatabaseAdapter, addVersions } from '../commons'
 
 export interface ConnectionGeneratorContext extends FeathersBaseContext {
   database: DatabaseType
@@ -105,5 +105,5 @@ export const generate = (ctx: ConnectionGeneratorArguments) =>
         }
       }
 
-      return install(dependencies)(ctx)
+      return install<ConnectionGeneratorContext>(addVersions(dependencies, ctx.dependencyVersions))(ctx)
     })

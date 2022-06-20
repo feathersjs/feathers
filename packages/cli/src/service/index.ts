@@ -122,8 +122,8 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
       const pathElements = path.split('/').filter((el) => el !== '')
       const relative = pathElements.map(() => '..').join('/')
       const folder = _.initial(pathElements)
-      const schemaPath = `schemas/${folder.join('/')}${kebabName}.schema`
-      const resolverPath = `resolvers/${folder.join('/')}${kebabName}.resolver`
+      const schemaPath = ['schemas', ...folder, `${kebabName}.schema`].join('/')
+      const resolverPath = ['resolvers', ...folder, `${kebabName}.resolver`].join('/')
 
       return {
         name,

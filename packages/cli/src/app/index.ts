@@ -1,25 +1,18 @@
-import { sep, join } from 'path'
-import { PackageJson } from 'type-fest'
+import { sep } from 'path'
 import chalk from 'chalk'
 import {
   generator,
   prompt,
   runGenerators,
-  loadJSON,
   fromFile,
   install,
   copyFiles,
   toFile,
   when
 } from '@feathershq/pinion'
-import { FeathersBaseContext, FeathersAppInfo, initializeBaseContext } from '../commons'
+import { FeathersBaseContext, FeathersAppInfo, initializeBaseContext, addVersions } from '../commons'
 import { generate as authenticationGenerator, prompts as authenticationPrompts } from '../authentication'
 import { generate as connectionGenerator, prompts as connectionPrompts } from '../connection'
-
-export type DependencyVersions = { [key: string]: string }
-
-const addVersions = (dependencies: string[], versions: DependencyVersions) =>
-  dependencies.map((dep) => `${dep}@${versions[dep] ? versions[dep] : 'latest'}`)
 
 export interface AppGeneratorData extends FeathersAppInfo {
   /**
@@ -42,11 +35,6 @@ export interface AppGeneratorData extends FeathersAppInfo {
    * The source folder where files are put
    */
   lib: string
-  /**
-   * A list dependencies that should be installed with a certain version.
-   * Used for installing development dependencies during testing.
-   */
-  dependencyVersions?: DependencyVersions
 }
 
 export type AppGeneratorContext = FeathersBaseContext &
@@ -59,16 +47,11 @@ export type AppGeneratorArguments = FeathersBaseContext & Partial<AppGeneratorDa
 
 export const generate = (ctx: AppGeneratorArguments) =>
   generator(ctx)
-    .then(
-      loadJSON(join(__dirname, '..', '..', 'package.json'), (pkg: PackageJson) => ({
-        dependencyVersions: {
-          ...pkg.devDependencies,
-          ...ctx.dependencyVersions
-        },
-        dependencies: [],
-        devDependencies: []
-      }))
-    )
+    .then((ctx) => ({
+      ...ctx,
+      dependencies: [],
+      devDependencies: []
+    }))
     .then(
       prompt<AppGeneratorArguments, AppGeneratorContext>((ctx) => [
         {

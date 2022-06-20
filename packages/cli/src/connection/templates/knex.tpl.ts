@@ -21,13 +21,13 @@ export const ${database} = (app: Application) => {
 }
 `
 
-const knexfile = ({ lib, database }: ConnectionGeneratorContext) => `
+const knexfile = ({ lib, language, database }: ConnectionGeneratorContext) => `
 import { app } from './${lib}/app'
 
 // Load our database connection info from the app configuration
 const config = app.get('${database}')
 
-module.exports = config
+${language === 'js' ? 'export default config' : 'module.exports = config'}
 `
 
 const configurationTemplate = ({ database }: ConnectionGeneratorContext) => `    ${database}: {
@@ -56,7 +56,7 @@ export const generate = (ctx: ConnectionGeneratorContext) =>
       mergeJSON<ConnectionGeneratorContext>(
         {
           scripts: {
-            migrate: 'knex migrate:latest',
+            migrate: `knex migrate:latest`,
             test: 'npm run migrate && npm run mocha'
           }
         },
