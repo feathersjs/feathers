@@ -6,6 +6,9 @@ type OptionalPick<T, K extends PropertyKey> = Pick<T, Extract<keyof T, K>>
 
 export type { NextFunction }
 
+/**
+ * The object returned from `.find` call by standard database adapters
+ */
 export interface Paginated<T> {
   total: number
   limit: number
@@ -13,6 +16,9 @@ export interface Paginated<T> {
   data: T[]
 }
 
+/**
+ * Options that can be passed when registering a service via `app.use(name, service, options)`
+ */
 export interface ServiceOptions {
   events?: string[]
   methods?: string[]
@@ -89,6 +95,21 @@ export type CustomMethods<T extends { [key: string]: [any, any] }> = {
   [K in keyof T]: (data: T[K][0], params?: Params) => Promise<T[K][1]>
 }
 
+/**
+ * An interface usually use by transport clients that represents a e.g. HTTP or websocket
+ * connection that can be configured on the application.
+ */
+export type TransportConnection<Services = any> = {
+  (app: Application<Services>): void
+  Service: any
+  service: <L extends keyof Services & string>(
+    name: L
+  ) => keyof any extends keyof Services ? ServiceInterface : Services[L]
+}
+
+/**
+ * The interface for a custom service method. Can e.g. be used to type client side services.
+ */
 export type CustomMethod<T = any, R = T, P extends Params = Params> = (data: T, params?: P) => Promise<R>
 
 export type ServiceMixin<A> = (service: FeathersService<A>, path: string, options: ServiceOptions) => void

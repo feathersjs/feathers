@@ -11,7 +11,7 @@ import { ServiceTypes } from './declarations'
 
 describe('fetch REST connector', function () {
   const url = 'http://localhost:8889'
-  const connection = rest(url).fetch(fetch)
+  const connection = rest<ServiceTypes>(url).fetch(fetch)
   const app = feathers<ServiceTypes>()
     .configure(connection)
     .use('todos', connection.service('todos'), {

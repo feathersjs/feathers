@@ -13,7 +13,7 @@ export const generate = (ctx: AppGeneratorContext) =>
           compilerOptions: {
             target: 'es2020',
             module: 'commonjs',
-            outDir: './lib',
+            outDir: './dist',
             rootDir: `./${lib}`,
             strict: true,
             esModuleInterop: true
