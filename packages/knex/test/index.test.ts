@@ -1,6 +1,6 @@
-import knex from 'knex'
+import knex, { Knex } from 'knex'
 import assert from 'assert'
-import { feathers } from '@feathersjs/feathers'
+import { feathers, HookContext, Service } from '@feathersjs/feathers'
 import adapterTests from '@feathersjs/adapter-tests'
 import { errors } from '@feathersjs/errors'
 
@@ -372,221 +372,239 @@ describe('Feathers Knex Service', () => {
     })
   })
 
-  // describe('hooks', () => {
-  //   afterEach(async () => {
-  //     await db('people').truncate()
-  //   })
+  describe('hooks', () => {
+    afterEach(async () => {
+      await db('people').truncate()
+    })
 
-  //   it('does reject on problem with commit', async () => {
-  //     const app = feathers()
+    it('does reject on problem with commit', async () => {
+      const app = feathers()
 
-  //     app.hooks({
-  //       before: transaction.start(),
-  //       after: [
-  //         (context) => {
-  //           const client = context.params.transaction.trx.client
-  //           const query = client.query
+      app.hooks({
+        before: transaction.start(),
+        after: [
+          (context: HookContext) => {
+            const client = context.params.transaction.trx.client
+            const query = client.query
 
-  //           client.query = (conn, sql) => {
-  //             let result = query.call(client, conn, sql)
+            client.query = (conn: any, sql: any) => {
+              let result = query.call(client, conn, sql)
 
-  //             if (sql === 'COMMIT;') {
-  //               result = result.then(() => {
-  //                 throw new TypeError('Deliberate')
-  //               })
-  //             }
+              if (sql === 'COMMIT;') {
+                result = result.then(() => {
+                  throw new TypeError('Deliberate')
+                })
+              }
 
-  //             return result
-  //           }
-  //         },
-  //         transaction.end()
-  //       ],
-  //       error: transaction.rollback()
-  //     })
+              return result
+            }
+          },
+          transaction.end()
+        ],
+        error: transaction.rollback()
+      })
 
-  //     app.use('/people', people)
+      app.use('/people', people)
 
-  //     await expect(app.service('/people').create({ name: 'Foo' })).to.eventually.be.rejectedWith(
-  //       TypeError,
-  //       'Deliberate'
-  //     )
-  //   })
+      await assert.rejects(() => app.service('/people').create({ name: 'Foo' }), {
+        message: 'Deliberate'
+      })
+    })
 
-  //   it('does commit, rollback, nesting', async () => {
-  //     const app = feathers()
+    it('does commit, rollback, nesting', async () => {
+      const app = feathers<{
+        people: typeof people
+        test: Pick<Service, 'create'> & { Model: Knex }
+      }>()
 
-  //     app.hooks({
-  //       before: transaction.start({ getKnex: () => db }),
-  //       after: transaction.end(),
-  //       error: transaction.rollback()
-  //     })
+      app.hooks({
+        before: transaction.start(),
+        after: transaction.end(),
+        error: transaction.rollback()
+      })
 
-  //     app.use('/people', people)
+      app.use('people', people)
 
-  //     app.use('/test', {
-  //       create: async (data, params) => {
-  //         await app.service('/people').create({ name: 'Foo' }, { ...params })
+      app.use('test', {
+        Model: db,
+        create: async (data: any, params) => {
+          const created = await app.service('people').create({ name: 'Foo' }, { ...params })
 
-  //         if (data.throw) {
-  //           throw new TypeError('Deliberate')
-  //         }
-  //       }
-  //     })
+          if (data.throw) {
+            throw new TypeError('Deliberate')
+          }
 
-  //     await expect(app.service('/test').create({ throw: true })).to.eventually.be.rejectedWith(
-  //       TypeError,
-  //       'Deliberate'
-  //     )
+          return created
+        }
+      })
 
-  //     expect(await app.service('/people').find()).to.have.length(0)
+      await assert.rejects(() => app.service('test').create({ throw: true }), {
+        message: 'Deliberate'
+      })
 
-  //     await expect(app.service('/test').create({})).to.eventually.be.fulfilled
+      assert.strictEqual((await app.service('people').find({ paginate: false })).length, 0)
 
-  //     expect(await app.service('/people').find()).to.have.length(1)
-  //   })
+      await app.service('test').create({})
 
-  //   it('does use savepoints for nested calls', async () => {
-  //     const app = feathers()
+      assert.strictEqual((await app.service('people').find({ paginate: false })).length, 1)
+    })
 
-  //     app.hooks({
-  //       before: transaction.start({ getKnex: () => db }),
-  //       after: transaction.end(),
-  //       error: transaction.rollback()
-  //     })
+    it('does use savepoints for nested calls', async () => {
+      const app = feathers<{
+        people: typeof people
+        success: Pick<Service, 'create'> & { Model: Knex }
+        fail: Pick<Service, 'create'> & { Model: Knex }
+        test: Pick<Service, 'create'> & { Model: Knex }
+      }>()
 
-  //     app.use('/people', people)
+      app.hooks({
+        before: transaction.start(),
+        after: transaction.end(),
+        error: transaction.rollback()
+      })
 
-  //     app.use('/success', {
-  //       create: async (data, params) => {
-  //         await app.service('/people').create({ name: 'Success' }, { ...params })
-  //       }
-  //     })
+      app.use('people', people)
 
-  //     app.use('/fail', {
-  //       create: async (data, params) => {
-  //         await app.service('/people').create({ name: 'Fail' }, { ...params })
-  //         throw new TypeError('Deliberate')
-  //       }
-  //     })
+      app.use('success', {
+        Model: db,
+        create: async (_data, params) => {
+          return app.service('people').create({ name: 'Success' }, { ...params })
+        }
+      })
 
-  //     app.use('/test', {
-  //       create: async (data, params) => {
-  //         await app.service('/success').create({}, { ...params })
-  //         await app
-  //           .service('/fail')
-  //           .create({}, { ...params })
-  //           .catch(() => {})
-  //       }
-  //     })
+      app.use('fail', {
+        Model: db,
+        create: async (_data, params) => {
+          await app.service('people').create({ name: 'Fail' }, { ...params })
+          throw new TypeError('Deliberate')
+        }
+      })
 
-  //     await app.service('/test').create({})
+      app.use('test', {
+        Model: db,
+        create: async (_data, params) => {
+          await app.service('success').create({}, { ...params })
+          await app
+            .service('fail')
+            .create({}, { ...params })
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            .catch(() => {})
+          return []
+        }
+      })
 
-  //     const created = await app.service('/people').find()
+      await app.service('test').create({})
 
-  //     expect(created).to.have.length(1)
-  //     expect(created[0]).to.have.property('name', 'Success')
-  //   })
+      const created = await app.service('people').find({ paginate: false })
 
-  //   it('allows waiting for transaction to complete', async () => {
-  //     const app = feathers()
+      assert.strictEqual(created.length, 1)
+      assert.ok(created[0].name)
+    })
 
-  //     let seq = []
+    it('allows waiting for transaction to complete', async () => {
+      const app = feathers<{
+        people: typeof people
+        test: Pick<Service, 'create'> & { Model: Knex }
+      }>()
 
-  //     app.hooks({
-  //       before: [
-  //         transaction.start({ getKnex: () => db }),
-  //         (context) => {
-  //           seq.push(`${context.path}: waiting for trx to be committed`)
-  //           context.params.transaction.committed.then((success) => {
-  //             seq.push(`${context.path}: committed ${success}`)
-  //           })
-  //         },
-  //         async (context) => {
-  //           seq.push(`${context.path}: another hook`)
-  //         }
-  //       ],
-  //       after: [
-  //         transaction.end(),
-  //         (context) => {
-  //           seq.push(`${context.path}: trx ended`)
-  //         }
-  //       ],
-  //       error: [
-  //         transaction.rollback(),
-  //         (context) => {
-  //           seq.push(`${context.path}: trx rolled back`)
-  //         }
-  //       ]
-  //     })
+      let seq: string[] = []
 
-  //     app.use('/people', people)
+      app.hooks({
+        before: [
+          transaction.start(),
+          (context: HookContext) => {
+            seq.push(`${context.path}: waiting for trx to be committed`)
+            context.params.transaction.committed.then((success: any) => {
+              seq.push(`${context.path}: committed ${success}`)
+            })
+          },
+          async (context: HookContext) => {
+            seq.push(`${context.path}: another hook`)
+          }
+        ],
+        after: [
+          transaction.end(),
+          (context: HookContext) => {
+            seq.push(`${context.path}: trx ended`)
+          }
+        ],
+        error: [
+          transaction.rollback(),
+          (context: HookContext) => {
+            seq.push(`${context.path}: trx rolled back`)
+          }
+        ]
+      })
 
-  //     app.use('/test', {
-  //       create: async (data, params) => {
-  //         await app.service('/people').create({ name: 'Foo' }, { ...params })
+      app.use('people', people)
 
-  //         if (data.throw) {
-  //           throw new TypeError('Deliberate')
-  //         }
-  //       }
-  //     })
+      app.use('test', {
+        Model: db,
+        create: async (data: any, params) => {
+          const peeps = await app.service('people').create({ name: 'Foo' }, { ...params })
 
-  //     expect(seq).to.eql([])
+          if (data.throw) {
+            throw new TypeError('Deliberate')
+          }
+          return peeps
+        }
+      })
 
-  //     await expect(app.service('/test').create({ throw: true })).to.eventually.be.rejectedWith(
-  //       TypeError,
-  //       'Deliberate'
-  //     )
+      assert.deepStrictEqual(seq, [])
 
-  //     expect(seq).to.eql([
-  //       'test: waiting for trx to be committed',
-  //       'test: another hook',
-  //       'people: waiting for trx to be committed',
-  //       'people: another hook',
-  //       'people: trx ended',
-  //       'test: committed false',
-  //       'people: committed false',
-  //       'test: trx rolled back'
-  //     ])
+      await assert.rejects(() => app.service('test').create({ throw: true }), {
+        message: 'Deliberate'
+      })
 
-  //     seq = []
+      assert.deepStrictEqual(seq, [
+        'test: waiting for trx to be committed',
+        'test: another hook',
+        'people: waiting for trx to be committed',
+        'people: another hook',
+        'people: trx ended',
+        'test: committed false',
+        'people: committed false',
+        'test: trx rolled back'
+      ])
 
-  //     expect(await app.service('/people').find()).to.have.length(0)
+      seq = []
 
-  //     expect(seq).to.eql([
-  //       'people: waiting for trx to be committed',
-  //       'people: another hook',
-  //       'people: committed true',
-  //       'people: trx ended'
-  //     ])
+      assert.strictEqual((await app.service('people').find({ paginate: false })).length, 0)
 
-  //     seq = []
+      assert.deepStrictEqual(seq, [
+        'people: waiting for trx to be committed',
+        'people: another hook',
+        'people: committed true',
+        'people: trx ended'
+      ])
 
-  //     await expect(app.service('/test').create({})).to.eventually.be.fulfilled
+      seq = []
 
-  //     expect(seq).to.eql([
-  //       'test: waiting for trx to be committed',
-  //       'test: another hook',
-  //       'people: waiting for trx to be committed',
-  //       'people: another hook',
-  //       'people: trx ended',
-  //       'test: committed true',
-  //       'people: committed true',
-  //       'test: trx ended'
-  //     ])
+      await app.service('test').create({})
 
-  //     seq = []
+      assert.deepStrictEqual(seq, [
+        'test: waiting for trx to be committed',
+        'test: another hook',
+        'people: waiting for trx to be committed',
+        'people: another hook',
+        'people: trx ended',
+        'test: committed true',
+        'people: committed true',
+        'test: trx ended'
+      ])
 
-  //     expect(await app.service('/people').find()).to.have.length(1)
+      seq = []
 
-  //     expect(seq).to.eql([
-  //       'people: waiting for trx to be committed',
-  //       'people: another hook',
-  //       'people: committed true',
-  //       'people: trx ended'
-  //     ])
-  //   })
-  // })
+      assert.strictEqual((await app.service('people').find({ paginate: false })).length, 1)
+
+      assert.deepStrictEqual(seq, [
+        'people: waiting for trx to be committed',
+        'people: another hook',
+        'people: committed true',
+        'people: trx ended'
+      ])
+    })
+  })
 
   testSuite(app, errors, 'users')
   testSuite(app, errors, 'people')
