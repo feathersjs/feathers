@@ -18,8 +18,8 @@ describe('Feathers application tests', () => {
     server = await app.listen(port)
   })
 
-  after(done => {
-    server.close(done)
+  after(async () => {
+    await app.teardown()
   })
 
   it('starts and shows the index page', async () => {

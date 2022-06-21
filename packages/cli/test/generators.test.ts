@@ -115,6 +115,14 @@ describe('@feathersjs/cli', () => {
         assert.ok(customServiceContext)
         assert.strictEqual(testResult, 0)
       })
+
+      it('compiles successfully', async () => {
+        if (language === 'ts') {
+          const testResult = await context.pinion.exec('npm', ['run', 'compile'], { cwd })
+
+          assert.strictEqual(testResult, 0)
+        }
+      })
     })
   }
 })

@@ -3,7 +3,8 @@ import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
 const template = ({}: AppGeneratorContext) =>
-  `import { feathers, type Service, type TransportConnection } from '@feathersjs/feathers'
+  `import { feathers } from '@feathersjs/feathers'
+import type { Service, TransportConnection, Params } from '@feathersjs/feathers'
 
 // A mapping of client side services
 export interface ServiceTypes {
