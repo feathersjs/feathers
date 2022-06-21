@@ -6,16 +6,19 @@ const jsPackageJson = (lib: string) => ({
   scripts: {
     start: `node ${lib}`,
     dev: `nodemon ${lib}/`,
-    test: 'mocha test/ --recursive --exit'
+    mocha: 'cross-env NODE_ENV=test mocha test/ --recursive --exit',
+    test: 'npm run mocha'
   }
 })
 
 const tsPackageJson = (lib: string) => ({
   scripts: {
     dev: `nodemon -x ts-node ${lib}/index.ts`,
-    compile: 'shx rm -rf lib/ && tsc',
-    start: 'npm run compile && node lib/',
-    test: 'mocha test/ --require ts-node/register --recursive --extension .ts --exit'
+    compile: 'shx rm -rf dist/ && tsc',
+    start: 'npm run compile && node dist/',
+    mocha:
+      'cross-env NODE_ENV=test mocha test/ --require ts-node/register --recursive --extension .ts --exit',
+    test: 'npm run mocha'
   }
 })
 
@@ -54,6 +57,7 @@ const packageJson = ({
     test
   },
   main: `${lib}/`,
+  browser: language === 'ts' ? 'dist/client' : `${lib}/client`,
   ...(language === 'ts' ? tsPackageJson(lib) : jsPackageJson(lib))
 })
 

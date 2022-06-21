@@ -11,12 +11,11 @@ export const configurationSchema = schema({
   $id: 'ApplicationConfiguration',
   type: 'object',
   additionalProperties: false,
-  required: [ 'database', 'host', 'port', 'public', 'paginate' ],
+  required: [ 'host', 'port', 'public', 'paginate' ],
   properties: {
     host: { type: 'string' },
     port: { type: 'number' },
     public: { type: 'string' },
-    database: { type: 'string' },
     authentication: authenticationSettingsSchema,
     paginate: {
       type: 'object',

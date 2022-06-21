@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.24](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.23...v5.0.0-pre.24) (2022-06-21)
+
+
+### Bug Fixes
+
+* **authentication:** Add safe dispatch data for authentication requests ([#2662](https://github.com/feathersjs/feathers/issues/2662)) ([d8104a1](https://github.com/feathersjs/feathers/commit/d8104a19ee9181e6a5ea81014af29ff9a3c28a8a))
+
+
+### Features
+
+* **cli:** Add support for JavaScript to the new CLI ([#2668](https://github.com/feathersjs/feathers/issues/2668)) ([ebac587](https://github.com/feathersjs/feathers/commit/ebac587f7d00dc7607c3f546352d79f79b89a5d4))
+
+
+
+
+
 # [5.0.0-pre.23](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.22...v5.0.0-pre.23) (2022-06-06)
 
 

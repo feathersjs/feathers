@@ -5,9 +5,12 @@ import { mkdtemp } from 'fs/promises'
 import assert from 'assert'
 import { getContext } from '@feathershq/pinion'
 
-import { AppGeneratorData, AppGeneratorContext, DependencyVersions } from '../src/app'
+import { AppGeneratorContext } from '../src/app'
 import { generate } from '../lib'
-import pkg from '../package.json'
+import { FeathersBaseContext } from '../src/commons'
+import { ConnectionGeneratorArguments } from '../src/connection'
+import { ServiceGeneratorArguments } from '../src/service'
+import { combinate, dependencyVersions } from './utils'
 
 const matrix = {
   language: ['js', 'ts'] as const,
@@ -19,65 +22,99 @@ const defaultCombination = {
   framework: process.env.FEATHERS_FRAMEWORK || 'koa'
 }
 
-function combinate<O extends Record<string | number, any[]>>(obj: O) {
-  let combos: { [k in keyof O]: O[k][number] }[] = []
-  for (const key of Object.keys(obj)) {
-    const values = obj[key]
-    const all = []
-    for (let i = 0; i < values.length; i++) {
-      for (let j = 0; j < (combos.length || 1); j++) {
-        const newCombo = { ...combos[j], [key]: values[i] }
-        all.push(newCombo)
-      }
-    }
-    combos = all
-  }
-  return combos
-}
-
 const combinations =
   process.version > 'v16.0.0' ? (process.env.CI ? combinate(matrix as any) : [defaultCombination]) : []
-// Use local packages for testing instead of the versions from npm
-const dependencyVersions = Object.keys(pkg.devDependencies)
-  .filter((dep) => dep.startsWith('@feathersjs/'))
-  .reduce((acc, dep) => {
-    const [, name] = dep.split('/')
-
-    acc[dep] = `file://${path.join(__dirname, '..', '..', name)}`
-
-    return acc
-  }, {} as DependencyVersions)
 
 describe('@feathersjs/cli', () => {
   for (const { language, framework } of combinations) {
-    it(`generates ${language} ${framework} app and passes tests`, async () => {
+    describe(`${language} ${framework} app`, () => {
       const name = `feathers_${language}_${framework}`
-      const cwd = await mkdtemp(path.join(os.tmpdir(), name + '-'))
-      const settings: AppGeneratorData = {
-        name,
-        framework,
-        language,
-        dependencyVersions,
-        lib: 'src',
-        description: 'A Feathers test app',
-        packager: 'npm',
-        database: 'mongodb',
-        connectionString: 'mongodb://localhost:27017/feathersapp',
-        transports: ['rest', 'websockets'],
-        authStrategies: ['local', 'github']
-      }
-      const context = getContext<AppGeneratorContext>(
-        {
-          ...settings,
-          _: ['generate', 'app']
-        },
-        { cwd }
-      )
-      const finalContext = await generate(context)
-      const testResult = await context.pinion.exec('npm', ['test'], { cwd })
 
-      assert.ok(finalContext)
-      assert.strictEqual(testResult, 0)
+      let context: FeathersBaseContext
+      let cwd: string
+
+      before(async () => {
+        cwd = await mkdtemp(path.join(os.tmpdir(), name + '-'))
+        console.log(cwd)
+        context = await generate(
+          getContext<AppGeneratorContext>(
+            {
+              name,
+              framework,
+              language,
+              dependencyVersions,
+              lib: 'src',
+              description: 'A Feathers test app',
+              packager: 'npm',
+              database: 'sqlite',
+              connectionString: `${name}.sqlite`,
+              transports: ['rest', 'websockets'],
+              authStrategies: ['local', 'github'],
+              _: ['generate', 'app']
+            },
+            { cwd }
+          )
+        )
+      })
+
+      it('generated app with SQLite and passes tests', async () => {
+        const testResult = await context.pinion.exec('npm', ['test'], { cwd })
+
+        assert.ok(context)
+        assert.strictEqual(testResult, 0)
+      })
+
+      it('generates a MongoDB connection and service and passes tests', async () => {
+        const connectionContext = await generate(
+          getContext<ConnectionGeneratorArguments>(
+            {
+              dependencyVersions,
+              database: 'mongodb' as const,
+              connectionString: `mongodb://localhost:27017/${name}`,
+              _: ['generate', 'connection']
+            },
+            { cwd }
+          )
+        )
+        const mongoServiceContext = await generate(
+          getContext<ServiceGeneratorArguments>(
+            {
+              dependencyVersions,
+              name: 'testing',
+              path: 'path/to/test',
+              authentication: true,
+              type: 'mongodb',
+              _: ['generate', 'service']
+            },
+            { cwd }
+          )
+        )
+        const testResult = await context.pinion.exec('npm', ['test'], { cwd })
+
+        assert.ok(connectionContext)
+        assert.ok(mongoServiceContext)
+        assert.strictEqual(testResult, 0)
+      })
+
+      it('generates a custom service and passes tests', async () => {
+        const customServiceContext = await generate(
+          getContext<ServiceGeneratorArguments>(
+            {
+              dependencyVersions,
+              name: 'Custom Service',
+              path: 'custom',
+              authentication: false,
+              type: 'custom',
+              _: ['generate', 'service']
+            },
+            { cwd }
+          )
+        )
+        const testResult = await context.pinion.exec('npm', ['test'], { cwd })
+
+        assert.ok(customServiceContext)
+        assert.strictEqual(testResult, 0)
+      })
     })
   }
 })

@@ -237,7 +237,7 @@ export class MongoDbAdapter<
     const model = await Promise.resolve(Model)
     const {
       query,
-      filters: { $select, $limit }
+      filters: { $select }
     } = this.filterQuery(id, params)
     const updateOptions = { ...params.mongodb }
     const modifier = Object.keys(data).reduce((current, key) => {
@@ -268,7 +268,6 @@ export class MongoDbAdapter<
       ...params,
       paginate: false,
       query: {
-        ...($limit === 0 ? { $limit: 0 } : {}),
         [this.id]: { $in: idList },
         $select
       }
@@ -298,7 +297,7 @@ export class MongoDbAdapter<
     const model = await Promise.resolve(Model)
     const {
       query,
-      filters: { $select, $limit }
+      filters: { $select }
     } = this.filterQuery(id, params)
     const deleteOptions = { ...params.mongodb }
     const findParams = {
@@ -306,7 +305,6 @@ export class MongoDbAdapter<
       paginate: false,
       query: {
         ...query,
-        ...($limit === 0 ? { $limit: 0 } : {}),
         $select
       }
     }

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.24](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.23...v5.0.0-pre.24) (2022-06-21)
+
+
+### Bug Fixes
+
+* **schema:** Fix dispatch resovler hook to convert actually resolved data ([#2663](https://github.com/feathersjs/feathers/issues/2663)) ([f7e87db](https://github.com/feathersjs/feathers/commit/f7e87dbb9a0bc8d89aee47318dddbaa4d6ba5b91))
+
+
+### Features
+
+* **cli:** Add typed client to a generated app ([#2669](https://github.com/feathersjs/feathers/issues/2669)) ([5b801b5](https://github.com/feathersjs/feathers/commit/5b801b5017ddc3eaa95622b539f51d605916bc86))
+
+
+
+
+
 # [5.0.0-pre.23](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.22...v5.0.0-pre.23) (2022-06-06)
 
 

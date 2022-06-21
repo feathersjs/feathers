@@ -12,7 +12,7 @@ import { ServiceTypes } from './declarations'
 
 describe('Axios REST connector', function () {
   const url = 'http://localhost:8889'
-  const connection = rest(url).axios(axios)
+  const connection = rest<ServiceTypes>(url).axios(axios)
   const app = feathers<ServiceTypes>()
     .configure(connection)
     .use('todos', connection.service('todos'), {

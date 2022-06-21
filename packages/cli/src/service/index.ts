@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { generator, runGenerator, runGenerators, prompt } from '@feathershq/pinion'
 
-import { FeathersBaseContext } from '../commons'
+import { FeathersBaseContext, getDatabaseAdapter } from '../commons'
 
 export interface ServiceGeneratorContext extends FeathersBaseContext {
   /**
@@ -32,6 +32,10 @@ export interface ServiceGeneratorContext extends FeathersBaseContext {
    * A kebab-cased (filename friendly) version of the service name
    */
   kebabName: string
+  /**
+   * The actual filename (the last element of the path)
+   */
+  fileName: string
   /**
    * Indicates how many file paths we should go up to import other things (e.g. `../../`)
    */
@@ -93,16 +97,15 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
             type: 'list',
             when: !type,
             message: 'What kind of service is it?',
-            default: ctx.feathers.database,
+            default: getDatabaseAdapter(ctx.feathers.database),
             choices: [
+              {
+                value: 'knex',
+                name: 'SQL'
+              },
               {
                 value: 'mongodb',
                 name: 'MongoDB'
-              },
-              {
-                value: 'knex',
-                name: 'SQL',
-                disabled: false
               },
               {
                 value: 'custom',
@@ -123,14 +126,16 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
       const pathElements = path.split('/').filter((el) => el !== '')
       const relative = pathElements.map(() => '..').join('/')
       const folder = _.initial(pathElements)
-      const schemaPath = `schemas/${folder.join('/')}${kebabName}.schema`
-      const resolverPath = `resolvers/${folder.join('/')}${kebabName}.resolver`
+      const fileName = _.last(pathElements)
+      const schemaPath = ['schemas', ...folder, `${fileName}.schema`].join('/')
+      const resolverPath = ['resolvers', ...folder, `${fileName}.resolver`].join('/')
 
       return {
         name,
         type,
         path,
         folder,
+        fileName,
         upperName,
         className,
         kebabName,
