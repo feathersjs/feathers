@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.24](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.23...v5.0.0-pre.24) (2022-06-21)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Fix bug and properly set Grant defaults ([#2659](https://github.com/feathersjs/feathers/issues/2659)) ([cb93bb9](https://github.com/feathersjs/feathers/commit/cb93bb911fd92282424da2db805cd685b7e4a45b))
+* **authentication:** Add safe dispatch data for authentication requests ([#2662](https://github.com/feathersjs/feathers/issues/2662)) ([d8104a1](https://github.com/feathersjs/feathers/commit/d8104a19ee9181e6a5ea81014af29ff9a3c28a8a))
+* **schema:** Fix dispatch resovler hook to convert actually resolved data ([#2663](https://github.com/feathersjs/feathers/issues/2663)) ([f7e87db](https://github.com/feathersjs/feathers/commit/f7e87dbb9a0bc8d89aee47318dddbaa4d6ba5b91))
+
+
+### Features
+
+* **authentication-local:** Add passwordHash property resolver ([#2660](https://github.com/feathersjs/feathers/issues/2660)) ([b41279b](https://github.com/feathersjs/feathers/commit/b41279b55eea3771a6fa4983a37be2413287bbc6))
+* **cli:** Add generators for new Knex SQL database adapter ([#2673](https://github.com/feathersjs/feathers/issues/2673)) ([0fb2c0f](https://github.com/feathersjs/feathers/commit/0fb2c0f629116f71184b8698c383af8cfd149688))
+* **cli:** Add hook generator ([#2667](https://github.com/feathersjs/feathers/issues/2667)) ([24e4bc0](https://github.com/feathersjs/feathers/commit/24e4bc04a67fadee0e6a96a8389d788faba5c305))
+* **cli:** Add support for JavaScript to the new CLI ([#2668](https://github.com/feathersjs/feathers/issues/2668)) ([ebac587](https://github.com/feathersjs/feathers/commit/ebac587f7d00dc7607c3f546352d79f79b89a5d4))
+* **cli:** Add typed client to a generated app ([#2669](https://github.com/feathersjs/feathers/issues/2669)) ([5b801b5](https://github.com/feathersjs/feathers/commit/5b801b5017ddc3eaa95622b539f51d605916bc86))
+* **cli:** Initial Feathers v5 CLI and Pinion generator ([#2578](https://github.com/feathersjs/feathers/issues/2578)) ([7f59ae7](https://github.com/feathersjs/feathers/commit/7f59ae7f1471895ba8a82aa4702f1a23f71b7682))
+* **knex:** Add KnexJS SQL database adapter to core ([#2671](https://github.com/feathersjs/feathers/issues/2671)) ([9380fff](https://github.com/feathersjs/feathers/commit/9380fff58596e8bb90b8bb098d2795b7eadfec20))
+
+
+
+
+
 # [5.0.0-pre.23](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.22...v5.0.0-pre.23) (2022-06-06)
 
 
