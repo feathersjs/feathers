@@ -3,12 +3,10 @@ import koaQs from 'koa-qs'
 import { Application as FeathersApplication } from '@feathersjs/feathers'
 import { routing } from '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
-
+import bodyParser from 'koa-bodyparser'
 import { Application } from './declarations'
 
-export { default as Koa } from 'koa'
-export { default as bodyParser } from 'koa-bodyparser'
-
+export { Koa, bodyParser }
 export * from './authentication'
 export * from './declarations'
 export * from './handlers'

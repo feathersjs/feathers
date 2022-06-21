@@ -1,0 +1,51 @@
+import crypto from 'crypto'
+import { generator, toFile, mergeJSON } from '@feathershq/pinion'
+import { AuthenticationGeneratorContext } from '../index'
+
+export const generate = (ctx: AuthenticationGeneratorContext) =>
+  generator(ctx).then(
+    mergeJSON<AuthenticationGeneratorContext>(({ authStrategies }) => {
+      const authentication: any = {
+        entity: ctx.entity,
+        service: ctx.service,
+        secret: crypto.randomBytes(24).toString('base64'),
+        authStrategies: ['jwt'],
+        jwtOptions: {
+          header: {
+            typ: 'access'
+          },
+          audience: 'https://yourdomain.com',
+          algorithm: 'HS256',
+          expiresIn: '1d'
+        }
+      }
+
+      if (authStrategies.includes('local')) {
+        authentication.authStrategies.push('local')
+        authentication.local = {
+          usernameField: 'email',
+          passwordField: 'password'
+        }
+      }
+
+      const oauthStrategies = authStrategies.filter((name) => name !== 'local')
+
+      if (oauthStrategies.length) {
+        authentication.oauth = oauthStrategies.reduce(
+          (oauth, name) => {
+            oauth[name] = {
+              key: '<Client ID>',
+              secret: '<Client secret>'
+            }
+
+            return oauth
+          },
+          {
+            redirect: '/'
+          } as any
+        )
+      }
+
+      return { authentication }
+    }, toFile('config', 'default.json'))
+  )

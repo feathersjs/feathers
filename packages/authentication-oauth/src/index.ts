@@ -30,7 +30,6 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
   const { strategyNames } = service
 
   // Set up all the defaults
-  const { prefix = '/oauth' } = oauth.defaults || {}
   const port = app.get('port')
   let host = app.get('host')
   let protocol = 'https'
@@ -43,21 +42,18 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
     }
   }
 
-  const grant = defaultsDeep(
-    {
-      defaults: {
-        prefix,
-        origin: `${oauth?.defaults?.protocol ?? protocol}://${oauth?.defaults?.host ?? host}`,
-        transport: oauth?.defaults?.transport ?? 'session',
-        response: ['tokens', 'raw', 'profile']
-      }
-    },
-    omit(oauth, ['redirect', 'origins'])
-  )
+  const grant = defaultsDeep({}, omit(oauth, ['redirect', 'origins']), {
+    defaults: {
+      prefix: '/oauth',
+      origin: `${protocol}://${host}`,
+      transport: 'session',
+      response: ['tokens', 'raw', 'profile']
+    }
+  })
 
   const getUrl = (url: string) => {
     const { defaults } = grant
-    return `${defaults.origin}${prefix}/${url}`
+    return `${defaults.origin}${defaults.prefix}/${url}`
   }
 
   each(grant, (value, name) => {

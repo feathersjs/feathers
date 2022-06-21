@@ -2,6 +2,7 @@ import assert from 'assert'
 import merge from 'lodash/merge'
 import { feathers, Application, Service } from '@feathersjs/feathers'
 import { memory } from '@feathersjs/memory'
+import { getDispatch, resolve, resolveDispatch } from '@feathersjs/schema'
 
 import { AuthenticationService, JWTStrategy, hooks } from '../src'
 import { ServerResponse } from 'http'
@@ -18,6 +19,16 @@ describe('authentication/jwt', () => {
   let user: any
   let accessToken: string
   let payload: any
+
+  const userDispatchResolver = resolve({
+    converter: async () => {
+      return {
+        dispatch: true,
+        message: 'Hello world'
+      }
+    },
+    properties: {}
+  })
 
   beforeEach(async () => {
     app = feathers()
@@ -51,6 +62,9 @@ describe('authentication/jwt', () => {
     })
 
     app.service('users').hooks({
+      around: {
+        all: [resolveDispatch(userDispatchResolver)]
+      },
       after: {
         get: [
           (context) => {
@@ -117,6 +131,17 @@ describe('authentication/jwt', () => {
         strategy: 'jwt',
         accessToken
       })
+    })
+
+    it('resolves safe dispatch data in authentication result', async () => {
+      const authResult = await app.service('authentication').create({
+        strategy: 'jwt',
+        accessToken
+      })
+
+      const dispatch = getDispatch(authResult)
+
+      assert.deepStrictEqual(dispatch.user, { dispatch: true, message: 'Hello world' })
     })
 
     it('sends disconnect event when connection token expires and removes all connection information', async () => {

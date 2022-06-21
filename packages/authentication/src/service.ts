@@ -5,6 +5,7 @@ import { connection, event } from './hooks'
 import '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
 import { ServiceMethods, ServiceAddons } from '@feathersjs/feathers'
+import { resolveDispatch } from '@feathersjs/schema'
 import jsonwebtoken from 'jsonwebtoken'
 
 const debug = createDebug('@feathersjs/authentication/service')
@@ -120,12 +121,14 @@ export class AuthenticationService
 
     const accessToken = await this.createAccessToken(payload, jwtOptions, params.secret)
 
-    return merge({ accessToken }, authResult, {
+    return {
+      accessToken,
+      ...authResult,
       authentication: {
-        accessToken,
+        ...authResult.authentication,
         payload: jsonwebtoken.decode(accessToken)
       }
-    })
+    }
   }
 
   /**
@@ -182,8 +185,8 @@ export class AuthenticationService
     }
 
     this.hooks({
-      create: [connection('login'), event('login')],
-      remove: [connection('logout'), event('logout')]
+      create: [resolveDispatch(), connection('login'), event('login')],
+      remove: [resolveDispatch(), connection('logout'), event('logout')]
     } as any)
 
     this.app.on('disconnect', async (connection) => {
