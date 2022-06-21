@@ -110,12 +110,7 @@ export const generate = (ctx: ServiceGeneratorContext) =>
     .then(
       renderSource(
         template,
-        toFile<ServiceGeneratorContext>(({ lib, folder, kebabName }) => [
-          lib,
-          'services',
-          ...folder,
-          kebabName
-        ])
+        toFile<ServiceGeneratorContext>(({ lib, folder, fileName }) => [lib, 'services', ...folder, fileName])
       )
     )
     .then(inject(getSource(importTemplate), prepend(), toServiceIndex))

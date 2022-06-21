@@ -18,11 +18,11 @@ const optionTemplate = ({ kebabName }: ServiceGeneratorContext) =>
   `    paginate: app.get('paginate'),
     Model: app.get('mongodbClient').then(db => db.collection('${kebabName}'))`
 
-const toServiceFile = toFile<ServiceGeneratorContext>(({ lib, folder, kebabName, language }) => [
+const toServiceFile = toFile<ServiceGeneratorContext>(({ lib, folder, fileName, language }) => [
   lib,
   'services',
   ...folder,
-  `${kebabName}.${language}`
+  `${fileName}.${language}`
 ])
 
 export const generate = (ctx: ServiceGeneratorContext) =>

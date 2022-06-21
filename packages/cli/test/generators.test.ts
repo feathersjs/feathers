@@ -36,7 +36,6 @@ describe('@feathersjs/cli', () => {
       before(async () => {
         cwd = await mkdtemp(path.join(os.tmpdir(), name + '-'))
         console.log(cwd)
-
         context = await generate(
           getContext<AppGeneratorContext>(
             {
@@ -69,6 +68,7 @@ describe('@feathersjs/cli', () => {
         const connectionContext = await generate(
           getContext<ConnectionGeneratorArguments>(
             {
+              dependencyVersions,
               database: 'mongodb' as const,
               connectionString: `mongodb://localhost:27017/${name}`,
               _: ['generate', 'connection']
@@ -79,8 +79,9 @@ describe('@feathersjs/cli', () => {
         const mongoServiceContext = await generate(
           getContext<ServiceGeneratorArguments>(
             {
+              dependencyVersions,
               name: 'testing',
-              path: 'path/to/testing',
+              path: 'path/to/test',
               authentication: true,
               type: 'mongodb',
               _: ['generate', 'service']
@@ -95,9 +96,25 @@ describe('@feathersjs/cli', () => {
         assert.strictEqual(testResult, 0)
       })
 
-      // it('generates a custom service and passes tests', async () => {
+      it('generates a custom service and passes tests', async () => {
+        const customServiceContext = await generate(
+          getContext<ServiceGeneratorArguments>(
+            {
+              dependencyVersions,
+              name: 'Custom Service',
+              path: 'custom',
+              authentication: false,
+              type: 'custom',
+              _: ['generate', 'service']
+            },
+            { cwd }
+          )
+        )
+        const testResult = await context.pinion.exec('npm', ['test'], { cwd })
 
-      // })
+        assert.ok(customServiceContext)
+        assert.strictEqual(testResult, 0)
+      })
     })
   }
 })

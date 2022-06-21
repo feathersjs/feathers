@@ -68,11 +68,11 @@ export const generate = (ctx: ServiceGeneratorContext) =>
   generator(ctx).then(
     renderSource(
       template,
-      toFile(({ lib, folder, kebabName }: ServiceGeneratorContext) => [
+      toFile(({ lib, folder, fileName }: ServiceGeneratorContext) => [
         lib,
         'resolvers',
         ...folder,
-        `${kebabName}.resolver`
+        `${fileName}.resolver`
       ])
     )
   )

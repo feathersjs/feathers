@@ -33,6 +33,10 @@ export interface ServiceGeneratorContext extends FeathersBaseContext {
    */
   kebabName: string
   /**
+   * The actual filename (the last element of the path)
+   */
+  fileName: string
+  /**
    * Indicates how many file paths we should go up to import other things (e.g. `../../`)
    */
   relative: string
@@ -122,14 +126,16 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
       const pathElements = path.split('/').filter((el) => el !== '')
       const relative = pathElements.map(() => '..').join('/')
       const folder = _.initial(pathElements)
-      const schemaPath = ['schemas', ...folder, `${kebabName}.schema`].join('/')
-      const resolverPath = ['resolvers', ...folder, `${kebabName}.resolver`].join('/')
+      const fileName = _.last(pathElements)
+      const schemaPath = ['schemas', ...folder, `${fileName}.schema`].join('/')
+      const resolverPath = ['resolvers', ...folder, `${fileName}.resolver`].join('/')
 
       return {
         name,
         type,
         path,
         folder,
+        fileName,
         upperName,
         className,
         kebabName,
