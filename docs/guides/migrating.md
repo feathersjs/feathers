@@ -24,7 +24,7 @@ You can see the migration steps necessary for the Feathers chat [here for Javasc
 
 ### Schemas and resolvers
 
-[`@feathersjs/schema`](../api/schema/readme.md) provides a way to define data models and to dynamically resolve them. It comes in two main parts:
+[`@feathersjs/schema`](../api/schema/index.md) provides a way to define data models and to dynamically resolve them. It comes in two main parts:
 
 - [Schema](../api/schema/schema.md) - Uses [JSON schema](https://json-schema.org/) to define a data model with TypeScript types and basic validations. This allows us to:
 - [Resolvers](../api/schema/resolvers.md) - Resolve schema properties based on a context (usually the [hook context](../api/hooks.md)).
@@ -86,7 +86,7 @@ declare module '../../declarations' {
 
 ### Configuration types
 
-A Feathers application can now also include types for the values of `app.set` and `app.get`. The configuration can also be validated and the type inferred from a [Feathers schema](../api/schema/readme.md).
+A Feathers application can now also include types for the values of `app.set` and `app.get`. The configuration can also be validated and the type inferred from a [Feathers schema](../api/schema/index.md).
 
 ### Typed params and query
 
