@@ -2,7 +2,7 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
-const template = ({}: AppGeneratorContext) =>
+const template = ({ language }: AppGeneratorContext) =>
   `import '@feathersjs/transport-commons'
 import type { Application, HookContext } from './declarations'
 import { logger } from './logger'
@@ -13,7 +13,7 @@ export const channels = (app: Application) => {
     return
   }
 
-  logger.warn('Publishing all events to all authenticated users. See \`channels.js\` and https://docs.feathersjs.com/api/channels.html for more information.')
+  logger.warn('Publishing all events to all authenticated users. See \`channels.${language}\` and https://docs.feathersjs.com/api/channels.html for more information.')
 
   app.on('connection', (connection: any) => {
     // On a new real-time connection, add it to the anonymous channel

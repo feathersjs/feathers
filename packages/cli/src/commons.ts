@@ -2,6 +2,22 @@ import { PackageJson } from 'type-fest'
 import { Callable, PinionContext, loadJSON, fromFile, getCallable, renderTemplate } from '@feathershq/pinion'
 import * as ts from 'typescript'
 import prettier from 'prettier'
+import path from 'path'
+
+export type DependencyVersions = { [key: string]: string }
+
+/**
+ * The database types supported by this generator
+ */
+export type DatabaseType = 'mongodb' | 'mysql' | 'postgresql' | 'sqlite' | 'mssql'
+
+/**
+ * Returns the name of the Feathers database adapter for a supported database type
+ *
+ * @param database The type of the database
+ * @returns The name of the adapter
+ */
+export const getDatabaseAdapter = (database: DatabaseType) => (database === 'mongodb' ? 'mongodb' : 'knex')
 
 export type FeathersAppInfo = {
   /**
@@ -11,7 +27,7 @@ export type FeathersAppInfo = {
   /**
    * The main database
    */
-  database: 'knex' | 'mongodb' | 'custom'
+  database: DatabaseType
   /**
    * The package manager used
    */
@@ -52,7 +68,22 @@ export interface FeathersBaseContext extends PinionContext {
    * The language the app is generated in
    */
   language: 'js' | 'ts'
+  /**
+   * A list dependencies that should be installed with a certain version.
+   * Used for installing development dependencies during testing.
+   */
+  dependencyVersions?: DependencyVersions
 }
+
+/**
+ * Returns dependencies with the versions from the context attached (if available)
+ *
+ * @param dependencies The dependencies to install
+ * @param versions The dependency version list
+ * @returns A list of dependencies with their versions
+ */
+export const addVersions = (dependencies: string[], versions: DependencyVersions) =>
+  dependencies.map((dep) => `${dep}@${versions[dep] ? versions[dep] : 'latest'}`)
 
 /**
  * Loads the application package.json and populates information like the library and test directory
@@ -65,11 +96,19 @@ export const initializeBaseContext =
   <C extends FeathersBaseContext>(ctx: C) =>
     Promise.resolve(ctx)
       .then(loadJSON(fromFile('package.json'), (pkg) => ({ pkg }), {}))
+      .then(
+        loadJSON(path.join(__dirname, '..', 'package.json'), (pkg: PackageJson) => ({
+          dependencyVersions: {
+            ...pkg.devDependencies,
+            ...ctx.dependencyVersions
+          }
+        }))
+      )
       .then((ctx) => ({
         ...ctx,
         lib: ctx.pkg?.directories?.lib || 'src',
         test: ctx.pkg?.directories?.test || 'test',
-        language: ctx.pkg?.feathers?.language || 'ts',
+        language: ctx.language || ctx.pkg?.feathers?.language,
         feathers: ctx.pkg?.feathers
       }))
 
@@ -78,6 +117,13 @@ const escapeNewLines = (code: string) => code.replace(/\n\n/g, '\n/* :newline: *
 const restoreNewLines = (code: string) => code.replace(/\/\* :newline: \*\//g, '\n')
 const fixLocalImports = (code: string) => code.replace(importRegex, "from '$1.js'")
 
+/**
+ * Returns the transpiled and prettified JavaScript for a TypeScript source code
+ *
+ * @param typescript The TypeScript source code
+ * @param options TypeScript transpilation options
+ * @returns The formatted JavaScript source code
+ */
 export const getJavaScript = (typescript: string, options: ts.TranspileOptions = {}) => {
   const source = escapeNewLines(typescript)
   const transpiled = ts.transpileModule(source, {

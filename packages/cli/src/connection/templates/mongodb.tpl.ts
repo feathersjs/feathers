@@ -9,20 +9,21 @@ import type { Application } from './declarations'
 
 declare module './declarations' {
   interface Configuration {
-    mongoClient: Promise<Db>
+    mongodbClient: Promise<Db>
   }
 }
 
 export const mongodb = (app: Application) => {
-  const connection = app.get('database')
+  const connection = app.get('mongodb') as string
   const database = connection.substring(connection.lastIndexOf('/') + 1)
   const mongoClient = MongoClient.connect(connection)
     .then(client => client.db(database))
 
-  app.set('mongoClient', mongoClient)
+  app.set('mongodbClient', mongoClient)
 }
 `
-
+const configurationTemplate = ({ database }: ConnectionGeneratorContext) =>
+  `    ${database}: { type: 'string' },`
 const importTemplate = "import { mongodb } from './mongodb'"
 const configureTemplate = 'app.configure(mongodb)'
 const toAppFile = toFile<ConnectionGeneratorContext>(({ lib, language }) => [lib, `app.${language}`])
@@ -33,6 +34,17 @@ export const generate = (ctx: ConnectionGeneratorContext) =>
       renderSource(
         template,
         toFile<ConnectionGeneratorContext>(({ lib }) => lib, 'mongodb')
+      )
+    )
+    .then(
+      inject(
+        configurationTemplate,
+        before('authentication: authenticationSettingsSchema'),
+        toFile<ConnectionGeneratorContext>(({ lib, language }) => [
+          lib,
+          'schemas',
+          `configuration.schema.${language}`
+        ])
       )
     )
     .then(inject(getSource(importTemplate), before('import { services } from'), toAppFile))

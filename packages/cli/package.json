@@ -54,7 +54,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathershq/pinion": "^0.3.1",
+    "@feathershq/pinion": "^0.3.3",
     "chalk": "^4.0.1",
     "lodash": "^4.17.21",
     "prettier": "^2.7.1"
@@ -69,6 +69,7 @@
     "@feathersjs/feathers": "^5.0.0-pre.22",
     "@feathersjs/koa": "^5.0.0-pre.22",
     "@feathersjs/mongodb": "^5.0.0-pre.22",
+    "@feathersjs/knex": "^5.0.0-pre.22",
     "@feathersjs/schema": "^5.0.0-pre.22",
     "@feathersjs/socketio": "^5.0.0-pre.22",
     "@feathersjs/transport-commons": "^5.0.0-pre.22",

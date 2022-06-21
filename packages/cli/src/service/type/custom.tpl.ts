@@ -1,4 +1,4 @@
-import { generator, inject, toFile, after, prepend } from '@feathershq/pinion'
+import { generator, inject, toFile, after, before, prepend } from '@feathershq/pinion'
 import { getSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
@@ -7,59 +7,75 @@ export const template = ({ className, upperName }: ServiceGeneratorContext) =>
   app: Application
 }
 
-export class ${className} implements ServiceInterface<${upperName}Result, ${upperName}Data> {
+export interface ${upperName}Params extends Params<${upperName}Query> {
+
+}
+
+// This is a skeleton for a custom service class. Remove or add the methods you need here
+export class ${className} {
   constructor (public options: ${className}Options) {
   }
 
-  async find (params?: Params) {
-    return [];
+  async find (_params?: ${upperName}Params): Promise<${upperName}Result[]> {
+    return []
   }
 
-  async get (id: Id, params?: Params) {
+  async get (id: Id, _params?: ${upperName}Params): Promise<${upperName}Result> {
     return {
-      id, text: \`A new message with ID: \${id}!\`
+      id: \`\${id}\`,
+      text: \`A new message with ID: \${id}!\`
     };
   }
 
-  async create (data: Data, params?: Params) {
+  async create (data: ${upperName}Data, params?: ${upperName}Params): Promise<${upperName}Result>
+  async create (data: ${upperName}Data[], params?: ${upperName}Params): Promise<${upperName}Result[]>
+  async create (data: ${upperName}Data|${upperName}Data[], params?: ${upperName}Params): Promise<${upperName}Result|${upperName}Result[]> {
     if (Array.isArray(data)) {
       return Promise.all(data.map(current => this.create(current, params)));
     }
 
-    return data;
+    return {
+      id: 'created',
+      ...data
+    };
   }
 
-  async update (id: NullableId, data: Data, params?: Params) {
-    return data;
+  async update (id: NullableId, data: ${upperName}Data, _params?: ${upperName}Params): Promise<${upperName}Result> {
+    return {
+      id: \`\${id}\`,
+      ...data
+    };
   }
 
-  async patch (id: NullableId, data: Data, params?: Params) {
-    return data;
+  async patch (id: NullableId, data: ${upperName}Data, _params?: ${upperName}Params): Promise<${upperName}Result> {
+    return {
+      id: \`\${id}\`,
+      ...data
+    };
   }
 
-  async remove (id: NullableId, params?: Params) {
-    return { id };
+  async remove (id: NullableId, _params?: ${upperName}Params): Promise<${upperName}Result> {
+    return {
+      id: \`\${id}\`,
+      text: 'removed'
+    };
   }
 }
 `
 
-export const importTemplate =
-  "import type { Id, NullableId, Params, ServiceMethods } from '@feathersjs/feathers'"
+export const importTemplate = "import type { Id, NullableId, Params } from '@feathersjs/feathers'"
 
-const toServiceFile = toFile<ServiceGeneratorContext>(({ lib, folder, kebabName }) => [
+const optionTemplate = ({}: ServiceGeneratorContext) => `    app`
+
+const toServiceFile = toFile<ServiceGeneratorContext>(({ lib, language, folder, fileName }) => [
   lib,
   'services',
   ...folder,
-  `${kebabName}.ts`
+  `${fileName}.${language}`
 ])
 
 export const generate = (ctx: ServiceGeneratorContext) =>
   generator(ctx)
-    .then(
-      inject(
-        getSource(template),
-        after<ServiceGeneratorContext>(({ className }) => `// The ${className} service class`),
-        toServiceFile
-      )
-    )
+    .then(inject(getSource(template), before<ServiceGeneratorContext>('export const hooks ='), toServiceFile))
     .then(inject(getSource(importTemplate), prepend(), toServiceFile))
+    .then(inject(optionTemplate, after('const options ='), toServiceFile))
