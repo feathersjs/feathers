@@ -46,10 +46,8 @@ export const generate = (ctx: AuthenticationGeneratorContext) =>
         migrationTemplate,
         toFile(
           toFile<AuthenticationGeneratorContext>('migrations', () => {
-            const now = new Date()
-            const migrationDate =
-              `${now.getUTCFullYear()}${now.getUTCMonth()}${now.getUTCDay()}` +
-              `${now.getUTCHours()}${now.getUTCMinutes()}${now.getUTCSeconds() + 1}`
+            // Probably not great but it works to align with the Knex migration file format
+            const migrationDate = new Date().toISOString().replace(/\D/g, '').substring(0, 14)
 
             return `${migrationDate}_authentication`
           })

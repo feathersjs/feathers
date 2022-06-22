@@ -51,10 +51,8 @@ export const generate = (ctx: ServiceGeneratorContext) =>
       renderSource(
         migrationTemplate,
         toFile<ServiceGeneratorContext>('migrations', ({ kebabName }) => {
-          const now = new Date()
-          const migrationDate =
-            `${now.getUTCFullYear()}${now.getUTCMonth()}${now.getUTCDay()}` +
-            `${now.getUTCHours()}${now.getUTCMinutes()}${now.getUTCSeconds()}`
+          // Probably not great but it works to align with the Knex migration file format
+          const migrationDate = new Date().toISOString().replace(/\D/g, '').substring(0, 14)
 
           return `${migrationDate}_${kebabName}`
         })
