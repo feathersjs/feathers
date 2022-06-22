@@ -2,7 +2,9 @@
 import { computed } from 'vue'
 
 const props = defineProps({
+  // Can be tip, info, warning, danger, or details
   type: { type: String, default: 'tip' },
+  label: { type: String },
 })
 const outerTag = computed(() => (props.type === 'details' ? 'details' : 'div'))
 const labelTag = computed(() => (props.type === 'details' ? 'summary' : 'p'))
@@ -15,7 +17,7 @@ const labelTag = computed(() => (props.type === 'details' ? 'summary' : 'p'))
       class="custom-block-title"
       :class="type === 'details' ? 'capitalize' : 'uppercase'"
     >
-      {{ type === 'warning' ? 'important' : type}}
+      {{ label || type }}
     </component>
     <slot />
   </component>
