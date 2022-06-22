@@ -12,6 +12,7 @@ import LanguageSelect from '../components/LanguageSelect.vue'
 import Badges from '../components/Badges.vue'
 import Logo from '../components/Logo.vue'
 import BlockQuote from '../components/BlockQuote.vue'
+import LanguageBlock from '../components/LanguageBlock.vue'
 
 if (inBrowser)
   import('./pwa')
@@ -27,6 +28,7 @@ export default {
     app.component('Badges', Badges)
     app.component('Logo', Logo)
     app.component('BlockQuote', BlockQuote)
+    app.component('LanguageBlock', LanguageBlock)
   }
 }
 
