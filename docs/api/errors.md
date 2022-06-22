@@ -21,9 +21,9 @@ The `@feathersjs/errors` module contains a set of standard error classes used by
 
 Here are a few ways that you can use them:
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```ts
 import { NotFound, GeneralError, BadRequest } from '@feathersjs/errors';
@@ -57,9 +57,9 @@ const validationErrors = new BadRequest({
 });
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 const { NotFound, GeneralError, BadRequest } = require('@feathersjs/errors');
@@ -93,9 +93,9 @@ const validationErrors = new BadRequest({
 });
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 ## Feathers errors
 

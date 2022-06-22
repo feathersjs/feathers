@@ -38,9 +38,9 @@ The server needs to explicitly *publish* channels it is interested in sharing wi
 
 The example below shows the generated `channels.js` file illustrating how the different parts fit together:
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```ts
 export default function(app: any) {
@@ -106,9 +106,9 @@ export default function(app: any) {
 };
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 module.exports = function(app) {
@@ -174,9 +174,9 @@ module.exports = function(app) {
 };
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 ## Connections
 

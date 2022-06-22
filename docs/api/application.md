@@ -17,18 +17,18 @@ npm install @feathersjs/feathers --save
 
 The core `@feathersjs/feathers` module provides the ability to initialize a new Feathers application instance. It works in Node, React Native and the browser (see the [client](./client.md) chapter for more information). Each instance allows for registration and retrieval of [services](./services.md), [hooks](./hooks.md), plugin configuration, and getting and setting configuration options. An initialized Feathers application is referred to as the **app object**.
 
-<Tabs>
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 <<< @/examples/ts/application.ts
 
-</Tab>
-<Tab name="JavaScript" global-id="js">
+</LanguageBlock>
+<LanguageBlock global-id="js">
 
 <<< @/examples/js/application.js
 
-</Tab>
-</Tabs>
+</LanguageBlock>
+
 
 
 
@@ -36,18 +36,18 @@ The core `@feathersjs/feathers` module provides the ability to initialize a new 
 
 `app.use(path, service [, options]) -> app` allows registering a [service object](./services.md) on a given `path`.
 
-<Tabs>
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 <<< @/examples/ts/application-use.ts
 
-</Tab>
-<Tab name="JavaScript" global-id="js">
+</LanguageBlock>
+<LanguageBlock global-id="js">
 
 <<< @/examples/js/application-use.js
 
-</Tab>
-</Tabs>
+</LanguageBlock>
+
 
 
 > __Note:__ `path` can be `/` to register a service at the root level.

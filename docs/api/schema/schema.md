@@ -10,9 +10,9 @@ outline: deep
 
 If you are not familiar with JSON schema have a look at the [official getting started guide](https://json-schema.org/learn/getting-started-step-by-step). Here is an example for a possible user schema:
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```ts
 import { HookContext } from './definitions';
@@ -33,9 +33,9 @@ export const userSchema = schema({
 export type User = Infer<typeof userSchema>;
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 import { schema } from '@feathersjs/schema';
@@ -53,9 +53,9 @@ export const userSchema = schema({
 });
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 > __Very Important:__ To get the correct TypeScript types the definition always needs to be declared via `schema({} as const)`.
 
@@ -92,9 +92,9 @@ export const userSchema = schema({
 
 To create a new schema that extends an existing one, combine the schema properties from `schema.properties` (an `schema.required` if needed) with the new properties:
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```ts
 import { HookContext } from './definitions';
@@ -127,9 +127,9 @@ export const userResultSchema = schema({
 export type User = Infer<typeof userResultSchema>;
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 import { schema } from '@feathersjs/schema';
@@ -160,17 +160,17 @@ export const userResultSchema = schema({
 });
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 ## Associations
 
 Associated schemas can be initialized via the `$ref` keyword referencing the `$id` set during schema definition.
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 In TypeScript the referenced type needs to be added explicitly.
 
@@ -208,9 +208,9 @@ export type Message = Infer<typeof messageSchema> & {
 }
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 import { schema } from '@feathersjs/schema';
@@ -239,9 +239,9 @@ export const messageSchema = schema({
 });
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 ## Query helper
 

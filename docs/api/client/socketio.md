@@ -88,6 +88,8 @@ app.service('messages').create({
 
 </Tabs>
 
+
+
 ### app.io
 
 `app.io` contains a reference to the `socket` object passed to `socketio(socket [, options])`
@@ -102,9 +104,9 @@ app.io.on('disconnect', (reason) => {
 
 On the client, [custom service methods](../services.md#custom-methods) are also registered using the `methods` option when registering the service via `socketClient.service()`:
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```typescript
 import { feathers, CustomMethod } from '@feathersjs/feathers';
@@ -138,9 +140,9 @@ client.service('myservice', socketClient.service('myservice'), {
 client.service('myservice').myCustomMethod(data, params);
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 const feathers = require('@feathersjs/feathers');
@@ -162,9 +164,9 @@ client.service('myservice', connection.service('myservice'), {
 client.service('myservice').myCustomMethod(data, params);
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 > __Note:__ Just like on the server *all* methods you want to use have to be listed in the `methods` option.
 

@@ -35,9 +35,7 @@ Service methods are [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_an
 
 Below is an example of Feathers service interface as a class:
 
-<Tabs group-name="Service Interface">
-
-<Tab name="TypeScript Class" global-id="ts" >
+<LanguageBlock global-id="ts" >
 
 ```ts
 import { Application, Id, NullableId, Params, Service } from '@feathersjs/feathers';
@@ -56,8 +54,8 @@ class MyService implements Service<any> {
 app.use('/my-service', new MyService());
 ```
 
-</Tab>
-<Tab name="JavaScript Class" global-id="js">
+</LanguageBlock>
+<LanguageBlock global-id="js">
 
 ```js
 class MyService {
@@ -74,9 +72,9 @@ class MyService {
 app.use('/my-service', new MyService());
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 The parameters for service methods are:
 

@@ -12,9 +12,9 @@ Hooks are commonly used to handle things like validation, logging, [authenticati
 
 The following example adds a `createdAt` property before saving the data to the database, logs the total runtime of any method call and any errors on the service:
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```js
 import { feathers, HookContext } from '@feathersjs/feathers';
@@ -32,7 +32,7 @@ app.service('messages').hooks({
         await next()
 
         console.log(`Method ${context.method} on ${context.path} took ${Date.now() - start}ms`)
-      } 
+      }
     ]
   }
   before: {
@@ -44,9 +44,9 @@ app.service('messages').hooks({
   }
 });
 ```
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 const feathers = require('@feathersjs/feathers');
@@ -83,9 +83,9 @@ app.service('messages').hooks({
 });
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 ## Hook functions
 

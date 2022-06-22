@@ -83,9 +83,9 @@ Standard local authentication can be configured with those options in `config/de
 
 The `LocalStrategy` can be customized like any ES6 class and then registered on the [AuthenticationService](./service.md):
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```typescript
 import { Application, Params, Query } from '@feathersjs/feathers';
@@ -113,9 +113,9 @@ export default (app: Application) => {
 }
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
@@ -142,9 +142,9 @@ module.exports = app => {
 }
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 ## Hooks
 

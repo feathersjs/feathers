@@ -14,9 +14,9 @@ All database adapters implement a common interface for initialization, paginatio
 
 Each adapter exports a `Service` class that can be exported and extended.
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```js
 import { Service } from 'feathers-<adaptername>';
@@ -25,9 +25,9 @@ app.use('/messages', new Service());
 app.use('/messages', new Service({ id, events, paginate }));
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 const { Service } = require('feathers-<adaptername>');
@@ -36,9 +36,9 @@ app.use('/messages', new Service());
 app.use('/messages', new Service({ id, events, paginate }));
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 ### `service([options])`
 

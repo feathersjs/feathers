@@ -4,9 +4,9 @@
 
 Let's have a brief look at the files that have been generated:
 
-<Tabs>
 
-<Tab name="For TypeScript Apps" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 <div class="pb-2" />
 
@@ -42,11 +42,9 @@ Let's have a brief look at the files that have been generated:
 * `package.json` contains [information](https://docs.npmjs.com/files/package.json) about our NodeJS project like its name or dependencies.
 * `README.md` has installation and usage instructions
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="For JavaScript Apps" global-id="js">
-
-<div class="pb-2" />
+<LanguageBlock global-id="js">
 
 * `config/` contains the configuration files for the app
   * `default.json` contains the basic application configuration
@@ -79,9 +77,9 @@ Let's have a brief look at the files that have been generated:
 * `package.json` contains [information](https://docs.npmjs.com/files/package.json) about our NodeJS project like its name or dependencies.
 * `README.md` has installation and usage instructions
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 ## Configure functions
 
@@ -89,9 +87,9 @@ The most important pattern used in the generated application to split things up 
 
 For example, have a look at the following files:
 
-<Tabs>
 
-<Tab name="For TypeScript Apps" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 <div class="pb-2" />
 
@@ -120,11 +118,9 @@ app.configure(services);
 // ...
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="For JavaScript Apps" global-id="js">
-
-<div class="pb-2" />
+<LanguageBlock global-id="js">
 
 `src/services/index.js` looks like this:
 
@@ -149,9 +145,9 @@ app.configure(services);
 // ...
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 This is how the generator splits things up into separate files and any documentation example that uses the `app` object can be used in a configure function. You can create your own files that export a configure function and `require`/`import` and `app.configure` them in `app.js`.
 

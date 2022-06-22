@@ -10,9 +10,9 @@ outline: deep
 
 Service methods are pre-defined [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) and [custom methods](#custommethod-data-params) that your service provides (or that have already been implemented by one of the [database adapters](./databases/common.md)). Below is an example of a Feathers service using [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) as a class or object.
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```typescript
 import { feathers, Params, Id, NullableId } from "@feathersjs/feathers";
@@ -54,9 +54,9 @@ app.use('my-service', new MyService())
 app.use('my-service-object', myServiceObject)
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 import { feathers } from '@feathersjs/feathers'
@@ -93,9 +93,9 @@ app.use('my-service', new MyService())
 app.use('my-service-object', myServiceObject)
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 > **ProTip:** Methods are optional and if a method is not implemented Feathers will automatically emit a `NotImplemented` error. At least one of the methods (e.g. `setup`) must be implemented to be considered a service.
 

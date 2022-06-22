@@ -38,8 +38,8 @@ Feathers works with Node.js 14 and later. It will always support the [currently 
 
 Instead of installing Node from the website, we recommend using a version manager that works on your OS.  Version managers are tools to quickly install any version of NodeJS and keep it up to date.  Install a version manager that matches your system before you continue.
 
-- [NVM for Windows](https://github.com/coreybutler/nvm-windows)
 - [NVM for MacOS and other Unix systems](https://github.com/creationix/nvm)
+- [NVM for Windows](https://github.com/coreybutler/nvm-windows)
 
 After successful installation, the `node` and `npm` commands should be available on the terminal and show a similar version number when running the following commands:
 

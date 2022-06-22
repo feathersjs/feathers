@@ -22,9 +22,9 @@ Resolvers usually work together with [schema definitions](./schema.md) but can a
 
 Here is an example for a standalone resolver using a custom context:
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```ts
 import { resolve } from '@feathersjs/schema';
@@ -85,9 +85,9 @@ const partialMessage: Pick<User, 'id'|'text'|'user'> = await messageResolver.res
 // { id: 1, text: 'Hello', user: { id: 23, name: 'David' } }
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 import { resolve } from '@feathersjs/schema';
@@ -133,9 +133,9 @@ const partialMessage = await messageResolver.resolve({
 // { id: 1, text: 'Hello', user: { id: 23, name: 'David' } }
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 ## Options
 

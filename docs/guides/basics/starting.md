@@ -17,9 +17,9 @@ cd feathers-basics
 
 Since any Feathers application is a Node application, we can create a default [package.json](https://docs.npmjs.com/files/package.json) using `npm`:
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```sh
 npm init --yes
@@ -29,17 +29,17 @@ npm i typescript ts-node --save-dev
 npx tsc --init --target es2020
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```sh
 npm init --yes
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 ## Installing Feathers
 
@@ -59,9 +59,9 @@ All Feathers core modules are in the `@feathersjs` namespace.
 
 Now we can create a Feathers application with a simple messages service that allows to create new messages and find all existing ones.
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts" class="pt-0.5">
+
+<LanguageBlock global-id="ts">
 
 Create a file called `app.ts` with the following content:
 
@@ -73,8 +73,8 @@ We can run it with
 npx ts-node app.ts
 ```
 
-</Tab>
-<Tab name="JavaScript" global-id="js" class="pt-0.5">
+</LanguageBlock>
+<LanguageBlock global-id="js">
 
 Create a file called `app.js` with the following content:
 
@@ -84,9 +84,9 @@ Create a file called `app.js` with the following content:
 node app.js
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 We will see something like this:
 
@@ -108,9 +108,9 @@ In the following example we will take our existing service and use
 - `@feathersjs/koa` which uses [KoaJS](https://koajs.com/) to automatically turn our services into a REST API
 - `@feathersjs/socketio` which uses Socket.io to do the same as a websocket real-time API (as we will see in a bit this is where the `created` event we saw above comes in handy)
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts" class="pt-0.5">
+
+<LanguageBlock global-id="ts">
 
 Run
 
@@ -129,10 +129,10 @@ We can start the server with
 npx ts-node app.ts
 ```
 
-</Tab>
+</LanguageBlock>
 
 
-<Tab name="JavaScript" global-id="js" class="pt-0.5">
+<LanguageBlock  global-id="js">
 
 Run
 
@@ -150,9 +150,9 @@ We can start the server with
 node app.js
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 <BlockQuote type="info">
 

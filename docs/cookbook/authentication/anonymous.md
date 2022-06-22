@@ -6,9 +6,9 @@ outline: deep
 
 Anonymous authentication can be allowed by creating a [custom strategy](../../api/authentication/strategy.md) that returns the `params` that you would like to use to identify an authenticated user.
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```ts
 import { Params } from '@feathersjs/feathers';
@@ -29,9 +29,9 @@ export default function(app: Application) {
 }
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 In `src/authentication.js`:
 
@@ -53,16 +53,16 @@ module.exports = app => {
 }
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 
 Next, we create a hook called `allow-anonymous` that sets `params.authentication` if it does not exist and if `params.provider` exists (which means it is an external call) to use that `anonymous` strategy:
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```ts
 import { Hook, HookContext } from '@feathersjs/feathers';
@@ -85,9 +85,9 @@ export default (): Hook => {
 }
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 /* eslint-disable require-atomic-updates */
@@ -109,9 +109,9 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
 };
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 This hook should be added __before__ the [authenticate hook](../../api/authentication/hook.md) wherever anonymous authentication should be allowed:
 

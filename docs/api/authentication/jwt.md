@@ -91,9 +91,9 @@ Parse the HTTP request headers for JWT authentication information. Returns a pro
 
 ## Customization
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```typescript
 import { Application } from '@feathersjs/feathers';
@@ -113,9 +113,9 @@ export default (app: Application) => {
 }
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
@@ -133,6 +133,6 @@ module.exports = app => {
 }
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+

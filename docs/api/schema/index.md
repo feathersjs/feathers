@@ -28,9 +28,9 @@ outline: deep
 
 Here is an example of a user schema definition and resolver:
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```ts
 import { HookContext } from './definitions';
@@ -73,9 +73,9 @@ export const userResultResolver = resolve<User, HookContext>({
 });
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 import { schema, resolve } from '@feathersjs/schema';
@@ -114,6 +114,6 @@ export const userResultResolver = resolve({
 });
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+

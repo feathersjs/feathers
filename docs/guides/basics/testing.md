@@ -36,9 +36,9 @@ npm install shx --save-dev
 
 Now we can update the `scripts` section of our `package.json` to the following:
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```ts
   "scripts": {
@@ -51,9 +51,9 @@ Now we can update the `scripts` section of our `package.json` to the following:
   },
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
   "scripts": {
@@ -65,9 +65,9 @@ Now we can update the `scripts` section of our `package.json` to the following:
   }
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 On Windows the `mocha` command should look like this:
 
@@ -85,9 +85,9 @@ But there is a much faster, easier and complete approach. Since everything on to
 
 By default, the generator creates a service test file that only tests that the service exists.
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 E.g. like this in `test/services/users.test.ts`:
 
@@ -104,9 +104,9 @@ describe('\'users\' service', () => {
 });
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 E.g. like this in `test/services/users.test.js`:
 
@@ -123,15 +123,15 @@ describe('\'users\' service', () => {
 });
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 We can then add similar tests that use the service. The first test below verifies that users can be created, the profile image gets set and the password gets encrypted. The second verifies that the password does not get sent to external requests:
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 Replace `test/services/users.test.ts` with the following:
 
@@ -173,9 +173,9 @@ describe('\'users\' service', () => {
 });
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 Replace `test/services/users.test.js` with the following:
 
@@ -217,15 +217,15 @@ describe('\'users\' service', () => {
 });
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 We take a similar approach for the messages service test. We create a test-specific user from the `users` service, then pass it as `params.user` when creating a new message and validates that message's content:
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 Update `test/services/messages.test.ts` as follows:
 
@@ -265,9 +265,9 @@ describe('\'messages\' service', () => {
 });
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 Update `test/services/messages.test.js` as follows:
 
@@ -307,9 +307,9 @@ describe('\'messages\' service', () => {
 });
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 Run `npm test` one more time, to verify that all tests are passing.
 
@@ -323,9 +323,9 @@ npm install nyc --save-dev
 
 Now we have to update the `scripts` section of our `package.json` to:
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 For TypeScript we also have to install the TypeScript reporter:
 
@@ -359,9 +359,9 @@ And then update the `package.json` like this:
   },
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
   "scripts": {
@@ -375,9 +375,9 @@ And then update the `package.json` like this:
   },
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 
 On Windows, the `coverage` command looks like this:

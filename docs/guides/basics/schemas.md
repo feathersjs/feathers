@@ -34,66 +34,66 @@ While schemas and resolvers can be used outside of a Feather application, you wi
 
 Let's extend our existing users schema to add an `avatar` property so that our users can have a profile image:
 
-<Tabs>
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 First we need to update the `src/schemas/users.schema.ts` file with the new `avatar` property. This can be done by adding the JSON schema property definition `avatar: { type: 'string' }` to the `usersDataSchema`:
 
 <<< @/examples/ts/chat-users-schema.ts {17-19}
 
-</Tab>
-<Tab name="JavaScript" global-id="js">
+</LanguageBlock>
+<LanguageBlock global-id="js">
 
-</Tab>
-</Tabs>
+</LanguageBlock>
 
-Next, instead of making users send a link to their avatar, we update the resolver to automatically add a link to the [Gravatar](http://en.gravatar.com/) image associated with the user's email address. To do this we add an `avatar` data resolver which means it gets added before the user gets saved to the database. 
 
-<Tabs>
-<Tab name="TypeScript" global-id="ts">
+Next, instead of making users send a link to their avatar, we update the resolver to automatically add a link to the [Gravatar](http://en.gravatar.com/) image associated with the user's email address. To do this we add an `avatar` data resolver which means it gets added before the user gets saved to the database.
+
+
+<LanguageBlock global-id="ts">
 
 Update the `src/schemas/users.resolver.ts` file as follows:
 
 <<< @/examples/ts/chat-users-resolver.ts {1,19-24}
 
-</Tab>
-<Tab name="JavaScript" global-id="js">
+</LanguageBlock>
+<LanguageBlock global-id="js">
 
-</Tab>
-</Tabs>
+</LanguageBlock>
+
 
 
 ## Handling messages
 
 Next we can look at the messages service schema. We want to include the date when the message was sent and the id of the user who sent it:
 
-<Tabs>
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 Update the `src/schemas/messages.schema.ts` file with the `userId` and `createdAt` properties:
 
 <<< @/examples/ts/chat-messages-schema.ts {3,15-20,53-55}
 
-</Tab>
-<Tab name="JavaScript" global-id="js">
+</LanguageBlock>
+<LanguageBlock global-id="js">
 
-</Tab>
-</Tabs>
+</LanguageBlock>
+
 
 Both the `createdAt` and `userId` property can be added automatically before saving the data to the database. `createdAt` is the current date and `userId` is the authenticated user (we will see how to authenticate in the [next chapter](./authentication.md)). To do this we can update the `data` resolver. To populate the full user that sent the message in a response we can use the `result` resolver.
 
-<Tabs>
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 Update `src/resolvers/messsges.resolver.ts` like this:
 
 <<< @/examples/ts/chat-messages-resolver.ts {17-23,39-42}
 
-</Tab>
-<Tab name="JavaScript" global-id="js">
+</LanguageBlock>
+<LanguageBlock global-id="js">
 
-</Tab>
-</Tabs>
+</LanguageBlock>
+
 
 ## Creating a migration
 
@@ -126,16 +126,16 @@ Created Migration: /path/to/feathers-chat/migrations/20220622012334_chat.(ts|js)
 
 Open that file and update it as follows
 
-<Tabs>
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 <<< @/examples/ts/chat-migration.ts {4-11,15-22}
 
-</Tab>
-<Tab name="JavaScript" global-id="js">
+</LanguageBlock>
+<LanguageBlock global-id="js">
 
-</Tab>
-</Tabs>
+</LanguageBlock>
+
 
 We can run the migrations on the current database with
 

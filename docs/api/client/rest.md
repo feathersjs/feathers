@@ -80,6 +80,8 @@ const messages = app.service('messages');
 
 </Tabs>
 
+
+
 <!-- -->
 
 > **ProTip:** When `window.fetch` (or just `fetch` which is normally equal to `window.fetch`) is passed to the FeathersJS REST client, its context (`this`) has to be bound to `window` (using `bind(window)` on it). Otherwise `window.fetch` would be called by the FeathersJS REST client with incorrect context, causing a JavaScript error: `Failed to execute 'fetch' on 'Window': Illegal invocation`.
@@ -186,9 +188,9 @@ app.configure(restClient.axios(axios.create({
 
 On the client, [custom service methods](../services.md#custom-methods) are also registered using the `methods` option when registering the service via `restClient.service()`:
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```typescript
 import { feathers, CustomMethod } from '@feathersjs/feathers';
@@ -225,9 +227,9 @@ client.service('myservice', restClient.service('myservice'), {
 client.service('myservice').myCustomMethod(data, params);
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 const feathers = require('@feathersjs/feathers');
@@ -253,9 +255,9 @@ client.service('myservice', restClient.service('myservice'), {
 client.service('myservice').myCustomMethod(data, params);
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 > __Note:__ Just like on the server *all* methods you want to use have to be listed in the `methods` option.
 

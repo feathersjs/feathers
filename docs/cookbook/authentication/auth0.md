@@ -30,9 +30,9 @@ This should be added in your configuration (usually `config/default.json`) as fo
 
 To use Auth0 in the chat application from the [Feathers guide](../../guides/) we have to do the same modifications as already shown [for the GitHub login in the authentication guide](../../guides/basics/authentication.md).
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 In `src/authentication.ts` like this:
 
@@ -73,9 +73,9 @@ export default function(app: Application) {
 }
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 In `src/authentication.js` like this:
 
@@ -107,8 +107,8 @@ module.exports = app => {
 };
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 Additionally, `auth0Id` needs to be included in the data in the users service class.

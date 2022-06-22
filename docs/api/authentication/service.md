@@ -28,9 +28,9 @@ The `AuthenticationService` is a [Feathers service](../services.md) that allows 
 
 The standard setup of [the generator]() initializes an [AuthenticationService](#authenticationservice) at the `/authentication` path with a [JWT strategy](./jwt.md), [Local strategy](./local.md) and [OAuth authentication](./oauth.md).
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```typescript
 import { Application } from '@feathersjs/feathers';
@@ -49,9 +49,9 @@ export default (app: Application) => {
 }
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 ```js
 const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
@@ -69,9 +69,9 @@ module.exports = app => {
 }
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 ## Configuration
 

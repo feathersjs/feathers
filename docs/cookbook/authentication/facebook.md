@@ -48,9 +48,9 @@ The standard OAuth strategy only returns the default profile fields (`id` and `n
 
 The following example allows to log in with Facebook in the [chat application from the guide](../../guides/index.md):
 
-<Tabs>
 
-<Tab name="TypeScript" global-id="ts">
+
+<LanguageBlock global-id="ts">
 
 ```ts
 import { Params } from '@feathersjs/feathers';
@@ -108,9 +108,9 @@ export default function(app: Application) {
 }
 ```
 
-</Tab>
+</LanguageBlock>
 
-<Tab name="JavaScript" global-id="js">
+<LanguageBlock global-id="js">
 
 In `src/authentication.js`:
 
@@ -163,8 +163,8 @@ module.exports = app => {
 };
 ```
 
-</Tab>
+</LanguageBlock>
 
-</Tabs>
+
 
 > __Pro tip:__ [See all available Facebook user options here](https://developers.facebook.com/docs/graph-api/reference/user/).
