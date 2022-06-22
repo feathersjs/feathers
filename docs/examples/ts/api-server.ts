@@ -5,7 +5,7 @@ import socketio from '@feathersjs/socketio'
 
 // This is the interface for the message data
 interface Message {
-  id: number
+  id?: number
   text: string
 }
 

@@ -16,7 +16,7 @@ class MessageService {
     return this.messages
   }
 
-  async create(data: Message) {
+  async create(data: Pick<Message, 'text'>) {
     // The new message is the data text with a unique identifier added
     // using the messages length since it changes whenever we add one
     const message: Message = {
