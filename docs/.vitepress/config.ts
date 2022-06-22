@@ -182,7 +182,7 @@ export default defineConfig({
     sidebar: {
       '/guides': [
         {
-          text: 'The Feathers Guide',
+          text: 'Getting Started',
           collapsible: true,
           items: [
             {
@@ -202,17 +202,16 @@ export default defineConfig({
               link: '/guides/basics/services.md',
             },
             {
-              text: 'Hooks',
-              link: '/guides/basics/hooks.md',
+              text: 'Schemas',
+              link: '/guides/basics/schemas.md'
             },
             {
               text: 'Authentication',
               link: '/guides/basics/authentication.md',
             },
-
             {
-              text: 'Building a Frontend',
-              link: '/guides/basics/frontend.md',
+              text: 'Hooks',
+              link: '/guides/basics/hooks.md',
             },
             {
               text: 'Writing Tests',
@@ -221,13 +220,41 @@ export default defineConfig({
           ],
         },
         {
-          text: 'Advanced Topics',
+          text: "Frontend",
           collapsible: true,
           items: [
             {
-              text: 'Front-End Frameworks',
-              link: '/guides/frameworks.md',
+              text: 'JavaScript',
+              link: '/guides/frontend/javascript.md'
             },
+            {
+              text: 'React',
+              link: '/guides/frontend/react.md'
+            },
+            {
+              text: 'VueJS',
+              link: '/guides/frontend/vuejs.md'
+            },
+            {
+              text: 'More',
+              link: '/guides/frameworks.md'
+            }
+          ]
+        },
+        {
+          text: 'The Feathers CLI',
+          collapsible: true,
+          items: [
+            {
+              text: 'File structure',
+              link: '/guides/cli/index.md'
+            }
+          ]
+        },
+        {
+          text: 'More',
+          collapsible: true,
+          items: [
             {
               text: 'Security',
               link: '/guides/security.md',

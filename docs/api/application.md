@@ -20,12 +20,12 @@ The core `@feathersjs/feathers` module provides the ability to initialize a new 
 <Tabs>
 <Tab name="TypeScript" global-id="ts">
 
-<<< @/examples/application.ts
+<<< @/examples/ts/application.ts
 
 </Tab>
 <Tab name="JavaScript" global-id="js">
 
-<<< @/examples/application.js
+<<< @/examples/js/application.js
 
 </Tab>
 </Tabs>
@@ -39,12 +39,12 @@ The core `@feathersjs/feathers` module provides the ability to initialize a new 
 <Tabs>
 <Tab name="TypeScript" global-id="ts">
 
-<<< @/examples/application-use.ts
+<<< @/examples/ts/application-use.ts
 
 </Tab>
 <Tab name="JavaScript" global-id="js">
 
-<<< @/examples/application-use.js
+<<< @/examples/js/application-use.js
 
 </Tab>
 </Tabs>

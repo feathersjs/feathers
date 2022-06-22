@@ -15,7 +15,7 @@ const labelTag = computed(() => (props.type === 'details' ? 'summary' : 'p'))
       class="custom-block-title"
       :class="type === 'details' ? 'capitalize' : 'uppercase'"
     >
-      {{ type }}
+      {{ type === 'warning' ? 'important' : type}}
     </component>
     <slot />
   </component>

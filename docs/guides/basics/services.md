@@ -4,11 +4,11 @@ outline: deep
 
 # Services
 
-Services are the heart of every Feathers application. You probably remember the service we created in the [getting started chapter](./starting.md) to create and find messages. In this chapter we will dive more into services and update the existing user service in our chat application to include an avatar image.
+Services are the heart of every Feathers application. You probably remember the service we created in the [quick start](./starting.md) to create and find messages. In this chapter we will dive more into services and create a services for our chat messages.
 
 ## Feathers services
 
-In general, a service is an object or instance of [a class](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes) that implements certain methods. Services provide a uniform, protocol independent interface for how to interact with any kind of data like:
+In general, a service is an object or instance of a class that implements certain methods. Services provide a uniform, protocol independent interface for how to interact with any kind of data like:
 
 - Reading and/or writing from a database
 - Interacting with the file system
@@ -22,7 +22,7 @@ Protocol independent means that to a Feathers service it does not matter if it h
 
 ### Service methods
 
-Service methods are [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) methods that a service can implement. Feathers service methods are:
+Service methods are [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) methods that a service can implement. The Feathers service methods are:
 
 - `find` - Find all data (potentially matching a query)
 - `get` - Get a single data entry by its unique identifier
@@ -30,6 +30,8 @@ Service methods are [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_an
 - `update` - Update an existing data entry by completely replacing it
 - `patch` - Update one or more data entries by merging with the new data
 - `remove` - Remove one or more existing data entries
+- `setup` - Called when the application is started
+- `teardown` - Called when the application is shut down
 
 Below is an example of Feathers service interface as a class and a normal object:
 
@@ -95,13 +97,15 @@ The parameters for service methods are:
 
 - `id` - The unique identifier for the data
 - `data` - The data sent by the user (for creating, updating and patching)
-- `params` (*optional*) - Additional parameters, for example the authenticated user or the query
+- `params` - Additional parameters, for example the authenticated user or the query
 
-> __Note:__ A service does not have to implement all those methods but must have at least one.
+Usually those methods can be used for most API functionality but it is also possible to add your own [custom service methods](../../api/services.md#custom-methods) for a client to call.
 
-<!-- -->
+<BlockQuote type="note">
 
-> __Pro tip:__ For more information about service, service methods and parameters see the [Service API documentation](../../api/services.md).
+A service does not have to implement all those methods but must have at least one. For more information about service, service methods and parameters see the [Service API documentation](../../api/services.md).
+
+</BlockQuote>
 
 When used as a REST API, incoming requests get mapped automatically to their corresponding service method like this:
 
@@ -117,13 +121,13 @@ When used as a REST API, incoming requests get mapped automatically to their cor
 
 ### Registering services
 
-As we have seen, a service can be registered on the Feathers application by calling [app.use(name, service)](../../api/application.md#use-path-service) with a name and the service instance:
+A service can be registered on the Feathers application by calling [app.use(name, service)](../../api/application.md#use-path-service) with a name and the service instance:
 
 ```js
-const app = feathers();
+const app = feathers()
 
 // Register the message service on the Feathers application
-app.use('messages', new MessageService());
+app.use('messages', new MessageService())
 ```
 
 To get the service object and use the service methods (and events) we can use [app.service(name)](../../api/application.md#service-path):
@@ -144,41 +148,29 @@ A registered service will automatically become a [NodeJS EventEmitter](https://n
 | `service.patch()`  | `service.on('patched')` |
 | `service.remove()` | `service.on('removed')` |
 
-This is how Feathers does real-time and how we updated the messages automatically by listening to `app.service('messages').on('created')`.
+This is how Feathers does real-time and how we updated the messages automatically by listening to
+
+```js
+app.service('messages').on('created', data => {
+  console.log(data)
+})
+```
 
 ## Database adapters
 
 Now that we have all those service methods we could go ahead and implement any kind of custom logic using any backend. Very often, that means creating, reading, updating and removing data from a database.
 
-Writing all that code yourself for every service is pretty repetitive and cumbersome though which is why Feathers has a collection of pre-built services for different databases. They offer most of the basic functionality and can always be fully customized (as we will see in a bit). Feathers database adapters support a common [usage API](../../api/databases/common.md), pagination and [querying syntax](../../api/databases/querying.md) for many popular databases and NodeJS ORMs:
-
-### Core Database Adapters
-
-These database adapters are maintained as part of FeathersJS Core.
+Writing all that code yourself for every service is pretty repetitive and cumbersome though which is why Feathers has a collection of pre-built services for different databases. They offer most of the basic functionality and can always be fully customized. Feathers database adapters support a common [usage API](../../api/databases/common.md), pagination and [querying syntax](../../api/databases/querying.md) for many popular databases. The following database adapters are maintained as part of FeathersJS Core.
 
 | Database | Adapter |
 |---|---|
-| In memory | [feathers-memory](https://github.com/feathersjs/feathers/tree/dove/packages/memory) |
-| MongoDB | [feathers-mongodb](https://github.com/feathersjs/feathers/tree/dove/packages/mongodb) |
-| MySQL, PostgreSQL, MariaDB, SQLite, MSSQL | [feathers-knex](https://github.com/feathersjs/feathers/tree/dove/packages) |
+| In memory | [@feathersjs/memory](../../api/databases/memory.md) |
+| MongoDB | [@feathers/mongodb](../../api/databases/mongodb.md) |
+| SQLite, MySQL, PostgreSQL, MariaDB, MSSQL | [@feathersjs/knex](../../api/databases/knex.md) |
 
-### Community Adapters
+For community supported databases adapters see the [ecosystem page](https://github.com/feathersjs/awesome-feathersjs#database)
 
-These full-featured adapters are maintained by the community.
-
-| Database | Adapter |
-|---|---|
-| Localstorage, AsyncStorage | [feathers-localstorage](https://github.com/feathersjs-ecosystem/feathers-localstorage) |
-| Filesystem | [feathers-nedb](https://github.com/feathersjs-ecosystem/feathers-nedb) |
-| MongoDB | [feathers-mongoose](https://github.com/feathersjs-ecosystem/feathers-mongoose) |
-| MySQL, PostgreSQL, MariaDB, SQLite, MSSQL | [feathers-sequelize](https://github.com/feathersjs-ecosystem/feathers-sequelize), [feathers-objection](https://github.com/feathersjs-ecosystem/feathers-objection) |
-| Elasticsearch | [feathers-elasticsearch](https://github.com/feathersjs-ecosystem/feathers-elasticsearch) |
-
-> __Pro tip:__ Each one of the linked adapters has a complete standalone REST API example in their readme.
-
-In this guide we will use  [NeDB](https://github.com/feathersjs-ecosystem/feathers-nedb/) which is a database that writes to the filesystem and does not require any additional setup. The users service that was created when we [generated our application](./generator.md) is already using it. In larger applications you probably want to choose something like PostgreSQL or MongoDB but NeDB is great for this guide because it gets us started quickly without having to learn and install a database system.
-
-> __Note:__ NeDB stores its data in our application directory under a `data/` folder. It uses a JSON append-only file format. This means that if you look at the database files directly you might see the same entry multiple times but it will always return the correct data.
+If you went with the default selection, we will use SQLite which write the database to a file and does not require any additional setup. The users service that was created when we [generated our application](./generator.md) is already using it. If you decide to use another SQL database like PostgreSQL or MySQL you just have to change the database connection settings in the configuration.
 
 ## Generating a service
 
@@ -188,128 +180,12 @@ In our [newly generated](./generator.md) `feathers-chat` application, we can cre
 feathers generate service
 ```
 
-For this service we will also use NeDB which we can just confirm by pressing enter. We will use `messages` as the service name and can confirm all other prompts with the defaults by pressing enter:
+We will give it the name of `messages` and can confirm everything else with the default:
 
 ![feathers generate service prompts](./assets/generate-service.png)
 
 This is it, we now have a database backed messages service with authentication enabled.
 
-## Customizing a service
-
-Feathers has two ways for customizing existing database adapter services. Either by using hooks, which we will look at [in the next chapter](./hooks.md) or by extending the adapter service class. Let's extend our existing `users` service to add a link to the [Gravatar](http://en.gravatar.com/) image associated with the user's email address so we can display a user avatar. We will then add that data to the database by calling the original (`super.create`) method.
-
-<Tabs>
-
-<Tab name="TypeScript" global-id="ts">
-
-Update `src/services/users/users.class.ts` with the following:
-
-```ts
-import crypto from 'crypto';
-import { Params } from '@feathersjs/feathers';
-import { Service, NedbServiceOptions } from 'feathers-nedb';
-import { Application } from '../../declarations';
-
-// The Gravatar image service
-const gravatarUrl = 'https://s.gravatar.com/avatar';
-// The size query. Our chat needs 60px images
-const query = 's=60';
-// Returns the Gravatar image for an email
-const getGravatar = (email: string) => {
-  // Gravatar uses MD5 hashes from an email address (all lowercase) to get the image
-  const hash = crypto.createHash('md5').update(email.toLowerCase()).digest('hex');
-  // Return the full avatar URL
-  return `${gravatarUrl}/${hash}?${query}`;
-}
-
-// A type interface for our user (it does not validate any data)
-interface UserData {
-  _id?: string;
-  email: string;
-  password: string;
-  name?: string;
-  avatar?: string;
-  githubId?: string;
-}
-
-export class Users extends Service<UserData> {
-  constructor(options: Partial<NedbServiceOptions>, app: Application) {
-    super(options);
-  }
-
-  create (data: UserData, params?: Params) {
-    // This is the information we want from the user signup data
-    const { email, password, githubId, name } = data;
-    // Use the existing avatar image or return the Gravatar for the email
-    const avatar = data.avatar || getGravatar(email);
-    // The complete user
-    const userData = {
-      email,
-      name,
-      password,
-      githubId,
-      avatar
-    };
-
-    // Call the original `create` method with existing `params` and new data
-    return super.create(userData, params);
-  }
-}
-```
-
-</Tab>
-
-<Tab name="JavaScript" global-id="js">
-
-Update `src/services/users/users.class.js` with the following:
-
-```js
-// This is the database adapter service class
-const { Service } = require('feathers-nedb');
-// We need this to create the MD5 hash
-const crypto = require('crypto');
-
-// The Gravatar image service
-const gravatarUrl = 'https://s.gravatar.com/avatar';
-// The size query. Our chat needs 60px images
-const query = 's=60';
-// Returns the Gravatar image for an email
-const getGravatar = email => {
-  // Gravatar uses MD5 hashes from an email address (all lowercase) to get the image
-  const hash = crypto.createHash('md5').update(email.toLowerCase()).digest('hex');
-  // Return the full avatar URL
-  return `${gravatarUrl}/${hash}?${query}`;
-};
-
-exports.Users = class Users extends Service {
-  create (data, params) {
-    // This is the information we want from the user signup data
-    const { email, password, githubId, name } = data;
-    // Use the existing avatar image or return the Gravatar for the email
-    const avatar = data.avatar || getGravatar(email);
-    // The complete user
-    const userData = {
-      email,
-      name,
-      password,
-      githubId,
-      avatar
-    };
-
-    // Call the original `create` method with existing `params` and new data
-    return super.create(userData, params);
-  }
-};
-```
-
-</Tab>
-
-</Tabs>
-
-Now we can sign up users with email and password and it will automatically set an avatar image for them. If they have no gravatar, it will return a placeholder image.
-
-> __Note:__ We are keeping `githubId` from the original data so that we can add a "Login with GitHub" button in the [authentication](./authentication.md) chapter.
-
 ## What's next?
 
-In this chapter we learned about services as Feathers core concept for abstracting data operations. We also saw how a service sends events which we will use later to create real-time applications. After that, we generated a messages service and updated our users service to include an avatar image. Next, we will look at [Hooks](./hooks.md) which is the other key part of how Feathers works.
+In this chapter we learned about services as Feathers core concept for abstracting data operations. We also saw how a service sends events which we will use later to create real-time applications. After that, we generated a messages service. Next, we will do some data modelling and add some logic to our chat using [Schemas and resolvers](./schemas.md)

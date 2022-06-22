@@ -26,12 +26,6 @@ const learnList = [
   { label: 'API', link: '/api/' },
   { label: 'Blog', link: 'https://blog.feathersjs.com' },
 ]
-const comparisonList = [
-  { label: 'Feathers vs Firebase', link: '/feathers-vs-firebase' },
-  { label: 'Feathers vs Meteor', link: '/feathers-vs-meteor' },
-  { label: 'Feathers vs Sails', link: '/feathers-vs-sails' },
-  { label: 'Feathers vs LoopBack', link: '/feathers-vs-loopback' },
-]
 const ecosystemList = [
   { label: 'Become a Backer', link: 'https://github.com/sponsors/daffl' },
   { label: 'Find Help', link: '/help/' },
@@ -54,7 +48,6 @@ const ecosystemList = [
         <div class="flex flex-row flex-wrap mt-2">
           <FooterList title="About" :items="aboutList" class="m-6" />
           <FooterList title="Learn" :items="learnList" class="m-6" />
-          <FooterList title="Comparison" :items="comparisonList" class="m-6" />
           <FooterList title="Ecosystem" :items="ecosystemList" class="m-6" />
         </div>
 

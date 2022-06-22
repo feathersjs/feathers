@@ -38,7 +38,7 @@ onBeforeUnmount(toggleHomeClass)
 
       <div class="illustration-roundb text-center text-neutral-content pt-4 font-bold">
         <p class="text-xs md:text-base lg:text-lg xl:text-2xl">
-          For Node.js and Cloudflare Workers
+          For TypeScript and JavaScript in Node.js, React Native and the browser
         </p>
         <div class="scale-80">
           <CTAButton primary class="mt-3 mb-6 md:mb-10">Get Started</CTAButton>
@@ -52,11 +52,13 @@ onBeforeUnmount(toggleHomeClass)
 @media (min-width: 768px) {
   .home-hero {
     margin-top: -56px;
+    margin-bottom: 40px;
   }
 }
 @media (min-width: 960px) {
   .home-hero {
     margin-top: -144px;
+    margin-bottom: 40px;
   }
 }
 

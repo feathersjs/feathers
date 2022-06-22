@@ -1,4 +1,8 @@
-# Migrating from Crow to Dove
+---
+outline: deep
+---
+
+# Migrating to v5
 
 This guide explains the new features and changes necessary to migrate to the Feathers v5 (Dove) release. It expects applications to be using the previous Feathers v4 (Crow). See the [v4 (Crow) migration guide](https://crow.docs.feathersjs.com/guides/migrating.html) for upgrading to the previous version.
 
@@ -115,6 +119,24 @@ declare module '@feathersjs/feathers/lib/declarations' {
 ```
 
 ## Deprecations and breaking changes
+
+### Core named export
+
+The import of `feathers` has changed from
+
+```
+const { feathers } = require('@feathersjs/feathers')
+
+import { feathers } from '@feathersjs/feathers'
+```
+
+To
+
+```
+const { feathers } = require('@feathersjs/feathers')
+
+import { feathers } from '@feathersjs/feathers'
+```
 
 ### Asynchronous setup
 
