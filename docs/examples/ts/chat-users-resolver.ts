@@ -56,7 +56,9 @@ export const usersQueryResolver = resolve<UsersQuery, HookContext>({
   properties: {
     // If there is a user (e.g. with authentication), they are only allowed to see their own data
     id: async (value, user, context) => {
-      if (context.params.user) {
+      // We want to be able to get a list of all users
+      // only let a user see and modify their own data otherwise
+      if (context.params.user && context.method !== 'find') {
         return context.params.user.id
       }
 

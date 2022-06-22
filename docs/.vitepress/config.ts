@@ -209,14 +209,14 @@ export default defineConfig({
               text: 'Authentication',
               link: '/guides/basics/authentication.md',
             },
-            // {
-            //   text: 'Hooks',
-            //   link: '/guides/basics/hooks.md',
-            // },
-            // {
-            //   text: 'Writing Tests',
-            //   link: '/guides/basics/testing.md',
-            // },
+            {
+              text: 'Hooks',
+              link: '/guides/basics/hooks.md',
+            },
+            {
+              text: 'Writing Tests',
+              link: '/guides/basics/testing.md',
+            },
           ],
         },
         {
@@ -246,8 +246,16 @@ export default defineConfig({
           collapsible: true,
           items: [
             {
-              text: 'File structure',
+              text: 'Overview',
               link: '/guides/cli/index.md'
+            },
+            {
+              text: 'File structure',
+              link: '/guides/cli/structure.md'
+            },
+            {
+              text: 'Dependency injection',
+              link: '/guides/cli/composition.md'
             }
           ]
         },
@@ -255,10 +263,6 @@ export default defineConfig({
           text: 'More',
           collapsible: true,
           items: [
-            {
-              text: 'Security',
-              link: '/guides/security.md',
-            },
             {
               text: 'Migration Guide',
               link: '/guides/migrating.md',
@@ -440,6 +444,10 @@ export default defineConfig({
             {
               text: 'FAQ',
               link: '/help/faq',
+            },
+            {
+              text: 'Security',
+              link: '/guides/security.md',
             },
           ],
         },

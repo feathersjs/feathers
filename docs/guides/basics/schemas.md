@@ -54,7 +54,7 @@ Next, instead of making users send a link to their avatar, we update the resolve
 
 Update the `src/schemas/users.resolver.ts` file as follows:
 
-<<< @/examples/ts/chat-users-resolver.ts {1,19-24}
+<<< @/examples/ts/chat-users-resolver.ts {1,19-24,59-63}
 
 </Tab>
 <Tab name="JavaScript" global-id="js">

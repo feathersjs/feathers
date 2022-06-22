@@ -11,4 +11,7 @@
 .badges p {
   @apply flex flex-row;
 }
+.badges img {
+  margin-right: .5em
+}
 </style>
