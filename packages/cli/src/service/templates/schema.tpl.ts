@@ -45,7 +45,7 @@ export const ${camelName}ResultSchema = schema({
   properties: {
     ...${camelName}DataSchema.properties,
     ${type === 'mongodb' ? '_id' : 'id'}: {
-      type: 'string'
+      type: '${type === 'mongodb' ? 'string' : 'number'}'
     }
   }
 } as const)
