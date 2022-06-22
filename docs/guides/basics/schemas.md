@@ -106,14 +106,35 @@ If you chose MongoDB you do **not** need to create a migration.
 Initially, every database service will automatically add a migration that creates a table for it with an `id` and `text` property. Our users service also already added a migration to add the email and password fields for logging in. The migration for the changes we made in this chapter needs to
 
 - Add the `avatar` string field to the `users` table
-- Add the `createdAt` number field to the `messages` table
-- Add the `userId` number field to the `messages` table and reference it with the `users` table
+- To the `messasges` table
+  - Add the `createdAt` number
+  - Add the `userId` number field referencing the `id` column in the `users` table
 
-To create a new migration run
+To create a new migration with the name `chat` run
 
 ```
-npm run migrate:create -- chat
+npm run migrate:make -- chat
 ```
+
+You should see something like
+
+```
+Created Migration: /path/to/feathers-chat/migrations/20220622012334_chat.(ts|js)
+```
+
+Open that file and update it as follows
+
+<Tabs>
+<Tab name="TypeScript" global-id="ts">
+
+<<< @/examples/ts/chat-migration.ts
+
+</Tab>
+<Tab name="JavaScript" global-id="js">
+
+</Tab>
+</Tabs>
+
 
 ## What's next?
 
