@@ -127,7 +127,7 @@ Open that file and update it as follows
 <Tabs>
 <Tab name="TypeScript" global-id="ts">
 
-<<< @/examples/ts/chat-migration.ts
+<<< @/examples/ts/chat-migration.ts {4-11,15-22}
 
 </Tab>
 <Tab name="JavaScript" global-id="js">
@@ -138,4 +138,4 @@ Open that file and update it as follows
 
 ## What's next?
 
-In this chapter we learned about
+In this chapter we learned about schemas and implemented all the logic we need for our chat application. In the next chapter we will learn about [authentication](./authentication.md) as the last piece to get our chat application working.

@@ -4,7 +4,7 @@ outline: deep
 
 # Building a frontend
 
-As we have seen [when getting started](./starting.md), Feathers works great in the browser and comes with client services that allow to easily connect to a Feathers server.
+As we have seen [when getting started](../basics/starting.md), Feathers works great in the browser and comes with client services that allow to easily connect to a Feathers server.
 
 In this chapter we will create a real-time chat frontend with signup and login using modern plain JavaScript. It will only work in the latest versions of Chrome, Firefox, Safari and Edge since we won't be using a transpiler like Webpack or Babel (which is also why there won't be a TypeScript option). The final version can be found [here](https://github.com/feathersjs/feathers-chat/).
 

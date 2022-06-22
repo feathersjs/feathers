@@ -33,7 +33,7 @@ Service methods are [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_an
 - `setup` - Called when the application is started
 - `teardown` - Called when the application is shut down
 
-Below is an example of Feathers service interface as a class and a normal object:
+Below is an example of Feathers service interface as a class:
 
 <Tabs group-name="Service Interface">
 
@@ -49,6 +49,8 @@ class MyService implements Service<any> {
   async update(id: NullableId, data: any, params: Params) {}
   async patch(id: NullableId, data: any, params: Params) {}
   async remove(id: NullableId, params: Params) {}
+  async setup (path: string, app: Application) {},
+  async teardown (path: string, app: Application) {}
 }
 
 app.use('/my-service', new MyService());
@@ -64,29 +66,12 @@ class MyService {
   async create(data, params) {}
   async update(id, data, params) {}
   async patch(id, data, params) {}
-  async remove(id, params) {}
+  async remove(id, params) {},
+  async setup(path, app) {},
+  async teardown(path, app) {}
 }
 
 app.use('/my-service', new MyService());
-```
-
-</Tab>
-
-<Tab name="Object">
-
-```js
-const myService = {
-  async find(params) {
-    return [];
-  },
-  async get(id, params) {},
-  async create(data, params) {},
-  async update(id, data, params) {},
-  async patch(id, data, params) {},
-  async remove(id, params) {}
-}
-
-app.use('/my-service', myService);
 ```
 
 </Tab>
@@ -98,6 +83,11 @@ The parameters for service methods are:
 - `id` - The unique identifier for the data
 - `data` - The data sent by the user (for creating, updating and patching)
 - `params` - Additional parameters, for example the authenticated user or the query
+
+For `setup` and `teardown` (which are only called once on application startup and shutdown) we additionally have
+
+- `path` - The path the service is registered on
+- `app` - The [Feathers applicaton](./../../api/application.md)
 
 Usually those methods can be used for most API functionality but it is also possible to add your own [custom service methods](../../api/services.md#custom-methods) for a client to call.
 

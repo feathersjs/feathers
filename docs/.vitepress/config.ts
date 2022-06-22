@@ -209,14 +209,14 @@ export default defineConfig({
               text: 'Authentication',
               link: '/guides/basics/authentication.md',
             },
-            {
-              text: 'Hooks',
-              link: '/guides/basics/hooks.md',
-            },
-            {
-              text: 'Writing Tests',
-              link: '/guides/basics/testing.md',
-            },
+            // {
+            //   text: 'Hooks',
+            //   link: '/guides/basics/hooks.md',
+            // },
+            // {
+            //   text: 'Writing Tests',
+            //   link: '/guides/basics/testing.md',
+            // },
           ],
         },
         {

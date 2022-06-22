@@ -11,7 +11,7 @@ In the [getting started chapter](./starting.md) we created a Feathers applicatio
 The Feathers CLI allows us to initialize a new Feathers server with a recommended structure and generating things we commonly need like authentication, a database connection or new services. It can be installed via:
 
 ```sh
-npm install @feathersjs/cli -g
+npm install @feathersjs/cli@pre -g
 ```
 
 <BlockQuote type="warning">
