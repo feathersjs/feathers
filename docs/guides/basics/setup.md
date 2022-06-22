@@ -4,37 +4,44 @@ outline: deep
 
 # Getting ready
 
-Alright then! Let's learn what Feathers is all about. First we'll have a look at what we are going to do in this guide, what you should already know and what needs to be installed to use Feathers.
+Alright then! Let's learn Feathers. In this section, we'll take a look at
+
+- What we will cover in this guide
+- What needs to be installed to use Feathers
+- Things you should already know
 
 ## What we will do
 
-In this guide we will get a [quick start](./starting.md) by creating our first simple Feathers REST and real-time API and a website to use it from scratch. Then we will learn about the [Feathers CLI](./generator.md) and the core concepts of [services](./services.md), [hooks](./hooks.md) and [authentication](./authentication.md) by building a chat application that allows users to sign up, log in (including with GitHub) and send and receive messages in real-time. It will look like this:
+In this guide we will get a [quick start](./starting.md) at creating our first Feathers REST and real-time API, along with a website to use it from scratch. We will learn about the [Feathers CLI](./generator.md) and the core concepts of [services](./services.md), [hooks](./hooks.md) and [authentication](./authentication.md).  We'll do this by building a chat application with user signup, login (including with GitHub), and the ability to send and receive messages in real-time. It will look like this:
 
 ![The Feathers chat application](./assets/feathers-chat.png)
 
-You can find the final version at
+<LanguageBlock global-id="ts">
 
-<Tabs group-name="Feathers Chat">
+You can find the final version here: [feathersjs/feathers-chat-ts](https://github.com/feathersjs/feathers-chat-ts)
 
-<Tab name="TypeScript" global-id="ts" >
+</LanguageBlock>
 
-The [feathersjs/feathers-chat-ts](https://github.com/feathersjs/feathers-chat-ts) repository
+<LanguageBlock global-id="js">
 
-</Tab>
+You can find the final version here: [feathersjs/feathers-chat](https://github.com/feathersjs/feathers-chat)
 
-<Tab name="JavaScript" global-id="js">
-
-The [feathersjs/feathers-chat](https://github.com/feathersjs/feathers-chat) repository
-
-</Tab>
-
-</Tabs>
+</LanguageBlock>
 
 ## Prerequisites
 
-Feathers works with NodeJS 14 and later and will always support the [currently active releases](https://github.com/nodejs/Release#release-schedule). We recommend using the latest available version from the [NodeJS website](https://nodejs.org/en/). On MacOS and other Unix systems the [Node Version Manager](https://github.com/creationix/nvm) is a good way to quickly install the latest version of NodeJS and keep it up to date.
+We will be writing code for Node.js and the browser. Let's cover the requirements.
 
-After successful installation, the `node` and `npm` commands should be available on the terminal and show something similar when running the following commands:
+### Node.js Requirements
+
+Feathers works with Node.js 14 and later. It will always support the [currently active releases](https://github.com/nodejs/Release#release-schedule). The version we recommend using is the one shown as the latest available version on the [NodeJS website](https://nodejs.org/en/).
+
+Instead of installing Node from the website, we recommend using a version manager that works on your OS.  Version managers are tools to quickly install any version of NodeJS and keep it up to date.  Install a version manager that matches your system before you continue.
+
+- [NVM for Windows](https://github.com/coreybutler/nvm-windows)
+- [NVM for MacOS and other Unix systems](https://github.com/creationix/nvm)
+
+After successful installation, the `node` and `npm` commands should be available on the terminal and show a similar version number when running the following commands:
 
 ```
 $ node --version
@@ -44,15 +51,41 @@ $ node --version
 $ npm --version
 ```
 
-> __Note:__ Running NodeJS and npm should not require admin or root privileges.
+<BlockQuote type="danger" label="Important">
 
-Feathers does work in the browser and supports all modern browser. The browser examples used in the guides will work with all browser versions that support `async/await`.
+Running NodeJS and npm should not require admin or root privileges.
+
+</BlockQuote>
+
+### Browser Requirements
+
+Feathers also works in the browser and supports all modern browsers. The examples used in the guides work with browsers that support `async/await`.
 
 ## What you should know
 
-In order to get the most out of this guide you should have reasonable JavaScript experience using [ES6](http://es6-features.org/) and later as well as [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) and some experience with NodeJS and the JavaScript features it supports like the [module system](https://nodejs.org/api/modules.html). If you selected TypeScript as the language, you should be familiar with TypeScript (including generics). Some familiarity with HTTP and [REST APIs](https://en.wikipedia.org/wiki/Representational_state_transfer) as well as websockets is also helpful but not necessary.
+In order to get the most out of this guide you should have experience in a few areas.  First, choose the programming language you'd like to use:
 
-Feathers works standalone but also provide an integration with [Koa](../../api/koa.md) or [Express](../../api/express.md). This guide does not require any in-depth knowledge of the web framework you chose but some experience can be helpful in the future.
+<BlockQuote label="Select a Programming Language">
+
+  <LanguageSelect hide-label/>
+
+</BlockQuote>
+
+To complete this guide, you'll need
+
+
+- Reasonable JavaScript experience using [ES6](http://es6-features.org/) features like [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)
+
+<LanguageBlock global-id="ts" inline>
+
+- TypeScript generics
+
+</LanguageBlock>
+
+- Some NodeJS experience, including its [module system](https://nodejs.org/api/modules.html).
+- Familiarity with HTTP, [REST APIs](https://en.wikipedia.org/wiki/Representational_state_transfer), and websockets is also helpful but not necessary.
+
+Feathers works standalone but also provides an integration with [Koa](../../api/koa.md) or [Express](../../api/express.md). This guide does not require any in-depth knowledge of the web framework you chose but some experience may be helpful in the future.
 
 ## What's next?
 

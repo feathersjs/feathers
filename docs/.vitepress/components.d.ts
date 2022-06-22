@@ -10,6 +10,7 @@ declare module '@vue/runtime-core' {
     Contributors: typeof import('./components/Contributors.vue')['default']
     FeaturesList: typeof import('./components/FeaturesList.vue')['default']
     HomePage: typeof import('./components/HomePage.vue')['default']
+    LanguageBlock: typeof import('./components/LanguageBlock.vue')['default']
     LanguageSelect: typeof import('./components/LanguageSelect.vue')['default']
     ListItem: typeof import('./components/ListItem.vue')['default']
     Logo: typeof import('./components/Logo.vue')['default']
