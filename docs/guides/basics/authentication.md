@@ -8,7 +8,7 @@ We now have a fully functional chat application consisting of [services](./servi
 
 ## Registering a user
 
-Although the frontend we will create [in the next chapter](./frontend.md) will allow to register new users, let's have a quick look at how the REST API can be used directly to register a new user. We can do this by sending a POST request to `http://localhost:3030/users` with JSON data like this as the body:
+Although the frontend we will create [JavaScript Frontend chapter](../frontend/javascript.md) will allow to register new users, let's have a quick look at how the REST API can be used directly to register a new user. We can do this by sending a POST request to `http://localhost:3030/users` with JSON data like this as the body:
 
 ```js
 // POST /users
@@ -38,7 +38,7 @@ This will return something like this:
 
 ```json
 {
-  "_id": "<random id>",
+  "id": "<user id>",
   "email": "hello@feathersjs.com",
   "avatar": "https://s.gravatar.com/avatar/ffe2a09df37d7c646e974a2d2b8d3e03?s=60"
 }
@@ -88,7 +88,7 @@ This will return something like this:
     "strategy":"local"
   },
   "user":{
-    "_id":"<user id>",
+    "id":"<user id>",
     "email":"hello@feathersjs.com",
     "avatar":"https://s.gravatar.com/avatar/ffe2a09df37d7c646e974a2d2b8d3e03?s=60",
   }
@@ -101,7 +101,7 @@ The `accessToken` can now be used for other REST requests that require authentic
 
 ## Browser authentication
 
-When using Feathers on the client, the authentication client does all those authentication steps for us automatically. It stores the access token as long as it is valid so that a user does not have to log in every time they visit our site and sends it with every request. It also takes care of making sure that the user is always authenticated again, for example after they went offline for a bit. Since we will need it in the [building a frontend chapter](./frontend.md) anyway, let's update the existing `public/index.html` file like this:
+When using Feathers on the client, the authentication client does all those authentication steps for us automatically. It stores the access token as long as it is valid so that a user does not have to log in every time they visit our site and sends it with every request. It also takes care of making sure that the user is always authenticated again, for example after they went offline for a bit. Since we will need it in the [building a frontend chapter](../frontend/javascript.md), let's update the existing `public/index.html` file like this:
 
 ```html
 <html lang="en">

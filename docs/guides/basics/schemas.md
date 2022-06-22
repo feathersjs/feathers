@@ -70,7 +70,7 @@ Next we can look at the messages service schema. We want to include the date whe
 <Tabs>
 <Tab name="TypeScript" global-id="ts">
 
-First we need to update the `src/schemas/users.schema.ts` file with the new `avatar` property. This can be done by adding the JSON schema property definition `avatar: { type: 'string' }` to the `usersDataSchema`:
+Update the `src/schemas/messages.schema.ts` file with the `userId` and `createdAt` properties:
 
 <<< @/examples/ts/chat-messages-schema.ts {3,15-20,53-55}
 
@@ -84,6 +84,8 @@ Both the `createdAt` and `userId` property can be added automatically before sav
 
 <Tabs>
 <Tab name="TypeScript" global-id="ts">
+
+Update `src/resolvers/messsges.resolver.ts` like this:
 
 <<< @/examples/ts/chat-messages-resolver.ts {17-23,39-42}
 
@@ -135,6 +137,11 @@ Open that file and update it as follows
 </Tab>
 </Tabs>
 
+We can run the migrations on the current database with
+
+```
+npm run migrate
+```
 
 ## What's next?
 

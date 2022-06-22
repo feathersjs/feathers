@@ -8,7 +8,7 @@ As we have seen [when getting started](../basics/starting.md), Feathers works gr
 
 In this chapter we will create a real-time chat frontend with signup and login using modern plain JavaScript. It will only work in the latest versions of Chrome, Firefox, Safari and Edge since we won't be using a transpiler like Webpack or Babel (which is also why there won't be a TypeScript option). The final version can be found [here](https://github.com/feathersjs/feathers-chat/).
 
-![The Feathers chat application](./assets/feathers-chat.png)
+![The Feathers chat application](../basics/assets/feathers-chat.png)
 
 > __Note:__ We will not be using a frontend framework so we can focus on what Feathers is all about. Feathers is framework agnostic and can be used with any frontend framework like React, VueJS or Angular. For more information see the [frameworks section](../frameworks.md).
 
@@ -30,9 +30,9 @@ First, let's update `public/index.html` to initialize everything we need for the
   <body>
     <div id="app" class="flex flex-column"></div>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.js"></script>
-    <script src="//unpkg.com/@feathersjs/client@^4.3.0/dist/feathers.js"></script>
+    <script src="//unpkg.com/@feathersjs/client@^5.0.0-pre.24/dist/feathers.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="client.js"></script>
+    <script type="module" src="client.js"></script>
   </body>
 </html>
 ```
@@ -48,7 +48,7 @@ Let’s create `public/client.js` where all the following code will live. Each o
 
 ## Connect to the API
 
-We’ll start with the most important thing first, the connection to our Feathers API that connects to our server using websockets and initializes the [authentication client](./authentication.md):
+We’ll start with the most important thing first, the connection to our Feathers API that connects to our server using websockets and initializes the [authentication client](../basics/authentication.md):
 
 ```js
 /* global io, feathers, moment */
@@ -93,10 +93,6 @@ const loginHTML = `<main class="login container">
         <button type="button" id="signup" class="button button-primary block signup">
           Sign up and log in
         </button>
-
-        <a class="button button-primary block" href="/oauth/github">
-          Login with GitHub
-        </a>
       </form>
     </div>
   </div>
@@ -349,7 +345,7 @@ login();
 
 ## Using the chat application
 
-That’s it. We now have a plain JavaScript real-time chat frontend with login and signup. This example demonstrates many of the basic principles of how you interact with a Feathers API. You can log in with your GitHub account by following the "Login with GitHub" button, with the email (`hello@feathersjs.com`) and password (`supersecret`) from the user we registered in the [authentication chapter](./authentication.md) or sign up and log in with a different email address.
+That’s it. We now have a plain JavaScript real-time chat frontend with login and signup. This example demonstrates many of the basic principles of how you interact with a Feathers API. You can log in with the email (`hello@feathersjs.com`) and password (`supersecret`) from the user we registered in the [authentication chapter](../basics/authentication.md) or sign up and log in with a different email address.
 
 If you run into an issue, remember you can find the complete working example at
 
@@ -368,7 +364,3 @@ The [feathersjs/feathers-chat](https://github.com/feathersjs/feathers-chat) repo
 </Tab>
 
 </Tabs>
-
-## What's next?
-
-In the final chapter, we'll look at [how to write automated tests for our API](./testing.md).

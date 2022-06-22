@@ -465,4 +465,4 @@ Create your own (custom) service when
 
 ## What's next?
 
-In this chapter we learned how Feathers hooks can be used as middleware for service method calls to validate and manipulate incoming and outgoing data without having to change our service. We now have a fully working chat application. Before we [create a frontend for it](./frontend.md) though, let's first look at how [authentication works with Feathers](./authentication.md).
+In this chapter we learned how Feathers hooks can be used as middleware for service method calls to validate and manipulate incoming and outgoing data without having to change our service. We now have a fully working chat application. Before we [create a frontend for it](../frontend/javascript.md) though, let's first look at how [authentication works with Feathers](./authentication.md).

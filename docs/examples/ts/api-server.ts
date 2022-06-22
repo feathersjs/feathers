@@ -1,5 +1,5 @@
-import feathers from '@feathersjs/feathers'
-import { koa, rest, bodyParser, errorHandler, parseAuthentication } from '@feathersjs/koa'
+import { feathers } from '@feathersjs/feathers'
+import { koa, rest, bodyParser, errorHandler } from '@feathersjs/koa'
 import serveStatic from 'koa-static'
 import socketio from '@feathersjs/socketio'
 
@@ -34,8 +34,13 @@ class MessageService {
   }
 }
 
+// This tells TypeScript what services we are registering
+type ServiceTypes = {
+  messages: MessageService
+}
+
 // Creates an ExpressJS compatible Feathers application
-const app = koa(feathers())
+const app = koa<ServiceTypes>(feathers())
 
 // Use the current folder for static file hosting
 app.use(serveStatic('.'))
