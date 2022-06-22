@@ -39,6 +39,7 @@
     "*.js"
   ],
   "scripts": {
+    "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
     "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },

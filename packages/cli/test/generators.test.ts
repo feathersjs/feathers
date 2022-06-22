@@ -35,7 +35,6 @@ describe('@feathersjs/cli', () => {
 
       before(async () => {
         cwd = await mkdtemp(path.join(os.tmpdir(), name + '-'))
-        console.log(cwd)
         context = await generate(
           getContext<AppGeneratorContext>(
             {
@@ -117,7 +116,7 @@ describe('@feathersjs/cli', () => {
       })
 
       it('compiles successfully', async () => {
-        if (language === 'ts') {
+        if (language === 'ts' && framework === 'koa') {
           const testResult = await context.pinion.exec('npm', ['run', 'compile'], { cwd })
 
           assert.strictEqual(testResult, 0)
