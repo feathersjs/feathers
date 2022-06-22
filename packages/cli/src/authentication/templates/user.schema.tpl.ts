@@ -16,15 +16,9 @@ export const ${camelName}DataSchema = schema({
     ${authStrategies
       .map((name) =>
         name === 'local'
-          ? `email: {
-      type: 'string'
-    },
-    password: {
-      type: 'string'
-    }`
-          : `    ${name}Id: {
-      type: 'string'
-    }`
+          ? `    email: { type: 'string' },
+    password: { type: 'string' }`
+          : `    ${name}Id: { type: 'string' }`
       )
       .join(',\n')}
   }
@@ -55,7 +49,7 @@ export const ${camelName}ResultSchema = schema({
   properties: {
     ...${camelName}DataSchema.properties,
     ${type === 'mongodb' ? '_id' : 'id'}: {
-      type: 'string'
+      type: '${type === 'mongodb' ? 'string' : 'number'}'
     }
   }
 } as const)
