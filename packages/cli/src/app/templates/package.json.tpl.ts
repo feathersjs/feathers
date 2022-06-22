@@ -14,8 +14,8 @@ const jsPackageJson = (lib: string) => ({
 const tsPackageJson = (lib: string) => ({
   scripts: {
     dev: `nodemon -x ts-node ${lib}/index.ts`,
-    compile: 'shx rm -rf dist/ && tsc',
-    start: 'npm run compile && node dist/',
+    compile: 'shx rm -rf lib/ && tsc',
+    start: 'npm run compile && node lib/',
     mocha:
       'cross-env NODE_ENV=test mocha test/ --require ts-node/register --recursive --extension .ts --exit',
     test: 'npm run mocha'

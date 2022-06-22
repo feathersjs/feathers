@@ -22,9 +22,9 @@ export class ${className} {
 
   async get (id: Id, _params?: ${upperName}Params): Promise<${upperName}Result> {
     return {
-      id: \`\${id}\`,
+      id: 0,
       text: \`A new message with ID: \${id}!\`
-    };
+    }
   }
 
   async create (data: ${upperName}Data, params?: ${upperName}Params): Promise<${upperName}Result>
@@ -35,30 +35,30 @@ export class ${className} {
     }
 
     return {
-      id: 'created',
+      id: 0,
       ...data
-    };
+    }
   }
 
   async update (id: NullableId, data: ${upperName}Data, _params?: ${upperName}Params): Promise<${upperName}Result> {
     return {
-      id: \`\${id}\`,
+      id: 0,
       ...data
-    };
+    }
   }
 
   async patch (id: NullableId, data: ${upperName}Data, _params?: ${upperName}Params): Promise<${upperName}Result> {
     return {
-      id: \`\${id}\`,
+      id: 0,
       ...data
-    };
+    }
   }
 
   async remove (id: NullableId, _params?: ${upperName}Params): Promise<${upperName}Result> {
     return {
-      id: \`\${id}\`,
+      id: 0,
       text: 'removed'
-    };
+    }
   }
 }
 `

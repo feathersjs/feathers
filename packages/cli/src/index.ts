@@ -20,8 +20,9 @@ export const command = (yargs: Argv) =>
       yarg
         .command('app', 'Generate a new app', commandRunner)
         .command('service', 'Generate a service', commandRunner)
-        .command('connection', 'Connect to a different database', commandRunner)
         .command('hook', 'Generate a hook', commandRunner)
+        .command('connection', 'Connect to a different database', commandRunner)
+        .command('authentication', 'Set up authentication with a custom entity', commandRunner)
     )
     .usage('Usage: $0 <command> [options]')
     .help()

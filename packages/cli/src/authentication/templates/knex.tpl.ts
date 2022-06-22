@@ -47,7 +47,11 @@ export const generate = (ctx: AuthenticationGeneratorContext) =>
         toFile(
           toFile<AuthenticationGeneratorContext>('migrations', () => {
             // Probably not great but it works to align with the Knex migration file format
-            const migrationDate = new Date().toISOString().replace(/\D/g, '').substring(0, 14)
+            // We add 2 seconds so that the migrations run in the correct order
+            const migrationDate = new Date(Date.now() + 2000)
+              .toISOString()
+              .replace(/\D/g, '')
+              .substring(0, 14)
 
             return `${migrationDate}_authentication`
           })

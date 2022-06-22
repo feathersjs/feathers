@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/socketio",
   "description": "The Feathers Socket.io real-time API provider",
-  "version": "5.0.0-pre.24",
+  "version": "5.0.0-pre.26",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -52,15 +52,15 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^5.0.0-pre.24",
-    "@feathersjs/feathers": "^5.0.0-pre.24",
-    "@feathersjs/transport-commons": "^5.0.0-pre.24",
+    "@feathersjs/commons": "^5.0.0-pre.26",
+    "@feathersjs/feathers": "^5.0.0-pre.26",
+    "@feathersjs/transport-commons": "^5.0.0-pre.26",
     "socket.io": "^4.5.1"
   },
   "devDependencies": {
-    "@feathersjs/express": "^5.0.0-pre.24",
-    "@feathersjs/memory": "^5.0.0-pre.24",
-    "@feathersjs/tests": "^5.0.0-pre.24",
+    "@feathersjs/express": "^5.0.0-pre.26",
+    "@feathersjs/memory": "^5.0.0-pre.26",
+    "@feathersjs/tests": "^5.0.0-pre.26",
     "@types/mocha": "^9.1.1",
     "@types/node": "^17.0.40",
     "lodash": "^4.17.21",
@@ -69,5 +69,5 @@
     "socket.io-client": "^4.5.1",
     "typescript": "^4.7.3"
   },
-  "gitHead": "72779fa2938f43d7b345b6861ff0035481a07de3"
+  "gitHead": "0e7553ded9b24016d36021aaedcc2cdb19ab0157"
 }
