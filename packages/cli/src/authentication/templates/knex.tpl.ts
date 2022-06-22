@@ -39,19 +39,24 @@ export async function down(knex: Knex): Promise<void> {
 `
 
 export const generate = (ctx: AuthenticationGeneratorContext) =>
-  generator(ctx).then(
-    when(
-      (ctx) => getDatabaseAdapter(ctx.feathers.database) === 'knex',
-      renderSource(
-        migrationTemplate,
-        toFile(
-          toFile<AuthenticationGeneratorContext>('migrations', () => {
-            // Probably not great but it works to align with the Knex migration file format
-            const migrationDate = new Date().toISOString().replace(/\D/g, '').substring(0, 14)
+  generator(ctx)
+    // We need to wait a second otherwise the migration filenames won't be in the right order
+    .then(
+      (ctx) => new Promise<AuthenticationGeneratorContext>((resolve) => setTimeout(() => resolve(ctx), 1100))
+    )
+    .then(
+      when(
+        (ctx) => getDatabaseAdapter(ctx.feathers.database) === 'knex',
+        renderSource(
+          migrationTemplate,
+          toFile(
+            toFile<AuthenticationGeneratorContext>('migrations', () => {
+              // Probably not great but it works to align with the Knex migration file format
+              const migrationDate = new Date().toISOString().replace(/\D/g, '').substring(0, 14)
 
-            return `${migrationDate}_authentication`
-          })
+              return `${migrationDate}_authentication`
+            })
+          )
         )
       )
     )
-  )
