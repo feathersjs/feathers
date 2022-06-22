@@ -1,22 +1,23 @@
 <script setup lang="ts">
-import { useGlobalLanguage } from "../theme/store"
+import { useGlobalLanguage } from '../theme/store'
 
 defineProps({
   hideOnMobile: Boolean,
+  hideLabel: Boolean,
 })
 
 const activeGlobalId = useGlobalLanguage()
 
 const options = [
-  { value: "ts", text: "TypeScript" },
-  { value: "js", text: "JavaScript" },
+  { value: 'ts', text: 'TypeScript' },
+  { value: 'js', text: 'JavaScript' },
 ]
 </script>
 
 <template>
   <div :class="{ 'hidden lg:block': hideOnMobile }">
     <label>
-      <span class="text-xs">Code Language</span>
+      <span v-if="!hideLabel" class="language-select-label text-sm font-bold">Code Language</span>
       <div class="relative">
         <select
           v-model="activeGlobalId"
@@ -31,3 +32,9 @@ const options = [
     </label>
   </div>
 </template>
+
+<style lang="postcss">
+.language-select-label {
+  color: var(--vp-c-text-1);
+}
+</style>
