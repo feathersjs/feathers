@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed, inject } from "vue"
+import { computed, inject } from 'vue'
 
 const props = defineProps({
   name: String,
   globalId: String,
 })
 
-const { addTab, activeIndex, showTabs }: any = inject("tab-state")
+const { addTab, activeIndex, showTabs }: any = inject('tab-state')
 
 const index = addTab({
   name: props.name,
@@ -21,11 +21,25 @@ const isActive = computed(() => {
 <template>
   <div v-if="isActive" class="tab relative">
     <div
-      v-if="!showTabs"
-      class="bg-neutral text-neutral-content inline-block text-xs px-2.5 py-1 rounded-t-md absolute -top-5 z-10"
+      v-if="!showTabs && !hideLabel"
+      class="tab-label bg-neutral text-neutral-content inline-block text-xs px-2.5 py-1 rounded-t-md"
     >
       {{ name }}
     </div>
-    <slot></slot>
+    <div class="z-0">
+      <slot></slot>
+    </div>
   </div>
 </template>
+
+<style>
+.tab {
+  @apply pt-6;
+}
+.tab-label {
+  @apply absolute z-10 top-0;
+}
+.tab div[class*='language-']:first-child {
+  @apply -mt-0.25;
+}
+</style>
