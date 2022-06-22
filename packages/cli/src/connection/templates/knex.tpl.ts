@@ -57,7 +57,7 @@ export const generate = (ctx: ConnectionGeneratorContext) =>
         {
           scripts: {
             migrate: 'knex migrate:latest',
-            'migrate:create': 'knex migrate:create',
+            'migrate:make': 'knex migrate:make',
             test: 'cross-env NODE_ENV=test npm run migrate && npm run mocha'
           }
         },

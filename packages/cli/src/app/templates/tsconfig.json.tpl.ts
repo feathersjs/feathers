@@ -13,11 +13,12 @@ export const generate = (ctx: AppGeneratorContext) =>
           compilerOptions: {
             target: 'es2020',
             module: 'commonjs',
-            outDir: './dist',
+            outDir: './lib',
             rootDir: `./${lib}`,
             strict: true,
             esModuleInterop: true
           },
+          include: [lib],
           exclude: ['test']
         }),
         toFile('tsconfig.json')
