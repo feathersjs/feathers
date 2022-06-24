@@ -1,6 +1,6 @@
-import { generator, toFile, inject, before } from '@feathershq/pinion'
+import { generator, toFile, before } from '@feathershq/pinion'
 import { ConnectionGeneratorContext } from '../index'
-import { getSource, renderSource } from '../../commons'
+import { injectSource, renderSource } from '../../commons'
 
 const template = ({}: ConnectionGeneratorContext) =>
   `import { MongoClient } from 'mongodb'
@@ -22,11 +22,12 @@ export const mongodb = (app: Application) => {
   app.set('mongodbClient', mongoClient)
 }
 `
+
 const configurationTemplate = ({ database }: ConnectionGeneratorContext) =>
-  `    ${database}: { type: 'string' },`
+  `   ${database}: { type: 'string' },`
 const importTemplate = "import { mongodb } from './mongodb'"
 const configureTemplate = 'app.configure(mongodb)'
-const toAppFile = toFile<ConnectionGeneratorContext>(({ lib, language }) => [lib, `app.${language}`])
+const toAppFile = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'app'])
 
 export const generate = (ctx: ConnectionGeneratorContext) =>
   generator(ctx)
@@ -37,15 +38,12 @@ export const generate = (ctx: ConnectionGeneratorContext) =>
       )
     )
     .then(
-      inject(
+      injectSource(
         configurationTemplate,
         before('authentication: authenticationSettingsSchema'),
-        toFile<ConnectionGeneratorContext>(({ lib, language }) => [
-          lib,
-          'schemas',
-          `configuration.schema.${language}`
-        ])
+        toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'configuration']),
+        false
       )
     )
-    .then(inject(getSource(importTemplate), before('import { services } from'), toAppFile))
-    .then(inject(getSource(configureTemplate), before('app.configure(services)'), toAppFile))
+    .then(injectSource(importTemplate, before('import { services } from'), toAppFile))
+    .then(injectSource(configureTemplate, before('app.configure(services)'), toAppFile))

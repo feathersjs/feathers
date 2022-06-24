@@ -76,11 +76,11 @@ export const generate = (ctx: AuthenticationGeneratorContext) =>
   generator(ctx).then(
     renderSource(
       template,
-      toFile(({ lib, folder, kebabName }: AuthenticationGeneratorContext) => [
+      toFile(({ lib, folder, fileName }: AuthenticationGeneratorContext) => [
         lib,
-        'schemas',
+        'services',
         ...folder,
-        `${kebabName}.schema`
+        `${fileName}.schema`
       ]),
       { force: true }
     )

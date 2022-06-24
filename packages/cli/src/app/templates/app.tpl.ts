@@ -10,7 +10,7 @@ import { koa, rest, bodyParser, errorHandler, parseAuthentication } from '@feath
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
 import type { Application } from './declarations'
-import { configurationSchema } from './schemas/configuration.schema'
+import { configurationSchema } from './configuration'
 import { logErrorHook } from './logger'
 import { services } from './services/index'
 import { channels } from './channels'
@@ -63,7 +63,7 @@ import configuration from '@feathersjs/configuration'
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
 import type { Application } from './declarations'
-import { configurationSchema } from './schemas/configuration.schema'
+import { configurationSchema } from './configuration'
 import { logger, logErrorHook } from './logger'
 import { services } from './services/index'
 import { channels } from './channels'

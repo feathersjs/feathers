@@ -1,27 +1,22 @@
 import { generator, inject, toFile, when, after } from '@feathershq/pinion'
 import { ServiceGeneratorContext } from '../index'
 
-const schemaImports = ({ upperName, schemaPath }: ServiceGeneratorContext) => `import type {
+const schemaImports = ({ upperName, folder, fileName }: ServiceGeneratorContext) => `import type {
   ${upperName}Data,
   ${upperName}Result,
   ${upperName}Query,
-} from './${schemaPath}'`
+} from './services/${folder.join('/')}/${fileName}.schema'`
+
 const declarationTemplate = ({ path, upperName }: ServiceGeneratorContext) =>
   `  '${path}': Service<${upperName}Data, ${upperName}Result, Params<${upperName}Query>>`
 
-const toClientFile = toFile<ServiceGeneratorContext>(({ lib, language }) => [lib, `client.${language}`])
+const toClientFile = toFile<ServiceGeneratorContext>(({ lib }) => [lib, 'client.ts'])
 
 export const generate = async (ctx: ServiceGeneratorContext) =>
-  generator(ctx)
-    .then(
-      when(
-        (ctx) => ctx.language === 'ts',
-        inject(schemaImports, after("from '@feathersjs/feathers'"), toClientFile)
-      )
+  generator(ctx).then(
+    when(
+      (ctx) => ctx.language === 'ts',
+      inject(schemaImports, after("from '@feathersjs/feathers'"), toClientFile),
+      inject(declarationTemplate, after('export interface ServiceTypes'), toClientFile)
     )
-    .then(
-      when(
-        (ctx) => ctx.language === 'ts',
-        inject(declarationTemplate, after('export interface ServiceTypes'), toClientFile)
-      )
-    )
+  )

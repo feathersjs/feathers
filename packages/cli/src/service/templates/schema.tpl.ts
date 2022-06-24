@@ -72,7 +72,7 @@ export const generate = (ctx: ServiceGeneratorContext) =>
       template,
       toFile(({ lib, folder, fileName }: ServiceGeneratorContext) => [
         lib,
-        'schemas',
+        'services',
         ...folder,
         `${fileName}.schema`
       ])

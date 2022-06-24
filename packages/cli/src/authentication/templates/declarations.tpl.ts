@@ -1,8 +1,8 @@
 import { generator, inject, before, toFile, when, append } from '@feathershq/pinion'
 import { AuthenticationGeneratorContext } from '../index'
 
-const importTemplate = ({ upperName, schemaPath }: AuthenticationGeneratorContext) =>
-  `import { ${upperName}Result } from './${schemaPath}'
+const importTemplate = ({ upperName, folder, fileName }: AuthenticationGeneratorContext) =>
+  `import { ${upperName}Result } from './services/${folder.join('/')}/${fileName}.schema'
 `
 
 const paramsTemplate = ({
