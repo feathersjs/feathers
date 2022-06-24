@@ -1,5 +1,5 @@
-import { generator, inject, before, toFile } from '@feathershq/pinion'
-import { getSource, renderSource } from '../../commons'
+import { generator, before, toFile } from '@feathershq/pinion'
+import { injectSource, renderSource } from '../../commons'
 import { AuthenticationGeneratorContext } from '../index'
 
 const template = ({ authStrategies, feathers }: AuthenticationGeneratorContext) =>
@@ -39,7 +39,7 @@ export const authentication = (app: Application) => {
 
 const importTemplate = "import { authentication } from './authentication'"
 const configureTemplate = 'app.configure(authentication)'
-const toAppFile = toFile<AuthenticationGeneratorContext>(({ lib, language }) => [lib, `app.${language}`])
+const toAppFile = toFile<AuthenticationGeneratorContext>(({ lib }) => [lib, 'app'])
 
 export const generate = (ctx: AuthenticationGeneratorContext) =>
   generator(ctx)
@@ -49,5 +49,5 @@ export const generate = (ctx: AuthenticationGeneratorContext) =>
         toFile<AuthenticationGeneratorContext>(({ lib }) => lib, 'authentication')
       )
     )
-    .then(inject(getSource(importTemplate), before('import { services } from'), toAppFile))
-    .then(inject(getSource(configureTemplate), before('app.configure(services)'), toAppFile))
+    .then(injectSource(importTemplate, before('import { services } from'), toAppFile))
+    .then(injectSource(configureTemplate, before('app.configure(services)'), toAppFile))

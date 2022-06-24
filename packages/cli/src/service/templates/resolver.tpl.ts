@@ -2,7 +2,7 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-const template = ({ camelName, upperName, relative, schemaPath }: ServiceGeneratorContext) =>
+const template = ({ camelName, upperName, relative, fileName }: ServiceGeneratorContext) =>
   `import { resolve } from '@feathersjs/schema'
 import type { HookContext } from '${relative}/declarations'
 
@@ -11,13 +11,13 @@ import type {
   ${upperName}Patch,
   ${upperName}Result,
   ${upperName}Query,
-} from '${relative}/${schemaPath}'
+} from './${fileName}.schema'
 import {
   ${camelName}DataSchema,
   ${camelName}PatchSchema,
   ${camelName}ResultSchema,
   ${camelName}QuerySchema
-} from '${relative}/${schemaPath}'
+} from './${fileName}.schema'
 
 
 // Resolver for the basic data model (e.g. creating new entries)
@@ -70,7 +70,7 @@ export const generate = (ctx: ServiceGeneratorContext) =>
       template,
       toFile(({ lib, folder, fileName }: ServiceGeneratorContext) => [
         lib,
-        'resolvers',
+        'services',
         ...folder,
         `${fileName}.resolver`
       ])

@@ -1,5 +1,14 @@
 import { PackageJson } from 'type-fest'
-import { Callable, PinionContext, loadJSON, fromFile, getCallable, renderTemplate } from '@feathershq/pinion'
+import {
+  Callable,
+  PinionContext,
+  loadJSON,
+  fromFile,
+  getCallable,
+  renderTemplate,
+  inject,
+  Location
+} from '@feathershq/pinion'
 import * as ts from 'typescript'
 import prettier from 'prettier'
 import path from 'path'
@@ -145,8 +154,7 @@ export const getJavaScript = (typescript: string, options: ts.TranspileOptions =
 }
 
 /**
- * Render a source file template for the language set in the context. Will do nothing
- * it there is no template for the selected language.
+ * Render a source file template for the language set in the context.
  *
  * @param templates The JavaScript and TypeScript template to render
  * @param toFile The target filename without extension (will be added based on language)
@@ -159,10 +167,6 @@ export const renderSource =
     options?: { force: boolean }
   ) =>
   async (ctx: C) => {
-    if (!template) {
-      return ctx
-    }
-
     const { language } = ctx
     const fileName = await getCallable<string, C>(toFile, ctx)
     const content = language === 'js' ? getJavaScript(await getCallable<string, C>(template, ctx)) : template
@@ -172,16 +176,27 @@ export const renderSource =
   }
 
 /**
- * Returns the TypeScript or transpiled JavaScript source code
+ * Inject a source template as the language set in the context.
  *
- * @param template The source template
+ * @param template The source template to render
+ * @param location The location to inject the code to. Must use the target language.
+ * @param target The target file name
+ * @param transpile Set to `false` if the code should not be transpiled to JavaScript
  * @returns
  */
-export const getSource =
-  <C extends PinionContext & { language: 'js' | 'ts' }>(template: Callable<string, C>) =>
-  async <T extends C>(ctx: T) => {
+export const injectSource =
+  <C extends PinionContext & { language: 'js' | 'ts' }>(
+    template: Callable<string, C>,
+    location: Location<C>,
+    target: Callable<string, C>,
+    transpile = true
+  ) =>
+  async (ctx: C) => {
     const { language } = ctx
-    const source = await getCallable<string, C>(template, ctx)
+    const source =
+      language === 'js' && transpile ? getJavaScript(await getCallable<string, C>(template, ctx)) : template
+    const toFile = await getCallable<string, C>(target, ctx)
+    const injector = inject(source, location, `${toFile}.${language}`)
 
-    return language === 'js' ? getJavaScript(source) : source
+    return injector(ctx)
   }
