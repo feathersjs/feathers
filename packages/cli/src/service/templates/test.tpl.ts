@@ -2,11 +2,11 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-const template = ({ relative, lib, path, name }: ServiceGeneratorContext) =>
+const template = ({ relative, lib, path }: ServiceGeneratorContext) =>
   `import assert from 'assert'
 import { app } from '../${relative}/${lib}/app'
 
-describe('${name} service', () => {
+describe('${path} service', () => {
   it('registered the service', () => {
     const service = app.service('${path}')
 
