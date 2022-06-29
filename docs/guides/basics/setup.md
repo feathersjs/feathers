@@ -78,7 +78,7 @@ To complete this guide, you'll need
 
 <LanguageBlock global-id="ts" inline>
 
-- TypeScript generics
+- Knowledge of [TypeScript generics](https://www.typescriptlang.org/docs/handbook/2/generics.html)
 
 </LanguageBlock>
 
