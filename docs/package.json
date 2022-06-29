@@ -10,23 +10,23 @@
     "start": "npm run dev"
   },
   "dependencies": {
-    "@vueuse/core": "^8.7.4",
+    "@vueuse/core": "^8.7.5",
     "vue": "^3.2.37"
   },
   "devDependencies": {
-    "@iconify-json/carbon": "^1.1.5",
+    "@iconify-json/carbon": "^1.1.6",
     "@types/node": "^18.0.0",
-    "@unocss/preset-typography": "^0.39.3",
-    "@unocss/reset": "^0.39.3",
-    "@unocss/transformer-directives": "^0.39.3",
+    "@unocss/preset-typography": "^0.41.1",
+    "@unocss/reset": "^0.41.1",
+    "@unocss/transformer-directives": "^0.41.1",
     "@vitejs/plugin-vue": "^2.3.3",
     "esno": "^0.16.3",
     "fast-glob": "^3.2.11",
     "https-localhost": "^4.7.1",
-    "unocss": "^0.39.3",
-    "unplugin-vue-components": "^0.19.6",
+    "unocss": "^0.41.1",
+    "unplugin-vue-components": "^0.20.1",
     "vite-plugin-pwa": "^0.12.0",
-    "vitepress": "^1.0.0-alpha.2",
+    "vitepress": "^1.0.0-alpha.4",
     "workbox-window": "^6.5.3"
   }
 }
