@@ -2,7 +2,7 @@ import { strictEqual } from 'assert'
 import { getJavaScript } from '../src/commons'
 
 describe('common tests', () => {
-  it('getJavaScript returns transpiled and prettified JavaScript', () => {
+  it('getJavaScript returns transpiled JavaScript', () => {
     const transpiled = getJavaScript(
       `import bla from 'bla'
 import something from './file'
@@ -20,15 +20,15 @@ const otherThing: string = "Hello"
 
     strictEqual(
       transpiled,
-      `import bla from 'bla'
-import something from './file.js'
+      `import bla from 'bla';
+import something from './file.js';
 
-function test(arg) {
-  bla(something)
+ function test(arg) {
+    bla(something);
 }
 
-// This is a comment
-const otherThing = 'Hello'
+ // This is a comment
+const otherThing = "Hello";
 `
     )
   })
