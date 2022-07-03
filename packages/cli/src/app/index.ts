@@ -179,7 +179,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
     )
     .then(
       install<AppGeneratorContext>(({ language, framework, devDependencies, dependencyVersions }) => {
-        devDependencies.push('nodemon', 'axios', 'mocha', 'cross-env')
+        devDependencies.push('nodemon', 'axios', 'mocha', 'cross-env', 'prettier')
 
         if (language === 'ts') {
           devDependencies.push(
