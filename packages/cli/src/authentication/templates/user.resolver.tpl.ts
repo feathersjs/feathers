@@ -8,7 +8,7 @@ const template = ({
   relative,
   authStrategies,
   type,
-  schemaPath
+  fileName
 }: AuthenticationGeneratorContext) =>
   `import { resolve } from '@feathersjs/schema'
 ${authStrategies.includes('local') ? `import { passwordHash } from '@feathersjs/authentication-local'` : ''}
@@ -18,13 +18,13 @@ import type {
   ${upperName}Patch,
   ${upperName}Result,
   ${upperName}Query,
-} from '../${schemaPath}' 
+} from './${fileName}.schema'
 import {
   ${camelName}DataSchema,
   ${camelName}PatchSchema,
   ${camelName}ResultSchema,
   ${camelName}QuerySchema
-} from '../${schemaPath}'
+} from './${fileName}.schema'
 
 
 // Resolver for the basic data model (e.g. creating new entries)
@@ -98,11 +98,11 @@ export const generate = (ctx: AuthenticationGeneratorContext) =>
   generator(ctx).then(
     renderSource(
       template,
-      toFile(({ lib, folder, kebabName }: AuthenticationGeneratorContext) => [
+      toFile(({ lib, folder, fileName }: AuthenticationGeneratorContext) => [
         lib,
-        'resolvers',
+        'services',
         ...folder,
-        `${kebabName}.resolver`
+        `${fileName}.resolver`
       ]),
       { force: true }
     )

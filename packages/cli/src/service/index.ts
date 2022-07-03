@@ -52,14 +52,6 @@ export interface ServiceGeneratorContext extends FeathersBaseContext {
    * Set to true if this service is for an authentication entity
    */
   isEntityService?: boolean
-  /**
-   * The name of the schema file
-   */
-  schemaPath: string
-  /**
-   * The name of the resolver file
-   */
-  resolverPath: string
 }
 
 /**
@@ -123,12 +115,9 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
       const upperName = _.upperFirst(camelName)
       const className = `${upperName}Service`
 
-      const pathElements = path.split('/').filter((el) => el !== '')
-      const relative = pathElements.map(() => '..').join('/')
-      const folder = _.initial(pathElements)
-      const fileName = _.last(pathElements)
-      const schemaPath = ['schemas', ...folder, `${fileName}.schema`].join('/')
-      const resolverPath = ['resolvers', ...folder, `${fileName}.resolver`].join('/')
+      const folder = path.split('/').filter((el) => el !== '')
+      const relative = ['', ...folder].map(() => '..').join('/')
+      const fileName = _.last(folder)
 
       return {
         name,
@@ -141,8 +130,6 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
         kebabName,
         camelName,
         relative,
-        resolverPath,
-        schemaPath,
         ...ctx
       }
     })

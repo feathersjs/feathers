@@ -1,6 +1,6 @@
-import { generator, toFile, inject, before, mergeJSON } from '@feathershq/pinion'
+import { generator, toFile, before, mergeJSON } from '@feathershq/pinion'
 import { ConnectionGeneratorContext } from '../index'
-import { getSource, renderSource } from '../../commons'
+import { injectSource, renderSource } from '../../commons'
 
 const template = ({ database }: ConnectionGeneratorContext) =>
   `import knex from 'knex'
@@ -17,7 +17,7 @@ export const ${database} = (app: Application) => {
   const config = app.get('${database}')
   const db = knex(config!)
 
-  app.set('${database}Client', db);
+  app.set('${database}Client', db)
 }
 `
 
@@ -30,18 +30,19 @@ const config = app.get('${database}')
 ${language === 'js' ? 'export default config' : 'module.exports = config'}
 `
 
-const configurationTemplate = ({ database }: ConnectionGeneratorContext) => `    ${database}: {
-    type: 'object',
-    properties: {
-      client: { type: 'string' },
-      connection: { type: 'string' }
-    }
-  },`
-
+const configurationTemplate = ({ database }: ConnectionGeneratorContext) => `${database}: {
+  type: 'object',
+  properties: {
+    client: { type: 'string' },
+    connection: { type: 'string' }
+  }
+},`
 const importTemplate = ({ database }: ConnectionGeneratorContext) =>
   `import { ${database} } from './${database}'`
 const configureTemplate = ({ database }: ConnectionGeneratorContext) => `app.configure(${database})`
-const toAppFile = toFile<ConnectionGeneratorContext>(({ lib, language }) => [lib, `app.${language}`])
+
+const toAppFile = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'app'])
+const toConfig = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'configuration'])
 
 export const generate = (ctx: ConnectionGeneratorContext) =>
   generator(ctx)
@@ -65,15 +66,12 @@ export const generate = (ctx: ConnectionGeneratorContext) =>
       )
     )
     .then(
-      inject(
+      injectSource(
         configurationTemplate,
         before('authentication: authenticationSettingsSchema'),
-        toFile<ConnectionGeneratorContext>(({ lib, language }) => [
-          lib,
-          'schemas',
-          `configuration.schema.${language}`
-        ])
+        toConfig,
+        false
       )
     )
-    .then(inject(getSource(importTemplate), before('import { services } from'), toAppFile))
-    .then(inject(getSource(configureTemplate), before('app.configure(services)'), toAppFile))
+    .then(injectSource(importTemplate, before('import { services } from'), toAppFile))
+    .then(injectSource(configureTemplate, before('app.configure(services)'), toAppFile))

@@ -1,9 +1,11 @@
-import { generator, inject, toFile, after, before, prepend } from '@feathershq/pinion'
-import { getSource } from '../../commons'
+import { generator, toFile, after, prepend, append } from '@feathershq/pinion'
+import { injectSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-export const template = ({ className, upperName }: ServiceGeneratorContext) =>
-  `export interface ${className}Options {
+export const template = ({ className, upperName, relative }: ServiceGeneratorContext) =>
+  `import type { Application } from '${relative}/declarations'
+  
+export interface ${className}Options {
   app: Application
 }
 
@@ -67,15 +69,22 @@ export const importTemplate = "import type { Id, NullableId, Params } from '@fea
 
 const optionTemplate = ({}: ServiceGeneratorContext) => `    app`
 
-const toServiceFile = toFile<ServiceGeneratorContext>(({ lib, language, folder, fileName }) => [
+const toServiceFile = toFile<ServiceGeneratorContext>(({ lib, folder, fileName }) => [
   lib,
   'services',
   ...folder,
-  `${fileName}.${language}`
+  `${fileName}.service`
+])
+
+const toClassFile = toFile<ServiceGeneratorContext>(({ lib, folder, fileName }) => [
+  lib,
+  'services',
+  ...folder,
+  `${fileName}.class`
 ])
 
 export const generate = (ctx: ServiceGeneratorContext) =>
   generator(ctx)
-    .then(inject(getSource(template), before<ServiceGeneratorContext>('export const hooks ='), toServiceFile))
-    .then(inject(getSource(importTemplate), prepend(), toServiceFile))
-    .then(inject(optionTemplate, after('const options ='), toServiceFile))
+    .then(injectSource(template, append(), toClassFile))
+    .then(injectSource(importTemplate, prepend(), toClassFile))
+    .then(injectSource(optionTemplate, after('const options ='), toServiceFile, false))

@@ -1,7 +1,17 @@
 import { PackageJson } from 'type-fest'
-import { Callable, PinionContext, loadJSON, fromFile, getCallable, renderTemplate } from '@feathershq/pinion'
+import { readFile, writeFile } from 'fs/promises'
+import {
+  Callable,
+  PinionContext,
+  loadJSON,
+  fromFile,
+  getCallable,
+  renderTemplate,
+  inject,
+  Location
+} from '@feathershq/pinion'
 import * as ts from 'typescript'
-import prettier from 'prettier'
+import prettier, { Options as PrettierOptions } from 'prettier'
 import path from 'path'
 
 export type DependencyVersions = { [key: string]: string }
@@ -135,53 +145,104 @@ export const getJavaScript = (typescript: string, options: ts.TranspileOptions =
       ...options.compilerOptions
     }
   })
-  const code = fixLocalImports(restoreNewLines(transpiled.outputText))
 
-  return prettier.format(code, {
-    semi: false,
-    parser: 'babel',
-    singleQuote: true
-  })
+  return fixLocalImports(restoreNewLines(transpiled.outputText))
 }
 
+const getFileName = async <C extends PinionContext & { language: 'js' | 'ts' }>(
+  target: Callable<string, C>,
+  ctx: C
+) => `${await getCallable(target, ctx)}.${ctx.language}`
+
 /**
- * Render a source file template for the language set in the context. Will do nothing
- * it there is no template for the selected language.
+ * The default configuration for prettifying files
+ */
+export const PRETTIERRC: PrettierOptions = {
+  tabWidth: 2,
+  useTabs: false,
+  printWidth: 110,
+  semi: false,
+  trailingComma: 'none',
+  singleQuote: true
+}
+
+/*
+ * Format a source file using Prettier. Will use the local configuration, the settings set in
+ * `options` or a default configuration
+ *
+ * @param target The file to prettify
+ * @param options The Prettier options
+ * @returns The updated context
+ */
+export const prettify =
+  <C extends PinionContext & { language: 'js' | 'ts' }>(
+    target: Callable<string, C>,
+    options: PrettierOptions = PRETTIERRC
+  ) =>
+  async (ctx: C) => {
+    const fileName = await getFileName(target, ctx)
+    const config = (await prettier.resolveConfig(ctx.cwd)) || options
+    const content = (await readFile(fileName)).toString()
+
+    try {
+      await writeFile(
+        fileName,
+        await prettier.format(content, {
+          parser: ctx.language === 'ts' ? 'typescript' : 'babel',
+          ...config
+        })
+      )
+    } catch (error: any) {
+      throw new Error(`Error prettifying ${fileName}: ${error.message}`)
+    }
+
+    return ctx
+  }
+
+/**
+ * Render a source file template for the language set in the context.
  *
  * @param templates The JavaScript and TypeScript template to render
- * @param toFile The target filename without extension (will be added based on language)
+ * @param target The target filename without extension (will be added based on language)
  * @returns The updated context
  */
 export const renderSource =
   <C extends PinionContext & { language: 'js' | 'ts' }>(
     template: Callable<string, C>,
-    toFile: Callable<string, C>,
+    target: Callable<string, C>,
     options?: { force: boolean }
   ) =>
   async (ctx: C) => {
-    if (!template) {
-      return ctx
-    }
-
     const { language } = ctx
-    const fileName = await getCallable<string, C>(toFile, ctx)
+    const fileName = await getFileName(target, ctx)
     const content = language === 'js' ? getJavaScript(await getCallable<string, C>(template, ctx)) : template
-    const renderer = renderTemplate(content, `${fileName}.${language}`, options)
+    const renderer = renderTemplate(content, fileName, options)
 
-    return renderer(ctx)
+    return renderer(ctx).then(prettify(target))
   }
 
 /**
- * Returns the TypeScript or transpiled JavaScript source code
+ * Inject a source template as the language set in the context.
  *
- * @param template The source template
+ * @param template The source template to render
+ * @param location The location to inject the code to. Must use the target language.
+ * @param target The target file name
+ * @param transpile Set to `false` if the code should not be transpiled to JavaScript
  * @returns
  */
-export const getSource =
-  <C extends PinionContext & { language: 'js' | 'ts' }>(template: Callable<string, C>) =>
-  async <T extends C>(ctx: T) => {
+export const injectSource =
+  <C extends PinionContext & { language: 'js' | 'ts' }>(
+    template: Callable<string, C>,
+    location: Location<C>,
+    target: Callable<string, C>,
+    transpile = true
+  ) =>
+  async (ctx: C) => {
     const { language } = ctx
-    const source = await getCallable<string, C>(template, ctx)
+    const source =
+      language === 'js' && transpile ? getJavaScript(await getCallable<string, C>(template, ctx)) : template
+    const fileName = await getFileName(target, ctx)
+    const injector = inject(source, location, fileName)
 
-    return language === 'js' ? getJavaScript(source) : source
+    return injector(ctx).then(prettify(target))
   }

@@ -2,9 +2,9 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AuthenticationGeneratorContext } from '../index'
 
-const template = ({ authStrategies, relative, lib }: AuthenticationGeneratorContext) =>
+const template = ({ authStrategies, lib }: AuthenticationGeneratorContext) =>
   `import assert from 'assert';
-import { app } from '${relative}/${lib}/app';
+import { app } from '../${lib}/app';
 
 describe('authentication', () => {
   ${

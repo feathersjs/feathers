@@ -6,6 +6,7 @@ const jsPackageJson = (lib: string) => ({
   scripts: {
     start: `node ${lib}`,
     dev: `nodemon ${lib}/`,
+    prettier: 'npx prettier "**/*.js" --write',
     mocha: 'cross-env NODE_ENV=test mocha test/ --recursive --exit',
     test: 'npm run mocha'
   }
@@ -16,6 +17,7 @@ const tsPackageJson = (lib: string) => ({
     dev: `nodemon -x ts-node ${lib}/index.ts`,
     compile: 'shx rm -rf lib/ && tsc',
     start: 'npm run compile && node lib/',
+    prettier: 'npx prettier "**/*.ts" --write',
     mocha:
       'cross-env NODE_ENV=test mocha test/ --require ts-node/register --recursive --extension .ts --exit',
     test: 'npm run mocha'
