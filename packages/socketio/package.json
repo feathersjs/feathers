@@ -62,7 +62,7 @@
     "@feathersjs/memory": "^5.0.0-pre.26",
     "@feathersjs/tests": "^5.0.0-pre.26",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.0.0",
+    "@types/node": "^18.0.1",
     "lodash": "^4.17.21",
     "mocha": "^10.0.0",
     "shx": "^0.3.4",

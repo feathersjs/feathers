@@ -63,10 +63,10 @@
     "@types/encodeurl": "^1.0.0",
     "@types/lodash": "^4.14.182",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.0.0",
+    "@types/node": "^18.0.1",
     "mocha": "^10.0.0",
     "shx": "^0.3.4",
-    "ts-node": "^10.8.1",
+    "ts-node": "^10.8.2",
     "typescript": "^4.7.4"
   },
   "gitHead": "0e7553ded9b24016d36021aaedcc2cdb19ab0157"
