@@ -30,21 +30,21 @@
     "prettier": "npx prettier \"packages/{,!(node_modules)/**/(src|test)/**/}*.ts\" --write",
     "eslint": "eslint \"packages/**/*.ts\" --fix",
     "lint": "npm run prettier && npm run eslint",
-    "update-dependencies": "ncu -u && lerna exec -- ncu -u -x node-fetch",
+    "update-dependencies": "ncu -u && lerna exec -- ncu -u -x node-fetch -x chalk",
     "clean": "find . -name node_modules -exec rm -rf '{}' + && find . -name package-lock.json -exec rm -rf '{}' +",
     "test:deno": "deno test --config deno/tsconfig.json deno/test.ts",
     "test": "npm run lint && lerna run compile && c8 lerna run test"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.27.1",
-    "@typescript-eslint/parser": "^5.27.1",
+    "@typescript-eslint/eslint-plugin": "^5.30.4",
+    "@typescript-eslint/parser": "^5.30.4",
     "c8": "^7.11.3",
-    "eslint": "^8.17.0",
+    "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "lerna": "^5.0.0",
-    "npm-check-updates": "^13.1.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "lerna": "^5.1.6",
+    "npm-check-updates": "^15.0.2",
     "prettier": "^2.7.1",
-    "typescript": "^4.7.3"
+    "typescript": "^4.7.4"
   }
 }
