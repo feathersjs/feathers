@@ -88,6 +88,10 @@ describe('@feathersjs/socketio-client', () => {
     }
   })
 
+  it('is event target compatible', async () => {
+    app.service('todo').addEventListener('created', (data: any) => assert.ok(data))
+  })
+
   it('calls .customMethod', async () => {
     const service = app.service('todos')
     const result = await service.customMethod({ message: 'hi' })
