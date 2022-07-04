@@ -1,22 +1,10 @@
-# The Feathers CLI
-
-## Code formatting
-
-The Feathers CLI uses [Prettier](https://prettier.io/) for code formatting and generates a configuration for it in a new application. To change the options, like the use of semicolons, quotes etc, edit the `.prettierrc` file with the [options available](https://prettier.io/docs/en/options.html). To update all existing source files with the new code style run
-
-```
-npm run prettier
-```
-
-Any new files generated will use current Prettier configuration. See the [Prettier Integration with Linters](https://prettier.io/docs/en/integrating-with-linters.html) documentation for how to integrate with tools like ESLint.
-
-## The generated files
+# The generated files
 
 Let's have a brief look at the files that have been generated:
 
+<Tabs>
 
-
-<LanguageBlock global-id="ts">
+<Tab name="For TypeScript Apps" global-id="ts">
 
 <div class="pb-2" />
 
@@ -52,9 +40,11 @@ Let's have a brief look at the files that have been generated:
 * `package.json` contains [information](https://docs.npmjs.com/files/package.json) about our NodeJS project like its name or dependencies.
 * `README.md` has installation and usage instructions
 
-</LanguageBlock>
+</Tab>
 
-<LanguageBlock global-id="js">
+<Tab name="For JavaScript Apps" global-id="js">
+
+<div class="pb-2" />
 
 * `config/` contains the configuration files for the app
   * `default.json` contains the basic application configuration
@@ -87,78 +77,6 @@ Let's have a brief look at the files that have been generated:
 * `package.json` contains [information](https://docs.npmjs.com/files/package.json) about our NodeJS project like its name or dependencies.
 * `README.md` has installation and usage instructions
 
-</LanguageBlock>
+</Tab>
 
-
-
-## Configure functions
-
-The most important pattern used in the generated application to split things up into individual files are _configure functions_ which are functions that are exported from a file and take the Feathers [app object](../../api/application.md) and then use it to e.g. register services. Those functions are then passed to [app.configure](../../api/application.md#configurecallback).
-
-For example, have a look at the following files:
-
-
-
-<LanguageBlock global-id="ts">
-
-<div class="pb-2" />
-
-`src/services/index.ts` looks like this:
-
-```ts
-import { Application } from '../declarations';
-import users from './users/users.service';
-// Don't remove this comment. It's needed to format import lines nicely.
-
-export default function (app: Application) {
-  app.configure(users);
-}
-```
-
-It uses another configure function exported from `src/services/users/users.service.ts`. The export from `src/services/index.js` is in turn used in `src/app.ts` as:
-
-```ts
-// ...
-import services from './services';
-
-// ...
-app.configure(authentication);
-// Set up our services (see `services/index.js`)
-app.configure(services);
-// ...
-```
-
-</LanguageBlock>
-
-<LanguageBlock global-id="js">
-
-`src/services/index.js` looks like this:
-
-```js
-const users = require('./users/users.service.js');
-// eslint-disable-next-line no-unused-vars
-module.exports = function (app) {
-  app.configure(users);
-};
-```
-
-It uses another configure function exported from `src/services/users/users.service.js`. The export from `src/services/index.js` is in turn used in `src/app.js` as:
-
-```js
-// ...
-const services = require('./services');
-
-// ...
-app.configure(authentication);
-// Set up our services (see `services/index.js`)
-app.configure(services);
-// ...
-```
-
-</LanguageBlock>
-
-
-
-This is how the generator splits things up into separate files and any documentation example that uses the `app` object can be used in a configure function. You can create your own files that export a configure function and `require`/`import` and `app.configure` them in `app.js`.
-
-> __Note:__ Keep in mind that the order in which configure functions are called might matter, e.g. if it is using a service, that service has to be registered first.
+</Tabs>

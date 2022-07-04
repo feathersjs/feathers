@@ -55,14 +55,14 @@ Next, instead of making users send a link to their avatar, we update the resolve
 
 Update the `src/services/users/users.resolver.ts` file as follows:
 
-<<< @/examples/ts/chat-users-resolver.ts {1,24-32}
+<<< @/examples/ts/chat-users-resolver.ts {1,24-32,68-72}
 
 </LanguageBlock>
 <LanguageBlock global-id="js">
 
 Update the `src/services/users/users.resolver.js` file as follows:
 
-<<< @/examples/js/chat-users-resolver.js {1,17-22}
+<<< @/examples/js/chat-users-resolver.js {1,17-22,61-65}
 
 </LanguageBlock>
 
