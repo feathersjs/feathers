@@ -14,6 +14,7 @@ import * as ts from 'typescript'
 import prettier, { Options as PrettierOptions } from 'prettier'
 import path from 'path'
 
+export { prettier }
 export type DependencyVersions = { [key: string]: string }
 
 /**

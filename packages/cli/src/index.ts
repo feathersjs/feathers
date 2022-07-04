@@ -9,6 +9,8 @@ export const commandRunner = (yarg: any) => {
   return generate(ctx)
 }
 
+export * from './commons'
+
 export const generate = (ctx: FeathersBaseContext) =>
   generator(ctx)
     .then(initializeBaseContext())

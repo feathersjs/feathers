@@ -16,7 +16,7 @@ npm install @feathersjs/cli@pre -g
 
 <BlockQuote type="warning">
 
-Since the generated application it is using modern features like ES modules, the Feathers CLI requires Node 16 or newer. The `feathers --version` command should show `5.0.0-pre.24` or later.
+Since the generated application is using modern features like ES modules, the Feathers CLI requires Node 16 or newer. The `feathers --version` command should show `5.0.0-pre.27` or later.
 
 </BlockQuote>
 

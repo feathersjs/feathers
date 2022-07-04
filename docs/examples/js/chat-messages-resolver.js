@@ -1,21 +1,13 @@
 import { resolve } from '@feathersjs/schema'
-import type { HookContext } from '../declarations'
-
-import type {
-  MessagesData,
-  MessagesPatch,
-  MessagesResult,
-  MessagesQuery
-} from '../schemas/messages.schema'
 import {
   messagesDataSchema,
   messagesPatchSchema,
   messagesResultSchema,
   messagesQuerySchema
-} from '../schemas/messages.schema'
+} from '../schemas/messages.schema.js'
 
 // Resolver for the basic data model (e.g. creating new entries)
-export const messagesDataResolver = resolve<MessagesData, HookContext>({
+export const messagesDataResolver = resolve({
   schema: messagesDataSchema,
   validate: 'before',
   properties: {
@@ -31,14 +23,14 @@ export const messagesDataResolver = resolve<MessagesData, HookContext>({
 })
 
 // Resolver for making partial updates
-export const messagesPatchResolver = resolve<MessagesPatch, HookContext>({
+export const messagesPatchResolver = resolve({
   schema: messagesPatchSchema,
   validate: 'before',
   properties: {}
 })
 
 // Resolver for the data that is being returned
-export const messagesResultResolver = resolve<MessagesResult, HookContext>({
+export const messagesResultResolver = resolve({
   schema: messagesResultSchema,
   validate: false,
   properties: {
@@ -50,7 +42,7 @@ export const messagesResultResolver = resolve<MessagesResult, HookContext>({
 })
 
 // Resolver for query properties
-export const messagesQueryResolver = resolve<MessagesQuery, HookContext>({
+export const messagesQueryResolver = resolve({
   schema: messagesQuerySchema,
   validate: 'before',
   properties: {}

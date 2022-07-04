@@ -72,12 +72,13 @@ npx ts-node app.ts
 </LanguageBlock>
 <LanguageBlock global-id="js">
 
-Create a file called `app.js` with the following content:
+Create a file called `app.mjs` with the following content:
+
 
 <<< @/examples/js/first-app.js
 
 ```sh
-node app.js
+node app.mjs
 ```
 
 </LanguageBlock>
@@ -113,7 +114,7 @@ npm install @feathersjs/socketio@pre @feathersjs/koa@pre \
 
 Then update `app.ts` with the following content:
 
-<<< @/examples/ts/api-server.ts{2-4,42-55,59-62,64-65,70}
+<<< @/examples/ts/api-server.ts{2-4,42-55,59-62,64-67}
 
 We can start the server with
 
@@ -130,14 +131,14 @@ Run
 npm install @feathersjs/socketio@pre @feathersjs/koa@pre koa-static --save
 ```
 
-Then update `app.js` with the following content:
+Then update `app.mjs` with the following content:
 
-<<< @/examples/js/api-server.js
+<<< @/examples/js/api-server.js{2-4,33-56}
 
 We can start the server with
 
 ```sh
-node app.js
+node app.mjs
 ```
 
 </LanguageBlock>

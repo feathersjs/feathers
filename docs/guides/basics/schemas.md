@@ -1,6 +1,6 @@
 # Schemas and resolvers
 
-Schemas and resolvers are a new concept introduced in Feathers v5 that helps to define, validate and secure your data model and types.
+In Feathers, schemas and resolvers allow to define, validate and secure your data model and types.
 
 <img style="margin: 2em;" src="/img/professor-bird-server.svg" alt="Professor bird at work">
 
@@ -21,12 +21,12 @@ Similar to how Feathers services are transport independent, schemas and resolver
 
 In this chapter we will look at the generated schemas and resolvers and update them with the information we need for our chat application.
 
-## Types
+## Feathers schemas
 
 While schemas and resolvers can be used outside of a Feather application, you will usually encounter them in a Feathers context where they come in four kinds:
 
-- `data` schemas and resolvers handle the data from the `create`, `update` and `patch` service methods and can be used to add things like default or calculated values on the server
-- `query` schemas and resolvers validate and convert the querystring and can also be used for additional limits (like only allowing a user to see their own data)
+- `data` schemas and resolvers handle the data from the `create`, `update` and `patch` service methods and can be used to add things like default or calculated values (like the created or updated at date) before saving to the database
+- `query` schemas and resolvers validate and convert the query string and can also be used for additional limitations like only allowing a user to see their own data
 - `result` schemas and resolvers define the data that is being returned. This is also where associated data would be defined
 - `dispach` resolvers usually use the `result` schema to return a safe version of the data (e.g. hiding a users password) that can be sent to external clients
 
@@ -36,12 +36,16 @@ Let's extend our existing users schema to add an `avatar` property so that our u
 
 <LanguageBlock global-id="ts">
 
-First we need to update the `src/schemas/users.schema.ts` file with the new `avatar` property. This can be done by adding the JSON schema property definition `avatar: { type: 'string' }` to the `usersDataSchema`:
+First we need to update the `src/services/users/users.schema.ts` file with the new `avatar` property. This can be done by adding the JSON schema property definition `avatar: { type: 'string' }` to the `usersDataSchema`:
 
 <<< @/examples/ts/chat-users-schema.ts {17-19}
 
 </LanguageBlock>
 <LanguageBlock global-id="js">
+
+First we need to update the `src/services/users/users.schema.js` file with the new `avatar` property. This can be done by adding the JSON schema property definition `avatar: { type: 'string' }` to the `usersDataSchema`:
+
+<<< @/examples/ts/chat-users-schema.ts {17-19}
 
 </LanguageBlock>
 
@@ -49,27 +53,35 @@ Next, instead of making users send a link to their avatar, we update the resolve
 
 <LanguageBlock global-id="ts">
 
-Update the `src/schemas/users.resolver.ts` file as follows:
+Update the `src/services/users/users.resolver.ts` file as follows:
 
-<<< @/examples/ts/chat-users-resolver.ts {1,19-24}
+<<< @/examples/ts/chat-users-resolver.ts {1,24-32}
 
 </LanguageBlock>
 <LanguageBlock global-id="js">
+
+Update the `src/services/users/users.resolver.js` file as follows:
+
+<<< @/examples/js/chat-users-resolver.js {1,17-22}
 
 </LanguageBlock>
 
 ## Handling messages
 
-Next we can look at the messages service schema. We want to include the date when the message was sent and the id of the user who sent it:
+Next we can look at the messages service schema. We want to include the date when the message was sent and the id of the user who sent it.
 
 <LanguageBlock global-id="ts">
 
-Update the `src/schemas/messages.schema.ts` file with the `userId` and `createdAt` properties:
+Update the `src/services/messages/messages.schema.ts` file with the `userId` and `createdAt` properties:
 
 <<< @/examples/ts/chat-messages-schema.ts {3,15-20,53-55}
 
 </LanguageBlock>
 <LanguageBlock global-id="js">
+
+Update the `src/services/messages/messages.schema.js` file with the `userId` and `createdAt` properties:
+
+<<< @/examples/js/chat-messages-schema.js {2,14-19}
 
 </LanguageBlock>
 
@@ -77,12 +89,16 @@ Both the `createdAt` and `userId` property can be added automatically before sav
 
 <LanguageBlock global-id="ts">
 
-Update `src/resolvers/messages.resolver.ts` like this:
+Update `src/services/messages/messages.resolver.ts` like this:
 
-<<< @/examples/ts/chat-messages-resolver.ts {17-23,39-42}
+<<< @/examples/ts/chat-messages-resolver.ts {22-29,45-48}
 
 </LanguageBlock>
 <LanguageBlock global-id="js">
+
+Update `src/services/messages/messages.resolver.js` like this:
+
+<<< @/examples/js/chat-messages-resolver.js {14-20,36-39}
 
 </LanguageBlock>
 
@@ -99,9 +115,8 @@ If you chose MongoDB you do **not** need to create a migration.
 Initially, every database service will automatically add a migration that creates a table for it with an `id` and `text` property. Our users service also already added a migration to add the email and password fields for logging in. The migration for the changes we made in this chapter needs to
 
 - Add the `avatar` string field to the `users` table
-- To the `messasges` table
-  - Add the `createdAt` number
-  - Add the `userId` number field referencing the `id` column in the `users` table
+- Add the `createdAt` number field to the `messages` table
+- Add the `userId` number field to the `messages` table and reference it with the `id` un the `users` table 
 
 To create a new migration with the name `chat` run
 
@@ -123,6 +138,8 @@ Open that file and update it as follows
 
 </LanguageBlock>
 <LanguageBlock global-id="js">
+
+<<< @/examples/js/chat-migration.js {4-11,15-22}
 
 </LanguageBlock>
 

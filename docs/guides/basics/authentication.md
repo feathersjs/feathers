@@ -30,7 +30,7 @@ curl 'http://localhost:3030/users/' \
 
 <BlockQuote type="note">
 
-Creating a user with the same email address will only work once, then fail since it already exists in the database.
+For SQL databases, creating a user with the same email address will only work once, then fail since it already exists in the database.
 
 </BlockQuote>
 
@@ -56,7 +56,11 @@ The password is stored securely in the database but will never be included in a 
 
 By default, Feathers uses [JSON web token](https://jwt.io/) for authentication. It is an access token that is valid for a limited time (one day by default) that is issued by the Feathers server and needs to be sent with every API request that requires authentication. Usually a token is issued for a specific user and in our case we want a JWT for the user we just created.
 
-> __Pro tip:__ If you are wondering why Feathers is using JWT for authentication, have a look at [this FAQ](../../help/faq.md#why-are-you-using-jwt-for-sessions).
+<BlockQuote type="tip">
+
+If you are wondering why Feathers is using JWT for authentication, have a look at [this FAQ](../../help/faq.md#why-are-you-using-jwt-for-sessions).
+
+</BlockQuote>
 
 Tokens can be created by sending a POST request to the `/authentication` endpoint (which is the same as calling the `create` method on the `authentication` service set up in `src/authentication`) and passing the authentication strategy you want to use. To get a token for an existing user through a username (email) and password login we can use the built-in `local` authentication strategy with a request like this:
 
@@ -97,7 +101,11 @@ This will return something like this:
 
 The `accessToken` can now be used for other REST requests that require authentication by sending the `Authorization: Bearer <JWT for this user>` HTTP header.
 
-> __Pro tip:__ For more information about the direct usage of the REST API see the [REST client API](../../api/client/rest.md) and for websockets the [Socket.io client API](../../api/client/socketio.md).
+<BlockQuote type="tip">
+
+For more information about the direct usage of the REST API see the [REST client API](../../api/client/rest.md) and for websockets the [Socket.io client API](../../api/client/socketio.md).
+
+</BlockQuote>
 
 ## Browser authentication
 
