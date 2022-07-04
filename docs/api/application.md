@@ -30,8 +30,6 @@ The core `@feathersjs/feathers` module provides the ability to initialize a new 
 </LanguageBlock>
 
 
-
-
 ## .use(path, service [, options])
 
 `app.use(path, service [, options]) -> app` allows registering a [service object](./services.md) on a given `path`.

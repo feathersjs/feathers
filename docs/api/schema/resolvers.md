@@ -147,7 +147,7 @@ A resolver takes the following options:
 - `converter`: A `async (data, context) => {}` function that can return a completely new representation of the data. A `converter` runs before `properties` resolvers.
 
 
-## Resolver functions
+## Property resolvers
 
 A resolver function is an `async` function that resolves a property on a data object. It gets passed the following parameters:
 
@@ -170,6 +170,12 @@ const userResolver = resolve({
   }
 })
 ```
+
+<BlockQuote type="danger">
+
+Property resolver functions should only return a value and not have side effects. This means a property resolver shouldn't do things like create new data or modify the context. [Hooks](../hooks.md) should be used for side effects.
+
+</BlockQuote>
 
 ## Feathers resolvers
 

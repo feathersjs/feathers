@@ -4,15 +4,13 @@ outline: deep
 
 # Hooks
 
-Hooks are pluggable middleware functions that can be registered __around__, __before__, __after__ or on __error__(s) of a [service method](./services.md). Multiple hook functions can be chained to create complex work-flows.  A hook is **transport independent**, which means it does not matter if it has been called internally on the server, through HTTP(S) (REST), websockets or any other transport Feathers may support. They are also service agnostic, meaning they can be used with ​**any**​ service regardless of whether they have a model or not.
+Hooks are pluggable middleware functions that can be registered __around__, __before__, __after__ or on __error__(s) of a [service method](./services.md). Multiple hook functions can be chained to create complex work-flows.  A hook is **transport independent**, which means it does not matter if it has been called internally on the server, through HTTP(S) (REST), websockets or any other transport Feathers supports. They are also service agnostic, meaning they can be used with ​**any**​ service regardless of whether they have a model or not.
 
-Hooks are commonly used to handle things like validation, logging, [authentication](./authentication/hook.md), [handling data schemas and resolvers](./schema/index.md), sending notifications and more. This pattern keeps your application logic flexible, composable, and much easier to trace through and debug. For more information about the design patterns behind hooks see [this blog post](https://blog.feathersjs.com/api-service-composition-with-hooks-47af13aa6c01).
+Hooks are commonly used to handle things like permissions, validation, logging, [authentication](./authentication/hook.md), [data schemas and resolvers](./schema/index.md), sending notifications and more. This pattern keeps your application logic flexible, composable, and much easier to trace through and debug. For more information about the design patterns behind hooks see [this blog post](https://blog.feathersjs.com/api-service-composition-with-hooks-47af13aa6c01).
 
 ## Quick Example
 
 The following example adds a `createdAt` property before saving the data to the database, logs the total runtime of any method call and any errors on the service:
-
-
 
 <LanguageBlock global-id="ts">
 
@@ -36,11 +34,11 @@ app.service('messages').hooks({
     ]
   }
   before: {
-    create: [async (context) => {
-      context.data.createdAt = new Date();
-
-      return context;
-    }]
+    create: [
+      async (context) => {
+        context.data.createdAt = new Date()
+      }
+    ]
   }
 });
 ```
@@ -86,88 +84,39 @@ app.service('messages').hooks({
 </LanguageBlock>
 
 
-
 ## Hook functions
 
-A hook function can be a normal or `async` function that takes the [hook context](#hook-context) as the parameter and returns the `context` object, `undefined` or throws an error.
+A hook functions are `async` or return a promise and take the [hook context](#hook-context) as the parameter and returns the `context` object, `undefined` or throws an error.
 
 For more information see the [hook flow](#hook-flow) and [asynchronous hooks](#asynchronous-hooks) section.
 
-## Hook context
+### before, after and error
 
-The hook `context` is passed to a hook function and contains information about the service method call. It has __read only__ properties that should not be modified and ___writeable___ properties that can be changed for subsequent hooks.
+### around
 
-> **Pro Tip:** The `context` object is the same throughout a service method call so it is possible to add properties and use them in other hooks at a later time.
+`around` hooks are a special kind of hook that allow to control the entire `before`, `after` and `error` flow in a single function. They are a Feathers specific version of the generic [@feathersjs/hooks](https://github.com/feathersjs/hooks). An `around` hook is an `async` function that accepts two arguments:
 
-### context.app
+- The [hook context](#hook-context)
+- An asynchronous `next` function. Somewhere in the body of the hook function, there is a call to `await next()`, which calls the `next` hooks OR the original function if all other hooks have run.
 
-`context.app` is a _read only_ property that contains the [Feathers application object](./application.md). This can be used to retrieve other services (via `context.app.service('name')`) or configuration values.
+In its simplest form, an around hook looks like this:
 
-### context.service
+```js
+const myAsyncHook = async (context, next) => {
+  try {
+    // Code before `await next()` runs before the main function
+    await next();
+    // Code after `await next()` runs after the main function.
+  } catch (error) {
+    // Do things on error
+  } finally {
+    // Do things always
+  }
+}
+```
 
-`context.service` is a _read only_ property and contains the service this hook currently runs on.
-
-### context.path
-
-`context.path` is a _read only_ property and contains the service name (or path) without leading or trailing slashes.
-
-### context.method
-
-`context.method` is a _read only_ property with the name of the [service method](./services.md) (`find`, `get`, `create`, `update`, `patch`, `remove`).
-
-### context.type
-
-`context.type` is a _read only_ property with the hook type (one of `before`, `after` or `error`).
-
-### context.params
-
-`context.params` is a __writeable__ property that contains the [service method](./services.md) parameters (including `params.query`). For more information see the [service params documentation](./services.md#params).
-
-### context.id
-
-`context.id` is a __writeable__ property and the `id` for a `get`, `remove`, `update` and `patch` service method call. For `remove`, `update` and `patch` `context.id` can also be `null` when modifying multiple entries. In all other cases it will be `undefined`.
-
-> __Note:__ `context.id` is only available for method types `get`, `remove`, `update` and `patch`.
-
-### context.data
-
-`context.data` is a __writeable__ property containing the data of a `create`, `update` and `patch` service method call.
-
-> __Note:__ `context.data` will only be available for method types `create`, `update` and `patch`.
-
-### context.error
-
-`context.error` is a __writeable__ property with the error object that was thrown in a failed method call. It is only available in `error` hooks.
-
-> __Note:__ `context.error` will only be available if `context.type` is `error`.
-
-### context.result
-
-`context.result` is a __writeable__ property containing the result of the successful service method call. It is only available in `after` hooks. `context.result` can also be set in
-
-- A `before` hook to skip the actual service method (database) call
-- An `error` hook to swallow the error and return a result instead
-
-> __Note:__ `context.result` will only be available if `context.type` is `after` or if `context.result` has been set.
-
-### context.dispatch
-
-`context.dispatch` is a __writeable, optional__ property and contains a "safe" version of the data that should be sent to any client. If `context.dispatch` has not been set `context.result` will be sent to the client instead.
-
-> __Note:__ `context.dispatch` only affects the data sent through a Feathers Transport like [REST](./express.md) or [Socket.io](./socketio.md). An internal method call will still get the data set in `context.result`.
-
-### context.http
-
-`context.http` is a __writeable, optional__ property that allows customizing HTTP response specific properties. The following properties can be set:
-
-- `context.http.status` - Sets the [HTTP status code](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) that should be returned. Usually the most appropriate status code will be picked automatically but there are cases where it needs to be customized.
-- `context.http.headers` - An object with additional HTTP response headers
-- `context.http.location` - Setting this property will trigger a redirect for HTTP requests.
-
-### context.event
-
-`context.event` is a __writeable, optional__ property that allows service events to be skipped by setting it to `null`
-
+Any around hook can be wrapped around another function, essentially becoming a middleware function.  Calling `await next()` will either call the next middleware in the chain or the original function if all middleware have run.
+ 
 ## Hook flow
 
 In general, hooks are executed in the order they are registered with the original service method being called after all `before` hooks. This flow can be affected as follows.
@@ -212,90 +161,105 @@ app.service('users').hooks({
 });
 ```
 
-## Asynchronous hooks
+## Hook context
 
-When the hook function is `async` or a Promise is returned it will wait until all asynchronous operations resolve or reject before continuing to the next hook.
+The hook `context` is passed to a hook function and contains information about the service method call. It has __read only__ properties that should not be modified and ___writeable___ properties that can be changed for subsequent hooks.
 
-> **Important:** As stated in the [hook functions](#hook-functions) section the promise has to either resolve with the `context` object (usually done with `.then(() => context)` at the end of the promise chain) or with `undefined`.
+<BlockQuote type="tip">
 
-### async/await
+The `context` object is the same throughout a service method call so it is possible to add properties and use them in other hooks at a later time.
 
-The use of [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) is highly recommended. This will avoid many common issues when using Promises and asynchronous hook flows. Any hook function can be `async` in which case it will wait until all `await` operations are completed. Just like a normal hook it should return the `context` object or `undefined`.
+</BlockQuote>
 
-The following example shows an async/await hook that uses another service to retrieve and populate the messages `user` when getting a single message:
+### `context.app`
 
-```js
-app.service('messages').hooks({
-  after: {
-    get: [
-      async context => {
-        const userId = context.result.userId;
+`context.app` is a _read only_ property that contains the [Feathers application object](./application.md). This can be used to retrieve other services (via `context.app.service('name')`) or configuration values.
 
-        // Since context.app.service('users').get returns a promise we can `await` it
-        const user = await context.app.service('users').get(userId);
+### `context.service`
 
-        // Update the result (the message)
-        context.result.user = user;
+`context.service` is a _read only_ property and contains the service this hook currently runs on.
 
-        // Returning will resolve the promise with the `context` object
-        return context;
-      }
-    ]
-  }
-});
-```
+### `context.path`
 
-The following example shows an asynchronous hook that uses another service to retrieve and populate the messages `user` when getting a single message.
+`context.path` is a _read only_ property and contains the service name (or path) without leading or trailing slashes.
 
-```js
-app.service('messages').hooks({
-  after: {
-    get: [
-      async context => {
-        const userId = context.result.userId;
+### `context.method`
 
-        // Also pass the `params` so we get a secure version of the user
-        const user = await context.app.service('users').get(userId, context.params);
+`context.method` is a _read only_ property with the name of the [service method](./services.md) (`find`, `get`, `create`, `update`, `patch`, `remove`).
 
-        context.result.user = user;
+### `context.type`
 
-        // Returning will resolve the promise with the `context` object
-        return context;
-      }
-    ]
-  }
-});
-```
+`context.type` is a _read only_ property with the hook type (one of `around`, `before`, `after` or `error`).
 
-> __Note:__ A common issue when hooks are not running in the expected order is a missing `await` statement.
+### `context.params`
 
-> **Important:** Most Feathers service calls and newer Node packages already return Promises. They can be returned and chained directly. There usually is no need to instantiate your own `new Promise` instance.
+`context.params` is a __writeable__ property that contains the [service method](./services.md) parameters (including `params.query`). For more information see the [service params documentation](./services.md#params).
 
-### Converting callbacks
+### `context.id`
 
-When the asynchronous operation is using a _callback_ instead of returning a promise you have to create and return a new Promise (`new Promise((resolve, reject) => {})`) or use [util.promisify](https://nodejs.org/api/util.html#util_util_promisify_original).
+`context.id` is a __writeable__ property and the `id` for a `get`, `remove`, `update` and `patch` service method call. For `remove`, `update` and `patch`, `context.id` can also be `null` when modifying multiple entries. In all other cases it will be `undefined`.
 
-The following example reads a JSON file converting [fs.readFile](https://nodejs.org/api/fs.html#fs_fs_readfile_file_options_callback) with `util.promisify`:
+### `context.data`
 
-```js
-const fs = require('fs');
-const util = require('util');
-const readFile = util.promisify(fs.readFile);
+`context.data` is a __writeable__ property containing the data of a `create`, `update` and `patch` service method call.
 
-app.service('messages').hooks({
-  after: {
-    get: [
-      async context => {
-        const data = await readFile('./myfile.json');
+<BlockQuote type="note">
 
-        context.result.myFile = data.toString();
+`context.data` will only be available for `create`, `update`, `patch` and [custom methods](./services.md#custom-methods).
 
-        return context;
-      }
-    ]
-  }
-});
-```
+</BlockQuote>
+
+### `context.error`
+
+`context.error` is a __writeable__ property with the error object that was thrown in a failed method call. It can be modified to change the error that is returned at the end.
+
+<BlockQuote type="note">
+
+`context.error` will only be available if `context.type` is `error`.
+
+</BlockQuote>
+
+### `context.result`
+
+`context.result` is a __writeable__ property containing the result of the successful service method call. It is only available in `after` hooks. `context.result` can also be set in
+
+- An `around` or `before` hook to skip the actual service method (database) call
+- An `error` hook to swallow the error and return a result instead
+
+<BlockQuote type="note">
+
+`context.result` will only be available if `context.type` is `after` or if `context.result` has been set.
+
+</BlockQuote>
+
+### context.dispatch
+
+`context.dispatch` is a __writeable, optional__ property and contains a "safe" version of the data that should be sent to any client. If `context.dispatch` has not been set `context.result` will be sent to the client instead.
+
+<BlockQuote type="note">
+
+`context.dispatch` only affects the data sent through a Feathers Transport like [REST](./express.md) or [Socket.io](./socketio.md). An internal method call will still get the data set in `context.result`.
+
+</BlockQuote>
+
+### context.http
+
+`context.http` is a __writeable, optional__ property that allows customizing HTTP response specific properties. The following properties can be set:
+
+- `context.http.status` - Sets the [HTTP status code](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) that should be returned. Usually the most appropriate status code will be picked automatically but there are cases where it needs to be customized.
+- `context.http.headers` - An object with additional HTTP response headers
+- `context.http.location` - Setting this property will trigger a redirect for HTTP requests.
+
+<BlockQuote type="warning">
+
+Setting `context.http` properties will have no effect when using a websocket real-time connection.
+
+</BlockQuote>
+
+### context.event
+
+`context.event` is a __writeable, optional__ property that allows service events to be skipped by setting it to `null`
+
 
 ## Registering hooks
 
@@ -359,12 +323,14 @@ app.service('servicename').hooks({
 
 > **Pro Tip:** `app.service(<servicename>).hooks(hooks)` can be called multiple times and the hooks will be registered in that order. Normally all hooks should be registered at once however to see at a glance what the service is going to do.
 
+
 ## Application hooks
 
 ### Service hooks
 
 To add hooks to every service `app.hooks(hooks)` can be used. Application hooks are [registered in the same format as service hooks](#registering-hooks) and also work exactly the same. Note when application hooks will be executed however:
 
+- `around` application hook will run around all other hooks
 - `before` application hooks will always run _before_ all service `before` hooks
 - `after` application hooks will always run _after_ all service `after` hooks
 - `error` application hooks will always run _after_ all service `error` hooks
@@ -379,11 +345,9 @@ app.hooks({
 });
 ```
 
-> __Note:__ generated applications come with `src/app.hooks.js` containing hooks that run for every service.
-
 ### Setup and teardown
 
-A special kind of application hooks are `setup` and `teardown` hooks. They are advanced hooks that can be used to initialize database connections etc. when the application starts up (or shuts down).
+A special kind of application hooks are `setup` and `teardown` hooks. They are around hooks that can be used to initialize database connections etc. and only run once when the application starts up or shuts down.
 
 ```js
 import { MongoClient } from 'mongodb';

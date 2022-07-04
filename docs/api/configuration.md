@@ -17,51 +17,58 @@ npm install @feathersjs/configuration --save
 
 `@feathersjs/configuration` is a wrapper for [node-config](https://github.com/lorenwest/node-config) which allows to configure a server side Feathers application.
 
+By default this implementation will look in `config/*` for `default.json`. It will be merged with other configuration files in the `config/` folder using the `NODE_ENV` environment variable. So setting `NODE_ENV=production` will merge `config/default.json` with `config/production.json`.
 
-By default this implementation will look in `config/*` for `default.json` which retains convention. It will be merged with other configuration files in the `config/` folder using the `NODE_ENV` environment variable. So setting `NODE_ENV=production` will merge `config/default.json` with `config/production.json`.
-
-As per the [config docs](https://github.com/lorenwest/node-config/wiki/Configuration-Files) you can organize *"hierarchical configurations for your app deployments"*.
+For more information refer to the  [node-config docs](https://github.com/lorenwest/node-config/wiki/Configuration-Files).
 
 ## Usage
 
 The `@feathersjs/configuration` module is an app configuration function that takes a root directory (usually something like `__dirname` in your application) and the configuration folder (set to `config` by default):
 
-```js
-const feathers = require('@feathersjs/feathers');
-const configuration = require('@feathersjs/configuration');
+<LanguageBlock global-id="ts">
+
+```ts
+import { feathers } from '@feathersjs/feathers'
+import configuration from '@feathersjs/configuration'
 
 // Use the application root and `config/` as the configuration folder
 const app = feathers().configure(configuration())
 ```
 
-> **Note**: Direct access to nested config properties is not supported via `app.get()`. To access a nested config property (e.g. `Customer.dbConfig.host`, use `app.get('Customer').dbConfig.host` or `require('config')` directly and use it [as documented](https://github.com/lorenwest/node-config).
+</LanguageBlock>
+<LanguageBlock global-id="js">
+
+```js
+import { feathers } from '@feathersjs/feathers'
+import configuration from '@feathersjs/configuration'
+
+// Use the application root and `config/` as the configuration folder
+const app = feathers().configure(configuration())
+```
+
+</LanguageBlock>
+
+<BlockQuote type="note">
+
+Direct access to nested config properties is not supported via `app.get()`. To access a nested config property (e.g. `Customer.dbConfig.host`, use `app.get('Customer').dbConfig.host` or `import config from 'config'` directly and use it [as documented](https://github.com/lorenwest/node-config).
+
+</BlockQuote>
 
 ## Configuration schema
 
 The application configuration can be validated against a [Feathers schema](./schema/) when [app.setup](./application.md#setupserver) (or `app.listen`) is called by passing a schema when initializing `@feathersjs/configuration`:
 
-```js
-const feathers = require('@feathersjs/feathers');
-const schema = require('@feathersjs/schema');
-const configuration = require('@feathersjs/configuration');
 
-const configurationSchema = schema({
-  $id: 'FeathersConfiguration',
-  type: 'object',
-  additionalProperties: false,
-  required: ['port', 'host'],
-  properties: {
-    port: { type: 'number' },
-    host: { type: 'string' }
-  }
-});
+<LanguageBlock global-id="ts">
 
-// Use the application root and `config/` as the configuration folder
-const app = feathers().configure(configuration(configurationSchema))
+<<< @/examples/ts/configuration-schema.ts
 
-// Configuration will only be validated now
-app.listen();
-```
+</LanguageBlock>
+<LanguageBlock global-id="js">
+
+<<< @/examples/js/configuration-schema.js
+
+</LanguageBlock>
 
 
 ## Environment variables
