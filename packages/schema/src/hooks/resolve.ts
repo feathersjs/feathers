@@ -3,13 +3,13 @@ import { compose } from '@feathersjs/hooks'
 import { Resolver, ResolverStatus } from '../resolver'
 
 const getContext = <H extends HookContext>(context: H) => {
-  return {
+  return Object.freeze({
     ...context,
-    params: {
+    params: Object.freeze({
       ...context.params,
-      query: {}
-    }
-  }
+      query: Object.freeze({})
+    })
+  })
 }
 
 const getData = <H extends HookContext>(context: H) => {
