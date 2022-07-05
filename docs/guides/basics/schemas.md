@@ -28,7 +28,7 @@ While schemas and resolvers can be used outside of a Feather application, you wi
 - `data` schemas and resolvers handle the data from the `create`, `update` and `patch` service methods and can be used to add things like default or calculated values (like the created or updated at date) before saving to the database
 - `query` schemas and resolvers validate and convert the query string and can also be used for additional limitations like only allowing a user to see their own data
 - `result` schemas and resolvers define the data that is being returned. This is also where associated data would be defined
-- `dispach` resolvers usually use the `result` schema to return a safe version of the data (e.g. hiding a users password) that can be sent to external clients
+- `dispatch` resolvers usually use the `result` schema to return a safe version of the data (e.g. hiding a users password) that can be sent to external clients
 
 ## Adding a user avatar
 
