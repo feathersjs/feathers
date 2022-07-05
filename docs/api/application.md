@@ -46,39 +46,48 @@ The core `@feathersjs/feathers` module provides the ability to initialize a new 
 
 </LanguageBlock>
 
+<BlockQuote type="note">
 
+`path` can be `/` to register a service at the root level.
 
-> __Note:__ `path` can be `/` to register a service at the root level.
+</BlockQuote>
 
 `options` can contain the following additional options for the service:
 
-- `methods` (default: `['find', 'get', 'create', 'patch', 'update','remove']`) - A list of official and [custom service methods](services.md#custom-methods) exposed by this service. When using this option **all** method names that should be available externally must be passed otherwise. All methods passed will automatically be available for use with [hooks](./hooks).
+- `methods` (default: `['find', 'get', 'create', 'patch', 'update','remove']`) - A list of official and [custom service methods](services.md#custom-methods) exposed by this service. When using this option **all** method names that should be available externally must be passed otherwise. The methods passed will automatically be available for use with [hooks](./hooks).
 - `events` - A list of [public custom events sent by this service](./events.md#custom-events)
 
-```js
-class MyService {
-  async doSomething (data, params) {
-    this.emit('something', 'I did something');
-    return data;
-  }
+<LanguageBlock global-id="ts">
 
-  async get(id) {
-    return {
-      id,
-      text: `This is the ${id} message!`
-    };
-  }
-}
+<<< @/examples/ts/application-use-options.ts
 
-app.use('/messages', new MyService(), {
-  methods: [ 'get', 'doSomething' ],
-  events: [ 'something' ]
-});
-```
+</LanguageBlock>
+<LanguageBlock global-id="js">
+
+<<< @/examples/js/application-use-options.js
+
+</LanguageBlock>
 
 ## .service(path)
 
-`app.service(path) -> service` returns the wrapped [service object](./services.md) for the given path. Feathers internally creates a new object from each registered service. This means that the object returned by `app.service(path)` will provide the same methods and functionality as your original service object but also functionality added by Feathers and its plugins like [service events](./events.md) and [additional methods](./services.md#feathers-functionality). `path` can be the service name with or without leading and trailing slashes.
+`app.service(path) -> service` returns the [service object](./services.md) for the given path. Feathers internally creates a new object from each registered service. This means that the object returned by `app.service(path)` will provide the same methods and functionality as your original service object but also functionality added by Feathers and its plugins like [service events](./events.md) and [additional methods](./services.md#feathers-functionality).
+
+<LanguageBlock global-id="ts">
+
+```ts
+const messageService = app.service('messages');
+
+const message = await messageService.get('test');
+
+console.log(message);
+
+messageService.on('created', (message: Message) => {
+  console.log('Created a todo')
+})
+```
+
+</LanguageBlock>
+<LanguageBlock global-id="js">
 
 ```js
 const messageService = app.service('messages');
@@ -87,18 +96,13 @@ const message = await messageService.get('test');
 
 console.log(message);
 
-app.use('/my/todos', {
-  async create(data) {
-    return data;
-  }
-});
-
-const todoService = app.service('my/todos');
-// todoService is an event emitter
-todoService.on('created', todo =>
-  console.log('Created todo', todo)
-);
+messageService.on('created', (message) => {
+  console.log('Created a todo')
+})
 ```
+
+</LanguageBlock>
+
 
 ## .hooks(hooks)
 
@@ -110,15 +114,42 @@ todoService.on('created', todo =>
 
 ## .configure(callback)
 
-`app.configure(callback) -> app` runs a `callback` function that gets passed the application object. It is used to initialize plugins or services.
+`app.configure(callback) -> app` runs a `callback` function that gets passed the application object. It is used to initialize plugins and can be used to separate your application into different files.
 
-```js
-function setupService(app) {
+<LanguageBlock global-id="ts">
+
+```ts
+const setupService = (app: Application) => {
   app.use('/todos', todoService);
 }
 
 app.configure(setupService);
 ```
+
+</LanguageBlock>
+<LanguageBlock global-id="js">
+
+```js
+const setupService = (app) => {
+  app.use('/todos', todoService);
+}
+
+app.configure(setupService);
+```
+
+</LanguageBlock>
+
+
+## .setup([server])
+
+`app.setup([server]) -> Promise<app>` is used to initialize all services by calling each [services .setup(app, path)](services.md#setupapp-path) method (if available).
+It will also use the `server` instance passed (e.g. through `http.createServer`) to set up SocketIO (if enabled) and any other provider that might require the server instance. You can register [application hooks](./hooks.md#application-hooks) on setup to e.g. set up database connections and other things required to be initialized on startup in a certain order.
+
+Normally `app.setup` will be called automatically when starting the application via [app.listen([port])](#listen-port) but there are cases (like in tests) when it can be called explicitly.
+
+## .teardown([server])
+
+`app.teardown([server]) -> Promise<app>` can be called to gracefully shut down the application. When the app has been set up with a server (e.g. by calling `app.listen()`) the server will be closed automatically when calling `app.teardown()`. You can also register [application hooks](./hooks.md#application-hooks) on teardown to e.g. close database connection etc.
 
 ## .listen(port)
 
@@ -126,30 +157,56 @@ app.configure(setupService);
 
 `listen` will only be available if a server side transport (REST or websocket) has been configured.
 
-## .setup([server])
-
-`app.setup([server]) -> Promise<app>` is used to initialize all services by calling each [services .setup(app, path)](services.md#setupapp-path) method (if available).
-It will also use the `server` instance passed (e.g. through `http.createServer`) to set up SocketIO (if enabled) and any other provider that might require the server instance. You can register [application hooks](./hooks.md#application-hooks) on setup to e.g. set up database connections and other things required to be initialized on startup in a certain order.
-
-Normally `app.setup` will be called automatically when starting the application via `app.listen([port])` but there are cases when it needs to be called explicitly.
-
-## .teardown([server])
-
-`app.teardown([server]) -> Promise<app>` can be called to gracefully shut down the application. When the app has been set up with a server (e.g. by calling `app.listen()`) the server will be closed automatically when calling `app.teardown()`. You can also register [application hooks](./hooks.md#application-hooks) on teardown to e.g. close database connection etc.
-
 ## .set(name, value)
 
 `app.set(name, value) -> app` assigns setting `name` to `value`.
 
 ## .get(name)
 
-`app.get(name) -> value` retrieves the setting `name`. For more information on server side Express settings see the [Express documentation](http://expressjs.com/en/4x/api.html#app.set).
+`app.get(name) -> value` retrieves the setting `name`.
 
-```js
-app.set('port', 3030);
+<LanguageBlock global-id="ts">
 
-app.listen(app.get('port'));
+```ts
+import { feathers } from '@feathersjs/feathers'
+
+type ServiceTypes = {
+  // Add services path to type mapping here
+}
+
+// app.get and app.set can be typed when initializing the app
+type Configuration = {
+  port: number
+}
+
+const app = feathers<ServiceTypes, Configuration>()
+
+app.set('port', 3030)
+
+app.listen(app.get('port'))
 ```
+
+</LanguageBlock>
+<LanguageBlock global-id="js">
+
+```ts
+import { feathers } from '@feathersjs/feathers'
+
+const app = feathers()
+
+app.set('port', 3030)
+
+app.listen(app.get('port'))
+```
+
+</LanguageBlock>
+
+<BlockQuote type="note">
+
+On the server, those settings are usually initialized using [@feathersjs/configuration](configuration.md).
+
+</BlockQuote>
+
 
 ## .on(eventname, listener)
 
@@ -171,6 +228,12 @@ app.emit('myevent', {
 app.on('myevent', data => console.log('myevent happened', data));
 ```
 
+<BlockQuote type="warning">
+
+`app` can not receive or send events to or from clients. A [custom service](services.md) should be used for those use cases.
+
+</BlockQuote>
+
 ## .removeListener(eventname)
 
 Provided by the core [NodeJS EventEmitter .removeListener](https://nodejs.org/api/events.html#events_emitter_removelistener_eventname_listener). Removes all or the given listener for `eventname`.
@@ -180,23 +243,20 @@ Provided by the core [NodeJS EventEmitter .removeListener](https://nodejs.org/ap
 `app.mixins` contains a list of service mixins. A mixin is a callback (`(service, path, options) => {}`) that gets run for every service that is being registered. Adding your own mixins allows to add functionality to every registered service.
 
 ```js
-const feathers = require('@feathersjs/feathers');
-const app = feathers();
-
 // Mixins have to be added before registering any services
 app.mixins.push((service, path) => {
   service.sayHello = function() {
-    return `Hello from service at '${path}'`;
+    return `Hello from service at '${path}'`
   }
-});
+})
 
 app.use('/todos', {
   async get(id) {
-    return { id };
+    return { id }
   }
-});
+})
 
-app.service('todos').sayHello();
+app.service('todos').sayHello()
 // -> Hello from service at 'todos'
 ```
 
@@ -205,16 +265,20 @@ app.service('todos').sayHello();
 `app.services` contains an object of all [services](./services.md) keyed by the path they have been registered via `app.use(path, service)`. This allows to return a list of all available service names:
 
 ```js
-const servicePaths = Object.keys(app.services);
+const servicePaths = Object.keys(app.services)
 
 servicePaths.forEach(path => {
-  const service = app.service(path);
-
-  console.log(path, service);
-});
+  const service = app.service(path)
+})
 ```
 
-> __Important:__ To retrieve services, the [app.service(path)](#servicepath) method should be used (not `app.services.path` directly).
+<BlockQuote type="danger">
+
+To retrieve services, the [app.service(path)](#service-path) method should be used.
+
+Not `app.services[path]` directly.
+
+</BlockQuote>
 
 A Feathers [client](client.md) does not know anything about the server it is connected to. This means that `app.services` will _not_ automatically contain all services available on the server. Instead, the server has to provide the list of its services, e.g. through a [custom service](./services.md):
 
@@ -233,11 +297,11 @@ app.use('/info', {
 `app.defaultService` can be a function that returns an instance of a new standard service for `app.service(path)` if there isn't one registered yet. By default it throws a `NotFound` error when you are trying to access a service that doesn't exist.
 
 ```js
-const memory = require('feathers-memory');
+import { MemoryService } from '@feathersjs/memory'
 
 // For every `path` that doesn't have a service automatically return a new in-memory service
 app.defaultService = function(path) {
-  return memory();
+  return new MemoryService()
 }
 ```
 

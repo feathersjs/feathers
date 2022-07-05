@@ -21,87 +21,42 @@ The `@feathersjs/errors` module contains a set of standard error classes used by
 
 Here are a few ways that you can use them:
 
-
-
-<LanguageBlock global-id="ts">
-
 ```ts
-import { NotFound, GeneralError, BadRequest } from '@feathersjs/errors';
+import { NotFound, GeneralError, BadRequest } from '@feathersjs/errors'
 
 // If you were to create an error yourself.
-const notFound = new NotFound('User does not exist');
+const notFound = new NotFound('User does not exist')
 
 // You can wrap existing errors
-const existing = new GeneralError(new Error('I exist'));
+const existing = new GeneralError(new Error('I exist'))
 
 // You can also pass additional data
 const data = new BadRequest('Invalid email', {
   email: 'sergey@google.com'
-});
+})
 
 // You can also pass additional data without a message
 const dataWithoutMessage = new BadRequest({
   email: 'sergey@google.com'
-});
+})
 
 // If you need to pass multiple errors
 const validationErrors = new BadRequest('Invalid Parameters', {
   errors: { email: 'Email already taken' }
-});
+})
 
 // You can also omit the error message and we'll put in a default one for you
 const validationErrors = new BadRequest({
   errors: {
     email: 'Invalid Email'
   }
-});
+})
 ```
-
-</LanguageBlock>
-
-<LanguageBlock global-id="js">
-
-```js
-const { NotFound, GeneralError, BadRequest } = require('@feathersjs/errors');
-
-// If you were to create an error yourself.
-const notFound = new NotFound('User does not exist');
-
-// You can wrap existing errors
-const existing = new GeneralError(new Error('I exist'));
-
-// You can also pass additional data
-const data = new BadRequest('Invalid email', {
-  email: 'sergey@google.com'
-});
-
-// You can also pass additional data without a message
-const dataWithoutMessage = new BadRequest({
-  email: 'sergey@google.com'
-});
-
-// If you need to pass multiple errors
-const validationErrors = new BadRequest('Invalid Parameters', {
-  errors: { email: 'Email already taken' }
-});
-
-// You can also omit the error message and we'll put in a default one for you
-const validationErrors = new BadRequest({
-  errors: {
-    email: 'Invalid Email'
-  }
-});
-```
-
-</LanguageBlock>
-
 
 
 ## Feathers errors
 
 The following error types, all of which are instances of `FeathersError`, are available:
-
-> **ProTip:** All of the Feathers plugins will automatically emit the appropriate Feathers errors for you. For example, most of the database adapters will already send `Conflict` or `Unprocessable` errors with the validation errors from the ORM.
 
 - 400: `BadRequest`
 - 401: `NotAuthenticated`
@@ -120,6 +75,12 @@ The following error types, all of which are instances of `FeathersError`, are av
 - 502: `BadGateway`
 - 503: `Unavailable`
 
+<BlockQuote type="tip">
+
+All of the Feathers plugins will automatically emit the appropriate Feathers errors for you. For example, most of the database adapters will already send `Conflict` or `Unprocessable` errors on validation errors.
+
+</BlockQuote>
+
 Feathers errors contain the following fields:
 
 - `name` - The error name (e.g. "BadRequest", "ValidationError", etc.)
@@ -129,7 +90,11 @@ Feathers errors contain the following fields:
 - `data` - An object containing anything you passed to a Feathers error except for the `errors` object and `message`.
 - `errors` - An object containing whatever was passed to a Feathers error inside `errors`. This is typically validation errors or if you want to group multiple errors together.
 
-> **ProTip:** To convert a Feathers error back to an object call `error.toJSON()`. A normal `console.log` of a JavaScript Error object will not automatically show those additional properties described above (even though they can be accessed directly).
+<BlockQuote type="warning">
+
+To convert a Feathers error back to an object call `error.toJSON()`. A normal `console.log` of a JavaScript Error object will not automatically show those additional properties described above (even though they can be accessed directly).
+
+</BlockQuote>
 
 ## Custom errors
 
@@ -143,7 +108,7 @@ You can create custom errors by extending from the `FeathersError` class and cal
 
 
 ```js
-const { FeathersError } = require('@feathersjs/errors');
+import { FeathersError } from '@feathersjs/errors'
 
 class UnsupportedMediaType extends FeathersError {
   constructor(message, data) {
@@ -151,24 +116,14 @@ class UnsupportedMediaType extends FeathersError {
   }
 }
 
-const error = new UnsupportedMediaType('Not supported');
+const error = new UnsupportedMediaType('Not supported')
 
-console.log(error.toJSON());
-```
-
-## Server Side Errors
-
-Promises swallow errors if you forget to add a `catch()` statement. Therefore, you should make sure that you **always** call `.catch()` on your promises. To catch uncaught errors at a global level you can add the code below to your top-most file.
-
-```js
-process.on('unhandledRejection', (reason, p) => {
-  console.log('Unhandled Rejection at: Promise ', p, ' reason: ', reason);
-});
+console.log(error.toJSON())
 ```
 
 ## Error Handling
 
-It is important to make sure that errors get cleaned up before they go back to the client. [Express error handling middleware](https://docs.feathersjs.com/api/express.html#expresserrorhandler) works only for REST calls. If you want to make sure that ws errors are handled as well, you need to use [App Hooks](https://docs.feathersjs.com/guides/basics/hooks.html#application-hooks). App Error Hooks get called on an error to every service call regardless of transport.
+It is important to make sure that errors get cleaned up before they go back to the client. [Express error handling middleware](https://docs.feathersjs.com/api/express.html#expresserrorhandler) works only for REST calls. If you want to make sure that ws errors are handled as well, you need to use [application error hooks](hooks.md#application-hooks) which are called on any service call error.
 
 Here is an example error handler you can add to app.hooks errors.
 

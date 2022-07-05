@@ -232,7 +232,7 @@ The `context` object is the same throughout a service method call so it is possi
 
 </BlockQuote>
 
-### context.dispatch
+### `context.dispatch`
 
 `context.dispatch` is a __writeable, optional__ property and contains a "safe" version of the data that should be sent to any client. If `context.dispatch` has not been set `context.result` will be sent to the client instead.
 
@@ -242,7 +242,7 @@ The `context` object is the same throughout a service method call so it is possi
 
 </BlockQuote>
 
-### context.http
+### `context.http`
 
 `context.http` is a __writeable, optional__ property that allows customizing HTTP response specific properties. The following properties can be set:
 
@@ -256,73 +256,183 @@ Setting `context.http` properties will have no effect when using a websocket rea
 
 </BlockQuote>
 
-### context.event
+### `context.event`
 
 `context.event` is a __writeable, optional__ property that allows service events to be skipped by setting it to `null`
 
 
 ## Registering hooks
 
-Hook functions are registered on a service through the `app.service(<servicename>).hooks(hooks)` method. There are several options for what can be passed as `hooks`:
+Hook functions are registered on a service through the `app.service(<servicename>).hooks(hooks)` method. The most commonly used registration format is
+
+```js
+{
+  [type]: { // around, before, after or error
+    all: [
+      // list of hooks that should run for every method here
+    ],
+    [methodName]: [
+      // list of method hooks here
+    ]
+  }
+}
+```
+
+<BlockQuote type="warning">
+
+Hooks will only be available for the standard service methods or methods passed as an option to [app.use](application.md#usepath-service--options). See the [documentation for @feathersjs/hooks](https://github.com/feathersjs/hooks) how to use hooks on other methods.
+
+</BlockQuote>
+
+This means usual hook registration looks like this:
+
+<LanguageBlock global-id="ts">
+
+```ts
+// The standard all at once way (also used by the generator)
+// an array of functions per service method name (and for `all` methods)
+app.service('servicename').hooks({
+  around: {
+    all: [
+      async (context: HookContext, next: NextFunction) => {
+        console.log('around all hook ran')
+        await next()
+      }
+    ],
+    find: [ /* other hook functions here */ ],
+    get: [],
+    create: [],
+    update: [],
+    patch: [],
+    remove: [],
+    // Custom methods use hooks as well
+    myCustomMethod: []
+  },
+  before: {
+    all: [
+      async (context: HookContext) => console.log('before all hook ran')
+    ],
+    find: [ /* other hook functions here */ ],
+    get: [],
+    // ...etc
+  },
+  after: {
+    find: [
+      async (context: HookContext) => console.log('after find hook ran')
+    ]
+  },
+  error: {
+  }
+})
+```
+
+</LanguageBlock>
+<LanguageBlock global-id="js">
 
 ```js
 // The standard all at once way (also used by the generator)
 // an array of functions per service method name (and for `all` methods)
 app.service('servicename').hooks({
+  around: {
+    all: [
+      async (context, next) => {
+        console.log('around all hook ran')
+        await next()
+      }
+    ],
+    find: [ /* other hook functions here */ ],
+    get: [],
+    create: [],
+    update: [],
+    patch: [],
+    remove: [],
+    // Custom methods use hooks as well
+    myCustomMethod: []
+  },
   before: {
     all: [
-      // Use normal functions
-      function(context) { console.log('before all hook ran'); }
+      async (context) => console.log('before all hook ran')
     ],
-    find: [
-      // Use ES6 arrow functions
-      context => console.log('before find hook 1 ran'),
-      context => console.log('before find hook 2 ran')
-    ],
-    get: [ /* other hook functions here */ ],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
+    find: [ /* other hook functions here */ ],
+    get: [],
+    // ...etc
   },
   after: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
+    find: [
+      async (context) => console.log('after find hook ran')
+    ]
   },
   error: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
   }
-});
-
-// Register a single hook before, after and on error for all methods
-app.service('servicename').hooks({
-  before(context) {
-    console.log('before all hook ran');
-  },
-  after(context) {
-    console.log('after all hook ran');
-  },
-  error(context) {
-    console.log('error all hook ran');
-  }
-});
+})
 ```
 
-> **Pro Tip:** When using the full object, `all` is a special keyword meaning this hook will run for all methods. `all` hooks will be registered before other method specific hooks.
+</LanguageBlock>
 
-> **Pro Tip:** `app.service(<servicename>).hooks(hooks)` can be called multiple times and the hooks will be registered in that order. Normally all hooks should be registered at once however to see at a glance what the service is going to do.
+<BlockQuote type="tip">
 
+`app.service(<servicename>).hooks(hooks)` can be called multiple times and the hooks will be registered in that order. Normally all hooks should be registered at once however to see at a glance what the service is going to do.
+
+</BlockQuote>
+
+Since around hooks offer the same functionality as `before`, `after` and `error` hooks at the same time they can also be registered without a nested object:
+
+<LanguageBlock global-id="ts">
+
+```ts
+// Passing an array of around hooks that run for every method
+app.service('servicename').hooks([
+  async (context: HookContext, next: NextFunction) => {
+    console.log('around all hook ran')
+    await next()
+  }
+])
+
+// Passing an object with method names and a list of around hooks
+app.service('servicename').hooks({
+  get: [
+    async (context: HookContext, next: NextFunction) => {
+      console.log('around get hook ran')
+      await next()
+    }
+  ],
+  create: [],
+  update: [],
+  patch: [],
+  remove: [],
+  myCustomMethod: []
+})
+```
+
+</LanguageBlock>
+<LanguageBlock global-id="js">
+
+```js
+// Passing an array of around hooks that run for every method
+app.service('servicename').hooks([
+  async (context, next) => {
+    console.log('around all hook ran')
+    await next()
+  }
+])
+
+// Passing an object with method names and a list of around hooks
+app.service('servicename').hooks({
+  get: [
+    async (context, next) => {
+      console.log('around get hook ran')
+      await next()
+    }
+  ],
+  create: [],
+  update: [],
+  patch: [],
+  remove: [],
+  myCustomMethod: []
+})
+```
+
+</LanguageBlock>
 
 ## Application hooks
 
@@ -349,23 +459,55 @@ app.hooks({
 
 A special kind of application hooks are `setup` and `teardown` hooks. They are around hooks that can be used to initialize database connections etc. and only run once when the application starts up or shuts down.
 
-```js
-import { MongoClient } from 'mongodb';
+<LanguageBlock global-id="ts">
+
+```ts
+import { MongoClient } from 'mongodb'
 
 app.hooks({
   setup: [
-    async (context, next) => {
-      const mongodb = new MongoClient(yourConnectionURI);
+    async (context: HookContext, next: NextFunction) => {
+      const mongodb = new MongoClient(yourConnectionURI)
 
-      await mongodb.connect();
-      context.app.set('mongodb', mongodb);
+      await mongodb.connect()
+      context.app.set('mongodb', mongodb)
+      await next()
     }
   ],
   teardown: [
-    async (context, next) => {
-      context.app.get('mongodb').close();
-      await next();
+    async (context: HookContext, next: NextFunction) => {
+      context.app.get('mongodb').close()
+      await next()
     }
   ]
 })
 ```
+
+</LanguageBlock>
+<LanguageBlock global-id="js">
+
+```js
+import { MongoClient } from 'mongodb'
+
+app.hooks({
+  setup: [
+    async (context, next) => {
+      const mongodb = new MongoClient(yourConnectionURI)
+
+      await mongodb.connect()
+      context.app.set('mongodb', mongodb)
+      await next()
+    }
+  ],
+  teardown: [
+    async (context, next) => {
+      context.app.get('mongodb').close()
+      await next()
+    }
+  ]
+})
+```
+
+</LanguageBlock>
+
+

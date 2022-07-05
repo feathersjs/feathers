@@ -4,7 +4,7 @@ class MessageService {
   async get(id: Id) {
     return {
       id,
-      text: `This it the ${id} message!`
+      text: `This is the ${id} message!`
     }
   }
 }
