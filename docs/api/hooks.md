@@ -10,9 +10,44 @@ Hooks are commonly used to handle things like permissions, validation, logging, 
 
 ## Quick Example
 
-The following example adds a `createdAt` property before saving the data to the database, logs the total runtime of any method call and any errors on the service:
+The following example logs the runtime of any service method on the `messages` service and adds `createdAt` property before saving the data to the database:
 
 <LanguageBlock global-id="ts">
+
+```js
+import { feathers, HookContext, NextFunction } from '@feathersjs/feathers';
+
+const app = feathers();
+
+app.service('messages').hooks({
+  around: {
+    all: [
+      // A hook that wraps around all other hooks and the service method
+      // logging the total runtime of a successful call
+      async (context: HookContext, next: NextFunction) => {
+        const startTime = Date.now()
+
+        await next()
+
+        console.log(`Method ${context.method} on ${context.path} took ${Date.now() - start}ms`)
+      }
+    ]
+  }
+  before: {
+    create: [
+      async (context: HookContext) => {
+        context.data = {
+          ...context.data,
+          createdAt: Date.now()
+        }
+      }
+    ]
+  }
+})
+```
+</LanguageBlock>
+
+<LanguageBlock global-id="js">
 
 ```js
 import { feathers, HookContext } from '@feathersjs/feathers';
@@ -36,49 +71,14 @@ app.service('messages').hooks({
   before: {
     create: [
       async (context) => {
-        context.data.createdAt = new Date()
+        context.data = {
+          ...context.data,
+          createdAt: Date.now()
+        }
       }
     ]
   }
-});
-```
-</LanguageBlock>
-
-<LanguageBlock global-id="js">
-
-```js
-const feathers = require('@feathersjs/feathers');
-
-const app = feathers();
-
-app.service('messages').hooks({
-  before: {
-    create: [async context => {
-      context.data.createdAt = new Date();
-
-      return context;
-    }],
-
-    update: [async context => {
-      context.data.updatedAt = new Date();
-
-      return context;
-    }],
-
-    patch: [async context => {
-      context.data.updatedAt = new Date();
-
-      return context;
-    }]
-  },
-
-  error: {
-    all: [async context => {
-      console.error(`Error in ${context.path} calling ${context.method}  method`, context.error);
-
-      return context;
-    }]
-});
+})
 ```
 
 </LanguageBlock>
@@ -86,11 +86,18 @@ app.service('messages').hooks({
 
 ## Hook functions
 
-A hook functions are `async` or return a promise and take the [hook context](#hook-context) as the parameter and returns the `context` object, `undefined` or throws an error.
+### before, after and error
+
+`before`, `after` and `error` hook functions are functions that are `async` or return a promise and take the [hook context](#hook-context) as the parameter and return nothing or throw an error.
+
+```js
+const hookFunction = async (context) => {
+  // Do things here
+}
+```
 
 For more information see the [hook flow](#hook-flow) and [asynchronous hooks](#asynchronous-hooks) section.
 
-### before, after and error
 
 ### around
 
@@ -119,7 +126,17 @@ Any around hook can be wrapped around another function, essentially becoming a m
  
 ## Hook flow
 
-In general, hooks are executed in the order they are registered with the original service method being called after all `before` hooks. This flow can be affected as follows.
+In general, hooks are executed in the order [they are registered](#registering-hooks) with `before` hooks running before the service method is called. Hooks are executed in the following order: 
+
+- `around` hooks (before `await next()`)
+- `before` hooks
+- service method
+- `after` hooks
+- `around` hooks (after `await next()`)
+
+Note that since `around` hooks wrap everything, the first hook to run will be the last to execute it's code after `await next()`. 
+
+The hook flow can be affected as follows.
 
 ### Throwing an error
 

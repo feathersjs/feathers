@@ -51,24 +51,24 @@ If no Feathers application is passed, `koa() -> app` returns a plain Koa applica
 
 ## app.use(location|mw[, service])
 
-`app.use(location|mw[, service]) -> app` registers either a [service object](./services.md), or a Koa middleware. If a path and [service object](./services.md) is passed it will use Feathers registration mechanism, for a middleware function Koa.
+`app.use(location|mw[, service]) -> app` registers either a [service object](./services.md), or a Koa middleware. If a path and [service object](./services.md) is passed it will use Feathers registration mechanism, for a middleware function Koa. In a Koa middleware, `ctx.feathers` is an object which will be extended as `params` in a service method call. 
 
 ```js
+// Register Koa middleware
+app.use(async (ctx, next) => {
+  ctx.feathers.fromMiddleware = 'Hello from Koa middleware'
+
+  await next()
+})
+
 // Register a service
 app.use('/todos', {
-  async get(id) {
-    return { id };
+  async get(id, params) {
+    const { fromMiddleware } = params
+
+    return { id, fromMiddleware }
   }
-});
-
-// Register an Express middleware
-app.use(async (ctx, next) => {
-  ctx.body = {
-    message: 'Hello world from Koa middleware'
-  };
-
-  await next();
-});
+})
 ```
 
 ## app.listen(port)
@@ -88,8 +88,31 @@ const server = await app.listen(3030);
 
 ### rest
 
+```ts
+import { rest } from '@feathersjs/koa'
+
+app.configure(rest())
+```
+
+Configures the middleware for handling service calls via HTTP. It will also register authentication header parsing. The following (optional) options are available:
+
+- `formatter` - A middleware that formats the response body
+- `authentication` - The authentication `service` and `strategies` to use for parsing authentication information 
+
 ### errorHandler
 
-### authentication
+```ts
+import { errorHandler } from '@feathersjs/koa'
+
+app.configure(errorHandler())
+```
+
+A middleware that formats errors as a Feathers error and sets the proper status code. Needs to be the first middleware registered in order to catch all other errors.
+
+### authenticate
+
+A middleware that allows to authenticate a user (or other authentication entity) setting `ctx.feathers.user`. Not necessary for use with services but can be used in custom middleware.
 
 ### bodyParser
+
+A reference to the [koa-bodyparser](https://github.com/koajs/bodyparser) module.

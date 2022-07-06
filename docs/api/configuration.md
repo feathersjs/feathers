@@ -48,7 +48,7 @@ const app = feathers().configure(configuration())
 
 </LanguageBlock>
 
-<BlockQuote type="note">
+<BlockQuote type="warning" label="Important">
 
 Direct access to nested config properties is not supported via `app.get()`. To access a nested config property (e.g. `Customer.dbConfig.host`, use `app.get('Customer').dbConfig.host` or `import config from 'config'` directly and use it [as documented](https://github.com/lorenwest/node-config).
 
