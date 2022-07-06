@@ -30,6 +30,7 @@ While schemas and resolvers can be used outside of a Feather application, you wi
 - `result` schemas and resolvers define the data that is being returned. This is also where associated data would be defined
 - `dispatch` resolvers usually use the `result` schema to return a safe version of the data (e.g. hiding a users password) that can be sent to external clients
 
+
 ## Adding a user avatar
 
 Let's extend our existing users schema to add an `avatar` property so that our users can have a profile image:
@@ -148,6 +149,26 @@ We can run the migrations on the current database with
 ```
 npm run migrate
 ```
+
+## Services, Hooks and Schemas
+
+In the [previous chapter](./services.md) we extended our user service to add a user avatar. This could also be put in a hook instead but made a good example to illustrate how to extend an existing service. There are no explicit rules when to use a hook or when to extend a service but here are some guidelines.
+
+Use a hook when
+
+- The functionality can be used in more than one place (e.g. validation, permissions etc.)
+- It is not a core responsibility of the service and the service can work without it (e.g. sending an email after a user has been created)
+
+Extend a service when
+
+- The functionality is only needed in this one place
+- The service could not function without it
+
+Create your own (custom) service when
+
+- Multiple services are combined together (e.g. reports)
+- The service does something other than talk to a database (e.g. another API, sensors etc.)
+
 
 ## What's next?
 

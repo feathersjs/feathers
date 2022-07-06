@@ -28,7 +28,7 @@ curl 'http://localhost:3030/users/' \
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/6bcea48aac6c7494c2ad)
 
-<BlockQuote type="note">
+<BlockQuote type="info">
 
 For SQL databases, creating a user with the same email address will only work once, then fail since it already exists in the database.
 
@@ -46,7 +46,7 @@ This will return something like this:
 
 Which means our user has been created successfully.
 
-<BlockQuote type="note">
+<BlockQuote type="info">
 
 The password is stored securely in the database but will never be included in a response to an external client.
 

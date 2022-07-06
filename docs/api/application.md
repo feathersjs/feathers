@@ -46,7 +46,7 @@ The core `@feathersjs/feathers` module provides the ability to initialize a new 
 
 </LanguageBlock>
 
-<BlockQuote type="note">
+<BlockQuote type="info">
 
 `path` can be `/` to register a service at the root level.
 
@@ -201,7 +201,7 @@ app.listen(app.get('port'))
 
 </LanguageBlock>
 
-<BlockQuote type="note">
+<BlockQuote type="info">
 
 On the server, those settings are usually initialized using [@feathersjs/configuration](configuration.md).
 

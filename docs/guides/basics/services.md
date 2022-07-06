@@ -89,7 +89,7 @@ For `setup` and `teardown` (which are only called once on application startup an
 
 Usually those methods can be used for most API functionality but it is also possible to add your own [custom service methods](../../api/services.md#custom-methods) for a client to call.
 
-<BlockQuote type="note">
+<BlockQuote type="info">
 
 A service does not have to implement all those methods but must have at least one. For more information about service, service methods and parameters see the [Service API documentation](../../api/services.md).
 

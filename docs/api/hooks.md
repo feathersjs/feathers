@@ -220,7 +220,7 @@ The `context` object is the same throughout a service method call so it is possi
 
 `context.data` is a __writeable__ property containing the data of a `create`, `update` and `patch` service method call.
 
-<BlockQuote type="note">
+<BlockQuote type="info">
 
 `context.data` will only be available for `create`, `update`, `patch` and [custom methods](./services.md#custom-methods).
 
@@ -230,7 +230,7 @@ The `context` object is the same throughout a service method call so it is possi
 
 `context.error` is a __writeable__ property with the error object that was thrown in a failed method call. It can be modified to change the error that is returned at the end.
 
-<BlockQuote type="note">
+<BlockQuote type="info">
 
 `context.error` will only be available if `context.type` is `error`.
 
@@ -243,7 +243,7 @@ The `context` object is the same throughout a service method call so it is possi
 - An `around` or `before` hook to skip the actual service method (database) call
 - An `error` hook to swallow the error and return a result instead
 
-<BlockQuote type="note">
+<BlockQuote type="info">
 
 `context.result` will only be available if `context.type` is `after` or if `context.result` has been set.
 
@@ -253,7 +253,7 @@ The `context` object is the same throughout a service method call so it is possi
 
 `context.dispatch` is a __writeable, optional__ property and contains a "safe" version of the data that should be sent to any client. If `context.dispatch` has not been set `context.result` will be sent to the client instead.
 
-<BlockQuote type="note">
+<BlockQuote type="info">
 
 `context.dispatch` only affects the data sent through a Feathers Transport like [REST](./express.md) or [Socket.io](./socketio.md). An internal method call will still get the data set in `context.result`.
 

@@ -202,16 +202,16 @@ export default defineConfig({
               link: '/guides/basics/services.md',
             },
             {
+              text: 'Hooks',
+              link: '/guides/basics/hooks.md',
+            },
+            {
               text: 'Schemas',
               link: '/guides/basics/schemas.md'
             },
             {
               text: 'Authentication',
               link: '/guides/basics/authentication.md',
-            },
-            {
-              text: 'Hooks',
-              link: '/guides/basics/hooks.md',
             },
             {
               text: 'Writing Tests',
@@ -227,14 +227,14 @@ export default defineConfig({
               text: 'JavaScript',
               link: '/guides/frontend/javascript.md'
             },
-            {
-              text: 'React',
-              link: '/guides/frontend/react.md'
-            },
-            {
-              text: 'VueJS',
-              link: '/guides/frontend/vuejs.md'
-            },
+            // {
+            //   text: 'React',
+            //   link: '/guides/frontend/react.md'
+            // },
+            // {
+            //   text: 'VueJS',
+            //   link: '/guides/frontend/vuejs.md'
+            // },
             {
               text: 'More',
               link: '/guides/frameworks.md'
@@ -250,12 +250,16 @@ export default defineConfig({
               link: '/guides/cli/index.md'
             },
             {
-              text: 'File structure',
+              text: 'Structure',
               link: '/guides/cli/structure.md'
             },
             {
-              text: 'Dependency injection',
-              link: '/guides/cli/composition.md'
+              text: 'Customization',
+              link: '/guides/cli/customization.md'
+            },
+            {
+              text: 'TypeScript',
+              link: '/guides/cli/typescript.md'
             }
           ]
         },

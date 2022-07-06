@@ -8,7 +8,7 @@ This guide explains the new features and changes necessary to migrate to the Fea
 
 ## Status
 
-The final v5 release is expected in the first quarter of 2022. Aside from the breaking changes and new features documented here. For more information
+The final v5 release is expected in the second half of 2022. Aside from the breaking changes and new features documented here. For more information
 
 - Follow [the v5 milestone](https://github.com/feathersjs/feathers/milestone/11) - open issues are in development, closed issues are already published as a prerelease
 - See the current [v5 Changelog](https://github.com/feathersjs/feathers/blob/dove/CHANGELOG.md)
@@ -30,7 +30,7 @@ You can see the migration steps necessary for the Feathers chat [here for Javasc
 
 [`@feathersjs/schema`](../api/schema/index.md) provides a way to define data models and to dynamically resolve them. It comes in two main parts:
 
-- [Schema](../api/schema/schema.md) - Uses [JSON schema](https://json-schema.org/) to define a data model with TypeScript types and basic validations. This allows us to:
+- [Schema](../api/schema/schema.md) - Uses [JSON schema](https://json-schema.org/) to define a data model with TypeScript types and basic validations.
 - [Resolvers](../api/schema/resolvers.md) - Resolve schema properties based on a context (usually the [hook context](../api/hooks.md)).
 
 ### Configuration schemas
@@ -45,9 +45,27 @@ Provides a way to expose custom service methods to external clients. See the [se
 
 `service.setup`, `app.setup`, the new `app.teardown` and `app.listen` now run asynchronously and return a Promise. It is also possible to register [`setup` and `teardown` application hooks](../api/hooks.md#setup-and-teardown) to e.g. establish and gracefully close database connections when the application starts up.
 
-### Async hooks
+### Around hooks
 
-See the documentation for [feathersjs/hooks](https://github.com/feathersjs/hooks) for the new general purpose hook format that is now also supported by Feathers services (additional documentation to follow).
+The new `around` [hook type](../api/hooks.md) allows a hook function to control the before, after and error flow at the same time.
+
+```ts
+app.service('myservice').hooks({
+  around: {
+    all: [async (context: HookContext, next: NextFunction) => {
+      const start = Date.now()
+
+      await next()
+
+      console.log(`${context.method} on ${context.path} took ${Date.now() - start}ms`)
+    }]
+  }
+})
+```
+
+## Core SQL and MongoDB
+
+The new [schemas and resolvers](../api/schema/index.md) cover most use cases previously provided by higher level ORMs like Sequelize or Mongoose in a more flexible and Feathers friendly way. This allows for a better database integration into Feathers without the overhead of a full ORM which is why the more low level [MongoDB](../api/databases/mongodb.md) and [Knex](../api/databases/knex.md) (SQL) database adapters have been moved into Feathers core for first-class SQL and MongoDB database support.
 
 ## TypeScript
 
@@ -124,15 +142,15 @@ declare module '@feathersjs/feathers/lib/declarations' {
 
 The import of `feathers` has changed from
 
-```
-const { feathers } = require('@feathersjs/feathers')
+```js
+const feathers = require('@feathersjs/feathers')
 
-import { feathers } from '@feathersjs/feathers'
+import feathers from '@feathersjs/feathers'
 ```
 
 To
 
-```
+```js
 const { feathers } = require('@feathersjs/feathers')
 
 import { feathers } from '@feathersjs/feathers'
@@ -155,11 +173,11 @@ Usually you would call `app.listen`. In case you are calling `app.setup` instead
 
 ```js
 // Before
-app.setup();
+app.setup()
 // Do something here
 
 // Now
-await app.setup();
+await app.setup()
 // Do something here
 ```
 
@@ -193,22 +211,22 @@ The automatic environment variable substitution in `@feathersjs/configuration` w
 The `debug` module has been removed as a direct dependency. This reduces the the client bundle size and allows to support other platforms (like Deno). The original `debug` functionality can now be initialized as follows:
 
 ```js
-const feathers = require('@feathersjs/feathers');
-const debug = require('debug');
+const feathers = require('@feathersjs/feathers')
+const debug = require('debug')
 
-feathers.setDebug(debug);
+feathers.setDebug(debug)
 ```
 
 It is also possible to set a custom logger like this:
 
 ```js
-const feathers = require('@feathersjs/feathers');
+const feathers = require('@feathersjs/feathers')
 
 const customDebug = name => (...args) => {
-  console.log(name, ...args);
+  console.log(name, ...args)
 }
 
-feathers.setDebug(customDebug);
+feathers.setDebug(customDebug)
 ```
 
 Setting the debugger will apply to all `@feathersjs` modules.
@@ -227,6 +245,16 @@ Due to low usage `@feathersjs/primus` and `@feathers/primus-client` have been re
 
 - The legacy `servicename::method` socket message format has been deprecated in Feathers 3 and has now been removed. Use a v3 or later [Feathers client](../api/client.md) or the [current Socket.io direct connection API](../api/client/socketio.md).
 - The `timeout` setting for socket services has been removed. It was mainly intended as a fallback for the old message format and interfered with the underlying timeout and retry mechanism provided by the websocket libraries themselves.
+
+### NotFound for `app.service`
+
+By default, when getting a non existing service via `app.service('something')` on the server, it will now throw a `NotFound` error instead of returning `undefined`. The previous behaviour can be restored by setting [app.defaultService](../api/application.md#defaultservice):
+
+```js
+app.defaultService = () => {
+  return null // undefined
+}
+```
 
 ### Removed `service.mixin()`
 
@@ -259,7 +287,7 @@ app.mixins.push((service, path) => {
 
 ### `finally` hook
 
-The undocumented `finally` hook type is no longer available and should be replaced by the new asynchronous hooks which offer the same functionality using plain JavaScript:
+The undocumented `finally` hook type is no longer available and should be replaced by the new `around` hooks which offer the same functionality using plain JavaScript:
 
 ```js
 app.service('myservice').hooks([

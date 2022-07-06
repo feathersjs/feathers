@@ -52,7 +52,7 @@ const item = await app.service('my-service').get(1)
 console.log('.get(1)', item)
 ```
 
-<BlockQuote type="note">
+<BlockQuote type="info">
 
 Although probably the most common use case, a service does not necessarily have to connect to a database. A custom service can implement any functionality like talking to another API or send an email etc.
 
@@ -125,7 +125,7 @@ app.use('messages', new MessageService())
 </LanguageBlock>
 
 
-<BlockQuote type="note">
+<BlockQuote type="info">
 
 `find` does not have to return an array. It can also return an object. The database adapters already do this for [pagination](./databases/common.md#pagination).
 
@@ -230,7 +230,7 @@ Note that `data` may also be an array. When using a [database adapters](./databa
 
 A successful `update` method call emits the [`updated` service event](./events.md#updated-patched) with the returned data or a separate event for every item if the returned data is an array.
 
-<BlockQuote type="note">
+<BlockQuote type="info">
 
 The [database adapters](./databases/adapters.md) do not support completely replacing multiple entries.
 
@@ -244,7 +244,7 @@ A successful `patch` method call emits the [`patched` service event](./events.md
 
 The method should return with the complete, updated resource data. Implement `patch` additionally (or instead of) `update` if you want to distinguish between partial and full updates and support the `PATCH` HTTP method.
 
-<BlockQuote type="note">
+<BlockQuote type="info">
 
 With [database adapters](./databases/adapters.md) the [`multi` option](./databases/common.md) has to be set explicitly to support patching multiple entries.
 
@@ -256,7 +256,7 @@ With [database adapters](./databases/adapters.md) the [`multi` option](./databas
 
 A successful `remove` method call emits the [`removed` service event](./events.md#removed) with the returned data or a separate event for every item if the returned data is an array.
 
-<BlockQuote type="note">
+<BlockQuote type="info">
 
 With [database adapters](./databases/adapters.md) the [`multi` option](./databases/common.md) has to be set explicitly to support removing multiple entries.
 
@@ -370,7 +370,7 @@ Register an event publishing callback. For more information, see the [channels c
 
 Provided by the core [NodeJS EventEmitter .on](https://nodejs.org/api/events.html#events_emitter_on_eventname_listener). Registers a `listener` method (`function(data) {}`) for the given `eventname`.
 
-<BlockQuote type="note">
+<BlockQuote type="info">
 
 For more information about service events, see the [Events chapter](./events.md).
 
