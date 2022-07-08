@@ -73,7 +73,7 @@ app.use('/messages', {
   }
 });
 
-// Retrieve the wrapped service object which will be an event emitter
+// Retrieve the wrapped service object which is also an EventEmitter
 const messages = app.service('messages');
 
 messages.on('created', (message, context) => console.log('created', message));
@@ -156,7 +156,7 @@ class PaymentService {
     const payment = await createPayment(data);
 
     this.emit('status', { status: 'completed' });
-    
+
     return payment;
   }
 }
