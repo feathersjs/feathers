@@ -77,6 +77,8 @@ Create a file called `app.mjs` with the following content:
 
 <<< @/examples/js/first-app.js
 
+We can run it with
+
 ```sh
 node app.mjs
 ```
@@ -108,8 +110,7 @@ In the following example we will take our existing service and use
 Run
 
 ```sh
-npm install @feathersjs/socketio@pre @feathersjs/koa@pre \
-  koa-static @types/koa-static --save
+npm install @feathersjs/socketio@pre @feathersjs/koa@pre koa-static @types/koa-static --save
 ```
 
 Then update `app.ts` with the following content:
@@ -149,7 +150,7 @@ The server will stay running until you stop it by pressing Control + C in the te
 
 </BlockQuote>
 
-And visit
+And in the browser visit
 
 ```
 http://localhost:3030/messages
@@ -179,7 +180,7 @@ In the same folder, add the following `index.html` page:
 
 <<< @/examples/first-frontend.html
 
-If you now go to
+If you now in the browser go to
 
 ```
 http://localhost:3030

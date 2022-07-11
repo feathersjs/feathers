@@ -345,6 +345,10 @@ export default defineConfig({
               text: 'Socket.io Client',
               link: '/api/client/socketio',
             },
+            {
+              text: 'Authentication',
+              link: '/api/authentication/client',
+            },
           ],
         },
         {
@@ -379,10 +383,6 @@ export default defineConfig({
             {
               text: 'OAuth Strategy',
               link: '/api/authentication/oauth',
-            },
-            {
-              text: 'Client',
-              link: '/api/authentication/client',
             },
           ],
         },

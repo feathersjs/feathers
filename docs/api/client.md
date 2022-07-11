@@ -15,11 +15,19 @@ Modules most relevant on the client are:
 - [@feathersjs/socketio-client](./client/socketio.md) to connect to services through [Socket.io](./socketio.md).
 - [@feathersjs/authentication-client](./authentication/client.md) to authenticate a client
 
-> __Important:__ You do not have to use Feathers on the client to connect to a Feathers server. The client [REST client](./client/rest.md) and [Socket.io client](./client/socketio.md) chapters also describe how to use the connection directly without Feathers on the client side. For details on authentication, see the [Authentication client chapter](./authentication/client.md).
+<BlockQuote type="warning" label="Important">
+
+You do not have to use Feathers on the client to connect to a Feathers server. The client [REST client](./client/rest.md) and [Socket.io client](./client/socketio.md) chapters also describe how to use the connection directly without Feathers on the client side. For details on authentication, see the [Authentication client chapter](./authentication/client.md).
+
+</BlockQuote>
 
 This chapter describes how to set up Feathers as the client in Node, React Native and in the browser with a module loader like Webpack or Browserify or through a `<script>` tag. The examples are using [the Socket.io client](./client/socketio.md). For other connection methods see the chapters linked above.
 
-> __Important:__ Feathers can be used on the client through the individual modules or the [@feathersjs/client](#feathersjsclient) module. The latter combines all modules mentioned above into a single, ES5 transpiled version.
+<BlockQuote type="warning" label="Important">
+
+Feathers can be used on the client through the individual modules or the [@feathersjs/client](#feathersjsclient) module. The latter combines all modules mentioned above into a single file. Use with modules and a loader like Webpack, Parcel etc. is recommended.
+
+</BlockQuote>
 
 ## Node
 
@@ -32,23 +40,23 @@ npm install @feathersjs/feathers @feathersjs/socketio-client socket.io-client --
 Then initialize like this:
 
 ```js
-const io = require('socket.io-client');
-const feathers = require('@feathersjs/feathers');
-const socketio = require('@feathersjs/socketio-client');
+import io from 'socket.io-client'
+import { feathers } from '@feathersjs/feathers'
+import socketio from '@feathersjs/socketio-client'
 
-const socket = io('http://api.my-feathers-server.com');
-const client = feathers();
+const socket = io('http://api.my-feathers-server.com')
+const client = feathers()
 
-client.configure(socketio(socket));
+client.configure(socketio(socket))
 
-const messageService = client.service('messages');
+const messageService = client.service('messages')
 
-messageService.on('created', message => console.log('Created a message', message));
+messageService.on('created', message => console.log('Created a message', message))
 
 // Use the messages service from the server
 messageService.create({
   text: 'Message from client'
-});
+})
 ```
 
 ## React Native
@@ -62,43 +70,44 @@ npm install @feathersjs/feathers @feathersjs/socketio-client socket.io-client
 Then in the main application file:
 
 ```js
-import io from 'socket.io-client';
-import { AsyncStorage } from 'react-native';
-import feathers from '@feathersjs/feathers';
-import socketio from '@feathersjs/socketio-client';
-import authentication from '@feathersjs/authentication-client';
+import io from 'socket.io-client'
+import { AsyncStorage } from 'react-native'
+import feathers from '@feathersjs/feathers'
+import socketio from '@feathersjs/socketio-client'
+import authentication from '@feathersjs/authentication-client'
 
 const socket = io('http://api.my-feathers-server.com', {
   transports: ['websocket'],
   forceNew: true
-});
-const client = feathers();
+})
+const client = feathers()
 
-client.configure(socketio(socket));
+client.configure(socketio(socket))
 client.configure(authentication({
   storage: AsyncStorage
-});
+})
 
-const messageService = client.service('messages');
+const messageService = client.service('messages')
 
-messageService.on('created', message => console.log('Created a message', message));
+messageService.on('created', message => console.log('Created a message', message))
 
 // Use the messages service from the server
 messageService.create({
   text: 'Message from client'
-});
+})
 ```
 
 Since React Native for Android doesn't handle timeouts exceeding one minute, consider setting lower values for `pingInterval` and `pingTimeout` of [Socket.io](./socketio.md) **on your server**. This will stop warnings related to this [issue](https://github.com/facebook/react-native/issues/12981). For example:
 
 ```js
-const app = feathers();
-const socketio = require('@feathersjs/socketio');
+import socketio from '@feathersjs/socketio'
+
+const app = feathers()
 
 app.configure(socketio({
   pingInterval: 10000,
   pingTimeout: 50000
-}));
+}))
 ```
 
 ## Module loaders
@@ -131,13 +140,9 @@ You can then import the transpiled libraries from this package:
 import feathers from "@feathersjs/client";
 ```
 
-### Browserify
-
-In Browserify the [babelify](https://github.com/babel/babelify) transform must be used. All Feathers packages indicate that they need the transform and should be transpiled automatically.
-
 ### Others
 
-As mentioned above, `node_modules/@feathersjs` and all its subfolders must be included in the ES6+ transpilation step when using any module loader that is using a transpiler. For non-CommonJS formats (like AMD) and an ES5 compatible version of Feathers and its client modules you can use the [@feathersjs/client module](#feathersjsclient).
+As mentioned above, `node_modules/@feathersjs` and all its subfolders must be included in the ES6+ transpilation step when using any module loader that is using a transpiler. For non-CommonJS formats (like AMD) version of Feathers and its client modules you can use the [@feathersjs/client module](#feathersjsclient).
 
 ## @feathersjs/client
 
@@ -152,7 +157,15 @@ As mentioned above, `node_modules/@feathersjs` and all its subfolders must be in
 npm install @feathersjs/client --save
 ```
 
-`@feathersjs/client` is a module that bundles the separate Feathers client-side modules into one providing the code as ES5 which is compatible with modern browsers (IE10+). It can also be used directly in the browser through a `<script>` tag. Here is a table of which Feathers client module is included:
+`@feathersjs/client` is a module that bundles the separate Feathers client-side modules into one file which can be loaded directly in the browser through a `<script>` tag and in most other JavaScript runtimes. 
+
+<BlockQuote type="danger">
+
+If you are using a module loader like Webpack, Parcel etc. and in React Native and Node you **should not use** `@feathersjs/client`. Use the individual client modules instead. See the [REST client](./client/rest.md) and [Socket.io client](./client/socketio.md) chapters for invidual module use. This will give you the most modern builds and reduce bundle size and build/load time.
+
+</BlockQuote>
+
+Here is a table of which Feathers client module is included:
 
 | Feathers module                   | @feathersjs/client      |
 |-----------------------------------|-------------------------|
@@ -162,63 +175,34 @@ npm install @feathersjs/client --save
 | @feathersjs/socketio-client       | feathers.socketio       |
 | @feathersjs/authentication-client | feathers.authentication |
 
-> __Important:__ The Feathers client libraries come transpiled to ES5 and require ES6 shims either through the [babel-polyfill](https://www.npmjs.com/package/babel-polyfill) module or by including [core.js](https://github.com/zloirock/core-js) in older browsers e.g. via `<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/core-js/2.1.4/core.min.js"></script>`
 
-<!-- -->
-
-> __Important:__ When you are loading @feathersjs/client you do not have to install or load any of the other modules listed in the table above.
+When you are loading `@feathersjs/client` you do not have to install or load any of the other modules listed in the table above.
 
 ### When to use
 
-`@feathersjs/client` can be used directly in the browser using a `<script>` tag without a module loader as well as with module loaders that do not support CommonJS (like RequireJS) or React applications created with a default `create-react-app`.
+`@feathersjs/client` can be used directly in the browser using a `<script>` tag without a module loader as well as with module loaders that do not support CommonJS (like RequireJS).
 
 If you are using the Feathers client with Node or React Native you should follow the steps described in the [Node](#node) and [React Native](#react-native) sections and __not__ use `@feathersjs/client`.
-
-> __Note:__ All Feathers client examples show direct usage and usage with `@feathersjs/client`.
-
-### Load with a module loader
-
-You can use `@feathersjs/client` with other browser module loaders/bundlers (instead of using the modules directly) but it may include packages you may not use and result in a slightly larger bundle size.
-
-```js
-import io from 'socket.io-client';
-import feathers from '@feathersjs/client';
-
-// Socket.io is exposed as the `io` global.
-const socket = io('http://localhost:3030');
-// @feathersjs/client is exposed as the `feathers` global.
-const app = feathers();
-
-app.configure(feathers.socketio(socket));
-app.configure(feathers.authentication());
-
-app.service('messages').create({
-  text: 'A new message'
-});
-
-// feathers.errors is an object with all of the custom error types.
-```
 
 ### Load from CDN with `<script>`
 
 Below is an example of the scripts you would use to load `@feathersjs/client` from [unpkg.com](https://unpkg.com).
 
 ```html
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/core-js/2.1.4/core.min.js"></script>
-<script src="//unpkg.com/@feathersjs/client@^4.5.0/dist/feathers.js"></script>
-<script src="//unpkg.com/socket.io-client@^2.3.0/dist/socket.io.js"></script>
+<script src="//unpkg.com/@feathersjs/client@^5.0.0/dist/feathers.js"></script>
+<script src="//unpkg.com/socket.io-client@^4.0.0/dist/socket.io.js"></script>
 <script>
   // Socket.io is exposed as the `io` global.
-  var socket = io('http://localhost:3030');
+  const socket = io('http://localhost:3030')
   // @feathersjs/client is exposed as the `feathers` global.
-  var app = feathers();
+  const app = feathers()
 
-  app.configure(feathers.socketio(socket));
-  app.configure(feathers.authentication());
+  app.configure(feathers.socketio(socket))
+  app.configure(feathers.authentication())
 
   app.service('messages').create({
     text: 'A new message'
-  });
+  })
 
   // feathers.errors is an object with all of the custom error types.
 </script>
