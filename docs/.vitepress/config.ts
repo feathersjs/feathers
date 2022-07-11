@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 // import { version } from '../package.json'
+import { highlight } from './highlight'
 const version = 5
 import {
   contributing,
@@ -88,6 +89,16 @@ export default defineConfig({
   ],
   lastUpdated: true,
   markdown: {
+    config: async md => {
+      md.set({
+        highlight: await highlight({
+          light: 'vitesse-light',
+          dark: 'vitesse-dark',
+        })
+      })
+
+      return md
+    },
     theme: {
       light: 'vitesse-light',
       dark: 'vitesse-dark',

@@ -35,10 +35,8 @@ Service methods are [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_an
 
 Below is an example of Feathers service interface as a class:
 
-<LanguageBlock global-id="ts" >
-
 ```ts
-import { Application, Id, NullableId, Params, Service } from '@feathersjs/feathers';
+import type { Application, Id, NullableId, Params, Service } from '@feathersjs/feathers';
 
 class MyService implements Service<any> {
   async find(params: Params) {}
@@ -47,34 +45,12 @@ class MyService implements Service<any> {
   async update(id: NullableId, data: any, params: Params) {}
   async patch(id: NullableId, data: any, params: Params) {}
   async remove(id: NullableId, params: Params) {}
-  async setup (path: string, app: Application) {},
+  async setup (path: string, app: Application) {}
   async teardown (path: string, app: Application) {}
 }
 
 app.use('/my-service', new MyService());
 ```
-
-</LanguageBlock>
-<LanguageBlock global-id="js">
-
-```js
-class MyService {
-  async find(params) {}
-  async get(id, params) {}
-  async create(data, params) {}
-  async update(id, data, params) {}
-  async patch(id, data, params) {}
-  async remove(id, params) {},
-  async setup(path, app) {},
-  async teardown(path, app) {}
-}
-
-app.use('/my-service', new MyService());
-```
-
-</LanguageBlock>
-
-
 
 The parameters for service methods are:
 
@@ -111,8 +87,22 @@ When used as a REST API, incoming requests get mapped automatically to their cor
 
 A service can be registered on the Feathers application by calling [app.use(name, service)](../../api/application.md#use-path-service) with a name and the service instance:
 
-```js
-const app = feathers()
+```ts
+import { feathers, type Params } from '@feathersjs/feathers'
+
+class MessageService {
+  async get (name: string, params: Params) {
+    return {
+      message: `You have to do ${name}`
+    }
+  }
+}
+
+type ServiceTypes = {
+  messages: MessageService
+}
+
+const app = feathers<ServiceTypes>()
 
 // Register the message service on the Feathers application
 app.use('messages', new MessageService())

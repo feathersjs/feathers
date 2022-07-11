@@ -18,7 +18,7 @@ This should already pass but it won't be testing any of the functionality we add
 
 When testing database functionality, we want to make sure that the tests use a different database. We can achieve this by updating the test environment configuration in `config/test.json` with the following content:
 
-```js
+```json
 {
   "nedb": "../test/data"
 }
@@ -40,7 +40,7 @@ Now we can update the `scripts` section of our `package.json` to the following:
 
 <LanguageBlock global-id="ts">
 
-```ts
+```json
   "scripts": {
     "test": "npm run compile && npm run mocha",
     "dev": "ts-node-dev --no-notify src/",
@@ -55,7 +55,7 @@ Now we can update the `scripts` section of our `package.json` to the following:
 
 <LanguageBlock global-id="js">
 
-```js
+```json
   "scripts": {
     "test": "npm run eslint && npm run mocha",
     "eslint": "eslint src/. test/. --config .eslintrc.json",

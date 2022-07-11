@@ -12,9 +12,7 @@ Hooks are commonly used to handle things like permissions, validation, logging, 
 
 The following example logs the runtime of any service method on the `messages` service and adds `createdAt` property before saving the data to the database:
 
-<LanguageBlock global-id="ts">
-
-```js
+```ts
 import { feathers, HookContext, NextFunction } from '@feathersjs/feathers';
 
 const app = feathers();
@@ -32,7 +30,7 @@ app.service('messages').hooks({
         console.log(`Method ${context.method} on ${context.path} took ${Date.now() - start}ms`)
       }
     ]
-  }
+  },
   before: {
     create: [
       async (context: HookContext) => {
@@ -45,43 +43,6 @@ app.service('messages').hooks({
   }
 })
 ```
-</LanguageBlock>
-
-<LanguageBlock global-id="js">
-
-```js
-import { feathers, HookContext } from '@feathersjs/feathers';
-
-const app = feathers();
-
-app.service('messages').hooks({
-  around: {
-    all: [
-      // A hook that wraps around all other hooks and the service method
-      // logging the total runtime of a successful call
-      async (context, next) => {
-        const startTime = Date.now()
-
-        await next()
-
-        console.log(`Method ${context.method} on ${context.path} took ${Date.now() - start}ms`)
-      }
-    ]
-  }
-  before: {
-    create: [
-      async (context) => {
-        context.data = {
-          ...context.data,
-          createdAt: Date.now()
-        }
-      }
-    ]
-  }
-})
-```
-
-</LanguageBlock>
 
 
 ## Hook functions
@@ -303,8 +264,6 @@ Hooks will only be available for the standard service methods or methods passed 
 
 This means usual hook registration looks like this:
 
-<LanguageBlock global-id="ts">
-
 ```ts
 // The standard all at once way (also used by the generator)
 // an array of functions per service method name (and for `all` methods)
@@ -343,49 +302,6 @@ app.service('servicename').hooks({
 })
 ```
 
-</LanguageBlock>
-<LanguageBlock global-id="js">
-
-```js
-// The standard all at once way (also used by the generator)
-// an array of functions per service method name (and for `all` methods)
-app.service('servicename').hooks({
-  around: {
-    all: [
-      async (context, next) => {
-        console.log('around all hook ran')
-        await next()
-      }
-    ],
-    find: [ /* other hook functions here */ ],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: [],
-    // Custom methods use hooks as well
-    myCustomMethod: []
-  },
-  before: {
-    all: [
-      async (context) => console.log('before all hook ran')
-    ],
-    find: [ /* other hook functions here */ ],
-    get: [],
-    // ...etc
-  },
-  after: {
-    find: [
-      async (context) => console.log('after find hook ran')
-    ]
-  },
-  error: {
-  }
-})
-```
-
-</LanguageBlock>
-
 <BlockQuote type="tip">
 
 `app.service(<servicename>).hooks(hooks)` can be called multiple times and the hooks will be registered in that order. Normally all hooks should be registered at once however to see at a glance what the service is going to do.
@@ -393,8 +309,6 @@ app.service('servicename').hooks({
 </BlockQuote>
 
 Since around hooks offer the same functionality as `before`, `after` and `error` hooks at the same time they can also be registered without a nested object:
-
-<LanguageBlock global-id="ts">
 
 ```ts
 // Passing an array of around hooks that run for every method
@@ -421,36 +335,6 @@ app.service('servicename').hooks({
 })
 ```
 
-</LanguageBlock>
-<LanguageBlock global-id="js">
-
-```js
-// Passing an array of around hooks that run for every method
-app.service('servicename').hooks([
-  async (context, next) => {
-    console.log('around all hook ran')
-    await next()
-  }
-])
-
-// Passing an object with method names and a list of around hooks
-app.service('servicename').hooks({
-  get: [
-    async (context, next) => {
-      console.log('around get hook ran')
-      await next()
-    }
-  ],
-  create: [],
-  update: [],
-  patch: [],
-  remove: [],
-  myCustomMethod: []
-})
-```
-
-</LanguageBlock>
-
 ## Application hooks
 
 ### Service hooks
@@ -476,8 +360,6 @@ app.hooks({
 
 A special kind of application hooks are `setup` and `teardown` hooks. They are around hooks that can be used to initialize database connections etc. and only run once when the application starts up or shuts down.
 
-<LanguageBlock global-id="ts">
-
 ```ts
 import { MongoClient } from 'mongodb'
 
@@ -499,32 +381,3 @@ app.hooks({
   ]
 })
 ```
-
-</LanguageBlock>
-<LanguageBlock global-id="js">
-
-```js
-import { MongoClient } from 'mongodb'
-
-app.hooks({
-  setup: [
-    async (context, next) => {
-      const mongodb = new MongoClient(yourConnectionURI)
-
-      await mongodb.connect()
-      context.app.set('mongodb', mongodb)
-      await next()
-    }
-  ],
-  teardown: [
-    async (context, next) => {
-      context.app.get('mongodb').close()
-      await next()
-    }
-  ]
-})
-```
-
-</LanguageBlock>
-
-

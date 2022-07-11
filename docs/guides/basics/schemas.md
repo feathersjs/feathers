@@ -39,16 +39,82 @@ Let's extend our existing users schema to add an `avatar` property so that our u
 
 First we need to update the `src/services/users/users.schema.ts` file with the new `avatar` property. This can be done by adding the JSON schema property definition `avatar: { type: 'string' }` to the `usersDataSchema`:
 
-<<< @/examples/ts/chat-users-schema.ts {17-19}
-
 </LanguageBlock>
 <LanguageBlock global-id="js">
 
 First we need to update the `src/services/users/users.schema.js` file with the new `avatar` property. This can be done by adding the JSON schema property definition `avatar: { type: 'string' }` to the `usersDataSchema`:
 
-<<< @/examples/ts/chat-users-schema.ts {17-19}
-
 </LanguageBlock>
+
+```ts{17-19}
+import { schema, querySyntax } from '@feathersjs/schema'
+import type { Infer } from '@feathersjs/schema'
+
+// Schema for the basic data model (e.g. creating new entries)
+export const usersDataSchema = schema({
+  $id: 'UsersData',
+  type: 'object',
+  additionalProperties: false,
+  required: ['email', 'password'],
+  properties: {
+    email: {
+      type: 'string'
+    },
+    password: {
+      type: 'string'
+    },
+    avatar: {
+      type: 'string'
+    }
+  }
+} as const)
+
+export type UsersData = Infer<typeof usersDataSchema>
+
+// Schema for making partial updates
+export const usersPatchSchema = schema({
+  $id: 'UsersPatch',
+  type: 'object',
+  additionalProperties: false,
+  required: [],
+  properties: {
+    ...usersDataSchema.properties
+  }
+} as const)
+
+export type UsersPatch = Infer<typeof usersPatchSchema>
+
+// Schema for the data that is being returned
+export const usersResultSchema = schema({
+  $id: 'UsersResult',
+  type: 'object',
+  additionalProperties: false,
+  required: ['id'],
+  properties: {
+    ...usersDataSchema.properties,
+    id: {
+      type: 'string'
+    }
+  }
+} as const)
+
+export type UsersResult = Infer<typeof usersResultSchema>
+
+// Queries shouldn't allow doing anything with the password
+const { password, ...usersQueryProperties } = usersResultSchema.properties
+
+// Schema for allowed query properties
+export const usersQuerySchema = schema({
+  $id: 'UsersQuery',
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    ...querySyntax(usersQueryProperties)
+  }
+} as const)
+
+export type UsersQuery = Infer<typeof usersQuerySchema>
+```
 
 Next, instead of making users send a link to their avatar, we update the resolver to automatically add a link to the [Gravatar](http://en.gravatar.com/) image associated with the user's email address. To do this we add an `avatar` data resolver which means it gets added before the user gets saved to the database.
 
@@ -56,16 +122,104 @@ Next, instead of making users send a link to their avatar, we update the resolve
 
 Update the `src/services/users/users.resolver.ts` file as follows:
 
-<<< @/examples/ts/chat-users-resolver.ts {1,24-32,68-72}
-
 </LanguageBlock>
 <LanguageBlock global-id="js">
 
 Update the `src/services/users/users.resolver.js` file as follows:
 
-<<< @/examples/js/chat-users-resolver.js {1,17-22,61-65}
-
 </LanguageBlock>
+
+```ts{1,24-32,68-72}
+import crypto from 'crypto'
+import { resolve } from '@feathersjs/schema'
+import { passwordHash } from '@feathersjs/authentication-local'
+import type { HookContext } from '../declarations'
+import type {
+  UsersData,
+  UsersPatch,
+  UsersResult,
+  UsersQuery
+} from '../schemas/users.schema'
+import {
+  usersDataSchema,
+  usersPatchSchema,
+  usersResultSchema,
+  usersQuerySchema
+} from '../schemas/users.schema'
+
+// Resolver for the basic data model (e.g. creating new entries)
+export const usersDataResolver = resolve<UsersData, HookContext>({
+  schema: usersDataSchema,
+  validate: 'before',
+  properties: {
+    password: passwordHash({ strategy: 'local' }),
+    avatar: async (_value, user) => {
+      // Gravatar uses MD5 hashes from an email address to get the image
+      const hash = crypto
+        .createHash('md5')
+        .update(user.email.toLowerCase())
+        .digest('hex')
+      // Return the full avatar URL
+      return `https://s.gravatar.com/avatar/${hash}?s=60`
+    }
+  }
+})
+
+// Resolver for making partial updates
+export const usersPatchResolver = resolve<UsersPatch, HookContext>({
+  schema: usersPatchSchema,
+  validate: 'before',
+  properties: {}
+})
+
+// Resolver for the data that is being returned
+export const usersResultResolver = resolve<UsersResult, HookContext>({
+  schema: usersResultSchema,
+  validate: false,
+  properties: {}
+})
+
+// Resolver for the "safe" version that external clients are allowed to see
+export const usersDispatchResolver = resolve<UsersResult, HookContext>({
+  schema: usersResultSchema,
+  validate: false,
+  properties: {
+    // The password should never be visible externally
+    password: async () => undefined
+  }
+})
+
+// Resolver for allowed query properties
+export const usersQueryResolver = resolve<UsersQuery, HookContext>({
+  schema: usersQuerySchema,
+  validate: 'before',
+  properties: {
+    // If there is a user (e.g. with authentication)
+    // They are only allowed to see their own data
+    id: async (value, user, context) => {
+      // We want to be able to get a list of all users
+      // only let a user see and modify their own data otherwise
+      if (context.params.user && context.method !== 'find') {
+        return context.params.user.id
+      }
+
+      return value
+    }
+  }
+})
+
+// Export all resolvers in a format that can be used with the resolveAll hook
+export const usersResolvers = {
+  result: usersResultResolver,
+  dispatch: usersDispatchResolver,
+  data: {
+    create: usersDataResolver,
+    update: usersDataResolver,
+    patch: usersPatchResolver
+  },
+  query: usersQueryResolver
+}
+```
 
 ## Handling messages
 
@@ -75,16 +229,82 @@ Next we can look at the messages service schema. We want to include the date whe
 
 Update the `src/services/messages/messages.schema.ts` file with the `userId` and `createdAt` properties:
 
-<<< @/examples/ts/chat-messages-schema.ts {3,15-20,53-55}
-
 </LanguageBlock>
 <LanguageBlock global-id="js">
 
 Update the `src/services/messages/messages.schema.js` file with the `userId` and `createdAt` properties:
 
-<<< @/examples/js/chat-messages-schema.js {2,14-19}
-
 </LanguageBlock>
+
+```ts{3,15-20,53-55}
+import { schema, querySyntax } from '@feathersjs/schema'
+import type { Infer } from '@feathersjs/schema'
+import { UsersResult } from './users.schema'
+
+// Schema for the basic data model (e.g. creating new entries)
+export const messagesDataSchema = schema({
+  $id: 'MessagesData',
+  type: 'object',
+  additionalProperties: false,
+  required: ['text'],
+  properties: {
+    text: {
+      type: 'string'
+    },
+    createdAt: {
+      type: 'number'
+    },
+    userId: {
+      type: 'number' // 'string' if you are using MongoDB
+    }
+  }
+} as const)
+
+export type MessagesData = Infer<typeof messagesDataSchema>
+
+// Schema for making partial updates
+export const messagesPatchSchema = schema({
+  $id: 'MessagesPatch',
+  type: 'object',
+  additionalProperties: false,
+  required: [],
+  properties: {
+    ...messagesDataSchema.properties
+  }
+} as const)
+
+export type MessagesPatch = Infer<typeof messagesPatchSchema>
+
+// Schema for the data that is being returned
+export const messagesResultSchema = schema({
+  $id: 'MessagesResult',
+  type: 'object',
+  additionalProperties: false,
+  required: [...messagesDataSchema.required, 'id', 'userId'],
+  properties: {
+    ...messagesDataSchema.properties,
+    id: {
+      type: 'string'
+    }
+  }
+} as const)
+
+export type MessagesResult = Infer<typeof messagesResultSchema> & {
+  user: UsersResult
+}
+
+// Schema for allowed query properties
+export const messagesQuerySchema = schema({
+  $id: 'MessagesQuery',
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    ...querySyntax(messagesResultSchema.properties)
+  }
+} as const)
+
+export type MessagesQuery = Infer<typeof messagesQuerySchema>
+```
 
 Both the `createdAt` and `userId` property can be added automatically before saving the data to the database. `createdAt` is the current date and `userId` is the authenticated user (we will see how to authenticate in the [next chapter](./authentication.md)). To do this we can update the `data` resolver. To populate the full user that sent the message in a response we can use the `result` resolver.
 
@@ -92,16 +312,83 @@ Both the `createdAt` and `userId` property can be added automatically before sav
 
 Update `src/services/messages/messages.resolver.ts` like this:
 
-<<< @/examples/ts/chat-messages-resolver.ts {22-29,45-48}
-
 </LanguageBlock>
 <LanguageBlock global-id="js">
 
 Update `src/services/messages/messages.resolver.js` like this:
 
-<<< @/examples/js/chat-messages-resolver.js {14-20,36-39}
-
 </LanguageBlock>
+
+```ts{22-29,45-48}
+import { resolve } from '@feathersjs/schema'
+import type { HookContext } from '../declarations'
+
+import type {
+  MessagesData,
+  MessagesPatch,
+  MessagesResult,
+  MessagesQuery
+} from '../schemas/messages.schema'
+import {
+  messagesDataSchema,
+  messagesPatchSchema,
+  messagesResultSchema,
+  messagesQuerySchema
+} from '../schemas/messages.schema'
+
+// Resolver for the basic data model (e.g. creating new entries)
+export const messagesDataResolver = resolve<MessagesData, HookContext>({
+  schema: messagesDataSchema,
+  validate: 'before',
+  properties: {
+    userId: async (_value, _message, context) => {
+      // Associate the record with the id of the authenticated user
+      // context.params.user._id if you are using MongoDB
+      return context.params.user.id
+    },
+    createdAt: async () => {
+      return Date.now()
+    }
+  }
+})
+
+// Resolver for making partial updates
+export const messagesPatchResolver = resolve<MessagesPatch, HookContext>({
+  schema: messagesPatchSchema,
+  validate: 'before',
+  properties: {}
+})
+
+// Resolver for the data that is being returned
+export const messagesResultResolver = resolve<MessagesResult, HookContext>({
+  schema: messagesResultSchema,
+  validate: false,
+  properties: {
+    user: async (_value, message, context) => {
+      // Associate the user that sent the message
+      return context.app.service('users').get(message.userId)
+    }
+  }
+})
+
+// Resolver for query properties
+export const messagesQueryResolver = resolve<MessagesQuery, HookContext>({
+  schema: messagesQuerySchema,
+  validate: 'before',
+  properties: {}
+})
+
+// Export all resolvers in a format that can be used with the resolveAll hook
+export const messagesResolvers = {
+  result: messagesResultResolver,
+  data: {
+    create: messagesDataResolver,
+    update: messagesDataResolver,
+    patch: messagesPatchResolver
+  },
+  query: messagesQueryResolver
+}
+```
 
 ## Creating a migration
 
@@ -133,16 +420,31 @@ Created Migration: /path/to/feathers-chat/migrations/20220622012334_chat.(ts|js)
 
 Open that file and update it as follows
 
-<LanguageBlock global-id="ts">
+```ts{4-11,15-22}
+import { Knex } from 'knex'
 
-<<< @/examples/ts/chat-migration.ts {4-11,15-22}
+export async function up(knex: Knex): Promise<void> {
+  await knex.schema.alterTable('users', (table) => {
+    table.string('avatar')
+  })
 
-</LanguageBlock>
-<LanguageBlock global-id="js">
+  await knex.schema.alterTable('messages', (table) => {
+    table.bigint('createdAt')
+    table.bigint('userId').references('id').inTable('users')
+  })
+}
 
-<<< @/examples/js/chat-migration.js {4-11,15-22}
+export async function down(knex: Knex): Promise<void> {
+  await knex.schema.alterTable('users', (table) => {
+    table.dropColumn('avatar')
+  })
 
-</LanguageBlock>
+  await knex.schema.alterTable('messages', (table) => {
+    table.dropColumn('createdAt')
+    table.dropColumn('userId')
+  })
+}
+```
 
 We can run the migrations on the current database with
 

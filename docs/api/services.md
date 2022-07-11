@@ -10,16 +10,45 @@ Services are the heart of every Feathers application. Services are objects or in
 
 Service methods are pre-defined [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) and [custom methods](#custommethod-data-params) that your service provides or that have already been implemented by one of the [database adapters](./databases/common.md). Below is an example of a Feathers service as a class or object.
 
-<LanguageBlock global-id="ts">
+```ts
+import { feathers, Params, Id, NullableId } from '@feathersjs/feathers'
 
-<<< @/examples/ts/service-interface-examples.ts
+class MyServiceClass {
+  async find(params: Params) {
+    return []
+  }
+  async get(id: Id, params: Params) {}
+  async create(data: any, params: Params) {}
+  async update(id: NullableId, data: any, params: Params) {}
+  async patch(id: NullableId, data: any, params: Params) {}
+  async remove(id: NullableId, params: Params) {}
+  async setup(app: Application, path: string) {}
+  async teardown(app: Application, path: string) {}
+}
 
-</LanguageBlock>
-<LanguageBlock global-id="js">
+const myServiceObject = {
+  async find(params: Params) {
+    return []
+  },
+  async get(id: Id, params: Params) {},
+  async create(data: any, params: Params) {},
+  async update(id: NullableId, data: any, params: Params) {},
+  async patch(id: NullableId, data: any, params: Params) {},
+  async remove(id: NullableId, params: Params) {},
+  async setup(app: Application, path: string) {},
+  async teardown(app: Application, path: string) {}
+}
 
-<<< @/examples/js/service-interface-examples.js
+type ServiceTypes = {
+  'my-service': MyServiceClass
+  'my-service-object': typeof myServiceObject
+}
 
-</LanguageBlock>
+const app = feathers<ServiceTypes>()
+
+app.use('my-service', new MyService())
+app.use('my-service-object', myServiceObject)
+```
 
 <BlockQuote type="danger">
 
@@ -85,8 +114,6 @@ For external calls only `params.query` will be sent between the client and serve
 
 `service.find(params) -> Promise` - Retrieves a list of all resources from the service. `params.query` can be used to filter and limit the returned data.
 
-<LanguageBlock global-id="ts">
-
 ```ts
 class MessageService {
   async find (params: Params) {
@@ -103,28 +130,6 @@ class MessageService {
 app.use('messages', new MessageService())
 ```
 
-</LanguageBlock>
-<LanguageBlock global-id="js">
-
-```js
-class MessageService {
-  async find (params) {
-    return [{
-      id: 1,
-      text: 'Message 1'
-    }, {
-      id: 2,
-      text: 'Message 2'
-    }]
-  }
-}
-
-app.use('messages', new MessageService())
-```
-
-</LanguageBlock>
-
-
 <BlockQuote type="info">
 
 `find` does not have to return an array. It can also return an object. The database adapters already do this for [pagination](./databases/common.md#pagination).
@@ -135,10 +140,8 @@ app.use('messages', new MessageService())
 
 `service.get(id, params) -> Promise` - Retrieves a single resource with the given `id` from the service.
 
-<LanguageBlock global-id="ts">
-
 ```ts
-import { Id, Params } from '@feathersjs/feathers'
+import type { Id, Params } from '@feathersjs/feathers'
 
 class TodoService {
   async get (id: Id, params: Params) {
@@ -152,23 +155,6 @@ class TodoService {
 app.use('todos', new TodoService())
 ```
 
-</LanguageBlock>
-<LanguageBlock global-id="js">
-
-```js
-class TodoService {
-  async get (id, params) {
-    return {
-      id,
-      text: `You have to do ${id}!`
-    }
-  }
-}
-
-app.use('todos', new TodoService())
-```
-
-</LanguageBlock>
 
 ### .create(data, params)
 
@@ -176,10 +162,8 @@ app.use('todos', new TodoService())
 
 A successful `create` method call emits the [`created` service event](./events.md#created) with the returned data or a separate event for every item if the returned data is an array.
 
-<LanguageBlock global-id="ts">
-
 ```ts
-import { Id, Params } from '@feathersjs/feathers'
+import type { Id, Params } from '@feathersjs/feathers'
 
 type Message = { text: string }
 
@@ -195,27 +179,6 @@ class MessageService {
 
 app.use('messages', new MessageService())
 ```
-
-</LanguageBlock>
-<LanguageBlock global-id="js">
-
-```js
-class MessageService {
-  constructor() {
-    this.messages = []
-  }
-
-  async create (data, params) {
-    this.messages.push(data)
-
-    return data
-  }
-}
-
-app.use('messages', new MessageService())
-```
-
-</LanguageBlock>
 
 <BlockQuote type="warning">
 
@@ -280,10 +243,8 @@ A custom method is any other service method you want to expose publicly. A custo
 
 In order to register a public custom method, the names of *all methods* have to be passed as the `methods` option when registering the service with [app.use()](./application.md#usepath-service--options)
 
-<LanguageBlock global-id="ts">
-
 ```ts
-import { Id, Params } from '@feathersjs/feathers'
+import type { Id, Params } from '@feathersjs/feathers'
 
 type CustomData = {
   name: string
@@ -313,35 +274,6 @@ const app = feathers<ServiceTypes>()
     methods: ['get', 'myCustomMethod']
   })
 ```
-
-</LanguageBlock>
-<LanguageBlock global-id="js">
-
-```js
-class MyService {
-  async get(id, params) {
-    return {
-      id,
-      message: `You have to do ${id}`
-    }
-  }
-
-  async myCustomMethod (data, params) {
-    return data
-  }
-}
-
-const app = feathers()
-  .configure(rest())
-  .use('my-service', new MyService(), {
-    // Pass all methods you want to expose
-    methods: ['get', 'myCustomMethod']
-  })
-```
-
-</LanguageBlock>
-
-
 
 See the [REST client](./client/rest.md) and [Socket.io client](./client/socketio.md) chapters on how to use those custom methods on the client.
 

@@ -51,7 +51,7 @@ export default function (app: Application) {
   app.configure(expressOauth());
 }
 
-export default class DiscordStrategy extends OAuthStrategy {
+export class DiscordStrategy extends OAuthStrategy {
   async getProfile(authResult: AuthenticationRequest) {
     // This is the OAuth access token that can be used
     // for Discord API requests as the Bearer token

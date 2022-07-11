@@ -104,12 +104,8 @@ app.io.on('disconnect', (reason) => {
 
 On the client, [custom service methods](../services.md#custom-methods) are also registered using the `methods` option when registering the service via `socketClient.service()`:
 
-
-
-<LanguageBlock global-id="ts">
-
-```typescript
-import { feathers, CustomMethod } from '@feathersjs/feathers';
+```ts
+import { feathers, type CustomMethod } from '@feathersjs/feathers';
 import socketio, { SocketService } from '@feathersjs/socketio-client';
 import io from 'socket.io-client';
 
@@ -139,34 +135,6 @@ client.service('myservice', socketClient.service('myservice'), {
 // Then it can be used like other service methods
 client.service('myservice').myCustomMethod(data, params);
 ```
-
-</LanguageBlock>
-
-<LanguageBlock global-id="js">
-
-```js
-const feathers = require('@feathersjs/feathers');
-const socketio = require('@feathersjs/socketio-client');
-const io = require('socket.io-client');
-
-const socket = io('http://api.feathersjs.com');
-const client = feathers();
-const socketClient = socketio(socket)
-
-// Set up Socket.io client with the socket
-client.configure(socketClient);
-
-client.service('myservice', connection.service('myservice'), {
-  methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'myCustomMethod']
-});
-
-// Then it can be used like other service methods
-client.service('myservice').myCustomMethod(data, params);
-```
-
-</LanguageBlock>
-
-
 
 > __Note:__ Just like on the server *all* methods you want to use have to be listed in the `methods` option.
 

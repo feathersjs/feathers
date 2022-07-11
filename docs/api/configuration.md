@@ -25,8 +25,6 @@ For more information refer to the  [node-config docs](https://github.com/lorenwe
 
 The `@feathersjs/configuration` module is an app configuration function that takes a root directory (usually something like `__dirname` in your application) and the configuration folder (set to `config` by default):
 
-<LanguageBlock global-id="ts">
-
 ```ts
 import { feathers } from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
@@ -34,19 +32,6 @@ import configuration from '@feathersjs/configuration'
 // Use the application root and `config/` as the configuration folder
 const app = feathers().configure(configuration())
 ```
-
-</LanguageBlock>
-<LanguageBlock global-id="js">
-
-```js
-import { feathers } from '@feathersjs/feathers'
-import configuration from '@feathersjs/configuration'
-
-// Use the application root and `config/` as the configuration folder
-const app = feathers().configure(configuration())
-```
-
-</LanguageBlock>
 
 <BlockQuote type="warning" label="Important">
 
@@ -58,18 +43,31 @@ Direct access to nested config properties is not supported via `app.get()`. To a
 
 The application configuration can be validated against a [Feathers schema](./schema/) when [app.setup](./application.md#setupserver) (or `app.listen`) is called by passing a schema when initializing `@feathersjs/configuration`:
 
+```ts
+import { Knex } from 'knex'
 
-<LanguageBlock global-id="ts">
+export async function up(knex: Knex): Promise<void> {
+  await knex.schema.alterTable('users', (table) => {
+    table.string('avatar')
+  })
 
-<<< @/examples/ts/configuration-schema.ts
+  await knex.schema.alterTable('messages', (table) => {
+    table.bigint('createdAt')
+    table.bigint('userId').references('id').inTable('users')
+  })
+}
 
-</LanguageBlock>
-<LanguageBlock global-id="js">
+export async function down(knex: Knex): Promise<void> {
+  await knex.schema.alterTable('users', (table) => {
+    table.dropColumn('avatar')
+  })
 
-<<< @/examples/js/configuration-schema.js
-
-</LanguageBlock>
-
+  await knex.schema.alterTable('messages', (table) => {
+    table.dropColumn('createdAt')
+    table.dropColumn('userId')
+  })
+}
+```
 
 ## Environment variables
 

@@ -61,7 +61,85 @@ Now we can create a Feathers application with a simple `messages` service that a
 
 Create a file called `app.ts` with the following content:
 
-<<< @/examples/ts/first-app.ts
+</LanguageBlock>
+<LanguageBlock global-id="js">
+
+Create a file called `app.mjs` with the following content:
+
+</LanguageBlock>
+
+```ts
+import { feathers } from '@feathersjs/feathers'
+
+// This is the interface for the message data
+interface Message {
+  id?: number
+  text: string
+}
+
+// A messages service that allows to create new
+// and return all existing messages
+class MessageService {
+  messages: Message[] = []
+
+  async find() {
+    // Just return all our messages
+    return this.messages
+  }
+
+  async create(data: Pick<Message, 'text'>) {
+    // The new message is the data text with a unique identifier added
+    // using the messages length since it changes whenever we add one
+    const message: Message = {
+      id: this.messages.length,
+      text: data.text
+    }
+
+    // Add new message to the list
+    this.messages.push(message)
+
+    return message
+  }
+}
+
+// This tells TypeScript what services we are registering
+type ServiceTypes = {
+  messages: MessageService
+}
+
+const app = feathers<ServiceTypes>()
+
+// Register the message service on the Feathers application
+app.use('messages', new MessageService())
+
+// Log every time a new message has been created
+app.service('messages').on('created', (message: Message) => {
+  console.log('A new message has been created', message)
+})
+
+// A function that creates messages and then logs
+// all existing messages on the service
+const main = async () => {
+  // Create a new message on our message service
+  await app.service('messages').create({
+    text: 'Hello Feathers'
+  })
+
+  // And another one
+  await app.service('messages').create({
+    text: 'Hello again'
+  })
+
+  // Find all existing messages
+  const messages = await app.service('messages').find()
+
+  console.log('All messages', messages)
+}
+
+main()
+```
+
+<LanguageBlock global-id="ts">
 
 We can run it with
 
@@ -71,11 +149,6 @@ npx ts-node app.ts
 
 </LanguageBlock>
 <LanguageBlock global-id="js">
-
-Create a file called `app.mjs` with the following content:
-
-
-<<< @/examples/js/first-app.js
 
 We can run it with
 
@@ -107,24 +180,15 @@ In the following example we will take our existing service and use
 
 <LanguageBlock global-id="ts">
 
-Run
-
 ```sh
 npm install @feathersjs/socketio@pre @feathersjs/koa@pre koa-static @types/koa-static --save
 ```
 
 Then update `app.ts` with the following content:
 
-<<< @/examples/ts/api-server.ts{2-4,42-55,59-62,64-67}
-
-We can start the server with
-
-```sh
-npx ts-node app.ts
-```
 
 </LanguageBlock>
-<LanguageBlock  global-id="js">
+<LanguageBlock global-id="js">
 
 Run
 
@@ -134,7 +198,95 @@ npm install @feathersjs/socketio@pre @feathersjs/koa@pre koa-static --save
 
 Then update `app.mjs` with the following content:
 
-<<< @/examples/js/api-server.js{2-4,33-56}
+</LanguageBlock>
+
+
+```ts{2-4,42-55,59-62,64-67}
+import { feathers } from '@feathersjs/feathers'
+import { koa, rest, bodyParser, errorHandler } from '@feathersjs/koa'
+import serveStatic from 'koa-static'
+import socketio from '@feathersjs/socketio'
+
+// This is the interface for the message data
+interface Message {
+  id?: number
+  text: string
+}
+
+// A messages service that allows to create new
+// and return all existing messages
+class MessageService {
+  messages: Message[] = []
+
+  async find() {
+    // Just return all our messages
+    return this.messages
+  }
+
+  async create(data: Pick<Message, 'text'>) {
+    // The new message is the data text with a unique identifier added
+    // using the messages length since it changes whenever we add one
+    const message: Message = {
+      id: this.messages.length,
+      text: data.text
+    }
+
+    // Add new message to the list
+    this.messages.push(message)
+
+    return message
+  }
+}
+
+// This tells TypeScript what services we are registering
+type ServiceTypes = {
+  messages: MessageService
+}
+
+// Creates an ExpressJS compatible Feathers application
+const app = koa<ServiceTypes>(feathers())
+
+// Use the current folder for static file hosting
+app.use(serveStatic('.'))
+// Register the error handle
+app.use(errorHandler())
+// Parse JSON request bodies
+app.use(bodyParser())
+
+// Register REST service handler
+app.configure(rest())
+// Configure Socket.io real-time APIs
+app.configure(socketio())
+// Register our messages service
+app.use('messages', new MessageService())
+
+// Add any new real-time connection to the `everybody` channel
+app.on('connection', (connection) => app.channel('everybody').join(connection))
+// Publish all events to the `everybody` channel
+app.publish((_data) => app.channel('everybody'))
+
+// Start the server
+app
+  .listen(3030)
+  .then(() => console.log('Feathers server listening on localhost:3030'))
+
+// For good measure let's create a message
+// So our API doesn't look so empty
+app.service('messages').create({
+  text: 'Hello world from the server'
+})
+```
+
+<LanguageBlock global-id="ts">
+
+We can start the server with
+
+```sh
+npx ts-node app.ts
+```
+
+</LanguageBlock>
+<LanguageBlock  global-id="js">
 
 We can start the server with
 
@@ -178,7 +330,70 @@ Now we can look at one of the really cool features of Feathers: **It works the s
 
 In the same folder, add the following `index.html` page:
 
-<<< @/examples/first-frontend.html
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Feathers Example</title>
+  <link rel="stylesheet" href="//unpkg.com/feathers-chat@4.0.0/public/base.css">
+  <link rel="stylesheet" href="//unpkg.com/feathers-chat@4.0.0/public/chat.css">
+</head>
+<body>
+  <main id="main" class="container">
+    <h1>Welcome to Feathers</h1>
+    <form class="form" onsubmit="sendMessage(event.preventDefault())">
+      <input type="text" id="message-text" placeholder="Enter message here">
+      <button type="submit" class="button button-primary">Send message</button>
+    </form>
+
+    <h2>Here are the current messages:</h2>
+  </main>
+
+  <script src="//unpkg.com/@feathersjs/client@^5.0.0-pre.24/dist/feathers.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    // Set up socket.io
+    const socket = io('http://localhost:3030');
+    // Initialize a Feathers app
+    const app = feathers();
+
+    // Register socket.io to talk to our server
+    app.configure(feathers.socketio(socket));
+
+    // Form submission handler that sends a new message
+    async function sendMessage () {
+      const messageInput = document.getElementById('message-text');
+
+      // Create a new message with the input field value
+      await app.service('messages').create({
+        text: messageInput.value
+      });
+
+      messageInput.value = '';
+    }
+
+    // Renders a single message on the page
+    function addMessage (message) {
+      document.getElementById('main').innerHTML += `<p>${message.text}</p>`;
+    }
+
+    const main = async () => {
+      // Find all existing messages
+      const messages = await app.service('messages').find();
+
+      // Add existing messages to the list
+      messages.forEach(addMessage);
+
+      // Add any newly created message to the list in real-time
+      app.service('messages').on('created', addMessage);
+    };
+
+    main();
+  </script>
+</body>
+</html>
+```
 
 If you now in the browser go to
 

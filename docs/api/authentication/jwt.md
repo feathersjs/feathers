@@ -91,11 +91,7 @@ Parse the HTTP request headers for JWT authentication information. Returns a pro
 
 ## Customization
 
-
-
-<LanguageBlock global-id="ts">
-
-```typescript
+```ts
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { LocalStrategy } from '@feathersjs/authentication-local';
@@ -112,27 +108,3 @@ export default (app: Application) => {
   app.use('/authentication', authService);
 }
 ```
-
-</LanguageBlock>
-
-<LanguageBlock global-id="js">
-
-```js
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
-
-class MyJwtStrategy extends JWTStrategy {
-}
-
-module.exports = app => {
-  const authService = new AuthenticationService(app);
-
-  authService.register('jwt', new MyJwtStrategy());
-
-  // ...
-  app.use('/authentication', authService);
-}
-```
-
-</LanguageBlock>
-
-

@@ -83,12 +83,8 @@ Standard local authentication can be configured with those options in `config/de
 
 The `LocalStrategy` can be customized like any ES6 class and then registered on the [AuthenticationService](./service.md):
 
-
-
-<LanguageBlock global-id="ts">
-
-```typescript
-import { Application, Params, Query } from '@feathersjs/feathers';
+```ts
+import type { Application, Params, Query } from '@feathersjs/feathers';
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { LocalStrategy } from '@feathersjs/authentication-local';
 
@@ -112,39 +108,6 @@ export default (app: Application) => {
   app.use('/authentication', authService);
 }
 ```
-
-</LanguageBlock>
-
-<LanguageBlock global-id="js">
-
-```js
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
-const { LocalStrategy } = require('@feathersjs/authentication-local');
-
-class MyLocalStrategy extends LocalStrategy {
-  async getEntityQuery(query, params) {
-    // Query for user but only include users marked as `active`
-    return {
-      ...query,
-      active: true,
-      $limit: 1
-    }
-  }
-}
-
-module.exports = app => {
-  const authService = new AuthenticationService(app);
-
-  authService.register('local', new MyLocalStrategy());
-
-  // ...
-  app.use('/authentication', authService);
-}
-```
-
-</LanguageBlock>
-
-
 
 ## Hooks
 

@@ -23,9 +23,6 @@ Resolvers usually work together with [schema definitions](./schema.md) but can a
 Here is an example for a standalone resolver using a custom context:
 
 
-
-<LanguageBlock global-id="ts">
-
 ```ts
 import { resolve } from '@feathersjs/schema';
 
@@ -84,57 +81,6 @@ const partialMessage: Pick<User, 'id'|'text'|'user'> = await messageResolver.res
 
 // { id: 1, text: 'Hello', user: { id: 23, name: 'David' } }
 ```
-
-</LanguageBlock>
-
-<LanguageBlock global-id="js">
-
-```js
-import { resolve } from '@feathersjs/schema';
-
-const context = {
-  async getUser (id) {
-    return {
-      id,
-      name: 'David'
-    }
-  },
-  async getLikes (messageId) {
-    return 10;
-  }
-}
-
-const messageResolver = resolve({
-  properties: {
-    likes: async (value, message, context) => {
-      return context.getLikes(message.id);
-    },
-    user: async (value, message, context) => {
-      return context.getUser(message.userId);
-    }
-  }
-});
-
-const resolvedMessage = await messageResolver.resolve({
-  id: 1,
-  userId: 23,
-  text: 'Hello!'
-}, context);
-
-// { id: 1, userId: 10, likes: 10, text: 'Hello', user: { id: 23, name: 'David' } }
-const partialMessage = await messageResolver.resolve({
-  id: 1,
-  userId: 23,
-  text: 'Hello!'
-}, context, {
-  properties: [ 'id', 'text', 'user' ]
-});
-
-// { id: 1, text: 'Hello', user: { id: 23, name: 'David' } }
-```
-
-</LanguageBlock>
-
 
 
 ## Options

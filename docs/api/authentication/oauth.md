@@ -262,10 +262,7 @@ app.configure(expressOauth({
 Normally, any OAuth provider set up in the [configuration](#configuration) will be initialized with the default [OAuthStrategy](#oauthstrategy). The flow for a specific provider can be customized by extending `OAuthStrategy` class and registering it under that name on the [AuthenticationService](./service.md):
 
 
-
-<LanguageBlock global-id="ts">
-
-```typescript
+```ts
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { OAuthStrategy } from '@feathersjs/authentication-oauth';
@@ -292,38 +289,3 @@ export default (app: Application) => {
   app.use('/authentication', authService);
 }
 ```
-
-</LanguageBlock>
-
-<LanguageBlock global-id="js">
-
-```js
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
-const { OAuthStrategy } = require('@feathersjs/authentication-oauth');
-
-class MyGithubStrategy extends OAuthStrategy {
-  async getEntityData(profile) {
-    // Include the `email` from the GitHub profile when creating
-    // or updating a user that logged in with GitHub
-    const baseData = await super.getEntityData(profile);
-
-    return {
-      ...baseData,
-      email: profile.email
-    };
-  }
-}
-
-module.exports = app => {
-  const authService = new AuthenticationService(app);
-
-  authService.register('github', new MyGithubStrategy());
-
-  // ...
-  app.use('/authentication', authService);
-}
-```
-
-</LanguageBlock>
-
-

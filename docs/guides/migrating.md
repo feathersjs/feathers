@@ -121,7 +121,7 @@ export type MyQuery = {
   name: string;
 }
 
-export type MyServiceParams extends Params<MyQuery> {
+export interface MyServiceParams extends Params<MyQuery> {
   user: User;
 }
 ```
