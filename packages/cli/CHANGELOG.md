@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.27](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.26...v5.0.0-pre.27) (2022-07-13)
+
+
+### Bug Fixes
+
+* **cli:** Fix flaky authentication migration and SQL id schema types ([#2676](https://github.com/feathersjs/feathers/issues/2676)) ([04ce9a5](https://github.com/feathersjs/feathers/commit/04ce9a53f4226cd6283f9dc241876e90ddf48618))
+
+
+### Features
+
+* **cli:** Add support for Prettier ([#2684](https://github.com/feathersjs/feathers/issues/2684)) ([83aa8f9](https://github.com/feathersjs/feathers/commit/83aa8f9f212cb122d831dca8858852b0ac9b4da8))
+* **cli:** Improve generated application folder structure ([#2678](https://github.com/feathersjs/feathers/issues/2678)) ([d114557](https://github.com/feathersjs/feathers/commit/d114557721e73d6302aa88c11e3726dbcbd5c92b))
+
+
+
+
+
 # [5.0.0-pre.26](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.25...v5.0.0-pre.26) (2022-06-22)
 
 

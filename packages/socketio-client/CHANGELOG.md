@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.27](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.26...v5.0.0-pre.27) (2022-07-13)
+
+
+### Bug Fixes
+
+* **socketio-client:** Make Socket.io client event target compatible ([#2686](https://github.com/feathersjs/feathers/issues/2686)) ([716c49a](https://github.com/feathersjs/feathers/commit/716c49a270e4be5e5276192092c292f72ffcfa19))
+
+
+
+
+
 # [5.0.0-pre.26](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.25...v5.0.0-pre.26) (2022-06-22)
 
 **Note:** Version bump only for package @feathersjs/socketio-client
