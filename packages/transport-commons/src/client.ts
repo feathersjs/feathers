@@ -7,6 +7,7 @@ const debug = createDebug('@feathersjs/transport-commons/client')
 
 const namespacedEmitterMethods = [
   'addListener',
+  'addEventListener',
   'emit',
   'listenerCount',
   'listeners',
@@ -15,6 +16,7 @@ const namespacedEmitterMethods = [
   'prependListener',
   'prependOnceListener',
   'removeAllListeners',
+  'removeEventListener',
   'removeListener'
 ]
 const otherEmitterMethods = ['eventNames', 'getMaxListeners', 'setMaxListeners']
