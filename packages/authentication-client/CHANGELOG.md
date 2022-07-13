@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.27](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.26...v5.0.0-pre.27) (2022-07-13)
+
+
+### Bug Fixes
+
+* **authentication-client:** Ensure reAuthenticate works in parallel with other requests ([#2690](https://github.com/feathersjs/feathers/issues/2690)) ([41b3761](https://github.com/feathersjs/feathers/commit/41b376106b47e2f40a8914db7a5ed2935e070c08))
+
+
+
+
+
 # [5.0.0-pre.26](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.25...v5.0.0-pre.26) (2022-06-22)
 
 **Note:** Version bump only for package @feathersjs/authentication-client
