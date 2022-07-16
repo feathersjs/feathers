@@ -44,29 +44,36 @@ Direct access to nested config properties is not supported via `app.get()`. To a
 The application configuration can be validated against a [Feathers schema](./schema/) when [app.setup](./application.md#setupserver) (or `app.listen`) is called by passing a schema when initializing `@feathersjs/configuration`:
 
 ```ts
-import { Knex } from 'knex'
+import { feathers } from '@feathersjs/feathers'
+import { schema, Infer } from '@feathersjs/schema'
+import configuration from '@feathersjs/configuration'
 
-export async function up(knex: Knex): Promise<void> {
-  await knex.schema.alterTable('users', (table) => {
-    table.string('avatar')
-  })
+const configurationSchema = schema({
+  $id: 'FeathersConfiguration',
+  type: 'object',
+  additionalProperties: false,
+  required: ['port', 'host'],
+  properties: {
+    port: { type: 'number' },
+    host: { type: 'string' }
+  }
+} as const)
 
-  await knex.schema.alterTable('messages', (table) => {
-    table.bigint('createdAt')
-    table.bigint('userId').references('id').inTable('users')
-  })
-}
+type ServiceTypes = {}
+// Use the schema type for typed `app.get` and `app.set` calls
+type Configuration = Infer<typeof configurationSchema>
 
-export async function down(knex: Knex): Promise<void> {
-  await knex.schema.alterTable('users', (table) => {
-    table.dropColumn('avatar')
-  })
+// Use the application root and `config/` as the configuration folder
+const app = feathers<ServiceTypes, Configuration>().configure(
+  configuration(configurationSchema)
+)
 
-  await knex.schema.alterTable('messages', (table) => {
-    table.dropColumn('createdAt')
-    table.dropColumn('userId')
+// Configuration will only be validated now
+app.listen()
+  .then(() => console.log('Server started'))
+  .catch((error) => {
+    // Configuration validation errors will show up here
   })
-}
 ```
 
 ## Environment variables

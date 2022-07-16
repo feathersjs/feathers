@@ -107,11 +107,11 @@ You can create custom errors by extending from the `FeathersError` class and cal
 - `data` - Additional data to include in the error
 
 
-```js
+```ts
 import { FeathersError } from '@feathersjs/errors'
 
 class UnsupportedMediaType extends FeathersError {
-  constructor(message, data) {
+  constructor(message: string, data: any) {
     super(message, 'UnsupportedMediaType', 415, 'unsupported-media-type', data);
   }
 }
@@ -145,19 +145,13 @@ const errorHandler = ctx => {
 };
 ```
 
-then add it to the error.all hook
+then add it as an [application level](./application.md#hookshooks) error hook
 
-```js
-module.exports = {
+```ts
+app.hooks({
   //...
   error: {
-    all: [errorHandler],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
+    all: [errorHandler]
   }
-};
+})
 ```

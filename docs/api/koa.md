@@ -21,17 +21,17 @@ The `@feathersjs/koa` module contains the [KoaJS](https://koajs.com/) framework 
 
 `koa(app) -> app` is a function that turns a [Feathers application](./application.md) into a fully KoaJS compatible application that additionally to Feathers functionality also lets you use the [KoaJS API](https://koajs.com/).
 
-```js
-const feathers = require('@feathersjs/feathers');
-const { koa, errorHandler, bodyParser, rest } = require('@feathersjs/koa');
+```ts
+import { feathers } from '@feathersjs/feathers'
+import { koa, errorHandler, bodyParser, rest } from '@feathersjs/koa'
 
 // Create an app that is a Feathers AND Express application
-const app = koa(feathers());
+const app = koa(feathers())
 
-app.use(errorHandler());
-app.use(authentication());
-app.use(bodyParser());
-app.configure(rest());
+app.use(errorHandler())
+app.use(authentication())
+app.use(bodyParser())
+app.configure(rest())
 ```
 
 `@feathersjs/koa` also exposes the following middleware:
@@ -55,14 +55,14 @@ If no Feathers application is passed, `koa() -> app` returns a plain Koa applica
 
 ```js
 // Register Koa middleware
-app.use(async (ctx, next) => {
+app.use(async (ctx: any, next: NextFunction) => {
   ctx.feathers.fromMiddleware = 'Hello from Koa middleware'
 
   await next()
 })
 
 // Register a service
-app.use('/todos', {
+app.use('todos', {
   async get(id, params) {
     const { fromMiddleware } = params
 
@@ -77,7 +77,7 @@ app.use('/todos', {
 
 ```js
 // Listen on port 3030
-const server = await app.listen(3030);
+const server = await app.listen(3030)
 ```
 
 ## app.setup(server)

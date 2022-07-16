@@ -12,8 +12,6 @@ This chapter describes:
 - [Channel usage](#channels) and how to retrieve, join and leave channels
 - [Publishing events](#publishing) to channels
 
-> __Important:__ If you are not using a real-time transport server (e.g. when making a REST only API or using Feathers on the client), channel functionality is not going to be available.
-
 Some examples where channels are used:
 
 - Real-time events should only be sent to authenticated users
@@ -22,9 +20,17 @@ Some examples where channels are used:
 - Only admins should be notified when new users are created
 - When a user is created, modified or removed, non-admins should only receive a "safe" version of the user object (e.g. only `email`, `id` and `avatar`)
 
+
+<BlockQuote type="warning">
+
+If you are not using a real-time transport server (e.g. when making a REST only API or using Feathers on the client), channel functionality is not going to be available.
+
+</BlockQuote>
+
+
 ## Concepts
 
-When using channels, the server pushes events (such as "created", "removed" etc. for a particular service) down to its clients via *channels*. The client doesn’t listen to individual channels directly, but rather subscribes to specific events on services that it is interested in. Those events will only fire on the client if the server pushes data to one or more channels that the client has been added to.
+When using channels, the server pushes events (such as `created`, `removed` etc. for a particular service) down to its clients via *channels*. The client doesn’t listen to individual channels directly, but rather subscribes to specific events on services that it is interested in. Those events will only fire on the client if the server pushes data to one or more channels that the client has been added to.
 
 You can have any number of channels. This helps to organise how data is sent and to control the volume of data, by not sending things that aren't relevant.
 
@@ -36,7 +42,7 @@ The server needs to explicitly *publish* channels it is interested in sharing wi
 
 ## Example
 
-The example below shows the generated `channels.js` file illustrating how the different parts fit together:
+The example below shows the generated channels file illustrating how the different parts fit together:
 
 ```ts
 export default function(app: any) {

@@ -13,7 +13,7 @@ Hooks are commonly used to handle things like permissions, validation, logging, 
 The following example logs the runtime of any service method on the `messages` service and adds `createdAt` property before saving the data to the database:
 
 ```ts
-import { feathers, HookContext, NextFunction } from '@feathersjs/feathers';
+import { feathers, type HookContext, type NextFunction } from '@feathersjs/feathers';
 
 const app = feathers();
 
@@ -57,7 +57,7 @@ const hookFunction = async (context) => {
 }
 ```
 
-For more information see the [hook flow](#hook-flow) and [asynchronous hooks](#asynchronous-hooks) section.
+For more information see the [hook flow](#hook-flow) section.
 
 
 ### around
@@ -83,11 +83,11 @@ const myAsyncHook = async (context, next) => {
 }
 ```
 
-Any around hook can be wrapped around another function, essentially becoming a middleware function.  Calling `await next()` will either call the next middleware in the chain or the original function if all middleware have run.
- 
+Any around hook can be wrapped around another function. Calling `await next()` will either call the next hook in the chain or the original function if all hooks have run.
+
 ## Hook flow
 
-In general, hooks are executed in the order [they are registered](#registering-hooks) with `before` hooks running before the service method is called. Hooks are executed in the following order: 
+In general, hooks are executed in the order [they are registered](#registering-hooks) with `around` hooks running first. Hooks are executed in the following order: 
 
 - `around` hooks (before `await next()`)
 - `before` hooks
@@ -95,7 +95,7 @@ In general, hooks are executed in the order [they are registered](#registering-h
 - `after` hooks
 - `around` hooks (after `await next()`)
 
-Note that since `around` hooks wrap everything, the first hook to run will be the last to execute it's code after `await next()`. 
+Note that since `around` hooks wrap **around** everything, the first hook to run will be the last to execute it's code after `await next()`. This is reverse of the order `after` hooks execute.
 
 The hook flow can be affected as follows.
 
@@ -121,18 +121,16 @@ app.service('messages').hooks({
 
 ### Setting `context.result`
 
-When `context.result` is set in a `before` hook, the original [service method](./services.md) call will be skipped. All other hooks will still execute in their normal order. The following example always returns the currently [authenticated user](./authentication/service.md) instead of the actual user for all `get` method calls:
+When `context.result` is set in an `around` hook before calling `await next()` or in a `before` hook, the original [service method](./services.md) call will be skipped. All other hooks will still execute in their normal order. The following example always returns the currently [authenticated user](./authentication/service.md) instead of the actual user for all `get` method calls:
 
 ```js
 app.service('users').hooks({
   before: {
     get: [
-      context => {
+      (context: HookContext) => {
         // Never call the actual users service
         // just use the authenticated user
         context.result = context.params.user;
-
-        return context;
       }
     ]
   }

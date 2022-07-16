@@ -39,7 +39,7 @@ npm install @feathersjs/feathers @feathersjs/socketio-client socket.io-client --
 
 Then initialize like this:
 
-```js
+```ts
 import io from 'socket.io-client'
 import { feathers } from '@feathersjs/feathers'
 import socketio from '@feathersjs/socketio-client'
@@ -51,7 +51,7 @@ client.configure(socketio(socket))
 
 const messageService = client.service('messages')
 
-messageService.on('created', message => console.log('Created a message', message))
+messageService.on('created', (message: Message) => console.log('Created a message', message))
 
 // Use the messages service from the server
 messageService.create({
@@ -69,7 +69,7 @@ npm install @feathersjs/feathers @feathersjs/socketio-client socket.io-client
 
 Then in the main application file:
 
-```js
+```ts
 import io from 'socket.io-client'
 import { AsyncStorage } from 'react-native'
 import feathers from '@feathersjs/feathers'
@@ -85,11 +85,11 @@ const client = feathers()
 client.configure(socketio(socket))
 client.configure(authentication({
   storage: AsyncStorage
-})
+}))
 
 const messageService = client.service('messages')
 
-messageService.on('created', message => console.log('Created a message', message))
+messageService.on('created', (message: Message) => console.log('Created a message', message))
 
 // Use the messages service from the server
 messageService.create({

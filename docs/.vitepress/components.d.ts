@@ -3,6 +3,8 @@
 // Read more: https://github.com/vuejs/core/pull/3399
 import '@vue/runtime-core'
 
+export {}
+
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Badges: typeof import('./components/Badges.vue')['default']
@@ -19,5 +21,3 @@ declare module '@vue/runtime-core' {
     TeamMember: typeof import('./components/TeamMember.vue')['default']
   }
 }
-
-export {}

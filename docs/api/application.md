@@ -72,7 +72,7 @@ const message = await app.service('messages').get('test')
 
 `options` can contain the following additional options for the service:
 
-- `methods` (default: `['find', 'get', 'create', 'patch', 'update','remove']`) - A list of official and [custom service methods](services.md#custom-methods) exposed by this service. When using this option **all** method names that should be available externally must be passed otherwise. The methods passed will automatically be available for use with [hooks](./hooks).
+- `methods` (default: `['find', 'get', 'create', 'patch', 'update','remove']`) - A list of official and [custom service methods](services.md#custom-methods) exposed by this service. When using this option **all** method names that should be available externally must be passed. Those methods will automatically be available for use with [hooks](./hooks).
 - `events` - A list of [public custom events sent by this service](./events.md#custom-events)
 
 ```ts
@@ -167,10 +167,11 @@ Normally `app.setup` will be called automatically when starting the application 
 
 `app.set(name, value) -> app` assigns setting `name` to `value`.
 
-## .get(name)
+<BlockQuote type="danger">
 
-`app.get(name) -> value` retrieves the setting `name`.
+`app.set` is global to the application. Do not use it for storing request or service method specific data. This can be done by adding data to the [hook context](./hooks.md#hook-context).
 
+</BlockQuote>
 
 ```ts
 import { feathers } from '@feathersjs/feathers'
@@ -191,12 +192,15 @@ app.set('port', 3030)
 app.listen(app.get('port'))
 ```
 
-<BlockQuote type="info">
+<BlockQuote type="info" label="Note">
 
-On the server, those settings are usually initialized using [@feathersjs/configuration](configuration.md).
+On the server, settings are usually initialized using [@feathersjs/configuration](configuration.md).
 
 </BlockQuote>
 
+## .get(name)
+
+`app.get(name) -> value` retrieves the setting `name`.
 
 ## .on(eventname, listener)
 
@@ -222,7 +226,7 @@ app.on('myevent', (data: Message) => console.log('myevent happened', data));
 
 <BlockQuote type="warning">
 
-`app` can not receive or send events to or from clients. A [custom service](services.md) should be used for those use cases.
+`app` can not receive or send events to or from clients. A [custom service](services.md) should be used for that.
 
 </BlockQuote>
 
@@ -235,7 +239,7 @@ Provided by the core [NodeJS EventEmitter .removeListener](https://nodejs.org/ap
 `app.mixins` contains a list of service mixins. A mixin is a callback (`(service, path, options) => {}`) that gets run for every service that is being registered. Adding your own mixins allows to add functionality to every registered service.
 
 ```ts
-import type { id } from '@feathersjs/feathers'
+import type { Id } from '@feathersjs/feathers'
 
 // Mixins have to be added before registering any services
 app.mixins.push((service: any, path: string) => {
@@ -268,9 +272,7 @@ servicePaths.forEach(path => {
 
 <BlockQuote type="danger">
 
-To retrieve services, the [app.service(path)](#service-path) method should be used.
-
-Not `app.services[path]` directly.
+To retrieve services, the [app.service(path)](#service-path) method should be used, not `app.services[path]` directly.
 
 </BlockQuote>
 
@@ -285,7 +287,7 @@ class InfoService {
   }
 }
 
-app.use('info', new InfoService());
+app.use('info', new InfoService())
 ```
 
 ## .defaultService
@@ -295,7 +297,8 @@ app.use('info', new InfoService());
 ```ts
 import { MemoryService } from '@feathersjs/memory'
 
-// For every `path` that doesn't have a service automatically return a new in-memory service
+// For every `path` that doesn't have a service
+// Automatically return a new in-memory service
 app.defaultService = function(path: string) {
   return new MemoryService()
 }
@@ -305,7 +308,7 @@ This is used by the [client transport adapters](./client.md) to automatically re
 
 ## .lookup
 
-`app.lookup(path)` allows to look up a full path and will return the `data` (route parameters) and `service` on the server:
+`app.lookup(path)` allows to look up a full path and will return the `data` (route parameters) and `service` on the server.
 
 ```ts
 const { data, service } = app.lookup('messages/4321');

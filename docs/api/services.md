@@ -11,7 +11,8 @@ Services are the heart of every Feathers application. Services are objects or in
 Service methods are pre-defined [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) and [custom methods](#custommethod-data-params) that your service provides or that have already been implemented by one of the [database adapters](./databases/common.md). Below is an example of a Feathers service as a class or object.
 
 ```ts
-import { feathers, Params, Id, NullableId } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
+import type { Params, Id, NullableId } from '@feathersjs/feathers'
 
 class MyServiceClass {
   async find(params: Params) {
@@ -58,7 +59,7 @@ Always use the service returned by `app.service(path)` not the service object or
 
 <BlockQuote type="tip">
 
-Methods are optional and if a method is not implemented Feathers will automatically emit a `NotImplemented` error. At least one of the default methods (e.g. `setup`) or all `methods` passed as options to [app.use](./application.md#usepath-service--options) must be available to be considered a service.
+Methods are optional and if a method is not implemented Feathers will automatically emit a `NotImplemented` error. At least one standard service method must be implemented to be considered a service. If you used `methods` option when registering the service via [app.use](./application.md#usepath-service--options), all methods listed must be available.
 
 </BlockQuote>
 
