@@ -145,7 +145,7 @@ export class AuthenticationClient {
     if (!authPromise || force === true) {
       authPromise = this.getAccessToken().then((accessToken) => {
         if (!accessToken) {
-          throw new NotAuthenticated('No accessToken found in storage')
+          return this.handleError(new NotAuthenticated('No accessToken found in storage'), 'authenticate')
         }
 
         return this.authenticate({
