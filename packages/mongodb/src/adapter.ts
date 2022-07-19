@@ -215,15 +215,18 @@ export class MongoDbAdapter<
 
       return entry
     }
+
     const promise = Array.isArray(data)
       ? model
           .insertMany(data.map(setId), writeOptions)
           .then(async (result) =>
-            Promise.all(Object.values(result.insertedIds).map(async (_id) => model.findOne({ _id })))
+            Promise.all(
+              Object.values(result.insertedIds).map(async (_id) => model.findOne({ _id }, params.mongodb))
+            )
           )
       : model
           .insertOne(setId(data), writeOptions)
-          .then(async (result) => model.findOne({ _id: result.insertedId }))
+          .then(async (result) => model.findOne({ _id: result.insertedId }, params.mongodb))
 
     return promise.then(select(params, this.id)).catch(errorHandler)
   }
