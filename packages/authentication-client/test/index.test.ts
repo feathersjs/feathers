@@ -154,10 +154,11 @@ describe('@feathersjs/authentication-client', () => {
   })
 
   describe('reauthenticate', () => {
-    it('fails when no token in storage', async () => {
+    it('fails when no token in storage and resets authentication state', async () => {
       await assert.rejects(() => app.authentication.reAuthenticate(), {
         message: 'No accessToken found in storage'
       })
+      assert.ok(!app.get('authentication'), 'Reset authentication')
     })
 
     it('reauthenticates when token is in storage', async () => {
