@@ -24,6 +24,8 @@ const OPERATORS = {
   $ilike: 'ilike'
 }
 
+const RETURNING_CLIENTS = ['postgresql', 'pg', 'oracledb', 'mssql']
+
 export class KnexAdapter<
   T,
   D = Partial<T>,
@@ -155,7 +157,7 @@ export class KnexAdapter<
   async $find(params: P = {} as P): Promise<Paginated<T> | T[]> {
     const { filters, paginate } = this.filterQuery(params)
     const builder = params.knex ? params.knex.clone() : this.createQuery(params)
-    const countBuilder = builder.clone().count(`${this.table}.${this.id} as total`)
+    const countBuilder = builder.clone().clearSelect().clearOrder().count(`${this.table}.${this.id} as total`)
 
     // Handle $limit
     if (filters.$limit) {
@@ -172,11 +174,13 @@ export class KnexAdapter<
       builder.orderBy(`${this.table}.${this.id}`, 'asc')
     }
 
-    const data = filters.$limit === 0 ? [] : await builder
+    const data = filters.$limit === 0 ? [] : await builder.catch(errorHandler)
 
     if (paginate && paginate.default) {
+      const total = await countBuilder.then((count) => parseInt(count[0] ? count[0].total : 0))
+
       return {
-        total: await countBuilder.then((count) => (count[0] ? count[0].total : 0)),
+        total,
         limit: filters.$limit,
         skip: filters.$skip || 0,
         data
@@ -220,7 +224,7 @@ export class KnexAdapter<
     }
 
     const client = this.db(params).client.config.client
-    const returning = client === 'pg' || client === 'oracledb' || client === 'mssql' ? [this.id] : []
+    const returning = RETURNING_CLIENTS.includes(client as string) ? [this.id] : []
     const rows: any = await this.db(params).insert(data, returning).catch(errorHandler)
     const id = data[this.id] || rows[0][this.id] || rows[0]
 

@@ -86,7 +86,7 @@ const testSuite = adapterTests([
   '.find + paginate + params'
 ])
 
-const TYPE = process.env.DB || 'sqlite'
+const TYPE = process.env.TEST_DB || 'sqlite'
 const db = knex(connection(TYPE) as any)
 
 // Create a public database to mimic a "schema"
@@ -366,9 +366,7 @@ describe('Feathers Knex Service', () => {
     })
 
     it('attaches the SQL error', async () => {
-      await assert.rejects(() => peopleService.create({}), {
-        name: 'GeneralError'
-      })
+      await assert.rejects(() => peopleService.create({}))
     })
   })
 
