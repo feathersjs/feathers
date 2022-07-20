@@ -3,7 +3,7 @@ import { HookGeneratorContext } from '../index'
 import { renderSource } from '../../commons'
 
 const aroundTemplate = ({ camelName, name }: HookGeneratorContext) => `
-import { HookContext, NextFunction } from '../declarations'
+import type { HookContext, NextFunction } from '../declarations'
 
 export const ${camelName} = async (context: HookContext, next: NextFunction) => {
   console.log(\`Running hook ${name} on \${context.path}\.\${context.method}\`)
@@ -12,8 +12,9 @@ export const ${camelName} = async (context: HookContext, next: NextFunction) => 
 `
 
 const regularTemplate = ({
-  camelName
-}: HookGeneratorContext) => `import { HookContext } from '../declarations'
+  camelName,
+  name
+}: HookGeneratorContext) => `import type { HookContext } from '../declarations'
 
 export const ${camelName} = async (context: HookContext) => {
   console.log(\`Running hook ${name} on \${context.path}\.\${context.method}\`)

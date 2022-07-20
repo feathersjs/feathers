@@ -5,10 +5,12 @@ const schemaImports = ({ upperName, folder, fileName }: ServiceGeneratorContext)
   ${upperName}Data,
   ${upperName}Result,
   ${upperName}Query,
-} from './services/${folder.join('/')}/${fileName}.schema'`
+} from './services/${folder.join('/')}/${fileName}.schema'
+
+export * from './services/${folder.join('/')}/${fileName}.schema'`
 
 const declarationTemplate = ({ path, upperName }: ServiceGeneratorContext) =>
-  `  '${path}': Service<${upperName}Data, ${upperName}Result, Params<${upperName}Query>>`
+  `  '${path}': Service<${upperName}Result, ${upperName}Data, Params<${upperName}Query>>`
 
 const toClientFile = toFile<ServiceGeneratorContext>(({ lib }) => [lib, 'client.ts'])
 
