@@ -14,7 +14,8 @@ import {
   querySyntax,
   Combine,
   resolveDispatch,
-  resolveAll
+  resolveAll,
+  Ajv
 } from '../src'
 import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib'
 
