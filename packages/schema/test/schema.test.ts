@@ -195,7 +195,7 @@ describe('@feathersjs/schema/schema', () => {
         email: { type: 'string' },
         age: { type: 'number' }
       }
-    } as const)
+    } as const, customAjv)
     const messageSchema = schema({
       $id: 'ref-message',
       type: 'object',
@@ -209,7 +209,7 @@ describe('@feathersjs/schema/schema', () => {
           $ref: 'ref-user'
         }
       }
-    } as const)
+    } as const, customAjv)
 
     type User = Infer<typeof userSchema>
     type Message = Infer<typeof messageSchema> & {
