@@ -18,6 +18,11 @@ import {
 } from '../src'
 import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib'
 
+const fixtureAjv = new Ajv({
+  coerceTypes: true,
+  addUsedSchema: true // default
+})
+
 export const userSchema = schema({
   $id: 'UserData',
   type: 'object',
@@ -27,7 +32,7 @@ export const userSchema = schema({
     email: { type: 'string' },
     password: { type: 'string' }
   }
-} as const)
+} as const, fixtureAjv)
 
 export const userResultSchema = schema({
   $id: 'UserResult',
@@ -96,7 +101,7 @@ export const messageResultSchema = schema({
     id: { type: 'number' },
     user: { $ref: 'UserResult' }
   }
-} as const)
+} as const, fixtureAjv)
 
 export type Message = Infer<typeof messageSchema>
 export type MessageResult = Combine<
