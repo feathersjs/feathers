@@ -33,7 +33,7 @@ export const userSchema = schema({
     email: { type: 'string' },
     password: { type: 'string' }
   }
-} as const, fixtureAjv)
+} as const)
 
 export const userResultSchema = schema({
   $id: 'UserResult',
@@ -44,7 +44,7 @@ export const userResultSchema = schema({
     ...userSchema.properties,
     id: { type: 'number' }
   }
-} as const)
+} as const, fixtureAjv)
 
 export type User = Infer<typeof userSchema>
 export type UserResult = Infer<typeof userResultSchema> & { name: string }
