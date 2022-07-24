@@ -175,3 +175,20 @@ Only `params.query` is passed between the server and the client, other parts of 
 ### params.connection
 
 `params.connection` is the connection object that can be used with [channels](./channels.md). It is the same object as `socket.feathers` in a Socket.io middleware as [shown in the `params` section](#params).
+
+## CORS
+
+When serving your client from another host, you'll run into CORS issues which can be resolved by setting `cors` options for `socketio`. More on that here: https://socket.io/docs/v3/handling-cors/
+
+```js
+const cors = require('@koa/cors')
+
+const app = koa(feathers())
+
+// Note that this only applies to REST (non-socket) requests
+app.use(cors())
+
+// setting `origin` to true will allow requests from any origin
+// reference https://socket.io/docs/v3/handling-cors/ for other options
+app.configure(socketio({cors: { origin: true }})) 
+```
