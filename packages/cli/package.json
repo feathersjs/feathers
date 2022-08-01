@@ -54,7 +54,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathershq/pinion": "^0.3.3",
+    "@feathershq/pinion": "^0.3.4",
     "chalk": "^4.0.1",
     "lodash": "^4.17.21",
     "prettier": "^2.7.1"
@@ -74,13 +74,13 @@
     "@feathersjs/socketio": "^5.0.0-pre.27",
     "@feathersjs/transport-commons": "^5.0.0-pre.27",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.0.1",
-    "@types/prettier": "^2.6.3",
+    "@types/node": "^18.6.3",
+    "@types/prettier": "^2.6.4",
     "axios": "^0.27.2",
     "mocha": "^10.0.0",
     "shx": "^0.3.4",
-    "ts-node": "^10.8.2",
-    "type-fest": "^2.16.0",
+    "ts-node": "^10.9.1",
+    "type-fest": "^2.18.0",
     "typescript": "^4.7.4"
   },
   "gitHead": "6032742bce059781e7013fd662870df45bd72bb5"
