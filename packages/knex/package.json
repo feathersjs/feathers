@@ -56,17 +56,17 @@
     "@feathersjs/feathers": "^5.0.0-pre.27"
   },
   "peerDependencies": {
-    "knex": "^2.1.0"
+    "knex": "^2.2.0"
   },
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.0-pre.27",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.0.1",
-    "knex": "^2.1.0",
+    "@types/node": "^18.6.3",
+    "knex": "^2.2.0",
     "mocha": "^10.0.0",
     "pg": "^8.7.3",
     "shx": "^0.3.4",
-    "sqlite3": "^5.0.8",
+    "sqlite3": "^5.0.11",
     "typescript": "^4.7.4"
   },
   "gitHead": "6032742bce059781e7013fd662870df45bd72bb5"
