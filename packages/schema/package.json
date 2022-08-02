@@ -60,12 +60,12 @@
     "@types/json-schema": "^7.0.11",
     "ajv": "^8.11.0",
     "json-schema": "^0.4.0",
-    "json-schema-to-ts": "^2.5.4"
+    "json-schema-to-ts": "^2.5.5"
   },
   "devDependencies": {
     "@feathersjs/memory": "^5.0.0-pre.27",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.0.1",
+    "@types/node": "^18.6.3",
     "ajv-formats": "^2.1.1",
     "mocha": "^10.0.0",
     "shx": "^0.3.4",
