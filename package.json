@@ -33,7 +33,7 @@
     "update-dependencies": "ncu -u && lerna exec -- ncu -u -x node-fetch -x chalk",
     "clean": "find . -name node_modules -exec rm -rf '{}' + && find . -name package-lock.json -exec rm -rf '{}' +",
     "test:deno": "deno test --config deno/tsconfig.json deno/test.ts",
-    "test": "npm run lint && lerna run compile && c8 lerna run test"
+    "test": "npm run lint && lerna run compile && c8 lerna run test --ignore @feathersjs/tests"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.31.0",

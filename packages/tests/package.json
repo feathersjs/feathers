@@ -33,8 +33,7 @@
   },
   "scripts": {
     "prepublish": "npm run compile",
-    "compile": "shx rm -rf lib/ && tsc",
-    "test": "npm run compile"
+    "compile": "shx rm -rf lib/ && tsc"
   },
   "directories": {
     "lib": "lib"
