@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.28](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.27...v5.0.0-pre.28) (2022-08-03)
+
+
+### Bug Fixes
+
+* **cli:** Improve generated application and client ([#2701](https://github.com/feathersjs/feathers/issues/2701)) ([bd55ffb](https://github.com/feathersjs/feathers/commit/bd55ffb812e89bf215f4515e7f137656ea888c3f))
+* **core:** Get hooks to work reliably with custom methods ([#2714](https://github.com/feathersjs/feathers/issues/2714)) ([8d7e04a](https://github.com/feathersjs/feathers/commit/8d7e04acd0f0e2af9f4c13efee652d296dd3bc51))
+
+
+
+
+
 # [5.0.0-pre.27](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.26...v5.0.0-pre.27) (2022-07-13)
 
 **Note:** Version bump only for package @feathersjs/feathers
