@@ -34,6 +34,8 @@ describe('@feathersjs/cli', () => {
       let cwd: string
 
       before(async () => {
+        console.log(dependencyVersions)
+
         cwd = await mkdtemp(path.join(os.tmpdir(), name + '-'))
         context = await generate(
           getContext<AppGeneratorContext>(
