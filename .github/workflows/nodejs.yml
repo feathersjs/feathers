@@ -33,6 +33,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - run: npm i npm -g
     - run: npm install -g codeclimate-test-reporter
     - run: npm install
     - run: npm test
