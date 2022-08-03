@@ -36,6 +36,8 @@ Authenticate `authentication` data with additional `params`. `authenticate` shou
 
 Parse a given plain Node HTTP request and response and return `null` or the authentication information it provides. Does not have to be implemented.
 
+This is called by the authentication service. See [AuthService.parse](https://dove.feathersjs.com/api/authentication/service.html#parse-req-res-strategies)
+
 ## AuthenticationBaseStrategy
 
 The `AuthenticationBaseStrategy` class provides a base class that already implements some of the strategy methods below with some common functionality:
