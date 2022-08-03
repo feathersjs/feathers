@@ -31,10 +31,11 @@
     "eslint": "eslint \"packages/**/*.ts\" --fix",
     "lint": "npm run prettier && npm run eslint",
     "pack": "lerna exec npm -- pack --pack-destination ../cli/test",
+    "compile": "lerna run compile && npm run pack",
     "update-dependencies": "ncu -u && lerna exec -- ncu -u -x node-fetch -x chalk",
     "clean": "find . -name node_modules -exec rm -rf '{}' + && find . -name package-lock.json -exec rm -rf '{}' +",
     "test:deno": "deno test --config deno/tsconfig.json deno/test.ts",
-    "test": "npm run lint && lerna run compile && npm run pack && c8 lerna run test  --ignore @feathersjs/tests --ignore @feathersjs/adapter-commons"
+    "test": "npm run lint && npm run compile && c8 lerna run test  --ignore @feathersjs/tests --ignore @feathersjs/adapter-commons"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.31.0",
