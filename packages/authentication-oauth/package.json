@@ -43,7 +43,8 @@
   "scripts": {
     "start": "ts-node test/app",
     "prepublish": "npm run compile",
-    "compile": "shx rm -rf lib/ && tsc",
+    "pack": "npm pack --pack-destination ../cli/test",
+    "compile": "shx rm -rf lib/ && tsc && npm run pack",
     "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {

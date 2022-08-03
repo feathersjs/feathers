@@ -1,6 +1,7 @@
 import path from 'path'
 import pkg from '../package.json'
 import { DependencyVersions } from '../src/commons'
+import lernaConfig from '../../../lerna.json'
 
 export function combinate<O extends Record<string | number, any[]>>(obj: O) {
   let combos: { [k in keyof O]: O[k][number] }[] = []
@@ -23,7 +24,7 @@ export const dependencyVersions = Object.keys(pkg.devDependencies as any)
   .reduce((acc, dep) => {
     const [, name] = dep.split('/')
 
-    acc[dep] = `file://${path.join(__dirname, '..', '..', name)}`
+    acc[dep] = path.join(__dirname, `feathersjs-${name}-${lernaConfig.version}.tgz`)
 
     return acc
   }, {} as DependencyVersions)

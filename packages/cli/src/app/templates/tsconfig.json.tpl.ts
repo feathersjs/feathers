@@ -15,6 +15,7 @@ export const generate = (ctx: AppGeneratorContext) =>
             module: 'commonjs',
             outDir: './lib',
             rootDir: `./${lib}`,
+            declaration: true,
             strict: true,
             esModuleInterop: true
           },

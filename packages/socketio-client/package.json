@@ -33,7 +33,8 @@
   },
   "scripts": {
     "prepublish": "npm run compile",
-    "compile": "shx rm -rf lib/ && tsc",
+    "pack": "npm pack --pack-destination ../cli/test",
+    "compile": "shx rm -rf lib/ && tsc && npm run pack",
     "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
     "test": "npm run mocha"
   },
