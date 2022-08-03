@@ -15,7 +15,7 @@ describe('`error` hooks', () => {
       const s = service as any
 
       s.__hooks.error.get = undefined
-      s.__hooks.hooks.get = []
+      s.__hooks.collected.get = []
     })
 
     it('basic error hook', async () => {
