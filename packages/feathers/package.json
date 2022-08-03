@@ -47,7 +47,8 @@
     "prepublish": "npm run compile",
     "version": "npm run write-version",
     "publish": "npm run reset-version",
-    "compile": "shx rm -rf lib/ && tsc",
+    "pack": "npm pack --pack-destination ../cli/test",
+    "compile": "shx rm -rf lib/ && tsc && npm run pack",
     "test": "mocha --config ../../.mocharc.json --recursive test/"
   },
   "engines": {
