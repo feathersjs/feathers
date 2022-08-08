@@ -4,70 +4,75 @@ outline: deep
 
 # Channels
 
-On a Feathers server with a real-time transport (like [Socket.io](./socketio.md)) set up, event channels determine which connected clients to send [real-time events](./events.md) to and how the sent data should look like.
+On a Feathers server with a real-time transport (like [Socket.io](./socketio.md)) configured, event channels determine which connected clients to send [real-time events](./events.md) to and how the sent data should look.
 
 This chapter describes:
 
+- [Concepts](#concepts) of real-time communication
+- [An example](#example) channels.js file
 - [Real-time Connections](#connections) and how to access them
 - [Channel usage](#channels) and how to retrieve, join and leave channels
 - [Publishing events](#publishing) to channels
 
-Some examples where channels are used:
+<BlockQuote label="Important">
+
+Channels functionality will not be available in the following two scenarios:
+
+- When you're making a rest-only API, not using a real-time adapter.
+- When you're using Feathers on the client. Only server-side Feathers has channel management.
+
+</BlockQuote>
+
+Here are some example logic conditions where channels are useful:
 
 - Real-time events should only be sent to authenticated users
-- Users should only get updates about messages if they joined a certain chat room
+- Users should only get updates about messages from chat rooms they joined
 - Only users in the same organization should receive real-time updates about their data changes
 - Only admins should be notified when new users are created
 - When a user is created, modified or removed, non-admins should only receive a "safe" version of the user object (e.g. only `email`, `id` and `avatar`)
 
-
-<BlockQuote type="warning">
-
-If you are not using a real-time transport server (e.g. when making a REST only API or using Feathers on the client), channel functionality is not going to be available.
-
-</BlockQuote>
-
-
 ## Concepts
 
-When using channels, the server pushes events (such as `created`, `removed` etc. for a particular service) down to its clients via *channels*. The client doesn’t listen to individual channels directly, but rather subscribes to specific events on services that it is interested in. Those events will only fire on the client if the server pushes data to one or more channels that the client has been added to.
+A **_channel_** is basically an array of **_connection_** objects. Each array is explicitly given a name. When using a real-time server transport and a new client connects, the you can tell the server to explicitly add that client's connection object to any relevant channels. Any connection in a channel will receive all events that are sent to that channel. This allows clients to receive only their intended messages.
+
+When using a real-time transport, the server pushes events (such as "created", "removed" etc. for a particular service) down to its clients. Using channels allows customizing which clients should receive each event. The client doesn’t subscribe to individual channels, directly, but rather subscribes to specific events like `created`, `patched`, custom events, etc, in which they are interested. Those events will only fire for a client if the server pushes data to one a channel to which the client has been added.
 
 You can have any number of channels. This helps to organise how data is sent and to control the volume of data, by not sending things that aren't relevant.
 
-When a new client connects, the server explicitly adds that *connection* to any relevant channels. This is how clients are given access to events that they are allowed to see.
+The server can also change connection channel membership from time to time, eg. before vs after login.
 
-The server can also change connection channel membership from time to time, eg before vs after login.
-
-The server needs to explicitly *publish* channels it is interested in sharing with clients before they become available.
+The server needs to explicitly **publish** channels it is interested in sharing with clients before they become available.
 
 ## Example
 
-The example below shows the generated channels file illustrating how the different parts fit together:
+The example below shows the generated `channels.js` file illustrating how the different parts fit together:
+
+<LanguageBlock global-id="ts">
 
 ```ts
-export default function(app: any) {
-  if(typeof app.channel !== 'function') {
+export default function (app: any) {
+  if (typeof app.channel !== 'function') {
     // If no real-time functionality has been configured just return
-    return;
+    return
   }
 
   app.on('connection', (connection: any) => {
     // On a new real-time connection, add it to the anonymous channel
-    app.channel('anonymous').join(connection);
-  });
+    app.channel('anonymous').join(connection)
+  })
 
   app.on('login', (authResult: any, { connection }: any) => {
     // connection can be undefined if there is no
     // real-time connection, e.g. when logging in via REST
-    if(connection) {
+    if (connection) {
       // Obtain the logged in user from the connection
       // const user = connection.user;
 
       // The connection is no longer anonymous, remove it
-      app.channel('anonymous').leave(connection);
+      app.channel('anonymous').leave(connection)
 
       // Add it to the authenticated user channel
-      app.channel('authenticated').join(connection);
+      app.channel('authenticated').join(connection)
 
       // Channels can be named anything and joined on any condition
 
@@ -81,18 +86,20 @@ export default function(app: any) {
       // app.channel(`emails/${user.email}`).join(connection);
       // app.channel(`userIds/${user.id}`).join(connection);
     }
-  });
+  })
 
   // eslint-disable-next-line no-unused-vars
   app.publish((data: any, hook: any) => {
     // Here you can add event publishers to channels set up in `channels.js`
     // To publish only for a specific event use `app.publish(eventname, () => {})`
 
-    console.log('Publishing all events to all authenticated users. See `channels.js` and https://docs.feathersjs.com/api/channels.html for more information.'); // eslint-disable-line
+    console.log(
+      'Publishing all events to all authenticated users. See `channels.js` and https://docs.feathersjs.com/api/channels.html for more information.'
+    ) // eslint-disable-line
 
     // e.g. to publish all service events to all authenticated users use
-    return app.channel('authenticated');
-  });
+    return app.channel('authenticated')
+  })
 
   // Here you can also add service specific event publishers
   // e.g. the publish the `users` service `created` event to the `admins` channel
@@ -105,8 +112,10 @@ export default function(app: any) {
   //     app.channel(`emails/${data.recipientEmail}`)
   //   ];
   // });
-};
+}
 ```
+
+</LanguageBlock>
 
 ## Connections
 
@@ -114,18 +123,18 @@ A connection is an object that represents a real-time connection. It is the same
 
 We can get access to the `connection` object by listening to `app.on('connection', connection => {})` or `app.on('login', (payload, { connection }) => {})`.
 
-> __Note:__ When a connection is terminated it will be automatically removed from all channels.
+> **Note:** When a connection is terminated it will be automatically removed from all channels.
 
 ### app.on('connection')
 
 `app.on('connection', connection => {})` is fired every time a new real-time connection is established. This is a good place to add the connection to a channel for anonymous users (in case we want to send any real-time updates to them):
 
 ```js
-app.on('connection', connection => {
+app.on('connection', (connection) => {
   // On a new real-time connection, add it to the
   // anonymous channel
-  app.channel('anonymous').join(connection);
-});
+  app.channel('anonymous').join(connection)
+})
 ```
 
 ### app.on('disconnect')
@@ -142,28 +151,28 @@ This is a good place to add the connection to channels related to the user (e.g.
 app.on('login', (payload, { connection }) => {
   // connection can be undefined if there is no
   // real-time connection, e.g. when logging in via REST
-  if(connection) {
+  if (connection) {
     // The user attached to this connection
-    const { user } = connection;
+    const { user } = connection
 
     // The connection is no longer anonymous, remove it
-    app.channel('anonymous').leave(connection);
+    app.channel('anonymous').leave(connection)
 
     // Add it to the authenticated user channel
-    app.channel('authenticated').join(connection);
+    app.channel('authenticated').join(connection)
 
     // Channels can be named anything and joined on any condition `
     // E.g. to send real-time events only to admins use
-    if(user.isAdmin) {
-      app.channel('admins').join(connection);
+    if (user.isAdmin) {
+      app.channel('admins').join(connection)
     }
 
     // If the user has joined e.g. chat rooms
-    user.rooms.forEach(room => {
-      app.channel(`rooms/${room.id}`).join(connection);
-    });
+    user.rooms.forEach((room) => {
+      app.channel(`rooms/${room.id}`).join(connection)
+    })
   }
-});
+})
 ```
 
 ### app.on('logout')
@@ -172,14 +181,14 @@ app.on('login', (payload, { connection }) => {
 
 ```js
 app.on('logout', (payload, { connection }) => {
-  if(connection) {
+  if (connection) {
     // Join the channels a logged out connection should be in
-    app.channel('anonymous').join(connection);
+    app.channel('anonymous').join(connection)
   }
-});
+})
 ```
 
-> __Note:__ On `logout` the connection will be removed from all existing channels automatically.
+> **Note:** On `logout` the connection will be removed from all existing channels automatically.
 
 ## Channels
 
@@ -201,18 +210,18 @@ app.channel('authenticated') // the authenticated channel
 const combinedChannel = app.channel('anonymous', 'authenticated')
 
 // Join the `anonymous` and `authenticated` channel
-combinedChannel.join(connection);
+combinedChannel.join(connection)
 
 // Join the `admins` and `chat` channel
-app.channel('admins', 'chat').join(connection);
+app.channel('admins', 'chat').join(connection)
 
 // Leave the `admins` and `chat` channel
-app.channel('admins', 'chat').leave(connection);
+app.channel('admins', 'chat').leave(connection)
 
 // Make user with `_id` 5 leave the admins and chat channel
-app.channel('admins', 'chat').leave(connection => {
-  return connection.user._id === 5;
-});
+app.channel('admins', 'chat').leave((connection) => {
+  return connection.user._id === 5
+})
 ```
 
 ### app.channels
@@ -220,8 +229,8 @@ app.channel('admins', 'chat').leave(connection => {
 `app.channels -> [string]` returns a list of all existing channel names.
 
 ```js
-app.channel('authenticated');
-app.channel('admins', 'users');
+app.channel('authenticated')
+app.channel('admins', 'users')
 
 app.channels // [ 'authenticated', 'admins', 'users' ]
 
@@ -232,11 +241,11 @@ This is useful to e.g. remove a connection from all channels:
 
 ```js
 // When a user is removed, make all their connections leave every channel
-app.service('users').on('removed', user => {
-  app.channel(app.channels).leave(connection => {
-    return user._id === connection.user._id;
-  });
-});
+app.service('users').on('removed', (user) => {
+  app.channel(app.channels).leave((connection) => {
+    return user._id === connection.user._id
+  })
+})
 ```
 
 ### channel.join(connection)
@@ -245,14 +254,14 @@ app.service('users').on('removed', user => {
 
 ```js
 app.on('login', (payload, { connection }) => {
-  if(connection && connection.user.isAdmin) {
+  if (connection && connection.user.isAdmin) {
     // Join the admins channel
-    app.channel('admins').join(connection);
+    app.channel('admins').join(connection)
 
     // Calling a second time will do nothing
-    app.channel('admins').join(connection);
+    app.channel('admins').join(connection)
   }
-});
+})
 ```
 
 ### channel.leave(connection|fn)
@@ -261,9 +270,9 @@ app.on('login', (payload, { connection }) => {
 
 ```js
 // Make the user with `_id` 5 leave the `admins` channel
-app.channel('admins').leave(connection => {
-  return connection.user._id === 5;
-});
+app.channel('admins').leave((connection) => {
+  return connection.user._id === 5
+})
 ```
 
 ### channel.filter(fn)
@@ -272,8 +281,7 @@ app.channel('admins').leave(connection => {
 
 ```js
 // Returns a new channel with all connections of the user with `_id` 5
-const userFive = app.channel(app.channels)
-  .filter(connection => connection.user._id === 5);
+const userFive = app.channel(app.channels).filter((connection) => connection.user._id === 5)
 ```
 
 ### channel.send(data)
@@ -287,22 +295,22 @@ What data will be sent as the event data will be determined by the first availab
 3. `context.result`
 
 ```js
-app.on('connection', connection => {
+app.on('connection', (connection) => {
   // On a new real-time connection, add it to the
   // anonymous channel
-  app.channel('anonymous').join(connection);
-});
+  app.channel('anonymous').join(connection)
+})
 
 // Send the `users` `created` event to all anonymous
 // users but use only the name as the payload
-app.service('users').publish('created', data => {
+app.service('users').publish('created', (data) => {
   return app.channel('anonymous').send({
     name: data.name
-  });
-});
+  })
+})
 ```
 
-> __Note:__ If a connection is in multiple channels (e.g. `users` and `admins`) it will get the data from the _first_ channel that it is in.
+> **Note:** If a connection is in multiple channels (e.g. `users` and `admins`) it will get the data from the _first_ channel that it is in.
 
 ### channel.connections
 
@@ -324,28 +332,26 @@ Publishers are callback functions that return which channel(s) to send an event 
 app.on('login', (payload, { connection }) => {
   // connection can be undefined if there is no
   // real-time connection, e.g. when logging in via REST
-  if(connection && connection.user.isAdmin) {
-    app.channel('admins').join(connection);
+  if (connection && connection.user.isAdmin) {
+    app.channel('admins').join(connection)
   }
-});
+})
 
 // Publish all messages service events only to its room channel
 app.service('messages').publish((data, context) => {
-  return app.channel(`rooms/${data.roomId}`);
-});
+  return app.channel(`rooms/${data.roomId}`)
+})
 
 // Publish the `created` event to admins and the user that sent it
 app.service('users').publish('created', (data, context) => {
   return [
     app.channel('admins'),
-    app.channel(app.channels).filter(connection =>
-      connection.user._id === context.params.user._id
-    )
-  ];
-});
+    app.channel(app.channels).filter((connection) => connection.user._id === context.params.user._id)
+  ]
+})
 
 // Prevent all events in the `password-reset` service from being published
-app.service('password-reset').publish(() => null);
+app.service('password-reset').publish(() => null)
 ```
 
 ### app.publish([event,] fn)
@@ -356,20 +362,20 @@ app.service('password-reset').publish(() => null);
 app.on('login', (payload, { connection }) => {
   // connection can be undefined if there is no
   // real-time connection, e.g. when logging in via REST
-  if(connection) {
-    app.channel('authenticated').join(connection);
+  if (connection) {
+    app.channel('authenticated').join(connection)
   }
-});
+})
 
 // Publish all events to all authenticated users
 app.publish((data, context) => {
-  return app.channel('authenticated');
-});
+  return app.channel('authenticated')
+})
 
 // Publish the `log` custom event to all connections
 app.publish('log', (data, context) => {
-  return app.channel(app.channels);
-});
+  return app.channel(app.channels)
+})
 ```
 
 ### Publisher precedence
@@ -394,47 +400,41 @@ The following example updates all active connections for a given user when the u
 ```js
 // Join a channel given a user and connection
 const joinChannels = (user, connection) => {
-  app.channel('authenticated').join(connection);
+  app.channel('authenticated').join(connection)
   // Assuming that the chat room/user assignment is stored
   // on an array of the user
-  user.rooms.forEach(room =>
-    app.channel(`rooms/${roomId}`).join(connection)
-  );
+  user.rooms.forEach((room) => app.channel(`rooms/${roomId}`).join(connection))
 }
 
 // Get a user to leave all channels
-const leaveChannels = user => {
-  app.channel(app.channels).leave(connection =>
-    connection.user._id === user._id
-  );
-};
+const leaveChannels = (user) => {
+  app.channel(app.channels).leave((connection) => connection.user._id === user._id)
+}
 
 // Leave and re-join all channels with new user information
-const updateChannels = user => {
+const updateChannels = (user) => {
   // Find all connections for this user
-  const { connections } = app.channel(app.channels).filter(connection =>
-    connection.user._id === user._id
-  );
+  const { connections } = app.channel(app.channels).filter((connection) => connection.user._id === user._id)
 
   // Leave all channels
-  leaveChannels(user);
+  leaveChannels(user)
 
   // Re-join all channels with the updated user information
-  connections.forEach(connection => joinChannels(user, connection));
+  connections.forEach((connection) => joinChannels(user, connection))
 }
 
 app.on('login', (payload, { connection }) => {
-  if(connection) {
+  if (connection) {
     // Join all channels on login
-    joinChannels(connection.user, connection);
+    joinChannels(connection.user, connection)
   }
-});
+})
 
 // On `updated` and `patched`, leave and re-join with new room assignments
-app.service('users').on('updated', updateChannels);
-app.service('users').on('patched', updateChannels);
+app.service('users').on('updated', updateChannels)
+app.service('users').on('patched', updateChannels)
 // On `removed`, remove the connection from all channels
-app.service('users').on('removed', leaveChannels);
+app.service('users').on('removed', leaveChannels)
 ```
 
-> __Note:__ The number active connections is usually one (or none) but unless you prevent it explicitly Feathers is not preventing multiple logins of the same user (e.g. with two open browser windows or on a mobile device).
+> **Note:** The number active connections is usually one (or none) but unless you prevent it explicitly Feathers is not preventing multiple logins of the same user (e.g. with two open browser windows or on a mobile device).
