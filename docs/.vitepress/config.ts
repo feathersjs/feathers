@@ -279,11 +279,19 @@ export default defineConfig({
           collapsible: true,
           items: [
             {
-              text: 'Migration Guide',
-              link: '/guides/migrating.md',
+              text: "What's New in Dove",
+              link: '/guides/whats-new-in-dove.md'
             },
-          ],
-        },
+            {
+              text: 'Migration Guide',
+              link: '/guides/migrating.md'
+            },
+            {
+              text: 'Troubleshooting',
+              link: '/guides/troubleshooting.md'
+            }
+          ]
+        }
       ],
       '/api': [
         {
