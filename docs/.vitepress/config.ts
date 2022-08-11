@@ -12,7 +12,7 @@ import {
   releases,
   twitter,
   feathersDescription,
-  feathersName,
+  feathersName
 } from './meta'
 import { teamMembers } from './contributors'
 
@@ -22,26 +22,26 @@ const comparisonSidebar = [
     items: [
       {
         text: 'Overview',
-        link: '/comparison',
+        link: '/comparison'
       },
       {
         text: 'Feathers vs Firebase',
-        link: '/feathers-vs-firebase',
+        link: '/feathers-vs-firebase'
       },
       {
         text: 'Feathers vs Meteor',
-        link: '/feathers-vs-meteor',
+        link: '/feathers-vs-meteor'
       },
       {
         text: 'Feathers vs Sails',
-        link: '/feathers-vs-sails',
+        link: '/feathers-vs-sails'
       },
       {
         text: 'Feathers vs Loopback',
-        link: '/feathers-vs-loopback',
-      },
-    ],
-  },
+        link: '/feathers-vs-loopback'
+      }
+    ]
+  }
 ]
 
 export default defineConfig({
@@ -51,26 +51,21 @@ export default defineConfig({
   head: [
     ['meta', { name: 'theme-color', content: '#ffffff' }],
     ['link', { rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' }],
-    [
-      'link',
-      { rel: 'alternate icon', href: '/favicon.ico', type: 'image/png', sizes: '16x16' },
-    ],
+    ['link', { rel: 'alternate icon', href: '/favicon.ico', type: 'image/png', sizes: '16x16' }],
     [
       'meta',
       {
         name: 'author',
-        content: `${teamMembers
-          .map((c) => c.name)
-          .join(', ')} and ${feathersName} contributors`,
-      },
+        content: `${teamMembers.map((c) => c.name).join(', ')} and ${feathersName} contributors`
+      }
     ],
     [
       'meta',
       {
         name: 'keywords',
         content:
-          'feathersjs, feathers, react, vue, preact, svelte, solid, typescript, esm, node, deno, cloudflare, workers',
-      },
+          'feathersjs, feathers, react, vue, preact, svelte, solid, typescript, esm, node, deno, cloudflare, workers'
+      }
     ],
     ['meta', { property: 'og:title', content: feathersName }],
     ['meta', { property: 'og:description', content: feathersDescription }],
@@ -82,18 +77,15 @@ export default defineConfig({
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['link', { href: font, rel: 'stylesheet' }],
     ['link', { rel: 'mask-icon', href: '/logo.svg', color: '#ffffff' }],
-    [
-      'link',
-      { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180' },
-    ],
+    ['link', { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180' }]
   ],
   lastUpdated: true,
   markdown: {
-    config: async md => {
+    config: async (md) => {
       md.set({
         highlight: await highlight({
           light: 'vitesse-light',
-          dark: 'vitesse-dark',
+          dark: 'vitesse-dark'
         })
       })
 
@@ -101,21 +93,21 @@ export default defineConfig({
     },
     theme: {
       light: 'vitesse-light',
-      dark: 'vitesse-dark',
-    },
+      dark: 'vitesse-dark'
+    }
   },
   themeConfig: {
     logo: '/logo.svg',
 
     editLink: {
       pattern: 'https://github.com/feathersjs/feathers/edit/dove-docs/docs/:path',
-      text: 'Suggest changes to this page',
+      text: 'Suggest changes to this page'
     },
 
     algolia: {
       appId: 'QK3SV4AQ1E',
       apiKey: '3e8a4c82e7a1b57cd1a4809ceb86878e',
-      indexName: 'feathersjs',
+      indexName: 'feathersjs'
       // searchParameters: {
       //   facetFilters: ['tags:en'],
       // },
@@ -131,12 +123,12 @@ export default defineConfig({
     socialLinks: [
       { icon: 'twitter', link: twitter },
       { icon: 'discord', link: discord },
-      { icon: 'github', link: github },
+      { icon: 'github', link: github }
     ],
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2012-PRESENT FeathersJS contributors',
+      copyright: 'Copyright © 2012-PRESENT FeathersJS contributors'
     },
 
     nav: [
@@ -148,17 +140,17 @@ export default defineConfig({
         items: [
           {
             text: 'Release Notes ',
-            link: releases,
+            link: releases
           },
           {
             text: 'Crow v4 ',
-            link: releases,
+            link: releases
           },
           {
             text: 'Buzzard v3 ',
-            link: contributing,
-          },
-        ],
+            link: contributing
+          }
+        ]
       },
       {
         text: 'Ecosystem',
@@ -167,27 +159,26 @@ export default defineConfig({
           { text: 'Cookbook', link: '/cookbook/' },
           {
             text: 'Awesome Feathers',
-            link: 'https://github.com/feathersjs/awesome-feathersjs',
+            link: 'https://github.com/feathersjs/awesome-feathersjs'
           },
           {
             text: 'YouTube Playlist',
-            link:
-              'https://www.youtube.com/playlist?list=PLwSdIiqnDlf_lb5y1liQK2OW5daXYgKOe',
+            link: 'https://www.youtube.com/playlist?list=PLwSdIiqnDlf_lb5y1liQK2OW5daXYgKOe'
           },
           {
             text: 'Feathers Pinia - Vue',
-            link: 'https://feathers-pinia.pages.dev/',
+            link: 'https://feathers-pinia.pages.dev/'
           },
           {
             text: 'Figbird - React',
-            link: 'https://humaans.github.io/figbird/',
+            link: 'https://humaans.github.io/figbird/'
           },
           {
             text: 'Common Hooks',
-            link: 'https://hooks-common.feathersjs.com/',
-          },
-        ],
-      },
+            link: 'https://hooks-common.feathersjs.com/'
+          }
+        ]
+      }
     ],
 
     sidebar: {
@@ -198,23 +189,23 @@ export default defineConfig({
           items: [
             {
               text: 'Getting Ready',
-              link: '/guides/basics/setup.md',
+              link: '/guides/basics/setup.md'
             },
             {
               text: 'Quick start',
-              link: '/guides/basics/starting.md',
+              link: '/guides/basics/starting.md'
             },
             {
               text: 'Generating an App',
-              link: '/guides/basics/generator.md',
+              link: '/guides/basics/generator.md'
             },
             {
               text: 'Services',
-              link: '/guides/basics/services.md',
+              link: '/guides/basics/services.md'
             },
             {
               text: 'Hooks',
-              link: '/guides/basics/hooks.md',
+              link: '/guides/basics/hooks.md'
             },
             {
               text: 'Schemas',
@@ -222,16 +213,16 @@ export default defineConfig({
             },
             {
               text: 'Authentication',
-              link: '/guides/basics/authentication.md',
+              link: '/guides/basics/authentication.md'
             },
             {
               text: 'Writing Tests',
-              link: '/guides/basics/testing.md',
-            },
-          ],
+              link: '/guides/basics/testing.md'
+            }
+          ]
         },
         {
-          text: "Frontend",
+          text: 'Frontend',
           collapsible: true,
           items: [
             {
@@ -300,25 +291,25 @@ export default defineConfig({
           items: [
             {
               text: 'Application',
-              link: '/api/application',
+              link: '/api/application'
             },
             {
               text: 'Services',
-              link: '/api/services',
+              link: '/api/services'
             },
             {
               text: 'Hooks',
-              link: '/api/hooks',
+              link: '/api/hooks'
             },
             {
               text: 'Events',
-              link: '/api/events',
+              link: '/api/events'
             },
             {
               text: 'Errors',
-              link: '/api/errors',
-            },
-          ],
+              link: '/api/errors'
+            }
+          ]
         },
         {
           text: 'Transports',
@@ -327,25 +318,25 @@ export default defineConfig({
           items: [
             {
               text: 'Configuration',
-              link: '/api/configuration',
+              link: '/api/configuration'
             },
             {
               text: 'Koa',
-              link: '/api/koa',
+              link: '/api/koa'
             },
             {
               text: 'Express',
-              link: '/api/express',
+              link: '/api/express'
             },
             {
               text: 'Socket.io',
-              link: '/api/socketio',
+              link: '/api/socketio'
             },
             {
               text: 'Channels',
-              link: '/api/channels',
-            },
-          ],
+              link: '/api/channels'
+            }
+          ]
         },
         {
           text: 'Client',
@@ -354,21 +345,21 @@ export default defineConfig({
           items: [
             {
               text: 'Feathers Client',
-              link: '/api/client',
+              link: '/api/client'
             },
             {
               text: 'REST Client',
-              link: '/api/client/rest',
+              link: '/api/client/rest'
             },
             {
               text: 'Socket.io Client',
-              link: '/api/client/socketio',
+              link: '/api/client/socketio'
             },
             {
               text: 'Authentication',
-              link: '/api/authentication/client',
-            },
-          ],
+              link: '/api/authentication/client'
+            }
+          ]
         },
         {
           text: 'Authentication',
@@ -377,33 +368,33 @@ export default defineConfig({
           items: [
             {
               text: 'Overview',
-              link: '/api/authentication/',
+              link: '/api/authentication/'
             },
             {
               text: 'Service',
-              link: '/api/authentication/service',
+              link: '/api/authentication/service'
             },
             {
               text: 'Hook',
-              link: '/api/authentication/hook',
+              link: '/api/authentication/hook'
             },
             {
               text: 'Strategies',
-              link: '/api/authentication/strategy',
+              link: '/api/authentication/strategy'
             },
             {
               text: 'JWT Strategy',
-              link: '/api/authentication/jwt',
+              link: '/api/authentication/jwt'
             },
             {
               text: 'Local Strategy',
-              link: '/api/authentication/local',
+              link: '/api/authentication/local'
             },
             {
               text: 'OAuth Strategy',
-              link: '/api/authentication/oauth',
-            },
-          ],
+              link: '/api/authentication/oauth'
+            }
+          ]
         },
         {
           text: 'Schema',
@@ -412,17 +403,17 @@ export default defineConfig({
           items: [
             {
               text: 'Overview',
-              link: '/api/schema/',
+              link: '/api/schema/'
             },
             {
               text: 'Schemas',
-              link: '/api/schema/schema',
+              link: '/api/schema/schema'
             },
             {
               text: 'Resolvers',
-              link: '/api/schema/resolvers',
-            },
-          ],
+              link: '/api/schema/resolvers'
+            }
+          ]
         },
         {
           text: 'Databases',
@@ -431,30 +422,30 @@ export default defineConfig({
           items: [
             {
               text: 'Adapters',
-              link: '/api/databases/adapters',
+              link: '/api/databases/adapters'
             },
             {
               text: 'Common API',
-              link: '/api/databases/common',
+              link: '/api/databases/common'
             },
             {
               text: 'Querying',
-              link: '/api/databases/querying',
+              link: '/api/databases/querying'
             },
             {
               text: 'Adapter - Memory',
-              link: '/api/databases/memory',
+              link: '/api/databases/memory'
             },
             {
               text: 'Adapter - MongoDB',
-              link: '/api/databases/mongodb',
+              link: '/api/databases/mongodb'
             },
             {
               text: 'Adapter - Knex',
-              link: '/api/databases/knex',
-            },
-          ],
-        },
+              link: '/api/databases/knex'
+            }
+          ]
+        }
       ],
       '/help': [
         {
@@ -462,18 +453,18 @@ export default defineConfig({
           items: [
             {
               text: 'Getting Help',
-              link: '/help/',
+              link: '/help/'
             },
             {
               text: 'FAQ',
-              link: '/help/faq',
+              link: '/help/faq'
             },
             {
               text: 'Security',
-              link: '/guides/security.md',
-            },
-          ],
-        },
+              link: '/guides/security.md'
+            }
+          ]
+        }
       ],
       '/cookbook': [
         {
@@ -481,80 +472,79 @@ export default defineConfig({
           items: [
             {
               text: 'Scaling',
-              link: '/cookbook/general/scaling',
-            },
-          ],
+              link: '/cookbook/general/scaling'
+            }
+          ]
         },
         {
           text: 'Authentication',
           items: [
             {
               text: 'Anonymous',
-              link: '/cookbook/authentication/anonymous',
+              link: '/cookbook/authentication/anonymous'
             },
             {
               text: 'API Key',
-              link: '/cookbook/authentication/apiKey',
+              link: '/cookbook/authentication/apiKey'
             },
             {
               text: 'Auth0',
-              link: '/cookbook/authentication/auth0',
+              link: '/cookbook/authentication/auth0'
             },
             {
               text: 'Facebook',
-              link: '/cookbook/authentication/facebook',
+              link: '/cookbook/authentication/facebook'
             },
             {
               text: 'Google',
-              link: '/cookbook/authentication/google',
+              link: '/cookbook/authentication/google'
             },
             {
               text: 'Firebase',
-              link: '/cookbook/authentication/firebase',
+              link: '/cookbook/authentication/firebase'
             },
             {
               text: 'Discord',
-              link: '/cookbook/authentication/_discord',
+              link: '/cookbook/authentication/_discord'
             },
             {
               text: 'Stateless JWT',
-              link: '/cookbook/authentication/stateless',
+              link: '/cookbook/authentication/stateless'
             },
             {
               text: 'Revoking JWTs',
-              link: '/cookbook/authentication/revoke-jwt',
-            },
-          ],
+              link: '/cookbook/authentication/revoke-jwt'
+            }
+          ]
         },
         {
           text: 'Express',
           items: [
             {
               text: 'File Uploads',
-              link: '/cookbook/express/file-uploading',
+              link: '/cookbook/express/file-uploading'
             },
             {
               text: 'View Engine SSR',
-              link: '/cookbook/express/view-engine',
-            },
-          ],
+              link: '/cookbook/express/view-engine'
+            }
+          ]
         },
         {
           text: 'Deployment',
           items: [
             {
               text: 'Dockerize a Feathers App',
-              link: '/cookbook/deploy/docker',
-            },
-          ],
-        },
+              link: '/cookbook/deploy/docker'
+            }
+          ]
+        }
       ],
       '/comparison': comparisonSidebar,
       '/feathers-vs-firebase': comparisonSidebar,
       '/feathers-vs-meteor': comparisonSidebar,
       '/feathers-vs-sails': comparisonSidebar,
-      '/feathers-vs-loopback': comparisonSidebar,
-    },
-  },
+      '/feathers-vs-loopback': comparisonSidebar
+    }
+  }
 })
-
