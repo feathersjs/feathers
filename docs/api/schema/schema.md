@@ -27,8 +27,8 @@ If you are not familiar with JSON schema have a look at the [official getting st
 <LanguageBlock global-id="ts">
 
 ```ts
-import { HookContext } from './definitions';
-import { schema, Infer } from '@feathersjs/schema';
+import { HookContext } from './definitions'
+import { schema, Infer } from '@feathersjs/schema'
 
 export const userSchema = schema({
   $id: 'User',
@@ -40,9 +40,9 @@ export const userSchema = schema({
     email: { type: 'string' },
     password: { type: 'string' }
   }
-} as const);
+} as const)
 
-export type User = Infer<typeof userSchema>;
+export type User = Infer<typeof userSchema>
 ```
 
 </LanguageBlock>
@@ -50,7 +50,7 @@ export type User = Infer<typeof userSchema>;
 <LanguageBlock global-id="js">
 
 ```js
-import { schema } from '@feathersjs/schema';
+import { schema } from '@feathersjs/schema'
 
 export const userSchema = schema({
   $id: 'User',
@@ -62,14 +62,12 @@ export const userSchema = schema({
     email: { type: 'string' },
     password: { type: 'string' }
   }
-});
+})
 ```
 
 </LanguageBlock>
 
-
-
-> __Very Important:__ To get the correct TypeScript types the definition always needs to be declared via `schema({} as const)`.
+> **Very Important:** To get the correct TypeScript types the definition always needs to be declared via `schema({} as const)`.
 
 ## Options
 
@@ -104,13 +102,11 @@ export const userSchema = schema({
 
 To create a new schema that extends an existing one, combine the schema properties from `schema.properties` (an `schema.required` if needed) with the new properties:
 
-
-
 <LanguageBlock global-id="ts">
 
 ```ts
-import { HookContext } from './definitions';
-import { schema, Infer } from '@feathersjs/schema';
+import { HookContext } from './definitions'
+import { schema, Infer } from '@feathersjs/schema'
 
 export const userSchema = schema({
   $id: 'User',
@@ -121,9 +117,9 @@ export const userSchema = schema({
     email: { type: 'string' },
     password: { type: 'string' }
   }
-} as const);
+} as const)
 
-export type User = Infer<typeof userSchema>;
+export type User = Infer<typeof userSchema>
 
 export const userResultSchema = schema({
   $id: 'UserResult',
@@ -134,9 +130,9 @@ export const userResultSchema = schema({
     ...userSchema.properties,
     id: { type: 'number' }
   }
-});
+})
 
-export type User = Infer<typeof userResultSchema>;
+export type User = Infer<typeof userResultSchema>
 ```
 
 </LanguageBlock>
@@ -144,7 +140,7 @@ export type User = Infer<typeof userResultSchema>;
 <LanguageBlock global-id="js">
 
 ```js
-import { schema } from '@feathersjs/schema';
+import { schema } from '@feathersjs/schema'
 
 export const userSchema = schema({
   $id: 'User',
@@ -156,7 +152,7 @@ export const userSchema = schema({
     email: { type: 'string' },
     password: { type: 'string' }
   }
-});
+})
 
 // The user result has all properties from the user but also an
 // additional `id` added by the database
@@ -169,26 +165,22 @@ export const userResultSchema = schema({
     ...userSchema.properties,
     id: { type: 'number' }
   }
-});
+})
 ```
 
 </LanguageBlock>
 
-
-
 ## Associations
 
 Associated schemas can be initialized via the `$ref` keyword referencing the `$id` set during schema definition.
-
-
 
 <LanguageBlock global-id="ts">
 
 In TypeScript the referenced type needs to be added explicitly.
 
 ```ts
-import { HookContext } from './definitions';
-import { schema, Infer } from '@feathersjs/schema';
+import { HookContext } from './definitions'
+import { schema, Infer } from '@feathersjs/schema'
 
 export const userSchema = schema({
   $id: 'User',
@@ -200,9 +192,9 @@ export const userSchema = schema({
     email: { type: 'string' },
     password: { type: 'string' }
   }
-});
+})
 
-export type User = Infer<typeof userSchema>;
+export type User = Infer<typeof userSchema>
 
 export const messageSchema = schema({
   $id: 'Message',
@@ -213,7 +205,7 @@ export const messageSchema = schema({
     text: { type: 'string' },
     user: { $ref: 'User' }
   }
-});
+})
 
 export type Message = Infer<typeof messageSchema> & {
   user: User
@@ -225,7 +217,7 @@ export type Message = Infer<typeof messageSchema> & {
 <LanguageBlock global-id="js">
 
 ```js
-import { schema } from '@feathersjs/schema';
+import { schema } from '@feathersjs/schema'
 
 export const userSchema = schema({
   $id: 'User',
@@ -237,7 +229,7 @@ export const userSchema = schema({
     email: { type: 'string' },
     password: { type: 'string' }
   }
-});
+})
 
 export const messageSchema = schema({
   $id: 'Message',
@@ -248,12 +240,10 @@ export const messageSchema = schema({
     text: { type: 'string' },
     user: { $ref: 'User' }
   }
-});
+})
 ```
 
 </LanguageBlock>
-
-
 
 ## Query helper
 
