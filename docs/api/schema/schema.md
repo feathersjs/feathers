@@ -4,13 +4,25 @@ outline: deep
 
 # Schemas
 
-`schema` is a small wrapper over [JSON schema](https://json-schema.org/), [AJV](https://ajv.js.org/) and [json-schema-to-ts](https://github.com/thomasaribart/json-schema-to-ts) to define data schemas. It can also automatically get the correct TypeScript type for a schema. This allows for a single place to define your types and validation rules in plain JavaScript or TypeScript which can then be used by many other parts of a Feathers application. Schemas are also used by [resolvers](./resolvers.md) to validate and convert data before or after dynamically resolving properties.
+`schema` is a small wrapper around three existing projects:
+
+- [JSON schema](https://json-schema.org/) for defining schemas.
+- [AJV](https://ajv.js.org/) for validating objects with those schemas.
+- [json-schema-to-ts](https://github.com/thomasaribart/json-schema-to-ts) to convert those schemas to TypeScript types.
+
+This package essentially allows for a single place to define your types and validation rules in plain JavaScript or TypeScript which can then be used by many other parts of a Feathers application.
+
+Schemas are also used by [resolvers](./resolvers.md) to validate and convert data before or after dynamically resolving properties.
+
+<BlockQuote label="Need JSON Schema help?">
+
+You can find a lot of type-specific [JSON Schema examples](https://github.com/ThomasAribart/json-schema-to-ts) in the [json-schema-to-ts docs](https://github.com/ThomasAribart/json-schema-to-ts).
+
+</BlockQuote>
 
 ## Definitions
 
 If you are not familiar with JSON schema have a look at the [official getting started guide](https://json-schema.org/learn/getting-started-step-by-step). Here is an example for a possible user schema:
-
-
 
 <LanguageBlock global-id="ts">
 
