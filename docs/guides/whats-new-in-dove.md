@@ -18,7 +18,7 @@ In Feathers Dove there are now two hook formats. The "Regular" hooks:
   - Are registered in the `around` key of a hook object.
   - Are capable of handling `before`, `after`, and `error` logic, all within a single hook.
   - Have a slightly different function definition than Regular hooks
-  - Are more powerful yet also more visually complex (The "after" part of each hook run in reverse-registered order).
+  - Are more powerful yet also more visually complex (The "after" part of each hook runs in reverse-registered order).
 
 Let's compare the signature of the two types of hooks.
 
