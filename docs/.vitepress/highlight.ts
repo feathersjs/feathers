@@ -1,4 +1,5 @@
-import { prettier, getJavaScript, PRETTIERRC } from '@feathersjs/cli'
+import { getJavaScript, PRETTIERRC } from '@feathersjs/cli/lib/commons'
+import prettier from 'prettier'
 import { getHighlighter } from 'shiki'
 import { ThemeOptions } from 'vitepress'
 
