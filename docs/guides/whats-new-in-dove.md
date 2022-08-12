@@ -122,7 +122,7 @@ You can start using resolvers right away. The new [CLI](/guides/basics/services#
 
 You can read more about resolvers, [here](/api/schema/resolvers).
 
-## Hooks vs Resolvers
+### Hooks vs Resolvers
 
 At first glance, it might seem complex now that there are multiple places where you could write the same functionality. Should the feature go into a hook or a resolver? Here are some general guidelines to assist you to pick:
 
