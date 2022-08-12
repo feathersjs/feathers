@@ -14,7 +14,7 @@
     "vue": "^3.2.37"
   },
   "devDependencies": {
-    "@feathersjs/cli": "../packages/cli",
+    "@feathersjs/cli": "^5.0.0-pre.28",
     "@iconify-json/carbon": "^1.1.6",
     "@types/node": "^18.0.3",
     "@unocss/preset-typography": "^0.45.5",
