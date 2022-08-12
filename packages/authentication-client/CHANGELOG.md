@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.28](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.27...v5.0.0-pre.28) (2022-08-03)
+
+
+### Bug Fixes
+
+* **authentication-client:** Properly handle missing token error ([#2700](https://github.com/feathersjs/feathers/issues/2700)) ([160746e](https://github.com/feathersjs/feathers/commit/160746e2bceb465fd1b6a003415f8ab38daba521))
+* **cli:** Improve generated application and client ([#2701](https://github.com/feathersjs/feathers/issues/2701)) ([bd55ffb](https://github.com/feathersjs/feathers/commit/bd55ffb812e89bf215f4515e7f137656ea888c3f))
+
+
+
+
+
 # [5.0.0-pre.27](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.26...v5.0.0-pre.27) (2022-07-13)
 
 

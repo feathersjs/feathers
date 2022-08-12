@@ -32,7 +32,7 @@ export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
   schema: ${camelName}DataSchema,
   validate: 'before',
   properties: {
-    ${authStrategies.includes('local') ? `password: passwordHash({ strategy: 'local' })` : ''}    
+    ${authStrategies.includes('local') ? `password: passwordHash({ strategy: 'local' })` : ''}
   }
 })
 
@@ -41,7 +41,9 @@ export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
 export const ${camelName}PatchResolver = resolve<${upperName}Patch, HookContext>({
   schema: ${camelName}PatchSchema,
   validate: 'before',
-  properties: {}
+  properties: {
+    ${authStrategies.includes('local') ? `password: passwordHash({ strategy: 'local' })` : ''}
+  }
 })
 
 

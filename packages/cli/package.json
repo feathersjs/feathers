@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/cli",
   "description": "The command line interface for creating Feathers applications",
-  "version": "5.0.0-pre.27",
+  "version": "5.0.0-pre.28",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "bin": {
@@ -54,34 +54,34 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathershq/pinion": "^0.3.3",
+    "@feathershq/pinion": "^0.3.4",
     "chalk": "^4.0.1",
     "lodash": "^4.17.21",
     "prettier": "^2.7.1"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^5.0.0-pre.27",
-    "@feathersjs/authentication-local": "^5.0.0-pre.27",
-    "@feathersjs/authentication-oauth": "^5.0.0-pre.27",
-    "@feathersjs/configuration": "^5.0.0-pre.27",
-    "@feathersjs/errors": "^5.0.0-pre.27",
-    "@feathersjs/express": "^5.0.0-pre.27",
-    "@feathersjs/feathers": "^5.0.0-pre.27",
-    "@feathersjs/knex": "^5.0.0-pre.27",
-    "@feathersjs/koa": "^5.0.0-pre.27",
-    "@feathersjs/mongodb": "^5.0.0-pre.27",
-    "@feathersjs/schema": "^5.0.0-pre.27",
-    "@feathersjs/socketio": "^5.0.0-pre.27",
-    "@feathersjs/transport-commons": "^5.0.0-pre.27",
+    "@feathersjs/authentication": "^5.0.0-pre.28",
+    "@feathersjs/authentication-local": "^5.0.0-pre.28",
+    "@feathersjs/authentication-oauth": "^5.0.0-pre.28",
+    "@feathersjs/configuration": "^5.0.0-pre.28",
+    "@feathersjs/errors": "^5.0.0-pre.28",
+    "@feathersjs/express": "^5.0.0-pre.28",
+    "@feathersjs/feathers": "^5.0.0-pre.28",
+    "@feathersjs/knex": "^5.0.0-pre.28",
+    "@feathersjs/koa": "^5.0.0-pre.28",
+    "@feathersjs/mongodb": "^5.0.0-pre.28",
+    "@feathersjs/schema": "^5.0.0-pre.28",
+    "@feathersjs/socketio": "^5.0.0-pre.28",
+    "@feathersjs/transport-commons": "^5.0.0-pre.28",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.0.1",
-    "@types/prettier": "^2.6.3",
+    "@types/node": "^18.6.3",
+    "@types/prettier": "^2.6.4",
     "axios": "^0.27.2",
     "mocha": "^10.0.0",
     "shx": "^0.3.4",
-    "ts-node": "^10.8.2",
-    "type-fest": "^2.16.0",
+    "ts-node": "^10.9.1",
+    "type-fest": "^2.18.0",
     "typescript": "^4.7.4"
   },
-  "gitHead": "6032742bce059781e7013fd662870df45bd72bb5"
+  "gitHead": "bf8e54fddc14d688ba8f505e72c9630a71656ff1"
 }

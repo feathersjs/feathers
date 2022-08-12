@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/knex",
   "description": "Feathers SQL service adapter using KnexJS",
-  "version": "5.0.0-pre.27",
+  "version": "5.0.0-pre.28",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -40,7 +40,8 @@
   ],
   "scripts": {
     "prepublish": "npm run compile",
-    "compile": "shx rm -rf lib/ && tsc",
+    "pack": "npm pack --pack-destination ../cli/test",
+    "compile": "shx rm -rf lib/ && tsc && npm run pack",
     "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
@@ -50,23 +51,24 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/adapter-commons": "^5.0.0-pre.27",
-    "@feathersjs/commons": "^5.0.0-pre.27",
-    "@feathersjs/errors": "^5.0.0-pre.27",
-    "@feathersjs/feathers": "^5.0.0-pre.27"
+    "@feathersjs/adapter-commons": "^5.0.0-pre.28",
+    "@feathersjs/commons": "^5.0.0-pre.28",
+    "@feathersjs/errors": "^5.0.0-pre.28",
+    "@feathersjs/feathers": "^5.0.0-pre.28"
   },
   "peerDependencies": {
-    "knex": "^2.1.0"
+    "knex": "^2.2.0"
   },
   "devDependencies": {
-    "@feathersjs/adapter-tests": "^5.0.0-pre.27",
+    "@feathersjs/adapter-tests": "^5.0.0-pre.28",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.0.1",
-    "knex": "^2.1.0",
+    "@types/node": "^18.6.3",
+    "knex": "^2.2.0",
     "mocha": "^10.0.0",
+    "pg": "^8.7.3",
     "shx": "^0.3.4",
-    "sqlite3": "^5.0.8",
+    "sqlite3": "^5.0.11",
     "typescript": "^4.7.4"
   },
-  "gitHead": "6032742bce059781e7013fd662870df45bd72bb5"
+  "gitHead": "bf8e54fddc14d688ba8f505e72c9630a71656ff1"
 }

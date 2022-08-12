@@ -70,6 +70,8 @@ export function errorHandler(error: any) {
 
     switch (error.code.slice(0, 2)) {
       case '22':
+        feathersError = new errors.NotFound(message)
+        break
       case '23':
         feathersError = new errors.BadRequest(message)
         break
