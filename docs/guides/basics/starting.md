@@ -55,7 +55,7 @@ All Feathers core modules are in the `@feathersjs` namespace.
 
 ## Our first app
 
-Now we can create a Feathers application with a simple `messages` service that allows to create new messages and find all existing ones.
+Now we can create a Feathers application with a simple `messages` service that allows us to create new messages and find all existing ones.
 
 <LanguageBlock global-id="ts">
 
@@ -77,7 +77,7 @@ interface Message {
   text: string
 }
 
-// A messages service that allows to create new
+// A messages service that allows us to create new
 // and return all existing messages
 class MessageService {
   messages: Message[] = []
@@ -213,7 +213,7 @@ interface Message {
   text: string
 }
 
-// A messages service that allows to create new
+// A messages service that allows us to create new
 // and return all existing messages
 class MessageService {
   messages: Message[] = []
@@ -413,4 +413,4 @@ You'll see the JSON response including all current messages.
 
 In this chapter we created our first Feathers application and a service that allows creating new messages, storing them in memory, and retrieving them. We then hosted that service as a REST and real-time API server and used Feathers in the browser to connect to that server and create a website that can send new messages and show all existing messages, with messaging updates showing up in realtime.
 
-Even though we are using just NodeJS and Feathers from scratch without any additional tools, we didn't write lot of code for what we are getting. In the [next chapter](./generator.md) we will look at the Feathers CLI which can create a similar Feathers application with a recommended file structure. We can also use it to add authentication and database connections, all set up for us, automatically.
+Even though we are using just NodeJS and Feathers from scratch without any additional tools, we didn't write a lot of code for what we are getting. In the [next chapter](./generator.md) we will look at the Feathers CLI which can create a similar Feathers application with a recommended file structure. We can also use it to add authentication and database connections, all set up for us, automatically.
