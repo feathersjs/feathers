@@ -51,9 +51,24 @@ If no Feathers application is passed, `koa() -> app` returns a plain Koa applica
 
 ## app.use(location|mw[, service])
 
-`app.use(location|mw[, service]) -> app` registers either a [service object](./services.md), or a Koa middleware. If a path and [service object](./services.md) is passed it will use Feathers registration mechanism, for a middleware function Koa. In a Koa middleware, `ctx.feathers` is an object which will be extended as `params` in a service method call. 
+`app.use(location|mw[, service]) -> app` registers either a [service object](./services.md), or a Koa middleware. If a path and [service object](./services.md) is passed it will use Feathers registration mechanism, for a middleware function Koa.
 
-```js
+### Koa middleware
+
+In a Koa middleware, `ctx.feathers` is an object which will be extended as `params` in a service method call. 
+
+```ts
+import type { NextFunction } from '@feathersjs/koa'
+import type { Id, Params } from '@feathersjs/feathers'
+
+class TodoService {
+  async get(id: Id, params: Params & { fromMiddleware: string }) {
+    const { fromMiddleware } = params
+
+    return { id, fromMiddleware }
+  }
+}
+
 // Register Koa middleware
 app.use(async (ctx: any, next: NextFunction) => {
   ctx.feathers.fromMiddleware = 'Hello from Koa middleware'
@@ -62,14 +77,32 @@ app.use(async (ctx: any, next: NextFunction) => {
 })
 
 // Register a service
-app.use('todos', {
-  async get(id, params) {
-    const { fromMiddleware } = params
+app.use('todos', new TodoService())
+```
 
-    return { id, fromMiddleware }
+### Service middleware
+
+When registering a service, it is also possible to pass custom Koa middleware that should run `before` the specific service method in the `koa` [service option](./application.md#usepath-service--options):
+
+
+```ts
+app.use('/todos', new TodoService(), {
+  koa: {
+    before: [async (ctx, next) => {
+      ctx.feathers // data that will be merged into sevice `params`
+      
+      // This will run all subsequent middleware and the service call
+      await next()
+
+      // Then we have additional properties available on the context
+      ctx.hook // the hook context from the method call
+      ctx.body // the return value
+    }]
   }
 })
 ```
+
+Note that the order of middleware will be `[...before, serviceMethod]`.
 
 ## app.listen(port)
 
