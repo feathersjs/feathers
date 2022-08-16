@@ -56,7 +56,7 @@ Now that Feathers comes with [its own router](#lightning-fast-routing), it's pos
 
 <BlockQuote type="danger" label="todo">
 
-// TODO: Link to the API docs for removing services once they are completed.
+Work on this feature is still pending. [issue](https://github.com/feathersjs/feathers/issues/2035)
 
 </BlockQuote>
 
@@ -119,7 +119,7 @@ At first glance, it might seem complex now that there are multiple places where 
 
 <BlockQuote type="danger" label="todo">
 
-// TODO: Fill out this section
+// TODO: Fill out this section once the new data-loader is finished.
 
 </BlockQuote>
 
