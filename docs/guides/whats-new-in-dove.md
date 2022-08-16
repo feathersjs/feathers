@@ -304,8 +304,25 @@ We covered this [in more detail, earlier](#typed-client), but it's worth briefly
 
 ### New App Structure
 
+The file and folder structure of generated apps has changed a little bit. Here's an overview of the changes:
+
+- Each service has its own schemas file.
+- Each service has its own resolvers file.
+- The service hooks are now found together with the service class. So now you see all of a service's logic in one place.
+- The `src/models` folder no longer gets created, since [Feathers schemas](#official-schemas) replace models.
+- Each service has its own folder inside the `tests` folder.
+
+You can learn more about the generated files, [here](/guides/cli/structure)
+
 ## `setup` and `teardown`
 
-## Build a hooks diagram
+Feathers v5 Dove adds built-in support for app-level `setup` and `teardown` hooks. They are special hooks that don't run on the service level but instead directly on `app.setup` and `app.teardown`. They allow you to perform some async logic while starting and stopping the Feathers server.
 
-Color-coded console.log in relation to color-matched hook blocks.
+```ts
+app.hooks({
+  setup: [connectMongoDB],
+  teardown: [closeMongoDB]
+})
+```
+
+Learn more about `setup` and `teardown` hooks, [here](/api/hooks#setup-and-teardown)
