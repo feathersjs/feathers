@@ -24,44 +24,9 @@ npm install
 
 You can see the migration steps necessary for the Feathers chat [here for Javascript](https://github.com/feathersjs/feathers-chat/compare/dove-pre) and [here for TypeScript](https://github.com/feathersjs/feathers-chat-ts/compare/dove-pre).
 
-## Features
+## New Features
 
-### Schemas and resolvers
-
-[`@feathersjs/schema`](../api/schema/index.md) provides a way to define data models and to dynamically resolve them. It comes in two main parts:
-
-- [Schema](../api/schema/schema.md) - Uses [JSON schema](https://json-schema.org/) to define a data model with TypeScript types and basic validations.
-- [Resolvers](../api/schema/resolvers.md) - Resolve schema properties based on a context (usually the [hook context](../api/hooks.md)).
-
-### Configuration schemas
-
-[Feathers configuration](../api/configuration.md) can now be passed a schema instance to validate the configuration on application start (`app.listen` or `app.setup`).
-
-### Custom methods
-
-Provides a way to expose custom service methods to external clients. See the [services API custom method docs](../api/services.md#custom-methods) how to set up custom service methods and the [REST client](../api/client/rest.md#feathersjs-rest-client) and [Socket.io client](../api/client/socketio.md#feathersjs-socketio-client) chapters on how to use them on the client.
-
-### setup and teardown
-
-`service.setup`, `app.setup`, the new `app.teardown` and `app.listen` now run asynchronously and return a Promise. It is also possible to register [`setup` and `teardown` application hooks](../api/hooks.md#setup-and-teardown) to e.g. establish and gracefully close database connections when the application starts up.
-
-### Around hooks
-
-The new `around` [hook type](../api/hooks.md) allows a hook function to control the before, after and error flow at the same time.
-
-```ts
-app.service('myservice').hooks({
-  around: {
-    all: [async (context: HookContext, next: NextFunction) => {
-      const start = Date.now()
-
-      await next()
-
-      console.log(`${context.method} on ${context.path} took ${Date.now() - start}ms`)
-    }]
-  }
-})
-```
+There are so many new features in this release that they got their own page! Read about the new features on the [What's New in v5](./whats-new-in-dove.md) page.
 
 ## Core SQL and MongoDB
 
@@ -76,19 +41,19 @@ The new version comes with major improvements in TypeScript support from improve
 To get the typed hook context and application configuration update your `declarations.ts` as follows:
 
 ```ts
-import '@feathersjs/transport-commons';
-import { Application as ExpressFeathers } from '@feathersjs/express';
-import { HookContext as FeathersHookContext } from '@feathersjs/feathers';
+import '@feathersjs/transport-commons'
+import { Application as ExpressFeathers } from '@feathersjs/express'
+import { HookContext as FeathersHookContext } from '@feathersjs/feathers'
 
 export interface Configuration {
   // Put types for app.get and app.set here
-  port: number;
+  port: number
 }
 // A mapping of service names to types. Will be extended in service files.
 export interface ServiceTypes {}
 // The application instance type that will be used everywhere else
-export type Application = ExpressFeathers<ServiceTypes, Configuration>;
-export type HookContext = FeathersHookContext<Application>;
+export type Application = ExpressFeathers<ServiceTypes, Configuration>
+export type HookContext = FeathersHookContext<Application>
 ```
 
 Now `import { HookContext } from './declarations'` can be used as the context in hooks.
@@ -101,7 +66,7 @@ Service types now only need the actual service class type and should no longer i
 // Add this service to the service type index
 declare module '../../declarations' {
   interface ServiceTypes {
-    'messages': Messages;
+    messages: Messages
   }
 }
 ```
@@ -118,11 +83,11 @@ Service `Params` no longer include a catchall property type and need to be expli
 import { Params } from '@feathersjs/feathers'
 
 export type MyQuery = {
-  name: string;
+  name: string
 }
 
 export interface MyServiceParams extends Params<MyQuery> {
-  user: User;
+  user: User
 }
 ```
 
@@ -131,7 +96,7 @@ You can revert to the previous behaviour by overriding he `Params` declaration:
 ```ts
 declare module '@feathersjs/feathers/lib/declarations' {
   interface Params {
-    [key: string]: any;
+    [key: string]: any
   }
 }
 ```
@@ -162,11 +127,10 @@ import { feathers } from '@feathersjs/feathers'
 
 ```js
 // Before
-const server = app.listen(3030);
+const server = app.listen(3030)
 
 // Now
-app.listen(3030).then(server => {
-});
+app.listen(3030).then((server) => {})
 ```
 
 Usually you would call `app.listen`. In case you are calling `app.setup` instead (e.g. for internal jobs or seed scripts) it is now also asynchronous:
@@ -222,9 +186,11 @@ It is also possible to set a custom logger like this:
 ```js
 const feathers = require('@feathersjs/feathers')
 
-const customDebug = name => (...args) => {
-  console.log(name, ...args)
-}
+const customDebug =
+  (name) =>
+  (...args) => {
+    console.log(name, ...args)
+  }
 
 feathers.setDebug(customDebug)
 ```
@@ -237,14 +203,19 @@ Setting the debugger will apply to all `@feathersjs` modules.
 - Since all modern browsers now support built-in [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), the Angular and jQuery REST clients have been removed as well.
 - The `@feathersjs/client` package now only comes with a full (`dist/feathers.js`) and core (`dist/core.js`) browser build. Using Feathers [with a module loader](../api/client.md#module-loaders) is recommended for all other use cases.
 
-### Removed primus transport
+### Removed Primus Transport
 
 Due to low usage `@feathersjs/primus` and `@feathers/primus-client` have been removed from Feathers core.
 
-### Legacy socket format and timeouts
+### Changes to WebSockets
 
-- The legacy `servicename::method` socket message format has been deprecated in Feathers 3 and has now been removed. Use a v3 or later [Feathers client](../api/client.md) or the [current Socket.io direct connection API](../api/client/socketio.md).
-- The `timeout` setting for socket services has been removed. It was mainly intended as a fallback for the old message format and interfered with the underlying timeout and retry mechanism provided by the websocket libraries themselves.
+#### Legacy Socket Format
+
+The legacy `servicename::method` socket message format has been deprecated since Feathers 3 and has now been removed. Use a v3 or later [Feathers client](../api/client.md) or the [current Socket.io direct connection API](../api/client/socketio.md).
+
+#### Timeouts
+
+The `timeout` setting for socket services has been removed. It was mainly intended as a fallback for the old message format and interfered with the underlying timeout and retry mechanism provided by the websocket libraries themselves.
 
 ### NotFound for `app.service`
 
@@ -264,25 +235,25 @@ Services are no longer Uberproto (an ES5 inheritance utility) objects and instea
 // Before
 app.mixins.push((service, path) => {
   service.mixin({
-    create (data, params) {
+    create(data, params) {
       // do something here
-      return this._super(data, params);
+      return this._super(data, params)
     }
-  });
-});
+  })
+})
 
 // Now
 app.mixins.push((service, path) => {
-  const { create } = service;
+  const { create } = service
 
   Object.assign(service, {
-    create (data, params) {
+    create(data, params) {
       // do something here, then invoke the old method
       // through normal JavaScript functionality
-      return create.call(this, data, params);
+      return create.call(this, data, params)
     }
-  });
-});
+  })
+})
 ```
 
 ### `finally` hook
@@ -293,12 +264,12 @@ The undocumented `finally` hook type is no longer available and should be replac
 app.service('myservice').hooks([
   async (context, next) => {
     try {
-      await next();
+      await next()
     } finally {
       // Do finally hook stuff here
     }
   }
-]);
+])
 ```
 
 ### Other internal changes
