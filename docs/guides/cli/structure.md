@@ -1,5 +1,11 @@
 # The generated files
 
+<BlockQuote type="danger" label="Pending Updates">
+
+This page has not yet been updated for Feathers Dove.
+
+</BlockQuote>
+
 Let's have a brief look at the files that have been generated:
 
 <Tabs>
