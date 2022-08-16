@@ -1,7 +1,7 @@
 import http from 'http'
 import { Server, ServerOptions } from 'socket.io'
 import { createDebug } from '@feathersjs/commons'
-import { Application } from '@feathersjs/feathers'
+import { Application, ApplicationHookContext, NextFunction } from '@feathersjs/feathers'
 import { socket } from '@feathersjs/transport-commons'
 
 import { disconnect, params, authentication, FeathersSocket } from './middleware'
@@ -46,7 +46,7 @@ function configureSocketio(port?: any, options?: any, config?: any) {
     // Promise that resolves with the Socket.io `io` instance
     // when `setup` has been called (with a server)
     const done = new Promise((resolve) => {
-      const { listen, setup } = app as any
+      const { listen } = app as any
 
       Object.assign(app, {
         async listen(this: any, ...args: any[]) {
@@ -61,31 +61,34 @@ function configureSocketio(port?: any, options?: any, config?: any) {
           await this.setup(server)
 
           return server.listen(...args)
-        },
-
-        async setup(this: any, server: http.Server, ...rest: any[]) {
-          if (!this.io) {
-            const io = (this.io = new Server(port || server, options))
-
-            io.use(disconnect(app, getParams))
-            io.use(params(app, socketMap))
-            io.use(authentication(app, getParams))
-
-            // In Feathers it is easy to hit the standard Node warning limit
-            // of event listeners (e.g. by registering 10 services).
-            // So we set it to a higher number. 64 should be enough for everyone.
-            io.sockets.setMaxListeners(64)
-          }
-
-          if (typeof config === 'function') {
-            debug('Calling SocketIO configuration function')
-            config.call(this, this.io)
-          }
-
-          resolve(this.io)
-
-          return setup.call(this, server, ...rest)
         }
+      })
+
+      app.hooks({
+        setup: [
+          async (context: ApplicationHookContext, next: NextFunction) => {
+            if (!app.io) {
+              const io = (app.io = new Server(port || context.server, options))
+
+              io.use(disconnect(app, getParams))
+              io.use(params(app, socketMap))
+              io.use(authentication(app, getParams))
+
+              // In Feathers it is easy to hit the standard Node warning limit
+              // of event listeners (e.g. by registering 10 services).
+              // So we set it to a higher number. 64 should be enough for everyone.
+              io.sockets.setMaxListeners(64)
+            }
+
+            if (typeof config === 'function') {
+              debug('Calling SocketIO configuration function')
+              config.call(app, app.io)
+            }
+
+            resolve(app.io)
+            await next()
+          }
+        ]
       })
     })
 
