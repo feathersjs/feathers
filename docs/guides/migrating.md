@@ -8,7 +8,7 @@ This guide explains the new features and changes necessary to migrate to the Fea
 
 ## Status
 
-The final v5 release is expected in the second half of 2022. Aside from the breaking changes and new features documented here. For more information
+The final v5 release is expected on October 31, 2022. Aside from the breaking changes and new features documented here. For more information
 
 - Follow [the v5 milestone](https://github.com/feathersjs/feathers/milestone/11) - open issues are in development, closed issues are already published as a prerelease
 - See the current [v5 Changelog](https://github.com/feathersjs/feathers/blob/dove/CHANGELOG.md)
