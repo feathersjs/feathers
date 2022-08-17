@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert'
-import { feathers, Application, HookContext, NullableId, Params } from '@feathersjs/feathers'
+import { feathers, Application, HookContext, NullableId, Params, ApplicationHookContext } from '@feathersjs/feathers'
 import express from '@feathersjs/express'
 import { Request, Response } from 'express'
 import { omit, extend } from 'lodash'
@@ -80,6 +80,15 @@ describe('@feathersjs/socketio', () => {
       }
     })
 
+    app.hooks({
+      setup: [
+        async (context: ApplicationHookContext, next: NextFunction) => {
+          assert.notStrictEqual(context.app, undefined)
+          await next()
+        }
+      ]
+    })
+
     app.listen(7886).then((srv) => {
       server = srv
       server.once('listening', () => {
@@ -90,7 +99,7 @@ describe('@feathersjs/socketio', () => {
           }
         })
       })
-    })
+    }).catch(done)
 
     socket = io('http://localhost:7886')
     socket.on('connect', () => done())
