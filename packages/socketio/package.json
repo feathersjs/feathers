@@ -55,6 +55,7 @@
   "dependencies": {
     "@feathersjs/commons": "^5.0.0-pre.28",
     "@feathersjs/feathers": "^5.0.0-pre.28",
+    "@feathersjs/hooks": "^0.7.5",
     "@feathersjs/transport-commons": "^5.0.0-pre.28",
     "socket.io": "^4.5.1"
   },

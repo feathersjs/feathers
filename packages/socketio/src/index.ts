@@ -3,6 +3,7 @@ import { Server, ServerOptions } from 'socket.io'
 import { createDebug } from '@feathersjs/commons'
 import { Application } from '@feathersjs/feathers'
 import { socket } from '@feathersjs/transport-commons'
+import { hooks, middleware } from '@feathersjs/hooks'
 
 import { disconnect, params, authentication, FeathersSocket } from './middleware'
 
@@ -86,6 +87,10 @@ function configureSocketio(port?: any, options?: any, config?: any) {
 
           return setup.call(this, server, ...rest)
         }
+      })
+
+      hooks(app, {
+        setup: middleware().params('server').props({ app })
       })
     })
 
