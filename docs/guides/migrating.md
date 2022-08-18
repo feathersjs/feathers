@@ -121,6 +121,33 @@ const { feathers } = require('@feathersjs/feathers')
 import { feathers } from '@feathersjs/feathers'
 ```
 
+### Service Options
+
+For v5 service adapters, when passing service options, the `whitelist` and `allow` options are no longer supported. If you're using `whitelist` or `allow`, rename them to `operators`.
+
+```js
+// `whitelist` is no longer supported. Rename it to `operators`
+{
+  whitelist: ['$customQueryOperator']
+}
+
+// `allow` is no longer supported. Rename it to `operators`
+{
+  allow: ['$customQueryOperator']
+}
+
+// Use `operators` for v5 service adapters
+{
+  operators: ['$customQueryOperator']
+}
+```
+
+<BlockQuote>
+
+This change only affects service adapters that have been upgraded to v5, like [@feathersjs/mongodb](/api/databases/mongodb), [@feathersjs/knex](/api/databases/knex), and [@feathersjs/memory](/api/databases/memory). This also applies to any community-supported adapters which have been upgraded to v5. If you use a v4 adapter for a service in your v5 app, you do not need to make this change for that service.
+
+</BlockQuote>
+
 ### Asynchronous setup
 
 `service.setup`, `app.setup` and `app.listen` return a Promise:
