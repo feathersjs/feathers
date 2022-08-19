@@ -121,9 +121,11 @@ const { feathers } = require('@feathersjs/feathers')
 import { feathers } from '@feathersjs/feathers'
 ```
 
-### Service Options
+### Custom Operators
 
-For v5 service adapters, when passing service options, the `whitelist` and `allow` options are no longer supported. If you're using `whitelist` or `allow`, rename them to `operators`.
+Use `operators` instead of `whitelist` or `allow`.
+
+For v5 service adapters, when passing service options, the `whitelist` and `allow` options are no longer supported. If you were using `whitelist` or `allow`, rename them to `operators`.
 
 ```js
 // `whitelist` is no longer supported. Rename it to `operators`
