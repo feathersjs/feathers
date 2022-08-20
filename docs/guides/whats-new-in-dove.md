@@ -4,7 +4,9 @@ outline: deep
 
 # What's New in v5
 
-Feathers Dove (v5) is a super-ambitious release which adds some really great tooling and APIs. Here is an overview of each new feature, followed by links to learn more.
+Feathers Dove (v5) is a super-ambitious release which adds some really great tools and APIs. We don't have to mince words. This release is awesome with so many useful features.
+
+Here is an overview of each new feature, followed by links to learn more.
 
 ## New TypeScript Benefits
 
@@ -14,13 +16,29 @@ Feathers has been a TypeScript-friendly framework for years, but TypeScript supp
 
 We've completely rewritten all of Feathers in TypeScript. And we're not talking about a lightweight TypeScript implementation. It's TypeScript all the way down. Everything from the official database adapters, built-in hooks, and utilities, right down to Feathers core. The newly-rebuilt [v5 CLI and generator](#rebuilt-cli) even produces a TypeScript application, by default.
 
+You can find the shiny new TypeScript packages on GitHub, [here](https://github.com/feathersjs/feathers/tree/dove/packages).
+
 ### Typed Client
 
 Feathers has had an isomorphic API - working equally well in browser and server - since 2016. Now with Dove, our [new CLI](#rebuilt-cli) generates **shared types for the Feathers server and client**. We even integrated the types with our new [schemas feature](#official-schemas), so you define your types once, in a single location, and use them everywhere.
 
-`<snark>`We're also happy to announce that FeathersHQ didn't have to borrow $40 million from investors to implement this awesome new feature. How did we ever manage to build such a great framework without millions of dollars?`</snark>` Really, we have a wondeful, active community of contributors who share values of good API design, boilerplate elimination, and making development fun.
-
 Thanks to FeathersJS's clean, modular, loose-coupled architecture, it was pleasantly simple to add this feature. This is another one of the benefits we get from building a pattern-driven framework.
+
+You can learn more about the Feathers Client, [here](/api/client).
+
+### New Documentation
+
+The new docs are built on [Vitepress](https://vitepress.vuejs.org/). It had become difficult to maintain all of the examples in two languages: JavaScript and TypeScript. To simplify, we now ONLY write documentation examples in TypeScript. You can still switch languages in the sidebar thanks to our custom highlighter for Vitepress, which transpiles TypeScript examples to JavaScript.
+
+The custom highlighter can be found in the `/docs/.vitepress` folder of the core monorepo.
+
+You can find the `docs` folder, [here](https://github.com/feathersjs/feathers/tree/dove-docs/docs).
+
+<BlockQuote label="Todo">
+
+Once the `dove-docs` branch is merged, the docs will be found [here](https://github.com/feathersjs/feathers/tree/dove/docs). This block should be removed and the above link updated.
+
+</BlockQuote>
 
 ## Framework Agnostic API
 
@@ -30,35 +48,47 @@ In 2016, we realized that we could decouple Feathers from the underlying HTTP tr
 - The [KoaJS transport](/api/koa) (new in Feathers Dove)
 - The [ExpressJS transport](/api/express)
 
-It's possible to create other framework integrations using the Koa transport as a template. For example, you could make an adapter for the popular framework, Fastify (but with the new Feathers [router](#lightning-fast-routing), you really don't need to).
-
 ### KoaJS Support
 
-but the CLI's official HTTP integration has always been built on the Express adapter. Lately, Express has been "showing its age", so we've made some inviting changes.
+The CLI's official HTTP integration has always been built on the Express adapter. Lately, Express has been "showing its age", so we've made some inviting changes.
 
 - We've released the [`@feathersjs/koa`](/api/koa) adapter and utilities. Now Feathers apps can use [KoaJS](https://koajs.com/) as an API base.
 - The Feathers CLI now uses KoaJS as the default transport.
 - The Express adapter will continue to function alongside KoaJS.
 
-FeathersJS has its own, isomorphic middleware layer, based on [`@feathersjs/hooks`](https://www.github.com/feathersjs/hooks), so you likely won't need to tap into the middleware layer of any framework adapter. But, in those rare cases that you do need framework middleware, it's available to you.
+FeathersJS has its own, isomorphic middleware layer, based on [`@feathersjs/hooks`](https://www.github.com/feathersjs/hooks), so you likely won't need to tap into the middleware layer of any framework adapter. But, in those cases that you need framework middleware, it's available to you.
+
+Read about the KoaJS adapter, [here](/api/koa).
 
 ### Lightning-Fast Routing
 
-Feathers just got a huge speed upgrade, now including its own Radix Trie router. This means that the algorithm behind Fastify's speed is now built into Feathers, and it works no matter which framework transport you use under the hood. (This is why there's not really a need to build a Fastify transport for Feathers, unless you want to use some other Fastify API under the hood.)
+Feathers just got a huge speed upgrade, now including its own [Radix Trie](https://iq.opengenus.org/radix-tree/) router. This means that the algorithm behind Fastify's speed is now built into Feathers, and it works no matter which framework transport you use under the hood.
 
 The best part about the new router is that there's not another API you have to learn in order to use Feathers. It just works.
 
-For those who want to build a custom framework transport, there's a single [`.lookup` method](/api/application#lookup) you can use to route requests through Feathers.
+For those who want to build a custom framework transport, there's a single `.lookup` method which routes requests through Feathers.
 
-### Service De-registration
+Learn about the `lookup` method, [here](/api/application#lookup).
+
+### Service De-Registration
 
 Now that Feathers comes with [its own router](#lightning-fast-routing), it's possible to de-register a service to completely remove it from the application. This allows you to build cleaner, dynamically generated applications. This is a coveted feature for those who want to build, for example, a dynamic CRUD admin application that's driven by some sort of schema.
 
-<BlockQuote type="danger" label="todo">
+Learn about service de-registration... once we finish the feature.
 
-Work on this feature is still pending. [issue](https://github.com/feathersjs/feathers/issues/2035)
+<BlockQuote label="todo">
+
+Work on this feature is still pending. [issue](https://github.com/feathersjs/feathers/issues/2035). Update the link once documented.
 
 </BlockQuote>
+
+### Custom Frameworks
+
+It's possible to create other framework integrations using the Koa transport as a template. For example, one could make an adapter for Feathers to run on top of Fastify. Don't do it for the speed, though, since with the new [Feathers router](#lightning-fast-routing), you really don't need to. The reason to build a Fastify transport for Feathers would be that you want to use other Fastify APIs along with Feathers.
+
+We've seen some exciting developments for transports in the community. We are currently working on transports for Serverless. If you'd like to make your own transport, get familiar with `@feathersjs/koa`.
+
+You can read through the code for `@feathersjs/koa`, [here](https://github.com/feathersjs/feathers/tree/dove/packages/koa).
 
 ## Custom Methods
 
@@ -70,11 +100,7 @@ Read more about custom methods, [here](/api/services#custom-methods).
 
 ## Resolvers
 
-Feathers just inherited one of GraphQL's best features: Resolvers! Let's take a look at some of the advantages.
-
-### Resolver Advantages
-
-Feathers Resolvers offer several advantages.
+Feathers just inherited one of GraphQL's best features: Resolvers! The new Feathers Resolvers offer several benefits.
 
 - Bring GraphQL's powerful resolver API into your Feathers app.
 - Keep using Feathers' REST-based patterns and loosely-coupled, modular architecture.
@@ -93,6 +119,8 @@ Resolvers are powered by new hook utilities:
 
 The new CLI builds new services with `resolveAll`, enabling all resolvers in a single, clean function call.
 
+Read about the new hooks using the links, above.
+
 #### Benefits of Resolver Hook Utils
 
 These new hook utils allow you to
@@ -108,12 +136,12 @@ You can read more about resolvers, [here](/api/schema/resolvers).
 
 ### Hooks vs Resolvers
 
-At first glance, it might seem complex now that there are multiple places where you could write the same functionality. Should the feature go into a hook or a resolver? Here are some general guidelines to assist you to pick:
+At first glance, choosing where to put logic might seem complex. Should the feature go into a hook or a resolver? Here are some general guidelines to assist you:
 
-- data manipulation and custom validation probably fit best in a resolver.
-- adding or pulling in data from other sources will likely fit best in a resolver.
-- side effects that affect `context.params` must happen in a hook, since the `context` objected is frozen inside of resolvers. This prevents race conditions and allows resolvers to run in parallel.
-- Other side effects that manipulate external data will likely go into a hook with a few exceptions. If you need to do some logging, for example, based on an attribute in incoming data, you might consider putting that API request into a resolver. This situation could also work well in a hook.
+- Data manipulation and **custom** validation probably fit best in a resolver.
+- Adding or pulling in data from other sources will likely fit best in a resolver.
+- Side effects that affect `context.params` must happen in a hook, since the `context` objected is frozen inside of resolvers. This prevents race conditions and allows resolvers to run in parallel.
+- Other side effects that manipulate external data will likely go into a hook with few exceptions. For example, if you need to do some logging based on an attribute in incoming data, you might consider putting that API request into a resolver. This solution could also work well in a hook.
 
 ### Where to Populate Data
 
@@ -244,6 +272,19 @@ Once you've learned the basics about resolvers on this page, you can find more i
 
 </BlockQuote>
 
+### Setup and Teardown Hooks
+
+Feathers v5 Dove adds built-in support for app-level `setup` and `teardown` hooks. They are special hooks that don't run on the service level but instead directly on `app.setup` and `app.teardown`. They allow you to perform some async logic while starting and stopping the Feathers server.
+
+```ts
+app.hooks({
+  setup: [connectMongoDB],
+  teardown: [closeMongoDB]
+})
+```
+
+Learn more about `setup` and `teardown` hooks, [here](/api/hooks#setup-and-teardown)
+
 ## Official Schemas
 
 Feathers Dove (v5) introduces new, official tools for data validation and mutation in the new core package, [@feathersjs/schema](/api/schema/index). This same package includes schema-based resolvers, which you'll learn about in the next section.
@@ -260,9 +301,7 @@ So in Feathers Dove, when you create a schema, it dynamically generates proper T
 
 ### Configuration Schemas
 
-If you've ever experienced pains of deploying to production, you'll appreciate this feature.
-
-So now when your app starts in production, all of your environment variables are checked against the configuration schema. The app won't start if the schema validation fails. This will alleviate occurrence of those pesky bugs in production days to weeks after deployment, all because of a missing environment variable.
+If you've ever experienced pains of deploying to production, you'll appreciate this feature. When when your app starts in production, all of your environment variables are checked against the configuration schema. The app won't start if the schema validation fails. This keeps bugs from missing environment variables from showing up in production days to weeks after deployment.
 
 Configuration schemas also produce TypeScript types, so the [TypeScript improvements](#new-typescript-benefits) in Feathers Dove include typed configuration lookup for `app.get()` and `app.set()`. It's really convenient.
 
@@ -282,7 +321,9 @@ When we say "state of the art", it's not hubris. The new Feathers CLI is built o
 - It just works™️ with existing npm packages. There's no need to make an EJS plugin for some custom helper using an obscure API. Just import the module and use it in your template.
 - Integrates with all existing TypeScript tooling. Hover over a variable and inspect the context like you would any TS code.
 
-Now that we have what we consider the best generator on the planet, we have some exciting future plans for the Feathers CLI. Stay tuned!
+Now that we have what we consider the best generator on the planet, we have some exciting future plans for the Feathers CLI, whicih we will announce in the future.
+
+You can read more about Pinion, [here](https://github.com/feathershq/pinion)
 
 ### Fully TypeScript
 
@@ -290,9 +331,9 @@ We have dramatically reduced the surface area for bugs to be introduced into the
 
 When you select `JavaScript` to generate an app, the CLI works some magic under the hood by
 
-- compiling the `.ts` templates to JavaScript, in memory
-- formatting the JavaScript code with Prettier
-- writing clean `.js` to the file system.
+- Compiling the `.ts` templates to JavaScript, in memory
+- Formatting the JavaScript code with Prettier
+- Writing clean `.js` to the file system.
 
 And we get to smile because the entire process is a work of art, thanks to the TypeScript team.
 
@@ -301,6 +342,8 @@ For Feathers Maintainers, commiting to TypeScript means we only contribute to a 
 ### Shared Types
 
 We covered this [in more detail, earlier](#typed-client), but it's worth briefly mentioning again. The new generator powers Shared Types for both the Feathers server and client. You can make your public-facing API easier to use and give developers a typed client.
+
+Read more about shared types, [here](#typed-client).
 
 ### New App Structure
 
@@ -314,15 +357,14 @@ The file and folder structure of generated apps has changed a little bit. Here's
 
 You can learn more about the generated files, [here](/guides/cli/structure)
 
-## `setup` and `teardown`
+## The Future
 
-Feathers v5 Dove adds built-in support for app-level `setup` and `teardown` hooks. They are special hooks that don't run on the service level but instead directly on `app.setup` and `app.teardown`. They allow you to perform some async logic while starting and stopping the Feathers server.
+We're pround to announce that FeathersHQ has been able to secure funding... the old fashion way. We turned down a buyout offer and rejected the modern path of borrowing $40 million - or any amount of money - from investors to build Feathers. We are self-funded and community powered. In every way, Feathers has a solid foundation for a steady, stable future.
 
-```ts
-app.hooks({
-  setup: [connectMongoDB],
-  teardown: [closeMongoDB]
-})
-```
+How did we ever manage to build such a great framework without millions of dollars? Really, we have a wonderful, active community of contributors who share values of good API design, boilerplate elimination, and making development fun. This is rewarding for us!
 
-Learn more about `setup` and `teardown` hooks, [here](/api/hooks#setup-and-teardown)
+We started in 2013 from a core architecture that's unique among frameworks - in **any** language. We offer the same API across multiple transports, which allows us all to build real-time, restful applications. The result is a robust, flexible framework that continues to be unique while showing its maturity. Feathers has made its way into enterprises that serve a large portion of the connected planet. With all of the new features in Feathers v5 (Dove), we're excited to build! And we're even more excited to see what you build!
+
+We have a few more things to show off in the coming months. Stay tuned!
+
+Enjoy the release! And come chat with us on [Discord](https://discord.gg/qa8kez8QBx) when you feel like it.
