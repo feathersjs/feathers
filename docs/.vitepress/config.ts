@@ -224,6 +224,7 @@ export default defineConfig({
         {
           text: 'Frontend',
           collapsible: true,
+          collapsed: true,
           items: [
             {
               text: 'JavaScript',
@@ -246,6 +247,7 @@ export default defineConfig({
         {
           text: 'The Feathers CLI',
           collapsible: true,
+          collapsed: true,
           items: [
             {
               text: 'Overview',
