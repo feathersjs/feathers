@@ -83,7 +83,7 @@ Save yourself some time making a custom formatter. Learn how to apply AJV's exte
 
 #### Example of Customized AJV
 
-See an example of custom keywords and formatters in the [MongoDB adapter documentation](/api/database/mongodb#using-a-custom-ajv-instance).
+See an example of custom keywords and formatters in the [MongoDB adapter documentation](/api/databases/mongodb#using-a-custom-ajv-instance).
 
 ### schema(definition, ajv)
 
