@@ -39,3 +39,17 @@ app.service('users').hooks({
   }
 })
 ```
+
+## Schema Issues
+
+### unknown keyword: "convert"
+
+You see an error like `"Error: strict mode: unknown keyword: "convert"`.
+
+See the solution on the [MongoDB Database Adapter](/api/databases/mongodb#unknown-keyword-convert) page.
+
+### unknown format "date-time"
+
+You see an error like `Error: unknown format "date-time" ignored in schema at path "#/properties/createdAt"`.
+
+See the solution on the [MongoDB Database Adapter](/api/databases/mongodb#unknown-format-date-time) page.

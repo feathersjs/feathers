@@ -147,3 +147,22 @@ export const connectionsResultSchema = schema(
   ajv
 )
 ```
+
+## Common Pitfalls
+
+Here are a couple of errors you might run into while using validators.
+
+### unknown keyword: "convert"
+
+You'll see an error like `"Error: strict mode: unknown keyword: "convert"` in a few scenarios:
+
+- You fail to [Pass the Custom AJV Instance to every `schema`](#pass-the-custom-ajv-instance-to-schema). If you're using a custom AJV instance, be sure to provide it to **every** place where you call `schema()`.
+- You try to use custom keywords in your schema without registering them, first.
+- You make a typo in your schema. For example, it's common to forget to accidentally mis-document arrays and collapse the item `properties` up one level.
+
+### unknown format "date-time"
+
+You'll see an error like `Error: unknown format "date-time" ignored in schema at path "#/properties/createdAt"` in a few scenarios.
+
+- You're attempting to use a formatter not built into AJV.
+- You fail to [Pass the Custom AJV Instance to every `schema`](#pass-the-custom-ajv-instance-to-schema). If you're using a custom AJV instance, be sure to provide it to **every** place where you call `schema()`.
