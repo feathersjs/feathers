@@ -84,7 +84,7 @@ app.hooks({
 })
 ```
 
-Now loaders are available everywhere! No need to instantiate or configure a `ServiceLoader` for each service ahead of time. `ServiceLoader` are lazily created and cached as they are called. It is also best practice to pass the loader onto susequent service/loader calls to maximize effeciency. See the [Guide](./docs/guide.md) section for more info.
+Now loaders are available everywhere! No need to instantiate or configure a `ServiceLoader` for each service ahead of time. `ServiceLoader` are lazily created and cached as they are called. It is also best practice to pass the loader onto susequent service/loader calls to maximize effeciency. See the Guide(./docs/guide.md) section for more info.
 
 ```js
 const { resolveResult, resolve } = require('@feathersjs/schema')
@@ -118,7 +118,7 @@ const users = await serviceLoader.find(params)
 serviceLoader.clearAll()
 ```
 
-The `ServiceLoader` configures a `DataLoader` with some basic options. The `DataLoader` is a powerful batching and caching class that dramatically imporoves performance. It is based on the [facebook/dataloader](https://github.com/facebook/dataloader). If you are interested in how this works in depth, check out this [GREAT VIDEO](https://www.youtube.com/watch?v=OQTnXNCDywA) by its original author. You should also checkout the [GUIDE](./guide.md) for a comprehensive explanation of how the `DataLoader` works.
+The `ServiceLoader` configures a `DataLoader` with some basic options. The `DataLoader` is a powerful batching and caching class that dramatically imporoves performance. It is based on the [facebook/dataloader](https://github.com/facebook/dataloader). If you are interested in how this works in depth, check out this [GREAT VIDEO](https://www.youtube.com/watch?v=OQTnXNCDywA) by its original author. You should also checkout the GUIDE(./guide.md) for a comprehensive explanation of how the `DataLoader` works.
 
 ```js
 const { DataLoader, uniqueKeys, uniqueResults } = require('@feathersjs/loader')
