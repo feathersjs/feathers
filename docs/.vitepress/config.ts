@@ -280,6 +280,10 @@ export default defineConfig({
               link: '/guides/migrating.md'
             },
             {
+              text: 'Populating Data',
+              link: '/guides/populating.md'
+            },
+            {
               text: 'Troubleshooting',
               link: '/guides/troubleshooting.md'
             }
