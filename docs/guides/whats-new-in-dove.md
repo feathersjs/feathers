@@ -143,9 +143,17 @@ At first glance, choosing where to put logic might seem complex. Should the feat
 - Side effects that affect `context.params` must happen in a hook, since the `context` objected is frozen inside of resolvers. This prevents race conditions and allows resolvers to run in parallel.
 - Other side effects that manipulate external data will likely go into a hook with few exceptions. For example, if you need to do some logging based on an attribute in incoming data, you might consider putting that API request into a resolver. This solution could also work well in a hook.
 
+### Populating With Resolvers
+
+Resolvers provide a basic way of pulling in data from other services onto results from the current service. They work especially well for populating data onto the results of `get` requests and even on nested `get` requests (multiple levels deep). For anything more complex than `get` requests, you can now use Data Loaders in your resolvers.
+
+Read more about populating with data loaders, [here](#populating-with-loaders).
+
 ## Data Loaders
 
 Feathers Dove introduces memorable new APIs for batch-loading and caching. And for the first time, Feathers has a built-in solution for populating data: Cache Loaders, App Loaders, and Service Loaders!
+
+You can learn more about Data Loaders, [here](/api/loader/index).
 
 ### Cache Loaders
 
@@ -153,16 +161,25 @@ Speed is the goal. Cache Loaders make your apps one step faster by preventing th
 
 Learn more about Cache Loaders, [here](/api/loader/cache-loaders).
 
-### App and Service Loaders
+### Service Loaders
 
-We mentioned that speed is the goal. The `AppLoader` and `ServiceLoader` classes provide huge improvements to speed by intelligently batching requests. They can combine many service requests into a single request, saving round-trips to the database.
+We mentioned that speed is the goal. The `ServiceLoader` class provides huge speed improvements through intelligent batching of requests. Service Loaders can combine many requests to a service into a single request, saving round-trips to the database.
 
-Thanks to the power of the Feathers Service Interface, these new loaders work with **every** database adapter and almost any custom service.
+Thanks to the power of the Feathers Service Interface, these new loaders work with **every** database adapter and almost any custom service. They also cache results with their own built-in cache layer.
 
-Learn more about App Loaders, [here](/api/loader/app-loader). <br>
 Learn more about Service Loaders, [here](/api/loader/service-loader).
 
-### Powerful With Resolvers
+### App Loaders
+
+App Loaders are the most convenient way to lazily instantiate Service Loaders and use them anywhere in your API. Once you've created an app loader, you can call the `service` method to either create or reference a Service Loader by service path name. You can then call `loader.service('users')`, for example, to create or recall a loader for the `users` service. It's a familiar API, being very similar to Feathers' `app.service` method.
+
+Learn more about App Loaders, [here](/api/loader/app-loader). <br>
+
+### Populating With Loaders
+
+When you combine resolvers with data loaders, you get you get the most concise, beautiful API for populating data. It's not even necessary to write schemas to define relationships, first.
+
+Read the "Populating Data" guide, [here](./populating)
 
 ### Community Contributed
 
