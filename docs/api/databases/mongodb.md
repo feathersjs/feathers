@@ -48,9 +48,15 @@ export const commentsResultResolver = resolve<commentsResult, HookContext>({
 })
 ```
 
-### Using a Custom AJV Format
+### Using a Custom AJV Instance
 
-It's possible to validate MongoDB ObjectIds and dates with AJV, as well. This is more complicated than using resolvers, but can also handle the full query syntax. You can create a custom AJV instance with extra formatters attached. Here's an example of a custom AJV instance, which could be placed in `src/schemas/ajv.ts` and referenced by all other services.
+All [Feathers schemas](/api/schema/schema) share an implicit AJV instance by default.
+
+It's possible to validate MongoDB ObjectIds and dates with AJV, as well. This is more complicated than using resolvers, but can also handle the full query syntax. You can create a custom AJV instance with extra formatters attached.
+
+#### Custom AJV Instance
+
+Here's an example of a custom AJV instance, which could be placed in `src/schemas/ajv.ts` and referenced by all other services.
 
 ```ts
 import Ajv, { AnySchemaObject } from 'ajv'
@@ -114,6 +120,8 @@ ajv.addFormat('objectid', {
   }
 })
 ```
+
+#### Pass the Custom AJV Instance to `schema`
 
 Once created, all service schema files should use the custom AJV instance. Here's an example:
 
