@@ -143,13 +143,30 @@ At first glance, choosing where to put logic might seem complex. Should the feat
 - Side effects that affect `context.params` must happen in a hook, since the `context` objected is frozen inside of resolvers. This prevents race conditions and allows resolvers to run in parallel.
 - Other side effects that manipulate external data will likely go into a hook with few exceptions. For example, if you need to do some logging based on an attribute in incoming data, you might consider putting that API request into a resolver. This solution could also work well in a hook.
 
-### Where to Populate Data
+## Data Loaders
 
-<BlockQuote type="danger" label="todo">
+Feathers Dove introduces memorable new APIs for batch-loading and caching. And for the first time, Feathers has a built-in solution for populating data: Cache Loaders, App Loaders, and Service Loaders!
 
-// TODO: Fill out this section once the new data-loader is finished.
+### Cache Loaders
 
-</BlockQuote>
+Speed is the goal. Cache Loaders make your apps one step faster by preventing the need to re-request data. Cache Loaders have a familiar API for making requests and caching the results of those requests. The Cache Loaders include the `FindLoader`, the `GetLoader`, and the `find` and `get` methods of the new `ServiceLoader` classes.
+
+Learn more about Cache Loaders, [here](/api/loader/cache-loaders).
+
+### App and Service Loaders
+
+We mentioned that speed is the goal. The `AppLoader` and `ServiceLoader` classes provide huge improvements to speed by intelligently batching requests. They can combine many service requests into a single request, saving round-trips to the database.
+
+Thanks to the power of the Feathers Service Interface, these new loaders work with **every** database adapter and almost any custom service.
+
+Learn more about App Loaders, [here](/api/loader/app-loader). <br>
+Learn more about Service Loaders, [here](/api/loader/service-loader).
+
+### Powerful With Resolvers
+
+### Community Contributed
+
+Many thanks to [@DaddyWarbucks](https://github.com/DaddyWarbucks) for championing this feature.
 
 ## More Powerful Hooks
 

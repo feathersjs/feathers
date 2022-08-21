@@ -447,6 +447,33 @@ export default defineConfig({
               link: '/api/databases/knex'
             }
           ]
+        },
+        {
+          text: 'Data Loaders',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            {
+              text: 'Overview',
+              link: '/api/loader/index'
+            },
+            {
+              text: 'App Loader',
+              link: '/api/loader/app-loader'
+            },
+            {
+              text: 'Service Loader',
+              link: '/api/loader/service-loader'
+            },
+            {
+              text: 'Cache Loaders',
+              link: '/api/loader/cache-loaders'
+            },
+            {
+              text: 'Loader Utils',
+              link: '/api/loader/loader-utils'
+            }
+          ]
         }
       ],
       '/help': [
