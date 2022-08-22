@@ -36,11 +36,12 @@ The simplest way to convert ObjectIds is to make a resolver.
 ```ts
 import { ObjectId } from 'mongodb'
 
-// Resolver for the data that is being returned
-export const commentsResultResolver = resolve<commentsResult, HookContext>({
-  schema: commentsResultSchema,
+// Resolver for the basic data model (e.g. creating new entries)
+export const commentsDataResolver = resolve<commentsData, HookContext>({
+  schema: commentsDataSchema,
   validate: false,
   properties: {
+    text: { type: 'string' },
     userId: async (value) => {
       return value ? new ObjectId(value) : value
     }
