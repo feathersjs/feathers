@@ -65,22 +65,8 @@ import { ObjectId } from 'mongodb'
 
 export { Infer, validateData, validateQuery, schema, queryProperty } from '@feathersjs/schema'
 
-export const ajv = new Ajv({
-  coerceTypes: true,
-  useDefaults: true,
-  schemas: []
-})
-addFormats(ajv)
-
-export const ajvNoCoerce = new Ajv({
-  coerceTypes: false,
-  useDefaults: true,
-  schemas: []
-})
-addFormats(ajvNoCoerce)
-
-// Add convert keyword for "date" and "date-time" string formats
-ajv.addKeyword({
+// Reusable `convert` keyword.
+const keywordConvert = {
   keyword: 'convert',
   type: 'string',
   compile(schemaVal: boolean, parentSchema: AnySchemaObject) {
@@ -106,10 +92,10 @@ ajv.addKeyword({
     }
     return () => true
   }
-})
+} as const
 
-// Add `objectid` format
-ajv.addFormat('objectid', {
+// Reusable `ObjectId` Formatter
+const formatObjectId = {
   type: 'string',
   validate: (id: string | ObjectId) => {
     if (ObjectId.isValid(id)) {
@@ -118,7 +104,27 @@ ajv.addFormat('objectid', {
     }
     return false
   }
+} as const
+
+// Create a custom AJV
+export const ajv = new Ajv({
+  coerceTypes: true,
+  useDefaults: true,
+  schemas: []
 })
+addFormats(ajv)
+ajv.addKeyword(keywordConvert)
+ajv.addFormat('objectid', formatObjectId)
+
+// Create a custom AJV instance that doesn't coerce types
+export const ajvNoCoerce = new Ajv({
+  coerceTypes: false,
+  useDefaults: true,
+  schemas: []
+})
+addFormats(ajvNoCoerce)
+ajv.addKeyword(keywordConvert)
+ajv.addFormat('objectid', formatObjectId)
 ```
 
 #### Pass the Custom AJV Instance to `schema`
