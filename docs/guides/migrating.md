@@ -137,10 +137,10 @@ The `whitelist` option is now split into two options: `operators` and `filters`.
 In the below example, `$customFilter` would be a filter, `$regex` and `$options` would be operators.
 
 ```ts
-{
+const query = {
   $customFilter: 'value',
   name: {
-    $regex: /pattern/
+    $regex: /pattern/,
     $options: 'igm'
   }
 }
