@@ -121,26 +121,43 @@ const { feathers } = require('@feathersjs/feathers')
 import { feathers } from '@feathersjs/feathers'
 ```
 
-### Custom Operators
+### Custom Filters & Operators
 
-Use `operators` instead of `whitelist` or `allow`.
+<BlockQuote type="warning" label="pending">
+
+We are exploring the best migration strategy to replace "whitelisting" options with a solution based on [Feathers schema](/api/schema/index). We'll update this guide once the solution is in place.
+
+</BlockQuote>
+
+The `whitelist` option is now split into two options: `operators` and `filters`. To migrate, you need to figure out how you're using each item from your old `whitelist`, then move them to the correct option. You can determine if each one is a filter or an operator based on where it is used in a query.
+
+- `filters` are top-level query properties.
+- `operators` are positioned under an attribute.
+
+In the below example, `$customFilter` would be a filter, `$regex` and `$options` would be operators.
+
+```ts
+{
+  $customFilter: 'value',
+  name: {
+    $regex: /pattern/
+    $options: 'igm'
+  }
+}
+```
 
 For v5 service adapters, when passing service options, the `whitelist` and `allow` options are no longer supported. If you were using `whitelist` or `allow`, rename them to `operators`.
 
 ```js
-// `whitelist` is no longer supported. Rename it to `operators`
+// `whitelist`/`allow are no longer supported.
 {
-  whitelist: ['$customQueryOperator']
+  whitelist: ['$customFilter', '$regex', '$options']
 }
 
-// `allow` is no longer supported. Rename it to `operators`
+// Separate items into `filters` and `operators` for v5 service adapters
 {
-  allow: ['$customQueryOperator']
-}
-
-// Use `operators` for v5 service adapters
-{
-  operators: ['$customQueryOperator']
+  filters: ['$customQueryOperator'],
+  operators: ['$regex', '$options']
 }
 ```
 
