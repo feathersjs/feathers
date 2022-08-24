@@ -8,6 +8,12 @@ import { OauthSetupSettings } from './utils'
 
 const debug = createDebug('@feathersjs/authentication-oauth/services')
 
+export type GrantResponse = {
+  location: string
+  session: any
+  state: any
+}
+
 export type OAuthParams = Omit<Params, 'route'> & {
   session: any
   state: Record<string, any>
@@ -16,7 +22,7 @@ export type OAuthParams = Omit<Params, 'route'> & {
   }
 }
 
-export const locationHook = () => async (context: HookContext, next: NextFunction) => {
+export const redirectHook = () => async (context: HookContext, next: NextFunction) => {
   await next()
 
   const { location } = context.result
@@ -29,14 +35,16 @@ export const locationHook = () => async (context: HookContext, next: NextFunctio
   }
 }
 
-export class OAuthFlowService {
+export class OAuthService {
   grant: any
 
-  constructor(opts: GrantConfig) {
-    this.grant = Grant({ config: opts })
+  constructor(public app: Application, public settings: OauthSetupSettings) {
+    const config = app.get('grant') as GrantConfig
+
+    this.grant = Grant({ config })
   }
 
-  async handler(method: string, params: OAuthParams, body?: any, override?: string) {
+  async handler(method: string, params: OAuthParams, body?: any, override?: string): Promise<GrantResponse> {
     const {
       session,
       state,
@@ -44,7 +52,7 @@ export class OAuthFlowService {
       route: { provider }
     } = params
 
-    const result = await this.grant({
+    const result: GrantResponse = await this.grant({
       params: { provider, override },
       state: state.grant,
       session: session.grant,
@@ -53,53 +61,16 @@ export class OAuthFlowService {
       body
     })
 
-    // result = { location, session, state }
     session.grant = result.session
     state.grant = result.state
 
     return result
   }
 
-  async find(params: OAuthParams) {
-    const { session, query, headers } = params
-    const { feathers_token, redirect, ...rest } = query
-
-    if (feathers_token) {
-      debug('Got feathers_token query parameter to link accounts', feathers_token)
-      session.accessToken = feathers_token
-    }
-
-    session.redirect = redirect
-    session.query = rest
-    session.headers = headers
-
-    return this.handler(
-      'GET',
-      {
-        ...params,
-        query: rest
-      },
-      {}
-    )
-  }
-
-  async get(override: string, params: OAuthParams) {
-    return this.handler('GET', params, {}, override)
-  }
-
-  async create(data: any, params: OAuthParams) {
-    return this.handler('POST', params, data)
-  }
-}
-
-export class OAuthService {
-  constructor(public app: Application, public settings: OauthSetupSettings) {}
-
-  async authenticate(params: OAuthParams) {
+  async authenticate(params: OAuthParams, result: GrantResponse) {
     const name = params.route.provider
-    const config: GrantConfig = this.app.get('grant')
     const { linkStrategy, authService } = this.settings
-    const { accessToken, grant, query = {}, redirect, headers } = params.session
+    const { accessToken, grant, query = {}, redirect } = params.session
     const service = this.app.defaultAuthentication(authService)
     const strategy = service.getStrategy(name) as OAuthStrategy
     const authParams = {
@@ -112,11 +83,9 @@ export class OAuthService {
           }
         : null,
       query,
-      redirect,
-      headers
+      redirect
     }
-
-    const payload = config.defaults.transport === 'session' ? grant.response : params.query
+    const payload = grant?.response || result?.session?.response || result?.state?.response || params.query
     const authentication = {
       strategy: name,
       ...payload
@@ -137,6 +106,35 @@ export class OAuthService {
   }
 
   async find(params: OAuthParams) {
-    return this.authenticate(params)
+    const { session, query } = params
+    const { feathers_token, redirect, ...restQuery } = query
+    const handlerParams = {
+      ...params,
+      query: restQuery
+    }
+
+    if (feathers_token) {
+      debug('Got feathers_token query parameter to link accounts', feathers_token)
+      session.accessToken = feathers_token
+    }
+
+    session.redirect = redirect
+    session.query = restQuery
+
+    return this.handler('GET', handlerParams, {})
+  }
+
+  async get(override: string, params: OAuthParams) {
+    const result = await this.handler('GET', params, {}, override)
+
+    if (override === 'callback') {
+      return this.authenticate(params, result)
+    }
+
+    return result
+  }
+
+  async create(data: any, params: OAuthParams) {
+    return this.handler('POST', params, data)
   }
 }

@@ -6,10 +6,11 @@ import { Application, ServiceOptions } from '@feathersjs/feathers'
 import { OAuthStrategy, OAuthProfile } from './strategy'
 import { default as setupExpress } from './express'
 import { OauthSetupSettings, getDefaultSettings } from './utils'
-import { locationHook, OAuthFlowService, OAuthService } from './services'
+import { redirectHook, OAuthService } from './service'
 import session from 'express-session'
 import koaSession from 'koa-session'
 import '@feathersjs/koa'
+import { GrantConfig } from 'grant'
 
 const debug = createDebug('@feathersjs/authentication-oauth')
 
@@ -46,11 +47,11 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
     }
   }
 
-  const grant = defaultsDeep({}, omit(oauth, ['redirect', 'origins']), {
+  const grant: GrantConfig = defaultsDeep({}, omit(oauth, ['redirect', 'origins']), {
     defaults: {
       prefix: '/oauth',
       origin: `${protocol}://${host}`,
-      transport: 'session',
+      transport: 'state',
       response: ['tokens', 'raw', 'profile']
     }
   })
@@ -62,7 +63,6 @@ export const setup = (options: OauthSetupSettings) => (app: Application) => {
 
   each(grant, (value, name) => {
     if (name !== 'defaults') {
-      value.callback = value.callback || getUrl(`${name}/authenticate`)
       value.redirect_uri = value.redirect_uri || getUrl(`${name}/callback`)
 
       if (!strategyNames.includes(name)) {
@@ -113,9 +113,13 @@ export const oauth =
         session: ctx.session,
         state: ctx.state
       }
+
       await next()
+
       if (ctx.originalUrl.endsWith('authenticate')) {
         ctx.session = null
+      } else {
+        await ctx.session.save()
       }
     }
     ;(app as any).keys = ['grant']
@@ -130,14 +134,8 @@ export const oauth =
     }
 
     app.configure(setup(options))
-
-    app.use('/oauth/:provider', new OAuthFlowService(app.get('grant')), serviceOptions)
-    app.use('/oauth/:provider/authenticate', new OAuthService(app, options), serviceOptions)
-
+    app.use('/oauth/:provider', new OAuthService(app, options), serviceOptions)
     app.service('/oauth/:provider').hooks({
-      around: { all: [locationHook()] }
-    })
-    app.service('/oauth/:provider/authenticate').hooks({
-      around: { all: [locationHook()] }
+      around: { all: [redirectHook()] }
     })
   }

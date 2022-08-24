@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import querystring from 'querystring'
 import {
   AuthenticationRequest,
   AuthenticationBaseStrategy,
@@ -102,14 +98,10 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     const separator = redirect.endsWith('?') ? '' : redirect.indexOf('#') !== -1 ? '?' : '#'
     const authResult: AuthenticationResult = data
     const query = authResult.accessToken
-      ? {
-          access_token: authResult.accessToken
-        }
-      : {
-          error: data.message || 'OAuth Authentication not successful'
-        }
+      ? { access_token: authResult.accessToken }
+      : { error: data.message || 'OAuth Authentication not successful' }
 
-    return `${redirectUrl}${separator}${querystring.stringify(query)}`
+    return `${redirectUrl}${separator}${new URLSearchParams(query).toString()}`
   }
 
   async findEntity(profile: OAuthProfile, params: Params) {
