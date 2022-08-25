@@ -8,7 +8,7 @@ We now have a fully functional chat application consisting of [services](./servi
 
 ## Registering a user
 
-Although the frontend we will create [JavaScript Frontend chapter](../frontend/javascript.md) will allow to register new users, let's have a quick look at how the REST API can be used directly to register a new user. We can do this by sending a POST request to `http://localhost:3030/users` with JSON data like this as the body:
+For the frontend, we will create a [JavaScript Frontend chapter](../frontend/javascript.md) will allow us to register new users. Let's have a quick look at how the REST API can be used directly to register a new user. We can do this by sending a POST request to `http://localhost:3030/users` with JSON data like this as the body:
 
 ```js
 // POST /users
@@ -186,7 +186,7 @@ you will see that our user has been authenticated.
 
 ## What's next?
 
-Sweet! We now have an API that can register new users with email/password. This means we have everything we need to a frontend for our chat application. You have your choice of
+Sweet! We now have an API that can register new users with email/password. This means we have everything we need for a frontend for our chat application. You have your choice of
 
 - [Plain JavaScipt](../frontend/javascript.md)
 - [React](../frontend/react.md)
