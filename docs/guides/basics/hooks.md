@@ -4,7 +4,7 @@ outline: deep
 
 # Hooks
 
-As we have seen in the [quick start](./starting.md) and when we created our messages service in [the previous chapter](./services.md), Feathers services are a great way to implement data storage and modification. Technically, we could write our entire app with services but very often we need similar functionality across multiple services. For example, we might want to check for all services if a user is allowed to even use it. With just services we would have to implement this again every time.
+As we have seen in the [quick start](./starting.md),  and when we created our messages service in [the previous chapter](./services.md), Feathers services are a great way to implement data storage and modification. Technically, we could write our entire app with services but very often we need similar functionality across multiple services. For example, we might want to check for all services a user is allowed to access. With just services, we would have to implement this every time.
 
 This is where Feathers hooks come in. Hooks are pluggable middleware functions that can be registered __around__, __before__, __after__ or on __errors__ of a service method. Just like services themselves, hooks are *transport independent*. They are usually also service agnostic, meaning they can be used with ​*any*​ service. This pattern keeps your application logic flexible, composable, and much easier to trace through and debug.
 
@@ -72,7 +72,7 @@ app.service('messages').hooks({
 
 A hook function is a function that takes the [hook context](#hook-context) as the parameter and returns that context or nothing. Hook functions run in the order they are registered and will only continue to the next once the current hook function completes. If a hook function throws an error, all remaining hooks (and the service call if it didn't run yet) will be skipped and the error will be returned.
 
-A common pattern the generator uses to make hooks more re-usable (e.g. making the `createdAt` property name from the example above configurable) is to create a wrapper function that takes those options and returns a hook function:
+A common pattern the generator uses to make hooks more reusable (e.g. making the `createdAt` property name from the example above configurable) is to create a wrapper function that takes those options and returns a hook function:
 
 
 
@@ -122,7 +122,7 @@ app.service('messages').hooks({
 
 
 
-Now we have a re-usable hook that can set the timestamp on any property.
+Now we have a reusable hook that can set the timestamp on any property.
 
 ## Hook context
 
@@ -232,7 +232,7 @@ module.exports = {
 
 
 
-This makes it easy to see at one glance in which order hooks are executed and for which method.
+This makes it easy to see at one glance the order hooks are executed and for which method.
 
 > __Note:__ `all` is a special keyword which means those hooks will run before the method specific hooks in this chain.
 
