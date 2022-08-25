@@ -146,20 +146,27 @@ const query = {
 }
 ```
 
-For v5 service adapters, when passing service options, the `whitelist` and `allow` options are no longer supported. If you were using `whitelist` or `allow`, rename them to `operators`.
+For v5 service adapters, split the `whitelist` options into the `filters` object or the `operators` array.
 
 ```js
 // `whitelist`/`allow are no longer supported.
 {
-  whitelist: ['$customFilter', '$regex', '$options']
+  whitelist: ['$customFilter', '$ignoreCase', '$regex', '$options']
 }
 
 // Separate items into `filters` and `operators` for v5 service adapters
 {
-  filters: ['$customQueryOperator'],
+  filters: {
+    // Map a custom filter to a converter function
+    $ignoreCase: (value) => value === 'true' ? true : false,
+    // Enable a custom param without converting
+    '$customQueryOperator': true
+  },
   operators: ['$regex', '$options']
 }
 ```
+
+Notice that `filters` accepts an object. By passing `true`, the `$customQueryOperator` will pass internal query validation. You can also provide a converter function like the below example.
 
 <BlockQuote>
 
