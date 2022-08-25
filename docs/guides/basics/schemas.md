@@ -1,6 +1,6 @@
 # Schemas and resolvers
 
-In Feathers, schemas and resolvers allow to define, validate and secure your data model and types.
+In Feathers, schemas and resolvers allow you to define, validate and secure your data model and types.
 
 <img style="margin: 2em;" src="/img/professor-bird-server.svg" alt="Professor bird at work">
 
@@ -396,7 +396,7 @@ Now that our schemas and resolvers are up to date, we also have to update the da
 
 <BlockQuote type="warning">
 
-If you chose MongoDB you do **not** need to create a migration.
+If you choose MongoDB you do **not** need to create a migration.
 
 </BlockQuote>
 
@@ -404,7 +404,7 @@ Initially, every database service will automatically add a migration that create
 
 - Add the `avatar` string field to the `users` table
 - Add the `createdAt` number field to the `messages` table
-- Add the `userId` number field to the `messages` table and reference it with the `id` un the `users` table 
+- Add the `userId` number field to the `messages` table and reference it with the `id` in the `users` table 
 
 To create a new migration with the name `chat` run
 
@@ -454,7 +454,7 @@ npm run migrate
 
 ## Services, Hooks and Schemas
 
-In the [previous chapter](./services.md) we extended our user service to add a user avatar. This could also be put in a hook instead but made a good example to illustrate how to extend an existing service. There are no explicit rules when to use a hook or when to extend a service but here are some guidelines.
+In the [previous chapter](./services.md) we extended our user service to add a user avatar. This could also be added in a hook but mades a good example to illustrate how to extend an existing service. There are no explicit rules when to use a hook or when to extend a service but here are some guidelines.
 
 Use a hook when
 
