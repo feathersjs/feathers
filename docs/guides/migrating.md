@@ -148,25 +148,29 @@ const query = {
 
 For v5 service adapters, split the `whitelist` options into the `filters` object or the `operators` array.
 
-```js
-// `whitelist`/`allow are no longer supported.
-{
+```ts
+// 👎`whitelist` and `allow are unsupported.
+const oldServiceOptions = {
   whitelist: ['$customFilter', '$ignoreCase', '$regex', '$options']
 }
 
-// Separate items into `filters` and `operators` for v5 service adapters
-{
+// 👍 Separate items into `filters` and `operators` for v5 service adapters
+const serviceOptions = {
   filters: {
     // Map a custom filter to a converter function
-    $ignoreCase: (value) => value === 'true' ? true : false,
+    $ignoreCase: (value: any) => (value === 'true' ? true : false),
     // Enable a custom param without converting
-    '$customQueryOperator': true
-  },
+    $customQueryOperator: true
+  } as const,
   operators: ['$regex', '$options']
 }
 ```
 
-Notice that `filters` accepts an object. By passing `true`, the `$customQueryOperator` will pass internal query validation. You can also provide a converter function like the below example.
+<LanguageBlock global-id="ts">
+
+If you're using TypeScript, notice the `as const` after the `filters` object in the options, above. That will keep type errors from happening when passing the `serviceOptions` to the service.
+
+</LanguageBlock>
 
 <BlockQuote>
 
