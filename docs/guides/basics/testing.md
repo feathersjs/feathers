@@ -81,7 +81,7 @@ This will make sure that the `test/data` folder is removed before every test run
 
 To test the `messages` and `users` services (with all hooks wired up), we could use any REST API testing tool to make requests and verify that they return correct responses.
 
-But there is a much faster, easier and complete approach. Since everything on top of our own hooks and services is already provided (and tested) by Feathers, we can require the [application](../../api/application.md) object and use the [service methods](../../api/services.md) directly. We "fake" authentication by setting `params.user` manually.
+There is a much faster, easier and complete approach. Since everything on top of our own hooks and services is already provided (and tested) by Feathers, we can require the [application](../../api/application.md) object and use the [service methods](../../api/services.md) directly. We "fake" authentication by setting `params.user` manually.
 
 By default, the generator creates a service test file that only tests that the service exists.
 
