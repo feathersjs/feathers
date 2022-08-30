@@ -4,7 +4,7 @@ outline: deep
 
 # Services
 
-Services are the heart of every Feathers application. You probably remember the service we created in the [quick start](./starting.md) to create and find messages. In this chapter we will dive more into services and create a services for our chat messages.
+Services are the heart of every Feathers application. You probably remember the service we created in the [quick start](./starting.md) to create and find messages. In this chapter we will dive more into services and create a service for our chat messages.
 
 ## Feathers services
 
@@ -12,8 +12,8 @@ In general, a service is an object or instance of a class that implements certai
 
 - Reading and/or writing from a database
 - Interacting with the file system
-- Call another API
-- Call other services like
+- Calling another API
+- Calling other services like
   - Sending an email
   - Processing a payment
   - Returning the current weather for a location, etc.
@@ -61,13 +61,13 @@ The parameters for service methods are:
 For `setup` and `teardown` (which are only called once on application startup and shutdown) we additionally have
 
 - `path` - The path the service is registered on
-- `app` - The [Feathers applicaton](./../../api/application.md)
+- `app` - The [Feathers application](./../../api/application.md)
 
 Usually those methods can be used for most API functionality but it is also possible to add your own [custom service methods](../../api/services.md#custom-methods) for a client to call.
 
 <BlockQuote type="info">
 
-A service does not have to implement all those methods but must have at least one. For more information about service, service methods and parameters see the [Service API documentation](../../api/services.md).
+A service does not have to implement all those methods but must have at least one. For more information about services, service methods, and parameters see the [Service API documentation](../../api/services.md).
 
 </BlockQuote>
 
@@ -138,7 +138,7 @@ app.service('messages').on('created', data => {
 
 Now that we have all those service methods we could go ahead and implement any kind of custom logic using any backend. Very often, that means creating, reading, updating and removing data from a database.
 
-Writing all that code yourself for every service is pretty repetitive and cumbersome though which is why Feathers has a collection of pre-built services for different databases. They offer most of the basic functionality and can always be fully customized. Feathers database adapters support a common [usage API](../../api/databases/common.md), pagination and [querying syntax](../../api/databases/querying.md) for many popular databases. The following database adapters are maintained as part of FeathersJS Core.
+Writing all that code yourself for every service is pretty repetitive and cumbersome, which is why Feathers has a collection of pre-built services for different databases. They offer most of the basic functionality and can always be fully customized. Feathers database adapters support a common [usage API](../../api/databases/common.md), pagination and [querying syntax](../../api/databases/querying.md) for many popular databases. The following database adapters are maintained as part of FeathersJS Core.
 
 | Database | Adapter |
 |---|---|
@@ -146,9 +146,9 @@ Writing all that code yourself for every service is pretty repetitive and cumber
 | MongoDB | [@feathers/mongodb](../../api/databases/mongodb.md) |
 | SQLite, MySQL, PostgreSQL, MariaDB, MSSQL | [@feathersjs/knex](../../api/databases/knex.md) |
 
-For community supported databases adapters see the [ecosystem page](https://github.com/feathersjs/awesome-feathersjs#database)
+For community supported databases adapters see the [ecosystem page](https://github.com/feathersjs/awesome-feathersjs#database).
 
-If you went with the default selection, we will use SQLite which write the database to a file and does not require any additional setup. The users service that was created when we [generated our application](./generator.md) is already using it. If you decide to use another SQL database like PostgreSQL or MySQL you just have to change the database connection settings in the configuration.
+If you went with the default selection, we will use SQLite which writes the database to a file and does not require any additional setup. The user service that was created when we [generated our application](./generator.md) is already using it. If you decide to use another SQL database like PostgreSQL or MySQL, you will need to change the database connection settings in the configuration.
 
 ## Generating a service
 
@@ -158,7 +158,7 @@ In our [newly generated](./generator.md) `feathers-chat` application, we can cre
 feathers generate service
 ```
 
-We will give it the name of `messages` and can confirm everything else with the default:
+We will give it the name `messages` and can confirm everything else with the default:
 
 ![feathers generate service prompts](./assets/generate-service.png)
 
@@ -166,4 +166,4 @@ This is it, we now have a database backed messages service with authentication e
 
 ## What's next?
 
-In this chapter we learned about services as Feathers core concept for abstracting data operations. We also saw how a service sends events which we will use later to create real-time applications. After that, we generated a messages service. Next, we will do some data modelling and add some logic to our chat using [Schemas and resolvers](./schemas.md)
+In this chapter we learned about services as a Feathers core concept for abstracting data operations. We also saw how a service sends events which we will use later to create real-time applications. After that, we generated a messages service. Next, we will do some data modelling and add some logic to our chat using [Schemas and resolvers](./schemas.md)
