@@ -26,15 +26,17 @@ describe('@feathersjs/koa', () => {
     app.use('/', new Service())
     app.use('todo', new Service(), {
       koa: {
-        after: [async (ctx, next) => {
-          const body = ctx.body as any
+        after: [
+          async (ctx, next) => {
+            const body = ctx.body as any
 
-          if (body.id === 'custom-middleware') {
-            body.description = 'Description from custom middleware'
+            if (body.id === 'custom-middleware') {
+              body.description = 'Description from custom middleware'
+            }
+
+            await next()
           }
-
-          await next()
-        }]
+        ]
       },
       methods: ['get', 'find', 'create', 'update', 'patch', 'remove', 'customMethod']
     })
@@ -101,7 +103,7 @@ describe('@feathersjs/koa', () => {
 
   it('supports custom service middleware', async () => {
     const { data } = await axios.get<any>('http://localhost:8465/todo/custom-middleware')
-    
+
     assert.deepStrictEqual(data, {
       id: 'custom-middleware',
       description: 'Description from custom middleware'
