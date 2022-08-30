@@ -2,11 +2,11 @@ import { generator, before, toFile } from '@feathershq/pinion'
 import { injectSource, renderSource } from '../../commons'
 import { AuthenticationGeneratorContext } from '../index'
 
-const template = ({ authStrategies, feathers }: AuthenticationGeneratorContext) =>
+const template = ({ authStrategies }: AuthenticationGeneratorContext) =>
   `import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
 import { LocalStrategy } from '@feathersjs/authentication-local'
 import { OAuthStrategy } from '@feathersjs/authentication-oauth'
-${feathers.framework === 'express' ? `import { expressOauth } from '@feathersjs/authentication-oauth'` : ''}
+import { oauth } from '@feathersjs/authentication-oauth'
 import type { Application } from './declarations'
 
 declare module './declarations' {
@@ -28,12 +28,8 @@ export const authentication = (app: Application) => {
     )
     .join('\n')}
 
-  app.use('authentication', authentication)${
-    feathers.framework === 'express'
-      ? `
-  app.configure(expressOauth())`
-      : ''
-  }
+  app.use('authentication', authentication)
+  app.configure(oauth())
 }
 `
 

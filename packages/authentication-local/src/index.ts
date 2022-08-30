@@ -16,6 +16,10 @@ export { LocalStrategy }
 export const passwordHash =
   (options: { service?: string; strategy: string }) =>
   async <H extends HookContext<any, any>>(value: string | undefined, _data: any, context: H) => {
+    if (value === undefined) {
+      return value
+    }
+
     const { app, params } = context
     const authService = app.defaultAuthentication(options.service)
     const localStrategy = authService.getStrategy(options.strategy) as LocalStrategy
