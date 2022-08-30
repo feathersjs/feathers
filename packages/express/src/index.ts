@@ -60,7 +60,7 @@ export default function feathersExpress<S = any, C = any>(
             middleware[service ? 'after' : 'before'].push(arg)
           } else if (!service) {
             service = arg
-          } else if (arg.methods || arg.events) {
+          } else if (arg.methods || arg.events || arg.express || arg.koa) {
             options = arg
           } else {
             throw new Error('Invalid options passed to app.use')

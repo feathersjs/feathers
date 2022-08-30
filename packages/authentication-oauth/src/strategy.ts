@@ -7,6 +7,7 @@ import {
 import { Params } from '@feathersjs/feathers'
 import { NotAuthenticated } from '@feathersjs/errors'
 import { createDebug, _ } from '@feathersjs/commons'
+import qs from 'qs'
 
 const debug = createDebug('@feathersjs/authentication-oauth/strategy')
 
@@ -18,7 +19,7 @@ export interface OAuthProfile {
 export class OAuthStrategy extends AuthenticationBaseStrategy {
   get configuration() {
     const { entity, service, entityId, oauth } = this.authentication.configuration
-    const config = oauth[this.name]
+    const config = oauth[this.name] as any
 
     return {
       entity,
@@ -101,7 +102,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
       ? { access_token: authResult.accessToken }
       : { error: data.message || 'OAuth Authentication not successful' }
 
-    return `${redirectUrl}${separator}${new URLSearchParams(query).toString()}`
+    return `${redirectUrl}${separator}${qs.stringify(query)}`
   }
 
   async findEntity(profile: OAuthProfile, params: Params) {

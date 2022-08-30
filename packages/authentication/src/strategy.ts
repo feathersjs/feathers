@@ -18,7 +18,7 @@ export class AuthenticationBaseStrategy implements AuthenticationStrategy {
     this.name = name
   }
 
-  get configuration() {
+  get configuration(): any {
     return this.authentication.configuration[this.name]
   }
 

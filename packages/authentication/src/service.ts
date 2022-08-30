@@ -28,7 +28,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
   }
 }
 
-// eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface AuthenticationService extends ServiceAddons<AuthenticationResult, AuthenticationResult> {}
 
 export class AuthenticationService

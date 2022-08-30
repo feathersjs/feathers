@@ -1,10 +1,11 @@
-import { Application, HookContext, NextFunction, Params } from '@feathersjs/feathers'
-import { GrantConfig } from 'grant'
+import { createDebug } from '@feathersjs/commons'
+import { HookContext, NextFunction, Params } from '@feathersjs/feathers'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import Grant from 'grant/lib/grant'
-import { createDebug } from '@feathersjs/commons'
+import { AuthenticationService } from '@feathersjs/authentication'
 import { OAuthStrategy } from './strategy'
-import { OauthSetupSettings } from './utils'
+import { getGrantConfig, OauthSetupSettings } from './utils'
 
 const debug = createDebug('@feathersjs/authentication-oauth/services')
 
@@ -27,6 +28,8 @@ export const redirectHook = () => async (context: HookContext, next: NextFunctio
 
   const { location } = context.result
 
+  debug(`oAuth redirect to ${location}`)
+
   if (location) {
     context.http = {
       ...context.http,
@@ -38,8 +41,8 @@ export const redirectHook = () => async (context: HookContext, next: NextFunctio
 export class OAuthService {
   grant: any
 
-  constructor(public app: Application, public settings: OauthSetupSettings) {
-    const config = app.get('grant') as GrantConfig
+  constructor(public service: AuthenticationService, public settings: OauthSetupSettings) {
+    const config = getGrantConfig(service)
 
     this.grant = Grant({ config })
   }
@@ -71,8 +74,7 @@ export class OAuthService {
     const name = params.route.provider
     const { linkStrategy, authService } = this.settings
     const { accessToken, grant, query = {}, redirect } = params.session
-    const service = this.app.defaultAuthentication(authService)
-    const strategy = service.getStrategy(name) as OAuthStrategy
+    const strategy = this.service.getStrategy(name) as OAuthStrategy
     const authParams = {
       ...params,
       authStrategies: [name],
@@ -93,11 +95,15 @@ export class OAuthService {
 
     debug(`Calling ${authService}.create authentication with strategy ${name}`)
 
-    const authResult = await service.create(authentication, authParams)
+    const authResult = await this.service.create(authentication, authParams)
 
     debug('Successful oAuth authentication, sending response')
 
     const location = await strategy.getRedirect(authResult, authParams)
+
+    if (typeof params.session.destroy === 'function') {
+      await params.session.destroy()
+    }
 
     return {
       ...authResult,
