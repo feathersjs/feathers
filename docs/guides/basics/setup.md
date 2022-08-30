@@ -12,7 +12,7 @@ Alright then! Let's learn Feathers. In this section, we'll take a look at
 
 ## What we will do
 
-In this guide we will get a [quick start](./starting.md) at creating our first Feathers REST and real-time API, along with a website to use it from scratch. We will learn about the [Feathers CLI](./generator.md) and the core concepts of [services](./services.md), [hooks](./hooks.md) and [authentication](./authentication.md).  We'll do this by building a chat application with user signup, login (including with GitHub), and the ability to send and receive messages in real-time. It will look like this:
+In this guide we will get a [quick start](./starting.md) at creating our first Feathers REST and real-time API, along with a website to use it from scratch. We will learn about the [Feathers CLI](./generator.md) and the core concepts of [services](./services.md), [hooks](./hooks.md) and [authentication](./authentication.md).  We'll do this by building a chat application with user signup, login (including GitHub), and the ability to send and receive messages in real-time. It will look like this:
 
 ![The Feathers chat application](./assets/feathers-chat.png)
 
@@ -34,7 +34,7 @@ We will be writing code for Node.js and the browser. Let's cover the requirement
 
 ### Node.js Requirements
 
-Feathers works with Node.js 14 and later. It will always support the [currently active releases](https://github.com/nodejs/Release#release-schedule). The version we recommend using is the one shown as the latest available version on the [NodeJS website](https://nodejs.org/en/).
+Feathers works with Node.js 14 and later. It will always support the [currently active releases](https://github.com/nodejs/Release#release-schedule). We recommend using the latest available version on the [NodeJS website](https://nodejs.org/en/).
 
 Instead of installing Node from the website, we recommend using a version manager that works on your OS.  Version managers are tools to quickly install any version of NodeJS and keep it up to date.  Install a version manager that matches your system before you continue.
 
