@@ -4,11 +4,11 @@ outline: deep
 
 # Generating an app
 
-In the [getting started chapter](./starting.md) we created a Feathers application in a single file to get a better understanding how Feathers itself works. 
+In the [getting started chapter](./starting.md) we created a Feathers application in a single file to get a better understanding of how Feathers itself works. 
 
 <img style="margin: 2em;" src="/img/main-character-coding.svg" alt="Getting started">
 
-The Feathers CLI allows us to initialize a new Feathers server with a recommended structure and generating things we commonly need like authentication, a database connection or new services. It can be installed via:
+The Feathers CLI allows us to initialize a new Feathers server with a recommended structure and generate things we commonly need like authentication, a database connection or new services. It can be installed via:
 
 ```sh
 npm install @feathersjs/cli@pre -g
@@ -72,4 +72,4 @@ You can keep this command running throughout the rest of this guide, it will rel
 
 ## What's next?
 
-In this chapter we installed the Feathers CLI and created a new Feathers application. To learn more about the generated files and what you can do with the CLI have a look at the [CLI guide](../cli/index.md) after finishing the Getting Started guide. In [the next chapter](./services.md) we will learn more about Feathers services and databases.
+In this chapter we installed the Feathers CLI and created a new Feathers application. To learn more about the generated files and what you can do with the CLI, have a look at the [CLI guide](../cli/index.md) after finishing the Getting Started guide. In [the next chapter](./services.md) we will learn more about Feathers services and databases.
