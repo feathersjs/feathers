@@ -55,6 +55,7 @@
   "dependencies": {
     "@feathersjs/commons": "^5.0.0-pre.28",
     "@feathersjs/feathers": "^5.0.0-pre.28",
+    "@feathersjs/hooks": "^0.7.5",
     "@feathersjs/transport-commons": "^5.0.0-pre.28",
     "socket.io": "^4.5.1"
   },
@@ -63,12 +64,12 @@
     "@feathersjs/memory": "^5.0.0-pre.28",
     "@feathersjs/tests": "^5.0.0-pre.28",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.6.3",
+    "@types/node": "^18.7.14",
     "lodash": "^4.17.21",
     "mocha": "^10.0.0",
     "shx": "^0.3.4",
     "socket.io-client": "^4.5.1",
-    "typescript": "^4.7.4"
+    "typescript": "^4.8.2"
   },
   "gitHead": "bf8e54fddc14d688ba8f505e72c9630a71656ff1"
 }
