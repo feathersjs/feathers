@@ -14,9 +14,15 @@ import {
   querySyntax,
   Combine,
   resolveDispatch,
-  resolveAll
+  resolveAll,
+  Ajv
 } from '../src'
 import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib'
+
+const fixtureAjv = new Ajv({
+  coerceTypes: true,
+  addUsedSchema: true // default
+})
 
 export const userSchema = schema({
   $id: 'UserData',
@@ -38,7 +44,7 @@ export const userResultSchema = schema({
     ...userSchema.properties,
     id: { type: 'number' }
   }
-} as const)
+} as const, fixtureAjv)
 
 export type User = Infer<typeof userSchema>
 export type UserResult = Infer<typeof userResultSchema> & { name: string }
@@ -96,7 +102,7 @@ export const messageResultSchema = schema({
     id: { type: 'number' },
     user: { $ref: 'UserResult' }
   }
-} as const)
+} as const, fixtureAjv)
 
 export type Message = Infer<typeof messageSchema>
 export type MessageResult = Combine<
