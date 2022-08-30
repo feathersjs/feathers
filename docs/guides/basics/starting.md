@@ -4,13 +4,13 @@ outline: deep
 
 # Quick start
 
-Now that we are [ready to roll](./setup.md) we can create our first Feathers application. In this quick start guide we'll create our first Feathers API server and a simple website to use it from scratch. You'll see how easy it is to get started with Feathers, even without a generator or boilerplate.
+Now that we are [ready to roll](./setup.md) we can create our first Feathers application. In this quick start guide we'll create our first Feathers API server and a simple website to use it. You'll see how easy it is to get started with Feathers, even without a generator or boilerplate.
 
 <img style="margin: 2em;" src="/img/main-character-bench.svg" alt="Getting started">
 
 Let's create a new folder for our application:
 
-```sh
+```sh 
 mkdir feathers-basics
 cd feathers-basics
 ```
@@ -171,7 +171,7 @@ Here we implemented only `find` and `create` but a service can also have a few o
 
 ## An API server
 
-Ok, so we created a Feathers application and a service and we are listening to events, but it is only a simple NodeJS script that prints some output and then exits. What we really want is to host it as an API webserver. This is where Feathers transports come in. A transport takes a service like the one we created above and turns it into a server that other clients (like a web- or mobile application) can talk to.
+We created a Feathers application and a service and we are listening to events. However, this is only a simple NodeJS script that prints some output and then exits. What we really want is to host it as an API webserver. This is where Feathers transports come in. A transport takes a service like the one we created above and turns it into a server that other clients (like a web- or mobile application) can talk to.
 
 In the following example we will take our existing service and use
 
@@ -413,4 +413,4 @@ You'll see the JSON response including all current messages.
 
 In this chapter we created our first Feathers application and a service that allows creating new messages, storing them in memory, and retrieving them. We then hosted that service as a REST and real-time API server and used Feathers in the browser to connect to that server and create a website that can send new messages and show all existing messages, with messaging updates showing up in realtime.
 
-Even though we are using just NodeJS and Feathers from scratch without any additional tools, we didn't write a lot of code for what we are getting. In the [next chapter](./generator.md) we will look at the Feathers CLI which can create a similar Feathers application with a recommended file structure. We can also use it to add authentication and database connections, all set up for us, automatically.
+Even though we are using just NodeJS and Feathers from scratch without any additional tools, we didn't write a lot of code. In the [next chapter](./generator.md) we will look at the Feathers CLI which can create a similar Feathers application with a recommended file structure. We can also use it to add authentication and database connections, all set up for us, automatically.
