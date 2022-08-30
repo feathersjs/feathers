@@ -4,12 +4,11 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [14.x, 18.x]
 
     services:
       postgres:
@@ -28,21 +27,21 @@ jobs:
           --health-retries 5
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm i npm -g
-    - run: npm install -g codeclimate-test-reporter
-    - run: npm install
-    - run: npm test
-      env:
-        CI: true
-        TEST_DB: postgres
-    - run: |
-        if [ "$CODECLIMATE_REPO_TOKEN" != "" ]; then
-          codeclimate-test-reporter < coverage/lcov.info
-        fi
-      env:
-        CODECLIMATE_REPO_TOKEN: ${{ secrets.codeclimate }}
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i npm -g
+      - run: npm install -g codeclimate-test-reporter
+      - run: npm install
+      - run: npm test
+        env:
+          CI: true
+          TEST_DB: postgres
+      - run: |
+          if [ "$CODECLIMATE_REPO_TOKEN" != "" ]; then
+            codeclimate-test-reporter < coverage/lcov.info
+          fi
+        env:
+          CODECLIMATE_REPO_TOKEN: ${{ secrets.codeclimate }}
