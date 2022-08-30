@@ -4,7 +4,7 @@ outline: deep
 
 # Building a frontend
 
-As we have seen [when getting started](../basics/starting.md), Feathers works great in the browser and comes with client services that allow to easily connect to a Feathers server.
+As we have seen [while getting started](../basics/starting.md), Feathers works great in the browser and comes with client services that allow it to easily connect to a Feathers server.
 
 In this chapter we will create a real-time chat frontend with signup and login using modern plain JavaScript. It will only work in the latest versions of Chrome, Firefox, Safari and Edge since we won't be using a transpiler like Webpack or Babel (which is also why there won't be a TypeScript option). The final version can be found [here](https://github.com/feathersjs/feathers-chat/).
 
@@ -234,7 +234,7 @@ const showChat = async () => {
 
 ## Login and signup
 
-Alright. Now we can show the login page (including an error message when something goes wrong) and if we are logged in call the `showChat` we defined above. We’ve built out the UI, now we have to add the functionality to actually allow people to sign up, log in and also log out.
+Alright. Now we can show the login page (including an error message when something goes wrong) and if we are logged in, call the `showChat` we defined above. We’ve built out the UI, now we have to add the functionality to actually allow people to sign up, log in and also log out.
 
 ```js
 // Retrieve email/password object from the login/signup page
@@ -271,11 +271,11 @@ const login = async credentials => {
 ```
 
 - `getCredentials()` gets us the values of the username (email) and password fields from the login/signup page to be used directly with Feathers authentication.
-- `login(credentials)` will either authenticate the credentials returned by getCredentials against our Feathers API using the local authentication strategy (e.g. username and password) or, if no credentials are given, try and use the JWT stored in localStorage. This will try and get the JWT from localStorage first where it is put automatically once you log in successfully so that we don’t have to log in every time we visit the chat. Only if that doesn’t work it will show the login page. Finally, if the login was successful it will show the chat page.
+- `login(credentials)` will either authenticate the credentials returned by getCredentials against our Feathers API using the local authentication strategy (e.g. username and password) or, if no credentials are given, try to use the JWT stored in localStorage. This will try and get the JWT from localStorage first where it is put automatically once you log in successfully so that we don’t have to log in every time we visit the chat. Only if that doesn’t work will it show the login page. Finally, if the login was successful it will show the chat page.
 
 ## Event listeners and real-time
 
-In the last step we will add event listeners for all buttons and functionality to send new message and make the user and message list update in real-time.
+In the last step we will add event listeners for all buttons and functionality to send new messages and make the user and message list update in real-time.
 
 ```js
 const addEventListener = (selector, event, handler) => {
@@ -341,7 +341,7 @@ login();
 - We also added click event listeners for three buttons. `#login` will get the credentials and just log in with those. Clicking `#signup` will signup and log in at the same time. It will first create a new user on our API and then log in with that same user information. Finally, `#logout` will forget the JWT and then show the login page again.
 - The `#submit` button event listener gets the message text from the input field, creates a new message on the messages service and then clears out the field.
 - Next, we added two `created` event listeners. One for `messages` which calls the `addMessage` function to add the new message to the list and one for `users` which adds the user to the list via `addUser`. This is how Feathers does real-time and everything we need to do in order to get everything to update automatically.
-- To kick our application off, we call `login()` which as mentioned above will either show the chat application right away (if we signed in before and the token isn’t expired) or the login page.
+- To kick our application off, we call `login()` which as mentioned above will either show the chat application right away (if we signed in before and the token hasn’t expired) or the login page.
 
 ## Using the chat application
 
