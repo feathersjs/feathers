@@ -4,7 +4,7 @@ import { AppGeneratorContext } from '../index'
 
 const template = ({}: AppGeneratorContext) =>
   `import { feathers } from '@feathersjs/feathers'
-import type { Service, TransportConnection, Params } from '@feathersjs/feathers'
+import type { Paginated, ClientService, TransportConnection, Params } from '@feathersjs/feathers'
 
 export interface ServiceTypes {
   // A mapping of client side services

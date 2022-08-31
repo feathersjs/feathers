@@ -116,6 +116,7 @@ describe('@feathersjs/cli', () => {
       })
 
       it('compiles successfully', async () => {
+        console.log(cwd)
         if (language === 'ts' && framework === 'koa') {
           const testResult = await context.pinion.exec('npm', ['run', 'compile'], { cwd })
 
