@@ -37,13 +37,13 @@
     "test": "npm run lint && npm run compile && c8 lerna run test  --ignore @feathersjs/tests --ignore @feathersjs/adapter-commons"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.36.0",
-    "@typescript-eslint/parser": "^5.36.0",
+    "@typescript-eslint/eslint-plugin": "^5.36.1",
+    "@typescript-eslint/parser": "^5.36.1",
     "c8": "^7.12.0",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "lerna": "^5.4.3",
+    "lerna": "^5.5.0",
     "npm-check-updates": "^16.0.6",
     "prettier": "^2.7.1",
     "typescript": "^4.8.2"
