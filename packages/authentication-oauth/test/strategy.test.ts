@@ -13,6 +13,10 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
     strategy = authService.getStrategy('github') as TestOAuthStrategy
   })
 
+  after(async () => {
+    await app.teardown()
+  })
+
   it('initializes, has .entityId and configuration', () => {
     assert.ok(strategy)
     assert.strictEqual(strategy.entityId, 'id')

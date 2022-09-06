@@ -1,5 +1,6 @@
 import { Application } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
+import { resolveDispatch } from '@feathersjs/schema'
 
 import { OAuthStrategy, OAuthProfile } from './strategy'
 import { redirectHook, OAuthService } from './service'
@@ -36,7 +37,7 @@ export const oauth =
     const oauthService = app.service('oauth/:provider')
 
     oauthService.hooks({
-      around: { all: [redirectHook()] }
+      around: { all: [resolveDispatch(), redirectHook()] }
     })
 
     if (typeof oauthService.publish === 'function') {

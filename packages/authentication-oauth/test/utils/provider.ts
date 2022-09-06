@@ -257,12 +257,12 @@ const oauth2 = (port: number) =>
           buffer(req, (form: any) => {
             on.profile({ method, url, query, headers, form })
             res.writeHead(200, { 'content-type': 'application/json' })
-            res.end(JSON.stringify({ user: 'simov' }))
+            res.end(JSON.stringify({ id: 'test', user: 'simov' }))
           })
         } else {
           on.profile({ method, url, query, headers })
           res.writeHead(200, { 'content-type': 'application/json' })
-          res.end(JSON.stringify({ user: 'simov' }))
+          res.end(JSON.stringify({ id: 'test', user: 'simov' }))
         }
       } else if (/profile_error/.test(url)) {
         on.profile({ method, url, query, headers })
