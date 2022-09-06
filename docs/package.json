@@ -10,24 +10,24 @@
     "start": "npm run dev"
   },
   "dependencies": {
-    "@vueuse/core": "^8.9.1",
-    "vue": "^3.2.37"
+    "@vueuse/core": "^9.2.0",
+    "vue": "^3.2.38"
   },
   "devDependencies": {
     "@feathersjs/cli": "^5.0.0-pre.28",
-    "@iconify-json/carbon": "^1.1.6",
-    "@types/node": "^18.0.3",
-    "@unocss/preset-typography": "^0.45.5",
-    "@unocss/reset": "^0.45.5",
-    "@unocss/transformer-directives": "^0.45.5",
-    "@vitejs/plugin-vue": "^2.3.3",
+    "@iconify-json/carbon": "^1.1.7",
+    "@types/node": "^18.7.15",
+    "@unocss/preset-typography": "^0.45.18",
+    "@unocss/reset": "^0.45.18",
+    "@unocss/transformer-directives": "^0.45.18",
+    "@vitejs/plugin-vue": "^3.1.0",
     "esno": "^0.16.3",
     "fast-glob": "^3.2.11",
     "https-localhost": "^4.7.1",
-    "unocss": "^0.45.5",
-    "unplugin-vue-components": "^0.21.1",
-    "vite-plugin-pwa": "^0.12.2",
-    "vitepress": "^1.0.0-alpha.9",
-    "workbox-window": "^6.5.3"
+    "unocss": "^0.45.18",
+    "unplugin-vue-components": "^0.22.4",
+    "vite-plugin-pwa": "^0.12.6",
+    "vitepress": "^1.0.0-alpha.13",
+    "workbox-window": "^6.5.4"
   }
 }

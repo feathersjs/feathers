@@ -9,18 +9,16 @@ export async function highlight(theme: ThemeOptions = 'material-palenight') {
   const preRE = /^<pre.*?>/
   const highlightCode = (str: string, lang: string, theme: ThemeOptions) => {
     if (typeof theme === 'string') {
-      return highlighter
-        .codeToHtml(str, { lang, theme })
-        .replace(preRE, '<pre v-pre>')
+      return highlighter.codeToHtml(str, { lang, theme }).replace(preRE, '<pre v-pre>')
     }
 
     const dark = highlighter
       .codeToHtml(str, { lang, theme: theme.dark })
-      .replace(preRE, '<pre v-pre class="vp-code-dark">')
+      .replace(preRE, `<pre v-pre class="vp-code-dark" data-language="${lang}">`)
 
     const light = highlighter
       .codeToHtml(str, { lang, theme: theme.light })
-      .replace(preRE, '<pre v-pre class="vp-code-light">')
+      .replace(preRE, `<pre v-pre class="vp-code-light" data-language="${lang}">`)
 
     return dark + light
   }
@@ -33,7 +31,7 @@ export async function highlight(theme: ThemeOptions = 'material-palenight') {
         ...PRETTIERRC,
         printWidth: 80
       }
-    
+
       const javascript = getJavaScript(code)
       const formattedJS = prettier.format(javascript, {
         ...prettierOptions,
@@ -46,9 +44,9 @@ export async function highlight(theme: ThemeOptions = 'material-palenight') {
       const tsCode = highlightCode(formattedTS, lang, theme)
       const jsCode = highlightCode(formattedJS, lang, theme)
 
-      return `<LanguageBlock global-id="ts">${tsCode}</LanguageBlock><LanguageBlock global-id="js">${jsCode}</LanguageBlock>`
+      return tsCode + jsCode
     }
-    
+
     return highlightCode(code, lang, theme)
   }
 }
