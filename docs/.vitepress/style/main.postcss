@@ -139,6 +139,10 @@ img.resizable-img {
   height: unset;
 }
 
-[data-language='js'] {
+body[data-language='js'] pre[data-language='ts'] {
+  display: none;
+}
+
+body[data-language='ts'] pre[data-language='js'] {
   display: none;
 }

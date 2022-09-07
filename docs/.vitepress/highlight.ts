@@ -42,7 +42,7 @@ export async function highlight(theme: ThemeOptions = 'material-palenight') {
         parser: 'typescript'
       })
       const tsCode = highlightCode(formattedTS, lang, theme)
-      const jsCode = highlightCode(formattedJS, lang, theme)
+      const jsCode = highlightCode(formattedJS, 'js', theme)
 
       return tsCode + jsCode
     }

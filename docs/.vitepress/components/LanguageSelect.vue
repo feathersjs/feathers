@@ -1,17 +1,24 @@
 <script setup lang="ts">
 import { useGlobalLanguage } from '../theme/store'
+import { whenever } from "@vueuse/core"
 
 defineProps({
   hideOnMobile: Boolean,
-  hideLabel: Boolean,
+  hideLabel: Boolean
 })
 
 const activeGlobalId = useGlobalLanguage()
 
 const options = [
   { value: 'ts', text: 'TypeScript' },
-  { value: 'js', text: 'JavaScript' },
+  { value: 'js', text: 'JavaScript' }
 ]
+
+document.body.setAttribute('data-language', activeGlobalId.value)
+
+whenever(activeGlobalId, (val) => {
+  document.body.setAttribute('data-language', val)
+})
 </script>
 
 <template>

@@ -1,3 +1,3 @@
-import { createGlobalState, useStorage } from "@vueuse/core"
+import { createGlobalState, useStorage } from '@vueuse/core'
 
-export const useGlobalLanguage = createGlobalState(() => useStorage("global-id", "ts"))
+export const useGlobalLanguage = createGlobalState(() => useStorage('global-id', 'ts'))
