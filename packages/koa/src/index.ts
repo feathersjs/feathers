@@ -4,9 +4,11 @@ import { Application as FeathersApplication } from '@feathersjs/feathers'
 import { routing } from '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
 import bodyParser from 'koa-bodyparser'
+import cors from '@koa/cors'
+
 import { Application } from './declarations'
 
-export { Koa, bodyParser }
+export { Koa, bodyParser, cors }
 export * from './authentication'
 export * from './declarations'
 export * from './handlers'

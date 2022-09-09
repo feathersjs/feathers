@@ -31,19 +31,14 @@ export const generate = (ctx: AuthenticationGeneratorContext) =>
       const oauthStrategies = authStrategies.filter((name) => name !== 'local')
 
       if (oauthStrategies.length) {
-        authentication.oauth = oauthStrategies.reduce(
-          (oauth, name) => {
-            oauth[name] = {
-              key: '<Client ID>',
-              secret: '<Client secret>'
-            }
+        authentication.oauth = oauthStrategies.reduce((oauth, name) => {
+          oauth[name] = {
+            key: '<Client ID>',
+            secret: '<Client secret>'
+          }
 
-            return oauth
-          },
-          {
-            redirect: '/'
-          } as any
-        )
+          return oauth
+        }, {} as any)
       }
 
       return { authentication }

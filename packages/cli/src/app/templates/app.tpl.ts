@@ -6,7 +6,7 @@ const tsKoaApp = ({ transports }: AppGeneratorContext) =>
   `import serveStatic from 'koa-static'
 import { feathers } from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
-import { koa, rest, bodyParser, errorHandler, parseAuthentication } from '@feathersjs/koa'
+import { koa, rest, bodyParser, errorHandler, parseAuthentication, cors } from '@feathersjs/koa'
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
 import type { Application } from './declarations'
@@ -23,12 +23,21 @@ app.configure(configuration(configurationSchema))
 // Set up Koa middleware
 app.use(serveStatic(app.get('public')))
 app.use(errorHandler())
+app.use(cors())
 app.use(parseAuthentication())
 app.use(bodyParser())
 
 // Configure services and transports
 app.configure(rest())
-${transports.includes('websockets') ? 'app.configure(socketio())' : ''}
+${
+  transports.includes('websockets')
+    ? `app.configure(socketio({
+  cors: {
+    origin: app.get('origins')
+  }
+}))`
+    : ''
+}
 app.configure(services)
 app.configure(channels)
 
@@ -52,11 +61,10 @@ export { app }
 
 const tsExpressApp = ({ transports }: AppGeneratorContext) =>
   `import compress from 'compression'
-import helmet from 'helmet'
 
 import { feathers } from '@feathersjs/feathers'
 import express, {
-  rest, json, urlencoded,
+  rest, json, urlencoded, cors,
   serveStatic, notFound, errorHandler
 } from '@feathersjs/express'
 import configuration from '@feathersjs/configuration'
@@ -72,7 +80,7 @@ const app: Application = express(feathers())
 
 // Load app configuration
 app.configure(configuration(configurationSchema))
-app.use(helmet())
+app.use(cors())
 app.use(compress())
 app.use(json())
 app.use(urlencoded({ extended: true }))
@@ -81,7 +89,15 @@ app.use('/', serveStatic(app.get('public')))
 
 // Configure services and real-time functionality
 app.configure(rest())
-${transports.includes('websockets') ? 'app.configure(socketio())' : ''}
+${
+  transports.includes('websockets')
+    ? `app.configure(socketio({
+  cors: {
+    origin: app.get('origins')
+  }
+}))`
+    : ''
+}
 app.configure(services)
 app.configure(channels)
 

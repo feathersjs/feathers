@@ -2,6 +2,7 @@ import express, { Express } from 'express'
 import { Application as FeathersApplication, defaultServiceMethods } from '@feathersjs/feathers'
 import { routing } from '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
+import cors from 'cors'
 
 import { rest, RestOptions, formatter } from './rest'
 import { errorHandler, notFound, ErrorHandlerOptions } from './handlers'
@@ -28,7 +29,8 @@ export {
   ExpressOverrides,
   AuthenticationSettings,
   parseAuthentication,
-  authenticate
+  authenticate,
+  cors
 }
 
 const debug = createDebug('@feathersjs/express')

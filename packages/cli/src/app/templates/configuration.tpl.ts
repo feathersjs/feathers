@@ -18,6 +18,12 @@ export const configurationSchema = schema(
       port: { type: 'number' },
       public: { type: 'string' },
       authentication: authenticationSettingsSchema,
+      origins: {
+        type: 'array',
+        items: {
+          type: 'string'
+        }
+      },
       paginate: {
         type: 'object',
         additionalProperties: false,
