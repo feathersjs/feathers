@@ -8,7 +8,7 @@ Feathers embraces modularity and is broken up across multiple modules. You can f
 
 Before creating an issue please make sure you have checked out the docs, specifically the [FAQ](https://docs.feathersjs.com/help/faq.html) section. You might want to also try searching Github. It's pretty likely someone has already asked a similar question.
 
-If you haven't found your answer please feel free to join our [slack channel](http://slack.feathersjs.com), create an issue on Github, or post on [Stackoverflow](http://stackoverflow.com) using the `feathersjs` tag. We try our best to monitor Stackoverflow but you're likely to get more immediate responses in Slack and Github.
+If you haven't found your answer please feel free to join our [discord channel](https://discord.gg/qa8kez8QBx), create an issue on Github, or post on [Stackoverflow](http://stackoverflow.com) using the `feathersjs` tag. We try our best to monitor Stackoverflow but you're likely to get more immediate responses in Slack and Github.
 
 Issues can be reported in the [issue tracker](https://github.com/feathersjs/feathers/issues). Since feathers combines many modules it can be hard for us to assess the root cause without knowing which modules are being used and what your configuration looks like, so **it helps us immensely if you can link to a simple example that reproduces your issue**.
 
