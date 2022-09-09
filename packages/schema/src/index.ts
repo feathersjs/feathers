@@ -1,5 +1,6 @@
 import { ResolverStatus } from './resolver'
 
+export type { FromSchema } from 'json-schema-to-ts'
 export * from './schema'
 export * from './resolver'
 export * from './hooks'
