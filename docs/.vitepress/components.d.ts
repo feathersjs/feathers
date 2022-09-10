@@ -16,6 +16,7 @@ declare module '@vue/runtime-core' {
     LanguageSelect: typeof import('./components/LanguageSelect.vue')['default']
     ListItem: typeof import('./components/ListItem.vue')['default']
     Logo: typeof import('./components/Logo.vue')['default']
+    RadioButton: typeof import('./components/RadioButton.vue')['default']
     Tab: typeof import('./components/Tab.vue')['default']
     Tabs: typeof import('./components/Tabs.vue')['default']
     TeamMember: typeof import('./components/TeamMember.vue')['default']

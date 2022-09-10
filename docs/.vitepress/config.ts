@@ -153,6 +153,10 @@ export default defineConfig({
         ]
       },
       {
+        text: 'eco',
+        link: '/ecosystem/'
+      },
+      {
         text: 'Ecosystem',
         items: [
           { text: 'Blog', link: 'https://blog.feathersjs.com/' },
@@ -447,7 +451,7 @@ export default defineConfig({
               link: '/api/databases/knex'
             }
           ]
-        },
+        }
       ],
       '/help': [
         {
