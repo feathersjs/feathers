@@ -171,7 +171,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
         }
 
         if (framework === 'express') {
-          dependencies.push('@feathersjs/express', 'compression', 'helmet')
+          dependencies.push('@feathersjs/express', 'compression')
         }
 
         return addVersions(dependencies, dependencyVersions)

@@ -68,7 +68,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
   }
 
   async getAllowedOrigin(params?: Params) {
-    const { redirect, origins } = this.authentication.configuration.oauth
+    const { redirect, origins = this.app.get('origins') } = this.authentication.configuration.oauth
 
     if (Array.isArray(origins)) {
       const referer = params?.headers?.referer || ''
