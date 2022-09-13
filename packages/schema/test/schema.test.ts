@@ -186,30 +186,36 @@ describe('@feathersjs/schema/schema', () => {
   })
 
   it('with references', async () => {
-    const userSchema = schema({
-      $id: 'ref-user',
-      type: 'object',
-      required: ['email'],
-      additionalProperties: false,
-      properties: {
-        email: { type: 'string' },
-        age: { type: 'number' }
-      }
-    } as const, customAjv)
-    const messageSchema = schema({
-      $id: 'ref-message',
-      type: 'object',
-      required: ['text', 'user'],
-      additionalProperties: false,
-      properties: {
-        text: {
-          type: 'string'
-        },
-        user: {
-          $ref: 'ref-user'
+    const userSchema = schema(
+      {
+        $id: 'ref-user',
+        type: 'object',
+        required: ['email'],
+        additionalProperties: false,
+        properties: {
+          email: { type: 'string' },
+          age: { type: 'number' }
         }
-      }
-    } as const, customAjv)
+      } as const,
+      customAjv
+    )
+    const messageSchema = schema(
+      {
+        $id: 'ref-message',
+        type: 'object',
+        required: ['text', 'user'],
+        additionalProperties: false,
+        properties: {
+          text: {
+            type: 'string'
+          },
+          user: {
+            $ref: 'ref-user'
+          }
+        }
+      } as const,
+      customAjv
+    )
 
     type User = Infer<typeof userSchema>
     type Message = Infer<typeof messageSchema> & {

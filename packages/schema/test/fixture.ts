@@ -35,16 +35,19 @@ export const userSchema = schema({
   }
 } as const)
 
-export const userResultSchema = schema({
-  $id: 'UserResult',
-  type: 'object',
-  additionalProperties: false,
-  required: ['id', ...userSchema.required],
-  properties: {
-    ...userSchema.properties,
-    id: { type: 'number' }
-  }
-} as const, fixtureAjv)
+export const userResultSchema = schema(
+  {
+    $id: 'UserResult',
+    type: 'object',
+    additionalProperties: false,
+    required: ['id', ...userSchema.required],
+    properties: {
+      ...userSchema.properties,
+      id: { type: 'number' }
+    }
+  } as const,
+  fixtureAjv
+)
 
 export type User = Infer<typeof userSchema>
 export type UserResult = Infer<typeof userResultSchema> & { name: string }
@@ -92,17 +95,20 @@ export const messageSchema = schema({
   }
 } as const)
 
-export const messageResultSchema = schema({
-  $id: 'MessageResult',
-  type: 'object',
-  additionalProperties: false,
-  required: ['id', ...messageSchema.required],
-  properties: {
-    ...messageSchema.properties,
-    id: { type: 'number' },
-    user: { $ref: 'UserResult' }
-  }
-} as const, fixtureAjv)
+export const messageResultSchema = schema(
+  {
+    $id: 'MessageResult',
+    type: 'object',
+    additionalProperties: false,
+    required: ['id', ...messageSchema.required],
+    properties: {
+      ...messageSchema.properties,
+      id: { type: 'number' },
+      user: { $ref: 'UserResult' }
+    }
+  } as const,
+  fixtureAjv
+)
 
 export type Message = Infer<typeof messageSchema>
 export type MessageResult = Combine<
