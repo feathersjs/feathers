@@ -2,6 +2,7 @@ import express, { Express } from 'express'
 import { Application as FeathersApplication, defaultServiceMethods } from '@feathersjs/feathers'
 import { routing } from '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
+import cors from 'cors'
 
 import { rest, RestOptions, formatter } from './rest'
 import { errorHandler, notFound, ErrorHandlerOptions } from './handlers'
@@ -28,7 +29,8 @@ export {
   ExpressOverrides,
   AuthenticationSettings,
   parseAuthentication,
-  authenticate
+  authenticate,
+  cors
 }
 
 const debug = createDebug('@feathersjs/express')
@@ -60,7 +62,7 @@ export default function feathersExpress<S = any, C = any>(
             middleware[service ? 'after' : 'before'].push(arg)
           } else if (!service) {
             service = arg
-          } else if (arg.methods || arg.events) {
+          } else if (arg.methods || arg.events || arg.express || arg.koa) {
             options = arg
           } else {
             throw new Error('Invalid options passed to app.use')
@@ -85,8 +87,8 @@ export default function feathersExpress<S = any, C = any>(
       debug('Registering service with middleware', middleware)
       // Since this is a service, call Feathers `.use`
       feathersUse.call(this, location, service, {
-        ...options,
-        express: middleware
+        express: middleware,
+        ...options
       })
 
       return this
@@ -103,11 +105,16 @@ export default function feathersExpress<S = any, C = any>(
     },
 
     async teardown(server?: any) {
-      return feathersTeardown
-        .call(this, server)
-        .then(
-          () => new Promise((resolve, reject) => this.server.close((e) => (e ? reject(e) : resolve(this))))
-        )
+      return feathersTeardown.call(this, server).then(
+        () =>
+          new Promise((resolve, reject) => {
+            if (this.server) {
+              this.server.close((e) => (e ? reject(e) : resolve(this)))
+            } else {
+              resolve(this)
+            }
+          })
+      )
     }
   } as Application<S, C>)
 

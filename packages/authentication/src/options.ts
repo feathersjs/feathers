@@ -1,3 +1,5 @@
+import { FromSchema } from '@feathersjs/schema'
+
 export const defaultOptions = {
   authStrategies: [] as string[],
   jwtOptions: {
@@ -119,3 +121,5 @@ export const authenticationSettingsSchema = {
     }
   }
 } as const
+
+export type AuthenticationConfiguration = FromSchema<typeof authenticationSettingsSchema>

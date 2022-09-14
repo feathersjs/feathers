@@ -87,6 +87,7 @@ describe('@feathersjs/express/rest provider', () => {
 
     before(async () => {
       app = expressify(feathers())
+        .use(express.cors())
         .use(express.json())
         .configure(rest(express.formatter))
         .use('codes', {

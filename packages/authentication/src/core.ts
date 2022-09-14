@@ -1,11 +1,11 @@
 import merge from 'lodash/merge'
-import jsonwebtoken, { SignOptions, Secret, VerifyOptions } from 'jsonwebtoken'
+import jsonwebtoken, { SignOptions, Secret, VerifyOptions, Algorithm } from 'jsonwebtoken'
 import { v4 as uuidv4 } from 'uuid'
 import { NotAuthenticated } from '@feathersjs/errors'
 import { createDebug } from '@feathersjs/commons'
 import { Application, Params } from '@feathersjs/feathers'
 import { IncomingMessage, ServerResponse } from 'http'
-import { defaultOptions } from './options'
+import { AuthenticationConfiguration, defaultOptions } from './options'
 
 const debug = createDebug('@feathersjs/authentication/base')
 
@@ -122,7 +122,7 @@ export class AuthenticationBase {
   /**
    * Return the current configuration from the application
    */
-  get configuration() {
+  get configuration(): AuthenticationConfiguration {
     // Always returns a copy of the authentication configuration
     return Object.assign({}, defaultOptions, this.app.get(this.configKey))
   }
@@ -226,7 +226,7 @@ export class AuthenticationBase {
 
     // Normalize the `algorithm` setting into the algorithms array
     if (algorithm && !options.algorithms) {
-      options.algorithms = Array.isArray(algorithm) ? algorithm : [algorithm]
+      options.algorithms = (Array.isArray(algorithm) ? algorithm : [algorithm]) as Algorithm[]
       delete options.algorithm
     }
 

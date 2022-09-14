@@ -11,7 +11,7 @@ export const ${camelName}DataSchema = schema({
   $id: '${upperName}Data',
   type: 'object',
   additionalProperties: false,
-  required: [ ${authStrategies.includes('local') ? "'email', 'password'" : ''} ],
+  required: [ ${authStrategies.includes('local') ? "'email'" : ''} ],
   properties: {
     ${authStrategies
       .map((name) =>

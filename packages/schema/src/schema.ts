@@ -3,7 +3,8 @@ import { FromSchema, JSONSchema } from 'json-schema-to-ts'
 import { BadRequest } from '@feathersjs/errors'
 
 export const DEFAULT_AJV = new Ajv({
-  coerceTypes: true
+  coerceTypes: true,
+  addUsedSchema: false
 })
 
 export { Ajv }

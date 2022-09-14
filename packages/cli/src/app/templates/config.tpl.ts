@@ -5,6 +5,7 @@ const defaultConfig = ({}: AppGeneratorContext) => ({
   host: 'localhost',
   port: 3030,
   public: './public/',
+  origins: ['http://localhost:3030'],
   paginate: {
     default: 10,
     max: 50

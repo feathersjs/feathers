@@ -64,13 +64,13 @@
     "@feathersjs/memory": "^5.0.0-pre.28",
     "@feathersjs/schema": "^5.0.0-pre.28",
     "@types/bcryptjs": "^2.4.2",
-    "@types/lodash": "^4.14.184",
+    "@types/lodash": "^4.14.185",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.7.14",
+    "@types/node": "^18.7.17",
     "mocha": "^10.0.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
-    "typescript": "^4.8.2"
+    "typescript": "^4.8.3"
   },
   "gitHead": "bf8e54fddc14d688ba8f505e72c9630a71656ff1"
 }
