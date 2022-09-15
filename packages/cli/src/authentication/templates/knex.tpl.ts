@@ -31,9 +31,10 @@ export async function down(knex: Knex): Promise<void> {
     table.dropColumn('email')
     table.dropColumn('password')`
           : `    
-    table.dropColumn('${name}Id')`
+    table.dropColumn('${name}Id')
+    `
       )
-      .join(',\n')}
+      .join('\n')}
   })
 }
 `
