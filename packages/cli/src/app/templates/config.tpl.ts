@@ -12,6 +12,14 @@ const defaultConfig = ({}: AppGeneratorContext) => ({
   }
 })
 
+const customEnvironment = {
+  port: {
+    __name: 'PORT',
+    __format: 'number'
+  },
+  host: 'HOSTNAME'
+}
+
 const testConfig = {
   port: 8998
 }
@@ -20,3 +28,4 @@ export const generate = (ctx: AppGeneratorContext) =>
   generator(ctx)
     .then(writeJSON(defaultConfig, toFile('config', 'default.json')))
     .then(writeJSON(testConfig, toFile('config', 'test.json')))
+    .then(writeJSON(customEnvironment, toFile('config', 'custom-environment-variables.json')))
