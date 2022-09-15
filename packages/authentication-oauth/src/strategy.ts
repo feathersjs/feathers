@@ -71,11 +71,11 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     const { redirect, origins = this.app.get('origins') } = this.authentication.configuration.oauth
 
     if (Array.isArray(origins)) {
-      const referer = params?.headers?.referer || ''
+      const referer = params?.headers?.referer || origins[0]
       const allowedOrigin = origins.find((current) => referer.toLowerCase().startsWith(current.toLowerCase()))
 
       if (!allowedOrigin) {
-        throw new NotAuthenticated(`Referer "${referer || '[header not available]'}" not allowed.`)
+        throw new NotAuthenticated(`Referer "${referer}" is not allowed.`)
       }
 
       return allowedOrigin
