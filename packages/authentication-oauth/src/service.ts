@@ -1,5 +1,6 @@
 import { createDebug } from '@feathersjs/commons'
 import { HookContext, NextFunction, Params } from '@feathersjs/feathers'
+import { FeathersError } from '@feathersjs/errors'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import Grant from 'grant/lib/grant'
@@ -23,17 +24,35 @@ export type OAuthParams = Omit<Params, 'route'> & {
   }
 }
 
+export class OAuthError extends FeathersError {
+  constructor(message: string, data: any, public location: string) {
+    super(message, 'NotAuthenticated', 401, 'not-authenticated', data)
+  }
+}
+
 export const redirectHook = () => async (context: HookContext, next: NextFunction) => {
-  await next()
+  try {
+    await next()
 
-  const { location } = context.result
+    const { location } = context.result
 
-  debug(`oAuth redirect to ${location}`)
+    debug(`oAuth redirect to ${location}`)
 
-  if (location) {
-    context.http = {
-      ...context.http,
-      location
+    if (location) {
+      context.http = {
+        ...context.http,
+        location
+      }
+    }
+  } catch (error: any) {
+    if (error.location) {
+      context.http = {
+        ...context.http,
+        location: error.location
+      }
+      context.result = typeof error.toJSON === 'function' ? error.toJSON() : error
+    } else {
+      throw error
     }
   }
 }
@@ -93,21 +112,33 @@ export class OAuthService {
       ...payload
     }
 
-    debug(`Calling ${authService}.create authentication with strategy ${name}`)
+    try {
+      debug(`Calling ${authService}.create authentication with strategy ${name}`)
 
-    const authResult = await this.service.create(authentication, authParams)
+      const authResult = await this.service.create(authentication, authParams)
 
-    debug('Successful oAuth authentication, sending response')
+      debug('Successful oAuth authentication, sending response')
 
-    const location = await strategy.getRedirect(authResult, authParams)
+      const location = await strategy.getRedirect(authResult, authParams)
 
-    if (typeof params.session.destroy === 'function') {
-      await params.session.destroy()
-    }
+      if (typeof params.session.destroy === 'function') {
+        await params.session.destroy()
+      }
 
-    return {
-      ...authResult,
-      location
+      return {
+        ...authResult,
+        location
+      }
+    } catch (error: any) {
+      const location = await strategy.getRedirect(error, authParams)
+      const e = new OAuthError(error.message, error.data, location)
+
+      if (typeof params.session.destroy === 'function') {
+        await params.session.destroy()
+      }
+
+      e.stack = error.stack
+      throw e
     }
   }
 
