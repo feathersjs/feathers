@@ -47,6 +47,7 @@ export type AppGeneratorArguments = FeathersBaseContext & Partial<AppGeneratorDa
 
 export const generate = (ctx: AppGeneratorArguments) =>
   generator(ctx)
+    .then(initializeBaseContext())
     .then((ctx) => ({
       ...ctx,
       dependencies: [],
@@ -104,7 +105,8 @@ export const generate = (ctx: AppGeneratorArguments) =>
           message: 'Which package manager are you using?',
           choices: [
             { value: 'npm', name: 'npm' },
-            { value: 'yarn', name: 'Yarn' }
+            { value: 'yarn', name: 'Yarn' },
+            { value: 'pnpm', name: 'pnpm' }
           ]
         },
         ...connectionPrompts(ctx),
@@ -149,50 +151,58 @@ export const generate = (ctx: AppGeneratorArguments) =>
       )
     )
     .then(
-      install<AppGeneratorContext>(({ transports, framework, dependencyVersions, dependencies }) => {
-        const hasSocketio = transports.includes('websockets')
+      install<AppGeneratorContext>(
+        ({ transports, framework, dependencyVersions, dependencies }) => {
+          const hasSocketio = transports.includes('websockets')
 
-        dependencies.push(
-          '@feathersjs/feathers',
-          '@feathersjs/errors',
-          '@feathersjs/schema',
-          '@feathersjs/configuration',
-          '@feathersjs/transport-commons',
-          '@feathersjs/authentication',
-          'winston'
-        )
+          dependencies.push(
+            '@feathersjs/feathers',
+            '@feathersjs/errors',
+            '@feathersjs/schema',
+            '@feathersjs/configuration',
+            '@feathersjs/transport-commons',
+            '@feathersjs/authentication',
+            'winston'
+          )
 
-        if (hasSocketio) {
-          dependencies.push('@feathersjs/socketio')
-        }
+          if (hasSocketio) {
+            dependencies.push('@feathersjs/socketio')
+          }
 
-        if (framework === 'koa') {
-          dependencies.push('@feathersjs/koa', 'koa-static')
-        }
+          if (framework === 'koa') {
+            dependencies.push('@feathersjs/koa', 'koa-static')
+          }
 
-        if (framework === 'express') {
-          dependencies.push('@feathersjs/express', 'compression')
-        }
+          if (framework === 'express') {
+            dependencies.push('@feathersjs/express', 'compression')
+          }
 
-        return addVersions(dependencies, dependencyVersions)
-      })
+          return addVersions(dependencies, dependencyVersions)
+        },
+        false,
+        ctx.packager
+      )
     )
     .then(
-      install<AppGeneratorContext>(({ language, framework, devDependencies, dependencyVersions }) => {
-        devDependencies.push('nodemon', 'axios', 'mocha', 'cross-env', 'prettier')
+      install<AppGeneratorContext>(
+        ({ language, framework, devDependencies, dependencyVersions }) => {
+          devDependencies.push('nodemon', 'axios', 'mocha', 'cross-env', 'prettier', '@feathersjs/cli')
 
-        if (language === 'ts') {
-          devDependencies.push(
-            '@types/mocha',
-            framework === 'koa' ? '@types/koa-static' : '@types/compression',
-            '@types/node',
-            'nodemon',
-            'ts-node',
-            'typescript',
-            'shx'
-          )
-        }
+          if (language === 'ts') {
+            devDependencies.push(
+              '@types/mocha',
+              framework === 'koa' ? '@types/koa-static' : '@types/compression',
+              '@types/node',
+              'nodemon',
+              'ts-node',
+              'typescript',
+              'shx'
+            )
+          }
 
-        return addVersions(devDependencies, dependencyVersions)
-      }, true)
+          return addVersions(devDependencies, dependencyVersions)
+        },
+        true,
+        ctx.packager
+      )
     )

@@ -6,11 +6,14 @@ import assert from 'assert'
 import { getContext } from '@feathershq/pinion'
 
 import { AppGeneratorContext } from '../src/app'
-import { generate } from '../lib'
 import { FeathersBaseContext } from '../src/commons'
 import { ConnectionGeneratorArguments } from '../src/connection'
 import { ServiceGeneratorArguments } from '../src/service'
 import { combinate, dependencyVersions } from './utils'
+
+import { generate as generateApp } from '../lib/app'
+import { generate as generateConnection } from '../lib/connection'
+import { generate as generateService } from '../lib/service'
 
 const matrix = {
   language: ['js', 'ts'] as const,
@@ -35,7 +38,7 @@ describe('@feathersjs/cli', () => {
 
       before(async () => {
         cwd = await mkdtemp(path.join(os.tmpdir(), name + '-'))
-        context = await generate(
+        context = await generateApp(
           getContext<AppGeneratorContext>(
             {
               name,
@@ -64,7 +67,7 @@ describe('@feathersjs/cli', () => {
       })
 
       it('generates a MongoDB connection and service and passes tests', async () => {
-        const connectionContext = await generate(
+        const connectionContext = await generateConnection(
           getContext<ConnectionGeneratorArguments>(
             {
               dependencyVersions,
@@ -75,7 +78,7 @@ describe('@feathersjs/cli', () => {
             { cwd }
           )
         )
-        const mongoServiceContext = await generate(
+        const mongoServiceContext = await generateService(
           getContext<ServiceGeneratorArguments>(
             {
               dependencyVersions,
@@ -96,7 +99,7 @@ describe('@feathersjs/cli', () => {
       })
 
       it('generates a custom service and passes tests', async () => {
-        const customServiceContext = await generate(
+        const customServiceContext = await generateService(
           getContext<ServiceGeneratorArguments>(
             {
               dependencyVersions,

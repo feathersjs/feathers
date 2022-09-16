@@ -1,6 +1,13 @@
 import { generator, runGenerator, prompt, install, mergeJSON, toFile } from '@feathershq/pinion'
 import chalk from 'chalk'
-import { FeathersBaseContext, DatabaseType, getDatabaseAdapter, addVersions } from '../commons'
+import {
+  FeathersBaseContext,
+  DatabaseType,
+  getDatabaseAdapter,
+  addVersions,
+  checkPreconditions,
+  initializeBaseContext
+} from '../commons'
 
 export interface ConnectionGeneratorContext extends FeathersBaseContext {
   database: DatabaseType
@@ -60,6 +67,8 @@ export const getDatabaseClient = (database: DatabaseType) => DATABASE_CLIENTS[da
 
 export const generate = (ctx: ConnectionGeneratorArguments) =>
   generator(ctx)
+    .then(initializeBaseContext())
+    .then(checkPreconditions())
     .then(prompt<ConnectionGeneratorArguments, ConnectionGeneratorContext>(prompts))
     .then(
       runGenerator<ConnectionGeneratorContext>(
@@ -105,5 +114,9 @@ export const generate = (ctx: ConnectionGeneratorArguments) =>
         }
       }
 
-      return install<ConnectionGeneratorContext>(addVersions(dependencies, ctx.dependencyVersions))(ctx)
+      return install<ConnectionGeneratorContext>(
+        addVersions(dependencies, ctx.dependencyVersions),
+        false,
+        ctx.feathers.packager
+      )(ctx)
     })

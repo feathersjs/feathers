@@ -1,6 +1,6 @@
 import { generator, prompt, runGenerators } from '@feathershq/pinion'
 import _ from 'lodash'
-import { FeathersBaseContext } from '../commons'
+import { checkPreconditions, FeathersBaseContext, initializeBaseContext } from '../commons'
 
 export interface HookGeneratorContext extends FeathersBaseContext {
   name: string
@@ -11,6 +11,8 @@ export interface HookGeneratorContext extends FeathersBaseContext {
 
 export const generate = (ctx: HookGeneratorContext) =>
   generator(ctx)
+    .then(initializeBaseContext())
+    .then(checkPreconditions())
     .then(
       prompt<HookGeneratorContext>(({ type, name }) => [
         {
