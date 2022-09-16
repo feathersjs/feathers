@@ -1,0 +1,56 @@
+{
+    "name": "create-feathers-app",
+    "description": "Create a new Feathers application",
+    "version": "5.0.0-pre.29",
+    "homepage": "https://feathersjs.com",
+    "bin": {
+      "feathers": "./bin/create-feathers-app"
+    },
+    "keywords": [
+      "feathers",
+      "feathers-plugin"
+    ],
+    "license": "MIT",
+    "funding": {
+      "type": "github",
+      "url": "https://github.com/sponsors/daffl"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/feathersjs/feathers.git"
+    },
+    "author": {
+      "name": "Feathers contributors",
+      "email": "hello@feathersjs.com",
+      "url": "https://feathersjs.com"
+    },
+    "contributors": [],
+    "bugs": {
+      "url": "https://github.com/feathersjs/feathers/issues"
+    },
+    "engines": {
+      "node": ">= 14"
+    },
+    "files": [
+      "CHANGELOG.md",
+      "LICENSE",
+      "README.md",
+      "lib/**",
+      "bin/**",
+      "*.d.ts",
+      "*.js"
+    ],
+    "scripts": {
+      "test": "echo \"No tests necessary\""
+    },
+    "publishConfig": {
+      "access": "public"
+    },
+    "dependencies": {
+      "@feathersjs/cli": "^5.0.0-pre.29"
+    },
+    "devDependencies": {
+    },
+    "gitHead": "4314dc89a41a8bbaabf00b47697bf7887861d17d"
+  }
+  

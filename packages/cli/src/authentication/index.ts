@@ -107,5 +107,9 @@ export const generate = (ctx: AuthenticationGeneratorArguments) =>
         }
       }
 
-      return install<AuthenticationGeneratorContext>(addVersions(dependencies, ctx.dependencyVersions))(ctx)
+      return install<AuthenticationGeneratorContext>(
+        addVersions(dependencies, ctx.dependencyVersions),
+        false,
+        ctx.feathers.packager
+      )(ctx)
     })

@@ -114,5 +114,9 @@ export const generate = (ctx: ConnectionGeneratorArguments) =>
         }
       }
 
-      return install<ConnectionGeneratorContext>(addVersions(dependencies, ctx.dependencyVersions))(ctx)
+      return install<ConnectionGeneratorContext>(
+        addVersions(dependencies, ctx.dependencyVersions),
+        false,
+        ctx.feathers.packager
+      )(ctx)
     })
