@@ -7,6 +7,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
     params: { [key: string]: any }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Application<Services, Settings> {
     // eslint-disable-line
     routes: Router<{

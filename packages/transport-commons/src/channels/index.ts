@@ -19,6 +19,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
     registerPublisher(event: Event, publisher: Publisher<ServiceGenericType<S>, A, this>): this
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Application<Services, Settings> {
     // eslint-disable-line
     channels: string[]
