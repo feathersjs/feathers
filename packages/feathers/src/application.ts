@@ -126,6 +126,21 @@ export class Feathers<Services, Settings>
     return this
   }
 
+  async unuse<L extends keyof Services & string>(
+    location: L
+  ): Promise<FeathersService<this, keyof any extends keyof Services ? Service : Services[L]>> {
+    const path = (stripSlashes(location) || '/') as L
+    const service = this.services[path] as Service
+
+    if (service && typeof service.teardown === 'function') {
+      await service.teardown(this as any, path)
+    }
+
+    delete this.services[path]
+
+    return service as any
+  }
+
   hooks(hookMap: ApplicationHookOptions<this>) {
     const untypedMap = hookMap as any
 

@@ -107,4 +107,14 @@ describe('app.routes', () => {
       __id: '1234'
     })
   })
+
+  it('can unregister a service (#2035)', async () => {
+    const result = app.lookup('my/service')
+
+    assert.strictEqual(result.service, app.service('/my/service/'))
+
+    await app.unuse('/my/service')
+
+    assert.strictEqual(app.lookup('my/service'), null)
+  })
 })

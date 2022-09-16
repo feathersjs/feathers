@@ -223,6 +223,15 @@ export interface FeathersApplication<Services = any, Settings = any> {
   ): this
 
   /**
+   * Unregister an existing service.
+   *
+   * @param path The name of the service to unregister
+   */
+  unuse<L extends keyof Services & string>(
+    path: L
+  ): Promise<FeathersService<this, keyof any extends keyof Services ? Service : Services[L]>>
+
+  /**
    * Get the Feathers service instance for a path. This will
    * be the service originally registered with Feathers functionality
    * like hooks and events added.

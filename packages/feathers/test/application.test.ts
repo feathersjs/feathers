@@ -85,7 +85,7 @@ describe('Feathers application', () => {
       })
     })
 
-    it('registers and wraps a new service', async () => {
+    it('registers and wraps a new service and can unregister (#2035)', async () => {
       const dummyService = {
         async setup(this: any, _app: any, path: string) {
           this.path = path
@@ -100,7 +100,7 @@ describe('Feathers application', () => {
         }
       }
 
-      const app = feathers().use('/dummy', dummyService)
+      const app = feathers<{ dummy: typeof dummyService }>().use('dummy', dummyService)
       const wrappedService = app.service('dummy')
 
       assert.strictEqual(
@@ -114,6 +114,13 @@ describe('Feathers application', () => {
       })
 
       assert.strictEqual(data.message, 'Test message')
+
+      await app.unuse('dummy')
+
+      assert.strictEqual(Object.keys(app.services).length, 0)
+      assert.throws(() => app.service('dummy'), {
+        message: "Can not find service 'dummy'"
+      })
     })
 
     it('can not register custom methods on a protected methods', async () => {
