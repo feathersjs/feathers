@@ -10,13 +10,14 @@ import {
 } from '../commons'
 
 export interface ConnectionGeneratorContext extends FeathersBaseContext {
+  name?: string
   database: DatabaseType
   connectionString: string
   dependencies: string[]
 }
 
 export type ConnectionGeneratorArguments = FeathersBaseContext &
-  Partial<Pick<ConnectionGeneratorContext, 'database' | 'connectionString'>>
+  Partial<Pick<ConnectionGeneratorContext, 'database' | 'connectionString' | 'name'>>
 
 export const defaultConnectionString = (type: DatabaseType, name: string) => {
   const connectionStrings = {
@@ -30,7 +31,7 @@ export const defaultConnectionString = (type: DatabaseType, name: string) => {
   return connectionStrings[type]
 }
 
-export const prompts = ({ database, connectionString, pkg }: ConnectionGeneratorArguments) => [
+export const prompts = ({ database, connectionString, pkg, name }: ConnectionGeneratorArguments) => [
   {
     name: 'database',
     type: 'list',
@@ -51,7 +52,7 @@ export const prompts = ({ database, connectionString, pkg }: ConnectionGenerator
     when: !connectionString,
     message: 'Enter your database connection string',
     default: (answers: { name?: string; database: DatabaseType }) =>
-      defaultConnectionString(answers.database, answers.name || pkg.name)
+      defaultConnectionString(answers.database, answers.name || name || pkg.name)
   }
 ]
 

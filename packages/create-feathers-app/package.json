@@ -4,7 +4,7 @@
     "version": "5.0.0-pre.29",
     "homepage": "https://feathersjs.com",
     "bin": {
-      "feathers": "./bin/create-feathers-app"
+      "create-feathers-app": "./bin/create-feathers-app"
     },
     "keywords": [
       "feathers",
