@@ -1,10 +1,10 @@
 {
-    "name": "create-feathers-app",
+    "name": "create-feathers",
     "description": "Create a new Feathers application",
     "version": "5.0.0-pre.29",
     "homepage": "https://feathersjs.com",
     "bin": {
-      "feathers": "./bin/create-feathers-app"
+      "create-feathers": "./bin/create-feathers"
     },
     "keywords": [
       "feathers",

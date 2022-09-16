@@ -4,6 +4,7 @@ import { generator, runGenerator, getContext } from '@feathershq/pinion'
 import { FeathersBaseContext, version } from './commons'
 
 export * from 'commander'
+export { chalk }
 
 export const commandRunner = (name: string) => async (options: any) => {
   const ctx = getContext<FeathersBaseContext>({
