@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.29](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.28...v5.0.0-pre.29) (2022-09-16)
+
+
+### Features
+
+* Add CORS support to oAuth, Express, Koa and generated application ([#2744](https://github.com/feathersjs/feathers/issues/2744)) ([fd218f2](https://github.com/feathersjs/feathers/commit/fd218f289f8ca4c101e9938e8683e2efef6e8131))
+
+
+
+
+
 # [5.0.0-pre.28](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.27...v5.0.0-pre.28) (2022-08-03)
 
 

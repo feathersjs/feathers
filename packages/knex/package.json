@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/knex",
   "description": "Feathers SQL service adapter using KnexJS",
-  "version": "5.0.0-pre.28",
+  "version": "5.0.0-pre.29",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -51,16 +51,16 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/adapter-commons": "^5.0.0-pre.28",
-    "@feathersjs/commons": "^5.0.0-pre.28",
-    "@feathersjs/errors": "^5.0.0-pre.28",
-    "@feathersjs/feathers": "^5.0.0-pre.28"
+    "@feathersjs/adapter-commons": "^5.0.0-pre.29",
+    "@feathersjs/commons": "^5.0.0-pre.29",
+    "@feathersjs/errors": "^5.0.0-pre.29",
+    "@feathersjs/feathers": "^5.0.0-pre.29"
   },
   "peerDependencies": {
     "knex": "^2.3.0"
   },
   "devDependencies": {
-    "@feathersjs/adapter-tests": "^5.0.0-pre.28",
+    "@feathersjs/adapter-tests": "^5.0.0-pre.29",
     "@types/mocha": "^9.1.1",
     "@types/node": "^18.7.17",
     "knex": "^2.3.0",

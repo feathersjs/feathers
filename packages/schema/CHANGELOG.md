@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.29](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.28...v5.0.0-pre.29) (2022-09-16)
+
+
+### Bug Fixes
+
+* **schema:** Fix for Ajv global collision bug [#2681](https://github.com/feathersjs/feathers/issues/2681) ([#2702](https://github.com/feathersjs/feathers/issues/2702)) ([0b2def6](https://github.com/feathersjs/feathers/commit/0b2def6ca483fad6ca22fcc4ea9873bc027925d8))
+
+
+### Features
+
+* **authentication-oauth:** Koa and transport independent oAuth authentication ([#2737](https://github.com/feathersjs/feathers/issues/2737)) ([9231525](https://github.com/feathersjs/feathers/commit/9231525a24bb790ba9c5d940f2867a9c727691c9))
+
+
+
+
+
 # [5.0.0-pre.28](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.27...v5.0.0-pre.28) (2022-08-03)
 
 

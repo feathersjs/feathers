@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.29](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.28...v5.0.0-pre.29) (2022-09-16)
+
+
+### Features
+
+* **cli:** Adding ClientService to CLI ([#2750](https://github.com/feathersjs/feathers/issues/2750)) ([1d45427](https://github.com/feathersjs/feathers/commit/1d45427988521ac028755cbe128685fcdf34f636))
+
+
+
+
+
 # [5.0.0-pre.28](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.27...v5.0.0-pre.28) (2022-08-03)
 
 

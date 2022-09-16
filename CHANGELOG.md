@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.29](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.28...v5.0.0-pre.29) (2022-09-16)
+
+
+### Bug Fixes
+
+* **authentication-oauth:** Fix oAuth origin and error handling ([#2752](https://github.com/feathersjs/feathers/issues/2752)) ([f7e1c33](https://github.com/feathersjs/feathers/commit/f7e1c33de1b7af0672a302d2ba6e15d997f0aa83))
+* **schema:** Fix for Ajv global collision bug [#2681](https://github.com/feathersjs/feathers/issues/2681) ([#2702](https://github.com/feathersjs/feathers/issues/2702)) ([0b2def6](https://github.com/feathersjs/feathers/commit/0b2def6ca483fad6ca22fcc4ea9873bc027925d8))
+* **socketio:** Reinitialize hooks on overriden setup method ([#2722](https://github.com/feathersjs/feathers/issues/2722)) ([5e8e7c4](https://github.com/feathersjs/feathers/commit/5e8e7c442238fdc929a0a36b8b8ca2b230ce761f))
+
+
+### Features
+
+* Add CORS support to oAuth, Express, Koa and generated application ([#2744](https://github.com/feathersjs/feathers/issues/2744)) ([fd218f2](https://github.com/feathersjs/feathers/commit/fd218f289f8ca4c101e9938e8683e2efef6e8131))
+* **authentication-oauth:** Koa and transport independent oAuth authentication ([#2737](https://github.com/feathersjs/feathers/issues/2737)) ([9231525](https://github.com/feathersjs/feathers/commit/9231525a24bb790ba9c5d940f2867a9c727691c9))
+* **cli:** Add custom environment variable support to generated application ([#2751](https://github.com/feathersjs/feathers/issues/2751)) ([c7bf80d](https://github.com/feathersjs/feathers/commit/c7bf80d82c28c190e3f0136d51af5b7de1bc4868))
+* **cli:** Adding ClientService to CLI ([#2750](https://github.com/feathersjs/feathers/issues/2750)) ([1d45427](https://github.com/feathersjs/feathers/commit/1d45427988521ac028755cbe128685fcdf34f636))
+
+
+
+
+
 # [5.0.0-pre.28](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.27...v5.0.0-pre.28) (2022-08-03)
 
 
