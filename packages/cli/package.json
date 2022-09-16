@@ -47,15 +47,13 @@
     "mocha": "mocha --timeout 60000 --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
     "test": "npm run compile && npm run mocha"
   },
-  "directories": {
-    "lib": "lib/cli"
-  },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@feathershq/pinion": "^0.3.5",
     "chalk": "^4.0.1",
+    "commander": "^9.4.0",
     "lodash": "^4.17.21",
     "prettier": "^2.7.1"
   },

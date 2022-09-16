@@ -42,7 +42,7 @@ export async function down(knex: Knex): Promise<void> {
 export const generate = (ctx: AuthenticationGeneratorContext) =>
   generator(ctx).then(
     when(
-      (ctx) => getDatabaseAdapter(ctx.feathers.database) === 'knex',
+      (ctx) => getDatabaseAdapter(ctx.feathers?.database) === 'knex',
       renderSource(
         migrationTemplate,
         toFile(

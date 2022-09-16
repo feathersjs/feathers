@@ -47,6 +47,7 @@ export type AppGeneratorArguments = FeathersBaseContext & Partial<AppGeneratorDa
 
 export const generate = (ctx: AppGeneratorArguments) =>
   generator(ctx)
+    .then(initializeBaseContext())
     .then((ctx) => ({
       ...ctx,
       dependencies: [],
@@ -179,7 +180,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
     )
     .then(
       install<AppGeneratorContext>(({ language, framework, devDependencies, dependencyVersions }) => {
-        devDependencies.push('nodemon', 'axios', 'mocha', 'cross-env', 'prettier')
+        devDependencies.push('nodemon', 'axios', 'mocha', 'cross-env', 'prettier', '@feathersjs/cli')
 
         if (language === 'ts') {
           devDependencies.push(

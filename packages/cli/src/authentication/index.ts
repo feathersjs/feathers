@@ -1,6 +1,12 @@
 import chalk from 'chalk'
 import { generator, runGenerators, prompt, install } from '@feathershq/pinion'
-import { addVersions, FeathersBaseContext, getDatabaseAdapter } from '../commons'
+import {
+  addVersions,
+  checkPreconditions,
+  FeathersBaseContext,
+  getDatabaseAdapter,
+  initializeBaseContext
+} from '../commons'
 import { generate as serviceGenerator, ServiceGeneratorContext } from '../service/index'
 
 export interface AuthenticationGeneratorContext extends ServiceGeneratorContext {
@@ -67,6 +73,8 @@ export const prompts = (ctx: AuthenticationGeneratorArguments) => [
 
 export const generate = (ctx: AuthenticationGeneratorArguments) =>
   generator(ctx)
+    .then(initializeBaseContext())
+    .then(checkPreconditions())
     .then(prompt<AuthenticationGeneratorArguments, AuthenticationGeneratorContext>(prompts))
     .then(async (ctx) => {
       const serviceContext = await serviceGenerator({
@@ -74,7 +82,7 @@ export const generate = (ctx: AuthenticationGeneratorArguments) =>
         name: ctx.service,
         path: ctx.service,
         isEntityService: true,
-        type: getDatabaseAdapter(ctx.feathers.database)
+        type: getDatabaseAdapter(ctx.feathers?.database)
       })
 
       return {
