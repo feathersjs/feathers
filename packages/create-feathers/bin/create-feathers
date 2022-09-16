@@ -10,10 +10,10 @@ const program = new Command()
 const generateApp = commandRunner('app')
 
 program
-  .name('npm init feathers-app')
+  .name('npm init feathers')
   .description(`Create a new Feathers application 🕊️
 
-${chalk.grey('npm init feathers-app myapp')}
+${chalk.grey('npm init feathers myapp')}
 `)
   .argument('<name>', 'The name of your new application')
   // .version(version)
