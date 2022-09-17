@@ -29,14 +29,21 @@ await getPackageStats()
 
 const keyToSortBy = ref<'stars' | 'downloads' | 'lastPublish'>('lastPublish')
 const showCore = ref(false)
+const showOld = ref(false)
 
 const searchPackage = ref('')
+
+const packagesAreOldIfOlderThan = 1000 * 60 * 60 * 24 * 365 * 2.9 // 3 years
 
 const filteredPackages = computed(() => {
   let pkgs = [...fetchedPackages.value]
 
   if (!showCore.value) {
     pkgs = pkgs.filter((pkg) => pkg.ownerName !== 'feathersjs')
+  }
+
+  if (!showOld.value) {
+    pkgs = pkgs.filter((pkg) => pkg.lastPublish.getTime() > Date.now() - packagesAreOldIfOlderThan)
   }
 
   if (searchPackage.value) {
@@ -64,7 +71,10 @@ const packagesToShow = computed(() => {
   <div>
     <el-input v-model="searchPackage" placeholder="Search package" clearable class="mb-1" />
     <div class="flex justify-between mb-5 flex-col-reverse md:flex-row">
-      <el-checkbox v-model="showCore">core</el-checkbox>
+      <div>
+        <el-checkbox v-model="showCore">core</el-checkbox>
+        <el-checkbox v-model="showOld">outdated</el-checkbox>
+      </div>
       <el-radio-group v-model="keyToSortBy">
         <el-radio label="downloads" size="small" title="Monthly npm downloads">Downloads</el-radio>
         <el-radio label="stars" size="small" title="Github stars">Stars</el-radio>
@@ -73,7 +83,12 @@ const packagesToShow = computed(() => {
     </div>
     <div class="font-bold mb-5">{{ packagesToShow.length }}/{{ fetchedPackages.length }} packages:</div>
     <TransitionGroup name="list" tag="div">
-      <package-card v-for="pkg in packagesToShow" :key="pkg.name" :stats="pkg" />
+      <package-card
+        v-for="pkg in packagesToShow"
+        :key="pkg.name"
+        :stats="pkg"
+        :is-old="pkg.lastPublish.getTime() < Date.now() - packagesAreOldIfOlderThan"
+      />
     </TransitionGroup>
   </div>
 </template>
