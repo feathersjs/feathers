@@ -72,7 +72,7 @@
     "@feathersjs/socketio": "^5.0.0-pre.29",
     "@feathersjs/transport-commons": "^5.0.0-pre.29",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.7.17",
+    "@types/node": "^18.7.18",
     "@types/prettier": "^2.7.0",
     "axios": "^0.27.2",
     "mocha": "^10.0.0",

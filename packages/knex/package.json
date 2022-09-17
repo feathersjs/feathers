@@ -62,12 +62,12 @@
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.0-pre.29",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.7.17",
+    "@types/node": "^18.7.18",
     "knex": "^2.3.0",
     "mocha": "^10.0.0",
     "pg": "^8.8.0",
     "shx": "^0.3.4",
-    "sqlite3": "^5.0.11",
+    "sqlite3": "^5.1.1",
     "typescript": "^4.8.3"
   },
   "gitHead": "4314dc89a41a8bbaabf00b47697bf7887861d17d"
