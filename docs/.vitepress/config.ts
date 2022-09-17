@@ -153,8 +153,8 @@ export default defineConfig({
         ]
       },
       {
-        text: 'eco',
-        link: '/ecosystem/'
+        text: 'Awesome',
+        link: '/awesome/'
       },
       {
         text: 'Ecosystem',

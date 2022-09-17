@@ -3,6 +3,7 @@ import Theme from 'vitepress/theme'
 import { inBrowser } from 'vitepress'
 import '../style/main.postcss'
 import '../style/vars.postcss'
+
 import 'uno.css'
 import HomePage from '../components/HomePage.vue'
 import FeathersLayout from './FeathersLayout.vue'
@@ -14,8 +15,10 @@ import Logo from '../components/Logo.vue'
 import BlockQuote from '../components/BlockQuote.vue'
 import LanguageBlock from '../components/LanguageBlock.vue'
 
-if (inBrowser)
-  import('./pwa')
+import '../style/element-plus.scss'
+// import 'element-plus/dist/index.css'
+
+if (inBrowser) import('./pwa')
 
 export default {
   ...Theme,
@@ -31,4 +34,3 @@ export default {
     app.component('LanguageBlock', LanguageBlock)
   }
 }
-

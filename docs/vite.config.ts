@@ -93,7 +93,8 @@ export default defineConfig({
     Components({
       include: [/\.vue/, /\.md/],
       dirs: '.vitepress/components',
-      dts: '.vitepress/components.d.ts'
+      dts: '.vitepress/components.d.ts',
+      resolvers: [ElementPlusResolver({ ssr: false })]
     }),
     Unocss({
       shortcuts: [
@@ -126,7 +127,8 @@ export default defineConfig({
         if (pwa) await pwaPlugin.generateSW()
       }
     }
-  ]
+  ],
+  ssr: { noExternal: ['element-plus'] }
 })
 
 function IncludesPlugin(): Plugin {
