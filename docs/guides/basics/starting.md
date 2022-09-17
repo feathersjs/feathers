@@ -68,7 +68,7 @@ Create a file called `app.mjs` with the following content:
 
 </LanguageBlock>
 
-```ts
+```ts{3-8}
 import { feathers } from '@feathersjs/feathers'
 
 // This is the interface for the message data
