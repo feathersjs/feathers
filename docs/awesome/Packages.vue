@@ -28,26 +28,123 @@ async function getPackageStats(): Promise<PackageOutput[]> {
 await getPackageStats()
 
 const keyToSortBy = ref<'stars' | 'downloads' | 'lastPublish'>('lastPublish')
-const showCore = ref(false)
-const showOld = ref(false)
-
-const searchPackage = ref('')
+const showCore = ref(true)
+const showOld = ref(true)
 
 const packagesAreOldIfOlderThan = 1000 * 60 * 60 * 24 * 365 * 2.9 // 3 years
+
+function filterCore(pkg: PackageOutput) {
+  return pkg.ownerName !== 'feathersjs'
+}
+
+function filterOld(pkg: PackageOutput) {
+  return pkg.lastPublish.getTime() > Date.now() - packagesAreOldIfOlderThan
+}
+
+const coreCount = computed(() => {
+  return fetchedPackages.value.filter((pkg) => !filterCore(pkg)).length
+})
+
+const oldCount = computed(() => {
+  return fetchedPackages.value.filter((pkg) => !filterOld(pkg)).length
+})
+
+const categoriesToShow = ref<CategoryOption[]>([])
+
+type Category = string[]
+
+type CategoryOption = {
+  label: string
+  value: Category
+}
+
+const categories: CategoryOption[] = [
+  { label: 'Authentication', value: ['authentication'] },
+  { label: 'Authorization', value: ['authorization'] },
+  { label: 'Caching', value: ['caching'] },
+  { label: 'Database', value: ['database'] },
+  { label: 'APIs', value: ['api', 'apis'] },
+  { label: 'Documentation', value: ['documentation', 'docs'] },
+  { label: 'Email & SMS', value: ['email', 'mail', 'mailer', 'nodemailer', 'sms'] },
+  { label: 'Google', value: ['google'] },
+  { label: 'Hooks', value: ['hook', 'hooks'] },
+  { label: 'Images', value: ['image', 'images'] },
+  { label: 'Payments', value: ['payment', 'payments'] },
+  { label: 'Scaling', value: ['scale', 'scaling'] },
+  { label: 'Search', value: ['search'] },
+  { label: 'Social Media', value: ['social media', 'social-media', 'socialmedia'] },
+  { label: 'Testing', value: ['test', 'testing'] },
+  { label: 'Logging', value: ['log', 'logs', 'logging'] },
+  { label: 'Transports', value: ['transport', 'transports'] },
+  { label: 'Utilities', value: ['utility', 'utilities'] },
+  { label: 'Validation', value: ['validation', 'validator', 'validators'] }
+]
+
+const countByCategory = computed(() => {
+  const counts: Record<string, number> = {}
+
+  categories.forEach((category) => {
+    counts[category.label] = fetchedPackages.value.filter((pkg) => {
+      return category.value.some((value) => {
+        return pkg.keywords?.some((keyword) => keyword.toLowerCase().includes(value))
+      })
+    }).length
+  })
+
+  console.log(counts)
+
+  return counts
+})
+
+// const countByCategory = computed(() => {
+//   const counts: Record<string, number> = {}
+
+//   categories.forEach((category) => {
+//     counts[category.toLowerCase()] = 0
+//   })
+
+//   fetchedPackages.value.forEach((pkg) => {
+//     if (pkg.keywords) {
+//       pkg.keywords.forEach((keyword) => {
+//         if (!categories.some((category) => category.toLowerCase() === keyword.toLowerCase())) {
+//           return
+//         }
+
+//         counts[keyword]++
+//       })
+//     }
+//   })
+
+//   return counts
+// })
+
+const searchPackage = ref('')
 
 const filteredPackages = computed(() => {
   let pkgs = [...fetchedPackages.value]
 
   if (!showCore.value) {
-    pkgs = pkgs.filter((pkg) => pkg.ownerName !== 'feathersjs')
+    pkgs = pkgs.filter(filterCore)
   }
 
   if (!showOld.value) {
-    pkgs = pkgs.filter((pkg) => pkg.lastPublish.getTime() > Date.now() - packagesAreOldIfOlderThan)
+    pkgs = pkgs.filter(filterOld)
   }
 
   if (searchPackage.value) {
     pkgs = pkgs.filter((pkg) => pkg.name.includes(searchPackage.value))
+  }
+
+  if (categoriesToShow.value.length) {
+    pkgs = pkgs.filter((pkg) => {
+      return pkg.keywords?.some((keyword) => {
+        return categoriesToShow.value.some((category) => {
+          return category.value.some((value) => {
+            return keyword.toLowerCase().includes(value)
+          })
+        })
+      })
+    })
   }
 
   return pkgs
@@ -70,17 +167,40 @@ const packagesToShow = computed(() => {
 <template>
   <div>
     <el-input v-model="searchPackage" placeholder="Search package" clearable class="mb-1" />
-    <div class="flex justify-between mb-5 flex-col-reverse md:flex-row">
+    <div class="flex justify-between mb-2">
       <div>
-        <el-checkbox v-model="showCore">core</el-checkbox>
-        <el-checkbox v-model="showOld">outdated</el-checkbox>
+        <el-checkbox v-model="showCore" size="small">core ({{ coreCount }})</el-checkbox>
+        <el-checkbox v-model="showOld" size="small">outdated ({{ oldCount }})</el-checkbox>
       </div>
+      <el-select
+        v-model="categoriesToShow"
+        multiple
+        collapse-tags
+        collapse-tags-tooltip
+        placeholder="Filter by category"
+        style="width: 240px"
+        value-key="label"
+        clearable
+      >
+        <el-option
+          v-for="option in categories"
+          :key="option.label"
+          :label="option.label"
+          :value="option"
+          :title="option.value.join(', ')"
+        >
+          {{ option.label }} ({{ countByCategory[option.label] }})
+        </el-option>
+      </el-select>
+    </div>
+    <div class="flex justify-end mb-3">
       <el-radio-group v-model="keyToSortBy">
         <el-radio label="downloads" size="small" title="Monthly npm downloads">Downloads</el-radio>
         <el-radio label="stars" size="small" title="Github stars">Stars</el-radio>
         <el-radio label="lastPublish" size="small" title="Recently published on npm">Newest</el-radio>
       </el-radio-group>
     </div>
+
     <div class="font-bold mb-5">{{ packagesToShow.length }}/{{ fetchedPackages.length }} packages:</div>
     <TransitionGroup name="list" tag="div">
       <package-card

@@ -1,5 +1,5 @@
 ---
-lastPublished: false
+lastUpdated: false
 ---
 
 <script setup lang="ts">

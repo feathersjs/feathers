@@ -68,7 +68,7 @@ defineProps({
       </div>
     </div>
     <div class="text-gray-600 my-3 ml-2 text-sm md:text-base .dark:text-gray-300">
-      <div v-if="isOld" class="border-l-4 border-red-500 bg-red-100 p-2 mb-2 text-sm">
+      <div v-if="isOld" class="border-l-4 border-red-500 bg-red-500/20 p-2 mb-2 text-sm">
         This package seems to be unmaintained. Please use with caution and consider taking over the
         maintenance! Please contact us if you want to over discord! ❤️
       </div>
