@@ -118,7 +118,7 @@ const countByCategory = computed(() => {
 //   return counts
 // })
 
-const searchPackage = ref('')
+const search = ref('')
 
 const filteredPackages = computed(() => {
   let pkgs = [...fetchedPackages.value]
@@ -131,8 +131,14 @@ const filteredPackages = computed(() => {
     pkgs = pkgs.filter(filterOld)
   }
 
-  if (searchPackage.value) {
-    pkgs = pkgs.filter((pkg) => pkg.name.includes(searchPackage.value))
+  if (search.value) {
+    const _search = search.value.toLowerCase()
+    pkgs = pkgs.filter(
+      (pkg) =>
+        pkg.name.includes(_search) ||
+        pkg.description?.includes(_search) ||
+        pkg.keywords?.some((keyword) => keyword.includes(_search))
+    )
   }
 
   if (categoriesToShow.value.length) {
@@ -166,7 +172,7 @@ const packagesToShow = computed(() => {
 
 <template>
   <div>
-    <el-input v-model="searchPackage" placeholder="Search package" clearable class="mb-1" />
+    <el-input v-model="search" placeholder="Search package" clearable class="mb-1" />
     <div class="flex justify-between mb-2">
       <div>
         <el-checkbox v-model="showCore" size="small">core ({{ coreCount }})</el-checkbox>
