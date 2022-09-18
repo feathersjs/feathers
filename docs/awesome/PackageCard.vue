@@ -24,7 +24,7 @@ defineProps({
 
 <template>
   <div class="feathers-package">
-    <div class="flex items-center flex-col sm:flex-row">
+    <div class="flex items-center flex-col sm:flex-row mb-1">
       <a :href="`https://github.com/${stats.ownerName}`" target="_blank">
         <img v-if="stats.ownerAvatar" :src="stats.ownerAvatar" class="w-10 h-10 rounded-full mr-2" />
       </a>
@@ -67,13 +67,35 @@ defineProps({
         </div>
       </div>
     </div>
-    <div class="text-gray-600 my-3 ml-2 text-sm md:text-base .dark:text-gray-300">
+    <div class="flex text-sm mb-2 justify-center sm:justify-start">
+      <div v-if="stats.license" class="mx-2">{{ stats.license }}</div>
+      <a
+        v-if="stats.ghLink"
+        :href="stats.ghLink"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center mx-2"
+      >
+        <div class="i-carbon-arrow-up-right mr-1 w-3.5 h-3.5" />
+        Github
+      </a>
+      <a
+        v-if="stats.npmLink"
+        :href="stats.npmLink"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center mx-2"
+      >
+        <div class="i-carbon-arrow-up-right mr-1 w-3.5 h-3.5" />
+        npm
+      </a>
+    </div>
+    <div class="text-gray-600 my-2 ml-2 text-sm md:text-base .dark:text-gray-300">
       <div v-if="isOld" class="border-l-4 border-red-500 bg-red-500/20 p-2 mb-2 text-sm">
         This package seems to be unmaintained. Please use with caution and consider taking over the
         maintenance! Please contact us if you want to over discord! ❤️
       </div>
       {{ stats.description }}
-      <span>{{ stats.license }}</span>
     </div>
     <div>
       <div
