@@ -124,8 +124,8 @@ export const ajvNoCoerce = new Ajv({
   schemas: []
 })
 addFormats(ajvNoCoerce)
-ajv.addKeyword(keywordConvert)
-ajv.addFormat('objectid', formatObjectId)
+ajvNoCoerce.addKeyword(keywordConvert)
+ajvNoCoerce.addFormat('objectid', formatObjectId)
 ```
 
 #### Pass the Custom AJV Instance to `schema`
