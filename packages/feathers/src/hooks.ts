@@ -14,7 +14,8 @@ import {
   FeathersService,
   HookMap,
   AroundHookFunction,
-  HookFunction
+  HookFunction,
+  Application
 } from './declarations'
 import { defaultServiceArguments, getHookMethods } from './service'
 
@@ -212,4 +213,8 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
   }
 
   return service
+}
+
+export const defineHooks = <A = Application, S = Service>(hooks: HookMap<A, S>) => {
+  return hooks
 }
