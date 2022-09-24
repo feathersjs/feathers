@@ -8,6 +8,78 @@ outline: deep
 
 TypeScript provides many benefits, but it also introduces its own set of issues to a codebase. Here are some TypeScript-related issues that can come up while developing Feathers apps.
 
+### Services - Registering
+
+When registering a service, you might see an error where things just worked before.  Here's an example:
+
+```ts
+app.use('version', {
+  async find() {
+    return { v: 2 }
+  }
+})
+```
+
+The above code will produce a TypeScript error like this one:
+
+> Argument of type '"version"' is not assignable to parameter of type '"authentication" | "users" | "tasks"'. ts(2345)
+
+This error means that the the `version` service doesn't have a match in the `ServiceTypes` interface in the `declarations` file.  While it's certainly an option to go edit that file, there's a cleaner way to do it.  If you look at the bottom of a newly-generated `users` service file, you'll see a `declare` block that looks like this:
+
+```ts
+// Add this service to the service type index
+declare module '../../declarations' {
+  interface ServiceTypes {
+    users: UsersService
+  }
+}
+```
+
+This tells the TypeScript tooling that you expect `app.service('users')` to be of type `UsersService`.  So we need to do the same thing for our tiny new `version` service. We could do it the quick and dirty way and use the `any` type, like this:
+
+```ts
+// Add this service to the service type index
+declare module '../../declarations' {
+  interface ServiceTypes {
+    version: any
+  }
+}
+```
+
+And that would eliminate the error, but it's not a very clear definition. By more clearly defining what's going on, we can benefit from return types when we use the `find` method on this custom `version` service. So it would be more supportive to tell TypeScript that the `version` service has the following characteristics:
+
+- It's an object which has a `find` attribute: `{ find: any }`
+- The `find` attribute is a method which accepts no parameters and when called it returns a Promise: `{ find: () => Promise<any> }`
+- The returned Promise resolves to an object: `Promise<{}>`
+- The object contains a `v` attribute, which will hold a `number` value: `Promise<{ v: number }>`
+- So altogether it looks like this: `{ find: () => Promise<{ v: number }> }`
+
+So now we can tell TypeScript that `version` is a specific type:
+
+```ts
+
+// Add this service to the service type index
+declare module '../../declarations' {
+  interface ServiceTypes {
+    version: { find: () => Promise<{ v: number }> }
+  }
+}
+```
+
+With the declaration in place, the error message will go away.  Sometimes you might want to put a small service into another service's file. Suppose that the `version` path was actually going to be `users/version`, and we wanted to register it in the `users` service file. We could just update the declaration at the bottom of the file to look like this:
+
+```ts
+// Add this service to the service type index
+declare module '../../declarations' {
+  interface ServiceTypes {
+    users: UsersService
+    version: { find: () => Promise<{ v: number }> }
+  }
+}
+```
+
+And now both services are declared inside a single interface.
+
 ### Hooks - No overload matches this call
 
 You might see the error `No overload matches this call` when calling a service's `hooks` method. It will happen if any of the provided hooks are of the wrong type. The following code will trigger a TS error:
