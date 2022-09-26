@@ -1,97 +1,74 @@
 import { _ } from '@feathersjs/commons'
-import { JSONSchema } from 'json-schema-to-ts'
+import { Type, TObject, TSchema, TIntersect } from '@sinclair/typebox'
 
-export type PropertyQuery<D extends JSONSchema> = {
-  anyOf: [
-    D,
-    {
-      type: 'object'
-      additionalProperties: false
-      properties: {
-        $gt: D
-        $gte: D
-        $lt: D
-        $lte: D
-        $ne: D
-        $in: {
-          type: 'array'
-          items: D
-        }
-        $nin: {
-          type: 'array'
-          items: D
-        }
-      }
-    }
-  ]
+const ArrayOfKeys = <T extends TObject>(type: T) => {
+  const keys = Object.keys(type.properties)
+  return Type.Unsafe<(keyof T['properties'])[]>({ type: 'array', items: { type: 'string', enum: keys } })
 }
 
-export const queryProperty = <T extends JSONSchema>(def: T) => {
-  const definition = _.omit(def, 'default')
-  return {
-    anyOf: [
-      definition,
-      {
-        type: 'object',
-        additionalProperties: false,
-        properties: {
-          $gt: definition,
-          $gte: definition,
-          $lt: definition,
-          $lte: definition,
-          $ne: definition,
-          $in: {
-            type: 'array',
-            items: definition
-          },
-          $nin: {
-            type: 'array',
-            items: definition
-          }
-        }
-      }
-    ]
-  } as const
-}
+export function SortKeys<T extends TObject>(schema: T) {
+  const keys = Object.keys(schema.properties)
 
-export const queryProperties = <T extends { [key: string]: JSONSchema }>(definition: T) =>
-  Object.keys(definition).reduce((res, key) => {
+  const result = keys.reduce((res, key) => {
     const result = res as any
 
-    result[key] = queryProperty(definition[key])
+    result[key] = Type.Unsafe<1 | -1>({ type: 'number', enum: [1, -1] })
 
     return result
-  }, {} as { [K in keyof T]: PropertyQuery<T[K]> })
+  }, {} as { [K in keyof T['properties']]: { readonly type: 'number'; readonly enum: [1, -1] } })
 
-export const querySyntax = <T extends { [key: string]: any }>(definition: T) =>
-  ({
-    $limit: {
-      type: 'number',
-      minimum: 0
-    },
-    $skip: {
-      type: 'number',
-      minimum: 0
-    },
-    $sort: {
-      type: 'object',
-      properties: Object.keys(definition).reduce((res, key) => {
-        const result = res as any
+  return Type.Unsafe<{ [K in keyof T['properties']]?: 1 | -1 }>(result)
+}
 
-        result[key] = {
-          type: 'number',
-          enum: [1, -1]
-        }
+export const queryProperty = <T extends TSchema>(def: T) => {
+  return Type.Union(
+    [
+      def,
+      Type.Object({
+        $gt: def,
+        $gte: def,
+        $lt: def,
+        $lte: def,
+        $ne: def,
+        $in: Type.Array(def),
+        $nin: Type.Array(def)
+      })
+    ],
+    { additionalProperties: false }
+  )
+}
 
-        return result
-      }, {} as { [K in keyof T]: { readonly type: 'number'; readonly enum: [1, -1] } })
-    },
-    $select: {
-      type: 'array',
-      items: {
-        type: 'string',
-        enum: Object.keys(definition) as any as (keyof T)[]
-      }
-    },
-    ...queryProperties(definition)
-  } as const)
+type QueryProperty<T extends TSchema> = ReturnType<typeof queryProperty<T>>
+
+export const queryProperties = <T extends TObject>(type: T) => {
+  const properties = Object.keys(type.properties).reduce((res, key) => {
+    const result = res as any
+
+    result[key] = queryProperty(type[key])
+
+    return result
+  }, {} as { [K in keyof T['properties']]: QueryProperty<T['properties'][K]> })
+
+  const result = {
+    type: 'object',
+    additionalProperties: false,
+    properties
+  } as TObject<typeof properties>
+
+  return result
+}
+
+export const querySyntax = <T extends TObject | TIntersect>(type: T) => {
+  return Type.Intersect([
+    Type.Object(
+      {
+        $limit: Type.Optional(Type.Number({ minimum: 0 })),
+        $skip: Type.Optional(Type.Number({ minimum: 0 })),
+        $sort: SortKeys(type),
+        $select: ArrayOfKeys(type)
+      },
+      { additionalProperties: false }
+    ),
+    queryProperties(type)
+  ])
+}

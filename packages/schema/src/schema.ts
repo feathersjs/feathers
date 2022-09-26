@@ -1,5 +1,5 @@
 import Ajv, { AsyncValidateFunction, ValidateFunction } from 'ajv'
-import { FromSchema, JSONSchema } from 'json-schema-to-ts'
+import { Static, TObject } from '@sinclair/typebox'
 import { BadRequest } from '@feathersjs/errors'
 
 export const DEFAULT_AJV = new Ajv({
@@ -9,39 +9,28 @@ export const DEFAULT_AJV = new Ajv({
 
 export { Ajv }
 
-export type JSONSchemaDefinition = JSONSchema & {
-  $id: string
-  $async?: boolean
-  properties?: { [key: string]: JSONSchema }
-  required?: readonly string[]
-}
-
-export interface Schema<T> {
-  validate<X = T>(...args: Parameters<ValidateFunction<X>>): Promise<X>
-}
-
-export class SchemaWrapper<S extends JSONSchemaDefinition> implements Schema<FromSchema<S>> {
+export class SchemaWrapper<S extends TObject, T = Static<S>> {
   ajv: Ajv
   validator: AsyncValidateFunction
-  readonly _type!: FromSchema<S>
+  readonly _type!: T
 
   constructor(public definition: S, ajv: Ajv = DEFAULT_AJV) {
     this.ajv = ajv
     this.validator = this.ajv.compile({
       $async: true,
-      ...(this.definition as any)
+      ...this.definition
     }) as AsyncValidateFunction
   }
 
   get properties() {
-    return this.definition.properties as S['properties']
+    return this.definition.properties
   }
 
   get required() {
     return this.definition.required as S['required']
   }
 
-  async validate<T = FromSchema<S>>(...args: Parameters<ValidateFunction<T>>) {
+  async validate(...args: Parameters<ValidateFunction<T>>) {
     try {
       const validated = (await this.validator(...args)) as T
 
@@ -56,6 +45,6 @@ export class SchemaWrapper<S extends JSONSchemaDefinition> implements Schema<Fro
   }
 }
 
-export function schema<S extends JSONSchemaDefinition>(definition: S, ajv: Ajv = DEFAULT_AJV) {
+export function schema<S extends TObject>(definition: S, ajv: Ajv = DEFAULT_AJV) {
   return new SchemaWrapper(definition, ajv)
 }

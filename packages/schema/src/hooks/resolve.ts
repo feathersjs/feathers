@@ -1,5 +1,6 @@
 import { HookContext, NextFunction } from '@feathersjs/feathers'
 import { compose } from '@feathersjs/hooks'
+import { Static, TObject } from '@sinclair/typebox'
 import { Resolver, ResolverStatus } from '../resolver'
 
 const getContext = <H extends HookContext>(context: H) => {
@@ -19,11 +20,11 @@ const getData = <H extends HookContext>(context: H) => {
   return { isPaginated, data }
 }
 
-const runResolvers = async <T, H extends HookContext>(
-  resolvers: Resolver<T, H>[],
+const runResolvers = async <S extends TObject, H extends HookContext, T = Static<S>>(
+  resolvers: Resolver<S, H>[],
   data: any,
   ctx: H,
-  status?: Partial<ResolverStatus<T, H>>
+  status?: Partial<ResolverStatus<S, H>>
 ) => {
   let current: any = data
 
@@ -57,7 +58,7 @@ export const getDispatch = (value: any) =>
   typeof value === 'object' && value !== null && value[DISPATCH] !== undefined ? value[DISPATCH] : value
 
 export const resolveQuery =
-  <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) =>
+  <S extends TObject, H extends HookContext>(...resolvers: Resolver<S, H>[]) =>
   async (context: H, next?: NextFunction) => {
     const ctx = getContext(context)
     const data = context?.params?.query || {}
@@ -98,7 +99,7 @@ export const resolveData =
   }
 
 export const resolveResult =
-  <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) =>
+  <S extends TObject, H extends HookContext>(...resolvers: Resolver<S, H>[]) =>
   async (context: H, next?: NextFunction) => {
     if (typeof next === 'function') {
       const { $resolve: properties, ...query } = context.params?.query || {}
@@ -133,7 +134,7 @@ export const resolveResult =
   }
 
 export const resolveDispatch =
-  <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) =>
+  <S extends TObject, H extends HookContext, T = Static<S>>(...resolvers: Resolver<S, H, T>[]) =>
   async (context: H, next?: NextFunction) => {
     if (typeof next === 'function') {
       await next()

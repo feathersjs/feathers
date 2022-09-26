@@ -1,48 +1,47 @@
 import { BadRequest } from '@feathersjs/errors'
-import { Schema } from './schema'
+import { HookContext } from '@feathersjs/feathers'
+import { Static, TIntersect, TObject } from '@sinclair/typebox'
 
-export type PropertyResolver<T, V, C> = (
+export type PropertyResolver<S extends TObject, V, C, T = Static<S>> = (
   value: V | undefined,
   obj: T,
   context: C,
-  status: ResolverStatus<T, C>
+  status: ResolverStatus<S, C, T>
 ) => Promise<V | undefined>
 
-export type PropertyResolverMap<T, C> = {
-  [key in keyof T]?: PropertyResolver<T, T[key], C>
+export type PropertyResolverMap<S extends TObject, C, T = Static<S>> = {
+  [key in keyof T]?: PropertyResolver<S, T[key], C>
 }
 
-export type ResolverConverter<T, C> = (
+export type ResolverConverter<S extends TObject, C, T = Static<S>> = (
   obj: any,
   context: C,
-  status: ResolverStatus<T, C>
+  status: ResolverStatus<S, C, T>
 ) => Promise<T | undefined>
 
-export interface ResolverConfig<T, C> {
-  schema?: Schema<T>
+export interface ResolverConfig<S extends TObject, C, T> {
+  schema?: S
   validate?: 'before' | 'after' | false
-  properties: PropertyResolverMap<T, C>
-  converter?: ResolverConverter<T, C>
+  properties: PropertyResolverMap<S, C, T>
+  converter?: ResolverConverter<S, C, T>
 }
 
-export interface ResolverStatus<T, C> {
+export interface ResolverStatus<S extends TObject, C, T = Static<S>> {
   path: string[]
   originalContext?: C
   properties?: string[]
-  stack: PropertyResolver<T, any, C>[]
+  stack: PropertyResolver<S, any, C, T>[]
 }
 
-export class Resolver<T, C> {
-  readonly _type!: T
-
-  constructor(public options: ResolverConfig<T, C>) {}
+export class Resolver<S extends TObject = TObject, C = HookContext, T = Static<S>> {
+  constructor(public options: ResolverConfig<S, C, T>) {}
 
   async resolveProperty<D, K extends keyof T>(
     name: K,
     data: D,
     context: C,
     status: Partial<ResolverStatus<T, C>> = {}
-  ): Promise<T[K]> {
+  ): Promise<T[K] | undefined> {
     const resolver = this.options.properties[name]
     const value = (data as any)[name]
     const { path = [], stack = [] } = status || {}
@@ -61,7 +60,7 @@ export class Resolver<T, C> {
     return resolver(value, data as any, context, resolverStatus)
   }
 
-  async convert<D>(data: D, context: C, status?: Partial<ResolverStatus<T, C>>) {
+  async convert<D>(data: D, context: C, status?: Partial<ResolverStatus<S, T, C>>) {
     if (this.options.converter) {
       const { path = [], stack = [] } = status || {}
 
@@ -71,7 +70,7 @@ export class Resolver<T, C> {
     return data
   }
 
-  async resolve<D>(_data: D, context: C, status?: Partial<ResolverStatus<T, C>>): Promise<T> {
+  async resolve<D>(_data: D, context: C, status?: Partial<ResolverStatus<S, T, C>>): Promise<T> {
     const { properties: resolvers, schema, validate } = this.options
     const payload = await this.convert(_data, context, status)
     const data = schema && validate === 'before' ? await schema.validate(payload) : payload
@@ -122,6 +121,6 @@ export class Resolver<T, C> {
   }
 }
 
-export function resolve<T, C>(options: ResolverConfig<T, C>) {
-  return new Resolver<T, C>(options)
+export function resolve<S extends TObject | TIntersect, C, T = Static<S>>(options: ResolverConfig<S, C, T>) {
+  return new Resolver<S, C, T>(options)
 }

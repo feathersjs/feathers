@@ -58,6 +58,7 @@
     "@feathersjs/errors": "^5.0.0-pre.29",
     "@feathersjs/feathers": "^5.0.0-pre.29",
     "@feathersjs/hooks": "^0.7.5",
+    "@sinclair/typebox": "^0.24.42",
     "@types/json-schema": "^7.0.11",
     "ajv": "^8.11.0",
     "json-schema": "^0.4.0",
