@@ -2,8 +2,13 @@ import { generator, prepend, toFile, after } from '@feathershq/pinion'
 import { injectSource, renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-const template = ({ relative, path, className, camelName, fileName }: ServiceGeneratorContext) =>
-  `import type { Application } from '${relative}/declarations'
+const template = ({
+  relative,
+  path,
+  className,
+  camelName,
+  fileName
+}: ServiceGeneratorContext) => /* ts */ `import type { Application } from '${relative}/declarations'
 
 import { ${className}, ${camelName}Hooks } from './${fileName}.class'
 

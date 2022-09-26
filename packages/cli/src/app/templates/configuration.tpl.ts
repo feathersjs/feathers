@@ -2,8 +2,7 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
-const template = ({}: AppGeneratorContext) =>
-  `import { schema, Ajv } from '@feathersjs/schema'
+const template = ({}: AppGeneratorContext) => /* ts */ `import { schema, Ajv } from '@feathersjs/schema'
 import type { Infer } from '@feathersjs/schema'
 import { authenticationSettingsSchema } from '@feathersjs/authentication'
 

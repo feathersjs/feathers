@@ -1,8 +1,7 @@
 import { generator, renderTemplate, toFile } from '@feathershq/pinion'
 import { AppGeneratorContext } from '../index'
 
-const template = ({ name, description }: AppGeneratorContext) =>
-  `<!DOCTYPE html>
+const template = ({ name, description }: AppGeneratorContext) => /* html */ `<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>${name}</title>

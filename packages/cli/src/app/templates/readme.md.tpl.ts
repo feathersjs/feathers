@@ -1,8 +1,7 @@
 import { generator, renderTemplate, toFile } from '@feathershq/pinion'
 import { AppGeneratorContext } from '../index'
 
-const template = ({ name, description }: AppGeneratorContext) =>
-  `# ${name}
+const template = ({ name, description }: AppGeneratorContext) => /* md */ `# ${name}
 
 > ${description}
 

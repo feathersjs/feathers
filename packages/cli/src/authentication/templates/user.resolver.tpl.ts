@@ -9,8 +9,7 @@ const template = ({
   authStrategies,
   type,
   fileName
-}: AuthenticationGeneratorContext) =>
-  `import { resolve } from '@feathersjs/schema'
+}: AuthenticationGeneratorContext) => /* ts */ `import { resolve } from '@feathersjs/schema'
 ${authStrategies.includes('local') ? `import { passwordHash } from '@feathersjs/authentication-local'` : ''}
 import type { HookContext } from '${relative}/declarations'
 import type {

@@ -2,8 +2,11 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-const template = ({ camelName, upperName, type }: ServiceGeneratorContext) =>
-  `import { schema, querySyntax } from '@feathersjs/schema'
+const template = ({
+  camelName,
+  upperName,
+  type
+}: ServiceGeneratorContext) => /* ts */ `import { schema, querySyntax } from '@feathersjs/schema'
 import type { Infer } from '@feathersjs/schema'
 
 // Schema for the basic data model (e.g. creating new entries)

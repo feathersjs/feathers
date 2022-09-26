@@ -8,8 +8,7 @@ const template = ({
   fileName,
   isEntityService,
   authentication
-}: ServiceGeneratorContext) =>
-  `import { resolveAll } from '@feathersjs/schema'
+}: ServiceGeneratorContext) => /* ts */ `import { resolveAll } from '@feathersjs/schema'
 ${isEntityService || authentication ? `import { authenticate } from '@feathersjs/authentication'` : ''}
 import type {
   ${upperName}Data,
@@ -26,11 +25,11 @@ export const ${camelName}Hooks = {
       authenticate('jwt'),`
         : ''
     } ${
-    !isEntityService
-      ? `
+  !isEntityService
+    ? `
       resolveAll(${camelName}Resolvers)`
-      : ''
-  }
+    : ''
+}
     ]${
       isEntityService
         ? `,

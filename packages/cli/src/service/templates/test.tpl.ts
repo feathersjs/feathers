@@ -2,8 +2,7 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-const template = ({ relative, lib, path }: ServiceGeneratorContext) =>
-  `import assert from 'assert'
+const template = ({ relative, lib, path }: ServiceGeneratorContext) => /* ts */ `import assert from 'assert'
 import { app } from '../${relative}/${lib}/app'
 
 describe('${path} service', () => {

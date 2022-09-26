@@ -1,14 +1,19 @@
 import { generator, inject, before, toFile, when, append } from '@feathershq/pinion'
 import { AuthenticationGeneratorContext } from '../index'
 
-const importTemplate = ({ upperName, folder, fileName }: AuthenticationGeneratorContext) =>
-  `import { ${upperName}Result } from './services/${folder.join('/')}/${fileName}.schema'
+const importTemplate = ({
+  upperName,
+  folder,
+  fileName
+}: AuthenticationGeneratorContext) => /* ts */ `import { ${upperName}Result } from './services/${folder.join(
+  '/'
+)}/${fileName}.schema'
 `
 
 const paramsTemplate = ({
   entity,
   upperName
-}: AuthenticationGeneratorContext) => `// Add the ${entity} as an optional property to all params
+}: AuthenticationGeneratorContext) => /* ts */ `// Add the ${entity} as an optional property to all params
 declare module '@feathersjs/feathers' {
   interface Params {
     ${entity}?: ${upperName}Result

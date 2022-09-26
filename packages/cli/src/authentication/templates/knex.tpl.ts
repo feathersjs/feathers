@@ -5,7 +5,7 @@ import { AuthenticationGeneratorContext } from '../index'
 const migrationTemplate = ({
   kebabName,
   authStrategies
-}: AuthenticationGeneratorContext) => `import type { Knex } from 'knex'
+}: AuthenticationGeneratorContext) => /* ts */ `import type { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.alterTable('${kebabName}', function (table) {

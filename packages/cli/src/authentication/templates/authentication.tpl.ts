@@ -2,8 +2,9 @@ import { generator, before, toFile } from '@feathershq/pinion'
 import { injectSource, renderSource } from '../../commons'
 import { AuthenticationGeneratorContext } from '../index'
 
-const template = ({ authStrategies }: AuthenticationGeneratorContext) =>
-  `import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
+const template = ({
+  authStrategies
+}: AuthenticationGeneratorContext) => /* ts */ `import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
 import { LocalStrategy } from '@feathersjs/authentication-local'
 import { OAuthStrategy } from '@feathersjs/authentication-oauth'
 import { oauth } from '@feathersjs/authentication-oauth'

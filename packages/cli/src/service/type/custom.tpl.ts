@@ -2,8 +2,11 @@ import { generator, toFile, after, prepend, append } from '@feathershq/pinion'
 import { injectSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-export const template = ({ className, upperName, relative }: ServiceGeneratorContext) =>
-  `import type { Application } from '${relative}/declarations'
+export const template = ({
+  className,
+  upperName,
+  relative
+}: ServiceGeneratorContext) => /* ts */ `import type { Application } from '${relative}/declarations'
   
 export interface ${className}Options {
   app: Application

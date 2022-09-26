@@ -2,8 +2,7 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
-const tsKoaApp = ({ transports }: AppGeneratorContext) =>
-  `import serveStatic from 'koa-static'
+const tsKoaApp = ({ transports }: AppGeneratorContext) => /* ts */ `import serveStatic from 'koa-static'
 import { feathers } from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
 import { koa, rest, bodyParser, errorHandler, parseAuthentication, cors } from '@feathersjs/koa'
@@ -59,8 +58,7 @@ app.hooks({
 export { app }
 `
 
-const tsExpressApp = ({ transports }: AppGeneratorContext) =>
-  `import compress from 'compression'
+const tsExpressApp = ({ transports }: AppGeneratorContext) => /* ts */ `import compress from 'compression'
 
 import { feathers } from '@feathersjs/feathers'
 import express, {

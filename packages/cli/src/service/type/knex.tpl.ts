@@ -2,7 +2,9 @@ import { generator, toFile, after, prepend, append } from '@feathershq/pinion'
 import { injectSource, renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-const migrationTemplate = ({ kebabName }: ServiceGeneratorContext) => `import type { Knex } from 'knex'
+const migrationTemplate = ({
+  kebabName
+}: ServiceGeneratorContext) => /* ts */ `import type { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('${kebabName}', table => {
@@ -16,7 +18,7 @@ export async function down(knex: Knex): Promise<void> {
 }
 `
 
-export const importTemplate = `import { KnexService } from \'@feathersjs/knex\'
+export const importTemplate = /* ts */ `import { KnexService } from \'@feathersjs/knex\'
 import type { KnexAdapterParams } from \'@feathersjs/knex\'`
 
 export const classCode = ({ className, upperName }: ServiceGeneratorContext) =>

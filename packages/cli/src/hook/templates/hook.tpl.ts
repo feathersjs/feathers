@@ -2,8 +2,10 @@ import { generator, toFile } from '@feathershq/pinion'
 import { HookGeneratorContext } from '../index'
 import { renderSource } from '../../commons'
 
-const aroundTemplate = ({ camelName, name }: HookGeneratorContext) => `
-import type { HookContext, NextFunction } from '../declarations'
+const aroundTemplate = ({
+  camelName,
+  name
+}: HookGeneratorContext) => /* ts */ `import type { HookContext, NextFunction } from '../declarations'
 
 export const ${camelName} = async (context: HookContext, next: NextFunction) => {
   console.log(\`Running hook ${name} on \${context.path}\.\${context.method}\`)
@@ -14,7 +16,7 @@ export const ${camelName} = async (context: HookContext, next: NextFunction) => 
 const regularTemplate = ({
   camelName,
   name
-}: HookGeneratorContext) => `import type { HookContext } from '../declarations'
+}: HookGeneratorContext) => /* ts */ `import type { HookContext } from '../declarations'
 
 export const ${camelName} = async (context: HookContext) => {
   console.log(\`Running hook ${name} on \${context.path}\.\${context.method}\`)

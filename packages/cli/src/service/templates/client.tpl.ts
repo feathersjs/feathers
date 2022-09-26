@@ -1,7 +1,7 @@
 import { generator, inject, toFile, when, after } from '@feathershq/pinion'
 import { ServiceGeneratorContext } from '../index'
 
-const schemaImports = ({ upperName, folder, fileName }: ServiceGeneratorContext) => `import type {
+const schemaImports = ({ upperName, folder, fileName }: ServiceGeneratorContext) => /* ts */ `import type {
   ${upperName}Data,
   ${upperName}Patch,
   ${upperName}Result,

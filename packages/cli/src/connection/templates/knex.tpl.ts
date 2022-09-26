@@ -2,8 +2,7 @@ import { generator, toFile, before, mergeJSON } from '@feathershq/pinion'
 import { ConnectionGeneratorContext } from '../index'
 import { injectSource, renderSource } from '../../commons'
 
-const template = ({ database }: ConnectionGeneratorContext) =>
-  `import knex from 'knex'
+const template = ({ database }: ConnectionGeneratorContext) => /* ts */ `import knex from 'knex'
 import type { Knex } from 'knex'
 import type { Application } from './declarations'
 
@@ -21,8 +20,11 @@ export const ${database} = (app: Application) => {
 }
 `
 
-const knexfile = ({ lib, language, database }: ConnectionGeneratorContext) => `
-import { app } from './${lib}/app'
+const knexfile = ({
+  lib,
+  language,
+  database
+}: ConnectionGeneratorContext) => /* ts */ `import { app } from './${lib}/app'
 
 // Load our database connection info from the app configuration
 const config = app.get('${database}')

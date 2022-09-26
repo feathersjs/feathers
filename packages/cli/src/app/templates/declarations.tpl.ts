@@ -1,8 +1,9 @@
 import { generator, toFile, when, renderTemplate } from '@feathershq/pinion'
 import { AppGeneratorContext } from '../index'
 
-const template = ({ framework }: AppGeneratorContext) =>
-  `import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers'
+const template = ({
+  framework
+}: AppGeneratorContext) => /* ts */ `import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers'
 import { Application as FeathersApplication } from '@feathersjs/${framework}'
 import { ConfigurationSchema } from './configuration'
 

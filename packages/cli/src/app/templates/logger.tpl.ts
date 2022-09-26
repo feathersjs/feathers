@@ -2,8 +2,8 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
-const template = ({}: AppGeneratorContext) =>
-  `import { createLogger, format, transports } from 'winston'
+const template =
+  ({}: AppGeneratorContext) => /* ts */ `import { createLogger, format, transports } from 'winston'
 import type { HookContext, NextFunction } from './declarations'
 
 // Configure the Winston logger. For the complete documentation see https://github.com/winstonjs/winston

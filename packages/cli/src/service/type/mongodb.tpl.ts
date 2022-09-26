@@ -2,11 +2,13 @@ import { generator, toFile, after, prepend, append } from '@feathershq/pinion'
 import { injectSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-export const importTemplate = `import { MongoDBService } from \'@feathersjs/mongodb\'
+export const importTemplate = /* ts */ `import { MongoDBService } from \'@feathersjs/mongodb\'
 import type { MongoDBAdapterParams } from \'@feathersjs/mongodb\'`
 
-export const classCode = ({ className, upperName }: ServiceGeneratorContext) =>
-  `export interface ${upperName}Params extends MongoDBAdapterParams<${upperName}Query> {
+export const classCode = ({
+  className,
+  upperName
+}: ServiceGeneratorContext) => /* ts */ `export interface ${upperName}Params extends MongoDBAdapterParams<${upperName}Query> {
 }
 
 // By default calls the standard MongoDB adapter service methods but can be customized with your own functionality.

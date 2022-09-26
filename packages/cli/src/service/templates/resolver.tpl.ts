@@ -2,8 +2,12 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-const template = ({ camelName, upperName, relative, fileName }: ServiceGeneratorContext) =>
-  `import { resolve } from '@feathersjs/schema'
+const template = ({
+  camelName,
+  upperName,
+  relative,
+  fileName
+}: ServiceGeneratorContext) => /* ts */ `import { resolve } from '@feathersjs/schema'
 import type { HookContext } from '${relative}/declarations'
 
 import type {
