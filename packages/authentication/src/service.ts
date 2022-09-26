@@ -106,17 +106,19 @@ export class AuthenticationService
     }
 
     const authResult = await this.authenticate(data, params, ...authStrategies)
-
+    
     debug('Got authentication result', authResult)
 
     if (authResult.accessToken) {
       return authResult
     }
 
+    authResult.data = data;
+
     const [payload, jwtOptions] = await Promise.all([
       this.getPayload(authResult, params),
       this.getTokenOptions(authResult, params)
-    ])
+    ])    
 
     debug('Creating JWT with', payload, jwtOptions)
 
