@@ -134,7 +134,7 @@ In a Feathers application, resolvers are normally used together with a [schema d
 A data resolver can be used on a service with the `resolveData` hook:
 
 ```ts
-import { resolveData, resolve } from '@feathersjs/schema'
+import { resolveData, resolve, type Infer } from '@feathersjs/schema'
 
 export const userSchema = schema({
   $id: 'UserData',
@@ -171,7 +171,7 @@ app.service('users').hooks({
 A result resolver can be registered for all or individual service methods using the `resolveResult` hook.
 
 ```ts
-import { resolveResult, resolve } from '@feathersjs/schema'
+import { resolveResult, resolve, type Infer } from '@feathersjs/schema'
 
 // Extend the userSchema from above with an `id` property
 // which is what a service usually returns
@@ -239,7 +239,7 @@ app.service('users').hooks({
 `query` resolvers use the `resolveQuery` hook to modify `params.query`. This is often used to set default values or limit the query so a user can only request data they are allowed to see.
 
 ```ts
-import { schema, querySyntax, resolveQuery } from '@feathersjs/schema';
+import { schema, querySyntax, resolveQuery, type Infer } from '@feathersjs/schema';
 
 export const userQuerySchema = schema({
   $id: 'UserQuery',

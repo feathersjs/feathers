@@ -64,7 +64,7 @@ import Ajv, { AnySchemaObject } from 'ajv'
 import addFormats from 'ajv-formats'
 import { ObjectId } from 'mongodb'
 
-export { Infer, validateData, validateQuery, schema, queryProperty } from '@feathersjs/schema'
+export { type Infer, validateData, validateQuery, schema, queryProperty } from '@feathersjs/schema'
 
 // Reusable `convert` keyword.
 const keywordConvert = {

@@ -28,7 +28,7 @@ If you are not familiar with JSON schema have a look at the [official getting st
 
 ```ts
 import { HookContext } from './definitions'
-import { schema, Infer } from '@feathersjs/schema'
+import { schema, type Infer } from '@feathersjs/schema'
 
 export const userSchema = schema({
   $id: 'User',
@@ -140,7 +140,7 @@ To create a new schema that extends an existing one, combine the schema properti
 
 ```ts
 import { HookContext } from './definitions'
-import { schema, Infer } from '@feathersjs/schema'
+import { schema, type Infer } from '@feathersjs/schema'
 
 export const userSchema = schema({
   $id: 'User',
@@ -216,7 +216,7 @@ In TypeScript, the referenced type needs to be added explicitly.
 
 ```ts
 import { HookContext } from './definitions'
-import { schema, Infer } from '@feathersjs/schema'
+import { schema, type Infer } from '@feathersjs/schema'
 
 export const userSchema = schema({
   $id: 'User',
@@ -296,7 +296,7 @@ You can learn how it works, [here](https://github.com/feathersjs/feathers/blob/d
 `querySyntax(schema.properties)` initializes all properties the additional query syntax properties `$limit`, `$skip`, `$select` and `$sort`. `$select` and `$sort` will be typed so they only allow existing schema properties.
 
 ```js
-import { querySyntax } from '@feathersjs/schema';
+import { querySyntax, type Infer } from '@feathersjs/schema';
 
 export const userQuerySchema = schema({
   $id: 'UserQuery',

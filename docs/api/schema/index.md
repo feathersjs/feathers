@@ -30,7 +30,7 @@ Here is an example of a user schema definition and resolver:
 
 ```ts
 import { HookContext } from './definitions';
-import { schema, resolve, Infer } from '@feathersjs/schema';
+import { schema, resolve, type Infer } from '@feathersjs/schema';
 
 export const userSchema = schema({
   $id: 'User',

@@ -45,7 +45,7 @@ The application configuration can be validated against a [Feathers schema](./sch
 
 ```ts
 import { feathers } from '@feathersjs/feathers'
-import { schema, Infer } from '@feathersjs/schema'
+import { schema, type Infer } from '@feathersjs/schema'
 import configuration from '@feathersjs/configuration'
 
 const configurationSchema = schema({
