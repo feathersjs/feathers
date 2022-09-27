@@ -128,7 +128,7 @@ const socketClient = socketio(socket)
 client.configure(socketClient);
 
 // Register a socket client service with all methods listed
-client.service('myservice', socketClient.service('myservice'), {
+client.use('myservice', socketClient.service('myservice'), {
   methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'myCustomMethod']
 });
 
