@@ -61,12 +61,12 @@
   },
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.0-pre.29",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "^18.7.18",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.7.23",
     "mocha": "^10.0.0",
-    "mongodb-memory-server": "^8.9.2",
+    "mongodb-memory-server": "^8.9.3",
     "shx": "^0.3.4",
-    "typescript": "^4.8.3"
+    "typescript": "^4.8.4"
   },
   "gitHead": "4314dc89a41a8bbaabf00b47697bf7887861d17d"
 }
