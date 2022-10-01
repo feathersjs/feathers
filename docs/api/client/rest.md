@@ -220,8 +220,8 @@ type CustomMethodData = { name: string }
 type CustomMethodResponse = { acknowledged: boolean }
 
 type ServiceTypes = {
-  // The type is a Socket service extended with custom methods
-  myservice: SocketService & {
+  // The type is a RestService extended with custom methods
+  myservice: RestService & {
     myCustomMethods: CustomMethod<CustomMethodData, CustomMethodResponse>
   }
 }
@@ -238,7 +238,7 @@ const restClient = rest('http://feathers-api.com').fetch(window.fetch);
 client.configure(restClient);
 
 // Register a REST client service with all methods listed
-client.service('myservice', restClient.service('myservice'), {
+client.use('myservice', restClient.service('myservice'), {
   methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'myCustomMethod']
 });
 
@@ -266,7 +266,7 @@ const restClient = rest('http://feathers-api.com').fetch(window.fetch.bind(windo
 client.configure(restClient);
 
 // Register a REST client service with all methods listed
-client.service('myservice', restClient.service('myservice'), {
+client.use('myservice', restClient.service('myservice'), {
   methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'myCustomMethod']
 });
 
