@@ -69,7 +69,7 @@ import configuration from '@feathersjs/configuration'
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
 import type { Application } from './declarations'
-import { configurationSchema } from './configuration'
+import { configurationSchema } from './schemas/configuration'
 import { logger, logErrorHook } from './logger'
 import { services } from './services/index'
 import { channels } from './channels'
