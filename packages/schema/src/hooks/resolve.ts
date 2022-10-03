@@ -170,6 +170,8 @@ export const resolveDispatch =
     })
   }
 
+export const resolveExternal = resolveDispatch
+
 export const resolveAll = <H extends HookContext>(map: ResolveAllSettings<H>) => {
   const middleware = []
 

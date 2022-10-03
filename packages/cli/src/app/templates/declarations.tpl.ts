@@ -5,7 +5,7 @@ const template = ({
   framework
 }: AppGeneratorContext) => /* ts */ `import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers'
 import { Application as FeathersApplication } from '@feathersjs/${framework}'
-import { ConfigurationSchema } from './configuration'
+import { ConfigurationSchema } from './schemas/configuration'
 
 export { NextFunction }
 

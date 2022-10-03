@@ -2,9 +2,23 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
-const template = ({}: AppGeneratorContext) => /* ts */ `import { schema, Ajv } from '@feathersjs/schema'
+const validatorTemplate = /* ts */ `import { Ajv } from '@feathersjs/schema'
+
+export const dataValidator = new Ajv({
+  addUsedSchema: false
+})
+
+export const queryValidator = new Ajv({
+  coerceTypes: true,
+  addUsedSchema: false
+})
+
+`
+const configurationTemplate =
+  ({}: AppGeneratorContext) => /* ts */ `import { schema, Ajv } from '@feathersjs/schema'
 import type { Infer } from '@feathersjs/schema'
 import { authenticationSettingsSchema } from '@feathersjs/authentication'
+import { dataValidator } from './validators'
 
 export const configurationSchema = schema(
   {
@@ -34,16 +48,23 @@ export const configurationSchema = schema(
       }
     }
   } as const,
-  new Ajv()
+  dataValidator
 )
 
 export type ConfigurationSchema = Infer<typeof configurationSchema>
 `
 
 export const generate = (ctx: AppGeneratorContext) =>
-  generator(ctx).then(
-    renderSource(
-      template,
-      toFile<AppGeneratorContext>(({ lib }) => lib, 'configuration')
+  generator(ctx)
+    .then(
+      renderSource(
+        configurationTemplate,
+        toFile<AppGeneratorContext>(({ lib }) => lib, 'schemas', 'configuration')
+      )
     )
-  )
+    .then(
+      renderSource(
+        validatorTemplate,
+        toFile<AppGeneratorContext>(({ lib }) => lib, 'schemas', 'validators')
+      )
+    )

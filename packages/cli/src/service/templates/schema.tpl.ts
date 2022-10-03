@@ -5,12 +5,16 @@ import { ServiceGeneratorContext } from '../index'
 const template = ({
   camelName,
   upperName,
+  relative,
   type
-}: ServiceGeneratorContext) => /* ts */ `import { schema, querySyntax } from '@feathersjs/schema'
-import type { Infer } from '@feathersjs/schema'
+}: ServiceGeneratorContext) => /* ts */ `import { querySyntax, getValidator, getDataValidator, resolve } from '@feathersjs/schema'
+import type { FromSchema } from '@feathersjs/schema'
+
+import type { HookContext } from '${relative}/declarations'
+import { dataValidator, queryValidator } from '${relative}/schemas/validators'
 
 // Schema for the basic data model (e.g. creating new entries)
-export const ${camelName}DataSchema = schema({
+export const ${camelName}DataSchema = {
   $id: '${upperName}Data',
   type: 'object',
   additionalProperties: false,
@@ -20,28 +24,19 @@ export const ${camelName}DataSchema = schema({
       type: 'string'
     }
   }
-} as const)
+} as const
 
-export type ${upperName}Data = Infer<typeof ${camelName}DataSchema>
+export type ${upperName}Data = FromSchema<typeof ${camelName}DataSchema>
 
+export const ${camelName}DataValidator = getDataValidator(${camelName}DataSchema, dataValidator)
 
-// Schema for making partial updates
-export const ${camelName}PatchSchema = schema({
-  $id: '${upperName}Patch',
-  type: 'object',
-  additionalProperties: false,
-  required: [],
-  properties: {
-    ...${camelName}DataSchema.properties
-  }
-} as const)
-
-export type ${upperName}Patch = Infer<typeof ${camelName}PatchSchema>
-
+export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
+  properties: {}
+})
 
 // Schema for the data that is being returned
-export const ${camelName}ResultSchema = schema({
-  $id: '${upperName}Result',
+export const ${camelName}Schema = {
+  $id: '${upperName}',
   type: 'object',
   additionalProperties: false,
   required: [ ...${camelName}DataSchema.required, '${type === 'mongodb' ? '_id' : 'id'}' ],
@@ -51,22 +46,35 @@ export const ${camelName}ResultSchema = schema({
       type: '${type === 'mongodb' ? 'string' : 'number'}'
     }
   }
-} as const)
+} as const
 
-export type ${upperName}Result = Infer<typeof ${camelName}ResultSchema>
+export type ${upperName} = FromSchema<typeof ${camelName}Schema>
 
+export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
+  properties: {}
+})
+
+export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
+  properties: {}
+})
 
 // Schema for allowed query properties
-export const ${camelName}QuerySchema = schema({
+export const ${camelName}QuerySchema = {
   $id: '${upperName}Query',
   type: 'object',
   additionalProperties: false,
   properties: {
-    ...querySyntax(${camelName}ResultSchema.properties)
+    ...querySyntax(${camelName}Schema.properties)
   }
-} as const)
+} as const
 
-export type ${upperName}Query = Infer<typeof ${camelName}QuerySchema>
+export type ${upperName}Query = FromSchema<typeof ${camelName}QuerySchema>
+
+export const ${camelName}QueryValidator = getValidator(${camelName}QuerySchema, queryValidator)
+
+export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
+  properties: {}
+})
 `
 
 export const generate = (ctx: ServiceGeneratorContext) =>

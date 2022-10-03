@@ -44,7 +44,7 @@ const importTemplate = ({ database }: ConnectionGeneratorContext) =>
 const configureTemplate = ({ database }: ConnectionGeneratorContext) => `app.configure(${database})`
 
 const toAppFile = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'app'])
-const toConfig = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'configuration'])
+const toConfig = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'schemas', 'configuration'])
 
 export const generate = (ctx: ConnectionGeneratorContext) =>
   generator(ctx)

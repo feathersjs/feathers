@@ -40,7 +40,7 @@ export const generate = (ctx: ConnectionGeneratorContext) =>
       injectSource(
         configurationTemplate,
         before('authentication: authenticationSettingsSchema'),
-        toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'configuration']),
+        toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'schemas', 'configuration']),
         false
       )
     )

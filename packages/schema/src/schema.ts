@@ -11,9 +11,55 @@ export { Ajv }
 
 export type JSONSchemaDefinition = JSONSchema & {
   $id: string
-  $async?: boolean
+  $async?: true
   properties?: { [key: string]: JSONSchema }
   required?: readonly string[]
+}
+
+export type Validator<T = any, R = T> = (data: T) => Promise<R>
+
+export type DataSchemaMap = {
+  create: JSONSchemaDefinition
+  update?: JSONSchemaDefinition
+  patch?: JSONSchemaDefinition
+}
+
+export type DataValidatorMap = {
+  create: Validator
+  update: Validator
+  patch: Validator
+}
+
+/**
+ * Returns a compiled validation function for a schema and AJV validator instance
+ *
+ * @param schema The JSON schema definition
+ * @param validator The AJV validation instance
+ * @returns A compiled validation function
+ */
+export const getValidator = <T = any, R = T>(schema: JSONSchemaDefinition, validator: Ajv): Validator<T, R> =>
+  validator.compile({
+    $async: true,
+    ...(schema as any)
+  }) as any as Validator<T, R>
+
+export const getDataValidator = (
+  def: JSONSchemaDefinition | DataSchemaMap,
+  validator: Ajv
+): DataValidatorMap => {
+  const schema = ((def as any).create ? def : { create: def }) as DataSchemaMap
+
+  return {
+    create: getValidator(schema.create, validator),
+    update: getValidator(schema.update || schema.create, validator),
+    patch: getValidator(
+      schema.patch || {
+        ...(schema.create as any),
+        required: []
+      },
+      validator
+    )
+  }
 }
 
 export interface Schema<T> {

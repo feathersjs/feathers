@@ -2,25 +2,23 @@ import { generator, inject, toFile, when, after } from '@feathershq/pinion'
 import { ServiceGeneratorContext } from '../index'
 
 const schemaImports = ({ upperName, folder, fileName }: ServiceGeneratorContext) => /* ts */ `import type {
+  ${upperName},
   ${upperName}Data,
-  ${upperName}Patch,
-  ${upperName}Result,
   ${upperName}Query,
 } from './services/${folder.join('/')}/${fileName}.schema'
 
 export type {
+  ${upperName},
   ${upperName}Data,
-  ${upperName}Patch,
-  ${upperName}Result,
   ${upperName}Query,
 }`
 
 const declarationTemplate = ({ path, upperName }: ServiceGeneratorContext) =>
   `  '${path}': ClientService<
-    ${upperName}Result,
+    ${upperName},
     ${upperName}Data,
-    ${upperName}Patch,
-    Paginated<${upperName}Result>, 
+    Partial<${upperName}Data>,
+    Paginated<${upperName}>, 
     Params<${upperName}Query>
   >`
 
