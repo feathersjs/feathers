@@ -7,7 +7,7 @@ const template = ({
   upperName,
   relative,
   type
-}: ServiceGeneratorContext) => /* ts */ `import { querySyntax, getValidator, getDataValidator, resolve } from '@feathersjs/schema'
+}: ServiceGeneratorContext) => /* ts */ `import { jsonSchema, resolve } from '@feathersjs/schema'
 import type { FromSchema } from '@feathersjs/schema'
 
 import type { HookContext } from '${relative}/declarations'
@@ -28,7 +28,7 @@ export const ${camelName}DataSchema = {
 
 export type ${upperName}Data = FromSchema<typeof ${camelName}DataSchema>
 
-export const ${camelName}DataValidator = getDataValidator(${camelName}DataSchema, dataValidator)
+export const ${camelName}DataValidator = jsonSchema.getDataValidator(${camelName}DataSchema, dataValidator)
 
 export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
   properties: {}
@@ -64,13 +64,13 @@ export const ${camelName}QuerySchema = {
   type: 'object',
   additionalProperties: false,
   properties: {
-    ...querySyntax(${camelName}Schema.properties)
+    ...jsonSchema.querySyntax(${camelName}Schema.properties)
   }
 } as const
 
 export type ${upperName}Query = FromSchema<typeof ${camelName}QuerySchema>
 
-export const ${camelName}QueryValidator = getValidator(${camelName}QuerySchema, queryValidator)
+export const ${camelName}QueryValidator = jsonSchema.getValidator(${camelName}QuerySchema, queryValidator)
 
 export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
   properties: {}

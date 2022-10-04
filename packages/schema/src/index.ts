@@ -4,8 +4,10 @@ export type { FromSchema } from 'json-schema-to-ts'
 export * from './schema'
 export * from './resolver'
 export * from './hooks'
-export * from './query'
+export * from './json-schema'
+
 export * as schemaHooks from './hooks'
+export * as jsonSchema from './json-schema'
 
 export type Infer<S extends { _type: any }> = S['_type']
 
