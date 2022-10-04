@@ -33,7 +33,8 @@ const packageJson = ({
   framework,
   transports,
   lib,
-  test
+  test,
+  schema
 }: AppGeneratorContext) => ({
   name,
   description,
@@ -52,7 +53,8 @@ const packageJson = ({
     packager,
     database,
     framework,
-    transports
+    transports,
+    schema
   },
   directories: {
     lib,

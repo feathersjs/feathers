@@ -50,6 +50,10 @@ export interface ServiceGeneratorContext extends FeathersBaseContext {
    */
   type: 'knex' | 'mongodb' | 'custom'
   /**
+   * Which schema definition format to use
+   */
+  schema: 'typebox' | 'json' | false
+  /**
    * Wether this service uses authentication
    */
   authentication: boolean
@@ -63,7 +67,9 @@ export interface ServiceGeneratorContext extends FeathersBaseContext {
  * Parameters the generator is called with
  */
 export type ServiceGeneratorArguments = FeathersBaseContext &
-  Partial<Pick<ServiceGeneratorContext, 'name' | 'path' | 'type' | 'authentication' | 'isEntityService'>>
+  Partial<
+    Pick<ServiceGeneratorContext, 'name' | 'path' | 'type' | 'authentication' | 'isEntityService' | 'schema'>
+  >
 
 export const generate = (ctx: ServiceGeneratorArguments) =>
   generator(ctx)
@@ -71,7 +77,7 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
     .then(checkPreconditions())
     .then(
       prompt<ServiceGeneratorArguments, ServiceGeneratorContext>(
-        ({ name, path, type, authentication, isEntityService }) => [
+        ({ name, path, type, schema, authentication, isEntityService }) => [
           {
             name: 'name',
             type: 'input',
@@ -109,6 +115,27 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
               {
                 value: 'custom',
                 name: 'A custom service'
+              }
+            ]
+          },
+          {
+            name: 'schema',
+            type: 'list',
+            when: schema === undefined,
+            message: 'Which schema definition format do you want to use?',
+            choices: [
+              {
+                value: 'json',
+                name: 'JSON schema'
+              },
+              {
+                value: 'typebox',
+                name: 'TypeBox',
+                disabled: true
+              },
+              {
+                value: false,
+                name: 'No schema'
               }
             ]
           }

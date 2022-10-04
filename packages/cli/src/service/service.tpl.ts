@@ -28,14 +28,17 @@ export const serviceImportTemplate = ({
   camelName,
   upperName,
   fileName,
-  relative
+  relative,
+  schema
 }: ServiceGeneratorContext) => `
 ${authentication || isEntityService ? `import { authenticate } from '@feathersjs/authentication'` : ''}
-import { schemaHooks } from '@feathersjs/schema'
+${schema ? `import { hooks as schemaHooks } from '@feathersjs/schema'` : ''}
 
 import type { Application } from '${relative}/declarations'
 
-import {
+${
+  schema
+    ? `import {
   ${camelName}DataValidator,
   ${camelName}QueryValidator,
   ${camelName}Resolver,
@@ -48,7 +51,16 @@ import type {
   ${upperName},
   ${upperName}Data,
   ${upperName}Query
-} from './${fileName}.schema'`
+} from './${fileName}.schema'
+
+export * from './${fileName}.schema'
+`
+    : `
+export type ${upperName} = any
+export type ${upperName}Data = any
+export type ${upperName}Query = any
+`
+}`
 
 export const serviceRegistrationTemplate = ({
   camelName,
@@ -56,7 +68,8 @@ export const serviceRegistrationTemplate = ({
   isEntityService,
   path,
   className,
-  relative
+  relative,
+  schema
 }: ServiceGeneratorContext) => /* ts */ `
 export const ${camelName}Hooks = {
   around: {
@@ -79,20 +92,30 @@ export const ${camelName}Hooks = {
     }
   },
   before: {
-    all: [
+    all: [${
+      schema
+        ? `
       schemaHooks.validateQuery(${camelName}QueryValidator),
       schemaHooks.validateData(${camelName}DataValidator),
       schemaHooks.resolveQuery(${camelName}QueryResolver),
       schemaHooks.resolveData(${camelName}DataResolver)
-    ]
+    `
+        : ''
+    }]
   },
   after: {
-    all: [
+    all: [${
+      schema
+        ? `
       schemaHooks.resolveResult(${camelName}Resolver),
       schemaHooks.resolveExternal(${camelName}ExternalResolver)
-    ]
+    `
+        : ''
+    }]
   },
-  error: {}
+  error: {
+    all: []
+  }
 }
 
 // A configure function that registers the service and its hooks via \`app.configure\`

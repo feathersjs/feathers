@@ -4,6 +4,7 @@ import { AuthenticationGeneratorContext } from '../index'
 
 const template = ({
   authStrategies,
+  path,
   lib
 }: AuthenticationGeneratorContext) => /* ts */ `import assert from 'assert';
 import { app } from '../${lib}/app';
@@ -19,7 +20,7 @@ describe('authentication', () => {
 
   before(async () => {
     try {
-      await app.service('users').create(userInfo)
+      await app.service('${path}').create(userInfo)
     } catch (error) {
       // Do nothing, it just means the user already exists and can be tested
     }

@@ -6,7 +6,7 @@ export * from './resolver'
 export * from './hooks'
 export * from './json-schema'
 
-export * as schemaHooks from './hooks'
+export * as hooks from './hooks'
 export * as jsonSchema from './json-schema'
 
 export type Infer<S extends { _type: any }> = S['_type']

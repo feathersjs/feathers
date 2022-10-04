@@ -53,7 +53,7 @@ describe('@feathersjs/cli', () => {
               connectionString: `${name}.sqlite`,
               transports: ['rest', 'websockets'],
               authStrategies: ['local', 'github'],
-              _: ['generate', 'app']
+              schema: 'typebox'
             },
             { cwd }
           )
@@ -73,8 +73,7 @@ describe('@feathersjs/cli', () => {
             {
               dependencyVersions,
               database: 'mongodb' as const,
-              connectionString: `mongodb://localhost:27017/${name}`,
-              _: ['generate', 'connection']
+              connectionString: `mongodb://localhost:27017/${name}`
             },
             { cwd }
           )
@@ -87,7 +86,7 @@ describe('@feathersjs/cli', () => {
               path: 'path/to/test',
               authentication: true,
               type: 'mongodb',
-              _: ['generate', 'service']
+              schema: false
             },
             { cwd }
           )
@@ -104,11 +103,11 @@ describe('@feathersjs/cli', () => {
           getContext<ServiceGeneratorArguments>(
             {
               dependencyVersions,
-              name: 'Custom Service',
-              path: 'custom',
+              name: 'Custom',
+              path: 'customized',
               authentication: false,
               type: 'custom',
-              _: ['generate', 'service']
+              schema: 'typebox'
             },
             { cwd }
           )

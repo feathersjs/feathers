@@ -1,4 +1,4 @@
-import { generator, toFile } from '@feathershq/pinion'
+import { generator, toFile, when } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
@@ -79,13 +79,16 @@ export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>
 
 export const generate = (ctx: ServiceGeneratorContext) =>
   generator(ctx).then(
-    renderSource(
-      template,
-      toFile(({ lib, folder, fileName }: ServiceGeneratorContext) => [
-        lib,
-        'services',
-        ...folder,
-        `${fileName}.schema`
-      ])
+    when<ServiceGeneratorContext>(
+      ({ schema }) => schema !== false,
+      renderSource(
+        template,
+        toFile(({ lib, folder, fileName }: ServiceGeneratorContext) => [
+          lib,
+          'services',
+          ...folder,
+          `${fileName}.schema`
+        ])
+      )
     )
   )
