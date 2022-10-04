@@ -33,9 +33,9 @@ export const oauth =
 
     const grantConfig = getGrantConfig(authService)
     const serviceOptions = getServiceOptions(authService, oauthOptions)
-    const servicePath = grantConfig.defaults?.prefix ?
-      `${grantConfig.defaults.prefix}/oauth/:provider` :
-      'oauth/:provider'
+    const servicePath = grantConfig.defaults?.prefix
+      ? `${grantConfig.defaults.prefix}/oauth/:provider`
+      : 'oauth/:provider'
 
     app.use(servicePath, new OAuthService(authService, oauthOptions), serviceOptions)
 
