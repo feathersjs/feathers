@@ -2,16 +2,31 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
-const validatorTemplate = /* ts */ `import { Ajv } from '@feathersjs/schema'
+const validatorTemplate = /* ts */ `import { Ajv, addFormats } from '@feathersjs/schema'
+import type { FormatsPluginOptions } from '@feathersjs/schema'
 
-export const dataValidator = new Ajv({
-  addUsedSchema: false
-})
+const formats: FormatsPluginOptions = [
+  'date-time', 
+  'time', 
+  'date', 
+  'email',  
+  'hostname', 
+  'ipv4', 
+  'ipv6', 
+  'uri', 
+  'uri-reference', 
+  'uuid',
+  'uri-template', 
+  'json-pointer', 
+  'relative-json-pointer', 
+  'regex'
+]
 
-export const queryValidator = new Ajv({
-  coerceTypes: true,
-  addUsedSchema: false
-})
+export const dataValidator = addFormats(new Ajv({}), formats)
+
+export const queryValidator = addFormats(new Ajv({
+  coerceTypes: true
+}), formats)
 
 `
 const configurationTemplate =

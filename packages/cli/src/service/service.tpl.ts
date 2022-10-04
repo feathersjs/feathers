@@ -32,13 +32,12 @@ export const serviceImportTemplate = ({
   schema
 }: ServiceGeneratorContext) => `
 ${authentication || isEntityService ? `import { authenticate } from '@feathersjs/authentication'` : ''}
-${schema ? `import { hooks as schemaHooks } from '@feathersjs/schema'` : ''}
-
-import type { Application } from '${relative}/declarations'
-
 ${
   schema
-    ? `import {
+    ? `
+import { hooks as schemaHooks } from '@feathersjs/schema'
+    
+import {
   ${camelName}DataValidator,
   ${camelName}QueryValidator,
   ${camelName}Resolver,
@@ -60,7 +59,10 @@ export type ${upperName} = any
 export type ${upperName}Data = any
 export type ${upperName}Query = any
 `
-}`
+}
+
+import type { Application } from '${relative}/declarations'
+`
 
 export const serviceRegistrationTemplate = ({
   camelName,

@@ -1,6 +1,11 @@
+import addFormats, { FormatName, FormatOptions, FormatsPluginOptions } from 'ajv-formats'
 import { ResolverStatus } from './resolver'
 
 export type { FromSchema } from 'json-schema-to-ts'
+export { addFormats, FormatName, FormatOptions, FormatsPluginOptions }
+
+export * from '@sinclair/typebox'
+
 export * from './schema'
 export * from './resolver'
 export * from './hooks'
@@ -8,6 +13,7 @@ export * from './json-schema'
 
 export * as hooks from './hooks'
 export * as jsonSchema from './json-schema'
+export * as typebox from './typebox'
 
 export type Infer<S extends { _type: any }> = S['_type']
 

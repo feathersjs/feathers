@@ -1,14 +1,16 @@
 import { generator, toFile, when } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
-import { ServiceGeneratorContext } from '../index'
+import { AuthenticationGeneratorContext } from '../index'
 
 const template = ({
   camelName,
   upperName,
-  relative,
-  type
-}: ServiceGeneratorContext) => /* ts */ `import { jsonSchema, resolve } from '@feathersjs/schema'
+  authStrategies,
+  type,
+  relative
+}: AuthenticationGeneratorContext) => /* ts */ `import { resolve, jsonSchema } from '@feathersjs/schema'
 import type { FromSchema } from '@feathersjs/schema'
+${authStrategies.includes('local') ? `import { passwordHash } from '@feathersjs/authentication-local'` : ''}
 
 import type { HookContext } from '${relative}/declarations'
 import { dataValidator, queryValidator } from '${relative}/schemas/validators'
@@ -18,11 +20,16 @@ export const ${camelName}DataSchema = {
   $id: '${upperName}Data',
   type: 'object',
   additionalProperties: false,
-  required: [ 'text' ],
+  required: [ ${authStrategies.includes('local') ? "'email'" : ''} ],
   properties: {
-    text: {
-      type: 'string'
-    }
+    ${authStrategies
+      .map((name) =>
+        name === 'local'
+          ? `    email: { type: 'string' },
+    password: { type: 'string' }`
+          : `    ${name}Id: { type: 'string' }`
+      )
+      .join(',\n')}
   }
 } as const
 
@@ -31,7 +38,9 @@ export type ${upperName}Data = FromSchema<typeof ${camelName}DataSchema>
 export const ${camelName}DataValidator = jsonSchema.getDataValidator(${camelName}DataSchema, dataValidator)
 
 export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
-  properties: {}
+  properties: {
+    ${authStrategies.includes('local') ? `password: passwordHash({ strategy: 'local' })` : ''}
+  }
 })
 
 // Schema for the data that is being returned
@@ -55,7 +64,10 @@ export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
 })
 
 export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
-  properties: {}
+  properties: {
+    // The password should never be visible externally
+    password: async () => undefined
+  }
 })
 
 // Schema for allowed query properties
@@ -73,22 +85,32 @@ export type ${upperName}Query = FromSchema<typeof ${camelName}QuerySchema>
 export const ${camelName}QueryValidator = jsonSchema.getValidator(${camelName}QuerySchema, queryValidator)
 
 export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
-  properties: {}
+  properties: {
+    // If there is a user (e.g. with authentication), they are only allowed to see their own data
+    ${type === 'mongodb' ? '_id' : 'id'}: async (value, user, context) => {
+      if (context.params.user) {
+        return context.params.user.${type === 'mongodb' ? '_id' : 'id'}
+      }
+  
+      return value
+    }
+  }
 })
 `
 
-export const generate = (ctx: ServiceGeneratorContext) =>
+export const generate = (ctx: AuthenticationGeneratorContext) =>
   generator(ctx).then(
-    when<ServiceGeneratorContext>(
-      ({ schema }) => schema !== false,
+    when<AuthenticationGeneratorContext>(
+      ({ schema }) => schema === 'json',
       renderSource(
         template,
-        toFile(({ lib, folder, fileName }: ServiceGeneratorContext) => [
+        toFile(({ lib, folder, fileName }: AuthenticationGeneratorContext) => [
           lib,
           'services',
           ...folder,
           `${fileName}.schema`
-        ])
+        ]),
+        { force: true }
       )
     )
   )
