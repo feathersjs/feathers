@@ -70,7 +70,14 @@ export const generate = (ctx: AppGeneratorArguments) =>
           type: 'input',
           when: !ctx.name,
           message: 'What is the name of your application?',
-          default: ctx.cwd.split(sep).pop()
+          default: ctx.cwd.split(sep).pop(),
+          validate: (input) => {
+            if (ctx.dependencyVersions[input]) {
+              return `Application can not have the same name as a dependency`
+            }
+
+            return true
+          }
         },
         {
           name: 'description',

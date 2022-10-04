@@ -82,14 +82,28 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
             name: 'name',
             type: 'input',
             when: !name,
-            message: 'What is the name of your service?'
+            message: 'What is the name of your service?',
+            validate: (input) => {
+              if (!input || input === 'authentication') {
+                return 'Invalid service name'
+              }
+
+              return true
+            }
           },
           {
             name: 'path',
             type: 'input',
             when: !path,
             message: 'Which path should the service be registered on?',
-            default: (answers: ServiceGeneratorArguments) => `${_.kebabCase(answers.name)}`
+            default: (answers: ServiceGeneratorArguments) => `${_.kebabCase(answers.name)}`,
+            validate: (input) => {
+              if (!input || input === 'authentication') {
+                return 'Invalid service path'
+              }
+
+              return true
+            }
           },
           {
             name: 'authentication',
@@ -123,15 +137,15 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
             type: 'list',
             when: schema === undefined,
             message: 'Which schema definition format do you want to use?',
+            default: ctx.feathers?.schema,
             choices: [
+              {
+                value: 'typebox',
+                name: 'TypeBox'
+              },
               {
                 value: 'json',
                 name: 'JSON schema'
-              },
-              {
-                value: 'typebox',
-                name: 'TypeBox',
-                disabled: true
               },
               {
                 value: false,
