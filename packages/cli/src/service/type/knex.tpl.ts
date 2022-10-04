@@ -1,7 +1,6 @@
 import { generator, toFile } from '@feathershq/pinion'
-import { joinTemplates, renderSource } from '../../commons'
+import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
-import { registerService, serviceImportTemplate, serviceRegistrationTemplate } from '../service.tpl'
 
 const migrationTemplate = ({
   kebabName
@@ -19,16 +18,32 @@ export async function down(knex: Knex): Promise<void> {
 }
 `
 
-export const importTemplate = `import { KnexService } from '@feathersjs/knex'
-import type { KnexAdapterParams } from '@feathersjs/knex'
-`
-
-export const serviceTemplate = ({
+export const template = ({
   className,
   upperName,
   kebabName,
-  feathers
-}: ServiceGeneratorContext) => /* ts */ `
+  feathers,
+  schema,
+  fileName,
+  relative
+}: ServiceGeneratorContext) => /* ts */ `import { KnexService } from '@feathersjs/knex'
+import type { KnexAdapterParams } from '@feathersjs/knex'
+
+import type { Application } from '${relative}/declarations'
+${
+  schema
+    ? `import type {
+  ${upperName},
+  ${upperName}Data,
+  ${upperName}Query
+} from './${fileName}.schema'
+`
+    : `
+export type ${upperName} = any
+export type ${upperName}Data = any
+export type ${upperName}Query = any
+`
+}
 
 export interface ${upperName}Params extends KnexAdapterParams<${upperName}Query> {
 }
@@ -50,18 +65,15 @@ export const generate = (ctx: ServiceGeneratorContext) =>
   generator(ctx)
     .then(
       renderSource(
-        joinTemplates(importTemplate, serviceImportTemplate, serviceTemplate, serviceRegistrationTemplate),
-        toFile(
-          toFile<ServiceGeneratorContext>(({ lib, folder, fileName }) => [
-            lib,
-            'services',
-            ...folder,
-            `${fileName}.service`
-          ])
-        )
+        template,
+        toFile<ServiceGeneratorContext>(({ lib, folder, fileName }) => [
+          lib,
+          'services',
+          ...folder,
+          `${fileName}.class`
+        ])
       )
     )
-    .then(registerService)
     .then(
       renderSource(
         migrationTemplate,

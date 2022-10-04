@@ -1,11 +1,25 @@
 import { generator, toFile } from '@feathershq/pinion'
-import { joinTemplates, renderSource } from '../../commons'
+import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
-import { registerService, serviceImportTemplate, serviceRegistrationTemplate } from '../service.tpl'
 
-export const importTemplate = "import type { Id, NullableId, Params } from '@feathersjs/feathers'"
+export const template = ({ className, upperName, schema, fileName, relative }: ServiceGeneratorContext) => `
+import type { Id, NullableId, Params } from '@feathersjs/feathers'
 
-export const serviceTemplate = ({ className, upperName }: ServiceGeneratorContext) => `
+import type { Application } from '${relative}/declarations'
+${
+  schema
+    ? `import type {
+  ${upperName},
+  ${upperName}Data,
+  ${upperName}Query
+} from './${fileName}.schema'
+`
+    : `
+export type ${upperName} = any
+export type ${upperName}Data = any
+export type ${upperName}Query = any
+`
+}
 
 export interface ${className}Options {
   app: Application
@@ -72,16 +86,14 @@ export const getOptions = (app: Application) => {
 `
 
 export const generate = (ctx: ServiceGeneratorContext) =>
-  generator(ctx)
-    .then(
-      renderSource(
-        joinTemplates(importTemplate, serviceImportTemplate, serviceTemplate, serviceRegistrationTemplate),
-        toFile<ServiceGeneratorContext>(({ lib, folder, fileName }) => [
-          lib,
-          'services',
-          ...folder,
-          `${fileName}.service`
-        ])
-      )
+  generator(ctx).then(
+    renderSource(
+      template,
+      toFile<ServiceGeneratorContext>(({ lib, folder, fileName }) => [
+        lib,
+        'services',
+        ...folder,
+        `${fileName}.class`
+      ])
     )
-    .then(registerService)
+  )

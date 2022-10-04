@@ -5,7 +5,7 @@ const schemaImports = ({ upperName, folder, fileName }: ServiceGeneratorContext)
   ${upperName},
   ${upperName}Data,
   ${upperName}Query,
-} from './services/${folder.join('/')}/${fileName}.service'
+} from './services/${folder.join('/')}/${fileName}'
 
 export type {
   ${upperName},

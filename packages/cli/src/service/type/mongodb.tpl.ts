@@ -1,12 +1,32 @@
 import { generator, toFile } from '@feathershq/pinion'
-import { joinTemplates, renderSource } from '../../commons'
+import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
-import { registerService, serviceImportTemplate, serviceRegistrationTemplate } from '../service.tpl'
 
-export const importTemplate = /* ts */ `import { MongoDBService } from \'@feathersjs/mongodb\'
-import type { MongoDBAdapterParams } from \'@feathersjs/mongodb\'`
+export const template = ({
+  className,
+  upperName,
+  kebabName,
+  schema,
+  fileName,
+  relative
+}: ServiceGeneratorContext) => /* ts */ `import { MongoDBService } from \'@feathersjs/mongodb\'
+import type { MongoDBAdapterParams } from \'@feathersjs/mongodb\'
 
-export const serviceTemplate = ({ className, upperName, kebabName }: ServiceGeneratorContext) => /* ts */ `
+import type { Application } from '${relative}/declarations'
+${
+  schema
+    ? `import type {
+  ${upperName},
+  ${upperName}Data,
+  ${upperName}Query
+} from './${fileName}.schema'
+`
+    : `
+export type ${upperName} = any
+export type ${upperName}Data = any
+export type ${upperName}Query = any
+`
+}
 
 export interface ${upperName}Params extends MongoDBAdapterParams<${upperName}Query> {
 }
@@ -24,16 +44,14 @@ export const getOptions = (app: Application) => {
 `
 
 export const generate = (ctx: ServiceGeneratorContext) =>
-  generator(ctx)
-    .then(
-      renderSource(
-        joinTemplates(importTemplate, serviceImportTemplate, serviceTemplate, serviceRegistrationTemplate),
-        toFile<ServiceGeneratorContext>(({ lib, folder, fileName }) => [
-          lib,
-          'services',
-          ...folder,
-          `${fileName}.service`
-        ])
-      )
+  generator(ctx).then(
+    renderSource(
+      template,
+      toFile<ServiceGeneratorContext>(({ lib, folder, fileName }) => [
+        lib,
+        'services',
+        ...folder,
+        `${fileName}.class`
+      ])
     )
-    .then(registerService)
+  )

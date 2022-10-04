@@ -275,17 +275,3 @@ export const injectSource =
 
     return injector(ctx).then(prettify(target))
   }
-
-/**
- * Join multiple templates into one.
- *
- * @param templates The list of templates (callables) to join
- * @returns
- */
-export const joinTemplates =
-  <C extends PinionContext & { language: 'js' | 'ts' }>(...templates: Callable<string, C>[]) =>
-  async (ctx: C) => {
-    const strings = await Promise.all(templates.map((tpl) => getCallable(tpl, ctx)))
-
-    return strings.join('')
-  }
