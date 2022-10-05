@@ -32,19 +32,11 @@ const config = app.get('${database}')
 ${language === 'js' ? 'export default config' : 'module.exports = config'}
 `
 
-const configurationTemplate = ({ database }: ConnectionGeneratorContext) => `${database}: {
-  type: 'object',
-  properties: {
-    client: { type: 'string' },
-    connection: { type: 'string' }
-  }
-},`
 const importTemplate = ({ database }: ConnectionGeneratorContext) =>
   `import { ${database} } from './${database}'`
 const configureTemplate = ({ database }: ConnectionGeneratorContext) => `app.configure(${database})`
 
 const toAppFile = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'app'])
-const toConfig = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'schemas', 'configuration'])
 
 export const generate = (ctx: ConnectionGeneratorContext) =>
   generator(ctx)
@@ -65,14 +57,6 @@ export const generate = (ctx: ConnectionGeneratorContext) =>
           }
         },
         toFile('package.json')
-      )
-    )
-    .then(
-      injectSource(
-        configurationTemplate,
-        before('authentication: authenticationSettingsSchema'),
-        toConfig,
-        false
       )
     )
     .then(injectSource(importTemplate, before('import { services } from'), toAppFile))

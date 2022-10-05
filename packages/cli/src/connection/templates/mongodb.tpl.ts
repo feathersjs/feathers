@@ -22,8 +22,6 @@ export const mongodb = (app: Application) => {
 }
 `
 
-const configurationTemplate = ({ database }: ConnectionGeneratorContext) =>
-  `   ${database}: { type: 'string' },`
 const importTemplate = "import { mongodb } from './mongodb'"
 const configureTemplate = 'app.configure(mongodb)'
 const toAppFile = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'app'])
@@ -34,14 +32,6 @@ export const generate = (ctx: ConnectionGeneratorContext) =>
       renderSource(
         template,
         toFile<ConnectionGeneratorContext>(({ lib }) => lib, 'mongodb')
-      )
-    )
-    .then(
-      injectSource(
-        configurationTemplate,
-        before('authentication: authenticationSettingsSchema'),
-        toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'schemas', 'configuration']),
-        false
       )
     )
     .then(injectSource(importTemplate, before('import { services } from'), toAppFile))

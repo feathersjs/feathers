@@ -27,53 +27,58 @@ export const dataValidator = addFormats(new Ajv({}), formats)
 export const queryValidator = addFormats(new Ajv({
   coerceTypes: true
 }), formats)
-
 `
-const configurationTemplate =
-  ({}: AppGeneratorContext) => /* ts */ `import { schema, Ajv } from '@feathersjs/schema'
-import type { Infer } from '@feathersjs/schema'
-import { authenticationSettingsSchema } from '@feathersjs/authentication'
+
+const configurationJsonTemplate =
+  ({}: AppGeneratorContext) => /* ts */ `import { defaultAppSettings, jsonSchema } from '@feathersjs/schema'
+import type { FromSchema } from '@feathersjs/schema'
+
 import { dataValidator } from './validators'
 
-export const configurationSchema = schema(
-  {
-    $id: 'ApplicationConfiguration',
-    type: 'object',
-    additionalProperties: false,
-    required: [ 'host', 'port', 'public', 'paginate' ],
-    properties: {
-      host: { type: 'string' },
-      port: { type: 'number' },
-      public: { type: 'string' },
-      authentication: authenticationSettingsSchema,
-      origins: {
-        type: 'array',
-        items: {
-          type: 'string'
-        }
-      },
-      paginate: {
-        type: 'object',
-        additionalProperties: false,
-        required: [ 'default', 'max' ],
-        properties: {
-          default: { type: 'number' },
-          max: { type: 'number' }
-        }
-      }
-    }
-  } as const,
-  dataValidator
-)
+export const configurationSchema = {
+  type: 'object',
+  additionalProperties: false,
+  required: [ 'host', 'port', 'public' ],
+  properties: {
+    ...defaultAppSettings,
+    host: { type: 'string' },
+    port: { type: 'number' },
+    public: { type: 'string' }
+  }
+} as const
 
-export type ConfigurationSchema = Infer<typeof configurationSchema>
+export const configurationValidator = jsonSchema.getValidator(configurationSchema, dataValidator)
+
+export type ApplicationConfiguration = FromSchema<typeof configurationSchema>
+`
+
+const configurationTypeboxTemplate =
+  ({}: AppGeneratorContext) => /* ts */ `import { jsonSchema } from '@feathersjs/schema'
+import { Type, defaultAppConfiguration } from '@feathersjs/typebox'
+import type { Static } from '@feathersjs/typebox'
+
+import { dataValidator } from './validators'
+
+export const configurationSchema = Type.Intersect([
+  defaultAppConfiguration,
+  Type.Object({
+    host: Type.String(),
+    port: Type.Number(),
+    public: Type.String()
+  })
+])
+
+export type ApplicationConfiguration = Static<typeof configurationSchema>
+
+export const configurationValidator = jsonSchema.getValidator(configurationSchema, dataValidator)
 `
 
 export const generate = (ctx: AppGeneratorContext) =>
   generator(ctx)
     .then(
       renderSource(
-        configurationTemplate,
+        async (ctx) =>
+          ctx.schema === 'typebox' ? configurationTypeboxTemplate(ctx) : configurationJsonTemplate(ctx),
         toFile<AppGeneratorContext>(({ lib }) => lib, 'schemas', 'configuration')
       )
     )

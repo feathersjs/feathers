@@ -54,10 +54,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/schema": "^5.0.0-pre.29",
     "@sinclair/typebox": "^0.24.44"
   },
   "devDependencies": {
+    "@feathersjs/schema": "^5.0.0-pre.29",
     "@types/mocha": "^9.1.1",
     "@types/node": "^18.7.18",
     "mocha": "^10.0.0",

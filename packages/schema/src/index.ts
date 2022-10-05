@@ -8,6 +8,7 @@ export * from './schema'
 export * from './resolver'
 export * from './hooks'
 export * from './json-schema'
+export * from './default-schemas'
 
 export * as hooks from './hooks'
 export * as jsonSchema from './json-schema'

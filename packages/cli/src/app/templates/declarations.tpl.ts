@@ -5,11 +5,11 @@ const template = ({
   framework
 }: AppGeneratorContext) => /* ts */ `import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers'
 import { Application as FeathersApplication } from '@feathersjs/${framework}'
-import { ConfigurationSchema } from './schemas/configuration'
+import { ApplicationConfiguration } from './schemas/configuration'
 
 export { NextFunction }
 
-export interface Configuration extends ConfigurationSchema {}
+export interface Configuration extends ApplicationConfiguration {}
 
 // A mapping of service names to types. Will be extended in service files.
 export interface ServiceTypes {}

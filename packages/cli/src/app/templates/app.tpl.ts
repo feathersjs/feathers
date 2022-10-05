@@ -9,7 +9,7 @@ import { koa, rest, bodyParser, errorHandler, parseAuthentication, cors } from '
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
 import type { Application } from './declarations'
-import { configurationSchema } from './schemas/configuration'
+import { configurationValidator } from './schemas/configuration'
 import { logErrorHook } from './logger'
 import { services } from './services/index'
 import { channels } from './channels'
@@ -17,7 +17,7 @@ import { channels } from './channels'
 const app: Application = koa(feathers())
 
 // Load our app configuration (see config/ folder)
-app.configure(configuration(configurationSchema))
+app.configure(configuration(configurationValidator))
 
 // Set up Koa middleware
 app.use(serveStatic(app.get('public')))
@@ -69,7 +69,7 @@ import configuration from '@feathersjs/configuration'
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
 import type { Application } from './declarations'
-import { configurationSchema } from './schemas/configuration'
+import { configurationValidator } from './schemas/configuration'
 import { logger, logErrorHook } from './logger'
 import { services } from './services/index'
 import { channels } from './channels'
@@ -77,7 +77,7 @@ import { channels } from './channels'
 const app: Application = express(feathers())
 
 // Load app configuration
-app.configure(configuration(configurationSchema))
+app.configure(configuration(configurationValidator))
 app.use(cors())
 app.use(compress())
 app.use(json())

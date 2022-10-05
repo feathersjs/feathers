@@ -1,6 +1,6 @@
 import assert from 'assert'
 import { Ajv } from '@feathersjs/schema'
-import { querySyntax, Type, Static } from '../src'
+import { querySyntax, Type, Static, defaultAppConfiguration } from '../src'
 
 describe('@feathersjs/schema/typebox', () => {
   it('querySyntax', async () => {
@@ -24,6 +24,26 @@ describe('@feathersjs/schema/typebox', () => {
 
     const validator = new Ajv().compile(querySchema)
     const validated = (await validator(query)) as any as Query
+
+    assert.ok(validated)
+  })
+
+  it('defaultAppConfiguration', async () => {
+    const configSchema = Type.Intersect([
+      defaultAppConfiguration,
+      Type.Object({
+        host: Type.String(),
+        port: Type.Number(),
+        public: Type.String()
+      })
+    ])
+
+    const validator = new Ajv().compile(configSchema)
+    const validated = await validator({
+      host: 'something',
+      port: 3030,
+      public: './'
+    })
 
     assert.ok(validated)
   })

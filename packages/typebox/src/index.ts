@@ -1,6 +1,7 @@
 import { Type, TObject, TInteger, TOptional, TSchema, TIntersect } from '@sinclair/typebox'
 
 export * from '@sinclair/typebox'
+export * from './default-schemas'
 
 const arrayOfKeys = <T extends TObject>(type: T) => {
   const keys = Object.keys(type.properties)
