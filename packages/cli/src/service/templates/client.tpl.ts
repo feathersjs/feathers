@@ -1,4 +1,5 @@
-import { generator, inject, toFile, when, after } from '@feathershq/pinion'
+import { generator, inject, toFile, when, after, before } from '@feathershq/pinion'
+import { injectSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
 const schemaImports = ({ upperName, folder, fileName }: ServiceGeneratorContext) => /* ts */ `import type {
@@ -20,15 +21,33 @@ const declarationTemplate = ({ path, upperName }: ServiceGeneratorContext) =>
     Partial<${upperName}Data>,
     Paginated<${upperName}>, 
     Params<${upperName}Query>
-  >`
+  > & {
+    // Add custom methods here
+  }`
+
+const registrationTemplate = ({
+  path
+}: ServiceGeneratorContext) => `  client.use('${path}', connection.service('${path}'), {
+  // List all standard and custom methods
+  methods: ['find', 'get', 'create', 'update', 'patch', 'remove']
+})
+`
 
 const toClientFile = toFile<ServiceGeneratorContext>(({ lib }) => [lib, 'client.ts'])
 
 export const generate = async (ctx: ServiceGeneratorContext) =>
-  generator(ctx).then(
-    when(
-      (ctx) => ctx.language === 'ts',
-      inject(schemaImports, after("from '@feathersjs/feathers'"), toClientFile),
-      inject(declarationTemplate, after('export interface ServiceTypes'), toClientFile)
+  generator(ctx)
+    .then(
+      injectSource(
+        registrationTemplate,
+        before('return client'),
+        toFile<ServiceGeneratorContext>(({ lib }) => [lib, 'client'])
+      )
     )
-  )
+    .then(
+      when(
+        (ctx) => ctx.language === 'ts',
+        inject(schemaImports, after("from '@feathersjs/feathers'"), toClientFile),
+        inject(declarationTemplate, after('export interface ServiceTypes'), toClientFile)
+      )
+    )

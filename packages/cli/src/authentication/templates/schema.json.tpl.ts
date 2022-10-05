@@ -32,11 +32,8 @@ export const ${camelName}DataSchema = {
       .join(',\n')}
   }
 } as const
-
 export type ${upperName}Data = FromSchema<typeof ${camelName}DataSchema>
-
 export const ${camelName}DataValidator = jsonSchema.getDataValidator(${camelName}DataSchema, dataValidator)
-
 export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
   properties: {
     ${authStrategies.includes('local') ? `password: passwordHash({ strategy: 'local' })` : ''}
@@ -56,9 +53,7 @@ export const ${camelName}Schema = {
     }
   }
 } as const
-
 export type ${upperName} = FromSchema<typeof ${camelName}Schema>
-
 export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
   properties: {}
 })
@@ -79,11 +74,8 @@ export const ${camelName}QuerySchema = {
     ...jsonSchema.querySyntax(${camelName}Schema.properties)
   }
 } as const
-
 export type ${upperName}Query = FromSchema<typeof ${camelName}QuerySchema>
-
 export const ${camelName}QueryValidator = jsonSchema.getValidator(${camelName}QuerySchema, queryValidator)
-
 export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
   properties: {
     // If there is a user (e.g. with authentication), they are only allowed to see their own data

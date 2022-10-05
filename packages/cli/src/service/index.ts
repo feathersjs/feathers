@@ -137,7 +137,7 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
             type: 'list',
             when: schema === undefined,
             message: 'Which schema definition format do you want to use?',
-            default: ctx.feathers?.schema,
+            default: ctx.feathers?.schema || 'json',
             choices: [
               {
                 value: 'typebox',

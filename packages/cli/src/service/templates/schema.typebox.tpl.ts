@@ -18,24 +18,20 @@ import { dataValidator, queryValidator } from '${relative}/schemas/validators'
 export const ${camelName}DataSchema = Type.Object({
   text: Type.String()
 }, { $id: '${upperName}Data', additionalProperties: false })
-
 export type ${upperName}Data = Static<typeof ${camelName}DataSchema>
-
 export const ${camelName}DataValidator = jsonSchema.getDataValidator(${camelName}DataSchema, dataValidator)
-
 export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
   properties: {}
 })
 
+// Schema for the data that is being returned
 export const ${camelName}Schema = Type.Intersect([
   ${camelName}DataSchema, 
   Type.Object({
     ${type === 'mongodb' ? '_id: Type.String()' : 'id: Type.Number()'}
   })
 ], { $id: '${upperName}', additionalProperties: false })
-
 export type ${upperName} = Static<typeof ${camelName}Schema>
-
 export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
   properties: {}
 })
@@ -50,11 +46,8 @@ export const ${camelName}QuerySchema = Type.Intersect([
   // Add additional query properties here
   Type.Object({})
 ])
-
 export type ${upperName}Query = Static<typeof ${camelName}QuerySchema>
-
 export const ${camelName}QueryValidator = jsonSchema.getValidator(${camelName}QuerySchema, queryValidator)
-
 export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
   properties: {}
 })

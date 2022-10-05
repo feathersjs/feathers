@@ -27,11 +27,8 @@ export const ${camelName}DataSchema = Type.Object({
     )
     .join(',\n')}
 }, { $id: '${upperName}Data', additionalProperties: false })
-
 export type ${upperName}Data = Static<typeof ${camelName}DataSchema>
-
 export const ${camelName}DataValidator = jsonSchema.getDataValidator(${camelName}DataSchema, dataValidator)
-
 export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
   properties: {
     ${authStrategies.includes('local') ? `password: passwordHash({ strategy: 'local' })` : ''}
@@ -45,9 +42,7 @@ export const ${camelName}Schema = Type.Intersect([
     ${type === 'mongodb' ? '_id: Type.String()' : 'id: Type.Number()'}
   })
 ], { $id: '${upperName}' })
-
 export type ${upperName} = Static<typeof ${camelName}Schema>
-
 export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
   properties: {}
 })
@@ -65,11 +60,8 @@ export const ${camelName}QuerySchema = Type.Intersect([
   // Add additional query properties here
   Type.Object({})
 ])
-
 export type ${upperName}Query = Static<typeof ${camelName}QuerySchema>
-
 export const ${camelName}QueryValidator = jsonSchema.getValidator(${camelName}QuerySchema, queryValidator)
-
 export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
   properties: {
     // If there is a user (e.g. with authentication), they are only allowed to see their own data
