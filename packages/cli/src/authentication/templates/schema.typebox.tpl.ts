@@ -8,8 +8,9 @@ export const template = ({
   authStrategies,
   type,
   relative
-}: AuthenticationGeneratorContext) => /* ts */ `import { Type, typebox, jsonSchema, resolve } from '@feathersjs/schema'
-import type { Static } from '@feathersjs/schema'
+}: AuthenticationGeneratorContext) => /* ts */ `import { jsonSchema, resolve } from '@feathersjs/schema'
+import { Type, querySyntax } from '@feathersjs/typebox'
+import type { Static } from '@feathersjs/typebox'
 ${authStrategies.includes('local') ? `import { passwordHash } from '@feathersjs/authentication-local'` : ''}
 
 import type { HookContext } from '${relative}/declarations'
@@ -60,7 +61,7 @@ export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
 
 // Schema for allowed query properties
 export const ${camelName}QuerySchema = Type.Intersect([
-  typebox.querySyntax(${camelName}Schema),
+  querySyntax(${camelName}Schema),
   // Add additional query properties here
   Type.Object({})
 ])

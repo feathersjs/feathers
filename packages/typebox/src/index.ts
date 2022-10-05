@@ -1,5 +1,7 @@
 import { Type, TObject, TInteger, TOptional, TSchema, TIntersect } from '@sinclair/typebox'
 
+export * from '@sinclair/typebox'
+
 const arrayOfKeys = <T extends TObject>(type: T) => {
   const keys = Object.keys(type.properties)
   return Type.Unsafe<(keyof T['properties'])[]>({ type: 'array', items: { type: 'string', enum: keys } })

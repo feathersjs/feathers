@@ -7,8 +7,9 @@ const template = ({
   upperName,
   relative,
   type
-}: ServiceGeneratorContext) => /* ts */ `import { Type, jsonSchema, typebox, resolve } from '@feathersjs/schema'
-import type { Static } from '@feathersjs/schema'
+}: ServiceGeneratorContext) => /* ts */ `import { jsonSchema, resolve } from '@feathersjs/schema'
+import { Type, querySyntax } from '@feathersjs/typebox'
+import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '${relative}/declarations'
 import { dataValidator, queryValidator } from '${relative}/schemas/validators'
@@ -45,7 +46,7 @@ export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
 
 // Schema for allowed query properties
 export const ${camelName}QuerySchema = Type.Intersect([
-  typebox.querySyntax(${camelName}Schema),
+  querySyntax(${camelName}Schema),
   // Add additional query properties here
   Type.Object({})
 ])

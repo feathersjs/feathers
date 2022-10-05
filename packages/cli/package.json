@@ -69,6 +69,7 @@
     "@feathersjs/koa": "^5.0.0-pre.29",
     "@feathersjs/mongodb": "^5.0.0-pre.29",
     "@feathersjs/schema": "^5.0.0-pre.29",
+    "@feathersjs/typebox": "^5.0.0-pre.29",
     "@feathersjs/socketio": "^5.0.0-pre.29",
     "@feathersjs/transport-commons": "^5.0.0-pre.29",
     "@types/mocha": "^9.1.1",

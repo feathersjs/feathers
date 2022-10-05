@@ -166,7 +166,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
     )
     .then(
       install<AppGeneratorContext>(
-        ({ transports, framework, dependencyVersions, dependencies }) => {
+        ({ transports, framework, dependencyVersions, dependencies, schema }) => {
           const hasSocketio = transports.includes('websockets')
 
           dependencies.push(
@@ -189,6 +189,10 @@ export const generate = (ctx: AppGeneratorArguments) =>
 
           if (framework === 'express') {
             dependencies.push('@feathersjs/express', 'compression')
+          }
+
+          if (schema === 'typebox') {
+            dependencies.push('@feathersjs/typebox')
           }
 
           return addVersions(dependencies, dependencyVersions)
