@@ -24,7 +24,7 @@ export const dependencyVersions = Object.keys(pkg.devDependencies as any)
   .reduce((acc, dep) => {
     const [, name] = dep.split('/')
 
-    acc[dep] = path.join(__dirname, `feathersjs-${name}-${lernaConfig.version}.tgz`)
+    acc[dep] = path.join(__dirname, 'build', `feathersjs-${name}-${lernaConfig.version}.tgz`)
 
     return acc
   }, {} as DependencyVersions)
