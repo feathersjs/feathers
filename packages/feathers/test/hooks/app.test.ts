@@ -56,6 +56,17 @@ describe('app.hooks', () => {
 
   it('.setup and .teardown special hooks', async () => {
     const app = feathers()
+
+    // Test that setup and teardown can be overwritten
+    const oldSetup = app.setup
+    app.setup = function (arg: any) {
+      return oldSetup.call(this, arg)
+    }
+    const oldTeardown = app.teardown
+    app.teardown = function (arg: any) {
+      return oldTeardown.call(this, arg)
+    }
+
     const order: string[] = []
     const hooks: ApplicationHookMap<typeof app> = {
       setup: [
