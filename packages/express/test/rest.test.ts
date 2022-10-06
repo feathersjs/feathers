@@ -4,7 +4,7 @@ import axios, { AxiosRequestConfig } from 'axios'
 
 import { Server } from 'http'
 import { Request, Response, NextFunction } from 'express'
-import { feathers, HookContext, Id, Params } from '@feathersjs/feathers'
+import { ApplicationHookMap, feathers, HookContext, Id, Params } from '@feathersjs/feathers'
 import { Service, restTests } from '@feathersjs/tests'
 import { BadRequest } from '@feathersjs/errors'
 
@@ -101,6 +101,21 @@ describe('@feathersjs/express/rest provider', () => {
         })
         .use('/', new Service())
         .use('todo', new Service())
+
+      app.hooks({
+        setup: [
+          async (context, next) => {
+            assert.ok(context.app)
+            await next()
+          }
+        ],
+        teardown: [
+          async (context, next) => {
+            assert.ok(context.app)
+            await next()
+          }
+        ]
+      } as ApplicationHookMap<express.Application>)
 
       await app.listen(4777, () => app.use('tasks', new Service()))
     })

@@ -138,7 +138,6 @@ export const checkPreconditions =
   () =>
   async <T extends FeathersBaseContext>(ctx: T) => {
     if (!ctx.feathers) {
-      console.log(ctx)
       throw new Error(`Can not run generator since the current folder does not appear to be a Feathers application.
 Either your package.json is missing or it does not have \`feathers\` property.
 `)
