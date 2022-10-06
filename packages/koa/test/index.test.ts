@@ -1,7 +1,7 @@
 import { strict as assert } from 'assert'
 import Koa from 'koa'
 import axios from 'axios'
-import { feathers, Id } from '@feathersjs/feathers'
+import { ApplicationHookMap, feathers, Id } from '@feathersjs/feathers'
 import { Service, restTests } from '@feathersjs/tests'
 import { koa, rest, Application, bodyParser, errorHandler } from '../src'
 
@@ -40,6 +40,21 @@ describe('@feathersjs/koa', () => {
       },
       methods: ['get', 'find', 'create', 'update', 'patch', 'remove', 'customMethod']
     })
+
+    app.hooks({
+      setup: [
+        async (context, next) => {
+          assert.ok(context.app)
+          await next()
+        }
+      ],
+      teardown: [
+        async (context, next) => {
+          assert.ok(context.app)
+          await next()
+        }
+      ]
+    } as ApplicationHookMap<Application>)
 
     await app.listen(8465)
   })

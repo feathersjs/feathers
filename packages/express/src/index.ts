@@ -102,19 +102,6 @@ export default function feathersExpress<S = any, C = any>(
       debug('Feathers application listening')
 
       return server
-    },
-
-    async teardown(server?: any) {
-      return feathersTeardown.call(this, server).then(
-        () =>
-          new Promise((resolve, reject) => {
-            if (this.server) {
-              this.server.close((e) => (e ? reject(e) : resolve(this)))
-            } else {
-              resolve(this)
-            }
-          })
-      )
     }
   } as Application<S, C>)
 
@@ -137,6 +124,21 @@ export default function feathersExpress<S = any, C = any>(
       Object.defineProperty(expressApp, prop, newProp)
     }
   })
+
+  // Assign teardown and setup which will also make sure that hooks are initialized
+  app.setup = feathersApp.setup as any
+  app.teardown = async function teardown(server?: any) {
+    return feathersTeardown.call(this, server).then(
+      () =>
+        new Promise((resolve, reject) => {
+          if (this.server) {
+            this.server.close((e) => (e ? reject(e) : resolve(this)))
+          } else {
+            resolve(this)
+          }
+        })
+    )
+  }
 
   app.configure(routing() as any)
 

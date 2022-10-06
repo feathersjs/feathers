@@ -82,6 +82,10 @@ export function koa<S = any, C = any>(
 
   koaQs(app as any)
 
+  // This reinitializes hooks
+  app.setup = feathersApp.setup as any
+  app.teardown = feathersApp.teardown as any
+
   app.configure(routing() as any)
   app.use((ctx, next) => {
     ctx.feathers = { ...ctx.feathers, provider: 'rest' }
