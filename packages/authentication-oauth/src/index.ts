@@ -4,7 +4,7 @@ import { resolveDispatch } from '@feathersjs/schema'
 
 import { OAuthStrategy, OAuthProfile } from './strategy'
 import { redirectHook, OAuthService } from './service'
-import { getServiceOptions, OauthSetupSettings } from './utils'
+import { getGrantConfig, getServiceOptions, OauthSetupSettings } from './utils'
 
 const debug = createDebug('@feathersjs/authentication-oauth')
 
@@ -30,17 +30,20 @@ export const oauth =
       linkStrategy: 'jwt',
       ...settings
     }
+
+    const grantConfig = getGrantConfig(authService)
     const serviceOptions = getServiceOptions(authService, oauthOptions)
+    const servicePath = `${grantConfig.defaults.prefix || 'oauth'}/:provider`
 
-    app.use('oauth/:provider', new OAuthService(authService, oauthOptions), serviceOptions)
+    app.use(servicePath, new OAuthService(authService, oauthOptions), serviceOptions)
 
-    const oauthService = app.service('oauth/:provider')
+    const oauthService = app.service(servicePath)
 
     oauthService.hooks({
       around: { all: [resolveDispatch(), redirectHook()] }
     })
 
     if (typeof oauthService.publish === 'function') {
-      app.service('oauth/:provider').publish(() => null)
+      app.service(servicePath).publish(() => null)
     }
   }
