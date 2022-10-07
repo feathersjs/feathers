@@ -253,6 +253,10 @@ export default defineConfig({
               link: '/guides/cli/index.md'
             },
             {
+              text: 'Generate an App',
+              link: '/guides/cli/generate-app.md'
+            },
+            {
               text: 'Structure',
               link: '/guides/cli/structure.md'
             },
