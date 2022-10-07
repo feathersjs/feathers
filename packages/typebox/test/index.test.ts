@@ -1,6 +1,6 @@
 import assert from 'assert'
 import { Ajv } from '@feathersjs/schema'
-import { querySyntax, Type, Static, defaultAppConfiguration } from '../src'
+import { querySyntax, Type, Static, defaultAppConfiguration, getDataValidator, getValidator } from '../src'
 
 describe('@feathersjs/schema/typebox', () => {
   it('querySyntax', async () => {
@@ -46,5 +46,10 @@ describe('@feathersjs/schema/typebox', () => {
     })
 
     assert.ok(validated)
+  })
+
+  it('validators', () => {
+    assert.strictEqual(typeof getDataValidator(Type.Object({}), new Ajv()), 'object')
+    assert.strictEqual(typeof getValidator(Type.Object({}), new Ajv()), 'function')
   })
 })

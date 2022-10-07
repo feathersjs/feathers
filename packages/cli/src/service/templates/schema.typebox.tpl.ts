@@ -7,8 +7,8 @@ const template = ({
   upperName,
   relative,
   type
-}: ServiceGeneratorContext) => /* ts */ `import { jsonSchema, resolve } from '@feathersjs/schema'
-import { Type, querySyntax } from '@feathersjs/typebox'
+}: ServiceGeneratorContext) => /* ts */ `import { resolve } from '@feathersjs/schema'
+import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '${relative}/declarations'
@@ -33,7 +33,7 @@ export const ${camelName}DataSchema = Type.Pick(${camelName}Schema, ['text'], {
   $id: '${upperName}Data', additionalProperties: false
 })
 export type ${upperName}Data = Static<typeof ${camelName}DataSchema>
-export const ${camelName}DataValidator = jsonSchema.getDataValidator(${camelName}DataSchema, dataValidator)
+export const ${camelName}DataValidator = getDataValidator(${camelName}DataSchema, dataValidator)
 export const ${camelName}DataResolver = resolve<${upperName}, HookContext>({
   properties: {}
 })
@@ -44,7 +44,7 @@ export const ${camelName}QueryProperties = Type.Pick(${camelName}Schema, [
 ], { additionalProperties: false })
 export const ${camelName}QuerySchema = querySyntax(${camelName}QueryProperties)
 export type ${upperName}Query = Static<typeof ${camelName}QuerySchema>
-export const ${camelName}QueryValidator = jsonSchema.getValidator(${camelName}QuerySchema, queryValidator)
+export const ${camelName}QueryValidator = getValidator(${camelName}QuerySchema, queryValidator)
 export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
   properties: {}
 })

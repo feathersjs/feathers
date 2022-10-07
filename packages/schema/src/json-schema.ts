@@ -1,12 +1,11 @@
 import { _ } from '@feathersjs/commons'
 import { JSONSchema } from 'json-schema-to-ts'
-import { TObject } from '@sinclair/typebox'
 import { JSONSchemaDefinition, Ajv, Validator } from './schema'
 
 export type DataSchemaMap = {
-  create: JSONSchemaDefinition | TObject
-  update?: JSONSchemaDefinition | TObject
-  patch?: JSONSchemaDefinition | TObject
+  create: JSONSchemaDefinition
+  update?: JSONSchemaDefinition
+  patch?: JSONSchemaDefinition
 }
 
 export type DataValidatorMap = {
@@ -22,10 +21,7 @@ export type DataValidatorMap = {
  * @param validator The AJV validation instance
  * @returns A compiled validation function
  */
-export const getValidator = <T = any, R = T>(
-  schema: JSONSchemaDefinition | TObject,
-  validator: Ajv
-): Validator<T, R> =>
+export const getValidator = <T = any, R = T>(schema: JSONSchemaDefinition, validator: Ajv): Validator<T, R> =>
   validator.compile({
     $async: true,
     ...(schema as any)
@@ -42,7 +38,7 @@ export const getValidator = <T = any, R = T>(
  * @returns A map of validator functions
  */
 export const getDataValidator = (
-  def: JSONSchemaDefinition | TObject | DataSchemaMap,
+  def: JSONSchemaDefinition | DataSchemaMap,
   validator: Ajv
 ): DataValidatorMap => {
   const schema = ((def as any).create ? def : { create: def }) as DataSchemaMap
