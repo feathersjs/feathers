@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useGlobalLanguage } from '../theme/store'
-import { whenever } from "@vueuse/core"
+import { onMounted } from 'vue'
+import { whenever } from '@vueuse/core'
 
 defineProps({
   hideOnMobile: Boolean,
@@ -14,10 +15,12 @@ const options = [
   { value: 'js', text: 'JavaScript' }
 ]
 
-document.body.setAttribute('data-language', activeGlobalId.value)
+onMounted(() => {
+  document.body.setAttribute('data-language', activeGlobalId.value)
 
-whenever(activeGlobalId, (val) => {
-  document.body.setAttribute('data-language', val)
+  whenever(activeGlobalId, (val) => {
+    document.body.setAttribute('data-language', val)
+  })
 })
 </script>
 
