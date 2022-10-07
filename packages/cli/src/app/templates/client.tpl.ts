@@ -2,12 +2,11 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
-const template = ({}: AppGeneratorContext) =>
-  `import { feathers } from '@feathersjs/feathers'
-import type { Service, TransportConnection, Params } from '@feathersjs/feathers'
+const template = ({}: AppGeneratorContext) => /* ts */ `import { feathers } from '@feathersjs/feathers'
+import type { Paginated, ClientService, TransportConnection, Params } from '@feathersjs/feathers'
 
 export interface ServiceTypes {
-  // A mapping of client side services
+  //
 }
 
 export const createClient = <Configuration = any> (connection: TransportConnection<ServiceTypes>) => {

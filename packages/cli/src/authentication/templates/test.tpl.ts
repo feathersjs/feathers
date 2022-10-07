@@ -2,8 +2,11 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AuthenticationGeneratorContext } from '../index'
 
-const template = ({ authStrategies, lib }: AuthenticationGeneratorContext) =>
-  `import assert from 'assert';
+const template = ({
+  authStrategies,
+  path,
+  lib
+}: AuthenticationGeneratorContext) => /* ts */ `import assert from 'assert';
 import { app } from '../${lib}/app';
 
 describe('authentication', () => {
@@ -14,11 +17,10 @@ describe('authentication', () => {
     email: 'someone@example.com',
     password: 'supersecret'
   }
-  let user: any
 
   before(async () => {
     try {
-      user = await app.service('users').create(userInfo)
+      await app.service('${path}').create(userInfo)
     } catch (error) {
       // Do nothing, it just means the user already exists and can be tested
     }

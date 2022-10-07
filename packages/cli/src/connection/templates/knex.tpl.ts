@@ -2,8 +2,7 @@ import { generator, toFile, before, mergeJSON } from '@feathershq/pinion'
 import { ConnectionGeneratorContext } from '../index'
 import { injectSource, renderSource } from '../../commons'
 
-const template = ({ database }: ConnectionGeneratorContext) =>
-  `import knex from 'knex'
+const template = ({ database }: ConnectionGeneratorContext) => /* ts */ `import knex from 'knex'
 import type { Knex } from 'knex'
 import type { Application } from './declarations'
 
@@ -21,8 +20,11 @@ export const ${database} = (app: Application) => {
 }
 `
 
-const knexfile = ({ lib, language, database }: ConnectionGeneratorContext) => `
-import { app } from './${lib}/app'
+const knexfile = ({
+  lib,
+  language,
+  database
+}: ConnectionGeneratorContext) => /* ts */ `import { app } from './${lib}/app'
 
 // Load our database connection info from the app configuration
 const config = app.get('${database}')
@@ -30,19 +32,11 @@ const config = app.get('${database}')
 ${language === 'js' ? 'export default config' : 'module.exports = config'}
 `
 
-const configurationTemplate = ({ database }: ConnectionGeneratorContext) => `${database}: {
-  type: 'object',
-  properties: {
-    client: { type: 'string' },
-    connection: { type: 'string' }
-  }
-},`
 const importTemplate = ({ database }: ConnectionGeneratorContext) =>
   `import { ${database} } from './${database}'`
 const configureTemplate = ({ database }: ConnectionGeneratorContext) => `app.configure(${database})`
 
 const toAppFile = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'app'])
-const toConfig = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'configuration'])
 
 export const generate = (ctx: ConnectionGeneratorContext) =>
   generator(ctx)
@@ -63,14 +57,6 @@ export const generate = (ctx: ConnectionGeneratorContext) =>
           }
         },
         toFile('package.json')
-      )
-    )
-    .then(
-      injectSource(
-        configurationTemplate,
-        before('authentication: authenticationSettingsSchema'),
-        toConfig,
-        false
       )
     )
     .then(injectSource(importTemplate, before('import { services } from'), toAppFile))

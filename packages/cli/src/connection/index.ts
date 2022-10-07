@@ -1,15 +1,23 @@
 import { generator, runGenerator, prompt, install, mergeJSON, toFile } from '@feathershq/pinion'
 import chalk from 'chalk'
-import { FeathersBaseContext, DatabaseType, getDatabaseAdapter, addVersions } from '../commons'
+import {
+  FeathersBaseContext,
+  DatabaseType,
+  getDatabaseAdapter,
+  addVersions,
+  checkPreconditions,
+  initializeBaseContext
+} from '../commons'
 
 export interface ConnectionGeneratorContext extends FeathersBaseContext {
+  name?: string
   database: DatabaseType
   connectionString: string
   dependencies: string[]
 }
 
 export type ConnectionGeneratorArguments = FeathersBaseContext &
-  Partial<Pick<ConnectionGeneratorContext, 'database' | 'connectionString'>>
+  Partial<Pick<ConnectionGeneratorContext, 'database' | 'connectionString' | 'name'>>
 
 export const defaultConnectionString = (type: DatabaseType, name: string) => {
   const connectionStrings = {
@@ -23,7 +31,7 @@ export const defaultConnectionString = (type: DatabaseType, name: string) => {
   return connectionStrings[type]
 }
 
-export const prompts = ({ database, connectionString, pkg }: ConnectionGeneratorArguments) => [
+export const prompts = ({ database, connectionString, pkg, name }: ConnectionGeneratorArguments) => [
   {
     name: 'database',
     type: 'list',
@@ -44,7 +52,7 @@ export const prompts = ({ database, connectionString, pkg }: ConnectionGenerator
     when: !connectionString,
     message: 'Enter your database connection string',
     default: (answers: { name?: string; database: DatabaseType }) =>
-      defaultConnectionString(answers.database, answers.name || pkg.name)
+      defaultConnectionString(answers.database, answers.name || name || pkg.name)
   }
 ]
 
@@ -60,6 +68,8 @@ export const getDatabaseClient = (database: DatabaseType) => DATABASE_CLIENTS[da
 
 export const generate = (ctx: ConnectionGeneratorArguments) =>
   generator(ctx)
+    .then(initializeBaseContext())
+    .then(checkPreconditions())
     .then(prompt<ConnectionGeneratorArguments, ConnectionGeneratorContext>(prompts))
     .then(
       runGenerator<ConnectionGeneratorContext>(
@@ -105,5 +115,9 @@ export const generate = (ctx: ConnectionGeneratorArguments) =>
         }
       }
 
-      return install<ConnectionGeneratorContext>(addVersions(dependencies, ctx.dependencyVersions))(ctx)
+      return install<ConnectionGeneratorContext>(
+        addVersions(dependencies, ctx.dependencyVersions),
+        false,
+        ctx.feathers.packager
+      )(ctx)
     })

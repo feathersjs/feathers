@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-empty-function */
 // Ported from https://github.com/simov/grant/blob/master/test/util/provider.js
 import http from 'http'

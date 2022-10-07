@@ -10,6 +10,7 @@ import {
 export { SocketService }
 
 declare module '@feathersjs/feathers/lib/declarations' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface FeathersApplication<Services, Settings> {
     /**
      * The Socket.io client instance. Usually does not need

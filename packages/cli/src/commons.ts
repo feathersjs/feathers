@@ -1,3 +1,5 @@
+import fs from 'fs'
+import { join } from 'path'
 import { PackageJson } from 'type-fest'
 import { readFile, writeFile } from 'fs/promises'
 import {
@@ -15,6 +17,8 @@ import prettier, { Options as PrettierOptions } from 'prettier'
 import path from 'path'
 
 export { prettier }
+export const { version } = JSON.parse(fs.readFileSync(join(__dirname, '..', 'package.json')).toString())
+
 export type DependencyVersions = { [key: string]: string }
 
 /**
@@ -51,6 +55,10 @@ export type FeathersAppInfo = {
    * The HTTP framework used
    */
   framework: 'koa' | 'express'
+  /**
+   * The main schema definition format
+   */
+  schema: 'typebox' | 'json'
 }
 
 export interface AppPackageJson extends PackageJson {
@@ -111,7 +119,8 @@ export const initializeBaseContext =
         loadJSON(path.join(__dirname, '..', 'package.json'), (pkg: PackageJson) => ({
           dependencyVersions: {
             ...pkg.devDependencies,
-            ...ctx.dependencyVersions
+            ...ctx.dependencyVersions,
+            '@feathersjs/cli': version
           }
         }))
       )
@@ -122,6 +131,25 @@ export const initializeBaseContext =
         language: ctx.language || ctx.pkg?.feathers?.language,
         feathers: ctx.pkg?.feathers
       }))
+
+/**
+ * Checks if the current context contains a valid generated application. This is necesary for most
+ * generators (besides the app generator).
+ *
+ * @param ctx The context to check against
+ * @returns Throws an error or returns the original context
+ */
+export const checkPreconditions =
+  () =>
+  async <T extends FeathersBaseContext>(ctx: T) => {
+    if (!ctx.feathers) {
+      throw new Error(`Can not run generator since the current folder does not appear to be a Feathers application.
+Either your package.json is missing or it does not have \`feathers\` property.
+`)
+    }
+
+    return ctx
+  }
 
 const importRegex = /from '(\..*)'/g
 const escapeNewLines = (code: string) => code.replace(/\n\n/g, '\n/* :newline: */')

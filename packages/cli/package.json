@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/cli",
   "description": "The command line interface for creating Feathers applications",
-  "version": "5.0.0-pre.28",
+  "version": "5.0.0-pre.30",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "bin": {
@@ -47,41 +47,40 @@
     "mocha": "mocha --timeout 60000 --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
     "test": "npm run compile && npm run mocha"
   },
-  "directories": {
-    "lib": "lib/cli"
-  },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@feathershq/pinion": "^0.3.5",
     "chalk": "^4.0.1",
+    "commander": "^9.4.1",
     "lodash": "^4.17.21",
     "prettier": "^2.7.1"
   },
   "devDependencies": {
-    "@feathersjs/authentication": "^5.0.0-pre.28",
-    "@feathersjs/authentication-local": "^5.0.0-pre.28",
-    "@feathersjs/authentication-oauth": "^5.0.0-pre.28",
-    "@feathersjs/configuration": "^5.0.0-pre.28",
-    "@feathersjs/errors": "^5.0.0-pre.28",
-    "@feathersjs/express": "^5.0.0-pre.28",
-    "@feathersjs/feathers": "^5.0.0-pre.28",
-    "@feathersjs/knex": "^5.0.0-pre.28",
-    "@feathersjs/koa": "^5.0.0-pre.28",
-    "@feathersjs/mongodb": "^5.0.0-pre.28",
-    "@feathersjs/schema": "^5.0.0-pre.28",
-    "@feathersjs/socketio": "^5.0.0-pre.28",
-    "@feathersjs/transport-commons": "^5.0.0-pre.28",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "^18.7.17",
-    "@types/prettier": "^2.7.0",
+    "@feathersjs/authentication": "^5.0.0-pre.30",
+    "@feathersjs/authentication-local": "^5.0.0-pre.30",
+    "@feathersjs/authentication-oauth": "^5.0.0-pre.30",
+    "@feathersjs/configuration": "^5.0.0-pre.30",
+    "@feathersjs/errors": "^5.0.0-pre.30",
+    "@feathersjs/express": "^5.0.0-pre.30",
+    "@feathersjs/feathers": "^5.0.0-pre.30",
+    "@feathersjs/knex": "^5.0.0-pre.30",
+    "@feathersjs/koa": "^5.0.0-pre.30",
+    "@feathersjs/mongodb": "^5.0.0-pre.30",
+    "@feathersjs/schema": "^5.0.0-pre.30",
+    "@feathersjs/socketio": "^5.0.0-pre.30",
+    "@feathersjs/transport-commons": "^5.0.0-pre.30",
+    "@feathersjs/typebox": "^5.0.0-pre.30",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.8.2",
+    "@types/prettier": "^2.7.1",
     "axios": "^0.27.2",
     "mocha": "^10.0.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
-    "type-fest": "^2.19.0",
-    "typescript": "^4.8.3"
+    "type-fest": "^3.0.0",
+    "typescript": "^4.8.4"
   },
-  "gitHead": "bf8e54fddc14d688ba8f505e72c9630a71656ff1"
+  "gitHead": "b535c91197f4b997520e0a0e608793eeba791931"
 }

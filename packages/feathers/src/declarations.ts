@@ -26,6 +26,33 @@ export interface ServiceOptions {
   routeParams?: { [key: string]: any }
 }
 
+export interface ClientService<
+  Result = any,
+  Data = Partial<Result>,
+  PatchData = Data,
+  FindResult = Paginated<Result>,
+  P = Params
+> {
+  find(params?: P): Promise<FindResult>
+
+  get(id: Id, params?: P): Promise<Result>
+
+  create(data: Data[], params?: P): Promise<Result[]>
+  create(data: Data, params?: P): Promise<Result>
+
+  update(id: Id, data: Data, params?: P): Promise<Result>
+  update(id: NullableId, data: Data, params?: P): Promise<Result | Result[]>
+  update(id: null, data: Data, params?: P): Promise<Result[]>
+
+  patch(id: NullableId, data: PatchData, params?: P): Promise<Result | Result[]>
+  patch(id: Id, data: PatchData, params?: P): Promise<Result>
+  patch(id: null, data: PatchData, params?: P): Promise<Result[]>
+
+  remove(id: NullableId, params?: P): Promise<Result | Result[]>
+  remove(id: Id, params?: P): Promise<Result>
+  remove(id: null, params?: P): Promise<Result[]>
+}
+
 export interface ServiceMethods<T = any, D = Partial<T>, P = Params> {
   find(params?: P): Promise<T | T[]>
 
@@ -194,6 +221,15 @@ export interface FeathersApplication<Services = any, Settings = any> {
     service: keyof any extends keyof Services ? ServiceInterface | Application : Services[L],
     options?: ServiceOptions
   ): this
+
+  /**
+   * Unregister an existing service.
+   *
+   * @param path The name of the service to unregister
+   */
+  unuse<L extends keyof Services & string>(
+    path: L
+  ): Promise<FeathersService<this, keyof any extends keyof Services ? Service : Services[L]>>
 
   /**
    * Get the Feathers service instance for a path. This will

@@ -1,4 +1,4 @@
-import { Application, Service, ServiceOptions } from '@feathersjs/feathers'
+import { Application, FeathersService, Service, ServiceOptions } from '@feathersjs/feathers'
 import { Router } from './router'
 
 declare module '@feathersjs/feathers/lib/declarations' {
@@ -7,6 +7,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
     params: { [key: string]: any }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Application<Services, Settings> {
     // eslint-disable-line
     routes: Router<{
@@ -44,8 +45,22 @@ export const routing = () => (app: Application) => {
   app.routes = new Router()
   app.lookup = lookup
 
+  // This mixin allows us to unregister a service. It needs to run
+  // first so that `teardown` hooks still get registered properly
+  app.mixins.unshift((service: Service) => {
+    const { teardown } = service
+
+    service.teardown = async function (app: Application, path: string) {
+      if (typeof teardown === 'function') {
+        await teardown.call(this, app, path)
+      }
+      app.routes.remove(path)
+      app.routes.remove(`${path}/:__id`)
+    }
+  })
+
   // Add a mixin that registers a service on the router
-  app.mixins.push((service: Service, path: string, options: ServiceOptions) => {
+  app.mixins.push((service: FeathersService, path: string, options: ServiceOptions) => {
     const { routeParams: params = {} } = options
 
     app.routes.insert(path, { service, params })

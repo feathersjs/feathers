@@ -78,6 +78,9 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
     )
     assert.equal(redirect, 'https://feathersjs.com#access_token=testing')
 
+    redirect = await strategy.getRedirect({ accessToken: 'testing' }, {})
+    assert.equal(redirect, 'https://feathersjs.com#access_token=testing')
+
     redirect = await strategy.getRedirect(
       { accessToken: 'testing' },
       {
@@ -110,7 +113,7 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
           }
         ),
       {
-        message: 'Referer "https://example.com" not allowed.'
+        message: 'Referer "https://example.com" is not allowed.'
       }
     )
   })

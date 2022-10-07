@@ -17,8 +17,7 @@ export const generate = (ctx: AppGeneratorContext) =>
             rootDir: `./${lib}`,
             declaration: true,
             strict: true,
-            esModuleInterop: true,
-            skipLibCheck: true
+            esModuleInterop: true
           },
           include: [lib],
           exclude: ['test']

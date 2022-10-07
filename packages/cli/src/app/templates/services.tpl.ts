@@ -2,8 +2,7 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
-const template = ({}: AppGeneratorContext) =>
-  `import type { Application } from '../declarations'
+const template = ({}: AppGeneratorContext) => /* ts */ `import type { Application } from '../declarations'
 
 export const services = (app: Application) => {
   // All services will be registered here

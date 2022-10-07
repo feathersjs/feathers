@@ -2,8 +2,7 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
-const template = ({ language }: AppGeneratorContext) =>
-  `import '@feathersjs/transport-commons'
+const template = ({ language }: AppGeneratorContext) => /* ts */ `import '@feathersjs/transport-commons'
 import type { Application, HookContext } from './declarations'
 import { logger } from './logger'
 

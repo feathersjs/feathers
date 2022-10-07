@@ -2,15 +2,14 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
-const tsKoaApp = ({ transports }: AppGeneratorContext) =>
-  `import serveStatic from 'koa-static'
+const tsKoaApp = ({ transports }: AppGeneratorContext) => /* ts */ `import serveStatic from 'koa-static'
 import { feathers } from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
 import { koa, rest, bodyParser, errorHandler, parseAuthentication, cors } from '@feathersjs/koa'
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
 import type { Application } from './declarations'
-import { configurationSchema } from './configuration'
+import { configurationValidator } from './schemas/configuration'
 import { logErrorHook } from './logger'
 import { services } from './services/index'
 import { channels } from './channels'
@@ -18,12 +17,12 @@ import { channels } from './channels'
 const app: Application = koa(feathers())
 
 // Load our app configuration (see config/ folder)
-app.configure(configuration(configurationSchema))
+app.configure(configuration(configurationValidator))
 
 // Set up Koa middleware
+app.use(cors())
 app.use(serveStatic(app.get('public')))
 app.use(errorHandler())
-app.use(cors())
 app.use(parseAuthentication())
 app.use(bodyParser())
 
@@ -59,8 +58,7 @@ app.hooks({
 export { app }
 `
 
-const tsExpressApp = ({ transports }: AppGeneratorContext) =>
-  `import compress from 'compression'
+const tsExpressApp = ({ transports }: AppGeneratorContext) => /* ts */ `import compress from 'compression'
 
 import { feathers } from '@feathersjs/feathers'
 import express, {
@@ -71,7 +69,7 @@ import configuration from '@feathersjs/configuration'
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
 import type { Application } from './declarations'
-import { configurationSchema } from './configuration'
+import { configurationValidator } from './schemas/configuration'
 import { logger, logErrorHook } from './logger'
 import { services } from './services/index'
 import { channels } from './channels'
@@ -79,7 +77,7 @@ import { channels } from './channels'
 const app: Application = express(feathers())
 
 // Load app configuration
-app.configure(configuration(configurationSchema))
+app.configure(configuration(configurationValidator))
 app.use(cors())
 app.use(compress())
 app.use(json())

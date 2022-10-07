@@ -15,6 +15,10 @@ export class RouteNode<T = any> {
 
   constructor(public name: string, public depth: number) {}
 
+  get hasChildren() {
+    return Object.keys(this.children).length !== 0 || this.placeholders.length !== 0
+  }
+
   insert(path: string[], data: T): RouteNode<T> {
     if (this.depth === path.length) {
       if (this.data !== undefined) {
@@ -48,6 +52,30 @@ export class RouteNode<T = any> {
     return child.insert(path, data)
   }
 
+  remove(path: string[]) {
+    if (path.length === this.depth) {
+      return
+    }
+
+    const current = path[this.depth]
+
+    if (current.startsWith(':')) {
+      const placeholderName = current.substring(1)
+      const placeholder = this.placeholders.find((p) => p.name === placeholderName)
+
+      placeholder.remove(path)
+      this.placeholders = this.placeholders.filter((p) => p !== placeholder)
+    } else if (this.children[current]) {
+      const child = this.children[current]
+
+      child.remove(path)
+
+      if (!child.hasChildren) {
+        delete this.children[current]
+      }
+    }
+  }
+
   lookup(path: string[], info: LookupData): LookupResult<T> | null {
     if (path.length === this.depth) {
       return this.data === undefined
@@ -62,7 +90,11 @@ export class RouteNode<T = any> {
     const child = this.children[current]
 
     if (child) {
-      return child.lookup(path, info)
+      const lookup = child.lookup(path, info)
+
+      if (lookup !== null) {
+        return lookup
+      }
     }
 
     // This will return the first placeholder that matches early
@@ -88,6 +120,10 @@ export class Router<T = any> {
 
   insert(path: string, data: T) {
     return this.root.insert(this.getPath(path), data)
+  }
+
+  remove(path: string) {
+    return this.root.remove(this.getPath(path))
   }
 
   lookup(path: string) {

@@ -20,6 +20,7 @@ const serviceMiddleware = (): RequestHandler => {
     const { query, headers, path, body: data, method: httpMethod } = req
     const methodOverride = req.headers[http.METHOD_HEADER] as string | undefined
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const { service, params: { __id: id = null, ...route } = {} } = req.lookup!
     const method = http.getServiceMethod(httpMethod, id, methodOverride)
     const { methods } = getServiceOptions(service)

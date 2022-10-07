@@ -2,8 +2,7 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
-const template = ({}: AppGeneratorContext) =>
-  `import { app } from './app'
+const template = ({}: AppGeneratorContext) => /* ts */ `import { app } from './app'
 import { logger } from './logger'
 
 const port = app.get('port')

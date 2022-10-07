@@ -3,28 +3,28 @@ import { memory, MemoryService } from '@feathersjs/memory'
 import { GeneralError } from '@feathersjs/errors'
 
 import {
-  schema,
   resolve,
-  Infer,
   resolveResult,
   resolveQuery,
   resolveData,
   validateData,
   validateQuery,
   querySyntax,
-  Combine,
   resolveDispatch,
   resolveAll,
-  Ajv
+  Ajv,
+  FromSchema,
+  getValidator,
+  getDataValidator
 } from '../src'
 import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib'
 
 const fixtureAjv = new Ajv({
   coerceTypes: true,
-  addUsedSchema: true // default
+  addUsedSchema: false
 })
 
-export const userSchema = schema({
+export const userDataSchema = {
   $id: 'UserData',
   type: 'object',
   additionalProperties: false,
@@ -33,28 +33,13 @@ export const userSchema = schema({
     email: { type: 'string' },
     password: { type: 'string' }
   }
-} as const)
+} as const
 
-export const userResultSchema = schema(
-  {
-    $id: 'UserResult',
-    type: 'object',
-    additionalProperties: false,
-    required: ['id', ...userSchema.required],
-    properties: {
-      ...userSchema.properties,
-      id: { type: 'number' }
-    }
-  } as const,
-  fixtureAjv
-)
+export const userDataValidator = getDataValidator(userDataSchema, fixtureAjv)
 
-export type User = Infer<typeof userSchema>
-export type UserResult = Infer<typeof userResultSchema> & { name: string }
+export type UserData = FromSchema<typeof userDataSchema>
 
-export const userDataResolver = resolve<User, HookContext<Application>>({
-  schema: userSchema,
-  validate: 'before',
+export const userDataResolver = resolve<UserData, HookContext<Application>>({
   properties: {
     password: async () => {
       return 'hashed'
@@ -62,29 +47,40 @@ export const userDataResolver = resolve<User, HookContext<Application>>({
   }
 })
 
-export const userResultResolver = resolve<UserResult, HookContext<Application>>({
-  schema: userResultSchema,
+export const userSchema = {
+  $id: 'User',
+  type: 'object',
+  additionalProperties: false,
+  required: ['id', ...userDataSchema.required],
+  properties: {
+    ...userDataSchema.properties,
+    id: { type: 'number' },
+    name: { type: 'string' }
+  }
+} as const
+
+export type User = FromSchema<typeof userSchema>
+
+export const userResolver = resolve<User, HookContext<Application>>({
   properties: {
     name: async (_value, user) => user.email.split('@')[0]
   }
 })
 
-export const userDispatchResolver = resolve<UserResult, HookContext<Application>>({
-  schema: userResultSchema,
+export const userExternalResolver = resolve<User, HookContext<Application>>({
   properties: {
     password: async () => undefined,
     email: async () => '[redacted]'
   }
 })
 
-export const secondUserResultResolver = resolve<UserResult, HookContext<Application>>({
-  schema: userResultSchema,
+export const secondUserResolver = resolve<User, HookContext<Application>>({
   properties: {
     name: async (value, user) => `${value} (${user.email})`
   }
 })
 
-export const messageSchema = schema({
+export const messageDataSchema = {
   $id: 'MessageData',
   type: 'object',
   additionalProperties: false,
@@ -93,33 +89,30 @@ export const messageSchema = schema({
     text: { type: 'string' },
     userId: { type: 'number' }
   }
-} as const)
+} as const
 
-export const messageResultSchema = schema(
-  {
-    $id: 'MessageResult',
-    type: 'object',
-    additionalProperties: false,
-    required: ['id', ...messageSchema.required],
-    properties: {
-      ...messageSchema.properties,
-      id: { type: 'number' },
-      user: { $ref: 'UserResult' }
-    }
-  } as const,
-  fixtureAjv
-)
+export type MessageData = FromSchema<typeof messageDataSchema>
 
-export type Message = Infer<typeof messageSchema>
-export type MessageResult = Combine<
-  typeof messageResultSchema,
+export const messageSchema = {
+  $id: 'MessageResult',
+  type: 'object',
+  additionalProperties: false,
+  required: ['id', ...messageDataSchema.required],
+  properties: {
+    ...messageDataSchema.properties,
+    id: { type: 'number' },
+    user: { $ref: 'User' }
+  }
+} as const
+
+export type Message = FromSchema<
+  typeof messageSchema,
   {
-    user: User
+    references: [typeof userSchema]
   }
 >
 
-export const messageResultResolver = resolve<MessageResult, HookContext<Application>>({
-  schema: messageResultSchema,
+export const messageResolver = resolve<Message, HookContext<Application>>({
   properties: {
     user: async (_value, message, context) => {
       const { userId } = message
@@ -128,30 +121,32 @@ export const messageResultResolver = resolve<MessageResult, HookContext<Applicat
         throw new GeneralError('This is an error')
       }
 
-      return context.app.service('users').get(userId, context.params)
+      const user = await context.app.service('users').get(userId, context.params)
+
+      return user as Message['user']
     }
   }
 })
 
-export const messageQuerySchema = schema({
+export const messageQuerySchema = {
   $id: 'MessageQuery',
   type: 'object',
   additionalProperties: false,
   required: [],
   properties: {
-    ...querySyntax(messageSchema.properties),
+    ...querySyntax(messageDataSchema.properties),
     $resolve: {
       type: 'array',
       items: { type: 'string' }
     }
   }
-} as const)
+} as const
 
-export type MessageQuery = Infer<typeof messageQuerySchema>
+export type MessageQuery = FromSchema<typeof messageQuerySchema>
+
+export const messageQueryValidator = getValidator(messageQuerySchema, fixtureAjv)
 
 export const messageQueryResolver = resolve<MessageQuery, HookContext<Application>>({
-  schema: messageQuerySchema,
-  validate: 'before',
   properties: {
     userId: async (value, _query, context) => {
       if (context.params?.user) {
@@ -169,9 +164,9 @@ interface ServiceParams extends AdapterParams {
 }
 
 type ServiceTypes = {
-  users: MemoryService<UserResult, User, ServiceParams>
-  messages: MemoryService<MessageResult, Message, ServiceParams>
-  paginatedMessages: MemoryService<MessageResult, Message, ServiceParams>
+  users: MemoryService<User, UserData, ServiceParams>
+  messages: MemoryService<Message, MessageData, ServiceParams>
+  paginatedMessages: MemoryService<Message, MessageData, ServiceParams>
 }
 type Application = FeathersApplication<ServiceTypes>
 
@@ -188,27 +183,27 @@ app.use('paginatedMessages', memory({ paginate: { default: 10 } }))
 
 app.service('messages').hooks([
   resolveAll({
-    result: messageResultResolver,
+    result: messageResolver,
     query: messageQueryResolver
   }),
-  validateQuery(messageQuerySchema)
+  validateQuery(messageQueryValidator)
 ])
 
 app
   .service('paginatedMessages')
   .hooks([
-    validateQuery(messageQuerySchema),
+    validateQuery(messageQueryValidator),
     resolveQuery(messageQueryResolver),
-    resolveResult(messageResultResolver)
+    resolveResult(messageResolver)
   ])
 
 app
   .service('users')
-  .hooks([resolveDispatch(userDispatchResolver), resolveResult(userResultResolver, secondUserResultResolver)])
+  .hooks([resolveDispatch(userExternalResolver), resolveResult(userResolver, secondUserResolver)])
 
 app.service('users').hooks({
   create: [
-    validateData(userSchema),
+    validateData(userDataValidator),
     resolveData({
       create: userDataResolver,
       patch: userDataResolver,

@@ -1,14 +1,15 @@
 import { generator, toFile, when, renderTemplate } from '@feathershq/pinion'
 import { AppGeneratorContext } from '../index'
 
-const template = ({ framework }: AppGeneratorContext) =>
-  `import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers'
+const template = ({
+  framework
+}: AppGeneratorContext) => /* ts */ `import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers'
 import { Application as FeathersApplication } from '@feathersjs/${framework}'
-import { ConfigurationSchema } from './configuration'
+import { ApplicationConfiguration } from './schemas/configuration'
 
 export { NextFunction }
 
-export interface Configuration extends ConfigurationSchema {}
+export interface Configuration extends ApplicationConfiguration {}
 
 // A mapping of service names to types. Will be extended in service files.
 export interface ServiceTypes {}

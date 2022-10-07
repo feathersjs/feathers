@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/mongodb",
   "description": "Feathers MongoDB service adapter",
-  "version": "5.0.0-pre.28",
+  "version": "5.0.0-pre.30",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -40,7 +40,7 @@
   ],
   "scripts": {
     "prepublish": "npm run compile",
-    "pack": "npm pack --pack-destination ../cli/test",
+    "pack": "npm pack --pack-destination ../cli/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
     "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
@@ -51,22 +51,22 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/adapter-commons": "^5.0.0-pre.28",
-    "@feathersjs/commons": "^5.0.0-pre.28",
-    "@feathersjs/errors": "^5.0.0-pre.28",
-    "@feathersjs/feathers": "^5.0.0-pre.28"
+    "@feathersjs/adapter-commons": "^5.0.0-pre.30",
+    "@feathersjs/commons": "^5.0.0-pre.30",
+    "@feathersjs/errors": "^5.0.0-pre.30",
+    "@feathersjs/feathers": "^5.0.0-pre.30"
   },
   "peerDependencies": {
     "mongodb": "^4.5.0"
   },
   "devDependencies": {
-    "@feathersjs/adapter-tests": "^5.0.0-pre.28",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "^18.7.17",
+    "@feathersjs/adapter-tests": "^5.0.0-pre.30",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.8.2",
     "mocha": "^10.0.0",
-    "mongodb-memory-server": "^8.9.1",
+    "mongodb-memory-server": "^8.9.3",
     "shx": "^0.3.4",
-    "typescript": "^4.8.3"
+    "typescript": "^4.8.4"
   },
-  "gitHead": "bf8e54fddc14d688ba8f505e72c9630a71656ff1"
+  "gitHead": "b535c91197f4b997520e0a0e608793eeba791931"
 }

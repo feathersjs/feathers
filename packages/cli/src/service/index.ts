@@ -1,7 +1,12 @@
 import _ from 'lodash'
 import { generator, runGenerator, runGenerators, prompt } from '@feathershq/pinion'
 
-import { FeathersBaseContext, getDatabaseAdapter } from '../commons'
+import {
+  checkPreconditions,
+  FeathersBaseContext,
+  getDatabaseAdapter,
+  initializeBaseContext
+} from '../commons'
 
 export interface ServiceGeneratorContext extends FeathersBaseContext {
   /**
@@ -45,6 +50,10 @@ export interface ServiceGeneratorContext extends FeathersBaseContext {
    */
   type: 'knex' | 'mongodb' | 'custom'
   /**
+   * Which schema definition format to use
+   */
+  schema: 'typebox' | 'json' | false
+  /**
    * Wether this service uses authentication
    */
   authentication: boolean
@@ -58,25 +67,43 @@ export interface ServiceGeneratorContext extends FeathersBaseContext {
  * Parameters the generator is called with
  */
 export type ServiceGeneratorArguments = FeathersBaseContext &
-  Partial<Pick<ServiceGeneratorContext, 'name' | 'path' | 'type' | 'authentication' | 'isEntityService'>>
+  Partial<
+    Pick<ServiceGeneratorContext, 'name' | 'path' | 'type' | 'authentication' | 'isEntityService' | 'schema'>
+  >
 
 export const generate = (ctx: ServiceGeneratorArguments) =>
   generator(ctx)
+    .then(initializeBaseContext())
+    .then(checkPreconditions())
     .then(
       prompt<ServiceGeneratorArguments, ServiceGeneratorContext>(
-        ({ name, path, type, authentication, isEntityService }) => [
+        ({ name, path, type, schema, authentication, isEntityService }) => [
           {
             name: 'name',
             type: 'input',
             when: !name,
-            message: 'What is the name of your service?'
+            message: 'What is the name of your service?',
+            validate: (input) => {
+              if (!input || input === 'authentication') {
+                return 'Invalid service name'
+              }
+
+              return true
+            }
           },
           {
             name: 'path',
             type: 'input',
             when: !path,
             message: 'Which path should the service be registered on?',
-            default: (answers: ServiceGeneratorArguments) => `${_.kebabCase(answers.name)}`
+            default: (answers: ServiceGeneratorArguments) => `${_.kebabCase(answers.name)}`,
+            validate: (input) => {
+              if (!input || input === 'authentication') {
+                return 'Invalid service path'
+              }
+
+              return true
+            }
           },
           {
             name: 'authentication',
@@ -89,7 +116,7 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
             type: 'list',
             when: !type,
             message: 'What kind of service is it?',
-            default: getDatabaseAdapter(ctx.feathers.database),
+            default: getDatabaseAdapter(ctx.feathers?.database),
             choices: [
               {
                 value: 'knex',
@@ -102,6 +129,27 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
               {
                 value: 'custom',
                 name: 'A custom service'
+              }
+            ]
+          },
+          {
+            name: 'schema',
+            type: 'list',
+            when: schema === undefined,
+            message: 'Which schema definition format do you want to use?',
+            default: ctx.feathers?.schema || 'json',
+            choices: [
+              {
+                value: 'typebox',
+                name: 'TypeBox'
+              },
+              {
+                value: 'json',
+                name: 'JSON schema'
+              },
+              {
+                value: false,
+                name: 'No schema'
               }
             ]
           }

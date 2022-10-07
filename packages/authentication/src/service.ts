@@ -11,6 +11,7 @@ import jsonwebtoken from 'jsonwebtoken'
 const debug = createDebug('@feathersjs/authentication/service')
 
 declare module '@feathersjs/feathers/lib/declarations' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface FeathersApplication<Services, Settings> {
     // eslint-disable-line
     /**

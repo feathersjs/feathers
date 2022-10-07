@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/adapter-commons",
-  "version": "5.0.0-pre.28",
+  "version": "5.0.0-pre.30",
   "description": "Shared database adapter utility functions",
   "homepage": "https://feathersjs.com",
   "keywords": [
@@ -32,7 +32,7 @@
   "types": "lib/",
   "scripts": {
     "prepublish": "npm run compile",
-    "pack": "npm pack --pack-destination ../cli/test",
+    "pack": "npm pack --pack-destination ../cli/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
     "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
@@ -50,19 +50,19 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^5.0.0-pre.28",
-    "@feathersjs/errors": "^5.0.0-pre.28",
-    "@feathersjs/feathers": "^5.0.0-pre.28"
+    "@feathersjs/commons": "^5.0.0-pre.30",
+    "@feathersjs/errors": "^5.0.0-pre.30",
+    "@feathersjs/feathers": "^5.0.0-pre.30"
   },
   "devDependencies": {
-    "@types/mocha": "^9.1.1",
+    "@types/mocha": "^10.0.0",
     "@types/mongodb": "^4.0.6",
-    "@types/node": "^18.7.17",
+    "@types/node": "^18.8.2",
     "mocha": "^10.0.0",
-    "mongodb": "^4.9.1",
+    "mongodb": "^4.10.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
-    "typescript": "^4.8.3"
+    "typescript": "^4.8.4"
   },
-  "gitHead": "bf8e54fddc14d688ba8f505e72c9630a71656ff1"
+  "gitHead": "b535c91197f4b997520e0a0e608793eeba791931"
 }

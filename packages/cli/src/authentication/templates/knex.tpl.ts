@@ -5,7 +5,7 @@ import { AuthenticationGeneratorContext } from '../index'
 const migrationTemplate = ({
   kebabName,
   authStrategies
-}: AuthenticationGeneratorContext) => `import type { Knex } from 'knex'
+}: AuthenticationGeneratorContext) => /* ts */ `import type { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.alterTable('${kebabName}', function (table) {
@@ -31,9 +31,10 @@ export async function down(knex: Knex): Promise<void> {
     table.dropColumn('email')
     table.dropColumn('password')`
           : `    
-    table.dropColumn('${name}Id')`
+    table.dropColumn('${name}Id')
+    `
       )
-      .join(',\n')}
+      .join('\n')}
   })
 }
 `
@@ -41,7 +42,7 @@ export async function down(knex: Knex): Promise<void> {
 export const generate = (ctx: AuthenticationGeneratorContext) =>
   generator(ctx).then(
     when(
-      (ctx) => getDatabaseAdapter(ctx.feathers.database) === 'knex',
+      (ctx) => getDatabaseAdapter(ctx.feathers?.database) === 'knex',
       renderSource(
         migrationTemplate,
         toFile(
