@@ -113,13 +113,6 @@ export default defineConfig({
       // },
     },
 
-    // localeLinks: {
-    //   text: 'English',
-    //   items: [
-    //     { text: '简体中文', link: 'https://cn.vitest.dev' },
-    //   ],
-    // },
-
     socialLinks: [
       { icon: 'twitter', link: twitter },
       { icon: 'discord', link: discord },
@@ -128,7 +121,7 @@ export default defineConfig({
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2012-PRESENT FeathersJS contributors'
+      copyright: `Copyright © 2012-${new Date().getFullYear()} FeathersJS contributors`
     },
 
     nav: [
@@ -198,15 +191,11 @@ export default defineConfig({
           collapsible: true,
           items: [
             {
-              text: 'Getting Ready',
-              link: '/guides/basics/setup.md'
-            },
-            {
               text: 'Quick start',
               link: '/guides/basics/starting.md'
             },
             {
-              text: 'Generating an App',
+              text: 'Feathers CLI',
               link: '/guides/basics/generator.md'
             },
             {
@@ -418,7 +407,11 @@ export default defineConfig({
               link: '/api/schema/'
             },
             {
-              text: 'Schemas',
+              text: 'TypeBox',
+              link: '/api/schema/typebox'
+            },
+            {
+              text: 'JSON schema',
               link: '/api/schema/schema'
             },
             {
@@ -457,7 +450,7 @@ export default defineConfig({
               link: '/api/databases/knex'
             }
           ]
-        },
+        }
       ],
       '/help': [
         {

@@ -4,9 +4,27 @@ outline: deep
 
 # Quick start
 
-Now that we are [ready to roll](./setup.md) we can create our first Feathers application. In this quick start guide we'll create our first Feathers API server and a simple website to use it. You'll see how easy it is to get started with Feathers, even without a generator or boilerplate.
+Alright then! Let's learn Feathers. In this quick start guide we'll create our first Feathers API server and a simple website to use it. You'll see how easy it is to get started with Feathers in just a single file without a generator or additional boilerplate. If you want to jump right into creating a complete application you can go to the [generate an app](./generator.md) chapter.
 
 <img style="margin: 2em;" src="/img/main-character-bench.svg" alt="Getting started">
+
+Feathers works with all [currently active releases](https://github.com/nodejs/Release#release-schedule). All guides are assuming the languages features from the most current stable NodeJS release which you can get from the [NodeJS website](https://nodejs.org/en/).
+
+After successful installation, the `node` and `npm` commands should be available on the terminal:
+
+```
+$ node --version
+```
+
+```
+$ npm --version
+```
+
+<BlockQuote type="warning" label="Important">
+
+Running NodeJS and npm should not require admin or root privileges.
+
+</BlockQuote>
 
 Let's create a new folder for our application:
 
@@ -68,7 +86,7 @@ Create a file called `app.mjs` with the following content:
 
 </LanguageBlock>
 
-```ts{3-8}
+```ts
 import { feathers } from '@feathersjs/feathers'
 
 // This is the interface for the message data
@@ -298,7 +316,7 @@ node app.mjs
 
 <BlockQuote type="info">
 
-The server will stay running until you stop it by pressing Control + C in the terminal.
+The server will stay running until you stop it by pressing __Control + C__ in the terminal.
 
 </BlockQuote>
 
@@ -320,7 +338,7 @@ The built-in [JSON viewer in Firefox](https://developer.mozilla.org/en-US/docs/T
 
 This is the basic setup of a Feathers API server.
 
-- The `app.use` calls probably look familiar if you have used Express before.
+- The `app.use` calls probably look familiar if you have used something like Koa or Express before.
 - `app.configure` calls set up the Feathers transport to host the API.
 - `app.on('connection')` and `app.publish` are used to set up event channels, which send real-time events to the proper clients (everybody that is connected to our server in this case). You can learn [more about the channels API](../../api/channels.md) after finishing this guide.
 
@@ -411,6 +429,6 @@ You'll see the JSON response including all current messages.
 
 ## What's next?
 
-In this chapter we created our first Feathers application and a service that allows creating new messages, storing them in memory, and retrieving them. We then hosted that service as a REST and real-time API server and used Feathers in the browser to connect to that server and create a website that can send new messages and show all existing messages, with messaging updates showing up in realtime.
+In this chapter we created our first Feathers application and a service that allows creating new messages, storing them in memory, and retrieving them. We then hosted that service as a REST and real-time API server and used Feathers in the browser to connect to that server and create a website that can send new messages and show all existing messages in real-time.
 
-Even though we are using just NodeJS and Feathers from scratch without any additional tools, we didn't write a lot of code. In the [next chapter](./generator.md) we will look at the Feathers CLI which can create a similar Feathers application with a recommended file structure. We can also use it to add authentication and database connections, all set up for us, automatically.
+Even though we are using just NodeJS and Feathers from scratch without any additional tools, we didn't write a lot of code. In the [next chapter](./generator.md) we will look at the Feathers CLI which can create a similar Feathers application with a recommended file structure, models, database connections, authentication and more.

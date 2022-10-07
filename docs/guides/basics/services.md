@@ -4,7 +4,7 @@ outline: deep
 
 # Services
 
-Services are the heart of every Feathers application. You probably remember the service we created in the [quick start](./starting.md) to create and find messages. In this chapter we will dive more into services and create a service for our chat messages.
+Services are the heart of every Feathers application. You probably remember the service we created in the [quick start](./starting.md) to create and find messages. In this chapter we will dive more into services and create a database backed service for our chat messages.
 
 ## Feathers services
 
@@ -138,7 +138,7 @@ app.service('messages').on('created', data => {
 
 Now that we have all those service methods we could go ahead and implement any kind of custom logic using any backend. Very often, that means creating, reading, updating and removing data from a database.
 
-Writing all that code yourself for every service is pretty repetitive and cumbersome, which is why Feathers has a collection of pre-built services for different databases. They offer most of the basic functionality and can always be fully customized. Feathers database adapters support a common [usage API](../../api/databases/common.md), pagination and [querying syntax](../../api/databases/querying.md) for many popular databases. The following database adapters are maintained as part of FeathersJS Core.
+Writing all that code yourself for every service is pretty repetitive and cumbersome, which is why Feathers has a collection of pre-built services for different databases. They offer most of the basic functionality and can always be customized to your needs. Feathers database adapters support a common [usage API](../../api/databases/common.md), pagination and [querying syntax](../../api/databases/querying.md) for many popular databases. The following database adapters are maintained as part of FeathersJS Core.
 
 | Database | Adapter |
 |---|---|
@@ -155,10 +155,10 @@ If you went with the default selection, we will use SQLite which writes the data
 In our [newly generated](./generator.md) `feathers-chat` application, we can create database backed services with the following command:
 
 ```sh
-feathers generate service
+npx feathers generate service
 ```
 
-We will give it the name `messages` and can confirm everything else with the default:
+The name for our service is `message` (this is used for variable names etc.) and for the path use `messages`. Anything else we can confirm with the default:
 
 ![feathers generate service prompts](./assets/generate-service.png)
 
@@ -166,4 +166,4 @@ This is it, we now have a database backed messages service with authentication e
 
 ## What's next?
 
-In this chapter we learned about services as a Feathers core concept for abstracting data operations. We also saw how a service sends events which we will use later to create real-time applications. After that, we generated a messages service. Next, we will do some data modelling and add some logic to our chat using [Schemas and resolvers](./schemas.md)
+In this chapter we learned about services as a Feathers core concept for abstracting data operations. We also saw how a service sends events which we will use later to create real-time applications. After that, we generated a messages service. Next, we will [look at Feathers hooks](./hooks.md) as a way to create middleware for services.

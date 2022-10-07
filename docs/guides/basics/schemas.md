@@ -1,17 +1,17 @@
 # Schemas and resolvers
 
-In Feathers, schemas and resolvers allow you to define, validate and secure your data model and types.
+In Feathers, schemas and resolvers allow us to define, validate and secure our data model and types.
 
 <img style="margin: 2em;" src="/img/professor-bird-server.svg" alt="Professor bird at work">
 
-Similar to how Feathers services are transport independent, schemas and resolvers are database independent. It comes in two main parts:
+As we've briefly seen in the [previous chapter about hooks](./hooks.md), schema validators and resolvers are used with hooks to modify data in the hook context. Similar to how Feathers services are transport independent, schemas and resolvers are database independent. It comes in two main parts:
 
-- [Schema](../../api/schema/schema.md) - Uses [JSON schema](https://json-schema.org/) to define a data model. This allows us to:
+- [TypeBox](../../api/schema//typebox.md) or [JSON schema](../../api/schema//schema.md) to define a schema. This allows us to do things like:
   - Ensure data is valid and always in the right format
   - Automatically get up to date TypeScript types from schema definitions
   - Create a typed client that can be used in React, Vue etc. apps
   - Automatically generate API documentation
-  - Validate query string queries and convert them to the right type
+  - Validate query string queries and convert them to the correct type
 - [Resolvers](../../api/schema/resolvers.md) - Resolve schema properties based on a context (usually the [hook context](./hooks.md)). This can be used for many different things like:
   - Populating associations
   - Securing queries and e.g. limiting requests to the logged in user
@@ -28,7 +28,7 @@ While schemas and resolvers can be used outside of a Feather application, you wi
 - `data` schemas and resolvers handle the data from the `create`, `update` and `patch` service methods and can be used to add things like default or calculated values (like the created or updated at date) before saving to the database
 - `query` schemas and resolvers validate and convert the query string and can also be used for additional limitations like only allowing a user to see their own data
 - `result` schemas and resolvers define the data that is being returned. This is also where associated data would be defined
-- `dispatch` resolvers usually use the `result` schema to return a safe version of the data (e.g. hiding a users password) that can be sent to external clients
+- `external` resolvers usually use the `result` to return a safe version of the data (e.g. hiding a users password) that can be sent to external clients
 
 
 ## Adding a user avatar
@@ -37,167 +37,82 @@ Let's extend our existing users schema to add an `avatar` property so that our u
 
 <LanguageBlock global-id="ts">
 
-First we need to update the `src/services/users/users.schema.ts` file with the new `avatar` property. This can be done by adding the JSON schema property definition `avatar: { type: 'string' }` to the `usersDataSchema`:
+First we need to update the `src/services/users/users.schema.ts` file with the schema property for the avatar and a resolver property that sets a default avatar using [Gravatar]() based on the email address:
 
 </LanguageBlock>
 <LanguageBlock global-id="js">
 
-First we need to update the `src/services/users/users.schema.js` file with the new `avatar` property. This can be done by adding the JSON schema property definition `avatar: { type: 'string' }` to the `usersDataSchema`:
+First we need to update the `src/services/users/users.schema.js` file with the schema property for the avatar and a resolver property that sets a default avatar using [Gravatar]() based on the email address:
 
 </LanguageBlock>
 
-```ts{17-19}
-import { schema, querySyntax } from '@feathersjs/schema'
-import type { Infer } from '@feathersjs/schema'
+```ts{1,15,27-35,76-80}
+import crypto from 'crypto'
+import { jsonSchema, resolve } from '@feathersjs/schema'
+import { Type, querySyntax } from '@feathersjs/typebox'
+import type { Static } from '@feathersjs/typebox'
+import { passwordHash } from '@feathersjs/authentication-local'
 
-// Schema for the basic data model (e.g. creating new entries)
-export const usersDataSchema = schema({
-  $id: 'UsersData',
-  type: 'object',
-  additionalProperties: false,
-  required: ['email', 'password'],
-  properties: {
-    email: {
-      type: 'string'
-    },
-    password: {
-      type: 'string'
-    },
-    avatar: {
-      type: 'string'
-    }
-  }
-} as const)
-
-export type UsersData = Infer<typeof usersDataSchema>
-
-// Schema for making partial updates
-export const usersPatchSchema = schema({
-  $id: 'UsersPatch',
-  type: 'object',
-  additionalProperties: false,
-  required: [],
-  properties: {
-    ...usersDataSchema.properties
-  }
-} as const)
-
-export type UsersPatch = Infer<typeof usersPatchSchema>
+import type { HookContext } from '../../declarations'
+import { dataValidator, queryValidator } from '../../schemas/validators'
 
 // Schema for the data that is being returned
-export const usersResultSchema = schema({
-  $id: 'UsersResult',
-  type: 'object',
-  additionalProperties: false,
-  required: ['id'],
-  properties: {
-    ...usersDataSchema.properties,
-    id: {
-      type: 'string'
-    }
-  }
-} as const)
-
-export type UsersResult = Infer<typeof usersResultSchema>
-
-// Queries shouldn't allow doing anything with the password
-const { password, ...usersQueryProperties } = usersResultSchema.properties
-
-// Schema for allowed query properties
-export const usersQuerySchema = schema({
-  $id: 'UsersQuery',
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    ...querySyntax(usersQueryProperties)
-  }
-} as const)
-
-export type UsersQuery = Infer<typeof usersQuerySchema>
-```
-
-Next, instead of making users send a link to their avatar, we update the resolver to automatically add a link to the [Gravatar](http://en.gravatar.com/) image associated with the user's email address. To do this we add an `avatar` data resolver which means it gets added before the user gets saved to the database.
-
-<LanguageBlock global-id="ts">
-
-Update the `src/services/users/users.resolver.ts` file as follows:
-
-</LanguageBlock>
-<LanguageBlock global-id="js">
-
-Update the `src/services/users/users.resolver.js` file as follows:
-
-</LanguageBlock>
-
-```ts{1,24-32,68-72}
-import crypto from 'crypto'
-import { resolve } from '@feathersjs/schema'
-import { passwordHash } from '@feathersjs/authentication-local'
-import type { HookContext } from '../declarations'
-import type {
-  UsersData,
-  UsersPatch,
-  UsersResult,
-  UsersQuery
-} from '../schemas/users.schema'
-import {
-  usersDataSchema,
-  usersPatchSchema,
-  usersResultSchema,
-  usersQuerySchema
-} from '../schemas/users.schema'
-
-// Resolver for the basic data model (e.g. creating new entries)
-export const usersDataResolver = resolve<UsersData, HookContext>({
-  schema: usersDataSchema,
-  validate: 'before',
-  properties: {
-    password: passwordHash({ strategy: 'local' }),
-    avatar: async (_value, user) => {
-      // Gravatar uses MD5 hashes from an email address to get the image
-      const hash = crypto
-        .createHash('md5')
-        .update(user.email.toLowerCase())
-        .digest('hex')
-      // Return the full avatar URL
-      return `https://s.gravatar.com/avatar/${hash}?s=60`
-    }
-  }
-})
-
-// Resolver for making partial updates
-export const usersPatchResolver = resolve<UsersPatch, HookContext>({
-  schema: usersPatchSchema,
-  validate: 'before',
+export const userSchema = Type.Object(
+  {
+    id: Type.Number(),
+    email: Type.String(),
+    password: Type.Optional(Type.String()),
+    avatar: Type.String()
+  },
+  { $id: 'User', additionalProperties: false }
+)
+export type User = Static<typeof userSchema>
+export const userResolver = resolve<User, HookContext>({
   properties: {}
 })
 
-// Resolver for the data that is being returned
-export const usersResultResolver = resolve<UsersResult, HookContext>({
-  schema: usersResultSchema,
-  validate: false,
-  properties: {}
-})
-
-// Resolver for the "safe" version that external clients are allowed to see
-export const usersDispatchResolver = resolve<UsersResult, HookContext>({
-  schema: usersResultSchema,
-  validate: false,
+export const userExternalResolver = resolve<User, HookContext>({
   properties: {
     // The password should never be visible externally
     password: async () => undefined
   }
 })
 
-// Resolver for allowed query properties
-export const usersQueryResolver = resolve<UsersQuery, HookContext>({
-  schema: usersQuerySchema,
-  validate: 'before',
+// Schema for the basic data model (e.g. creating new entries)
+export const userDataSchema = Type.Pick(userSchema, ['email', 'password'], {
+  $id: 'UserData',
+  additionalProperties: false
+})
+export type UserData = Static<typeof userDataSchema>
+export const userDataValidator = jsonSchema.getDataValidator(
+  userDataSchema,
+  dataValidator
+)
+export const userDataResolver = resolve<User, HookContext>({
   properties: {
-    // If there is a user (e.g. with authentication)
-    // They are only allowed to see their own data
+    password: passwordHash({ strategy: 'local' }),
+    avatar: async (_value, user) => {
+      // Gravatar uses MD5 hashes from an email address to get the image
+      const hash = crypto.createHash('md5').update(user.email.toLowerCase()).digest('hex')
+      // Return the full avatar URL
+      return `https://s.gravatar.com/avatar/${hash}?s=60`
+    }
+  }
+})
+
+// Schema for allowed query properties
+export const userQuerySchema = Type.Intersect([
+  querySyntax(userSchema),
+  // Add additional query properties here
+  Type.Object({})
+])
+export type UserQuery = Static<typeof userQuerySchema>
+export const userQueryValidator = jsonSchema.getValidator(userQuerySchema, queryValidator)
+export const userQueryResolver = resolve<UserQuery, HookContext>({
+  properties: {
+    // If there is a user (e.g. with authentication), they are only allowed to see their own data
     id: async (value, user, context) => {
-      // We want to be able to get a list of all users
+      // We want to be able to get a list of all users but
       // only let a user see and modify their own data otherwise
       if (context.params.user && context.method !== 'find') {
         return context.params.user.id
@@ -207,18 +122,6 @@ export const usersQueryResolver = resolve<UsersQuery, HookContext>({
     }
   }
 })
-
-// Export all resolvers in a format that can be used with the resolveAll hook
-export const usersResolvers = {
-  result: usersResultResolver,
-  dispatch: usersDispatchResolver,
-  data: {
-    create: usersDataResolver,
-    update: usersDataResolver,
-    patch: usersPatchResolver
-  },
-  query: usersQueryResolver
-}
 ```
 
 ## Handling messages
@@ -227,119 +130,56 @@ Next we can look at the messages service schema. We want to include the date whe
 
 <LanguageBlock global-id="ts">
 
-Update the `src/services/messages/messages.schema.ts` file with the `userId` and `createdAt` properties:
+Update the `src/services/messages/messages.schema.ts` file like this:
 
 </LanguageBlock>
 <LanguageBlock global-id="js">
 
-Update the `src/services/messages/messages.schema.js` file with the `userId` and `createdAt` properties:
+Update the `src/services/messages/messages.schema.js` file like this:
 
 </LanguageBlock>
 
-```ts{3,15-20,53-55}
-import { schema, querySyntax } from '@feathersjs/schema'
-import type { Infer } from '@feathersjs/schema'
-import { UsersResult } from './users.schema'
+```ts{7,13-14,25-32,42,50-53}
+import { jsonSchema, resolve } from '@feathersjs/schema'
+import { Type, querySyntax } from '@feathersjs/typebox'
+import type { Static } from '@feathersjs/typebox'
 
-// Schema for the basic data model (e.g. creating new entries)
-export const messagesDataSchema = schema({
-  $id: 'MessagesData',
-  type: 'object',
-  additionalProperties: false,
-  required: ['text'],
-  properties: {
-    text: {
-      type: 'string'
-    },
-    createdAt: {
-      type: 'number'
-    },
-    userId: {
-      type: 'number' // 'string' if you are using MongoDB
-    }
-  }
-} as const)
-
-export type MessagesData = Infer<typeof messagesDataSchema>
-
-// Schema for making partial updates
-export const messagesPatchSchema = schema({
-  $id: 'MessagesPatch',
-  type: 'object',
-  additionalProperties: false,
-  required: [],
-  properties: {
-    ...messagesDataSchema.properties
-  }
-} as const)
-
-export type MessagesPatch = Infer<typeof messagesPatchSchema>
+import type { HookContext } from '../../declarations'
+import { dataValidator, queryValidator } from '../../schemas/validators'
+import { userSchema } from '../users/users.schema'
 
 // Schema for the data that is being returned
-export const messagesResultSchema = schema({
-  $id: 'MessagesResult',
-  type: 'object',
-  additionalProperties: false,
-  required: [...messagesDataSchema.required, 'id', 'userId'],
+export const messageSchema = Type.Object(
+  {
+    id: Type.Number(),
+    text: Type.String(),
+    createdAt: Type.Number(),
+    userId: Type.Number(),
+    user: Type.Ref(userSchema)
+  },
+  { $id: 'Message', additionalProperties: false }
+)
+export type Message = Static<typeof messageSchema>
+export const messageResolver = resolve<Message, HookContext>({
   properties: {
-    ...messagesDataSchema.properties,
-    id: {
-      type: 'string'
+    user: async (_value, message, context) => {
+      // Associate the user that sent the message
+      return context.app.service('users').get(message.userId)
     }
   }
-} as const)
+})
 
-export type MessagesResult = Infer<typeof messagesResultSchema> & {
-  user: UsersResult
-}
-
-// Schema for allowed query properties
-export const messagesQuerySchema = schema({
-  $id: 'MessagesQuery',
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    ...querySyntax(messagesResultSchema.properties)
-  }
-} as const)
-
-export type MessagesQuery = Infer<typeof messagesQuerySchema>
-```
-
-Both the `createdAt` and `userId` property can be added automatically before saving the data to the database. `createdAt` is the current date and `userId` is the authenticated user (we will see how to authenticate in the [next chapter](./authentication.md)). To do this we can update the `data` resolver. To populate the full user that sent the message in a response we can use the `result` resolver.
-
-<LanguageBlock global-id="ts">
-
-Update `src/services/messages/messages.resolver.ts` like this:
-
-</LanguageBlock>
-<LanguageBlock global-id="js">
-
-Update `src/services/messages/messages.resolver.js` like this:
-
-</LanguageBlock>
-
-```ts{22-29,45-48}
-import { resolve } from '@feathersjs/schema'
-import type { HookContext } from '../declarations'
-
-import type {
-  MessagesData,
-  MessagesPatch,
-  MessagesResult,
-  MessagesQuery
-} from '../schemas/messages.schema'
-import {
-  messagesDataSchema,
-  messagesPatchSchema,
-  messagesResultSchema,
-  messagesQuerySchema
-} from '../schemas/messages.schema'
-
-// Resolver for the basic data model (e.g. creating new entries)
-export const messagesDataResolver = resolve<MessagesData, HookContext>({
-  schema: messagesDataSchema,
-  validate: 'before',
+// Schema for the basic data model (e.g. creating new entries)
+export const messageDataSchema = Type.Pick(messageSchema, ['text'], {
+  $id: 'MessageData',
+  additionalProperties: false
+})
+export type MessageData = Static<typeof messageDataSchema>
+export const messageDataValidator = jsonSchema.getDataValidator(
+  messageDataSchema,
+  dataValidator
+)
+export const messageDataResolver = resolve<Message, HookContext>({
   properties: {
     userId: async (_value, _message, context) => {
       // Associate the record with the id of the authenticated user
@@ -352,44 +192,23 @@ export const messagesDataResolver = resolve<MessagesData, HookContext>({
   }
 })
 
-// Resolver for making partial updates
-export const messagesPatchResolver = resolve<MessagesPatch, HookContext>({
-  schema: messagesPatchSchema,
-  validate: 'before',
+export const messageExternalResolver = resolve<Message, HookContext>({
   properties: {}
 })
 
-// Resolver for the data that is being returned
-export const messagesResultResolver = resolve<MessagesResult, HookContext>({
-  schema: messagesResultSchema,
-  validate: false,
-  properties: {
-    user: async (_value, message, context) => {
-      // Associate the user that sent the message
-      return context.app.service('users').get(message.userId)
-    }
-  }
-})
-
-// Resolver for query properties
-export const messagesQueryResolver = resolve<MessagesQuery, HookContext>({
-  schema: messagesQuerySchema,
-  validate: 'before',
+// Schema for allowed query properties
+export const messageQuerySchema = querySyntax(
+  Type.Pick(messageSchema, ['createdAt', 'userId'])
+)
+export type MessageQuery = Static<typeof messageQuerySchema>
+export const messageQueryValidator = jsonSchema.getValidator(
+  messageQuerySchema,
+  queryValidator
+)
+export const messageQueryResolver = resolve<MessageQuery, HookContext>({
   properties: {}
 })
-
-// Export all resolvers in a format that can be used with the resolveAll hook
-export const messagesResolvers = {
-  result: messagesResultResolver,
-  data: {
-    create: messagesDataResolver,
-    update: messagesDataResolver,
-    patch: messagesPatchResolver
-  },
-  query: messagesQueryResolver
-}
 ```
-
 ## Creating a migration
 
 Now that our schemas and resolvers are up to date, we also have to update the database with the changes that we made. For SQL databases this is done with migrations. Every change we make in a schema will need its corresponding migration step.
@@ -451,26 +270,6 @@ We can run the migrations on the current database with
 ```
 npm run migrate
 ```
-
-## Services, Hooks and Schemas
-
-In the [previous chapter](./services.md) we extended our user service to add a user avatar. This could also be added in a hook but mades a good example to illustrate how to extend an existing service. There are no explicit rules when to use a hook or when to extend a service but here are some guidelines.
-
-Use a hook when
-
-- The functionality can be used in more than one place (e.g. validation, permissions etc.)
-- It is not a core responsibility of the service and the service can work without it (e.g. sending an email after a user has been created)
-
-Extend a service when
-
-- The functionality is only needed in this one place
-- The service could not function without it
-
-Create your own (custom) service when
-
-- Multiple services are combined together (e.g. reports)
-- The service does something other than talk to a database (e.g. another API, sensors etc.)
-
 
 ## What's next?
 

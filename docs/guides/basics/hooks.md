@@ -4,125 +4,61 @@ outline: deep
 
 # Hooks
 
-As we have seen in the [quick start](./starting.md),  and when we created our messages service in [the previous chapter](./services.md), Feathers services are a great way to implement data storage and modification. Technically, we could write our entire app with services but very often we need similar functionality across multiple services. For example, we might want to check for all services a user is allowed to access. With just services, we would have to implement this every time.
+As we have seen in the [quick start](./starting.md) and when we created our messages service in [the previous chapter](./services.md), Feathers services are a great way to implement data storage and modification. Technically, we could write our entire app with services but very often we need similar functionality across multiple services. For example, we might want to check for all services if a user is allowed to access it. With just services, we would have to implement this every time.
 
-This is where Feathers hooks come in. Hooks are pluggable middleware functions that can be registered __around__, __before__, __after__ or on __errors__ of a service method. Just like services themselves, hooks are *transport independent*. They are usually also service agnostic, meaning they can be used with ​*any*​ service. This pattern keeps your application logic flexible, composable, and much easier to trace through and debug.
-
-<BlockQuote type="info">
-
-A full overview of the hook API can be found in the [hooks API documentation](../../api/hooks.md).
-
-</BlockQuote>
-
-Hooks are commonly used to handle things like validation, authorization, logging, populating related entities, sending notifications and more.
+This is where Feathers hooks come in. Hooks are pluggable middleware functions that can be registered __around__, __before__, __after__ or on __errors__ of a service method. Just like services themselves, hooks are *transport independent*. They are usually also service independent, meaning they can be used with ​*any*​ service. This pattern keeps your application logic flexible, composable, and much easier to trace through and debug.
+Hooks are commonly used to handle things like validation, authorization, logging, sending emails and more.
 
 <BlockQuote type="tip">
 
-For the general design pattern behind hooks see [this blog post](https://blog.feathersjs.com/design-patterns-for-modern-web-apis-1f046635215). A more Feathers specific overview can be found [here](https://blog.feathersjs.com/api-service-composition-with-hooks-47af13aa6c01).
+A full overview of the hook API can be found in the [hooks API documentation](../../api/hooks.md). For the general design pattern behind hooks see [this blog post](https://blog.feathersjs.com/design-patterns-for-modern-web-apis-1f046635215).
 
 </BlockQuote>
 
-## Quick example
+## Generating a hook
 
-Here is a quick example for a hook that adds a `createdAt` property to the data before calling the actual `create` service method:
+Let's generate a hook that lets us log the total runtime of a service method to the console.
 
+```sh
+npx feathers generate hook
+```
+
+We call our hook `log-runtime` and confirm the type with enter to make it an `around` hook.
 
 
 <LanguageBlock global-id="ts">
 
-```ts
-import { HookContext } from '@feathersjs/feathers';
-
-const createdAt = async (context: HookContext) => {
-  context.data.createdAt = new Date();
-
-  return context;
-};
-
-app.service('messages').hooks({
-  before: {
-    create: [ createdAt ]
-  }
-});
-```
+Now update `src/hooks/log-runtime.ts` as follows:
 
 </LanguageBlock>
-
 <LanguageBlock global-id="js">
 
-```js
-const createdAt = async context => {
-  context.data.createdAt = new Date();
-
-  return context;
-};
-
-app.service('messages').hooks({
-  before: {
-    create: [ createdAt ]
-  }
-});
-```
+Now update `src/hooks/log-runtime.js` as follows:
 
 </LanguageBlock>
 
 
+```ts{4-9}
+import type { HookContext, NextFunction } from '../declarations'
+
+export const logRuntime = async (context: HookContext, next: NextFunction) => {
+  const startTime = Date.now()
+  // Run everything else (other hooks and service call)
+  await next()
+
+  const duration = Date.now() - startTime
+  console.log(
+    `Calling ${context.method} on ${context.path} took ${duration}ms`
+  )
+}
+
+```
 
 ## Hook functions
 
-A hook function is a function that takes the [hook context](#hook-context) as the parameter and returns that context or nothing. Hook functions run in the order they are registered and will only continue to the next once the current hook function completes. If a hook function throws an error, all remaining hooks (and the service call if it didn't run yet) will be skipped and the error will be returned.
+A hook function is an `async` function that takes the [hook `context`](#hook-context) and a `next` function as the parameter. If the hook should only run __before__ or __after__ the service method, it does not need a `next` function. 
 
-A common pattern the generator uses to make hooks more reusable (e.g. making the `createdAt` property name from the example above configurable) is to create a wrapper function that takes those options and returns a hook function:
-
-
-
-<LanguageBlock global-id="ts">
-
-```ts
-import { HookContext } from '@feathersjs/feathers';
-
-const setTimestamp = (name: string) => {
-  return async (context: HookContext) => {
-    context.data[name] = new Date();
-
-    return context;
-  }
-}
-
-app.service('messages').hooks({
-  before: {
-    create: [ setTimestamp('createdAt') ],
-    update: [ setTimestamp('updatedAt') ]
-  }
-});
-```
-
-</LanguageBlock>
-
-<LanguageBlock global-id="js">
-
-```js
-const setTimestamp = name => {
-  return async context => {
-    context.data[name] = new Date();
-
-    return context;
-  }
-}
-
-app.service('messages').hooks({
-  before: {
-    create: [ setTimestamp('createdAt') ],
-    update: [ setTimestamp('updatedAt') ]
-  }
-});
-```
-
-</LanguageBlock>
-
-
-
-Now we have a reusable hook that can set the timestamp on any property.
+However since we need to store the start and end time here, we created an `around` hook. Hooks run in the order they are registered and if a hook function throws an error, all remaining hooks (and the service call if it didn't run yet) will be skipped and the error will be returned.
 
 ## Hook context
 
@@ -146,96 +82,98 @@ Writeable properties are:
 - `context.error` - The error that was thrown (in `error` hooks)
 - `context.result` - The result of the service method call (in `after` hooks)
 
-> __Note:__ For more information about the hook context see the [hooks API documentation](../../api/hooks.md).
+<BlockQuote type="tip">
+
+For more information about the hook context see the [hooks API documentation](../../api/hooks.md).
+
+</BlockQuote>
 
 ## Registering hooks
 
-In a Feathers application generated by the CLI, hooks are being registered in a `.hooks` file in an object in the following format:
-
-
+In a Feathers application generated by the CLI, hooks are being registered in the `<servicename>.ts` file. The hook registration object is an object with `{ around, before, after, error }` and a list or hooks per method like `{ all: [], find: [], create: [] }`.
 
 <LanguageBlock global-id="ts">
 
-```ts
-export default {
-  before: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
-  },
-
-  after: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
-  },
-
-  error: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
-  }
-};
-```
+To log the runtime of our `messages` service calls we can update `src/services/messages/messages.ts` like this:
 
 </LanguageBlock>
-
 <LanguageBlock global-id="js">
 
-```js
-module.exports = {
-  before: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
-  },
-
-  after: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
-  },
-
-  error: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
-  }
-};
-```
+To log the runtime of all `messages` service calls we can update `src/services/messages/messages.js` like this:
 
 </LanguageBlock>
 
+```ts{16,33}
+import { authenticate } from '@feathersjs/authentication'
 
+import { hooks as schemaHooks } from '@feathersjs/schema'
 
-This makes it easy to see at one glance the order hooks are executed and for which method.
+import {
+  messageDataValidator,
+  messageQueryValidator,
+  messageResolver,
+  messageDataResolver,
+  messageQueryResolver,
+  messageExternalResolver
+} from './messages.schema'
 
-> __Note:__ `all` is a special keyword which means those hooks will run before the method specific hooks in this chain.
+import type { Application } from '../../declarations'
+import { MessageService, getOptions } from './messages.class'
+import { logRuntime } from '../../hooks/log-runtime'
+
+export * from './messages.class'
+export * from './messages.schema'
+
+// A configure function that registers the service and its hooks via `app.configure`
+export const message = (app: Application) => {
+  // Register our service on the Feathers application
+  app.use('messages', new MessageService(getOptions(app)), {
+    // A list of all methods this service exposes externally
+    methods: ['find', 'get', 'create', 'update', 'patch', 'remove'],
+    // You can add additional custom events to be sent to clients here
+    events: []
+  })
+  // Initialize hooks
+  app.service('messages').hooks({
+    around: {
+      all: [
+        logRuntime,
+        authenticate('jwt')
+      ]
+    },
+    before: {
+      all: [
+        schemaHooks.validateQuery(messageQueryValidator),
+        schemaHooks.validateData(messageDataValidator),
+        schemaHooks.resolveQuery(messageQueryResolver),
+        schemaHooks.resolveData(messageDataResolver)
+      ]
+    },
+    after: {
+      all: [schemaHooks.resolveResult(messageResolver), schemaHooks.resolveExternal(messageExternalResolver)]
+    },
+    error: {
+      all: []
+    }
+  })
+}
+
+// Add this service to the service type index
+declare module '../../declarations' {
+  interface ServiceTypes {
+    messages: MessageService
+  }
+}
+```
+
+<BlockQuote type="info">
+
+`all` is a special keyword which means those hooks will run before the method specific hooks.
+
+</BlockQuote>
+
+Now every time a our messages service is accessed successfully the name, method and runtime will be logged.
 
 ## What's next?
 
-In this chapter we learned how Feathers hooks can be used as middleware for service method calls to validate and manipulate incoming and outgoing data without having to change our service. We now have a fully working chat application. Before we [create a frontend for it](../frontend/javascript.md) though, let's first look at how [authentication works with Feathers](./authentication.md).
+In this chapter we learned how Feathers hooks can be used as middleware for service method calls without having to change our service. You may have noticed above that there are already some `schemaHooks` like `schemaHooks.validateQuery` or `schemaHooks.resolveResult` registered on our service which brings us to the next chapter on how to define our data model with [schemas and resolvers](./schemas.md).

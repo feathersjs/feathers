@@ -21,9 +21,7 @@ const attrsToLines = (attrs: string): HtmlRendererOptions['lineOptions'] => {
     .map((v) => v.split('-').map((v) => parseInt(v, 10)))
     .forEach(([start, end]) => {
       if (start && end) {
-        result.push(
-          ...Array.from({ length: end - start + 1 }, (_, i) => start + i)
-        )
+        result.push(...Array.from({ length: end - start + 1 }, (_, i) => start + i))
       } else {
         result.push(start)
       }
@@ -74,7 +72,7 @@ export async function highlight(
     if (lang === 'ts' || lang === 'typescript') {
       const prettierOptions = {
         ...PRETTIERRC,
-        printWidth: 80
+        printWidth: 90
       }
 
       const javascript = getJavaScript(code)
@@ -92,6 +90,6 @@ export async function highlight(
       return tsCode + jsCode
     }
 
-    return highlightCode(code, lang, attrs)  
+    return highlightCode(code, lang, attrs)
   }
 }
