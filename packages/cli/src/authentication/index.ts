@@ -17,7 +17,7 @@ export interface AuthenticationGeneratorContext extends ServiceGeneratorContext 
 }
 
 export type AuthenticationGeneratorArguments = FeathersBaseContext &
-  Partial<Pick<AuthenticationGeneratorContext, 'service' | 'authStrategies' | 'entity'>>
+  Partial<Pick<AuthenticationGeneratorContext, 'service' | 'authStrategies' | 'entity' | 'path'>>
 
 export const prompts = (ctx: AuthenticationGeneratorArguments) => [
   {
@@ -59,6 +59,13 @@ export const prompts = (ctx: AuthenticationGeneratorArguments) => [
     type: 'input',
     when: !ctx.service,
     message: 'What is your authentication service name?',
+    default: 'user'
+  },
+  {
+    name: 'path',
+    type: 'input',
+    when: !ctx.path,
+    message: 'What path should the service be registered on?',
     default: 'users'
   },
   {
@@ -80,7 +87,6 @@ export const generate = (ctx: AuthenticationGeneratorArguments) =>
       const serviceContext = await serviceGenerator({
         ...ctx,
         name: ctx.service,
-        path: ctx.service,
         isEntityService: true,
         type: getDatabaseAdapter(ctx.feathers?.database)
       })

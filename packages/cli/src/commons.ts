@@ -54,6 +54,10 @@ export type FeathersAppInfo = {
    * The HTTP framework used
    */
   framework: 'koa' | 'express'
+  /**
+   * The main schema definition format
+   */
+  schema: 'typebox' | 'json'
 }
 
 export interface AppPackageJson extends PackageJson {

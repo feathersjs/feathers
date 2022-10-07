@@ -20,8 +20,18 @@ export type ResolverConverter<T, C> = (
 
 export interface ResolverConfig<T, C> {
   schema?: Schema<T>
+  /**
+   * @deprecated Use the `validateData` and `validateQuery` hooks explicitly instead
+   */
   validate?: 'before' | 'after' | false
+  /**
+   * The properties to resolve
+   */
   properties: PropertyResolverMap<T, C>
+  /**
+   * A converter function that is run before property resolvers
+   * to transform the initial data into a different format.
+   */
   converter?: ResolverConverter<T, C>
 }
 
@@ -37,6 +47,15 @@ export class Resolver<T, C> {
 
   constructor(public options: ResolverConfig<T, C>) {}
 
+  /**
+   * Resolve a single property
+   *
+   * @param name The name of the property
+   * @param data The current data
+   * @param context The current resolver context
+   * @param status The current resolver status
+   * @returns The resolver property
+   */
   async resolveProperty<D, K extends keyof T>(
     name: K,
     data: D,
@@ -122,6 +141,12 @@ export class Resolver<T, C> {
   }
 }
 
+/**
+ * Create a new resolver with `<DataType, ContextType>`.
+ *
+ * @param options The configuration for the returned resolver
+ * @returns A new resolver instance
+ */
 export function resolve<T, C>(options: ResolverConfig<T, C>) {
   return new Resolver<T, C>(options)
 }

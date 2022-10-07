@@ -1,14 +1,16 @@
 import { HookContext, NextFunction } from '@feathersjs/feathers'
-import { BadRequest } from '../../../errors/lib'
-import { Schema } from '../schema'
+import { BadRequest } from '@feathersjs/errors'
+import { Schema, Validator } from '../schema'
+import { DataValidatorMap } from '../json-schema'
 
-export const validateQuery =
-  <H extends HookContext>(schema: Schema<any>) =>
-  async (context: H, next?: NextFunction) => {
+export const validateQuery = <H extends HookContext>(schema: Schema<any> | Validator) => {
+  const validator: Validator = typeof schema === 'function' ? schema : schema.validate.bind(schema)
+
+  return async (context: H, next?: NextFunction) => {
     const data = context?.params?.query || {}
 
     try {
-      const query = await schema.validate(data)
+      const query = await validator(data)
 
       context.params = {
         ...context.params,
@@ -22,23 +24,30 @@ export const validateQuery =
       throw error.ajv ? new BadRequest(error.message, error.errors) : error
     }
   }
+}
 
-export const validateData =
-  <H extends HookContext>(schema: Schema<any>) =>
-  async (context: H, next?: NextFunction) => {
+export const validateData = <H extends HookContext>(schema: Schema<any> | DataValidatorMap) => {
+  return async (context: H, next?: NextFunction) => {
     const data = context.data
+    const validator =
+      typeof (schema as Schema<any>).validate === 'function'
+        ? (schema as Schema<any>).validate.bind(schema)
+        : (schema as any)[context.method]
 
-    try {
-      if (Array.isArray(data)) {
-        context.data = await Promise.all(data.map((current) => schema.validate(current)))
-      } else {
-        context.data = await schema.validate(data)
+    if (validator) {
+      try {
+        if (Array.isArray(data)) {
+          context.data = await Promise.all(data.map((current) => validator(current)))
+        } else {
+          context.data = await validator(data)
+        }
+      } catch (error: any) {
+        throw error.ajv ? new BadRequest(error.message, error.errors) : error
       }
-    } catch (error: any) {
-      throw error.ajv ? new BadRequest(error.message, error.errors) : error
     }
 
     if (typeof next === 'function') {
       return next()
     }
   }
+}

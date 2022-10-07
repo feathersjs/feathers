@@ -16,7 +16,7 @@ const tsPackageJson = (lib: string) => ({
   scripts: {
     dev: `nodemon -x ts-node ${lib}/index.ts`,
     compile: 'shx rm -rf lib/ && tsc',
-    start: 'npm run compile && node lib/',
+    start: 'node lib/',
     prettier: 'npx prettier "**/*.ts" --write',
     mocha:
       'cross-env NODE_ENV=test mocha test/ --require ts-node/register --recursive --extension .ts --exit',
@@ -33,7 +33,8 @@ const packageJson = ({
   framework,
   transports,
   lib,
-  test
+  test,
+  schema
 }: AppGeneratorContext) => ({
   name,
   description,
@@ -52,7 +53,8 @@ const packageJson = ({
     packager,
     database,
     framework,
-    transports
+    transports,
+    schema
   },
   directories: {
     lib,

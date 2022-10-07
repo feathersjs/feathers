@@ -70,7 +70,14 @@ export const generate = (ctx: AppGeneratorArguments) =>
           type: 'input',
           when: !ctx.name,
           message: 'What is the name of your application?',
-          default: ctx.cwd.split(sep).pop()
+          default: ctx.cwd.split(sep).pop(),
+          validate: (input) => {
+            if (ctx.dependencyVersions[input]) {
+              return `Application can not have the same name as a dependency`
+            }
+
+            return true
+          }
         },
         {
           name: 'description',
@@ -109,10 +116,21 @@ export const generate = (ctx: AppGeneratorArguments) =>
             { value: 'pnpm', name: 'pnpm' }
           ]
         },
+        {
+          type: 'list',
+          name: 'schema',
+          when: !ctx.schema,
+          message: 'What is your preferred schema (model) definition format?',
+          choices: [
+            { value: 'typebox', name: `TypeBox ${chalk.grey('(recommended)')}` },
+            { value: 'json', name: 'JSON schema' }
+          ]
+        },
         ...connectionPrompts(ctx),
         ...authenticationPrompts({
           ...ctx,
-          service: 'users',
+          service: 'user',
+          path: 'users',
           entity: 'user'
         })
       ])
@@ -120,26 +138,22 @@ export const generate = (ctx: AppGeneratorArguments) =>
     .then(runGenerators(__dirname, 'templates'))
     .then(copyFiles(fromFile(__dirname, 'static'), toFile('.')))
     .then(initializeBaseContext())
-    .then(
-      when<AppGeneratorContext>(
-        ({ authStrategies }) => authStrategies.length > 0,
-        async (ctx) => {
-          const { dependencies } = await connectionGenerator(ctx)
+    .then(async (ctx) => {
+      const { dependencies } = await connectionGenerator(ctx)
 
-          return {
-            ...ctx,
-            dependencies
-          }
-        }
-      )
-    )
+      return {
+        ...ctx,
+        dependencies
+      }
+    })
     .then(
       when<AppGeneratorContext>(
         ({ authStrategies }) => authStrategies.length > 0,
         async (ctx) => {
           const { dependencies } = await authenticationGenerator({
             ...ctx,
-            service: 'users',
+            service: 'user',
+            path: 'users',
             entity: 'user'
           })
 
@@ -152,7 +166,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
     )
     .then(
       install<AppGeneratorContext>(
-        ({ transports, framework, dependencyVersions, dependencies }) => {
+        ({ transports, framework, dependencyVersions, dependencies, schema }) => {
           const hasSocketio = transports.includes('websockets')
 
           dependencies.push(
@@ -175,6 +189,10 @@ export const generate = (ctx: AppGeneratorArguments) =>
 
           if (framework === 'express') {
             dependencies.push('@feathersjs/express', 'compression')
+          }
+
+          if (schema === 'typebox') {
+            dependencies.push('@feathersjs/typebox')
           }
 
           return addVersions(dependencies, dependencyVersions)

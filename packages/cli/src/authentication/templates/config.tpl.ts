@@ -8,7 +8,7 @@ export const generate = (ctx: AuthenticationGeneratorContext) =>
       mergeJSON<AuthenticationGeneratorContext>(({ authStrategies }) => {
         const authentication: any = {
           entity: ctx.entity,
-          service: ctx.service,
+          service: ctx.path,
           secret: crypto.randomBytes(24).toString('base64'),
           authStrategies: ['jwt'],
           jwtOptions: {

@@ -1,13 +1,13 @@
 import { createContext } from '@feathersjs/feathers'
 import assert from 'assert'
-import { app, MessageResult, UserResult } from './fixture'
+import { app, Message, User } from './fixture'
 
 describe('@feathersjs/schema/hooks', () => {
   const text = 'Hi there'
 
-  let message: MessageResult
-  let messageOnPaginatedService: MessageResult
-  let user: UserResult
+  let message: Message
+  let messageOnPaginatedService: Message
+  let user: User
 
   before(async () => {
     user = (

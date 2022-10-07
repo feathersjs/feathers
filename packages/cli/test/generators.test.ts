@@ -38,6 +38,7 @@ describe('@feathersjs/cli', () => {
 
       before(async () => {
         cwd = await mkdtemp(path.join(os.tmpdir(), name + '-'))
+        console.log(cwd)
         context = await generateApp(
           getContext<AppGeneratorContext>(
             {
@@ -52,7 +53,7 @@ describe('@feathersjs/cli', () => {
               connectionString: `${name}.sqlite`,
               transports: ['rest', 'websockets'],
               authStrategies: ['local', 'github'],
-              _: ['generate', 'app']
+              schema: 'typebox'
             },
             { cwd }
           )
@@ -72,13 +73,12 @@ describe('@feathersjs/cli', () => {
             {
               dependencyVersions,
               database: 'mongodb' as const,
-              connectionString: `mongodb://localhost:27017/${name}`,
-              _: ['generate', 'connection']
+              connectionString: `mongodb://localhost:27017/${name}`
             },
             { cwd }
           )
         )
-        const mongoServiceContext = await generateService(
+        const mongoService1Context = await generateService(
           getContext<ServiceGeneratorArguments>(
             {
               dependencyVersions,
@@ -86,7 +86,20 @@ describe('@feathersjs/cli', () => {
               path: 'path/to/test',
               authentication: true,
               type: 'mongodb',
-              _: ['generate', 'service']
+              schema: false
+            },
+            { cwd }
+          )
+        )
+        const messageServiceContext = await generateService(
+          getContext<ServiceGeneratorArguments>(
+            {
+              dependencyVersions,
+              name: 'message',
+              path: 'messages',
+              authentication: true,
+              type: 'mongodb',
+              schema: 'typebox'
             },
             { cwd }
           )
@@ -94,7 +107,8 @@ describe('@feathersjs/cli', () => {
         const testResult = await context.pinion.exec('npm', ['test'], { cwd })
 
         assert.ok(connectionContext)
-        assert.ok(mongoServiceContext)
+        assert.ok(mongoService1Context)
+        assert.ok(messageServiceContext)
         assert.strictEqual(testResult, 0)
       })
 
@@ -103,11 +117,11 @@ describe('@feathersjs/cli', () => {
           getContext<ServiceGeneratorArguments>(
             {
               dependencyVersions,
-              name: 'Custom Service',
-              path: 'custom',
+              name: 'Custom',
+              path: 'customized',
               authentication: false,
               type: 'custom',
-              _: ['generate', 'service']
+              schema: 'json'
             },
             { cwd }
           )
