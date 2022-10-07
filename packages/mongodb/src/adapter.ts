@@ -195,10 +195,10 @@ export class MongoDbAdapter<
     return runQuery(0).then((page) => page.data)
   }
 
-  async $create(data: Partial<D>, params?: P): Promise<T>
-  async $create(data: Partial<D>[], params?: P): Promise<T[]>
-  async $create(data: Partial<D> | Partial<D>[], _params?: P): Promise<T | T[]>
-  async $create(data: Partial<D> | Partial<D>[], params: P = {} as P): Promise<T | T[]> {
+  async $create(data: D, params?: P): Promise<T>
+  async $create(data: D[], params?: P): Promise<T[]>
+  async $create(data: D | D[], _params?: P): Promise<T | T[]>
+  async $create(data: D | D[], params: P = {} as P): Promise<T | T[]> {
     const writeOptions = params.mongodb
     const { Model } = this.getOptions(params)
     const model = await Promise.resolve(Model)

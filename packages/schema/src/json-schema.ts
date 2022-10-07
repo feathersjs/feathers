@@ -129,14 +129,15 @@ export const queryProperty = <T extends JSONSchema>(def: T) => {
 /**
  * Creates Feathers a query syntax compatible JSON schema for multiple properties.
  *
- * @param definition A map of property definitions
+ * @param definitions A map of property definitions
  * @returns The JSON schema definition for the Feathers query syntax for multiple properties
  */
-export const queryProperties = <T extends { [key: string]: JSONSchema }>(definition: T) =>
-  Object.keys(definition).reduce((res, key) => {
+export const queryProperties = <T extends { [key: string]: JSONSchema }>(definitions: T) =>
+  Object.keys(definitions).reduce((res, key) => {
     const result = res as any
+    const definition = definitions[key]
 
-    result[key] = queryProperty(definition[key])
+    result[key] = queryProperty(definition)
 
     return result
   }, {} as { [K in keyof T]: PropertyQuery<T[K]> })

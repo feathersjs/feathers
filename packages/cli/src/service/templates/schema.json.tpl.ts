@@ -13,7 +13,30 @@ import type { FromSchema } from '@feathersjs/schema'
 import type { HookContext } from '${relative}/declarations'
 import { dataValidator, queryValidator } from '${relative}/schemas/validators'
 
-// Schema for the basic data model (e.g. creating new entries)
+// Main data model schema
+export const ${camelName}Schema = {
+  $id: '${upperName}',
+  type: 'object',
+  additionalProperties: false,
+  required: [ '${type === 'mongodb' ? '_id' : 'id'}', 'text' ],
+  properties: {
+    ${type === 'mongodb' ? '_id' : 'id'}: {
+      type: '${type === 'mongodb' ? 'string' : 'number'}'
+    },
+    text: {
+      type: 'string'
+    }
+  }
+} as const
+export type ${upperName} = FromSchema<typeof ${camelName}Schema>
+export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
+  properties: {}
+})
+export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
+  properties: {}
+})
+
+// Schema for creating new data
 export const ${camelName}DataSchema = {
   $id: '${upperName}Data',
   type: 'object',
@@ -28,27 +51,6 @@ export const ${camelName}DataSchema = {
 export type ${upperName}Data = FromSchema<typeof ${camelName}DataSchema>
 export const ${camelName}DataValidator = jsonSchema.getDataValidator(${camelName}DataSchema, dataValidator)
 export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
-  properties: {}
-})
-
-// Schema for the data that is being returned
-export const ${camelName}Schema = {
-  $id: '${upperName}',
-  type: 'object',
-  additionalProperties: false,
-  required: [ ...${camelName}DataSchema.required, '${type === 'mongodb' ? '_id' : 'id'}' ],
-  properties: {
-    ...${camelName}DataSchema.properties,
-    ${type === 'mongodb' ? '_id' : 'id'}: {
-      type: '${type === 'mongodb' ? 'string' : 'number'}'
-    }
-  }
-} as const
-export type ${upperName} = FromSchema<typeof ${camelName}Schema>
-export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
-  properties: {}
-})
-export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
   properties: {}
 })
 

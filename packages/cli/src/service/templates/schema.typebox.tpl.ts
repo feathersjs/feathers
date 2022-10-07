@@ -14,23 +14,11 @@ import type { Static } from '@feathersjs/typebox'
 import type { HookContext } from '${relative}/declarations'
 import { dataValidator, queryValidator } from '${relative}/schemas/validators'
 
-// Schema for the basic data model (e.g. creating new entries)
-export const ${camelName}DataSchema = Type.Object({
-  text: Type.String()
-}, { $id: '${upperName}Data', additionalProperties: false })
-export type ${upperName}Data = Static<typeof ${camelName}DataSchema>
-export const ${camelName}DataValidator = jsonSchema.getDataValidator(${camelName}DataSchema, dataValidator)
-export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
-  properties: {}
-})
-
-// Schema for the data that is being returned
-export const ${camelName}Schema = Type.Intersect([
-  ${camelName}DataSchema, 
-  Type.Object({
-    ${type === 'mongodb' ? '_id: Type.String()' : 'id: Type.Number()'}
-  })
-], { $id: '${upperName}', additionalProperties: false })
+// Main data model schema
+export const ${camelName}Schema = Type.Object({
+    ${type === 'mongodb' ? '_id: Type.String()' : 'id: Type.Number()'},
+    text: Type.String()
+  }, { $id: '${upperName}', additionalProperties: false })
 export type ${upperName} = Static<typeof ${camelName}Schema>
 export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
   properties: {}
@@ -40,12 +28,21 @@ export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
   properties: {}
 })
 
+// Schema for creating new entries
+export const ${camelName}DataSchema = Type.Pick(${camelName}Schema, ['text'], {
+  $id: '${upperName}Data', additionalProperties: false
+})
+export type ${upperName}Data = Static<typeof ${camelName}DataSchema>
+export const ${camelName}DataValidator = jsonSchema.getDataValidator(${camelName}DataSchema, dataValidator)
+export const ${camelName}DataResolver = resolve<${upperName}, HookContext>({
+  properties: {}
+})
+
 // Schema for allowed query properties
-export const ${camelName}QuerySchema = Type.Intersect([
-  querySyntax(${camelName}Schema),
-  // Add additional query properties here
-  Type.Object({})
-])
+export const ${camelName}QueryProperties = Type.Pick(${camelName}Schema, [
+  '${type === 'mongodb' ? '_id' : 'id'}', 'text'
+], { additionalProperties: false })
+export const ${camelName}QuerySchema = querySyntax(${camelName}QueryProperties)
 export type ${upperName}Query = Static<typeof ${camelName}QuerySchema>
 export const ${camelName}QueryValidator = jsonSchema.getValidator(${camelName}QuerySchema, queryValidator)
 export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({

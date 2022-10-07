@@ -15,13 +15,16 @@ ${authStrategies.includes('local') ? `import { passwordHash } from '@feathersjs/
 import type { HookContext } from '${relative}/declarations'
 import { dataValidator, queryValidator } from '${relative}/schemas/validators'
 
-// Schema for the basic data model (e.g. creating new entries)
-export const ${camelName}DataSchema = {
-  $id: '${upperName}Data',
+// Main data model schema
+export const ${camelName}Schema = {
+  $id: '${upperName}',
   type: 'object',
   additionalProperties: false,
-  required: [ ${authStrategies.includes('local') ? "'email'" : ''} ],
+  required: [ '${type === 'mongodb' ? '_id' : 'id'}'${authStrategies.includes('local') ? ", 'email'" : ''} ],
   properties: {
+    ${type === 'mongodb' ? '_id' : 'id'}: {
+      type: '${type === 'mongodb' ? 'string' : 'number'}'
+    },
     ${authStrategies
       .map((name) =>
         name === 'local'
@@ -32,30 +35,27 @@ export const ${camelName}DataSchema = {
       .join(',\n')}
   }
 } as const
+export type ${upperName} = FromSchema<typeof ${camelName}Schema>
+export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
+  properties: {}
+})
+
+// Schema for the basic data model (e.g. creating new entries)
+export const ${camelName}DataSchema = {
+  $id: '${upperName}Data',
+  type: 'object',
+  additionalProperties: false,
+  required: [  ],
+  properties: {
+    ...${camelName}Schema.properties
+  }
+} as const
 export type ${upperName}Data = FromSchema<typeof ${camelName}DataSchema>
 export const ${camelName}DataValidator = jsonSchema.getDataValidator(${camelName}DataSchema, dataValidator)
 export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
   properties: {
     ${authStrategies.includes('local') ? `password: passwordHash({ strategy: 'local' })` : ''}
   }
-})
-
-// Schema for the data that is being returned
-export const ${camelName}Schema = {
-  $id: '${upperName}',
-  type: 'object',
-  additionalProperties: false,
-  required: [ ...${camelName}DataSchema.required, '${type === 'mongodb' ? '_id' : 'id'}' ],
-  properties: {
-    ...${camelName}DataSchema.properties,
-    ${type === 'mongodb' ? '_id' : 'id'}: {
-      type: '${type === 'mongodb' ? 'string' : 'number'}'
-    }
-  }
-} as const
-export type ${upperName} = FromSchema<typeof ${camelName}Schema>
-export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
-  properties: {}
 })
 
 export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({

@@ -22,8 +22,14 @@ export const logger = createLogger({
 export const logErrorHook = async (context: HookContext, next: NextFunction) => {
   try {
     await next()
-  } catch (error) {
-    logger.error(error)
+  } catch (error: any) {
+    logger.error(error.stack)
+    
+    // Log validation errors
+    if (error.errors) {
+      logger.error(error.errors)
+    }
+
     throw error
   }
 }

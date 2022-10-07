@@ -213,10 +213,10 @@ export class KnexAdapter<
     return data[0]
   }
 
-  async $create(data: Partial<D>, params?: P): Promise<T>
-  async $create(data: Partial<D>[], params?: P): Promise<T[]>
-  async $create(data: Partial<D> | Partial<D>[], _params?: P): Promise<T | T[]>
-  async $create(_data: Partial<D> | Partial<D>[], params: P = {} as P): Promise<T | T[]> {
+  async $create(data: D, params?: P): Promise<T>
+  async $create(data: D[], params?: P): Promise<T[]>
+  async $create(data: D | D[], _params?: P): Promise<T | T[]>
+  async $create(_data: D | D[], params: P = {} as P): Promise<T | T[]> {
     const data = _data as any
 
     if (Array.isArray(data)) {
