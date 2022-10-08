@@ -2,17 +2,25 @@ import { generator, inject, toFile, when, after, before } from '@feathershq/pini
 import { injectSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-const schemaImports = ({ upperName, folder, fileName }: ServiceGeneratorContext) => /* ts */ `import type {
+const schemaImports = ({
+  upperName,
+  folder,
+  fileName,
+  className,
+  camelName
+}: ServiceGeneratorContext) => /* ts */ `import type {
   ${upperName},
   ${upperName}Data,
   ${upperName}Query,
+  ${className}
 } from './services/${folder.join('/')}/${fileName}'
-
 export type {
   ${upperName},
   ${upperName}Data,
   ${upperName}Query,
-}`
+}
+// export const ${camelName}ServiceMethods = []
+`
 
 const declarationTemplate = ({ path, upperName }: ServiceGeneratorContext) =>
   `  '${path}': ClientService<

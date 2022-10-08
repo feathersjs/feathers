@@ -204,15 +204,22 @@ export const generate = (ctx: AppGeneratorArguments) =>
     .then(
       install<AppGeneratorContext>(
         ({ language, framework, devDependencies, dependencyVersions }) => {
-          devDependencies.push('nodemon', 'axios', 'mocha', 'cross-env', 'prettier', '@feathersjs/cli')
+          devDependencies.push(
+            'nodemon',
+            'axios',
+            'mocha',
+            'cross-env',
+            'prettier',
+            '@feathersjs/cli',
+            '@feathersjs/rest-client',
+            '@feathersjs/authentication-client'
+          )
 
           if (language === 'ts') {
             devDependencies.push(
               '@types/mocha',
               framework === 'koa' ? '@types/koa-static' : '@types/compression',
               '@types/node',
-              '@feathersjs/rest-client',
-              '@feathersjs/authentication-client',
               'nodemon',
               'ts-node',
               'typescript',
