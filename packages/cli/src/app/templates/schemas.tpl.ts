@@ -30,7 +30,7 @@ export const queryValidator = addFormats(new Ajv({
 `
 
 const configurationJsonTemplate =
-  ({}: AppGeneratorContext) => /* ts */ `import { defaultAppSettings, jsonSchema } from '@feathersjs/schema'
+  ({}: AppGeneratorContext) => /* ts */ `import { defaultAppSettings, getValidator } from '@feathersjs/schema'
 import type { FromSchema } from '@feathersjs/schema'
 
 import { dataValidator } from './validators'
@@ -47,14 +47,13 @@ export const configurationSchema = {
   }
 } as const
 
-export const configurationValidator = jsonSchema.getValidator(configurationSchema, dataValidator)
+export const configurationValidator = getValidator(configurationSchema, dataValidator)
 
 export type ApplicationConfiguration = FromSchema<typeof configurationSchema>
 `
 
 const configurationTypeboxTemplate =
-  ({}: AppGeneratorContext) => /* ts */ `import { jsonSchema } from '@feathersjs/schema'
-import { Type, defaultAppConfiguration } from '@feathersjs/typebox'
+  ({}: AppGeneratorContext) => /* ts */ `import { Type, getValidator, defaultAppConfiguration } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
 import { dataValidator } from './validators'
@@ -70,7 +69,7 @@ export const configurationSchema = Type.Intersect([
 
 export type ApplicationConfiguration = Static<typeof configurationSchema>
 
-export const configurationValidator = jsonSchema.getValidator(configurationSchema, dataValidator)
+export const configurationValidator = getValidator(configurationSchema, dataValidator)
 `
 
 export const generate = (ctx: AppGeneratorContext) =>

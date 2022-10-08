@@ -5,12 +5,12 @@ import { ServiceGeneratorContext } from '../index'
 export const template = ({
   className,
   upperName,
-  kebabName,
   schema,
   fileName,
+  kebabPath,
   relative
 }: ServiceGeneratorContext) => /* ts */ `import { MongoDBService } from \'@feathersjs/mongodb\'
-import type { MongoDBAdapterParams } from \'@feathersjs/mongodb\'
+import type { MongoDBAdapterParams, MongoDBAdapterOptions } from \'@feathersjs/mongodb\'
 
 import type { Application } from '${relative}/declarations'
 ${
@@ -35,10 +35,10 @@ export interface ${upperName}Params extends MongoDBAdapterParams<${upperName}Que
 export class ${className} extends MongoDBService<${upperName}, ${upperName}Data, ${upperName}Params> {
 }
 
-export const getOptions = (app: Application) => {
+export const getOptions = (app: Application): MongoDBAdapterOptions => {
   return {
     paginate: app.get('paginate'),
-    Model: app.get('mongodbClient').then(db => db.collection('${kebabName}'))
+    Model: app.get('mongodbClient').then(db => db.collection('${kebabPath}'))
   }
 }
 `

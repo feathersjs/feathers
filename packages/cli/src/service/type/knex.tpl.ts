@@ -3,31 +3,30 @@ import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
 const migrationTemplate = ({
-  kebabName
+  kebabPath
 }: ServiceGeneratorContext) => /* ts */ `import type { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.schema.createTable('${kebabName}', table => {
+  await knex.schema.createTable('${kebabPath}', table => {
     table.increments('id')
     table.string('text')
   })
 }
 
 export async function down(knex: Knex): Promise<void> {
-  await knex.schema.dropTable('${kebabName}')
+  await knex.schema.dropTable('${kebabPath}')
 }
 `
 
 export const template = ({
   className,
   upperName,
-  kebabName,
   feathers,
   schema,
   fileName,
   relative
 }: ServiceGeneratorContext) => /* ts */ `import { KnexService } from '@feathersjs/knex'
-import type { KnexAdapterParams } from '@feathersjs/knex'
+import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 
 import type { Application } from '${relative}/declarations'
 ${
@@ -52,11 +51,11 @@ export interface ${upperName}Params extends KnexAdapterParams<${upperName}Query>
 export class ${className} extends KnexService<${upperName}, ${upperName}Data, ${upperName}Params> {
 }
 
-export const getOptions = (app: Application) => {
+export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
     paginate: app.get('paginate'),
     Model: app.get('${feathers.database}Client'),
-    name: '${kebabName}'
+    name: '${fileName}'
   }
 }
 `
