@@ -211,6 +211,8 @@ export const generate = (ctx: AppGeneratorArguments) =>
               '@types/mocha',
               framework === 'koa' ? '@types/koa-static' : '@types/compression',
               '@types/node',
+              '@feathersjs/rest-client',
+              '@feathersjs/authentication-client',
               'nodemon',
               'ts-node',
               'typescript',
