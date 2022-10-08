@@ -2,7 +2,7 @@ import { generator, inject, toFile, when, after, before } from '@feathershq/pini
 import { injectSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-const schemaImports = ({
+const definitionTemplates = ({
   upperName,
   folder,
   fileName,
@@ -17,27 +17,22 @@ const schemaImports = ({
 export type {
   ${upperName},
   ${upperName}Data,
-  ${upperName}Query,
+  ${upperName}Query
 }
-// export const ${camelName}ServiceMethods = []
+
+const ${camelName}ServiceMethods = ['find', 'get', 'create', 'update', 'patch', 'remove'] as const
+type ${upperName}ServiceMethods = typeof ${camelName}ServiceMethods[number]
 `
 
-const declarationTemplate = ({ path, upperName }: ServiceGeneratorContext) =>
-  `  '${path}': ClientService<
-    ${upperName},
-    ${upperName}Data,
-    Partial<${upperName}Data>,
-    Paginated<${upperName}>, 
-    Params<${upperName}Query>
-  > & {
-    // Add custom methods here
-  }`
+const declarationTemplate = ({ path, className, upperName }: ServiceGeneratorContext) =>
+  `  '${path}': Pick<${className}, ${upperName}ServiceMethods>`
 
 const registrationTemplate = ({
+  camelName,
   path
 }: ServiceGeneratorContext) => `  client.use('${path}', connection.service('${path}'), {
   // List all standard and custom methods
-  methods: ['find', 'get', 'create', 'update', 'patch', 'remove']
+  methods: ${camelName}ServiceMethods
 })
 `
 
@@ -55,7 +50,7 @@ export const generate = async (ctx: ServiceGeneratorContext) =>
     .then(
       when(
         (ctx) => ctx.language === 'ts',
-        inject(schemaImports, after("from '@feathersjs/feathers'"), toClientFile),
+        inject(definitionTemplates, after("from '@feathersjs/feathers'"), toClientFile),
         inject(declarationTemplate, after('export interface ServiceTypes'), toClientFile)
       )
     )

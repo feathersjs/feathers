@@ -11,16 +11,15 @@ export const defaultServiceArguments = {
   update: ['id', 'data', 'params'],
   patch: ['id', 'data', 'params'],
   remove: ['id', 'params']
-}
-
-export const defaultServiceMethods = Object.keys(defaultServiceArguments)
+} as const
+export const defaultServiceMethods = ['find', 'get', 'create', 'update', 'patch', 'remove'] as const
 
 export const defaultEventMap = {
   create: 'created',
   update: 'updated',
   patch: 'patched',
   remove: 'removed'
-}
+} as const
 
 export const protectedMethods = Object.keys(Object.prototype)
   .concat(Object.keys(EventEmitter.prototype))
@@ -29,7 +28,7 @@ export const protectedMethods = Object.keys(Object.prototype)
 export function getHookMethods(service: any, options: ServiceOptions) {
   const { methods } = options
 
-  return defaultServiceMethods
+  return (defaultServiceMethods as any as string[])
     .filter((m) => typeof service[m] === 'function' && !methods.includes(m))
     .concat(methods)
 }
