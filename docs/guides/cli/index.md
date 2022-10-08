@@ -62,7 +62,7 @@ Commands:
   help [command]     display help for command
 ```
 
-### Generate an App
+### The App Generator
 
 Learn about the app generator on the [Generate an App](./generate-app.md) page.
 
