@@ -159,10 +159,9 @@ For example, a payment service that sends status events to the client while proc
 class PaymentService {
   async create(data: any, params: Params) {
     const customer = await createStripeCustomer(params.user);
-
     this.emit('status', { status: 'created' });
-    const payment = await createPayment(data);
 
+    const payment = await createPayment(data);
     this.emit('status', { status: 'completed' });
 
     return payment;
@@ -205,5 +204,6 @@ Custom events can be [published through channels](./channels.md#publishing) just
 ```js
 client.service('payments').on('status', data => {});
 
+// or
 socket.on('payments status', data => {});
 ```
