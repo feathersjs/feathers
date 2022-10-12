@@ -1,4 +1,4 @@
-import { NotFound } from '@feathersjs/errors'
+import { FeathersError, NotFound } from '@feathersjs/errors'
 import { FeathersKoaContext } from './declarations'
 
 export const errorHandler = () => async (ctx: FeathersKoaContext, next: () => Promise<any>) => {
@@ -9,7 +9,7 @@ export const errorHandler = () => async (ctx: FeathersKoaContext, next: () => Pr
       throw new NotFound('Not Found')
     }
   } catch (error: any) {
-    ctx.response.status = error.code || 500
+    ctx.response.status = error instanceof FeathersError ? error.code : 500
     ctx.body =
       typeof error.toJSON === 'function'
         ? error.toJSON()

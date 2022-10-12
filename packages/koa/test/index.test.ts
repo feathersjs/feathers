@@ -199,6 +199,7 @@ describe('@feathersjs/koa', () => {
     let called = false
 
     const server = await app.listen(8787)
+
     server.on('close', () => {
       called = true
     })
