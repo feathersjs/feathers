@@ -11,15 +11,15 @@ export const defaultServiceArguments = {
   update: ['id', 'data', 'params'],
   patch: ['id', 'data', 'params'],
   remove: ['id', 'params']
-} as const
-export const defaultServiceMethods = ['find', 'get', 'create', 'update', 'patch', 'remove'] as const
+}
+export const defaultServiceMethods = ['find', 'get', 'create', 'update', 'patch', 'remove']
 
 export const defaultEventMap = {
   create: 'created',
   update: 'updated',
   patch: 'patched',
   remove: 'removed'
-} as const
+}
 
 export const protectedMethods = Object.keys(Object.prototype)
   .concat(Object.keys(EventEmitter.prototype))
