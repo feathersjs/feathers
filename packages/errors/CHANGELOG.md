@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.31](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.30...v5.0.0-pre.31) (2022-10-12)
+
+### Bug Fixes
+
+- **errors:** Allows to pass no error message ([#2794](https://github.com/feathersjs/feathers/issues/2794)) ([f3ddab6](https://github.com/feathersjs/feathers/commit/f3ddab637e269e67e852ffce07b060bab2b085c0))
+
 # [5.0.0-pre.30](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.29...v5.0.0-pre.30) (2022-10-07)
 
 ### Features
