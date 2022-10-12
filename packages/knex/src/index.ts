@@ -1,5 +1,5 @@
 import { PaginationOptions } from '@feathersjs/adapter-commons'
-import { Paginated, ServiceMethods, Id, NullableId } from '@feathersjs/feathers'
+import { Paginated, ServiceMethods, Id, NullableId, Params } from '@feathersjs/feathers'
 import { KnexAdapter } from './adapter'
 import { KnexAdapterParams } from './declarations'
 
@@ -8,7 +8,7 @@ export * from './adapter'
 export * from './error-handler'
 export * as transaction from './hooks'
 
-export class KnexService<T = any, D = Partial<T>, P extends KnexAdapterParams<any> = KnexAdapterParams>
+export class KnexService<T = any, D = Partial<T>, P extends Params<any> = KnexAdapterParams>
   extends KnexAdapter<T, D, P>
   implements ServiceMethods<T | Paginated<T>, D, P>
 {

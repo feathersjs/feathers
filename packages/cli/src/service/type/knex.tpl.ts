@@ -25,7 +25,8 @@ export const template = ({
   schema,
   fileName,
   relative
-}: ServiceGeneratorContext) => /* ts */ `import { KnexService } from '@feathersjs/knex'
+}: ServiceGeneratorContext) => /* ts */ `import type { Params } from '@feathersjs/feathers'
+import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 
 import type { Application } from '${relative}/declarations'
@@ -48,7 +49,8 @@ export interface ${upperName}Params extends KnexAdapterParams<${upperName}Query>
 }
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
-export class ${className} extends KnexService<${upperName}, ${upperName}Data, ${upperName}Params> {
+export class ${className}<ServiceParams extends Params = ${upperName}Params>
+  extends KnexService<${upperName}, ${upperName}Data, ServiceParams> {
 }
 
 export const getOptions = (app: Application): KnexAdapterOptions => {

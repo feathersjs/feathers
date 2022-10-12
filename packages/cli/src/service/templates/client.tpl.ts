@@ -20,11 +20,15 @@ export type {
 }
 `
 
-const methodsTemplate = ({ camelName }: ServiceGeneratorContext) =>
-  `const ${camelName}ServiceMethods = ['find', 'get', 'create', 'update', 'patch', 'remove'] as const`
+const methodsTemplate = ({ camelName, upperName, className, type }: ServiceGeneratorContext) =>
+  `const ${camelName}ServiceMethods = ['find', 'get', 'create', 'update', 'patch', 'remove'] as const
+type ${upperName}ClientService = Pick<${className}${
+    type !== 'custom' ? `<Params<${upperName}Query>>` : ''
+  }, typeof ${camelName}ServiceMethods[number]>
+`
 
-const declarationTemplate = ({ path, className, camelName }: ServiceGeneratorContext) =>
-  `  '${path}': Pick<${className}, typeof ${camelName}ServiceMethods[number]>`
+const declarationTemplate = ({ path, upperName }: ServiceGeneratorContext) =>
+  `  '${path}': ${upperName}ClientService`
 
 const registrationTemplate = ({
   camelName,
