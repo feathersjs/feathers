@@ -345,6 +345,11 @@ describe('@feathersjs/errors', () => {
       assert.deepStrictEqual(error.data, [{ hello: 'world' }])
     })
 
+    it('can be instantiated with `null` (#2789)', () => {
+      const err = new errors.BadRequest(null, {})
+      assert.strictEqual(err.message, 'Error')
+    })
+
     it('has proper stack trace (#78)', () => {
       try {
         throw new errors.NotFound('Not the error you are looking for')
