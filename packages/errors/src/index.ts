@@ -8,7 +8,7 @@ export interface FeathersErrorJSON {
 }
 
 export type DynamicError = Error & { [key: string]: any }
-export type ErrorMessage = string | DynamicError | { [key: string]: any } | any[]
+export type ErrorMessage = null | string | DynamicError | { [key: string]: any } | any[]
 
 interface ErrorProperties extends Omit<FeathersErrorJSON, 'message'> {
   type: string
@@ -33,7 +33,7 @@ export class FeathersError extends Error {
     if (Array.isArray(_data)) {
       properties.data = _data
     } else if (typeof err === 'object' || _data !== undefined) {
-      const { message, errors, ...rest } = typeof err === 'object' ? err : _data
+      const { message, errors, ...rest } = err !== null && typeof err === 'object' ? err : _data
 
       msg = message || msg
       properties.errors = errors
