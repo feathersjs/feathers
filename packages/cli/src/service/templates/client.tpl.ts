@@ -1,39 +1,43 @@
-import { generator, inject, toFile, when, after, before } from '@feathershq/pinion'
+import { generator, toFile, when, after, before } from '@feathershq/pinion'
 import { injectSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-const schemaImports = ({ upperName, folder, fileName }: ServiceGeneratorContext) => /* ts */ `import type {
+const importTemplate = ({
+  upperName,
+  folder,
+  fileName,
+  className
+}: ServiceGeneratorContext) => /* ts */ `import type {
   ${upperName},
   ${upperName}Data,
   ${upperName}Query,
+  ${className}
 } from './services/${folder.join('/')}/${fileName}'
-
 export type {
   ${upperName},
   ${upperName}Data,
-  ${upperName}Query,
-}`
-
-const declarationTemplate = ({ path, upperName }: ServiceGeneratorContext) =>
-  `  '${path}': ClientService<
-    ${upperName},
-    ${upperName}Data,
-    Partial<${upperName}Data>,
-    Paginated<${upperName}>, 
-    Params<${upperName}Query>
-  > & {
-    // Add custom methods here
-  }`
-
-const registrationTemplate = ({
-  path
-}: ServiceGeneratorContext) => `  client.use('${path}', connection.service('${path}'), {
-  // List all standard and custom methods
-  methods: ['find', 'get', 'create', 'update', 'patch', 'remove']
-})
+  ${upperName}Query
+}
 `
 
-const toClientFile = toFile<ServiceGeneratorContext>(({ lib }) => [lib, 'client.ts'])
+const methodsTemplate = ({ camelName, upperName, className, type }: ServiceGeneratorContext) =>
+  `const ${camelName}ServiceMethods = ['find', 'get', 'create', 'update', 'patch', 'remove'] as const
+type ${upperName}ClientService = Pick<${className}${
+    type !== 'custom' ? `<Params<${upperName}Query>>` : ''
+  }, typeof ${camelName}ServiceMethods[number]>
+`
+
+const declarationTemplate = ({ path, upperName }: ServiceGeneratorContext) =>
+  `  '${path}': ${upperName}ClientService`
+
+const registrationTemplate = ({
+  camelName,
+  path
+}: ServiceGeneratorContext) => `  client.use('${path}', connection.service('${path}'), {
+  methods: ${camelName}ServiceMethods
+})`
+
+const toClientFile = toFile<ServiceGeneratorContext>(({ lib }) => [lib, 'client'])
 
 export const generate = async (ctx: ServiceGeneratorContext) =>
   generator(ctx)
@@ -46,8 +50,15 @@ export const generate = async (ctx: ServiceGeneratorContext) =>
     )
     .then(
       when(
+        (ctx) => ctx.language === 'js',
+        injectSource(methodsTemplate, before('\nexport const createClient'), toClientFile)
+      )
+    )
+    .then(
+      when(
         (ctx) => ctx.language === 'ts',
-        inject(schemaImports, after("from '@feathersjs/feathers'"), toClientFile),
-        inject(declarationTemplate, after('export interface ServiceTypes'), toClientFile)
+        injectSource(methodsTemplate, before('\nexport interface ServiceTypes'), toClientFile),
+        injectSource(importTemplate, after("from '@feathersjs/feathers'"), toClientFile),
+        injectSource(declarationTemplate, after('export interface ServiceTypes'), toClientFile)
       )
     )

@@ -184,7 +184,7 @@ describe('@feathersjs/koa', () => {
 
         assert.deepStrictEqual(data, {
           name: 'NotFound',
-          message: 'Not Found',
+          message: 'Path /no/where not found',
           code: 404,
           className: 'not-found'
         })

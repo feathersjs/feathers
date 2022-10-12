@@ -1,15 +1,11 @@
 import { PaginationOptions } from '@feathersjs/adapter-commons'
-import { Paginated, ServiceMethods, Id, NullableId } from '@feathersjs/feathers'
+import { Paginated, ServiceMethods, Id, NullableId, Params } from '@feathersjs/feathers'
 import { MongoDbAdapter, MongoDBAdapterParams } from './adapter'
 
 export * from './adapter'
 export * from './error-handler'
 
-export class MongoDBService<
-    T = any,
-    D = Partial<T>,
-    P extends MongoDBAdapterParams<any> = MongoDBAdapterParams
-  >
+export class MongoDBService<T = any, D = Partial<T>, P extends Params<any> = MongoDBAdapterParams>
   extends MongoDbAdapter<T, D, P>
   implements ServiceMethods<T | Paginated<T>, D, P>
 {
@@ -24,9 +20,9 @@ export class MongoDBService<
     return this._get(id, params)
   }
 
-  async create(data: Partial<D>, params?: P): Promise<T>
-  async create(data: Partial<D>[], params?: P): Promise<T[]>
-  async create(data: Partial<D> | Partial<D>[], params?: P): Promise<T | T[]> {
+  async create(data: D, params?: P): Promise<T>
+  async create(data: D[], params?: P): Promise<T[]>
+  async create(data: D | D[], params?: P): Promise<T | T[]> {
     return this._create(data, params)
   }
 

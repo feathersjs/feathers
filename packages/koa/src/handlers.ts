@@ -6,7 +6,7 @@ export const errorHandler = () => async (ctx: FeathersKoaContext, next: () => Pr
     await next()
 
     if (ctx.body === undefined) {
-      throw new NotFound('Not Found')
+      throw new NotFound(`Path ${ctx.path} not found`)
     }
   } catch (error: any) {
     ctx.response.status = error instanceof FeathersError ? error.code : 500

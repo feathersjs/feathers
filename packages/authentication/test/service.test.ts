@@ -212,20 +212,21 @@ describe('authentication/service', () => {
       assert.deepStrictEqual(authResult, Strategy1.result)
     })
 
-    it('passes when id is set and does not match accessToken', async () => {
-      try {
-        await app.service('authentication').remove('test', {
-          authentication: {
-            strategy: 'first',
-            username: 'David',
-            accessToken: 'testing'
-          }
-        })
-        assert.fail('Should never get here')
-      } catch (error: any) {
-        assert.strictEqual(error.name, 'NotAuthenticated')
-        assert.strictEqual(error.message, 'Invalid access token')
-      }
+    it('fails when id is set and does not match accessToken', async () => {
+      await assert.rejects(
+        () =>
+          app.service('authentication').remove('test', {
+            authentication: {
+              strategy: 'first',
+              username: 'David',
+              accessToken: 'testing'
+            }
+          }),
+        {
+          name: 'NotAuthenticated',
+          message: 'Invalid access token'
+        }
+      )
     })
 
     it('errors when trying to remove with nothing', async () => {

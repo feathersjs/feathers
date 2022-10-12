@@ -9,7 +9,8 @@ export const template = ({
   fileName,
   kebabPath,
   relative
-}: ServiceGeneratorContext) => /* ts */ `import { MongoDBService } from \'@feathersjs/mongodb\'
+}: ServiceGeneratorContext) => /* ts */ `import type { Params } from '@feathersjs/feathers'
+import { MongoDBService } from \'@feathersjs/mongodb\'
 import type { MongoDBAdapterParams, MongoDBAdapterOptions } from \'@feathersjs/mongodb\'
 
 import type { Application } from '${relative}/declarations'
@@ -32,7 +33,8 @@ export interface ${upperName}Params extends MongoDBAdapterParams<${upperName}Que
 }
 
 // By default calls the standard MongoDB adapter service methods but can be customized with your own functionality.
-export class ${className} extends MongoDBService<${upperName}, ${upperName}Data, ${upperName}Params> {
+export class ${className}<ServiceParams extends Params = ${upperName}Params>
+  extends MongoDBService<${upperName}, ${upperName}Data, ServiceParams> {
 }
 
 export const getOptions = (app: Application): MongoDBAdapterOptions => {

@@ -7,7 +7,7 @@ const importTemplate = ({
   fileName
 }: AuthenticationGeneratorContext) => /* ts */ `import { ${upperName} } from './services/${folder.join(
   '/'
-)}/${fileName}.schema'
+)}/${fileName}'
 `
 
 const paramsTemplate = ({
