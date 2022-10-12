@@ -21,7 +21,7 @@ export class Strategy1 extends AuthenticationBaseStrategy {
 
   async authenticate(authentication: AuthenticationRequest) {
     if (authentication.username === 'David' || authentication.both) {
-      return Strategy1.result
+      return { ...Strategy1.result }
     }
 
     throw new NotAuthenticated('Invalid Dave')
@@ -29,7 +29,7 @@ export class Strategy1 extends AuthenticationBaseStrategy {
 
   async parse(req: MockRequest) {
     if (req.isDave) {
-      return Strategy1.result
+      return { ...Strategy1.result }
     }
 
     return null

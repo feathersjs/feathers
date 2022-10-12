@@ -8,40 +8,26 @@ export const template = ({
   authStrategies,
   type,
   relative
-}: AuthenticationGeneratorContext) => /* ts */ `import { jsonSchema, resolve } from '@feathersjs/schema'
-import { Type, querySyntax } from '@feathersjs/typebox'
+}: AuthenticationGeneratorContext) => /* ts */ `import { resolve } from '@feathersjs/schema'
+import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 ${authStrategies.includes('local') ? `import { passwordHash } from '@feathersjs/authentication-local'` : ''}
 
 import type { HookContext } from '${relative}/declarations'
 import { dataValidator, queryValidator } from '${relative}/schemas/validators'
 
-// Schema for the basic data model (e.g. creating new entries)
-export const ${camelName}DataSchema = Type.Object({
+// Main data model schema
+export const ${camelName}Schema = Type.Object({
+  ${type === 'mongodb' ? '_id: Type.String()' : 'id: Type.Number()'},
   ${authStrategies
     .map((name) =>
       name === 'local'
         ? `  email: Type.String(),
-  password: Type.String()`
+  password: Type.Optional(Type.String())`
         : `    ${name}Id: Type.Optional(Type.String())`
     )
     .join(',\n')}
-}, { $id: '${upperName}Data', additionalProperties: false })
-export type ${upperName}Data = Static<typeof ${camelName}DataSchema>
-export const ${camelName}DataValidator = jsonSchema.getDataValidator(${camelName}DataSchema, dataValidator)
-export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
-  properties: {
-    ${authStrategies.includes('local') ? `password: passwordHash({ strategy: 'local' })` : ''}
-  }
-})
-
-// Schema for the data that is being returned
-export const ${camelName}Schema = Type.Intersect([
-  ${camelName}DataSchema, 
-  Type.Object({
-    ${type === 'mongodb' ? '_id: Type.String()' : 'id: Type.Number()'}
-  })
-], { $id: '${upperName}' })
+},{ $id: '${upperName}', additionalProperties: false })
 export type ${upperName} = Static<typeof ${camelName}Schema>
 export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
   properties: {}
@@ -54,14 +40,28 @@ export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
   }
 })
 
+// Schema for the basic data model (e.g. creating new entries)
+export const ${camelName}DataSchema = Type.Pick(${camelName}Schema, [
+  ${authStrategies.map((name) => (name === 'local' ? `'email', 'password'` : `'${name}Id'`)).join(', ')}
+],
+  { $id: '${upperName}Data', additionalProperties: false }
+)
+export type ${upperName}Data = Static<typeof ${camelName}DataSchema>
+export const ${camelName}DataValidator = getDataValidator(${camelName}DataSchema, dataValidator)
+export const ${camelName}DataResolver = resolve<${upperName}, HookContext>({
+  properties: {
+    ${authStrategies.includes('local') ? `password: passwordHash({ strategy: 'local' })` : ''}
+  }
+})
+
 // Schema for allowed query properties
-export const ${camelName}QuerySchema = Type.Intersect([
-  querySyntax(${camelName}Schema),
-  // Add additional query properties here
-  Type.Object({})
+export const ${camelName}QueryProperties = Type.Pick(${camelName}Schema, ['${
+  type === 'mongodb' ? '_id' : 'id'
+}', ${authStrategies.map((name) => (name === 'local' ? `'email'` : `'${name}Id'`)).join(', ')}
 ])
+export const ${camelName}QuerySchema = querySyntax(${camelName}QueryProperties)
 export type ${upperName}Query = Static<typeof ${camelName}QuerySchema>
-export const ${camelName}QueryValidator = jsonSchema.getValidator(${camelName}QuerySchema, queryValidator)
+export const ${camelName}QueryValidator = getValidator(${camelName}QuerySchema, queryValidator)
 export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
   properties: {
     // If there is a user (e.g. with authentication), they are only allowed to see their own data

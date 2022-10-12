@@ -20,9 +20,9 @@ export interface Paginated<T> {
  * Options that can be passed when registering a service via `app.use(name, service, options)`
  */
 export interface ServiceOptions {
-  events?: string[]
-  methods?: string[]
-  serviceEvents?: string[]
+  events?: string[] | readonly string[]
+  methods?: string[] | readonly string[]
+  serviceEvents?: string[] | readonly string[]
   routeParams?: { [key: string]: any }
 }
 

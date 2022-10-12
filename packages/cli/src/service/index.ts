@@ -42,6 +42,10 @@ export interface ServiceGeneratorContext extends FeathersBaseContext {
    */
   fileName: string
   /**
+   * The kebab-cased name of the path. Will be used for e.g. database names
+   */
+  kebabPath: string
+  /**
    * Indicates how many file paths we should go up to import other things (e.g. `../../`)
    */
   relative: string
@@ -77,7 +81,7 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
     .then(checkPreconditions())
     .then(
       prompt<ServiceGeneratorArguments, ServiceGeneratorContext>(
-        ({ name, path, type, schema, authentication, isEntityService }) => [
+        ({ name, path, type, schema, authentication, isEntityService, feathers }) => [
           {
             name: 'name',
             type: 'input',
@@ -116,7 +120,7 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
             type: 'list',
             when: !type,
             message: 'What kind of service is it?',
-            default: getDatabaseAdapter(ctx.feathers?.database),
+            default: getDatabaseAdapter(feathers?.database),
             choices: [
               {
                 value: 'knex',
@@ -137,7 +141,7 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
             type: 'list',
             when: schema === undefined,
             message: 'Which schema definition format do you want to use?',
-            default: ctx.feathers?.schema || 'json',
+            default: feathers?.schema,
             choices: [
               {
                 value: 'typebox',
@@ -156,7 +160,7 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
         ]
       )
     )
-    .then(async (ctx) => {
+    .then(async (ctx): Promise<ServiceGeneratorContext> => {
       const { name, path, type } = ctx
       const kebabName = _.kebabCase(name)
       const camelName = _.camelCase(name)
@@ -166,6 +170,7 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
       const folder = path.split('/').filter((el) => el !== '')
       const relative = ['', ...folder].map(() => '..').join('/')
       const fileName = _.last(folder)
+      const kebabPath = _.kebabCase(path)
 
       return {
         name,
@@ -177,6 +182,7 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
         className,
         kebabName,
         camelName,
+        kebabPath,
         relative,
         ...ctx
       }

@@ -33,7 +33,7 @@ describe('@feathersjs/schema/hooks', () => {
   })
 
   it('validates data', async () => {
-    assert.rejects(() => app.service('users').create({ password: 'failing' }), {
+    assert.rejects(() => app.service('users').create({ password: 'failing' } as any), {
       name: 'BadRequest'
     })
   })

@@ -1,7 +1,37 @@
 import { Type, TObject, TInteger, TOptional, TSchema, TIntersect } from '@sinclair/typebox'
+import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
 
 export * from '@sinclair/typebox'
 export * from './default-schemas'
+
+export type TDataSchemaMap = {
+  create: TObject
+  update?: TObject
+  patch?: TObject
+}
+
+/**
+ * Returns a compiled validation function for a TypeBox object and AJV validator instance.
+ *
+ * @param schema The JSON schema definition
+ * @param validator The AJV validation instance
+ * @returns A compiled validation function
+ */
+export const getValidator = <T = any, R = T>(schema: TObject, validator: Ajv): Validator<T, R> =>
+  jsonSchema.getValidator(schema as any, validator)
+
+/**
+ * Returns compiled validation functions to validate data for the `create`, `update` and `patch`
+ * service methods. If not passed explicitly, the `update` validator will be the same as the `create`
+ * and `patch` will be the `create` validator with no required fields.
+ *
+ * @param def Either general TypeBox object definition or a mapping of `create`, `update` and `patch`
+ * to their respective type object
+ * @param validator The Ajv instance to use as the validator
+ * @returns A map of validator functions
+ */
+export const getDataValidator = (def: TObject | TDataSchemaMap, validator: Ajv): DataValidatorMap =>
+  jsonSchema.getDataValidator(def as any, validator)
 
 const arrayOfKeys = <T extends TObject>(type: T) => {
   const keys = Object.keys(type.properties)
@@ -59,6 +89,13 @@ export const queryProperties = <T extends TObject>(type: T) => {
   } as TObject<typeof properties>
 }
 
+/**
+ * Creates a TypeBox schema for the complete Feathers query syntax including `$limit`, $skip`
+ * and `$sort` and `$select` for the allowed properties.
+ *
+ * @param type The properties to create the query syntax for
+ * @returns A TypeBox object representing the complete Feathers query syntax for the given properties
+ */
 export const querySyntax = <T extends TObject | TIntersect>(type: T) => {
   return Type.Intersect([
     Type.Object(

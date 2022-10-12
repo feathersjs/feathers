@@ -3,12 +3,12 @@ import { getDatabaseAdapter, renderSource } from '../../commons'
 import { AuthenticationGeneratorContext } from '../index'
 
 const migrationTemplate = ({
-  kebabName,
+  kebabPath,
   authStrategies
 }: AuthenticationGeneratorContext) => /* ts */ `import type { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.schema.alterTable('${kebabName}', function (table) {
+  await knex.schema.alterTable('${kebabPath}', function (table) {
     table.dropColumn('text')${authStrategies
       .map((name) =>
         name === 'local'
@@ -23,7 +23,7 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  await knex.schema.alterTable('${kebabName}', function (table) {
+  await knex.schema.alterTable('${kebabPath}', function (table) {
     table.string('text')${authStrategies
       .map((name) =>
         name === 'local'

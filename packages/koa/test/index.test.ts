@@ -184,7 +184,7 @@ describe('@feathersjs/koa', () => {
 
         assert.deepStrictEqual(data, {
           name: 'NotFound',
-          message: 'Not Found',
+          message: 'Path /no/where not found',
           code: 404,
           className: 'not-found'
         })
@@ -199,6 +199,7 @@ describe('@feathersjs/koa', () => {
     let called = false
 
     const server = await app.listen(8787)
+
     server.on('close', () => {
       called = true
     })
