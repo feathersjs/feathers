@@ -24,9 +24,9 @@ export class MongoDBService<
     return this._get(id, params)
   }
 
-  async create(data: Partial<D>, params?: P): Promise<T>
-  async create(data: Partial<D>[], params?: P): Promise<T[]>
-  async create(data: Partial<D> | Partial<D>[], params?: P): Promise<T | T[]> {
+  async create(data: D, params?: P): Promise<T>
+  async create(data: D[], params?: P): Promise<T[]>
+  async create(data: D | D[], params?: P): Promise<T | T[]> {
     return this._create(data, params)
   }
 
