@@ -4,9 +4,11 @@ outline: deep
 
 # Hooks
 
-As we have seen in the [quick start](./starting.md) and when we created our messages service in [the previous chapter](./services.md), Feathers services are a great way to implement data storage and modification. Technically, we could write our entire app with services but very often we need similar functionality across multiple services. For example, we might want to check for all services if a user is allowed to access it. With just services, we would have to implement this every time.
+As we have seen in the [quick start](./starting.md) and when we created our messages service in [the services chapter](./services.md), Feathers services are a great way to implement data storage and modification. Technically, we could write our entire app with services but very often we need similar functionality across multiple services. For example, we might want to check for all services if a user is allowed to access it. With just services, we would have to write this every time.
 
-This is where Feathers hooks come in. Hooks are pluggable middleware functions that can be registered __around__, __before__, __after__ or on __errors__ of a service method. Just like services themselves, hooks are *transport independent*. They are usually also service independent, meaning they can be used with ​*any*​ service. This pattern keeps your application logic flexible, composable, and much easier to trace through and debug.
+This is where Feathers hooks come in. Hooks are pluggable middleware functions that can be registered **around**, **before**, **after** or on **errors** of a service method without having to change the original code.
+
+Just like services themselves, hooks are _transport independent_. They are usually also service independent, meaning they can be used with ​*any*​ service. This pattern keeps your application logic flexible, composable, and much easier to trace through and debug.
 Hooks are commonly used to handle things like validation, authorization, logging, sending emails and more.
 
 <BlockQuote type="tip">
@@ -17,14 +19,13 @@ A full overview of the hook API can be found in the [hooks API documentation](..
 
 ## Generating a hook
 
-Let's generate a hook that lets us log the total runtime of a service method to the console.
+Let's generate a hook that logs the total runtime of a service method to the console.
 
 ```sh
 npx feathers generate hook
 ```
 
 We call our hook `log-runtime` and confirm the type with enter to make it an `around` hook.
-
 
 <LanguageBlock global-id="ts">
 
@@ -36,7 +37,6 @@ Now update `src/hooks/log-runtime.ts` as follows:
 Now update `src/hooks/log-runtime.js` as follows:
 
 </LanguageBlock>
-
 
 ```ts{4-9}
 import type { HookContext, NextFunction } from '../declarations'
@@ -51,14 +51,15 @@ export const logRuntime = async (context: HookContext, next: NextFunction) => {
     `Calling ${context.method} on ${context.path} took ${duration}ms`
   )
 }
-
 ```
+
+In this hook, we store the start time and then run all other hooks and the service method by calling `await next()`. After that we can calculate the duration in milliseconds by subtracting the start time from the current time and log the information to the console.
 
 ## Hook functions
 
-A hook function is an `async` function that takes the [hook `context`](#hook-context) and a `next` function as the parameter. If the hook should only run __before__ or __after__ the service method, it does not need a `next` function. 
+A hook function is an `async` function that takes the [hook `context`](#hook-context) and a `next` function as the parameter. If the hook should only run on **error**, **before** or **after** the service method, it does not need a `next` function. However since we need to do both, get the start time before and the end time after, we created an `around` hook.
 
-However since we need to store the start and end time here, we created an `around` hook. Hooks run in the order they are registered and if a hook function throws an error, all remaining hooks (and the service call if it didn't run yet) will be skipped and the error will be returned.
+Hooks run in the order they are registered and if a hook function throws an error, all remaining hooks (and the service call if it didn't run yet) will be skipped and the error will be returned.
 
 ## Hook context
 
@@ -70,17 +71,17 @@ Read-only properties are:
 - `context.service` - The service this hook is currently running on
 - `context.path` - The path (name) of the service
 - `context.method` - The service method name
-- `context.type` - The hook type (`before`, `after` or `error`)
+- `context.type` - The hook type
 
 Writeable properties are:
 
 - `context.params` - The service method call `params`. For external calls, `params` usually contains:
-  - `context.params.query` - The query (e.g. query string for REST) for the service call
-  - `context.params.provider` - The name of the transport (which we will look at in the next chapter) the call has been made through. Usually `rest`, `socketio`, `primus`. Will be `undefined` for internal calls.
+  - `context.params.query` - The query (e.g. from the query string) for the service call
+  - `context.params.provider` - The name of the transport the call has been made through. Usually `rest` or `socketio`. Will be `undefined` for internal calls.
 - `context.id` - The `id` for a `get`, `remove`, `update` and `patch` service method call
-- `context.data` - The `data` sent by the user in a `create`, `update` and `patch` service method call
+- `context.data` - The `data` sent by the user in a `create`, `update` and `patch` and custom service method call
 - `context.error` - The error that was thrown (in `error` hooks)
-- `context.result` - The result of the service method call (in `after` hooks)
+- `context.result` - The result of the service method call (available after calling `await next()` or in `after` hooks)
 
 <BlockQuote type="tip">
 
@@ -90,7 +91,7 @@ For more information about the hook context see the [hooks API documentation](..
 
 ## Registering hooks
 
-In a Feathers application generated by the CLI, hooks are being registered in the `<servicename>.ts` file. The hook registration object is an object with `{ around, before, after, error }` and a list or hooks per method like `{ all: [], find: [], create: [] }`.
+In a Feathers application generated by the CLI, hooks are being registered in the `<servicename>.ts` file. The hook registration object is an object with `{ around, before, after, error }` and a list of hooks per method like `{ all: [], find: [], create: [] }`.
 
 <LanguageBlock global-id="ts">
 
@@ -166,14 +167,27 @@ declare module '../../declarations' {
 }
 ```
 
-<BlockQuote type="info">
+Now every time a our messages service is accessed successfully the name, method and runtime will be logged.
 
-`all` is a special keyword which means those hooks will run before the method specific hooks.
+<BlockQuote type="tip">
+
+`all` is a special keyword which means those hooks will run before the method specific hooks. Method specific hooks can be registered based on their name, e.g. to only log the runtime for `find` and `get`:
+
+```ts
+app.service('messages').hooks({
+  around: {
+    all: [authenticate('jwt')],
+    find: [logRuntime],
+    get: [logRuntime]
+  }
+  // ...
+})
+```
 
 </BlockQuote>
 
-Now every time a our messages service is accessed successfully the name, method and runtime will be logged.
-
 ## What's next?
 
-In this chapter we learned how Feathers hooks can be used as middleware for service method calls without having to change our service. You may have noticed above that there are already some `schemaHooks` like `schemaHooks.validateQuery` or `schemaHooks.resolveResult` registered on our service which brings us to the next chapter on how to define our data model with [schemas and resolvers](./schemas.md).
+In this chapter we learned how Feathers hooks can be used as middleware for service method calls without having to change our service. Here we just logged the runtime of a service method to the console but you can imagine that hooks can be useful for many other things like more advanced logging, sending notifications or checking user permissions.
+
+You may also have noticed above that there are already some hooks like `schemaHooks.validateQuery` or `schemaHooks.resolveResult` registered on our service. This brings us to the next chapter on how to define our data model with [schemas and resolvers](./schemas.md).

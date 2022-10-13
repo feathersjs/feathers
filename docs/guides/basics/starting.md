@@ -4,7 +4,7 @@ outline: deep
 
 # Quick start
 
-Alright then! Let's learn Feathers. In this quick start guide we'll create our first Feathers API server and a simple website to use it. You'll see how easy it is to get started with Feathers in just a single file without a generator or additional boilerplate. If you want to jump right into creating a complete application you can go to the [generate an app](./generator.md) chapter.
+Alright then! Let's learn Feathers. In this quick start guide we'll create our first Feathers API server and a simple website to use it. You'll see how easy it is to get started with Feathers in just a single file without additional boilerplate or tooling. If you want to jump right into creating a complete application you can go to the [Creating An App](./generator.md) chapter.
 
 <img style="margin: 2em;" src="/img/main-character-bench.svg" alt="Getting started">
 
@@ -28,14 +28,12 @@ Running NodeJS and npm should not require admin or root privileges.
 
 Let's create a new folder for our application:
 
-```sh 
+```sh
 mkdir feathers-basics
 cd feathers-basics
 ```
 
 Since any Feathers application is a Node application, we can create a default [package.json](https://docs.npmjs.com/files/package.json) using `npm`:
-
-
 
 <LanguageBlock global-id="ts">
 
@@ -204,7 +202,6 @@ npm install @feathersjs/socketio@pre @feathersjs/koa@pre koa-static @types/koa-s
 
 Then update `app.ts` with the following content:
 
-
 </LanguageBlock>
 <LanguageBlock global-id="js">
 
@@ -217,7 +214,6 @@ npm install @feathersjs/socketio@pre @feathersjs/koa@pre koa-static --save
 Then update `app.mjs` with the following content:
 
 </LanguageBlock>
-
 
 ```ts{2-4,42-55,59-62,64-67}
 import { feathers } from '@feathersjs/feathers'
@@ -316,7 +312,7 @@ node app.mjs
 
 <BlockQuote type="info">
 
-The server will stay running until you stop it by pressing __Control + C__ in the terminal.
+The server will stay running until you stop it by pressing **Control + C** in the terminal.
 
 </BlockQuote>
 
@@ -332,9 +328,7 @@ to see an array with the one message we created on the server.
 
 The built-in [JSON viewer in Firefox](https://developer.mozilla.org/en-US/docs/Tools/JSON_viewer) or a browser plugin like [JSON viewer for Chrome](https://chrome.google.com/webstore/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh) makes it nicer to view JSON responses in the browser.
 
-
 </BlockQuote>
-
 
 This is the basic setup of a Feathers API server.
 
@@ -351,65 +345,65 @@ In the same folder, add the following `index.html` page:
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Feathers Example</title>
-  <link rel="stylesheet" href="//unpkg.com/feathers-chat@4.0.0/public/base.css">
-  <link rel="stylesheet" href="//unpkg.com/feathers-chat@4.0.0/public/chat.css">
-</head>
-<body>
-  <main id="main" class="container">
-    <h1>Welcome to Feathers</h1>
-    <form class="form" onsubmit="sendMessage(event.preventDefault())">
-      <input type="text" id="message-text" placeholder="Enter message here">
-      <button type="submit" class="button button-primary">Send message</button>
-    </form>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Feathers Example</title>
+    <link rel="stylesheet" href="//unpkg.com/feathers-chat@4.0.0/public/base.css" />
+    <link rel="stylesheet" href="//unpkg.com/feathers-chat@4.0.0/public/chat.css" />
+  </head>
+  <body>
+    <main id="main" class="container">
+      <h1>Welcome to Feathers</h1>
+      <form class="form" onsubmit="sendMessage(event.preventDefault())">
+        <input type="text" id="message-text" placeholder="Enter message here" />
+        <button type="submit" class="button button-primary">Send message</button>
+      </form>
 
-    <h2>Here are the current messages:</h2>
-  </main>
+      <h2>Here are the current messages:</h2>
+    </main>
 
-  <script src="//unpkg.com/@feathersjs/client@^5.0.0-pre.24/dist/feathers.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script type="text/javascript">
-    // Set up socket.io
-    const socket = io('http://localhost:3030');
-    // Initialize a Feathers app
-    const app = feathers();
+    <script src="//unpkg.com/@feathersjs/client@^5.0.0-pre.24/dist/feathers.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+      // Set up socket.io
+      const socket = io('http://localhost:3030')
+      // Initialize a Feathers app
+      const app = feathers()
 
-    // Register socket.io to talk to our server
-    app.configure(feathers.socketio(socket));
+      // Register socket.io to talk to our server
+      app.configure(feathers.socketio(socket))
 
-    // Form submission handler that sends a new message
-    async function sendMessage () {
-      const messageInput = document.getElementById('message-text');
+      // Form submission handler that sends a new message
+      async function sendMessage() {
+        const messageInput = document.getElementById('message-text')
 
-      // Create a new message with the input field value
-      await app.service('messages').create({
-        text: messageInput.value
-      });
+        // Create a new message with the input field value
+        await app.service('messages').create({
+          text: messageInput.value
+        })
 
-      messageInput.value = '';
-    }
+        messageInput.value = ''
+      }
 
-    // Renders a single message on the page
-    function addMessage (message) {
-      document.getElementById('main').innerHTML += `<p>${message.text}</p>`;
-    }
+      // Renders a single message on the page
+      function addMessage(message) {
+        document.getElementById('main').innerHTML += `<p>${message.text}</p>`
+      }
 
-    const main = async () => {
-      // Find all existing messages
-      const messages = await app.service('messages').find();
+      const main = async () => {
+        // Find all existing messages
+        const messages = await app.service('messages').find()
 
-      // Add existing messages to the list
-      messages.forEach(addMessage);
+        // Add existing messages to the list
+        messages.forEach(addMessage)
 
-      // Add any newly created message to the list in real-time
-      app.service('messages').on('created', addMessage);
-    };
+        // Add any newly created message to the list in real-time
+        app.service('messages').on('created', addMessage)
+      }
 
-    main();
-  </script>
-</body>
+      main()
+    </script>
+  </body>
 </html>
 ```
 

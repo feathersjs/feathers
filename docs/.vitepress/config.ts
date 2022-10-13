@@ -195,7 +195,7 @@ export default defineConfig({
               link: '/guides/basics/starting.md'
             },
             {
-              text: 'Feathers CLI',
+              text: 'Creating an app',
               link: '/guides/basics/generator.md'
             },
             {
@@ -213,11 +213,11 @@ export default defineConfig({
             {
               text: 'Authentication',
               link: '/guides/basics/authentication.md'
-            },
-            {
-              text: 'Writing Tests',
-              link: '/guides/basics/testing.md'
             }
+            // {
+            //   text: 'Writing Tests',
+            //   link: '/guides/basics/testing.md'
+            // }
           ]
         },
         {

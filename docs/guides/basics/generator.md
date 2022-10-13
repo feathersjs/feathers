@@ -2,9 +2,9 @@
 outline: deep
 ---
 
-# Generating an app
+# Creating an app
 
-In the [quick start](./starting.md) we created a Feathers application in a single file to get a better understanding of how Feathers itself works. 
+In the [quick start](./starting.md) we created a Feathers application in a single file to get a better understanding of how Feathers itself works.
 
 <img style="margin: 2em;" src="/img/main-character-coding.svg" alt="Getting started">
 
@@ -15,18 +15,18 @@ The Feathers CLI allows us to initialize a new Feathers server with a recommende
 You can create a new Feathers application by running `npm create feathers <name>`. To create a new Feathers application called `feathers-chat` we can run:
 
 ```sh
-npm create feathers feathers-chat
+npm create feathers@pre feathers-chat
 ```
 
 If you never ran the command before you might be ask to confirm the package installation by pressing enter.
 
 <BlockQuote type="warning">
 
-Since the generated application is using modern features like ES modules, the Feathers CLI requires Node 16 or newer. The `feathers --version` command should show `5.0.0-pre.30` or later.
+Since the generated application is using modern features like ES modules, the Feathers CLI requires Node 16 or newer. The `feathers --version` command should show `5.0.0-pre.31` or later.
 
 </BlockQuote>
 
-First, choose if you want to use JavaScript or TypeScript. When presented with the project name, just hit enter, or enter a name (no spaces). Next, write a short description of your application. All other questions should be confirmed with the default selection by hitting Enter.
+First, choose if you want to use JavaScript or TypeScript. When presented with the project name, just hit enter, or enter a name (no spaces). Next, write a short description for your application. Confirm the next questions with the default selection by pressing Enter. When asked about authentication methods, let's include GitHub as well so we can look at adding a "Log In with Github" button.
 
 Once you confirm the last prompt, the final selection should look similar to this:
 
@@ -43,7 +43,6 @@ Sweet! We generated our first Feathers application in a new folder called `feath
 ```sh
 cd feathers-chat
 ```
-
 
 ## Running the server and tests
 
@@ -66,15 +65,19 @@ npm start
 
 </LanguageBlock>
 
-
-
-After that, you will see the Feathers logo at 
+After that, you will see the Feathers logo at
 
 ```
 http://localhost:3030
 ```
 
-While we will learn [more about writing tests later](./testing.md), the app also comes with a set of basic tests which can be run with
+<BlockQuote type="warning" label="Note">
+
+You can exit the running process by pressing **CTRL + C**
+
+</BlockQuote>
+
+The app also comes with a set of basic tests which can be run with
 
 ```sh
 npm test
@@ -94,4 +97,4 @@ Keep this command running throughout the rest of this guide so it will reload al
 
 ## What's next?
 
-In this chapter we installed the Feathers CLI and created a new Feathers application. To learn more about the generated files and what you can do with the CLI, have a look at the [CLI guide](../cli/index.md) after finishing the Getting Started guide. In [the next chapter](./services.md) we will learn more about Feathers services and databases.
+In this chapter we we created a new Feathers application. To learn more about the generated files and what you can do with the CLI, have a look at the [CLI guide](../cli/index.md) after finishing the Getting Started guide. In [the next chapter](./services.md) we will learn more about Feathers services and databases.

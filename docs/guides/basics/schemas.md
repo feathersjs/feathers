@@ -4,7 +4,7 @@ In Feathers, schemas and resolvers allow us to define, validate and secure our d
 
 <img style="margin: 2em;" src="/img/professor-bird-server.svg" alt="Professor bird at work">
 
-As we've briefly seen in the [previous chapter about hooks](./hooks.md), schema validators and resolvers are used with hooks to modify data in the hook context. Similar to how Feathers services are transport independent, schemas and resolvers are database independent. It comes in two main parts:
+As we've briefly seen in the [previous chapter about hooks](./hooks.md), there were a few hooks registered already to validate schemas and resolve data. Schema validators and resolvers are used with those hooks to modify data in the hook context. Similar to how Feathers services are transport independent, schemas and resolvers are database independent. It comes in two main parts:
 
 - [TypeBox](../../api/schema//typebox.md) or [JSON schema](../../api/schema//schema.md) to define a schema. This allows us to do things like:
   - Ensure data is valid and always in the right format
@@ -25,15 +25,14 @@ In this chapter we will look at the generated schemas and resolvers and update t
 
 While schemas and resolvers can be used outside of a Feather application, you will usually encounter them in a Feathers context where they come in four kinds:
 
-- `data` schemas and resolvers handle the data from the `create`, `update` and `patch` service methods and can be used to add things like default or calculated values (like the created or updated at date) before saving to the database
-- `query` schemas and resolvers validate and convert the query string and can also be used for additional limitations like only allowing a user to see their own data
-- `result` schemas and resolvers define the data that is being returned. This is also where associated data would be defined
-- `external` resolvers usually use the `result` to return a safe version of the data (e.g. hiding a users password) that can be sent to external clients
-
+- **Result** schemas and resolvers that define the data that is being returned. This is also where associated data would be declared
+- **Data** schemas and resolvers handle the data from the `create`, `update` and `patch` service methods and can be used to add things like default or calculated values (like the created or updated at date) before saving to the database
+- **Query** schemas and resolvers validate and convert the query string and can also be used for additional limitations like only allowing a user to see and modify their own data
+- **External** resolvers that return a safe version of the data (e.g. hiding a users password) that can be sent to external clients
 
 ## Adding a user avatar
 
-Let's extend our existing users schema to add an `avatar` property so that our users can have a profile image:
+Let's extend our existing users schema to add an `avatar` property so that our users can have a profile image.
 
 <LanguageBlock global-id="ts">
 
@@ -46,22 +45,23 @@ First we need to update the `src/services/users/users.schema.js` file with the s
 
 </LanguageBlock>
 
-```ts{1,15,27-35,76-80}
+```ts{1,16-17,36,47-57,70-74}
 import crypto from 'crypto'
-import { jsonSchema, resolve } from '@feathersjs/schema'
-import { Type, querySyntax } from '@feathersjs/typebox'
+import { resolve } from '@feathersjs/schema'
+import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 import { passwordHash } from '@feathersjs/authentication-local'
 
 import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../schemas/validators'
 
-// Schema for the data that is being returned
+// Main data model schema
 export const userSchema = Type.Object(
   {
     id: Type.Number(),
     email: Type.String(),
     password: Type.Optional(Type.String()),
+    githubId: Type.Optional(Type.Number()),
     avatar: Type.String()
   },
   { $id: 'User', additionalProperties: false }
@@ -79,19 +79,25 @@ export const userExternalResolver = resolve<User, HookContext>({
 })
 
 // Schema for the basic data model (e.g. creating new entries)
-export const userDataSchema = Type.Pick(userSchema, ['email', 'password'], {
-  $id: 'UserData',
-  additionalProperties: false
-})
-export type UserData = Static<typeof userDataSchema>
-export const userDataValidator = jsonSchema.getDataValidator(
-  userDataSchema,
-  dataValidator
+export const userDataSchema = Type.Pick(
+  userSchema,
+  ['email', 'password', 'githubId', 'avatar'],
+  {
+    $id: 'UserData',
+    additionalProperties: false
+  }
 )
+export type UserData = Static<typeof userDataSchema>
+export const userDataValidator = getDataValidator(userDataSchema, dataValidator)
 export const userDataResolver = resolve<User, HookContext>({
   properties: {
     password: passwordHash({ strategy: 'local' }),
-    avatar: async (_value, user) => {
+    avatar: async (value, user) => {
+      // If the user passed an avatar image, use it
+      if (value !== undefined) {
+        return value
+      }
+
       // Gravatar uses MD5 hashes from an email address to get the image
       const hash = crypto.createHash('md5').update(user.email.toLowerCase()).digest('hex')
       // Return the full avatar URL
@@ -101,19 +107,16 @@ export const userDataResolver = resolve<User, HookContext>({
 })
 
 // Schema for allowed query properties
-export const userQuerySchema = Type.Intersect([
-  querySyntax(userSchema),
-  // Add additional query properties here
-  Type.Object({})
-])
+export const userQueryProperties = Type.Pick(userSchema, ['id', 'email', 'githubId'])
+export const userQuerySchema = querySyntax(userQueryProperties)
 export type UserQuery = Static<typeof userQuerySchema>
-export const userQueryValidator = jsonSchema.getValidator(userQuerySchema, queryValidator)
+export const userQueryValidator = getValidator(userQuerySchema, queryValidator)
 export const userQueryResolver = resolve<UserQuery, HookContext>({
   properties: {
     // If there is a user (e.g. with authentication), they are only allowed to see their own data
     id: async (value, user, context) => {
       // We want to be able to get a list of all users but
-      // only let a user see and modify their own data otherwise
+      // only let a user modify their own data otherwise
       if (context.params.user && context.method !== 'find') {
         return context.params.user.id
       }
@@ -126,7 +129,7 @@ export const userQueryResolver = resolve<UserQuery, HookContext>({
 
 ## Handling messages
 
-Next we can look at the messages service schema. We want to include the date when the message was sent and the id of the user who sent it.
+Next we can look at the messages service schema. We want to include the date when the message was created as `createdAt` and the id of the user who sent it as `userId`. When we get a message back, we also want to populate the `user` with the user data from `userId` so that we can show e.g. the user image and email.
 
 <LanguageBlock global-id="ts">
 
@@ -139,16 +142,16 @@ Update the `src/services/messages/messages.schema.js` file like this:
 
 </LanguageBlock>
 
-```ts{7,13-14,25-32,42,50-53}
-import { jsonSchema, resolve } from '@feathersjs/schema'
-import { Type, querySyntax } from '@feathersjs/typebox'
+```ts{7,14-16,23-26,43-49,56,66-74}
+import { resolve } from '@feathersjs/schema'
+import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../schemas/validators'
 import { userSchema } from '../users/users.schema'
 
-// Schema for the data that is being returned
+// Main data model schema
 export const messageSchema = Type.Object(
   {
     id: Type.Number(),
@@ -169,21 +172,21 @@ export const messageResolver = resolve<Message, HookContext>({
   }
 })
 
-// Schema for the basic data model (e.g. creating new entries)
+export const messageExternalResolver = resolve<Message, HookContext>({
+  properties: {}
+})
+
+// Schema for creating new entries
 export const messageDataSchema = Type.Pick(messageSchema, ['text'], {
   $id: 'MessageData',
   additionalProperties: false
 })
 export type MessageData = Static<typeof messageDataSchema>
-export const messageDataValidator = jsonSchema.getDataValidator(
-  messageDataSchema,
-  dataValidator
-)
+export const messageDataValidator = getDataValidator(messageDataSchema, dataValidator)
 export const messageDataResolver = resolve<Message, HookContext>({
   properties: {
     userId: async (_value, _message, context) => {
       // Associate the record with the id of the authenticated user
-      // context.params.user._id if you are using MongoDB
       return context.params.user.id
     },
     createdAt: async () => {
@@ -192,26 +195,35 @@ export const messageDataResolver = resolve<Message, HookContext>({
   }
 })
 
-export const messageExternalResolver = resolve<Message, HookContext>({
-  properties: {}
-})
-
 // Schema for allowed query properties
-export const messageQuerySchema = querySyntax(
-  Type.Pick(messageSchema, ['createdAt', 'userId'])
+export const messageQueryProperties = Type.Pick(
+  messageSchema,
+  ['id', 'text', 'createdAt', 'userId'],
+  {
+    additionalProperties: false
+  }
 )
+export const messageQuerySchema = querySyntax(messageQueryProperties)
 export type MessageQuery = Static<typeof messageQuerySchema>
-export const messageQueryValidator = jsonSchema.getValidator(
-  messageQuerySchema,
-  queryValidator
-)
+export const messageQueryValidator = getValidator(messageQuerySchema, queryValidator)
 export const messageQueryResolver = resolve<MessageQuery, HookContext>({
-  properties: {}
+  properties: {
+    userId: async (value, user, context) => {
+      // We want to be able to get a list of all messages but
+      // only let a user access their own messages otherwise
+      if (context.params.user && context.method !== 'find') {
+        return context.params.user.id
+      }
+
+      return value
+    }
+  }
 })
 ```
+
 ## Creating a migration
 
-Now that our schemas and resolvers are up to date, we also have to update the database with the changes that we made. For SQL databases this is done with migrations. Every change we make in a schema will need its corresponding migration step.
+Now that our schemas and resolvers have everything we need, we also have to update the database with those changes. For SQL databases this is done with migrations. Migrations are a best practise for SQL databases to roll out and undo changes to the data model. Every change we make in a schema will need its corresponding migration step.
 
 <BlockQuote type="warning">
 
@@ -223,7 +235,7 @@ Initially, every database service will automatically add a migration that create
 
 - Add the `avatar` string field to the `users` table
 - Add the `createdAt` number field to the `messages` table
-- Add the `userId` number field to the `messages` table and reference it with the `id` in the `users` table 
+- Add the `userId` number field to the `messages` table and reference it with the `id` in the `users` table
 
 To create a new migration with the name `chat` run
 
@@ -240,7 +252,7 @@ Created Migration: /path/to/feathers-chat/migrations/20220622012334_chat.(ts|js)
 Open that file and update it as follows
 
 ```ts{4-11,15-22}
-import { Knex } from 'knex'
+import type { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.alterTable('users', (table) => {
@@ -273,4 +285,4 @@ npm run migrate
 
 ## What's next?
 
-In this chapter we learned about schemas and implemented all the logic we need for our chat application. In the next chapter we will learn about [authentication](./authentication.md) as the last piece to get our chat application working.
+In this chapter we learned about schemas and implemented all the things we need for our chat application. In the next chapter we will learn about [authentication](./authentication.md) and add a "Login with GitHub".

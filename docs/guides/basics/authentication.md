@@ -4,11 +4,11 @@ outline: deep
 
 # Authentication
 
-We now have a fully functional chat application consisting of [services](./services.md) and [schemas](./schemas.md). The services come with authentication enabled by default, so before we can use it we need to create a new user and learn how Feathers authentication works. We will look at authenticating our REST API, and then how to authenticate with Feathers in the browser.
+We now have a fully functional chat application consisting of [services](./services.md) and [schemas](./schemas.md). The services come with authentication enabled by default, so before we can use it we need to create a new user and learn how Feathers authentication works. We will look at authenticating our REST API, and then how to authenticate with Feathers in the browser. Finally we will implement a "Login with GitHub".
 
 ## Registering a user
 
-For the frontend, we will create a [JavaScript Frontend chapter](../frontend/javascript.md) will allow us to register new users. Let's have a quick look at how the REST API can be used directly to register a new user. We can do this by sending a POST request to `http://localhost:3030/users` with JSON data like this as the body:
+The HTTP REST API can be used directly to register a new user. We can do this by sending a POST request to `http://localhost:3030/users` with JSON data like this as the body:
 
 ```js
 // POST /users
@@ -30,7 +30,7 @@ curl 'http://localhost:3030/users/' \
 
 <BlockQuote type="info">
 
-For SQL databases, creating a user with the same email address will only work once, then fail since it already exists in the database.
+For SQL databases, creating a user with the same email address will only work once, then fail since it already exists. With the default database selection, you can reset your database by removing the `feathers-chat.sqlite` file and running `npm run migrate` to initialise it again.
 
 </BlockQuote>
 
@@ -48,11 +48,11 @@ Which means our user has been created successfully.
 
 <BlockQuote type="info">
 
-The password is stored securely in the database but will never be included in a response to an external client.
+The password is stored securely in the database but will never be included in an external response.
 
 </BlockQuote>
 
-## Get a token
+## Logging in
 
 By default, Feathers uses [JSON web token](https://jwt.io/) for authentication. It is an access token that is valid for a limited time (one day by default) that is issued by the Feathers server and needs to be sent with every API request that requires authentication. Usually a token is issued for a specific user and in our case we want a JWT for the user we just created.
 
@@ -89,100 +89,127 @@ This will return something like this:
 {
   "accessToken": "<JWT for this user>",
   "authentication": {
-    "strategy":"local"
+    "strategy": "local"
   },
-  "user":{
-    "id":"<user id>",
-    "email":"hello@feathersjs.com",
-    "avatar":"https://s.gravatar.com/avatar/ffe2a09df37d7c646e974a2d2b8d3e03?s=60",
+  "user": {
+    "id": "<user id>",
+    "email": "hello@feathersjs.com",
+    "avatar": "https://s.gravatar.com/avatar/ffe2a09df37d7c646e974a2d2b8d3e03?s=60"
   }
 }
 ```
 
-The `accessToken` can now be used for other REST requests that require authentication by sending the `Authorization: Bearer <JWT for this user>` HTTP header.
+The `accessToken` can now be used for other REST requests that require authentication by sending the `Authorization: Bearer <accessToken>` HTTP header. For example to create a new message:
+
+```sh
+curl 'http://localhost:3030/messages/' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer <accessToken>' \
+  --data-binary '{ "text": "Hello from the console" }'
+```
 
 <BlockQuote type="tip">
 
-For more information about the direct usage of the REST API see the [REST client API](../../api/client/rest.md) and for websockets the [Socket.io client API](../../api/client/socketio.md).
+Make sure to replace the `<accessToken>` in the above request. For more information about the direct usage of the REST API see the [REST client API](../../api/client/rest.md) and for websockets the [Socket.io client API](../../api/client/socketio.md).
 
 </BlockQuote>
 
-## Browser authentication
+## Login with GitHub
 
-When using Feathers on the client, the authentication client does all those authentication steps for us automatically. It stores the access token as long as it is valid so that a user does not have to log in every time they visit our site and sends it with every request. It also takes care of making sure that the user is always authenticated again, for example after they went offline for a bit. Since we will need it in the [building a frontend chapter](../frontend/javascript.md), let's update the existing `public/index.html` file like this:
+OAuth is an open authentication standard supported by almost every major platform and what gets us the log in with Facebook, Google, GitHub etc. buttons. From the Feathers perspective the authentication flow is pretty similar. Instead of authenticating with the `local` strategy by sending a username and password, Feathers directs the user to authorize the application with the login provider. If it is successful Feathers authentication finds or creates the user in the `users` service with the information it got back from the provider and then issues a token for them.
 
-```html
-<html lang="en">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0" />
-    <title>FeathersJS chat</title>
-    <link rel="shortcut icon" href="favicon.ico">
-    <link rel="stylesheet" href="//unpkg.com/feathers-chat@4.0.0/public/base.css">
-    <link rel="stylesheet" href="//unpkg.com/feathers-chat@4.0.0/public/chat.css">
-  </head>
-  <body>
-    <div id="app" class="flex flex-column"></div>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.js"></script>
-    <script src="//unpkg.com/@feathersjs/client@^5.0.0-pre.24/dist/feathers.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="client.js"></script>
-  </body>
-</html>
+To allow login with GitHub, first, we have to [create a new OAuth application on GitHub](https://github.com/settings/applications/new). You can put anything in the name, homepage and description fields. The callback URL **must** be set to
+
+```sh
+http://localhost:3030/oauth/github/callback
 ```
 
-Create a new file `public/client.js` where we can now set up the Feathers client similar to the [getting started example](./starting.md). We also add a `login` method that first tries to use a stored token by calling `app.reAuthenticate()`. If that fails, we try to log in with email/password of our registered user:
+![Screenshot of the GitHub application screen](./assets/github-app.png)
+
+<BlockQuote type="info">
+
+You can find your existing applications in the [GitHub OAuth apps developer settings](https://github.com/settings/developers).
+
+</BlockQuote>
+
+Once you clicked "Register application" we have to update our Feathers app configuration with the client id and secret copied from the GitHub application settings:
+
+![Screenshot of the created GitHub application client id and secret](./assets/github-keys.png)
+
+Find the `authentication` section in `config/default.json` replace the `<Client ID>` and `<Client Secret>` in the `github` section with the proper values:
 
 ```js
-// Establish a Socket.io connection
-const socket = io();
-
-// Initialize our Feathers client application through Socket.io
-// with hooks and authentication.
-const client = feathers();
-client.configure(feathers.socketio(socket));
-
-// Use localStorage to store our login token
-client.configure(feathers.authentication({
-  storage: window.localStorage
-}));
-
-const login = async () => {
-  try {
-    // First try to log in with an existing JWT
-    return await client.reAuthenticate();
-  } catch (error) {
-    // If that errors, log in with email/password
-    // Here we would normally show a login page
-    // to get the login information
-    return await client.authenticate({
-      strategy: 'local',
-      email: 'hello@feathersjs.com',
-      password: 'supersecret'
-    });
+{
+  "authentication": {
+    "oauth": {
+      "github": {
+        "key": "<Client ID>",
+        "secret": "<Client Secret>"
+      }
+    },
+    // Other authentication configuration is here
+    // ...
   }
-};
-
-const main = async () => {
-  const auth = await login();
-
-  console.log('User is authenticated', auth);
-
-  // Log us out again
-  await client.logout();
-};
-
-main();
+}
 ```
 
-If you now open the console and visit 
+This tells the OAuth strategy to redirect back to our index page after a successful login and already makes a basic login with GitHub possible. Because of the changes we made in the `users` service in the [services chapter](./services.md) we do need a small customization though. Instead of only adding `githubId` to a new user when they log in with GitHub we also include their email and the avatar image from the profile we get back. We can do this by extending the standard OAuth strategy and registering it as a GitHub specific one and overwriting the `getEntityData` method:
+
+Update `src/authentication.ts` as follows:
+
+```ts{1,5,14-26,33}
+import type { Params } from '@feathersjs/feathers'
+import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
+import { LocalStrategy } from '@feathersjs/authentication-local'
+import { oauth, OAuthStrategy } from '@feathersjs/authentication-oauth'
+import type { OAuthProfile } from '@feathersjs/authentication-oauth'
+import type { Application } from './declarations'
+
+declare module './declarations' {
+  interface ServiceTypes {
+    authentication: AuthenticationService
+  }
+}
+
+class GitHubStrategy extends OAuthStrategy {
+  async getEntityData(profile: OAuthProfile, existing: any, params: Params) {
+    const baseData = await super.getEntityData(profile, existing, params)
+
+    return {
+      ...baseData,
+      // The GitHub profile image
+      avatar: profile.avatar_url,
+      // The user email address (if available)
+      email: profile.email
+    }
+  }
+}
+
+export const authentication = (app: Application) => {
+  const authentication = new AuthenticationService(app)
+
+  authentication.register('jwt', new JWTStrategy())
+  authentication.register('local', new LocalStrategy())
+  authentication.register('github', new GitHubStrategy())
+
+  app.use('authentication', authentication)
+  app.configure(oauth())
+}
+```
+
+<BlockQuote type="info">
+
+For more information about the OAuth flow and strategy see the [OAuth API documentation](../../api/authentication/oauth.md).
+
+</BlockQuote>
+
+To log in with GitHub, visit
 
 ```
-http://localhost:3030
+http://localhost:3030/oauth/github
 ```
 
-you will see that our user has been authenticated.
+It will redirect to GitHub and ask to authorize our application. If everything went well, we get redirected to our homepage with the Feathers logo with the token information in the location hash. This will be used by the Feathers authentication client to authenticate our user.
 
 ## What's next?
 
