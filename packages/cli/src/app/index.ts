@@ -184,7 +184,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
           }
 
           if (framework === 'koa') {
-            dependencies.push('@feathersjs/koa', 'koa-static')
+            dependencies.push('@feathersjs/koa')
           }
 
           if (framework === 'express') {
@@ -203,7 +203,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
     )
     .then(
       install<AppGeneratorContext>(
-        ({ language, framework, devDependencies, dependencyVersions }) => {
+        ({ language, devDependencies, dependencyVersions }) => {
           devDependencies.push(
             'nodemon',
             'axios',
@@ -216,15 +216,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
           )
 
           if (language === 'ts') {
-            devDependencies.push(
-              '@types/mocha',
-              framework === 'koa' ? '@types/koa-static' : '@types/compression',
-              '@types/node',
-              'nodemon',
-              'ts-node',
-              'typescript',
-              'shx'
-            )
+            devDependencies.push('@types/mocha', '@types/node', 'nodemon', 'ts-node', 'typescript', 'shx')
           }
 
           return addVersions(devDependencies, dependencyVersions)
