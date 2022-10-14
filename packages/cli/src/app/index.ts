@@ -176,6 +176,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
             '@feathersjs/configuration',
             '@feathersjs/transport-commons',
             '@feathersjs/authentication',
+            '@feathersjs/authentication-client',
             'winston'
           )
 
