@@ -212,8 +212,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
             'cross-env',
             'prettier',
             '@feathersjs/cli',
-            '@feathersjs/rest-client',
-            '@feathersjs/authentication-client'
+            '@feathersjs/rest-client'
           )
 
           if (language === 'ts') {

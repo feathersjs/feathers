@@ -15,7 +15,7 @@ export interface ServiceTypes {
 }
 
 /**
- * Returns a ${language === 'ts' ? 'typed' : ''} Feathers client for the ${name} app.
+ * Returns a ${language === 'ts' ? 'typed' : ''} client for the ${name} app.
  * 
  * @param connection The REST or Socket.io Feathers client connection
  * @param authenticationOptions Additional settings for the authentication client
