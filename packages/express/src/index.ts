@@ -3,6 +3,7 @@ import { Application as FeathersApplication, defaultServiceMethods } from '@feat
 import { routing } from '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
 import cors from 'cors'
+import compression from 'compression'
 
 import { rest, RestOptions, formatter } from './rest'
 import { errorHandler, notFound, ErrorHandlerOptions } from './handlers'
@@ -30,7 +31,8 @@ export {
   AuthenticationSettings,
   parseAuthentication,
   authenticate,
-  cors
+  cors,
+  compression
 }
 
 const debug = createDebug('@feathersjs/express')

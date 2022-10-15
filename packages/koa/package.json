@@ -25,7 +25,7 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">= 14"
   },
   "files": [
     "CHANGELOG.md",
@@ -53,15 +53,17 @@
     "@feathersjs/commons": "^5.0.0-pre.31",
     "@feathersjs/errors": "^5.0.0-pre.31",
     "@feathersjs/transport-commons": "^5.0.0-pre.31",
-    "@koa/cors": "^3.4.2",
+    "@koa/cors": "^4.0.0",
     "@types/koa": "^2.13.5",
     "@types/koa-bodyparser": "^4.3.8",
     "@types/koa-qs": "^2.0.0",
+    "@types/koa-static": "^4.0.2",
     "@types/koa__cors": "^3.3.0",
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
     "koa-compose": "^4.1.0",
-    "koa-qs": "^3.0.0"
+    "koa-qs": "^3.0.0",
+    "koa-static": "^5.0.0"
   },
   "devDependencies": {
     "@feathersjs/authentication-local": "^5.0.0-pre.31",

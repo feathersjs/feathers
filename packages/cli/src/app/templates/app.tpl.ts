@@ -2,10 +2,13 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
-const tsKoaApp = ({ transports }: AppGeneratorContext) => /* ts */ `import serveStatic from 'koa-static'
-import { feathers } from '@feathersjs/feathers'
+const tsKoaApp = ({
+  transports
+}: AppGeneratorContext) => /* ts */ `import { feathers } from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
-import { koa, rest, bodyParser, errorHandler, parseAuthentication, cors } from '@feathersjs/koa'
+import {
+  koa, rest, bodyParser, errorHandler, parseAuthentication, cors, serveStatic
+} from '@feathersjs/koa'
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
 import type { Application } from './declarations'
@@ -58,11 +61,11 @@ app.hooks({
 export { app }
 `
 
-const tsExpressApp = ({ transports }: AppGeneratorContext) => /* ts */ `import compress from 'compression'
-
-import { feathers } from '@feathersjs/feathers'
+const tsExpressApp = ({
+  transports
+}: AppGeneratorContext) => /* ts */ `import { feathers } from '@feathersjs/feathers'
 import express, {
-  rest, json, urlencoded, cors,
+  rest, json, urlencoded, cors, compression,
   serveStatic, notFound, errorHandler
 } from '@feathersjs/express'
 import configuration from '@feathersjs/configuration'
@@ -79,7 +82,7 @@ const app: Application = express(feathers())
 // Load app configuration
 app.configure(configuration(configurationValidator))
 app.use(cors())
-app.use(compress())
+app.use(compression())
 app.use(json())
 app.use(urlencoded({ extended: true }))
 // Host the public folder

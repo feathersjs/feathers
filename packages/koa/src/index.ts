@@ -5,10 +5,11 @@ import { routing } from '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
 import bodyParser from 'koa-bodyparser'
 import cors from '@koa/cors'
+import serveStatic from 'koa-static'
 
 import { Application } from './declarations'
 
-export { Koa, bodyParser, cors }
+export { Koa, bodyParser, cors, serveStatic }
 export * from './authentication'
 export * from './declarations'
 export * from './handlers'
