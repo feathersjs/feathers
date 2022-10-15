@@ -25,8 +25,6 @@ const appUrl = \`http://\${app.get('host')}:\${port}\`
 
 describe('application client tests', () => {
   const client = createClient(rest(appUrl).axios(axios))
-  
-  client.configure(authenticationClient())
 
   before(async () => {
     await app.listen(port)

@@ -20,12 +20,11 @@ export type {
 }
 `
 
-const methodsTemplate = ({ camelName, upperName, className, type }: ServiceGeneratorContext) =>
-  `const ${camelName}ServiceMethods = ['find', 'get', 'create', 'update', 'patch', 'remove'] as const
+const methodsTemplate = ({ camelName, upperName, className, type }: ServiceGeneratorContext) => `
+const ${camelName}ServiceMethods = ['find', 'get', 'create', 'update', 'patch', 'remove'] as const
 type ${upperName}ClientService = Pick<${className}${
-    type !== 'custom' ? `<Params<${upperName}Query>>` : ''
-  }, typeof ${camelName}ServiceMethods[number]>
-`
+  type !== 'custom' ? `<Params<${upperName}Query>>` : ''
+}, typeof ${camelName}ServiceMethods[number]>`
 
 const declarationTemplate = ({ path, upperName }: ServiceGeneratorContext) =>
   `  '${path}': ${upperName}ClientService`
@@ -41,24 +40,18 @@ const toClientFile = toFile<ServiceGeneratorContext>(({ lib }) => [lib, 'client'
 
 export const generate = async (ctx: ServiceGeneratorContext) =>
   generator(ctx)
-    .then(
-      injectSource(
-        registrationTemplate,
-        before('return client'),
-        toFile<ServiceGeneratorContext>(({ lib }) => [lib, 'client'])
-      )
-    )
+    .then(injectSource(registrationTemplate, before('return client'), toClientFile))
     .then(
       when(
         (ctx) => ctx.language === 'js',
-        injectSource(methodsTemplate, before('\nexport const createClient'), toClientFile)
+        injectSource(methodsTemplate, after('import authenticationClient'), toClientFile)
       )
     )
     .then(
       when(
         (ctx) => ctx.language === 'ts',
-        injectSource(methodsTemplate, before('\nexport interface ServiceTypes'), toClientFile),
         injectSource(importTemplate, after("from '@feathersjs/feathers'"), toClientFile),
+        injectSource(methodsTemplate, before('\nexport interface ServiceTypes'), toClientFile),
         injectSource(declarationTemplate, after('export interface ServiceTypes'), toClientFile)
       )
     )
