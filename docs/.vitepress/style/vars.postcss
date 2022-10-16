@@ -1,0 +1,92 @@
+/**
+ * Colors
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --primary: #ed8a80;                /* congo pink */
+  --primary-content: #3C3C3B;        /* charcoal */
+  --neutral: #27464F;                /* midnight green */
+  --neutral-content: #EDEDED;        /* cloud */
+  --secondary: #EDEDED;              /* charcoal */
+  --secondary-content: #3C3C3B;      /* cloud */
+  --accent: #3C3C3B;                 /* charcoal */
+  --accent-content: #EDEDED;         /* cloud */
+  --btn-focus-scale: 1.05;
+
+  --vp-c-accent: rgb(218, 180, 11);
+  --vp-c-brand: var(--primary);
+  --vp-c-brand-light: #FFA69D;
+  --vp-c-brand-lighter: #FA978D;
+  --vp-c-brand-dark: #e47f75;
+  --vp-c-brand-darker: #db6d62;
+  --vp-code-block-bg: rgba(125,125,125,0.04);
+  --vp-c-green-light: rgb(18, 181, 157);
+  --vp-custom-block-tip-border: rgba(18, 181, 157, 0.5);
+  --vp-custom-block-tip-bg: rgba(18, 181, 157, 0.1);
+  --vp-code-line-highlight-color: rgba(18, 181, 157, 0.2);
+  /* --vp-code-line-highlight-color: #eea74b22; */
+  /* --vp-code-line-highlight-color: #db6d6232; */
+  /* --vp-code-line-highlight-color: #db6d6232; */
+  /* --vp-code-line-highlight-color: rgba(0, 0, 0, 0.1); */
+}
+
+.dark {
+  --vp-code-block-bg: rgba(0,0,0,0.2);
+  --vp-code-line-highlight-color: rgba(18, 181, 157, 0.15);
+}
+
+/**
+ * Component: Button
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-button-brand-border: var(--vp-c-brand-light);
+  --vp-button-brand-text: var(--vp-c-text-dark-1);
+  --vp-button-brand-bg: var(--vp-c-brand);
+  --vp-button-brand-hover-border: var(--vp-c-brand-light);
+  --vp-button-brand-hover-text: var(--vp-c-text-dark-1);
+  --vp-button-brand-hover-bg: var(--vp-c-brand-light);
+  --vp-button-brand-active-border: var(--vp-c-brand-light);
+  --vp-button-brand-active-text: var(--vp-c-text-dark-1);
+  --vp-button-brand-active-bg: var(--vp-button-brand-bg);
+}
+
+/**
+ * Component: Home
+ * -------------------------------------------------------------------------- */
+
+ :root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(
+    120deg,
+    #f850ce 30%,
+    #c10893
+  );
+  --vp-home-hero-image-background-image: linear-gradient(
+    -45deg,
+    #ffffff8f 30%,
+    #ff85f75e
+  );
+  --vp-home-hero-image-filter: blur(30px);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --vp-home-hero-image-filter: blur(56px);
+  }
+}
+
+@media (min-width: 960px) {
+  :root {
+    --vp-home-hero-image-filter: blur(72px);
+  }
+}
+
+
+/**
+ * Component: Algolia
+ * -------------------------------------------------------------------------- */
+
+.DocSearch {
+  --docsearch-primary-color: var(--vp-c-brand) !important;
+}
