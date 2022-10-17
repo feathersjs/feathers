@@ -27,15 +27,13 @@ const messages = app.service('messages')
 messages.on('patched', (message: Message) => console.log('message patched', message))
 
 // Only listen to an event once
-messsages.once('removed', (message: Message) =>
-  console.log('First time a message has been removed', message)
-)
+messsages.once('removed', (message: Message) => console.log('First time a message has been removed', message))
 
 // A reference to a handler
 const onCreatedListener = (message: Message) => console.log('New message created', message)
 
 // Listen `created` with a handler reference
-messages.on('created', onCreatedListener);
+messages.on('created', onCreatedListener)
 
 // Unbind the `created` event listener
 messages.removeListener('created', onCreatedListener)
@@ -48,11 +46,11 @@ messages.emit('customEvent', {
 
 ## Service Events
 
-Any service automatically emits `created`, `updated`, `patched` and `removed` events when the respective service method returns successfully. This works on the client as well as on the server. When the client is using [Socket.io](socketio.md), events will be pushed automatically from the server to all connected clients. This is how Feathers does real-time.
+Any service automatically emits `created`, `updated`, `patched` and `removed` events when the respective service method returns successfully. This works on the client as well as on the server. Events are not fired until all [hooks](./hooks.md) have executed. When the client is using [Socket.io](socketio.md), events will be pushed automatically from the server to all connected clients. This is how Feathers does real-time.
 
 <BlockQuote type="tip">
 
-Events are not fired until all of your [hooks](./hooks.md) have executed.
+To disable sending of events e.g. when updating a large amount of data, set [context.event](./hooks.md#context-event) to `null` in a hook.
 
 </BlockQuote>
 
@@ -65,15 +63,17 @@ The `created` event will fire with the result data when a service `create` retur
 ```ts
 import { feathers, type Params, type HookContext } from '@feathersjs/feathers'
 
-const app = feathers()
-
 type Message = { text: string }
 
-app.use('messages', {
-  async create(data: Message, params: Params) {
+class MessageService {
+  async create(data: Message) {
     return data
   }
-});
+}
+
+const app = feathers<{ messages: MessageService }>()
+
+app.use('messages', new MessageService())
 
 // Retrieve the wrapped service object which is also an EventEmitter
 const messages = app.service('messages')
@@ -90,23 +90,24 @@ messages.create({
 The `updated` and `patched` events will fire with the callback data when a service `update` or `patch` method calls back successfully.
 
 ```ts
-import { feathers, type Id, type Params, type HookContext } from '@feathersjs/feathers'
-
-const app = feathers()
+import { feathers } from '@feathersjs/feathers'
+import type { Id, Params, HookContext } from '@feathersjs/feathers'
 
 type Message = { text: string }
 
-const app = feathers()
-
-app.use('my/messages/', {
+class MessageService {
   async update(id: Id, data: Message) {
     return data
-  },
+  }
 
   async patch(id: Id, data: Message) {
     return data
   }
-})
+}
+
+const app = feathers<{ messages: MessageService }>()
+
+app.use('messages', new MessageService())
 
 const messages = app.service('my/messages')
 
@@ -127,27 +128,32 @@ messages.patch(0, {
 The `removed` event will fire with the callback data when a service `remove` calls back successfully.
 
 ```ts
-import { feathers, type Id, type Params, type HookContext } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
+import type { Id, Params, HookContext } from '@feathersjs/feathers'
 
-const app = feathers()
+type Message = { text: string }
 
-app.use('messages', {
+class MessageService {
   async remove(id: Id, params: Params) {
     return { id }
   }
-});
+}
+
+const app = feathers<{ messages: MessageService }>()
+
+app.use('messages', new MessageService())
 
 const messages = app.service('messages')
 
 messages.on('removed', (message: Message, context: HookContext) => console.log('removed', message))
-messages.remove(1);
+messages.remove(1)
 ```
 
 ## Custom events
 
-By default, real-time clients will only receive the [standard events](#service-events). However, it is possible to define a list of custom events when registering the service with [app.use](./application.md#usepath-service--options) that should also be sent to the client when `service.emit('customevent', data)` is called on the server. The `context` for custom events won't be a full hook context but just an object containing `{ app, service, path, result }`.
+By default, real-time clients will only receive the [standard events](#service-events). However, it is possible to define a list of custom events that should also be sent to the client when registering the service with [app.use](./application.md##use-path-service-options) when `service.emit('customevent', data)` is called on the server. The `context` for custom events won't be a full hook context but just an object containing `{ app, service, path, result }`.
 
-<BlockQuote type="warning">
+<BlockQuote type="warning" label="important">
 
 Custom events can only be sent from the server to the client, not the other way (client to server). A [custom service](./services.md) should be used for those cases.
 
@@ -158,13 +164,13 @@ For example, a payment service that sends status events to the client while proc
 ```ts
 class PaymentService {
   async create(data: any, params: Params) {
-    const customer = await createStripeCustomer(params.user);
-    this.emit('status', { status: 'created' });
+    const customer = await createStripeCustomer(params.user)
+    this.emit('status', { status: 'created' })
 
-    const payment = await createPayment(data);
-    this.emit('status', { status: 'completed' });
+    const payment = await createPayment(data)
+    this.emit('status', { status: 'completed' })
 
-    return payment;
+    return payment
   }
 }
 
@@ -174,36 +180,23 @@ app.use('payments', new PaymentService(), {
 })
 ```
 
-The [database adapters](./databases/common.md) also take a list of custom events as an [initialization option](./databases/common.md#serviceoptions):
-
-```ts
-import { MongoDbService } from '@feathersjs/mongodb'
-
-app.use('payments', new MongoDbService({
-  events: [ 'status' ],
-  Model
-}))
-```
-
 Using `service.emit` custom events can also be sent in a hook:
 
 ```js
 app.service('payments').hooks({
   after: {
     create(context: HookContext) {
-      context.service.emit('status', { status: 'completed' });
+      context.service.emit('status', { status: 'completed' })
     }
   }
-});
+})
 ```
-
 
 Custom events can be [published through channels](./channels.md#publishing) just like standard events and listened to it in a [Feathers client](./client.md) or [directly on the socket connection](./client/socketio.md#listening-to-events):
 
-
 ```js
-client.service('payments').on('status', data => {});
+client.service('payments').on('status', (data) => {})
 
 // or
-socket.on('payments status', data => {});
+socket.on('payments status', (data) => {})
 ```
