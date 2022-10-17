@@ -260,10 +260,6 @@ export default defineConfig({
             {
               text: 'Errors',
               link: '/api/errors'
-            },
-            {
-              text: 'Configuration',
-              link: '/api/configuration'
             }
           ]
         },
@@ -272,6 +268,10 @@ export default defineConfig({
           collapsible: true,
           collapsed: true,
           items: [
+            {
+              text: 'Configuration',
+              link: '/api/configuration'
+            },
             {
               text: 'Koa',
               link: '/api/koa'
@@ -291,25 +291,6 @@ export default defineConfig({
           ]
         },
         {
-          text: 'Schema',
-          collapsible: true,
-          collapsed: true,
-          items: [
-            {
-              text: 'Overview',
-              link: '/api/schema/'
-            },
-            {
-              text: 'Schemas',
-              link: '/api/schema/schema'
-            },
-            {
-              text: 'Resolvers',
-              link: '/api/schema/resolvers'
-            }
-          ]
-        },
-        {
           text: 'Client',
           collapsible: true,
           collapsed: true,
@@ -325,6 +306,10 @@ export default defineConfig({
             {
               text: 'Socket.io Client',
               link: '/api/client/socketio'
+            },
+            {
+              text: 'Authentication',
+              link: '/api/authentication/client'
             }
           ]
         },
@@ -342,28 +327,47 @@ export default defineConfig({
               link: '/api/authentication/service'
             },
             {
-              text: 'Strategies',
-              link: '/api/authentication/strategy'
-            },
-            {
               text: 'Hook',
               link: '/api/authentication/hook'
             },
             {
-              text: 'JWT',
+              text: 'Strategies',
+              link: '/api/authentication/strategy'
+            },
+            {
+              text: 'JWT Strategy',
               link: '/api/authentication/jwt'
             },
             {
-              text: 'Local',
+              text: 'Local Strategy',
               link: '/api/authentication/local'
             },
             {
-              text: 'OAuth',
+              text: 'OAuth Strategy',
               link: '/api/authentication/oauth'
+            }
+          ]
+        },
+        {
+          text: 'Schema',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            {
+              text: 'Overview',
+              link: '/api/schema/'
             },
             {
-              text: 'Client',
-              link: '/api/authentication/client'
+              text: 'TypeBox',
+              link: '/api/schema/typebox'
+            },
+            {
+              text: 'JSON schema',
+              link: '/api/schema/schema'
+            },
+            {
+              text: 'Resolvers',
+              link: '/api/schema/resolvers'
             }
           ]
         },
@@ -373,7 +377,7 @@ export default defineConfig({
           collapsed: true,
           items: [
             {
-              text: 'Overview',
+              text: 'Adapters',
               link: '/api/databases/adapters'
             },
             {
@@ -383,6 +387,18 @@ export default defineConfig({
             {
               text: 'Querying',
               link: '/api/databases/querying'
+            },
+            {
+              text: 'MongoDB',
+              link: '/api/databases/mongodb'
+            },
+            {
+              text: 'SQL',
+              link: '/api/databases/knex'
+            },
+            {
+              text: 'Memory',
+              link: '/api/databases/memory'
             }
           ]
         }

@@ -1,8 +1,15 @@
-# Overview
+---
+outline: deep
+---
 
-[![CI](https://github.com/feathersjs/feathers/workflows/CI/badge.svg)](https://github.com/feathersjs/feathers/actions?query=workflow%3ACI)
-[![Dependency Status](https://img.shields.io/david/feathersjs/feathers.svg?style=flat-square&path=packages/socketio)](https://david-dm.org/feathersjs/feathers?path=packages/schema)
-[![Download Status](https://img.shields.io/npm/dm/@feathersjs/schema.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/schema)
+# Schema Overview
+
+<Badges>
+
+[![npm version](https://img.shields.io/npm/v/@feathersjs/schema.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/schema)
+[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/dove/packages/schema/CHANGELOG.md)
+
+</Badges>
 
 `@feathersjs/schema` provides a way to define data models and to dynamically resolve them. It comes in two main parts:
 
@@ -21,51 +28,9 @@
 
 Here is an example of a user schema definition and resolver:
 
-:::: tabs :options="{ useUrlFragment: false }"
-
-::: tab "JavaScript"
-```js
-import { schema, resolve } from '@feathersjs/schema';
-
-export const userSchema = schema({
-  $id: 'User',
-  type: 'object',
-  additionalProperties: false,
-  required: ['email', 'password'],
-  properties: {
-    id: { type: 'number' },
-    email: { type: 'string' },
-    password: { type: 'string' }
-  }
-});
-
-export const userDataResolver = resolve({
-  properties: {
-    password: async (value) => {
-      // Return a hashed version of the password before storing it in the database
-      return bcrypt(value);
-    }
-  }
-});
-
-export const userResultResolver = resolve({
-  properties: {
-    password: async (value, _user, context) => {
-      // Do not return the password for external requests
-      if (context.params.provider) {
-        return undefined;
-      }
-      return value;
-    }
-  }
-});
-```
-:::
-
-::: tab "TypeScript"
 ```ts
 import { HookContext } from './definitions';
-import { schema, resolve, Infer } from '@feathersjs/schema';
+import { schema, resolve, type Infer } from '@feathersjs/schema';
 
 export const userSchema = schema({
   $id: 'User',
@@ -103,6 +68,3 @@ export const userResultResolver = resolve<User, HookContext>({
   }
 });
 ```
-:::
-
-::::
