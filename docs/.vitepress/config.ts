@@ -136,11 +136,11 @@ export default defineConfig({
           },
           {
             text: 'Crow v4 ',
-            link: releases
+            link: 'https://crow.docs.feathersjs.com'
           },
           {
             text: 'Buzzard v3 ',
-            link: contributing
+            link: 'https://buzzard.docs.feathersjs.com'
           }
         ]
       },
@@ -179,41 +179,36 @@ export default defineConfig({
           text: 'Getting Started',
           collapsible: true,
           items: [
-            // {
-            //   text: 'Getting Ready',
-            //   link: '/guides/basics/setup.md'
-            // },
-            // {
-            //   text: 'Quick start',
-            //   link: '/guides/basics/starting.md'
-            // },
-            // {
-            //   text: 'Generating an app',
-            //   link: '/guides/basics/generator.md'
-            // },
-            // {
-            //   text: 'Services',
-            //   link: '/guides/basics/services.md'
-            // },
-            // {
-            //   text: 'Hooks',
-            //   link: '/guides/basics/hooks.md'
-            // },
-            // {
-            //   text: 'Authentication',
-            //   link: '/guides/basics/authentication.md'
-            // },
-            // {
-            //   text: 'Building a frontend',
-            //   link: '/guides/basics/frontend.md'
-            // },
+            {
+              text: 'Quick start',
+              link: '/guides/basics/starting.md'
+            },
+            {
+              text: 'Creating an app',
+              link: '/guides/basics/generator.md'
+            },
+            {
+              text: 'Services',
+              link: '/guides/basics/services.md'
+            },
+            {
+              text: 'Hooks',
+              link: '/guides/basics/hooks.md'
+            },
+            {
+              text: 'Schemas',
+              link: '/guides/basics/schemas.md'
+            },
+            {
+              text: 'Authentication',
+              link: '/guides/basics/authentication.md'
+            }
             // {
             //   text: 'Writing Tests',
             //   link: '/guides/basics/testing.md'
             // }
           ]
         },
-
         {
           text: 'Frontend',
           // collapsible: true,
