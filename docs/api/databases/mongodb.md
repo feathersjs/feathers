@@ -318,8 +318,6 @@ app.listen(port, () => {
 })
 ```
 
-Run the example with `node app` and go to [localhost:3030/messages](http://localhost:3030/messages).
-
 ## Querying
 
 Additionally to the [common querying mechanism](https://docs.feathersjs.com/api/databases/querying.html) this adapter also supports [MongoDB's query syntax](https://docs.mongodb.com/v3.2/tutorial/query-documents/) and the `update` method also supports MongoDB [update operators](https://docs.mongodb.com/v3.2/reference/operator/update/).

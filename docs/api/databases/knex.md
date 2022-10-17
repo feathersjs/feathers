@@ -157,7 +157,7 @@ app.listen(port, () => {
 })
 ```
 
-Run the example with `node app` and go to [localhost:3030/messages](http://localhost:3030/messages).
+Run the example with `node app` and go to <a href="http://localhost:3030/messages">localhost:3030/messages</a>
 
 ## Querying
 

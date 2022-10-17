@@ -225,4 +225,4 @@ GET /messages?archived[$ne]=true
 
 ## Search
 
-Searching is not part of the common querying syntax since it is very specific to the database you are using. For built in databases, see the [SQL `$like` and `$ilike`](./knex.md#like) and [MongoDb search](./mongodb.md#search) documentation. If you are using a [community supported adapter]() its documentation may contain additional information on how to implement search functionality.
+Searching is not part of the common querying syntax since it is very specific to the database you are using. For built in databases, see the [SQL `$like` and `$ilike`](./knex.md#like) and [MongoDb search](./mongodb.md#search) documentation. If you are using a community supported adapter its documentation may contain additional information on how to implement search functionality.
