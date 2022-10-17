@@ -26,7 +26,7 @@ You can see the migration steps necessary for the Feathers chat [here for Javasc
 
 ## New Features
 
-There are so many new features in this release that they got their own page! Read about the new features on the [What's New in v5](./whats-new-in-dove.md) page.
+There are so many new features in this release that they got their own page! Read about the new features on the [What's New in v5](./whats-new.md) page.
 
 ## Core SQL and MongoDB
 

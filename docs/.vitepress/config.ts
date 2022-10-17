@@ -226,12 +226,16 @@ export default defineConfig({
           ]
         },
         {
-          text: 'More',
+          text: 'Migrating',
           // collapsible: true,
           items: [
             {
-              text: 'Migrating',
+              text: 'Migration guide',
               link: '/guides/migrating.md'
+            },
+            {
+              text: "What's new?",
+              link: '/guides/whats-new.md'
             }
           ]
         }
