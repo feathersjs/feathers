@@ -1,9 +1,17 @@
+---
+outline: deep
+---
+
 # Socket.io Client
 
 ## @feathersjs/socketio-client
 
+<Badges>
+
 [![npm version](https://img.shields.io/npm/v/@feathersjs/client.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/socketio-client)
-[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/crow/packages/socketio-client/CHANGELOG.md)
+[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/dove/packages/socketio-client/CHANGELOG.md)
+
+</Badges>
 
 ```
 npm install @feathersjs/socketio-client --save
@@ -21,9 +29,10 @@ The `@feathersjs/socketio-client` module allows to connect to services exposed t
 
 Initialize the Socket.io client using a given socket and the default options.
 
-:::: tabs :options="{ useUrlFragment: false }"
+<Tabs show-tabs>
 
-::: tab "Modular"
+<Tab name="Modular">
+
 ``` javascript
 const feathers = require('@feathersjs/feathers');
 const socketio = require('@feathersjs/socketio-client');
@@ -44,9 +53,11 @@ app.service('messages').create({
   text: 'A message from a REST client'
 });
 ```
-:::
 
-::: tab "@feathersjs/client"
+</Tab>
+
+<Tab name="@feathersjs/client">
+
 ``` html
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/core-js/2.1.4/core.min.js"></script>
 <script src="//unpkg.com/@feathersjs/client@^3.0.0/dist/feathers.js"></script>
@@ -72,9 +83,12 @@ app.service('messages').create({
   // feathers.errors is an object with all of the custom error types.
 </script>
 ```
-:::
 
-::::
+</Tab>
+
+</Tabs>
+
+
 
 ### app.io
 
@@ -90,33 +104,8 @@ app.io.on('disconnect', (reason) => {
 
 On the client, [custom service methods](../services.md#custom-methods) are also registered using the `methods` option when registering the service via `socketClient.service()`:
 
-:::: tabs :options="{ useUrlFragment: false }"
-
-::: tab "JavaScript"
-```js
-const feathers = require('@feathersjs/feathers');
-const socketio = require('@feathersjs/socketio-client');
-const io = require('socket.io-client');
-
-const socket = io('http://api.feathersjs.com');
-const client = feathers();
-const socketClient = socketio(socket)
-
-// Set up Socket.io client with the socket
-client.configure(socketClient);
-
-client.service('myservice', connection.service('myservice'), {
-  methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'myCustomMethod']
-});
-
-// Then it can be used like other service methods
-client.service('myservice').myCustomMethod(data, params);
-```
-:::
-
-::: tab "TypeScript"
-```typescript
-import { feathers, CustomMethod } from '@feathersjs/feathers';
+```ts
+import { feathers, type CustomMethod } from '@feathersjs/feathers';
 import socketio, { SocketService } from '@feathersjs/socketio-client';
 import io from 'socket.io-client';
 
@@ -139,16 +128,13 @@ const socketClient = socketio(socket)
 client.configure(socketClient);
 
 // Register a socket client service with all methods listed
-client.service('myservice', socketClient.service('myservice'), {
+client.use('myservice', socketClient.service('myservice'), {
   methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'myCustomMethod']
 });
 
 // Then it can be used like other service methods
 client.service('myservice').myCustomMethod(data, params);
 ```
-:::
-
-::::
 
 > __Note:__ Just like on the server *all* methods you want to use have to be listed in the `methods` option.
 
@@ -196,7 +182,7 @@ socket.emit('create', 'authentication', {
   email: 'hello@feathersjs.com',
   password: 'supersecret'
 }, function(error, authResult) {
-  console.log(authResult); 
+  console.log(authResult);
   // authResult will be {"accessToken": "your token", "user": user }
   // You can now send authenticated messages to the server
 });
@@ -210,7 +196,7 @@ socket.on('connect', () => {
     strategy: 'jwt',
     accessToken: authResult.accessToken
   }, function(error, newAuthResult) {
-    console.log(newAuthResult); 
+    console.log(newAuthResult);
   });
 });
 ```

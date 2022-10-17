@@ -1,7 +1,15 @@
-# OAuth
+---
+outline: deep
+---
+
+# OAuth Strategy
+
+<Badges>
 
 [![npm version](https://img.shields.io/npm/v/@feathersjs/authentication-oauth.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/authentication-oauth)
-[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/crow/packages/authentication-oauth/CHANGELOG.md)
+[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/dove/packages/authentication-oauth/CHANGELOG.md)
+
+</Badges>
 
 ```
 npm install @feathersjs/authentication-oauth --save
@@ -73,7 +81,7 @@ overrides | `[provider]` | [static overrides](#static-overrides) for a provider
 response | `[provider]` | [limit](#limit-response-data) the response data
 token_endpoint_auth_method | `[provider]` | authentication method for the [token endpoint](#token-endpoint-auth-method)
 name | generated | provider's [name](#grant), used to generate `redirect_uri`
-profile_url | [grant-profile](https://github.com/simov/grant-profile) | The URL to retrieve the user profile from  
+profile_url | [grant-profile](https://github.com/simov/grant-profile) | The URL to retrieve the user profile from
 [provider] | generated | provider's [name](#grant) as key
 redirect_uri | generated | OAuth app [redirect URI](#redirect-uri), generated using `protocol`, `host`, `path` and `name`
 
@@ -253,39 +261,8 @@ app.configure(expressOauth({
 
 Normally, any OAuth provider set up in the [configuration](#configuration) will be initialized with the default [OAuthStrategy](#oauthstrategy). The flow for a specific provider can be customized by extending `OAuthStrategy` class and registering it under that name on the [AuthenticationService](./service.md):
 
-:::: tabs :options="{ useUrlFragment: false }"
 
-::: tab "JavaScript"
-```js
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
-const { OAuthStrategy } = require('@feathersjs/authentication-oauth');
-
-class MyGithubStrategy extends OAuthStrategy {
-  async getEntityData(profile) {
-    // Include the `email` from the GitHub profile when creating
-    // or updating a user that logged in with GitHub
-    const baseData = await super.getEntityData(profile);
-
-    return {
-      ...baseData,
-      email: profile.email
-    };
-  }
-}
-
-module.exports = app => {
-  const authService = new AuthenticationService(app);
-
-  authService.register('github', new MyGithubStrategy());
-
-  // ...
-  app.use('/authentication', authService);
-}
-```
-:::
-
-::: tab "TypeScript"
-```typescript
+```ts
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { OAuthStrategy } from '@feathersjs/authentication-oauth';
@@ -312,6 +289,3 @@ export default (app: Application) => {
   app.use('/authentication', authService);
 }
 ```
-:::
-
-::::

@@ -1,7 +1,15 @@
-# JWT
+---
+outline: deep
+---
+
+# JWT Strategy
+
+<Badges>
 
 [![npm version](https://img.shields.io/npm/v/@feathersjs/authentication.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/authentication)
-[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/crow/packages/authentication/CHANGELOG.md)
+[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/dove/packages/authentication/CHANGELOG.md)
+
+</Badges>
 
 ```
 npm install @feathersjs/authentication --save
@@ -68,7 +76,7 @@ Returns a promise that resolves with the following format:
 
 ### getEntityQuery(params)
 
-Returns the `query` to use when calling `entityService.get` (default: `{}`). 
+Returns the `query` to use when calling `entityService.get` (default: `{}`).
 
 ### parse(req, res)
 
@@ -83,28 +91,7 @@ Parse the HTTP request headers for JWT authentication information. Returns a pro
 
 ## Customization
 
-:::: tabs :options="{ useUrlFragment: false }"
-
-::: tab "JavaScript"
-```js
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
-
-class MyJwtStrategy extends JWTStrategy {
-}
-
-module.exports = app => {
-  const authService = new AuthenticationService(app);
-
-  authService.register('jwt', new MyJwtStrategy());
-
-  // ...
-  app.use('/authentication', authService);
-}
-```
-:::
-
-::: tab "TypeScript"
-```typescript
+```ts
 import { Application } from '@feathersjs/feathers';
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { LocalStrategy } from '@feathersjs/authentication-local';
@@ -121,6 +108,3 @@ export default (app: Application) => {
   app.use('/authentication', authService);
 }
 ```
-:::
-
-::::

@@ -1,7 +1,15 @@
+---
+outline: deep
+---
+
 # Socket.io
 
+<Badges>
+
 [![npm version](https://img.shields.io/npm/v/@feathersjs/socketio.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/socketio)
-[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/crow/packages/socketio/CHANGELOG.md)
+[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/dove/packages/socketio/CHANGELOG.md)
+
+</Badges>
 
 ```
 npm install @feathersjs/socketio --save
@@ -9,7 +17,11 @@ npm install @feathersjs/socketio --save
 
 The [@feathersjs/socketio](https://github.com/feathersjs/socketio) module allows to call [service methods](./services.md) and receive [real-time events](./events.md) via [Socket.io](http://socket.io/), a NodeJS library which enables real-time bi-directional, event-based communication.
 
-> **Important:** This page describes how to set up a Socket.io server. The [Socket.io client chapter](./client/socketio.md) shows how to connect to this server on the client and the message format for service calls and real-time events.
+<BlockQuote type="warning" label="Important">
+
+This page describes how to set up a Socket.io server. The [Socket.io client chapter](./client/socketio.md) shows how to connect to this server on the client and the message format for service calls and real-time events.
+
+</BlockQuote>
 
 ## Configuration
 
@@ -19,47 +31,54 @@ The [@feathersjs/socketio](https://github.com/feathersjs/socketio) module allows
 
 Sets up the Socket.io transport with the default configuration using either the server provided by [app.listen](./application.md#listenport) or passed in [app.setup(server)](./application.md#setupserver).
 
-```js
-const feathers = require('@feathersjs/feathers');
-const socketio = require('@feathersjs/socketio');
+```ts
+import { feathers } from '@feathersjs/feathers'
+import socketio from '@feathersjs/socketio'
 
-const app = feathers();
+const app = feathers()
 
-app.configure(socketio());
+app.configure(socketio())
 
-app.listen(3030);
+app.listen(3030)
 ```
 
-> **Pro tip:** Once the server has been started with `app.listen()` or `app.setup(server)` the Socket.io object is available as `app.io`.
+<BlockQuote type="warning" label="Important">
+
+Once the server has been started with `app.listen()` or `app.setup(server)` the Socket.io object is available as `app.io`. Usually you should not have to send or listen to events on `app.io` directly.
+
+</BlockQuote>
 
 ### app.configure(socketio(callback))
 
-Sets up the Socket.io transport with the default configuration and call `callback` with the [Socket.io server object](http://socket.io/docs/server-api/). This is a good place to listen to custom events or add [authorization](https://github.com/LearnBoost/socket.io/wiki/Authorizing):
+Sets up the Socket.io transport with the default configuration and call `callback` with the [Socket.io server object](http://socket.io/docs/server-api/).
 
-```js
-const feathers = require('@feathersjs/feathers');
-const socketio = require('@feathersjs/socketio');
+```ts
+import { feathers } from '@feathersjs/feathers'
+import socketio from '@feathersjs/socketio'
 
-const app = feathers();
+const app = feathers()
 
-app.configure(socketio(function(io) {
-  io.on('connection', function(socket) {
-    socket.emit('news', { text: 'A client connected!' });
-    socket.on('my other event', function (data) {
-      console.log(data);
-    });
-  });
-  
+app.configure(socketio(io => {
+  io.on('connection', socket => {
+    // Do something here
+  })
+
   // Registering Socket.io middleware
   io.use(function (socket, next) {
     // Exposing a request property to services and hooks
-    socket.feathers.referrer = socket.request.referrer;
-    next();
-  });
-}));
+    socket.feathers.referrer = socket.request.referrer
+    next()
+  })
+}))
 
-app.listen(3030);
+app.listen(3030)
 ```
+
+<BlockQuote type="warning">
+
+We recommend to avoid listening and sending events on the `socket` directly since it circumvents Feathers secure dispatch mechanisms available through [channels](./channels.md) and [hooks](./hooks.md).
+
+</BlockQuote>
 
 ### app.configure(socketio(options [, callback]))
 
@@ -68,58 +87,63 @@ Sets up the Socket.io transport with the given [Socket.io options object](https:
 This can be used to e.g. configure the path where Socket.io is initialize (`socket.io/` by default). The following changes the path to `ws/`:
 
 
-```js
-const feathers = require('@feathersjs/feathers');
-const socketio = require('@feathersjs/socketio');
+```ts
+import { feathers } from '@feathersjs/feathers'
+import socketio from '@feathersjs/socketio'
 
 const app = feathers();
 
 app.configure(socketio({
   path: '/ws/'
-}, function(io) {
+}, io => {
   // Do something here
   // This function is optional
-}));
+}))
 
-app.listen(3030);
+app.listen(3030)
 ```
 
 ### app.configure(socketio(port, [options], [callback]))
 
 Creates a new Socket.io server on a separate port. Options and a callback are optional and work as described above.
 
-```js
-const feathers = require('@feathersjs/feathers');
-const socketio = require('@feathersjs/socketio');
+```ts
+import { feathers } from '@feathersjs/feathers'
+import socketio from '@feathersjs/socketio'
 
-const app = feathers();
+const app = feathers()
 
-app.configure(socketio(3031));
-app.listen(3030);
+app.configure(socketio(3031))
+app.listen(3030)
 ```
 
 ## params
 
 [Socket.io middleware](https://socket.io/docs/v4/middlewares/) can modify the `feathers` property on the `socket` which will then be used as the service call `params`:
 
-```js
-app.configure(socketio(function(io) {
-  io.use(function (socket, next) {
-    socket.feathers.user = { name: 'David' };
-    next();
-  });
-}));
+```ts
+app.configure(socketio(io => {
+  io.use((socket, next) => {
+    socket.feathers.user = { name: 'David' }
+    next()
+  })
+}))
 
 app.use('messages', {
-  create(data, params, callback) {
+  async create(data, params, callback) {
     // When called via SocketIO:
     params.provider // -> socketio
     params.user // -> { name: 'David' }
+    return data
   }
-});
+})
 ```
 
-> __Note:__ `socket.feathers` is the same object as the `connection` in a [channel](./channels.md). `socket.request` and `socket.handshake` contains information the HTTP request that initiated the connection (see the [Socket.io documentation](https://socket.io/docs/server-api/#socket-request)).
+<BlockQuote type="info">
+
+`socket.feathers` is the same object as the `connection` in a [channel](./channels.md). `socket.request` and `socket.handshake` contains information the HTTP request that initiated the connection (see the [Socket.io documentation](https://socket.io/docs/server-api/#socket-request)).
+
+</BlockQuote>
 
 ### params.provider
 
@@ -142,7 +166,11 @@ app.service('users').hooks({
 
 `params.query` will contain the query parameters sent from the client.
 
-> **Important:** Only `params.query` is passed between the server and the client, other parts of `params` are not. This is for security reasons so that a client can't set things like `params.user` or the database options. You can always map from `params.query` to `params` in a before [hook](./hooks.md).
+<BlockQuote type="warning">
+
+Only `params.query` is passed between the server and the client, other parts of `params` are not. This is for security reasons so that a client can't set things like `params.user` or the database options. You can always map from `params.query` to `params` in a before [hook](./hooks.md).
+
+</BlockQuote>
 
 ### params.connection
 

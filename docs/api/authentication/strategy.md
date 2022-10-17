@@ -1,4 +1,8 @@
-# Strategies
+---
+outline: deep
+---
+
+# Authentication Strategies
 
 An authentication strategy is any object or class that implements at least an [authenticate(data, params)]() method. They can be registered with the AuthenticationService to authenticate service calls and other requests. The following strategies already come with Feathers:
 
@@ -31,6 +35,8 @@ Authenticate `authentication` data with additional `params`. `authenticate` shou
 ## parse(req, res)
 
 Parse a given plain Node HTTP request and response and return `null` or the authentication information it provides. Does not have to be implemented.
+
+This is called by the authentication service. See [AuthService.parse](https://dove.feathersjs.com/api/authentication/service.html#parse-req-res-strategies)
 
 ## AuthenticationBaseStrategy
 

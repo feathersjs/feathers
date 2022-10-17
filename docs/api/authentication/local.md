@@ -1,7 +1,15 @@
-# Local
+---
+outline: deep
+---
+
+# Local Strategy
+
+<Badges>
 
 [![npm version](https://img.shields.io/npm/v/@feathersjs/authentication-local.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/authentication-local)
-[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/crow/packages/authentication-local/CHANGELOG.md)
+[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/dove/packages/authentication-local/CHANGELOG.md)
+
+</Badges>
 
 ```
 npm install @feathersjs/authentication-local --save
@@ -75,38 +83,8 @@ Standard local authentication can be configured with those options in `config/de
 
 The `LocalStrategy` can be customized like any ES6 class and then registered on the [AuthenticationService](./service.md):
 
-:::: tabs :options="{ useUrlFragment: false }"
-
-::: tab "JavaScript"
-```js
-const { AuthenticationService, JWTStrategy } = require('@feathersjs/authentication');
-const { LocalStrategy } = require('@feathersjs/authentication-local');
-
-class MyLocalStrategy extends LocalStrategy {
-  async getEntityQuery(query, params) {
-    // Query for user but only include users marked as `active`
-    return {
-      ...query,
-      active: true,
-      $limit: 1
-    }
-  }
-}
-
-module.exports = app => {
-  const authService = new AuthenticationService(app);
-
-  authService.register('local', new MyLocalStrategy());
-
-  // ...
-  app.use('/authentication', authService);
-}
-```
-:::
-
-::: tab "TypeScript"
-```typescript
-import { Application, Params, Query } from '@feathersjs/feathers';
+```ts
+import type { Application, Params, Query } from '@feathersjs/feathers';
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { LocalStrategy } from '@feathersjs/authentication-local';
 
@@ -130,15 +108,12 @@ export default (app: Application) => {
   app.use('/authentication', authService);
 }
 ```
-:::
-
-::::
 
 ## Hooks
 
 ### hashPassword(field)
 
-The `hashPassword(field [, options])` hook should be used as a `before` hook for `create`, `patch` or `update`. It will replace the plain text `field` on `data` with a hashed password using [LocalStrategy.hashPassword]() before storing it in the database. 
+The `hashPassword(field [, options])` hook should be used as a `before` hook for `create`, `patch` or `update`. It will replace the plain text `field` on `data` with a hashed password using [LocalStrategy.hashPassword]() before storing it in the database.
 
 `options` is optional and may contain the following settings:
 

@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Resolvers
 
 Resolvers dynamically resolve individual properties based on a context, in a Feathers application usually the [hook context](../hooks.md#hook-context).
@@ -18,55 +22,7 @@ Resolvers usually work together with [schema definitions](./schema.md) but can a
 
 Here is an example for a standalone resolver using a custom context:
 
-:::: tabs :options="{ useUrlFragment: false }"
 
-::: tab "JavaScript"
-```js
-import { resolve } from '@feathersjs/schema';
-
-const context = {
-  async getUser (id) {
-    return {
-      id,
-      name: 'David'
-    }
-  },
-  async getLikes (messageId) {
-    return 10;
-  }
-}
-
-const messageResolver = resolve({
-  properties: {
-    likes: async (value, message, context) => {
-      return context.getLikes(message.id);
-    },
-    user: async (value, message, context) => {
-      return context.getUser(message.userId);
-    }
-  }
-});
-
-const resolvedMessage = await messageResolver.resolve({
-  id: 1,
-  userId: 23,
-  text: 'Hello!'
-}, context);
-
-// { id: 1, userId: 10, likes: 10, text: 'Hello', user: { id: 23, name: 'David' } }
-const partialMessage = await messageResolver.resolve({
-  id: 1,
-  userId: 23,
-  text: 'Hello!'
-}, context, {
-  properties: [ 'id', 'text', 'user' ]
-});
-
-// { id: 1, text: 'Hello', user: { id: 23, name: 'David' } }
-```
-:::
-
-::: tab "TypeScript"
 ```ts
 import { resolve } from '@feathersjs/schema';
 
@@ -125,9 +81,7 @@ const partialMessage: Pick<User, 'id'|'text'|'user'> = await messageResolver.res
 
 // { id: 1, text: 'Hello', user: { id: 23, name: 'David' } }
 ```
-:::
 
-::::
 
 ## Options
 
@@ -139,7 +93,7 @@ A resolver takes the following options:
 - `converter`: A `async (data, context) => {}` function that can return a completely new representation of the data. A `converter` runs before `properties` resolvers.
 
 
-## Resolver functions
+## Property resolvers
 
 A resolver function is an `async` function that resolves a property on a data object. It gets passed the following parameters:
 
@@ -163,6 +117,12 @@ const userResolver = resolve({
 })
 ```
 
+<BlockQuote type="danger">
+
+Property resolver functions should only return a value and not have side effects. This means a property resolver shouldn't do things like create new data or modify the context. [Hooks](../hooks.md) should be used for side effects.
+
+</BlockQuote>
+
 ## Feathers resolvers
 
 In a Feathers application, resolvers are normally used together with a [schema definition](./schema.md) to convert service method query, data and responses. When a schema is passed to the resolver it can validate the data before or after the resolver runs. The context for these resolvers is always the [Feathers hook context](../hooks.md#hook-context).
@@ -174,7 +134,7 @@ In a Feathers application, resolvers are normally used together with a [schema d
 A data resolver can be used on a service with the `resolveData` hook:
 
 ```ts
-import { resolveData, resolve } from '@feathersjs/schema'
+import { resolveData, resolve, type Infer } from '@feathersjs/schema'
 
 export const userSchema = schema({
   $id: 'UserData',
@@ -203,7 +163,7 @@ app.service('users').hooks({
   ]
 });
 ```
- 
+
 ### Result resolvers
 
 `result` resolvers use the `resolveResult` hook and modify the data that is returned by a service call ([context.result](../hooks.md#context-result) in a hook). This can be used to populate associations or protect properties from being returned for external requests. A result resolver should also have a schema to know the shape of the data that will be returned but it does not need to run any validation.
@@ -211,7 +171,7 @@ app.service('users').hooks({
 A result resolver can be registered for all or individual service methods using the `resolveResult` hook.
 
 ```ts
-import { resolveResult, resolve } from '@feathersjs/schema'
+import { resolveResult, resolve, type Infer } from '@feathersjs/schema'
 
 // Extend the userSchema from above with an `id` property
 // which is what a service usually returns
@@ -272,14 +232,14 @@ app.service('users').hooks({
 });
 ```
 
-> __Important:__ In order to get the safe data from resolved associations, all services involved need the `resolveDispatch` or `resolveAll` hook registered. The `resolveDispatch` hook should also be registered before the `resolveResult` hook so that it gets the final result data. 
+> __Important:__ In order to get the safe data from resolved associations, all services involved need the `resolveDispatch` or `resolveAll` hook registered. The `resolveDispatch` hook should also be registered before the `resolveResult` hook so that it gets the final result data.
 
 ### Query resolvers
 
 `query` resolvers use the `resolveQuery` hook to modify `params.query`. This is often used to set default values or limit the query so a user can only request data they are allowed to see.
 
 ```ts
-import { schema, querySyntax, resolveQuery } from '@feathersjs/schema';
+import { schema, querySyntax, resolveQuery, type Infer } from '@feathersjs/schema';
 
 export const userQuerySchema = schema({
   $id: 'UserQuery',

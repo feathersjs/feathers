@@ -1,33 +1,61 @@
+---
+outline: deep
+---
+
 # REST Client
 
-## @feathersjs/rest-client
+The following chapter describes the use of
+
+- [@feathersjs/rest-client](#feathersjsrest-client) as a client side Feathers HTTP API integration
+- [Direct connection](#http-api) with any other HTTP client  
+
+## rest-client
+
+<Badges>
 
 [![npm version](https://img.shields.io/npm/v/@feathersjs/client.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/rest-client)
-[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/crow/packages/rest-client/CHANGELOG.md)
+[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/dove/packages/rest-client/CHANGELOG.md)
+
+</Badges>
 
 ```
 npm install @feathersjs/rest-client --save
 ```
 
-`@feathersjs/rest-client` allows to connect to a service exposed through the [Express REST HTTP API](../express.md#expressrest) using [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), [Superagent](http://visionmedia.github.io/superagent/) or [Axios](https://github.com/mzabriskie/axios).
+`@feathersjs/rest-client` allows to connect to a service exposed through a REST HTTP transport (e.g. with [Koa](../koa.md#rest) or [Express](../express.md#rest)) using [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), [Superagent](http://visionmedia.github.io/superagent/) or [Axios](https://github.com/mzabriskie/axios).
 
-> **Note:** For directly using a Feathers REST API (via HTTP) without using Feathers on the client see the [HTTP API](#http-api) section.
+<BlockQuote type="info">
 
-<!-- -->
+For directly using a Feathers REST API (via HTTP) without using Feathers on the client see the [HTTP API](#http-api) section.
 
-> **ProTip:** REST client services do emit `created`, `updated`, `patched` and `removed` events but only _locally for their own instance_. Real-time events from other clients can only be received by using a real-time transport ([Socket.io](./socketio.md)).
+</BlockQuote>
 
-<!-- -->
+<BlockQuote type="tip">
 
-> **Note:** A client application can only use a single transport (e.g. either REST or Socket.io). Using two transports in the same client application is normally not necessary.
+REST client services do emit `created`, `updated`, `patched` and `removed` events but only _locally for their own instance_. Real-time events from other clients can only be received by using a real-time transport ([Socket.io](./socketio.md)).
+
+</BlockQuote>
+
+<BlockQuote type="warning">
+
+A client application can only use a single transport (e.g. either REST or Socket.io). Using two transports in the same client application is normally not necessary.
+
+</BlockQuote>
 
 ### rest([baseUrl])
 
-REST client services can be initialized by loading `@feathersjs/rest-client` and initializing a client object with a base URL:
+REST client services can be initialized by loading `@feathersjs/rest-client` and initializing a client object with a base URL.
 
-:::: tabs :options="{ useUrlFragment: false }"
+<BlockQuote type="info" label="Note">
 
-::: tab "Modular"
+In the browser, the base URL is relative from where services are registered. That means that a service at `http://api.feathersjs.com/api/v1/messages` with a base URL of `http://api.feathersjs.com` would be available as `app.service('api/v1/messages')`. With a base URL of `http://api.feathersjs.com/api/v1` it would be `app.service('messages')`.
+
+</BlockQuote>
+
+<Tabs show-tabs>
+
+<Tab name="Modular">
+
 ``` javascript
 const feathers = require('@feathersjs/feathers');
 const rest = require('@feathersjs/rest-client');
@@ -40,15 +68,17 @@ const restClient = rest();
 // Connect to a different URL
 const restClient = rest('http://feathers-api.com')
 
-// Configure an AJAX library (see below) with that client 
+// Configure an AJAX library (see below) with that client
 app.configure(restClient.fetch(window.fetch.bind(window)));
 
 // Connect to the `http://feathers-api.com/messages` service
 const messages = app.service('messages');
 ```
-:::
 
-::: tab "@feathersjs/client"
+</Tab>
+
+<Tab name="@feathersjs/client">
+
 ``` html
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/core-js/2.1.4/core.min.js"></script>
 <script src="//unpkg.com/@feathersjs/client@^3.0.0/dist/feathers.js"></script>
@@ -57,22 +87,25 @@ const messages = app.service('messages');
   // Connect to a different URL
   var restClient = feathers.rest('http://feathers-api.com')
 
-  // Configure an AJAX library (see below) with that client 
+  // Configure an AJAX library (see below) with that client
   app.configure(restClient.fetch(window.fetch.bind(window)));
 
   // Connect to the `http://feathers-api.com/messages` service
   const messages = app.service('messages');
 </script>
 ```
-:::
 
-::::
+</Tab>
+
+</Tabs>
+
+
 
 <!-- -->
 
 > **ProTip:** When `window.fetch` (or just `fetch` which is normally equal to `window.fetch`) is passed to the FeathersJS REST client, its context (`this`) has to be bound to `window` (using `bind(window)` on it). Otherwise `window.fetch` would be called by the FeathersJS REST client with incorrect context, causing a JavaScript error: `Failed to execute 'fetch' on 'Window': Illegal invocation`.
 
-> **ProTip:** In the browser, the base URL is relative from where services are registered. That means that a service at `http://api.feathersjs.com/api/v1/messages` with a base URL of `http://api.feathersjs.com` would be available as `app.service('api/v1/messages')`. With a base URL of `http://api.feathersjs.com/api/v1` it would be `app.service('messages')`.
+> **ProTip:** 
 
 ### params.headers
 
@@ -174,35 +207,10 @@ app.configure(restClient.axios(axios.create({
 
 On the client, [custom service methods](../services.md#custom-methods) are also registered using the `methods` option when registering the service via `restClient.service()`:
 
-:::: tabs :options="{ useUrlFragment: false }"
 
-::: tab "JavaScript"
-```js
-const feathers = require('@feathersjs/feathers');
-const rest = require('@feathersjs/rest-client');
 
-const client = feathers();
+<LanguageBlock global-id="ts">
 
-// Connect to the same as the browser URL (only in the browser)
-const restClient = rest();
-
-// Connect to a different URL
-const restClient = rest('http://feathers-api.com').fetch(window.fetch.bind(window))
-
-// Configure an AJAX library (see below) with that client 
-client.configure(restClient);
-
-// Register a REST client service with all methods listed
-client.service('myservice', restClient.service('myservice'), {
-  methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'myCustomMethod']
-});
-
-// Then it can be used like other service methods
-client.service('myservice').myCustomMethod(data, params);
-```
-:::
-
-::: tab "TypeScript"
 ```typescript
 import { feathers, CustomMethod } from '@feathersjs/feathers';
 import rest, { RestService } from '@feathersjs/rest-client';
@@ -212,8 +220,8 @@ type CustomMethodData = { name: string }
 type CustomMethodResponse = { acknowledged: boolean }
 
 type ServiceTypes = {
-  // The type is a Socket service extended with custom methods
-  myservice: SocketService & {
+  // The type is a RestService extended with custom methods
+  myservice: RestService & {
     myCustomMethods: CustomMethod<CustomMethodData, CustomMethodResponse>
   }
 }
@@ -226,20 +234,49 @@ const restClient = rest().fetch(window.fetch);
 // Connect to a different URL
 const restClient = rest('http://feathers-api.com').fetch(window.fetch);
 
-// Configure an AJAX library (see below) with that client 
+// Configure an AJAX library (see below) with that client
 client.configure(restClient);
 
 // Register a REST client service with all methods listed
-client.service('myservice', restClient.service('myservice'), {
+client.use('myservice', restClient.service('myservice'), {
   methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'myCustomMethod']
 });
 
 // Then it can be used like other service methods
 client.service('myservice').myCustomMethod(data, params);
 ```
-:::
 
-::::
+</LanguageBlock>
+
+<LanguageBlock global-id="js">
+
+```js
+const feathers = require('@feathersjs/feathers');
+const rest = require('@feathersjs/rest-client');
+
+const client = feathers();
+
+// Connect to the same as the browser URL (only in the browser)
+const restClient = rest();
+
+// Connect to a different URL
+const restClient = rest('http://feathers-api.com').fetch(window.fetch.bind(window))
+
+// Configure an AJAX library (see below) with that client
+client.configure(restClient);
+
+// Register a REST client service with all methods listed
+client.use('myservice', restClient.service('myservice'), {
+  methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'myCustomMethod']
+});
+
+// Then it can be used like other service methods
+client.service('myservice').myCustomMethod(data, params);
+```
+
+</LanguageBlock>
+
+
 
 > __Note:__ Just like on the server *all* methods you want to use have to be listed in the `methods` option.
 
@@ -346,7 +383,7 @@ Then to authenticate subsequent requests, add the returned `accessToken` to the 
 curl -H "Content-Type: application/json" -H "Authorization: Bearer <your access token>" http://localhost:3030/messages
 ```
 
-For more information see the [authentication API documentation](../index.md).
+For more information see the [authentication API documentation](../).
 
 ### find
 
@@ -458,7 +495,7 @@ Will call `messages.patch(null, { complete: true }, { query: { complete: 'false'
 
 > **Note:** With a [database adapters](../databases/adapters.md) the [`multi` option](../databases/common.md) has to be set to support patching multiple entries.
 
-This is supported out of the box by the Feathers [database adapters](../databases/adapters.md) 
+This is supported out of the box by the Feathers [database adapters](../databases/adapters.md)
 
 ### remove
 
