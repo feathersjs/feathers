@@ -1,0 +1,33 @@
+{
+  "name": "docs",
+  "private": true,
+  "scripts": {
+    "dev": "vitepress --port 3333 --open",
+    "build": "vitepress build",
+    "serve": "vitepress serve",
+    "preview-https": "pnpm run build && serve .vitepress/dist",
+    "prefetch": "esno .vitepress/scripts/fetch-avatars.ts",
+    "start": "npm run dev"
+  },
+  "dependencies": {
+    "@vueuse/core": "^9.3.0",
+    "vue": "^3.2.40"
+  },
+  "devDependencies": {
+    "@feathersjs/cli": "^5.0.0-pre.28",
+    "@iconify-json/carbon": "^1.1.8",
+    "@types/node": "^18.8.3",
+    "@unocss/preset-typography": "^0.45.26",
+    "@unocss/reset": "^0.45.26",
+    "@unocss/transformer-directives": "^0.45.26",
+    "@vitejs/plugin-vue": "^3.1.2",
+    "esno": "^0.16.3",
+    "fast-glob": "^3.2.12",
+    "https-localhost": "^4.7.1",
+    "unocss": "^0.45.26",
+    "unplugin-vue-components": "^0.22.8",
+    "vite-plugin-pwa": "^0.13.1",
+    "vitepress": "^1.0.0-alpha.19",
+    "workbox-window": "^6.5.4"
+  }
+}

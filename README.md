@@ -8,19 +8,17 @@
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/feathers.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/feathers)
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/qa8kez8QBx)
 
-Feathers is a lightweight web-framework for creating real-time applications and REST APIs using JavaScript or TypeScript.
+Feathers is a lightweight web-framework for creating APIs and real-time applications using TypeScript or JavaScript.
 
-Feathers can interact with any backend technology, supports over a dozen databases and works with any frontend technology like React, VueJS, Angular, React Native, Android or iOS.
+Feathers can interact with any backend technology, supports many databases out of the box and works with any frontend technology like React, VueJS, Angular, React Native, Android or iOS.
 
 ## Getting started
 
 You can build your first real-time and REST API in just 4 commands:
 
 ```bash
-$ npm install -g @feathersjs/cli
-$ mkdir my-new-app
-$ cd my-new-app/
-$ feathers generate app
+$ npm init feathers my-new-app
+$ cd my-new-app
 $ npm start
 ```
 
