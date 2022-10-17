@@ -3,7 +3,7 @@ layout: page
 sidebar: false
 
 title: Feathers
-titleTemplate: The Framework for Building Real-time Apps and APIs
+titleTemplate: The API and Real-time Application Framework
 ---
 
 <script setup>

@@ -6,7 +6,7 @@ const cards = [
     title: 'Fast',
     imgSrc: '/img/feature-icons/Fast_Icon.svg',
     description:
-      'Leveraging a unique architecture, Feathers lets you focus on building your APIs and real-time applications quickly. You automatically get scalable REST, GraphQL and real-time APIs and stay prepared for whatever else the future might bring.',
+      'Leveraging a unique architecture, Feathers lets you focus on building your APIs and real-time applications quickly. You automatically get scalable HTTP and real-time APIs and stay prepared for whatever else the future might bring.',
   },
   {
     title: 'Universal',
@@ -18,7 +18,7 @@ const cards = [
     title: 'Flexible',
     imgSrc: '/img/feature-icons/Flexible_Icon.svg',
     description:
-      'Built for TypeScript and JavaScript, Feathers provides the structure to create complex applications but is flexible enough to not be in the way. With a large ecosystem of plugins you can include exactly what you need. No more, no less.',
+      'Built for TypeScript, Feathers provides the structure to create complex applications but is flexible enough to not be in the way. With a large ecosystem of plugins you can include exactly what you need. No more, no less.',
   },
 ]
 </script>
