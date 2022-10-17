@@ -3,17 +3,14 @@ import { useGlobalLanguage } from '../theme/store'
 
 defineProps({
   globalId: String,
-  inline: String,
+  inline: String
 })
 
 const activeGlobalId = useGlobalLanguage()
 </script>
 
 <template>
-  <component
-    :is="inline ? 'span' : 'div'"
-    :class="{ hidden: globalId !== activeGlobalId }"
-  >
+  <component :is="inline ? 'span' : 'div'" :class="{ hidden: globalId !== activeGlobalId }">
     <slot />
   </component>
 </template>

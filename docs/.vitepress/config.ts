@@ -179,38 +179,38 @@ export default defineConfig({
           text: 'Getting Started',
           collapsible: true,
           items: [
-            {
-              text: 'Getting Ready',
-              link: '/guides/basics/setup.md'
-            },
-            {
-              text: 'Quick start',
-              link: '/guides/basics/starting.md'
-            },
-            {
-              text: 'Generating an app',
-              link: '/guides/basics/generator.md'
-            },
-            {
-              text: 'Services',
-              link: '/guides/basics/services.md'
-            },
-            {
-              text: 'Hooks',
-              link: '/guides/basics/hooks.md'
-            },
-            {
-              text: 'Authentication',
-              link: '/guides/basics/authentication.md'
-            },
-            {
-              text: 'Building a frontend',
-              link: '/guides/basics/frontend.md'
-            },
-            {
-              text: 'Writing Tests',
-              link: '/guides/basics/testing.md'
-            }
+            // {
+            //   text: 'Getting Ready',
+            //   link: '/guides/basics/setup.md'
+            // },
+            // {
+            //   text: 'Quick start',
+            //   link: '/guides/basics/starting.md'
+            // },
+            // {
+            //   text: 'Generating an app',
+            //   link: '/guides/basics/generator.md'
+            // },
+            // {
+            //   text: 'Services',
+            //   link: '/guides/basics/services.md'
+            // },
+            // {
+            //   text: 'Hooks',
+            //   link: '/guides/basics/hooks.md'
+            // },
+            // {
+            //   text: 'Authentication',
+            //   link: '/guides/basics/authentication.md'
+            // },
+            // {
+            //   text: 'Building a frontend',
+            //   link: '/guides/basics/frontend.md'
+            // },
+            // {
+            //   text: 'Writing Tests',
+            //   link: '/guides/basics/testing.md'
+            // }
           ]
         },
 
@@ -219,31 +219,20 @@ export default defineConfig({
           // collapsible: true,
           // collapsed: true,
           items: [
-            {
-              text: 'Frontend Frameworks',
-              link: '/guides/frameworks.md'
-            }
-          ]
-        },
-        {
-          text: 'Security',
-          // collapsible: true,
-          // collapsed: true,
-          items: [
-            {
-              text: 'Security',
-              link: '/guides/security.md'
-            }
+            // {
+            //   text: 'Frontend Frameworks',
+            //   link: '/guides/frameworks.md'
+            // }
           ]
         },
         {
           text: 'Migrating',
           // collapsible: true,
           items: [
-            {
-              text: 'Migrating',
-              link: '/guides/migrating.md'
-            }
+            // {
+            //   text: 'Migrating',
+            //   link: '/guides/migrating.md'
+            // }
           ]
         }
       ],

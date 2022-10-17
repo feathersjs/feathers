@@ -223,8 +223,6 @@ Next a list of all our services is displayed. For this hook, only choose the `me
 
 A hook can run before any number of [service methods](./services.md). For this specific hook, only select `create`. After confirming the last prompt you should see something like this:
 
-![feathers generate hook prompts](./assets/process-message-prompts.png)
-
 A hook was generated and wired up to the selected service. Now it's time to add some code. 
 
 :::: tabs :options="{ useUrlFragment: false }"
@@ -320,8 +318,6 @@ We can do this by creating another hook called `populate-user` which is an `afte
 ```sh
 feathers generate hook
 ```
-
-![feathers generate hook prompts](./assets/populate-user-prompts.png)
 
 :::: tabs :options="{ useUrlFragment: false }"
 ::: tab "JavaScript"
