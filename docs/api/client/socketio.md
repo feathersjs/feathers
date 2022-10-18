@@ -34,7 +34,7 @@ Initialize the Socket.io client using a given socket and the default options.
 <Tab name="Modular">
 
 ``` javascript
-const feathers = require('@feathersjs/feathers');
+const { feathers } = require('@feathersjs/feathers');
 const socketio = require('@feathersjs/socketio-client');
 const io = require('socket.io-client');
 
