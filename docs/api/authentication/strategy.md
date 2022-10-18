@@ -10,7 +10,7 @@ An authentication strategy is any object or class that implements at least an [a
 - [LocalStrategy](./local.md) in `@feathersjs/authentication-local`
 - [OAuthStrategy](./oauth.md) in `@feathersjs/authentication-oauth`
 
-More details on how to customize existing strategies can be found in their  API documentation. This section describes the APIcommon methods for all authentication strategies and how a custom authentication strategy can implemented.
+More details on how to customize existing strategies can be found in their API documentation. This section describes the common methods for all authentication strategies and how a custom authentication strategy can implemented.
 
 ## setName(name)
 
@@ -18,7 +18,7 @@ Will be called with the `name` under which the strategy has been [registered on 
 
 ## setApplication(app)
 
-Will be called with the [Feathers application](../application.md) instance.  Does not have to be implemented.
+Will be called with the [Feathers application](../application.md) instance. Does not have to be implemented.
 
 ## setAuthentication(service)
 
