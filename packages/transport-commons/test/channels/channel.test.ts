@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import assert from 'assert'
-import { feathers, Application } from '@feathersjs/feathers'
+import { feathers, Application, RealTimeConnection } from '@feathersjs/feathers'
 import { channels, keys } from '../../src/channels'
-import { Channel, RealTimeConnection } from '../../src/channels/channel/base'
+import { Channel } from '../../src/channels/channel/base'
 import { CombinedChannel } from '../../src/channels/channel/combined'
 
 const { CHANNELS } = keys

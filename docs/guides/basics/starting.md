@@ -197,7 +197,7 @@ In the following example we will take our existing service and use
 <LanguageBlock global-id="ts">
 
 ```sh
-npm install @feathersjs/socketio@pre @feathersjs/koa@pre koa-static @types/koa-static --save
+npm install @feathersjs/socketio@pre @feathersjs/koa@pre --save
 ```
 
 Then update `app.ts` with the following content:
@@ -217,8 +217,7 @@ Then update `app.mjs` with the following content:
 
 ```ts{2-4,42-55,59-62,64-67}
 import { feathers } from '@feathersjs/feathers'
-import { koa, rest, bodyParser, errorHandler } from '@feathersjs/koa'
-import serveStatic from 'koa-static'
+import { koa, rest, bodyParser, errorHandler, serveStatic } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
 
 // This is the interface for the message data

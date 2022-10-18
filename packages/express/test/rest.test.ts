@@ -306,10 +306,7 @@ describe('@feathersjs/express/rest provider', () => {
 
       const app = expressify(feathers())
         .use(function (req: Request, _res: Response, next: NextFunction) {
-          req.feathers = {
-            ...req.feathers,
-            test: 'Happy'
-          }
+          req.feathers.test = 'Happy'
           next()
         })
         .configure(rest(express.formatter))

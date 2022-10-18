@@ -1,4 +1,5 @@
-import { Channel, RealTimeConnection } from './base'
+import { RealTimeConnection } from '@feathersjs/feathers'
+import { Channel } from './base'
 
 function collectConnections(children: Channel[]) {
   const mappings = new WeakMap<RealTimeConnection, any>()

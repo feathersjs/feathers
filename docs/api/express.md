@@ -30,7 +30,7 @@ const app = express(feathers())
 
 <BlockQuote type="warning" label="Important">
 
-This chapter assumes that you are familiar with [Express](http://expressjs.com/en/guide/routing.html) and describes how to set up an Express server and REST API. See the [REST client chapter](./client/rest.md) how to use this server on the client.
+As of Feathers v5, [Koa](./koa.md) is the recommended framework integration since it is more modern, faster and easier to use. When chosen explicitly, you should be already familiar [Express](http://expressjs.com/en/guide/routing.html).
 
 </BlockQuote>
 
@@ -45,16 +45,7 @@ import express from '@feathersjs/express'
 const app = express(feathers())
 ```
 
-Note that `@feathersjs/express` also exposes the standard [Express middleware](http://expressjs.com/en/4x/api.html#express):
-
-- `json` - A JSON body parser
-- `urlencoded` - A URL encoded form body parser
-- `serveStatic` - To statically host files in a folder
-- `Router` - Creates an Express router object
-
-```ts
-import { json, urlencoded, serveStatic, Router } from '@feathersjs/express'
-```
+Note that `@feathersjs/express` also exposes the Express [built-in middleware](#built-ins)
 
 ## express(app, expressApp)
 
@@ -84,19 +75,23 @@ app.use('/test', (req, res) => {
 })
 
 // Register multiple Express middleware functions
-app.use('/test', (req, res, next) => {
-  res.data = 'Step 1 worked';
-  next();
-}, (req, res) => {
-  res.json({
-    message: `Hello world from Express middleware ${res.data}`
-  })
-})
+app.use(
+  '/test',
+  (req, res, next) => {
+    res.data = 'Step 1 worked'
+    next()
+  },
+  (req, res) => {
+    res.json({
+      message: `Hello world from Express middleware ${res.data}`
+    })
+  }
+)
 ```
 
 ## app.listen(port)
 
-`app.listen(port) -> Promise<HttpServer>` will first call Express [app.listen](http://expressjs.com/en/4x/api.html#app.listen) and then internally also call the [Feathers app.setup(server)](./application.md#setupserver).
+`app.listen(port) -> Promise<HttpServer>` will first call Express [app.listen](http://expressjs.com/en/4x/api.html#app.listen) and then internally also call the [app.setup(server)](./application.md#setup-server).
 
 ```ts
 // Listen on port 3030
@@ -135,18 +130,21 @@ HTTPS requires creating a separate server in which case `app.setup(server)` also
 import https from 'https'
 import { app } from './app'
 
-const port = app.get('port');
-const server = https.createServer({
-  key: fs.readFileSync('privatekey.pem'),
-  cert: fs.readFileSync('certificate.pem')
-}, app).listen(443)
+const port = app.get('port')
+const server = https
+  .createServer(
+    {
+      key: fs.readFileSync('privatekey.pem'),
+      cert: fs.readFileSync('certificate.pem')
+    },
+    app
+  )
+  .listen(443)
 
 // Call app.setup to initialize all services and SocketIO
 app.setup(server)
 
-server.on('listening', () =>
-  logger.info('Feathers application started')
-)
+server.on('listening', () => logger.info('Feathers application started'))
 ```
 
 ### Virtual Hosts
@@ -174,15 +172,14 @@ app.setup(server)
 
 Registers a Feathers transport mechanism that allows you to expose and consume [services](./services.md) through a [RESTful API](https://en.wikipedia.org/wiki/Representational_state_transfer). This means that you can call a service method through the `GET`, `POST`, `PUT`, `PATCH` and `DELETE` [HTTP methods](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol):
 
-| Service method  | HTTP method | Path        |
-|-----------------|-------------|-------------|
-| .find()         | GET         | /messages   |
-| .get()          | GET         | /messages/1 |
-| .create()       | POST        | /messages   |
-| .update()       | PUT         | /messages/1 |
-| .patch()        | PATCH       | /messages/1 |
-| .remove()       | DELETE      | /messages/1 |
-
+| Service method | HTTP method | Path        |
+| -------------- | ----------- | ----------- |
+| .find()        | GET         | /messages   |
+| .get()         | GET         | /messages/1 |
+| .create()      | POST        | /messages   |
+| .update()      | PUT         | /messages/1 |
+| .patch()       | PATCH       | /messages/1 |
+| .remove()      | DELETE      | /messages/1 |
 
 ### app.configure(rest())
 
@@ -203,9 +200,9 @@ app.use(urlencoded({ extended: true }))
 app.configure(rest())
 ```
 
-<BlockQuote type="warning" label="Important">
+<BlockQuote type="danger" label="Important">
 
-The `json` and `urlencoded` body parser middleware has to be registered _before_ any service. Otherwise the service method throw an error that data is `undefined`.
+The `json` and `urlencoded` body parser and [params middleware](#params) has to be registered **before** any service.
 
 </BlockQuote>
 
@@ -224,17 +221,19 @@ app.use(json())
 // Turn on URL-encoded parser for REST services
 app.use(urlencoded({ extended: true }))
 // Set up REST transport
-app.configure(rest(function(req, res) {
-  // Format the message as text/plain
-  res.format({
-    'text/plain': function() {
-      res.end(`The Message is: "${res.data.text}"`)
-    }
+app.configure(
+  rest(function (req, res) {
+    // Format the message as text/plain
+    res.format({
+      'text/plain': function () {
+        res.end(`The Message is: "${res.data.text}"`)
+      }
+    })
   })
-}))
+)
 ```
 
-### Custom service middleware
+## Custom service middleware
 
 Custom Express middleware that only should run before or after a specific service can be passed to `app.use` in the order it should run:
 
@@ -248,7 +247,7 @@ const todoService = {
   }
 }
 
-app.use('todos', logRequest, todoService, updateData);
+app.use('todos', logRequest, todoService, updateData)
 ```
 
 <BlockQuote type="danger">
@@ -276,9 +275,9 @@ If you run `res.send` in a custom middleware after the service and don't call `n
 ```ts
 import json2csv from 'json2csv'
 
-const fields = [ 'done', 'description' ]
+const fields = ['done', 'description']
 
-app.use('/todos', todoService, function(req, res) {
+app.use('todos', todoService, function (req, res) {
   const result = res.data
   const data = result.data // will be either `result` as an array or `data` if it is paginated
   const csv = json2csv({ data, fields })
@@ -288,23 +287,24 @@ app.use('/todos', todoService, function(req, res) {
 })
 ```
 
-### params
+## params
 
-All middleware registered after the [REST transport](#express-rest) will have access to the `req.feathers` object to set properties on the service method `params`:
+All Express middleware will have access to the `req.feathers` object to set properties on the service method `params`:
 
 ```ts
-import { feathers, type Id, type Params } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
+import type { Id, Params } from '@feathersjs/feathers'
 import express, { json, urlencoded, rest } from '@feathersjs/express'
 
 const app = express(feathers())
 
+app.use(json())
+app.use(urlencoded({ extended: true }))
+app.use(function (req, res, next) {
+  req.feathers.fromMiddleware = 'Hello world'
+  next()
+})
 app.configure(rest())
-  .use(json())
-  .use(urlencoded({extended: true}))
-  .use(function(req, res, next) {
-    req.feathers.fromMiddleware = 'Hello world'
-    next()
-  })
 
 app.use('todos', {
   async get(id: Id, params: Params) {
@@ -312,7 +312,8 @@ app.use('todos', {
     console.log(params.fromMiddleware) // -> 'Hello world'
 
     return {
-      id, params,
+      id,
+      params,
       description: `You have to do ${id}!`
     }
   }
@@ -321,13 +322,11 @@ app.use('todos', {
 app.listen(3030)
 ```
 
-You can see the parameters set by running the example and visiting `http://localhost:3030/todos/test`.
-
 Avoid setting `req.feathers = something` directly since it may already contain information that other Feathers plugins rely on. Adding individual properties or using `{ ...req.feathers, something }` is the more reliable option.
 
-<BlockQuote type="warning">
+<BlockQuote type="warning" label="Important">
 
-Since the order of Express middleware matters, any middleware that sets service parameters has to be registered _before_ your services (in a generated application before `app.configure(services)` or in `middleware/index.js`).
+Since the order of Express middleware matters, any middleware that sets service parameters has to be registered **before** `app.configure(rest())` or as a [custom service middleware](#custom-service-middleware)
 
 </BlockQuote>
 
@@ -370,7 +369,7 @@ Note that the URL is a string so type conversion may be necessary. This is usual
 
 <BlockQuote type="danger">
 
-If an array in your request consists of more than 20 items, the [qs](https://www.npmjs.com/package/qs) parser implicitly [converts](https://github.com/ljharb/qs#parsing-arrays) it  to an object with indices as keys. To extend this limit, you can set a custom query parser: `app.set('query parser', str => qs.parse(str, {arrayLimit: 1000}))`
+If an array in your request consists of more than 20 items, the [qs](https://www.npmjs.com/package/qs) parser implicitly [converts](https://github.com/ljharb/qs#parsing-arrays) it to an object with indices as keys. To extend this limit, you can set a custom query parser: `app.set('query parser', str => qs.parse(str, {arrayLimit: 1000}))`
 
 </BlockQuote>
 
@@ -379,161 +378,27 @@ If an array in your request consists of more than 20 items, the [qs](https://www
 For any [service method call](./services.md) made through REST `params.provider` will be set to `rest`. In a [hook](./hooks.md) this can for example be used to prevent external users from making a service method call:
 
 ```ts
+import { HookContext } from 'declarations'
+
 app.service('users').hooks({
   before: {
-    remove(context) {
-      // check for if(context.params.provider) to prevent any external call
-      if(context.params.provider === 'rest') {
-        throw new Error('You can not delete a user via REST')
+    remove: [
+      async (context: HookContext) => {
+        // check for if(context.params.provider) to prevent any external call
+        if (context.params.provider === 'rest') {
+          throw new Error('You can not delete a user via REST')
+        }
       }
-    }
+    ]
   }
 })
 ```
+
+### params.headers
+
+`params.headers` will contain the original service request headers.
 
 ### params.route
-
-See the [routing section](#routing).
-
-## notFound(options)
-
-`express.notFound()` returns middleware that returns a `NotFound` (404) [Feathers error](./errors.md). It should be used as the last middleware __before__ the error handler. The following options are available:
-
-- `verbose`: Set to `true` if the URL should be included in the error message (default: `false`)
-
-```ts
-import { notFound, errorHandler } from '@feathersjs/express'
-
-// Return errors that include the URL
-app.use(notFound({ verbose: true }))
-app.use(errorHandler())
-```
-
-## errorHandler()
-
-`errorHandler` is an [Express error handler](https://expressjs.com/en/guide/error-handling.html) middleware that formats any error response to a REST call as JSON (or HTML if e.g. someone hits our API directly in the browser) and sets the appropriate error code.
-
-<BlockQuote type="tip">
-
-You can still use any other Express compatible [error middleware](http://expressjs.com/en/guide/error-handling.html) with Feathers.
-
-</BlockQuote>
-
-<BlockQuote type="warning" label="Important">
-
-Just as in Express, the error handler has to be registered *after* all middleware and services.
-
-</BlockQuote>
-
-### app.use(errorHandler())
-
-Set up the error handler with the default configuration.
-
-```js
-import { feathers } from '@feathersjs/feathers'
-import express from '@feathersjs/express'
-
-const app = express(feathers())
-
-// before starting the app
-app.use(express.errorHandler())
-```
-
-### app.use(errorHandler(options))
-
-```js
-import { feathers } from '@feathersjs/feathers'
-import express from '@feathersjs/express'
-
-const app = express(feathers())
-
-// Just like Express your error middleware needs to be
-// set up last in your middleware chain.
-app.use(express.errorHandler({
-    html: function(error, req, res, next) {
-      // render your error view with the error object
-      res.render('error', error)
-    }
-}));
-
-app.use(errorHandler({
-    html: {
-      404: 'path/to/notFound.html',
-      500: 'there/will/be/robots.html'
-    }
-}))
-```
-
-<BlockQuote type="warning" label="important">
-
-If you want to have the response in json format be sure to set the `Accept` header in your request to `application/json` otherwise the default error handler will return HTML.
-
-</BlockQuote>
-
-The following options can be passed when creating a new localstorage service:
-
-- `html` (Function|Object) [optional] - A custom formatter function or an object that contains the path to your custom html error pages. Can also be set to `false` to disable html error pages altogether so that only JSON is returned.
-- `logger` (Function|false) (default: `console`) - Set a logger object to log the error (it will be logger with `logger.error(error)`
-
-
-## authenticate()
-
-`express.authenticate(...strategies)` allows to protect an Express middleware with an [authentication service](./authentication/service.md) that has [strategies](./authentication/strategy.md) registered that can parse HTTP headers. It will set the authentication information on the `req` object (e.g. `req.user`). The following example protects the `/hello` endpoint with the JWT strategy (so the `Authorization: Bearer <JWT>` header needs to be set) and uses the user email to render the message:
-
-```ts
-import { authenticate } from '@feathersjs/express'
-
-app.use('/hello', authenticate('jwt'), (req, res) => {
-  const { user } = req
-
-  res.render(`Hello ${user.email}`)
-})
-
-// When using with the non-default authentication service
-app.use('/hello', authenticate({
-  service: 'v2/auth',
-  strategies: [ 'jwt', 'api-key' ]
-}), (req, res) => {
-  const { user } = req
-
-  res.render(`Hello ${user.email}`)
-})
-```
-
-When clicking a normal link, web browsers do _not_ send the appropriate header. In order to initate an authenticated request to a middleware from a browser link, there are two options. One is using a session which is described in the [Server Side rendering guide](../cookbook/express/view-engine.md), another is to add the JWT access token to the query string and mapping it to an authentication request:
-
-```ts
-import { authenticate } from '@feathersjs/express'
-const setQueryAuthentication = (req, res, next) => {
-  const { access_token } = req.query;
-
-  if (access_token) {
-    req.authentication = {
-      strategy: 'jwt',
-      accessToken: access_token
-    }
-  }
-
-  next();
-}
-
-// Request this with `hello?access_token=<your jwt>`
-app.use('/hello', setQueryAuthentication, authenticate('jwt'), (req, res) => {
-  const { user } = req
-
-  res.render(`Hello ${user.email}`)
-})
-```
-
-How to get the access token from the authentication client is described in the [authentication client documentation](../api/authentication/client.md#app-get-authentication).
-
-<BlockQuote type="warning">
-
-When using HTTPS URLs are safely encrypted but when using this method you have to make sure that access tokens are not logged through any of your logging mechanisms.
-
-</BlockQuote>
-
-## Routing
 
 Express route placeholders in a service URL will be added to the services `params.route`. See the [FAQ entry on nested routes](../help/faq.md#how-do-i-do-nested-or-custom-routes) for more details on when and when not to use nested routes.
 
@@ -544,10 +409,10 @@ import express, { rest } from '@feathersjs/express'
 const app = express(feathers())
 
 app.configure(rest())
-  .use(function(req, res, next) {
-    req.feathers.fromMiddleware = 'Hello world'
-    next()
-  })
+app.use(function (req, res, next) {
+  req.feathers.fromMiddleware = 'Hello world'
+  next()
+})
 
 app.use('users/:userId/messages', {
   async get(id, params) {
@@ -568,3 +433,170 @@ app.use('users/:userId/messages', {
 
 app.listen(3030)
 ```
+
+## Middleware
+
+`@feathersjs/express` comes with the following middleware
+
+### notFound(options)
+
+`notFound()` returns middleware that returns a `NotFound` (404) [Feathers error](./errors.md). It should be used as the last middleware **before** the error handler. The following options are available:
+
+- `verbose`: Set to `true` if the URL should be included in the error message (default: `false`)
+
+```ts
+import { notFound, errorHandler } from '@feathersjs/express'
+
+// Return errors that include the URL
+app.use(notFound({ verbose: true }))
+app.use(errorHandler())
+```
+
+### errorHandler()
+
+`errorHandler` is an [Express error handler](https://expressjs.com/en/guide/error-handling.html) middleware that formats any error response to a REST call as JSON (or HTML if e.g. someone hits our API directly in the browser) and sets the appropriate error code.
+
+<BlockQuote type="tip">
+
+You can still use any other Express compatible [error middleware](http://expressjs.com/en/guide/error-handling.html) with Feathers.
+
+</BlockQuote>
+
+<BlockQuote type="danger" label="Important">
+
+Just like in Express, the error handler has to be registered _after_ all middleware and services.
+
+</BlockQuote>
+
+#### app.use(errorHandler())
+
+Set up the error handler with the default configuration.
+
+```ts
+import { feathers } from '@feathersjs/feathers'
+import express from '@feathersjs/express'
+
+const app = express(feathers())
+
+// before starting the app
+app.use(express.errorHandler())
+```
+
+#### app.use(errorHandler(options))
+
+```ts
+import { feathers } from '@feathersjs/feathers'
+import express from '@feathersjs/express'
+
+const app = express(feathers())
+
+// Just like Express your error middleware needs to be
+// set up last in your middleware chain.
+app.use(
+  express.errorHandler({
+    html: function (error, req, res, next) {
+      // render your error view with the error object
+      res.render('error', error)
+    }
+  })
+)
+
+app.use(
+  errorHandler({
+    html: {
+      404: 'path/to/notFound.html',
+      500: 'there/will/be/robots.html'
+    }
+  })
+)
+```
+
+<BlockQuote type="warning" label="important">
+
+If you want to have the response in json format be sure to set the `Accept` header in your request to `application/json` otherwise the default error handler will return HTML.
+
+</BlockQuote>
+
+The following options can be passed when creating a new error handler:
+
+- `html` (Function|Object) [optional] - A custom formatter function or an object that contains the path to your custom html error pages. Can also be set to `false` to disable html error pages altogether so that only JSON is returned.
+- `logger` (Function|false) (default: `console`) - Set a logger object to log the error (it will be logger with `logger.error(error)`
+
+### authenticate()
+
+`express.authenticate(...strategies)` allows to protect an Express middleware with an [authentication service](./authentication/service.md) that has [strategies](./authentication/strategy.md) registered that can parse HTTP headers. It will set the authentication information on the `req` object (e.g. `req.user`). The following example protects the `/hello` endpoint with the JWT strategy (so the `Authorization: Bearer <JWT>` header needs to be set) and uses the user email to render the message:
+
+```ts
+import { authenticate } from '@feathersjs/express'
+
+app.use('/hello', authenticate('jwt'), (req, res) => {
+  const { user } = req
+
+  res.render(`Hello ${user.email}`)
+})
+
+// When using with the non-default authentication service
+app.use(
+  '/hello',
+  authenticate({
+    service: 'v2/auth',
+    strategies: ['jwt', 'api-key']
+  }),
+  (req, res) => {
+    const { user } = req
+
+    res.render(`Hello ${user.email}`)
+  }
+)
+```
+
+When clicking a normal link, web browsers do _not_ send the appropriate header. In order to initate an authenticated request to a middleware from a browser link, there are two options. One is using a session which is described in the [Server Side rendering guide](../cookbook/express/view-engine.md), another is to add the JWT access token to the query string and mapping it to an authentication request:
+
+```ts
+import { authenticate } from '@feathersjs/express'
+
+const setQueryAuthentication = (req, res, next) => {
+  const { access_token } = req.query
+
+  if (access_token) {
+    req.authentication = {
+      strategy: 'jwt',
+      accessToken: access_token
+    }
+  }
+
+  next()
+}
+
+// Request this with `hello?access_token=<your jwt>`
+app.use('/hello', setQueryAuthentication, authenticate('jwt'), (req, res) => {
+  const { user } = req
+
+  res.render(`Hello ${user.email}`)
+})
+```
+
+How to get the access token from the authentication client is described in the [authentication client documentation](../api/authentication/client.md#app-get-authentication).
+
+<BlockQuote type="warning">
+
+When using HTTPS URLs are safely encrypted but when using this method you have to make sure that access tokens are not logged through any of your logging mechanisms.
+
+</BlockQuote>
+
+### cors
+
+A reference to the [cors](https://github.com/expressjs/cors) module.
+
+### compression
+
+A reference to the [compression](https://github.com/expressjs/compression) module.
+
+### Built ins
+
+Note that `@feathersjs/express` also exposes the standard [Express middleware](http://expressjs.com/en/4x/api.html#express):
+
+- `json` - A JSON body parser
+- `urlencoded` - A URL encoded form body parser
+- `serveStatic` - To statically host files in a folder
+- `Router` - Creates an Express router object

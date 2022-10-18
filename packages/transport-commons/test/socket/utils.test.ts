@@ -1,12 +1,11 @@
 import assert from 'assert'
 import { EventEmitter } from 'events'
-import { feathers, Application, Params } from '@feathersjs/feathers'
+import { feathers, Application, Params, RealTimeConnection } from '@feathersjs/feathers'
 import { NotAuthenticated } from '@feathersjs/errors'
 import { isPlainObject } from 'lodash'
 
 import { routing } from '../../src/routing'
 import { normalizeError, getDispatcher, runMethod } from '../../src/socket/utils'
-import { RealTimeConnection } from '../../src/channels/channel/base'
 
 describe('socket commons utils', () => {
   describe('.normalizeError', () => {

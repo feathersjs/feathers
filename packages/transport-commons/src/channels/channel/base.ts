@@ -1,8 +1,5 @@
 import { EventEmitter } from 'events'
-
-export interface RealTimeConnection {
-  [key: string]: any
-}
+import { RealTimeConnection } from '@feathersjs/feathers'
 
 export class Channel extends EventEmitter {
   connections: RealTimeConnection[]

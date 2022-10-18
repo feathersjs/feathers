@@ -45,92 +45,69 @@ The server needs to explicitly **publish** channels it is interested in sharing 
 
 ## Example
 
-The example below shows the generated `channels.js` file illustrating how the different parts fit together:
-
-<LanguageBlock global-id="ts">
+The example below shows a `channels.js` file illustrating how the different parts fit together:
 
 ```ts
+import type { RealTimeConnection, Params } from '@feathersjs/feathers'
+import type { Application, HookContext } from './declarations'
+
 export default function (app: any) {
   if (typeof app.channel !== 'function') {
     // If no real-time functionality has been configured just return
     return
   }
 
-  app.on('connection', (connection: any) => {
+  app.on('connection', (connection: RealTimeConnection) => {
     // On a new real-time connection, add it to the anonymous channel
     app.channel('anonymous').join(connection)
   })
 
-  app.on('login', (authResult: any, { connection }: any) => {
+  app.on('login', (AuthenticationResult: any, { connection }: Params) => {
     // connection can be undefined if there is no
     // real-time connection, e.g. when logging in via REST
     if (connection) {
-      // Obtain the logged in user from the connection
-      // const user = connection.user;
-
       // The connection is no longer anonymous, remove it
       app.channel('anonymous').leave(connection)
 
       // Add it to the authenticated user channel
       app.channel('authenticated').join(connection)
-
-      // Channels can be named anything and joined on any condition
-
-      // E.g. to send real-time events only to admins use
-      // if(user.isAdmin) { app.channel('admins').join(connection); }
-
-      // If the user has joined e.g. chat rooms
-      // if(Array.isArray(user.rooms)) user.rooms.forEach(room => app.channel(`rooms/${room.id}`).join(connection));
-
-      // Easily organize users by email and userid for things like messaging
-      // app.channel(`emails/${user.email}`).join(connection);
-      // app.channel(`userIds/${user.id}`).join(connection);
     }
   })
 
   // eslint-disable-next-line no-unused-vars
-  app.publish((data: any, hook: any) => {
+  app.publish((data: any, context: HookContext) => {
     // Here you can add event publishers to channels set up in `channels.js`
     // To publish only for a specific event use `app.publish(eventname, () => {})`
-
     console.log(
       'Publishing all events to all authenticated users. See `channels.js` and https://docs.feathersjs.com/api/channels.html for more information.'
-    ) // eslint-disable-line
+    )
 
     // e.g. to publish all service events to all authenticated users use
     return app.channel('authenticated')
   })
-
-  // Here you can also add service specific event publishers
-  // e.g. the publish the `users` service `created` event to the `admins` channel
-  // app.service('users').publish('created', () => app.channel('admins'));
-
-  // With the userid and email organization from above you can easily select involved users
-  // app.service('messages').publish(data => {
-  //   return [
-  //     app.channel(`userIds/${data.createdBy}`),
-  //     app.channel(`emails/${data.recipientEmail}`)
-  //   ];
-  // });
 }
 ```
 
-</LanguageBlock>
-
 ## Connections
 
-A connection is an object that represents a real-time connection. It is the same object as `socket.feathers` in a [Socket.io](./socketio.md) middleware. You can add any kind of information to it but most notably, when using [authentication](./authentication/service.md), it will contain the authenticated user. By default it is located in `connection.user` once the client has authenticated on the socket (usually by calling `app.authenticate()` on the [client](./client.md)).
+A connection is an object that represents a real-time connection. It is the same object as `socket.feathers` in a [Socket.io](./socketio.md#params) middleware. You can add any kind of information to it but most notably, when using [authentication](./authentication/service.md), it will contain the authenticated user. By default it is located in `connection.user` once the client has authenticated on the socket (usually by calling `app.authenticate()` on the [client](./client.md)).
 
 We can get access to the `connection` object by listening to `app.on('connection', connection => {})` or `app.on('login', (payload, { connection }) => {})`.
 
-> **Note:** When a connection is terminated it will be automatically removed from all channels.
+<BlockQuote type="info" label="Note">
+
+When a connection is terminated it will be automatically removed from all channels.
+
+</BlockQuote>
 
 ### app.on('connection')
 
 `app.on('connection', connection => {})` is fired every time a new real-time connection is established. This is a good place to add the connection to a channel for anonymous users (in case we want to send any real-time updates to them):
 
-```js
-app.on('connection', (connection) => {
+```ts
+import type { RealTimeConnection } from '@feathersjs/feathers'
+
+app.on('connection', (connection: RealTimeConnection) => {
   // On a new real-time connection, add it to the
   // anonymous channel
   app.channel('anonymous').join(connection)
@@ -143,12 +120,15 @@ app.on('connection', (connection) => {
 
 ### app.on('login')
 
-`app.on('login', (authResult, params, context) => {})` is sent by the [AuthenticationService](./authentication/service.md#app-on-login) on successful login.
+`app.on('login', (authenticationResult, params, context) => {})` is sent by the [AuthenticationService](./authentication/service.md#app-on-login) on successful login.
 
 This is a good place to add the connection to channels related to the user (e.g. chat rooms, admin status etc.)
 
-```js
-app.on('login', (payload, { connection }) => {
+```ts
+import type { Params } from '@feathersjs/feathers'
+import type { AuthenticationResult } from '@feathersjs/authentication'
+
+app.on('login', (payload: AuthenticationResult, { connection }: Params) => {
   // connection can be undefined if there is no
   // real-time connection, e.g. when logging in via REST
   if (connection) {
@@ -177,10 +157,13 @@ app.on('login', (payload, { connection }) => {
 
 ### app.on('logout')
 
-`app.on('logout', (authResult, params, context) => {})` is sent by the [AuthenticationService](./authentication/service.md) on successful logout:
+`app.on('logout', (AuthenticationResult, params, context) => {})` is sent by the [AuthenticationService](./authentication/service.md) on successful logout:
 
-```js
-app.on('logout', (payload, { connection }) => {
+```ts
+import type { Params } from '@feathersjs/feathers'
+import type { AuthenticationResult } from '@feathersjs/authentication'
+
+app.on('logout', (payload: AuthenticationResult, { connection }: Params) => {
   if (connection) {
     // Join the channels a logged out connection should be in
     app.channel('anonymous').join(connection)
@@ -188,7 +171,11 @@ app.on('logout', (payload, { connection }) => {
 })
 ```
 
-> **Note:** On `logout` the connection will be removed from all existing channels automatically.
+<BlockQuote type="info" label="note">
+
+On `logout` the connection will be removed from all existing channels automatically.
+
+</BlockQuote>
 
 ## Channels
 
@@ -198,14 +185,14 @@ A channel is an object that contains a number of connections. It can be created 
 
 `app.channel(name) -> Channel`, when given a single name, returns an existing or new named channel:
 
-```js
+```ts
 app.channel('admins') // the admin channel
 app.channel('authenticated') // the authenticated channel
 ```
 
 `app.channel(name1, name2, ... nameN) -> Channel`, when given multiples names, will return a combined channel. A combined channel contains a list of all connections (without duplicates) and re-directs `channel.join` and `channel.leave` calls to all its child channels.
 
-```js
+```ts
 // Combine the anonymous and authenticated channel
 const combinedChannel = app.channel('anonymous', 'authenticated')
 
@@ -228,7 +215,7 @@ app.channel('admins', 'chat').leave((connection) => {
 
 `app.channels -> [string]` returns a list of all existing channel names.
 
-```js
+```ts
 app.channel('authenticated')
 app.channel('admins', 'users')
 
@@ -239,10 +226,12 @@ app.channel(app.channels) // will return a channel with all connections
 
 This is useful to e.g. remove a connection from all channels:
 
-```js
+```ts
+import type { RealTimeConnection } from '@feathersjs/feathers'
+
 // When a user is removed, make all their connections leave every channel
-app.service('users').on('removed', (user) => {
-  app.channel(app.channels).leave((connection) => {
+app.service('users').on('removed', (user: User) => {
+  app.channel(app.channels).leave((connection: RealTimeConnection) => {
     return user._id === connection.user._id
   })
 })
@@ -252,8 +241,11 @@ app.service('users').on('removed', (user) => {
 
 `channel.join(connection) -> Channel` adds a connection to this channel. If the channel is a combined channel, add the connection to all its child channels. If the connection is already in the channel it does nothing. Returns the channel object.
 
-```js
-app.on('login', (payload, { connection }) => {
+```ts
+import type { Params } from '@feathersjs/feathers'
+import type { AuthenticationResult } from '@feathersjs/authentication'
+
+app.on('login', (payload: AuthenticationResult, { connection }: Params) => {
   if (connection && connection.user.isAdmin) {
     // Join the admins channel
     app.channel('admins').join(connection)
@@ -268,9 +260,11 @@ app.on('login', (payload, { connection }) => {
 
 `channel.leave(connection|fn) -> Channel` removes a connection from this channel. If the channel is a combined channel, remove the connection from all its child channels. Also allows to pass a callback that is run for every connection and returns if the connection should be removed or not. Returns the channel object.
 
-```js
+```ts
+import type { RealTimeConnection } from '@feathersjs/feathers'
+
 // Make the user with `_id` 5 leave the `admins` channel
-app.channel('admins').leave((connection) => {
+app.channel('admins').leave((connection: RealTimeConnection) => {
   return connection.user._id === 5
 })
 ```
@@ -279,9 +273,13 @@ app.channel('admins').leave((connection) => {
 
 `channel.filter(fn) -> Channel` returns a new channel filtered by a given function which gets passed the connection.
 
-```js
+```ts
+import type { RealTimeConnection } from '@feathersjs/feathers'
+
 // Returns a new channel with all connections of the user with `_id` 5
-const userFive = app.channel(app.channels).filter((connection) => connection.user._id === 5)
+const userFive = app
+  .channel(app.channels)
+  .filter((connection: RealTimeConnection) => connection.user._id === 5)
 ```
 
 ### channel.send(data)
@@ -294,8 +292,10 @@ What data will be sent as the event data will be determined by the first availab
 2. `context.dispatch`
 3. `context.result`
 
-```js
-app.on('connection', (connection) => {
+```ts
+import type { RealTimeConnection } from '@feathersjs/feathers'
+
+app.on('connection', (connection: RealTimeConnection) => {
   // On a new real-time connection, add it to the
   // anonymous channel
   app.channel('anonymous').join(connection)
@@ -303,14 +303,18 @@ app.on('connection', (connection) => {
 
 // Send the `users` `created` event to all anonymous
 // users but use only the name as the payload
-app.service('users').publish('created', (data) => {
+app.service('users').publish('created', (data: User) => {
   return app.channel('anonymous').send({
     name: data.name
   })
 })
 ```
 
-> **Note:** If a connection is in multiple channels (e.g. `users` and `admins`) it will get the data from the _first_ channel that it is in.
+<BlockQuote type="warning" label="Important">
+
+If a connection is in multiple channels (e.g. `users` and `admins`) it will get the data from the _first_ channel that it is in.
+
+</BlockQuote>
 
 ### channel.connections
 
@@ -322,14 +326,18 @@ app.service('users').publish('created', (data) => {
 
 ## Publishing
 
-Publishers are callback functions that return which channel(s) to send an event to. They can be registered at the application and the service level and for all or specific events. A publishing function gets the event data and context object (`(data, context) => {}`) and returns a named or combined channel, an array of channels or `null`. Only one publisher can be registered for one type. Besides the standard [service event names](./events.md#service-events) an event name can also be a [custom event](./events.md#custom-events). `context` is the [context object](./hooks.md) from the service call or an object containing `{ path, service, app, result }` for custom events.
+Publishers are callback functions that return which channel(s) to send an event to. They can be registered at the application and the service level and for all or specific events. A publishing function gets the event data and context object (`(data, context) => {}`) and returns a named or combined channel, an array of channels or `null`. Only one publisher can be registered for one type. Besides the standard [service event names](./events.md#service-events) an event name can also be a [custom event](./events.md#custom-events). `context` is the [hook context object](./hooks.md) from the service call or an object containing `{ path, service, app, result }` for custom events.
 
 ### service.publish([event,] fn)
 
 `service.publish([event,] fn) -> service` registers a publishing function for a specific service for a specific event or all events if no event name was given.
 
-```js
-app.on('login', (payload, { connection }) => {
+```ts
+import { HookContext } from './declarations'
+import type { Params } from '@feathersjs/feathers'
+import type { AuthenticationResult } from '@feathersjs/authentication'
+
+app.on('login', (payload: AuthenticationResult, { connection }: Params) => {
   // connection can be undefined if there is no
   // real-time connection, e.g. when logging in via REST
   if (connection && connection.user.isAdmin) {
@@ -338,12 +346,12 @@ app.on('login', (payload, { connection }) => {
 })
 
 // Publish all messages service events only to its room channel
-app.service('messages').publish((data, context) => {
+app.service('messages').publish((data: Message, context: HookContext) => {
   return app.channel(`rooms/${data.roomId}`)
 })
 
 // Publish the `created` event to admins and the user that sent it
-app.service('users').publish('created', (data, context) => {
+app.service('users').publish('created', (data: User, context: HookContext) => {
   return [
     app.channel('admins'),
     app.channel(app.channels).filter((connection) => connection.user._id === context.params.user._id)
@@ -358,8 +366,11 @@ app.service('password-reset').publish(() => null)
 
 `app.publish([event,] fn) -> app` registers a publishing function for all services for a specific event or all events if no event name was given.
 
-```js
-app.on('login', (payload, { connection }) => {
+```ts
+import type { Params } from '@feathersjs/feathers'
+import type { AuthenticationResult } from '@feathersjs/authentication'
+
+app.on('login', (payload: AuthenticationResult, { connection }: Params) => {
   // connection can be undefined if there is no
   // real-time connection, e.g. when logging in via REST
   if (connection) {
@@ -368,12 +379,12 @@ app.on('login', (payload, { connection }) => {
 })
 
 // Publish all events to all authenticated users
-app.publish((data, context) => {
+app.publish((data: any, context: HookContext) => {
   return app.channel('authenticated')
 })
 
 // Publish the `log` custom event to all connections
-app.publish('log', (data, context) => {
+app.publish('log', (data: any, context: HookContext) => {
   return app.channel(app.channels)
 })
 ```
@@ -397,9 +408,13 @@ Instead, the relevant information (e.g. what rooms a user is currently in) shoul
 
 The following example updates all active connections for a given user when the user object (which is assumed to have a `rooms` array being a list of room ids the user has joined) is updated or removed:
 
-```js
+```ts
+import type { RealTimeConnection } from '@feathersjs/feathers'
+import type { Params } from '@feathersjs/feathers'
+import type { AuthenticationResult } from '@feathersjs/authentication'
+
 // Join a channel given a user and connection
-const joinChannels = (user, connection) => {
+const joinChannels = (user: User, connection: RealTimeConnection) => {
   app.channel('authenticated').join(connection)
   // Assuming that the chat room/user assignment is stored
   // on an array of the user
@@ -407,12 +422,12 @@ const joinChannels = (user, connection) => {
 }
 
 // Get a user to leave all channels
-const leaveChannels = (user) => {
+const leaveChannels = (user: User) => {
   app.channel(app.channels).leave((connection) => connection.user._id === user._id)
 }
 
 // Leave and re-join all channels with new user information
-const updateChannels = (user) => {
+const updateChannels = (user: User) => {
   // Find all connections for this user
   const { connections } = app.channel(app.channels).filter((connection) => connection.user._id === user._id)
 
@@ -423,7 +438,7 @@ const updateChannels = (user) => {
   connections.forEach((connection) => joinChannels(user, connection))
 }
 
-app.on('login', (payload, { connection }) => {
+app.on('login', (payload: AuthenticationResult, { connection }: Params) => {
   if (connection) {
     // Join all channels on login
     joinChannels(connection.user, connection)
@@ -437,4 +452,8 @@ app.service('users').on('patched', updateChannels)
 app.service('users').on('removed', leaveChannels)
 ```
 
-> **Note:** The number active connections is usually one (or none) but unless you prevent it explicitly Feathers is not preventing multiple logins of the same user (e.g. with two open browser windows or on a mobile device).
+<BlockQuote type="info" label="Note">
+
+The number active connections is usually one (or none) but unless you prevent it explicitly Feathers is not preventing multiple logins of the same user (e.g. with two open browser windows or on a mobile device).
+
+</BlockQuote>
