@@ -97,10 +97,6 @@ export const rest = (options?: RestOptions | RequestHandler) => {
       throw new Error('@feathersjs/express/rest needs an Express compatible app.')
     }
 
-    app.use((req, _res, next) => {
-      req.feathers = { ...req.feathers, provider: 'rest' }
-      return next()
-    })
     app.use(parseAuthentication(authenticationOptions))
     app.use(servicesMiddleware())
 

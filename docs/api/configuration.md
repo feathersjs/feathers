@@ -15,15 +15,15 @@ outline: deep
 npm install @feathersjs/configuration --save
 ```
 
-`@feathersjs/configuration` is a wrapper for [node-config](https://github.com/lorenwest/node-config) which allows to configure a server side Feathers application.
+`@feathersjs/configuration` is a wrapper for [node-config](https://github.com/lorenwest/node-config) to make configuration values available via [app.get](./application.md#get-name) which can then be used to configure an application.
 
-By default this implementation will look in `config/*` for `default.json`. It will be merged with other configuration files in the `config/` folder using the `NODE_ENV` environment variable. So setting `NODE_ENV=production` will merge `config/default.json` with `config/production.json`.
+By default it will look in `config/*` for `default.json`. It will be merged with other configuration files in the `config/` folder using the `NODE_ENV` environment variable. So setting `NODE_ENV=production` will merge `config/default.json` with `config/production.json`.
 
-For more information refer to the  [node-config docs](https://github.com/lorenwest/node-config/wiki/Configuration-Files).
+For more information also see the [node-config docs](https://github.com/lorenwest/node-config/wiki/Configuration-Files).
 
 ## Usage
 
-The `@feathersjs/configuration` module is an app configuration function that takes a root directory (usually something like `__dirname` in your application) and the configuration folder (set to `config` by default):
+`app.configure(configuration())` loads the configuration from `node-config` and makes it available via `app.get()`.
 
 ```ts
 import { feathers } from '@feathersjs/feathers'
@@ -31,48 +31,52 @@ import configuration from '@feathersjs/configuration'
 
 // Use the application root and `config/` as the configuration folder
 const app = feathers().configure(configuration())
+
+// Will return 3030 with  `{ "port": 3030 }` in config/default.json
+app.get('port')
 ```
 
 <BlockQuote type="warning" label="Important">
 
-Direct access to nested config properties is not supported via `app.get()`. To access a nested config property (e.g. `Customer.dbConfig.host`, use `app.get('Customer').dbConfig.host` or `import config from 'config'` directly and use it [as documented](https://github.com/lorenwest/node-config).
+Direct access to nested config properties is not supported via `app.get()`. To access a nested config property (e.g. `Customer.dbConfig.host`, use `app.get('Customer').dbConfig.host`.
 
 </BlockQuote>
 
-## Configuration schema
+## Configuration validation
 
-The application configuration can be validated against a [Feathers schema](./schema/) when [app.setup](./application.md#setupserver) (or `app.listen`) is called by passing a schema when initializing `@feathersjs/configuration`:
+`app.configure(configuration(validator))` loads the configuration from `node-config`, makes it available via `app.get()` and validates the original configuration against a [Feathers schema](./schema/) validator when [app.setup](./application.md#setup-server) (or [app.listen](./application.md#listen-port)) is called.
 
 ```ts
 import { feathers } from '@feathersjs/feathers'
-import { schema, type Infer } from '@feathersjs/schema'
+import { Ajv } from '@feathersjs/schema'
+import { Type, getValidator } from '@feathersjs/typebox'
+import type { Static } from '@feathersjs/typebox'
 import configuration from '@feathersjs/configuration'
 
-const configurationSchema = schema({
-  $id: 'FeathersConfiguration',
-  type: 'object',
-  additionalProperties: false,
-  required: ['port', 'host'],
-  properties: {
-    port: { type: 'number' },
-    host: { type: 'string' }
-  }
-} as const)
+const configurationSchema = Type.Object(
+  {
+    port: Type.Number(),
+    host: Type.String()
+  },
+  { $id: 'Configuration', additionalProperties: false }
+)
+
+const configurationValidator = getValidator(configurationSchema, new Ajv())
 
 type ServiceTypes = {}
 // Use the schema type for typed `app.get` and `app.set` calls
-type Configuration = Infer<typeof configurationSchema>
+type Configuration = Static<typeof configurationSchema>
 
 // Use the application root and `config/` as the configuration folder
-const app = feathers<ServiceTypes, Configuration>().configure(
-  configuration(configurationSchema)
-)
+const app = feathers<ServiceTypes, Configuration>().configure(configuration(configurationValidator))
 
 // Configuration will only be validated now
-app.listen()
+app
+  .listen()
   .then(() => console.log('Server started'))
   .catch((error) => {
     // Configuration validation errors will show up here
+    console.log(error.data)
   })
 ```
 
@@ -103,4 +107,8 @@ $ export NODE_CONFIG_DIR=server/config
 $ node myapp.js
 ```
 
-> __Note:__ The NODE_CONFIG_DIR environment variable isn’t used directly by @feathersjs/configuration but by the [node-config](https://github.com/lorenwest/node-config) module that it uses. For more information on configuring node-config settings, see the [Configuration Files Wiki page](https://github.com/lorenwest/node-config/wiki/Configuration-Files).
+<BlockQuote type="info" label="Note">
+
+The NODE_CONFIG_DIR environment variable isn’t used directly by @feathersjs/configuration but by the [node-config](https://github.com/lorenwest/node-config) module that it uses. For more information on configuring node-config settings, see the [Configuration Files Wiki page](https://github.com/lorenwest/node-config/wiki/Configuration-Files).
+
+</BlockQuote>

@@ -1,9 +1,8 @@
-import { Application, getServiceOptions, Params } from '@feathersjs/feathers'
+import { Application, getServiceOptions, Params, RealTimeConnection } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
 import { channels } from '../channels'
 import { routing } from '../routing'
 import { getDispatcher, runMethod } from './utils'
-import { RealTimeConnection } from '../channels/channel/base'
 
 const debug = createDebug('@feathersjs/transport-commons')
 

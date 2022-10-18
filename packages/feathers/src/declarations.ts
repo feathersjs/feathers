@@ -135,6 +135,13 @@ export type TransportConnection<Services = any> = {
 }
 
 /**
+ * A real-time connection object
+ */
+export interface RealTimeConnection {
+  [key: string]: any
+}
+
+/**
  * The interface for a custom service method. Can e.g. be used to type client side services.
  */
 export type CustomMethod<T = any, R = T, P extends Params = Params> = (data: T, params?: P) => Promise<R>
