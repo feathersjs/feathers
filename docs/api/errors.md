@@ -53,7 +53,6 @@ const validationErrors = new BadRequest({
 })
 ```
 
-
 ## Feathers errors
 
 The following error types, all of which are instances of `FeathersError`, are available:
@@ -77,7 +76,7 @@ The following error types, all of which are instances of `FeathersError`, are av
 
 <BlockQuote type="tip">
 
-All of the Feathers plugins will automatically emit the appropriate Feathers errors for you. For example, most of the database adapters will already send `Conflict` or `Unprocessable` errors on validation errors.
+All of the Feathers core modules and most plugins and database adapters automatically emit the appropriate Feathers errors for you. For example, most of the database adapters will already send `Conflict` or `Unprocessable` errors on validation errors.
 
 </BlockQuote>
 
@@ -90,7 +89,7 @@ Feathers errors contain the following fields:
 - `data` - An object containing anything you passed to a Feathers error except for the `errors` object and `message`.
 - `errors` - An object containing whatever was passed to a Feathers error inside `errors`. This is typically validation errors or if you want to group multiple errors together.
 
-<BlockQuote type="warning">
+<BlockQuote type="warning" label="Important">
 
 To convert a Feathers error back to an object call `error.toJSON()`. A normal `console.log` of a JavaScript Error object will not automatically show those additional properties described above (even though they can be accessed directly).
 
@@ -98,7 +97,7 @@ To convert a Feathers error back to an object call `error.toJSON()`. A normal `c
 
 ## Custom errors
 
-You can create custom errors by extending from the `FeathersError` class and calling its constructor with `(msg, name, code, className, data)`:
+You can create custom errors by extending from the `FeathersError` class and calling its constructor with `(message, name, code, className, data)`:
 
 - `message` - The error message
 - `name` - The error name (e.g. `MyError`)
@@ -106,13 +105,12 @@ You can create custom errors by extending from the `FeathersError` class and cal
 - `className` - The full name of the error class (e.g. `my-error`)
 - `data` - Additional data to include in the error
 
-
 ```ts
 import { FeathersError } from '@feathersjs/errors'
 
 class UnsupportedMediaType extends FeathersError {
   constructor(message: string, data: any) {
-    super(message, 'UnsupportedMediaType', 415, 'unsupported-media-type', data);
+    super(message, 'UnsupportedMediaType', 415, 'unsupported-media-type', data)
   }
 }
 
@@ -128,24 +126,24 @@ It is important to make sure that errors get cleaned up before they go back to t
 Here is an example error handler you can add to app.hooks errors.
 
 ```js
-const errors = require("@feathersjs/errors");
-const errorHandler = ctx => {
+const errors = require('@feathersjs/errors')
+const errorHandler = (ctx) => {
   if (ctx.error) {
-    const error = ctx.error;
+    const error = ctx.error
     if (!error.code) {
-      const newError = new errors.GeneralError("server error");
-      ctx.error = newError;
-      return ctx;
+      const newError = new errors.GeneralError('server error')
+      ctx.error = newError
+      return ctx
     }
-    if (error.code === 404 || process.env.NODE_ENV === "production") {
-      error.stack = null;
+    if (error.code === 404 || process.env.NODE_ENV === 'production') {
+      error.stack = null
     }
-    return ctx;
+    return ctx
   }
-};
+}
 ```
 
-then add it as an [application level](./application.md#hookshooks) error hook
+then add it as an [application level](./application.md#hooks-hooks) error hook
 
 ```ts
 app.hooks({

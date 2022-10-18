@@ -63,7 +63,6 @@ Methods are optional and if a method is not implemented Feathers will automatica
 
 </BlockQuote>
 
-
 Service methods must use [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) or return a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and have the following parameters:
 
 - `id` — The identifier for the resource. A resource is the data identified by a unique id.
@@ -88,9 +87,9 @@ Although probably the most common use case, a service does not necessarily have 
 
 </BlockQuote>
 
-<BlockQuote type="warning">
+<BlockQuote type="warning" label="Important">
 
-This section describes the general usage of service methods and how to implement them. They are already implemented by the official Feathers database adapters. For specifics on how to use the database adapters, see the [database adapters common API](./databases/common.md).
+This section describes the general usage of service methods and how to implement them. They are already implemented by the official Feathers database adapters. For specifics on how to use the database adapters, see the [database adapters documentation](./databases/common.md).
 
 </BlockQuote>
 
@@ -105,7 +104,7 @@ This section describes the general usage of service methods and how to implement
 - `params.connection` - If the service call has been made by a real-time transport (e.g. through websockets), `params.connection` is the connection object that can be used with [channels](./channels.md).
 - `params.headers` - The HTTP headers connected to this service call if available. This is either the headers of the REST call or the headers passed when initializing a websocket connection.
 
-<BlockQuote type="warning">
+<BlockQuote type="warning" label="Important">
 
 For external calls only `params.query` will be sent between the client and server. This is because other parameters in `params` on the server often contain security critical information (like `params.user` or `params.authentication`).
 
@@ -117,14 +116,17 @@ For external calls only `params.query` will be sent between the client and serve
 
 ```ts
 class MessageService {
-  async find (params: Params) {
-    return [{
-      id: 1,
-      text: 'Message 1'
-    }, {
-      id: 2,
-      text: 'Message 2'
-    }]
+  async find(params: Params) {
+    return [
+      {
+        id: 1,
+        text: 'Message 1'
+      },
+      {
+        id: 2,
+        text: 'Message 2'
+      }
+    ]
   }
 }
 
@@ -145,7 +147,7 @@ app.use('messages', new MessageService())
 import type { Id, Params } from '@feathersjs/feathers'
 
 class TodoService {
-  async get (id: Id, params: Params) {
+  async get(id: Id, params: Params) {
     return {
       id,
       text: `You have to do ${id}!`
@@ -155,7 +157,6 @@ class TodoService {
 
 app.use('todos', new TodoService())
 ```
-
 
 ### .create(data, params)
 
@@ -171,7 +172,7 @@ type Message = { text: string }
 class MessageService {
   messages: Message[] = []
 
-  async create (data: Message, params: Params) {
+  async create(data: Message, params: Params) {
     this.messages.push(data)
 
     return data
@@ -181,18 +182,17 @@ class MessageService {
 app.use('messages', new MessageService())
 ```
 
-<BlockQuote type="warning">
+<BlockQuote type="warning" label="Important">
 
 Note that `data` may also be an array. When using a [database adapters](./databases/adapters.md) the [`multi` option](./databases/common.md) has to be set to allow arrays.
 
 </BlockQuote>
 
-
 ### .update(id, data, params)
 
-`service.update(id, data, params) -> Promise` - Replaces the resource identified by `id` with `data`. The method should return with the complete, updated resource data. `id` can also be `null` when updating multiple records, with `params.query` containing the query criteria.
+`service.update(id, data, params) -> Promise` - Replaces the resource identified by `id` with `data`. The method should return with the complete, updated resource data. `id` can also be `null` when updating multiple records.
 
-A successful `update` method call emits the [`updated` service event](./events.md#updated-patched) with the returned data or a separate event for every item if the returned data is an array.
+A successful `update` method call emits the [`updated` service event](./events.md#updated-patched). If an array is returned, it will send an individual `updated` event for every item.
 
 <BlockQuote type="info">
 
@@ -204,7 +204,7 @@ The [database adapters](./databases/adapters.md) do not support completely repla
 
 `patch(id, data, params) -> Promise` - Merges the existing data of the resource identified by `id` with the new `data`. `id` can also be `null` indicating that multiple resources should be patched with `params.query` containing the query criteria.
 
-A successful `patch` method call emits the [`patched` service event](./events.md#updated-patched) with the returned data or a separate event for every item if the returned data is an array.
+A successful `patch` method call emits the [`patched` service event](./events.md#updated-patched) with the returned data. When an array is returned when patching mutiple items, it will send an individual `patched` event for every item in the array.
 
 The method should return with the complete, updated resource data. Implement `patch` additionally (or instead of) `update` if you want to distinguish between partial and full updates and support the `PATCH` HTTP method.
 
@@ -226,7 +226,6 @@ With [database adapters](./databases/adapters.md) the [`multi` option](./databas
 
 </BlockQuote>
 
-
 ### .setup(app, path)
 
 `service.setup(app, path) -> Promise` is a special method that initializes the service, passing an instance of the Feathers application and the path it has been registered on.
@@ -235,14 +234,13 @@ When calling [app.listen](application.md#listenport) or [app.setup](application.
 
 ### .teardown(app, path)
 
-`service.teardown(app, path) -> Promise` is a special method that shuts down the service, passing an instance of the Feathers application and the path it has been registered on. If a service implements a `teardown` method, it will be called during [app.teardown()](application.md#teardownserver).
-
+`service.teardown(app, path) -> Promise` is a special method that shuts down the service, passing an instance of the Feathers application and the path it has been registered on. If a service implements a `teardown` method, it will be called during [app.teardown()](application.md#teardownserver) or when unregistering the service via [app.unuse](./application.md#unusepath).
 
 ## Custom Methods
 
-A custom method is any other service method you want to expose publicly. A custom method always has a signature of `(data, params)` with the same semantics as standard service methods (`data` is the payload, `params` is the service [params](#params)). They can be used with [hooks](./hooks.md) (including authentication) and must be `async` or return a Promise.
+A custom method is any other service method you want to expose publicly. A custom method **must have** the signature of `(data, params)` with the same semantics as standard service methods (`data` is the payload, `params` is the service [params](#params)). They can be used with [hooks](./hooks.md) (including authentication) and must be `async` or return a Promise.
 
-In order to register a public custom method, the names of *all methods* have to be passed as the `methods` option when registering the service with [app.use()](./application.md#usepath-service--options)
+In order to register a public custom method, the names of _all methods_ have to be passed as the `methods` option when registering the service with [app.use()](./application.md#usepath-service--options)
 
 ```ts
 import type { Id, Params } from '@feathersjs/feathers'
@@ -259,7 +257,7 @@ class MyService {
     }
   }
 
-  async myCustomMethod (data: CustomData, params: Params) {
+  async myCustomMethod(data: CustomData, params: Params) {
     return data
   }
 }
@@ -278,9 +276,9 @@ const app = feathers<ServiceTypes>()
 
 See the [REST client](./client/rest.md) and [Socket.io client](./client/socketio.md) chapters on how to use those custom methods on the client.
 
-<BlockQuote type="warning">
+<BlockQuote type="warning" label="Important">
 
-When passing the `methods` option __all methods__ you want to expose, including standard service methods, must be listed. This allows to completely disable standard service method you might not want to expose. The `methods` option only applies to external access (via a transport like HTTP or websockets). All methods continue to be available internally on the server.
+When passing the `methods` option **all methods** you want to expose, including standard service methods, must be listed. This allows to completely disable standard service method you might not want to expose. The `methods` option only applies to external access (via a transport like HTTP or websockets). All methods continue to be available internally on the server.
 
 </BlockQuote>
 
@@ -288,16 +286,13 @@ When passing the `methods` option __all methods__ you want to expose, including 
 
 When registering a service, Feathers (or its plugins) can also add its own methods to a service. Most notably, every service will automatically become an instance of a [NodeJS EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter).
 
-
 ### .hooks(hooks)
 
 Register [hooks](./hooks.md) for this service.
 
-
 ### .publish([event, ] publisher)
 
 Register an event publishing callback. For more information, see the [channels chapter](./channels.md).
-
 
 ### .on(eventname, listener)
 
@@ -309,12 +304,10 @@ For more information about service events, see the [Events chapter](./events.md)
 
 </BlockQuote>
 
-
 ### .emit(eventname, data)
 
 Provided by the core [NodeJS EventEmitter .emit](https://nodejs.org/api/events.html#events_emitter_emit_eventname_args). Emits the event `eventname` to all event listeners.
 
 ### .removeListener(eventname)
-
 
 Provided by the core [NodeJS EventEmitter .removeListener](https://nodejs.org/api/events.html#events_emitter_removelistener_eventname_listener). Removes all listeners, or the given listener, for `eventname`.
