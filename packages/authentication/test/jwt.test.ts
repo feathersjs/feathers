@@ -115,7 +115,7 @@ describe('authentication/jwt', () => {
   })
 
   describe('handleConnection', () => {
-    it('adds authentication information on create', async () => {
+    it('adds entity and authentication information on create', async () => {
       const connection: any = {}
 
       await app.service('authentication').create(
@@ -192,6 +192,40 @@ describe('authentication/jwt', () => {
         authentication: connection.authentication,
         connection
       })
+
+      assert.ok(!connection.authentication)
+      assert.ok(!connection.user)
+    })
+
+    it('deletes authentication information on disconnect but maintains it in event handler', async () => {
+      const connection: any = {}
+
+      await app.service('authentication').create(
+        {
+          strategy: 'jwt',
+          accessToken
+        },
+        { connection }
+      )
+
+      assert.ok(connection.authentication)
+      assert.ok(connection.user)
+
+      const disconnectPromise = new Promise((resolve, reject) =>
+        app.once('disconnect', (connection) => {
+          try {
+            assert.ok(connection.authentication)
+            assert.ok(connection.user)
+            resolve(connection)
+          } catch (error) {
+            reject(error)
+          }
+        })
+      )
+      app.emit('disconnect', connection)
+
+      await disconnectPromise
+      await new Promise((resolve) => process.nextTick(resolve))
 
       assert.ok(!connection.authentication)
       assert.ok(!connection.user)
