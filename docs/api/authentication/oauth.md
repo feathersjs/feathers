@@ -28,8 +28,7 @@ The following is a standard oAuth setup. The `OAuthStrategy` often needs to be [
 ```ts
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
 import { LocalStrategy } from '@feathersjs/authentication-local'
-import { OAuthStrategy } from '@feathersjs/authentication-oauth'
-import { oauth } from '@feathersjs/authentication-oauth'
+import { OAuthStrategy, oauth } from '@feathersjs/authentication-oauth'
 import type { Application } from './declarations'
 
 declare module './declarations' {

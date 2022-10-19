@@ -15,21 +15,9 @@ outline: deep
 npm install @feathersjs/authentication-client --save
 ```
 
-The `@feathersjs/authentication-client` module allows you to easily authenticate against a Feathers server. It is not required, but makes it easier to implement authentication in your client by automatically storing and sending the access token and handling re-authenticating when a websocket disconnects.
+The `@feathersjs/authentication-client` module allows you to easily authenticate a Feathers client against a Feathers server. It is not required, but makes it easier to implement authentication in your client by automatically storing and sending the access token and handling re-authenticating when a websocket disconnects.
 
-## Configuration
-
-- `storage` (default: `localStorage` if available, `MemoryStorage` otherwise) - The storage to store the access token. For React Native use `import { AsyncStorage } from 'react-native'`
-- `path` (default: '/authentication') - The path of the authentication service
-- `locationKey` (default: `'access_token'`) - The name of the window hash parameter to parse for an access token from the `window.location`. Usually used by the OAuth flow.
-- `locationErrorKey` (default: `'error') - The name of the window hash parameter to parse for authentication errors. Usually used by the OAuth flow.
-- `jwtStrategy` (default: `'jwt'`) - The access token authentication strategy
-- `storageKey` (default: `'feathers-jwt'`) - Key for storing the token in `storage`
-- `header` (default: `'Authorization'`) - Name of the accessToken header
-- `scheme` (default: `'Bearer'`) - The HTTP header scheme
-- Authentication (default: `AuthenticationClient`) - Allows to provide a [customized authentication client class](#customization)
-
-## Setup
+## Usage
 
 ```ts
 import { feathers } from '@feathersjs/feathers'
@@ -46,6 +34,20 @@ app.configure(socketio(socket))
 // Available options are listed in the "Options" section
 app.configure(authentication())
 ```
+
+## Options
+
+The following options are available for `app.configure(authentication(options))`:
+
+- `storage` (default: `localStorage` if available, `MemoryStorage` otherwise) - The storage to store the access token. For React Native use `import { AsyncStorage } from 'react-native'`
+- `path` (default: '/authentication') - The path of the authentication service
+- `locationKey` (default: `'access_token'`) - The name of the window hash parameter to parse for an access token from the `window.location`. Usually used by the OAuth flow.
+- `locationErrorKey` (default: `'error') - The name of the window hash parameter to parse for authentication errors. Usually used by the OAuth flow.
+- `jwtStrategy` (default: `'jwt'`) - The access token authentication strategy
+- `storageKey` (default: `'feathers-jwt'`) - Key for storing the token in `storage`
+- `header` (default: `'Authorization'`) - Name of the accessToken header
+- `scheme` (default: `'Bearer'`) - The HTTP header scheme
+- Authentication (default: `AuthenticationClient`) - Allows to provide a [customized authentication client class](#customization)
 
 <BlockQuote type="info">
 
@@ -68,7 +70,7 @@ try {
 
 <BlockQuote type="danger">
 
-`app.reAuthenticate()` has to be called when you want to use the token from storage. __There’s no need to call it more than once__, so you’d typically only do it once when the application initializes. When successful, all subsequent requests will send their authentication information automatically.
+`app.reAuthenticate()` has to be called when you want to use the token from storage. **There is no need to call it more than once**, so you’d typically only do it once when the application initializes. When successful, all subsequent requests will send their authentication information automatically.
 
 </BlockQuote>
 
@@ -94,7 +96,7 @@ try {
 ```
 
 - `data {Object}` - of the format `{strategy [, ...otherProps]}`
-  - `strategy {String}` - the name of the strategy to be used to authenticate.  Required.
+  - `strategy {String}` - the name of the strategy to be used to authenticate. Required.
   - `...otherProps {Properties} ` vary depending on the chosen strategy. Above is an example of using the `local` strategy.
 
 ## app.logout()
@@ -103,13 +105,13 @@ Removes the access token from storage on the client. It also calls the `remove` 
 
 ## app.get('authentication')
 
-`app.get('authentication') -> Promise` is a Promise that resolves with the current authentication information. For most strategies this is the best place to get the currently authenticated user:
+`app.get('authentication') -> Promise` is a Promise that resolves with the current authentication information. For most strategies this is the best place to **get the currently authenticated user**:
 
 ```js
 // Returns the authenticated user
-const { user } = await app.get('authentication');
+const { user } = await app.get('authentication')
 // Gets the authenticated accessToken (JWT)
-const { accessToken } = await app.get('authentication');
+const { accessToken } = await app.get('authentication')
 ```
 
 ## app.authentication
@@ -192,9 +194,11 @@ class MyAuthenticationClient extends AuthenticationClient {
 app.configure(socketio(socket))
 
 // Pass the custom authentication client class as the `Authentication` option
-app.configure(authentication({
-  Authentication: MyAuthenticationClient
-}))
+app.configure(
+  authentication({
+    Authentication: MyAuthenticationClient
+  })
+)
 ```
 
 ## Hooks

@@ -7,7 +7,7 @@ outline: deep
 The following chapter describes the use of
 
 - [@feathersjs/rest-client](#feathersjsrest-client) as a client side Feathers HTTP API integration
-- [Direct connection](#http-api) with any other HTTP client  
+- [Direct connection](#http-api) with any other HTTP client
 
 ## rest-client
 
@@ -32,13 +32,13 @@ For directly using a Feathers REST API (via HTTP) without using Feathers on the 
 
 <BlockQuote type="tip">
 
-REST client services do emit `created`, `updated`, `patched` and `removed` events but only _locally for their own instance_. Real-time events from other clients can only be received by using a real-time transport ([Socket.io](./socketio.md)).
+REST client services do emit `created`, `updated`, `patched` and `removed` events but only _locally for their own instance_. Real-time events from other clients can only be received by using a real-time transport like [Socket.io](./socketio.md).
 
 </BlockQuote>
 
 <BlockQuote type="warning">
 
-A client application can only use a single transport (e.g. either REST or Socket.io). Using two transports in the same client application is normally not necessary.
+A client application can only use **a single transport** (e.g. either REST or Socket.io). Using two transports in the same client application is not necessary.
 
 </BlockQuote>
 
@@ -46,77 +46,49 @@ A client application can only use a single transport (e.g. either REST or Socket
 
 REST client services can be initialized by loading `@feathersjs/rest-client` and initializing a client object with a base URL.
 
-<BlockQuote type="info" label="Note">
+```ts
+import { feathers } from '@feathersjs/feathers'
+import rest from '@feathersjs/rest-client'
 
-In the browser, the base URL is relative from where services are registered. That means that a service at `http://api.feathersjs.com/api/v1/messages` with a base URL of `http://api.feathersjs.com` would be available as `app.service('api/v1/messages')`. With a base URL of `http://api.feathersjs.com/api/v1` it would be `app.service('messages')`.
-
-</BlockQuote>
-
-<Tabs show-tabs>
-
-<Tab name="Modular">
-
-``` javascript
-const feathers = require('@feathersjs/feathers');
-const rest = require('@feathersjs/rest-client');
-
-const app = feathers();
+const app = feathers()
 
 // Connect to the same as the browser URL (only in the browser)
-const restClient = rest();
+const restClient = rest()
 
 // Connect to a different URL
 const restClient = rest('http://feathers-api.com')
 
 // Configure an AJAX library (see below) with that client
-app.configure(restClient.fetch(window.fetch.bind(window)));
+app.configure(restClient.fetch(window.fetch.bind(window)))
 
 // Connect to the `http://feathers-api.com/messages` service
-const messages = app.service('messages');
+const messages = app.service('messages')
 ```
 
-</Tab>
+The base URL is relative from where services are registered. That means that means that
 
-<Tab name="@feathersjs/client">
+- A service at `http://api.feathersjs.com/api/v1/messages` with a base URL of `http://api.feathersjs.com` would be available as `app.service('api/v1/messages')`
+- A base URL of `http://api.feathersjs.com/api/v1` would be `app.service('messages')`.
 
-``` html
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/core-js/2.1.4/core.min.js"></script>
-<script src="//unpkg.com/@feathersjs/client@^3.0.0/dist/feathers.js"></script>
-<script>
-  var app = feathers();
-  // Connect to a different URL
-  var restClient = feathers.rest('http://feathers-api.com')
+<BlockQuote type="warning" label="important">
 
-  // Configure an AJAX library (see below) with that client
-  app.configure(restClient.fetch(window.fetch.bind(window)));
+In the browser `window.fetch` (which the same as the global `fetch`) has to be passed as `window.fetch.bind(window)` otherwise it will be called with an incorrect context, causing a JavaScript error: `Failed to execute 'fetch' on 'Window': Illegal invocation`.
 
-  // Connect to the `http://feathers-api.com/messages` service
-  const messages = app.service('messages');
-</script>
-```
-
-</Tab>
-
-</Tabs>
-
-
-
-<!-- -->
-
-> **ProTip:** When `window.fetch` (or just `fetch` which is normally equal to `window.fetch`) is passed to the FeathersJS REST client, its context (`this`) has to be bound to `window` (using `bind(window)` on it). Otherwise `window.fetch` would be called by the FeathersJS REST client with incorrect context, causing a JavaScript error: `Failed to execute 'fetch' on 'Window': Illegal invocation`.
-
-> **ProTip:** 
+</BlockQuote>
 
 ### params.headers
 
 Request specific headers can be through `params.headers` in a service call:
 
 ```js
-app.service('messages').create({
-  text: 'A message from a REST client'
-}, {
-  headers: { 'X-Requested-With': 'FeathersJS' }
-});
+app.service('messages').create(
+  {
+    text: 'A message from a REST client'
+  },
+  {
+    headers: { 'X-Requested-With': 'FeathersJS' }
+  }
+)
 ```
 
 ### params.connection
@@ -124,30 +96,13 @@ app.service('messages').create({
 Allows to pass additional options specific to the AJAX library. `params.connection.headers` will be merged with `params.headers`:
 
 ```js
-app.configure(restClient.axios(axios));
+app.configure(restClient.axios(axios))
 
 app.service('messages').get(1, {
   connection: {
     // Axios specific options here
   }
-});
-```
-
-With the `fetch` fork [yetch](https://github.com/Netflix/yetch) it can also be used to abort requests:
-
-```js
-const yetch = require('yetch');
-const controller = new AbortController();
-
-app.configure(restClient.fetch(yetch));
-
-const promise = app.service('messages').get(1, {
-  connection: {
-    signal: controller.signal
-  }
-});
-
-promise.abort();
+})
 ```
 
 ### app.rest
@@ -160,26 +115,40 @@ The Feathers REST client can be used with several HTTP request libraries.
 
 #### Fetch
 
-Fetch uses a default configuration:
+The [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is the recommended way to make client connections since it does not require a third party library on most platforms:
 
 ```js
 // In Node
-const fetch = require('node-fetch');
-
-app.configure(restClient.fetch(fetch));
+app.configure(restClient.fetch(fetch))
 
 // In modern browsers
-app.configure(restClient.fetch(window.fetch));
+app.configure(restClient.fetch(window.fetch.bind(window)))
+```
+
+Where supported, an [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) can be used to abort fetch requests:
+
+```js
+const controller = new AbortController()
+
+app.configure(restClient.fetch(fetch))
+
+const promise = app.service('messages').get(1, {
+  connection: {
+    signal: controller.signal
+  }
+})
+
+promise.abort()
 ```
 
 #### Superagent
 
 [Superagent](http://visionmedia.github.io/superagent/) currently works with a default configuration:
 
-```js
-const superagent = require('superagent');
+```ts
+import superagent from 'superagent'
 
-app.configure(restClient.superagent(superagent));
+app.configure(restClient.superagent(superagent))
 ```
 
 #### Axios
@@ -187,33 +156,34 @@ app.configure(restClient.superagent(superagent));
 [Axios](http://github.com/mzabriskie/axios) currently works with a default configuration:
 
 ```js
-const axios = require('axios');
+import axios from 'axios'
 
-app.configure(restClient.axios(axios));
+app.configure(restClient.axios(axios))
 ```
 
 To use default values for all requests, `axios.create` with [the axios configuration](https://axios-http.com/docs/req_config) can be used:
 
 ```js
-const axios = require('axios');
+import axios from 'axios'
 
-app.configure(restClient.axios(axios.create({
-  headers: {'X-Requested-With': 'My-Feathers-Frontend'}
-})));
+app.configure(
+  restClient.axios(
+    axios.create({
+      headers: { 'X-Requested-With': 'My-Feathers-Frontend' }
+    })
+  )
+)
 ```
-
 
 ### Custom Methods
 
-On the client, [custom service methods](../services.md#custom-methods) are also registered using the `methods` option when registering the service via `restClient.service()`:
+On the client, [custom service methods](../services.md#custom-methods) registered using the `methods` option when registering the service via `restClient.service()`:
 
-
-
-<LanguageBlock global-id="ts">
-
-```typescript
-import { feathers, CustomMethod } from '@feathersjs/feathers';
-import rest, { RestService } from '@feathersjs/rest-client';
+```ts
+import { feathers } from '@feathersjs/feathers'
+import type { Params } from '@feathersjs/feathers'
+import rest from '@feathersjs/rest-client'
+import type { RestService } from '@feathersjs/rest-client'
 
 // `data` and return type of custom method
 type CustomMethodData = { name: string }
@@ -222,141 +192,116 @@ type CustomMethodResponse = { acknowledged: boolean }
 type ServiceTypes = {
   // The type is a RestService extended with custom methods
   myservice: RestService & {
-    myCustomMethods: CustomMethod<CustomMethodData, CustomMethodResponse>
+    myCustomMethod(data: CustomMethodData, params: Params): Promise<CustomMethodResponse>
   }
 }
 
-const client = feathers<ServiceTypes>();
+const client = feathers<ServiceTypes>()
 
 // Connect to the same as the browser URL (only in the browser)
-const restClient = rest().fetch(window.fetch);
-
-// Connect to a different URL
-const restClient = rest('http://feathers-api.com').fetch(window.fetch);
-
-// Configure an AJAX library (see below) with that client
-client.configure(restClient);
-
-// Register a REST client service with all methods listed
-client.use('myservice', restClient.service('myservice'), {
-  methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'myCustomMethod']
-});
-
-// Then it can be used like other service methods
-client.service('myservice').myCustomMethod(data, params);
-```
-
-</LanguageBlock>
-
-<LanguageBlock global-id="js">
-
-```js
-const feathers = require('@feathersjs/feathers');
-const rest = require('@feathersjs/rest-client');
-
-const client = feathers();
-
-// Connect to the same as the browser URL (only in the browser)
-const restClient = rest();
+const restClient = rest().fetch(window.fetch.bind(window))
 
 // Connect to a different URL
 const restClient = rest('http://feathers-api.com').fetch(window.fetch.bind(window))
 
 // Configure an AJAX library (see below) with that client
-client.configure(restClient);
+client.configure(restClient)
 
 // Register a REST client service with all methods listed
 client.use('myservice', restClient.service('myservice'), {
   methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'myCustomMethod']
-});
+})
 
 // Then it can be used like other service methods
-client.service('myservice').myCustomMethod(data, params);
+client.service('myservice').myCustomMethod(data, params)
 ```
 
-</LanguageBlock>
+<BlockQuote type="info">
 
+Just like on the server _all_ methods you want to use have to be listed in the `methods` option.
 
-
-> __Note:__ Just like on the server *all* methods you want to use have to be listed in the `methods` option.
+</BlockQuote>
 
 ### Connecting to multiple servers
 
 It is possible to instantiate and use individual services pointing to different servers by calling `rest('server').<library>().service(name)`:
 
-```js
-const feathers = require('@feathersjs/feathers');
-const rest = require('@feathersjs/rest-client');
+```ts
+import { feathers } from '@feathersjs/feathers'
+import rest from '@feathersjs/rest-client'
 
-const app = feathers();
+const app = feathers()
 
-const client1 = rest('http://feathers-api.com').fetch(window.fetch.bind(window));
-const client2 = rest('http://other-feathers-api.com').fetch(window.fetch.bind(window));
+const client1 = rest('http://feathers-api.com').fetch(window.fetch.bind(window))
+const client2 = rest('http://other-feathers-api.com').fetch(window.fetch.bind(window))
 
 // With additional options to e.g. set authentication information
-const client2 = rest('http://other-feathers-api.com').fetch(window.fetch.bind(window),{
+const client2 = rest('http://other-feathers-api.com').fetch(window.fetch.bind(window), {
   headers: {
     Authorization: 'Bearer <Token for other-feathers-api.com>'
   }
-});
+})
 
 // Configuring this will initialize default services for http://feathers-api.com
-app.configure(client1);
+app.configure(client1)
 
 // Connect to the `http://feathers-api.com/messages` service
-const messages = app.service('messages');
+const messages = app.service('messages')
 
 // Register /users service that points to http://other-feathers-api.com/users
-app.use('/users', client2.service('users'));
+app.use('users', client2.service('users'))
 
-const users = app.service('users');
+const users = app.service('users')
 ```
 
-> __Note:__ If the authentication information is different, it needs to be set as an option as shown above or via `params.headers` when making the request.
+<BlockQuote type="info" label="note">
+
+If the authentication information is different, it needs to be set as an option as shown above or via `params.headers` when making the request.
+
+</BlockQuote>
 
 ### Extending rest clients
 
-This can be useful if you wish to override how the query is transformed before it is sent to the API.
+This can be useful if you e.g. wish to override how the query is transformed before it is sent to the API.
 
-```js
-// In Node
-const fetch = require('node-fetch');
-const { FetchClient } = require('@feathersjs/rest-client');
-const qs = require('qs');
+```ts
+import type { Query } from '@feathersjs/feathers'
+import { FetchClient } from '@feathersjs/rest-client'
+import qs from 'qs'
 
 class CustomFetch extends FetchClient {
-  getQuery (query) {
+  getQuery(query: Query) {
     if (Object.keys(query).length !== 0) {
       const queryString = qs.stringify(query, {
         strictNullHandling: true
-      });
+      })
 
-      return `?${queryString}`;
+      return `?${queryString}`
     }
 
-    return '';
+    return ''
   }
 }
 
-app.configure(restClient.fetch(fetch, CustomFetch));
+app.configure(restClient.fetch(fetch, CustomFetch))
 ```
 
 ## HTTP API
 
 You can communicate with a Feathers REST API using any other HTTP REST client. The following section describes what HTTP method, body and query parameters belong to which service method call.
 
-All query parameters in a URL will be set as `params.query` on the server. Other service parameters can be set through [hooks](../hooks.md) and [Express middleware](../express.md). URL query parameter values will always be strings. Conversion (e.g. the string `'true'` to boolean `true`) can be done in a hook as well.
+All query parameters in a URL will be set as `params.query` on the server. Other service parameters can be set through [hooks](../hooks.md) and [Express middleware](../express.md). URL query parameter values will always be strings. Conversion (e.g. the string `'true'` to boolean `true`) on the server is done via [schemas](../schema/index.md) or [hooks](../hooks.md).
 
-The body type for `POST`, `PUT` and `PATCH` requests is determined by the Express [body-parser](http://expressjs.com/en/4x/api.html#express.json) middleware which has to be registered *before* any service. You should also make sure you are setting your `Accept` header to `application/json`. Here is the mapping of service methods to REST API calls:
+The body type for `POST`, `PUT` and `PATCH` requests is determined by the request type. You should also make sure you are setting your `Accept` header to `application/json`. Here is the mapping of service methods to REST API calls:
 
-| Service method  | HTTP method | Path        |
-|-----------------|-------------|-------------|
-| .find()         | GET         | /messages   |
-| .get()          | GET         | /messages/1 |
-| .create()       | POST        | /messages   |
-| .update()       | PUT         | /messages/1 |
-| .patch()        | PATCH       | /messages/1 |
-| .remove()       | DELETE      | /messages/1 |
+| Service method | HTTP method | Path        |
+| -------------- | ----------- | ----------- |
+| .find()        | GET         | /messages   |
+| .get()         | GET         | /messages/1 |
+| .create()      | POST        | /messages   |
+| .update()      | PUT         | /messages/1 |
+| .patch()       | PATCH       | /messages/1 |
+| .remove()      | DELETE      | /messages/1 |
 
 ### Authentication
 
@@ -453,7 +398,11 @@ POST /messages
 ]
 ```
 
-> **Note:** With a [database adapters](../databases/adapters.md) the [`multi` option](../databases/common.md) has to be set explicitly to support creating multiple entries.
+<BlockQuote type="info" label="note">
+
+With a [database adapters](../databases/adapters.md) the [`multi` option](../databases/common.md) has to be set explicitly to support creating multiple entries.
+
+</BlockQuote>
 
 ### update
 
@@ -473,8 +422,6 @@ PUT /messages?complete=false
 
 Will call `messages.update(null, { "complete": true }, { query: { complete: 'false' } })` on the server.
 
-> **ProTip:** `update` is normally expected to replace an entire resource which is why the database adapters only support `patch` for multiple records.
-
 ### patch
 
 Merge the existing data of a single or multiple resources with the new `data`.
@@ -493,7 +440,11 @@ PATCH /messages?complete=false
 
 Will call `messages.patch(null, { complete: true }, { query: { complete: 'false' } })` on the server to change the status for all read messages.
 
-> **Note:** With a [database adapters](../databases/adapters.md) the [`multi` option](../databases/common.md) has to be set to support patching multiple entries.
+<BlockQuote type="info" label="note">
+
+With a [database adapters](../databases/adapters.md) the [`multi` option](../databases/common.md) has to be set to support patching multiple entries.
+
+</BlockQuote>
 
 This is supported out of the box by the Feathers [database adapters](../databases/adapters.md)
 
@@ -515,8 +466,11 @@ DELETE /messages?read=true
 
 Will call `messages.remove(null, { query: { read: 'true' } })` to delete all read messages.
 
-> **Note:** With a [database adapters](../databases/adapters.md) the [`multi` option](../databases/common.md) has to be set to support patching multiple entries.
+<BlockQuote type="info" label="note">
 
+With a [database adapters](../databases/adapters.md) the [`multi` option](../databases/common.md) has to be set to support patching multiple entries.
+
+</BlockQuote>
 
 ### Custom methods
 
