@@ -4,7 +4,7 @@ outline: deep
 
 # Authentication Overview
 
-The `@feathersjs/authentication` plugins provide a collection of tools for managing username/password, JWT and OAuth (GitHub, Facebook etc.) authentication as well as custom authentication mechanisms.
+The `@feathersjs/authentication` plugins provide a collection of tools for username/password, JWT and OAuth (GitHub, Facebook etc.) authentication as well as custom authentication mechanisms.
 
 It consists of the following core modules:
 
@@ -13,7 +13,7 @@ It consists of the following core modules:
   - The [JWTStrategy](./jwt.md) to use JWTs to make authenticated requests
   - The [authenticate hook](./hook.md) to limit service calls to an authentication strategy.
 - [Local authentication](./local.md) for local username/password authentication
-- [OAuth authentication](./oauth.md) for GitHub, Facebook etc. authentication
+- [OAuth authentication](./oauth.md) for Google, GitHub, Facebook etc. authentication
 - [The authentication client](./client.md) to use Feathers authentication on the client.
 
 <BlockQuote type="warning">

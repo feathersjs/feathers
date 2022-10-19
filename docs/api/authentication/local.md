@@ -2,7 +2,7 @@
 outline: deep
 ---
 
-# Local Strategy
+# Local Authentication
 
 <Badges>
 
@@ -25,9 +25,31 @@ npm install @feathersjs/authentication-local --save
 }
 ```
 
-## Configuration
+## Usage
 
-The following settings are available:
+```ts
+import { AuthenticationService } from '@feathersjs/authentication'
+import { LocalStrategy } from '@feathersjs/authentication-local'
+import type { Application } from './declarations'
+
+declare module './declarations' {
+  interface ServiceTypes {
+    authentication: AuthenticationService
+  }
+}
+
+export const authentication = (app: Application) => {
+  const authentication = new AuthenticationService(app)
+
+  authentication.register('local', new LocalStrategy())
+
+  app.use('authentication', authentication)
+}
+```
+
+## Options
+
+Options are set in the [authentication configuration](./service.md#configuration) under the strategy name. Available options are:
 
 - `usernameField`: Name of the username field (e.g. `'email'`)
 - `passwordField`: Name of the password field (e.g. `'password'`)
@@ -36,7 +58,7 @@ The following settings are available:
 - `entityUsernameField` (default: `usernameField`): Name of the username field on the entity if authentication request data and entity field names are different
 - `entityPasswordField` (default: `passwordField`): Name of the password field on the entity if authentication request data and entity field names are different
 
-Standard local authentication can be configured with those options in `config/default.json` like this:
+Options are usually set under the registered name via [Feathers configuration](../configuration.md) in `config/default.json` or `config/<environment>.json`:
 
 ```json
 {
@@ -49,11 +71,13 @@ Standard local authentication can be configured with those options in `config/de
 }
 ```
 
-> __Important:__ If you want to set the value of `usernameField` to `username` in your configuration file under Windows or running the node process manager `PM2` in Ubuntu/Linux, the value has to be escaped as `\\username` (otherwise the `username` environment variable will be used).
-
 ## LocalStrategy
 
-> __Note:__ The methods described in this section are intended for [customization](#customization) purposes and internal calls. They usually do not need to be called directly.
+<BlockQuote type="info" label="Note">
+
+The methods described in this section are intended for [customization](#customization) purposes and internal calls. They usually do not need to be called directly.
+
+</BlockQuote>
 
 ### getEntityQuery(query, params)
 
@@ -84,9 +108,9 @@ Standard local authentication can be configured with those options in `config/de
 The `LocalStrategy` can be customized like any ES6 class and then registered on the [AuthenticationService](./service.md):
 
 ```ts
-import type { Application, Params, Query } from '@feathersjs/feathers';
-import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
-import { LocalStrategy } from '@feathersjs/authentication-local';
+import type { Application, Params, Query } from '@feathersjs/feathers'
+import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
+import { LocalStrategy } from '@feathersjs/authentication-local'
 
 class MyLocalStrategy extends LocalStrategy {
   async getEntityQuery(query: Query, params: Params) {
@@ -100,26 +124,57 @@ class MyLocalStrategy extends LocalStrategy {
 }
 
 export default (app: Application) => {
-  const authService = new AuthenticationService(app);
+  const authService = new AuthenticationService(app)
 
-  authService.register('local', new MyLocalStrategy());
+  authService.register('local', new MyLocalStrategy())
 
   // ...
-  app.use('/authentication', authService);
+  app.use('/authentication', authService)
 }
 ```
 
-## Hooks
+## Helpers
+
+### Protecting fields
+
+As of Feathers v5, external [resolvers](../schema/resolvers.md) using the `schemaHooks.resolveExternal` hook are the preferred method to hide or change fields for external requests. The following will always hide the user password for external responses and events:
+
+```ts
+import { resolve, schemaHooks } from '@feathersjs/schema'
+
+export const userExternalResolver = resolve<User, HookContext>({
+  properties: {
+    // The password should never be visible externally
+    password: async () => undefined
+  }
+})
+
+app.service('users').hooks({
+  after: {
+    all: [schemaHooks.resolveExternal(userExternalResolver)]
+  }
+})
+```
+
+### passwordHash
+
+The `passwordHash` utility provides a [property resolver function](../schema//resolvers.md#property-resolvers) that uses a local strategy to securely [hash the password](#hashpassword-password) before storing it in the database. The following options are available:
+
+- `strategy` - The name of the local strategy (usually `'local'`)
+- `service` - The path of the authentication service (will use `app.get('defaultAuthentication')` by default)
+
+```ts
+export const userDataResolver = resolve<User, HookContext>({
+  properties: {
+    password: passwordHash({ strategy: 'local' })
+  }
+})
+```
 
 ### hashPassword(field)
 
-The `hashPassword(field [, options])` hook should be used as a `before` hook for `create`, `patch` or `update`. It will replace the plain text `field` on `data` with a hashed password using [LocalStrategy.hashPassword]() before storing it in the database.
-
-`options` is optional and may contain the following settings:
-
-- `authentication` (default: `app.get('defaultAuthentication')`): The name of the [AuthenticationService](./service.md) the hook should use.
-- `strategy` (default: `'local'`): The name of the LocalStrategy to use on the authentication service.
+The `hashPassword` hook is provided for Feathers v4 backwards compatibility but **has been deprecated** in favour of the [passwordHash resolver](#passwordhash).
 
 ### protect(...fields)
 
-The `protect(...fields)` hook removes fields from the data that is sent to the user by setting [hook.dispatch]().
+The `protect` hook is provided for Feathers v4 backwards compatibility but **has been deprecated** in favour of [external data resolvers](../schema/resolvers.md).

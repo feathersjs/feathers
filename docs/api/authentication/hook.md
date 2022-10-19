@@ -4,32 +4,7 @@ outline: deep
 
 # Authenticate Hook
 
-The `authenticate` hook will use `params.authentication` of the service method call and run [authenticationService.authenticate()]().
-
-## authenticate(... strategies)
-
-## authenticate(options)
-
-It should be used as a `before` hook and either takes a list of strategy names (using `app.service('authentication')` as the authentication service) or an object with `service` set to the authentication service name and `strategies` set to a list of strategy names to authenticate with:
-
-```js
-const { authenticate } = require('@feathersjs/authentication');
-
-// Authenticate with `jwt` and `api-key` strategy
-// using app.service('authentication') as the authentication service
-app.service('messages').hooks({
-  before: authenticate('jwt', 'api-key')
-});
-
-// Authenticate with `jwt` and `api-key` strategy
-// using app.service('v1/authentication') as the authentication service
-app.service('messages').hooks({
-  before: authenticate({
-    service: 'v1/authentication',
-    strategies: [ 'jwt', 'api-key' ]
-  })
-});
-```
+The `authenticate` hook will use `params.authentication` of the service method call and run [authenticationService.authenticate()](./service.md#authenticate-data-params-strategies).
 
 The hook will
 
@@ -45,4 +20,44 @@ params.authentication.strategy === 'jwt' // The strategy name
 params.user // or params[entity] if entity is not `null`
 ```
 
-In the following hooks and for the service method call.
+In the following hooks and for the service method call. It can be used as a `before` or `around` [hook](../hooks.md).
+
+## authenticate(...strategies)
+
+Check `params.authentication` against a list of authentication strategy names.
+
+```ts
+import { authenticate } from '@feathersjs/authentication'
+
+// Authenticate with `jwt` and `api-key` strategy
+// using app.service('authentication') as the authentication service
+app.service('messages').hooks({
+  around: {
+    all: [authenticate('jwt', 'api-key')]
+  }
+})
+```
+
+## authenticate(options)
+
+Check `params.authentication` against a list of strategies and specific authentication service. Available `options` are:
+
+- `service` - The path to the authentication service
+- `strategies` - A list of strategy names
+
+```js
+import { authenticate } from '@feathersjs/authentication'
+
+// Authenticate with `jwt` and `api-key` strategy
+// using app.service('v1/authentication') as the authentication service
+app.service('messages').hooks({
+  before: {
+    all: [
+      authenticate({
+        service: 'v1/authentication',
+        strategies: ['jwt', 'api-key']
+      })
+    ]
+  }
+})
+```

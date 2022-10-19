@@ -26,26 +26,28 @@ The `AuthenticationService` is a [Feathers service](../services.md) that allows 
 
 ## Setup
 
-The standard setup of [the generator]() initializes an [AuthenticationService](#authenticationservice) at the `/authentication` path with a [JWT strategy](./jwt.md), [Local strategy](./local.md) and [OAuth authentication](./oauth.md).
-
+The standard setup initializes an [AuthenticationService](#authenticationservice) at the `/authentication` path with a [JWT strategy](./jwt.md), [Local strategy](./local.md) and [OAuth authentication](./oauth.md) (if selected).
 
 ```ts
-import { Application } from '@feathersjs/feathers';
-import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
-import { LocalStrategy } from '@feathersjs/authentication-local';
-import { expressOauth } from '@feathersjs/authentication-oauth';
+import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
+import { LocalStrategy } from '@feathersjs/authentication-local'
+import type { Application } from './declarations'
 
-export default (app: Application) => {
-  const authService = new AuthenticationService(app);
+declare module './declarations' {
+  interface ServiceTypes {
+    authentication: AuthenticationService
+  }
+}
 
-  authService.register('jwt', new JWTStrategy());
-  authService.register('local', new LocalStrategy());
+export const authentication = (app: Application) => {
+  const authentication = new AuthenticationService(app)
 
-  app.use('/authentication', authService);
-  app.configure(expressOauth());
+  authentication.register('jwt', new JWTStrategy())
+  authentication.register('local', new LocalStrategy())
+
+  app.use('authentication', authentication)
 }
 ```
-
 
 ## Configuration
 
@@ -75,7 +77,7 @@ An authentication service configuration in `config/default.json` can look like t
     "secret": "CHANGE_ME",
     "entity": "user",
     "service": "users",
-    "authStrategies": [ "jwt", "local" ],
+    "authStrategies": ["jwt", "local"],
     "jwtOptions": {
       "header": { "typ": "access" },
       "audience": "https://yourdomain.com",
@@ -107,7 +109,7 @@ For any strategy allowed in `authStrategies`, a user can call `app.service('/aut
 - Create a JWT for the entity returned by the strategy
 - Return the JWT (`accessToken`) and the additional information from the strategy
 
-For `local` strategy, the user has to be created before doing auth, otherwise, a 401 `NotAuthenticated` error will be send.
+For `local` strategy, the user has to be created before doing auth, otherwise, a 401 `NotAuthenticated` error will be sent.
 
 ### To _authenticate an external request_
 
@@ -126,7 +128,7 @@ For any service that uses the [authenticate hook](./hook.md) called internally y
 
 <BlockQuote type="warning">
 
-You can set `params.authentication` for internal requests on the server but usually setting the entity (`params.user` in most cases) if you already have it available should be preferred. This will avoid the overhead of running authentication again if it has already been done. 
+You can set `params.authentication` for internal requests on the server but usually setting the entity (`params.user` in most cases) if you already have it available should be preferred. This will avoid the overhead of running authentication again if it has already been done.
 
 </BlockQuote>
 
@@ -178,9 +180,8 @@ app.set('authentication', {
 
 `service.getStrategies(...names) -> AuthenticationStrategy[]` returns the [authentication strategies](./strategy.md) that exist for a list of names. The returned array may include `undefined` values if the strategy does not exist. Usually authentication strategies do not need to be used directly.
 
-
 ```js
-const [ localStrategy ] = authService.getStrategies('local');
+const [localStrategy] = authService.getStrategies('local')
 ```
 
 ### createAccessToken(payload)
@@ -233,10 +234,11 @@ The `AuthenticationService` can be customized like any other class:
 
 ```ts
 import type { Params } from '@feathersjs/feathers'
-import { AuthenticationService, type AuthResult } from '@feathersjs/authentication'
+import type { AuthenticationResult } from '@feathersjs/authentication'
+import { AuthenticationService } from '@feathersjs/authentication'
 
 class MyAuthService extends AuthenticationService {
-  async getPayload(authResult: AuthResult, params: Params) {
+  async getPayload(authResult: AuthenticationResult, params: Params) {
     // Call original `getPayload` first
     const payload = await super.getPayload(authResult, params)
     const { user } = authResult
@@ -260,7 +262,7 @@ Things to be aware of when extending the authentication service:
 
 ## Events
 
-For both, `login` and `logout` the event data is `(authResult, params, context) => {}` as follows:
+For both, `login` and `logout` the event data is `(authenticationResult, params, context) => {}` as follows:
 
 - `authResult` is the return value of the `authService.create` or `authService.remove` call. It usually contains the user and access token.
 - `params` is the service call parameters
@@ -268,7 +270,7 @@ For both, `login` and `logout` the event data is `(authResult, params, context) 
 
 ### app.on('login')
 
-`app.on('login', (authResult, params, context) => {})` will be sent after a user logs in. This means, after any successful external call to [authService.create](#create-data-params).
+`app.on('login', (authenticationResult, params, context) => {})` will be sent after a user logs in. This means, after any successful external call to [authService.create](#create-data-params).
 
 <BlockQuote type="warning" label="Important">
 
@@ -278,4 +280,4 @@ The `login` event is also sent for e.g. reconnections of websockets and may not 
 
 ### app.on('logout')
 
-`app.on('logout', (authResult, params, context) => {})` will be sent after a user explicitly logs out. This means after any successful external call to [authService.remove](#remove-id-params).
+`app.on('logout', (authenticationResult, params, context) => {})` will be sent after a user explicitly logs out. This means after any successful external call to [authService.remove](#remove-id-params).

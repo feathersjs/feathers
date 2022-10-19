@@ -290,29 +290,6 @@ export default defineConfig({
           ]
         },
         {
-          text: 'Client',
-          collapsible: true,
-          collapsed: true,
-          items: [
-            {
-              text: 'Feathers Client',
-              link: '/api/client'
-            },
-            {
-              text: 'REST Client',
-              link: '/api/client/rest'
-            },
-            {
-              text: 'Socket.io Client',
-              link: '/api/client/socketio'
-            },
-            {
-              text: 'Authentication',
-              link: '/api/authentication/client'
-            }
-          ]
-        },
-        {
           text: 'Authentication',
           collapsible: true,
           collapsed: true,
@@ -334,16 +311,39 @@ export default defineConfig({
               link: '/api/authentication/strategy'
             },
             {
-              text: 'JWT Strategy',
+              text: 'JWT',
               link: '/api/authentication/jwt'
             },
             {
-              text: 'Local Strategy',
+              text: 'Local',
               link: '/api/authentication/local'
             },
             {
-              text: 'OAuth Strategy',
+              text: 'OAuth',
               link: '/api/authentication/oauth'
+            }
+          ]
+        },
+        {
+          text: 'Client',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            {
+              text: 'Feathers Client',
+              link: '/api/client'
+            },
+            {
+              text: 'REST Client',
+              link: '/api/client/rest'
+            },
+            {
+              text: 'Socket.io Client',
+              link: '/api/client/socketio'
+            },
+            {
+              text: 'Authentication',
+              link: '/api/authentication/client'
             }
           ]
         },

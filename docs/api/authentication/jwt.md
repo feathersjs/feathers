@@ -2,7 +2,7 @@
 outline: deep
 ---
 
-# JWT Strategy
+# JWT Authentication
 
 <Badges>
 
@@ -15,7 +15,7 @@ outline: deep
 npm install @feathersjs/authentication --save
 ```
 
-The `JWTStrategy` is an [authentication strategy](./strategy.md) included in `@feathersjs/authentication` for authenticating JSON web token service methods calls and HTTP requests, e.g.
+The `JWTStrategy` is an [authentication strategy](./strategy.md) included in `@feathersjs/authentication` for authenticating [JSON web tokens (JWT)](https://jwt.io/):
 
 ```json
 {
@@ -24,7 +24,30 @@ The `JWTStrategy` is an [authentication strategy](./strategy.md) included in `@f
 }
 ```
 
+## Usage
+
+```ts
+import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
+import type { Application } from './declarations'
+
+declare module './declarations' {
+  interface ServiceTypes {
+    authentication: AuthenticationService
+  }
+}
+
+export const authentication = (app: Application) => {
+  const authentication = new AuthenticationService(app)
+
+  authentication.register('jwt', new JWTStrategy())
+
+  app.use('authentication', authentication)
+}
+```
+
 ## Options
+
+Options are set in the [authentication configuration](./service.md#configuration) under the strategy name. Available options are:
 
 - `header` (default: `'Authorization'`): The HTTP header containing the JWT
 - `schemes` (default: `[ 'Bearer', 'JWT' ]`): An array of schemes to support
@@ -37,17 +60,25 @@ Authorization: Bearer <your JWT>
 Authorization: JWT <your JWT>
 ```
 
-Standard JWT authentication can be configured with those options in `config/default.json` like this:
+Options are usually set under the registered name via [Feathers configuration](../configuration.md) in `config/default.json` or `config/<environment>.json`:
 
 ```json
 {
   "authentication": {
-    "jwtOptions": {}
+    "jwt": {
+      "header": "X-Auth"
+    }
   }
 }
 ```
 
-> __Note:__ Since the default options are what most clients expect for JWT authentication they usually don't need to be customized.
+<BlockQuote type="warning" label="Important">
+
+Since the default options are what most clients expect for JWT authentication they usually don't need to be customized.
+
+</BlockQuote>
+
+To change the settings for generating and validating a JWT see the [authentication service configuration](./service.md#configuration)
 
 ## JwtStrategy
 
@@ -72,7 +103,11 @@ Returns a promise that resolves with the following format:
 }
 ```
 
-> __Note:__ Since the JWT strategy returns an `accessToken` property (the same as the token sent to this strategy), that access token will also be returned by [authenticationService.create](./service.md#create-data-params) instead of creating a new one.
+<BlockQuote type="warning" label="Important">
+
+Since the JWT strategy returns an `accessToken` property (the same as the token sent to this strategy), that access token will also be returned by [authenticationService.create](./service.md#create-data-params) instead of creating a new one.
+
+</BlockQuote>
 
 ### getEntityQuery(params)
 
@@ -80,7 +115,7 @@ Returns the `query` to use when calling `entityService.get` (default: `{}`).
 
 ### parse(req, res)
 
-Parse the HTTP request headers for JWT authentication information. Returns a promise that resolves with either `null` or data in the form of:
+Parse the HTTP request headers for JWT authentication information. By default in the `Authorization` header. Returns a promise that resolves with either `null` or data in the form of:
 
 ```js
 {
@@ -92,19 +127,31 @@ Parse the HTTP request headers for JWT authentication information. Returns a pro
 ## Customization
 
 ```ts
-import { Application } from '@feathersjs/feathers';
-import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
-import { LocalStrategy } from '@feathersjs/authentication-local';
+import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
+import { LocalStrategy } from '@feathersjs/authentication-local'
+import type { Application } from './declarations'
+
+declare module './declarations' {
+  interface ServiceTypes {
+    authentication: AuthenticationService
+  }
+}
 
 class MyJwtStrategy extends JWTStrategy {
+  // Only allow authenticating activated users
+  async getEntityQuery(params: Params) {
+    return {
+      active: true
+    }
+  }
 }
 
 export default (app: Application) => {
-  const authService = new AuthenticationService(app);
+  const authentication = new AuthenticationService(app)
 
-  authService.register('jwt', new MyJwtStrategy());
+  authentication.register('jwt', new MyJwtStrategy())
 
   // ...
-  app.use('/authentication', authService);
+  app.use('authentication', authentication)
 }
 ```
