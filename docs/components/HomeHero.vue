@@ -31,17 +31,17 @@ onBeforeUnmount(toggleHomeClass)
             Application Framework
           </div>
           <div class="mx-auto mt-4 lg:mt-12">
-            <CTAButton primary>Get Started</CTAButton>
+            <CTAButton primary>Start Now</CTAButton>
           </div>
         </div>
       </div>
 
       <div class="illustration-roundb text-center text-neutral-content pt-4 font-bold">
         <p class="text-xs md:text-base lg:text-lg xl:text-2xl">
-          For TypeScript and JavaScript in Node.js, React Native and the browser
+          Prototypes in minutes and production-ready apps in days. Seriously.
         </p>
         <div class="scale-80">
-          <CTAButton primary class="mt-3 mb-6 md:mb-10">Get Started</CTAButton>
+          <CTAButton primary class="mt-3 mb-6 md:mb-10">Ready for Take Off</CTAButton>
         </div>
       </div>
     </div>

@@ -9,6 +9,6 @@ defineProps({
 <template>
   <div class="py-24 text-center">
     <h2 class="text-lg font-bold mb-10 md:text-2xl lg:text-3xl">{{ text }}</h2>
-    <CTAButton primary>Get Started</CTAButton>
+    <CTAButton primary>Take Off</CTAButton>
   </div>
 </template>

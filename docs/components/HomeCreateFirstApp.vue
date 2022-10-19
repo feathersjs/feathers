@@ -10,8 +10,8 @@
       <a href="/docs">Check out the docs</a> to learn more about Feathers.
     </p>
     <p>
-      Feel free say hello on Discord, or show us some love on
-      <a href="https://twitter.com/feathersjs">Twitter</a>.
+      Feel free say hello on <a href="https://discord.com/invite/qa8kez8QBx" target="_blank">Discord</a>, or show us some love on
+      <a href="https://twitter.com/feathersjs" target="_blank">Twitter</a>.
     </p>
   </div>
 </template>

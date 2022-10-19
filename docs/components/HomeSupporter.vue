@@ -8,9 +8,10 @@ import CTAButton from "./CTAButton.vue"
     xl="py-32"
   >
     <h2 class="text-center pb-8 font-bold" md="text-xl px-16" lg="px-32 text-2xl">
-      Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh
-      euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+      Sign up for the Feathers Newsletter for the latest updates from the Feathers Flock
     </h2>
-    <CTAButton primary>Learn More</CTAButton>
+
+    
+    <CTAButton primary>Form</CTAButton>
   </div>
 </template>

@@ -1,22 +1,36 @@
 <template>
   <div class="home-industry-partners text-center py-16">
     <div class="max-w-7xl mx-auto">
-      <h2 class="text-xl mb-8 font-bold">Our Industry Partners</h2>
+      <h2 class="text-xl mb-8 font-bold">Birds of a Feather</h2>
 
       <p class="text-sm mb-12" md="text-lg px-32">
-        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh
-        euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+        15% off when you launch Feathers & Adaptable
       </p>
 
-      <div class="grid grid-cols-3 lg:grid-cols-5 px-12 gap-4">
-        <div
-          v-for="id in 5"
-          :key="id"
-          class="max-h-16 flex flex-row items-center justify-center"
-        >
-          <img :src="`/img/partners/${id}.jpg`" alt="" class="h-full" />
-        </div>
-      </div>
+      <a hef="https://adaptable.io/"><img src="/img/partners/Adaptable.svg" alt="" class="w-1/3 max-w-lg mx-auto" /></a>
+
+      
+          
     </div>
+
+    
+  </div>
+
+  <div class="home-industry-partners text-center py-16">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-xl mb-8 font-bold">Feathers Sponsors</h2>
+
+      <p class="text-sm mb-12" md="text-lg px-32">
+        Pull from Github
+      </p>
+
+      <img src="/img/partners/#" alt="" class="w-1/3 max-w-lg mx-auto" />
+
+      
+      
+          
+    </div>
+
+    
   </div>
 </template>
