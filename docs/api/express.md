@@ -584,6 +584,21 @@ When using HTTPS URLs are safely encrypted but when using this method you have t
 
 </BlockQuote>
 
+### parseAuthentication
+
+The `parseAuthentication` middleware is registered automatically and will use the strategies of the default [authentication service](./authentication/service.md) to parse headers for authentication information. If you want to additionally parse authentication with a different authentication service this middleware can be registered again with that service configured.
+
+```ts
+import { parseAuthentication } from '@feathersjs/express'
+
+app.use(
+  parseAuthentication({
+    service: 'api/v1/authentication',
+    strategies: ['jwt', 'local']
+  })
+)
+```
+
 ### cors
 
 A reference to the [cors](https://github.com/expressjs/cors) module.

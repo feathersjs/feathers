@@ -194,7 +194,37 @@ A middleware that formats errors as a Feathers error and sets the proper status 
 
 ### authenticate
 
-A middleware that allows to authenticate a user (or other authentication entity) setting `ctx.feathers.user`. Not necessary for use with services but can be used in custom middleware.
+A middleware that allows to authenticate a user (or other authentication entity) using the [authentication service](./authentication/service.md) setting `ctx.feathers.user`. Not necessary for use with services but can be used in custom middleware.
+
+```ts
+import { authenticate } from '@feathersjs/koa'
+
+// Authenticate other middleware with the JWT strategy
+app.use(authenticate('jwt'))
+
+// Authenticate a non default service
+app.use(
+  authenticate({
+    service: 'api/v1',
+    strategies: ['jwt']
+  })
+)
+```
+
+### parseAuthentication
+
+The `parseAuthentication` middleware is registered automatically and will use the strategies of the default [authentication service](./authentication/service.md) to parse headers for authentication information. If you want to additionally parse authentication with a different authentication service this middleware can be registered again with that service configured.
+
+```ts
+import { parseAuthentication } from '@feathersjs/express'
+
+app.use(
+  parseAuthentication({
+    service: 'api/v1/authentication',
+    strategies: ['jwt', 'local']
+  })
+)
+```
 
 ### bodyParser
 
