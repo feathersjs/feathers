@@ -38,14 +38,17 @@ export interface ResolverConfig<T, C> {
 export interface ResolverStatus<T, C> {
   path: string[]
   originalContext?: C
-  properties?: string[]
+  properties?: (keyof T)[]
   stack: PropertyResolver<T, any, C>[]
 }
 
 export class Resolver<T, C> {
   readonly _type!: T
+  protected propertyNames: string[]
 
-  constructor(public options: ResolverConfig<T, C>) {}
+  constructor(public options: ResolverConfig<T, C>) {
+    this.propertyNames = Object.keys(options.properties)
+  }
 
   /**
    * Resolve a single property
@@ -93,12 +96,17 @@ export class Resolver<T, C> {
   async resolve<D>(_data: D, context: C, status?: Partial<ResolverStatus<T, C>>): Promise<T> {
     const { properties: resolvers, schema, validate } = this.options
     const payload = await this.convert(_data, context, status)
+
+    if (!Array.isArray(status?.properties) && this.propertyNames.length === 0) {
+      return payload as T
+    }
+
     const data = schema && validate === 'before' ? await schema.validate(payload) : payload
     const propertyList = (
       Array.isArray(status?.properties)
         ? status?.properties
         : // By default get all data and resolver keys but remove duplicates
-          [...new Set(Object.keys(data).concat(Object.keys(resolvers)))]
+          [...new Set(Object.keys(data).concat(this.propertyNames))]
     ) as (keyof T)[]
 
     const result: any = {}
