@@ -231,6 +231,10 @@ export default defineConfig({
             {
               text: "What's new?",
               link: '/guides/whats-new.md'
+            },
+            {
+              text: 'Troubleshooting',
+              link: '/guides/troubleshooting.md'
             }
           ]
         }
