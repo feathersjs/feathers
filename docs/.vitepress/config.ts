@@ -176,6 +176,16 @@ export default defineConfig({
     sidebar: {
       '/guides': [
         {
+          text: 'Introduction',
+          collapsible: false,
+          items: [
+            {
+              text: 'Overview of FeathersJS',
+              link: '/guides/overview.md'
+            }
+          ]
+        },
+        {
           text: 'Getting Started',
           collapsible: true,
           items: [
