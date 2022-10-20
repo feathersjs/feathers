@@ -53,8 +53,8 @@ export type ResolveAllSettings<H extends HookContext> = {
 
 export const DISPATCH = Symbol('@feathersjs/schema/dispatch')
 
-export const getDispatch = (value: any) =>
-  typeof value === 'object' && value !== null && value[DISPATCH] !== undefined ? value[DISPATCH] : value
+export const getDispatch = (value: any, fallback = value) =>
+  typeof value === 'object' && value !== null && value[DISPATCH] !== undefined ? value[DISPATCH] : fallback
 
 export const resolveQuery =
   <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) =>
@@ -140,34 +140,40 @@ export const resolveDispatch =
     }
 
     const ctx = getContext(context)
-    const status = context.params.resolve
-    const { isPaginated, data } = getData(context)
-    const resolveAndGetDispatch = async (current: any) => {
-      const resolved: any = await runResolvers(resolvers, current, ctx, status)
+    const existingDispatch = getDispatch(context.result, null)
 
-      return Object.keys(resolved).reduce((res, key) => {
-        res[key] = getDispatch(resolved[key])
+    if (existingDispatch !== null) {
+      context.dispatch = existingDispatch
+    } else {
+      const status = context.params.resolve
+      const { isPaginated, data } = getData(context)
+      const resolveAndGetDispatch = async (current: any) => {
+        const resolved: any = await runResolvers(resolvers, current, ctx, status)
 
-        return res
-      }, {} as any)
+        return Object.keys(resolved).reduce((res, key) => {
+          res[key] = getDispatch(resolved[key])
+
+          return res
+        }, {} as any)
+      }
+
+      const result = await (Array.isArray(data)
+        ? Promise.all(data.map(resolveAndGetDispatch))
+        : resolveAndGetDispatch(data))
+      const dispatch = isPaginated
+        ? {
+            ...context.result,
+            data: result
+          }
+        : result
+
+      context.dispatch = dispatch
+      Object.defineProperty(context.result, DISPATCH, {
+        value: dispatch,
+        enumerable: false,
+        configurable: false
+      })
     }
-
-    const result = await (Array.isArray(data)
-      ? Promise.all(data.map(resolveAndGetDispatch))
-      : resolveAndGetDispatch(data))
-    const dispatch = isPaginated
-      ? {
-          ...context.result,
-          data: result
-        }
-      : result
-
-    context.dispatch = dispatch
-    Object.defineProperty(context.result, DISPATCH, {
-      value: dispatch,
-      enumerable: false,
-      configurable: false
-    })
   }
 
 export const resolveExternal = resolveDispatch
