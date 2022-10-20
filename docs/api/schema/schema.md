@@ -2,21 +2,13 @@
 outline: deep
 ---
 
-# Schemas
+# JSON Schema
 
-`schema` is a small wrapper around three existing projects:
-
-- [JSON schema](https://json-schema.org/) for defining schemas.
-- [AJV](https://ajv.js.org/) for validating objects with those schemas.
-- [json-schema-to-ts](https://github.com/thomasaribart/json-schema-to-ts) to convert those schemas to TypeScript types.
-
-This package essentially allows for a single place to define your types and validation rules in plain JavaScript or TypeScript which can then be used by many other parts of a Feathers application.
-
-Schemas are also used by [resolvers](./resolvers.md) to validate and convert data before or after dynamically resolving properties.
+As an alternative to [TypeBox](./typebox.md), `@feathersjs/schema` also provides the ability to define plain JSON schemas as objects. It uses [json-schema-to-ts](https://github.com/thomasaribart/json-schema-to-ts) to turn those schemas into TypeScript types.
 
 <BlockQuote label="Need JSON Schema help?">
 
-You can find a lot of type-specific JSON Schema examples in the [json-schema-to-ts docs](https://github.com/ThomasAribart/json-schema-to-ts).
+You can find an introduction in the [JSON schema official getting started guide](https://json-schema.org/learn/getting-started-step-by-step) and a lot of type-specific JSON Schema examples in the [json-schema-to-ts docs](https://github.com/ThomasAribart/json-schema-to-ts).
 
 </BlockQuote>
 
@@ -27,10 +19,9 @@ You can find a lot of type-specific JSON Schema examples in the [json-schema-to-
 If you are not familiar with JSON schema have a look at the [official getting started guide](https://json-schema.org/learn/getting-started-step-by-step). Here is an example for a possible user schema:
 
 ```ts
-import { HookContext } from './definitions'
-import { schema, type Infer } from '@feathersjs/schema'
+import type { FromSchema } from '@feathersjs/schema'
 
-export const userSchema = schema({
+export const userSchema = {
   $id: 'User',
   type: 'object',
   additionalProperties: false,
@@ -40,88 +31,20 @@ export const userSchema = schema({
     email: { type: 'string' },
     password: { type: 'string' }
   }
-} as const)
+} as const
 
-export type User = Infer<typeof userSchema>
+export type User = FromSchema<typeof userSchema>
 ```
 
 <LanguageBlock global-id="ts">
 
-<BlockQuote label="very important">
-
-To get the correct TypeScript types the definition always needs to be declared `as const`. [See examples](#generating-correct-types).
-
-</BlockQuote>
-
-</LanguageBlock>
-
-### AJV
-
-AJV is the JSON Schema validator that runs under the hood of Feathers Schema. We chose it because it's fully compliant with the JSON Schema spec and it's the fastest JSON Schema validator because it has its own compiler. It pre-compiles code for each validator, instead of dynamically creating validators from schemas during runtime. The Feathers Schema package takes care of the compiling part for you, so you generally don't have to do it yourself.
-
-<BlockQuote type="info" label="Environments Requiring Pre-Compiled Schema">
-
-The only time you would need to manually compile validators would be if you're deploying to an environment where dynamic code generation APIs are not available, such as Cloudflare Workers. Any environment that doesn't support the [`eval` function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval) will require pre-compiling each schema.
-
-</BlockQuote>
-
-<BlockQuote type="info" label="Security Concerns with Compiling Schema">
-
-AJV uses [JavaScript's global `eval` function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval) under the hood to pre-compile its schema. It's normally frowned upon to use `eval` due to security risks. In the case of Feathers Schema, the risk is eliminated as long as you are not dynamically compiling schema. The generator sets up the Feathers application to compile during startup, which virtually eliminates the risk of running arbitrary or malicious code.
-
-</BlockQuote>
-
-The primary utility in AJV is the `AJV` class. You need an AJV class instance in order to register and run validators. Feathers Schema handles this for you under the hood by providing a default `ajv` singleton instance. Sometimes it's necessary to customize AJV to work in a specific way for your app. You'll learn how to provide a custom AJV instance to Feathers Schema in the next section.
-
-#### Customize AJV
-
-Learn what AJV options are customizable in the [AJV class API docs](https://ajv.js.org/options.html).
-
-#### Add Formatters to AJV
-
-Save yourself some time making a custom formatter. Learn how to apply AJV's extended formatters in the [ajv-formats docs](https://ajv.js.org/packages/ajv-formats.html).
-
-#### Example of Customized AJV
-
-See an example of custom keywords and formatters in the [MongoDB adapter documentation](/api/databases/mongodb#using-a-custom-ajv-instance).
-
-### schema(definition, ajv)
-
-`schema(definition, ajv)` allows to initialize a schema with a custom AJV instance:
-
-```js
-import ajvErrors from 'ajv-errors';
-import Ajv form 'ajv';
-import { schema } from '@feathersjs/schema';
-
-const ajv = new Ajv({
-  coerceTypes: true
-});
-
-ajvErrors(ajv);
-
-export const userSchema = schema({
-  $id: 'User',
-  type: 'object',
-  additionalProperties: false,
-  required: ['email', 'password'],
-  properties: {
-    id: { type: 'number' },
-    email: { type: 'string' },
-    password: { type: 'string' }
-  }
-}, ajv);
-
-```
-
 ### Generating Correct Types
 
-For correct TypeScript types, the definition always needs to be declared `as const`. This first example will not produce correct types because the definition is not immediately followed by `as const`:
+For correct TypeScript types, the definition always **needs to be declared `as const`**. This first example will not produce correct types because the definition is not immediately followed by `as const`:
 
 ```ts
 // Will not produce correct types.
 const definition = { type: 'object' } // `as const` is missing, here.
-const userSchema = schema(definition)
 ```
 
 This next example does declare `as const` after the `definition`, so the types will be generated correctly:
@@ -129,20 +52,18 @@ This next example does declare `as const` after the `definition`, so the types w
 ```ts
 // Produces correct types.
 const definition = { type: 'object' } as const
-const userSchema = schema(definition)
 ```
+
+</LanguageBlock>
 
 ## Extending Schemas
 
-To create a new schema that extends an existing one, combine the schema properties from `schema.properties` (and `schema.required`, if used) with the new properties:
-
-<LanguageBlock global-id="ts">
+To create a new schema that extends an existing one, combine the schema properties (and `schema.required`, if used) with the new properties:
 
 ```ts
-import { HookContext } from './definitions'
-import { schema, type Infer } from '@feathersjs/schema'
+import type { FromSchema } from '@feathersjs/schema'
 
-export const userSchema = schema({
+export const userDataSchema = {
   $id: 'User',
   type: 'object',
   additionalProperties: false,
@@ -151,11 +72,11 @@ export const userSchema = schema({
     email: { type: 'string' },
     password: { type: 'string' }
   }
-} as const)
+} as const
 
-export type User = Infer<typeof userSchema>
+export type UserData = FromSchema<typeof userDataSchema>
 
-export const userResultSchema = schema({
+export const userSchema = {
   $id: 'UserResult',
   type: 'object',
   additionalProperties: false,
@@ -164,47 +85,12 @@ export const userResultSchema = schema({
     ...userSchema.properties,
     id: { type: 'number' }
   }
-})
+} as const
 
-export type User = Infer<typeof userResultSchema>
+export type User = FromSchema<typeof userSchema>
 ```
 
-</LanguageBlock>
-
-<LanguageBlock global-id="js">
-
-```js
-import { schema } from '@feathersjs/schema'
-
-export const userSchema = schema({
-  $id: 'User',
-  type: 'object',
-  additionalProperties: false,
-  required: ['email', 'password'],
-  properties: {
-    id: { type: 'number' },
-    email: { type: 'string' },
-    password: { type: 'string' }
-  }
-})
-
-// The user result has all properties from the user but also an
-// additional `id` added by the database
-export const userResultSchema = schema({
-  $id: 'UserResult',
-  type: 'object',
-  additionalProperties: false,
-  required: [...userSchema.required, 'id'],
-  properties: {
-    ...userSchema.properties,
-    id: { type: 'number' }
-  }
-})
-```
-
-</LanguageBlock>
-
-## Associations with `$ref`
+## References
 
 Associated schemas can be initialized via the `$ref` keyword referencing the `$id` set during schema definition.
 
@@ -215,10 +101,9 @@ In TypeScript, the referenced type needs to be added explicitly.
 </LanguageBlock>
 
 ```ts
-import { HookContext } from './definitions'
-import { schema, type Infer } from '@feathersjs/schema'
+import type { FromSchema } from '@feathersjs/schema'
 
-export const userSchema = schema({
+export const userSchema = {
   $id: 'User',
   type: 'object',
   additionalProperties: false,
@@ -228,11 +113,11 @@ export const userSchema = schema({
     email: { type: 'string' },
     password: { type: 'string' }
   }
-})
+} as const
 
-export type User = Infer<typeof userSchema>
+export type User = FromSchema<typeof userSchema>
 
-export const messageSchema = schema({
+export const messageSchema = {
   $id: 'Message',
   type: 'object',
   additionalProperties: false,
@@ -241,11 +126,15 @@ export const messageSchema = schema({
     text: { type: 'string' },
     user: { $ref: 'User' }
   }
-})
+} as const
 
-export type Message = Infer<typeof messageSchema> & {
-  user: User
-}
+export type Message = FromSchema<
+  typeof messageSchema,
+  {
+    // All schema references need to be passed to get the correct type
+    references: [typeof userSchema]
+  }
+>
 ```
 
 ## Query Helpers
@@ -267,14 +156,16 @@ Schema ships with a few helpers to automatically create schemas that comply with
 The `name` property in the example, below, shows how `queryProperty` wraps a single property's definition.
 
 ```ts
-export const userQuerySchema = schema({
+import { queryProperty } from '@feathersjs/schema'
+
+export const userQuerySchema = {
   $id: 'UserQuery',
   type: 'object',
   additionalProperties: false,
   properties: {
     name: queryProperty({ type: 'string' })
   }
-} as const)
+} as const
 ```
 
 With the `queryProperty` utility in place, the schema will allow querying on `name` using any of the above-listed operators. With it in place, the query in the following example will not throw an error:
@@ -295,29 +186,89 @@ You can learn how it works, [here](https://github.com/feathersjs/feathers/blob/d
 
 `querySyntax(schema.properties)` initializes all properties the additional query syntax properties `$limit`, `$skip`, `$select` and `$sort`. `$select` and `$sort` will be typed so they only allow existing schema properties.
 
-```js
-import { querySyntax, type Infer } from '@feathersjs/schema';
+```ts
+import { querySyntax } from '@feathersjs/schema'
+import type { FromSchema } from '@feathersjs/schema'
 
-export const userQuerySchema = schema({
+export const userQuerySchema = {
   $id: 'UserQuery',
   type: 'object',
   additionalProperties: false,
   properties: {
     ...querySyntax(userSchema.properties)
   }
-} as const);
+} as const
 
-export type UserQuery = Infer<typeof userQuerySchema>
+export type UserQuery = FromSchema<typeof userQuerySchema>
 
 const userQuery: UserQuery = {
   $limit: 10,
-  $select: [ 'email', 'id' ],
+  $select: ['email', 'id'],
   $sort: {
     email: 1
   }
 }
 ```
 
-## Validation hooks
+## Validators
 
-Schemas will be used for validation when they are passed to a [Resolver](./resolvers.md). See the [Feathers resolver](./resolvers.md#feathers-resolvers) on how to use the schema with resolvers.
+The following functions are available to get a [validator function](./validators.md) from a JSON schema definition.
+
+<BlockQuote type="info" label="note">
+
+See the [validators](./validators.md) chapter for more information on validators and validator functions.
+
+</BlockQuote>
+
+### getDataValidator
+
+`getDataValidator(definition, validator)` returns validators for the data of `create`, `update` and `patch` service methods. You can either pass a single definition in which case all properties of the `patch` schema will be optional or individual validators for `create`, `update` and `patch`.
+
+```ts
+import { getDataValidator, Ajv } from '@feathersjs/schema'
+import type { FromSchema } from '@feathersjs/schema'
+
+const userDataSchema = {
+  $id: 'User',
+  type: 'object',
+  additionalProperties: false,
+  required: ['email', 'password'],
+  properties: {
+    email: { type: 'string' },
+    password: { type: 'string' }
+  }
+} as const
+
+type UserData = FromSchema<typeof userDataSchema>
+
+const dataValidator = new Ajv()
+
+const dataValidator = getDataValidator(userDataSchema, dataValidator)
+```
+
+### getValidator
+
+`getValidator(definition, validator)` returns a single validator function for a TypeBox schema.
+
+```ts
+import { querySyntax, Ajv, getValidator } from '@feathersjs/schema'
+import type { FromSchema } from '@feathersjs/schema'
+
+export const userQuerySchema = {
+  $id: 'UserQuery',
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    ...querySyntax(userSchema.properties)
+  }
+} as const
+
+export type UserQuery = FromSchema<typeof userQuerySchema>
+
+// Since queries can be only strings we can to coerce them
+const queryValidator = new Ajv({
+  coerceTypes: true
+})
+
+const messageValidator = getValidator(userQuerySchema, queryValidator)
+```

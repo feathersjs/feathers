@@ -365,6 +365,10 @@ export default defineConfig({
               link: '/api/schema/schema'
             },
             {
+              text: 'Validators',
+              link: '/api/schema/validators'
+            },
+            {
               text: 'Resolvers',
               link: '/api/schema/resolvers'
             }
