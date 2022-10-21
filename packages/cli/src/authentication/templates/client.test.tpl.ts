@@ -1,6 +1,6 @@
 import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
-import { AuthenticationGeneratorContext } from '../index'
+import { AuthenticationGeneratorContext, localTemplate } from '../index'
 
 const template = ({
   authStrategies,
@@ -11,14 +11,10 @@ const template = ({
 import axios from 'axios'
 
 import rest from '@feathersjs/rest-client'
-${
-  authStrategies.includes('local')
-    ? `import authenticationClient from '@feathersjs/authentication-client'`
-    : ''
-}
+${localTemplate(authStrategies, `import authenticationClient from '@feathersjs/authentication-client'`)}
 import { app } from '../${lib}/app'
 import { createClient } from '../${lib}/client' 
-${authStrategies.includes('local') ? `import type { ${upperName}Data } from '../${lib}/client'` : ''}
+${localTemplate(authStrategies, `import type { ${upperName}Data } from '../${lib}/client'`)}
 
 const port = app.get('port')
 const appUrl = \`http://\${app.get('host')}:\${port}\`
@@ -38,9 +34,9 @@ describe('application client tests', () => {
     assert.ok(client)
   })
 
-  ${
-    authStrategies.includes('local')
-      ? `
+  ${localTemplate(
+    authStrategies,
+    `
   it('creates and authenticates a user with email and password', async () => {
     const userData: ${upperName}Data = {
       email: 'someone@example.com',
@@ -63,8 +59,7 @@ describe('application client tests', () => {
     // Remove the test user on the server
     await app.service('users').remove(user.${type === 'mongodb' ? '_id' : 'id'})
   })`
-      : ''
-  }
+  )}
 })
 `
 

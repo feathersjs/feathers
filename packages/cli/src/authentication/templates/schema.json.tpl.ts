@@ -1,6 +1,6 @@
 import { generator, toFile, when } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
-import { AuthenticationGeneratorContext } from '../index'
+import { AuthenticationGeneratorContext, localTemplate } from '../index'
 
 const template = ({
   camelName,
@@ -10,7 +10,7 @@ const template = ({
   relative
 }: AuthenticationGeneratorContext) => /* ts */ `import { resolve, querySyntax, getValidator, getDataValidator } from '@feathersjs/schema'
 import type { FromSchema } from '@feathersjs/schema'
-${authStrategies.includes('local') ? `import { passwordHash } from '@feathersjs/authentication-local'` : ''}
+${localTemplate(authStrategies, `import { passwordHash } from '@feathersjs/authentication-local'`)}
 
 import type { HookContext } from '${relative}/declarations'
 import { dataValidator, queryValidator } from '${relative}/schemas/validators'
@@ -20,7 +20,7 @@ export const ${camelName}Schema = {
   $id: '${upperName}',
   type: 'object',
   additionalProperties: false,
-  required: [ '${type === 'mongodb' ? '_id' : 'id'}'${authStrategies.includes('local') ? ", 'email'" : ''} ],
+  required: [ '${type === 'mongodb' ? '_id' : 'id'}'${localTemplate(authStrategies, ", 'email'")} ],
   properties: {
     ${type === 'mongodb' ? '_id' : 'id'}: {
       type: '${type === 'mongodb' ? 'string' : 'number'}'
@@ -54,7 +54,7 @@ export type ${upperName}Data = FromSchema<typeof ${camelName}DataSchema>
 export const ${camelName}DataValidator = getDataValidator(${camelName}DataSchema, dataValidator)
 export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
   properties: {
-    ${authStrategies.includes('local') ? `password: passwordHash({ strategy: 'local' })` : ''}
+    ${localTemplate(authStrategies, `password: passwordHash({ strategy: 'local' })`)}
   }
 })
 
