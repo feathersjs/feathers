@@ -103,4 +103,4 @@ export function createSymbol(name: string) {
 
 export * from "./debug.ts";
 
-export * from "./events.ts";
+export * from "./events.js";
