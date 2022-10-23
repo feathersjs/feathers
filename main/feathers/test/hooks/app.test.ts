@@ -1,0 +1,349 @@
+// deno-lint-ignore-file require-await
+import {
+  describe,
+  it,
+  beforeEach,
+  assertStrictEquals,
+  assertEquals,
+  assertObjectMatch,
+  assertRejects,
+} from "../../../commons/mod.ts";
+
+import {
+  feathers,
+  Application,
+  ApplicationHookMap,
+  ServiceInterface,
+  Params,
+} from "../../mod.ts";
+
+type Todo = {
+  id?: string;
+  params?: TodoParams;
+  data?: any;
+  test?: string;
+  order?: string[];
+};
+
+interface TodoParams extends Params {
+  order: string[];
+  ran: boolean;
+}
+
+type TodoService = ServiceInterface<Todo, Todo, TodoParams> & {
+  customMethod(data: any, params?: TodoParams): Promise<any>;
+};
+
+type App = Application<{ todos: TodoService }>;
+
+describe("app.hooks", () => {
+  let app: App;
+
+  beforeEach(() => {
+    app = feathers<{ todos: TodoService }>().use(
+      "todos",
+      {
+        async get(id: any, params: any) {
+          if (id === "error") {
+            throw new Error("Something went wrong");
+          }
+
+          return { id, params };
+        },
+
+        async create(data: any, params: any) {
+          return { data, params };
+        },
+
+        async customMethod(data: any, params: TodoParams) {
+          return { data, params };
+        },
+      },
+      {
+        methods: ["get", "create", "customMethod"],
+      }
+    );
+  });
+
+  it("app has the .hooks method", () => {
+    assertStrictEquals(typeof app.hooks, "function");
+  });
+
+  it(".setup and .teardown special hooks", async () => {
+    const app = feathers();
+
+    // Test that setup and teardown can be overwritten
+    const oldSetup = app.setup;
+    app.setup = function (arg: any) {
+      return oldSetup.call(this, arg);
+    };
+    const oldTeardown = app.teardown;
+    app.teardown = function (arg: any) {
+      return oldTeardown.call(this, arg);
+    };
+
+    const order: string[] = [];
+    const hooks: ApplicationHookMap<typeof app> = {
+      setup: [
+        async (context, next) => {
+          assertStrictEquals(context.app, app);
+          order.push("setup 1");
+          await next();
+        },
+        async (_context, next) => {
+          order.push("setup 2");
+          await next();
+          order.push("setup after");
+        },
+      ],
+      teardown: [
+        async (context, next) => {
+          assertStrictEquals(context.app, app);
+          order.push("teardown 1");
+          await next();
+        },
+        async (_context, next) => {
+          order.push("teardown 2");
+          await next();
+        },
+      ],
+    };
+
+    app.hooks(hooks);
+
+    await app.setup();
+    await app.teardown();
+
+    assertEquals(order, [
+      "setup 1",
+      "setup 2",
+      "setup after",
+      "teardown 1",
+      "teardown 2",
+    ]);
+  });
+
+  describe("app.hooks([ async ])", () => {
+    it("basic app async hook, works with custom method", async () => {
+      const service = app.service("todos");
+
+      app.hooks([
+        async (context, next) => {
+          assertStrictEquals(context.app, app);
+          await next();
+          context.params.ran = true;
+        },
+      ]);
+
+      let result = await service.get("test");
+
+      assertObjectMatch(result, {
+        id: "test",
+        params: { ran: true },
+      });
+
+      const data = { test: "hi" };
+
+      result = await service.create(data);
+
+      assertObjectMatch(result, {
+        data,
+        params: { ran: true },
+      });
+
+      result = await service.customMethod("custom test");
+
+      assertObjectMatch(result, {
+        data: "custom test",
+        params: { ran: true },
+      });
+    });
+  });
+
+  describe("app.hooks({ method: [ async ] })", () => {
+    it("basic app async method hook", async () => {
+      const service = app.service("todos");
+
+      app.hooks({
+        get: [
+          async (context, next) => {
+            assertStrictEquals(context.app, app);
+            await next();
+            context.params.ran = true;
+          },
+        ],
+      });
+
+      const result = await service.get("test");
+
+      assertObjectMatch(result, {
+        id: "test",
+        params: { ran: true },
+      });
+    });
+  });
+
+  describe("app.hooks({ before })", () => {
+    it("basic app before hook, works with custom method", async () => {
+      const service = app.service("todos");
+
+      app.hooks({
+        before(context) {
+          assertStrictEquals(context.app, app);
+          context.params.ran = true;
+        },
+      });
+
+      let result = await service.get("test");
+
+      assertObjectMatch(result, {
+        id: "test",
+        params: { ran: true },
+      });
+
+      const data = { test: "hi" };
+
+      result = await service.create(data);
+
+      assertObjectMatch(result, {
+        data,
+        params: { ran: true },
+      });
+
+      result = await service.customMethod("custom with before");
+
+      assertObjectMatch(result, {
+        data: "custom with before",
+        params: { ran: true },
+      });
+    });
+
+    it("app before hooks always run first", async () => {
+      app.service("todos").hooks({
+        before(context) {
+          assertStrictEquals(context.app, app);
+          context.params.order.push("service.before");
+        },
+      });
+
+      app.service("todos").hooks({
+        before(context) {
+          assertStrictEquals(context.app, app);
+          context.params.order.push("service.before 1");
+        },
+      });
+
+      app.hooks({
+        before(context) {
+          assertStrictEquals(context.app, app);
+          context.params.order = [];
+          context.params.order.push("app.before");
+        },
+      });
+
+      const result = await app.service("todos").get("test");
+
+      assertObjectMatch(result, {
+        id: "test",
+        params: {
+          order: ["app.before", "service.before", "service.before 1"],
+        },
+      });
+    });
+  });
+
+  describe("app.hooks({ after })", () => {
+    it("basic app after hook", async () => {
+      app.hooks({
+        after(context) {
+          assertStrictEquals(context.app, app);
+          context.result.ran = true;
+        },
+      });
+
+      const result = await app.service("todos").get("test");
+
+      assertObjectMatch(result, {
+        id: "test",
+        params: {},
+        ran: true,
+      });
+    });
+
+    it("app after hooks always run last", async () => {
+      app.hooks({
+        after(context) {
+          assertStrictEquals(context.app, app);
+          context.result.order.push("app.after");
+        },
+      });
+
+      app.service("todos").hooks({
+        after(context) {
+          assertStrictEquals(context.app, app);
+          context.result!.order = [];
+          context.result!.order.push("service.after");
+        },
+      });
+
+      app.service("todos").hooks({
+        after(context) {
+          assertStrictEquals(context.app, app);
+          context.result!.order!.push("service.after 1");
+        },
+      });
+
+      const result = await app.service("todos").get("test");
+
+      assertObjectMatch(result, {
+        id: "test",
+        params: {},
+        order: ["service.after", "service.after 1", "app.after"],
+      });
+    });
+  });
+
+  describe("app.hooks({ error })", () => {
+    it("basic app error hook", async () => {
+      app.hooks({
+        error(context) {
+          assertStrictEquals(context.app, app);
+          context.error = new Error("App hook ran");
+        },
+      });
+
+      await assertRejects(
+        () => app.service("todos").get("error"),
+        "App hook ran"
+      );
+    });
+
+    it("app error hooks always run last", async () => {
+      app.hooks({
+        error(context) {
+          assertStrictEquals(context.app, app);
+          context.error = new Error(`${context.error.message} app.after`);
+        },
+      });
+
+      app.service("todos").hooks({
+        error(context) {
+          assertStrictEquals(context.app, app);
+          context.error = new Error(`${context.error.message} service.after`);
+        },
+      });
+
+      app.service("todos").hooks({
+        error(context) {
+          assertStrictEquals(context.app, app);
+          context.error = new Error(`${context.error.message} service.after 1`);
+        },
+      });
+
+      await assertRejects(
+        () => app.service("todos").get("error"),
+        "Something went wrong service.after service.after 1 app.after"
+      );
+    });
+  });
+});
