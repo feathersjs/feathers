@@ -140,11 +140,10 @@ export abstract class AdapterBase<
   async _find(params?: P): Promise<T | T[] | Paginated<T>> {
     const query = await this.sanitizeQuery(params);
 
-    // @ts-ignore<typescript overload problem>
     return this.$find({
       ...params,
       query,
-    } as P & { paginate?: PaginationOptions });
+    } as P & { paginate?: PaginationOptions | false });
   }
 
   abstract $get(id: Id, params?: P): Promise<T>;
