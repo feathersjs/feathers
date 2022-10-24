@@ -4,6 +4,6 @@
     "src/**/*.ts"
   ],
   "compilerOptions": {
-    "outDir": "lib"    
+    "outDir": "lib"
   }
 }

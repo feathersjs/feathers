@@ -1,9 +1,10 @@
 {
   "name": "@feathersjs/schema",
   "description": "A common data schema definition format",
-  "version": "5.0.0-pre.16",
+  "version": "5.0.0-pre.31",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
+  "types": "lib/",
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -15,7 +16,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/feathers.git"
+    "url": "git://github.com/feathersjs/feathers.git",
+    "directory": "packages/schema"
   },
   "author": {
     "name": "Feathers contributors",
@@ -40,8 +42,10 @@
   ],
   "scripts": {
     "prepublish": "npm run compile",
-    "compile": "shx rm -rf lib/ && tsc",
-    "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+    "pack": "npm pack --pack-destination ../cli/test/build",
+    "compile": "shx rm -rf lib/ && tsc && npm run pack",
+    "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
+    "test": "npm run compile && npm run mocha"
   },
   "directories": {
     "lib": "lib"
@@ -50,21 +54,23 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/errors": "^5.0.0-pre.16",
-    "@feathersjs/feathers": "^5.0.0-pre.16",
-    "@types/json-schema": "^7.0.9",
-    "ajv": "^8.8.2",
-    "json-schema": "^0.4.0",
-    "json-schema-to-ts": "^1.6.4"
+    "@feathersjs/commons": "^5.0.0-pre.31",
+    "@feathersjs/errors": "^5.0.0-pre.31",
+    "@feathersjs/feathers": "^5.0.0-pre.31",
+    "@feathersjs/hooks": "^0.7.5",
+    "@types/json-schema": "^7.0.11",
+    "ajv": "^8.11.0",
+    "ajv-formats": "^2.1.1",
+    "json-schema-to-ts": "^2.5.5"
   },
   "devDependencies": {
-    "@feathersjs/memory": "^5.0.0-pre.16",
-    "@types/mocha": "^9.0.0",
-    "@types/node": "^17.0.5",
+    "@feathersjs/memory": "^5.0.0-pre.31",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.8.2",
     "ajv-formats": "^2.1.1",
-    "mocha": "^9.1.3",
-    "shx": "^0.3.3",
-    "typescript": "^4.5.4"
+    "mocha": "^10.0.0",
+    "shx": "^0.3.4",
+    "typescript": "^4.8.4"
   },
-  "gitHead": "f0cd227a82d159b528193bd33747c97684a48773"
+  "gitHead": "4500dbeb8cea566678cf88b3313a88efd93a2ed9"
 }

@@ -41,3 +41,5 @@ dist/
 
 # TypeScript compiled files
 packages/**/lib
+packages/cli/test/build/*.tgz
+*.sqlite

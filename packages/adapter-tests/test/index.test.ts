@@ -1,5 +1,5 @@
-import { strict as assert } from 'assert';
-import adapterTests from '../src';
+import { strict as assert } from 'assert'
+import adapterTests from '../src'
 
 const testSuite = adapterTests([
   '.events',
@@ -9,6 +9,12 @@ const testSuite = adapterTests([
   '._update',
   '._patch',
   '._remove',
+  '.$get',
+  '.$find',
+  '.$create',
+  '.$update',
+  '.$patch',
+  '.$remove',
   '.get',
   '.get + $select',
   '.get + id + query',
@@ -18,6 +24,7 @@ const testSuite = adapterTests([
   '.remove + $select',
   '.remove + id + query',
   '.remove + multi',
+  '.remove + multi no pagination',
   '.update',
   '.update + $select',
   '.update + id + query',
@@ -26,7 +33,9 @@ const testSuite = adapterTests([
   '.patch + $select',
   '.patch + id + query',
   '.patch multiple',
-  '.patch multi query',
+  '.patch multiple no pagination',
+  '.patch multi query changed',
+  '.patch multi query same',
   '.patch + NotFound',
   '.create',
   '.create + $select',
@@ -63,14 +72,14 @@ const testSuite = adapterTests([
   '.remove + id + query id',
   '.update + id + query id',
   '.patch + id + query id'
-]);
+])
 
 describe('Feathers Memory Service', () => {
   it('loads the test suite', () => {
-    assert.ok(typeof testSuite === 'function');
-  });
+    assert.ok(typeof testSuite === 'function')
+  })
 
   it('exports as CommonJS', () => {
-    assert.equal(typeof require('../lib'), 'function');
-  });
-});
+    assert.equal(typeof require('../lib'), 'function')
+  })
+})

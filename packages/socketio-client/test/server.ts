@@ -1,36 +1,36 @@
-import { feathers, Id, Params } from '@feathersjs/feathers';
-import socketio from '@feathersjs/socketio';
-import '@feathersjs/transport-commons';
-import { Service } from '@feathersjs/memory';
+import { feathers, Id, Params } from '@feathersjs/feathers'
+import socketio from '@feathersjs/socketio'
+import '@feathersjs/transport-commons'
+import { MemoryService } from '@feathersjs/memory'
 
 // eslint-disable-next-line no-extend-native
 Object.defineProperty(Error.prototype, 'toJSON', {
-  value () {
-    const alt: any = {};
+  value() {
+    const alt: any = {}
 
     Object.getOwnPropertyNames(this).forEach((key: string) => {
-      alt[key] = this[key];
-    }, this);
+      alt[key] = this[key]
+    }, this)
 
-    return alt;
+    return alt
   },
   configurable: true,
   writable: true
-});
+})
 
 // Create an in-memory CRUD service for our Todos
-class TodoService extends Service {
-  async get (id: Id, params: Params) {
+class TodoService extends MemoryService {
+  async get(id: Id, params: Params) {
     if (params.query.error) {
-      throw new Error('Something went wrong');
+      throw new Error('Something went wrong')
     }
 
-    const data = await super.get(id);
+    const data = await super.get(id)
 
     return Object.assign({ query: params.query }, data)
   }
 
-  async customMethod (data: any, { provider }: Params) {
+  async customMethod(data: any, { provider }: Params) {
     return {
       data,
       provider,
@@ -39,32 +39,28 @@ class TodoService extends Service {
   }
 }
 
-export function createServer () {
+export function createServer() {
   const app = feathers()
     .configure(socketio())
     .use('/', new TodoService())
     .use('/todos', new TodoService(), {
-      methods: [
-        'find', 'get', 'create', 'update', 'patch', 'remove', 'customMethod'
-      ]
-    });
-  const service = app.service('todos');
-  const rootService = app.service('/');
-  const publisher = () => app.channel('general');
+      methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'customMethod']
+    })
+  const service = app.service('todos')
+  const rootService = app.service('/')
+  const publisher = () => app.channel('general')
   const data = {
     text: 'some todo',
     complete: false
-  };
+  }
 
-  app.on('connection', connection =>
-    app.channel('general').join(connection)
-  );
+  app.on('connection', (connection) => app.channel('general').join(connection))
 
-  rootService.create(data);
-  rootService.publish(publisher);
+  rootService.create(data)
+  rootService.publish(publisher)
 
-  service.create(data);
-  service.publish(publisher);
+  service.create(data)
+  service.publish(publisher)
 
-  return app;
+  return app
 }

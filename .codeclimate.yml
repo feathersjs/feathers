@@ -34,11 +34,12 @@ plugins:
   duplication:
     enabled: true
     config:
-      count_threshold: 3
+      count_threshold: 4
 exclude_patterns:
-  - "**/test/*"	
-  - "**/adapter-tests/*"	
-  - "**/dist/*"	
-  - "**/*.dist.js"	
+  - "**/test/*"
+  - "**/adapter-tests/*"
+  - "**/dist/*"
+  - "**/*.dist.js"
   - "**/templates/*"
   - "**/_**"
+  - "**/adapter-commons/src/sort.ts"

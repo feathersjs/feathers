@@ -3,591 +3,402 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [5.0.0-pre.16](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.15...v5.0.0-pre.16) (2022-01-12)
+# [5.0.0-pre.31](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.30...v5.0.0-pre.31) (2022-10-12)
 
+**Note:** Version bump only for package @feathersjs/client
+
+# [5.0.0-pre.30](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.29...v5.0.0-pre.30) (2022-10-07)
 
 ### Features
 
-* **express, koa:** make transports similar ([#2486](https://github.com/feathersjs/feathers/issues/2486)) ([26aa937](https://github.com/feathersjs/feathers/commit/26aa937c114fb8596dfefc599b1f53cead69c159))
+- **core:** Allow to unregister services at runtime ([#2756](https://github.com/feathersjs/feathers/issues/2756)) ([d16601f](https://github.com/feathersjs/feathers/commit/d16601f2277dca5357866ffdefba2a611f6dc7fa))
 
+# [5.0.0-pre.29](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.28...v5.0.0-pre.29) (2022-09-16)
 
+**Note:** Version bump only for package @feathersjs/client
 
+# [5.0.0-pre.28](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.27...v5.0.0-pre.28) (2022-08-03)
 
+**Note:** Version bump only for package @feathersjs/client
+
+# [5.0.0-pre.27](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.26...v5.0.0-pre.27) (2022-07-13)
+
+**Note:** Version bump only for package @feathersjs/client
+
+# [5.0.0-pre.26](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.25...v5.0.0-pre.26) (2022-06-22)
+
+**Note:** Version bump only for package @feathersjs/client
+
+# [5.0.0-pre.25](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.24...v5.0.0-pre.25) (2022-06-22)
+
+**Note:** Version bump only for package @feathersjs/client
+
+# [5.0.0-pre.24](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.23...v5.0.0-pre.24) (2022-06-21)
+
+**Note:** Version bump only for package @feathersjs/client
+
+# [5.0.0-pre.23](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.22...v5.0.0-pre.23) (2022-06-06)
+
+**Note:** Version bump only for package @feathersjs/client
+
+# [5.0.0-pre.22](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.21...v5.0.0-pre.22) (2022-05-24)
+
+**Note:** Version bump only for package @feathersjs/client
+
+# [5.0.0-pre.21](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.20...v5.0.0-pre.21) (2022-05-23)
+
+**Note:** Version bump only for package @feathersjs/client
+
+# [5.0.0-pre.20](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.19...v5.0.0-pre.20) (2022-05-04)
+
+### Bug Fixes
+
+- **dependencies:** Lock monorepo package version numbers ([#2623](https://github.com/feathersjs/feathers/issues/2623)) ([5640c10](https://github.com/feathersjs/feathers/commit/5640c1020cc139994e695d658c08bad3494db507))
+
+# [5.0.0-pre.19](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.18...v5.0.0-pre.19) (2022-05-01)
+
+### Bug Fixes
+
+- **client:** Fix @feathersjs/client types field ([#2596](https://github.com/feathersjs/feathers/issues/2596)) ([d719f54](https://github.com/feathersjs/feathers/commit/d719f54daee63daf9ed5cc762626ca15131086de))
+
+### Features
+
+- **typescript:** Improve adapter typings ([#2605](https://github.com/feathersjs/feathers/issues/2605)) ([3b2ca0a](https://github.com/feathersjs/feathers/commit/3b2ca0a6a8e03e8390272c4d7e930b4bffdaacf5))
+
+# [5.0.0-pre.18](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.17...v5.0.0-pre.18) (2022-04-11)
+
+**Note:** Version bump only for package @feathersjs/client
+
+# [5.0.0-pre.17](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.16...v5.0.0-pre.17) (2022-02-15)
+
+**Note:** Version bump only for package @feathersjs/client
+
+# [5.0.0-pre.16](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.15...v5.0.0-pre.16) (2022-01-12)
+
+### Features
+
+- **express, koa:** make transports similar ([#2486](https://github.com/feathersjs/feathers/issues/2486)) ([26aa937](https://github.com/feathersjs/feathers/commit/26aa937c114fb8596dfefc599b1f53cead69c159))
 
 # [5.0.0-pre.15](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.14...v5.0.0-pre.15) (2021-11-27)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 # [5.0.0-pre.14](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.13...v5.0.0-pre.14) (2021-10-13)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 # [5.0.0-pre.13](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.12...v5.0.0-pre.13) (2021-10-13)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 # [5.0.0-pre.12](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.11...v5.0.0-pre.12) (2021-10-12)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 # [5.0.0-pre.11](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.10...v5.0.0-pre.11) (2021-10-06)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 # [5.0.0-pre.10](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.9...v5.0.0-pre.10) (2021-09-19)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 # [5.0.0-pre.9](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.8...v5.0.0-pre.9) (2021-08-09)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 # [5.0.0-pre.8](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.7...v5.0.0-pre.8) (2021-08-09)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 # [5.0.0-pre.7](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.6...v5.0.0-pre.7) (2021-08-09)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 # [5.0.0-pre.6](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.5...v5.0.0-pre.6) (2021-08-08)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 # [5.0.0-pre.5](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.4...v5.0.0-pre.5) (2021-06-23)
-
 
 ### Features
 
-* **adapter-commons:** Add support for params.adapter option and move memory adapter to @feathersjs/memory ([#2367](https://github.com/feathersjs/feathers/issues/2367)) ([a43e7da](https://github.com/feathersjs/feathers/commit/a43e7da22b6b981a96d1321736ea9a0cb924fb4f))
-
-
-
-
+- **adapter-commons:** Add support for params.adapter option and move memory adapter to @feathersjs/memory ([#2367](https://github.com/feathersjs/feathers/issues/2367)) ([a43e7da](https://github.com/feathersjs/feathers/commit/a43e7da22b6b981a96d1321736ea9a0cb924fb4f))
 
 # [5.0.0-pre.4](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.3...v5.0.0-pre.4) (2021-05-13)
 
-
 ### Features
 
-* **koa:** KoaJS transport adapter ([#2315](https://github.com/feathersjs/feathers/issues/2315)) ([2554b57](https://github.com/feathersjs/feathers/commit/2554b57cf05731df58feeba9c12faab18e442107))
-
-
-
-
+- **koa:** KoaJS transport adapter ([#2315](https://github.com/feathersjs/feathers/issues/2315)) ([2554b57](https://github.com/feathersjs/feathers/commit/2554b57cf05731df58feeba9c12faab18e442107))
 
 # [5.0.0-pre.3](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.2...v5.0.0-pre.3) (2021-04-21)
 
-
 ### Bug Fixes
 
-* **typescript:** Improve TypeScript backwards compatibility ([#2310](https://github.com/feathersjs/feathers/issues/2310)) ([f33be73](https://github.com/feathersjs/feathers/commit/f33be73fc46a533efb15df9aab0658e3240d3897))
-
-
-
-
+- **typescript:** Improve TypeScript backwards compatibility ([#2310](https://github.com/feathersjs/feathers/issues/2310)) ([f33be73](https://github.com/feathersjs/feathers/commit/f33be73fc46a533efb15df9aab0658e3240d3897))
 
 # [5.0.0-pre.2](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.1...v5.0.0-pre.2) (2021-04-06)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 # [5.0.0-beta.1](https://github.com/feathersjs/feathers/compare/v5.0.0-beta.0...v5.0.0-beta.1) (2021-04-03)
-
 
 ### Bug Fixes
 
-* **dependencies:** Fix transport-commons dependency and update other dependencies ([#2284](https://github.com/feathersjs/feathers/issues/2284)) ([05b03b2](https://github.com/feathersjs/feathers/commit/05b03b27b40604d956047e3021d8053c3a137616))
-
-
-
-
+- **dependencies:** Fix transport-commons dependency and update other dependencies ([#2284](https://github.com/feathersjs/feathers/issues/2284)) ([05b03b2](https://github.com/feathersjs/feathers/commit/05b03b27b40604d956047e3021d8053c3a137616))
 
 # [5.0.0-beta.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.1...v5.0.0-beta.0) (2021-03-28)
 
-
 ### Bug Fixes
 
-* Update Grant usage and other dependencies ([#2264](https://github.com/feathersjs/feathers/issues/2264)) ([7b0f8fa](https://github.com/feathersjs/feathers/commit/7b0f8fad252419ed0ad0bf259cdf3104d322ab60))
-
+- Update Grant usage and other dependencies ([#2264](https://github.com/feathersjs/feathers/issues/2264)) ([7b0f8fa](https://github.com/feathersjs/feathers/commit/7b0f8fad252419ed0ad0bf259cdf3104d322ab60))
 
 ### Features
 
-* Feathers v5 core refactoring and features ([#2255](https://github.com/feathersjs/feathers/issues/2255)) ([2dafb7c](https://github.com/feathersjs/feathers/commit/2dafb7ce14ba57406aeec13d10ca45b1e709bee9))
-
-
-
-
+- Feathers v5 core refactoring and features ([#2255](https://github.com/feathersjs/feathers/issues/2255)) ([2dafb7c](https://github.com/feathersjs/feathers/commit/2dafb7ce14ba57406aeec13d10ca45b1e709bee9))
 
 # [5.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.5.11...v5.0.0-pre.1) (2020-12-17)
 
-
-
 # [5.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v4.5.4...v5.0.0-pre.0) (2020-05-19)
-
 
 ### chore
 
-* **package:** Remove @feathersjs/primus packages from core ([#1919](https://github.com/feathersjs/feathers/issues/1919)) ([d20b7d5](https://github.com/feathersjs/feathers/commit/d20b7d5a70f4d3306e294696156e8aa0337c35e9)), closes [#1899](https://github.com/feathersjs/feathers/issues/1899)
-
+- **package:** Remove @feathersjs/primus packages from core ([#1919](https://github.com/feathersjs/feathers/issues/1919)) ([d20b7d5](https://github.com/feathersjs/feathers/commit/d20b7d5a70f4d3306e294696156e8aa0337c35e9)), closes [#1899](https://github.com/feathersjs/feathers/issues/1899)
 
 ### Features
 
-* **core:** use @feathers/hooks and add async type ([#1929](https://github.com/feathersjs/feathers/issues/1929)) ([a5c4756](https://github.com/feathersjs/feathers/commit/a5c47562eae8410c82fe2f6308f26f8e78b6a3e8))
-
+- **core:** use @feathers/hooks and add async type ([#1929](https://github.com/feathersjs/feathers/issues/1929)) ([a5c4756](https://github.com/feathersjs/feathers/commit/a5c47562eae8410c82fe2f6308f26f8e78b6a3e8))
 
 ### BREAKING CHANGES
 
-* **package:** Remove primus packages to be moved into the ecosystem.
-
-
-
-
+- **package:** Remove primus packages to be moved into the ecosystem.
 
 # [5.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v4.5.4...v5.0.0-pre.0) (2020-05-19)
 
-
 ### chore
 
-* **package:** Remove @feathersjs/primus packages from core ([#1919](https://github.com/feathersjs/feathers/issues/1919)) ([d20b7d5](https://github.com/feathersjs/feathers/commit/d20b7d5a70f4d3306e294696156e8aa0337c35e9)), closes [#1899](https://github.com/feathersjs/feathers/issues/1899)
-
+- **package:** Remove @feathersjs/primus packages from core ([#1919](https://github.com/feathersjs/feathers/issues/1919)) ([d20b7d5](https://github.com/feathersjs/feathers/commit/d20b7d5a70f4d3306e294696156e8aa0337c35e9)), closes [#1899](https://github.com/feathersjs/feathers/issues/1899)
 
 ### Features
 
-* **core:** use @feathers/hooks and add async type ([#1929](https://github.com/feathersjs/feathers/issues/1929)) ([a5c4756](https://github.com/feathersjs/feathers/commit/a5c47562eae8410c82fe2f6308f26f8e78b6a3e8))
-
+- **core:** use @feathers/hooks and add async type ([#1929](https://github.com/feathersjs/feathers/issues/1929)) ([a5c4756](https://github.com/feathersjs/feathers/commit/a5c47562eae8410c82fe2f6308f26f8e78b6a3e8))
 
 ### BREAKING CHANGES
 
-* **package:** Remove primus packages to be moved into the ecosystem.
-
+- **package:** Remove primus packages to be moved into the ecosystem.
 
 ## [4.5.11](https://github.com/feathersjs/feathers/compare/v4.5.10...v4.5.11) (2020-12-05)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 ## [4.5.10](https://github.com/feathersjs/feathers/compare/v4.5.9...v4.5.10) (2020-11-08)
-
 
 ### Bug Fixes
 
-* **package:** Fix clean script in non Unix environments ([#2110](https://github.com/feathersjs/feathers/issues/2110)) ([09b62c0](https://github.com/feathersjs/feathers/commit/09b62c0c7e636caf620904ba87d61f168a020f05))
-
-
-
-
+- **package:** Fix clean script in non Unix environments ([#2110](https://github.com/feathersjs/feathers/issues/2110)) ([09b62c0](https://github.com/feathersjs/feathers/commit/09b62c0c7e636caf620904ba87d61f168a020f05))
 
 ## [4.5.9](https://github.com/feathersjs/feathers/compare/v4.5.8...v4.5.9) (2020-10-09)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 ## [4.5.8](https://github.com/feathersjs/feathers/compare/v4.5.7...v4.5.8) (2020-08-12)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 ## [4.5.7](https://github.com/feathersjs/feathers/compare/v4.5.6...v4.5.7) (2020-07-24)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 ## [4.5.6](https://github.com/feathersjs/feathers/compare/v4.5.5...v4.5.6) (2020-07-12)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 ## [4.5.5](https://github.com/feathersjs/feathers/compare/v4.5.4...v4.5.5) (2020-07-11)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 ## [4.5.4](https://github.com/feathersjs/feathers/compare/v4.5.3...v4.5.4) (2020-04-29)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 ## [4.5.3](https://github.com/feathersjs/feathers/compare/v4.5.2...v4.5.3) (2020-04-17)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 ## [4.5.2](https://github.com/feathersjs/feathers/compare/v4.5.1...v4.5.2) (2020-03-04)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 ## [4.5.1](https://github.com/feathersjs/feathers/compare/v4.5.0...v4.5.1) (2020-01-24)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 # [4.5.0](https://github.com/feathersjs/feathers/compare/v4.4.3...v4.5.0) (2020-01-18)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 ## [4.4.3](https://github.com/feathersjs/feathers/compare/v4.4.1...v4.4.3) (2019-12-06)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 ## [4.4.1](https://github.com/feathersjs/feathers/compare/v4.4.0...v4.4.1) (2019-11-27)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 # [4.4.0](https://github.com/feathersjs/feathers/compare/v4.3.11...v4.4.0) (2019-11-27)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 ## [4.3.11](https://github.com/feathersjs/feathers/compare/v4.3.10...v4.3.11) (2019-11-11)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 ## [4.3.10](https://github.com/feathersjs/feathers/compare/v4.3.9...v4.3.10) (2019-10-26)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 ## [4.3.9](https://github.com/feathersjs/feathers/compare/v4.3.8...v4.3.9) (2019-10-26)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 ## [4.3.7](https://github.com/feathersjs/feathers/compare/v4.3.6...v4.3.7) (2019-10-14)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 ## [4.3.5](https://github.com/feathersjs/feathers/compare/v4.3.4...v4.3.5) (2019-10-07)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 ## [4.3.4](https://github.com/feathersjs/feathers/compare/v4.3.3...v4.3.4) (2019-10-03)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 ## [4.3.3](https://github.com/feathersjs/feathers/compare/v4.3.2...v4.3.3) (2019-09-21)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 ## [4.3.2](https://github.com/feathersjs/feathers/compare/v4.3.1...v4.3.2) (2019-09-16)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 ## [4.3.1](https://github.com/feathersjs/feathers/compare/v4.3.0...v4.3.1) (2019-09-09)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 # [4.3.0](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.4...v4.3.0) (2019-08-27)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 # [4.3.0-pre.4](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.3...v4.3.0-pre.4) (2019-08-22)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 # [4.3.0-pre.3](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.2...v4.3.0-pre.3) (2019-08-19)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 # [4.3.0-pre.2](https://github.com/feathersjs/feathers/compare/v4.3.0-pre.1...v4.3.0-pre.2) (2019-08-02)
 
 **Note:** Version bump only for package @feathersjs/client
-
-
-
-
 
 # [4.3.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.5...v4.3.0-pre.1) (2019-07-11)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 # [4.0.0-pre.5](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.4...v4.0.0-pre.5) (2019-07-10)
-
 
 ### Bug Fixes
 
-* Fix feathers-memory dependency that did not get updated ([9422b13](https://github.com/feathersjs/feathers/commit/9422b13))
-
-
-
-
+- Fix feathers-memory dependency that did not get updated ([9422b13](https://github.com/feathersjs/feathers/commit/9422b13))
 
 # [4.0.0-pre.4](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.3...v4.0.0-pre.4) (2019-07-05)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 # [4.0.0-pre.3](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.2...v4.0.0-pre.3) (2019-06-01)
-
 
 ### Bug Fixes
 
-* Update dependencies and fix tests ([#1373](https://github.com/feathersjs/feathers/issues/1373)) ([d743a7f](https://github.com/feathersjs/feathers/commit/d743a7f))
-
-
-
-
+- Update dependencies and fix tests ([#1373](https://github.com/feathersjs/feathers/issues/1373)) ([d743a7f](https://github.com/feathersjs/feathers/commit/d743a7f))
 
 # [4.0.0-pre.2](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.1...v4.0.0-pre.2) (2019-05-15)
 
-
 ### Bug Fixes
 
-* Use `export =` in TypeScript definitions ([#1285](https://github.com/feathersjs/feathers/issues/1285)) ([12d0f4b](https://github.com/feathersjs/feathers/commit/12d0f4b))
-
-
-
-
+- Use `export =` in TypeScript definitions ([#1285](https://github.com/feathersjs/feathers/issues/1285)) ([12d0f4b](https://github.com/feathersjs/feathers/commit/12d0f4b))
 
 # [4.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v4.0.0-pre.0...v4.0.0-pre.1) (2019-05-08)
 
-
 ### Bug Fixes
 
-* Improve authentication parameter handling ([#1333](https://github.com/feathersjs/feathers/issues/1333)) ([6e77204](https://github.com/feathersjs/feathers/commit/6e77204))
-
-
-
-
+- Improve authentication parameter handling ([#1333](https://github.com/feathersjs/feathers/issues/1333)) ([6e77204](https://github.com/feathersjs/feathers/commit/6e77204))
 
 # [4.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v3.2.0-pre.1...v4.0.0-pre.0) (2019-04-21)
 
-
 ### Bug Fixes
 
-* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
-* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
-* Update all dependencies to latest ([#1206](https://github.com/feathersjs/feathers/issues/1206)) ([e51e0f6](https://github.com/feathersjs/feathers/commit/e51e0f6))
-* **chore:** Properly configure and run code linter ([#1092](https://github.com/feathersjs/feathers/issues/1092)) ([fd3fc34](https://github.com/feathersjs/feathers/commit/fd3fc34))
-
+- Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+- Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
+- Update all dependencies to latest ([#1206](https://github.com/feathersjs/feathers/issues/1206)) ([e51e0f6](https://github.com/feathersjs/feathers/commit/e51e0f6))
+- **chore:** Properly configure and run code linter ([#1092](https://github.com/feathersjs/feathers/issues/1092)) ([fd3fc34](https://github.com/feathersjs/feathers/commit/fd3fc34))
 
 ### Features
 
-* Add TypeScript definitions ([#1275](https://github.com/feathersjs/feathers/issues/1275)) ([9dd6713](https://github.com/feathersjs/feathers/commit/9dd6713))
-* Authentication v3 core server implementation ([#1205](https://github.com/feathersjs/feathers/issues/1205)) ([1bd7591](https://github.com/feathersjs/feathers/commit/1bd7591))
-
-
-
-
+- Add TypeScript definitions ([#1275](https://github.com/feathersjs/feathers/issues/1275)) ([9dd6713](https://github.com/feathersjs/feathers/commit/9dd6713))
+- Authentication v3 core server implementation ([#1205](https://github.com/feathersjs/feathers/issues/1205)) ([1bd7591](https://github.com/feathersjs/feathers/commit/1bd7591))
 
 ## [3.7.8](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.7...@feathersjs/client@3.7.8) (2019-01-26)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 ## [3.7.7](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.6...@feathersjs/client@3.7.7) (2019-01-02)
 
-
 ### Bug Fixes
 
-* Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
-
-
-
-
+- Update adapter common tests ([#1135](https://github.com/feathersjs/feathers/issues/1135)) ([8166dda](https://github.com/feathersjs/feathers/commit/8166dda))
 
 <a name="3.7.6"></a>
-## [3.7.6](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.5...@feathersjs/client@3.7.6) (2018-12-16)
 
+## [3.7.6](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.5...@feathersjs/client@3.7.6) (2018-12-16)
 
 ### Bug Fixes
 
-* **chore:** Properly configure and run code linter ([#1092](https://github.com/feathersjs/feathers/issues/1092)) ([fd3fc34](https://github.com/feathersjs/feathers/commit/fd3fc34))
-
-
-
-
+- **chore:** Properly configure and run code linter ([#1092](https://github.com/feathersjs/feathers/issues/1092)) ([fd3fc34](https://github.com/feathersjs/feathers/commit/fd3fc34))
 
 <a name="3.7.5"></a>
+
 ## [3.7.5](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.4...@feathersjs/client@3.7.5) (2018-10-26)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 <a name="3.7.4"></a>
-## [3.7.4](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.3...@feathersjs/client@3.7.4) (2018-10-25)
 
+## [3.7.4](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.3...@feathersjs/client@3.7.4) (2018-10-25)
 
 ### Bug Fixes
 
-* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
-
-
-
-
+- Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
 
 <a name="3.7.3"></a>
+
 ## [3.7.3](https://github.com/feathersjs/feathers/compare/@feathersjs/client@3.7.2...@feathersjs/client@3.7.3) (2018-09-24)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 <a name="3.7.2"></a>
+
 ## 3.7.2 (2018-09-21)
 
 **Note:** Version bump only for package @feathersjs/client
 
-
-
-
-
 # Change Log
 
 ## [v3.7.1](https://github.com/feathersjs/client/tree/v3.7.1) (2018-09-21)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.7.0...v3.7.1)
 
 ## [v3.7.0](https://github.com/feathersjs/client/tree/v3.7.0) (2018-09-18)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.6.0...v3.7.0)
 
 **Closed issues:**
@@ -600,6 +411,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update uglifyjs-webpack-plugin to the latest version 🚀 [\#287](https://github.com/feathersjs/client/pull/287) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.6.0](https://github.com/feathersjs/client/tree/v3.6.0) (2018-09-03)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.5.6...v3.6.0)
 
 **Merged pull requests:**
@@ -609,9 +421,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update @feathersjs/errors to the latest version 🚀 [\#272](https://github.com/feathersjs/client/pull/272) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.5.6](https://github.com/feathersjs/client/tree/v3.5.6) (2018-08-13)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.5.5...v3.5.6)
 
 ## [v3.5.5](https://github.com/feathersjs/client/tree/v3.5.5) (2018-08-02)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.5.4...v3.5.5)
 
 **Closed issues:**
@@ -623,6 +437,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update ws to the latest version 🚀 [\#269](https://github.com/feathersjs/client/pull/269) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.5.4](https://github.com/feathersjs/client/tree/v3.5.4) (2018-07-19)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.5.3...v3.5.4)
 
 **Merged pull requests:**
@@ -630,6 +445,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update all dependencies to latest [\#268](https://github.com/feathersjs/client/pull/268) ([daffl](https://github.com/daffl))
 
 ## [v3.5.3](https://github.com/feathersjs/client/tree/v3.5.3) (2018-06-28)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.5.2...v3.5.3)
 
 **Merged pull requests:**
@@ -637,6 +453,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update @feathersjs/rest-client to the latest version 🚀 [\#266](https://github.com/feathersjs/client/pull/266) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.5.2](https://github.com/feathersjs/client/tree/v3.5.2) (2018-06-16)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.5.1...v3.5.2)
 
 **Closed issues:**
@@ -649,11 +466,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update shx to the latest version 🚀 [\#263](https://github.com/feathersjs/client/pull/263) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.5.1](https://github.com/feathersjs/client/tree/v3.5.1) (2018-06-03)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.5.0...v3.5.1)
 
 **Closed issues:**
 
--  'exports' is undefined [\#261](https://github.com/feathersjs/client/issues/261)
+- 'exports' is undefined [\#261](https://github.com/feathersjs/client/issues/261)
 - I got error from NuxtJS when I use FeathersJS client V3 [\#260](https://github.com/feathersjs/client/issues/260)
 
 **Merged pull requests:**
@@ -661,6 +479,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update @feathersjs/feathers to the latest version 🚀 [\#262](https://github.com/feathersjs/client/pull/262) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.5.0](https://github.com/feathersjs/client/tree/v3.5.0) (2018-05-17)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.4.5...v3.5.0)
 
 **Merged pull requests:**
@@ -668,6 +487,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update @feathersjs/rest-client to the latest version 🚀 [\#259](https://github.com/feathersjs/client/pull/259) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.4.5](https://github.com/feathersjs/client/tree/v3.4.5) (2018-05-04)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.4.4...v3.4.5)
 
 **Merged pull requests:**
@@ -675,6 +495,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update @feathersjs/feathers to the latest version 🚀 [\#258](https://github.com/feathersjs/client/pull/258) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.4.4](https://github.com/feathersjs/client/tree/v3.4.4) (2018-03-27)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.4.3...v3.4.4)
 
 **Merged pull requests:**
@@ -683,6 +504,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update @feathersjs/rest-client to the latest version 🚀 [\#256](https://github.com/feathersjs/client/pull/256) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.4.3](https://github.com/feathersjs/client/tree/v3.4.3) (2018-03-07)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.4.2...v3.4.3)
 
 **Closed issues:**
@@ -695,6 +517,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update webpack to the latest version 🚀 [\#254](https://github.com/feathersjs/client/pull/254) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.4.2](https://github.com/feathersjs/client/tree/v3.4.2) (2018-02-16)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.4.1...v3.4.2)
 
 **Closed issues:**
@@ -707,6 +530,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update @feathersjs/errors to the latest version 🚀 [\#251](https://github.com/feathersjs/client/pull/251) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.4.1](https://github.com/feathersjs/client/tree/v3.4.1) (2018-02-10)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.4.0...v3.4.1)
 
 **Merged pull requests:**
@@ -714,6 +538,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update @feathersjs/feathers to the latest version 🚀 [\#249](https://github.com/feathersjs/client/pull/249) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.4.0](https://github.com/feathersjs/client/tree/v3.4.0) (2018-02-09)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.3.2...v3.4.0)
 
 **Merged pull requests:**
@@ -722,6 +547,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update @feathersjs/socketio-client to the latest version 🚀 [\#247](https://github.com/feathersjs/client/pull/247) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.3.2](https://github.com/feathersjs/client/tree/v3.3.2) (2018-02-09)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.3.1...v3.3.2)
 
 **Merged pull requests:**
@@ -730,6 +556,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - delete slack link [\#245](https://github.com/feathersjs/client/pull/245) ([vodniciarv](https://github.com/vodniciarv))
 
 ## [v3.3.1](https://github.com/feathersjs/client/tree/v3.3.1) (2018-02-05)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.3.0...v3.3.1)
 
 **Merged pull requests:**
@@ -739,6 +566,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update node-fetch to the latest version 🚀 [\#242](https://github.com/feathersjs/client/pull/242) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.3.0](https://github.com/feathersjs/client/tree/v3.3.0) (2018-01-26)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.2.0...v3.3.0)
 
 **Merged pull requests:**
@@ -746,6 +574,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update @feathersjs/feathers to the latest version 🚀 [\#241](https://github.com/feathersjs/client/pull/241) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.2.0](https://github.com/feathersjs/client/tree/v3.2.0) (2018-01-24)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.1.2...v3.2.0)
 
 **Closed issues:**
@@ -768,6 +597,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update @feathersjs/errors to the latest version 🚀 [\#228](https://github.com/feathersjs/client/pull/228) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.1.2](https://github.com/feathersjs/client/tree/v3.1.2) (2018-01-02)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.1.1...v3.1.2)
 
 **Closed issues:**
@@ -780,6 +610,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update semistandard to the latest version 🚀 [\#226](https://github.com/feathersjs/client/pull/226) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.1.1](https://github.com/feathersjs/client/tree/v3.1.1) (2017-12-05)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.1.0...v3.1.1)
 
 **Merged pull requests:**
@@ -790,6 +621,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update @feathersjs/errors to the latest version 🚀 [\#221](https://github.com/feathersjs/client/pull/221) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v3.1.0](https://github.com/feathersjs/client/tree/v3.1.0) (2017-11-16)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.0.0...v3.1.0)
 
 **Merged pull requests:**
@@ -799,6 +631,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update package.json [\#215](https://github.com/feathersjs/client/pull/215) ([frank-dspeed](https://github.com/frank-dspeed))
 
 ## [v3.0.0](https://github.com/feathersjs/client/tree/v3.0.0) (2017-11-01)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v3.0.0-pre.1...v3.0.0)
 
 **Merged pull requests:**
@@ -806,6 +639,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update dependencies for release [\#214](https://github.com/feathersjs/client/pull/214) ([daffl](https://github.com/daffl))
 
 ## [v3.0.0-pre.1](https://github.com/feathersjs/client/tree/v3.0.0-pre.1) (2017-10-30)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v2.4.0...v3.0.0-pre.1)
 
 **Closed issues:**
@@ -832,6 +666,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update feathers-errors to the latest version 🚀 [\#197](https://github.com/feathersjs/client/pull/197) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v2.4.0](https://github.com/feathersjs/client/tree/v2.4.0) (2017-09-02)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v2.3.0...v2.4.0)
 
 **Closed issues:**
@@ -851,6 +686,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update feathers-errors to the latest version 🚀 [\#186](https://github.com/feathersjs/client/pull/186) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v2.3.0](https://github.com/feathersjs/client/tree/v2.3.0) (2017-07-04)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v2.2.0...v2.3.0)
 
 **Closed issues:**
@@ -879,6 +715,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Add IE Edge instead of IE 9 [\#166](https://github.com/feathersjs/client/pull/166) ([daffl](https://github.com/daffl))
 
 ## [v2.2.0](https://github.com/feathersjs/client/tree/v2.2.0) (2017-04-25)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v2.1.0...v2.2.0)
 
 **Merged pull requests:**
@@ -888,6 +725,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update semistandard to the latest version 🚀 [\#163](https://github.com/feathersjs/client/pull/163) ([greenkeeper[bot]](https://github.com/marketplace/greenkeeper))
 
 ## [v2.1.0](https://github.com/feathersjs/client/tree/v2.1.0) (2017-04-18)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v2.0.0...v2.1.0)
 
 **Closed issues:**
@@ -901,6 +739,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Added generics to typescript definition. [\#158](https://github.com/feathersjs/client/pull/158) ([noah79](https://github.com/noah79))
 
 ## [v2.0.0](https://github.com/feathersjs/client/tree/v2.0.0) (2017-04-11)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v2.0.0-pre.2...v2.0.0)
 
 **Closed issues:**
@@ -912,6 +751,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update feathers-rest to version 1.7.2 🚀 [\#160](https://github.com/feathersjs/client/pull/160) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v2.0.0-pre.2](https://github.com/feathersjs/client/tree/v2.0.0-pre.2) (2017-03-08)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v2.0.0-pre.1...v2.0.0-pre.2)
 
 **Closed issues:**
@@ -937,6 +777,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update ws to version 2.0.0 🚀 [\#139](https://github.com/feathersjs/client/pull/139) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v2.0.0-pre.1](https://github.com/feathersjs/client/tree/v2.0.0-pre.1) (2017-01-11)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.9.0...v2.0.0-pre.1)
 
 **Closed issues:**
@@ -948,6 +789,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Feathers Auth Update [\#131](https://github.com/feathersjs/client/pull/131) ([flyboarder](https://github.com/flyboarder))
 
 ## [v1.9.0](https://github.com/feathersjs/client/tree/v1.9.0) (2016-12-31)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.8.0...v1.9.0)
 
 **Closed issues:**
@@ -968,6 +810,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - superagent@3.1.0 breaks build 🚨 [\#121](https://github.com/feathersjs/client/pull/121) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.8.0](https://github.com/feathersjs/client/tree/v1.8.0) (2016-11-26)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.7.2...v1.8.0)
 
 **Closed issues:**
@@ -986,6 +829,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update feathers-commons to version 0.8.0 🚀 [\#111](https://github.com/feathersjs/client/pull/111) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.7.2](https://github.com/feathersjs/client/tree/v1.7.2) (2016-11-08)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.7.1...v1.7.2)
 
 **Merged pull requests:**
@@ -994,6 +838,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update feathers-socketio to version 1.4.2 🚀 [\#109](https://github.com/feathersjs/client/pull/109) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.7.1](https://github.com/feathersjs/client/tree/v1.7.1) (2016-11-02)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.7.0...v1.7.1)
 
 **Closed issues:**
@@ -1006,6 +851,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Make sure Bower and NPM version are in sync [\#107](https://github.com/feathersjs/client/pull/107) ([daffl](https://github.com/daffl))
 
 ## [v1.7.0](https://github.com/feathersjs/client/tree/v1.7.0) (2016-11-02)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.6.2...v1.7.0)
 
 **Closed issues:**
@@ -1022,6 +868,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Cross browser testing in Saucelabs [\#100](https://github.com/feathersjs/client/pull/100) ([daffl](https://github.com/daffl))
 
 ## [v1.6.2](https://github.com/feathersjs/client/tree/v1.6.2) (2016-10-22)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.6.1...v1.6.2)
 
 **Closed issues:**
@@ -1038,6 +885,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update feathers-hooks to version 1.5.8 🚀 [\#91](https://github.com/feathersjs/client/pull/91) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.6.1](https://github.com/feathersjs/client/tree/v1.6.1) (2016-09-15)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.6.0...v1.6.1)
 
 **Closed issues:**
@@ -1049,6 +897,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update feathers to version 2.0.2 🚀 [\#90](https://github.com/feathersjs/client/pull/90) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.6.0](https://github.com/feathersjs/client/tree/v1.6.0) (2016-09-09)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.5.3...v1.6.0)
 
 **Closed issues:**
@@ -1063,6 +912,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update feathers-memory to version 0.8.0 🚀 [\#88](https://github.com/feathersjs/client/pull/88) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.5.3](https://github.com/feathersjs/client/tree/v1.5.3) (2016-08-31)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.5.2...v1.5.3)
 
 **Closed issues:**
@@ -1077,6 +927,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update feathers-hooks to version 1.5.6 🚀 [\#75](https://github.com/feathersjs/client/pull/75) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.5.2](https://github.com/feathersjs/client/tree/v1.5.2) (2016-08-12)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.5.1...v1.5.2)
 
 **Closed issues:**
@@ -1089,6 +940,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update mocha to version 3.0.0 🚀 [\#72](https://github.com/feathersjs/client/pull/72) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.5.1](https://github.com/feathersjs/client/tree/v1.5.1) (2016-07-14)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.5.0...v1.5.1)
 
 **Merged pull requests:**
@@ -1096,6 +948,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update feathers-rest to version 1.4.3 🚀 [\#70](https://github.com/feathersjs/client/pull/70) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.5.0](https://github.com/feathersjs/client/tree/v1.5.0) (2016-07-05)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.4.1...v1.5.0)
 
 **Closed issues:**
@@ -1103,9 +956,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Refresh browser [\#68](https://github.com/feathersjs/client/issues/68)
 
 ## [v1.4.1](https://github.com/feathersjs/client/tree/v1.4.1) (2016-06-27)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.4.0...v1.4.1)
 
 ## [v1.4.0](https://github.com/feathersjs/client/tree/v1.4.0) (2016-06-24)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.3.2...v1.4.0)
 
 **Closed issues:**
@@ -1119,6 +974,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update feathers-authentication to version 0.7.9 🚀 [\#63](https://github.com/feathersjs/client/pull/63) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.3.2](https://github.com/feathersjs/client/tree/v1.3.2) (2016-06-09)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.3.1...v1.3.2)
 
 **Merged pull requests:**
@@ -1126,6 +982,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update feathers-authentication to version 0.7.8 🚀 [\#61](https://github.com/feathersjs/client/pull/61) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.3.1](https://github.com/feathersjs/client/tree/v1.3.1) (2016-06-04)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.3.0...v1.3.1)
 
 **Merged pull requests:**
@@ -1133,6 +990,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update feathers-rest to version 1.4.2 🚀 [\#60](https://github.com/feathersjs/client/pull/60) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.3.0](https://github.com/feathersjs/client/tree/v1.3.0) (2016-05-30)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.2.1...v1.3.0)
 
 **Merged pull requests:**
@@ -1144,6 +1002,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update feathers-primus to version 1.4.1 🚀 [\#52](https://github.com/feathersjs/client/pull/52) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.2.1](https://github.com/feathersjs/client/tree/v1.2.1) (2016-05-19)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.2.0...v1.2.1)
 
 **Closed issues:**
@@ -1156,6 +1015,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update babel-plugin-add-module-exports to version 0.2.0 🚀 [\#46](https://github.com/feathersjs/client/pull/46) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.2.0](https://github.com/feathersjs/client/tree/v1.2.0) (2016-04-29)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.1.0...v1.2.0)
 
 **Closed issues:**
@@ -1172,6 +1032,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update feathers-memory to version 0.7.0 🚀 [\#33](https://github.com/feathersjs/client/pull/33) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.1.0](https://github.com/feathersjs/client/tree/v1.1.0) (2016-04-03)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.0.0...v1.1.0)
 
 **Merged pull requests:**
@@ -1179,6 +1040,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update all dependencies 🌴 [\#31](https://github.com/feathersjs/client/pull/31) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [v1.0.0](https://github.com/feathersjs/client/tree/v1.0.0) (2016-03-14)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.0.0-pre.3...v1.0.0)
 
 **Merged pull requests:**
@@ -1186,9 +1048,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Use a gcc version that can build bcrypt [\#30](https://github.com/feathersjs/client/pull/30) ([daffl](https://github.com/daffl))
 
 ## [v1.0.0-pre.3](https://github.com/feathersjs/client/tree/v1.0.0-pre.3) (2016-03-14)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.0.0-pre.2...v1.0.0-pre.3)
 
 ## [v1.0.0-pre.2](https://github.com/feathersjs/client/tree/v1.0.0-pre.2) (2016-03-04)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.5.3...v1.0.0-pre.2)
 
 **Closed issues:**
@@ -1198,12 +1062,15 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Add documentation for using in React Native [\#10](https://github.com/feathersjs/client/issues/10)
 
 ## [v0.5.3](https://github.com/feathersjs/client/tree/v0.5.3) (2016-02-12)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v1.0.0-pre.1...v0.5.3)
 
 ## [v1.0.0-pre.1](https://github.com/feathersjs/client/tree/v1.0.0-pre.1) (2016-02-11)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.5.2...v1.0.0-pre.1)
 
 ## [v0.5.2](https://github.com/feathersjs/client/tree/v0.5.2) (2016-02-09)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.5.1...v0.5.2)
 
 **Merged pull requests:**
@@ -1212,6 +1079,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Adding nsp check [\#24](https://github.com/feathersjs/client/pull/24) ([marshallswain](https://github.com/marshallswain))
 
 ## [v0.5.1](https://github.com/feathersjs/client/tree/v0.5.1) (2016-01-15)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.5.0...v0.5.1)
 
 **Closed issues:**
@@ -1225,6 +1093,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - fix issue \#21 [\#22](https://github.com/feathersjs/client/pull/22) ([wuyuanyi135](https://github.com/wuyuanyi135))
 
 ## [v0.5.0](https://github.com/feathersjs/client/tree/v0.5.0) (2016-01-05)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.4.0...v0.5.0)
 
 **Closed issues:**
@@ -1237,6 +1106,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Adding events and querystring dependencies. [\#16](https://github.com/feathersjs/client/pull/16) ([marshallswain](https://github.com/marshallswain))
 
 ## [v0.4.0](https://github.com/feathersjs/client/tree/v0.4.0) (2015-12-11)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.3.3...v0.4.0)
 
 **Fixed bugs:**
@@ -1248,6 +1118,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - .babelrc messes with react-native [\#15](https://github.com/feathersjs/client/issues/15)
 
 ## [v0.3.3](https://github.com/feathersjs/client/tree/v0.3.3) (2015-11-27)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.3.2...v0.3.3)
 
 **Closed issues:**
@@ -1259,6 +1130,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Fix es6 build and add Steal compatibility. [\#13](https://github.com/feathersjs/client/pull/13) ([marshallswain](https://github.com/marshallswain))
 
 ## [v0.3.2](https://github.com/feathersjs/client/tree/v0.3.2) (2015-11-26)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.3.1...v0.3.2)
 
 **Closed issues:**
@@ -1266,6 +1138,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update lodash [\#11](https://github.com/feathersjs/client/issues/11)
 
 ## [v0.3.1](https://github.com/feathersjs/client/tree/v0.3.1) (2015-11-26)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.3.0...v0.3.1)
 
 **Closed issues:**
@@ -1273,6 +1146,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Working with can-connect [\#8](https://github.com/feathersjs/client/issues/8)
 
 ## [v0.3.0](https://github.com/feathersjs/client/tree/v0.3.0) (2015-11-15)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.2.1...v0.3.0)
 
 **Closed issues:**
@@ -1284,6 +1158,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Migration to ES6 and using Promises [\#9](https://github.com/feathersjs/client/pull/9) ([daffl](https://github.com/daffl))
 
 ## [v0.2.1](https://github.com/feathersjs/client/tree/v0.2.1) (2015-10-06)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.2.0...v0.2.1)
 
 **Merged pull requests:**
@@ -1291,9 +1166,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Make client depend on feathers-commons, remove arguments.js [\#6](https://github.com/feathersjs/client/pull/6) ([daffl](https://github.com/daffl))
 
 ## [v0.2.0](https://github.com/feathersjs/client/tree/v0.2.0) (2015-07-18)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.1.3...v0.2.0)
 
 ## [v0.1.3](https://github.com/feathersjs/client/tree/v0.1.3) (2015-07-06)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.1.2...v0.1.3)
 
 **Merged pull requests:**
@@ -1301,6 +1178,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Fixing requires and missing deps. [\#5](https://github.com/feathersjs/client/pull/5) ([marshallswain](https://github.com/marshallswain))
 
 ## [v0.1.2](https://github.com/feathersjs/client/tree/v0.1.2) (2015-06-22)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.1.1...v0.1.2)
 
 **Closed issues:**
@@ -1308,12 +1186,13 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Publish to NPM and Bower [\#1](https://github.com/feathersjs/client/issues/1)
 
 ## [v0.1.1](https://github.com/feathersjs/client/tree/v0.1.1) (2015-06-21)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.0.1...v0.1.1)
 
 ## [v0.0.1](https://github.com/feathersjs/client/tree/v0.0.1) (2015-06-21)
+
 [Full Changelog](https://github.com/feathersjs/client/compare/v0.1.0...v0.0.1)
 
 ## [v0.1.0](https://github.com/feathersjs/client/tree/v0.1.0) (2015-06-06)
 
-
-\* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
+\* _This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)_
