@@ -50,7 +50,7 @@ export const generate = async (ctx: ServiceGeneratorContext) =>
     .then(
       when(
         (ctx) => ctx.language === 'ts',
-        injectSource(importTemplate, after("from '@feathersjs/feathers'"), toClientFile),
+        injectSource(importTemplate, after('import authenticationClient'), toClientFile),
         injectSource(methodsTemplate, before('\nexport interface ServiceTypes'), toClientFile),
         injectSource(declarationTemplate, after('export interface ServiceTypes'), toClientFile)
       )

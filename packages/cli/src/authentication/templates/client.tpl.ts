@@ -10,7 +10,7 @@ const toClientFile = toFile<ServiceGeneratorContext>(({ lib }) => [lib, 'client'
 
 export const generate = async (ctx: ServiceGeneratorContext) =>
   generator(ctx)
-    .then(injectSource(importTemplate, after("from '@feathersjs/feathers'"), toClientFile))
+    .then(injectSource(importTemplate, after('import authenticationClient'), toClientFile))
     .then(
       when(
         ({ language }) => language === 'ts',
