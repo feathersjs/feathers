@@ -38,24 +38,6 @@ const runResolvers = async <T, H extends HookContext>(
 
 export type ResolverSetting<H extends HookContext> = Resolver<any, H> | Resolver<any, H>[]
 
-export type DataResolvers<H extends HookContext> = {
-  create: Resolver<any, H>
-  patch: Resolver<any, H>
-  update: Resolver<any, H>
-}
-
-export type ResolveAllSettings<H extends HookContext> = {
-  data?: DataResolvers<H>
-  query?: Resolver<any, H>
-  result?: Resolver<any, H>
-  dispatch?: Resolver<any, H>
-}
-
-export const DISPATCH = Symbol('@feathersjs/schema/dispatch')
-
-export const getDispatch = (value: any, fallback = value) =>
-  typeof value === 'object' && value !== null && value[DISPATCH] !== undefined ? value[DISPATCH] : fallback
-
 export const resolveQuery =
   <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) =>
   async (context: H, next?: NextFunction) => {
@@ -74,10 +56,9 @@ export const resolveQuery =
   }
 
 export const resolveData =
-  <H extends HookContext>(settings: DataResolvers<H> | Resolver<any, H>) =>
+  <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) =>
   async (context: H, next?: NextFunction) => {
-    if (context.method === 'create' || context.method === 'patch' || context.method === 'update') {
-      const resolvers = settings instanceof Resolver ? [settings] : [settings[context.method]]
+    if (context.data !== undefined) {
       const ctx = getContext(context)
       const data = context.data
 
@@ -132,6 +113,11 @@ export const resolveResult =
     }
   }
 
+export const DISPATCH = Symbol('@feathersjs/schema/dispatch')
+
+export const getDispatch = (value: any, fallback = value) =>
+  typeof value === 'object' && value !== null && value[DISPATCH] !== undefined ? value[DISPATCH] : fallback
+
 export const resolveDispatch =
   <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) =>
   async (context: H, next?: NextFunction) => {
@@ -178,6 +164,19 @@ export const resolveDispatch =
 
 export const resolveExternal = resolveDispatch
 
+export type ResolveAllSettings<H extends HookContext> = {
+  data?: {
+    create: Resolver<any, H>
+    patch: Resolver<any, H>
+    update: Resolver<any, H>
+  }
+  query?: Resolver<any, H>
+  result?: Resolver<any, H>
+  dispatch?: Resolver<any, H>
+}
+
+const dataMethods = ['create', 'update', 'patch'] as const
+
 export const resolveAll = <H extends HookContext>(map: ResolveAllSettings<H>) => {
   const middleware = []
 
@@ -192,7 +191,15 @@ export const resolveAll = <H extends HookContext>(map: ResolveAllSettings<H>) =>
   }
 
   if (map.data) {
-    middleware.push(resolveData(map.data))
+    dataMethods.forEach((name) => {
+      if (map.data[name]) {
+        const resolver = resolveData(map.data[name])
+
+        middleware.push(async (context: H, next: NextFunction) =>
+          context.method === name ? resolver(context, next) : next()
+        )
+      }
+    })
   }
 
   return compose(middleware)
