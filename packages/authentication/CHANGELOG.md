@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.32](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.31...v5.0.0-pre.32) (2022-10-26)
+
+### Bug Fixes
+
+- **authentication:** Improve logout and disconnect connection handling ([#2813](https://github.com/feathersjs/feathers/issues/2813)) ([dd77379](https://github.com/feathersjs/feathers/commit/dd77379d8bdcd32d529bef912e672639e4899823))
+
 # [5.0.0-pre.31](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.30...v5.0.0-pre.31) (2022-10-12)
 
 ### Features

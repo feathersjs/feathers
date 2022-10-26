@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.32](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.31...v5.0.0-pre.32) (2022-10-26)
+
+### Features
+
+- **cli:** Add authentication client to generated client ([#2801](https://github.com/feathersjs/feathers/issues/2801)) ([bd59f91](https://github.com/feathersjs/feathers/commit/bd59f91b45a01c2eea0c4386e567f4de5aa6ad99))
+
 # [5.0.0-pre.31](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.30...v5.0.0-pre.31) (2022-10-12)
 
 **Note:** Version bump only for package @feathersjs/authentication-client
