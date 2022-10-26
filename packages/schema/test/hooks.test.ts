@@ -166,6 +166,22 @@ describe('@feathersjs/schema/hooks', () => {
     })
   })
 
+  it('resolves data for custom methods', async () => {
+    const result = await app.service('messages').customMethod({ message: 'Hello' })
+
+    assert.deepStrictEqual(result, {
+      message: 'Hello',
+      userId: 0,
+      additionalData: 'additional data',
+      user: {
+        email: 'hello@feathersjs.com',
+        password: 'hashed',
+        id: 0,
+        name: 'hello (hello@feathersjs.com)'
+      }
+    })
+  })
+
   it('validates and converts the query', async () => {
     const otherUser = await app.service('users').create({
       email: 'helloagain@feathersjs.com',

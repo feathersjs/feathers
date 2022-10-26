@@ -1,4 +1,9 @@
-import { feathers, HookContext, Application as FeathersApplication } from '@feathersjs/feathers'
+import {
+  feathers,
+  HookContext,
+  Application as FeathersApplication,
+  defaultServiceMethods
+} from '@feathersjs/feathers'
 import { memory, MemoryService } from '@feathersjs/memory'
 import { GeneralError } from '@feathersjs/errors'
 
@@ -158,6 +163,19 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext<Applicatio
   }
 })
 
+class MessageService extends MemoryService<Message, MessageData, ServiceParams> {
+  async customMethod(data: any) {
+    return data
+  }
+}
+
+const customMethodDataResolver = resolve<any, HookContext<Application>>({
+  properties: {
+    userId: async () => 0,
+    additionalData: async () => 'additional data'
+  }
+})
+
 interface ServiceParams extends AdapterParams {
   user?: User
   error?: boolean
@@ -165,7 +183,7 @@ interface ServiceParams extends AdapterParams {
 
 type ServiceTypes = {
   users: MemoryService<User, UserData, ServiceParams>
-  messages: MemoryService<Message, MessageData, ServiceParams>
+  messages: MessageService
   paginatedMessages: MemoryService<Message, MessageData, ServiceParams>
 }
 type Application = FeathersApplication<ServiceTypes>
@@ -178,16 +196,23 @@ app.use(
     multi: ['create']
   })
 )
-app.use('messages', memory())
+app.use('messages', new MessageService(), {
+  methods: [...defaultServiceMethods, 'customMethod']
+})
 app.use('paginatedMessages', memory({ paginate: { default: 10 } }))
 
-app.service('messages').hooks([
-  resolveAll({
-    result: messageResolver,
-    query: messageQueryResolver
-  }),
-  validateQuery(messageQueryValidator)
-])
+app.service('messages').hooks({
+  around: {
+    all: [
+      resolveAll({
+        result: messageResolver,
+        query: messageQueryResolver
+      }),
+      validateQuery(messageQueryValidator)
+    ],
+    customMethod: [resolveData(customMethodDataResolver)]
+  }
+})
 
 app
   .service('paginatedMessages')
@@ -202,14 +227,7 @@ app
   .hooks([resolveDispatch(userExternalResolver), resolveResult(userResolver, secondUserResolver)])
 
 app.service('users').hooks({
-  create: [
-    validateData(userDataValidator),
-    resolveData({
-      create: userDataResolver,
-      patch: userDataResolver,
-      update: userDataResolver
-    })
-  ]
+  create: [validateData(userDataValidator), resolveData(userDataResolver)]
 })
 
 export { app }
