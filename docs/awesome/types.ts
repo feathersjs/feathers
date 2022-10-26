@@ -31,6 +31,11 @@ export type PackageOutput = {
   ownerAvatar: string
   /** github: url of the repo */
   ghLink: string
+  hasNPM: boolean
   /** npm: url of the package */
   npmLink: string
+  repository: {
+    name: string
+    directory: string
+  }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PropType } from 'vue'
 import { nFormatter } from './helpers'
-import { formatDistance } from 'date-fns'
+import _formatDistance from 'date-fns/formatDistance'
 import { PackageOutput } from './types'
 
 const intlFormat = new Intl.DateTimeFormat('en-US', {
@@ -10,7 +10,7 @@ const intlFormat = new Intl.DateTimeFormat('en-US', {
   day: 'numeric'
 })
 
-defineProps({
+const props = defineProps({
   stats: {
     type: Object as PropType<PackageOutput>,
     required: true
@@ -20,6 +20,24 @@ defineProps({
     default: false
   }
 })
+
+const formatDistance = (date: Date, baseDate: Date) => {
+  try {
+    return _formatDistance(date, new Date())
+  } catch (err) {
+    console.error(err)
+    return ''
+  }
+}
+
+const formatDate = (date: Date) => {
+  try {
+    return intlFormat.format(date)
+  } catch (err) {
+    console.error(err)
+    return ''
+  }
+}
 </script>
 
 <template>
@@ -31,17 +49,16 @@ defineProps({
       <div class="flex-1">
         <div class="flex justify-between flex-col sm:flex-row">
           <a
-            :title="stats.name"
-            :href="stats.npmLink"
+            :title="stats.hasNPM ? stats.name : stats.repository?.name"
+            :href="stats.hasNPM ? stats.npmLink : stats.ghLink"
             target="_blank"
             rel="noopener noreferrer"
             class="text-lg flex flex-wrap justify-center md:justify-normal"
           >
-            <div>{{ stats.ownerName }}</div>
-            /
-            <div>{{ stats.name.substring(stats.ownerName.length + 1) }}</div>
+            <template v-if="stats.name">{{ stats.name }}</template>
+            <template v-else>{{ stats.repository?.name }}</template>
           </a>
-          <div class="flex justify-center md:justify-normal ml-2">
+          <div v-if="stats.hasNPM" class="flex justify-center md:justify-normal ml-2">
             <div>
               <span class="text-gray-500 font-extralight">v</span>
               <span class="font-semibold">{{ stats.version }}</span>
@@ -49,7 +66,11 @@ defineProps({
           </div>
         </div>
         <div class="flex my-1 text-sm">
-          <div :title="`${stats.downloads} weekly npm downloads`" class="flex mx-2 items-center min-w-14">
+          <div
+            v-if="stats.hasNPM"
+            :title="`${stats.downloads} weekly npm downloads`"
+            class="flex mx-2 items-center min-w-14"
+          >
             <div class="i-carbon-download mr-1 w-3.5 h-3.5 text-gray-500" />
             <div class="flex-1 flex justify-center">{{ stats.downloads && nFormatter(stats.downloads) }}</div>
           </div>
@@ -58,7 +79,8 @@ defineProps({
             <div class="flex-1 flex justify-center">{{ nFormatter(stats.stars) }}</div>
           </div>
           <div
-            :title="`published on ${intlFormat.format(stats.lastPublish)}`"
+            v-if="stats.hasNPM"
+            :title="`published on ${formatDate(stats.lastPublish)}`"
             class="flex mx-2 items-center min-w-16"
           >
             <div class="i-carbon-time mr-1 w-3.5 h-3.5 text-gray-500"></div>
@@ -80,7 +102,7 @@ defineProps({
         Github
       </a>
       <a
-        v-if="stats.npmLink"
+        v-if="stats.hasNPM"
         :href="stats.npmLink"
         target="_blank"
         rel="noopener noreferrer"

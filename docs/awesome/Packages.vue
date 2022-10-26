@@ -19,6 +19,11 @@ async function getPackageStats(): Promise<PackageOutput[]> {
     .then((result) => result.data)
 
   cloudflare.forEach((stat: any) => makeDate(stat, 'lastPublish'))
+  cloudflare.forEach((stat: any) => {
+    const hasNPM = !isNaN(stat.lastPublish.getTime())
+
+    stat.hasNPM = hasNPM
+  })
 
   fetchedPackages.value = cloudflare
 
@@ -90,8 +95,6 @@ const countByCategory = computed(() => {
       })
     }).length
   })
-
-  console.log(counts)
 
   return counts
 })
@@ -211,7 +214,7 @@ const packagesToShow = computed(() => {
     <TransitionGroup name="list" tag="div">
       <package-card
         v-for="pkg in packagesToShow"
-        :key="pkg.name"
+        :key="pkg.name || `${pkg.repository?.name}/${pkg.repository?.directory}`"
         :stats="pkg"
         :is-old="pkg.lastPublish.getTime() < Date.now() - packagesAreOldIfOlderThan"
       />
