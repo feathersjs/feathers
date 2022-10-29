@@ -1,4 +1,5 @@
-import { Service, SocketService } from '@feathersjs/transport-commons/client'
+import { client } from '@feathersjs/transport-commons'
+
 import { Socket } from 'socket.io-client'
 import {
   Application,
@@ -7,7 +8,9 @@ import {
   defaultServiceMethods
 } from '@feathersjs/feathers'
 
-export { SocketService }
+const { Service } = client
+
+export type { SocketService } from '@feathersjs/transport-commons/lib/client'
 
 declare module '@feathersjs/feathers/lib/declarations' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
