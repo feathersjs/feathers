@@ -3,7 +3,7 @@ lastUpdated: false
 ---
 
 <script setup lang="ts">
-import Packages from './packages.vue'
+import Packages from './Packages.vue'
 </script>
 
 # Awesome Packages
