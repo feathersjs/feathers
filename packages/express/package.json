@@ -3,8 +3,16 @@
   "description": "Feathers Express framework bindings and REST provider",
   "version": "5.0.0-pre.32",
   "homepage": "https://feathersjs.com",
-  "main": "lib/",
-  "types": "lib/",
+  "module": "./esm/index.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    }
+  },
   "keywords": [
     "feathers",
     "feathers-plugin"

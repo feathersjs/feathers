@@ -3,6 +3,7 @@ import { omit } from 'lodash'
 import { strict as assert } from 'assert'
 import { default as _axios } from 'axios'
 import { feathers } from '@feathersjs/feathers'
+// TODO: don't import from test - remove 'exports['./test/fixture']' from package.json of @feathersjs/authentication-local
 import { createApplication } from '@feathersjs/authentication-local/test/fixture'
 import { authenticate, AuthenticationResult } from '@feathersjs/authentication'
 import * as express from '../src'

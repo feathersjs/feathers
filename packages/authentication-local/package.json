@@ -11,7 +11,8 @@
       "import": "./esm/index.js",
       "require": "./lib/index.js",
       "types": "./lib/index.d.ts"
-    }
+    },
+    "./test/fixture": "./test/fixture.ts" 
   },
   "keywords": [
     "feathers",
