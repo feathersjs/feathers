@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PackageCard from './PackageCard.vue'
 import { PackageOutput, PackagesInput } from './types'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 const packageSource = 'https://ecosystem.feathershq.workers.dev/'
 
@@ -21,7 +21,7 @@ async function getPackageStats(): Promise<PackageOutput[]> {
   fetchedPackages.value = packages
   return packages
 }
-await getPackageStats()
+onMounted(() => getPackageStats())
 const keyToSortBy = ref<'stars' | 'downloads' | 'lastPublish'>('lastPublish')
 const showCore = ref(true)
 const showOld = ref(false)
