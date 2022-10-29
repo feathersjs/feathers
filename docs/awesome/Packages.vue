@@ -2,6 +2,7 @@
 import PackageCard from './PackageCard.vue'
 import { PackageOutput, PackagesInput } from './types'
 import { ref, computed, onMounted } from 'vue'
+import { uniqBy } from './helpers'
 
 const packageSource = 'https://ecosystem.feathershq.workers.dev/'
 
@@ -13,37 +14,27 @@ const makeDate = (obj: Record<string, any>, key: string) => {
 const fetchedPackages = ref<PackageOutput[]>([])
 async function getPackageStats(): Promise<PackageOutput[]> {
   const packages = await fetch(packageSource).then((response) => response.json())
-  packages.forEach((stat: any) => makeDate(stat, 'lastPublish'))
-  packages.forEach((stat: any) => {
-    const hasNPM = !isNaN(stat.lastPublish.getTime())
-    stat.hasNPM = hasNPM
+
+  packages.forEach((pkg: any) => {
+    makeDate(pkg, 'lastPublish')
+
+    pkg.id = pkg.name || `${pkg.repository?.name}/${pkg.repository?.directory}`
+
+    const hasNPM = !isNaN(pkg.lastPublish.getTime())
+    pkg.hasNPM = hasNPM
   })
-  fetchedPackages.value = packages
-  return packages
+
+  console.log(packages)
+
+  const uniq = uniqBy(packages, (pkg) => pkg.id)
+  console.log(uniq)
+  return uniq
 }
-onMounted(() => getPackageStats())
-const keyToSortBy = ref<'stars' | 'downloads' | 'lastPublish'>('lastPublish')
-const showCore = ref(true)
-const showOld = ref(false)
-const packagesAreOldIfOlderThan = 1000 * 60 * 60 * 24 * 365 * 2.9 // 3 years
-function filterCore(pkg: PackageOutput) {
-  return pkg.ownerName !== 'feathersjs'
-}
-function filterOld(pkg: PackageOutput) {
-  return pkg.lastPublish.getTime() > Date.now() - packagesAreOldIfOlderThan
-}
-const coreCount = computed(() => {
-  return fetchedPackages.value.filter((pkg) => !filterCore(pkg)).length
+
+onMounted(async () => {
+  fetchedPackages.value = await getPackageStats()
 })
-const oldCount = computed(() => {
-  return fetchedPackages.value.filter((pkg) => !filterOld(pkg)).length
-})
-const categoriesToShow = ref<CategoryOption[]>([])
-type Category = string[]
-type CategoryOption = {
-  label: string
-  value: Category
-}
+
 const categories: CategoryOption[] = [
   { label: 'Authentication', value: ['authentication'] },
   { label: 'Authorization', value: ['authorization'] },
@@ -67,6 +58,25 @@ const categories: CategoryOption[] = [
   { label: 'Utilities', value: ['utility', 'utilities'] },
   { label: 'Validation', value: ['validation', 'validator', 'validators'] }
 ]
+
+const keyToSortBy = ref<'stars' | 'downloads' | 'lastPublish'>('lastPublish')
+
+const showCore = ref(true)
+function filterCore(pkg: PackageOutput) {
+  return pkg.ownerName === 'feathersjs'
+}
+const coreCount = computed(() => {
+  return fetchedPackages.value.filter(filterCore).length
+})
+
+const packagesAreOldIfOlderThan = 1000 * 60 * 60 * 24 * 365 * 2.9 // 3 years
+const showOld = ref(false)
+function filterOld(pkg: PackageOutput) {
+  return pkg.lastPublish.getTime() < Date.now() - packagesAreOldIfOlderThan
+}
+const oldCount = computed(() => {
+  return fetchedPackages.value.filter(filterOld).length
+})
 const countByCategory = computed(() => {
   const counts: Record<string, number> = {}
   categories.forEach((category) => {
@@ -78,31 +88,23 @@ const countByCategory = computed(() => {
   })
   return counts
 })
-// const countByCategory = computed(() => {
-//   const counts: Record<string, number> = {}
-//   categories.forEach((category) => {
-//     counts[category.toLowerCase()] = 0
-//   })
-//   fetchedPackages.value.forEach((pkg) => {
-//     if (pkg.keywords) {
-//       pkg.keywords.forEach((keyword) => {
-//         if (!categories.some((category) => category.toLowerCase() === keyword.toLowerCase())) {
-//           return
-//         }
-//         counts[keyword]++
-//       })
-//     }
-//   })
-//   return counts
-// })
+
+const categoriesToShow = ref<CategoryOption[]>([])
+type Category = string[]
+type CategoryOption = {
+  label: string
+  value: Category
+}
+
 const search = ref('')
+
 const filteredPackages = computed(() => {
   let pkgs = [...fetchedPackages.value]
   if (!showCore.value) {
-    pkgs = pkgs.filter(filterCore)
+    pkgs = pkgs.filter((pkg) => !filterCore(pkg))
   }
   if (!showOld.value) {
-    pkgs = pkgs.filter(filterOld)
+    pkgs = pkgs.filter((pkg) => !filterOld(pkg))
   }
   if (search.value) {
     const _search = search.value.toLowerCase()
@@ -126,9 +128,14 @@ const filteredPackages = computed(() => {
   }
   return pkgs
 })
+
 const packagesToShow = computed(() => {
   const key = keyToSortBy.value
-  return filteredPackages.value.sort((a, b) => {
+  const result = filteredPackages.value.sort((a, b) => {
+    if (key === 'lastPublish' && (!a.hasNPM || !b.hasNPM)) {
+      return a.hasNPM ? -1 : 1
+    }
+
     if (a[key] > b[key]) {
       return -1
     } else if (a[key] < b[key]) {
@@ -137,6 +144,8 @@ const packagesToShow = computed(() => {
       return 0
     }
   })
+  console.log(result.map((x) => x[key]))
+  return result
 })
 </script>
 
@@ -185,7 +194,7 @@ const packagesToShow = computed(() => {
     <TransitionGroup name="list" tag="div">
       <package-card
         v-for="pkg in packagesToShow"
-        :key="pkg.name || `${pkg.repository?.name}/${pkg.repository?.directory}`"
+        :key="pkg.id"
         :stats="pkg"
         :is-old="pkg.lastPublish.getTime() < Date.now() - packagesAreOldIfOlderThan"
       />

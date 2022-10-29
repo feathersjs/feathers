@@ -17,3 +17,14 @@ export function nFormatter(num: number, digits: number) {
     })
   return item ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0'
 }
+
+export const uniqBy = <T = any, V = any>(arr: T[], selector: (item: T) => V) => {
+  const map = new Map<V, T>()
+  arr.forEach((item) => {
+    const prop = selector(item)
+    console.log(prop)
+    if (!map.has(prop)) map.set(prop, item)
+  })
+  console.log(map.values())
+  return [...map.values()]
+}
