@@ -75,8 +75,12 @@ export class MemoryAdapter<T = any, D = Partial<T>, P extends Params = Params> e
     const { paginate } = this.getOptions(params)
     const { query, filters } = this.getQuery(params)
 
-    let values = _.values(this.store).filter(this.options.matcher(query))
+    let values = _.values(this.store)
     const total = values.length
+
+    if (_.keys(query).length > 0) {
+      values = values.filter(this.options.matcher(query))
+    }
 
     if (filters.$sort !== undefined) {
       values.sort(this.options.sorter(filters.$sort))
