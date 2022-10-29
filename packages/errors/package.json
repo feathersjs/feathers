@@ -43,7 +43,7 @@
     "pack": "npm pack --pack-destination ../cli/test/build",
     "compile:esm": "shx rm -rf esm/ && tsc --target es2020 --module es2020 --outDir esm/ --moduleResolution node",
     "compile:lib": "shx rm -rf lib/ && tsc --outDir lib/",
-    "compile": "npm run compile:lib && npm run compile:esm && tsc && npm run pack",
+    "compile": "npm run compile:lib && npm run compile:esm && npm run pack",
     "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "publishConfig": {
