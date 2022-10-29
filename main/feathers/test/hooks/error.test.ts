@@ -6,7 +6,6 @@ import {
   assertEquals,
   assertRejects,
   assertStrictEquals,
-  unreachable,
   assert,
   beforeEach,
   assertObjectMatch,

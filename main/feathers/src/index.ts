@@ -5,7 +5,7 @@ import { Feathers } from "./application.ts";
 import { Application } from "./declarations.ts";
 
 export function feathers<T = any, S = any>() {
-  return new Feathers<T, S>() as Application<T, S>;
+  return new Feathers<T, S>() as unknown as Application<T, S>;
 }
 
 feathers.setDebug = setDebug;
