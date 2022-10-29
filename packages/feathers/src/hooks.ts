@@ -16,11 +16,25 @@ import {
   AroundHookFunction,
   HookFunction
 } from './declarations'
-import { defaultServiceArguments, defaultServiceMethods, getHookMethods } from './service'
+import { defaultServiceArguments, getHookMethods } from './service'
 
-export function collectHooks(target: any, method: string) {
-  return target.__hooks.hooks[method] || []
+type HookType = 'before' | 'after' | 'error' | 'around'
+
+type ConvertedMap = { [type in HookType]: ReturnType<typeof convertHookData> }
+
+type HookStore = {
+  around: { [method: string]: AroundHookFunction[] }
+  before: { [method: string]: HookFunction[] }
+  after: { [method: string]: HookFunction[] }
+  error: { [method: string]: HookFunction[] }
+  collected: { [method: string]: AroundHookFunction[] }
 }
+
+type HookEnabled = { __hooks: HookStore }
+
+const types: HookType[] = ['before', 'after', 'error', 'around']
+
+const isType = (value: any): value is HookType => types.includes(value)
 
 // Converts different hook registration formats into the
 // same internal format
@@ -41,80 +55,25 @@ export function convertHookData(input: any) {
   return result
 }
 
-type HookTypes = 'before' | 'after' | 'error' | 'around'
+export function collectHooks(target: HookEnabled, method: string) {
+  const { collected, around } = target.__hooks
 
-type ConvertedMap = { [type in HookTypes]: ReturnType<typeof convertHookData> }
-
-type HookStore = {
-  around: { [method: string]: AroundHookFunction[] }
-  before: { [method: string]: HookFunction[] }
-  after: { [method: string]: HookFunction[] }
-  error: { [method: string]: HookFunction[] }
-  hooks: { [method: string]: AroundHookFunction[] }
+  return [
+    ...(around.all || []),
+    ...(around[method] || []),
+    ...(collected.all || []),
+    ...(collected[method] || [])
+  ] as AroundHookFunction[]
 }
-
-const types: HookTypes[] = ['before', 'after', 'error', 'around']
-
-const isType = (value: any): value is HookTypes => types.includes(value)
-
-const createMap = (input: HookMap<any, any>, methods: string[]) => {
-  const map = {} as ConvertedMap
-
-  Object.keys(input).forEach((type) => {
-    if (!isType(type)) {
-      throw new Error(`'${type}' is not a valid hook type`)
-    }
-
-    const data = convertHookData(input[type])
-
-    Object.keys(data).forEach((method) => {
-      if (method !== 'all' && !methods.includes(method) && !defaultServiceMethods.includes(method)) {
-        throw new Error(`'${method}' is not a valid hook method`)
-      }
-    })
-
-    map[type] = data
-  })
-
-  return map
-}
-
-const updateStore = (store: HookStore, map: ConvertedMap) =>
-  Object.keys(store.hooks).forEach((method) => {
-    Object.keys(map).forEach((key) => {
-      const type = key as HookTypes
-      const allHooks = map[type].all || []
-      const methodHooks = map[type][method] || []
-
-      if (allHooks.length || methodHooks.length) {
-        const list = [...allHooks, ...methodHooks] as any
-        const hooks = (store[type][method] ||= [])
-
-        hooks.push(...list)
-      }
-    })
-
-    const collected = collect({
-      before: store.before[method] || [],
-      after: store.after[method] || [],
-      error: store.error[method] || []
-    })
-
-    store.hooks[method] = [...(store.around[method] || []), collected]
-  })
 
 // Add `.hooks` functionality to an object
-export function enableHooks(object: any, methods: string[] = defaultServiceMethods) {
+export function enableHooks(object: any) {
   const store: HookStore = {
     around: {},
     before: {},
     after: {},
     error: {},
-    hooks: {}
-  }
-
-  for (const method of methods) {
-    store.hooks[method] = []
+    collected: {}
   }
 
   Object.defineProperty(object, '__hooks', {
@@ -123,11 +82,37 @@ export function enableHooks(object: any, methods: string[] = defaultServiceMetho
     writable: true
   })
 
-  return function registerHooks(this: any, input: HookMap<any, any>) {
+  return function registerHooks(this: HookEnabled, input: HookMap<any, any>) {
     const store = this.__hooks
-    const map = createMap(input, methods)
+    const map = Object.keys(input).reduce((map, type) => {
+      if (!isType(type)) {
+        throw new Error(`'${type}' is not a valid hook type`)
+      }
 
-    updateStore(store, map)
+      map[type] = convertHookData(input[type])
+
+      return map
+    }, {} as ConvertedMap)
+    const types = Object.keys(map) as HookType[]
+
+    types.forEach((type) =>
+      Object.keys(map[type]).forEach((method) => {
+        const mapHooks = map[type][method]
+        const storeHooks: any[] = (store[type][method] ||= [])
+
+        storeHooks.push(...mapHooks)
+
+        if (store.before[method] || store.after[method] || store.error[method]) {
+          const collected = collect({
+            before: store.before[method] || [],
+            after: store.after[method] || [],
+            error: store.error[method] || []
+          })
+
+          store.collected[method] = [collected]
+        }
+      })
+    )
 
     return this
   }
@@ -150,7 +135,7 @@ export class FeathersHookManager<A> extends HookManager {
   }
 
   collectMiddleware(self: any, args: any[]): Middleware[] {
-    const appHooks = collectHooks(this.app, this.method)
+    const appHooks = collectHooks(this.app as any as HookEnabled, this.method)
     const middleware = super.collectMiddleware(self, args)
     const methodHooks = collectHooks(self, this.method)
 
@@ -200,7 +185,7 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
     return res
   }, {} as BaseHookMap)
 
-  const registerHooks = enableHooks(service, hookMethods)
+  const registerHooks = enableHooks(service)
 
   hooks(service, serviceMethodHooks)
 

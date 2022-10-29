@@ -9,9 +9,9 @@ import { disconnect, params, authentication, FeathersSocket } from './middleware
 const debug = createDebug('@feathersjs/socketio')
 
 declare module '@feathersjs/feathers/lib/declarations' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Application<Services, Settings> {
-    // eslint-disable-line
-    io: Server
+    io: any
     listen(options: any): Promise<http.Server>
   }
 }

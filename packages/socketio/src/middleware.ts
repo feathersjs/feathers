@@ -12,7 +12,7 @@ export interface FeathersSocket extends Socket {
 
 export const disconnect =
   (app: Application, getParams: ParamsGetter) => (socket: FeathersSocket, next: NextFunction) => {
-    socket.once('disconnect', () => app.emit('disconnect', getParams(socket)))
+    socket.on('disconnect', () => app.emit('disconnect', getParams(socket)))
     next()
   }
 

@@ -140,12 +140,12 @@ export class AuthenticationClient {
   reAuthenticate(force = false, strategy?: string): Promise<AuthenticationResult> {
     // Either returns the authentication state or
     // tries to re-authenticate with the stored JWT and strategy
-    const authPromise = this.app.get('authentication')
+    let authPromise = this.app.get('authentication')
 
     if (!authPromise || force === true) {
-      return this.getAccessToken().then((accessToken) => {
+      authPromise = this.getAccessToken().then((accessToken) => {
         if (!accessToken) {
-          throw new NotAuthenticated('No accessToken found in storage')
+          return this.handleError(new NotAuthenticated('No accessToken found in storage'), 'authenticate')
         }
 
         return this.authenticate({
@@ -153,6 +153,7 @@ export class AuthenticationClient {
           accessToken
         })
       })
+      this.app.set('authentication', authPromise)
     }
 
     return authPromise

@@ -20,23 +20,45 @@ export type ResolverConverter<T, C> = (
 
 export interface ResolverConfig<T, C> {
   schema?: Schema<T>
+  /**
+   * @deprecated Use the `validateData` and `validateQuery` hooks explicitly instead
+   */
   validate?: 'before' | 'after' | false
+  /**
+   * The properties to resolve
+   */
   properties: PropertyResolverMap<T, C>
+  /**
+   * A converter function that is run before property resolvers
+   * to transform the initial data into a different format.
+   */
   converter?: ResolverConverter<T, C>
 }
 
 export interface ResolverStatus<T, C> {
   path: string[]
   originalContext?: C
-  properties?: string[]
+  properties?: (keyof T)[]
   stack: PropertyResolver<T, any, C>[]
 }
 
 export class Resolver<T, C> {
   readonly _type!: T
+  protected propertyNames: string[]
 
-  constructor(public options: ResolverConfig<T, C>) {}
+  constructor(public options: ResolverConfig<T, C>) {
+    this.propertyNames = Object.keys(options.properties)
+  }
 
+  /**
+   * Resolve a single property
+   *
+   * @param name The name of the property
+   * @param data The current data
+   * @param context The current resolver context
+   * @param status The current resolver status
+   * @returns The resolver property
+   */
   async resolveProperty<D, K extends keyof T>(
     name: K,
     data: D,
@@ -74,12 +96,17 @@ export class Resolver<T, C> {
   async resolve<D>(_data: D, context: C, status?: Partial<ResolverStatus<T, C>>): Promise<T> {
     const { properties: resolvers, schema, validate } = this.options
     const payload = await this.convert(_data, context, status)
+
+    if (!Array.isArray(status?.properties) && this.propertyNames.length === 0) {
+      return payload as T
+    }
+
     const data = schema && validate === 'before' ? await schema.validate(payload) : payload
     const propertyList = (
       Array.isArray(status?.properties)
         ? status?.properties
         : // By default get all data and resolver keys but remove duplicates
-          [...new Set(Object.keys(data).concat(Object.keys(resolvers)))]
+          [...new Set(Object.keys(data).concat(this.propertyNames))]
     ) as (keyof T)[]
 
     const result: any = {}
@@ -122,6 +149,12 @@ export class Resolver<T, C> {
   }
 }
 
+/**
+ * Create a new resolver with `<DataType, ContextType>`.
+ *
+ * @param options The configuration for the returned resolver
+ * @returns A new resolver instance
+ */
 export function resolve<T, C>(options: ResolverConfig<T, C>) {
   return new Resolver<T, C>(options)
 }

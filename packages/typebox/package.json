@@ -1,0 +1,68 @@
+{
+  "name": "@feathersjs/typebox",
+  "description": "TypeBox integration for @feathersjs/schema",
+  "version": "5.0.0-pre.32",
+  "homepage": "https://feathersjs.com",
+  "main": "lib/",
+  "types": "lib/",
+  "keywords": [
+    "feathers",
+    "feathers-plugin"
+  ],
+  "license": "MIT",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/daffl"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git",
+    "directory": "packages/schema"
+  },
+  "author": {
+    "name": "Feathers contributors",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "engines": {
+    "node": ">= 12"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "*.d.ts",
+    "*.js"
+  ],
+  "scripts": {
+    "prepublish": "npm run compile",
+    "pack": "npm pack --pack-destination ../cli/test/build",
+    "compile": "shx rm -rf lib/ && tsc && npm run pack",
+    "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
+    "test": "npm run compile && npm run mocha"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@feathersjs/schema": "^5.0.0-pre.32",
+    "@sinclair/typebox": "^0.24.44"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.8.2",
+    "mocha": "^10.0.0",
+    "shx": "^0.3.4",
+    "typescript": "^4.8.4"
+  },
+  "gitHead": "b405e205fc6d9fbd42b42c7a3f30ea4bf33d121d"
+}

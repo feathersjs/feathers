@@ -1,87 +1,49 @@
-import defaultsDeep from 'lodash/defaultsDeep'
-import each from 'lodash/each'
-import omit from 'lodash/omit'
-import { createDebug } from '@feathersjs/commons'
 import { Application } from '@feathersjs/feathers'
+import { createDebug } from '@feathersjs/commons'
+import { resolveDispatch } from '@feathersjs/schema'
+
 import { OAuthStrategy, OAuthProfile } from './strategy'
-import { default as setupExpress } from './express'
-import { OauthSetupSettings, getDefaultSettings } from './utils'
+import { redirectHook, OAuthService } from './service'
+import { getGrantConfig, getServiceOptions, OauthSetupSettings } from './utils'
 
 const debug = createDebug('@feathersjs/authentication-oauth')
 
 export { OauthSetupSettings, OAuthStrategy, OAuthProfile }
 
-export const setup = (options: OauthSetupSettings) => (app: Application) => {
-  const service = app.defaultAuthentication ? app.defaultAuthentication(options.authService) : null
-
-  if (!service) {
-    throw new Error(
-      'An authentication service must exist before registering @feathersjs/authentication-oauth'
-    )
-  }
-
-  const { oauth } = service.configuration
-
-  if (!oauth) {
-    debug('No oauth configuration found in authentication configuration. Skipping oAuth setup.')
-    return
-  }
-
-  const { strategyNames } = service
-
-  // Set up all the defaults
-  const port = app.get('port')
-  let host = app.get('host')
-  let protocol = 'https'
-
-  // Development environments commonly run on HTTP with an extended port
-  if (app.get('env') === 'development') {
-    protocol = 'http'
-    if (String(port) !== '80') {
-      host += `:${port}`
-    }
-  }
-
-  const grant = defaultsDeep(
-    {},
-    omit(oauth, ['redirect', 'origins']),
-    {
-      defaults: {
-        prefix: '/oauth',
-        origin: `${protocol}://${host}`,
-        transport: 'session',
-        response: ['tokens', 'raw', 'profile']
-      }
-    }
-  )
-
-  const getUrl = (url: string) => {
-    const { defaults } = grant
-    return `${defaults.origin}${defaults.prefix}/${url}`
-  }
-
-  each(grant, (value, name) => {
-    if (name !== 'defaults') {
-      value.callback = value.callback || getUrl(`${name}/authenticate`)
-      value.redirect_uri = value.redirect_uri || getUrl(`${name}/callback`)
-
-      if (!strategyNames.includes(name)) {
-        debug(`Registering oAuth default strategy for '${name}'`)
-        service.register(name, new OAuthStrategy())
-      }
-    }
-  })
-
-  app.set('grant', grant)
-}
-
-export const express =
+export const oauth =
   (settings: Partial<OauthSetupSettings> = {}) =>
   (app: Application) => {
-    const options = getDefaultSettings(app, settings)
+    const authService = app.defaultAuthentication ? app.defaultAuthentication(settings.authService) : null
 
-    app.configure(setup(options))
-    app.configure(setupExpress(options))
+    if (!authService) {
+      throw new Error(
+        'An authentication service must exist before registering @feathersjs/authentication-oauth'
+      )
+    }
+
+    if (!authService.configuration.oauth) {
+      debug('No oauth configuration found in authentication configuration. Skipping oAuth setup.')
+      return
+    }
+
+    const oauthOptions = {
+      linkStrategy: 'jwt',
+      ...settings
+    }
+
+    const grantConfig = getGrantConfig(authService)
+    const serviceOptions = getServiceOptions(authService, oauthOptions)
+    const servicePath = `${grantConfig.defaults.prefix || 'oauth'}/:provider`
+
+    app.use(servicePath, new OAuthService(authService, oauthOptions), serviceOptions)
+
+    const oauthService = app.service(servicePath)
+
+    oauthService.hooks({
+      around: { all: [resolveDispatch(), redirectHook()] }
+    })
+
+    if (typeof oauthService.publish === 'function') {
+      app.service(servicePath).publish(() => null)
+    }
   }
-
-export const expressOauth = express

@@ -3,13 +3,13 @@ import { compose } from '@feathersjs/hooks'
 import { Resolver, ResolverStatus } from '../resolver'
 
 const getContext = <H extends HookContext>(context: H) => {
-  return {
+  return Object.freeze({
     ...context,
-    params: {
+    params: Object.freeze({
       ...context.params,
-      query: {}
-    }
-  }
+      query: Object.freeze({})
+    })
+  })
 }
 
 const getData = <H extends HookContext>(context: H) => {
@@ -38,24 +38,6 @@ const runResolvers = async <T, H extends HookContext>(
 
 export type ResolverSetting<H extends HookContext> = Resolver<any, H> | Resolver<any, H>[]
 
-export type DataResolvers<H extends HookContext> = {
-  create: Resolver<any, H>
-  patch: Resolver<any, H>
-  update: Resolver<any, H>
-}
-
-export type ResolveAllSettings<H extends HookContext> = {
-  data?: DataResolvers<H>
-  query?: Resolver<any, H>
-  result?: Resolver<any, H>
-  dispatch?: Resolver<any, H>
-}
-
-export const DISPATCH = Symbol('@feathersjs/schema/dispatch')
-
-export const getDispatch = (value: any) =>
-  typeof value === 'object' && value !== null && value[DISPATCH] !== undefined ? value[DISPATCH] : value
-
 export const resolveQuery =
   <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) =>
   async (context: H, next?: NextFunction) => {
@@ -74,10 +56,9 @@ export const resolveQuery =
   }
 
 export const resolveData =
-  <H extends HookContext>(settings: DataResolvers<H> | Resolver<any, H>) =>
+  <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) =>
   async (context: H, next?: NextFunction) => {
-    if (context.method === 'create' || context.method === 'patch' || context.method === 'update') {
-      const resolvers = settings instanceof Resolver ? [settings] : [settings[context.method]]
+    if (context.data !== undefined) {
       const ctx = getContext(context)
       const data = context.data
 
@@ -132,6 +113,11 @@ export const resolveResult =
     }
   }
 
+export const DISPATCH = Symbol('@feathersjs/schema/dispatch')
+
+export const getDispatch = (value: any, fallback = value) =>
+  typeof value === 'object' && value !== null && value[DISPATCH] !== undefined ? value[DISPATCH] : fallback
+
 export const resolveDispatch =
   <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) =>
   async (context: H, next?: NextFunction) => {
@@ -140,35 +126,56 @@ export const resolveDispatch =
     }
 
     const ctx = getContext(context)
-    const status = context.params.resolve
-    const { isPaginated, data } = getData(context)
-    const resolveAndGetDispatch = async (current: any) => {
-      const resolved: any = await runResolvers(resolvers, current, ctx, status)
+    const existingDispatch = getDispatch(context.result, null)
 
-      return Object.keys(resolved).reduce((res, key) => {
-        res[key] = getDispatch(resolved[key])
+    if (existingDispatch !== null) {
+      context.dispatch = existingDispatch
+    } else {
+      const status = context.params.resolve
+      const { isPaginated, data } = getData(context)
+      const resolveAndGetDispatch = async (current: any) => {
+        const resolved: any = await runResolvers(resolvers, current, ctx, status)
 
-        return res
-      }, {} as any)
+        return Object.keys(resolved).reduce((res, key) => {
+          res[key] = getDispatch(resolved[key])
+
+          return res
+        }, {} as any)
+      }
+
+      const result = await (Array.isArray(data)
+        ? Promise.all(data.map(resolveAndGetDispatch))
+        : resolveAndGetDispatch(data))
+      const dispatch = isPaginated
+        ? {
+            ...context.result,
+            data: result
+          }
+        : result
+
+      context.dispatch = dispatch
+      Object.defineProperty(context.result, DISPATCH, {
+        value: dispatch,
+        enumerable: false,
+        configurable: false
+      })
     }
-
-    const result = await (Array.isArray(data)
-      ? Promise.all(data.map(resolveAndGetDispatch))
-      : resolveAndGetDispatch(data))
-    const dispatch = isPaginated
-      ? {
-          ...context.result,
-          data: result
-        }
-      : result
-
-    context.dispatch = dispatch
-    Object.defineProperty(context.result, DISPATCH, {
-      value: dispatch,
-      enumerable: false,
-      configurable: false
-    })
   }
+
+export const resolveExternal = resolveDispatch
+
+export type ResolveAllSettings<H extends HookContext> = {
+  data?: {
+    create: Resolver<any, H>
+    patch: Resolver<any, H>
+    update: Resolver<any, H>
+  }
+  query?: Resolver<any, H>
+  result?: Resolver<any, H>
+  dispatch?: Resolver<any, H>
+}
+
+const dataMethods = ['create', 'update', 'patch'] as const
 
 export const resolveAll = <H extends HookContext>(map: ResolveAllSettings<H>) => {
   const middleware = []
@@ -184,7 +191,15 @@ export const resolveAll = <H extends HookContext>(map: ResolveAllSettings<H>) =>
   }
 
   if (map.data) {
-    middleware.push(resolveData(map.data))
+    dataMethods.forEach((name) => {
+      if (map.data[name]) {
+        const resolver = resolveData(map.data[name])
+
+        middleware.push(async (context: H, next: NextFunction) =>
+          context.method === name ? resolver(context, next) : next()
+        )
+      }
+    })
   }
 
   return compose(middleware)

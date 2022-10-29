@@ -18,6 +18,7 @@ export interface HashPasswordOptions {
  * @param field
  * @param options
  * @returns
+ * @see https://dove.feathersjs.com/api/authentication/local.html#passwordhash
  */
 export default function hashPassword(field: string, options: HashPasswordOptions = {}) {
   if (!field) {

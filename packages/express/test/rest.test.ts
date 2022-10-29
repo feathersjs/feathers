@@ -4,7 +4,7 @@ import axios, { AxiosRequestConfig } from 'axios'
 
 import { Server } from 'http'
 import { Request, Response, NextFunction } from 'express'
-import { feathers, HookContext, Id, Params } from '@feathersjs/feathers'
+import { ApplicationHookMap, feathers, HookContext, Id, Params } from '@feathersjs/feathers'
 import { Service, restTests } from '@feathersjs/tests'
 import { BadRequest } from '@feathersjs/errors'
 
@@ -87,6 +87,7 @@ describe('@feathersjs/express/rest provider', () => {
 
     before(async () => {
       app = expressify(feathers())
+        .use(express.cors())
         .use(express.json())
         .configure(rest(express.formatter))
         .use('codes', {
@@ -100,6 +101,21 @@ describe('@feathersjs/express/rest provider', () => {
         })
         .use('/', new Service())
         .use('todo', new Service())
+
+      app.hooks({
+        setup: [
+          async (context, next) => {
+            assert.ok(context.app)
+            await next()
+          }
+        ],
+        teardown: [
+          async (context, next) => {
+            assert.ok(context.app)
+            await next()
+          }
+        ]
+      } as ApplicationHookMap<express.Application>)
 
       await app.listen(4777, () => app.use('tasks', new Service()))
     })
@@ -290,10 +306,7 @@ describe('@feathersjs/express/rest provider', () => {
 
       const app = expressify(feathers())
         .use(function (req: Request, _res: Response, next: NextFunction) {
-          req.feathers = {
-            ...req.feathers,
-            test: 'Happy'
-          }
+          req.feathers.test = 'Happy'
           next()
         })
         .configure(rest(express.formatter))

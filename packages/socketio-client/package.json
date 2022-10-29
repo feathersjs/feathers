@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/socketio-client",
   "description": "The client for Socket.io through feathers-socketio",
-  "version": "5.0.0-pre.23",
+  "version": "5.0.0-pre.32",
   "homepage": "https://feathersjs.com",
   "module": "./esm/index.js",
   "main": "./lib/index.js",
@@ -41,9 +41,10 @@
   },
   "scripts": {
     "prepublish": "npm run compile",
+    "pack": "npm pack --pack-destination ../cli/test/build",
     "compile:esm": "shx rm -rf esm/ && tsc --target es2020 --module es2020 --outDir esm/ --moduleResolution node",
     "compile:lib": "shx rm -rf lib/ && tsc --outDir lib/",
-    "compile": "npm run compile:lib && npm run compile:esm",
+    "compile": "npm run compile:lib && npm run compile:esm && tsc && npm run pack",
     "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
     "test": "npm run mocha"
   },
@@ -64,21 +65,21 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/transport-commons": "^5.0.0-pre.23"
+    "@feathersjs/transport-commons": "^5.0.0-pre.32"
   },
   "devDependencies": {
-    "@feathersjs/commons": "^5.0.0-pre.23",
-    "@feathersjs/feathers": "^5.0.0-pre.23",
-    "@feathersjs/memory": "^5.0.0-pre.23",
-    "@feathersjs/socketio": "^5.0.0-pre.23",
-    "@feathersjs/tests": "^5.0.0-pre.23",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "^17.0.40",
+    "@feathersjs/commons": "^5.0.0-pre.32",
+    "@feathersjs/feathers": "^5.0.0-pre.32",
+    "@feathersjs/memory": "^5.0.0-pre.32",
+    "@feathersjs/socketio": "^5.0.0-pre.32",
+    "@feathersjs/tests": "^5.0.0-pre.32",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.8.2",
     "mocha": "^10.0.0",
     "shx": "^0.3.4",
-    "socket.io-client": "^4.5.1",
-    "ts-node": "^10.8.1",
-    "typescript": "^4.7.3"
+    "socket.io-client": "^4.5.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
   },
-  "gitHead": "a60910bd730b88053ca6648337095f1ca1e3b39f"
+  "gitHead": "b405e205fc6d9fbd42b42c7a3f30ea4bf33d121d"
 }

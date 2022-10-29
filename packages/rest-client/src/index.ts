@@ -1,4 +1,4 @@
-import { Application, defaultServiceMethods } from '@feathersjs/feathers'
+import { Application, TransportConnection, defaultServiceMethods } from '@feathersjs/feathers'
 
 import { Base } from './base'
 import { AxiosClient } from './axios'
@@ -13,34 +13,21 @@ const transports = {
   axios: AxiosClient
 }
 
-interface HandlerResult extends Function {
-  /**
-   * initialize service
-   */
-  (): void
+export type Handler<ServiceTypes> = (
+  connection: any,
+  options?: any,
+  Service?: any
+) => TransportConnection<ServiceTypes>
 
-  /**
-   * Transport Service
-   */
-  Service: any
-
-  /**
-   * default Service
-   */
-  service: any
-}
-
-export type Handler = (connection: any, options?: any, Service?: any) => HandlerResult
-
-export interface Transport {
-  superagent: Handler
-  fetch: Handler
-  axios: Handler
+export interface Transport<ServiceTypes> {
+  superagent: Handler<ServiceTypes>
+  fetch: Handler<ServiceTypes>
+  axios: Handler<ServiceTypes>
 }
 
 export type RestService<T = any, D = Partial<any>> = Base<T, D>
 
-export default function restClient(base = '') {
+export default function restClient<ServiceTypes = any>(base = '') {
   const result: any = { Base }
 
   Object.keys(transports).forEach((key) => {
@@ -81,7 +68,7 @@ export default function restClient(base = '') {
     }
   })
 
-  return result as Transport
+  return result as Transport<ServiceTypes>
 }
 
 if (typeof module !== 'undefined') {

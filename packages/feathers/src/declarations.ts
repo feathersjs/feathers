@@ -6,6 +6,9 @@ type OptionalPick<T, K extends PropertyKey> = Pick<T, Extract<keyof T, K>>
 
 export type { NextFunction }
 
+/**
+ * The object returned from `.find` call by standard database adapters
+ */
 export interface Paginated<T> {
   total: number
   limit: number
@@ -13,11 +16,41 @@ export interface Paginated<T> {
   data: T[]
 }
 
+/**
+ * Options that can be passed when registering a service via `app.use(name, service, options)`
+ */
 export interface ServiceOptions {
-  events?: string[]
-  methods?: string[]
-  serviceEvents?: string[]
+  events?: string[] | readonly string[]
+  methods?: string[] | readonly string[]
+  serviceEvents?: string[] | readonly string[]
   routeParams?: { [key: string]: any }
+}
+
+export interface ClientService<
+  Result = any,
+  Data = Partial<Result>,
+  PatchData = Data,
+  FindResult = Paginated<Result>,
+  P = Params
+> {
+  find(params?: P): Promise<FindResult>
+
+  get(id: Id, params?: P): Promise<Result>
+
+  create(data: Data[], params?: P): Promise<Result[]>
+  create(data: Data, params?: P): Promise<Result>
+
+  update(id: Id, data: Data, params?: P): Promise<Result>
+  update(id: NullableId, data: Data, params?: P): Promise<Result | Result[]>
+  update(id: null, data: Data, params?: P): Promise<Result[]>
+
+  patch(id: NullableId, data: PatchData, params?: P): Promise<Result | Result[]>
+  patch(id: Id, data: PatchData, params?: P): Promise<Result>
+  patch(id: null, data: PatchData, params?: P): Promise<Result[]>
+
+  remove(id: NullableId, params?: P): Promise<Result | Result[]>
+  remove(id: Id, params?: P): Promise<Result>
+  remove(id: null, params?: P): Promise<Result[]>
 }
 
 export interface ServiceMethods<T = any, D = Partial<T>, P = Params> {
@@ -89,6 +122,28 @@ export type CustomMethods<T extends { [key: string]: [any, any] }> = {
   [K in keyof T]: (data: T[K][0], params?: Params) => Promise<T[K][1]>
 }
 
+/**
+ * An interface usually use by transport clients that represents a e.g. HTTP or websocket
+ * connection that can be configured on the application.
+ */
+export type TransportConnection<Services = any> = {
+  (app: Application<Services>): void
+  Service: any
+  service: <L extends keyof Services & string>(
+    name: L
+  ) => keyof any extends keyof Services ? ServiceInterface : Services[L]
+}
+
+/**
+ * A real-time connection object
+ */
+export interface RealTimeConnection {
+  [key: string]: any
+}
+
+/**
+ * The interface for a custom service method. Can e.g. be used to type client side services.
+ */
 export type CustomMethod<T = any, R = T, P extends Params = Params> = (data: T, params?: P) => Promise<R>
 
 export type ServiceMixin<A> = (service: FeathersService<A>, path: string, options: ServiceOptions) => void
@@ -173,6 +228,15 @@ export interface FeathersApplication<Services = any, Settings = any> {
     service: keyof any extends keyof Services ? ServiceInterface | Application : Services[L],
     options?: ServiceOptions
   ): this
+
+  /**
+   * Unregister an existing service.
+   *
+   * @param path The name of the service to unregister
+   */
+  unuse<L extends keyof Services & string>(
+    path: L
+  ): Promise<FeathersService<this, keyof any extends keyof Services ? Service : Services[L]>>
 
   /**
    * Get the Feathers service instance for a path. This will

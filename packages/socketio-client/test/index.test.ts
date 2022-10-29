@@ -26,7 +26,7 @@ describe('@feathersjs/socketio-client', () => {
     server = await createServer().listen(9988)
     socket = io('http://localhost:9988')
 
-    const connection = socketio(socket)
+    const connection = socketio<ServiceTypes>(socket)
 
     app.configure(connection)
     app.use('todos', connection.service('todos'), {
@@ -86,6 +86,10 @@ describe('@feathersjs/socketio-client', () => {
     } catch (e: any) {
       assert.strictEqual(e.message, "Service 'not/me' not found")
     }
+  })
+
+  it('is event target compatible', async () => {
+    app.service('todo').addEventListener('created', (data: any) => assert.ok(data))
   })
 
   it('calls .customMethod', async () => {

@@ -96,7 +96,7 @@ describe('@feathersjs/authentication-client', () => {
     }
   })
 
-  it('authenticate, authentication hook, login event', () => {
+  it('authenticate, authentication hook, login event', async () => {
     const data = {
       strategy: 'testing'
     }
@@ -107,58 +107,44 @@ describe('@feathersjs/authentication-client', () => {
 
     app.authenticate(data)
 
-    return promise
-      .then((result) => {
-        assert.deepStrictEqual(result, {
-          accessToken,
-          data,
-          user
-        })
+    const result = await promise
 
-        return app.authentication.getAccessToken()
-      })
-      .then((at) => {
-        assert.strictEqual(at, accessToken, 'Set accessToken in storage')
+    assert.deepStrictEqual(result, {
+      accessToken,
+      data,
+      user
+    })
 
-        return Promise.resolve(app.get('storage').getItem('feathers-jwt'))
-      })
-      .then((at) => {
-        assert.strictEqual(at, accessToken, 'Set accessToken in storage')
+    let at = await app.authentication.getAccessToken()
 
-        return app.service('dummy').find()
-      })
-      .then((result) => {
-        assert.deepStrictEqual(result.accessToken, accessToken)
-        assert.deepStrictEqual(result.user, user)
-      })
+    assert.strictEqual(at, accessToken, 'Set accessToken in storage')
+
+    at = await Promise.resolve(app.get('storage').getItem('feathers-jwt'))
+
+    assert.strictEqual(at, accessToken, 'Set accessToken in storage')
+
+    const found = await app.service('dummy').find()
+    assert.deepStrictEqual(found.accessToken, accessToken)
+    assert.deepStrictEqual(found.user, user)
   })
 
-  it('logout event', () => {
+  it('logout event', async () => {
     const promise = new Promise((resolve) => app.once('logout', resolve))
 
-    app
-      .authenticate({
-        strategy: 'testing'
-      })
-      .then(() => app.logout())
+    app.authenticate({ strategy: 'testing' }).then(() => app.logout())
 
-    return promise.then((result) => {
-      assert.deepStrictEqual(result, { id: null })
-    })
+    const result = await promise
+
+    assert.deepStrictEqual(result, { id: null })
   })
 
-  it('does not remove AccessToken on other errors', () => {
-    return app
-      .authenticate({
-        strategy: 'testing'
-      })
-      .then(() =>
-        app.authenticate({
-          strategy: 'testing'
-        })
-      )
-      .then(() => app.authentication.getAccessToken())
-      .then((at) => assert.strictEqual(at, accessToken))
+  it('does not remove AccessToken on other errors', async () => {
+    await app.authenticate({ strategy: 'testing' })
+    await app.authenticate({ strategy: 'testing' })
+
+    const at = await app.authentication.getAccessToken()
+
+    assert.strictEqual(at, accessToken)
   })
 
   it('logout when not logged in without error', async () => {
@@ -168,59 +154,62 @@ describe('@feathersjs/authentication-client', () => {
   })
 
   describe('reauthenticate', () => {
-    it('fails when no token in storage', () => {
-      return app.authentication
-        .reAuthenticate()
-        .then(() => {
-          assert.fail('Should never get here')
-        })
-        .catch((error) => {
-          assert.strictEqual(error.message, 'No accessToken found in storage')
-        })
+    it('fails when no token in storage and resets authentication state', async () => {
+      await assert.rejects(() => app.authentication.reAuthenticate(), {
+        message: 'No accessToken found in storage'
+      })
+      assert.ok(!app.get('authentication'), 'Reset authentication')
     })
 
-    it('reauthenticates when token is in storage', () => {
+    it('reauthenticates when token is in storage', async () => {
       const data = {
         strategy: 'testing'
       }
 
-      app
-        .authenticate(data)
-        .then((result) => {
-          assert.deepStrictEqual(result, {
-            accessToken,
-            data,
-            user
-          })
+      const result = await app.authenticate(data)
 
-          return result
-        })
-        .then(() => app.authentication.reAuthenticate())
-        .then(() => app.authentication.reset())
-        .then(() => {
-          return Promise.resolve(app.get('storage').getItem('feathers-jwt'))
-        })
-        .then((at) => {
-          assert.strictEqual(at, accessToken, 'Set accessToken in storage')
+      assert.deepStrictEqual(result, {
+        accessToken,
+        data,
+        user
+      })
+      await app.authentication.reAuthenticate()
+      await app.authentication.reset()
 
-          return app.authentication.reAuthenticate()
-        })
-        .then((at) => {
-          assert.deepStrictEqual(at, {
-            accessToken,
-            data: { strategy: 'jwt', accessToken: 'testing' },
-            user
-          })
+      let at = await Promise.resolve(app.get('storage').getItem('feathers-jwt'))
 
-          return app.logout()
-        })
-        .then(() => {
-          return Promise.resolve(app.get('storage').getItem('feathers-jwt'))
-        })
-        .then((at) => {
-          assert.ok(!at)
-          assert.ok(!app.get('authentication'))
-        })
+      assert.strictEqual(at, accessToken, 'Set accessToken in storage')
+
+      at = await app.authentication.reAuthenticate()
+
+      assert.deepStrictEqual(at, {
+        accessToken,
+        data: { strategy: 'jwt', accessToken: 'testing' },
+        user
+      })
+
+      await app.logout()
+
+      at = await Promise.resolve(app.get('storage').getItem('feathers-jwt'))
+      assert.ok(!at)
+      assert.ok(!app.get('authentication'))
+    })
+
+    it('reAuthenticate works with parallel requests', async () => {
+      const data = {
+        strategy: 'testing'
+      }
+
+      await app.authenticate(data)
+      await app.reAuthenticate()
+      await app.authentication.reset()
+
+      app.reAuthenticate()
+
+      const found = await app.service('dummy').find()
+
+      assert.deepStrictEqual(found.accessToken, accessToken)
+      assert.deepStrictEqual(found.user, user)
     })
 
     it('reauthenticates using different strategy', async () => {

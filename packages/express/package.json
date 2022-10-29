@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/express",
   "description": "Feathers Express framework bindings and REST provider",
-  "version": "5.0.0-pre.23",
+  "version": "5.0.0-pre.32",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -42,9 +42,10 @@
   ],
   "scripts": {
     "prepublish": "npm run compile",
+    "pack": "npm pack --pack-destination ../cli/test/build",
     "compile:esm": "shx rm -rf esm/ && tsc --target es2020 --module es2020 --outDir esm/ --moduleResolution node",
     "compile:lib": "shx rm -rf lib/ && tsc --outDir lib/",
-    "compile": "npm run compile:lib && npm run compile:esm",
+    "compile": "npm run compile:lib && npm run compile:esm && tsc && npm run pack",
     "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
@@ -54,27 +55,30 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^5.0.0-pre.23",
-    "@feathersjs/commons": "^5.0.0-pre.23",
-    "@feathersjs/errors": "^5.0.0-pre.23",
-    "@feathersjs/feathers": "^5.0.0-pre.23",
-    "@feathersjs/transport-commons": "^5.0.0-pre.23",
-    "@types/express": "^4.17.13",
-    "@types/express-serve-static-core": "^4.17.28",
+    "@feathersjs/authentication": "^5.0.0-pre.32",
+    "@feathersjs/commons": "^5.0.0-pre.32",
+    "@feathersjs/errors": "^5.0.0-pre.32",
+    "@feathersjs/feathers": "^5.0.0-pre.32",
+    "@feathersjs/transport-commons": "^5.0.0-pre.32",
+    "@types/compression": "^1.7.2",
+    "@types/express": "^4.17.14",
+    "@types/express-serve-static-core": "^4.17.31",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
     "express": "^4.18.1"
   },
   "devDependencies": {
-    "@feathersjs/authentication-local": "^5.0.0-pre.23",
-    "@feathersjs/tests": "^5.0.0-pre.23",
-    "@types/lodash": "^4.14.182",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "^17.0.40",
+    "@feathersjs/authentication-local": "^5.0.0-pre.32",
+    "@feathersjs/tests": "^5.0.0-pre.32",
+    "@types/lodash": "^4.14.186",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.8.2",
     "axios": "^0.27.2",
     "lodash": "^4.17.21",
     "mocha": "^10.0.0",
     "shx": "^0.3.4",
-    "ts-node": "^10.8.1",
-    "typescript": "^4.7.3"
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
   },
-  "gitHead": "a60910bd730b88053ca6648337095f1ca1e3b39f"
+  "gitHead": "b405e205fc6d9fbd42b42c7a3f30ea4bf33d121d"
 }

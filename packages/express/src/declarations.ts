@@ -30,7 +30,7 @@ export interface ExpressOverrides<Services> {
   listen(port: number | string | any, callback?: () => void): Promise<http.Server>
   listen(callback?: () => void): Promise<http.Server>
   use: ExpressUseHandler<this, Services>
-  server: http.Server
+  server?: http.Server
 }
 
 export type Application<Services = any, Settings = any> = Omit<Express, 'listen' | 'use' | 'get' | 'set'> &
@@ -49,7 +49,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
 
 declare module 'express-serve-static-core' {
   interface Request {
-    feathers?: Partial<FeathersParams> & { [key: string]: any }
+    feathers: Partial<FeathersParams> & { [key: string]: any }
     lookup?: RouteLookup
   }
 

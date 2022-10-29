@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/client",
   "description": "A module that consolidates Feathers client modules for REST (jQuery, Request, Superagent) and Websocket (Socket.io, Primus) connections",
-  "version": "5.0.0-pre.23",
+  "version": "5.0.0-pre.32",
   "repository": {
     "type": "git",
     "url": "https://github.com/feathersjs/feathers.git",
@@ -49,31 +49,31 @@
     "IE 11"
   ],
   "dependencies": {
-    "@feathersjs/authentication-client": "^5.0.0-pre.23",
-    "@feathersjs/errors": "^5.0.0-pre.23",
-    "@feathersjs/feathers": "^5.0.0-pre.23",
-    "@feathersjs/rest-client": "^5.0.0-pre.23",
-    "@feathersjs/socketio-client": "^5.0.0-pre.23"
+    "@feathersjs/authentication-client": "^5.0.0-pre.32",
+    "@feathersjs/errors": "^5.0.0-pre.32",
+    "@feathersjs/feathers": "^5.0.0-pre.32",
+    "@feathersjs/rest-client": "^5.0.0-pre.32",
+    "@feathersjs/socketio-client": "^5.0.0-pre.32"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.2",
-    "@babel/preset-env": "^7.18.2",
-    "@feathersjs/express": "^5.0.0-pre.23",
-    "@feathersjs/memory": "^5.0.0-pre.23",
-    "@feathersjs/socketio": "^5.0.0-pre.23",
-    "@feathersjs/tests": "^5.0.0-pre.23",
+    "@babel/core": "^7.19.3",
+    "@babel/preset-env": "^7.19.3",
+    "@feathersjs/express": "^5.0.0-pre.32",
+    "@feathersjs/memory": "^5.0.0-pre.32",
+    "@feathersjs/socketio": "^5.0.0-pre.32",
+    "@feathersjs/tests": "^5.0.0-pre.32",
     "babel-loader": "^8.2.5",
     "mocha": "^10.0.0",
     "mocha-puppeteer": "^0.14.0",
     "node-fetch": "^2.6.1",
     "shx": "^0.3.4",
-    "socket.io-client": "^4.5.1",
-    "superagent": "^7.1.6",
-    "ts-loader": "^9.3.0",
-    "typescript": "^4.7.3",
-    "webpack": "^5.73.0",
-    "webpack-cli": "^4.9.2",
+    "socket.io-client": "^4.5.2",
+    "superagent": "^8.0.0",
+    "ts-loader": "^9.4.1",
+    "typescript": "^4.8.4",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
     "webpack-merge": "^5.8.0"
   },
-  "gitHead": "a60910bd730b88053ca6648337095f1ca1e3b39f"
+  "gitHead": "b405e205fc6d9fbd42b42c7a3f30ea4bf33d121d"
 }

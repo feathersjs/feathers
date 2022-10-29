@@ -1,16 +1,19 @@
 import merge from 'lodash/merge'
 import { NotAuthenticated } from '@feathersjs/errors'
-import { AuthenticationBase, AuthenticationResult, AuthenticationRequest, AuthenticationParams } from './core'
-import { connection, event } from './hooks'
 import '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
 import { ServiceMethods, ServiceAddons } from '@feathersjs/feathers'
 import { resolveDispatch } from '@feathersjs/schema'
 import jsonwebtoken from 'jsonwebtoken'
+import { hooks } from '@feathersjs/hooks'
+
+import { AuthenticationBase, AuthenticationResult, AuthenticationRequest, AuthenticationParams } from './core'
+import { connection, event } from './hooks'
 
 const debug = createDebug('@feathersjs/authentication/service')
 
 declare module '@feathersjs/feathers/lib/declarations' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface FeathersApplication<Services, Settings> {
     // eslint-disable-line
     /**
@@ -28,7 +31,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
   }
 }
 
-// eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface AuthenticationService extends ServiceAddons<AuthenticationResult, AuthenticationResult> {}
 
 export class AuthenticationService
@@ -37,6 +40,15 @@ export class AuthenticationService
 {
   constructor(app: any, configKey = 'authentication', options = {}) {
     super(app, configKey, options)
+
+    hooks(this, {
+      create: [resolveDispatch(), connection('login'), event('login')],
+      remove: [resolveDispatch(), connection('logout'), event('logout')]
+    })
+
+    this.app.on('disconnect', async (connection) => {
+      await this.handleConnection('disconnect', connection)
+    })
 
     if (typeof app.defaultAuthentication !== 'function') {
       app.defaultAuthentication = function (location?: string) {
@@ -183,15 +195,6 @@ export class AuthenticationService
         )
       }
     }
-
-    this.hooks({
-      create: [resolveDispatch(), connection('login'), event('login')],
-      remove: [resolveDispatch(), connection('logout'), event('logout')]
-    } as any)
-
-    this.app.on('disconnect', async (connection) => {
-      await this.handleConnection('disconnect', connection)
-    })
 
     if (typeof this.publish === 'function') {
       this.publish(() => null)

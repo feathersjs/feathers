@@ -1,10 +1,21 @@
 import { strict as assert } from 'assert'
-import { app, TestOAuthStrategy } from './fixture'
+import { expressFixture, TestOAuthStrategy } from './utils/fixture'
 import { AuthenticationService } from '@feathersjs/authentication'
 
 describe('@feathersjs/authentication-oauth/strategy', () => {
-  const authService = app.service('authentication') as unknown as AuthenticationService
-  const [strategy] = authService.getStrategies('test') as TestOAuthStrategy[]
+  let app: Awaited<ReturnType<typeof expressFixture>>
+  let authService: AuthenticationService
+  let strategy: TestOAuthStrategy
+
+  before(async () => {
+    app = await expressFixture(9778, 5115)
+    authService = app.service('authentication')
+    strategy = authService.getStrategy('github') as TestOAuthStrategy
+  })
+
+  after(async () => {
+    await app.teardown()
+  })
 
   it('initializes, has .entityId and configuration', () => {
     assert.ok(strategy)
@@ -14,7 +25,7 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
 
   it('reads configuration from the oauth key', () => {
     const testConfigValue = Math.random()
-    app.get('authentication').oauth.test.hello = testConfigValue
+    app.get('authentication').oauth.github.hello = testConfigValue
     assert.strictEqual(strategy.configuration.hello, testConfigValue)
   })
 
@@ -67,6 +78,9 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
     )
     assert.equal(redirect, 'https://feathersjs.com#access_token=testing')
 
+    redirect = await strategy.getRedirect({ accessToken: 'testing' }, {})
+    assert.equal(redirect, 'https://feathersjs.com#access_token=testing')
+
     redirect = await strategy.getRedirect(
       { accessToken: 'testing' },
       {
@@ -99,7 +113,7 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
           }
         ),
       {
-        message: 'Referer "https://example.com" not allowed.'
+        message: 'Referer "https://example.com" is not allowed.'
       }
     )
   })
@@ -117,14 +131,14 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
       )
 
       assert.deepEqual(authResult, {
-        authentication: { strategy: 'test' },
-        user: { testId: 'newEntity', id: authResult.user.id }
+        authentication: { strategy: 'github' },
+        user: { githubId: 'newEntity', id: authResult.user.id }
       })
     })
 
     it('with existing user and already linked strategy', async () => {
       const existingUser = await app.service('users').create({
-        testId: 'existingEntity',
+        githubId: 'existingEntity',
         name: 'David'
       })
       const authResult = await strategy.authenticate(
@@ -138,7 +152,7 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
       )
 
       assert.deepEqual(authResult, {
-        authentication: { strategy: 'test' },
+        authentication: { strategy: 'github' },
         user: existingUser
       })
     })
@@ -170,8 +184,8 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
       )
 
       assert.deepEqual(authResult, {
-        authentication: { strategy: 'test' },
-        user: { id: user.id, name: user.name, testId: 'linkedEntity' }
+        authentication: { strategy: 'github' },
+        user: { id: user.id, name: user.name, githubId: 'linkedEntity' }
       })
     })
   })

@@ -1,10 +1,16 @@
 import { Service, SocketService } from '@feathersjs/transport-commons/client'
 import { Socket } from 'socket.io-client'
-import { Application, defaultEventMap, defaultServiceMethods } from '@feathersjs/feathers'
+import {
+  Application,
+  TransportConnection,
+  defaultEventMap,
+  defaultServiceMethods
+} from '@feathersjs/feathers'
 
 export { SocketService }
 
 declare module '@feathersjs/feathers/lib/declarations' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface FeathersApplication<Services, Settings> {
     /**
      * The Socket.io client instance. Usually does not need
@@ -14,7 +20,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
   }
 }
 
-export default function socketioClient(connection: Socket, options?: any) {
+export default function socketioClient<Services = any>(connection: Socket, options?: any) {
   if (!connection) {
     throw new Error('Socket.io connection needs to be provided')
   }
@@ -31,7 +37,7 @@ export default function socketioClient(connection: Socket, options?: any) {
     return new Service(settings) as any
   }
 
-  const initialize = function (app: Application) {
+  const initialize = function (app: Application<Services>) {
     if (app.io !== undefined) {
       throw new Error('Only one default client provider can be configured')
     }
@@ -50,7 +56,7 @@ export default function socketioClient(connection: Socket, options?: any) {
   initialize.Service = Service
   initialize.service = defaultService
 
-  return initialize
+  return initialize as TransportConnection<Services>
 }
 
 if (typeof module !== 'undefined') {

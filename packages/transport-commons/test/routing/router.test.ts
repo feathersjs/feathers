@@ -95,4 +95,27 @@ describe('router', () => {
       data: 'three'
     })
   })
+
+  it('can remove paths (#2035)', () => {
+    const r = new Router<string>()
+
+    r.insert('/hello/:id', 'one')
+    r.insert('/hello/:test/you', 'two')
+    r.insert('/hello/here/thing', 'else')
+
+    assert.deepStrictEqual(r.lookup('hello/there'), { params: { id: 'there' }, data: 'one' })
+
+    r.remove('/hello/:id')
+
+    assert.deepStrictEqual(r.lookup('hello/here/you'), { params: { test: 'here' }, data: 'two' })
+    assert.deepStrictEqual(r.lookup('hello/here/thing'), { params: {}, data: 'else' })
+    assert.strictEqual(r.lookup('hello/there'), null)
+
+    r.remove('/hello/:test/you')
+    assert.deepStrictEqual(r.lookup('hello/here/you'), null)
+    assert.deepStrictEqual(r.lookup('hello/here/thing'), { params: {}, data: 'else' })
+
+    r.remove('/hello/here/thing')
+    assert.ok(!r.root.hasChildren)
+  })
 })

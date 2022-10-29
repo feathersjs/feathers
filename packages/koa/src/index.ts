@@ -3,12 +3,13 @@ import koaQs from 'koa-qs'
 import { Application as FeathersApplication } from '@feathersjs/feathers'
 import { routing } from '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
+import bodyParser from 'koa-bodyparser'
+import cors from '@koa/cors'
+import serveStatic from 'koa-static'
 
 import { Application } from './declarations'
 
-export { default as Koa } from 'koa'
-export { default as bodyParser } from 'koa-bodyparser'
-
+export { Koa, bodyParser, cors, serveStatic }
 export * from './authentication'
 export * from './declarations'
 export * from './handlers'
@@ -81,6 +82,10 @@ export function koa<S = any, C = any>(
   })
 
   koaQs(app as any)
+
+  // This reinitializes hooks
+  app.setup = feathersApp.setup as any
+  app.teardown = feathersApp.teardown as any
 
   app.configure(routing() as any)
   app.use((ctx, next) => {

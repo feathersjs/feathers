@@ -1,11 +1,13 @@
 import { Application, ApplicationHookContext, NextFunction } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
-import { Schema } from '@feathersjs/schema'
+import { Schema, Validator } from '@feathersjs/schema'
 import config from 'config'
 
 const debug = createDebug('@feathersjs/configuration')
 
-export default function init(schema?: Schema<any>) {
+export default function init(schema?: Schema<any> | Validator) {
+  const validator: Validator = typeof schema === 'function' ? schema : schema?.validate.bind(schema)
+
   return (app?: Application) => {
     if (!app) {
       return config
@@ -21,11 +23,11 @@ export default function init(schema?: Schema<any>) {
       app.set(name, value)
     })
 
-    if (schema) {
+    if (validator) {
       app.hooks({
         setup: [
           async (_context: ApplicationHookContext, next: NextFunction) => {
-            await schema.validate(configuration)
+            await validator(configuration)
             await next()
           }
         ]

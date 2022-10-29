@@ -20,6 +20,7 @@ const serviceMiddleware = (): RequestHandler => {
     const { query, headers, path, body: data, method: httpMethod } = req
     const methodOverride = req.headers[http.METHOD_HEADER] as string | undefined
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const { service, params: { __id: id = null, ...route } = {} } = req.lookup!
     const method = http.getServiceMethod(httpMethod, id, methodOverride)
     const { methods } = getServiceOptions(service)
@@ -96,10 +97,6 @@ export const rest = (options?: RestOptions | RequestHandler) => {
       throw new Error('@feathersjs/express/rest needs an Express compatible app.')
     }
 
-    app.use((req, _res, next) => {
-      req.feathers = { ...req.feathers, provider: 'rest' }
-      return next()
-    })
     app.use(parseAuthentication(authenticationOptions))
     app.use(servicesMiddleware())
 

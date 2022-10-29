@@ -15,7 +15,9 @@ interface TodoParams extends Params {
   ran: boolean
 }
 
-type TodoService = ServiceInterface<Todo, Todo, TodoParams>
+type TodoService = ServiceInterface<Todo, Todo, TodoParams> & {
+  customMethod(data: any, params?: TodoParams): Promise<any>
+}
 
 type App = Application<{ todos: TodoService }>
 
@@ -23,19 +25,29 @@ describe('app.hooks', () => {
   let app: App
 
   beforeEach(() => {
-    app = feathers().use('todos', {
-      async get(id: any, params: any) {
-        if (id === 'error') {
-          throw new Error('Something went wrong')
+    app = feathers<{ todos: TodoService }>().use(
+      'todos',
+      {
+        async get(id: any, params: any) {
+          if (id === 'error') {
+            throw new Error('Something went wrong')
+          }
+
+          return { id, params }
+        },
+
+        async create(data: any, params: any) {
+          return { data, params }
+        },
+
+        async customMethod(data: any, params: TodoParams) {
+          return { data, params }
         }
-
-        return { id, params }
       },
-
-      async create(data: any, params: any) {
-        return { data, params }
+      {
+        methods: ['get', 'create', 'customMethod']
       }
-    })
+    )
   })
 
   it('app has the .hooks method', () => {
@@ -44,6 +56,17 @@ describe('app.hooks', () => {
 
   it('.setup and .teardown special hooks', async () => {
     const app = feathers()
+
+    // Test that setup and teardown can be overwritten
+    const oldSetup = app.setup
+    app.setup = function (arg: any) {
+      return oldSetup.call(this, arg)
+    }
+    const oldTeardown = app.teardown
+    app.teardown = function (arg: any) {
+      return oldTeardown.call(this, arg)
+    }
+
     const order: string[] = []
     const hooks: ApplicationHookMap<typeof app> = {
       setup: [
@@ -80,7 +103,7 @@ describe('app.hooks', () => {
   })
 
   describe('app.hooks([ async ])', () => {
-    it('basic app async hook', async () => {
+    it('basic app async hook, works with custom method', async () => {
       const service = app.service('todos')
 
       app.hooks([
@@ -104,6 +127,13 @@ describe('app.hooks', () => {
 
       assert.deepStrictEqual(result, {
         data,
+        params: { ran: true }
+      })
+
+      result = await service.customMethod('custom test')
+
+      assert.deepStrictEqual(result, {
+        data: 'custom test',
         params: { ran: true }
       })
     })
@@ -133,7 +163,7 @@ describe('app.hooks', () => {
   })
 
   describe('app.hooks({ before })', () => {
-    it('basic app before hook', async () => {
+    it('basic app before hook, works with custom method', async () => {
       const service = app.service('todos')
 
       app.hooks({
@@ -156,6 +186,13 @@ describe('app.hooks', () => {
 
       assert.deepStrictEqual(result, {
         data,
+        params: { ran: true }
+      })
+
+      result = await service.customMethod('custom with before')
+
+      assert.deepStrictEqual(result, {
+        data: 'custom with before',
         params: { ran: true }
       })
     })

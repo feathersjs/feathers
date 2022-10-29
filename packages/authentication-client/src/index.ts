@@ -4,9 +4,10 @@ import { Application } from '@feathersjs/feathers'
 import { Storage, MemoryStorage, StorageWrapper } from './storage'
 
 declare module '@feathersjs/feathers/lib/declarations' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Application<Services, Settings> {
     // eslint-disable-line
-    io?: any
+    io: any
     rest?: any
     authentication: AuthenticationClient
     authenticate: AuthenticationClient['authenticate']

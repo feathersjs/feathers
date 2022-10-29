@@ -1,4 +1,4 @@
-import { Application, Service, ServiceOptions } from '@feathersjs/feathers'
+import { Application, FeathersService, ServiceOptions } from '@feathersjs/feathers'
 import { Router } from './router'
 
 declare module '@feathersjs/feathers/lib/declarations' {
@@ -7,6 +7,7 @@ declare module '@feathersjs/feathers/lib/declarations' {
     params: { [key: string]: any }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Application<Services, Settings> {
     // eslint-disable-line
     routes: Router<{
@@ -41,11 +42,18 @@ export const routing = () => (app: Application) => {
     return
   }
 
+  const { unuse } = app
+
   app.routes = new Router()
   app.lookup = lookup
+  app.unuse = function (path: string) {
+    app.routes.remove(path)
+    app.routes.remove(`${path}/:__id`)
+    return unuse.call(this, path)
+  }
 
   // Add a mixin that registers a service on the router
-  app.mixins.push((service: Service, path: string, options: ServiceOptions) => {
+  app.mixins.push((service: FeathersService, path: string, options: ServiceOptions) => {
     const { routeParams: params = {} } = options
 
     app.routes.insert(path, { service, params })

@@ -1,10 +1,10 @@
 import assert from 'assert'
 import { BadRequest } from '@feathersjs/errors'
 
-import { schema, resolve, Infer } from '../src'
+import { FromSchema, schema, resolve } from '../src'
 
 describe('@feathersjs/schema/resolver', () => {
-  const userSchema = schema({
+  const userSchema = {
     $id: 'simple-user',
     type: 'object',
     required: ['firstName', 'lastName'],
@@ -14,21 +14,19 @@ describe('@feathersjs/schema/resolver', () => {
       lastName: { type: 'string' },
       password: { type: 'string' }
     }
-  } as const)
+  } as const
   const context = {
     isContext: true
   }
 
-  type User = Infer<typeof userSchema> & {
+  type User = FromSchema<typeof userSchema> & {
     name: string
   }
 
   it('simple resolver', async () => {
     const userResolver = resolve<User, typeof context>({
       properties: {
-        password: async (): Promise<string> => {
-          return undefined
-        },
+        password: async () => undefined,
 
         name: async (_name, user, ctx, status) => {
           assert.deepStrictEqual(ctx, context)
@@ -72,15 +70,16 @@ describe('@feathersjs/schema/resolver', () => {
   })
 
   it('simple resolver with schema and validation', async () => {
+    const userFeathersSchema = schema(userSchema)
     const userBeforeResolver = resolve<User, typeof context>({
-      schema: userSchema,
+      schema: userFeathersSchema,
       validate: 'before',
       properties: {
         name: async (_name, user) => `${user.firstName} ${user.lastName}`
       }
     })
     const userAfterResolver = resolve<User, typeof context>({
-      schema: userSchema,
+      schema: userFeathersSchema,
       validate: 'after',
       properties: {
         firstName: async () => undefined
@@ -107,8 +106,6 @@ describe('@feathersjs/schema/resolver', () => {
 
   it('simple resolver with converter', async () => {
     const userConverterResolver = resolve<User, typeof context>({
-      schema: userSchema,
-      validate: 'before',
       converter: async (data) => ({
         firstName: 'Default',
         lastName: 'Name',
@@ -129,7 +126,7 @@ describe('@feathersjs/schema/resolver', () => {
   })
 
   it('resolving with errors', async () => {
-    const dummyResolver = resolve({
+    const dummyResolver = resolve<{ name: string; age: number }, Record<string, unknown>>({
       properties: {
         name: async (value) => {
           if (value === 'Dave') {
@@ -139,7 +136,7 @@ describe('@feathersjs/schema/resolver', () => {
           return value
         },
         age: async (value) => {
-          if (value < 18) {
+          if (value && value < 18) {
             throw new BadRequest('Invalid age')
           }
 
@@ -173,5 +170,25 @@ describe('@feathersjs/schema/resolver', () => {
         }
       }
     )
+  })
+
+  it('empty resolver returns original data', async () => {
+    const resolver = resolve({
+      properties: {}
+    })
+    const data = { message: 'Hello' }
+    const resolved = await resolver.resolve(data, {})
+
+    assert.strictEqual(data, resolved)
+  })
+
+  it('empty resolver still allows to select properties', async () => {
+    const data = { message: 'Hello', name: 'David' }
+    const resolver = resolve<typeof data, any>({
+      properties: {}
+    })
+    const resolved = await resolver.resolve(data, {}, { properties: ['message'] })
+
+    assert.deepStrictEqual(resolved, { message: 'Hello' })
   })
 })

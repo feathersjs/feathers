@@ -42,14 +42,14 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
       connection.authentication.accessToken === authResult.accessToken
 
     const { accessToken } = authResult || {}
+    const { entity } = this.configuration
 
     if (accessToken && event === 'login') {
       debug('Adding authentication information to connection')
-      const { exp } = await this.authentication.verifyAccessToken(accessToken)
+      const { exp } =
+        authResult?.authentication?.payload || (await this.authentication.verifyAccessToken(accessToken))
       // The time (in ms) until the token expires
       const duration = exp * 1000 - Date.now()
-      // This may have to be a `logout` event but right now we don't want
-      // the whole context object lingering around until the timer is gone
       const timer = lt.setTimeout(() => this.app.emit('disconnect', connection), duration)
 
       debug(`Registering connection expiration timer for ${duration}ms`)
@@ -61,13 +61,17 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
         strategy: this.name,
         accessToken
       }
+      connection[entity] = authResult[entity]
     } else if (event === 'disconnect' || isValidLogout) {
       debug('Removing authentication information and expiration timer from connection')
 
-      const { entity } = this.configuration
-
-      delete connection[entity]
-      delete connection.authentication
+      await new Promise((resolve) =>
+        process.nextTick(() => {
+          delete connection[entity]
+          delete connection.authentication
+          resolve(connection)
+        })
+      )
 
       lt.clearTimeout(this.expirationTimers.get(connection))
       this.expirationTimers.delete(connection)

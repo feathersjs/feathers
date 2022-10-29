@@ -3,14 +3,21 @@ import { FromSchema, JSONSchema } from 'json-schema-to-ts'
 import { BadRequest } from '@feathersjs/errors'
 
 export const DEFAULT_AJV = new Ajv({
-  coerceTypes: true
+  coerceTypes: true,
+  addUsedSchema: false
 })
 
 export { Ajv }
 
+/**
+ * A validation function that takes data and returns the (possibly coerced)
+ * data or throws a validation error.
+ */
+export type Validator<T = any, R = T> = (data: T) => Promise<R>
+
 export type JSONSchemaDefinition = JSONSchema & {
   $id: string
-  $async?: boolean
+  $async?: true
   properties?: { [key: string]: JSONSchema }
   required?: readonly string[]
 }

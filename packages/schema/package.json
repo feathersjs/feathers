@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/schema",
   "description": "A common data schema definition format",
-  "version": "5.0.0-pre.23",
+  "version": "5.0.0-pre.32",
   "homepage": "https://feathersjs.com",
   "module": "./esm/index.js",
   "main": "./lib/index.js",
@@ -51,9 +51,10 @@
   ],
   "scripts": {
     "prepublish": "npm run compile",
+    "pack": "npm pack --pack-destination ../cli/test/build",
     "compile:esm": "shx rm -rf esm/ && tsc --target es2020 --module es2020 --outDir esm/ --moduleResolution node",
     "compile:lib": "shx rm -rf lib/ && tsc --outDir lib/",
-    "compile": "npm run compile:lib && npm run compile:esm",
+    "compile": "npm run compile:lib && npm run compile:esm && tsc && npm run pack",
     "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
     "test": "npm run compile && npm run mocha"
   },
@@ -64,23 +65,23 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^5.0.0-pre.23",
-    "@feathersjs/errors": "^5.0.0-pre.23",
-    "@feathersjs/feathers": "^5.0.0-pre.23",
+    "@feathersjs/commons": "^5.0.0-pre.32",
+    "@feathersjs/errors": "^5.0.0-pre.32",
+    "@feathersjs/feathers": "^5.0.0-pre.32",
     "@feathersjs/hooks": "^0.7.5",
     "@types/json-schema": "^7.0.11",
     "ajv": "^8.11.0",
-    "json-schema": "^0.4.0",
-    "json-schema-to-ts": "^2.5.3"
+    "ajv-formats": "^2.1.1",
+    "json-schema-to-ts": "^2.5.5"
   },
   "devDependencies": {
-    "@feathersjs/memory": "^5.0.0-pre.23",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "^17.0.40",
+    "@feathersjs/memory": "^5.0.0-pre.32",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.8.2",
     "ajv-formats": "^2.1.1",
     "mocha": "^10.0.0",
     "shx": "^0.3.4",
-    "typescript": "^4.7.3"
+    "typescript": "^4.8.4"
   },
-  "gitHead": "a60910bd730b88053ca6648337095f1ca1e3b39f"
+  "gitHead": "b405e205fc6d9fbd42b42c7a3f30ea4bf33d121d"
 }

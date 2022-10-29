@@ -195,10 +195,10 @@ export class MongoDbAdapter<
     return runQuery(0).then((page) => page.data)
   }
 
-  async $create(data: Partial<D>, params?: P): Promise<T>
-  async $create(data: Partial<D>[], params?: P): Promise<T[]>
-  async $create(data: Partial<D> | Partial<D>[], _params?: P): Promise<T | T[]>
-  async $create(data: Partial<D> | Partial<D>[], params: P = {} as P): Promise<T | T[]> {
+  async $create(data: D, params?: P): Promise<T>
+  async $create(data: D[], params?: P): Promise<T[]>
+  async $create(data: D | D[], _params?: P): Promise<T | T[]>
+  async $create(data: D | D[], params: P = {} as P): Promise<T | T[]> {
     const writeOptions = params.mongodb
     const { Model } = this.getOptions(params)
     const model = await Promise.resolve(Model)
@@ -215,15 +215,18 @@ export class MongoDbAdapter<
 
       return entry
     }
+
     const promise = Array.isArray(data)
       ? model
           .insertMany(data.map(setId), writeOptions)
           .then(async (result) =>
-            Promise.all(Object.values(result.insertedIds).map(async (_id) => model.findOne({ _id })))
+            Promise.all(
+              Object.values(result.insertedIds).map(async (_id) => model.findOne({ _id }, params.mongodb))
+            )
           )
       : model
           .insertOne(setId(data), writeOptions)
-          .then(async (result) => model.findOne({ _id: result.insertedId }))
+          .then(async (result) => model.findOne({ _id: result.insertedId }, params.mongodb))
 
     return promise.then(select(params, this.id)).catch(errorHandler)
   }
@@ -237,7 +240,7 @@ export class MongoDbAdapter<
     const model = await Promise.resolve(Model)
     const {
       query,
-      filters: { $select, $limit }
+      filters: { $select }
     } = this.filterQuery(id, params)
     const updateOptions = { ...params.mongodb }
     const modifier = Object.keys(data).reduce((current, key) => {
@@ -268,7 +271,6 @@ export class MongoDbAdapter<
       ...params,
       paginate: false,
       query: {
-        ...($limit === 0 ? { $limit: 0 } : {}),
         [this.id]: { $in: idList },
         $select
       }
@@ -298,7 +300,7 @@ export class MongoDbAdapter<
     const model = await Promise.resolve(Model)
     const {
       query,
-      filters: { $select, $limit }
+      filters: { $select }
     } = this.filterQuery(id, params)
     const deleteOptions = { ...params.mongodb }
     const findParams = {
@@ -306,7 +308,6 @@ export class MongoDbAdapter<
       paginate: false,
       query: {
         ...query,
-        ...($limit === 0 ? { $limit: 0 } : {}),
         $select
       }
     }

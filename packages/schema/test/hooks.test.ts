@@ -1,13 +1,13 @@
 import { createContext } from '@feathersjs/feathers'
 import assert from 'assert'
-import { app, MessageResult, UserResult } from './fixture'
+import { app, Message, User } from './fixture'
 
 describe('@feathersjs/schema/hooks', () => {
   const text = 'Hi there'
 
-  let message: MessageResult
-  let messageOnPaginatedService: MessageResult
-  let user: UserResult
+  let message: Message
+  let messageOnPaginatedService: Message
+  let user: User
 
   before(async () => {
     user = (
@@ -33,7 +33,7 @@ describe('@feathersjs/schema/hooks', () => {
   })
 
   it('validates data', async () => {
-    assert.rejects(() => app.service('users').create({ password: 'failing' }), {
+    assert.rejects(() => app.service('users').create({ password: 'failing' } as any), {
       name: 'BadRequest'
     })
   })
@@ -161,6 +161,22 @@ describe('@feathersjs/schema/hooks', () => {
       user: {
         id: 0,
         email: '[redacted]',
+        name: 'hello (hello@feathersjs.com)'
+      }
+    })
+  })
+
+  it('resolves data for custom methods', async () => {
+    const result = await app.service('messages').customMethod({ message: 'Hello' })
+
+    assert.deepStrictEqual(result, {
+      message: 'Hello',
+      userId: 0,
+      additionalData: 'additional data',
+      user: {
+        email: 'hello@feathersjs.com',
+        password: 'hashed',
+        id: 0,
         name: 'hello (hello@feathersjs.com)'
       }
     })

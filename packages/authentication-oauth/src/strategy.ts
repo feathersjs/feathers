@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import querystring from 'querystring'
 import {
   AuthenticationRequest,
   AuthenticationBaseStrategy,
@@ -11,6 +7,7 @@ import {
 import { Params } from '@feathersjs/feathers'
 import { NotAuthenticated } from '@feathersjs/errors'
 import { createDebug, _ } from '@feathersjs/commons'
+import qs from 'qs'
 
 const debug = createDebug('@feathersjs/authentication-oauth/strategy')
 
@@ -22,7 +19,7 @@ export interface OAuthProfile {
 export class OAuthStrategy extends AuthenticationBaseStrategy {
   get configuration() {
     const { entity, service, entityId, oauth } = this.authentication.configuration
-    const config = oauth[this.name]
+    const config = oauth[this.name] as any
 
     return {
       entity,
@@ -71,14 +68,14 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
   }
 
   async getAllowedOrigin(params?: Params) {
-    const { redirect, origins } = this.authentication.configuration.oauth
+    const { redirect, origins = this.app.get('origins') } = this.authentication.configuration.oauth
 
     if (Array.isArray(origins)) {
-      const referer = params?.headers?.referer || ''
+      const referer = params?.headers?.referer || origins[0]
       const allowedOrigin = origins.find((current) => referer.toLowerCase().startsWith(current.toLowerCase()))
 
       if (!allowedOrigin) {
-        throw new NotAuthenticated(`Referer "${referer || '[header not available]'}" not allowed.`)
+        throw new NotAuthenticated(`Referer "${referer}" is not allowed.`)
       }
 
       return allowedOrigin
@@ -102,14 +99,10 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     const separator = redirect.endsWith('?') ? '' : redirect.indexOf('#') !== -1 ? '?' : '#'
     const authResult: AuthenticationResult = data
     const query = authResult.accessToken
-      ? {
-          access_token: authResult.accessToken
-        }
-      : {
-          error: data.message || 'OAuth Authentication not successful'
-        }
+      ? { access_token: authResult.accessToken }
+      : { error: data.message || 'OAuth Authentication not successful' }
 
-    return `${redirectUrl}${separator}${querystring.stringify(query)}`
+    return `${redirectUrl}${separator}${qs.stringify(query)}`
   }
 
   async findEntity(profile: OAuthProfile, params: Params) {

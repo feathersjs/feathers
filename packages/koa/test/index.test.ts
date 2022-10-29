@@ -1,7 +1,7 @@
 import { strict as assert } from 'assert'
 import Koa from 'koa'
 import axios from 'axios'
-import { feathers, Id } from '@feathersjs/feathers'
+import { ApplicationHookMap, feathers, Id } from '@feathersjs/feathers'
 import { Service, restTests } from '@feathersjs/tests'
 import { koa, rest, Application, bodyParser, errorHandler } from '../src'
 
@@ -25,8 +25,36 @@ describe('@feathersjs/koa', () => {
     app.configure(rest())
     app.use('/', new Service())
     app.use('todo', new Service(), {
+      koa: {
+        after: [
+          async (ctx, next) => {
+            const body = ctx.body as any
+
+            if (body.id === 'custom-middleware') {
+              body.description = 'Description from custom middleware'
+            }
+
+            await next()
+          }
+        ]
+      },
       methods: ['get', 'find', 'create', 'update', 'patch', 'remove', 'customMethod']
     })
+
+    app.hooks({
+      setup: [
+        async (context, next) => {
+          assert.ok(context.app)
+          await next()
+        }
+      ],
+      teardown: [
+        async (context, next) => {
+          assert.ok(context.app)
+          await next()
+        }
+      ]
+    } as ApplicationHookMap<Application>)
 
     await app.listen(8465)
   })
@@ -85,6 +113,15 @@ describe('@feathersjs/koa', () => {
     assert.deepEqual(todo, {
       id: 'dishes',
       description: 'You have to do dishes!'
+    })
+  })
+
+  it('supports custom service middleware', async () => {
+    const { data } = await axios.get<any>('http://localhost:8465/todo/custom-middleware')
+
+    assert.deepStrictEqual(data, {
+      id: 'custom-middleware',
+      description: 'Description from custom middleware'
     })
   })
 
@@ -147,7 +184,7 @@ describe('@feathersjs/koa', () => {
 
         assert.deepStrictEqual(data, {
           name: 'NotFound',
-          message: 'Not Found',
+          message: 'Path /no/where not found',
           code: 404,
           className: 'not-found'
         })
@@ -162,6 +199,7 @@ describe('@feathersjs/koa', () => {
     let called = false
 
     const server = await app.listen(8787)
+
     server.on('close', () => {
       called = true
     })

@@ -1,7 +1,7 @@
 import version from './version'
 import { EventEmitter } from 'events'
 import { stripSlashes, createDebug } from '@feathersjs/commons'
-import { hooks, middleware } from '@feathersjs/hooks'
+import { HOOKS, hooks, middleware } from '@feathersjs/hooks'
 import { eventHook, eventMixin } from './events'
 import { hookMixin } from './hooks'
 import { wrapService, getServiceOptions, protectedMethods } from './service'
@@ -33,14 +33,6 @@ export class Feathers<Services, Settings>
 
   constructor() {
     super()
-    hooks(this, {
-      setup: middleware().params('server').props({
-        app: this
-      }),
-      teardown: middleware().params('server').props({
-        app: this
-      })
-    })
     this.registerHooks = enableHooks(this)
     this.registerHooks({
       around: [eventHook]
@@ -78,6 +70,76 @@ export class Feathers<Services, Settings>
     }
 
     return current as any
+  }
+
+  protected _setup() {
+    this._isSetup = true
+
+    return Object.keys(this.services)
+      .reduce(
+        (current, path) =>
+          current.then(() => {
+            const service: any = this.service(path as any)
+
+            if (typeof service.setup === 'function') {
+              debug(`Setting up service for \`${path}\``)
+
+              return service.setup(this, path)
+            }
+          }),
+        Promise.resolve()
+      )
+      .then(() => this)
+  }
+
+  get setup() {
+    return this._setup
+  }
+
+  set setup(value) {
+    this._setup = (value as any)[HOOKS]
+      ? value
+      : hooks(
+          value,
+          middleware().params('server').props({
+            app: this
+          })
+        )
+  }
+
+  protected _teardown() {
+    this._isSetup = false
+
+    return Object.keys(this.services)
+      .reduce(
+        (current, path) =>
+          current.then(() => {
+            const service: any = this.service(path as any)
+
+            if (typeof service.teardown === 'function') {
+              debug(`Tearing down service for \`${path}\``)
+
+              return service.teardown(this, path)
+            }
+          }),
+        Promise.resolve()
+      )
+      .then(() => this)
+  }
+
+  get teardown() {
+    return this._teardown
+  }
+
+  set teardown(value) {
+    this._teardown = (value as any)[HOOKS]
+      ? value
+      : hooks(
+          value,
+          middleware().params('server').props({
+            app: this
+          })
+        )
   }
 
   use<L extends keyof Services & string>(
@@ -126,6 +188,21 @@ export class Feathers<Services, Settings>
     return this
   }
 
+  async unuse<L extends keyof Services & string>(
+    location: L
+  ): Promise<FeathersService<this, keyof any extends keyof Services ? Service : Services[L]>> {
+    const path = (stripSlashes(location) || '/') as L
+    const service = this.services[path] as Service
+
+    if (service && typeof service.teardown === 'function') {
+      await service.teardown(this as any, path)
+    }
+
+    delete this.services[path]
+
+    return service as any
+  }
+
   hooks(hookMap: ApplicationHookOptions<this>) {
     const untypedMap = hookMap as any
 
@@ -143,45 +220,5 @@ export class Feathers<Services, Settings>
     }
 
     return this
-  }
-
-  setup() {
-    this._isSetup = true
-
-    return Object.keys(this.services)
-      .reduce(
-        (current, path) =>
-          current.then(() => {
-            const service: any = this.service(path as any)
-
-            if (typeof service.setup === 'function') {
-              debug(`Setting up service for \`${path}\``)
-
-              return service.setup(this, path)
-            }
-          }),
-        Promise.resolve()
-      )
-      .then(() => this)
-  }
-
-  teardown() {
-    this._isSetup = false
-
-    return Object.keys(this.services)
-      .reduce(
-        (current, path) =>
-          current.then(() => {
-            const service: any = this.service(path as any)
-
-            if (typeof service.teardown === 'function') {
-              debug(`Tearing down service for \`${path}\``)
-
-              return service.teardown(this, path)
-            }
-          }),
-        Promise.resolve()
-      )
-      .then(() => this)
   }
 }
