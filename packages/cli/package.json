@@ -3,7 +3,16 @@
   "description": "The command line interface for creating Feathers applications",
   "version": "5.0.0-pre.32",
   "homepage": "https://feathersjs.com",
-  "main": "lib/",
+  "module": "./esm/index.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    }
+  },
   "bin": {
     "feathers": "./bin/feathers"
   },
@@ -43,7 +52,9 @@
   ],
   "scripts": {
     "prepublish": "npm run compile",
-    "compile": "shx rm -rf lib/ && tsc && shx cp -r src/. lib/",
+    "compile:esm": "shx rm -rf esm/ && tsc --target es2020 --module es2020 --outDir esm/ --moduleResolution node",
+    "compile:lib": "shx rm -rf lib/ && tsc --outDir lib/",
+    "compile": "npm run compile:lib && npm run compile:esm && cp -r src/. lib/",
     "mocha": "mocha --timeout 60000 --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
     "test": "npm run compile && npm run mocha"
   },
