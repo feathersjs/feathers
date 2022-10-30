@@ -88,6 +88,62 @@ export class MongoDbAdapter<
     }
   }
 
+  getModel(params: P) {
+    const { Model } = this.getOptions(params)
+    return Promise.resolve(Model)
+  }
+
+  async asFindQuery(params: P) {
+    const { filters, query } = this.filterQuery(null, params)
+    const model = await this.getModel(params)
+    const q = model.find(query, { ...params.mongodb })
+
+    if (filters.$select !== undefined) {
+      q.project(this.getSelect(filters.$select))
+    }
+
+    if (filters.$sort !== undefined) {
+      q.sort(filters.$sort)
+    }
+
+    if (filters.$skip !== undefined) {
+      q.skip(filters.$skip)
+    }
+
+    if (filters.$limit !== undefined) {
+      q.limit(filters.$limit)
+    }
+
+    return q
+  }
+
+  async asAggregateQuery(params: P) {
+    const model = await this.getModel(params)
+    return model.aggregate(this.asPipeline(params))
+  }
+
+  asPipeline(params: P) {
+    const { filters, query } = this.filterQuery(null, params)
+    const pipeline: Document[] = [{ $match: query }]
+
+    if (filters.$select !== undefined) {
+      pipeline.push({ $project: this.getSelect(filters.$select) })
+    }
+
+    if (filters.$sort !== undefined) {
+      pipeline.push({ $sort: filters.$sort })
+    }
+
+    if (filters.$skip !== undefined) {
+      pipeline.push({ $skip: filters.$skip })
+    }
+
+    if (filters.$limit !== undefined) {
+      pipeline.push({ $limit: filters.$limit })
+    }
+    return pipeline.concat(params.pipeline || [])
+  }
+
   getSelect(select: string[] | { [key: string]: number }) {
     if (Array.isArray(select)) {
       return select.reduce<{ [key: string]: number }>(
@@ -123,7 +179,6 @@ export class MongoDbAdapter<
   }
 
   async $get(id: Id, params: P = {} as P): Promise<T> {
-    const { Model } = this.getOptions(params)
     const {
       query,
       filters: { $select }
@@ -141,7 +196,7 @@ export class MongoDbAdapter<
       ...projection
     }
 
-    return Promise.resolve(Model)
+    return this.getModel(params)
       .then((model) => model.findOne(query, findOptions))
       .then((data) => {
         if (data == null) {
@@ -157,55 +212,35 @@ export class MongoDbAdapter<
   async $find(params?: P & { paginate: false }): Promise<T[]>
   async $find(params?: P): Promise<Paginated<T> | T[]>
   async $find(params: P = {} as P): Promise<Paginated<T> | T[]> {
+    const { paginate, useEstimatedDocumentCount } = this.getOptions(params)
     const { filters, query } = this.filterQuery(null, params)
-    const { paginate, Model, useEstimatedDocumentCount } = this.getOptions(params)
-    const findOptions = { ...params.mongodb }
-    const model = await Promise.resolve(Model)
-    // If params.mongodb is provided, use model.find, otherwise use aggregation pipeline
     const useAggregation = !params.mongodb && filters.$limit !== 0
-    const q = useAggregation ? null : model.find(query, findOptions)
-    const pipeline: Document[] | null = useAggregation ? [{ $match: query }] : null
 
-    if (filters.$select !== undefined) {
-      useAggregation
-        ? pipeline.push({ $project: this.getSelect(filters.$select) })
-        : q.project(this.getSelect(filters.$select))
-    }
-
-    if (filters.$sort !== undefined) {
-      useAggregation ? pipeline.push({ $sort: filters.$sort }) : q.sort(filters.$sort)
-    }
-
-    if (filters.$skip !== undefined) {
-      useAggregation ? pipeline.push({ $skip: filters.$skip }) : q.skip(filters.$skip)
-    }
-
-    if (filters.$limit !== undefined) {
-      useAggregation ? pipeline.push({ $limit: filters.$limit }) : q.limit(filters.$limit)
-    }
-
-    const runQuery = async (total: number) => {
-      const requestToExecute = useAggregation
-        ? model.aggregate(pipeline.concat(params.pipeline || [])).toArray()
-        : q.toArray()
-
-      return {
-        total,
-        limit: filters.$limit,
-        skip: filters.$skip || 0,
-        data: filters.$limit === 0 ? [] : ((await requestToExecute) as any as T[])
+    const countDocuments = async () => {
+      if (paginate && paginate.default) {
+        const model = await this.getModel(params)
+        if (useEstimatedDocumentCount && typeof model.estimatedDocumentCount === 'function') {
+          return model.estimatedDocumentCount()
+        } else {
+          return model.countDocuments(query, { ...params.mongodb })
+        }
       }
+      return Promise.resolve(0)
     }
 
-    if (paginate && paginate.default) {
-      if (useEstimatedDocumentCount && typeof model.estimatedDocumentCount === 'function') {
-        return model.estimatedDocumentCount().then(runQuery)
-      }
+    const [request, total] = await Promise.all([
+      useAggregation ? this.asAggregateQuery(params) : this.asFindQuery(params),
+      countDocuments()
+    ])
 
-      return model.countDocuments(query, findOptions).then(runQuery)
+    const page = {
+      total,
+      limit: filters.$limit,
+      skip: filters.$skip || 0,
+      data: filters.$limit === 0 ? [] : ((await request.toArray()) as any as T[])
     }
 
-    return runQuery(0).then((page) => page.data)
+    return paginate && paginate.default ? page : page.data
   }
 
   async $create(data: D, params?: P): Promise<T>
@@ -213,8 +248,7 @@ export class MongoDbAdapter<
   async $create(data: D | D[], _params?: P): Promise<T | T[]>
   async $create(data: D | D[], params: P = {} as P): Promise<T | T[]> {
     const writeOptions = params.mongodb
-    const { Model } = this.getOptions(params)
-    const model = await Promise.resolve(Model)
+    const model = await this.getModel(params)
     const setId = (item: any) => {
       const entry = Object.assign({}, item)
 
@@ -249,8 +283,7 @@ export class MongoDbAdapter<
   async $patch(id: NullableId, data: Partial<D>, _params?: P): Promise<T | T[]>
   async $patch(id: NullableId, _data: Partial<D>, params: P = {} as P): Promise<T | T[]> {
     const data = this.normalizeId(id, _data)
-    const { Model } = this.getOptions(params)
-    const model = await Promise.resolve(Model)
+    const model = await this.getModel(params)
     const {
       query,
       filters: { $select }
@@ -295,8 +328,7 @@ export class MongoDbAdapter<
   }
 
   async $update(id: Id, data: D, params: P = {} as P): Promise<T> {
-    const { Model } = this.getOptions(params)
-    const model = await Promise.resolve(Model)
+    const model = await this.getModel(params)
     const { query } = this.filterQuery(id, params)
     const replaceOptions = { ...params.mongodb }
 
@@ -309,8 +341,7 @@ export class MongoDbAdapter<
   async $remove(id: Id, params?: P): Promise<T>
   async $remove(id: NullableId, _params?: P): Promise<T | T[]>
   async $remove(id: NullableId, params: P = {} as P): Promise<T | T[]> {
-    const { Model } = this.getOptions(params)
-    const model = await Promise.resolve(Model)
+    const model = await this.getModel(params)
     const {
       query,
       filters: { $select }
