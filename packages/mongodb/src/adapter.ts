@@ -6,7 +6,8 @@ import {
   InsertOneOptions,
   DeleteOptions,
   CountDocumentsOptions,
-  ReplaceOptions
+  ReplaceOptions,
+  Document
 } from 'mongodb'
 import { NotFound } from '@feathersjs/errors'
 import { _ } from '@feathersjs/commons'
@@ -29,6 +30,7 @@ export interface MongoDBAdapterOptions extends AdapterServiceOptions {
 
 export interface MongoDBAdapterParams<Q = AdapterQuery>
   extends AdapterParams<Q, Partial<MongoDBAdapterOptions>> {
+  pipeline?: Document[]
   mongodb?:
     | BulkWriteOptions
     | FindOptions
@@ -159,30 +161,41 @@ export class MongoDbAdapter<
     const { paginate, Model, useEstimatedDocumentCount } = this.getOptions(params)
     const findOptions = { ...params.mongodb }
     const model = await Promise.resolve(Model)
-    const q = model.find(query, findOptions)
+    // If params.mongodb is provided, use model.find, otherwise use aggregation pipeline
+    const useAggregation = !params.mongodb && filters.$limit !== 0
+    const q = useAggregation ? null : model.find(query, findOptions)
+    const pipeline: Document[] | null = useAggregation ? [{ $match: query }] : null
 
     if (filters.$select !== undefined) {
-      q.project(this.getSelect(filters.$select))
+      useAggregation
+        ? pipeline.push({ $project: this.getSelect(filters.$select) })
+        : q.project(this.getSelect(filters.$select))
     }
 
     if (filters.$sort !== undefined) {
-      q.sort(filters.$sort)
-    }
-
-    if (filters.$limit !== undefined) {
-      q.limit(filters.$limit)
+      useAggregation ? pipeline.push({ $sort: filters.$sort }) : q.sort(filters.$sort)
     }
 
     if (filters.$skip !== undefined) {
-      q.skip(filters.$skip)
+      useAggregation ? pipeline.push({ $skip: filters.$skip }) : q.skip(filters.$skip)
     }
 
-    const runQuery = async (total: number) => ({
-      total,
-      limit: filters.$limit,
-      skip: filters.$skip || 0,
-      data: filters.$limit === 0 ? [] : ((await q.toArray()) as any as T[])
-    })
+    if (filters.$limit !== undefined) {
+      useAggregation ? pipeline.push({ $limit: filters.$limit }) : q.limit(filters.$limit)
+    }
+
+    const runQuery = async (total: number) => {
+      const requestToExecute = useAggregation
+        ? model.aggregate(pipeline.concat(params.pipeline || [])).toArray()
+        : q.toArray()
+
+      return {
+        total,
+        limit: filters.$limit,
+        skip: filters.$skip || 0,
+        data: filters.$limit === 0 ? [] : ((await requestToExecute) as any as T[])
+      }
+    }
 
     if (paginate && paginate.default) {
       if (useEstimatedDocumentCount && typeof model.estimatedDocumentCount === 'function') {

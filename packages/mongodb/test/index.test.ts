@@ -97,10 +97,17 @@ describe('Feathers MongoDB Service', () => {
       friends: string
     }
   }
+  type Todo = {
+    _id: string
+    name: string
+    userId: string
+    person?: Person
+  }
 
   type ServiceTypes = {
     people: MongoDBService<Person>
     'people-customid': MongoDBService<Person>
+    todos: MongoDBService<Todo>
   }
 
   const app = feathers<ServiceTypes>()
@@ -319,7 +326,7 @@ describe('Feathers MongoDB Service', () => {
         }
       )
 
-      assert.strictEqual(result[0].friends.length, 1)
+      assert.strictEqual(result[0].friends?.length, 1)
 
       const patched = await peopleService.patch(
         null,
@@ -329,7 +336,7 @@ describe('Feathers MongoDB Service', () => {
         { query: { name: { $gt: 'AAA' } } }
       )
 
-      assert.strictEqual(patched[0].friends.length, 2)
+      assert.strictEqual(patched[0].friends?.length, 2)
     })
 
     it('overrides default index selection using hint param if present', async () => {
@@ -348,6 +355,56 @@ describe('Feathers MongoDB Service', () => {
       assert.strictEqual(result.length, 1)
 
       await peopleService.remove(indexed._id)
+    })
+  })
+
+  describe('Aggregation', () => {
+    let bob: any
+    let alice: any
+    let doug: any
+
+    before(async () => {
+      app.use(
+        'todos',
+        new MongoDBService({
+          Model: db.collection('todos'),
+          events: ['testing']
+        })
+      )
+      bob = await app.service('people').create({ name: 'Bob', age: 25 })
+      alice = await app.service('people').create({ name: 'Alice', age: 19 })
+      doug = await app.service('people').create({ name: 'Doug', age: 32 })
+
+      // Create a task for each person
+      await app.service('todos').create({ name: 'Bob do dishes', userId: bob._id })
+      await app.service('todos').create({ name: 'Alice do dishes', userId: alice._id })
+      await app.service('todos').create({ name: 'Doug do dishes', userId: doug._id })
+    })
+
+    after(async () => {
+      db.collection('people').deleteMany({})
+      db.collection('todos').deleteMany({})
+    })
+
+    it('can use lookup after normal query pipeline', async () => {
+      const result = await app.service('todos').find({
+        query: { $sort: { name: 1 } },
+        pipeline: [
+          {
+            $lookup: {
+              from: 'people',
+              localField: 'userId',
+              foreignField: '_id',
+              as: 'person'
+            }
+          },
+          { $unwind: { path: '$person' } }
+        ],
+        paginate: false
+      })
+      assert.deepEqual(result[0].person, alice)
+      assert.deepEqual(result[1].person, bob)
+      assert.deepEqual(result[2].person, doug)
     })
   })
 
