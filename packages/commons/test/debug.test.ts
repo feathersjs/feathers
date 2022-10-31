@@ -1,30 +1,32 @@
-import { strict as assert } from 'assert';
-import { createDebug, setDebug, noopDebug } from '../src';
+import { strict as assert } from 'assert'
+import { createDebug, setDebug, noopDebug } from '../src'
 
-const myDebug = createDebug('hello test');
+const myDebug = createDebug('hello test')
 
 describe('debug', () => {
   it('default debug does nothing', () => {
-    assert.equal(myDebug('hi', 'there'), undefined);
-  });
+    assert.equal(myDebug('hi', 'there'), undefined)
+  })
 
   it('can set custom debug later', () => {
-    let call;
+    let call
 
-    const customDebug = (name: string) => (...args: any[]) => {
-      call = [ name ].concat(args);
-    }
+    const customDebug =
+      (name: string) =>
+      (...args: any[]) => {
+        call = [name].concat(args)
+      }
 
-    setDebug(customDebug);
+    setDebug(customDebug)
 
-    assert.equal(myDebug('hi', 'there'), undefined);
-    assert.deepEqual(call, [ 'hello test', 'hi', 'there' ]);
+    assert.equal(myDebug('hi', 'there'), undefined)
+    assert.deepEqual(call, ['hello test', 'hi', 'there'])
 
-    const newDebug = createDebug('other test');
+    const newDebug = createDebug('other test')
 
-    assert.equal(newDebug('other', 'there'), undefined);
-    assert.deepEqual(call, [ 'other test', 'other', 'there' ]);
+    assert.equal(newDebug('other', 'there'), undefined)
+    assert.deepEqual(call, ['other test', 'other', 'there'])
 
-    setDebug(noopDebug);
-  });
-});
+    setDebug(noopDebug)
+  })
+})

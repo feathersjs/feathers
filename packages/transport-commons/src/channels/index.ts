@@ -1,80 +1,83 @@
-import { Application, FeathersService, getServiceOptions } from '@feathersjs/feathers';
-import { createDebug } from '@feathersjs/commons';
-import { compact, flattenDeep, noop } from 'lodash';
-import { Channel, RealTimeConnection } from './channel/base';
-import { CombinedChannel } from './channel/combined';
-import { channelMixin, publishMixin, keys, PublishMixin, Event, Publisher } from './mixins';
-import EventEmitter from 'events';
+import { Application, FeathersService, getServiceOptions } from '@feathersjs/feathers'
+import { createDebug } from '@feathersjs/commons'
+import { compact, flattenDeep, noop } from 'lodash'
+import { Channel, RealTimeConnection } from './channel/base'
+import { CombinedChannel } from './channel/combined'
+import { channelMixin, publishMixin, keys, PublishMixin, Event, Publisher } from './mixins'
+import EventEmitter from 'events'
 
-const debug = createDebug('@feathersjs/transport-commons/channels');
-const { CHANNELS } = keys;
+const debug = createDebug('@feathersjs/transport-commons/channels')
+const { CHANNELS } = keys
 
 declare module '@feathersjs/feathers/lib/declarations' {
-  interface ServiceAddons<A, S> extends EventEmitter { // eslint-disable-line
-    publish (publisher: Publisher<ServiceGenericType<S>, A, this>): this;
-    publish (event: Event, publisher: Publisher<ServiceGenericType<S>, A, this>): this;
+  interface ServiceAddons<A, S> extends EventEmitter {
+    // eslint-disable-line
+    publish(publisher: Publisher<ServiceGenericType<S>, A, this>): this
+    publish(event: Event, publisher: Publisher<ServiceGenericType<S>, A, this>): this
 
-    registerPublisher (publisher: Publisher<ServiceGenericType<S>, A, this>): this;
-    registerPublisher (event: Event, publisher: Publisher<ServiceGenericType<S>, A, this>): this;
+    registerPublisher(publisher: Publisher<ServiceGenericType<S>, A, this>): this
+    registerPublisher(event: Event, publisher: Publisher<ServiceGenericType<S>, A, this>): this
   }
 
-  interface Application<Services, Settings> { // eslint-disable-line
-    channels: string[];
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface Application<Services, Settings> {
+    // eslint-disable-line
+    channels: string[]
 
-    channel (name: string | string[]): Channel;
-    channel (...names: string[]): Channel;
+    channel(name: string | string[]): Channel
+    channel(...names: string[]): Channel
 
-    publish<T> (publisher: Publisher<T, this>): this;
-    publish<T> (event: Event, publisher: Publisher<T, this>): this;
+    publish<T>(publisher: Publisher<T, this>): this
+    publish<T>(event: Event, publisher: Publisher<T, this>): this
 
-    registerPublisher<T> (publisher: Publisher<T, this>): this;
-    registerPublisher<T> (event: Event, publisher: Publisher<T, this>): this;
+    registerPublisher<T>(publisher: Publisher<T, this>): this
+    registerPublisher<T>(event: Event, publisher: Publisher<T, this>): this
   }
 
   interface Params {
-    connection?: RealTimeConnection;
+    connection?: RealTimeConnection
   }
 }
 
-export { keys };
+export { keys }
 
-export function channels () {
+export function channels() {
   return (app: Application) => {
     if (typeof app.channel === 'function' && typeof app.publish === 'function') {
-      return;
+      return
     }
 
-    Object.assign(app, channelMixin(), publishMixin());
+    Object.assign(app, channelMixin(), publishMixin())
     Object.defineProperty(app, 'channels', {
-      get () {
-        return Object.keys(this[CHANNELS]);
+      get() {
+        return Object.keys(this[CHANNELS])
       }
-    });
+    })
 
     app.mixins.push((service: FeathersService, path: string) => {
-      const { serviceEvents } = getServiceOptions(service);
+      const { serviceEvents } = getServiceOptions(service)
 
       if (typeof service.publish === 'function') {
-        return;
+        return
       }
 
-      Object.assign(service, publishMixin());
+      Object.assign(service, publishMixin())
 
       serviceEvents.forEach((event: string) => {
         service.on(event, function (data, hook) {
           if (!hook) {
             // Fake hook for custom events
-            hook = { path, service, app, result: data };
+            hook = { path, service, app, result: data }
           }
 
-          debug('Publishing event', event, hook.path);
+          debug('Publishing event', event, hook.path)
 
-          const logError = (error: any) => debug(`Error in '${hook.path} ${event}' publisher`, error);
-          const servicePublishers = (service as unknown as PublishMixin)[keys.PUBLISHERS];
-          const appPublishers = (app as unknown as PublishMixin)[keys.PUBLISHERS];
+          const logError = (error: any) => debug(`Error in '${hook.path} ${event}' publisher`, error)
+          const servicePublishers = (service as unknown as PublishMixin)[keys.PUBLISHERS]
+          const appPublishers = (app as unknown as PublishMixin)[keys.PUBLISHERS]
           // This will return the first publisher list that is not empty
           // In the following precedence
-          const publisher = (
+          const publisher =
             // 1. Service publisher for a specific event
             servicePublishers[event] ||
             // 2. Service publisher for all events
@@ -85,28 +88,31 @@ export function channels () {
             appPublishers[keys.ALL_EVENTS] ||
             // 5. No publisher
             noop
-          );
 
           try {
-            Promise.resolve(publisher(data, hook)).then((result: any) => {
-              if (!result) {
-                return;
-              }
+            Promise.resolve(publisher(data, hook))
+              .then((result: any) => {
+                if (!result) {
+                  return
+                }
 
-              const results = (Array.isArray(result) ? compact(flattenDeep(result)) : [result] as Channel[]);
-              const channel = new CombinedChannel(results);
+                const results = Array.isArray(result) ? compact(flattenDeep(result)) : ([result] as Channel[])
+                const channel = new CombinedChannel(results)
 
-              if (channel && channel.length > 0) {
-                app.emit('publish', event, channel, hook, data);
-              } else {
-                debug('No connections to publish to');
-              }
-            }).catch(logError);
+                if (channel && channel.length > 0) {
+                  app.emit('publish', event, channel, hook, data)
+                } else {
+                  debug('No connections to publish to')
+                }
+              })
+              .catch(logError)
           } catch (error: any) {
-            logError(error);
+            logError(error)
           }
-        });
-      });
-    });
-  };
+        })
+      })
+    })
+  }
 }
+
+export { Channel, CombinedChannel, RealTimeConnection }

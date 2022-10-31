@@ -1,223 +1,214 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import assert from 'assert';
-import { NotImplemented } from '@feathersjs/errors';
-import { AdapterService, InternalServiceMethods } from '../src';
-import { Params, Id, NullableId } from '@feathersjs/feathers';
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/ban-ts-comment */
+import assert from 'assert'
+import { MethodService } from './fixture'
 
-const METHODS: [ 'find', 'get', 'create', 'update', 'patch', 'remove' ] = [ 'find', 'get', 'create', 'update', 'patch', 'remove' ];
+const METHODS: ['find', 'get', 'create', 'update', 'patch', 'remove'] = [
+  'find',
+  'get',
+  'create',
+  'update',
+  'patch',
+  'remove'
+]
 
 describe('@feathersjs/adapter-commons/service', () => {
-  class CustomService extends AdapterService {
-  }
-
-  describe('errors when method does not exit', () => {
-    METHODS.forEach(method => {
-      it(`${method}`, () => {
-        const service = new CustomService({});
-
-        // @ts-ignore
-        return service[method]().then(() => {
-          throw new Error('Should never get here');
-        }).catch((error: Error) => {
-          assert.ok(error instanceof NotImplemented);
-          assert.strictEqual(error.message, `Method _${method} not available`);
-        });
-      });
-    });
-  });
-
   describe('works when methods exist', () => {
-    class MethodService extends AdapterService implements InternalServiceMethods {
-      _find (_params?: Params) {
-        return Promise.resolve([]);
-      }
-
-      _get (id: Id, _params?: Params) {
-        return Promise.resolve({ id });
-      }
-
-      _create (data: Partial<any> | Partial<any>[], _params?: Params) {
-        return Promise.resolve(data);
-      }
-
-      _update (id: NullableId, _data: any, _params?: Params) {
-        return Promise.resolve({ id });
-      }
-
-      _patch (id: NullableId, _data: any, _params?: Params) {
-        return Promise.resolve({ id });
-      }
-
-      _remove (id: NullableId, _params?: Params) {
-        return Promise.resolve({ id });
-      }
-    }
-
-    METHODS.forEach(method => {
+    METHODS.forEach((method) => {
       it(`${method}`, () => {
-        const service = new MethodService({});
-        const args = [];
+        const service = new MethodService({})
+        const args = []
 
         if (method !== 'find') {
-          args.push('test');
+          args.push('test')
         }
 
         if (method === 'update' || method === 'patch') {
-          args.push({});
+          args.push({})
         }
 
         // @ts-ignore
-        return service[method](...args);
-      });
-    });
+        return service[method](...args)
+      })
+    })
 
-    it('does not allow multi patch', () => {
-      const service = new MethodService({});
+    it('does not allow multi patch', async () => {
+      const service = new MethodService({})
 
-      return service.patch(null, {})
-        .then(() => assert.ok(false))
-        .catch(error => {
-          assert.strictEqual(error.name, 'MethodNotAllowed');
-          assert.strictEqual(error.message, 'Can not patch multiple entries');
-        });
-    });
+      await assert.rejects(() => service.patch(null, {}), {
+        name: 'MethodNotAllowed',
+        message: 'Can not patch multiple entries'
+      })
+    })
 
-    it('does not allow multi remove', () => {
-      const service = new MethodService({});
+    it('does not allow multi remove', async () => {
+      const service = new MethodService({})
 
-      return service.remove(null, {})
-        .then(() => assert.ok(false))
-        .catch(error => {
-          assert.strictEqual(error.name, 'MethodNotAllowed');
-          assert.strictEqual(error.message, 'Can not remove multiple entries');
-        });
-    });
+      await assert.rejects(() => service.remove(null, {}), {
+        name: 'MethodNotAllowed',
+        message: 'Can not remove multiple entries'
+      })
+    })
 
-    it('does not allow multi create', () => {
-      const service = new MethodService({});
+    it('does not allow multi create', async () => {
+      const service = new MethodService({})
 
-      return service.create([])
-        .then(() => assert.ok(false))
-        .catch(error => {
-          assert.strictEqual(error.name, 'MethodNotAllowed');
-          assert.strictEqual(error.message, 'Can not create multiple entries');
-        });
-    });
+      await assert.rejects(() => service.create([], {}), {
+        name: 'MethodNotAllowed',
+        message: 'Can not create multiple entries'
+      })
+    })
 
-    it('multi can be set to true', () => {
-      const service = new MethodService({});
+    it('multi can be set to true', async () => {
+      const service = new MethodService({})
 
-      service.options.multi = true;
+      service.options.multi = true
 
-      return service.create([])
-        .then(() => assert.ok(true));
-    });
-  });
+      await service.create([])
+    })
+  })
 
-  it('filterQuery', () => {
-    const service = new CustomService({
-      whitelist: [ '$something' ]
-    });
-    const filtered = service.filterQuery({
-      query: { $limit: 10, test: 'me' }
-    });
+  it('sanitizeQuery', async () => {
+    const service = new MethodService({
+      filters: {
+        $something: true
+      },
+      operators: ['$test']
+    })
 
-    assert.deepStrictEqual(filtered, {
-      paginate: {},
-      filters: { $limit: 10 },
-      query: { test: 'me' }
-    });
+    assert.deepStrictEqual(
+      await service.sanitizeQuery({
+        query: { $limit: '10', test: 'me' } as any
+      }),
+      { $limit: 10, test: 'me' }
+    )
 
-    const withWhitelisted = service.filterQuery({
-      query: { $limit: 10, $something: 'else' }
-    });
+    assert.deepStrictEqual(
+      await service.sanitizeQuery({
+        adapter: {
+          paginate: { max: 2 }
+        },
+        query: { $limit: '10', test: 'me' } as any
+      }),
+      { $limit: 2, test: 'me' }
+    )
 
-    assert.deepStrictEqual(withWhitelisted, {
-      paginate: {},
-      filters: { $limit: 10 },
-      query: { $something: 'else' }
-    });
-  });
+    await assert.rejects(
+      () =>
+        service.sanitizeQuery({
+          query: { name: { $bla: 'me' } }
+        }),
+      {
+        message: 'Invalid query parameter $bla'
+      }
+    )
+
+    assert.deepStrictEqual(
+      await service.sanitizeQuery({
+        adapter: {
+          operators: ['$bla']
+        },
+        query: { name: { $bla: 'Dave' } }
+      }),
+      { name: { $bla: 'Dave' } }
+    )
+  })
 
   it('getOptions', () => {
-    const service = new AdapterService({
-      multi: true
-    });
+    const service = new MethodService({
+      multi: true,
+      paginate: {
+        default: 1,
+        max: 10
+      }
+    })
     const opts = service.getOptions({
       adapter: {
-        multi: [ 'create' ],
+        multi: ['create'],
         paginate: {
           default: 10,
           max: 100
         }
       }
-    });
+    })
 
     assert.deepStrictEqual(opts, {
       id: 'id',
       events: [],
       paginate: { default: 10, max: 100 },
-      multi: [ 'create' ],
-      filters: [],
-      allow: []
-    });
-  });
+      multi: ['create'],
+      filters: {},
+      operators: []
+    })
+
+    const notPaginated = service.getOptions({
+      paginate: false
+    })
+
+    assert.deepStrictEqual(notPaginated, {
+      id: 'id',
+      events: [],
+      paginate: false,
+      multi: true,
+      filters: {},
+      operators: []
+    })
+  })
 
   it('allowsMulti', () => {
     context('with true', () => {
-      const service = new AdapterService({multi: true});
+      const service = new MethodService({ multi: true })
 
-      it('does return true for multible methodes', () => {
-        assert.equal(service.allowsMulti('patch'), true);
-      });
+      it('does return true for multiple methodes', () => {
+        assert.equal(service.allowsMulti('patch'), true)
+      })
 
-      it('does return false for always non-multible methodes', () => {
-        assert.equal(service.allowsMulti('update'), false);
-      });
+      it('does return false for always non-multiple methodes', () => {
+        assert.equal(service.allowsMulti('update'), false)
+      })
 
       it('does return true for unknown methods', () => {
-        assert.equal(service.allowsMulti('other'), true);
-      });
-    });
+        assert.equal(service.allowsMulti('other'), true)
+      })
+    })
 
     context('with false', () => {
-      const service = new AdapterService({multi: false});
+      const service = new MethodService({ multi: false })
 
-      it('does return false for multible methodes', () => {
-        assert.equal(service.allowsMulti('remove'), false);
-      });
+      it('does return false for multiple methodes', () => {
+        assert.equal(service.allowsMulti('remove'), false)
+      })
 
-      it('does return true for always multible methodes', () => {
-        assert.equal(service.allowsMulti('find'), true);
-      });
+      it('does return true for always multiple methodes', () => {
+        assert.equal(service.allowsMulti('find'), true)
+      })
 
       it('does return false for unknown methods', () => {
-        assert.equal(service.allowsMulti('other'), false);
-      });
-    });
+        assert.equal(service.allowsMulti('other'), false)
+      })
+    })
 
     context('with array', () => {
-      const service = new AdapterService({multi: ['create', 'get', 'other']});
+      const service = new MethodService({ multi: ['create', 'get', 'other'] })
 
-      it('does return true for specified multible methodes', () => {
-        assert.equal(service.allowsMulti('create'), true);
-      });
+      it('does return true for specified multiple methodes', () => {
+        assert.equal(service.allowsMulti('create'), true)
+      })
 
-      it('does return false for non-specified multible methodes', () => {
-        assert.equal(service.allowsMulti('patch'), false);
-      });
+      it('does return false for non-specified multiple methodes', () => {
+        assert.equal(service.allowsMulti('patch'), false)
+      })
 
-      it('does return false for specified always multible methodes', () => {
-        assert.equal(service.allowsMulti('get'), false);
-      });
+      it('does return false for specified always multiple methodes', () => {
+        assert.equal(service.allowsMulti('get'), false)
+      })
 
       it('does return true for specified unknown methodes', () => {
-        assert.equal(service.allowsMulti('other'), true);
-      });
+        assert.equal(service.allowsMulti('other'), true)
+      })
 
       it('does return false for non-specified unknown methodes', () => {
-        assert.equal(service.allowsMulti('another'), false);
-      });
-    });
-  });
-});
+        assert.equal(service.allowsMulti('another'), false)
+      })
+    })
+  })
+})

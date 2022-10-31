@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-local",
   "description": "Local authentication strategy for @feathers/authentication",
-  "version": "5.0.0-pre.16",
+  "version": "5.0.0-pre.31",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -16,7 +16,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/feathers.git"
+    "url": "git://github.com/feathersjs/feathers.git",
+    "directory": "packages/authentication-local"
   },
   "author": {
     "name": "Feathers contributors",
@@ -41,9 +42,9 @@
   ],
   "scripts": {
     "prepublish": "npm run compile",
-    "compile": "shx rm -rf lib/ && tsc",
-    "test": "npm run compile && npm run mocha",
-    "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+    "pack": "npm pack --pack-destination ../cli/test/build",
+    "compile": "shx rm -rf lib/ && tsc && npm run pack",
+    "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"
@@ -52,23 +53,24 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^5.0.0-pre.16",
-    "@feathersjs/commons": "^5.0.0-pre.16",
-    "@feathersjs/errors": "^5.0.0-pre.16",
-    "@feathersjs/feathers": "^5.0.0-pre.16",
+    "@feathersjs/authentication": "^5.0.0-pre.31",
+    "@feathersjs/commons": "^5.0.0-pre.31",
+    "@feathersjs/errors": "^5.0.0-pre.31",
+    "@feathersjs/feathers": "^5.0.0-pre.31",
     "bcryptjs": "^2.4.3",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@feathersjs/memory": "^5.0.0-pre.16",
+    "@feathersjs/memory": "^5.0.0-pre.31",
+    "@feathersjs/schema": "^5.0.0-pre.31",
     "@types/bcryptjs": "^2.4.2",
-    "@types/lodash": "^4.14.178",
-    "@types/mocha": "^9.0.0",
-    "@types/node": "^17.0.5",
-    "mocha": "^9.1.3",
-    "shx": "^0.3.3",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.5.4"
+    "@types/lodash": "^4.14.186",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.8.2",
+    "mocha": "^10.0.0",
+    "shx": "^0.3.4",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
   },
-  "gitHead": "f0cd227a82d159b528193bd33747c97684a48773"
+  "gitHead": "4500dbeb8cea566678cf88b3313a88efd93a2ed9"
 }

@@ -1,20 +1,16 @@
 // https://deno.land/manual/testing/assertions
-import * as denoAssert from 'https://deno.land/std@0.114.0/testing/asserts.ts';
+import * as denoAssert from "https://deno.land/std@0.159.0/testing/asserts.ts";
 
-const { assertEquals } = denoAssert
+const { assertEquals } = denoAssert;
 
-export * from 'https://deno.land/std@0.114.0/testing/asserts.ts';
+export * from "https://deno.land/std@0.159.0/testing/bdd.ts";
 
-export const it = (name: string, fn: () => any, only = false) => Deno.test({
-  only,
-  name,
-  fn
-});
+export * from "https://deno.land/std@0.159.0/testing/asserts.ts";
 
-it.only = (name: string, fn: () => any) => it(name, fn, true);
-
-export const assert = {
-  deepStrictEqual (actual: unknown, expected: unknown, msg?: string) {
-    return assertEquals(actual, expected, msg)
-  }
+export function assertDeepStrictEquals(
+  actual: unknown,
+  expected: unknown,
+  msg?: string
+) {
+  return assertEquals(actual, expected, msg);
 }

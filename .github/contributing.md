@@ -8,7 +8,7 @@ Feathers embraces modularity and is broken up across multiple modules. You can f
 
 Before creating an issue please make sure you have checked out the docs, specifically the [FAQ](https://docs.feathersjs.com/help/faq.html) section. You might want to also try searching Github. It's pretty likely someone has already asked a similar question.
 
-If you haven't found your answer please feel free to join our [slack channel](http://slack.feathersjs.com), create an issue on Github, or post on [Stackoverflow](http://stackoverflow.com) using the `feathersjs` tag. We try our best to monitor Stackoverflow but you're likely to get more immediate responses in Slack and Github.
+If you haven't found your answer please feel free to join our [Discord server](https://discord.gg/qa8kez8QBx), create an issue on Github, or post on [Stackoverflow](http://stackoverflow.com) using the `feathersjs` tag. We try our best to monitor Stackoverflow but you're likely to get more immediate responses in Slack and Github.
 
 Issues can be reported in the [issue tracker](https://github.com/feathersjs/feathers/issues). Since feathers combines many modules it can be hard for us to assess the root cause without knowing which modules are being used and what your configuration looks like, so **it helps us immensely if you can link to a simple example that reproduces your issue**.
 
@@ -16,7 +16,7 @@ Issues can be reported in the [issue tracker](https://github.com/feathersjs/feat
 
 We take security very seriously at Feathers. We welcome any peer review of our 100% open source code to ensure nobody's Feathers app is ever compromised or hacked. As a web application developer you are responsible for any security breaches. We do our very best to make sure Feathers is as secure as possible by default.
 
-In order to give the community time to respond and upgrade we strongly urge you report all security issues to us. Send one of the core team members a PM in [Slack](http://slack.feathersjs.com) or email us at <a href="mailto:">hello@feathersjs.com</a> with details and we will respond ASAP.
+In order to give the community time to respond and upgrade we strongly urge you report all security issues to us. Send one of the core team members a PM in [Discord](https://discord.gg/qa8kez8QBx) or email us at <a href="mailto:">hello@feathersjs.com</a> with details and we will respond ASAP.
 
 For full details refer to our [Security docs](https://docs.feathersjs.com/SECURITY.html).
 
@@ -48,7 +48,7 @@ If you've written something awesome about Feathers, for the Feathers ecosystem, 
 
 If you are looking to create a new plugin you also might want to check out the [Plugin Generator](https://github.com/feathersjs/generator-feathers-plugin) that can be used to scaffold plugins to be Feathers compliant from the start.
 
-If you think your module would be a good core `feathersjs` module or `featherjs-ecosystem` module then please contact one of the Feathers maintainers in [Slack](http://slack.feathersjs.com) and we can discuss whether it belongs and how to get it there. :beers:
+If you think your module would be a good core `feathersjs` module or `featherjs-ecosystem` module then please contact one of the Feathers maintainers on [Discord](https://discord.gg/qa8kez8QBx) and we can discuss whether it belongs and how to get it there. :beers:
 
 ## Contributor Code of Conduct
 

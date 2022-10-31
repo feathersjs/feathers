@@ -1,5 +1,9 @@
 {
   "deno.enable": true,
   "deno.lint": true,
-  "deno.unstable": true
+  "deno.unstable": true,
+  "deno.enablePaths": [
+    "./main",
+    "./deno"
+  ]
 }

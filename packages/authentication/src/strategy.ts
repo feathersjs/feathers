@@ -1,34 +1,34 @@
-import { AuthenticationStrategy, AuthenticationBase } from './core';
-import { Application, Service } from '@feathersjs/feathers';
+import { AuthenticationStrategy, AuthenticationBase } from './core'
+import { Application, Service } from '@feathersjs/feathers'
 
 export class AuthenticationBaseStrategy implements AuthenticationStrategy {
-  authentication?: AuthenticationBase;
-  app?: Application;
-  name?: string;
+  authentication?: AuthenticationBase
+  app?: Application
+  name?: string
 
-  setAuthentication (auth: AuthenticationBase) {
-    this.authentication = auth;
+  setAuthentication(auth: AuthenticationBase) {
+    this.authentication = auth
   }
 
-  setApplication (app: Application) {
-    this.app = app;
+  setApplication(app: Application) {
+    this.app = app
   }
 
-  setName (name: string) {
-    this.name = name;
+  setName(name: string) {
+    this.name = name
   }
 
-  get configuration () {
-    return this.authentication.configuration[this.name];
+  get configuration(): any {
+    return this.authentication.configuration[this.name]
   }
 
-  get entityService (): Service {
-    const { service } = this.configuration;
+  get entityService(): Service {
+    const { service } = this.configuration
 
     if (!service) {
-      return null;
+      return null
     }
 
-    return this.app.service(service) || null;
+    return this.app.service(service) || null
   }
 }

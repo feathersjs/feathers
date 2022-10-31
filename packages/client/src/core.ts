@@ -1,1 +1,1 @@
-export * from '@feathersjs/feathers';
+export * from '@feathersjs/feathers'

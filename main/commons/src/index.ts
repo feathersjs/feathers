@@ -1,69 +1,69 @@
-export * from './testing.ts';
+export * from "./testing.ts";
 
 // Removes all leading and trailing slashes from a path
-export function stripSlashes (name: string) {
-  return name.replace(/^(\/+)|(\/+)$/g, '');
+export function stripSlashes(name: string) {
+  return name.replace(/^(\/+)|(\/+)$/g, "");
 }
 
 export type KeyValueCallback<T> = (value: any, key: string) => T;
 
 // A set of lodash-y utility functions that use ES6
 export const _ = {
-  each (obj: any, callback: KeyValueCallback<void>) {
-    if (obj && typeof obj.forEach === 'function') {
+  each(obj: any, callback: KeyValueCallback<void>) {
+    if (obj && typeof obj.forEach === "function") {
       obj.forEach(callback);
     } else if (_.isObject(obj)) {
-      Object.keys(obj).forEach(key => callback(obj[key], key));
+      Object.keys(obj).forEach((key) => callback(obj[key], key));
     }
   },
 
-  some (value: any, callback: KeyValueCallback<boolean>) {
+  some(value: any, callback: KeyValueCallback<boolean>) {
     return Object.keys(value)
-      .map(key => [ value[key], key ])
+      .map((key) => [value[key], key])
       .some(([val, key]) => callback(val, key));
   },
 
-  every (value: any, callback: KeyValueCallback<boolean>) {
+  every(value: any, callback: KeyValueCallback<boolean>) {
     return Object.keys(value)
-      .map(key => [ value[key], key ])
+      .map((key) => [value[key], key])
       .every(([val, key]) => callback(val, key));
   },
 
-  keys (obj: any) {
+  keys(obj: any) {
     return Object.keys(obj);
   },
 
-  values (obj: any) {
-    return _.keys(obj).map(key => obj[key]);
+  values(obj: any) {
+    return _.keys(obj).map((key) => obj[key]);
   },
 
-  isMatch (obj: any, item: any) {
-    return _.keys(item).every(key => obj[key] === item[key]);
+  isMatch(obj: any, item: any) {
+    return _.keys(item).every((key) => obj[key] === item[key]);
   },
 
-  isEmpty (obj: any) {
+  isEmpty(obj: any) {
     return _.keys(obj).length === 0;
   },
 
-  isObject (item: any) {
-    return (typeof item === 'object' && !Array.isArray(item) && item !== null);
+  isObject(item: any) {
+    return typeof item === "object" && !Array.isArray(item) && item !== null;
   },
 
-  isObjectOrArray (value: any) {
-    return typeof value === 'object' && value !== null;
+  isObjectOrArray(value: any) {
+    return typeof value === "object" && value !== null;
   },
 
-  extend (first: any, ...rest: any[]) {
+  extend(first: any, ...rest: any[]) {
     return Object.assign(first, ...rest);
   },
 
-  omit (obj: any, ...keys: string[]) {
+  omit(obj: any, ...keys: string[]) {
     const result = _.extend({}, obj);
-    keys.forEach(key => delete result[key]);
+    keys.forEach((key) => delete result[key]);
     return result;
   },
 
-  pick (source: any, ...keys: string[]) {
+  pick(source: any, ...keys: string[]) {
     return keys.reduce((result: { [key: string]: any }, key) => {
       if (source[key] !== undefined) {
         result[key] = source[key];
@@ -74,9 +74,9 @@ export const _ = {
   },
 
   // Recursively merge the source object into the target object
-  merge (target: any, source: any) {
+  merge(target: any, source: any) {
     if (_.isObject(target) && _.isObject(source)) {
-      Object.keys(source).forEach(key => {
+      Object.keys(source).forEach((key) => {
         if (_.isObject(source[key])) {
           if (!target[key]) {
             Object.assign(target, { [key]: {} });
@@ -89,17 +89,18 @@ export const _ = {
       });
     }
     return target;
-  }
+  },
 };
 
 // Duck-checks if an object looks like a promise
-export function isPromise (result: any) {
-  return _.isObject(result) &&
-    typeof result.then === 'function';
+export function isPromise(result: any) {
+  return _.isObject(result) && typeof result.then === "function";
 }
 
-export function createSymbol (name: string) {
-  return typeof Symbol !== 'undefined' ? Symbol(name) : name;
+export function createSymbol(name: string) {
+  return typeof Symbol !== "undefined" ? Symbol(name) : name;
 }
 
-export * from './debug.ts';
+export * from "./debug.ts";
+
+export * from "./events.js";
