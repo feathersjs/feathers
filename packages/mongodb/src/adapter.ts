@@ -93,7 +93,7 @@ export class MongoDbAdapter<
     return Promise.resolve(Model)
   }
 
-  async asFindQuery(params: P) {
+  async findRaw(params: P) {
     const { filters, query } = this.filterQuery(null, params)
     const model = await this.getModel(params)
     const q = model.find(query, { ...params.mongodb })
@@ -117,12 +117,8 @@ export class MongoDbAdapter<
     return q
   }
 
-  async asAggregateQuery(params: P) {
+  async aggregateRaw(params: P) {
     const model = await this.getModel(params)
-    return model.aggregate(this.makePipeline(params))
-  }
-
-  makePipeline(params: P) {
     const pipeline = params.pipeline || []
     const index = pipeline.findIndex((stage: Document) => stage.$feathers)
     const handleStages = pipeline[index]?.$feathers.handleStages || ((stages: Document[]) => stages)
@@ -130,7 +126,7 @@ export class MongoDbAdapter<
     const feathersPipeline = this.makeFeathersPipeline(params)
     const after = index >= 0 ? pipeline.slice(index + 1) : pipeline
 
-    return [...before, ...(handleStages(feathersPipeline) || feathersPipeline), ...after]
+    return model.aggregate([...before, ...(handleStages(feathersPipeline) || feathersPipeline), ...after])
   }
 
   makeFeathersPipeline(params: P) {
@@ -240,7 +236,7 @@ export class MongoDbAdapter<
     }
 
     const [request, total] = await Promise.all([
-      useAggregation ? this.asAggregateQuery(params) : this.asFindQuery(params),
+      useAggregation ? this.aggregateRaw(params) : this.findRaw(params),
       countDocuments()
     ])
 
