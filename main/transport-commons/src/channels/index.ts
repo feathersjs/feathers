@@ -118,7 +118,7 @@ export function channels() {
                 }
 
                 const results = Array.isArray(result)
-                  ? lodash.compact(lodash.flattenDeep(result))
+                  ? lodash.compact(result.flat())
                   : ([result] as Channel[]);
                 const channel = new CombinedChannel(results);
 

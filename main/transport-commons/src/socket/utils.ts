@@ -30,7 +30,7 @@ export function normalizeError(e: any) {
     });
   }
 
-  // how to tell if production mode in Deno? NODE_ENV is, of course, a NODE / express way to do it
+  // @TODO how to tell if we are in production mode in Deno? NODE_ENV is, of course, a NODE / express way to do it
   // if (process.env.NODE_ENV === "production") {
   delete result.stack;
   // }
