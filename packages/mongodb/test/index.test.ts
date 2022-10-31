@@ -377,6 +377,7 @@ describe('Feathers MongoDB Service', () => {
 
       // Create a task for each person
       await app.service('todos').create({ name: 'Bob do dishes', userId: bob._id })
+      await app.service('todos').create({ name: 'Bob do laundry', userId: bob._id })
       await app.service('todos').create({ name: 'Alice do dishes', userId: alice._id })
       await app.service('todos').create({ name: 'Doug do dishes', userId: doug._id })
     })
@@ -386,9 +387,9 @@ describe('Feathers MongoDB Service', () => {
       db.collection('todos').deleteMany({})
     })
 
-    it('can use lookup after normal query pipeline', async () => {
+    it('assumes the feathers stage runs before all if it is not explicitly provided in pipeline', async () => {
       const result = await app.service('todos').find({
-        query: { $sort: { name: 1 } },
+        query: { name: /dishes/, $sort: { name: 1 } },
         pipeline: [
           {
             $lookup: {
@@ -405,6 +406,59 @@ describe('Feathers MongoDB Service', () => {
       assert.deepEqual(result[0].person, alice)
       assert.deepEqual(result[1].person, bob)
       assert.deepEqual(result[2].person, doug)
+    })
+
+    it('can prepend stages by explicitly placing the feathers stage', async () => {
+      const result = await app.service('todos').find({
+        query: { $sort: { name: 1 } },
+        pipeline: [
+          { $match: { name: 'Bob do dishes' } },
+          { $feathers: {} },
+          {
+            $lookup: {
+              from: 'people',
+              localField: 'userId',
+              foreignField: '_id',
+              as: 'person'
+            }
+          },
+          { $unwind: { path: '$person' } }
+        ],
+        paginate: false
+      })
+      assert.deepEqual(result[0].person, bob)
+      assert.equal(result.length, 1)
+    })
+
+    it('calls handleStages when provided in the feathers stage', async () => {
+      const result = await app.service('todos').find({
+        query: { $sort: { name: 1 } },
+        pipeline: [
+          { $match: { name: /do dishes/ } },
+          {
+            $feathers: {
+              handleStages(stages: any[]) {
+                assert.equal(stages.length, 2)
+                assert.ok(stages[0].$match)
+                assert.ok(stages[1].$sort)
+                stages[0].$match = { name: /Alice/ }
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'people',
+              localField: 'userId',
+              foreignField: '_id',
+              as: 'person'
+            }
+          },
+          { $unwind: { path: '$person' } }
+        ],
+        paginate: false
+      })
+      assert.deepEqual(result[0].person, alice)
+      assert.equal(result.length, 1)
     })
   })
 

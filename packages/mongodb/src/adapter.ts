@@ -119,10 +119,21 @@ export class MongoDbAdapter<
 
   async asAggregateQuery(params: P) {
     const model = await this.getModel(params)
-    return model.aggregate(this.asPipeline(params))
+    return model.aggregate(this.makePipeline(params))
   }
 
-  asPipeline(params: P) {
+  makePipeline(params: P) {
+    const pipeline = params.pipeline || []
+    const index = pipeline.findIndex((stage: Document) => stage.$feathers)
+    const handleStages = pipeline[index]?.$feathers.handleStages || ((stages: Document[]) => stages)
+    const before = index >= 0 ? pipeline.slice(0, index) : []
+    const feathersPipeline = this.makeFeathersPipeline(params)
+    const after = index >= 0 ? pipeline.slice(index + 1) : pipeline
+
+    return [...before, ...(handleStages(feathersPipeline) || feathersPipeline), ...after]
+  }
+
+  makeFeathersPipeline(params: P) {
     const { filters, query } = this.filterQuery(null, params)
     const pipeline: Document[] = [{ $match: query }]
 
@@ -141,7 +152,7 @@ export class MongoDbAdapter<
     if (filters.$limit !== undefined) {
       pipeline.push({ $limit: filters.$limit })
     }
-    return pipeline.concat(params.pipeline || [])
+    return pipeline
   }
 
   getSelect(select: string[] | { [key: string]: number }) {
