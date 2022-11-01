@@ -22,9 +22,7 @@ export const uniqBy = <T = any, V = any>(arr: T[], selector: (item: T) => V) => 
   const map = new Map<V, T>()
   arr.forEach((item) => {
     const prop = selector(item)
-    console.log(prop)
     if (!map.has(prop)) map.set(prop, item)
   })
-  console.log(map.values())
   return [...map.values()]
 }

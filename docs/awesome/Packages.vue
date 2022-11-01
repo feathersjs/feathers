@@ -24,10 +24,7 @@ async function getPackageStats(): Promise<PackageOutput[]> {
     pkg.hasNPM = hasNPM
   })
 
-  console.log(packages)
-
   const uniq = uniqBy(packages, (pkg) => pkg.id)
-  console.log(uniq)
   return uniq
 }
 
@@ -110,7 +107,7 @@ const filteredPackages = computed(() => {
     const _search = search.value.toLowerCase()
     pkgs = pkgs.filter(
       (pkg) =>
-        pkg.name.includes(_search) ||
+        pkg.id.includes(_search) ||
         pkg.description?.includes(_search) ||
         pkg.keywords?.some((keyword) => keyword.includes(_search))
     )
@@ -144,7 +141,6 @@ const packagesToShow = computed(() => {
       return 0
     }
   })
-  console.log(result.map((x) => x[key]))
   return result
 })
 </script>
