@@ -22,7 +22,6 @@ const formatDistance = (date: Date, baseDate: Date) => {
   try {
     return _formatDistance(date, new Date())
   } catch (err) {
-    console.error(err)
     return ''
   }
 }
@@ -30,7 +29,6 @@ const formatDate = (date: Date) => {
   try {
     return intlFormat.format(date)
   } catch (err) {
-    console.error(err)
     return ''
   }
 }
