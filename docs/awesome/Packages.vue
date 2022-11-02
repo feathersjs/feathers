@@ -3,6 +3,7 @@ import PackageCard from './PackageCard.vue'
 import { PackageOutput, PackagesInput } from './types'
 import { ref, computed, onMounted } from 'vue'
 import { uniqBy } from './helpers'
+import { useQuery } from './useQuery'
 
 const packageSource = 'https://ecosystem.feathershq.workers.dev/'
 
@@ -56,9 +57,9 @@ const categories: CategoryOption[] = [
   { label: 'Validation', value: ['validation', 'validator', 'validators'] }
 ]
 
-const keyToSortBy = ref<'stars' | 'downloads' | 'lastPublish'>('lastPublish')
+const keyToSortBy = useQuery<'string', 'stars' | 'downloads' | 'lastPublish'>('sort', 'string', 'lastPublish')
 
-const showCore = ref(true)
+const showCore = useQuery('core', 'boolean', true)
 function filterCore(pkg: PackageOutput) {
   return pkg.ownerName === 'feathersjs'
 }
@@ -67,7 +68,7 @@ const coreCount = computed(() => {
 })
 
 const packagesAreOldIfOlderThan = 1000 * 60 * 60 * 24 * 365 * 2.9 // 3 years
-const showOld = ref(false)
+const showOld = useQuery('old', 'boolean', false)
 function filterOld(pkg: PackageOutput) {
   return pkg.lastPublish.getTime() < Date.now() - packagesAreOldIfOlderThan
 }
@@ -86,14 +87,22 @@ const countByCategory = computed(() => {
   return counts
 })
 
-const categoriesToShow = ref<CategoryOption[]>([])
+const categoriesToFilter = useQuery<'string[]', string[]>('cat', 'string[]', [])
+
+const categoriesToShow = computed(() => {
+  const cats = categories.filter((category) => {
+    return categoriesToFilter.value.includes(category.label)
+  })
+  return cats
+})
+
 type Category = string[]
 type CategoryOption = {
   label: string
   value: Category
 }
 
-const search = ref('')
+const search = useQuery('search', 'string')
 
 const filteredPackages = computed(() => {
   let pkgs = [...fetchedPackages.value]
@@ -158,7 +167,7 @@ const packagesToShow = computed(() => {
         >
       </div>
       <el-select
-        v-model="categoriesToShow"
+        v-model="categoriesToFilter"
         multiple
         collapse-tags
         collapse-tags-tooltip
@@ -171,7 +180,7 @@ const packagesToShow = computed(() => {
           v-for="option in categories"
           :key="option.label"
           :label="option.label"
-          :value="option"
+          :value="option.label"
           :title="option.value.join(', ')"
         >
           {{ option.label }} ({{ countByCategory[option.label] }})
