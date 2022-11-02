@@ -67,10 +67,10 @@
   "devDependencies": {
     "@feathersjs/authentication-local": "^5.0.0-pre.32",
     "@feathersjs/tests": "^5.0.0-pre.32",
-    "@types/lodash": "^4.14.186",
+    "@types/lodash": "^4.14.187",
     "@types/mocha": "^10.0.0",
-    "@types/node": "^18.11.8",
-    "axios": "^0.27.2",
+    "@types/node": "^18.11.9",
+    "axios": "^1.1.3",
     "lodash": "^4.17.21",
     "mocha": "^10.1.0",
     "shx": "^0.3.4",

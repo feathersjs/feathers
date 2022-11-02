@@ -62,9 +62,9 @@
   },
   "devDependencies": {
     "@types/encodeurl": "^1.0.0",
-    "@types/lodash": "^4.14.186",
+    "@types/lodash": "^4.14.187",
     "@types/mocha": "^10.0.0",
-    "@types/node": "^18.11.8",
+    "@types/node": "^18.11.9",
     "mocha": "^10.1.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",

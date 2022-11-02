@@ -66,7 +66,7 @@
   "devDependencies": {
     "@feathersjs/memory": "^5.0.0-pre.32",
     "@types/mocha": "^10.0.0",
-    "@types/node": "^18.11.8",
+    "@types/node": "^18.11.9",
     "ajv-formats": "^2.1.1",
     "mocha": "^10.1.0",
     "shx": "^0.3.4",

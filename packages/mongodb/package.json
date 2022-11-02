@@ -62,7 +62,7 @@
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.0-pre.32",
     "@types/mocha": "^10.0.0",
-    "@types/node": "^18.11.8",
+    "@types/node": "^18.11.9",
     "mocha": "^10.1.0",
     "mongodb-memory-server": "^8.9.5",
     "shx": "^0.3.4",
