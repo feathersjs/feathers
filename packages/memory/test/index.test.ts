@@ -172,7 +172,7 @@ describe('Feathers Memory Service', () => {
     )
 
     await app.service('matcher').find({
-      query: { $sort: { something: 1 } }
+      query: { something: 1, $sort: { something: 1 } }
     })
 
     assert.ok(sorterCalled, 'sorter called')
