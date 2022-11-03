@@ -38,6 +38,15 @@ const arrayOfKeys = <T extends TObject>(type: T) => {
   return Type.Unsafe<(keyof T['properties'])[]>({ type: 'array', items: { type: 'string', enum: keys } })
 }
 
+/**
+ * A TypeBox utility that converts an array of provided strings into a string enum.
+ * @param allowedValues array of strings for the enum
+ * @returns TypeBox.Type
+ */
+export function StringEnum<T extends string[]>(allowedValues: [...T]) {
+  return Type.Unsafe<T[number]>({ type: 'string', enum: allowedValues })
+}
+
 export function sortDefinition<T extends TObject>(schema: T) {
   const properties = Object.keys(schema.properties).reduce((res, key) => {
     const result = res as any

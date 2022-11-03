@@ -269,7 +269,38 @@ const T = {
 }
 ```
 
+##### StringEnum
+
+`StringEnum` is a standalone utility to for specifying an array of allowed string values on a property. It is directly exported from `@feathersjs/typebox`:
+
+```js
+// import the module, first
+import { StringEnum } from '@feathersjs/typebox'
+
+const T = StringEnum(['crow', 'dove', 'eagle'])
+```
+
+To obtain the TypeScript type, use the `Static` utility:
+
+```js
+import { Static } from '@feathersjs/typebox'
+
+type T = Static<typeof T>
+```
+
+```js
+const T = {
+  enum: ['crow', 'dove', 'eagle']
+}
+```
+
 ##### Enum
+
+<BlockQuote>
+
+For string values, use [StringEnum](#stringenum).
+
+</BlockQuote>
 
 ```js
 enum Foo {
