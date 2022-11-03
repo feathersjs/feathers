@@ -429,37 +429,6 @@ describe('Feathers MongoDB Service', () => {
       assert.deepEqual(result[0].person, bob)
       assert.equal(result.length, 1)
     })
-
-    it('calls handleStages when provided in the feathers stage', async () => {
-      const result = await app.service('todos').find({
-        query: { $sort: { name: 1 } },
-        pipeline: [
-          { $match: { name: /do dishes/ } },
-          {
-            $feathers: {
-              handleStages(stages: any[]) {
-                assert.equal(stages.length, 2)
-                assert.ok(stages[0].$match)
-                assert.ok(stages[1].$sort)
-                stages[0].$match = { name: /Alice/ }
-              }
-            }
-          },
-          {
-            $lookup: {
-              from: 'people',
-              localField: 'userId',
-              foreignField: '_id',
-              as: 'person'
-            }
-          },
-          { $unwind: { path: '$person' } }
-        ],
-        paginate: false
-      })
-      assert.deepEqual(result[0].person, alice)
-      assert.equal(result.length, 1)
-    })
   })
 
   testSuite(app, errors, 'people', '_id')

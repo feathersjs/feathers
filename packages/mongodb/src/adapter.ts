@@ -121,12 +121,11 @@ export class MongoDbAdapter<
     const model = await this.getModel(params)
     const pipeline = params.pipeline || []
     const index = pipeline.findIndex((stage: Document) => stage.$feathers)
-    const handleStages = pipeline[index]?.$feathers.handleStages || ((stages: Document[]) => stages)
     const before = index >= 0 ? pipeline.slice(0, index) : []
     const feathersPipeline = this.makeFeathersPipeline(params)
     const after = index >= 0 ? pipeline.slice(index + 1) : pipeline
 
-    return model.aggregate([...before, ...(handleStages(feathersPipeline) || feathersPipeline), ...after])
+    return model.aggregate([...before, ...feathersPipeline, ...after])
   }
 
   makeFeathersPipeline(params: P) {
