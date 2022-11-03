@@ -14,7 +14,7 @@ declare module './declarations' {
 
 export const mongodb = (app: Application) => {
   const connection = app.get('mongodb') as string
-  const database = connection.substring(connection.lastIndexOf('/') + 1)
+  const database = new URL("mongodb://localhost").pathname.substring(1)
   const mongoClient = MongoClient.connect(connection)
     .then(client => client.db(database))
 
