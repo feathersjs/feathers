@@ -114,7 +114,7 @@ export class MemoryAdapter<T = any, D = Partial<T>, P extends Params = Params> e
     }
 
     const result: Paginated<T> = {
-      total,
+      total: hasQuery ? values.length : total,
       limit: filters.$limit,
       skip: filters.$skip || 0,
       data: filters.$limit === 0 ? [] : values
