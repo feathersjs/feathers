@@ -145,6 +145,10 @@ export default defineConfig({
         ]
       },
       {
+        text: 'Awesome',
+        link: '/awesome/'
+      },
+      {
         text: 'Ecosystem',
         items: [
           { text: 'Blog', link: 'https://blog.feathersjs.com/' },
@@ -211,9 +215,12 @@ export default defineConfig({
         },
         {
           text: 'Frontend',
-          // collapsible: true,
-          // collapsed: true,
+          collapsible: true,
           items: [
+            {
+              text: 'JavaScript',
+              link: '/guides/frontend/javascript.md'
+            }
             // {
             //   text: 'Frontend Frameworks',
             //   link: '/guides/frameworks.md'

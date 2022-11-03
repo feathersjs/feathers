@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.32](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.31...v5.0.0-pre.32) (2022-10-26)
+
+### Bug Fixes
+
+- **schema:** Improve resolver performance ([#2822](https://github.com/feathersjs/feathers/issues/2822)) ([5fa900f](https://github.com/feathersjs/feathers/commit/5fa900f90d55859332c90283dddddab26ae3759c))
+- **schema:** Use the same options for resolveData hook ([#2833](https://github.com/feathersjs/feathers/issues/2833)) ([ed3b050](https://github.com/feathersjs/feathers/commit/ed3b05051db6886729d4824825ca8f00c2459af7))
+
 # [5.0.0-pre.31](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.30...v5.0.0-pre.31) (2022-10-12)
 
 ### Features

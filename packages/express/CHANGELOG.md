@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.32](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.31...v5.0.0-pre.32) (2022-10-26)
+
+### Bug Fixes
+
+- **docs:** Review transport API docs and update Express middleware setup ([#2811](https://github.com/feathersjs/feathers/issues/2811)) ([1b97f14](https://github.com/feathersjs/feathers/commit/1b97f14d474f5613482f259eeaa585c24fcfab43))
+- **transports:** Add remaining middleware for generated apps to Koa and Express ([#2796](https://github.com/feathersjs/feathers/issues/2796)) ([0d5781a](https://github.com/feathersjs/feathers/commit/0d5781a5c72a0cbb2ec8211bfa099f0aefe115a2))
+
 # [5.0.0-pre.31](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.30...v5.0.0-pre.31) (2022-10-12)
 
 **Note:** Version bump only for package @feathersjs/express

@@ -115,7 +115,7 @@ In a Feathers application, resolvers are used through [hooks](../hooks.md) to co
 
 ### resolveData
 
-Data resolvers use the `schemaHooks.resolveData` hook and convert the `data` from a `create`, `update` or `patch` [service method](../services.md) or a [custom method](../services.md#custom-methods). This can be used to validate against the schema and e.g. hash a password before storing it in the database or to remove properties the user is not allowed to write. `schemaHooks.resolveData` can be used as an `around` and `before` hook.
+Data resolvers use the `schemaHooks.resolveData(...resolvers)` hook and convert the `data` from a `create`, `update` or `patch` [service method](../services.md) or a [custom method](../services.md#custom-methods). This can be used to validate against the schema and e.g. hash a password before storing it in the database or to remove properties the user is not allowed to write. It is possible to pass multiple resolvers which will run in the order they are passed, using the previous data. `schemaHooks.resolveData` can be used as an `around` and `before` hook.
 
 ```ts
 import type { HookContext } from '../declarations'
@@ -173,7 +173,7 @@ app.service('users').hooks({
 
 ### resolveResult
 
-Result resolvers use the `schemaHooks.resolveResult` hook and resolve the data that is returned by a service call ([context.result](../hooks.md#context-result) in a hook). This can be used to populate associations or add other computed properties etc. `schemaHooks.resolveResult` can be used as an `around` and `after` hook.
+Result resolvers use the `schemaHooks.resolveResult(...resolvers)` hook and resolve the data that is returned by a service call ([context.result](../hooks.md#context-result) in a hook). This can be used to populate associations or add other computed properties etc. It is possible to pass multiple resolvers which will run in the order they are passed, using the previous data. `schemaHooks.resolveResult` can be used as an `around` and `after` hook.
 
 ```ts
 import { schemaHooks, resolve } from '@feathersjs/schema'
@@ -223,7 +223,7 @@ app.service('messages').hooks({
 
 ### resolveExternal
 
-External (or dispatch) resolver use the `schemaHooks.resolveDispatch` hook to return a safe version of the data that will be sent to external clients. Returning `undefined` for a property resolver will exclude the property which can be used to hide sensitive data like the user password. This includes nested associations and real-time events. `schemaHooks.resolveExternal` can be used as an `around` or `after` hook.
+External (or dispatch) resolver use the `schemaHooks.resolveDispatch(...resolvers)` hook to return a safe version of the data that will be sent to external clients. It is possible to pass multiple resolvers which will run in the order they are passed, using the previous data. Returning `undefined` for a property resolver will exclude the property which can be used to hide sensitive data like the user password. This includes nested associations and real-time events. `schemaHooks.resolveExternal` can be used as an `around` or `after` hook.
 
 ```ts
 import { schemaHooks, resolve } from '@feathersjs/schema'
@@ -267,7 +267,7 @@ In order to get the safe data from resolved associations **all services** involv
 
 ### resolveQuery
 
-Query resolvers use the `schemaHooks.resolveQuery` hook to modify `params.query`. This is often used to set default values or limit the query so a user can only request data they are allowed to see. `schemaHooks.resolveQuery` can be used as an `around` or `before` hook.
+Query resolvers use the `schemaHooks.resolveQuery(...resolvers)` hook to modify `params.query`. This is often used to set default values or limit the query so a user can only request data they are allowed to see. It is possible to pass multiple resolvers which will run in the order they are passed, using the previous data. `schemaHooks.resolveQuery` can be used as an `around` or `before` hook.
 
 ```ts
 import { schemaHooks, resolve } from '@feathersjs/schema'

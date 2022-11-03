@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication",
   "description": "Add Authentication to your FeathersJS app.",
-  "version": "5.0.0-pre.31",
+  "version": "5.0.0-pre.32",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -53,12 +53,12 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^5.0.0-pre.31",
-    "@feathersjs/errors": "^5.0.0-pre.31",
-    "@feathersjs/feathers": "^5.0.0-pre.31",
+    "@feathersjs/commons": "^5.0.0-pre.32",
+    "@feathersjs/errors": "^5.0.0-pre.32",
+    "@feathersjs/feathers": "^5.0.0-pre.32",
     "@feathersjs/hooks": "^0.7.5",
-    "@feathersjs/schema": "^5.0.0-pre.31",
-    "@feathersjs/transport-commons": "^5.0.0-pre.31",
+    "@feathersjs/schema": "^5.0.0-pre.32",
+    "@feathersjs/transport-commons": "^5.0.0-pre.32",
     "@types/jsonwebtoken": "^8.5.9",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
@@ -66,7 +66,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@feathersjs/memory": "^5.0.0-pre.31",
+    "@feathersjs/memory": "^5.0.0-pre.32",
     "@types/lodash": "^4.14.186",
     "@types/mocha": "^10.0.0",
     "@types/node": "^18.8.2",
@@ -76,5 +76,5 @@
     "ts-node": "^10.9.1",
     "typescript": "^4.8.4"
   },
-  "gitHead": "4500dbeb8cea566678cf88b3313a88efd93a2ed9"
+  "gitHead": "b405e205fc6d9fbd42b42c7a3f30ea4bf33d121d"
 }

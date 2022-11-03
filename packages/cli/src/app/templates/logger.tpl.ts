@@ -26,8 +26,8 @@ export const logErrorHook = async (context: HookContext, next: NextFunction) => 
     logger.error(error.stack)
     
     // Log validation errors
-    if (error.errors) {
-      logger.error(error.errors)
+    if (error.data) {
+      logger.error(error.data)
     }
 
     throw error
