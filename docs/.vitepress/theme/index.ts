@@ -12,6 +12,10 @@ import Logo from '../components/Logo.vue'
 import BlockQuote from '../components/BlockQuote.vue'
 import LanguageBlock from '../components/LanguageBlock.vue'
 
+import '../style/element-plus.scss'
+import 'element-plus/theme-chalk/dark/css-vars.css'
+// import 'element-plus/dist/index.css'
+
 if (inBrowser) import('./pwa')
 
 export default {
