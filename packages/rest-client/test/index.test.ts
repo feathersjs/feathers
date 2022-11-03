@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-ignore
 import fetch from 'node-fetch'
 import { strict as assert } from 'assert'
 import { feathers } from '@feathersjs/feathers'
