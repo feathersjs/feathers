@@ -145,6 +145,10 @@ export default defineConfig({
         ]
       },
       {
+        text: 'Awesome',
+        link: '/awesome/'
+      },
+      {
         text: 'Ecosystem',
         items: [
           { text: 'Blog', link: 'https://blog.feathersjs.com/' },
