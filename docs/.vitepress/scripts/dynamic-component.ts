@@ -5,8 +5,8 @@ import { h, render } from 'vue'
  * Refer to https://github.com/vuejs/core/issues/2097#issuecomment-707975628
  */
 export const prependDynamicComponent = function (app, Component, id, props, el) {
-  const firstChild = el.children[0]
-  if (firstChild.id === 'GlobalLanguageSelect') {
+  const firstTwoIds = [el.children?.[0], el.children?.[1]].map((el) => el?.id)
+  if (firstTwoIds.includes(id)) {
     return
   }
 
