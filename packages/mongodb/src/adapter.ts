@@ -67,7 +67,7 @@ export class MongoDbAdapter<
     return id
   }
 
-  filterQuery(id: NullableId, params: P) {
+  filterQuery(id: NullableId | ObjectId, params: P) {
     const { $select, $sort, $limit, $skip, ...query } = (params.query || {}) as AdapterQuery
 
     if (id !== null) {
@@ -100,11 +100,11 @@ export class MongoDbAdapter<
     return select
   }
 
-  async $findOrGet(id: NullableId, params: P) {
+  async $findOrGet(id: NullableId | ObjectId, params: P) {
     return id === null ? await this.$find(params) : await this.$get(id, params)
   }
 
-  normalizeId(id: NullableId, data: Partial<D>): Partial<D> {
+  normalizeId(id: NullableId | ObjectId, data: Partial<D>): Partial<D> {
     if (this.id === '_id') {
       // Default Mongo IDs cannot be updated. The Mongo library handles
       // this automatically.
@@ -120,7 +120,7 @@ export class MongoDbAdapter<
     return data
   }
 
-  async $get(id: Id, params: P = {} as P): Promise<T> {
+  async $get(id: Id | ObjectId, params: P = {} as P): Promise<T> {
     const { Model } = this.getOptions(params)
     const {
       query,
@@ -233,8 +233,9 @@ export class MongoDbAdapter<
 
   async $patch(id: null, data: Partial<D>, params?: P): Promise<T[]>
   async $patch(id: Id, data: Partial<D>, params?: P): Promise<T>
+  async $patch(id: ObjectId, data: Partial<D>, params?: P): Promise<T>
   async $patch(id: NullableId, data: Partial<D>, _params?: P): Promise<T | T[]>
-  async $patch(id: NullableId, _data: Partial<D>, params: P = {} as P): Promise<T | T[]> {
+  async $patch(id: NullableId | ObjectId, _data: Partial<D>, params: P = {} as P): Promise<T | T[]> {
     const data = this.normalizeId(id, _data)
     const { Model } = this.getOptions(params)
     const model = await Promise.resolve(Model)
@@ -281,7 +282,7 @@ export class MongoDbAdapter<
     return this.$findOrGet(id, findParams).catch(errorHandler)
   }
 
-  async $update(id: Id, data: D, params: P = {} as P): Promise<T> {
+  async $update(id: Id | ObjectId, data: D, params: P = {} as P): Promise<T> {
     const { Model } = this.getOptions(params)
     const model = await Promise.resolve(Model)
     const { query } = this.filterQuery(id, params)
@@ -294,8 +295,9 @@ export class MongoDbAdapter<
 
   async $remove(id: null, params?: P): Promise<T[]>
   async $remove(id: Id, params?: P): Promise<T>
+  async $remove(id: ObjectId, params?: P): Promise<T>
   async $remove(id: NullableId, _params?: P): Promise<T | T[]>
-  async $remove(id: NullableId, params: P = {} as P): Promise<T | T[]> {
+  async $remove(id: NullableId | ObjectId, params: P = {} as P): Promise<T | T[]> {
     const { Model } = this.getOptions(params)
     const model = await Promise.resolve(Model)
     const {

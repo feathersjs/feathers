@@ -376,3 +376,48 @@ students.find({ query, collation }).then( ... );
 For more information on MongoDB's collation feature, visit the [collation reference page](https://docs.mongodb.com/manual/reference/collation/).
 
 ## Search
+
+## ObjectId resolvers
+
+MongoDB uses object ids as primary keys and for references to other documents. To a client they are represented as strings and to convert between strings and object ids, the following [property resolver](../schema/resolvers.md) helpers can be used.
+
+### resolveObjectId
+
+`resolveObjectId` resolves a property as an object id. It can be used as a direct property resolver or called with the original value.
+
+```ts
+import { resolveObjectId } from '@feathersjs/mongodb'
+
+export const messageDataResolver = resolve<Message, HookContext>({
+  properties: {
+    userId: resolveObjectId
+  }
+})
+
+export const messageDataResolver = resolve<Message, HookContext>({
+  properties: {
+    userId: async (value, _message, context) => {
+      // If the user is an admin, allow them to create messages for other users
+      if (context.params.user.isAdmin && value !== undefined) {
+        return resolveObjectId(value)
+      }
+      // Otherwise associate the record with the id of the authenticated user
+      return context.params.user._id
+    }
+  }
+})
+```
+
+### resolveQueryObjectId
+
+`resolveQueryObjectId` allows to query for object ids. It supports conversion from a string to an object id as well as conversion for values from the [$in, $nin and $ne query syntax](./querying.md).
+
+```ts
+import { resolveQueryObjectId } from '@feathersjs/mongodb'
+
+export const messageQueryResolver = resolve<MessageQuery, HookContext>({
+  properties: {
+    userId: resolveQueryObjectId
+  }
+})
+```
