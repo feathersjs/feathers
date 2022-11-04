@@ -37,7 +37,7 @@ type Message = Static<typeof messageSchema>
 
 ## Types
 
-TypeBox provides a set of functions that allow you to compose JSON Schema similar to how you would compose static types with TypeScript. Each function creates a JSON schema fragment which can compose into more complex types. The schemas produced by TypeBox can be passed directly to any JSON Schema compliant validator, or used to reflect runtime metadata for a type.
+TypeBox provides a set of functions that allow you to compose JSON Schema similar to how you would compose static types with TypeScript. Each function creates a JSON schema fragment which can compose into more complex types. The schemas produced by TypeBox can be passed directly to any JSON Schema-compliant validator, or used to reflect runtime metadata for a type.
 
 ### Standard
 
@@ -46,6 +46,8 @@ These are the standard TypeBox types. Each section shows equivalent code in thre
 - TypeBox
 - TypeScript type
 - JSON Schema
+
+The following information comes from the TypeBox documentation.  It has been formatted to make it easier to copy/paste examples.
 
 #### Primitive Types
 
@@ -643,20 +645,132 @@ const T = {
 }
 ```
 
-### Options
+### Options by Type
 
-You can pass additional JSON schema options on the last argument of any given type. The following are some examples.
+You can pass additional JSON schema options on the last argument of any given type. The [JSON Schema specification](https://json-schema.org/draft/2020-12/json-schema-validation.html#name-a-vocabulary-for-structural) describes options for each data type. Descriptions from the specification are copied here for easy reference.
+
+#### For Numbers
+
+Number types support the following options, which can be used simultaneously.
+
+##### `multipleOf`
+
+The value of "multipleOf" MUST be a number, strictly greater than 0. Values are valid only if division by this keyword's value results in an integer.
 
 ```ts
-// string must be an email
-const T = Type.String({ format: 'email' })
-
-// number must be a multiple of 2
 const T = Type.Number({ multipleOf: 2 })
-
-// array must have at least 5 integer values
-const T = Type.Array(Type.Integer(), { minItems: 5 })
 ```
+
+##### `maximum`
+
+The value of "maximum" MUST be a number, representing an inclusive upper limit for a numeric instance. If the instance is a number, then this keyword validates only if the instance is less than or exactly equal to "maximum".
+
+```ts
+const T = Type.Number({ maximum: 20 })
+```
+
+##### `exclusiveMaximum`
+
+The value of "exclusiveMaximum" MUST be a number, representing an exclusive upper limit for a numeric instance. If the instance is a number, then the instance is valid only if it has a value strictly less than (not equal to) "exclusiveMaximum".
+
+```ts
+const T = Type.Number({ exclusiveMaximum: 20 })
+```
+
+##### `minimum`
+
+The value of "minimum" MUST be a number, representing an inclusive lower limit for a numeric instance. If the instance is a number, then this keyword validates only if the instance is greater than or exactly equal to "minimum".
+
+```ts
+const T = Type.Number({ minimum: 20 })
+```
+
+##### `exclusiveMinimum`
+
+The value of "exclusiveMinimum" MUST be a number, representing an exclusive lower limit for a numeric instance. If the instance is a number, then the instance is valid only if it has a value strictly greater than (not equal to) "exclusiveMinimum".
+
+```ts
+const T = Type.Number({ exclusiveMinimum: 20 })
+```
+
+#### For Strings
+
+String types support the following options, which can be used simultaneously.
+
+##### `maxLength`
+
+The value of this keyword MUST be a non-negative integer. A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword. The length of a string instance is defined as the number of its characters as defined by RFC 8259 [RFC8259].
+
+##### `minLength`
+
+The value of this keyword MUST be a non-negative integer. A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword. The length of a string instance is defined as the number of its characters as defined by RFC 8259 [RFC8259]. Omitting this keyword has the same behavior as a value of 0.
+
+##### `pattern`
+
+Use `Type.Regex`, instead of this option.
+
+#### For Arrays
+
+Array types support the following options, which can be used simultaneously.
+
+##### `maxItems`
+
+The value of this keyword MUST be a non-negative integer. An array instance is valid against "maxItems" if its size is less than, or equal to, the value of this keyword.
+
+##### `minItems`
+
+The value of this keyword MUST be a non-negative integer. An array instance is valid against "minItems" if its size is greater than, or equal to, the value of this keyword. Omitting this keyword has the same behavior as a value of 0.
+
+##### `uniqueItems`
+
+The value of this keyword MUST be a boolean. If this keyword has boolean value false, the instance validates successfully. If it has boolean value true, the instance validates successfully if all of its elements are unique. Omitting this keyword has the same behavior as a value of false.
+
+##### `maxContains`
+
+The value of this keyword MUST be a non-negative integer.
+
+If "contains" is not present within the same schema object, then this keyword has no effect.
+
+An instance array is valid against "maxContains" in two ways, depending on the form of the annotation result of an adjacent "contains" [json-schema] keyword. The first way is if the annotation result is an array and the length of that array is less than or equal to the "maxContains" value. The second way is if the annotation result is a boolean "true" and the instance array length is less than or equal to the "maxContains" value.
+
+##### `minContains`
+
+The value of this keyword MUST be a non-negative integer.
+
+If "contains" is not present within the same schema object, then this keyword has no effect.
+
+An instance array is valid against "minContains" in two ways, depending on the form of the annotation result of an adjacent "contains" [json-schema] keyword. The first way is if the annotation result is an array and the length of that array is greater than or equal to the "minContains" value. The second way is if the annotation result is a boolean "true" and the instance array length is greater than or equal to the "minContains" value.
+
+A value of 0 is allowed, but is only useful for setting a range of occurrences from 0 to the value of "maxContains". A value of 0 causes "minContains" and "contains" to always pass validation (but validation can still fail against a "maxContains" keyword).
+
+Omitting this keyword has the same behavior as a value of 1.
+
+#### For Objects
+
+Array types support the following options, which can be used simultaneously.
+
+##### `maxProperties`
+
+The value of this keyword MUST be a non-negative integer. An object instance is valid against "maxProperties" if its number of properties is less than, or equal to, the value of this keyword.
+
+##### `minProperties`
+
+The value of this keyword MUST be a non-negative integer. An object instance is valid against "minProperties" if its number of properties is greater than, or equal to, the value of this keyword. Omitting this keyword has the same behavior as a value of 0.
+
+##### `required`
+
+All TypeBox types are required unless you wrap them in [Type.Optional](#optional), so you don't need to use this option, manually.
+
+##### `dependentRequired`
+
+The value of this keyword MUST be an object. Properties in this object, if any, MUST be arrays. Elements in each array, if any, MUST be strings, and MUST be unique.
+
+This keyword specifies properties that are required if a specific other property is present. Their requirement is dependent on the presence of the other property.
+
+Validation succeeds if, for each name that appears in both the instance and as a name within this keyword's value, every item in the corresponding array is also the name of a property in the instance.
+
+Omitting this keyword has the same behavior as an empty object.
+
 
 ### Extended
 
