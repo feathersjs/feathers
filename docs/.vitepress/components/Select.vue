@@ -17,7 +17,6 @@ const route = useRoute()
 const isVisible = ref(true)
 
 const updateAttribute = (value: string) => {
-  console.log(value)
   emit('updateValue', value)
 }
 
@@ -25,7 +24,6 @@ const valueProxy = computed({
   get: () => props.value,
   set: (val: string) => {
     updateAttribute(val)
-    window.location = window.location
   }
 })
 

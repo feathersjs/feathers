@@ -1,3 +1,4 @@
+import '../vite-env.d'
 import Theme from 'vitepress/theme'
 import { inBrowser } from 'vitepress'
 import '../style/main.postcss'
@@ -11,6 +12,7 @@ import Badges from '../components/Badges.vue'
 import Logo from '../components/Logo.vue'
 import BlockQuote from '../components/BlockQuote.vue'
 import LanguageBlock from '../components/LanguageBlock.vue'
+import DatabaseBlock from '../components/DatabaseBlock.vue'
 
 import '../style/element-plus.scss'
 import 'element-plus/theme-chalk/dark/css-vars.css'
@@ -30,5 +32,6 @@ export default {
     app.component('Logo', Logo)
     app.component('BlockQuote', BlockQuote)
     app.component('LanguageBlock', LanguageBlock)
+    app.component('DatabaseBlock', DatabaseBlock)
   }
 }
