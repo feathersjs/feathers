@@ -27,6 +27,7 @@
     "fast-glob": "^3.2.12",
     "https-localhost": "^4.7.1",
     "sass": "^1.55.0",
+    "sitemap": "^7.1.1",
     "unocss": "^0.46.3",
     "unplugin-auto-import": "^0.11.4",
     "unplugin-vue-components": "^0.22.9",
