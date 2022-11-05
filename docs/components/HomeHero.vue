@@ -17,7 +17,7 @@ onBeforeUnmount(toggleHomeClass)
       <div class="feathers-home-hero relative">
         <div class="relative aspect-15/9 overflow-hidden">
           <img
-            class="hero-bg-light w-screen transition-opacity"
+            class="hero-bg-light w-screen transition-opacity duration-800"
             :class="[isDark ? 'dark:opacity-0' : 'opacity-100 ']"
             src="/img/illustration/birds-hero-day.svg"
             alt="The FeathersJS Birds enjoying a sunny day in the valley of Feathers where a lovely treehouse sits next to the river running between the mountains."
@@ -25,7 +25,7 @@ onBeforeUnmount(toggleHomeClass)
             height="902"
           />
           <img
-            class="hero-bg-dark w-screen absolute inset-0 transition-opacity"
+            class="hero-bg-dark w-screen absolute inset-0 transition-opacity duration-800"
             :class="[isDark ? 'dark:opacity-100' : 'opacity-0 ']"
             src="/img/illustration/birds-hero-night.svg"
             alt="The FeathersJS Birds enjoying a cool night in the valley of Feathers where a lovely treehouse sits next to the river running between the mountains."
@@ -94,9 +94,5 @@ onBeforeUnmount(toggleHomeClass)
   width: 150%;
   margin-left: -75%;
   z-index: -1;
-}
-
-.transition-opacity {
-  transition: opacity 800ms;
 }
 </style>
