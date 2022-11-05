@@ -45,6 +45,8 @@ First we need to update the `src/services/users/users.schema.js` file with the s
 
 </LanguageBlock>
 
+<DatabaseBlock global-id="sql">
+
 ```ts{1,16-17,36,47-57,70-74}
 import crypto from 'crypto'
 import { resolve } from '@feathersjs/schema'
@@ -127,7 +129,9 @@ export const userQueryResolver = resolve<UserQuery, HookContext>({
 })
 ```
 
-For MongoDB:
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
 
 ```ts{1,16-17,36,47-57,70-74}
 import crypto from 'crypto'
@@ -207,6 +211,8 @@ export const userQueryResolver = resolve<UserQuery, HookContext>({
 })
 ```
 
+</DatabaseBlock>
+
 ## Handling messages
 
 Next we can look at the messages service schema. We want to include the date when the message was created as `createdAt` and the id of the user who sent it as `userId`. When we get a message back, we also want to populate the `user` with the user data from `userId` so that we can show e.g. the user image and email.
@@ -221,6 +227,8 @@ Update the `src/services/messages/messages.schema.ts` file like this:
 Update the `src/services/messages/messages.schema.js` file like this:
 
 </LanguageBlock>
+
+<DatabaseBlock global-id="sql">
 
 ```ts{7,14-16,23-26,43-49,56,66-74}
 import { resolve } from '@feathersjs/schema'
@@ -301,7 +309,9 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext>({
 })
 ```
 
-For MongoDB:
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
 
 ```ts{7,14-16,23-26,43-49,56,66-74}
 import { resolve } from '@feathersjs/schema'
@@ -378,7 +388,11 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext>({
 })
 ```
 
+</DatabaseBlock>
+
 ## Creating a migration
+
+<DatabaseBlock global-id="sql">
 
 Now that our schemas and resolvers have everything we need, we also have to update the database with those changes. For SQL databases this is done with migrations. Migrations are a best practise for SQL databases to roll out and undo changes to the data model. Every change we make in a schema will need its corresponding migration step.
 
@@ -439,6 +453,18 @@ We can run the migrations on the current database with
 ```
 npm run migrate
 ```
+
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
+
+<BlockQuote type="tip">
+
+For MongoDB no migrations are necessary.
+
+</BlockQuote>
+
+</DatabaseBlock>
 
 ## What's next?
 
