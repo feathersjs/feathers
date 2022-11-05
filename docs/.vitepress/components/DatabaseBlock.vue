@@ -6,11 +6,11 @@ defineProps({
   inline: String
 })
 
-const activeGlobalId = useGlobalDb()
+const activeGlobalDb = useGlobalDb()
 </script>
 
 <template>
-  <component :is="inline ? 'span' : 'div'" :class="{ hidden: globalId !== activeGlobalId }">
+  <component :is="inline ? 'span' : 'div'" :class="{ hidden: globalId !== activeGlobalDb }">
     <slot />
   </component>
 </template>

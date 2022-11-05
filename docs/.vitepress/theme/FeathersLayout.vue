@@ -40,11 +40,9 @@ onMounted(() => {
                 if (activeGlobalDb.value !== val) {
                   activeGlobalDb.value = val
                   document.body.setAttribute('data-db', val)
-                  // works around an SSR bug where the select resets to its SSR-hydrated state after a route change.
-                  window.location = window.location
                 }
               },
-              showOnRoutePrefix: ['/guides/basics'],
+              // showOnRoutePrefix: ['/guides'],
               options: [
                 { value: 'sql', text: 'SQL' },
                 { value: 'mongodb', text: 'MongoDB' }
