@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount } from 'vue'
 import CTAButton from './CTAButton.vue'
+import { useData } from 'vitepress'
 
-const toggleHomeClass = () =>
-  document.getElementById('app')?.classList.toggle('home-page')
+const { isDark } = useData()
+
+const toggleHomeClass = () => document.getElementById('app')?.classList.toggle('home-page')
 
 onMounted(toggleHomeClass)
 onBeforeUnmount(toggleHomeClass)
@@ -13,15 +15,22 @@ onBeforeUnmount(toggleHomeClass)
   <div class="home-hero">
     <div class="illustration">
       <div class="feathers-home-hero relative">
-        <img class="hero-bg-dark w-screen" src="/img/illustration/combined-night.svg" />
-        <img
-          class="hero-bg-light w-screen"
-          src="/img/illustration/Final_Header_Illustration.jpg"
-        />
+        <div class="relative aspect-15/9 overflow-hidden">
+          <img
+            class="hero-bg-light w-screen transition-opacity"
+            :class="[isDark ? 'dark:opacity-0' : 'opacity-100 ']"
+            src="/img/illustration/birds-hero-day.svg"
+          />
+          <img
+            class="hero-bg-dark w-screen absolute inset-0 transition-opacity"
+            :class="[isDark ? 'dark:opacity-100' : 'opacity-0 ']"
+            src="/img/illustration/birds-hero-night.svg"
+          />
+        </div>
 
         <div class="absolute inset-0 flex flex-col pt-13.5vw md:pt-14.5vw">
           <div
-            class="text-center text-lg xl:text-6xl leading-tight font-bold"
+            class="transition-all duration-400 text-center text-lg xl:text-6xl leading-tight font-bold"
             sm="text-2xl"
             md="text-3xl"
             lg="text-5xl"
@@ -81,19 +90,7 @@ onBeforeUnmount(toggleHomeClass)
   z-index: -1;
 }
 
-/* Light Mode */
-.hero-bg-light {
-  display: initial;
-}
-.hero-bg-dark {
-  display: none;
-}
-
-/* Dark mode */
-.dark .hero-bg-light {
-  display: none;
-}
-.dark .hero-bg-dark {
-  display: initial;
+.transition-opacity {
+  transition: opacity 400ms;
 }
 </style>
