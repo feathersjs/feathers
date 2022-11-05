@@ -77,6 +77,41 @@ export default {
       ]
     },
     {
+      text: 'CLI',
+      collapsible: true,
+      collapsed: true,
+      items: [
+        {
+          text: 'Overview',
+          link: '/guides/cli/index.md'
+        },
+        {
+          text: 'Generate App',
+          link: '/guides/cli/generate-app.md'
+        },
+        {
+          text: 'Configuration',
+          link: '/guides/cli/config.md'
+        },
+        {
+          text: 'Validators',
+          link: '/guides/cli/validators.md'
+        },
+        {
+          text: 'Service Classes',
+          link: '/guides/cli/service-classes.md'
+        },
+        {
+          text: 'Service Hooks',
+          link: '/guides/cli/service-hooks.md'
+        },
+        {
+          text: 'Schemas and Resolvers',
+          link: '/guides/cli/schemas-and-resolvers.md'
+        }
+      ]
+    },
+    {
       text: 'Migrating',
       // collapsible: true,
       items: [
