@@ -179,7 +179,7 @@ describe('Feathers MongoDB Service', () => {
         name: 'David'
       })
 
-      const withId = await app.service('people').get(new ObjectId(person._id.toString()))
+      const withId = await app.service('people').get(person._id.toString())
 
       assert.strictEqual(withId.name, 'David')
 

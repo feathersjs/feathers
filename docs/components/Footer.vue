@@ -99,26 +99,23 @@ const ecosystemList = [
 </template>
 
 <style scoped>
-/* Only indent the footer on pages other than home-page */
-/* @media (min-width: 800px) {
-  #app:not(.home-page) .feathers-footer.sidebar-open .sidebar-adjust {
-    margin-left: 272px;
-  }
-} */
+#app.home-page .feathers-footer {
+  padding-top: 64px;
+}
 
 @media (min-width: 960px) {
-  .VPContent {
+  #app:not(.home-page) .VPContent {
     padding-top: var(--vp-nav-height);
   }
 
-  .VPContent.has-sidebar {
+  #app:not(.home-page) .VPContent.has-sidebar {
     margin: var(--vp-layout-top-height, 0px) 0 0;
     padding-left: var(--vp-sidebar-width);
   }
 }
 
 @media (min-width: 1440px) {
-  .VPContent.has-sidebar {
+  #app:not(.home-page) .VPContent.has-sidebar {
     padding-right: calc((100vw - var(--vp-layout-max-width)) / 2);
     padding-left: calc((100vw - var(--vp-layout-max-width)) / 2 + var(--vp-sidebar-width));
   }
