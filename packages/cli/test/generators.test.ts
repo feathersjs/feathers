@@ -38,7 +38,7 @@ describe('@feathersjs/cli', () => {
 
       before(async () => {
         cwd = await mkdtemp(path.join(os.tmpdir(), name + '-'))
-        console.log(cwd)
+        console.log(`\nGenerating test application to\n${cwd}\n\n`)
         context = await generateApp(
           getContext<AppGeneratorContext>(
             {

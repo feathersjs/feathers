@@ -13,7 +13,6 @@ outline: deep
 
 Support for MongoDB is provided in Feathers via the `@feathersjs/mongodb` database adapter which uses the [MongoDB Client for Node.js](https://www.npmjs.com/package/mongodb). The adapter uses the [MongoDB Aggregation Framework](https://www.mongodb.com/docs/manual/aggregation/), internally, and enables using Feathers' friendly syntax with the full power of [aggregation operators](https://www.mongodb.com/docs/manual/meta/aggregation-quick-reference/). The adapter automatically uses the [MongoDB Query API](https://www.mongodb.com/docs/drivers/node/current/quick-reference/) when you need features like [Collation](https://www.mongodb.com/docs/drivers/node/current/fundamentals/collations/).
 
-
 ```bash
 $ npm install --save @feathersjs/mongodb
 ```
@@ -26,14 +25,14 @@ The MongoDB adapter implements the [common database adapter API](./common) and [
 
 ## Setup
 
-There are two typical setup steps for using `@feathersjs/mongodb` in an application: 
+There are two typical setup steps for using `@feathersjs/mongodb` in an application:
 
-- connect to the database and 
+- connect to the database and
 - setup schemas for types and validation.
 
 ### Connect to the Database
 
-Before using `@feathersjs/mongodb`, you'll need to create a connection to the database.  This example connects to a MongoDB database similar to how the CLI-generated app connects. It uses `app.get('mongodb')` to read the connection string from `@feathersjs/configuration`. The connection string would be something similar to `mongodb://localhost:27017/my-app-dev` for local development or one provided by your database host.
+Before using `@feathersjs/mongodb`, you'll need to create a connection to the database. This example connects to a MongoDB database similar to how the CLI-generated app connects. It uses `app.get('mongodb')` to read the connection string from `@feathersjs/configuration`. The connection string would be something similar to `mongodb://localhost:27017/my-app-dev` for local development or one provided by your database host.
 
 Once the connection attempt has been started, the code uses `app.set('monodbClient', mongoClient)` to store the connection promise back into the config, which allows it to be looked up when initializing individual services.
 
@@ -45,8 +44,7 @@ import type { Application } from './declarations'
 export const mongodb = (app: Application) => {
   const connection = app.get('mongodb')
   const database = new URL(connection).pathname.substring(1)
-  const mongoClient = MongoClient.connect(connection)
-    .then(client => client.db(database))
+  const mongoClient = MongoClient.connect(connection).then((client) => client.db(database))
   app.set('mongodbClient', mongoClient)
 }
 
@@ -69,27 +67,30 @@ import type { Static } from '@feathersjs/typebox'
 export const messagesSchema = Type.Object(
   {
     _id: Type.String(),
-    text: Type.String(),
+    text: Type.String()
   },
-  { $id: 'Messages', additionalProperties: false },
+  { $id: 'Messages', additionalProperties: false }
 )
 export type Messages = Static<typeof messagesSchema>
 
 // Schema for creating new entries
-export const messagesDataSchema = Type.Pick(messagesSchema, ['name'],
-  { $id: 'MessagesData', additionalProperties: false },
-)
+export const messagesDataSchema = Type.Pick(messagesSchema, ['name'], {
+  $id: 'MessagesData',
+  additionalProperties: false
+})
 export type MessagesData = Static<typeof messagesDataSchema>
 
 // Schema for allowed query properties
-export const messagesQueryProperties = Type.Pick(messagesSchema, ['_id', 'name'], { additionalProperties: false })
+export const messagesQueryProperties = Type.Pick(messagesSchema, ['_id', 'name'], {
+  additionalProperties: false
+})
 export const messagesQuerySchema = querySyntax(messagesQueryProperties)
 export type MessagesQuery = Static<typeof messagesQuerySchema>
 ```
 
 ### Schemas vs MongoDB Validation
 
-In Feathers v5 (Dove) we added support for Feathers Schema, which performs validation and provides TypeScript types.  Recent versions of MongoDB include support for JSON Schema validation at the database server.  Most applications will benefit from using Feathers Schema for the following reasons.
+In Feathers v5 (Dove) we added support for Feathers Schema, which performs validation and provides TypeScript types. Recent versions of MongoDB include support for JSON Schema validation at the database server. Most applications will benefit from using Feathers Schema for the following reasons.
 
 - Feathers Schema's TypeBox integration makes JSON Schema so much easier to read and write.
 - You get TypeScript types for free once you've defined your validation rules, using `TypeBox` or `json-schema-to-ts`
@@ -116,17 +117,20 @@ import type { Messages, MessagesData, MessagesQuery } from './messages.schema'
 
 export interface MessagesParams extends MongoDBAdapterParams<MessagesQuery> {}
 
-export class MessagesService<ServiceParams extends Params = MessagesParams>
-  extends MongoDBService<Messages, MessagesData, ServiceParams> {}
+export class MessagesService<ServiceParams extends Params = MessagesParams> extends MongoDBService<
+  Messages,
+  MessagesData,
+  ServiceParams
+> {}
 
 export const messages = (app: Application) => {
   const options: MongoDBAdapterOptions = {
     paginate: app.get('paginate'),
-    Model: app.get('mongodbClient').then((db) => db.collection('messages')),
+    Model: app.get('mongodbClient').then((db) => db.collection('messages'))
   }
   app.use('messages', new MessagesService(options), {
     methods: ['find', 'get', 'create', 'update', 'patch', 'remove'],
-    events: [],
+    events: []
   })
 }
 ```
@@ -136,14 +140,14 @@ Here's an overview of the `options` object:
 **Options:**
 
 - `Model {Promise<MongoDBCollection>}` (**required**) - The MongoDB collection instance
-- `id {string}` (*optional*, default: `'_id'`) - The name of the id field property. By design, MongoDB will always add an `_id` property.
-- `disableObjectify {boolean}` (*optional*, default `false`) - This will disable the objectify of the id field if you want to use normal strings
-- `events {string[]}` (*optional*) - A list of [custom service events](/api/events.html#custom-events) sent by this service
-- `paginate {Object}` (*optional*) - A [pagination object](/api/databases/common.html#pagination) containing a `default` and `max` page size
-- `filters {Object}` (*optional*) - An object of additional filter parameters to allow (e..g `{ $customQueryOperator: true }`). See [Filters](/api/databases/querying.md#filters)
-- `operators {string[]}` (*optional*) - A list of additional query parameters to allow (e..g `[ '$regex', '$geoNear' ]`) See [Operators](/api/databases/querying.md#operators)
-- `multi {string[]|true}` (*optional*) - Allow `create` with arrays and `update` and `remove` with `id` `null` to change multiple items. Can be `true` for all methods or an array of allowed methods (e.g. `[ 'remove', 'create' ]`)
-- `useEstimatedDocumentCount {boolean}` (*optional*, default `false`) - If `true` document counting will rely on `estimatedDocumentCount` instead of `countDocuments`
+- `id {string}` (_optional_, default: `'_id'`) - The name of the id field property. By design, MongoDB will always add an `_id` property.
+- `disableObjectify {boolean}` (_optional_, default `false`) - This will disable the objectify of the id field if you want to use normal strings
+- `events {string[]}` (_optional_) - A list of [custom service events](/api/events.html#custom-events) sent by this service
+- `paginate {Object}` (_optional_) - A [pagination object](/api/databases/common.html#pagination) containing a `default` and `max` page size
+- `filters {Object}` (_optional_) - An object of additional filter parameters to allow (e..g `{ $customQueryOperator: true }`). See [Filters](/api/databases/querying.md#filters)
+- `operators {string[]}` (_optional_) - A list of additional query parameters to allow (e..g `[ '$regex', '$geoNear' ]`) See [Operators](/api/databases/querying.md#operators)
+- `multi {string[]|true}` (_optional_) - Allow `create` with arrays and `update` and `remove` with `id` `null` to change multiple items. Can be `true` for all methods or an array of allowed methods (e.g. `[ 'remove', 'create' ]`)
+- `useEstimatedDocumentCount {boolean}` (_optional_, default `false`) - If `true` document counting will rely on `estimatedDocumentCount` instead of `countDocuments`
 
 ### `aggregateRaw(params)`
 
@@ -151,7 +155,7 @@ The `find` method has been split into separate utilities for converting params i
 
 ### `findRaw(params)`
 
-The `find` method has been split into separate utilities for converting params into different types of MongoDB requests.  When `params.mongodb` is used, the `findRaw` method is used to retrieve data using `params.mongodb` as the `FindOptions` object. This method returns a raw MongoDB Cursor object, which can be used to perform custom pagination or in custom server scripts, if desired.
+The `find` method has been split into separate utilities for converting params into different types of MongoDB requests. When `params.mongodb` is used, the `findRaw` method is used to retrieve data using `params.mongodb` as the `FindOptions` object. This method returns a raw MongoDB Cursor object, which can be used to perform custom pagination or in custom server scripts, if desired.
 
 ### `makeFeathersPipeline(params)`
 
@@ -175,31 +179,31 @@ The adapter will automatically switch to use the MongoClient's`collection.find` 
 
 In Feathers v5 Dove, we added support for the full power of MongoDB's Aggregation Framework and blends it seamlessly with the familiar Feathers Query syntax. All `find` queries now use the Aggregation Framework, by default.
 
-The Aggregation Framework is accessed through the mongoClient's `collection.aggregate` method, which accepts an array of "stages". Each stage contains an operator which describes an operation to apply to the previous step's data. Each stage applies the operation to the results of the previous step.  It’s now possible to perform any of the [Aggregation Stages](https://www.mongodb.com/docs/upcoming/reference/operator/aggregation-pipeline/) like `$lookup` and `$unwind`, integration with the normal Feathers queries.
+The Aggregation Framework is accessed through the mongoClient's `collection.aggregate` method, which accepts an array of "stages". Each stage contains an operator which describes an operation to apply to the previous step's data. Each stage applies the operation to the results of the previous step. It’s now possible to perform any of the [Aggregation Stages](https://www.mongodb.com/docs/upcoming/reference/operator/aggregation-pipeline/) like `$lookup` and `$unwind`, integration with the normal Feathers queries.
 
 Here's how it works with the operators that match the Feathers Query syntax. Let's convert the following Feathers query:
 
 ```ts
 const query = {
-  text: { $regex: 'feathersjs', $options: 'igm'  },
+  text: { $regex: 'feathersjs', $options: 'igm' },
   $sort: { createdAt: -1 },
   $skip: 0,
-  $limit: 10,
+  $limit: 10
 }
 ```
 
 The above query looks like this when converted to aggregation pipeline stages:
 
 ```ts
-[
+;[
   // returns the set of records containing the word "feathersjs"
-  { $match: { text: { $regex: 'feathersjs', $options: 'igm'  } } },
+  { $match: { text: { $regex: 'feathersjs', $options: 'igm' } } },
   // Sorts the results of the previous step by newest messages, first.
   { $sort: { createdAt: -1 } },
   // Skips the first 20 records of the previous step
   { $skip: 20 },
   // returns the next 10 records
-  { $limit: 10 },
+  { $limit: 10 }
 ]
 ```
 
@@ -229,7 +233,7 @@ const result = await app.service('messages').find({
 
 In the example, above, the `query` is added to the pipeline, first. Then additional stages are added in the `pipeline` option:
 
-- The `$lookup` stage creates an array called `user` which contains any matches in `message.userId`, so if `userId` were an array of ids, any matches would be in the `users` array.  However, in this example, the `userId` is a single id, so...
+- The `$lookup` stage creates an array called `user` which contains any matches in `message.userId`, so if `userId` were an array of ids, any matches would be in the `users` array. However, in this example, the `userId` is a single id, so...
 - The `$unwind` stage turns the array into a single `user` object.
 
 The above is like doing a join, but without the data transforming overhead like you'd get with an SQL JOIN. If you have properly applied index to your MongoDB collections, the operation will typically execute extremely fast for a reasonable amount of data.
@@ -249,9 +253,9 @@ The previous section showed how to append stages to a query using `params.pipeli
 
 ### Example: Proxy Permissions
 
-Imagine a scenario where you want to query the `pages` a user can edit by referencing a `permissions` collection to find out which pages the user can actually edit.  Each record in the `permissions` record has a `userId` and a `pageId`.  So we need to find and return only the pages to which the user has access by calling `GET /pages` from the client.
+Imagine a scenario where you want to query the `pages` a user can edit by referencing a `permissions` collection to find out which pages the user can actually edit. Each record in the `permissions` record has a `userId` and a `pageId`. So we need to find and return only the pages to which the user has access by calling `GET /pages` from the client.
 
-We could put the following query in a hook to pull the correct `pages` from the database in a single query THROUGH the permissions collection.  Remember, the request is coming in on the `pages` service, but we're going to query for pages `through` the permissions collection.  Assume we've already authenticated the user, so the user will be found at `context.params.user`.
+We could put the following query in a hook to pull the correct `pages` from the database in a single query THROUGH the permissions collection. Remember, the request is coming in on the `pages` service, but we're going to query for pages `through` the permissions collection. Assume we've already authenticated the user, so the user will be found at `context.params.user`.
 
 ```ts
 // Assume this query on the client
@@ -262,8 +266,8 @@ const result = await app.service('permissions').find({
   query: {},
   pipeline: [
     // query all permissions records which apply to the current user
-    { 
-      $match: { userId: context.params.user._id } 
+    {
+      $match: { userId: context.params.user._id }
     },
     // populate the pageId onto each `permission` record, as an array containing one page
     {
@@ -271,8 +275,8 @@ const result = await app.service('permissions').find({
         from: 'pages',
         localField: 'pageId',
         foreignField: '_id',
-        as: 'page',
-      },
+        as: 'page'
+      }
     },
     // convert the `page` array into an object, so now we have an array of permissions with permission.page on each.
     {
@@ -292,23 +296,23 @@ const result = await app.service('permissions').find({
     // now the query will apply to the pages, since we made the pages top level in the previous step.
     {
       $feathers: {}
-    },
+    }
   ],
   paginate: false
 })
 ```
 
-Notice the `$feathers` stage in the above example.  It will apply the query to that stage in the pipeline, which allows the query to apply to pages even though we had to make the query through the `permissions` service.
+Notice the `$feathers` stage in the above example. It will apply the query to that stage in the pipeline, which allows the query to apply to pages even though we had to make the query through the `permissions` service.
 
 If we were to express the above query with JavaScript, the final result would the same as with the following example:
 
 ```ts
 // perform a db query to get the permissions
-const permissions = await context.app.service('permissions').find({ 
-  query: { 
+const permissions = await context.app.service('permissions').find({
+  query: {
     userId: context.params.user._id
   },
-  paginate: false,
+  paginate: false
 })
 // make a list of pageIds
 const pageIds = permissions.map((permission) => permission.pageId)
@@ -335,9 +339,9 @@ const pagesWithPermissionId = pages.map((page) => {
 // It might require another database query
 ```
 
-Both examples look a bit complex, but te one using aggregation stages will be much quicker because all stages run in the database server.  It will also be quicker because it all happens in a single database query!  
+Both examples look a bit complex, but te one using aggregation stages will be much quicker because all stages run in the database server. It will also be quicker because it all happens in a single database query!
 
-One more obstacle for using JavaScript this way is that if the user's query changed (from the front end), we would likely be required to edit multiple different parts of the JS logic in order to correctly display results.  With the pipeline example, above, the query is very cleanly applied.
+One more obstacle for using JavaScript this way is that if the user's query changed (from the front end), we would likely be required to edit multiple different parts of the JS logic in order to correctly display results. With the pipeline example, above, the query is very cleanly applied.
 
 ## Transactions
 
@@ -583,3 +587,50 @@ You'll see an error like `Error: unknown format "date-time" ignored in schema at
 
 - You're attempting to use a formatter not built into AJV.
 - You fail to [Pass the Custom AJV Instance to every `schema`](#pass-the-custom-ajv-instance-to-schema). If you're using a custom AJV instance, be sure to provide it to **every** place where you call `schema()`.
+
+## Search
+
+## ObjectId resolvers
+
+MongoDB uses object ids as primary keys and for references to other documents. To a client they are represented as strings and to convert between strings and object ids, the following [property resolver](../schema/resolvers.md) helpers can be used.
+
+### resolveObjectId
+
+`resolveObjectId` resolves a property as an object id. It can be used as a direct property resolver or called with the original value.
+
+```ts
+import { resolveObjectId } from '@feathersjs/mongodb'
+
+export const messageDataResolver = resolve<Message, HookContext>({
+  properties: {
+    userId: resolveObjectId
+  }
+})
+
+export const messageDataResolver = resolve<Message, HookContext>({
+  properties: {
+    userId: async (value, _message, context) => {
+      // If the user is an admin, allow them to create messages for other users
+      if (context.params.user.isAdmin && value !== undefined) {
+        return resolveObjectId(value)
+      }
+      // Otherwise associate the record with the id of the authenticated user
+      return context.params.user._id
+    }
+  }
+})
+```
+
+### resolveQueryObjectId
+
+`resolveQueryObjectId` allows to query for object ids. It supports conversion from a string to an object id as well as conversion for values from the [$in, $nin and $ne query syntax](./querying.md).
+
+```ts
+import { resolveQueryObjectId } from '@feathersjs/mongodb'
+
+export const messageQueryResolver = resolve<MessageQuery, HookContext>({
+  properties: {
+    userId: resolveQueryObjectId
+  }
+})
+```

@@ -28,15 +28,35 @@ Since the generated application is using modern features like ES modules, the Fe
 
 First, choose if you want to use JavaScript or TypeScript. When presented with the project name, just hit enter, or enter a name (no spaces). Next, write a short description for your application. Confirm the next questions with the default selection by pressing Enter. When asked about authentication methods, let's include GitHub as well so we can look at adding a "Log In with Github" button.
 
+<DatabaseBlock global-id="sql">
+
+<BlockQuote type="tip">
+
+If you want to use **MongoDB** instead of SQLite (or another SQL database) for this quide, select it in the **Database** dropdown in the main menu.
+
+</BlockQuote>
+
+</DatabaseBlock>
+
 Once you confirm the last prompt, the final selection should look similar to this:
+
+<DatabaseBlock global-id="sql">
 
 ![feathers generate app prompts](./assets/generate-app.png)
 
-<BlockQuote type="warning" label="Note">
+<BlockQuote type="info" label="Note">
 
 `SQLite` creates an SQL database in a file so we don't need to have a database server running. For any other selection, the database you choose has to be available at the connection string.
 
 </BlockQuote>
+
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
+
+![feathers generate app prompts](./assets/generate-app-mongodb.png)
+
+</DatabaseBlock>
 
 Sweet! We generated our first Feathers application in a new folder called `feathers-chat` so we need to go there.
 

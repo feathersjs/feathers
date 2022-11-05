@@ -173,6 +173,20 @@ describe('Feathers MongoDB Service', () => {
     })
   })
 
+  describe('works with ObjectIds', () => {
+    it('can call methods with ObjectId instance', async () => {
+      const person = await app.service('people').create({
+        name: 'David'
+      })
+
+      const withId = await app.service('people').get(new ObjectId(person._id.toString()))
+
+      assert.strictEqual(withId.name, 'David')
+
+      await app.service('people').remove(new ObjectId(person._id.toString()))
+    })
+  })
+
   describe('Special collation param', () => {
     let peopleService: MongoDBService<Person>
     let people: Person[]

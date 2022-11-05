@@ -164,7 +164,17 @@ npx feathers generate service
 
 The name for our service is `message` (this is used for variable names etc.) and for the path we use `messages`. Anything else we can confirm with the default:
 
+<DatabaseBlock global-id="sql">
+
 ![feathers generate service prompts](./assets/generate-service.png)
+
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
+
+![feathers generate service prompts](./assets/generate-service-mongodb.png)
+
+</DatabaseBlock>
 
 This is it, we now have a database backed messages service with authentication enabled.
 
