@@ -20,11 +20,17 @@ onBeforeUnmount(toggleHomeClass)
             class="hero-bg-light w-screen transition-opacity"
             :class="[isDark ? 'dark:opacity-0' : 'opacity-100 ']"
             src="/img/illustration/birds-hero-day.svg"
+            alt="The FeathersJS Birds enjoying a sunny day in the valley of Feathers where a lovely treehouse sits next to the river running between the mountains."
+            width="1504"
+            height="902"
           />
           <img
             class="hero-bg-dark w-screen absolute inset-0 transition-opacity"
             :class="[isDark ? 'dark:opacity-100' : 'opacity-0 ']"
             src="/img/illustration/birds-hero-night.svg"
+            alt="The FeathersJS Birds enjoying a cool night in the valley of Feathers where a lovely treehouse sits next to the river running between the mountains."
+            width="1504"
+            height="902"
           />
         </div>
 
@@ -91,6 +97,6 @@ onBeforeUnmount(toggleHomeClass)
 }
 
 .transition-opacity {
-  transition: opacity 400ms;
+  transition: opacity 800ms;
 }
 </style>
