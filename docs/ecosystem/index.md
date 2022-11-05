@@ -20,6 +20,8 @@ Watch the [FeathersJS Playlist on YouTube](https://www.youtube.com/playlist?list
 
 This is a curated list of feathers packages. You can sort by various criteria. Core packages are hidden by default.
 
-<Suspense>
-  <Packages class="mt-4" />
-</Suspense>
+<ClientOnly>
+  <Suspense>
+    <Packages class="mt-4" />
+  </Suspense>
+</ClientOnly>
