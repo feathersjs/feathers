@@ -1,6 +1,4 @@
-<img style="width: 100%; max-width: 400px;" src="http://feathersjs.com/img/feathers-logo-wide.png" alt="Feathers logo">
-
-## A framework for real-time applications and REST APIs with JavaScript and TypeScript
+## The API and Real-time Application Framework
 
 [![CI](https://github.com/feathersjs/feathers/workflows/CI/badge.svg)](https://github.com/feathersjs/feathers/actions?query=workflow%3ACI)
 [![Maintainability](https://api.codeclimate.com/v1/badges/cb5ec42a2d0cc1a47a02/maintainability)](https://codeclimate.com/github/feathersjs/feathers/maintainability)
@@ -9,6 +7,10 @@
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/qa8kez8QBx)
 
 Feathers is a lightweight web-framework for creating APIs and real-time applications using TypeScript or JavaScript.
+
+<a href="https://feathersjs.com" title="FeathersJS">
+  <img src="https://user-images.githubusercontent.com/128857/173851241-b52de3b8-468d-4ac3-a4b3-eaae9c8b7f77.jpg" alt="The FeathersJS Family of Birds">
+</a>
 
 Feathers can interact with any backend technology, supports many databases out of the box and works with any frontend technology like React, VueJS, Angular, React Native, Android or iOS.
 
