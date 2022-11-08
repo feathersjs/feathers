@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/schema",
   "description": "A common data schema definition format",
-  "version": "5.0.0-pre.32",
+  "version": "5.0.0-pre.33",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -54,9 +54,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^5.0.0-pre.32",
-    "@feathersjs/errors": "^5.0.0-pre.32",
-    "@feathersjs/feathers": "^5.0.0-pre.32",
+    "@feathersjs/commons": "^5.0.0-pre.33",
+    "@feathersjs/errors": "^5.0.0-pre.33",
+    "@feathersjs/feathers": "^5.0.0-pre.33",
     "@feathersjs/hooks": "^0.7.5",
     "@types/json-schema": "^7.0.11",
     "ajv": "^8.11.0",
@@ -64,7 +64,7 @@
     "json-schema-to-ts": "^2.5.5"
   },
   "devDependencies": {
-    "@feathersjs/memory": "^5.0.0-pre.32",
+    "@feathersjs/memory": "^5.0.0-pre.33",
     "@types/mocha": "^10.0.0",
     "@types/node": "^18.11.9",
     "ajv-formats": "^2.1.1",
@@ -72,5 +72,5 @@
     "shx": "^0.3.4",
     "typescript": "^4.8.4"
   },
-  "gitHead": "b405e205fc6d9fbd42b42c7a3f30ea4bf33d121d"
+  "gitHead": "89f516bcb1457e23a02c6212e9cd8bacc4d267d4"
 }

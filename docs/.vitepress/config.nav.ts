@@ -25,34 +25,7 @@ export default [
     ]
   },
   {
-    text: 'Awesome',
-    link: '/awesome/'
-  },
-  {
     text: 'Ecosystem',
-    items: [
-      { text: 'Blog', link: 'https://blog.feathersjs.com/' },
-      { text: 'Cookbook', link: '/cookbook/' },
-      {
-        text: 'Awesome Feathers',
-        link: 'https://github.com/feathersjs/awesome-feathersjs'
-      },
-      {
-        text: 'YouTube Playlist',
-        link: 'https://www.youtube.com/playlist?list=PLwSdIiqnDlf_lb5y1liQK2OW5daXYgKOe'
-      },
-      {
-        text: 'Feathers Pinia - Vue',
-        link: 'https://feathers-pinia.pages.dev/'
-      },
-      {
-        text: 'Figbird - React',
-        link: 'https://humaans.github.io/figbird/'
-      },
-      {
-        text: 'Common Hooks',
-        link: 'https://hooks-common.feathersjs.com/'
-      }
-    ]
+    link: '/ecosystem/'
   }
 ]

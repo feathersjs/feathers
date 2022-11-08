@@ -9,17 +9,13 @@
 ## Installation
 
 ```
-npm install -g @feathersjs/cli
+npm install @feathersjs/cli --save-dev
 ```
 
 ## Usage
 
 ```
-$ mkdir myproject
-
-$ cd myproject
-
-$ feathers help
+$ npx feathers help
 ```
 
 ## Documentation
@@ -28,6 +24,6 @@ Refer to the [Feathers documentation](https://docs.feathersjs.com) for more deta
 
 ## License
 
-Copyright (c) 2021 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2022 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).
