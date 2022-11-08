@@ -24,7 +24,7 @@ $ cd my-new-app
 $ npm run dev
 ```
 
-To learn more about Feathers visit the website at [feathersjs.com](http://feathersjs.com) or jump right into [the Feathers guides](http://feathersjs.com/guides).
+To learn more about Feathers visit the website at [feathersjs.com](http://feathersjs.com) or jump right into [the Feathers guides](https://docs.feathersjs.com/guides/).
 
 ## Documentation
 
