@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/configuration",
   "description": "A small configuration module for your Feathers application.",
-  "version": "5.0.0-pre.32",
+  "version": "5.0.0-pre.33",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -58,9 +58,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^5.0.0-pre.32",
-    "@feathersjs/feathers": "^5.0.0-pre.32",
-    "@feathersjs/schema": "^5.0.0-pre.32",
+    "@feathersjs/commons": "^5.0.0-pre.33",
+    "@feathersjs/feathers": "^5.0.0-pre.33",
+    "@feathersjs/schema": "^5.0.0-pre.33",
     "@types/config": "^3.3.0",
     "config": "^3.3.8"
   },
