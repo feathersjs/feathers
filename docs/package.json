@@ -12,7 +12,7 @@
   "dependencies": {
     "@vueuse/core": "^9.4.0",
     "date-fns": "^2.29.3",
-    "element-plus": "^2.2.19",
+    "element-plus": "^2.2.20",
     "vue": "^3.2.41"
   },
   "devDependencies": {
@@ -26,13 +26,13 @@
     "esno": "^0.16.3",
     "fast-glob": "^3.2.12",
     "https-localhost": "^4.7.1",
-    "sass": "^1.55.0",
+    "sass": "^1.56.0",
     "sitemap": "^7.1.1",
     "unocss": "^0.46.3",
     "unplugin-auto-import": "^0.11.4",
     "unplugin-vue-components": "^0.22.9",
-    "vite-plugin-pwa": "^0.13.1",
-    "vitepress": "^1.0.0-alpha.27",
+    "vite-plugin-pwa": "^0.13.3",
+    "vitepress": "^1.0.0-alpha.28",
     "workbox-window": "^6.5.4"
   }
 }
