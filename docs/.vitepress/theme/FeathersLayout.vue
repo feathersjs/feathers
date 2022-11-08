@@ -38,7 +38,6 @@ const handleGlobalDbUpdate = (val: string) => {
         id="GlobalDbSelect"
         :value="activeGlobalDb"
         label="Database"
-        :showOnRoutePrefix="['/guides/basics']"
         :options="[
           { value: 'sql', text: 'SQL' },
           { value: 'mongodb', text: 'MongoDB' }
