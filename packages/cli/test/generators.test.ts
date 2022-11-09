@@ -14,6 +14,7 @@ import { combinate, dependencyVersions } from './utils'
 import { generate as generateApp } from '../lib/app'
 import { generate as generateConnection } from '../lib/connection'
 import { generate as generateService } from '../lib/service'
+import { listAllFiles } from '@feathershq/pinion/lib/utils'
 
 const matrix = {
   language: ['js', 'ts'] as const,
@@ -39,25 +40,32 @@ describe('@feathersjs/cli', () => {
       before(async () => {
         cwd = await mkdtemp(path.join(os.tmpdir(), name + '-'))
         console.log(`\nGenerating test application to\n${cwd}\n\n`)
-        context = await generateApp(
-          getContext<AppGeneratorContext>(
-            {
-              name,
-              framework,
-              language,
-              dependencyVersions,
-              lib: 'src',
-              description: 'A Feathers test app',
-              packager: 'npm',
-              database: 'sqlite',
-              connectionString: `${name}.sqlite`,
-              transports: ['rest', 'websockets'],
-              authStrategies: ['local', 'github'],
-              schema: 'typebox'
-            },
-            { cwd }
+
+        try {
+          context = await generateApp(
+            getContext<AppGeneratorContext>(
+              {
+                name,
+                framework,
+                language,
+                dependencyVersions,
+                lib: 'src',
+                description: 'A Feathers test app',
+                packager: 'npm',
+                database: 'sqlite',
+                connectionString: `${name}.sqlite`,
+                transports: ['rest', 'websockets'],
+                authStrategies: ['local', 'github'],
+                schema: 'typebox'
+              },
+              { cwd }
+            )
           )
-        )
+        } catch (error) {
+          console.error(error.stack)
+          console.error((await listAllFiles(cwd)).join('\n'))
+          throw error
+        }
       })
 
       it('generated app with SQLite and passes tests', async () => {
