@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.33](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.32...v5.0.0-pre.33) (2022-11-08)
+
+### Bug Fixes
+
+- **cli:** Fix MongoDB connection database name parsing ([#2845](https://github.com/feathersjs/feathers/issues/2845)) ([50e7463](https://github.com/feathersjs/feathers/commit/50e7463971ef95cb98358b70a721e67554d92eb5))
+- **cli:** Use proper MSSQL client ([#2853](https://github.com/feathersjs/feathers/issues/2853)) ([bae5176](https://github.com/feathersjs/feathers/commit/bae5176488b46fc377e53719d20e0036e087aa16))
+- **docs:** Add JavaScript web app frontend guide ([#2834](https://github.com/feathersjs/feathers/issues/2834)) ([68cf03f](https://github.com/feathersjs/feathers/commit/68cf03f092da38ccbec5e9fd42b95d00f5a0a9f2))
+- **memory:** Use for loop in \_find() for better performance ([#2844](https://github.com/feathersjs/feathers/issues/2844)) ([d6ee5f1](https://github.com/feathersjs/feathers/commit/d6ee5f1c869f0c65cb470130f35956a52356e5c3))
+
+### Features
+
+- **docs:** Add Awesome Ecosystem page ([f66177d](https://github.com/feathersjs/feathers/commit/f66177ded1f48ac45a7105f73c5c3cda7084c7b1))
+- **mongodb:** Add ObjectId resolvers and MongoDB option in the guide ([#2847](https://github.com/feathersjs/feathers/issues/2847)) ([c5c1fba](https://github.com/feathersjs/feathers/commit/c5c1fba5718a63412075cd3838b86b889eb0bd48))
+- **schema:** Add StringEnum to TypeBox module ([#2827](https://github.com/feathersjs/feathers/issues/2827)) ([65d3665](https://github.com/feathersjs/feathers/commit/65d36656f50a48f633fa3fcabaea10521d04bf1c))
+
 # [5.0.0-pre.32](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.31...v5.0.0-pre.32) (2022-10-26)
 
 ### Bug Fixes
