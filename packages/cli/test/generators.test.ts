@@ -61,7 +61,7 @@ describe('@feathersjs/cli', () => {
               { cwd }
             )
           )
-        } catch (error) {
+        } catch (error: any) {
           console.error(error.stack)
           console.error((await listAllFiles(cwd)).join('\n'))
           throw error
