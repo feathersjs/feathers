@@ -10,25 +10,25 @@
     "start": "npm run dev"
   },
   "dependencies": {
-    "@vueuse/core": "^9.4.0",
+    "@vueuse/core": "^9.5.0",
     "date-fns": "^2.29.3",
-    "element-plus": "^2.2.20",
-    "vue": "^3.2.41"
+    "element-plus": "^2.2.21",
+    "vue": "^3.2.45"
   },
   "devDependencies": {
     "@feathersjs/cli": "^5.0.0-pre.28",
     "@iconify-json/carbon": "^1.1.9",
     "@types/node": "^18.11.9",
-    "@unocss/preset-typography": "^0.46.3",
-    "@unocss/reset": "^0.46.3",
-    "@unocss/transformer-directives": "^0.46.3",
+    "@unocss/preset-typography": "^0.46.4",
+    "@unocss/reset": "^0.46.4",
+    "@unocss/transformer-directives": "^0.46.4",
     "@vitejs/plugin-vue": "^3.2.0",
     "esno": "^0.16.3",
     "fast-glob": "^3.2.12",
     "https-localhost": "^4.7.1",
-    "sass": "^1.56.0",
+    "sass": "^1.56.1",
     "sitemap": "^7.1.1",
-    "unocss": "^0.46.3",
+    "unocss": "^0.46.4",
     "unplugin-auto-import": "^0.11.4",
     "unplugin-vue-components": "^0.22.9",
     "vite-plugin-pwa": "^0.13.3",

@@ -51,7 +51,11 @@ The following information comes from the TypeBox documentation.  It has been for
 
 #### Primitive Types
 
+Primitive type utilities create schemas for individual values.
+
 ##### Any
+
+Creates a schema that will always pass validation. It's the equivalent of TypeScript's [any](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#any) type.
 
 ```js
 const T = Type.Any()
@@ -67,6 +71,8 @@ const T = { }
 
 ##### Unknown
 
+Similar to [any](#any), it creates a schema that will always pass validation.  It's the equivalent of TypeScript's [unknown](https://www.typescriptlang.org/docs/handbook/2/functions.html#unknown) type.
+
 ```js
 const T = Type.Unknown()
 ```
@@ -80,6 +86,8 @@ const T = { }
 ```
 
 ##### String
+
+Creates a string schema and type.
 
 ```js
 const T = Type.String()
@@ -97,6 +105,8 @@ const T = {
 
 ##### Number
 
+Creates a number schema and type.
+
 ```js
 const T = Type.Number()
 ```
@@ -112,6 +122,8 @@ const T = {
 ```
 
 ##### Integer
+
+Creates a number schema and type. The number has to be an integer (not a float).
 
 ```js
 const T = Type.Integer()
@@ -129,6 +141,8 @@ const T = {
 
 ##### Boolean
 
+Creates a boolean schema and type.
+
 ```js
 const T = Type.Boolean()
 ```
@@ -145,6 +159,8 @@ const T = {
 
 ##### Null
 
+Creates a schema and type only allowing `null`.
+
 ```js
 const T = Type.Null()
 ```
@@ -160,6 +176,8 @@ const T = {
 ```
 
 ##### Literal
+
+Creates a schema and type that must match the provided value.
 
 ```js
 const T = Type.Literal(42)
@@ -178,7 +196,11 @@ const T = {
 
 #### Object & Array Types
 
+These utilities creates schemas and types for objects and arrays.
+
 ##### RegEx
+
+Creates a string schema that validates against a regular expression object. The TypeScript type will be `string`.
 
 ```js
 const T = Type.RegEx(/foo/)
@@ -196,6 +218,8 @@ const T = {
 ```
 
 ##### Array
+
+Creates an array of the provided type. You can use any of the utility types to specify what can go in the array, even complex types using [union](#union) and [intersect](#intersect).
 
 ```js
 const T = Type.Array( Type.Number() )
@@ -215,6 +239,8 @@ const T = {
 ```
 
 ##### Object
+
+Creates an object schema where all properties are required by default.  You can use the [Type.Optional](#optional) utility to mark a key as optional.
 
 ```js
 const T = Type.Object({
@@ -246,6 +272,8 @@ const T = {
 ```
 
 ##### Tuple
+
+Creates an array type with exactly two items matching the specified types.
 
 ```js
 const T = Type.Tuple([
@@ -332,8 +360,11 @@ const T = {
 
 #### Utility Types
 
+The utility types create types which are derived from other types.
 
 ##### KeyOf
+
+Creates a schema for a string that can be any of the keys of a provided `Type.Object`. It's similar to TypeScript's [KeyOf](https://www.typescriptlang.org/docs/handbook/2/keyof-types.html#handbook-content) operator.
 
 ```js
 const T = Type.KeyOf(
@@ -362,11 +393,13 @@ const T = {
 
 ##### Union
 
+Creates a type which can be one of the types in the provided array. It's the equivalent to using `|` to form a TypeScript [Union](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html#unions).
+
 ```js
-const T = Type.Union({
+const T = Type.Union([
   Type.String(),
   Type.Number(),
-})
+])
 ```
 
 ```js
@@ -383,6 +416,8 @@ const T = {
 ```
 
 ##### Intersect
+
+Creates an object type by combining two or more other object types.
 
 ```js
 const T = Type.Intersect([
@@ -412,6 +447,8 @@ const T = {
 
 ##### Never
 
+Creates a type that will never validate if the attribute is present.  This is useful if you are allowing [additionalProperties](#additionalproperties) but need to prevent using specific keys.
+
 ```js
 const T = Type.Never()
 ```
@@ -430,6 +467,8 @@ const T = {
 ```
 
 ##### Record
+
+Creates the JSON Schema equivalent of TypeScript's [Record](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type) utility type.
 
 ```js
 const T = Type.Record( Type.String(), Type.Number() )
@@ -451,6 +490,8 @@ const T = {
 ```
 
 ##### Partial
+
+Creates a schema for an object where all keys are optional. It's the opposite of [Required](#required), and the JSON Schema equivalent of TypeScript's [Partial](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype) utility type.
 
 ```js
 const T = Type.Partial(
@@ -479,6 +520,8 @@ const T = {
 ```
 
 ##### Required
+
+Creates a schema for an object where all keys are required, even ignoring if keys are marked with `Type.Optional`. It's the opposite of [Partial](#partial), and the JSON Schema equivalent of TypeScript's [Required](https://www.typescriptlang.org/docs/handbook/utility-types.html#requiredtype) utility type.
 
 ```js
 const T = Type.Required(
@@ -509,6 +552,8 @@ const T = {
 
 ##### Pick
 
+Forms a new object containing only the array of keys provided in the second argument.  It's the JSON Schema equivalent of TypeScript's [Pick](https://www.typescriptlang.org/docs/handbook/utility-types.html#picktype-keys) utility type.
+
 ```js
 const T = Type.Pick(
   Type.Object({
@@ -537,6 +582,9 @@ const T = {
 ```
 
 ##### Omit
+
+Forms a new object containing all keys except those provided in the second argument.  It's the JSON Schema equivalent of TypeScript's [Omit](https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys) utility type.
+
 
 ```js
 const T = Type.Omit(
@@ -571,6 +619,8 @@ TypeBox provides modifiers that can be applied to an objects properties. This al
 
 #### Optional
 
+Allows marking a key in [Type.Object](#object) as optional.
+
 ```js
 const T = Type.Object({
   name: Type.Optional( Type.String() )
@@ -595,6 +645,8 @@ const T = {
 ```
 
 #### Readonly
+
+Allows marking a key in [Type.Object](#object) as readonly.  It's the equivalent of TypeScript's [Readonly](https://www.typescriptlang.org/docs/handbook/utility-types.html#readonlytype) utility type.
 
 ```js
 const T = Type.Object({
@@ -621,6 +673,8 @@ const T = {
 ```
 
 #### ReadonlyOptional
+
+Allows marking a key in [Type.Object](#object) as both [readonly](#readonly) and [optional](#optional).
 
 ```js
 const T = Type.Object({
@@ -748,6 +802,10 @@ Omitting this keyword has the same behavior as a value of 1.
 #### For Objects
 
 Array types support the following options, which can be used simultaneously.
+
+##### `additionalProperties`
+
+Specifies if keys other than the ones specified in the schema are allowed to be present in the object.
 
 ##### `maxProperties`
 
