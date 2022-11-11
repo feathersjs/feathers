@@ -2,7 +2,35 @@
 outline: deep
 ---
 
-# Generate a Service
+# Service Class
+
+Link here from the class file in the generated app:
+
+Todo: Implement ServiceAdapter picker for the following
+
+## Knex
+
+## MongoDB
+
+```ts
+import { MongoDBService } from '@feathersjs/mongodb'
+import type { MongoDBAdapterParams } from '@feathersjs/mongodb'
+
+import type { Application } from '../../declarations'
+import type { Message, MessageData, MessageQuery } from './messages.schema'
+
+export interface MessageParams extends MongoDBAdapterParams<MessageQuery> {}
+
+// Message class for MongoDB https://dove.feathersjs.com/cli/service-class
+export class MessageService extends MongoDBService<Message, MessageData, MessageParams> {}
+
+export const getOptions = (app: Application) => {
+  return {
+    paginate: app.get('paginate'),
+    Model: app.get('mongodbClient').then((db) => db.collection('message'))
+  }
+}
+```
 
 ## Hooks Overview
 
@@ -20,21 +48,21 @@ export * from './test.class'
 export const testing = (app: Application) => {
   app.use('messages', new TestingService(getOptions(app)), {
     methods: ['find', 'get', 'create', 'update', 'patch', 'remove'],
-    events: [],
+    events: []
   })
   app.service('messages').hooks({
     around: {
-      all: [authenticate('jwt')],
+      all: [authenticate('jwt')]
     },
     before: {
-      all: [],
+      all: []
     },
     after: {
-      all: [],
+      all: []
     },
     error: {
-      all: [],
-    },
+      all: []
+    }
   })
 }
 ```
@@ -47,7 +75,7 @@ We already have an explanation of this in the troubleshooting guide, so we can l
 // Update Service Declarations https://dove.feathersjs.com/cli/service-overview.html#service-types
 declare module '../../../../declarations' {
   interface ServiceTypes {
-    'messages': TestingService
+    messages: TestingService
   }
 }
 ```

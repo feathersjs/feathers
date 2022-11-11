@@ -4,7 +4,8 @@ import { AppGeneratorContext } from '../index'
 
 const tsKoaApp = ({
   transports
-}: AppGeneratorContext) => /* ts */ `import { feathers } from '@feathersjs/feathers'
+}: AppGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
+import { feathers } from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
 import {
   koa, rest, bodyParser, errorHandler, parseAuthentication, cors, serveStatic
@@ -63,7 +64,8 @@ export { app }
 
 const tsExpressApp = ({
   transports
-}: AppGeneratorContext) => /* ts */ `import { feathers } from '@feathersjs/feathers'
+}: AppGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
+import { feathers } from '@feathersjs/feathers'
 import express, {
   rest, json, urlencoded, cors, compression,
   serveStatic, notFound, errorHandler

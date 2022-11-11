@@ -2,7 +2,10 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
-const template = ({ lib }: AppGeneratorContext) => /* ts */ `import assert from 'assert'
+const template = ({
+  lib
+}: AppGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
+import assert from 'assert'
 import axios from 'axios'
 import type { Server } from 'http'
 import { app } from '../${lib}/app'

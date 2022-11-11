@@ -4,11 +4,39 @@ outline: deep
 
 # Validators
 
-## AJV and TypeBox
+For all currently supported schema types, AJV is used as the default validator. See the [validators API documentation](../../api/schema/validators.md) for more information.
 
-General data about AJV and TypeBox.
+## AJV validators
 
+The `src/schemas/validators.ts` file sets up two Ajv instances for data and querys (for which string types will be coerced automatically). It also sets up a collection of additional formats using [ajv-formats](https://ajv.js.org/packages/ajv-formats.html). The validators in this file can be customized according to the [Ajv documentation](https://ajv.js.org/) and [its plugins](https://ajv.js.org/packages/). You can find the available Ajv options in the [Ajs class API docs](https://ajv.js.org/options.html).
 
-## MongoDB-Specific Stuff
+```ts
+import { Ajv, addFormats } from '@feathersjs/schema'
+import type { FormatsPluginOptions } from '@feathersjs/schema'
 
-TODO: hook up the ServiceAdapter picker for this section
+const formats: FormatsPluginOptions = [
+  'date-time',
+  'time',
+  'date',
+  'email',
+  'hostname',
+  'ipv4',
+  'ipv6',
+  'uri',
+  'uri-reference',
+  'uuid',
+  'uri-template',
+  'json-pointer',
+  'relative-json-pointer',
+  'regex'
+]
+
+export const dataValidator = addFormats(new Ajv({}), formats)
+
+export const queryValidator = addFormats(
+  new Ajv({
+    coerceTypes: true
+  }),
+  formats
+)
+```

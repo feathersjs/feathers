@@ -90,24 +90,44 @@ export default {
           link: '/guides/cli/generate-app.md'
         },
         {
+          text: 'Application',
+          link: '/guides/cli/application.md'
+        },
+        {
           text: 'Configuration',
           link: '/guides/cli/config.md'
+        },
+        {
+          text: 'TypeScript',
+          link: '/guides/cli/typescript.md'
         },
         {
           text: 'Validators',
           link: '/guides/cli/validators.md'
         },
         {
-          text: 'Service Classes',
-          link: '/guides/cli/service-classes.md'
+          text: 'Logging',
+          link: '/guides/cli/logging.md'
         },
         {
-          text: 'Service Hooks',
-          link: '/guides/cli/service-hooks.md'
+          text: 'Databases',
+          link: '/guides/cli/databases.md'
         },
         {
-          text: 'Schemas and Resolvers',
-          link: '/guides/cli/schemas-and-resolvers.md'
+          text: 'Authentication',
+          link: '/guides/cli/authentication.md'
+        },
+        {
+          text: 'Services',
+          link: '/guides/cli/services.md'
+        },
+        {
+          text: 'Schemas',
+          link: '/guides/cli/schemas.md'
+        },
+        {
+          text: 'Hooks',
+          link: '/guides/cli/hooks.md'
         }
       ]
     },
