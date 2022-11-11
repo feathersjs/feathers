@@ -365,7 +365,7 @@ const T = {
 ```js
 const T = Type.Union({
   Type.String(),
-  Type.Number,
+  Type.Number(),
 })
 ```
 
@@ -377,7 +377,7 @@ type T = string | number
 const T = {
   anyOf: [
     { type: 'string' },
-    { type: 'string' },
+    { type: 'number' },
   ]
 }
 ```
