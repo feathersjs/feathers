@@ -94,8 +94,12 @@ export default {
           link: '/guides/cli/application.md'
         },
         {
+          text: 'Client',
+          link: '/guides/cli/client.md'
+        },
+        {
           text: 'Configuration',
-          link: '/guides/cli/config.md'
+          link: '/guides/cli/configuration.md'
         },
         {
           text: 'TypeScript',
@@ -128,6 +132,10 @@ export default {
         {
           text: 'Hooks',
           link: '/guides/cli/hooks.md'
+        },
+        {
+          text: 'Channels',
+          link: '/guides/cli/channels.md'
         }
       ]
     },

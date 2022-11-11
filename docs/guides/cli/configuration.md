@@ -2,7 +2,9 @@
 outline: deep
 ---
 
-# Application Configuration
+# Configuration
+
+This page describes how the application loads its settings from [configuration files](#app-configuration) or [environment variables](#environment-variables) and how the generated file [folders](#folders) and [code style](#code-formatting) can be changed.
 
 ## App configuration
 

@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Application
 
 The `src/app.ts` file is the main file where the [Feathers application](../../api/application.md) gets initialized and wired up with a Feathers transport.
@@ -72,4 +76,17 @@ app.hooks({
 
 ## Tests, jobs and SSR
 
-The `app` file can be imported like any other Node module. This means it can be used directly in tests, scheduled jobs or server side rendering without having to spin up a separate server instance.
+The `app` file can be imported like any other Node module. This means it can be used directly in tests, scheduled jobs or server side rendering without having to start a separate server instance. For example, the unit tests import the application like this:
+
+```ts
+import assert from 'assert'
+import { app } from '../../src/app'
+
+describe('messages service', () => {
+  it('registered the service', () => {
+    const service = app.service('messages')
+
+    assert.ok(service, 'Registered the service')
+  })
+})
+```

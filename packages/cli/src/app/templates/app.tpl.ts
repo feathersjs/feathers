@@ -14,7 +14,7 @@ ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketi
 
 import type { Application } from './declarations'
 import { configurationValidator } from './schemas/configuration'
-import { logErrorHook } from './logger'
+import { logError } from './hooks/log-error'
 import { services } from './services/index'
 import { channels } from './channels'
 
@@ -47,7 +47,7 @@ app.configure(channels)
 // Register hooks that run on all service methods
 app.hooks({
   around: {
-    all: [ logErrorHook ]
+    all: [ logError ]
   },
   before: {},
   after: {},
@@ -75,7 +75,8 @@ ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketi
 
 import type { Application } from './declarations'
 import { configurationValidator } from './schemas/configuration'
-import { logger, logErrorHook } from './logger'
+import { logger } from './logger'
+import { logError } from './hooks/log-error'
 import { services } from './services/index'
 import { channels } from './channels'
 
@@ -111,7 +112,7 @@ app.use(errorHandler({ logger }))
 // Register hooks that run on all service methods
 app.hooks({
   around: {
-    all: [ logErrorHook ]
+    all: [ logError ]
   },
   before: {},
   after: {},

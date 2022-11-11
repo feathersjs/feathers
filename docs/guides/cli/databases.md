@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Databases
 
 ## SQL
@@ -12,7 +16,7 @@ const knex = app.get('<database>Client')
 
 ### Migrations
 
-Migrations are a best practise for SQL databases to roll out and undo changes to the data model and are set up automatically with an SQL database connection. The generated `knexfile.ts` imports the [app object](./application.md) to establish the connection to the database. To run migration scripts for the connection from the [configuration environment](./config.md#environment-variables) use:
+Migrations are a best practise for SQL databases to roll out and undo changes to the data model and are set up automatically with an SQL database connection. The generated `knexfile.ts` imports the [app object](./application.md) to establish the connection to the database. To run migration scripts for the connection from the [configuration environment](./configuration.md#environment-variables) use:
 
 ```
 npm run migrate
@@ -46,7 +50,7 @@ KnexJS does not have a concept of models. Instead a new service is initialized w
 const db = await app.get('mongodbClient')
 ```
 
-The default connection string tries to connect to a local MongoDB instance with no password. To use e.g. [MongoDB Atlas](https://www.mongodb.com/cloud) change the `mongodb` property in `config/default.json` or add it as an [environment variable](./config.md#environment-variables) with the connection string that will look similar to this:
+The default connection string tries to connect to a local MongoDB instance with no password. To use e.g. [MongoDB Atlas](https://www.mongodb.com/cloud) change the `mongodb` property in `config/default.json` or add it as an [environment variable](./configuration.md#environment-variables) with the connection string that will look similar to this:
 
 ```
 mongodb+srv://<user>:<password>@cluster0.xyz.mongodb.net/?retryWrites=true&w=majority
