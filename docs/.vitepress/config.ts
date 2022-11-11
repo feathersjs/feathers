@@ -66,7 +66,7 @@ export default defineConfig({
     logo: '/logo.svg',
 
     editLink: {
-      pattern: 'https://github.com/feathersjs/feathers/edit/dove-docs/docs/:path',
+      pattern: 'https://github.com/feathersjs/feathers/edit/dove/docs/:path',
       text: 'Suggest changes to this page'
     },
 

@@ -32,7 +32,7 @@ The new docs are built on [Vitepress](https://vitepress.vuejs.org/). It had beco
 
 The custom highlighter can be found in the `/docs/.vitepress` folder of the core monorepo.
 
-You can find the `docs` folder, [here](https://github.com/feathersjs/feathers/tree/dove-docs/docs).
+You can find the `docs` folder, [here](https://github.com/feathersjs/feathers/tree/dove/docs).
 
 <BlockQuote label="Todo">
 
