@@ -441,75 +441,122 @@ app.service('users').hooks({
 
 Which will allows queries like `/users?_id=507f1f77bcf86cd799439011&age=25`.
 
-## Validating MongoDB Data
+## Validate Data
 
-### Using Resolvers
+There are two ways 
 
-The simplest way to convert ObjectIds is to make a resolver.
+Since MongoDB uses special binary types for stored data, Feathers uses Schemas to validate MongoDB data and resolvers to convert types. Attributes on MongoDB services often require specitying two schema formats:
+
+- Object-type formats for data pulled from the database and passed between services on the API server. The MongoDB driver for Node converts binary data into objects, like `ObjectId` and `Date`.
+- String-type formats for data passed from the client.
+
+You can convert values to their binary types to take advantage of performance enhancements in MongoDB. The following sections show how to use Schemas and Resolvers for each MongoDB binary format.
+
+### Shared Validators
+
+The following example shows how to create two custom validator/type utilities:
+
+- An ObjectId validator which handles strings or objects. Place the following code inside `src/schema/shared.ts`.
+- A Date validator
 
 ```ts
-import { ObjectId } from 'mongodb'
+import { Type } from '@feathersjs/typebox'
 
-// Resolver for the basic data model (e.g. creating new entries)
-export const commentsDataResolver = resolve<commentsData, HookContext>({
-  schema: commentsDataSchema,
-  validate: false,
-  properties: {
-    text: { type: 'string' },
-    userId: async (value) => {
-      return value ? new ObjectId(value) : value
-    }
-  }
-})
+export const ObjectId = () => Type.Union([
+  Type.String({ format: 'objectid' }),
+  Type.Object({}, { additionalProperties: true }),
+])
+export const NullableObjectId = () => Type.Union([ObjectId(), Type.Null()])
+
+export const Date = () => Type.Union([
+  Type.String({ format: 'date-time' }),
+  Type.Date(),
+])
 ```
 
-### Using a Custom AJV Instance
+Technically, `ObjectId` in the above example could be improved since it allows any object to pass validation. A query with a bogus id fail only when it reaches the database. Since objects can't be passed from the client, it's a situation which only occurs with our server code, so it will suffice.
 
-All [Feathers schemas](/api/schema/schema) share an implicit AJV instance by default.
+### ObjectIds
 
-It's possible to validate MongoDB ObjectIds and dates with AJV, as well. This is more complicated than using resolvers, but can also handle the full query syntax. You can create a custom AJV instance with extra formatters attached.
-
-#### Custom AJV Instance
-
-Here's an example of a custom AJV instance, which could be placed in `src/schemas/ajv.ts` and referenced by all other services.
+With the [shared validators](#shared-validators) in place, you can specify an `ObjectId` type in your TypeBox Schemas:
 
 ```ts
-import Ajv, { AnySchemaObject } from 'ajv'
-import addFormats from 'ajv-formats'
+import { Type } from '@feathersjs/typebox'
+import { ObjectId } from '../../schemas/shared'
+
+const userSchema = Type.Object(
+  {
+    _id: ObjectId(),
+    orgIds: Type.Array( ObjectId() ),
+  },
+  { $id: 'User', additionalProperties: false }
+)
+```
+
+### Dates
+
+The standard format for transmitting dates between client and server is [ISO8601](https://www.rfc-editor.org/rfc/rfc3339#section-5.6), which is a string representation of a date.
+
+While it's possible to use `$gt` (greater than) and `$lt` (less than) queries on string values, performance will be faster for dates stored as date objects. This means you'd use the same code as the previous example, followed by a resolver or a hook to convert the values in `context.data` and `context.query` into actual Dates.
+
+With the [shared validators](#shared-validators) in place, you can use the custom `Date` type in your TypeBox Schemas:
+
+```ts
+import { Type } from '@feathersjs/typebox'
+import { ObjectId, Date } from '../../schemas/shared'
+
+const userSchema = Type.Object(
+  {
+    _id: ObjectId(),
+    createdAt: Date(),
+  },
+  { $id: 'User', additionalProperties: false }
+)
+```
+
+## Convert Data
+
+It's possible to convert data by either customizing AJV or using resolvers.  Converting with AJV is currently the simplest solution, but it uses extended AJV features, outside of the JSON Schema standard.
+
+### Convert With AJV
+
+The FeathersJS CLI creates validators in the `src/schema/validators` file.  It's possible to enable the AJV validators to convert certain values using AJV keywords. This example works for both [TypeBox](/api/schema/typebox) and [JSON Schema](/api/schema/schema):
+
+#### Create Converters
+
+```ts
+import type { AnySchemaObject } from 'ajv'
+import { Ajv } from '@feathersjs/schema'
 import { ObjectId } from 'mongodb'
 
-export { type Infer, validateData, validateQuery, schema, queryProperty } from '@feathersjs/schema'
-
-// Reusable `convert` keyword.
+// `convert` keyword.
 const keywordConvert = {
   keyword: 'convert',
   type: 'string',
   compile(schemaVal: boolean, parentSchema: AnySchemaObject) {
     if (!schemaVal) return () => true
 
-    // Update date-time string to Date object
+    // Convert date-time string to Date
     if (['date-time', 'date'].includes(parentSchema.format)) {
       return function (value: string, obj: any) {
         const { parentData, parentDataProperty } = obj
-        console.log(value)
         parentData[parentDataProperty] = new Date(value)
         return true
       }
     }
-    // Update objectid string to ObjectId
+    // Convert objectid string to ObjectId
     else if (parentSchema.format === 'objectid') {
       return function (value: string, obj: any) {
         const { parentData, parentDataProperty } = obj
-        // Update date-time string to Date object
         parentData[parentDataProperty] = new ObjectId(value)
         return true
       }
     }
     return () => true
-  }
+  },
 } as const
 
-// Reusable `ObjectId` Formatter
+// `objectid` formatter
 const formatObjectId = {
   type: 'string',
   validate: (id: string | ObjectId) => {
@@ -518,83 +565,84 @@ const formatObjectId = {
       return false
     }
     return false
-  }
+  },
 } as const
 
-// Create a custom AJV
-export const ajv = new Ajv({
-  coerceTypes: true,
-  useDefaults: true,
-  schemas: []
-})
-addFormats(ajv)
-ajv.addKeyword(keywordConvert)
-ajv.addFormat('objectid', formatObjectId)
-
-// Create a custom AJV instance that doesn't coerce types
-export const ajvNoCoerce = new Ajv({
-  coerceTypes: false,
-  useDefaults: true,
-  schemas: []
-})
-addFormats(ajvNoCoerce)
-ajvNoCoerce.addKeyword(keywordConvert)
-ajvNoCoerce.addFormat('objectid', formatObjectId)
+export function addConverters(validator: Ajv) {
+  validator.addKeyword(keywordConvert)
+  validator.addFormat('objectid', formatObjectId)
+}
 ```
 
-#### Pass the Custom AJV Instance to `schema`
+#### Apply to AJV
 
-Once created, all service schema files should use the custom AJV instance. Here's an example:
+You can then add converters to the generated validators by importing the `addConverters` utility in the `validators.ts` file:
 
-```ts
-// Schema for the data that is being returned
-export const connectionsResultSchema = schema(
-  {
-    $id: 'ConnectionsResult',
-    type: 'object',
-    additionalProperties: false,
-    required: ['_id'],
-    properties: {
-      ...common,
-      _id: {
-        anyOf: [
-          { type: 'string', format: 'objectid', convert: true },
-          { type: 'object' } // ObjectId
-        ]
-      },
-      createdAt: { type: 'string', format: 'date-time', convert: true }
-    }
-  } as const,
-  ajv
+```ts{3,30-32}
+import { Ajv, addFormats } from '@feathersjs/schema'
+import type { FormatsPluginOptions } from '@feathersjs/schema'
+import { addConverters } from './converters'
+
+const formats: FormatsPluginOptions = [
+  'date-time',
+  'time',
+  'date',
+  'email',
+  'hostname',
+  'ipv4',
+  'ipv6',
+  'uri',
+  'uri-reference',
+  'uuid',
+  'uri-template',
+  'json-pointer',
+  'relative-json-pointer',
+  'regex',
+]
+
+export const dataValidator = addFormats(new Ajv({}), formats)
+
+export const queryValidator = addFormats(
+  new Ajv({
+    coerceTypes: true,
+  }),
+  formats,
 )
+
+addConverters(dataValidator)
+addConverters(queryValidator)
 ```
 
-## Common Mistakes
+#### Update Shared Validators
 
-Here are a couple of errors you might run into while using validators.
+We can now update the [shared validators](#shared-validators) to also convert data.
 
-### unknown keyword: "convert"
+```ts{5}
+import { Type } from '@feathersjs/typebox'
 
-You'll see an error like `"Error: strict mode: unknown keyword: "convert"` in a few scenarios:
+export const ObjectId = () => Type.Union([
+  Type.String({ format: 'objectid', convert: true }),
+  Type.Object({}, { additionalProperties: true }),
+])
+export const NullableObjectId = () => Type.Union([ObjectId(), Type.Null()])
 
-- You fail to [Pass the Custom AJV Instance to every `schema`](#pass-the-custom-ajv-instance-to-schema). If you're using a custom AJV instance, be sure to provide it to **every** place where you call `schema()`.
-- You try to use custom keywords in your schema without registering them, first.
-- You make a typo in your schema. For example, it's common to forget to accidentally mis-document arrays and collapse the item `properties` up one level.
+export const Date = () => Type.Union([
+  Type.String({ format: 'date-time', convert: true }),
+  Type.Date(),
+])
+```
 
-### unknown format "date-time"
+Now when we use the shared validators (as shown in the [ObjectIds](#objectids) and [Dates](#dates) sections) AJV will also convert the data to the correct type.
 
-You'll see an error like `Error: unknown format "date-time" ignored in schema at path "#/properties/createdAt"` in a few scenarios.
+### Convert with Resolvers
 
-- You're attempting to use a formatter not built into AJV.
-- You fail to [Pass the Custom AJV Instance to every `schema`](#pass-the-custom-ajv-instance-to-schema). If you're using a custom AJV instance, be sure to provide it to **every** place where you call `schema()`.
+In place of [converting data with AJV](#convert-with-ajv), you can also use resolvers to convert data.
 
-## Search
-
-## ObjectId resolvers
+#### ObjectId Resolvers
 
 MongoDB uses object ids as primary keys and for references to other documents. To a client they are represented as strings and to convert between strings and object ids, the following [property resolver](../schema/resolvers.md) helpers can be used.
 
-### resolveObjectId
+#### resolveObjectId
 
 `resolveObjectId` resolves a property as an object id. It can be used as a direct property resolver or called with the original value.
 
@@ -621,7 +669,7 @@ export const messageDataResolver = resolve<Message, HookContext>({
 })
 ```
 
-### resolveQueryObjectId
+#### resolveQueryObjectId
 
 `resolveQueryObjectId` allows to query for object ids. It supports conversion from a string to an object id as well as conversion for values from the [$in, $nin and $ne query syntax](./querying.md).
 
@@ -634,3 +682,49 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext>({
   }
 })
 ```
+
+## Common Mistakes
+
+Here are a couple of errors you might run into while using validators.
+
+### unknown keyword: "convert"
+
+You'll see an error like `"Error: strict mode: unknown keyword: "convert"` in a few scenarios:
+
+- You fail to [Pass the Custom AJV Instance to every `schema`](#pass-the-custom-ajv-instance-to-schema). If you're using a custom AJV instance, be sure to provide it to **every** place where you call `schema()`.
+- You try to use custom keywords in your schema without registering them, first.
+- You make a typo in your schema. For example, it's common to forget to accidentally mis-document arrays and collapse the item `properties` up one level.
+
+### unknown format "date-time"
+
+You'll see an error like `Error: unknown format "date-time" ignored in schema at path "#/properties/createdAt"` in a few scenarios.
+
+- You're attempting to use a formatter not built into AJV.
+- You fail to [Pass the Custom AJV Instance to every `schema`](#pass-the-custom-ajv-instance-to-schema). If you're using a custom AJV instance, be sure to provide it to **every** place where you call `schema()`.
+
+## Search
+
+There are two ways to perform search queries with MongoDB: 
+
+- Perform basic Regular Expression matches using the `$regex` filter.
+- Perform full-text search using the `$search` filter.
+
+### Basic Regex Search
+
+You can perform basic search using regular expressions with the `$regex` operator.  Here's an example query.
+
+```js
+{
+  text: { $regex: 'feathersjs', $options: 'igm' },
+}
+```
+
+TODO: Show how to customize the query syntax to allow the `$regex` and `$options` operators.
+
+### Full-Text Search
+
+See the MongoDB documentation for instructions on performing full-text search using the `$search` operator:
+
+- Perform [full-text queries on self-hosted MongoDB](https://www.mongodb.com/docs/manual/core/link-text-indexes/).
+- Perform [full-text queries on MongoDB Atlas](https://www.mongodb.com/docs/atlas/atlas-search/) (MongoDB's first-party hosted database).
+- Perform [full-text queries with the MongoDB Pipeline](https://www.mongodb.com/docs/manual/tutorial/text-search-in-aggregation/)
