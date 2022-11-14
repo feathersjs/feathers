@@ -87,7 +87,7 @@ const T = { }
 
 ##### String
 
-Creates a string schema and type.
+Creates a string schema and type. `Type.String` will generally be used for validating dates sent from clients, as well.  See [Validating Dates](#validating-dates).
 
 ```js
 const T = Type.String()
@@ -102,6 +102,378 @@ const T = {
   type: 'string'
 }
 ```
+
+###### String Formats Bundled
+
+Strings are the most versatile, serializable type which can be transmitted from clients. Because of their versatility, several custom string formatters are supported, by default, in Feathers CLI-generated applications.  [Additional formats](#additional-formats) can be manually enabled.
+
+<hr/>
+
+###### `date-time`
+
+```ts
+Type.String({ format: 'date-time' })
+```
+
+Validates against the [date-time](https://www.rfc-editor.org/rfc/rfc3339#section-5.6) described in RFC3339/ISO8601, which is the following format:
+
+```
+YYYY-MM-DDTHH:MM:SS.SSS+HH:MM
+2022-11-30T11:21:44.000-08:00
+```
+
+The sections of this format are described as follows:
+
+- **full-date**: `YYYY-MM-DD`
+- **partial-time**: `HH:MM:SS.SSS` (where `.SSS` represents optional milliseconds)
+- **time-offset**: `+HH:MM` (where `+` can be `-` and which value represents UTC offset or "time zone") **required**
+
+<hr/>
+
+###### `time`
+
+```ts
+Type.String({ format: 'time' })
+```
+
+Validates against the following format:
+
+```
+HH:MM:SS.SSS+HH:MM
+11:21:44.000-08:00
+```
+
+The sections of this format are described as follows:
+
+- **partial-time**: `HH:MM:SS.SSS` (where `.SSS` represents optional milliseconds)
+- **time-offset**: `+HH:MM` (where `+` can be `-` and which value represents UTC offset or "time zone") **optional**
+
+<hr/>
+
+###### `date`
+
+```ts
+Type.String({ format: 'date' })
+```
+
+Validates against the [full date](https://www.rfc-editor.org/rfc/rfc3339#section-5.6) described in RFC3339/ISO8601, which is the following format:
+
+```
+YYYY-MM-DD
+2022-11-30
+```
+
+<hr/>
+
+###### `email`
+
+```ts
+Type.String({ format: 'email' })
+```
+
+Validates email addresses against the format specified by [RFC 1034](https://rumkin.com/software/email/rules/).
+
+<hr/>
+
+###### `hostname`
+
+```ts
+Type.String({ format: 'hostname' })
+```
+
+Validates hostnames against the format specified by [RFC 1034](https://rumkin.com/software/email/rules/).
+
+<hr/>
+
+###### `ipv4`
+
+```ts
+Type.String({ format: 'ipv4' })
+```
+
+Validates an IPV4-formatted IP Address.
+
+```
+0.0.0.0 to 255.255.255.255
+```
+
+<hr/>
+
+###### `ipv6`
+
+```ts
+Type.String({ format: 'ipv6' })
+```
+
+Validates an IPV6-formatted IP Address.
+
+<hr/>
+
+###### `uri`
+
+```ts
+Type.String({ format: 'uri' })
+```
+
+Validates a full URI.
+
+<hr/>
+
+###### `uri-reference`
+
+```ts
+Type.String({ format: 'uri-reference' })
+```
+
+<hr/>
+
+###### `uuid`
+
+```ts
+Type.String({ format: 'uuid' })
+```
+
+Validates a Universally Unique Identifier according to [rfc4122](https://www.rfc-editor.org/rfc/rfc4122).
+
+<hr/>
+
+###### `uri-template`
+
+```ts
+Type.String({ format: 'uri-template' })
+```
+
+Validates a URI Template according to [rfc6570](https://www.rfc-editor.org/rfc/rfc6570).
+
+<hr/>
+
+###### `json-pointer`
+
+```ts
+Type.String({ format: 'json-pointer' })
+```
+
+Validates a JSON Pointer, according to [RFC6901](https://www.rfc-editor.org/rfc/rfc6901).
+
+<hr/>
+
+###### `relative-json-pointer`
+
+```ts
+Type.String({ format: 'relative-json-pointer' })
+```
+
+Validates a Relative JSON Pointer, according to [this draft](https://datatracker.ietf.org/doc/html/draft-luff-relative-json-pointer-00).
+
+<hr/>
+
+###### `regex`
+
+```ts
+Type.String({ format: 'regex' })
+```
+
+Tests whether a string is a valid regular expression by passing it to RegExp constructor.
+
+<hr/>
+
+###### Additional Formats
+
+The `ajv-formats` package bundled with CLI-generated apps includes additional utilities, listed below, which can be manually enabled by modifying the array of formats in `src/schema/validators.ts`. The additional formats are highlighted in this code example:
+
+```ts{16-25}
+const formats: FormatsPluginOptions = [
+  'date-time',
+  'time',
+  'date',
+  'email',
+  'hostname',
+  'ipv4',
+  'ipv6',
+  'uri',
+  'uri-reference',
+  'uuid',
+  'uri-template',
+  'json-pointer',
+  'relative-json-pointer',
+  'regex',
+  'iso-time',
+  'iso-date-time',
+  'duration',
+  'byte',
+  'int32',
+  'int64',
+  'float',
+  'double',
+  'password',
+  'binary',
+]
+```
+
+Be aware that there is also an [ajv-formats-draft2019 package](https://github.com/luzlab/ajv-formats-draft2019) which can be manually installed. The package allows use of several international formats for urls, domains, and emails. The formats are included in [JSON Schema draft-07](https://json-schema.org/draft-07/json-schema-release-notes.html).
+
+<hr/>
+
+###### iso-time
+
+Must be manually enabled. See [Additional Formats](#additional-formats). 
+
+```ts
+Type.String({ format: 'iso-time'})
+```
+
+Validates against UTC-based time format:
+
+```
+HH:MM:SS.SSSZ
+11:21:44.000Z
+
+HH:MM:SSZ
+11:21:44Z
+```
+
+The sections of this format are described as follows:
+
+- **partial-time**: `HH:MM:SS.SSS` (where `.SSS` represents optional milliseconds)
+- **Z**: `Z` (where Z represents UTC time zone, or time offset 00:00)
+
+<hr/>
+
+###### `iso-date-time`
+
+```ts
+Type.String({ format: 'date-time' })
+```
+
+Validates against the [date-time](https://www.rfc-editor.org/rfc/rfc3339#section-5.6) described in RFC3339/ISO8601, which is the following format:
+
+```
+YYYY-MM-DDTHH:MM:SS.SSSZ
+2022-11-30T11:21:44.000Z
+
+YYYY-MM-DDTHH:MM:SSZ
+2022-11-30T11:21:44Z
+```
+
+The sections of this format are described as follows:
+
+- **full-date**: `YYYY-MM-DD`
+- **partial-time**: `HH:MM:SS.SSS` (where `.SSS` represents optional milliseconds)
+- **Z**: `Z` (where Z represents UTC time zone, or time offset 00:00)
+
+<hr/>
+
+###### Duration
+
+Must be manually enabled. See [Additional Formats](#additional-formats). 
+
+```ts
+Type.String({ format: 'duration' })
+```
+
+A duration string representing a period of time, as specified in [rfc3339 appendix-A](https://www.rfc-editor.org/rfc/rfc3339#appendix-A) undder the "Durations" heading. Here's an excerpt of the spec.
+
+```
+Durations:
+
+dur-second        = 1*DIGIT "S"
+dur-minute        = 1*DIGIT "M" [dur-second]
+dur-hour          = 1*DIGIT "H" [dur-minute]
+dur-time          = "T" (dur-hour / dur-minute / dur-second)
+dur-day           = 1*DIGIT "D"
+dur-week          = 1*DIGIT "W"
+dur-month         = 1*DIGIT "M" [dur-day]
+dur-year          = 1*DIGIT "Y" [dur-month]
+dur-date          = (dur-day / dur-month / dur-year) [dur-time]
+
+duration          = "P" (dur-date / dur-time / dur-week)
+```
+
+<hr/>
+
+###### Byte
+
+Must be manually enabled. See [Additional Formats](#additional-formats). 
+
+```ts
+Type.String({ format: 'byte' })
+```
+
+Validates base64-encoded data according to the [openApi 3.0.0 specification](https://spec.openapis.org/oas/v3.0.0#data-types).
+
+<hr/>
+
+###### int32
+
+Must be manually enabled. See [Additional Formats](#additional-formats). 
+
+```ts
+Type.String({ format: 'int32' })
+```
+
+Validates signed (+/-), 32-bit integers according to the [openApi 3.0.0 specification](https://spec.openapis.org/oas/v3.0.0#data-types).
+
+<hr/>
+
+###### int64
+
+Must be manually enabled. See [Additional Formats](#additional-formats). 
+
+```ts
+Type.String({ format: 'int64' })
+```
+
+Validates signed (+/-), 64-bit integers according to the [openApi 3.0.0 specification](https://spec.openapis.org/oas/v3.0.0#data-types).
+
+<hr/>
+
+###### float
+
+Must be manually enabled. See [Additional Formats](#additional-formats). 
+
+```ts
+Type.String({ format: 'float' })
+```
+
+Validates floats according to the [openApi 3.0.0 specification](https://spec.openapis.org/oas/v3.0.0#data-types).
+
+<hr/>
+
+###### double
+
+Must be manually enabled. See [Additional Formats](#additional-formats). 
+
+```ts
+Type.String({ format: 'double' })
+```
+
+Validates doubles according to the [openApi 3.0.0 specification](https://spec.openapis.org/oas/v3.0.0#data-types).
+
+<hr/>
+
+###### password
+
+Must be manually enabled. See [Additional Formats](#additional-formats). 
+
+```ts
+Type.String({ format: 'password' })
+```
+
+Validates passwords according to the [openApi 3.0.0 specification](https://spec.openapis.org/oas/v3.0.0#data-types).
+
+<hr/>
+
+###### binary
+
+Must be manually enabled. See [Additional Formats](#additional-formats). 
+
+```ts
+Type.String({ format: 'binary' })
+```
+
+Validates a binary string according to the [openApi 3.0.0 specification](https://spec.openapis.org/oas/v3.0.0#data-types).
+
+<hr/>
 
 ##### Number
 
@@ -763,6 +1135,63 @@ The value of this keyword MUST be a non-negative integer. A string instance is v
 
 Use `Type.Regex`, instead of this option.
 
+##### With AJV Formats
+
+There are four custom options which are only available for certain formats when using the `ajv-formats` package:
+
+- [formatMinimum](#formatminimum)
+- [formatMaximum](#formatmaximum)
+- [formatExclusiveMinimum](#formatexclusiveminimum)
+- [formatExclusiveMaximum](#formatexclusivemaximum)
+
+The above-listed options are only available when using the following [string formats](#string-formats).
+
+- [date](#date)
+- [time](#time)
+- [date-time](#date-time)
+- [iso-time](#iso-time)
+- [iso-date-time](#iso-date-time)
+
+##### `formatMinimum`
+
+Allows defining minimum constraints when the `format` keyword defines ordering (using the compare function in format definition). Available when using [ajv-formats](#with-ajv-formats).
+
+The following example validates that the provided date is on or after November 13, 2022.
+
+```ts
+Type.String({ format: 'date', formatMinimum: '2022-11-13' })
+```
+
+##### `formatMaximum`
+
+Allows defining maximum constraints when the `format` keyword defines ordering (using the compare function in format definition). Available when using [ajv-formats](#with-ajv-formats).
+
+The following example validates that the provided date is on or before November 13, 2022.
+
+```ts
+Type.String({ format: 'date', formatMaximum: '2022-11-13' })
+```
+
+##### `formatExclusiveMinimum`
+
+Allows defining exclusive minimum constraints when the `format` keyword defines ordering (using the compare function in format definition). Available when using [ajv-formats](#with-ajv-formats).
+
+The following example validates that the provided date is after (and not on) November 13, 2022.
+
+```ts
+Type.String({ format: 'date', formatExclusiveMinimum: '2022-11-13' })
+```
+
+##### `formatExclusiveMaximum`
+
+Allows defining exclusive maximum constraints when the `format` keyword defines ordering (using the compare function in format definition). Available when using [ajv-formats](#with-ajv-formats).
+
+The following example validates that the provided date is before (and not on) November 13, 2022.
+
+```ts
+Type.String({ format: 'date', formatExclusiveMaximum: '2022-11-13' })
+```
+
 #### For Arrays
 
 Array types support the following options, which can be used simultaneously.
@@ -836,6 +1265,8 @@ In addition to JSON schema types, TypeBox provides several extended types that a
 
 #### Constructor
 
+Verifies that the value is a constructor with typed arguments and return value.
+
 ```js
 const T = Type.Constructor([
   Type.String(),
@@ -865,6 +1296,8 @@ const T = {
 
 #### Function
 
+Verifies that the value is a function with typed arguments and return value.
+
 ```js
 const T = Type.Function([
   Type.String(),
@@ -892,24 +1325,9 @@ const T = {
 }
 ```
 
-#### Uint8Array
-
-```js
-const T = Type.Uint8Array()
-```
-
-```js
-type T = Uint8Array
-```
-
-```js
-const T = {
-  type: 'object',
-  specialized: 'Uint8Array',
-}
-```
-
 #### Promise
+
+Verifies that the value is an instanceof Promise which resolves to the provided type.
 
 ```js
 const T = Type.Promise( Type.String() )
@@ -926,7 +1344,47 @@ const T = {
 }
 ```
 
+#### Uint8Array
+
+Verifies that the value is an instanceof Uint8Array.
+
+```js
+const T = Type.Uint8Array()
+```
+
+```js
+type T = Uint8Array
+```
+
+```js
+const T = {
+  type: 'object',
+  instanceOf: 'Uint8Array',
+}
+```
+
+#### Date
+
+Verifies that the value is an instanceof Date. This is likely not the validator to use for storing dates in a database. See [Validating Dates](#validating-dates).
+
+```js
+const T = Type.Date()
+```
+
+```js
+type T = Date
+```
+
+```js
+const T = {
+  type: 'object',
+  instanceOf: 'Date',
+}
+```
+
 #### Undefined
+
+Verifies that the value is `undefined`.
 
 ```js
 const T = Type.Undefined()
@@ -944,6 +1402,8 @@ const T = {
 ```
 
 #### Void
+
+Verifies that the value is `null`.
 
 ```js
 const T = Type.Void()
@@ -967,6 +1427,23 @@ Use `Type.Ref(...)` to create referenced types. The target type must specify an 
 const T = Type.String({ $id: 'T' })
 const R = Type.Ref(T)
 ```
+
+## Validating Dates
+
+When validating dates sent from the client, the most spec-compliant solution is to use the [ISO8601 format](https://www.rfc-editor.org/rfc/rfc3339#section-5.6). For example, SQLite date values are strings in the [ISO8601 format](https://www.rfc-editor.org/rfc/rfc3339#section-5.6), which is `YYYY-MM-DDTHH:MM:SS.SSS`. The character between the date and time formats is generally specified as the letter `T`, as in `2016-01-01T10:20:05.123`. For date values, you implement this spec with `Type.String` and not `Type.Date`.
+
+When using AJV you can validate this format with the `ajv-formats` package, which the Feathers CLI installs for you.  Using it with `@feathersjs/typebox` looks like this:
+
+```ts
+const userSchema = Type.Object(
+  {
+    createdAt: Type.String({ format: 'date-time' })
+  },
+  { $id: 'User', additionalProperties: false }
+)
+```
+
+See the `@feathersjs/mongodb` docs for more information on [validating dates with MongoDB](/api/databases/mongodb#dates).
 
 ## Result and data schemas
 
