@@ -293,7 +293,7 @@ export type UserQuery = Static<typeof userQuerySchema>
 export const userQueryResolver = resolve<UserQuery, HookContext>({
   properties: {
     // If there is an authenticated user, they can only see their own data
-    id: async (value, user, context) => {
+    id: async (value, query, context) => {
       if (context.params.user) {
         return context.params.user.id
       }
