@@ -73,7 +73,7 @@ describe('@feathersjs/cli', () => {
             {
               dependencyVersions,
               database: 'mongodb' as const,
-              connectionString: `mongodb://localhost:27017/${name}`
+              connectionString: `mongodb://127.0.0.1:27017/${name}`
             },
             { cwd }
           )
