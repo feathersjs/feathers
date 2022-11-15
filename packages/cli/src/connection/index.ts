@@ -61,7 +61,7 @@ export const DATABASE_CLIENTS = {
   sqlite: 'sqlite3',
   postgresql: 'pg',
   mysql: 'mysql',
-  mssql: 'tedious'
+  mssql: 'mssql'
 }
 
 export const getDatabaseClient = (database: DatabaseType) => DATABASE_CLIENTS[database]

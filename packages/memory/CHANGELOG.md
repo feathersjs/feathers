@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.33](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.32...v5.0.0-pre.33) (2022-11-08)
+
+### Bug Fixes
+
+- **memory:** Use for loop in \_find() for better performance ([#2844](https://github.com/feathersjs/feathers/issues/2844)) ([d6ee5f1](https://github.com/feathersjs/feathers/commit/d6ee5f1c869f0c65cb470130f35956a52356e5c3))
+
 # [5.0.0-pre.32](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.31...v5.0.0-pre.32) (2022-10-26)
 
 **Note:** Version bump only for package @feathersjs/memory

@@ -45,6 +45,8 @@ First we need to update the `src/services/users/users.schema.js` file with the s
 
 </LanguageBlock>
 
+<DatabaseBlock global-id="sql">
+
 ```ts{1,16-17,36,47-57,70-74}
 import crypto from 'crypto'
 import { resolve } from '@feathersjs/schema'
@@ -127,6 +129,90 @@ export const userQueryResolver = resolve<UserQuery, HookContext>({
 })
 ```
 
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
+
+```ts{1,16-17,36,47-57,70-74}
+import crypto from 'crypto'
+import { resolve } from '@feathersjs/schema'
+import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
+import type { Static } from '@feathersjs/typebox'
+import { passwordHash } from '@feathersjs/authentication-local'
+
+import type { HookContext } from '../../declarations'
+import { dataValidator, queryValidator } from '../../schemas/validators'
+
+// Main data model schema
+export const userSchema = Type.Object(
+  {
+    _id: Type.String(),
+    email: Type.String(),
+    password: Type.Optional(Type.String()),
+    githubId: Type.Optional(Type.Number()),
+    avatar: Type.Optional(Type.String())
+  },
+  { $id: 'User', additionalProperties: false }
+)
+export type User = Static<typeof userSchema>
+export const userResolver = resolve<User, HookContext>({
+  properties: {}
+})
+
+export const userExternalResolver = resolve<User, HookContext>({
+  properties: {
+    // The password should never be visible externally
+    password: async () => undefined
+  }
+})
+
+// Schema for the basic data model (e.g. creating new entries)
+export const userDataSchema = Type.Pick(userSchema, ['email', 'password', 'githubId', 'avatar'], {
+  $id: 'UserData',
+  additionalProperties: false
+})
+export type UserData = Static<typeof userDataSchema>
+export const userDataValidator = getDataValidator(userDataSchema, dataValidator)
+export const userDataResolver = resolve<User, HookContext>({
+  properties: {
+    password: passwordHash({ strategy: 'local' }),
+    avatar: async (value, user) => {
+      // If the user passed an avatar image, use it
+      if (value !== undefined) {
+        return value
+      }
+
+      // Gravatar uses MD5 hashes from an email address to get the image
+      const hash = crypto.createHash('md5').update(user.email.toLowerCase()).digest('hex')
+      // Return the full avatar URL
+      return `https://s.gravatar.com/avatar/${hash}?s=60`
+    }
+  }
+})
+
+// Schema for allowed query properties
+export const userQueryProperties = Type.Pick(userSchema, ['_id', 'email', 'githubId'])
+export const userQuerySchema = querySyntax(userQueryProperties)
+export type UserQuery = Static<typeof userQuerySchema>
+export const userQueryValidator = getValidator(userQuerySchema, queryValidator)
+export const userQueryResolver = resolve<UserQuery, HookContext>({
+  properties: {
+    // If there is a user (e.g. with authentication), they are only allowed to see their own data
+    _id: async (value, user, context) => {
+      // We want to be able to get a list of all users but
+      // only let a user modify their own data otherwise
+      if (context.params.user && context.method !== 'find') {
+        return context.params.user._id
+      }
+
+      return value
+    }
+  }
+})
+```
+
+</DatabaseBlock>
+
 ## Handling messages
 
 Next we can look at the messages service schema. We want to include the date when the message was created as `createdAt` and the id of the user who sent it as `userId`. When we get a message back, we also want to populate the `user` with the user data from `userId` so that we can show e.g. the user image and email.
@@ -141,6 +227,8 @@ Update the `src/services/messages/messages.schema.ts` file like this:
 Update the `src/services/messages/messages.schema.js` file like this:
 
 </LanguageBlock>
+
+<DatabaseBlock global-id="sql">
 
 ```ts{7,14-16,23-26,43-49,56,66-74}
 import { resolve } from '@feathersjs/schema'
@@ -221,7 +309,90 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext>({
 })
 ```
 
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
+
+```ts{7,14-16,23-26,43-49,56,66-74}
+import { resolve } from '@feathersjs/schema'
+import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
+import type { Static } from '@feathersjs/typebox'
+
+import type { HookContext } from '../../declarations'
+import { dataValidator, queryValidator } from '../../schemas/validators'
+import { userSchema } from '../users/users.schema'
+
+// Main data model schema
+export const messageSchema = Type.Object(
+  {
+    _id: Type.String(),
+    text: Type.String(),
+    createdAt: Type.Number(),
+    userId: Type.String(),
+    user: Type.Ref(userSchema)
+  },
+  { $id: 'Message', additionalProperties: false }
+)
+export type Message = Static<typeof messageSchema>
+export const messageResolver = resolve<Message, HookContext>({
+  properties: {
+    user: async (_value, message, context) => {
+      // Associate the user that sent the message
+      return context.app.service('users').get(message.userId)
+    }
+  }
+})
+
+export const messageExternalResolver = resolve<Message, HookContext>({
+  properties: {}
+})
+
+// Schema for creating new entries
+export const messageDataSchema = Type.Pick(messageSchema, ['text'], {
+  $id: 'MessageData',
+  additionalProperties: false
+})
+export type MessageData = Static<typeof messageDataSchema>
+export const messageDataValidator = getDataValidator(messageDataSchema, dataValidator)
+export const messageDataResolver = resolve<Message, HookContext>({
+  properties: {
+    userId: async (_value, _message, context) => {
+      // Associate the record with the id of the authenticated user
+      return context.params.user._id
+    },
+    createdAt: async () => {
+      return Date.now()
+    }
+  }
+})
+
+// Schema for allowed query properties
+export const messageQueryProperties = Type.Pick(messageSchema, ['_id', 'text', 'createdAt', 'userId'], {
+  additionalProperties: false
+})
+export const messageQuerySchema = querySyntax(messageQueryProperties)
+export type MessageQuery = Static<typeof messageQuerySchema>
+export const messageQueryValidator = getValidator(messageQuerySchema, queryValidator)
+export const messageQueryResolver = resolve<MessageQuery, HookContext>({
+  properties: {
+    userId: async (value, user, context) => {
+      // We want to be able to get a list of all messages but
+      // only let a user access their own messages otherwise
+      if (context.params.user && context.method !== 'find') {
+        return context.params.user._id
+      }
+
+      return value
+    }
+  }
+})
+```
+
+</DatabaseBlock>
+
 ## Creating a migration
+
+<DatabaseBlock global-id="sql">
 
 Now that our schemas and resolvers have everything we need, we also have to update the database with those changes. For SQL databases this is done with migrations. Migrations are a best practise for SQL databases to roll out and undo changes to the data model. Every change we make in a schema will need its corresponding migration step.
 
@@ -282,6 +453,18 @@ We can run the migrations on the current database with
 ```
 npm run migrate
 ```
+
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
+
+<BlockQuote type="tip">
+
+For MongoDB no migrations are necessary.
+
+</BlockQuote>
+
+</DatabaseBlock>
 
 ## What's next?
 

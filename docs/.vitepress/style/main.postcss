@@ -79,9 +79,15 @@ body .bg-base-100 {
 
 /* Style the Global Language Select in the left nav */
 #app #GlobalLanguageSelect {
-  @apply pt-2 pb-3;
+  /* @apply pt-2 pb-3;
   border-bottom: 1px solid transparent;
-  border-bottom-color: var(--vp-c-divider-light);
+  border-bottom-color: var(--vp-c-divider-light); */
+}
+
+#VPSidebarNav:not(:first-child) {
+  @apply mt-3;
+  border-top: 1px solid transparent;
+  border-top-color: var(--vp-c-divider-light);
 }
 
 @media (min-width: 960px) {

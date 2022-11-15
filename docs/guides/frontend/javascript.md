@@ -234,8 +234,8 @@ const showChat = async () => {
 }
 ```
 
-- `showLogin(error)` will either show the content of loginHTML or, if the login page is already showing, add an error message. This will happen when you try to log in with invalid credentials or sign up with a user that already exists.
-- `showChat()` does several things. First, we add the static chatHTML to the page. Then we get the latest 25 messages from the messages Feathers service (this is the same as the `/messages` endpoint of our chat API) using the Feathers query syntax. Since the list will come back with the newest message first, we need to reverse the data. Then we add each message by calling our `addMessage` function so that it looks like a chat app should — with old messages getting older as you scroll up. After that we get a list of all registered users to show them in the sidebar by calling addUser.
+- `showLogin(error)` will either show the content of loginTemplate or, if the login page is already showing, add an error message. This will happen when you try to log in with invalid credentials or sign up with a user that already exists.
+- `showChat()` does several things. First, we add the static chatTemplate to the page. Then we get the latest 25 messages from the messages Feathers service (this is the same as the `/messages` endpoint of our chat API) using the Feathers query syntax. Since the list will come back with the newest message first, we need to reverse the data. Then we add each message by calling our `addMessage` function so that it looks like a chat app should — with old messages getting older as you scroll up. After that we get a list of all registered users to show them in the sidebar by calling addUser.
 
 ## Login and signup
 
@@ -313,7 +313,7 @@ addEventListener('#login', 'click', async () => {
 addEventListener('#logout', 'click', async () => {
   await client.logout()
 
-  document.getElementById('app').innerHTML = loginHTML
+  document.getElementById('app').innerHTML = loginTemplate()
 })
 
 // "Send" message form submission handler

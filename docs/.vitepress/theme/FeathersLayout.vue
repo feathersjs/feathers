@@ -1,49 +1,50 @@
 <script setup lang="ts">
 import DefaultTheme from 'vitepress/theme'
 import Footer from '../../components/Footer.vue'
-import './store'
-
-import { watch, onMounted, getCurrentInstance, nextTick } from 'vue'
-import LanguageSelect from '../components/LanguageSelect.vue'
-import { prependDynamicComponent } from '../scripts/dynamic-component'
-import { useRoute } from 'vitepress'
+import { useGlobalLanguage, useGlobalDb } from './store'
+import Select from '../components/Select.vue'
 
 const { Layout } = DefaultTheme
 
-const route = useRoute()
-const instance = getCurrentInstance()
+const activeGlobalLanguage = useGlobalLanguage()
+const activeGlobalDb = useGlobalDb()
 
-/**
- * Add the Global Language Select to the Left Nav. We watch for route changes to
- * make sure the select is put in place when navigating from and to the home page.
- */
-onMounted(() => {
-  const { app } = instance.appContext
-  watch(
-    route,
-    () => {
-      // Use `nextTick` to wait until the sidebar has rendered
-      nextTick(() => {
-        const sidebar = document.querySelector('.VPSidebar')
-        if (sidebar)
-          prependDynamicComponent(
-            app,
-            LanguageSelect,
-            'GlobalLanguageSelect',
-            {},
-            sidebar,
-          )
-      })
-    },
-    { immediate: true },
-  )
-})
+const handleGlobalLanguageUpdate = (val: string) => {
+  activeGlobalLanguage.value = val
+  document.body.setAttribute('data-language', val)
+}
+const handleGlobalDbUpdate = (val: string) => {
+  if (activeGlobalDb.value !== val) {
+    activeGlobalDb.value = val
+    document.body.setAttribute('data-db', val)
+  }
+}
 </script>
 
 <template>
   <Layout>
-    <template #aside-outline-before> </template>
-    <template #aside-outline-after> </template>
+    <template #sidebar-nav-before>
+      <Select
+        id="GlobalLanguageSelect"
+        :value="activeGlobalLanguage"
+        label="Code Language"
+        :options="[
+          { value: 'ts', text: 'TypeScript' },
+          { value: 'js', text: 'JavaScript' }
+        ]"
+        @update-value="handleGlobalLanguageUpdate"
+      />
+      <Select
+        id="GlobalDbSelect"
+        :value="activeGlobalDb"
+        label="Database"
+        :options="[
+          { value: 'sql', text: 'SQL' },
+          { value: 'mongodb', text: 'MongoDB' }
+        ]"
+        @update-value="handleGlobalDbUpdate"
+      />
+    </template>
   </Layout>
   <Footer />
 </template>

@@ -6,7 +6,8 @@ import {
   InsertOneOptions,
   DeleteOptions,
   CountDocumentsOptions,
-  ReplaceOptions
+  ReplaceOptions,
+  Document
 } from 'mongodb'
 import { NotFound } from '@feathersjs/errors'
 import { _ } from '@feathersjs/commons'
@@ -29,6 +30,7 @@ export interface MongoDBAdapterOptions extends AdapterServiceOptions {
 
 export interface MongoDBAdapterParams<Q = AdapterQuery>
   extends AdapterParams<Q, Partial<MongoDBAdapterOptions>> {
+  pipeline?: Document[]
   mongodb?:
     | BulkWriteOptions
     | FindOptions
@@ -67,7 +69,7 @@ export class MongoDbAdapter<
     return id
   }
 
-  filterQuery(id: NullableId, params: P) {
+  filterQuery(id: NullableId | ObjectId, params: P) {
     const { $select, $sort, $limit, $skip, ...query } = (params.query || {}) as AdapterQuery
 
     if (id !== null) {
@@ -86,6 +88,68 @@ export class MongoDbAdapter<
     }
   }
 
+  getModel(params: P) {
+    const { Model } = this.getOptions(params)
+    return Promise.resolve(Model)
+  }
+
+  async findRaw(params: P) {
+    const { filters, query } = this.filterQuery(null, params)
+    const model = await this.getModel(params)
+    const q = model.find(query, { ...params.mongodb })
+
+    if (filters.$select !== undefined) {
+      q.project(this.getSelect(filters.$select))
+    }
+
+    if (filters.$sort !== undefined) {
+      q.sort(filters.$sort)
+    }
+
+    if (filters.$skip !== undefined) {
+      q.skip(filters.$skip)
+    }
+
+    if (filters.$limit !== undefined) {
+      q.limit(filters.$limit)
+    }
+
+    return q
+  }
+
+  async aggregateRaw(params: P) {
+    const model = await this.getModel(params)
+    const pipeline = params.pipeline || []
+    const index = pipeline.findIndex((stage: Document) => stage.$feathers)
+    const before = index >= 0 ? pipeline.slice(0, index) : []
+    const feathersPipeline = this.makeFeathersPipeline(params)
+    const after = index >= 0 ? pipeline.slice(index + 1) : pipeline
+
+    return model.aggregate([...before, ...feathersPipeline, ...after])
+  }
+
+  makeFeathersPipeline(params: P) {
+    const { filters, query } = this.filterQuery(null, params)
+    const pipeline: Document[] = [{ $match: query }]
+
+    if (filters.$select !== undefined) {
+      pipeline.push({ $project: this.getSelect(filters.$select) })
+    }
+
+    if (filters.$sort !== undefined) {
+      pipeline.push({ $sort: filters.$sort })
+    }
+
+    if (filters.$skip !== undefined) {
+      pipeline.push({ $skip: filters.$skip })
+    }
+
+    if (filters.$limit !== undefined) {
+      pipeline.push({ $limit: filters.$limit })
+    }
+    return pipeline
+  }
+
   getSelect(select: string[] | { [key: string]: number }) {
     if (Array.isArray(select)) {
       return select.reduce<{ [key: string]: number }>(
@@ -100,11 +164,11 @@ export class MongoDbAdapter<
     return select
   }
 
-  async $findOrGet(id: NullableId, params: P) {
+  async $findOrGet(id: NullableId | ObjectId, params: P) {
     return id === null ? await this.$find(params) : await this.$get(id, params)
   }
 
-  normalizeId(id: NullableId, data: Partial<D>): Partial<D> {
+  normalizeId(id: NullableId | ObjectId, data: Partial<D>): Partial<D> {
     if (this.id === '_id') {
       // Default Mongo IDs cannot be updated. The Mongo library handles
       // this automatically.
@@ -120,8 +184,7 @@ export class MongoDbAdapter<
     return data
   }
 
-  async $get(id: Id, params: P = {} as P): Promise<T> {
-    const { Model } = this.getOptions(params)
+  async $get(id: Id | ObjectId, params: P = {} as P): Promise<T> {
     const {
       query,
       filters: { $select }
@@ -139,7 +202,7 @@ export class MongoDbAdapter<
       ...projection
     }
 
-    return Promise.resolve(Model)
+    return this.getModel(params)
       .then((model) => model.findOne(query, findOptions))
       .then((data) => {
         if (data == null) {
@@ -155,44 +218,35 @@ export class MongoDbAdapter<
   async $find(params?: P & { paginate: false }): Promise<T[]>
   async $find(params?: P): Promise<Paginated<T> | T[]>
   async $find(params: P = {} as P): Promise<Paginated<T> | T[]> {
+    const { paginate, useEstimatedDocumentCount } = this.getOptions(params)
     const { filters, query } = this.filterQuery(null, params)
-    const { paginate, Model, useEstimatedDocumentCount } = this.getOptions(params)
-    const findOptions = { ...params.mongodb }
-    const model = await Promise.resolve(Model)
-    const q = model.find(query, findOptions)
+    const useAggregation = !params.mongodb && filters.$limit !== 0
 
-    if (filters.$select !== undefined) {
-      q.project(this.getSelect(filters.$select))
+    const countDocuments = async () => {
+      if (paginate && paginate.default) {
+        const model = await this.getModel(params)
+        if (useEstimatedDocumentCount && typeof model.estimatedDocumentCount === 'function') {
+          return model.estimatedDocumentCount()
+        } else {
+          return model.countDocuments(query, { ...params.mongodb })
+        }
+      }
+      return Promise.resolve(0)
     }
 
-    if (filters.$sort !== undefined) {
-      q.sort(filters.$sort)
-    }
+    const [request, total] = await Promise.all([
+      useAggregation ? this.aggregateRaw(params) : this.findRaw(params),
+      countDocuments()
+    ])
 
-    if (filters.$limit !== undefined) {
-      q.limit(filters.$limit)
-    }
-
-    if (filters.$skip !== undefined) {
-      q.skip(filters.$skip)
-    }
-
-    const runQuery = async (total: number) => ({
+    const page = {
       total,
       limit: filters.$limit,
       skip: filters.$skip || 0,
-      data: filters.$limit === 0 ? [] : ((await q.toArray()) as any as T[])
-    })
-
-    if (paginate && paginate.default) {
-      if (useEstimatedDocumentCount && typeof model.estimatedDocumentCount === 'function') {
-        return model.estimatedDocumentCount().then(runQuery)
-      }
-
-      return model.countDocuments(query, findOptions).then(runQuery)
+      data: filters.$limit === 0 ? [] : ((await request.toArray()) as any as T[])
     }
 
-    return runQuery(0).then((page) => page.data)
+    return paginate && paginate.default ? page : page.data
   }
 
   async $create(data: D, params?: P): Promise<T>
@@ -200,8 +254,7 @@ export class MongoDbAdapter<
   async $create(data: D | D[], _params?: P): Promise<T | T[]>
   async $create(data: D | D[], params: P = {} as P): Promise<T | T[]> {
     const writeOptions = params.mongodb
-    const { Model } = this.getOptions(params)
-    const model = await Promise.resolve(Model)
+    const model = await this.getModel(params)
     const setId = (item: any) => {
       const entry = Object.assign({}, item)
 
@@ -233,11 +286,11 @@ export class MongoDbAdapter<
 
   async $patch(id: null, data: Partial<D>, params?: P): Promise<T[]>
   async $patch(id: Id, data: Partial<D>, params?: P): Promise<T>
+  async $patch(id: ObjectId, data: Partial<D>, params?: P): Promise<T>
   async $patch(id: NullableId, data: Partial<D>, _params?: P): Promise<T | T[]>
-  async $patch(id: NullableId, _data: Partial<D>, params: P = {} as P): Promise<T | T[]> {
+  async $patch(id: NullableId | ObjectId, _data: Partial<D>, params: P = {} as P): Promise<T | T[]> {
     const data = this.normalizeId(id, _data)
-    const { Model } = this.getOptions(params)
-    const model = await Promise.resolve(Model)
+    const model = await this.getModel(params)
     const {
       query,
       filters: { $select }
@@ -281,9 +334,8 @@ export class MongoDbAdapter<
     return this.$findOrGet(id, findParams).catch(errorHandler)
   }
 
-  async $update(id: Id, data: D, params: P = {} as P): Promise<T> {
-    const { Model } = this.getOptions(params)
-    const model = await Promise.resolve(Model)
+  async $update(id: Id | ObjectId, data: D, params: P = {} as P): Promise<T> {
+    const model = await this.getModel(params)
     const { query } = this.filterQuery(id, params)
     const replaceOptions = { ...params.mongodb }
 
@@ -294,10 +346,10 @@ export class MongoDbAdapter<
 
   async $remove(id: null, params?: P): Promise<T[]>
   async $remove(id: Id, params?: P): Promise<T>
+  async $remove(id: ObjectId, params?: P): Promise<T>
   async $remove(id: NullableId, _params?: P): Promise<T | T[]>
-  async $remove(id: NullableId, params: P = {} as P): Promise<T | T[]> {
-    const { Model } = this.getOptions(params)
-    const model = await Promise.resolve(Model)
+  async $remove(id: NullableId | ObjectId, params: P = {} as P): Promise<T | T[]> {
+    const model = await this.getModel(params)
     const {
       query,
       filters: { $select }
