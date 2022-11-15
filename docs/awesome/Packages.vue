@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PackageCard from './PackageCard.vue'
-import { PackageOutput, PackagesInput } from './types'
+import { PackageOutput } from './types'
 import { ref, computed, onMounted } from 'vue'
 import { uniqBy } from './helpers'
 import { useQuery } from './useQuery'
@@ -29,10 +29,6 @@ async function getPackageStats(): Promise<PackageOutput[]> {
   return uniq
 }
 
-onMounted(async () => {
-  fetchedPackages.value = await getPackageStats()
-})
-
 const categories: CategoryOption[] = [
   { label: 'Authentication', value: ['authentication'] },
   { label: 'Authorization', value: ['authorization'] },
@@ -57,9 +53,9 @@ const categories: CategoryOption[] = [
   { label: 'Validation', value: ['validation', 'validator', 'validators'] }
 ]
 
-const keyToSortBy = useQuery<'string', 'stars' | 'downloads' | 'lastPublish'>('sort', 'string', 'lastPublish')
+const keyToSortBy = ref<'stars' | 'downloads' | 'lastPublish'>('lastPublish')
+const showCore = ref(true)
 
-const showCore = useQuery('core', 'boolean', true)
 function filterCore(pkg: PackageOutput) {
   return pkg.ownerName === 'feathersjs'
 }
@@ -68,7 +64,8 @@ const coreCount = computed(() => {
 })
 
 const packagesAreOldIfOlderThan = 1000 * 60 * 60 * 24 * 365 * 2.9 // 3 years
-const showOld = useQuery('old', 'boolean', false)
+const showOld = ref(false)
+
 function filterOld(pkg: PackageOutput) {
   return pkg.lastPublish.getTime() < Date.now() - packagesAreOldIfOlderThan
 }
@@ -87,7 +84,7 @@ const countByCategory = computed(() => {
   return counts
 })
 
-const categoriesToFilter = useQuery<'string[]', string[]>('cat', 'string[]', [])
+const categoriesToFilter = ref<string[]>([])
 
 const categoriesToShow = computed(() => {
   const cats = categories.filter((category) => {
@@ -102,7 +99,7 @@ type CategoryOption = {
   value: Category
 }
 
-const search = useQuery('search', 'string')
+const search = ref('')
 
 const filteredPackages = computed(() => {
   let pkgs = [...fetchedPackages.value]
@@ -151,6 +148,17 @@ const packagesToShow = computed(() => {
     }
   })
   return result
+})
+
+onMounted(async () => {
+  fetchedPackages.value = await getPackageStats()
+
+  // sync values with URL
+  useQuery(keyToSortBy, 'sort', 'string')
+  useQuery(showCore, 'core', 'boolean')
+  useQuery(showOld, 'old', 'boolean')
+  useQuery(search, 's', 'string')
+  useQuery(categoriesToFilter, 'cat', 'string[]')
 })
 </script>
 

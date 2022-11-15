@@ -1,23 +1,11 @@
-import { computed, ref, WritableComputedRef } from 'vue'
+import { Ref, watch } from 'vue'
 import queryString from 'query-string'
 
-type PossibleType = 'string' | 'number' | 'boolean' | 'string[]'
+type MaybeArray<T> = T | T[]
 
-type InferType<T> = T extends 'string'
-  ? string
-  : T extends 'number'
-  ? number
-  : T extends 'boolean'
-  ? boolean
-  : T extends 'string[]'
-  ? string[]
-  : never
+type FieldType = MaybeArray<'string' | 'number' | 'boolean'>
 
-export const useQuery = <T extends PossibleType, V = InferType<T>>(
-  field: string,
-  type: T,
-  defaultValue?: V
-) => {
+export const useQuery = <T extends FieldType>(reference: Ref<T>, field: string) => {
   function getQuery() {
     return queryString.parse(window.location.search, {
       parseNumbers: true,
@@ -26,23 +14,30 @@ export const useQuery = <T extends PossibleType, V = InferType<T>>(
     })
   }
 
-  function getFromUrl(withDefault = false) {
+  function getFromUrl() {
     const q = getQuery()
     const result = q[field]
-    if (type === 'string[]') {
-      if (Array.isArray(result)) return result
-      if (!result && defaultValue && withDefault) return defaultValue
-      return result ? [result] : []
+    // explicitly return false instead of undefined
+    if (typeof reference.value === 'boolean' && !result) {
+      return false
     }
-    if (!result && defaultValue && withDefault) {
-      return defaultValue
+    if (result == null) return
+    if (Array.isArray(reference.value)) {
+      return Array.isArray(result) ? result : [result]
     }
     return result
   }
 
+  const fromUrl = getFromUrl()
+
+  if (fromUrl != null) {
+    // @ts-expect-error arbitrary type
+    reference.value = fromUrl
+  }
+
   function setToUrl(val: any) {
     const q = getQuery()
-    if (val && (type !== 'string[]' || (Array.isArray(val) && val.length > 0))) {
+    if (val && (!Array.isArray(reference.value) || (Array.isArray(val) && val.length > 0))) {
       q[field] = val
     } else {
       delete q[field]
@@ -52,19 +47,11 @@ export const useQuery = <T extends PossibleType, V = InferType<T>>(
     window.history.replaceState(null, '', newQuery)
   }
 
-  const val = ref(getFromUrl(true))
-
-  const update = computed({
-    get: () => val.value,
-    set: (v: any) => {
-      val.value = v
-      setToUrl(v)
-    }
-  }) as any as WritableComputedRef<V>
-
-  if (defaultValue && JSON.stringify(getFromUrl()) !== JSON.stringify(val.value)) {
-    update.value = defaultValue
-  }
-
-  return update
+  watch(
+    reference,
+    (val) => {
+      setToUrl(val)
+    },
+    { immediate: true }
+  )
 }
