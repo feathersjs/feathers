@@ -80,7 +80,7 @@ export interface AdapterParams<
  *
  * @see {@link https://docs.feathersjs.com/guides/migrating.html#hook-less-service-methods}
  */
-export interface InternalServiceMethods<T = any, D = Partial<T>, P extends AdapterParams = AdapterParams> {
+export interface InternalServiceMethods<T = any, D = T, P extends AdapterParams = AdapterParams> {
   /**
    * Retrieve all resources from this service.
    * Does not sanitize the query and should only be used on the server.
