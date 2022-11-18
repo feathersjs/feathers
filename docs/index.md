@@ -10,8 +10,7 @@ titleTemplate: The API and Real-time Application Framework
 import HomeHero from './components/HomeHero.vue'
 import HomeFeature1 from './components/HomeFeature1.vue'
 import HomeFeature2 from './components/HomeFeature2.vue'
-import HomeSupporter from './components/HomeSupporter.vue'
-import HomeIndustryPartners from './components/HomeIndustryPartners.vue'
+import HomeQuickStart from './components/HomeQuickStart.vue'
 import HomeCreateFirstApp from './components/HomeCreateFirstApp.vue'
 import HomeFeatureGrid from './components/HomeFeatureGrid.vue'
 import HomeCTATextSection from './components/HomeCTATextSection.vue'
@@ -21,8 +20,7 @@ import Footer from './components/Footer.vue'
 <HomeHero />
 <HomeFeature1 />
 <HomeFeature2 />
-<HomeSupporter />
-<HomeIndustryPartners />
+<!-- <HomeQuickStart /> -->
 <HomeCreateFirstApp />
 <HomeFeatureGrid />
 <HomeCTATextSection text="Create your first Feathers app, today!" />
