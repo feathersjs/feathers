@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import PackageCard from './PackageCard.vue'
-import { PackageOutput, PackagesInput } from './types'
+import { PackageOutput } from './types'
 import { ref, computed, onMounted } from 'vue'
 import { uniqBy } from './helpers'
+import { useQuery } from './useQuery'
 
 const packageSource = 'https://ecosystem.feathershq.workers.dev/'
 
@@ -27,10 +28,6 @@ async function getPackageStats(): Promise<PackageOutput[]> {
   const uniq = uniqBy(packages, (pkg) => pkg.id)
   return uniq
 }
-
-onMounted(async () => {
-  fetchedPackages.value = await getPackageStats()
-})
 
 const categories: CategoryOption[] = [
   { label: 'Authentication', value: ['authentication'] },
@@ -57,8 +54,8 @@ const categories: CategoryOption[] = [
 ]
 
 const keyToSortBy = ref<'stars' | 'downloads' | 'lastPublish'>('lastPublish')
-
 const showCore = ref(true)
+
 function filterCore(pkg: PackageOutput) {
   return pkg.ownerName === 'feathersjs'
 }
@@ -68,6 +65,7 @@ const coreCount = computed(() => {
 
 const packagesAreOldIfOlderThan = 1000 * 60 * 60 * 24 * 365 * 2.9 // 3 years
 const showOld = ref(false)
+
 function filterOld(pkg: PackageOutput) {
   return pkg.lastPublish.getTime() < Date.now() - packagesAreOldIfOlderThan
 }
@@ -86,7 +84,15 @@ const countByCategory = computed(() => {
   return counts
 })
 
-const categoriesToShow = ref<CategoryOption[]>([])
+const categoriesToFilter = ref<string[]>([])
+
+const categoriesToShow = computed(() => {
+  const cats = categories.filter((category) => {
+    return categoriesToFilter.value.includes(category.label)
+  })
+  return cats
+})
+
 type Category = string[]
 type CategoryOption = {
   label: string
@@ -143,6 +149,17 @@ const packagesToShow = computed(() => {
   })
   return result
 })
+
+onMounted(async () => {
+  fetchedPackages.value = await getPackageStats()
+
+  // sync values with URL
+  useQuery(keyToSortBy, 'sort', 'string')
+  useQuery(showCore, 'core', 'boolean')
+  useQuery(showOld, 'old', 'boolean')
+  useQuery(search, 's', 'string')
+  useQuery(categoriesToFilter, 'cat', 'string[]')
+})
 </script>
 
 <template>
@@ -158,7 +175,7 @@ const packagesToShow = computed(() => {
         >
       </div>
       <el-select
-        v-model="categoriesToShow"
+        v-model="categoriesToFilter"
         multiple
         collapse-tags
         collapse-tags-tooltip
@@ -171,7 +188,7 @@ const packagesToShow = computed(() => {
           v-for="option in categories"
           :key="option.label"
           :label="option.label"
-          :value="option"
+          :value="option.label"
           :title="option.value.join(', ')"
         >
           {{ option.label }} ({{ countByCategory[option.label] }})
