@@ -30,6 +30,9 @@ While schemas and resolvers can be used outside of a Feather application, you wi
 - **Query** schemas and resolvers validate and convert the query string and can also be used for additional limitations like only allowing a user to see and modify their own data
 - **External** resolvers that return a safe version of the data (e.g. hiding a users password) that can be sent to external clients
 
+<hr />
+<DatabaseSelect />
+
 ## Adding a user avatar
 
 Let's extend our existing users schema to add an `avatar` property so that our users can have a profile image.

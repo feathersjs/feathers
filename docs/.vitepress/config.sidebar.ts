@@ -78,18 +78,25 @@ export default {
       ]
     },
     {
-      text: 'Generator',
+      text: 'CLI',
+      collapsible: true,
+      collapsed: true,
+      items: [
+        {
+          text: 'Using the CLI',
+          link: '/guides/cli/index.md'
+        },
+        {
+          text: 'Generate App',
+          link: '/guides/cli/generate-app.md'
+        }
+      ]
+    },
+    {
+      text: 'App Structure',
       collapsible: true,
       collapsed: false,
       items: [
-        {
-          text: '📝 readme',
-          link: '/guides/cli/index.md'
-        },
-        // {
-        //   text: 'Generate App',
-        //   link: '/guides/cli/generate-app.md'
-        // },
         {
           text: '📂 config',
           items: [
