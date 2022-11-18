@@ -104,17 +104,21 @@ export default {
           ]
         },
         {
-          text: '📂 hooks',
-          items: [
-            {
-              text: '📄 Hooks',
-              link: '/guides/cli/hooks.md'
-            }
-          ]
-        },
-        {
           text: '📂 src',
           items: [
+            {
+              text: '📂 hooks',
+              items: [
+                {
+                  text: '📄 &lt;hook&gt;',
+                  link: '/guides/cli/hook.md'
+                },
+                {
+                  text: '📄 log-error',
+                  link: '/guides/cli/log-error.md'
+                }
+              ]
+            },
             {
               text: '📂 services',
               items: [
@@ -123,15 +127,15 @@ export default {
                   items: [
                     {
                       text: '📄 &lt;service&gt;',
-                      link: '/guides/cli/services.md'
+                      link: '/guides/cli/service.md'
                     },
                     {
                       text: '📄 &lt;service&gt;.class',
-                      link: '/guides/cli/schemas.md'
+                      link: '/guides/cli/service.class.md'
                     },
                     {
-                      text: '📄 &lt;service&gt;.schema',
-                      link: '/guides/cli/schemas.md'
+                      text: '📄 &lt;service&gt;.schemas',
+                      link: '/guides/cli/service.schemas.md'
                     }
                   ]
                 },
@@ -142,7 +146,7 @@ export default {
             },
             {
               text: '📄 app',
-              link: '/guides/cli/application.md'
+              link: '/guides/cli/app.md'
             },
             {
               text: '📄 authentication',

@@ -7,7 +7,8 @@ const template = ({
   upperName,
   relative,
   type
-}: ServiceGeneratorContext) => /* ts */ `import { resolve, getDataValidator, getValidator, querySyntax } from '@feathersjs/schema'
+}: ServiceGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
+import { resolve, getDataValidator, getValidator, querySyntax } from '@feathersjs/schema'
 import type { FromSchema } from '@feathersjs/schema'
 
 import type { HookContext } from '${relative}/declarations'

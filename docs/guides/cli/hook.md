@@ -73,3 +73,46 @@ export const myFancyUserHook = async (context: HookContext<UserService>) => {
 ## Registering hooks
 
 A generated hook can be registered as an [application hook](./application.md#application-hooks) or as a [service hook](./services.md#registering-hooks). Also see the [hook registration API documentation](../../api/hooks.md#registering-hooks).
+
+## Profiling example
+
+To log some basic profiling information like which method was called and how long it took to run you can create a new _around_ hook called `profiler` via
+
+```
+npx feathers generate hook
+```
+
+Then update `src/hooks/profiler.ts` as follows:
+
+```ts
+import type { HookContext, NextFunction } from '../declarations'
+import { logger } from '../logger'
+
+export const profiler = async (context: HookContext, next: NextFunction) => {
+  const startTime = Date.now()
+
+  await next()
+
+  const runtime = Date.now() - startTime
+
+  console.log(`Calling ${context.method} on service ${context.path} took ${runtime}ms`)
+}
+```
+
+And add it in `src/app.ts` as an application hook after the `logError` hook as follows:
+
+```ts{1,8}
+import { profiler } from './hooks/profiler'
+
+//...
+
+// Register hooks that run on all service methods
+app.hooks({
+  around: {
+    all: [ logError, profiler ]
+  },
+  before: {},
+  after: {},
+  error: {}
+})
+```
