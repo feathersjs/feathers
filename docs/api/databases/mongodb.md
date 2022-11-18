@@ -32,7 +32,7 @@ There are two typical setup steps for using `@feathersjs/mongodb` in an applicat
 
 ### Connect to the Database
 
-Before using `@feathersjs/mongodb`, you'll need to create a connection to the database. This example connects to a MongoDB database similar to how the CLI-generated app connects. It uses `app.get('mongodb')` to read the connection string from `@feathersjs/configuration`. The connection string would be something similar to `mongodb://localhost:27017/my-app-dev` for local development or one provided by your database host.
+Before using `@feathersjs/mongodb`, you'll need to create a connection to the database. This example connects to a MongoDB database similar to how the CLI-generated app connects. It uses `app.get('mongodb')` to read the connection string from `@feathersjs/configuration`. The connection string would be something similar to `mongodb://127.0.0.1:27017/my-app-dev` for local development or one provided by your database host.
 
 Once the connection attempt has been started, the code uses `app.set('monodbClient', mongoClient)` to store the connection promise back into the config, which allows it to be looked up when initializing individual services.
 
