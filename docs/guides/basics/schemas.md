@@ -55,7 +55,7 @@ import type { Static } from '@feathersjs/typebox'
 import { passwordHash } from '@feathersjs/authentication-local'
 
 import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../schemas/validators'
+import { dataValidator, queryValidator } from '../../validators'
 
 // Main data model schema
 export const userSchema = Type.Object(
@@ -141,7 +141,7 @@ import type { Static } from '@feathersjs/typebox'
 import { passwordHash } from '@feathersjs/authentication-local'
 
 import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../schemas/validators'
+import { dataValidator, queryValidator } from '../../validators'
 
 // Main data model schema
 export const userSchema = Type.Object(
@@ -236,7 +236,7 @@ import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/t
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../schemas/validators'
+import { dataValidator, queryValidator } from '../../validators'
 import { userSchema } from '../users/users.schema'
 
 // Main data model schema
@@ -319,7 +319,7 @@ import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/t
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../schemas/validators'
+import { dataValidator, queryValidator } from '../../validators'
 import { userSchema } from '../users/users.schema'
 
 // Main data model schema

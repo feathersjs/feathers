@@ -12,7 +12,7 @@ import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/t
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '${relative}/declarations'
-import { dataValidator, queryValidator } from '${relative}/schemas/validators'
+import { dataValidator, queryValidator } from '${relative}/validators'
 
 // Main data model schema
 export const ${camelName}Schema = Type.Object({

@@ -65,6 +65,7 @@ export default {
     {
       text: 'Frontend',
       collapsible: true,
+      collapsed: false,
       items: [
         {
           text: 'JavaScript',
@@ -77,65 +78,125 @@ export default {
       ]
     },
     {
-      text: 'CLI',
+      text: 'Generator',
       collapsible: true,
-      collapsed: true,
+      collapsed: false,
       items: [
         {
-          text: 'Overview',
+          text: '📝 readme',
           link: '/guides/cli/index.md'
         },
+        // {
+        //   text: 'Generate App',
+        //   link: '/guides/cli/generate-app.md'
+        // },
         {
-          text: 'Generate App',
-          link: '/guides/cli/generate-app.md'
+          text: '📂 config',
+          items: [
+            {
+              text: '📄 default.json',
+              link: '/guides/cli/default.json.md'
+            },
+            {
+              text: '📄 custom-environment-variables.json',
+              link: '/guides/cli/custom-environment-variables.md'
+            }
+          ]
         },
         {
-          text: 'Application',
-          link: '/guides/cli/application.md'
+          text: '📂 hooks',
+          items: [
+            {
+              text: '📄 Hooks',
+              link: '/guides/cli/hooks.md'
+            }
+          ]
         },
         {
-          text: 'Client',
-          link: '/guides/cli/client.md'
+          text: '📂 src',
+          items: [
+            {
+              text: '📂 services',
+              items: [
+                {
+                  text: '📂 &lt;service&gt;',
+                  items: [
+                    {
+                      text: '📄 &lt;service&gt;',
+                      link: '/guides/cli/services.md'
+                    },
+                    {
+                      text: '📄 &lt;service&gt;.class',
+                      link: '/guides/cli/schemas.md'
+                    },
+                    {
+                      text: '📄 &lt;service&gt;.schema',
+                      link: '/guides/cli/schemas.md'
+                    }
+                  ]
+                },
+                {
+                  text: '📄 index'
+                }
+              ]
+            },
+            {
+              text: '📄 app',
+              link: '/guides/cli/application.md'
+            },
+            {
+              text: '📄 authentication',
+              link: '/guides/cli/authentication.md'
+            },
+            {
+              text: '📄 channels',
+              link: '/guides/cli/channels.md'
+            },
+            {
+              text: '📄 client',
+              link: '/guides/cli/client.md'
+            },
+            {
+              text: '📄 configuration',
+              link: '/guides/cli/configuration.md'
+            },
+            {
+              text: '📄 declarations',
+              link: '/guides/cli/declarations.md'
+            },
+            {
+              text: '📄 logger',
+              link: '/guides/cli/logger.md'
+            },
+            {
+              text: '📄 validators',
+              link: '/guides/cli/validators.md'
+            },
+            {
+              text: '📄 &lt;database&gt;',
+              link: '/guides/cli/databases.md'
+            }
+          ]
         },
         {
-          text: 'Configuration',
-          link: '/guides/cli/configuration.md'
+          text: '📂 test',
+          items: []
         },
         {
-          text: 'TypeScript',
-          link: '/guides/cli/typescript.md'
+          text: '📄 .prettierrc',
+          link: '/guides/cli/prettierrc.md'
         },
         {
-          text: 'Validators',
-          link: '/guides/cli/validators.md'
+          text: '📄 knexfile',
+          link: '/guides/cli/knexfile.md'
         },
         {
-          text: 'Logging',
-          link: '/guides/cli/logging.md'
+          text: '📄 package.json',
+          link: '/guides/cli/package.md'
         },
         {
-          text: 'Databases',
-          link: '/guides/cli/databases.md'
-        },
-        {
-          text: 'Authentication',
-          link: '/guides/cli/authentication.md'
-        },
-        {
-          text: 'Services',
-          link: '/guides/cli/services.md'
-        },
-        {
-          text: 'Schemas',
-          link: '/guides/cli/schemas.md'
-        },
-        {
-          text: 'Hooks',
-          link: '/guides/cli/hooks.md'
-        },
-        {
-          text: 'Channels',
-          link: '/guides/cli/channels.md'
+          text: '📄 tsconfig.json',
+          link: '/guides/cli/tsconfig.md'
         }
       ]
     },
@@ -144,12 +205,12 @@ export default {
       // collapsible: true,
       items: [
         {
-          text: 'Migration guide',
-          link: '/guides/migrating.md'
-        },
-        {
           text: "What's new?",
           link: '/guides/whats-new.md'
+        },
+        {
+          text: 'Migration guide',
+          link: '/guides/migrating.md'
         }
       ]
     }

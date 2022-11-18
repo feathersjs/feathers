@@ -6,7 +6,7 @@ const template = ({
 }: AppGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/typescript.html
 import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers'
 import { Application as FeathersApplication } from '@feathersjs/${framework}'
-import { ApplicationConfiguration } from './schemas/configuration'
+import { ApplicationConfiguration } from './configuration'
 
 export { NextFunction }
 

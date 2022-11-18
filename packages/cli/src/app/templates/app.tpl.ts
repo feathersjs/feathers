@@ -13,7 +13,7 @@ import {
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
 import type { Application } from './declarations'
-import { configurationValidator } from './schemas/configuration'
+import { configurationValidator } from './configuration'
 import { logError } from './hooks/log-error'
 import { services } from './services/index'
 import { channels } from './channels'
@@ -74,7 +74,7 @@ import configuration from '@feathersjs/configuration'
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
 import type { Application } from './declarations'
-import { configurationValidator } from './schemas/configuration'
+import { configurationValidator } from './configuration'
 import { logger } from './logger'
 import { logError } from './hooks/log-error'
 import { services } from './services/index'

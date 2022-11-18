@@ -27,7 +27,7 @@ const knexfile = ({
   lib,
   language,
   database
-}: ConnectionGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/databases.html#sql
+}: ConnectionGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/databases.html
 import { app } from './${lib}/app'
 
 // Load our database connection info from the app configuration

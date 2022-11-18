@@ -34,6 +34,6 @@ export const generate = (ctx: AppGeneratorContext) =>
   generator(ctx).then(
     renderSource(
       validatorTemplate,
-      toFile<AppGeneratorContext>(({ lib }) => lib, 'schemas', 'validators')
+      toFile<AppGeneratorContext>(({ lib }) => lib, 'validators')
     )
   )

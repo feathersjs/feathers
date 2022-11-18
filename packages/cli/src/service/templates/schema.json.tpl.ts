@@ -11,7 +11,7 @@ const template = ({
 import type { FromSchema } from '@feathersjs/schema'
 
 import type { HookContext } from '${relative}/declarations'
-import { dataValidator, queryValidator } from '${relative}/schemas/validators'
+import { dataValidator, queryValidator } from '${relative}/validators'
 
 // Main data model schema
 export const ${camelName}Schema = {

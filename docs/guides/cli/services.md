@@ -2,7 +2,27 @@
 outline: deep
 ---
 
-# Service Class
+# Service
+
+## Service class
+
+### Database services
+
+### Custom services
+
+## Service file
+
+### Registration
+
+### Custom methods
+
+### Hooks
+
+## TypeScript
+
+### Generics
+
+### Registration
 
 Link here from the class file in the generated app:
 
@@ -32,7 +52,7 @@ export const getOptions = (app: Application) => {
 }
 ```
 
-## Hooks Overview
+## Registering hooks
 
 Where to link for the comment above the service hooks?:
 
