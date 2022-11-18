@@ -1263,9 +1263,13 @@ Omitting this keyword has the same behavior as an empty object.
 
 In addition to JSON schema types, TypeBox provides several extended types that allow for the composition of `function` and `constructor` types. These additional types are not valid JSON Schema and will not validate using typical JSON Schema validation. However, these types can be used to frame JSON schema and describe callable interfaces that may receive JSON validated data. These types are as follows.
 
+#### Extended Configuration
+
+Utilities in this section require updating `src/schemas/validators.ts` to the [Extended Ajv Configuration](https://github.com/sinclairzx81/typebox#ajv) shown in the Typebox documentation.
+
 #### Constructor
 
-Verifies that the value is a constructor with typed arguments and return value.
+Verifies that the value is a constructor with typed arguments and return value.  Requires [Extended Ajv Configuration](#extended-configuration).
 
 ```js
 const T = Type.Constructor([
@@ -1296,7 +1300,7 @@ const T = {
 
 #### Function
 
-Verifies that the value is a function with typed arguments and return value.
+Verifies that the value is a function with typed arguments and return value. Requires [Extended Ajv Configuration](#extended-configuration).
 
 ```js
 const T = Type.Function([
@@ -1327,7 +1331,7 @@ const T = {
 
 #### Promise
 
-Verifies that the value is an instanceof Promise which resolves to the provided type.
+Verifies that the value is an instanceof Promise which resolves to the provided type. Requires [Extended Ajv Configuration](#extended-configuration).
 
 ```js
 const T = Type.Promise( Type.String() )
@@ -1346,7 +1350,7 @@ const T = {
 
 #### Uint8Array
 
-Verifies that the value is an instanceof Uint8Array.
+Verifies that the value is an instanceof Uint8Array. Requires [Extended Ajv Configuration](#extended-configuration).
 
 ```js
 const T = Type.Uint8Array()
@@ -1365,7 +1369,7 @@ const T = {
 
 #### Date
 
-Verifies that the value is an instanceof Date. This is likely not the validator to use for storing dates in a database. See [Validating Dates](#validating-dates).
+Verifies that the value is an instanceof Date. This is likely not the validator to use for storing dates in a database. See [Validating Dates](#validating-dates). Requires [Extended Ajv Configuration](#extended-configuration).
 
 ```js
 const T = Type.Date()
@@ -1384,7 +1388,7 @@ const T = {
 
 #### Undefined
 
-Verifies that the value is `undefined`.
+Verifies that the value is `undefined`. Requires [Extended Ajv Configuration](#extended-configuration).
 
 ```js
 const T = Type.Undefined()
@@ -1403,7 +1407,7 @@ const T = {
 
 #### Void
 
-Verifies that the value is `null`.
+Verifies that the value is `null`. Requires [Extended Ajv Configuration](#extended-configuration).
 
 ```js
 const T = Type.Void()
