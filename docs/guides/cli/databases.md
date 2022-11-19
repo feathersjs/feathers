@@ -11,7 +11,7 @@ outline: deep
 
 <DatabaseBlock global-id="sql">
 
-Depending on the SQL database you selected, a `src/<database>.ts` file will be created that sets up a connection using [KnexJS](../../api/databases/knex.md). It uses the connection settings from the `<database>` [configuration value](./config.md#app-configuration) and exports a [configure function](./application.md#configure-functions) that initializes the database connection. The Knex connection object is then acessible wherever you have access to the [app object](./application.md) via
+Depending on the SQL database you selected, a `src/<database>.ts` file will be created that sets up a connection using [KnexJS](../../api/databases/knex.md). It uses the connection settings from the `<database>` [configuration value](./default.json.md.md) and exports a [configure function](./app.md#configure-functions) that initializes the database connection. The Knex connection object is then acessible wherever you have access to the [app object](./app.md) via
 
 ```ts
 const knex = app.get('<database>Client')
@@ -21,7 +21,7 @@ const knex = app.get('<database>Client')
 
 <DatabaseBlock global-id="mongodb">
 
-`src/mongodb.ts` exports a [configure function](./application.md#configure-functions) that connects to the MongoDB connection string set as `mongodb` in your [configuration](./configuration.md#app-configuration). The [MongoDB NodeJS client](https://www.mongodb.com/languages/mongodb-with-nodejs) is then accessible wherever you have access to the [app object](./application.md) via
+`src/mongodb.ts` exports a [configure function](./app.md#configure-functions) that connects to the MongoDB connection string set as `mongodb` in your [configuration](./default.json.md). The [MongoDB NodeJS client](https://www.mongodb.com/languages/mongodb-with-nodejs) is then accessible wherever you have access to the [app object](./app.md) via
 
 ```ts
 const db = await app.get('mongodbClient')

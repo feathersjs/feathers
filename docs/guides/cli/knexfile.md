@@ -2,7 +2,7 @@
 
 ## Migrations
 
-Migrations are a best practise for SQL databases to roll out and undo changes to the data model and are set up automatically with an SQL database connection. The generated `knexfile.ts` imports the [app object](./application.md) to establish the connection to the database. To run migration scripts for the connection from the [configuration environment](./configuration.md#environment-variables) use:
+Migrations are a best practise for SQL databases to roll out and undo changes to the data model and are set up automatically with an SQL database connection. The generated `knexfile.ts` imports the [app object](./app.md) to establish the connection to the database. To run migration scripts for the connection from the [configuration environment](./configuration.md#environment-variables) use:
 
 ```
 npm run migrate

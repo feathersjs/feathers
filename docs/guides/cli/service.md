@@ -29,7 +29,7 @@ declare module '../../../declarations' {
 
 ## Registering hooks
 
-This file is also where service [hooks](../../api/hooks.md) are registered on the service. Depending on the selection, it commonly includes the [authentication hook](../../api/authentication/hook.md) and hooks that validate and resolve the schemas from the [service.schemas file](./schemas.md).
+This file is also where service [hooks](../../api/hooks.md) are registered on the service. Depending on the selection, it commonly includes the [authentication hook](../../api/authentication/hook.md) and hooks that validate and resolve the schemas from the [service.schemas file](./service.schemas.md).
 
 ```ts
 // Initialize hooks

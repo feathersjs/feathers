@@ -61,10 +61,10 @@ This test will create a new user with the generated client, log in, verify a use
 
 <BlockQuote type="tip">
 
-Note that you can use `client` for client side interactions and the server side [application](./application.md#application) `app` object for server side calls in the same file. For example, if the user required an email verification but you don't want to test sending out emails you can call something like `app.service('users').patch(user.id, { verified: true })` to enable the new user on the server.
+Note that you can use `client` for client side interactions and the server side [application](./app.md#application) `app` object for server side calls in the same file. For example, if the user required an email verification but you don't want to test sending out emails you can call something like `app.service('users').patch(user.id, { verified: true })` to enable the new user on the server.
 
 </BlockQuote>
 
 ## oAuth
 
-Note that when selecting oAuth logins (Google, Facebook, GitHub etc.), the standard registered oAuth strategy only uses the `<name>Id` property to create a new user. This will fail validation against the default user [schema](./schemas.md) which requires an `email` property to exist. If the provider (and user) allows fetching the email, you can customize the oAuth strategy like shown for GitHub in the [oAuth authentication guide](../basics/authentication.md#login-with-github). You can also make the email in the schema optional with `email: Type.Optional(Type.String())`.
+Note that when selecting oAuth logins (Google, Facebook, GitHub etc.), the standard registered oAuth strategy only uses the `<name>Id` property to create a new user. This will fail validation against the default user [schema](./service.schemas.md) which requires an `email` property to exist. If the provider (and user) allows fetching the email, you can customize the oAuth strategy like shown for GitHub in the [oAuth authentication guide](../basics/authentication.md#login-with-github). You can also make the email in the schema optional with `email: Type.Optional(Type.String())`.

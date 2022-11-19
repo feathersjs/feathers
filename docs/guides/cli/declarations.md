@@ -70,7 +70,7 @@ declare module '../../declarations' {
 
 ## Application
 
-The `Application` interface is the type for the main [app object](./application.md) using the [ServiceTypes](#service-types) interface as the service index and [ConfigurationTypes](#configuration-types) for `app.get` and `app.set`.
+The `Application` interface is the type for the main [app object](./app.md) using the [ServiceTypes](#service-types) interface as the service index and [ConfigurationTypes](#configuration-types) for `app.get` and `app.set`.
 
 ```ts
 // The application instance type that will be used everywhere else
@@ -96,7 +96,7 @@ Use `HookContext<FeathersService<UserService>>` to get the full hook context for
 
 ## Services and Params
 
-See the [services chapter](./services.md) for more information on service and parameter typings.
+See the [services chapter](./service.md) for more information on service and parameter typings.
 
 </LanguageBlock>
 

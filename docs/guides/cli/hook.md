@@ -59,7 +59,7 @@ export const myFancyHook = async (context: HookContext) => {
 
 ## Context types
 
-If the hook is for a specific service, you can pass the service as a generic to the [HookContext](./typescript.md#hook-context) type which will give you the correct types for [context.data](../../api/hooks.md#contextdata), [context.result](../../api/hooks.md#contextresult) and [context.params](../../api/hooks.md#contextparams):
+If the hook is for a specific service, you can pass the service as a generic to the [HookContext](./declarations.md#hook-context) type which will give you the correct types for [context.data](../../api/hooks.md#contextdata), [context.result](../../api/hooks.md#contextresult) and [context.params](../../api/hooks.md#contextparams):
 
 ```ts
 import type { UserService } from '../services/users/users'
@@ -72,7 +72,7 @@ export const myFancyUserHook = async (context: HookContext<UserService>) => {
 
 ## Registering hooks
 
-A generated hook can be registered as an [application hook](./application.md#application-hooks) or as a [service hook](./services.md#registering-hooks). Also see the [hook registration API documentation](../../api/hooks.md#registering-hooks).
+A generated hook can be registered as an [application hook](./app.md#application-hooks) or as a [service hook](./service.md#registering-hooks). Also see the [hook registration API documentation](../../api/hooks.md#registering-hooks).
 
 ## Profiling example
 
