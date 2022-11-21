@@ -1,4 +1,4 @@
-import { Type, TObject, TInteger, TOptional, TSchema, TIntersect } from '@sinclair/typebox'
+import { Type, TObject, TInteger, TOptional, TSchema, TIntersect, ObjectOptions } from '@sinclair/typebox'
 import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
 
 export * from '@sinclair/typebox'
@@ -66,42 +66,80 @@ export function sortDefinition<T extends TObject>(schema: T) {
 }
 
 /**
- * Returns the Feathers query syntax including operators like `$gt`, `$lt` etc. for a single proeprty
+ * Returns an object schema for a list of operators. `operators` is a map of operator names
+ * to a function that returns the schema for the schema type. For example:
+ *
+ * ```
+ * queryPropertyOperators(Type.String({ minLength: 5 }), {
+ *   $ilike: definition => definition,
+ *   $in: definition => Type.Array(definition),
+ * })
+ * ```
+ *
+ * @param def The property schema
+ * @param operators The operator map
+ * @returns An object schema for the property with the operators
+ */
+export const queryPropertyOperators = <T extends TSchema, X extends { [key: string]: (def: T) => TSchema }>(
+  def: T,
+  operators: X
+) =>
+  Type.Partial(
+    Type.Object(
+      Object.keys(operators).reduce((acc, key) => {
+        const current = acc as any
+
+        current[key] = operators[key](def)
+
+        return current
+      }, {} as { [K in keyof X]: ReturnType<X[K]> })
+    )
+  )
+
+/**
+ * Returns the standard Feathers query syntax for a property schema,
+ * including operators like `$gt`, `$lt` etc. for a single property
  *
  * @param def The property definition
  * @returns The Feathers query syntax schema
  */
 export const queryProperty = <T extends TSchema>(def: T) => {
+  const identity = (x: T) => x
+
   return Type.Optional(
     Type.Union([
       def,
-      Type.Partial(
-        Type.Object({
-          $gt: def,
-          $gte: def,
-          $lt: def,
-          $lte: def,
-          $ne: def,
-          $in: Type.Array(def),
-          $nin: Type.Array(def)
-        })
-      )
+      queryPropertyOperators(def, {
+        $gt: identity,
+        $gte: identity,
+        $lt: identity,
+        $lte: identity,
+        $ne: identity,
+        $in: (definition) => Type.Array(definition),
+        $nin: (definition) => Type.Array(definition)
+      })
     ])
   )
 }
 
 type QueryProperty<T extends TSchema> = ReturnType<typeof queryProperty<T>>
 
-export const queryProperties = <T extends TObject>(type: T) => {
-  const properties = Object.keys(type.properties).reduce((res, key) => {
+/**
+ * Creates a Feathers query syntax schema for the properties defined in `definition`.
+ *
+ * @param definition The properties to create the Feathers query syntax schema for
+ * @returns The Feathers query syntax schema
+ */
+export const queryProperties = <T extends TObject>(definition: T) => {
+  const properties = Object.keys(definition.properties).reduce((res, key) => {
     const result = res as any
 
-    result[key] = queryProperty(type.properties[key])
+    result[key] = queryProperty(definition.properties[key])
 
     return result
   }, {} as { [K in keyof T['properties']]: QueryProperty<T['properties'][K]> })
 
-  return Type.Object(properties, { additionalProperties: false })
+  return Type.Optional(Type.Object(properties, { additionalProperties: false }))
 }
 
 /**
@@ -109,9 +147,15 @@ export const queryProperties = <T extends TObject>(type: T) => {
  * and `$sort` and `$select` for the allowed properties.
  *
  * @param type The properties to create the query syntax for
+ * @param intersections Additional intersecting types to add to the query syntax
+ * @param options Options for the TypeBox object schema
  * @returns A TypeBox object representing the complete Feathers query syntax for the given properties
  */
-export const querySyntax = <T extends TObject | TIntersect>(type: T) => {
+export const querySyntax = <T extends TObject | TIntersect, I extends TObject[]>(
+  type: T,
+  intersections: I = [] as I,
+  options: ObjectOptions = { additionalProperties: false }
+) => {
   const propertySchema = queryProperties(type)
 
   return Type.Intersect(
@@ -128,8 +172,9 @@ export const querySyntax = <T extends TObject | TIntersect>(type: T) => {
           { additionalProperties: false }
         )
       ),
-      propertySchema
+      propertySchema,
+      ...intersections
     ],
-    { additionalProperties: false }
+    options
   )
 }

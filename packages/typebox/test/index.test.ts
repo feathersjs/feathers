@@ -1,12 +1,24 @@
 import assert from 'assert'
 import { Ajv } from '@feathersjs/schema'
-import { querySyntax, Type, Static, defaultAppConfiguration, getDataValidator, getValidator } from '../src'
+import {
+  querySyntax,
+  Type,
+  Static,
+  defaultAppConfiguration,
+  getDataValidator,
+  getValidator,
+  queryPropertyOperators
+} from '../src'
 
 describe('@feathersjs/schema/typebox', () => {
   it('querySyntax', async () => {
     const schema = Type.Object({
       name: Type.String(),
       age: Type.Number()
+    })
+    const extraSchema = queryPropertyOperators(Type.String(), {
+      $ilike: (definition) => definition,
+      $likeMany: (definition) => Type.Array(definition)
     })
 
     const querySchema = querySyntax(schema)
@@ -23,9 +35,12 @@ describe('@feathersjs/schema/typebox', () => {
     }
 
     const validator = new Ajv().compile(querySchema)
-    const validated = (await validator(query)) as any as Query
+    let validated = (await validator(query)) as any as Query
 
     assert.ok(validated)
+
+    validated = (await validator({ ...query, something: 'wrong' })) as any as Query
+    assert.ok(!validated)
   })
 
   it('defaultAppConfiguration', async () => {
