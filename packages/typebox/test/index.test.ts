@@ -1,14 +1,6 @@
 import assert from 'assert'
 import { Ajv } from '@feathersjs/schema'
-import {
-  querySyntax,
-  Type,
-  Static,
-  defaultAppConfiguration,
-  getDataValidator,
-  getValidator,
-  queryPropertyOperators
-} from '../src'
+import { querySyntax, Type, Static, defaultAppConfiguration, getDataValidator, getValidator } from '../src'
 
 describe('@feathersjs/schema/typebox', () => {
   it('querySyntax', async () => {
@@ -16,11 +8,6 @@ describe('@feathersjs/schema/typebox', () => {
       name: Type.String(),
       age: Type.Number()
     })
-    const extraSchema = queryPropertyOperators(Type.String(), {
-      $ilike: (definition) => definition,
-      $likeMany: (definition) => Type.Array(definition)
-    })
-
     const querySchema = querySyntax(schema)
 
     type Query = Static<typeof querySchema>

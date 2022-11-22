@@ -66,61 +66,30 @@ export function sortDefinition<T extends TObject>(schema: T) {
 }
 
 /**
- * Returns an object schema for a list of operators. `operators` is a map of operator names
- * to a function that returns the schema for the schema type. For example:
- *
- * ```
- * queryPropertyOperators(Type.String({ minLength: 5 }), {
- *   $ilike: definition => definition,
- *   $in: definition => Type.Array(definition),
- * })
- * ```
- *
- * @param def The property schema
- * @param operators The operator map
- * @returns An object schema for the property with the operators
- */
-export const queryPropertyOperators = <T extends TSchema, X extends { [key: string]: (def: T) => TSchema }>(
-  def: T,
-  operators: X
-) =>
-  Type.Partial(
-    Type.Object(
-      Object.keys(operators).reduce((acc, key) => {
-        const current = acc as any
-
-        current[key] = operators[key](def)
-
-        return current
-      }, {} as { [K in keyof X]: ReturnType<X[K]> })
-    )
-  )
-
-/**
  * Returns the standard Feathers query syntax for a property schema,
  * including operators like `$gt`, `$lt` etc. for a single property
  *
  * @param def The property definition
  * @returns The Feathers query syntax schema
  */
-export const queryProperty = <T extends TSchema>(def: T) => {
-  const identity = (x: T) => x
-
-  return Type.Optional(
+export const queryProperty = <T extends TSchema>(def: T) =>
+  Type.Optional(
     Type.Union([
       def,
-      queryPropertyOperators(def, {
-        $gt: identity,
-        $gte: identity,
-        $lt: identity,
-        $lte: identity,
-        $ne: identity,
-        $in: (definition) => Type.Array(definition),
-        $nin: (definition) => Type.Array(definition)
-      })
+      Type.Partial(
+        Type.Object({
+          $gt: def,
+          $gte: def,
+          $lt: def,
+          $lte: def,
+          $ne: def,
+          $in: Type.Array(def),
+          $nin: Type.Array(def)
+        }),
+        { additionalProperties: false }
+      )
     ])
   )
-}
 
 type QueryProperty<T extends TSchema> = ReturnType<typeof queryProperty<T>>
 
@@ -147,13 +116,11 @@ export const queryProperties = <T extends TObject>(definition: T) => {
  * and `$sort` and `$select` for the allowed properties.
  *
  * @param type The properties to create the query syntax for
- * @param intersections Additional intersecting types to add to the query syntax
  * @param options Options for the TypeBox object schema
  * @returns A TypeBox object representing the complete Feathers query syntax for the given properties
  */
-export const querySyntax = <T extends TObject | TIntersect, I extends TObject[]>(
+export const querySyntax = <T extends TObject | TIntersect>(
   type: T,
-  intersections: I = [] as I,
   options: ObjectOptions = { additionalProperties: false }
 ) => {
   const propertySchema = queryProperties(type)
@@ -167,13 +134,13 @@ export const querySyntax = <T extends TObject | TIntersect, I extends TObject[]>
             $skip: Type.Number({ minimum: 0 }),
             $sort: sortDefinition(type),
             $select: arrayOfKeys(type),
-            $or: Type.Array(propertySchema)
+            $or: Type.Array(propertySchema),
+            $and: Type.Array(propertySchema)
           },
           { additionalProperties: false }
         )
       ),
-      propertySchema,
-      ...intersections
+      propertySchema
     ],
     options
   )
