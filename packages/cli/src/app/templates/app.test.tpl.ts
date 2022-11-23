@@ -5,6 +5,7 @@ import { AppGeneratorContext } from '../index'
 const template = ({ lib }: AppGeneratorContext) => /* ts */ `import assert from 'assert'
 import axios from 'axios'
 import type { Server } from 'http'
+import { readFileSync } from 'fs'
 import { app } from '../${lib}/app'
 
 const port = app.get('port')
@@ -27,7 +28,9 @@ describe('Feathers application tests', () => {
     try {
       assert.ok(data.indexOf('<html lang="en">') !== -1)
     } catch (error) {
-      console.error(data)
+      console.error(data.toString())
+      console.log('Index file is')
+      console.log(readFileSync('public/index.html', 'utf8').toString())
       throw error
     }
   })
