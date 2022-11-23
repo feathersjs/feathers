@@ -24,7 +24,12 @@ describe('Feathers application tests', () => {
   it('starts and shows the index page', async () => {
     const { data } = await axios.get<string>(appUrl)
 
-    assert.ok(data.indexOf('<html lang="en">') !== -1)
+    try {
+      assert.ok(data.indexOf('<html lang="en">') !== -1)
+    } catch (error) {
+      console.error(data)
+      throw error
+    }
   })
 
   it('shows a 404 JSON error', async () => {
