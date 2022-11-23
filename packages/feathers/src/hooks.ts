@@ -14,11 +14,10 @@ import {
   FeathersService,
   HookMap,
   AroundHookFunction,
-  HookFunction
+  HookFunction,
+  HookType
 } from './declarations'
 import { defaultServiceArguments, getHookMethods } from './service'
-
-type HookType = 'before' | 'after' | 'error' | 'around'
 
 type ConvertedMap = { [type in HookType]: ReturnType<typeof convertHookData> }
 
