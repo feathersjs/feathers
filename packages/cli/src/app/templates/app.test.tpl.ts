@@ -23,12 +23,12 @@ describe('Feathers application tests', () => {
   })
 
   it('starts and shows the index page', async () => {
-    const { data } = await axios.get<string>(appUrl)
+    const response = await axios.get<string>(appUrl)
 
     try {
-      assert.ok(data.indexOf('<html lang="en">') !== -1)
+      assert.ok(response.indexOf('<html lang="en">') !== -1)
     } catch (error) {
-      console.error(data.toString())
+      console.error(response)
       console.log('Index file is')
       console.log(readFileSync('public/index.html', 'utf8').toString())
       throw error
