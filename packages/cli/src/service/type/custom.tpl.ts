@@ -3,7 +3,7 @@ import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
 export const template = ({ className, upperName, schema, fileName, relative }: ServiceGeneratorContext) => `
-import type { Id, NullableId, Params } from '@feathersjs/feathers'
+import type { Id, NullableId, Params, ServiceInterface } from '@feathersjs/feathers'
 
 import type { Application } from '${relative}/declarations'
 ${
@@ -30,7 +30,7 @@ export interface ${upperName}Params extends Params<${upperName}Query> {
 }
 
 // This is a skeleton for a custom service class. Remove or add the methods you need here
-export class ${className} {
+export class ${className} implements ServiceInterface<${upperName}, ${upperName}Data, ${upperName}Params> {
   constructor (public options: ${className}Options) {
   }
 
