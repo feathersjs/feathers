@@ -26,7 +26,7 @@ describe('@feathersjs/schema/resolver', () => {
   it('simple resolver', async () => {
     const userResolver = resolve<User, typeof context>({
       properties: {
-        password: async () => undefined,
+        password: async (): Promise<undefined> => undefined,
 
         name: async (_name, user, ctx, status) => {
           assert.deepStrictEqual(ctx, context)
@@ -82,7 +82,7 @@ describe('@feathersjs/schema/resolver', () => {
       schema: userFeathersSchema,
       validate: 'after',
       properties: {
-        firstName: async () => undefined
+        firstName: async (): Promise<undefined> => undefined
       }
     })
 

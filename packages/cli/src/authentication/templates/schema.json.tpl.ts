@@ -36,9 +36,7 @@ export const ${camelName}Schema = {
   }
 } as const
 export type ${upperName} = FromSchema<typeof ${camelName}Schema>
-export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
-  properties: {}
-})
+export const ${camelName}Resolver = resolve<${upperName}, HookContext>({})
 
 // Schema for the basic data model (e.g. creating new entries)
 export const ${camelName}DataSchema = {
@@ -53,16 +51,12 @@ export const ${camelName}DataSchema = {
 export type ${upperName}Data = FromSchema<typeof ${camelName}DataSchema>
 export const ${camelName}DataValidator = getDataValidator(${camelName}DataSchema, dataValidator)
 export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
-  properties: {
-    ${localTemplate(authStrategies, `password: passwordHash({ strategy: 'local' })`)}
-  }
+  ${localTemplate(authStrategies, `password: passwordHash({ strategy: 'local' })`)}
 })
 
 export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
-  properties: {
-    // The password should never be visible externally
-    password: async () => undefined
-  }
+  // The password should never be visible externally
+  password: async () => undefined
 })
 
 // Schema for allowed query properties
@@ -77,15 +71,13 @@ export const ${camelName}QuerySchema = {
 export type ${upperName}Query = FromSchema<typeof ${camelName}QuerySchema>
 export const ${camelName}QueryValidator = getValidator(${camelName}QuerySchema, queryValidator)
 export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
-  properties: {
-    // If there is a user (e.g. with authentication), they are only allowed to see their own data
-    ${type === 'mongodb' ? '_id' : 'id'}: async (value, user, context) => {
-      if (context.params.user) {
-        return context.params.user.${type === 'mongodb' ? '_id' : 'id'}
-      }
-  
-      return value
+  // If there is a user (e.g. with authentication), they are only allowed to see their own data
+  ${type === 'mongodb' ? '_id' : 'id'}: async (value, user, context) => {
+    if (context.params.user) {
+      return context.params.user.${type === 'mongodb' ? '_id' : 'id'}
     }
+
+    return value
   }
 })
 `

@@ -74,15 +74,13 @@ export const userResolver = resolve<User, HookContext<Application>>({
 
 export const userExternalResolver = resolve<User, HookContext<Application>>({
   properties: {
-    password: async () => undefined,
+    password: async (): Promise<undefined> => undefined,
     email: async () => '[redacted]'
   }
 })
 
 export const secondUserResolver = resolve<User, HookContext<Application>>({
-  properties: {
-    name: async (value, user) => `${value} (${user.email})`
-  }
+  name: async (value, user) => `${value} (${user.email})`
 })
 
 export const messageDataSchema = {
@@ -152,14 +150,12 @@ export type MessageQuery = FromSchema<typeof messageQuerySchema>
 export const messageQueryValidator = getValidator(messageQuerySchema, fixtureAjv)
 
 export const messageQueryResolver = resolve<MessageQuery, HookContext<Application>>({
-  properties: {
-    userId: async (value, _query, context) => {
-      if (context.params?.user) {
-        return context.params.user.id
-      }
-
-      return value
+  userId: async (value, _query, context) => {
+    if (context.params?.user) {
+      return context.params.user.id
     }
+
+    return value
   }
 })
 

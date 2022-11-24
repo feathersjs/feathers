@@ -52,13 +52,11 @@ class MyContext {
 }
 
 const messageResolver = resolve<Message, MyContext>({
-  properties: {
-    likes: async (value, message, context) => {
-      return context.getLikes(message.id)
-    },
-    user: async (value, message, context) => {
-      return context.getUser(message.userId)
-    }
+  likes: async (value, message, context) => {
+    return context.getLikes(message.id)
+  },
+  user: async (value, message, context) => {
+    return context.getUser(message.userId)
   }
 })
 
@@ -72,16 +70,9 @@ const resolvedMessage = await messageResolver.resolve(
 )
 ```
 
-## Options
-
-A resolver takes the following options:
-
-- `properties`: An object of property names and their [resolver functions](#property-resolvers)
-- `converter` (optional): A `async (data, context) => {}` function that can return a completely new representation of the data. A `converter` runs before `properties` resolvers.
-
 ## Property resolvers
 
-A resolver function is an `async` function that resolves a property on a data object. If it returns `undefined` the property will not be included. It gets passed the following parameters:
+Property resolvers are a map of property names to resolver functions. A resolver function is an `async` function that resolves a property on a data object. If it returns `undefined` the property will not be included. It gets passed the following parameters:
 
 - `value` - The current value which can also be `undefined`
 - `data` - The initial data object
@@ -90,15 +81,13 @@ A resolver function is an `async` function that resolves a property on a data ob
 
 ```ts
 const userResolver = resolve<User, MyContext>({
-  properties: {
-    isDrinkingAge: async (value, user, context) => {
-      const drinkingAge = await context.getDrinkingAge(user.country)
+  isDrinkingAge: async (value, user, context) => {
+    const drinkingAge = await context.getDrinkingAge(user.country)
 
-      return user.age >= drinkingAge
-    },
-    fullName: async (value, user, context) => {
-      return `${user.firstName} ${user.lastName}`
-    }
+    return user.age >= drinkingAge
+  },
+  fullName: async (value, user, context) => {
+    return `${user.firstName} ${user.lastName}`
   }
 })
 ```
@@ -108,6 +97,36 @@ const userResolver = resolve<User, MyContext>({
 Property resolver functions should only return a value and not have side effects. This means a property resolver **should not** do things like create new data or modify the `data` or `context` object. [Hooks](../hooks.md) should be used for side effects.
 
 </BlockQuote>
+
+## Options
+
+A resolver takes the following options as the second parameter:
+
+- `converter` (optional): A `async (data, context) => {}` function that can return a completely new representation of the data. A `converter` runs before `properties` resolvers.
+
+```ts
+const userResolver = resolve<User, MyContext>(
+  {
+    isDrinkingAge: async (value, user, context) => {
+      const drinkingAge = await context.getDrinkingAge(user.country)
+
+      return user.age >= drinkingAge
+    },
+    fullName: async (value, user, context) => {
+      return `${user.firstName} ${user.lastName}`
+    }
+  },
+  {
+    // Convert the raw data into a new structure before running property resolvers
+    converter: async (rawData, context) => {
+      return {
+        firstName: rawData.data.first_name,
+        lastName: rawData.data.last_name
+      }
+    }
+  }
+)
+```
 
 ## Hooks
 
