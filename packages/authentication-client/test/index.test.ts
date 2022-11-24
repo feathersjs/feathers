@@ -17,29 +17,29 @@ describe('@feathersjs/authentication-client', () => {
 
     app.configure(client())
     app.use('/authentication', {
-      create(data: any) {
+      async create(data: any) {
         if (data.error) {
-          return Promise.reject(new Error('Did not work'))
+          throw new Error('Did not work')
         }
 
-        return Promise.resolve({
+        return {
           accessToken,
           data,
           user
-        })
+        }
       },
 
-      remove(id) {
+      async remove(id) {
         if (!app.get('authentication')) {
           throw new NotAuthenticated('Not logged in')
         }
 
-        return Promise.resolve({ id })
+        return { id }
       }
     })
     app.use('dummy', {
-      find(params) {
-        return Promise.resolve(params)
+      async find(params) {
+        return params
       }
     })
   })
@@ -145,6 +145,16 @@ describe('@feathersjs/authentication-client', () => {
     const at = await app.authentication.getAccessToken()
 
     assert.strictEqual(at, accessToken)
+  })
+
+  it('resets after any error (#1947)', async () => {
+    await assert.rejects(() => app.authenticate({ strategy: 'testing', error: true }), {
+      message: 'Did not work'
+    })
+
+    const found = await app.service('dummy').find()
+
+    assert.deepStrictEqual(found, {})
   })
 
   it('logout when not logged in without error', async () => {
