@@ -5,7 +5,6 @@ import { AppGeneratorContext } from '../index'
 const template = ({ lib }: AppGeneratorContext) => /* ts */ `import assert from 'assert'
 import axios from 'axios'
 import type { Server } from 'http'
-import { readFileSync } from 'fs'
 import { app } from '../${lib}/app'
 
 const port = app.get('port')
@@ -23,20 +22,9 @@ describe('Feathers application tests', () => {
   })
 
   it('starts and shows the index page', async () => {
-    const res = await axios.get<string>(appUrl, {
-      repsonseEncoding: 'utf8'
-    })
-    const { data } = res
+    const { data } = await axios.get<string>(appUrl)
 
-    try {
-      assert.ok(data.indexOf('<html lang="en">') !== -1)
-    } catch (error) {
-      console.error(data.toString())
-      console.error(res)
-      console.log('Index file is')
-      console.log(readFileSync('public/index.html', 'utf8').toString())
-      throw error
-    }
+    assert.ok(data.indexOf('<html lang="en">') !== -1)
   })
 
   it('shows a 404 JSON error', async () => {

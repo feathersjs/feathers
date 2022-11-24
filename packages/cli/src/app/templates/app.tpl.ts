@@ -65,7 +65,7 @@ const tsExpressApp = ({
   transports
 }: AppGeneratorContext) => /* ts */ `import { feathers } from '@feathersjs/feathers'
 import express, {
-  rest, json, urlencoded, cors, compression,
+  rest, json, urlencoded, cors,
   serveStatic, notFound, errorHandler
 } from '@feathersjs/express'
 import configuration from '@feathersjs/configuration'
@@ -82,7 +82,6 @@ const app: Application = express(feathers())
 // Load app configuration
 app.configure(configuration(configurationValidator))
 app.use(cors())
-app.use(compression())
 app.use(json())
 app.use(urlencoded({ extended: true }))
 // Host the public folder
