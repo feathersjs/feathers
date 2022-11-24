@@ -23,7 +23,9 @@ describe('Feathers application tests', () => {
   })
 
   it('starts and shows the index page', async () => {
-    const res = await axios.get<string>(appUrl)
+    const res = await axios.get<string>(appUrl, {
+      repsonseEncoding: 'utf8'
+    })
     const { data } = res
 
     try {
