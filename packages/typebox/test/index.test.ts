@@ -8,7 +8,6 @@ describe('@feathersjs/schema/typebox', () => {
       name: Type.String(),
       age: Type.Number()
     })
-
     const querySchema = querySyntax(schema)
 
     type Query = Static<typeof querySchema>
@@ -23,9 +22,12 @@ describe('@feathersjs/schema/typebox', () => {
     }
 
     const validator = new Ajv().compile(querySchema)
-    const validated = (await validator(query)) as any as Query
+    let validated = (await validator(query)) as any as Query
 
     assert.ok(validated)
+
+    validated = (await validator({ ...query, something: 'wrong' })) as any as Query
+    assert.ok(!validated)
   })
 
   it('defaultAppConfiguration', async () => {
