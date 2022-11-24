@@ -11,119 +11,108 @@ export default (
     let client: Application
     let user: any
 
-    before(() =>
-      getApp()
-        .service('users')
-        .create({
+    before(
+      async () =>
+        (user = await getApp().service('users').create({
           email,
           password
-        })
-        .then((result: any) => {
-          user = result
-        })
+        }))
     )
 
     beforeEach(() => {
       client = getClient()
     })
 
-    it('authenticates with local strategy', () => {
-      return client
-        .authenticate({
-          strategy: 'local',
-          email,
-          password
-        })
-        .then((result) => {
-          assert.ok(result.accessToken)
-          assert.strictEqual(result.authentication.strategy, 'local')
-          assert.strictEqual(result.user.email, email)
-        })
+    after(async () => {
+      await getApp().service('users').remove(user.id)
     })
 
-    it('authentication with wrong credentials fails, does not maintain state', () => {
-      return client
-        .authenticate({
-          strategy: 'local',
-          email,
-          password: 'blabla'
-        })
-        .then(() => assert.fail('Should never get here'))
-        .catch((error) => {
-          assert.strictEqual(error.name, 'NotAuthenticated')
-          assert.strictEqual(error.message, 'Invalid login')
-          assert.ok(!client.get('authentication'), 'Reset client state')
-        })
+    it('authenticates with local strategy', async () => {
+      const result = await client.authenticate({
+        strategy: 'local',
+        email,
+        password
+      })
+
+      assert.ok(result.accessToken)
+      assert.strictEqual(result.authentication.strategy, 'local')
+      assert.strictEqual(result.user.email, email)
     })
 
-    it('errors when not authenticated', () => {
-      return client
-        .service('dummy')
-        .find()
-        .then(() => assert.fail('Should never get here'))
-        .catch((error: any) => {
-          assert.strictEqual(error.name, 'NotAuthenticated')
-          assert.strictEqual(error.code, 401)
-          assert.strictEqual(error.message, 'Not authenticated')
-        })
+    it('authentication with wrong credentials fails, does not maintain state', async () => {
+      await assert.rejects(
+        () =>
+          client.authenticate({
+            strategy: 'local',
+            email,
+            password: 'blabla'
+          }),
+        {
+          name: 'NotAuthenticated',
+          message: 'Invalid login'
+        }
+      )
+      assert.ok(!client.get('authentication'), 'Reset client state')
     })
 
-    it('authenticates and allows access', () => {
-      return client
-        .authenticate({
-          strategy: 'local',
-          email,
-          password
-        })
-        .then(() => client.service('dummy').find())
-        .then((result) => {
-          assert.strictEqual(result.provider, provider)
-          assert.ok(result.authentication)
-          assert.ok(result.authentication.payload)
-          assert.strictEqual(result.user.email, user.email)
-          assert.strictEqual(result.user.id, user.id)
-        })
+    it('errors when not authenticated', async () => {
+      await assert.rejects(() => client.service('dummy').find(), {
+        name: 'NotAuthenticated',
+        code: 401,
+        message: 'Not authenticated'
+      })
     })
 
-    it('re-authenticates', () => {
-      return client
-        .authenticate({
-          strategy: 'local',
-          email,
-          password
-        })
-        .then(() => client.authentication.reset())
-        .then(() => client.authenticate())
-        .then(() => client.service('dummy').find())
-        .then((result) => {
-          assert.strictEqual(result.provider, provider)
-          assert.ok(result.authentication)
-          assert.ok(result.authentication.payload)
-          assert.strictEqual(result.user.email, user.email)
-          assert.strictEqual(result.user.id, user.id)
-        })
+    it('authenticates and allows access', async () => {
+      await client.authenticate({
+        strategy: 'local',
+        email,
+        password
+      })
+      const result = await client.service('dummy').find()
+
+      assert.strictEqual(result.provider, provider)
+      assert.ok(result.authentication)
+      assert.ok(result.authentication.payload)
+      assert.strictEqual(result.user.email, user.email)
+      assert.strictEqual(result.user.id, user.id)
     })
 
-    it('after logout does not allow subsequent access', () => {
-      return client
-        .authenticate({
-          strategy: 'local',
-          email,
-          password
-        })
-        .then(() => client.logout())
-        .then((result) => {
-          assert.ok(result.accessToken)
-          assert.ok(result.user)
+    it('re-authenticates', async () => {
+      await client.authenticate({
+        strategy: 'local',
+        email,
+        password
+      })
 
-          return client.service('dummy').find()
-        })
-        .then(() => assert.fail('Should never get here'))
-        .catch((error) => {
-          assert.strictEqual(error.name, 'NotAuthenticated')
-          assert.strictEqual(error.code, 401)
-          assert.strictEqual(error.message, 'Not authenticated')
-        })
+      client.authentication.reset()
+      client.authenticate()
+      const result = await client.service('dummy').find()
+
+      assert.strictEqual(result.provider, provider)
+      assert.ok(result.authentication)
+      assert.ok(result.authentication.payload)
+      assert.strictEqual(result.user.email, user.email)
+      assert.strictEqual(result.user.id, user.id)
+    })
+
+    it('after logout does not allow subsequent access', async () => {
+      await client.authenticate({
+        strategy: 'local',
+        email,
+        password
+      })
+
+      const result = await client.logout()
+
+      assert.ok(result!.accessToken)
+      assert.ok(result!.user)
+
+      assert.rejects(() => client.service('dummy').find(), {
+        name: 'NotAuthenticated',
+        code: 401,
+        message: 'Not authenticated'
+      })
     })
   })
 }

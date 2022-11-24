@@ -134,7 +134,7 @@ export class AuthenticationClient {
       return type === 'logout' ? promise : promise.then(() => Promise.reject(error))
     }
 
-    return Promise.reject(error)
+    return this.reset().then(() => Promise.reject(error))
   }
 
   reAuthenticate(force = false, strategy?: string): Promise<AuthenticationResult> {
