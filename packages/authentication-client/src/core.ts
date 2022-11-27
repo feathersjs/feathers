@@ -67,18 +67,12 @@ export class AuthenticationClient {
   }
 
   handleSocket(socket: any) {
-    // Connection events happen on every reconnect
-    const connected = this.app.io ? 'connect' : 'open'
-    const disconnected = this.app.io ? 'disconnect' : 'disconnection'
-
-    socket.on(disconnected, () => {
-      const authPromise = new Promise((resolve) => socket.once(connected, (data: any) => resolve(data)))
-        // Only reconnect when `reAuthenticate()` or `authenticate()`
-        // has been called explicitly first
-        // Force reauthentication with the server
-        .then(() => (this.authenticated ? this.reAuthenticate(true) : null))
-
-      this.app.set('authentication', authPromise)
+    // When the socket disconnects and we are still authenticated, try to reauthenticate right away
+    // the websocket connection will handle timeouts and retries
+    socket.on('disconnect', () => {
+      if (this.authenticated) {
+        this.reAuthenticate(true)
+      }
     })
   }
 
