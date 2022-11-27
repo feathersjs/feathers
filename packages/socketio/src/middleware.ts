@@ -1,4 +1,4 @@
-import { Application, Params } from '@feathersjs/feathers'
+import { Application, Params, RealTimeConnection } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
 import { Socket } from 'socket.io'
 
@@ -10,14 +10,27 @@ export interface FeathersSocket extends Socket {
   feathers?: Params & { [key: string]: any }
 }
 
-export const disconnect =
-  (app: Application, getParams: ParamsGetter) => (socket: FeathersSocket, next: NextFunction) => {
+export const disconnect = (
+  app: Application,
+  getParams: ParamsGetter,
+  socketMap: WeakMap<RealTimeConnection, FeathersSocket>
+) => {
+  app.on('disconnect', (connection: RealTimeConnection) => {
+    const socket = socketMap.get(connection)
+    if (socket && socket.connected) {
+      socket.disconnect()
+    }
+  })
+
+  return (socket: FeathersSocket, next: NextFunction) => {
     socket.on('disconnect', () => app.emit('disconnect', getParams(socket)))
     next()
   }
+}
 
 export const params =
-  (_app: Application, socketMap: WeakMap<any, any>) => (socket: FeathersSocket, next: NextFunction) => {
+  (_app: Application, socketMap: WeakMap<RealTimeConnection, FeathersSocket>) =>
+  (socket: FeathersSocket, next: NextFunction) => {
     socket.feathers = {
       provider: 'socketio',
       headers: socket.handshake.headers
