@@ -241,6 +241,21 @@ describe('@feathersjs/socketio', () => {
     assert.ok(mySocket)
   })
 
+  it('app `disconnect` event disconnects socket (#2754)', (done) => {
+    const mySocket = io('http://localhost:7886?channel=dctest')
+
+    app.once('connection', (connection) => {
+      assert.strictEqual(connection.channel, 'dctest')
+      app.once('disconnect', (disconnection) => {
+        assert.strictEqual(disconnection.channel, 'dctest')
+        done()
+      })
+      app.emit('disconnect', connection)
+    })
+
+    assert.ok(mySocket)
+  })
+
   it('missing parameters in socket call works (#88)', (done) => {
     socket.emit('find', 'verify', (error: any, data: any) => {
       assert.ok(!error)
