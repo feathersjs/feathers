@@ -246,10 +246,7 @@ describe('@feathersjs/socketio', () => {
 
     app.once('connection', (connection) => {
       assert.strictEqual(connection.channel, 'dctest')
-      app.once('disconnect', (disconnection) => {
-        assert.strictEqual(disconnection.channel, 'dctest')
-        done()
-      })
+      mySocket.once('disconnect', () => done())
       app.emit('disconnect', connection)
     })
 
