@@ -112,6 +112,16 @@ describe('@feathersjs/schema/hooks', () => {
     })
   })
 
+  it('resolves with $select and virtual properties', async () => {
+    const messages = await app.service('messages').find({
+      paginate: false,
+      query: {
+        $select: ['user', 'text']
+      }
+    })
+    assert.strictEqual(Object.keys(messages[0]).length, 2)
+  })
+
   it('resolves find results with paginated result object', async () => {
     const payload = {
       userId: user.id,

@@ -20,7 +20,8 @@ import {
   Ajv,
   FromSchema,
   getValidator,
-  getDataValidator
+  getDataValidator,
+  virtual
 } from '../src'
 import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib'
 
@@ -116,19 +117,17 @@ export type Message = FromSchema<
 >
 
 export const messageResolver = resolve<Message, HookContext<Application>>({
-  properties: {
-    user: async (_value, message, context) => {
-      const { userId } = message
+  user: virtual(async (message, context) => {
+    const { userId } = message
 
-      if (context.params.error === true) {
-        throw new GeneralError('This is an error')
-      }
-
-      const user = await context.app.service('users').get(userId, context.params)
-
-      return user as Message['user']
+    if (context.params.error === true) {
+      throw new GeneralError('This is an error')
     }
-  }
+
+    const user = await context.app.service('users').get(userId, context.params)
+
+    return user as Message['user']
+  })
 })
 
 export const messageQuerySchema = {
@@ -138,6 +137,10 @@ export const messageQuerySchema = {
   required: [],
   properties: {
     ...querySyntax(messageDataSchema.properties),
+    $select: {
+      type: 'array',
+      items: { type: 'string' }
+    },
     $resolve: {
       type: 'array',
       items: { type: 'string' }
@@ -206,16 +209,27 @@ app.service('messages').hooks({
       }),
       validateQuery(messageQueryValidator)
     ],
-    customMethod: [resolveData(customMethodDataResolver)]
+    customMethod: [resolveData(customMethodDataResolver)],
+    find: [
+      async (context, next) => {
+        // A hook that makes sure that virtual properties are not passed to the adapter as `$select`
+        // An SQL adapter would throw an error if it received a query like this
+        if (context.params?.query?.$select && context.params?.query?.$select.includes('user')) {
+          throw new Error('Invalid $select')
+        }
+        await next()
+      }
+    ]
   }
 })
 
 app
   .service('paginatedMessages')
   .hooks([
+    resolveDispatch(),
+    resolveResult(messageResolver),
     validateQuery(messageQueryValidator),
-    resolveQuery(messageQueryResolver),
-    resolveResult(messageResolver)
+    resolveQuery(messageQueryResolver)
   ])
 
 app

@@ -214,8 +214,8 @@ Update the `src/services/messages/messages.schema.js` file like this:
 
 <DatabaseBlock global-id="sql">
 
-```ts{7,14-16,22-25,38-44,50,60-64}
-import { resolve } from '@feathersjs/schema'
+```ts{1, 7,14-16,22-25,38-44,50,60-64}
+import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
@@ -236,10 +236,10 @@ export const messageSchema = Type.Object(
 )
 export type Message = Static<typeof messageSchema>
 export const messageResolver = resolve<Message, HookContext>({
-  user: async (_value, message, context) => {
+  user: virtual(async (message, context) => {
     // Associate the user that sent the message
     return context.app.service('users').get(message.userId)
-  }
+  })
 })
 
 export const messageExternalResolver = resolve<Message, HookContext>({})
@@ -289,8 +289,8 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext>({
 
 <DatabaseBlock global-id="mongodb">
 
-```ts{7,14-16,22-25,38-44,50,60-64}
-import { resolve } from '@feathersjs/schema'
+```ts{1,7,14-16,22-25,38-44,50,60-64}
+import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
@@ -311,10 +311,10 @@ export const messageSchema = Type.Object(
 )
 export type Message = Static<typeof messageSchema>
 export const messageResolver = resolve<Message, HookContext>({
-  user: async (_value, message, context) => {
+  user: virtual(async (message, context) => {
     // Associate the user that sent the message
     return context.app.service('users').get(message.userId)
-  }
+  })
 })
 
 export const messageExternalResolver = resolve<Message, HookContext>({})

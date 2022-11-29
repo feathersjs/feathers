@@ -78,21 +78,28 @@ export const resolveData =
     }
   }
 
-export const resolveResult =
-  <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) =>
-  async (context: H, next?: NextFunction) => {
+export const resolveResult = <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) => {
+  const virtualProperties = new Set(
+    resolvers.reduce((acc, current) => acc.concat(current.virtualNames), [] as (keyof T)[])
+  )
+
+  return async (context: H, next?: NextFunction) => {
     if (typeof next === 'function') {
-      const { $resolve: properties, ...query } = context.params?.query || {}
+      const { $resolve, $select: select, ...query } = context.params?.query || {}
+      const $select = Array.isArray(select) ? select.filter((name) => !virtualProperties.has(name)) : select
       const resolve = {
         originalContext: context,
         ...context.params.resolve,
-        properties
+        properties: $resolve || select
       }
 
       context.params = {
         ...context.params,
         resolve,
-        query
+        query: {
+          ...query,
+          $select
+        }
       }
 
       await next()
@@ -112,6 +119,7 @@ export const resolveResult =
       context.result = result
     }
   }
+}
 
 export const DISPATCH = Symbol('@feathersjs/schema/dispatch')
 
