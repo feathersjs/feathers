@@ -1,19 +1,23 @@
 import { generator, toFile, when } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
+import { fileExists, renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
 const template = ({
   camelName,
   upperName,
   relative,
-  type
+  type,
+  cwd,
+  lib
 }: ServiceGeneratorContext) => /* ts */ `// // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve } from '@feathersjs/schema'
 import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '${relative}/declarations'
-import { dataValidator, queryValidator } from '${relative}/validators'
+import { dataValidator, queryValidator } from '${relative}/${
+  fileExists(cwd, lib, 'schemas') ? 'schemas/' : '' // This is for legacy backwards compatibility
+}validators'
 
 // Main data model schema
 export const ${camelName}Schema = Type.Object({

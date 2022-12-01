@@ -274,3 +274,11 @@ export const injectSource =
 
     return injector(ctx).then(prettify(target))
   }
+
+/**
+ * Synchronously checks if a file exits
+ * @param context The base context
+ * @param filenames The filenames to check
+ * @returns Wether the file exists or not
+ */
+export const fileExists = (...filenames: string[]) => fs.existsSync(join(...filenames))

@@ -1,8 +1,10 @@
 import { generator, toFile, when } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
+import { fileExists, renderSource } from '../../commons'
 import { AuthenticationGeneratorContext, localTemplate } from '../index'
 
 const template = ({
+  cwd,
+  lib,
   camelName,
   upperName,
   authStrategies,
@@ -13,7 +15,9 @@ import type { FromSchema } from '@feathersjs/schema'
 ${localTemplate(authStrategies, `import { passwordHash } from '@feathersjs/authentication-local'`)}
 
 import type { HookContext } from '${relative}/declarations'
-import { dataValidator, queryValidator } from '${relative}/validators'
+import { dataValidator, queryValidator } from '${relative}/${
+  fileExists(cwd, lib, 'schemas') ? 'schemas/' : '' // This is for legacy backwards compatibility
+}validators'
 
 // Main data model schema
 export const ${camelName}Schema = {
