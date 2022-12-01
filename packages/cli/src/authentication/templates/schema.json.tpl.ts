@@ -55,8 +55,11 @@ export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
 })
 
 export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
-  // The password should never be visible externally
-  password: async () => undefined
+  ${localTemplate(
+    authStrategies,
+    `// The password should never be visible externally
+  password: async () => undefined`
+  )}
 })
 
 // Schema for allowed query properties

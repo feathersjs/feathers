@@ -32,8 +32,11 @@ export type ${upperName} = Static<typeof ${camelName}Schema>
 export const ${camelName}Resolver = resolve<${upperName}, HookContext>({})
 
 export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
-  // The password should never be visible externally
-  password: async () => undefined
+  ${localTemplate(
+    authStrategies,
+    `// The password should never be visible externally
+  password: async () => undefined`
+  )}
 })
 
 // Schema for the basic data model (e.g. creating new entries)
