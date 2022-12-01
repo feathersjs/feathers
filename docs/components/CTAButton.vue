@@ -3,6 +3,7 @@ import { computed } from 'vue'
 
 const props = defineProps({
   primary: Boolean,
+  href: String
 })
 
 const classes = computed(() => {
@@ -12,7 +13,7 @@ const classes = computed(() => {
 
 <template>
   <a
-    href="/guides/"
+    :href="href || '/guides/'"
     class="btn text-md font-bold uppercase px-6 py-0.5 rounded-full"
     md="text-lg px-8 py-1.6"
     lg="py-2.8 px-12"

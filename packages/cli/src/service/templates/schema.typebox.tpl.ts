@@ -21,13 +21,9 @@ export const ${camelName}Schema = Type.Object({
     text: Type.String()
   }, { $id: '${upperName}', additionalProperties: false })
 export type ${upperName} = Static<typeof ${camelName}Schema>
-export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
-  properties: {}
-})
+export const ${camelName}Resolver = resolve<${upperName}, HookContext>({})
 
-export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
-  properties: {}
-})
+export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({})
 
 // Schema for creating new entries
 export const ${camelName}DataSchema = Type.Pick(${camelName}Schema, ['text'], {
@@ -35,9 +31,7 @@ export const ${camelName}DataSchema = Type.Pick(${camelName}Schema, ['text'], {
 })
 export type ${upperName}Data = Static<typeof ${camelName}DataSchema>
 export const ${camelName}DataValidator = getDataValidator(${camelName}DataSchema, dataValidator)
-export const ${camelName}DataResolver = resolve<${upperName}, HookContext>({
-  properties: {}
-})
+export const ${camelName}DataResolver = resolve<${upperName}, HookContext>({})
 
 // Schema for allowed query properties
 export const ${camelName}QueryProperties = Type.Pick(${camelName}Schema, [
@@ -46,9 +40,7 @@ export const ${camelName}QueryProperties = Type.Pick(${camelName}Schema, [
 export const ${camelName}QuerySchema = querySyntax(${camelName}QueryProperties)
 export type ${upperName}Query = Static<typeof ${camelName}QuerySchema>
 export const ${camelName}QueryValidator = getValidator(${camelName}QuerySchema, queryValidator)
-export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
-  properties: {}
-})
+export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({})
 `
 
 export const generate = (ctx: ServiceGeneratorContext) =>

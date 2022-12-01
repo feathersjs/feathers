@@ -30,12 +30,8 @@ export const ${camelName}Schema = {
   }
 } as const
 export type ${upperName} = FromSchema<typeof ${camelName}Schema>
-export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
-  properties: {}
-})
-export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
-  properties: {}
-})
+export const ${camelName}Resolver = resolve<${upperName}, HookContext>({})
+export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({})
 
 // Schema for creating new data
 export const ${camelName}DataSchema = {
@@ -51,9 +47,7 @@ export const ${camelName}DataSchema = {
 } as const
 export type ${upperName}Data = FromSchema<typeof ${camelName}DataSchema>
 export const ${camelName}DataValidator = getDataValidator(${camelName}DataSchema, dataValidator)
-export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
-  properties: {}
-})
+export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({})
 
 // Schema for allowed query properties
 export const ${camelName}QuerySchema = {
@@ -66,9 +60,7 @@ export const ${camelName}QuerySchema = {
 } as const
 export type ${upperName}Query = FromSchema<typeof ${camelName}QuerySchema>
 export const ${camelName}QueryValidator = getValidator(${camelName}QuerySchema, queryValidator)
-export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
-  properties: {}
-})
+export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({})
 `
 
 export const generate = (ctx: ServiceGeneratorContext) =>

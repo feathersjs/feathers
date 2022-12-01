@@ -18,8 +18,16 @@ export type ResolverConverter<T, C> = (
   status: ResolverStatus<T, C>
 ) => Promise<T | undefined>
 
-export interface ResolverConfig<T, C> {
+export interface ResolverOptions<T, C> {
   schema?: Schema<T>
+  /**
+   * A converter function that is run before property resolvers
+   * to transform the initial data into a different format.
+   */
+  converter?: ResolverConverter<T, C>
+}
+
+export interface ResolverConfig<T, C> extends ResolverOptions<T, C> {
   /**
    * @deprecated Use the `validateData` and `validateQuery` hooks explicitly instead
    */
@@ -28,11 +36,6 @@ export interface ResolverConfig<T, C> {
    * The properties to resolve
    */
   properties: PropertyResolverMap<T, C>
-  /**
-   * A converter function that is run before property resolvers
-   * to transform the initial data into a different format.
-   */
-  converter?: ResolverConverter<T, C>
 }
 
 export interface ResolverStatus<T, C> {
@@ -155,6 +158,18 @@ export class Resolver<T, C> {
  * @param options The configuration for the returned resolver
  * @returns A new resolver instance
  */
-export function resolve<T, C>(options: ResolverConfig<T, C>) {
-  return new Resolver<T, C>(options)
+export function resolve<T, C>(
+  properties: PropertyResolverMap<T, C>,
+  options?: ResolverOptions<T, C>
+): Resolver<T, C>
+export function resolve<T, C>(options: ResolverConfig<T, C>): Resolver<T, C>
+export function resolve<T, C>(
+  properties: PropertyResolverMap<T, C> | ResolverConfig<T, C>,
+  options?: ResolverOptions<T, C>
+) {
+  const settings = (
+    (properties as ResolverConfig<T, C>).properties ? properties : { properties, ...options }
+  ) as ResolverConfig<T, C>
+
+  return new Resolver<T, C>(settings)
 }

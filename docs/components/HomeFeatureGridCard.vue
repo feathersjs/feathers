@@ -2,7 +2,7 @@
 defineProps({
   title: String,
   imgSrc: String,
-  description: String,
+  description: String
 })
 </script>
 
@@ -12,6 +12,6 @@ defineProps({
       <img :src="imgSrc" alt="" class="mx-auto w-42 h-42" />
     </div>
     <p class="font-bold text-xl">{{ title }}</p>
-    <p class="">{{ description }}</p>
+    <p class="vp-doc" v-html="description"></p>
   </div>
 </template>

@@ -408,10 +408,6 @@ export default {
         {
           text: 'FAQ',
           link: '/help/faq'
-        },
-        {
-          text: 'Security',
-          link: '/guides/security.md'
         }
       ]
     }

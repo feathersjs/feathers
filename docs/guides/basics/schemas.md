@@ -50,7 +50,7 @@ First we need to update the `src/services/users/users.schema.js` file with the s
 
 <DatabaseBlock global-id="sql">
 
-```ts{1,16-17,36,47-57,70-74}
+```ts{1,16-17,32,42-52,56,63-67}
 import crypto from 'crypto'
 import { resolve } from '@feathersjs/schema'
 import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
@@ -72,15 +72,11 @@ export const userSchema = Type.Object(
   { $id: 'User', additionalProperties: false }
 )
 export type User = Static<typeof userSchema>
-export const userResolver = resolve<User, HookContext>({
-  properties: {}
-})
+export const userResolver = resolve<User, HookContext>({})
 
 export const userExternalResolver = resolve<User, HookContext>({
-  properties: {
-    // The password should never be visible externally
-    password: async () => undefined
-  }
+  // The password should never be visible externally
+  password: async () => undefined
 })
 
 // Schema for the basic data model (e.g. creating new entries)
@@ -95,19 +91,17 @@ export const userDataSchema = Type.Pick(
 export type UserData = Static<typeof userDataSchema>
 export const userDataValidator = getDataValidator(userDataSchema, dataValidator)
 export const userDataResolver = resolve<User, HookContext>({
-  properties: {
-    password: passwordHash({ strategy: 'local' }),
-    avatar: async (value, user) => {
-      // If the user passed an avatar image, use it
-      if (value !== undefined) {
-        return value
-      }
-
-      // Gravatar uses MD5 hashes from an email address to get the image
-      const hash = crypto.createHash('md5').update(user.email.toLowerCase()).digest('hex')
-      // Return the full avatar URL
-      return `https://s.gravatar.com/avatar/${hash}?s=60`
+  password: passwordHash({ strategy: 'local' }),
+  avatar: async (value, user) => {
+    // If the user passed an avatar image, use it
+    if (value !== undefined) {
+      return value
     }
+
+    // Gravatar uses MD5 hashes from an email address to get the image
+    const hash = crypto.createHash('md5').update(user.email.toLowerCase()).digest('hex')
+    // Return the full avatar URL
+    return `https://s.gravatar.com/avatar/${hash}?s=60`
   }
 })
 
@@ -117,17 +111,15 @@ export const userQuerySchema = querySyntax(userQueryProperties)
 export type UserQuery = Static<typeof userQuerySchema>
 export const userQueryValidator = getValidator(userQuerySchema, queryValidator)
 export const userQueryResolver = resolve<UserQuery, HookContext>({
-  properties: {
-    // If there is a user (e.g. with authentication), they are only allowed to see their own data
-    id: async (value, user, context) => {
-      // We want to be able to get a list of all users but
-      // only let a user modify their own data otherwise
-      if (context.params.user && context.method !== 'find') {
-        return context.params.user.id
-      }
-
-      return value
+  // If there is a user (e.g. with authentication), they are only allowed to see their own data
+  id: async (value, user, context) => {
+    // We want to be able to get a list of all users but
+    // only let a user modify their own data otherwise
+    if (context.params.user && context.method !== 'find') {
+      return context.params.user.id
     }
+
+    return value
   }
 })
 ```
@@ -136,7 +128,7 @@ export const userQueryResolver = resolve<UserQuery, HookContext>({
 
 <DatabaseBlock global-id="mongodb">
 
-```ts{1,16-17,36,47-57,70-74}
+```ts{1,16-17,32,42-52,56,63-67}
 import crypto from 'crypto'
 import { resolve } from '@feathersjs/schema'
 import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
@@ -158,15 +150,11 @@ export const userSchema = Type.Object(
   { $id: 'User', additionalProperties: false }
 )
 export type User = Static<typeof userSchema>
-export const userResolver = resolve<User, HookContext>({
-  properties: {}
-})
+export const userResolver = resolve<User, HookContext>({})
 
 export const userExternalResolver = resolve<User, HookContext>({
-  properties: {
-    // The password should never be visible externally
-    password: async () => undefined
-  }
+  // The password should never be visible externally
+  password: async () => undefined
 })
 
 // Schema for the basic data model (e.g. creating new entries)
@@ -177,19 +165,17 @@ export const userDataSchema = Type.Pick(userSchema, ['email', 'password', 'githu
 export type UserData = Static<typeof userDataSchema>
 export const userDataValidator = getDataValidator(userDataSchema, dataValidator)
 export const userDataResolver = resolve<User, HookContext>({
-  properties: {
-    password: passwordHash({ strategy: 'local' }),
-    avatar: async (value, user) => {
-      // If the user passed an avatar image, use it
-      if (value !== undefined) {
-        return value
-      }
-
-      // Gravatar uses MD5 hashes from an email address to get the image
-      const hash = crypto.createHash('md5').update(user.email.toLowerCase()).digest('hex')
-      // Return the full avatar URL
-      return `https://s.gravatar.com/avatar/${hash}?s=60`
+  password: passwordHash({ strategy: 'local' }),
+  avatar: async (value, user) => {
+    // If the user passed an avatar image, use it
+    if (value !== undefined) {
+      return value
     }
+
+    // Gravatar uses MD5 hashes from an email address to get the image
+    const hash = crypto.createHash('md5').update(user.email.toLowerCase()).digest('hex')
+    // Return the full avatar URL
+    return `https://s.gravatar.com/avatar/${hash}?s=60`
   }
 })
 
@@ -199,17 +185,15 @@ export const userQuerySchema = querySyntax(userQueryProperties)
 export type UserQuery = Static<typeof userQuerySchema>
 export const userQueryValidator = getValidator(userQuerySchema, queryValidator)
 export const userQueryResolver = resolve<UserQuery, HookContext>({
-  properties: {
-    // If there is a user (e.g. with authentication), they are only allowed to see their own data
-    _id: async (value, user, context) => {
-      // We want to be able to get a list of all users but
-      // only let a user modify their own data otherwise
-      if (context.params.user && context.method !== 'find') {
-        return context.params.user._id
-      }
-
-      return value
+  // If there is a user (e.g. with authentication), they are only allowed to see their own data
+  _id: async (value, user, context) => {
+    // We want to be able to get a list of all users but
+    // only let a user modify their own data otherwise
+    if (context.params.user && context.method !== 'find') {
+      return context.params.user._id
     }
+
+    return value
   }
 })
 ```
@@ -233,7 +217,7 @@ Update the `src/services/messages/messages.schema.js` file like this:
 
 <DatabaseBlock global-id="sql">
 
-```ts{7,14-16,23-26,43-49,56,66-74}
+```ts{7,14-16,22-25,38-44,50,60-64}
 import { resolve } from '@feathersjs/schema'
 import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
@@ -255,17 +239,13 @@ export const messageSchema = Type.Object(
 )
 export type Message = Static<typeof messageSchema>
 export const messageResolver = resolve<Message, HookContext>({
-  properties: {
-    user: async (_value, message, context) => {
-      // Associate the user that sent the message
-      return context.app.service('users').get(message.userId)
-    }
+  user: async (_value, message, context) => {
+    // Associate the user that sent the message
+    return context.app.service('users').get(message.userId)
   }
 })
 
-export const messageExternalResolver = resolve<Message, HookContext>({
-  properties: {}
-})
+export const messageExternalResolver = resolve<Message, HookContext>({})
 
 // Schema for creating new entries
 export const messageDataSchema = Type.Pick(messageSchema, ['text'], {
@@ -275,14 +255,12 @@ export const messageDataSchema = Type.Pick(messageSchema, ['text'], {
 export type MessageData = Static<typeof messageDataSchema>
 export const messageDataValidator = getDataValidator(messageDataSchema, dataValidator)
 export const messageDataResolver = resolve<Message, HookContext>({
-  properties: {
-    userId: async (_value, _message, context) => {
-      // Associate the record with the id of the authenticated user
-      return context.params.user.id
-    },
-    createdAt: async () => {
-      return Date.now()
-    }
+  userId: async (_value, _message, context) => {
+    // Associate the record with the id of the authenticated user
+    return context.params.user.id
+  },
+  createdAt: async () => {
+    return Date.now()
   }
 })
 
@@ -298,16 +276,14 @@ export const messageQuerySchema = querySyntax(messageQueryProperties)
 export type MessageQuery = Static<typeof messageQuerySchema>
 export const messageQueryValidator = getValidator(messageQuerySchema, queryValidator)
 export const messageQueryResolver = resolve<MessageQuery, HookContext>({
-  properties: {
-    userId: async (value, user, context) => {
-      // We want to be able to get a list of all messages but
-      // only let a user access their own messages otherwise
-      if (context.params.user && context.method !== 'find') {
-        return context.params.user.id
-      }
-
-      return value
+  userId: async (value, user, context) => {
+    // We want to be able to get a list of all messages but
+    // only let a user access their own messages otherwise
+    if (context.params.user && context.method !== 'find') {
+      return context.params.user.id
     }
+
+    return value
   }
 })
 ```
@@ -316,7 +292,7 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext>({
 
 <DatabaseBlock global-id="mongodb">
 
-```ts{7,14-16,23-26,43-49,56,66-74}
+```ts{7,14-16,22-25,38-44,50,60-64}
 import { resolve } from '@feathersjs/schema'
 import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
@@ -338,17 +314,13 @@ export const messageSchema = Type.Object(
 )
 export type Message = Static<typeof messageSchema>
 export const messageResolver = resolve<Message, HookContext>({
-  properties: {
-    user: async (_value, message, context) => {
-      // Associate the user that sent the message
-      return context.app.service('users').get(message.userId)
-    }
+  user: async (_value, message, context) => {
+    // Associate the user that sent the message
+    return context.app.service('users').get(message.userId)
   }
 })
 
-export const messageExternalResolver = resolve<Message, HookContext>({
-  properties: {}
-})
+export const messageExternalResolver = resolve<Message, HookContext>({})
 
 // Schema for creating new entries
 export const messageDataSchema = Type.Pick(messageSchema, ['text'], {
@@ -358,14 +330,12 @@ export const messageDataSchema = Type.Pick(messageSchema, ['text'], {
 export type MessageData = Static<typeof messageDataSchema>
 export const messageDataValidator = getDataValidator(messageDataSchema, dataValidator)
 export const messageDataResolver = resolve<Message, HookContext>({
-  properties: {
-    userId: async (_value, _message, context) => {
-      // Associate the record with the id of the authenticated user
-      return context.params.user._id
-    },
-    createdAt: async () => {
-      return Date.now()
-    }
+  userId: async (_value, _message, context) => {
+    // Associate the record with the id of the authenticated user
+    return context.params.user._id
+  },
+  createdAt: async () => {
+    return Date.now()
   }
 })
 
@@ -377,16 +347,14 @@ export const messageQuerySchema = querySyntax(messageQueryProperties)
 export type MessageQuery = Static<typeof messageQuerySchema>
 export const messageQueryValidator = getValidator(messageQuerySchema, queryValidator)
 export const messageQueryResolver = resolve<MessageQuery, HookContext>({
-  properties: {
-    userId: async (value, user, context) => {
-      // We want to be able to get a list of all messages but
-      // only let a user access their own messages otherwise
-      if (context.params.user && context.method !== 'find') {
-        return context.params.user._id
-      }
-
-      return value
+  userId: async (value, user, context) => {
+    // We want to be able to get a list of all messages but
+    // only let a user access their own messages otherwise
+    if (context.params.user && context.method !== 'find') {
+      return context.params.user._id
     }
+
+    return value
   }
 })
 ```
