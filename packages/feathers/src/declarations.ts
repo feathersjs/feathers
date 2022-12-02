@@ -29,11 +29,6 @@ export interface ServiceOptions<MethodTypes = string> {
    */
   methods?: MethodTypes[] | readonly MethodTypes[]
   /**
-   * A list of service methods that should only be available __internally__ to other services
-   * but still send events and use hooks.
-   */
-  serviceMethods?: MethodTypes[] | readonly MethodTypes[]
-  /**
    * Provide a full list of events that this service should emit to clients.
    * Unlike the `events` option, this will not be merged with the default events.
    */

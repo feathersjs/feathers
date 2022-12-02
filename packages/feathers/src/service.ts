@@ -42,8 +42,7 @@ export function getServiceOptions(service: any): ServiceOptions {
 export const normalizeServiceOptions = (service: any, options: ServiceOptions = {}): ServiceOptions => {
   const {
     methods = defaultServiceMethods.filter((method) => typeof service[method] === 'function'),
-    events = service.events || [],
-    serviceMethods = defaultServiceMethods.filter((method) => methods.includes(method))
+    events = service.events || []
   } = options
   const serviceEvents = options.serviceEvents || defaultServiceEvents.concat(events)
 
@@ -51,7 +50,6 @@ export const normalizeServiceOptions = (service: any, options: ServiceOptions = 
     ...options,
     events,
     methods,
-    serviceMethods,
     serviceEvents
   }
 }
