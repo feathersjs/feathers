@@ -77,7 +77,7 @@ describe('app.publish', () => {
       app.service('test').create(data).catch(done)
     })
 
-    it('app and global level dispatching and precedence', (done) => {
+    it.only('app and global level dispatching and precedence', (done) => {
       app.channel('testing').join(c1)
       app.channel('other').join(c2)
 

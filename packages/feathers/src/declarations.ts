@@ -19,10 +19,28 @@ export interface Paginated<T> {
 /**
  * Options that can be passed when registering a service via `app.use(name, service, options)`
  */
-export interface ServiceOptions {
+export interface ServiceOptions<MethodTypes = string> {
+  /**
+   * A list of custom events that this service emits to clients
+   */
   events?: string[] | readonly string[]
-  methods?: string[] | readonly string[]
+  /**
+   * A list of service methods that should be available __externally__ to clients
+   */
+  methods?: MethodTypes[] | readonly MethodTypes[]
+  /**
+   * A list of service methods that should only be available __internally__ to other services
+   * but still send events and use hooks.
+   */
+  serviceMethods?: MethodTypes[] | readonly MethodTypes[]
+  /**
+   * Provide a full list of events that this service should emit to clients.
+   * Unlike the `events` option, this will not be merged with the default events.
+   */
   serviceEvents?: string[] | readonly string[]
+  /**
+   * Initial data to always add as route params to this service.
+   */
   routeParams?: { [key: string]: any }
 }
 
@@ -226,7 +244,7 @@ export interface FeathersApplication<Services = any, Settings = any> {
   use<L extends keyof Services & string>(
     path: L,
     service: keyof any extends keyof Services ? ServiceInterface | Application : Services[L],
-    options?: ServiceOptions
+    options?: ServiceOptions<keyof any extends keyof Services ? string : keyof Services[L]>
   ): this
 
   /**
