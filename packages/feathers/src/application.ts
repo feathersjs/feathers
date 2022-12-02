@@ -145,7 +145,7 @@ export class Feathers<Services, Settings>
   use<L extends keyof Services & string>(
     path: L,
     service: keyof any extends keyof Services ? ServiceInterface | Application : Services[L],
-    options?: Partial<ServiceOptions<keyof any extends keyof Services ? string : keyof Services[L]>>
+    options?: ServiceOptions<keyof any extends keyof Services ? string : keyof Services[L]>
   ): this {
     if (typeof path !== 'string') {
       throw new Error(`'${path}' is not a valid service path.`)
