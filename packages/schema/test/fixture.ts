@@ -1,9 +1,4 @@
-import {
-  feathers,
-  HookContext,
-  Application as FeathersApplication,
-  defaultServiceMethods
-} from '@feathersjs/feathers'
+import { feathers, HookContext, Application as FeathersApplication } from '@feathersjs/feathers'
 import { memory, MemoryService } from '@feathersjs/memory'
 import { GeneralError } from '@feathersjs/errors'
 
@@ -193,7 +188,7 @@ app.use(
   })
 )
 app.use('messages', new MessageService(), {
-  methods: [...defaultServiceMethods, 'customMethod']
+  methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'customMethod']
 })
 app.use('paginatedMessages', memory({ paginate: { default: 10 } }))
 

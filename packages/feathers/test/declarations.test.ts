@@ -70,7 +70,9 @@ describe('Feathers typings', () => {
     const app2 = feathers<Record<string, unknown>, Configuration>()
 
     app.set('port', 80)
-    app.use('todos', new TodoService())
+    app.use('todos', new TodoService(), {
+      methods: ['find', 'create']
+    })
     app.use('v2', app2)
 
     const service = app.service('todos')
@@ -84,8 +86,9 @@ describe('Feathers typings', () => {
         all: [],
         create: [
           async (context) => {
-            const { result, data } = context
+            const { result, data, service } = context
 
+            assert.ok(service instanceof TodoService)
             assert.ok(result)
             assert.ok(data)
             assert.ok(context.app.service('todos'))
