@@ -46,6 +46,7 @@ const arrayOfKeys = <T extends TObject>(type: T) => {
   const keys = Object.keys(type.properties)
   return Type.Unsafe<(keyof T['properties'])[]>({
     type: 'array',
+    maxItems: keys.length,
     items: {
       type: 'string',
       ...(keys.length > 0 ? { enum: keys } : {})
