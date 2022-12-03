@@ -139,8 +139,16 @@ export const message = (app: Application) => {
     around: {
       all: [
         logRuntime,
-        authenticate('jwt')
-      ]
+        authenticate('jwt'),
+        schemaHooks.resolveExternal(messageExternalResolver),
+        schemaHooks.resolveResult(messageResolver)
+      ],
+      find: [],
+      get: [],
+      create: [],
+      update: [],
+      patch: [],
+      remove: []
     },
     before: {
       all: [
@@ -151,7 +159,7 @@ export const message = (app: Application) => {
       ]
     },
     after: {
-      all: [schemaHooks.resolveResult(messageResolver), schemaHooks.resolveExternal(messageExternalResolver)]
+      all: []
     },
     error: {
       all: []

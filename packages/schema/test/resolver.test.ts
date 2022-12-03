@@ -1,7 +1,7 @@
 import assert from 'assert'
 import { BadRequest } from '@feathersjs/errors'
 
-import { FromSchema, schema, resolve } from '../src'
+import { FromSchema, schema, resolve, virtual } from '../src'
 
 describe('@feathersjs/schema/resolver', () => {
   const userSchema = {
@@ -25,16 +25,14 @@ describe('@feathersjs/schema/resolver', () => {
 
   it('simple resolver', async () => {
     const userResolver = resolve<User, typeof context>({
-      properties: {
-        password: async (): Promise<undefined> => undefined,
+      password: async (): Promise<undefined> => undefined,
 
-        name: async (_name, user, ctx, status) => {
-          assert.deepStrictEqual(ctx, context)
-          assert.deepStrictEqual(status.path, ['name'])
-          assert.strictEqual(typeof status.stack[0], 'function')
+      name: async (_value, user, ctx, status) => {
+        assert.deepStrictEqual(ctx, context)
+        assert.deepStrictEqual(status.path, ['name'])
+        assert.strictEqual(typeof status.stack[0], 'function')
 
-          return `${user.firstName} ${user.lastName}`
-        }
+        return `${user.firstName} ${user.lastName}`
       }
     })
 
@@ -52,7 +50,7 @@ describe('@feathersjs/schema/resolver', () => {
       name: 'Dave L.'
     })
 
-    const withProps: any = await userResolver.resolve(
+    const withProps = await userResolver.resolve(
       {
         firstName: 'David',
         lastName: 'L'
@@ -66,6 +64,34 @@ describe('@feathersjs/schema/resolver', () => {
     assert.deepStrictEqual(withProps, {
       name: 'David L',
       lastName: 'L'
+    })
+  })
+
+  it('simple resolver with virtual', async () => {
+    const userResolver = resolve<User, typeof context>({
+      password: async (): Promise<undefined> => undefined,
+
+      name: virtual(async (user, ctx, status) => {
+        assert.deepStrictEqual(ctx, context)
+        assert.deepStrictEqual(status.path, ['name'])
+        assert.strictEqual(typeof status.stack[0], 'function')
+
+        return `${user.firstName} ${user.lastName}`
+      })
+    })
+
+    const u = await userResolver.resolve(
+      {
+        firstName: 'Dave',
+        lastName: 'L.'
+      },
+      context
+    )
+
+    assert.deepStrictEqual(u, {
+      firstName: 'Dave',
+      lastName: 'L.',
+      name: 'Dave L.'
     })
   })
 

@@ -98,6 +98,31 @@ Property resolver functions should only return a value and not have side effects
 
 </BlockQuote>
 
+## Virtual property resolvers
+
+Virtual resolvers are property resolvers that do not use the `value` but instead always return a value of their own. The parameters are (`(data, context, status)`). The above example can be written like this:
+
+```ts
+import { resolve, virtual } from '@feathersjs/schema'
+
+const userResolver = resolve<User, MyContext>({
+  isDrinkingAge: virtual(async (user, context) => {
+    const drinkingAge = await context.getDrinkingAge(user.country)
+
+    return user.age >= drinkingAge
+  }),
+  fullName: virtual(async (user, context) => {
+    return `${user.firstName} ${user.lastName}`
+  })
+})
+```
+
+<BlockQuote type="warning" label="Important">
+
+Virtual resolvers should always be used when combined with a [database adapter](../databases/adapters.md) in order to make valid [$select queries](../databases/querying.md#select). Otherwise queries could try to select fields that do not exist in the database which will throw an error.
+
+</BlockQuote>
+
 ## Options
 
 A resolver takes the following options as the second parameter:
@@ -194,8 +219,14 @@ app.service('users').hooks({
 
 Result resolvers use the `schemaHooks.resolveResult(...resolvers)` hook and resolve the data that is returned by a service call ([context.result](../hooks.md#context-result) in a hook). This can be used to populate associations or add other computed properties etc. It is possible to pass multiple resolvers which will run in the order they are passed, using the previous data. `schemaHooks.resolveResult` can be used as an `around` and `after` hook.
 
+<BlockQuote type="warning" label="Important">
+
+Use as an `around` hook is recommended since this will ensure that database adapters will be able to handle [$select queries](../databases/querying.md#select) properly when using [virtual properties](#virtual-property-resolvers).
+
+</BlockQuote>
+
 ```ts
-import { schemaHooks, resolve } from '@feathersjs/schema'
+import { schemaHooks, resolve, virtual } from '@feathersjs/schema'
 import { Type } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 import type { HookContext } from '../declarations'
@@ -225,16 +256,14 @@ const messageSchema = Type.Object(
 type Message = Static<typeof messageSchema>
 
 export const messageResolver = resolve<Message, HookContext>({
-  properties: {
-    user: async (_value, message, context) => {
-      // Populate the user associated via `userId`
-      return context.app.service('users').get(message.userId)
-    }
-  }
+  user: virtual(async (message, context) => {
+    // Populate the user associated via `userId`
+    return context.app.service('users').get(message.userId)
+  })
 })
 
 app.service('messages').hooks({
-  after: {
+  around: {
     all: [schemaHooks.resolveResult(messageResolver)]
   }
 })
@@ -262,10 +291,8 @@ const userSchema = Type.Object(
 type User = Static<typeof userSchema>
 
 export const userExternalResolver = resolve<User, HookContext>({
-  properties: {
-    // Always hide the password for external responses
-    password: async () => undefined
-  }
+  // Always hide the password for external responses
+  password: async () => undefined
 })
 
 // Dispatch should be resolved on every method
@@ -310,15 +337,13 @@ export const userQuerySchema = querySyntax(userQueryProperties)
 export type UserQuery = Static<typeof userQuerySchema>
 
 export const userQueryResolver = resolve<UserQuery, HookContext>({
-  properties: {
-    // If there is an authenticated user, they can only see their own data
-    id: async (value, query, context) => {
-      if (context.params.user) {
-        return context.params.user.id
-      }
-
-      return value
+  // If there is an authenticated user, they can only see their own data
+  id: async (value, query, context) => {
+    if (context.params.user) {
+      return context.params.user.id
     }
+
+    return value
   }
 })
 
