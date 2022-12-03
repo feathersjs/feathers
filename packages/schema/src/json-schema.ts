@@ -122,6 +122,8 @@ export const queryProperty = <T extends JSONSchema>(def: T) => {
   } as const
 }
 
+export const SUPPORTED_TYPES = ['string', 'number', 'integer', 'boolean', 'null']
+
 /**
  * Creates Feathers a query syntax compatible JSON schema for multiple properties.
  *
@@ -132,6 +134,15 @@ export const queryProperties = <T extends { [key: string]: JSONSchema }>(definit
   Object.keys(definitions).reduce((res, key) => {
     const result = res as any
     const definition = definitions[key]
+    const { type, $ref } = definition as any
+
+    if ($ref || !SUPPORTED_TYPES.includes(type)) {
+      throw new Error(
+        `Can not create query syntax schema for property '${key}'. Only types ${SUPPORTED_TYPES.join(
+          ', '
+        )} are allowed.`
+      )
+    }
 
     result[key] = queryProperty(definition)
 
@@ -145,8 +156,11 @@ export const queryProperties = <T extends { [key: string]: JSONSchema }>(definit
  * @param definition The property definitions to create the query syntax schema for
  * @returns A JSON schema for the complete query syntax
  */
-export const querySyntax = <T extends { [key: string]: any }>(definition: T) =>
-  ({
+export const querySyntax = <T extends { [key: string]: JSONSchema }>(definition: T) => {
+  const keys = Object.keys(definition)
+  const props = queryProperties(definition)
+
+  return {
     $limit: {
       type: 'number',
       minimum: 0
@@ -157,7 +171,7 @@ export const querySyntax = <T extends { [key: string]: any }>(definition: T) =>
     },
     $sort: {
       type: 'object',
-      properties: Object.keys(definition).reduce((res, key) => {
+      properties: keys.reduce((res, key) => {
         const result = res as any
 
         result[key] = {
@@ -170,10 +184,20 @@ export const querySyntax = <T extends { [key: string]: any }>(definition: T) =>
     },
     $select: {
       type: 'array',
+      maxItems: keys.length,
       items: {
         type: 'string',
-        enum: Object.keys(definition) as any as (keyof T)[]
+        ...(keys.length > 0 ? { enum: keys as any as (keyof T)[] } : {})
       }
     },
-    ...queryProperties(definition)
-  } as const)
+    $or: {
+      type: 'array',
+      items: {
+        type: 'object',
+        additionalProperties: false,
+        properties: props
+      }
+    },
+    ...props
+  } as const
+}
