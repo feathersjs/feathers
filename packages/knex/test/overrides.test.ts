@@ -34,16 +34,16 @@ type Animal = {
  * introduce ambiguity by the table to itself.
  */
 class AnimalService<T = Animal, P extends KnexAdapterParams = KnexAdapterParams> extends KnexService<T> {
-  async $find(params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>
-  async $find(params?: P & { paginate: false }): Promise<T[]>
-  async $find(params?: P): Promise<Paginated<T> | T[]>
-  async $find(params: P = {} as P): Promise<Paginated<T> | T[]> {
+  async _find(params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>
+  async _find(params?: P & { paginate: false }): Promise<T[]>
+  async _find(params?: P): Promise<Paginated<T> | T[]>
+  async _find(params: P = {} as P): Promise<Paginated<T> | T[]> {
     const knexQuery = this.createQuery(params)
     knexQuery
       .select('ancestors.name as ancestor_name')
       .leftJoin('animals as ancestors', 'ancestors.id', '=', 'animals.ancestor_id')
     params.knex = knexQuery
-    return super.$find(params)
+    return super._find(params)
   }
 }
 

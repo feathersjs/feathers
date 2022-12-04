@@ -154,7 +154,7 @@ describe('@feathersjs/adapter-commons/service', () => {
     })
   })
 
-  it('allowsMulti', () => {
+  it.only('allowsMulti', () => {
     context('with true', () => {
       const service = new MethodService({ multi: true })
 

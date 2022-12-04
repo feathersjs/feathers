@@ -1,4 +1,4 @@
-import { Query, Params, Paginated, Id, NullableId } from '@feathersjs/feathers'
+import { Query, Params, Paginated, Id } from '@feathersjs/feathers'
 
 export type FilterQueryOptions = {
   filters?: FilterSettings
@@ -80,16 +80,22 @@ export interface AdapterParams<
  *
  * @see {@link https://docs.feathersjs.com/guides/migrating.html#hook-less-service-methods}
  */
-export interface InternalServiceMethods<T = any, D = T, P extends AdapterParams = AdapterParams> {
+export interface InternalServiceMethods<
+  Result = any,
+  Data = Result,
+  PatchData = Partial<Data>,
+  Params extends AdapterParams = AdapterParams,
+  IdType = Id
+> {
   /**
    * Retrieve all resources from this service.
    * Does not sanitize the query and should only be used on the server.
    *
    * @param _params - Service call parameters {@link Params}
    */
-  $find(_params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>
-  $find(_params?: P & { paginate: false }): Promise<T[]>
-  $find(params?: P): Promise<T[] | Paginated<T>>
+  _find(_params?: Params & { paginate?: PaginationOptions }): Promise<Paginated<Result>>
+  _find(_params?: Params & { paginate: false }): Promise<Result[]>
+  _find(params?: Params): Promise<Result[] | Paginated<Result>>
 
   /**
    * Retrieve a single resource matching the given ID, skipping any service-level hooks.
@@ -100,7 +106,7 @@ export interface InternalServiceMethods<T = any, D = T, P extends AdapterParams 
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#get-id-params|Feathers API Documentation: .get(id, params)}
    */
-  $get(id: Id, params?: P): Promise<T>
+  _get(id: IdType, params?: Params): Promise<Result>
 
   /**
    * Create a new resource for this service, skipping any service-level hooks.
@@ -111,9 +117,9 @@ export interface InternalServiceMethods<T = any, D = T, P extends AdapterParams 
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#create-data-params|Feathers API Documentation: .create(data, params)}
    */
-  $create(data: Partial<D>, params?: P): Promise<T>
-  $create(data: Partial<D>[], params?: P): Promise<T[]>
-  $create(data: Partial<D> | Partial<D>[], params?: P): Promise<T | T[]>
+  _create(data: Data, params?: Params): Promise<Result>
+  _create(data: Data[], params?: Params): Promise<Result[]>
+  _create(data: Data | Data[], params?: Params): Promise<Result | Result[]>
 
   /**
    * Completely replace the resource identified by id, skipping any service-level hooks.
@@ -125,7 +131,7 @@ export interface InternalServiceMethods<T = any, D = T, P extends AdapterParams 
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#update-id-data-params|Feathers API Documentation: .update(id, data, params)}
    */
-  $update(id: Id, data: D, params?: P): Promise<T>
+  _update(id: IdType, data: Data, params?: Params): Promise<Result>
 
   /**
    * Merge any resources matching the given ID with the given data, skipping any service-level hooks.
@@ -137,9 +143,9 @@ export interface InternalServiceMethods<T = any, D = T, P extends AdapterParams 
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#patch-id-data-params|Feathers API Documentation: .patch(id, data, params)}
    */
-  $patch(id: null, data: Partial<D>, params?: P): Promise<T[]>
-  $patch(id: Id, data: Partial<D>, params?: P): Promise<T>
-  $patch(id: NullableId, data: Partial<D>, params?: P): Promise<T | T[]>
+  _patch(id: null, data: PatchData, params?: Params): Promise<Result[]>
+  _patch(id: IdType, data: PatchData, params?: Params): Promise<Result>
+  _patch(id: IdType | null, data: PatchData, params?: Params): Promise<Result | Result[]>
 
   /**
    * Remove resources matching the given ID from the this service, skipping any service-level hooks.
@@ -150,7 +156,7 @@ export interface InternalServiceMethods<T = any, D = T, P extends AdapterParams 
    * @see {@link HookLessServiceMethods}
    * @see {@link https://docs.feathersjs.com/api/services.html#remove-id-params|Feathers API Documentation: .remove(id, params)}
    */
-  $remove(id: null, params?: P): Promise<T[]>
-  $remove(id: Id, params?: P): Promise<T>
-  $remove(id: NullableId, params?: P): Promise<T | T[]>
+  _remove(id: null, params?: Params): Promise<Result[]>
+  _remove(id: IdType, params?: Params): Promise<Result>
+  _remove(id: IdType | null, params?: Params): Promise<Result | Result[]>
 }
