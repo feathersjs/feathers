@@ -16,7 +16,7 @@ describe('@feathersjs/adapter-commons/service', () => {
     METHODS.forEach((method) => {
       it(`${method}`, () => {
         const service = new MethodService({})
-        const args = []
+        const args: any[] = []
 
         if (method !== 'find') {
           args.push('test')

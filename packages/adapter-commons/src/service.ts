@@ -20,7 +20,7 @@ const alwaysMulti: { [key: string]: boolean } = {
  */
 export abstract class AdapterBase<
   T = any,
-  D = Partial<T>,
+  D = T,
   P extends AdapterParams = AdapterParams,
   O extends AdapterServiceOptions = AdapterServiceOptions
 > implements InternalServiceMethods<T, D, P>
@@ -130,8 +130,8 @@ export abstract class AdapterBase<
    */
   async _find(_params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>
   async _find(_params?: P & { paginate: false }): Promise<T[]>
-  async _find(params?: P): Promise<T | T[] | Paginated<T>>
-  async _find(params?: P): Promise<T | T[] | Paginated<T>> {
+  async _find(params?: P): Promise<T[] | Paginated<T>>
+  async _find(params?: P): Promise<T[] | Paginated<T>> {
     const query = await this.sanitizeQuery(params)
 
     return this.$find({

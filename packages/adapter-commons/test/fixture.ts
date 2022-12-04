@@ -6,23 +6,22 @@ export type Data = {
 }
 
 export class MethodBase
-  extends AdapterBase<Data, Partial<Data>, AdapterParams>
+  extends AdapterBase<Data, Data, AdapterParams>
   implements InternalServiceMethods<Data>
 {
   async $find(_params?: AdapterParams & { paginate?: PaginationOptions }): Promise<Paginated<Data>>
   async $find(_params?: AdapterParams & { paginate: false }): Promise<Data[]>
-  async $find(params?: AdapterParams): Promise<Data | Data[] | Paginated<Data>>
   async $find(params?: AdapterParams): Promise<Data | Data[] | Paginated<Data>> {
     if (params && params.paginate === false) {
-      return {
-        total: 0,
-        limit: 10,
-        skip: 0,
-        data: []
-      }
+      return []
     }
 
-    return []
+    return {
+      total: 0,
+      limit: 10,
+      skip: 0,
+      data: []
+    }
   }
 
   async $get(id: Id, _params?: AdapterParams): Promise<Data> {
@@ -51,7 +50,7 @@ export class MethodBase
   }
 
   async $update(id: NullableId, _data: Data, _params?: AdapterParams) {
-    return Promise.resolve({ id })
+    return Promise.resolve({ id: id ?? _data.id })
   }
 
   async $patch(id: null, _data: Partial<Data>, _params?: AdapterParams): Promise<Data[]>
