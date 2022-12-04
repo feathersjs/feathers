@@ -1,5 +1,4 @@
 import { Id, Paginated, Query } from '@feathersjs/feathers'
-import { hooks } from '@feathersjs/schema'
 import {
   AdapterParams,
   AdapterServiceOptions,
@@ -7,6 +6,8 @@ import {
   PaginationOptions
 } from './declarations'
 import { filterQuery } from './query'
+
+export const VALIDATED = Symbol('@feathersjs/adapter/sanitized')
 
 const alwaysMulti: { [key: string]: boolean } = {
   find: true,
@@ -99,7 +100,7 @@ export abstract class AdapterBase<
    */
   async sanitizeQuery(params: ServiceParams = {} as ServiceParams): Promise<Query> {
     // We don't need legacy query sanitisation if the query has been validated by a schema already
-    if (params.query && (params.query as any)[hooks.VALIDATED]) {
+    if (params.query && (params.query as any)[VALIDATED]) {
       return params.query || {}
     }
 

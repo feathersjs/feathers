@@ -1,9 +1,8 @@
 import { HookContext, NextFunction } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
+import { VALIDATED } from '@feathersjs/adapter-commons'
 import { Schema, Validator } from '../schema'
 import { DataValidatorMap } from '../json-schema'
-
-export const VALIDATED = Symbol('@feathersjs/schema/validated')
 
 export const validateQuery = <H extends HookContext>(schema: Schema<any> | Validator) => {
   const validator: Validator = typeof schema === 'function' ? schema : schema.validate.bind(schema)

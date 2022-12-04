@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/ban-ts-comment */
-import { hooks } from '@feathersjs/schema/lib'
 import assert from 'assert'
+import { VALIDATED } from '../src'
 import { MethodService } from './fixture'
 
 const METHODS: ['find', 'get', 'create', 'update', 'patch', 'remove'] = [
@@ -115,7 +115,7 @@ describe('@feathersjs/adapter-commons/service', () => {
 
     const validatedQuery = { name: { $bla: 'me' } }
 
-    Object.defineProperty(validatedQuery, hooks.VALIDATED, { value: true })
+    Object.defineProperty(validatedQuery, VALIDATED, { value: true })
 
     assert.deepStrictEqual(
       await service.sanitizeQuery({
