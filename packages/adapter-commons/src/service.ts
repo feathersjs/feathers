@@ -98,9 +98,9 @@ export abstract class AdapterBase<
    * @returns A new object containing the sanitized query.
    */
   async sanitizeQuery(params: ServiceParams = {} as ServiceParams): Promise<Query> {
-    // We don't need legacy query sanitisation if the query has ben validated by a schema already
+    // We don't need legacy query sanitisation if the query has been validated by a schema already
     if (params.query && (params.query as any)[hooks.VALIDATED]) {
-      return params.query
+      return params.query || {}
     }
 
     const options = this.getOptions(params)
