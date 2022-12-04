@@ -1,5 +1,6 @@
 import { AdapterBase, AdapterParams, PaginationOptions } from '../src'
 import { Id, NullableId, Paginated } from '@feathersjs/feathers'
+import { BadRequest, MethodNotAllowed } from '@feathersjs/errors/lib'
 
 export type Data = {
   id: Id
@@ -42,12 +43,6 @@ export class MethodBase extends AdapterBase<Data, Data, Partial<Data>, AdapterPa
     }
   }
 
-  async create(data: Data[], _params?: AdapterParams): Promise<Data[]>
-  async create(data: Data, _params?: AdapterParams): Promise<Data>
-  async create(data: Data | Data[], params?: AdapterParams): Promise<Data | Data[]> {
-    return this._create(data, params)
-  }
-
   async _update(id: Id, _data: Data, _params?: AdapterParams) {
     return Promise.resolve({ id: id ?? _data.id })
   }
@@ -84,15 +79,37 @@ export class MethodService extends MethodBase {
     return this._get(id, params)
   }
 
+  async create(data: Data[], _params?: AdapterParams): Promise<Data[]>
+  async create(data: Data, _params?: AdapterParams): Promise<Data>
+  async create(data: Data | Data[], params?: AdapterParams): Promise<Data | Data[]> {
+    if (Array.isArray(data) && !this.allowsMulti('create', params)) {
+      throw new MethodNotAllowed('Can not create multiple entries')
+    }
+
+    return this._create(data, params)
+  }
+
   async update(id: Id, data: Data, params?: AdapterParams) {
+    if (id === null || Array.isArray(data)) {
+      throw new BadRequest("You can not replace multiple instances. Did you mean 'patch'?")
+    }
+
     return this._update(id, data, params)
   }
 
   async patch(id: NullableId, data: Partial<Data>, params?: AdapterParams) {
+    if (id === null && !this.allowsMulti('patch', params)) {
+      throw new MethodNotAllowed('Can not patch multiple entries')
+    }
+
     return this._patch(id, data, params)
   }
 
   async remove(id: NullableId, params?: AdapterParams) {
+    if (id === null && !this.allowsMulti('remove', params)) {
+      throw new MethodNotAllowed('Can not remove multiple entries')
+    }
+
     return this._remove(id, params)
   }
 }

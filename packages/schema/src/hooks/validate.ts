@@ -3,6 +3,8 @@ import { BadRequest } from '@feathersjs/errors'
 import { Schema, Validator } from '../schema'
 import { DataValidatorMap } from '../json-schema'
 
+export const VALIDATED = Symbol('@feathersjs/schema/validated')
+
 export const validateQuery = <H extends HookContext>(schema: Schema<any> | Validator) => {
   const validator: Validator = typeof schema === 'function' ? schema : schema.validate.bind(schema)
 
@@ -11,6 +13,8 @@ export const validateQuery = <H extends HookContext>(schema: Schema<any> | Valid
 
     try {
       const query = await validator(data)
+
+      Object.defineProperty(query, VALIDATED, { value: true })
 
       context.params = {
         ...context.params,
@@ -41,6 +45,8 @@ export const validateData = <H extends HookContext>(schema: Schema<any> | DataVa
         } else {
           context.data = await validator(data)
         }
+
+        Object.defineProperty(context.data, VALIDATED, { value: true })
       } catch (error: any) {
         throw error.ajv ? new BadRequest(error.message, error.errors) : error
       }

@@ -39,10 +39,14 @@ app.use('/messages', service({ id, events, paginate }))
 ### Options
 
 - `id` (_optional_) - The name of the id field property (usually set by default to `id` or `_id`).
-- `events` (_optional_) - A list of [custom service events](../events.md#custom-events) sent by this service
 - `paginate` (_optional_) - A [pagination object](#pagination) containing a `default` and `max` page size
-- `allow` (_optional_) - A list of additional non-standard query parameters to allow (e.g `[ '$regex', '$populate' ]`)
 - `multi` (_optional_, default: `false`) - Allow `create` with arrays and `patch` and `remove` with id `null` to change multiple items. Can be `true` for all methods or an array of allowed methods (e.g. `[ 'remove', 'create' ]`)
+
+The following legacy options are still available but should be avoided:
+
+- `events` (_optional_, _deprecated_) - A list of [custom service events](../events.md#custom-events) sent by this service. Use the `events` option when [registering the service with app.use](../application.md#usepath-service--options) instead.
+- `operators` (_optional_, _deprecated_) - A list of additional non-standard query parameters to allow (e.g `[ '$regex' ]`).**Not necessary** when using a [query schema validator](../schema/validators.md#validatequery)
+- `filters` (_optional_, _deprecated_) - A list of top level `$` query parameters to allow (e.g. `[ '$populate' ]`). **Not necessary** when using a [query schema validator](../schema/validators.md#validatequery)
 
 ## Pagination
 

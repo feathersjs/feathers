@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/ban-ts-comment */
+import { hooks } from '@feathersjs/schema/lib'
 import assert from 'assert'
 import { MethodService } from './fixture'
 
@@ -111,6 +112,18 @@ describe('@feathersjs/adapter-commons/service', () => {
       }),
       { name: { $bla: 'Dave' } }
     )
+
+    const validatedQuery = { name: { $bla: 'me' } }
+
+    Object.defineProperty(validatedQuery, hooks.VALIDATED, { value: true })
+
+    assert.deepStrictEqual(
+      await service.sanitizeQuery({
+        query: validatedQuery
+      }),
+      validatedQuery,
+      'validated queries are not sanitized'
+    )
   })
 
   it('getOptions', () => {
@@ -154,7 +167,7 @@ describe('@feathersjs/adapter-commons/service', () => {
     })
   })
 
-  it.only('allowsMulti', () => {
+  it('allowsMulti', () => {
     context('with true', () => {
       const service = new MethodService({ multi: true })
 

@@ -34,11 +34,15 @@ export interface AdapterServiceOptions {
   paginate?: PaginationParams
   /**
    * A list of additional property query operators to allow in a query
+   *
+   * @deprecated No longer needed when a query schema is used
    */
   operators?: string[]
   /**
    * An object of additional top level query filters, e.g. `{ $populate: true }`
    * Can also be a converter function like `{ $ignoreCase: (value) => value === 'true' ? true : false }`
+   *
+   * @deprecated No longer needed when a query schema is used
    */
   filters?: FilterSettings
   /**
@@ -46,7 +50,7 @@ export interface AdapterServiceOptions {
    */
   events?: string[]
   /**
-   * @deprecated renamed to `operators`.
+   * @deprecated No longer needed when a query schema is used
    */
   whitelist?: string[]
 }
