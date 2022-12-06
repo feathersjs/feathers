@@ -58,6 +58,7 @@
     "prettier": "^2.7.1"
   },
   "devDependencies": {
+    "@feathersjs/adapter-commons": "^5.0.0-pre.33",
     "@feathersjs/authentication": "^5.0.0-pre.33",
     "@feathersjs/authentication-client": "^5.0.0-pre.33",
     "@feathersjs/authentication-local": "^5.0.0-pre.33",

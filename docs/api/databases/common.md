@@ -39,10 +39,14 @@ app.use('/messages', service({ id, events, paginate }))
 ### Options
 
 - `id` (_optional_) - The name of the id field property (usually set by default to `id` or `_id`).
-- `events` (_optional_) - A list of [custom service events](../events.md#custom-events) sent by this service
 - `paginate` (_optional_) - A [pagination object](#pagination) containing a `default` and `max` page size
-- `allow` (_optional_) - A list of additional non-standard query parameters to allow (e.g `[ '$regex', '$populate' ]`)
 - `multi` (_optional_, default: `false`) - Allow `create` with arrays and `patch` and `remove` with id `null` to change multiple items. Can be `true` for all methods or an array of allowed methods (e.g. `[ 'remove', 'create' ]`)
+
+The following legacy options are still available but should be avoided:
+
+- `events` (_optional_, **deprecated**) - A list of [custom service events](../events.md#custom-events) sent by this service. Use the `events` option when [registering the service with app.use](../application.md#usepath-service--options) instead.
+- `operators` (_optional_, **deprecated**) - A list of additional non-standard query parameters to allow (e.g `[ '$regex' ]`). Not necessary when using a [query schema validator](../schema/validators.md#validatequery)
+- `filters` (_optional_, **deprecated**) - A list of top level `$` query parameters to allow (e.g. `[ '$populate' ]`). Not necessary when using a [query schema validator](../schema/validators.md#validatequery)
 
 ## Pagination
 
@@ -92,13 +96,17 @@ app.service('todos').find({
 })
 ```
 
-> **Note:** Disabling or changing the default pagination is not available in the client. Only `params.query` is passed to the server (also see a [workaround here](https://github.com/feathersjs/feathers/issues/382#issuecomment-238407741))
+<BlockQuote type="info" label="note">
+
+Disabling or changing the default pagination is not available in the client. Only `params.query` is passed to the server (also see a [workaround here](https://github.com/feathersjs/feathers/issues/382#issuecomment-238407741))
+
+</BlockQuote>
 
 ## Extending Adapters
 
-There are two ways to extend existing database adapters. Either by extending the ES6 base class or by adding functionality through hooks.
+There are two ways to extend existing database adapters. Either by extending the base class or by adding functionality through hooks.
 
-### Classes (ES6)
+### Classes
 
 All modules also export an [ES6 class](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes) as `Service` that can be directly extended like this:
 

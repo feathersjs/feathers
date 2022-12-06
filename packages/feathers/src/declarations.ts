@@ -66,43 +66,70 @@ export interface ClientService<
   remove(id: null, params?: P): Promise<Result[]>
 }
 
-export interface ServiceMethods<T = any, D = Partial<T>, P = Params> {
-  find(params?: P): Promise<T | T[]>
+export interface ServiceMethods<
+  Result = any,
+  Data = Partial<Result>,
+  ServiceParams = Params,
+  PatchData = Partial<Data>
+> {
+  find(params?: ServiceParams): Promise<Result | Result[]>
 
-  get(id: Id, params?: P): Promise<T>
+  get(id: Id, params?: ServiceParams): Promise<Result>
 
-  create(data: D, params?: P): Promise<T>
+  create(data: Data, params?: ServiceParams): Promise<Result>
 
-  update(id: NullableId, data: D, params?: P): Promise<T | T[]>
+  update(id: NullableId, data: Data, params?: ServiceParams): Promise<Result | Result[]>
 
-  patch(id: NullableId, data: D, params?: P): Promise<T | T[]>
+  patch(id: NullableId, data: PatchData, params?: ServiceParams): Promise<Result | Result[]>
 
-  remove(id: NullableId, params?: P): Promise<T | T[]>
+  remove(id: NullableId, params?: ServiceParams): Promise<Result | Result[]>
 
   setup?(app: Application, path: string): Promise<void>
 
   teardown?(app: Application, path: string): Promise<void>
 }
 
-export interface ServiceOverloads<T = any, D = Partial<T>, P = Params> {
-  create?(data: D[], params?: P): Promise<T[]>
+export interface ServiceOverloads<
+  Result = any,
+  Data = Partial<Result>,
+  ServiceParams = Params,
+  PatchData = Partial<Data>
+> {
+  create?(data: Data[], params?: ServiceParams): Promise<Result[]>
 
-  update?(id: Id, data: D, params?: P): Promise<T>
+  update?(id: Id, data: Data, params?: ServiceParams): Promise<Result>
 
-  update?(id: null, data: D, params?: P): Promise<T[]>
+  update?(id: null, data: Data, params?: ServiceParams): Promise<Result[]>
 
-  patch?(id: Id, data: D, params?: P): Promise<T>
+  patch?(id: Id, data: PatchData, params?: ServiceParams): Promise<Result>
 
-  patch?(id: null, data: D, params?: P): Promise<T[]>
+  patch?(id: null, data: PatchData, params?: ServiceParams): Promise<Result[]>
 
-  remove?(id: Id, params?: P): Promise<T>
+  remove?(id: Id, params?: ServiceParams): Promise<Result>
 
-  remove?(id: null, params?: P): Promise<T[]>
+  remove?(id: null, params?: ServiceParams): Promise<Result[]>
 }
 
-export type Service<T = any, D = Partial<T>, P = Params> = ServiceMethods<T, D, P> & ServiceOverloads<T, D, P>
+/**
+ * A complete service interface. The `ServiceInterface` type should be preferred for customs service
+ * implementations
+ */
+export type Service<
+  Result = any,
+  Data = Partial<Result>,
+  ServiceParams = Params,
+  PatchData = Partial<Data>
+> = ServiceMethods<Result, Data, ServiceParams> & ServiceOverloads<Result, Data, ServiceParams, PatchData>
 
-export type ServiceInterface<T = any, D = Partial<T>, P = Params> = Partial<ServiceMethods<T, D, P>>
+/**
+ * The `Service` service interface but with none of the methods required.
+ */
+export type ServiceInterface<
+  Result = any,
+  Data = Partial<Result>,
+  ServiceParams = Params,
+  PatchData = Partial<Data>
+> = Partial<ServiceMethods<Result, Data, ServiceParams, PatchData>>
 
 export interface ServiceAddons<A = Application, S = Service> extends EventEmitter {
   id?: string
