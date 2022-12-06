@@ -65,7 +65,7 @@
     "babel-loader": "^9.1.0",
     "mocha": "^10.1.0",
     "mocha-puppeteer": "^0.14.0",
-    "node-fetch": "^3.3.0",
+    "node-fetch": "^2.6.1",
     "shx": "^0.3.4",
     "socket.io-client": "^4.5.4",
     "superagent": "^8.0.4",
