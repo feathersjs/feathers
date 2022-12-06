@@ -1,5 +1,5 @@
 import { Type, TObject, TInteger, TOptional, TSchema, TIntersect, ObjectOptions } from '@sinclair/typebox'
-import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
+import { jsonSchema, Validator, DataValidatorMap, Ajv, SUPPORTED_TYPES } from '@feathersjs/schema'
 
 export * from '@sinclair/typebox'
 export * from './default-schemas'
@@ -44,7 +44,14 @@ export function StringEnum<T extends string[]>(allowedValues: [...T]) {
 
 const arrayOfKeys = <T extends TObject>(type: T) => {
   const keys = Object.keys(type.properties)
-  return Type.Unsafe<(keyof T['properties'])[]>({ type: 'array', items: { type: 'string', enum: keys } })
+  return Type.Unsafe<(keyof T['properties'])[]>({
+    type: 'array',
+    maxItems: keys.length,
+    items: {
+      type: 'string',
+      ...(keys.length > 0 ? { enum: keys } : {})
+    }
+  })
 }
 
 /**
@@ -102,8 +109,17 @@ type QueryProperty<T extends TSchema> = ReturnType<typeof queryProperty<T>>
 export const queryProperties = <T extends TObject>(definition: T) => {
   const properties = Object.keys(definition.properties).reduce((res, key) => {
     const result = res as any
+    const value = definition.properties[key]
 
-    result[key] = queryProperty(definition.properties[key])
+    if (value.$ref || !SUPPORTED_TYPES.includes(value.type)) {
+      throw new Error(
+        `Can not create query syntax schema for property '${key}'. Only types ${SUPPORTED_TYPES.join(
+          ', '
+        )} are allowed.`
+      )
+    }
+
+    result[key] = queryProperty(value)
 
     return result
   }, {} as { [K in keyof T['properties']]: QueryProperty<T['properties'][K]> })
