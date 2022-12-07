@@ -89,7 +89,7 @@ export const setKoaParams: Middleware = async (ctx, next) => {
   await next()
 }
 
-export const getServiceOptions = (
+export const authenticationServiceOptions = (
   service: AuthenticationService,
   settings: OauthSetupSettings
 ): ServiceOptions => {

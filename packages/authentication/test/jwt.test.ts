@@ -20,7 +20,7 @@ describe('authentication/jwt', () => {
   let accessToken: string
   let payload: any
 
-  const userDispatchResolver = resolve({
+  const userDispatchResolver = resolve<any, any>({
     converter: async () => {
       return {
         dispatch: true,

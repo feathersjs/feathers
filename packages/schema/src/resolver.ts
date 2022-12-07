@@ -1,15 +1,39 @@
 import { BadRequest } from '@feathersjs/errors'
 import { Schema } from './schema'
 
-export type PropertyResolver<T, V, C> = (
+export type PropertyResolver<T, V, C> = ((
   value: V | undefined,
+  obj: T,
+  context: C,
+  status: ResolverStatus<T, C>
+) => Promise<V | undefined>) & { [IS_VIRTUAL]?: boolean }
+
+export type VirtualResolver<T, V, C> = (
   obj: T,
   context: C,
   status: ResolverStatus<T, C>
 ) => Promise<V | undefined>
 
+export const IS_VIRTUAL = Symbol('@feathersjs/schema/virtual')
+
+/**
+ * Create a resolver for a virtual property. A virtual property is a property that
+ * is computed and never has an initial value.
+ *
+ * @param virtualResolver The virtual resolver function
+ * @returns The property resolver function
+ */
+export const virtual = <T, V, C>(virtualResolver: VirtualResolver<T, V, C>) => {
+  const propertyResolver: PropertyResolver<T, V, C> = async (_value, obj, context, status) =>
+    virtualResolver(obj, context, status)
+
+  propertyResolver[IS_VIRTUAL] = true
+
+  return propertyResolver
+}
+
 export type PropertyResolverMap<T, C> = {
-  [key in keyof T]?: PropertyResolver<T, T[key], C>
+  [key in keyof T]?: PropertyResolver<T, T[key], C> | ReturnType<typeof virtual<T, T[key], C>>
 }
 
 export type ResolverConverter<T, C> = (
@@ -47,10 +71,12 @@ export interface ResolverStatus<T, C> {
 
 export class Resolver<T, C> {
   readonly _type!: T
-  protected propertyNames: string[]
+  public propertyNames: (keyof T)[]
+  public virtualNames: (keyof T)[]
 
-  constructor(public options: ResolverConfig<T, C>) {
-    this.propertyNames = Object.keys(options.properties)
+  constructor(public readonly options: ResolverConfig<T, C>) {
+    this.propertyNames = Object.keys(options.properties) as any as (keyof T)[]
+    this.virtualNames = this.propertyNames.filter((name) => options.properties[name][IS_VIRTUAL])
   }
 
   /**
@@ -109,7 +135,7 @@ export class Resolver<T, C> {
       Array.isArray(status?.properties)
         ? status?.properties
         : // By default get all data and resolver keys but remove duplicates
-          [...new Set(Object.keys(data).concat(this.propertyNames))]
+          [...new Set(Object.keys(data).concat(this.propertyNames as string[]))]
     ) as (keyof T)[]
 
     const result: any = {}

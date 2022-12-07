@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import { Application, HookContext, getServiceOptions } from '@feathersjs/feathers'
+import { Application, HookContext, getServiceOptions, defaultServiceEvents } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
 import { Channel } from './channel/base'
 import { CombinedChannel } from './channel/combined'
@@ -90,7 +90,7 @@ export function publishMixin() {
         event = ALL_EVENTS
       }
 
-      const { serviceEvents } = getServiceOptions(this)
+      const { serviceEvents = defaultServiceEvents } = getServiceOptions(this) || {}
 
       if (event !== ALL_EVENTS && !serviceEvents.includes(event)) {
         throw new Error(`'${event.toString()}' is not a valid service event`)
