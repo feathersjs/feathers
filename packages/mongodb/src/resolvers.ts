@@ -19,6 +19,10 @@ export async function resolveQueryObjectId(
 ): Promise<IdQueryObject<ObjectId>>
 export async function resolveQueryObjectId(value: ObjectIdParam): Promise<ObjectId>
 export async function resolveQueryObjectId(value: ObjectIdParam | IdQueryObject<ObjectIdParam>) {
+  if (value === undefined || value === null) {
+    return undefined
+  }
+
   if (typeof value === 'string' || typeof value === 'number' || value instanceof ObjectId) {
     return toObjectId(value)
   }
