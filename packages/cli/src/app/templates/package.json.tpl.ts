@@ -8,7 +8,8 @@ const jsPackageJson = (lib: string) => ({
     dev: `nodemon ${lib}/`,
     prettier: 'npx prettier "**/*.js" --write',
     mocha: 'cross-env NODE_ENV=test mocha test/ --recursive --exit',
-    test: 'npm run mocha'
+    test: 'npm run mocha',
+    'bundle:client': 'npm pack --pack-destination ./public'
   }
 })
 
@@ -20,7 +21,8 @@ const tsPackageJson = (lib: string) => ({
     prettier: 'npx prettier "**/*.ts" --write',
     mocha:
       'cross-env NODE_ENV=test mocha test/ --require ts-node/register --recursive --extension .ts --exit',
-    test: 'npm run mocha'
+    test: 'npm run mocha',
+    'bundle:client': 'npm run compile && npm pack --pack-destination ./public'
   }
 })
 
@@ -60,6 +62,7 @@ const packageJson = ({
     lib,
     test
   },
+  files: ['lib/client.js', 'lib/**/*.d.ts'],
   main: language === 'ts' ? 'lib/client' : `${lib}/client`,
   ...(language === 'ts' ? tsPackageJson(lib) : jsPackageJson(lib))
 })
