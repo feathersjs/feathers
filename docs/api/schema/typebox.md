@@ -71,11 +71,7 @@ const T = {}
 
 ##### Unknown
 
-<<<<<<< HEAD
-Similar to [any](#any), it creates a schema that will always pass validation.  It's the equivalent of TypeScript's [unknown](https://www.typescriptlang.org/docs/handbook/2/functions.html#unknown) type.
-=======
 Similar to [any](#any), it creates a schema that will always pass validation. It's the equivalent of TypeScript's [unknown](https://www.typescriptlang.org/docs/handbook/2/functions.html#unknown) type.
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```js
 const T = Type.Unknown()
@@ -91,11 +87,7 @@ const T = {}
 
 ##### String
 
-<<<<<<< HEAD
-Creates a string schema and type. `Type.String` will generally be used for validating dates sent from clients, as well.  See [Validating Dates](#validating-dates).
-=======
 Creates a string schema and type. `Type.String` will generally be used for validating dates sent from clients, as well. See [Validating Dates](#validating-dates).
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```js
 const T = Type.String()
@@ -113,11 +105,7 @@ const T = {
 
 ###### String Formats Bundled
 
-<<<<<<< HEAD
-Strings are the most versatile, serializable type which can be transmitted from clients. Because of their versatility, several custom string formatters are supported, by default, in Feathers CLI-generated applications.  [Additional formats](#additional-formats) can be manually enabled.
-=======
 Strings are the most versatile, serializable type which can be transmitted from clients. Because of their versatility, several custom string formatters are supported, by default, in Feathers CLI-generated applications. [Additional formats](#additional-formats) can be manually enabled.
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 <hr/>
 
@@ -328,17 +316,10 @@ Be aware that there is also an [ajv-formats-draft2019 package](https://github.co
 
 ###### iso-time
 
-<<<<<<< HEAD
-Must be manually enabled. See [Additional Formats](#additional-formats). 
-
-```ts
-Type.String({ format: 'iso-time'})
-=======
 Must be manually enabled. See [Additional Formats](#additional-formats).
 
 ```ts
 Type.String({ format: 'iso-time' })
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 ```
 
 Validates against UTC-based time format:
@@ -384,11 +365,7 @@ The sections of this format are described as follows:
 
 ###### Duration
 
-<<<<<<< HEAD
-Must be manually enabled. See [Additional Formats](#additional-formats). 
-=======
 Must be manually enabled. See [Additional Formats](#additional-formats).
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```ts
 Type.String({ format: 'duration' })
@@ -416,11 +393,7 @@ duration          = "P" (dur-date / dur-time / dur-week)
 
 ###### Byte
 
-<<<<<<< HEAD
-Must be manually enabled. See [Additional Formats](#additional-formats). 
-=======
 Must be manually enabled. See [Additional Formats](#additional-formats).
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```ts
 Type.String({ format: 'byte' })
@@ -432,11 +405,7 @@ Validates base64-encoded data according to the [openApi 3.0.0 specification](htt
 
 ###### int32
 
-<<<<<<< HEAD
-Must be manually enabled. See [Additional Formats](#additional-formats). 
-=======
 Must be manually enabled. See [Additional Formats](#additional-formats).
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```ts
 Type.String({ format: 'int32' })
@@ -448,11 +417,7 @@ Validates signed (+/-), 32-bit integers according to the [openApi 3.0.0 specific
 
 ###### int64
 
-<<<<<<< HEAD
-Must be manually enabled. See [Additional Formats](#additional-formats). 
-=======
 Must be manually enabled. See [Additional Formats](#additional-formats).
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```ts
 Type.String({ format: 'int64' })
@@ -464,11 +429,7 @@ Validates signed (+/-), 64-bit integers according to the [openApi 3.0.0 specific
 
 ###### float
 
-<<<<<<< HEAD
-Must be manually enabled. See [Additional Formats](#additional-formats). 
-=======
 Must be manually enabled. See [Additional Formats](#additional-formats).
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```ts
 Type.String({ format: 'float' })
@@ -480,11 +441,7 @@ Validates floats according to the [openApi 3.0.0 specification](https://spec.ope
 
 ###### double
 
-<<<<<<< HEAD
-Must be manually enabled. See [Additional Formats](#additional-formats). 
-=======
 Must be manually enabled. See [Additional Formats](#additional-formats).
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```ts
 Type.String({ format: 'double' })
@@ -496,11 +453,7 @@ Validates doubles according to the [openApi 3.0.0 specification](https://spec.op
 
 ###### password
 
-<<<<<<< HEAD
-Must be manually enabled. See [Additional Formats](#additional-formats). 
-=======
 Must be manually enabled. See [Additional Formats](#additional-formats).
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```ts
 Type.String({ format: 'password' })
@@ -512,11 +465,7 @@ Validates passwords according to the [openApi 3.0.0 specification](https://spec.
 
 ###### binary
 
-<<<<<<< HEAD
-Must be manually enabled. See [Additional Formats](#additional-formats). 
-=======
 Must be manually enabled. See [Additional Formats](#additional-formats).
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```ts
 Type.String({ format: 'binary' })
@@ -663,11 +612,7 @@ const T = {
 
 ##### Object
 
-<<<<<<< HEAD
-Creates an object schema where all properties are required by default.  You can use the [Type.Optional](#optional) utility to mark a key as optional.
-=======
 Creates an object schema where all properties are required by default. You can use the [Type.Optional](#optional) utility to mark a key as optional.
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```js
 const T = Type.Object({
@@ -816,14 +761,7 @@ const T = {
 Creates a type which can be one of the types in the provided array. It's the equivalent to using `|` to form a TypeScript [Union](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html#unions).
 
 ```js
-<<<<<<< HEAD
-const T = Type.Union([
-  Type.String(),
-  Type.Number(),
-])
-=======
 const T = Type.Union([Type.String(), Type.Number()])
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 ```
 
 ```js
@@ -832,14 +770,7 @@ type T = string | number
 
 ```js
 const T = {
-<<<<<<< HEAD
-  anyOf: [
-    { type: 'string' },
-    { type: 'number' },
-  ]
-=======
   anyOf: [{ type: 'string' }, { type: 'number' }]
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 }
 ```
 
@@ -875,11 +806,7 @@ const T = {
 
 ##### Never
 
-<<<<<<< HEAD
-Creates a type that will never validate if the attribute is present.  This is useful if you are allowing [additionalProperties](#additionalproperties) but need to prevent using specific keys.
-=======
 Creates a type that will never validate if the attribute is present. This is useful if you are allowing [additionalProperties](#additionalproperties) but need to prevent using specific keys.
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```js
 const T = Type.Never()
@@ -984,11 +911,7 @@ const T = {
 
 ##### Pick
 
-<<<<<<< HEAD
-Forms a new object containing only the array of keys provided in the second argument.  It's the JSON Schema equivalent of TypeScript's [Pick](https://www.typescriptlang.org/docs/handbook/utility-types.html#picktype-keys) utility type.
-=======
 Forms a new object containing only the array of keys provided in the second argument. It's the JSON Schema equivalent of TypeScript's [Pick](https://www.typescriptlang.org/docs/handbook/utility-types.html#picktype-keys) utility type.
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```js
 const T = Type.Pick(
@@ -1022,12 +945,7 @@ const T = {
 
 ##### Omit
 
-<<<<<<< HEAD
-Forms a new object containing all keys except those provided in the second argument.  It's the JSON Schema equivalent of TypeScript's [Omit](https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys) utility type.
-
-=======
 Forms a new object containing all keys except those provided in the second argument. It's the JSON Schema equivalent of TypeScript's [Omit](https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys) utility type.
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```js
 const T = Type.Omit(
@@ -1092,11 +1010,7 @@ const T = {
 
 #### Readonly
 
-<<<<<<< HEAD
-Allows marking a key in [Type.Object](#object) as readonly.  It's the equivalent of TypeScript's [Readonly](https://www.typescriptlang.org/docs/handbook/utility-types.html#readonlytype) utility type.
-=======
 Allows marking a key in [Type.Object](#object) as readonly. It's the equivalent of TypeScript's [Readonly](https://www.typescriptlang.org/docs/handbook/utility-types.html#readonlytype) utility type.
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```js
 const T = Type.Object({
@@ -1346,11 +1260,7 @@ Utilities in this section require updating `src/schemas/validators.ts` to the [E
 
 #### Constructor
 
-<<<<<<< HEAD
-Verifies that the value is a constructor with typed arguments and return value.
-=======
 Verifies that the value is a constructor with typed arguments and return value. Requires [Extended Ajv Configuration](#extended-configuration).
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```js
 const T = Type.Constructor([Type.String(), Type.Number()], Type.Boolean())
@@ -1378,11 +1288,7 @@ const T = {
 
 #### Function
 
-<<<<<<< HEAD
-Verifies that the value is a function with typed arguments and return value.
-=======
 Verifies that the value is a function with typed arguments and return value. Requires [Extended Ajv Configuration](#extended-configuration).
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```js
 const T = Type.Function([Type.String(), Type.Number()], Type.Boolean())
@@ -1409,8 +1315,6 @@ const T = {
 ```
 
 #### Promise
-<<<<<<< HEAD
-=======
 
 Verifies that the value is an instanceof Promise which resolves to the provided type. Requires [Extended Ajv Configuration](#extended-configuration).
 
@@ -1451,9 +1355,6 @@ const T = {
 #### Date
 
 Verifies that the value is an instanceof Date. This is likely not the validator to use for storing dates in a database. See [Validating Dates](#validating-dates). Requires [Extended Ajv Configuration](#extended-configuration).
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
-
-Verifies that the value is an instanceof Promise which resolves to the provided type.
 
 ```js
 const T = Type.Date()
@@ -1470,51 +1371,9 @@ const T = {
 }
 ```
 
-#### Uint8Array
-
-Verifies that the value is an instanceof Uint8Array.
-
-```js
-const T = Type.Uint8Array()
-```
-
-```js
-type T = Uint8Array
-```
-
-```js
-const T = {
-  type: 'object',
-  instanceOf: 'Uint8Array',
-}
-```
-
-#### Date
-
-Verifies that the value is an instanceof Date. This is likely not the validator to use for storing dates in a database. See [Validating Dates](#validating-dates).
-
-```js
-const T = Type.Date()
-```
-
-```js
-type T = Date
-```
-
-```js
-const T = {
-  type: 'object',
-  instanceOf: 'Date',
-}
-```
-
 #### Undefined
 
-<<<<<<< HEAD
-Verifies that the value is `undefined`.
-=======
 Verifies that the value is `undefined`. Requires [Extended Ajv Configuration](#extended-configuration).
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```js
 const T = Type.Undefined()
@@ -1533,11 +1392,7 @@ const T = {
 
 #### Void
 
-<<<<<<< HEAD
-Verifies that the value is `null`.
-=======
 Verifies that the value is `null`. Requires [Extended Ajv Configuration](#extended-configuration).
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```js
 const T = Type.Void()
@@ -1566,11 +1421,7 @@ const R = Type.Ref(T)
 
 When validating dates sent from the client, the most spec-compliant solution is to use the [ISO8601 format](https://www.rfc-editor.org/rfc/rfc3339#section-5.6). For example, SQLite date values are strings in the [ISO8601 format](https://www.rfc-editor.org/rfc/rfc3339#section-5.6), which is `YYYY-MM-DDTHH:MM:SS.SSS`. The character between the date and time formats is generally specified as the letter `T`, as in `2016-01-01T10:20:05.123`. For date values, you implement this spec with `Type.String` and not `Type.Date`.
 
-<<<<<<< HEAD
-When using AJV you can validate this format with the `ajv-formats` package, which the Feathers CLI installs for you.  Using it with `@feathersjs/typebox` looks like this:
-=======
 When using AJV you can validate this format with the `ajv-formats` package, which the Feathers CLI installs for you. Using it with `@feathersjs/typebox` looks like this:
->>>>>>> 31f9a127a4e60d747673fbac00a1e28366b2c8ac
 
 ```ts
 const userSchema = Type.Object(
