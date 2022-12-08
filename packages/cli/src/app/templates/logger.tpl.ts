@@ -20,7 +20,7 @@ export const logger = createLogger({
 })
 `
 
-export const logErrorTemplate = /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/logging.html
+export const logErrorTemplate = /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/log-error.html
 import type { HookContext, NextFunction } from '../declarations'
 import { logger } from '../logger'
 

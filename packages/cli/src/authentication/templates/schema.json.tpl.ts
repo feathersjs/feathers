@@ -10,7 +10,8 @@ const template = ({
   authStrategies,
   type,
   relative
-}: AuthenticationGeneratorContext) => /* ts */ `import { resolve, querySyntax, getValidator, getDataValidator } from '@feathersjs/schema'
+}: AuthenticationGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
+import { resolve, querySyntax, getValidator, getDataValidator } from '@feathersjs/schema'
 import type { FromSchema } from '@feathersjs/schema'
 ${localTemplate(authStrategies, `import { passwordHash } from '@feathersjs/authentication-local'`)}
 

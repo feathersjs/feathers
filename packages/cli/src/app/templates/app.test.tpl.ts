@@ -4,7 +4,7 @@ import { AppGeneratorContext } from '../index'
 
 const template = ({
   lib
-}: AppGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
+}: AppGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/app.test.html
 import assert from 'assert'
 import axios from 'axios'
 import type { Server } from 'http'

@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Client
 
 A generated application can used as an npm module that provides a [Feathers client](../../api/client.md). It gives you a fully typed client that can be installed in any TypeScript (e.g. React, VueJS, React Native etc.) application.

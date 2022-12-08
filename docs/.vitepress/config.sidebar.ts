@@ -191,7 +191,20 @@ export default {
         },
         {
           text: '📂 test',
-          items: []
+          items: [
+            {
+              text: '📄 client.test',
+              link: '/guides/cli/client.test.md'
+            },
+            {
+              text: '📄 app.test',
+              link: '/guides/cli/app.test.md'
+            },
+            {
+              text: '📄 &lt;service&gt;.test',
+              link: '/guides/cli/service.test.md'
+            }
+          ]
         },
         {
           text: '📄 .prettierrc',
