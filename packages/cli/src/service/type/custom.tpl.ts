@@ -2,7 +2,13 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-export const template = ({ className, upperName, schema, fileName, relative }: ServiceGeneratorContext) => `
+export const template = ({
+  className,
+  upperName,
+  schema,
+  fileName,
+  relative
+}: ServiceGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
 import type { Id, NullableId, Params, ServiceInterface } from '@feathersjs/feathers'
 
 import type { Application } from '${relative}/declarations'

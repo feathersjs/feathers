@@ -1,33 +1,29 @@
-import { generator, toFile } from '@feathershq/pinion'
+import { generator, toFile, writeJSON } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
-const validatorTemplate = /* ts */ `import { Ajv, addFormats } from '@feathersjs/schema'
-import type { FormatsPluginOptions } from '@feathersjs/schema'
+const defaultConfig = ({}: AppGeneratorContext) => ({
+  host: 'localhost',
+  port: 3030,
+  public: './public/',
+  origins: ['http://localhost:3030'],
+  paginate: {
+    default: 10,
+    max: 50
+  }
+})
 
-const formats: FormatsPluginOptions = [
-  'date-time', 
-  'time', 
-  'date', 
-  'email',  
-  'hostname', 
-  'ipv4', 
-  'ipv6', 
-  'uri', 
-  'uri-reference', 
-  'uuid',
-  'uri-template', 
-  'json-pointer', 
-  'relative-json-pointer', 
-  'regex'
-]
+const customEnvironment = {
+  port: {
+    __name: 'PORT',
+    __format: 'number'
+  },
+  host: 'HOSTNAME'
+}
 
-export const dataValidator = addFormats(new Ajv({}), formats)
-
-export const queryValidator = addFormats(new Ajv({
-  coerceTypes: true
-}), formats)
-`
+const testConfig = {
+  port: 8998
+}
 
 const configurationJsonTemplate =
   ({}: AppGeneratorContext) => /* ts */ `import { defaultAppSettings, getValidator } from '@feathersjs/schema'
@@ -74,16 +70,13 @@ export const configurationValidator = getValidator(configurationSchema, dataVali
 
 export const generate = (ctx: AppGeneratorContext) =>
   generator(ctx)
+    .then(writeJSON(defaultConfig, toFile('config', 'default.json')))
+    .then(writeJSON(testConfig, toFile('config', 'test.json')))
+    .then(writeJSON(customEnvironment, toFile('config', 'custom-environment-variables.json')))
     .then(
       renderSource(
         async (ctx) =>
           ctx.schema === 'typebox' ? configurationTypeboxTemplate(ctx) : configurationJsonTemplate(ctx),
-        toFile<AppGeneratorContext>(({ lib }) => lib, 'schemas', 'configuration')
-      )
-    )
-    .then(
-      renderSource(
-        validatorTemplate,
-        toFile<AppGeneratorContext>(({ lib }) => lib, 'schemas', 'validators')
+        toFile<AppGeneratorContext>(({ lib }) => lib, 'configuration')
       )
     )

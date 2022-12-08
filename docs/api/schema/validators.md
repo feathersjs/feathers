@@ -14,7 +14,7 @@ Ajv and most other validation libraries are only used for ensuring data is valid
 
 ## Usage
 
-The following is the standard `validators.ts` file that sets up a validator for data and querys (for which string types will be coerced automatically). It also sets up a collection of additional formats using [ajv-formats](https://ajv.js.org/packages/ajv-formats.html). The validators in this file can be customized according to the [Ajv documentation](https://ajv.js.org/) and [its plugins](https://ajv.js.org/packages/). You can find the available Ajv options in the [Ajs class API docs](https://ajv.js.org/options.html).
+The following is the standard `validators.ts` file that sets up a validator for data and querys (for which string types will be coerced automatically). It also sets up a collection of additional formats using [ajv-formats](https://ajv.js.org/packages/ajv-formats.html). The validators in this file can be customized according to the [Ajv documentation](https://ajv.js.org/) and [its plugins](https://ajv.js.org/packages/). You can find the available Ajv options in the [Ajv class API docs](https://ajv.js.org/options.html).
 
 ```ts
 import { Ajv, addFormats } from '@feathersjs/schema'

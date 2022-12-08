@@ -4,7 +4,8 @@ import { ServiceGeneratorContext } from '../index'
 
 const migrationTemplate = ({
   kebabPath
-}: ServiceGeneratorContext) => /* ts */ `import type { Knex } from 'knex'
+}: ServiceGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/knexfile.html
+import type { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('${kebabPath}', table => {
@@ -25,7 +26,8 @@ export const template = ({
   schema,
   fileName,
   relative
-}: ServiceGeneratorContext) => /* ts */ `import type { Params } from '@feathersjs/feathers'
+}: ServiceGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
+import type { Params } from '@feathersjs/feathers'
 import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 

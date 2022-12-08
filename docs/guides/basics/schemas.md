@@ -30,6 +30,9 @@ While schemas and resolvers can be used outside of a Feather application, you wi
 - **Query** schemas and resolvers validate and convert the query string and can also be used for additional limitations like only allowing a user to see and modify their own data
 - **External** resolvers that return a safe version of the data (e.g. hiding a users password) that can be sent to external clients
 
+<hr />
+<DatabaseSelect />
+
 ## Adding a user avatar
 
 Let's extend our existing users schema to add an `avatar` property so that our users can have a profile image.
@@ -55,7 +58,7 @@ import type { Static } from '@feathersjs/typebox'
 import { passwordHash } from '@feathersjs/authentication-local'
 
 import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../schemas/validators'
+import { dataValidator, queryValidator } from '../../validators'
 
 // Main data model schema
 export const userSchema = Type.Object(
@@ -133,7 +136,7 @@ import type { Static } from '@feathersjs/typebox'
 import { passwordHash } from '@feathersjs/authentication-local'
 
 import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../schemas/validators'
+import { dataValidator, queryValidator } from '../../validators'
 
 // Main data model schema
 export const userSchema = Type.Object(
@@ -220,7 +223,7 @@ import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/t
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../schemas/validators'
+import { dataValidator, queryValidator } from '../../validators'
 import { userSchema } from '../users/users.schema'
 
 // Main data model schema
@@ -295,7 +298,7 @@ import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/t
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../schemas/validators'
+import { dataValidator, queryValidator } from '../../validators'
 import { userSchema } from '../users/users.schema'
 
 // Main data model schema

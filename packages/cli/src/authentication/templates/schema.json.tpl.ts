@@ -1,19 +1,24 @@
 import { generator, toFile, when } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
+import { fileExists, renderSource } from '../../commons'
 import { AuthenticationGeneratorContext, localTemplate } from '../index'
 
 const template = ({
+  cwd,
+  lib,
   camelName,
   upperName,
   authStrategies,
   type,
   relative
-}: AuthenticationGeneratorContext) => /* ts */ `import { resolve, querySyntax, getValidator, getDataValidator } from '@feathersjs/schema'
+}: AuthenticationGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
+import { resolve, querySyntax, getValidator, getDataValidator } from '@feathersjs/schema'
 import type { FromSchema } from '@feathersjs/schema'
 ${localTemplate(authStrategies, `import { passwordHash } from '@feathersjs/authentication-local'`)}
 
 import type { HookContext } from '${relative}/declarations'
-import { dataValidator, queryValidator } from '${relative}/schemas/validators'
+import { dataValidator, queryValidator } from '${relative}/${
+  fileExists(cwd, lib, 'schemas') ? 'schemas/' : '' // This is for legacy backwards compatibility
+}validators'
 
 // Main data model schema
 export const ${camelName}Schema = {
@@ -55,8 +60,11 @@ export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
 })
 
 export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
-  // The password should never be visible externally
-  password: async () => undefined
+  ${localTemplate(
+    authStrategies,
+    `// The password should never be visible externally
+  password: async () => undefined`
+  )}
 })
 
 // Schema for allowed query properties

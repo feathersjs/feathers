@@ -2,7 +2,10 @@ import { generator, toFile, before, mergeJSON } from '@feathershq/pinion'
 import { ConnectionGeneratorContext } from '../index'
 import { injectSource, renderSource } from '../../commons'
 
-const template = ({ database }: ConnectionGeneratorContext) => /* ts */ `import knex from 'knex'
+const template = ({
+  database
+}: ConnectionGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/databases.html
+import knex from 'knex'
 import type { Knex } from 'knex'
 import type { Application } from './declarations'
 
@@ -24,7 +27,8 @@ const knexfile = ({
   lib,
   language,
   database
-}: ConnectionGeneratorContext) => /* ts */ `import { app } from './${lib}/app'
+}: ConnectionGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/databases.html
+import { app } from './${lib}/app'
 
 // Load our database connection info from the app configuration
 const config = app.get('${database}')

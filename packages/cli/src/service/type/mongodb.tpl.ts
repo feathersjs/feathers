@@ -9,7 +9,8 @@ export const template = ({
   fileName,
   kebabPath,
   relative
-}: ServiceGeneratorContext) => /* ts */ `import type { Params } from '@feathersjs/feathers'
+}: ServiceGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
+import type { Params } from '@feathersjs/feathers'
 import { MongoDBService } from \'@feathersjs/mongodb\'
 import type { MongoDBAdapterParams, MongoDBAdapterOptions } from \'@feathersjs/mongodb\'
 

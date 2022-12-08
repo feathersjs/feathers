@@ -65,6 +65,7 @@ export default {
     {
       text: 'Frontend',
       collapsible: true,
+      collapsed: false,
       items: [
         {
           text: 'JavaScript',
@@ -77,16 +78,163 @@ export default {
       ]
     },
     {
+      text: 'CLI',
+      collapsible: true,
+      collapsed: true,
+      items: [
+        {
+          text: 'Using the CLI',
+          link: '/guides/cli/index.md'
+        },
+        {
+          text: 'Generate App',
+          link: '/guides/cli/generate-app.md'
+        }
+      ]
+    },
+    {
+      text: 'App Structure',
+      collapsible: true,
+      collapsed: false,
+      items: [
+        {
+          text: '📂 config',
+          items: [
+            {
+              text: '📄 default.json',
+              link: '/guides/cli/default.json.md'
+            },
+            {
+              text: '📄 custom-environment-variables.json',
+              link: '/guides/cli/custom-environment-variables.md'
+            }
+          ]
+        },
+        {
+          text: '📂 src',
+          items: [
+            {
+              text: '📂 hooks',
+              items: [
+                {
+                  text: '📄 &lt;hook&gt;',
+                  link: '/guides/cli/hook.md'
+                },
+                {
+                  text: '📄 log-error',
+                  link: '/guides/cli/log-error.md'
+                }
+              ]
+            },
+            {
+              text: '📂 services',
+              items: [
+                {
+                  text: '📂 &lt;service&gt;',
+                  items: [
+                    {
+                      text: '📄 &lt;service&gt;',
+                      link: '/guides/cli/service.md'
+                    },
+                    {
+                      text: '📄 &lt;service&gt;.class',
+                      link: '/guides/cli/service.class.md'
+                    },
+                    {
+                      text: '📄 &lt;service&gt;.schemas',
+                      link: '/guides/cli/service.schemas.md'
+                    }
+                  ]
+                },
+                {
+                  text: '📄 index'
+                }
+              ]
+            },
+            {
+              text: '📄 app',
+              link: '/guides/cli/app.md'
+            },
+            {
+              text: '📄 authentication',
+              link: '/guides/cli/authentication.md'
+            },
+            {
+              text: '📄 channels',
+              link: '/guides/cli/channels.md'
+            },
+            {
+              text: '📄 client',
+              link: '/guides/cli/client.md'
+            },
+            {
+              text: '📄 configuration',
+              link: '/guides/cli/configuration.md'
+            },
+            {
+              text: '📄 declarations',
+              link: '/guides/cli/declarations.md'
+            },
+            {
+              text: '📄 logger',
+              link: '/guides/cli/logger.md'
+            },
+            {
+              text: '📄 validators',
+              link: '/guides/cli/validators.md'
+            },
+            {
+              text: '📄 &lt;database&gt;',
+              link: '/guides/cli/databases.md'
+            }
+          ]
+        },
+        {
+          text: '📂 test',
+          items: [
+            {
+              text: '📄 client.test',
+              link: '/guides/cli/client.test.md'
+            },
+            {
+              text: '📄 app.test',
+              link: '/guides/cli/app.test.md'
+            },
+            {
+              text: '📄 &lt;service&gt;.test',
+              link: '/guides/cli/service.test.md'
+            }
+          ]
+        },
+        {
+          text: '📄 .prettierrc',
+          link: '/guides/cli/prettierrc.md'
+        },
+        {
+          text: '📄 knexfile',
+          link: '/guides/cli/knexfile.md'
+        },
+        {
+          text: '📄 package.json',
+          link: '/guides/cli/package.md'
+        },
+        {
+          text: '📄 tsconfig.json',
+          link: '/guides/cli/tsconfig.md'
+        }
+      ]
+    },
+    {
       text: 'Migrating',
       // collapsible: true,
       items: [
         {
-          text: 'Migration guide',
-          link: '/guides/migrating.md'
-        },
-        {
           text: "What's new?",
           link: '/guides/whats-new.md'
+        },
+        {
+          text: 'Migration guide',
+          link: '/guides/migrating.md'
         }
       ]
     }

@@ -4,7 +4,8 @@ import { AuthenticationGeneratorContext, localTemplate, oauthTemplate } from '..
 
 const template = ({
   authStrategies
-}: AuthenticationGeneratorContext) => /* ts */ `import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
+}: AuthenticationGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/authentication.html
+import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
 ${localTemplate(authStrategies, `import { LocalStrategy } from '@feathersjs/authentication-local'`)}
 ${oauthTemplate(authStrategies, `import { oauth, OAuthStrategy } from '@feathersjs/authentication-oauth'`)}
 

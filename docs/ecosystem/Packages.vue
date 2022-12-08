@@ -139,9 +139,12 @@ const packagesToShow = computed(() => {
       return a.hasNPM ? -1 : 1
     }
 
-    if (a[key] > b[key]) {
+    const valA = a[key] || 0
+    const valB = b[key] || 0
+
+    if (valA > valB) {
       return -1
-    } else if (a[key] < b[key]) {
+    } else if (valA < valB) {
       return 1
     } else {
       return 0

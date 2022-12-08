@@ -37,6 +37,7 @@
     "LICENSE",
     "README.md",
     "lib/**",
+    "lib/app/static/.gitignore",
     "bin/**",
     "*.d.ts",
     "*.js"
