@@ -19,7 +19,7 @@ export async function resolveQueryObjectId(
 ): Promise<IdQueryObject<ObjectId>>
 export async function resolveQueryObjectId(value: ObjectIdParam): Promise<ObjectId>
 export async function resolveQueryObjectId(value: ObjectIdParam | IdQueryObject<ObjectIdParam>) {
-  if (value === undefined || value === null) {
+  if (!value) {
     return undefined
   }
 

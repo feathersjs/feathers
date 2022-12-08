@@ -25,8 +25,11 @@ describe('ObjectId resolvers', () => {
     assert.ok(oids.$ne instanceof ObjectId)
   })
 
-  it('resolveQueryObjectId with undefined value', async () => {
+  it('resolveQueryObjectId with falsey value', async () => {
     await resolveQueryObjectId(undefined)
-    assert.ok('Undefined value does not throw exception')
+    await resolveQueryObjectId(null)
+    await resolveQueryObjectId(0)
+
+    assert.ok('Falsey value does not throw exception')
   })
 })
