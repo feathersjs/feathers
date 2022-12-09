@@ -29,12 +29,14 @@ export const validateQuery = <H extends HookContext>(schema: Schema<any> | Valid
   }
 }
 
-export const validateData = <H extends HookContext>(schema: Schema<any> | DataValidatorMap) => {
+export const validateData = <H extends HookContext>(schema: Schema<any> | DataValidatorMap | Validator) => {
   return async (context: H, next?: NextFunction) => {
     const data = context.data
     const validator =
       typeof (schema as Schema<any>).validate === 'function'
         ? (schema as Schema<any>).validate.bind(schema)
+        : typeof schema === 'function'
+        ? schema
         : (schema as any)[context.method]
 
     if (validator) {

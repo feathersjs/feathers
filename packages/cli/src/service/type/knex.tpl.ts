@@ -37,12 +37,14 @@ ${
     ? `import type {
   ${upperName},
   ${upperName}Data,
+  ${upperName}Patch,
   ${upperName}Query
 } from './${fileName}.schema'
 `
     : `
 export type ${upperName} = any
 export type ${upperName}Data = any
+export type ${upperName}Patch = any
 export type ${upperName}Query = any
 `
 }
@@ -52,7 +54,7 @@ export interface ${upperName}Params extends KnexAdapterParams<${upperName}Query>
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class ${className}<ServiceParams extends Params = ${upperName}Params>
-  extends KnexService<${upperName}, ${upperName}Data, ServiceParams> {
+  extends KnexService<${upperName}, ${upperName}Data, ServiceParams, ${upperName}Patch> {
 }
 
 export const getOptions = (app: Application): KnexAdapterOptions => {

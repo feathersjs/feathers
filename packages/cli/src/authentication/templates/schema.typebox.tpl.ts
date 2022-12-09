@@ -44,7 +44,7 @@ export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
   )}
 })
 
-// Schema for the basic data model (e.g. creating new entries)
+// Schema for creating new entries
 export const ${camelName}DataSchema = Type.Pick(${camelName}Schema, [
   ${authStrategies.map((name) => (name === 'local' ? `'email', 'password'` : `'${name}Id'`)).join(', ')}
 ],
@@ -56,12 +56,26 @@ export const ${camelName}DataResolver = resolve<${upperName}, HookContext>({
   ${localTemplate(authStrategies, `password: passwordHash({ strategy: 'local' })`)}
 })
 
+// Schema for updating existing entries
+export const ${camelName}PatchSchema = Type.Partial(${camelName}Schema, {
+  $id: '${upperName}Patch'
+})
+export type ${upperName}Patch = Static<typeof ${camelName}PatchSchema>
+export const ${camelName}PatchValidator = getDataValidator(${camelName}PatchSchema, dataValidator)
+export const ${camelName}PatchResolver = resolve<${upperName}, HookContext>({
+  ${localTemplate(authStrategies, `password: passwordHash({ strategy: 'local' })`)}
+})
+
 // Schema for allowed query properties
 export const ${camelName}QueryProperties = Type.Pick(${camelName}Schema, ['${
   type === 'mongodb' ? '_id' : 'id'
 }', ${authStrategies.map((name) => (name === 'local' ? `'email'` : `'${name}Id'`)).join(', ')}
 ])
-export const ${camelName}QuerySchema = querySyntax(${camelName}QueryProperties)
+export const ${camelName}QuerySchema = Type.Intersect([
+  querySyntax(${camelName}QueryProperties),
+  // Add additional query properties here
+  Type.Object({}, { additionalProperties: false })
+], { additionalProperties: false })
 export type ${upperName}Query = Static<typeof ${camelName}QuerySchema>
 export const ${camelName}QueryValidator = getValidator(${camelName}QuerySchema, queryValidator)
 export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({

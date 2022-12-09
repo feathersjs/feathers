@@ -20,11 +20,13 @@ import { hooks as schemaHooks } from '@feathersjs/schema'
     
 import {
   ${camelName}DataValidator,
+  ${camelName}PatchValidator,
   ${camelName}QueryValidator,
   ${camelName}Resolver,
+  ${camelName}ExternalResolver,
   ${camelName}DataResolver,
-  ${camelName}QueryResolver,
-  ${camelName}ExternalResolver
+  ${camelName}PatchResolver,
+  ${camelName}QueryResolver
 } from './${fileName}.schema'
 `
     : ''
@@ -41,7 +43,7 @@ export const ${camelName} = (app: Application) => {
   // Register our service on the Feathers application
   app.use('${path}', new ${className}(getOptions(app)), {
     // A list of all methods this service exposes externally
-    methods: ['find', 'get', 'create', 'update', 'patch', 'remove'],
+    methods: ['find', 'get', 'create', 'patch', 'remove'],
     // You can add additional custom events to be sent to clients here
     events: []
   })
@@ -53,33 +55,53 @@ export const ${camelName} = (app: Application) => {
           ? `
         authenticate('jwt'),`
           : ''
-      }
-      ${
-        schema
-          ? `
+      } ${
+  schema
+    ? `
         schemaHooks.resolveExternal(${camelName}ExternalResolver),
         schemaHooks.resolveResult(${camelName}Resolver),`
+    : ''
+}
+      ],${
+        isEntityService
+          ? `
+      find: [authenticate('jwt')],
+      get: [authenticate('jwt')],
+      create: [],
+      update: [authenticate('jwt')],
+      patch: [authenticate('jwt')],
+      remove: [authenticate('jwt')]`
           : ''
       }
-      ],
-      find: [${isEntityService ? `authenticate('jwt')` : ''}],
-      get: [${isEntityService ? `authenticate('jwt')` : ''}],
-      create: [],
-      update: [${isEntityService ? `authenticate('jwt')` : ''}],
-      patch: [${isEntityService ? `authenticate('jwt')` : ''}],
-      remove: [${isEntityService ? `authenticate('jwt')` : ''}]
     },
     before: {
       all: [${
         schema
           ? `
         schemaHooks.validateQuery(${camelName}QueryValidator),
+        schemaHooks.resolveQuery(${camelName}QueryResolver)
+      `
+          : ''
+      }],
+      find: [],
+      get: [],
+      create: [${
+        schema
+          ? `
         schemaHooks.validateData(${camelName}DataValidator),
-        schemaHooks.resolveQuery(${camelName}QueryResolver),
         schemaHooks.resolveData(${camelName}DataResolver)
       `
           : ''
-      }]
+      }],
+      patch: [${
+        schema
+          ? `
+        schemaHooks.validateData(${camelName}PatchValidator),
+        schemaHooks.resolveData(${camelName}PatchResolver)
+      `
+          : ''
+      }],
+      remove: []
     },
     after: {
       all: []
