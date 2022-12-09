@@ -30,7 +30,7 @@ export default (originalSettings: string | AuthenticateHookSettings, ...original
 
     debug(`Running authenticate hook on '${path}'`)
 
-    if (type && type !== 'before') {
+    if (type && type !== 'before' && type !== 'around') {
       throw new NotAuthenticated('The authenticate hook must be used as a before hook')
     }
 

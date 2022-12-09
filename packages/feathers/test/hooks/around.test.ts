@@ -114,7 +114,7 @@ describe('`around` hooks', () => {
     service.hooks({
       create: [
         async (hook, next) => {
-          assert.strictEqual(hook.type, null)
+          assert.strictEqual(hook.type, 'around')
 
           hook.data.modified = 'data'
 

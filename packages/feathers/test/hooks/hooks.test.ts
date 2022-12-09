@@ -231,7 +231,7 @@ describe('hooks basics', () => {
       const returnedContext = await app.service('dummy').get(10, {}, context)
 
       assert.strictEqual(returnedContext.service, app.service('dummy'))
-      assert.strictEqual(returnedContext.type, null)
+      assert.strictEqual(returnedContext.type, 'around')
       assert.strictEqual(returnedContext.path, 'dummy')
       assert.deepStrictEqual(returnedContext.result, {
         id: 10,
