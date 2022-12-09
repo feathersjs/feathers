@@ -1,15 +1,39 @@
 import { BadRequest } from '@feathersjs/errors'
 import { Schema } from './schema'
 
-export type PropertyResolver<T, V, C> = (
+export type PropertyResolver<T, V, C> = ((
   value: V | undefined,
+  obj: T,
+  context: C,
+  status: ResolverStatus<T, C>
+) => Promise<V | undefined>) & { [IS_VIRTUAL]?: boolean }
+
+export type VirtualResolver<T, V, C> = (
   obj: T,
   context: C,
   status: ResolverStatus<T, C>
 ) => Promise<V | undefined>
 
+export const IS_VIRTUAL = Symbol('@feathersjs/schema/virtual')
+
+/**
+ * Create a resolver for a virtual property. A virtual property is a property that
+ * is computed and never has an initial value.
+ *
+ * @param virtualResolver The virtual resolver function
+ * @returns The property resolver function
+ */
+export const virtual = <T, V, C>(virtualResolver: VirtualResolver<T, V, C>) => {
+  const propertyResolver: PropertyResolver<T, V, C> = async (_value, obj, context, status) =>
+    virtualResolver(obj, context, status)
+
+  propertyResolver[IS_VIRTUAL] = true
+
+  return propertyResolver
+}
+
 export type PropertyResolverMap<T, C> = {
-  [key in keyof T]?: PropertyResolver<T, T[key], C>
+  [key in keyof T]?: PropertyResolver<T, T[key], C> | ReturnType<typeof virtual<T, T[key], C>>
 }
 
 export type ResolverConverter<T, C> = (
@@ -18,8 +42,16 @@ export type ResolverConverter<T, C> = (
   status: ResolverStatus<T, C>
 ) => Promise<T | undefined>
 
-export interface ResolverConfig<T, C> {
+export interface ResolverOptions<T, C> {
   schema?: Schema<T>
+  /**
+   * A converter function that is run before property resolvers
+   * to transform the initial data into a different format.
+   */
+  converter?: ResolverConverter<T, C>
+}
+
+export interface ResolverConfig<T, C> extends ResolverOptions<T, C> {
   /**
    * @deprecated Use the `validateData` and `validateQuery` hooks explicitly instead
    */
@@ -28,11 +60,6 @@ export interface ResolverConfig<T, C> {
    * The properties to resolve
    */
   properties: PropertyResolverMap<T, C>
-  /**
-   * A converter function that is run before property resolvers
-   * to transform the initial data into a different format.
-   */
-  converter?: ResolverConverter<T, C>
 }
 
 export interface ResolverStatus<T, C> {
@@ -44,10 +71,12 @@ export interface ResolverStatus<T, C> {
 
 export class Resolver<T, C> {
   readonly _type!: T
-  protected propertyNames: string[]
+  public propertyNames: (keyof T)[]
+  public virtualNames: (keyof T)[]
 
-  constructor(public options: ResolverConfig<T, C>) {
-    this.propertyNames = Object.keys(options.properties)
+  constructor(public readonly options: ResolverConfig<T, C>) {
+    this.propertyNames = Object.keys(options.properties) as any as (keyof T)[]
+    this.virtualNames = this.propertyNames.filter((name) => options.properties[name][IS_VIRTUAL])
   }
 
   /**
@@ -106,7 +135,7 @@ export class Resolver<T, C> {
       Array.isArray(status?.properties)
         ? status?.properties
         : // By default get all data and resolver keys but remove duplicates
-          [...new Set(Object.keys(data).concat(this.propertyNames))]
+          [...new Set(Object.keys(data).concat(this.propertyNames as string[]))]
     ) as (keyof T)[]
 
     const result: any = {}
@@ -155,6 +184,18 @@ export class Resolver<T, C> {
  * @param options The configuration for the returned resolver
  * @returns A new resolver instance
  */
-export function resolve<T, C>(options: ResolverConfig<T, C>) {
-  return new Resolver<T, C>(options)
+export function resolve<T, C>(
+  properties: PropertyResolverMap<T, C>,
+  options?: ResolverOptions<T, C>
+): Resolver<T, C>
+export function resolve<T, C>(options: ResolverConfig<T, C>): Resolver<T, C>
+export function resolve<T, C>(
+  properties: PropertyResolverMap<T, C> | ResolverConfig<T, C>,
+  options?: ResolverOptions<T, C>
+) {
+  const settings = (
+    (properties as ResolverConfig<T, C>).properties ? properties : { properties, ...options }
+  ) as ResolverConfig<T, C>
+
+  return new Resolver<T, C>(settings)
 }

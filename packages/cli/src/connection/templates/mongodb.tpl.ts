@@ -2,7 +2,9 @@ import { generator, toFile, before } from '@feathershq/pinion'
 import { ConnectionGeneratorContext } from '../index'
 import { injectSource, renderSource } from '../../commons'
 
-const template = ({}: ConnectionGeneratorContext) => /* ts */ `import { MongoClient } from 'mongodb'
+const template =
+  ({}: ConnectionGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/databases.html
+import { MongoClient } from 'mongodb'
 import type { Db } from 'mongodb'
 import type { Application } from './declarations'
 

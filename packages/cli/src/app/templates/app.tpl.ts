@@ -4,7 +4,8 @@ import { AppGeneratorContext } from '../index'
 
 const tsKoaApp = ({
   transports
-}: AppGeneratorContext) => /* ts */ `import { feathers } from '@feathersjs/feathers'
+}: AppGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
+import { feathers } from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
 import {
   koa, rest, bodyParser, errorHandler, parseAuthentication, cors, serveStatic
@@ -12,8 +13,8 @@ import {
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
 import type { Application } from './declarations'
-import { configurationValidator } from './schemas/configuration'
-import { logErrorHook } from './logger'
+import { configurationValidator } from './configuration'
+import { logError } from './hooks/log-error'
 import { services } from './services/index'
 import { channels } from './channels'
 
@@ -46,7 +47,7 @@ app.configure(channels)
 // Register hooks that run on all service methods
 app.hooks({
   around: {
-    all: [ logErrorHook ]
+    all: [ logError ]
   },
   before: {},
   after: {},
@@ -63,17 +64,19 @@ export { app }
 
 const tsExpressApp = ({
   transports
-}: AppGeneratorContext) => /* ts */ `import { feathers } from '@feathersjs/feathers'
+}: AppGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
+import { feathers } from '@feathersjs/feathers'
 import express, {
-  rest, json, urlencoded, cors, compression,
+  rest, json, urlencoded, cors,
   serveStatic, notFound, errorHandler
 } from '@feathersjs/express'
 import configuration from '@feathersjs/configuration'
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
 import type { Application } from './declarations'
-import { configurationValidator } from './schemas/configuration'
-import { logger, logErrorHook } from './logger'
+import { configurationValidator } from './configuration'
+import { logger } from './logger'
+import { logError } from './hooks/log-error'
 import { services } from './services/index'
 import { channels } from './channels'
 
@@ -82,7 +85,6 @@ const app: Application = express(feathers())
 // Load app configuration
 app.configure(configuration(configurationValidator))
 app.use(cors())
-app.use(compression())
 app.use(json())
 app.use(urlencoded({ extended: true }))
 // Host the public folder
@@ -109,7 +111,7 @@ app.use(errorHandler({ logger }))
 // Register hooks that run on all service methods
 app.hooks({
   around: {
-    all: [ logErrorHook ]
+    all: [ logError ]
   },
   before: {},
   after: {},

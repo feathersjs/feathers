@@ -1,9 +1,4 @@
-import {
-  feathers,
-  HookContext,
-  Application as FeathersApplication,
-  defaultServiceMethods
-} from '@feathersjs/feathers'
+import { feathers, HookContext, Application as FeathersApplication } from '@feathersjs/feathers'
 import { memory, MemoryService } from '@feathersjs/memory'
 import { GeneralError } from '@feathersjs/errors'
 
@@ -20,7 +15,8 @@ import {
   Ajv,
   FromSchema,
   getValidator,
-  getDataValidator
+  getDataValidator,
+  virtual
 } from '../src'
 import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib'
 
@@ -74,15 +70,13 @@ export const userResolver = resolve<User, HookContext<Application>>({
 
 export const userExternalResolver = resolve<User, HookContext<Application>>({
   properties: {
-    password: async () => undefined,
+    password: async (): Promise<undefined> => undefined,
     email: async () => '[redacted]'
   }
 })
 
 export const secondUserResolver = resolve<User, HookContext<Application>>({
-  properties: {
-    name: async (value, user) => `${value} (${user.email})`
-  }
+  name: async (value, user) => `${value} (${user.email})`
 })
 
 export const messageDataSchema = {
@@ -118,19 +112,17 @@ export type Message = FromSchema<
 >
 
 export const messageResolver = resolve<Message, HookContext<Application>>({
-  properties: {
-    user: async (_value, message, context) => {
-      const { userId } = message
+  user: virtual(async (message, context) => {
+    const { userId } = message
 
-      if (context.params.error === true) {
-        throw new GeneralError('This is an error')
-      }
-
-      const user = await context.app.service('users').get(userId, context.params)
-
-      return user as Message['user']
+    if (context.params.error === true) {
+      throw new GeneralError('This is an error')
     }
-  }
+
+    const user = await context.app.service('users').get(userId, context.params)
+
+    return user as Message['user']
+  })
 })
 
 export const messageQuerySchema = {
@@ -140,6 +132,10 @@ export const messageQuerySchema = {
   required: [],
   properties: {
     ...querySyntax(messageDataSchema.properties),
+    $select: {
+      type: 'array',
+      items: { type: 'string' }
+    },
     $resolve: {
       type: 'array',
       items: { type: 'string' }
@@ -152,14 +148,12 @@ export type MessageQuery = FromSchema<typeof messageQuerySchema>
 export const messageQueryValidator = getValidator(messageQuerySchema, fixtureAjv)
 
 export const messageQueryResolver = resolve<MessageQuery, HookContext<Application>>({
-  properties: {
-    userId: async (value, _query, context) => {
-      if (context.params?.user) {
-        return context.params.user.id
-      }
-
-      return value
+  userId: async (value, _query, context) => {
+    if (context.params?.user) {
+      return context.params.user.id
     }
+
+    return value
   }
 })
 
@@ -197,7 +191,7 @@ app.use(
   })
 )
 app.use('messages', new MessageService(), {
-  methods: [...defaultServiceMethods, 'customMethod']
+  methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'customMethod']
 })
 app.use('paginatedMessages', memory({ paginate: { default: 10 } }))
 
@@ -210,16 +204,27 @@ app.service('messages').hooks({
       }),
       validateQuery(messageQueryValidator)
     ],
-    customMethod: [resolveData(customMethodDataResolver)]
+    customMethod: [resolveData(customMethodDataResolver)],
+    find: [
+      async (context, next) => {
+        // A hook that makes sure that virtual properties are not passed to the adapter as `$select`
+        // An SQL adapter would throw an error if it received a query like this
+        if (context.params?.query?.$select && context.params?.query?.$select.includes('user')) {
+          throw new Error('Invalid $select')
+        }
+        await next()
+      }
+    ]
   }
 })
 
 app
   .service('paginatedMessages')
   .hooks([
+    resolveDispatch(),
+    resolveResult(messageResolver),
     validateQuery(messageQueryValidator),
-    resolveQuery(messageQueryResolver),
-    resolveResult(messageResolver)
+    resolveQuery(messageQueryResolver)
   ])
 
 app

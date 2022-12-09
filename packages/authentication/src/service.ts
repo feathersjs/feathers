@@ -42,8 +42,8 @@ export class AuthenticationService
     super(app, configKey, options)
 
     hooks(this, {
-      create: [resolveDispatch(), connection('login'), event('login')],
-      remove: [resolveDispatch(), connection('logout'), event('logout')]
+      create: [resolveDispatch(), event('login'), connection('login')],
+      remove: [resolveDispatch(), event('logout'), connection('logout')]
     })
 
     this.app.on('disconnect', async (connection) => {

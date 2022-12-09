@@ -11,7 +11,7 @@ export const template = ({
   relative,
   schema,
   fileName
-}: ServiceGeneratorContext) => /* ts */ `
+}: ServiceGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 ${authentication || isEntityService ? `import { authenticate } from '@feathersjs/authentication'` : ''}
 ${
   schema
@@ -54,17 +54,20 @@ export const ${camelName} = (app: Application) => {
         authenticate('jwt'),`
           : ''
       }
-      ]${
-        isEntityService
-          ? `,
-      find: [ authenticate('jwt') ],
-      get: [ authenticate('jwt') ],
-      create: [],
-      update: [ authenticate('jwt') ],
-      patch: [ authenticate('jwt') ],
-      remove: [ authenticate('jwt') ]`
+      ${
+        schema
+          ? `
+        schemaHooks.resolveExternal(${camelName}ExternalResolver),
+        schemaHooks.resolveResult(${camelName}Resolver),`
           : ''
       }
+      ],
+      find: [${isEntityService ? `authenticate('jwt')` : ''}],
+      get: [${isEntityService ? `authenticate('jwt')` : ''}],
+      create: [],
+      update: [${isEntityService ? `authenticate('jwt')` : ''}],
+      patch: [${isEntityService ? `authenticate('jwt')` : ''}],
+      remove: [${isEntityService ? `authenticate('jwt')` : ''}]
     },
     before: {
       all: [${
@@ -79,14 +82,7 @@ export const ${camelName} = (app: Application) => {
       }]
     },
     after: {
-      all: [${
-        schema
-          ? `
-        schemaHooks.resolveResult(${camelName}Resolver),
-        schemaHooks.resolveExternal(${camelName}ExternalResolver)
-      `
-          : ''
-      }]
+      all: []
     },
     error: {
       all: []

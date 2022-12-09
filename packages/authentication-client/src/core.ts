@@ -67,21 +67,22 @@ export class AuthenticationClient {
   }
 
   handleSocket(socket: any) {
-    // Connection events happen on every reconnect
-    const connected = this.app.io ? 'connect' : 'open'
-    const disconnected = this.app.io ? 'disconnect' : 'disconnection'
-
-    socket.on(disconnected, () => {
-      const authPromise = new Promise((resolve) => socket.once(connected, (data: any) => resolve(data)))
-        // Only reconnect when `reAuthenticate()` or `authenticate()`
-        // has been called explicitly first
-        // Force reauthentication with the server
-        .then(() => (this.authenticated ? this.reAuthenticate(true) : null))
-
-      this.app.set('authentication', authPromise)
+    // When the socket disconnects and we are still authenticated, try to reauthenticate right away
+    // the websocket connection will handle timeouts and retries
+    socket.on('disconnect', () => {
+      if (this.authenticated) {
+        this.reAuthenticate(true)
+      }
     })
   }
 
+  /**
+   * Parse the access token or authentication error from the window location hash. Will remove it from the hash
+   * if found.
+   *
+   * @param location The window location
+   * @returns The access token if available, will throw an error if found, otherwise null
+   */
   getFromLocation(location: Location) {
     const [accessToken, tokenRegex] = getMatch(location, this.options.locationKey)
 
@@ -102,10 +103,21 @@ export class AuthenticationClient {
     return Promise.resolve(null)
   }
 
+  /**
+   * Set the access token in storage.
+   *
+   * @param accessToken The access token to set
+   * @returns
+   */
   setAccessToken(accessToken: string) {
     return this.storage.setItem(this.options.storageKey, accessToken)
   }
 
+  /**
+   * Returns the access token from storage or the window location hash.
+   *
+   * @returns The access token from storage or location hash
+   */
   getAccessToken(): Promise<string | null> {
     return this.storage.getItem(this.options.storageKey).then((accessToken: string) => {
       if (!accessToken && typeof window !== 'undefined' && window.location) {
@@ -116,10 +128,19 @@ export class AuthenticationClient {
     })
   }
 
+  /**
+   * Remove the access token from storage
+   * @returns The removed access token
+   */
   removeAccessToken() {
     return this.storage.removeItem(this.options.storageKey)
   }
 
+  /**
+   * Reset the internal authentication state. Usually not necessary to call directly.
+   *
+   * @returns null
+   */
   reset() {
     this.app.set('authentication', null)
     this.authenticated = false
@@ -128,15 +149,25 @@ export class AuthenticationClient {
   }
 
   handleError(error: FeathersError, type: 'authenticate' | 'logout') {
-    if (error.code === 401 || error.code === 403) {
+    // For NotAuthenticated, PaymentError, Forbidden, NotFound, MethodNotAllowed, NotAcceptable
+    // errors, remove the access token
+    if (error.code > 400 && error.code < 408) {
       const promise = this.removeAccessToken().then(() => this.reset())
 
       return type === 'logout' ? promise : promise.then(() => Promise.reject(error))
     }
 
-    return Promise.reject(error)
+    return this.reset().then(() => Promise.reject(error))
   }
 
+  /**
+   * Try to reauthenticate using the token from storage. Will do nothing if already authenticated unless
+   * `force` is true.
+   *
+   * @param force force reauthentication with the server
+   * @param strategy The name of the strategy to use. Defaults to `options.jwtStrategy`
+   * @returns The reauthentication result
+   */
   reAuthenticate(force = false, strategy?: string): Promise<AuthenticationResult> {
     // Either returns the authentication state or
     // tries to re-authenticate with the stored JWT and strategy
@@ -159,6 +190,13 @@ export class AuthenticationClient {
     return authPromise
   }
 
+  /**
+   * Authenticate using a specific strategy and data.
+   *
+   * @param authentication The authentication data
+   * @param params Additional parameters
+   * @returns The authentication result
+   */
   authenticate(authentication?: AuthenticationRequest, params?: Params): Promise<AuthenticationResult> {
     if (!authentication) {
       return this.reAuthenticate()
@@ -182,6 +220,12 @@ export class AuthenticationClient {
     return promise
   }
 
+  /**
+   * Log out the current user and remove their token. Will do nothing
+   * if not authenticated.
+   *
+   * @returns The log out result.
+   */
   logout(): Promise<AuthenticationResult | null> {
     return Promise.resolve(this.app.get('authentication'))
       .then(() =>

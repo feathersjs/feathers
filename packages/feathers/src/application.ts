@@ -145,7 +145,7 @@ export class Feathers<Services, Settings>
   use<L extends keyof Services & string>(
     path: L,
     service: keyof any extends keyof Services ? ServiceInterface | Application : Services[L],
-    options?: ServiceOptions
+    options?: ServiceOptions<keyof any extends keyof Services ? string : keyof Services[L]>
   ): this {
     if (typeof path !== 'string') {
       throw new Error(`'${path}' is not a valid service path.`)
@@ -163,7 +163,7 @@ export class Feathers<Services, Settings>
       return this
     }
 
-    const protoService = wrapService(location, service, options)
+    const protoService = wrapService(location, service, options as ServiceOptions)
     const serviceOptions = getServiceOptions(protoService)
 
     for (const name of protectedMethods) {

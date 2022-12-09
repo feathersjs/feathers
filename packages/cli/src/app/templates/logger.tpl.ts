@@ -3,8 +3,8 @@ import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
 const template =
-  ({}: AppGeneratorContext) => /* ts */ `import { createLogger, format, transports } from 'winston'
-import type { HookContext, NextFunction } from './declarations'
+  ({}: AppGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/logging.html
+import { createLogger, format, transports } from 'winston'
 
 // Configure the Winston logger. For the complete documentation see https://github.com/winstonjs/winston
 export const logger = createLogger({
@@ -18,8 +18,13 @@ export const logger = createLogger({
     new transports.Console()
   ]
 })
+`
 
-export const logErrorHook = async (context: HookContext, next: NextFunction) => {
+export const logErrorTemplate = /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/log-error.html
+import type { HookContext, NextFunction } from '../declarations'
+import { logger } from '../logger'
+
+export const logError = async (context: HookContext, next: NextFunction) => {
   try {
     await next()
   } catch (error: any) {
@@ -36,9 +41,16 @@ export const logErrorHook = async (context: HookContext, next: NextFunction) => 
 `
 
 export const generate = (ctx: AppGeneratorContext) =>
-  generator(ctx).then(
-    renderSource(
-      template,
-      toFile<AppGeneratorContext>(({ lib }) => lib, 'logger')
+  generator(ctx)
+    .then(
+      renderSource(
+        template,
+        toFile<AppGeneratorContext>(({ lib }) => lib, 'logger')
+      )
     )
-  )
+    .then(
+      renderSource(
+        logErrorTemplate,
+        toFile<AppGeneratorContext>(({ lib }) => lib, 'hooks', 'log-error')
+      )
+    )

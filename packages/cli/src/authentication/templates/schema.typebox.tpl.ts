@@ -1,20 +1,25 @@
 import { generator, toFile, when } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
+import { fileExists, renderSource } from '../../commons'
 import { AuthenticationGeneratorContext, localTemplate } from '../index'
 
 export const template = ({
+  cwd,
+  lib,
   camelName,
   upperName,
   authStrategies,
   type,
   relative
-}: AuthenticationGeneratorContext) => /* ts */ `import { resolve } from '@feathersjs/schema'
+}: AuthenticationGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
+import { resolve } from '@feathersjs/schema'
 import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 ${localTemplate(authStrategies, `import { passwordHash } from '@feathersjs/authentication-local'`)}
 
 import type { HookContext } from '${relative}/declarations'
-import { dataValidator, queryValidator } from '${relative}/schemas/validators'
+import { dataValidator, queryValidator } from '${relative}/${
+  fileExists(cwd, lib, 'schemas') ? 'schemas/' : '' // This is for legacy backwards compatibility
+}validators'
 
 // Main data model schema
 export const ${camelName}Schema = Type.Object({
@@ -29,15 +34,14 @@ export const ${camelName}Schema = Type.Object({
     .join(',\n')}
 },{ $id: '${upperName}', additionalProperties: false })
 export type ${upperName} = Static<typeof ${camelName}Schema>
-export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
-  properties: {}
-})
+export const ${camelName}Resolver = resolve<${upperName}, HookContext>({})
 
 export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
-  properties: {
-    // The password should never be visible externally
-    password: async () => undefined
-  }
+  ${localTemplate(
+    authStrategies,
+    `// The password should never be visible externally
+  password: async () => undefined`
+  )}
 })
 
 // Schema for the basic data model (e.g. creating new entries)
@@ -49,9 +53,7 @@ export const ${camelName}DataSchema = Type.Pick(${camelName}Schema, [
 export type ${upperName}Data = Static<typeof ${camelName}DataSchema>
 export const ${camelName}DataValidator = getDataValidator(${camelName}DataSchema, dataValidator)
 export const ${camelName}DataResolver = resolve<${upperName}, HookContext>({
-  properties: {
-    ${localTemplate(authStrategies, `password: passwordHash({ strategy: 'local' })`)}
-  }
+  ${localTemplate(authStrategies, `password: passwordHash({ strategy: 'local' })`)}
 })
 
 // Schema for allowed query properties
@@ -63,15 +65,13 @@ export const ${camelName}QuerySchema = querySyntax(${camelName}QueryProperties)
 export type ${upperName}Query = Static<typeof ${camelName}QuerySchema>
 export const ${camelName}QueryValidator = getValidator(${camelName}QuerySchema, queryValidator)
 export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
-  properties: {
-    // If there is a user (e.g. with authentication), they are only allowed to see their own data
-    ${type === 'mongodb' ? '_id' : 'id'}: async (value, user, context) => {
-      if (context.params.user) {
-        return context.params.user.${type === 'mongodb' ? '_id' : 'id'}
-      }
-  
-      return value
+  // If there is a user (e.g. with authentication), they are only allowed to see their own data
+  ${type === 'mongodb' ? '_id' : 'id'}: async (value, user, context) => {
+    if (context.params.user) {
+      return context.params.user.${type === 'mongodb' ? '_id' : 'id'}
     }
+
+    return value
   }
 })
 `
