@@ -289,7 +289,7 @@ describe('Service events', () => {
           assert.ok(hook.changed)
           assert.strictEqual(hook.service, service)
           assert.strictEqual(hook.method, 'create')
-          assert.strictEqual(hook.type, null)
+          assert.strictEqual(hook.type, 'around')
           done()
         } catch (error: any) {
           done(error)

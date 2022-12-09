@@ -346,6 +346,8 @@ export interface Http {
   location?: string
 }
 
+export type HookType = 'before' | 'after' | 'error' | 'around'
+
 export interface HookContext<A = Application, S = any> extends BaseHookContext<ServiceGenericType<S>> {
   /**
    * A read only property that contains the Feathers application object. This can be used to
@@ -367,10 +369,9 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
    */
   readonly service: S
   /**
-   * A read only property with the hook type (one of before, after or error).
-   * Will be `null` for asynchronous hooks.
+   * A read only property with the hook type (one of 'around', 'before', 'after' or 'error').
    */
-  readonly type: null | 'before' | 'after' | 'error'
+  readonly type: HookType
   /**
    * The list of method arguments. Should not be modified, modify the
    * `params`, `data` and `id` properties instead.
