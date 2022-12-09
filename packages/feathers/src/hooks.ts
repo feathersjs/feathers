@@ -171,7 +171,7 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
       method,
       service,
       event: null,
-      type: null,
+      type: 'around',
       get statusCode() {
         return this.http?.status
       },
