@@ -24,4 +24,12 @@ describe('ObjectId resolvers', () => {
     assert.ok(oids.$in && oids.$in[0] instanceof ObjectId)
     assert.ok(oids.$ne instanceof ObjectId)
   })
+
+  it('resolveQueryObjectId with falsey value', async () => {
+    await resolveQueryObjectId(undefined)
+    await resolveQueryObjectId(null)
+    await resolveQueryObjectId(0)
+
+    assert.ok('Falsey value does not throw exception')
+  })
 })
