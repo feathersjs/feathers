@@ -109,7 +109,7 @@ app.use('messages', new MessageService(), {
 
 <BlockQuote type="warning" label="Important">
 
-If the `methods` property is `undefined`, all standard methods will be enabled and accessibly externally.
+If the `methods` property is `undefined`, all standard methods will be enabled and accessible externally.
 
 </BlockQuote>
 
