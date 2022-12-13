@@ -63,7 +63,10 @@ export function wrapService(location: string, service: any, options: ServiceOpti
   const protoService = Object.create(service)
   const serviceOptions = normalizeServiceOptions(service, options)
 
-  if (Object.keys(serviceOptions.methods).length === 0 && typeof service.setup !== 'function') {
+  if (
+    Object.keys(serviceOptions.methods).length === 0 &&
+    ![...defaultServiceMethods, 'setup', 'teardown'].some((method) => typeof service[method] === 'function')
+  ) {
     throw new Error(`Invalid service object passed for path \`${location}\``)
   }
 

@@ -165,6 +165,18 @@ describe('Feathers application', () => {
       )
     })
 
+    it('can register service with no external methods', async () => {
+      const dummyService = {
+        async create(data: any) {
+          return data
+        }
+      }
+
+      feathers().use('dummy', dummyService, {
+        methods: []
+      })
+    })
+
     it('can use a root level service', async () => {
       const app = feathers().use('/', {
         async get(id: string) {
