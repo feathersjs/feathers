@@ -17,12 +17,14 @@ ${
     ? `import type {
   ${upperName},
   ${upperName}Data,
+  ${upperName}Patch,
   ${upperName}Query
 } from './${fileName}.schema'
 `
     : `
 export type ${upperName} = any
 export type ${upperName}Data = any
+export type ${upperName}Patch = any
 export type ${upperName}Query = any
 `
 }
@@ -36,7 +38,7 @@ export interface ${upperName}Params extends Params<${upperName}Query> {
 }
 
 // This is a skeleton for a custom service class. Remove or add the methods you need here
-export class ${className} implements ServiceInterface<${upperName}, ${upperName}Data, ${upperName}Params> {
+export class ${className} implements ServiceInterface<${upperName}, ${upperName}Data, ${upperName}Params, ${upperName}Patch> {
   constructor (public options: ${className}Options) {
   }
 
@@ -64,6 +66,7 @@ export class ${className} implements ServiceInterface<${upperName}, ${upperName}
     }
   }
 
+  // This method has to be added to the 'methods' option to make it available to clients
   async update (id: NullableId, data: ${upperName}Data, _params?: ${upperName}Params): Promise<${upperName}> {
     return {
       id: 0,
@@ -71,9 +74,10 @@ export class ${className} implements ServiceInterface<${upperName}, ${upperName}
     }
   }
 
-  async patch (id: NullableId, data: ${upperName}Data, _params?: ${upperName}Params): Promise<${upperName}> {
+  async patch (id: NullableId, data: ${upperName}Patch, _params?: ${upperName}Params): Promise<${upperName}> {
     return {
       id: 0,
+      text: \`Fallback for \${id}\`,
       ...data
     }
   }

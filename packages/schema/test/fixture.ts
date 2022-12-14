@@ -36,7 +36,9 @@ export const userDataSchema = {
   }
 } as const
 
-export const userDataValidator = getDataValidator(userDataSchema, fixtureAjv)
+export const userDataValidator = getValidator(userDataSchema, fixtureAjv)
+
+export const userDataValidatorMap = getDataValidator(userDataSchema, fixtureAjv)
 
 export type UserData = FromSchema<typeof userDataSchema>
 
@@ -232,7 +234,7 @@ app
   .hooks([resolveDispatch(userExternalResolver), resolveResult(userResolver, secondUserResolver)])
 
 app.service('users').hooks({
-  create: [validateData(userDataValidator), resolveData(userDataResolver)]
+  create: [validateData(userDataValidator), validateData(userDataValidatorMap), resolveData(userDataResolver)]
 })
 
 export { app }

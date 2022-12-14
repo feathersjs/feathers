@@ -10,7 +10,7 @@ const template = ({
   cwd,
   lib
 }: ServiceGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
-import { resolve, getDataValidator, getValidator, querySyntax } from '@feathersjs/schema'
+import { resolve, getValidator, querySyntax } from '@feathersjs/schema'
 import type { FromSchema } from '@feathersjs/schema'
 
 import type { HookContext } from '${relative}/declarations'
@@ -50,8 +50,22 @@ export const ${camelName}DataSchema = {
   }
 } as const
 export type ${upperName}Data = FromSchema<typeof ${camelName}DataSchema>
-export const ${camelName}DataValidator = getDataValidator(${camelName}DataSchema, dataValidator)
+export const ${camelName}DataValidator = getValidator(${camelName}DataSchema, dataValidator)
 export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({})
+
+// Schema for updating existing data
+export const ${camelName}PatchSchema = {
+  $id: '${upperName}Patch',
+  type: 'object',
+  additionalProperties: false,
+  required: [],
+  properties: {
+    ...${camelName}Schema.properties
+  }
+} as const
+export type ${upperName}Patch = FromSchema<typeof ${camelName}PatchSchema>
+export const ${camelName}PatchValidator = getValidator(${camelName}PatchSchema, dataValidator)
+export const ${camelName}PatchResolver = resolve<${upperName}Patch, HookContext>({})
 
 // Schema for allowed query properties
 export const ${camelName}QuerySchema = {
