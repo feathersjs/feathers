@@ -65,9 +65,7 @@ export const userSchema = {
 export type User = FromSchema<typeof userSchema>
 
 export const userResolver = resolve<User, HookContext<Application>>({
-  properties: {
-    name: async (_value, user) => user.email.split('@')[0]
-  }
+  name: async (_value, user) => user.email.split('@')[0]
 })
 
 export const userExternalResolver = resolve<User, HookContext<Application>>({
@@ -102,7 +100,9 @@ export const messageSchema = {
   properties: {
     ...messageDataSchema.properties,
     id: { type: 'number' },
-    user: { $ref: 'User' }
+    user: { $ref: 'User' },
+    userList: { type: 'array', items: { $ref: 'User' } },
+    userPage: { type: 'object' }
   }
 } as const
 
@@ -121,9 +121,25 @@ export const messageResolver = resolve<Message, HookContext<Application>>({
       throw new GeneralError('This is an error')
     }
 
-    const user = await context.app.service('users').get(userId, context.params)
+    return context.app.service('users').get(userId, context.params) as Promise<Message['user']>
+  }),
+  userList: virtual(async (_message, context) => {
+    const users = await context.app.service('users').find({
+      paginate: false
+    })
 
-    return user as Message['user']
+    return users as any
+  }),
+  userPage: virtual(async (_message, context) => {
+    const users = await context.app.service('users').find({
+      adapter: {
+        paginate: {
+          default: 2
+        }
+      }
+    })
+
+    return users as any
   })
 })
 
