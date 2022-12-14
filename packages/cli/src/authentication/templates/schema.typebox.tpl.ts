@@ -44,7 +44,7 @@ export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
   )}
 })
 
-// Schema for creating new entries
+// Schema for creating new users
 export const ${camelName}DataSchema = Type.Pick(${camelName}Schema, [
   ${authStrategies.map((name) => (name === 'local' ? `'email', 'password'` : `'${name}Id'`)).join(', ')}
 ],
@@ -56,7 +56,7 @@ export const ${camelName}DataResolver = resolve<${upperName}, HookContext>({
   ${localTemplate(authStrategies, `password: passwordHash({ strategy: 'local' })`)}
 })
 
-// Schema for updating existing entries
+// Schema for updating existing users
 export const ${camelName}PatchSchema = Type.Partial(${camelName}Schema, {
   $id: '${upperName}Patch'
 })
