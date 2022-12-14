@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.34](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.33...v5.0.0-pre.34) (2022-12-14)
+
+### Bug Fixes
+
+- **core:** `context.type` for around hooks ([#2890](https://github.com/feathersjs/feathers/issues/2890)) ([d606ac6](https://github.com/feathersjs/feathers/commit/d606ac660fd5335c95206784fea36530dd2e851a))
+- **core:** Allow services with no external methods ([#2921](https://github.com/feathersjs/feathers/issues/2921)) ([df56918](https://github.com/feathersjs/feathers/commit/df569183d1a9ed0a9e0ea5bf8d7dab52d326a33d))
+- **core:** Improve service option usage and method option typings ([#2902](https://github.com/feathersjs/feathers/issues/2902)) ([164d75c](https://github.com/feathersjs/feathers/commit/164d75c0f11139a316baa91f1762de8f8eb7da2d))
+
+### Features
+
+- **adapter:** Add patch data type to adapters and refactor AdapterBase usage ([#2906](https://github.com/feathersjs/feathers/issues/2906)) ([9ddc2e6](https://github.com/feathersjs/feathers/commit/9ddc2e6b028f026f939d6af68125847e5c6734b4))
+
 # [5.0.0-pre.33](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.32...v5.0.0-pre.33) (2022-11-08)
 
 **Note:** Version bump only for package @feathersjs/feathers

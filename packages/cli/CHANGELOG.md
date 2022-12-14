@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.34](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.33...v5.0.0-pre.34) (2022-12-14)
+
+### Bug Fixes
+
+- **cli:** mongodb connection string for node 17+ ([#2875](https://github.com/feathersjs/feathers/issues/2875)) ([7fa2012](https://github.com/feathersjs/feathers/commit/7fa2012897d8429b522fbca72211fc9be1c25f7e))
+
+### Features
+
+- **adapter:** Add patch data type to adapters and refactor AdapterBase usage ([#2906](https://github.com/feathersjs/feathers/issues/2906)) ([9ddc2e6](https://github.com/feathersjs/feathers/commit/9ddc2e6b028f026f939d6af68125847e5c6734b4))
+- **cli:** Use separate patch schema and types ([#2916](https://github.com/feathersjs/feathers/issues/2916)) ([7088af6](https://github.com/feathersjs/feathers/commit/7088af64a539dc7f1a016d832b77b98aaaf92603))
+- **docs:** CLI and application structure guide ([#2818](https://github.com/feathersjs/feathers/issues/2818)) ([142914f](https://github.com/feathersjs/feathers/commit/142914fc001a8420056dd56db992c1c4f1bd312c))
+- **schema:** Split resolver options and property resolvers ([#2889](https://github.com/feathersjs/feathers/issues/2889)) ([4822c94](https://github.com/feathersjs/feathers/commit/4822c949812e5a1dceff3c62b2f9de4781b4d601))
+- **schema:** Virtual property resolvers ([#2900](https://github.com/feathersjs/feathers/issues/2900)) ([7d03b57](https://github.com/feathersjs/feathers/commit/7d03b57ae2f633bdd4a368e0d5955011fbd6c329))
+
 # [5.0.0-pre.33](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.32...v5.0.0-pre.33) (2022-11-08)
 
 ### Bug Fixes

@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.34](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.33...v5.0.0-pre.34) (2022-12-14)
+
+### Bug Fixes
+
+- **schema:** Allow query schemas with no properties, error on unsupported types ([#2904](https://github.com/feathersjs/feathers/issues/2904)) ([b66c734](https://github.com/feathersjs/feathers/commit/b66c734357478f51b2d38fa7f3eee08640cea26e))
+- **typebox:** Improve query syntax defaults ([#2888](https://github.com/feathersjs/feathers/issues/2888)) ([59f3cdc](https://github.com/feathersjs/feathers/commit/59f3cdca6376e34fe39a7b91db837d0325aeb5db))
+
 # [5.0.0-pre.33](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.32...v5.0.0-pre.33) (2022-11-08)
 
 ### Features

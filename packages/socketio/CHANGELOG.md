@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.34](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.33...v5.0.0-pre.34) (2022-12-14)
+
+### Bug Fixes
+
+- **socketio:** Disconnect socket on app disconnect event ([#2896](https://github.com/feathersjs/feathers/issues/2896)) ([4ba0039](https://github.com/feathersjs/feathers/commit/4ba003907843cfc2655798a568b16f07ff8adb1b))
+
 # [5.0.0-pre.33](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.32...v5.0.0-pre.33) (2022-11-08)
 
 **Note:** Version bump only for package @feathersjs/socketio
