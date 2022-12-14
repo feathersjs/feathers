@@ -107,6 +107,12 @@ app.use('messages', new MessageService(), {
 })
 ```
 
+<BlockQuote type="warning" label="Important">
+
+If the `methods` property is `undefined`, all standard methods will be enabled and accessible externally.
+
+</BlockQuote>
+
 ## .unuse(path)
 
 `app.unuse(path)` unregisters an existing service on `path` and calls the services [.teardown method](./services.md#teardownapp-path) if it is implemented.
