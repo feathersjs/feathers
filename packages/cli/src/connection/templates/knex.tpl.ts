@@ -28,12 +28,12 @@ const knexfile = ({
   language,
   database
 }: ConnectionGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/databases.html
-import { app } from './${lib}/app'
+import config from 'config'
 
 // Load our database connection info from the app configuration
-const config = app.get('${database}')
+const dbConfig = config.get('${database}') as Object
 
-${language === 'js' ? 'export default config' : 'module.exports = config'}
+${language === 'js' ? 'export default { ...dbConfig }' : 'module.exports = { ...dbConfig }'}
 `
 
 const importTemplate = ({ database }: ConnectionGeneratorContext) =>
