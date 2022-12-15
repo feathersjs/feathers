@@ -1,0 +1,28 @@
+https://docs.feathersjs.com/* https://feathersjs.com/:splat 301!
+
+# Crow Redirects
+
+/migrating.html                             /guides/migrating.html
+/security.html                              /guides/security.html
+/help/readme.html                           /help/
+/faq/readme.html                            /help/faq.html
+
+/api/authentication/oauth1.html             /api/authentication/oauth.html
+/api/authentication/oauth2.html             /api/authentication/oauth.html
+/api/authentication/server.html             /api/authentication/
+
+/guides/frameworks/readme.html              /guides/frameworks.html
+/guides/basics/readme.html                  /guides/
+/guides/basics/clients.html                 /guides/basics/starting.html
+/guides/basics/databases.html               /guides/basics/services.html
+/guides/basics/real-time.html               /guides/basics/services.html
+
+/guides/chat/readme.html                    /guides/
+/guides/chat/authentication.html            /guides/basics/authentication.html
+/guides/chat/creating.html                  /guides/basics/generator.html
+/guides/chat/frontend.html                  /guides/basics/frontend.html
+/guides/chat/processing.html                /guides/basics/hooks.html
+/guides/chat/service.html                   /guides/basics/services.html
+/guides/chat/testing.html                   /guides/basics/testing.html
+
+/*/readme.html                              /:splat 301!
