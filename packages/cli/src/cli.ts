@@ -2,6 +2,7 @@ import chalk from 'chalk'
 import { Command } from 'commander'
 import { generator, runGenerator, getContext } from '@feathershq/pinion'
 import { FeathersBaseContext, version } from './commons'
+import { cloudLogin } from './cloud'
 
 export * from 'commander'
 export { chalk }
@@ -27,6 +28,8 @@ program
   .description('The Feathers command line interface 🕊️')
   .version(version)
   .showHelpAfterError()
+
+program.command('login').action(cloudLogin)
 
 const generate = program.command('generate').alias('g')
 
