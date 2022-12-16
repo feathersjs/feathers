@@ -71,9 +71,9 @@ export default defineConfig({
     },
 
     algolia: {
-      appId: 'QK3SV4AQ1E',
-      apiKey: '3e8a4c82e7a1b57cd1a4809ceb86878e',
-      indexName: 'feathersjs'
+      appId: 'NW7C8J8UU2',
+      apiKey: '2aee4d5bd54a250e6f626c2d07275567',
+      indexName: 'dove'
       // searchParameters: {
       //   facetFilters: ['tags:en'],
       // },
