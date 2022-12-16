@@ -6,7 +6,9 @@ const importTemplate = ({
   upperName,
   folder,
   fileName,
-  className
+  className,
+  camelName,
+  type
 }: ServiceGeneratorContext) => /* ts */ `import type {
   ${upperName},
   ${upperName}Data,
@@ -18,13 +20,11 @@ export type {
   ${upperName}Data,
   ${upperName}Query
 }
-`
-
-const methodsTemplate = ({ camelName, upperName, className, type }: ServiceGeneratorContext) => `
-const ${camelName}ServiceMethods = ['find', 'get', 'create', 'update', 'patch', 'remove'] as const
-type ${upperName}ClientService = Pick<${className}${
+export const ${camelName}ServiceMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
+export type ${upperName}ClientService = Pick<${className}${
   type !== 'custom' ? `<Params<${upperName}Query>>` : ''
-}, typeof ${camelName}ServiceMethods[number]>`
+}, typeof ${camelName}ServiceMethods[number]>
+`
 
 const declarationTemplate = ({ path, upperName }: ServiceGeneratorContext) =>
   `  '${path}': ${upperName}ClientService`
@@ -44,14 +44,13 @@ export const generate = async (ctx: ServiceGeneratorContext) =>
     .then(
       when(
         (ctx) => ctx.language === 'js',
-        injectSource(methodsTemplate, after('import authenticationClient'), toClientFile)
+        injectSource(importTemplate, after('import authenticationClient'), toClientFile)
       )
     )
     .then(
       when(
         (ctx) => ctx.language === 'ts',
-        injectSource(importTemplate, after('import authenticationClient'), toClientFile),
-        injectSource(methodsTemplate, before('\nexport interface ServiceTypes'), toClientFile),
+        injectSource(importTemplate, after('import type { AuthenticationClientOptions }'), toClientFile),
         injectSource(declarationTemplate, after('export interface ServiceTypes'), toClientFile)
       )
     )
