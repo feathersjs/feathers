@@ -229,7 +229,7 @@ export class KnexAdapter<
 
     const client = this.db(params).client.config.client
     const returning = RETURNING_CLIENTS.includes(client as string) ? [this.id] : []
-    const rows: any = await this.db(params).insert(data, returning).catch(errorHandler)
+    const rows: any = await this.db(params).insert(data, returning).returning(this.id).catch(errorHandler)
     const id = data[this.id] || rows[0][this.id] || rows[0]
 
     if (!id) {
