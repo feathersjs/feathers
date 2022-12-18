@@ -100,7 +100,7 @@ function clean() {
     }),
     db.schema.dropTableIfExists(peopleId.fullName).then(() => {
       return db.schema.createTable(peopleId.fullName, (table) => {
-        table.integer('customid').primary().defaultTo(db.raw('(random())'))
+        table.increments('customid')
         table.string('name')
         table.integer('age')
         table.integer('time')
