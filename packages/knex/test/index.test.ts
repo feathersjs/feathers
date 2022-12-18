@@ -86,9 +86,6 @@ const db = knex(connection(TYPE) as any)
 // Create a public database to mimic a "schema"
 const schemaName = 'public'
 
-const UUID_AUTOGENERATE =
-  "(lower(hex(randomblob(4)) || '-' || hex(randomblob(2)) || '-' || '4' || substr(hex( randomblob(2)), 2) || '-' || substr('AB89', 1 + (abs(random()) % 4) , 1) || substr(hex(randomblob(2)), 2) || '-' || hex(randomblob(6))))"
-
 function clean() {
   return Promise.all([
     db.schema.dropTableIfExists(people.fullName).then(() => {
@@ -103,7 +100,7 @@ function clean() {
     }),
     db.schema.dropTableIfExists(peopleId.fullName).then(() => {
       return db.schema.createTable(peopleId.fullName, (table) => {
-        table.uuid('customid').primary().defaultTo(db.raw(UUID_AUTOGENERATE))
+        table.integer('customid').primary().defaultTo(db.raw('(random())'))
         table.string('name')
         table.integer('age')
         table.integer('time')
