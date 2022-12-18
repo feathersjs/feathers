@@ -1,43 +1,175 @@
+---
+outline: deep
+---
+
 # Service classes
 
-The `service.class` file exports the [service class or object](../../api/services.md).
+The `<service>.class` file exports the [service class or object](../../api/services.md).
 
 ## Database services
 
 When using a database, the service class will be extended from the [Feathers database adapter service](../../api/databases/common.md). Like any class, existing methods can be overriden or you can add your own methods (which can also be made available externally [as custom methods when registering the service](./service.md#registration)).
 
-### Service customization
-
 <LanguageBlock global-id="ts">
 
-<BlockQuote type="tip">
+<BlockQuote type="tip" label="Note">
 
-The generic types for a database service are always `AdapterService<ResultType, DataType, ParamsType>`.
+The generic types for a database service are always `AdapterService<MessageType, DataType, ParamsType, PatchType>`. The `MessageService<MessageParams extends Params = MessageParams>` generic is used to change the parameter type when using this service interface as a [client side service](./client.md).
 
 </BlockQuote>
 
 </LanguageBlock>
 
+### Overriding methods
+
+When overriding an existing [service method](../../api/services.md#service-methods) on a database adapter the method and overload signatures have to match. The following example shows how to override every service method. Only the methods you want to customize have to be added.
+
 <DatabaseBlock global-id="sql">
 
-An [SQL Knex service](../../api/databases/knex.md) can be customized like this:
+The [SQL Knex service](../../api/databases/knex.md) methods can be customized like this:
 
 ```ts
+import { Id, NullableId, Paginated } from '@feathersjs/feathers'
+
 export interface MessageParams extends KnexAdapterParams<MessageQuery> {}
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
-export class MessageService<ServiceParams extends Params = MessageParams> extends KnexService<
+export class MessageService<MessageParams extends Params = MessageParams> extends KnexService<
   Message,
   MessageData,
-  ServiceParams
+  MessageParams,
+  MessagePatch
 > {
-  find(params: ServiceParams) {
+  async find(
+    params?: MessageParams & { paginate?: { default?: number; max?: number } }
+  ): Promise<Paginated<Message>>
+  async find(params?: MessageParams & { paginate: false }): Promise<Message[]>
+  async find(params?: MessageParams): Promise<Paginated<Message> | Message[]>
+  async find(params?: MessageParams): Promise<Paginated<Message> | Message[]> {
     return super.find(params)
   }
 
-  async myMethod(name: string) {
+  async get(id: Id, params?: MessageParams): Promise<Message> {
+    return super.get(id, params)
+  }
+
+  async create(data: MessageData, params?: MessageParams): Promise<Message>
+  async create(data: MessageData[], params?: MessageParams): Promise<Message[]>
+  async create(data: MessageData | MessageData[], params?: MessageParams): Promise<Message | Message[]> {
+    return super.create(data, params)
+  }
+
+  async update(id: Id, data: Data, params?: MessageParams): Promise<Message> {
+    return super.update(id, data, params)
+  }
+
+  async patch(id: Id, data: MessagePatch, params?: MessageParams): Promise<Message>
+  async patch(id: null, data: MessagePatch, params?: MessageParams): Promise<Message[]>
+  async patch(id: NullableId, data: MessagePatch, params?: MessageParams): Promise<Message | Message[]> {
+    return super.patch(id, data, params)
+  }
+
+  async remove(id: Id, params?: MessageParams): Promise<Message>
+  async remove(id: null, params?: MessageParams): Promise<Message[]>
+  async remove(id: NullableId, params?: MessageParams): Promise<Message | Message[]> {
+    return super.remove(id, params)
+  }
+}
+```
+
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
+
+The [MongoDB service](../../api/databases/mongodb.md) methods can be customized like this:
+
+```ts
+import { Paginated } from '@feathersjs/feathers'
+import { AdapterId } from '@feathersjs/mongodb'
+
+export interface MessageParams extends MongoDBAdapterParams<MessageQuery> {}
+
+// By default calls the standard MongoDB adapter service methods but can be customized with your own functionality.
+export class MessageService<MessageParams extends Params = MessageParams> extends MongoDBService<
+  Message,
+  MessageData,
+  MessageParams,
+  MessagePatch
+> {
+  async find(
+    params?: MessageParams & { paginate?: { paginate?: { default?: number; max?: number } } }
+  ): Promise<Paginated<Message>>
+  async find(params?: MessageParams & { paginate: false }): Promise<Message[]>
+  async find(params?: MessageParams): Promise<Paginated<Message> | Message[]>
+  async find(params?: MessageParams): Promise<Paginated<Message> | Message[]> {
+    return super.find(params)
+  }
+
+  async get(id: AdapterId, params?: MessageParams): Promise<Message> {
+    return super.get(id, params)
+  }
+
+  async create(data: MessageData, params?: MessageParams): Promise<Message>
+  async create(data: MessageData[], params?: MessageParams): Promise<Message[]>
+  async create(data: MessageData | MessageData[], params?: MessageParams): Promise<Message | Message[]> {
+    return super.create(data, params)
+  }
+
+  async update(id: AdapterId, data: MessageData, params?: MessageParams): Promise<Message> {
+    return super.update(id, data, params)
+  }
+
+  async patch(id: null, data: MessagePatch, params?: MessageParams): Promise<Message[]>
+  async patch(id: AdapterId, data: MessagePatch, params?: MessageParams): Promise<Message>
+  async patch(
+    id: NullableAdapterId,
+    data: MessagePatch,
+    params?: MessageParams
+  ): Promise<Message | Message[]> {
+    return super.patch(id, data, params)
+  }
+
+  async remove(id: AdapterId, params?: MessageParams): Promise<Message>
+  async remove(id: null, params?: MessageParams): Promise<Message[]>
+  async remove(id: NullableAdapterId, params?: MessageParams): Promise<Message | Message[]> {
+    return super.remove(id, params)
+  }
+}
+```
+
+</DatabaseBlock>
+
+### Other service methods
+
+<DatabaseBlock global-id="sql">
+
+It is also possible to write your own service methods where the signatures don't have to match by extending from the `KnexAdapter` (instead of the `KnexService`) class. It does not have any of the service methods implemented but you can use the internal `_find`, `_get`, `_update`, `_patch` and `_remove` [adapter methods](../../api/databases/common.md#methods-without-hooks) to work with the database and implement the service method in the way you need.
+
+```ts
+import { Id } from '@feathersjs/feathers'
+import { KnexAdapter } from '@feathersjs/knex'
+
+export interface MessageParams extends KnexAdapterParams<MessageQuery> {}
+
+// By default calls the standard Knex adapter service methods but can be customized with your own functionality.
+export class MessageService<MessageParams extends Params = MessageParams> extends KnexAdapter<
+  Message,
+  MessageData,
+  MessageParams,
+  MessagePatch
+> {
+  async find(params: MessageParams) {
+    const page = this._find(params)
+
     return {
-      message: `Hello ${name}`
+      status: 'ok',
+      ...page
+    }
+  }
+
+  async get(id: Id, params: MessageParams) {
+    return {
+      message: `Hello ${id}`
     }
   }
 }
@@ -47,24 +179,33 @@ export class MessageService<ServiceParams extends Params = MessageParams> extend
 
 <DatabaseBlock global-id="mongodb">
 
-An [MongoDB service](../../api/databases/mongodb.md) can be customized like this:
+It is also possible to write your own service methods where the signatures don't have to match by extending from the `MongoDbAdapter` (instead of the `MongoDBService`) class. It does not have any of the service methods implemented but you can use the internal `_find`, `_get`, `_update`, `_patch` and `_remove` [adapter methods](../../api/databases/common.md#methods-without-hooks) to work with the database and implement the service method the way you need.
 
 ```ts
+import { Id } from '@feathersjs/feathers'
+import { MongoDbAdapter } from '@feathersjs/mongodb'
+
 export interface MessageParams extends MongoDBAdapterParams<MessageQuery> {}
 
 // By default calls the standard MongoDB adapter service methods but can be customized with your own functionality.
-export class MessageService<ServiceParams extends Params = MessageParams> extends MongoDBService<
+export class MessageService<MessageParams extends Params = MessageParams> extends MongoDbAdapter<
   Message,
   MessageData,
-  ServiceParams
+  MessageParams,
+  MessagePatch
 > {
-  find(params: ServiceParams) {
-    return super.find(params)
+  async find(params: MessageParams) {
+    const page = this._find(params)
+
+    return {
+      status: 'ok',
+      ...page
+    }
   }
 
-  async myMethod(name: string) {
+  async get(id: Id, params: MessageParams) {
     return {
-      message: `Hello ${name}`
+      message: `Hello ${id}`
     }
   }
 }
@@ -72,15 +213,63 @@ export class MessageService<ServiceParams extends Params = MessageParams> extend
 
 </DatabaseBlock>
 
-<LanguageBlock global-id="ts">
+### Custom methods
 
-Note the `MessageService<ServiceParams extends Params = MessageParams>` generic. This is used to change the parameter type when using this service interface as a [client side service](./client.md).
+<DatabaseBlock global-id="sql">
 
-</LanguageBlock>
+[Custom service methods](../../api/services.md#custom-methods) can be added to an [SQL Knex service](../../api/databases/knex.md) as follows:
+
+```ts
+export interface MessageParams extends KnexAdapterParams<MessageQuery> {}
+
+export type MyMethodData = { greeting: string }
+
+// By default calls the standard Knex adapter service methods but can be customized with your own functionality.
+export class MessageService<MessageParams extends Params = MessageParams> extends KnexService<
+  Message,
+  MessageData,
+  MessageParams,
+  MessagePatch
+> {
+  async myMethod(data: MyMethodData, params: MessageParams) {
+    return {
+      message: `${data.greeting || 'Hello'} ${params.user.name}!`
+    }
+  }
+}
+```
+
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
+
+[Custom service methods](../../api/services.md#custom-methods) can be added to a [MongoDB service](../../api/databases/mongodb.md) like this:
+
+```ts
+export interface MessageParams extends MongoDBAdapterParams<MessageQuery> {}
+
+export type MyMethodData = { name: string }
+
+// By default calls the standard MongoDB adapter service methods but can be customized with your own functionality.
+export class MessageService<MessageParams extends Params = MessageParams> extends MongoDBService<
+  Message,
+  MessageData,
+  MessageParams,
+  MessagePatch
+> {
+  async myMethod(data: MyMethodData, params: MessageParams) {
+    return {
+      message: `${data.greeting || 'Hello'} ${params.user.name}!`
+    }
+  }
+}
+```
+
+</DatabaseBlock>
 
 ## Custom services
 
-As shown in the [Quick start](../basics/starting.md), Feathers can work with any database, third party API or custom functionality by implementing your own [services](../../api/services.md). When generating a custom service, a basic skeleton service will be created. You can remove the methods you don't need and add your own.
+As shown in the [Quick start](../basics/starting.md), Feathers can work with any database, third party API or custom functionality by implementing your own [services](../../api/services.md). When generating a custom service, a basic skeleton service will be created. You can remove the methods you don't need and add others you need.
 
 <LanguageBlock global-id="ts">
 
@@ -132,4 +321,4 @@ When removing methods, the `methods` list in the [service](./service.md) and [cl
 
 ## getOptions
 
-The `getOptions` function is a function that returns the options based on the [application](./app.md) that will be passed to the service class constructor.
+The `getOptions` function is a function that returns the options based on the [application](./app.md) that will be passed to the service class constructor. This is where you can pass [common adapter options](../../api/databases/common.md#options) as well as [MongoDB](../../api/databases/mongodb.md#serviceoptions) or [SQL](../../api/databases/knex.md#serviceoptions) specific or custom service options.

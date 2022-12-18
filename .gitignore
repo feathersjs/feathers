@@ -43,3 +43,4 @@ dist/
 packages/**/lib
 packages/cli/test/build/*.tgz
 *.sqlite
+docs/.vitepress/cache
