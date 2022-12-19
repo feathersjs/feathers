@@ -32,7 +32,7 @@ A Feathers application generated with Feathers v5 or later now exports a client 
 To connect to a Feathers server in NodeJS, install the desired client connection library (here, `socket.io-client`), alongside the Feathers core library, and the connection-specific library:
 
 ```
-npm install @feathersjs/feathers @feathersjs/socketio-client socket.io-client --save
+npm install @feathersjs/feathers@pre @feathersjs/socketio-client@pre socket.io-client --save
 ```
 
 Then initialize like this:
@@ -62,7 +62,7 @@ messageService.create({
 React Native usage is the same as for the [Node client](#node). Install the required packages into your [React Native](https://facebook.github.io/react-native/) project.
 
 ```bash
-npm install @feathersjs/feathers @feathersjs/socketio-client socket.io-client
+npm install @feathersjs/feathers@pre @feathersjs/socketio-client@pre socket.io-client
 ```
 
 Then in the main application file:
@@ -138,7 +138,7 @@ For non-CommonJS formats (like AMD) version of Feathers and its client modules t
 </Badges>
 
 ```
-npm install @feathersjs/client --save
+npm install @feathersjs/client@pre --save
 ```
 
 `@feathersjs/client` is a module that bundles the separate Feathers client-side modules into one file which can be loaded directly in the browser through a `<script>` tag and in most other JavaScript runtimes.
