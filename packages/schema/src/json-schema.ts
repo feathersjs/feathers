@@ -63,7 +63,7 @@ export const getDataValidator = (
   }
 }
 
-export type PropertyQuery<D extends JSONSchema, X extends { [key: string]: JSONSchema }> = {
+export type PropertyQuery<D extends JSONSchema, X> = {
   anyOf: [
     D,
     {

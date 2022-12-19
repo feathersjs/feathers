@@ -186,7 +186,7 @@ export const userQuerySchema = {
           type: 'string'
         }
       }
-    })
+    } as const)
   }
 } as const
 
