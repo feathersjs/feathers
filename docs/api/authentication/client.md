@@ -12,7 +12,7 @@ outline: deep
 </Badges>
 
 ```
-npm install @feathersjs/authentication-client --save
+npm install @feathersjs/authentication-client@pre --save
 ```
 
 The `@feathersjs/authentication-client` module allows you to easily authenticate a Feathers client against a Feathers server. It is not required, but makes it easier to implement authentication in your client by automatically storing and sending the access token and handling re-authenticating when a websocket disconnects.

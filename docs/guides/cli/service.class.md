@@ -14,7 +14,7 @@ When using a database, the service class will be extended from the [Feathers dat
 
 <BlockQuote type="tip" label="Note">
 
-The generic types for a database service are always `AdapterService<MessageType, DataType, ParamsType, PatchType>`. The `MessageService<MessageParams extends Params = MessageParams>` generic is used to change the parameter type when using this service interface as a [client side service](./client.md).
+The generic types for a database service are always `AdapterService<MessageType, DataType, ParamsType, PatchType>`. The `MessageService<ServiceParams extends Params = MessageParams>` generic is used to change the parameter type when using this service interface as a [client side service](./client.md).
 
 </BlockQuote>
 
@@ -34,7 +34,7 @@ import { Id, NullableId, Paginated } from '@feathersjs/feathers'
 export interface MessageParams extends KnexAdapterParams<MessageQuery> {}
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
-export class MessageService<MessageParams extends Params = MessageParams> extends KnexService<
+export class MessageService<ServiceParams extends Params = MessageParams> extends KnexService<
   Message,
   MessageData,
   MessageParams,
@@ -43,35 +43,35 @@ export class MessageService<MessageParams extends Params = MessageParams> extend
   async find(
     params?: MessageParams & { paginate?: { default?: number; max?: number } }
   ): Promise<Paginated<Message>>
-  async find(params?: MessageParams & { paginate: false }): Promise<Message[]>
-  async find(params?: MessageParams): Promise<Paginated<Message> | Message[]>
-  async find(params?: MessageParams): Promise<Paginated<Message> | Message[]> {
+  async find(params?: ServiceParams & { paginate: false }): Promise<Message[]>
+  async find(params?: ServiceParams): Promise<Paginated<Message> | Message[]>
+  async find(params?: ServiceParams): Promise<Paginated<Message> | Message[]> {
     return super.find(params)
   }
 
-  async get(id: Id, params?: MessageParams): Promise<Message> {
+  async get(id: Id, params?: ServiceParams): Promise<Message> {
     return super.get(id, params)
   }
 
-  async create(data: MessageData, params?: MessageParams): Promise<Message>
-  async create(data: MessageData[], params?: MessageParams): Promise<Message[]>
-  async create(data: MessageData | MessageData[], params?: MessageParams): Promise<Message | Message[]> {
+  async create(data: MessageData, params?: ServiceParams): Promise<Message>
+  async create(data: MessageData[], params?: ServiceParams): Promise<Message[]>
+  async create(data: MessageData | MessageData[], params?: ServiceParams): Promise<Message | Message[]> {
     return super.create(data, params)
   }
 
-  async update(id: Id, data: Data, params?: MessageParams): Promise<Message> {
+  async update(id: Id, data: Data, params?: ServiceParams): Promise<Message> {
     return super.update(id, data, params)
   }
 
-  async patch(id: Id, data: MessagePatch, params?: MessageParams): Promise<Message>
-  async patch(id: null, data: MessagePatch, params?: MessageParams): Promise<Message[]>
-  async patch(id: NullableId, data: MessagePatch, params?: MessageParams): Promise<Message | Message[]> {
+  async patch(id: Id, data: MessagePatch, params?: ServiceParams): Promise<Message>
+  async patch(id: null, data: MessagePatch, params?: ServiceParams): Promise<Message[]>
+  async patch(id: NullableId, data: MessagePatch, params?: ServiceParams): Promise<Message | Message[]> {
     return super.patch(id, data, params)
   }
 
-  async remove(id: Id, params?: MessageParams): Promise<Message>
-  async remove(id: null, params?: MessageParams): Promise<Message[]>
-  async remove(id: NullableId, params?: MessageParams): Promise<Message | Message[]> {
+  async remove(id: Id, params?: ServiceParams): Promise<Message>
+  async remove(id: null, params?: ServiceParams): Promise<Message[]>
+  async remove(id: NullableId, params?: ServiceParams): Promise<Message | Message[]> {
     return super.remove(id, params)
   }
 }
@@ -90,48 +90,48 @@ import { AdapterId } from '@feathersjs/mongodb'
 export interface MessageParams extends MongoDBAdapterParams<MessageQuery> {}
 
 // By default calls the standard MongoDB adapter service methods but can be customized with your own functionality.
-export class MessageService<MessageParams extends Params = MessageParams> extends MongoDBService<
+export class MessageService<ServiceParams extends Params = MessageParams> extends MongoDBService<
   Message,
   MessageData,
   MessageParams,
   MessagePatch
 > {
   async find(
-    params?: MessageParams & { paginate?: { paginate?: { default?: number; max?: number } } }
+    params?: ServiceParams & { paginate?: { paginate?: { default?: number; max?: number } } }
   ): Promise<Paginated<Message>>
-  async find(params?: MessageParams & { paginate: false }): Promise<Message[]>
-  async find(params?: MessageParams): Promise<Paginated<Message> | Message[]>
-  async find(params?: MessageParams): Promise<Paginated<Message> | Message[]> {
+  async find(params?: ServiceParams & { paginate: false }): Promise<Message[]>
+  async find(params?: ServiceParams): Promise<Paginated<Message> | Message[]>
+  async find(params?: ServiceParams): Promise<Paginated<Message> | Message[]> {
     return super.find(params)
   }
 
-  async get(id: AdapterId, params?: MessageParams): Promise<Message> {
+  async get(id: AdapterId, params?: ServiceParams): Promise<Message> {
     return super.get(id, params)
   }
 
-  async create(data: MessageData, params?: MessageParams): Promise<Message>
-  async create(data: MessageData[], params?: MessageParams): Promise<Message[]>
-  async create(data: MessageData | MessageData[], params?: MessageParams): Promise<Message | Message[]> {
+  async create(data: MessageData, params?: ServiceParams): Promise<Message>
+  async create(data: MessageData[], params?: ServiceParams): Promise<Message[]>
+  async create(data: MessageData | MessageData[], params?: ServiceParams): Promise<Message | Message[]> {
     return super.create(data, params)
   }
 
-  async update(id: AdapterId, data: MessageData, params?: MessageParams): Promise<Message> {
+  async update(id: AdapterId, data: MessageData, params?: ServiceParams): Promise<Message> {
     return super.update(id, data, params)
   }
 
-  async patch(id: null, data: MessagePatch, params?: MessageParams): Promise<Message[]>
-  async patch(id: AdapterId, data: MessagePatch, params?: MessageParams): Promise<Message>
+  async patch(id: null, data: MessagePatch, params?: ServiceParams): Promise<Message[]>
+  async patch(id: AdapterId, data: MessagePatch, params?: ServiceParams): Promise<Message>
   async patch(
     id: NullableAdapterId,
     data: MessagePatch,
-    params?: MessageParams
+    params?: ServiceParams
   ): Promise<Message | Message[]> {
     return super.patch(id, data, params)
   }
 
-  async remove(id: AdapterId, params?: MessageParams): Promise<Message>
-  async remove(id: null, params?: MessageParams): Promise<Message[]>
-  async remove(id: NullableAdapterId, params?: MessageParams): Promise<Message | Message[]> {
+  async remove(id: AdapterId, params?: ServiceParams): Promise<Message>
+  async remove(id: null, params?: ServiceParams): Promise<Message[]>
+  async remove(id: NullableAdapterId, params?: ServiceParams): Promise<Message | Message[]> {
     return super.remove(id, params)
   }
 }
@@ -152,13 +152,13 @@ import { KnexAdapter } from '@feathersjs/knex'
 export interface MessageParams extends KnexAdapterParams<MessageQuery> {}
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
-export class MessageService<MessageParams extends Params = MessageParams> extends KnexAdapter<
+export class MessageService<ServiceParams extends Params = MessageParams> extends KnexAdapter<
   Message,
   MessageData,
   MessageParams,
   MessagePatch
 > {
-  async find(params: MessageParams) {
+  async find(params: ServiceParams) {
     const page = this._find(params)
 
     return {
@@ -167,7 +167,7 @@ export class MessageService<MessageParams extends Params = MessageParams> extend
     }
   }
 
-  async get(id: Id, params: MessageParams) {
+  async get(id: Id, params: ServiceParams) {
     return {
       message: `Hello ${id}`
     }
@@ -188,13 +188,13 @@ import { MongoDbAdapter } from '@feathersjs/mongodb'
 export interface MessageParams extends MongoDBAdapterParams<MessageQuery> {}
 
 // By default calls the standard MongoDB adapter service methods but can be customized with your own functionality.
-export class MessageService<MessageParams extends Params = MessageParams> extends MongoDbAdapter<
+export class MessageService<ServiceParams extends Params = MessageParams> extends MongoDbAdapter<
   Message,
   MessageData,
   MessageParams,
   MessagePatch
 > {
-  async find(params: MessageParams) {
+  async find(params: ServiceParams) {
     const page = this._find(params)
 
     return {
@@ -203,7 +203,7 @@ export class MessageService<MessageParams extends Params = MessageParams> extend
     }
   }
 
-  async get(id: Id, params: MessageParams) {
+  async get(id: Id, params: ServiceParams) {
     return {
       message: `Hello ${id}`
     }
@@ -225,13 +225,13 @@ export interface MessageParams extends KnexAdapterParams<MessageQuery> {}
 export type MyMethodData = { greeting: string }
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
-export class MessageService<MessageParams extends Params = MessageParams> extends KnexService<
+export class MessageService<ServiceParams extends Params = MessageParams> extends KnexService<
   Message,
   MessageData,
   MessageParams,
   MessagePatch
 > {
-  async myMethod(data: MyMethodData, params: MessageParams) {
+  async myMethod(data: MyMethodData, params: ServiceParams) {
     return {
       message: `${data.greeting || 'Hello'} ${params.user.name}!`
     }
@@ -251,13 +251,13 @@ export interface MessageParams extends MongoDBAdapterParams<MessageQuery> {}
 export type MyMethodData = { name: string }
 
 // By default calls the standard MongoDB adapter service methods but can be customized with your own functionality.
-export class MessageService<MessageParams extends Params = MessageParams> extends MongoDBService<
+export class MessageService<ServiceParams extends Params = MessageParams> extends MongoDBService<
   Message,
   MessageData,
   MessageParams,
   MessagePatch
 > {
-  async myMethod(data: MyMethodData, params: MessageParams) {
+  async myMethod(data: MyMethodData, params: ServiceParams) {
     return {
       message: `${data.greeting || 'Hello'} ${params.user.name}!`
     }

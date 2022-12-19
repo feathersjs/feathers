@@ -12,7 +12,7 @@ outline: deep
 </Badges>
 
 ```
-npm install @feathersjs/authentication --save
+npm install @feathersjs/authentication@pre --save
 ```
 
 The `JWTStrategy` is an [authentication strategy](./strategy.md) included in `@feathersjs/authentication` for authenticating [JSON web tokens (JWT)](https://jwt.io/):
