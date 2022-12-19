@@ -44,25 +44,11 @@ describe('@feathersjs/schema/typebox', () => {
         () =>
           queryProperties(
             Type.Object({
-              something: Type.Object({})
+              something: Type.Ref(Type.Object({}, { $id: 'something' }))
             })
           ),
         {
-          message:
-            "Can not create query syntax schema for property 'something'. Only types string, number, integer, boolean, null are allowed."
-        }
-      )
-
-      assert.throws(
-        () =>
-          queryProperties(
-            Type.Object({
-              otherThing: Type.Array(Type.String())
-            })
-          ),
-        {
-          message:
-            "Can not create query syntax schema for property 'otherThing'. Only types string, number, integer, boolean, null are allowed."
+          message: "Can not create query syntax schema for reference property 'something'"
         }
       )
     })
@@ -71,6 +57,39 @@ describe('@feathersjs/schema/typebox', () => {
       const schema = querySyntax(Type.Object({}))
 
       new Ajv().compile(schema)
+    })
+
+    it('query syntax can include additional extensions', async () => {
+      const schema = Type.Object({
+        name: Type.String(),
+        age: Type.Number()
+      })
+      const querySchema = querySyntax(schema, {
+        age: {
+          $notNull: Type.Boolean()
+        },
+        name: {
+          $ilike: Type.String()
+        }
+      })
+      const validator = new Ajv().compile(querySchema)
+
+      type Query = Static<typeof querySchema>
+
+      const query: Query = {
+        age: {
+          $gt: 10,
+          $notNull: true
+        },
+        name: {
+          $gt: 'David',
+          $ilike: 'Dave'
+        }
+      }
+
+      const validated = (await validator(query)) as any as Query
+
+      assert.ok(validated)
     })
   })
 

@@ -1,7 +1,3 @@
----
-outline: deep
----
-
 # TypeBox
 
 `@feathersjs/typebox` allows to define JSON schemas with [TypeBox](https://github.com/sinclairzx81/typebox), a JSON schema type builder with static type resolution for TypeScript.
@@ -1482,7 +1478,7 @@ type MessageData = Static<typeof messageDataSchema>
 
 ### querySyntax
 
-`querySyntax(definition)` returns a schema to validate the [Feathers query syntax](../databases/querying.md) for all properties in a TypeBox definition.
+`querySyntax(definition, extensions, options)` returns a schema to validate the [Feathers query syntax](../databases/querying.md) for all properties in a TypeBox definition.
 
 ```ts
 import { querySyntax } from '@feathersjs/typebox'
@@ -1496,7 +1492,7 @@ const messageQuerySchema = querySyntax(messageQueryProperties)
 type MessageQuery = Static<typeof messageQuerySchema>
 ```
 
-To allow additional query parameters for properties you can create a union type:
+To allow additional query parameters like `$ilike`, `$regex` etc. for properties you can pass an object with the property names and additional types:
 
 ```ts
 import { querySyntax } from '@feathersjs/typebox'
@@ -1505,14 +1501,35 @@ import { querySyntax } from '@feathersjs/typebox'
 const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdAt', 'userId'], {
   additionalProperties: false
 })
-const messageQuerySchema = Type.Union(
+const messageQuerySchema = Type.Intersect(
+  [
+    // This will additioanlly allow querying for `{ name: { $ilike: 'Dav%' } }`
+    querySyntax(messageQueryProperties, {
+      name: {
+        $ilike: Type.String()
+      }
+    }),
+    // Add additional query properties here
+    Type.Object({})
+  ],
+  { additionalProperties: false }
+)
+```
+
+To allow additional query properties outside of the query syntax use the intersection type:
+
+```ts
+import { querySyntax } from '@feathersjs/typebox'
+
+// Schema for allowed query properties
+const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdAt', 'userId'], {
+  additionalProperties: false
+})
+const messageQuerySchema = Type.Intersect(
   [
     querySyntax(messageQueryProperties),
-    // Allow to also query for `{ name: { $ilike: '%something' } }`
     Type.Object({
-      name: Type.Object({
-        $ilike: Type.String()
-      })
+      isActive: Type.Boolean()
     })
   ],
   { additionalProperties: false }

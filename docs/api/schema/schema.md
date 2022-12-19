@@ -141,6 +141,69 @@ export type Message = FromSchema<
 
 Schema ships with a few helpers to automatically create schemas that comply with the [Feathers query syntax](../databases/querying.md) (like `$gt`, `$ne` etc.):
 
+### querySyntax
+
+`querySyntax(schema.properties, extensions)` initializes all properties the additional query syntax properties `$limit`, `$skip`, `$select` and `$sort`. `$select` and `$sort` will be typed so they only allow existing schema properties.
+
+```ts
+import { querySyntax } from '@feathersjs/schema'
+import type { FromSchema } from '@feathersjs/schema'
+
+export const userQuerySchema = {
+  $id: 'UserQuery',
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    ...querySyntax(userSchema.properties)
+  }
+} as const
+
+export type UserQuery = FromSchema<typeof userQuerySchema>
+
+const userQuery: UserQuery = {
+  $limit: 10,
+  $select: ['email', 'id'],
+  $sort: {
+    email: 1
+  }
+}
+```
+
+Additional properties like `$ilike` can be added to the query syntax like this:
+
+```ts
+import { querySyntax } from '@feathersjs/schema'
+import type { FromSchema } from '@feathersjs/schema'
+
+export const userQuerySchema = {
+  $id: 'UserQuery',
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    ...querySyntax(userSchema.properties, {
+      email: {
+        $ilike: {
+          type: 'string'
+        }
+      }
+    })
+  }
+} as const
+
+export type UserQuery = FromSchema<typeof userQuerySchema>
+
+const userQuery: UserQuery = {
+  $limit: 10,
+  $select: ['email', 'id'],
+  $sort: {
+    email: 1
+  },
+  email: {
+    $ilike: '%@example.com'
+  }
+}
+```
+
 ### queryProperty
 
 `queryProperty` helper takes a definition for a single property and returns a schema that allows the default query operators. This helper supports the operators listed, below. Learn what each one means in the [common query operator](/api/databases/querying#operators) documentation.
@@ -181,34 +244,6 @@ You can learn how it works, [here](https://github.com/feathersjs/feathers/blob/d
 ### queryProperties
 
 `queryProperties(schema.properties)` takes the all properties of a schema and converts them into query schema properties (using `queryProperty`)
-
-### querySyntax
-
-`querySyntax(schema.properties)` initializes all properties the additional query syntax properties `$limit`, `$skip`, `$select` and `$sort`. `$select` and `$sort` will be typed so they only allow existing schema properties.
-
-```ts
-import { querySyntax } from '@feathersjs/schema'
-import type { FromSchema } from '@feathersjs/schema'
-
-export const userQuerySchema = {
-  $id: 'UserQuery',
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    ...querySyntax(userSchema.properties)
-  }
-} as const
-
-export type UserQuery = FromSchema<typeof userQuerySchema>
-
-const userQuery: UserQuery = {
-  $limit: 10,
-  $select: ['email', 'id'],
-  $sort: {
-    email: 1
-  }
-}
-```
 
 ## Validators
 

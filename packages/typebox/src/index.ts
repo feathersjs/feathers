@@ -1,5 +1,5 @@
 import { Type, TObject, TInteger, TOptional, TSchema, TIntersect, ObjectOptions } from '@sinclair/typebox'
-import { jsonSchema, Validator, DataValidatorMap, Ajv, SUPPORTED_TYPES } from '@feathersjs/schema'
+import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
 
 export * from '@sinclair/typebox'
 export * from './default-schemas'
@@ -77,9 +77,13 @@ export function sortDefinition<T extends TObject>(schema: T) {
  * including operators like `$gt`, `$lt` etc. for a single property
  *
  * @param def The property definition
+ * @param extension Additional properties to add to the property query
  * @returns The Feathers query syntax schema
  */
-export const queryProperty = <T extends TSchema>(def: T) =>
+export const queryProperty = <T extends TSchema, X extends { [key: string]: TSchema }>(
+  def: T,
+  extension: X = {} as X
+) =>
   Type.Optional(
     Type.Union([
       def,
@@ -91,38 +95,44 @@ export const queryProperty = <T extends TSchema>(def: T) =>
           $lte: def,
           $ne: def,
           $in: Type.Array(def),
-          $nin: Type.Array(def)
+          $nin: Type.Array(def),
+          ...extension
         }),
         { additionalProperties: false }
       )
     ])
   )
 
-type QueryProperty<T extends TSchema> = ReturnType<typeof queryProperty<T>>
+type QueryProperty<T extends TSchema, X extends { [key: string]: TSchema }> = ReturnType<
+  typeof queryProperty<T, X>
+>
 
 /**
  * Creates a Feathers query syntax schema for the properties defined in `definition`.
  *
  * @param definition The properties to create the Feathers query syntax schema for
+ * @param extensions Additional properties to add to a property query
  * @returns The Feathers query syntax schema
  */
-export const queryProperties = <T extends TObject>(definition: T) => {
+export const queryProperties = <
+  T extends TObject,
+  X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
+>(
+  definition: T,
+  extensions: X = {} as X
+) => {
   const properties = Object.keys(definition.properties).reduce((res, key) => {
     const result = res as any
     const value = definition.properties[key]
 
-    if (value.$ref || !SUPPORTED_TYPES.includes(value.type)) {
-      throw new Error(
-        `Can not create query syntax schema for property '${key}'. Only types ${SUPPORTED_TYPES.join(
-          ', '
-        )} are allowed.`
-      )
+    if (value.$ref) {
+      throw new Error(`Can not create query syntax schema for reference property '${key}'`)
     }
 
-    result[key] = queryProperty(value)
+    result[key] = queryProperty(value, extensions[key])
 
     return result
-  }, {} as { [K in keyof T['properties']]: QueryProperty<T['properties'][K]> })
+  }, {} as { [K in keyof T['properties']]: QueryProperty<T['properties'][K], X[K]> })
 
   return Type.Optional(Type.Object(properties, { additionalProperties: false }))
 }
@@ -132,14 +142,19 @@ export const queryProperties = <T extends TObject>(definition: T) => {
  * and `$sort` and `$select` for the allowed properties.
  *
  * @param type The properties to create the query syntax for
+ * @param extensions Additional properties to add to the query syntax
  * @param options Options for the TypeBox object schema
  * @returns A TypeBox object representing the complete Feathers query syntax for the given properties
  */
-export const querySyntax = <T extends TObject | TIntersect>(
+export const querySyntax = <
+  T extends TObject | TIntersect,
+  X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
+>(
   type: T,
+  extensions: X = {} as X,
   options: ObjectOptions = { additionalProperties: false }
 ) => {
-  const propertySchema = queryProperties(type)
+  const propertySchema = queryProperties(type, extensions)
 
   return Type.Intersect(
     [
