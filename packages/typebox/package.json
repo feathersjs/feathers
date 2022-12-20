@@ -45,6 +45,7 @@
     "README.md",
     "src/**",
     "lib/**",
+    "esm/**",
     "*.d.ts",
     "*.js"
   ],

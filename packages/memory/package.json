@@ -39,7 +39,6 @@
     "CHANGELOG.md",
     "LICENSE",
     "README.md",
-    "_templates/**",
     "src/**",
     "esm/**",
     "lib/**",

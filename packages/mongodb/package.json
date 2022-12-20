@@ -43,6 +43,7 @@
     "LICENSE",
     "README.md",
     "src/**",
+    "esm/**",
     "lib/**",
     "*.d.ts",
     "*.js"
