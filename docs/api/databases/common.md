@@ -102,6 +102,18 @@ Disabling or changing the default pagination is not available in the client. Onl
 
 </BlockQuote>
 
+## Bulk updates
+
+Some database adapters allow to set the `params.bulk` option to perform fast `create`, `patch` or `remove` operations for a large amount of data. Setting `params.bulk = true` will always return no data (an empty array `[]`) and not send any real-time events.
+
+```ts
+const manyTodos = await readCSVFile('todos.csv')
+
+await app.service('todos').create(manyTodos, {
+  bulk: true
+}) // -> []
+```
+
 ## Extending Adapters
 
 There are two ways to extend existing database adapters. Either by extending the base class or by adding functionality through hooks.

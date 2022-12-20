@@ -70,6 +70,7 @@ export interface AdapterParams<
 > extends Params<Q> {
   adapter?: A
   paginate?: PaginationParams
+  bulk?: boolean
 }
 
 /**

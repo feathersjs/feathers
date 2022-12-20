@@ -114,6 +114,28 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
         }
       })
 
+      test('.remove bulk', async () => {
+        await service.create({ name: 'Dave', age: 29, created: true })
+        await service.create({
+          name: 'David',
+          age: 3,
+          created: true
+        })
+
+        const data = await service.remove(null, {
+          query: { created: true },
+          bulk: true
+        })
+
+        assert.deepStrictEqual(data, [])
+
+        const found = await service.find({
+          query: { created: true }
+        })
+
+        assert.strictEqual(found.length, 0)
+      })
+
       test('.remove + multi', async () => {
         try {
           await service.remove(null)
@@ -398,6 +420,39 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
         await service.remove(david[idProp])
       })
 
+      test('.patch bulk', async () => {
+        const dave = await service.create({
+          name: 'Dave',
+          age: 29,
+          created: true
+        })
+        const david = await service.create({
+          name: 'David',
+          age: 3,
+          created: true
+        })
+
+        const data = await service.patch(
+          null,
+          {
+            age: 2
+          },
+          {
+            query: { created: true },
+            bulk: true
+          }
+        )
+
+        assert.deepStrictEqual(data, [])
+
+        const daveAfter = await service.get(dave[idProp])
+
+        assert.strictEqual(daveAfter.age, 2, 'Dave age was updated')
+
+        await service.remove(dave[idProp])
+        await service.remove(david[idProp])
+      })
+
       test('.patch multiple no pagination', async () => {
         try {
           await service.remove(doug[idProp])
@@ -642,6 +697,36 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
 
         await service.remove(data[0][idProp])
         await service.remove(data[1][idProp])
+      })
+
+      test('.create bulk', async () => {
+        const items = [
+          {
+            name: 'Gerald',
+            age: 18
+          },
+          {
+            name: 'Herald',
+            age: 18
+          }
+        ]
+
+        const data = await service.create(items, {
+          bulk: true
+        })
+
+        assert.deepStrictEqual(data, [])
+
+        const foundItems = await service.find({
+          query: { age: 18 }
+        })
+
+        assert.strictEqual(foundItems.length, 2)
+
+        await service.remove(null, {
+          query: { age: 18 },
+          bulk: true
+        })
       })
     })
 
