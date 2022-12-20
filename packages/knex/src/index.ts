@@ -37,6 +37,7 @@ export class KnexService<
 
   async create(data: Data, params?: ServiceParams): Promise<Result>
   async create(data: Data[], params?: ServiceParams): Promise<Result[]>
+  async create(data: Data | Data[], params?: ServiceParams): Promise<Result | Result[]>
   async create(data: Data | Data[], params?: ServiceParams): Promise<Result | Result[]> {
     if (Array.isArray(data) && !this.allowsMulti('create', params)) {
       throw new MethodNotAllowed('Can not create multiple entries')
@@ -54,6 +55,7 @@ export class KnexService<
 
   async patch(id: Id, data: PatchData, params?: ServiceParams): Promise<Result>
   async patch(id: null, data: PatchData, params?: ServiceParams): Promise<Result[]>
+  async patch(id: NullableId, data: PatchData, params?: ServiceParams): Promise<Result | Result[]>
   async patch(id: NullableId, data: PatchData, params?: ServiceParams): Promise<Result | Result[]> {
     const { $limit, ...query } = await this.sanitizeQuery(params)
 
@@ -65,6 +67,7 @@ export class KnexService<
 
   async remove(id: Id, params?: ServiceParams): Promise<Result>
   async remove(id: null, params?: ServiceParams): Promise<Result[]>
+  async remove(id: NullableId, params?: ServiceParams): Promise<Result | Result[]>
   async remove(id: NullableId, params?: ServiceParams): Promise<Result | Result[]> {
     const { $limit, ...query } = await this.sanitizeQuery(params)
 
