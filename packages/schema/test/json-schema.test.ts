@@ -1,5 +1,6 @@
 import Ajv from 'ajv'
 import assert from 'assert'
+import { FromSchema } from '../src'
 import { queryProperties, querySyntax } from '../src/json-schema'
 
 describe('@feathersjs/schema/json-schema', () => {
@@ -8,25 +9,11 @@ describe('@feathersjs/schema/json-schema', () => {
       () =>
         queryProperties({
           something: {
-            type: 'object'
+            $ref: 'something'
           }
         }),
       {
-        message:
-          "Can not create query syntax schema for property 'something'. Only types string, number, integer, boolean, null are allowed."
-      }
-    )
-
-    assert.throws(
-      () =>
-        queryProperties({
-          otherThing: {
-            type: 'array'
-          }
-        }),
-      {
-        message:
-          "Can not create query syntax schema for property 'otherThing'. Only types string, number, integer, boolean, null are allowed."
+        message: "Can not create query syntax schema for reference property 'something'"
       }
     )
   })
@@ -38,5 +25,48 @@ describe('@feathersjs/schema/json-schema', () => {
     }
 
     new Ajv().compile(schema)
+  })
+
+  it('querySyntax with extensions', async () => {
+    const schema = {
+      name: {
+        type: 'string'
+      },
+      age: {
+        type: 'number'
+      }
+    } as const
+
+    const querySchema = {
+      type: 'object',
+      properties: querySyntax(schema, {
+        name: {
+          $ilike: {
+            type: 'string'
+          }
+        },
+        age: {
+          $value: {
+            type: 'null'
+          }
+        }
+      } as const)
+    } as const
+
+    type Query = FromSchema<typeof querySchema>
+
+    const q: Query = {
+      name: {
+        $ilike: 'hello'
+      },
+      age: {
+        $value: null,
+        $gte: 42
+      }
+    }
+
+    const validator = new Ajv({ strict: false }).compile(schema)
+
+    assert.ok(validator(q))
   })
 })
