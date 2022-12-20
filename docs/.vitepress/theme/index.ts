@@ -1,3 +1,6 @@
+import googleAnalytics from 'vitepress-plugin-google-analytics'
+import 'element-plus/theme-chalk/dark/css-vars.css'
+
 import '../vite-env.d'
 import Theme from 'vitepress/theme'
 import { inBrowser } from 'vitepress'
@@ -15,7 +18,6 @@ import LanguageBlock from '../components/LanguageBlock.vue'
 import DatabaseBlock from '../components/DatabaseBlock.vue'
 
 import '../style/element-plus.scss'
-import 'element-plus/theme-chalk/dark/css-vars.css'
 // import 'element-plus/dist/index.css'
 
 if (inBrowser) import('./pwa')
@@ -24,8 +26,11 @@ export default {
   ...Theme,
   Layout: FeathersLayout,
   enhanceApp({ app }) {
-    // Globally register components so they don't have to be imported in the template.
-    app.component('Tabs', Tabs)
+    googleAnalytics({
+      id: 'G-XQ8CKCD9L6'
+    }),
+      // Globally register components so they don't have to be imported in the template.
+      app.component('Tabs', Tabs)
     app.component('Tab', Tab)
     app.component('Select', Select)
     app.component('Badges', Badges)
