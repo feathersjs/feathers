@@ -19,6 +19,7 @@ import {
 } from './.vitepress/meta'
 import { optimizePages } from './.vitepress/scripts/assets'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import { SearchPlugin } from 'vitepress-plugin-search'
 
 const PWA = VitePWA({
   outDir: '.vitepress/dist',
@@ -87,6 +88,7 @@ const PWA = VitePWA({
 
 export default defineConfig({
   plugins: [
+    SearchPlugin(),
     AutoImport({
       resolvers: [ElementPlusResolver()]
     }),

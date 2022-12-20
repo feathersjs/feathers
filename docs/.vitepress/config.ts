@@ -70,15 +70,6 @@ export default defineConfig({
       text: 'Suggest changes to this page'
     },
 
-    algolia: {
-      appId: 'NW7C8J8UU2',
-      apiKey: '2aee4d5bd54a250e6f626c2d07275567',
-      indexName: 'dove'
-      // searchParameters: {
-      //   facetFilters: ['tags:en'],
-      // },
-    },
-
     socialLinks: [
       { icon: 'twitter', link: twitter },
       { icon: 'discord', link: discord },
