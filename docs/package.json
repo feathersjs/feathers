@@ -26,7 +26,9 @@
     "@vitejs/plugin-vue": "^3.2.0",
     "esno": "^0.16.3",
     "fast-glob": "^3.2.12",
+    "flexsearch": "^0.7.31",
     "https-localhost": "^4.7.1",
+    "markdown-it": "^13.0.1",
     "sass": "^1.56.1",
     "sitemap": "^7.1.1",
     "unocss": "^0.46.4",
@@ -34,6 +36,7 @@
     "unplugin-vue-components": "^0.22.9",
     "vite-plugin-pwa": "^0.13.3",
     "vitepress": "^1.0.0-alpha.28",
+    "vitepress-plugin-search": "^1.0.4-alpha.17",
     "workbox-window": "^6.5.4"
   }
 }
