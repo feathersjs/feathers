@@ -7,7 +7,8 @@ const template = ({
   upperName,
   type,
   lib
-}: AuthenticationGeneratorContext) => /* ts */ `import assert from 'assert'
+}: AuthenticationGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/client.test.html
+import assert from 'assert'
 import axios from 'axios'
 
 import rest from '@feathersjs/rest-client'

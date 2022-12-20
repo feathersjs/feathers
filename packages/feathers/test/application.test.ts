@@ -165,6 +165,18 @@ describe('Feathers application', () => {
       )
     })
 
+    it('can register service with no external methods', async () => {
+      const dummyService = {
+        async create(data: any) {
+          return data
+        }
+      }
+
+      feathers().use('dummy', dummyService, {
+        methods: []
+      })
+    })
+
     it('can use a root level service', async () => {
       const app = feathers().use('/', {
         async get(id: string) {
@@ -441,7 +453,7 @@ describe('Feathers application', () => {
       app.mixins.push(function (service: any, location: any, options: any) {
         assert.ok(service.dummy)
         assert.strictEqual(location, 'dummy')
-        assert.deepStrictEqual(options, getServiceOptions(new Dummy()))
+        assert.deepStrictEqual(options, getServiceOptions(service))
         mixinRan = true
       })
 
@@ -461,7 +473,7 @@ describe('Feathers application', () => {
       app.mixins.push(function (service: any, location: any, options: any) {
         assert.ok(service.dummy)
         assert.strictEqual(location, 'dummy')
-        assert.deepStrictEqual(options, getServiceOptions(new Dummy(), opts))
+        assert.deepStrictEqual(options, getServiceOptions(service))
         mixinRan = true
       })
 

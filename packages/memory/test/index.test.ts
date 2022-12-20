@@ -14,12 +14,6 @@ const testSuite = adapterTests([
   '._update',
   '._patch',
   '._remove',
-  '.$get',
-  '.$find',
-  '.$create',
-  '.$update',
-  '.$patch',
-  '.$remove',
   '.get',
   '.get + $select',
   '.get + id + query',
@@ -172,7 +166,7 @@ describe('Feathers Memory Service', () => {
     )
 
     await app.service('matcher').find({
-      query: { $sort: { something: 1 } }
+      query: { something: 1, $sort: { something: 1 } }
     })
 
     assert.ok(sorterCalled, 'sorter called')

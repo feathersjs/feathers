@@ -5,7 +5,8 @@ import { AppGeneratorContext } from '../index'
 const template = ({
   name,
   language
-}: AppGeneratorContext) => /* ts */ `import { feathers } from '@feathersjs/feathers'
+}: AppGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/client.html
+import { feathers } from '@feathersjs/feathers'
 import type { TransportConnection, Params } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'

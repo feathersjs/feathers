@@ -44,3 +44,4 @@ packages/**/lib
 packages/**/esm
 packages/cli/test/build/*.tgz
 *.sqlite
+docs/.vitepress/cache

@@ -63,7 +63,7 @@ export const getDataValidator = (
   }
 }
 
-export type PropertyQuery<D extends JSONSchema> = {
+export type PropertyQuery<D extends JSONSchema, X> = {
   anyOf: [
     D,
     {
@@ -83,7 +83,7 @@ export type PropertyQuery<D extends JSONSchema> = {
           type: 'array'
           items: D
         }
-      }
+      } & X
     }
   ]
 }
@@ -92,9 +92,13 @@ export type PropertyQuery<D extends JSONSchema> = {
  * Create a Feathers query syntax compatible JSON schema definition for a property definition.
  *
  * @param def The property definition (e.g. `{ type: 'string' }`)
+ * @param extensions Additional properties to add to the query property schema
  * @returns A JSON schema definition for the Feathers query syntax for this property.
  */
-export const queryProperty = <T extends JSONSchema>(def: T) => {
+export const queryProperty = <T extends JSONSchema, X extends { [key: string]: JSONSchema }>(
+  def: T,
+  extensions: X = {} as X
+) => {
   const definition = _.omit(def, 'default')
   return {
     anyOf: [
@@ -115,7 +119,8 @@ export const queryProperty = <T extends JSONSchema>(def: T) => {
           $nin: {
             type: 'array',
             items: definition
-          }
+          },
+          ...extensions
         }
       }
     ]
@@ -126,27 +131,49 @@ export const queryProperty = <T extends JSONSchema>(def: T) => {
  * Creates Feathers a query syntax compatible JSON schema for multiple properties.
  *
  * @param definitions A map of property definitions
+ * @param extensions Additional properties to add to the query property schema
  * @returns The JSON schema definition for the Feathers query syntax for multiple properties
  */
-export const queryProperties = <T extends { [key: string]: JSONSchema }>(definitions: T) =>
+export const queryProperties = <
+  T extends { [key: string]: JSONSchema },
+  X extends { [K in keyof T]?: { [key: string]: JSONSchema } }
+>(
+  definitions: T,
+  extensions: X = {} as X
+) =>
   Object.keys(definitions).reduce((res, key) => {
     const result = res as any
     const definition = definitions[key]
+    const { $ref } = definition as any
 
-    result[key] = queryProperty(definition)
+    if ($ref) {
+      throw new Error(`Can not create query syntax schema for reference property '${key}'`)
+    }
+
+    result[key] = queryProperty(definition as JSONSchemaDefinition, extensions[key as keyof T])
 
     return result
-  }, {} as { [K in keyof T]: PropertyQuery<T[K]> })
+  }, {} as { [K in keyof T]: PropertyQuery<T[K], X[K]> })
 
 /**
  * Creates a JSON schema for the complete Feathers query syntax including `$limit`, $skip`
  * and `$sort` and `$select` for the allowed properties.
  *
  * @param definition The property definitions to create the query syntax schema for
+ * @param extensions Additional properties to add to the query property schema
  * @returns A JSON schema for the complete query syntax
  */
-export const querySyntax = <T extends { [key: string]: any }>(definition: T) =>
-  ({
+export const querySyntax = <
+  T extends { [key: string]: JSONSchema },
+  X extends { [K in keyof T]?: { [key: string]: JSONSchema } }
+>(
+  definition: T,
+  extensions: X = {} as X
+) => {
+  const keys = Object.keys(definition)
+  const props = queryProperties(definition, extensions)
+
+  return {
     $limit: {
       type: 'number',
       minimum: 0
@@ -157,7 +184,7 @@ export const querySyntax = <T extends { [key: string]: any }>(definition: T) =>
     },
     $sort: {
       type: 'object',
-      properties: Object.keys(definition).reduce((res, key) => {
+      properties: keys.reduce((res, key) => {
         const result = res as any
 
         result[key] = {
@@ -170,10 +197,20 @@ export const querySyntax = <T extends { [key: string]: any }>(definition: T) =>
     },
     $select: {
       type: 'array',
+      maxItems: keys.length,
       items: {
         type: 'string',
-        enum: Object.keys(definition) as any as (keyof T)[]
+        ...(keys.length > 0 ? { enum: keys as any as (keyof T)[] } : {})
       }
     },
-    ...queryProperties(definition)
-  } as const)
+    $or: {
+      type: 'array',
+      items: {
+        type: 'object',
+        additionalProperties: false,
+        properties: props
+      }
+    },
+    ...props
+  } as const
+}

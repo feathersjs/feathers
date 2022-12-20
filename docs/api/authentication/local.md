@@ -12,7 +12,7 @@ outline: deep
 </Badges>
 
 ```
-npm install @feathersjs/authentication-local --save
+npm install @feathersjs/authentication-local@pre --save
 ```
 
 `@feathersjs/authentication-local` provides a `LocalStrategy` for authenticating with a username/email and password combination, e.g.

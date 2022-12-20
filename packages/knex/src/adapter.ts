@@ -1,7 +1,7 @@
 import { Id, NullableId, Paginated, Query } from '@feathersjs/feathers'
 import { _ } from '@feathersjs/commons'
 import { AdapterBase, PaginationOptions, filterQuery } from '@feathersjs/adapter-commons'
-import { NotFound } from '@feathersjs/errors'
+import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
 import { Knex } from 'knex'
 
 import { errorHandler } from './error-handler'
@@ -27,10 +27,11 @@ const OPERATORS = {
 const RETURNING_CLIENTS = ['postgresql', 'pg', 'oracledb', 'mssql']
 
 export class KnexAdapter<
-  T,
-  D = Partial<T>,
-  P extends KnexAdapterParams<any> = KnexAdapterParams
-> extends AdapterBase<T, D, P, KnexAdapterOptions> {
+  Result,
+  Data = Partial<Result>,
+  ServiceParams extends KnexAdapterParams<any> = KnexAdapterParams,
+  PatchData = Partial<Data>
+> extends AdapterBase<Result, Data, PatchData, ServiceParams, KnexAdapterOptions> {
   table: string
   schema?: string
 
@@ -65,7 +66,7 @@ export class KnexAdapter<
     return this.schema ? `${this.schema}.${this.table}` : this.table
   }
 
-  db(params?: P) {
+  db(params?: ServiceParams) {
     const { Model, table, schema } = this
 
     if (params && params.transaction && params.transaction.trx) {
@@ -114,7 +115,7 @@ export class KnexAdapter<
     }, knexQuery)
   }
 
-  createQuery(params: P) {
+  createQuery(params: ServiceParams) {
     const { table, id } = this
     const { filters, query } = this.filterQuery(params)
     const builder = this.db(params)
@@ -144,17 +145,17 @@ export class KnexAdapter<
     return builder
   }
 
-  filterQuery(params: P) {
+  filterQuery(params: ServiceParams) {
     const options = this.getOptions(params)
     const { filters, query } = filterQuery(params?.query || {}, options)
 
     return { filters, query, paginate: options.paginate }
   }
 
-  async $find(params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>
-  async $find(params?: P & { paginate: false }): Promise<T[]>
-  async $find(params?: P): Promise<Paginated<T> | T[]>
-  async $find(params: P = {} as P): Promise<Paginated<T> | T[]> {
+  async _find(params?: ServiceParams & { paginate?: PaginationOptions }): Promise<Paginated<Result>>
+  async _find(params?: ServiceParams & { paginate: false }): Promise<Result[]>
+  async _find(params?: ServiceParams): Promise<Paginated<Result> | Result[]>
+  async _find(params: ServiceParams = {} as ServiceParams): Promise<Paginated<Result> | Result[]> {
     const { filters, paginate } = this.filterQuery(params)
     const builder = params.knex ? params.knex.clone() : this.createQuery(params)
     const countBuilder = builder.clone().clearSelect().clearOrder().count(`${this.table}.${this.id} as total`)
@@ -190,7 +191,7 @@ export class KnexAdapter<
     return data
   }
 
-  async _findOrGet(id: NullableId, params?: P) {
+  async _findOrGet(id: NullableId, params?: ServiceParams) {
     const findParams = {
       ...params,
       paginate: false,
@@ -200,10 +201,10 @@ export class KnexAdapter<
       }
     }
 
-    return this.$find(findParams as any) as any as Promise<T[]>
+    return this._find(findParams as any) as any as Promise<Result[]>
   }
 
-  async $get(id: Id, params: P = {} as P): Promise<T> {
+  async _get(id: Id, params: ServiceParams = {} as ServiceParams): Promise<Result> {
     const data = await this._findOrGet(id, params)
 
     if (data.length !== 1) {
@@ -213,32 +214,43 @@ export class KnexAdapter<
     return data[0]
   }
 
-  async $create(data: D, params?: P): Promise<T>
-  async $create(data: D[], params?: P): Promise<T[]>
-  async $create(data: D | D[], _params?: P): Promise<T | T[]>
-  async $create(_data: D | D[], params: P = {} as P): Promise<T | T[]> {
+  async _create(data: Data, params?: ServiceParams): Promise<Result>
+  async _create(data: Data[], params?: ServiceParams): Promise<Result[]>
+  async _create(data: Data | Data[], _params?: ServiceParams): Promise<Result | Result[]>
+  async _create(
+    _data: Data | Data[],
+    params: ServiceParams = {} as ServiceParams
+  ): Promise<Result | Result[]> {
     const data = _data as any
 
     if (Array.isArray(data)) {
-      return Promise.all(data.map((current) => this.$create(current, params)))
+      return Promise.all(data.map((current) => this._create(current, params)))
     }
 
     const client = this.db(params).client.config.client
     const returning = RETURNING_CLIENTS.includes(client as string) ? [this.id] : []
-    const rows: any = await this.db(params).insert(data, returning).catch(errorHandler)
+    const rows: any = await this.db(params).insert(data, returning).returning(this.id).catch(errorHandler)
     const id = data[this.id] || rows[0][this.id] || rows[0]
 
     if (!id) {
-      return rows as T[]
+      return rows as Result[]
     }
 
-    return this.$get(id, params)
+    return this._get(id, params)
   }
 
-  async $patch(id: null, data: Partial<D>, params?: P): Promise<T[]>
-  async $patch(id: Id, data: Partial<D>, params?: P): Promise<T>
-  async $patch(id: NullableId, data: Partial<D>, _params?: P): Promise<T | T[]>
-  async $patch(id: NullableId, raw: Partial<D>, params: P = {} as P): Promise<T | T[]> {
+  async _patch(id: null, data: PatchData, params?: ServiceParams): Promise<Result[]>
+  async _patch(id: Id, data: PatchData, params?: ServiceParams): Promise<Result>
+  async _patch(id: NullableId, data: PatchData, _params?: ServiceParams): Promise<Result | Result[]>
+  async _patch(
+    id: NullableId,
+    raw: PatchData,
+    params: ServiceParams = {} as ServiceParams
+  ): Promise<Result | Result[]> {
+    if (id === null && !this.allowsMulti('patch', params)) {
+      throw new MethodNotAllowed('Can not patch multiple entries')
+    }
+
     const data = _.omit(raw, this.id)
     const results = await this._findOrGet(id, {
       ...params,
@@ -272,9 +284,13 @@ export class KnexAdapter<
     return items
   }
 
-  async $update(id: Id, _data: D, params: P = {} as P): Promise<T> {
+  async _update(id: Id, _data: Data, params: ServiceParams = {} as ServiceParams): Promise<Result> {
+    if (id === null || Array.isArray(_data)) {
+      throw new BadRequest("You can not replace multiple instances. Did you mean 'patch'?")
+    }
+
     const data = _.omit(_data, this.id)
-    const oldData = await this.$get(id, params)
+    const oldData = await this._get(id, params)
     const newObject = Object.keys(oldData).reduce((result: any, key) => {
       if (key !== this.id) {
         // We don't want the id field to be changed
@@ -286,13 +302,17 @@ export class KnexAdapter<
 
     await this.db(params).update(newObject, '*').where(this.id, id)
 
-    return this.$get(id, params)
+    return this._get(id, params)
   }
 
-  async $remove(id: null, params?: P): Promise<T[]>
-  async $remove(id: Id, params?: P): Promise<T>
-  async $remove(id: NullableId, _params?: P): Promise<T | T[]>
-  async $remove(id: NullableId, params: P = {} as P): Promise<T | T[]> {
+  async _remove(id: null, params?: ServiceParams): Promise<Result[]>
+  async _remove(id: Id, params?: ServiceParams): Promise<Result>
+  async _remove(id: NullableId, _params?: ServiceParams): Promise<Result | Result[]>
+  async _remove(id: NullableId, params: ServiceParams = {} as ServiceParams): Promise<Result | Result[]> {
+    if (id === null && !this.allowsMulti('remove', params)) {
+      throw new MethodNotAllowed('Can not remove multiple entries')
+    }
+
     const items = await this._findOrGet(id, params)
     const { query } = this.filterQuery(params)
     const q = this.db(params)

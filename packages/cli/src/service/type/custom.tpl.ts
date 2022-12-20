@@ -2,8 +2,14 @@ import { generator, toFile } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
-export const template = ({ className, upperName, schema, fileName, relative }: ServiceGeneratorContext) => `
-import type { Id, NullableId, Params } from '@feathersjs/feathers'
+export const template = ({
+  className,
+  upperName,
+  schema,
+  fileName,
+  relative
+}: ServiceGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
+import type { Id, NullableId, Params, ServiceInterface } from '@feathersjs/feathers'
 
 import type { Application } from '${relative}/declarations'
 ${
@@ -11,12 +17,14 @@ ${
     ? `import type {
   ${upperName},
   ${upperName}Data,
+  ${upperName}Patch,
   ${upperName}Query
 } from './${fileName}.schema'
 `
     : `
 export type ${upperName} = any
 export type ${upperName}Data = any
+export type ${upperName}Patch = any
 export type ${upperName}Query = any
 `
 }
@@ -30,7 +38,7 @@ export interface ${upperName}Params extends Params<${upperName}Query> {
 }
 
 // This is a skeleton for a custom service class. Remove or add the methods you need here
-export class ${className} {
+export class ${className} implements ServiceInterface<${upperName}, ${upperName}Data, ${upperName}Params, ${upperName}Patch> {
   constructor (public options: ${className}Options) {
   }
 
@@ -58,6 +66,7 @@ export class ${className} {
     }
   }
 
+  // This method has to be added to the 'methods' option to make it available to clients
   async update (id: NullableId, data: ${upperName}Data, _params?: ${upperName}Params): Promise<${upperName}> {
     return {
       id: 0,
@@ -65,9 +74,10 @@ export class ${className} {
     }
   }
 
-  async patch (id: NullableId, data: ${upperName}Data, _params?: ${upperName}Params): Promise<${upperName}> {
+  async patch (id: NullableId, data: ${upperName}Patch, _params?: ${upperName}Params): Promise<${upperName}> {
     return {
       id: 0,
+      text: \`Fallback for \${id}\`,
       ...data
     }
   }

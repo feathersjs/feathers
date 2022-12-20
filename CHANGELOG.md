@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.34](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.33...v5.0.0-pre.34) (2022-12-14)
+
+### Bug Fixes
+
+- **adapter-commons:** multiple type definition issues ([#2876](https://github.com/feathersjs/feathers/issues/2876)) ([4ff1ed0](https://github.com/feathersjs/feathers/commit/4ff1ed084eb2b2cb687de27a28c96a0dad4530b7))
+- **authentication-client:** Do not cache authentication errors ([#2892](https://github.com/feathersjs/feathers/issues/2892)) ([cc4e767](https://github.com/feathersjs/feathers/commit/cc4e76726fce1ac73252cfd92e22570d4bdeca20))
+- **authentication-client:** Improve socket reauthentication handling ([#2895](https://github.com/feathersjs/feathers/issues/2895)) ([9db5e7a](https://github.com/feathersjs/feathers/commit/9db5e7adb0f6aea43d607f530d8258ade98b7362))
+- **authentication-client:** Remove access token for fatal 400 errors ([#2894](https://github.com/feathersjs/feathers/issues/2894)) ([cfc6c7a](https://github.com/feathersjs/feathers/commit/cfc6c7a6b9dbc7fb60816e2b7f15897c38deb98d))
+- **authentication:** Fix order of connection and login event handling ([#2909](https://github.com/feathersjs/feathers/issues/2909)) ([801a503](https://github.com/feathersjs/feathers/commit/801a503425062e27f2a32b91493b6ffae3822626))
+- **cli:** mongodb connection string for node 17+ ([#2875](https://github.com/feathersjs/feathers/issues/2875)) ([7fa2012](https://github.com/feathersjs/feathers/commit/7fa2012897d8429b522fbca72211fc9be1c25f7e))
+- **core:** `context.type` for around hooks ([#2890](https://github.com/feathersjs/feathers/issues/2890)) ([d606ac6](https://github.com/feathersjs/feathers/commit/d606ac660fd5335c95206784fea36530dd2e851a))
+- **core:** Allow services with no external methods ([#2921](https://github.com/feathersjs/feathers/issues/2921)) ([df56918](https://github.com/feathersjs/feathers/commit/df569183d1a9ed0a9e0ea5bf8d7dab52d326a33d))
+- **core:** Improve service option usage and method option typings ([#2902](https://github.com/feathersjs/feathers/issues/2902)) ([164d75c](https://github.com/feathersjs/feathers/commit/164d75c0f11139a316baa91f1762de8f8eb7da2d))
+- **schema:** Allow query schemas with no properties, error on unsupported types ([#2904](https://github.com/feathersjs/feathers/issues/2904)) ([b66c734](https://github.com/feathersjs/feathers/commit/b66c734357478f51b2d38fa7f3eee08640cea26e))
+- **schema:** Check for undefined value in resolveQueryObjectId resolver ([#2914](https://github.com/feathersjs/feathers/issues/2914)) ([d9449fa](https://github.com/feathersjs/feathers/commit/d9449fa835f58fc9cec5f7254c50219494129140))
+- **socketio:** Disconnect socket on app disconnect event ([#2896](https://github.com/feathersjs/feathers/issues/2896)) ([4ba0039](https://github.com/feathersjs/feathers/commit/4ba003907843cfc2655798a568b16f07ff8adb1b))
+- **typebox:** Improve query syntax defaults ([#2888](https://github.com/feathersjs/feathers/issues/2888)) ([59f3cdc](https://github.com/feathersjs/feathers/commit/59f3cdca6376e34fe39a7b91db837d0325aeb5db))
+
+### Features
+
+- **adapter:** Add patch data type to adapters and refactor AdapterBase usage ([#2906](https://github.com/feathersjs/feathers/issues/2906)) ([9ddc2e6](https://github.com/feathersjs/feathers/commit/9ddc2e6b028f026f939d6af68125847e5c6734b4))
+- **cli:** Use separate patch schema and types ([#2916](https://github.com/feathersjs/feathers/issues/2916)) ([7088af6](https://github.com/feathersjs/feathers/commit/7088af64a539dc7f1a016d832b77b98aaaf92603))
+- **docs:** CLI and application structure guide ([#2818](https://github.com/feathersjs/feathers/issues/2818)) ([142914f](https://github.com/feathersjs/feathers/commit/142914fc001a8420056dd56db992c1c4f1bd312c))
+- **schema:** Split resolver options and property resolvers ([#2889](https://github.com/feathersjs/feathers/issues/2889)) ([4822c94](https://github.com/feathersjs/feathers/commit/4822c949812e5a1dceff3c62b2f9de4781b4d601))
+- **schema:** Virtual property resolvers ([#2900](https://github.com/feathersjs/feathers/issues/2900)) ([7d03b57](https://github.com/feathersjs/feathers/commit/7d03b57ae2f633bdd4a368e0d5955011fbd6c329))
+
+# [5.0.0-pre.33](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.32...v5.0.0-pre.33) (2022-11-08)
+
+### Bug Fixes
+
+- **cli:** Fix MongoDB connection database name parsing ([#2845](https://github.com/feathersjs/feathers/issues/2845)) ([50e7463](https://github.com/feathersjs/feathers/commit/50e7463971ef95cb98358b70a721e67554d92eb5))
+- **cli:** Use proper MSSQL client ([#2853](https://github.com/feathersjs/feathers/issues/2853)) ([bae5176](https://github.com/feathersjs/feathers/commit/bae5176488b46fc377e53719d20e0036e087aa16))
+- **docs:** Add JavaScript web app frontend guide ([#2834](https://github.com/feathersjs/feathers/issues/2834)) ([68cf03f](https://github.com/feathersjs/feathers/commit/68cf03f092da38ccbec5e9fd42b95d00f5a0a9f2))
+- **memory:** Use for loop in \_find() for better performance ([#2844](https://github.com/feathersjs/feathers/issues/2844)) ([d6ee5f1](https://github.com/feathersjs/feathers/commit/d6ee5f1c869f0c65cb470130f35956a52356e5c3))
+
+### Features
+
+- **docs:** Add Awesome Ecosystem page ([f66177d](https://github.com/feathersjs/feathers/commit/f66177ded1f48ac45a7105f73c5c3cda7084c7b1))
+- **mongodb:** Add ObjectId resolvers and MongoDB option in the guide ([#2847](https://github.com/feathersjs/feathers/issues/2847)) ([c5c1fba](https://github.com/feathersjs/feathers/commit/c5c1fba5718a63412075cd3838b86b889eb0bd48))
+- **schema:** Add StringEnum to TypeBox module ([#2827](https://github.com/feathersjs/feathers/issues/2827)) ([65d3665](https://github.com/feathersjs/feathers/commit/65d36656f50a48f633fa3fcabaea10521d04bf1c))
+
 # [5.0.0-pre.32](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.31...v5.0.0-pre.32) (2022-10-26)
 
 ### Bug Fixes

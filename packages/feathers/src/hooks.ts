@@ -14,11 +14,10 @@ import {
   FeathersService,
   HookMap,
   AroundHookFunction,
-  HookFunction
+  HookFunction,
+  HookType
 } from './declarations'
 import { defaultServiceArguments, getHookMethods } from './service'
-
-type HookType = 'before' | 'after' | 'error' | 'around'
 
 type ConvertedMap = { [type in HookType]: ReturnType<typeof convertHookData> }
 
@@ -172,7 +171,7 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
       method,
       service,
       event: null,
-      type: null,
+      type: 'around',
       get statusCode() {
         return this.http?.status
       },

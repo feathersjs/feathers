@@ -19,7 +19,7 @@ The following chapter describes the use of
 </Badges>
 
 ```
-npm install @feathersjs/rest-client --save
+npm install @feathersjs/rest-client@pre --save
 ```
 
 `@feathersjs/rest-client` allows to connect to a service exposed through a REST HTTP transport (e.g. with [Koa](../koa.md#rest) or [Express](../express.md#rest)) using [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), [Superagent](http://visionmedia.github.io/superagent/) or [Axios](https://github.com/mzabriskie/axios).
@@ -338,7 +338,7 @@ Retrieves a list of all matching resources from the service
 GET /messages?status=read&user=10
 ```
 
-Will call `messages.find({ query: { status: 'read', user: '10' } })` on the server.
+Will call `messages.find({ query: { status: 'read', userId: '10' } })` on the server.
 
 If you want to use any of the built-in find operands ($le, $lt, $ne, $eq, $in, etc.) the general format is as follows:
 
@@ -356,9 +356,9 @@ The find API allows the use of $limit, $skip, $sort, and $select in the query. T
 
 ```
 // Find all messages that are read, limit to 10, only include text field.
-{"read":"1", "$limit":10, "$select": ["name"] } } // JSON
+{"status": "read", "$limit":10, "$select": ["name"] } } // JSON
 
-GET /messages?read=1&$limit=10&$select[]=text // HTTP
+GET /messages?status=read&$limit=10&$select[]=text // HTTP
 ```
 
 More information about the possible parameters for official database adapters can be found [in the database querying section](../databases/querying.md).
@@ -374,10 +374,10 @@ GET /messages/1
 Will call `messages.get(1, {})` on the server.
 
 ```
-GET /messages/1?fetch=all
+GET /messages/1?status=read
 ```
 
-Will call `messages.get(1, { query: { fetch: 'all' } })` on the server.
+Will call `messages.get(1, { query: { status: 'read' } })` on the server.
 
 ### create
 
@@ -413,14 +413,14 @@ PUT /messages/2
 { "text": "I really have to do laundry" }
 ```
 
-Will call `messages.update(2, { "text": "I really have to do laundry" }, {})` on the server. When no `id` is given by sending the request directly to the endpoint something like:
+Will call `messages.update(2, { text: 'I really have to do laundry' }, {})` on the server. When no `id` is given by sending the request directly to the endpoint something like:
 
 ```
-PUT /messages?complete=false
-{ "complete": true }
+PUT /messages?status=unread
+{ "status": "read" }
 ```
 
-Will call `messages.update(null, { "complete": true }, { query: { complete: 'false' } })` on the server.
+Will call `messages.update(null, { status: 'read' }, { query: { status: 'unread' } })` on the server.
 
 ### patch
 
@@ -428,17 +428,17 @@ Merge the existing data of a single or multiple resources with the new `data`.
 
 ```
 PATCH /messages/2
-{ "read": true }
+{ "status": "read" }
 ```
 
-Will call `messages.patch(2, { "read": true }, {})` on the server. When no `id` is given by sending the request directly to the endpoint something like:
+Will call `messages.patch(2, { status: 'read' }, {})` on the server. When no `id` is given by sending the request directly to the endpoint something like:
 
 ```
-PATCH /messages?complete=false
-{ "complete": true }
+PATCH /messages?status=unread
+{ "status": "read" }
 ```
 
-Will call `messages.patch(null, { complete: true }, { query: { complete: 'false' } })` on the server to change the status for all read messages.
+Will call `messages.patch(null, { status: 'read' }, { query: { status: 'unread' } })` on the server to change the status for all read messages.
 
 <BlockQuote type="info" label="note">
 
@@ -453,18 +453,18 @@ This is supported out of the box by the Feathers [database adapters](../database
 Remove a single or multiple resources:
 
 ```
-DELETE /messages/2?cascade=true
+DELETE /messages/2
 ```
 
-Will call `messages.remove(2, { query: { cascade: 'true' } })`.
+Will call `messages.remove(2, {} })`.
 
 When no `id` is given by sending the request directly to the endpoint something like:
 
 ```
-DELETE /messages?read=true
+DELETE /messages?status=archived
 ```
 
-Will call `messages.remove(null, { query: { read: 'true' } })` to delete all read messages.
+Will call `messages.remove(null, { query: { status: 'archived' } })` to delete all read messages.
 
 <BlockQuote type="info" label="note">
 
@@ -491,3 +491,5 @@ Via CURL:
 ```bash
 curl -H "Content-Type: application/json" -H "X-Service-Method: myCustomMethod" -X POST -d '{"message": "Hello world"}' http://localhost:3030/myservice
 ```
+
+This will call `messages.myCustomMethod({ message: 'Hello world' }, {})`.

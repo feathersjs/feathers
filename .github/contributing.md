@@ -40,15 +40,13 @@ Before running the tests from the `test/` folder `npm test` will run ESlint. You
 
 ### Documentation
 
-Feathers documentation is contained in Markdown files in the [docs](https://github.com/feathersjs/docs) repository. To change the documentation submit a pull request to that repo, referencing any other PR if applicable, and the docs will be updated with the next release.
+Feathers documentation is contained in Markdown files in the [docs folder](https://github.com/feathersjs/feathers) of the mainr repository. To change the documentation submit a pull request to that repo, referencing any other PR if applicable, and the docs will be updated as soon as it is merged.
 
 ## Community Contributions
 
 If you've written something awesome about Feathers, for the Feathers ecosystem, or created an app using Feathers please add it to the [awesome-feathersjs](https://github.com/feathersjs-ecosystem/awesome-feathersjs).
 
-If you are looking to create a new plugin you also might want to check out the [Plugin Generator](https://github.com/feathersjs/generator-feathers-plugin) that can be used to scaffold plugins to be Feathers compliant from the start.
-
-If you think your module would be a good core `feathersjs` module or `featherjs-ecosystem` module then please contact one of the Feathers maintainers on [Discord](https://discord.gg/qa8kez8QBx) and we can discuss whether it belongs and how to get it there. :beers:
+If you think your module would be a good core `feathersjs` module or [featherjs-ecosystem](https://github.com/feathersjs-ecosystem) module then please contact one of the Feathers maintainers on [Discord](https://discord.gg/qa8kez8QBx) and we can discuss whether it belongs and how to get it there. :beers:
 
 ## Contributor Code of Conduct
 

@@ -1,7 +1,7 @@
 import http from 'http'
 import { Server, ServerOptions } from 'socket.io'
 import { createDebug } from '@feathersjs/commons'
-import { Application } from '@feathersjs/feathers'
+import { Application, RealTimeConnection } from '@feathersjs/feathers'
 import { socket } from '@feathersjs/transport-commons'
 
 import { disconnect, params, authentication, FeathersSocket } from './middleware'
@@ -42,7 +42,7 @@ function configureSocketio(port?: any, options?: any, config?: any) {
     // Function that gets the connection
     const getParams = (socket: FeathersSocket) => socket.feathers
     // A mapping from connection to socket instance
-    const socketMap = new WeakMap()
+    const socketMap = new WeakMap<RealTimeConnection, FeathersSocket>()
     // Promise that resolves with the Socket.io `io` instance
     // when `setup` has been called (with a server)
     const done = new Promise((resolve) => {
@@ -67,7 +67,7 @@ function configureSocketio(port?: any, options?: any, config?: any) {
           if (!this.io) {
             const io = (this.io = new Server(port || server, options))
 
-            io.use(disconnect(app, getParams))
+            io.use(disconnect(app, getParams, socketMap))
             io.use(params(app, socketMap))
             io.use(authentication(app, getParams))
 

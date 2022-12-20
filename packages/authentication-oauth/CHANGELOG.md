@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.34](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.33...v5.0.0-pre.34) (2022-12-14)
+
+### Bug Fixes
+
+- **core:** Improve service option usage and method option typings ([#2902](https://github.com/feathersjs/feathers/issues/2902)) ([164d75c](https://github.com/feathersjs/feathers/commit/164d75c0f11139a316baa91f1762de8f8eb7da2d))
+
+# [5.0.0-pre.33](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.32...v5.0.0-pre.33) (2022-11-08)
+
+**Note:** Version bump only for package @feathersjs/authentication-oauth
+
 # [5.0.0-pre.32](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.31...v5.0.0-pre.32) (2022-10-26)
 
 **Note:** Version bump only for package @feathersjs/authentication-oauth

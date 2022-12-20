@@ -9,7 +9,8 @@ export const template = ({
   fileName,
   kebabPath,
   relative
-}: ServiceGeneratorContext) => /* ts */ `import type { Params } from '@feathersjs/feathers'
+}: ServiceGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
+import type { Params } from '@feathersjs/feathers'
 import { MongoDBService } from \'@feathersjs/mongodb\'
 import type { MongoDBAdapterParams, MongoDBAdapterOptions } from \'@feathersjs/mongodb\'
 
@@ -19,12 +20,14 @@ ${
     ? `import type {
   ${upperName},
   ${upperName}Data,
+  ${upperName}Patch,
   ${upperName}Query
 } from './${fileName}.schema'
 `
     : `
 export type ${upperName} = any
 export type ${upperName}Data = any
+export type ${upperName}Patch = any
 export type ${upperName}Query = any
 `
 }
@@ -34,7 +37,7 @@ export interface ${upperName}Params extends MongoDBAdapterParams<${upperName}Que
 
 // By default calls the standard MongoDB adapter service methods but can be customized with your own functionality.
 export class ${className}<ServiceParams extends Params = ${upperName}Params>
-  extends MongoDBService<${upperName}, ${upperName}Data, ServiceParams> {
+  extends MongoDBService<${upperName}, ${upperName}Data, ServiceParams, ${upperName}Patch> {
 }
 
 export const getOptions = (app: Application): MongoDBAdapterOptions => {

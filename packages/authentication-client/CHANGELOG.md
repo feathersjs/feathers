@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.34](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.33...v5.0.0-pre.34) (2022-12-14)
+
+### Bug Fixes
+
+- **authentication-client:** Do not cache authentication errors ([#2892](https://github.com/feathersjs/feathers/issues/2892)) ([cc4e767](https://github.com/feathersjs/feathers/commit/cc4e76726fce1ac73252cfd92e22570d4bdeca20))
+- **authentication-client:** Improve socket reauthentication handling ([#2895](https://github.com/feathersjs/feathers/issues/2895)) ([9db5e7a](https://github.com/feathersjs/feathers/commit/9db5e7adb0f6aea43d607f530d8258ade98b7362))
+- **authentication-client:** Remove access token for fatal 400 errors ([#2894](https://github.com/feathersjs/feathers/issues/2894)) ([cfc6c7a](https://github.com/feathersjs/feathers/commit/cfc6c7a6b9dbc7fb60816e2b7f15897c38deb98d))
+
+# [5.0.0-pre.33](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.32...v5.0.0-pre.33) (2022-11-08)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
 # [5.0.0-pre.32](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.31...v5.0.0-pre.32) (2022-10-26)
 
 ### Features

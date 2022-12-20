@@ -4,10 +4,20 @@ import { app, Message, User } from './fixture'
 
 describe('@feathersjs/schema/hooks', () => {
   const text = 'Hi there'
-
   let message: Message
   let messageOnPaginatedService: Message
   let user: User
+
+  const userProps = (user: User) => ({
+    user,
+    userList: [user],
+    userPage: {
+      limit: 2,
+      skip: 0,
+      total: 1,
+      data: [user]
+    }
+  })
 
   before(async () => {
     user = (
@@ -48,7 +58,7 @@ describe('@feathersjs/schema/hooks', () => {
     assert.strictEqual(user.password, 'hashed', 'Resolved data')
     assert.deepStrictEqual(message, {
       id: 0,
-      user,
+      ...userProps(user),
       ...payload
     })
 
@@ -59,7 +69,7 @@ describe('@feathersjs/schema/hooks', () => {
     assert.deepStrictEqual(messages, [
       {
         id: 0,
-        user,
+        ...userProps(user),
         ...payload
       }
     ])
@@ -97,7 +107,7 @@ describe('@feathersjs/schema/hooks', () => {
     assert.strictEqual(user.password, 'hashed', 'Resolved data')
     assert.deepStrictEqual(message, {
       id: 0,
-      user,
+      ...userProps(user),
       ...payload
     })
 
@@ -107,9 +117,19 @@ describe('@feathersjs/schema/hooks', () => {
 
     assert.deepStrictEqual(result, {
       id: 0,
-      user,
+      ...userProps(user),
       ...payload
     })
+  })
+
+  it('resolves with $select and virtual properties', async () => {
+    const messages = await app.service('messages').find({
+      paginate: false,
+      query: {
+        $select: ['user', 'text']
+      }
+    })
+    assert.strictEqual(Object.keys(messages[0]).length, 2)
   })
 
   it('resolves find results with paginated result object', async () => {
@@ -122,7 +142,7 @@ describe('@feathersjs/schema/hooks', () => {
     assert.strictEqual(user.password, 'hashed', 'Resolved data')
     assert.deepStrictEqual(messageOnPaginatedService, {
       id: 0,
-      user,
+      ...userProps(user),
       ...payload
     })
 
@@ -141,16 +161,21 @@ describe('@feathersjs/schema/hooks', () => {
       data: [
         {
           id: 0,
-          user,
+          ...userProps(user),
           ...payload
         }
       ]
     })
   })
 
-  it('resolves safe dispatch data recursively', async () => {
+  it('resolves safe dispatch data recursively and with arrays and pages', async () => {
     const service = app.service('messages')
     const context = await service.get(0, {}, createContext(service as any, 'get'))
+    const user = {
+      id: 0,
+      email: '[redacted]',
+      name: 'hello (hello@feathersjs.com)'
+    }
 
     assert.strictEqual(context.result.user.password, 'hashed')
 
@@ -158,27 +183,24 @@ describe('@feathersjs/schema/hooks', () => {
       text: 'Hi there',
       userId: 0,
       id: 0,
-      user: {
-        id: 0,
-        email: '[redacted]',
-        name: 'hello (hello@feathersjs.com)'
-      }
+      ...userProps(user)
     })
   })
 
   it('resolves data for custom methods', async () => {
     const result = await app.service('messages').customMethod({ message: 'Hello' })
+    const user = {
+      email: 'hello@feathersjs.com',
+      password: 'hashed',
+      id: 0,
+      name: 'hello (hello@feathersjs.com)'
+    }
 
     assert.deepStrictEqual(result, {
       message: 'Hello',
       userId: 0,
       additionalData: 'additional data',
-      user: {
-        email: 'hello@feathersjs.com',
-        password: 'hashed',
-        id: 0,
-        name: 'hello (hello@feathersjs.com)'
-      }
+      ...userProps(user)
     })
   })
 

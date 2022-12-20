@@ -14,7 +14,7 @@ outline: deep
 </Badges>
 
 ```
-npm install @feathersjs/socketio-client --save
+npm install @feathersjs/socketio-client@pre --save
 ```
 
 The `@feathersjs/socketio-client` module allows to connect to services exposed through the [Socket.io transport](../socketio.md) via a Socket.io socket. We recommend using Feathers and the `@feathersjs/socketio-client` module on the client if possible since it can also handle reconnection and reauthentication. If however, you want to use a direct Socket.io connection without using Feathers on the client, see the [Direct connection](#direct-connection) section.
@@ -229,12 +229,12 @@ socket.emit('get', 'messages', 1, (error, message) => {
 Will call `app.service('messages').get(1, {})` on the server.
 
 ```js
-socket.emit('get', 'messages', 1, { fetch: 'all' }, (error, message) => {
+socket.emit('get', 'messages', 1, { status: 'read' }, (error, message) => {
   console.log('Found message', message)
 })
 ```
 
-Will call `app.service('messages').get(1, { query: { fetch: 'all' } })` on the server.
+Will call `app.service('messages').get(1, { query: { status: 'read' } })` on the server.
 
 ### create
 
@@ -287,13 +287,13 @@ socket.emit(
   'messages',
   null,
   {
-    complete: true
+    status: 'unread'
   },
-  { complete: false }
+  { status: 'read' }
 )
 ```
 
-Will call `app.service('messages').update(null, { complete: true }, { query: { complete: 'false' } })` on the server.
+Will call `app.service('messages').update(null, { status: 'read' }, { query: { satus: 'unread' } })` on the server.
 
 ### patch
 
@@ -321,10 +321,10 @@ socket.emit(
   'messages',
   null,
   {
-    complete: true
+    status: 'read'
   },
   {
-    complete: false
+    status: 'unread'
   },
   (error, message) => {
     console.log('Patched message', message)
@@ -332,25 +332,25 @@ socket.emit(
 )
 ```
 
-Will call `app.service('messages').patch(null, { complete: true }, { query: { complete: false } })` on the server, to change the status for all read app.service('messages').
+Will call `app.service('messages').patch(null, { status: 'read' }, { query: { status: 'unread' } })` on the server, to change the status for all read app.service('messages').
 
 ### remove
 
 Remove a single or multiple resources:
 
 ```js
-socket.emit('remove', 'messages', 2, { cascade: true }, (error, message) => {
+socket.emit('remove', 'messages', 2, {}, (error, message) => {
   console.log('Removed a message', message)
 })
 ```
 
-Will call `app.service('messages').remove(2, { query: { cascade: true } })` on the server. The `id` can also be `null` to remove multiple resources:
+Will call `app.service('messages').remove(2, {})` on the server. The `id` can also be `null` to remove multiple resources:
 
 ```js
-socket.emit('remove', 'messages', null, { read: true })
+socket.emit('remove', 'messages', null, { status: 'archived' })
 ```
 
-Will call `app.service('messages').remove(null, { query: { read: 'true' } })` on the server to delete all read app.service('messages').
+Will call `app.service('messages').remove(null, { query: { status: 'archived' } })` on the server to delete all messages with status `archived`.
 
 ### Custom methods
 

@@ -4,7 +4,8 @@ import { ServiceGeneratorContext } from '../index'
 
 const migrationTemplate = ({
   kebabPath
-}: ServiceGeneratorContext) => /* ts */ `import type { Knex } from 'knex'
+}: ServiceGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/knexfile.html
+import type { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('${kebabPath}', table => {
@@ -25,7 +26,8 @@ export const template = ({
   schema,
   fileName,
   relative
-}: ServiceGeneratorContext) => /* ts */ `import type { Params } from '@feathersjs/feathers'
+}: ServiceGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
+import type { Params } from '@feathersjs/feathers'
 import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 
@@ -35,12 +37,14 @@ ${
     ? `import type {
   ${upperName},
   ${upperName}Data,
+  ${upperName}Patch,
   ${upperName}Query
 } from './${fileName}.schema'
 `
     : `
 export type ${upperName} = any
 export type ${upperName}Data = any
+export type ${upperName}Patch = any
 export type ${upperName}Query = any
 `
 }
@@ -50,7 +54,7 @@ export interface ${upperName}Params extends KnexAdapterParams<${upperName}Query>
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class ${className}<ServiceParams extends Params = ${upperName}Params>
-  extends KnexService<${upperName}, ${upperName}Data, ServiceParams> {
+  extends KnexService<${upperName}, ${upperName}Data, ServiceParams, ${upperName}Patch> {
 }
 
 export const getOptions = (app: Application): KnexAdapterOptions => {

@@ -1,19 +1,24 @@
 import { generator, toFile, when } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
+import { fileExists, renderSource } from '../../commons'
 import { AuthenticationGeneratorContext, localTemplate } from '../index'
 
 const template = ({
+  cwd,
+  lib,
   camelName,
   upperName,
   authStrategies,
   type,
   relative
-}: AuthenticationGeneratorContext) => /* ts */ `import { resolve, querySyntax, getValidator, getDataValidator } from '@feathersjs/schema'
+}: AuthenticationGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
+import { resolve, querySyntax, getValidator } from '@feathersjs/schema'
 import type { FromSchema } from '@feathersjs/schema'
 ${localTemplate(authStrategies, `import { passwordHash } from '@feathersjs/authentication-local'`)}
 
 import type { HookContext } from '${relative}/declarations'
-import { dataValidator, queryValidator } from '${relative}/schemas/validators'
+import { dataValidator, queryValidator } from '${relative}/${
+  fileExists(cwd, lib, 'schemas') ? 'schemas/' : '' // This is for legacy backwards compatibility
+}validators'
 
 // Main data model schema
 export const ${camelName}Schema = {
@@ -36,11 +41,17 @@ export const ${camelName}Schema = {
   }
 } as const
 export type ${upperName} = FromSchema<typeof ${camelName}Schema>
-export const ${camelName}Resolver = resolve<${upperName}, HookContext>({
-  properties: {}
+export const ${camelName}Resolver = resolve<${upperName}, HookContext>({})
+
+export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
+  ${localTemplate(
+    authStrategies,
+    `// The password should never be visible externally
+  password: async () => undefined`
+  )}
 })
 
-// Schema for the basic data model (e.g. creating new entries)
+// Schema for creating new users
 export const ${camelName}DataSchema = {
   $id: '${upperName}Data',
   type: 'object',
@@ -51,18 +62,25 @@ export const ${camelName}DataSchema = {
   }
 } as const
 export type ${upperName}Data = FromSchema<typeof ${camelName}DataSchema>
-export const ${camelName}DataValidator = getDataValidator(${camelName}DataSchema, dataValidator)
+export const ${camelName}DataValidator = getValidator(${camelName}DataSchema, dataValidator)
 export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
-  properties: {
-    ${localTemplate(authStrategies, `password: passwordHash({ strategy: 'local' })`)}
-  }
+  ${localTemplate(authStrategies, `password: passwordHash({ strategy: 'local' })`)}
 })
 
-export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
+// Schema for updating existing users
+export const ${camelName}DataSchema = {
+  $id: '${upperName}Patch',
+  type: 'object',
+  additionalProperties: false,
+  required: [],
   properties: {
-    // The password should never be visible externally
-    password: async () => undefined
+    ...${camelName}Schema.properties
   }
+} as const
+export type ${upperName}Patch = FromSchema<typeof ${camelName}PatchSchema>
+export const ${camelName}PatchValidator = getValidator(${camelName}PatchSchema, dataValidator)
+export const ${camelName}PatchResolver = resolve<${upperName}Patch, HookContext>({
+  ${localTemplate(authStrategies, `password: passwordHash({ strategy: 'local' })`)}
 })
 
 // Schema for allowed query properties
@@ -77,15 +95,13 @@ export const ${camelName}QuerySchema = {
 export type ${upperName}Query = FromSchema<typeof ${camelName}QuerySchema>
 export const ${camelName}QueryValidator = getValidator(${camelName}QuerySchema, queryValidator)
 export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
-  properties: {
-    // If there is a user (e.g. with authentication), they are only allowed to see their own data
-    ${type === 'mongodb' ? '_id' : 'id'}: async (value, user, context) => {
-      if (context.params.user) {
-        return context.params.user.${type === 'mongodb' ? '_id' : 'id'}
-      }
-  
-      return value
+  // If there is a user (e.g. with authentication), they are only allowed to see their own data
+  ${type === 'mongodb' ? '_id' : 'id'}: async (value, user, context) => {
+    if (context.params.user) {
+      return context.params.user.${type === 'mongodb' ? '_id' : 'id'}
     }
+
+    return value
   }
 })
 `

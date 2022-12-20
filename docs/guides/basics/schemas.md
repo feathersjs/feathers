@@ -30,6 +30,9 @@ While schemas and resolvers can be used outside of a Feather application, you wi
 - **Query** schemas and resolvers validate and convert the query string and can also be used for additional limitations like only allowing a user to see and modify their own data
 - **External** resolvers that return a safe version of the data (e.g. hiding a users password) that can be sent to external clients
 
+<hr />
+<DatabaseSelect />
+
 ## Adding a user avatar
 
 Let's extend our existing users schema to add an `avatar` property so that our users can have a profile image.
@@ -45,7 +48,10 @@ First we need to update the `src/services/users/users.schema.js` file with the s
 
 </LanguageBlock>
 
-```ts{1,16-17,36,47-57,70-74}
+<DatabaseBlock global-id="sql">
+
+```ts{2,17-18,33,43-53,81-85}
+// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import crypto from 'crypto'
 import { resolve } from '@feathersjs/schema'
 import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
@@ -53,7 +59,7 @@ import type { Static } from '@feathersjs/typebox'
 import { passwordHash } from '@feathersjs/authentication-local'
 
 import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../schemas/validators'
+import { dataValidator, queryValidator } from '../../validators'
 
 // Main data model schema
 export const userSchema = Type.Object(
@@ -67,18 +73,14 @@ export const userSchema = Type.Object(
   { $id: 'User', additionalProperties: false }
 )
 export type User = Static<typeof userSchema>
-export const userResolver = resolve<User, HookContext>({
-  properties: {}
-})
+export const userResolver = resolve<User, HookContext>({})
 
 export const userExternalResolver = resolve<User, HookContext>({
-  properties: {
-    // The password should never be visible externally
-    password: async () => undefined
-  }
+  // The password should never be visible externally
+  password: async () => undefined
 })
 
-// Schema for the basic data model (e.g. creating new entries)
+// Schema for creating new users
 export const userDataSchema = Type.Pick(
   userSchema,
   ['email', 'password', 'githubId', 'avatar'],
@@ -90,42 +92,153 @@ export const userDataSchema = Type.Pick(
 export type UserData = Static<typeof userDataSchema>
 export const userDataValidator = getDataValidator(userDataSchema, dataValidator)
 export const userDataResolver = resolve<User, HookContext>({
-  properties: {
-    password: passwordHash({ strategy: 'local' }),
-    avatar: async (value, user) => {
-      // If the user passed an avatar image, use it
-      if (value !== undefined) {
-        return value
-      }
-
-      // Gravatar uses MD5 hashes from an email address to get the image
-      const hash = crypto.createHash('md5').update(user.email.toLowerCase()).digest('hex')
-      // Return the full avatar URL
-      return `https://s.gravatar.com/avatar/${hash}?s=60`
+  password: passwordHash({ strategy: 'local' }),
+  avatar: async (value, user) => {
+    // If the user passed an avatar image, use it
+    if (value !== undefined) {
+      return value
     }
+
+    // Gravatar uses MD5 hashes from an email address to get the image
+    const hash = crypto.createHash('md5').update(user.email.toLowerCase()).digest('hex')
+    // Return the full avatar URL
+    return `https://s.gravatar.com/avatar/${hash}?s=60`
   }
+})
+
+// Schema for updating existing users
+export const userPatchSchema = Type.Partial(userSchema, {
+  $id: 'UserPatch'
+})
+export type UserPatch = Static<typeof userPatchSchema>
+export const userPatchValidator = getDataValidator(userPatchSchema, dataValidator)
+export const userPatchResolver = resolve<User, HookContext>({
+  password: passwordHash({ strategy: 'local' })
 })
 
 // Schema for allowed query properties
 export const userQueryProperties = Type.Pick(userSchema, ['id', 'email', 'githubId'])
-export const userQuerySchema = querySyntax(userQueryProperties)
+export const userQuerySchema = Type.Intersect(
+  [
+    querySyntax(userQueryProperties),
+    // Add additional query properties here
+    Type.Object({}, { additionalProperties: false })
+  ],
+  { additionalProperties: false }
+)
 export type UserQuery = Static<typeof userQuerySchema>
 export const userQueryValidator = getValidator(userQuerySchema, queryValidator)
 export const userQueryResolver = resolve<UserQuery, HookContext>({
-  properties: {
-    // If there is a user (e.g. with authentication), they are only allowed to see their own data
-    id: async (value, user, context) => {
-      // We want to be able to get a list of all users but
-      // only let a user modify their own data otherwise
-      if (context.params.user && context.method !== 'find') {
-        return context.params.user.id
-      }
-
-      return value
+  // If there is a user (e.g. with authentication), they are only allowed to see their own data
+  id: async (value, user, context) => {
+    // We want to be able to get a list of all users but
+    // only let a user modify their own data otherwise
+    if (context.params.user && context.method !== 'find') {
+      return context.params.user.id
     }
+
+    return value
   }
 })
 ```
+
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
+
+```ts{2,17-18,33,43-53,81-85}
+// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
+import crypto from 'crypto'
+import { resolve } from '@feathersjs/schema'
+import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
+import type { Static } from '@feathersjs/typebox'
+import { passwordHash } from '@feathersjs/authentication-local'
+
+import type { HookContext } from '../../declarations'
+import { dataValidator, queryValidator } from '../../validators'
+
+// Main data model schema
+export const userSchema = Type.Object(
+  {
+    _id: Type.String(),
+    email: Type.String(),
+    password: Type.Optional(Type.String()),
+    githubId: Type.Optional(Type.Number()),
+    avatar: Type.Optional(Type.String())
+  },
+  { $id: 'User', additionalProperties: false }
+)
+export type User = Static<typeof userSchema>
+export const userResolver = resolve<User, HookContext>({})
+
+export const userExternalResolver = resolve<User, HookContext>({
+  // The password should never be visible externally
+  password: async () => undefined
+})
+
+// Schema for creating new users
+export const userDataSchema = Type.Pick(
+  userSchema,
+  ['email', 'password', 'githubId', 'avatar'],
+  {
+    $id: 'UserData',
+    additionalProperties: false
+  }
+)
+export type UserData = Static<typeof userDataSchema>
+export const userDataValidator = getDataValidator(userDataSchema, dataValidator)
+export const userDataResolver = resolve<User, HookContext>({
+  password: passwordHash({ strategy: 'local' }),
+  avatar: async (value, user) => {
+    // If the user passed an avatar image, use it
+    if (value !== undefined) {
+      return value
+    }
+
+    // Gravatar uses MD5 hashes from an email address to get the image
+    const hash = crypto.createHash('md5').update(user.email.toLowerCase()).digest('hex')
+    // Return the full avatar URL
+    return `https://s.gravatar.com/avatar/${hash}?s=60`
+  }
+})
+
+// Schema for updating existing users
+export const userPatchSchema = Type.Partial(userSchema, {
+  $id: 'UserPatch'
+})
+export type UserPatch = Static<typeof userPatchSchema>
+export const userPatchValidator = getDataValidator(userPatchSchema, dataValidator)
+export const userPatchResolver = resolve<User, HookContext>({
+  password: passwordHash({ strategy: 'local' })
+})
+
+// Schema for allowed query properties
+export const userQueryProperties = Type.Pick(userSchema, ['id', 'email', 'githubId'])
+export const userQuerySchema = Type.Intersect(
+  [
+    querySyntax(userQueryProperties),
+    // Add additional query properties here
+    Type.Object({}, { additionalProperties: false })
+  ],
+  { additionalProperties: false }
+)
+export type UserQuery = Static<typeof userQuerySchema>
+export const userQueryValidator = getValidator(userQuerySchema, queryValidator)
+export const userQueryResolver = resolve<UserQuery, HookContext>({
+  // If there is a user (e.g. with authentication), they are only allowed to see their own data
+  _id: async (value, user, context) => {
+    // We want to be able to get a list of all users but
+    // only let a user modify their own data otherwise
+    if (context.params.user && context.method !== 'find') {
+      return context.params.user._id
+    }
+
+    return value
+  }
+})
+```
+
+</DatabaseBlock>
 
 ## Handling messages
 
@@ -142,13 +255,16 @@ Update the `src/services/messages/messages.schema.js` file like this:
 
 </LanguageBlock>
 
-```ts{7,14-16,23-26,43-49,56,66-74}
-import { resolve } from '@feathersjs/schema'
+<DatabaseBlock global-id="sql">
+
+```ts{2,8,15-17,23-26,38-44,57-60}
+// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
+import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../schemas/validators'
+import { dataValidator, queryValidator } from '../../validators'
 import { userSchema } from '../users/users.schema'
 
 // Main data model schema
@@ -157,71 +273,146 @@ export const messageSchema = Type.Object(
     id: Type.Number(),
     text: Type.String(),
     createdAt: Type.Number(),
-    userId: Type.Number(),
+    userId: Type.String(),
     user: Type.Ref(userSchema)
   },
   { $id: 'Message', additionalProperties: false }
 )
 export type Message = Static<typeof messageSchema>
 export const messageResolver = resolve<Message, HookContext>({
-  properties: {
-    user: async (_value, message, context) => {
-      // Associate the user that sent the message
-      return context.app.service('users').get(message.userId)
-    }
-  }
+  user: virtual(async (message, context) => {
+    // Associate the user that sent the message
+    return context.app.service('users').get(message.userId)
+  })
 })
 
-export const messageExternalResolver = resolve<Message, HookContext>({
-  properties: {}
-})
+export const messageExternalResolver = resolve<Message, HookContext>({})
 
 // Schema for creating new entries
 export const messageDataSchema = Type.Pick(messageSchema, ['text'], {
-  $id: 'MessageData',
-  additionalProperties: false
+  $id: 'MessageData'
 })
 export type MessageData = Static<typeof messageDataSchema>
 export const messageDataValidator = getDataValidator(messageDataSchema, dataValidator)
 export const messageDataResolver = resolve<Message, HookContext>({
-  properties: {
-    userId: async (_value, _message, context) => {
-      // Associate the record with the id of the authenticated user
-      return context.params.user.id
-    },
-    createdAt: async () => {
-      return Date.now()
-    }
+  userId: async (_value, _message, context) => {
+    // Associate the record with the id of the authenticated user
+    return context.params.user.id
+  },
+  createdAt: async () => {
+    return Date.now()
   }
 })
+
+// Schema for updating existing entries
+export const messagePatchSchema = Type.Partial(messageSchema, {
+  $id: 'MessagePatch'
+})
+export type MessagePatch = Static<typeof messagePatchSchema>
+export const messagePatchValidator = getDataValidator(messagePatchSchema, dataValidator)
+export const messagePatchResolver = resolve<Message, HookContext>({})
 
 // Schema for allowed query properties
-export const messageQueryProperties = Type.Pick(
-  messageSchema,
-  ['id', 'text', 'createdAt', 'userId'],
-  {
-    additionalProperties: false
-  }
+export const messageQueryProperties = Type.Pick(messageSchema,[
+  'id',
+  'text',
+  'createdAt',
+  'userId'
+])
+export const messageQuerySchema = Type.Intersect(
+  [
+    querySyntax(messageQueryProperties),
+    // Add additional query properties here
+    Type.Object({}, { additionalProperties: false })
+  ],
+  { additionalProperties: false }
 )
-export const messageQuerySchema = querySyntax(messageQueryProperties)
 export type MessageQuery = Static<typeof messageQuerySchema>
 export const messageQueryValidator = getValidator(messageQuerySchema, queryValidator)
-export const messageQueryResolver = resolve<MessageQuery, HookContext>({
-  properties: {
-    userId: async (value, user, context) => {
-      // We want to be able to get a list of all messages but
-      // only let a user access their own messages otherwise
-      if (context.params.user && context.method !== 'find') {
-        return context.params.user.id
-      }
-
-      return value
-    }
-  }
-})
+export const messageQueryResolver = resolve<MessageQuery, HookContext>({})
 ```
 
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
+
+```ts{2,8,15-17,23-26,38-44,57-60}
+// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
+import { resolve, virtual } from '@feathersjs/schema'
+import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
+import type { Static } from '@feathersjs/typebox'
+
+import type { HookContext } from '../../declarations'
+import { dataValidator, queryValidator } from '../../validators'
+import { userSchema } from '../users/users.schema'
+
+// Main data model schema
+export const messageSchema = Type.Object(
+  {
+    _id: Type.String(),
+    text: Type.String(),
+    createdAt: Type.Number(),
+    userId: Type.String(),
+    user: Type.Ref(userSchema)
+  },
+  { $id: 'Message', additionalProperties: false }
+)
+export type Message = Static<typeof messageSchema>
+export const messageResolver = resolve<Message, HookContext>({
+  user: virtual(async (message, context) => {
+    // Associate the user that sent the message
+    return context.app.service('users').get(message.userId)
+  })
+})
+
+export const messageExternalResolver = resolve<Message, HookContext>({})
+
+// Schema for creating new entries
+export const messageDataSchema = Type.Pick(messageSchema, ['text'], {
+  $id: 'MessageData'
+})
+export type MessageData = Static<typeof messageDataSchema>
+export const messageDataValidator = getDataValidator(messageDataSchema, dataValidator)
+export const messageDataResolver = resolve<Message, HookContext>({
+  userId: async (_value, _message, context) => {
+    // Associate the record with the id of the authenticated user
+    return context.params.user._id
+  },
+  createdAt: async () => {
+    return Date.now()
+  }
+})
+
+// Schema for updating existing entries
+export const messagePatchSchema = Type.Partial(messageSchema, {
+  $id: 'MessagePatch'
+})
+export type MessagePatch = Static<typeof messagePatchSchema>
+export const messagePatchValidator = getDataValidator(messagePatchSchema, dataValidator)
+export const messagePatchResolver = resolve<Message, HookContext>({})
+
+// Schema for allowed query properties
+export const messageQueryProperties = Type.Pick(messageSchema,
+['_id', 'text', 'createdAt', 'userId']
+)
+export const messageQuerySchema = Type.Intersect(
+  [
+    querySyntax(messageQueryProperties),
+    // Add additional query properties here
+    Type.Object({}, { additionalProperties: false })
+  ],
+  { additionalProperties: false }
+)
+export type MessageQuery = Static<typeof messageQuerySchema>
+export const messageQueryValidator = getValidator(messageQuerySchema, queryValidator)
+export const messageQueryResolver = resolve<MessageQuery, HookContext>({})
+```
+
+</DatabaseBlock>
+
 ## Creating a migration
+
+<DatabaseBlock global-id="sql">
 
 Now that our schemas and resolvers have everything we need, we also have to update the database with those changes. For SQL databases this is done with migrations. Migrations are a best practise for SQL databases to roll out and undo changes to the data model. Every change we make in a schema will need its corresponding migration step.
 
@@ -282,6 +473,18 @@ We can run the migrations on the current database with
 ```
 npm run migrate
 ```
+
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
+
+<BlockQuote type="tip">
+
+For MongoDB no migrations are necessary.
+
+</BlockQuote>
+
+</DatabaseBlock>
 
 ## What's next?
 

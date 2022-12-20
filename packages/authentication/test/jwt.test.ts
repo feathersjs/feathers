@@ -20,7 +20,7 @@ describe('authentication/jwt', () => {
   let accessToken: string
   let payload: any
 
-  const userDispatchResolver = resolve({
+  const userDispatchResolver = resolve<any, any>({
     converter: async () => {
       return {
         dispatch: true,
@@ -131,6 +131,33 @@ describe('authentication/jwt', () => {
         strategy: 'jwt',
         accessToken
       })
+    })
+
+    it('login event connection has authentication information (#2908)', async () => {
+      const connection: any = {}
+      const onLogin = new Promise((resolve, reject) =>
+        app.once('login', (data, { connection }) => {
+          try {
+            assert.deepStrictEqual(connection.user, {
+              ...user,
+              isExternal: true
+            })
+            resolve(data)
+          } catch (error) {
+            reject(error)
+          }
+        })
+      )
+
+      await app.service('authentication').create(
+        {
+          strategy: 'jwt',
+          accessToken
+        },
+        { connection, provider: 'test' }
+      )
+
+      await onLogin
     })
 
     it('resolves safe dispatch data in authentication result', async () => {

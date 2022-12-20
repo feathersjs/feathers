@@ -297,7 +297,7 @@ describe('\'messages\' service', () => {
     }, params);
 
     assert.equal(message.text, 'a test');
-    // `userId` should be set to passed users it
+    // `userId` should be set to the provided user's id
     assert.equal(message.userId, user._id);
     // Additional property has been removed
     assert.ok(!message.additional);

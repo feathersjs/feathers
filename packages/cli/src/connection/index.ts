@@ -21,7 +21,7 @@ export type ConnectionGeneratorArguments = FeathersBaseContext &
 
 export const defaultConnectionString = (type: DatabaseType, name: string) => {
   const connectionStrings = {
-    mongodb: `mongodb://localhost:27017/${name}`,
+    mongodb: `mongodb://127.0.0.1:27017/${name}`,
     mysql: `mysql://root:@localhost:3306/${name}`,
     postgresql: `postgres://postgres:@localhost:5432/${name}`,
     sqlite: `${name}.sqlite`,
@@ -61,7 +61,7 @@ export const DATABASE_CLIENTS = {
   sqlite: 'sqlite3',
   postgresql: 'pg',
   mysql: 'mysql',
-  mssql: 'tedious'
+  mssql: 'mssql'
 }
 
 export const getDatabaseClient = (database: DatabaseType) => DATABASE_CLIENTS[database]

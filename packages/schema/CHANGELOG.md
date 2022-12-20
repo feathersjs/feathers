@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.34](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.33...v5.0.0-pre.34) (2022-12-14)
+
+### Bug Fixes
+
+- **core:** `context.type` for around hooks ([#2890](https://github.com/feathersjs/feathers/issues/2890)) ([d606ac6](https://github.com/feathersjs/feathers/commit/d606ac660fd5335c95206784fea36530dd2e851a))
+- **core:** Improve service option usage and method option typings ([#2902](https://github.com/feathersjs/feathers/issues/2902)) ([164d75c](https://github.com/feathersjs/feathers/commit/164d75c0f11139a316baa91f1762de8f8eb7da2d))
+- **schema:** Allow query schemas with no properties, error on unsupported types ([#2904](https://github.com/feathersjs/feathers/issues/2904)) ([b66c734](https://github.com/feathersjs/feathers/commit/b66c734357478f51b2d38fa7f3eee08640cea26e))
+
+### Features
+
+- **adapter:** Add patch data type to adapters and refactor AdapterBase usage ([#2906](https://github.com/feathersjs/feathers/issues/2906)) ([9ddc2e6](https://github.com/feathersjs/feathers/commit/9ddc2e6b028f026f939d6af68125847e5c6734b4))
+- **cli:** Use separate patch schema and types ([#2916](https://github.com/feathersjs/feathers/issues/2916)) ([7088af6](https://github.com/feathersjs/feathers/commit/7088af64a539dc7f1a016d832b77b98aaaf92603))
+- **schema:** Split resolver options and property resolvers ([#2889](https://github.com/feathersjs/feathers/issues/2889)) ([4822c94](https://github.com/feathersjs/feathers/commit/4822c949812e5a1dceff3c62b2f9de4781b4d601))
+- **schema:** Virtual property resolvers ([#2900](https://github.com/feathersjs/feathers/issues/2900)) ([7d03b57](https://github.com/feathersjs/feathers/commit/7d03b57ae2f633bdd4a368e0d5955011fbd6c329))
+
+# [5.0.0-pre.33](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.32...v5.0.0-pre.33) (2022-11-08)
+
+**Note:** Version bump only for package @feathersjs/schema
+
 # [5.0.0-pre.32](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.31...v5.0.0-pre.32) (2022-10-26)
 
 ### Bug Fixes

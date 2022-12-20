@@ -1,31 +1,96 @@
 import assert from 'assert'
 import { Ajv } from '@feathersjs/schema'
-import { querySyntax, Type, Static, defaultAppConfiguration, getDataValidator, getValidator } from '../src'
+import {
+  querySyntax,
+  Type,
+  Static,
+  defaultAppConfiguration,
+  getDataValidator,
+  getValidator,
+  queryProperties
+} from '../src'
 
 describe('@feathersjs/schema/typebox', () => {
-  it('querySyntax', async () => {
-    const schema = Type.Object({
-      name: Type.String(),
-      age: Type.Number()
+  describe('querySyntax', () => {
+    it('basics', async () => {
+      const schema = Type.Object({
+        name: Type.String(),
+        age: Type.Number()
+      })
+      const querySchema = querySyntax(schema)
+
+      type Query = Static<typeof querySchema>
+
+      const query: Query = {
+        name: 'Dave',
+        age: { $gt: 42, $in: [50, 51] },
+        $select: ['age', 'name'],
+        $sort: {
+          age: 1
+        }
+      }
+
+      const validator = new Ajv().compile(querySchema)
+      let validated = (await validator(query)) as any as Query
+
+      assert.ok(validated)
+
+      validated = (await validator({ ...query, something: 'wrong' })) as any as Query
+      assert.ok(!validated)
     })
 
-    const querySchema = querySyntax(schema)
+    it('queryProperties errors for unsupported query types', () => {
+      assert.throws(
+        () =>
+          queryProperties(
+            Type.Object({
+              something: Type.Ref(Type.Object({}, { $id: 'something' }))
+            })
+          ),
+        {
+          message: "Can not create query syntax schema for reference property 'something'"
+        }
+      )
+    })
 
-    type Query = Static<typeof querySchema>
+    it('querySyntax works with no properties', async () => {
+      const schema = querySyntax(Type.Object({}))
 
-    const query: Query = {
-      name: 'Dave',
-      age: { $gt: 42, $in: [50, 51] },
-      $select: ['age', 'name'],
-      $sort: {
-        age: 1
+      new Ajv().compile(schema)
+    })
+
+    it('query syntax can include additional extensions', async () => {
+      const schema = Type.Object({
+        name: Type.String(),
+        age: Type.Number()
+      })
+      const querySchema = querySyntax(schema, {
+        age: {
+          $notNull: Type.Boolean()
+        },
+        name: {
+          $ilike: Type.String()
+        }
+      })
+      const validator = new Ajv().compile(querySchema)
+
+      type Query = Static<typeof querySchema>
+
+      const query: Query = {
+        age: {
+          $gt: 10,
+          $notNull: true
+        },
+        name: {
+          $gt: 'David',
+          $ilike: 'Dave'
+        }
       }
-    }
 
-    const validator = new Ajv().compile(querySchema)
-    const validated = (await validator(query)) as any as Query
+      const validated = (await validator(query)) as any as Query
 
-    assert.ok(validated)
+      assert.ok(validated)
+    })
   })
 
   it('defaultAppConfiguration', async () => {

@@ -4,7 +4,7 @@ import { resolveDispatch } from '@feathersjs/schema'
 
 import { OAuthStrategy, OAuthProfile } from './strategy'
 import { redirectHook, OAuthService } from './service'
-import { getGrantConfig, getServiceOptions, OauthSetupSettings } from './utils'
+import { getGrantConfig, authenticationServiceOptions, OauthSetupSettings } from './utils'
 
 const debug = createDebug('@feathersjs/authentication-oauth')
 
@@ -32,7 +32,7 @@ export const oauth =
     }
 
     const grantConfig = getGrantConfig(authService)
-    const serviceOptions = getServiceOptions(authService, oauthOptions)
+    const serviceOptions = authenticationServiceOptions(authService, oauthOptions)
     const servicePath = `${grantConfig.defaults.prefix || 'oauth'}/:provider`
 
     app.use(servicePath, new OAuthService(authService, oauthOptions), serviceOptions)

@@ -1,5 +1,6 @@
 import { HookContext, NextFunction } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
+import { VALIDATED } from '@feathersjs/adapter-commons'
 import { Schema, Validator } from '../schema'
 import { DataValidatorMap } from '../json-schema'
 
@@ -11,6 +12,8 @@ export const validateQuery = <H extends HookContext>(schema: Schema<any> | Valid
 
     try {
       const query = await validator(data)
+
+      Object.defineProperty(query, VALIDATED, { value: true })
 
       context.params = {
         ...context.params,
@@ -26,12 +29,14 @@ export const validateQuery = <H extends HookContext>(schema: Schema<any> | Valid
   }
 }
 
-export const validateData = <H extends HookContext>(schema: Schema<any> | DataValidatorMap) => {
+export const validateData = <H extends HookContext>(schema: Schema<any> | DataValidatorMap | Validator) => {
   return async (context: H, next?: NextFunction) => {
     const data = context.data
     const validator =
       typeof (schema as Schema<any>).validate === 'function'
         ? (schema as Schema<any>).validate.bind(schema)
+        : typeof schema === 'function'
+        ? schema
         : (schema as any)[context.method]
 
     if (validator) {
@@ -41,6 +46,8 @@ export const validateData = <H extends HookContext>(schema: Schema<any> | DataVa
         } else {
           context.data = await validator(data)
         }
+
+        Object.defineProperty(context.data, VALIDATED, { value: true })
       } catch (error: any) {
         throw error.ajv ? new BadRequest(error.message, error.errors) : error
       }

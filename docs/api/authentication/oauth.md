@@ -12,7 +12,7 @@ outline: deep
 </Badges>
 
 ```
-npm install @feathersjs/authentication-oauth --save
+npm install @feathersjs/authentication-oauth@pre --save
 ```
 
 `@feathersjs/authentication-oauth` allows to authenticate with over 180 OAuth providers (Google, Facebook, GitHub etc.) using [grant](https://github.com/simov/grant), an OAuth middleware module for NodeJS.

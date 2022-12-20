@@ -21,6 +21,8 @@ export const defaultEventMap = {
   remove: 'removed'
 }
 
+export const defaultServiceEvents = Object.values(defaultEventMap)
+
 export const protectedMethods = Object.keys(Object.prototype)
   .concat(Object.keys(EventEmitter.prototype))
   .concat(['all', 'around', 'before', 'after', 'error', 'hooks', 'setup', 'teardown', 'publish'])
@@ -33,18 +35,16 @@ export function getHookMethods(service: any, options: ServiceOptions) {
     .concat(methods)
 }
 
-export function getServiceOptions(service: any, options: ServiceOptions = {}): ServiceOptions {
-  const existingOptions = service[SERVICE]
+export function getServiceOptions(service: any): ServiceOptions {
+  return service[SERVICE]
+}
 
-  if (existingOptions) {
-    return existingOptions
-  }
-
+export const normalizeServiceOptions = (service: any, options: ServiceOptions = {}): ServiceOptions => {
   const {
     methods = defaultServiceMethods.filter((method) => typeof service[method] === 'function'),
     events = service.events || []
   } = options
-  const { serviceEvents = Object.values(defaultEventMap).concat(events) } = options
+  const serviceEvents = options.serviceEvents || defaultServiceEvents.concat(events)
 
   return {
     ...options,
@@ -61,9 +61,12 @@ export function wrapService(location: string, service: any, options: ServiceOpti
   }
 
   const protoService = Object.create(service)
-  const serviceOptions = getServiceOptions(service, options)
+  const serviceOptions = normalizeServiceOptions(service, options)
 
-  if (Object.keys(serviceOptions.methods).length === 0 && typeof service.setup !== 'function') {
+  if (
+    Object.keys(serviceOptions.methods).length === 0 &&
+    ![...defaultServiceMethods, 'setup', 'teardown'].some((method) => typeof service[method] === 'function')
+  ) {
     throw new Error(`Invalid service object passed for path \`${location}\``)
   }
 

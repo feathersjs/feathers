@@ -1,47 +1,14 @@
 import { defineConfig } from 'vitepress'
-// import { version } from '../package.json'
 import { highlight } from './highlight'
-const version = 5
-import {
-  contributing,
-  discord,
-  font,
-  github,
-  ogImage,
-  ogUrl,
-  releases,
-  twitter,
-  feathersDescription,
-  feathersName
-} from './meta'
+import { discord, font, github, ogImage, ogUrl, twitter, feathersDescription, feathersName } from './meta'
+import sidebar from './config.sidebar'
+import nav from './config.nav'
 
-const comparisonSidebar = [
-  {
-    text: 'Compare Feathers',
-    items: [
-      {
-        text: 'Overview',
-        link: '/comparison'
-      },
-      {
-        text: 'Feathers vs Firebase',
-        link: '/feathers-vs-firebase'
-      },
-      {
-        text: 'Feathers vs Meteor',
-        link: '/feathers-vs-meteor'
-      },
-      {
-        text: 'Feathers vs Sails',
-        link: '/feathers-vs-sails'
-      },
-      {
-        text: 'Feathers vs Loopback',
-        link: '/feathers-vs-loopback'
-      }
-    ]
-  }
-]
+// For sitemap/search
+import { createWriteStream } from 'node:fs'
+import { SitemapStream } from 'sitemap'
+import { resolve } from 'node:path'
+const links: any[] = []
 
 export default defineConfig({
   lang: 'en-US',
@@ -99,17 +66,8 @@ export default defineConfig({
     logo: '/logo.svg',
 
     editLink: {
-      pattern: 'https://github.com/feathersjs/feathers/edit/dove-docs/docs/:path',
+      pattern: 'https://github.com/feathersjs/feathers/edit/dove/docs/:path',
       text: 'Suggest changes to this page'
-    },
-
-    algolia: {
-      appId: 'QK3SV4AQ1E',
-      apiKey: '3e8a4c82e7a1b57cd1a4809ceb86878e',
-      indexName: 'feathersjs'
-      // searchParameters: {
-      //   facetFilters: ['tags:en'],
-      // },
     },
 
     socialLinks: [
@@ -123,390 +81,27 @@ export default defineConfig({
       copyright: `Copyright © 2012-${new Date().getFullYear()} FeathersJS contributors`
     },
 
-    nav: [
-      { text: 'Guides', link: '/guides/' },
-      { text: 'API', link: '/api/' },
-      { text: 'Help', link: '/help/' },
-      {
-        text: `v${version}`,
-        items: [
-          {
-            text: 'Release Notes ',
-            link: releases
-          },
-          {
-            text: 'Crow v4 ',
-            link: 'https://crow.docs.feathersjs.com'
-          },
-          {
-            text: 'Buzzard v3 ',
-            link: 'https://buzzard.docs.feathersjs.com'
-          }
-        ]
-      },
-      {
-        text: 'Ecosystem',
-        items: [
-          { text: 'Blog', link: 'https://blog.feathersjs.com/' },
-          { text: 'Cookbook', link: '/cookbook/' },
-          {
-            text: 'Awesome Feathers',
-            link: 'https://github.com/feathersjs/awesome-feathersjs'
-          },
-          {
-            text: 'YouTube Playlist',
-            link: 'https://www.youtube.com/playlist?list=PLwSdIiqnDlf_lb5y1liQK2OW5daXYgKOe'
-          },
-          {
-            text: 'Feathers Pinia - Vue',
-            link: 'https://feathers-pinia.pages.dev/'
-          },
-          {
-            text: 'Figbird - React',
-            link: 'https://humaans.github.io/figbird/'
-          },
-          {
-            text: 'Common Hooks',
-            link: 'https://hooks-common.feathersjs.com/'
-          }
-        ]
-      }
-    ],
-
-    sidebar: {
-      '/guides': [
-        {
-          text: 'Getting Started',
-          collapsible: true,
-          items: [
-            {
-              text: 'Quick start',
-              link: '/guides/basics/starting.md'
-            },
-            {
-              text: 'Creating an app',
-              link: '/guides/basics/generator.md'
-            },
-            {
-              text: 'Services',
-              link: '/guides/basics/services.md'
-            },
-            {
-              text: 'Hooks',
-              link: '/guides/basics/hooks.md'
-            },
-            {
-              text: 'Schemas',
-              link: '/guides/basics/schemas.md'
-            },
-            {
-              text: 'Authentication',
-              link: '/guides/basics/authentication.md'
-            }
-            // {
-            //   text: 'Writing Tests',
-            //   link: '/guides/basics/testing.md'
-            // }
-          ]
-        },
-        {
-          text: 'Frontend',
-          collapsible: true,
-          items: [
-            {
-              text: 'JavaScript',
-              link: '/guides/frontend/javascript.md'
-            }
-            // {
-            //   text: 'Frontend Frameworks',
-            //   link: '/guides/frameworks.md'
-            // }
-          ]
-        },
-        {
-          text: 'Migrating',
-          // collapsible: true,
-          items: [
-            {
-              text: 'Migration guide',
-              link: '/guides/migrating.md'
-            },
-            {
-              text: "What's new?",
-              link: '/guides/whats-new.md'
-            }
-          ]
-        }
-      ],
-      '/api': [
-        {
-          text: 'Core',
-          collapsible: true,
-          items: [
-            {
-              text: 'Application',
-              link: '/api/application'
-            },
-            {
-              text: 'Services',
-              link: '/api/services'
-            },
-            {
-              text: 'Hooks',
-              link: '/api/hooks'
-            },
-            {
-              text: 'Events',
-              link: '/api/events'
-            },
-            {
-              text: 'Errors',
-              link: '/api/errors'
-            }
-          ]
-        },
-        {
-          text: 'Transports',
-          collapsible: true,
-          collapsed: true,
-          items: [
-            {
-              text: 'Configuration',
-              link: '/api/configuration'
-            },
-            {
-              text: 'Koa',
-              link: '/api/koa'
-            },
-            {
-              text: 'Express',
-              link: '/api/express'
-            },
-            {
-              text: 'Socket.io',
-              link: '/api/socketio'
-            },
-            {
-              text: 'Channels',
-              link: '/api/channels'
-            }
-          ]
-        },
-        {
-          text: 'Authentication',
-          collapsible: true,
-          collapsed: true,
-          items: [
-            {
-              text: 'Overview',
-              link: '/api/authentication/'
-            },
-            {
-              text: 'Service',
-              link: '/api/authentication/service'
-            },
-            {
-              text: 'Hook',
-              link: '/api/authentication/hook'
-            },
-            {
-              text: 'Strategies',
-              link: '/api/authentication/strategy'
-            },
-            {
-              text: 'JWT',
-              link: '/api/authentication/jwt'
-            },
-            {
-              text: 'Local',
-              link: '/api/authentication/local'
-            },
-            {
-              text: 'OAuth',
-              link: '/api/authentication/oauth'
-            }
-          ]
-        },
-        {
-          text: 'Client',
-          collapsible: true,
-          collapsed: true,
-          items: [
-            {
-              text: 'Feathers Client',
-              link: '/api/client'
-            },
-            {
-              text: 'REST Client',
-              link: '/api/client/rest'
-            },
-            {
-              text: 'Socket.io Client',
-              link: '/api/client/socketio'
-            },
-            {
-              text: 'Authentication',
-              link: '/api/authentication/client'
-            }
-          ]
-        },
-        {
-          text: 'Schema',
-          collapsible: true,
-          collapsed: true,
-          items: [
-            {
-              text: 'Overview',
-              link: '/api/schema/'
-            },
-            {
-              text: 'TypeBox',
-              link: '/api/schema/typebox'
-            },
-            {
-              text: 'JSON schema',
-              link: '/api/schema/schema'
-            },
-            {
-              text: 'Validators',
-              link: '/api/schema/validators'
-            },
-            {
-              text: 'Resolvers',
-              link: '/api/schema/resolvers'
-            }
-          ]
-        },
-        {
-          text: 'Databases',
-          collapsible: true,
-          collapsed: true,
-          items: [
-            {
-              text: 'Adapters',
-              link: '/api/databases/adapters'
-            },
-            {
-              text: 'Common API',
-              link: '/api/databases/common'
-            },
-            {
-              text: 'Querying',
-              link: '/api/databases/querying'
-            },
-            {
-              text: 'MongoDB',
-              link: '/api/databases/mongodb'
-            },
-            {
-              text: 'SQL',
-              link: '/api/databases/knex'
-            },
-            {
-              text: 'Memory',
-              link: '/api/databases/memory'
-            }
-          ]
-        }
-      ],
-      '/help': [
-        {
-          text: 'Help',
-          items: [
-            {
-              text: 'Getting Help',
-              link: '/help/'
-            },
-            {
-              text: 'FAQ',
-              link: '/help/faq'
-            },
-            {
-              text: 'Security',
-              link: '/guides/security.md'
-            }
-          ]
-        }
-      ],
-      '/cookbook': [
-        {
-          text: 'General',
-          items: [
-            {
-              text: 'Scaling',
-              link: '/cookbook/general/scaling'
-            }
-          ]
-        },
-        {
-          text: 'Authentication',
-          items: [
-            {
-              text: 'Anonymous',
-              link: '/cookbook/authentication/anonymous'
-            },
-            {
-              text: 'API Key',
-              link: '/cookbook/authentication/apiKey'
-            },
-            {
-              text: 'Auth0',
-              link: '/cookbook/authentication/auth0'
-            },
-            {
-              text: 'Facebook',
-              link: '/cookbook/authentication/facebook'
-            },
-            {
-              text: 'Google',
-              link: '/cookbook/authentication/google'
-            },
-            {
-              text: 'Firebase',
-              link: '/cookbook/authentication/firebase'
-            },
-            {
-              text: 'Discord',
-              link: '/cookbook/authentication/_discord'
-            },
-            {
-              text: 'Stateless JWT',
-              link: '/cookbook/authentication/stateless'
-            },
-            {
-              text: 'Revoking JWTs',
-              link: '/cookbook/authentication/revoke-jwt'
-            }
-          ]
-        },
-        {
-          text: 'Express',
-          items: [
-            {
-              text: 'File Uploads',
-              link: '/cookbook/express/file-uploading'
-            },
-            {
-              text: 'View Engine SSR',
-              link: '/cookbook/express/view-engine'
-            }
-          ]
-        },
-        {
-          text: 'Deployment',
-          items: [
-            {
-              text: 'Dockerize a Feathers App',
-              link: '/cookbook/deploy/docker'
-            }
-          ]
-        }
-      ],
-      '/comparison': comparisonSidebar,
-      '/feathers-vs-firebase': comparisonSidebar,
-      '/feathers-vs-meteor': comparisonSidebar,
-      '/feathers-vs-sails': comparisonSidebar,
-      '/feathers-vs-loopback': comparisonSidebar
-    }
+    nav,
+    sidebar
+  },
+  // for sitemap/search
+  transformHtml: (_: any, id: any, { pageData }: any) => {
+    if (!/[\\/]404\.html$/.test(id))
+      links.push({
+        // you might need to change this if not using clean urls mode
+        url: pageData.relativePath.replace(/((^|\/)index)?\.md$/, '$2'),
+        lastmod: pageData.lastUpdated
+      })
+  },
+  // for sitemap/search
+  buildEnd: async ({ outDir }) => {
+    const sitemap = new SitemapStream({
+      hostname: 'https://dove.feathersjs.com/'
+    })
+    const writeStream = createWriteStream(resolve(outDir, 'sitemap.xml'))
+    sitemap.pipe(writeStream)
+    links.forEach((link) => sitemap.write(link))
+    sitemap.end()
+    await new Promise((r) => writeStream.on('finish', r))
   }
 })

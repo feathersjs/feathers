@@ -4,7 +4,8 @@ import { AppGeneratorContext } from '../index'
 
 const template = ({
   language
-}: AppGeneratorContext) => /* ts */ `import type { RealTimeConnection, Params } from '@feathersjs/feathers'
+}: AppGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/channels.html
+import type { RealTimeConnection, Params } from '@feathersjs/feathers'
 import '@feathersjs/transport-commons'
 import type { Application, HookContext } from './declarations'
 import { logger } from './logger'

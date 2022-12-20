@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.34](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.33...v5.0.0-pre.34) (2022-12-14)
+
+### Bug Fixes
+
+- **core:** `context.type` for around hooks ([#2890](https://github.com/feathersjs/feathers/issues/2890)) ([d606ac6](https://github.com/feathersjs/feathers/commit/d606ac660fd5335c95206784fea36530dd2e851a))
+
+# [5.0.0-pre.33](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.32...v5.0.0-pre.33) (2022-11-08)
+
+**Note:** Version bump only for package @feathersjs/express
+
 # [5.0.0-pre.32](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.31...v5.0.0-pre.32) (2022-10-26)
 
 ### Bug Fixes

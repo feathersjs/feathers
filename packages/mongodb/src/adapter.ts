@@ -6,9 +6,10 @@ import {
   InsertOneOptions,
   DeleteOptions,
   CountDocumentsOptions,
-  ReplaceOptions
+  ReplaceOptions,
+  Document
 } from 'mongodb'
-import { NotFound } from '@feathersjs/errors'
+import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
 import { _ } from '@feathersjs/commons'
 import {
   AdapterBase,
@@ -18,7 +19,7 @@ import {
   PaginationOptions,
   AdapterQuery
 } from '@feathersjs/adapter-commons'
-import { NullableId, Id, Paginated } from '@feathersjs/feathers'
+import { Id, Paginated } from '@feathersjs/feathers'
 import { errorHandler } from './error-handler'
 
 export interface MongoDBAdapterOptions extends AdapterServiceOptions {
@@ -29,6 +30,7 @@ export interface MongoDBAdapterOptions extends AdapterServiceOptions {
 
 export interface MongoDBAdapterParams<Q = AdapterQuery>
   extends AdapterParams<Q, Partial<MongoDBAdapterOptions>> {
+  pipeline?: Document[]
   mongodb?:
     | BulkWriteOptions
     | FindOptions
@@ -38,12 +40,17 @@ export interface MongoDBAdapterParams<Q = AdapterQuery>
     | ReplaceOptions
 }
 
+export type AdapterId = Id | ObjectId
+
+export type NullableAdapterId = AdapterId | null
+
 // Create the service.
 export class MongoDbAdapter<
-  T,
-  D = Partial<T>,
-  P extends MongoDBAdapterParams<any> = MongoDBAdapterParams
-> extends AdapterBase<T, D, P, MongoDBAdapterOptions> {
+  Result,
+  Data = Partial<Result>,
+  ServiceParams extends MongoDBAdapterParams<any> = MongoDBAdapterParams,
+  PatchData = Partial<Data>
+> extends AdapterBase<Result, Data, PatchData, ServiceParams, MongoDBAdapterOptions, AdapterId> {
   constructor(options: MongoDBAdapterOptions) {
     if (!options) {
       throw new Error('MongoDB options have to be provided')
@@ -55,7 +62,7 @@ export class MongoDbAdapter<
     })
   }
 
-  getObjectId(id: Id | ObjectId) {
+  getObjectId(id: AdapterId) {
     if (this.options.disableObjectify) {
       return id
     }
@@ -67,7 +74,7 @@ export class MongoDbAdapter<
     return id
   }
 
-  filterQuery(id: NullableId, params: P) {
+  filterQuery(id: NullableAdapterId, params: ServiceParams) {
     const { $select, $sort, $limit, $skip, ...query } = (params.query || {}) as AdapterQuery
 
     if (id !== null) {
@@ -86,6 +93,68 @@ export class MongoDbAdapter<
     }
   }
 
+  getModel(params: ServiceParams) {
+    const { Model } = this.getOptions(params)
+    return Promise.resolve(Model)
+  }
+
+  async findRaw(params: ServiceParams) {
+    const { filters, query } = this.filterQuery(null, params)
+    const model = await this.getModel(params)
+    const q = model.find(query, { ...params.mongodb })
+
+    if (filters.$select !== undefined) {
+      q.project(this.getSelect(filters.$select))
+    }
+
+    if (filters.$sort !== undefined) {
+      q.sort(filters.$sort)
+    }
+
+    if (filters.$skip !== undefined) {
+      q.skip(filters.$skip)
+    }
+
+    if (filters.$limit !== undefined) {
+      q.limit(filters.$limit)
+    }
+
+    return q
+  }
+
+  async aggregateRaw(params: ServiceParams) {
+    const model = await this.getModel(params)
+    const pipeline = params.pipeline || []
+    const index = pipeline.findIndex((stage: Document) => stage.$feathers)
+    const before = index >= 0 ? pipeline.slice(0, index) : []
+    const feathersPipeline = this.makeFeathersPipeline(params)
+    const after = index >= 0 ? pipeline.slice(index + 1) : pipeline
+
+    return model.aggregate([...before, ...feathersPipeline, ...after])
+  }
+
+  makeFeathersPipeline(params: ServiceParams) {
+    const { filters, query } = this.filterQuery(null, params)
+    const pipeline: Document[] = [{ $match: query }]
+
+    if (filters.$select !== undefined) {
+      pipeline.push({ $project: this.getSelect(filters.$select) })
+    }
+
+    if (filters.$sort !== undefined) {
+      pipeline.push({ $sort: filters.$sort })
+    }
+
+    if (filters.$skip !== undefined) {
+      pipeline.push({ $skip: filters.$skip })
+    }
+
+    if (filters.$limit !== undefined) {
+      pipeline.push({ $limit: filters.$limit })
+    }
+    return pipeline
+  }
+
   getSelect(select: string[] | { [key: string]: number }) {
     if (Array.isArray(select)) {
       return select.reduce<{ [key: string]: number }>(
@@ -100,11 +169,11 @@ export class MongoDbAdapter<
     return select
   }
 
-  async $findOrGet(id: NullableId, params: P) {
-    return id === null ? await this.$find(params) : await this.$get(id, params)
+  async _findOrGet(id: NullableAdapterId, params: ServiceParams) {
+    return id === null ? await this._find(params) : await this._get(id, params)
   }
 
-  normalizeId(id: NullableId, data: Partial<D>): Partial<D> {
+  normalizeId<D>(id: NullableAdapterId, data: D): D {
     if (this.id === '_id') {
       // Default Mongo IDs cannot be updated. The Mongo library handles
       // this automatically.
@@ -120,8 +189,7 @@ export class MongoDbAdapter<
     return data
   }
 
-  async $get(id: Id, params: P = {} as P): Promise<T> {
-    const { Model } = this.getOptions(params)
+  async _get(id: AdapterId, params: ServiceParams = {} as ServiceParams): Promise<Result> {
     const {
       query,
       filters: { $select }
@@ -139,7 +207,7 @@ export class MongoDbAdapter<
       ...projection
     }
 
-    return Promise.resolve(Model)
+    return this.getModel(params)
       .then((model) => model.findOne(query, findOptions))
       .then((data) => {
         if (data == null) {
@@ -151,57 +219,50 @@ export class MongoDbAdapter<
       .catch(errorHandler)
   }
 
-  async $find(params?: P & { paginate?: PaginationOptions }): Promise<Paginated<T>>
-  async $find(params?: P & { paginate: false }): Promise<T[]>
-  async $find(params?: P): Promise<Paginated<T> | T[]>
-  async $find(params: P = {} as P): Promise<Paginated<T> | T[]> {
+  async _find(params?: ServiceParams & { paginate?: PaginationOptions }): Promise<Paginated<Result>>
+  async _find(params?: ServiceParams & { paginate: false }): Promise<Result[]>
+  async _find(params?: ServiceParams): Promise<Paginated<Result> | Result[]>
+  async _find(params: ServiceParams = {} as ServiceParams): Promise<Paginated<Result> | Result[]> {
+    const { paginate, useEstimatedDocumentCount } = this.getOptions(params)
     const { filters, query } = this.filterQuery(null, params)
-    const { paginate, Model, useEstimatedDocumentCount } = this.getOptions(params)
-    const findOptions = { ...params.mongodb }
-    const model = await Promise.resolve(Model)
-    const q = model.find(query, findOptions)
+    const useAggregation = !params.mongodb && filters.$limit !== 0
 
-    if (filters.$select !== undefined) {
-      q.project(this.getSelect(filters.$select))
+    const countDocuments = async () => {
+      if (paginate && paginate.default) {
+        const model = await this.getModel(params)
+        if (useEstimatedDocumentCount && typeof model.estimatedDocumentCount === 'function') {
+          return model.estimatedDocumentCount()
+        } else {
+          return model.countDocuments(query, { ...params.mongodb })
+        }
+      }
+      return Promise.resolve(0)
     }
 
-    if (filters.$sort !== undefined) {
-      q.sort(filters.$sort)
-    }
+    const [request, total] = await Promise.all([
+      useAggregation ? this.aggregateRaw(params) : this.findRaw(params),
+      countDocuments()
+    ])
 
-    if (filters.$limit !== undefined) {
-      q.limit(filters.$limit)
-    }
-
-    if (filters.$skip !== undefined) {
-      q.skip(filters.$skip)
-    }
-
-    const runQuery = async (total: number) => ({
+    const page = {
       total,
       limit: filters.$limit,
       skip: filters.$skip || 0,
-      data: filters.$limit === 0 ? [] : ((await q.toArray()) as any as T[])
-    })
-
-    if (paginate && paginate.default) {
-      if (useEstimatedDocumentCount && typeof model.estimatedDocumentCount === 'function') {
-        return model.estimatedDocumentCount().then(runQuery)
-      }
-
-      return model.countDocuments(query, findOptions).then(runQuery)
+      data: filters.$limit === 0 ? [] : ((await request.toArray()) as any as Result[])
     }
 
-    return runQuery(0).then((page) => page.data)
+    return paginate && paginate.default ? page : page.data
   }
 
-  async $create(data: D, params?: P): Promise<T>
-  async $create(data: D[], params?: P): Promise<T[]>
-  async $create(data: D | D[], _params?: P): Promise<T | T[]>
-  async $create(data: D | D[], params: P = {} as P): Promise<T | T[]> {
+  async _create(data: Data, params?: ServiceParams): Promise<Result>
+  async _create(data: Data[], params?: ServiceParams): Promise<Result[]>
+  async _create(data: Data | Data[], _params?: ServiceParams): Promise<Result | Result[]>
+  async _create(
+    data: Data | Data[],
+    params: ServiceParams = {} as ServiceParams
+  ): Promise<Result | Result[]> {
     const writeOptions = params.mongodb
-    const { Model } = this.getOptions(params)
-    const model = await Promise.resolve(Model)
+    const model = await this.getModel(params)
     const setId = (item: any) => {
       const entry = Object.assign({}, item)
 
@@ -231,13 +292,20 @@ export class MongoDbAdapter<
     return promise.then(select(params, this.id)).catch(errorHandler)
   }
 
-  async $patch(id: null, data: Partial<D>, params?: P): Promise<T[]>
-  async $patch(id: Id, data: Partial<D>, params?: P): Promise<T>
-  async $patch(id: NullableId, data: Partial<D>, _params?: P): Promise<T | T[]>
-  async $patch(id: NullableId, _data: Partial<D>, params: P = {} as P): Promise<T | T[]> {
+  async _patch(id: null, data: PatchData, params?: ServiceParams): Promise<Result[]>
+  async _patch(id: AdapterId, data: PatchData, params?: ServiceParams): Promise<Result>
+  async _patch(id: NullableAdapterId, data: PatchData, _params?: ServiceParams): Promise<Result | Result[]>
+  async _patch(
+    id: NullableAdapterId,
+    _data: PatchData,
+    params: ServiceParams = {} as ServiceParams
+  ): Promise<Result | Result[]> {
+    if (id === null && !this.allowsMulti('patch', params)) {
+      throw new MethodNotAllowed('Can not patch multiple entries')
+    }
+
     const data = this.normalizeId(id, _data)
-    const { Model } = this.getOptions(params)
-    const model = await Promise.resolve(Model)
+    const model = await this.getModel(params)
     const {
       query,
       filters: { $select }
@@ -257,7 +325,7 @@ export class MongoDbAdapter<
 
       return current
     }, {} as any)
-    const originalIds = await this.$findOrGet(id, {
+    const originalIds = await this._findOrGet(id, {
       ...params,
       query: {
         ...query,
@@ -278,26 +346,35 @@ export class MongoDbAdapter<
 
     await model.updateMany(query, modifier, updateOptions)
 
-    return this.$findOrGet(id, findParams).catch(errorHandler)
+    return this._findOrGet(id, findParams).catch(errorHandler)
   }
 
-  async $update(id: Id, data: D, params: P = {} as P): Promise<T> {
-    const { Model } = this.getOptions(params)
-    const model = await Promise.resolve(Model)
+  async _update(id: AdapterId, data: Data, params: ServiceParams = {} as ServiceParams): Promise<Result> {
+    if (id === null || Array.isArray(data)) {
+      throw new BadRequest("You can not replace multiple instances. Did you mean 'patch'?")
+    }
+
+    const model = await this.getModel(params)
     const { query } = this.filterQuery(id, params)
     const replaceOptions = { ...params.mongodb }
 
     await model.replaceOne(query, this.normalizeId(id, data), replaceOptions)
 
-    return this.$findOrGet(id, params).catch(errorHandler)
+    return this._findOrGet(id, params).catch(errorHandler)
   }
 
-  async $remove(id: null, params?: P): Promise<T[]>
-  async $remove(id: Id, params?: P): Promise<T>
-  async $remove(id: NullableId, _params?: P): Promise<T | T[]>
-  async $remove(id: NullableId, params: P = {} as P): Promise<T | T[]> {
-    const { Model } = this.getOptions(params)
-    const model = await Promise.resolve(Model)
+  async _remove(id: null, params?: ServiceParams): Promise<Result[]>
+  async _remove(id: AdapterId, params?: ServiceParams): Promise<Result>
+  async _remove(id: NullableAdapterId, _params?: ServiceParams): Promise<Result | Result[]>
+  async _remove(
+    id: NullableAdapterId | ObjectId,
+    params: ServiceParams = {} as ServiceParams
+  ): Promise<Result | Result[]> {
+    if (id === null && !this.allowsMulti('remove', params)) {
+      throw new MethodNotAllowed('Can not remove multiple entries')
+    }
+
+    const model = await this.getModel(params)
     const {
       query,
       filters: { $select }
@@ -312,7 +389,7 @@ export class MongoDbAdapter<
       }
     }
 
-    return this.$findOrGet(id, findParams)
+    return this._findOrGet(id, findParams)
       .then(async (items) => {
         await model.deleteMany(query, deleteOptions)
         return items
