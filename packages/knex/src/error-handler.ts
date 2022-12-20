@@ -65,7 +65,7 @@ export function errorHandler(error: any) {
     // NOTE: Error codes taken from
     // https://www.postgresql.org/docs/9.6/static/errcodes-appendix.html
     // Omit query information
-    const messages = error.message.split('-')
+    const messages = (error.message || '').split('-')
     error.message = messages[messages.length - 1]
 
     switch (error.code.slice(0, 2)) {
