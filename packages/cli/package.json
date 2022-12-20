@@ -77,6 +77,7 @@
     "@feathersjs/authentication-local": "^5.0.0-pre.34",
     "@feathersjs/authentication-oauth": "^5.0.0-pre.34",
     "@feathersjs/configuration": "^5.0.0-pre.34",
+    "@feathersjs/commons": "^5.0.0-pre.34",
     "@feathersjs/errors": "^5.0.0-pre.34",
     "@feathersjs/express": "^5.0.0-pre.34",
     "@feathersjs/feathers": "^5.0.0-pre.34",
