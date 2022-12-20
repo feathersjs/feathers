@@ -67,7 +67,7 @@
     "chalk": "^4.0.1",
     "commander": "^9.4.1",
     "lodash": "^4.17.21",
-    "prettier": "^2.8.0"
+    "prettier": "^2.8.1"
   },
   "devDependencies": {
     "@feathersjs/adapter-commons": "^5.0.0-pre.34",
@@ -88,14 +88,14 @@
     "@feathersjs/transport-commons": "^5.0.0-pre.34",
     "@feathersjs/typebox": "^5.0.0-pre.34",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.11.10",
-    "@types/prettier": "^2.7.1",
-    "axios": "^1.2.0",
-    "mocha": "^10.1.0",
+    "@types/node": "^18.11.17",
+    "@types/prettier": "^2.7.2",
+    "axios": "^1.2.1",
+    "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
-    "type-fest": "^3.3.0",
-    "typescript": "^4.9.3"
+    "type-fest": "^3.4.0",
+    "typescript": "^4.9.4"
   },
   "gitHead": "42cca600d00f0b3b9d89fa79be30fcd46bc50132"
 }
