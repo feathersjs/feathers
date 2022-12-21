@@ -15,7 +15,7 @@ const { Layout } = DefaultTheme
         <a href="/guides/whats-new.html">what's new</a>, and please
         <a href="/help/">let us know about any issues or questions</a>
         . The current v4 documentation can be found at
-        <a href="https://crow.docs.feathersjs.com/">https://crow.docs.feathersjs.com/</a>.
+        <a href="https://crow.docs.feathersjs.com/">crow.docs.feathersjs.com</a>.
       </BlockQuote>
     </template>
 
