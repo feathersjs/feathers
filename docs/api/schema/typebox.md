@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # TypeBox
 
 `@feathersjs/typebox` allows to define JSON schemas with [TypeBox](https://github.com/sinclairzx81/typebox), a JSON schema type builder with static type resolution for TypeScript.
