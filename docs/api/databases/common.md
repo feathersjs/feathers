@@ -98,7 +98,7 @@ app.service('todos').find({
 
 <BlockQuote type="info" label="note">
 
-Disabling or changing the default pagination is not available in the client. Only `params.query` is passed to the server (also see a [workaround here](https://github.com/feathersjs/feathers/issues/382#issuecomment-238407741))
+Disabling or changing the default pagination is not available in the client. Only `params.query` is passed to the server (also see a [workaround here](https://github.com/feathersjs/feathers/issues/382#issuecomment-288125825))
 
 </BlockQuote>
 
