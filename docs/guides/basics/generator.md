@@ -32,7 +32,7 @@ First, choose if you want to use JavaScript or TypeScript. When presented with t
 
 <BlockQuote type="tip">
 
-If you want to use **MongoDB** instead of SQLite (or another SQL database) for this quide, select it in the **Database** dropdown in the main menu.
+If you want to use **MongoDB** instead of SQLite (or another SQL database) for this guide, select it in the **Database** dropdown in the main menu.
 
 </BlockQuote>
 
