@@ -162,8 +162,11 @@ In a Feathers application, resolvers are used through [hooks](../hooks.md) to co
 Data resolvers use the `schemaHooks.resolveData(...resolvers)` hook and convert the `data` from a `create`, `update` or `patch` [service method](../services.md) or a [custom method](../services.md#custom-methods). This can be used to validate against the schema and e.g. hash a password before storing it in the database or to remove properties the user is not allowed to write. It is possible to pass multiple resolvers which will run in the order they are passed, using the previous data. `schemaHooks.resolveData` can be used as an `around` and `before` hook.
 
 ```ts
-import type { HookContext } from '../declarations'
 import { schemaHooks, resolve } from '@feathersjs/schema'
+import { Type } from '@feathersjs/typebox'
+import type { Static } from '@feathersjs/typebox'
+import type { HookContext } from '../declarations'
+
 
 const messageSchema = Type.Object(
   {
