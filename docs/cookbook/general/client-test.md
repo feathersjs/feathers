@@ -119,4 +119,4 @@ We first make a call on the *server* to create a new user. We then start up a se
 
 The individual tests remain unchanged except that the service calls are now made on the client (`client.service(...).create`) instead of on the server (`app.service(...).create`).
 
-The `describe('Run tests using client and server',` statement stops a new server and client from being created for each test. This results in the test module running noticeably faster, though the tests are now exposed to potential iteractions. You can remove the statement to isolate the tests from one another.
+The `describe('Run tests using client and server',` statement stops a new server and client from being created for each test. This results in the test module running noticeably faster, though the tests are now exposed to potential interactions. You can remove the statement to isolate the tests from one another.

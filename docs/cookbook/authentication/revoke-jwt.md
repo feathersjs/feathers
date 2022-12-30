@@ -6,7 +6,7 @@ outline: deep
 
 By default a valid JWT can be used for as long as it is valid. To do a normal logout the client just "forgets" their JWT (usually by removing it from localStorage).
 
-To add the ability to revoke an access token so that it can be no longer used even if it is still valid [the authentication service](../../api/authentication/service.md) can be customized as folllows.
+To add the ability to revoke an access token so that it can be no longer used even if it is still valid [the authentication service](../../api/authentication/service.md) can be customized as follows.
 
 ## Basic example
 
