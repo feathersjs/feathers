@@ -63,12 +63,12 @@
     "@feathersjs/memory": "^5.0.0-pre.34",
     "@feathersjs/tests": "^5.0.0-pre.34",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.11.10",
+    "@types/node": "^18.11.18",
     "lodash": "^4.17.21",
-    "mocha": "^10.1.0",
+    "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "socket.io-client": "^4.5.4",
-    "typescript": "^4.9.3"
+    "typescript": "^4.9.4"
   },
   "gitHead": "42cca600d00f0b3b9d89fa79be30fcd46bc50132"
 }
