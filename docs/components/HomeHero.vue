@@ -73,7 +73,7 @@ onBeforeUnmount(toggleHomeClass)
               The API and Real-time <br />
               Application Framework
             </div>
-            <div class="mx-auto mt-4 lg:mt-12">
+            <div class="mx-auto mt-4 lg:mt-12 hidden md:block">
               <CTAButton primary>Get Started</CTAButton>
             </div>
           </div>

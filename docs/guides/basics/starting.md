@@ -8,16 +8,16 @@ Alright then! Let's learn Feathers. In this quick start guide we'll create our f
 
 <img style="margin: 2em;" src="/img/main-character-bench.svg" alt="Getting started">
 
-Feathers works with all [currently active releases](https://github.com/nodejs/Release#release-schedule). All guides are assuming the languages features from the most current stable NodeJS release which you can get from the [NodeJS website](https://nodejs.org/en/).
+Feathers works with all [currently active NodeJS releases](https://github.com/nodejs/Release#release-schedule). All guides are assuming the languages features from the most current stable NodeJS release which you can get from the [NodeJS website](https://nodejs.org/en/).
 
 After successful installation, the `node` and `npm` commands should be available on the terminal:
 
 ```
-$ node --version
+node --version
 ```
 
 ```
-$ npm --version
+npm --version
 ```
 
 <BlockQuote type="warning" label="Important">

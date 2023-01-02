@@ -95,7 +95,7 @@ export default {
     {
       text: 'App Structure',
       collapsible: true,
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           text: '📂 config',
