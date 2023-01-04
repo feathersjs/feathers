@@ -8,7 +8,7 @@ In the [quick start](./starting.md) we created a Feathers application in a singl
 
 <img style="margin: 2em;" src="/img/main-character-coding.svg" alt="Getting started">
 
-The Feathers CLI allows us to initialize a new Feathers server with a recommended structure and generate things we commonly need like authentication, a database connection or new services.
+The Feathers CLI allows us to initialize a new Feathers server with a recommended structure and generate things we commonly need like authentication, a database connection or new services. You can find the complete example in the [feathers-chat repository](https://github.com/feathersjs/feathers-chat).
 
 ## Generating the application
 
@@ -22,7 +22,7 @@ If you never ran the command before you might be ask to confirm the package inst
 
 <BlockQuote type="warning">
 
-Since the generated application is using modern features like ES modules, the Feathers CLI requires Node 16 or newer. The `feathers --version` command should show `5.0.0-pre.31` or later.
+Since the generated application is using modern features like ES modules, the Feathers CLI requires Node 16 or newer. The `npx feathers --version` command should show `5.0.0-pre.34` or later.
 
 </BlockQuote>
 
@@ -64,16 +64,36 @@ Sweet! We generated our first Feathers application in a new folder called `feath
 cd feathers-chat
 ```
 
+<BlockQuote type="tip">
+
+Most generated files have a page in the **App Structure guide** which contains more information about the file and what it does. See for example the [package.json](../cli/package.md) file.
+
+</BlockQuote>
+
 ## Running the server and tests
 
 The server can be started by running
 
 <LanguageBlock global-id="ts">
 
+<DatabaseBlock global-id="sql">
+
+```sh
+npm run compile
+npm run migrate
+npm start
+```
+
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
+
 ```sh
 npm run compile
 npm start
 ```
+
+</DatabaseBlock>
 
 </LanguageBlock>
 

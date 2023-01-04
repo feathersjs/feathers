@@ -104,18 +104,21 @@ To log the runtime of all `messages` service calls we can update `src/services/m
 
 </LanguageBlock>
 
-```ts{16,33}
+```ts{19,37}
+// For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
 
 import { hooks as schemaHooks } from '@feathersjs/schema'
 
 import {
   messageDataValidator,
+  messagePatchValidator,
   messageQueryValidator,
   messageResolver,
+  messageExternalResolver,
   messageDataResolver,
-  messageQueryResolver,
-  messageExternalResolver
+  messagePatchResolver,
+  messageQueryResolver
 } from './messages.schema'
 
 import type { Application } from '../../declarations'
@@ -130,7 +133,7 @@ export const message = (app: Application) => {
   // Register our service on the Feathers application
   app.use('messages', new MessageService(getOptions(app)), {
     // A list of all methods this service exposes externally
-    methods: ['find', 'get', 'create', 'update', 'patch', 'remove'],
+    methods: ['find', 'get', 'create', 'patch', 'remove'],
     // You can add additional custom events to be sent to clients here
     events: []
   })
@@ -142,21 +145,15 @@ export const message = (app: Application) => {
         authenticate('jwt'),
         schemaHooks.resolveExternal(messageExternalResolver),
         schemaHooks.resolveResult(messageResolver)
-      ],
-      find: [],
-      get: [],
-      create: [],
-      update: [],
-      patch: [],
-      remove: []
+      ]
     },
     before: {
-      all: [
-        schemaHooks.validateQuery(messageQueryValidator),
-        schemaHooks.validateData(messageDataValidator),
-        schemaHooks.resolveQuery(messageQueryResolver),
-        schemaHooks.resolveData(messageDataResolver)
-      ]
+      all: [schemaHooks.validateQuery(messageQueryValidator), schemaHooks.resolveQuery(messageQueryResolver)],
+      find: [],
+      get: [],
+      create: [schemaHooks.validateData(messageDataValidator), schemaHooks.resolveData(messageDataResolver)],
+      patch: [schemaHooks.validateData(messagePatchValidator), schemaHooks.resolveData(messagePatchResolver)],
+      remove: []
     },
     after: {
       all: []

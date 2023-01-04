@@ -56,7 +56,7 @@ The parameters for service methods are:
 - `data` - The data sent by the user (for `create`, `update`, `patch` and custom methods)
 - `params` - Additional parameters, for example the authenticated user or the query
 
-For `setup` and `teardown` (which are only called once on application startup and shutdown) we additionally have
+For `setup` and `teardown` (which are only called once on application startup and shutdown) we have
 
 - `path` - The path the service is registered on
 - `app` - The [Feathers application](./../../api/application.md)
@@ -117,6 +117,12 @@ const messageService = app.service('messages')
 const messages = await messageService.find()
 ```
 
+<BlockQuote type="tip">
+
+In a generated application, a service will be registered in the [&lt;servicename&gt;.ts|js file](../cli/service.md).
+
+</BlockQuote>
+
 ### Service events
 
 A registered service will automatically become a [NodeJS EventEmitter](https://nodejs.org/api/events.html) that sends events with the new data when a service method that modifies data (`create`, `update`, `patch` and `remove`) returns. Events can be listened to with `app.service('messages').on('eventName', data => {})`. Here is a list of the service methods and their corresponding events:
@@ -148,7 +154,7 @@ Writing all that code yourself for every service is pretty repetitive and cumber
 
 <BlockQuote type="tip">
 
-There are also many other community maintained database integrations which you can explore on the [ecosystem page](https://github.com/feathersjs/awesome-feathersjs#database). Since they are not part of Feathers core they are not covered in the guides here though.
+There are also many other community maintained database integrations which you can explore on the [ecosystem page](/ecosystem/?cat=Database&sort=downloads). Since they are not part of Feathers core they are not covered in the guides here though.
 
 </BlockQuote>
 

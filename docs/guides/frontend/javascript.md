@@ -27,13 +27,17 @@ First, let's update `public/index.html` to initialize everything we need for the
     <title>feathers-chat</title>
     <meta name="description" content="A Feathers chat application" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.18.1/dist/full.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://dove.feathersjs.com/feathers-chat.css" />
   </head>
-
   <body>
     <div id="app" data-theme="dracula"></div>
-    <script src="https://unpkg.com/@feathersjs/client@^5.0.0-pre.24/dist/feathers.js"></script>
+    <script src="https://unpkg.com/@feathersjs/client@^5.0.0-pre.34/dist/feathers.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script type="module" src="client.js"></script>
   </body>
@@ -352,16 +356,4 @@ login()
 
 That’s it. We now have a plain JavaScript real-time chat frontend with login and signup. This example demonstrates many of the basic principles of how you interact with a Feathers API. You can log in with the email (`hello@feathersjs.com`) and password (`supersecret`) from the user we registered in the [authentication chapter](../basics/authentication.md) or sign up and log in with a different email address.
 
-If you run into an issue, remember you can find the complete working example at
-
-<LanguageBlock global-id="ts">
-
-The [feathersjs/feathers-chat-ts](https://github.com/feathersjs/feathers-chat-ts) repository
-
-</LanguageBlock>
-
-<LanguageBlock global-id="js">
-
-The [feathersjs/feathers-chat](https://github.com/feathersjs/feathers-chat) repository
-
-</LanguageBlock>
+If you run into an issue, remember you can find the complete working example at the [feathersjs/feathers-chat](https://github.com/feathersjs/feathers-chat) repository.
