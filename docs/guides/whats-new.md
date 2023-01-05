@@ -313,7 +313,7 @@ When we say "state of the art", it's not hubris. The new Feathers CLI is built o
 - It just works™️ with existing npm packages. There's no need to make an EJS plugin for some custom helper using an obscure API. Just import the module and use it in your template.
 - Integrates with all existing TypeScript tooling. Hover over a variable and inspect the context like you would any TS code.
 
-Now that we have what we consider the best generator on the planet, we have some exciting future plans for the Feathers CLI, whicih we will announce in the future.
+Now that we have what we consider the best generator on the planet, we have some exciting future plans for the Feathers CLI, which we will announce in the future.
 
 You can read more about Pinion, [here](https://github.com/feathershq/pinion)
 
@@ -329,7 +329,7 @@ When you select `JavaScript` to generate an app, the CLI works some magic under 
 
 And we get to smile because the entire process is a work of art, thanks to the TypeScript team.
 
-For Feathers Maintainers, commiting to TypeScript means we only contribute to a single set of templates. and they get magically compiled - on the fly - to plain JavaScript when you want it.
+For Feathers Maintainers, committing to TypeScript means we only contribute to a single set of templates. and they get magically compiled - on the fly - to plain JavaScript when you want it.
 
 ### Shared Types
 

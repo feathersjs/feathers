@@ -1179,7 +1179,7 @@ const T = {
 
 ### Modifiers
 
-TypeBox provides modifiers that can be applied to an objects properties. This allows for `optional` and `readonly` to be applied to that property. The following table illustates how they map between TypeScript and JSON Schema.
+TypeBox provides modifiers that can be applied to an objects properties. This allows for `optional` and `readonly` to be applied to that property. The following table illustrates how they map between TypeScript and JSON Schema.
 
 #### Optional
 
