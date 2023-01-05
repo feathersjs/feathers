@@ -128,7 +128,7 @@ const chatTemplate =
       </div>
       </div>
     </div>
-    <div class="chat h-full overflow-y-auto px-3"></div>
+    <div id="chat" class="h-full overflow-y-auto px-3"></div>
     <div class="form-control w-full py-2 px-3">
       <form class="input-group overflow-hidden" id="send-message">
         <input name="text" type="text" placeholder="Compose message" class="input input-bordered w-full">
@@ -177,19 +177,22 @@ const addUser = (user) => {
 const addMessage = (message) => {
   // The user that sent this message (added by the populate-user hook)
   const { user = {} } = message
-  const chat = document.querySelector('.chat')
+  const chat = document.querySelector('#chat')
   // Escape HTML to prevent XSS attacks
   const text = escapeHTML(message.text)
 
   if (chat) {
-    chat.innerHTML += `<div class="message flex flex-row pt-2 pb-3 relative transition-colors duration-300 hover:bg-base-200">
-      <div class="avatar indicator">
-        <div class="h-10 w-10 sm:w-12 sm:h-12 rounded"><img src="${user.avatar}"></div>
+    chat.innerHTML += `<div class="chat chat-start py-2">
+      <div class="chat-image avatar">
+        <div class="w-10 rounded-full">
+          <img src="${user.avatar}" />
+        </div>
       </div>
-      <div class="ml-2 leading-4 md:leading-5 sm:mt-1.5"><span class="font-bold">${user.email}</span>
-      <small class="text-sm font-light tracking-tight ml-2">${formatDate(message.createdAt)}</small>
-      <p>${text}</p>
+      <div class="chat-header pb-1">
+        ${user.email}
+        <time class="text-xs opacity-50">${formatDate(message.createdAt)}</time>
       </div>
+      <div class="chat-bubble">${text}</div>
     </div>`
 
     // Always scroll to the bottom of our message list
