@@ -200,7 +200,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
           return addVersions(dependencies, dependencyVersions)
         },
         false,
-        ctx.packager
+        ({ packager }) => packager
       )
     )
     .then(
@@ -223,6 +223,6 @@ export const generate = (ctx: AppGeneratorArguments) =>
           return addVersions(devDependencies, dependencyVersions)
         },
         true,
-        ctx.packager
+        ({ packager }) => packager
       )
     )
