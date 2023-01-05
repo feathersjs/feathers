@@ -25,7 +25,7 @@ In this chapter we will look at the generated schemas and resolvers and update t
 
 While schemas and resolvers can be used outside of a Feather application, you will usually encounter them in a Feathers context where they come in four kinds:
 
-- **Result** schemas and resolvers that define the data that is being returned. This is also where associated data would be declared
+- **Result** schemas and resolvers that define the data that is being returned. This is also where associated data would be fetched
 - **Data** schemas and resolvers handle the data from the `create`, `update` and `patch` service methods and can be used to add things like default or calculated values (like the created or updated at date) before saving to the database
 - **Query** schemas and resolvers validate and convert the query string and can also be used for additional limitations like only allowing a user to see and modify their own data
 - **External** resolvers that return a safe version of the data (e.g. hiding a users password) that can be sent to external clients
@@ -39,12 +39,12 @@ Let's extend our existing users schema to add an `avatar` property so that our u
 
 <LanguageBlock global-id="ts">
 
-First we need to update the `src/services/users/users.schema.ts` file with the schema property for the avatar and a resolver property that sets a default avatar using Gravatar based on the email address:
+First we need to update the `src/services/users/users.schema.ts` file with the schema property for the avatar and a resolver property that sets a default avatar using the [Gravatar](https://en.gravatar.com/) based on the email address:
 
 </LanguageBlock>
 <LanguageBlock global-id="js">
 
-First we need to update the `src/services/users/users.schema.js` file with the schema property for the avatar and a resolver property that sets a default avatar using Gravatar based on the email address:
+First we need to update the `src/services/users/users.schema.js` file with the schema property for the avatar and a resolver property that sets a default avatar using the [Gravatar](https://en.gravatar.com/) based on the email address:
 
 </LanguageBlock>
 
@@ -257,7 +257,7 @@ Update the `src/services/messages/messages.schema.js` file like this:
 
 <DatabaseBlock global-id="sql">
 
-```ts{2,8,15-17,23-26,38-44,57-60}
+```ts{2,8,15-17,23-26,38-44,48,57-60}
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
@@ -305,7 +305,7 @@ export const messageDataResolver = resolve<Message, HookContext>({
 })
 
 // Schema for updating existing entries
-export const messagePatchSchema = Type.Partial(messageSchema, {
+export const messagePatchSchema = Type.Partial(messageDataSchema, {
   $id: 'MessagePatch'
 })
 export type MessagePatch = Static<typeof messagePatchSchema>
@@ -336,7 +336,7 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext>({})
 
 <DatabaseBlock global-id="mongodb">
 
-```ts{2,8,15-17,23-26,38-44,57-60}
+```ts{2,8,15-17,23-26,38-44,48,57-60}
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
@@ -384,7 +384,7 @@ export const messageDataResolver = resolve<Message, HookContext>({
 })
 
 // Schema for updating existing entries
-export const messagePatchSchema = Type.Partial(messageSchema, {
+export const messagePatchSchema = Type.Partial(messageDataSchema, {
   $id: 'MessagePatch'
 })
 export type MessagePatch = Static<typeof messagePatchSchema>
@@ -409,6 +409,12 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext>({})
 ```
 
 </DatabaseBlock>
+
+<BlockQuote type="info">
+
+The `virtual()` in the `messageResolver` `user` property is a [virtual property](../../api/schema/resolvers.md#virtual-property-resolvers) and indicates that the value does not come from the messages database table.
+
+</BlockQuote>
 
 ## Creating a migration
 

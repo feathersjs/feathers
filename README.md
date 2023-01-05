@@ -6,7 +6,7 @@
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/feathers.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/feathers)
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/qa8kez8QBx)
 
-Feathers is a lightweight web-framework for creating APIs and real-time applications with TypeScript or JavaScript.
+Feathers is a full-stack web-framework for creating APIs and real-time applications with TypeScript or JavaScript.
 
 <a href="https://feathersjs.com" title="FeathersJS">
   <img src="https://user-images.githubusercontent.com/128857/173851241-b52de3b8-468d-4ac3-a4b3-eaae9c8b7f77.jpg" alt="The FeathersJS Family of Birds">
