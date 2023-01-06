@@ -60,6 +60,31 @@ const server = await app.listen(3030)
 
 `app.setup(server) -> app` is usually called internally by `app.listen` but in the cases described below needs to be called explicitly.
 
+### HTTPS
+
+HTTPS requires creating a separate server in which case `app.setup(server)` also has to be called explicitly. In a generated application `src/index.js` should look like this:
+
+```ts
+import https from 'https'
+import { app } from './app'
+
+const port = app.get('port')
+const server = https
+  .createServer(
+    {
+      key: fs.readFileSync('privatekey.pem'),
+      cert: fs.readFileSync('certificate.pem')
+    },
+    app.callback()
+  )
+  .listen(443)
+
+// Call app.setup to initialize all services and SocketIO
+app.setup(server)
+
+server.on('listening', () => logger.info('Feathers application started'))
+```
+
 ## params
 
 In a Koa middleware, `ctx.feathers` is an object which will be extended as `params` in a service method call.
