@@ -38,7 +38,7 @@ export const ${camelName}DataValidator = getDataValidator(${camelName}DataSchema
 export const ${camelName}DataResolver = resolve<${upperName}, HookContext>({})
 
 // Schema for updating existing entries
-export const ${camelName}PatchSchema = Type.Partial(${camelName}Schema, {
+export const ${camelName}PatchSchema = Type.Partial(${camelName}DataSchema, {
   $id: '${upperName}Patch'
 })
 export type ${upperName}Patch = Static<typeof ${camelName}PatchSchema>
