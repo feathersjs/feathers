@@ -19,3 +19,27 @@ This sets `app.get('port')` using the `PORT` environment variable (if it is avai
 See the [node-config custom envrionment variable](https://github.com/node-config/node-config/wiki/Environment-Variables#custom-environment-variables) documentation for more information.
 
 </BlockQuote>
+
+## Dotenv
+
+To add support for [dotenv](https://www.dotenv.org/) `.env` files run
+
+```
+npm install dotenv --save
+```
+
+And update `src/app.ts` as follows:
+
+```ts
+// dotenv replaces all environmental variables from ~/.env in ~/config/custom-environment-variables.json
+import * as dotenv from 'dotenv'
+dotenv.config()
+
+import configuration from '@feathersjs/configuration'
+```
+
+<BlockQuote type="warning" label="important">
+
+`dotenv.config()` needs to run _before_ `import configuration from '@feathersjs/configuration'`
+
+</BlockQuote>

@@ -167,12 +167,12 @@ import { Type } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 import type { HookContext } from '../declarations'
 
-
 const messageSchema = Type.Object(
   {
     id: Type.Number(),
     text: Type.String(),
     createdAt: Type.Number(),
+    updatedAt: Type.Number(),
     userId: Type.Number()
   },
   { $id: 'Message', additionalProperties: false }
@@ -186,21 +186,28 @@ type MessageData = Static<typeof messageDataSchema>
 
 // Resolver that automatically set `userId` and `createdAt`
 const messageDataResolver = resolve<Message, HookContext>({
-  properties: {
-    userId: async (value, message, context) => {
-      // Associate the currently authenticated user
-      return context.params?.user.id
-    },
-    createdAt: async () => {
-      // Return the current date
-      return Date.now()
-    }
+  userId: async (value, message, context) => {
+    // Associate the currently authenticated user
+    return context.params?.user.id
+  },
+  createdAt: async () => {
+    // Return the current date
+    return Date.now()
+  }
+})
+
+// Resolver that automatically sets `updatedAt`
+const messagePatchResolver = resolve<Message, HookContext>({
+  updatedAt: async () => {
+    // Return the current date
+    return Date.now()
   }
 })
 
 app.service('users').hooks({
   before: {
-    all: [schemaHooks.resolveData(messageDataResolver)]
+    create: [schemaHooks.resolveData(messageDataResolver)],
+    patch: [schemaHooks.resolveData(messagePatchResolver)]
   }
 })
 ```
@@ -354,31 +361,6 @@ export const userQueryResolver = resolve<UserQuery, HookContext>({
 app.service('users').hooks({
   before: {
     all: [resolveQuery(userQueryResolver)]
-  }
-})
-```
-
-### resolveAll
-
-The `resolveAll` hook combines the individual resolver hooks into a single easier to use format and must be used as an `around` hook. `create` takes separate resolver options for the `create`, `update` and `patch` method:
-
-```ts
-import { schemaHooks } from '@feathersjs/schema'
-
-app.service('users').hooks({
-  around: {
-    all: [
-      schemaHooks.resolveAll({
-        dispatch: userDispatchResolver,
-        result: userResultResolver,
-        query: userQueryResolver,
-        data: {
-          create: userDataResolver,
-          update: userDataResolver,
-          patch: userPatchResolver
-        }
-      })
-    ]
   }
 })
 ```
