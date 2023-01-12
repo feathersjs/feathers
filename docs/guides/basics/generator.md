@@ -18,7 +18,7 @@ You can create a new Feathers application by running `npm create feathers <name>
 npm create feathers@pre feathers-chat
 ```
 
-If you never ran the command before you might be ask to confirm the package installation by pressing enter.
+If you never ran the command before you might be asked to confirm the package installation by pressing enter.
 
 <BlockQuote type="warning">
 
@@ -137,4 +137,4 @@ Keep this command running throughout the rest of this guide so it will reload al
 
 ## What's next?
 
-In this chapter we we created a new Feathers application. To learn more about the generated files and what you can do with the CLI, have a look at the CLI guide after finishing the Getting Started guide. In [the next chapter](./services.md) we will learn more about Feathers services and databases.
+In this chapter, we've created a new Feathers application. To learn more about the generated files and what you can do with the CLI, have a look at the [CLI guide](../cli/index.md) after finishing the Getting Started guide. In [the next chapter](./services.md) we will learn more about Feathers services and databases.

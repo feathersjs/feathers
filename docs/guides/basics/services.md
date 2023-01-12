@@ -8,21 +8,25 @@ Services are the heart of every Feathers application. You probably remember the 
 
 ## Feathers services
 
-In general, a service is an object or instance of a class that implements certain methods. Services provide a uniform, protocol independent interface for how to interact with any kind of data like:
+In general, a service is an object or instance of a class that implements certain methods. Services provide a uniform, protocol-independent interface for feathers to interact with any kind of data like:
 
-- Reading and/or writing from a database
+- Reading and/or writing to a database
 - Interacting with the file system
-- Calling another API
-- Calling other services like
-  - Sending an email
-  - Processing a payment
-  - Returning the current weather for a location, etc.
+- Calling a third-party API/service like:
+  - MailGun for sending emails
+  - Stripe for Processing payments
+  - OpenWeatherMap for returning the current weather in a location
+- Reading and/or writing to a completely different type of database
+- Anything else you can think of!
 
-Protocol independent means that to a Feathers service it does not matter if it has been called through a REST API, websockets, internally in our application or any other way.
+This standardized interface allows us to interact with the Database/API/Gnomes inside in a uniform manner across any transport protocol, be it REST, websockets, internally within the application, or Carrier Pigeon.
+
+Once you write a service method, it can then automatically be used as a REST endpoint or called by a websocket. Feathers will take care of all the boilerplate.
 
 ### Service methods
 
-Service methods are [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) methods that a service can implement. The Feathers service methods are:
+Service methods are [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) methods that a service can implement.
+Feathers offers a set of general methods that a service can implement, these are:
 
 - `find` - Find all data (potentially matching a query)
 - `get` - Get a single data entry by its unique identifier
@@ -75,11 +79,11 @@ When used as a REST API, incoming requests get mapped automatically to their cor
 | ------------------------------------------- | ----------- | --------------------- |
 | `service.find({ query: {} })`               | GET         | /messages             |
 | `service.find({ query: { unread: true } })` | GET         | /messages?unread=true |
-| `service.get(1)`                            | GET         | /messages/1           |
+| `service.get(123)`                          | GET         | /messages/123         |
 | `service.create(body)`                      | POST        | /messages             |
-| `service.update(1, body)`                   | PUT         | /messages/1           |
-| `service.patch(1, body)`                    | PATCH       | /messages/1           |
-| `service.remove(1)`                         | DELETE      | /messages/1           |
+| `service.update(123, body)`                 | PUT         | /messages/123         |
+| `service.patch(123, body)`                  | PATCH       | /messages/123         |
+| `service.remove(123)`                       | DELETE      | /messages/123         |
 
 ### Registering services
 
@@ -144,7 +148,7 @@ app.service('messages').on('created', (data) => {
 
 ## Database adapters
 
-Now that we have all those service methods we could go ahead and implement any kind of custom logic using any backend, similar to what we did in the [quick start guide](./starting.md). Very often, that means creating, reading, updating and removing data from a database.
+Now that we have all those service methods, we could go ahead and implement any kind of custom logic using any backend, similar to what we did in the [quick start guide](./starting.md). Very often, this means creating, reading, updating and removing data from a database.
 
 Writing all that code yourself for every service is pretty repetitive and cumbersome, which is why Feathers has a collection of pre-built services for different databases. They offer most of the basic functionality and can always be customized to your needs. Feathers database adapters support a common [usage API](../../api/databases/common.md), pagination and [querying syntax](../../api/databases/querying.md) for many popular databases. The following database adapters are maintained as part of Feathers core:
 
@@ -154,7 +158,7 @@ Writing all that code yourself for every service is pretty repetitive and cumber
 
 <BlockQuote type="tip">
 
-There are also many other community maintained database integrations which you can explore on the [ecosystem page](/ecosystem/?cat=Database&sort=downloads). Since they are not part of Feathers core they are not covered in the guides here though.
+There are also many other community maintained database integrations which you can explore on the [ecosystem page](/ecosystem/?cat=Database&sort=downloads). Since they are not part of Feathers core, they are outside the scope of these guides.
 
 </BlockQuote>
 

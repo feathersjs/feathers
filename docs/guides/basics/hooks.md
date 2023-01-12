@@ -67,18 +67,19 @@ The hook `context` is an object which contains information about the service met
 
 Read-only properties are:
 
-- `context.app` - The Feathers application object. This can be used to e.g. call other services
-- `context.service` - The service this hook is currently running on
+- `context.app` - The Feathers application object. This commonly used to call other services
+- `context.service` - The service object this hook is currently running on
 - `context.path` - The path (name) of the service
-- `context.method` - The service method name
-- `context.type` - The hook type
+- `context.method` - The name of the service method being called
+- `context.type` - The hook type (around, before, etc)
 
 Writeable properties are:
 
 - `context.params` - The service method call `params`. For external calls, `params` usually contains:
-  - `context.params.query` - The query (e.g. from the query string) for the service call
-  - `context.params.provider` - The name of the transport the call has been made through. Usually `rest` or `socketio`. Will be `undefined` for internal calls.
-- `context.id` - The `id` for a `get`, `remove`, `update` and `patch` service method call
+  - `context.params.query` - The query filter (e.g. from the REST query string) for the service call
+  - `context.params.provider` - The name of the transport the call has been made through. Usually `"rest"` or `"socketio"`. Will be `undefined` for internal calls.
+  - `context.params.user` - *If authenticated*, the data of the user making the service method call.
+- `context.id` - The `id` of the record if the service method call is a `get`, `remove`, `update` or `patch` 
 - `context.data` - The `data` sent by the user in a `create`, `update` and `patch` and custom service method call
 - `context.error` - The error that was thrown (in `error` hooks)
 - `context.result` - The result of the service method call (available after calling `await next()` or in `after` hooks)
@@ -172,7 +173,7 @@ declare module '../../declarations' {
 }
 ```
 
-Now every time a our messages service is accessed successfully the name, method and runtime will be logged.
+Now every time a our messages service is accessed successfully, the name, method and runtime will be logged.
 
 <BlockQuote type="tip">
 

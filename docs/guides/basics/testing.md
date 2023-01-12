@@ -26,7 +26,11 @@ When testing database functionality, we want to make sure that the tests use a d
 
 This will set up the NeDB database to use `test/data` as the base directory instead of `data/` when the `NODE_ENV` environment variable is set to `test`. The same thing can be done with connection strings for other databases.
 
-> __Note:__ When using Git for version control, the `data/` and `test/data` folders should be added to `.gitignore`.
+<BlockQuote type="warning" label="Important">
+
+When using Git for version control, the `data/` and `test/data` folders should be added to `.gitignore`.
+
+</BlockQuote>
 
 We also want to make sure that the database is cleaned up before every test run. To make that possible across platforms, first run:
 
@@ -127,7 +131,9 @@ describe('\'users\' service', () => {
 
 
 
-We can then add similar tests that use the service. The first test below verifies that users can be created, the profile image gets set and the password gets encrypted. The second verifies that the password does not get sent to external requests:
+We can then add similar tests that use the service. In this case we are:
+1. verifying that users can be created, the default profile image gets set and the password is encrypted
+2. ensuring that the password does not get sent to external requests
 
 
 
@@ -221,7 +227,7 @@ describe('\'users\' service', () => {
 
 
 
-We take a similar approach for the messages service test. We create a test-specific user from the `users` service, then pass it as `params.user` when creating a new message and validates that message's content:
+We take a similar approach for the messages service test by creating a test-specific user from the `users` service, then pass it as `params.user` when creating a new message and validates that message's content:
 
 
 
@@ -321,8 +327,6 @@ Code coverage is a great way to get some insights into how much of our code is a
 npm install nyc --save-dev
 ```
 
-Now we have to update the `scripts` section of our `package.json` to:
-
 
 
 <LanguageBlock global-id="ts">
@@ -345,7 +349,7 @@ Add the following `.nycrc` file:
 }
 ```
 
-And then update the `package.json` like this:
+And then update the `scripts` section of our `package.json` to:
 
 ```json
   "scripts": {
@@ -363,6 +367,8 @@ And then update the `package.json` like this:
 
 <LanguageBlock global-id="js">
 
+Now we have to update the `scripts` section of our `package.json` to:
+
 ```js
   "scripts": {
     "test": "npm run eslint && npm run coverage",
@@ -376,9 +382,6 @@ And then update the `package.json` like this:
 ```
 
 </LanguageBlock>
-
-
-
 
 On Windows, the `coverage` command looks like this:
 
@@ -394,8 +397,12 @@ npm test
 
 This will print out some additional coverage information.
 
-> __Note:__ When using Git for version control, the `.nyc_output/` folder should be added to `.gitignore`.
+<BlockQuote type="warning" label="Important">
+
+When using Git for version control, the `.nyc_output/` folder should be added to `.gitignore`.
+
+</BlockQuote>
 
 ## What's next?
 
-That’s it - our chat guide is completed! We now have a fully-tested REST and real-time API, with a plain JavaScript frontend including login and signup. Follow up in the [Feathers API documentation](../../api/) for more details about using Feathers, or start building your own first Feathers application!
+That’s it! Our chat guide is completed! We now have a fully-tested REST and real-time API, with a plain JavaScript frontend including login and signup. Follow up in the [Feathers API documentation](../../api/) for more details about using Feathers, or start building your own first Feathers application!
