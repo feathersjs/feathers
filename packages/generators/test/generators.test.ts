@@ -29,7 +29,7 @@ const defaultCombination = {
 const combinations =
   process.version > 'v16.0.0' ? (process.env.CI ? combinate(matrix as any) : [defaultCombination]) : []
 
-describe('@feathersjs/cli', () => {
+describe('@feathersjs/generators', () => {
   for (const { language, framework } of combinations) {
     describe(`${language} ${framework} app`, () => {
       const name = `feathers_${language}_${framework}`
