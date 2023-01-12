@@ -40,7 +40,7 @@ Before running the tests from the `test/` folder `npm test` will run ESlint. You
 
 ### Documentation
 
-Feathers documentation is contained in Markdown files in the [docs folder](https://github.com/feathersjs/feathers) of the mainr repository. To change the documentation submit a pull request to that repo, referencing any other PR if applicable, and the docs will be updated as soon as it is merged.
+Feathers documentation is contained in Markdown files in the [docs folder](https://github.com/feathersjs/feathers) of the main repository. To change the documentation submit a pull request to that repo, referencing any other PR if applicable, and the docs will be updated as soon as it is merged.
 
 ## Community Contributions
 
