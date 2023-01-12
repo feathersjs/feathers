@@ -44,7 +44,7 @@
   ],
   "scripts": {
     "prepublish": "npm run compile",
-    "compile": "shx rm -rf lib/ && tsc && shx cp -r src/. lib/",
+    "compile": "shx rm -rf lib/ && tsc",
     "mocha": "mocha --timeout 60000 --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
     "test": "npm run compile && npm run mocha"
   },
@@ -52,11 +52,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathershq/pinion": "^0.3.5",
-    "chalk": "^4.0.1",
     "commander": "^9.4.1",
-    "lodash": "^4.17.21",
-    "prettier": "^2.8.1"
+    "chalk": "^4.0.1",
+    "@feathersjs/generators": "^5.0.0-pre.34"
   },
   "devDependencies": {
     "@feathersjs/adapter-commons": "^5.0.0-pre.34",
