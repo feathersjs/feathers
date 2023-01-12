@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.35](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.34...v5.0.0-pre.35) (2023-01-12)
+
+### Bug Fixes
+
+- **cli:** Add unhandledRejection handler to generated index file ([#2932](https://github.com/feathersjs/feathers/issues/2932)) ([e3cedc8](https://github.com/feathersjs/feathers/commit/e3cedc8e00f52d892f21fd6a3eb4ca4fe40a903c))
+- **cli:** Minor generated app improvements ([#2936](https://github.com/feathersjs/feathers/issues/2936)) ([ba1a550](https://github.com/feathersjs/feathers/commit/ba1a5500a8a5ea4ab44da44ac509e48c723d7efd))
+- **cli:** Properly log validation errors in log-error hook ([54c883c](https://github.com/feathersjs/feathers/commit/54c883c2bb5c35c02b1a2081b2f17554550aa1d4))
+- **cli:** Use correct package manager when installing an app ([#2973](https://github.com/feathersjs/feathers/issues/2973)) ([99c2a70](https://github.com/feathersjs/feathers/commit/99c2a70b77f0b68698a66180b69a56cb20c2ca0d))
+- **databases:** Make sure adapter method signatures are exported properly ([#2943](https://github.com/feathersjs/feathers/issues/2943)) ([458d668](https://github.com/feathersjs/feathers/commit/458d66859e256c5854e7590f0b4a11b233fe0374))
+- **knex:** Ensure custom ids are returned on create ([#2934](https://github.com/feathersjs/feathers/issues/2934)) ([c4fa3cf](https://github.com/feathersjs/feathers/commit/c4fa3cf812d59e6e8e3831ab098bb8768c92e8f4))
+
+### Features
+
+- **generators:** Move core code generators to shared generators package ([#2982](https://github.com/feathersjs/feathers/issues/2982)) ([0328d22](https://github.com/feathersjs/feathers/commit/0328d2292153870bc43958f73d2c6f288a8cec17))
+- **schema:** Allow to add additional operators to the query syntax ([#2941](https://github.com/feathersjs/feathers/issues/2941)) ([f324940](https://github.com/feathersjs/feathers/commit/f324940d5795b41e8c6fc113defb0beb7ab03a0a))
+
 # [5.0.0-pre.34](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.33...v5.0.0-pre.34) (2022-12-14)
 
 ### Bug Fixes
