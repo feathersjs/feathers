@@ -1,13 +1,11 @@
 {
-  "name": "@feathersjs/authentication-local",
-  "description": "Local authentication strategy for @feathers/authentication",
+  "name": "@feathersjs/generators",
   "version": "5.0.0-pre.34",
+  "description": "Feathers CLI core generators, powered by Pinion",
   "homepage": "https://feathersjs.com",
-  "main": "lib/",
-  "types": "lib/",
   "keywords": [
     "feathers",
-    "feathers-plugin"
+    "pinion"
   ],
   "license": "MIT",
   "funding": {
@@ -17,10 +15,10 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git",
-    "directory": "packages/authentication-local"
+    "directory": "packages/commons"
   },
   "author": {
-    "name": "Feathers contributors",
+    "name": "Feathers contributor",
     "email": "hello@feathersjs.com",
     "url": "https://feathersjs.com"
   },
@@ -29,21 +27,22 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 12"
+    "node": ">= 16"
   },
+  "main": "lib/",
+  "types": "lib/",
   "files": [
     "CHANGELOG.md",
     "LICENSE",
     "README.md",
-    "src/**",
     "lib/**",
+    "lib/app/static/.gitignore",
     "*.d.ts",
     "*.js"
   ],
   "scripts": {
     "prepublish": "npm run compile",
-    "pack": "npm pack --pack-destination ../generators/test/build",
-    "compile": "shx rm -rf lib/ && tsc && npm run pack",
+    "compile": "shx rm -rf lib/ && tsc && shx cp -r src/. lib/",
     "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
@@ -53,23 +52,37 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^5.0.0-pre.34",
-    "@feathersjs/commons": "^5.0.0-pre.34",
-    "@feathersjs/errors": "^5.0.0-pre.34",
-    "@feathersjs/feathers": "^5.0.0-pre.34",
-    "bcryptjs": "^2.4.3",
-    "lodash": "^4.17.21"
+    "@feathershq/pinion": "^0.3.5",
+    "chalk": "^4.0.1",
+    "lodash": "^4.17.21",
+    "prettier": "^2.8.1"
   },
   "devDependencies": {
-    "@feathersjs/memory": "^5.0.0-pre.34",
+    "@feathersjs/adapter-commons": "^5.0.0-pre.34",
+    "@feathersjs/authentication": "^5.0.0-pre.34",
+    "@feathersjs/authentication-client": "^5.0.0-pre.34",
+    "@feathersjs/authentication-local": "^5.0.0-pre.34",
+    "@feathersjs/authentication-oauth": "^5.0.0-pre.34",
+    "@feathersjs/configuration": "^5.0.0-pre.34",
+    "@feathersjs/errors": "^5.0.0-pre.34",
+    "@feathersjs/express": "^5.0.0-pre.34",
+    "@feathersjs/feathers": "^5.0.0-pre.34",
+    "@feathersjs/knex": "^5.0.0-pre.34",
+    "@feathersjs/koa": "^5.0.0-pre.34",
+    "@feathersjs/mongodb": "^5.0.0-pre.34",
+    "@feathersjs/rest-client": "^5.0.0-pre.34",
     "@feathersjs/schema": "^5.0.0-pre.34",
-    "@types/bcryptjs": "^2.4.2",
-    "@types/lodash": "^4.14.191",
+    "@feathersjs/socketio": "^5.0.0-pre.34",
+    "@feathersjs/transport-commons": "^5.0.0-pre.34",
+    "@feathersjs/typebox": "^5.0.0-pre.34",
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.11.18",
+    "@types/prettier": "^2.7.2",
+    "axios": "^1.2.2",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
+    "type-fest": "^3.5.0",
     "typescript": "^4.9.4"
   },
   "gitHead": "42cca600d00f0b3b9d89fa79be30fcd46bc50132"

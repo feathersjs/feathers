@@ -47,7 +47,7 @@
     "prepublish": "npm run compile",
     "version": "npm run write-version",
     "publish": "npm run reset-version",
-    "pack": "npm pack --pack-destination ../cli/test/build",
+    "pack": "npm pack --pack-destination ../generators/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
     "test": "mocha --config ../../.mocharc.json --recursive test/"
   },
