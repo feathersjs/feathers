@@ -223,6 +223,15 @@ export class KnexAdapter<
   ): Promise<Result | Result[]> {
     const data = _data as any
 
+    if (params.bulk) {
+      const res = await this.db(params)
+        .insert(data)
+        .then(() => [])
+        .catch(errorHandler)
+
+      return res as Result[]
+    }
+
     if (Array.isArray(data)) {
       return Promise.all(data.map((current) => this._create(current, params)))
     }
@@ -252,6 +261,12 @@ export class KnexAdapter<
     }
 
     const data = _.omit(raw, this.id)
+
+    if (params.bulk) {
+      await this.createQuery(params).update(data)
+      return []
+    }
+
     const results = await this._findOrGet(id, {
       ...params,
       query: {
@@ -311,6 +326,11 @@ export class KnexAdapter<
   async _remove(id: NullableId, params: ServiceParams = {} as ServiceParams): Promise<Result | Result[]> {
     if (id === null && !this.allowsMulti('remove', params)) {
       throw new MethodNotAllowed('Can not remove multiple entries')
+    }
+
+    if (params.bulk) {
+      await this.createQuery(params).del().catch(errorHandler)
+      return []
     }
 
     const items = await this._findOrGet(id, params)

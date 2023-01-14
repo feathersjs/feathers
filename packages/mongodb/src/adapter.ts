@@ -261,7 +261,6 @@ export class MongoDbAdapter<
     data: Data | Data[],
     params: ServiceParams = {} as ServiceParams
   ): Promise<Result | Result[]> {
-    const writeOptions = params.mongodb
     const model = await this.getModel(params)
     const setId = (item: any) => {
       const entry = Object.assign({}, item)
@@ -279,14 +278,14 @@ export class MongoDbAdapter<
 
     const promise = Array.isArray(data)
       ? model
-          .insertMany(data.map(setId), writeOptions)
+          .insertMany(data.map(setId), params.mongodb)
           .then(async (result) =>
-            Promise.all(
-              Object.values(result.insertedIds).map(async (_id) => model.findOne({ _id }, params.mongodb))
-            )
+            params.bulk
+              ? []
+              : model.find({ _id: { $in: Object.values(result.insertedIds) } }, params.mongodb).toArray()
           )
       : model
-          .insertOne(setId(data), writeOptions)
+          .insertOne(setId(data), params.mongodb)
           .then(async (result) => model.findOne({ _id: result.insertedId }, params.mongodb))
 
     return promise.then(select(params, this.id)).catch(errorHandler)
@@ -325,6 +324,12 @@ export class MongoDbAdapter<
 
       return current
     }, {} as any)
+
+    if (params.bulk) {
+      await model.updateMany(query, modifier, updateOptions)
+      return []
+    }
+
     const originalIds = await this._findOrGet(id, {
       ...params,
       query: {
@@ -389,11 +394,13 @@ export class MongoDbAdapter<
       }
     }
 
-    return this._findOrGet(id, findParams)
-      .then(async (items) => {
-        await model.deleteMany(query, deleteOptions)
-        return items
-      })
-      .catch(errorHandler)
+    return params.bulk
+      ? model.deleteMany(query, deleteOptions).then(() => [])
+      : this._findOrGet(id, findParams)
+          .then(async (items) => {
+            await model.deleteMany(query, deleteOptions)
+            return items
+          })
+          .catch(errorHandler)
   }
 }

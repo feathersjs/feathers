@@ -57,6 +57,10 @@ export abstract class AdapterBase<
    * @returns Wether or not multiple updates are allowed.
    */
   allowsMulti(method: string, params: ServiceParams = {} as ServiceParams) {
+    if (params.bulk) {
+      return true
+    }
+
     const always = alwaysMulti[method]
 
     if (typeof always !== 'undefined') {

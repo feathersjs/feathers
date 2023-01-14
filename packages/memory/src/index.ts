@@ -6,7 +6,8 @@ import {
   AdapterBase,
   AdapterServiceOptions,
   PaginationOptions,
-  AdapterParams
+  AdapterParams,
+  AdapterQuery
 } from '@feathersjs/adapter-commons'
 import sift from 'sift'
 import { NullableId, Id, Params, Paginated } from '@feathersjs/feathers'
@@ -28,10 +29,12 @@ const _select = (data: any, params: any, ...args: any[]) => {
   return base(JSON.parse(JSON.stringify(data)))
 }
 
+export type MemoryAdapterParams<Q = AdapterQuery> = AdapterParams<Q, Partial<MemoryServiceOptions>>
+
 export class MemoryAdapter<
   Result = any,
   Data = Partial<Result>,
-  ServiceParams extends Params = Params,
+  ServiceParams extends MemoryAdapterParams = MemoryAdapterParams,
   PatchData = Partial<Data>
 > extends AdapterBase<Result, Data, PatchData, ServiceParams, MemoryServiceOptions<Result>> {
   store: MemoryServiceStore<Result>
@@ -145,18 +148,18 @@ export class MemoryAdapter<
   async _create(data: Partial<Data>[], params?: ServiceParams): Promise<Result[]>
   async _create(data: Partial<Data> | Partial<Data>[], _params?: ServiceParams): Promise<Result | Result[]>
   async _create(
-    data: Partial<Data> | Partial<Data>[],
+    _data: Partial<Data> | Partial<Data>[],
     params: ServiceParams = {} as ServiceParams
   ): Promise<Result | Result[]> {
-    if (Array.isArray(data)) {
-      return Promise.all(data.map((current) => this._create(current, params)))
-    }
+    const payload = Array.isArray(_data) ? _data : [_data]
+    const results = payload.map((value) => {
+      const id = (value as any)[this.id] || this._uId++
+      const current = _.extend({}, value, { [this.id]: id })
 
-    const id = (data as any)[this.id] || this._uId++
-    const current = _.extend({}, data, { [this.id]: id })
-    const result = (this.store[id] = current)
+      return _select((this.store[id] = current), params, this.id)
+    })
 
-    return _select(result, params, this.id) as Result
+    return params.bulk ? [] : Array.isArray(_data) ? results : results[0]
   }
 
   async _update(id: Id, data: Data, params: ServiceParams = {} as ServiceParams): Promise<Result> {
@@ -202,11 +205,12 @@ export class MemoryAdapter<
         ...params,
         query
       })
+      const results = entries.map(patchEntry)
 
-      return entries.map(patchEntry)
+      return params.bulk ? [] : results
     }
 
-    return patchEntry(await this._get(id, params)) // Will throw an error if not found
+    return params.bulk ? [] : patchEntry(await this._get(id, params)) // Will throw an error if not found
   }
 
   async _remove(id: null, params?: ServiceParams): Promise<Result[]>
@@ -225,7 +229,9 @@ export class MemoryAdapter<
         query
       })
 
-      return Promise.all(entries.map((current: any) => this._remove(current[this.id] as Id, params)))
+      entries.forEach((current: any) => delete this.store[(current as any)[this.id]])
+
+      return params.bulk ? [] : entries
     }
 
     const entry = await this._get(id, params)
