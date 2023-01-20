@@ -140,7 +140,7 @@ At first glance, choosing where to put logic might seem complex. Should the feat
 
 - Data manipulation and **custom** validation probably fit best in a resolver.
 - Adding or pulling in data from other sources will likely fit best in a resolver.
-- Side effects that affect `context.params` must happen in a hook, since the `context` objected is frozen inside of resolvers. This prevents race conditions and allows resolvers to run in parallel.
+- Side effects that affect `context.params` must happen in a hook, since the `context` object is frozen inside of resolvers. This prevents race conditions and allows resolvers to run in parallel.
 - Other side effects that manipulate external data will likely go into a hook with few exceptions. For example, if you need to do some logging based on an attribute in incoming data, you might consider putting that API request into a resolver. This solution could also work well in a hook.
 
 ## More Powerful Hooks
@@ -310,7 +310,7 @@ When creating the new generator, we looked at open-source generators already ava
 When we say "state of the art", it's not hubris. The new Feathers CLI is built on top of [Pinion](https://github.com/feathershq/pinion), our own generator with TypeScript-based templates. Instead of using some custom templating language, like Handlebars or EJS, Pinion uses Typed [Template Literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals), providing some wonderful benefits:
 
 - No more mystery context. You always know the exact context of the templates and what helpers are available.
-- It just works™️ with existing npm packages. There's no need to make an EJS plugin for some custom helper using an obscure API. Just import the module and use it in your template.
+- It just works™ with existing npm packages. There's no need to make an EJS plugin for some custom helper using an obscure API. Just import the module and use it in your template.
 - Integrates with all existing TypeScript tooling. Hover over a variable and inspect the context like you would any TS code.
 
 Now that we have what we consider the best generator on the planet, we have some exciting future plans for the Feathers CLI, which we will announce in the future.
@@ -329,7 +329,7 @@ When you select `JavaScript` to generate an app, the CLI works some magic under 
 
 And we get to smile because the entire process is a work of art, thanks to the TypeScript team.
 
-For Feathers Maintainers, committing to TypeScript means we only contribute to a single set of templates. and they get magically compiled - on the fly - to plain JavaScript when you want it.
+For Feathers Maintainers, committing to TypeScript means we only contribute to a single set of templates. And they get magically compiled - on the fly - to plain JavaScript when you want it.
 
 ### Shared Types
 
@@ -347,7 +347,7 @@ The file and folder structure of generated apps has changed a little bit. Here's
 - The `src/models` folder no longer gets created, since [Feathers schemas](#official-schemas) replace models.
 - Each service has its own folder inside the `tests` folder.
 
-You can learn more about the generated files in the CLI guide
+You can learn more about the generated files in the CLI guide.
 
 ## The Future
 
