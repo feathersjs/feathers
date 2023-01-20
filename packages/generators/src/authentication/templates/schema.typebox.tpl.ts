@@ -12,7 +12,7 @@ export const template = ({
   relative
 }: AuthenticationGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve } from '@feathersjs/schema'
-import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
+import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 ${localTemplate(authStrategies, `import { passwordHash } from '@feathersjs/authentication-local'`)}
 
@@ -34,6 +34,7 @@ export const ${camelName}Schema = Type.Object({
     .join(',\n')}
 },{ $id: '${upperName}', additionalProperties: false })
 export type ${upperName} = Static<typeof ${camelName}Schema>
+export const ${camelName}Validator = getValidator(${camelName}Schema, dataValidator)
 export const ${camelName}Resolver = resolve<${upperName}, HookContext>({})
 
 export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
@@ -51,7 +52,7 @@ export const ${camelName}DataSchema = Type.Pick(${camelName}Schema, [
   { $id: '${upperName}Data', additionalProperties: false }
 )
 export type ${upperName}Data = Static<typeof ${camelName}DataSchema>
-export const ${camelName}DataValidator = getDataValidator(${camelName}DataSchema, dataValidator)
+export const ${camelName}DataValidator = getValidator(${camelName}DataSchema, dataValidator)
 export const ${camelName}DataResolver = resolve<${upperName}, HookContext>({
   ${localTemplate(authStrategies, `password: passwordHash({ strategy: 'local' })`)}
 })
@@ -61,7 +62,7 @@ export const ${camelName}PatchSchema = Type.Partial(${camelName}Schema, {
   $id: '${upperName}Patch'
 })
 export type ${upperName}Patch = Static<typeof ${camelName}PatchSchema>
-export const ${camelName}PatchValidator = getDataValidator(${camelName}PatchSchema, dataValidator)
+export const ${camelName}PatchValidator = getValidator(${camelName}PatchSchema, dataValidator)
 export const ${camelName}PatchResolver = resolve<${upperName}, HookContext>({
   ${localTemplate(authStrategies, `password: passwordHash({ strategy: 'local' })`)}
 })

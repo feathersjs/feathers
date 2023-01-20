@@ -49,7 +49,7 @@ export const queryValidator = addFormats(
 
 ## Validation functions
 
-A validation function takes data and validates them against a schema using a validator. They can be used with any validation library. Currently the `getDataValidator` and `getValidator` functions are available for:
+A validation function takes data and validates them against a schema using a validator. They can be used with any validation library. Currently the `getValidator` functions are available for:
 
 - [TypeBox schema](./typebox.md#validators) to validate a TypeBox definition using an Ajv validator instance
 - [JSON schema](./schema.md#validators) to validate a JSON schema object using an Ajv validator instance
@@ -64,7 +64,7 @@ The following hooks take a [validation function](#validation-functions) and vali
 
 ```ts
 import { Ajv, schemaHooks } from '@feathersjs/schema'
-import { Type, getDataValidator } from '@feathersjs/typebox'
+import { Type, getValidator } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 import { dataValidator } from '../validators'
 
@@ -82,7 +82,7 @@ type User = Static<typeof userSchema>
 const userDataSchema = Type.Pick(userSchema, ['email', 'password'])
 
 // Returns validation functions for `create`, `update` and `patch`
-const userDataValidator = getDataValidator(userDataSchema, dataValidator)
+const userDataValidator = getValidator(userDataSchema, dataValidator)
 
 app.service('users').hooks({
   before: {
