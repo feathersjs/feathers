@@ -23,12 +23,12 @@ export const nameSchema = Type.Object({
 })
 // The TypeScript type inferred from the schema
 export type Name = Static<typeof nameSchema>
+// The validator for the schema
+export const nameValidator = getValidator(nameSchema, dataValidator)
 // The resolver for the schema
 export const nameResolver = resolve<Name, HookContext>({
   properties: {}
 })
-// The validator if it is a schema for data
-export const nameValidator = getDataValidator(nameSchema, dataValidator)
 ```
 
 ## Main Schemas and Resolvers
@@ -68,7 +68,7 @@ export const messagesDataSchema = Type.Pick(messagesSchema, ['string'], {
   additionalProperties: false
 })
 export type MessagesData = Static<typeof messagesDataSchema>
-export const messagesDataValidator = getDataValidator(messagesDataSchema, dataValidator)
+export const messagesDataValidator = getValidator(messagesDataSchema, dataValidator)
 export const messagesDataResolver = resolve<Messages, HookContext>({
   properties: {}
 })

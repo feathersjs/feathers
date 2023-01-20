@@ -11,7 +11,7 @@ const template = ({
   lib
 }: ServiceGeneratorContext) => /* ts */ `// // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve } from '@feathersjs/schema'
-import { Type, getDataValidator, getValidator, querySyntax } from '@feathersjs/typebox'
+import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '${relative}/declarations'
@@ -25,6 +25,7 @@ export const ${camelName}Schema = Type.Object({
     text: Type.String()
   }, { $id: '${upperName}', additionalProperties: false })
 export type ${upperName} = Static<typeof ${camelName}Schema>
+export const ${camelName}Validator = getValidator(${camelName}Schema, dataValidator)
 export const ${camelName}Resolver = resolve<${upperName}, HookContext>({})
 
 export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({})
@@ -34,7 +35,7 @@ export const ${camelName}DataSchema = Type.Pick(${camelName}Schema, ['text'], {
   $id: '${upperName}Data'
 })
 export type ${upperName}Data = Static<typeof ${camelName}DataSchema>
-export const ${camelName}DataValidator = getDataValidator(${camelName}DataSchema, dataValidator)
+export const ${camelName}DataValidator = getValidator(${camelName}DataSchema, dataValidator)
 export const ${camelName}DataResolver = resolve<${upperName}, HookContext>({})
 
 // Schema for updating existing entries
@@ -42,7 +43,7 @@ export const ${camelName}PatchSchema = Type.Partial(${camelName}DataSchema, {
   $id: '${upperName}Patch'
 })
 export type ${upperName}Patch = Static<typeof ${camelName}PatchSchema>
-export const ${camelName}PatchValidator = getDataValidator(${camelName}PatchSchema, dataValidator)
+export const ${camelName}PatchValidator = getValidator(${camelName}PatchSchema, dataValidator)
 export const ${camelName}PatchResolver = resolve<${upperName}, HookContext>({})
 
 // Schema for allowed query properties

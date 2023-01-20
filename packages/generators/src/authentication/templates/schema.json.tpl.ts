@@ -41,6 +41,7 @@ export const ${camelName}Schema = {
   }
 } as const
 export type ${upperName} = FromSchema<typeof ${camelName}Schema>
+export const ${camelName}Validator = getValidator(${camelName}Schema, dataValidator)
 export const ${camelName}Resolver = resolve<${upperName}, HookContext>({})
 
 export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
