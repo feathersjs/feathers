@@ -4,7 +4,7 @@ import { createDebug } from '@feathersjs/commons'
 import { getServiceOptions, defaultServiceMethods, createContext } from '@feathersjs/feathers'
 import { MethodNotAllowed } from '@feathersjs/errors'
 
-import { Application, Middleware } from './declarations'
+import { KoaApplication, Middleware } from './declarations'
 import { AuthenticationSettings, parseAuthentication } from './authentication'
 
 const debug = createDebug('@feathersjs/koa/rest')
@@ -77,7 +77,7 @@ export const rest = (options?: RestOptions | Middleware) => {
   const formatterMiddleware = options.formatter || formatter
   const authenticationOptions = options.authentication
 
-  return (app: Application) => {
+  return (app: KoaApplication) => {
     app.use(parseAuthentication(authenticationOptions))
     app.use(servicesMiddleware())
 

@@ -1,7 +1,7 @@
 import http from 'http'
 import express, { Express } from 'express'
 import {
-  Application as FeathersApplication,
+  FeathersApplication,
   Params as FeathersParams,
   HookContext,
   ServiceMethods,
@@ -33,9 +33,21 @@ export interface ExpressOverrides<Services> {
   server?: http.Server
 }
 
-export type Application<Services = any, Settings = any> = Omit<Express, 'listen' | 'use' | 'get' | 'set'> &
+export type ExpressApplication<Services = any, Settings = any> = Omit<
+  Express,
+  'listen' | 'use' | 'get' | 'set'
+> &
   FeathersApplication<Services, Settings> &
   ExpressOverrides<Services>
+
+/**
+ * The combined Express and Feathers application type.
+ *
+ * @deprecated Use the `Application` type from your apps 'declarations' instead to get
+ * the correct service and configuration typings. To get this type,
+ * use `import { ExpressApplication } from '@feathersjs/express'`.
+ */
+export type Application<Services = any, Settings = any> = ExpressApplication<Services, Settings>
 
 declare module '@feathersjs/feathers/lib/declarations' {
   interface ServiceOptions {

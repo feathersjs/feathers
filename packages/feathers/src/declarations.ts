@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import { EventEmitter } from 'events'
 import { NextFunction, HookContext as BaseHookContext } from '@feathersjs/hooks'
 
@@ -84,9 +85,9 @@ export interface ServiceMethods<
 
   remove(id: NullableId, params?: ServiceParams): Promise<Result | Result[]>
 
-  setup?(app: Application, path: string): Promise<void>
+  setup?(app: FeathersApplication, path: string): Promise<void>
 
-  teardown?(app: Application, path: string): Promise<void>
+  teardown?(app: FeathersApplication, path: string): Promise<void>
 }
 
 export interface ServiceOverloads<
@@ -131,30 +132,40 @@ export type ServiceInterface<
   PatchData = Partial<Data>
 > = Partial<ServiceMethods<Result, Data, ServiceParams, PatchData>>
 
-export interface ServiceAddons<A = Application, S = Service> extends EventEmitter {
+export interface ServiceAddons<A = FeathersApplication, S = Service> extends EventEmitter {
   id?: string
   hooks(options: HookOptions<A, S>): this
 }
 
 export interface ServiceHookOverloads<S, P = Params> {
-  find(params: P, context: HookContext): Promise<HookContext>
+  find(params: P, context: FeathersHookContext): Promise<FeathersHookContext>
 
-  get(id: Id, params: P, context: HookContext): Promise<HookContext>
+  get(id: Id, params: P, context: FeathersHookContext): Promise<FeathersHookContext>
 
   create(
     data: ServiceGenericData<S> | ServiceGenericData<S>[],
     params: P,
-    context: HookContext
-  ): Promise<HookContext>
+    context: FeathersHookContext
+  ): Promise<FeathersHookContext>
 
-  update(id: NullableId, data: ServiceGenericData<S>, params: P, context: HookContext): Promise<HookContext>
+  update(
+    id: NullableId,
+    data: ServiceGenericData<S>,
+    params: P,
+    context: FeathersHookContext
+  ): Promise<FeathersHookContext>
 
-  patch(id: NullableId, data: ServiceGenericData<S>, params: P, context: HookContext): Promise<HookContext>
+  patch(
+    id: NullableId,
+    data: ServiceGenericData<S>,
+    params: P,
+    context: FeathersHookContext
+  ): Promise<FeathersHookContext>
 
-  remove(id: NullableId, params: P, context: HookContext): Promise<HookContext>
+  remove(id: NullableId, params: P, context: FeathersHookContext): Promise<FeathersHookContext>
 }
 
-export type FeathersService<A = FeathersApplication, S = Service> = S &
+export type FeathersService<A = ApplicationInterface, S = Service> = S &
   ServiceAddons<A, S> &
   OptionalPick<ServiceHookOverloads<S>, keyof S>
 
@@ -167,7 +178,7 @@ export type CustomMethods<T extends { [key: string]: [any, any] }> = {
  * connection that can be configured on the application.
  */
 export type TransportConnection<Services = any> = {
-  (app: Application<Services>): void
+  (app: FeathersApplication<Services>): void
   Service: any
   service: <L extends keyof Services & string>(
     name: L
@@ -192,7 +203,7 @@ export type ServiceGenericType<S> = S extends ServiceInterface<infer T> ? T : an
 export type ServiceGenericData<S> = S extends ServiceInterface<infer _T, infer D> ? D : any
 export type ServiceGenericParams<S> = S extends ServiceInterface<infer _T, infer _D, infer P> ? P : any
 
-export interface FeathersApplication<Services = any, Settings = any> {
+export interface ApplicationInterface<Services = any, Settings = any> {
   /**
    * The Feathers application version
    */
@@ -201,7 +212,7 @@ export interface FeathersApplication<Services = any, Settings = any> {
   /**
    * A list of callbacks that run when a new service is registered
    */
-  mixins: ServiceMixin<Application<Services, Settings>>[]
+  mixins: ServiceMixin<FeathersApplication<Services, Settings>>[]
 
   /**
    * The index of all services keyed by their path.
@@ -265,7 +276,7 @@ export interface FeathersApplication<Services = any, Settings = any> {
    */
   use<L extends keyof Services & string>(
     path: L,
-    service: keyof any extends keyof Services ? ServiceInterface | Application : Services[L],
+    service: keyof any extends keyof Services ? ServiceInterface | FeathersApplication : Services[L],
     options?: ServiceOptions<keyof any extends keyof Services ? string : keyof Services[L]>
   ): this
 
@@ -313,9 +324,22 @@ export interface FeathersApplication<Services = any, Settings = any> {
 
 // This needs to be an interface instead of a type
 // so that the declaration can be extended by other modules
-export interface Application<Services = any, Settings = any>
-  extends FeathersApplication<Services, Settings>,
+/**
+ * The main interface for a Feathers application.
+ */
+export interface FeathersApplication<Services = any, Settings = any>
+  extends ApplicationInterface<Services, Settings>,
     EventEmitter {}
+
+/**
+ * The interface for a Feathers application.
+ *
+ * @deprecated Use the `Application` type from your apps 'declarations' instead to get
+ * the correct service and configuration typings. To get this type,
+ * use `import { FeathersApplication } from '@feathersjs/feathers'`.
+ */
+export interface Application<Services = any, Settings = any>
+  extends FeathersApplication<Services, Settings> {}
 
 export type Id = number | string
 export type NullableId = Id | null
@@ -348,7 +372,8 @@ export interface Http {
 
 export type HookType = 'before' | 'after' | 'error' | 'around'
 
-export interface HookContext<A = Application, S = any> extends BaseHookContext<ServiceGenericType<S>> {
+export interface FeathersHookContext<A = FeathersApplication, S = any>
+  extends BaseHookContext<ServiceGenericType<S>> {
   /**
    * A read only property that contains the Feathers application object. This can be used to
    * retrieve other services (via context.app.service('name')) or configuration values.
@@ -431,13 +456,25 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
   event: string | null
 }
 
-// Regular hook typings
-export type HookFunction<A = Application, S = Service> = (
-  this: S,
-  context: HookContext<A, S>
-) => Promise<HookContext<Application, S> | void> | HookContext<Application, S> | void
+/**
+ * The context object for a hook function.
+ *
+ * @deprecated Use the `HookContext` type from your apps 'declarations' instead to get
+ * the correct service and configuration typings. To get this type,
+ * use `import { FeathersHookContext } from '@feathersjs/feathers'`.
+ */
+export type HookContext<A = FeathersApplication, S = any> = FeathersHookContext<A, S>
 
-export type Hook<A = Application, S = Service> = HookFunction<A, S>
+// Regular hook typings
+export type HookFunction<A = FeathersApplication, S = Service> = (
+  this: S,
+  context: FeathersHookContext<A, S>
+) =>
+  | Promise<FeathersHookContext<FeathersApplication, S> | void>
+  | FeathersHookContext<FeathersApplication, S>
+  | void
+
+export type Hook<A = FeathersApplication, S = Service> = HookFunction<A, S>
 
 type HookMethodMap<A, S> = {
   [L in keyof S]?: SelfOrArray<HookFunction<A, S>>
@@ -446,8 +483,8 @@ type HookMethodMap<A, S> = {
 type HookTypeMap<A, S> = SelfOrArray<HookFunction<A, S>> | HookMethodMap<A, S>
 
 // New @feathersjs/hook typings
-export type AroundHookFunction<A = Application, S = Service> = (
-  context: HookContext<A, S>,
+export type AroundHookFunction<A = FeathersApplication, S = Service> = (
+  context: FeathersHookContext<A, S>,
   next: NextFunction
 ) => Promise<void>
 
@@ -464,7 +501,7 @@ export type HookMap<A, S> = {
 
 export type HookOptions<A, S> = AroundHookMap<A, S> | AroundHookFunction<A, S>[] | HookMap<A, S>
 
-export interface ApplicationHookContext<A = Application> extends BaseHookContext {
+export interface ApplicationHookContext<A = FeathersApplication> extends BaseHookContext {
   app: A
   server: any
 }

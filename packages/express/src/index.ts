@@ -7,7 +7,7 @@ import compression from 'compression'
 
 import { rest, RestOptions, formatter } from './rest'
 import { errorHandler, notFound, ErrorHandlerOptions } from './handlers'
-import { Application, ExpressOverrides } from './declarations'
+import { ExpressApplication, ExpressOverrides } from './declarations'
 import { AuthenticationSettings, authenticate, parseAuthentication } from './authentication'
 import { default as original, static as serveStatic, json, raw, text, urlencoded, query } from 'express'
 
@@ -25,7 +25,7 @@ export {
   formatter,
   errorHandler,
   notFound,
-  Application,
+  ExpressApplication as Application,
   ErrorHandlerOptions,
   ExpressOverrides,
   AuthenticationSettings,
@@ -40,7 +40,7 @@ const debug = createDebug('@feathersjs/express')
 export default function feathersExpress<S = any, C = any>(
   feathersApp?: FeathersApplication<S, C>,
   expressApp: Express = express()
-): Application<S, C> {
+): ExpressApplication<S, C> {
   if (!feathersApp) {
     return expressApp as any
   }
@@ -49,7 +49,7 @@ export default function feathersExpress<S = any, C = any>(
     throw new Error('@feathersjs/express requires a valid Feathers application instance')
   }
 
-  const app = expressApp as any as Application<S, C>
+  const app = expressApp as any as ExpressApplication<S, C>
   const { use: expressUse, listen: expressListen } = expressApp as any
   const { use: feathersUse, teardown: feathersTeardown } = feathersApp
 
@@ -105,7 +105,7 @@ export default function feathersExpress<S = any, C = any>(
 
       return server
     }
-  } as Application<S, C>)
+  } as ExpressApplication<S, C>)
 
   const appDescriptors = {
     ...Object.getOwnPropertyDescriptors(Object.getPrototypeOf(app)),

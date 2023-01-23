@@ -10,7 +10,7 @@ import {
 import {
   Service,
   ServiceOptions,
-  HookContext,
+  FeathersHookContext,
   FeathersService,
   HookMap,
   AroundHookFunction,
@@ -124,7 +124,7 @@ export function createContext(service: Service, method: string, data: HookContex
     throw new Error(`Can not create context for method ${method}`)
   }
 
-  return createContext(data) as HookContext
+  return createContext(data) as FeathersHookContext
 }
 
 export class FeathersHookManager<A> extends HookManager {
@@ -141,7 +141,7 @@ export class FeathersHookManager<A> extends HookManager {
     return [...appHooks, ...middleware, ...methodHooks]
   }
 
-  initializeContext(self: any, args: any[], context: HookContext) {
+  initializeContext(self: any, args: any[], context: FeathersHookContext) {
     const ctx = super.initializeContext(self, args, context)
 
     ctx.params = ctx.params || {}

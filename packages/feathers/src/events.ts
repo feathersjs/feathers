@@ -1,9 +1,9 @@
 import { EventEmitter } from 'events'
 import { NextFunction } from '@feathersjs/hooks'
-import { HookContext, FeathersService } from './declarations'
+import { FeathersHookContext, FeathersService } from './declarations'
 import { getServiceOptions, defaultEventMap } from './service'
 
-export function eventHook(context: HookContext, next: NextFunction) {
+export function eventHook(context: FeathersHookContext, next: NextFunction) {
   const { events } = getServiceOptions((context as any).self)
   const defaultEvent = (defaultEventMap as any)[context.method] || null
 

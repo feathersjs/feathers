@@ -6,12 +6,12 @@ import { eventHook, eventMixin } from './events'
 import { hookMixin } from './hooks'
 import { wrapService, getServiceOptions, protectedMethods } from './service'
 import {
-  FeathersApplication,
+  ApplicationInterface,
   ServiceMixin,
   Service,
   ServiceOptions,
   ServiceInterface,
-  Application,
+  FeathersApplication,
   FeathersService,
   ApplicationHookOptions
 } from './declarations'
@@ -21,11 +21,11 @@ const debug = createDebug('@feathersjs/feathers')
 
 export class Feathers<Services, Settings>
   extends EventEmitter
-  implements FeathersApplication<Services, Settings>
+  implements ApplicationInterface<Services, Settings>
 {
   services: Services = {} as Services
   settings: Settings = {} as Settings
-  mixins: ServiceMixin<Application<Services, Settings>>[] = [hookMixin, eventMixin]
+  mixins: ServiceMixin<FeathersApplication<Services, Settings>>[] = [hookMixin, eventMixin]
   version: string = version
   _isSetup = false
 
@@ -144,7 +144,7 @@ export class Feathers<Services, Settings>
 
   use<L extends keyof Services & string>(
     path: L,
-    service: keyof any extends keyof Services ? ServiceInterface | Application : Services[L],
+    service: keyof any extends keyof Services ? ServiceInterface | FeathersApplication : Services[L],
     options?: ServiceOptions<keyof any extends keyof Services ? string : keyof Services[L]>
   ): this {
     if (typeof path !== 'string') {
@@ -152,7 +152,7 @@ export class Feathers<Services, Settings>
     }
 
     const location = (stripSlashes(path) || '/') as L
-    const subApp = service as Application
+    const subApp = service as FeathersApplication
     const isSubApp = typeof subApp.service === 'function' && subApp.services
 
     if (isSubApp) {

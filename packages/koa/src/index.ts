@@ -7,7 +7,7 @@ import bodyParser from 'koa-bodyparser'
 import cors from '@koa/cors'
 import serveStatic from 'koa-static'
 
-import { Application } from './declarations'
+import { KoaApplication } from './declarations'
 
 export { Koa, bodyParser, cors, serveStatic }
 export * from './authentication'
@@ -20,7 +20,7 @@ const debug = createDebug('@feathersjs/koa')
 export function koa<S = any, C = any>(
   feathersApp?: FeathersApplication<S, C>,
   koaApp: Koa = new Koa()
-): Application<S, C> {
+): KoaApplication<S, C> {
   if (!feathersApp) {
     return koaApp as any
   }
@@ -29,7 +29,7 @@ export function koa<S = any, C = any>(
     throw new Error('@feathersjs/koa requires a valid Feathers application instance')
   }
 
-  const app = feathersApp as any as Application<S, C>
+  const app = feathersApp as any as KoaApplication<S, C>
   const { listen: koaListen, use: koaUse } = koaApp
   const { use: feathersUse, teardown: feathersTeardown } = feathersApp
 
@@ -59,7 +59,7 @@ export function koa<S = any, C = any>(
           () => new Promise((resolve, reject) => this.server.close((e) => (e ? reject(e) : resolve(this))))
         )
     }
-  } as Application)
+  } as KoaApplication)
 
   const appDescriptors = {
     ...Object.getOwnPropertyDescriptors(Object.getPrototypeOf(app)),

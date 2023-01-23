@@ -3,7 +3,7 @@ import { HookContext } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
 import { authenticate as AuthenticateHook } from '@feathersjs/authentication'
 
-import { Application } from './declarations'
+import { ExpressApplication } from './declarations'
 
 const debug = createDebug('@feathersjs/express/authentication')
 
@@ -20,7 +20,7 @@ export type AuthenticationSettings = {
 
 export function parseAuthentication(settings: AuthenticationSettings = {}): RequestHandler {
   return toHandler(async (req, res, next) => {
-    const app = req.app as any as Application
+    const app = req.app as any as ExpressApplication
     const service = app.defaultAuthentication?.(settings.service)
 
     if (!service) {
@@ -53,7 +53,7 @@ export function authenticate(
   const hook = AuthenticateHook(settings, ...strategies)
 
   return toHandler(async (req, _res, next) => {
-    const app = req.app as any as Application
+    const app = req.app as any as ExpressApplication
     const params = req.feathers
     const context = { app, params } as any as HookContext
 

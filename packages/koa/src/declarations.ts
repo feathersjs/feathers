@@ -1,6 +1,6 @@
 import Koa, { Next } from 'koa'
 import { Server } from 'http'
-import { Application as FeathersApplication, HookContext, Params, RouteLookup } from '@feathersjs/feathers'
+import { FeathersApplication, HookContext, Params, RouteLookup } from '@feathersjs/feathers'
 import '@feathersjs/authentication'
 
 export type ApplicationAddons = {
@@ -8,15 +8,24 @@ export type ApplicationAddons = {
   listen(port?: number, ...args: any[]): Promise<Server>
 }
 
-export type Application<T = any, C = any> = Omit<Koa, 'listen'> &
+export type KoaApplication<T = any, C = any> = Omit<Koa, 'listen'> &
   FeathersApplication<T, C> &
   ApplicationAddons
 
-export type FeathersKoaContext<A = Application> = Koa.Context & {
+/**
+ * The combined Koa and Feathers application type.
+ *
+ * @deprecated Use the `Application` type from your apps 'declarations' instead to get
+ * the correct service and configuration typings. To get this type,
+ * use `import { KoaApplication } from '@feathersjs/koa'`.
+ */
+export type Application<T = any, C = any> = KoaApplication<T, C>
+
+export type FeathersKoaContext<A = KoaApplication> = Koa.Context & {
   app: A
 }
 
-export type Middleware<A = Application> = (context: FeathersKoaContext<A>, next: Next) => any
+export type Middleware<A = KoaApplication> = (context: FeathersKoaContext<A>, next: Next) => any
 
 declare module '@feathersjs/feathers/lib/declarations' {
   interface ServiceOptions {

@@ -5,7 +5,7 @@ import { http } from '@feathersjs/transport-commons'
 import { createContext, defaultServiceMethods, getServiceOptions } from '@feathersjs/feathers'
 
 import { AuthenticationSettings, parseAuthentication } from './authentication'
-import { Application } from './declarations'
+import { ExpressApplication } from './declarations'
 
 const debug = createDebug('@feathersjs/express/rest')
 
@@ -53,7 +53,7 @@ const serviceMiddleware = (): RequestHandler => {
 
 const servicesMiddleware = (): RequestHandler => {
   return toHandler(async (req, res, next) => {
-    const app = req.app as any as Application
+    const app = req.app as any as ExpressApplication
     const lookup = app.lookup(req.path)
 
     if (!lookup) {
@@ -92,7 +92,7 @@ export const rest = (options?: RestOptions | RequestHandler) => {
   const formatterMiddleware = options.formatter || formatter
   const authenticationOptions = options.authentication
 
-  return (app: Application) => {
+  return (app: ExpressApplication) => {
     if (typeof app.route !== 'function') {
       throw new Error('@feathersjs/express/rest needs an Express compatible app.')
     }
