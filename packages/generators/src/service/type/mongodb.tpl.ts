@@ -32,6 +32,8 @@ export type ${upperName}Query = any
 `
 }
 
+export type { ${upperName}, ${upperName}Data, ${upperName}Patch, ${upperName}Query }
+
 export interface ${upperName}Params extends MongoDBAdapterParams<${upperName}Query> {
 }
 

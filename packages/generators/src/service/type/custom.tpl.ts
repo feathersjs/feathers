@@ -29,6 +29,8 @@ export type ${upperName}Query = any
 `
 }
 
+export type { ${upperName}, ${upperName}Data, ${upperName}Patch, ${upperName}Query }
+
 export interface ${className}Options {
   app: Application
 }
@@ -38,24 +40,25 @@ export interface ${upperName}Params extends Params<${upperName}Query> {
 }
 
 // This is a skeleton for a custom service class. Remove or add the methods you need here
-export class ${className} implements ServiceInterface<${upperName}, ${upperName}Data, ${upperName}Params, ${upperName}Patch> {
+export class ${className}<ServiceParams extends Params = ${upperName}Params>
+    implements ServiceInterface<${upperName}, ${upperName}Data, ServiceParams, ${upperName}Patch> {
   constructor (public options: ${className}Options) {
   }
 
-  async find (_params?: ${upperName}Params): Promise<${upperName}[]> {
+  async find (_params?: ServiceParams): Promise<${upperName}[]> {
     return []
   }
 
-  async get (id: Id, _params?: ${upperName}Params): Promise<${upperName}> {
+  async get (id: Id, _params?: ServiceParams): Promise<${upperName}> {
     return {
       id: 0,
       text: \`A new message with ID: \${id}!\`
     }
   }
 
-  async create (data: ${upperName}Data, params?: ${upperName}Params): Promise<${upperName}>
-  async create (data: ${upperName}Data[], params?: ${upperName}Params): Promise<${upperName}[]>
-  async create (data: ${upperName}Data|${upperName}Data[], params?: ${upperName}Params): Promise<${upperName}|${upperName}[]> {
+  async create (data: ${upperName}Data, params?: ServiceParams): Promise<${upperName}>
+  async create (data: ${upperName}Data[], params?: ServiceParams): Promise<${upperName}[]>
+  async create (data: ${upperName}Data|${upperName}Data[], params?: ServiceParams): Promise<${upperName}|${upperName}[]> {
     if (Array.isArray(data)) {
       return Promise.all(data.map(current => this.create(current, params)));
     }
@@ -67,14 +70,14 @@ export class ${className} implements ServiceInterface<${upperName}, ${upperName}
   }
 
   // This method has to be added to the 'methods' option to make it available to clients
-  async update (id: NullableId, data: ${upperName}Data, _params?: ${upperName}Params): Promise<${upperName}> {
+  async update (id: NullableId, data: ${upperName}Data, _params?: ServiceParams): Promise<${upperName}> {
     return {
       id: 0,
       ...data
     }
   }
 
-  async patch (id: NullableId, data: ${upperName}Patch, _params?: ${upperName}Params): Promise<${upperName}> {
+  async patch (id: NullableId, data: ${upperName}Patch, _params?: ServiceParams): Promise<${upperName}> {
     return {
       id: 0,
       text: \`Fallback for \${id}\`,
@@ -82,7 +85,7 @@ export class ${className} implements ServiceInterface<${upperName}, ${upperName}
     }
   }
 
-  async remove (id: NullableId, _params?: ${upperName}Params): Promise<${upperName}> {
+  async remove (id: NullableId, _params?: ServiceParams): Promise<${upperName}> {
     return {
       id: 0,
       text: 'removed'
