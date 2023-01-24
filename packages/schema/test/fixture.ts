@@ -121,14 +121,24 @@ export const messageResolver = resolve<Message, HookContext<Application>>({
       throw new GeneralError('This is an error')
     }
 
-    return context.app.service('users').get(userId, context.params) as Promise<Message['user']>
+    const {
+      data: [user]
+    } = (await context.app.service('users').find({
+      ...context.params,
+      paginate: { default: 2 },
+      query: {
+        id: userId
+      }
+    })) as any
+
+    return user as Message['user']
   }),
   userList: virtual(async (_message, context) => {
     const users = await context.app.service('users').find({
       paginate: false
     })
 
-    return users as any
+    return users.map((user) => user) as any
   }),
   userPage: virtual(async (_message, context) => {
     const users = await context.app.service('users').find({

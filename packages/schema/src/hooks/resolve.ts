@@ -12,7 +12,7 @@ const getContext = <H extends HookContext>(context: H) => {
   })
 }
 
-const getData = <H extends HookContext>(context: H) => {
+const getResult = <H extends HookContext>(context: H) => {
   const isPaginated = context.method === 'find' && context.result.data
   const data = isPaginated ? context.result.data : context.result
 
@@ -96,7 +96,7 @@ export const resolveResult = <H extends HookContext>(...resolvers: Resolver<any,
         resolve,
         query: {
           ...query,
-          $select
+          ...($select ? { $select } : {})
         }
       }
 
@@ -105,7 +105,7 @@ export const resolveResult = <H extends HookContext>(...resolvers: Resolver<any,
 
     const ctx = getContext(context)
     const status = context.params.resolve
-    const { isPaginated, data } = getData(context)
+    const { isPaginated, data } = getResult(context)
 
     const result = Array.isArray(data)
       ? await Promise.all(data.map(async (current) => runResolvers(resolvers, current, ctx, status)))
@@ -121,8 +121,22 @@ export const resolveResult = <H extends HookContext>(...resolvers: Resolver<any,
 
 export const DISPATCH = Symbol('@feathersjs/schema/dispatch')
 
-export const getDispatch = (value: any, fallback = value) =>
-  typeof value === 'object' && value !== null && value[DISPATCH] !== undefined ? value[DISPATCH] : fallback
+export const getDispatchValue = (value: any, fallback = value): any => {
+  if (typeof value === 'object' && value !== null) {
+    if (value[DISPATCH] !== undefined) {
+      return value[DISPATCH]
+    }
+
+    if (Array.isArray(value)) {
+      return value.map((item) => getDispatchValue(item))
+    }
+  }
+
+  return fallback
+}
+
+export const getExistingDispatch = (value: any): any =>
+  typeof value === 'object' && value !== null && value[DISPATCH] ? value[DISPATCH] : null
 
 export const resolveDispatch =
   <H extends HookContext>(...resolvers: Resolver<any, H>[]) =>
@@ -132,21 +146,28 @@ export const resolveDispatch =
     }
 
     const ctx = getContext(context)
-    const existingDispatch = getDispatch(context.result, null)
+    const { isPaginated, data } = getResult(context)
+    const existingDispatch = getExistingDispatch(context.result)
 
     if (existingDispatch !== null) {
       context.dispatch = existingDispatch
     } else {
       const status = context.params.resolve
-      const { isPaginated, data } = getData(context)
       const resolveAndGetDispatch = async (current: any) => {
         const resolved: any = await runResolvers(resolvers, current, ctx, status)
-
-        return Object.keys(resolved).reduce((res, key) => {
-          res[key] = getDispatch(resolved[key])
+        const currentDispatch = Object.keys(resolved).reduce((res, key) => {
+          res[key] = getDispatchValue(resolved[key])
 
           return res
         }, {} as any)
+
+        Object.defineProperty(current, DISPATCH, {
+          value: currentDispatch,
+          enumerable: false,
+          configurable: false
+        })
+
+        return currentDispatch
       }
 
       const result = await (Array.isArray(data)
