@@ -39,7 +39,7 @@ const runResolvers = async <T, H extends HookContext>(
 export type ResolverSetting<H extends HookContext> = Resolver<any, H> | Resolver<any, H>[]
 
 export const resolveQuery =
-  <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) =>
+  <H extends HookContext>(...resolvers: Resolver<any, H>[]) =>
   async (context: H, next?: NextFunction) => {
     const ctx = getContext(context)
     const data = context?.params?.query || {}
@@ -56,7 +56,7 @@ export const resolveQuery =
   }
 
 export const resolveData =
-  <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) =>
+  <H extends HookContext>(...resolvers: Resolver<any, H>[]) =>
   async (context: H, next?: NextFunction) => {
     if (context.data !== undefined) {
       const ctx = getContext(context)
@@ -78,10 +78,8 @@ export const resolveData =
     }
   }
 
-export const resolveResult = <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) => {
-  const virtualProperties = new Set(
-    resolvers.reduce((acc, current) => acc.concat(current.virtualNames), [] as (keyof T)[])
-  )
+export const resolveResult = <H extends HookContext>(...resolvers: Resolver<any, H>[]) => {
+  const virtualProperties = new Set(resolvers.reduce((acc, current) => acc.concat(current.virtualNames), []))
 
   return async (context: H, next?: NextFunction) => {
     if (typeof next === 'function') {
@@ -127,7 +125,7 @@ export const getDispatch = (value: any, fallback = value) =>
   typeof value === 'object' && value !== null && value[DISPATCH] !== undefined ? value[DISPATCH] : fallback
 
 export const resolveDispatch =
-  <T, H extends HookContext>(...resolvers: Resolver<T, H>[]) =>
+  <H extends HookContext>(...resolvers: Resolver<any, H>[]) =>
   async (context: H, next?: NextFunction) => {
     if (typeof next === 'function') {
       await next()
