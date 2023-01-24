@@ -143,6 +143,8 @@ export const messageResolver = resolve<Message, HookContext<Application>>({
   })
 })
 
+export const otherMessageResolver = resolve<{ text: string }, HookContext<Application>>({})
+
 export const messageQuerySchema = {
   $id: 'MessageQuery',
   type: 'object',
@@ -240,7 +242,7 @@ app
   .service('paginatedMessages')
   .hooks([
     resolveDispatch(),
-    resolveResult(messageResolver),
+    resolveResult(messageResolver, otherMessageResolver),
     validateQuery(messageQueryValidator),
     resolveQuery(messageQueryResolver)
   ])
