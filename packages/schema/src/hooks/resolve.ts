@@ -164,12 +164,12 @@ export const resolveDispatch =
       const status = context.params.resolve
       const { isPaginated, data } = getResult(context)
       const resolveAndGetDispatch = async (current: any) => {
-        const resolved: any = await runResolvers(resolvers, current, ctx, status)
+        const resolved = await runResolvers(resolvers, current, ctx, status)
         const currentDispatch = Object.keys(resolved).reduce((res, key) => {
           res[key] = getDispatchValue(resolved[key])
 
           return res
-        }, {} as any)
+        }, {} as Record<string, any>)
 
         return setDispatch(current, currentDispatch)
       }
