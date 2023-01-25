@@ -121,7 +121,7 @@ export const resolveResult = <H extends HookContext>(...resolvers: Resolver<any,
 
 export const DISPATCH = Symbol('@feathersjs/schema/dispatch')
 
-export const getDispatchValue = (value: any, fallback = value): any => {
+export const getDispatchValue = (value: any): any => {
   if (typeof value === 'object' && value !== null) {
     if (value[DISPATCH] !== undefined) {
       return value[DISPATCH]
@@ -132,11 +132,21 @@ export const getDispatchValue = (value: any, fallback = value): any => {
     }
   }
 
-  return fallback
+  return value
 }
 
-export const getExistingDispatch = (value: any): any =>
+export const getDispatch = (value: any): any =>
   typeof value === 'object' && value !== null && value[DISPATCH] ? value[DISPATCH] : null
+
+export const setDispatch = (current: any, dispatch: any) => {
+  Object.defineProperty(current, DISPATCH, {
+    value: dispatch,
+    enumerable: false,
+    configurable: false
+  })
+
+  return dispatch
+}
 
 export const resolveDispatch =
   <H extends HookContext>(...resolvers: Resolver<any, H>[]) =>
@@ -146,13 +156,13 @@ export const resolveDispatch =
     }
 
     const ctx = getContext(context)
-    const { isPaginated, data } = getResult(context)
-    const existingDispatch = getExistingDispatch(context.result)
+    const existingDispatch = getDispatch(context.result)
 
     if (existingDispatch !== null) {
       context.dispatch = existingDispatch
     } else {
       const status = context.params.resolve
+      const { isPaginated, data } = getResult(context)
       const resolveAndGetDispatch = async (current: any) => {
         const resolved: any = await runResolvers(resolvers, current, ctx, status)
         const currentDispatch = Object.keys(resolved).reduce((res, key) => {
@@ -161,13 +171,7 @@ export const resolveDispatch =
           return res
         }, {} as any)
 
-        Object.defineProperty(current, DISPATCH, {
-          value: currentDispatch,
-          enumerable: false,
-          configurable: false
-        })
-
-        return currentDispatch
+        return setDispatch(current, currentDispatch)
       }
 
       const result = await (Array.isArray(data)
@@ -180,18 +184,13 @@ export const resolveDispatch =
           }
         : result
 
-      context.dispatch = dispatch
-      Object.defineProperty(context.result, DISPATCH, {
-        value: dispatch,
-        enumerable: false,
-        configurable: false
-      })
+      context.dispatch = setDispatch(context.result, dispatch)
     }
   }
 
 export const resolveExternal = resolveDispatch
 
-export type ResolveAllSettings<H extends HookContext> = {
+type ResolveAllSettings<H extends HookContext> = {
   data?: {
     create: Resolver<any, H>
     patch: Resolver<any, H>
@@ -204,6 +203,14 @@ export type ResolveAllSettings<H extends HookContext> = {
 
 const dataMethods = ['create', 'update', 'patch'] as const
 
+/**
+ * Resolve all resolvers at once.
+ *
+ * @param map The individual resolvers
+ * @returns A combined resolver middleware
+ * @deprecated Use individual data, query and external resolvers and hooks instead.
+ * @see https://dove.feathersjs.com/guides/cli/service.schemas.html
+ */
 export const resolveAll = <H extends HookContext>(map: ResolveAllSettings<H>) => {
   const middleware = []
 
