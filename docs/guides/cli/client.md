@@ -11,7 +11,7 @@ A generated application can used as an npm module that provides a [Feathers clie
 The application can be linked into a client application by running
 
 ```
-npm run compile
+npm run bundle:client
 npm link
 ```
 
