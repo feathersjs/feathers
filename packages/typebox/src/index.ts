@@ -88,17 +88,21 @@ export const queryProperty = <T extends TSchema, X extends { [key: string]: TSch
     Type.Union([
       def,
       Type.Partial(
-        Type.Object({
-          $gt: def,
-          $gte: def,
-          $lt: def,
-          $lte: def,
-          $ne: def,
-          $in: Type.Array(def),
-          $nin: Type.Array(def),
-          ...extension
-        }),
-        { additionalProperties: false }
+        Type.Intersect(
+          [
+            Type.Object({
+              $gt: def,
+              $gte: def,
+              $lt: def,
+              $lte: def,
+              $ne: def,
+              $in: Type.Array(def),
+              $nin: Type.Array(def)
+            }),
+            Type.Object(extension)
+          ],
+          { additionalProperties: false }
+        )
       )
     ])
   )
