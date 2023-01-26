@@ -12,7 +12,7 @@ const getContext = <H extends HookContext>(context: H) => {
   })
 }
 
-const getData = <H extends HookContext>(context: H) => {
+const getResult = <H extends HookContext>(context: H) => {
   const isPaginated = context.method === 'find' && context.result.data
   const data = isPaginated ? context.result.data : context.result
 
@@ -96,7 +96,7 @@ export const resolveResult = <H extends HookContext>(...resolvers: Resolver<any,
         resolve,
         query: {
           ...query,
-          $select
+          ...($select ? { $select } : {})
         }
       }
 
@@ -105,7 +105,7 @@ export const resolveResult = <H extends HookContext>(...resolvers: Resolver<any,
 
     const ctx = getContext(context)
     const status = context.params.resolve
-    const { isPaginated, data } = getData(context)
+    const { isPaginated, data } = getResult(context)
 
     const result = Array.isArray(data)
       ? await Promise.all(data.map(async (current) => runResolvers(resolvers, current, ctx, status)))
@@ -121,8 +121,32 @@ export const resolveResult = <H extends HookContext>(...resolvers: Resolver<any,
 
 export const DISPATCH = Symbol('@feathersjs/schema/dispatch')
 
-export const getDispatch = (value: any, fallback = value) =>
-  typeof value === 'object' && value !== null && value[DISPATCH] !== undefined ? value[DISPATCH] : fallback
+export const getDispatchValue = (value: any): any => {
+  if (typeof value === 'object' && value !== null) {
+    if (value[DISPATCH] !== undefined) {
+      return value[DISPATCH]
+    }
+
+    if (Array.isArray(value)) {
+      return value.map((item) => getDispatchValue(item))
+    }
+  }
+
+  return value
+}
+
+export const getDispatch = (value: any): any =>
+  typeof value === 'object' && value !== null && value[DISPATCH] ? value[DISPATCH] : null
+
+export const setDispatch = (current: any, dispatch: any) => {
+  Object.defineProperty(current, DISPATCH, {
+    value: dispatch,
+    enumerable: false,
+    configurable: false
+  })
+
+  return dispatch
+}
 
 export const resolveDispatch =
   <H extends HookContext>(...resolvers: Resolver<any, H>[]) =>
@@ -132,21 +156,22 @@ export const resolveDispatch =
     }
 
     const ctx = getContext(context)
-    const existingDispatch = getDispatch(context.result, null)
+    const existingDispatch = getDispatch(context.result)
 
     if (existingDispatch !== null) {
       context.dispatch = existingDispatch
     } else {
       const status = context.params.resolve
-      const { isPaginated, data } = getData(context)
+      const { isPaginated, data } = getResult(context)
       const resolveAndGetDispatch = async (current: any) => {
-        const resolved: any = await runResolvers(resolvers, current, ctx, status)
-
-        return Object.keys(resolved).reduce((res, key) => {
-          res[key] = getDispatch(resolved[key])
+        const resolved = await runResolvers(resolvers, current, ctx, status)
+        const currentDispatch = Object.keys(resolved).reduce((res, key) => {
+          res[key] = getDispatchValue(resolved[key])
 
           return res
-        }, {} as any)
+        }, {} as Record<string, any>)
+
+        return setDispatch(current, currentDispatch)
       }
 
       const result = await (Array.isArray(data)
@@ -159,18 +184,13 @@ export const resolveDispatch =
           }
         : result
 
-      context.dispatch = dispatch
-      Object.defineProperty(context.result, DISPATCH, {
-        value: dispatch,
-        enumerable: false,
-        configurable: false
-      })
+      context.dispatch = setDispatch(context.result, dispatch)
     }
   }
 
 export const resolveExternal = resolveDispatch
 
-export type ResolveAllSettings<H extends HookContext> = {
+type ResolveAllSettings<H extends HookContext> = {
   data?: {
     create: Resolver<any, H>
     patch: Resolver<any, H>
@@ -183,6 +203,14 @@ export type ResolveAllSettings<H extends HookContext> = {
 
 const dataMethods = ['create', 'update', 'patch'] as const
 
+/**
+ * Resolve all resolvers at once.
+ *
+ * @param map The individual resolvers
+ * @returns A combined resolver middleware
+ * @deprecated Use individual data, query and external resolvers and hooks instead.
+ * @see https://dove.feathersjs.com/guides/cli/service.schemas.html
+ */
 export const resolveAll = <H extends HookContext>(map: ResolveAllSettings<H>) => {
   const middleware = []
 
