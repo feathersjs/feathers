@@ -57,7 +57,7 @@ And like this with a REST client:
 import rest from '@feathersjs/rest-client'
 import { createClient } from 'my-app'
 
-const connection = rest('https://myapp.com').fetch(fetch)
+const connection = rest('https://myapp.com').fetch(window.fetch.bind(window))
 
 const client = createClient(connection)
 ```
