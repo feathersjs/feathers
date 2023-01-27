@@ -338,3 +338,4 @@ app.service('myservice').hooks([
 - The undocumented `service._setup` method introduced in v1 will no longer be called. It was used to circumvent middleware inconsistencies from Express 3 and is no longer necessary.
 - The undocumented `app.providers` has been removed since it provided the same functionality as [`app.mixins`](../api/application.md#mixins)
 - `app.disable`, `app.disabled`, `app.enable` and `app.enabled` have been removed from basic Feathers applications. It will still be available in an Express-compatible Feathers application. `app.get()` and `app.set()` should be used instead.
+- The `req.authentication` property is no longer set on the express requests, use `req.feathers.authentication` instead.
