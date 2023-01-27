@@ -8,7 +8,10 @@ const debug = createDebug('feathers-knex-transaction')
 const ROLLBACK = { rollback: true }
 
 export const getKnex = (context: HookContext): Knex => {
-  const knex = context.service.Model
+  const knex =
+    typeof context.service.getModel === 'function'
+      ? context.service.getModel(context.params)
+      : context.service.Model
 
   return knex && typeof knex.transaction === 'function' ? knex : undefined
 }
@@ -45,7 +48,6 @@ export const start =
           transaction.id = Date.now()
 
           context.params = { ...context.params, transaction }
-
           debug('started a new transaction %s', transaction.id)
 
           resolve()

@@ -48,7 +48,7 @@ KnexJS does not have a concept of models. Instead a new service is initialized w
 The collection for a MongoDB service can be accessed via
 
 ```ts
-const userCollection = await app.service('users').Model
+const userCollection = await app.service('users').getModel()
 ```
 
 See the [MongoDB service API documentation](../../api/databases/mongodb.md) for more information.

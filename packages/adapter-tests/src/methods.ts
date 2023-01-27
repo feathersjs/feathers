@@ -591,6 +591,22 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
         await service.remove(data[idProp])
       })
 
+      test('.create + query', async () => {
+        const originalData = {
+          name: 'Billy',
+          age: 42
+        }
+        const data = await service.create(originalData, {
+          query: {
+            name: 'Dave'
+          }
+        })
+
+        assert.strictEqual(data.name, 'Billy', 'data.name matches')
+
+        await service.remove(data[idProp])
+      })
+
       test('.create + $select', async () => {
         const originalData = {
           name: 'William',

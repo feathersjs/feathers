@@ -5,7 +5,8 @@ import adapterTests from '@feathersjs/adapter-tests'
 import { errors } from '@feathersjs/errors'
 
 import connection from './connection'
-import { KnexService, transaction } from '../src/index'
+import { ERROR, KnexAdapterParams, KnexService, transaction } from '../src/index'
+import { AdapterQuery } from '@feathersjs/adapter-commons/lib'
 
 const testSuite = adapterTests([
   '.options',
@@ -45,6 +46,7 @@ const testSuite = adapterTests([
   '.patch + query + NotFound',
   '.patch + id + query id',
   '.create',
+  '.create + query',
   '.create + $select',
   '.create multi',
   'internal .find',
@@ -86,39 +88,43 @@ const db = knex(connection(TYPE) as any)
 // Create a public database to mimic a "schema"
 const schemaName = 'public'
 
-function clean() {
-  return Promise.all([
-    db.schema.dropTableIfExists(people.fullName).then(() => {
-      return db.schema.createTable(people.fullName, (table) => {
-        table.increments('id')
-        table.string('name').notNullable()
-        table.integer('age')
-        table.integer('time')
-        table.boolean('created')
-        return table
-      })
-    }),
-    db.schema.dropTableIfExists(peopleId.fullName).then(() => {
-      return db.schema.createTable(peopleId.fullName, (table) => {
-        table.increments('customid')
-        table.string('name')
-        table.integer('age')
-        table.integer('time')
-        table.boolean('created')
-        return table
-      })
-    }),
-    db.schema.dropTableIfExists(users.fullName).then(() => {
-      return db.schema.createTable(users.fullName, (table) => {
-        table.increments('id')
-        table.string('name')
-        table.integer('age')
-        table.integer('time')
-        table.boolean('created')
-        return table
-      })
-    })
-  ])
+const clean = async () => {
+  await db.schema.dropTableIfExists(people.fullName)
+  await db.schema.createTable(people.fullName, (table) => {
+    table.increments('id')
+    table.string('name').notNullable()
+    table.integer('age')
+    table.integer('time')
+    table.boolean('created')
+    return table
+  })
+  await db.schema.dropTableIfExists('todos')
+  await db.schema.createTable('todos', (table) => {
+    table.increments('id')
+    table.string('text')
+    table.bigInteger('personId').references('id').inTable(people.fullName).notNullable()
+    return table
+  })
+
+  await db.schema.dropTableIfExists(peopleId.fullName)
+  await db.schema.createTable(peopleId.fullName, (table) => {
+    table.increments('customid')
+    table.string('name')
+    table.integer('age')
+    table.integer('time')
+    table.boolean('created')
+    return table
+  })
+
+  await db.schema.dropTableIfExists(users.fullName)
+  await db.schema.createTable(users.fullName, (table) => {
+    table.increments('id')
+    table.string('name')
+    table.integer('age')
+    table.integer('time')
+    table.boolean('created')
+    return table
+  })
 }
 
 type Person = {
@@ -129,10 +135,28 @@ type Person = {
   create: boolean
 }
 
+type Todo = {
+  id: number
+  text: string
+  personId: number
+  personName: string
+}
+
 type ServiceTypes = {
   people: KnexService<Person>
   'people-customid': KnexService<Person>
   users: KnexService<Person>
+  todos: KnexService<Todo>
+}
+
+class TodoService extends KnexService<Todo> {
+  createQuery(params: KnexAdapterParams<AdapterQuery>) {
+    const query = super.createQuery(params)
+
+    query.join('people as person', 'todos.personId', 'person.id').select('person.name as personName')
+
+    return query
+  }
 }
 
 const people = new KnexService({
@@ -154,6 +178,11 @@ const users = new KnexService({
   events: ['testing']
 })
 
+const todos = new TodoService({
+  Model: db,
+  name: 'todos'
+})
+
 describe('Feathers Knex Service', () => {
   const app = feathers<ServiceTypes>()
     .hooks({
@@ -164,6 +193,7 @@ describe('Feathers Knex Service', () => {
     .use('people', people)
     .use('people-customid', peopleId)
     .use('users', users)
+    .use('todos', todos)
   const peopleService = app.service('people')
 
   before(() => {
@@ -360,7 +390,13 @@ describe('Feathers Knex Service', () => {
     })
 
     it('attaches the SQL error', async () => {
-      await assert.rejects(() => peopleService.create({}))
+      await assert.rejects(
+        () => peopleService.create({}),
+        (error: any) => {
+          assert.ok(error[ERROR])
+          return true
+        }
+      )
     })
   })
 
@@ -595,6 +631,36 @@ describe('Feathers Knex Service', () => {
         'people: committed true',
         'people: trx ended'
       ])
+    })
+  })
+
+  describe('associations', () => {
+    const todoService = app.service('todos')
+
+    it('create, query and get with associations', async () => {
+      const dave = await peopleService.create({
+        name: 'Dave',
+        age: 133
+      })
+      const todo = await todoService.create({
+        text: 'Do dishes',
+        personId: dave.id
+      })
+
+      const [found] = await todoService.find({
+        paginate: false,
+        query: {
+          'person.age': { $gt: 100 }
+        }
+      })
+      const got = await todoService.get(todo.id)
+
+      assert.strictEqual(got.personName, dave.name)
+      assert.deepStrictEqual(got, todo)
+      assert.deepStrictEqual(found, todo)
+
+      peopleService.remove(dave.id)
+      todoService.remove(todo.id)
     })
   })
 
