@@ -89,6 +89,7 @@ const db = knex(connection(TYPE) as any)
 const schemaName = 'public'
 
 const clean = async () => {
+  await db.schema.dropTableIfExists('todos')
   await db.schema.dropTableIfExists(people.fullName)
   await db.schema.createTable(people.fullName, (table) => {
     table.increments('id')
@@ -98,14 +99,12 @@ const clean = async () => {
     table.boolean('created')
     return table
   })
-  await db.schema.dropTableIfExists('todos')
   await db.schema.createTable('todos', (table) => {
     table.increments('id')
     table.string('text')
-    table.bigInteger('personId').references('id').inTable(people.fullName).notNullable()
+    table.integer('personId')
     return table
   })
-
   await db.schema.dropTableIfExists(peopleId.fullName)
   await db.schema.createTable(peopleId.fullName, (table) => {
     table.increments('customid')

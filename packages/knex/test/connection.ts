@@ -16,9 +16,9 @@ export default (DB: string) => {
       client: 'postgresql',
       connection: {
         host: 'localhost',
-        database: 'feathers',
+        database: 'postgres',
         user: 'postgres',
-        password: 'postgres'
+        password: ''
       }
     }
   }
