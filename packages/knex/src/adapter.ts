@@ -32,7 +32,6 @@ export class KnexAdapter<
   ServiceParams extends KnexAdapterParams<any> = KnexAdapterParams,
   PatchData = Partial<Data>
 > extends AdapterBase<Result, Data, PatchData, ServiceParams, KnexAdapterOptions> {
-  table: string
   schema?: string
 
   constructor(options: KnexAdapterOptions) {
@@ -53,28 +52,32 @@ export class KnexAdapter<
       },
       operators: [...(options.operators || []), '$like', '$notlike', '$ilike', '$and', '$or']
     })
-
-    this.table = options.name
-    this.schema = options.schema
-  }
-
-  get Model() {
-    return this.options.Model
   }
 
   get fullName() {
-    return this.schema ? `${this.schema}.${this.table}` : this.table
+    const { name, schema } = this.getOptions({} as ServiceParams)
+    return schema ? `${schema}.${name}` : name
+  }
+
+  get Model() {
+    return this.getModel()
+  }
+
+  getModel(params?: ServiceParams) {
+    const { Model } = this.getOptions(params)
+    return Model
   }
 
   db(params?: ServiceParams) {
-    const { Model, table, schema } = this
+    const { Model, name, schema } = this.getOptions(params)
 
     if (params && params.transaction && params.transaction.trx) {
       const { trx } = params.transaction
       // debug('ran %s with transaction %s', fullName, id)
-      return schema ? (trx.withSchema(schema).table(table) as Knex.QueryBuilder) : trx(table)
+      return schema ? (trx.withSchema(schema).table(name) as Knex.QueryBuilder) : trx(name)
     }
-    return schema ? (Model.withSchema(schema).table(table) as Knex.QueryBuilder) : Model(table)
+
+    return schema ? (Model.withSchema(schema).table(name) as Knex.QueryBuilder) : Model(name)
   }
 
   knexify(knexQuery: Knex.QueryBuilder, query: Query = {}, parentKey?: string): Knex.QueryBuilder {
@@ -116,16 +119,16 @@ export class KnexAdapter<
   }
 
   createQuery(params: ServiceParams) {
-    const { table, id } = this
+    const { name, id } = this.getOptions(params)
     const { filters, query } = this.filterQuery(params)
     const builder = this.db(params)
 
     // $select uses a specific find syntax, so it has to come first.
     if (filters.$select) {
       // always select the id field, but make sure we only select it once
-      builder.select(...new Set([...filters.$select, `${table}.${id}`]))
+      builder.select(...new Set([...filters.$select, `${name}.${id}`]))
     } else {
-      builder.select(`${table}.*`)
+      builder.select(`${name}.*`)
     }
 
     // build up the knex query out of the query params, include $and and $or filters
@@ -157,8 +160,9 @@ export class KnexAdapter<
   async _find(params?: ServiceParams): Promise<Paginated<Result> | Result[]>
   async _find(params: ServiceParams = {} as ServiceParams): Promise<Paginated<Result> | Result[]> {
     const { filters, paginate } = this.filterQuery(params)
+    const { name, id } = this.getOptions(params)
     const builder = params.knex ? params.knex.clone() : this.createQuery(params)
-    const countBuilder = builder.clone().clearSelect().clearOrder().count(`${this.table}.${this.id} as total`)
+    const countBuilder = builder.clone().clearSelect().clearOrder().count(`${name}.${id} as total`)
 
     // Handle $limit
     if (filters.$limit) {
@@ -172,7 +176,7 @@ export class KnexAdapter<
 
     // provide default sorting if its not set
     if (!filters.$sort) {
-      builder.orderBy(`${this.table}.${this.id}`, 'asc')
+      builder.orderBy(`${name}.${id}`, 'asc')
     }
 
     const data = filters.$limit === 0 ? [] : await builder.catch(errorHandler)
@@ -192,12 +196,13 @@ export class KnexAdapter<
   }
 
   async _findOrGet(id: NullableId, params?: ServiceParams) {
+    const { name, id: idField } = this.getOptions(params)
     const findParams = {
       ...params,
       paginate: false,
       query: {
         ...params?.query,
-        ...(id !== null ? { [`${this.table}.${this.id}`]: id } : {})
+        ...(id !== null ? { [`${name}.${idField}`]: id } : {})
       }
     }
 
@@ -229,14 +234,17 @@ export class KnexAdapter<
 
     const client = this.db(params).client.config.client
     const returning = RETURNING_CLIENTS.includes(client as string) ? [this.id] : []
-    const rows: any = await this.db(params).insert(data, returning).returning(this.id).catch(errorHandler)
+    const rows: any = await this.db(params).insert(data, returning).catch(errorHandler)
     const id = data[this.id] || rows[0][this.id] || rows[0]
 
     if (!id) {
       return rows as Result[]
     }
 
-    return this._get(id, params)
+    return this._get(id, {
+      ...params,
+      query: _.pick(params?.query || {}, '$select')
+    })
   }
 
   async _patch(id: null, data: PatchData, params?: ServiceParams): Promise<Result[]>
@@ -251,19 +259,20 @@ export class KnexAdapter<
       throw new MethodNotAllowed('Can not patch multiple entries')
     }
 
+    const { name, id: idField } = this.getOptions(params)
     const data = _.omit(raw, this.id)
     const results = await this._findOrGet(id, {
       ...params,
       query: {
         ...params?.query,
-        $select: [`${this.table}.${this.id}`]
+        $select: [`${name}.${idField}`]
       }
     })
-    const idList = results.map((current: any) => current[this.id])
+    const idList = results.map((current: any) => current[idField])
     const updateParams = {
       ...params,
       query: {
-        [`${this.table}.${this.id}`]: { $in: idList },
+        [`${name}.${idField}`]: { $in: idList },
         ...(params?.query?.$select ? { $select: params?.query?.$select } : {})
       }
     }

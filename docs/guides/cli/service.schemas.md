@@ -90,3 +90,16 @@ export const messagesQueryResolver = resolve<MessagesQuery, HookContext>({
   properties: {}
 })
 ```
+
+### Schemas vs MongoDB Validation
+
+In Feathers v5 (Dove) we added support for Feathers Schema, which performs validation and provides TypeScript types. Recent versions of MongoDB include support for JSON Schema validation at the database server. Most applications will benefit from using Feathers Schema for the following reasons.
+
+- Feathers Schema's TypeBox integration makes JSON Schema so much easier to read and write.
+- You get TypeScript types for free once you've defined your validation rules, using `TypeBox` or `json-schema-to-ts`
+- All configuration is done in code, reducing the time to prototype/setup/launch. With MongoDB's built-in validation, you essentially add another "DevOps" step before you can use the database.
+- Support for JSON Schema draft 7. MongoDB's validation is based on version 4.
+- Feathers Schema don't have to wait for a round-trip to the database to validate the data.
+- Feathers Schema can be used in the browser or on the server.
+
+MongoDB's built-in validation does have built-in support for `bsonType` to force data to be stored as a specific BSON type once it passes validation. There's nothing keeping you from using both solutions together. It's not a use case that's documented, here.

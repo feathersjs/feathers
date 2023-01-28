@@ -55,6 +55,7 @@ export type AdapterMethodsTestName =
   | '.create'
   | '.create + $select'
   | '.create multi'
+  | '.create ignores query'
   | 'internal .find'
   | 'internal .get'
   | 'internal .create'
