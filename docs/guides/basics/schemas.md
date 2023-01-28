@@ -6,27 +6,27 @@ In Feathers, schemas and resolvers allow us to define, validate and secure our d
 
 As we've briefly seen in the [previous chapter about hooks](./hooks.md), there were a few hooks registered already to validate schemas and resolve data. Schema validators and resolvers are used with those hooks to modify data in the hook context. Similar to how Feathers services are transport independent, schemas and resolvers are database independent. It comes in two main parts:
 
-- [TypeBox](../../api/schema//typebox.md) or [JSON schema](../../api/schema//schema.md) to define a schema. This allows us to do things like:
+- [TypeBox](../../api/schema/typebox.md) or [JSON schema](../../api/schema/schema.md) to define a schema. This allows us to do things like:
   - Ensure data is valid and always in the right format
   - Automatically get up to date TypeScript types from schema definitions
   - Create a typed client that can be used in React, Vue etc. apps
   - Automatically generate API documentation
-  - Validate query string queries and convert them to the correct type
+  - Validate query string filters and convert them to the correct types
 - [Resolvers](../../api/schema/resolvers.md) - Resolve schema properties based on a context (usually the [hook context](./hooks.md)). This can be used for many different things like:
   - Populating associations
-  - Securing queries and e.g. limiting requests to the logged in user
+  - Securing queries and limiting the type of requests the logged in user can perform
   - Safely hiding sensitive data for external clients
-  - Adding read- and write permissions on the property level
+  - Adding read and write permissions on the property field level
   - Hashing passwords and validating dynamic password policies
 
 In this chapter we will look at the generated schemas and resolvers and update them with the information we need for our chat application.
 
 ## Feathers schemas
 
-While schemas and resolvers can be used outside of a Feather application, you will usually encounter them in a Feathers context where they come in four kinds:
+While schemas and resolvers can be used outside of a Feathers application, you will usually encounter them in a Feathers context where they come in four kinds:
 
 - **Result** schemas and resolvers that define the data that is being returned. This is also where associated data would be fetched
-- **Data** schemas and resolvers handle the data from the `create`, `update` and `patch` service methods and can be used to add things like default or calculated values (like the created or updated at date) before saving to the database
+- **Data** schemas and resolvers handle the data from a `create`, `update`, `patch`, or custom service method and can be used to add/replace things like default or calculated values (e.g. the createdAt/updatedAt date) before saving it to the database
 - **Query** schemas and resolvers validate and convert the query string and can also be used for additional limitations like only allowing a user to see and modify their own data
 - **External** resolvers that return a safe version of the data (e.g. hiding a users password) that can be sent to external clients
 
@@ -244,7 +244,7 @@ export const userQueryResolver = resolve<UserQuery, HookContext>({
 
 ## Handling messages
 
-Next we can look at the messages service schema. We want to include the date when the message was created as `createdAt` and the id of the user who sent it as `userId`. When we get a message back, we also want to populate the `user` with the user data from `userId` so that we can show e.g. the user image and email.
+Next we can look at the messages service schema. We want to include the date when the message was created as `createdAt` and the id of the user who sent it as `userId`. When we get a message back, we also want to populate the `user` with the user data from `userId` so that we can show their avatar and email.
 
 <LanguageBlock global-id="ts">
 
@@ -424,7 +424,7 @@ The `virtual()` in the `messageResolver` `user` property is a [virtual property]
 
 <DatabaseBlock global-id="sql">
 
-Now that our schemas and resolvers have everything we need, we also have to update the database with those changes. For SQL databases this is done with migrations. Migrations are a best practise for SQL databases to roll out and undo changes to the data model. Every change we make in a schema will need its corresponding migration step.
+Now that our schemas and resolvers have everything we need, we also have to update the database with those changes. For SQL databases this is done with migrations. Migrations are a best practice for SQL databases to roll out and undo changes to the data model. Every change we make in a schema will need its corresponding migration step.
 
 <BlockQuote type="warning">
 
@@ -498,4 +498,4 @@ For MongoDB no migrations are necessary.
 
 ## What's next?
 
-In this chapter we learned about schemas and implemented all the things we need for our chat application. In the next chapter we will learn about [authentication](./authentication.md) and add a "Login with GitHub".
+In this chapter we learned about schemas and implemented all the things we need for our chat application. In the next chapter we will learn about [authentication](./authentication.md) and add a "Login with GitHub" button.

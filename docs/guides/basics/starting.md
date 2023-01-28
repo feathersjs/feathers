@@ -191,16 +191,20 @@ All messages [ { id: 0, text: 'Hello Feathers' },
   { id: 1, text: 'Hello again' } ]
 ```
 
-Here we implemented only `find` and `create` but a service can also have a few other methods, specifically `get`, `update`, `patch` and `remove`. We will learn more about service methods and events throughout this guide, but this sums up some of the most important concepts upon which Feathers is built.
+Here we implemented only `find` and `create`, but a service can also have a few other methods, specifically `get`, `update`, `patch` and `remove`. We will learn more about service methods and events throughout this guide, but this sums up some of the most important concepts upon which Feathers is built.
 
-## An API server
+## An API Server
 
-We created a Feathers application and a service and we are listening to events. However, this is only a simple NodeJS script that prints some output and then exits. What we really want is to host it as an API webserver. This is where Feathers transports come in. A transport takes a service like the one we created above and turns it into a server that other clients (like a web- or mobile application) can talk to.
+So far we've created a Feathers application, a message service, and are listening to events. However, this is only a simple NodeJS script that prints some output and then exits. What we really want is to host it as an API server. This is where Feathers transports come in.
 
-In the following example we will take our existing service and use
+A transport takes a service like the one we created above and turns it into a server that other clients can talk to, like a website or mobile application.
+
+In the following example we will take our existing service and use:
 
 - `@feathersjs/koa` which uses [KoaJS](https://koajs.com/) to automatically turn our services into a REST API
 - `@feathersjs/socketio` which uses Socket.io to do the same as a WebSocket, real-time API (as we will see in a bit this is where the `created` event we saw above comes in handy).
+
+Run:
 
 <LanguageBlock global-id="ts">
 
@@ -213,7 +217,6 @@ Then update `app.ts` with the following content:
 </LanguageBlock>
 <LanguageBlock global-id="js">
 
-Run
 
 ```sh
 npm install @feathersjs/socketio@pre @feathersjs/koa@pre koa-static --save
@@ -429,7 +432,7 @@ In the same folder, add the following `index.html` page:
 
 [Try it out live >](https://stackblitz.com/edit/node-m7cjfd?embed=1&file=index.html)
 
-If you now in the browser go to
+Now in the browser if you go to
 
 ```
 http://localhost:3030

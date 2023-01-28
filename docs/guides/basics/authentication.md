@@ -4,7 +4,7 @@ outline: deep
 
 # Authentication
 
-We now have a fully functional chat application consisting of [services](./services.md) and [schemas](./schemas.md). The services come with authentication enabled by default, so before we can use it we need to create a new user and learn how Feathers authentication works. We will look at authenticating our REST API, and then how to authenticate with Feathers in the browser. Finally we will implement a "Login with GitHub".
+We now have a fully functional chat application consisting of [services](./services.md) and [schemas](./schemas.md). The services come with authentication enabled by default, so before we can use it we need to create a new user and learn how Feathers authentication works. We will look at authenticating our REST API, and then how to authenticate with Feathers in the browser. Finally we will implement a "Login with GitHub" button.
 
 ## Registering a user
 
@@ -36,25 +36,41 @@ For SQL databases, creating a user with the same email address will only work on
 
 This will return something like this:
 
+<DatabaseBlock global-id="sql">
+
 ```json
 {
-  "id": "<user id>",
+  "id": 123,
   "email": "hello@feathersjs.com",
   "avatar": "https://s.gravatar.com/avatar/ffe2a09df37d7c646e974a2d2b8d3e03?s=60"
 }
 ```
 
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
+
+```json
+{
+  "_id": "63c00098502debdeec31bd77",
+  "email": "hello@feathersjs.com",
+  "avatar": "https://s.gravatar.com/avatar/ffe2a09df37d7c646e974a2d2b8d3e03?s=60"
+}
+```
+
+</DatabaseBlock>
+
 Which means our user has been created successfully.
 
 <BlockQuote type="info">
 
-The password is stored securely in the database but will never be included in an external response.
+The password has been encrypted and stored securely in the database but will never be included in an external response.
 
 </BlockQuote>
 
 ## Logging in
 
-By default, Feathers uses [JSON web token](https://jwt.io/) for authentication. It is an access token that is valid for a limited time (one day by default) that is issued by the Feathers server and needs to be sent with every API request that requires authentication. Usually a token is issued for a specific user and in our case we want a JWT for the user we just created.
+By default, Feathers uses [JSON Web Tokens](https://jwt.io/) for authentication. It is an access token that is issued by the Feathers server for a limited time (one day by default) and needs to be sent with every API request that requires authentication. Usually a token is issued for a specific user, Let's see if we can issue a JWT for the user that we just created.
 
 <BlockQuote type="tip">
 
@@ -62,7 +78,7 @@ If you are wondering why Feathers is using JWT for authentication, have a look a
 
 </BlockQuote>
 
-Tokens can be created by sending a POST request to the `/authentication` endpoint (which is the same as calling the `create` method on the `authentication` service set up in `src/authentication`) and passing the authentication strategy you want to use. To get a token for an existing user through a username (email) and password login we can use the built-in `local` authentication strategy with a request like this:
+Tokens can be created by sending a POST request to the `/authentication` endpoint (which is the same as calling the `create` method on the `authentication` service set up in `src/authentication`) and passing the authentication strategy you want to use along with any other relevant data. To get a token for an existing user through a username (email) and password login, we can use the built-in `local` authentication strategy with a request like this:
 
 ```js
 // POST /authentication
@@ -85,6 +101,8 @@ curl 'http://localhost:3030/authentication/' \
 
 This will return something like this:
 
+<DatabaseBlock global-id="sql">
+
 ```json
 {
   "accessToken": "<JWT for this user>",
@@ -92,12 +110,32 @@ This will return something like this:
     "strategy": "local"
   },
   "user": {
-    "id": "<user id>",
+    "id": 123,
     "email": "hello@feathersjs.com",
     "avatar": "https://s.gravatar.com/avatar/ffe2a09df37d7c646e974a2d2b8d3e03?s=60"
   }
 }
 ```
+
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
+
+```json
+{
+  "accessToken": "<JWT for this user>",
+  "authentication": {
+    "strategy": "local"
+  },
+  "user": {
+    "_id": "63c00098502debdeec31bd77",
+    "email": "hello@feathersjs.com",
+    "avatar": "https://s.gravatar.com/avatar/ffe2a09df37d7c646e974a2d2b8d3e03?s=60"
+  }
+}
+```
+
+</DatabaseBlock>
 
 The `accessToken` can now be used for other REST requests that require authentication by sending the `Authorization: Bearer <accessToken>` HTTP header. For example to create a new message:
 
@@ -114,11 +152,13 @@ Make sure to replace the `<accessToken>` in the above request. For more informat
 
 </BlockQuote>
 
+That's pretty neat, but emails and passwords are boring, let's spice things up a bit.
+
 ## Login with GitHub
 
-OAuth is an open authentication standard supported by almost every major platform and what gets us the log in with Facebook, Google, GitHub etc. buttons. From the Feathers perspective the authentication flow is pretty similar. Instead of authenticating with the `local` strategy by sending a username and password, Feathers directs the user to authorize the application with the login provider. If it is successful Feathers authentication finds or creates the user in the `users` service with the information it got back from the provider and then issues a token for them.
+OAuth is an open authentication standard supported by almost every major social platform and what gets us the log in with Facebook, Google, GitHub etc. buttons. From the Feathers perspective, the authentication flow with OAuth is pretty similar. Instead of authenticating with the `local` strategy by sending a username and password, Feathers directs the user to authorize the application with the login provider. If it is successful, Feathers authentication finds or creates the user in the `users` service with the information it got back from the provider and then issues a token for them.
 
-To allow login with GitHub, first, we have to [create a new OAuth application on GitHub](https://github.com/settings/applications/new). You can put anything in the name, homepage and description fields. The callback URL **must** be set to
+To allow login with GitHub, we first have to [create a new OAuth application on GitHub](https://github.com/settings/applications/new). You can put anything in the name, homepage and description fields. The callback URL **must** be set to
 
 ```sh
 http://localhost:3030/oauth/github/callback
@@ -132,7 +172,7 @@ You can find your existing applications in the [GitHub OAuth apps developer sett
 
 </BlockQuote>
 
-Once you clicked "Register application" we have to update our Feathers app configuration with the client id and secret copied from the GitHub application settings:
+Once you've clicked "Register application", we need to update our Feathers app configuration with the client id and secret copied from the GitHub application settings:
 
 ![Screenshot of the created GitHub application client id and secret](./assets/github-keys.png)
 
