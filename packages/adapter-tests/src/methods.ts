@@ -591,7 +591,7 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
         await service.remove(data[idProp])
       })
 
-      test('.create + query', async () => {
+      test('.create ignores query', async () => {
         const originalData = {
           name: 'Billy',
           age: 42

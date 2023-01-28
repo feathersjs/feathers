@@ -8,10 +8,7 @@ const debug = createDebug('feathers-knex-transaction')
 const ROLLBACK = { rollback: true }
 
 export const getKnex = (context: HookContext): Knex => {
-  const knex =
-    typeof context.service.getModel === 'function'
-      ? context.service.getModel(context.params)
-      : context.service.Model
+  const knex = typeof context.service.getModel === 'function' && context.service.getModel(context.params)
 
   return knex && typeof knex.transaction === 'function' ? knex : undefined
 }

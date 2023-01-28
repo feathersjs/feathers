@@ -46,7 +46,7 @@ const testSuite = adapterTests([
   '.patch + query + NotFound',
   '.patch + id + query id',
   '.create',
-  '.create + query',
+  '.create ignores query',
   '.create + $select',
   '.create multi',
   'internal .find',
@@ -400,6 +400,8 @@ describe('Feathers Knex Service', () => {
   })
 
   describe('hooks', () => {
+    type ModelStub = { getModel: () => Knex }
+
     afterEach(async () => {
       await db('people').truncate()
     })
@@ -441,7 +443,7 @@ describe('Feathers Knex Service', () => {
     it('does commit, rollback, nesting', async () => {
       const app = feathers<{
         people: typeof people
-        test: Pick<Service, 'create'> & { Model: Knex }
+        test: Pick<Service, 'create'> & ModelStub
       }>()
 
       app.hooks({
@@ -453,7 +455,7 @@ describe('Feathers Knex Service', () => {
       app.use('people', people)
 
       app.use('test', {
-        Model: db,
+        getModel: () => db,
         create: async (data: any, params) => {
           const created = await app.service('people').create({ name: 'Foo' }, { ...params })
 
@@ -479,9 +481,9 @@ describe('Feathers Knex Service', () => {
     it('does use savepoints for nested calls', async () => {
       const app = feathers<{
         people: typeof people
-        success: Pick<Service, 'create'> & { Model: Knex }
-        fail: Pick<Service, 'create'> & { Model: Knex }
-        test: Pick<Service, 'create'> & { Model: Knex }
+        success: Pick<Service, 'create'> & ModelStub
+        fail: Pick<Service, 'create'> & ModelStub
+        test: Pick<Service, 'create'> & ModelStub
       }>()
 
       app.hooks({
@@ -493,14 +495,14 @@ describe('Feathers Knex Service', () => {
       app.use('people', people)
 
       app.use('success', {
-        Model: db,
+        getModel: () => db,
         create: async (_data, params) => {
           return app.service('people').create({ name: 'Success' }, { ...params })
         }
       })
 
       app.use('fail', {
-        Model: db,
+        getModel: () => db,
         create: async (_data, params) => {
           await app.service('people').create({ name: 'Fail' }, { ...params })
           throw new TypeError('Deliberate')
@@ -508,7 +510,7 @@ describe('Feathers Knex Service', () => {
       })
 
       app.use('test', {
-        Model: db,
+        getModel: () => db,
         create: async (_data, params) => {
           await app.service('success').create({}, { ...params })
           await app
@@ -531,7 +533,7 @@ describe('Feathers Knex Service', () => {
     it('allows waiting for transaction to complete', async () => {
       const app = feathers<{
         people: typeof people
-        test: Pick<Service, 'create'> & { Model: Knex }
+        test: Pick<Service, 'create'> & ModelStub
       }>()
 
       let seq: string[] = []
@@ -566,7 +568,7 @@ describe('Feathers Knex Service', () => {
       app.use('people', people)
 
       app.use('test', {
-        Model: db,
+        getModel: () => db,
         create: async (data: any, params) => {
           const peeps = await app.service('people').create({ name: 'Foo' }, { ...params })
 
