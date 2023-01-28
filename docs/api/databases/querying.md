@@ -121,6 +121,23 @@ app.service('messages').find({
 GET /messages?$or[0][archived][$ne]=true&$or[1][roomId]=2
 ```
 
+### $and
+
+Find all records that match all of the given criteria.
+
+```js
+// Find all messages that are not marked as archived and in room 2
+app.service('messages').find({
+  query: {
+    $all: [{ archived: { $ne: true } }, { roomId: 2 }]
+  }
+})
+```
+
+```
+GET /messages?$and[0][archived][$ne]=true&$and[1][roomId]=2
+```
+
 ## Operators
 
 Operators either query a property for a specific value or determine nested special properties (starting with a `$`) that allow querying the property for certain conditions. When multiple operators are set, all conditions have to apply for a property to match.

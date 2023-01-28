@@ -274,6 +274,34 @@ export default (test: AdapterSyntaxTest, app: any, _errors: any, serviceName: st
       assert.strictEqual(data[1].name, 'Doug')
     })
 
+    test('.find + $and', async () => {
+      const params = {
+        query: {
+          $and: [{ age: 19 }],
+          $sort: { name: 1 }
+        }
+      }
+
+      const data = await service.find(params)
+
+      assert.strictEqual(data.length, 1)
+      assert.strictEqual(data[0].name, 'Alice')
+    })
+
+    test('.find + $and + $or', async () => {
+      const params = {
+        query: {
+          $and: [{ $or: [{ name: 'Alice' }] }],
+          $sort: { name: 1 }
+        }
+      }
+
+      const data = await service.find(params)
+
+      assert.strictEqual(data.length, 1)
+      assert.strictEqual(data[0].name, 'Alice')
+    })
+
     describe('params.adapter', () => {
       test('params.adapter + paginate', async () => {
         const page = await service.find({

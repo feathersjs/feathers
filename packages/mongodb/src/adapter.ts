@@ -226,7 +226,6 @@ export class MongoDbAdapter<
     const { paginate, useEstimatedDocumentCount } = this.getOptions(params)
     const { filters, query } = this.filterQuery(null, params)
     const useAggregation = !params.mongodb && filters.$limit !== 0
-
     const countDocuments = async () => {
       if (paginate && paginate.default) {
         const model = await this.getModel(params)
