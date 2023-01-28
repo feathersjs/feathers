@@ -17,6 +17,34 @@ Depending on the SQL database you selected, a `src/<database>.ts` file will be c
 const knex = app.get('<database>Client')
 ```
 
+The database pool size can be set in the [configuration](./default.json.md) like this:
+
+```json
+"postgresql": {
+  "client": "pg",
+  "connection": "<pg connection string>",
+  "pool": {
+    "min": 0,
+    "max": 7
+  }
+},
+```
+
+`connection` can also be an object instead of a connection string:
+
+```json
+"postgresql": {
+  "client": "pg",
+  "connection": {
+    "host": "localhost",
+    "port": 5432,
+    "user": "postgres",
+    "password": "postgres",
+    "database": "pgtest"
+  }
+}
+```
+
 </DatabaseBlock>
 
 <DatabaseBlock global-id="mongodb">

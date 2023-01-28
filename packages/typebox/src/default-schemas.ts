@@ -58,7 +58,24 @@ export const authenticationSettingsSchema = Type.Object({
 export const sqlSettingsSchema = Type.Optional(
   Type.Object({
     client: Type.String(),
-    connection: Type.String()
+    connection: Type.Union([
+      Type.String(),
+      Type.Partial(
+        Type.Object({
+          host: Type.String(),
+          port: Type.Number(),
+          user: Type.String(),
+          password: Type.String(),
+          database: Type.String()
+        })
+      )
+    ]),
+    pool: Type.Optional(
+      Type.Object({
+        min: Type.Number(),
+        max: Type.Number()
+      })
+    )
   })
 )
 
