@@ -10,13 +10,12 @@
 
 This is a repository for handling Feathers common database syntax. See the [API documentation](https://docs.feathersjs.com/api/databases/common.html) for more information.
 
-
 ## Authors
 
 [Feathers contributors](https://github.com/feathersjs/adapter-commons/graphs/contributors)
 
 ## License
 
-Copyright (c) 2022 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2023 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).
