@@ -26,8 +26,8 @@ type HookStore = {
   before: { [method: string]: HookFunction[] }
   after: { [method: string]: HookFunction[] }
   error: { [method: string]: HookFunction[] }
-  collected: { [method: string]: AroundHookFunction[] },
-  collectedAll: { before?: AroundHookFunction[], after?: AroundHookFunction[] }
+  collected: { [method: string]: AroundHookFunction[] }
+  collectedAll: { before?: AroundHookFunction[]; after?: AroundHookFunction[] }
 }
 
 type HookEnabled = { __hooks: HookStore }
@@ -63,7 +63,7 @@ export function collectHooks(target: HookEnabled, method: string) {
     ...(around[method] || []),
     ...(collectedAll.before || []),
     ...(collected[method] || []),
-    ...(collectedAll.after || []),
+    ...(collectedAll.after || [])
   ] as AroundHookFunction[]
 }
 
@@ -75,7 +75,7 @@ export function enableHooks(object: any) {
     after: {},
     error: {},
     collected: {},
-    collectedAll: {},
+    collectedAll: {}
   }
 
   Object.defineProperty(object, '__hooks', {
@@ -115,7 +115,7 @@ export function enableHooks(object: any) {
 
           if (store.after[method]) {
             const afterAll = collect({
-              after: store.after[method] || [],
+              after: store.after[method] || []
             })
             store.collectedAll.after = [afterAll]
           }

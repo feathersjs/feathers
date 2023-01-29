@@ -62,7 +62,7 @@
     "@feathersjs/feathers": "^5.0.0-pre.35",
     "@feathersjs/schema": "^5.0.0-pre.35",
     "@types/config": "^3.3.0",
-    "config": "^3.3.8"
+    "config": "^3.3.9"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
