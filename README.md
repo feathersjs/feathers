@@ -9,7 +9,7 @@
 Feathers is a full-stack web-framework for creating APIs and real-time applications with TypeScript or JavaScript.
 
 <a href="https://feathersjs.com" title="FeathersJS">
-  <img src="https://user-images.githubusercontent.com/128857/173851241-b52de3b8-468d-4ac3-a4b3-eaae9c8b7f77.jpg" alt="The FeathersJS Family of Birds">
+  <img src="https://feathersjs.com/og.png" alt="The FeathersJS birds">
 </a>
 
 Feathers can interact with any backend technology, supports many databases out of the box and works with any frontend like React, VueJS, Angular, React Native, Android or iOS.
@@ -32,6 +32,6 @@ The [Feathers website](http://feathersjs.com) are loaded with awesome stuff and 
 
 ## License
 
-Copyright (c) 2022 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2023 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).

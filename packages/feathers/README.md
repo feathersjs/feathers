@@ -1,6 +1,6 @@
 <img style="width: 100%; max-width: 400px;" src="http://feathersjs.com/img/feathers-logo-wide.png" alt="Feathers logo">
 
-## A framework for real-time applications and REST APIs with JavaScript and TypeScript
+## The API and real-time application framework
 
 [![CI](https://github.com/feathersjs/feathers/workflows/CI/badge.svg)](https://github.com/feathersjs/feathers/actions?query=workflow%3ACI)
 [![Maintainability](https://api.codeclimate.com/v1/badges/cb5ec42a2d0cc1a47a02/maintainability)](https://codeclimate.com/github/feathersjs/feathers/maintainability)
@@ -30,6 +30,6 @@ The [Feathers docs](http://docs.feathersjs.com) are loaded with awesome stuff an
 
 ## License
 
-Copyright (c) 2022 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2023 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).
