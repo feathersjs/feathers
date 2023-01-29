@@ -22,14 +22,14 @@ import type {
 
 export type { ${upperName}, ${upperName}Data, ${upperName}Patch, ${upperName}Query }
 
-export const ${camelName}Path = '${path}'
-
-export const ${camelName}Methods = ['find', 'get', 'create', 'patch', 'remove'] as const
-
 export type ${upperName}ClientService = Pick<
   ${className}<Params<${upperName}Query>>,
   typeof ${camelName}Methods[number]
 >
+
+export const ${camelName}Path = '${path}'
+
+export const ${camelName}Methods = ['find', 'get', 'create', 'patch', 'remove'] as const
 
 export const ${camelName}Client = (client: ClientApplication) => {
   const connection = client.get('connection')
