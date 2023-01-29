@@ -172,6 +172,25 @@ export const querySyntax = <
 ) => {
   const keys = Object.keys(definition)
   const props = queryProperties(definition, extensions)
+  const $or = {
+    type: 'array',
+    items: {
+      type: 'object',
+      additionalProperties: false,
+      properties: props
+    }
+  } as const
+  const $and = {
+    type: 'array',
+    items: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        ...props,
+        $or
+      }
+    }
+  } as const
 
   return {
     $limit: {
@@ -203,14 +222,8 @@ export const querySyntax = <
         ...(keys.length > 0 ? { enum: keys as any as (keyof T)[] } : {})
       }
     },
-    $or: {
-      type: 'array',
-      items: {
-        type: 'object',
-        additionalProperties: false,
-        properties: props
-      }
-    },
+    $or,
+    $and,
     ...props
   } as const
 }

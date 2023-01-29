@@ -61,6 +61,7 @@
   },
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.0-pre.35",
+    "@feathersjs/schema": "^5.0.0-pre.35",
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.11.18",
     "mocha": "^10.2.0",

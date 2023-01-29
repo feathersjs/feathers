@@ -3,6 +3,7 @@ import assert from 'assert'
 import { feathers, HookContext, Service } from '@feathersjs/feathers'
 import adapterTests from '@feathersjs/adapter-tests'
 import { errors } from '@feathersjs/errors'
+import { Ajv, getValidator, querySyntax, hooks } from '@feathersjs/schema'
 
 import connection from './connection'
 import { ERROR, KnexAdapterParams, KnexService, transaction } from '../src/index'
@@ -126,6 +127,38 @@ const clean = async () => {
   })
 }
 
+const personSchema = {
+  $id: 'Person',
+  type: 'object',
+  additionalProperties: false,
+  required: ['_id', 'name', 'age'],
+  properties: {
+    id: { type: 'number' },
+    name: { type: 'string' },
+    age: { type: ['number', 'null'] },
+    time: { type: 'string' },
+    create: { type: 'boolean' }
+  }
+} as const
+const personQuery = {
+  $id: 'PersonQuery',
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    ...querySyntax(personSchema.properties, {
+      name: {
+        $like: { type: 'string' },
+        $ilike: { type: 'string' },
+        $notlike: { type: 'string' }
+      }
+    })
+  }
+} as const
+const validator = new Ajv({
+  coerceTypes: true
+})
+const personQueryValidator = getValidator(personQuery, validator)
+
 type Person = {
   id: number
   name: string
@@ -195,6 +228,11 @@ describe('Feathers Knex Service', () => {
     .use('todos', todos)
   const peopleService = app.service('people')
 
+  peopleService.hooks({
+    before: {
+      find: [hooks.validateQuery(personQueryValidator)]
+    }
+  })
   before(() => {
     if (TYPE === 'sqlite') {
       // Attach the public database to mimic a "schema"

@@ -1,6 +1,6 @@
 import { Id, NullableId, Paginated, Query } from '@feathersjs/feathers'
 import { _ } from '@feathersjs/commons'
-import { AdapterBase, PaginationOptions, filterQuery } from '@feathersjs/adapter-commons'
+import { AdapterBase, PaginationOptions, AdapterQuery, getLimit } from '@feathersjs/adapter-commons'
 import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
 import { Knex } from 'knex'
 
@@ -50,7 +50,7 @@ export class KnexAdapter<
         ...options.filters,
         $and: (value: any) => value
       },
-      operators: [...(options.operators || []), '$like', '$notlike', '$ilike', '$and', '$or']
+      operators: [...(options.operators || []), '$like', '$notlike', '$ilike']
     })
   }
 
@@ -150,9 +150,14 @@ export class KnexAdapter<
 
   filterQuery(params: ServiceParams) {
     const options = this.getOptions(params)
-    const { filters, query } = filterQuery(params?.query || {}, options)
+    const { $select, $sort, $limit: _limit, $skip = 0, ...query } = (params.query || {}) as AdapterQuery
+    const $limit = getLimit(_limit, options.paginate)
 
-    return { filters, query, paginate: options.paginate }
+    return {
+      paginate: options.paginate,
+      filters: { $select, $sort, $limit, $skip },
+      query
+    }
   }
 
   async _find(params?: ServiceParams & { paginate?: PaginationOptions }): Promise<Paginated<Result>>

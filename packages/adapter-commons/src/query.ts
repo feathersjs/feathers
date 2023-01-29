@@ -1,7 +1,7 @@
 import { _ } from '@feathersjs/commons'
 import { BadRequest } from '@feathersjs/errors'
 import { Query } from '@feathersjs/feathers'
-import { FilterQueryOptions, FilterSettings } from './declarations'
+import { FilterQueryOptions, FilterSettings, PaginationParams } from './declarations'
 
 const parse = (value: any) => (typeof value !== 'undefined' ? parseInt(value, 10) : value)
 
@@ -64,6 +64,26 @@ const getQuery = (query: Query, settings: FilterQueryOptions) => {
   }, {} as Query)
 }
 
+/**
+ * Returns the converted `$limit` value based on the `paginate` configuration.
+ * @param _limit The limit value
+ * @param paginate The pagination options
+ * @returns The converted $limit value
+ */
+export const getLimit = (_limit: any, paginate?: PaginationParams) => {
+  const limit = parse(_limit)
+
+  if (paginate && (paginate.default || paginate.max)) {
+    const base = paginate.default || 0
+    const lower = typeof limit === 'number' && !isNaN(limit) && limit >= 0 ? limit : base
+    const upper = typeof paginate.max === 'number' ? paginate.max : Number.MAX_VALUE
+
+    return Math.min(lower, upper)
+  }
+
+  return limit
+}
+
 export const OPERATORS = ['$in', '$nin', '$lt', '$lte', '$gt', '$gte', '$ne', '$or']
 
 export const FILTERS: FilterSettings = {
@@ -79,19 +99,7 @@ export const FILTERS: FilterSettings = {
       return result
     }, {} as { [key: string]: number })
   },
-  $limit: (_limit: any, { paginate }: FilterQueryOptions) => {
-    const limit = parse(_limit)
-
-    if (paginate && (paginate.default || paginate.max)) {
-      const base = paginate.default || 0
-      const lower = typeof limit === 'number' && !isNaN(limit) && limit >= 0 ? limit : base
-      const upper = typeof paginate.max === 'number' ? paginate.max : Number.MAX_VALUE
-
-      return Math.min(lower, upper)
-    }
-
-    return limit
-  },
+  $limit: (_limit: any, { paginate }: FilterQueryOptions) => getLimit(_limit, paginate),
   $select: (select: any) => {
     if (Array.isArray(select)) {
       return select.map((current) => `${current}`)

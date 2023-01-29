@@ -17,7 +17,8 @@ import {
   AdapterParams,
   AdapterServiceOptions,
   PaginationOptions,
-  AdapterQuery
+  AdapterQuery,
+  getLimit
 } from '@feathersjs/adapter-commons'
 import { Id, Paginated } from '@feathersjs/feathers'
 import { errorHandler } from './error-handler'
@@ -75,8 +76,9 @@ export class MongoDbAdapter<
   }
 
   filterQuery(id: NullableAdapterId, params: ServiceParams) {
-    const { $select, $sort, $limit, $skip, ...query } = (params.query || {}) as AdapterQuery
-
+    const options = this.getOptions(params)
+    const { $select, $sort, $limit: _limit, $skip = 0, ...query } = (params.query || {}) as AdapterQuery
+    const $limit = getLimit(_limit, options.paginate)
     if (id !== null) {
       query.$and = (query.$and || []).concat({
         [this.id]: this.getObjectId(id)
@@ -226,7 +228,6 @@ export class MongoDbAdapter<
     const { paginate, useEstimatedDocumentCount } = this.getOptions(params)
     const { filters, query } = this.filterQuery(null, params)
     const useAggregation = !params.mongodb && filters.$limit !== 0
-
     const countDocuments = async () => {
       if (paginate && paginate.default) {
         const model = await this.getModel(params)
