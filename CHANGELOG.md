@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.36](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.35...v5.0.0-pre.36) (2023-01-29)
+
+### Bug Fixes
+
+- **authentication-oauth:** Use original headers in oauth flow ([#3025](https://github.com/feathersjs/feathers/issues/3025)) ([fb3d8cc](https://github.com/feathersjs/feathers/commit/fb3d8cca123d68a77b096bc92e49baa55424afe0))
+- **configuration:** Add pool and connection object to SQL database default configuration ([#3023](https://github.com/feathersjs/feathers/issues/3023)) ([092c749](https://github.com/feathersjs/feathers/commit/092c749d43f7da4d019576d1210fe7d3719a44a2))
+- **databases:** Ensure that query sanitization is not necessary when using query schemas ([#3022](https://github.com/feathersjs/feathers/issues/3022)) ([dbf514e](https://github.com/feathersjs/feathers/commit/dbf514e85d1508b95c007462a39b3cadd4ff391d))
+- **databases:** Improve documentation for adapters and allow dynamic Knex adapter options ([#3019](https://github.com/feathersjs/feathers/issues/3019)) ([66c4b5e](https://github.com/feathersjs/feathers/commit/66c4b5e72000dd03acb57fca1cad4737c85c9c9e))
+- **feathers:** Run after all hooks first, and then after method hooks ([#3004](https://github.com/feathersjs/feathers/issues/3004)) ([3692fd5](https://github.com/feathersjs/feathers/commit/3692fd57f70564492cef8bbaf78d264627a9bf0a))
+- **generators:** Add main schema to all validators ([#2997](https://github.com/feathersjs/feathers/issues/2997)) ([5854dea](https://github.com/feathersjs/feathers/commit/5854dea7f610262121a49623ec5bbd474dcd3ef3))
+- **generators:** Add TypeScript as normal instead of dev dependency ([#3011](https://github.com/feathersjs/feathers/issues/3011)) ([2f67398](https://github.com/feathersjs/feathers/commit/2f673987f38b199e75aff629b7cdfcaebfd69c4c))
+- **generators:** Do not removeAdditional in queries ([#3000](https://github.com/feathersjs/feathers/issues/3000)) ([ef501bc](https://github.com/feathersjs/feathers/commit/ef501bcfa528119168787e9d857f1bb90e0c3114))
+- **schema:** Allow any type in resolver hooks ([#3006](https://github.com/feathersjs/feathers/issues/3006)) ([f01281f](https://github.com/feathersjs/feathers/commit/f01281f7d83262738459585fc3f53f56c0a0deb8))
+- **schema:** Ensure all types of nested data are securely dispatched ([#3005](https://github.com/feathersjs/feathers/issues/3005)) ([e4a9da5](https://github.com/feathersjs/feathers/commit/e4a9da5f3288e8e9f02087754473c7a9dfda6cb1))
+- **schema:** Fix TypeBox extension value query syntax inference ([#3010](https://github.com/feathersjs/feathers/issues/3010)) ([f1c7a76](https://github.com/feathersjs/feathers/commit/f1c7a76586bbb8aed66ef866c3dcd666d79f3a24))
+- Update all dependencies ([#3024](https://github.com/feathersjs/feathers/issues/3024)) ([283dc47](https://github.com/feathersjs/feathers/commit/283dc4798d85584bc031e6e54b83b4ea77d1edd0))
+
+### Features
+
+- **database:** Add and to the query syntax ([#3021](https://github.com/feathersjs/feathers/issues/3021)) ([00cb0d9](https://github.com/feathersjs/feathers/commit/00cb0d9c302ae951ae007d3d6ceba33e254edd9c))
+- **generators:** Add service file for shared information ([#3008](https://github.com/feathersjs/feathers/issues/3008)) ([0a1665d](https://github.com/feathersjs/feathers/commit/0a1665d23e002afadb40ed99bf0168f0fceb0054))
+
 # [5.0.0-pre.35](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.34...v5.0.0-pre.35) (2023-01-12)
 
 ### Bug Fixes
