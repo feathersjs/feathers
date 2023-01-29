@@ -59,7 +59,7 @@
     "@feathersjs/hooks": "^0.7.6",
     "@feathersjs/schema": "^5.0.0-pre.35",
     "@feathersjs/transport-commons": "^5.0.0-pre.35",
-    "@types/jsonwebtoken": "^9.0.0",
+    "@types/jsonwebtoken": "^9.0.1",
     "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "long-timeout": "^0.1.1",

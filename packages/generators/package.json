@@ -55,7 +55,7 @@
     "@feathershq/pinion": "^0.3.5",
     "chalk": "^4.0.1",
     "lodash": "^4.17.21",
-    "prettier": "^2.8.1",
+    "prettier": "^2.8.3",
     "typescript": "^4.9.4"
   },
   "devDependencies": {
@@ -79,11 +79,11 @@
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.11.18",
     "@types/prettier": "^2.7.2",
-    "axios": "^1.2.2",
+    "axios": "^1.2.6",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
-    "type-fest": "^3.5.0"
+    "type-fest": "^3.5.3"
   },
   "gitHead": "c641598d9a4de3ceda10f56cf2af288a4236b15e"
 }
