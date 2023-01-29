@@ -113,6 +113,13 @@ export const FILTERS: FilterSettings = {
     }
 
     return or
+  },
+  $and: (and: any, { operators }: FilterQueryOptions) => {
+    if (Array.isArray(and)) {
+      return and.map((current) => validateQueryProperty(current, operators))
+    }
+
+    return and
   }
 }
 

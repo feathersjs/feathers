@@ -82,6 +82,8 @@ export type AdapterSyntaxTestName =
   | '.find + $ne'
   | '.find + $gt + $lt + $sort'
   | '.find + $or nested + $sort'
+  | '.find + $and'
+  | '.find + $and + $or'
   | 'params.adapter + paginate'
   | 'params.adapter + multi'
   | '.find + paginate'
