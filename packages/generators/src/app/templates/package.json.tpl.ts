@@ -62,7 +62,7 @@ const packageJson = ({
     lib,
     test
   },
-  files: ['lib/client.js', 'lib/**/*.d.ts'],
+  files: ['lib/client.js', 'lib/**/*.d.ts', 'lib/**/*.shared.js'],
   main: language === 'ts' ? 'lib/client' : `${lib}/client`,
   ...(language === 'ts' ? tsPackageJson(lib) : jsPackageJson(lib))
 })

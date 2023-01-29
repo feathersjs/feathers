@@ -25,12 +25,14 @@ ${
 } from './${fileName}.schema'
 `
     : `
-export type ${upperName} = any
-export type ${upperName}Data = any
-export type ${upperName}Patch = any
-export type ${upperName}Query = any
+type ${upperName} = any
+type ${upperName}Data = any
+type ${upperName}Patch = any
+type ${upperName}Query = any
 `
 }
+
+export type { ${upperName}, ${upperName}Data, ${upperName}Patch, ${upperName}Query }
 
 export interface ${upperName}Params extends MongoDBAdapterParams<${upperName}Query> {
 }

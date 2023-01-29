@@ -143,6 +143,10 @@ export default {
                     {
                       text: '📄 &lt;service&gt;.schemas',
                       link: '/guides/cli/service.schemas.md'
+                    },
+                    {
+                      text: '📄 &lt;service&gt;.shared',
+                      link: '/guides/cli/service.shared.md'
                     }
                   ]
                 },

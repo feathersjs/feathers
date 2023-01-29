@@ -6,7 +6,6 @@ export const template = ({
   camelName,
   authentication,
   isEntityService,
-  path,
   className,
   relative,
   schema,
@@ -34,6 +33,7 @@ import {
 
 import type { Application } from '${relative}/declarations'
 import { ${className}, getOptions } from './${fileName}.class'
+import { ${camelName}Path, ${camelName}Methods } from './${fileName}.shared'
 
 export * from './${fileName}.class'
 ${schema ? `export * from './${fileName}.schema'` : ''}
@@ -41,14 +41,14 @@ ${schema ? `export * from './${fileName}.schema'` : ''}
 // A configure function that registers the service and its hooks via \`app.configure\`
 export const ${camelName} = (app: Application) => {
   // Register our service on the Feathers application
-  app.use('${path}', new ${className}(getOptions(app)), {
+  app.use(${camelName}Path, new ${className}(getOptions(app)), {
     // A list of all methods this service exposes externally
-    methods: ['find', 'get', 'create', 'patch', 'remove'],
+    methods: ${camelName}Methods,
     // You can add additional custom events to be sent to clients here
     events: []
   })
   // Initialize hooks
-  app.service('${path}').hooks({
+  app.service(${camelName}Path).hooks({
     around: {
       all: [${
         authentication
@@ -115,7 +115,7 @@ export const ${camelName} = (app: Application) => {
 // Add this service to the service type index
 declare module '${relative}/declarations' {
   interface ServiceTypes {
-    '${path}': ${className}
+    [${camelName}Path]: ${className}
   }
 }
 `
