@@ -259,7 +259,7 @@ Update the `src/services/messages/messages.schema.js` file like this:
 
 <DatabaseBlock global-id="sql">
 
-```ts{2,8,15-17,24-27,39-45,58-61}
+```ts{2,8,15-17,24-27,39-45,58-61,74-82}
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
@@ -332,14 +332,24 @@ export const messageQuerySchema = Type.Intersect(
 )
 export type MessageQuery = Static<typeof messageQuerySchema>
 export const messageQueryValidator = getValidator(messageQuerySchema, queryValidator)
-export const messageQueryResolver = resolve<MessageQuery, HookContext>({})
+export const messageQueryResolver = resolve<MessageQuery, HookContext>({
+  userId: async (value, user, context) => {
+    // We want to be able to find all messages but
+    // only let a user modify their own messages otherwise
+    if (context.params.user && context.method !== 'find') {
+      return context.params.user.id
+    }
+
+    return value
+  }
+})
 ```
 
 </DatabaseBlock>
 
 <DatabaseBlock global-id="mongodb">
 
-```ts{2,8,15-17,24-27,39-45,58-61}
+```ts{2,8,15-17,24-27,39-45,58-61,74-82}
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
@@ -409,7 +419,17 @@ export const messageQuerySchema = Type.Intersect(
 )
 export type MessageQuery = Static<typeof messageQuerySchema>
 export const messageQueryValidator = getValidator(messageQuerySchema, queryValidator)
-export const messageQueryResolver = resolve<MessageQuery, HookContext>({})
+export const messageQueryResolver = resolve<MessageQuery, HookContext>({
+  userId: async (value, user, context) => {
+    // We want to be able to find all messages but
+    // only let a user modify their own messages otherwise
+    if (context.params.user && context.method !== 'find') {
+      return context.params.user._id
+    }
+
+    return value
+  }
+})
 ```
 
 </DatabaseBlock>
@@ -425,12 +445,6 @@ The `virtual()` in the `messageResolver` `user` property is a [virtual property]
 <DatabaseBlock global-id="sql">
 
 Now that our schemas and resolvers have everything we need, we also have to update the database with those changes. For SQL databases this is done with migrations. Migrations are a best practice for SQL databases to roll out and undo changes to the data model. Every change we make in a schema will need its corresponding migration step.
-
-<BlockQuote type="warning">
-
-If you choose MongoDB you do **not** need to create a migration.
-
-</BlockQuote>
 
 Initially, every database service will automatically add a migration that creates a table for it with an `id` and `text` property. Our users service also already added a migration to add the email and password fields for logging in. The migration for the changes we made in this chapter needs to
 

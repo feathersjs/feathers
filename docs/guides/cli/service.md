@@ -15,12 +15,12 @@ The service is added to the main application via [app.use](../../api/application
 
 <LanguageBlock global-id="ts">
 
-In TypeScript the `ServiceTypes` interface defined in the [declarations](./declarations.md) will also be extended with the correct service class type:
+In TypeScript the `ServiceTypes` interface defined in the [declarations](./declarations.md) will also be extended with the correct service class type using the [shared path](./service.shared.md) as a key:
 
 ```ts
 declare module '../../../declarations' {
   interface ServiceTypes {
-    testing: TestingService
+    [testingPath]: TestingService
   }
 }
 ```
@@ -33,20 +33,24 @@ This file is also where service [hooks](../../api/hooks.md) are registered on th
 
 ```ts
 // Initialize hooks
-app.service('messages').hooks({
+app.service(messagePath).hooks({
   around: {
-    all: [authenticate('jwt')]
-  },
-  before: {
     all: [
-      schemaHooks.validateQuery(messageQueryValidator),
-      schemaHooks.validateData(messageDataValidator),
-      schemaHooks.resolveQuery(messageQueryResolver),
-      schemaHooks.resolveData(messageDataResolver)
+      authenticate('jwt'),
+      schemaHooks.resolveExternal(messageExternalResolver),
+      schemaHooks.resolveResult(messageResolver)
     ]
   },
+  before: {
+    all: [schemaHooks.validateQuery(messageQueryValidator), schemaHooks.resolveQuery(messageQueryResolver)],
+    find: [],
+    get: [],
+    create: [schemaHooks.validateData(messageDataValidator), schemaHooks.resolveData(messageDataResolver)],
+    patch: [schemaHooks.validateData(messagePatchValidator), schemaHooks.resolveData(messagePatchResolver)],
+    remove: []
+  },
   after: {
-    all: [schemaHooks.resolveResult(messageResolver), schemaHooks.resolveExternal(messageExternalResolver)]
+    all: []
   },
   error: {
     all: []
@@ -61,22 +65,26 @@ import { profiler } from '../../hooks/profiler'
 // ...
 
 // Initialize hooks
-app.service('messages').hooks({
+app.service(messagePath).hooks({
   around: {
-    all: [authenticate('jwt')],
+    all: [
+      authenticate('jwt'),
+      schemaHooks.resolveExternal(messageExternalResolver),
+      schemaHooks.resolveResult(messageResolver)
+    ],
     find: [profiler],
     get: [profiler]
   },
   before: {
-    all: [
-      schemaHooks.validateQuery(messageQueryValidator),
-      schemaHooks.validateData(messageDataValidator),
-      schemaHooks.resolveQuery(messageQueryResolver),
-      schemaHooks.resolveData(messageDataResolver)
-    ]
+    all: [schemaHooks.validateQuery(messageQueryValidator), schemaHooks.resolveQuery(messageQueryResolver)],
+    find: [],
+    get: [],
+    create: [schemaHooks.validateData(messageDataValidator), schemaHooks.resolveData(messageDataResolver)],
+    patch: [schemaHooks.validateData(messagePatchValidator), schemaHooks.resolveData(messagePatchResolver)],
+    remove: []
   },
   after: {
-    all: [schemaHooks.resolveResult(messageResolver), schemaHooks.resolveExternal(messageExternalResolver)]
+    all: []
   },
   error: {
     all: []

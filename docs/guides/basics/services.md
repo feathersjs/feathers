@@ -19,14 +19,13 @@ In general, a service is an object or instance of a class that implements certai
 - Reading and/or writing to a completely different type of database
 - Anything else you can think of!
 
-This standardized interface allows us to interact with the Database/API/Gnomes inside in a uniform manner across any transport protocol, be it REST, websockets, internally within the application, or Carrier Pigeon.
+This standardized interface allows us to interact with the Database/API/Gnomes inside in a uniform manner across any transport protocol, be it REST, websockets, internally within the application, or Carrier Pigeon 🕊️
 
 Once you write a service method, it can then automatically be used as a REST endpoint or called by a websocket. Feathers will take care of all the boilerplate.
 
 ### Service methods
 
-Service methods are [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) methods that a service can implement.
-Feathers offers a set of general methods that a service can implement, these are:
+Service methods are [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) methods that a service can implement. Feathers offers a set of general methods that a service can implement, these are:
 
 - `find` - Find all data (potentially matching a query)
 - `get` - Get a single data entry by its unique identifier

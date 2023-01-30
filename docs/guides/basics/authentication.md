@@ -172,9 +172,7 @@ You can find your existing applications in the [GitHub OAuth apps developer sett
 
 </BlockQuote>
 
-Once you've clicked "Register application", we need to update our Feathers app configuration with the client id and secret copied from the GitHub application settings:
-
-![Screenshot of the created GitHub application client id and secret](./assets/github-keys.png)
+Once you've clicked "Register application", we need to update our Feathers app configuration with the client id and secret copied from the GitHub application settings.
 
 Find the `authentication` section in `config/default.json` replace the `<Client ID>` and `<Client Secret>` in the `github` section with the proper values:
 
@@ -192,6 +190,12 @@ Find the `authentication` section in `config/default.json` replace the `<Client 
   }
 }
 ```
+
+<BlockQuote type="info" label="note">
+
+In a production environment you would set those values as [custom environment variables](../cli/custom-environment-variables.md).
+
+</BlockQuote>
 
 This tells the OAuth strategy to redirect back to our index page after a successful login and already makes a basic login with GitHub possible. Because of the changes we made in the `users` service in the [services chapter](./services.md) we do need a small customization though. Instead of only adding `githubId` to a new user when they log in with GitHub we also include their email and the avatar image from the profile we get back. We can do this by extending the standard OAuth strategy and registering it as a GitHub specific one and overwriting the `getEntityData` method:
 
@@ -253,4 +257,4 @@ It will redirect to GitHub and ask to authorize our application. If everything w
 
 ## What's next?
 
-Sweet! We now have an API that can register new users with email/password. This means we have everything we need for a frontend for our chat application. You have your choice of
+Sweet! We now have an API that can register new users with email/password and GitHub. This means we have everything we need for a frontend for our chat application. See the [JavaScript frontend guide](../frontend/javascript.md) on how to create a plain JavaScript chat application.
