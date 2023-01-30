@@ -107,7 +107,7 @@ Resolvers are powered by new hook utilities:
 - [resolveData](../api/schema/resolvers.md#data-resolvers) for incoming data.
 - [resolveResult](../api/schema/resolvers.md#result-resolvers) for results coming from databases or other services
 - [resolveDispatch](../api/schema/resolvers.md#safe-data-resolvers) for cleanly defining safe data for WebSocket / Real-time events.
-- [resolveQuery](../api/schema/resolvers.d#query-resolvers) for incoming query parameters
+- [resolveQuery](../api/schema/resolvers.md#query-resolvers) for incoming query parameters
 
 Read about the new hooks using the links, above. These new hook utils allow you to
 
