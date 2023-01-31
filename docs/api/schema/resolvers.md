@@ -315,7 +315,7 @@ app.service('users').hooks({
 
 <BlockQuote type="warning" label="important">
 
-In order to get the safe data from resolved associations **all services** involved need the `schemaHooks.resolveExternal` (or `resolveAll`) hook registered even if it does not need a resolver (`schemaHooks.resolveExternal()`).
+In order to get the safe data from resolved associations **all services** involved need the `schemaHooks.resolveExternal` hook registered even if it does not need a resolver (`schemaHooks.resolveExternal()`).
 
 `schemaHooks.resolveExternal` should be registered first when used as an `around` hook or last when used as an `after` hook so that it gets the final result data.
 
