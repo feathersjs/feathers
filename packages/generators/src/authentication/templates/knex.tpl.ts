@@ -46,11 +46,10 @@ export const generate = (ctx: AuthenticationGeneratorContext) =>
       renderSource(
         migrationTemplate,
         toFile(
-          toFile<AuthenticationGeneratorContext>('migrations', async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1200))
-
-            return `${yyyymmddhhmmss()}_authentication`
-          })
+          toFile<AuthenticationGeneratorContext>(
+            'migrations',
+            async () => `${yyyymmddhhmmss(1200)}_authentication`
+          )
         )
       )
     )

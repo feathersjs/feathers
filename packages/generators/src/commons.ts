@@ -287,8 +287,8 @@ export const fileExists = (...filenames: string[]) => fs.existsSync(join(...file
  * The helper used by Knex to create migration names
  * @returns The current date and time in the format `YYYYMMDDHHMMSS`
  */
-export const yyyymmddhhmmss = () => {
-  const now = new Date()
+export const yyyymmddhhmmss = (offset = 0) => {
+  const now = new Date(Date.now() + offset)
 
   return (
     now.getUTCFullYear().toString() +
