@@ -69,7 +69,7 @@ export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
 })
 
 // Schema for updating existing users
-export const ${camelName}DataSchema = {
+export const ${camelName}PatchSchema = {
   $id: '${upperName}Patch',
   type: 'object',
   additionalProperties: false,
