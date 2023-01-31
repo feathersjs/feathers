@@ -282,3 +282,20 @@ export const injectSource =
  * @returns Wether the file exists or not
  */
 export const fileExists = (...filenames: string[]) => fs.existsSync(join(...filenames))
+
+/**
+ * The helper used by Knex to create migration names
+ * @returns The current date and time in the format `YYYYMMDDHHMMSS`
+ */
+export const yyyymmddhhmmss = (offset = 0) => {
+  const now = new Date(Date.now() + offset)
+
+  return (
+    now.getUTCFullYear().toString() +
+    (now.getUTCMonth() + 1).toString().padStart(2, '0') +
+    now.getUTCDate().toString().padStart(2, '0') +
+    now.getUTCHours().toString().padStart(2, '0') +
+    now.getUTCMinutes().toString().padStart(2, '0') +
+    now.getUTCSeconds().toString().padStart(2, '0')
+  )
+}

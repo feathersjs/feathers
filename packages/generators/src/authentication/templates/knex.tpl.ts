@@ -1,5 +1,5 @@
 import { generator, when, toFile } from '@feathershq/pinion'
-import { getDatabaseAdapter, renderSource } from '../../commons'
+import { getDatabaseAdapter, renderSource, yyyymmddhhmmss } from '../../commons'
 import { AuthenticationGeneratorContext } from '../index'
 
 const migrationTemplate = ({
@@ -46,16 +46,10 @@ export const generate = (ctx: AuthenticationGeneratorContext) =>
       renderSource(
         migrationTemplate,
         toFile(
-          toFile<AuthenticationGeneratorContext>('migrations', () => {
-            // Probably not great but it works to align with the Knex migration file format
-            // We add a few seconds so that the migrations run in the correct order
-            const migrationDate = new Date(Date.now() + 10000)
-              .toISOString()
-              .replace(/\D/g, '')
-              .substring(0, 14)
-
-            return `${migrationDate}_authentication`
-          })
+          toFile<AuthenticationGeneratorContext>(
+            'migrations',
+            async () => `${yyyymmddhhmmss(1200)}_authentication`
+          )
         )
       )
     )
