@@ -129,7 +129,7 @@ Find all records that match all of the given criteria.
 // Find all messages that are not marked as archived and in room 2
 app.service('messages').find({
   query: {
-    $all: [{ archived: { $ne: true } }, { roomId: 2 }]
+    $and: [{ archived: { $ne: true } }, { roomId: 2 }]
   }
 })
 ```
