@@ -80,23 +80,12 @@ export default {
     {
       text: 'CLI',
       collapsible: true,
-      collapsed: true,
+      collapsed: false,
       items: [
         {
-          text: 'Using the CLI',
+          text: '📖 Readme',
           link: '/guides/cli/index.md'
         },
-        {
-          text: 'Generate App',
-          link: '/guides/cli/generate-app.md'
-        }
-      ]
-    },
-    {
-      text: 'App Structure',
-      collapsible: true,
-      collapsed: true,
-      items: [
         {
           text: '📂 config',
           items: [
@@ -149,9 +138,6 @@ export default {
                       link: '/guides/cli/service.shared.md'
                     }
                   ]
-                },
-                {
-                  text: '📄 index'
                 }
               ]
             },
