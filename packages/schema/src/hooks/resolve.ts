@@ -81,27 +81,29 @@ export const resolveData =
 export const resolveResult = <H extends HookContext>(...resolvers: Resolver<any, H>[]) => {
   const virtualProperties = new Set(resolvers.reduce((acc, current) => acc.concat(current.virtualNames), []))
 
-  return async (context: H, next?: NextFunction) => {
-    if (typeof next === 'function') {
-      const { $resolve, $select: select, ...query } = context.params?.query || {}
-      const $select = Array.isArray(select) ? select.filter((name) => !virtualProperties.has(name)) : select
-      const resolve = {
-        originalContext: context,
-        ...context.params.resolve,
-        properties: $resolve || select
-      }
-
-      context.params = {
-        ...context.params,
-        resolve,
-        query: {
-          ...query,
-          ...($select ? { $select } : {})
-        }
-      }
-
-      await next()
+  return async (context: H, next: NextFunction) => {
+    if (typeof next !== 'function') {
+      throw new Error('The resolveResult hook must be used as an around hook')
     }
+
+    const { $resolve, $select: select, ...query } = context.params?.query || {}
+    const $select = Array.isArray(select) ? select.filter((name) => !virtualProperties.has(name)) : select
+    const resolve = {
+      originalContext: context,
+      ...context.params.resolve,
+      properties: $resolve || select
+    }
+
+    context.params = {
+      ...context.params,
+      resolve,
+      query: {
+        ...query,
+        ...($select ? { $select } : {})
+      }
+    }
+
+    await next()
 
     const ctx = getContext(context)
     const status = context.params.resolve
@@ -148,12 +150,14 @@ export const setDispatch = (current: any, dispatch: any) => {
   return dispatch
 }
 
-export const resolveDispatch =
+export const resolveExternal =
   <H extends HookContext>(...resolvers: Resolver<any, H>[]) =>
-  async (context: H, next?: NextFunction) => {
-    if (typeof next === 'function') {
-      await next()
+  async (context: H, next: NextFunction) => {
+    if (typeof next !== 'function') {
+      throw new Error('The resolveExternal hook must be used as an around hook')
     }
+
+    await next()
 
     const ctx = getContext(context)
     const existingDispatch = getDispatch(context.result)
@@ -188,7 +192,7 @@ export const resolveDispatch =
     }
   }
 
-export const resolveExternal = resolveDispatch
+export const resolveDispatch = resolveExternal
 
 type ResolveAllSettings<H extends HookContext> = {
   data?: {
