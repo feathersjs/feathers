@@ -18,21 +18,23 @@ import { listAllFiles } from '@feathershq/pinion/lib/utils'
 
 const matrix = {
   language: ['js', 'ts'] as const,
-  framework: ['koa', 'express'] as const
+  framework: ['koa', 'express'] as const,
+  schema: ['typebox', 'json'] as const
 }
 
 const defaultCombination = {
   language: process.env.FEATHERS_LANGUAGE || 'ts',
-  framework: process.env.FEATHERS_FRAMEWORK || 'koa'
+  framework: process.env.FEATHERS_FRAMEWORK || 'koa',
+  schema: process.env.FEATHERS_SCHEMA || 'typebox'
 }
 
 const combinations =
   process.version > 'v16.0.0' ? (process.env.CI ? combinate(matrix as any) : [defaultCombination]) : []
 
 describe('@feathersjs/generators', () => {
-  for (const { language, framework } of combinations) {
+  for (const { language, framework, schema } of combinations) {
     describe(`${language} ${framework} app`, () => {
-      const name = `feathers_${language}_${framework}`
+      const name = `feathers_${language}_${framework}_${schema}`
 
       let context: FeathersBaseContext
       let cwd: string
@@ -56,7 +58,7 @@ describe('@feathersjs/generators', () => {
                 connectionString: `${name}.sqlite`,
                 transports: ['rest', 'websockets'],
                 authStrategies: ['local', 'github'],
-                schema: 'typebox'
+                schema
               },
               { cwd }
             )
@@ -107,7 +109,7 @@ describe('@feathersjs/generators', () => {
               path: 'messages',
               authentication: true,
               type: 'mongodb',
-              schema: 'typebox'
+              schema
             },
             { cwd }
           )
@@ -129,7 +131,7 @@ describe('@feathersjs/generators', () => {
               path: 'customized',
               authentication: false,
               type: 'custom',
-              schema: 'json'
+              schema
             },
             { cwd }
           )
