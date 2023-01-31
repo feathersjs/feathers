@@ -32,6 +32,7 @@ import type { FromSchema } from '@feathersjs/schema'
 import { dataValidator } from './validators'
 
 export const configurationSchema = {
+  $id: 'configuration',
   type: 'object',
   additionalProperties: false,
   required: [ 'host', 'port', 'public' ],
