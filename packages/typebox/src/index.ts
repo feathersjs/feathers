@@ -160,6 +160,7 @@ export const querySyntax = <
 ) => {
   const propertySchema = queryProperties(type, extensions)
   const $or = Type.Array(propertySchema)
+  const $and = Type.Array(Type.Union([propertySchema, Type.Object({ $or })]))
 
   return Type.Intersect(
     [
@@ -170,8 +171,8 @@ export const querySyntax = <
             $skip: Type.Number({ minimum: 0 }),
             $sort: sortDefinition(type),
             $select: arrayOfKeys(type),
-            $or,
-            $and: Type.Array(Type.Union([propertySchema, Type.Object({ $or })]))
+            $and,
+            $or
           },
           { additionalProperties: false }
         )
