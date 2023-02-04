@@ -267,7 +267,7 @@ type ServiceTypes = {
   messages: MessageService
 }
 
-// Creates an ExpressJS compatible Feathers application
+// Creates an KoaJS compatible Feathers application
 const app = koa<ServiceTypes>(feathers())
 
 // Use the current folder for static file hosting
