@@ -57,7 +57,7 @@
     "@feathersjs/feathers": "^5.0.0-pre.36"
   },
   "peerDependencies": {
-    "mongodb": "^4.5.0"
+    "mongodb": "^5.0.0"
   },
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.0-pre.36",
