@@ -399,6 +399,9 @@ MongoDB uses [ObjectId](https://www.mongodb.com/docs/manual/reference/method/Obj
 To validate an ObjectId via the `format` keyword, add the following to your `validators` file:
 
 ```ts
+import { AnySchemaObject } from 'ajv'
+import { ObjectId } from 'mongodb'
+
 // `objectid` formatter
 const formatObjectId = {
   type: 'string',
