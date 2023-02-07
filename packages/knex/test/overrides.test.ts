@@ -122,4 +122,11 @@ describe('Feathers Knex Overridden Method With Self-Join', () => {
 
     assert.strictEqual(patchedAnimal.name, newName)
   })
+
+  it('get the service model (getModel)', async () => {
+    const model = animalService.Model
+    const options = animalService.options
+
+    assert.strictEqual(model, options.Model)
+  })
 })
