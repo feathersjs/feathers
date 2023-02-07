@@ -63,8 +63,8 @@ export class KnexAdapter<
     return this.getModel()
   }
 
-  getModel(params?: ServiceParams) {
-    const { Model } = this.getOptions(params ?? {} as ServiceParams)
+  getModel(params: ServiceParams = {} as ServiceParams) {
+    const { Model } = this.getOptions(params)
     return Model
   }
 
