@@ -1,4 +1,4 @@
-import { generator, toFile, before } from '@feathershq/pinion'
+import { generator, toFile, before, prepend, append } from '@feathershq/pinion'
 import { ConnectionGeneratorContext } from '../index'
 import { injectSource, renderSource } from '../../commons'
 
@@ -24,9 +24,15 @@ export const mongodb = (app: Application) => {
 }
 `
 
+const keywordImport = `import { keywordObjectId } from '@feathersjs/mongodb'`
+
+const keywordTemplate = `dataValidator.addKeyword(keywordObjectId)
+queryValidator.addKeyword(keywordObjectId)`
+
 const importTemplate = "import { mongodb } from './mongodb'"
 const configureTemplate = 'app.configure(mongodb)'
 const toAppFile = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'app'])
+const toValidatorFile = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'validators'])
 
 export const generate = (ctx: ConnectionGeneratorContext) =>
   generator(ctx)
@@ -38,3 +44,5 @@ export const generate = (ctx: ConnectionGeneratorContext) =>
     )
     .then(injectSource(importTemplate, before('import { services } from'), toAppFile))
     .then(injectSource(configureTemplate, before('app.configure(services)'), toAppFile))
+    .then(injectSource(keywordImport, prepend(), toValidatorFile))
+    .then(injectSource(keywordTemplate, append(), toValidatorFile))

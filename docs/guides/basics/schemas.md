@@ -161,7 +161,7 @@ import { dataValidator, queryValidator } from '../../validators'
 // Main data model schema
 export const userSchema = Type.Object(
   {
-    _id: Type.String(),
+    _id: Type.String({ objectid: true }),
     email: Type.String(),
     password: Type.Optional(Type.String()),
     githubId: Type.Optional(Type.Number()),
@@ -275,7 +275,7 @@ export const messageSchema = Type.Object(
     id: Type.Number(),
     text: Type.String(),
     createdAt: Type.Number(),
-    userId: Type.String(),
+    userId: Type.Number(),
     user: Type.Ref(userSchema)
   },
   { $id: 'Message', additionalProperties: false }
@@ -362,10 +362,10 @@ import { userSchema } from '../users/users.schema'
 // Main data model schema
 export const messageSchema = Type.Object(
   {
-    _id: Type.String(),
+    _id: Type.String({ objectid: true }),
     text: Type.String(),
     createdAt: Type.Number(),
-    userId: Type.String(),
+    userId: Type.String({ objectid: true }),
     user: Type.Ref(userSchema)
   },
   { $id: 'Message', additionalProperties: false }

@@ -23,7 +23,7 @@ import { dataValidator, queryValidator } from '${relative}/${
 
 // Main data model schema
 export const ${camelName}Schema = Type.Object({
-  ${type === 'mongodb' ? '_id: Type.String()' : 'id: Type.Number()'},
+  ${type === 'mongodb' ? '_id: Type.String({ objectid: true })' : 'id: Type.Number()'},
   ${authStrategies
     .map((name) =>
       name === 'local'

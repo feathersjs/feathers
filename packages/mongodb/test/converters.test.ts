@@ -60,7 +60,7 @@ describe('objectid keyword', () => {
     // runs converters
     validate(data)
 
-    assert.equal(typeof data._id, 'object')
+    assert.ok((data._id as any) instanceof ObjectId)
     assert.equal(typeof data.otherId, 'object')
   })
 

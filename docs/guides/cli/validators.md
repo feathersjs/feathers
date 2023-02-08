@@ -40,3 +40,7 @@ export const queryValidator = addFormats(
   formats
 )
 ```
+
+## MongoDB ObjectIds
+
+When choosing MongoDB, the validators file will also register the [`objectid` keyword](../../api/databases/mongodb.md#ajv-keyword) to convert strings to MongoDB Object ids.
