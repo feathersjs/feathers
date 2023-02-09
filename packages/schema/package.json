@@ -58,7 +58,7 @@
     "@feathersjs/commons": "^5.0.0-pre.36",
     "@feathersjs/errors": "^5.0.0-pre.36",
     "@feathersjs/feathers": "^5.0.0-pre.36",
-    "@feathersjs/hooks": "^0.7.6",
+    "@feathersjs/hooks": "^0.8.0",
     "@types/json-schema": "^7.0.11",
     "ajv": "^8.12.0",
     "ajv-formats": "^2.1.1",
@@ -67,7 +67,7 @@
   "devDependencies": {
     "@feathersjs/memory": "^5.0.0-pre.36",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.11.18",
+    "@types/node": "^18.13.0",
     "ajv-formats": "^2.1.1",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
