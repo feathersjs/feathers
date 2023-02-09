@@ -25,9 +25,16 @@ export const ${camelName}Schema = {
   additionalProperties: false,
   required: [ '${type === 'mongodb' ? '_id' : 'id'}', 'text' ],
   properties: {
-    ${type === 'mongodb' ? '_id' : 'id'}: {
-      type: '${type === 'mongodb' ? 'string' : 'number'}'
-    },
+    ${
+      type === 'mongodb'
+        ? `_id: {
+      type: 'string',
+      objectid: true
+    },`
+        : `id: {
+      type: 'number'
+    },`
+    }
     text: {
       type: 'string'
     }

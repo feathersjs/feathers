@@ -1,6 +1,6 @@
 import { IThemeRegistration, getHighlighter, HtmlRendererOptions } from 'shiki'
 import type { ThemeOptions } from 'vitepress'
-import { getJavaScript, PRETTIERRC } from '@feathersjs/cli/lib/commons'
+import { getJavaScript, PRETTIERRC } from '@feathersjs/generators/lib/commons'
 import prettier from 'prettier'
 
 /**

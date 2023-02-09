@@ -394,101 +394,37 @@ For more information on MongoDB's collation feature, visit the [collation refere
 
 MongoDB uses [ObjectId](https://www.mongodb.com/docs/manual/reference/method/ObjectId/) object as primary keys. To store them in the right format they have to be converted from and to strings.
 
-### AJV format
+### AJV keyword
 
-To validate an ObjectId via the `format` keyword, add the following to your `validators` file:
+To validate and convert strings to an object id using AJV, the `keywordObjectId` [AJV keyword](https://ajv.js.org/api.html#ajv-addkeyword-definition-string-object-ajv) helper can be used. It is set up automatically in a generated application using MongoDB.
 
 ```ts
-// `objectid` formatter
-const formatObjectId = {
-  type: 'string',
-  validate: (id: string | ObjectId) => {
-    if (ObjectId.isValid(id)) {
-      if (String(new ObjectId(id)) === id) return true
-      return false
+import { keywordObjectId } from '@feathersjs/mongodb'
+
+const validator = new Ajv()
+
+validator.addKeyword(keywordObjectId)
+
+const typeboxSchema = Type.Object({
+  userId: Type.String({ objectid: true })
+})
+
+const jsonSchema = {
+  type: 'object',
+  properties: {
+    userId: {
+      type: 'string',
+      objectid: true
     }
-    return false
   }
-} as const
-
-dataValidator.addFormat('objectid', formatObjectId)
-queryValidator.addFormat('objectid', formatObjectId)
-```
-
-Now you can use it as a `format` option in your schema definitions:
-
-```ts
-// TypeBox
-Type.String({ format: 'objectid' })
-// JSON schema
-const schema = {
-  type: 'string',
-  format: 'objectid'
 }
 ```
 
-### Shared Validator
+<BlockQuote label="Important" type="warning">
 
-The following utility can be used to create a shared [TypeBox](../schema/typebox.md) type for object ids (e.g. in a `utilities` file):
+Usually a converted object id property can be treated like a string but in some cases when working with it on the server you may have to call `toString()` to get the proper type.
 
-```ts
-import { Type } from '@feathersjs/typebox'
-
-export const ObjectId = () =>
-  Type.Union([Type.String({ format: 'objectid' }), Type.Object({}, { additionalProperties: true })])
-```
-
-Which can then be used like this:
-
-```ts
-import { Type } from '@feathersjs/typebox'
-import { ObjectId } from '../utilities'
-
-const userSchema = Type.Object(
-  {
-    _id: ObjectId(),
-    orgIds: Type.Array(ObjectId())
-  },
-  { $id: 'User', additionalProperties: false }
-)
-```
-
-### AJV converter
-
-To convert Object Ids, one option is to register an AJV specific converter by adding the following to the the `validators` file:
-
-```ts
-// `convert` keyword.
-const keywordConvert = {
-  keyword: 'convert',
-  type: 'string',
-  compile(schemaVal: boolean, parentSchema: AnySchemaObject) {
-    if (!schemaVal) return () => true
-
-    if (parentSchema.format === 'objectid') {
-      return function (value: string, obj: any) {
-        const { parentData, parentDataProperty } = obj
-        parentData[parentDataProperty] = new ObjectId(value)
-        return true
-      }
-    }
-    return () => true
-  }
-} as const
-
-dataValidator.addKeyword(keywordConvert)
-queryValidator.addKeyword(keywordConvert)
-```
-
-And then update the shared `ObjectId` in `utilities`:
-
-```ts
-export const ObjectId = () =>
-  Type.Union([
-    Type.String({ format: 'objectid', convert: true }),
-    Type.Object({}, { additionalProperties: true })
-  ])
-```
+</BlockQuote>
 
 ### ObjectId resolvers
 

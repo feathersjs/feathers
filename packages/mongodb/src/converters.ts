@@ -43,3 +43,22 @@ export async function resolveQueryObjectId(value: ObjectIdParam | IdQueryObject<
 
   return convertedObject
 }
+
+export const keywordObjectId = {
+  keyword: 'objectid',
+  type: 'string',
+  modifying: true,
+  compile(schemaVal: boolean) {
+    if (!schemaVal) return () => true
+
+    return function (value: string, obj: any) {
+      const { parentData, parentDataProperty } = obj
+      try {
+        parentData[parentDataProperty] = new ObjectId(value)
+        return true
+      } catch (error) {
+        throw new Error(`invalid objectid for property "${parentDataProperty}"`)
+      }
+    }
+  }
+} as const

@@ -27,9 +27,16 @@ export const ${camelName}Schema = {
   additionalProperties: false,
   required: [ '${type === 'mongodb' ? '_id' : 'id'}'${localTemplate(authStrategies, ", 'email'")} ],
   properties: {
-    ${type === 'mongodb' ? '_id' : 'id'}: {
-      type: '${type === 'mongodb' ? 'string' : 'number'}'
-    },
+    ${
+      type === 'mongodb'
+        ? `_id: {
+      type: 'string',
+      objectid: true
+    },`
+        : `id: {
+      type: 'number'
+    },`
+    }
     ${authStrategies
       .map((name) =>
         name === 'local'

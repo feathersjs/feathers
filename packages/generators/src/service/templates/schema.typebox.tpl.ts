@@ -21,7 +21,7 @@ import { dataValidator, queryValidator } from '${relative}/${
 
 // Main data model schema
 export const ${camelName}Schema = Type.Object({
-    ${type === 'mongodb' ? '_id: Type.String()' : 'id: Type.Number()'},
+    ${type === 'mongodb' ? '_id: Type.String({ objectid: true })' : 'id: Type.Number()'},
     text: Type.String()
   }, { $id: '${upperName}', additionalProperties: false })
 export type ${upperName} = Static<typeof ${camelName}Schema>

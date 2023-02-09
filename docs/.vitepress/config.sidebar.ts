@@ -80,7 +80,7 @@ export default {
     {
       text: 'CLI',
       collapsible: true,
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           text: '📖 Readme',
