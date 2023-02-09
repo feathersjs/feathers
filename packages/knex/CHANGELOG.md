@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.37](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.36...v5.0.0-pre.37) (2023-02-09)
+
+### Bug Fixes
+
+- **knex:** The method getModel in the knex adapter ([#3043](https://github.com/feathersjs/feathers/issues/3043)) ([77e14dd](https://github.com/feathersjs/feathers/commit/77e14dd3f4a29adff8beb805d0e6186ead59e4fe))
+
 # [5.0.0-pre.36](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.35...v5.0.0-pre.36) (2023-01-29)
 
 ### Bug Fixes

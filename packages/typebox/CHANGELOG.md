@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.37](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.36...v5.0.0-pre.37) (2023-02-09)
+
+### Bug Fixes
+
+- **typebox:** Allow nested or in and queries ([#3029](https://github.com/feathersjs/feathers/issues/3029)) ([39e0b78](https://github.com/feathersjs/feathers/commit/39e0b785238b809aa9b4dea9b95efc3c188c9baa))
+
 # [5.0.0-pre.36](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.35...v5.0.0-pre.36) (2023-01-29)
 
 ### Bug Fixes

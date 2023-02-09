@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.37](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.36...v5.0.0-pre.37) (2023-02-09)
+
+### Bug Fixes
+
+- **schema:** Do not change the hook context in resolvers ([#3048](https://github.com/feathersjs/feathers/issues/3048)) ([bfd8c04](https://github.com/feathersjs/feathers/commit/bfd8c04c15279063a0d4b70771715c656dda5f7c))
+- **schema:** Ensure that resolveResult and resolveExternal are run as around hooks ([#3032](https://github.com/feathersjs/feathers/issues/3032)) ([71942f4](https://github.com/feathersjs/feathers/commit/71942f418e3afe167aef4f98b1a97356dae7625c))
+
 # [5.0.0-pre.36](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.35...v5.0.0-pre.36) (2023-01-29)
 
 ### Bug Fixes

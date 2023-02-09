@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.37](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.36...v5.0.0-pre.37) (2023-02-09)
+
+### Bug Fixes
+
+- **generators:** Add schema selection to CI test matrix ([#3035](https://github.com/feathersjs/feathers/issues/3035)) ([7484b16](https://github.com/feathersjs/feathers/commit/7484b164fba4ac2ee379dc5c6363f964f45e94d3))
+- **generators:** Fix Knex migration generated filename ([#3033](https://github.com/feathersjs/feathers/issues/3033)) ([1ac18a7](https://github.com/feathersjs/feathers/commit/1ac18a7143173d973af982772678834f7a7334f7))
+- **generators:** Generated app does not start when choosing JSON schema ([#3034](https://github.com/feathersjs/feathers/issues/3034)) ([7b8250b](https://github.com/feathersjs/feathers/commit/7b8250bd535c3c5ec7429a65139335ad43616ae0))
+
+### Features
+
+- **mongodb:** Add Object ID keyword converter and update MongoDB CLI & docs ([#3041](https://github.com/feathersjs/feathers/issues/3041)) ([ca0994e](https://github.com/feathersjs/feathers/commit/ca0994eaecb5a31f310bc980d106834e11f24f41))
+
 # [5.0.0-pre.36](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.35...v5.0.0-pre.36) (2023-01-29)
 
 ### Bug Fixes
