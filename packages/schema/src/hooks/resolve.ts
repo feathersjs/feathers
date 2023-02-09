@@ -2,16 +2,6 @@ import { HookContext, NextFunction } from '@feathersjs/feathers'
 import { compose } from '@feathersjs/hooks'
 import { Resolver, ResolverStatus } from '../resolver'
 
-const getContext = <H extends HookContext>(context: H) => {
-  return Object.freeze({
-    ...context,
-    params: Object.freeze({
-      ...context.params,
-      query: Object.freeze({})
-    })
-  })
-}
-
 const getResult = <H extends HookContext>(context: H) => {
   const isPaginated = context.method === 'find' && context.result.data
   const data = isPaginated ? context.result.data : context.result
@@ -41,9 +31,8 @@ export type ResolverSetting<H extends HookContext> = Resolver<any, H> | Resolver
 export const resolveQuery =
   <H extends HookContext>(...resolvers: Resolver<any, H>[]) =>
   async (context: H, next?: NextFunction) => {
-    const ctx = getContext(context)
     const data = context?.params?.query || {}
-    const query = await runResolvers(resolvers, data, ctx)
+    const query = await runResolvers(resolvers, data, context)
 
     context.params = {
       ...context.params,
@@ -59,7 +48,6 @@ export const resolveData =
   <H extends HookContext>(...resolvers: Resolver<any, H>[]) =>
   async (context: H, next?: NextFunction) => {
     if (context.data !== undefined) {
-      const ctx = getContext(context)
       const data = context.data
 
       const status = {
@@ -67,9 +55,11 @@ export const resolveData =
       }
 
       if (Array.isArray(data)) {
-        context.data = await Promise.all(data.map((current) => runResolvers(resolvers, current, ctx, status)))
+        context.data = await Promise.all(
+          data.map((current) => runResolvers(resolvers, current, context, status))
+        )
       } else {
-        context.data = await runResolvers(resolvers, data, ctx, status)
+        context.data = await runResolvers(resolvers, data, context, status)
       }
     }
 
@@ -105,13 +95,12 @@ export const resolveResult = <H extends HookContext>(...resolvers: Resolver<any,
 
     await next()
 
-    const ctx = getContext(context)
     const status = context.params.resolve
     const { isPaginated, data } = getResult(context)
 
     const result = Array.isArray(data)
-      ? await Promise.all(data.map(async (current) => runResolvers(resolvers, current, ctx, status)))
-      : await runResolvers(resolvers, data, ctx, status)
+      ? await Promise.all(data.map(async (current) => runResolvers(resolvers, current, context, status)))
+      : await runResolvers(resolvers, data, context, status)
 
     if (isPaginated) {
       context.result.data = result
@@ -159,7 +148,6 @@ export const resolveExternal =
 
     await next()
 
-    const ctx = getContext(context)
     const existingDispatch = getDispatch(context.result)
 
     if (existingDispatch !== null) {
@@ -168,7 +156,7 @@ export const resolveExternal =
       const status = context.params.resolve
       const { isPaginated, data } = getResult(context)
       const resolveAndGetDispatch = async (current: any) => {
-        const resolved = await runResolvers(resolvers, current, ctx, status)
+        const resolved = await runResolvers(resolvers, current, context, status)
         const currentDispatch = Object.keys(resolved).reduce((res, key) => {
           res[key] = getDispatchValue(resolved[key])
 
