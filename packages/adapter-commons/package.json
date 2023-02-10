@@ -57,7 +57,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.1",
     "@types/mongodb": "^4.0.6",
-    "@types/node": "^18.11.18",
+    "@types/node": "^18.13.0",
     "mocha": "^10.2.0",
     "mongodb": "^5.0.1",
     "shx": "^0.3.4",
