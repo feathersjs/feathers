@@ -67,7 +67,7 @@
     "mocha-puppeteer": "^0.14.0",
     "node-fetch": "^2.6.1",
     "shx": "^0.3.4",
-    "socket.io-client": "^4.5.4",
+    "socket.io-client": "^4.6.0",
     "superagent": "^8.0.9",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.5",

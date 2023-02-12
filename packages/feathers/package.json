@@ -59,12 +59,12 @@
   },
   "dependencies": {
     "@feathersjs/commons": "^5.0.0-pre.37",
-    "@feathersjs/hooks": "^0.7.6",
+    "@feathersjs/hooks": "^0.8.1",
     "events": "^3.3.0"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.11.18",
+    "@types/node": "^18.13.0",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
