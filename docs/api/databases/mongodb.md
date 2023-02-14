@@ -400,20 +400,20 @@ To validate and convert strings to an object id using AJV, the `keywordObjectId`
 
 ```ts
 import { keywordObjectId } from '@feathersjs/mongodb'
-import { ObjectId } from '@feathersjs/typebox' // or '@feathersjs/schema'
+import { ObjectIdSchema } from '@feathersjs/typebox' // or '@feathersjs/schema'
 
 const validator = new Ajv()
 
 validator.addKeyword(keywordObjectId)
 
 const typeboxSchema = Type.Object({
-  userId: ObjectId()
+  userId: ObjectIdSchema()
 })
 
 const jsonSchema = {
   type: 'object',
   properties: {
-    userId: ObjectId()
+    userId: ObjectIdSchema()
   }
 }
 ```
