@@ -396,15 +396,22 @@ MongoDB uses [ObjectId](https://www.mongodb.com/docs/manual/reference/method/Obj
 
 ### AJV keyword
 
-To validate and convert strings to an object id using AJV, the `keywordObjectId` [AJV keyword](https://ajv.js.org/api.html#ajv-addkeyword-definition-string-object-ajv) helper can be used. It is set up automatically in a generated application using MongoDB. Both, `@feathersjs/typebox` and `@feathersjs/schema` export an `ObjectIdSchema` helper that creates a schema which can be both, a MongoDB ObjectId or a string that will be converted with the `objectid` keyword:
+To validate and convert strings to an object id using AJV, the `keywordObjectId` [AJV keyword](https://ajv.js.org/api.html#ajv-addkeyword-definition-string-object-ajv) helper can be used. It is set up automatically in a generated application using MongoDB.
 
 ```ts
 import { keywordObjectId } from '@feathersjs/mongodb'
-import { ObjectIdSchema } from '@feathersjs/typebox' // or '@feathersjs/schema'
 
 const validator = new Ajv()
 
 validator.addKeyword(keywordObjectId)
+```
+
+### ObjectIdSchema
+
+Both, `@feathersjs/typebox` and `@feathersjs/schema` export an `ObjectIdSchema` helper that creates a schema which can be both, a MongoDB ObjectId or a string that will be converted with the `objectid` keyword:
+
+```ts
+import { ObjectIdSchema } from '@feathersjs/typebox' // or '@feathersjs/schema'
 
 const typeboxSchema = Type.Object({
   userId: ObjectIdSchema()
@@ -420,7 +427,7 @@ const jsonSchema = {
 
 <BlockQuote label="Important" type="warning">
 
-Usually a converted object id property can be treated like a string but in some cases when working with it on the server you may have to call `toString()` to get the proper type.
+The `ObjectIdSchema` helper will only work when the [`objectid` AJV keyword](#ajv-keyword) is registered.
 
 </BlockQuote>
 
