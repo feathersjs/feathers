@@ -1,23 +1,10 @@
 import Ajv from 'ajv'
 import assert from 'assert'
+import { ObjectId as MongoObjectId } from 'mongodb'
 import { FromSchema } from '../src'
-import { queryProperties, querySyntax } from '../src/json-schema'
+import { querySyntax, ObjectIdSchema } from '../src/json-schema'
 
 describe('@feathersjs/schema/json-schema', () => {
-  it('queryProperties errors for unsupported query types', () => {
-    assert.throws(
-      () =>
-        queryProperties({
-          something: {
-            $ref: 'something'
-          }
-        }),
-      {
-        message: "Can not create query syntax schema for reference property 'something'"
-      }
-    )
-  })
-
   it('querySyntax works with no properties', async () => {
     const schema = {
       type: 'object',
@@ -68,5 +55,28 @@ describe('@feathersjs/schema/json-schema', () => {
     const validator = new Ajv({ strict: false }).compile(schema)
 
     assert.ok(validator(q))
+  })
+
+  // Test ObjectId validation
+  it('ObjectId', async () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        _id: ObjectIdSchema()
+      }
+    }
+
+    const validator = new Ajv({
+      strict: false
+    }).compile(schema)
+    const validated = await validator({
+      _id: '507f191e810c19729de860ea'
+    })
+    assert.ok(validated)
+
+    const validated2 = await validator({
+      _id: new MongoObjectId()
+    })
+    assert.ok(validated2)
   })
 })

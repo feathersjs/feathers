@@ -396,26 +396,24 @@ MongoDB uses [ObjectId](https://www.mongodb.com/docs/manual/reference/method/Obj
 
 ### AJV keyword
 
-To validate and convert strings to an object id using AJV, the `keywordObjectId` [AJV keyword](https://ajv.js.org/api.html#ajv-addkeyword-definition-string-object-ajv) helper can be used. It is set up automatically in a generated application using MongoDB.
+To validate and convert strings to an object id using AJV, the `keywordObjectId` [AJV keyword](https://ajv.js.org/api.html#ajv-addkeyword-definition-string-object-ajv) helper can be used. It is set up automatically in a generated application using MongoDB. Both, `@feathersjs/typebox` and `@feathersjs/schema` export an `ObjectIdSchema` helper that creates a schema which can be both, a MongoDB ObjectId or a string that will be converted with the `objectid` keyword:
 
 ```ts
 import { keywordObjectId } from '@feathersjs/mongodb'
+import { ObjectId } from '@feathersjs/typebox' // or '@feathersjs/schema'
 
 const validator = new Ajv()
 
 validator.addKeyword(keywordObjectId)
 
 const typeboxSchema = Type.Object({
-  userId: Type.String({ objectid: true })
+  userId: ObjectId()
 })
 
 const jsonSchema = {
   type: 'object',
   properties: {
-    userId: {
-      type: 'string',
-      objectid: true
-    }
+    userId: ObjectId()
   }
 }
 ```

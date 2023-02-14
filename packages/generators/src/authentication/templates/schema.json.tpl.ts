@@ -11,7 +11,12 @@ const template = ({
   type,
   relative
 }: AuthenticationGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
-import { resolve, querySyntax, getValidator } from '@feathersjs/schema'
+import { resolve, querySyntax, getValidator } from '@feathersjs/schema'${
+  type === 'mongodb'
+    ? `
+import { ObjectIdSchema } from '@feathersjs/schema'`
+    : ''
+}
 import type { FromSchema } from '@feathersjs/schema'
 ${localTemplate(authStrategies, `import { passwordHash } from '@feathersjs/authentication-local'`)}
 
@@ -27,16 +32,7 @@ export const ${camelName}Schema = {
   additionalProperties: false,
   required: [ '${type === 'mongodb' ? '_id' : 'id'}'${localTemplate(authStrategies, ", 'email'")} ],
   properties: {
-    ${
-      type === 'mongodb'
-        ? `_id: {
-      type: 'string',
-      objectid: true
-    },`
-        : `id: {
-      type: 'number'
-    },`
-    }
+    ${type === 'mongodb' ? `_id: ObjectIdSchema(),` : `id: { type: 'number' },`}
     ${authStrategies
       .map((name) =>
         name === 'local'

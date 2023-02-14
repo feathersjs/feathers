@@ -11,7 +11,12 @@ const template = ({
   lib
 }: ServiceGeneratorContext) => /* ts */ `// // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve } from '@feathersjs/schema'
-import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
+import { Type, getValidator, querySyntax } from '@feathersjs/typebox'${
+  type === 'mongodb'
+    ? `
+import { ObjectIdSchema } from '@feathersjs/typebox'`
+    : ''
+}
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '${relative}/declarations'
@@ -21,7 +26,7 @@ import { dataValidator, queryValidator } from '${relative}/${
 
 // Main data model schema
 export const ${camelName}Schema = Type.Object({
-    ${type === 'mongodb' ? '_id: Type.String({ objectid: true })' : 'id: Type.Number()'},
+    ${type === 'mongodb' ? '_id: ObjectIdSchema()' : 'id: Type.Number()'},
     text: Type.String()
   }, { $id: '${upperName}', additionalProperties: false })
 export type ${upperName} = Static<typeof ${camelName}Schema>

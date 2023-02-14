@@ -144,11 +144,6 @@ export const queryProperties = <
   Object.keys(definitions).reduce((res, key) => {
     const result = res as any
     const definition = definitions[key]
-    const { $ref } = definition as any
-
-    if ($ref) {
-      throw new Error(`Can not create query syntax schema for reference property '${key}'`)
-    }
 
     result[key] = queryProperty(definition as JSONSchemaDefinition, extensions[key as keyof T])
 
@@ -227,3 +222,11 @@ export const querySyntax = <
     ...props
   } as const
 }
+
+export const ObjectIdSchema = () =>
+  ({
+    anyOf: [
+      { type: 'string', objectid: true },
+      { type: 'object', properties: {}, additionalProperties: false }
+    ]
+  } as const)

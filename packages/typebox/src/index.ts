@@ -129,10 +129,6 @@ export const queryProperties = <
     const result = res as any
     const value = definition.properties[key]
 
-    if (value.$ref) {
-      throw new Error(`Can not create query syntax schema for reference property '${key}'`)
-    }
-
     result[key] = queryProperty(value, extensions[key])
 
     return result
@@ -182,3 +178,6 @@ export const querySyntax = <
     options
   )
 }
+
+export const ObjectIdSchema = () =>
+  Type.Union([Type.String({ objectid: true }), Type.Object({}, { additionalProperties: false })])
