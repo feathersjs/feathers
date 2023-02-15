@@ -22,7 +22,7 @@ export const validateQuery = <H extends HookContext>(schema: Schema<any> | Valid
     } catch (error: any) {
       throw error.ajv ? new BadRequest(error.message, error.errors) : error
     }
-    
+
     if (typeof next === 'function') {
       return next()
     }
