@@ -16,7 +16,7 @@ import type { Application } from './declarations'
 import { configurationValidator } from './configuration'
 import { logError } from './hooks/log-error'
 import { services } from './services/index'
-import { channels } from './channels'
+${transports.includes('websockets') ? `import { channels } from './channels'` : ''}
 
 const app: Application = koa(feathers())
 
@@ -38,11 +38,12 @@ ${
   cors: {
     origin: app.get('origins')
   }
-}))`
+}))
+app.configure(channels)`
     : ''
 }
 app.configure(services)
-app.configure(channels)
+
 
 // Register hooks that run on all service methods
 app.hooks({
