@@ -1,17 +1,7 @@
 import { sep } from 'path'
 import chalk from 'chalk'
-import {
-  generator,
-  prompt,
-  runGenerators,
-  fromFile,
-  install,
-  copyFiles,
-  toFile,
-  when
-} from '@feathershq/pinion'
+import { generator, prompt, runGenerators, fromFile, install, copyFiles, toFile } from '@feathershq/pinion'
 import { FeathersBaseContext, FeathersAppInfo, initializeBaseContext, addVersions } from '../commons'
-import { generate as authenticationGenerator, prompts as authenticationPrompts } from '../authentication'
 import { generate as connectionGenerator, prompts as connectionPrompts } from '../connection'
 
 export interface AppGeneratorData extends FeathersAppInfo {
@@ -23,10 +13,6 @@ export interface AppGeneratorData extends FeathersAppInfo {
    * A short description of the app
    */
   description: string
-  /**
-   * The selected user authentication strategies
-   */
-  authStrategies: string[]
   /**
    * The database connection string
    */
@@ -125,25 +111,20 @@ export const generate = (ctx: AppGeneratorArguments) =>
           type: 'confirm',
           when: ctx.client === undefined,
           message: (answers) => `Generate ${answers.language === 'ts' ? 'end-to-end typed ' : ''}client?`,
-          suffix: chalk.grey(' Can be used in Node.js, React, Angular, Vue, React Native etc.')
+          suffix: chalk.grey(' Can be used with React, Angular, Vue, React Native, etc.')
         },
         {
           type: 'list',
           name: 'schema',
           when: !ctx.schema,
           message: 'What is your preferred schema (model) definition format?',
+          suffix: chalk.grey(' Schemas allow to type, validate, secure and populate data'),
           choices: [
             { value: 'typebox', name: `TypeBox ${chalk.grey('(recommended)')}` },
             { value: 'json', name: 'JSON schema' }
           ]
         },
-        ...connectionPrompts(ctx),
-        ...authenticationPrompts({
-          ...ctx,
-          service: 'user',
-          path: 'users',
-          entity: 'user'
-        })
+        ...connectionPrompts(ctx)
       ])
     )
     .then(runGenerators(__dirname, 'templates'))
@@ -157,24 +138,6 @@ export const generate = (ctx: AppGeneratorArguments) =>
         dependencies
       }
     })
-    .then(
-      when<AppGeneratorContext>(
-        ({ authStrategies }) => authStrategies.length > 0,
-        async (ctx) => {
-          const { dependencies } = await authenticationGenerator({
-            ...ctx,
-            service: 'user',
-            path: 'users',
-            entity: 'user'
-          })
-
-          return {
-            ...ctx,
-            dependencies
-          }
-        }
-      )
-    )
     .then(
       install<AppGeneratorContext>(
         ({ transports, framework, dependencyVersions, dependencies, schema }) => {

@@ -13,8 +13,10 @@ import { combinate, dependencyVersions } from './utils'
 
 import { generate as generateApp } from '../lib/app'
 import { generate as generateConnection } from '../lib/connection'
+import { generate as generateAuthentication } from '../lib/authentication'
 import { generate as generateService } from '../lib/service'
 import { listAllFiles } from '@feathershq/pinion/lib/utils'
+import { AuthenticationGeneratorArguments } from '../src/authentication'
 
 const matrix = {
   language: ['js', 'ts'] as const,
@@ -58,7 +60,6 @@ describe('@feathersjs/generators', () => {
                 database: 'sqlite',
                 connectionString: `${name}.sqlite`,
                 transports: ['rest', 'websockets'],
-                authStrategies: ['local', 'github'],
                 schema
               },
               { cwd }
@@ -75,6 +76,26 @@ describe('@feathersjs/generators', () => {
         const testResult = await context.pinion.exec('npm', ['test'], { cwd })
 
         assert.ok(context)
+        assert.strictEqual(testResult, 0)
+      })
+
+      it('generates authentication with database and passes tests', async () => {
+        const authContext = await generateAuthentication(
+          getContext<AuthenticationGeneratorArguments>(
+            {
+              dependencyVersions,
+              authStrategies: ['local', 'github'],
+              entity: 'user',
+              service: 'user',
+              path: 'users',
+              schema
+            },
+            { cwd }
+          )
+        )
+        const testResult = await context.pinion.exec('npm', ['test'], { cwd })
+
+        assert.ok(authContext)
         assert.strictEqual(testResult, 0)
       })
 

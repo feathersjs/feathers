@@ -1,6 +1,8 @@
 import { generator, toFile, before, mergeJSON } from '@feathershq/pinion'
 import { ConnectionGeneratorContext } from '../index'
 import { injectSource, renderSource } from '../../commons'
+import { mkdir } from 'fs/promises'
+import path from 'path'
 
 const template = ({
   database
@@ -65,3 +67,7 @@ export const generate = (ctx: ConnectionGeneratorContext) =>
     )
     .then(injectSource(importTemplate, before('import { services } from'), toAppFile))
     .then(injectSource(configureTemplate, before('app.configure(services)'), toAppFile))
+    .then(async (ctx) => {
+      await mkdir(path.join(ctx.cwd, 'migrations'))
+      return ctx
+    })
