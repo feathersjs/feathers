@@ -299,3 +299,22 @@ export const yyyymmddhhmmss = (offset = 0) => {
     now.getUTCSeconds().toString().padStart(2, '0')
   )
 }
+
+/**
+ * Render a template if `local` authentication strategy has been selected
+ * @param authStrategies The list of selected authentication strategies
+ * @param content The content to render if `local` is selected
+ * @param alt The content to render if `local` is not selected
+ * @returns
+ */
+export const localTemplate = (authStrategies: string[], content: string, alt = '') =>
+  authStrategies.includes('local') ? content : alt
+
+/**
+ * Render a template if an `oauth` authentication strategy has been selected
+ * @param authStrategies
+ * @param content
+ * @returns
+ */
+export const oauthTemplate = (authStrategies: string[], content: string) =>
+  authStrategies.filter((s) => s !== 'local').length > 0 ? content : ''

@@ -1,6 +1,7 @@
 import { generator, before, toFile } from '@feathershq/pinion'
 import { injectSource, renderSource } from '../../commons'
-import { AuthenticationGeneratorContext, localTemplate, oauthTemplate } from '../index'
+import { AuthenticationGeneratorContext } from '../index'
+import { localTemplate, oauthTemplate } from '../../commons'
 
 const template = ({
   authStrategies

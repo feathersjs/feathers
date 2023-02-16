@@ -65,6 +65,10 @@ export interface ServiceGeneratorContext extends FeathersBaseContext {
    * Set to true if this service is for an authentication entity
    */
   isEntityService?: boolean
+  /**
+   * The authentication strategies (if it is an entity service)
+   */
+  authStrategies?: string[]
 }
 
 /**
@@ -161,7 +165,7 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
       )
     )
     .then(async (ctx): Promise<ServiceGeneratorContext> => {
-      const { name, path, type } = ctx
+      const { name, path, type, authStrategies = [] } = ctx
       const kebabName = _.kebabCase(name)
       const camelName = _.camelCase(name)
       const upperName = _.upperFirst(camelName)
@@ -184,6 +188,7 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
         camelName,
         kebabPath,
         relative,
+        authStrategies,
         ...ctx
       }
     })

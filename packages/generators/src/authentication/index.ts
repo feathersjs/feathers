@@ -19,11 +19,6 @@ export interface AuthenticationGeneratorContext extends ServiceGeneratorContext 
 export type AuthenticationGeneratorArguments = FeathersBaseContext &
   Partial<Pick<AuthenticationGeneratorContext, 'service' | 'authStrategies' | 'entity' | 'path'>>
 
-export const localTemplate = (authStrategies: string[], content: string) =>
-  authStrategies.includes('local') ? content : ''
-export const oauthTemplate = (authStrategies: string[], content: string) =>
-  authStrategies.filter((s) => s !== 'local').length > 0 ? content : ''
-
 export const prompts = (ctx: AuthenticationGeneratorArguments) => [
   {
     type: 'checkbox',

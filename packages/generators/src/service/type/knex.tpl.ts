@@ -3,14 +3,30 @@ import { renderSource, yyyymmddhhmmss } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
 const migrationTemplate = ({
-  kebabPath
+  kebabPath,
+  authStrategies,
+  isEntityService
 }: ServiceGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/knexfile.html
 import type { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('${kebabPath}', table => {
     table.increments('id')
-    table.string('text')
+    ${
+      isEntityService
+        ? authStrategies
+            .map((name) =>
+              name === 'local'
+                ? `    
+    table.string('email').unique()
+    table.string('password')`
+                : `    
+    table.string('${name}Id')`
+            )
+            .join('\n')
+        : `
+    table.string('text')`
+    }
   })
 }
 
@@ -56,7 +72,7 @@ export interface ${upperName}Params extends KnexAdapterParams<${upperName}Query>
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class ${className}<ServiceParams extends Params = ${upperName}Params>
-  extends KnexService<${upperName}, ${upperName}Data, ServiceParams, ${upperName}Patch> {
+  extends KnexService<${upperName}, ${upperName}Data, ${upperName}Params, ${upperName}Patch> {
 }
 
 export const getOptions = (app: Application): KnexAdapterOptions => {
