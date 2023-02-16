@@ -23,7 +23,7 @@ export type DependencyVersions = { [key: string]: string }
 /**
  * The database types supported by this generator
  */
-export type DatabaseType = 'mongodb' | 'mysql' | 'postgresql' | 'sqlite' | 'mssql'
+export type DatabaseType = 'mongodb' | 'mysql' | 'postgresql' | 'sqlite' | 'mssql' | 'other'
 
 /**
  * Returns the name of the Feathers database adapter for a supported database type

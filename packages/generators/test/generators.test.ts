@@ -79,15 +79,15 @@ describe('@feathersjs/generators', () => {
         assert.strictEqual(testResult, 0)
       })
 
-      it('generates authentication with database and passes tests', async () => {
+      it('generates authentication with SQLite and passes tests', async () => {
         const authContext = await generateAuthentication(
           getContext<AuthenticationGeneratorArguments>(
             {
               dependencyVersions,
               authStrategies: ['local', 'github'],
-              entity: 'user',
               service: 'user',
               path: 'users',
+              type: 'knex',
               schema
             },
             { cwd }

@@ -1,12 +1,6 @@
 import chalk from 'chalk'
 import { generator, runGenerators, prompt, install } from '@feathershq/pinion'
-import {
-  addVersions,
-  checkPreconditions,
-  FeathersBaseContext,
-  getDatabaseAdapter,
-  initializeBaseContext
-} from '../commons'
+import { addVersions, checkPreconditions, FeathersBaseContext, initializeBaseContext } from '../commons'
 import { generate as serviceGenerator, ServiceGeneratorContext } from '../service/index'
 
 export interface AuthenticationGeneratorContext extends ServiceGeneratorContext {
@@ -17,7 +11,7 @@ export interface AuthenticationGeneratorContext extends ServiceGeneratorContext 
 }
 
 export type AuthenticationGeneratorArguments = FeathersBaseContext &
-  Partial<Pick<AuthenticationGeneratorContext, 'service' | 'authStrategies' | 'entity' | 'path' | 'schema'>>
+  Partial<Pick<AuthenticationGeneratorContext, 'service' | 'authStrategies' | 'path' | 'schema' | 'type'>>
 
 export const generate = (ctx: AuthenticationGeneratorArguments) =>
   generator(ctx)
@@ -73,14 +67,6 @@ export const generate = (ctx: AuthenticationGeneratorArguments) =>
             when: !ctx.path,
             message: 'What path should the service be registered on?',
             default: 'users'
-          },
-          {
-            name: 'entity',
-            type: 'input',
-            when: !ctx.entity,
-            message: 'What is your authenticated entity name?',
-            suffix: chalk.grey(' Will be available in params (e.g. params.user)'),
-            default: 'user'
           }
         ]
       )
@@ -89,12 +75,12 @@ export const generate = (ctx: AuthenticationGeneratorArguments) =>
       const serviceContext = await serviceGenerator({
         ...ctx,
         name: ctx.service,
-        isEntityService: true,
-        type: getDatabaseAdapter(ctx.feathers?.database)
+        isEntityService: true
       })
 
       return {
         ...ctx,
+        entity: ctx.service,
         ...serviceContext
       }
     })

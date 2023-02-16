@@ -121,7 +121,8 @@ export const generate = (ctx: AppGeneratorArguments) =>
           suffix: chalk.grey(' Schemas allow to type, validate, secure and populate data'),
           choices: [
             { value: 'typebox', name: `TypeBox ${chalk.grey('(recommended)')}` },
-            { value: 'json', name: 'JSON schema' }
+            { value: 'json', name: 'JSON schema' },
+            { value: false, name: `No schema ${chalk.grey('(less secure and not recommended)')}` }
           ]
         },
         ...connectionPrompts(ctx)
