@@ -52,6 +52,7 @@
     "@feathersjs/authentication": "^5.0.0-pre.37",
     "@feathersjs/commons": "^5.0.0-pre.37",
     "@feathersjs/errors": "^5.0.0-pre.37",
+    "@feathersjs/feathers": "^5.0.0-pre.37",
     "@feathersjs/transport-commons": "^5.0.0-pre.37",
     "@koa/cors": "^4.0.0",
     "@types/koa": "^2.13.5",
@@ -67,7 +68,6 @@
   },
   "devDependencies": {
     "@feathersjs/authentication-local": "^5.0.0-pre.37",
-    "@feathersjs/feathers": "^5.0.0-pre.37",
     "@feathersjs/memory": "^5.0.0-pre.37",
     "@feathersjs/tests": "^5.0.0-pre.37",
     "@types/koa-compose": "^3.2.5",
