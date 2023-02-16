@@ -35,6 +35,10 @@ export interface AppGeneratorData extends FeathersAppInfo {
    * The source folder where files are put
    */
   lib: string
+  /**
+   * Generate a client
+   */
+  client: boolean
 }
 
 export type AppGeneratorContext = FeathersBaseContext &
@@ -115,6 +119,13 @@ export const generate = (ctx: AppGeneratorArguments) =>
             { value: 'yarn', name: 'Yarn' },
             { value: 'pnpm', name: 'pnpm' }
           ]
+        },
+        {
+          name: 'client',
+          type: 'confirm',
+          when: ctx.client === undefined,
+          message: (answers) => `Generate ${answers.language === 'ts' ? 'end-to-end typed ' : ''}client?`,
+          suffix: chalk.grey(' Can be used in Node.js, React, Angular, Vue, React Native etc.')
         },
         {
           type: 'list',

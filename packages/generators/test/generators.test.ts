@@ -51,6 +51,7 @@ describe('@feathersjs/generators', () => {
                 framework,
                 language,
                 dependencyVersions,
+                client: true,
                 lib: 'src',
                 description: 'A Feathers test app',
                 packager: 'npm',

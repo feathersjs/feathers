@@ -45,7 +45,7 @@ export type FeathersAppInfo = {
   /**
    * The package manager used
    */
-  packager: 'yarn' | 'npm'
+  packager: 'yarn' | 'npm' | 'pnpm'
   /**
    * A list of all chosen transports
    */

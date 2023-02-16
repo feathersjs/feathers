@@ -68,7 +68,7 @@ export interface ServiceGeneratorContext extends FeathersBaseContext {
   /**
    * The authentication strategies (if it is an entity service)
    */
-  authStrategies?: string[]
+  authStrategies: string[]
 }
 
 /**

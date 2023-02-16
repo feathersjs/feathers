@@ -18,7 +18,10 @@ const customEnvironment = {
     __name: 'PORT',
     __format: 'number'
   },
-  host: 'HOSTNAME'
+  host: 'HOSTNAME',
+  authentication: {
+    secret: 'FEATHERS_SECRET'
+  }
 }
 
 const testConfig = {

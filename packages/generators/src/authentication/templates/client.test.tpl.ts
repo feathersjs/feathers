@@ -1,5 +1,5 @@
-import { generator, toFile } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
+import { generator, toFile, when } from '@feathershq/pinion'
+import { fileExists, renderSource } from '../../commons'
 import { AuthenticationGeneratorContext } from '../index'
 import { localTemplate } from '../../commons'
 
@@ -67,9 +67,12 @@ describe('application client tests', () => {
 
 export const generate = (ctx: AuthenticationGeneratorContext) =>
   generator(ctx).then(
-    renderSource(
-      template,
-      toFile<AuthenticationGeneratorContext>(({ test }) => test, 'client.test'),
-      { force: true }
+    when<AuthenticationGeneratorContext>(
+      ({ lib, language }) => fileExists(lib, `client.${language}`),
+      renderSource(
+        template,
+        toFile<AuthenticationGeneratorContext>(({ test }) => test, 'client.test'),
+        { force: true }
+      )
     )
   )
