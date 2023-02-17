@@ -132,17 +132,17 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
               name: 'type',
               type: 'list',
               when: !type,
-              message: 'What kind of service is it?',
+              message: 'What database is the service using?',
               default: getDatabaseAdapter(feathers?.database),
               choices: [
                 {
                   value: 'knex',
-                  name: `SQL${sqlDisabled ? chalk.gray(' (connection not found)') : ''}`,
+                  name: `SQL${sqlDisabled ? chalk.gray(' (connection not available)') : ''}`,
                   disabled: sqlDisabled
                 },
                 {
                   value: 'mongodb',
-                  name: `MongoDB${mongodbDisabled ? chalk.gray(' (connection not found)') : ''}`,
+                  name: `MongoDB${mongodbDisabled ? chalk.gray(' (connection not available)') : ''}`,
                   disabled: mongodbDisabled
                 },
                 {
@@ -156,11 +156,12 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
               type: 'list',
               when: schema === undefined,
               message: 'Which schema definition format do you want to use?',
+              suffix: chalk.grey(' Schemas allow to type, validate, secure and populate data'),
               default: feathers?.schema,
-              choices: [
+              choices: (answers: ServiceGeneratorContext) => [
                 {
                   value: 'typebox',
-                  name: 'TypeBox'
+                  name: `TypeBox ${chalk.gray(' (recommended)')}`
                 },
                 {
                   value: 'json',
@@ -168,7 +169,9 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
                 },
                 {
                   value: false,
-                  name: 'No schema'
+                  name: `No schema${
+                    answers.type !== 'custom' ? chalk.gray(' (not recommended with a database)') : ''
+                  }`
                 }
               ]
             }

@@ -59,7 +59,7 @@ export type FeathersAppInfo = {
   /**
    * The main schema definition format
    */
-  schema: 'typebox' | 'json'
+  schema: 'typebox' | 'json' | false
 }
 
 export interface AppPackageJson extends PackageJson {

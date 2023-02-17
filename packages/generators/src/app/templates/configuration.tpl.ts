@@ -1,4 +1,4 @@
-import { generator, toFile, writeJSON } from '@feathershq/pinion'
+import { generator, toFile, when, writeJSON } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
@@ -29,7 +29,7 @@ const testConfig = {
 }
 
 const configurationJsonTemplate =
-  ({}: AppGeneratorContext) => /* ts */ `import { defaultAppSettings, getValidator } from '@feathersjs/schema'
+  ({}: AppGeneratorContext) => `import { defaultAppSettings, getValidator } from '@feathersjs/schema'
 import type { FromSchema } from '@feathersjs/schema'
 
 import { dataValidator } from './validators'
@@ -53,7 +53,7 @@ export type ApplicationConfiguration = FromSchema<typeof configurationSchema>
 `
 
 const configurationTypeboxTemplate =
-  ({}: AppGeneratorContext) => /* ts */ `import { Type, getValidator, defaultAppConfiguration } from '@feathersjs/typebox'
+  ({}: AppGeneratorContext) => `import { Type, getValidator, defaultAppConfiguration } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
 import { dataValidator } from './validators'
@@ -78,9 +78,12 @@ export const generate = (ctx: AppGeneratorContext) =>
     .then(writeJSON(testConfig, toFile('config', 'test.json')))
     .then(writeJSON(customEnvironment, toFile('config', 'custom-environment-variables.json')))
     .then(
-      renderSource(
-        async (ctx) =>
-          ctx.schema === 'typebox' ? configurationTypeboxTemplate(ctx) : configurationJsonTemplate(ctx),
-        toFile<AppGeneratorContext>(({ lib }) => lib, 'configuration')
+      when<AppGeneratorContext>(
+        (ctx) => ctx.schema !== false,
+        renderSource(
+          async (ctx) =>
+            ctx.schema === 'typebox' ? configurationTypeboxTemplate(ctx) : configurationJsonTemplate(ctx),
+          toFile<AppGeneratorContext>(({ lib }) => lib, 'configuration')
+        )
       )
     )

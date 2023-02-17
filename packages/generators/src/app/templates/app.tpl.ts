@@ -3,7 +3,8 @@ import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
 const tsKoaApp = ({
-  transports
+  transports,
+  schema
 }: AppGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
 import { feathers } from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
@@ -12,8 +13,8 @@ import {
 } from '@feathersjs/koa'
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
+${schema !== false ? `import { configurationValidator } from './configuration'` : ''}
 import type { Application } from './declarations'
-import { configurationValidator } from './configuration'
 import { logError } from './hooks/log-error'
 import { services } from './services/index'
 ${transports.includes('websockets') ? `import { channels } from './channels'` : ''}
@@ -21,7 +22,7 @@ ${transports.includes('websockets') ? `import { channels } from './channels'` : 
 const app: Application = koa(feathers())
 
 // Load our app configuration (see config/ folder)
-app.configure(configuration(configurationValidator))
+app.configure(configuration(${schema !== false ? 'configurationValidator' : ''}))
 
 // Set up Koa middleware
 app.use(cors())
@@ -64,7 +65,8 @@ export { app }
 `
 
 const tsExpressApp = ({
-  transports
+  transports,
+  schema
 }: AppGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
 import { feathers } from '@feathersjs/feathers'
 import express, {
@@ -75,7 +77,7 @@ import configuration from '@feathersjs/configuration'
 ${transports.includes('websockets') ? "import socketio from '@feathersjs/socketio'" : ''}
 
 import type { Application } from './declarations'
-import { configurationValidator } from './configuration'
+${schema !== false ? `import { configurationValidator } from './configuration'` : ''}
 import { logger } from './logger'
 import { logError } from './hooks/log-error'
 import { services } from './services/index'
@@ -84,7 +86,7 @@ import { channels } from './channels'
 const app: Application = express(feathers())
 
 // Load app configuration
-app.configure(configuration(configurationValidator))
+app.configure(configuration(${schema !== false ? 'configurationValidator' : ''}))
 app.use(cors())
 app.use(json())
 app.use(urlencoded({ extended: true }))

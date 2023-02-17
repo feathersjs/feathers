@@ -118,11 +118,13 @@ export const generate = (ctx: AppGeneratorArguments) =>
           name: 'schema',
           when: !ctx.schema,
           message: 'What is your preferred schema (model) definition format?',
-          suffix: chalk.grey(' Schemas allow to type, validate, secure and populate data'),
+          suffix: chalk.grey(
+            ' Schemas allow to type, validate, secure and populate your data and configuration'
+          ),
           choices: [
             { value: 'typebox', name: `TypeBox ${chalk.grey('(recommended)')}` },
             { value: 'json', name: 'JSON schema' },
-            { value: false, name: `No schema ${chalk.grey('(less secure and not recommended)')}` }
+            { value: false, name: `No schema ${chalk.grey('(not recommended)')}` }
           ]
         },
         ...connectionPrompts(ctx)
