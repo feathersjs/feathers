@@ -20,10 +20,12 @@ export const { version } = JSON.parse(fs.readFileSync(join(__dirname, '..', 'pac
 
 export type DependencyVersions = { [key: string]: string }
 
+export const DATABASE_TYPES = ['mongodb', 'mysql', 'postgresql', 'sqlite', 'mssql', 'other'] as const
+
 /**
  * The database types supported by this generator
  */
-export type DatabaseType = 'mongodb' | 'mysql' | 'postgresql' | 'sqlite' | 'mssql' | 'other'
+export type DatabaseType = (typeof DATABASE_TYPES)[number]
 
 /**
  * Returns the name of the Feathers database adapter for a supported database type

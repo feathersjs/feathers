@@ -47,7 +47,7 @@ export const prompts = ({ database, connectionString, pkg, name }: ConnectionGen
       { value: 'mssql', name: 'Microsoft SQL' },
       {
         value: 'other',
-        name: `Another database ${chalk.grey('(used in custom services)')}`
+        name: `Another database ${chalk.grey('(not configured automatically, use with custom services)')}`
       }
     ]
   },
