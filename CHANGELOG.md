@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.38](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.37...v5.0.0-pre.38) (2023-02-17)
+
+### Bug Fixes
+
+- **koa:** Fix missing dependency on feathers ([#3061](https://github.com/feathersjs/feathers/issues/3061)) ([80dc95f](https://github.com/feathersjs/feathers/commit/80dc95ff85c9074b8f70e3ff71562f18863ef2be))
+- **schema:** validateQuery - move next function outside of try-catch ([#3053](https://github.com/feathersjs/feathers/issues/3053)) ([37fe5c4](https://github.com/feathersjs/feathers/commit/37fe5c4a4d813867f6d02098b7c77d08786248c7))
+
+### Features
+
+- **generators:** Final tweaks to the generators ([#3060](https://github.com/feathersjs/feathers/issues/3060)) ([1bf1544](https://github.com/feathersjs/feathers/commit/1bf1544fa8deeaa44ba354fb539dc3f1fd187767))
+- **schema:** Add schema helper for handling Object ids ([#3058](https://github.com/feathersjs/feathers/issues/3058)) ([1393bed](https://github.com/feathersjs/feathers/commit/1393bed81a9ee814de6aab0e537af83e667591a2))
+
 # [5.0.0-pre.37](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.36...v5.0.0-pre.37) (2023-02-09)
 
 ### Bug Fixes

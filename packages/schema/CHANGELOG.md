@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.38](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.37...v5.0.0-pre.38) (2023-02-17)
+
+### Bug Fixes
+
+- **schema:** validateQuery - move next function outside of try-catch ([#3053](https://github.com/feathersjs/feathers/issues/3053)) ([37fe5c4](https://github.com/feathersjs/feathers/commit/37fe5c4a4d813867f6d02098b7c77d08786248c7))
+
+### Features
+
+- **schema:** Add schema helper for handling Object ids ([#3058](https://github.com/feathersjs/feathers/issues/3058)) ([1393bed](https://github.com/feathersjs/feathers/commit/1393bed81a9ee814de6aab0e537af83e667591a2))
+
 # [5.0.0-pre.37](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.36...v5.0.0-pre.37) (2023-02-09)
 
 ### Bug Fixes

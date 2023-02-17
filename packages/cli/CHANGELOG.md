@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.38](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.37...v5.0.0-pre.38) (2023-02-17)
+
+### Features
+
+- **generators:** Final tweaks to the generators ([#3060](https://github.com/feathersjs/feathers/issues/3060)) ([1bf1544](https://github.com/feathersjs/feathers/commit/1bf1544fa8deeaa44ba354fb539dc3f1fd187767))
+
 # [5.0.0-pre.37](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.36...v5.0.0-pre.37) (2023-02-09)
 
 **Note:** Version bump only for package @feathersjs/cli

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-pre.38](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.37...v5.0.0-pre.38) (2023-02-17)
+
+### Bug Fixes
+
+- **koa:** Fix missing dependency on feathers ([#3061](https://github.com/feathersjs/feathers/issues/3061)) ([80dc95f](https://github.com/feathersjs/feathers/commit/80dc95ff85c9074b8f70e3ff71562f18863ef2be))
+
 # [5.0.0-pre.37](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.36...v5.0.0-pre.37) (2023-02-09)
 
 **Note:** Version bump only for package @feathersjs/koa
