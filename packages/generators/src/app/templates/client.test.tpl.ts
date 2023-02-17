@@ -1,4 +1,4 @@
-import { generator, toFile } from '@feathershq/pinion'
+import { generator, toFile, when } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
@@ -23,4 +23,6 @@ describe('client tests', () => {
 `
 
 export const generate = (ctx: AppGeneratorContext) =>
-  generator(ctx).then(renderSource(template, toFile('test', 'client.test')))
+  generator(ctx).then(
+    when<AppGeneratorContext>((ctx) => ctx.client, renderSource(template, toFile('test', 'client.test')))
+  )

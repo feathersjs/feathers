@@ -40,7 +40,7 @@ export interface ${upperName}Params extends Params<${upperName}Query> {
 }
 
 // This is a skeleton for a custom service class. Remove or add the methods you need here
-export class ${className}<ServiceParams extends Params = ${upperName}Params>
+export class ${className}<ServiceParams extends ${upperName}Params = ${upperName}Params>
     implements ServiceInterface<${upperName}, ${upperName}Data, ServiceParams, ${upperName}Patch> {
   constructor (public options: ${className}Options) {
   }

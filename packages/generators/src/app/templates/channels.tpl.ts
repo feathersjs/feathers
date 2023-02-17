@@ -1,4 +1,4 @@
-import { generator, toFile } from '@feathershq/pinion'
+import { generator, toFile, when } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
@@ -12,11 +12,6 @@ import type { Application, HookContext } from './declarations'
 import { logger } from './logger'
 
 export const channels = (app: Application) => {
-  if(typeof app.channel !== 'function') {
-    // If no real-time functionality has been configured just return
-    return
-  }
-
   logger.warn('Publishing all events to all authenticated users. See \`channels.${language}\` and https://dove.feathersjs.com/api/channels.html for more information.')
 
   app.on('connection', (connection: RealTimeConnection) => {
@@ -49,8 +44,11 @@ export const channels = (app: Application) => {
 
 export const generate = (ctx: AppGeneratorContext) =>
   generator(ctx).then(
-    renderSource(
-      template,
-      toFile<AppGeneratorContext>(({ lib }) => lib, 'channels')
+    when<AppGeneratorContext>(
+      ({ transports }) => transports.includes('websockets'),
+      renderSource(
+        template,
+        toFile<AppGeneratorContext>(({ lib }) => lib, 'channels')
+      )
     )
   )

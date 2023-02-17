@@ -29,6 +29,7 @@ const tsPackageJson = (lib: string) => ({
 const packageJson = ({
   name,
   description,
+  client,
   language,
   packager,
   database,
@@ -62,8 +63,14 @@ const packageJson = ({
     lib,
     test
   },
-  files: ['lib/client.js', 'lib/**/*.d.ts', 'lib/**/*.shared.js'],
-  main: language === 'ts' ? 'lib/client' : `${lib}/client`,
+  ...(client
+    ? {
+        files: ['lib/client.js', 'lib/**/*.d.ts', 'lib/**/*.shared.js'],
+        main: language === 'ts' ? 'lib/client' : `${lib}/client`
+      }
+    : {
+        main: 'lib/index'
+      }),
   ...(language === 'ts' ? tsPackageJson(lib) : jsPackageJson(lib))
 })
 

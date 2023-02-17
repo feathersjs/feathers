@@ -1,11 +1,14 @@
 import { generator, toFile, after, prepend } from '@feathershq/pinion'
-import { injectSource, renderSource } from '../../commons'
+import { fileExists, injectSource, renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
 export const template = ({
   camelName,
   authentication,
   isEntityService,
+  path,
+  lib,
+  language,
   className,
   relative,
   schema,
@@ -33,7 +36,13 @@ import {
 
 import type { Application } from '${relative}/declarations'
 import { ${className}, getOptions } from './${fileName}.class'
-import { ${camelName}Path, ${camelName}Methods } from './${fileName}.shared'
+${
+  fileExists(lib, `client.${language}`)
+    ? `import { ${camelName}Path, ${camelName}Methods } from './${fileName}.shared'`
+    : `
+export const ${camelName}Path = '${path}'
+export const ${camelName}Methods = ['find', 'get', 'create', 'patch', 'remove'] as const`
+}
 
 export * from './${fileName}.class'
 ${schema ? `export * from './${fileName}.schema'` : ''}

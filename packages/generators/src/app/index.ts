@@ -1,17 +1,7 @@
 import { sep } from 'path'
 import chalk from 'chalk'
-import {
-  generator,
-  prompt,
-  runGenerators,
-  fromFile,
-  install,
-  copyFiles,
-  toFile,
-  when
-} from '@feathershq/pinion'
+import { generator, prompt, runGenerators, fromFile, install, copyFiles, toFile } from '@feathershq/pinion'
 import { FeathersBaseContext, FeathersAppInfo, initializeBaseContext, addVersions } from '../commons'
-import { generate as authenticationGenerator, prompts as authenticationPrompts } from '../authentication'
 import { generate as connectionGenerator, prompts as connectionPrompts } from '../connection'
 
 export interface AppGeneratorData extends FeathersAppInfo {
@@ -24,10 +14,6 @@ export interface AppGeneratorData extends FeathersAppInfo {
    */
   description: string
   /**
-   * The selected user authentication strategies
-   */
-  authStrategies: string[]
-  /**
    * The database connection string
    */
   connectionString: string
@@ -35,6 +21,10 @@ export interface AppGeneratorData extends FeathersAppInfo {
    * The source folder where files are put
    */
   lib: string
+  /**
+   * Generate a client
+   */
+  client: boolean
 }
 
 export type AppGeneratorContext = FeathersBaseContext &
@@ -117,22 +107,27 @@ export const generate = (ctx: AppGeneratorArguments) =>
           ]
         },
         {
+          name: 'client',
+          type: 'confirm',
+          when: ctx.client === undefined,
+          message: (answers) => `Generate ${answers.language === 'ts' ? 'end-to-end typed ' : ''}client?`,
+          suffix: chalk.grey(' Can be used with React, Angular, Vue, React Native, Node.js etc.')
+        },
+        {
           type: 'list',
           name: 'schema',
           when: !ctx.schema,
           message: 'What is your preferred schema (model) definition format?',
+          suffix: chalk.grey(
+            ' Schemas allow to type, validate, secure and populate your data and configuration'
+          ),
           choices: [
             { value: 'typebox', name: `TypeBox ${chalk.grey('(recommended)')}` },
-            { value: 'json', name: 'JSON schema' }
+            { value: 'json', name: 'JSON schema' },
+            { value: false, name: `No schema ${chalk.grey('(not recommended)')}` }
           ]
         },
-        ...connectionPrompts(ctx),
-        ...authenticationPrompts({
-          ...ctx,
-          service: 'user',
-          path: 'users',
-          entity: 'user'
-        })
+        ...connectionPrompts(ctx)
       ])
     )
     .then(runGenerators(__dirname, 'templates'))
@@ -146,24 +141,6 @@ export const generate = (ctx: AppGeneratorArguments) =>
         dependencies
       }
     })
-    .then(
-      when<AppGeneratorContext>(
-        ({ authStrategies }) => authStrategies.length > 0,
-        async (ctx) => {
-          const { dependencies } = await authenticationGenerator({
-            ...ctx,
-            service: 'user',
-            path: 'users',
-            entity: 'user'
-          })
-
-          return {
-            ...ctx,
-            dependencies
-          }
-        }
-      )
-    )
     .then(
       install<AppGeneratorContext>(
         ({ transports, framework, dependencyVersions, dependencies, schema }) => {

@@ -20,10 +20,12 @@ export const { version } = JSON.parse(fs.readFileSync(join(__dirname, '..', 'pac
 
 export type DependencyVersions = { [key: string]: string }
 
+export const DATABASE_TYPES = ['mongodb', 'mysql', 'postgresql', 'sqlite', 'mssql', 'other'] as const
+
 /**
  * The database types supported by this generator
  */
-export type DatabaseType = 'mongodb' | 'mysql' | 'postgresql' | 'sqlite' | 'mssql'
+export type DatabaseType = (typeof DATABASE_TYPES)[number]
 
 /**
  * Returns the name of the Feathers database adapter for a supported database type
@@ -45,7 +47,7 @@ export type FeathersAppInfo = {
   /**
    * The package manager used
    */
-  packager: 'yarn' | 'npm'
+  packager: 'yarn' | 'npm' | 'pnpm'
   /**
    * A list of all chosen transports
    */
@@ -57,7 +59,7 @@ export type FeathersAppInfo = {
   /**
    * The main schema definition format
    */
-  schema: 'typebox' | 'json'
+  schema: 'typebox' | 'json' | false
 }
 
 export interface AppPackageJson extends PackageJson {
@@ -299,3 +301,22 @@ export const yyyymmddhhmmss = (offset = 0) => {
     now.getUTCSeconds().toString().padStart(2, '0')
   )
 }
+
+/**
+ * Render a template if `local` authentication strategy has been selected
+ * @param authStrategies The list of selected authentication strategies
+ * @param content The content to render if `local` is selected
+ * @param alt The content to render if `local` is not selected
+ * @returns
+ */
+export const localTemplate = (authStrategies: string[], content: string, alt = '') =>
+  authStrategies.includes('local') ? content : alt
+
+/**
+ * Render a template if an `oauth` authentication strategy has been selected
+ * @param authStrategies
+ * @param content
+ * @returns
+ */
+export const oauthTemplate = (authStrategies: string[], content: string) =>
+  authStrategies.filter((s) => s !== 'local').length > 0 ? content : ''

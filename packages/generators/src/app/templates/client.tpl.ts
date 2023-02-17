@@ -1,4 +1,4 @@
-import { generator, toFile } from '@feathershq/pinion'
+import { generator, toFile, when } from '@feathershq/pinion'
 import { renderSource } from '../../commons'
 import { AppGeneratorContext } from '../index'
 
@@ -43,8 +43,11 @@ export const createClient = <Configuration = any> (
 
 export const generate = async (ctx: AppGeneratorContext) =>
   generator(ctx).then(
-    renderSource(
-      template,
-      toFile<AppGeneratorContext>(({ lib }) => lib, 'client')
+    when<AppGeneratorContext>(
+      (ctx) => ctx.client,
+      renderSource(
+        template,
+        toFile<AppGeneratorContext>(({ lib }) => lib, 'client')
+      )
     )
   )

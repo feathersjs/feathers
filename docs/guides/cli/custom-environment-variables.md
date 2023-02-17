@@ -8,11 +8,14 @@ While `node-config` used for [application configuration](./default.json.md) reco
     "__name": "PORT",
     "__format": "number"
   },
-  "host": "HOSTNAME"
+  "host": "HOSTNAME",
+  "authentication": {
+    "secret": "FEATHERS_SECRET"
+  }
 }
 ```
 
-This sets `app.get('port')` using the `PORT` environment variable (if it is available) parsing it as a number and `app.get('host')` from the `HOSTNAME` environment variable.
+This sets `app.get('port')` using the `PORT` environment variable (if it is available) parsing it as a number and `app.get('host')` from the `HOSTNAME` environment variable and the authentication secret to the `FEATHERS_SECRET` environment variable.
 
 <BlockQuote type="tip">
 

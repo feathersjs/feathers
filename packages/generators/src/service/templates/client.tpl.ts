@@ -1,5 +1,5 @@
-import { generator, toFile, after, before } from '@feathershq/pinion'
-import { injectSource } from '../../commons'
+import { generator, toFile, after, before, when } from '@feathershq/pinion'
+import { fileExists, injectSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
 const importTemplate = ({ upperName, folder, fileName, camelName }: ServiceGeneratorContext) => /* ts */ `
@@ -17,15 +17,15 @@ const registrationTemplate = ({ camelName }: ServiceGeneratorContext) =>
 
 const toClientFile = toFile<ServiceGeneratorContext>(({ lib }) => [lib, 'client'])
 
-export const generate = async (ctx: ServiceGeneratorContext) =>
-  generator(ctx)
-    .then(injectSource(registrationTemplate, before('return client'), toClientFile))
-    .then(
-      injectSource(
-        importTemplate,
-        after<ServiceGeneratorContext>(({ language }) =>
-          language === 'ts' ? 'import type { AuthenticationClientOptions }' : 'import authenticationClient'
-        ),
-        toClientFile
-      )
-    )
+export const generate = async (ctx: ServiceGeneratorContext) => generator(ctx)
+when<ServiceGeneratorContext>(
+  ({ lib, language }) => fileExists(lib, `client.${language}`),
+  injectSource(registrationTemplate, before('return client'), toClientFile),
+  injectSource(
+    importTemplate,
+    after<ServiceGeneratorContext>(({ language }) =>
+      language === 'ts' ? 'import type { AuthenticationClientOptions }' : 'import authenticationClient'
+    ),
+    toClientFile
+  )
+)

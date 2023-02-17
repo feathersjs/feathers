@@ -1,5 +1,5 @@
-import { generator, toFile } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
+import { generator, toFile, when } from '@feathershq/pinion'
+import { fileExists, renderSource } from '../../commons'
 import { ServiceGeneratorContext } from '../index'
 
 const sharedTemplate = ({
@@ -49,13 +49,16 @@ declare module '${relative}/client' {
 
 export const generate = async (ctx: ServiceGeneratorContext) =>
   generator(ctx).then(
-    renderSource(
-      sharedTemplate,
-      toFile(({ lib, folder, fileName }: ServiceGeneratorContext) => [
-        lib,
-        'services',
-        ...folder,
-        `${fileName}.shared`
-      ])
+    when<ServiceGeneratorContext>(
+      ({ lib, language }) => fileExists(lib, `client.${language}`),
+      renderSource(
+        sharedTemplate,
+        toFile(({ lib, folder, fileName }: ServiceGeneratorContext) => [
+          lib,
+          'services',
+          ...folder,
+          `${fileName}.shared`
+        ])
+      )
     )
   )
