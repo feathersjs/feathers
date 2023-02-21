@@ -15,7 +15,7 @@ The Feathers CLI allows us to initialize a new Feathers server with a recommende
 You can create a new Feathers application by running `npm create feathers <name>`. To create a new Feathers application called `feathers-chat` we can run:
 
 ```sh
-npm create feathers@pre feathers-chat
+npm create feathers@latest feathers-chat
 ```
 
 If you never ran the command before you might be asked to confirm the package installation by pressing enter.

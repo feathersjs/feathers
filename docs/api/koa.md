@@ -12,7 +12,7 @@ outline: deep
 </Badges>
 
 ```
-npm install @feathersjs/koa@pre --save
+npm install @feathersjs/koa --save
 ```
 
 The `@feathersjs/koa` module contains the [KoaJS](https://koajs.com/) framework integrations for Feathers. It will turn the Feathers app into a fully compatible KoaJS application.
