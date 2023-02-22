@@ -146,11 +146,12 @@ export const userQueryResolver = resolve<UserQuery, HookContext>({
 
 <DatabaseBlock global-id="mongodb">
 
-```ts{2,17-18,34,44-54,82-86}
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
+```ts{2,18-19,35,44-54,82-87}
+// // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import crypto from 'crypto'
 import { resolve } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
+import { ObjectIdSchema } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 import { passwordHash } from '@feathersjs/authentication-local'
 
@@ -160,7 +161,7 @@ import { dataValidator, queryValidator } from '../../validators'
 // Main data model schema
 export const userSchema = Type.Object(
   {
-    _id: Type.String({ objectid: true }),
+    _id: ObjectIdSchema(),
     email: Type.String(),
     password: Type.Optional(Type.String()),
     githubId: Type.Optional(Type.Number()),
@@ -177,13 +178,12 @@ export const userExternalResolver = resolve<User, HookContext>({
   password: async () => undefined
 })
 
-// Schema for creating new users
+// Schema for creating new entries
 export const userDataSchema = Type.Pick(
   userSchema,
   ['email', 'password', 'githubId', 'avatar'],
   {
-    $id: 'UserData',
-    additionalProperties: false
+    $id: 'UserData'
   }
 )
 export type UserData = Static<typeof userDataSchema>
@@ -203,7 +203,7 @@ export const userDataResolver = resolve<User, HookContext>({
   }
 })
 
-// Schema for updating existing users
+// Schema for updating existing entries
 export const userPatchSchema = Type.Partial(userSchema, {
   $id: 'UserPatch'
 })
@@ -355,10 +355,11 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext>({
 
 <DatabaseBlock global-id="mongodb">
 
-```ts{2,8,15-17,24-27,39-45,58-61,74-82}
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
+```ts{2,9,16-18,25-28,40-46,59-62,75-83}
+// // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
+import { ObjectIdSchema } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
@@ -368,7 +369,7 @@ import { userSchema } from '../users/users.schema'
 // Main data model schema
 export const messageSchema = Type.Object(
   {
-    _id: Type.String({ objectid: true }),
+    _id: ObjectIdSchema(),
     text: Type.String(),
     createdAt: Type.Number(),
     userId: Type.String({ objectid: true }),
@@ -412,9 +413,7 @@ export const messagePatchValidator = getValidator(messagePatchSchema, dataValida
 export const messagePatchResolver = resolve<Message, HookContext>({})
 
 // Schema for allowed query properties
-export const messageQueryProperties = Type.Pick(messageSchema,
-  ['_id', 'text', 'createdAt', 'userId']
-)
+export const messageQueryProperties = Type.Pick(messageSchema, ['_id', 'text', 'createdAt', 'userId'])
 export const messageQuerySchema = Type.Intersect(
   [
     querySyntax(messageQueryProperties),

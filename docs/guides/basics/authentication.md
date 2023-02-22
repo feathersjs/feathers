@@ -22,7 +22,19 @@ npx feathers generate authentication
 
 For the first prompt, let's select GitHub in addition to _Email + Password_ by navigating to it with the arrow down key and then pressing space. All other questions can be answered with the default by pressing enter:
 
+<DatabaseBlock global-id="sql">
+
 ![feathers generate authentication prompts](./assets/generate-authentication.png)
+
+</DatabaseBlock>
+
+<DatabaseBlock global-id="mongodb">
+
+![feathers generate authentication prompts](./assets/generate-authentication-mongodb.png)
+
+</DatabaseBlock>
+
+
 
 ## What's next?
 
