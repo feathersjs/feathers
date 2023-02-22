@@ -83,6 +83,13 @@ export function koa<S = any, C = any>(
 
   koaQs(app as any)
 
+  Object.getOwnPropertySymbols(koaApp).forEach((symbol) => {
+    const target = app as any
+    const source = koaApp as any
+
+    target[symbol] = source[symbol]
+  })
+
   // This reinitializes hooks
   app.setup = feathersApp.setup as any
   app.teardown = feathersApp.teardown as any
