@@ -1,7 +1,5 @@
 # Logging in
 
-# Authentication
-
 We now have a fully functional chat application consisting of [services](./services.md) and [schemas](./schemas.md). In the [authentication chapter](./authentication.md) we generated everything necessary for using Feathers authentication so let's look at how to register users and add a log in with GitHub to our chat.
 
 ## Registering a user
@@ -68,7 +66,7 @@ The password has been hashed and stored securely in the database but will never 
 
 ## Logging in
 
-By default, Feathers uses [JSON Web Tokens](https://jwt.io/) for authentication. It is an access token that is issued by the Feathers server for a limited time (one day by default) and needs to be sent with every API request that requires authentication. Usually a token is issued for a specific user, Let's see if we can issue a JWT for the user that we just created.
+By default, Feathers uses [JSON Web Tokens](https://jwt.io/) for authentication. It is an access token that is issued by the Feathers server for a limited time (one day by default) and needs to be sent with every API request that requires authentication. Usually a token is issued for a specific user. Let's see if we can issue a JWT for the user that we just created.
 
 <BlockQuote type="tip">
 

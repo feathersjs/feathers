@@ -30,6 +30,8 @@ While schemas and resolvers can be used outside of a Feathers application, you w
 - **Query** schemas and resolvers validate and convert the query string and can also be used for additional limitations like only allowing a user to see and modify their own data
 - **External** resolvers return a safe version of the data (by e.g. hiding a users password) that can be sent to external clients
 
+While it may initially look like a bit more code, schema driven development is a great way to have the data models and how data is modified in a single place.
+
 ## Adding a user avatar
 
 Let's extend our existing users schema to add an `avatar` property so that our users can have a profile image.

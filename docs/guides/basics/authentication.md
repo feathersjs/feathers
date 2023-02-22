@@ -4,7 +4,7 @@ outline: deep
 
 # Authentication
 
-Authentication is an important aspect of any web application that involves user accounts. It allows users to log in and prove their identity, which is critical for keeping the application secure and ensuring that only authorized users can access sensitive information or perform certain actions. Implementing authentication can be a complex task providing different authentication mechanisms and storing this information securely.
+Authentication is an important aspect of any web application that involves user accounts. It allows users to log in and prove their identity, which is critical for keeping the application secure and ensuring that only authorized users can access sensitive information or perform certain actions.
 
 The Feathers CLI allows to easily add authentication to our application, including features such as creating and verifying tokens, storing and retrieving user credentials securely, and implementing OAuth-based authentication with third-party providers. The following authentication strategies are included:
 
