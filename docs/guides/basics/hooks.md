@@ -4,9 +4,9 @@ outline: deep
 
 # Hooks
 
-As we have seen in the [quick start](./starting.md) and when we created our messages service in [the services chapter](./services.md), Feathers services are a great way to implement data storage and modification. Technically, we could write our entire app with services but very often we need similar functionality across multiple services. For example, we might want to check for all services if a user is allowed to access it. With just services, we would have to write this every time.
+When we created our messages service in [the services chapter](./services.md), we saw that Feathers services are a great way to implement data storage and modification. Technically, we could write our entire app with services but very often we need similar functionality across multiple services. For example, we might want to check for all services if a user is allowed to access it. With just services, we would have to write this every time.
 
-This is where Feathers hooks come in. Hooks are pluggable middleware functions that can be registered **around**, **before**, **after** or on **errors** of a service method without having to change the original code.
+This is where Feathers hooks come in. Hooks are pluggable middleware functions that can be registered **around**, **before**, **after** or on **errors** of a service method without changing the original code.
 
 Just like services themselves, hooks are _transport independent_. They are usually also service independent, meaning they can be used with ​*any*​ service. This pattern keeps your application logic flexible, composable, and much easier to trace through and debug.
 Hooks are commonly used to handle things like validation, authorization, logging, sending emails and more.
@@ -26,6 +26,8 @@ npx feathers generate hook
 ```
 
 We call our hook `log-runtime` and confirm the type with enter to make it an `around` hook.
+
+![feathers generate hook prompts](./assets/generate-hook.png)
 
 <LanguageBlock global-id="ts">
 

@@ -26,12 +26,9 @@ In this chapter we will look at the generated schemas and resolvers and update t
 While schemas and resolvers can be used outside of a Feathers application, you will usually encounter them in a Feathers context where they come in four kinds:
 
 - **Result** schemas and resolvers that define the data that is being returned. This is also where associated data would be fetched
-- **Data** schemas and resolvers handle the data from a `create`, `update`, `patch`, or custom service method and can be used to add/replace things like default or calculated values (e.g. the createdAt/updatedAt date) before saving it to the database
+- **Data** schemas and resolvers handle the data from a `create`, `update`, `patch`, or custom service method and can be used to add/replace things like default or calculated values (e.g. the `createdAt` or `updatedAt` date) before saving it to the database
 - **Query** schemas and resolvers validate and convert the query string and can also be used for additional limitations like only allowing a user to see and modify their own data
-- **External** resolvers that return a safe version of the data (e.g. hiding a users password) that can be sent to external clients
-
-<hr />
-<DatabaseSelect />
+- **External** resolvers return a safe version of the data (by e.g. hiding a users password) that can be sent to external clients
 
 ## Adding a user avatar
 
@@ -241,6 +238,13 @@ export const userQueryResolver = resolve<UserQuery, HookContext>({
 ```
 
 </DatabaseBlock>
+
+What happened here?
+
+- We are adding adding an optional `avatar` field to our user object. This is where we store a user image to show in the chat.
+- The `userDataSchema` is updated to include the `avatar` so that a new user can be created with a custom avatar
+- In the `userDataResolver`, if an `avatar` is not set, we set a default image using the [Gravatar avatar](https://en.gravatar.com/) for the email address
+- The `userQueryResolver` for the user id property allows for a user to `find` all other users but only change (`patch`, `remove`) their own data
 
 ## Handling messages
 

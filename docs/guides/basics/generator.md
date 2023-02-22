@@ -8,7 +8,7 @@ In the [quick start](./starting.md) we created a Feathers application in a singl
 
 <img style="margin: 2em;" src="/img/main-character-coding.svg" alt="Getting started">
 
-The Feathers CLI allows us to initialize a new Feathers server with a recommended structure and generate things we commonly need like authentication, a database connection or new services. You can find the complete example in the [feathers-chat repository](https://github.com/feathersjs/feathers-chat).
+The [Feathers CLI](../cli/index.md) allows us to initialize a new Feathers server with a recommended structure and generate things we commonly need like authentication, a database connection or new services. You can find the complete example in the [feathers-chat repository](https://github.com/feathersjs/feathers-chat).
 
 ## Generating the application
 
@@ -18,25 +18,18 @@ You can create a new Feathers application by running `npm create feathers <name>
 npm create feathers@latest feathers-chat
 ```
 
-If you never ran the command before you might be asked to confirm the package installation by pressing enter.
+If you never ran the command before you might be asked to confirm the package installation by pressing enter. The `@latest` in the command makes sure that the most recent released version of the CLI is used.
 
-<BlockQuote type="warning">
+<BlockQuote type="warning" label="Note">
 
-Since the generated application is using modern features like ES modules, the Feathers CLI requires Node 16 or newer. The `npx feathers --version` command should show `5.0.0-pre.34` or later.
-
-</BlockQuote>
-
-First, choose if you want to use JavaScript or TypeScript. When presented with the project name, just hit enter, or enter a name (no spaces). Next, write a short description for your application. Confirm the next questions with the default selection by pressing Enter. When asked about authentication methods, let's include GitHub as well so we can look at adding a "Log In with Github" button.
-
-<DatabaseBlock global-id="sql">
-
-<BlockQuote type="tip">
-
-If you want to use **MongoDB** instead of SQLite (or another SQL database) for this guide, select it in the **Database** dropdown in the main menu.
+Since the generated application is using modern features like ES modules, the Feathers CLI requires __Node 16 or newer__.
 
 </BlockQuote>
 
-</DatabaseBlock>
+First, choose if you want to use JavaScript or TypeScript. When presented with the project name, just hit enter, or enter a name (no spaces). Next, write a short description for your application. Confirm the next questions with the default selection by pressing Enter. If you choose a database other than __SQLite__, make sure it is reachable at the connection string. For following this guide using MongoDB, change the database selection in the dropdown below.
+
+<DatabaseSelect />
+<hr />
 
 Once you confirm the last prompt, the final selection should look similar to this:
 
@@ -46,7 +39,7 @@ Once you confirm the last prompt, the final selection should look similar to thi
 
 <BlockQuote type="info" label="Note">
 
-`SQLite` creates an SQL database in a file so we don't need to have a database server running. For any other selection, the database you choose has to be available at the connection string.
+`SQLite` creates an SQL database in a file so we don't need to have a database server running.
 
 </BlockQuote>
 
@@ -66,7 +59,7 @@ cd feathers-chat
 
 <BlockQuote type="tip">
 
-Most generated files have a page in the **App Structure guide** which contains more information about the file and what it does. See for example the [package.json](../cli/package.md) file.
+Most generated files have a page in the [CLI guide](../cli/index.md) which contains more information about the file and what it does.
 
 </BlockQuote>
 
@@ -137,4 +130,4 @@ Keep this command running throughout the rest of this guide so it will reload al
 
 ## What's next?
 
-In this chapter, we've created a new Feathers application. To learn more about the generated files and what you can do with the CLI, have a look at the [CLI guide](../cli/index.md) after finishing the Getting Started guide. In [the next chapter](./services.md) we will learn more about Feathers services and databases.
+In this chapter, we've created a new Feathers application. To learn more about the generated files and what you can do with the CLI, have a look at the [CLI guide](../cli/index.md) after finishing the Getting Started guide. In [the next chapter](./authentication.md) we will set up user authentication.
