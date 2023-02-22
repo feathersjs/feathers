@@ -17,15 +17,17 @@ const registrationTemplate = ({ camelName }: ServiceGeneratorContext) =>
 
 const toClientFile = toFile<ServiceGeneratorContext>(({ lib }) => [lib, 'client'])
 
-export const generate = async (ctx: ServiceGeneratorContext) => generator(ctx)
-when<ServiceGeneratorContext>(
-  ({ lib, language }) => fileExists(lib, `client.${language}`),
-  injectSource(registrationTemplate, before('return client'), toClientFile),
-  injectSource(
-    importTemplate,
-    after<ServiceGeneratorContext>(({ language }) =>
-      language === 'ts' ? 'import type { AuthenticationClientOptions }' : 'import authenticationClient'
-    ),
-    toClientFile
+export const generate = async (ctx: ServiceGeneratorContext) =>
+  generator(ctx).then(
+    when<ServiceGeneratorContext>(
+      ({ lib, language }) => fileExists(lib, `client.${language}`),
+      injectSource(registrationTemplate, before('return client'), toClientFile),
+      injectSource(
+        importTemplate,
+        after<ServiceGeneratorContext>(({ language }) =>
+          language === 'ts' ? 'import type { AuthenticationClientOptions }' : 'import authenticationClient'
+        ),
+        toClientFile
+      )
+    )
   )
-)
