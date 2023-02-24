@@ -56,7 +56,7 @@
     "@feathersjs/socketio-client": "^5.0.0-pre.38"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.12",
+    "@babel/core": "^7.21.0",
     "@babel/preset-env": "^7.20.2",
     "@feathersjs/express": "^5.0.0-pre.38",
     "@feathersjs/memory": "^5.0.0-pre.38",
@@ -67,7 +67,7 @@
     "mocha-puppeteer": "^0.14.0",
     "node-fetch": "^2.6.1",
     "shx": "^0.3.4",
-    "socket.io-client": "^4.6.0",
+    "socket.io-client": "^4.6.1",
     "superagent": "^8.0.9",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.5",

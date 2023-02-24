@@ -56,18 +56,18 @@
     "@feathersjs/commons": "^5.0.0-pre.38",
     "@feathersjs/feathers": "^5.0.0-pre.38",
     "@feathersjs/transport-commons": "^5.0.0-pre.38",
-    "socket.io": "^4.6.0"
+    "socket.io": "^4.6.1"
   },
   "devDependencies": {
     "@feathersjs/express": "^5.0.0-pre.38",
     "@feathersjs/memory": "^5.0.0-pre.38",
     "@feathersjs/tests": "^5.0.0-pre.38",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.13.0",
+    "@types/node": "^18.14.1",
     "lodash": "^4.17.21",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
-    "socket.io-client": "^4.6.0",
+    "socket.io-client": "^4.6.1",
     "typescript": "^4.9.5"
   },
   "gitHead": "7fc86307438ae8cf3f71ce3b677be8bcc55768c1"
