@@ -8,6 +8,6 @@ import CTAButton from './CTAButton.vue'
       <p>Build prototypes in minutes and production-ready apps in days.</p>
       <p>Seriously.</p>
     </div>
-    <CTAButton href="/guides/basics/generator.html" class="mt-6" primary>Build an app</CTAButton>
+    <CTAButton href="/guides/basics/generator.html" class="mt-6" primary>Build a chat app</CTAButton>
   </div>
 </template>

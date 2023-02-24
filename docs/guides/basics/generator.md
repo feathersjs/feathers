@@ -8,7 +8,11 @@ In the [quick start](./starting.md) we created a Feathers application in a singl
 
 <img style="margin: 2em;" src="/img/main-character-coding.svg" alt="Getting started">
 
-The [Feathers CLI](../cli/index.md) allows us to initialize a new Feathers server with a recommended structure and generate things we commonly need like authentication, a database connection or new services. You can find the complete example in the [feathers-chat repository](https://github.com/feathersjs/feathers-chat).
+The [Feathers CLI](../cli/index.md) allows us to initialize a new Feathers server with a recommended structure and generate things we commonly need like authentication, a database connection or new services. In this guide we will create a Feathers HTTP and real-time API for a chat application using the Feathers CLI. Using it, for example with [a JavaScript frontend](../frontend/javascript.md), looks like this:
+
+![The Feathers chat application](../basics/assets/feathers-chat.png)
+
+You can find the complete example in the [feathers-chat repository](https://github.com/feathersjs/feathers-chat).
 
 ## Generating the application
 
