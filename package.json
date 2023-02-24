@@ -25,6 +25,9 @@
   "scripts": {
     "install": "lerna bootstrap",
     "publish": "lerna publish && git commit -am \"chore: Update changelog\" && git push origin",
+    "publish:major": "lerna publish major && git commit -am \"chore: Update changelog\" && git push origin",
+    "publish:minor": "lerna publish minor && git commit -am \"chore: Update changelog\" && git push origin",
+    "publish:patch": "lerna publish patch && git commit -am \"chore: Update changelog\" && git push origin",
     "publish:premajor": "lerna publish premajor --preid pre --pre-dist-tag pre && git commit -am \"chore: Update version and changelog\" && git push origin",
     "publish:prerelease": "lerna publish prerelease --preid pre --pre-dist-tag pre --dist-tag pre --force-publish && git commit -am \"chore: Update version and changelog\" && git push origin",
     "prettier": "npx prettier \"packages/{,!(node_modules)/**/(src|test)/**/}*.ts\" --write",
