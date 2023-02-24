@@ -26,12 +26,11 @@ In this chapter we will look at the generated schemas and resolvers and update t
 While schemas and resolvers can be used outside of a Feathers application, you will usually encounter them in a Feathers context where they come in four kinds:
 
 - **Result** schemas and resolvers that define the data that is being returned. This is also where associated data would be fetched
-- **Data** schemas and resolvers handle the data from a `create`, `update`, `patch`, or custom service method and can be used to add/replace things like default or calculated values (e.g. the createdAt/updatedAt date) before saving it to the database
+- **Data** schemas and resolvers handle the data from a `create`, `update`, `patch`, or custom service method and can be used to add/replace things like default or calculated values (e.g. the `createdAt` or `updatedAt` date) before saving it to the database
 - **Query** schemas and resolvers validate and convert the query string and can also be used for additional limitations like only allowing a user to see and modify their own data
-- **External** resolvers that return a safe version of the data (e.g. hiding a users password) that can be sent to external clients
+- **External** resolvers return a safe version of the data (by e.g. hiding a users password) that can be sent to external clients
 
-<hr />
-<DatabaseSelect />
+While it may initially look like a bit more code, schema driven development is a great way to have the data models and how data is modified in a single place.
 
 ## Adding a user avatar
 
@@ -147,11 +146,12 @@ export const userQueryResolver = resolve<UserQuery, HookContext>({
 
 <DatabaseBlock global-id="mongodb">
 
-```ts{2,17-18,34,44-54,82-86}
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
+```ts{2,18-19,35,44-54,82-87}
+// // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import crypto from 'crypto'
 import { resolve } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
+import { ObjectIdSchema } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 import { passwordHash } from '@feathersjs/authentication-local'
 
@@ -161,7 +161,7 @@ import { dataValidator, queryValidator } from '../../validators'
 // Main data model schema
 export const userSchema = Type.Object(
   {
-    _id: Type.String({ objectid: true }),
+    _id: ObjectIdSchema(),
     email: Type.String(),
     password: Type.Optional(Type.String()),
     githubId: Type.Optional(Type.Number()),
@@ -178,13 +178,12 @@ export const userExternalResolver = resolve<User, HookContext>({
   password: async () => undefined
 })
 
-// Schema for creating new users
+// Schema for creating new entries
 export const userDataSchema = Type.Pick(
   userSchema,
   ['email', 'password', 'githubId', 'avatar'],
   {
-    $id: 'UserData',
-    additionalProperties: false
+    $id: 'UserData'
   }
 )
 export type UserData = Static<typeof userDataSchema>
@@ -204,7 +203,7 @@ export const userDataResolver = resolve<User, HookContext>({
   }
 })
 
-// Schema for updating existing users
+// Schema for updating existing entries
 export const userPatchSchema = Type.Partial(userSchema, {
   $id: 'UserPatch'
 })
@@ -241,6 +240,13 @@ export const userQueryResolver = resolve<UserQuery, HookContext>({
 ```
 
 </DatabaseBlock>
+
+What happened here?
+
+- We are adding adding an optional `avatar` field to our user object. This is where we store a user image to show in the chat.
+- The `userDataSchema` is updated to include the `avatar` so that a new user can be created with a custom avatar
+- In the `userDataResolver`, if an `avatar` is not set, we set a default image using the [Gravatar avatar](https://en.gravatar.com/) for the email address
+- The `userQueryResolver` for the user id property allows for a user to `find` all other users but only change (`patch`, `remove`) their own data
 
 ## Handling messages
 
@@ -349,10 +355,11 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext>({
 
 <DatabaseBlock global-id="mongodb">
 
-```ts{2,8,15-17,24-27,39-45,58-61,74-82}
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
+```ts{2,9,16-18,25-28,40-46,59-62,75-83}
+// // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
+import { ObjectIdSchema } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
@@ -362,7 +369,7 @@ import { userSchema } from '../users/users.schema'
 // Main data model schema
 export const messageSchema = Type.Object(
   {
-    _id: Type.String({ objectid: true }),
+    _id: ObjectIdSchema(),
     text: Type.String(),
     createdAt: Type.Number(),
     userId: Type.String({ objectid: true }),
@@ -406,9 +413,7 @@ export const messagePatchValidator = getValidator(messagePatchSchema, dataValida
 export const messagePatchResolver = resolve<Message, HookContext>({})
 
 // Schema for allowed query properties
-export const messageQueryProperties = Type.Pick(messageSchema,
-  ['_id', 'text', 'createdAt', 'userId']
-)
+export const messageQueryProperties = Type.Pick(messageSchema, ['_id', 'text', 'createdAt', 'userId'])
 export const messageQuerySchema = Type.Intersect(
   [
     querySyntax(messageQueryProperties),

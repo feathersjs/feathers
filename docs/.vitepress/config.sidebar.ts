@@ -41,6 +41,10 @@ export default {
           link: '/guides/basics/generator.md'
         },
         {
+          text: 'Authentication',
+          link: '/guides/basics/authentication.md'
+        },
+        {
           text: 'Services',
           link: '/guides/basics/services.md'
         },
@@ -53,8 +57,8 @@ export default {
           link: '/guides/basics/schemas.md'
         },
         {
-          text: 'Authentication',
-          link: '/guides/basics/authentication.md'
+          text: 'Logging in',
+          link: '/guides/basics/login.md'
         }
         // {
         //   text: 'Writing Tests',

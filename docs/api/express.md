@@ -12,7 +12,7 @@ outline: deep
 </Badges>
 
 ```
-npm install @feathersjs/express@pre --save
+npm install @feathersjs/express --save
 ```
 
 The `@feathersjs/express` module contains [Express](http://expressjs.com/) framework integrations for Feathers:

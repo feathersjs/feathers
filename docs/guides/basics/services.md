@@ -8,20 +8,13 @@ Services are the heart of every Feathers application. You probably remember the 
 
 ## Feathers services
 
-In general, a service is an object or instance of a class that implements certain methods. Services provide a uniform, protocol-independent interface for feathers to interact with any kind of data like:
+In Feathers, a service is an object or instance of a class that implements certain methods. Services provide a way for Feathers to interact with different kinds of data sources in a uniform, protocol-independent way.
 
-- Reading and/or writing to a database
-- Interacting with the file system
-- Calling a third-party API/service like:
-  - MailGun for sending emails
-  - Stripe for Processing payments
-  - OpenWeatherMap for returning the current weather in a location
-- Reading and/or writing to a completely different type of database
-- Anything else you can think of!
+For example, you could use services to read and/or write data to one of the supported databases, interact with the file system, call a third-party API/service (such as MailGun for sending emails, Stripe for processing payments, or OpenWeatherMap for returning weather information), or even read and/or write to a completely different type of database.
 
-This standardized interface allows us to interact with the Database/API/Gnomes inside in a uniform manner across any transport protocol, be it REST, websockets, internally within the application, or Carrier Pigeon 🕊️
+A standardized interface allows us to interact with the Database/API/Gnomes inside in a uniform manner across any transport protocol, be it REST, websockets, internally within the application, or Carrier Pigeon 🕊️
 
-Once you write a service method, it can then automatically be used as a REST endpoint or called by a websocket. Feathers will take care of all the boilerplate.
+Once you write a service method, which usually does not do anything Feathers-specific, you can automatically use it as a REST endpoint or call it through a websocket. Feathers takes care of all the necessary boilerplate, so you can focus on writing the service method itself.
 
 ### Service methods
 
@@ -36,9 +29,10 @@ Service methods are [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_an
 - `setup` - Called when the application is started
 - `teardown` - Called when the application is shut down
 
-Below is an example of Feathers service interface as a class:
+Below is an example of Feathers service interface as a class and basic registration on a Feathers application via [app.use(name, service[, options])](../../api/application.md#use-path-service):
 
 ```ts
+import { feathers } from '@feathersjs/feathers'
 import type { Application, Id, NullableId, Params } from '@feathersjs/feathers'
 
 class MyService {
@@ -51,6 +45,10 @@ class MyService {
   async setup(path: string, app: Application) {}
   async teardown(path: string, app: Application) {}
 }
+
+const app = feathers<{ myservice: MyService }>()
+
+app.use('myservice', new MyService())
 ```
 
 The parameters for service methods are:
@@ -84,48 +82,6 @@ When used as a REST API, incoming requests get mapped automatically to their cor
 | `service.patch(123, body)`                  | PATCH       | /messages/123         |
 | `service.remove(123)`                       | DELETE      | /messages/123         |
 
-### Registering services
-
-A service can be registered on the Feathers application by calling [app.use(name, service[, options])](../../api/application.md#use-path-service) with a name and the service instance:
-
-```ts
-import { feathers, type Params } from '@feathersjs/feathers'
-
-class MessageService {
-  async get(name: string, params: Params) {
-    return {
-      message: `You have to do ${name}`
-    }
-  }
-}
-
-type ServiceTypes = {
-  messages: MessageService
-}
-
-const app = feathers<ServiceTypes>()
-
-// Register the message service on the Feathers application
-app.use('messages', new MessageService())
-// Or with additional options like which methods should be made available
-app.use('messages', new MessageService(), {
-  methods: ['get']
-})
-```
-
-To get the service object and use the service methods (and events) we can use [app.service(name)](../../api/application.md#service-path):
-
-```js
-const messageService = app.service('messages')
-const messages = await messageService.find()
-```
-
-<BlockQuote type="tip">
-
-In a generated application, a service will be registered in the [&lt;servicename&gt;.ts|js file](../cli/service.md).
-
-</BlockQuote>
-
 ### Service events
 
 A registered service will automatically become a [NodeJS EventEmitter](https://nodejs.org/api/events.html) that sends events with the new data when a service method that modifies data (`create`, `update`, `patch` and `remove`) returns. Events can be listened to with `app.service('messages').on('eventName', data => {})`. Here is a list of the service methods and their corresponding events:
@@ -140,8 +96,8 @@ A registered service will automatically become a [NodeJS EventEmitter](https://n
 This is how Feathers does real-time.
 
 ```js
-app.service('messages').on('created', (data) => {
-  console.log('New message created', data)
+app.service('myservice').on('created', (data) => {
+  console.log('Got created event', data)
 })
 ```
 
@@ -161,11 +117,11 @@ There are also many other community maintained database integrations which you c
 
 </BlockQuote>
 
-If you went with the default selection, we will use **SQLite** which writes the database to a file and does not require any additional setup. The user service that was created when we [generated our application](./generator.md) is already using it. If you decide to use another SQL database like PostgreSQL or MySQL, you will need to change the database connection settings in the configuration.
+If you went with the default selection, we will use **SQLite** which writes the database to a file and does not require any additional setup. The user service that was created when we [generated authentication](./authentication.md) is already using it.
 
 ## Generating a service
 
-In our [newly generated](./generator.md) `feathers-chat` application, we can create database backed services with the following command:
+In our new `feathers-chat` application, we can create database backed services with the following command:
 
 ```sh
 npx feathers generate service

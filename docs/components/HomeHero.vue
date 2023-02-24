@@ -85,7 +85,7 @@ onBeforeUnmount(toggleHomeClass)
           For TypeScript and JavaScript in Node.js, React Native and the browser
         </p>
         <div class="scale-80">
-          <CTAButton primary class="mt-3 mb-6 md:mb-10">Get Started</CTAButton>
+          <CTAButton href="/guides/basics/starting.html" primary class="mt-3 mb-6 md:mb-10">Quick Start</CTAButton>
         </div>
       </div>
     </div>

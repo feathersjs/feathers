@@ -97,7 +97,7 @@ const messageQuerySchema = querySyntax(messageQueryProperties)
 type MessageQuery = Static<typeof messageQuerySchema>
 ```
 
-To allow additional query parameters like `$ilike`, `$regex` etc. for properties you can pass an object with the property names and additional types:
+Additional special query properties [that are not already included in the query syntax](../databases/querying.md) like `$ilike` can be added like this:
 
 ```ts
 import { querySyntax } from '@feathersjs/typebox'

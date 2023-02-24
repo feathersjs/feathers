@@ -66,7 +66,7 @@ npm init --yes
 Feathers can be installed like any other Node module by installing the [@feathersjs/feathers](https://www.npmjs.com/package/@feathersjs/feathers) package through [npm](https://www.npmjs.com). The same package can also be used with module loaders like Vite, Webpack, and in React Native.
 
 ```sh
-npm install @feathersjs/feathers@pre --save
+npm install @feathersjs/feathers --save
 ```
 
 <BlockQuote label="note">
@@ -209,7 +209,7 @@ Run:
 <LanguageBlock global-id="ts">
 
 ```sh
-npm install @feathersjs/socketio@pre @feathersjs/koa@pre --save
+npm install @feathersjs/socketio @feathersjs/koa --save
 ```
 
 Then update `app.ts` with the following content:
@@ -218,7 +218,7 @@ Then update `app.ts` with the following content:
 <LanguageBlock global-id="js">
 
 ```sh
-npm install @feathersjs/socketio@pre @feathersjs/koa@pre koa-static --save
+npm install @feathersjs/socketio @feathersjs/koa koa-static --save
 ```
 
 Then update `app.mjs` with the following content:
